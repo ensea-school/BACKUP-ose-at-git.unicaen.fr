@@ -416,6 +416,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
     OPEN c FOR '
     SELECT
+      v.ANNEE_ID,
+      v.ANNEE_AGREMENT,
+      v.TYPE_AGREMENT_ID,
+      v.INTERVENANT_ID,
+      v.CODE_INTERVENANT,
+      v.STRUCTURE_ID,
+      v.AGREMENT_ID,
+      v.DUREE_VIE,
       CASE WHEN
             t.ANNEE_ID                     = v.ANNEE_ID
         AND COALESCE(t.ANNEE_AGREMENT,0)   = COALESCE(v.ANNEE_AGREMENT,0)
@@ -425,15 +433,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND COALESCE(t.STRUCTURE_ID,0)     = COALESCE(v.STRUCTURE_ID,0)
         AND COALESCE(t.AGREMENT_ID,0)      = COALESCE(v.AGREMENT_ID,0)
         AND t.DUREE_VIE                    = v.DUREE_VIE
-      THEN -1 ELSE t.ID END ID,
-      v.ANNEE_ID,
-      v.ANNEE_AGREMENT,
-      v.TYPE_AGREMENT_ID,
-      v.INTERVENANT_ID,
-      v.CODE_INTERVENANT,
-      v.STRUCTURE_ID,
-      v.AGREMENT_ID,
-      v.DUREE_VIE
+      THEN -1 ELSE t.ID END ID
     FROM
       (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_AGREMENT t ON
@@ -1795,6 +1795,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           CASE
             WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
             WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+            ELSE COALESCE(p.plafond_etat_id,1)
           END plafond_etat_id,
           COALESCE(pd.heures, 0) derogation,
           CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
@@ -1890,12 +1891,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           CASE
             WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
             WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+            ELSE COALESCE(p.plafond_etat_id,1)
           END plafond_etat_id,
           COALESCE(pd.heures, 0) derogation,
           CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
-          SELECT 4 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+          SELECT 4 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                             annee_id,
                 fr.type_volume_horaire_id              type_volume_horaire_id,
@@ -1910,7 +1912,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
             UNION ALL
 
-          SELECT 2 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+          SELECT 2 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                             annee_id,
                 fr.type_volume_horaire_id              type_volume_horaire_id,
@@ -1925,7 +1927,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
             UNION ALL
 
-          SELECT 1 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+          SELECT 1 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                          annee_id,
                 fr.type_volume_horaire_id           type_volume_horaire_id,
@@ -1943,7 +1945,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
             UNION ALL
 
-          SELECT 5 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+          SELECT 5 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                          annee_id,
                 fr.type_volume_horaire_id           type_volume_horaire_id,
@@ -1958,7 +1960,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
             UNION ALL
 
-          SELECT 8 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+          SELECT 8 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                annee_id,
                 fr.type_volume_horaire_id type_volume_horaire_id,
@@ -2065,12 +2067,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           CASE
             WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
             WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+            ELSE COALESCE(p.plafond_etat_id,1)
           END plafond_etat_id,
           COALESCE(pd.heures, 0) derogation,
           CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
-          SELECT 3 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+          SELECT 3 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                        annee_id,
                 vhr.type_volume_horaire_id        type_volume_horaire_id,
@@ -2109,7 +2112,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
             UNION ALL
 
-          SELECT 6 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+          SELECT 6 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                 annee_id,
                 vhr.type_volume_horaire_id type_volume_horaire_id,
@@ -2217,12 +2220,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           CASE
             WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
             WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+            ELSE COALESCE(p.plafond_etat_id,1)
           END plafond_etat_id,
           COALESCE(pd.heures, 0) derogation,
           CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
-          SELECT 7 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+          SELECT 7 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                 annee_id,
                 vhr.type_volume_horaire_id type_volume_horaire_id,
@@ -2242,7 +2246,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
             UNION ALL
 
-          SELECT 25 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+          SELECT 25 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                       i.annee_id                 annee_id,
                       vh.type_volume_horaire_id  type_volume_horaire_id,
@@ -2351,6 +2355,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           CASE
             WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
             WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+            ELSE COALESCE(p.plafond_etat_id,1)
           END plafond_etat_id,
           COALESCE(pd.heures, 0) derogation,
           CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
@@ -2404,11 +2409,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                 s.element_pedagogique_id                    element_pedagogique_id,
                 s.type_intervention_id                      type_intervention_id,
                 s.heures                                    heures,
-                COALESCE(c.heures * c.groupes,0)            plafond
+                COALESCE(c.heures * c.groupes,0)            plafond,
+                pe.id                                       plafond_etat_id
               FROM
                           s
                      JOIN type_intervention ti ON ti.id = s.type_intervention_id
                      JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
+                     JOIN plafond_etat pe ON pe.code = ''informatif''
                 LEFT JOIN c ON c.element_pedagogique_id = s.element_pedagogique_id
                            AND c.type_intervention_id = COALESCE(ti.type_intervention_maquette_id,ti.id)
               WHERE
@@ -2576,33 +2583,33 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       CASE WHEN
             t.ANNEE_ID                             = v.ANNEE_ID
         AND t.INTERVENANT_ID                       = v.INTERVENANT_ID
-        AND t.ACTIF                                = v.ACTIF
         AND t.TYPE_VOLUME_HORAIRE_ID               = v.TYPE_VOLUME_HORAIRE_ID
+        AND t.ACTIF                                = v.ACTIF
         AND t.STRUCTURE_ID                         = v.STRUCTURE_ID
-        AND t.NBVH                                 = v.NBVH
-        AND t.VALIDE                               = v.VALIDE
         AND COALESCE(t.INTERVENANT_STRUCTURE_ID,0) = COALESCE(v.INTERVENANT_STRUCTURE_ID,0)
         AND t.SERVICE_REFERENTIEL_ID               = v.SERVICE_REFERENTIEL_ID
         AND t.FONCTION_REFERENTIEL_ID              = v.FONCTION_REFERENTIEL_ID
         AND t.TYPE_INTERVENANT_ID                  = v.TYPE_INTERVENANT_ID
         AND t.TYPE_INTERVENANT_CODE                = v.TYPE_INTERVENANT_CODE
         AND t.TYPE_VOLUME_HORAIRE_CODE             = v.TYPE_VOLUME_HORAIRE_CODE
+        AND t.NBVH                                 = v.NBVH
         AND t.HEURES                               = v.HEURES
+        AND t.VALIDE                               = v.VALIDE
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.INTERVENANT_ID,
-      v.ACTIF,
       v.TYPE_VOLUME_HORAIRE_ID,
+      v.ACTIF,
       v.STRUCTURE_ID,
-      v.NBVH,
-      v.VALIDE,
       v.INTERVENANT_STRUCTURE_ID,
       v.SERVICE_REFERENTIEL_ID,
       v.FONCTION_REFERENTIEL_ID,
       v.TYPE_INTERVENANT_ID,
       v.TYPE_INTERVENANT_CODE,
       v.TYPE_VOLUME_HORAIRE_CODE,
-      v.HEURES
+      v.NBVH,
+      v.HEURES,
+      v.VALIDE
     FROM
       (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_REFERENTIEL t ON
@@ -2738,13 +2745,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       CASE WHEN
             t.ANNEE_ID                                   = v.ANNEE_ID
         AND t.INTERVENANT_ID                             = v.INTERVENANT_ID
-        AND COALESCE(t.INTERVENANT_STRUCTURE_ID,0)       = COALESCE(v.INTERVENANT_STRUCTURE_ID,0)
-        AND COALESCE(t.STRUCTURE_ID,0)                   = COALESCE(v.STRUCTURE_ID,0)
+        AND t.ACTIF                                      = v.ACTIF
+        AND t.SERVICE_ID                                 = v.SERVICE_ID
+        AND COALESCE(t.ELEMENT_PEDAGOGIQUE_ID,0)         = COALESCE(v.ELEMENT_PEDAGOGIQUE_ID,0)
         AND t.TYPE_INTERVENANT_ID                        = v.TYPE_INTERVENANT_ID
         AND t.TYPE_INTERVENANT_CODE                      = v.TYPE_INTERVENANT_CODE
-        AND t.ACTIF                                      = v.ACTIF
-        AND COALESCE(t.ELEMENT_PEDAGOGIQUE_ID,0)         = COALESCE(v.ELEMENT_PEDAGOGIQUE_ID,0)
-        AND t.SERVICE_ID                                 = v.SERVICE_ID
+        AND COALESCE(t.STRUCTURE_ID,0)                   = COALESCE(v.STRUCTURE_ID,0)
+        AND COALESCE(t.INTERVENANT_STRUCTURE_ID,0)       = COALESCE(v.INTERVENANT_STRUCTURE_ID,0)
         AND COALESCE(t.ELEMENT_PEDAGOGIQUE_PERIODE_ID,0) = COALESCE(v.ELEMENT_PEDAGOGIQUE_PERIODE_ID,0)
         AND COALESCE(t.ETAPE_ID,0)                       = COALESCE(v.ETAPE_ID,0)
         AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0)         = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
@@ -2758,13 +2765,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.INTERVENANT_ID,
-      v.INTERVENANT_STRUCTURE_ID,
-      v.STRUCTURE_ID,
+      v.ACTIF,
+      v.SERVICE_ID,
+      v.ELEMENT_PEDAGOGIQUE_ID,
       v.TYPE_INTERVENANT_ID,
       v.TYPE_INTERVENANT_CODE,
-      v.ACTIF,
-      v.ELEMENT_PEDAGOGIQUE_ID,
-      v.SERVICE_ID,
+      v.STRUCTURE_ID,
+      v.INTERVENANT_STRUCTURE_ID,
       v.ELEMENT_PEDAGOGIQUE_PERIODE_ID,
       v.ETAPE_ID,
       v.TYPE_VOLUME_HORAIRE_ID,

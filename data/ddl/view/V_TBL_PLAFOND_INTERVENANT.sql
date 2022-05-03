@@ -9,12 +9,13 @@ SELECT
   CASE
     WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
     WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+    ELSE COALESCE(p.plafond_etat_id,1)
   END plafond_etat_id,
   COALESCE(pd.heures, 0) derogation,
   CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
 FROM
   (
-  SELECT 4 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+  SELECT 4 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
     SELECT
         i.annee_id                             annee_id,
         fr.type_volume_horaire_id              type_volume_horaire_id,
@@ -29,7 +30,7 @@ FROM
 
     UNION ALL
 
-  SELECT 2 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+  SELECT 2 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
     SELECT
         i.annee_id                             annee_id,
         fr.type_volume_horaire_id              type_volume_horaire_id,
@@ -44,7 +45,7 @@ FROM
 
     UNION ALL
 
-  SELECT 1 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+  SELECT 1 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
     SELECT
         i.annee_id                          annee_id,
         fr.type_volume_horaire_id           type_volume_horaire_id,
@@ -62,7 +63,7 @@ FROM
 
     UNION ALL
 
-  SELECT 5 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+  SELECT 5 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
     SELECT
         i.annee_id                          annee_id,
         fr.type_volume_horaire_id           type_volume_horaire_id,
@@ -77,7 +78,7 @@ FROM
 
     UNION ALL
 
-  SELECT 8 PLAFOND_ID, NULL PLAFOND, p.* FROM (
+  SELECT 8 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
     SELECT
         i.annee_id                annee_id,
         fr.type_volume_horaire_id type_volume_horaire_id,

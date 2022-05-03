@@ -307,6 +307,27 @@ class OseAdmin
 
 
 
+    public function getConfig(): array
+    {
+        $configFilename = $this->getOseDir() . '/config.local.php';
+        if (file_exists($configFilename)) {
+            return require $configFilename;
+        } else {
+            return [];
+        }
+    }
+
+
+
+    public function inMaintenance(): bool
+    {
+        $config = $this->getConfig();
+
+        return $config['maintenance']['modeMaintenance'] ?? true;
+    }
+
+
+
     /**
      * @return \BddAdmin\Bdd
      */

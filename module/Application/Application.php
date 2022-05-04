@@ -39,6 +39,7 @@ class Application
         if (AppConfig::get('global', 'affichageErreurs')) {
             error_reporting(E_ALL);
         } else {
+            error_reporting(E_ERROR);
             set_exception_handler(function ($e) { // on affiche quand même les erreurs fatales pour expliquer!
                 self::error($e);
             });

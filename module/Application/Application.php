@@ -123,7 +123,9 @@ class Application
     public static function error($exception)
     {
         header("HTTP/1.0 500 Internal Server Error");
-        self::$maintenanceText = '<h2>Une erreur est survenue !</h2>' . $exception->getMessage();
+        self::$maintenanceText = '<h2>Une erreur est survenue !</h2>'
+            . '<p>' . $exception->getMessage() . '</p>'
+            . '<p style="color:darkred">' . $exception->getFile() . ' ligne ' . $exception->getLine() . '</p>';
         if (php_sapi_name() !== 'cli') {
             require 'public/maintenance.php';
         } else {

@@ -30,7 +30,9 @@
     "config": {
         "allow-plugins": {
             "laminas/laminas-dependency-plugin": true,
-            "composer/package-versions-deprecated": true
+            "composer/package-versions-deprecated": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "laminas-api-tools/api-tools-asset-manager": true
         }
     },
     "scripts"          : {
@@ -38,8 +40,4 @@
         "phpcs"       : "./vendor/bin/phpcs -p ./module --standard=PSR12"
     },
     "minimum-stability": "dev",
-    "allow-plugins": {
-        "dealerdirect/phpcodesniffer-composer-installer": true,
-        "laminas-api-tools/api-tools-asset-manager": true
-    }
 }

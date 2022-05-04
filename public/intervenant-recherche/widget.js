@@ -4,7 +4,7 @@
  */
 $.widget("ose.intervenantRecherche", {
 
-    rechercher: function (critere)
+    rechercher: function (critere, stopFunc)
     {
         var that = this;
 
@@ -17,6 +17,8 @@ $.widget("ose.intervenantRecherche", {
                     that.getElementRecherche().html(msg + xhr.status + " " + xhr.statusText + xhr.responseText);
                 }
                 that.getElementLoading().hide();
+                that.getElementCritere().autocomplete();
+                stopFunc();
             });
         }
     },
@@ -26,10 +28,9 @@ $.widget("ose.intervenantRecherche", {
         var that = this;
 
         this.getElementCritere().autocomplete({
-            source: function (event, ui)
+            source: function (event, stopFunc)
             {
-                that.rechercher(event.term);
-                return {};
+                that.rechercher(event.term, stopFunc);
             }
         });
 

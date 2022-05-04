@@ -238,6 +238,8 @@ class OseAdmin
         } elseif (is_dir($cible . $action)) {
             $sousAction = $this->getConsole()->getArg(2);
             $filename   = $cible . $action . '/actions/' . $sousAction . '.php';
+        } else {
+            $filename = null;
         }
 
         if ($filename) {

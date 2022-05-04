@@ -11,6 +11,7 @@ return [
             'TBL_SERVICE_SAISIE',
             'STATUT_PRIVILEGE',
             'TYPE_AGREMENT_STATUT',
+            'PLAFOND_APPLICATION',
         ],
     ],
     'materialized-view' => [

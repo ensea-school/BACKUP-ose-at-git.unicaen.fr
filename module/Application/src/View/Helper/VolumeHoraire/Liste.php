@@ -158,7 +158,15 @@ class Liste extends AbstractViewHelper
         $out      .= "</tr>\n";
         $periodes = $this->getPeriodes();
         foreach ($periodes as $periode) {
-            $vhl               = $this->getVolumeHoraireListe()->setPeriode($periode)->setTypeIntervention(false);
+            $vhl = $this->getVolumeHoraireListe()->createChild()->setPeriode($periode)->setTypeIntervention(false);
+
+            /* Gestion des mauvaises périodes */
+            $forbiddenPeriode = $vhl->getService()?->getElementPedagogique()?->getPeriode() ?? $periode !== $periode;
+            if ($forbiddenPeriode) {
+                $this->hasForbiddenPeriodes = true;
+            }
+
+            /*Listage des motifs de non paiement */
             $motifsNonPaiement = [];
             if ($canViewMNP) {  // découpage par motif de non paiement
                 $motifsNonPaiement = $vhl->getMotifsNonPaiement();
@@ -169,18 +177,13 @@ class Liste extends AbstractViewHelper
             if (empty($motifsNonPaiement)) {
                 $motifsNonPaiement = [0 => false];
             }
+
+            /* Affichage par motif de non paiement */
             foreach ($motifsNonPaiement as $motifNonPaiement) {
-                $readOnly         = $motifNonPaiement instanceof MotifNonPaiement && !$canEditMNP;
-                $forbiddenPeriode = false;
-                if (
-                    $this->getVolumeHoraireListe()->getService()
-                    && $this->getVolumeHoraireListe()->getService()->getElementPedagogique()
-                    && $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getPeriode()
-                    && $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getPeriode() !== $periode
-                ) {
-                    $forbiddenPeriode           = true;
-                    $this->hasForbiddenPeriodes = true;
-                }
+                $vhl->setMotifNonPaiement($motifNonPaiement);
+                if ($vhl->getHeures() == 0) continue; // rien à afficher
+
+                $readOnly = $motifNonPaiement instanceof MotifNonPaiement && !$canEditMNP;
                 if ($forbiddenPeriode) {
                     $out .= '<tr class="bg-danger">';
                     $out .= "<td><abbr title=\"La période n'est pas conforme à l'enseignement\">" . $this->renderPeriode($periode) . "</abbr></td>\n";
@@ -190,8 +193,7 @@ class Liste extends AbstractViewHelper
                 }
 
                 foreach ($this->typesIntervention as $typeIntervention) {
-                    $vhl->setMotifNonPaiement($motifNonPaiement)
-                        ->setTypeIntervention($typeIntervention);
+                    $vhl->setTypeIntervention($typeIntervention);
                     if ($vhl->getHeures() == 0) {
                         $class = "heures-empty";
                     } else {

@@ -95,6 +95,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 
 * **ATTENTION : OSE 18** ne pourra être mis à jour **qu'à partir de OSE 17.x**. Si vous utilisez une version plus ancienne de OSE, veuillez **d'abord** mettre à jour en version 17.
 * **ATTENTION : PHP 8.0** est requis
+* **IMPORTANT** AVANT de démarrer la mise à jour, dans le répertoire de OSE, lancez la commande `php composer.phar self-update --2` à partir du répertoire de l'application.
 * La mise à jour des vues matérialisées MV_EXT_* ne se fait plus à la mise à jour. Il faut maintenant lancer la commande `./bin/ose maj-exports` tous les jours et donc ajouter une ligne à votre _CronTab_ (cf. [Doc INSTALL mise à jour](install.md))
 * Pour bénéficier de la ventilation des heures par types d'intervention vous pouvez vous inspirer du [modèle de contrat de Caen](https://git.unicaen.fr/open-source/OSE/-/blob/master/data/modele_contrat_ventile.odt) pour adapter votre propre modèle de contrat.
 * Au niveau du fichier de configuration [config.local.php](config.local.php.default), vous pouvez remplir le paramètre (facultatif) ldap>systemeInformationUrl.

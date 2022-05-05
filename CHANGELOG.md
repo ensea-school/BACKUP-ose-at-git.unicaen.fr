@@ -94,16 +94,25 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 
 ## Notes de mise à jour
 
-* **ATTENTION : OSE 18** ne pourra être mis à jour **qu'à partir de OSE 17.x**. Si vous utilisez une version plus ancienne de OSE, veuillez **d'abord** mettre à jour en version 17.
-* **ATTENTION : PHP 8.0** est requis
-* **IMPORTANT** AVANT de démarrer la mise à jour, dans le répertoire de OSE, lancez la commande `php composer.phar self-update --2` à partir du répertoire de l'application.
-* La mise à jour des vues matérialisées MV_EXT_* ne se fait plus à la mise à jour. Il faut maintenant lancer la commande `./bin/ose maj-exports` tous les jours et donc ajouter une ligne à votre _CronTab_ (cf. [Doc INSTALL mise à jour](install.md))
-* Pour bénéficier de la ventilation des heures par types d'intervention vous pouvez vous inspirer du [modèle de contrat de Caen](https://git.unicaen.fr/open-source/OSE/-/blob/master/data/modele_contrat_ventile.odt) pour adapter votre propre modèle de contrat.
-* Au niveau du fichier de configuration [config.local.php](config.local.php.default), vous pouvez remplir le paramètre (facultatif) ldap>systemeInformationUrl.
-* Pour les instances qui utilisent le module Export Siham, vous devez renseigner un nouveau paramètre dans Administration > paramètres généraux > Gestion export RH, il vous faut sélectionner l'étape de la feuille de route franchie à partir de laquelle l'intervenant peut être exporté dans SIHAM.
-* La vue source [SRC_INTERVENANT](doc/Connecteurs-Import/Générique/SRC_INTERVENANT.sql) doit être mise à jour. 
-* Par précaution, la mise à jour désactive la synchronisation sur la table INTERVENANT. Vous devrez manuellement remettre en place cette synchronisation après avoir mis à jour votre vue source SRC_INTERVENANT.
-* ** ATTENTION** Les indicateurs portant sur les anciens plafonds ayant été supprimés et remplacés par de tous nouveaux indicateurs, les notifications par mail et abonnements correspondants seront résiliés
+* Les indicateurs portant sur les anciens plafonds ayant été supprimés et remplacés par de tous nouveaux indicateurs, les notifications par mail et abonnements correspondants seront résiliés
+* En raison de l'ampleur de la mise à jour, l'opération de maintenance va prendre du temps. Prévoyez une journée d'interruption de service.
+
+## Procédure de mise à jour spécifique à la version 18
+
+1. Mettez l'aplication en maintenance
+2. Si votre version de OSE est antérieure à la version 17, mettez **d'abord** à jour en version **17.3**
+3. Installez **PHP8.0** sur votre serveur
+4. Dans le répertoire de OSE, lancez `php composer.phar self-update --2`
+5. Mettez ensuite OSE à jour en version 18 `./bin/ose update` (attention, ce traitement est long, il pourra prendre plusieurs heures)
+6. Recalculez toutes les forules de calcul : `./bin/ose formule-calcul` (attention, ce traitement dure plusieurs heures)
+7. Pour votre instance de production, la nouvelle commande `./bin/ose maj-exports` doit être lancée régulièrement (cf. [procédure d'installation](install.md)). Ceci met à jour toutes les vues matérialisées dédiées à l'export MV_EXT_*.
+8. Mettez à jour votre vue source [SRC_INTERVENANT](doc/Connecteurs-Import/Générique/SRC_INTERVENANT.sql)
+9. Réactivez la synchronisation en import pour la table INTERVENANT, que la mise à jour a volontairement désactivée (en production).
+10. Mettez à jour votre [modèle de contrat de travail](data/modele_contrat_ventile.odt) si vous voulez bénéficier de la ventilation par CM/TD/TP/Autres des heures. 
+11. Si vous utilisez l'export RH Siham, renseignez un nouveau paramètre dans Administration > paramètres généraux > Gestion export RH, en sélectionnant l'étape de la feuille de route franchie à partir de laquelle l'intervenant peut être exporté dans SIHAM.
+12. Au niveau du fichier de configuration [config.local.php](config.local.php.default), vous pouvez remplir le paramètre (facultatif) ldap>systemeInformationUrl.
+13. Sortez du mode maintenance
+
 
 # OSE 17.3 (17/03/2022)
 

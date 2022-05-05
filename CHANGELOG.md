@@ -90,6 +90,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * Correction sur la suppression de service lorsque la clôture de service a été historisé (#42046)
 * Le calcul des choix minimum/maximum est de nouveau fiable (#42080)
 * Liens inactifs lors du changement d'année universitaire (#40992)
+* Dans certains cas avec des motifs de non paiements, le détail des services n'affichait pas toutes les heures
 
 ## Notes de mise à jour
 

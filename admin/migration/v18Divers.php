@@ -27,7 +27,7 @@ class v18Divers extends AbstractMigration
         $c   = $this->manager->getOseAdmin()->getConsole();
 
         // test pour savoir si on est bien en V17 minimum
-        if (!$this->manager->hasColumn('INTERVENANT', 'EXPORT_DATE22')) {
+        if (!$this->manager->hasColumn('INTERVENANT', 'EXPORT_DATE')) {
             $c->printDie('Attention : vous devez d\'abord mettre à jour en version 17.3 AVANT de mettre à jour en version 18');
         }
 

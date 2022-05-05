@@ -101,7 +101,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 
 1. Mettez l'aplication en maintenance
 2. Si votre version de OSE est antérieure à la version 17, mettez **d'abord** à jour en version **17.3**
-3. Installez **PHP8.0** sur votre serveur
+3. Installez **PHP8.0** sur votre serveur ainsi que [toutes ses dépendances nécessaires](install.md)
 4. Dans le répertoire de OSE, lancez `php composer.phar self-update --2`
 5. Mettez ensuite OSE à jour en version 18 `./bin/ose update` (attention, ce traitement est long, il pourra prendre plusieurs heures)
 6. Recalculez toutes les forules de calcul : `./bin/ose formule-calcul` (attention, ce traitement dure plusieurs heures)

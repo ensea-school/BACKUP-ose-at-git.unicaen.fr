@@ -161,7 +161,7 @@ class Liste extends AbstractViewHelper
             $vhl = $this->getVolumeHoraireListe()->createChild()->setPeriode($periode)->setTypeIntervention(false);
 
             /* Gestion des mauvaises périodes */
-            $forbiddenPeriode = $vhl->getService()?->getElementPedagogique()?->getPeriode() ?? $periode !== $periode;
+            $forbiddenPeriode = ($vhl->getService()?->getElementPedagogique()?->getPeriode() ?? $periode) !== $periode;
             if ($forbiddenPeriode) {
                 $this->hasForbiddenPeriodes = true;
             }

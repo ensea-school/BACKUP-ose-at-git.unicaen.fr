@@ -102,7 +102,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 * Pour les instances qui utilisent le module Export Siham, vous devez renseigner un nouveau paramètre dans Administration > paramètres généraux > Gestion export RH, il vous faut sélectionner l'étape de la feuille de route franchie à partir de laquelle l'intervenant peut être exporté dans SIHAM.
 * La vue source [SRC_INTERVENANT](doc/Connecteurs-Import/Générique/SRC_INTERVENANT.sql) doit être mise à jour. 
 * Par précaution, la mise à jour désactive la synchronisation sur la table INTERVENANT. Vous devrez manuellement remettre en place cette synchronisation après avoir mis à jour votre vue source SRC_INTERVENANT.
-
+* ** ATTENTION** Les indicateurs portant sur les anciens plafonds ayant été supprimés et remplacés par de tous nouveaux indicateurs, les notifications par mail et abonnements correspondants seront résiliés
 
 # OSE 17.3 (17/03/2022)
 

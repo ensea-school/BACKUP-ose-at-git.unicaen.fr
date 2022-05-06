@@ -75,6 +75,7 @@ return [
             'TBL_SERVICE_REFERENTIEL_ID_SEQ',
             'STATUT_PRIVILEGE_ID_SEQ',
             'TYPE_AGREMENT_STATUT_ID_SEQ',
+            'TBL_NOEUD_ID_SEQ',
         ],
     ],
 ];

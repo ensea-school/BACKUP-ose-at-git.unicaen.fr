@@ -1,5 +1,4 @@
-CREATE
-OR REPLACE TRIGGER "INTERVENANT_CK"
+CREATE OR REPLACE TRIGGER "INTERVENANT_CK"
 BEFORE INSERT OR
 UPDATE of source_id, source_code, histo_destruction, code, statut_id, utilisateur_code
 ON intervenant

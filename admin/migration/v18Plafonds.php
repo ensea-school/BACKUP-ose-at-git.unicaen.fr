@@ -58,18 +58,6 @@ class v18Plafonds extends AbstractMigration
 
 
 
-    public function preMigrationIndicateurs()
-    {
-        $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
-
-        $c->begin('Préparation à la mise à jour des indicateurs');
-
-        $c->end('Préparation à la migration des indicateurs terminée');
-    }
-
-
-
     public function migrationParamsStructure()
     {
         $bdd = $this->manager->getBdd();

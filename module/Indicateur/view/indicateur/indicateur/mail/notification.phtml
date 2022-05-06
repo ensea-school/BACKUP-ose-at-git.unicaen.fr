@@ -61,7 +61,7 @@ if (count($result) > 0):
                 <td style="text-align: center"><?= $r['prioritaire'] ? 'P*' : '' ?></td>
                 <td><?php printValue($r['structure-libelle']); ?></td>
                 <td>
-                    <a href="<?= $this->url($notification->getIndicateur()->getRoute(), ['intervenant' => $intervenantId]) ?>">
+                    <a href="<?= $this->url($notification->getIndicateur()->getRoute(), ['intervenant' => $intervenantId], ['force_canonical' => true]) ?>">
                         <?= $r['intervenant-nom'] . ' ' . $r['intervenant-prenom'] . ' <small>(n°' . $r['intervenant-code'] . ' / ' . $r['statut-libelle'] . ')</small>' ?>
                     </a>
                 </td>
@@ -77,5 +77,6 @@ if (count($result) > 0):
     Vous vous êtes abonné(e) à cet indicateur
     le <?= $notification->getDateAbonnement()->format(Constants::DATETIME_FORMAT) ?>.<br/>
     <a href="<?= $this->url('indicateur', [], ['force_canonical' => true]) ?>"
-       title="Cliquez pour vous rendre à la page de gestion de vos abonnements aux indicateurs">Gérer vos abonnements à des indicateurs</a>
+       title="Cliquez pour vous rendre à la page de gestion de vos abonnements aux indicateurs">Gérer vos abonnements à
+        des indicateurs</a>
 </p>

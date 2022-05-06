@@ -27,12 +27,6 @@ class v18Statuts extends AbstractMigration
         $c   = $this->manager->getOseAdmin()->getConsole();
 
         try {
-            $this->preMigrationIndicateurs();
-        } catch (\Exception $e) {
-            $c->println($e->getMessage(), $c::COLOR_RED);
-        }
-
-        try {
             $this->preMigrationStatuts();
         } catch (\Exception $e) {
             $c->println($e->getMessage(), $c::COLOR_RED);
@@ -120,27 +114,6 @@ class v18Statuts extends AbstractMigration
         $bdd->exec("UPDATE parametre SET valeur='Est VA (oui ou non)' WHERE nom='statut_intervenant_codes_corresp_3_libelle'");
 
         $c->end('Libellés mis à jour');
-    }
-
-
-
-    public function preMigrationIndicateurs()
-    {
-        $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
-
-        $c->begin('Préparation à la mise à jour des indicateurs');
-        if (!$this->manager->hasTable('TYPE_INDICATEUR')) {
-            $bdd->exec('ALTER TABLE INDICATEUR ADD (TYPE_INDICATEUR_ID NUMBER)');
-            $bdd->exec('CREATE TABLE TYPE_INDICATEUR (  
-              ID NUMBER NOT NULL ENABLE,
-              LIBELLE VARCHAR2(60 CHAR) NOT NULL ENABLE,
-              ORDRE NUMBER DEFAULT 1 NOT NULL ENABLE
-            )');
-            $bdd->exec('INSERT INTO TYPE_INDICATEUR (ID, LIBELLE, ORDRE) VALUES (1,\'provisoire\', 1)');
-            $bdd->exec('UPDATE INDICATEUR SET TYPE_INDICATEUR_ID = 1');
-        }
-        $c->end('Préparation à la migration des indicateurs terminée');
     }
 
 

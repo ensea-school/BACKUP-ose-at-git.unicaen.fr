@@ -25,6 +25,8 @@ class NiveauEtape
      */
     protected $lib;
 
+    protected $pertinence;
+
     /**
      *
      * @param \Application\Entity\Db\Etape $etape
@@ -93,6 +95,11 @@ class NiveauEtape
         return $this->lib;
     }
 
+    public function getPertinence()
+    {
+        return $this->pertinence;
+    }
+
     public function setNiv($niv)
     {
         $this->niv = $niv;
@@ -105,11 +112,18 @@ class NiveauEtape
         return $this;
     }
 
+    public function setPertinence($pertinence)
+    {
+        $this->pertinence = $pertinence;
+        return $this;
+    }
+
     public function setEtape(Etape $etape)
     {
         $this->etape = $etape;
-        $this->niv   = $this->etape->getNiveau();
-        $this->lib   = $this->etape->getTypeFormation()->getGroupe()->getLibelleCourt();
+        $this->niv = $this->etape->getNiveau();
+        $this->lib = $this->etape->getTypeFormation()->getGroupe()->getLibelleCourt();
+        $this->pertinence = $this->etape->getTypeFormation()->getGroupe()->getPertinenceNiveau();
         return $this;
     }
 }

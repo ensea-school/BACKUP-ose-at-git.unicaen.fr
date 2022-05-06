@@ -16,7 +16,7 @@ return [
     ],
     'materialized-view' => [
         'includes' => [
-
+            'TBL_NOEUD',
         ],
         'excludes' => [
             //'MV_EXT_SERVICE',

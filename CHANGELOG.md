@@ -2,11 +2,14 @@
 
 [OSE 17.3](#ose-173-17032022)
 
+# Version de test
+
+[OSE 18.0-beta3](#ose-18-beta-3-06052022)
 
 
 
 
-# OSE 18 (à venir)
+# OSE 18 BETA 3 (06/05/2022)
 Objectif : Plafonds personnalisables & refonte gestion des statuts
 
 ## Nouveautés

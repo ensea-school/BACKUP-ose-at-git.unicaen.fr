@@ -16,16 +16,16 @@ use Application\Provider\Privilege\Privileges;
 
 /**
  * @param \Application\Entity\Db\Structure $structure
- * @param \Application\Entity\NiveauEtape  $niveau
- * @param \Application\Entity\Db\Etape     $etape
+ * @param \Application\Entity\NiveauEtape $niveau
+ * @param \Application\Entity\Db\Etape $etape
  */
 function makeQuery($structure = null, $niveau = null, $etape = null)
 {
     $params = [];
     //@formatter:off
-    if ($structure) $params['structure']    = $structure->getId();
-    if ($niveau)    $params['niveau']       = $niveau->getId();
-    if ($etape)     $params['etape']        = $etape->getId();
+    if ($structure) $params['structure'] = $structure->getId();
+    if ($niveau) $params['niveau'] = ($niveau->getPertinence()) ? $niveau->getId() : $niveau->getLib();
+    if ($etape) $params['etape'] = $etape->getId();
     //@formatter:on
 
     return ['query' => $params];
@@ -41,9 +41,9 @@ $niveauxItems = [
     ],
 ];
 
-foreach ($niveaux as $niv) {
-    $niveauxItems[$niv->getId()] = [
-        'label'  => (string)$niv,
+foreach ($niveaux as $code => $niv) {
+    $niveauxItems[$code] = [
+        'label'  => ($niv->getPertinence()) ? (string)$niv : $code,
         'niveau' => $niv,
         'url'    => $this->url('of', [], makeQuery($structure, $niv)),
     ];
@@ -77,8 +77,8 @@ if ($structure) {
 }
 $this->headTitle()->append("Offre de formation");
 
-$canExport      = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV)) && count($elements);
-$canViewEtape   = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
+$canExport = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV)) && count($elements);
+$canViewEtape = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
 $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
 $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELEMENT_SYNCHRONISATION));
 ?>
@@ -236,7 +236,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                         echo $this->tag('a', $attrs)->html('<i class="fas fa-plus"></i> Nouvel enseignement');
                     }
                     if ($canExport) {
-                        $params      = [
+                        $params = [
                             'structure' => $structure ? $structure->getId() : null,
                             'niveau'    => $niveau ? $niveau->getId() : null,
                             'etape'     => $etape ? $etape->getId() : null,

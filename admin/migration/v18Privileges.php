@@ -16,22 +16,7 @@ class v18Privileges extends AbstractMigration
 
     public function utile(): bool
     {
-        if (!$this->manager->hasTable('SAVE_V18_PRIVILEGE')) {
-            return false;
-        }
-
-        $sql = "
-        SELECT 
-          count(*) c
-        FROM 
-          privilege p
-          JOIN categorie_privilege cp ON cp.id = p.categorie_id
-        WHERE 
-          cp.code = 'enseignement'
-          AND p.code = 'visualisation'
-          ";
-
-        return $this->manager->getBdd()->select($sql)[0]['C'] == '1';
+        return $this->manager->hasTable('SAVE_V18_PRIVILEGE');
     }
 
 

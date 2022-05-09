@@ -173,7 +173,8 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
               gtf.libelle_court || e.niveau niveau_id,
               gtf.libelle_court || e.niveau niveau_libelle,
               e.id etape_id,
-              e.libelle etape_libelle
+              e.libelle etape_libelle,
+              gtf.ordre
             FROM
               element_pedagogique ep
               JOIN chemin_pedagogique cp ON cp.element_pedagogique_id = ep.id AND cp.histo_destruction IS NULL
@@ -184,6 +185,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
             WHERE
               ep.histo_destruction IS NULL
               AND ep.annee_id = :annee
+            ORDER BY gtf.ordre ASC
               ";
 
         $res = $this->getEntityManager()->getConnection()->fetchAllAssociative(

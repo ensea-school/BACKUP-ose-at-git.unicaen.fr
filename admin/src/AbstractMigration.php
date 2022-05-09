@@ -6,14 +6,6 @@
 
 abstract class AbstractMigration
 {
-    CONST CONTEXTE_PRE  = 'pre';
-    CONST CONTEXTE_POST = 'post';
-    CONST CONTEXTE_ALL  = 'all';
-
-    /**
-     * @var string
-     */
-    protected $contexte = self::CONTEXTE_POST;
 
     /**
      * @var MigrationManager
@@ -42,7 +34,11 @@ abstract class AbstractMigration
 
     abstract public function utile(): bool;
 
+    /*
 
+    Ajouter uniquement si nécessaire :
+    - une méthode publique before() qui s'exécutera AVANT la mise à jour
+    - une méthode publique after() qui s'exécutera APRES la mise à jour
 
-    abstract public function action(string $contexte);
+    */
 }

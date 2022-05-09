@@ -76,9 +76,10 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                     <?php foreach ($result as $intervenantId => $r): ?>
                         <tr>
                             <?php if ($mailUrl): ?>
-                                <th class="cc"><input type="checkbox" checked="checked" value="<?= $intervenantId ?>" class="indic-intervenant"/></th>
+                                <th class="cc"><input type="checkbox" checked="checked" value="<?= $intervenantId ?>"
+                                                      class="indic-intervenant"/></th>
                             <?php endif; ?>
-                            <td style="text-align: center"><?= $r['prioritaire'] ? '<i class="fas fa-star-sharp"></i>' : '' ?></td>
+                            <td style="text-align: center"><?= $r['prioritaire'] ? '<i class="fas fa-star"></i>' : '' ?></td>
                             <td><?php printValue($r['structure-libelle']); ?></td>
                             <td>
                                 <a href="<?= $this->url($indicateur->getRoute(), ['intervenant' => $intervenantId]) ?>">
@@ -114,7 +115,8 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
             <i class="fas fa-rotate-left" aria-hidden="true"></i
                     Retour à la liste des indicateurs
         </a>
-        <a class="btn btn-default" href="<?= $this->url('indicateur/export-csv', ['indicateur' => $indicateur->getId()]); ?>">
+        <a class="btn btn-default"
+           href="<?= $this->url('indicateur/export-csv', ['indicateur' => $indicateur->getId()]); ?>">
             <i class="fas fa-upload" aria-hidden="true"></i>
             Export de la liste au format CSV
         </a>
@@ -128,19 +130,16 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
 <?php if ($mailUrl): ?>
     <script>
 
-        function cocherTout()
-        {
+        function cocherTout() {
             $(".indic-intervenant").prop("checked", true);
         }
 
 
-        function decocherTout()
-        {
+        function decocherTout() {
             $(".indic-intervenant").prop("checked", false);
         }
 
-        function envoiMail()
-        {
+        function envoiMail() {
             var url = <?= json_encode($mailUrl) ?>;
             var ids = '';
             $(".indic-intervenant:checked").each(function () {

@@ -238,6 +238,8 @@ class OseAdmin
         } elseif (is_dir($cible . $action)) {
             $sousAction = $this->getConsole()->getArg(2);
             $filename   = $cible . $action . '/actions/' . $sousAction . '.php';
+        } else {
+            $filename = null;
         }
 
         if ($filename) {
@@ -303,6 +305,27 @@ class OseAdmin
         }
 
         return $this->sourceOseId;
+    }
+
+
+
+    public function getConfig(): array
+    {
+        $configFilename = $this->getOseDir() . '/config.local.php';
+        if (file_exists($configFilename)) {
+            return require $configFilename;
+        } else {
+            return [];
+        }
+    }
+
+
+
+    public function inMaintenance(): bool
+    {
+        $config = $this->getConfig();
+
+        return $config['maintenance']['modeMaintenance'] ?? true;
     }
 
 

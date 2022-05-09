@@ -107,6 +107,21 @@ $config = [
             ],
         ],
     ],
+    'console'            => [
+        'router' => [
+            'routes' => [
+                'generate-proxies' => [
+                    'options' => [
+                        'route'    => 'generate-proxies',
+                        'defaults' => [
+                            'controller' => 'Application\Controller\Index',
+                            'action'     => 'generate-proxies',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
     'bjyauthorize'       => [
         'identity_provider' => Provider\Identity\IdentityProvider::class,
 

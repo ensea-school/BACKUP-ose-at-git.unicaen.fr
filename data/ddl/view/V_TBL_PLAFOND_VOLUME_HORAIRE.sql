@@ -11,6 +11,7 @@ SELECT
   CASE
     WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
     WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+    ELSE COALESCE(p.plafond_etat_id,1)
   END plafond_etat_id,
   COALESCE(pd.heures, 0) derogation,
   CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
@@ -64,11 +65,13 @@ FROM
         s.element_pedagogique_id                    element_pedagogique_id,
         s.type_intervention_id                      type_intervention_id,
         s.heures                                    heures,
-        COALESCE(c.heures * c.groupes,0)            plafond
+        COALESCE(c.heures * c.groupes,0)            plafond,
+        pe.id                                       plafond_etat_id
       FROM
                   s
              JOIN type_intervention ti ON ti.id = s.type_intervention_id
              JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
+             JOIN plafond_etat pe ON pe.code = 'informatif'
         LEFT JOIN c ON c.element_pedagogique_id = s.element_pedagogique_id
                    AND c.type_intervention_id = COALESCE(ti.type_intervention_maquette_id,ti.id)
       WHERE

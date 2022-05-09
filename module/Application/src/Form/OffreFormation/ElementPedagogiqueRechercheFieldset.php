@@ -21,27 +21,28 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     use SessionContainerTrait;
     use ElementPedagogiqueServiceAwareTrait;
 
-    protected $structureName = 'structure';
+    protected $structureName    = 'structure';
 
-    protected $niveauName = 'niveau';
+    protected $niveauName       = 'niveau';
 
-    protected $etapeName = 'etape';
+    protected $etapeName        = 'etape';
 
-    protected $elementId = 'element';
+    protected $elementId        = 'element';
 
     protected $structureEnabled = true;
 
-    protected $niveauEnabled = true;
+    protected $niveauEnabled    = true;
 
-    protected $etapeEnabled = true;
+    protected $etapeEnabled     = true;
 
-    protected $relations = [];
+    protected $relations        = [];
 
     /**
      *
      * @var QueryBuilder
      */
     protected $queryBuilder;
+
 
 
     public function init()
@@ -151,9 +152,10 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     public function populateOptions()
     {
-        $data = $this->getData();
+        $data            = $this->getData();
         $this->relations = $data['relations'];
         $this->get('structure')->setValueOptions($data['structures']);
         $this->get('niveau')->setValueOptions($data['niveaux']);
@@ -161,13 +163,10 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     protected function getData()
     {
-        $key = $this->getServiceContext()->getAnnee()->getId();
-
-        if (!$this->getSessionContainer()->{$key}) {
-
-            $sql = "
+        $sql = "
             SELECT DISTINCT
               s.id structure_id,
               s.libelle_court structure_libelle,
@@ -189,56 +188,56 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
             ORDER BY gtf.ordre ASC
               ";
 
-            $res = $this->getEntityManager()->getConnection()->fetchAllAssociative(
-                $sql,
-                ['annee' => $this->getServiceContext()->getAnnee()->getId()]
-            );
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative(
+            $sql,
+            ['annee' => $this->getServiceContext()->getAnnee()->getId()]
+        );
 
-            $result = [
-                'structures' => [],
-                'niveaux'    => [],
-                'etapes'     => [],
-                'relations'  => ['ALL' => ['ALL' => []]],
-            ];
-            foreach ($res as $e) {
-                $structureId = $e['STRUCTURE_ID'];
-                $structure = $e['STRUCTURE_LIBELLE'];
-                $niveauId = $e['NIVEAU_ID'];
-                $niveau = $e['NIVEAU_LIBELLE'];
-                $etapeId = $e['ETAPE_ID'];
-                $etape = $e['ETAPE_LIBELLE'];
+        $result = [
+            'structures' => [],
+            'niveaux'    => [],
+            'etapes'     => [],
+            'relations'  => ['ALL' => ['ALL' => []]],
+        ];
+        foreach ($res as $e) {
+            $structureId = $e['STRUCTURE_ID'];
+            $structure   = $e['STRUCTURE_LIBELLE'];
+            $niveauId    = $e['NIVEAU_ID'];
+            $niveau      = $e['NIVEAU_LIBELLE'];
+            $etapeId     = $e['ETAPE_ID'];
+            $etape       = $e['ETAPE_LIBELLE'];
 
-                if (!isset($result['structures'][$structureId])) {
-                    $result['structures'][$structureId] = $structure;
-                }
-                if (!isset($result['niveaux'][$niveauId])) {
-                    $result['niveaux'][$niveauId] = $niveau;
-                }
-                if (!isset($result['etapes'][$etapeId])) {
-                    $result['etapes'][$etapeId] = $etape;
-                }
-
-                if (!isset($result['relations'][$structureId]['ALL'])) {
-                    $result['relations'][$structureId]['ALL'] = [];
-                }
-                if (!isset($result['relations']['ALL'][$niveauId])) {
-                    $result['relations']['ALL'][$niveauId] = [];
-                }
-                if (!isset($result['relations'][$structureId][$niveauId])) {
-                    $result['relations'][$structureId][$niveauId] = [];
-                }
-                $result['relations']['ALL']['ALL'][] = $etapeId;
-                $result['relations'][$structureId]['ALL'][] = $etapeId;
-                $result['relations']['ALL'][$niveauId][] = $etapeId;
-                $result['relations'][$structureId][$niveauId][] = $etapeId;
+            if (!isset($result['structures'][$structureId])) {
+                $result['structures'][$structureId] = $structure;
             }
-            asort($result['structures']);
-            asort($result['etapes']);
-            $this->getSessionContainer()->{$key} = $result;
-        }
+            if (!isset($result['niveaux'][$niveauId])) {
+                $result['niveaux'][$niveauId] = $niveau;
+            }
+            if (!isset($result['etapes'][$etapeId])) {
+                $result['etapes'][$etapeId] = $etape;
+            }
 
-        return $this->getSessionContainer()->{$key};
+            if (!isset($result['relations'][$structureId]['ALL'])) {
+                $result['relations'][$structureId]['ALL'] = [];
+            }
+            if (!isset($result['relations']['ALL'][$niveauId])) {
+                $result['relations']['ALL'][$niveauId] = [];
+            }
+            if (!isset($result['relations'][$structureId][$niveauId])) {
+                $result['relations'][$structureId][$niveauId] = [];
+            }
+            $result['relations']['ALL']['ALL'][]            = $etapeId;
+            $result['relations'][$structureId]['ALL'][]     = $etapeId;
+            $result['relations']['ALL'][$niveauId][]        = $etapeId;
+            $result['relations'][$structureId][$niveauId][] = $etapeId;
+        }
+        asort($result['structures']);
+        asort($result['niveaux']);
+        asort($result['etapes']);
+
+        return $result;
     }
+
 
 
     public function getRelations()
@@ -247,10 +246,12 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     public function getStructureName()
     {
         return $this->structureName;
     }
+
 
 
     public function getNiveauName()
@@ -259,10 +260,12 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     public function getEtapeName()
     {
         return $this->etapeName;
     }
+
 
 
     public function getStructureEnabled()
@@ -271,16 +274,19 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     public function getNiveauEnabled()
     {
         return $this->niveauEnabled;
     }
 
 
+
     public function getEtapeEnabled()
     {
         return $this->etapeEnabled;
     }
+
 
 
     public function setStructureEnabled($structureEnabled = true)
@@ -291,12 +297,14 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     public function setNiveauEnabled($niveauEnabled = true)
     {
         $this->niveauEnabled = $niveauEnabled;
 
         return $this;
     }
+
 
 
     public function setEtapeEnabled($etapeEnabled = true)
@@ -307,6 +315,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     /**
      * @return string
      */
@@ -314,6 +323,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     {
         return $this->elementId;
     }
+
 
 
     /**
@@ -328,6 +338,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
 
         return $this;
     }
+
 
 
     /**
@@ -359,6 +370,9 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
 }
 
 
+
+
+
 /**
  *
  *
@@ -371,7 +385,7 @@ class ElementPedagogiqueRechercheHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array $data
+     * @param array  $data
      * @param object $object
      *
      * @return object
@@ -387,6 +401,7 @@ class ElementPedagogiqueRechercheHydrator implements HydratorInterface
 
         return null;
     }
+
 
 
     /**

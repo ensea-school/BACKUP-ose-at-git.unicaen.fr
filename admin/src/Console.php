@@ -124,6 +124,64 @@ class Console implements \BddAdmin\Logger\LoggerInterface
 
 
 
+    public function printArray(array $a)
+    {
+        $lengths = [];
+
+        if (isset($a[0])) {
+            $head = $a[0];
+            foreach ($head as $k => $null) {
+                $head[$k] = $k;
+                if (($lengths[$k] ?? 0) < mb_strlen($k)) {
+                    $lengths[$k] = mb_strlen($k);
+                }
+            }
+        } else {
+            $head = [];
+        }
+
+        foreach ($a as $l) {
+            foreach ($l as $k => $v) {
+                if (($lengths[$k] ?? 0) < mb_strlen($v)) {
+                    $lengths[$k] = mb_strlen($v);
+                }
+            }
+        }
+
+
+        $this->print('|');
+        foreach ($head as $k => $v) {
+            $this->print(str_pad('', $lengths[$k], '-') . ' | ');
+        }
+        $this->println('');
+        if ($head) {
+            $this->print('|');
+            foreach ($head as $k => $v) {
+                $this->print(str_pad($v, $lengths[$k], ' ') . ' | ');
+            }
+            $this->println('');
+            $this->print('|');
+            foreach ($head as $k => $v) {
+                $this->print(str_pad('', $lengths[$k], '-') . ' | ');
+            }
+            $this->println('');
+        }
+        foreach ($a as $n => $l) {
+            $this->print('|');
+            foreach ($l as $k => $v) {
+                $this->print(str_pad($v, $lengths[$k], ' ') . ' | ');
+            }
+            $this->println('');
+        }
+        $this->print('|');
+        foreach ($head as $k => $v) {
+            $this->print(str_pad('', $lengths[$k], '-') . ' | ');
+        }
+        $this->println('');
+    }
+
+
+
     public function msg($message, bool $rewrite = false)
     {
         if ($this->logCurrentLevel <= $this->logLevel) {

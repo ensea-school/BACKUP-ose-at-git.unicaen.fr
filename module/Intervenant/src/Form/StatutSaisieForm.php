@@ -26,7 +26,6 @@ class StatutSaisieForm extends AbstractForm
             'prioritaireIndicateurs'        => 'Ces intervenants, prioritaires, seront mis en évidence au niveau des indicateurs',
             'serviceStatutaire'             => 'Nombre d\'heures de service statutaire',
             'depassementServiceDuSansHC'    => 'Le dépassement du service statutaire n\'occasionne aucune heure complémentaire',
-            'tauxChargesPatronales'         => 'Taux de charges patronales',
             'dossier'                       => '',
             'servicePrevu'                  => 'Prévisionnel',
             'serviceRealise'                => 'Réalisé',
@@ -110,6 +109,24 @@ class StatutSaisieForm extends AbstractForm
 
         $this->spec(Statut::class, $ignored);
 
+        $this->spec(['tauxChargesPatronales' => [
+            'type'       => 'Text',
+            'name'       => 'tauxChargesPatronales',
+            'attributes' => [
+                'pattern' => '[0-9]*',
+            ],
+            'hydrator'   => [
+                'getter' => function (Statut $statut, string $name) {
+                    $taux = $statut->getTauxChargesPatronales();
+                    return $taux * 100;
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $taux = $value / 100;
+                    $statut->setTauxChargesPatronales($taux);
+                },
+            ],
+        ]]);
+
         foreach ($dveElements as $dveElement) {
             $this->spec([$dveElement => [
                 'type'     => 'Select',
@@ -127,8 +144,8 @@ class StatutSaisieForm extends AbstractForm
                         $getter = 'get' . ucfirst($name);
 
                         $access = $statut->{$getter}();
-                        $visu   = $statut->{$getter . 'Visualisation'}();
-                        $edit   = $statut->{$getter . 'Edition'}();
+                        $visu = $statut->{$getter . 'Visualisation'}();
+                        $edit = $statut->{$getter . 'Edition'}();
 
                         if ($edit && $visu && $access) {
                             return 'edition';
@@ -142,8 +159,8 @@ class StatutSaisieForm extends AbstractForm
                     },
                     'setter' => function (Statut $statut, $value, string $name) {
                         $access = false;
-                        $visu   = false;
-                        $edit   = false;
+                        $visu = false;
+                        $edit = false;
                         switch ($value) {
                             case 'edition':
                                 $edit = true;
@@ -211,7 +228,7 @@ class StatutSaisieForm extends AbstractForm
                 'hydrator' => [
                     'getter' => function (Statut $statut, string $name) {
                         $access = $statut->getConseilRestreint();
-                        $visu   = $statut->getConseilRestreintVisualisation();
+                        $visu = $statut->getConseilRestreintVisualisation();
 
                         if ($visu && $access) {
                             return 'visualisation';
@@ -223,7 +240,7 @@ class StatutSaisieForm extends AbstractForm
                     },
                     'setter' => function (Statut $statut, $value, string $name) {
                         $access = false;
-                        $visu   = false;
+                        $visu = false;
                         switch ($value) {
                             case 'visualisation':
                                 $visu = true;
@@ -248,7 +265,7 @@ class StatutSaisieForm extends AbstractForm
                 'hydrator' => [
                     'getter' => function (Statut $statut, string $name) {
                         $access = $statut->getConseilAcademique();
-                        $visu   = $statut->getConseilAcademiqueVisualisation();
+                        $visu = $statut->getConseilAcademiqueVisualisation();
 
                         if ($visu && $access) {
                             return 'visualisation';
@@ -260,7 +277,7 @@ class StatutSaisieForm extends AbstractForm
                     },
                     'setter' => function (Statut $statut, $value, string $name) {
                         $access = false;
-                        $visu   = false;
+                        $visu = false;
                         switch ($value) {
                             case 'visualisation':
                                 $visu = true;
@@ -286,8 +303,8 @@ class StatutSaisieForm extends AbstractForm
                 'hydrator' => [
                     'getter' => function (Statut $statut, string $name) {
                         $access = $statut->getContrat();
-                        $visu   = $statut->getContratVisualisation();
-                        $depot  = $statut->getContratDepot();
+                        $visu = $statut->getContratVisualisation();
+                        $depot = $statut->getContratDepot();
 
                         if ($depot && $visu && $access) {
                             return 'depot';
@@ -301,8 +318,8 @@ class StatutSaisieForm extends AbstractForm
                     },
                     'setter' => function (Statut $statut, $value, string $name) {
                         $access = false;
-                        $visu   = false;
-                        $depot  = false;
+                        $visu = false;
+                        $depot = false;
                         switch ($value) {
                             case 'depot':
                                 $depot = true;
@@ -330,7 +347,7 @@ class StatutSaisieForm extends AbstractForm
                 'hydrator' => [
                     'getter' => function (Statut $statut, string $name) {
                         $access = $statut->getModificationServiceDu();
-                        $visu   = $statut->getModificationServiceDuVisualisation();
+                        $visu = $statut->getModificationServiceDuVisualisation();
 
                         if ($visu && $access) {
                             return 'visualisation';
@@ -342,7 +359,7 @@ class StatutSaisieForm extends AbstractForm
                     },
                     'setter' => function (Statut $statut, $value, string $name) {
                         $access = false;
-                        $visu   = false;
+                        $visu = false;
                         switch ($value) {
 
                             case 'visualisation':

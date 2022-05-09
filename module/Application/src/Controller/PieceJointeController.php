@@ -15,6 +15,7 @@ use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PieceJointeServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Form\MailerIntervenantFormAwareTrait;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
@@ -350,22 +351,27 @@ class PieceJointeController extends AbstractController
 
     public function typePieceJointeStatutAction()
     {
+        $codeIntervenant = $this->params()->fromRoute('codeTypeIntervenant', TypeIntervenant::CODE_EXTERIEUR);
         $this->em()->getFilters()->enable('historique')->init(entity: [
             TypePieceJointe::class,
             Statut::class,
             TypePieceJointeStatut::class,
         ]);
+
         $this->em()->getFilters()->enable('annee')->init([
             Statut::class,
         ]);
 
         $anneeId = $this->getServiceContext()->getAnnee()->getId();
 
-        $typesPiecesJointes  = $this->getServiceTypePieceJointe()->getList();
-        $statuts             = $this->getServiceStatut()->getList();
+        $typesPiecesJointes = $this->getServiceTypePieceJointe()->getList();
+        $statuts            = $this->getServiceStatut()->getList();
+
         $statutsIntervenants = [];
         foreach ($statuts as $statut) {
-            $statutsIntervenants[$statut->getTypeIntervenant()->getId()][] = $statut;
+            if ($statut->getTypeIntervenant()->getCode() == $codeIntervenant) {
+                $statutsIntervenants[$statut->getTypeIntervenant()->getId()][] = $statut;
+            }
         }
 
         $dql = "
@@ -375,12 +381,13 @@ class PieceJointeController extends AbstractController
           " . TypePieceJointeStatut::class . " tpjs
           JOIN tpjs.typePieceJointe tpj
           JOIN tpjs.statut si
+          JOIN si.typeIntervenant ti
         WHERE
           tpjs.annee = :annee
-        ";
+        AND ti.code = :code";
 
         /* @var $tpjss TypePieceJointeStatut[] */
-        $query                     = $this->em()->createQuery($dql)->setParameters(['annee' => $this->getServiceContext()->getAnnee()->getId()]);
+        $query                     = $this->em()->createQuery($dql)->setParameters(['annee' => $this->getServiceContext()->getAnnee()->getId(), 'code' => $codeIntervenant]);
         $tpjss                     = $query->getResult();
         $typesPiecesJointesStatuts = [];
         foreach ($tpjss as $tpjs) {
@@ -393,7 +400,7 @@ class PieceJointeController extends AbstractController
             $typesPiecesJointesStatuts[$tpjID][$siId][] = $tpjs;
         }
 
-        return compact('typesPiecesJointes', 'statutsIntervenants', 'typesPiecesJointesStatuts');
+        return compact('typesPiecesJointes', 'statutsIntervenants', 'typesPiecesJointesStatuts', 'codeIntervenant');
     }
 
 

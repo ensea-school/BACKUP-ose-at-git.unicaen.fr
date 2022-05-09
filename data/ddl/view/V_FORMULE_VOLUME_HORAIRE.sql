@@ -47,8 +47,8 @@ SELECT
   str.code                                                             structure_code,
   CASE WHEN COALESCE(str.id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
   CASE WHEN COALESCE(str.id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
-  ep.ponderation_service_du                                            ponderation_service_du,
-  ep.ponderation_service_compl                                         ponderation_service_compl,
+  COALESCE(ep.ponderation_service_du,1)                                ponderation_service_du,
+  COALESCE(ep.ponderation_service_compl,1)                             ponderation_service_compl,
   COALESCE(tf.service_statutaire,1)                                    service_statutaire,
 
   vh.heures                                                            heures,

@@ -38,7 +38,7 @@ return [
             'requete'   => file_get_contents($sqlDir . '13.sql'),
         ],
         14 => [
-            'libelle' => 'Heures max. par rapport à la charge d'enseignement',
+            'libelle'   => 'Heures max. par rapport à la charge d\'enseignement',
             'perimetre' => 'volume_horaire',
             'message'   => 'Dépassement de la charge pour :sujet',
             'requete'   => file_get_contents($sqlDir . '14.sql'),

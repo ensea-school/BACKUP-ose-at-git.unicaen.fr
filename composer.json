@@ -30,16 +30,14 @@
     "config": {
         "allow-plugins": {
             "laminas/laminas-dependency-plugin": true,
-            "composer/package-versions-deprecated": true
+            "composer/package-versions-deprecated": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "laminas-api-tools/api-tools-asset-manager": true
         }
     },
     "scripts"          : {
         "sniffer:php8": "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
         "phpcs"       : "./vendor/bin/phpcs -p ./module --standard=PSR12"
     },
-    "minimum-stability": "dev",
-    "allow-plugins": {
-        "dealerdirect/phpcodesniffer-composer-installer": true,
-        "laminas-api-tools/api-tools-asset-manager": true
-    }
+    "minimum-stability": "dev"
 }

@@ -4,9 +4,11 @@ namespace Indicateur\Service;
 
 use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Annee;
+use Application\Entity\Db\Structure;
 use Application\Service\AbstractService;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Indicateur\Entity\Db\Indicateur;
+use Indicateur\Entity\Db\NotificationIndicateur;
 
 
 /**
@@ -36,10 +38,10 @@ class IndicateurService extends AbstractService
 
 
 
-    protected function fetchData(Indicateur $indicateur, bool $onlyCount = true): array
+    protected function fetchData(Indicateur $indicateur, ?Structure $structure = null, bool $onlyCount = true): array
     {
         $numero    = $indicateur->getNumero();
-        $structure = $this->getServiceContext()->getStructure();
+        $structure = $structure ?: $this->getServiceContext()->getStructure();
         $annee     = $this->getServiceContext()->getAnnee();
 
         if ($indicateur->getTypeIndicateur()->isPlafond()) {
@@ -98,7 +100,7 @@ class IndicateurService extends AbstractService
      */
     public function getCount(Indicateur $indicateur)
     {
-        $data = $this->fetchData($indicateur, true);
+        $data = $this->fetchData($indicateur, null, true);
 
         return (integer)$data[0]['NB'];
     }
@@ -110,9 +112,15 @@ class IndicateurService extends AbstractService
      *
      * @return array
      */
-    public function getResult(Indicateur $indicateur): array
+    public function getResult(NotificationIndicateur|Indicateur $indicateur): array
     {
-        $data   = $this->fetchData($indicateur, false);
+        if ($indicateur instanceof NotificationIndicateur) {
+            $structure  = $indicateur->getAffectation()->getStructure();
+            $indicateur = $indicateur->getIndicateur();
+        } else {
+            $structure = null;
+        }
+        $data   = $this->fetchData($indicateur, $structure, false);
         $result = [];
 
         foreach ($data as $d) {
@@ -168,7 +176,7 @@ class IndicateurService extends AbstractService
 
     public function getCsv(Indicateur $indicateur): array
     {
-        $data   = $this->fetchData($indicateur, false);
+        $data   = $this->fetchData($indicateur, null, false);
         $result = [];
 
         foreach ($data as $d) {

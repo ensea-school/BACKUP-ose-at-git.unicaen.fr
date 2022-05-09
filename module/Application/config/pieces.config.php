@@ -185,9 +185,9 @@ return [
                         ],
                     ],
                     'type-piece-jointe-statut'          => [
-                        'type'    => 'Literal',
+                        'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/type-piece-jointe-statut',
+                            'route'    => '/type-piece-jointe-statut[/:codeTypeIntervenant]',
                             'defaults' => [
                                 'action' => 'type-piece-jointe-statut',
                             ],

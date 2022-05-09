@@ -6,9 +6,7 @@
 
 class OrdonnancementColonnesTbl extends AbstractMigration
 {
-    protected $contexte = self::CONTEXTE_ALL;
-
-    protected $tbls     = [];
+    protected $tbls = [];
 
 
 
@@ -56,18 +54,7 @@ class OrdonnancementColonnesTbl extends AbstractMigration
 
 
 
-    public function action(string $contexte)
-    {
-        if ($contexte == self::CONTEXTE_PRE) {
-            $this->before();
-        } else {
-            $this->after();
-        }
-    }
-
-
-
-    protected function before()
+    public function before()
     {
         $bdd     = $this->manager->getBdd();
         $console = $this->manager->getOseAdmin()->getConsole();
@@ -80,7 +67,7 @@ class OrdonnancementColonnesTbl extends AbstractMigration
 
 
 
-    protected function after()
+    public function after()
     {
         $console = $this->manager->getOseAdmin()->getConsole();
 

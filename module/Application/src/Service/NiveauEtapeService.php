@@ -18,14 +18,15 @@ class NiveauEtapeService extends AbstractService
      */
     public function get($id)
     {
-        if (null === $id || 0 === $id || '-' === $id){
+        if (null === $id || 0 === $id || '-' === $id) {
             return null;
         }
-        $tiretPos = strrpos($id,'-');
-        $groupeTypeFormationLibelleCourt = substr( $id, 0, $tiretPos );
-        $niv = substr( $id, $tiretPos+1 );
+        $tiretPos = strrpos($id, '-');
+
+        $groupeTypeFormationLibelleCourt = (!$tiretPos) ? $id : substr($id, 0, $tiretPos);
+        $niv = (!$tiretPos) ? false : substr($id, $tiretPos + 1);
         if ($niv === false) $niv = null;
-        
+
         $niveau = new NiveauEtape();
         $niveau->setLib($groupeTypeFormationLibelleCourt);
         $niveau->setNiv($niv);

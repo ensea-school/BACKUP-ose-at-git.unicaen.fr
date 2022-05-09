@@ -37,7 +37,7 @@ return [
     'EFFECTIFS_ETAPE'         => [],
     'ELEMENT_TAUX_REGIMES'    => [],
     'NOEUD'                   => [
-        'SYNC_HOOK_AFTER' => "UNICAEN_IMPORT.REFRESH_MV('TBL_NOEUD');\nUNICAEN_TBL.CALCULER('chargens');",
+        'SYNC_HOOK_AFTER' => "UNICAEN_TBL.CALCULER('chargens');",
     ],
     'LIEN'                    => [],
     'SCENARIO_NOEUD'          => [],

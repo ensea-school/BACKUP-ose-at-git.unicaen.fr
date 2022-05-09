@@ -16,8 +16,6 @@ class v18Indicateurs extends AbstractMigration
 
     public function utile(): bool
     {
-        return true;
-
         return $this->manager->hasNew('table', 'TYPE_INDICATEUR');
     }
 

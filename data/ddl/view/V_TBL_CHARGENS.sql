@@ -51,16 +51,16 @@ FROM
 )
   SELECT
     n.annee_id                                                                       annee_id,
-    n.noeud_id                                                                       noeud_id,
+    n.id                                                                             noeud_id,
     sn.scenario_id                                                                   scenario_id,
     sne.type_heures_id                                                               type_heures_id,
     ti.id                                                                            type_intervention_id,
 
     n.element_pedagogique_id                                                         element_pedagogique_id,
-    n.element_pedagogique_etape_id                                                   etape_id,
+    etp.id                                                                           etape_id,
     sne.etape_id                                                                     etape_ens_id,
     n.structure_id                                                                   structure_id,
-    n.groupe_type_formation_id                                                       groupe_type_formation_id,
+    tf.groupe_id                                                                     groupe_type_formation_id,
 
     vhe.heures                                                                       heures_ens,
     vhe.heures * ti.taux_hetd_service                                                hetd,
@@ -69,8 +69,7 @@ FROM
     COALESCE(sep.dedoublement, se.dedoublement, sd.dedoublement,1)                   dedoublement,
     COALESCE(sep.assiduite,1)                                                        assiduite,
     sne.effectif*COALESCE(sep.assiduite,1)                                           effectif,
-    SUM(sne.effectif*COALESCE(sep.assiduite,1))
-      OVER (PARTITION BY n.noeud_id, sn.scenario_id, ti.id)                          t_effectif
+    SUM(sne.effectif*COALESCE(sep.assiduite,1)) OVER (PARTITION BY n.id, sn.scenario_id, ti.id) t_effectif
 FROM
               scenario_noeud_effectif sne
 
@@ -79,29 +78,36 @@ FROM
                                          /*@NOEUD_ID=sn.noeud_id*/
                                          /*@SCENARIO_ID=sn.scenario_id*/
 
-         JOIN tbl_noeud                 n ON n.noeud_id = sn.noeud_id
+
+
+         JOIN noeud                     n ON n.id = sn.noeud_id
+                                         AND n.histo_destruction IS NULL
                                          /*@ANNEE_ID=n.annee_id*/
                                          /*@ELEMENT_PEDAGOGIQUE_ID=n.element_pedagogique_id*/
-                                         /*@ETAPE_ID=n.element_pedagogique_etape_id*/
 
          JOIN volume_horaire_ens      vhe ON vhe.element_pedagogique_id = n.element_pedagogique_id
                                          AND vhe.histo_destruction IS NULL
                                          AND vhe.heures > 0
 
          JOIN type_intervention        ti ON ti.id = vhe.type_intervention_id
+    LEFT JOIN element_pedagogique      ep ON ep.id = n.element_pedagogique_id
+    LEFT JOIN etape                   etp ON etp.id = COALESCE(n.etape_id,ep.etape_id)
+                                         /*@ETAPE_ID=etp.id*/
+
+    LEFT JOIN type_formation           tf ON tf.id = etp.type_formation_id
 
     LEFT JOIN seuils_perso            sep ON sep.element_pedagogique_id = n.element_pedagogique_id
                                          AND sep.scenario_id = sn.scenario_id
                                          AND sep.type_intervention_id = ti.id
 
-    LEFT JOIN seuils_perso             se ON se.etape_id = n.element_pedagogique_etape_id
+    LEFT JOIN seuils_perso             se ON se.etape_id = etp.id
                                          AND se.scenario_id = sn.scenario_id
                                          AND se.type_intervention_id = ti.id
 
     LEFT JOIN tbl_chargens_seuils_def  sd ON sd.annee_id = n.annee_id
                                          AND sd.scenario_id = sn.scenario_id
-                                         AND sd.structure_id = n.structure_etape_id
-                                         AND sd.groupe_type_formation_id = n.groupe_type_formation_id
+                                         AND sd.structure_id = etp.structure_id
+                                         AND sd.groupe_type_formation_id = tf.groupe_id
                                          AND sd.type_intervention_id = ti.id
   WHERE
     1=1

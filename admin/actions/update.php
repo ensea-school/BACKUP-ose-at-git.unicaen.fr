@@ -49,24 +49,14 @@ $c->passthru([
     $updcmd,
 ]);
 
-
-// Récupération des dépendances
-$c->println("\nMise à jour des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
-$c->passthru([
-    "cd $osedir",
-    "php composer.phar self-update --2",
-    "php composer.phar install --optimize-autoloader",
-]);
-
-
-// Conclusion
 $oa->writeVersion($version);
-$c->println("\nMise à jour des fichiers OK : la version installée est désormais la " . $version, $c::COLOR_LIGHT_GREEN);
+$c->println("\nMise à jour du code source OK : la version installée est désormais la " . $version, $c::COLOR_LIGHT_GREEN);
 
+// Mise à jour des dépendances du projet
+$oa->run('update-composer', true);
 
 // Mise à jour de la base de données à partir d'un nouveau processus
 $oa->run('update-bdd', true);
-
 
 //Conclusion
 $c->println("\nFin de la mise à jour.");

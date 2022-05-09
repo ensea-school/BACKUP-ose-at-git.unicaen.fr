@@ -1,6 +1,7 @@
 <?php
 
 use Application\Provider\Privilege\Privileges;
+use Intervenant\Entity\Db\TypeIntervenant;
 
 /**
  * @var $this              \Application\View\Renderer\PhpRenderer
@@ -156,7 +157,8 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('pieceJustificative')); ?>
                         <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION))): ?>
-                            <a target="_blank" href="<?= $this->url('piece-jointe/type-piece-jointe-statut'); ?>">
+                            <a target="_blank"
+                               href="<?= $this->url('piece-jointe/type-piece-jointe-statut', ['codeTypeIntervenant' => TypeIntervenant::CODE_EXTERIEUR]); ?>">
                                 Page d'administration des pièces justificatives
                             </a>
                         <?php endif; ?>

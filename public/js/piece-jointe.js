@@ -12,15 +12,11 @@ $.widget("ose.pieceJointe", {
             event.preventDefault();
         });
 
-        that.element.on('click', '.refuser-pj', function (event) {
-            that.refuser($(this));
-            event.preventDefault();
-        });
-
         $("body").on("pj-refus-event", function (event, container) {
             var tpj = event.a.data('tpj');
             that.onFileChange(tpj);
-            that.refreshContainerValidationBar();
+            that.getContainer(tpj).find('.uploaded-files-div').refresh();
+            event.preventDefault();
 
         });
 
@@ -90,30 +86,6 @@ $.widget("ose.pieceJointe", {
                 alert('Une erreur est survenue. L\'opération n\'a pas pu être effectuée.');
                 console.log(jqXHR);
             },
-        });
-    },
-
-    refuser: function (element)
-    {
-        var that = this;
-        var tpj = element.parents('.tpj').data('tpj');
-
-        element.button('loading');
-
-
-        $.ajax({
-            type: 'POST',
-            url: element.prop('href'),
-            data: {},
-            success: function (data, textStatus, jqXHR) {
-            },
-            error: function (jqXHR) {
-                alert('Une erreur est survenue. L\'opération n\'a pas pu être effectuée.');
-                console.log(jqXHR);
-            },
-            complete: function (jqXHR) {
-                that.onFileChange(tpj);
-            }
         });
     },
 

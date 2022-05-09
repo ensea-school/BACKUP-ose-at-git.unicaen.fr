@@ -166,11 +166,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
 
     protected function getData()
     {
-        $key = $this->getServiceContext()->getAnnee()->getId();
-
-        if (!$this->getSessionContainer()->{$key}) {
-
-            $sql = "
+        $sql = "
             SELECT DISTINCT
               s.id structure_id,
               s.libelle_court structure_libelle,
@@ -190,56 +186,54 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
               AND ep.annee_id = :annee
               ";
 
-            $res = $this->getEntityManager()->getConnection()->fetchAllAssociative(
-                $sql,
-                ['annee' => $this->getServiceContext()->getAnnee()->getId()]
-            );
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative(
+            $sql,
+            ['annee' => $this->getServiceContext()->getAnnee()->getId()]
+        );
 
-            $result = [
-                'structures' => [],
-                'niveaux'    => [],
-                'etapes'     => [],
-                'relations'  => ['ALL' => ['ALL' => []]],
-            ];
-            foreach ($res as $e) {
-                $structureId = $e['STRUCTURE_ID'];
-                $structure   = $e['STRUCTURE_LIBELLE'];
-                $niveauId    = $e['NIVEAU_ID'];
-                $niveau      = $e['NIVEAU_LIBELLE'];
-                $etapeId     = $e['ETAPE_ID'];
-                $etape       = $e['ETAPE_LIBELLE'];
+        $result = [
+            'structures' => [],
+            'niveaux'    => [],
+            'etapes'     => [],
+            'relations'  => ['ALL' => ['ALL' => []]],
+        ];
+        foreach ($res as $e) {
+            $structureId = $e['STRUCTURE_ID'];
+            $structure   = $e['STRUCTURE_LIBELLE'];
+            $niveauId    = $e['NIVEAU_ID'];
+            $niveau      = $e['NIVEAU_LIBELLE'];
+            $etapeId     = $e['ETAPE_ID'];
+            $etape       = $e['ETAPE_LIBELLE'];
 
-                if (!isset($result['structures'][$structureId])) {
-                    $result['structures'][$structureId] = $structure;
-                }
-                if (!isset($result['niveaux'][$niveauId])) {
-                    $result['niveaux'][$niveauId] = $niveau;
-                }
-                if (!isset($result['etapes'][$etapeId])) {
-                    $result['etapes'][$etapeId] = $etape;
-                }
-
-                if (!isset($result['relations'][$structureId]['ALL'])) {
-                    $result['relations'][$structureId]['ALL'] = [];
-                }
-                if (!isset($result['relations']['ALL'][$niveauId])) {
-                    $result['relations']['ALL'][$niveauId] = [];
-                }
-                if (!isset($result['relations'][$structureId][$niveauId])) {
-                    $result['relations'][$structureId][$niveauId] = [];
-                }
-                $result['relations']['ALL']['ALL'][]            = $etapeId;
-                $result['relations'][$structureId]['ALL'][]     = $etapeId;
-                $result['relations']['ALL'][$niveauId][]        = $etapeId;
-                $result['relations'][$structureId][$niveauId][] = $etapeId;
+            if (!isset($result['structures'][$structureId])) {
+                $result['structures'][$structureId] = $structure;
             }
-            asort($result['structures']);
-            asort($result['niveaux']);
-            asort($result['etapes']);
-            $this->getSessionContainer()->{$key} = $result;
-        }
+            if (!isset($result['niveaux'][$niveauId])) {
+                $result['niveaux'][$niveauId] = $niveau;
+            }
+            if (!isset($result['etapes'][$etapeId])) {
+                $result['etapes'][$etapeId] = $etape;
+            }
 
-        return $this->getSessionContainer()->{$key};
+            if (!isset($result['relations'][$structureId]['ALL'])) {
+                $result['relations'][$structureId]['ALL'] = [];
+            }
+            if (!isset($result['relations']['ALL'][$niveauId])) {
+                $result['relations']['ALL'][$niveauId] = [];
+            }
+            if (!isset($result['relations'][$structureId][$niveauId])) {
+                $result['relations'][$structureId][$niveauId] = [];
+            }
+            $result['relations']['ALL']['ALL'][]            = $etapeId;
+            $result['relations'][$structureId]['ALL'][]     = $etapeId;
+            $result['relations']['ALL'][$niveauId][]        = $etapeId;
+            $result['relations'][$structureId][$niveauId][] = $etapeId;
+        }
+        asort($result['structures']);
+        asort($result['niveaux']);
+        asort($result['etapes']);
+
+        return $result;
     }
 
 

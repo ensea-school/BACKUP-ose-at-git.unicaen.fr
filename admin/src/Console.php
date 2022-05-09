@@ -148,7 +148,7 @@ class Console implements \BddAdmin\Logger\LoggerInterface
             }
         }
 
-
+        $this->println();
         $this->print('|');
         foreach ($head as $k => $v) {
             $this->print(str_pad('', $lengths[$k], '-') . ' | ');

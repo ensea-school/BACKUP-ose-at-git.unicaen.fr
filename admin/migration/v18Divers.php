@@ -16,7 +16,7 @@ class v18Divers extends AbstractMigration
 
     public function utile(): bool
     {
-        return $this->manager->hasNew('table', 'PLAFOND_PERIMETRE');
+        return true;
     }
 
 
@@ -29,6 +29,10 @@ class v18Divers extends AbstractMigration
         // test pour savoir si on est bien en V17 minimum
         if (!$this->manager->hasColumn('INTERVENANT', 'EXPORT_DATE')) {
             $c->printDie('Attention : vous devez d\'abord mettre à jour en version 17.3 AVANT de mettre à jour en version 18');
+        }
+
+        if (!$this->checkDoublons()) {
+            $c->printDie('Attention : des doublons ont été trouvés dans vos intervenants. Merci de purger d\'abord votre base de données, puis de relancer ensuite la procédure de mise à jour.');
         }
 
         try {
@@ -91,6 +95,110 @@ class v18Divers extends AbstractMigration
             $this->manager->sauvegarderTable($table, $saveTable);
         }
         $c->end();
+    }
+
+
+
+    public function checkDoublons(): bool
+    {
+        $bdd = $this->manager->getBdd();
+        $c   = $this->manager->getOseAdmin()->getConsole();
+
+        $need = $this->manager->hasNew(\BddAdmin\Ddl\Ddl::UNIQUE_CONSTRAINT, 'INTERVENANT_CODE_UN')
+            || $this->manager->hasNew(\BddAdmin\Ddl\Ddl::UNIQUE_CONSTRAINT, 'INTERVENANT_SOURCE_UN')
+            || $this->manager->hasNew(\BddAdmin\Ddl\Ddl::UNIQUE_CONSTRAINT, 'INTERVENANT_UTIL_CODE_UN');
+
+        if (!$need) return true;
+
+        $sql = "SELECT
+          COALESCE(t1.nom, t2.nom, t3.nom) nom,
+          COALESCE(t1.prenom, t2.prenom, t3.prenom) prenom,
+          COALESCE(t1.statut, t2.statut, t3.statut) statut,
+          CASE WHEN t1.cc IS NULL THEN '' ELSE t1.c || ' identiques' END CODE,
+          CASE WHEN t2.cc IS NULL THEN '' ELSE t2.c || ' identiques' END SOURCE_CODE,
+          CASE WHEN t3.cc IS NULL THEN '' ELSE t3.c || ' identiques' END UTILISATEUR_CODE
+        FROM
+          (
+            SELECT
+              i.nom_usuel nom,
+              i.prenom prenom,
+              si.libelle statut,
+              'code_un' cc,
+              count(*) c
+            FROM
+              intervenant i
+              JOIN statut si ON si.id = i.statut_id
+            WHERE
+              i.HISTO_DESTRUCTION IS NULL
+            GROUP BY
+              i.CODE, 
+              i.ANNEE_ID, 
+              i.STATUT_ID,
+              i.nom_usuel,
+              i.prenom,
+              si.libelle
+            HAVING 
+              COUNT(*) > 1
+          ) t1
+
+          FULL JOIN (
+            SELECT
+              i.nom_usuel nom,
+              i.prenom prenom,
+              si.libelle statut,
+              'source_un' cc,
+              count(*) c
+            FROM
+              intervenant i
+              JOIN statut si ON si.id = i.statut_id
+            WHERE
+              i.HISTO_DESTRUCTION IS NULL
+            GROUP BY
+              i.SOURCE_CODE, 
+              i.ANNEE_ID, 
+              i.STATUT_ID,
+              i.nom_usuel,
+              i.prenom,
+              si.libelle
+            HAVING COUNT(*) > 1
+          ) t2 ON t2.nom = t1.nom AND t2.prenom = t1.prenom AND t2.statut = t1.statut
+
+          FULL JOIN (
+            SELECT
+              i.nom_usuel nom,
+              i.prenom prenom,
+              si.libelle statut,
+              'util_code_un' cc,
+              count(*) c
+            FROM
+              intervenant i
+              JOIN statut si ON si.id = i.statut_id
+            WHERE
+              i.HISTO_DESTRUCTION IS NULL
+              AND i.UTILISATEUR_CODE IS NOT NULL
+            GROUP BY
+              i.UTILISATEUR_CODE, 
+              i.ANNEE_ID, 
+              i.STATUT_ID,
+              i.nom_usuel,
+              i.prenom,
+              si.libelle
+            HAVING COUNT(*) > 1
+          ) t3 ON t3.nom = COALESCE(t1.nom,t2.nom) AND t3.prenom = COALESCE(t1.prenom,t2.prenom) AND t3.statut = COALESCE(t1.statut,t2.statut)
+        ";
+
+        $res = $bdd->select($sql);
+
+        if (!empty($res)) {
+            $c->printArray($res);
+            $c->println('Des intervenants ayant le même statut, le même source_code ou le même utilisateur_code pour la même année ont été trouvés.');
+            $c->println('Merci de supprimer ou modifier manuellement les intervenants concernés AVANT de poursuivre la mise à jour.');
+            $c->println('Une fois le traitement effectué, vous pourrez reprendre la mise à jour via la commande ./bin/ose update-bdd.');
+
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }

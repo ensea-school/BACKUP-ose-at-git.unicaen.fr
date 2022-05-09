@@ -420,7 +420,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'bureauDistributeur' => $commune,
                 'bisTer'             => $bisTer,
                 'natureVoie'         => $natureVoie,
-                'nomVoie'            => $nomVoie,
+                'nomVoie'            => substr($nomVoie, 0, 32),
                 'numAdresse'         => $numeroVoie,
                 'complementAdresse'  => substr($complement, 0, 37),
                 'commune'            => $commune,

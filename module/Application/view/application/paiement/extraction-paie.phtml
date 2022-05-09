@@ -1,0 +1,35 @@
+<?php
+/* @var $periodes \Application\Entity\Db\Periode[] */
+/* @var $annee \Application\Entity\Db\Annee */
+
+?>
+
+    <h1>Extraction paie</h1>
+
+<?php if (isset($types)): ?>
+    <div class="alert alert-info" role="alert">Veuillez cliquer sur le type d'intervenant désiré.</div>
+
+    <ul>
+        <?php
+        foreach ($types as $type) {
+            $url = $this->url('paiement/extraction-paie', ['type' => $type->getCode()]);
+            $title = $type->getLibelle();
+            echo '<li><a href="' . $url . '">' . $title . '</a></li>';
+        }
+        ?>
+    </ul>
+<?php endif; ?>
+
+<?php if (isset($periodes)): ?>
+    <div class="alert alert-info" role="alert">Veuillez cliquer sur la période de paiement désirée.</div>
+
+    <ul>
+        <?php
+        foreach ($periodes as $periode) {
+            $url = $this->url('paiement/extraction-paie', ['type' => $type->getCode(), 'periode' => $periode->getCode()]);
+            $title = $periode->getLibelleAnnuel($annee);
+            echo '<li><a href="' . $url . '">' . $title . '</a></li>';
+        }
+        ?>
+    </ul>
+<?php endif; ?>

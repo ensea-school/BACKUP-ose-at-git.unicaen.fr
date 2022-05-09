@@ -43,9 +43,9 @@ return [
 
 
     /* Etats de sortie */
-    "es_winpaie"                                 => [
+    "es_extraction_paie"                         => [
         "VALEUR"      => "winpaie",
-        "DESCRIPTION" => "État de sortie pour l'extraction Winpaie",
+        "DESCRIPTION" => "État de sortie pour l'extraction de paie",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
     "es_services_pdf"                            => [

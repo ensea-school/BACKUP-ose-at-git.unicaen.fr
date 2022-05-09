@@ -18,24 +18,17 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  *
  * @author LECOURTES Anthony <antony.lecourtes@unicaen.fr>
  */
-class ReconductionProcessusFactory implements FactoryInterface
+class ReconductionProcessusFactory
 {
 
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return ReconductionProcessus
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $etapeService              = $serviceLocator->get(EtapeService::class);
-        $elementPedagogiqueService = $serviceLocator->get(ElementPedagogiqueService::class);
-        $cheminPedagogiqueService  = $serviceLocator->get(CheminPedagogiqueService::class);
-        $volumeHoraireEnsService   = $serviceLocator->get(VolumeHoraireEnsService::class);
-        $anneeService              = $serviceLocator->get(AnneeService::class);
-        $contextService            = $serviceLocator->get(ContextService::class);
+        $etapeService = $container->get(EtapeService::class);
+        $elementPedagogiqueService = $container->get(ElementPedagogiqueService::class);
+        $cheminPedagogiqueService = $container->get(CheminPedagogiqueService::class);
+        $volumeHoraireEnsService = $container->get(VolumeHoraireEnsService::class);
+        $anneeService = $container->get(AnneeService::class);
+        $contextService = $container->get(ContextService::class);
 
         $processus = new ReconductionProcessus($etapeService,
             $elementPedagogiqueService,
@@ -45,12 +38,5 @@ class ReconductionProcessusFactory implements FactoryInterface
             $contextService);
 
         return $processus;
-    }
-
-
-
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
-    {
-
     }
 }

@@ -111,6 +111,7 @@ class v18Divers extends AbstractMigration
         if (!$need) return true;
 
         $sql = "SELECT
+          COALESCE(t1.annee, t2.annee, t3.annee) annee,
           COALESCE(t1.nom, t2.nom, t3.nom) nom,
           COALESCE(t1.prenom, t2.prenom, t3.prenom) prenom,
           COALESCE(t1.statut, t2.statut, t3.statut) statut,
@@ -120,6 +121,7 @@ class v18Divers extends AbstractMigration
         FROM
           (
             SELECT
+              i.ANNEE_ID annee, 
               i.nom_usuel nom,
               i.prenom prenom,
               si.libelle statut,
@@ -143,6 +145,7 @@ class v18Divers extends AbstractMigration
 
           FULL JOIN (
             SELECT
+              i.ANNEE_ID annee,
               i.nom_usuel nom,
               i.prenom prenom,
               si.libelle statut,
@@ -165,6 +168,7 @@ class v18Divers extends AbstractMigration
 
           FULL JOIN (
             SELECT
+              i.ANNEE_ID annee,
               i.nom_usuel nom,
               i.prenom prenom,
               si.libelle statut,

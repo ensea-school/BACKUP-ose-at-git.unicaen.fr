@@ -16,7 +16,7 @@ class v18Privileges extends AbstractMigration
 
     public function utile(): bool
     {
-        return $this->manager->hasTable('SAVE_V18_PRIVILEGE');
+        return $this->manager->hasTable('SAVE_V18_PRIVILEGE') && $this->manager->hasTable('SAVE_V18_ROLE_PRIVILEGE');
     }
 
 

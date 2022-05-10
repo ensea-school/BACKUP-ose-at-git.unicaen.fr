@@ -16,7 +16,13 @@ class v18Statuts extends AbstractMigration
 
     public function utile(): bool
     {
-        return $this->manager->hasOld('table', 'STATUT_INTERVENANT');
+        return $this->manager->hasOld('table', 'STATUT_INTERVENANT')
+            && $this->manager->hasTable('SAVE_V18_STATUT')
+            && $this->manager->hasTable('SAVE_V18_STATUT_PRIVILEGE')
+            && $this->manager->hasTable('SAVE_V18_DOSSIER_AUTRE_STATUT')
+            && $this->manager->hasTable('SAVE_V18_TA_STATUT')
+            && $this->manager->hasTable('SAVE_V18_INTERVENANT')
+            && $this->manager->hasTable('SAVE_V18_DOSSIER');
     }
 
 

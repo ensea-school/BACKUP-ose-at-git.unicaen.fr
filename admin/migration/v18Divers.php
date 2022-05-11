@@ -110,6 +110,8 @@ class v18Divers extends AbstractMigration
 
         if (!$need) return true;
 
+        $statutTable = $this->manager->hasTable('STATUT') ? 'STATUT' : 'STATUT_INTERVENANT';
+
         $sql = "SELECT
           COALESCE(t1.annee, t2.annee, t3.annee) annee,
           COALESCE(t1.nom, t2.nom, t3.nom) nom,
@@ -129,7 +131,7 @@ class v18Divers extends AbstractMigration
               count(*) c
             FROM
               intervenant i
-              JOIN statut si ON si.id = i.statut_id
+              JOIN $statutTable si ON si.id = i.statut_id
             WHERE
               i.HISTO_DESTRUCTION IS NULL
             GROUP BY
@@ -153,7 +155,7 @@ class v18Divers extends AbstractMigration
               count(*) c
             FROM
               intervenant i
-              JOIN statut si ON si.id = i.statut_id
+              JOIN $statutTable si ON si.id = i.statut_id
             WHERE
               i.HISTO_DESTRUCTION IS NULL
             GROUP BY
@@ -176,7 +178,7 @@ class v18Divers extends AbstractMigration
               count(*) c
             FROM
               intervenant i
-              JOIN statut si ON si.id = i.statut_id
+              JOIN $statutTable si ON si.id = i.statut_id
             WHERE
               i.HISTO_DESTRUCTION IS NULL
               AND i.UTILISATEUR_CODE IS NOT NULL

@@ -126,6 +126,13 @@ class Console implements \BddAdmin\Logger\LoggerInterface
 
     public function printArray(array $a)
     {
+        function mb_str_pad($input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+        {
+            $diff = strlen($input) - mb_strlen($input);
+
+            return str_pad($input, $pad_length + $diff, $pad_string, $pad_type);
+        }
+
         $lengths = [];
 
         if (isset($a[0])) {
@@ -151,31 +158,31 @@ class Console implements \BddAdmin\Logger\LoggerInterface
         $this->println('');
         $this->print('|');
         foreach ($head as $k => $v) {
-            $this->print(str_pad('', $lengths[$k], '-') . ' | ');
+            $this->print(mb_str_pad('', $lengths[$k], '-') . ' | ');
         }
         $this->println('');
         if ($head) {
             $this->print('|');
             foreach ($head as $k => $v) {
-                $this->print(str_pad($v, $lengths[$k], ' ') . ' | ');
+                $this->print(mb_str_pad($v, $lengths[$k], ' ') . ' | ');
             }
             $this->println('');
             $this->print('|');
             foreach ($head as $k => $v) {
-                $this->print(str_pad('', $lengths[$k], '-') . ' | ');
+                $this->print(mb_str_pad('', $lengths[$k], '-') . ' | ');
             }
             $this->println('');
         }
         foreach ($a as $n => $l) {
             $this->print('|');
             foreach ($l as $k => $v) {
-                $this->print(str_pad($v, $lengths[$k], ' ') . ' | ');
+                $this->print(mb_str_pad($v, $lengths[$k], ' ') . ' | ');
             }
             $this->println('');
         }
         $this->print('|');
         foreach ($head as $k => $v) {
-            $this->print(str_pad('', $lengths[$k], '-') . ' | ');
+            $this->print(mb_str_pad('', $lengths[$k], '-') . ' | ');
         }
         $this->println('');
     }

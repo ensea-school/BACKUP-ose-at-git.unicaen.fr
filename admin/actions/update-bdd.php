@@ -23,9 +23,9 @@ foreach ($ref as $ddlClass => $objects) {
     }
 }
 
-//if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == 'ose-dev.pc-local') {
-$filters['materialized-view']['excludes'][] = 'MV_EXT_SERVICE';
-//}
+if (($_SERVER['IGNORE_MV_EXT_SERVICE'] ?? "false") == "true") {
+    $filters['materialized-view']['excludes'][] = 'MV_EXT_SERVICE';
+}
 
 $tablesDep = [
     Ddl::INDEX,

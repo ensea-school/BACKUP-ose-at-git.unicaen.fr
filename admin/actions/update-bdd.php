@@ -23,6 +23,10 @@ foreach ($ref as $ddlClass => $objects) {
     }
 }
 
+//if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == 'ose-dev.pc-local') {
+$filters['materialized-view']['excludes'][] = 'MV_EXT_SERVICE';
+//}
+
 $tablesDep = [
     Ddl::INDEX,
     Ddl::PRIMARY_CONSTRAINT,

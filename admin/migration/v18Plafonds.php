@@ -17,11 +17,11 @@ class v18Plafonds extends AbstractMigration
     public function utile(): bool
     {
         return $this->manager->hasNew('table', 'PLAFOND_PERIMETRE')
-            && $this->manager->hasTable('SAVE_V18_PLAFOND')
-            && $this->manager->hasTable('SAVE_V18_STRUCTURE')
-            && $this->manager->hasTable('SAVE_V18_PLAFOND_APP')
-            && $this->manager->hasTable('SAVE_V18_REFERENTIEL')
-            && $this->manager->hasTable('SAVE_V18_STATUT');
+            && $this->manager->tableRealExists('SAVE_V18_PLAFOND')
+            && $this->manager->tableRealExists('SAVE_V18_STRUCTURE')
+            && $this->manager->tableRealExists('SAVE_V18_PLAFOND_APP')
+            && $this->manager->tableRealExists('SAVE_V18_REFERENTIEL')
+            && $this->manager->tableRealExists('SAVE_V18_STATUT');
     }
 
 

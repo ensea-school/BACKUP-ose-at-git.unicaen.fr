@@ -135,8 +135,8 @@ class Console implements \BddAdmin\Logger\LoggerInterface
 
         $lengths = [];
 
-        if (isset($a[0])) {
-            $head = $a[0];
+        $head = reset($a);
+        if (isset($head)) {
             foreach ($head as $k => $null) {
                 $head[$k] = $k;
                 if (($lengths[$k] ?? 0) < mb_strlen($k)) {

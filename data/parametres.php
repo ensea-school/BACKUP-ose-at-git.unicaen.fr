@@ -228,4 +228,10 @@ Cordialement,
         "VALEUR"      => "active",
         "DESCRIPTION" => "Permettre la création d'avenants au contrat",
     ],
+
+    /* Contrat */
+    "contrat_projet"                => [
+        "VALEUR"      => "active",
+        "DESCRIPTION" => "Permettre la création d'un contrat sans passé par le projet",
+    ],
 ];

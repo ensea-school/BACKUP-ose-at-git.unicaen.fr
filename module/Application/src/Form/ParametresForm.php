@@ -582,6 +582,23 @@ class ParametresForm extends AbstractForm
                 'data-size' => 20,
             ],
         ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'contrat_projet',
+            'options'    => [
+                'label' => 'Possibilité de créer un contrat sans passer par le projet',
+
+                'value_options' => [
+                    PARAMETRE::CONTRAT_PROJET => 'Le contrat peut être crée sans passer par le projet',
+                    'desactive'               => 'Fonctionnalité désactivée',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
     }
 
 

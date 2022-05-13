@@ -16,7 +16,8 @@ class Parametre implements HistoriqueAwareInterface
     const CONTRAT_FRANCHI_VALIDATION  = 'validation';
     const CONTRAT_FRANCHI_DATE_RETOUR = 'date-retour';
 
-    const AVENANT = 'avenant';
+    const AVENANT        = 'avenant';
+    const CONTRAT_PROJET = 'contrat_projet';
 
     use HistoriqueAwareTrait;
 

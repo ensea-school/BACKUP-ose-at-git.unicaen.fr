@@ -135,11 +135,14 @@
                             <li><strong>:annee :</strong> année universitaire du contrat (ex : 2019/2020)</li>
                         </ul>
                         </p>
+                        <?= $this->formControlGroup($form->get('avenant')); ?>
+                        <?= $this->formControlGroup($form->get('contrat_projet')); ?>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <?= $this->formControlGroup($form->get('avenant')); ?>
-                        </div>
+
+                    </div>
+                    <div class="row">
+
                     </div>
                 </div>
             </div>

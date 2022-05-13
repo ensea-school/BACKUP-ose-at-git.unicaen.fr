@@ -4,10 +4,12 @@ use \Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Provider\Privilege\Privileges;
 
 /**
- * @var $this        \Application\View\Renderer\PhpRenderer
- * @var $title       string
- * @var $intervenant \Application\Entity\Db\Intervenant
- * @var $contrats    \Application\Entity\Db\Contrat[]
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $title             string
+ * @var $intervenant       \Application\Entity\Db\Intervenant
+ * @var $contrats          \Application\Entity\Db\Contrat[]
+ * @var $avenant           boolean
+ * @var $contratProjet     boolean
  */
 
 $hasContrat = false;
@@ -64,18 +66,19 @@ $this->messenger() ?>
                 <tr>
                     <td><?= $structure ?></td>
                     <td>
-                        <?php if ($canCreer): ?>
-
+                        <?php if ($canCreer):
+                            if ($contratProjet):?>
                                 <a class="btn btn-primary"
-                                   href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
-                                    <i class="fas fa-file"></i> Créer un
-
-
-                                    projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
+                                   href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId(), 'contratProjet' => $contratProjet]); ?>">
+                                    <i class="fas fa-file"></i> Créer un <?= $hasContrat ? 'avenant' : 'contrat' ?>
                                 </a>
-
-
-                        <?php else:
+                            <?php else: ?>
+                                <a class="btn btn-primary"
+                                   href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId(), 'contratProjet' => $contratProjet]); ?>">
+                                    <i class="fas fa-file"></i> Créer un projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
+                                </a>
+                            <?php endif;
+                        else:
                             echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
                         endif; ?>
                         <p>
@@ -101,7 +104,6 @@ $this->messenger() ?>
     <div class="well">
         <h2>Contrats et avenants</h2>
         <?php foreach ($contrats as $contrat): ?>
-
             <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant]) ?>
 
         <?php endforeach; ?>

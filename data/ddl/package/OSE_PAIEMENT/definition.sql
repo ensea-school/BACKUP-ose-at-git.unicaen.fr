@@ -1,11 +1,17 @@
 CREATE
-OR REPLACE PACKAGE "OSE_PAIEMENT" AS
+    OR REPLACE PACKAGE "OSE_PAIEMENT" AS
 
-  PROCEDURE CHECK_BAD_PAIEMENTS( FORMULE_RES_SERVICE_ID NUMERIC DEFAULT NULL, FORMULE_RES_SERVICE_REF_ID NUMERIC DEFAULT NULL );
+    PROCEDURE check_bad_paiements(formule_res_service_id NUMERIC DEFAULT NULL,
+                                  formule_res_service_ref_id NUMERIC DEFAULT NULL);
 
-  PROCEDURE SET_MOIS_EXTRACTION_PAIE( MOIS_EXTRACTION_PAIE NUMERIC );
+    PROCEDURE set_mois_extraction_paie(mois_extraction_paie VARCHAR2);
 
-  FUNCTION
-GET_MOIS_EXTRACTION_PAIE RETURN NUMERIC;
+    PROCEDURE set_annee_extraction_paie(annee_extraction_paie VARCHAR2);
 
-END OSE_PAIEMENT;
+    FUNCTION get_mois_extraction_paie RETURN VARCHAR2;
+
+    FUNCTION get_annee_extraction_paie RETURN VARCHAR2;
+
+    FUNCTION get_format_mois_du RETURN VARCHAR2;
+
+END ose_paiement;

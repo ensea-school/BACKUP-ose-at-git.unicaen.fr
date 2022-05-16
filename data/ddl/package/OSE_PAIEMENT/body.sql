@@ -1,38 +1,67 @@
-CREATE OR REPLACE PACKAGE BODY     "OSE_PAIEMENT" AS
+CREATE
+    OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
 
-  MOIS_EXTRACTION_PAIE NUMERIC DEFAULT 1;
+    mois_extraction_paie VARCHAR2(50) := '01';
+    annee_extraction_paie VARCHAR2(50) := '22';
 
-  PROCEDURE CHECK_BAD_PAIEMENTS( FORMULE_RES_SERVICE_ID NUMERIC DEFAULT NULL, FORMULE_RES_SERVICE_REF_ID NUMERIC DEFAULT NULL ) IS
-    cc NUMERIC;
-  BEGIN
-    SELECT count(*) INTO cc
-    FROM mise_en_paiement mep
-    WHERE
-      mep.histo_destruction IS NULL
-      AND mep.formule_res_service_id = NVL( CHECK_BAD_PAIEMENTS.FORMULE_RES_SERVICE_ID, mep.formule_res_service_id )
-      AND mep.formule_res_service_ref_id = NVL( CHECK_BAD_PAIEMENTS.FORMULE_RES_SERVICE_REF_ID, mep.formule_res_service_ref_id )
-  ;
+    PROCEDURE check_bad_paiements(formule_res_service_id NUMERIC DEFAULT NULL,
+                                  formule_res_service_ref_id NUMERIC DEFAULT NULL)
+        IS
+        cc NUMERIC;
+    BEGIN
+        SELECT COUNT(*)
+        INTO cc
+        FROM mise_en_paiement mep
+        WHERE mep.histo_destruction IS NULL
+          AND mep.formule_res_service_id = NVL(check_bad_paiements.formule_res_service_id, mep.formule_res_service_id)
+          AND mep.formule_res_service_ref_id =
+              NVL(check_bad_paiements.formule_res_service_ref_id, mep.formule_res_service_ref_id);
 
-    IF (cc > 0) THEN
-      raise_application_error(-20101, 'Il est impossible d''effectuer cette action : des demandes de mise en paiement ont été saisies et ne peuvent pas être modifiées');
-    ELSE
-      DELETE FROM mise_en_paiement WHERE
-        histo_destruction IS NOT NULL
-        AND formule_res_service_id = NVL( CHECK_BAD_PAIEMENTS.FORMULE_RES_SERVICE_ID, formule_res_service_id )
-        AND formule_res_service_ref_id = NVL( CHECK_BAD_PAIEMENTS.FORMULE_RES_SERVICE_REF_ID, formule_res_service_ref_id )
-      ;
-    END IF;
-  END;
+        IF
+            (cc > 0) THEN
+            RAISE_APPLICATION_ERROR(-20101,
+                                    'Il est impossible d''effectuer cette action : des demandes de mise en paiement ont été saisies et ne peuvent pas être modifiées');
+        ELSE
+            DELETE
+            FROM mise_en_paiement
+            WHERE histo_destruction IS NOT NULL
+              AND formule_res_service_id = NVL(check_bad_paiements.formule_res_service_id, formule_res_service_id)
+              AND formule_res_service_ref_id =
+                  NVL(check_bad_paiements.formule_res_service_ref_id, formule_res_service_ref_id);
+        END IF;
+    END;
 
-  PROCEDURE SET_MOIS_EXTRACTION_PAIE( MOIS_EXTRACTION_PAIE NUMERIC) IS
-  	BEGIN
-		OSE_PAIEMENT.MOIS_EXTRACTION_PAIE := MOIS_EXTRACTION_PAIE;
-	END;
+    PROCEDURE set_mois_extraction_paie(mois_extraction_paie VARCHAR2)
+        IS
+    BEGIN
+        ose_paiement.mois_extraction_paie
+            := mois_extraction_paie;
+    END;
 
-  FUNCTION GET_MOIS_EXTRACTION_PAIE RETURN NUMERIC IS
-  	BEGIN
-		RETURN OSE_PAIEMENT.MOIS_EXTRACTION_PAIE;
-	END;
+    PROCEDURE set_annee_extraction_paie(annee_extraction_paie VARCHAR2)
+        IS
+    BEGIN
+        ose_paiement.annee_extraction_paie
+            := annee_extraction_paie;
+    END;
+
+    FUNCTION
+        get_annee_extraction_paie RETURN VARCHAR2 IS
+    BEGIN
+        RETURN ose_paiement.annee_extraction_paie;
+    END;
+
+    FUNCTION
+        get_mois_extraction_paie RETURN VARCHAR2 IS
+    BEGIN
+        RETURN ose_paiement.mois_extraction_paie;
+    END;
+
+    FUNCTION
+        get_format_mois_du RETURN VARCHAR2 IS
+    BEGIN
+        RETURN '20' || ose_paiement.annee_extraction_paie || '-' || ose_paiement.mois_extraction_paie;
+    END;
 
 
-END OSE_PAIEMENT;
+END ose_paiement;

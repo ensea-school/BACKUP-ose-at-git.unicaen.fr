@@ -54,6 +54,7 @@ class IndexController extends AbstractController
     }
 
 
+
     public function changementAnneeAction()
     {
         /* Prise en compte du changement d'année!! */
@@ -74,6 +75,22 @@ class IndexController extends AbstractController
         }
 
         return [];
+    }
+
+
+
+    public function generateProxiesAction()
+    {
+        $destPath = $this->em()->getConfiguration()->getProxyDir();
+
+        if (!is_dir($destPath)) {
+            mkdir($destPath, 0775, true);
+        }
+
+        $destPath = realpath($destPath);
+
+        $metadatas = $this->em()->getMetadataFactory()->getAllMetadata();
+        $this->em()->getProxyFactory()->generateProxyClasses($metadatas, $destPath);
     }
 
 }

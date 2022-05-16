@@ -114,7 +114,15 @@ if ($intVersion > 0 && $intVersion < 18) {
 
 // Récupération des dépendances
 $c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
-$c->passthru("cd $osedir;php composer.phar install --optimize-autoloader");
+
+if ($intVersion === 0) {
+    // à partir d'une branche, on ignore les prérequis pour composer, afin de tester
+    $c->passthru("cd $osedir;php composer.phar install --optimize-autoloader --ignore-platform-reqs");
+} else {
+    // à partir de la v18, et toutes les branches
+    $c->passthru("cd $osedir;php composer.phar install --optimize-autoloader");
+}
+
 
 if ($intVersion > 0 && $intVersion < 18) {
     // Création des liens symboliques

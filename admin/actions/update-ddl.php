@@ -13,7 +13,6 @@ $filters = [
         'MV_EXT_SERVICE',
         'MV_EXT_DOTATION_LIQUIDATION',
         'MV_EXT_ETAT_PAIEMENT',
-        'TBL_NOEUD',
     ]],
     'package'            => ['excludes' => ['UCBN_LDAP', 'UNICAEN_IMPORT_AUTOGEN_PROCS__', 'OSE_ACTUL']],
 ];

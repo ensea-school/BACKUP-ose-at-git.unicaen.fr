@@ -193,7 +193,7 @@ class MigrationManager
 
 
 
-    protected function tableRealExists($tableName): bool
+    public function tableRealExists($tableName): bool
     {
         $sql = "SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME = :tableName";
         $tn  = $this->getBdd()->select($sql, compact('tableName'), ['fetch' => Bdd::FETCH_ONE]);
@@ -258,11 +258,16 @@ class MigrationManager
         if (
             $migration
             && $migration instanceof AbstractMigration
-            && ($contexte == $migration->getContexte() || AbstractMigration::CONTEXTE_ALL == $migration->getContexte())
+            && (method_exists($migration, $contexte))
         ) {
-            $console->print("[$contexte MIGRATION] " . $migration->description() . ' ... ');
+            $traducs     = [
+                'before' => 'AVANT',
+                'after'  => 'APRES',
+            ];
+            $contexteLib = $traducs[$contexte] ?? $contexte;
+            $console->print("[$contexteLib MIGRATION] " . $migration->description() . ' ... ');
             try {
-                $migration->action($contexte);
+                $migration->$contexte();
                 $console->println('OK', $console::COLOR_GREEN);
             } catch (\Throwable $e) {
                 $console->println('Erreur : ' . $e->getMessage(), $console::COLOR_RED);

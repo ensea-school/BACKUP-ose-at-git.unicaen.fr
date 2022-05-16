@@ -74,7 +74,7 @@ class IndicateurProcessus extends AbstractProcessus
 
     protected function creerMailNotification(NotificationIndicateur $notification): ?MailMessage
     {
-        $result = $this->getServiceIndicateur()->getResult($notification->getIndicateur());
+        $result = $this->getServiceIndicateur()->getResult($notification);
         $count  = count($result);
 
         if (0 == $count) return null; // pas de notification pour cet indicateur

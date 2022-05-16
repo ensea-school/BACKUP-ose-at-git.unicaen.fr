@@ -10,6 +10,7 @@ SELECT
   CASE
     WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
     WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+    ELSE COALESCE(p.plafond_etat_id,1)
   END plafond_etat_id,
   COALESCE(pd.heures, 0) derogation,
   CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement

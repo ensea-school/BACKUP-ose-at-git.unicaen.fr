@@ -266,6 +266,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $bisTer = (!empty($dossierIntervenant->getAdresseNumeroCompl())) ? $dossierIntervenant->getAdresseNumeroCompl()->getCodeRh() : '';
                 $nomVoie = (!empty($dossierIntervenant->getAdresseVoie())) ? $dossierIntervenant->getAdresseVoie() : ' ';
                 $nomVoie = Util::stripAccents($nomVoie);
+                $nomVoie = substr($nomVoie, 0, 32);
                 $complement = (!empty($dossierIntervenant->getAdresseLieuDit())) ? $dossierIntervenant->getAdresseLieuDit() . ' ' : ' ';
                 $complement .= (!empty($dossierIntervenant->getAdressePrecisions())) ? $dossierIntervenant->getAdressePrecisions() : ' ';
                 $complement = Util::stripAccents($complement);

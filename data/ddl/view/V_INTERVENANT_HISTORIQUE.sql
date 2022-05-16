@@ -1,5 +1,4 @@
-CREATE
-OR REPLACE FORCE VIEW V_INTERVENANT_HISTORIQUE AS
+CREATE OR REPLACE FORCE VIEW V_INTERVENANT_HISTORIQUE AS
 WITH historique AS (
 --Initialisation des données personnelles
     SELECT d.intervenant_id                              intervenant_id,

@@ -11,11 +11,15 @@ return [
             'TBL_SERVICE_SAISIE',
             'STATUT_PRIVILEGE',
             'TYPE_AGREMENT_STATUT',
+            'PLAFOND_APPLICATION',
         ],
     ],
     'materialized-view' => [
         'includes' => [
-
+            'TBL_NOEUD',
+        ],
+        'excludes' => [
+            //'MV_EXT_SERVICE',
         ],
     ],
     'view'              => [
@@ -71,6 +75,7 @@ return [
             'TBL_SERVICE_REFERENTIEL_ID_SEQ',
             'STATUT_PRIVILEGE_ID_SEQ',
             'TYPE_AGREMENT_STATUT_ID_SEQ',
+            'TBL_NOEUD_ID_SEQ',
         ],
     ],
 ];

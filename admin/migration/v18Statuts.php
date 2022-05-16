@@ -6,9 +6,6 @@
 
 class v18Statuts extends AbstractMigration
 {
-    protected $contexte = self::CONTEXTE_ALL;
-
-
 
     public function description(): string
     {
@@ -19,18 +16,13 @@ class v18Statuts extends AbstractMigration
 
     public function utile(): bool
     {
-        return $this->manager->hasOld('table', 'STATUT_INTERVENANT');
-    }
-
-
-
-    public function action(string $contexte)
-    {
-        if ($contexte == self::CONTEXTE_PRE) {
-            $this->before();
-        } else {
-            $this->after();
-        }
+        return $this->manager->hasOld('table', 'STATUT_INTERVENANT')
+            && $this->manager->tableRealExists('SAVE_V18_STATUT')
+            && $this->manager->tableRealExists('SAVE_V18_STATUT_PRIVILEGE')
+            && $this->manager->tableRealExists('SAVE_V18_DOSSIER_AUTRE_STATUT')
+            && $this->manager->tableRealExists('SAVE_V18_TA_STATUT')
+            && $this->manager->tableRealExists('SAVE_V18_INTERVENANT')
+            && $this->manager->tableRealExists('SAVE_V18_DOSSIER');
     }
 
 
@@ -39,12 +31,6 @@ class v18Statuts extends AbstractMigration
     {
         $bdd = $this->manager->getBdd();
         $c   = $this->manager->getOseAdmin()->getConsole();
-
-        try {
-            $this->preMigrationIndicateurs();
-        } catch (\Exception $e) {
-            $c->println($e->getMessage(), $c::COLOR_RED);
-        }
 
         try {
             $this->preMigrationStatuts();
@@ -78,8 +64,11 @@ class v18Statuts extends AbstractMigration
 
         $ddl = $bdd->table()->get('TBL_WORKFLOW')['TBL_WORKFLOW'];
         if (!isset($ddl['columns']['STATUT_ID'])) {
-            $bdd->exec('DROP TABLE TBL_WORKFLOW CASCADE CONSTRAINTS');
+            $c->msg('Vidage temporaire de WF_DEP_BLOQUANTE (dépendances du Workflow)');
+            $bdd->exec('DELETE FROM WF_DEP_BLOQUANTE');
+
             $c->msg('Suppression de la table TBL_WORKFLOW, qui sera recréée au nouveau format');
+            $bdd->exec('DROP TABLE TBL_WORKFLOW CASCADE CONSTRAINTS');
         }
 
         $ddl = $bdd->table()->get('MODELE_CONTRAT')['MODELE_CONTRAT'];
@@ -119,7 +108,7 @@ class v18Statuts extends AbstractMigration
 
 
 
-    protected function after()
+    public function after()
     {
         $bdd = $this->manager->getBdd();
         $c   = $this->manager->getOseAdmin()->getConsole();
@@ -135,54 +124,12 @@ class v18Statuts extends AbstractMigration
 
 
 
-    public function preMigrationIndicateurs()
-    {
-        $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
-
-        $c->begin('Préparation à la mise à jour des indicateurs');
-        if (empty($bdd->table()->get('TYPE_INDICATEUR'))) {
-            $bdd->exec('ALTER TABLE INDICATEUR ADD (TYPE_INDICATEUR_ID NUMBER)');
-            $bdd->exec('CREATE TABLE TYPE_INDICATEUR (  
-              ID NUMBER NOT NULL ENABLE,
-              LIBELLE VARCHAR2(60 CHAR) NOT NULL ENABLE,
-              ORDRE NUMBER DEFAULT 1 NOT NULL ENABLE
-            )');
-            $bdd->exec('INSERT INTO TYPE_INDICATEUR (ID, LIBELLE, ORDRE) VALUES (1,\'provisoire\', 1)');
-            $bdd->exec('UPDATE INDICATEUR SET TYPE_INDICATEUR_ID = 1');
-        }
-        $c->end('Préparation à la migration des indicateurs terminée');
-    }
-
-
-
     public function preMigrationStatuts()
     {
         $bdd = $this->manager->getBdd();
         $c   = $this->manager->getOseAdmin()->getConsole();
 
         $c->begin('Mise à jour de la liste des statuts');
-
-        if (empty($bdd->table()->get('SAVE_V18_STATUT'))) {
-            $this->manager->sauvegarderTable('STATUT_INTERVENANT', 'SAVE_V18_STATUT');
-            $c->msg('Anciens statuts "STATUT_INTERVENANT" sauvegardés dans "SAVE_V18_STATUT".');
-        }
-
-        if (empty($bdd->table()->get('SAVE_V18_STATUT_PRIVILEGE'))) {
-            $this->manager->sauvegarderTable('STATUT_PRIVILEGE', 'SAVE_V18_STATUT_PRIVILEGE');
-            $c->msg('Anciens statuts "STATUT_PRIVILEGE" sauvegardés dans "SAVE_V18_STATUT_PRIVILEGE".');
-        }
-
-        if (empty($bdd->table()->get('SAVE_V18_TA_STATUT'))) {
-            $this->manager->sauvegarderTable('TYPE_AGREMENT_STATUT', 'SAVE_V18_TA_STATUT');
-            $c->msg('Anciens statuts "TYPE_AGREMENT_STATUT" sauvegardés dans "SAVE_V18_TA_STATUT".');
-        }
-
-        if (!$this->manager->hasTable('SAVE_V18_DOSSIER_AUTRE_STATUT') && $this->manager->hasTable('DOSSIER_CHAMP_AUTRE_PAR_STATUT')) {
-            $this->manager->sauvegarderTable('DOSSIER_CHAMP_AUTRE_PAR_STATUT', 'SAVE_V18_DOSSIER_AUTRE_STATUT');
-            $c->msg('Anciens statuts "DOSSIER_CHAMP_AUTRE_PAR_STATUT" sauvegardés dans "SAVE_V18_DOSSIER_AUTRE_STATUT".');
-        }
-
 
         /* Modifications préalables à faire en BDD */
         if (empty($bdd->sequence()->get('STATUT_ID_SEQ'))) {
@@ -328,7 +275,7 @@ class v18Statuts extends AbstractMigration
         SELECT
           max(si.id) id, i.annee_id
         FROM
-          intervenant i
+          SAVE_V18_INTERVENANT i
           JOIN SAVE_V18_STATUT si ON si.id = i.statut_id
         GROUP BY
           si.code, i.annee_id
@@ -417,7 +364,7 @@ class v18Statuts extends AbstractMigration
                 'CONSEIL_RESTREINT_DUREE_VIE'    => $statut['agrements']['CONSEIL_RESTREINT'] ?? 1, // NUMBER DEFAULT 1 NOT NULL ENABLE,
                 'CONSEIL_ACA'                    => isset($statut['agrements']['CONSEIL_ACADEMIQUE']) ? 1 : 0, // NUMBER(1) DEFAULT 1 NOT NULL ENABLE,
                 'CONSEIL_ACA_VISUALISATION'      => in_array('agrement-conseil-academique-visualisation', $statut['privileges']) ? 1 : 0, // NUMBER(1) DEFAULT 1 NOT NULL ENABLE,
-                'CONSEIL_ACA_DUREE_VIE'          => $statut['agrements']['CONSEIL_RESTREINT'] ?? 5, // NUMBER DEFAULT 5 NOT NULL ENABLE,
+                'CONSEIL_ACA_DUREE_VIE'          => $statut['agrements']['CONSEIL_ACADEMIQUE'] ?? 5, // NUMBER DEFAULT 5 NOT NULL ENABLE,
                 'CONTRAT'                        => $statut['PEUT_AVOIR_CONTRAT'], // NUMBER(1) DEFAULT 1 NOT NULL ENABLE,
                 'CONTRAT_VISUALISATION'          => in_array('contrat-visualisation', $statut['privileges']) ? 1 : 0, // NUMBER(1) DEFAULT 1 NOT NULL ENABLE,
                 'CONTRAT_DEPOT'                  => in_array('contrat-depot-retour-signe', $statut['privileges']) ? 1 : 0, // NUMBER(1) DEFAULT 1 NOT NULL ENABLE,
@@ -503,7 +450,7 @@ class v18Statuts extends AbstractMigration
           osi.id old_statut_id,
           nsi.id new_statut_id
         FROM
-          intervenant i
+          SAVE_V18_INTERVENANT i
           JOIN SAVE_V18_STATUT osi ON osi.id = i.statut_id
           LEFT JOIN statut nsi ON nsi.code = osi.code AND nsi.annee_id = i.annee_id
         WHERE
@@ -553,7 +500,7 @@ class v18Statuts extends AbstractMigration
           osi.id old_statut_id,
           nsi.id new_statut_id
         FROM
-          intervenant_dossier d
+          SAVE_V18_DOSSIER d
           JOIN intervenant i ON i.id = d.intervenant_id
           JOIN SAVE_V18_STATUT osi ON osi.id = d.statut_id
           LEFT JOIN statut nsi ON nsi.code = osi.code AND nsi.annee_id = i.annee_id
@@ -592,14 +539,6 @@ class v18Statuts extends AbstractMigration
 
         $c->begin('Application des nouveaux statuts aux paramétrages de PJ');
 
-        if (empty($bdd->table()->get('SAVE_V18_TPJS'))) {
-            $this->manager->sauvegarderTable('TYPE_PIECE_JOINTE_STATUT', 'SAVE_V18_TPJS');
-            $c->msg('Anciens paramètres "TYPE_PIECE_JOINTE_STATUT" sauvegardés dans "SAVE_V18_TPJS".');
-
-            $bdd->exec('DELETE FROM TYPE_PIECE_JOINTE_STATUT');
-            $c->msg("Vidage de la table \"TYPE_PIECE_JOINTE_STATUT\" avant d'insérer les nouveaux paramètres");
-        }
-
         try {
             $bdd->exec("ALTER TABLE TYPE_PIECE_JOINTE_STATUT DROP CONSTRAINT TPJS_STATUT_INTERVENANT_FK");
         } catch (\Exception $e) {
@@ -609,6 +548,9 @@ class v18Statuts extends AbstractMigration
         /* Modifications au niveau de la table TPJS */
         $ddl = $bdd->table()->get('TYPE_PIECE_JOINTE_STATUT')['TYPE_PIECE_JOINTE_STATUT'];
         if (!isset($ddl['columns']['ANNEE_ID'])) {
+            $bdd->exec('DELETE FROM TYPE_PIECE_JOINTE_STATUT');
+            $c->msg("Vidage de la table \"TYPE_PIECE_JOINTE_STATUT\" avant d'insérer les nouveaux paramètres");
+
             $bdd->exec("ALTER TABLE TYPE_PIECE_JOINTE_STATUT ADD(ANNEE_ID NUMBER)");
         }
         if (!isset($ddl['columns']['NUM_REGLE'])) {
@@ -686,17 +628,12 @@ class v18Statuts extends AbstractMigration
 
         $c->begin('Application des nouveaux statuts aux paramétrages des types d\'intervention');
 
-        if (empty($bdd->table()->get('SAVE_V18_TIS'))) {
-            $this->manager->sauvegarderTable('TYPE_INTERVENTION_STATUT', 'SAVE_V18_TIS');
-            $c->msg('Anciens paramètres "TYPE_INTERVENTION_STATUT" sauvegardés dans "SAVE_V18_TIS".');
-
-            $bdd->exec('DELETE FROM TYPE_INTERVENTION_STATUT');
-            $c->msg("Vidage de la table \"TYPE_INTERVENTION_STATUT\" avant d'insérer les nouveaux paramètres");
-        }
-
         /* Modifications au niveau de la table TIS */
         $ddl = $bdd->table()->get('TYPE_INTERVENTION_STATUT')['TYPE_INTERVENTION_STATUT'];
         if (!isset($ddl['columns']['ANNEE_ID'])) {
+            $bdd->exec('DELETE FROM TYPE_INTERVENTION_STATUT');
+            $c->msg("Vidage de la table \"TYPE_INTERVENTION_STATUT\" avant d'insérer les nouveaux paramètres");
+
             $bdd->exec("ALTER TABLE TYPE_INTERVENTION_STATUT ADD(ANNEE_ID NUMBER)");
         }
         if (!isset($ddl['columns']['STATUT_ID'])) {

@@ -19,7 +19,7 @@ trait TypeNoteServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeNote( ?TypeNoteService $serviceTypeNote )
+    public function setServiceTypeNote(?TypeNoteService $serviceTypeNote)
     {
         $this->serviceTypeNote = $serviceTypeNote;
 
@@ -30,7 +30,7 @@ trait TypeNoteServiceAwareTrait
 
     public function getServiceTypeNote(): ?TypeNoteService
     {
-        if (empty($this->serviceTypeNote)){
+        if (empty($this->serviceTypeNote)) {
             $this->serviceTypeNote = \Application::$container->get(TypeNoteService::class);
         }
 

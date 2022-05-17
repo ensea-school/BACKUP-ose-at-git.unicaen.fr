@@ -20,7 +20,7 @@ trait GroupeTypeFormationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceGroupeTypeFormation( ?GroupeTypeFormationService $serviceGroupeTypeFormation )
+    public function setServiceGroupeTypeFormation(?GroupeTypeFormationService $serviceGroupeTypeFormation)
     {
         $this->serviceGroupeTypeFormation = $serviceGroupeTypeFormation;
 
@@ -31,7 +31,7 @@ trait GroupeTypeFormationServiceAwareTrait
 
     public function getServiceGroupeTypeFormation(): ?GroupeTypeFormationService
     {
-        if (empty($this->serviceGroupeTypeFormation)){
+        if (empty($this->serviceGroupeTypeFormation)) {
             $this->serviceGroupeTypeFormation = \Application::$container->get(GroupeTypeFormationService::class);
         }
 

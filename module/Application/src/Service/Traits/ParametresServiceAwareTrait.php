@@ -20,7 +20,7 @@ trait ParametresServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceParametres( ?ParametresService $serviceParametres )
+    public function setServiceParametres(?ParametresService $serviceParametres)
     {
         $this->serviceParametres = $serviceParametres;
 
@@ -31,7 +31,7 @@ trait ParametresServiceAwareTrait
 
     public function getServiceParametres(): ?ParametresService
     {
-        if (empty($this->serviceParametres)){
+        if (empty($this->serviceParametres)) {
             $this->serviceParametres = \Application::$container->get(ParametresService::class);
         }
 

@@ -20,7 +20,7 @@ trait ServiceServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceService( ?ServiceService $serviceService )
+    public function setServiceService(?ServiceService $serviceService)
     {
         $this->serviceService = $serviceService;
 
@@ -31,7 +31,7 @@ trait ServiceServiceAwareTrait
 
     public function getServiceService(): ?ServiceService
     {
-        if (empty($this->serviceService)){
+        if (empty($this->serviceService)) {
             $this->serviceService = \Application::$container->get(ServiceService::class);
         }
 

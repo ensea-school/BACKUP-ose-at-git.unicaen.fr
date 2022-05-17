@@ -20,7 +20,7 @@ trait FormuleResultatVolumeHoraireReferentielServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceFormuleResultatVolumeHoraireReferentiel( ?FormuleResultatVolumeHoraireReferentielService $serviceFormuleResultatVolumeHoraireReferentiel )
+    public function setServiceFormuleResultatVolumeHoraireReferentiel(?FormuleResultatVolumeHoraireReferentielService $serviceFormuleResultatVolumeHoraireReferentiel)
     {
         $this->serviceFormuleResultatVolumeHoraireReferentiel = $serviceFormuleResultatVolumeHoraireReferentiel;
 
@@ -31,7 +31,7 @@ trait FormuleResultatVolumeHoraireReferentielServiceAwareTrait
 
     public function getServiceFormuleResultatVolumeHoraireReferentiel(): ?FormuleResultatVolumeHoraireReferentielService
     {
-        if (empty($this->serviceFormuleResultatVolumeHoraireReferentiel)){
+        if (empty($this->serviceFormuleResultatVolumeHoraireReferentiel)) {
             $this->serviceFormuleResultatVolumeHoraireReferentiel = \Application::$container->get(FormuleResultatVolumeHoraireReferentielService::class);
         }
 

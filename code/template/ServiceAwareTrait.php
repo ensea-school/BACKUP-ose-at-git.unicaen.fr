@@ -21,7 +21,7 @@ trait <classname>
      *                      
      * @return self
      */
-    public function set<method>( ?<targetClassname> $<variable> )
+    public function set<method>(?<targetClassname> $<variable>)
     {
         $this-><variable> = $<variable>;
 
@@ -32,7 +32,7 @@ trait <classname>
 
     public function get<method>(): ?<targetClassname>
     {
-        if (empty($this-><variable>)){
+        if (empty($this-><variable>)) {
             $this-><variable> = \Application::$container->get(<targetClassname>::class);
         }
         

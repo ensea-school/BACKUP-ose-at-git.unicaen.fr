@@ -20,7 +20,7 @@ trait EtatSortieServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceEtatSortie( ?EtatSortieService $serviceEtatSortie )
+    public function setServiceEtatSortie(?EtatSortieService $serviceEtatSortie)
     {
         $this->serviceEtatSortie = $serviceEtatSortie;
 
@@ -31,7 +31,7 @@ trait EtatSortieServiceAwareTrait
 
     public function getServiceEtatSortie(): ?EtatSortieService
     {
-        if (empty($this->serviceEtatSortie)){
+        if (empty($this->serviceEtatSortie)) {
             $this->serviceEtatSortie = \Application::$container->get(EtatSortieService::class);
         }
 

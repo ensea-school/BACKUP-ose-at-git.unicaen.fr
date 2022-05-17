@@ -20,7 +20,7 @@ trait DossierAutreTypeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDossierAutreType( ?DossierAutreTypeService $serviceDossierAutreType )
+    public function setServiceDossierAutreType(?DossierAutreTypeService $serviceDossierAutreType)
     {
         $this->serviceDossierAutreType = $serviceDossierAutreType;
 
@@ -31,7 +31,7 @@ trait DossierAutreTypeServiceAwareTrait
 
     public function getServiceDossierAutreType(): ?DossierAutreTypeService
     {
-        if (empty($this->serviceDossierAutreType)){
+        if (empty($this->serviceDossierAutreType)) {
             $this->serviceDossierAutreType = \Application::$container->get(DossierAutreTypeService::class);
         }
 

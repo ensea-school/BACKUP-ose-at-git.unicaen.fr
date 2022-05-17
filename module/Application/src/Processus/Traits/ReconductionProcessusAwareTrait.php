@@ -20,7 +20,7 @@ trait ReconductionProcessusAwareTrait
      *
      * @return self
      */
-    public function setProcessusReconduction( ?ReconductionProcessus $processusReconduction )
+    public function setProcessusReconduction(?ReconductionProcessus $processusReconduction)
     {
         $this->processusReconduction = $processusReconduction;
 
@@ -31,7 +31,7 @@ trait ReconductionProcessusAwareTrait
 
     public function getProcessusReconduction(): ?ReconductionProcessus
     {
-        if (empty($this->processusReconduction)){
+        if (empty($this->processusReconduction)) {
             $this->processusReconduction = \Application::$container->get(ReconductionProcessus::class);
         }
 

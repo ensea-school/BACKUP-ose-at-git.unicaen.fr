@@ -20,7 +20,7 @@ trait SaisieFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetServiceReferentielSaisie( ?SaisieFieldset $fieldsetServiceReferentielSaisie )
+    public function setFieldsetServiceReferentielSaisie(?SaisieFieldset $fieldsetServiceReferentielSaisie)
     {
         $this->fieldsetServiceReferentielSaisie = $fieldsetServiceReferentielSaisie;
 
@@ -31,10 +31,10 @@ trait SaisieFieldsetAwareTrait
 
     public function getFieldsetServiceReferentielSaisie(): ?SaisieFieldset
     {
-        if (empty($this->fieldsetServiceReferentielSaisie)){
-            $this->fieldsetServiceReferentielSaisie = \Application::$container->get('FormElementManager')->get(SaisieFieldset::class);
+        if (!empty($this->fieldsetServiceReferentielSaisie)) {
+            return $this->fieldsetServiceReferentielSaisie;
         }
 
-        return $this->fieldsetServiceReferentielSaisie;
+        return \Application::$container->get('FormElementManager')->get(SaisieFieldset::class);
     }
 }

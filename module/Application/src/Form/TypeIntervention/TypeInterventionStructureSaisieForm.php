@@ -11,6 +11,7 @@ use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
 
 /**
@@ -30,6 +31,7 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
     {
         $hydrator = new TypeInterventionStructureHydrator();
         $this->setHydrator($hydrator);
+        $hydrator->setEntityManager($this->getEntityManager());
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([

@@ -20,7 +20,7 @@ trait RoleServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceRole( ?RoleService $serviceRole )
+    public function setServiceRole(?RoleService $serviceRole)
     {
         $this->serviceRole = $serviceRole;
 
@@ -31,7 +31,7 @@ trait RoleServiceAwareTrait
 
     public function getServiceRole(): ?RoleService
     {
-        if (empty($this->serviceRole)){
+        if (empty($this->serviceRole)) {
             $this->serviceRole = \Application::$container->get(RoleService::class);
         }
 

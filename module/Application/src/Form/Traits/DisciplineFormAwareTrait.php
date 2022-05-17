@@ -20,7 +20,7 @@ trait DisciplineFormAwareTrait
      *
      * @return self
      */
-    public function setFormDiscipline( ?DisciplineForm $formDiscipline )
+    public function setFormDiscipline(?DisciplineForm $formDiscipline)
     {
         $this->formDiscipline = $formDiscipline;
 
@@ -31,10 +31,10 @@ trait DisciplineFormAwareTrait
 
     public function getFormDiscipline(): ?DisciplineForm
     {
-        if (empty($this->formDiscipline)){
-            $this->formDiscipline = \Application::$container->get('FormElementManager')->get(DisciplineForm::class);
+        if (!empty($this->formDiscipline)) {
+            return $this->formDiscipline;
         }
 
-        return $this->formDiscipline;
+        return \Application::$container->get('FormElementManager')->get(DisciplineForm::class);
     }
 }

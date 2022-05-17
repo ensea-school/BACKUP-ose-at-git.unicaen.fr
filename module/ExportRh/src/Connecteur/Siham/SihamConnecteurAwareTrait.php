@@ -13,6 +13,7 @@ trait SihamConnecteurAwareTrait
     protected ?SihamConnecteur $connecteurSihamSiham = null;
 
 
+
     /**
      * @param SihamConnecteur $connecteurSihamSiham
      *
@@ -24,6 +25,7 @@ trait SihamConnecteurAwareTrait
 
         return $this;
     }
+
 
 
     public function getConnecteurSihamSiham(): ?SihamConnecteur

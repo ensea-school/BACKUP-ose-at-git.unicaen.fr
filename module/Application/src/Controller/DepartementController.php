@@ -32,7 +32,7 @@ class DepartementController extends AbstractController
     public function saisieAction()
     {
         $departement = $this->getEvent()->getParam('departement');
-        $form        = $this->getFormDepartementSaisie();
+        $form        = $this->getFormDepartementDepartementSaisie();
 
         if (empty($departement)) {
             $title       = "Création d'un nouveau département";

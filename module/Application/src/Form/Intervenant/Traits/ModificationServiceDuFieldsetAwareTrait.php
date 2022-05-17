@@ -20,7 +20,7 @@ trait ModificationServiceDuFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetIntervenantModificationServiceDu( ?ModificationServiceDuFieldset $fieldsetIntervenantModificationServiceDu )
+    public function setFieldsetIntervenantModificationServiceDu(?ModificationServiceDuFieldset $fieldsetIntervenantModificationServiceDu)
     {
         $this->fieldsetIntervenantModificationServiceDu = $fieldsetIntervenantModificationServiceDu;
 
@@ -31,10 +31,10 @@ trait ModificationServiceDuFieldsetAwareTrait
 
     public function getFieldsetIntervenantModificationServiceDu(): ?ModificationServiceDuFieldset
     {
-        if (empty($this->fieldsetIntervenantModificationServiceDu)){
-            $this->fieldsetIntervenantModificationServiceDu = \Application::$container->get('FormElementManager')->get(ModificationServiceDuFieldset::class);
+        if (!empty($this->fieldsetIntervenantModificationServiceDu)) {
+            return $this->fieldsetIntervenantModificationServiceDu;
         }
 
-        return $this->fieldsetIntervenantModificationServiceDu;
+        return \Application::$container->get('FormElementManager')->get(ModificationServiceDuFieldset::class);
     }
 }

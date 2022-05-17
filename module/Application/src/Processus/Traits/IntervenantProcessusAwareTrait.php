@@ -20,7 +20,7 @@ trait IntervenantProcessusAwareTrait
      *
      * @return self
      */
-    public function setProcessusIntervenant( ?IntervenantProcessus $processusIntervenant )
+    public function setProcessusIntervenant(?IntervenantProcessus $processusIntervenant)
     {
         $this->processusIntervenant = $processusIntervenant;
 
@@ -31,7 +31,7 @@ trait IntervenantProcessusAwareTrait
 
     public function getProcessusIntervenant(): ?IntervenantProcessus
     {
-        if (empty($this->processusIntervenant)){
+        if (empty($this->processusIntervenant)) {
             $this->processusIntervenant = \Application::$container->get(IntervenantProcessus::class);
         }
 

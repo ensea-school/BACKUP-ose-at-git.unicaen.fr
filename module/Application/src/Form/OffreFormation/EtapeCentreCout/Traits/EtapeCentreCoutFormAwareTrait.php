@@ -20,7 +20,7 @@ trait EtapeCentreCoutFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeCentreCoutEtapeCentreCout( ?EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout )
+    public function setFormOffreFormationEtapeCentreCoutEtapeCentreCout(?EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout)
     {
         $this->formOffreFormationEtapeCentreCoutEtapeCentreCout = $formOffreFormationEtapeCentreCoutEtapeCentreCout;
 
@@ -31,10 +31,10 @@ trait EtapeCentreCoutFormAwareTrait
 
     public function getFormOffreFormationEtapeCentreCoutEtapeCentreCout(): ?EtapeCentreCoutForm
     {
-        if (empty($this->formOffreFormationEtapeCentreCoutEtapeCentreCout)){
-            $this->formOffreFormationEtapeCentreCoutEtapeCentreCout = \Application::$container->get('FormElementManager')->get(EtapeCentreCoutForm::class);
+        if (!empty($this->formOffreFormationEtapeCentreCoutEtapeCentreCout)) {
+            return $this->formOffreFormationEtapeCentreCoutEtapeCentreCout;
         }
 
-        return $this->formOffreFormationEtapeCentreCoutEtapeCentreCout;
+        return \Application::$container->get('FormElementManager')->get(EtapeCentreCoutForm::class);
     }
 }

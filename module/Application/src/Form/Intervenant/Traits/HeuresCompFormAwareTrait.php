@@ -20,7 +20,7 @@ trait HeuresCompFormAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantHeuresComp( ?HeuresCompForm $formIntervenantHeuresComp )
+    public function setFormIntervenantHeuresComp(?HeuresCompForm $formIntervenantHeuresComp)
     {
         $this->formIntervenantHeuresComp = $formIntervenantHeuresComp;
 
@@ -31,10 +31,10 @@ trait HeuresCompFormAwareTrait
 
     public function getFormIntervenantHeuresComp(): ?HeuresCompForm
     {
-        if (empty($this->formIntervenantHeuresComp)){
-            $this->formIntervenantHeuresComp = \Application::$container->get('FormElementManager')->get(HeuresCompForm::class);
+        if (!empty($this->formIntervenantHeuresComp)) {
+            return $this->formIntervenantHeuresComp;
         }
 
-        return $this->formIntervenantHeuresComp;
+        return \Application::$container->get('FormElementManager')->get(HeuresCompForm::class);
     }
 }

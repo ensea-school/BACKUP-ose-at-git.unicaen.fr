@@ -20,7 +20,7 @@ trait SaisieCalendaireAwareTrait
      *
      * @return self
      */
-    public function setFormVolumeHoraireSaisieCalendaire( ?SaisieCalendaire $formVolumeHoraireSaisieCalendaire )
+    public function setFormVolumeHoraireSaisieCalendaire(?SaisieCalendaire $formVolumeHoraireSaisieCalendaire)
     {
         $this->formVolumeHoraireSaisieCalendaire = $formVolumeHoraireSaisieCalendaire;
 
@@ -31,10 +31,10 @@ trait SaisieCalendaireAwareTrait
 
     public function getFormVolumeHoraireSaisieCalendaire(): ?SaisieCalendaire
     {
-        if (empty($this->formVolumeHoraireSaisieCalendaire)){
-            $this->formVolumeHoraireSaisieCalendaire = \Application::$container->get('FormElementManager')->get(SaisieCalendaire::class);
+        if (!empty($this->formVolumeHoraireSaisieCalendaire)) {
+            return $this->formVolumeHoraireSaisieCalendaire;
         }
 
-        return $this->formVolumeHoraireSaisieCalendaire;
+        return \Application::$container->get('FormElementManager')->get(SaisieCalendaire::class);
     }
 }

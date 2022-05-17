@@ -1,47 +1,38 @@
 <?php
-/*
-* @author JORIOT Florian <florian.joriot at unicaen.fr>
-*/
 
 namespace Application\Form\Departement\Traits;
 
 use Application\Form\Departement\DepartementSaisieForm;
 
 /**
- * Description of GradeSaisieFormAwareTrait
+ * Description of DepartementSaisieFormAwareTrait
+ *
+ * @author UnicaenCode
  */
 trait DepartementSaisieFormAwareTrait
 {
-    /**
-     * @var DepartementSaisieForm
-     */
-    private $departementSaisie;
+    protected ?DepartementSaisieForm $formDepartementDepartementSaisie = null;
 
 
 
     /**
-     * @param DepartementSaisieForm $departementSaisie
+     * @param DepartementSaisieForm $formDepartementDepartementSaisie
      *
      * @return self
      */
-    public function setFormGroupeTypeFormationSaisie(DepartementSaisieForm $departementSaisie)
+    public function setFormDepartementDepartementSaisie(?DepartementSaisieForm $formDepartementDepartementSaisie)
     {
-        $this->formdepartementSaisie = $departementSaisie;
+        $this->formDepartementDepartementSaisie = $formDepartementDepartementSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return DepartementSaisieForm
-     */
-    public function getFormDepartementSaisie(): DepartementSaisieForm
+    public function getFormDepartementDepartementSaisie(): ?DepartementSaisieForm
     {
-        if (!empty($this->formDepartementSaisie)) {
-            return $this->formDepartementSaisie;
+        if (!empty($this->formDepartementDepartementSaisie)) {
+            return $this->formDepartementDepartementSaisie;
         }
 
         return \Application::$container->get('FormElementManager')->get(DepartementSaisieForm::class);

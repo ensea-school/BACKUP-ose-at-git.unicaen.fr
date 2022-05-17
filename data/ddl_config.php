@@ -12,6 +12,7 @@ return [
             'STATUT_PRIVILEGE',
             'TYPE_AGREMENT_STATUT',
             'PLAFOND_APPLICATION',
+            'VERSION',
         ],
     ],
     'materialized-view' => [
@@ -30,6 +31,8 @@ return [
             'V_CHARGENS_CALC_EFFECTIF',
             'V_CHARGENS_GRANDS_LIENS',
             'V_CHARGENS_PRECALCUL_HEURES',
+            'V_INDIC_DEPASS_HC_HORS_REMU_FC',
+            'V_INDIC_DEPASS_REF',
             'V_INDICATEUR_520',
             'V_INDICATEUR_530',
             'V_INDICATEUR_540',
@@ -48,6 +51,7 @@ return [
             'V_INDICATEUR_1240',
             'V_TBL_SERVICE_REFERENTIEL',
             'V_TBL_SERVICE_SAISIE',
+            'V_TBL_VOLUME_HORAIRE',
             'V_PRIVILEGES_ROLES',
             'V_CTL_SERVICES_ODF_HISTO',
         ], 'excludes' => [

@@ -6,7 +6,7 @@ namespace Intervenant\Service;
 /**
  * Description of TypeNoteServiceAwareTrait
  *
- * @author Antony Le Courtes <antony.lecourtes at unicaen.fr>
+ * @author UnicaenCode
  */
 trait TypeNoteServiceAwareTrait
 {

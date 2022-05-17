@@ -32,7 +32,7 @@ class PaysController extends AbstractController
     public function saisieAction()
     {
         $pays = $this->getEvent()->getParam('pays');
-        $form = $this->getFormPaysSaisie();
+        $form = $this->getFormPaysPaysSaisie();
 
         if (empty($pays)) {
             $title = "Création d'un nouveau pays";

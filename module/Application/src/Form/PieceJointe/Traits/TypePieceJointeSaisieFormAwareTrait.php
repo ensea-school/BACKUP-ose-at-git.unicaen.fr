@@ -20,7 +20,7 @@ trait TypePieceJointeSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormPieceJointeTypePieceJointeSaisie( ?TypePieceJointeSaisieForm $formPieceJointeTypePieceJointeSaisie )
+    public function setFormPieceJointeTypePieceJointeSaisie(?TypePieceJointeSaisieForm $formPieceJointeTypePieceJointeSaisie)
     {
         $this->formPieceJointeTypePieceJointeSaisie = $formPieceJointeTypePieceJointeSaisie;
 
@@ -31,10 +31,10 @@ trait TypePieceJointeSaisieFormAwareTrait
 
     public function getFormPieceJointeTypePieceJointeSaisie(): ?TypePieceJointeSaisieForm
     {
-        if (empty($this->formPieceJointeTypePieceJointeSaisie)){
-            $this->formPieceJointeTypePieceJointeSaisie = \Application::$container->get('FormElementManager')->get(TypePieceJointeSaisieForm::class);
+        if (!empty($this->formPieceJointeTypePieceJointeSaisie)) {
+            return $this->formPieceJointeTypePieceJointeSaisie;
         }
 
-        return $this->formPieceJointeTypePieceJointeSaisie;
+        return \Application::$container->get('FormElementManager')->get(TypePieceJointeSaisieForm::class);
     }
 }

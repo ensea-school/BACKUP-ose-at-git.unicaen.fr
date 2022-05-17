@@ -20,7 +20,7 @@ trait AffectationFormAwareTrait
      *
      * @return self
      */
-    public function setFormDroitsAffectation( ?AffectationForm $formDroitsAffectation )
+    public function setFormDroitsAffectation(?AffectationForm $formDroitsAffectation)
     {
         $this->formDroitsAffectation = $formDroitsAffectation;
 
@@ -31,10 +31,10 @@ trait AffectationFormAwareTrait
 
     public function getFormDroitsAffectation(): ?AffectationForm
     {
-        if (empty($this->formDroitsAffectation)){
-            $this->formDroitsAffectation = \Application::$container->get('FormElementManager')->get(AffectationForm::class);
+        if (!empty($this->formDroitsAffectation)) {
+            return $this->formDroitsAffectation;
         }
 
-        return $this->formDroitsAffectation;
+        return \Application::$container->get('FormElementManager')->get(AffectationForm::class);
     }
 }

@@ -20,7 +20,7 @@ trait TauxMixiteFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationTauxMixiteTauxMixite( ?TauxMixiteForm $formOffreFormationTauxMixiteTauxMixite )
+    public function setFormOffreFormationTauxMixiteTauxMixite(?TauxMixiteForm $formOffreFormationTauxMixiteTauxMixite)
     {
         $this->formOffreFormationTauxMixiteTauxMixite = $formOffreFormationTauxMixiteTauxMixite;
 
@@ -31,10 +31,10 @@ trait TauxMixiteFormAwareTrait
 
     public function getFormOffreFormationTauxMixiteTauxMixite(): ?TauxMixiteForm
     {
-        if (empty($this->formOffreFormationTauxMixiteTauxMixite)){
-            $this->formOffreFormationTauxMixiteTauxMixite = \Application::$container->get('FormElementManager')->get(TauxMixiteForm::class);
+        if (!empty($this->formOffreFormationTauxMixiteTauxMixite)) {
+            return $this->formOffreFormationTauxMixiteTauxMixite;
         }
 
-        return $this->formOffreFormationTauxMixiteTauxMixite;
+        return \Application::$container->get('FormElementManager')->get(TauxMixiteForm::class);
     }
 }

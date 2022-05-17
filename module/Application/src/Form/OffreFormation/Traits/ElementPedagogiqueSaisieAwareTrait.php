@@ -20,7 +20,7 @@ trait ElementPedagogiqueSaisieAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationElementPedagogiqueSaisie( ?ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie )
+    public function setFormOffreFormationElementPedagogiqueSaisie(?ElementPedagogiqueSaisie $formOffreFormationElementPedagogiqueSaisie)
     {
         $this->formOffreFormationElementPedagogiqueSaisie = $formOffreFormationElementPedagogiqueSaisie;
 
@@ -31,10 +31,10 @@ trait ElementPedagogiqueSaisieAwareTrait
 
     public function getFormOffreFormationElementPedagogiqueSaisie(): ?ElementPedagogiqueSaisie
     {
-        if (empty($this->formOffreFormationElementPedagogiqueSaisie)){
-            $this->formOffreFormationElementPedagogiqueSaisie = \Application::$container->get('FormElementManager')->get(ElementPedagogiqueSaisie::class);
+        if (!empty($this->formOffreFormationElementPedagogiqueSaisie)) {
+            return $this->formOffreFormationElementPedagogiqueSaisie;
         }
 
-        return $this->formOffreFormationElementPedagogiqueSaisie;
+        return \Application::$container->get('FormElementManager')->get(ElementPedagogiqueSaisie::class);
     }
 }

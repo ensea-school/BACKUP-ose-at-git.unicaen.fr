@@ -20,7 +20,7 @@ trait TypeInterventionServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeIntervention( ?TypeInterventionService $serviceTypeIntervention )
+    public function setServiceTypeIntervention(?TypeInterventionService $serviceTypeIntervention)
     {
         $this->serviceTypeIntervention = $serviceTypeIntervention;
 
@@ -31,7 +31,7 @@ trait TypeInterventionServiceAwareTrait
 
     public function getServiceTypeIntervention(): ?TypeInterventionService
     {
-        if (empty($this->serviceTypeIntervention)){
+        if (empty($this->serviceTypeIntervention)) {
             $this->serviceTypeIntervention = \Application::$container->get(TypeInterventionService::class);
         }
 

@@ -19,7 +19,7 @@ trait PlafondFormAwareTrait
      *
      * @return self
      */
-    public function setFormPlafond( ?PlafondForm $formPlafond )
+    public function setFormPlafond(?PlafondForm $formPlafond)
     {
         $this->formPlafond = $formPlafond;
 
@@ -30,10 +30,10 @@ trait PlafondFormAwareTrait
 
     public function getFormPlafond(): ?PlafondForm
     {
-        if (empty($this->formPlafond)){
-            $this->formPlafond = \Application::$container->get('FormElementManager')->get(PlafondForm::class);
+        if (!empty($this->formPlafond)) {
+            return $this->formPlafond;
         }
 
-        return $this->formPlafond;
+        return \Application::$container->get('FormElementManager')->get(PlafondForm::class);
     }
 }

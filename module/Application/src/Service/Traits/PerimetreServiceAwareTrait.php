@@ -20,7 +20,7 @@ trait PerimetreServiceAwareTrait
      *
      * @return self
      */
-    public function setServicePerimetre( ?PerimetreService $servicePerimetre )
+    public function setServicePerimetre(?PerimetreService $servicePerimetre)
     {
         $this->servicePerimetre = $servicePerimetre;
 
@@ -31,7 +31,7 @@ trait PerimetreServiceAwareTrait
 
     public function getServicePerimetre(): ?PerimetreService
     {
-        if (empty($this->servicePerimetre)){
+        if (empty($this->servicePerimetre)) {
             $this->servicePerimetre = \Application::$container->get(PerimetreService::class);
         }
 

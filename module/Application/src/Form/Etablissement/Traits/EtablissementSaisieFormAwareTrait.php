@@ -1,47 +1,38 @@
 <?php
-/*
-* @author JORIOT Florian <florian.joriot at unicaen.fr>
-*/
 
 namespace Application\Form\Etablissement\Traits;
 
 use Application\Form\Etablissement\EtablissementSaisieForm;
 
 /**
- * Description of GradeSaisieFormAwareTrait
+ * Description of EtablissementSaisieFormAwareTrait
+ *
+ * @author UnicaenCode
  */
 trait EtablissementSaisieFormAwareTrait
 {
-    /**
-     * @var EtablissementSaisieForm
-     */
-    private $formEtablissementSaisie;
+    protected ?EtablissementSaisieForm $formEtablissementEtablissementSaisie = null;
 
 
 
     /**
-     * @param EtablissementSaisieForm $formEtablissementSaisie
+     * @param EtablissementSaisieForm $formEtablissementEtablissementSaisie
      *
      * @return self
      */
-    public function setFormEtablissementSaisie(EtablissementSaisieForm $formEtablissementSaisie)
+    public function setFormEtablissementEtablissementSaisie(?EtablissementSaisieForm $formEtablissementEtablissementSaisie)
     {
-        $this->formEtablissementSaisie = $formEtablissementSaisie;
+        $this->formEtablissementEtablissementSaisie = $formEtablissementEtablissementSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return EtablissementSaisieForm
-     */
-    public function getFormEtablissementSaisie()
+    public function getFormEtablissementEtablissementSaisie(): ?EtablissementSaisieForm
     {
-        if (!empty($this->formEtablissementSaisie)) {
-            return $this->formEtablissementSaisie;
+        if (!empty($this->formEtablissementEtablissementSaisie)) {
+            return $this->formEtablissementEtablissementSaisie;
         }
 
         return \Application::$container->get('FormElementManager')->get(EtablissementSaisieForm::class);

@@ -20,7 +20,7 @@ trait EtapeModulateursSaisieAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeModulateursSaisie( ?EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie )
+    public function setFormOffreFormationEtapeModulateursSaisie(?EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie)
     {
         $this->formOffreFormationEtapeModulateursSaisie = $formOffreFormationEtapeModulateursSaisie;
 
@@ -31,10 +31,10 @@ trait EtapeModulateursSaisieAwareTrait
 
     public function getFormOffreFormationEtapeModulateursSaisie(): ?EtapeModulateursSaisie
     {
-        if (empty($this->formOffreFormationEtapeModulateursSaisie)){
-            $this->formOffreFormationEtapeModulateursSaisie = \Application::$container->get('FormElementManager')->get(EtapeModulateursSaisie::class);
+        if (!empty($this->formOffreFormationEtapeModulateursSaisie)) {
+            return $this->formOffreFormationEtapeModulateursSaisie;
         }
 
-        return $this->formOffreFormationEtapeModulateursSaisie;
+        return \Application::$container->get('FormElementManager')->get(EtapeModulateursSaisie::class);
     }
 }

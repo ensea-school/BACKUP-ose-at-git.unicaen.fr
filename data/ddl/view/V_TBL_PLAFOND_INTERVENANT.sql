@@ -15,17 +15,44 @@ SELECT
   CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
 FROM
   (
-  SELECT 4 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+  SELECT 9 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
     SELECT
-        i.annee_id                             annee_id,
-        fr.type_volume_horaire_id              type_volume_horaire_id,
-        i.id                                   intervenant_id,
-        fr.total - fr.heures_compl_fc_majorees heures
+        i.annee_id                annee_id,
+        vh.type_volume_horaire_id type_volume_horaire_id,
+        i.id                      intervenant_id,
+        SUM(vh.heures)            heures
       FROM
-        intervenant                     i
+        volume_horaire vh
+        JOIN service s ON s.id = vh.service_id
+        JOIN intervenant i ON i.id = s.intervenant_id
+        JOIN statut si ON si.id = i.statut_id
+      WHERE
+        vh.histo_destruction IS NULL
+        AND i.histo_destruction IS NULL
+        AND vh.motif_non_paiement_id IS NULL
+        AND si.code IN ('IMP')
+      GROUP BY
+        i.annee_id,
+        vh.type_volume_horaire_id,
+        i.id,
+        i.statut_id
+      HAVING
+        SUM(vh.heures) >= 0
+    ) p
+
+    UNION ALL
+
+  SELECT 1 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+    SELECT
+        i.annee_id                          annee_id,
+        fr.type_volume_horaire_id           type_volume_horaire_id,
+        fr.intervenant_id                   intervenant_id,
+        fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures
+      FROM
+             intervenant                i
+        JOIN statut                    si ON si.id = i.statut_id
         JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
         JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-        JOIN statut                    si ON si.id = i.statut_id
     ) p
 
     UNION ALL
@@ -45,40 +72,7 @@ FROM
 
     UNION ALL
 
-  SELECT 1 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
-    SELECT
-        i.annee_id                          annee_id,
-        fr.type_volume_horaire_id           type_volume_horaire_id,
-        i.id                                intervenant_id,
-        fr.heures_compl_fc_majorees         heures
-      /*  ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond*/
-
-      FROM
-             intervenant                i
-        JOIN annee                      a ON a.id = i.annee_id
-        JOIN statut                    si ON si.id = i.statut_id
-        JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
-        JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-    ) p
-
-    UNION ALL
-
-  SELECT 5 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
-    SELECT
-        i.annee_id                          annee_id,
-        fr.type_volume_horaire_id           type_volume_horaire_id,
-        fr.intervenant_id                   intervenant_id,
-        fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures
-      FROM
-             intervenant                i
-        JOIN statut                    si ON si.id = i.statut_id
-        JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
-        JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-    ) p
-
-    UNION ALL
-
-  SELECT 8 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+  SELECT 4 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
     SELECT
         i.annee_id                annee_id,
         fr.type_volume_horaire_id type_volume_horaire_id,
@@ -99,6 +93,39 @@ FROM
         i.annee_id,
         i.id,
         i.statut_id
+    ) p
+
+    UNION ALL
+
+  SELECT 8 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+    SELECT
+        i.annee_id                             annee_id,
+        fr.type_volume_horaire_id              type_volume_horaire_id,
+        i.id                                   intervenant_id,
+        fr.service_referentiel + fr.heures_compl_referentiel heures
+      FROM
+        intervenant                     i
+        JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
+        JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+        JOIN statut                    si ON si.id = i.statut_id
+    ) p
+
+    UNION ALL
+
+  SELECT 3 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+    SELECT
+        i.annee_id                          annee_id,
+        fr.type_volume_horaire_id           type_volume_horaire_id,
+        i.id                                intervenant_id,
+        fr.heures_compl_fc_majorees         heures
+        /*ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond*/
+
+      FROM
+             intervenant                i
+        JOIN annee                      a ON a.id = i.annee_id
+        JOIN statut                    si ON si.id = i.statut_id
+        JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
+        JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
     ) p
   ) p
   JOIN intervenant i ON i.id = p.intervenant_id

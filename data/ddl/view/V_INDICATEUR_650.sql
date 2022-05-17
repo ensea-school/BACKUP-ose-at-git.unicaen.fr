@@ -1,18 +1,11 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_650 AS
-SELECT
+SELECT DISTINCT
   w.intervenant_id,
-  i.structure_id,
-  s.libelle_court "Composantes concernées"
+  w.structure_id
 FROM
   tbl_workflow w
-  JOIN tbl_workflow wc ON wc.intervenant_id = w.intervenant_id
-  JOIN intervenant i ON i.id = wc.intervenant_id
-  JOIN structure s ON s.id = w.structure_id
 WHERE
   w.etape_code = 'SERVICE_VALIDATION_REALISE'
-  AND w.objectif > w.realisation
+  AND w.type_intervenant_code = 'P'
   AND w.atteignable = 1
-
-  AND wc.etape_code = 'CLOTURE_REALISE'
-  AND wc.objectif = wc.realisation
-  AND w.structure_id <> i.structure_id
+  AND w.objectif > w.realisation

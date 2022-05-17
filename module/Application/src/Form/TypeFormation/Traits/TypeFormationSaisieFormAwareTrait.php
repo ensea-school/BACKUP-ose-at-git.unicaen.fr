@@ -1,47 +1,38 @@
 <?php
-/*
-* @author JORIOT Florian <florian.joriot at unicaen.fr>
-*/
 
 namespace Application\Form\TypeFormation\Traits;
 
 use Application\Form\TypeFormation\TypeFormationSaisieForm;
 
 /**
- * Description of GradeSaisieFormAwareTrait
+ * Description of TypeFormationSaisieFormAwareTrait
+ *
+ * @author UnicaenCode
  */
 trait TypeFormationSaisieFormAwareTrait
 {
-    /**
-     * @var TypeFormationSaisieForm
-     */
-    private $typeFormationSaisie;
+    protected ?TypeFormationSaisieForm $formTypeFormationTypeFormationSaisie = null;
 
 
 
     /**
-     * @param TypeFormationSaisieForm $formTypeFormationSaisie
+     * @param TypeFormationSaisieForm $formTypeFormationTypeFormationSaisie
      *
      * @return self
      */
-    public function setFormTypeFormationSaisie(TypeFormationSaisieForm $formTypeFormationSaisie)
+    public function setFormTypeFormationTypeFormationSaisie(?TypeFormationSaisieForm $formTypeFormationTypeFormationSaisie)
     {
-        $this->formTypeFormationSaisie = $formTypeFormationSaisie;
+        $this->formTypeFormationTypeFormationSaisie = $formTypeFormationTypeFormationSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return TypeFormationSaisieForm
-     */
-    public function getFormTypeFormationSaisie()
+    public function getFormTypeFormationTypeFormationSaisie(): ?TypeFormationSaisieForm
     {
-        if (!empty($this->formTypeFormationSaisie)) {
-            return $this->formTypeFormationSaisie;
+        if (!empty($this->formTypeFormationTypeFormationSaisie)) {
+            return $this->formTypeFormationTypeFormationSaisie;
         }
 
         return \Application::$container->get('FormElementManager')->get(TypeFormationSaisieForm::class);

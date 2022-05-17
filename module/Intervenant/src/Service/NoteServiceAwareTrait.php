@@ -6,7 +6,7 @@ namespace Intervenant\Service;
 /**
  * Description of NoteServiceAwareTrait
  *
- * @author Antony Le Courtes <antony.lecourtes at unicaen.fr>
+ * @author UnicaenCode
  */
 trait NoteServiceAwareTrait
 {
@@ -19,7 +19,7 @@ trait NoteServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceNote(?NoteService $serviceNote)
+    public function setServiceNote( ?NoteService $serviceNote )
     {
         $this->serviceNote = $serviceNote;
 
@@ -30,7 +30,7 @@ trait NoteServiceAwareTrait
 
     public function getServiceNote(): ?NoteService
     {
-        if (empty($this->serviceNote)) {
+        if (empty($this->serviceNote)){
             $this->serviceNote = \Application::$container->get(NoteService::class);
         }
 

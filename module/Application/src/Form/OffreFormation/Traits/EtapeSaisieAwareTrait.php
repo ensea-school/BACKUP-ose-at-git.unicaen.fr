@@ -20,7 +20,7 @@ trait EtapeSaisieAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationEtapeSaisie( ?EtapeSaisie $formOffreFormationEtapeSaisie )
+    public function setFormOffreFormationEtapeSaisie(?EtapeSaisie $formOffreFormationEtapeSaisie)
     {
         $this->formOffreFormationEtapeSaisie = $formOffreFormationEtapeSaisie;
 
@@ -31,10 +31,10 @@ trait EtapeSaisieAwareTrait
 
     public function getFormOffreFormationEtapeSaisie(): ?EtapeSaisie
     {
-        if (empty($this->formOffreFormationEtapeSaisie)){
-            $this->formOffreFormationEtapeSaisie = \Application::$container->get('FormElementManager')->get(EtapeSaisie::class);
+        if (!empty($this->formOffreFormationEtapeSaisie)) {
+            return $this->formOffreFormationEtapeSaisie;
         }
 
-        return $this->formOffreFormationEtapeSaisie;
+        return \Application::$container->get('FormElementManager')->get(EtapeSaisie::class);
     }
 }

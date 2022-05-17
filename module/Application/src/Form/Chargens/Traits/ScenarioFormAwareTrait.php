@@ -20,7 +20,7 @@ trait ScenarioFormAwareTrait
      *
      * @return self
      */
-    public function setFormChargensScenario( ?ScenarioForm $formChargensScenario )
+    public function setFormChargensScenario(?ScenarioForm $formChargensScenario)
     {
         $this->formChargensScenario = $formChargensScenario;
 
@@ -31,10 +31,10 @@ trait ScenarioFormAwareTrait
 
     public function getFormChargensScenario(): ?ScenarioForm
     {
-        if (empty($this->formChargensScenario)){
-            $this->formChargensScenario = \Application::$container->get('FormElementManager')->get(ScenarioForm::class);
+        if (!empty($this->formChargensScenario)) {
+            return $this->formChargensScenario;
         }
 
-        return $this->formChargensScenario;
+        return \Application::$container->get('FormElementManager')->get(ScenarioForm::class);
     }
 }

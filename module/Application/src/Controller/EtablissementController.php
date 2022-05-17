@@ -131,7 +131,7 @@ class EtablissementController extends AbstractController
     public function saisieAction()
     {
         $etablissement = $this->getEvent()->getParam('etablissement');
-        $form          = $this->getFormEtablissementSaisie();
+        $form          = $this->getFormEtablissementEtablissementSaisie();
 
         if (empty($etablissement)) {
             $title         = "Création d'un nouvel établissement";

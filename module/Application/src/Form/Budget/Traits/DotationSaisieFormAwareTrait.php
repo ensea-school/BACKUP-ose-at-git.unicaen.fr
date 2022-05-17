@@ -20,7 +20,7 @@ trait DotationSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormBudgetDotationSaisie( ?DotationSaisieForm $formBudgetDotationSaisie )
+    public function setFormBudgetDotationSaisie(?DotationSaisieForm $formBudgetDotationSaisie)
     {
         $this->formBudgetDotationSaisie = $formBudgetDotationSaisie;
 
@@ -31,10 +31,10 @@ trait DotationSaisieFormAwareTrait
 
     public function getFormBudgetDotationSaisie(): ?DotationSaisieForm
     {
-        if (empty($this->formBudgetDotationSaisie)){
-            $this->formBudgetDotationSaisie = \Application::$container->get('FormElementManager')->get(DotationSaisieForm::class);
+        if (!empty($this->formBudgetDotationSaisie)) {
+            return $this->formBudgetDotationSaisie;
         }
 
-        return $this->formBudgetDotationSaisie;
+        return \Application::$container->get('FormElementManager')->get(DotationSaisieForm::class);
     }
 }

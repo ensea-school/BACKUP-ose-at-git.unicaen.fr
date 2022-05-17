@@ -20,7 +20,7 @@ trait VolumeHoraireEnsFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationVolumeHoraireEns( ?VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns )
+    public function setFormOffreFormationVolumeHoraireEns(?VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns)
     {
         $this->formOffreFormationVolumeHoraireEns = $formOffreFormationVolumeHoraireEns;
 
@@ -31,10 +31,10 @@ trait VolumeHoraireEnsFormAwareTrait
 
     public function getFormOffreFormationVolumeHoraireEns(): ?VolumeHoraireEnsForm
     {
-        if (empty($this->formOffreFormationVolumeHoraireEns)){
-            $this->formOffreFormationVolumeHoraireEns = \Application::$container->get('FormElementManager')->get(VolumeHoraireEnsForm::class);
+        if (!empty($this->formOffreFormationVolumeHoraireEns)) {
+            return $this->formOffreFormationVolumeHoraireEns;
         }
 
-        return $this->formOffreFormationVolumeHoraireEns;
+        return \Application::$container->get('FormElementManager')->get(VolumeHoraireEnsForm::class);
     }
 }

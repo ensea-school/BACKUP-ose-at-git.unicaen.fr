@@ -20,7 +20,7 @@ trait SaisieAwareTrait
      *
      * @return self
      */
-    public function setFormServiceReferentielSaisie( ?Saisie $formServiceReferentielSaisie )
+    public function setFormServiceReferentielSaisie(?Saisie $formServiceReferentielSaisie)
     {
         $this->formServiceReferentielSaisie = $formServiceReferentielSaisie;
 
@@ -31,10 +31,10 @@ trait SaisieAwareTrait
 
     public function getFormServiceReferentielSaisie(): ?Saisie
     {
-        if (empty($this->formServiceReferentielSaisie)){
-            $this->formServiceReferentielSaisie = \Application::$container->get('FormElementManager')->get(Saisie::class);
+        if (!empty($this->formServiceReferentielSaisie)) {
+            return $this->formServiceReferentielSaisie;
         }
 
-        return $this->formServiceReferentielSaisie;
+        return \Application::$container->get('FormElementManager')->get(Saisie::class);
     }
 }

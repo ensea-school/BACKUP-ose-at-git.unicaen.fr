@@ -20,7 +20,7 @@ trait StructureSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormStructureStructureSaisie( ?StructureSaisieForm $formStructureStructureSaisie )
+    public function setFormStructureStructureSaisie(?StructureSaisieForm $formStructureStructureSaisie)
     {
         $this->formStructureStructureSaisie = $formStructureStructureSaisie;
 
@@ -31,10 +31,10 @@ trait StructureSaisieFormAwareTrait
 
     public function getFormStructureStructureSaisie(): ?StructureSaisieForm
     {
-        if (empty($this->formStructureStructureSaisie)){
-            $this->formStructureStructureSaisie = \Application::$container->get('FormElementManager')->get(StructureSaisieForm::class);
+        if (!empty($this->formStructureStructureSaisie)) {
+            return $this->formStructureStructureSaisie;
         }
 
-        return $this->formStructureStructureSaisie;
+        return \Application::$container->get('FormElementManager')->get(StructureSaisieForm::class);
     }
 }

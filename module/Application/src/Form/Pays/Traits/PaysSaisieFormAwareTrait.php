@@ -1,47 +1,38 @@
 <?php
-/*
-* @author JORIOT Florian <florian.joriot at unicaen.fr>
-*/
 
 namespace Application\Form\Pays\Traits;
 
 use Application\Form\Pays\PaysSaisieForm;
 
 /**
- * Description of GradeSaisieFormAwareTrait
+ * Description of PaysSaisieFormAwareTrait
+ *
+ * @author UnicaenCode
  */
 trait PaysSaisieFormAwareTrait
 {
-    /**
-     * @var PaysSaisieForm
-     */
-    private $paysSaisie;
+    protected ?PaysSaisieForm $formPaysPaysSaisie = null;
 
 
 
     /**
-     * @param PaysSaisieForm $paysSaisie
+     * @param PaysSaisieForm $formPaysPaysSaisie
      *
      * @return self
      */
-    public function setFormGroupeTypeFormationSaisie(PaysSaisieForm $paysSaisie)
+    public function setFormPaysPaysSaisie(?PaysSaisieForm $formPaysPaysSaisie)
     {
-        $this->formPaysSaisie = $paysSaisie;
+        $this->formPaysPaysSaisie = $formPaysPaysSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return PaysSaisieForm
-     */
-    public function getFormPaysSaisie(): PaysSaisieForm
+    public function getFormPaysPaysSaisie(): ?PaysSaisieForm
     {
-        if (!empty($this->formPaysSaisie)) {
-            return $this->formPaysSaisie;
+        if (!empty($this->formPaysPaysSaisie)) {
+            return $this->formPaysPaysSaisie;
         }
 
         return \Application::$container->get('FormElementManager')->get(PaysSaisieForm::class);

@@ -55,7 +55,7 @@ class TypeFormationController extends AbstractController
         ]);
 
         $typeFormations = $this->getEvent()->getParam('typeFormation');
-        $form           = $this->getFormTypeFormationSaisie();
+        $form           = $this->getFormTypeFormationTypeFormationSaisie();
 
         if (empty($typeFormations)) {
             $title          = "Création d'un nouveau type de formation";
@@ -80,7 +80,7 @@ class TypeFormationController extends AbstractController
     public function saisieGroupeAction()
     {
         $groupeTypeFormation = $this->getEvent()->getParam('groupeTypeFormation');
-        $form                = $this->getFormGroupeTypeFormationSaisie();
+        $form                = $this->getFormGroupeTypeFormationGroupeTypeFormationSaisie();
 
         if (empty($groupeTypeFormation)) {
             $title               = "Création d'un nouveau groupe";
@@ -101,8 +101,7 @@ class TypeFormationController extends AbstractController
 
 
 
-    public
-    function supprimerAction()
+    public function supprimerAction()
     {
         $typeformation = $this->getEvent()->getParam('typeFormation');
         $this->getServiceTypeFormation()->delete($typeformation, true);
@@ -111,8 +110,8 @@ class TypeFormationController extends AbstractController
     }
 
 
-    public
-    function supprimerGroupeAction()
+
+    public function supprimerGroupeAction()
     {
         $groupetypeformation = $this->getEvent()->getParam('groupeTypeFormation');
         $this->getServiceGroupeTypeFormation()->delete($groupetypeformation, false);

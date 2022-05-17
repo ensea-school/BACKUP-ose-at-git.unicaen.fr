@@ -20,7 +20,7 @@ trait ModeleFormAwareTrait
      *
      * @return self
      */
-    public function setFormContratModele( ?ModeleForm $formContratModele )
+    public function setFormContratModele(?ModeleForm $formContratModele)
     {
         $this->formContratModele = $formContratModele;
 
@@ -31,10 +31,10 @@ trait ModeleFormAwareTrait
 
     public function getFormContratModele(): ?ModeleForm
     {
-        if (empty($this->formContratModele)){
-            $this->formContratModele = \Application::$container->get('FormElementManager')->get(ModeleForm::class);
+        if (!empty($this->formContratModele)) {
+            return $this->formContratModele;
         }
 
-        return $this->formContratModele;
+        return \Application::$container->get('FormElementManager')->get(ModeleForm::class);
     }
 }

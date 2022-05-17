@@ -1,47 +1,38 @@
 <?php
-/*
-* @author JORIOT Florian <florian.joriot at unicaen.fr>
-*/
 
 namespace Application\Form\Periode\Traits;
 
 use Application\Form\Periode\PeriodeSaisieForm;
 
 /**
- * Description of GradeSaisieFormAwareTrait
+ * Description of PeriodeSaisieFormAwareTrait
+ *
+ * @author UnicaenCode
  */
 trait PeriodeSaisieFormAwareTrait
 {
-    /**
-     * @var PeriodeSaisieForm
-     */
-    private $formPeriodeSaisie;
+    protected ?PeriodeSaisieForm $formPeriodePeriodeSaisie = null;
 
 
 
     /**
-     * @param PeriodeSaisieForm $formPeriodeSaisie
+     * @param PeriodeSaisieForm $formPeriodePeriodeSaisie
      *
      * @return self
      */
-    public function setFormPeriodeSaisie(PeriodeSaisieForm $formPeriodeSaisie)
+    public function setFormPeriodePeriodeSaisie(?PeriodeSaisieForm $formPeriodePeriodeSaisie)
     {
-        $this->formPeriodeSaisie = $formPeriodeSaisie;
+        $this->formPeriodePeriodeSaisie = $formPeriodePeriodeSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return PeriodeSaisieForm
-     */
-    public function getFormPeriodeSaisie()
+    public function getFormPeriodePeriodeSaisie(): ?PeriodeSaisieForm
     {
-        if (!empty($this->formPeriodeSaisie)) {
-            return $this->formPeriodeSaisie;
+        if (!empty($this->formPeriodePeriodeSaisie)) {
+            return $this->formPeriodePeriodeSaisie;
         }
 
         return \Application::$container->get('FormElementManager')->get(PeriodeSaisieForm::class);

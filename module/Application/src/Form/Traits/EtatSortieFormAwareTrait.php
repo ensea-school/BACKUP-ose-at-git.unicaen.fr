@@ -20,7 +20,7 @@ trait EtatSortieFormAwareTrait
      *
      * @return self
      */
-    public function setFormEtatSortie( ?EtatSortieForm $formEtatSortie )
+    public function setFormEtatSortie(?EtatSortieForm $formEtatSortie)
     {
         $this->formEtatSortie = $formEtatSortie;
 
@@ -31,10 +31,10 @@ trait EtatSortieFormAwareTrait
 
     public function getFormEtatSortie(): ?EtatSortieForm
     {
-        if (empty($this->formEtatSortie)){
-            $this->formEtatSortie = \Application::$container->get('FormElementManager')->get(EtatSortieForm::class);
+        if (!empty($this->formEtatSortie)) {
+            return $this->formEtatSortie;
         }
 
-        return $this->formEtatSortie;
+        return \Application::$container->get('FormElementManager')->get(EtatSortieForm::class);
     }
 }

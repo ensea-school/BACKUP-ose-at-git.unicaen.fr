@@ -28,6 +28,7 @@ trait GroupeTypeFormationServiceAwareTrait
     }
 
 
+
     public function getServiceGroupeTypeFormation(): ?GroupeTypeFormationService
     {
         if (empty($this->serviceGroupeTypeFormation)){

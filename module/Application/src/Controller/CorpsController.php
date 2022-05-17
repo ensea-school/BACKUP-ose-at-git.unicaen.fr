@@ -41,7 +41,7 @@ class CorpsController extends AbstractController
     {
 
         $corps = $this->getEvent()->getParam('corps');
-        $form  = $this->getFormCorpsSaisie();
+        $form  = $this->getFormCorpsCorpsSaisie();
 
         if (empty($corps)) {
             $title = "Création d'un nouveau corps";

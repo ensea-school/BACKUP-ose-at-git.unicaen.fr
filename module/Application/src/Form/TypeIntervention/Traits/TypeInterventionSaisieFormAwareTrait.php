@@ -20,7 +20,7 @@ trait TypeInterventionSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormTypeInterventionTypeInterventionSaisie( ?TypeInterventionSaisieForm $formTypeInterventionTypeInterventionSaisie )
+    public function setFormTypeInterventionTypeInterventionSaisie(?TypeInterventionSaisieForm $formTypeInterventionTypeInterventionSaisie)
     {
         $this->formTypeInterventionTypeInterventionSaisie = $formTypeInterventionTypeInterventionSaisie;
 
@@ -31,10 +31,10 @@ trait TypeInterventionSaisieFormAwareTrait
 
     public function getFormTypeInterventionTypeInterventionSaisie(): ?TypeInterventionSaisieForm
     {
-        if (empty($this->formTypeInterventionTypeInterventionSaisie)){
-            $this->formTypeInterventionTypeInterventionSaisie = \Application::$container->get('FormElementManager')->get(TypeInterventionSaisieForm::class);
+        if (!empty($this->formTypeInterventionTypeInterventionSaisie)) {
+            return $this->formTypeInterventionTypeInterventionSaisie;
         }
 
-        return $this->formTypeInterventionTypeInterventionSaisie;
+        return \Application::$container->get('FormElementManager')->get(TypeInterventionSaisieForm::class);
     }
 }

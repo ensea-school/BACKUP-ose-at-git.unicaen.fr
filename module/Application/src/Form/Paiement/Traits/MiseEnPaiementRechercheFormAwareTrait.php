@@ -20,7 +20,7 @@ trait MiseEnPaiementRechercheFormAwareTrait
      *
      * @return self
      */
-    public function setFormPaiementMiseEnPaiementRecherche( ?MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche )
+    public function setFormPaiementMiseEnPaiementRecherche(?MiseEnPaiementRechercheForm $formPaiementMiseEnPaiementRecherche)
     {
         $this->formPaiementMiseEnPaiementRecherche = $formPaiementMiseEnPaiementRecherche;
 
@@ -31,10 +31,10 @@ trait MiseEnPaiementRechercheFormAwareTrait
 
     public function getFormPaiementMiseEnPaiementRecherche(): ?MiseEnPaiementRechercheForm
     {
-        if (empty($this->formPaiementMiseEnPaiementRecherche)){
-            $this->formPaiementMiseEnPaiementRecherche = \Application::$container->get('FormElementManager')->get(MiseEnPaiementRechercheForm::class);
+        if (!empty($this->formPaiementMiseEnPaiementRecherche)) {
+            return $this->formPaiementMiseEnPaiementRecherche;
         }
 
-        return $this->formPaiementMiseEnPaiementRecherche;
+        return \Application::$container->get('FormElementManager')->get(MiseEnPaiementRechercheForm::class);
     }
 }

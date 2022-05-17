@@ -89,7 +89,7 @@ class ParametreController extends AbstractController
                 $form->bind($campagne);
                 $forms[$ti->getId()][$tvh->getId()] = $form;
 
-                if ($canEdit && $ti == $typeIntervenant && $tvh == $typeVolumeHoraire) {
+                if ($canEdit && $ti->getId() == $typeIntervenant && $tvh == $typeVolumeHoraire) {
                     $form->requestSave($this->getRequest(), function () use ($campagne) {
                         if (!$campagne->getDateDebut() && !$campagne->getDateFin() && !$campagne->getMessageIntervenant() && !$campagne->getMessageAutres()) {
                             $this->getServiceCampagneSaisie()->delete($campagne);

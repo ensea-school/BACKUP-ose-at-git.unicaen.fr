@@ -4,12 +4,12 @@
 
 # Version de test
 
-[OSE 18.0-beta3](#ose-18-beta-3-06052022)
+[OSE 18.0-beta3](#ose-18-fin-de-semaine)
 
 
 
 
-# OSE 18 BETA 3 (06/05/2022)
+# OSE 18 (fin de semaine)
 Objectif : Plafonds personnalisables & refonte gestion des statuts
 
 ## Nouveautés
@@ -34,6 +34,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
   * Extraction CSV des indicateurs (#19405)
   * Certains statuts pourront être affichés de manière prioritaire pour être traités en premier (#20808)
   * Possibilité d'envoyer en cci l'email des indicateurs (#40999)
+  * Pour plus de cohérence, réorganisation et **changemenent de numéro des indicateurs**
 
 * Saisie de service & référentiel
   * Par statut, vous pouvez maintenant choisir d'activer le prévisionnel et le réalisé de manière indépendante
@@ -76,7 +77,8 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
     * Les paramétrages de statuts sont maintenant annualisés
   
 * En bref
-  * Il est maintenant possible de choisir si on veut être connecté avec le CAS ou avec un compte LDAP ou local au moment du login
+  * Il est maintenant possible de choisir si on veut être connecté avec le CAS ou avec un compte LDAP ou local au moment du login (options désactivables)
+  * Vous pouvez vous connecter avec l'identité d'un autre utilisateur à des fins de tests, si vous vous en donnez le droit (cf. [config.local.php](config.local.php.default), rubrique "ldap").
   * Nouvel état de sortie sur l'export des agréments, rendant celui-ci maintenant paramétrable par les établissements (#42944)
   * Les paramétrages de pièces justificatives par statut sont maintenant annualisés: il n'y a plus de notion d'année de début/année de fin
   * Les paramétrages des types d'intervention par statut sont également annualisés
@@ -84,7 +86,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
   * [Technique] Migration vers PHP 8.0
 
 
-## Corrections de bugs
+## Corrections de bugs (liste non exhaustive)
 
 * Le service dû s'affiche de nouveau normalement dans la page "Calcul HETD" de l'intervenant
 * Adaptation de la commande update-employeur pour assurer la compatibilité avec les différentes versions d'oracle
@@ -113,7 +115,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 9. Réactivez la synchronisation en import pour la table INTERVENANT, que la mise à jour a volontairement désactivée (en production).
 10. Mettez à jour votre [modèle de contrat de travail](data/modele_contrat_ventile.odt) si vous voulez bénéficier de la ventilation par CM/TD/TP/Autres des heures. 
 11. Si vous utilisez l'export RH Siham, renseignez un nouveau paramètre dans Administration > paramètres généraux > Gestion export RH, en sélectionnant l'étape de la feuille de route franchie à partir de laquelle l'intervenant peut être exporté dans SIHAM.
-12. Au niveau du fichier de configuration [config.local.php](config.local.php.default), vous pouvez remplir le paramètre (facultatif) ldap>systemeInformationUrl.
+12. Au niveau du fichier de configuration [config.local.php](config.local.php.default), vous pouvez remplir les paramètres (facultatifs) ldap>systemeInformationUrl, les paramètres ldap>local et ldap>usurpationIdentite.
 13. Sortez du mode maintenance
 
 

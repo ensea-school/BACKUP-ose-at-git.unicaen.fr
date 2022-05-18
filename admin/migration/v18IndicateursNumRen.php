@@ -97,9 +97,11 @@ class v18IndicateursNumRen extends AbstractMigration
         }
 
         foreach ($numeros as $ancien => $nouveau) {
-            $id  = $ids[$ancien];
-            $sql = "UPDATE indicateur SET numero = $nouveau WHERE id = $id";
-            $bdd->exec($sql);
+            if (isset($ids[$ancien])) {
+                $id  = $ids[$ancien];
+                $sql = "UPDATE indicateur SET numero = $nouveau WHERE id = $id";
+                $bdd->exec($sql);
+            }
         }
     }
 }

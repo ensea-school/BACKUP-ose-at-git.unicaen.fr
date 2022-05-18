@@ -18,9 +18,9 @@ class v18IndicateursNumRen extends AbstractMigration
     {
         $bdd = $this->manager->getBdd();
 
-        $res = $bdd->select("select numero from indicateur where route = 'intervenant/services-prevus'");
+        $res = $bdd->select("select numero from indicateur where libelle_singulier like '%disparu%'");
 
-        return (int)$res[0]['NUMERO'] == 510;
+        return (int)($res[0]['NUMERO'] ?? 0) == 510;
     }
 
 

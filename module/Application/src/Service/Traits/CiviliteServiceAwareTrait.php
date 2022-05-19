@@ -20,7 +20,7 @@ trait CiviliteServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceCivilite( ?CiviliteService $serviceCivilite )
+    public function setServiceCivilite(?CiviliteService $serviceCivilite)
     {
         $this->serviceCivilite = $serviceCivilite;
 
@@ -31,7 +31,7 @@ trait CiviliteServiceAwareTrait
 
     public function getServiceCivilite(): ?CiviliteService
     {
-        if (empty($this->serviceCivilite)){
+        if (empty($this->serviceCivilite)) {
             $this->serviceCivilite = \Application::$container->get(CiviliteService::class);
         }
 

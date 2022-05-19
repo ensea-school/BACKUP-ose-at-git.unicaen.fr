@@ -20,7 +20,7 @@ trait EtatVolumeHoraireServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceEtatVolumeHoraire( ?EtatVolumeHoraireService $serviceEtatVolumeHoraire )
+    public function setServiceEtatVolumeHoraire(?EtatVolumeHoraireService $serviceEtatVolumeHoraire)
     {
         $this->serviceEtatVolumeHoraire = $serviceEtatVolumeHoraire;
 
@@ -31,7 +31,7 @@ trait EtatVolumeHoraireServiceAwareTrait
 
     public function getServiceEtatVolumeHoraire(): ?EtatVolumeHoraireService
     {
-        if (empty($this->serviceEtatVolumeHoraire)){
+        if (empty($this->serviceEtatVolumeHoraire)) {
             $this->serviceEtatVolumeHoraire = \Application::$container->get(EtatVolumeHoraireService::class);
         }
 

@@ -20,7 +20,7 @@ trait DependanceFormAwareTrait
      *
      * @return self
      */
-    public function setFormWorkflowDependance( ?DependanceForm $formWorkflowDependance )
+    public function setFormWorkflowDependance(?DependanceForm $formWorkflowDependance)
     {
         $this->formWorkflowDependance = $formWorkflowDependance;
 
@@ -31,10 +31,10 @@ trait DependanceFormAwareTrait
 
     public function getFormWorkflowDependance(): ?DependanceForm
     {
-        if (empty($this->formWorkflowDependance)){
-            $this->formWorkflowDependance = \Application::$container->get('FormElementManager')->get(DependanceForm::class);
+        if (!empty($this->formWorkflowDependance)) {
+            return $this->formWorkflowDependance;
         }
 
-        return $this->formWorkflowDependance;
+        return \Application::$container->get('FormElementManager')->get(DependanceForm::class);
     }
 }

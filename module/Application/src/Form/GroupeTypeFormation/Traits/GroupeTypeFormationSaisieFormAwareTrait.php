@@ -1,47 +1,38 @@
 <?php
-/*
-* @author JORIOT Florian <florian.joriot at unicaen.fr>
-*/
 
 namespace Application\Form\GroupeTypeFormation\Traits;
 
 use Application\Form\GroupeTypeFormation\GroupeTypeFormationSaisieForm;
 
 /**
- * Description of GradeSaisieFormAwareTrait
+ * Description of GroupeTypeFormationSaisieFormAwareTrait
+ *
+ * @author UnicaenCode
  */
 trait GroupeTypeFormationSaisieFormAwareTrait
 {
-    /**
-     * @var GroupeTypeFormationSaisieForm
-     */
-    private $groupeTypeFormationSaisie;
+    protected ?GroupeTypeFormationSaisieForm $formGroupeTypeFormationGroupeTypeFormationSaisie = null;
 
 
 
     /**
-     * @param GroupeTypeFormationSaisieForm $groupeTypeFormationSaisie
+     * @param GroupeTypeFormationSaisieForm $formGroupeTypeFormationGroupeTypeFormationSaisie
      *
      * @return self
      */
-    public function setFormGroupeTypeFormationSaisie(GroupeTypeFormationSaisieForm $groupeTypeFormationSaisie)
+    public function setFormGroupeTypeFormationGroupeTypeFormationSaisie(?GroupeTypeFormationSaisieForm $formGroupeTypeFormationGroupeTypeFormationSaisie)
     {
-        $this->formGroupeTypeFormationSaisie = $groupeTypeFormationSaisie;
+        $this->formGroupeTypeFormationGroupeTypeFormationSaisie = $formGroupeTypeFormationGroupeTypeFormationSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return GroupeTypeFormationSaisieForm
-     */
-    public function getFormGroupeTypeFormationSaisie()
+    public function getFormGroupeTypeFormationGroupeTypeFormationSaisie(): ?GroupeTypeFormationSaisieForm
     {
-        if (!empty($this->formGroupeTypeFormationSaisie)) {
-            return $this->formGroupeTypeFormationSaisie;
+        if (!empty($this->formGroupeTypeFormationGroupeTypeFormationSaisie)) {
+            return $this->formGroupeTypeFormationGroupeTypeFormationSaisie;
         }
 
         return \Application::$container->get('FormElementManager')->get(GroupeTypeFormationSaisieForm::class);

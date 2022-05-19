@@ -20,7 +20,7 @@ trait RechercheHydratorAwareTrait
      *
      * @return self
      */
-    public function setHydratorServiceRecherche( ?RechercheHydrator $hydratorServiceRecherche )
+    public function setHydratorServiceRecherche(?RechercheHydrator $hydratorServiceRecherche)
     {
         $this->hydratorServiceRecherche = $hydratorServiceRecherche;
 
@@ -31,7 +31,7 @@ trait RechercheHydratorAwareTrait
 
     public function getHydratorServiceRecherche(): ?RechercheHydrator
     {
-        if (empty($this->hydratorServiceRecherche)){
+        if (empty($this->hydratorServiceRecherche)) {
             $this->hydratorServiceRecherche = \Application::$container->get(RechercheHydrator::class);
         }
 

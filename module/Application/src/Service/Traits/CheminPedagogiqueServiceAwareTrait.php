@@ -20,7 +20,7 @@ trait CheminPedagogiqueServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceCheminPedagogique( ?CheminPedagogiqueService $serviceCheminPedagogique )
+    public function setServiceCheminPedagogique(?CheminPedagogiqueService $serviceCheminPedagogique)
     {
         $this->serviceCheminPedagogique = $serviceCheminPedagogique;
 
@@ -31,7 +31,7 @@ trait CheminPedagogiqueServiceAwareTrait
 
     public function getServiceCheminPedagogique(): ?CheminPedagogiqueService
     {
-        if (empty($this->serviceCheminPedagogique)){
+        if (empty($this->serviceCheminPedagogique)) {
             $this->serviceCheminPedagogique = \Application::$container->get(CheminPedagogiqueService::class);
         }
 

@@ -19,7 +19,7 @@ trait ChargensProviderAwareTrait
      *
      * @return self
      */
-    public function setProviderChargensChargens( ?ChargensProvider $providerChargensChargens )
+    public function setProviderChargensChargens(?ChargensProvider $providerChargensChargens)
     {
         $this->providerChargensChargens = $providerChargensChargens;
 
@@ -30,7 +30,7 @@ trait ChargensProviderAwareTrait
 
     public function getProviderChargensChargens(): ?ChargensProvider
     {
-        if (empty($this->providerChargensChargens)){
+        if (empty($this->providerChargensChargens)) {
             $this->providerChargensChargens = \Application::$container->get(ChargensProvider::class);
         }
 

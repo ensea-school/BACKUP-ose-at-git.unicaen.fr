@@ -20,7 +20,7 @@ trait VoirieSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormVoirieVoirieSaisie( ?VoirieSaisieForm $formVoirieVoirieSaisie )
+    public function setFormVoirieVoirieSaisie(?VoirieSaisieForm $formVoirieVoirieSaisie)
     {
         $this->formVoirieVoirieSaisie = $formVoirieVoirieSaisie;
 
@@ -31,10 +31,10 @@ trait VoirieSaisieFormAwareTrait
 
     public function getFormVoirieVoirieSaisie(): ?VoirieSaisieForm
     {
-        if (empty($this->formVoirieVoirieSaisie)){
-            $this->formVoirieVoirieSaisie = \Application::$container->get('FormElementManager')->get(VoirieSaisieForm::class);
+        if (!empty($this->formVoirieVoirieSaisie)) {
+            return $this->formVoirieVoirieSaisie;
         }
 
-        return $this->formVoirieVoirieSaisie;
+        return \Application::$container->get('FormElementManager')->get(VoirieSaisieForm::class);
     }
 }

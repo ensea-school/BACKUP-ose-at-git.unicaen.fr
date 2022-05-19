@@ -20,7 +20,7 @@ trait OffreFormationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceOffreFormation( ?OffreFormationService $serviceOffreFormation )
+    public function setServiceOffreFormation(?OffreFormationService $serviceOffreFormation)
     {
         $this->serviceOffreFormation = $serviceOffreFormation;
 
@@ -31,7 +31,7 @@ trait OffreFormationServiceAwareTrait
 
     public function getServiceOffreFormation(): ?OffreFormationService
     {
-        if (empty($this->serviceOffreFormation)){
+        if (empty($this->serviceOffreFormation)) {
             $this->serviceOffreFormation = \Application::$container->get(OffreFormationService::class);
         }
 

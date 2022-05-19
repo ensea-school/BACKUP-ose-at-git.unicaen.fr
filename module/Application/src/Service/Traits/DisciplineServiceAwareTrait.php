@@ -20,7 +20,7 @@ trait DisciplineServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDiscipline( ?DisciplineService $serviceDiscipline )
+    public function setServiceDiscipline(?DisciplineService $serviceDiscipline)
     {
         $this->serviceDiscipline = $serviceDiscipline;
 
@@ -31,7 +31,7 @@ trait DisciplineServiceAwareTrait
 
     public function getServiceDiscipline(): ?DisciplineService
     {
-        if (empty($this->serviceDiscipline)){
+        if (empty($this->serviceDiscipline)) {
             $this->serviceDiscipline = \Application::$container->get(DisciplineService::class);
         }
 

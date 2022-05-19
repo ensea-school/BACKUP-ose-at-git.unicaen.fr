@@ -20,7 +20,7 @@ trait DuplicationScenarioFormAwareTrait
      *
      * @return self
      */
-    public function setFormChargensDuplicationScenario( ?DuplicationScenarioForm $formChargensDuplicationScenario )
+    public function setFormChargensDuplicationScenario(?DuplicationScenarioForm $formChargensDuplicationScenario)
     {
         $this->formChargensDuplicationScenario = $formChargensDuplicationScenario;
 
@@ -31,10 +31,10 @@ trait DuplicationScenarioFormAwareTrait
 
     public function getFormChargensDuplicationScenario(): ?DuplicationScenarioForm
     {
-        if (empty($this->formChargensDuplicationScenario)){
-            $this->formChargensDuplicationScenario = \Application::$container->get('FormElementManager')->get(DuplicationScenarioForm::class);
+        if (!empty($this->formChargensDuplicationScenario)) {
+            return $this->formChargensDuplicationScenario;
         }
 
-        return $this->formChargensDuplicationScenario;
+        return \Application::$container->get('FormElementManager')->get(DuplicationScenarioForm::class);
     }
 }

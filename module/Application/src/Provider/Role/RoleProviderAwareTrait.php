@@ -19,7 +19,7 @@ trait RoleProviderAwareTrait
      *
      * @return self
      */
-    public function setProviderRoleRole( ?RoleProvider $providerRoleRole )
+    public function setProviderRoleRole(?RoleProvider $providerRoleRole)
     {
         $this->providerRoleRole = $providerRoleRole;
 
@@ -30,7 +30,7 @@ trait RoleProviderAwareTrait
 
     public function getProviderRoleRole(): ?RoleProvider
     {
-        if (empty($this->providerRoleRole)){
+        if (empty($this->providerRoleRole)) {
             $this->providerRoleRole = \Application::$container->get(RoleProvider::class);
         }
 

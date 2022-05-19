@@ -20,7 +20,7 @@ trait PaysServiceAwareTrait
      *
      * @return self
      */
-    public function setServicePays(PaysService $servicePays)
+    public function setServicePays(?PaysService $servicePays)
     {
         $this->servicePays = $servicePays;
 
@@ -29,7 +29,7 @@ trait PaysServiceAwareTrait
 
 
 
-    public function getServicePays(): PaysService
+    public function getServicePays(): ?PaysService
     {
         if (empty($this->servicePays)) {
             $this->servicePays = \Application::$container->get(PaysService::class);

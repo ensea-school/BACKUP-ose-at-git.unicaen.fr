@@ -30,10 +30,10 @@ trait NoteSaisieFormAwareTrait
 
     public function getFormNoteSaisie(): ?NoteSaisieForm
     {
-        if (empty($this->formNoteSaisie)) {
-            $this->formNoteSaisie = \Application::$container->get('FormElementManager')->get(NoteSaisieForm::class);
+        if (!empty($this->formNoteSaisie)) {
+            return $this->formNoteSaisie;
         }
 
-        return $this->formNoteSaisie;
+        return \Application::$container->get('FormElementManager')->get(NoteSaisieForm::class);
     }
 }

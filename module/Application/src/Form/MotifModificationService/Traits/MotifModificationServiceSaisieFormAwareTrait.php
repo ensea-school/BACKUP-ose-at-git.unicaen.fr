@@ -20,7 +20,7 @@ trait MotifModificationServiceSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormMotifModificationServiceMotifModificationServiceSaisie( ?MotifModificationServiceSaisieForm $formMotifModificationServiceMotifModificationServiceSaisie )
+    public function setFormMotifModificationServiceMotifModificationServiceSaisie(?MotifModificationServiceSaisieForm $formMotifModificationServiceMotifModificationServiceSaisie)
     {
         $this->formMotifModificationServiceMotifModificationServiceSaisie = $formMotifModificationServiceMotifModificationServiceSaisie;
 
@@ -31,10 +31,10 @@ trait MotifModificationServiceSaisieFormAwareTrait
 
     public function getFormMotifModificationServiceMotifModificationServiceSaisie(): ?MotifModificationServiceSaisieForm
     {
-        if (empty($this->formMotifModificationServiceMotifModificationServiceSaisie)){
-            $this->formMotifModificationServiceMotifModificationServiceSaisie = \Application::$container->get('FormElementManager')->get(MotifModificationServiceSaisieForm::class);
+        if (!empty($this->formMotifModificationServiceMotifModificationServiceSaisie)) {
+            return $this->formMotifModificationServiceMotifModificationServiceSaisie;
         }
 
-        return $this->formMotifModificationServiceMotifModificationServiceSaisie;
+        return \Application::$container->get('FormElementManager')->get(MotifModificationServiceSaisieForm::class);
     }
 }

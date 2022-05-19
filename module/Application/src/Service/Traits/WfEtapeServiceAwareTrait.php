@@ -20,7 +20,7 @@ trait WfEtapeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceWfEtape( ?WfEtapeService $serviceWfEtape )
+    public function setServiceWfEtape(?WfEtapeService $serviceWfEtape)
     {
         $this->serviceWfEtape = $serviceWfEtape;
 
@@ -31,7 +31,7 @@ trait WfEtapeServiceAwareTrait
 
     public function getServiceWfEtape(): ?WfEtapeService
     {
-        if (empty($this->serviceWfEtape)){
+        if (empty($this->serviceWfEtape)) {
             $this->serviceWfEtape = \Application::$container->get(WfEtapeService::class);
         }
 

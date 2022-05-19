@@ -20,7 +20,7 @@ trait SaisieAwareTrait
      *
      * @return self
      */
-    public function setFormAgrementSaisie( ?Saisie $formAgrementSaisie )
+    public function setFormAgrementSaisie(?Saisie $formAgrementSaisie)
     {
         $this->formAgrementSaisie = $formAgrementSaisie;
 
@@ -31,10 +31,10 @@ trait SaisieAwareTrait
 
     public function getFormAgrementSaisie(): ?Saisie
     {
-        if (empty($this->formAgrementSaisie)){
-            $this->formAgrementSaisie = \Application::$container->get('FormElementManager')->get(Saisie::class);
+        if (!empty($this->formAgrementSaisie)) {
+            return $this->formAgrementSaisie;
         }
 
-        return $this->formAgrementSaisie;
+        return \Application::$container->get('FormElementManager')->get(Saisie::class);
     }
 }

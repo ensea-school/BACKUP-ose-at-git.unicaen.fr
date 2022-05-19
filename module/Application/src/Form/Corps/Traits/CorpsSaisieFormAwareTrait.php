@@ -1,7 +1,4 @@
 <?php
-/*
-* @author JORIOT Florian <florian.joriot at unicaen.fr>
-*/
 
 namespace Application\Form\Corps\Traits;
 
@@ -9,39 +6,33 @@ use Application\Form\Corps\CorpsSaisieForm;
 
 /**
  * Description of CorpsSaisieFormAwareTrait
+ *
+ * @author UnicaenCode
  */
 trait CorpsSaisieFormAwareTrait
 {
-    /**
-     * @var CorpsSaisieForm
-     */
-    private $corpsSaisie;
+    protected ?CorpsSaisieForm $formCorpsCorpsSaisie = null;
 
 
 
     /**
-     * @param CorpsSaisieForm $formCorpsSaisie
+     * @param CorpsSaisieForm $formCorpsCorpsSaisie
      *
      * @return self
      */
-    public function setFormCorpsSaisie(CorpsSaisieForm $formCorpsSaisie)
+    public function setFormCorpsCorpsSaisie(?CorpsSaisieForm $formCorpsCorpsSaisie)
     {
-        $this->formCorpsSaisie = $formCorpsSaisie;
+        $this->formCorpsCorpsSaisie = $formCorpsCorpsSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return CorpsSaisieForm
-     */
-    public function getFormCorpsSaisie()
+    public function getFormCorpsCorpsSaisie(): ?CorpsSaisieForm
     {
-        if (!empty($this->formCorpsSaisie)) {
-            return $this->formCorpsSaisie;
+        if (!empty($this->formCorpsCorpsSaisie)) {
+            return $this->formCorpsCorpsSaisie;
         }
 
         return \Application::$container->get('FormElementManager')->get(CorpsSaisieForm::class);

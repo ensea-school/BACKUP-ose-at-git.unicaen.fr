@@ -20,7 +20,7 @@ trait AffectationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceAffectation( ?AffectationService $serviceAffectation )
+    public function setServiceAffectation(?AffectationService $serviceAffectation)
     {
         $this->serviceAffectation = $serviceAffectation;
 
@@ -31,7 +31,7 @@ trait AffectationServiceAwareTrait
 
     public function getServiceAffectation(): ?AffectationService
     {
-        if (empty($this->serviceAffectation)){
+        if (empty($this->serviceAffectation)) {
             $this->serviceAffectation = \Application::$container->get(AffectationService::class);
         }
 

@@ -20,7 +20,7 @@ trait RoleFormAwareTrait
      *
      * @return self
      */
-    public function setFormDroitsRole( ?RoleForm $formDroitsRole )
+    public function setFormDroitsRole(?RoleForm $formDroitsRole)
     {
         $this->formDroitsRole = $formDroitsRole;
 
@@ -31,10 +31,10 @@ trait RoleFormAwareTrait
 
     public function getFormDroitsRole(): ?RoleForm
     {
-        if (empty($this->formDroitsRole)){
-            $this->formDroitsRole = \Application::$container->get('FormElementManager')->get(RoleForm::class);
+        if (!empty($this->formDroitsRole)) {
+            return $this->formDroitsRole;
         }
 
-        return $this->formDroitsRole;
+        return \Application::$container->get('FormElementManager')->get(RoleForm::class);
     }
 }

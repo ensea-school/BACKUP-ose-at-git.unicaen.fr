@@ -20,7 +20,7 @@ trait AutresFormAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantAutres( ?AutresForm $formIntervenantAutres )
+    public function setFormIntervenantAutres(?AutresForm $formIntervenantAutres)
     {
         $this->formIntervenantAutres = $formIntervenantAutres;
 
@@ -31,10 +31,10 @@ trait AutresFormAwareTrait
 
     public function getFormIntervenantAutres(): ?AutresForm
     {
-        if (empty($this->formIntervenantAutres)){
-            $this->formIntervenantAutres = \Application::$container->get('FormElementManager')->get(AutresForm::class);
+        if (!empty($this->formIntervenantAutres)) {
+            return $this->formIntervenantAutres;
         }
 
-        return $this->formIntervenantAutres;
+        return \Application::$container->get('FormElementManager')->get(AutresForm::class);
     }
 }

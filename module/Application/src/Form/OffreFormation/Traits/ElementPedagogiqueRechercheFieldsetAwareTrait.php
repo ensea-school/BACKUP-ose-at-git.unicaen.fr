@@ -20,7 +20,7 @@ trait ElementPedagogiqueRechercheFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetOffreFormationElementPedagogiqueRecherche( ?ElementPedagogiqueRechercheFieldset $fieldsetOffreFormationElementPedagogiqueRecherche )
+    public function setFieldsetOffreFormationElementPedagogiqueRecherche(?ElementPedagogiqueRechercheFieldset $fieldsetOffreFormationElementPedagogiqueRecherche)
     {
         $this->fieldsetOffreFormationElementPedagogiqueRecherche = $fieldsetOffreFormationElementPedagogiqueRecherche;
 
@@ -31,10 +31,10 @@ trait ElementPedagogiqueRechercheFieldsetAwareTrait
 
     public function getFieldsetOffreFormationElementPedagogiqueRecherche(): ?ElementPedagogiqueRechercheFieldset
     {
-        if (empty($this->fieldsetOffreFormationElementPedagogiqueRecherche)){
-            $this->fieldsetOffreFormationElementPedagogiqueRecherche = \Application::$container->get('FormElementManager')->get(ElementPedagogiqueRechercheFieldset::class);
+        if (!empty($this->fieldsetOffreFormationElementPedagogiqueRecherche)) {
+            return $this->fieldsetOffreFormationElementPedagogiqueRecherche;
         }
 
-        return $this->fieldsetOffreFormationElementPedagogiqueRecherche;
+        return \Application::$container->get('FormElementManager')->get(ElementPedagogiqueRechercheFieldset::class);
     }
 }

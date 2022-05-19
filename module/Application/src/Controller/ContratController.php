@@ -154,8 +154,9 @@ class ContratController extends AbstractController
         /* @var $intervenant Intervenant */
         $structure = $this->getEvent()->getParam('structure');
         /* @var $structure Structure */
-        $projetContrat = $this->getEvent()->getParam('projetContrat');
-        /* @var $projetContrat boolean */
+
+        $contratProjetResult = $this->getServiceParametres()->get('contrat_projet');
+        $contratProjet       = ($contratProjetResult == Parametre::CONTRAT_PROJET);
 
         if (!$intervenant) {
             throw new \LogicException('L\'intervenant n\'est pas précisé');
@@ -172,11 +173,11 @@ class ContratController extends AbstractController
         } else {
             try {
                 $this->getProcessusContrat()->enregistrer($contrat);
-                if (!$projetContrat) {
+                if ($contratProjet) {
                     $this->getProcessusContrat()->valider($contrat);
                 }
                 $this->updateTableauxBord($contrat->getIntervenant());
-                if (!$projetContrat) {
+                if ($contratProjet) {
                     $this->flashMessenger()->addSuccessMessage(($contrat->estUnAvenant() ? 'L\'avenant' : 'Le contrat') . ' a bien été créé.');
                 } else {
                     $this->flashMessenger()->addSuccessMessage('Le projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat') . ' a bien été créé.');

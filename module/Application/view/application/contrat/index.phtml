@@ -69,12 +69,12 @@ $this->messenger() ?>
                         <?php if ($canCreer):
                             if ($contratProjet):?>
                                 <a class="btn btn-primary"
-                                   href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId(), 'contratProjet' => $contratProjet]); ?>">
+                                   href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
                                     <i class="fas fa-file"></i> Créer un <?= $hasContrat ? 'avenant' : 'contrat' ?>
                                 </a>
                             <?php else: ?>
                                 <a class="btn btn-primary"
-                                   href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId(), 'contratProjet' => $contratProjet]); ?>">
+                                   href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
                                     <i class="fas fa-file"></i> Créer un projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
                                 </a>
                             <?php endif;

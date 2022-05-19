@@ -1,24 +1,23 @@
 CREATE
-OR REPLACE FORCE VIEW V_EXPORT_PAIEMENT_WINPAIE AS
-SELECT 'P'                                                                 type,
-       code_rh                                                             matricule,
-       CASE WHEN type_intervenant_code = 'P' THEN '0204' ELSE '2251' END   retenue,
-       annee_id 'du_mois', type_intervenant_id,
-       structure_id,
-       periode_id,
-       intervenant_id,
-       insee,
-       nom,
-       '20'                                                                carte,
-       code_origine,
-       '0'                                                                 sens,
-       'B'                                                                 mc,
-       nbu,
-       montant,
+OR REPLACE FORCE VIEW V_EXPORT_PAIEMENT_SIHAM AS
+SELECT 'P'                                                                   type,
+       code_rh                                                               matricule,
+       CASE WHEN type_intervenant_code = 'P' THEN '200204' ELSE '202251' END retenue,
+       ose_paiement.get_format_mois_du()                                     du_mois,
+       '20' || ose_paiement.get_annee_extraction_paie()                      annee_de_paye,
+       ose_paiement.get_mois_extraction_paie()                               mois_de_paye,
+       'N'                                                                   tg_specifique,
+       'A definir'                                                           dossier_de_paye,
+       '01/' || ose_paiement.get_mois_extraction_paie() || '/20' ||
+       ose_paiement.get_annee_extraction_paie()                              date_pecuniaire,
+       nbu                                                                   nombre_d_unites,
+       montant                                                               montant,
        libelle || ' ' || lpad(to_char(floor(nbu)), 2, '00') || ' H' ||
        CASE to_char(round(nbu - floor(nbu), 2) * 100, '00')
            WHEN ' 00' THEN ''
-           ELSE ' ' || lpad(round(nbu - floor(nbu), 2) * 100, 2, '00') END libelle
+           ELSE ' ' || lpad(round(nbu - floor(nbu), 2) * 100, 2, '00') END   libelle,
+       'B'                                                                   mode_de_calcul,
+       code_origine                                                          code_origine
 FROM (SELECT i.annee_id                                                                                        annee_id,
              ti.id                                                                                             type_intervenant_id,
              ti.code                                                                                           type_intervenant_code,
@@ -95,9 +94,9 @@ FROM (SELECT i.annee_id                                                         
                JOIN (SELECT level ind, 99 max_nbu FROM dual CONNECT BY 1=1 AND LEVEL <= 11) tnbu
                     ON ceil(t2.nbu / max_nbu) >= ind
                JOIN intervenant i ON i.id = t2.intervenant_id
+               JOIN annee a ON a.id = i.annee_id
                LEFT JOIN intervenant_dossier d ON i.id = d.intervenant_id AND d.histo_destruction IS NULL
                JOIN statut si ON si.id = i.statut_id
                JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
                JOIN structure s ON s.id = t2.structure_id) t3
-WHERE annee_id = 2021
 ORDER BY annee_id, type_intervenant_id, structure_id, periode_id, nom, code_origine, nbu DESC

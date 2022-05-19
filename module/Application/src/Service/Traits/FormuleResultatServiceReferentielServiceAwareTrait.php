@@ -20,7 +20,7 @@ trait FormuleResultatServiceReferentielServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceFormuleResultatServiceReferentiel( ?FormuleResultatServiceReferentielService $serviceFormuleResultatServiceReferentiel )
+    public function setServiceFormuleResultatServiceReferentiel(?FormuleResultatServiceReferentielService $serviceFormuleResultatServiceReferentiel)
     {
         $this->serviceFormuleResultatServiceReferentiel = $serviceFormuleResultatServiceReferentiel;
 
@@ -31,7 +31,7 @@ trait FormuleResultatServiceReferentielServiceAwareTrait
 
     public function getServiceFormuleResultatServiceReferentiel(): ?FormuleResultatServiceReferentielService
     {
-        if (empty($this->serviceFormuleResultatServiceReferentiel)){
+        if (empty($this->serviceFormuleResultatServiceReferentiel)) {
             $this->serviceFormuleResultatServiceReferentiel = \Application::$container->get(FormuleResultatServiceReferentielService::class);
         }
 

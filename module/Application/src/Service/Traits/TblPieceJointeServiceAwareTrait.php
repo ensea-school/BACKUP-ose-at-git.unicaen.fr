@@ -20,7 +20,7 @@ trait TblPieceJointeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTblPieceJointe( ?TblPieceJointeService $serviceTblPieceJointe )
+    public function setServiceTblPieceJointe(?TblPieceJointeService $serviceTblPieceJointe)
     {
         $this->serviceTblPieceJointe = $serviceTblPieceJointe;
 
@@ -31,7 +31,7 @@ trait TblPieceJointeServiceAwareTrait
 
     public function getServiceTblPieceJointe(): ?TblPieceJointeService
     {
-        if (empty($this->serviceTblPieceJointe)){
+        if (empty($this->serviceTblPieceJointe)) {
             $this->serviceTblPieceJointe = \Application::$container->get(TblPieceJointeService::class);
         }
 

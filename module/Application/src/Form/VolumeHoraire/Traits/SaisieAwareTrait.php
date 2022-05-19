@@ -20,7 +20,7 @@ trait SaisieAwareTrait
      *
      * @return self
      */
-    public function setFormVolumeHoraireSaisie( ?Saisie $formVolumeHoraireSaisie )
+    public function setFormVolumeHoraireSaisie(?Saisie $formVolumeHoraireSaisie)
     {
         $this->formVolumeHoraireSaisie = $formVolumeHoraireSaisie;
 
@@ -31,10 +31,10 @@ trait SaisieAwareTrait
 
     public function getFormVolumeHoraireSaisie(): ?Saisie
     {
-        if (empty($this->formVolumeHoraireSaisie)){
-            $this->formVolumeHoraireSaisie = \Application::$container->get('FormElementManager')->get(Saisie::class);
+        if (!empty($this->formVolumeHoraireSaisie)) {
+            return $this->formVolumeHoraireSaisie;
         }
 
-        return $this->formVolumeHoraireSaisie;
+        return \Application::$container->get('FormElementManager')->get(Saisie::class);
     }
 }

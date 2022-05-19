@@ -20,7 +20,7 @@ trait TauxMixiteFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetOffreFormationTauxMixiteTauxMixite( ?TauxMixiteFieldset $fieldsetOffreFormationTauxMixiteTauxMixite )
+    public function setFieldsetOffreFormationTauxMixiteTauxMixite(?TauxMixiteFieldset $fieldsetOffreFormationTauxMixiteTauxMixite)
     {
         $this->fieldsetOffreFormationTauxMixiteTauxMixite = $fieldsetOffreFormationTauxMixiteTauxMixite;
 
@@ -31,10 +31,10 @@ trait TauxMixiteFieldsetAwareTrait
 
     public function getFieldsetOffreFormationTauxMixiteTauxMixite(): ?TauxMixiteFieldset
     {
-        if (empty($this->fieldsetOffreFormationTauxMixiteTauxMixite)){
-            $this->fieldsetOffreFormationTauxMixiteTauxMixite = \Application::$container->get('FormElementManager')->get(TauxMixiteFieldset::class);
+        if (!empty($this->fieldsetOffreFormationTauxMixiteTauxMixite)) {
+            return $this->fieldsetOffreFormationTauxMixiteTauxMixite;
         }
 
-        return $this->fieldsetOffreFormationTauxMixiteTauxMixite;
+        return \Application::$container->get('FormElementManager')->get(TauxMixiteFieldset::class);
     }
 }

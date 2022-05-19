@@ -20,7 +20,7 @@ trait StructureServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceStructure( ?StructureService $serviceStructure )
+    public function setServiceStructure(?StructureService $serviceStructure)
     {
         $this->serviceStructure = $serviceStructure;
 
@@ -31,7 +31,7 @@ trait StructureServiceAwareTrait
 
     public function getServiceStructure(): ?StructureService
     {
-        if (empty($this->serviceStructure)){
+        if (empty($this->serviceStructure)) {
             $this->serviceStructure = \Application::$container->get(StructureService::class);
         }
 

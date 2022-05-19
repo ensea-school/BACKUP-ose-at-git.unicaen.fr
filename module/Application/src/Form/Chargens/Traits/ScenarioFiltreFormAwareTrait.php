@@ -20,7 +20,7 @@ trait ScenarioFiltreFormAwareTrait
      *
      * @return self
      */
-    public function setFormChargensScenarioFiltre( ?ScenarioFiltreForm $formChargensScenarioFiltre )
+    public function setFormChargensScenarioFiltre(?ScenarioFiltreForm $formChargensScenarioFiltre)
     {
         $this->formChargensScenarioFiltre = $formChargensScenarioFiltre;
 
@@ -31,10 +31,10 @@ trait ScenarioFiltreFormAwareTrait
 
     public function getFormChargensScenarioFiltre(): ?ScenarioFiltreForm
     {
-        if (empty($this->formChargensScenarioFiltre)){
-            $this->formChargensScenarioFiltre = \Application::$container->get('FormElementManager')->get(ScenarioFiltreForm::class);
+        if (!empty($this->formChargensScenarioFiltre)) {
+            return $this->formChargensScenarioFiltre;
         }
 
-        return $this->formChargensScenarioFiltre;
+        return \Application::$container->get('FormElementManager')->get(ScenarioFiltreForm::class);
     }
 }

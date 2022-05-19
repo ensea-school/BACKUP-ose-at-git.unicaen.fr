@@ -20,7 +20,7 @@ trait ModificationServiceDuServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceModificationServiceDu( ?ModificationServiceDuService $serviceModificationServiceDu )
+    public function setServiceModificationServiceDu(?ModificationServiceDuService $serviceModificationServiceDu)
     {
         $this->serviceModificationServiceDu = $serviceModificationServiceDu;
 
@@ -31,7 +31,7 @@ trait ModificationServiceDuServiceAwareTrait
 
     public function getServiceModificationServiceDu(): ?ModificationServiceDuService
     {
-        if (empty($this->serviceModificationServiceDu)){
+        if (empty($this->serviceModificationServiceDu)) {
             $this->serviceModificationServiceDu = \Application::$container->get(ModificationServiceDuService::class);
         }
 

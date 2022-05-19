@@ -20,7 +20,7 @@ trait ValidationReferentielProcessusAwareTrait
      *
      * @return self
      */
-    public function setProcessusValidationReferentiel( ?ValidationReferentielProcessus $processusValidationReferentiel )
+    public function setProcessusValidationReferentiel(?ValidationReferentielProcessus $processusValidationReferentiel)
     {
         $this->processusValidationReferentiel = $processusValidationReferentiel;
 
@@ -31,7 +31,7 @@ trait ValidationReferentielProcessusAwareTrait
 
     public function getProcessusValidationReferentiel(): ?ValidationReferentielProcessus
     {
-        if (empty($this->processusValidationReferentiel)){
+        if (empty($this->processusValidationReferentiel)) {
             $this->processusValidationReferentiel = \Application::$container->get(ValidationReferentielProcessus::class);
         }
 

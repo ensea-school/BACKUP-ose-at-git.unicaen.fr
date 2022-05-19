@@ -20,7 +20,7 @@ trait FormuleServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceFormule( ?FormuleService $serviceFormule )
+    public function setServiceFormule(?FormuleService $serviceFormule)
     {
         $this->serviceFormule = $serviceFormule;
 
@@ -31,7 +31,7 @@ trait FormuleServiceAwareTrait
 
     public function getServiceFormule(): ?FormuleService
     {
-        if (empty($this->serviceFormule)){
+        if (empty($this->serviceFormule)) {
             $this->serviceFormule = \Application::$container->get(FormuleService::class);
         }
 

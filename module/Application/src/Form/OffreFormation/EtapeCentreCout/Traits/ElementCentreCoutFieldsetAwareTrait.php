@@ -20,7 +20,7 @@ trait ElementCentreCoutFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetOffreFormationEtapeCentreCoutElementCentreCout( ?ElementCentreCoutFieldset $fieldsetOffreFormationEtapeCentreCoutElementCentreCout )
+    public function setFieldsetOffreFormationEtapeCentreCoutElementCentreCout(?ElementCentreCoutFieldset $fieldsetOffreFormationEtapeCentreCoutElementCentreCout)
     {
         $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout = $fieldsetOffreFormationEtapeCentreCoutElementCentreCout;
 
@@ -31,10 +31,10 @@ trait ElementCentreCoutFieldsetAwareTrait
 
     public function getFieldsetOffreFormationEtapeCentreCoutElementCentreCout(): ?ElementCentreCoutFieldset
     {
-        if (empty($this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout)){
-            $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout = \Application::$container->get('FormElementManager')->get(ElementCentreCoutFieldset::class);
+        if (!empty($this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout)) {
+            return $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout;
         }
 
-        return $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout;
+        return \Application::$container->get('FormElementManager')->get(ElementCentreCoutFieldset::class);
     }
 }

@@ -1,4 +1,4 @@
-CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1111 AS
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_830 AS
 SELECT DISTINCT
   idc.intervenant_id,
   idc.structure_id
@@ -63,10 +63,10 @@ FROM
               LEFT JOIN c ON c.element_pedagogique_id = s.element_pedagogique_id
                          AND c.type_intervention_id = COALESCE(ti.type_intervention_maquette_id,ti.id)
             WHERE
-              s.heures - COALESCE(c.heures * c.groupes,0) > 0
-            ) idc
+                s.heures - COALESCE(c.heures * c.groupes,0) > 0
+            )  idc
        JOIN type_volume_horaire     tvh ON tvh.id = idc.type_volume_horaire_id
   LEFT JOIN periode                 p ON p.id = idc.periode_id
 WHERE
-  (p.code = 'S2' OR p.id IS NULL)
-  AND tvh.code = 'PREVU'
+  (p.code = 'S1' OR p.id IS NULL)
+  AND tvh.code = 'REALISE'

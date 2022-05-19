@@ -20,7 +20,7 @@ trait AdresseNumeroComplServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceAdresseNumeroCompl( ?AdresseNumeroComplService $serviceAdresseNumeroCompl )
+    public function setServiceAdresseNumeroCompl(?AdresseNumeroComplService $serviceAdresseNumeroCompl)
     {
         $this->serviceAdresseNumeroCompl = $serviceAdresseNumeroCompl;
 
@@ -31,7 +31,7 @@ trait AdresseNumeroComplServiceAwareTrait
 
     public function getServiceAdresseNumeroCompl(): ?AdresseNumeroComplService
     {
-        if (empty($this->serviceAdresseNumeroCompl)){
+        if (empty($this->serviceAdresseNumeroCompl)) {
             $this->serviceAdresseNumeroCompl = \Application::$container->get(AdresseNumeroComplService::class);
         }
 

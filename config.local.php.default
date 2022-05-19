@@ -126,6 +126,18 @@ return [
         /* Actif (si non, alors seuls les comptes locaux seront autorisés à se connecter à OSE) */
         'actif'                      => true,
 
+        /* Permet de se connecter avec un compte utilisateur créé dans OSE et non référencé dans le LDAP
+         * Si false alors que le LDAP est aussi à false, alors seule l'authentification par CAS sera possible
+         * Si le CAS est également désactivé, alors la fenêtre de login apparaîtra, mais personne ne pourra se connecter
+         */
+        'local'                      => true,
+
+        /* Permet de connecter en tant que quelqu'un d'autre, à l'aide d'un login LDAP
+         * exemple si le login 'lecluse' est autorisé à usurper, il peut se connecter en tant que Pascal Durand
+         * à l'aide de son login 'durandp' en entrant comme identifiant 'lecluse=durandp' et comme mot de passe celui de 'lecluse'
+         */
+        'autorisationsUrsurpation'     => [],
+
         /* IP ou nom DNS de la machine hébergeant le serveur LDAP */
         'host'                         => 'ldap.unicaen.fr',
 

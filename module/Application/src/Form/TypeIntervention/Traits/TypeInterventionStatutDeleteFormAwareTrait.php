@@ -11,36 +11,28 @@ use Application\Form\TypeIntervention\TypeInterventionStatutDeleteForm;
  */
 trait TypeInterventionStatutDeleteFormAwareTrait
 {
-    /**
-     * @var TypeInterventionStatutDeleteForm
-     */
-    private $formTypeInterventionStatutDelete;
+    protected ?TypeInterventionStatutDeleteForm $formTypeInterventionTypeInterventionStatutDelete = null;
 
 
 
     /**
-     * @param TypeInterventionStatutSaisieForm $formTypeInterventionStatutDelete
+     * @param TypeInterventionStatutDeleteForm $formTypeInterventionTypeInterventionStatutDelete
      *
      * @return self
      */
-    public function setFormTypeInterventionStatutDelete(TypeInterventionStatutDeleteForm $formTypeInterventionStatutDelete)
+    public function setFormTypeInterventionTypeInterventionStatutDelete(?TypeInterventionStatutDeleteForm $formTypeInterventionTypeInterventionStatutDelete)
     {
-        $this->formTypeInterventionStatutDelete = $formTypeInterventionStatutDelete;
+        $this->formTypeInterventionTypeInterventionStatutDelete = $formTypeInterventionTypeInterventionStatutDelete;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return TypeInterventionStatutDeleteForm
-     */
-    public function getFormTypeInterventionStatutDelete()
+    public function getFormTypeInterventionTypeInterventionStatutDelete(): ?TypeInterventionStatutDeleteForm
     {
-        if (!empty($this->formTypeInterventionStatutDelete)) {
-            return $this->formTypeInterventionStatutDelete;
+        if (!empty($this->formTypeInterventionTypeInterventionStatutDelete)) {
+            return $this->formTypeInterventionTypeInterventionStatutDelete;
         }
 
         return \Application::$container->get('FormElementManager')->get(TypeInterventionStatutDeleteForm::class);

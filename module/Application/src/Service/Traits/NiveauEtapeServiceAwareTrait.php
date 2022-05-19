@@ -20,7 +20,7 @@ trait NiveauEtapeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceNiveauEtape( ?NiveauEtapeService $serviceNiveauEtape )
+    public function setServiceNiveauEtape(?NiveauEtapeService $serviceNiveauEtape)
     {
         $this->serviceNiveauEtape = $serviceNiveauEtape;
 
@@ -31,7 +31,7 @@ trait NiveauEtapeServiceAwareTrait
 
     public function getServiceNiveauEtape(): ?NiveauEtapeService
     {
-        if (empty($this->serviceNiveauEtape)){
+        if (empty($this->serviceNiveauEtape)) {
             $this->serviceNiveauEtape = \Application::$container->get(NiveauEtapeService::class);
         }
 

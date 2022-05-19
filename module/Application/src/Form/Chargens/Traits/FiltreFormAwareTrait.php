@@ -20,7 +20,7 @@ trait FiltreFormAwareTrait
      *
      * @return self
      */
-    public function setFormChargensFiltre( ?FiltreForm $formChargensFiltre )
+    public function setFormChargensFiltre(?FiltreForm $formChargensFiltre)
     {
         $this->formChargensFiltre = $formChargensFiltre;
 
@@ -31,10 +31,10 @@ trait FiltreFormAwareTrait
 
     public function getFormChargensFiltre(): ?FiltreForm
     {
-        if (empty($this->formChargensFiltre)){
-            $this->formChargensFiltre = \Application::$container->get('FormElementManager')->get(FiltreForm::class);
+        if (!empty($this->formChargensFiltre)) {
+            return $this->formChargensFiltre;
         }
 
-        return $this->formChargensFiltre;
+        return \Application::$container->get('FormElementManager')->get(FiltreForm::class);
     }
 }

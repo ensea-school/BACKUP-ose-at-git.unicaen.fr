@@ -20,7 +20,7 @@ trait CentreCoutSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormCentreCoutCentreCoutSaisie( ?CentreCoutSaisieForm $formCentreCoutCentreCoutSaisie )
+    public function setFormCentreCoutCentreCoutSaisie(?CentreCoutSaisieForm $formCentreCoutCentreCoutSaisie)
     {
         $this->formCentreCoutCentreCoutSaisie = $formCentreCoutCentreCoutSaisie;
 
@@ -31,10 +31,10 @@ trait CentreCoutSaisieFormAwareTrait
 
     public function getFormCentreCoutCentreCoutSaisie(): ?CentreCoutSaisieForm
     {
-        if (empty($this->formCentreCoutCentreCoutSaisie)){
-            $this->formCentreCoutCentreCoutSaisie = \Application::$container->get('FormElementManager')->get(CentreCoutSaisieForm::class);
+        if (!empty($this->formCentreCoutCentreCoutSaisie)) {
+            return $this->formCentreCoutCentreCoutSaisie;
         }
 
-        return $this->formCentreCoutCentreCoutSaisie;
+        return \Application::$container->get('FormElementManager')->get(CentreCoutSaisieForm::class);
     }
 }

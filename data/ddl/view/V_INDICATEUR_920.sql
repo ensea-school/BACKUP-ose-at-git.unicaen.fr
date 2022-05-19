@@ -5,7 +5,7 @@ SELECT DISTINCT
 FROM
   tbl_workflow w
 WHERE
-  w.etape_code = 'SAISIE_MEP'
-  AND w.type_intervenant_code = 'E'
+  w.etape_code = 'DEMANDE_MEP'
+  AND w.type_intervenant_code = 'P'
   AND w.atteignable = 1
   AND w.objectif > w.realisation

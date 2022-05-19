@@ -20,7 +20,7 @@ trait ExportRhFormAwareTrait
      *
      * @return self
      */
-    public function setFormExportRh( ?ExportRhForm $formExportRh )
+    public function setFormExportRh(?ExportRhForm $formExportRh)
     {
         $this->formExportRh = $formExportRh;
 
@@ -31,10 +31,10 @@ trait ExportRhFormAwareTrait
 
     public function getFormExportRh(): ?ExportRhForm
     {
-        if (empty($this->formExportRh)){
-            $this->formExportRh = \Application::$container->get('FormElementManager')->get(ExportRhForm::class);
+        if (!empty($this->formExportRh)) {
+            return $this->formExportRh;
         }
 
-        return $this->formExportRh;
+        return \Application::$container->get('FormElementManager')->get(ExportRhForm::class);
     }
 }

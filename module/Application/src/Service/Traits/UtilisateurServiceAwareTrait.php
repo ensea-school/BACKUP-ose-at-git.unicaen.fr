@@ -20,7 +20,7 @@ trait UtilisateurServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceUtilisateur( ?UtilisateurService $serviceUtilisateur )
+    public function setServiceUtilisateur(?UtilisateurService $serviceUtilisateur)
     {
         $this->serviceUtilisateur = $serviceUtilisateur;
 
@@ -31,7 +31,7 @@ trait UtilisateurServiceAwareTrait
 
     public function getServiceUtilisateur(): ?UtilisateurService
     {
-        if (empty($this->serviceUtilisateur)){
+        if (empty($this->serviceUtilisateur)) {
             $this->serviceUtilisateur = \Application::$container->get(UtilisateurService::class);
         }
 

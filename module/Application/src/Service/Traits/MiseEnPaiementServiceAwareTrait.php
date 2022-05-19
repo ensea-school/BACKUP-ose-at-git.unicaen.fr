@@ -20,7 +20,7 @@ trait MiseEnPaiementServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceMiseEnPaiement( ?MiseEnPaiementService $serviceMiseEnPaiement )
+    public function setServiceMiseEnPaiement(?MiseEnPaiementService $serviceMiseEnPaiement)
     {
         $this->serviceMiseEnPaiement = $serviceMiseEnPaiement;
 
@@ -31,7 +31,7 @@ trait MiseEnPaiementServiceAwareTrait
 
     public function getServiceMiseEnPaiement(): ?MiseEnPaiementService
     {
-        if (empty($this->serviceMiseEnPaiement)){
+        if (empty($this->serviceMiseEnPaiement)) {
             $this->serviceMiseEnPaiement = \Application::$container->get(MiseEnPaiementService::class);
         }
 

@@ -20,7 +20,7 @@ trait ParametresFormAwareTrait
      *
      * @return self
      */
-    public function setFormParametres( ?ParametresForm $formParametres )
+    public function setFormParametres(?ParametresForm $formParametres)
     {
         $this->formParametres = $formParametres;
 
@@ -31,10 +31,10 @@ trait ParametresFormAwareTrait
 
     public function getFormParametres(): ?ParametresForm
     {
-        if (empty($this->formParametres)){
-            $this->formParametres = \Application::$container->get('FormElementManager')->get(ParametresForm::class);
+        if (!empty($this->formParametres)) {
+            return $this->formParametres;
         }
 
-        return $this->formParametres;
+        return \Application::$container->get('FormElementManager')->get(ParametresForm::class);
     }
 }

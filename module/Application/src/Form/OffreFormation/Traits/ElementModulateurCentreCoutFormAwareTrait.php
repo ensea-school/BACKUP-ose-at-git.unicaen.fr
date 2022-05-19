@@ -20,7 +20,7 @@ trait ElementModulateurCentreCoutFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationElementModulateurCentreCout( ?ElementModulateurCentreCoutForm $formOffreFormationElementModulateurCentreCout )
+    public function setFormOffreFormationElementModulateurCentreCout(?ElementModulateurCentreCoutForm $formOffreFormationElementModulateurCentreCout)
     {
         $this->formOffreFormationElementModulateurCentreCout = $formOffreFormationElementModulateurCentreCout;
 
@@ -31,10 +31,10 @@ trait ElementModulateurCentreCoutFormAwareTrait
 
     public function getFormOffreFormationElementModulateurCentreCout(): ?ElementModulateurCentreCoutForm
     {
-        if (empty($this->formOffreFormationElementModulateurCentreCout)){
-            $this->formOffreFormationElementModulateurCentreCout = \Application::$container->get('FormElementManager')->get(ElementModulateurCentreCoutForm::class);
+        if (!empty($this->formOffreFormationElementModulateurCentreCout)) {
+            return $this->formOffreFormationElementModulateurCentreCout;
         }
 
-        return $this->formOffreFormationElementModulateurCentreCout;
+        return \Application::$container->get('FormElementManager')->get(ElementModulateurCentreCoutForm::class);
     }
 }

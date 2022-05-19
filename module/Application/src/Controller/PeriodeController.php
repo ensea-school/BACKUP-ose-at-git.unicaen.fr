@@ -36,7 +36,7 @@ class PeriodeController extends AbstractController
     public function saisieAction()
     {
         $periode = $this->getEvent()->getParam('periode');
-        $form    = $this->getFormPeriodeSaisie();
+        $form    = $this->getFormPeriodePeriodeSaisie();
 
         if (empty($periode)) {
             $title   = "Création d'une nouvelle période";

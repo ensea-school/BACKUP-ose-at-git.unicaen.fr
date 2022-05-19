@@ -19,7 +19,7 @@ trait StatutServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceStatut( ?StatutService $serviceStatut )
+    public function setServiceStatut(?StatutService $serviceStatut)
     {
         $this->serviceStatut = $serviceStatut;
 
@@ -30,7 +30,7 @@ trait StatutServiceAwareTrait
 
     public function getServiceStatut(): ?StatutService
     {
-        if (empty($this->serviceStatut)){
+        if (empty($this->serviceStatut)) {
             $this->serviceStatut = \Application::$container->get(StatutService::class);
         }
 

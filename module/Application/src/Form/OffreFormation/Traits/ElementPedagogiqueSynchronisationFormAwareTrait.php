@@ -20,7 +20,7 @@ trait ElementPedagogiqueSynchronisationFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationElementPedagogiqueSynchronisation( ?ElementPedagogiqueSynchronisationForm $formOffreFormationElementPedagogiqueSynchronisation )
+    public function setFormOffreFormationElementPedagogiqueSynchronisation(?ElementPedagogiqueSynchronisationForm $formOffreFormationElementPedagogiqueSynchronisation)
     {
         $this->formOffreFormationElementPedagogiqueSynchronisation = $formOffreFormationElementPedagogiqueSynchronisation;
 
@@ -31,10 +31,10 @@ trait ElementPedagogiqueSynchronisationFormAwareTrait
 
     public function getFormOffreFormationElementPedagogiqueSynchronisation(): ?ElementPedagogiqueSynchronisationForm
     {
-        if (empty($this->formOffreFormationElementPedagogiqueSynchronisation)){
-            $this->formOffreFormationElementPedagogiqueSynchronisation = \Application::$container->get('FormElementManager')->get(ElementPedagogiqueSynchronisationForm::class);
+        if (!empty($this->formOffreFormationElementPedagogiqueSynchronisation)) {
+            return $this->formOffreFormationElementPedagogiqueSynchronisation;
         }
 
-        return $this->formOffreFormationElementPedagogiqueSynchronisation;
+        return \Application::$container->get('FormElementManager')->get(ElementPedagogiqueSynchronisationForm::class);
     }
 }

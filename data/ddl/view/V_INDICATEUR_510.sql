@@ -1,15 +1,11 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_510 AS
 SELECT DISTINCT
-  s.intervenant_id,
-  s.structure_id,
-  ep.source_code || ' - ' || ep.libelle "Enseignements concernés"
+  w.intervenant_id,
+  w.structure_id
 FROM
-  tbl_service s
-  LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
+  tbl_workflow w
 WHERE
-  (
-    s.has_heures_mauvaise_periode = 1
-    OR s.etape_histo = 0
-    OR s.element_pedagogique_histo = 0
-  )
-  AND s.heures > 0
+  w.etape_code = 'SERVICE_VALIDATION'
+  AND w.type_intervenant_code = 'P'
+  AND w.atteignable = 1
+  AND w.objectif > w.realisation

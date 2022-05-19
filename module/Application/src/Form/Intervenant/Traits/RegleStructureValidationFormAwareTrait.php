@@ -20,7 +20,7 @@ trait RegleStructureValidationFormAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantRegleStructureValidation( ?RegleStructureValidationForm $formIntervenantRegleStructureValidation )
+    public function setFormIntervenantRegleStructureValidation(?RegleStructureValidationForm $formIntervenantRegleStructureValidation)
     {
         $this->formIntervenantRegleStructureValidation = $formIntervenantRegleStructureValidation;
 
@@ -31,10 +31,10 @@ trait RegleStructureValidationFormAwareTrait
 
     public function getFormIntervenantRegleStructureValidation(): ?RegleStructureValidationForm
     {
-        if (empty($this->formIntervenantRegleStructureValidation)){
-            $this->formIntervenantRegleStructureValidation = \Application::$container->get('FormElementManager')->get(RegleStructureValidationForm::class);
+        if (!empty($this->formIntervenantRegleStructureValidation)) {
+            return $this->formIntervenantRegleStructureValidation;
         }
 
-        return $this->formIntervenantRegleStructureValidation;
+        return \Application::$container->get('FormElementManager')->get(RegleStructureValidationForm::class);
     }
 }

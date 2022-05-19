@@ -20,7 +20,7 @@ trait FichierServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceFichier( ?FichierService $serviceFichier )
+    public function setServiceFichier(?FichierService $serviceFichier)
     {
         $this->serviceFichier = $serviceFichier;
 
@@ -31,7 +31,7 @@ trait FichierServiceAwareTrait
 
     public function getServiceFichier(): ?FichierService
     {
-        if (empty($this->serviceFichier)){
+        if (empty($this->serviceFichier)) {
             $this->serviceFichier = \Application::$container->get(FichierService::class);
         }
 

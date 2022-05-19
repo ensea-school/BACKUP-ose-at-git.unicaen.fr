@@ -13,7 +13,7 @@ $settings = [
      */
     'enable_registration'        => false,
 
-    'entity_manager_name'    => 'doctrine.entitymanager.orm_default', // nom du gestionnaire d'entités à utiliser
+    'entity_manager_name'          => 'doctrine.entitymanager.orm_default', // nom du gestionnaire d'entités à utiliser
 
     /**
      * Classes représentant les entités rôle et privilège.
@@ -24,24 +24,31 @@ $settings = [
      * - 'role_entity_class'      : 'UnicaenAuth\Entity\Db\Role'
      * - 'privilege_entity_class' : 'UnicaenAuth\Entity\Db\Privilege'
      */
-    'role_entity_class'      => 'Application\Entity\Db\Role',
-    'privilege_entity_class' => 'UnicaenAuth\Entity\Db\Privilege',
+    'role_entity_class'            => 'Application\Entity\Db\Role',
+    'privilege_entity_class'       => 'UnicaenAuth\Entity\Db\Privilege',
 
     /**
      * Attribut LDAP utilisé pour le username des utilisateurs
      */
-    'ldap_username'          => strtolower(AppConfig::get('ldap', 'loginAttribute')),
+    'ldap_username'                => strtolower(AppConfig::get('ldap', 'loginAttribute')),
+
+    /**
+     * Gestion des autorisations d'usurpation
+     */
+    'usurpation_allowed_usernames' => AppConfig::get('ldap', 'autorisationsUrsurpation', []),
 
     /**
      * Configuration de l'authentification locale.
      */
-    'local'                  => [
+    'local'                        => [
         'order'   => 2,
 
         /**
          * Possibilité ou non de s'authentifier à l'aide d'un compte local.
+         * Toujours OK si pas de CAS
          */
-        'enabled' => true,//!AppConfig::get('ldap', 'actif', true),
+        'enabled' => AppConfig::get('ldap', 'actif', true) || AppConfig::get('ldap', 'local', true) || !AppConfig::get('cas', 'actif', false),
+
 
         'description' => "Utilisez ce formulaire si vous possédez un compte LDAP établissement ou un compte local dédié à l'application.",
 
@@ -49,7 +56,7 @@ $settings = [
          * Mode d'authentification à l'aide d'un compte dans la BDD de l'application.
          */
         'db'          => [
-            'enabled' => true, // doit être activé pour que l'usurpation fonctionne (cf. Authentication/Storage/Db::read()) :-/
+            'enabled' => AppConfig::get('ldap', 'local', true),
         ],
 
         'ldap' => [
@@ -69,7 +76,7 @@ $settings = [
         /**
          * Activation ou non de ce mode d'authentification.
          */
-        'enabled'     => AppConfig::get('cas', 'actif'),
+        'enabled'     => AppConfig::get('cas', 'actif', false),
 
         /**
          * Description facultative de ce mode d'authentification qui apparaîtra sur la page de connexion.

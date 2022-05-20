@@ -58,7 +58,6 @@ SELECT pj.intervenant_id                             intervenant_id,
 FROM piece_jointe pj
          JOIN type_piece_jointe tpj ON pj.type_piece_jointe_id = tpj.id
          JOIN utilisateur u ON u.id = pj.histo_createur_id
-WHERE pj.histo_destruction IS NULL
 
 UNION ALL
 
@@ -115,7 +114,7 @@ UNION ALL
 --Service référentiel uniquement pour les permanents
 SELECT  s.intervenant_id                                                                     intervenant_id,
        '3 - Service prévisionnel et/ou service référentiel'                                 categorie,
-        'Service référentiel : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
+        'Ajout service référentiel : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
        s.histo_modification                                                                histo_date,
        s.histo_modificateur_id                                                             histo_createur_id,
        u.display_name                                                        histo_user,
@@ -126,14 +125,12 @@ FROM
   JOIN fonction_referentiel fr ON fr.id = s.fonction_id
   JOIN utilisateur u ON u.id = s.histo_modificateur_id
   LEFT JOIN STRUCTURE str ON str.id = s.structure_id
-WHERE
- s.histo_destruction IS NULL
 
  UNION ALL
 --Suppression service référentiel uniquement pour les permanents
 SELECT  s.intervenant_id                                                                     intervenant_id,
        '3 - Service prévisionnel et/ou service référentiel'                                 categorie,
-        'Service référentiel : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
+        'Suppression service référentiel : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
        s.histo_destruction                                                                histo_date,
        s.histo_destructeur_id                                                             histo_createur_id,
        u.display_name                                                        histo_user,

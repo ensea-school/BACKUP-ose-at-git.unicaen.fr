@@ -1,4 +1,5 @@
-CREATE OR REPLACE FORCE VIEW V_INTERVENANT_HISTORIQUE AS
+CREATE
+OR REPLACE FORCE VIEW V_INTERVENANT_HISTORIQUE AS
 WITH historique AS (
 --Initialisation des données personnelles
     SELECT d.intervenant_id                              intervenant_id,
@@ -60,6 +61,22 @@ FROM piece_jointe pj
 WHERE pj.histo_destruction IS NULL
 
 UNION ALL
+
+--Suppression pièces justificatives
+SELECT pj.intervenant_id                             intervenant_id,
+       '2 - Pièces justificatives'                   categorie,
+       'Suppression pièce justificative : ' || tpj.libelle label,
+       pj.histo_destruction                             histo_date,
+       pj.histo_destructeur_id                          histo_createur_id,
+       u.display_name                                histo_user,
+       'glyphicon glyphicon-ok'                      icon,
+       2                                             ordre
+FROM piece_jointe pj
+         JOIN type_piece_jointe tpj ON pj.type_piece_jointe_id = tpj.id
+         JOIN utilisateur u ON u.id = pj.histo_destructeur_id
+WHERE pj.histo_destruction IS NOT NULL
+
+UNION ALL
 --Validation des pièces justificatives
 SELECT pj.intervenant_id                                  intervenant_id,
        '2 - Pièces justificatives'                        categorie,
@@ -111,6 +128,24 @@ FROM
   LEFT JOIN STRUCTURE str ON str.id = s.structure_id
 WHERE
  s.histo_destruction IS NULL
+
+ UNION ALL
+--Suppression service référentiel uniquement pour les permanents
+SELECT  s.intervenant_id                                                                     intervenant_id,
+       '3 - Service prévisionnel et/ou service référentiel'                                 categorie,
+        'Service référentiel : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
+       s.histo_destruction                                                                histo_date,
+       s.histo_destructeur_id                                                             histo_createur_id,
+       u.display_name                                                        histo_user,
+       'glyphicon glyphicon-ok'                                              icon,
+       3                                ordre
+FROM
+  service_referentiel s
+  JOIN fonction_referentiel fr ON fr.id = s.fonction_id
+  JOIN utilisateur u ON u.id = s.histo_destructeur_id
+  LEFT JOIN STRUCTURE str ON str.id = s.structure_id
+WHERE
+ s.histo_destruction IS NOT NULL
 
  UNION ALL
 --Validation du service prévisionnel

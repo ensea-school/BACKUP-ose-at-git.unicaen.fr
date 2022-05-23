@@ -20,7 +20,7 @@ trait CampagneSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormCampagneSaisie( ?CampagneSaisieForm $formCampagneSaisie )
+    public function setFormCampagneSaisie(?CampagneSaisieForm $formCampagneSaisie)
     {
         $this->formCampagneSaisie = $formCampagneSaisie;
 
@@ -31,10 +31,10 @@ trait CampagneSaisieFormAwareTrait
 
     public function getFormCampagneSaisie(): ?CampagneSaisieForm
     {
-        if (empty($this->formCampagneSaisie)){
-            $this->formCampagneSaisie = \Application::$container->get('FormElementManager')->get(CampagneSaisieForm::class);
+        if (!empty($this->formCampagneSaisie)) {
+            return $this->formCampagneSaisie;
         }
 
-        return $this->formCampagneSaisie;
+        return \Application::$container->get('FormElementManager')->get(CampagneSaisieForm::class);
     }
 }

@@ -20,7 +20,7 @@ trait WorkflowServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceWorkflow( ?WorkflowService $serviceWorkflow )
+    public function setServiceWorkflow(?WorkflowService $serviceWorkflow)
     {
         $this->serviceWorkflow = $serviceWorkflow;
 
@@ -31,7 +31,7 @@ trait WorkflowServiceAwareTrait
 
     public function getServiceWorkflow(): ?WorkflowService
     {
-        if (empty($this->serviceWorkflow)){
+        if (empty($this->serviceWorkflow)) {
             $this->serviceWorkflow = \Application::$container->get(WorkflowService::class);
         }
 

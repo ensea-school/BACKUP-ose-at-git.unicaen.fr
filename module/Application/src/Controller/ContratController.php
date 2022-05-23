@@ -6,6 +6,7 @@ use Application\Assertion\ContratAssertion;
 use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ModeleContrat;
+use Application\Entity\Db\Parametre;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Validation;
@@ -26,6 +27,7 @@ use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
+use Phan\Debug;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
@@ -134,8 +136,10 @@ class ContratController extends AbstractController
             }
             $services['non-contractualises'][$sid][] = $service;
         }
+        $avenantResult = $this->getServiceParametres()->get('avenant');
+        $avenant       = ($avenantResult == Parametre::AVENANT);
 
-        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant');
+        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'avenant');
     }
 
 

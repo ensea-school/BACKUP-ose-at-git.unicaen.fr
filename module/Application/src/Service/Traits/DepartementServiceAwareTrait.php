@@ -20,7 +20,7 @@ trait DepartementServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDepartement( ?DepartementService $serviceDepartement )
+    public function setServiceDepartement(?DepartementService $serviceDepartement)
     {
         $this->serviceDepartement = $serviceDepartement;
 
@@ -31,7 +31,7 @@ trait DepartementServiceAwareTrait
 
     public function getServiceDepartement(): ?DepartementService
     {
-        if (empty($this->serviceDepartement)){
+        if (empty($this->serviceDepartement)) {
             $this->serviceDepartement = \Application::$container->get(DepartementService::class);
         }
 

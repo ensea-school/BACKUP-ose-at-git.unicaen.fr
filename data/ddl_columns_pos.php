@@ -1401,8 +1401,6 @@ return [
         'STRUCTURE_ID',
         'AGREMENT_ID',
         'DUREE_VIE',
-        'DUREE_VIE',
-        'ID',
     ],
     'TBL_CHARGENS'                   => [
         'ID',

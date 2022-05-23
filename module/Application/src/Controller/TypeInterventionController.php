@@ -117,7 +117,7 @@ class TypeInterventionController extends AbstractController
 
         $typeIntervention          = $this->getEvent()->getParam('typeIntervention');
         $typeInterventionStructure = $this->getEvent()->getParam('typeInterventionStructure');
-        $form                      = $this->getFormTypeInterventionStructureSaisie();
+        $form                      = $this->getFormTypeInterventionTypeInterventionStructureSaisie();
         if (empty($typeInterventionStructure)) {
             $title                     = 'Ajouter une exception pour une structure';
             $typeInterventionStructure = $this->getServiceTypeInterventionStructure()->newEntity()

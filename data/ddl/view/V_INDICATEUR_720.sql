@@ -1,11 +1,12 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_720 AS
 SELECT DISTINCT
-  w.intervenant_id,
-  w.structure_id
+  s.intervenant_id intervenant_id,
+  s.intervenant_structure_id structure_id
 FROM
-  tbl_workflow w
+  tbl_service s
 WHERE
-  w.etape_code = 'SERVICE_VALIDATION_REALISE'
-  AND w.type_intervenant_code = 'E'
-  AND w.atteignable = 1
-  AND w.objectif > w.realisation
+  s.type_intervenant_code = 'P'
+  AND s.type_volume_horaire_code = 'PREVU'
+  AND s.intervenant_structure_id <> s.structure_id
+  AND s.valide > 0
+  AND s.structure_id IS NOT NULL

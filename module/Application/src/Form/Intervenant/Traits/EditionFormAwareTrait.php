@@ -20,7 +20,7 @@ trait EditionFormAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantEdition( ?EditionForm $formIntervenantEdition )
+    public function setFormIntervenantEdition(?EditionForm $formIntervenantEdition)
     {
         $this->formIntervenantEdition = $formIntervenantEdition;
 
@@ -31,10 +31,10 @@ trait EditionFormAwareTrait
 
     public function getFormIntervenantEdition(): ?EditionForm
     {
-        if (empty($this->formIntervenantEdition)){
-            $this->formIntervenantEdition = \Application::$container->get('FormElementManager')->get(EditionForm::class);
+        if (!empty($this->formIntervenantEdition)) {
+            return $this->formIntervenantEdition;
         }
 
-        return $this->formIntervenantEdition;
+        return \Application::$container->get('FormElementManager')->get(EditionForm::class);
     }
 }

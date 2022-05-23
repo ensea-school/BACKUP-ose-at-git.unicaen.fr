@@ -20,7 +20,7 @@ trait LdapConnecteurAwareTrait
      *
      * @return self
      */
-    public function setConnecteurLdap(LdapConnecteur $connecteurLdap)
+    public function setConnecteurLdap(?LdapConnecteur $connecteurLdap)
     {
         $this->connecteurLdap = $connecteurLdap;
 

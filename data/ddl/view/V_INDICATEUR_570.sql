@@ -1,7 +1,8 @@
-CREATE OR REPLACE FORCE VIEW V_INDICATEUR_660 AS
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_570 AS
 SELECT
   w.intervenant_id,
-  i.structure_id
+  i.structure_id,
+  s.libelle_court "Composantes concernées"
 FROM
   tbl_workflow w
   JOIN tbl_workflow wc ON wc.intervenant_id = w.intervenant_id
@@ -14,8 +15,4 @@ WHERE
 
   AND wc.etape_code = 'CLOTURE_REALISE'
   AND wc.objectif = wc.realisation
-  AND w.structure_id = i.structure_id
-GROUP BY
-  w.annee_id,
-  w.intervenant_id,
-  i.structure_id
+  AND w.structure_id <> i.structure_id

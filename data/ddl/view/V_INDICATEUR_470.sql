@@ -1,4 +1,4 @@
-CREATE OR REPLACE FORCE VIEW V_INDICATEUR_360 AS
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_470 AS
 SELECT DISTINCT
   c.intervenant_id,
   c.structure_id
@@ -11,3 +11,4 @@ FROM
 WHERE
   c.histo_destruction IS NULL
   AND f.id IS NULL
+  AND c.date_envoi_email IS NOT NULL

@@ -20,7 +20,7 @@ trait EmployeurServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceEmployeur( ?EmployeurService $serviceEmployeur )
+    public function setServiceEmployeur(?EmployeurService $serviceEmployeur)
     {
         $this->serviceEmployeur = $serviceEmployeur;
 
@@ -31,7 +31,7 @@ trait EmployeurServiceAwareTrait
 
     public function getServiceEmployeur(): ?EmployeurService
     {
-        if (empty($this->serviceEmployeur)){
+        if (empty($this->serviceEmployeur)) {
             $this->serviceEmployeur = \Application::$container->get(EmployeurService::class);
         }
 

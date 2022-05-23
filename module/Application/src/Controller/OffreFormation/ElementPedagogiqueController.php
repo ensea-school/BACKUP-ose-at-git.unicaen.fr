@@ -17,6 +17,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
+
 /**
  * Description of ElementPedagogiqueController
  *
@@ -307,7 +308,7 @@ class ElementPedagogiqueController extends AbstractController
 
         $form->setElementPedagogique($element);
         $form->setAttribute('action', $this->url()->fromRoute('of/element/modulateurs-centres-couts', ['elementPedagogique' => $element->getId()]));
-        $form->build();
+        $form->buildElements();
 
         return [
             'form' => $form,

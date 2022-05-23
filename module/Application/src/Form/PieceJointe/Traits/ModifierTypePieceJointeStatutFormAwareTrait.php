@@ -20,7 +20,7 @@ trait ModifierTypePieceJointeStatutFormAwareTrait
      *
      * @return self
      */
-    public function setFormPieceJointeModifierTypePieceJointeStatut( ?ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut )
+    public function setFormPieceJointeModifierTypePieceJointeStatut(?ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut)
     {
         $this->formPieceJointeModifierTypePieceJointeStatut = $formPieceJointeModifierTypePieceJointeStatut;
 
@@ -31,10 +31,10 @@ trait ModifierTypePieceJointeStatutFormAwareTrait
 
     public function getFormPieceJointeModifierTypePieceJointeStatut(): ?ModifierTypePieceJointeStatutForm
     {
-        if (empty($this->formPieceJointeModifierTypePieceJointeStatut)){
-            $this->formPieceJointeModifierTypePieceJointeStatut = \Application::$container->get('FormElementManager')->get(ModifierTypePieceJointeStatutForm::class);
+        if (!empty($this->formPieceJointeModifierTypePieceJointeStatut)) {
+            return $this->formPieceJointeModifierTypePieceJointeStatut;
         }
 
-        return $this->formPieceJointeModifierTypePieceJointeStatut;
+        return \Application::$container->get('FormElementManager')->get(ModifierTypePieceJointeStatutForm::class);
     }
 }

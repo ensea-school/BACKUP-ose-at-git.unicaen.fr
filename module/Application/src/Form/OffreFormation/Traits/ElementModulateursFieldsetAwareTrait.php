@@ -20,7 +20,7 @@ trait ElementModulateursFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetOffreFormationElementModulateurs( ?ElementModulateursFieldset $fieldsetOffreFormationElementModulateurs )
+    public function setFieldsetOffreFormationElementModulateurs(?ElementModulateursFieldset $fieldsetOffreFormationElementModulateurs)
     {
         $this->fieldsetOffreFormationElementModulateurs = $fieldsetOffreFormationElementModulateurs;
 
@@ -31,10 +31,10 @@ trait ElementModulateursFieldsetAwareTrait
 
     public function getFieldsetOffreFormationElementModulateurs(): ?ElementModulateursFieldset
     {
-        if (empty($this->fieldsetOffreFormationElementModulateurs)){
-            $this->fieldsetOffreFormationElementModulateurs = \Application::$container->get('FormElementManager')->get(ElementModulateursFieldset::class);
+        if (!empty($this->fieldsetOffreFormationElementModulateurs)) {
+            return $this->fieldsetOffreFormationElementModulateurs;
         }
 
-        return $this->fieldsetOffreFormationElementModulateurs;
+        return \Application::$container->get('FormElementManager')->get(ElementModulateursFieldset::class);
     }
 }

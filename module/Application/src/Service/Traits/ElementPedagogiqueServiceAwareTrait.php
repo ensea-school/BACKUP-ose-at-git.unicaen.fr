@@ -20,7 +20,7 @@ trait ElementPedagogiqueServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceElementPedagogique( ?ElementPedagogiqueService $serviceElementPedagogique )
+    public function setServiceElementPedagogique(?ElementPedagogiqueService $serviceElementPedagogique)
     {
         $this->serviceElementPedagogique = $serviceElementPedagogique;
 
@@ -31,7 +31,7 @@ trait ElementPedagogiqueServiceAwareTrait
 
     public function getServiceElementPedagogique(): ?ElementPedagogiqueService
     {
-        if (empty($this->serviceElementPedagogique)){
+        if (empty($this->serviceElementPedagogique)) {
             $this->serviceElementPedagogique = \Application::$container->get(ElementPedagogiqueService::class);
         }
 

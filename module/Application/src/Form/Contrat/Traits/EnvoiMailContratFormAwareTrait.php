@@ -20,7 +20,7 @@ trait EnvoiMailContratFormAwareTrait
      *
      * @return self
      */
-    public function setFormContratEnvoiMailContrat( ?EnvoiMailContratForm $formContratEnvoiMailContrat )
+    public function setFormContratEnvoiMailContrat(?EnvoiMailContratForm $formContratEnvoiMailContrat)
     {
         $this->formContratEnvoiMailContrat = $formContratEnvoiMailContrat;
 
@@ -31,10 +31,10 @@ trait EnvoiMailContratFormAwareTrait
 
     public function getFormContratEnvoiMailContrat(): ?EnvoiMailContratForm
     {
-        if (empty($this->formContratEnvoiMailContrat)){
-            $this->formContratEnvoiMailContrat = \Application::$container->get('FormElementManager')->get(EnvoiMailContratForm::class);
+        if (!empty($this->formContratEnvoiMailContrat)) {
+            return $this->formContratEnvoiMailContrat;
         }
 
-        return $this->formContratEnvoiMailContrat;
+        return \Application::$container->get('FormElementManager')->get(EnvoiMailContratForm::class);
     }
 }

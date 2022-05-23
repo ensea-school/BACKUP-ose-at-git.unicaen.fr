@@ -103,7 +103,6 @@ $.widget("ose.serviceListe", {
         var exHeures = this.total;
 
         this.init2();
-        this.showHideTypesIntervention();
         if (this.hasHeures() !== exHasHeures) {
             this._trigger('heures-change-exists', null, this);
         }
@@ -227,7 +226,7 @@ $.widget("ose.serviceListe", {
 
 
         this.calculTotaux();
-        //this.showHideTypesIntervention();
+        this.showHideTypesIntervention();
 
     },
 

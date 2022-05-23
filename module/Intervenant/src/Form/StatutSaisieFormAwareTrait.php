@@ -30,10 +30,10 @@ trait StatutSaisieFormAwareTrait
 
     public function getFormStatutSaisie(): ?StatutSaisieForm
     {
-        if (empty($this->formStatutSaisie)) {
-            $this->formStatutSaisie = \Application::$container->get('FormElementManager')->get(StatutSaisieForm::class);
+        if (!empty($this->formStatutSaisie)) {
+            return $this->formStatutSaisie;
         }
 
-        return $this->formStatutSaisie;
+        return \Application::$container->get('FormElementManager')->get(StatutSaisieForm::class);
     }
 }

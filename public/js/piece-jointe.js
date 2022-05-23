@@ -7,16 +7,22 @@ $.widget("ose.pieceJointe", {
     {
         var that = this;
 
-        that.element.on('click', '.valider-pj, .devalider-pj', function(event){
-            that.validerDevalider( $(this) );
+        that.element.on('click', '.valider-pj, .devalider-pj', function (event) {
+            that.validerDevalider($(this));
             event.preventDefault();
         });
 
-        that.element.on('click', '.archiver-pj', function (event){
-            that.archiver($(this));
+        $("body").on("pj-refus-event", function (event, container) {
+            var tpj = event.a.data('tpj');
+            that.onFileChange(tpj);
+            that.getContainer(tpj).find('.uploaded-files-div').refresh();
             event.preventDefault();
 
+        });
 
+        that.element.on('click', '.archiver-pj', function (event) {
+            that.archiver($(this));
+            event.preventDefault();
         });
 
         $("body").on("upload-event-file-deleted upload-event-file-uploaded", function (event, container)
@@ -83,9 +89,7 @@ $.widget("ose.pieceJointe", {
         });
     },
 
-
-
-    onValidationChange: function( tpj, isValider )
+    onValidationChange: function (tpj, isValider)
     {
         this.refreshFiles(tpj, isValider);
         this.refreshInfos();

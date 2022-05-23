@@ -14,12 +14,13 @@ trait TypeInterventionStructureSaisieFormAwareTrait
     protected ?TypeInterventionStructureSaisieForm $formTypeInterventionTypeInterventionStructureSaisie = null;
 
 
+
     /**
      * @param TypeInterventionStructureSaisieForm $formTypeInterventionTypeInterventionStructureSaisie
      *
      * @return self
      */
-    public function setFormTypeInterventionnStructureSaisie(?TypeInterventionStructureSaisieForm $formTypeInterventionTypeInterventionStructureSaisie)
+    public function setFormTypeInterventionTypeInterventionStructureSaisie(?TypeInterventionStructureSaisieForm $formTypeInterventionTypeInterventionStructureSaisie)
     {
         $this->formTypeInterventionTypeInterventionStructureSaisie = $formTypeInterventionTypeInterventionStructureSaisie;
 
@@ -27,7 +28,8 @@ trait TypeInterventionStructureSaisieFormAwareTrait
     }
 
 
-    public function getFormTypeInterventionStructureSaisie(): ?TypeInterventionStructureSaisieForm
+
+    public function getFormTypeInterventionTypeInterventionStructureSaisie(): ?TypeInterventionStructureSaisieForm
     {
         if (!empty($this->formTypeInterventionTypeInterventionStructureSaisie)) {
             return $this->formTypeInterventionTypeInterventionStructureSaisie;

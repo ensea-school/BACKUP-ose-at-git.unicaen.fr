@@ -4,6 +4,7 @@ namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Plafond\Entity\Db\PlafondDerogation;
 use Plafond\Entity\Db\PlafondEtat;
@@ -26,7 +27,7 @@ class DerogationController extends AbstractController
         $typesVolumesHoraires = $this->getServiceTypeVolumeHoraire()->getList();
 
 
-        if ($this->params()->fromPost('action') == 'save') {
+        if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_DEROGATIONS_EDITION)) && $this->params()->fromPost('action') == 'save') {
             $this->saveDerogations($intervenant);
         }
 

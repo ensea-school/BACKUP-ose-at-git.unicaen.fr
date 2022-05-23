@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 10,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'ID'               => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'   => [

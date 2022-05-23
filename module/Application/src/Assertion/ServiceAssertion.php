@@ -416,23 +416,16 @@ class ServiceAssertion extends AbstractAssertion
 
     protected function assertHasServices(Intervenant $intervenant, Structure $structure, string $etape, Role $role)
     {
-        $services                         = $intervenant->getService();
-        $serviceEnComposanteAffectation   = [];
-        $serviceHorsComposanteAffectation = [];
-        $typeIntervenant                  = $intervenant->getStatut()->getTypeIntervenant();
+        $services        = $intervenant->getService();
+        $typeIntervenant = $intervenant->getStatut()->getTypeIntervenant();
 
+        $nbServices = 0;
         foreach ($services as $service) {
 
             if ($service->getHistoDestruction()) continue;
             if (!$service->getElementPedagogique()) continue;
 
-            $intervenantStructure = $service->getIntervenant()->getStructure();
-            $serviceStructure     = $service->getElementPedagogique()->getStructure();
-            if ($intervenantStructure == $serviceStructure) {
-                $serviceEnComposanteAffectation[] = $service;
-            } else {
-                $serviceHorsComposanteAffectation[] = $service;
-            }
+            $nbServices++;
         }
 
         $reglesValidation = $this->getServiceRegleStructureValidation()->getList();
@@ -443,7 +436,7 @@ class ServiceAssertion extends AbstractAssertion
                 if ($regle->getTypeIntervenant()->getCode() == $typeIntervenant->getCode()) {
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
-                    if (($regle->getPriorite() == 'enseignement' && count($serviceEnComposanteAffectation) > 0) ||
+                    if (($regle->getPriorite() == 'enseignement' && $nbServices > 0) ||
                         ($regle->getPriorite() == 'affectation' && $intervenant->getStructure() == $role->getStructure())) {
                         return true;
                     }
@@ -454,7 +447,7 @@ class ServiceAssertion extends AbstractAssertion
                 if ($regle->getTypeIntervenant()->getCode() == $typeIntervenant->getCode()) {
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
-                    if (($regle->getPriorite() == 'enseignement' && count($serviceEnComposanteAffectation) > 0) ||
+                    if (($regle->getPriorite() == 'enseignement' && $nbServices > 0) ||
                         ($regle->getPriorite() == 'affectation' && $intervenant->getStructure() == $role->getStructure())) {
                         return true;
                     }

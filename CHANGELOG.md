@@ -1,15 +1,10 @@
 # Version stable
 
-[OSE 17.3](#ose-173-17032022)
-
-# Version de test
-
-[OSE 18.0-beta3](#ose-18-fin-de-semaine)
+[OSE 18.0](#ose-18-23052022)
 
 
 
-
-# OSE 18 (fin de semaine)
+# OSE 18 (23/05/2022)
 Objectif : Plafonds personnalisables & refonte gestion des statuts
 
 ## Nouveautés

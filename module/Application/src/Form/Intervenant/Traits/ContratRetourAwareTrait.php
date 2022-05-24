@@ -20,7 +20,7 @@ trait ContratRetourAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantContratRetour( ?ContratRetour $formIntervenantContratRetour )
+    public function setFormIntervenantContratRetour(?ContratRetour $formIntervenantContratRetour)
     {
         $this->formIntervenantContratRetour = $formIntervenantContratRetour;
 
@@ -31,10 +31,10 @@ trait ContratRetourAwareTrait
 
     public function getFormIntervenantContratRetour(): ?ContratRetour
     {
-        if (empty($this->formIntervenantContratRetour)){
-            $this->formIntervenantContratRetour = \Application::$container->get('FormElementManager')->get(ContratRetour::class);
+        if (!empty($this->formIntervenantContratRetour)) {
+            return $this->formIntervenantContratRetour;
         }
 
-        return $this->formIntervenantContratRetour;
+        return \Application::$container->get('FormElementManager')->get(ContratRetour::class);
     }
 }

@@ -176,6 +176,7 @@ return [
         Service\NoteService::class            => Service\NoteServiceFactory::class,
         Service\TypeNoteService::class        => Service\TypeNoteServiceFactory::class,
         Assertion\NoteAssertion::class        => \UnicaenAuth\Assertion\AssertionFactory::class,
+        Service\MailService::class            => Service\MailServiceFactory::class,
 
         Assertion\StatutAssertion::class => Assertion\StatutAssertionFactory::class,
     ],

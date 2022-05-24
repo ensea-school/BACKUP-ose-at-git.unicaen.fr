@@ -140,7 +140,7 @@ class PlafondConfigForm extends AbstractForm
         foreach ($plafondConfigs as $plafondConfig) {
             if (isset($heures[$plafondConfig->getPlafond()->getId()])) {
                 $v = stringToFloat($heures[$plafondConfig->getPlafond()->getId()]);
-                $plafondConfig->setHeures($v);
+                $plafondConfig->setHeures($v ?? 0);
             }
 
             if (isset($etatPrevu[$plafondConfig->getPlafond()->getId()])) {

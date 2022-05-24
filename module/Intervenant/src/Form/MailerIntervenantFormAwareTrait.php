@@ -4,13 +4,14 @@ namespace Intervenant\Form;
 
 
 /**
- * Description of NoteSaisieFormAwareTrait
+ * Description of MailerIntervenantFormAwareTrait
  *
  * @author UnicaenCode
  */
 trait MailerIntervenantFormAwareTrait
 {
     protected ?MailerIntervenantForm $formMailerIntervenant = null;
+
 
 
     /**
@@ -26,12 +27,13 @@ trait MailerIntervenantFormAwareTrait
     }
 
 
+
     public function getFormMailerIntervenant(): ?MailerIntervenantForm
     {
-        if (empty($this->formMailerIntervenant)) {
-            $this->formMailerIntervenant = \Application::$container->get('FormElementManager')->get(MailerIntervenantForm::class);
+        if (!empty($this->formMailerIntervenant)) {
+            return $this->formMailerIntervenant;
         }
 
-        return $this->formMailerIntervenant;
+        return \Application::$container->get('FormElementManager')->get(MailerIntervenantForm::class);
     }
 }

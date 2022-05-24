@@ -20,7 +20,7 @@ trait TypeModulateurSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormModulateurTypeModulateurSaisie( ?TypeModulateurSaisieForm $formModulateurTypeModulateurSaisie )
+    public function setFormModulateurTypeModulateurSaisie(?TypeModulateurSaisieForm $formModulateurTypeModulateurSaisie)
     {
         $this->formModulateurTypeModulateurSaisie = $formModulateurTypeModulateurSaisie;
 
@@ -31,10 +31,10 @@ trait TypeModulateurSaisieFormAwareTrait
 
     public function getFormModulateurTypeModulateurSaisie(): ?TypeModulateurSaisieForm
     {
-        if (empty($this->formModulateurTypeModulateurSaisie)){
-            $this->formModulateurTypeModulateurSaisie = \Application::$container->get('FormElementManager')->get(TypeModulateurSaisieForm::class);
+        if (!empty($this->formModulateurTypeModulateurSaisie)) {
+            return $this->formModulateurTypeModulateurSaisie;
         }
 
-        return $this->formModulateurTypeModulateurSaisie;
+        return \Application::$container->get('FormElementManager')->get(TypeModulateurSaisieForm::class);
     }
 }

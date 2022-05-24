@@ -122,6 +122,7 @@ class Liste extends AbstractViewHelper
     private $prevuToPrevu;
 
 
+
     /**
      * Helper entry point.
      *
@@ -138,6 +139,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      * Retourne le code HTML généré par cette aide de vue.
      *
@@ -147,6 +149,7 @@ class Liste extends AbstractViewHelper
     {
         return $this->render();
     }
+
 
 
     public function getAddUrl()
@@ -162,6 +165,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      * Génère le code HTML.
      *
@@ -169,9 +173,9 @@ class Liste extends AbstractViewHelper
      */
     public function render($details = false)
     {
-        $this->totaux = [];
+        $this->totaux      = [];
         $typesIntervention = $this->getTypesIntervention();
-        $colspan = 2;
+        $colspan           = 2;
 
         $attribs = [
             'id'          => $this->getId(true),
@@ -183,7 +187,7 @@ class Liste extends AbstractViewHelper
         if (count($this->getServices()) > 150) {
             return $out . '<div class="alert alert-danger" role="alert">Le nombre de services à afficher est trop important. Merci d\'affiner vos critères de recherche.</div></div>';
         }
-        if ($this->getAddButtonVisibility() && !$this->getReadOnly()) {
+        if ($this->getAddButtonVisibility() && !$this->getReadOnly() && $this->getIntervenant()) {
             $out .= $this->renderActionButtons();
         }
         $out .= $this->renderShowHide();
@@ -210,18 +214,19 @@ class Liste extends AbstractViewHelper
         }
 
         $style = $this->getTotaux()['total_general'] == 0 ? ' style="display:none"' : '';
-        $out .= '<tfoot ' . $style . '>' . "\n";
-        $out .= $this->renderTotaux();
-        $out .= '</tfoot>' . "\n";
-        $out .= '</table>' . "\n";
-        $out .= $this->renderShowHide();
-        $out .= '</div>' . "\n";
+        $out   .= '<tfoot ' . $style . '>' . "\n";
+        $out   .= $this->renderTotaux();
+        $out   .= '</tfoot>' . "\n";
+        $out   .= '</table>' . "\n";
+        $out   .= $this->renderShowHide();
+        $out   .= '</div>' . "\n";
 
         return $out;
     }
 
 
-    public function renderActionButtons()
+
+    protected function renderActionButtons()
     {
         $out = '';
         if ($this->isInRealise()) {
@@ -235,25 +240,25 @@ class Liste extends AbstractViewHelper
                     'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
                         . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
                 ];
-                $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
-                $out .= '<div class="modal fade" id="prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-                $out .= '<div class="modal-dialog modal-md">';
-                $out .= '<div class="modal-content">';
-                $out .= '<div class="modal-header">';
-                $out .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
-                $out .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
-                $out .= '</div>';
-                $out .= '<div class="modal-body">';
-                $out .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
-                $out .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
-                $out .= '</div>';
-                $out .= '<div class="modal-footer">';
-                $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
-                $out .= '<button type="button" class="btn btn-primary prevu-to-realise">OK</button>';
-                $out .= '</div>';
-                $out .= '</div>';
-                $out .= '</div>';
-                $out .= '</div>';
+                $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
+                $out     .= '<div class="modal fade" id="prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
+                $out     .= '<div class="modal-dialog modal-md">';
+                $out     .= '<div class="modal-content">';
+                $out     .= '<div class="modal-header">';
+                $out     .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
+                $out     .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
+                $out     .= '</div>';
+                $out     .= '<div class="modal-body">';
+                $out     .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
+                $out     .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
+                $out     .= '</div>';
+                $out     .= '<div class="modal-footer">';
+                $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+                $out     .= '<button type="button" class="btn btn-primary prevu-to-realise">OK</button>';
+                $out     .= '</div>';
+                $out     .= '</div>';
+                $out     .= '</div>';
+                $out     .= '</div>';
             }
         } elseif ($this->prevuToPrevu) {
             if ($typeVolumeHoraire = $this->getProcessusIntervenant()->service()->initializePrevu($this->prevuToPrevu)) {
@@ -265,29 +270,29 @@ class Liste extends AbstractViewHelper
                     //'href'          => $this->getAddUrl(),
                     'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
                 ];
-                $source = $typeVolumeHoraire->getLibelle();
-                $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <i class="fas fa-arrow-right"></i> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
-                $out .= '<div class="modal fade" id="prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-                $out .= '<div class="modal-dialog modal-md">';
-                $out .= '<div class="modal-content">';
-                $out .= '<div class="modal-header">';
-                $out .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
-                $out .= '<h4 class="modal-title">Reporter ici le service ' . strtolower($source) . ' validé de l\'année précédente.</h4>';
-                $out .= '</div>';
-                $out .= '<div class="modal-body">';
-                $out .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service ' . strtolower($source) . ' validé de l\'an dernier ?</p>';
-                $out .= '<div class="alert alert-info" id="prevu-to-prevu-attente" style="display:none">';
-                $out .= '<img src="' . $this->getView()->basePath() . '/images/wait.gif" alt="Attente..."/>';
-                $out .= '<div>Reprise des enseignements de l\'année dernière en cours... Merci de patienter.</div>';
-                $out .= '</div>';
-                $out .= '</div>';
-                $out .= '<div class="modal-footer">';
-                $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
-                $out .= '<button type="button" class="btn btn-primary prevu-to-prevu" data-intervenant="' . $this->prevuToPrevu->getId() . '">OK</button>';
-                $out .= '</div>';
-                $out .= '</div>';
-                $out .= '</div>';
-                $out .= '</div>';
+                $source  = $typeVolumeHoraire->getLibelle();
+                $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <i class="fas fa-arrow-right"></i> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
+                $out     .= '<div class="modal fade" id="prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
+                $out     .= '<div class="modal-dialog modal-md">';
+                $out     .= '<div class="modal-content">';
+                $out     .= '<div class="modal-header">';
+                $out     .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
+                $out     .= '<h4 class="modal-title">Reporter ici le service ' . strtolower($source) . ' validé de l\'année précédente.</h4>';
+                $out     .= '</div>';
+                $out     .= '<div class="modal-body">';
+                $out     .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service ' . strtolower($source) . ' validé de l\'an dernier ?</p>';
+                $out     .= '<div class="alert alert-info" id="prevu-to-prevu-attente" style="display:none">';
+                $out     .= '<img src="' . $this->getView()->basePath() . '/images/wait.gif" alt="Attente..."/>';
+                $out     .= '<div>Reprise des enseignements de l\'année dernière en cours... Merci de patienter.</div>';
+                $out     .= '</div>';
+                $out     .= '</div>';
+                $out     .= '<div class="modal-footer">';
+                $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+                $out     .= '<button type="button" class="btn btn-primary prevu-to-prevu" data-intervenant="' . $this->prevuToPrevu->getId() . '">OK</button>';
+                $out     .= '</div>';
+                $out     .= '</div>';
+                $out     .= '</div>';
+                $out     .= '</div>';
             }
         }
         $attribs = [
@@ -296,20 +301,21 @@ class Liste extends AbstractViewHelper
             'href'       => $this->getAddUrl(),
             'title'      => 'Ajouter un nouvel enseignement',
         ];
-        $out .= '<a ' . $this->htmlAttribs($attribs) . '><i class="fas fa-plus"></i> Je saisis</a>';
+        $out     .= '<a ' . $this->htmlAttribs($attribs) . '><i class="fas fa-plus"></i> Je saisis</a>';
 
         return $out;
     }
 
 
+
     public function renderLigne(Service $service, $details = false, $show = true)
     {
-        $tvhPrevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $tvhPrevu   = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $tvhRealise = $this->getServiceTypeVolumeHoraire()->getRealise();
-        $evhSaisi = $this->getServiceEtatVolumeHoraire()->getSaisi();
-        $evhValide = $this->getServiceEtatVolumeHoraire()->getValide();
+        $evhSaisi   = $this->getServiceEtatVolumeHoraire()->getSaisi();
+        $evhValide  = $this->getServiceEtatVolumeHoraire()->getValide();
 
-        $heures = 0;
+        $heures         = 0;
         $modeCalendaire = false;
         if (!$this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())) {
             // Si on n'est pas en semestriel, donc en calendaire, alors on ajoute une heure fictive afin d'afficher
@@ -334,8 +340,8 @@ class Liste extends AbstractViewHelper
             return ''; // on n'affiche pas les lignes de services avec 0 heures
         }
         $ligneView = $this->getView()->serviceLigne($this, $service);
-        $class = ($modeCalendaire) ? 'service-ligne mode-calendaire' : 'service-ligne';
-        $attribs = [
+        $class     = ($modeCalendaire) ? 'service-ligne mode-calendaire' : 'service-ligne';
+        $attribs   = [
             'id'       => 'service-' . $service->getId() . '-ligne',
             'data-id'  => $service->getId(),
             'class'    => $class,
@@ -372,6 +378,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      * @param Service $service
      * @param         $typeVolumeHoraire
@@ -396,6 +403,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     public function renderTotaux()
     {
         $typesIntervention = $this->getTypesIntervention();
@@ -413,8 +421,8 @@ class Liste extends AbstractViewHelper
 
         $data = $this->getTotaux();
 
-        $out = '<tr>';
-        $out .= "<th colspan='$colspan' style=\"text-align:right\">Totaux par type d'intervention :</th>\n";
+        $out                        = '<tr>';
+        $out                        .= "<th colspan='$colspan' style=\"text-align:right\">Totaux par type d'intervention :</th>\n";
         $typesInterventionDisplayed = 0;
         foreach ($typesIntervention as $ti) {
             if ($this->getTypeInterventionVisibility($ti)) {
@@ -437,6 +445,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     public function renderShowHide()
     {
         return
@@ -445,6 +454,7 @@ class Liste extends AbstractViewHelper
             . '<button type="button" class="btn btn-default btn-xs service-hide-all-details"><i class="fas fa-chevron-up"></i> Tout replier</button>'
             . '</div>';
     }
+
 
 
     /**
@@ -456,6 +466,7 @@ class Liste extends AbstractViewHelper
     {
         return $this->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
     }
+
 
 
     /**
@@ -471,18 +482,19 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     protected function getTotaux()
     {
         if (!$this->totaux) {
             $typesIntervention = $this->getTypesIntervention();
-            $data = [
+            $data              = [
                 'total_general' => 0,
             ];
             foreach ($typesIntervention as $ti) {
                 $data[$ti->getCode()] = 0;
 
                 foreach ($this->getServices() as $service) {
-                    $h = $service->getVolumeHoraireListe()->setTypeVolumeHoraire($this->getTypeVolumehoraire())->setTypeIntervention($ti)->getHeures();
+                    $h                    = $service->getVolumeHoraireListe()->setTypeVolumeHoraire($this->getTypeVolumehoraire())->setTypeIntervention($ti)->getHeures();
                     $data[$ti->getCode()] += $h;
                 }
             }
@@ -494,6 +506,7 @@ class Liste extends AbstractViewHelper
 
         return $this->totaux;
     }
+
 
 
     /**
@@ -515,6 +528,7 @@ class Liste extends AbstractViewHelper
 
         return $params;
     }
+
 
 
     /**
@@ -542,6 +556,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      * Calcule la visibilité par défaut des colonnes en fonction des données transmises!!
      *
@@ -550,13 +565,13 @@ class Liste extends AbstractViewHelper
     public function calcDefaultColumnsVisibility()
     {
         $services = $this->getServices();
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role     = $this->getServiceContext()->getSelectedIdentityRole();
 
         // si plusieurs années différentes sont détectées alors on prévoit d'afficher la colonne année par défaut
         // si plusieurs intervenants différents alors on prévoit d'afficher la colonne intervenant par défaut
-        $annee = null;
-        $multiAnnees = false;
-        $intervenant = null;
+        $annee             = null;
+        $multiAnnees       = false;
+        $intervenant       = null;
         $multiIntervenants = false;
         foreach ($services as $service) {
             if ($service) {
@@ -589,6 +604,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      * @param TypeIntervention $typeIntervention
      *
@@ -606,6 +622,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      * Détermine si le bouton prévu => prévu doit être affiché ou non.
      *
@@ -621,6 +638,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      * @return @string[]
      */
@@ -630,9 +648,10 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      *
-     * @param string $columnName
+     * @param string  $columnName
      * @param boolean $visibility
      *
      * @return self
@@ -643,6 +662,7 @@ class Liste extends AbstractViewHelper
 
         return $this;
     }
+
 
 
     /**
@@ -659,6 +679,7 @@ class Liste extends AbstractViewHelper
 
         return $this->columns[$columnName]['visibility'];
     }
+
 
 
     /**
@@ -678,6 +699,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      * @return TypeIntervention[]
      */
@@ -693,6 +715,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      * @param TypeIntervention[] $typesIntervention
      *
@@ -704,6 +727,7 @@ class Liste extends AbstractViewHelper
 
         return $this;
     }
+
 
 
     /**
@@ -721,6 +745,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      *
      * @return boolean
@@ -729,6 +754,7 @@ class Liste extends AbstractViewHelper
     {
         return $this->readOnly;
     }
+
 
 
     /**
@@ -745,6 +771,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      *
      * @return Service[]
@@ -753,6 +780,7 @@ class Liste extends AbstractViewHelper
     {
         return $this->services;
     }
+
 
 
     /**
@@ -769,6 +797,7 @@ class Liste extends AbstractViewHelper
     }
 
 
+
     /**
      *
      * @return boolean
@@ -777,6 +806,7 @@ class Liste extends AbstractViewHelper
     {
         return $this->addButtonVisibility;
     }
+
 
 
     /**

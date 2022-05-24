@@ -20,7 +20,7 @@ trait MiseEnPaiementFormAwareTrait
      *
      * @return self
      */
-    public function setFormPaiementMiseEnPaiement( ?MiseEnPaiementForm $formPaiementMiseEnPaiement )
+    public function setFormPaiementMiseEnPaiement(?MiseEnPaiementForm $formPaiementMiseEnPaiement)
     {
         $this->formPaiementMiseEnPaiement = $formPaiementMiseEnPaiement;
 
@@ -31,10 +31,10 @@ trait MiseEnPaiementFormAwareTrait
 
     public function getFormPaiementMiseEnPaiement(): ?MiseEnPaiementForm
     {
-        if (empty($this->formPaiementMiseEnPaiement)){
-            $this->formPaiementMiseEnPaiement = \Application::$container->get('FormElementManager')->get(MiseEnPaiementForm::class);
+        if (!empty($this->formPaiementMiseEnPaiement)) {
+            return $this->formPaiementMiseEnPaiement;
         }
 
-        return $this->formPaiementMiseEnPaiement;
+        return \Application::$container->get('FormElementManager')->get(MiseEnPaiementForm::class);
     }
 }

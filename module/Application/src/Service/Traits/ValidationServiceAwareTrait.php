@@ -20,7 +20,7 @@ trait ValidationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceValidation( ?ValidationService $serviceValidation )
+    public function setServiceValidation(?ValidationService $serviceValidation)
     {
         $this->serviceValidation = $serviceValidation;
 
@@ -31,7 +31,7 @@ trait ValidationServiceAwareTrait
 
     public function getServiceValidation(): ?ValidationService
     {
-        if (empty($this->serviceValidation)){
+        if (empty($this->serviceValidation)) {
             $this->serviceValidation = \Application::$container->get(ValidationService::class);
         }
 

@@ -1,4 +1,4 @@
-CREATE OR REPLACE FORCE VIEW V_INDICATEUR_670 AS
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_550 AS
 SELECT
   w.intervenant_id,
   i.structure_id,
@@ -9,7 +9,7 @@ FROM
   JOIN intervenant i ON i.id = wc.intervenant_id
   JOIN structure s ON s.id = w.structure_id
 WHERE
-  w.etape_code = 'REFERENTIEL_VALIDATION_REALISE'
+  w.etape_code = 'SERVICE_VALIDATION_REALISE'
   AND w.objectif > w.realisation
   AND w.atteignable = 1
 

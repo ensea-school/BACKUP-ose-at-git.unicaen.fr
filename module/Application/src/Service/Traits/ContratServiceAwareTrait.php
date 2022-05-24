@@ -20,7 +20,7 @@ trait ContratServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceContrat( ?ContratService $serviceContrat )
+    public function setServiceContrat(?ContratService $serviceContrat)
     {
         $this->serviceContrat = $serviceContrat;
 
@@ -31,7 +31,7 @@ trait ContratServiceAwareTrait
 
     public function getServiceContrat(): ?ContratService
     {
-        if (empty($this->serviceContrat)){
+        if (empty($this->serviceContrat)) {
             $this->serviceContrat = \Application::$container->get(ContratService::class);
         }
 

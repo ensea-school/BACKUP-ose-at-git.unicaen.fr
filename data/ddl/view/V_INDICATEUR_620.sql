@@ -5,7 +5,7 @@ SELECT DISTINCT
 FROM
   tbl_workflow w
 WHERE
-  w.etape_code = 'REFERENTIEL_VALIDATION'
-  AND w.type_intervenant_code = 'P'
+  w.etape_code = 'SERVICE_VALIDATION'
+  AND w.type_intervenant_code = 'E'
   AND w.atteignable = 1
   AND w.objectif > w.realisation

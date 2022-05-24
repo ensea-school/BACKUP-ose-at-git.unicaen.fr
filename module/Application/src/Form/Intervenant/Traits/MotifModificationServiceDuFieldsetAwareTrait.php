@@ -20,7 +20,7 @@ trait MotifModificationServiceDuFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetIntervenantMotifModificationServiceDu( ?MotifModificationServiceDuFieldset $fieldsetIntervenantMotifModificationServiceDu )
+    public function setFieldsetIntervenantMotifModificationServiceDu(?MotifModificationServiceDuFieldset $fieldsetIntervenantMotifModificationServiceDu)
     {
         $this->fieldsetIntervenantMotifModificationServiceDu = $fieldsetIntervenantMotifModificationServiceDu;
 
@@ -31,10 +31,10 @@ trait MotifModificationServiceDuFieldsetAwareTrait
 
     public function getFieldsetIntervenantMotifModificationServiceDu(): ?MotifModificationServiceDuFieldset
     {
-        if (empty($this->fieldsetIntervenantMotifModificationServiceDu)){
-            $this->fieldsetIntervenantMotifModificationServiceDu = \Application::$container->get('FormElementManager')->get(MotifModificationServiceDuFieldset::class);
+        if (!empty($this->fieldsetIntervenantMotifModificationServiceDu)) {
+            return $this->fieldsetIntervenantMotifModificationServiceDu;
         }
 
-        return $this->fieldsetIntervenantMotifModificationServiceDu;
+        return \Application::$container->get('FormElementManager')->get(MotifModificationServiceDuFieldset::class);
     }
 }

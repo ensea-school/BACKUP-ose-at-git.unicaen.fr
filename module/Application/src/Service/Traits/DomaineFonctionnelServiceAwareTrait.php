@@ -20,7 +20,7 @@ trait DomaineFonctionnelServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDomaineFonctionnel( ?DomaineFonctionnelService $serviceDomaineFonctionnel )
+    public function setServiceDomaineFonctionnel(?DomaineFonctionnelService $serviceDomaineFonctionnel)
     {
         $this->serviceDomaineFonctionnel = $serviceDomaineFonctionnel;
 
@@ -31,7 +31,7 @@ trait DomaineFonctionnelServiceAwareTrait
 
     public function getServiceDomaineFonctionnel(): ?DomaineFonctionnelService
     {
-        if (empty($this->serviceDomaineFonctionnel)){
+        if (empty($this->serviceDomaineFonctionnel)) {
             $this->serviceDomaineFonctionnel = \Application::$container->get(DomaineFonctionnelService::class);
         }
 

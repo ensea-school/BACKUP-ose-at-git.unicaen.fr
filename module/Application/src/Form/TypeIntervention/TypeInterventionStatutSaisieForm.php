@@ -4,13 +4,14 @@ namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionStatutServiceAwareTrait;
-use Application\Entity\Db\Traits\TypeInterventionStatutAwareTrait
+use Application\Entity\Db\Traits\TypeInterventionStatutAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 
 /**
  * Description of TypeInterventionStatutSaisieForm
@@ -28,6 +29,7 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
     {
         $hydrator = new TypeInterventionStatutHydrator();
         $this->setHydrator($hydrator);
+        $hydrator->setEntityManager($this->getEntityManager());
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([

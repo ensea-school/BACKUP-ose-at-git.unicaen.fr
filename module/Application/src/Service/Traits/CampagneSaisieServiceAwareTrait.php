@@ -20,7 +20,7 @@ trait CampagneSaisieServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceCampagneSaisie( ?CampagneSaisieService $serviceCampagneSaisie )
+    public function setServiceCampagneSaisie(?CampagneSaisieService $serviceCampagneSaisie)
     {
         $this->serviceCampagneSaisie = $serviceCampagneSaisie;
 
@@ -31,7 +31,7 @@ trait CampagneSaisieServiceAwareTrait
 
     public function getServiceCampagneSaisie(): ?CampagneSaisieService
     {
-        if (empty($this->serviceCampagneSaisie)){
+        if (empty($this->serviceCampagneSaisie)) {
             $this->serviceCampagneSaisie = \Application::$container->get(CampagneSaisieService::class);
         }
 

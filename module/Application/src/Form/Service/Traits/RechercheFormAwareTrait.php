@@ -20,7 +20,7 @@ trait RechercheFormAwareTrait
      *
      * @return self
      */
-    public function setFormServiceRecherche( ?RechercheForm $formServiceRecherche )
+    public function setFormServiceRecherche(?RechercheForm $formServiceRecherche)
     {
         $this->formServiceRecherche = $formServiceRecherche;
 
@@ -31,10 +31,10 @@ trait RechercheFormAwareTrait
 
     public function getFormServiceRecherche(): ?RechercheForm
     {
-        if (empty($this->formServiceRecherche)){
-            $this->formServiceRecherche = \Application::$container->get('FormElementManager')->get(RechercheForm::class);
+        if (!empty($this->formServiceRecherche)) {
+            return $this->formServiceRecherche;
         }
 
-        return $this->formServiceRecherche;
+        return \Application::$container->get('FormElementManager')->get(RechercheForm::class);
     }
 }

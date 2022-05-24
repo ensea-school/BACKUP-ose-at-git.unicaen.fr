@@ -1,4 +1,4 @@
-CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1020 AS
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_240 AS
 SELECT DISTINCT
   w.intervenant_id,
   i.structure_id,
@@ -11,7 +11,7 @@ FROM
 WHERE
   w.etape_code = 'PJ_VALIDATION'
   AND wc.etape_code = 'PJ_SAISIE'
-  AND w.type_intervenant_code = 'E'
+  AND w.type_intervenant_code = 'P'
   AND wc.objectif = wc.realisation
   AND w.atteignable = 1
   AND w.objectif > w.realisation

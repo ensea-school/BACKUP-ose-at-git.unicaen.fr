@@ -10,31 +10,24 @@ namespace Intervenant\Entity\Db;
  */
 trait StatutAwareTrait
 {
-    /**
-     * @var Statut|null
-     */
     protected ?Statut $statut = null;
 
 
 
     /**
-     * @param Statut|null $statut
+     * @param Statut $statut
      *
      * @return self
      */
-    public function setStatut(?Statut $statut)
+    public function setStatut( ?Statut $statut )
     {
         $this->statut = $statut;
-        
 
         return $this;
     }
 
 
 
-    /**
-     * @return Statut|null
-     */
     public function getStatut(): ?Statut
     {
         return $this->statut;

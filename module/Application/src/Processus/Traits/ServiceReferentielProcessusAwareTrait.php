@@ -20,7 +20,7 @@ trait ServiceReferentielProcessusAwareTrait
      *
      * @return self
      */
-    public function setProcessusServiceReferentiel( ?ServiceReferentielProcessus $processusServiceReferentiel )
+    public function setProcessusServiceReferentiel(?ServiceReferentielProcessus $processusServiceReferentiel)
     {
         $this->processusServiceReferentiel = $processusServiceReferentiel;
 
@@ -31,7 +31,7 @@ trait ServiceReferentielProcessusAwareTrait
 
     public function getProcessusServiceReferentiel(): ?ServiceReferentielProcessus
     {
-        if (empty($this->processusServiceReferentiel)){
+        if (empty($this->processusServiceReferentiel)) {
             $this->processusServiceReferentiel = \Application::$container->get(ServiceReferentielProcessus::class);
         }
 

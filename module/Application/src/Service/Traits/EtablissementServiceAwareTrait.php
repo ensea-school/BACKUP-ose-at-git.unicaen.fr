@@ -20,7 +20,7 @@ trait EtablissementServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceEtablissement( ?EtablissementService $serviceEtablissement )
+    public function setServiceEtablissement(?EtablissementService $serviceEtablissement)
     {
         $this->serviceEtablissement = $serviceEtablissement;
 
@@ -31,7 +31,7 @@ trait EtablissementServiceAwareTrait
 
     public function getServiceEtablissement(): ?EtablissementService
     {
-        if (empty($this->serviceEtablissement)){
+        if (empty($this->serviceEtablissement)) {
             $this->serviceEtablissement = \Application::$container->get(EtablissementService::class);
         }
 

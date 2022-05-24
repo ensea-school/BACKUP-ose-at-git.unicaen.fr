@@ -46,7 +46,7 @@ class CentreCoutController extends AbstractController
 
         $centreCout = $this->getEvent()->getParam('centreCout');
 
-        $form = $this->getFormCentreCoutSaisie();
+        $form = $this->getFormCentreCoutCentreCoutSaisie();
         if (empty($centreCout)) {
             $title      = 'Création d\'un nouveau Centre de Coûts';
             $centreCout = $this->getServiceCentreCout()->newEntity();

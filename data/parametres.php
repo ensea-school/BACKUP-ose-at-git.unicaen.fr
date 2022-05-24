@@ -223,4 +223,9 @@ Cordialement,
         "DESCRIPTION" => "Adresse email d'expéditeur des mails via les indicateur, si vide alors l'email de l'utilisateur sera utilisé",
     ],
 
+    /* Contrat */
+    "avenant"                       => [
+        "VALEUR"      => "active",
+        "DESCRIPTION" => "Permettre la création d'avenants au contrat",
+    ],
 ];

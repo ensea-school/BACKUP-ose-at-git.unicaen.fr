@@ -19,7 +19,7 @@ trait PlafondConfigFormAwareTrait
      *
      * @return self
      */
-    public function setFormPlafondConfig( ?PlafondConfigForm $formPlafondConfig )
+    public function setFormPlafondConfig(?PlafondConfigForm $formPlafondConfig)
     {
         $this->formPlafondConfig = $formPlafondConfig;
 
@@ -30,10 +30,10 @@ trait PlafondConfigFormAwareTrait
 
     public function getFormPlafondConfig(): ?PlafondConfigForm
     {
-        if (empty($this->formPlafondConfig)){
-            $this->formPlafondConfig = \Application::$container->get('FormElementManager')->get(PlafondConfigForm::class);
+        if (!empty($this->formPlafondConfig)) {
+            return $this->formPlafondConfig;
         }
 
-        return $this->formPlafondConfig;
+        return \Application::$container->get('FormElementManager')->get(PlafondConfigForm::class);
     }
 }

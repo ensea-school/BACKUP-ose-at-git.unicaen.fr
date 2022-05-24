@@ -20,7 +20,7 @@ trait ContextServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceContext( ?ContextService $serviceContext )
+    public function setServiceContext(?ContextService $serviceContext)
     {
         $this->serviceContext = $serviceContext;
 
@@ -31,7 +31,7 @@ trait ContextServiceAwareTrait
 
     public function getServiceContext(): ?ContextService
     {
-        if (empty($this->serviceContext)){
+        if (empty($this->serviceContext)) {
             $this->serviceContext = \Application::$container->get(ContextService::class);
         }
 

@@ -2,7 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_INDICATEUR_110 AS
 SELECT
   d.intervenant_id,
   i.structure_id,
-  TO_CHAR(MAX( ido.HISTO_MODIFICATION),'YYYY-MM-DD HH24:MI:SS') AS "Date modif"
+  MAX(ido.HISTO_MODIFICATION) AS "Date de modification"
 FROM
   tbl_dossier d
   JOIN intervenant i ON i.id = d.intervenant_id

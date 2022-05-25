@@ -2,7 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_INDICATEUR_920 AS
 SELECT DISTINCT
   w.intervenant_id,
   w.structure_id,
-  Max(v.HISTO_CREATION) AS dateModif
+  Max(v.HISTO_CREATION) AS "Date de modification"
 FROM
   tbl_workflow w
   JOIN VALIDATION v ON v.INTERVENANT_ID = w.INTERVENANT_ID

@@ -2,7 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_INDICATEUR_230 AS
 SELECT DISTINCT
   w.intervenant_id,
   i.structure_id,
-  TO_CHAR(MAX( pj.HISTO_MODIFICATION),'YYYY-MM-DD HH24:MI:SS') AS "Date modif"
+  MAX(pj.HISTO_MODIFICATION) AS "Date de modification"
 FROM
   tbl_workflow w
   JOIN tbl_workflow wc ON wc.intervenant_id = w.intervenant_id

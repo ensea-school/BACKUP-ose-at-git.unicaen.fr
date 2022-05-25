@@ -2,7 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_INDICATEUR_930 AS
 SELECT
   w.intervenant_id,
   w.structure_id,
-  MAX(histo_modification) DATEMODIF
+  MAX(histo_modification) AS "Date de modification"
 FROM
   mise_en_paiement mep
   LEFT JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id

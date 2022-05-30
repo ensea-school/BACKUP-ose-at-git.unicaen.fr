@@ -117,6 +117,7 @@ return [
             'visualisation'         => 'Visualisation',
             'edition'               => 'Édition',
             'validation'            => 'Validation',
+            'refus-piece'           => 'Refus - Pièce justificative',
             'devalidation'          => 'Dévalidation',
             'archivage'             => 'Archivage',
             'gestion-edition'       => 'Gestion des pièces justificatives (édition)',

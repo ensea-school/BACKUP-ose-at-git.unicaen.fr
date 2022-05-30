@@ -202,7 +202,7 @@ class PlafondService extends AbstractEntityService
         bool $bloquantUniquement = false,
         bool $depassementsUniquement = false): string
     {
-        $filters = [];
+        $filters                                  = [];
 
         if ($perimetre instanceof PlafondPerimetre) $perimetre = $perimetre->getCode();
 

@@ -47,8 +47,6 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                         echo '<li>' . $val . '</li>';
                     }
                     echo '</ul>';
-                } elseif ($value instanceof \DateTime) {
-                    echo $value->format(\Application\Constants::DATE_FORMAT);
                 } elseif ($value) {
                     echo $value;
                 } else {
@@ -88,8 +86,22 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                                     <?= $r['intervenant-nom'] . ' ' . $r['intervenant-prenom'] . ' <small>(n°' . $r['intervenant-code'] . ' / ' . $r['statut-libelle'] . ')</small>' ?>
                                 </a>
                             </td>
-                            <?php foreach ($supCols as $supCol): ?>
-                                <td><?php printValue($r[$supCol]); ?></td>
+
+                            <?php
+                            foreach ($supCols as $supCol):
+                                if (!is_array($r[$supCol])) {
+                                    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $r[$supCol]);
+                                    if ($dt && $dt->format('Y-m-d H:i:s') === $r[$supCol]) {
+                                        $dtOrder = $dt->format(\Application\Constants::DATE_SORT); ?>
+                                        <td data-order=<?php echo $dtOrder ?>><?php printValue($dt->format(\Application\Constants::DATE_FORMAT)); ?></td>
+
+                                    <?php }
+                                } else {
+                                    ?>
+                                    <td><?php printValue($r[$supCol]); ?></td>
+
+                                <?php }
+                                ?>
                             <?php endforeach; ?>
                         </tr>
                     <?php endforeach; ?>

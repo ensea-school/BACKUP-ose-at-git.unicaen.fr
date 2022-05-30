@@ -139,7 +139,10 @@ class ContratController extends AbstractController
         $avenantResult = $this->getServiceParametres()->get('avenant');
         $avenant       = ($avenantResult == Parametre::AVENANT);
 
-        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'avenant');
+        $contratProjetResult = $this->getServiceParametres()->get('contrat_projet');
+        $contratProjet       = ($contratProjetResult == Parametre::CONTRAT_PROJET);
+
+        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'avenant', 'contratProjet');
     }
 
 
@@ -151,6 +154,9 @@ class ContratController extends AbstractController
         /* @var $intervenant Intervenant */
         $structure = $this->getEvent()->getParam('structure');
         /* @var $structure Structure */
+
+        $contratProjetResult = $this->getServiceParametres()->get('contrat_projet');
+        $contratProjet       = ($contratProjetResult == Parametre::CONTRAT_PROJET);
 
         if (!$intervenant) {
             throw new \LogicException('L\'intervenant n\'est pas précisé');
@@ -167,8 +173,15 @@ class ContratController extends AbstractController
         } else {
             try {
                 $this->getProcessusContrat()->enregistrer($contrat);
+                if ($contratProjet) {
+                    $this->getProcessusContrat()->valider($contrat);
+                }
                 $this->updateTableauxBord($contrat->getIntervenant());
-                $this->flashMessenger()->addSuccessMessage('Le projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat') . ' a bien été créé.');
+                if ($contratProjet) {
+                    $this->flashMessenger()->addSuccessMessage(($contrat->estUnAvenant() ? 'L\'avenant' : 'Le contrat') . ' a bien été créé.');
+                } else {
+                    $this->flashMessenger()->addSuccessMessage('Le projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat') . ' a bien été créé.');
+                }
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }

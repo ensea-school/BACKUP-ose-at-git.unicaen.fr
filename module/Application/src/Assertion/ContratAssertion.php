@@ -5,10 +5,11 @@ namespace Application\Assertion;
 use Application\Acl\Role;
 use Application\Entity\Db\Contrat;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Parametre;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-
+use Application\Service\Traits\ParametresServiceAwareTrait;
 // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
@@ -22,6 +23,8 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
  */
 class ContratAssertion extends AbstractAssertion
 {
+    use ParametresServiceAwareTrait;
+
     const PRIV_LISTER_FICHIERS   = 'contrat-lister-fichiers';
     const PRIV_SUPPRIMER_FICHIER = 'contrat-supprimer-fichier';
     const PRIV_AJOUTER_FICHIER   = 'contrat-ajouter-fichier';
@@ -181,9 +184,12 @@ class ContratAssertion extends AbstractAssertion
             $devalid = true;
         }
 
+        $contratDirectResult = $this->getServiceParametres()->get('contrat_projet');
+        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_PROJET);
+
         return $this->asserts([
             $this->assertRole($contrat),
-            $contrat->getValidation(),
+            $contrat->getValidation() && !$contratDirect,
             !$contrat->getDateRetourSigne(),
             $devalid,
         ]);
@@ -193,9 +199,12 @@ class ContratAssertion extends AbstractAssertion
 
     protected function assertSuppression(Contrat $contrat)
     {
+        $contratDirectResult = $this->getServiceParametres()->get('contrat_projet');
+        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_PROJET);
+
         return $this->asserts([
             $this->assertRole($contrat),
-            !$contrat->getValidation(),
+            !$contrat->getValidation() || $contratDirect,
         ]);
     }
 

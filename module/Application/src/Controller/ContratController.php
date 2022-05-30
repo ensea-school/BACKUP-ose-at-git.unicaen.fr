@@ -177,6 +177,7 @@ class ContratController extends AbstractController
                 if ($contratProjet) {
                     $this->getProcessusContrat()->valider($contrat);
                 }
+
                 $this->updateTableauxBord($contrat->getIntervenant());
                 if ($contratProjet) {
                     $this->flashMessenger()->addSuccessMessage(($contrat->estUnAvenant() ? 'L\'avenant' : 'Le contrat') . ' a bien été créé.');
@@ -213,6 +214,11 @@ class ContratController extends AbstractController
 
         if ($this->getRequest()->isPost()) {
             try {
+                $contratProjetResult = $this->getServiceParametres()->get('contrat_projet');
+                $contratProjet       = ($contratProjetResult == Parametre::CONTRAT_PROJET);
+                if ($contratProjet) {
+
+                }
                 $this->getProcessusContrat()->supprimer($contrat);
                 $this->updateTableauxBord($contrat->getIntervenant());
                 $this->flashMessenger()->addSuccessMessage("Suppression $contratToString effectuée avec succès.");
@@ -283,6 +289,7 @@ class ContratController extends AbstractController
         if ($this->isAllowed($contrat, Privileges::CONTRAT_DEVALIDATION)) {
             if ($this->getRequest()->isPost()) {
                 try {
+
                     $this->getProcessusContrat()->devalider($contrat);
                     $this->updateTableauxBord($contrat->getIntervenant());
 

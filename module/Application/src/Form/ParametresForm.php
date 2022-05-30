@@ -589,8 +589,8 @@ class ParametresForm extends AbstractForm
             'options'    => [
                 'label'         => 'Activé la fonctionnalité projet de contrat',
                 'value_options' => [
-                    'desactive'               => 'Le contrat est crée directement',
-                    PARAMETRE::CONTRAT_PROJET => 'Un projet de contrat doit être validé pour devenir un contrat',
+                    PARAMETRE::CONTRAT_PROJET => 'Le contrat est crée directement',
+                    'desactive'               => 'Un projet de contrat doit être validé pour devenir un contrat',
                 ],
             ],
             'attributes' => [

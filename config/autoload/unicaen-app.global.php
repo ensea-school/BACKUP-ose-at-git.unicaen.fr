@@ -46,7 +46,7 @@ return [
             'connection'  => [
                 'default' => [
                     'params' => [
-                        'host'                => AppConfig::get('ldap', 'actif', true) ? AppConfig::get('ldap', 'host') : null,
+                        'host'                => (AppConfig::get('ldap', 'actif', true) || AppConfig::get('cas', 'actif', true)) ? AppConfig::get('ldap', 'host') : null,
                         'username'            => AppConfig::get('ldap', 'username'),
                         'password'            => AppConfig::get('ldap', 'password'),
                         'baseDn'              => AppConfig::get('ldap', 'baseDn'),

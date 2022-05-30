@@ -142,6 +142,7 @@ class ContratController extends AbstractController
         $contratProjetResult = $this->getServiceParametres()->get('contrat_projet');
         $contratProjet       = ($contratProjetResult == Parametre::CONTRAT_PROJET);
 
+
         return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'avenant', 'contratProjet');
     }
 
@@ -337,7 +338,10 @@ class ContratController extends AbstractController
             $canSaisieDateSigne = false;
         }
 
-        return compact('form', 'done', 'title', 'canSaisieDateSigne');
+        $contratDateResult = $this->getServiceParametres()->get('contrat_date');
+        $contratDate       = ($contratDateResult == Parametre::CONTRAT_DATE);
+
+        return compact('form', 'done', 'title', 'canSaisieDateSigne', 'contratDate');
     }
 
 

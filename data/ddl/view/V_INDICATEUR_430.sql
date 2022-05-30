@@ -4,6 +4,7 @@ SELECT
   w.structure_id
 FROM
 	intervenant i
+	JOIN PARAMETRE p ON p.VALEUR = 'avenant'
 	JOIN tbl_workflow w ON w.intervenant_id = i.id
 	JOIN (
     SELECT DISTINCT

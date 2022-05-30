@@ -225,13 +225,17 @@ Cordialement,
 
     /* Contrat */
     "avenant"                       => [
-        "VALEUR"      => "active",
+        "VALEUR"      => "AVENANT",
         "DESCRIPTION" => "Permettre la création d'avenants au contrat",
     ],
 
-    /* Contrat */
-    "contrat_projet"                => [
-        "VALEUR"      => "active",
+    "contrat_projet" => [
+        "VALEUR"      => "desactive",
         "DESCRIPTION" => "Permettre la création d'un contrat sans passé par le projet",
+    ],
+
+    "contrat_date" => [
+        "VALEUR"      => "desactive",
+        "DESCRIPTION" => "Permettre de saisir une date de retour signé pour un contrat sans ajouter de fichier",
     ],
 ];

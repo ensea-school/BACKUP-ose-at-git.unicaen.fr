@@ -490,7 +490,7 @@ class ParametresForm extends AbstractForm
 
             ],
             'attributes' => [
-                'rows' => 6,
+                'rows' => 12,
             ],
         ]);
 
@@ -587,10 +587,26 @@ class ParametresForm extends AbstractForm
             'type'       => 'Select',
             'name'       => 'contrat_projet',
             'options'    => [
-                'label' => 'Possibilité de créer un contrat sans passer par le projet',
+                'label'         => 'Activé la fonctionnalité projet de contrat',
                 'value_options' => [
-                    PARAMETRE::CONTRAT_PROJET => 'Le contrat peut être crée sans passer par le projet',
-                    'desactive'               => 'Fonctionnalité désactivée',
+                    'desactive'               => 'Le contrat est crée directement',
+                    PARAMETRE::CONTRAT_PROJET => 'Un projet de contrat doit être validé pour devenir un contrat',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'contrat_date',
+            'options'    => [
+                'label'         => 'Possibilité de saisir la date de retour signé sans ajouté le contrat',
+                'value_options' => [
+                    PARAMETRE::CONTRAT_DATE => 'La saisie est possible sans contrat',
+                    'desactive'             => 'Le contrat est nécessaire pour pouvoir saisir',
                 ],
             ],
             'attributes' => [

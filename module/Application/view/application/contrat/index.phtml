@@ -66,13 +66,13 @@ $this->messenger() ?>
                     <td>
                         <?php if ($canCreer): ?>
 
-                                <a class="btn btn-primary"
-                                   href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
-                                    <i class="fas fa-file"></i> Créer un
+                            <a class="btn btn-primary"
+                               href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
+                                <i class="fas fa-file"></i> Créer un
 
 
-                                    projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
-                                </a>
+                                projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
+                            </a>
 
 
                         <?php else:
@@ -94,6 +94,10 @@ $this->messenger() ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
+        <?php else: ?>
+            <div class="well">
+                <h2>La création d'avenant n'est pas disponible, elle a été désactivée dans les paramètre.</h2>
+            </div>
         <?php endif; ?>
         </table>
 

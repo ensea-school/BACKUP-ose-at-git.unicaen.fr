@@ -1,15 +1,16 @@
 # Version stable
 
-[OSE 18.0](#ose-18-23052022)
+[OSE 18.1](#ose-181-31052022)
 
 
-# OSE 18.1 (à venir)
+# OSE 18.1 (31/05/2022)
 
 ## Corrections de bugs
 
 * On peut maintenant se connecteur en CAS avec le login LDAP désativé (#44824)
 * **IMPORTANT** Dans la 18.0, les données personnelles ne pouvaient pas s'enregistrer
-
+* Pour certains intervenants multi-statuts, les agréments ne sont plus affichés en double
+* Les intervenants multi-statuts peuvent maintenant agir sur toutes leurs fiches sans avoir d'erreur de saisie
 
 
 

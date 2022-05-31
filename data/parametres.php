@@ -225,7 +225,7 @@ Cordialement,
 
     /* Contrat */
     "avenant"                       => [
-        "VALEUR"      => "active",
+        "VALEUR"      => "avenant",
         "DESCRIPTION" => "Permettre la création d'avenants au contrat",
     ],
 ];

@@ -75,7 +75,7 @@ $this->messenger() ?>
                             <?php else: ?>
                                 <a class="btn btn-primary"
                                    href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
-                                    <i class="fas fa-file"></i> Créer un projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
+                                <i class="fas fa-file"></i> Créer un projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
                                 </a>
                             <?php endif;
                         else:
@@ -97,6 +97,10 @@ $this->messenger() ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
+        <?php else: ?>
+            <div class="well">
+                <h2>La création d'avenant n'est pas disponible, elle a été désactivée dans les paramètre.</h2>
+            </div>
         <?php endif; ?>
         </table>
 
@@ -104,6 +108,7 @@ $this->messenger() ?>
     <div class="well">
         <h2>Contrats et avenants</h2>
         <?php foreach ($contrats as $contrat): ?>
+
             <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant]) ?>
 
         <?php endforeach; ?>

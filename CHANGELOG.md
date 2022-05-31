@@ -3,6 +3,15 @@
 [OSE 18.0](#ose-18-23052022)
 
 
+# OSE 18.1 (à venir)
+
+## Corrections de bugs
+
+* On peut maintenant se connecteur en CAS avec le login LDAP désativé (#44824)
+* **IMPORTANT** Dans la 18.0, les données personnelles ne pouvaient pas s'enregistrer
+
+
+
 
 # OSE 18 (23/05/2022)
 Objectif : Plafonds personnalisables & refonte gestion des statuts

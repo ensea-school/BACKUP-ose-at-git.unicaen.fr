@@ -121,9 +121,9 @@ return [
     ],
 
 
-    /* Configuration LDAP */
+    /* Configuration LDAP. si vous utilisez le CAS, le paramétrage de cette partie est nécessaire */
     'ldap'   => [
-        /* Actif (si non, alors seuls les comptes locaux seront autorisés à se connecter à OSE) */
+        /* Actif (si non, alors on ne peut se connecter qu'en CAS ou avec les comptes locaux) */
         'actif'                      => true,
 
         /* Permet de se connecter avec un compte utilisateur créé dans OSE et non référencé dans le LDAP
@@ -138,7 +138,7 @@ return [
          */
         'autorisationsUrsurpation'     => [],
 
-        /* IP ou nom DNS de la machine hébergeant le serveur LDAP */
+        /* IP ou nom DNS de la machine hébergeant le serveur LDAP. */
         'host'                         => 'ldap.unicaen.fr',
 
         /* UID d'accès au serveur (format uid=nom_utilisateur,ou=system,dc=mon_dc,dc=fr*/

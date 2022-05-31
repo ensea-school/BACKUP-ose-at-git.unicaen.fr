@@ -2,6 +2,7 @@
 
 namespace Application\ORM\Event\Listeners;
 
+
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
@@ -9,13 +10,21 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
-use RuntimeException;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 
+/**
+ * Description of HistoriqueListener
+ *
+ * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
+ */
 class HistoriqueListener implements EventSubscriber
 {
     use ContextServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
+
+    private
+    bool $enabled = true;
+
 
 
     /**
@@ -64,10 +73,12 @@ class HistoriqueListener implements EventSubscriber
      */
     public function prePersist(LifecycleEventArgs $args)
     {
-        $entity = $args->getEntity();
-        // On fait si c'est une HistoriqueAwareInterface, mais pas une ParametreEntityInterface
-        if (($entity instanceof HistoriqueAwareInterface) && (!$entity instanceof ParametreEntityInterface)) {
-            $this->updateHistorique($entity);
+        if ($this->isEnabled()) {
+            $entity = $args->getEntity();
+            // On fait si c'est une HistoriqueAwareInterface, mais pas une ParametreEntityInterface
+            if (($entity instanceof HistoriqueAwareInterface) && (!$entity instanceof ParametreEntityInterface)) {
+                $this->updateHistorique($entity);
+            }
         }
     }
 
@@ -78,10 +89,12 @@ class HistoriqueListener implements EventSubscriber
      */
     public function preUpdate(PreUpdateEventArgs $args)
     {
-        $entity = $args->getEntity();
-        // On fait si c'est une HistoriqueAwareInterface, mais pas une ParametreEntityInterface
-        if (($entity instanceof HistoriqueAwareInterface) && (!$entity instanceof ParametreEntityInterface)) {
-            $this->updateHistorique($entity);
+        if ($this->isEnabled()) {
+            $entity = $args->getEntity();
+            // On fait si c'est une HistoriqueAwareInterface, mais pas une ParametreEntityInterface
+            if (($entity instanceof HistoriqueAwareInterface) && (!$entity instanceof ParametreEntityInterface)) {
+                $this->updateHistorique($entity);
+            }
         }
     }
 
@@ -93,5 +106,29 @@ class HistoriqueListener implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [Events::prePersist, Events::preUpdate];
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+
+
+    /**
+     * @param bool $enabled
+     *
+     * @return HistoriqueListener
+     */
+    public function setEnabled(bool $enabled): HistoriqueListener
+    {
+        $this->enabled = $enabled;
+
+        return $this;
     }
 }

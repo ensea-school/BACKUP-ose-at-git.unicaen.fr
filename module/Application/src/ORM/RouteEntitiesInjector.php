@@ -32,7 +32,7 @@ class RouteEntitiesInjector
             switch ($name) {
                 case 'intervenant':
                     /** @var IntervenantService $serviceIntervenant */
-                    $serviceIntervenant = \Application::$container->get(IntervenantService::class);
+                    $serviceIntervenant = $e->getApplication()->getServiceManager()->get(IntervenantService::class);
 
                     /* @var $role \Application\Acl\Role */
                     $role   = $serviceIntervenant->getServiceContext()->getSelectedIdentityRole();
@@ -42,6 +42,15 @@ class RouteEntitiesInjector
                             $entity = $role->getIntervenant(); // c'est l'intervenant du rôle qui prime
                         } else {
                             $role->setIntervenant($entity); // Si c'est la même personne, on lui donne sa fiche d'ID demandée
+                        }
+
+                        $contextIntervenant = $this->getServiceContext()->getIntervenant();
+                        $roleIntervenant    = $role->getIntervenant();
+
+                        if ($contextIntervenant && $contextIntervenant !== $roleIntervenant) {
+                            if ($contextIntervenant->getCode() === $roleIntervenant->getCode()) {
+                                $this->getServiceContext()->setIntervenant($roleIntervenant);
+                            }
                         }
                     }
                     $e->setParam($name, $entity);

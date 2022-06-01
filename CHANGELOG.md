@@ -2,6 +2,14 @@
 
 [OSE 18.1](#ose-181-31052022)
 
+# OSE 19 (à venir)
+
+## Nouveautés
+
+* Ajout d'un paramètre général qui permet de choisir si un contrat peut avoir une date de retour signé ou non s'il n'y a pas de fichier
+* Ajout d'un paramètre général pour empêcher la création d'avenants
+* Ajout d'un paramètre général pour permettre de créer les contrats sans passer par un projet de contrat
+* Ajout de date de dernière modification des données dans les indicateurs notifiant d'une validation en attente
 
 # OSE 18.1 (31/05/2022)
 

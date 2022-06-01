@@ -139,11 +139,11 @@ class ContratController extends AbstractController
         $avenantResult = $this->getServiceParametres()->get('avenant');
         $avenant       = ($avenantResult == Parametre::AVENANT);
 
-        $contratProjetResult = $this->getServiceParametres()->get('contrat_projet');
-        $contratProjet       = ($contratProjetResult == Parametre::CONTRAT_PROJET);
+        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
+        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
 
-        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'avenant', 'contratProjet');
+        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'avenant', 'contratDirect');
     }
 
 
@@ -156,8 +156,8 @@ class ContratController extends AbstractController
         $structure = $this->getEvent()->getParam('structure');
         /* @var $structure Structure */
 
-        $contratProjetResult = $this->getServiceParametres()->get('contrat_projet');
-        $contratProjet       = ($contratProjetResult == Parametre::CONTRAT_PROJET);
+        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
+        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
         if (!$intervenant) {
             throw new \LogicException('L\'intervenant n\'est pas précisé');
@@ -174,12 +174,12 @@ class ContratController extends AbstractController
         } else {
             try {
                 $this->getProcessusContrat()->enregistrer($contrat);
-                if ($contratProjet) {
+                if ($contratDirect) {
                     $this->getProcessusContrat()->valider($contrat);
                 }
 
                 $this->updateTableauxBord($contrat->getIntervenant());
-                if ($contratProjet) {
+                if ($contratDirect) {
                     $this->flashMessenger()->addSuccessMessage(($contrat->estUnAvenant() ? 'L\'avenant' : 'Le contrat') . ' a bien été créé.');
                 } else {
                     $this->flashMessenger()->addSuccessMessage('Le projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat') . ' a bien été créé.');
@@ -214,10 +214,10 @@ class ContratController extends AbstractController
 
         if ($this->getRequest()->isPost()) {
             try {
-                $contratProjetResult = $this->getServiceParametres()->get('contrat_projet');
-                $contratProjet       = ($contratProjetResult == Parametre::CONTRAT_PROJET);
-                if ($contratProjet) {
-
+                $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
+                $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
+                if ($contratDirect && $contrat->getValidation()) {
+                    $this->getProcessusContrat()->devalider($contrat);
                 }
                 $this->getProcessusContrat()->supprimer($contrat);
                 $this->updateTableauxBord($contrat->getIntervenant());
@@ -323,16 +323,20 @@ class ContratController extends AbstractController
 
         $done = false;
 
-        $form = $this->getFormIntervenantContratRetour()->setContrat($contrat)->init2();
+        $form            = $this->getFormIntervenantContratRetour()->setContrat($contrat)->init2();
         $contratToString = $contrat->toString(true, true);
-        $title = "Retour $contratToString signé <small>" . $contrat->getIntervenant() . "</small>";
+        $title           = "Retour $contratToString signé <small>" . $contrat->getIntervenant() . "</small>";
 
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE)) {
             throw new UnAuthorizedException('Vous n\'avez pas les droits requis pour saisir la date de retour du contrat signé.');
         }
         $canSaisieDateSigne = true;
-        if ($contrat->getDateRetourSigne() != null || $contrat->getFichier()->count() > 0) {
+
+        $contratDateSansFichierResult = $this->getServiceParametres()->get('contrat_date');
+        $contratDateSansFichier       = ($contratDateSansFichierResult == Parametre::CONTRAT_DATE);
+
+        if ($contrat->getDateRetourSigne() != null || $contrat->getFichier()->count() > 0 || $contratDateSansFichier) {
             $form->bindRequestSave($contrat, $this->getRequest(), function () use ($contrat, $contratToString) {
 
                 $this->getServiceContrat()->save($contrat);

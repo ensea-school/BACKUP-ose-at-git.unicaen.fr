@@ -585,11 +585,11 @@ class ParametresForm extends AbstractForm
 
         $this->add([
             'type'       => 'Select',
-            'name'       => 'contrat_projet',
+            'name'       => 'contrat_direct',
             'options'    => [
-                'label'         => 'Activé la fonctionnalité projet de contrat',
+                'label'         => 'Création de contrat sans passer par un projet',
                 'value_options' => [
-                    PARAMETRE::CONTRAT_PROJET => 'Le contrat est crée directement',
+                    PARAMETRE::CONTRAT_DIRECT => 'Le contrat est crée directement',
                     'desactive'               => 'Un projet de contrat doit être validé pour devenir un contrat',
                 ],
             ],

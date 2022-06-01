@@ -229,7 +229,7 @@ Cordialement,
         "DESCRIPTION" => "Permettre la création d'avenants au contrat",
     ],
 
-    "contrat_projet" => [
+    "contrat_direct" => [
         "VALEUR"      => "desactive",
         "DESCRIPTION" => "Permettre la création d'un contrat sans passé par le projet",
     ],

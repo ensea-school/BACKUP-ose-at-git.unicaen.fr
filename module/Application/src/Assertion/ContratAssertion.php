@@ -184,8 +184,8 @@ class ContratAssertion extends AbstractAssertion
             $devalid = true;
         }
 
-        $contratDirectResult = $this->getServiceParametres()->get('contrat_projet');
-        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_PROJET);
+        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
+        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
         return $this->asserts([
             $this->assertRole($contrat),
@@ -199,12 +199,19 @@ class ContratAssertion extends AbstractAssertion
 
     protected function assertSuppression(Contrat $contrat)
     {
-        $contratDirectResult = $this->getServiceParametres()->get('contrat_projet');
-        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_PROJET);
+        if (!$contrat->estUnAvenant()) {
+            $devalid = $contrat->getIntervenant()->getContrat()->count() == 1; // on ne peut supprimer un contrat que si aucun avenant n'existe
+        } else {
+            $devalid = true;
+        }
+
+        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
+        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
         return $this->asserts([
             $this->assertRole($contrat),
-            !$contrat->getValidation() || $contratDirect,
+            !$contrat->getValidation() || ($contratDirect && $devalid),
+            !$contrat->getDateRetourSigne(),
         ]);
     }
 

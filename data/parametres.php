@@ -228,4 +228,14 @@ Cordialement,
         "VALEUR"      => "avenant",
         "DESCRIPTION" => "Permettre la création d'avenants au contrat",
     ],
+
+    "contrat_direct" => [
+        "VALEUR"      => "desactive",
+        "DESCRIPTION" => "Permettre la création d'un contrat sans passé par le projet",
+    ],
+
+    "contrat_date" => [
+        "VALEUR"      => "desactive",
+        "DESCRIPTION" => "Permettre de saisir une date de retour signé pour un contrat sans ajouter de fichier",
+    ],
 ];

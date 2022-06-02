@@ -1,16 +1,21 @@
 <?php
 
+use Application\Entity\Db\TypeVolumeHoraire;
 use Indicateur\Entity\Db\IndicateurDepassementCharges;
 use Application\Entity\Db\Intervenant;
 
 /**
- * @var $this        \Application\View\Renderer\PhpRenderer
- * @var $title       string
- * @var $intervenant Intervenant
- * @var $idcs        IndicateurDepassementCharges[]
+ * @var $this                         \Application\View\Renderer\PhpRenderer
+ * @var $title                        string
+ * @var $intervenant                  Intervenant
+ * @var $idcs                         IndicateurDepassementCharges[]
+ * @var $typeVolumeHoraireCode        string
  */
-
-$servicesUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getId()]);
+if ($typeVolumeHoraireCode == TypeVolumeHoraire::CODE_PREVU) {
+    $servicesUrl = $this->url('intervenant/services-prevus', ['intervenant' => $intervenant->getId()]);
+} else {
+    $servicesUrl = $this->url('intervenant/services-realises', ['intervenant' => $intervenant->getId()]);
+}
 
 ?>
 <h1 class="page-header"><?= $title ?></h1>
@@ -32,9 +37,9 @@ $servicesUrl = $this->url('intervenant/services', ['intervenant' => $intervenant
         </tr>
     <?php endforeach; ?>
 </table>
-<button class="btn btn-default" type="button" onclick="window.history.back()"><i class="fas fa-rotate-left" aria-hidden="true"></i
-            Retour à l'indicateur
+<button class="btn btn-default" type="button" onclick="window.history.back()"><i class="fas fa-rotate-left" aria-hidden="true"></i>
+    Retour à l'indicateur
 </button>
-<a class="btn btn-primary" href="<?= $servicesUrl ?>"><i class="fas fa-list" aria-hidden="true"></i
-            Voir la fiche de services de l'intervenant
+<a class="btn btn-primary" href="<?= $servicesUrl ?>"><i class="fas fa-list" aria-hidden="true"></i>
+    Voir la fiche de services de l'intervenant
 </a>

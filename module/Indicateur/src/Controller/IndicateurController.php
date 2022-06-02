@@ -428,7 +428,7 @@ class IndicateurController extends AbstractController
         $idcs = $this->em()->createQuery($dql)->setParameters($params)->getResult();
         $title = 'Dépassement d\'heures (' . $typeVolumeHoraire . ') par rapport aux charges <small>' . $intervenant . '</small>';
 
-        return compact('title', 'intervenant', 'idcs');
+        return compact('title', 'intervenant', 'idcs', 'typeVolumeHoraireCode');
     }
 }
 

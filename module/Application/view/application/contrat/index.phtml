@@ -16,6 +16,7 @@ $hasContrat = false;
 foreach ($contrats as $contrat) {
     if (!$contrat->estUnProjet()) {
         $hasContrat = true;
+        $contrat->getStructure();
     }
 }
 
@@ -98,7 +99,7 @@ $this->messenger() ?>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
-            <div class="well">
+            <div class="alert alert-info">
                 <h2>La création d'avenant n'est pas disponible, elle a été désactivée dans les paramètres.</h2>
             </div>
         <?php endif; ?>

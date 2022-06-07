@@ -189,7 +189,7 @@ SELECT DISTINCT
     grade.c_grade                                                  z_grade_id,
     COALESCE(cnua.code_cnu_arrange, '00')                          z_discipline_id,
     /* Données identifiantes de base */
-    CASE ind.sexe
+    CASE COALESCE(ind.sexe_ow,ind.sexe)
         WHEN 'M' THEN 'M.'
         ELSE 'Mme'
         END                                                        z_civilite_id,

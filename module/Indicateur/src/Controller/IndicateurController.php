@@ -3,6 +3,7 @@
 namespace Indicateur\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Indicateur\Entity\Db\IndicateurDepassementCharges;
 use Application\Entity\Db\Intervenant;
 use Indicateur\Entity\Db\TypeIndicateur;
@@ -388,7 +389,6 @@ class IndicateurController extends AbstractController
     {
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
-
         $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code');
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
 
@@ -428,7 +428,7 @@ class IndicateurController extends AbstractController
         $idcs = $this->em()->createQuery($dql)->setParameters($params)->getResult();
         $title = 'Dépassement d\'heures (' . $typeVolumeHoraire . ') par rapport aux charges <small>' . $intervenant . '</small>';
 
-        return compact('title', 'intervenant', 'idcs');
+        return compact('title', 'intervenant', 'idcs', 'typeVolumeHoraireCode');
     }
 }
 

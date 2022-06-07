@@ -16,7 +16,7 @@ class v18Divers extends AbstractMigration
 
     public function utile(): bool
     {
-        return true;
+        return $this->manager->tableRealExists('STATUT_INTERVENANT');
     }
 
 

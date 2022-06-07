@@ -14,6 +14,7 @@ use Application\Form\PieceJointe\Traits\ModifierTypePieceJointeStatutFormAwareTr
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PieceJointeServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
+use Intervenant\Form\MailerIntervenantFormAwareTrait;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeServiceAwareTrait;
@@ -24,6 +25,8 @@ use UnicaenApp\View\Model\MessengerViewModel;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Model\JsonModel;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Intervenant\Service\MailServiceAwareTrait;
+use Intervenant\Service\NoteServiceAwareTrait;
 
 
 /**
@@ -41,7 +44,9 @@ class PieceJointeController extends AbstractController
     use TypePieceJointeServiceAwareTrait;
     use TypePieceJointeStatutServiceAwareTrait;
     use WorkflowServiceAwareTrait;
-
+    use MailServiceAwareTrait;
+    use NoteServiceAwareTrait;
+    use MailerIntervenantFormAwareTrait;
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -521,6 +526,49 @@ class PieceJointeController extends AbstractController
                 'piece_jointe',
             ], $objectIntervenant);
         }
+    }
+
+
+
+    public function refuserAction()
+    {
+        /** @var PieceJointe $pj */
+
+        $intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant();
+        if ($intervenant && $pj->getIntervenant() != $intervenant) {
+            // un intervenant tente de supprimer la PJ d'un autre intervenant
+            throw new \Exception('Vous ne pouvez pas supprimer la pièce jointe d\'un autre intervenant');
+        }
+
+        $pj = $this->getEvent()->getParam('pieceJointe');
+
+        $title = 'Rédiger un email à l\'intervenant pour le refus de pièce';
+
+        $form = $this->getFormMailerIntervenant()->setIntervenant($pj->getIntervenant())->initForm();
+
+        if ($this->getRequest()->isPost() && $this->getRequest()->getPost()->count() > 0) {
+            try {
+                $data    = $this->getRequest()->getPost();
+                $from    = $data['from'];
+                $to      = $data['to'];
+                $subject = $data['subject'];
+                $content = $data['content'];
+                $this->getServiceMail()->envoyerMail($from, $to, $subject, $content);
+                //Création d'une trace de l'envoi dans les notes de l'intervenant
+                $this->getServiceNote()->createNoteFromEmail($pj->getIntervenant(), $subject, $content);
+                $this->flashMessenger()->addSuccessMessage('Email envoyé à l\'intervenant');
+
+                foreach ($pj->getFichier() as $fichier) {
+                    $this->getServicePieceJointe()->supprimerFichier($fichier, $pj);
+                }
+
+                $this->updateTableauxBord($pj->getIntervenant());
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
+        }
+
+        return compact('pj', 'title', 'form');
     }
 
 }

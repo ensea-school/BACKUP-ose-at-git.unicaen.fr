@@ -137,6 +137,15 @@
                             <li><strong>:annee :</strong> année universitaire du contrat (ex : 2019/2020)</li>
                         </ul>
                         </p>
+                        <?= $this->formControlGroup($form->get('avenant')); ?>
+                        <?= $this->formControlGroup($form->get('contrat_direct')); ?>
+                        <?= $this->formControlGroup($form->get('contrat_date')); ?>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                    <div class="row">
+
                     </div>
                 </div>
             </div>
@@ -300,6 +309,7 @@
                 </div>
             </div>
         </div>
+
 
     </div>
 <?php

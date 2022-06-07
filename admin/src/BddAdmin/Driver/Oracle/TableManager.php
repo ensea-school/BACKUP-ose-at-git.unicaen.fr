@@ -149,7 +149,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
                     $type = Bdd::TYPE_CLOB;
                 break;
                 default:
-                    throw new BddException('Le type de colonne "' . $paq['type'] . '" n\'est pas reconnu');
+                    throw new BddException('Le type de colonne "' . $paq['type'] . '" n\'est pas reconnu pour ' . $paq['name'] . '.' . $paq['cname']);
             }
 
             $data[$paq['name']]['columns'][$paq['cname']] = [

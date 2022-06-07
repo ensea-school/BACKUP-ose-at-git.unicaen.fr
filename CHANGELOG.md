@@ -1,7 +1,45 @@
 # Version stable
 
-[OSE 18.0](#ose-18-23052022)
+[OSE 18.1](#ose-181-31052022)
 
+# OSE 19 (à venir)
+
+## Nouveautés
+
+* Ajout d'un paramètre général qui permet de choisir si un contrat peut avoir une date de retour signé ou non s'il n'y a pas de fichier
+* Ajout d'un paramètre général pour empêcher la création d'avenants
+* Ajout d'un paramètre général pour permettre de créer les contrats sans passer par un projet de contrat
+* Ajout de date de dernière modification des données dans les indicateurs notifiant d'une validation en attente
+
+# OSE 18.1 (31/05/2022)
+
+## Corrections de bugs
+
+* On peut maintenant se connecteur en CAS avec le login LDAP désativé (#44824)
+* **IMPORTANT** Dans la 18.0, les données personnelles ne pouvaient pas s'enregistrer
+* Pour certains intervenants multi-statuts, les agréments ne sont plus affichés en double
+* Les intervenants multi-statuts peuvent maintenant agir sur toutes leurs fiches sans avoir d'erreur de saisie
+
+## Notes de mise à jour
+
+Si vous êtes en version 17, se référer à toutes les notes de migration de la version 18.0
+
+Si vous êtes déjà en version 18.0, il vous faudra supprimer les tables de sauvegardes liées à la migration 17 --> 18 et la table STATUT_INTERVENANT
+**avant** de migrer en 18.1.
+
+```sql
+DROP TABLE SAVE_V18_DOSSIER_AUTRE_STATUT;
+DROP TABLE SAVE_V18_PLAFOND;
+DROP TABLE SAVE_V18_PLAFOND_APP;
+DROP TABLE SAVE_V18_REFERENTIEL;
+DROP TABLE SAVE_V18_STATUT;
+DROP TABLE SAVE_V18_STATUT_PRIVILEGE;
+DROP TABLE SAVE_V18_STRUCTURE;
+DROP TABLE SAVE_V18_TA_STATUT;
+DROP TABLE SAVE_V18_TIS;
+DROP TABLE SAVE_V18_TPJS;
+DROP TABLE STATUT_INTERVENANT;
+```
 
 
 # OSE 18 (23/05/2022)

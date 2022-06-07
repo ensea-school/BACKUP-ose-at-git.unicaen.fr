@@ -7,8 +7,10 @@ use Application\Entity\Db\Annee;
 use Application\Entity\Db\Structure;
 use Application\Service\AbstractService;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
+use DateTime;
 use Indicateur\Entity\Db\Indicateur;
 use Indicateur\Entity\Db\NotificationIndicateur;
+use phpDocumentor\Reflection\Types\Array_;
 
 
 /**
@@ -184,7 +186,28 @@ class IndicateurService extends AbstractService
             unset($d['STRUCTURE_ID']);
             $d['annee-id']    = $d['annee-id'] . '/' . ((int)$d['annee-id'] + 1);
             $d['prioritaire'] = $d['prioritaire'] ? 'Oui' : 'Non';
-            $result[]         = $d;
+            $count            = -1;
+            $datePresentes    = [];
+
+
+            //Regarde si les colonnes sont dans le format date pour l'afficher, si elles le sont ajoute le nom de la colonne dans l'array
+            foreach ($d as $dateTest) {
+                $count++;
+                if (!is_array($dateTest)) {
+                    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $dateTest);
+                    if ($dt && $dt->format('Y-m-d H:i:s') === $dateTest) {
+                        $keys            = array_keys($d);
+                        $datePresentes[] = $keys[$count];
+                    }
+                }
+            }
+
+            //Formate les date trouvé lors du parcours précedent au format voulu
+            foreach ($datePresentes as $datePresente) {
+                $dt               = DateTime::createFromFormat('Y-m-d H:i:s', $d[$datePresente]);
+                $d[$datePresente] = $dt->format(\Application\Constants::DATE_FORMAT);
+            }
+            $result[] = $d;
         }
 
         return $result;

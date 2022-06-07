@@ -490,7 +490,7 @@ class ParametresForm extends AbstractForm
 
             ],
             'attributes' => [
-                'rows' => 6,
+                'rows' => 12,
             ],
         ]);
 
@@ -563,6 +563,55 @@ class ParametresForm extends AbstractForm
             'attributes' => [
                 'value' => 'Enregistrer',
                 'class' => 'btn btn-primary',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'avenant',
+            'options'    => [
+                'label' => 'Possibilité de créer des avenants',
+
+                'value_options' => [
+                    PARAMETRE::AVENANT => 'Les avenants sont disponibles',
+                    'desactive'        => 'Fonctionnalité désactivée',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'contrat_direct',
+            'options'    => [
+                'label'         => 'Création de contrat sans passer par un projet',
+                'value_options' => [
+                    PARAMETRE::CONTRAT_DIRECT => 'Le contrat est crée directement',
+                    'desactive'               => 'Un projet de contrat doit être validé pour devenir un contrat',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'contrat_date',
+            'options'    => [
+                'label'         => 'Possibilité de saisir la date de retour signé sans ajouté le contrat',
+                'value_options' => [
+                    PARAMETRE::CONTRAT_DATE => 'La saisie est possible sans contrat',
+                    'desactive'             => 'Le contrat est nécessaire pour pouvoir saisir',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
             ],
         ]);
     }

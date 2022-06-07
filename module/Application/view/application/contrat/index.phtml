@@ -1,12 +1,15 @@
 <?php
 
+use \Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Provider\Privilege\Privileges;
 
 /**
- * @var $this        \Application\View\Renderer\PhpRenderer
- * @var $title       string
- * @var $intervenant \Application\Entity\Db\Intervenant
- * @var $contrats    \Application\Entity\Db\Contrat[]
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $title             string
+ * @var $intervenant       \Application\Entity\Db\Intervenant
+ * @var $contrats          \Application\Entity\Db\Contrat[]
+ * @var $avenant           boolean
+ * @var $contratDirect     boolean
  */
 
 $hasContrat = false;
@@ -17,7 +20,6 @@ foreach ($contrats as $contrat) {
 }
 
 $this->intervenant($intervenant)->renderTitle("Contrat/avenant");
-
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 if ($services['non-contractualises']) {
@@ -46,7 +48,8 @@ $this->messenger() ?>
 <?php if ($contrats || $services['non-contractualises']): ?>
 
     <?php if ($services['non-contractualises']): ?>
-        <table class="table table-bordered table-hover">
+        <?php if (!$hasContrat || $avenant): ?>
+            <table class="table table-bordered table-hover">
             <tr>
                 <th class="structure">Composante</th>
                 <th>Enseignement(s) non contractualisé(s)</th>
@@ -63,13 +66,19 @@ $this->messenger() ?>
                 <tr>
                     <td><?= $structure ?></td>
                     <td>
-                        <?php if ($canCreer): ?>
-                            <a class="btn btn-primary"
-                               href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
-                                <i class="fas fa-file"></i> Créer un
-                                projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
-                            </a>
-                        <?php else:
+                        <?php if ($canCreer):
+                            if ($contratDirect):?>
+                                <a class="btn btn-primary"
+                                   href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
+                                    <i class="fas fa-file"></i> Créer un <?= $hasContrat ? 'avenant' : 'contrat' ?>
+                                </a>
+                            <?php else: ?>
+                                <a class="btn btn-primary"
+                                   href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
+                                    <i class="fas fa-file"></i> Créer un projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
+                                </a>
+                            <?php endif;
+                        else:
                             echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
                         endif; ?>
                         <p>
@@ -88,13 +97,19 @@ $this->messenger() ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
+        <?php else: ?>
+            <div class="well">
+                <h2>La création d'avenant n'est pas disponible, elle a été désactivée dans les paramètres.</h2>
+            </div>
+        <?php endif; ?>
         </table>
+
     <?php endif; ?>
     <div class="well">
         <h2>Contrats et avenants</h2>
         <?php foreach ($contrats as $contrat): ?>
-
-            <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant]) ?>
+            <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect]);
+            ?>
 
         <?php endforeach; ?>
     </div>

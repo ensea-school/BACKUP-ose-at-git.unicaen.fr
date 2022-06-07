@@ -146,7 +146,11 @@ class ContratController extends AbstractController
         ];
 
         foreach ($contrats as $contrat) {
-            $services['contractualises'][$contrat->getId()] = $this->getProcessusContrat()->getServices($intervenant, $contrat, $role->getStructure());
+            if ($contrat->getStructure() == null) {
+                $services['contractualises'][$contrat->getId()] = $this->getProcessusContrat()->getServices($intervenant, $contrat, null);
+            } else {
+                $services['contractualises'][$contrat->getId()] = $this->getProcessusContrat()->getServices($intervenant, $contrat, $role->getStructure());
+            }
         }
 
         $nc = $this->getProcessusContrat()->getServices($intervenant, null, $role->getStructure());

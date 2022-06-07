@@ -161,9 +161,8 @@ class DataGen
         ],
         [
             'table'   => 'TYPE_RESSOURCE',
-            'context' => ['install', 'update'],
+            'context' => ['install'],
             'key'     => 'CODE',
-            'options' => ['update' => false, 'delete' => false],
         ],
         [
             'table'   => 'DOSSIER_CHAMP_AUTRE_TYPE',

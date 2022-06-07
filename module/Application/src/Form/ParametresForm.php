@@ -573,9 +573,9 @@ class ParametresForm extends AbstractForm
                 'label' => 'Possibilité de créer des avenants',
 
                 'value_options' => [
-                    PARAMETRE::AVENANT        => 'Tous les avenants sont disponibles',
-                    PARAMETRE::AVENANT_STRUCT => 'Un avenant est disponible par composante si celle-ci n\'a pas de contrat',
-                    'desactive'               => 'Aucun avenant ne peut être crée',
+                    PARAMETRE::AVENANT_AUTORISE  => 'Tous les avenants sont disponibles',
+                    PARAMETRE::AVENANT_STRUCT    => 'Un avenant est disponible par composante si celle-ci n\'a pas de contrat',
+                    PARAMETRE::AVENANT_DESACTIVE => 'Aucun avenant ne peut être crée',
                 ],
             ],
             'attributes' => [

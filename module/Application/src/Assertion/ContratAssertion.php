@@ -272,7 +272,7 @@ class ContratAssertion extends AbstractAssertion
 
     protected function assertStructure(Contrat $contrat, Structure $structure)
     {
-        return $contrat->getStructure() == $structure;
+        return $contrat->getStructure() == $structure || $contrat->getStructure() == null;
     }
 
 

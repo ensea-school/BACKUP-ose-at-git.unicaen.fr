@@ -470,7 +470,7 @@ class PaiementController extends AbstractController
             $filters = $recherche->getFilters();
 
             $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_extraction_paie');
-            $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters);
+            $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
             $csvModel->setFilename(str_replace(' ', '_', 'ose-export-paie-' . strtolower($recherche->getPeriode()->getLibelleAnnuel($recherche->getAnnee())) . '-' . strtolower($recherche->getTypeIntervenant()->getLibelle()) . '.csv'));
 
             return $csvModel;

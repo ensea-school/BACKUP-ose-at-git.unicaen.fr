@@ -65,7 +65,7 @@ class CampagneSaisieForm extends AbstractForm
             'name'    => 'messageIntervenant',
             'type'    => 'Text',
             'options' => [
-                'label' => 'Message informatif pour les intervenants',
+                'label' => 'Message informatif affiché pour les intervenants uniquement hors période de campagne',
             ],
         ]);
 
@@ -73,7 +73,7 @@ class CampagneSaisieForm extends AbstractForm
             'name'    => 'messageAutres',
             'type'    => 'Text',
             'options' => [
-                'label' => 'Message informatif pour les personnels',
+                'label' => 'Message informatif affiché pour les intervenants uniquement hors période de campagne',
             ],
         ]);
 
@@ -86,7 +86,6 @@ class CampagneSaisieForm extends AbstractForm
             ],
         ]);
     }
-
 
 
     /**
@@ -116,14 +115,11 @@ class CampagneSaisieForm extends AbstractForm
 }
 
 
-
-
-
 class CampagneSaisieFormHydrator implements HydratorInterface
 {
 
     /**
-     * @param array          $data
+     * @param array $data
      * @param CampagneSaisie $object
      *
      * @return CampagneSaisie
@@ -137,7 +133,6 @@ class CampagneSaisieFormHydrator implements HydratorInterface
 
         return $object;
     }
-
 
 
     /**

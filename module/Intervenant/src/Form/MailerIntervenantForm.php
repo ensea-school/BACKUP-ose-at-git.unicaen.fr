@@ -3,9 +3,11 @@
 namespace Intervenant\Form;
 
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Traits\ParametreAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Entity\Db\Note;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
@@ -27,10 +29,10 @@ class MailerIntervenantForm extends AbstractForm
 
     use DossierServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use ParametresServiceAwareTrait;
 
 
     protected Intervenant $intervenant;
-
 
 
     public function initForm()
@@ -47,19 +49,6 @@ class MailerIntervenantForm extends AbstractForm
         $this->setAttribute('action', $this->getCurrentUrl());
 
         $this->setAttribute('id', 'mailer-intervenant');
-
-
-        /*  $form = new Form();
-          $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
-          $form->add((new Text('from'))->setValue($from));
-          $form->add(new Text('cci'));
-          $form->add((new Text('nombre'))->setValue(count($emails)));
-          $form->add((new Text('subject'))->setValue($subject));
-          $form->add((new Textarea('body'))->setValue($body));
-          $form->add((new Checkbox('copy'))->setValue(1));
-          $form->add((new Hidden('intervenants'))->setValue($intervenantsStringIds));
-          $form->getInputFilter()->get('subject')->setRequired(true);
-          $form->getInputFilter()->get('body')->setRequired(true);*/
 
 
         $this->spec([
@@ -101,9 +90,16 @@ class MailerIntervenantForm extends AbstractForm
         $this->setValueOptions('to', $emailValues);
 
         //On set l'email expéditeur par rapport au contexte utilisateur
-        $context          = $this->getServiceContext();
-        $emailUtilisateur = $context->getUtilisateur()->getEmail();
-        $this->get('from')->setValue($emailUtilisateur);
+        $context = $this->getServiceContext();
+        $parametre = $this->getServiceParametres();
+        $fromDefault = trim($parametre->get('indicateur_email_expediteur'));
+        if (!empty($fromDefault)) {
+            $from = $fromDefault;
+        } else {
+            $from = $context->getUtilisateur()->getEmail();
+        }
+
+        $this->get('from')->setValue($from);
 
         //On set les labels des champs de formulaire
         $this->setLabels($labels);
@@ -119,14 +115,12 @@ class MailerIntervenantForm extends AbstractForm
     }
 
 
-
     public function setIntervenant(Intervenant $intervenant)
     {
         $this->intervenant = $intervenant;
 
         return $this;
     }
-
 
 
     public function getIntervenant(): Intervenant

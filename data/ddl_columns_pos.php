@@ -1337,6 +1337,7 @@ return [
         'REFERENTIEL_REALISE',
         'REFERENTIEL_REALISE_EDITION',
         'REFERENTIEL_REALISE_VISU',
+        'CONTRAT_ETAT_SORTIE_ID',
     ],
     'STRUCTURE'                      => [
         'ID',

@@ -28,7 +28,6 @@ class EtatSortieService extends AbstractEntityService
     private $config;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -39,7 +38,6 @@ class EtatSortieService extends AbstractEntityService
     {
         return EtatSortie::class;
     }
-
 
 
     /**
@@ -53,7 +51,6 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
-
     /**
      * @param string $param
      *
@@ -63,7 +60,7 @@ class EtatSortieService extends AbstractEntityService
     public function getByParametre(string $param): EtatSortie
     {
         $etatSortieId = $this->getServiceParametres()->get($param);
-        $etatSortie   = $this->get($etatSortieId);
+        $etatSortie = $this->get($etatSortieId);
         if (!$etatSortie) {
             throw new \Exception('Etat de sortie "' . $param . '" non configuré dans les paramètres de OSE');
         }
@@ -72,11 +69,10 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
-
     /***
      * @param EtatSortie $etatSortie
-     * @param array      $filtres
-     * @param array      $options
+     * @param array $filtres
+     * @param array $options
      *
      * @return Document
      * @throws \Exception
@@ -100,8 +96,8 @@ class EtatSortieService extends AbstractEntityService
         }
 
         $entityManager = $this->getEntityManager();
-        $data          = $this->generateData($etatSortie, $filtres);
-        $role          = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
+        $data = $this->generateData($etatSortie, $filtres);
+        $role = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
 
         if (trim($etatSortie->getPdfTraitement())) {
             $__PHP__CODE__TRAITEMENT__ = $etatSortie->getPdfTraitement();
@@ -111,7 +107,7 @@ class EtatSortieService extends AbstractEntityService
 
                 return $data;
             };
-            $data       = $traitement();
+            $data = $traitement();
         }
         if (!$document->getPublisher()->isPublished()) $document->publish($data);
 
@@ -119,11 +115,10 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
-
     /**
      * @param EtatSortie $etatSortie
-     * @param array      $filtres
-     * @param array      $options
+     * @param array $filtres
+     * @param array $options
      *
      * @return CsvModel
      * @throws \Exception
@@ -131,10 +126,17 @@ class EtatSortieService extends AbstractEntityService
     public function genererCsv(EtatSortie $etatSortie, array $filtres, array $options = []): CsvModel
     {
         $csv = new CsvModel();
+        //Uniquement dans le cas de la préliquidation siham
+        if ($etatSortie->getCode() == 'preliquidation-siham') {
+            $periode = $options['periode'];
+            $annee = $options['annee'];
+            $this->setAnneePaie($filtres['ANNEE_ID'], $periode->getCode());
+            $this->setMoisPaie($periode->getCode());
+        }
 
         $entityManager = $this->getEntityManager();
-        $data          = $this->generateData($etatSortie, $filtres);
-        $role          = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
+        $data = $this->generateData($etatSortie, $filtres);
+        $role = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
 
 
         if (trim($etatSortie->getCsvTraitement())) {
@@ -145,7 +147,7 @@ class EtatSortieService extends AbstractEntityService
 
                 return $data;
             };
-            $data       = $traitement();
+            $data = $traitement();
         }
 
         if (!$csv->getFilename()) {
@@ -155,7 +157,7 @@ class EtatSortieService extends AbstractEntityService
             $params = $etatSortie->getCsvParamsArray();
 
             $blocs = $etatSortie->getBlocs();
-            $bkey  = null;
+            $bkey = null;
             foreach ($blocs as $bloc) {
                 $bkey = $bloc['nom'] . '@' . $bloc['zone'];
                 break;
@@ -202,7 +204,6 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
-
     private function filterData(array $line, array $params): array
     {
         foreach ($line as $k => $v) {
@@ -213,21 +214,20 @@ class EtatSortieService extends AbstractEntityService
                 switch (strtolower($type)) {
                     case 'float':
                         $line[$k] = (float)$v;
-                    break;
+                        break;
                     case 'date':
                         $date = \DateTime::createFromFormat('Y-m-d H:i:s', $v);
                         if ($date instanceof \DateTime) {
-                            $format   = isset($params[$k]['format']) ? $params[$k]['format'] : Constants::DATE_FORMAT;
+                            $format = isset($params[$k]['format']) ? $params[$k]['format'] : Constants::DATE_FORMAT;
                             $line[$k] = $date->format($format);
                         }
-                    break;
+                        break;
                 }
             }
         }
 
         return $line;
     }
-
 
 
     private function generateData(EtatSortie $etatSortie, array $filtres)
@@ -245,7 +245,6 @@ class EtatSortieService extends AbstractEntityService
 
         throw new \Exception('Aucune requête n\'est associée à l\'état de sortie');
     }
-
 
 
     private function generateDataWithCle(EtatSortie $etatSortie, array $filtres)
@@ -266,7 +265,7 @@ class EtatSortieService extends AbstractEntityService
 
         $blocs = $etatSortie->getBlocs();
         foreach ($blocs as $bname => $boptions) {
-            $bdata   = $this->connBlocFetch($boptions['requete'], $etatSortie->getRequete(), $cle, $filtres);
+            $bdata = $this->connBlocFetch($boptions['requete'], $etatSortie->getRequete(), $cle, $filtres);
             $blocKey = $boptions['nom'] . '@' . $boptions['zone'];
             foreach ($bdata as $d) {
                 if (!array_key_exists($cle, $d)) {
@@ -284,12 +283,11 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
-
     private function connFetch(string $sql, array $filtres)
     {
         $connection = $this->getEntityManager()->getConnection();
 
-        $query        = "SELECT q.* FROM ($sql) q WHERE 1=1";
+        $query = "SELECT q.* FROM ($sql) q WHERE 1=1";
         $queryFilters = $filtres;
         foreach ($filtres as $filtre => $values) {
             if (is_array($values)) {
@@ -300,18 +298,18 @@ class EtatSortieService extends AbstractEntityService
                     if ($index > 0) {
                         $query .= ' OR ';
                     }
-                    $query                          .= "q.\"$filtre\" = :$filtre$index";
+                    $query .= "q.\"$filtre\" = :$filtre$index";
                     $queryFilters[$filtre . $index] = $val;
                     $index++;
                 }
                 $query .= ")";
             } else {
                 if (false !== strpos($filtre, ' OR ')) {
-                    $newFiltre                = str_replace(' ', '_', $filtre);
+                    $newFiltre = str_replace(' ', '_', $filtre);
                     $queryFilters[$newFiltre] = $queryFilters[$filtre];
                     unset($queryFilters[$filtre]);
                     $orFiltres = explode(" OR ", $filtre);
-                    $orQuery   = '';
+                    $orQuery = '';
                     foreach ($orFiltres as $orFiltre) {
                         if ($orQuery) $orQuery .= ' OR ';
                         $orQuery .= "q.\"$orFiltre\" = :$newFiltre";
@@ -327,12 +325,11 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
-
     private function connBlocFetch(string $sql, string $mainSql, string $cle, array $filtres)
     {
         $connection = $this->getEntityManager()->getConnection();
 
-        $query        = "SELECT q.* FROM ($sql) q JOIN ($mainSql) mq ON mq.\"$cle\" = q.\"$cle\" WHERE 1=1";
+        $query = "SELECT q.* FROM ($sql) q JOIN ($mainSql) mq ON mq.\"$cle\" = q.\"$cle\" WHERE 1=1";
         $queryFilters = $filtres;
         foreach ($filtres as $filtre => $values) {
             if (is_array($values)) {
@@ -343,7 +340,7 @@ class EtatSortieService extends AbstractEntityService
                     if ($index > 0) {
                         $query .= ' OR ';
                     }
-                    $query                          .= "mq.\"$filtre\" = :$filtre$index";
+                    $query .= "mq.\"$filtre\" = :$filtre$index";
                     $queryFilters[$filtre . $index] = $val;
                     $index++;
                 }
@@ -357,7 +354,6 @@ class EtatSortieService extends AbstractEntityService
     }
 
 
-
     /**
      * @return array
      */
@@ -365,7 +361,6 @@ class EtatSortieService extends AbstractEntityService
     {
         return $this->config;
     }
-
 
 
     /**
@@ -379,5 +374,61 @@ class EtatSortieService extends AbstractEntityService
 
         return $this;
     }
+
+    public function setAnneePaie(string $annee, string $periode)
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $anneeFormatted = $annee - 2000;
+        //on ajouter +1 à l'année courante si on est sur une période après le mois de décembre
+        if (!in_array($periode, ['P01', 'P02', 'P03', 'P04'])) {
+            $anneeFormatted++;
+        }
+
+
+        $query = "begin
+         ose_paiement.set_annee_extraction_paie('$anneeFormatted');
+         END;";
+
+        $connection->executeQuery($query);
+
+        return $this;
+
+    }
+
+    public function setMoisPaie($periode)
+    {
+        $connection = $this->getEntityManager()->getConnection();
+
+        $mappingPeriode = [
+            'P01' => '09',
+            'P02' => '10',
+            'P03' => '11',
+            'P04' => '12',
+            'P05' => '01',
+            'P06' => '02',
+            'P07' => '03',
+            'P08' => '04',
+            'P09' => '05',
+            'P10' => '06',
+            'P11' => '07',
+            'P12' => '08',
+            'P13' => '09',
+            'P14' => '10',
+            'P15' => '11',
+            'P16' => '12',
+        ];
+
+        $mois = (array_key_exists($periode, $mappingPeriode)) ? $mappingPeriode[$periode] : '09';
+
+        $query = "begin
+         ose_paiement.set_mois_extraction_paie('$mois');
+         END;";
+
+        $connection->executeQuery($query);
+
+        return $this;
+
+    }
+
 
 }

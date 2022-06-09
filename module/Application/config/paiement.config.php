@@ -66,13 +66,13 @@ return [
                             ],
                         ],
                     ],
-                    'extraction-winpaie'    => [
+                    'extraction-paie'       => [
                         'type'          => 'Segment',
                         'may_terminate' => true,
                         'options'       => [
-                            'route'    => '/extraction-winpaie[/:type][/:periode]',
+                            'route'    => '/extraction-paie[/:type][/:periode]',
                             'defaults' => [
-                                'action' => 'extractionWinpaie',
+                                'action' => 'extractionPaie',
                             ],
                         ],
                     ],
@@ -167,13 +167,14 @@ return [
                                         'route'    => 'paiement/mises-en-paiement-csv',
                                         'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV),
                                     ],
-                                    'extraction-winpaie'    => [
-                                        'label'    => "Extraction Winpaie",
-                                        'title'    => "Export des données de paiement au format Winpaie",
-                                        'route'    => 'paiement/extraction-winpaie',
+                                    'extraction-paie'       => [
+                                        'label'    => "Extraction paie",
+                                        'title'    => "Export des données de paiement au format attendu",
+                                        'route'    => 'paiement/extraction-paie',
                                         'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                                     ],
-                                    'imputation-siham'      => [
+
+                                    'imputation-siham' => [
                                         'label'    => "Imputation budgétaire SIHAM",
                                         'title'    => "Export des données pour chargement en masse des imputations budgétaires dans SIHAM",
                                         'route'    => 'paiement/imputation-siham',
@@ -245,7 +246,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
-                    'action'     => ['extractionWinpaie', 'imputationSiham'],
+                    'action'     => ['extractionPaie', 'imputationSiham'],
                     'privileges' => [Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE],
                 ],
             ],

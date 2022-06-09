@@ -79,11 +79,17 @@ class ContextService extends AbstractService
     {
         if (!$this->intervenantInit || $this->serviceUserContext->getNextSelectedIdentityRole()) {
             $this->intervenantInit = true;
-            $utilisateurCode       = $this->getConnecteurLdap()->getUtilisateurCourantCode();
-            if ($utilisateurCode) {
-                $this->intervenant = $this->getServiceIntervenant()->getByUtilisateurCode($utilisateurCode);
+
+            $sc = $this->getSessionContainer();
+            if (!$this->intervenant && ($id = $sc->intervenantId)) {
+                $this->intervenant = $this->getServiceIntervenant()->get($id);
             } else {
-                return null;
+                $utilisateurCode = $this->getConnecteurLdap()->getUtilisateurCourantCode();
+                if ($utilisateurCode) {
+                    $this->intervenant = $this->getServiceIntervenant()->getByUtilisateurCode($utilisateurCode);
+                } else {
+                    return null;
+                }
             }
         }
 
@@ -116,6 +122,8 @@ class ContextService extends AbstractService
     public function setIntervenant(?Intervenant $intervenant): self
     {
         $this->intervenant = $intervenant;
+        $sc                = $this->getSessionContainer();
+        $sc->intervenantId = $intervenant ? $intervenant->getId() : null;
 
         return $this;
     }

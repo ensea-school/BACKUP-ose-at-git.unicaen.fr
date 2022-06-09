@@ -1,6 +1,10 @@
 CREATE
 OR REPLACE FORCE VIEW V_EXPORT_PAIEMENT_SIHAM AS
-SELECT 'P'                                                                   type,
+SELECT annee_id,
+       type_intervenant_id,
+       structure_id,
+       periode_id,
+       'P'                                                                   type,
        code_rh                                                               matricule,
        CASE WHEN type_intervenant_code = 'P' THEN '200204' ELSE '202251' END retenue,
        ose_paiement.get_format_mois_du()                                     du_mois,

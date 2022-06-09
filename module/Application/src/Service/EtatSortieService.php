@@ -130,11 +130,7 @@ class EtatSortieService extends AbstractEntityService
         if ($etatSortie->getCode() == 'preliquidation-siham') {
             $periode = $options['periode'];
             $annee = $options['annee'];
-            var_dump($periode->getDatePaiement($annee));
-            die;
-            var_dump($filtres['ANNEE_ID']);
-            die;
-            $this->setAnneePaie($filtres['ANNEE_ID']);
+            $this->setAnneePaie($filtres['ANNEE_ID'], $periode->getCode());
             $this->setMoisPaie($periode->getCode());
         }
 
@@ -379,10 +375,14 @@ class EtatSortieService extends AbstractEntityService
         return $this;
     }
 
-    public function setAnneePaie(string $annee)
+    public function setAnneePaie(string $annee, string $periode)
     {
         $connection = $this->getEntityManager()->getConnection();
-        $anneeFormatted = (string)($annee - 2000);
+        $anneeFormatted = $annee - 2000;
+        //on ajouter +1 à l'année courante si on est sur une période après le mois de décembre
+        if (!in_array($periode, ['P01', 'P02', 'P03', 'P04'])) {
+            $anneeFormatted++;
+        }
 
 
         $query = "begin
@@ -429,5 +429,6 @@ class EtatSortieService extends AbstractEntityService
         return $this;
 
     }
+
 
 }

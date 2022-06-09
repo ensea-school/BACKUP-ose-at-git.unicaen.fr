@@ -72,7 +72,7 @@ class ModeleContratService extends AbstractEntityService
     public function generer(Contrat $contrat, $download = true)
     {
         $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
-            $contrat->getStructure()->getCode(),
+            ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
             $contrat->getIntervenant()->getNomUsuel(),
             $contrat->getIntervenant()->getCode());
 
@@ -115,7 +115,7 @@ class ModeleContratService extends AbstractEntityService
     public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null)
     {
         $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
-            $contrat->getStructure()->getCode(),
+            ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
             $contrat->getIntervenant()->getNomUsuel(),
             $contrat->getIntervenant()->getCode());
 

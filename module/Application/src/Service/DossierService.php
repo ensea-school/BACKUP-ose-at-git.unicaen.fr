@@ -101,7 +101,7 @@ class DossierService extends AbstractEntityService
             $emailsIntervenantDossierPro = $res['EMAIL_PRO'] ?? '';
         }
         $emailsIntervenantPerso = $intervenant->getEmailPerso();
-        $emailsIntervenantPro = $intervenant->getEmailPerso();
+        $emailsIntervenantPro = $intervenant->getEmailPro();
 
         $emails['perso'] = (!empty($emailsIntervenantDossierPerso)) ? $emailsIntervenantDossierPerso : $emailsIntervenantPerso;
         $emails['pro'] = (!empty($emailsIntervenantDossierPro)) ? $emailsIntervenantDossierPro : $emailsIntervenantPro;

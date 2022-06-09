@@ -134,6 +134,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
                 break;
                 case 'VARCHAR2':
                 case 'CHAR':
+                case 'RAW':
                     $type = Bdd::TYPE_STRING;
                 break;
                 case 'DATE':

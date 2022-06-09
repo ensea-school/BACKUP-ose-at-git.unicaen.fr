@@ -29,20 +29,19 @@ class IndicateurService extends AbstractService
 
     protected function getViewDef(int $numero, Annee $annee): string
     {
-        $view    = 'V_INDICATEUR_' . $numero;
-        $sql     = "SELECT TEXT FROM USER_VIEWS WHERE VIEW_NAME = :view";
+        $view = 'V_INDICATEUR_' . $numero;
+        $sql = "SELECT text FROM user_views WHERE view_name = :view";
         $viewDef = $this->getEntityManager()->getConnection()->fetchAssociative($sql, compact('view'))['TEXT'];
 
         return $viewDef;
     }
 
 
-
     protected function fetchData(Indicateur $indicateur, ?Structure $structure = null, bool $onlyCount = true): array
     {
-        $numero    = $indicateur->getNumero();
+        $numero = $indicateur->getNumero();
         $structure = $structure ?: $this->getServiceContext()->getStructure();
-        $annee     = $this->getServiceContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
 
         if ($indicateur->getTypeIndicateur()->isPlafond()) {
             $viewDef = $this->getServiceIndicateur()->makeQuery($indicateur);
@@ -54,14 +53,15 @@ class IndicateurService extends AbstractService
             'annee' => $annee->getId(),
         ];
         if ($onlyCount) {
-            $select  = "COUNT(DISTINCT i.id) NB";
+            $select = "COUNT(DISTINCT i.id) NB";
             $orderBy = "";
         } else {
-            $select  = "
+            $select = "
             i.annee_id                 \"annee-id\",
             si.libelle                 \"statut-libelle\",
             si.prioritaire_indicateurs \"prioritaire\",
-            i.code_rh                  \"intervenant-code\",
+            i.code_rh                  \"intervenant-code-rh\",
+            i.code                     \"intervenant-code\",
             i.prenom                   \"intervenant-prenom\",
             i.nom_usuel                \"intervenant-nom\",
             i.email_perso              \"intervenant-email-perso\",
@@ -86,13 +86,12 @@ class IndicateurService extends AbstractService
         }
         if ($structure) {
             $params['structure'] = $structure->getId();
-            $sql                 .= ' AND (indic.structure_id = :structure OR indic.structure_id IS NULL)';
+            $sql .= ' AND (indic.structure_id = :structure OR indic.structure_id IS NULL)';
         }
         $sql .= $orderBy;
 
         return $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
     }
-
 
 
     /**
@@ -106,7 +105,6 @@ class IndicateurService extends AbstractService
     }
 
 
-
     /**
      * @param Indicateur $indicateur Indicateur concerné
      *
@@ -115,12 +113,12 @@ class IndicateurService extends AbstractService
     public function getResult(NotificationIndicateur|Indicateur $indicateur): array
     {
         if ($indicateur instanceof NotificationIndicateur) {
-            $structure  = $indicateur->getAffectation()->getStructure();
+            $structure = $indicateur->getAffectation()->getStructure();
             $indicateur = $indicateur->getIndicateur();
         } else {
             $structure = null;
         }
-        $data   = $this->fetchData($indicateur, $structure, false);
+        $data = $this->fetchData($indicateur, $structure, false);
         $result = [];
 
         foreach ($data as $d) {
@@ -173,18 +171,17 @@ class IndicateurService extends AbstractService
     }
 
 
-
     public function getCsv(Indicateur $indicateur): array
     {
-        $data   = $this->fetchData($indicateur, null, false);
+        $data = $this->fetchData($indicateur, null, false);
         $result = [];
 
         foreach ($data as $d) {
             unset($d['INTERVENANT_ID']);
             unset($d['STRUCTURE_ID']);
-            $d['annee-id']    = $d['annee-id'] . '/' . ((int)$d['annee-id'] + 1);
+            $d['annee-id'] = $d['annee-id'] . '/' . ((int)$d['annee-id'] + 1);
             $d['prioritaire'] = $d['prioritaire'] ? 'Oui' : 'Non';
-            $result[]         = $d;
+            $result[] = $d;
         }
 
         return $result;

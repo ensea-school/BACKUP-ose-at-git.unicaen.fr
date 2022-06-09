@@ -33,6 +33,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
             unset($supCols['structure-libelle']);
             unset($supCols['prioritaire']);
             unset($supCols['intervenant-code']);
+            unset($supCols['intervenant-code-rh']);
             unset($supCols['intervenant-prenom']);
             unset($supCols['intervenant-nom']);
             unset($supCols['intervenant-email-pro']);
@@ -85,7 +86,13 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                             <td><?php printValue($r['structure-libelle']); ?></td>
                             <td>
                                 <a href="<?= $this->url($indicateur->getRoute(), ['intervenant' => $intervenantId]) ?>">
-                                    <?= $r['intervenant-nom'] . ' ' . $r['intervenant-prenom'] . ' <small>(n°' . $r['intervenant-code'] . ' / ' . $r['statut-libelle'] . ')</small>' ?>
+                                    <?php
+                                    if (!empty($r['intervenant-code-rh'])) {
+                                        echo $r['intervenant-nom'] . ' ' . $r['intervenant-prenom'] . " <small>(n°" . $r['intervenant-code-rh'] . ' / ' . $r['statut-libelle'] . ")</small>";
+                                    } else {
+                                        echo $r['intervenant-nom'] . ' ' . $r['intervenant-prenom'] . " <small>(" . $r['statut-libelle'] . ")</small>";
+                                    }
+                                    ?>
                                 </a>
                             </td>
                             <?php foreach ($supCols as $supCol): ?>

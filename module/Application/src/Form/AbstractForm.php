@@ -51,7 +51,7 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
      *
      * @param                                $entity
      * @param Request                        $request
-     * @param AbstractEntityService|function $saveFnc
+     * @param AbstractEntityService|callable $saveFnc
      * @param string                         $successMessage
      *
      * @return bool

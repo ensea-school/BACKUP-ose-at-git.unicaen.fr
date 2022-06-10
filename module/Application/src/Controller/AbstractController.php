@@ -12,7 +12,7 @@ use Laminas\Mvc\Controller\AbstractActionController;
  *
  * @method \Application\Controller\Plugin\Context context()
  * @method \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger flashMessenger()
- * @method \BjyAuthorize\Controller\Plugin\IsAllowed isAllowed()
+ * @method \BjyAuthorize\Controller\Plugin\IsAllowed isAllowed($resource, $privilege = null)
  *
  */
 abstract class AbstractController extends AbstractActionController

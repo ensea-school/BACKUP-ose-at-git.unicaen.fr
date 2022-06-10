@@ -230,10 +230,6 @@ class DataGen
             ],
         ],
         [
-            'table'   => 'MODELE_CONTRAT',
-            'context' => ['install'],
-        ],
-        [
             'table'   => 'ROLE',
             'context' => ['install'],
             'key'     => 'CODE',

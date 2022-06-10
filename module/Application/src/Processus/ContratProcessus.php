@@ -19,6 +19,10 @@ use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Laminas\Mail\Message as MailMessage;
+use Laminas\Mime\Message;
+use Laminas\Mime\Mime;
+use Laminas\Mime\Part;
 
 
 /**
@@ -384,4 +388,61 @@ class ContratProcessus extends AbstractProcessus
         return $fr->getServiceDu() + $fr->getSolde();
     }
 
+
+
+    public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null)
+    {
+        $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
+            ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
+            $contrat->getIntervenant()->getNomUsuel(),
+            $contrat->getIntervenant()->getCode());
+
+        $document = $this->getServiceContrat()->generer($contrat, false);
+        $content  = $document->saveToData();
+
+        if (empty($subject)) {
+            $subject = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
+        }
+
+
+        if (empty($to)) {
+            throw new \Exception("Aucun email disponible pour le destinataire / Envoi du contrat impossible");
+        }
+        if (empty($from)) {
+            throw new \Exception("Aucun email disponible pour l'expéditeur / Envoi du contrat impossible");
+        }
+        $bcc = [];
+        if (!empty($cci)) {
+            $bcc = explode(';', $cci);
+        }
+
+        $body = new Message();
+
+        $text          = new Part($htmlContent);
+        $text->type    = Mime::TYPE_HTML;
+        $text->charset = 'utf-8';
+        $body->addPart($text);
+        $nameFrom = "Application OSE";
+
+
+        //Contrat en pièce jointe
+        $attachment              = new Part($content);
+        $attachment->type        = 'application/pdf';
+        $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+        $attachment->encoding    = Mime::ENCODING_BASE64;
+        $attachment->filename    = $fileName;
+        $body->addPart($attachment);
+
+        $message     = new MailMessage();
+        $messageType = 'multipart/related';
+        $message->setEncoding('UTF-8')
+            ->setFrom($from, $nameFrom)
+            ->setSubject($subject)
+            ->addTo($to)
+            ->addBcc($bcc)
+            ->setBody($body)
+            ->getHeaders()->get('content-type')->setType($messageType);
+
+        return $message;
+    }
 }

@@ -158,7 +158,7 @@ Objectif : Plafonds personnalisables & refonte gestion des statuts
 7. Pour votre instance de production, la nouvelle commande `./bin/ose maj-exports` doit être lancée régulièrement (cf. [procédure d'installation](install.md)). Ceci met à jour toutes les vues matérialisées dédiées à l'export MV_EXT_*.
 8. Mettez à jour votre vue source [SRC_INTERVENANT](doc/Connecteurs-Import/Générique/SRC_INTERVENANT.sql)
 9. Réactivez la synchronisation en import pour la table INTERVENANT, que la mise à jour a volontairement désactivée (en production).
-10. Mettez à jour votre [modèle de contrat de travail](data/modele_contrat_ventile.odt) si vous voulez bénéficier de la ventilation par CM/TD/TP/Autres des heures. 
+10. Mettez à jour votre [modèle de contrat de travail](https://git.unicaen.fr/open-source/OSE/-/blob/18.0/data/modele_contrat_ventile.odt) si vous voulez bénéficier de la ventilation par CM/TD/TP/Autres des heures. 
 11. Si vous utilisez l'export RH Siham, renseignez un nouveau paramètre dans Administration > paramètres généraux > Gestion export RH, en sélectionnant l'étape de la feuille de route franchie à partir de laquelle l'intervenant peut être exporté dans SIHAM.
 12. Au niveau du fichier de configuration [config.local.php](config.local.php.default), vous pouvez remplir les paramètres (facultatifs) ldap>systemeInformationUrl, les paramètres ldap>local et ldap>usurpationIdentite.
 13. Sortez du mode maintenance

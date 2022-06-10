@@ -155,55 +155,6 @@ return [
                             ],
                         ],
                     ],
-                    'modeles'             => [
-                        'type'          => 'Literal',
-                        'options'       => [
-                            'route'    => '/modeles',
-                            'defaults' => [
-                                'controller' => 'Application\Controller\Contrat',
-                                'action'     => 'modeles-liste',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                        'child_routes'  => [
-                            'editer'      => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'       => '/editer[/:modeleContrat]',
-                                    'constraints' => [
-                                        'modeleContrat' => '[0-9]*',
-                                    ],
-                                    'defaults'    => [
-                                        'action' => 'modeles-editer',
-                                    ],
-                                ],
-                            ],
-                            'telecharger' => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'       => '/telecharger[/:modeleContrat]',
-                                    'constraints' => [
-                                        'modeleContrat' => '[0-9]*',
-                                    ],
-                                    'defaults'    => [
-                                        'action' => 'modeles-telecharger',
-                                    ],
-                                ],
-                            ],
-                            'supprimer'   => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'       => '/supprimer/:modeleContrat',
-                                    'constraints' => [
-                                        'contrat' => '[0-9]*',
-                                    ],
-                                    'defaults'    => [
-                                        'action' => 'modeles-supprimer',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
                 ],
             ],
         ],
@@ -269,19 +220,6 @@ return [
                     'privileges' => Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE,
                     'assertion'  => Assertion\ContratAssertion::class,
                 ],
-
-                /* Modèles de contrat */
-                [
-                    'controller' => 'Application\Controller\Contrat',
-                    'action'     => ['modeles-liste', 'modeles-telecharger'],
-                    'privileges' => Privileges::CONTRAT_MODELES_VISUALISATION,
-                    'assertion'  => Assertion\ContratAssertion::class,
-                ],
-                [
-                    'controller' => 'Application\Controller\Contrat',
-                    'action'     => ['modeles-editer', 'modeles-supprimer'],
-                    'privileges' => Privileges::CONTRAT_MODELES_EDITION,
-                ],
             ],
         ],
         'resource_providers' => [
@@ -316,26 +254,6 @@ return [
             ],
         ],
     ],
-    'navigation'      => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'administration' => [
-                        'pages' => [
-                            'contrats' => [
-                                'label'        => 'Modèles de contrats de travail',
-                                'icon'         => 'fas fa-commenting',
-                                'route'        => 'contrat/modeles',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Contrat', 'modeles-liste'),
-                                'order'        => 60,
-                                'border-color' => '#FFA643',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
     'controllers'     => [
         'factories' => [
             'Application\Controller\Contrat' => Controller\Factory\ContratControllerFactory::class,
@@ -343,8 +261,7 @@ return [
     ],
     'service_manager' => [
         'factories'  => [
-            Service\ModeleContratService::class => Service\Factory\ModeleContratServiceFactory::class,
-            Assertion\ContratAssertion::class   => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\ContratAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
         'invokables' => [
             Service\ContratService::class     => Service\ContratService::class,

@@ -198,8 +198,6 @@ return [
             'devalidation'             => 'Dévalidation',
             'depot-retour-signe'       => 'Dépôt de contrat signé',
             'saisie-date-retour-signe' => 'Saisie de date retour',
-            'modeles-visualisation'    => 'Visualisation des modèles',
-            'modeles-edition'          => 'Édition des modèles',
             'projet-generation'        => 'Génération de projet de contrat',
             'contrat-generation'       => 'Génération de contrat',
             'envoi-email'              => 'Envoyer le contrat par email',

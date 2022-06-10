@@ -236,9 +236,12 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 <div class="row">
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('contrat')); ?>
-                        <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::CONTRAT_MODELES_VISUALISATION))): ?>
-                            <a target="_blank" href="<?= $this->url('contrat/modeles'); ?>">Page d'administration des modèles de contrats de travail</a>
-                        <?php endif; ?>
+                        <div class="contratDetails">
+                            <?= $this->formControlGroup($form->get('contratEtatSortie')); ?>
+                            <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::CONTRAT_MODELES_VISUALISATION))): ?>
+                                <a target="_blank" href="<?= $this->url('etat-sortie'); ?>">Page d'administration des états de sortie</a>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -355,6 +358,13 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 this.element.find('.agrementCADetails').toggle(visible);
             },
 
+            contratVisu: function ()
+            {
+                var visible = this.el('contrat').val() != 'desactive';
+
+                this.element.find('.contratDetails').toggle(visible);
+            },
+
             _create: function ()
             {
                 var that = this;
@@ -364,6 +374,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 that.servicesVisu();
                 that.agrementCRVisu();
                 that.agrementCAVisu();
+                that.contratVisu();
 
                 that.el('dossier').change(function () {that.donneesVisu()});
                 that.el('dossierContact').change(function () {that.donneesContactVisu()});
@@ -371,6 +382,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 that.el('serviceRealise').change(function () {that.servicesVisu()});
                 that.el('conseilRestreint').change(function () {that.agrementCRVisu()});
                 that.el('conseilAcademique').change(function () {that.agrementCAVisu()});
+                that.el('contrat').change(function () {that.contratVisu()});
             },
 
 

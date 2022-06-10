@@ -26,6 +26,8 @@ use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
+use Laminas\Http\Response;
+use LogicException;
 use Phan\Debug;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\Util;
@@ -101,7 +103,7 @@ class ContratController extends AbstractController
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         if (!$intervenant) {
-            throw new \LogicException('Intervenant non précisé ou inexistant');
+            throw new LogicException('Intervenant non précisé ou inexistant');
         }
         $structure = $role->getStructure();
 
@@ -162,11 +164,11 @@ class ContratController extends AbstractController
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
         if (!$intervenant) {
-            throw new \LogicException('L\'intervenant n\'est pas précisé');
+            throw new LogicException('L\'intervenant n\'est pas précisé');
         }
 
         if (!$structure) {
-            throw new \LogicException('La structure n\'est pas précisée');
+            throw new LogicException('La structure n\'est pas précisée');
         }
 
         $contrat = $this->getProcessusContrat()->creer($intervenant, $structure);
@@ -200,7 +202,7 @@ class ContratController extends AbstractController
      * Suppression d'un projet de contrat/avenant par la composante d'intervention.
      *
      * @return \Laminas\View\Model\ViewModel
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function supprimerAction()
     {
@@ -212,7 +214,7 @@ class ContratController extends AbstractController
         $contratToString = lcfirst($contrat->toString(true, true));
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_SUPPRESSION)) {
-            throw new \LogicException("La suppression $contratToString n'est pas possible.");
+            throw new LogicException("La suppression $contratToString n'est pas possible.");
         }
 
         if ($this->getRequest()->isPost()) {
@@ -282,7 +284,7 @@ class ContratController extends AbstractController
      * Dévalidation du contrat/avenant par la composante d'intervention.
      *
      * @return \Laminas\View\Model\ViewModel
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function devaliderAction()
     {
@@ -318,7 +320,7 @@ class ContratController extends AbstractController
      * Saisie de la date de retour du contrat/avenant signé par l'intervenant.
      *
      * @return \Laminas\View\Model\ViewModel
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function saisirRetourAction()
     {
@@ -380,11 +382,7 @@ class ContratController extends AbstractController
 
     public function envoyerMailAction()
     {
-        /**
-         * @var Contrat $contrat
-         */
-
-
+        /** @var Contrat $contrat */
         $contrat = $this->getEvent()->getParam('contrat');
 
         if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
@@ -472,7 +470,7 @@ class ContratController extends AbstractController
     /**
      * Listing des fichiers déposés pour le contrat.
      *
-     * @return aarray
+     * @return array
      */
     public function listerFichierAction()
     {

@@ -1370,7 +1370,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Contrat|null
      */
-    public function getContratInitial()
+    public function getContratInitial(): ?Contrat
     {
         if (!count($this->getContrat())) {
             return null;

@@ -14,15 +14,15 @@ SELECT 'P'                                                                      
        to_char((CASE
                     WHEN pourc_ecart >= 0 THEN
                         CASE
-                            WHEN rank() OVER (PARTITION BY periode_id, intervenant_id, code_indemnite, etat   ORDER BY CASE WHEN (pourc_ecart >= 0 AND pourc_diff >= 0) OR (pourc_ecart < 0 AND pourc_diff < 0) THEN pourc_diff ELSE -1 END DESC) <= (ABS(pourc_ecart) / 0.001) THEN hetd_pourc + (pourc_ecart / abs(pourc_ecart) * 0.001)
+                            WHEN rank() OVER (PARTITION BY periode_id, intervenant_id, code_indemnite, etat   ORDER BY eotp_code,centre_cout_code, hetd_pourc) = 1 THEN hetd_pourc - pourc_ecart
                             ELSE hetd_pourc END
                     ELSE
                         CASE
-                            WHEN rank() OVER (PARTITION BY periode_id, intervenant_id,code_indemnite, etat   ORDER BY CASE WHEN (pourc_ecart >= 0 AND pourc_diff >= 0) OR (pourc_ecart < 0 AND pourc_diff < 0) THEN pourc_diff ELSE -1 END) <= (ABS(pourc_ecart) / 0.001) THEN hetd_pourc + (pourc_ecart / abs(pourc_ecart) * 0.001)
+                            WHEN rank() OVER (PARTITION BY periode_id, intervenant_id, code_indemnite, etat   ORDER BY eotp_code,centre_cout_code, hetd_pourc) = 1 THEN hetd_pourc + pourc_ecart
                             ELSE hetd_pourc END
            END)) * 100                                                                    pourcentage,
---       pourc_ecart,
---       pourc_diff,
+       --pourc_ecart,
+       --pourc_diff,
        (lpad(floor(hetd), 2, '0')) || ':' || lpad(floor((hetd - floor(hetd)) * 60), 2, 0) nombres_heures,
        NULL                                                                               flmodi,
        NULL                                                                               numord,
@@ -107,7 +107,7 @@ FROM (SELECT dep3.*,
                                       ose_formule.get_taux_horaire_hetd(nvl(mep.date_mise_en_paiement, sysdate)), 2) > 0
                                THEN '1542'
                            ELSE
-                               CASE WHEN ti.code = 'P' THEN '204' ELSE '2251' END
+                               CASE WHEN ti.code = 'P' THEN '="0204"' ELSE '="2251"' END
                            END                                                                    code_indemnite,
                        CASE
                            WHEN cc.parent_id IS NULL THEN cc.source_code
@@ -190,7 +190,10 @@ FROM (SELECT dep3.*,
                            taux_horaire,
                            is_fc_majoree,
                            code_indemnite) dep2) dep3) dep4
+    /* where
+     intervenant_matricule = 'UCN000001157' AND annee_id ='2021'*/
 ORDER BY annee_id,
          type_intervenant_id,
          periode_id,
-         intervenant_nom
+         intervenant_nom,
+         code_indemnite

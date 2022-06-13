@@ -10,6 +10,13 @@
 * Ajout d'un paramètre général pour empêcher la création d'avenants
 * Ajout d'un paramètre général pour permettre de créer les contrats sans passer par un projet de contrat
 * Ajout de date de dernière modification des données dans les indicateurs notifiant d'une validation en attente
+* Nouvel état de sortie pour l'extraction des paiements dans le cadre de la pré-liquidation SIHAM
+
+# OSE 18.2 (A venir)
+
+## Corrections de bugs
+
+* Utilisation du mail expéditeur des paramétres par défaut pour l'envoi de mail via les notes et les refus de pièces jointes et correction dans le cas où l'intervenant n'a pas encore de dossier (#45083)
 
 # OSE 18.1 (31/05/2022)
 
@@ -38,7 +45,12 @@ DROP TABLE SAVE_V18_STRUCTURE;
 DROP TABLE SAVE_V18_TA_STATUT;
 DROP TABLE SAVE_V18_TIS;
 DROP TABLE SAVE_V18_TPJS;
+DROP TABLE SAVE_V18_DOSSIER;
+DROP TABLE SAVE_V18_INTERVENANT;
+DROP TABLE SAVE_V18_PRIVILEGE;
+DROP TABLE SAVE_V18_ROLE_PRIVILEGE;
 DROP TABLE STATUT_INTERVENANT;
+
 ```
 
 

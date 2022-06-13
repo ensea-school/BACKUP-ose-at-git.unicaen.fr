@@ -22,6 +22,7 @@ $actions    = [
     "install-bdd"               => "Installe la base de données"
         . "\n\t--oseappli-pwd=<votre mdp> : mot de passe de l'utilisateur oseappli"
     ,
+    "update-code"               => "Mise à jour du code source de l'application (sans toucher à la BDD)",
     "update-bdd"                => "Mise à jour de la base de données de l'application (sans les fichiers)",
     "update-employeur"          => "Mise à jour de la table employeur à partir d'une source (par défault source INSEE)",
     "build-synchronisation"     => "Reconstruction des vues différentielles et des procédures de mise à jour",

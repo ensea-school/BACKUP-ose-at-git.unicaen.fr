@@ -270,10 +270,10 @@ class ParametresForm extends AbstractForm
 
         $this->add([
             'type'       => 'Select',
-            'name'       => 'es_winpaie',
+            'name'       => 'es_extraction_paie',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
-                'label'         => 'État de sortie pour l\'extraction Winpaie',
+                'label'         => 'État de sortie pour l\'extraction de la paie',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -616,7 +616,6 @@ class ParametresForm extends AbstractForm
             ],
         ]);
     }
-
 
 
     /**

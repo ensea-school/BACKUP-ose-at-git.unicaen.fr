@@ -73,12 +73,10 @@ class PaiementController extends AbstractController
     }
 
 
-
     public function indexAction()
     {
         return [];
     }
-
 
 
     /**
@@ -95,7 +93,6 @@ class PaiementController extends AbstractController
     }
 
 
-
     protected function isChangeIndexSaved($changeIndex)
     {
         $session = $this->getSessionContainer();
@@ -103,7 +100,6 @@ class PaiementController extends AbstractController
 
         return isset($session->cht[$changeIndex]) && $session->cht[$changeIndex];
     }
-
 
 
     protected function setChangeIndexSaved($changeIndex)
@@ -114,7 +110,6 @@ class PaiementController extends AbstractController
 
         return $this;
     }
-
 
 
     public function demandeMiseEnPaiementAction()
@@ -130,7 +125,7 @@ class PaiementController extends AbstractController
         }
         // pour empêcher le ré-enregistrement avec un rafraichissement (F5)
         $postChangeIndex = (int)$this->params()->fromPost('change-index');
-        $changeIndex     = $this->getChangeIndex();
+        $changeIndex = $this->getChangeIndex();
 
         /* @var $intervenant \Application\Entity\Db\Intervenant */
         if (!$intervenant) {
@@ -149,12 +144,12 @@ class PaiementController extends AbstractController
         $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant);
 
         /* On récupère du workflow les raisons de non édition éventuelles (selon sa structure le cas échéant) */
-        $workflowEtape  = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
-        $etapes         = $workflowEtape->getEtapes();
+        $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
+        $etapes = $workflowEtape->getEtapes();
         $whyNotEditable = [];
         foreach ($etapes as $we) {
             if (!$role->getStructure() || !$we->getStructure() || $role->getStructure() == $we->getStructure()) {
-                $sid  = $we->getStructure() ? $we->getStructure()->getId() : 0;
+                $sid = $we->getStructure() ? $we->getStructure()->getId() : 0;
                 $deps = $we->getEtapeDeps();
                 foreach ($deps as $dep) {
                     if (!isset($whyNotEditable[$sid])) {
@@ -169,11 +164,11 @@ class PaiementController extends AbstractController
         }
 
 
-        $dateDerniereModif   = null;
+        $dateDerniereModif = null;
         $dernierModificateur = null;
 
         $typesRessources = $this->getServiceTypeRessource()->getList();
-        $structures      = [];
+        $structures = [];
 
         foreach ($servicesAPayer as $sap) {
             if (null == $role->getStructure() || $sap->getStructure() == $role->getStructure()) {
@@ -185,7 +180,7 @@ class PaiementController extends AbstractController
                 $dateModification = $mep->getHistoModification();
 
                 if ($dateDerniereModif == null || $dateDerniereModif < $dateModification) {
-                    $dateDerniereModif   = $dateModification;
+                    $dateDerniereModif = $dateModification;
                     $dernierModificateur = $mep->getHistoModificateur();
                 }
             }
@@ -195,15 +190,15 @@ class PaiementController extends AbstractController
             'structures'      => $structures,
             'typesRessources' => $typesRessources,
         ];
-        $dot    = $this->getServiceDotation()->getTableauBord($structures);
-        $liq    = $this->getServiceMiseEnPaiement()->getTblLiquidation($structures);
+        $dot = $this->getServiceDotation()->getTableauBord($structures);
+        $liq = $this->getServiceMiseEnPaiement()->getTblLiquidation($structures);
         foreach ($structures as $structure) {
             $sid = $structure->getId();
             foreach ($typesRessources as $typeRessource) {
                 $trid = $typeRessource->getId();
 
                 $dotation = isset($dot[$sid][$trid]) ? $dot[$sid][$trid] : 0;
-                $usage    = isset($liq[$sid][$trid]) ? $liq[$sid][$trid] : 0;
+                $usage = isset($liq[$sid][$trid]) ? $liq[$sid][$trid] : 0;
 
                 $budget[$sid][$trid] = compact('dotation', 'usage');
             }
@@ -211,7 +206,6 @@ class PaiementController extends AbstractController
 
         return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur', 'budget', 'whyNotEditable');
     }
-
 
 
     public function visualisationMiseEnPaiementAction()
@@ -230,12 +224,11 @@ class PaiementController extends AbstractController
         WHERE
           p.intervenant = :intervenant";
 
-        $query     = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
+        $query = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
         $paiements = $query->getResult();
 
         return compact('intervenant', 'paiements');
     }
-
 
 
     public function editionMiseEnPaiementAction()
@@ -246,7 +239,7 @@ class PaiementController extends AbstractController
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
-        $mep       = $this->params()->fromPost('mep', []);
+        $mep = $this->params()->fromPost('mep', []);
         $paiements = [];
         /* @var $paiements MiseEnPaiement[] */
 
@@ -268,7 +261,7 @@ class PaiementController extends AbstractController
               AND mep.histoDestruction IS NULL
         ";
 
-        $res       = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
+        $res = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
         $paiements = array_merge($paiements, $res->getResult());
 
         $dql = "
@@ -289,7 +282,7 @@ class PaiementController extends AbstractController
               AND mep.histoDestruction IS NULL
         ";
 
-        $res       = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
+        $res = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
         $paiements = array_merge($paiements, $res->getResult());
 
 
@@ -312,13 +305,12 @@ class PaiementController extends AbstractController
     }
 
 
-
     public function etatPaiementAction()
     {
         $this->initFilters();
 
         $typeIntervenantId = (int)$this->params()->fromPost('type-intervenant');
-        $typeIntervenant   = $this->getServiceTypeIntervenant()->get($typeIntervenantId);
+        $typeIntervenant = $this->getServiceTypeIntervenant()->get($typeIntervenantId);
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -411,7 +403,6 @@ class PaiementController extends AbstractController
     }
 
 
-
     private function makeFilenameFromRecherche(MiseEnPaiementRecherche $recherche)
     {
         if ($recherche->getEtat() == MiseEnPaiement::A_METTRE_EN_PAIEMENT) {
@@ -426,7 +417,6 @@ class PaiementController extends AbstractController
 
         return $filename;
     }
-
 
 
     public function misesEnPaiementCsvAction()
@@ -449,8 +439,7 @@ class PaiementController extends AbstractController
     }
 
 
-
-    public function extractionWinpaieAction()
+    public function extractionPaieAction()
     {
         $this->initFilters();
         $periode = $this->params()->fromRoute('periode');
@@ -460,7 +449,7 @@ class PaiementController extends AbstractController
         $type = $this->getServiceTypeIntervenant()->getRepo()->findOneBy(['code' => $type]);
 
         $annee = $this->getServiceContext()->getAnnee();
-        $role  = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         if (empty($type)) {
             $types = $this->getServiceTypeIntervenant()->getList();
@@ -480,14 +469,13 @@ class PaiementController extends AbstractController
             $recherche->setTypeIntervenant($type);
             $filters = $recherche->getFilters();
 
-            $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_winpaie');
-            $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters);
-            $csvModel->setFilename(str_replace(' ', '_', 'ose-export-winpaie-' . strtolower($recherche->getPeriode()->getLibelleAnnuel($recherche->getAnnee())) . '-' . strtolower($recherche->getTypeIntervenant()->getLibelle()) . '.csv'));
+            $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_extraction_paie');
+            $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
+            $csvModel->setFilename(str_replace(' ', '_', 'ose-export-paie-' . strtolower($recherche->getPeriode()->getLibelleAnnuel($recherche->getAnnee())) . '-' . strtolower($recherche->getTypeIntervenant()->getLibelle()) . '.csv'));
 
             return $csvModel;
         }
     }
-
 
 
     public function imputationSihamAction()
@@ -496,7 +484,7 @@ class PaiementController extends AbstractController
         $this->initFilters();
 
         $typeIntervenantId = (int)$this->params()->fromPost('type-intervenant');
-        $typeIntervenant   = $this->getServiceTypeIntervenant()->get($typeIntervenantId);
+        $typeIntervenant = $this->getServiceTypeIntervenant()->get($typeIntervenantId);
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -559,23 +547,22 @@ class PaiementController extends AbstractController
     }
 
 
-
     public function miseEnPaiementAction()
     {
         $this->initFilters();
-        $title        = 'Mise en paiement';
-        $structure    = $this->getEvent()->getParam('structure');
+        $title = 'Mise en paiement';
+        $structure = $this->getEvent()->getParam('structure');
         $intervenants = $this->params('intervenants');
 
-        $form    = $this->getFormPaiementMiseEnPaiement();
-        $errors  = [];
+        $form = $this->getFormPaiementMiseEnPaiement();
+        $errors = [];
         $request = $this->getRequest();
         if ($request->isPost() && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT))) {
             $form->setData($request->getPost());
             $form->isValid();
 
             $periodeId = $form->get('periode')->getValue();
-            $periode   = $this->getServicePeriode()->get($periodeId);
+            $periode = $this->getServicePeriode()->get($periodeId);
             /* @var $periode \Application\Entity\Db\Periode */
 
             $dateMiseEnPaiementValue = $this->params()->fromPost('date-mise-en-paiement');
@@ -598,7 +585,6 @@ class PaiementController extends AbstractController
 
         return compact('form', 'title', 'errors');
     }
-
 
 
     /**

@@ -110,9 +110,22 @@ class ContratController extends AbstractController
 
         $title = "Contrat/avenants <small>{$intervenant}</small>";
 
-        $sTestContrat = $this->getServiceContrat();
-        $qbTest       = $sTestContrat->finderByIntervenant($intervenant);
-        $contratsTest = $sTestContrat->getList($qbTest);
+
+        $avenantResult = $this->getServiceParametres()->get('avenant');
+        switch ($avenantResult) {
+            case Parametre::AVENANT_AUTORISE :
+                $avenant_param = 1;
+            break;
+            case Parametre::AVENANT_STRUCT :
+                $avenant_param = 0;
+            break;
+            default :
+                $avenant_param = -1;
+        }
+
+        $sContrat     = $this->getServiceContrat();
+        $qbTest       = $sContrat->finderByIntervenant($intervenant);
+        $contratsTest = $sContrat->getList($qbTest);
         if (empty($contratsTest)) {
             $hasContrat = false;
         } else {
@@ -122,14 +135,8 @@ class ContratController extends AbstractController
 
         $sContrat = $this->getServiceContrat();
         $qb       = $sContrat->finderByIntervenant($intervenant);
-
-        if ($structure) {
-            $qb->andWhere(
-                new Orx([
-                    'c.structure IS NULL',
-                    'c.structure = ?2',
-                ])
-            )->setParameter(2, $structure);
+        if ($structure && $avenant_param >= 0) {
+            $sContrat->finderByStructure($structure, $qb);
         }
 
         $contrats = $sContrat->getList($qb);
@@ -145,12 +152,9 @@ class ContratController extends AbstractController
             'non-contractualises' => [],
         ];
 
+
         foreach ($contrats as $contrat) {
-            if ($contrat->getStructure() == null) {
-                $services['contractualises'][$contrat->getId()] = $this->getProcessusContrat()->getServices($intervenant, $contrat, null);
-            } else {
                 $services['contractualises'][$contrat->getId()] = $this->getProcessusContrat()->getServices($intervenant, $contrat, $role->getStructure());
-            }
         }
 
         $nc = $this->getProcessusContrat()->getServices($intervenant, null, $role->getStructure());
@@ -161,17 +165,7 @@ class ContratController extends AbstractController
             }
             $services['non-contractualises'][$sid][] = $service;
         }
-        $avenantResult = $this->getServiceParametres()->get('avenant');
-        switch ($avenantResult) {
-            case Parametre::AVENANT_AUTORISE :
-                $avenant_param = 1;
-            break;
-            case Parametre::AVENANT_STRUCT :
-                $avenant_param = 0;
-            break;
-            default :
-                $avenant_param = -1;
-        }
+
 
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
@@ -192,9 +186,6 @@ class ContratController extends AbstractController
         /* @var $structure Structure */
 
         $avenantResult = $this->getServiceParametres()->get('avenant');
-        if ($avenantResult == PARAMETRE::AVENANT_DESACTIVE) {
-            $structure = null;
-        }
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 

@@ -13,21 +13,22 @@ use Application\Provider\Privilege\Privileges;
  * @var $hasContrat                 boolean
  */
 
-$structList                 = [];
-$StructureNonContractToShow = [];
+$structList = [];
 foreach ($contrats as $contrat) {
-    if (!$contrat->estUnProjet()) {
-        $structList[] = $contrat->getStructure();
-    }
+    $structList[] = $contrat->getStructure();
 }
 
-
+$notshow                  = false;
+$serviceNonContractToShow = [];
 foreach ($services['non-contractualises'] as $sid => $servicesNC) {
     $structure = current($servicesNC)->getElementPedagogique()->getStructure();
-    if (!in_array($structure, $structList) && !in_array(null, $structList)) {
+    if ($avenant_param == 1 || (!in_array($structure, $structList) && !in_array(null, $structList) && !($avenant_param < 0 && $hasContrat))) {
         $serviceNonContractToShow[] = $structure;
+    } else {
+        $notshow = true;
     };
 }
+
 
 $this->intervenant($intervenant)->renderTitle("Contrat/avenant");
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
@@ -57,29 +58,42 @@ $this->messenger() ?>
 
 <?php if ($contrats || $services['non-contractualises']):
     if ($services['non-contractualises']):
-        if (!$hasContrat || $avenant_param > 0 || ($avenant_param == 0 && !empty($serviceNonContractToShow))): ?>
-            <table class="table table-bordered table-hover">
+        if ($notshow):
+            if ($avenant_param < 0): ?>
+                <div class="alert alert-info">
+                    <h2>La création d'avenant n'est pas disponible, elle a été désactivée dans les paramètres.</h2>
+                </div>
+            <?php else: if ($avenant_param == 0) ?>
+                <div class="alert alert-info">
+                    <h2>Une composante ne peut posséder qu'un seul contrat/avenant, tout avenant supplémentaire a été désactivé dans les paramètres.</h2>
+                </div>
+            <?php endif; endif; ?>
+
+        <?php if (!$hasContrat || $avenant_param > 0 || ($avenant_param == 0 && !empty($serviceNonContractToShow))): ?>
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th class="structure">Composante</th>
+                <th>Enseignement(s) non contractualisé(s)</th>
+            </tr>
+
+            <?php foreach ($services['non-contractualises'] as $sid => $servicesNC):
+                $structure = current($servicesNC)->getElementPedagogique()->getStructure();
+                $contrat = new \Application\Entity\Db\Contrat();
+                $contrat->setIntervenant($intervenant);
+                $contrat->setStructure($structure);
+                if (!in_array($structure, $serviceNonContractToShow)) {
+                    continue;
+                }
+                $canCreer = $this->isAllowed($contrat, Privileges::CONTRAT_CREATION);
+                ?>
                 <tr>
-                    <th class="structure">Composante</th>
-                    <th>Enseignement(s) non contractualisé(s)</th>
-                </tr>
-
-                <?php foreach ($services['non-contractualises'] as $sid => $servicesNC):
-                    $structure = current($servicesNC)->getElementPedagogique()->getStructure();
-                    $contrat = new \Application\Entity\Db\Contrat();
-                    $contrat->setIntervenant($intervenant);
-                    $contrat->setStructure($structure);
-
-                    $canCreer = $this->isAllowed($contrat, Privileges::CONTRAT_CREATION);
-                    ?>
-                    <tr>
-                        <td><?= $structure ?></td>
-                        <td>
-                            <?php if ($canCreer):
-                                if ($avenant_param >= 0):
-                                    if ($contratDirect):?>
-                                        <a class="btn btn-primary"
-                                           href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
+                    <td><?= $structure ?></td>
+                    <td>
+                        <?php if ($canCreer):
+                            if ($avenant_param >= 0):
+                                if ($contratDirect):?>
+                                    <a class="btn btn-primary"
+                                       href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
                                             <i class="fas fa-file"></i> Créer un <?= $hasContrat ? 'avenant' : 'contrat' ?>
                                         </a>
                                     <?php else: ?>
@@ -127,15 +141,10 @@ $this->messenger() ?>
                     </tr>
 
                 <?php endif; ?>
-            </table>
+        </table>
 
-        <?php else: ?>
-            <div class="alert alert-info">
-                <h2>La création d'avenant n'est pas disponible, elle a été désactivée dans les paramètres.</h2>
-            </div>
-        <?php endif; ?>
 
-    <?php endif; ?>
+    <?php endif; endif; ?>
     <div class="well">
         <h2>Contrats et avenants</h2>
         <?php foreach ($contrats as $contrat): ?>

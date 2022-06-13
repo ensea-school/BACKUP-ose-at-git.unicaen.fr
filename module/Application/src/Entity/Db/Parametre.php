@@ -17,8 +17,9 @@ class Parametre implements HistoriqueAwareInterface
     const CONTRAT_FRANCHI_DATE_RETOUR = 'date-retour';
 
     const AVENANT_AUTORISE  = 'avenant_autorise';
-    const AVENANT_STRUCT    = 'avenant_Struct';
+    const AVENANT_STRUCT    = 'avenant_struct';
     const AVENANT_DESACTIVE = 'avenant_desactive';
+
     const CONTRAT_DIRECT    = 'contrat_direct';
     const CONTRAT_DATE      = 'contrat_date';
 

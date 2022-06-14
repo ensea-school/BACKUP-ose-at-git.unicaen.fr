@@ -163,10 +163,10 @@ class TypeInterventionSaisieForm extends AbstractForm
             'taux-hetd-complementaire' => [
                 'required'   => true,
                 'validators' => [
-                    new \Laminas\Validator\Callback([
+                    new \Laminas\œValidator\Callback([
                         'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
-                            return (StringFromFloat::run($value) >= 0.0 ? true : false);
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }]),
                 ],
             ],

@@ -17,6 +17,8 @@
 ## Corrections de bugs
 
 * Utilisation du mail expéditeur des paramétres par défaut pour l'envoi de mail via les notes et les refus de pièces jointes et correction dans le cas où l'intervenant n'a pas encore de dossier (#45083)
+* Correction du bouton reporter les données de cet intervenant dans l'interface de test de formule (#45140)
+* Les demandes de mise en paiement faites pour des services historisés s'affichent en rouge plutôt que de provoquer une erreur
 
 # OSE 18.1 (31/05/2022)
 

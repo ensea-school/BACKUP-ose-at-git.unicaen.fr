@@ -507,8 +507,14 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return \Doctrine\Common\Collections\Collection|TypeInterventionStatut
      */
-    public function getTypeInterventionStatut()
+    public function getTypeInterventionStatut(?Annee $annee = null)
     {
-        return $this->typeInterventionStatut;
+        if ($annee) {
+            return $this->typeInterventionStatut->filter(function (TypeInterventionStatut $tis) use ($annee) {
+                return $tis->getAnnee() == $annee;
+            });
+        } else {
+            return $this->typeInterventionStatut;
+        }
     }
 }

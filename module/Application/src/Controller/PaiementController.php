@@ -3,9 +3,7 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeRessource;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
@@ -63,7 +61,6 @@ class PaiementController extends AbstractController
     {
         $this->em()->getFilters()->enable('historique')->init([
             MiseEnPaiement::class,
-            Service::class,
             VolumeHoraire::class,
             ServiceReferentiel::class,
             VolumeHoraireReferentiel::class,
@@ -450,7 +447,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function extractionWinpaieAction()
+    public function extractionPaieAction()
     {
         $this->initFilters();
         $periode = $this->params()->fromRoute('periode');
@@ -480,9 +477,9 @@ class PaiementController extends AbstractController
             $recherche->setTypeIntervenant($type);
             $filters = $recherche->getFilters();
 
-            $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_winpaie');
-            $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters);
-            $csvModel->setFilename(str_replace(' ', '_', 'ose-export-winpaie-' . strtolower($recherche->getPeriode()->getLibelleAnnuel($recherche->getAnnee())) . '-' . strtolower($recherche->getTypeIntervenant()->getLibelle()) . '.csv'));
+            $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_extraction_paie');
+            $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
+            $csvModel->setFilename(str_replace(' ', '_', 'ose-export-paie-' . strtolower($recherche->getPeriode()->getLibelleAnnuel($recherche->getAnnee())) . '-' . strtolower($recherche->getTypeIntervenant()->getLibelle()) . '.csv'));
 
             return $csvModel;
         }

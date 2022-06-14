@@ -274,9 +274,6 @@ return [
         ],
     ],
     'form_elements'   => [
-        'factories'  => [
-            Form\Contrat\ModeleForm::class => Form\Contrat\Factory\ModeleFormFactory::class,
-        ],
         'invokables' => [
             Form\Intervenant\ContratValidation::class => Form\Intervenant\ContratValidation::class, /** @todo à supprimer ? */
             Form\Intervenant\ContratRetour::class     => Form\Intervenant\ContratRetour::class,

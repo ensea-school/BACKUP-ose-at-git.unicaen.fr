@@ -5,14 +5,12 @@ namespace Application\Controller;
 use Application\Assertion\ContratAssertion;
 use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\ModeleContrat;
 use Application\Entity\Db\Parametre;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Form\Contrat\Traits\EnvoiMailContratFormAwareTrait;
-use Application\Form\Contrat\Traits\ModeleFormAwareTrait;
 use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
 use Application\Processus\Traits\ContratProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
@@ -57,7 +55,6 @@ class ContratController extends AbstractController
     use TauxHoraireHETDServiceAwareTrait;
     use DossierServiceAwareTrait;
     use WorkflowServiceAwareTrait;
-    use ModeleFormAwareTrait;
     use EnvoiMailContratFormAwareTrait;
     use NoteServiceAwareTrait;
 
@@ -374,7 +371,7 @@ class ContratController extends AbstractController
             throw new UnAuthorizedException("Génération du contrat interdite.");
         }
 
-        $this->getServiceModeleContrat()->generer($contrat);
+        $this->getServiceContrat()->generer($contrat);
         die();
     }
 

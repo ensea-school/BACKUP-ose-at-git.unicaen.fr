@@ -160,7 +160,7 @@ return [
             'length'      => 0,
             'scale'       => '0',
             'precision'   => null,
-            'nullable'    => true,
+            'nullable'    => false,
             'default'     => null,
             'position'    => 10,
             'commentaire' => null,

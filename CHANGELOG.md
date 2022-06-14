@@ -12,6 +12,8 @@
 * Ajout de date de dernière modification des données dans les indicateurs notifiant d'une validation en attente
 * Nouvel état de sortie pour l'extraction des paiements dans le cadre de la pré-liquidation SIHAM
 
+
+
 # OSE 18.2 (A venir)
 
 ## Corrections de bugs
@@ -20,6 +22,8 @@
 * Correction du bouton reporter les données de cet intervenant dans l'interface de test de formule (#45140)
 * Les demandes de mise en paiement faites pour des services historisés s'affichent en rouge plutôt que de provoquer une erreur
 * Les modifications sur les types d'intervention ne recalculent plus automatiquement toutes les formules, ce qui bloquait l'application
+* Les statuts sont de nouveau filtrés correctement dans l'interface d'administration des types d'intervention (#45141)
+
 
 # OSE 18.1 (31/05/2022)
 

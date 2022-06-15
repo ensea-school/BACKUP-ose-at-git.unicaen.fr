@@ -24,6 +24,8 @@
 * Les modifications sur les types d'intervention ne recalculent plus automatiquement toutes les formules, ce qui bloquait l'application
 * Les statuts sont de nouveau filtrés correctement dans l'interface d'administration des types d'intervention (#45141)
 * Détection du type "LONG" dans la base de données pour permettre les mises à jour (#45174)
+* Un nouveau paramètre de configuration : cas.exclusif a été ajouté. Il permet de n'offrir que le CAS comme possibilité de connexion (#44824)
+
 
 # OSE 18.1 (31/05/2022)
 

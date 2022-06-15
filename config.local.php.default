@@ -245,6 +245,9 @@ return [
         /* Détermine si OSE est cassifiée ou pas */
         'actif'   => false,
 
+        /* Si true, alors on ne peut se connecter QUE via le CAS, les autres options ne seront pas proposées */
+        'exclusif' => false,
+
         /* IP ou nom DNS du serveur CAS */
         'host'    => 'cas.xxx.fr',
 

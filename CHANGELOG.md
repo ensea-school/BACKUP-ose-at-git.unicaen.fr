@@ -23,7 +23,7 @@
 * Les demandes de mise en paiement faites pour des services historisés s'affichent en rouge plutôt que de provoquer une erreur
 * Les modifications sur les types d'intervention ne recalculent plus automatiquement toutes les formules, ce qui bloquait l'application
 * Les statuts sont de nouveau filtrés correctement dans l'interface d'administration des types d'intervention (#45141)
-
+* Détection du type "LONG" dans la base de données pour permettre les mises à jour (#45174)
 
 # OSE 18.1 (31/05/2022)
 

@@ -21,7 +21,7 @@ class StructureSaisieForm extends AbstractForm
 
     public function init()
     {
-        $this->spec(Structure::class);
+        $this->spec(Structure::class, ['adressePrecisions', 'adresseNumero', 'adresseNumeroCompl', 'adresseVoirie', 'adresseVoie', 'adresseLieuDit', 'adresseCodePostal', 'adresseCommune', 'adressePays']);
         $this->build();
 
         $this->get('libelleCourt')->setLabel('Libellé court');

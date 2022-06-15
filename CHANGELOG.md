@@ -30,6 +30,31 @@
 * Un nouveau paramètre de configuration : cas.exclusif a été ajouté. Il permet de n'offrir que le CAS comme possibilité de connexion (#44824)
 * Correction du lien vers la fiche intervenant des indicateurs de dépassement de charges
 
+## Notes de mise à jour
+
+Si vous êtes en version 17, se référer à toutes les notes de migration de la version 18.0
+
+Si vous êtes déjà en version 18.0, il vous faudra supprimer les tables de sauvegardes liées à la migration 17 --> 18 et la table STATUT_INTERVENANT
+**avant** de migrer en 18.1.
+
+```sql
+DROP TABLE SAVE_V18_DOSSIER_AUTRE_STATUT;
+DROP TABLE SAVE_V18_PLAFOND;
+DROP TABLE SAVE_V18_PLAFOND_APP;
+DROP TABLE SAVE_V18_REFERENTIEL;
+DROP TABLE SAVE_V18_STATUT;
+DROP TABLE SAVE_V18_STATUT_PRIVILEGE;
+DROP TABLE SAVE_V18_STRUCTURE;
+DROP TABLE SAVE_V18_TA_STATUT;
+DROP TABLE SAVE_V18_TIS;
+DROP TABLE SAVE_V18_TPJS;
+DROP TABLE SAVE_V18_DOSSIER;
+DROP TABLE SAVE_V18_INTERVENANT;
+DROP TABLE SAVE_V18_PRIVILEGE;
+DROP TABLE SAVE_V18_ROLE_PRIVILEGE;
+DROP TABLE STATUT_INTERVENANT;
+
+```
 
 
 # OSE 18.1 (31/05/2022)

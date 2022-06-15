@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 18.1](#ose-181-31052022)
+[OSE 18.2](#ose-182-15062022)
 
 # OSE 19 (à venir)
 
@@ -14,7 +14,7 @@
 
 
 
-# OSE 18.2 (A venir)
+# OSE 18.2 (15/06/2022)
 
 ## Corrections de bugs
 

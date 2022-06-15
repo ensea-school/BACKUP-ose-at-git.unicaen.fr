@@ -18,10 +18,13 @@
 
 ## Corrections de bugs
 
-* Utilisation du mail expéditeur des paramétres par défaut pour l'envoi de mail via les notes et les refus de pièces jointes et correction dans le cas où l'intervenant n'a pas encore de dossier (#45083)
+* Utilisation du mail expéditeur des paramétres par défaut pour l'envoi de mail via les notes et les refus de pièces jointes et correction dans le cas où l'
+  intervenant n'a pas encore de dossier (#45083)
 * Correction du bouton reporter les données de cet intervenant dans l'interface de test de formule (#45140)
 * Les demandes de mise en paiement faites pour des services historisés s'affichent en rouge plutôt que de provoquer une erreur
 * Les modifications sur les types d'intervention ne recalculent plus automatiquement toutes les formules, ce qui bloquait l'application
+* Les modifications sur les types d'intervention ne retournent plus d'erreur de type sur le "Taux Hetd Complémentaire"
+* L'ajout d'une structure est de nouveau possible depuis la page d'administration des structures.
 * Les statuts sont de nouveau filtrés correctement dans l'interface d'administration des types d'intervention (#45141)
 * Détection du type "LONG" dans la base de données pour permettre les mises à jour (#45174)
 * Un nouveau paramètre de configuration : cas.exclusif a été ajouté. Il permet de n'offrir que le CAS comme possibilité de connexion (#44824)

@@ -146,6 +146,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
                     $type = Bdd::TYPE_BLOB;
                 break;
                 case 'CLOB':
+                case 'LONG':
                     $type = Bdd::TYPE_CLOB;
                 break;
                 default:

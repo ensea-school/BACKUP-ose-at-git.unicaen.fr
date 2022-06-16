@@ -47,10 +47,9 @@ $settings = [
          * Possibilité ou non de s'authentifier à l'aide d'un compte local.
          * Toujours OK si pas de CAS
          */
-        'enabled' => AppConfig::get('ldap', 'actif', true) || AppConfig::get('ldap', 'local', true) || !AppConfig::get('cas', 'actif', false),
+        'enabled' => (AppConfig::get('ldap', 'actif', true) || AppConfig::get('ldap', 'local', true)) && !(AppConfig::get('cas', 'actif', false) && AppConfig::get('cas', 'exclusif', false)),
 
-
-        'description' => "Utilisez ce formulaire si vous possédez un compte LDAP établissement ou un compte local dédié à l'application.",
+        'description' => "Utilisez ce formulaire si vous possédez un compte LDAP établissement " . (AppConfig::get('ldap', 'local', true) ? "ou un compte local " : '') . "dédié à l'application.",
 
         /**
          * Mode d'authentification à l'aide d'un compte dans la BDD de l'application.
@@ -63,7 +62,7 @@ $settings = [
             /**
              * Possibilité ou non de s'authentifier via l'annuaire LDAP ET en local!!.
              */
-            'enabled' => AppConfig::get('ldap', 'actif', true),
+            'enabled' => AppConfig::get('ldap', 'actif', true) && !(AppConfig::get('cas', 'actif', false) && AppConfig::get('cas', 'exclusif', false)),
         ],
     ],
 

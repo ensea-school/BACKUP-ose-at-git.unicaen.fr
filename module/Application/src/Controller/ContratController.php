@@ -26,6 +26,7 @@ use Application\Service\Traits\TauxHoraireHETDServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Doctrine\ORM\Query\Expr\Orx;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Phan\Debug;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
@@ -64,11 +65,13 @@ class ContratController extends AbstractController
     private $renderer;
 
 
+
     public function __construct(PhpRenderer $renderer)
     {
 
         $this->renderer = $renderer;
     }
+
 
 
     /**
@@ -88,6 +91,7 @@ class ContratController extends AbstractController
     }
 
 
+
     /**
      * Point d'entrée sur les contrats/avenants.
      *
@@ -97,7 +101,7 @@ class ContratController extends AbstractController
     {
         $this->initFilters();
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
@@ -106,17 +110,41 @@ class ContratController extends AbstractController
 
         $title = "Contrat/avenants <small>{$intervenant}</small>";
 
+
+        $avenantResult = $this->getServiceParametres()->get('avenant');
+        switch ($avenantResult) {
+            case Parametre::AVENANT_AUTORISE :
+                $avenant_param = 1;
+            break;
+            case Parametre::AVENANT_STRUCT :
+                $avenant_param = 0;
+            break;
+            default :
+                $avenant_param = -1;
+        }
+
+        $sContrat     = $this->getServiceContrat();
+        $qbTest       = $sContrat->finderByIntervenant($intervenant);
+        $contratsTest = $sContrat->getList($qbTest);
+        if (empty($contratsTest)) {
+            $hasContrat = false;
+        } else {
+            $hasContrat = true;
+        }
+
+
         $sContrat = $this->getServiceContrat();
-        $qb = $sContrat->finderByIntervenant($intervenant);
-        if ($structure) {
+        $qb       = $sContrat->finderByIntervenant($intervenant);
+        if ($structure && $avenant_param >= 0) {
             $sContrat->finderByStructure($structure, $qb);
         }
+
         $contrats = $sContrat->getList($qb);
 
         //Récupération email intervenant (Perso puis unicaen)
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
-        $emailPerso = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
-        $emailIntervenant = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmailPro();
+        $emailPerso         = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
+        $emailIntervenant   = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmailPro();
 
         /* Récupération des services par contrat et par structure (pour les non contractualisés) */
         $services = [
@@ -124,8 +152,9 @@ class ContratController extends AbstractController
             'non-contractualises' => [],
         ];
 
+
         foreach ($contrats as $contrat) {
-            $services['contractualises'][$contrat->getId()] = $this->getProcessusContrat()->getServices($intervenant, $contrat, $role->getStructure());
+                $services['contractualises'][$contrat->getId()] = $this->getProcessusContrat()->getServices($intervenant, $contrat, $role->getStructure());
         }
 
         $nc = $this->getProcessusContrat()->getServices($intervenant, null, $role->getStructure());
@@ -136,15 +165,15 @@ class ContratController extends AbstractController
             }
             $services['non-contractualises'][$sid][] = $service;
         }
-        $avenantResult = $this->getServiceParametres()->get('avenant');
-        $avenant       = ($avenantResult == Parametre::AVENANT);
+
 
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
 
-        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'avenant', 'contratDirect');
+        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'hasContrat', 'avenant_param', 'contratDirect');
     }
+
 
 
     public function creerAction()
@@ -156,6 +185,7 @@ class ContratController extends AbstractController
         $structure = $this->getEvent()->getParam('structure');
         /* @var $structure Structure */
 
+        $avenantResult = $this->getServiceParametres()->get('avenant');
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
@@ -163,9 +193,9 @@ class ContratController extends AbstractController
             throw new \LogicException('L\'intervenant n\'est pas précisé');
         }
 
-        if (!$structure) {
-            throw new \LogicException('La structure n\'est pas précisée');
-        }
+//        if (!$structure) {
+//            throw new \LogicException('La structure n\'est pas précisée');
+//        }
 
         $contrat = $this->getProcessusContrat()->creer($intervenant, $structure);
 
@@ -191,6 +221,7 @@ class ContratController extends AbstractController
 
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()]);
     }
+
 
 
     /**
@@ -229,6 +260,7 @@ class ContratController extends AbstractController
 
         return new MessengerViewModel;
     }
+
 
 
     public function validerAction()
@@ -273,6 +305,7 @@ class ContratController extends AbstractController
     }
 
 
+
     /**
      * Dévalidation du contrat/avenant par la composante d'intervention.
      *
@@ -306,6 +339,7 @@ class ContratController extends AbstractController
 
         return new MessengerViewModel;
     }
+
 
 
     /**
@@ -356,6 +390,7 @@ class ContratController extends AbstractController
     }
 
 
+
     public function exporterAction()
     {
         /* @var Contrat $contrat */
@@ -370,6 +405,7 @@ class ContratController extends AbstractController
     }
 
 
+
     public function envoyerMailAction()
     {
         /**
@@ -382,12 +418,12 @@ class ContratController extends AbstractController
         if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
             throw new UnAuthorizedException("Interdiction d'envoyer le contrat par email");
         }
-        $intervenant = $contrat->getIntervenant();
+        $intervenant        = $contrat->getIntervenant();
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
-        $emailDossierPerso = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
-        $emailIntervenant = (!empty($emailDossierPerso)) ? $emailDossierPerso : $intervenant->getEmailPro();
-        $emailExpediteur = (!empty($this->getServiceParametres()->get('contrat_mail_expediteur'))) ? $this->getServiceParametres()->get('contrat_mail_expediteur') : $this->getServiceContext()->getUtilisateur()->getEmail();
-        $form = $this->getFormContratEnvoiMailContrat();
+        $emailDossierPerso  = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
+        $emailIntervenant   = (!empty($emailDossierPerso)) ? $emailDossierPerso : $intervenant->getEmailPro();
+        $emailExpediteur    = (!empty($this->getServiceParametres()->get('contrat_mail_expediteur'))) ? $this->getServiceParametres()->get('contrat_mail_expediteur') : $this->getServiceContext()->getUtilisateur()->getEmail();
+        $form               = $this->getFormContratEnvoiMailContrat();
         $form->get('destinataire-mail')->setValue($emailIntervenant);
         $form->get('destinataire-mail-hide')->setValue($emailIntervenant);
         $form->get('expediteur-mail')->setValue($emailExpediteur);
@@ -403,18 +439,18 @@ class ContratController extends AbstractController
                     //Personnalisation des variables
                     $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " " . $contrat->getIntervenant()->getNomUsuel();
                     $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
-                    $vAnnee = $this->getServiceContext()->getAnnee()->getLibelle();
-                    $html = str_replace([':intervenant', ':utilisateur', ':annee'], [$vIntervenant, $vUtilisateur, $vAnnee], $html);
-                    $subject = $this->getServiceParametres()->get('contrat_modele_mail_objet');
-                    $subject = str_replace(':intervenant', $vIntervenant, $subject);
-                    $from = $this->getRequest()->getPost('expediteur-mail');
-                    $to = $this->getRequest()->getPost('destinataire-mail-hide');
-                    $cci = $this->getRequest()->getPost('destinataire-cc-mail');
+                    $vAnnee       = $this->getServiceContext()->getAnnee()->getLibelle();
+                    $html         = str_replace([':intervenant', ':utilisateur', ':annee'], [$vIntervenant, $vUtilisateur, $vAnnee], $html);
+                    $subject      = $this->getServiceParametres()->get('contrat_modele_mail_objet');
+                    $subject      = str_replace(':intervenant', $vIntervenant, $subject);
+                    $from         = $this->getRequest()->getPost('expediteur-mail');
+                    $to           = $this->getRequest()->getPost('destinataire-mail-hide');
+                    $cci          = $this->getRequest()->getPost('destinataire-cc-mail');
 
                     $message = $this->getServiceModeleContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject);
                     /*Create Note from email for this intervenant*/
                     $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $html);
-                    $mail = $this->mail()->send($message);
+                    $mail           = $this->mail()->send($message);
                     $dateEnvoiEmail = new DateTime();
                     $contrat->setDateEnvoiEmail($dateEnvoiEmail);
                     $this->getServiceContrat()->save($contrat);
@@ -429,6 +465,7 @@ class ContratController extends AbstractController
 
         return compact('form');
     }
+
 
 
     /**
@@ -459,6 +496,7 @@ class ContratController extends AbstractController
     }
 
 
+
     /**
      * Listing des fichiers déposés pour le contrat.
      *
@@ -479,6 +517,7 @@ class ContratController extends AbstractController
     }
 
 
+
     /**
      * Téléchargement d'un fichier.
      *
@@ -497,6 +536,7 @@ class ContratController extends AbstractController
 
         $this->uploader()->download($fichier);
     }
+
 
 
     /**
@@ -530,6 +570,7 @@ class ContratController extends AbstractController
     }
 
 
+
     private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
@@ -537,6 +578,7 @@ class ContratController extends AbstractController
             'contrat',
         ], $intervenant);
     }
+
 
 
     public function modelesListeAction()
@@ -547,6 +589,7 @@ class ContratController extends AbstractController
     }
 
 
+
     public function modelesEditerAction()
     {
         /* @var $modeleContrat ModeleContrat */
@@ -555,7 +598,7 @@ class ContratController extends AbstractController
         $form = $this->getFormContratModele();
 
         if (!$modeleContrat) {
-            $title = 'Ajout d\'un modèle de contrat';
+            $title         = 'Ajout d\'un modèle de contrat';
             $modeleContrat = new ModeleContrat();
         } else {
             $title = 'Modification d\'un modèle de contrat';
@@ -574,6 +617,7 @@ class ContratController extends AbstractController
     }
 
 
+
     public function modelesSupprimerAction()
     {
         /* @var $modeleContrat ModeleContrat */
@@ -588,6 +632,7 @@ class ContratController extends AbstractController
 
         return new MessengerViewModel();
     }
+
 
 
     public function modelesTelechargerAction()

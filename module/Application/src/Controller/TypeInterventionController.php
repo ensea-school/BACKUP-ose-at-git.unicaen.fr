@@ -50,8 +50,9 @@ class TypeInterventionController extends AbstractController
 
     public function statutAction()
     {
+        /** @var TypeIntervention $typeIntervention */
         $typeIntervention        = $typeIntervention = $this->getEvent()->getParam('typeIntervention');
-        $typeInterventionStatuts = $typeIntervention->getTypeInterventionStatut();
+        $typeInterventionStatuts = $typeIntervention->getTypeInterventionStatut($this->getServiceContext()->getAnnee());
         $title                   = "Statuts spécifique pour " . $typeIntervention;
 
         return compact('typeIntervention', 'typeInterventionStatuts', 'title');
@@ -189,7 +190,7 @@ class TypeInterventionController extends AbstractController
 
         $typeIntervention       = $this->getEvent()->getParam('typeIntervention');
         $typeInterventionStatut = $this->getEvent()->getParam('typeInterventionStatut');
-        $form                   = $this->getFormTypeInterventionStatutSaisie();
+        $form                   = $this->getFormTypeInterventionTypeInterventionStatutSaisie();
         if (empty($typeInterventionStatut)) {
             $title                  = 'Ajout d\'un statut spécifique pour un nouveau type d\'intervention';
             $typeInterventionStatut = $this->getServiceTypeInterventionStatut()->newEntity()

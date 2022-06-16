@@ -1352,7 +1352,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
             if ($typeContrat && $typeContrat !== $contrat->getTypeContrat()) {
                 return false;
             }
-            if ($structure && $structure !== $contrat->getStructure()) {
+            if ($structure && $structure !== $contrat->getStructure() && $contrat->getStructure() !== null) {
                 return false;
             }
 

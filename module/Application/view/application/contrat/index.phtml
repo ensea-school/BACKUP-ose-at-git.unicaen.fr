@@ -4,20 +4,31 @@ use \Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Provider\Privilege\Privileges;
 
 /**
- * @var $this              \Application\View\Renderer\PhpRenderer
- * @var $title             string
- * @var $intervenant       \Application\Entity\Db\Intervenant
- * @var $contrats          \Application\Entity\Db\Contrat[]
- * @var $avenant           boolean
- * @var $contratDirect     boolean
+ * @var $this                       \Application\View\Renderer\PhpRenderer
+ * @var $title                      string
+ * @var $intervenant                \Application\Entity\Db\Intervenant
+ * @var $contrats                   \Application\Entity\Db\Contrat[]
+ * @var $avenant_param              boolean
+ * @var $contratDirect              boolean
+ * @var $hasContrat                 boolean
  */
 
-$hasContrat = false;
+$structList = [];
 foreach ($contrats as $contrat) {
-    if (!$contrat->estUnProjet()) {
-        $hasContrat = true;
-    }
+    $structList[] = $contrat->getStructure();
 }
+
+$notshow                  = false;
+$serviceNonContractToShow = [];
+foreach ($services['non-contractualises'] as $sid => $servicesNC) {
+    $structure = current($servicesNC)->getElementPedagogique()->getStructure();
+    if ($avenant_param == 1 || (!in_array($structure, $structList) && !in_array(null, $structList) && !($avenant_param < 0 && $hasContrat))) {
+        $serviceNonContractToShow[] = $structure;
+    } else {
+        $notshow = true;
+    };
+}
+
 
 $this->intervenant($intervenant)->renderTitle("Contrat/avenant");
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
@@ -45,11 +56,22 @@ $this->messenger() ?>
 
 </style>
 
-<?php if ($contrats || $services['non-contractualises']): ?>
+<?php if ($contrats || $services['non-contractualises']):
+    if ($services['non-contractualises']):
+        if ($notshow):
+            if ($avenant_param < 0): ?>
+                <div class="alert alert-info">
+                    <h2>La création d'avenant n'est pas disponible, elle a été désactivée dans les paramètres.</h2>
+                </div>
+            <?php else: if ($avenant_param == 0) ?>
+                <div class="alert alert-info">
+                    <h2>Une composante ne peut posséder qu'un seul contrat/avenant, la création de tout avenant supplémentaire a été désactivé dans les
+                        paramètres.</h2>
+                </div>
+            <?php endif; endif; ?>
 
-    <?php if ($services['non-contractualises']): ?>
-        <?php if (!$hasContrat || $avenant): ?>
-            <table class="table table-bordered table-hover">
+        <?php if (!$hasContrat || $avenant_param > 0 || ($avenant_param == 0 && !empty($serviceNonContractToShow))): ?>
+        <table class="table table-bordered table-hover">
             <tr>
                 <th class="structure">Composante</th>
                 <th>Enseignement(s) non contractualisé(s)</th>
@@ -60,7 +82,9 @@ $this->messenger() ?>
                 $contrat = new \Application\Entity\Db\Contrat();
                 $contrat->setIntervenant($intervenant);
                 $contrat->setStructure($structure);
-
+                if (!in_array($structure, $serviceNonContractToShow)) {
+                    continue;
+                }
                 $canCreer = $this->isAllowed($contrat, Privileges::CONTRAT_CREATION);
                 ?>
                 <tr>
@@ -97,18 +121,14 @@ $this->messenger() ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
-        <?php else: ?>
-            <div class="well">
-                <h2>La création d'avenant n'est pas disponible, elle a été désactivée dans les paramètres.</h2>
-            </div>
-        <?php endif; ?>
         </table>
 
-    <?php endif; ?>
+
+    <?php endif; endif; ?>
     <div class="well">
         <h2>Contrats et avenants</h2>
         <?php foreach ($contrats as $contrat): ?>
-            <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect]);
+            <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param]);
             ?>
 
         <?php endforeach; ?>

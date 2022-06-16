@@ -664,21 +664,41 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
     contrat := '
         SELECT
-          ''CONTRAT''                                               etape_code,
-          intervenant_id                                            intervenant_id,
-          structure_id                                              structure_id,
-          nbvh                                                      objectif,
-          CASE p.valeur
-            WHEN ''date-retour'' THEN signe
-            ELSE edite
-          END                                                       realisation
-        FROM
-          tbl_contrat c
-          JOIN parametre p on p.nom = ''contrat_regle_franchissement''
-        WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
-          AND actif = 1
-          AND nbvh > 0
+          c.etape_code,
+          c.intervenant_id,
+          CASE WHEN c.avenant_mode = ''avenant_desactive'' THEN NULL ELSE c.structure_id END structure_id,
+          c.objectif,
+          CASE WHEN
+            CASE
+              WHEN c.avenant_mode = ''avenant_struct'' THEN sum(c.realisation) over (partition by c.structure_id)
+              WHEN c.avenant_mode = ''avenant_desactive'' THEN sum(c.realisation) over (partition by c.intervenant_id)
+              ELSE 0
+            END > 0
+            THEN c.objectif
+            ELSE c.realisation
+          END realisation
+        FROM (
+          SELECT
+            ''CONTRAT''                      etape_code,
+            intervenant_id                 intervenant_id,
+            structure_id                   structure_id,
+            nbvh                           objectif,
+            CASE p.valeur
+              WHEN ''date-retour'' THEN signe
+              ELSE edite
+            END                            realisation,
+            p2.valeur                      avenant_mode,
+            CASE WHEN p2.valeur = ''avenant_desactive'' THEN rownum ELSE 1 END to_delete
+          FROM
+            tbl_contrat c
+            JOIN parametre p on p.nom = ''contrat_regle_franchissement''
+            JOIN parametre p2 on p2.nom = ''avenant''
+          WHERE
+            ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
+            AND actif = 1
+            AND nbvh > 0
+        ) c
+        WHERE to_delete = 1
     ';
 
 

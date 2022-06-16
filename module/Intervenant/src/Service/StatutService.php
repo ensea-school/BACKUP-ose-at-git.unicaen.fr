@@ -81,23 +81,18 @@ class StatutService extends AbstractEntityService
     public function getStatutSelectable(Statut $statut, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
-        $qb->andWhere("$alias.dossierSelectionnable = 1");
+        // $qb->andWhere("$alias.dossierSelectionnable = 1");
         $qb->andWhere("$alias.annee = " . $this->getServiceContext()->getAnnee()->getId());
 
-        $entities = $qb->getQuery()->execute();
+        $statuts = $qb->getQuery()->execute();
         $qb->addOrderBy("$alias.code");
 
         $result = [];
-        $entityClass = $this->getEntityClass();
-        foreach ($entities as $entity) {
-            if ($entity instanceof $entityClass) {
-                /**
-                 * @var Statut $entity
-                 */
-                //Je prends le statut si il n'est pas détruit ou si l'intervenant a ce statut
-                if (is_null($entity->getHistoDestruction()) ||
-                    $statut->getCode() == $entity->getCode()) {
-                    $result[] = $entity;
+        foreach ($statuts as $value) {
+            if ($value instanceof Statut) {
+                if (($value->estNonHistorise() && $value->getDossierSelectionnable()) ||
+                    $statut->getCode() == $value->getCode()) {
+                    $result[] = $value;
                 }
             }
         }

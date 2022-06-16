@@ -7,10 +7,13 @@
 ## Nouveautés
 
 * Ajout d'un paramètre général qui permet de choisir si un contrat peut avoir une date de retour signé ou non s'il n'y a pas de fichier
-* Ajout d'un paramètre général pour empêcher la création d'avenants
+* Ajout d'un paramètre général qui permet de choisir pour l'intervenant sur l'année universitaire entre : avoir autant d'avenants que nécessaire, avoir un
+  contrat/avenant par structure, avoir un contrat unique toutes composantes confondues
 * Ajout d'un paramètre général pour permettre de créer les contrats sans passer par un projet de contrat
 * Ajout de date de dernière modification des données dans les indicateurs notifiant d'une validation en attente
 * Nouvel état de sortie pour l'extraction des paiements dans le cadre de la pré-liquidation SIHAM
+* Ajout d'un bouton de refus de pièce justificative avec envoie d'email à l'intervenant
+* Changement du bouton de cloture de service pour un libellé plus parlant et un style de bouton plus prononcé
 
 
 

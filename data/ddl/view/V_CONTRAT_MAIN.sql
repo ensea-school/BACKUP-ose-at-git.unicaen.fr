@@ -112,7 +112,7 @@ FROM
          JOIN type_volume_horaire tvh ON tvh.code = 'PREVU'
          JOIN etat_volume_horaire evh ON evh.code = 'valide'
     LEFT JOIN formule_resultat     fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
-    LEFT JOIN taux_horaire_hetd    th ON c.histo_creation BETWEEN th.histo_creation AND COALESCE(th.histo_destruction,SYSDATE)
+    LEFT JOIN taux_horaire_hetd    th ON th.valeur = ose_formule.get_taux_horaire_hetd(c.histo_creation)
     LEFT JOIN                      hs ON hs.contrat_id = c.id
     LEFT JOIN contrat              cp ON cp.id = c.contrat_id
   WHERE

@@ -309,14 +309,30 @@ class OseAdmin
 
 
 
-    public function getConfig(): array
+    public function getConfig(string $section = null, string $key = null, $default = null)
     {
         $configFilename = $this->getOseDir() . '/config.local.php';
         if (file_exists($configFilename)) {
-            return require $configFilename;
+            $config = require $configFilename;
         } else {
-            return [];
+            $config = [];
         }
+
+        if ($config && $section && $key) {
+            if (isset($config[$section][$key])) {
+                return $config[$section][$key];
+            } else {
+                return $default;
+            }
+        }
+
+        if ($config && $section) {
+            if (isset($config[$section])) {
+                return $config[$section];
+            }
+        }
+
+        return $config;
     }
 
 

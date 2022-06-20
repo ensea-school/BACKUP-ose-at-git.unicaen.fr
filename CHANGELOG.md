@@ -21,7 +21,7 @@
 
 * Données personnelles : pouvoir pré-remplir le champs statut avec un statut non sélectionnable dans la liste. (#45216)
 * Budget/Liquidation : afficher le nombre de HETD uniquement des HCO et non les HETD des HCO + Heures de service
-* Notes : Afficher le bon utilisateur pour la validation de service (#45413) 
+* Notes : Afficher le bon utilisateur pour la validation de service (#45413).
 
 # OSE 18.2 (15/06/2022)
 

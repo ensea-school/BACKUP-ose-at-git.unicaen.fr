@@ -35,6 +35,9 @@ return [
         /* Détermine si le mode maintenante est activé ou non */
         'modeMaintenance' => false,
 
+        /* Désacive la synchronisation des données via le CRON */
+        'desactivationSynchronisation' => false,
+
         /* Message précisant pourquoi l'application est en maintenance */
         'messageInfo'  => 'OSE est actuellement en cours de mise à jour. Veuillez nous excuser pour ce déagrément.',
 

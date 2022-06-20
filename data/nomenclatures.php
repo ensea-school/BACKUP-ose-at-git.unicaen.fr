@@ -232,6 +232,10 @@ return [
             'LIBELLE'      => 'Université Rennes 1',
             'PACKAGE_NAME' => 'FORMULE_RENNES1',
         ],
+        23 => [
+            'LIBELLE'      => 'Université de Versailles Saint-Quentin-en-Yvelines',
+            'PACKAGE_NAME' => 'FORMULE_UVSQ',
+        ],
     ],
 
     'MODELE_CONTRAT' => [

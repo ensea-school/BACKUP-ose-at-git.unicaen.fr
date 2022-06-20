@@ -327,6 +327,8 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UVSQ AS
         WHEN c = 'AK' AND v >= 1 THEN
           IF cell('AI17') = 0 THEN
             RETURN (cell('AH',l) - cell('AJ',l)) / cell('AE',l);
+          ELSE
+            RETURN 0;
           END IF;
 
 
@@ -434,7 +436,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UVSQ AS
 
         ELSE
           raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
-      END CASE; END;
+      END CASE;
+      raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
+
+      END;
 
 
 
@@ -448,15 +453,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UVSQ AS
 
         -- transmission des résultats aux volumes horaires et volumes horaires référentiel
         FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
-          ose_formule.volumes_horaires.items(l).service_fi               := mainCell('Service FI', 'rs',l);
-          ose_formule.volumes_horaires.items(l).service_fa               := mainCell('Service FA', 'ss',l);
-          ose_formule.volumes_horaires.items(l).service_fc               := mainCell('Service FC', 'ts',l);
-          ose_formule.volumes_horaires.items(l).service_referentiel      := mainCell('Service référentiel', 'rr',l);
-          ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'us',l);
-          ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'vs',l);
-          ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'ws',l);
-          ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'xs',l);
-          ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'ur',l);
+          ose_formule.volumes_horaires.items(l).service_fi               := mainCell('Service FI', 'U',l);
+          ose_formule.volumes_horaires.items(l).service_fa               := mainCell('Service FA', 'V',l);
+          ose_formule.volumes_horaires.items(l).service_fc               := mainCell('Service FC', 'W',l);
+          ose_formule.volumes_horaires.items(l).service_referentiel      := mainCell('Service référentiel', 'X',l);
+          ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'Y',l);
+          ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'Z',l);
+          ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'AA',l);
+          ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'AB',l);
+          ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'AC',l);
         END LOOP;
       END;
 

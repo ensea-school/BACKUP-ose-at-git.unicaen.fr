@@ -109,8 +109,8 @@ class v18Statuts extends AbstractMigration
 
         $c->begin('Mise à jour des libellés des champs complémentaires pour les statuts');
 
-        $bdd->exec("UPDATE parametre SET valeur='Est ATV (oui ou non)' WHERE nom='statut_intervenant_codes_corresp_1_libelle'");
-        $bdd->exec("UPDATE parametre SET valeur='Code Siham' WHERE nom='statut_intervenant_codes_corresp_2_libelle'");
+        $bdd->exec("UPDATE parametre SET valeur='Code Siham' WHERE nom='statut_intervenant_codes_corresp_1_libelle'");
+        $bdd->exec("UPDATE parametre SET valeur='Est ATV (oui ou non)' WHERE nom='statut_intervenant_codes_corresp_2_libelle'");
         $bdd->exec("UPDATE parametre SET valeur='Est VA (oui ou non)' WHERE nom='statut_intervenant_codes_corresp_3_libelle'");
 
         $c->end('Libellés mis à jour');
@@ -380,8 +380,8 @@ class v18Statuts extends AbstractMigration
                 'PAIEMENT_VISUALISATION'         => in_array('mise-en-paiement-visualisation-intervenant', $statut['privileges']) ? 1 : 0, // NUMBER(1) DEFAULT 1 NOT NULL ENABLE,
                 'MOTIF_NON_PAIEMENT'             => $statut['PEUT_SAISIR_MOTIF_NON_PAIEMENT'], // NUMBER(1) DEFAULT 0 NOT NULL ENABLE,
                 'FORMULE_VISUALISATION'          => in_array('intervenant-calcul-hetd', $statut['privileges']) ? 1 : 0, // NUMBER(1) DEFAULT 0 NOT NULL ENABLE,
-                'CODES_CORRESP_1'                => $statut['TEM_ATV'] == '1' ? 'Oui' : 'Non', // VARCHAR2(1000 CHAR),
-                'CODES_CORRESP_2'                => $statut['CODE_RH']$statut['TEM_ATV'] == '1' ? 'Oui' : 'Non', // VARCHAR2(1000 CHAR),
+                'CODES_CORRESP_1'                => $statut['CODE_RH'], // VARCHAR2(1000 CHAR),
+                'CODES_CORRESP_2'                => $statut['TEM_ATV'] == '1' ? 'Oui' : 'Non', // VARCHAR2(1000 CHAR),
                 'CODES_CORRESP_3'                => $statut['TEM_VA'] == '1' ? 'Oui' : 'Non', // VARCHAR2(1000 CHAR),
                 'CODES_CORRESP_4'                => null, // VARCHAR2(1000 CHAR),
                 'HISTO_CREATION'                 => new \DateTime(), // DATE DEFAULT SYSDATE NOT NULL ENABLE,

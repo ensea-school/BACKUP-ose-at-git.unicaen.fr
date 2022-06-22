@@ -16,17 +16,19 @@ SELECT annee_id,
        ose_paiement.get_annee_extraction_paie()                              date_pecuniaire,
        nbu                                                                   nombre_d_unites,
        montant                                                               montant,
-       libelle || ' ' || lpad(to_char(floor(nbu)), 2, '00') || ' H' ||
-       CASE to_char(round(nbu - floor(nbu), 2) * 100, '00')
-           WHEN ' 00' THEN ''
-           ELSE ' ' || lpad(round(nbu - floor(nbu), 2) * 100, 2, '00') END   libelle,
+       'DN ' || type_intervenant_code || ' '
+           || substr(UPPER(structure_libelle), 0, 10)
+           || ' ' || annee_libelle                                           libelle,
        'B'                                                                   mode_de_calcul,
        code_origine                                                          code_origine
 FROM (SELECT i.annee_id                                                                                        annee_id,
+             a.libelle                                                                                         annee_libelle,
              ti.id                                                                                             type_intervenant_id,
              ti.code                                                                                           type_intervenant_code,
              i.code_rh                                                                                         code_rh,
              t2.structure_id                                                                                   structure_id,
+             s.libelle_court                                                                                   structure_libelle,
+             s.source_code                                                                                     structure_code,
              t2.periode_paiement_id                                                                            periode_id,
              i.id                                                                                              intervenant_id,
              CASE
@@ -102,5 +104,5 @@ FROM (SELECT i.annee_id                                                         
                LEFT JOIN intervenant_dossier d ON i.id = d.intervenant_id AND d.histo_destruction IS NULL
                JOIN statut si ON si.id = i.statut_id
                JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
-               JOIN structure s ON s.id = t2.structure_id) t3
+               JOIN structure s ON s.id = i.structure_id) t3
 ORDER BY annee_id, type_intervenant_id, structure_id, periode_id, nom, code_origine, nbu DESC

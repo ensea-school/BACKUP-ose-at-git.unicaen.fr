@@ -154,10 +154,10 @@ class FormuleCalcul
             'vh.structure_is_affectation'      => 'bool',
             'vh.structure_is_univ'             => 'bool',
             'vh.structure_is_exterieur'        => 'bool',
-            'vh.service_statutaire'            => 'float',
-            'vh.taux_fi'                       => 'float',
-            'vh.taux_fa'                       => 'float',
-            'vh.taux_fc'                       => 'float',
+            'vh.service_statutaire'            => 'bool',
+            'vh.taux_fi'                       => 'pourc',
+            'vh.taux_fa'                       => 'pourc',
+            'vh.taux_fc'                       => 'pourc',
             'vh.type_intervention_code'        => 'string',
             'vh.taux_service_du'               => 'float',
             'vh.taux_service_compl'            => 'float',
@@ -201,6 +201,10 @@ class FormuleCalcul
                     case 'float';
                         $val = (float)$val;
                     break;
+                    case 'pourc';
+                        $val = trim(str_replace('%', '', $val));
+                        $val = (float)$val / 100;
+                    break;
                 }
                 $data[$variable] = $val;
             }
@@ -226,6 +230,10 @@ class FormuleCalcul
                         break;
                         case 'float';
                             $val = (float)$val;
+                        break;
+                        case 'pourc';
+                            $val = trim(str_replace('%', '', $val));
+                            $val = (float)$val / 100;
                         break;
                     }
                     $data['volumes-horaires'][$line][$variable] = $val;

@@ -62,6 +62,16 @@ return [
                                 ],
                                 'may_terminate' => true,
                             ],
+                            'import'          => [
+                                'type'          => 'Literal',
+                                'options'       => [
+                                    'route'    => '/import',
+                                    'defaults' => [
+                                        'action' => 'test-import',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
                             'supprimer'       => [
                                 'type'          => 'Segment',
                                 'options'       => [
@@ -138,7 +148,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Formule',
-                    'action'     => ['test', 'test-saisir', 'test-enregistrement', 'test-supprimer', 'test-creer-from-reel'],
+                    'action'     => ['test', 'test-saisir', 'test-enregistrement', 'test-supprimer', 'test-creer-from-reel', 'test-import'],
                     'privileges' => [Privileges::FORMULE_TESTS],
                 ],
             ],

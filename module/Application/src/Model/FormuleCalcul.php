@@ -774,7 +774,7 @@ END FORMULE_" . $this->getName() . ";";
             $plsql .= "ELSE\n";
             $plsql .= $this->indent($this->returnPlsql($this->traductionExpr($else)));
         }
-        $plsql .= 'END';
+        $plsql .= 'END IF';
 
         return $plsql;
     }

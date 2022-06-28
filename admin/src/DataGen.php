@@ -591,11 +591,12 @@ class DataGen
 
     public function FORMULE()
     {
-        $data     = $this->nomenclature['FORMULE'];
+        $data = require $this->oseAdmin->getOseDir() . 'data/formules.php';;
         $formules = [];
         foreach ($data as $id => $formule) {
-            $formule['ID']             = $id;
-            $formule['PROCEDURE_NAME'] = 'CALCUL_RESULTAT';
+            $formule['ID'] = $id;
+            if (!isset($formule['INTERVENANT_QUERY'])) $formule['INTERVENANT_QUERY'] = null;
+            if (!isset($formule['VOLUME_HORAIRE_QUERY'])) $formule['VOLUME_HORAIRE_QUERY'] = null;
             for ($i = 1; $i < 6; $i++) {
                 if (!isset($formule['I_PARAM_' . $i . '_LIBELLE'])) $formule['I_PARAM_' . $i . '_LIBELLE'] = null;
                 if (!isset($formule['VH_PARAM_' . $i . '_LIBELLE'])) $formule['VH_PARAM_' . $i . '_LIBELLE'] = null;

@@ -2,6 +2,7 @@
 
 namespace Application\Model;
 
+use Unicaen\OpenDocument\Calc\Formule;
 use Unicaen\OpenDocument\Document;
 use Unicaen\OpenDocument\Calc\Sheet;
 use Unicaen\OpenDocument\Calc;
@@ -15,6 +16,8 @@ class FormuleCalcul
     private int     $mainLine = 20;
 
     private ?string $name     = null;
+
+    private array   $cellsPos = [];
 
 
 
@@ -35,7 +38,8 @@ class FormuleCalcul
         $document = new Document();
         $document->loadFromFile($filename);
 
-        $this->sheet = $document->getCalc()->getSheet(1);
+        $this->sheet    = $document->getCalc()->getSheet(1);
+        $this->cellsPos = [];
     }
 
 
@@ -69,7 +73,9 @@ class FormuleCalcul
 
     public function getCellsPos(): array
     {
-        $cellsPos = [];
+        if (!empty($this->cellsPos)) {
+            return $this->cellsPos;
+        }
 
         $vhColsRefs = [
             'structure_code'            => 'vh.structure_code',
@@ -108,7 +114,7 @@ class FormuleCalcul
             $cell   = $this->getSheet()->getCellByCoords($colNum, $this->mainLine - 1);
             $colLib = Util::reduce($cell?->getContent() ?? '');
             if (array_key_exists($colLib, $vhColsRefs)) {
-                $cellsPos[$vhColsRefs[$colLib]] = Calc::numberToLetter($colNum);
+                $this->cellsPos[$vhColsRefs[$colLib]] = Calc::numberToLetter($colNum);
             }
         }
 
@@ -131,11 +137,11 @@ class FormuleCalcul
             $cell   = $this->getSheet()->getCellByCoords($col, $ligne);
             $colLib = Util::reduce($cell?->getContent() ?? '');
             if (array_key_exists($colLib, $iColsRefs)) {
-                $cellsPos[$iColsRefs[$colLib]] = 'D' . $ligne;
+                $this->cellsPos[$iColsRefs[$colLib]] = 'D' . $ligne;
             }
         }
 
-        return $cellsPos;
+        return $this->cellsPos;
     }
 
 
@@ -283,6 +289,7 @@ END FORMULE_" . $this->getName() . ";";
         }
         $cells = '';
 
+        /** @var Calc\Cell[] $formules */
         foreach ($formules as $name => $cell) {
             $expr = $cell->getFormuleExpr();
 
@@ -292,13 +299,14 @@ END FORMULE_" . $this->getName() . ";";
             }
 
             $cellPlsql = "-- $name" . substr($cell->getFormule(), 3) . "\n";
-            $cellPlsql .= "WHEN c = '$name' AND v >= 1 THEN\n";
+            $cellPlsql .= "WHEN '$name' THEN\n";
             $cellPlsql .= $this->indent($this->exprToPlSql($expr)) . "\n\n";
 
             $cells .= $this->indent($cellPlsql, 3);
         }
 
         $body = file_get_contents(getcwd() . '/data/formule.sql');
+        $body = str_replace('<--DECALAGE-->', $this->mainLine - 1, $body);
         $body = str_replace('<--CELLS-->', $cells, $body);
         $body = str_replace('<--NAME-->', $this->getName(), $body);
         foreach ($cellsPos as $param => $cell) {
@@ -310,8 +318,25 @@ END FORMULE_" . $this->getName() . ";";
 
 
 
+    public function testFormule(string $formule)
+    {
+        $tableur = $formule;
+        $formule = new Formule($tableur);
+
+        $struct = $formule->analyse();
+
+        $plsql = $this->exprToPlSql($struct);
+        \UnicaenCode\Util::highlight($plsql, 'plsql', true, ['show-line-numbers' => true]);
+
+        $formule->displayTerms();
+        $formule->displayExprs();
+    }
+
+
+
     private function exprToPlSql(array $expr): string
     {
+        $this->preTraitementExpr($expr);
         $this->preTraitementExpr($expr);
         $this->preTraitementExpr23($expr);
         $this->preTraitementExpr23($expr);
@@ -358,6 +383,9 @@ END FORMULE_" . $this->getName() . ";";
                     break;
                     case 'cell':
                         $this->preTraitementCell($expr, $i);
+                    break;
+                    case 'range':
+                        $this->preTraitementRange($expr, $i);
                     break;
                 }
             }
@@ -457,6 +485,15 @@ END FORMULE_" . $this->getName() . ";";
 
 
 
+    private function preTraitementRange(array &$expr, int $i)
+    {
+        // On retire les $ qui sont inutiles pour la conversion en Pl/SQL
+        $expr[$i]['begin'] = str_replace('$', '', $expr[$i]['begin']);
+        $expr[$i]['end']   = str_replace('$', '', $expr[$i]['end']);
+    }
+
+
+
     private function isNumber0(array $term)
     {
         if ($term['type'] === 'number') {
@@ -473,7 +510,7 @@ END FORMULE_" . $this->getName() . ";";
     private function isNumber1(array $term)
     {
         if ($term['type'] === 'number') {
-            if ($term['value'] === 1) {
+            if ($term['value'] === 1.0) {
                 return true;
             }
         }
@@ -546,59 +583,78 @@ END FORMULE_" . $this->getName() . ";";
                 $isIf = true;
             }
             if (array_key_exists($term['type'], $methods)) {
-                $plsql .= $this->{$methods[$term['type']]}($expr[$i]);
+                $plsql .= $this->{$methods[$term['type']]}($expr, $i);
             } else {
                 $plsql .= '[PB TRADUCTION]';
             }
         }
 
-        return $plsql;
+        return $this->postReplace($plsql);
     }
 
 
 
-    private function traductionSousExpr(array &$term): string
+    private function traductionSousExpr(array &$expr, int $i): string
     {
+        $term = $expr[$i];
+
         return "(" . $this->traductionExpr($term['expr']) . ")";
     }
 
 
 
-    private function traductionString(array &$term): string
+    private function traductionString(array &$expr, int $i): string
     {
+        $term = $expr[$i];
+
         return "'" . str_replace("'", "''", $term['content']) . "'";
     }
 
 
 
-    private function traductionNumber(array &$term): string
+    private function traductionNumber(array &$expr, int $i): string
     {
+        $term = $expr[$i];
+
         return (string)$term['value'];
     }
 
 
 
-    private function traductionOperator(array &$term): string
+    private function traductionOperator(array &$expr, int $i): string
     {
+        $term = $expr[$i];
+
         return ' ' . $term['name'] . ' ';
     }
 
 
 
-    private function traductionRange(array &$term): string
+    private function traductionRange(array &$expr, int $i): string
     {
-        return '[TODO]';
+        // normalement, on ne passe jamais par ici : les RANGE ne sont utilisés qu'avec traductionFunctionRange
+        $term = $expr[$i];
+
+        return '[PB TRADUCTION]';
     }
 
 
 
-    private function traductionCell(array &$term): string
+    private function traductionCell(array &$expr, int $i): string
     {
+        $term = $expr[$i];
         ['col' => $col, 'row' => $row] = Calc::cellNameToCoords($term['name']);
 
         $col = Calc::numberToLetter($col);
 
         if ($row === $this->mainLine) {
+            $cellsPos = $this->getCellsPos();
+            foreach ($cellsPos as $variable => $column) {
+                if ($col === $column) {
+                    return $variable;
+                }
+            }
+
             return "cell('$col',l)";
         } else {
             return "cell('" . $term['name'] . "')";
@@ -607,24 +663,60 @@ END FORMULE_" . $this->getName() . ";";
 
 
 
-    private function traductionVariable(array &$term): string
+    private function traductionVariable(array &$expr, int $i): string
     {
+        $term        = $expr[$i];
+        $traductions = [
+            'i_type_intervenant_code'          => 'i.type_intervenant_code',
+            'i_structure_code'                 => 'i.structure_code',
+            'i_type_volume_horaire_code'       => 'i.type_volume_horaire_code',
+            'i_heures_decharge'                => 'i.heures_service_statutaire',
+            'i_heures_service_modifie'         => 'i.heures_service_modifie',
+            'i_depassement_service_du_sans_hc' => 'i.depassement_service_du_sans_hc',
+            'i_service_du'                     => 'i.service_du',
+            'i_param_1'                        => 'i.param_1',
+            'i_param_2'                        => 'i.param_2',
+            'i_param_3'                        => 'i.param_3',
+            'i_param_4'                        => 'i.param_4',
+            'i_param_5'                        => 'i.param_5',
+        ];
+
+        if (isset($traductions[$term['name']])) {
+            return $traductions[$term['name']];
+        }
+
         return $term['name'];
     }
 
 
 
-    private function traductionFunction(array &$term): string
+    private function traductionFunction(array &$expr, int $i): string
     {
+        $term      = $expr[$i];
         $functions = [
-            'IF' => 'traductionFunctionIf',
+            'IF'  => 'traductionFunctionIf',
+            'AND' => 'traductionFunctionAnd',
         ];
 
         if (array_key_exists($term['name'], $functions)) {
-            return $this->{$functions[$term['name']]}($term);
+            return $this->{$functions[$term['name']]}($expr, $i);
         }
 
-        $plsql = $term['name'] . '(';
+        if (isset($term['exprs']) && 1 === count($term['exprs']) && 1 === count($term['exprs'][0]) && $term['exprs'][0][0]['type'] === 'range') {
+            return $this->traductionFunctionRange($expr, $i);
+        }
+
+        $tradNames = [
+            'MIN' => 'LEAST',
+            'MAX' => 'GREATEST',
+        ];
+
+        if (isset($tradNames[$term['name']])) {
+            $plsql = $tradNames[$term['name']] . '(';
+        } else {
+            $plsql = $term['name'] . '(';
+        }
+
         if (!empty($term['exprs'])) {
             $plExprs = [];
             foreach ($term['exprs'] as $e => $fExpr) {
@@ -639,8 +731,35 @@ END FORMULE_" . $this->getName() . ";";
 
 
 
-    private function traductionFunctionIf(array $term): string
+    private function traductionFunctionRange(array &$expr, int $i): string
     {
+        $functions = [
+            'MAX' => 'max',
+            'SUM' => 'somme',
+        ];
+
+        $term  = $expr[$i];
+        $range = $term['exprs'][0][0];
+
+        $name = $functions[$term['name']] ?? $term['name'];
+
+        $begin = Calc::cellNameToCoords($range['begin']);
+        $end   = Calc::cellNameToCoords($range['end']);
+
+        if ($begin['col'] === $end['col'] && $begin['row'] <= $this->mainLine && $end['row'] > 500) {
+            $col = Calc::numberToLetter($begin['col']);
+
+            return "calcFnc('$name','$col')";
+        }
+
+        return '[PB TRADUCTION]';
+    }
+
+
+
+    private function traductionFunctionIf(array &$expr, int $i): string
+    {
+        $term = $expr[$i];
         $cond = $term['exprs'][0];
         $then = $term['exprs'][1];
         if (isset($term['exprs'][2])) {
@@ -662,6 +781,28 @@ END FORMULE_" . $this->getName() . ";";
 
 
 
+    private function traductionFunctionAnd(array &$expr, int $i): string
+    {
+        $term  = $expr[$i];
+        $plsql = '';
+
+        if (!empty($term['exprs'])) {
+            $plExprs = [];
+            foreach ($term['exprs'] as $e => $fExpr) {
+                $plExprs[$e] = $this->traductionExpr($fExpr);
+            }
+            $plsql .= implode(' AND ', $plExprs);
+        }
+
+        if (count($expr) === 1) {
+            return $plsql;
+        } else {
+            return '(' . $plsql . ')';
+        }
+    }
+
+
+
     private function indent(string $plsql, int $levels = 1): string
     {
 
@@ -675,5 +816,37 @@ END FORMULE_" . $this->getName() . ";";
         }
 
         return $result;
+    }
+
+
+
+    private function postReplace(string $plsql): string
+    {
+        $boolSar = [
+            'vh.service_statutaire',
+            'vh.structure_is_exterieur',
+        ];
+
+        $sar = [
+            "vh.type_intervention_code = 'Référentiel'"  => 'vh.volume_horaire_ref_id IS NOT NULL',
+            "vh.type_intervention_code <> 'Référentiel'" => 'vh.volume_horaire_ref_id IS NULL',
+            "vh.structure_code = cell('K10')"            => 'vh.structure_is_univ',
+            "vh.structure_code <> cell('K10')"           => 'NOT vh.structure_is_univ',
+            "vh.structure_code = i.structure_code"       => 'vh.structure_is_affectation',
+            "i.structure_code = vh.structure_code"       => 'vh.structure_is_affectation',
+            "vh.structure_code <> i.structure_code"      => 'NOT vh.structure_is_affectation',
+            "i.structure_code <> vh.structure_code"      => 'NOT vh.structure_is_affectation',
+        ];
+
+        foreach ($boolSar as $variable) {
+            $sar[$variable . " = 'Oui'"]  = $variable;
+            $sar[$variable . " <> 'Oui'"] = 'NOT ' . $variable;
+            $sar[$variable . " = 'Non'"]  = 'NOT ' . $variable;
+            $sar[$variable . " <> 'Non'"] = $variable;
+        }
+
+        $plsql = str_replace(array_keys($sar), array_values($sar), $plsql);
+
+        return $plsql;
     }
 }

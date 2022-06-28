@@ -9,6 +9,18 @@ return [
     'commentaire' => NULL,
     'sequence'    => NULL,
     'columns'     => [
+        'ACTIVE'             => [
+            'name'        => 'ACTIVE',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 4,
+            'commentaire' => 'Témoin (1=sélectionnable)',
+        ],
         'ID'                 => [
             'name'        => 'ID',
             'type'        => 'int',
@@ -103,18 +115,6 @@ return [
             'nullable'    => FALSE,
             'default'     => NULL,
             'position'    => 3,
-            'commentaire' => NULL,
-        ],
-        'PROCEDURE_NAME'     => [
-            'name'        => 'PROCEDURE_NAME',
-            'type'        => 'string',
-            'bdd-type'    => 'VARCHAR2',
-            'length'      => 30,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => FALSE,
-            'default'     => NULL,
-            'position'    => 4,
             'commentaire' => NULL,
         ],
         'VH_PARAM_1_LIBELLE' => [

@@ -4,6 +4,7 @@ return [
     1  => [
         'LIBELLE'      => 'Université de Caen (version 2016)',
         'PACKAGE_NAME' => 'FORMULE_UNICAEN_2016',
+        'ACTIVE'       => false,
     ],
     2  => [
         'LIBELLE'      => 'Université de Montpellier',

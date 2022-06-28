@@ -825,6 +825,7 @@ END FORMULE_" . $this->getName() . ";";
         $boolSar = [
             'vh.service_statutaire',
             'vh.structure_is_exterieur',
+            'i.depassement_service_du_sans_hc',
         ];
 
         $sar = [

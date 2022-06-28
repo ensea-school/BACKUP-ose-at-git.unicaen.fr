@@ -595,8 +595,7 @@ class DataGen
         $formules = [];
         foreach ($data as $id => $formule) {
             $formule['ID'] = $id;
-            if (!isset($formule['INTERVENANT_QUERY'])) $formule['INTERVENANT_QUERY'] = null;
-            if (!isset($formule['VOLUME_HORAIRE_QUERY'])) $formule['VOLUME_HORAIRE_QUERY'] = null;
+            if (!isset($formule['ACTIVE'])) $formule['ACTIVE'] = true;
             for ($i = 1; $i < 6; $i++) {
                 if (!isset($formule['I_PARAM_' . $i . '_LIBELLE'])) $formule['I_PARAM_' . $i . '_LIBELLE'] = null;
                 if (!isset($formule['VH_PARAM_' . $i . '_LIBELLE'])) $formule['VH_PARAM_' . $i . '_LIBELLE'] = null;

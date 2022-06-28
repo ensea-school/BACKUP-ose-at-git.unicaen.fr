@@ -2,6 +2,7 @@
 
 namespace Application\Form;
 
+use Application\Entity\Db\Formule;
 use Application\Entity\Db\Parametre;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\AnneeServiceAwareTrait;
@@ -183,14 +184,12 @@ class ParametresForm extends AbstractForm
         $this->add([
             'type'       => 'Select',
             'name'       => 'formule',
-            'options'    => [
-                'value_options' => Util::collectionAsOptions($this->getServiceFormule()->getList()),
-            ],
             'attributes' => [
                 'class'            => 'selectpicker',
                 'data-live-search' => 'true',
             ],
         ]);
+        $this->setValueOptions('formule', 'SELECT f FROM ' . Formule::class . ' f WHERE f.active = true ORDER BY f.libelle');
 
         $this->add([
             'type'       => 'Select',
@@ -616,6 +615,7 @@ class ParametresForm extends AbstractForm
             ],
         ]);
     }
+
 
 
     /**

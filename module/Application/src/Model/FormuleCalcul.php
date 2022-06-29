@@ -92,11 +92,6 @@ class FormuleCalcul
             'ponderation_service_du'    => 'vh.ponderation_service_du',
             'ponderation_service_compl' => 'vh.ponderation_service_compl',
             'heures'                    => 'vh.heures',
-            'p1'                        => 'vh.param_1',
-            'p2'                        => 'vh.param_2',
-            'p3'                        => 'vh.param_3',
-            'p4'                        => 'vh.param_4',
-            'p5'                        => 'vh.param_5',
             'service_fi'                => 'vh.service_fi',
             'service_fa'                => 'vh.service_fa',
             'service_fc'                => 'vh.service_fc',
@@ -118,6 +113,20 @@ class FormuleCalcul
             }
         }
 
+        for ($colNum = 1; $colNum <= $maxCol; $colNum++) {
+            $cell   = $this->getSheet()->getCellByCoords($colNum, $this->mainLine - 2);
+            $colLib = Util::reduce($cell?->getContent() ?? '');
+            if (str_contains($colLib, Util::reduce('spécifique'))) {
+                for ($pnum = 1; $pnum <= 5; $pnum++) {
+                    $cell = $this->getSheet()->getCellByCoords($colNum - 1 + $pnum, $this->mainLine);
+                    if (($cell?->getContent() ?? '') != '') {
+                        $this->cellsPos['vh.param_' . $pnum] = Calc::numberToLetter($colNum - 1 + $pnum);
+                    }
+                }
+                break;
+            }
+        }
+
         $iColsRefs = [
             'type_intervenant_code'          => 'i.type_intervenant_code',
             'structure_code'                 => 'i.structure_code',
@@ -125,11 +134,6 @@ class FormuleCalcul
             'heures_service_statutaire'      => 'i.heures_service_statutaire',
             'heures_service_modifie'         => 'i.heures_service_modifie',
             'depassement_service_du_sans_hc' => 'i.depassement_service_du_sans_hc',
-            'param_1'                        => 'i.param_1',
-            'param_2'                        => 'i.param_2',
-            'param_3'                        => 'i.param_3',
-            'param_4'                        => 'i.param_4',
-            'param_5'                        => 'i.param_5',
         ];
         $col       = 3; // C
 
@@ -138,6 +142,15 @@ class FormuleCalcul
             $colLib = Util::reduce($cell?->getContent() ?? '');
             if (array_key_exists($colLib, $iColsRefs)) {
                 $this->cellsPos[$iColsRefs[$colLib]] = 'D' . $ligne;
+            }
+        }
+
+        ['col' => $null, 'row' => $dsdshc] = Calc::cellNameToCoords($this->cellsPos['i.depassement_service_du_sans_hc']);
+
+        for ($pnum = 1; $pnum <= 5; $pnum++) {
+            $cell = $this->getSheet()->getCellByCoords($col + 1, $dsdshc + $pnum);
+            if ($cell?->getContent()) {
+                $this->cellsPos['i.param_' . $pnum] = Calc::coordsToCellName($col + 1, $dsdshc + $pnum);
             }
         }
 
@@ -252,6 +265,31 @@ class FormuleCalcul
 
 
 
+    public function getParams(): array
+    {
+        $params   = [];
+        $cellsPos = $this->getCellsPos();
+
+        for ($i = 1; $i <= 5; $i++) {
+            if (isset($cellsPos['i.param_' . $i])) {
+                $lcp = Calc::cellNameToCoords($cellsPos['i.param_' . $i]);
+                $lcp['col']--;
+                $cell                    = $this->getSheet()->getCellByCoords($lcp['col'], $lcp['row']);
+                $params['i.param_' . $i] = $cell->getContent();
+            }
+            if (isset($cellsPos['vh.param_' . $i])) {
+                $lcp                      = Calc::cellNameToCoords($cellsPos['vh.param_' . $i]);
+                $lcp['row']               = $this->mainLine - 1;
+                $cell                     = $this->getSheet()->getCellByCoords($lcp['col'], $lcp['row']);
+                $params['vh.param_' . $i] = $cell->getContent();
+            }
+        }
+
+        return $params;
+    }
+
+
+
     public function makePackageDef(): string
     {
         $def = "CREATE OR REPLACE PACKAGE FORMULE_" . $this->getName() . " AS
@@ -292,6 +330,9 @@ END FORMULE_" . $this->getName() . ";";
         /** @var Calc\Cell[] $formules */
         foreach ($formules as $name => $cell) {
             $expr = $cell->getFormuleExpr();
+            if ($this->exprIsTest($expr)) {
+                $expr = $this->exprTestToIf($expr);
+            }
 
             $mls = (string)$this->mainLine;
             if (str_ends_with($name, $mls)) {
@@ -324,12 +365,105 @@ END FORMULE_" . $this->getName() . ";";
         $formule = new Formule($tableur);
 
         $struct = $formule->analyse();
+        if ($this->exprIsTest($struct)) {
+            $struct = $this->exprTestToIf($struct);
+        }
 
         $plsql = $this->exprToPlSql($struct);
         \UnicaenCode\Util::highlight($plsql, 'plsql', true, ['show-line-numbers' => true]);
 
         $formule->displayTerms();
         $formule->displayExprs();
+    }
+
+
+
+    private function exprIsTest(array &$expr): bool
+    {
+        if (count($expr) === 1 && $expr[0]['type'] === 'function') {
+            switch ($expr[0]['name']) {
+                case 'AND':
+                    return true;
+                case 'OR':
+                    return true;
+                case 'NOT':
+                    return true;
+            }
+
+            return false;
+        }
+
+        foreach ($expr as $term) {
+            if ($term['type'] === 'op') {
+                switch ($term['name']) {
+                    case '=';
+                        return true;
+                    case '>=';
+                        return true;
+                    case '<=';
+                        return true;
+                    case '<>';
+                        return true;
+                    case '>';
+                        return true;
+                    case '<';
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+
+    private function exprTestToIf(array $expr): array
+    {
+        return [
+            [
+                'type'  => 'function',
+                'name'  => 'IF',
+                'exprs' => [
+                    $expr,
+                    [
+                        [
+                            'type'  => 'number',
+                            'value' => 1.0,
+                        ],
+                    ],
+                    [
+                        [
+                            'type'  => 'number',
+                            'value' => 0,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+
+
+    private function exprToTest(array $expr): array
+    {
+        $res = [];
+        if (count($expr) === 1) {
+            $res = $expr;
+        } else {
+            $res = [['type' => 'expr', 'expr' => $expr]];
+        }
+
+
+        $res[] = [
+            'type' => 'op',
+            'name' => '=',
+        ];
+        $res[] = [
+            'type'  => 'number',
+            'value' => 1.0,
+        ];
+
+        return $res;
     }
 
 
@@ -766,6 +900,10 @@ END FORMULE_" . $this->getName() . ";";
             $else = $term['exprs'][2];
         } else {
             $else = null;
+        }
+
+        if (!$this->exprIsTest($cond)) {
+            $cond = $this->exprToTest($cond);
         }
 
         $plsql = 'IF ' . $this->traductionExpr($cond, false) . " THEN\n";

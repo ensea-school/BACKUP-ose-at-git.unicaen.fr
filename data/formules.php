@@ -103,4 +103,8 @@ return [
         'LIBELLE'      => 'Université de Versailles Saint-Quentin-en-Yvelines',
         'PACKAGE_NAME' => 'FORMULE_UVSQ',
     ],
+    24 => [
+        'LIBELLE'      => 'Université Paris-Saclay',
+        'PACKAGE_NAME' => 'FORMULE_SACLAY',
+    ],
 ];

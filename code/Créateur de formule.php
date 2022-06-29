@@ -65,35 +65,19 @@ switch ($action) {
             try {
                 $bdd->exec($def);
                 $bdd->exec($body);
-
+                echo '<div class="alert alert-success">Package de formule correctement implanté dans la BDD</div>';
+                affCreateData($fc);
+            } catch
+            (\Exception $e) {
                 ?>
-                <div class="alert alert-success">Package de formule correctement implanté dans la BDD</div>
-                <?php
-
-                $packageName = 'FORMULE_' . $name . '2';
-                $pe          = $bdd->select('SELECT id FROM formule WHERE package_name = :pn', ['pn' => $packageName]);
-                if (empty($pe)) {
-                    $newFormuleId = $bdd->select('SELECT max(id) + 1 nid FROM formule')[0]['NID'];
-
-                    ?>
-                    <div class="alert alert-info">
-                        Cette formule n'est pas encore déclarée en BDD.
-                        Vous devez l'ajouter dans le fichier /data/formules.php
-                        <pre>
-    <?= $newFormuleId ?> => [
-        'LIBELLE'      => '...',
-        'PACKAGE_NAME' => '<?= $packageName ?>',
-    ],</pre>
-
-                        Puis lancer
-                        <pre>./bin/ose update-bdd-formules</pre>
-
-                    </div>
+                <div class="alert alert-danger">
                     <?php
-                }
-            } catch (\Exception $e) {
-                ?>
-                <div class="alert alert-danger"><?= $e->getMessage() ?>></div>
+                    $msg = $e->getMessage();
+                    if (str_starts_with($msg, 'ORA-24344')) {
+                        $msg = 'ERREUR : Le package ne compile pas';
+                    }
+                    echo $msg ?>
+                </div>
                 <?php
             }
 
@@ -103,4 +87,61 @@ switch ($action) {
         Util::highlight($def, 'plsql', true, ['show-line-numbers' => true]);
         Util::highlight($body, 'plsql', true, ['show-line-numbers' => true]);
     break;
+}
+
+
+function affCreateData(\Application\Model\FormuleCalcul $fc)
+{
+    $bdd         = oseAdmin()->getBdd();
+    $packageName = 'FORMULE_' . $fc->getName();
+    $pe          = $bdd->select('SELECT id FROM formule WHERE package_name = :pn', ['pn' => $packageName]);
+    if (empty($pe)) {
+        $newFormuleId = $bdd->select('SELECT max(id) + 1 nid FROM formule')[0]['NID'];
+
+        $array  = [
+            'LIBELLE'      => '...',
+            'PACKAGE_NAME' => $packageName,
+        ];
+        $params = $fc->getParams();
+        $plibs  = [
+            'I_PARAM_1_LIBELLE'  => 'i.param_1',
+            'I_PARAM_2_LIBELLE'  => 'i.param_2',
+            'I_PARAM_3_LIBELLE'  => 'i.param_3',
+            'I_PARAM_4_LIBELLE'  => 'i.param_4',
+            'I_PARAM_5_LIBELLE'  => 'i.param_5',
+            'VH_PARAM_1_LIBELLE' => 'vh.param_1',
+            'VH_PARAM_2_LIBELLE' => 'vh.param_2',
+            'VH_PARAM_3_LIBELLE' => 'vh.param_3',
+            'VH_PARAM_4_LIBELLE' => 'vh.param_4',
+            'VH_PARAM_5_LIBELLE' => 'vh.param_5',
+        ];
+        foreach ($plibs as $col => $param) {
+            if (isset($params[$param])) {
+                $array[$col] = $params[$param];
+            }
+        }
+
+        $kl = 0;
+        foreach ($array as $k => $v) {
+            if (strlen($k) > $kl) $kl = strlen($k);
+        }
+
+        echo '<div class="alert alert-info">';
+        echo 'Cette formule n\'est pas encore déclarée en BDD. Vous devez l\'ajouter dans le fichier /data/formules.php';
+        echo '<pre>';
+        echo "$newFormuleId => [\n";
+        foreach ($array as $k => $v) {
+            $pad = str_pad('', $kl - strlen($k), ' ');
+            echo "\t'$k'$pad => '$v',\n";
+        }
+        echo "];";
+        echo '</pre>';
+
+        if (!empty($params)) {
+            echo '<div class="alert alert-warning">Attention : cette formule a besoin de paramètres. Vous devrez adapter le package et écrire les requêtes correspondantes</div>';
+        }
+
+        echo 'Puis lancer<pre>./bin/ose update-bdd-formules</pre>';
+        echo '</div>';
+    }
 }

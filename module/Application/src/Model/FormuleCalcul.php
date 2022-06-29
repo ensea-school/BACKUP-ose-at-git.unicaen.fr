@@ -889,6 +889,7 @@ END FORMULE_" . $this->getName() . ";";
         $functions = [
             'IF'  => 'traductionFunctionIf',
             'AND' => 'traductionFunctionAnd',
+            'OR'  => 'traductionFunctionOr',
         ];
 
         if (array_key_exists($term['name'], $functions)) {
@@ -989,6 +990,28 @@ END FORMULE_" . $this->getName() . ";";
                 $plExprs[$e] = $this->traductionExpr($fExpr);
             }
             $plsql .= implode(' AND ', $plExprs);
+        }
+
+        if (count($expr) === 1) {
+            return $plsql;
+        } else {
+            return '(' . $plsql . ')';
+        }
+    }
+
+
+
+    private function traductionFunctionOr(array &$expr, int $i): string
+    {
+        $term  = $expr[$i];
+        $plsql = '';
+
+        if (!empty($term['exprs'])) {
+            $plExprs = [];
+            foreach ($term['exprs'] as $e => $fExpr) {
+                $plExprs[$e] = $this->traductionExpr($fExpr);
+            }
+            $plsql .= implode(' OR ', $plExprs);
         }
 
         if (count($expr) === 1) {

@@ -41,8 +41,10 @@ return [
         'PACKAGE_NAME' => 'FORMULE_COTE_AZUR',
     ],
     10 => [
-        'LIBELLE'      => 'Université Rennes 2',
-        'PACKAGE_NAME' => 'FORMULE_RENNES2',
+        'LIBELLE'            => 'Université Rennes 2',
+        'PACKAGE_NAME'       => 'FORMULE_RENNES2',
+        'VH_PARAM_1_LIBELLE' => 'Autre établissement',
+        'VH_PARAM_2_LIBELLE' => 'Maquettes Apogée',
     ],
     11 => [
         'LIBELLE'      => 'INSA de Lyon',

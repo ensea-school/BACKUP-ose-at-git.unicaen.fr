@@ -82,9 +82,7 @@ switch ($action) {
                 $bdd->exec($def);
                 $bdd->exec($body);
                 echo '<div class="alert alert-success">Package de formule correctement implanté dans la BDD</div>';
-                affCreateData($fc);
-            } catch
-            (\Exception $e) {
+            } catch (\Exception $e) {
                 ?>
                 <div class="alert alert-danger">
                     <?php
@@ -96,9 +94,10 @@ switch ($action) {
                 </div>
                 <?php
             }
-
-            echo '<h2>Code généré</h2>';
         }
+        affCreateData($fc);
+
+        echo '<h2>Code généré</h2>';
 
         Util::highlight($def, 'plsql', true, ['show-line-numbers' => true]);
         Util::highlight($body, 'plsql', true, ['show-line-numbers' => true]);

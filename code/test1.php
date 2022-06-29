@@ -26,7 +26,10 @@ $f = 'IF([.AJ$15]>0;[.AI20]/[.AJ$15];0)';
 
 //xmlDump($fc->getSheet()->getNode());
 
-$fc->testFormule($f);
+//$fc->testFormule($f);
+
+$c = $fc->getSheet()->getCell('AG16');
+var_dump($c->getDeps());
 
 //echo $fc->getSheet(1)->html();
 

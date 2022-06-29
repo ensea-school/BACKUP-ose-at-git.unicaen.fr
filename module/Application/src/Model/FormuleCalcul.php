@@ -365,16 +365,20 @@ END FORMULE_" . $this->getName() . ";";
             foreach ($deps as $dep) {
                 $dep = str_replace('$', '', $dep);
                 if (!array_key_exists($dep, $formules)) {
-                    $found = false;
-                    foreach ($cellsPos as $cp) {
-                        if ($cp . $mls === $dep) {
-                            $found = true;
-                            break;
+                    $depCoords = Calc::cellNameToCoords($dep);
+                    if ($depCoords['col'] > 11) { // > K
+                        $found = false;
+
+                        foreach ($cellsPos as $cp) {
+                            if ($cp . $mls === $dep) {
+                                $found = true;
+                                break;
+                            }
                         }
-                    }
-                    if (!$found) {
-                        $cellDep        = $this->getSheet()->getCell($dep);
-                        $formules[$dep] = $cellDep;
+                        if (!$found) {
+                            $cellDep        = $this->getSheet()->getCell($dep);
+                            $formules[$dep] = $cellDep;
+                        }
                     }
                 }
             }

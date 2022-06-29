@@ -308,8 +308,34 @@ END FORMULE_" . $this->getName() . ";";
 
 
 
-    public function makePackageBody(): string
+    public function makePackageBody(?string $intervenantQuery = null, ?string $volumeHoraireQuery = null): string
     {
+        if (!$intervenantQuery) {
+            $intervenantQuery = 'SELECT
+      fi.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      V_FORMULE_INTERVENANT fi';
+        }
+
+        if (!$volumeHoraireQuery) {
+            $volumeHoraireQuery = 'SELECT
+      fvh.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      V_FORMULE_VOLUME_HORAIRE fvh
+    ORDER BY
+      ordre';
+        }
+
         $s        = $this->getSheet();
         $formules = [];
 
@@ -328,6 +354,33 @@ END FORMULE_" . $this->getName() . ";";
         $cells = '';
 
         /** @var Calc\Cell[] $formules */
+        foreach ($formules as $name => $cell) {
+            /* On recherche les cases supplémentaires qui manqueraient */
+            $mls = (string)$this->mainLine;
+            if (str_ends_with($name, $mls)) {
+                $name = substr($name, 0, -strlen($mls));
+            }
+
+            $deps = $cell->getDeps();
+            foreach ($deps as $dep) {
+                $dep = str_replace('$', '', $dep);
+                if (!array_key_exists($dep, $formules)) {
+                    $found = false;
+                    foreach ($cellsPos as $cp) {
+                        if ($cp . $mls === $dep) {
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if (!$found) {
+                        $cellDep        = $this->getSheet()->getCell($dep);
+                        $formules[$dep] = $cellDep;
+                    }
+                }
+            }
+        }
+
+
         foreach ($formules as $name => $cell) {
             $expr = $cell->getFormuleExpr();
             if ($this->exprIsTest($expr)) {
@@ -350,6 +403,8 @@ END FORMULE_" . $this->getName() . ";";
         $body = str_replace('<--DECALAGE-->', $this->mainLine - 1, $body);
         $body = str_replace('<--CELLS-->', $cells, $body);
         $body = str_replace('<--NAME-->', $this->getName(), $body);
+        $body = str_replace('<--INTERVENANT_QUERY-->', $intervenantQuery, $body);
+        $body = str_replace('<--VOLUME_HORAIRE_QUERY-->', $volumeHoraireQuery, $body);
         foreach ($cellsPos as $param => $cell) {
             $body = str_replace("<--$param-->", "'" . $cell . "'", $body);
         }

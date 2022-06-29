@@ -50,7 +50,7 @@ if (!file_exists($fichier['tmp_name'])) {
     return;
 }
 
-$fc           = new \Application\Model\FormuleCalcul($fichier['tmp_name'], $name);
+$fc                         = new \Application\Model\FormuleCalcul($fichier['tmp_name'], $name);
 
 switch ($action) {
     case 'feuille':
@@ -58,8 +58,24 @@ switch ($action) {
     break;
     case 'aff':
     case 'gen':
-        $def = $fc->makePackageDef();
-        $body = $fc->makePackageBody();
+        $intervenantQuery = null;
+        $volumeHoraireQuery = null;
+        try {
+            $packageName = 'FORMULE_' . $fc->getName();
+            $pe          = $bdd->select('SELECT id FROM formule WHERE package_name = :pn', ['pn' => $packageName]);
+            if (!empty($pe)) {
+                $intervenantQuery   = trim(@$bdd->select("SELECT $packageName.INTERVENANT_QUERY Q FROM dual")[0]['Q']);
+                $volumeHoraireQuery = trim(@$bdd->select("SELECT $packageName.VOLUME_HORAIRE_QUERY Q FROM dual")[0]['Q']);
+
+                $intervenantQuery   = str_replace("'", "''", $intervenantQuery);
+                $volumeHoraireQuery = str_replace("'", "''", $volumeHoraireQuery);
+            }
+        } catch (\Exception $e) {
+
+        }
+
+        $def  = $fc->makePackageDef();
+        $body = $fc->makePackageBody($intervenantQuery, $volumeHoraireQuery);
 
         if ($action === 'gen') {
             try {
@@ -97,51 +113,53 @@ function affCreateData(\Application\Model\FormuleCalcul $fc)
     $pe          = $bdd->select('SELECT id FROM formule WHERE package_name = :pn', ['pn' => $packageName]);
     if (empty($pe)) {
         $newFormuleId = $bdd->select('SELECT max(id) + 1 nid FROM formule')[0]['NID'];
-
-        $array  = [
-            'LIBELLE'      => '...',
-            'PACKAGE_NAME' => $packageName,
-        ];
-        $params = $fc->getParams();
-        $plibs  = [
-            'I_PARAM_1_LIBELLE'  => 'i.param_1',
-            'I_PARAM_2_LIBELLE'  => 'i.param_2',
-            'I_PARAM_3_LIBELLE'  => 'i.param_3',
-            'I_PARAM_4_LIBELLE'  => 'i.param_4',
-            'I_PARAM_5_LIBELLE'  => 'i.param_5',
-            'VH_PARAM_1_LIBELLE' => 'vh.param_1',
-            'VH_PARAM_2_LIBELLE' => 'vh.param_2',
-            'VH_PARAM_3_LIBELLE' => 'vh.param_3',
-            'VH_PARAM_4_LIBELLE' => 'vh.param_4',
-            'VH_PARAM_5_LIBELLE' => 'vh.param_5',
-        ];
-        foreach ($plibs as $col => $param) {
-            if (isset($params[$param])) {
-                $array[$col] = $params[$param];
-            }
-        }
-
-        $kl = 0;
-        foreach ($array as $k => $v) {
-            if (strlen($k) > $kl) $kl = strlen($k);
-        }
-
-        echo '<div class="alert alert-info">';
-        echo 'Cette formule n\'est pas encore déclarée en BDD. Vous devez l\'ajouter dans le fichier /data/formules.php';
-        echo '<pre>';
-        echo "$newFormuleId => [\n";
-        foreach ($array as $k => $v) {
-            $pad = str_pad('', $kl - strlen($k), ' ');
-            echo "\t'$k'$pad => '$v',\n";
-        }
-        echo "];";
-        echo '</pre>';
-
-        if (!empty($params)) {
-            echo '<div class="alert alert-warning">Attention : cette formule a besoin de paramètres. Vous devrez adapter le package et écrire les requêtes correspondantes</div>';
-        }
-
-        echo 'Puis lancer<pre>./bin/ose update-bdd-formules</pre>';
-        echo '</div>';
+    } else {
+        $newFormuleId = $pe[0]['ID'];
     }
+
+    $array  = [
+        'LIBELLE'      => '...',
+        'PACKAGE_NAME' => $packageName,
+    ];
+    $params = $fc->getParams();
+    $plibs  = [
+        'I_PARAM_1_LIBELLE'  => 'i.param_1',
+        'I_PARAM_2_LIBELLE'  => 'i.param_2',
+        'I_PARAM_3_LIBELLE'  => 'i.param_3',
+        'I_PARAM_4_LIBELLE'  => 'i.param_4',
+        'I_PARAM_5_LIBELLE'  => 'i.param_5',
+        'VH_PARAM_1_LIBELLE' => 'vh.param_1',
+        'VH_PARAM_2_LIBELLE' => 'vh.param_2',
+        'VH_PARAM_3_LIBELLE' => 'vh.param_3',
+        'VH_PARAM_4_LIBELLE' => 'vh.param_4',
+        'VH_PARAM_5_LIBELLE' => 'vh.param_5',
+    ];
+    foreach ($plibs as $col => $param) {
+        if (isset($params[$param])) {
+            $array[$col] = $params[$param];
+        }
+    }
+
+    $kl = 0;
+    foreach ($array as $k => $v) {
+        if (strlen($k) > $kl) $kl = strlen($k);
+    }
+
+    echo '<div class="alert alert-info">';
+    echo 'Cette formule n\'est pas encore déclarée en BDD. Vous devez l\'ajouter dans le fichier /data/formules.php';
+    echo '<pre>';
+    echo "$newFormuleId => [\n";
+    foreach ($array as $k => $v) {
+        $pad = str_pad('', $kl - strlen($k), ' ');
+        echo "\t'$k'$pad => '$v',\n";
+    }
+    echo "];";
+    echo '</pre>';
+
+    if (!empty($params)) {
+        echo '<div class="alert alert-warning">Attention : cette formule a besoin de paramètres. Vous devrez adapter le package et écrire les requêtes correspondantes</div>';
+    }
+
+    echo 'Puis lancer<pre>./bin/ose update-bdd-formules</pre>';
+    echo '</div>';
 }

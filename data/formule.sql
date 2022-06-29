@@ -159,15 +159,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_<--NAME--> AS
   FUNCTION INTERVENANT_QUERY RETURN CLOB IS
   BEGIN
     RETURN '
-    SELECT
-      fi.*,
-      NULL param_1,
-      NULL param_2,
-      NULL param_3,
-      NULL param_4,
-      NULL param_5
-    FROM
-      V_FORMULE_INTERVENANT fi
+    <--INTERVENANT_QUERY-->
     ';
   END;
 
@@ -176,17 +168,8 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_<--NAME--> AS
   FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB IS
   BEGIN
     RETURN '
-    SELECT
-      fvh.*,
-      NULL param_1,
-      NULL param_2,
-      NULL param_3,
-      NULL param_4,
-      NULL param_5
-    FROM
-      V_FORMULE_VOLUME_HORAIRE fvh
-    ORDER BY
-      ordre';
+    <--VOLUME_HORAIRE_QUERY-->
+    ';
   END;
 
 END FORMULE_<--NAME-->;

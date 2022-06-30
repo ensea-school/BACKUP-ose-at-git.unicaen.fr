@@ -36,9 +36,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_<--NAME--> AS
     dbgi( '[calc|' || fncName || '|' || c || '|' || res );
   END;
 
-  FUNCTION cell( c VARCHAR2, l NUMERIC DEFAULT 0 ) RETURN FLOAT IS
+  FUNCTION cell( c VARCHAR2, l NUMERIC DEFAULT 9999 ) RETURN FLOAT IS
     val FLOAT;
   BEGIN
+    IF l = 0 THEN
+      RETURN 0;
+    END IF;
+
     IF feuille.exists(c) THEN
       IF feuille(c).cells.exists(l) THEN
         IF feuille(c).cells(l).enCalcul THEN
@@ -115,7 +119,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_<--NAME--> AS
     val FLOAT;
   BEGIN
     i := ose_formule.intervenant;
-    IF l > 0 THEN
+    IF l > 0 AND l <> 9999 THEN
       vh := ose_formule.volumes_horaires.items(l);
     END IF;
     CASE c
@@ -124,6 +128,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_<--NAME--> AS
 
 <--CELLS-->
     ELSE
+      dbms_output.put_line('La colonne c=' || c || ', l=' || l || ' n''existe pas!');
       raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
   END CASE;
   raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');

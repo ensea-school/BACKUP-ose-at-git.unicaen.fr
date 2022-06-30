@@ -90,7 +90,7 @@ switch ($action) {
                     if (str_starts_with($msg, 'ORA-24344')) {
                         $msg = 'ERREUR : Le package ne compile pas';
                     }
-                    echo $msg ?>
+                    echo nl2br($msg) ?>
                 </div>
                 <?php
             }

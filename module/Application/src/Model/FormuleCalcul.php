@@ -806,13 +806,15 @@ END FORMULE_" . $this->getName() . ";";
 
         $isIf = false;
         foreach ($expr as $i => $term) {
-            if ($term['type'] === 'function' && $term['name'] === 'IF') {
-                $isIf = true;
-            }
-            if (array_key_exists($term['type'], $methods)) {
-                $plsql .= $this->{$methods[$term['type']]}($expr, $i);
-            } else {
-                $plsql .= '[PB TRADUCTION]';
+            if ($term !== null) {
+                if ($term['type'] === 'function' && $term['name'] === 'IF') {
+                    $isIf = true;
+                }
+                if (array_key_exists($term['type'], $methods)) {
+                    $plsql .= $this->{$methods[$term['type']]}($expr, $i);
+                } else {
+                    $plsql .= '[PB TRADUCTION]';
+                }
             }
         }
 
@@ -1038,6 +1040,7 @@ END FORMULE_" . $this->getName() . ";";
         if (!empty($term['exprs'])) {
             $plExprs = [];
             foreach ($term['exprs'] as $e => $fExpr) {
+                $fExpr[]     = null;
                 $plExprs[$e] = $this->traductionExpr($fExpr);
             }
             $plsql .= implode(' AND ', $plExprs);
@@ -1060,6 +1063,7 @@ END FORMULE_" . $this->getName() . ";";
         if (!empty($term['exprs'])) {
             $plExprs = [];
             foreach ($term['exprs'] as $e => $fExpr) {
+                $fExpr[]     = null;
                 $plExprs[$e] = $this->traductionExpr($fExpr);
             }
             $plsql .= implode(' OR ', $plExprs);

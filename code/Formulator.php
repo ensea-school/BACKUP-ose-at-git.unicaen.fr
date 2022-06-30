@@ -152,7 +152,7 @@ function affCreateData(\Application\Model\FormuleCalcul $fc)
         $pad = str_pad('', $kl - strlen($k), ' ');
         echo "\t'$k'$pad => '$v',\n";
     }
-    echo "];";
+    echo "],";
     echo '</pre>';
 
     if (!empty($params)) {

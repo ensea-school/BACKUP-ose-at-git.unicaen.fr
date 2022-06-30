@@ -1,11 +1,6 @@
 <?php
 
 return [
-    1  => [
-        'LIBELLE'      => 'Université de Caen (version 2016)',
-        'PACKAGE_NAME' => 'FORMULE_UNICAEN_2016',
-        'ACTIVE'       => false,
-    ],
     2  => [
         'LIBELLE'      => 'Université de Montpellier',
         'PACKAGE_NAME' => 'FORMULE_MONTPELLIER',
@@ -51,11 +46,8 @@ return [
         'PACKAGE_NAME' => 'FORMULE_INSA_LYON',
     ],
     12 => [
-        'LIBELLE'           => 'Université de Poitiers',
-        'PACKAGE_NAME'      => 'FORMULE_POITIERS',
-        'I_PARAM_1_LIBELLE' => 'Heures max. référentiel en service',
-        'I_PARAM_2_LIBELLE' => 'Heures max. référentiel en HC',
-        'I_PARAM_3_LIBELLE' => 'Heures max. enseignement en HC',
+        'LIBELLE'      => 'Université de Poitiers',
+        'PACKAGE_NAME' => 'FORMULE_POITIERS',
     ],
     13 => [
         'LIBELLE'            => 'Université Paris 8',
@@ -84,7 +76,7 @@ return [
         'PACKAGE_NAME' => 'FORMULE_SORBONNE_NOUVELLE',
     ],
     19 => [
-        'LIBELLE'      => 'Université de Caen (version 2021)',
+        'LIBELLE'      => 'Université de Caen',
         'PACKAGE_NAME' => 'FORMULE_UNICAEN',
     ],
     20 => [

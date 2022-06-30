@@ -23,6 +23,7 @@
 * Budget/Liquidation : afficher le nombre de HETD uniquement des HCO et non les HETD des HCO + Heures de service
 * Notes : Afficher le bon utilisateur pour la validation de service (#45413).
 * Forcer l'activiation de l'étape pièces justificatives même si il n'y a pas de service prévisionnel de renseigné.
+* Choix du bon modèle de contrat dans le cas de plusieurs modèles de contrat (par structure et/ou par statut) (#45520) 
 
 # OSE 18.2 (15/06/2022)
 

@@ -1,396 +1,295 @@
-CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
+create or replace PACKAGE BODY "UNICAEN_TBL" AS
   TYPE t_dems_values IS TABLE OF BOOLEAN INDEX BY VARCHAR2(80);
-  TYPE
-t_dems_params IS TABLE OF t_dems_values INDEX BY VARCHAR2(30);
-  TYPE
-t_dems IS TABLE OF t_dems_params INDEX BY VARCHAR2(30);
+  TYPE t_dems_params IS TABLE OF t_dems_values INDEX BY VARCHAR2(30);
+  TYPE t_dems IS TABLE OF t_dems_params INDEX BY VARCHAR2(30);
 
-  dems
-t_dems;
+  dems t_dems;
 
 
 
-  FUNCTION
-MAKE_WHERE(param VARCHAR2 DEFAULT NULL, VALUE VARCHAR2 DEFAULT NULL,
+  FUNCTION MAKE_WHERE(param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL,
                       alias VARCHAR2 DEFAULT NULL) RETURN VARCHAR2 IS
     res VARCHAR2(120) DEFAULT '';
-BEGIN
-    IF
-param IS NULL THEN
+  BEGIN
+    IF param IS NULL THEN
       RETURN '1=1';
-END IF;
-    IF
-alias IS NOT NULL THEN
+    END IF;
+    IF alias IS NOT NULL THEN
       res := alias || '.';
-END IF;
-    IF
-VALUE IS NULL THEN
+    END IF;
+    IF value IS NULL THEN
       RETURN res || param || ' IS NULL';
-END IF;
-RETURN res || param || ' = q''[' || value || ']''';
-END;
+    END IF;
+   RETURN res || param || ' = q''[' || value || ']''';
+  END;
 
 
 
-  FUNCTION
-QUERY_APPLY_PARAM(sqlQuery VARCHAR2, param VARCHAR2, VALUE VARCHAR2) RETURN CLOB IS
+  FUNCTION QUERY_APPLY_PARAM(sqlQuery VARCHAR2, param VARCHAR2, value VARCHAR2) RETURN CLOB IS
     pos       NUMERIC;
-    paramLen
-NUMERIC;
-    paramComm
-VARCHAR2(200);
-    debComm
-NUMERIC;
-    endComm
-NUMERIC;
-    debReal
-NUMERIC;
-    realParam
-VARCHAR2(80);
-    realValue
-VARCHAR2(120);
-    q
-CLOB;
-BEGIN
-    q
-:= sqlQuery;
-    IF
-param IS NULL THEN
+    paramLen  NUMERIC;
+    paramComm VARCHAR2(200);
+    debComm   NUMERIC;
+    endComm   NUMERIC;
+    debReal   NUMERIC;
+    realParam VARCHAR2(80);
+    realValue VARCHAR2(120);
+    q         CLOB;
+  BEGIN
+    q := sqlQuery;
+    IF param IS NULL THEN
       RETURN q;
-END IF;
+    END IF;
 
-    paramlen
-:= LENGTH(param);
-    IF
-VALUE IS NULL THEN
+    paramlen := length(param);
+    IF value IS NULL THEN
       realValue := ' IS NULL';
-ELSE
-BEGIN
-        realValue
-:= TO_NUMBER(VALUE);
-EXCEPTION
+    ELSE
+      BEGIN
+        realValue := TO_NUMBER(value);
+      EXCEPTION
         WHEN VALUE_ERROR THEN
-          realValue := 'q''[' || VALUE || ']''';
-END;
-     realValue
-:= '=' || realValue;
-END IF;
+          realValue := 'q''[' || value || ']''';
+      END;
+     realValue := '=' || realValue;
+    END IF;
 
     LOOP
-pos := instr(q, '/*@' || param, 1, 1);
-      EXIT
-WHEN pos = 0;
-     debComm
-:= pos - 1;
-      endComm
-:= instr(q, '*/', pos, 1);
-      paramComm
-:= substr(q, debComm, endComm - debComm);
-     debReal
-:= instr(paramComm, '=', 1, 1);
-     realParam
-:= TRIM(substr(paramComm, debReal + 1));
+      pos := instr(q, '/*@' || param, 1, 1);
+      EXIT WHEN pos = 0;
+     debComm := pos - 1;
+      endComm := instr(q, '*/', pos, 1);
+      paramComm := substr(q, debComm, endComm - debComm);
+     debReal := instr(paramComm, '=', 1, 1);
+     realParam := trim(substr(paramComm, debReal + 1));
      --realParam := 'AND ' || substr(q,pos + paramLen + 4,endComm-pos - paramLen - 4);
-      realParam
-:= 'AND ' || realParam || realValue;
-     q
-:= substr(q, 1, debComm) || realParam || substr(q, endComm + 2);
-END LOOP;
+      realParam := 'AND ' || realParam || realValue;
+     q := substr(q, 1, debComm) || realParam || substr(q, endComm + 2);
+    END LOOP;
 
-RETURN q;
-END;
+    RETURN q;
+  END;
 
 
-  FUNCTION
-QUERY_APPLY_PARAMS(sqlQuery VARCHAR2, useParams BOOLEAN DEFAULT FALSE) RETURN CLOB IS
+  FUNCTION QUERY_APPLY_PARAMS(sqlQuery VARCHAR2, useParams BOOLEAN DEFAULT FALSE) RETURN CLOB IS
     q CLOB;
-BEGIN
-    q
-:= sqlQuery;
+  BEGIN
+    q := sqlQuery;
 
-    IF
-NOT useParams THEN
+    IF NOT useParams THEN
       RETURN q;
-END IF;
+    END IF;
 
-    IF
-UNICAEN_TBL.CALCUL_PROC_PARAMS.p1 IS NOT NULL THEN
+    IF UNICAEN_TBL.CALCUL_PROC_PARAMS.p1 IS NOT NULL THEN
       q := QUERY_APPLY_PARAM(q, UNICAEN_TBL.CALCUL_PROC_PARAMS.p1, UNICAEN_TBL.CALCUL_PROC_PARAMS.v1);
-END IF;
+    END IF;
 
-    IF
-UNICAEN_TBL.CALCUL_PROC_PARAMS.p2 IS NOT NULL THEN
+    IF UNICAEN_TBL.CALCUL_PROC_PARAMS.p2 IS NOT NULL THEN
       q := QUERY_APPLY_PARAM(q, UNICAEN_TBL.CALCUL_PROC_PARAMS.p2, UNICAEN_TBL.CALCUL_PROC_PARAMS.v2);
-END IF;
+    END IF;
 
-    IF
-UNICAEN_TBL.CALCUL_PROC_PARAMS.p3 IS NOT NULL THEN
+    IF UNICAEN_TBL.CALCUL_PROC_PARAMS.p3 IS NOT NULL THEN
       q := QUERY_APPLY_PARAM(q, UNICAEN_TBL.CALCUL_PROC_PARAMS.p3, UNICAEN_TBL.CALCUL_PROC_PARAMS.v3);
-END IF;
+    END IF;
 
-    IF
-UNICAEN_TBL.CALCUL_PROC_PARAMS.p4 IS NOT NULL THEN
+    IF UNICAEN_TBL.CALCUL_PROC_PARAMS.p4 IS NOT NULL THEN
       q := QUERY_APPLY_PARAM(q, UNICAEN_TBL.CALCUL_PROC_PARAMS.p4, UNICAEN_TBL.CALCUL_PROC_PARAMS.v4);
-END IF;
+    END IF;
 
-    IF
-UNICAEN_TBL.CALCUL_PROC_PARAMS.p5 IS NOT NULL THEN
+    IF UNICAEN_TBL.CALCUL_PROC_PARAMS.p5 IS NOT NULL THEN
       q := QUERY_APPLY_PARAM(q, UNICAEN_TBL.CALCUL_PROC_PARAMS.p5, UNICAEN_TBL.CALCUL_PROC_PARAMS.v5);
-END IF;
+    END IF;
 
-RETURN q;
-END;
+    RETURN q;
+  END;
 
 
-  FUNCTION
-PARAMS_MAKE_FILTER(useParams BOOLEAN DEFAULT FALSE) RETURN VARCHAR2 IS
+  FUNCTION PARAMS_MAKE_FILTER(useParams BOOLEAN DEFAULT FALSE) RETURN VARCHAR2 IS
     filter VARCHAR2(4000) DEFAULT '';
-BEGIN
-    IF
-NOT useParams THEN
+  BEGIN
+    IF NOT useParams THEN
       RETURN '1=1';
-END IF;
+    END IF;
 
-    IF
-unicaen_tbl.calcul_proc_params.p1 IS NOT NULL THEN
+    IF unicaen_tbl.calcul_proc_params.p1 IS NOT NULL THEN
       IF filter IS NOT NULL THEN
         filter := filter || ' AND ';
-END IF;
-      filter
-:= filter || 'COALESCE(v.' || unicaen_tbl.calcul_proc_params.p1 || ', t.' || unicaen_tbl.calcul_proc_params.p1 || ') ';
-      IF
-unicaen_tbl.calcul_proc_params.v1 IS NULL THEN
+      END IF;
+      filter := filter || 'COALESCE(v.' || unicaen_tbl.calcul_proc_params.p1 || ', t.' || unicaen_tbl.calcul_proc_params.p1 || ') ';
+      IF unicaen_tbl.calcul_proc_params.v1 IS NULL THEN
         filter := filter || 'IS NULL';
-ELSE
+      ELSE
         filter := filter || '= q''[' || unicaen_tbl.calcul_proc_params.v1 || ']''';
-END IF;
-END IF;
+      END IF;
+    END IF;
 
-    IF
-unicaen_tbl.calcul_proc_params.p2 IS NOT NULL THEN
+    IF unicaen_tbl.calcul_proc_params.p2 IS NOT NULL THEN
       IF filter IS NOT NULL THEN
         filter := filter || ' AND ';
-END IF;
-      filter
-:= filter || 'COALESCE(v.' || unicaen_tbl.calcul_proc_params.p2 || ', t.' || unicaen_tbl.calcul_proc_params.p2 || ') ';
-      IF
-unicaen_tbl.calcul_proc_params.v2 IS NULL THEN
+      END IF;
+      filter := filter || 'COALESCE(v.' || unicaen_tbl.calcul_proc_params.p2 || ', t.' || unicaen_tbl.calcul_proc_params.p2 || ') ';
+      IF unicaen_tbl.calcul_proc_params.v2 IS NULL THEN
         filter := filter || 'IS NULL';
-ELSE
+      ELSE
         filter := filter || '= q''[' || unicaen_tbl.calcul_proc_params.v2 || ']''';
-END IF;
-END IF;
+      END IF;
+    END IF;
 
-    IF
-unicaen_tbl.calcul_proc_params.p3 IS NOT NULL THEN
+    IF unicaen_tbl.calcul_proc_params.p3 IS NOT NULL THEN
       IF filter IS NOT NULL THEN
         filter := filter || ' AND ';
-END IF;
-      filter
-:= filter || 'COALESCE(v.' || unicaen_tbl.calcul_proc_params.p3 || ', t.' || unicaen_tbl.calcul_proc_params.p3 || ') ';
-      IF
-unicaen_tbl.calcul_proc_params.v3 IS NULL THEN
+      END IF;
+      filter := filter || 'COALESCE(v.' || unicaen_tbl.calcul_proc_params.p3 || ', t.' || unicaen_tbl.calcul_proc_params.p3 || ') ';
+      IF unicaen_tbl.calcul_proc_params.v3 IS NULL THEN
         filter := filter || 'IS NULL';
-ELSE
+      ELSE
         filter := filter || '= q''[' || unicaen_tbl.calcul_proc_params.v3 || ']''';
-END IF;
-END IF;
+      END IF;
+    END IF;
 
-    IF
-unicaen_tbl.calcul_proc_params.p4 IS NOT NULL THEN
+    IF unicaen_tbl.calcul_proc_params.p4 IS NOT NULL THEN
       IF filter IS NOT NULL THEN
         filter := filter || ' AND ';
-END IF;
-      filter
-:= filter || 'COALESCE(v.' || unicaen_tbl.calcul_proc_params.p4 || ', t.' || unicaen_tbl.calcul_proc_params.p4 || ') ';
-      IF
-unicaen_tbl.calcul_proc_params.v4 IS NULL THEN
+      END IF;
+      filter := filter || 'COALESCE(v.' || unicaen_tbl.calcul_proc_params.p4 || ', t.' || unicaen_tbl.calcul_proc_params.p4 || ') ';
+      IF unicaen_tbl.calcul_proc_params.v4 IS NULL THEN
         filter := filter || 'IS NULL';
-ELSE
+      ELSE
         filter := filter || '= q''[' || unicaen_tbl.calcul_proc_params.v4 || ']''';
-END IF;
-END IF;
+      END IF;
+    END IF;
 
-    IF
-unicaen_tbl.calcul_proc_params.p5 IS NOT NULL THEN
+    IF unicaen_tbl.calcul_proc_params.p5 IS NOT NULL THEN
       IF filter IS NOT NULL THEN
         filter := filter || ' AND ';
-END IF;
-      filter
-:= filter || 'COALESCE(v.' || unicaen_tbl.calcul_proc_params.p5 || ', t.' || unicaen_tbl.calcul_proc_params.p5 || ') ';
-      IF
-unicaen_tbl.calcul_proc_params.v5 IS NULL THEN
+      END IF;
+      filter := filter || 'COALESCE(v.' || unicaen_tbl.calcul_proc_params.p5 || ', t.' || unicaen_tbl.calcul_proc_params.p5 || ') ';
+      IF unicaen_tbl.calcul_proc_params.v5 IS NULL THEN
         filter := filter || 'IS NULL';
-ELSE
+      ELSE
         filter := filter || '= q''[' || unicaen_tbl.calcul_proc_params.v5 || ']''';
-END IF;
-END IF;
+      END IF;
+    END IF;
 
-    IF
-filter IS NULL THEN
+    IF filter IS NULL OR filter = '' THEN
       RETURN '1=1';
-END IF;
+    END IF;
 
-RETURN filter;
-END;
+    RETURN filter;
+  END;
 
 
 
-  PROCEDURE CALCULER(TBL_NAME VARCHAR2)
-IS
+  PROCEDURE CALCULER(TBL_NAME VARCHAR2) IS
     params t_params;
-BEGIN
-    ANNULER_DEMANDES
-(TBL_NAME);
-    CALCULER
-(TBL_NAME, params);
-END;
+  BEGIN
+    ANNULER_DEMANDES(TBL_NAME);
+    CALCULER(TBL_NAME, params);
+  END;
 
 
 
-  PROCEDURE CALCULER(TBL_NAME VARCHAR2, param VARCHAR2, VALUE VARCHAR2)
-IS
+  PROCEDURE CALCULER(TBL_NAME VARCHAR2, param VARCHAR2, value VARCHAR2) IS
     calcul_proc varchar2(30);
-    params
-t_params;
-BEGIN
-    IF
-NOT UNICAEN_TBL.ACTIV_CALCULS THEN RETURN;
-END IF;
+    params t_params;
+  BEGIN
+    IF NOT UNICAEN_TBL.ACTIV_CALCULS THEN RETURN; END IF;
 
-SELECT custom_calcul_proc
-INTO calcul_proc
-FROM tbl
-WHERE tbl_name = calculer.tbl_name;
+    SELECT custom_calcul_proc INTO calcul_proc FROM tbl WHERE tbl_name = CALCULER.TBL_NAME;
 
-params
-.
-p1
-:= param;
-    params.v1
-:= VALUE;
+    params.p1 := param;
+    params.v1 := value;
 
-    unicaen_tbl.calcul_proc_params
-:= params;
+    unicaen_tbl.calcul_proc_params := params;
 
-    IF
-calcul_proc IS NOT NULL THEN
+    IF calcul_proc IS NOT NULL THEN
       EXECUTE IMMEDIATE
         'BEGIN ' || calcul_proc || '(UNICAEN_TBL.CALCUL_PROC_PARAMS.p1, UNICAEN_TBL.CALCUL_PROC_PARAMS.v1); END;';
-ELSE
+    ELSE
       EXECUTE IMMEDIATE
         'BEGIN UNICAEN_TBL.C_' || TBL_NAME || '(TRUE); END;';
-END IF;
-END;
+    END IF;
+  END;
 
 
 
-  PROCEDURE CALCULER(TBL_NAME VARCHAR2, params t_params)
-IS
+  PROCEDURE CALCULER(TBL_NAME VARCHAR2, params t_params) IS
     calcul_proc varchar2(30);
-BEGIN
-    IF
-NOT UNICAEN_TBL.ACTIV_CALCULS THEN RETURN;
-END IF;
+  BEGIN
+    IF NOT UNICAEN_TBL.ACTIV_CALCULS THEN RETURN; END IF;
 
-SELECT custom_calcul_proc
-INTO calcul_proc
-FROM tbl
-WHERE tbl_name = calculer.tbl_name;
+    SELECT custom_calcul_proc INTO calcul_proc FROM tbl WHERE tbl_name = CALCULER.TBL_NAME;
 
-unicaen_tbl
-.
-calcul_proc_params
-:= params;
+    unicaen_tbl.calcul_proc_params := params;
 
-    IF
-calcul_proc IS NOT NULL THEN
+    IF calcul_proc IS NOT NULL THEN
       EXECUTE IMMEDIATE
               'BEGIN ' || calcul_proc || '(UNICAEN_TBL.CALCUL_PROC_PARAMS.p1, UNICAEN_TBL.CALCUL_PROC_PARAMS.v1); END;';
-ELSE
+    ELSE
       EXECUTE IMMEDIATE
               'BEGIN UNICAEN_TBL.C_' || TBL_NAME || '(TRUE); END;';
-END IF;
-END;
+    END IF;
+  END;
 
 
 
-  PROCEDURE DEMANDE_CALCUL(TBL_NAME VARCHAR2, param VARCHAR2, VALUE VARCHAR2)
-IS
-BEGIN
-    dems
-(TBL_NAME)(param)(VALUE) := TRUE;
-END;
+  PROCEDURE DEMANDE_CALCUL(TBL_NAME VARCHAR2, param VARCHAR2, value VARCHAR2) IS
+  BEGIN
+    dems(TBL_NAME)(param)(value) := TRUE;
+  END;
 
 
 
-  PROCEDURE ANNULER_DEMANDES
-IS
-BEGIN
+  PROCEDURE ANNULER_DEMANDES IS
+  BEGIN
     dems.delete;
-END;
+  END;
 
 
 
-  PROCEDURE ANNULER_DEMANDES(TBL_NAME VARCHAR2)
-IS
-BEGIN
-    IF
-dems.exists(tbl_name) THEN
+  PROCEDURE ANNULER_DEMANDES(TBL_NAME VARCHAR2) IS
+  BEGIN
+    IF dems.exists(tbl_name) THEN
       dems(tbl_name).delete;
-END IF;
-END;
+    END IF;
+  END;
 
 
 
-  FUNCTION
-HAS_DEMANDES RETURN BOOLEAN IS
-BEGIN
-RETURN dems.count > 0;
-END;
+  FUNCTION HAS_DEMANDES RETURN BOOLEAN IS
+  BEGIN
+    RETURN dems.count > 0;
+  END;
 
 
 
-  PROCEDURE CALCULER_DEMANDES
-IS
+  PROCEDURE CALCULER_DEMANDES IS
     d t_dems;
-    tbl_name
-VARCHAR2(30);
-    param
-VARCHAR2(30);
-VALUE VARCHAR2(80);
-BEGIN
-    d
-:= dems;
+    tbl_name VARCHAR2(30);
+    param VARCHAR2(30);
+    value VARCHAR2(80);
+  BEGIN
+    d := dems;
     dems.delete;
 
-    tbl_name
-:= d.FIRST;
-    LOOP
-EXIT WHEN tbl_name IS NULL;
-      param
-:= d(tbl_name).FIRST;
-      LOOP
-EXIT WHEN param IS NULL;
-VALUE := d(tbl_name)(param).FIRST;
-        LOOP
-EXIT WHEN VALUE IS NULL;
-          calculer
-(tbl_name, param, VALUE);
-VALUE := d(tbl_name)(param).NEXT(VALUE);
-END LOOP;
-        param
-:= d(tbl_name).NEXT(param);
-END LOOP;
-      tbl_name
-:= d.NEXT(tbl_name);
-END LOOP;
+    tbl_name := d.FIRST;
+    LOOP EXIT WHEN tbl_name IS NULL;
+      param := d(tbl_name).FIRST;
+      LOOP EXIT WHEN param IS NULL;
+        value := d(tbl_name)(param).FIRST;
+        LOOP EXIT WHEN value IS NULL;
+          calculer(tbl_name, param, value);
+          value := d(tbl_name)(param).NEXT(value);
+        END LOOP;
+        param := d(tbl_name).NEXT(param);
+      END LOOP;
+      tbl_name := d.NEXT(tbl_name);
+    END LOOP;
 
-    IF
-HAS_DEMANDES THEN -- pour les boucles !!
+    IF HAS_DEMANDES THEN -- pour les boucles !!
       CALCULER_DEMANDES;
-END IF;
-END;
+    END IF;
+  END;
 
 
 
@@ -1690,56 +1589,55 @@ END;
           GROUP BY
             intervenant_id
         )
-        SELECT i.annee_id                        annee_id,
-               i.code                            code_intervenant,
-               i.id                              intervenant_id,
-               tpj.id                            type_piece_jointe_id,
-               MAX(COALESCE(i_h.heures, 0))      heures_pour_seuil,
-               tpjs.obligatoire                  obligatoire,
-               MAX(COALESCE(hetd.total_hetd, 0)) heures_pour_seuil_hetd
-        FROM intervenant i
+        SELECT
+          i.annee_id                      annee_id,
+          i.code code_intervenant,
+          i.id                            intervenant_id,
+          tpj.id                          type_piece_jointe_id,
+          MAX(COALESCE(i_h.heures, 0))    heures_pour_seuil,
+          tpjs.obligatoire obligatoire,
+          MAX(COALESCE(hetd.total_hetd, 0))    heures_pour_seuil_hetd
+        FROM
+                    intervenant                 i
 
-                 LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id
-            AND d.histo_destruction IS NULL
+          LEFT JOIN intervenant_dossier         d ON d.intervenant_id = i.id
+                                                 AND d.histo_destruction IS NULL
 
-                 JOIN type_piece_jointe_statut tpjs ON tpjs.statut_id = i.statut_id
-            AND tpjs.histo_destruction IS NULL
-            AND i.annee_id = tpjs.annee_id
+               JOIN type_piece_jointe_statut tpjs ON tpjs.statut_id = i.statut_id
+                                                 AND tpjs.histo_destruction IS NULL
+                                                 AND i.annee_id = tpjs.annee_id
 
-                 JOIN type_piece_jointe tpj ON tpj.id = tpjs.type_piece_jointe_id
-            AND tpj.histo_destruction IS NULL
+               JOIN type_piece_jointe         tpj ON tpj.id = tpjs.type_piece_jointe_id
+                                                 AND tpj.histo_destruction IS NULL
 
-                 LEFT JOIN i_h ON i_h.intervenant_id = i.id
-                 LEFT JOIN hetd ON hetd.intervenant_id = i.id
+          LEFT JOIN                           i_h ON i_h.intervenant_id = i.id
+          LEFT JOIN               hetd ON hetd.intervenant_id = i.id
         WHERE
           -- Gestion de l''historique
-            i.histo_destruction IS NULL
-            /*@INTERVENANT_ID=i.id*/
-            /*@ANNEE_ID=i.annee_id*/
+          i.histo_destruction IS NULL
+          /*@INTERVENANT_ID=i.id*/
+          /*@ANNEE_ID=i.annee_id*/
 
           -- Seuil heure soit en HETD soit en heure ou PJ obligatoire meme avec des heures non payables
-          AND (COALESCE(tpjs.seuil_hetd, 0) = 0
-            OR (COALESCE(tpjs.type_heure_hetd, 0) = 0 AND COALESCE(i_h.heures, 0) > COALESCE(tpjs.seuil_hetd, -1))
-            OR (tpjs.type_heure_hetd = 1 AND COALESCE(hetd.total_hetd, 0) > COALESCE(tpjs.seuil_hetd, -1))
-            OR (COALESCE(i_h.heures_non_payables, 0) > 0 AND tpjs.obligatoire_hnp = 1))
+          AND ((COALESCE(tpjs.type_heure_hetd,0) = 0 AND COALESCE(i_h.heures,0) > COALESCE(tpjs.seuil_hetd,-1))
+                OR (tpjs.type_heure_hetd = 1  AND COALESCE(hetd.total_hetd,0) > COALESCE(tpjs.seuil_hetd,-1))
+                OR (COALESCE(i_h.heures_non_payables,0) > 0 AND tpjs.obligatoire_hnp = 1 ))
 
 
           -- Le RIB n''est demandé QUE s''il est différent!!
           AND CASE
-                  WHEN tpjs.changement_rib = 0 OR d.id IS NULL THEN 1
-                  ELSE CASE
-                           WHEN replace(i.bic, '' '', '''') = replace(d.bic, '' '', '''') AND
-                                replace(i.iban, '' '', '''') = replace(d.iban, '' '', '''') THEN 0
-                           ELSE 1 END
-                  END = 1
+                WHEN tpjs.changement_rib = 0 OR d.id IS NULL THEN 1
+                ELSE CASE WHEN REPLACE(i.bic, '' '', '''') = REPLACE(d.bic, '' '', '''') AND REPLACE(i.iban, '' '', '''') = REPLACE(d.iban, '' '', '''') THEN 0 ELSE 1 END
+              END = 1
 
           -- Filtre FC
           AND (tpjs.fc = 0 OR i_h.fc > 0)
-        GROUP BY i.annee_id,
-                 i.id,
-                 i.code,
-                 tpj.id,
-                 tpjs.obligatoire';
+        GROUP BY
+          i.annee_id,
+          i.id,
+          i.code,
+          tpj.id,
+          tpjs.obligatoire';
 
     OPEN c FOR '
     SELECT
@@ -2005,6 +1903,33 @@ END;
           CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
+          SELECT 9 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                annee_id,
+                vh.type_volume_horaire_id type_volume_horaire_id,
+                i.id                      intervenant_id,
+                SUM(vh.heures)            heures
+              FROM
+                volume_horaire vh
+                JOIN service s ON s.id = vh.service_id
+                JOIN intervenant i ON i.id = s.intervenant_id
+                JOIN statut si ON si.id = i.statut_id
+              WHERE
+                vh.histo_destruction IS NULL
+                AND i.histo_destruction IS NULL
+                AND vh.motif_non_paiement_id IS NULL
+                AND si.code IN (''IMP'')
+              GROUP BY
+                i.annee_id,
+                vh.type_volume_horaire_id,
+                i.id,
+                i.statut_id
+              HAVING
+                SUM(vh.heures) >= 0
+            ) p
+
+            UNION ALL
+
           SELECT 1 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                          annee_id,
@@ -2035,24 +1960,6 @@ END;
 
             UNION ALL
 
-          SELECT 3 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
-            SELECT
-                i.annee_id                          annee_id,
-                fr.type_volume_horaire_id           type_volume_horaire_id,
-                i.id                                intervenant_id,
-                fr.heures_compl_fc_majorees         heures
-                /*ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond*/
-
-              FROM
-                     intervenant                i
-                JOIN annee                      a ON a.id = i.annee_id
-                JOIN statut                    si ON si.id = i.statut_id
-                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
-                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-            ) p
-
-            UNION ALL
-
           SELECT 4 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                annee_id,
@@ -2078,33 +1985,6 @@ END;
 
             UNION ALL
 
-          SELECT 9 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
-            SELECT
-                i.annee_id                annee_id,
-                vh.type_volume_horaire_id type_volume_horaire_id,
-                i.id                      intervenant_id,
-                SUM(vh.heures)            heures
-              FROM
-                volume_horaire vh
-                JOIN service s ON s.id = vh.service_id
-                JOIN intervenant i ON i.id = s.intervenant_id
-                JOIN statut si ON si.id = i.statut_id
-              WHERE
-                vh.histo_destruction IS NULL
-                AND i.histo_destruction IS NULL
-                AND vh.motif_non_paiement_id IS NULL
-                AND si.code IN (''IMP'')
-              GROUP BY
-                i.annee_id,
-                vh.type_volume_horaire_id,
-                i.id,
-                i.statut_id
-              HAVING
-                SUM(vh.heures) >= 0
-            ) p
-
-            UNION ALL
-
           SELECT 8 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                             annee_id,
@@ -2116,6 +1996,24 @@ END;
                 JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
                 JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
                 JOIN statut                    si ON si.id = i.statut_id
+            ) p
+
+            UNION ALL
+
+          SELECT 3 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                          annee_id,
+                fr.type_volume_horaire_id           type_volume_horaire_id,
+                i.id                                intervenant_id,
+                fr.heures_compl_fc_majorees         heures
+                /*ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond*/
+
+              FROM
+                     intervenant                i
+                JOIN annee                      a ON a.id = i.annee_id
+                JOIN statut                    si ON si.id = i.statut_id
+                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
             ) p
           ) p
           JOIN intervenant i ON i.id = p.intervenant_id

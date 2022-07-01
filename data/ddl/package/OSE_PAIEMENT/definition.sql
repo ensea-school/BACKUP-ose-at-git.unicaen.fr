@@ -1,5 +1,4 @@
-CREATE
-    OR REPLACE PACKAGE "OSE_PAIEMENT" AS
+CREATE OR REPLACE PACKAGE "OSE_PAIEMENT" AS
 
     PROCEDURE check_bad_paiements(formule_res_service_id NUMERIC DEFAULT NULL,
                                   formule_res_service_ref_id NUMERIC DEFAULT NULL);

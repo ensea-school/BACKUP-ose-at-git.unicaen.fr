@@ -176,6 +176,12 @@ class SaisieFieldset extends AbstractFieldset
                 $fonctions[$id] = (string)$fonction;
             }
         }
+        asort($fonctions);
+        foreach ($fonctions as $key => $fonction) {
+            if (isset($fonction['options']) && is_array($fonction['options'])) {
+                asort($fonctions[$key]['options']);
+            }
+        }
 
         return $fonctions;
     }

@@ -1,5 +1,4 @@
-CREATE
-    OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
+CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
 
     mois_extraction_paie VARCHAR2(50) := '01';
     annee_extraction_paie VARCHAR2(50) := '22';

@@ -19,6 +19,8 @@ class FormuleCalcul
 
     private array   $cellsPos = [];
 
+    private string  $currentCellName;
+
 
 
     public function __construct(?string $filename = null, ?string $name = null)
@@ -308,34 +310,8 @@ END FORMULE_" . $this->getName() . ";";
 
 
 
-    public function makePackageBody(?string $intervenantQuery = null, ?string $volumeHoraireQuery = null): string
+    public function getFormuleCells(): array
     {
-        if (!$intervenantQuery) {
-            $intervenantQuery = 'SELECT
-      fi.*,
-      NULL param_1,
-      NULL param_2,
-      NULL param_3,
-      NULL param_4,
-      NULL param_5
-    FROM
-      V_FORMULE_INTERVENANT fi';
-        }
-
-        if (!$volumeHoraireQuery) {
-            $volumeHoraireQuery = 'SELECT
-      fvh.*,
-      NULL param_1,
-      NULL param_2,
-      NULL param_3,
-      NULL param_4,
-      NULL param_5
-    FROM
-      V_FORMULE_VOLUME_HORAIRE fvh
-    ORDER BY
-      ordre';
-        }
-
         $s        = $this->getSheet();
         $formules = [];
 
@@ -351,7 +327,7 @@ END FORMULE_" . $this->getName() . ";";
                 }
             }
         }
-        $cells = '';
+
 
         /** @var Calc\Cell[] $formules */
         foreach ($formules as $name => $cell) {
@@ -384,31 +360,68 @@ END FORMULE_" . $this->getName() . ";";
             }
         }
 
+        return $formules;
+    }
 
+
+
+    public function makePackageBody(?string $intervenantQuery = null, ?string $volumeHoraireQuery = null): string
+    {
+        if (!$intervenantQuery) {
+            $intervenantQuery = 'SELECT
+      fi.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      V_FORMULE_INTERVENANT fi';
+        }
+
+        if (!$volumeHoraireQuery) {
+            $volumeHoraireQuery = 'SELECT
+      fvh.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      V_FORMULE_VOLUME_HORAIRE fvh
+    ORDER BY
+      ordre';
+        }
+
+        $s        = $this->getSheet();
+        $formules = $this->getFormuleCells();
+
+        $cells = '';
         foreach ($formules as $name => $cell) {
+            $this->currentCellName = $name;
+
             $expr = $cell->getFormuleExpr();
-            if ($this->exprIsTest($expr)) {
-                $expr = $this->exprTestToIf($expr);
-            }
+            $this->exprInit($expr);
 
             $mls = (string)$this->mainLine;
             if (str_ends_with($name, $mls)) {
                 $name = substr($name, 0, -strlen($mls));
             }
 
-            $cellPlsql = "-- $name" . substr($cell->getFormule(), 3) . "\n";
+            $cellPlsql = "-- $name" . (substr($cell->getFormule(), 3) ?? $cell->getValue()) . "\n";
             $cellPlsql .= "WHEN '$name' THEN\n";
             $cellPlsql .= $this->indent($this->exprToPlSql($expr)) . "\n\n";
 
             $cells .= $this->indent($cellPlsql, 3);
         }
 
-        $body = file_get_contents(getcwd() . '/data/formule.sql');
-        $body = str_replace('<--DECALAGE-->', $this->mainLine - 1, $body);
-        $body = str_replace('<--CELLS-->', $cells, $body);
-        $body = str_replace('<--NAME-->', $this->getName(), $body);
-        $body = str_replace('<--INTERVENANT_QUERY-->', $intervenantQuery, $body);
-        $body = str_replace('<--VOLUME_HORAIRE_QUERY-->', $volumeHoraireQuery, $body);
+        $body     = file_get_contents(getcwd() . '/data/formule.sql');
+        $body     = str_replace('<--DECALAGE-->', $this->mainLine - 1, $body);
+        $body     = str_replace('<--CELLS-->', $cells, $body);
+        $body     = str_replace('<--NAME-->', $this->getName(), $body);
+        $body     = str_replace('<--INTERVENANT_QUERY-->', $intervenantQuery, $body);
+        $body     = str_replace('<--VOLUME_HORAIRE_QUERY-->', $volumeHoraireQuery, $body);
+        $cellsPos = $this->getCellsPos();
         foreach ($cellsPos as $param => $cell) {
             $body = str_replace("<--$param-->", "'" . $cell . "'", $body);
         }
@@ -418,21 +431,30 @@ END FORMULE_" . $this->getName() . ";";
 
 
 
-    public function testFormule(string $formule)
+    public function testFormule(string $cellName, string $formule)
     {
+        $this->currentCellName = $cellName;
+
         $tableur = $formule;
         $formule = new Formule($tableur);
 
-        $struct = $formule->analyse();
-        if ($this->exprIsTest($struct)) {
-            $struct = $this->exprTestToIf($struct);
-        }
+        $expr = $formule->analyse();
+        $this->exprInit($expr);
 
-        $plsql = $this->exprToPlSql($struct);
+        $plsql = $this->exprToPlSql($expr);
         \UnicaenCode\Util::highlight($plsql, 'plsql', true, ['show-line-numbers' => true]);
 
         $formule->displayTerms();
         $formule->displayExprs();
+    }
+
+
+
+    private function exprInit(array &$expr)
+    {
+        if ($this->exprIsTest($expr)) {
+            $expr = $this->exprTestToIf($expr);
+        }
     }
 
 
@@ -673,7 +695,19 @@ END FORMULE_" . $this->getName() . ";";
     private function preTraitementCell(array &$expr, int $i)
     {
         // On retire les $ qui sont inutiles pour la conversion en Pl/SQL
+        $an               = $expr[$i]['name'];
         $expr[$i]['name'] = str_replace('$', '', $expr[$i]['name']);
+
+        // On voit comme absolue toute référence fixe, CAD si ligne < 20, pour éviter des soucis par la suite
+        ['col' => $col, 'row' => $row] = Calc::cellNameToCoords($this->currentCellName);
+        if ($row < 20) {
+            $an = str_replace('19', '$19', $an);
+            $an = str_replace('$$', '$', $an);
+        }
+
+        if (!isset($expr[$i]['absName'])) {
+            $expr[$i]['absName'] = $an;
+        }
     }
 
 
@@ -772,13 +806,15 @@ END FORMULE_" . $this->getName() . ";";
 
         $isIf = false;
         foreach ($expr as $i => $term) {
-            if ($term['type'] === 'function' && $term['name'] === 'IF') {
-                $isIf = true;
-            }
-            if (array_key_exists($term['type'], $methods)) {
-                $plsql .= $this->{$methods[$term['type']]}($expr, $i);
-            } else {
-                $plsql .= '[PB TRADUCTION]';
+            if ($term !== null) {
+                if ($term['type'] === 'function' && $term['name'] === 'IF') {
+                    $isIf = true;
+                }
+                if (array_key_exists($term['type'], $methods)) {
+                    $plsql .= $this->{$methods[$term['type']]}($expr, $i);
+                } else {
+                    $plsql .= '[PB TRADUCTION]';
+                }
             }
         }
 
@@ -833,12 +869,19 @@ END FORMULE_" . $this->getName() . ";";
 
 
 
-    private function traductionCell(array &$expr, int $i): string
+    public function traductionCell(array &$expr, int $i): string
     {
         $term = $expr[$i];
         ['col' => $col, 'row' => $row] = Calc::cellNameToCoords($term['name']);
 
         $col = Calc::numberToLetter($col);
+
+        $absName = $term['absName'];
+        if (str_starts_with($absName, '$')) {
+            $absName = substr($absName, 1); // on élimine le premier $ lié à la colonne
+        }
+
+        $absolute = str_contains($absName, '$'); // si on en trouve un autre => ligne relative!!
 
         if ($row === $this->mainLine) {
             $cellsPos = $this->getCellsPos();
@@ -847,10 +890,20 @@ END FORMULE_" . $this->getName() . ";";
                     return $variable;
                 }
             }
+        }
 
-            return "cell('$col',l)";
-        } else {
+        if ($row < $this->mainLine - 1 || $absolute) {
             return "cell('" . $term['name'] . "')";
+        } else {
+            $rowDiff = $row - $this->mainLine;
+
+            if ($rowDiff < 0) {
+                return "cell('$col',l$rowDiff)";
+            } elseif ($rowDiff == 0) {
+                return "cell('$col',l)";
+            } else {
+                return "cell('$col',l+$rowDiff)";
+            }
         }
     }
 
@@ -987,6 +1040,7 @@ END FORMULE_" . $this->getName() . ";";
         if (!empty($term['exprs'])) {
             $plExprs = [];
             foreach ($term['exprs'] as $e => $fExpr) {
+                $fExpr[]     = null;
                 $plExprs[$e] = $this->traductionExpr($fExpr);
             }
             $plsql .= implode(' AND ', $plExprs);
@@ -1009,6 +1063,7 @@ END FORMULE_" . $this->getName() . ";";
         if (!empty($term['exprs'])) {
             $plExprs = [];
             foreach ($term['exprs'] as $e => $fExpr) {
+                $fExpr[]     = null;
                 $plExprs[$e] = $this->traductionExpr($fExpr);
             }
             $plsql .= implode(' OR ', $plExprs);

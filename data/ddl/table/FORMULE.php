@@ -19,7 +19,7 @@ return [
             'nullable'    => FALSE,
             'default'     => '1',
             'position'    => 4,
-            'commentaire' => 'Témoin (1=sélectionnable)',
+            'commentaire' => NULL,
         ],
         'ID'                 => [
             'name'        => 'ID',

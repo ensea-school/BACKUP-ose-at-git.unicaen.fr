@@ -35,7 +35,6 @@ class ModeleContratService extends AbstractEntityService
     private $config;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -48,7 +47,6 @@ class ModeleContratService extends AbstractEntityService
     }
 
 
-
     /**
      * @param Contrat $contrat
      *
@@ -59,14 +57,19 @@ class ModeleContratService extends AbstractEntityService
         $modeles = $this->getList();
 
         usort($modeles, function (ModeleContrat $m1, ModeleContrat $m2) use ($contrat) {
-            return $this->getRank($m1, $contrat) < $this->getRank($m2, $contrat) ? 1 : 0;
+            $rank1 = $this->getRank($m1, $contrat);
+            $rank2 = $this->getRank($m2, $contrat);
+
+            if ($rank1 == $rank2) {
+                return 0;
+            }
+            return $rank1 < $rank2 ? 1 : -1;
         });
 
         $modele = reset($modeles);
 
         return $modele;
     }
-
 
 
     public function generer(Contrat $contrat, $download = true)
@@ -111,7 +114,6 @@ class ModeleContratService extends AbstractEntityService
     }
 
 
-
     public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null)
     {
         $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
@@ -120,7 +122,7 @@ class ModeleContratService extends AbstractEntityService
             $contrat->getIntervenant()->getCode());
 
         $document = $this->generer($contrat, false);
-        $content  = $document->saveToData();
+        $content = $document->saveToData();
 
         if (empty($subject)) {
             $subject = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
@@ -140,22 +142,22 @@ class ModeleContratService extends AbstractEntityService
 
         $body = new Message();
 
-        $text          = new Part($htmlContent);
-        $text->type    = Mime::TYPE_HTML;
+        $text = new Part($htmlContent);
+        $text->type = Mime::TYPE_HTML;
         $text->charset = 'utf-8';
         $body->addPart($text);
         $nameFrom = "Application OSE";
 
 
         //Contrat en pièce jointe
-        $attachment              = new Part($content);
-        $attachment->type        = 'application/pdf';
+        $attachment = new Part($content);
+        $attachment->type = 'application/pdf';
         $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
-        $attachment->encoding    = Mime::ENCODING_BASE64;
-        $attachment->filename    = $fileName;
+        $attachment->encoding = Mime::ENCODING_BASE64;
+        $attachment->filename = $fileName;
         $body->addPart($attachment);
 
-        $message     = new MailMessage();
+        $message = new MailMessage();
         $messageType = 'multipart/related';
         $message->setEncoding('UTF-8')
             ->setFrom($from, $nameFrom)
@@ -169,7 +171,6 @@ class ModeleContratService extends AbstractEntityService
     }
 
 
-
     /**
      * @return string
      */
@@ -179,14 +180,13 @@ class ModeleContratService extends AbstractEntityService
     }
 
 
-
     private function generateData(ModeleContrat $modele, Contrat $contrat)
     {
         $connection = $this->getEntityManager()->getConnection();
 
         $params = ['contrat' => $contrat->getId()];
 
-        $mainData = $connection->fetchAssociative('SELECT * FROM V_CONTRAT_MAIN WHERE CONTRAT_ID = :contrat', $params);
+        $mainData = $connection->fetchAssociative('SELECT * FROM v_contrat_main WHERE contrat_id = :contrat', $params);
         if ($modele->getRequete()) {
             $mainDataPerso = $connection->fetchAssociative($modele->getRequete(), $params);
             foreach ($mainDataPerso as $key => $value) {
@@ -201,7 +201,7 @@ class ModeleContratService extends AbstractEntityService
         $blocs = $modele->getBlocs();
         foreach ($blocs as $bname => $bquery) {
             $bdata = $connection->fetchAllAssociative($bquery, $params);
-            $bkey  = $bname . '@table:table-row';
+            $bkey = $bname . '@table:table-row';
 
             $data[0][$bkey] = $bdata;
         }
@@ -212,7 +212,7 @@ class ModeleContratService extends AbstractEntityService
             && !isset($data[0]['serviceHeures@table:table-row'])
         ) {
             $data[0]['serviceCode@table:table-row'] =
-                $connection->fetchAllAssociative('SELECT * FROM V_CONTRAT_SERVICES WHERE CONTRAT_ID = :contrat', $params);
+                $connection->fetchAllAssociative('SELECT * FROM v_contrat_services WHERE contrat_id = :contrat', $params);
         }
 
         if (isset($mainData['exemplaire1']) && $mainData['exemplaire1'] && ('0' !== $mainData['exemplaire1'])) {
@@ -220,19 +220,18 @@ class ModeleContratService extends AbstractEntityService
             unset($mainData['exemplaire1']);
         }
         if (isset($mainData['exemplaire2']) && $mainData['exemplaire2'] && ('0' !== $mainData['exemplaire2'])) {
-            $data[1]               = $data[0];
+            $data[1] = $data[0];
             $data[1]['exemplaire'] = $mainData['exemplaire2'];
             unset($mainData['exemplaire2']);
         }
         if (isset($mainData['exemplaire3']) && $mainData['exemplaire3'] && ('0' !== $mainData['exemplaire3'])) {
-            $data[2]               = $data[0];
+            $data[2] = $data[0];
             $data[2]['exemplaire'] = $mainData['exemplaire3'];
             unset($mainData['exemplaire3']);
         }
 
         return $data;
     }
-
 
 
     private function getRank(ModeleContrat $modele, Contrat $contrat)
@@ -259,7 +258,6 @@ class ModeleContratService extends AbstractEntityService
     }
 
 
-
     /**
      * Retourne l'alias d'entité courante
      *
@@ -271,7 +269,6 @@ class ModeleContratService extends AbstractEntityService
     }
 
 
-
     /**
      * @return array
      */
@@ -279,7 +276,6 @@ class ModeleContratService extends AbstractEntityService
     {
         return $this->config;
     }
-
 
 
     /**

@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
+CREATE OR REPLACE PACKAGE BODY FORMULE_SACLAY AS
   decalageLigne NUMERIC DEFAULT 19;
 
   /* Stockage des valeurs intermédiaires */
@@ -36,13 +36,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
     dbgi( '[calc|' || fncName || '|' || c || '|' || res );
   END;
 
-  FUNCTION cell( c VARCHAR2, l NUMERIC DEFAULT 9999 ) RETURN FLOAT IS
+  FUNCTION cell( c VARCHAR2, l NUMERIC DEFAULT 0 ) RETURN FLOAT IS
     val FLOAT;
   BEGIN
-    IF l = 0 THEN
-      RETURN 0;
-    END IF;
-
     IF feuille.exists(c) THEN
       IF feuille(c).cells.exists(l) THEN
         IF feuille(c).cells(l).enCalcul THEN
@@ -119,79 +115,79 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
     val FLOAT;
   BEGIN
     i := ose_formule.intervenant;
-    IF l > 0 AND l <> 9999 THEN
+    IF l > 0 THEN
       vh := ose_formule.volumes_horaires.items(l);
     END IF;
     CASE c
 
 
 
-      -- U=IF([.$I20]="Référentiel";0;([.$AJ20])*[.F20])
+      -- U=IF([.$I20]="Référentiel";0;([.$AJ20]+[.$AV20])*[.F20])
       WHEN 'U' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AJ',l)) * vh.taux_fi;
+          RETURN (cell('AJ',l) + cell('AV',l)) * vh.taux_fi;
         END IF;
 
 
 
-      -- V=IF([.$I20]="Référentiel";0;([.$AJ20])*[.G20])
+      -- V=IF([.$I20]="Référentiel";0;([.$AJ20]+[.$AV20])*[.G20])
       WHEN 'V' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AJ',l)) * vh.taux_fa;
+          RETURN (cell('AJ',l) + cell('AV',l)) * vh.taux_fa;
         END IF;
 
 
 
-      -- W=IF([.$I20]="Référentiel";0;([.$AJ20])*[.H20])
+      -- W=IF([.$I20]="Référentiel";0;([.$AJ20]+[.$AV20])*[.H20])
       WHEN 'W' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AJ',l)) * vh.taux_fc;
+          RETURN (cell('AJ',l) + cell('AV',l)) * vh.taux_fc;
         END IF;
 
 
 
-      -- X=IF([.$I20]="Référentiel";[.$AJ20];0)
+      -- X=IF([.$I20]="Référentiel";[.$AP20];0)
       WHEN 'X' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('AJ',l);
+          RETURN cell('AP',l);
         ELSE
           RETURN 0;
         END IF;
 
 
 
-      -- Y=IF([.$I20]="Référentiel";0;([.$AL20])*[.F20])
+      -- Y=IF([.$I20]="Référentiel";0;([.$AL20]+[.$AX20])*[.F20])
       WHEN 'Y' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AL',l)) * vh.taux_fi;
+          RETURN (cell('AL',l) + cell('AX',l)) * vh.taux_fi;
         END IF;
 
 
 
-      -- Z=IF([.$I20]="Référentiel";0;([.$AL20])*[.G20])
+      -- Z=IF([.$I20]="Référentiel";0;([.$AL20]+[.$AX20])*[.G20])
       WHEN 'Z' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AL',l)) * vh.taux_fa;
+          RETURN (cell('AL',l) + cell('AX',l)) * vh.taux_fa;
         END IF;
 
 
 
-      -- AA=IF([.$I20]="Référentiel";0;([.$AL20])*[.H20])
+      -- AA=IF([.$I20]="Référentiel";0;([.$AL20]+[.$AX20])*[.H20])
       WHEN 'AA' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AL',l)) * vh.taux_fc;
+          RETURN (cell('AL',l) + cell('AX',l)) * vh.taux_fc;
         END IF;
 
 
@@ -202,31 +198,31 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
 
-      -- AC=IF([.$I20]="Référentiel";[.$AL20];0)
+      -- AC=IF([.$I20]="Référentiel";[.$AR20];0)
       WHEN 'AC' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('AL',l);
+          RETURN cell('AR',l);
         ELSE
           RETURN 0;
         END IF;
 
 
 
-      -- AE=IF(ISERROR([.J20]);1;[.J20]*IF(ISERROR([.L20]);1;[.L20]))
+      -- AE=IF(ISERROR([.J20]);1;[.J20])
       WHEN 'AE' THEN
         RETURN vh.taux_service_du;
 
 
 
-      -- AF=IF(ISERROR([.K20]);1;[.K20]*IF(ISERROR([.M20]);1;[.M20]))
+      -- AF=IF(ISERROR([.K20]);1;[.K20])
       WHEN 'AF' THEN
         RETURN vh.taux_service_compl;
 
 
 
-      -- AH=IF([.$E20]="Oui";[.$N20]*[.$AE20];0)
+      -- AH=IF(AND([.$E20]="Oui";[.$D20]<>"Oui";[.$I20]<>"Référentiel");[.$N20]*[.$AE20];0)
       WHEN 'AH' THEN
-        IF vh.service_statutaire THEN
+        IF vh.service_statutaire AND NOT vh.structure_is_exterieur AND vh.volume_horaire_ref_id IS NULL THEN
           RETURN vh.heures * cell('AE',l);
         ELSE
           RETURN 0;
@@ -288,9 +284,136 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
 
+      -- AN=IF(AND([.$E20]="Oui";[.$I20]="Référentiel");[.$N20]*[.$AE20];0)
+      WHEN 'AN' THEN
+        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL THEN
+          RETURN vh.heures * cell('AE',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AO15=SUM([.AN$1:.AN$1048576])
+      WHEN 'AO15' THEN
+        RETURN calcFnc('somme','AN');
+
+
+
+      -- AO16=MIN([.AO15];[.AI17])
+      WHEN 'AO16' THEN
+        RETURN LEAST(cell('AO15'), cell('AI17'));
+
+
+
+      -- AO17=[.AI17]-[.AO16]
+      WHEN 'AO17' THEN
+        RETURN cell('AI17') - cell('AO16');
+
+
+
+      -- AO=IF([.AO$15]>0;[.AN20]/[.AO$15];0)
+      WHEN 'AO' THEN
+        IF cell('AO15') > 0 THEN
+          RETURN cell('AN',l) / cell('AO15');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AP=[.AO$16]*[.AO20]
+      WHEN 'AP' THEN
+        RETURN cell('AO16') * cell('AO',l);
+
+
+
+      -- AQ=IF([.AO$17]=0;([.AN20]-[.AP20])/[.$AE20];0)
+      WHEN 'AQ' THEN
+        IF cell('AO17') = 0 THEN
+          RETURN (cell('AN',l) - cell('AP',l)) / cell('AE',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AR=IF(i_depassement_service_du_sans_hc="Non";[.AQ20]*[.$AF20];0)
+      WHEN 'AR' THEN
+        IF NOT i.depassement_service_du_sans_hc THEN
+          RETURN cell('AQ',l) * cell('AF',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AT=IF(AND([.$E20]="Oui";[.$D20]="Oui";[.$I20]<>"Référentiel");[.$N20]*[.$AE20];0)
+      WHEN 'AT' THEN
+        IF vh.service_statutaire AND vh.structure_is_exterieur AND vh.volume_horaire_ref_id IS NULL THEN
+          RETURN vh.heures * cell('AE',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AU15=SUM([.AT$1:.AT$1048576])
+      WHEN 'AU15' THEN
+        RETURN calcFnc('somme','AT');
+
+
+
+      -- AU16=MIN([.AU15];[.AO17])
+      WHEN 'AU16' THEN
+        RETURN LEAST(cell('AU15'), cell('AO17'));
+
+
+
+      -- AU17=[.AO17]-[.AU16]
+      WHEN 'AU17' THEN
+        RETURN cell('AO17') - cell('AU16');
+
+
+
+      -- AU=IF([.AU$15]>0;[.AT20]/[.AU$15];0)
+      WHEN 'AU' THEN
+        IF cell('AU15') > 0 THEN
+          RETURN cell('AT',l) / cell('AU15');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AV=[.AU$16]*[.AU20]
+      WHEN 'AV' THEN
+        RETURN cell('AU16') * cell('AU',l);
+
+
+
+      -- AW=IF([.AU$17]=0;([.AT20]-[.AV20])/[.$AE20];0)
+      WHEN 'AW' THEN
+        IF cell('AU17') = 0 THEN
+          RETURN (cell('AT',l) - cell('AV',l)) / cell('AE',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AX=IF(i_depassement_service_du_sans_hc="Non";[.AW20]*[.$AF20];0)
+      WHEN 'AX' THEN
+        IF NOT i.depassement_service_du_sans_hc THEN
+          RETURN cell('AW',l) * cell('AF',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
 
     ELSE
-      dbms_output.put_line('La colonne c=' || c || ', l=' || l || ' n''existe pas!');
       raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
   END CASE;
   raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
@@ -302,11 +425,6 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
   PROCEDURE CALCUL_RESULTAT IS
   BEGIN
     feuille.delete;
-
-    IF ose_formule.intervenant.annee_id < 2022 THEN
-      FORMULE_POITIERS_2021.CALCUL_RESULTAT;
-      RETURN;
-    END IF;
 
     IF ose_formule.intervenant.depassement_service_du_sans_hc THEN -- HC traitées comme du service
       ose_formule.intervenant.service_du := ose_formule.intervenant.heures_service_statutaire + ose_formule.intervenant.heures_service_modifie;
@@ -339,7 +457,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
       NULL param_4,
       NULL param_5
     FROM
-      v_formule_intervenant fi
+      V_FORMULE_INTERVENANT fi
     ';
   END;
 
@@ -356,10 +474,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
       NULL param_4,
       NULL param_5
     FROM
-      v_formule_volume_horaire fvh
+      V_FORMULE_VOLUME_HORAIRE fvh
     ORDER BY
       ordre
     ';
   END;
 
-END FORMULE_POITIERS;
+END FORMULE_SACLAY;

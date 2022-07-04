@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
+CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
   TYPE t_dep_bloquante IS RECORD (
     id NUMERIC,
     to_delete BOOLEAN DEFAULT TRUE
@@ -558,6 +558,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
             WHEN e.code = ''PJ_VALIDATION'' THEN pj.demandees
           END                                                       objectif,
           CASE
+			WHEN pj.obligatoire = 0 THEN 1
             WHEN e.code = ''PJ_SAISIE'' THEN pj.fournies
             WHEN e.code = ''PJ_VALIDATION'' THEN pj.validees
           END                                                       realisation
@@ -567,13 +568,13 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
             intervenant_id,
             SUM(demandee) demandees,
             SUM(fournie)  fournies,
-            SUM(validee)  validees
+            SUM(validee)  validees,
+			MIN(obligatoire) obligatoire
           FROM
             tbl_piece_jointe
           WHERE
             ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
             AND demandee > 0
-            AND obligatoire = 1
           GROUP BY
             annee_id,
             intervenant_id

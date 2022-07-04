@@ -26,7 +26,8 @@
 * Notes : Afficher le bon utilisateur pour la validation de service (#45413).
 * Forcer l'activiation de l'étape pièces justificatives même si il n'y a pas de service prévisionnel de renseigné.
 * Choix du bon modèle de contrat dans le cas de plusieurs modèles de contrat (par structure et/ou par statut) (#45520)
-* Bouton Prévu->réalisé Apparait correctement pour le service réalisé
+* Bouton Prévu->réalisé Apparait correctement pour le service réalisé.
+
 # OSE 18.2 (15/06/2022)
 
 ## Corrections de bugs

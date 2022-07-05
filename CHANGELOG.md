@@ -18,6 +18,7 @@
 * Changement du bouton de cloture de service pour un libellé plus parlant et un style de bouton plus prononcé
 * Formules nouvelles ou mises à jour : Rennes 2, Paris Saclay, Guyane, Côte d'Azur, La Réunion, Poitiers, Brest
 * Possibilité de créer un nouveau test de formule en téléversant une feuille de calcul au format tableur
+* Ajout d'un champs cci pour l'envoi de mail aux intervenants et le refus de pièces jointes (#45083)
 
 ## Corrections de bugs
 

@@ -42,6 +42,7 @@ class MailerIntervenantForm extends AbstractForm
             'subject' => 'Objet du mail',
             'to'      => 'Email intervenant',
             'content' => 'Contenu du mail',
+            'copy'    => 'Email en copie caché',
 
         ];
 
@@ -55,6 +56,11 @@ class MailerIntervenantForm extends AbstractForm
             'from'    => [
                 'type' => 'Text',
                 'name' => 'from',
+
+            ],
+            'copy'    => [
+                'type' => 'Text',
+                'name' => 'copy',
 
             ],
             'to'      => [

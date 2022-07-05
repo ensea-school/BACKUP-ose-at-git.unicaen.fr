@@ -11,12 +11,11 @@ use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Traits\AdresseTrait;
 use Application\Interfaces\AdresseInterface;
 use Doctrine\Persistence\Mapping\ClassMetadata;
-use Doctrine\Persistence\ObjectManager;
-use Doctrine\Persistence\ObjectManagerAware;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Intervenant\Entity\Db\Statut;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
@@ -27,7 +26,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
  * Intervenant
  *
  */
-class Intervenant implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, ObjectManagerAware, AdresseInterface
+class Intervenant implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, EntityManagerAwareInterface, AdresseInterface
 {
     use AnneeAwareTrait;
     use StructureAwareTrait;
@@ -360,21 +359,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
         } else {
             return implode(' ', $identite);
         }
-    }
-
-
-
-    /**
-     * Injects responsible ObjectManager and the ClassMetadata into this persistent object.
-     *
-     * @param ObjectManager $objectManager
-     * @param ClassMetadata $classMetadata
-     *
-     * @return void
-     */
-    public function injectObjectManager(ObjectManager $objectManager, ClassMetadata $classMetadata)
-    {
-        $this->setEntityManager($objectManager);
     }
 
 

@@ -1,0 +1,276 @@
+<?php
+
+return [
+    /* Obligatoire au début */
+    'UTILISATEUR'                => [
+        'actions' => ['install', 'update'],
+        'key'     => 'USERNAME',
+        'options' => ['update-ignore-cols' => ['EMAIL', 'PASSWORD'], 'delete' => false],
+    ],
+    'SOURCE'                     => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+        'options' => ['delete' => false],
+    ],
+
+
+    /* Nomenclatures fixes et jamais paramétrables */
+    'CIVILITE'                   => [
+        'actions' => ['install', 'update'],
+        'key'     => ['LIBELLE_COURT'],
+    ],
+    'PLAFOND_ETAT'               => [
+        'actions' => ['install', 'update'],
+        'key'     => 'ID',
+    ],
+    'PLAFOND_PERIMETRE'          => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+    ],
+    'PLAFOND'                    => [
+        'actions' => ['install', 'update'],
+        'options' => ['update' => false, 'delete' => false],
+        'key'     => 'NUMERO',
+    ],
+    'TYPE_NOTE'                  => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+    ],
+    'TYPE_VOLUME_HORAIRE'        => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+    ],
+    'ETAT_VOLUME_HORAIRE'        => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+    ],
+    'PERIMETRE'                  => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+    ],
+    'TYPE_VALIDATION'            => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+    ],
+    'TBL'                        => [
+        'actions' => ['install', 'update'],
+        'key'     => 'TBL_NAME',
+    ],
+    'WF_ETAPE'                   => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+        'options' => ['update-ignore-cols' => ['LIBELLE_INTERVENANT', 'LIBELLE_AUTRES']],
+    ],
+    'TYPE_AGREMENT'              => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+    ],
+    'TYPE_CONTRAT'               => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+    ],
+    'CATEGORIE_PRIVILEGE'        => [
+        'actions' => ['install', 'update', 'privileges'],
+        'key'     => 'CODE',
+    ],
+    'PRIVILEGE'                  => [
+        'actions' => ['install', 'update', 'privileges'],
+        'key'     => ['CATEGORIE_ID', 'CODE'],
+        'options' => ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT id FROM categorie_privilege WHERE code = %s']]],
+    ],
+    'TYPE_INDICATEUR'            => [
+        'actions' => ['install', 'update'],
+        'key'     => 'ID',
+    ],
+    'INDICATEUR'                 => [
+        'actions' => ['install', 'update'],
+        'key'     => ['TYPE_INDICATEUR_ID', 'NUMERO'],
+    ],
+    'FORMULE'                    => [
+        'actions' => ['install', 'update'],
+    ],
+    'TYPE_HEURES'                => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+        'options' => ['update-ignore-cols' => ['ID', 'TYPE_HEURES_ELEMENT_ID']],
+    ],
+    'TYPE_INTERVENANT'           => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+    ],
+    'PERIODE'                    => [
+        'actions' => ['install'],
+        'key'     => 'CODE',
+        'options' => ['delete' => false],
+    ],
+    'TAUX_HORAIRE_HETD'          => [
+        'actions' => ['install', 'update'],
+    ],
+    'TYPE_RESSOURCE'             => [
+        'actions' => ['install'],
+        'key'     => 'CODE',
+    ],
+    'DOSSIER_CHAMP_AUTRE_TYPE'   => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+    ],
+
+    /* Nomenclatures partiellement paramétrables (certaines colonnes) */
+    'ANNEE'                      => [
+        'actions' => ['install', 'update'],
+        'key'     => 'ID',
+        'options' => ['update-ignore-cols' => ['ACTIVE', 'TAUX_HETD']],
+    ],
+    'REGLE_STRUCTURE_VALIDATION' => [
+        'actions' => ['install', 'update'],
+        'key'     => ['TYPE_VOLUME_HORAIRE_ID', 'TYPE_INTERVENANT_ID'],
+        'options' => ['update-ignore-cols' => ['PRIORITE']],
+    ],
+    'DOSSIER_CHAMP_AUTRE'        => [
+        'actions' => ['install', 'update'],
+        'key'     => 'ID',
+        'options' => ['update-ignore-cols' => ['LIBELLE', 'DOSSIER_CHAMP_AUTRE_TYPE_ID', 'CONTENU', 'DESCRIPTION', 'OBLIGATOIRE']],
+    ],
+
+
+    /* Tables avec paramétrages pré-configurés (certaines colonnes + nouveaux enregistrements) */
+    'ADRESSE_NUMERO_COMPL'       => [
+        'actions' => ['install'],
+        'key'     => ['CODE'],
+    ],
+    'IMPORT_TABLES'              => [
+        'actions' => ['install', 'update'],
+        'key'     => 'TABLE_NAME',
+        //'options' => ['update' => true, 'delete' => true],
+        'options' => ['update-ignore-cols' => ['SYNC_FILTRE', 'SYNC_ENABLED', 'SYNC_JOB', 'SYNC_HOOK_BEFORE', 'SYNC_HOOK_AFTER']],
+    ],
+    'CC_ACTIVITE'                => [
+        'actions' => ['install'],
+        'key'     => 'CODE',
+    ],
+    'TYPE_INTERVENTION'          => [
+        'actions' => ['install'],
+        'key'     => 'CODE',
+    ],
+    'SCENARIO'                   => [
+        'actions' => ['install'],
+        'key'     => 'LIBELLE',
+        'options' => ['delete' => false],
+    ],
+    'ETAT_SORTIE'                => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+        'options' => ['update'           => true, 'delete' => false,
+                      'update-cols'      => ['CSV_PARAMS', 'CSV_TRAITEMENT', 'PDF_TRAITEMENT'],
+                      'update-only-null' => ['CSV_PARAMS', 'CSV_TRAITEMENT', 'PDF_TRAITEMENT'],
+        ],
+    ],
+    'MODELE_CONTRAT'             => [
+        'actions' => ['install'],
+    ],
+    'ROLE'                       => [
+        'actions' => ['install'],
+        'key'     => 'CODE',
+        'options' => ['columns' => ['PERIMETRE_ID' => ['transformer' => 'SELECT id FROM perimetre WHERE code = %s']]],
+    ],
+    'ROLE_PRIVILEGE'             => [
+        'actions' => ['install'],
+        'key'     => ['ROLE_ID', 'PRIVILEGE_ID'],
+        'options' => ['columns' => [
+            'ROLE_ID'      => ['transformer' => 'SELECT id FROM role WHERE histo_destruction IS NULL AND code = %s'],
+            'PRIVILEGE_ID' => ['transformer' => 'SELECT p.id FROM privilege p JOIN categorie_privilege cp ON cp.id = p.categorie_id WHERE cp.code || \'-\' || p.code = %s'],
+        ],],
+    ],
+    'AFFECTATION'                => [
+        'actions' => ['install'],
+        'key'     => ['UTILISATEUR_ID', 'ROLE_ID'],
+        'options' => ['columns' => [
+            'ROLE_ID'        => ['transformer' => 'SELECT id FROM role WHERE histo_destruction IS NULL AND code = %s'],
+            'UTILISATEUR_ID' => ['transformer' => 'SELECT id FROM utilisateur WHERE username = %s'],
+        ],],
+    ],
+
+
+    /* Jeu de données de configuration par défaut (tout perso) */
+    'PAYS'                       => [
+        'actions' => ['install'],
+        'key'     => 'SOURCE_CODE',
+    ],
+    'DEPARTEMENT'                => [
+        'actions' => ['install'],
+        'key'     => 'SOURCE_CODE',
+    ],
+    'VOIRIE'                     => [
+        'actions' => ['install'],
+        'key'     => 'SOURCE_CODE',
+    ],
+    'ETABLISSEMENT'              => [
+        'actions' => ['install'],
+        'key'     => 'SOURCE_CODE',
+    ],
+    'CORPS'                      => [
+        'actions' => ['install'],
+        'key'     => 'SOURCE_CODE',
+    ],
+    'GRADE'                      => [
+        'actions' => ['install'],
+        'key'     => 'SOURCE_CODE',
+        'options' => ['columns' => ['CORPS_ID' => ['transformer' => 'SELECT id FROM corps WHERE source_code = %s']]],
+    ],
+    'DISCIPLINE'                 => [
+        'actions' => ['install'],
+        'key'     => 'SOURCE_CODE',
+    ],
+    'DOMAINE_FONCTIONNEL'        => [
+        'actions' => ['install'],
+        'key'     => 'SOURCE_CODE',
+    ],
+    'FONCTION_REFERENTIEL'       => [
+        'actions' => ['install'],
+        'key'     => 'CODE',
+        'options' => ['columns' => ['DOMAINE_FONCTIONNEL_ID' => ['transformer' => 'SELECT id FROM domaine_fonctionnel WHERE source_code = %s']]],
+    ],
+    'MOTIF_MODIFICATION_SERVICE' => [
+        'actions' => ['install'],
+        'key'     => 'CODE',
+    ],
+    'MOTIF_NON_PAIEMENT'         => [
+        'actions' => ['install'],
+        'key'     => 'CODE',
+    ],
+    'STATUT'                     => [
+        'actions' => ['install'],
+        'key'     => ['CODE', 'ANNEE_ID'],
+        'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s']]],
+    ],
+    'TYPE_PIECE_JOINTE'          => [
+        'actions' => ['install'],
+        'key'     => 'CODE',
+    ],
+    'TYPE_PIECE_JOINTE_STATUT'   => [
+        'actions' => ['install'],
+        'key'     => ['STATUT_ID', 'TYPE_PIECE_JOINTE_ID'],
+        'options' => ['columns' => [
+            'STATUT_ID'            => ['transformer' => 'SELECT id FROM statut WHERE histo_destruction IS NULL AND code = %s'],
+            'TYPE_PIECE_JOINTE_ID' => ['transformer' => 'SELECT id FROM type_piece_jointe WHERE histo_destruction IS NULL AND code = %s'],
+        ],],
+    ],
+    'WF_ETAPE_DEP'               => [
+        'actions' => ['install'],
+        'key'     => ['ETAPE_SUIV_ID', 'ETAPE_PREC_ID'],
+        'options' => ['columns' => [
+            'ETAPE_PREC_ID'       => ['transformer' => 'SELECT id FROM wf_etape WHERE code = %s'],
+            'ETAPE_SUIV_ID'       => ['transformer' => 'SELECT id FROM wf_etape WHERE code = %s'],
+            'TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s'],
+        ],],
+    ],
+
+    /* Paramètres par défaut, en fonction des nomenclatures ci-dessus */
+    'PARAMETRE'                  => [
+        'actions' => ['install', 'update'],
+        'key'     => 'NOM',
+        'options' => ['update-ignore-cols' => ['VALEUR']],
+    ],
+
+
+];

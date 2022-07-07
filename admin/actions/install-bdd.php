@@ -10,8 +10,7 @@ $ref->loadFromDir($oa->getOseDir() . 'data/ddl');
 $bdd->create($ref);
 
 /* Insertion des données */
-$dataGen = new DataGen($oa);
-$dataGen->install();
+$oa->getBdd()->dataUpdater()->run('install');
 
 /* On construit les plafonds et les tableaux de bord */
 $oa->exec('plafonds construire');

@@ -23,6 +23,7 @@ use BddAdmin\Manager\TriggerManagerInterface;
 use BddAdmin\Manager\UniqueConstraintManagerInterface;
 use BddAdmin\Manager\ViewManagerInterface;
 use \Exception;
+use Unicaen\OpenDocument\Data;
 
 class Bdd
 {
@@ -41,10 +42,7 @@ class Bdd
     const TYPE_BLOB   = 'blob';
     const TYPE_CLOB   = 'clob';
 
-    /**
-     * @var array
-     */
-    private $ddlTypes    = [
+    private array $ddlTypes    = [
         Ddl::SEQUENCE,
         Ddl::TABLE,
         Ddl::PRIMARY_CONSTRAINT,
@@ -57,7 +55,7 @@ class Bdd
         Ddl::INDEX,
     ];
 
-    private $changements = [
+    private array $changements = [
         Ddl::SEQUENCE . '.rename'           => 'Renomage des séquences',
         Ddl::TABLE . '.rename'              => 'Renomage des tables',
         Ddl::VIEW . '.rename'               => 'Renomage des vues',
@@ -108,32 +106,24 @@ class Bdd
     /**
      * @var DriverInterface
      */
-    private $driver;
+    private     $driver;
 
-    /**
-     * @var bool
-     */
-    public $debug = false;
+    public bool $debug = false;
 
     /**
      * @var ManagerInterface[]
      */
-    private $managers = [];
+    private             $managers     = [];
 
-    /**
-     * @var bool
-     */
-    protected $queryCollect = false;
+    protected bool      $queryCollect = false;
 
-    /**
-     * @var array
-     */
-    protected $queries = [];
+    protected array     $queries      = [];
 
-    /**
-     * @var bool
-     */
-    protected $inCopy = false;
+    protected bool      $inCopy       = false;
+
+    private DataUpdater $dataUpdater;
+
+    private array       $options      = [];
 
 
 
@@ -319,6 +309,65 @@ class Bdd
         }
 
         return $this->managers[$ddlClass];
+    }
+
+
+
+    public function hasOption(string $name): bool
+    {
+        return array_key_exists($name, $this->options);
+    }
+
+
+
+    public function getOption(string $name)
+    {
+        if ($this->hasOption($name)) {
+            return $this->options[$name];
+        } else {
+            return null;
+        }
+    }
+
+
+
+    public function setOption(string $name, $value): self
+    {
+        $this->options[$name] = $value;
+
+        return $this;
+    }
+
+
+
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+
+
+    public function setOptions(array $options, bool $clearOthers = false): self
+    {
+        if ($clearOthers) {
+            $this->options = [];
+        }
+        foreach ($options as $name => $option) {
+            $this->setOption($name, $option);
+        }
+
+        return $this;
+    }
+
+
+
+    public function dataUpdater(): DataUpdater
+    {
+        if (!isset($this->dataUpdater)) {
+            $this->dataUpdater = new DataUpdater($this);
+        }
+
+        return $this->dataUpdater;
     }
 
 

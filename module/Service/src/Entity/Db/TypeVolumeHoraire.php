@@ -1,51 +1,71 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Service\Entity\Db;
 
 use Application\Provider\Privilege\Privileges;
 
-/**
- * TypeVolumeHoraire
- */
 class TypeVolumeHoraire
 {
 
     const CODE_PREVU   = 'PREVU';
     const CODE_REALISE = 'REALISE';
 
-    static public $codes = [
+    static public  $codes = [
         self::CODE_PREVU,
         self::CODE_REALISE,
     ];
 
-    /**
-     * @var string
-     */
-    private $code;
+    private int    $id;
 
-    /**
-     * @var string
-     */
-    private $libelle;
+    private string $code;
 
-    /**
-     * @var integer
-     */
-    private $ordre;
+    private string $libelle;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private int    $ordre;
+
+
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+
+
+    public function getLibelle(): string
+    {
+        return $this->libelle;
+    }
+
+
+
+    public function getOrdre(): int
+    {
+        return $this->ordre;
+    }
+
+
+
+    public function __toString(): string
+    {
+        return $this->getLibelle();
+    }
 
 
 
     /**
      * Retourne <code>true</code> si le code de ce type de volume horaire est PREVU.
      *
-     * @return boolean
+     * @return bool
      */
-    public function isPrevu()
+    public function isPrevu(): bool
     {
         return self::CODE_PREVU === $this->getCode();
     }
@@ -55,118 +75,11 @@ class TypeVolumeHoraire
     /**
      * Retourne <code>true</code> si le code de ce type de volume horaire est REALISE.
      *
-     * @return boolean
+     * @return bool
      */
-    public function isRealise()
+    public function isRealise(): bool
     {
         return self::CODE_REALISE === $this->getCode();
-    }
-
-
-
-    /**
-     * Set code
-     *
-     * @param string $code
-     *
-     * @return TypeVolumeHoraire
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get code
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-
-
-    /**
-     * Set libelle
-     *
-     * @param string $libelle
-     *
-     * @return TypeVolumeHoraire
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get libelle
-     *
-     * @return string
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
-    }
-
-
-
-    /**
-     * Set ordre
-     *
-     * @param integer $ordre
-     *
-     * @return TypeVolumeHoraire
-     */
-    public function setOrdre($ordre)
-    {
-        $this->ordre = $ordre;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get ordre
-     *
-     * @return integer
-     */
-    public function getOrdre()
-    {
-        return $this->ordre;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-
-    /**
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getLibelle();
     }
 
 

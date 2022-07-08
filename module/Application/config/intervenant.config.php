@@ -6,6 +6,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 return [
     'router'          => [
@@ -199,7 +200,7 @@ return [
                             'defaults' => [
                                 'controller'               => 'Application\Controller\ServiceReferentiel',
                                 'action'                   => 'index',
-                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
+                                'type-volume-horaire-code' => 'PREVU',
                             ],
                         ],
                     ],
@@ -220,7 +221,7 @@ return [
                             'defaults' => [
                                 'controller'               => 'Application\Controller\ServiceReferentiel',
                                 'action'                   => 'index',
-                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
+                                'type-volume-horaire-code' => 'REALISE',
                             ],
                         ],
                     ],

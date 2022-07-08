@@ -7,7 +7,7 @@ use Application\Entity\Db\FormuleTestIntervenant;
 use Application\Entity\Db\FormuleTestStructure;
 use Application\Entity\Db\FormuleTestVolumeHoraire;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\FormuleServiceAwareTrait;
 
 

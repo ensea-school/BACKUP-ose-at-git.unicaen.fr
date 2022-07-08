@@ -7,7 +7,7 @@ use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
 use Application\ORM\Event\Listeners\HistoriqueListenerAwareTrait;

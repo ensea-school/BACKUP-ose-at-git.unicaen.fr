@@ -1,6 +1,6 @@
 <?php
 
-namespace Intervenant;
+namespace Enseignement;
 
 use Application\ConfigFactory;
 

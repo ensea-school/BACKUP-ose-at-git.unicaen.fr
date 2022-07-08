@@ -1,64 +1,39 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Service\Entity\Db;
 
+
+use Application\Acl\Role;
 use Application\Constants;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
-use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 
-/**
- * CampagneSaisie
- */
 class CampagneSaisie
 {
     use AnneeAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use TypeIntervenantAwareTrait;
 
-    /**
-     * @var integer
-     */
-    protected $id;
+    protected ?int       $id;
 
-    /**
-     * @var \DateTime
-     */
-    protected $dateDebut;
+    protected ?\DateTime $dateDebut;
 
-    /**
-     * @var \DateTime
-     */
-    protected $dateFin;
+    protected ?\DateTime $dateFin;
 
-    /**
-     * @var messageIntervenant
-     */
-    protected $messageIntervenant;
+    protected ?string    $messageIntervenant;
 
-    /**
-     * @var messageAutres
-     */
-    protected $messageAutres;
+    protected ?string    $messageAutres;
 
 
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * @param int $id
-     *
-     * @return CampagneSaisie
-     */
-    public function setId($id)
+    public function setId(?int $id): CampagneSaisie
     {
         $this->id = $id;
 
@@ -67,22 +42,14 @@ class CampagneSaisie
 
 
 
-    /**
-     * @return \DateTime
-     */
-    public function getDateDebut()
+    public function getDateDebut(): ?\DateTime
     {
         return $this->dateDebut;
     }
 
 
 
-    /**
-     * @param \DateTime $dateDebut
-     *
-     * @return CampagneSaisie
-     */
-    public function setDateDebut($dateDebut = null)
+    public function setDateDebut(?\DateTime $dateDebut): CampagneSaisie
     {
         $this->dateDebut = $dateDebut;
 
@@ -91,22 +58,14 @@ class CampagneSaisie
 
 
 
-    /**
-     * @return \DateTime
-     */
-    public function getDateFin()
+    public function getDateFin(): ?\DateTime
     {
         return $this->dateFin;
     }
 
 
 
-    /**
-     * @param \DateTime $dateFin
-     *
-     * @return CampagneSaisie
-     */
-    public function setDateFin($dateFin = null)
+    public function setDateFin(?\DateTime $dateFin): CampagneSaisie
     {
         $this->dateFin = $dateFin;
 
@@ -115,22 +74,14 @@ class CampagneSaisie
 
 
 
-    /**
-     * @return messageIntervenant
-     */
-    public function getMessageIntervenant()
+    public function getMessageIntervenant(): ?string
     {
         return $this->messageIntervenant;
     }
 
 
 
-    /**
-     * @param messageIntervenant $messageIntervenant
-     *
-     * @return CampagneSaisie
-     */
-    public function setMessageIntervenant($messageIntervenant)
+    public function setMessageIntervenant(?string $messageIntervenant): CampagneSaisie
     {
         $this->messageIntervenant = $messageIntervenant;
 
@@ -139,40 +90,14 @@ class CampagneSaisie
 
 
 
-    /**
-     * @return messageAutres
-     */
-    public function getMessageAutres()
+    public function getMessageAutres(): ?string
     {
         return $this->messageAutres;
     }
 
 
 
-    /**
-     * @param \Application\Acl\Role $role
-     *
-     * @return string
-     */
-    public function getMessage(\Application\Acl\Role $role)
-    {
-        if ($role->getIntervenant()) {
-            $message = $this->getMessageIntervenant();
-        } else {
-            $message = $this->getMessageAutres();
-        }
-
-        return $this->formatMessage($message);
-    }
-
-
-
-    /**
-     * @param messageAutres $messageAutres
-     *
-     * @return CampagneSaisie
-     */
-    public function setMessageAutres($messageAutres)
+    public function setMessageAutres(?string $messageAutres): CampagneSaisie
     {
         $this->messageAutres = $messageAutres;
 
@@ -181,8 +106,19 @@ class CampagneSaisie
 
 
 
-    private function formatMessage($message)
+    /**
+     * @param Role $role
+     *
+     * @return string
+     */
+    public function getMessage(Role $role): string
     {
+        if ($role->getIntervenant()) {
+            $message = $this->getMessageIntervenant();
+        } else {
+            $message = $this->getMessageAutres();
+        }
+
         $dateDebut = $this->dateDebut ? $this->dateDebut->format(Constants::DATE_FORMAT) : '[Pas de date définie]';
         $dateFin   = $this->dateFin ? $this->dateFin->format(Constants::DATE_FORMAT) : '[Pas de date définie]';
 
@@ -194,9 +130,9 @@ class CampagneSaisie
     /**
      * Retourne true si la date transmise ou à défaut la date du jour est dans la période, false sinon
      *
-     * @return boolean
+     * @return bool
      */
-    public function estOuverte(\DateTime $date = null)
+    public function estOuverte(?\DateTime $date = null): bool
     {
         $f = 'Y-m-d';
 
@@ -214,12 +150,7 @@ class CampagneSaisie
 
 
 
-    /**
-     * Retourne la représentation littérale de cet objet.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getMessage();
     }

@@ -1,15 +1,15 @@
 <?php
 
-/* @var $service Application\Entity\Db\Service */
+/* @var $service Enseignement\Entity\Db\Service */
 /* @var $params array */
 
-$serviceListe = $this->serviceListe( [$service] );
+$serviceListe = $this->serviceListe([$service]);
 /* @var $serviceListe Application\View\Helper\Service\Liste */
 
-if (! empty($params)) $serviceListe->applyParams($params);
+if (!empty($params)) $serviceListe->applyParams($params);
 
-if ($onlyContent){
-    echo $this->serviceLigne( $serviceListe, $service )->render($details);
-}else{
-    echo $serviceListe->renderLigne( $service, $details );
+if ($onlyContent) {
+    echo $this->serviceLigne($serviceListe, $service)->render($details);
+} else {
+    echo $serviceListe->renderLigne($service, $details);
 }

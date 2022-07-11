@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 
 /**
  * Description of EtatVolumeHoraireAwareTrait

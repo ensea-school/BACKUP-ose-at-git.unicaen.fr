@@ -8,7 +8,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
-use Application\Entity\VolumeHoraireListe;
+use Enseignement\Entity\VolumeHoraireListe;
 use Application\Entity\Db\TypeIntervention;
 
 

@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\VolumeHoraireReferentiel;
+use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 
 /**
  * Description of VolumeHoraireReferentielAwareTrait
@@ -20,7 +20,7 @@ trait VolumeHoraireReferentielAwareTrait
      *
      * @return self
      */
-    public function setVolumeHoraireReferentiel( ?VolumeHoraireReferentiel $volumeHoraireReferentiel )
+    public function setVolumeHoraireReferentiel(?VolumeHoraireReferentiel $volumeHoraireReferentiel)
     {
         $this->volumeHoraireReferentiel = $volumeHoraireReferentiel;
 

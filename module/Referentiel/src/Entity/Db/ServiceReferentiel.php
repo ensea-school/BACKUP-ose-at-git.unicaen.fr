@@ -1,12 +1,16 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Referentiel\Entity\Db;
 
+use Application\Entity\Db\Traits\FonctionReferentielAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenApp\Util;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
@@ -17,52 +21,68 @@ use Application\Entity\VolumeHoraireReferentielListe;
  */
 class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
 {
+    use FonctionReferentielAwareTrait;
+
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
     use StructureAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use ImportAwareTrait;
 
-    /**
-     * @var integer
-     */
-    protected $id;
+    protected ?int     $id;
 
-    /**
-     * @var string
-     */
-    protected $commentaires;
+    protected ?string  $commentaires;
 
-    /**
-     * @var string
-     */
-    protected $formation;
+    protected ?string  $formation;
 
-    /**
-     * @var \Application\Entity\Db\FonctionReferentiel
-     */
-    protected $fonction;
+    private Collection $volumeHoraireReferentiel;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $volumeHoraireReferentiel;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $formuleResultatServiceReferentiel;
+    private Collection $formuleResultatServiceReferentiel;
 
 
 
-    /**
-     * Retourne la représentation littérale de cet objet.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function getId(): ?int
     {
-        $heures = \UnicaenApp\Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
+        return $this->id;
+    }
+
+
+
+    public function getCommentaires(): ?string
+    {
+        return $this->commentaires;
+    }
+
+
+
+    public function setCommentaires(?string $commentaires): ServiceReferentiel
+    {
+        $this->commentaires = $commentaires;
+
+        return $this;
+    }
+
+
+
+    public function getFormation(): ?string
+    {
+        return $this->formation;
+    }
+
+
+
+    public function setFormation(?string $formation): ServiceReferentiel
+    {
+        $this->formation = $formation;
+
+        return $this;
+    }
+
+
+
+    public function __toString(): string
+    {
+        $heures = Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
 
         return sprintf("%s%s : %s (%sh)",
             $this->getStructure() ? " - " . $this->getStructure() : null,
@@ -72,117 +92,15 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
 
 
 
-    /**
-     *
-     */
     public function __construct()
     {
-        $this->volumeHoraireReferentiel          = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleResultatServiceReferentiel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->volumeHoraireReferentiel          = new ArrayCollection();
+        $this->formuleResultatServiceReferentiel = new ArrayCollection();
     }
 
 
 
-    /**
-     * Set commentaires
-     *
-     * @param string $commentaires
-     *
-     * @return ServiceReferentiel
-     */
-    public function setCommentaires($commentaires)
-    {
-        $this->commentaires = $commentaires;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get commentaires
-     *
-     * @return string
-     */
-    public function getCommentaires()
-    {
-        return $this->commentaires;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getFormation()
-    {
-        return $this->formation;
-    }
-
-
-
-    /**
-     * @param string $formation
-     *
-     * @return ServiceReferentiel
-     */
-    public function setFormation($formation): ServiceReferentiel
-    {
-        $this->formation = $formation;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-
-    /**
-     * Set fonction
-     *
-     * @param \Application\Entity\Db\FonctionReferentiel $fonction
-     *
-     * @return ServiceReferentiel
-     */
-    public function setFonction(\Application\Entity\Db\FonctionReferentiel $fonction = null)
-    {
-        $this->fonction = $fonction;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get fonction
-     *
-     * @return \Application\Entity\Db\FonctionReferentiel
-     */
-    public function getFonction()
-    {
-        return $this->fonction;
-    }
-
-
-
-    /**
-     * Add volumeHoraireReferentiel
-     *
-     * @param VolumeHoraireReferentiel $volumeHoraireReferentiel
-     *
-     * @return Service
-     */
-    public function addVolumeHoraireReferentiel(VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    public function addVolumeHoraireReferentiel(VolumeHoraireReferentiel $volumeHoraireReferentiel): ServiceReferentiel
     {
         $this->volumeHoraireReferentiel[] = $volumeHoraireReferentiel;
 
@@ -191,14 +109,11 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
 
 
 
-    /**
-     * Remove volumeHoraireReferentiel
-     *
-     * @param VolumeHoraireReferentiel $volumeHoraireReferentiel
-     */
-    public function removeVolumeHoraireReferentiel(VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    public function removeVolumeHoraireReferentiel(VolumeHoraireReferentiel $volumeHoraireReferentiel): ServiceReferentiel
     {
         $this->volumeHoraireReferentiel->removeElement($volumeHoraireReferentiel);
+
+        return $this;
     }
 
 
@@ -206,9 +121,9 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * Get volumeHoraireReferentiel
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection|VolumeHoraireReferentiel[]
      */
-    public function getVolumeHoraireReferentiel()
+    public function getVolumeHoraireReferentiel(): Collection
     {
         return $this->volumeHoraireReferentiel;
     }
@@ -218,14 +133,14 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * Détermine si le VHR a une validation ou non
      *
-     * @return boolean
+     * @return bool
      */
-    public function hasValidation()
+    public function hasValidation(): bool
     {
         $volumesHoraires = $this->getVolumeHoraireReferentiel();
         foreach ($volumesHoraires as $volumeHoraire) {
             /* @var $volumeHoraire VolumeHoraireReferentiel */
-            if ($volumeHoraire->hasValidation()) {
+            if ($volumeHoraire->isValide()) {
                 return true;
             }
         }
@@ -235,11 +150,7 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
 
 
 
-    /**
-     *
-     * @return VolumeHoraireReferentielListe
-     */
-    public function getVolumeHoraireReferentielListe()
+    public function getVolumeHoraireReferentielListe(): VolumeHoraireReferentielListe
     {
         $volumeHoraireListe = new VolumeHoraireReferentielListe($this);
 
@@ -252,12 +163,7 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
 
 
 
-    /**
-     * Get formuleResultatServiceReferentiel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFormuleResultatServiceReferentiel(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumeHoraire = null)
+    public function getFormuleResultatServiceReferentiel(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumeHoraire = null): Collection
     {
         $filter = function (FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel) use ($typeVolumeHoraire, $etatVolumeHoraire) {
             if (isset($typeVolumeHoraire) && $typeVolumeHoraire !== $formuleResultatServiceReferentiel->getFormuleResultat()->getTypeVolumeHoraire()) {
@@ -275,25 +181,14 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
 
 
 
-    /**
-     * Get formuleResultatReferentiel
-     *
-     * @return FormuleResultatServiceReferentiel
-     */
-    public function getUniqueFormuleResultatServiceReferentiel(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
+    public function getUniqueFormuleResultatServiceReferentiel(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): FormuleResultatServiceReferentiel
     {
         return $this->getFormuleResultatServiceReferentiel($typeVolumeHoraire, $etatVolumeHoraire)->first();
     }
 
 
 
-    /**
-     * Returns the string identifier of the Resource
-     *
-     * @return string
-     * @see ResourceInterface
-     */
-    public function getResourceId()
+    public function getResourceId(): string
     {
         return 'ServiceReferentiel';
     }

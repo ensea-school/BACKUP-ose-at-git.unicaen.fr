@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\TblClotureRealise;
+use Service\Entity\Db\TblClotureRealise;
 
 /**
  * Description of TblClotureRealiseAwareTrait
@@ -20,7 +20,7 @@ trait TblClotureRealiseAwareTrait
      *
      * @return self
      */
-    public function setTblClotureRealise( ?TblClotureRealise $tblClotureRealise )
+    public function setTblClotureRealise(?TblClotureRealise $tblClotureRealise)
     {
         $this->tblClotureRealise = $tblClotureRealise;
 

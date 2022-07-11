@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Referentiel\Entity\Db;
 
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;

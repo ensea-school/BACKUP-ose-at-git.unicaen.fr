@@ -60,11 +60,6 @@ class TypeVolumeHoraire
 
 
 
-    /**
-     * Retourne <code>true</code> si le code de ce type de volume horaire est PREVU.
-     *
-     * @return bool
-     */
     public function isPrevu(): bool
     {
         return self::CODE_PREVU === $this->getCode();
@@ -72,11 +67,6 @@ class TypeVolumeHoraire
 
 
 
-    /**
-     * Retourne <code>true</code> si le code de ce type de volume horaire est REALISE.
-     *
-     * @return bool
-     */
     public function isRealise(): bool
     {
         return self::CODE_REALISE === $this->getCode();

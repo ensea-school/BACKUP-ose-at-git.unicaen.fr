@@ -20,7 +20,7 @@ class FormuleResultatVolumeHoraireReferentiel
     private $formuleResultat;
 
     /**
-     * @var \Application\Entity\Db\VolumeHoraireReferentiel
+     * @var \Referentiel\Entity\Db\VolumeHoraireReferentiel
      */
     private $volumeHoraireReferentiel;
 
@@ -48,7 +48,7 @@ class FormuleResultatVolumeHoraireReferentiel
     /**
      * Get volumeHoraireReferentiel
      *
-     * @return \Application\Entity\Db\VolumeHoraireReferentiel 
+     * @return \Referentiel\Entity\Db\VolumeHoraireReferentiel 
      */
     public function getVolumeHoraireReferentiel()
     {

@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\MotifModificationServiceDu;
+use Service\Entity\Db\MotifModificationServiceDu;
 
 /**
  * Description of MotifModificationServiceDuAwareTrait
@@ -20,7 +20,7 @@ trait MotifModificationServiceDuAwareTrait
      *
      * @return self
      */
-    public function setMotifModificationServiceDu( ?MotifModificationServiceDu $motifModificationServiceDu )
+    public function setMotifModificationServiceDu(?MotifModificationServiceDu $motifModificationServiceDu)
     {
         $this->motifModificationServiceDu = $motifModificationServiceDu;
 

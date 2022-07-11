@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\VolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 
 /**
  * Description of VolumeHoraireAwareTrait
@@ -20,7 +20,7 @@ trait VolumeHoraireAwareTrait
      *
      * @return self
      */
-    public function setVolumeHoraire( ?VolumeHoraire $volumeHoraire )
+    public function setVolumeHoraire(?VolumeHoraire $volumeHoraire)
     {
         $this->volumeHoraire = $volumeHoraire;
 

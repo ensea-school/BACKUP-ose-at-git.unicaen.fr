@@ -3,15 +3,7 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <!-- NB: repository-class ajouté manuellement sur <entity> -->
-    <entity name="Application\Entity\Db\ServiceReferentiel" table="SERVICE_REFERENTIEL">
-        <indexes>
-            <index name="IDX_42741E7D59860CDC" columns="HISTO_CREATEUR_ID"/>
-            <index name="IDX_42741E7D7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-            <index name="IDX_42741E7D63F06898" columns="HISTO_MODIFICATEUR_ID"/>
-            <index name="IDX_42741E7DE2C64D28" columns="FONCTION_ID"/>
-            <index name="IDX_42741E7D78FF2BCB" columns="INTERVENANT_ID"/>
-            <index name="IDX_42741E7D884B0F7B" columns="STRUCTURE_ID"/>
-        </indexes>
+    <entity name="Referentiel\Entity\Db\ServiceReferentiel" table="SERVICE_REFERENTIEL">
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
@@ -21,36 +13,24 @@
         <field name="commentaires" type="string" column="COMMENTAIRES" length="256" nullable="true"/>
         <field name="formation" type="string" column="FORMATION" length="256" nullable="true"/>
         <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="serviceReferentiel">
-            <join-columns>
-                <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
-            <join-columns>
-                <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="fonction" target-entity="Application\Entity\Db\FonctionReferentiel">
-            <join-columns>
-                <join-column name="FONCTION_ID" referenced-column-name="ID"/>
-            </join-columns>
+        <many-to-one field="fonction" target-entity="Referentiel\Entity\Db\FonctionReferentiel">
+            <join-column name="FONCTION_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
-            <join-columns>
-                <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
-            <join-columns>
-                <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
-            <join-columns>
-                <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <one-to-many field="volumeHoraireReferentiel" target-entity="Application\Entity\Db\VolumeHoraireReferentiel"
+        <one-to-many field="volumeHoraireReferentiel" target-entity="Referentiel\Entity\Db\VolumeHoraireReferentiel"
                      mapped-by="serviceReferentiel">
             <cascade>
                 <cascade-all/>
@@ -60,9 +40,7 @@
                      target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel" mapped-by="serviceReferentiel"/>
 
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
-            <join-columns>
-                <join-column name="SOURCE_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="SOURCE_ID" referenced-column-name="ID"/>
         </many-to-one>
         <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
     </entity>

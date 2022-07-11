@@ -1,30 +1,36 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Enseignement\Entity\Db;
+
+use Application\Entity\Db\Annee;
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Structure;
+use Application\Entity\Db\Traits\AnneeAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\ServiceAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 class TblService
 {
-    private int               $id;
+    use StructureAwareTrait;
+    use ServiceAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use IntervenantAwareTrait;
+    use AnneeAwareTrait;
 
-    private Annee             $annee;
+    private int   $id;
 
-    private Intervenant       $intervenant;
+    private bool  $actif                    = false;
 
-    private bool              $actif                    = false;
+    private bool  $hasHeuresMauvaisePeriode = false;
 
-    private Service           $service;
+    private int   $nbvh                     = 0;
 
-    private ?Structure        $structure;
+    private float $heures                   = 0;
 
-    private TypeVolumeHoraire $typeVolumeHoraire;
-
-    private bool              $hasHeuresMauvaisePeriode = false;
-
-    private int               $nbvh                     = 0;
-
-    private float             $heures                   = 0;
-
-    private int               $valide                   = 0;
+    private int   $valide                   = 0;
 
 
 
@@ -35,44 +41,9 @@ class TblService
 
 
 
-    public function getAnnee(): Annee
-    {
-        return $this->annee;
-    }
-
-
-
-    public function getIntervenant(): Intervenant
-    {
-        return $this->intervenant;
-    }
-
-
-
     public function getActif(): bool
     {
         return $this->actif;
-    }
-
-
-
-    public function getService(): Service
-    {
-        return $this->service;
-    }
-
-
-
-    public function getStructure(): ?Structure
-    {
-        return $this->structure;
-    }
-
-
-
-    public function getTypeVolumeHoraire(): TypeVolumeHoraire
-    {
-        return $this->typeVolumeHoraire;
     }
 
 

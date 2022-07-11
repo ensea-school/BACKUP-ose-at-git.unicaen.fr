@@ -5,7 +5,7 @@ namespace Application\Form\VolumeHoraire;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\TypeIntervention;
-use Application\Entity\VolumeHoraireListe;
+use Enseignement\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
 use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;

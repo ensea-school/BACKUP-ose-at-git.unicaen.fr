@@ -2,11 +2,11 @@
 
 namespace Application\Entity;
 
-use Application\Entity\Db\EtatVolumeHoraire;
-use Application\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Referentiel\Entity\Db\ServiceReferentiel;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Application\Entity\Db\VolumeHoraireReferentiel;
+use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Application\Hydrator\VolumeHoraireReferentiel\ListeFilterHydrator;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
@@ -82,57 +82,47 @@ class VolumeHoraireReferentielListe
     use VolumeHoraireReferentielServiceAwareTrait;
 
     /**
-     * @var ServiceReferentiel|boolean
+     * @var ServiceReferentiel|bool
      */
     protected $service;
 
     /**
-     * @var TypeVolumeHoraire|boolean
+     * @var TypeVolumeHoraire|bool
      */
     protected $typeVolumeHoraire = false;
 
     /**
      *
-     * @var EtatVolumeHoraire
+     * @var EtatVolumeHoraire|bool
      */
     protected $etatVolumeHoraire = false;
 
     /**
-     * @var Validation|boolean
+     * @var Validation|bool
      */
     protected $validation = false;
 
     /**
-     * @var \DateTime|boolean
+     * @var \DateTime|bool
      */
     protected $horaireDebut = false;
 
     /**
-     * @var \DateTime|boolean
+     * @var \DateTime|bool
      */
     protected $horaireFin = false;
 
     /**
-     * @var Source|boolean
+     * @var Source|bool
      */
-    protected $source = false;
+    protected      $source             = false;
 
-    /**
-     * @var bool
-     */
-    protected $filterByHistorique = true;
+    protected bool $filterByHistorique = true;
 
-    /**
-     * @var bool
-     */
-    protected $new = false;
+    protected bool $new                = false;
 
 
 
-    /**
-     *
-     * @param ServiceReferentiel $service
-     */
     function __construct(ServiceReferentiel $service)
     {
         $this->setService($service);
@@ -146,7 +136,7 @@ class VolumeHoraireReferentielListe
      *
      * @return VolumeHoraireReferentiel[]
      */
-    public function getVolumeHorairesReferentiel()
+    public function getVolumeHorairesReferentiel(): array
     {
         $data = [];
 
@@ -162,24 +152,14 @@ class VolumeHoraireReferentielListe
 
 
 
-    /**
-     *
-     * @return ServiceReferentiel
-     */
-    public function getService()
+    public function getService(): ServiceReferentiel
     {
         return $this->service;
     }
 
 
 
-    /**
-     *
-     * @param ServiceReferentiel $service
-     *
-     * @return self
-     */
-    public function setService(ServiceReferentiel $service)
+    public function setService(ServiceReferentiel $service): VolumeHoraireReferentielListe
     {
         $this->service = $service;
 
@@ -190,7 +170,7 @@ class VolumeHoraireReferentielListe
 
     /**
      *
-     * @return TypeVolumeHoraire|boolean
+     * @return TypeVolumeHoraire|bool
      */
     public function getTypeVolumeHoraire()
     {
@@ -201,7 +181,7 @@ class VolumeHoraireReferentielListe
 
     /**
      *
-     * @param TypeVolumeHoraire|boolean $typeVolumeHoraire
+     * @param TypeVolumeHoraire|bool $typeVolumeHoraire
      *
      * @return self
      */
@@ -219,7 +199,7 @@ class VolumeHoraireReferentielListe
 
     /**
      *
-     * @return EtatVolumeHoraire|boolean
+     * @return EtatVolumeHoraire|bool
      */
     public function getEtatVolumeHoraire()
     {
@@ -230,7 +210,7 @@ class VolumeHoraireReferentielListe
 
     /**
      *
-     * @param EtatVolumeHoraire|boolean $etatVolumeHoraire
+     * @param EtatVolumeHoraire|bool $etatVolumeHoraire
      *
      * @return self
      */
@@ -248,7 +228,7 @@ class VolumeHoraireReferentielListe
 
     /**
      *
-     * @return Validation|boolean
+     * @return Validation|bool
      */
     public function getValidation()
     {
@@ -259,7 +239,7 @@ class VolumeHoraireReferentielListe
 
     /**
      *
-     * @param Validation|boolean $validation
+     * @param Validation|bool $validation
      *
      * @return self
      */
@@ -347,29 +327,22 @@ class VolumeHoraireReferentielListe
 
 
 
-    /**
-     * @return boolean
-     */
-    public function getFilterByHistorique()
+    public function getFilterByHistorique(): bool
     {
         return $this->filterByHistorique;
     }
 
 
 
-    /**
-     * @param boolean $filterByHistorique
-     */
-    public function setFilterByHistorique($filterByHistorique)
+    public function setFilterByHistorique(bool $filterByHistorique): VolumeHoraireReferentielListe
     {
         $this->filterByHistorique = $filterByHistorique;
+
+        return $this;
     }
 
 
 
-    /**
-     * @return bool
-     */
     public function getNew(): bool
     {
         return $this->new;
@@ -377,12 +350,7 @@ class VolumeHoraireReferentielListe
 
 
 
-    /**
-     * @param bool $new
-     *
-     * @return $this
-     */
-    public function setNew(bool $new)
+    public function setNew(bool $new): VolumeHoraireReferentielListe
     {
         $this->new = $new;
 
@@ -393,12 +361,8 @@ class VolumeHoraireReferentielListe
 
     /**
      * Détermine si un volume horaire répond aux critères de la liste ou non
-     *
-     * @param VolumeHoraireReferentiel $volumeHoraire
-     *
-     * @return boolean
      */
-    public function match(VolumeHoraireReferentiel $volumeHoraire)
+    public function match(VolumeHoraireReferentiel $volumeHoraire): bool
     {
         if ($volumeHoraire->getRemove()) { // Si le volume horaire est en cours de suppression
             return false;
@@ -484,12 +448,6 @@ class VolumeHoraireReferentielListe
 
 
 
-    /**
-     * @param VolumeHoraireReferentiel $vh
-     * @param array                    $filtres
-     *
-     * @return string
-     */
     private function makeSousListeId(VolumeHoraireReferentiel $vh, array $filtres = []): string
     {
         $id = [];
@@ -527,7 +485,7 @@ class VolumeHoraireReferentielListe
     /**
      * @param array $filtres
      *
-     * @return self[]
+     * @return array|VolumeHoraireReferentielListe[]
      */
     public function getSousListes(array $filtres = []): array
     {
@@ -547,10 +505,8 @@ class VolumeHoraireReferentielListe
 
     /**
      * retourne une liste fille de volumes horaires
-     *
-     * @return self
      */
-    public function createChild()
+    public function createChild(): VolumeHoraireReferentielListe
     {
         $vhlph              = new ListeFilterHydrator();
         $volumeHoraireListe = new VolumeHoraireReferentielListe($this->getService());
@@ -563,12 +519,6 @@ class VolumeHoraireReferentielListe
 
 
 
-    /**
-     * @param VolumeHoraireReferentiel $vh
-     * @param array                    $filtres
-     *
-     * @return VolumeHoraireReferentielListe
-     */
     public function filterByVolumeHoraireReferentiel(VolumeHoraireReferentiel $vh, array $filtres = []): VolumeHoraireReferentielListe
     {
         if (in_array(self::FILTRE_ETAT_VOLUME_HORAIRE, $filtres)) {
@@ -606,9 +556,9 @@ class VolumeHoraireReferentielListe
     /**
      * Retourne la liste des volumes horaires du service.
      *
-     * @return VolumeHoraireReferentiel[]
+     * @return array|VolumeHoraireReferentiel[]
      */
-    public function get()
+    public function get(): array
     {
         $data = [];
         foreach ($this->getService()->getVolumeHoraireReferentiel() as $volumeHoraire) {
@@ -624,10 +574,8 @@ class VolumeHoraireReferentielListe
 
     /**
      * Retourne le nombre de volumes horaires concernés par la liste
-     *
-     * @return integer
      */
-    public function count()
+    public function count(): int
     {
         return count($this->get());
     }
@@ -636,10 +584,8 @@ class VolumeHoraireReferentielListe
 
     /**
      * Détermine si la liste est vide ou non
-     *
-     * @return boolean
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return 0 === $this->count();
     }
@@ -648,10 +594,8 @@ class VolumeHoraireReferentielListe
 
     /**
      * retourne une liste fille de volumes horaires
-     *
-     * @return self
      */
-    public function getChild()
+    public function getChild(): VolumeHoraireReferentielListe
     {
         $volumeHoraireListe = new VolumeHoraireReferentielListe($this->getService());
         $volumeHoraireListe->setTypeVolumeHoraire($this->typeVolumeHoraire);
@@ -666,11 +610,7 @@ class VolumeHoraireReferentielListe
 
 
 
-    /**
-     *
-     * @return type
-     */
-    public function getHeures()
+    public function getHeures(): float
     {
         $volumesHoraires = $this->get();
         $heures          = 0;
@@ -683,7 +623,7 @@ class VolumeHoraireReferentielListe
 
 
 
-    public function isVolumeHoraireModifiable(VolumeHoraireReferentiel $volumeHoraire)
+    public function isVolumeHoraireModifiable(VolumeHoraireReferentiel $volumeHoraire): bool
     {
         return !(
             $volumeHoraire->isValide()
@@ -700,10 +640,10 @@ class VolumeHoraireReferentielListe
      *
      * @param float $heures
      *
-     * @return self
+     * @return VolumeHoraireReferentielListe
      * @throws LogicException
      */
-    public function setHeures($heures)
+    public function setHeures(float $heures): VolumeHoraireReferentielListe
     {
         if ($heures < 0) {
             throw new LogicException('Le nombre d\'heures ne peut être inférieur à zéro');
@@ -868,95 +808,14 @@ class VolumeHoraireReferentielListe
 
 
     /**
-     * Affecte un certain nombre d'heures à la liste
-     *
-     * @param float $heures
-     *
-     * @return self
-     * @throws LogicException
-     */
-    public function setHeuresOld($heures)
-    {
-        if ($heures < 0) {
-            throw new LogicException('Le nombre d\'heures ne peut être inférieur à zéro');
-        }
-
-        $vhl = new VolumeHoraireReferentielListe($this->getService());
-        /* Initialisation */
-        if ($this->horaireDebut instanceof \DateTime) {
-            $vhl->setHoraireDebut($this->horaireDebut);
-        } else {
-            $vhl->setHoraireDebut(null);
-        }
-        if ($this->horaireFin instanceof \DateTime) {
-            $vhl->setHoraireFin($this->horaireFin);
-        } else {
-            $vhl->setHoraireFin(null);
-        }
-        if ($this->typeVolumeHoraire instanceof TypeVolumeHoraire) {
-            $vhl->setTypeVolumeHoraire($this->typeVolumeHoraire);
-        } else {
-            throw new LogicException('Le type de volume horaire n\'est pas défini');
-        }
-
-        $lastHeures = $vhl->getHeures();
-        $newHeures  = $heures - $lastHeures;
-        $vhl->setValidation(null); // On travaille sur les non validés
-        $vhl->setSource($this->getServiceSource()->getOse()); // On ne modifie que la source OSE!!
-        if ($vhl->isEmpty()) {
-            if (0 == $newHeures) {
-                return $this;
-            } // Pas de modifications à prévoir
-            $saisieHeures  = $newHeures;
-            $volumeHoraire = $this->getServiceVolumeHoraireReferentiel()->newEntity();
-            $volumeHoraire->setServiceReferentiel($vhl->getService());
-            $volumeHoraire->setTypeVolumeHoraire($vhl->getTypeVolumeHoraire());
-            $volumeHoraire->setHoraireDebut($vhl->getHoraireDebut());
-            $volumeHoraire->setHoraireFin($vhl->getHoraireFin());
-            $volumeHoraire->setHeures($saisieHeures);
-            $this->getService()->addVolumeHoraireReferentiel($volumeHoraire);
-        } else {
-            $soldeHeures = $newHeures;
-            foreach ($vhl->get() as $volumeHoraire) {
-                if ($soldeHeures < 0 && $volumeHoraire->getHeures() > 0) {
-                    if ($volumeHoraire->getHeures() + $soldeHeures > 0) {
-                        // on retranche sur ce volume horaire, qui restera positif quand même
-                        $volumeHoraire->setHeures($volumeHoraire->getHeures() + $soldeHeures);
-                        $soldeHeures = 0;
-                    } else {
-                        // on supprime le VH et les heures restant à supprimer le seront sur d'autres VH ou bien dans une autre passe
-                        $soldeHeures += $volumeHoraire->getHeures();
-                        $volumeHoraire->setRemove(true);
-                    }
-                } elseif ($soldeHeures > 0) {
-                    // on met toutes les heures en plus sur ce volume horaire ! !
-                    $volumeHoraire->setHeures($volumeHoraire->getHeures() + $soldeHeures);
-                    $soldeHeures = 0;
-                }
-
-                if (0 == $soldeHeures) {
-                    break;
-                } // Fin de boucle si fin de modif
-            }
-            if ($soldeHeures != 0) {
-                $vhl->getChild()->setHeures($lastHeures + $newHeures);
-            }
-        }
-
-        return $this;
-    }
-
-
-
-    /**
      * Vérifie l'éligibilité d'un volume horaire à la liste
      *
      * @param VolumeHoraireReferentiel $volumeHoraire
      *
-     * @return true
+     * @return bool
      * @throws LogicException
      */
-    protected function checkVolumeHoraireEligibilite(VolumeHoraireReferentiel $volumeHoraire)
+    protected function checkVolumeHoraireEligibilite(VolumeHoraireReferentiel $volumeHoraire): bool
     {
         if ($volumeHoraire->getService() !== $this->getService()) {
             throw new LogicException('Le service du volume horaire ne correspond pas à celui de la liste');
@@ -973,10 +832,7 @@ class VolumeHoraireReferentielListe
 
 
 
-    /**
-     * @return array
-     */
-    public function filtersToArray()
+    public function filtersToArray(): array
     {
         $result = [];
         if ($this->getTypeVolumeHoraire() instanceof TypeVolumeHoraire) {

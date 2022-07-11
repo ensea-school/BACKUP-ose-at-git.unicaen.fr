@@ -2,15 +2,7 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Application\Entity\Db\Service" table="SERVICE">
-        <indexes>
-            <index name="IDX_DED864C88AB4A516" columns="ELEMENT_PEDAGOGIQUE_ID"/>
-            <index name="IDX_DED864C8B3FC6B16" columns="ETABLISSEMENT_ID"/>
-            <index name="IDX_DED864C859860CDC" columns="HISTO_CREATEUR_ID"/>
-            <index name="IDX_DED864C87E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-            <index name="IDX_DED864C863F06898" columns="HISTO_MODIFICATEUR_ID"/>
-            <index name="IDX_DED864C878FF2BCB" columns="INTERVENANT_ID"/>
-        </indexes>
+    <entity name="Enseignement\Entity\Db\Service" table="SERVICE">
         <unique-constraints>
             <unique-constraint name="service__un"
                                columns="INTERVENANT_ID,ELEMENT_PEDAGOGIQUE_ID,ETABLISSEMENT_ID,HISTO_DESTRUCTION"/>
@@ -23,37 +15,25 @@
         <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
         <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
         <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
-            <join-columns>
-                <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
-            <join-columns>
-                <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
-            <join-columns>
-                <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique">
-            <join-columns>
-                <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="etablissement" target-entity="Application\Entity\Db\Etablissement">
-            <join-columns>
-                <join-column name="ETABLISSEMENT_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="ETABLISSEMENT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
-            <join-columns>
-                <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
         <!-- NB: Ajout de relations à la main -->
-        <one-to-many field="volumeHoraire" target-entity="Application\Entity\Db\VolumeHoraire" mapped-by="service"
+        <one-to-many field="volumeHoraire" target-entity="Enseignement\Entity\Db\VolumeHoraire" mapped-by="service"
                      fetch="EXTRA_LAZY">
             <cascade>
                 <cascade-all/>

@@ -1,16 +1,16 @@
 <?php
 
-namespace Application\Entity;
+namespace Enseignement\Entity;
 
 use Application\Entity\Db\Contrat;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\TypeIntervention;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Application\Entity\Db\VolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use LogicException;
@@ -162,17 +162,11 @@ class VolumeHoraireListe
     /**
      * @var Source|boolean
      */
-    protected $source = false;
+    protected      $source             = false;
 
-    /**
-     * @var bool
-     */
-    protected $filterByHistorique = true;
+    protected bool $filterByHistorique = true;
 
-    /**
-     * @var bool
-     */
-    protected $new = false;
+    protected bool $new                = false;
 
     /**
      * @var object
@@ -181,10 +175,6 @@ class VolumeHoraireListe
 
 
 
-    /**
-     *
-     * @param \Application\Entity\Db\Service $service
-     */
     function __construct(Service $service)
     {
         $this->setService($service);
@@ -198,7 +188,7 @@ class VolumeHoraireListe
      *
      * @return VolumeHoraire[]
      */
-    public function getVolumeHoraires()
+    public function getVolumeHoraires(): array
     {
         $data = [];
 
@@ -214,24 +204,14 @@ class VolumeHoraireListe
 
 
 
-    /**
-     *
-     * @return Service
-     */
-    public function getService()
+    public function getService(): Service
     {
         return $this->service;
     }
 
 
 
-    /**
-     *
-     * @param Service $service
-     *
-     * @return self
-     */
-    public function setService(Service $service)
+    public function setService(Service $service): VolumeHoraireListe
     {
         $this->service = $service;
 
@@ -242,12 +222,8 @@ class VolumeHoraireListe
 
     /**
      * Détermine si un volume horaire répond aux critères de la liste ou non
-     *
-     * @param VolumeHoraire $volumeHoraire
-     *
-     * @return boolean
      */
-    public function match(VolumeHoraire $volumeHoraire)
+    public function match(VolumeHoraire $volumeHoraire): bool
     {
         if ($volumeHoraire->getRemove()) { // Si le volume horaire est en cours de suppression
             return false;
@@ -348,12 +324,7 @@ class VolumeHoraireListe
 
 
 
-    /**
-     * @param DateTime|null $dateTime
-     *
-     * @return int
-     */
-    private function timestamp($dateTime): int
+    private function timestamp(?\DateTime $dateTime): int
     {
         if ($dateTime instanceof \DateTime) {
             return $dateTime->getTimestamp();
@@ -379,7 +350,7 @@ class VolumeHoraireListe
      *
      * @return VolumeHoraireListe
      */
-    public function setSource($source)
+    public function setSource($source): VolumeHoraireListe
     {
         $this->source = $source;
         if ($this->__debug) $this->__debug->dumpAction('setSource', $source);
@@ -389,20 +360,14 @@ class VolumeHoraireListe
 
 
 
-    /**
-     * @return boolean
-     */
-    public function getFilterByHistorique()
+    public function getFilterByHistorique(): bool
     {
         return $this->filterByHistorique;
     }
 
 
 
-    /**
-     * @param boolean $filterByHistorique
-     */
-    public function setFilterByHistorique($filterByHistorique)
+    public function setFilterByHistorique(bool $filterByHistorique): VolumeHoraireListe
     {
         $this->filterByHistorique = $filterByHistorique;
         if ($this->__debug) $this->__debug->dumpAction('setFilterByHistorique', $filterByHistorique);
@@ -412,9 +377,6 @@ class VolumeHoraireListe
 
 
 
-    /**
-     * @return bool
-     */
     public function getNew(): bool
     {
         return $this->new;
@@ -427,7 +389,7 @@ class VolumeHoraireListe
      *
      * @return $this
      */
-    public function setNew(bool $new)
+    public function setNew(bool $new): VolumeHoraireListe
     {
         $this->new = $new;
         if ($this->__debug) $this->__debug->dumpAction('setNew', $new);
@@ -439,10 +401,8 @@ class VolumeHoraireListe
 
     /**
      * Détermine si, dans la liste des heures, des périodes non autorisées sont présentes
-     *
-     * @return boolean
      */
-    public function hasForbiddenPeriodes()
+    public function hasForbiddenPeriodes(): bool
     {
         if (!$this->getService()->getElementPedagogique()) return false;
         if (!$periode = $this->getService()->getElementPedagogique()->getPeriode()) return false;
@@ -460,7 +420,7 @@ class VolumeHoraireListe
     /**
      * Retourne la liste des types d'intervention concernés par le service
      */
-    public function getTypesIntervention()
+    public function getTypesIntervention(): array
     {
         $typesIntervention = [];
         $vhs               = $this->getVolumeHoraires();
@@ -479,7 +439,7 @@ class VolumeHoraireListe
      *
      * @return Periode[]
      */
-    public function getPeriodes()
+    public function getPeriodes(): array
     {
         $periodes = [];
         foreach ($this->getVolumeHoraires() as $volumeHoraire) {
@@ -498,7 +458,7 @@ class VolumeHoraireListe
      *
      * @return MotifNonPaiement[]
      */
-    public function getMotifsNonPaiement()
+    public function getMotifsNonPaiement(): array
     {
         $mnps   = [];
         $vChild = $this->createChild();
@@ -524,12 +484,6 @@ class VolumeHoraireListe
 
 
 
-    /**
-     * @param VolumeHoraire $vh
-     * @param array         $filtres
-     *
-     * @return string
-     */
     private function makeSousListeId(VolumeHoraire $vh, array $filtres = []): string
     {
         $id = [];
@@ -567,7 +521,7 @@ class VolumeHoraireListe
     /**
      * @param array $filtres
      *
-     * @return self[]
+     * @return VolumeHoraireListe[]
      */
     public function getSousListes(array $filtres = []): array
     {
@@ -587,10 +541,8 @@ class VolumeHoraireListe
 
     /**
      * retourne une liste fille de volumes horaires
-     *
-     * @return self
      */
-    public function createChild()
+    public function createChild(): VolumeHoraireListe
     {
         $vhlph              = new ListeFilterHydrator();
         $volumeHoraireListe = new VolumeHoraireListe($this->getService());
@@ -704,11 +656,7 @@ class VolumeHoraireListe
 
 
 
-    /**
-     *
-     * @return type
-     */
-    public function getHeures()
+    public function getHeures(): float
     {
         $volumesHoraires = $this->getVolumeHoraires();
         $heures          = 0;
@@ -721,7 +669,7 @@ class VolumeHoraireListe
 
 
 
-    public function isVolumeHoraireModifiable(VolumeHoraire $volumeHoraire)
+    public function isVolumeHoraireModifiable(VolumeHoraire $volumeHoraire): bool
     {
         return !(
             $volumeHoraire->isValide()
@@ -741,7 +689,7 @@ class VolumeHoraireListe
      * @return self
      * @throws LogicException
      */
-    public function setHeures($heures)
+    public function setHeures(float $heures): VolumeHoraireListe
     {
         if ($this->__debug) $this->__debug->dumpAction('setHeures', $heures);
 
@@ -931,7 +879,7 @@ class VolumeHoraireListe
      *
      * @return $this
      */
-    public function moveHeuresFromAncienMotifNonPaiement($heures, $ancienMotifNonPaiement)
+    public function moveHeuresFromAncienMotifNonPaiement($heures, $ancienMotifNonPaiement): VolumeHoraireListe
     {
         if ($this->__debug) $this->__debug->dumpAction('moveHeuresFromAncienMotifNonPaiement', $heures, $ancienMotifNonPaiement);
 
@@ -962,7 +910,7 @@ class VolumeHoraireListe
      *
      * @return $this
      */
-    public function changeAll($horaireDebut, $horaireFin, $typeIntervention, $periode, $motifNonPaiement)
+    public function changeAll($horaireDebut, $horaireFin, $typeIntervention, $periode, $motifNonPaiement): VolumeHoraireListe
     {
         if ($this->__debug) $this->__debug->dumpAction('changeAll', $horaireDebut, $horaireFin, $typeIntervention, $periode, $motifNonPaiement);
 
@@ -1034,10 +982,8 @@ class VolumeHoraireListe
 
     /**
      * Détermine si la liste est vide ou non
-     *
-     * @return boolean
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return 0 === $this->count();
     }
@@ -1046,10 +992,8 @@ class VolumeHoraireListe
 
     /**
      * Retourne le nombre de volumes horaires concernés par la liste
-     *
-     * @return integer
      */
-    public function count()
+    public function count(): int
     {
         return count($this->getVolumeHoraires());
     }
@@ -1073,7 +1017,7 @@ class VolumeHoraireListe
      *
      * @return self
      */
-    public function setTypeVolumeHoraire($typeVolumeHoraire)
+    public function setTypeVolumeHoraire($typeVolumeHoraire): VolumeHoraireListe
     {
         if ($typeVolumeHoraire !== $this->typeVolumeHoraire) {
             if ($this->__debug) $this->__debug->dumpAction('setTypeVolumeHoraire', $typeVolumeHoraire);
@@ -1106,7 +1050,7 @@ class VolumeHoraireListe
      *
      * @return self
      */
-    public function setPeriode($periode)
+    public function setPeriode($periode): VolumeHoraireListe
     {
         if ($periode !== $this->periode) {
             if ($this->__debug) $this->__debug->dumpAction('setPeriode', $periode);
@@ -1139,7 +1083,7 @@ class VolumeHoraireListe
      *
      * @return self
      */
-    public function setTypeIntervention($typeIntervention)
+    public function setTypeIntervention($typeIntervention): VolumeHoraireListe
     {
         if ($typeIntervention !== $this->typeIntervention) {
             if ($this->__debug) $this->__debug->dumpAction('setTypeIntervention', $typeIntervention);
@@ -1170,7 +1114,7 @@ class VolumeHoraireListe
      *
      * @return VolumeHoraireListe
      */
-    public function setHoraireDebut($horaireDebut)
+    public function setHoraireDebut($horaireDebut): VolumeHoraireListe
     {
         if ($horaireDebut !== $this->horaireDebut) {
             if ($this->__debug) $this->__debug->dumpAction('setHoraireDebut', $horaireDebut);
@@ -1201,7 +1145,7 @@ class VolumeHoraireListe
      *
      * @return VolumeHoraireListe
      */
-    public function setHoraireFin($horaireFin)
+    public function setHoraireFin($horaireFin): VolumeHoraireListe
     {
         if ($horaireFin !== $this->horaireFin) {
             if ($this->__debug) $this->__debug->dumpAction('setHoraireFin', $horaireFin);
@@ -1234,7 +1178,7 @@ class VolumeHoraireListe
      *
      * @return self
      */
-    public function setEtatVolumeHoraire($etatVolumeHoraire)
+    public function setEtatVolumeHoraire($etatVolumeHoraire): VolumeHoraireListe
     {
         if ($etatVolumeHoraire !== $this->etatVolumeHoraire) {
             if ($this->__debug) $this->__debug->dumpAction('setEtatVolumeHoraire', $etatVolumeHoraire);
@@ -1267,7 +1211,7 @@ class VolumeHoraireListe
      *
      * @return self
      */
-    public function setMotifNonPaiement($motifNonPaiement)
+    public function setMotifNonPaiement($motifNonPaiement): VolumeHoraireListe
     {
         if ($motifNonPaiement !== $this->motifNonPaiement) {
             if ($this->__debug) $this->__debug->dumpAction('setMotifNonPaiement', $motifNonPaiement);
@@ -1300,7 +1244,7 @@ class VolumeHoraireListe
      *
      * @return self
      */
-    public function setContrat($contrat)
+    public function setContrat($contrat): VolumeHoraireListe
     {
         if ($contrat !== $this->contrat) {
             if ($this->__debug) $this->__debug->dumpAction('setContrat', $contrat);
@@ -1333,7 +1277,7 @@ class VolumeHoraireListe
      *
      * @return self
      */
-    public function setValidation($validation)
+    public function setValidation($validation): VolumeHoraireListe
     {
         if ($validation !== $this->validation) {
             if ($this->__debug) $this->__debug->dumpAction('setValidation', $validation);

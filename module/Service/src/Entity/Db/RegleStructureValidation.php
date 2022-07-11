@@ -1,85 +1,39 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Service\Entity\Db;
 
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 
-/**
- * RegleStructureValidation
- */
 class RegleStructureValidation
 {
+    use TypeVolumeHoraireAwareTrait;
+    use TypeIntervenantAwareTrait;
 
-    /**
-     * @var integer
-     */
-    protected $id;
+    protected ?int    $id;
 
-    /**
-     * @var string
-     */
-    protected $priorite;
+    protected ?string $priorite;
 
-    /**
-     * @var string
-     */
-    protected $message;
-
-    /**
-     * @var TypeVolumeHoraire
-     */
-
-    protected $typeVolumeHoraire;
-
-    /**
-     * @var TypeIntervenant
-     */
-    protected $typeIntervenant;
+    protected ?string $message;
 
 
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * @param int $id
-     *
-     * @return RegleStructureValidation
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getPriorite()
+    public function getPriorite(): ?string
     {
         return $this->priorite;
     }
 
 
 
-    /**
-     * @param string $priorite
-     *
-     * @return RegleStructureValidation
-     */
-    public function setPriorite($priorite)
+    public function setPriorite(?string $priorite): RegleStructureValidation
     {
         $this->priorite = $priorite;
 
@@ -88,68 +42,16 @@ class RegleStructureValidation
 
 
 
-    /**
-     * @return string
-     */
-    public function getMessage()
+    public function getMessage(): ?string
     {
         return $this->message;
     }
 
 
 
-    /**
-     * @param string $message
-     *
-     * @return RegleStructureValidation
-     */
-    public function setMessage($message)
+    public function setMessage(?string $message): RegleStructureValidation
     {
         $this->message = $message;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return TypeVolumeHoraire
-     */
-    public function getTypeVolumeHoraire()
-    {
-        return $this->typeVolumeHoraire;
-    }
-
-
-
-    /**
-     * @param TypeVolumeHoraire $typeVolumeHoraire
-     */
-    public function setTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire)
-    {
-        $this->typeVolumeHoraire = $typeVolumeHoraire;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return TypeIntervenant
-     */
-    public function getTypeIntervenant()
-    {
-        return $this->typeIntervenant;
-    }
-
-
-
-    /**
-     * @param TypeIntervenant $typeIntervenant
-     */
-    public function setTypeIntervenant(TypeIntervenant $typeIntervenant)
-    {
-        $this->typeIntervenant = $typeIntervenant;
 
         return $this;
     }

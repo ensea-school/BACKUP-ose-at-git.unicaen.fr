@@ -2,9 +2,9 @@
 
 namespace Application\Form\ServiceReferentiel;
 
-use Application\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\ServiceReferentiel;
+use Referentiel\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;

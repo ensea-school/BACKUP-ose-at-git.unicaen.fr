@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\ModificationServiceDu;
+use Service\Entity\Db\ModificationServiceDu;
 
 /**
  * Description of ModificationServiceDuAwareTrait
@@ -20,7 +20,7 @@ trait ModificationServiceDuAwareTrait
      *
      * @return self
      */
-    public function setModificationServiceDu( ?ModificationServiceDu $modificationServiceDu )
+    public function setModificationServiceDu(?ModificationServiceDu $modificationServiceDu)
     {
         $this->modificationServiceDu = $modificationServiceDu;
 

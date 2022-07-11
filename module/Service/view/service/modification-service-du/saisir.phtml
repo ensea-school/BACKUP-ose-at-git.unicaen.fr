@@ -44,7 +44,7 @@ echo $this->form()->openTag($form);
 echo '<fieldset>' . "\n";
 foreach ($modificationServiceDu->get('modificationServiceDu')->getIterator() as $fieldset) {
     $motif = $fieldset->getObject()->getMotif();
-    /* @var $object \Application\Entity\Db\ModificationServiceDu */
+    /* @var $object \Service\Entity\Db\ModificationServiceDu */
 
     $motifElement = $fieldset->get('motif');
     /* @var $motifElement \Laminas\Form\Element\Select */

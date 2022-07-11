@@ -2,14 +2,14 @@
 
 namespace Application\Form\VolumeHoraire;
 
-use Application\Entity\VolumeHoraireListe;
+use Enseignement\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Laminas\Form\Element\Hidden;
 use Application\Filter\StringFromFloat;
 use Laminas\Hydrator\HydratorInterface;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
 
@@ -136,13 +136,13 @@ class SaisieMultipleHydrator implements HydratorInterface
      * Hydrate $object with the provided $data.
      *
      * @param array                                  $data
-     * @param \Application\Entity\VolumeHoraireListe $object
+     * @param \Enseignement\Entity\VolumeHoraireListe $object
      *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
-        $typeVolumeHoraire = $this->getEntityManager()->find(\Application\Entity\Db\TypeVolumeHoraire::class, (int)$data['type-volume-horaire']);
+        $typeVolumeHoraire = $this->getEntityManager()->find(\Service\Entity\Db\TypeVolumeHoraire::class, (int)$data['type-volume-horaire']);
         $periode           = $this->getEntityManager()->find(\Application\Entity\Db\Periode::class, (int)$data['periode']);
 
         $object->setTypeVolumeHoraire($typeVolumeHoraire);
@@ -166,7 +166,7 @@ class SaisieMultipleHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\VolumeHoraireListe $object
+     * @param \Enseignement\Entity\VolumeHoraireListe $object
      *
      * @return array
      */

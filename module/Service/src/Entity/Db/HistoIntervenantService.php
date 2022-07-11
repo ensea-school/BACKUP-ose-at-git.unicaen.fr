@@ -1,52 +1,38 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Service\Entity\Db;
+
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Service\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Entity\Db\Utilisateur;
 
 /**
  * HistoIntervenantService
  */
 class HistoIntervenantService
 {
-    /**
-     * @var boolean
-     */
-    private $referentiel;
+    use IntervenantAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
 
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
+    private bool         $referentiel = false;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private ?\DateTime   $histoModification;
 
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    private $intervenant;
+    private ?int         $id;
 
-    /**
-     * @var \Application\Entity\Db\TypeVolumeHoraire
-     */
-    private $typeVolumeHoraire;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoModificateur;
+    private ?Utilisateur $histoModificateur;
 
 
 
-    /**
-     * Set referentiel
-     *
-     * @param boolean $referentiel
-     *
-     * @return HistoIntervenantService
-     */
-    public function setReferentiel($referentiel)
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+
+
+    public function setReferentiel(bool $referentiel): HistoIntervenantService
     {
         $this->referentiel = $referentiel;
 
@@ -55,26 +41,14 @@ class HistoIntervenantService
 
 
 
-    /**
-     * Get referentiel
-     *
-     * @return boolean
-     */
-    public function getReferentiel()
+    public function getReferentiel(): bool
     {
         return $this->referentiel;
     }
 
 
 
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     *
-     * @return HistoIntervenantService
-     */
-    public function setHistoModification($histoModification)
+    public function setHistoModification(?\DateTime $histoModification): HistoIntervenantService
     {
         $this->histoModification = $histoModification;
 
@@ -83,94 +57,14 @@ class HistoIntervenantService
 
 
 
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime
-     */
-    public function getHistoModification()
+    public function getHistoModification(): ?\DateTime
     {
         return $this->histoModification;
     }
 
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     *
-     * @return HistoIntervenantService
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\Intervenant
-     */
-    public function getIntervenant()
-    {
-        return $this->intervenant;
-    }
-
-
-
-    /**
-     * Set typeVolumeHoraire
-     *
-     * @param \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
-     *
-     * @return HistoIntervenantService
-     */
-    public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
-    {
-        $this->typeVolumeHoraire = $typeVolumeHoraire;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get typeVolumeHoraire
-     *
-     * @return \Application\Entity\Db\TypeVolumeHoraire
-     */
-    public function getTypeVolumeHoraire()
-    {
-        return $this->typeVolumeHoraire;
-    }
-
-
-
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     *
-     * @return HistoIntervenantService
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
+    public function setHistoModificateur(?Utilisateur $histoModificateur = null): HistoIntervenantService
     {
         $this->histoModificateur = $histoModificateur;
 
@@ -179,12 +73,7 @@ class HistoIntervenantService
 
 
 
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoModificateur()
+    public function getHistoModificateur(): ?Utilisateur
     {
         return $this->histoModificateur;
     }

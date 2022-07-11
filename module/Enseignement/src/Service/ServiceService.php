@@ -5,16 +5,16 @@ namespace Application\Service;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Etape;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervention;
 use Intervenant\Entity\Db\TypeIntervenant;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\NiveauEtape;
 use Application\Entity\Service\Recherche;
-use Application\Entity\VolumeHoraireListe;
+use Enseignement\Entity\VolumeHoraireListe;
 use Application\Form\Service\RechercheHydrator;
 use Application\Hydrator\Service\Traits\RechercheHydratorAwareTrait;
 use Application\Provider\Privilege\Privileges;
@@ -227,7 +227,7 @@ class ServiceService extends AbstractEntityService
 
         if (count($result) > 1) {
             foreach ($result as $sr) {
-                /* @var $sr \Application\Entity\Db\Service */
+                /* @var $sr \Enseignement\Entity\Db\Service */
                 if ($sr->estNonHistorise()) return $sr;
             }
 
@@ -306,7 +306,7 @@ class ServiceService extends AbstractEntityService
             /* Sauvegarde automatique des volumes horaires associés */
             $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
             foreach ($entity->getVolumeHoraire() as $volumeHoraire) {
-                /* @var $volumeHoraire \Application\Entity\Db\Volumehoraire */
+                /* @var $volumeHoraire \Enseignement\Entity\Db\VolumeHoraire */
                 if ($result !== $entity) $volumeHoraire->setService($result);
                 if ($volumeHoraire->getRemove()) {
                     if ($volumeHoraire->getId()) {
@@ -674,7 +674,7 @@ class ServiceService extends AbstractEntityService
         $old = [];
         foreach ($s as $service) {
 
-            /* @var $service \Application\Entity\Db\Service */
+            /* @var $service \Enseignement\Entity\Db\Service */
             $service->setTypeVolumeHoraire($tvhSource);
             $oldElement = $service->getElementPedagogique();
             $newElement = $oldElement ? $this->getServiceElementPedagogique()->getByCode(
@@ -1122,7 +1122,7 @@ class ServiceService extends AbstractEntityService
     /**
      * Détermine si un service est assuré localement (c'est-à-dire dans l'université) ou sur un autre établissement
      *
-     * @param \Application\Entity\Db\Service $service
+     * @param \Enseignement\Entity\Db\Service $service
      *
      * @return boolean
      */
@@ -1139,7 +1139,7 @@ class ServiceService extends AbstractEntityService
     /**
      * Retourne la période courante d'un service
      *
-     * @param \Application\Entity\Db\Service $service
+     * @param \Enseignement\Entity\Db\Service $service
      *
      * @return \Application\Entity\Db\Periode
      */
@@ -1155,7 +1155,7 @@ class ServiceService extends AbstractEntityService
 
     /**
      *
-     * @param \Application\Entity\Db\Service $service
+     * @param \Enseignement\Entity\Db\Service $service
      *
      * @return \Application\Entity\Db\Periode[]
      */

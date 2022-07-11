@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Service;
+
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -17,8 +18,10 @@ class MotifModificationServiceService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\MotifModificationServiceDu::class;
+        return \Service\Entity\Db\MotifModificationServiceDu::class;
     }
+
+
 
     /**
      * Retourne l'alias d'entit? courante
@@ -30,9 +33,12 @@ class MotifModificationServiceService extends AbstractEntityService
         return 'fr';
     }
 
+
+
     public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery();
+        [$qb, $alias] = $this->initQuery();
+
         return parent::getList($qb, $alias);
     }
 }

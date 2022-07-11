@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\HistoIntervenantService;
+use Service\Entity\Db\HistoIntervenantService;
 
 /**
  * Description of HistoIntervenantServiceAwareTrait
@@ -20,7 +20,7 @@ trait HistoIntervenantServiceAwareTrait
      *
      * @return self
      */
-    public function setHistoIntervenantService( ?HistoIntervenantService $histoIntervenantService )
+    public function setHistoIntervenantService(?HistoIntervenantService $histoIntervenantService)
     {
         $this->histoIntervenantService = $histoIntervenantService;
 

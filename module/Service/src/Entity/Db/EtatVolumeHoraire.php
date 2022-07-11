@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Service\Entity\Db;
 
 /**
  * EtatVolumeHoraire
@@ -12,165 +12,73 @@ class EtatVolumeHoraire
     const CODE_CONTRAT_EDITE = 'contrat-edite';
     const CODE_CONTRAT_SIGNE = 'contrat-signe';
 
-    /**
-     * @var string
-     */
-    private $code;
+    private int    $id;
 
-    /**
-     * @var string
-     */
-    private $libelle;
+    private string $code;
 
-    /**
-     * @var integer
-     */
-    private $ordre;
+    private string $libelle;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private int    $ordre;
 
 
 
-    /**
-     * Set code
-     *
-     * @param string $code
-     *
-     * @return EtatVolumeHoraire
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get code
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isSaisi()
-    {
-        return $this->getCode() == self::CODE_SAISI;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isValide()
-    {
-        return $this->getCode() == self::CODE_VALIDE;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isContratEdite()
-    {
-        return $this->getCode() == self::CODE_CONTRAT_EDITE;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isContratSigne()
-    {
-        return $this->getCode() == self::CODE_CONTRAT_SIGNE;
-    }
-
-
-
-    /**
-     * Set libelle
-     *
-     * @param string $libelle
-     *
-     * @return EtatVolumeHoraire
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get libelle
-     *
-     * @return string
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
-    }
-
-
-
-    /**
-     * Set ordre
-     *
-     * @param integer $ordre
-     *
-     * @return EtatVolumeHoraire
-     */
-    public function setOrdre($ordre)
-    {
-        $this->ordre = $ordre;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get ordre
-     *
-     * @return integer
-     */
-    public function getOrdre()
-    {
-        return $this->ordre;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
 
 
-    public function __toString()
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+
+
+    public function getLibelle(): string
+    {
+        return $this->libelle;
+    }
+
+
+
+    public function getOrdre(): int
+    {
+        return $this->ordre;
+    }
+
+
+
+    public function isSaisi(): bool
+    {
+        return $this->getCode() == self::CODE_SAISI;
+    }
+
+
+
+    public function isValide(): bool
+    {
+        return $this->getCode() == self::CODE_VALIDE;
+    }
+
+
+
+    public function isContratEdite(): bool
+    {
+        return $this->getCode() == self::CODE_CONTRAT_EDITE;
+    }
+
+
+
+    public function isContratSigne(): bool
+    {
+        return $this->getCode() == self::CODE_CONTRAT_SIGNE;
+    }
+
+
+
+    public function __toString(): string
     {
         return $this->getLibelle();
     }

@@ -3,8 +3,8 @@
 namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\FonctionReferentiel;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Referentiel\Entity\Db\FonctionReferentiel;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;

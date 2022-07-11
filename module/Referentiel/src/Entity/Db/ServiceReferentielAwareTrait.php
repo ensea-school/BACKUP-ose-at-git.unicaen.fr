@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\ServiceReferentiel;
+use Referentiel\Entity\Db\ServiceReferentiel;
 
 /**
  * Description of ServiceReferentielAwareTrait
@@ -20,7 +20,7 @@ trait ServiceReferentielAwareTrait
      *
      * @return self
      */
-    public function setServiceReferentiel( ?ServiceReferentiel $serviceReferentiel )
+    public function setServiceReferentiel(?ServiceReferentiel $serviceReferentiel)
     {
         $this->serviceReferentiel = $serviceReferentiel;
 

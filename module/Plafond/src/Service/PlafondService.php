@@ -3,17 +3,17 @@
 namespace Plafond\Service;
 
 use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Service;
-use Application\Entity\Db\ServiceReferentiel;
+use Enseignement\Entity\Db\Service;
+use Referentiel\Entity\Db\ServiceReferentiel;
 use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\VolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Plafond\Entity\Db\Plafond;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Entity\Db\PlafondPerimetre;
 use Plafond\Entity\Db\PlafondReferentiel;
@@ -202,7 +202,7 @@ class PlafondService extends AbstractEntityService
         bool $bloquantUniquement = false,
         bool $depassementsUniquement = false): string
     {
-        $filters                                  = [];
+        $filters = [];
 
         if ($perimetre instanceof PlafondPerimetre) $perimetre = $perimetre->getCode();
 

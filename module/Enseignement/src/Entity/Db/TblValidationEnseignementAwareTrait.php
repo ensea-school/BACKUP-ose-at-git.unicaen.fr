@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\TblValidationEnseignement;
+use Enseignement\Entity\Db\TblValidationEnseignement;
 
 /**
  * Description of TblValidationEnseignementAwareTrait
@@ -20,7 +20,7 @@ trait TblValidationEnseignementAwareTrait
      *
      * @return self
      */
-    public function setTblValidationEnseignement( ?TblValidationEnseignement $tblValidationEnseignement )
+    public function setTblValidationEnseignement(?TblValidationEnseignement $tblValidationEnseignement)
     {
         $this->tblValidationEnseignement = $tblValidationEnseignement;
 

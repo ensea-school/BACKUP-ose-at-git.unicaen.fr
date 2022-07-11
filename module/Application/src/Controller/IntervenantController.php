@@ -2,7 +2,7 @@
 
 namespace Application\Controller;
 
-use Application\Entity\Db\RegleStructureValidation;
+use Service\Entity\Db\RegleStructureValidation;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Service\Recherche;
@@ -179,11 +179,11 @@ class  IntervenantController extends AbstractController
     private function servicesAction(TypeVolumehoraire $typeVolumeHoraire)
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\Service::class,
-            \Application\Entity\Db\VolumeHoraire::class,
+            \Enseignement\Entity\Db\Service::class,
+            \Enseignement\Entity\Db\VolumeHoraire::class,
             \Application\Entity\Db\CheminPedagogique::class,
-            \Application\Entity\Db\ServiceReferentiel::class,
-            \Application\Entity\Db\VolumeHoraireReferentiel::class,
+            \Referentiel\Entity\Db\ServiceReferentiel::class,
+            \Referentiel\Entity\Db\VolumeHoraireReferentiel::class,
             \Application\Entity\Db\Validation::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
@@ -458,7 +458,7 @@ class  IntervenantController extends AbstractController
         }
 
         $etatVolumeHoraire = $this->context()->etatVolumeHoraireFromQuery('etat-volume-horaire', $form->get('etat-volume-horaire')->getValue());
-        /* @var $etatVolumeHoraire \Application\Entity\Db\EtatVolumeHoraire */
+        /* @var $etatVolumeHoraire \Service\Entity\Db\EtatVolumeHoraire */
         if (!isset($etatVolumeHoraire)) {
             throw new LogicException('Etat de volume horaire erroné');
         }

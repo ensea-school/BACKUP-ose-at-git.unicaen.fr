@@ -1,83 +1,42 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Referentiel\Entity\Db;
 
+use Application\Entity\Db\Traits\DomaineFonctionnelAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityNotFoundException;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-/**
- * FonctionReferentiel
- */
 class FonctionReferentiel implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
+    use StructureAwareTrait;
+    use DomaineFonctionnelAwareTrait;
 
-    /**
-     * @var self
-     */
-    protected $parent;
+    protected ?FonctionReferentiel $parent;
 
-    /**
-     * @var string
-     */
-    protected $code;
+    protected ?string              $code;
 
-    /**
-     * @var string
-     */
-    protected $libelleCourt;
+    protected ?string              $libelleCourt;
 
-    /**
-     * @var string
-     */
-    protected $libelleLong;
+    protected ?string              $libelleLong;
 
-    /**
-     * @var integer
-     */
-    protected $id;
+    protected ?int                 $id;
 
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    protected $structure;
+    protected bool                 $etapeRequise      = false;
 
-    /**
-     * @var DomaineFonctionnel
-     */
-    protected $domaineFonctionnel;
-
-    /**
-     * @var bool
-     */
-    protected $etapeRequise;
-
-    /**
-     * @var bool
-     */
-    protected $serviceStatutaire = true;
+    protected bool                 $serviceStatutaire = true;
 
     /**
      * @var FonctionReferentiel[]
      */
-    protected $fille;
+    protected Collection $fille;
 
 
 
-    /**
-     * PHP 5 allows developers to declare constructor methods for classes.
-     * Classes which have a constructor method call this method on each newly-created object,
-     * so it is suitable for any initialization that the object may need before it is used.
-     *
-     * Note: Parent constructors are not called implicitly if the child class defines a constructor.
-     * In order to run a parent constructor, a call to parent::__construct() within the child constructor is required.
-     *
-     * param [ mixed $args [, $... ]]
-     *
-     * @link https://php.net/manual/en/language.oop5.decon.php
-     */
     public function __construct()
     {
         $this->fille = new ArrayCollection();
@@ -85,27 +44,15 @@ class FonctionReferentiel implements HistoriqueAwareInterface
 
 
 
-    /**
-     * @return FonctionReferentiel
-     */
-    public function getParent()
+    public function getParent(): ?FonctionReferentiel
     {
         return $this->parent;
     }
 
 
 
-    /**
-     * @param FonctionReferentiel|null $parent
-     *
-     * @return FonctionReferentiel
-     */
-    public function setParent($parent = null): FonctionReferentiel
+    public function setParent(?FonctionReferentiel $parent): FonctionReferentiel
     {
-        if ($parent instanceof FonctionReferentiel && $parent->getParent()) {
-            throw new \Exception('Il est impossible de définir cette fonction référentielle comme parente : elle a déjà un parent');
-        }
-
         $this->parent = $parent;
 
         return $this;
@@ -113,48 +60,14 @@ class FonctionReferentiel implements HistoriqueAwareInterface
 
 
 
-    /**
-     * @param FonctionReferentiel $fille
-     *
-     * @return $this
-     */
-    public function addFille(FonctionReferentiel $fille)
+    public function getCode(): ?string
     {
-        $this->fille[] = $fille;
-
-        return $this;
+        return $this->code;
     }
 
 
 
-    /**
-     * @param FonctionReferentiel $fille
-     */
-    public function removeFille(FonctionReferentiel $fille)
-    {
-        $this->fille->removeElement($fille);
-    }
-
-
-
-    /**
-     * @return ArrayCollection|FonctionReferentiel[]
-     */
-    public function getFille()
-    {
-        return $this->fille;
-    }
-
-
-
-    /**
-     * Set code
-     *
-     * @param string $code
-     *
-     * @return FonctionReferentiel
-     */
-    public function setCode($code)
+    public function setCode(?string $code): FonctionReferentiel
     {
         $this->code = $code;
 
@@ -163,26 +76,14 @@ class FonctionReferentiel implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Get code
-     *
-     * @return string
-     */
-    public function getCode()
+    public function getLibelleCourt(): ?string
     {
-        return $this->code;
+        return $this->libelleCourt;
     }
 
 
 
-    /**
-     * Set libelleCourt
-     *
-     * @param string $libelleCourt
-     *
-     * @return FonctionReferentiel
-     */
-    public function setLibelleCourt($libelleCourt)
+    public function setLibelleCourt(?string $libelleCourt): FonctionReferentiel
     {
         $this->libelleCourt = $libelleCourt;
 
@@ -191,26 +92,14 @@ class FonctionReferentiel implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Get libelleCourt
-     *
-     * @return string
-     */
-    public function getLibelleCourt()
+    public function getLibelleLong(): ?string
     {
-        return $this->libelleCourt;
+        return $this->libelleLong;
     }
 
 
 
-    /**
-     * Set libelleLong
-     *
-     * @param string $libelleLong
-     *
-     * @return FonctionReferentiel
-     */
-    public function setLibelleLong($libelleLong)
+    public function setLibelleLong(?string $libelleLong): FonctionReferentiel
     {
         $this->libelleLong = $libelleLong;
 
@@ -219,100 +108,30 @@ class FonctionReferentiel implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Get libelleLong
-     *
-     * @return string
-     */
-    public function getLibelleLong()
-    {
-        return $this->libelleLong;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     *
-     * @return self
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setId(?int $id): FonctionReferentiel
     {
-        $this->structure = $structure;
+        $this->id = $id;
 
         return $this;
     }
 
 
 
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure
-     */
-    public function getStructure()
-    {
-        return $this->structure;
-    }
-
-
-
-    /**
-     *
-     * @return DomaineFonctionnel
-     */
-    function getDomaineFonctionnel()
-    {
-        return $this->domaineFonctionnel;
-    }
-
-
-
-    /**
-     *
-     * @param DomaineFonctionnel $domaineFonctionnel
-     *
-     * @return self
-     */
-    function setDomaineFonctionnel(DomaineFonctionnel $domaineFonctionnel)
-    {
-        $this->domaineFonctionnel = $domaineFonctionnel;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isEtapeRequise()
+    public function isEtapeRequise(): bool
     {
         return $this->etapeRequise;
     }
 
 
 
-    /**
-     * @param bool $etapeRequise
-     *
-     * @return FonctionReferentiel
-     */
-    public function setEtapeRequise($etapeRequise): FonctionReferentiel
+    public function setEtapeRequise(bool $etapeRequise): FonctionReferentiel
     {
         $this->etapeRequise = $etapeRequise;
 
@@ -321,9 +140,6 @@ class FonctionReferentiel implements HistoriqueAwareInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function isServiceStatutaire(): bool
     {
         return $this->serviceStatutaire;
@@ -331,11 +147,6 @@ class FonctionReferentiel implements HistoriqueAwareInterface
 
 
 
-    /**
-     * @param bool $serviceStatutaire
-     *
-     * @return FonctionReferentiel
-     */
     public function setServiceStatutaire(bool $serviceStatutaire): FonctionReferentiel
     {
         $this->serviceStatutaire = $serviceStatutaire;
@@ -345,12 +156,35 @@ class FonctionReferentiel implements HistoriqueAwareInterface
 
 
 
+    public function addFille(FonctionReferentiel $fille): FonctionReferentiel
+    {
+        $this->fille[] = $fille;
+
+        return $this;
+    }
+
+
+
+    public function removeFille(FonctionReferentiel $fille): FonctionReferentiel
+    {
+        $this->fille->removeElement($fille);
+
+        return $this;
+    }
+
+
+
     /**
-     * Retourne la représentation littérale de cet objet.
-     *
-     * @return string
+     * @return ArrayCollection|FonctionReferentiel[]
      */
-    public function __toString()
+    public function getFille(): Collection
+    {
+        return $this->fille;
+    }
+
+
+
+    public function __toString(): string
     {
         $str = $this->getLibelleCourt();
         //Try catch préventif dans le cas d'une fonction référentiel attachée à une structure historisée.

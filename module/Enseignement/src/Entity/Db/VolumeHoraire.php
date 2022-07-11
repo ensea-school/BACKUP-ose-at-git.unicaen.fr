@@ -3,12 +3,17 @@
 namespace Enseignement\Entity\Db;
 
 use Application\Entity\Db\Contrat;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\FormuleResultatVolumeHoraire;
 use Application\Entity\Db\Periode;
+use Application\Entity\Db\Traits\MotifNonPaiementAwareTrait;
+use Application\Entity\Db\Traits\PeriodeAwareTrait;
+use Application\Entity\Db\Traits\ServiceAwareTrait;
+use Application\Entity\Db\Traits\TypeInterventionAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\TypeValidation;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,36 +30,31 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
+    use ServiceAwareTrait;
+    use MotifNonPaiementAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use TypeInterventionAwareTrait;
+    use PeriodeAwareTrait;
 
-    protected ?int               $id;
+    protected ?int       $id;
 
-    protected ?Service           $service;
+    protected ?float     $heures;
 
-    protected ?TypeVolumeHoraire $typeVolumeHoraire;
+    protected ?\DateTime $horaireDebut;
 
-    protected ?TypeIntervention  $typeIntervention;
+    protected ?\DateTime $horaireFin;
 
-    protected ?Periode           $periode;
+    protected ?Contrat   $contrat;
 
-    protected ?float             $heures;
+    protected bool       $autoValidation = false;
 
-    protected ?\DateTime         $horaireDebut;
+    protected bool       $remove         = false;
 
-    protected ?\DateTime         $horaireFin;
+    private Collection   $validation;
 
-    protected ?MotifNonPaiement  $motifNonPaiement;
+    private Collection   $etatVolumeHoraire;
 
-    protected ?Contrat           $contrat;
-
-    protected bool               $autoValidation = false;
-
-    protected bool               $remove         = false;
-
-    private Collection           $validation;
-
-    private Collection           $etatVolumeHoraire;
-
-    private Collection           $formuleResultatVolumeHoraire;
+    private Collection   $formuleResultatVolumeHoraire;
 
 
 
@@ -135,86 +135,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     public function setId(int $id)
     {
         $this->id = $id;
-    }
-
-
-
-    public function setService(Service $service = null): VolumeHoraire
-    {
-        $this->service = $service;
-
-        return $this;
-    }
-
-
-
-    public function getService(): ?Service
-    {
-        return $this->service;
-    }
-
-
-
-    public function setMotifNonPaiement(?MotifNonPaiement $motifNonPaiement = null): VolumeHoraire
-    {
-        $this->motifNonPaiement = $motifNonPaiement;
-
-        return $this;
-    }
-
-
-
-    public function getMotifNonPaiement(): ?MotifNonPaiement
-    {
-        return $this->motifNonPaiement;
-    }
-
-
-
-    public function setPeriode(Periode $periode = null): VolumeHoraire
-    {
-        $this->periode = $periode;
-
-        return $this;
-    }
-
-
-
-    public function getPeriode(): ?Periode
-    {
-        return $this->periode;
-    }
-
-
-
-    public function setTypeIntervention(?TypeIntervention $typeIntervention = null): VolumeHoraire
-    {
-        $this->typeIntervention = $typeIntervention;
-
-        return $this;
-    }
-
-
-
-    public function getTypeIntervention(): ?TypeIntervention
-    {
-        return $this->typeIntervention;
-    }
-
-
-
-    public function setTypeVolumeHoraire(?TypeVolumeHoraire $typeVolumeHoraire = null): VolumeHoraire
-    {
-        $this->typeVolumeHoraire = $typeVolumeHoraire;
-
-        return $this;
-    }
-
-
-
-    public function getTypeVolumeHoraire(): TypeVolumeHoraire
-    {
-        return $this->typeVolumeHoraire;
     }
 
 

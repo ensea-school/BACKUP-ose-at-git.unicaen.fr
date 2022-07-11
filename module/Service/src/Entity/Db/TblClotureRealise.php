@@ -1,24 +1,23 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Service\Entity\Db;
+
+use Application\Entity\Db\Traits\AnneeAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 
 class TblClotureRealise
 {
-    private int         $id;
+    use AnneeAwareTrait;
+    use IntervenantAwareTrait;
 
-    private Annee       $annee;
+    private int  $id;
 
-    private Intervenant $intervenant;
+    private bool $actif   = false;
 
-    private bool        $actif   = false;
-
-    private bool        $cloture = false;
-
+    private bool $cloture = false;
 
 
-    /**
-     * @return int
-     */
+
     public function getId(): int
     {
         return $this->id;
@@ -26,29 +25,6 @@ class TblClotureRealise
 
 
 
-    /**
-     * @return Annee
-     */
-    public function getAnnee(): Annee
-    {
-        return $this->annee;
-    }
-
-
-
-    /**
-     * @return Intervenant
-     */
-    public function getIntervenant(): Intervenant
-    {
-        return $this->intervenant;
-    }
-
-
-
-    /**
-     * @return bool
-     */
     public function getActif(): bool
     {
         return $this->actif;
@@ -56,9 +32,6 @@ class TblClotureRealise
 
 
 
-    /**
-     * @return bool
-     */
     public function getCloture(): bool
     {
         return $this->cloture;

@@ -2,16 +2,7 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Application\Entity\Db\VolumeHoraire" table="VOLUME_HORAIRE">
-        <indexes>
-            <index name="IDX_C2A901856DA70281" columns="TYPE_INTERVENTION_ID"/>
-            <index name="IDX_C2A90185D09A4004" columns="MOTIF_NON_PAIEMENT_ID"/>
-            <index name="IDX_C2A90185C0569A10" columns="PERIODE_ID"/>
-            <index name="IDX_C2A90185DE8EF239" columns="SERVICE_ID"/>
-            <index name="IDX_C2A9018559860CDC" columns="HISTO_CREATEUR_ID"/>
-            <index name="IDX_C2A901857E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-            <index name="IDX_C2A9018563F06898" columns="HISTO_MODIFICATEUR_ID"/>
-        </indexes>
+    <entity name="Enseignement\Entity\Db\VolumeHoraire" table="VOLUME_HORAIRE">
         <unique-constraints>
             <unique-constraint name="volume_horaire__un"
                                columns="SERVICE_ID,PERIODE_ID,TYPE_INTERVENTION_ID,MOTIF_NON_PAIEMENT_ID"/>
@@ -23,50 +14,32 @@
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
         <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-        <many-to-one field="typeVolumeHoraire" target-entity="Application\Entity\Db\TypeVolumeHoraire">
-            <join-columns>
-                <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
-            </join-columns>
+        <many-to-one field="typeVolumeHoraire" target-entity="Service\Entity\Db\TypeVolumeHoraire">
+            <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="contrat" target-entity="Application\Entity\Db\Contrat">
-            <join-columns>
-                <join-column name="CONTRAT_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="CONTRAT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
-            <join-columns>
-                <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
-            <join-columns>
-                <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
-            <join-columns>
-                <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="service" target-entity="Application\Entity\Db\Service">
-            <join-columns>
-                <join-column name="SERVICE_ID" referenced-column-name="ID"/>
-            </join-columns>
+        <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service">
+            <join-column name="SERVICE_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="motifNonPaiement" target-entity="Application\Entity\Db\MotifNonPaiement">
-            <join-columns>
-                <join-column name="MOTIF_NON_PAIEMENT_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="MOTIF_NON_PAIEMENT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="periode" target-entity="Application\Entity\Db\Periode">
-            <join-columns>
-                <join-column name="PERIODE_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="PERIODE_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="typeIntervention" target-entity="Application\Entity\Db\TypeIntervention">
-            <join-columns>
-                <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-many field="validation" target-entity="Application\Entity\Db\Validation">
             <join-table name="VALIDATION_VOL_HORAIRE">
@@ -78,7 +51,7 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
-        <many-to-many field="etatVolumeHoraire" target-entity="Application\Entity\Db\EtatVolumeHoraire">
+        <many-to-many field="etatVolumeHoraire" target-entity="Service\Entity\Db\EtatVolumeHoraire">
             <join-table name="V_VOLUME_HORAIRE_ETAT">
                 <join-columns>
                     <join-column name="VOLUME_HORAIRE_ID" referenced-column-name="ID" unique="true"/>
@@ -88,22 +61,12 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
-        <one-to-many field="formuleResultatVolumeHoraire" target-entity="Application\Entity\Db\FormuleResultatVolumeHoraire"
-                     mapped-by="volumeHoraire"/>
-
+        <one-to-many field="formuleResultatVolumeHoraire" target-entity="Application\Entity\Db\FormuleResultatVolumeHoraire" mapped-by="volumeHoraire"/>
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
-            <join-columns>
-                <join-column name="SOURCE_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="SOURCE_ID" referenced-column-name="ID"/>
         </many-to-one>
         <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
-
-        <field name="autoValidation" type="boolean" column="AUTO_VALIDATION" nullable="false">
-            <options>
-                <option name="default">0</option>
-            </options>
-        </field>
-
+        <field name="autoValidation" type="boolean" column="AUTO_VALIDATION" nullable="false"/>
         <field name="horaireDebut" type="datetime" column="HORAIRE_DEBUT" nullable="true"/>
         <field name="horaireFin" type="datetime" column="HORAIRE_FIN" nullable="true"/>
     </entity>

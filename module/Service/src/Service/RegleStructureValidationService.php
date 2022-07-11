@@ -2,8 +2,8 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\RegleStructureValidation;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\RegleStructureValidation;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 
 /**

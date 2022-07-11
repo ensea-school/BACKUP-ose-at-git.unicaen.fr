@@ -3,7 +3,7 @@
 namespace Application\Form\Service;
 
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Form\Service\Traits\SaisieFieldsetAwareTrait;

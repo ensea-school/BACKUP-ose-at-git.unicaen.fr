@@ -1484,11 +1484,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Add modificationServiceDu
      *
-     * @param \Application\Entity\Db\ModificationServiceDu $modificationServiceDu
+     * @param \Service\Entity\Db\ModificationServiceDu $modificationServiceDu
      *
      * @return Intervenant
      */
-    public function addModificationServiceDu(\Application\Entity\Db\ModificationServiceDu $modificationServiceDu)
+    public function addModificationServiceDu(\Service\Entity\Db\ModificationServiceDu $modificationServiceDu)
     {
         $this->modificationServiceDu[] = $modificationServiceDu;
 
@@ -1500,10 +1500,10 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Remove modificationServiceDu
      *
-     * @param \Application\Entity\Db\ModificationServiceDu $modificationServiceDu
-     * @param bool                                         $softDelete
+     * @param \Service\Entity\Db\ModificationServiceDu $modificationServiceDu
+     * @param bool                                     $softDelete
      */
-    public function removeModificationServiceDu(\Application\Entity\Db\ModificationServiceDu $modificationServiceDu, $softDelete = true)
+    public function removeModificationServiceDu(\Service\Entity\Db\ModificationServiceDu $modificationServiceDu, $softDelete = true)
     {
         if ($softDelete && $modificationServiceDu instanceof HistoriqueAwareInterface) {
             $modificationServiceDu->setHistoDestruction(new \DateTime());

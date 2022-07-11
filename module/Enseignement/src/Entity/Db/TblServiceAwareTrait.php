@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\TblService;
+use Enseignement\Entity\Db\TblService;
 
 /**
  * Description of TblServiceAwareTrait
@@ -20,7 +20,7 @@ trait TblServiceAwareTrait
      *
      * @return self
      */
-    public function setTblService( ?TblService $tblService )
+    public function setTblService(?TblService $tblService)
     {
         $this->tblService = $tblService;
 

@@ -3,7 +3,7 @@
 namespace Application\Form;
 
 use Application\Constants;
-use Application\Entity\Db\CampagneSaisie;
+use Service\Entity\Db\CampagneSaisie;
 use Laminas\Hydrator\HydratorInterface;
 
 

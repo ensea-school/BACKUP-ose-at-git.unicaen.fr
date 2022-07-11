@@ -3,7 +3,7 @@
 namespace Application\View\Helper\ServiceReferentiel;
 
 use Laminas\View\Helper\AbstractHelper;
-use Application\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Traits\FonctionReferentielAwareTrait;
 
 /**

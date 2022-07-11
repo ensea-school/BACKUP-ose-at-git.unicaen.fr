@@ -20,7 +20,7 @@
         <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="etatVolumeHoraire" target-entity="Application\Entity\Db\EtatVolumeHoraire">
+    <many-to-one field="etatVolumeHoraire" target-entity="Service\Entity\Db\EtatVolumeHoraire">
       <join-columns>
         <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
       </join-columns>

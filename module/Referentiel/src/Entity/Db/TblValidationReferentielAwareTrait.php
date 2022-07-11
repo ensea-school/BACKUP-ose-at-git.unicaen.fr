@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\TblValidationReferentiel;
+use Referentiel\Entity\Db\TblValidationReferentiel;
 
 /**
  * Description of TblValidationReferentielAwareTrait
@@ -20,7 +20,7 @@ trait TblValidationReferentielAwareTrait
      *
      * @return self
      */
-    public function setTblValidationReferentiel( ?TblValidationReferentiel $tblValidationReferentiel )
+    public function setTblValidationReferentiel(?TblValidationReferentiel $tblValidationReferentiel)
     {
         $this->tblValidationReferentiel = $tblValidationReferentiel;
 

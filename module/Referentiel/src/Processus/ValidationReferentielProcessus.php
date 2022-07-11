@@ -1,11 +1,12 @@
 <?php
 
 namespace Application\Processus;
+
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\ServiceReferentiel;
+use Referentiel\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TblValidationReferentiel;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Referentiel\Entity\Db\TblValidationReferentiel;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
@@ -22,23 +23,20 @@ class ValidationReferentielProcessus extends AbstractProcessus
     use ValidationServiceAwareTrait;
 
 
-
-
-
-    public function lister( TypeVolumeHoraire $typeVolumeHoraire, Intervenant $intervenant, Structure $structure=null )
+    public function lister(TypeVolumeHoraire $typeVolumeHoraire, Intervenant $intervenant, Structure $structure = null)
     {
         $dql = "
         SELECT
           tvr, str, v
         FROM
-          Application\Entity\Db\TblValidationReferentiel tvr
+          Referentiel\Entity\Db\TblValidationReferentiel tvr
           JOIN tvr.structure        str
           LEFT JOIN tvr.validation  v
         WHERE
           tvr.typeVolumeHoraire = :typeVolumeHoraire
           AND tvr.autoValidation = false
           AND tvr.intervenant = :intervenant
-          ".($structure ? 'AND tvr.structure = :structure' : '')."
+          " . ($structure ? 'AND tvr.structure = :structure' : '') . "
         ORDER BY
           v.id, str.libelleCourt
         ";
@@ -54,8 +52,8 @@ class ValidationReferentielProcessus extends AbstractProcessus
         $validations = [];
         foreach ($res as $tvr) {
             $this->getEntityManager()->detach($tvr);
-            $validation = $tvr->getValidation() ?: $this->creer($intervenant, $tvr->getStructure());
-            $vid = $this->getValidationId($validation);
+            $validation        = $tvr->getValidation() ?: $this->creer($intervenant, $tvr->getStructure());
+            $vid               = $this->getValidationId($validation);
             $validations[$vid] = $validation;
         }
 
@@ -67,11 +65,11 @@ class ValidationReferentielProcessus extends AbstractProcessus
     /**
      * @param TypeVolumehoraire $typeVolumeHoraire
      * @param Validation|null   $validation
-     * @param boolean $detach
+     * @param boolean           $detach
      *
      * @return ServiceReferentiel[]
      */
-    public function getServices(TypeVolumeHoraire $typeVolumeHoraire, Validation $validation, $detach=true)
+    public function getServices(TypeVolumeHoraire $typeVolumeHoraire, Validation $validation, $detach = true)
     {
         $services = [];
 
@@ -79,7 +77,7 @@ class ValidationReferentielProcessus extends AbstractProcessus
         SELECT
           tvr, str, s, vh, v
         FROM
-          Application\Entity\Db\TblValidationReferentiel tvr
+          Referentiel\Entity\Db\TblValidationReferentiel tvr
           JOIN tvr.structure              str
           JOIN tvr.serviceReferentiel     s
           JOIN s.volumeHoraireReferentiel vh WITH vh = tvr.volumeHoraireReferentiel
@@ -94,11 +92,11 @@ class ValidationReferentielProcessus extends AbstractProcessus
         $query = $this->getEntityManager()->createQuery($dql);
         $query->setParameters([
             'typeVolumeHoraire' => $typeVolumeHoraire,
-            'intervenant' => $validation->getIntervenant(),
+            'intervenant'       => $validation->getIntervenant(),
         ]);
         if ($validation->getId()) {
             $query->setParameter('validation', $validation);
-        }else{
+        } else {
             $query->setParameter('structure', $validation->getStructure());
         }
 
@@ -125,7 +123,7 @@ class ValidationReferentielProcessus extends AbstractProcessus
      *
      * @return Validation
      */
-    public function creer( Intervenant $intervenant, Structure $structure )
+    public function creer(Intervenant $intervenant, Structure $structure)
     {
         $typeValidation = $this->getServiceTypeValidation()->getReferentiel();
 
@@ -140,17 +138,17 @@ class ValidationReferentielProcessus extends AbstractProcessus
 
     /**
      * @param TypeVolumeHoraire $typeVolumeHoraire
-     * @param Validation       $validation
+     * @param Validation        $validation
      *
      * @return self
      */
-    public function enregistrer( TypeVolumeHoraire $typeVolumeHoraire, Validation $validation )
+    public function enregistrer(TypeVolumeHoraire $typeVolumeHoraire, Validation $validation)
     {
-        $services = $this->getServices($typeVolumeHoraire, $validation, false );
+        $services = $this->getServices($typeVolumeHoraire, $validation, false);
 
         foreach ($services as $service) {
             foreach ($service->getVolumeHoraireReferentiel() as $vh) {
-                /* @var $vh \Application\Entity\Db\VolumeHoraireReferentiel */
+                /* @var $vh \Referentiel\Entity\Db\VolumeHoraireReferentiel */
                 $validation->addVolumeHoraireReferentiel($vh);
             }
         }
@@ -166,7 +164,7 @@ class ValidationReferentielProcessus extends AbstractProcessus
      *
      * @return $this
      */
-    public function supprimer( Validation $validation )
+    public function supprimer(Validation $validation)
     {
         $this->getServiceValidation()->delete($validation);
 
@@ -182,12 +180,12 @@ class ValidationReferentielProcessus extends AbstractProcessus
      *
      * @return int|string
      */
-    public function getValidationId( Validation $validation )
+    public function getValidationId(Validation $validation)
     {
-        if ($validation->getId()){
+        if ($validation->getId()) {
             return $validation->getId();
-        }else{
-            return 'nv_'.$validation->getStructure()->getId();
+        } else {
+            return 'nv_' . $validation->getStructure()->getId();
         }
     }
 }

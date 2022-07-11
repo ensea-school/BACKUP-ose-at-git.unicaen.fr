@@ -4,7 +4,7 @@ namespace Application\View\Helper\VolumeHoraire;
 
 use Application\Constants;
 use Application\Entity\Db\TypeIntervention;
-use Application\Entity\VolumeHoraireListe;
+use Enseignement\Entity\VolumeHoraireListe;
 use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ServiceServiceAwareTrait;

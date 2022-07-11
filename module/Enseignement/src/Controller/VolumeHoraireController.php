@@ -3,8 +3,8 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Service;
-use Application\Entity\VolumeHoraireListe;
+use Enseignement\Entity\Db\Service;
+use Enseignement\Entity\VolumeHoraireListe;
 use Application\Form\AbstractForm;
 use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
 use Application\Form\VolumeHoraire\Traits\SaisieCalendaireAwareTrait;
@@ -39,7 +39,7 @@ class VolumeHoraireController extends AbstractController
     public function listeAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\VolumeHoraire::class,
+            \Enseignement\Entity\Db\VolumeHoraire::class,
         ]);
         $service = $this->getEvent()->getParam('service');
         /* @var $service Service */
@@ -76,7 +76,7 @@ class VolumeHoraireController extends AbstractController
     private function saisieMixte(AbstractForm $form)
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\VolumeHoraire::class,
+            \Enseignement\Entity\Db\VolumeHoraire::class,
             \Application\Entity\Db\MotifNonPaiement::class,
         ]);
 

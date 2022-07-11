@@ -1,7 +1,14 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Referentiel\Entity\Db;
 
+use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Entity\Db\Validation;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -15,201 +22,126 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use ServiceReferentielAwareTrait;
 
-    /**
-     * @var float
-     */
-    private $heures;
+    private ?int       $id;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private ?float     $heures;
 
-    /**
-     * @var \Application\Entity\Db\TypeVolumeHoraire
-     */
-    private $typeVolumeHoraire;
+    private ?\DateTime $horaireDebut;
 
-    /**
-     * @var \Application\Entity\Db\ServiceReferentiel
-     */
-    private $serviceReferentiel;
+    private ?\DateTime $horaireFin;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $validation;
+    private bool       $autoValidation = false;
 
-    /**
-     * remove
-     *
-     * @var boolean
-     */
-    protected $remove = false;
+    private Collection $validation;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $etatVolumeHoraireReferentiel;
+    private Collection $etatVolumeHoraireReferentiel;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $formuleResultatVolumeHoraireReferentiel;
+    private Collection $formuleResultatVolumeHoraireReferentiel;
 
-    /**
-     * @var boolean
-     */
-    private $autoValidation = false;
-
-    /**
-     * @var \DateTime
-     */
-    protected $horaireDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $horaireFin;
+    private bool       $remove         = false;
 
 
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
-        $this->validation                              = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->etatVolumeHoraireReferentiel            = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleResultatVolumeHoraireReferentiel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->validation                              = new ArrayCollection();
+        $this->etatVolumeHoraireReferentiel            = new ArrayCollection();
+        $this->formuleResultatVolumeHoraireReferentiel = new ArrayCollection();
     }
 
 
 
-    /**
-     * Détermine si le volume horaire a vocation à être supprimé ou non
-     */
-    public function setRemove($remove)
-    {
-        $this->remove = (boolean)$remove;
-
-        return $this;
-    }
-
-
-
-    public function getRemove()
-    {
-        return $this->remove;
-    }
-
-
-
-    /**
-     * Set heures
-     *
-     * @param float $heures
-     *
-     * @return VolumeHoraireReferentiel
-     */
-    public function setHeures($heures)
-    {
-        $this->heures = round($heures, 2);
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get heures
-     *
-     * @return float
-     */
-    public function getHeures()
-    {
-        return $this->heures;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * Set typeVolumeHoraire
-     *
-     * @param \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
-     *
-     * @return VolumeHoraireReferentiel
-     */
-    public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
+    public function getHeures(): ?float
     {
-        $this->typeVolumeHoraire = $typeVolumeHoraire;
+        return $this->heures;
+    }
+
+
+
+    public function setHeures(?float $heures): VolumeHoraireReferentiel
+    {
+        $this->heures = $heures;
 
         return $this;
     }
 
 
 
-    /**
-     * Get typeVolumeHoraire
-     *
-     * @return \Application\Entity\Db\TypeVolumeHoraire
-     */
-    public function getTypeVolumeHoraire()
+    public function getHoraireDebut(): ?\DateTime
     {
-        return $this->typeVolumeHoraire;
+        return $this->horaireDebut;
     }
 
 
 
-    /**
-     * Set serviceReferentiel
-     *
-     * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
-     *
-     * @return VolumeHoraireReferentiel
-     */
-    public function setServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel = null)
+    public function setHoraireDebut(?\DateTime $horaireDebut): VolumeHoraireReferentiel
     {
-        $this->serviceReferentiel = $serviceReferentiel;
+        $this->horaireDebut = $horaireDebut;
 
         return $this;
     }
 
 
 
-    /**
-     * Get serviceReferentiel
-     *
-     * @return \Application\Entity\Db\ServiceReferentiel
-     */
-    public function getServiceReferentiel()
+    public function getHoraireFin(): ?\DateTime
     {
-        return $this->serviceReferentiel;
+        return $this->horaireFin;
     }
 
 
 
-    /**
-     * Add validation
-     *
-     * @param \Application\Entity\Db\Validation $validation
-     *
-     * @return VolumeHoraireReferentiel
-     */
-    public function addValidation(\Application\Entity\Db\Validation $validation)
+    public function setHoraireFin(?\DateTime $horaireFin): VolumeHoraireReferentiel
+    {
+        $this->horaireFin = $horaireFin;
+
+        return $this;
+    }
+
+
+
+    public function isAutoValidation(): bool
+    {
+        return $this->autoValidation;
+    }
+
+
+
+    public function setAutoValidation(bool $autoValidation): VolumeHoraireReferentiel
+    {
+        $this->autoValidation = $autoValidation;
+
+        return $this;
+    }
+
+
+
+    public function getRemove(): bool
+    {
+        return $this->remove;
+    }
+
+
+
+    public function setRemove(bool $remove): VolumeHoraireReferentiel
+    {
+        $this->remove = $remove;
+
+        return $this;
+    }
+
+
+
+    public function addValidation(Validation $validation): VolumeHoraireReferentiel
     {
         $this->validation[] = $validation;
 
@@ -218,44 +150,34 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
 
 
 
-    /**
-     * Remove validation
-     *
-     * @param \Application\Entity\Db\Validation $validation
-     */
-    public function removeValidation(\Application\Entity\Db\Validation $validation)
+    public function removeValidation(Validation $validation): VolumeHoraireReferentiel
     {
         $this->validation->removeElement($validation);
+
+        return $this;
     }
 
 
 
     /**
-     * Get validation
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection|Validation[]
      */
-    public function getValidation()
+    public function getValidation(): Collection
     {
         return $this->validation;
     }
 
 
 
-    /**
-     * Détermine si le VHR a une validation ou non
-     *
-     * @return boolean
-     */
-    public function hasValidation()
+    public function isValide(): bool
     {
         if ($this->isAutoValidation()) return true;
 
-        $validations = $this->getValidation();
-        foreach ($validations as $validation) {
-            /* @var $validation Validation */
-            if ($validation->estNonHistorise()) {
-                return true;
+        if ($validations = $this->getValidation()) {
+            foreach ($validations as $validation) {
+                if ($validation->estNonHistorise()) {
+                    return true;
+                }
             }
         }
 
@@ -264,24 +186,14 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
 
 
 
-    /**
-     * Get etatVolumeHoraireReferentiel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEtatVolumeHoraireReferentiel()
+    public function getEtatVolumeHoraireReferentiel(): Collection
     {
         return $this->etatVolumeHoraireReferentiel->first();
     }
 
 
 
-    /**
-     * Get formuleResultatVolumeHoraireReferentiel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFormuleResultatVolumeHoraireReferentiel(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumeHoraire = null)
+    public function getFormuleResultatVolumeHoraireReferentiel(?TypeVolumeHoraire $typeVolumeHoraire = null, ?EtatVolumeHoraire $etatVolumeHoraire = null): Collection
     {
         $filter = function (FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel) use ($typeVolumeHoraire, $etatVolumeHoraire) {
             if (isset($typeVolumeHoraire) && $typeVolumeHoraire !== $formuleResultatVolumeHoraireReferentiel->getFormuleResultat()->getTypeVolumeHoraire()) {
@@ -299,111 +211,14 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
 
 
 
-    /**
-     * Get formuleResultatVolumeHoraireReferentiel
-     *
-     * @return FormuleResultatVolumeHoraireReferentiel
-     */
-    public function getUniqueFormuleResultatVolumeHoraireReferentiel(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
+    public function getUniqueFormuleResultatVolumeHoraireReferentiel(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): ?FormuleResultatVolumeHoraireReferentiel
     {
-        return $this->getFormuleResultatVolumeHoraireReferentiel($typeVolumeHoraire, $etatVolumeHoraire)->first();
+        return $this->getFormuleResultatVolumeHoraireReferentiel($typeVolumeHoraire, $etatVolumeHoraire)->first() ?: null;
     }
 
 
 
-    /**
-     * @return bool
-     */
-    public function isAutoValidation(): bool
-    {
-        return $this->autoValidation;
-    }
-
-
-
-    /**
-     * @param bool $autoValidation
-     *
-     * @return VolumeHoraire
-     */
-    public function setAutoValidation(bool $autoValidation): self
-    {
-        $this->autoValidation = $autoValidation;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Permet de savoir si ce volume horaire référentiel est validé ou non
-     *
-     * @return bool
-     */
-    public function isValide(): bool
-    {
-        if ($this->isAutoValidation()) return true;
-
-        if ($validations = $this->getValidation()) {
-            foreach ($validations as $validation) {
-                if ($validation->estNonHistorise()) return true;
-            }
-        }
-
-        return false;
-    }
-
-
-
-    /**
-     * @return \DateTime
-     */
-    public function getHoraireDebut()
-    {
-        return $this->horaireDebut;
-    }
-
-
-
-    /**
-     * @param \DateTime $horaireDebut
-     *
-     * @return VolumeHoraireReferentiel
-     */
-    public function setHoraireDebut($horaireDebut): VolumeHoraireReferentiel
-    {
-        $this->horaireDebut = $horaireDebut;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return \DateTime
-     */
-    public function getHoraireFin()
-    {
-        return $this->horaireFin;
-    }
-
-
-
-    /**
-     * @param \DateTime $horaireFin
-     *
-     * @return VolumeHoraireReferentiel
-     */
-    public function setHoraireFin($horaireFin): VolumeHoraireReferentiel
-    {
-        $this->horaireFin = $horaireFin;
-
-        return $this;
-    }
-
-
-
-    public function getResourceId()
+    public function getResourceId(): string
     {
         return 'VolumeHoraireReferentiel';
     }

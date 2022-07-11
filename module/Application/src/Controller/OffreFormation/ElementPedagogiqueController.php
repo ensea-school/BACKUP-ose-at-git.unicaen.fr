@@ -41,7 +41,7 @@ class ElementPedagogiqueController extends AbstractController
     {
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\CheminPedagogique::class,
-            \Application\Entity\Db\VolumeHoraire::class,
+            \Enseignement\Entity\Db\VolumeHoraire::class,
         ]);
         $element       = $this->getEvent()->getParam('elementPedagogique');
         $title         = $element->getLibelle() . ' (' . $element->getCode() . ')';

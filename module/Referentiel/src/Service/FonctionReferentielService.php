@@ -1,7 +1,7 @@
 <?php
 
 namespace Application\Service;
-use Application\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Doctrine\ORM\QueryBuilder;
 
 /**

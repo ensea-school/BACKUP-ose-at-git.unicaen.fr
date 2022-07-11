@@ -1,6 +1,7 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Enseignement\Entity\Db;
+
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\ServiceAwareTrait;
@@ -9,9 +10,6 @@ use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Entity\Db\Traits\ValidationAwareTrait;
 use Application\Entity\Db\Traits\VolumeHoraireAwareTrait;
 
-/**
- * TblValidationEnseignement
- */
 class TblValidationEnseignement
 {
     use AnneeAwareTrait;
@@ -22,44 +20,22 @@ class TblValidationEnseignement
     use VolumeHoraireAwareTrait;
     use ValidationAwareTrait;
 
-    protected $id;
+    protected int  $id;
 
-    /**
-     * @var bool
-     */
-    protected $autoValidation = false;
+    protected bool $autoValidation = false;
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+
+
+    public function getId(): int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * @return bool
-     */
     public function getAutoValidation(): bool
     {
         return $this->autoValidation;
     }
-
-
-
-    /**
-     * @param bool $autoValidation
-     *
-     * @return TblValidationEnseignement
-     */
-    public function setAutoValidation(bool $autoValidation): TblValidationEnseignement
-    {
-        $this->autoValidation = $autoValidation;
-
-        return $this;
-    }
-
 
 }

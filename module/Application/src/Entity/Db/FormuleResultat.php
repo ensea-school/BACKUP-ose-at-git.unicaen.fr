@@ -65,7 +65,7 @@ class FormuleResultat
     private $typeVolumeHoraire;
 
     /**
-     * @var \Application\Entity\Db\EtatVolumeHoraire
+     * @var \Service\Entity\Db\EtatVolumeHoraire
      */
     private $etatVolumeHoraire;
 
@@ -200,7 +200,7 @@ class FormuleResultat
     /**
      * Get etatVolumeHoraire
      *
-     * @return \Application\Entity\Db\EtatVolumeHoraire 
+     * @return \Service\Entity\Db\EtatVolumeHoraire 
      */
     public function getEtatVolumeHoraire()
     {

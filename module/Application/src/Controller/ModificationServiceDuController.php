@@ -3,7 +3,7 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\ModificationServiceDu;
+use Service\Entity\Db\ModificationServiceDu;
 use Application\Form\Intervenant\Traits\ModificationServiceDuFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ModificationServiceDuServiceAwareTrait;
@@ -27,7 +27,6 @@ class ModificationServiceDuController extends AbstractController
     use WorkflowServiceAwareTrait;
 
 
-
     public function saisirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -35,11 +34,11 @@ class ModificationServiceDuController extends AbstractController
         ]);
 
         $intervenant = $this->getEvent()->getParam('intervenant');
-        if (!$intervenant){
+        if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
-        $canEdit     = $this->isAllowed($intervenant, Privileges::MODIF_SERVICE_DU_EDITION);
+        $canEdit = $this->isAllowed($intervenant, Privileges::MODIF_SERVICE_DU_EDITION);
 
         // NB: patch pour permettre de vider toutes les modifs de service dû
         if ($canEdit && $this->getRequest()->isPost()) {
@@ -102,7 +101,7 @@ class ModificationServiceDuController extends AbstractController
             Intervenant::class,
         ]);
 
-        $data = $this->getServiceModificationServiceDu()->getExportCsvData( $annee, $role->getStructure() );
+        $data = $this->getServiceModificationServiceDu()->getExportCsvData($annee, $role->getStructure());
 
         $csvModel = new CsvModel();
         $csvModel->setHeader($data['head']);

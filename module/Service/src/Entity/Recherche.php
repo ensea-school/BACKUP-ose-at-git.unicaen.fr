@@ -2,10 +2,10 @@
 
 namespace Application\Entity\Service;
 
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Traits\NiveauEtapeAwareTrait;
 use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
@@ -13,11 +13,6 @@ use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Entity\Db\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Entity\Db\Structure;
 
-/**
- * Description of Recherche
- *
- * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
- */
 class Recherche
 {
 
@@ -29,42 +24,20 @@ class Recherche
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
 
-    /**
-     * Structure d'affectation
-     *
-     * @var \Application\Entity\Db\Structure
-     */
-    protected $structureAff;
+    protected ?Structure $structureAff;
 
-    /**
-     * Structure d'enseignement
-     *
-     * @var \Application\Entity\Db\Structure
-     */
-    protected $structureEns;
+    protected ?Structure $structureEns;
 
 
 
-    /**
-     * Retourne la structure d'affectation
-     *
-     * @return Structure
-     */
-    function getStructureAff()
+    function getStructureAff(): ?Structure
     {
         return $this->structureAff;
     }
 
 
 
-    /**
-     * Assigne une structure d'affectation
-     *
-     * @param Structure $structureAff
-     *
-     * @return self
-     */
-    function setStructureAff(Structure $structureAff = null)
+    function setStructureAff(?Structure $structureAff = null): Recherche
     {
         $this->structureAff = $structureAff;
 
@@ -73,26 +46,14 @@ class Recherche
 
 
 
-    /**
-     * Retourne la structure d'enseignement
-     *
-     * @return Structure
-     */
-    function getStructureEns()
+    function getStructureEns(): ?Structure
     {
         return $this->structureEns;
     }
 
 
 
-    /**
-     * Assigne une structure d'enseignement
-     *
-     * @param Structure $structureEns
-     *
-     * @return self
-     */
-    function setStructureEns(Structure $structureEns = null)
+    function setStructureEns(?Structure $structureEns = null): Recherche
     {
         $this->structureEns = $structureEns;
 
@@ -118,20 +79,7 @@ class Recherche
 
 
 
-    /**
-     * PHP 5 allows developers to declare constructor methods for classes.
-     * Classes which have a constructor method call this method on each newly-created object,
-     * so it is suitable for any initialization that the object may need before it is used.
-     *
-     * Note: Parent constructors are not called implicitly if the child class defines a constructor.
-     * In order to run a parent constructor, a call to parent::__construct() within the child constructor is required.
-     *
-     * param [ mixed $args [, $... ]]
-     *
-     * @return void
-     * @link http://php.net/manual/en/language.oop5.decon.php
-     */
-    public function __construct(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumeHoraire = null)
+    public function __construct(?TypeVolumeHoraire $typeVolumeHoraire = null, ?EtatVolumeHoraire $etatVolumeHoraire = null)
     {
         if ($typeVolumeHoraire) $this->setTypeVolumeHoraire($typeVolumeHoraire);
         if ($etatVolumeHoraire) $this->setEtatVolumeHoraire($etatVolumeHoraire);

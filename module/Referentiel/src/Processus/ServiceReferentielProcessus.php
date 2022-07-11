@@ -2,7 +2,7 @@
 
 namespace Application\Processus;
 
-use Application\Entity\Db\ServiceReferentiel;
+use Referentiel\Entity\Db\ServiceReferentiel;
 use Application\Entity\Service\Recherche;
 use Application\Service\EtatVolumeHoraireService;
 use Application\Service\IntervenantService;

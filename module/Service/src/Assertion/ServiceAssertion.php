@@ -4,13 +4,13 @@ namespace Application\Assertion;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Service;
-use Application\Entity\Db\ServiceReferentiel;
+use Enseignement\Entity\Db\Service;
+use Referentiel\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Application\Entity\Db\VolumeHoraire;
-use Application\Entity\Db\VolumeHoraireReferentiel;
+use Enseignement\Entity\Db\VolumeHoraire;
+use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CampagneSaisieServiceAwareTrait;

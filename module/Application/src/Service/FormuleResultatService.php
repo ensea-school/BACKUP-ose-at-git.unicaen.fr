@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etablissement;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Service\Entity\Db\TypeVolumeHoraire;

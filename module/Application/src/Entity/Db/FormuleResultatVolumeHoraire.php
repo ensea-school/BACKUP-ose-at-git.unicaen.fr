@@ -20,7 +20,7 @@ class FormuleResultatVolumeHoraire
     private $formuleResultat;
 
     /**
-     * @var \Application\Entity\Db\VolumeHoraire
+     * @var \Enseignement\Entity\Db\VolumeHoraire
      */
     private $volumeHoraire;
 
@@ -29,27 +29,31 @@ class FormuleResultatVolumeHoraire
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
+
+
     /**
      * Get formuleResultat
      *
-     * @return \Application\Entity\Db\FormuleResultat 
+     * @return \Application\Entity\Db\FormuleResultat
      */
     public function getFormuleResultat()
     {
         return $this->formuleResultat;
     }
 
+
+
     /**
      * Get volumeHoraire
      *
-     * @return \Application\Entity\Db\VolumeHoraire 
+     * @return \Enseignement\Entity\Db\VolumeHoraire
      */
     public function getVolumeHoraire()
     {

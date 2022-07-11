@@ -3,7 +3,7 @@
 namespace Indicateur\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Indicateur\Entity\Db\IndicateurDepassementCharges;
 use Application\Entity\Db\Intervenant;
 use Indicateur\Entity\Db\TypeIndicateur;

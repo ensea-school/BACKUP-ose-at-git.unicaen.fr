@@ -9,7 +9,7 @@
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
-        <many-to-one field="fonctionReferentiel" target-entity="Application\Entity\Db\FonctionReferentiel">
+        <many-to-one field="fonctionReferentiel" target-entity="Referentiel\Entity\Db\FonctionReferentiel">
             <join-columns>
                 <join-column name="FONCTION_REFERENTIEL_ID" referenced-column-name="ID"/>
             </join-columns>

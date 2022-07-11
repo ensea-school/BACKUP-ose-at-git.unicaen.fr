@@ -25,7 +25,7 @@ class ModificationServiceDuService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\ModificationServiceDu::class;
+        return \Service\Entity\Db\ModificationServiceDu::class;
     }
 
 

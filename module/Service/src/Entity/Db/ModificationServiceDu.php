@@ -1,9 +1,12 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Service\Entity\Db;
+
+use Service\Entity\Db\MotifModificationServiceDu;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenApp\Util;
 
 /**
  * ModificationServiceDu
@@ -13,123 +16,31 @@ class ModificationServiceDu implements HistoriqueAwareInterface
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
 
+    private ?int                        $id;
 
+    private ?MotifModificationServiceDu $motif;
 
-    /**
-     * Retourne la représentation littérale de cet objet.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        $heures = \UnicaenApp\Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
+    private ?float                      $heures;
 
-        return sprintf("%s (%sh)%s",
-            $this->getMotif(),
-            $heures,
-            ($com = $this->getCommentaires()) ? " - $com" : null);
-    }
+    private ?string                     $commentaires;
 
 
 
-    /**
-     * @var float
-     */
-    protected $heures;
-
-    /**
-     * @var string
-     */
-    protected $commentaires;
-
-    /**
-     * @var integer
-     */
-    protected $id;
-
-    /**
-     * @var \Application\Entity\Db\MotifModificationServiceDu
-     */
-    protected $motif;
-
-
-
-    /**
-     * Set heures
-     *
-     * @param float $heures
-     *
-     * @return ModificationServiceDu
-     */
-    public function setHeures($heures)
-    {
-        $this->heures = $heures;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get heures
-     *
-     * @return float
-     */
-    public function getHeures()
-    {
-        return $this->heures;
-    }
-
-
-
-    /**
-     * Set commentaires
-     *
-     * @param string $commentaires
-     *
-     * @return ModificationServiceDu
-     */
-    public function setCommentaires($commentaires)
-    {
-        $this->commentaires = $commentaires;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get commentaires
-     *
-     * @return string
-     */
-    public function getCommentaires()
-    {
-        return $this->commentaires;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * Set motif
-     *
-     * @param \Application\Entity\Db\MotifModificationServiceDu $motif
-     *
-     * @return ModificationServiceDu
-     */
-    public function setMotif(\Application\Entity\Db\MotifModificationServiceDu $motif = null)
+    public function getMotif(): ?\Service\Entity\Db\MotifModificationServiceDu
+    {
+        return $this->motif;
+    }
+
+
+
+    public function setMotif(?\Service\Entity\Db\MotifModificationServiceDu $motif): ModificationServiceDu
     {
         $this->motif = $motif;
 
@@ -138,14 +49,46 @@ class ModificationServiceDu implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Get motif
-     *
-     * @return \Application\Entity\Db\MotifModificationServiceDu
-     */
-    public function getMotif()
+    public function getHeures(): ?float
     {
-        return $this->motif;
+        return $this->heures;
+    }
+
+
+
+    public function setHeures(?float $heures): ModificationServiceDu
+    {
+        $this->heures = $heures;
+
+        return $this;
+    }
+
+
+
+    public function getCommentaires(): ?string
+    {
+        return $this->commentaires;
+    }
+
+
+
+    public function setCommentaires(?string $commentaires): ModificationServiceDu
+    {
+        $this->commentaires = $commentaires;
+
+        return $this;
+    }
+
+
+
+    public function __toString(): string
+    {
+        $heures = Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
+
+        return sprintf("%s (%sh)%s",
+            $this->getMotif(),
+            $heures,
+            ($com = $this->getCommentaires()) ? " - $com" : null);
     }
 
 }

@@ -12,52 +12,33 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
 
-    /**
-     * @var integer
-     */
-    protected $id;
+    protected ?int    $id;
 
-    /**
-     * @var string
-     */
-    protected $code;
+    protected ?string $code;
 
-    /**
-     * @var string
-     */
-    protected $libelle;
+    protected ?string $libelle;
 
-    /**
-     * @var boolean
-     */
-    protected $decharge;
+    protected bool    $decharge       = false;
 
-    /**
-     * @var float
-     */
-    protected $multiplicateur;
+    protected float   $multiplicateur = -1;
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+
+    public function getId(): int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * Set code
-     *
-     * @param string $code
-     *
-     * @return MotifModificationService
-     */
-    public function setCode($code)
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+
+
+    public function setCode(?string $code): MotifModificationServiceDu
     {
         $this->code = $code;
 
@@ -66,26 +47,14 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Get code
-     *
-     * @return string
-     */
-    public function getCode()
+    public function getLibelle(): ?string
     {
-        return $this->code;
+        return $this->libelle;
     }
 
 
 
-    /**
-     * Set libelle
-     *
-     * @param string $libelle
-     *
-     * @return MotifModificationService
-     */
-    public function setLibelle($libelle)
+    public function setLibelle(?string $libelle): MotifModificationServiceDu
     {
         $this->libelle = $libelle;
 
@@ -94,48 +63,30 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Get libelle
-     *
-     * @return string
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
-    }
-
-
-
-    /**
-     * @return boolean
-     */
-    public function getDecharge()
+    public function getDecharge(): bool
     {
         return $this->decharge;
     }
 
 
 
-    /**
-     * @param boolean $decharge
-     *
-     * @return MotifModificationServiceDu
-     */
-    public function setDecharge($decharge)
+    public function setDecharge(bool $decharge): MotifModificationServiceDu
     {
         $this->decharge = $decharge;
 
         return $this;
     }
 
-    /**
-     * Set multiplicateur
-     *
-     * @param int $multiplicateur
-     *
-     * @return MotifModificationService
-     */
-    public function setMultiplicateur($multiplicateur)
+
+
+    public function getMultiplicateur(): float|int
+    {
+        return $this->multiplicateur;
+    }
+
+
+
+    public function setMultiplicateur(float|int $multiplicateur): MotifModificationServiceDu
     {
         $this->multiplicateur = $multiplicateur;
 
@@ -144,22 +95,7 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Get mutiplicateur
-     *
-     * @return int
-     */
-    public function getMultiplicateur()
-    {
-        return $this->multiplicateur;
-    }
-
-    /**
-     * Retourne la représentation littérale de cet objet.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getLibelle();
     }

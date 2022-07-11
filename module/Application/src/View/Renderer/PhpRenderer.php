@@ -30,11 +30,11 @@ namespace Application\View\Renderer;
  * @method \Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche fieldsetElementPedagogiqueRecherche(?\Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset $fieldset = null)
  * @method \Application\View\Helper\Paiement\DemandeMiseEnPaiementViewHelper demandeMiseEnPaiement(array $servicesAPayer, $changeIndex = null)
  * @method \Application\View\Helper\Paiement\TypeHeuresViewHelper typeHeures(?\Application\Entity\Db\TypeHeures $typeHeures = null)
- * @method \Application\View\Helper\ServiceReferentiel\FonctionReferentielViewHelper fonctionReferentiel(?\Application\Entity\Db\FonctionReferentiel $fonctionReferentiel = null)
+ * @method \Application\View\Helper\ServiceReferentiel\FonctionReferentielViewHelper fonctionReferentiel(?\Referentiel\Entity\Db\FonctionReferentiel $fonctionReferentiel = null)
  * @method \Application\View\Helper\ServiceReferentiel\FormSaisie formServiceReferentielSaisie(?\Application\Form\ServiceReferentiel\Saisie $form = null)
- * @method \Application\View\Helper\ServiceReferentiel\Ligne serviceReferentielLigne(\Application\View\Helper\ServiceReferentiel\Liste $liste, \Application\Entity\Db\ServiceReferentiel $service)
+ * @method \Application\View\Helper\ServiceReferentiel\Ligne serviceReferentielLigne(\Application\View\Helper\ServiceReferentiel\Liste $liste, \Referentiel\Entity\Db\ServiceReferentiel $service)
  * @method \Application\View\Helper\ServiceReferentiel\Liste serviceReferentielListe($services)
- * @method \Application\View\Helper\Service\Ligne serviceLigne(\Application\View\Helper\Service\Liste $liste, \Application\Entity\Db\Service $service)
+ * @method \Application\View\Helper\Service\Ligne serviceLigne(\Application\View\Helper\Service\Liste $liste, \Enseignement\Entity\Db\Service $service)
  * @method \Application\View\Helper\Service\Liste serviceListe($services)
  * @method \Application\View\Helper\Service\Resume serviceResume($resumeServices)
  * @method \Application\View\Helper\Service\SaisieForm serviceSaisieForm(?\Application\Form\Service\Saisie $form = null)
@@ -45,8 +45,8 @@ namespace Application\View\Renderer;
  * @method \Application\View\Helper\UserProfileSelectRadioItem userProfileSelectRadioItem(Laminas\Permissions\Acl\Role\RoleInterface $role, $selected = false)
  * @method string utilisateur(\Application\Entity\Db\Utilisateur $utilisateur, $title = null, $subject = null, $body = null)
  * @method \Application\View\Helper\ValidationViewHelper validation(?\Application\Entity\Db\Validation $validation = null)
- * @method \Application\View\Helper\VolumeHoraire\Liste volumeHoraireListe(\Application\Entity\VolumeHoraireListe $volumeHoraireListe)
- * @method \Application\View\Helper\VolumeHoraire\ListeCalendaire volumeHoraireListeCalendaire(\Application\Entity\VolumeHoraireListe $volumeHoraireListe)
+ * @method \Application\View\Helper\VolumeHoraire\Liste volumeHoraireListe(\Enseignement\Entity\VolumeHoraireListe $volumeHoraireListe)
+ * @method \Application\View\Helper\VolumeHoraire\ListeCalendaire volumeHoraireListeCalendaire(\Enseignement\Entity\VolumeHoraireListe $volumeHoraireListe)
  * @method \Laminas\Form\View\Helper\Captcha\Dumb captchaDumb(?Laminas\Form\ElementInterface $element = null)
  * @method \Laminas\Form\View\Helper\Captcha\Dumb formCaptchaDumb(?Laminas\Form\ElementInterface $element = null)
  * @method \Laminas\Form\View\Helper\Captcha\Figlet captchaFiglet(?Laminas\Form\ElementInterface $element = null)
@@ -219,8 +219,7 @@ namespace Application\View\Renderer;
  *
  * @author UnicaenCode
  */
-class PhpRenderer extends \Laminas\View\Renderer\PhpRenderer {
-
-
+class PhpRenderer extends \Laminas\View\Renderer\PhpRenderer
+{
 
 }

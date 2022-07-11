@@ -4,7 +4,7 @@ namespace Application\View\Helper\Service;
 
 use Application\Provider\Privilege\Privileges;
 use Application\View\Helper\AbstractViewHelper;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 
@@ -247,7 +247,7 @@ class Ligne extends AbstractViewHelper
 
 
 
-    protected function renderTypeIntervention(\Application\Entity\VolumeHoraireListe $liste)
+    protected function renderTypeIntervention(\Enseignement\Entity\VolumeHoraireListe $liste)
     {
         $liste  = $liste->setMotifNonPaiement(false);
         $heures = $liste->getHeures();

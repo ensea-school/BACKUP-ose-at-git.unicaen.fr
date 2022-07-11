@@ -627,11 +627,11 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * Add service
      *
-     * @param \Application\Entity\Db\Service $service
+     * @param \Enseignement\Entity\Db\Service $service
      *
      * @return Service
      */
-    public function addService(\Application\Entity\Db\Service $service)
+    public function addService(\Enseignement\Entity\Db\Service $service)
     {
         $this->service[] = $service;
 
@@ -643,9 +643,9 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * Remove service
      *
-     * @param \Application\Entity\Db\Service $service
+     * @param \Enseignement\Entity\Db\Service $service
      */
-    public function removeService(\Application\Entity\Db\Service $service)
+    public function removeService(\Enseignement\Entity\Db\Service $service)
     {
         $this->service->removeElement($service);
     }

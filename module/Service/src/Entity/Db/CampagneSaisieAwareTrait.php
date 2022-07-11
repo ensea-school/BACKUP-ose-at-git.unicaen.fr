@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\CampagneSaisie;
+use Service\Entity\Db\CampagneSaisie;
 
 /**
  * Description of CampagneSaisieAwareTrait

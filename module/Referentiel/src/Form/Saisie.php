@@ -2,7 +2,7 @@
 
 namespace Application\Form\ServiceReferentiel;
 
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Form\AbstractForm;
 use Application\Form\ServiceReferentiel\Traits\SaisieFieldsetAwareTrait;
 use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
@@ -34,7 +34,7 @@ class Saisie extends AbstractForm
      *
      * Ensures the object is populated with validated values.
      *
-     * @param \Application\Entity\Db\ServiceReferentiel $object
+     * @param \Referentiel\Entity\Db\ServiceReferentiel $object
      * @param int                                       $flags
      *
      * @return mixed|void
@@ -144,7 +144,7 @@ class SaisieHydrator implements HydratorInterface
      * Hydrate $object with the provided $data.
      *
      * @param array                                     $data
-     * @param \Application\Entity\Db\ServiceReferentiel $object
+     * @param \Referentiel\Entity\Db\ServiceReferentiel $object
      *
      * @return object
      */
@@ -160,7 +160,7 @@ class SaisieHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Db\ServiceReferentiel $object
+     * @param \Referentiel\Entity\Db\ServiceReferentiel $object
      *
      * @return array
      */

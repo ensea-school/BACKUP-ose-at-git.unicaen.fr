@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\TblService" table="TBL_SERVICE">
+  <entity name="Enseignement\Entity\Db\TblService" table="TBL_SERVICE">
     <id name="id" type="integer" column="ID" />
     <many-to-one field="annee" target-entity="Application\Entity\Db\Annee" fetch="LAZY">
       <join-column name="ANNEE_ID" referenced-column-name="ID"/>
@@ -9,13 +9,13 @@
       <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
     </many-to-one>
     <field name="actif" type="boolean" column="ACTIF" nullable="false" />
-    <many-to-one field="service" target-entity="Application\Entity\Db\Service" fetch="LAZY">
+    <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service" fetch="LAZY">
       <join-column name="SERVICE_ID" referenced-column-name="ID"/>
     </many-to-one>
     <many-to-one field="structure" target-entity="Application\Entity\Db\Structure" fetch="LAZY">
       <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="typeVolumeHoraire" target-entity="Application\Entity\Db\TypeVolumeHoraire" fetch="LAZY">
+    <many-to-one field="typeVolumeHoraire" target-entity="Service\Entity\Db\TypeVolumeHoraire" fetch="LAZY">
       <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
     </many-to-one>
     <field name="hasHeuresMauvaisePeriode" type="boolean" column="HAS_HEURES_MAUVAISE_PERIODE" nullable="false" />

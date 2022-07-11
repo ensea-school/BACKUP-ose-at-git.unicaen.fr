@@ -14,8 +14,8 @@ class RegleStructureValidationHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                                           $data
-     * @param \Application\Entity\Db\RegleStructureValidation $object
+     * @param array                                       $data
+     * @param \Service\Entity\Db\RegleStructureValidation $object
      *
      * @return object
      */
@@ -38,7 +38,7 @@ class RegleStructureValidationHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Db\RegleStructureValidation $object
+     * @param \Service\Entity\Db\RegleStructureValidation $object
      *
      * @return array
      */

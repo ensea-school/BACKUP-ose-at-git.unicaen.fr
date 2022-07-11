@@ -3,13 +3,13 @@
 namespace Application\View\Helper\ServiceReferentiel;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\VolumeHoraireReferentiel;
+use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
-use Application\Entity\Db\ServiceReferentiel;
+use Referentiel\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 
@@ -290,7 +290,7 @@ class Liste extends AbstractViewHelper
                     $vhSum += $vh->getHeures();
                 }
             } elseif ($service->getTypeVolumeHoraire()->isRealise()) {
-                if ($vh->getTypeVolumeHoraire()->isPrevu() && $vh->hasValidation()) {
+                if ($vh->getTypeVolumeHoraire()->isPrevu() && $vh->isValide()) {
                     $vhSum += $vh->getHeures();
                 } elseif ($vh->getTypeVolumeHoraire()->isRealise()) {
                     $vhSum2 += $vh->getHeures();
@@ -366,7 +366,7 @@ class Liste extends AbstractViewHelper
      */
     public function isInRealise()
     {
-        return $this->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
+        return $this->getTypeVolumeHoraire()->getCode() === \Service\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
     }
 
 

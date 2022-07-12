@@ -2,6 +2,17 @@
 
 [OSE 19.0](#ose-19-12072022)
 
+
+# OSE 20 (à venir)
+
+## Nouveautés
+
+* Les modèles de contrats de travail sont maintenant gérés comme n'importe quel autre état de sortie
+
+
+
+
+
 # OSE 19 (12/07/2022)
 
 ## Nouveautés
@@ -30,6 +41,42 @@
 * Bouton Prévu->réalisé Apparait correctement pour le service réalisé.
 * Correction sur la reconduction des centres de coût et modulateurs (#45746)
 
+
+## Notes de mise à jour
+
+* Si vous êtes en version 17.x, se référer à toutes les notes de migration de la version [18.0](#ose-18-23052022)
+Une fois la migration réalisée et quelques tests effectués, vous devrez supprimer manuellement les tables de sauvegarde listées ci-dessous.
+Si vous ne le faites pas, le risque est que les scripts de migration de la version 17 à la version 18 soient rejoués sans qu'il n'en soit nécessaire, avec en sus un *risque de perte de données* pour des intervenants ayant changé de statut entre temps.
+
+
+* Si vous êtes déjà en version 18.x et si ce n'est déjà fait, il vous faudra supprimer les tables de sauvegardes liées à la migration 17 --> 18 et
+la table STATUT_INTERVENANT
+**avant** de migrer en 19.0.
+
+#### Liste des tables de sauvegardes de migration 17=>18 concernées :
+```sql
+DROP TABLE save_v18_dossier_autre_statut;
+DROP TABLE save_v18_plafond;
+DROP TABLE save_v18_plafond_app;
+DROP TABLE save_v18_referentiel;
+DROP TABLE save_v18_statut;
+DROP TABLE save_v18_statut_privilege;
+DROP TABLE save_v18_structure;
+DROP TABLE save_v18_ta_statut;
+DROP TABLE save_v18_tis;
+DROP TABLE save_v18_tpjs;
+DROP TABLE save_v18_dossier;
+DROP TABLE save_v18_intervenant;
+DROP TABLE save_v18_privilege;
+DROP TABLE save_v18_role_privilege;
+DROP TABLE statut_intervenant;
+
+```
+
+
+
+
+
 # OSE 18.2 (15/06/2022)
 
 ## Corrections de bugs
@@ -56,7 +103,7 @@ Si vous êtes en version 17, se référer à toutes les notes de migration de la
 
 Si vous êtes déjà en version 18.x et si ce n'est déjà fait, il vous faudra supprimer les tables de sauvegardes liées à la migration 17 --> 18 et
 la table STATUT_INTERVENANT
-**avant** de migrer en 19.0.
+**avant** de migrer en 18.1.
 
 ```sql
 DROP TABLE save_v18_dossier_autre_statut;

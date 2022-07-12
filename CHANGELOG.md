@@ -56,7 +56,7 @@ Si vous êtes en version 17, se référer à toutes les notes de migration de la
 
 Si vous êtes déjà en version 18.x et si ce n'est déjà fait, il vous faudra supprimer les tables de sauvegardes liées à la migration 17 --> 18 et
 la table STATUT_INTERVENANT
-**avant** de migrer en 18.1.
+**avant** de migrer en 19.0.
 
 ```sql
 DROP TABLE save_v18_dossier_autre_statut;

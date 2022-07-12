@@ -1,8 +1,8 @@
 # Version stable
 
-[OSE 18.2](#ose-182-15062022)
+[OSE 19.0](#ose-19-12072022)
 
-# OSE 19 (à venir)
+# OSE 19 (12/07/2022)
 
 ## Nouveautés
 
@@ -16,7 +16,7 @@
 * Nouvel état de sortie pour l'extraction des paiements dans le cadre de la pré-liquidation SIHAM
 * Ajout d'un bouton de refus de pièce justificative avec envoie d'email à l'intervenant
 * Changement du bouton de cloture de service pour un libellé plus parlant et un style de bouton plus prononcé
-* Formules nouvelles ou mises à jour : Rennes 2, Paris Saclay, Guyane, Côte d'Azur, La Réunion, Poitiers, Brest
+* Formules nouvelles ou mises à jour : Rennes 2, Paris Saclay, Guyane, Côte d'Azur, La Réunion, Poitiers, Brest, Rouen
 * Possibilité de créer un nouveau test de formule en téléversant une feuille de calcul au format tableur
 * Ajout d'un champs cci pour l'envoi de mail aux intervenants et le refus de pièces jointes (#45083)
 
@@ -54,7 +54,7 @@
 
 Si vous êtes en version 17, se référer à toutes les notes de migration de la version 18.0
 
-Si vous êtes déjà en version 18.0, il vous faudra supprimer les tables de sauvegardes liées à la migration 17 --> 18 et
+Si vous êtes déjà en version 18.x et si ce n'est déjà fait, il vous faudra supprimer les tables de sauvegardes liées à la migration 17 --> 18 et
 la table STATUT_INTERVENANT
 **avant** de migrer en 18.1.
 

@@ -37,12 +37,9 @@ class ExportRhController extends AbstractController
      * @var ExportRhService $exportRhService
      */
     protected $exportRhService;
-    protected $config;
 
-
-    public function __construct(ExportRhService $exportRhService, $config)
+    public function __construct(ExportRhService $exportRhService)
     {
-        $this->config = $config;
         $this->exportRhService = $exportRhService;
     }
 

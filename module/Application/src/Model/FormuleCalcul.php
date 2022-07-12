@@ -118,10 +118,11 @@ class FormuleCalcul
         for ($colNum = 1; $colNum <= $maxCol; $colNum++) {
             $cell   = $this->getSheet()->getCellByCoords($colNum, $this->mainLine - 2);
             $colLib = Util::reduce($cell?->getContent() ?? '');
-            if (str_contains($colLib, Util::reduce('spécifique'))) {
+            if (str_contains($colLib, Util::reduce('specifique'))) {
                 for ($pnum = 1; $pnum <= 5; $pnum++) {
-                    $cell = $this->getSheet()->getCellByCoords($colNum - 1 + $pnum, $this->mainLine);
-                    if (($cell?->getContent() ?? '') != '') {
+                    $cell = $this->getSheet()->getCellByCoords($colNum - 1 + $pnum, $this->mainLine - 1);
+                    $name = $cell?->getContent();
+                    if (!in_array($name, ['P1', 'P2', 'P3', 'P4', 'P5'])) {
                         $this->cellsPos['vh.param_' . $pnum] = Calc::numberToLetter($colNum - 1 + $pnum);
                     }
                 }
@@ -1100,6 +1101,8 @@ END FORMULE_" . $this->getName() . ";";
         $boolSar = [
             'vh.service_statutaire',
             'vh.structure_is_exterieur',
+            'vh.structure_is_affectation',
+            'vh.structure_is_univ',
             'i.depassement_service_du_sans_hc',
         ];
 
@@ -1121,8 +1124,8 @@ END FORMULE_" . $this->getName() . ";";
             $sar[$variable . " <> 'Non'"] = $variable;
         }
 
-        $plsql = str_replace(array_keys($sar), array_values($sar), $plsql);
+        $result = str_replace(array_keys($sar), array_values($sar), $plsql);
 
-        return $plsql;
+        return $result;
     }
 }

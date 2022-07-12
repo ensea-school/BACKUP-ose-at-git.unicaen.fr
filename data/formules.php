@@ -101,4 +101,9 @@ return [
         'LIBELLE'      => 'Université Paris-Saclay',
         'PACKAGE_NAME' => 'FORMULE_SACLAY',
     ],
+    25 => [
+        'LIBELLE'            => 'Université de ROUEN',
+        'PACKAGE_NAME'       => 'FORMULE_ROUEN',
+        'VH_PARAM_1_LIBELLE' => 'Type de référentiel',
+    ],
 ];

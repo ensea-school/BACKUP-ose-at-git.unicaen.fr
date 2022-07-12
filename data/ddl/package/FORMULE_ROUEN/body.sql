@@ -288,9 +288,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ROUEN AS
 
 
 
-      -- AN=IF(AND([.$E20]="Oui";[.$B20]<>"Oui";[.$D20]<>"Oui";[.$I20]<>"Référentiel");[.$N20]*[.$AE20];0)
+      -- AN=IF(AND([.$E20]="Oui";[.$B20]<>"Oui";[.$I20]<>"Référentiel");[.$N20]*[.$AE20];0)
       WHEN 'AN' THEN
-        IF vh.service_statutaire AND NOT vh.structure_is_affectation AND NOT vh.structure_is_exterieur AND vh.volume_horaire_ref_id IS NULL THEN
+        IF vh.service_statutaire AND NOT vh.structure_is_affectation AND vh.volume_horaire_ref_id IS NULL THEN
           RETURN vh.heures * cell('AE',l);
         ELSE
           RETURN 0;

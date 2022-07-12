@@ -158,7 +158,7 @@ class PieceJointeController extends AbstractController
         $msgs = [];
 
         if (0 == $nbDemandees) {
-            $msgs['info'][] = 'Aucune pièce justificative n\'est à fournir';
+            $msgs['info'][] = 'Aucune pièce justificative obligatoire n\'est à fournir';
         } elseif ($nbFournies < $nbDemandees) {
             $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
         } elseif ($nbFournies == $nbDemandees && $nbValidees == $nbDemandees) {

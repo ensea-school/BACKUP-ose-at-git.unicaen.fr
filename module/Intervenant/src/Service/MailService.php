@@ -81,8 +81,11 @@ class MailService extends AbstractService
             ->setFrom($from)
             ->setSubject($subject)
             ->addTo($to)
-            ->addBcc($copy)
             ->setBody($body);
+
+        if (!empty($copy)) {
+            $message->addBcc($copy);
+        }
 
         //Envoi du mail
         $this->getMail()->send($message);

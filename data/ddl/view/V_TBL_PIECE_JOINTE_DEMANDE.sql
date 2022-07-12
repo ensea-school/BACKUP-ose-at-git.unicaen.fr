@@ -1,5 +1,4 @@
-CREATE
-OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_DEMANDE AS
+CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_DEMANDE AS
 WITH i_h AS (
   SELECT
     s.intervenant_id,
@@ -37,7 +36,7 @@ SELECT i.annee_id                        annee_id,
        i.id                              intervenant_id,
        tpj.id                            type_piece_jointe_id,
        MAX(COALESCE(i_h.heures, 0))      heures_pour_seuil,
-       tpjs.obligatoire                  obligatoire,
+       MAX(tpjs.obligatoire)             obligatoire,
        MAX(COALESCE(hetd.total_hetd, 0)) heures_pour_seuil_hetd
 FROM intervenant i
 
@@ -80,5 +79,4 @@ WHERE
 GROUP BY i.annee_id,
          i.id,
          i.code,
-         tpj.id,
-         tpjs.obligatoire
+         tpj.id

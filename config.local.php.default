@@ -296,6 +296,7 @@ return [
         //définition du connecteur SI RH à utiliser pour le module export RH de OSE
         'actif'      => true,
         'connecteur' => 'siham',
+        'sync-code' => true,
     ],
 
 

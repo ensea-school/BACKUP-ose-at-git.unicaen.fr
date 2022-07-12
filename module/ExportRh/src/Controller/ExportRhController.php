@@ -38,10 +38,8 @@ class ExportRhController extends AbstractController
      */
     protected $exportRhService;
 
-
     public function __construct(ExportRhService $exportRhService)
     {
-
         $this->exportRhService = $exportRhService;
     }
 
@@ -91,8 +89,6 @@ class ExportRhController extends AbstractController
         $nameConnecteur = '';
         $affectationEnCours = '';
         $contratEnCours = '';
-
-
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
@@ -202,6 +198,10 @@ class ExportRhController extends AbstractController
                     $this->exportRhService->cloreDossier($intervenant);
                     $this->flashMessenger()->addSuccessMessage('La prise en charge s\'est déroulée avec succés et le dossier a été cloturé');
                     $this->getServiceIntervenant()->updateExportDate($intervenant);
+                    //On met à jour le code intervenant si l'option est activée
+                    if ($this->exportRhService->haveToSyncCode()) {
+                        $this->getServiceIntervenant()->updateCode($intervenant, $result);
+                    }
                 } else {
                     $this->flashMessenger()->addErrorMessage('Probleme prise en charge');
                 }
@@ -218,6 +218,7 @@ class ExportRhController extends AbstractController
     public function renouvellementAction()
     {
         try {
+
             if ($this->getRequest()->isPost()) {
                 $intervenant = $this->getEvent()->getParam('intervenant');
                 if (!$intervenant) {
@@ -239,6 +240,10 @@ class ExportRhController extends AbstractController
                         $this->exportRhService->cloreDossier($intervenant);
                         $this->flashMessenger()->addSuccessMessage('Le renouvellement s\'est déroulé avec succés et le dossier a été cloturé');
                         $this->getServiceIntervenant()->updateExportDate($intervenant);
+                        if ($this->exportRhService->haveToSyncCode()) {
+                            $this->getServiceIntervenant()->updateCode($intervenant, $result);
+                        }
+
                     } else {
                         $this->flashMessenger()->addErrorMessage('Un problème est survenu lors de la tentative de renouvellement de l\'intervenant');
                     }

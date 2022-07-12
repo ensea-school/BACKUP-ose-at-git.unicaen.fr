@@ -558,7 +558,6 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
             WHEN e.code = ''PJ_VALIDATION'' THEN pj.demandees
           END                                                       objectif,
           CASE
-			WHEN pj.obligatoire = 0 THEN 1
             WHEN e.code = ''PJ_SAISIE'' THEN pj.fournies
             WHEN e.code = ''PJ_VALIDATION'' THEN pj.validees
           END                                                       realisation
@@ -567,9 +566,9 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
           SELECT
             intervenant_id,
             SUM(demandee) demandees,
-            SUM(fournie)  fournies,
-            SUM(validee)  validees,
-			MIN(obligatoire) obligatoire
+            SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE fournie END)  fournies,
+            SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE validee END)  validees,
+			SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE 0 END) facultatives
           FROM
             tbl_piece_jointe
           WHERE

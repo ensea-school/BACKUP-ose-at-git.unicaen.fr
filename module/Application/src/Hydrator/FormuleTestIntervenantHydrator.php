@@ -4,11 +4,11 @@ namespace Application\Hydrator;
 
 use Application\Constants;
 use Application\Entity\Db\Annee;
-use Service\Entity\Db\EtatVolumeHoraire;
+use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\FormuleTestVolumeHoraire;
 use Intervenant\Entity\Db\TypeIntervenant;
-use Service\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Laminas\Hydrator\HydratorInterface;
 use Application\Entity\Db\FormuleTestIntervenant;
 

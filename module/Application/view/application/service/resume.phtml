@@ -1,0 +1,36 @@
+<?php $this->headTitle()->append("Services $annee") ?>
+
+<h1 class="page-header">Services <small>Année universitaire <?= $annee; ?></small></h1>
+
+<?php
+    echo $this->messenger()->setMessages(['warning' => "Sont visibles ici les référentiels et les enseignements prévisionnels des intervenants affectés "
+        . "ou enseignant dans votre structure de responsabilité ou l'une de ses sous-structures."]);
+?>
+
+<?= $this->recherche; ?>
+
+<?php if ('afficher' === $action || 'trier' === $action): ?>
+
+    <?php if ($canAddService): ?>
+        <?php $url = $this->url('service/saisie'); ?>
+        <a class="ajax-modal services btn btn-default" data-event="service-add-message" href="<?= $url ?>" title="Ajouter un enseignement"><i
+                    class="fas fa-plus"></i> Saisir un nouvel enseignement</a>
+        <br/><br/>
+    <?php endif; ?>
+
+    <?= $this->messenger()->setMessages(['warning' => "Les totaux en heures équivalent TD sont calculés à partir de l'ensemble des enseignements de chaque intervenant. En outre, les heures non payables ne sont pas prises en compte."]); ?>
+
+    <div data-url="<?= $this->url('service/resume-refresh'); ?>" id="service-resume">
+        <?= $this->serviceResume($resumeServices)->render(); ?>
+    </div>
+<?php else: ?>
+<?= $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les enseignements.', \UnicaenApp\View\Helper\Messenger::INFO); ?>
+<?php endif; ?>
+<style>
+    .modal-dialog {
+        width: 70%;
+    }
+    div.row {
+        padding:1px;
+    }
+</style>

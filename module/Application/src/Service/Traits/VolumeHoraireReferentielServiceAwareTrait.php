@@ -1,0 +1,40 @@
+<?php
+
+namespace Application\Service\Traits;
+
+use Application\Service\VolumeHoraireReferentielService;
+
+/**
+ * Description of VolumeHoraireReferentielServiceAwareTrait
+ *
+ * @author UnicaenCode
+ */
+trait VolumeHoraireReferentielServiceAwareTrait
+{
+    protected ?VolumeHoraireReferentielService $serviceVolumeHoraireReferentiel = null;
+
+
+
+    /**
+     * @param VolumeHoraireReferentielService $serviceVolumeHoraireReferentiel
+     *
+     * @return self
+     */
+    public function setServiceVolumeHoraireReferentiel(?VolumeHoraireReferentielService $serviceVolumeHoraireReferentiel)
+    {
+        $this->serviceVolumeHoraireReferentiel = $serviceVolumeHoraireReferentiel;
+
+        return $this;
+    }
+
+
+
+    public function getServiceVolumeHoraireReferentiel(): ?VolumeHoraireReferentielService
+    {
+        if (empty($this->serviceVolumeHoraireReferentiel)) {
+            $this->serviceVolumeHoraireReferentiel = \Application::$container->get(VolumeHoraireReferentielService::class);
+        }
+
+        return $this->serviceVolumeHoraireReferentiel;
+    }
+}

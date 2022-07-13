@@ -1,0 +1,21 @@
+<?php
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form  \Application\Form\Intervenant\RegleStructureValidationForm
+ */
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+echo $this->form()->openTag($form); ?>
+
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('priorite')); ?>
+    </div>
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('message')); ?>
+    </div>
+</div>
+
+<?= $this->formControlGroup($form->get('security')); ?>
+<?= $this->formSubmit($form->get('submit')); ?>
+<?= $this->form()->closeTag(); ?>

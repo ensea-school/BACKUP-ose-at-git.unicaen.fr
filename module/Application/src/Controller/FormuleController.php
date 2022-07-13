@@ -4,11 +4,11 @@ namespace Application\Controller;
 
 
 use Application\Entity\Db\Annee;
-use Service\Entity\Db\EtatVolumeHoraire;
+use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\FormuleTestIntervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
-use Service\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\FormuleTestIntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;

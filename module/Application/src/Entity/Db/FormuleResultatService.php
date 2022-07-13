@@ -14,7 +14,7 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
     use ServiceAPayerTrait;
 
     /**
-     * @var \Enseignement\Entity\Db\Service
+     * @var \Application\Entity\Db\Service
      */
     private $service;
 
@@ -75,7 +75,7 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
     /**
      * Get Service
      *
-     * @return \Enseignement\Entity\Db\Service
+     * @return \Application\Entity\Db\Service
      */
     public function getService()
     {

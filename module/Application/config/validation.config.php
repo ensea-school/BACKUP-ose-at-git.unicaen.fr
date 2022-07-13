@@ -32,7 +32,7 @@ return [
                                             'route'    => '/prevu',
                                             'defaults' => [
                                                 'action'                   => 'validation',
-                                                'type-volume-horaire-code' => 'PREVU',
+                                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
                                             ],
                                         ],
                                     ],
@@ -42,7 +42,7 @@ return [
                                             'route'    => '/realise',
                                             'defaults' => [
                                                 'action'                   => 'validation',
-                                                'type-volume-horaire-code' => 'REALISE',
+                                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
                                             ],
                                         ],
                                     ],
@@ -89,7 +89,7 @@ return [
                                             'route'    => '/prevu',
                                             'defaults' => [
                                                 'action'                   => 'validation',
-                                                'type-volume-horaire-code' => 'PREVU',
+                                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
                                             ],
                                         ],
                                     ],
@@ -99,7 +99,7 @@ return [
                                             'route'    => '/realise',
                                             'defaults' => [
                                                 'action'                   => 'validation',
-                                                'type-volume-horaire-code' => 'REALISE',
+                                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
                                             ],
                                         ],
                                     ],

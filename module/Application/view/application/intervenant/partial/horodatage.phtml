@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $intervenant       \Application\Entity\Db\Intervenant
+ * @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire
+ * @var $referentiel       boolean
+ */
+
+?>
+<div id="s<?= $referentiel ? 'r' : '' ?>-horodatage" data-url="<?= $this->url('service/horodatage', [
+    'intervenant'       => $intervenant->getId(),
+    'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
+    'referentiel'       => $referentiel,
+]); ?>">
+    <?= $this->partial('application/service/horodatage', [
+        'intervenant'       => $intervenant,
+        'typeVolumeHoraire' => $typeVolumeHoraire,
+        'referentiel'       => $referentiel,
+    ]); ?>
+</div>

@@ -10,7 +10,7 @@ use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Parametre;
 use Application\Entity\Db\Structure;
-use Service\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;

@@ -81,7 +81,7 @@
         <one-to-many field="cheminPedagogique" target-entity="Application\Entity\Db\CheminPedagogique"
                      mapped-by="elementPedagogique"/>
         <!-- NB: Ajout de relations à la main -->
-        <one-to-many field="service" target-entity="Enseignement\Entity\Db\Service" mapped-by="elementPedagogique"/>
+        <one-to-many field="service" target-entity="Application\Entity\Db\Service" mapped-by="elementPedagogique"/>
 
         <one-to-many field="elementModulateur" target-entity="Application\Entity\Db\ElementModulateur" mapped-by="element">
             <cascade>

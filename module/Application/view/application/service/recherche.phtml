@@ -1,0 +1,57 @@
+<?php
+/* @var $rechercheForm \Application\Form\Service\RechercheForm */
+
+if ($rechercheForm):
+
+?>
+<style>
+    div.filter input[type=radio] { margin-left: 1em; margin-right: 3px; }
+</style>
+<div class="service-filtres">
+<div class="panel panel-default filter">
+
+    <div class="panel-heading">Filtres</div>
+    <div class="panel-body">
+        <?= $this->form()->openTag($rechercheForm->prepare()); ?>
+        <div class="row">
+          <div class="col-sm-2"><label class="control-label">Intervenant</label></div>
+          <div class="col-sm-5"><label class="control-label"><?= $rechercheForm->get('type-intervenant')->getLabel() ?></label><br />
+          <?= $this->formRadio($rechercheForm->get('type-intervenant')); ?></div>
+          <div class="col-sm-5" id="structure-aff-div"><?= $this->formControlGroup($rechercheForm->get('structure-aff')); ?></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">&nbsp;</div>
+          <div class="col-sm-10 form-group"><label class="control-label"><?= $rechercheForm->get('intervenant')->getLabel() ?></label><br />
+          <?= $this->formSearchAndSelect($rechercheForm->get('intervenant')); ?></div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-sm-2"><label class="control-label">Enseignement</label></div>
+          <div class="col-sm-10"><?= $this->fieldsetElementPedagogiqueRecherche($rechercheForm->get('element-pedagogique')); ?></div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-sm-2"><label class="control-label">Service</label></div>
+          <div class="col-sm-5 form-group"><?= $this->formControlGroup($rechercheForm->get('type-volume-horaire')); ?></div>
+          <div class="col-sm-5 form-group"><?= $this->formControlGroup($rechercheForm->get('etat-volume-horaire')); ?></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">&nbsp;</div>
+          <div class="col-sm-10">
+              <?php
+                foreach( $rechercheForm->getActionButtons() as $actionButton ){
+                    echo $this->formRow($actionButton);
+                    echo ' ';
+                }
+              ?>
+          </div>
+        </div>
+        <?php
+        echo $this->formHidden( $rechercheForm->get('action')->setValue('afficher') );
+        echo $this->form()->closeTag();
+        echo $this->formErrors( $rechercheForm );
+        ?>
+    </div>
+</div>
+</div>
+<?php endif; ?>

@@ -4,10 +4,10 @@ namespace Application\Service;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etablissement;
-use Service\Entity\Db\EtatVolumeHoraire;
+use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Service\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;

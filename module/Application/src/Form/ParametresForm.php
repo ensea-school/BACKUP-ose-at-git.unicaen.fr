@@ -3,7 +3,7 @@
 namespace Application\Form;
 
 use Application\Entity\Db\Parametre;
-use Service\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;

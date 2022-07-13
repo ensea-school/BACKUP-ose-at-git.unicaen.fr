@@ -2,12 +2,12 @@
 
 namespace Application\Service;
 
-use Service\Entity\Db\EtatVolumeHoraire;
+use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\FormuleTestIntervenant;
 use Application\Entity\Db\FormuleTestStructure;
 use Application\Entity\Db\FormuleTestVolumeHoraire;
 use Application\Entity\Db\Intervenant;
-use Service\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\FormuleServiceAwareTrait;
 
 

@@ -3,13 +3,13 @@
 namespace Application\Processus;
 
 use Application\Entity\Db\Contrat;
-use Service\Entity\Db\EtatVolumeHoraire;
+use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
-use Enseignement\Entity\Db\Service;
+use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
-use Service\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Enseignement\Entity\Db\VolumeHoraire;
+use Application\Entity\Db\VolumeHoraire;
 use Application\ORM\Event\Listeners\HistoriqueListenerAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ContratServiceAwareTrait;
@@ -65,7 +65,7 @@ class ContratProcessus extends AbstractProcessus
         SELECT
           s, ep, vh, str, i, evh, tvh
         FROM
-          Enseignement\Entity\Db\Service s
+          Application\Entity\Db\Service s
           JOIN s.volumeHoraire      vh
           JOIN s.elementPedagogique ep
           JOIN ep.structure         str
@@ -90,7 +90,7 @@ class ContratProcessus extends AbstractProcessus
         }
 
         foreach ($query->execute() as $service) {
-            /* @var $service \Enseignement\Entity\Db\Service */
+            /* @var $service \Application\Entity\Db\Service */
             if ($detach) {
                 $this->getEntityManager()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
             }
@@ -104,14 +104,14 @@ class ContratProcessus extends AbstractProcessus
 
     public function getServicesRecaps(Contrat $contrat)
     {
-        $this->getEntityManager()->clear(\Enseignement\Entity\Db\Service::class);
+        $this->getEntityManager()->clear(\Application\Entity\Db\Service::class);
         // indispensable si on requête N fois la même entité avec des critères différents
 
         $dql = "
         SELECT
           s, ep, vh, str, i
         FROM
-          Enseignement\Entity\Db\Service s
+          Application\Entity\Db\Service s
           JOIN s.volumeHoraire      vh
           JOIN s.elementPedagogique ep
           JOIN ep.structure         str
@@ -219,7 +219,7 @@ class ContratProcessus extends AbstractProcessus
         // détachement du contrat et des VH
         $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
         foreach ($vhs as $vh) {
-            /* @var $vh \Enseignement\Entity\Db\VolumeHoraire */
+            /* @var $vh \Application\Entity\Db\VolumeHoraire */
             $vh->setContrat(null);
             $sVH->save($vh);
         }

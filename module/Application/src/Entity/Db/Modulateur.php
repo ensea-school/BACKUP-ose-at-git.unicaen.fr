@@ -231,7 +231,7 @@ class Modulateur implements HistoriqueAwareInterface, ResourceInterface
      *
      * @param \Application\Entity\Db\ElementModulateur $elementModulateur
      */
-    public function removeElementModulateur(\Enseignement\Entity\Db\Service $elementModulateur)
+    public function removeElementModulateur(\Application\Entity\Db\Service $elementModulateur)
     {
         $this->elementModulateur->removeElement($elementModulateur);
     }

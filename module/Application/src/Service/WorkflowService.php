@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TblWorkflow;
-use Service\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\WfEtape;
 use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;

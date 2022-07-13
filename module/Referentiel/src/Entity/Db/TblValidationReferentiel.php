@@ -8,9 +8,6 @@ use Application\Entity\Db\Traits\StructureAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Application\Entity\Db\Traits\ValidationAwareTrait;
 
-/**
- * TblValidationReferentiel
- */
 class TblValidationReferentiel
 {
     use AnneeAwareTrait;
@@ -21,46 +18,22 @@ class TblValidationReferentiel
     use VolumeHoraireReferentielAwareTrait;
     use ValidationAwareTrait;
 
-    protected $id;
+    protected int  $id;
 
-    /**
-     * @var bool
-     */
-    protected $autoValidation = false;
+    protected bool $autoValidation = false;
 
 
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * @return bool
-     */
     public function getAutoValidation(): bool
     {
         return $this->autoValidation;
     }
-
-
-
-    /**
-     * @param bool $autoValidation
-     *
-     * @return TblValidationEnseignement
-     */
-    public function setAutoValidation(bool $autoValidation): TblValidationEnseignement
-    {
-        $this->autoValidation = $autoValidation;
-
-        return $this;
-    }
-
 }
 

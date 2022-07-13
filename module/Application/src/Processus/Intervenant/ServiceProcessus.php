@@ -4,7 +4,7 @@ namespace Application\Processus\Intervenant;
 
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;

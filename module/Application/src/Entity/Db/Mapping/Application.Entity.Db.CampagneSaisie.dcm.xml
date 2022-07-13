@@ -15,7 +15,7 @@
                 <join-column name="ANNEE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="typeVolumeHoraire" target-entity="Application\Entity\Db\TypeVolumeHoraire">
+        <many-to-one field="typeVolumeHoraire" target-entity="Service\Entity\Db\TypeVolumeHoraire">
             <join-columns>
                 <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
             </join-columns>

@@ -21,7 +21,7 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Laminas\Http\Request;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Service\Recherche;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;

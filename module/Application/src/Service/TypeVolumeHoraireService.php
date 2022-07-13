@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 /**
  * Description of TypeVolumeHoraire

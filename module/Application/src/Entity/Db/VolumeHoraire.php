@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -47,7 +48,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     protected $typeIntervention;
 
     /**
-     * @var \Application\Entity\Db\TypeVolumeHoraire
+     * @var \Service\Entity\Db\TypeVolumeHoraire
      */
     protected $typeVolumeHoraire;
 
@@ -313,11 +314,11 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     /**
      * Set typeVolumeHoraire
      *
-     * @param \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
+     * @param \Service\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
      *
      * @return VolumeHoraire
      */
-    public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
+    public function setTypeVolumeHoraire(\Service\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
     {
         $this->typeVolumeHoraire = $typeVolumeHoraire;
 
@@ -329,7 +330,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     /**
      * Get typeVolumeHoraire
      *
-     * @return \Application\Entity\Db\TypeVolumeHoraire
+     * @return \Service\Entity\Db\TypeVolumeHoraire
      */
     public function getTypeVolumeHoraire()
     {

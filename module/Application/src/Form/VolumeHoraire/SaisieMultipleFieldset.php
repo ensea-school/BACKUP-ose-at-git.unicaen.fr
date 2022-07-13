@@ -142,7 +142,7 @@ class SaisieMultipleHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $typeVolumeHoraire = $this->getEntityManager()->find(\Application\Entity\Db\TypeVolumeHoraire::class, (int)$data['type-volume-horaire']);
+        $typeVolumeHoraire = $this->getEntityManager()->find(\Service\Entity\Db\TypeVolumeHoraire::class, (int)$data['type-volume-horaire']);
         $periode           = $this->getEntityManager()->find(\Application\Entity\Db\Periode::class, (int)$data['periode']);
 
         $object->setTypeVolumeHoraire($typeVolumeHoraire);

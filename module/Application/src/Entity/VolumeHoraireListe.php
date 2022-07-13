@@ -8,7 +8,7 @@ use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeIntervention;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;

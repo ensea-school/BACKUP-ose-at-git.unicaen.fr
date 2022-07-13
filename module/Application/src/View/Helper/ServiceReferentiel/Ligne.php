@@ -275,7 +275,7 @@ class Ligne extends AbstractViewHelper
      */
     public function isInRealise()
     {
-        return $this->getListe()->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
+        return $this->getListe()->getTypeVolumeHoraire()->getCode() === \Service\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
     }
 
 

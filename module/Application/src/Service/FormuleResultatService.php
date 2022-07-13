@@ -7,7 +7,7 @@ use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;

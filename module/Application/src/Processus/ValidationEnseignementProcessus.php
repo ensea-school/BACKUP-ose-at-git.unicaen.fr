@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TblValidationEnseignement;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;

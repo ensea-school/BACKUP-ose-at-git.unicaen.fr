@@ -4,7 +4,7 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Form\ServiceReferentiel\Traits\SaisieAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;

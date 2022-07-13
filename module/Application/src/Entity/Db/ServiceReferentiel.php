@@ -5,6 +5,7 @@ namespace Application\Entity\Db;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;

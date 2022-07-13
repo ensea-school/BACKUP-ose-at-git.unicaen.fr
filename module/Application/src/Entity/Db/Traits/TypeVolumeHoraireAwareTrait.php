@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 /**
  * Description of TypeVolumeHoraireAwareTrait

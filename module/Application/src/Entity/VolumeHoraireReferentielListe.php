@@ -4,7 +4,7 @@ namespace Application\Entity;
 
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Hydrator\VolumeHoraireReferentiel\ListeFilterHydrator;

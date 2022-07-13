@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\CampagneSaisie;
 use Intervenant\Entity\Db\TypeIntervenant;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\ContextServiceAwareTrait;
 
 /**

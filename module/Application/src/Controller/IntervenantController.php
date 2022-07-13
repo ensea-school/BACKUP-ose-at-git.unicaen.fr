@@ -3,7 +3,7 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\RegleStructureValidation;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Service\Recherche;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
@@ -439,7 +439,7 @@ class  IntervenantController extends AbstractController
         $form = $this->getFormIntervenantHeuresComp();
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
-        /* @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire */
+        /* @var $typeVolumeHoraire \Service\Entity\Db\TypeVolumeHoraire */
         if (!isset($typeVolumeHoraire)) {
             throw new LogicException('Type de volume horaire erroné');
         }

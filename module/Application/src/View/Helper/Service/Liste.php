@@ -5,7 +5,7 @@ namespace Application\View\Helper\Service;
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
@@ -464,7 +464,7 @@ class Liste extends AbstractViewHelper
      */
     public function isInRealise()
     {
-        return $this->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
+        return $this->getTypeVolumeHoraire()->getCode() === \Service\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
     }
 
 

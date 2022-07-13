@@ -16,7 +16,7 @@ use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 
 /**

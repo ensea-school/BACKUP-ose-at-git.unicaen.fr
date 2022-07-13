@@ -366,7 +366,7 @@ class Liste extends AbstractViewHelper
      */
     public function isInRealise()
     {
-        return $this->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
+        return $this->getTypeVolumeHoraire()->getCode() === \Service\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
     }
 
 

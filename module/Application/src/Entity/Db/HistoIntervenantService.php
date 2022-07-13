@@ -28,7 +28,7 @@ class HistoIntervenantService
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\TypeVolumeHoraire
+     * @var \Service\Entity\Db\TypeVolumeHoraire
      */
     private $typeVolumeHoraire;
 
@@ -138,11 +138,11 @@ class HistoIntervenantService
     /**
      * Set typeVolumeHoraire
      *
-     * @param \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
+     * @param \Service\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
      *
      * @return HistoIntervenantService
      */
-    public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
+    public function setTypeVolumeHoraire(\Service\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
     {
         $this->typeVolumeHoraire = $typeVolumeHoraire;
 
@@ -154,7 +154,7 @@ class HistoIntervenantService
     /**
      * Get typeVolumeHoraire
      *
-     * @return \Application\Entity\Db\TypeVolumeHoraire
+     * @return \Service\Entity\Db\TypeVolumeHoraire
      */
     public function getTypeVolumeHoraire()
     {

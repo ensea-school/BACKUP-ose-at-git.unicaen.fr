@@ -8,7 +8,7 @@ use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Intervenant\Entity\Db\TypeIntervenant;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\NiveauEtape;
 use Application\Entity\Service\Recherche;
 use Application\Form\AbstractForm;

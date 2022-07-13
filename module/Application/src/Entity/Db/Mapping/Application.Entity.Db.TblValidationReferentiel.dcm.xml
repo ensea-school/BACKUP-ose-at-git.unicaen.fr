@@ -22,7 +22,7 @@
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="typeVolumeHoraire" target-entity="Application\Entity\Db\TypeVolumeHoraire" fetch="LAZY">
+    <many-to-one field="typeVolumeHoraire" target-entity="Service\Entity\Db\TypeVolumeHoraire" fetch="LAZY">
       <join-columns>
         <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
       </join-columns>

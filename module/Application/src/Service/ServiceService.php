@@ -11,7 +11,7 @@ use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervention;
 use Intervenant\Entity\Db\TypeIntervenant;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\NiveauEtape;
 use Application\Entity\Service\Recherche;
 use Application\Entity\VolumeHoraireListe;

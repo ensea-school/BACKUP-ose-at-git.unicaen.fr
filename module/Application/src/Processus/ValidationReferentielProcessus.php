@@ -5,7 +5,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TblValidationReferentiel;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;

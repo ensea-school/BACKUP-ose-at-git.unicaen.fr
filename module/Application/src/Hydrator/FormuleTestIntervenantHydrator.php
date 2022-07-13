@@ -8,7 +8,7 @@ use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\FormuleTestVolumeHoraire;
 use Intervenant\Entity\Db\TypeIntervenant;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Laminas\Hydrator\HydratorInterface;
 use Application\Entity\Db\FormuleTestIntervenant;
 

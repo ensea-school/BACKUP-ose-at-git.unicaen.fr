@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Service\Entity\Db\TypeVolumeHoraire;
+
 class TblService
 {
     private int               $id;

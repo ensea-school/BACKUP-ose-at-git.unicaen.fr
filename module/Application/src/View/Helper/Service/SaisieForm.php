@@ -4,7 +4,7 @@ namespace Application\View\Helper\Service;
 
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Service;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Form\Service\Saisie;
 use Application\View\Helper\AbstractViewHelper;
 use \Application\Service\Traits\ContextServiceAwareTrait;

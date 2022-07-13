@@ -3,7 +3,7 @@
 namespace Application\Processus;
 
 use Application\Entity\Db\Contrat;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;

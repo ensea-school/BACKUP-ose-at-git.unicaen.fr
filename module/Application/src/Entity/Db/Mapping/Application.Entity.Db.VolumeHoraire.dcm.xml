@@ -78,7 +78,7 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
-        <many-to-many field="etatVolumeHoraire" target-entity="Application\Entity\Db\EtatVolumeHoraire">
+        <many-to-many field="etatVolumeHoraire" target-entity="Service\Entity\Db\EtatVolumeHoraire">
             <join-table name="V_VOLUME_HORAIRE_ETAT">
                 <join-columns>
                     <join-column name="VOLUME_HORAIRE_ID" referenced-column-name="ID" unique="true"/>

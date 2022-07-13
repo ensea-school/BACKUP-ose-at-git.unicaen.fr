@@ -3,7 +3,7 @@
 namespace Application\Entity;
 
 use Application\Entity\Db\Contrat;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Service;

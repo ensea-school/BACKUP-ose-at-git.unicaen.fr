@@ -4,7 +4,7 @@ namespace Application\Controller;
 
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\FormuleTestIntervenant;
 use Intervenant\Entity\Db\TypeIntervenant;

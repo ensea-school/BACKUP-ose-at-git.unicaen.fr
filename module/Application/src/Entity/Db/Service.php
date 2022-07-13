@@ -3,6 +3,7 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\VolumeHoraireListe;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;

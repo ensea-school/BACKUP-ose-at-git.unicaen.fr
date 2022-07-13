@@ -7,7 +7,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Doctrine\ORM\QueryBuilder;
 
 /**

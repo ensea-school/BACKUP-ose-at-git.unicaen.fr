@@ -11,7 +11,7 @@ use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\VolumeHoraire;
 
 /**

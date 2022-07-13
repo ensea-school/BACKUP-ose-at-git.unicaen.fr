@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\FormuleTestIntervenant;
 use Application\Entity\Db\FormuleTestStructure;
 use Application\Entity\Db\FormuleTestVolumeHoraire;
@@ -39,6 +39,7 @@ class FormuleTestIntervenantService extends AbstractEntityService
     }
 
 
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -48,6 +49,7 @@ class FormuleTestIntervenantService extends AbstractEntityService
     {
         return 'fti';
     }
+
 
 
     /**
@@ -70,6 +72,7 @@ class FormuleTestIntervenantService extends AbstractEntityService
     }
 
 
+
     /**
      * @return FormuleTestIntervenantService
      * @throws \Doctrine\DBAL\DBALException
@@ -83,12 +86,13 @@ class FormuleTestIntervenantService extends AbstractEntityService
     }
 
 
+
     public function creerDepuisIntervenant(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): FormuleTestIntervenant
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        $formule = $this->getServiceFormule()->getCurrent();
-        $intervenantQuery = trim($conn->executeQuery('SELECT ' . $formule->getPackageName() . '.INTERVENANT_QUERY Q FROM DUAL')->fetchOne());
+        $formule            = $this->getServiceFormule()->getCurrent();
+        $intervenantQuery   = trim($conn->executeQuery('SELECT ' . $formule->getPackageName() . '.INTERVENANT_QUERY Q FROM DUAL')->fetchOne());
         $volumeHoraireQuery = trim($conn->executeQuery('SELECT ' . $formule->getPackageName() . '.VOLUME_HORAIRE_QUERY Q FROM DUAL')->fetchOne());
 
         $sql = "BEGIN ose_formule.intervenant.id := " . $intervenant->getId() . "; END;";
@@ -96,10 +100,10 @@ class FormuleTestIntervenantService extends AbstractEntityService
 
         $params = ['intervenant' => $intervenant->getId()];
 
-        $idata = $conn->fetchAllAssociative('SELECT * FROM (' . $intervenantQuery . ') q WHERE intervenant_id = :intervenant', $params)[0];
+        $idata                       = $conn->fetchAllAssociative('SELECT * FROM (' . $intervenantQuery . ') q WHERE intervenant_id = :intervenant', $params)[0];
         $params['typeVolumeHoraire'] = $typeVolumeHoraire->getId();
         $params['etatVolumeHoraire'] = $etatVolumeHoraire->getId();
-        $vhdata = $conn->fetchAllAssociative('SELECT * FROM (' . $volumeHoraireQuery . ') q WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :typeVolumeHoraire AND etat_volume_horaire_id >= :etatVolumeHoraire', $params);
+        $vhdata                      = $conn->fetchAllAssociative('SELECT * FROM (' . $volumeHoraireQuery . ') q WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :typeVolumeHoraire AND etat_volume_horaire_id >= :etatVolumeHoraire', $params);
 
         $fti = new FormuleTestIntervenant();
         $fti->setLibelle((string)$intervenant);
@@ -124,7 +128,7 @@ class FormuleTestIntervenantService extends AbstractEntityService
             'TD' => [1, 1],
             'TP' => [1, 2 / 3],
         ];
-        $nbAutres = 0;
+        $nbAutres          = 0;
         foreach ($vhdata as $vhd) {
             if ($vhd['TYPE_INTERVENTION_CODE']) {
                 $typesIntervention[$vhd['TYPE_INTERVENTION_CODE']] = [
@@ -185,15 +189,15 @@ class FormuleTestIntervenantService extends AbstractEntityService
                 case 'CM':
                     $fti->setTauxCmServiceDu($tit[0]);
                     $fti->setTauxCmServiceCompl($tit[1]);
-                    break;
+                break;
                 case 'TP':
                     $fti->setTauxTpServiceDu($tit[0]);
                     $fti->setTauxTpServiceCompl($tit[1]);
-                    break;
+                break;
                 case 'AUTRE':
                     $fti->setTauxAutreServiceDu($tit[0]);
                     $fti->setTauxAutreServiceCompl($tit[1]);
-                    break;
+                break;
             }
         }
 
@@ -221,6 +225,7 @@ class FormuleTestIntervenantService extends AbstractEntityService
 
         return $fti;
     }
+
 
 
     /**

@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 
 /**
  * Description of EtatVolumeHoraire
@@ -108,11 +108,11 @@ class EtatVolumeHoraireService extends AbstractEntityService
      *
      * @param QueryBuilder|null $queryBuilder
      *
-     * @return \Application\Entity\Db\EtatVolumeHoraire[]
+     * @return \Service\Entity\Db\EtatVolumeHoraire[]
      */
     public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.ordre");
 
         return parent::getList($qb, $alias);

@@ -2,7 +2,7 @@
 
 namespace Application\View\Helper\Service;
 
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -15,7 +15,7 @@ use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeIntervention;
-use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait as ServiceTypeVolumeHoraireAwareTrait;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace Application\Entity;
 
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\ServiceReferentiel;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;

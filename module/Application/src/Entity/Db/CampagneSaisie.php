@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 use Application\Constants;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
-use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 
 /**
  * CampagneSaisie

@@ -6,7 +6,7 @@ use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
-use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Application\Entity\Db\Traits\ValidationAwareTrait;
 use Application\Entity\Db\Traits\VolumeHoraireReferentielAwareTrait;
 

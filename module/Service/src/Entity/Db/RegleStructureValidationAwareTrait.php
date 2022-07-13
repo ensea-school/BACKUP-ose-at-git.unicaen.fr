@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
-
-use Service\Entity\Db\RegleStructureValidation;
+namespace Service\Entity\Db;
 
 /**
  * Description of RegleStructureValidationAwareTrait

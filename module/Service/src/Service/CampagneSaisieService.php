@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Service;
+namespace Service\Service;
 
 use Service\Entity\Db\CampagneSaisie;
 use Intervenant\Entity\Db\TypeIntervenant;

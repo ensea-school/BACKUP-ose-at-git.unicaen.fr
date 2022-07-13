@@ -10,7 +10,7 @@ use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Referentiel\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 
 /**

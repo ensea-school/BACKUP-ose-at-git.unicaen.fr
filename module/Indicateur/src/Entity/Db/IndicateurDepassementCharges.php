@@ -8,7 +8,7 @@ use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\TypeInterventionAwareTrait;
-use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 
 
 /**

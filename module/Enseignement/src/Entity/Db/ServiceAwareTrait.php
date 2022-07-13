@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
-
-use Enseignement\Entity\Db\Service;
+namespace Enseignement\Entity\Db;
 
 /**
  * Description of ServiceAwareTrait

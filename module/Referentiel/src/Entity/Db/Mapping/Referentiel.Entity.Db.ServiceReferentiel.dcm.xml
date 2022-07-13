@@ -18,7 +18,7 @@
         <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
             <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="fonction" target-entity="Referentiel\Entity\Db\FonctionReferentiel">
+        <many-to-one field="fonctionReferentiel" target-entity="Referentiel\Entity\Db\FonctionReferentiel">
             <join-column name="FONCTION_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">

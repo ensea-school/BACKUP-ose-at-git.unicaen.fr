@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Service\Traits;
-
-use Application\Service\ServiceReferentielService;
+namespace Referentiel\Service;
 
 /**
  * Description of ServiceReferentielServiceAwareTrait

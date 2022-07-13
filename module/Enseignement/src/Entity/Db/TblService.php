@@ -7,9 +7,8 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Application\Entity\Db\Traits\ServiceAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
-use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
 
 class TblService

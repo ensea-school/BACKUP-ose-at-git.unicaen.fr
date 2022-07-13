@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
-
-use Service\Entity\Db\CampagneSaisie;
+namespace Service\Entity\Db;
 
 /**
  * Description of CampagneSaisieAwareTrait
@@ -20,7 +18,7 @@ trait CampagneSaisieAwareTrait
      *
      * @return self
      */
-    public function setCampagneSaisie( ?CampagneSaisie $campagneSaisie )
+    public function setCampagneSaisie(?CampagneSaisie $campagneSaisie)
     {
         $this->campagneSaisie = $campagneSaisie;
 

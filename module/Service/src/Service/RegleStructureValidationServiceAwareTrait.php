@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Service\Traits;
-
-use Application\Service\RegleStructureValidationService;
+namespace Service\Service;
 
 /**
  * Description of RegleStructureValidationServiceAwareTrait

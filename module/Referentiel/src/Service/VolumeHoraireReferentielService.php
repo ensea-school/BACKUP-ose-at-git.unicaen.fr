@@ -1,12 +1,13 @@
 <?php
 
-namespace Application\Service;
+namespace Referentiel\Service;
 
+use Application\Service\AbstractEntityService;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Doctrine\ORM\QueryBuilder;
 
@@ -30,7 +31,7 @@ class VolumeHoraireReferentielService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Referentiel\Entity\Db\VolumeHoraireReferentiel::class;
+        return VolumeHoraireReferentiel::class;
     }
 
 
@@ -49,7 +50,7 @@ class VolumeHoraireReferentielService extends AbstractEntityService
 
     /**
      *
-     * @return \Referentiel\Entity\Db\VolumeHoraireReferentiel
+     * @return VolumeHoraireReferentiel
      */
     public function newEntity()
     {

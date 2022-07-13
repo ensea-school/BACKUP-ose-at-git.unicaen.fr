@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Service;
+namespace Service\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Service\Entity\Db\EtatVolumeHoraire;
@@ -112,7 +112,7 @@ class EtatVolumeHoraireService extends AbstractEntityService
      */
     public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.ordre");
 
         return parent::getList($qb, $alias);

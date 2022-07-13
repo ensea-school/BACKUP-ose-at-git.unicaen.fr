@@ -7,7 +7,7 @@ use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Referentiel\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;
+use Referentiel\Entity\Db\ServiceReferentielAwareTrait;
 
 
 /**
@@ -115,7 +115,7 @@ class Ligne extends AbstractViewHelper
             $out .= '<td>' . $this->renderStructure($service->getStructure()) . "</td>\n";
         }
         if ($liste->getColumnVisibility('fonction')) {
-            $out .= '<td>' . $this->renderFonction($service->getFonction()) . "</td>\n";
+            $out .= '<td>' . $this->renderFonction($service->getFonctionReferentiel()) . "</td>\n";
         }
         if ($liste->getColumnVisibility('commentaires')) {
             $out .= '<td>' . $this->renderCommentaires($service->getCommentaires()) . "</td>\n";

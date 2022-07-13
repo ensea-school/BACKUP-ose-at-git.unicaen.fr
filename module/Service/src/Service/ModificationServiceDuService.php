@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Service;
+namespace Service\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Annee;

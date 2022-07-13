@@ -357,7 +357,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
         $object->setStructure($structure ? $em->find(Structure::class, $structure) : null);
 
         $fonction = isset($data['fonction']) ? (int)$data['fonction'] : null;
-        $object->setFonction($fonction ? $em->find(FonctionReferentiel::class, $fonction) : null);
+        $object->setFonctionReferentiel($fonction ? $em->find(FonctionReferentiel::class, $fonction) : null);
 
         $heures = isset($data['heures']) ? FloatFromString::run($data['heures']) : 0;
         $object->getVolumeHoraireReferentielListe()->setHeures($heures);
@@ -403,8 +403,8 @@ class SaisieFieldsetHydrator implements HydratorInterface
             $data['structure'] = null;
         }
 
-        if ($object->getFonction()) {
-            $data['fonction'] = $object->getFonction()->getId();
+        if ($object->getFonctionReferentiel()) {
+            $data['fonction'] = $object->getFonctionReferentiel()->getId();
         } else {
             $data['fonction'] = null;
         }

@@ -485,8 +485,8 @@ class PlafondService extends AbstractEntityService
         }
 
         if ($entity instanceof ServiceReferentiel) {
-            if ($entity->getFonction()) {
-                $this->calculerDepuisEntite($entity->getFonction());
+            if ($entity->getFonctionReferentiel()) {
+                $this->calculerDepuisEntite($entity->getFonctionReferentiel());
             }
             if ($entity->getIntervenant()) {
                 $this->calculerDepuisEntite($entity->getIntervenant());

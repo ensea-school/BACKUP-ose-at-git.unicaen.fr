@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Service;
+namespace Service\Service;
 
 use Service\Entity\Db\RegleStructureValidation;
 use Service\Entity\Db\TypeVolumeHoraire;

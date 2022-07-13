@@ -1,17 +1,17 @@
 <?php
 
-namespace Application\Service;
+namespace Referentiel\Service;
 
+use Application\Service\AbstractEntityService;
+use Application\Service\StructureService;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Intervenant;
 use Referentiel\Entity\Db\ServiceReferentiel;
@@ -140,7 +140,7 @@ class ServiceReferentielService extends AbstractEntityService
      * @param Structure           $structure
      * @param string              $commentaires
      *
-     * @return null|\Referentiel\Entity\Db\ServiceReferentiel
+     * @return null|ServiceReferentiel
      */
     public function getBy(
         Intervenant $intervenant,
@@ -157,13 +157,13 @@ class ServiceReferentielService extends AbstractEntityService
 
         /* Retourne le premier NON historisé */
         foreach ($result as $sr) {
-            /* @var $sr \Referentiel\Entity\Db\ServiceReferentiel */
+            /* @var $sr ServiceReferentiel */
             if ($sr->estNonHistorise() && $sr->getCommentaires() == $commentaires) return $sr;
         }
 
         /* Sinon retourne le premier trouvé */
         foreach ($result as $sr) {
-            /* @var $sr \Referentiel\Entity\Db\ServiceReferentiel */
+            /* @var $sr ServiceReferentiel */
             if ($sr->getCommentaires() == $commentaires) return $sr;
         }
 
@@ -248,7 +248,7 @@ class ServiceReferentielService extends AbstractEntityService
             if (!$entity->getId()) { // uniquement pour les nouveaux services!!
                 $serviceAllreadyExists = $this->getBy(
                     $entity->getIntervenant(),
-                    $entity->getFonction(),
+                    $entity->getFonctionReferentiel(),
                     $entity->getStructure(),
                     $entity->getCommentaires()
                 );
@@ -299,8 +299,8 @@ class ServiceReferentielService extends AbstractEntityService
     /**
      * Supprime (historise par défaut) le service spécifié.
      *
-     * @param \Referentiel\Entity\Db\ServiceReferentiel $entity Entité à détruire
-     * @param bool                                      $softDelete
+     * @param ServiceReferentiel $entity Entité à détruire
+     * @param bool               $softDelete
      *
      * @return self
      */
@@ -354,7 +354,7 @@ class ServiceReferentielService extends AbstractEntityService
             if (!$service) {
                 $service = $this->newEntity();
                 $service->setIntervenant($intervenant);
-                $service->setFonction($o['fonction']);
+                $service->setFonctionReferentiel($o['fonction']);
                 $service->setStructure($o['structure']);
                 $service->setCommentaires($o['commentaires']);
                 $service->setTypeVolumeHoraire($o['type-volume-horaire']);
@@ -405,27 +405,27 @@ class ServiceReferentielService extends AbstractEntityService
         $old = [];
         foreach ($s as $service) {
 
-            /* @var $service \Referentiel\Entity\Db\ServiceReferentiel */
+            /* @var $service ServiceReferentiel */
 
-            $ok = $service->getFonction()->estNonHistorise()
+            $ok = $service->getFonctionReferentiel()->estNonHistorise()
                 && $service->getStructure()->estNonHistorise();
 
             if ($ok) {
                 $o = [
                     'type-volume-horaire' => $tvhPrevu,
-                    'fonction'            => $service->getFonction(),
+                    'fonction'            => $service->getFonctionReferentiel(),
                     'structure'           => $service->getStructure(),
                     'commentaires'        => $service->getCommentaires(),
                     'heures'              => $service->getVolumeHoraireReferentielListe()->getHeures(),
                     'service'             => $this->getBy(
                         $intervenant,
-                        $service->getFonction(),
+                        $service->getFonctionReferentiel(),
                         $service->getStructure()
                     ),
                 ];
 
                 $newService = $o['service'];
-                /* @var $newService \Referentiel\Entity\Db\ServiceReferentiel */
+                /* @var $newService ServiceReferentiel */
 
                 // pour ne pas écraser les serices précédemment saisis avec des heures
                 if (

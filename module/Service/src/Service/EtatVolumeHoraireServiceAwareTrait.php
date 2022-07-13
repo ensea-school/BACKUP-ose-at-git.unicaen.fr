@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Service\Traits;
-
-use Application\Service\EtatVolumeHoraireService;
+namespace Service\Service;
 
 /**
  * Description of EtatVolumeHoraireServiceAwareTrait

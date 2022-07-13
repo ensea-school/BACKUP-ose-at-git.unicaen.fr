@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Assertion;
+namespace Service\Assertion;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
@@ -13,10 +13,10 @@ use Enseignement\Entity\Db\VolumeHoraire;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
+use Service\Service\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\RegleStructureValidationServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;

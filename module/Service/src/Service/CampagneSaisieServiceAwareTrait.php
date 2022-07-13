@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Service\Traits;
-
-use Application\Service\CampagneSaisieService;
+namespace Service\Service;
 
 /**
  * Description of CampagneSaisieServiceAwareTrait

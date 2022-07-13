@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Assertion;
+namespace Service\Assertion;
 
 use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
@@ -38,7 +38,7 @@ class ModificationServiceDuAssertion extends AbstractAssertion
 
     protected function assertController($controller, $action = null, $privilege = null)
     {
-        if ($controller == 'Application\Controller\ModificationServiceDu' && $action == 'saisir') {
+        if ($controller == 'Service\Controller\ModificationServiceDu' && $action == 'saisir') {
             $intervenant = $this->getMvcEvent()->getParam('intervenant');
             if ($intervenant) {
                 return $this->assertIntervenant($intervenant);

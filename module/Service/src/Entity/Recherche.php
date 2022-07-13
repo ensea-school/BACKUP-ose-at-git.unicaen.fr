@@ -9,8 +9,8 @@ use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Traits\NiveauEtapeAwareTrait;
 use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
-use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
-use Application\Entity\Db\Traits\EtatVolumeHoraireAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
+use Service\Entity\Db\EtatVolumeHoraireAwareTrait;
 use Application\Entity\Db\Structure;
 
 class Recherche

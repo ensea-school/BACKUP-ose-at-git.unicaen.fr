@@ -2,10 +2,12 @@
 
 namespace Referentiel\Entity\Db;
 
-use Application\Entity\Db\Traits\FonctionReferentielAwareTrait;
+use Application\Entity\Db\FormuleResultatServiceReferentiel;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
-use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -14,7 +16,7 @@ use UnicaenApp\Util;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Application\Entity\VolumeHoraireReferentielListe;
+use Referentiel\Entity\VolumeHoraireReferentielListe;
 
 /**
  * ServiceReferentiel
@@ -22,7 +24,6 @@ use Application\Entity\VolumeHoraireReferentielListe;
 class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
 {
     use FonctionReferentielAwareTrait;
-
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
     use StructureAwareTrait;
@@ -86,7 +87,7 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
 
         return sprintf("%s%s : %s (%sh)",
             $this->getStructure() ? " - " . $this->getStructure() : null,
-            $this->getFonction(),
+            $this->getFonctionReferentiel(),
             $heures);
     }
 

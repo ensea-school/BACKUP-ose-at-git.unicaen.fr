@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
-
-use Referentiel\Entity\Db\VolumeHoraireReferentiel;
+namespace Referentiel\Entity\Db;
 
 /**
  * Description of VolumeHoraireReferentielAwareTrait

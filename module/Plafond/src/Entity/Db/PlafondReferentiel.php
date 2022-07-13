@@ -3,7 +3,7 @@
 namespace Plafond\Entity\Db;
 
 use Referentiel\Entity\Db\FonctionReferentiel;
-use Application\Entity\Db\Traits\FonctionReferentielAwareTrait;
+use Referentiel\Entity\Db\FonctionReferentielAwareTrait;
 use Plafond\Interfaces\PlafondConfigInterface;
 use Plafond\Traits\PlafondConfigTrait;
 

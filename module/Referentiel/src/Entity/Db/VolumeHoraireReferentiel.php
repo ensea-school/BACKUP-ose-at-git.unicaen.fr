@@ -2,8 +2,7 @@
 
 namespace Referentiel\Entity\Db;
 
-use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;
-use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

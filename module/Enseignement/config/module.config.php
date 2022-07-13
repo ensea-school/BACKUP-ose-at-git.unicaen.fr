@@ -1,12 +1,16 @@
 <?php
 
-namespace Intervenant;
+namespace Enseignement;
 
 use Application\Provider\Privilege\Privileges;
 
 
 return [
     'routes' => [
+
+    ],
+
+    'navigation' => [
 
     ],
 

@@ -2,15 +2,11 @@
 
 namespace Service\Entity\Db;
 
-use Service\Entity\Db\MotifModificationServiceDu;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Util;
 
-/**
- * ModificationServiceDu
- */
 class ModificationServiceDu implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;

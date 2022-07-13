@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
-
-use Service\Entity\Db\EtatVolumeHoraire;
+namespace Service\Entity\Db;
 
 /**
  * Description of EtatVolumeHoraireAwareTrait
@@ -20,7 +18,7 @@ trait EtatVolumeHoraireAwareTrait
      *
      * @return self
      */
-    public function setEtatVolumeHoraire( ?EtatVolumeHoraire $etatVolumeHoraire )
+    public function setEtatVolumeHoraire(?EtatVolumeHoraire $etatVolumeHoraire)
     {
         $this->etatVolumeHoraire = $etatVolumeHoraire;
 

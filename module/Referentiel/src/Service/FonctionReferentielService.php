@@ -1,6 +1,8 @@
 <?php
 
-namespace Application\Service;
+namespace Referentiel\Service;
+
+use Application\Service\AbstractEntityService;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Doctrine\ORM\QueryBuilder;
 
@@ -26,6 +28,8 @@ class FonctionReferentielService extends AbstractEntityService
         return FonctionReferentiel::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -46,7 +50,7 @@ class FonctionReferentielService extends AbstractEntityService
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $qb->addOrderBy("$alias.libelleLong");
 

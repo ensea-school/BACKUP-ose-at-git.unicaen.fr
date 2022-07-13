@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Service\Traits;
-
-use Application\Service\ModificationServiceDuService;
+namespace Service\Service;
 
 /**
  * Description of ModificationServiceDuServiceAwareTrait

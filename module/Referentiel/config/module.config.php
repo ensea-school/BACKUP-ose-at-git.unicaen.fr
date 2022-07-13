@@ -10,6 +10,10 @@ return [
 
     ],
 
+    'navigation' => [
+
+    ],
+
     'resources' => [
 
     ],

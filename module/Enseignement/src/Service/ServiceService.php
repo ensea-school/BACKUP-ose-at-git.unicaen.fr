@@ -1,10 +1,11 @@
 <?php
 
-namespace Application\Service;
+namespace Enseignement\Service;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Etape;
+use Application\Service\AbstractEntityService;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Enseignement\Entity\Db\Service;
@@ -29,10 +30,9 @@ use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Laminas\Session\Container as SessionContainer;
 
@@ -306,7 +306,7 @@ class ServiceService extends AbstractEntityService
             /* Sauvegarde automatique des volumes horaires associés */
             $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
             foreach ($entity->getVolumeHoraire() as $volumeHoraire) {
-                /* @var $volumeHoraire \Enseignement\Entity\Db\VolumeHoraire */
+                /* @var $volumeHoraire VolumeHoraire */
                 if ($result !== $entity) $volumeHoraire->setService($result);
                 if ($volumeHoraire->getRemove()) {
                     if ($volumeHoraire->getId()) {
@@ -674,7 +674,7 @@ class ServiceService extends AbstractEntityService
         $old = [];
         foreach ($s as $service) {
 
-            /* @var $service \Enseignement\Entity\Db\Service */
+            /* @var $service Service */
             $service->setTypeVolumeHoraire($tvhSource);
             $oldElement = $service->getElementPedagogique();
             $newElement = $oldElement ? $this->getServiceElementPedagogique()->getByCode(
@@ -1063,7 +1063,7 @@ class ServiceService extends AbstractEntityService
             return $ti1->getOrdre() - $ti2->getOrdre();
         });
         foreach ($typesIntervention as $typeIntervention) {
-            /* @var $typeIntervention \Application\Entity\Db\TypeIntervention */
+            /* @var $typeIntervention TypeIntervention */
             $head['type-intervention-' . $typeIntervention->getCode()] = $typeIntervention->getCode();
         }
         $head['heures-ref']                   = 'Référentiel';
@@ -1122,7 +1122,7 @@ class ServiceService extends AbstractEntityService
     /**
      * Détermine si un service est assuré localement (c'est-à-dire dans l'université) ou sur un autre établissement
      *
-     * @param \Enseignement\Entity\Db\Service $service
+     * @param Service $service
      *
      * @return boolean
      */
@@ -1139,9 +1139,9 @@ class ServiceService extends AbstractEntityService
     /**
      * Retourne la période courante d'un service
      *
-     * @param \Enseignement\Entity\Db\Service $service
+     * @param Service $service
      *
-     * @return \Application\Entity\Db\Periode
+     * @return Periode
      */
     public function getPeriode(Service $service)
     {
@@ -1155,9 +1155,9 @@ class ServiceService extends AbstractEntityService
 
     /**
      *
-     * @param \Enseignement\Entity\Db\Service $service
+     * @param Service $service
      *
-     * @return \Application\Entity\Db\Periode[]
+     * @return Periode[]
      */
     public function getPeriodes(Service $service)
     {

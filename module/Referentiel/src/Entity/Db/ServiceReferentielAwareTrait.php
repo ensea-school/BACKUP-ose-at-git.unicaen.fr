@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
-
-use Referentiel\Entity\Db\ServiceReferentiel;
+namespace Referentiel\Entity\Db;
 
 /**
  * Description of ServiceReferentielAwareTrait

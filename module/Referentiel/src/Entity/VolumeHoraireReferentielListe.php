@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Entity;
+namespace Referentiel\Entity;
 
 use Service\Entity\Db\EtatVolumeHoraire;
 use Referentiel\Entity\Db\ServiceReferentiel;

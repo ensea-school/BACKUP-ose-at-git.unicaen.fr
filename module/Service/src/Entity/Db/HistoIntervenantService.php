@@ -4,7 +4,6 @@ namespace Service\Entity\Db;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Service\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Entity\Db\Utilisateur;
 
 /**

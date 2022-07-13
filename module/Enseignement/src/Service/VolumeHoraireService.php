@@ -1,12 +1,11 @@
 <?php
 
-namespace Application\Service;
+namespace Enseignement\Service;
 
 use Application\Entity\Db\Contrat;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
@@ -202,7 +201,7 @@ class VolumeHoraireService extends AbstractEntityService
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
-        if ($contrat instanceof \Application\Entity\Db\Contrat) {
+        if ($contrat instanceof Contrat) {
             $qb->addSelect("c")
                 ->join("$alias.contrat", "c")
                 ->andWhere("c = :contrat")->setParameter('contrat', $contrat);

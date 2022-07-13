@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
-
-use Referentiel\Entity\Db\FonctionReferentiel;
+namespace Referentiel\Entity\Db;
 
 /**
  * Description of FonctionReferentielAwareTrait
@@ -20,7 +18,7 @@ trait FonctionReferentielAwareTrait
      *
      * @return self
      */
-    public function setFonctionReferentiel( ?FonctionReferentiel $fonctionReferentiel )
+    public function setFonctionReferentiel(?FonctionReferentiel $fonctionReferentiel)
     {
         $this->fonctionReferentiel = $fonctionReferentiel;
 

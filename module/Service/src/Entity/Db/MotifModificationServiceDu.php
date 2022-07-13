@@ -1,13 +1,10 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Service\Entity\Db;
 
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-/**
- * MotifModificationService
- */
 class MotifModificationServiceDu implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;

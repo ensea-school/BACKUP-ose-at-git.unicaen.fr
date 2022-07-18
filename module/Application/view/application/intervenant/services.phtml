@@ -10,7 +10,7 @@ use Application\Provider\Privilege\Privileges;
  * @var $cloture             \Application\Entity\Db\Validation|null
  * @var $role                \Application\Acl\Role
  * @var $services            \Application\Entity\Db\Service[]
- * @var $servicesReferentiel \Application\Entity\Db\ServiceReferentiel[]
+ * @var $servicesReferentiel \Referentiel\Entity\Db\ServiceReferentiel[]
  */
 
 $service = new \Application\Entity\Db\Service();
@@ -18,7 +18,7 @@ $service->setIntervenant($intervenant);
 $service->setTypeVolumeHoraire($typeVolumeHoraire);
 $canAddService = $this->isAllowed($service, $typeVolumeHoraire->getPrivilegeEnseignementEdition());
 
-$serviceReferentiel = new \Application\Entity\Db\ServiceReferentiel();
+$serviceReferentiel = new \Referentiel\Entity\Db\ServiceReferentiel();
 $serviceReferentiel->setIntervenant($intervenant);
 $serviceReferentiel->setTypeVolumeHoraire($typeVolumeHoraire);
 $serviceReferentiel->setStructure($role->getStructure());

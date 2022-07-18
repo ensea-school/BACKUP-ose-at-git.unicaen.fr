@@ -3,7 +3,7 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\ServiceReferentiel;
+use Referentiel\Entity\Db\ServiceReferentiel;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Form\ServiceReferentiel\Traits\SaisieAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
@@ -47,8 +47,8 @@ class ServiceReferentielController extends AbstractController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\ServiceReferentiel::class,
-            \Application\Entity\Db\VolumeHoraireReferentiel::class,
+            \Referentiel\Entity\Db\ServiceReferentiel::class,
+            \Referentiel\Entity\Db\VolumeHoraireReferentiel::class,
             \Application\Entity\Db\Validation::class,
         ]);
     }

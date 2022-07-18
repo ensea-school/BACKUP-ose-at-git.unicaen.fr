@@ -2,10 +2,9 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\FormuleTestIntervenant;
-use Application\Entity\Db\FormuleTestStructure;
 use Application\Entity\Db\FormuleTestVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -229,7 +228,6 @@ class FormuleTestIntervenantService extends AbstractEntityService
 
         return $fti;
     }
-
 
 
 

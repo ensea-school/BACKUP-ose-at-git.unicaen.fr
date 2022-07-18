@@ -13,7 +13,7 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, Resou
     use ServiceAPayerTrait;
 
     /**
-     * @var \Application\Entity\Db\ServiceReferentiel
+     * @var \Referentiel\Entity\Db\ServiceReferentiel
      */
     private $serviceReferentiel;
 
@@ -56,7 +56,7 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, Resou
     /**
      * Get ServiceReferentiel
      *
-     * @return \Application\Entity\Db\ServiceReferentiel
+     * @return \Referentiel\Entity\Db\ServiceReferentiel
      */
     public function getServiceReferentiel()
     {

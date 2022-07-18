@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\VolumeHoraireReferentiel;
+use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
@@ -30,7 +30,7 @@ class VolumeHoraireReferentielService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\VolumeHoraireReferentiel::class;
+        return \Referentiel\Entity\Db\VolumeHoraireReferentiel::class;
     }
 
 
@@ -49,7 +49,7 @@ class VolumeHoraireReferentielService extends AbstractEntityService
 
     /**
      *
-     * @return \Application\Entity\Db\VolumeHoraireReferentiel
+     * @return \Referentiel\Entity\Db\VolumeHoraireReferentiel
      */
     public function newEntity()
     {

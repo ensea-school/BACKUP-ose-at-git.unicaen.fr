@@ -2,7 +2,7 @@
 
 namespace Application\Controller;
 
-use Application\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
 use Application\Form\FonctionReferentiel\Traits\FonctionReferentielSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;

@@ -2,7 +2,7 @@
 
 namespace Application\Controller;
 
-use Application\Entity\Db\RegleStructureValidation;
+use Service\Entity\Db\RegleStructureValidation;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Service\Recherche;
@@ -182,8 +182,8 @@ class  IntervenantController extends AbstractController
             \Application\Entity\Db\Service::class,
             \Application\Entity\Db\VolumeHoraire::class,
             \Application\Entity\Db\CheminPedagogique::class,
-            \Application\Entity\Db\ServiceReferentiel::class,
-            \Application\Entity\Db\VolumeHoraireReferentiel::class,
+            \Referentiel\Entity\Db\ServiceReferentiel::class,
+            \Referentiel\Entity\Db\VolumeHoraireReferentiel::class,
             \Application\Entity\Db\Validation::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([

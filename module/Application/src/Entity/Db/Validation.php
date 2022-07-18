@@ -207,11 +207,11 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Add volumeHoraireReferentiel
      *
-     * @param \Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
+     * @param \Referentiel\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
      *
      * @return self
      */
-    public function addVolumeHoraireReferentiel(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    public function addVolumeHoraireReferentiel(\Referentiel\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
     {
         $this->volumeHoraireReferentiel[] = $volumeHoraireReferentiel;
 
@@ -223,9 +223,9 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Remove volumeHoraireReferentiel
      *
-     * @param \Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
+     * @param \Referentiel\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
      */
-    public function removeVolumeHoraireReferentiel(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    public function removeVolumeHoraireReferentiel(\Referentiel\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
     {
         $this->volumeHoraireReferentiel->removeElement($volumeHoraireReferentiel);
     }

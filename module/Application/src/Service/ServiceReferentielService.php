@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
@@ -14,7 +14,7 @@ use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\ServiceReferentiel;
+use Referentiel\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
 use Service\Entity\Db\TypeVolumeHoraire;
 
@@ -140,7 +140,7 @@ class ServiceReferentielService extends AbstractEntityService
      * @param Structure           $structure
      * @param string              $commentaires
      *
-     * @return null|\Application\Entity\Db\ServiceReferentiel
+     * @return null|\Referentiel\Entity\Db\ServiceReferentiel
      */
     public function getBy(
         Intervenant $intervenant,
@@ -157,13 +157,13 @@ class ServiceReferentielService extends AbstractEntityService
 
         /* Retourne le premier NON historisé */
         foreach ($result as $sr) {
-            /* @var $sr \Application\Entity\Db\ServiceReferentiel */
+            /* @var $sr \Referentiel\Entity\Db\ServiceReferentiel */
             if ($sr->estNonHistorise() && $sr->getCommentaires() == $commentaires) return $sr;
         }
 
         /* Sinon retourne le premier trouvé */
         foreach ($result as $sr) {
-            /* @var $sr \Application\Entity\Db\ServiceReferentiel */
+            /* @var $sr \Referentiel\Entity\Db\ServiceReferentiel */
             if ($sr->getCommentaires() == $commentaires) return $sr;
         }
 
@@ -299,7 +299,7 @@ class ServiceReferentielService extends AbstractEntityService
     /**
      * Supprime (historise par défaut) le service spécifié.
      *
-     * @param \Application\Entity\Db\ServiceReferentiel $entity Entité à détruire
+     * @param \Referentiel\Entity\Db\ServiceReferentiel $entity Entité à détruire
      * @param bool                                      $softDelete
      *
      * @return self
@@ -405,7 +405,7 @@ class ServiceReferentielService extends AbstractEntityService
         $old = [];
         foreach ($s as $service) {
 
-            /* @var $service \Application\Entity\Db\ServiceReferentiel */
+            /* @var $service \Referentiel\Entity\Db\ServiceReferentiel */
 
             $ok = $service->getFonction()->estNonHistorise()
                 && $service->getStructure()->estNonHistorise();
@@ -425,7 +425,7 @@ class ServiceReferentielService extends AbstractEntityService
                 ];
 
                 $newService = $o['service'];
-                /* @var $newService \Application\Entity\Db\ServiceReferentiel */
+                /* @var $newService \Referentiel\Entity\Db\ServiceReferentiel */
 
                 // pour ne pas écraser les serices précédemment saisis avec des heures
                 if (

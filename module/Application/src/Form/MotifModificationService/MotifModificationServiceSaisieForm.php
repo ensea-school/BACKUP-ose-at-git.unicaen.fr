@@ -110,7 +110,7 @@ class MotifModificationServiceHydrator implements HydratorInterface
      * Hydrate $object with the provided $data.
      *
      * @param array                                             $data
-     * @param \Application\Entity\Db\MotifModificationServiceDu $object
+     * @param \Service\Entity\Db\MotifModificationServiceDu $object
      *
      * @return object
      */
@@ -129,7 +129,7 @@ class MotifModificationServiceHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Db\MotifModificationServiceDu $object
+     * @param \Service\Entity\Db\MotifModificationServiceDu $object
      *
      * @return array
      */

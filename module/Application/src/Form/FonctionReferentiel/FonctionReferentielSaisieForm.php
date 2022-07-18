@@ -2,7 +2,7 @@
 
 namespace Application\Form\FonctionReferentiel;
 
-use Application\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
@@ -209,7 +209,7 @@ class FonctionReferentielHydrator implements HydratorInterface
      * Hydrate $object with the provided $data.
      *
      * @param array                                      $data
-     * @param \Application\Entity\Db\FonctionReferentiel $object
+     * @param \Referentiel\Entity\Db\FonctionReferentiel $object
      *
      * @return object
      */
@@ -237,7 +237,7 @@ class FonctionReferentielHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Db\FonctionReferentiel $object
+     * @param \Referentiel\Entity\Db\FonctionReferentiel $object
      *
      * @return array
      */

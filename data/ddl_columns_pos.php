@@ -532,7 +532,7 @@ return [
         'ID',
         'LIBELLE',
         'PACKAGE_NAME',
-        'PROCEDURE_NAME',
+        'ACTIVE',
         'I_PARAM_1_LIBELLE',
         'I_PARAM_2_LIBELLE',
         'I_PARAM_3_LIBELLE',

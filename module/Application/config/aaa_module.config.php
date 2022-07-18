@@ -44,6 +44,7 @@ $config = [
                     \Doctrine\DBAL\Event\Listeners\OracleSessionInit::class,
                     ORM\Event\Listeners\HistoriqueListener::class,
                     ORM\Event\Listeners\ParametreEntityListener::class,
+                    ORM\Event\Listeners\EntityManagerListener::class,
                 ],
             ],
         ],

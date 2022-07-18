@@ -18,32 +18,32 @@ Votre vue matérialisée MV_INTERVENANT devra contenir les colonnes suivantes :
 |Z_SOURCE_ID               |VARCHAR2|15      |Non     |==> SOURCE.CODE              |
 |SOURCE_CODE               |VARCHAR2|100     |Oui     |                             |
 |UTILISATEUR_CODE          |VARCHAR2|60      |Oui     | Identifiant pour faire lien avec le LDAP |
-|Z_STRUCTURE_ID            |NUMBER  |        |Oui     |==> STRUCTURE.SOURCE_CODE    |
-|Z_STATUT_ID               |NUMBER  |        |Non     |==> STATUT.CODE  |
-|Z_GRADE_ID                |NUMBER  |        |Oui     |==> GRADE.SOURCE_CODE        |
-|Z_DISCIPLINE_ID           |NUMBER  |        |Oui     |==> DISCIPLINE.SOURCE_CODE   |
-|Z_CIVILITE_ID             |NUMBER  |        |Oui     |==> CIVILITE.LIBELLE_COURT   |
+|Z_STRUCTURE_ID            |VARCHAR2|100        |Oui     |==> STRUCTURE.SOURCE_CODE    |
+|Z_STATUT_ID               |VARCHAR2|100        |Non     |==> STATUT.CODE  |
+|Z_GRADE_ID                |VARCHAR2|100        |Oui     |==> GRADE.SOURCE_CODE        |
+|Z_DISCIPLINE_ID           |VARCHAR2|100        |Oui     |==> DISCIPLINE.SOURCE_CODE   |
+|Z_CIVILITE_ID             |VARCHAR2|100        |Oui     |==> CIVILITE.LIBELLE_COURT   |
 |NOM_USUEL                 |VARCHAR2|60      |Non     |                             |
 |PRENOM                    |VARCHAR2|60      |Non     |                             |
 |DATE_NAISSANCE            |DATE    |        |Non     |                             |
 |NOM_PATRONYMIQUE          |VARCHAR2|60      |Oui     |                             |
 |COMMUNE_NAISSANCE         |VARCHAR2|60      |Oui     |                             |
-|Z_PAYS_NAISSANCE_ID       |NUMBER  |        |Oui     |==> PAYS.SOURCE_CODE         |
-|Z_DEPARTEMENT_NAISSANCE_ID|NUMBER  |        |Oui     |==> DEPARTEMENT.SOURCE_CODE  |
-|Z_PAYS_NATIONALITE_ID     |NUMBER  |        |Oui     |==> PAYS.SOURCE_CODE         |
+|Z_PAYS_NAISSANCE_ID       |VARCHAR2|100        |Oui     |==> PAYS.SOURCE_CODE         |
+|Z_DEPARTEMENT_NAISSANCE_ID|VARCHAR2|100        |Oui     |==> DEPARTEMENT.SOURCE_CODE  |
+|Z_PAYS_NATIONALITE_ID     |VARCHAR2|100        |Oui     |==> PAYS.SOURCE_CODE         |
 |TEL_PRO                   |VARCHAR2|30      |Oui     |                             |
 |TEL_PERSO                 |VARCHAR2|30      |Oui     |                             |
 |EMAIL_PRO                 |VARCHAR2|255     |Oui     |                             |
 |EMAIL_PERSO               |VARCHAR2|255     |Oui     |                             |
 |ADRESSE_PRECISIONS        |VARCHAR2|240     |Oui     |                             |
 |ADRESSE_NUMERO            |VARCHAR2|4       |Oui     |                             |
-|Z_ADRESSE_NUMERO_COMPL_ID |NUMBER  |        |Oui     |==> ADRESSE_NUMERO_COMPL.CODE|
-|Z_ADRESSE_VOIRIE_ID       |NUMBER  |        |Oui     |==> ADRESSE_VOIRIE.SOURCE_CODE |
+|Z_ADRESSE_NUMERO_COMPL_ID |VARCHAR2|100        |Oui     |==> ADRESSE_NUMERO_COMPL.CODE|
+|Z_ADRESSE_VOIRIE_ID       |VARCHAR2|100        |Oui     |==> ADRESSE_VOIRIE.SOURCE_CODE |
 |ADRESSE_VOIE              |VARCHAR2|60      |Oui     |                             |
 |ADRESSE_LIEU_DIT          |VARCHAR2|60      |Oui     |                             |
 |ADRESSE_CODE_POSTAL       |VARCHAR2|15      |Oui     |                             |
 |ADRESSE_COMMUNE           |VARCHAR2|50      |Oui     |                             |
-|Z_ADRESSE_PAYS_ID         |NUMBER  |        |Oui     |==> PAYS.SOURCE_CODE         |
+|Z_ADRESSE_PAYS_ID         |VARCHAR2|100        |Oui     |==> PAYS.SOURCE_CODE         |
 |NUMERO_INSEE              |VARCHAR2|20      |Oui     |                             |
 |NUMERO_INSEE_PROVISOIRE   |NUMBER  |        |Non     | Flag (1 ou 0)               |
 |IBAN                      |VARCHAR2|50      |Oui     |                             |
@@ -54,7 +54,7 @@ Votre vue matérialisée MV_INTERVENANT devra contenir les colonnes suivantes :
 |AUTRE_3                   |VARCHAR2|1000    |Oui     |                             |
 |AUTRE_4                   |VARCHAR2|1000    |Oui     |                             |
 |AUTRE_5                   |VARCHAR2|1000    |Oui     |                             |
-|Z_EMPLOYEUR_ID            |NUMBER  |        |Oui     |==> EMPLOYEUR.SOURCE_CODE    |
+|Z_EMPLOYEUR_ID            |VARCHAR2|100        |Oui     |==> EMPLOYEUR.SOURCE_CODE    |
 |VALIDITE_DEBUT            |DATE    |        |Oui     |Date de début de validité (NULL = depuis toujours)  |
 |VALIDITE_FIN              |DATE    |        |Oui     |Date de fin   de validité (NULL = pas d'expiration) |
 |AFFECTATION_FIN           |DATE    |        |Oui     |Date de fin   d'affectation |

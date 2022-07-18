@@ -11,6 +11,7 @@ echo $this->form()->openTag($form);
 
 echo $this->formControlGroup($form->get('from'));
 echo $this->formControlGroup($form->get('to'));
+echo $this->formControlGroup($form->get('copy'));
 echo $this->formControlGroup($form->get('subject'));
 echo $this->formControlGroup($form->get('content'));
 echo $this->formRow($form->get('submit'));
@@ -43,8 +44,7 @@ echo $this->form()->closeTag();
      * @param {string} selector
      * @param {object} form
      */
-    function installEditor(selector, form)
-    {
+    function installEditor(selector, form) {
         WidgetInitializer.includeJs(Url('vendor/tinymce-4.4.1/js/tinymce/tinymce.min.js'));
         tinymce.editors = [];
         tinymce.init({

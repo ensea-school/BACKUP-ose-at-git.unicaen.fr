@@ -849,6 +849,10 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     structure = prompt("Ajout d'une nouvelle structure");
                 }
 
+                if (structure === '__EXTERIEUR__' || structure === '__UNIV__') {
+                    return;
+                }
+
                 if (structure && -1 === this.structures.indexOf(structure)) {
                     this.structures.push(structure);
                     this.element.find(".dinput[data-name=structureCode]").each(function () {

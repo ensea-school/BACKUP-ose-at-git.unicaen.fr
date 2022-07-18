@@ -41,6 +41,7 @@ CREATE OR REPLACE PACKAGE "OSE_FORMULE" AS
     structure_code             VARCHAR(100),
     structure_is_affectation   BOOLEAN DEFAULT TRUE,
     structure_is_univ          BOOLEAN DEFAULT FALSE,
+    structure_is_exterieur     BOOLEAN DEFAULT FALSE,
     service_statutaire         BOOLEAN DEFAULT TRUE,
     taux_fi                    FLOAT DEFAULT 1,
     taux_fa                    FLOAT DEFAULT 0,

@@ -396,7 +396,7 @@ class ServiceReferentielController extends AbstractController
     {
         $this->getServiceWorkflow()->calculerTableauxBord(['formule', 'validation_referentiel', 'referentiel'], $intervenant);
         if (!$validation) {
-            $this->getServiceWorkflow()->calculerTableauxBord(['referentiel', 'piece_jointe_fournie'], $intervenant);
+            $this->getServiceWorkflow()->calculerTableauxBord(['piece_jointe_fournie'], $intervenant);
         }
     }
 

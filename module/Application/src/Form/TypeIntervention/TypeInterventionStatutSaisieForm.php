@@ -73,7 +73,7 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
             ],
         ]);
         $this->get('statut')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceStatut()->getList($this->getServiceStatut()->finderByHistorique())));
+            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceStatut()->getStatuts()));
 
         return $this;
     }

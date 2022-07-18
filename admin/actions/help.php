@@ -34,6 +34,7 @@ $actionsDev = [
     "update-ddl"            => "Mise à jour du fichier de définition de la base de données à partir de cette dernière",
     "update-bdd-data"       => "Mise à jour des données de la base de données",
     "update-bdd-privileges" => "Mise à jour des privilèges de la base de données",
+    "update-bdd-formules"   => "Mise à jour de le liste des formules de calcul",
     "test"                  => "Script de tests divers",
     "test-migration"        => "Script de test de migration. Paramètres : [before|after nom_du_script_de_migration]",
     "build-tableaux-bord"   => "Reconstruction des tableaux de bord",

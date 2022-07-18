@@ -190,7 +190,7 @@ class FormuleTestIntervenant
             $structures[$this->getStructureCode()] = $this->getStructureCode();
         }
         foreach ($this->getVolumeHoraireTest() as $vht) {
-            if ($vht->getStructureCode()) {
+            if ($vht->getStructureCode() && $vht->getStructureCode() != '__EXTERIEUR__') {
                 $structures[$vht->getStructureCode()] = $vht->getStructureCode();
             }
         }

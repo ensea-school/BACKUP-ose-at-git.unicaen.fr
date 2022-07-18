@@ -93,6 +93,8 @@ return [
             'CHARGENS_MAJ_EFFECTIFS',
             'F_STATUT_INTERVENANT',
             'F_STATUT_INTERVENANT_S',
+            'F_TYPE_INTERVENTION',
+            'F_TYPE_INTERVENTION_S',
         ],
     ],
     'sequence'          => [

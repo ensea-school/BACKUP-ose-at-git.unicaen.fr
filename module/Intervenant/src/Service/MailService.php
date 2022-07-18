@@ -33,7 +33,6 @@ class MailService extends AbstractService
     private Mail $mail;
 
 
-
     /**
      * @return Mail
      */
@@ -41,7 +40,6 @@ class MailService extends AbstractService
     {
         return $this->mail;
     }
-
 
 
     /**
@@ -53,12 +51,10 @@ class MailService extends AbstractService
     }
 
 
-
     public function __construct(Mail $mail)
     {
         $this->mail = $mail;
     }
-
 
 
     /**
@@ -70,13 +66,13 @@ class MailService extends AbstractService
      *
      * @return void
      */
-    public function envoyerMail(string $from, string $to, string $subject, string $content)
+    public function envoyerMail(string $from, string $to, string $subject, string $content, string $copy)
     {
 
         $body = new Message();
 
-        $text          = new Part($content);
-        $text->type    = Mime::TYPE_HTML;
+        $text = new Part($content);
+        $text->type = Mime::TYPE_HTML;
         $text->charset = 'utf-8';
         $body->addPart($text);
         $message = new MailMessage();
@@ -86,6 +82,10 @@ class MailService extends AbstractService
             ->setSubject($subject)
             ->addTo($to)
             ->setBody($body);
+
+        if (!empty($copy)) {
+            $message->addBcc($copy);
+        }
 
         //Envoi du mail
         $this->getMail()->send($message);

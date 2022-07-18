@@ -171,7 +171,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       END IF;
     END IF;
 
-    IF filter IS NULL THEN
+    IF filter IS NULL OR filter = '' THEN
       RETURN '1=1';
     END IF;
 
@@ -416,14 +416,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
     OPEN c FOR '
     SELECT
-      v.ANNEE_ID,
-      v.ANNEE_AGREMENT,
-      v.TYPE_AGREMENT_ID,
-      v.INTERVENANT_ID,
-      v.CODE_INTERVENANT,
-      v.STRUCTURE_ID,
-      v.AGREMENT_ID,
-      v.DUREE_VIE,
       CASE WHEN
             t.ANNEE_ID                     = v.ANNEE_ID
         AND COALESCE(t.ANNEE_AGREMENT,0)   = COALESCE(v.ANNEE_AGREMENT,0)
@@ -433,7 +425,15 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND COALESCE(t.STRUCTURE_ID,0)     = COALESCE(v.STRUCTURE_ID,0)
         AND COALESCE(t.AGREMENT_ID,0)      = COALESCE(v.AGREMENT_ID,0)
         AND t.DUREE_VIE                    = v.DUREE_VIE
-      THEN -1 ELSE t.ID END ID
+      THEN -1 ELSE t.ID END ID,
+      v.ANNEE_ID,
+      v.ANNEE_AGREMENT,
+      v.TYPE_AGREMENT_ID,
+      v.INTERVENANT_ID,
+      v.CODE_INTERVENANT,
+      v.STRUCTURE_ID,
+      v.AGREMENT_ID,
+      v.DUREE_VIE
     FROM
       (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_AGREMENT t ON

@@ -3,7 +3,7 @@
 namespace Application\Form\Service;
 
 use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Form\AbstractFieldset;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;

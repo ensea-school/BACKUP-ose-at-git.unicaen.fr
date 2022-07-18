@@ -13,7 +13,7 @@ use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\TypeIntervention;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait as ServiceTypeVolumeHoraireAwareTrait;

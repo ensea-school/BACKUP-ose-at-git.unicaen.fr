@@ -22,9 +22,6 @@ use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
-/**
- * VolumeHoraire
- */
 class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;

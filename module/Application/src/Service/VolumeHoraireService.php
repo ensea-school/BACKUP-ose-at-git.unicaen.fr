@@ -12,7 +12,7 @@ use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Intervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
-use Application\Entity\Db\VolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 
 /**
  * Description of VolumeHoraire

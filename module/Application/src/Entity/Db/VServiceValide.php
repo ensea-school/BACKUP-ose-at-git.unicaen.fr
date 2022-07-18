@@ -11,7 +11,7 @@ class VServiceValide
      * @var string
      */
     private $code;
-    
+
     /**
      * @var \Application\Entity\Db\ElementPedagogique
      */
@@ -33,7 +33,7 @@ class VServiceValide
     private $libelle;
 
     /**
-     * @var \Application\Entity\Db\Service
+     * @var \Enseignement\Entity\Db\Service
      */
     protected $service;
 
@@ -43,7 +43,7 @@ class VServiceValide
     private $validation;
 
     /**
-     * @var \Application\Entity\Db\VolumeHoraire
+     * @var \Enseignement\Entity\Db\VolumeHoraire
      */
     protected $volumeHoraire;
 
@@ -52,90 +52,108 @@ class VServiceValide
      */
     private $id;
 
+
+
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
         return $this->code;
     }
 
+
+
     /**
      * Get elementPedagogiqueId
      *
-     * @return integer 
+     * @return integer
      */
     public function getElementPedagogiqueId()
     {
         return $this->elementPedagogiqueId;
     }
 
+
+
     /**
      * Get heures
      *
-     * @return float 
+     * @return float
      */
     public function getHeures()
     {
         return $this->heures;
     }
 
+
+
     /**
      * Get intervenant
      *
-     * @return \Application\Entity\Db\Intervenant 
+     * @return \Application\Entity\Db\Intervenant
      */
     public function getIntervenant()
     {
         return $this->intervenant;
     }
 
+
+
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
         return $this->libelle;
     }
 
+
+
     /**
      * Get service
      *
-     * @return \Application\Entity\Db\Service 
+     * @return \Enseignement\Entity\Db\Service
      */
     public function getService()
     {
         return $this->service;
     }
 
+
+
     /**
      * Get validation
      *
-     * @return \Application\Entity\Db\Validation 
+     * @return \Application\Entity\Db\Validation
      */
     public function getValidation()
     {
         return $this->validation;
     }
 
+
+
     /**
      * Get volumeHoraire
      *
-     * @return \Application\Entity\Db\VolumeHoraire 
+     * @return \Enseignement\Entity\Db\VolumeHoraire
      */
     public function getVolumeHoraire()
     {
         return $this->volumeHoraire;
     }
 
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {

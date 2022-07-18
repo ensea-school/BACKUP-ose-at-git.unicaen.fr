@@ -9,7 +9,7 @@ use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Laminas\Form\Element\Hidden;
 use Application\Filter\StringFromFloat;
 use Laminas\Hydrator\HydratorInterface;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
 

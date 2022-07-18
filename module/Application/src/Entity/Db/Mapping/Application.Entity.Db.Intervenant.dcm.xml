@@ -126,7 +126,7 @@
         </one-to-many>
         <one-to-many field="pieceJointe" target-entity="Application\Entity\Db\PieceJointe" mapped-by="intervenant"
                      fetch="EXTRA_LAZY"/>
-        <one-to-many field="service" target-entity="Application\Entity\Db\Service" mapped-by="intervenant"/>
+        <one-to-many field="service" target-entity="Enseignement\Entity\Db\Service" mapped-by="intervenant"/>
         <one-to-many field="serviceReferentiel" target-entity="Referentiel\Entity\Db\ServiceReferentiel"
                      mapped-by="intervenant">
             <cascade>

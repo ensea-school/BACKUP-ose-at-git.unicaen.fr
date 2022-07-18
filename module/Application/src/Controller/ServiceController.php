@@ -3,7 +3,7 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Validation;
 use Application\Form\Service\Saisie;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
@@ -76,8 +76,8 @@ class ServiceController extends AbstractController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\Service::class,
-            \Application\Entity\Db\VolumeHoraire::class,
+            \Enseignement\Entity\Db\Service::class,
+            \Enseignement\Entity\Db\VolumeHoraire::class,
             \Application\Entity\Db\Validation::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
@@ -343,7 +343,7 @@ class ServiceController extends AbstractController
 
         if ($id) {
             $entity = $service->get($id);
-            /* @var $entity \Application\Entity\Db\Service */
+            /* @var $entity \Enseignement\Entity\Db\Service */
         } else {
             $entity = $service->newEntity();
         }

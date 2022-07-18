@@ -2,7 +2,7 @@
 
 namespace Application\Form\ServiceReferentiel;
 
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Form\AbstractForm;
 use Application\Form\ServiceReferentiel\Traits\SaisieFieldsetAwareTrait;
 use Application\Service\Traits\FonctionReferentielServiceAwareTrait;

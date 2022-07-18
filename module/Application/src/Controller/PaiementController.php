@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\TypeRessource;
 use Application\Entity\Db\Validation;
-use Application\Entity\Db\VolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Application\Entity\Db\WfEtape;
 use Application\Form\Paiement\Traits\MiseEnPaiementFormAwareTrait;

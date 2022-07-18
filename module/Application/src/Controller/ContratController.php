@@ -7,10 +7,10 @@ use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ModeleContrat;
 use Application\Entity\Db\Parametre;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Validation;
-use Application\Entity\Db\VolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 use Application\Form\Contrat\Traits\EnvoiMailContratFormAwareTrait;
 use Application\Form\Contrat\Traits\ModeleFormAwareTrait;
 use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
@@ -154,7 +154,7 @@ class ContratController extends AbstractController
 
 
         foreach ($contrats as $contrat) {
-                $services['contractualises'][$contrat->getId()] = $this->getProcessusContrat()->getServices($intervenant, $contrat, $role->getStructure());
+            $services['contractualises'][$contrat->getId()] = $this->getProcessusContrat()->getServices($intervenant, $contrat, $role->getStructure());
         }
 
         $nc = $this->getProcessusContrat()->getServices($intervenant, null, $role->getStructure());
@@ -185,7 +185,7 @@ class ContratController extends AbstractController
         $structure = $this->getEvent()->getParam('structure');
         /* @var $structure Structure */
 
-        $avenantResult = $this->getServiceParametres()->get('avenant');
+        $avenantResult       = $this->getServiceParametres()->get('avenant');
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 

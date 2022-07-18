@@ -3,9 +3,9 @@
 namespace Application\Processus;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TblValidationEnseignement;
+use Enseignement\Entity\Db\TblValidationEnseignement;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
@@ -25,7 +25,6 @@ class ValidationEnseignementProcessus extends AbstractProcessus
     use TypeVolumeHoraireServiceAwareTrait;
 
 
-
     /**
      * @param TypeVolumeHoraire $typeVolumeHoraire
      * @param Intervenant       $intervenant
@@ -39,7 +38,7 @@ class ValidationEnseignementProcessus extends AbstractProcessus
         SELECT
           tve, str, v
         FROM
-          Application\Entity\Db\TblValidationEnseignement tve
+          Enseignement\Entity\Db\TblValidationEnseignement tve
           JOIN tve.structure        str
           LEFT JOIN tve.validation  v
         WHERE
@@ -82,11 +81,11 @@ class ValidationEnseignementProcessus extends AbstractProcessus
     public function getServices(TypeVolumeHoraire $typeVolumeHoraire, Validation $validation, $detach = true)
     {
         $services = [];
-        $prevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $prevu    = $this->getServiceTypeVolumeHoraire()->getPrevu();
 
-        if ($typeVolumeHoraire != $prevu){
+        if ($typeVolumeHoraire != $prevu) {
             $tvf = "OR vh.typeVolumeHoraire = :prevu";
-        }else{
+        } else {
             $tvf = '';
         }
 
@@ -94,7 +93,7 @@ class ValidationEnseignementProcessus extends AbstractProcessus
         SELECT
           tve, str, s, vh, v
         FROM
-          Application\Entity\Db\TblValidationEnseignement tve
+          Enseignement\Entity\Db\TblValidationEnseignement tve
           JOIN tve.structure        str
           JOIN tve.service          s
           JOIN s.volumeHoraire      vh WITH vh = tve.volumeHoraire $tvf
@@ -111,8 +110,8 @@ class ValidationEnseignementProcessus extends AbstractProcessus
             'typeVolumeHoraire' => $typeVolumeHoraire,
             'intervenant'       => $validation->getIntervenant(),
         ]);
-        if ($typeVolumeHoraire != $prevu){
-            $query->setParameter('prevu',$prevu);
+        if ($typeVolumeHoraire != $prevu) {
+            $query->setParameter('prevu', $prevu);
         }
         if ($validation->getId()) {
             $query->setParameter('validation', $validation);
@@ -170,7 +169,7 @@ class ValidationEnseignementProcessus extends AbstractProcessus
         /* Contrôle de validation */
         foreach ($services as $service) {
             foreach ($service->getVolumehoraire() as $vh) {
-                /* @var $vh \Application\Entity\Db\VolumeHoraire */
+                /* @var $vh \Enseignement\Entity\Db\VolumeHoraire */
                 if (
                     $vh->getTypeVolumeHoraire() == $typeVolumeHoraire
                     && $vh->getHeures() > 0
@@ -178,8 +177,8 @@ class ValidationEnseignementProcessus extends AbstractProcessus
                     && (!$vh->isValide())
                     && $service->getElementPedagogique()
                     && !$service->getElementPedagogique()->getTypeIntervention()->contains($vh->getTypeIntervention())
-                ){
-                    throw new \Exception('Des heures sont saisies sur au moins un type d\'intervention ('.$vh->getTypeIntervention().') non approprié. Veuillez modifier le service avant de pouvoir le valider.');
+                ) {
+                    throw new \Exception('Des heures sont saisies sur au moins un type d\'intervention (' . $vh->getTypeIntervention() . ') non approprié. Veuillez modifier le service avant de pouvoir le valider.');
                 }
             }
         }
@@ -187,7 +186,7 @@ class ValidationEnseignementProcessus extends AbstractProcessus
         foreach ($services as $service) {
             foreach ($service->getVolumehoraire() as $vh) {
                 if (($vh->getTypeVolumeHoraire() == $typeVolumeHoraire) && (!$vh->isValide())) {
-                    /* @var $vh \Application\Entity\Db\VolumeHoraire */
+                    /* @var $vh \Enseignement\Entity\Db\VolumeHoraire */
                     $validation->addVolumeHoraire($vh);
                 }
             }

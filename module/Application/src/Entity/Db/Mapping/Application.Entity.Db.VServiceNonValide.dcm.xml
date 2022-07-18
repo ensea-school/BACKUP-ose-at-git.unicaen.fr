@@ -17,12 +17,12 @@
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="service" target-entity="Application\Entity\Db\Service">
+    <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service">
       <join-columns>
         <join-column name="SERVICE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="volumeHoraire" target-entity="Application\Entity\Db\VolumeHoraire">
+    <many-to-one field="volumeHoraire" target-entity="Enseignement\Entity\Db\VolumeHoraire">
       <join-columns>
         <join-column name="VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
       </join-columns>

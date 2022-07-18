@@ -34,7 +34,7 @@ namespace Application\View\Renderer;
  * @method \Application\View\Helper\ServiceReferentiel\FormSaisie formServiceReferentielSaisie(?\Application\Form\ServiceReferentiel\Saisie $form = null)
  * @method \Application\View\Helper\ServiceReferentiel\Ligne serviceReferentielLigne(\Application\View\Helper\ServiceReferentiel\Liste $liste, \Referentiel\Entity\Db\ServiceReferentiel $service)
  * @method \Application\View\Helper\ServiceReferentiel\Liste serviceReferentielListe($services)
- * @method \Application\View\Helper\Service\Ligne serviceLigne(\Application\View\Helper\Service\Liste $liste, \Application\Entity\Db\Service $service)
+ * @method \Application\View\Helper\Service\Ligne serviceLigne(\Application\View\Helper\Service\Liste $liste, \Enseignement\Entity\Db\Service $service)
  * @method \Application\View\Helper\Service\Liste serviceListe($services)
  * @method \Application\View\Helper\Service\Resume serviceResume($resumeServices)
  * @method \Application\View\Helper\Service\SaisieForm serviceSaisieForm(?\Application\Form\Service\Saisie $form = null)
@@ -219,8 +219,7 @@ namespace Application\View\Renderer;
  *
  * @author UnicaenCode
  */
-class PhpRenderer extends \Laminas\View\Renderer\PhpRenderer {
-
-
+class PhpRenderer extends \Laminas\View\Renderer\PhpRenderer
+{
 
 }

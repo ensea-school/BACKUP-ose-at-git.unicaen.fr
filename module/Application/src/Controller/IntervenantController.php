@@ -179,8 +179,8 @@ class  IntervenantController extends AbstractController
     private function servicesAction(TypeVolumehoraire $typeVolumeHoraire)
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\Service::class,
-            \Application\Entity\Db\VolumeHoraire::class,
+            \Enseignement\Entity\Db\Service::class,
+            \Enseignement\Entity\Db\VolumeHoraire::class,
             \Application\Entity\Db\CheminPedagogique::class,
             \Referentiel\Entity\Db\ServiceReferentiel::class,
             \Referentiel\Entity\Db\VolumeHoraireReferentiel::class,

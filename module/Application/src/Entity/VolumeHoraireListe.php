@@ -6,11 +6,11 @@ use Application\Entity\Db\Contrat;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\TypeIntervention;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Application\Entity\Db\VolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use LogicException;
@@ -183,7 +183,7 @@ class VolumeHoraireListe
 
     /**
      *
-     * @param \Application\Entity\Db\Service $service
+     * @param \Enseignement\Entity\Db\Service $service
      */
     function __construct(Service $service)
     {

@@ -3,7 +3,7 @@
 namespace Application\View\Helper\Service;
 
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Form\Service\Saisie;
 use Application\View\Helper\AbstractViewHelper;
@@ -40,8 +40,9 @@ class SaisieForm extends AbstractViewHelper
     protected function getElementPedagogique()
     {
         $service = $this->form->get('service')->getObject();
+
         /* @var $service Service */
-        return  $service->getElementPedagogique();
+        return $service->getElementPedagogique();
     }
 
 
@@ -52,6 +53,7 @@ class SaisieForm extends AbstractViewHelper
     protected function getEtablissement()
     {
         $service = $this->form->get('service')->getObject();
+
         /* @var $service Service */
         return $service->getEtablissement();
     }
@@ -63,16 +65,16 @@ class SaisieForm extends AbstractViewHelper
      */
     protected function isEnseignementChoisi(): bool
     {
-        $etablissement = $this->getEtablissement();
+        $etablissement      = $this->getEtablissement();
         $elementPedagogique = $this->getElementPedagogique();
 
-        if ($elementPedagogique){
+        if ($elementPedagogique) {
             return true;
         }
-        if (!$etablissement){
+        if (!$etablissement) {
             return false;
         }
-        if ($etablissement != $this->getServiceContext()->getEtablissement()){
+        if ($etablissement != $this->getServiceContext()->getEtablissement()) {
             return true;
         }
 
@@ -178,12 +180,12 @@ class SaisieForm extends AbstractViewHelper
 
     public function renderVolumesHoraires()
     {
-        if (!$this->getServiceContext()->isModaliteServicesSemestriel($this->form->getTypeVolumeHoraire())){
+        if (!$this->getServiceContext()->isModaliteServicesSemestriel($this->form->getTypeVolumeHoraire())) {
             return null;
         }
 
         $res = '';
-        if ($this->isEnseignementChoisi()){
+        if ($this->isEnseignementChoisi()) {
             foreach ($this->getPeriodes() as $periode) {
                 $res .= '<div class="periode" id="' . $periode->getCode() . '">';
                 $res .= '<h3>' . $periode . '</h3>';

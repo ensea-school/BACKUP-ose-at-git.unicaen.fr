@@ -73,6 +73,57 @@ return [
 }',
     ],
     [
+        'CODE'           => 'ecarts-heures-complementaire',
+        'LIBELLE'        => 'Ecarts heures complémentaires',
+        'PDF_TRAITEMENT' => null,
+        'AUTO_BREAK'     => false,
+        'REQUETE'        => 'SELECT * FROM v_export_pilotage_ecarts_etats',
+        'CSV_PARAMS'     => '{
+    "INTERVENANT_TYPE_ID": {
+        "visible": false
+    },
+    "STRUCTURE_ID": {
+        "visible": false
+    },
+    "TYPE_HEURES_ID": {
+        "visible": false
+    },
+    "INTERVENANT_ID": {
+        "visible": false
+    },
+    "ANNEE_ID": {
+        "visible": false
+    },
+    "ANNEE": {
+        "libelle": "Année"
+    },
+    "ETAT": {
+        "libelle": "Etat"
+    },
+    "TYPE_HEURES": {
+        "libelle": "Type heures"
+    },
+    "STRUCTURE": {
+        "libelle": "Structure"
+    },
+     "INTERVENANT_TYPE": {
+        "libelle": "Type intervenant"
+    },
+     "INTERVENANT_CODE": {
+        "libelle": "Code intervenant"
+    },
+     "NOM_USUEL": {
+        "libelle": "Nom"
+    },
+    "PRENOM": {
+        "libelle": "Prénom"
+    },
+     "HETD_PAYABLES": {
+        "libelle": "HETD payables"
+    }
+}',
+    ],
+    [
         'CODE'           => 'winpaie',
         'LIBELLE'        => 'Extraction Winpaie',
         'PDF_TRAITEMENT' => null,

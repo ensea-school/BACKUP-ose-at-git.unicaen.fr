@@ -14,7 +14,7 @@ use Application\Entity\Db\TypeIntervention;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\NiveauEtape;
-use Application\Entity\Service\Recherche;
+use Service\Entity\Recherche;
 use Enseignement\Entity\VolumeHoraireListe;
 use Application\Form\Service\RechercheHydrator;
 use Application\Hydrator\Service\Traits\RechercheHydratorAwareTrait;

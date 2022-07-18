@@ -10,7 +10,7 @@ use Application\Entity\Db\Structure;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\NiveauEtape;
-use Application\Entity\Service\Recherche;
+use Service\Entity\Recherche;
 use Application\Form\AbstractForm;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
 use Application\Provider\Privilege\Privileges;
@@ -304,7 +304,7 @@ class RechercheFormHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Service\Recherche $object
+     * @param \Service\Entity\Recherche $object
      *
      * @return array
      */

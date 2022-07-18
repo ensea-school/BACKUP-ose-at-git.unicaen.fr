@@ -5,7 +5,7 @@ namespace Application\Controller;
 use Service\Entity\Db\RegleStructureValidation;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Application\Entity\Service\Recherche;
+use Service\Entity\Recherche;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use Application\Form\Intervenant\Traits\RegleStructureValidationFormAwareTrait;

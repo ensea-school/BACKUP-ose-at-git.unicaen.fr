@@ -99,7 +99,7 @@ function validiteIntervalle($anneeDebut, $anneeFin): string
 }
 
 
-function vhlDump(\Application\Entity\VolumeHoraireListe $volumeHoraireListe): \OSETest\VolumeHoraireListeTest
+function vhlDump(\Enseignement\Entity\VolumeHoraireListe $volumeHoraireListe): \OSETest\VolumeHoraireListeTest
 {
     include_once getcwd() . '/tests/OSETest/VolumeHoraireListeTest.php';
     $dumper                      = new \OSETest\VolumeHoraireListeTest();

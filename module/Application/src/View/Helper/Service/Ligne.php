@@ -247,7 +247,7 @@ class Ligne extends AbstractViewHelper
 
 
 
-    protected function renderTypeIntervention(\Application\Entity\VolumeHoraireListe $liste)
+    protected function renderTypeIntervention(\Enseignement\Entity\VolumeHoraireListe $liste)
     {
         $liste  = $liste->setMotifNonPaiement(false);
         $heures = $liste->getHeures();

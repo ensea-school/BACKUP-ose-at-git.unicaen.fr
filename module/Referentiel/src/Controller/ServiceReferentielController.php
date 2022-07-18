@@ -17,7 +17,7 @@ use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
-use Application\Entity\Service\Recherche;
+use Service\Entity\Recherche;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;

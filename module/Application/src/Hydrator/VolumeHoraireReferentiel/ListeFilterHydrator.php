@@ -3,7 +3,7 @@
 namespace Application\Hydrator\VolumeHoraireReferentiel;
 
 use Application\Constants;
-use Application\Entity\VolumeHoraireReferentielListe;
+use Referentiel\Entity\VolumeHoraireReferentielListe;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Hydrator\HydratorInterface;

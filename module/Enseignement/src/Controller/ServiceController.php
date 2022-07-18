@@ -22,7 +22,7 @@ use UnicaenApp\View\Model\MessengerViewModel;
 use Laminas\Http\Request;
 use Application\Entity\Db\Intervenant;
 use Service\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\Service\Recherche;
+use Service\Entity\Recherche;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireServiceAwareTrait;

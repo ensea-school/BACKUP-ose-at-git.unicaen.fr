@@ -3,7 +3,7 @@
 namespace Application\Processus;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Service\Recherche;
+use Service\Entity\Recherche;
 use Application\Service\EtatVolumeHoraireService;
 use Application\Service\IntervenantService;
 use Application\Service\MotifNonPaiementService;

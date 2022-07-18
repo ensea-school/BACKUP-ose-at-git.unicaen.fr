@@ -2,7 +2,7 @@
 
 namespace Application\Form\VolumeHoraire;
 
-use Application\Entity\VolumeHoraireListe;
+use Enseignement\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
@@ -136,7 +136,7 @@ class SaisieMultipleHydrator implements HydratorInterface
      * Hydrate $object with the provided $data.
      *
      * @param array                                  $data
-     * @param \Application\Entity\VolumeHoraireListe $object
+     * @param \Enseignement\Entity\VolumeHoraireListe $object
      *
      * @return object
      */
@@ -166,7 +166,7 @@ class SaisieMultipleHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\VolumeHoraireListe $object
+     * @param \Enseignement\Entity\VolumeHoraireListe $object
      *
      * @return array
      */

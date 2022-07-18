@@ -3,7 +3,7 @@
 namespace Application\View\Helper\ServiceReferentiel;
 
 use Service\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\VolumeHoraireReferentielListe;
+use Referentiel\Entity\VolumeHoraireReferentielListe;
 use Application\Form\ServiceReferentiel\SaisieFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;

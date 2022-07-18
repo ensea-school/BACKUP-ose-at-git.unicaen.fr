@@ -4,7 +4,7 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Intervenant;
 use Enseignement\Entity\Db\Service;
-use Application\Entity\VolumeHoraireListe;
+use Enseignement\Entity\VolumeHoraireListe;
 use Application\Form\AbstractForm;
 use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
 use Application\Form\VolumeHoraire\Traits\SaisieCalendaireAwareTrait;

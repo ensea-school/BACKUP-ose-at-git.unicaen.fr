@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Entity\Service;
+namespace Service\Entity;
 
 use Service\Entity\Db\EtatVolumeHoraire;
 use Intervenant\Entity\Db\TypeIntervenantAwareTrait;

@@ -7,7 +7,7 @@ use Application\Filter\StringFromFloat;
 use Application\Form\AbstractFieldset;
 use Doctrine\Laminas\Hydrator\DoctrineObject;
 use Laminas\Validator\LessThan;
-use Application\Entity\Db\ModificationServiceDu;
+use Service\Entity\Db\ModificationServiceDu;
 use Application\Entity\Db\MotifModificationService;
 
 /**

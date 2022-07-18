@@ -5,6 +5,7 @@ namespace Application\Service;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Structure;
+use Service\Entity\Db\ModificationServiceDu;
 
 
 /**
@@ -25,7 +26,7 @@ class ModificationServiceDuService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\ModificationServiceDu::class;
+        return ModificationServiceDu::class;
     }
 
 

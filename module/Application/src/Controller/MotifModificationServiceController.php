@@ -3,7 +3,7 @@
 namespace Application\Controller;
 
 use Application\Service\Traits\MotifModificationServiceServiceAwareTrait;
-use Application\Entity\Db\MotifModificationServiceDu;
+use Service\Entity\Db\MotifModificationServiceDu;
 use Application\Form\MotifModificationService\Traits\MotifModificationServiceSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 

@@ -2,7 +2,7 @@
 
 namespace Application\Form\Intervenant;
 
-use Application\Entity\Db\ModificationServiceDu;
+use Service\Entity\Db\ModificationServiceDu;
 use Application\Form\AbstractFieldset;
 use Application\Form\Intervenant\Traits\MotifModificationServiceDuFieldsetAwareTrait;
 use Application\Entity\Db\Intervenant;

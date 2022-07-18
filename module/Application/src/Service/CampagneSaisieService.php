@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\CampagneSaisie;
+use Service\Entity\Db\CampagneSaisie;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\ContextServiceAwareTrait;

@@ -114,11 +114,11 @@
         <one-to-many field="agrement" target-entity="Application\Entity\Db\Agrement" mapped-by="intervenant"/>
         <one-to-many field="contrat" target-entity="Application\Entity\Db\Contrat" mapped-by="intervenant"/>
         <one-to-many field="formuleResultat" target-entity="Application\Entity\Db\FormuleResultat" mapped-by="intervenant"/>
-        <one-to-many field="histoService" target-entity="Application\Entity\Db\HistoIntervenantService"
+        <one-to-many field="histoService" target-entity="Service\Entity\Db\HistoIntervenantService"
                      mapped-by="intervenant"/>
         <one-to-many field="miseEnPaiementIntervenantStructure"
                      target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="intervenant"/>
-        <one-to-many field="modificationServiceDu" target-entity="Application\Entity\Db\ModificationServiceDu"
+        <one-to-many field="modificationServiceDu" target-entity="Service\Entity\Db\ModificationServiceDu"
                      mapped-by="intervenant">
             <cascade>
                 <cascade-persist/>

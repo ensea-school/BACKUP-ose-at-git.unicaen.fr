@@ -3,7 +3,7 @@
 namespace Application\Form\Intervenant;
 
 use Application\Form\AbstractForm;
-use Application\Hydrator\RegleStructureValidationHydrator;
+use Service\Hydrator\RegleStructureValidationHydrator;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 

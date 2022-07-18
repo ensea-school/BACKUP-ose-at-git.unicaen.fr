@@ -16,15 +16,15 @@ class FonctionReferentiel implements HistoriqueAwareInterface
     use StructureAwareTrait;
     use DomaineFonctionnelAwareTrait;
 
-    protected ?FonctionReferentiel $parent;
+    protected ?FonctionReferentiel $parent            = null;
 
-    protected ?string              $code;
+    protected ?string              $code              = null;
 
-    protected ?string              $libelleCourt;
+    protected ?string              $libelleCourt      = null;
 
-    protected ?string              $libelleLong;
+    protected ?string              $libelleLong       = null;
 
-    protected ?int                 $id;
+    protected ?int                 $id                = null;
 
     protected bool                 $etapeRequise      = false;
 

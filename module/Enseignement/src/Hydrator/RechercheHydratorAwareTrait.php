@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Hydrator\Service\Traits;
-
-use Application\Hydrator\Service\RechercheHydrator;
+namespace Enseignement\Hydrator;
 
 /**
  * Description of RechercheHydratorAwareTrait

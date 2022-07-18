@@ -32,15 +32,15 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     use TypeInterventionAwareTrait;
     use PeriodeAwareTrait;
 
-    protected ?int       $id;
+    protected ?int       $id             = null;
 
-    protected ?float     $heures;
+    protected ?float     $heures         = null;
 
-    protected ?\DateTime $horaireDebut;
+    protected ?\DateTime $horaireDebut   = null;
 
-    protected ?\DateTime $horaireFin;
+    protected ?\DateTime $horaireFin     = null;
 
-    protected ?Contrat   $contrat;
+    protected ?Contrat   $contrat        = null;
 
     protected bool       $autoValidation = false;
 

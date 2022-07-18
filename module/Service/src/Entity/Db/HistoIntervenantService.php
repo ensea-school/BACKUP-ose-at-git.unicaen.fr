@@ -14,13 +14,13 @@ class HistoIntervenantService
     use IntervenantAwareTrait;
     use TypeVolumeHoraireAwareTrait;
 
-    private bool         $referentiel = false;
+    private bool         $referentiel       = false;
 
-    private ?\DateTime   $histoModification;
+    private ?\DateTime   $histoModification = null;
 
-    private ?int         $id;
+    private ?int         $id                = null;
 
-    private ?Utilisateur $histoModificateur;
+    private ?Utilisateur $histoModificateur = null;
 
 
 

@@ -30,11 +30,11 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
     use TypeVolumeHoraireAwareTrait;
     use ImportAwareTrait;
 
-    protected ?int     $id;
+    protected ?int     $id           = null;
 
-    protected ?string  $commentaires;
+    protected ?string  $commentaires = null;
 
-    protected ?string  $formation;
+    protected ?string  $formation    = null;
 
     private Collection $volumeHoraireReferentiel;
 

@@ -10,11 +10,11 @@ class RegleStructureValidation
     use TypeVolumeHoraireAwareTrait;
     use TypeIntervenantAwareTrait;
 
-    protected ?int    $id;
+    protected ?int    $id       = null;
 
-    protected ?string $priorite;
+    protected ?string $priorite = null;
 
-    protected ?string $message;
+    protected ?string $message  = null;
 
 
 

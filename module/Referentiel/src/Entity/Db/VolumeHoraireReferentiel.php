@@ -25,13 +25,13 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
     use TypeVolumeHoraireAwareTrait;
     use ServiceReferentielAwareTrait;
 
-    private ?int       $id;
+    private ?int       $id             = null;
 
-    private ?float     $heures;
+    private ?float     $heures         = null;
 
-    private ?\DateTime $horaireDebut;
+    private ?\DateTime $horaireDebut   = null;
 
-    private ?\DateTime $horaireFin;
+    private ?\DateTime $horaireFin     = null;
 
     private bool       $autoValidation = false;
 

@@ -505,7 +505,6 @@ return [
             Service\CampagneSaisieService::class         => Service\CampagneSaisieService::class,
             Processus\ServiceProcessus::class            => Processus\ServiceProcessus::class,
             Processus\ServiceReferentielProcessus::class => Processus\ServiceReferentielProcessus::class,
-            Hydrator\Service\RechercheHydrator::class    => Hydrator\Service\RechercheHydrator::class,
         ],
         'factories'  => [
             Assertion\ServiceAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,

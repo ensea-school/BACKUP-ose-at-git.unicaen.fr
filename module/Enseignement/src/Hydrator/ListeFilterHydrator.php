@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Hydrator\VolumeHoraire;
+namespace Enseignement\Hydrator;
 
 use Application\Constants;
 use Enseignement\Entity\VolumeHoraireListe;

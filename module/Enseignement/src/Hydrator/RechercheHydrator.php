@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Hydrator\Service;
+namespace Enseignement\Hydrator;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;

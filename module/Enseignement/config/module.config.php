@@ -3,6 +3,7 @@
 namespace Enseignement;
 
 use Application\Provider\Privilege\Privileges;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 
 return [
@@ -32,7 +33,7 @@ return [
     ],
 
     'services' => [
-
+        Hydrator\RechercheHydrator::class => InvokableFactory::class,
     ],
 
 

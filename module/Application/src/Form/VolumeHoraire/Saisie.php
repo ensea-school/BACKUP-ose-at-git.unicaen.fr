@@ -8,7 +8,7 @@ use Application\Entity\Db\TypeIntervention;
 use Enseignement\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
-use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
+use Enseignement\Hydrator\ListeFilterHydrator;
 use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;

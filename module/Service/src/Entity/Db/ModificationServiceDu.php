@@ -12,13 +12,13 @@ class ModificationServiceDu implements HistoriqueAwareInterface
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
 
-    private ?int                        $id;
+    private ?int                        $id           = null;
 
-    private ?MotifModificationServiceDu $motif;
+    private ?MotifModificationServiceDu $motif        = null;
 
-    private ?float                      $heures;
+    private ?float                      $heures       = null;
 
-    private ?string                     $commentaires;
+    private ?string                     $commentaires = null;
 
 
 

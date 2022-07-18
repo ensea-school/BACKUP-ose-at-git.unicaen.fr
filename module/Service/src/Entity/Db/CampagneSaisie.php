@@ -14,15 +14,15 @@ class CampagneSaisie
     use TypeVolumeHoraireAwareTrait;
     use TypeIntervenantAwareTrait;
 
-    protected ?int       $id;
+    protected ?int       $id                 = null;
 
-    protected ?\DateTime $dateDebut;
+    protected ?\DateTime $dateDebut          = null;
 
-    protected ?\DateTime $dateFin;
+    protected ?\DateTime $dateFin            = null;
 
-    protected ?string    $messageIntervenant;
+    protected ?string    $messageIntervenant = null;
 
-    protected ?string    $messageAutres;
+    protected ?string    $messageAutres      = null;
 
 
 

@@ -24,9 +24,9 @@ class Recherche
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
 
-    protected ?Structure $structureAff;
+    protected ?Structure $structureAff = null;
 
-    protected ?Structure $structureEns;
+    protected ?Structure $structureEns = null;
 
 
 

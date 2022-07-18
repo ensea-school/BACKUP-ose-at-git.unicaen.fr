@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Hydrator;
+namespace Service\Hydrator;
 
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;

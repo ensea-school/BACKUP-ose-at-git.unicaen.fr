@@ -3,7 +3,7 @@
 namespace Application\View\Helper\VolumeHoraire;
 
 use Application\Entity\Db\MotifNonPaiement;
-use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
+use Enseignement\Hydrator\ListeFilterHydrator;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;

@@ -26,19 +26,19 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
 
-    protected ?int                $id;
+    protected ?int                $id                 = null;
 
-    protected ?Intervenant        $intervenant;
+    protected ?Intervenant        $intervenant        = null;
 
-    protected ?TypeVolumeHoraire  $typeVolumeHoraire;
+    protected ?TypeVolumeHoraire  $typeVolumeHoraire  = null;
 
-    protected ?Etablissement      $etablissement;
+    protected ?Etablissement      $etablissement      = null;
 
-    protected ?ElementPedagogique $elementPedagogique;
+    protected ?ElementPedagogique $elementPedagogique = null;
 
-    protected ?string             $description;
+    protected ?string             $description        = null;
 
-    protected bool                $changed = false;
+    protected bool                $changed            = false;
 
     protected Collection          $volumeHoraire;
 

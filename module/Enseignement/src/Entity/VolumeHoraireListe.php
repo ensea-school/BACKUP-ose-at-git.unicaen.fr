@@ -11,7 +11,7 @@ use Application\Entity\Db\TypeIntervention;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Enseignement\Entity\Db\VolumeHoraire;
-use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
+use Enseignement\Hydrator\ListeFilterHydrator;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use LogicException;
 use RuntimeException;

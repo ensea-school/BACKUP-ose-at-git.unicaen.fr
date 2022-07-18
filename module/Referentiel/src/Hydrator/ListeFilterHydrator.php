@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Hydrator\VolumeHoraireReferentiel;
+namespace Referentiel\Hydrator;
 
 use Application\Constants;
 use Referentiel\Entity\VolumeHoraireReferentielListe;

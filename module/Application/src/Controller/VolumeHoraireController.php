@@ -8,7 +8,7 @@ use Enseignement\Entity\VolumeHoraireListe;
 use Application\Form\AbstractForm;
 use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
 use Application\Form\VolumeHoraire\Traits\SaisieCalendaireAwareTrait;
-use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
+use Enseignement\Hydrator\ListeFilterHydrator;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;

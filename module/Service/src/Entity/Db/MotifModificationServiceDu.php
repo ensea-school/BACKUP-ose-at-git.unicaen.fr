@@ -9,11 +9,11 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
 
-    protected ?int    $id;
+    protected ?int    $id             = null;
 
-    protected ?string $code;
+    protected ?string $code           = null;
 
-    protected ?string $libelle;
+    protected ?string $libelle        = null;
 
     protected bool    $decharge       = false;
 

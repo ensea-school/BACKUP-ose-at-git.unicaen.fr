@@ -8,7 +8,6 @@ use Application\Entity\Db\Validation;
 use Service\Entity\Recherche;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
-use Application\Form\Intervenant\Traits\RegleStructureValidationFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
@@ -20,7 +19,6 @@ use Application\Service\Traits\DossierServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
@@ -60,8 +58,6 @@ class  IntervenantController extends AbstractController
     use ValidationServiceAwareTrait;
     use PlafondProcessusAwareTrait;
     use FormuleResultatServiceAwareTrait;
-    use RegleStructureValidationServiceAwareTrait;
-    use RegleStructureValidationFormAwareTrait;
     use StatutServiceAwareTrait;
     use SourceServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
@@ -558,41 +554,6 @@ class  IntervenantController extends AbstractController
         $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()]);
-    }
-
-
-
-    public function validationVolumeHoraireTypeIntervenantAction()
-    {
-        $serviceRVS = $this->getServiceRegleStructureValidation();
-        $listeRsv   = $serviceRVS->getList();
-
-        return compact('listeRsv');
-    }
-
-
-
-    public function validationVolumeHoraireTypeIntervenantSaisieAction()
-    {
-        $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
-        $form                     = $this->getFormIntervenantRegleStructureValidation();
-        $title                    = 'Édition de la régle de validation';
-        $form->bindRequestSave($regleStructureValidation, $this->getRequest(), function (RegleStructureValidation $rsv) {
-            try {
-                $this->getServiceRegleStructureValidation()->save($rsv);
-                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-            } catch (\Exception $e) {
-                $message = $this->translate($e);
-
-                if (false !== strpos($message, 'ORA - 00001')) {
-                    $this->flashMessenger()->addErrorMessage("Règle non enregistrée car elle existe déjà dans OSE");
-                } else {
-                    $this->flashMessenger()->addErrorMessage($this->translate($e));
-                }
-            }
-        });
-
-        return compact('form', 'title');
     }
 
 

@@ -39,8 +39,8 @@ $canEdit = true;
             <?php if ($canEdit): ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">
                     <a class="ajax-modal"
-                       data-event="validation-volume-horaire-type-intervenant-saisie"
-                       href="<?= $this->url('validation-volume-horaire-type-intervenant/saisie', ['regleStructureValidation' => $rsv->getId()]) ?>"
+                       data-event="regle-structure-validation-saisie"
+                       href="<?= $this->url('parametres/regle-structure-validation/saisie', ['regleStructureValidation' => $rsv->getId()]) ?>"
                        data-submit-reload="true">
                         <i class="fas fa-pen-to-square"></i></a>
                 </td>
@@ -52,7 +52,7 @@ $canEdit = true;
 
 <script type="text/javascript">
     $(function () {
-        $("body").on("validation-volume-horaire-type-intervenant-saisie", function (event, data) {
+        $("body").on("regle-structure-validation-saisie", function (event, data) {
             window.location.reload();
         });
     });

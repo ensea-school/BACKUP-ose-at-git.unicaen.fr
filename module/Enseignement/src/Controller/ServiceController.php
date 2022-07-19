@@ -16,7 +16,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
+use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Laminas\Http\Request;

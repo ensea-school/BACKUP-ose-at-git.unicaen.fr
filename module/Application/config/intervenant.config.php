@@ -10,7 +10,7 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router'          => [
         'routes' => [
-            'intervenant'                                => [
+            'intervenant' => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/intervenant',
@@ -274,43 +274,6 @@ return [
                     ],
                 ],
             ],
-            'validation-volume-horaire-type-intervenant' => [
-                'type'          => 'Literal',
-                'options'       => [
-                    'route'    => '/validation-vh-ti',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\Intervenant',
-                        'action'     => 'validation-volume-horaire-type-intervenant',
-                    ],
-                ],
-                'may_terminate' => true,
-                'child_routes'  => [
-                    'delete' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/delete/:regleStructureValidation',
-                            'constraints' => [
-                                'regleStructureValidation' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'validation-volume-horaire-type-intervenant-delete',
-                            ],
-                        ],
-                    ],
-                    'saisie' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/saisie/[:regleStructureValidation]',
-                            'constraints' => [
-                                'regleStructureValidation' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'validation-volume-horaire-type-intervenant-saisie',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
         ],
     ],
     'navigation'      => [
@@ -484,16 +447,6 @@ return [
                         Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                 ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['validation-volume-horaire-type-intervenant',
-                                     'validation-volume-horaire-type-intervenant-saisie',
-                                     'validation-volume-horaire-type-intervenant-delete',
-                    ],
-                    'privileges' => [
-                        Privileges::MODIF_SERVICE_DU_EDITION,
-                    ],
-                ],
             ],
         ],
         'resource_providers' => [
@@ -545,8 +498,7 @@ return [
             Form\Intervenant\EditionForm::class => Form\Intervenant\Factory\EditionFormFactory::class,
         ],
         'invokables' => [
-            Form\Intervenant\HeuresCompForm::class               => Form\Intervenant\HeuresCompForm::class,
-            Form\Intervenant\RegleStructureValidationForm::class => Form\Intervenant\RegleStructureValidationForm::class,
+            Form\Intervenant\HeuresCompForm::class => Form\Intervenant\HeuresCompForm::class,
         ],
     ],
 ];

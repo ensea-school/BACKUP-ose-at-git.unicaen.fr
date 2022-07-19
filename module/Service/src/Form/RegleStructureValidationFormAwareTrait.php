@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Form\Intervenant\Traits;
-
-use Application\Form\Intervenant\RegleStructureValidationForm;
+namespace Service\Form;
 
 /**
  * Description of RegleStructureValidationFormAwareTrait
@@ -11,28 +9,28 @@ use Application\Form\Intervenant\RegleStructureValidationForm;
  */
 trait RegleStructureValidationFormAwareTrait
 {
-    protected ?RegleStructureValidationForm $formIntervenantRegleStructureValidation = null;
+    protected ?RegleStructureValidationForm $formRegleStructureValidation = null;
 
 
 
     /**
-     * @param RegleStructureValidationForm $formIntervenantRegleStructureValidation
+     * @param RegleStructureValidationForm $formRegleStructureValidation
      *
      * @return self
      */
-    public function setFormIntervenantRegleStructureValidation(?RegleStructureValidationForm $formIntervenantRegleStructureValidation)
+    public function setFormRegleStructureValidation(?RegleStructureValidationForm $formRegleStructureValidation)
     {
-        $this->formIntervenantRegleStructureValidation = $formIntervenantRegleStructureValidation;
+        $this->formRegleStructureValidation = $formRegleStructureValidation;
 
         return $this;
     }
 
 
 
-    public function getFormIntervenantRegleStructureValidation(): ?RegleStructureValidationForm
+    public function getFormRegleStructureValidation(): ?RegleStructureValidationForm
     {
-        if (!empty($this->formIntervenantRegleStructureValidation)) {
-            return $this->formIntervenantRegleStructureValidation;
+        if (!empty($this->formRegleStructureValidation)) {
+            return $this->formRegleStructureValidation;
         }
 
         return \Application::$container->get('FormElementManager')->get(RegleStructureValidationForm::class);

@@ -1,4 +1,4 @@
-RegleStructureValidationHydrator.php<?php
+<?php
 
 namespace Application\Form\Service;
 

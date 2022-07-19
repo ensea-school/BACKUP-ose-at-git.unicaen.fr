@@ -210,7 +210,6 @@ return [
         'invokables' => [
             Service\TypeValidationService::class             => Service\TypeValidationService::class,
             Service\ValidationService::class                 => Service\ValidationService::class,
-            Service\RegleStructureValidationService::class   => Service\RegleStructureValidationService::class,
             Processus\ValidationEnseignementProcessus::class => Processus\ValidationEnseignementProcessus::class,
             Processus\ValidationReferentielProcessus::class  => Processus\ValidationReferentielProcessus::class,
         ],

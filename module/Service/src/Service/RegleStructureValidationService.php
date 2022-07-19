@@ -2,6 +2,7 @@
 
 namespace Service\Service;
 
+use Application\Service\AbstractEntityService;
 use Service\Entity\Db\RegleStructureValidation;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Intervenant;

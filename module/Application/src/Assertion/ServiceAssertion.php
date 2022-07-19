@@ -15,7 +15,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Service\Service\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
+use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;

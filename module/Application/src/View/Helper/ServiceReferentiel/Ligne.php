@@ -115,7 +115,7 @@ class Ligne extends AbstractViewHelper
             $out .= '<td>' . $this->renderStructure($service->getStructure()) . "</td>\n";
         }
         if ($liste->getColumnVisibility('fonction')) {
-            $out .= '<td>' . $this->renderFonction($service->getFonction()) . "</td>\n";
+            $out .= '<td>' . $this->renderFonction($service->getFonctionReferentiel()) . "</td>\n";
         }
         if ($liste->getColumnVisibility('commentaires')) {
             $out .= '<td>' . $this->renderCommentaires($service->getCommentaires()) . "</td>\n";

@@ -53,7 +53,7 @@ $this->intervenant($intervenant)->renderTitle('Annulation de mises en paiement')
                             }
                         }
                     } else {
-                        echo $this->fonctionReferentiel($serviceReferentiel->getFonction())->renderLink();
+                        echo $this->fonctionReferentiel($serviceReferentiel->getFonctionReferentiel())->renderLink();
                     }
                     ?></td>
                 <td><?= $paiement->getCentreCout() ?></td>

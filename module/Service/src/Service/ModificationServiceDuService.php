@@ -2,6 +2,8 @@
 
 namespace Service\Service;
 
+use Application\Service\AbstractEntityService;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Structure;
@@ -14,7 +16,7 @@ use Application\Entity\Db\Structure;
  */
 class ModificationServiceDuService extends AbstractEntityService
 {
-    use Traits\IntervenantServiceAwareTrait;
+    use IntervenantServiceAwareTrait;
 
 
     /**

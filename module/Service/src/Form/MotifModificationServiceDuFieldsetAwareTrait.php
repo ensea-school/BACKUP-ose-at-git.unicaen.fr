@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Form\Intervenant\Traits;
-
-use Application\Form\Intervenant\MotifModificationServiceDuFieldset;
+namespace Service\Form;
 
 /**
  * Description of MotifModificationServiceDuFieldsetAwareTrait

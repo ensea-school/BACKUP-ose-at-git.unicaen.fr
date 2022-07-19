@@ -1,23 +1,20 @@
 <?php
 
-namespace Application\Controller;
+namespace Service\Controller;
 
+use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
 use Service\Entity\Db\ModificationServiceDu;
-use Application\Form\Intervenant\Traits\ModificationServiceDuFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ModificationServiceDuServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Doctrine\DBAL\Exception;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use RuntimeException;
+use Service\Form\ModificationServiceDuFormAwareTrait;
+use Service\Service\ModificationServiceDuServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 
-/**
- * Description of IntervenantController
- *
- */
 class ModificationServiceDuController extends AbstractController
 {
     use ContextServiceAwareTrait;
@@ -33,6 +30,8 @@ class ModificationServiceDuController extends AbstractController
             ModificationServiceDu::class,
         ]);
 
+
+        /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
@@ -75,7 +74,10 @@ class ModificationServiceDuController extends AbstractController
             $form->setData($data);
             if ($canEdit && $form->isValid()) {
                 try {
-                    $this->em()->flush();
+                    foreach ($intervenant->getModificationServiceDu() as $modificationServiceDu) {
+                        $this->em()->persist($modificationServiceDu);
+                        $this->em()->flush($modificationServiceDu);
+                    }
                     $this->updateTableauxBord($intervenant);
                     $this->flashMessenger()->addSuccessMessage(sprintf("Modifications de service dû de $intervenant enregistrées avec succès."));
                     $this->redirect()->toRoute(null, [], [], true);

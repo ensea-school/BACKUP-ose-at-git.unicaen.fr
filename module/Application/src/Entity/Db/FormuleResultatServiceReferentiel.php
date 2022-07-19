@@ -38,7 +38,7 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, Resou
      */
     public function getDefaultDomaineFonctionnel()
     {
-        return $this->getServiceReferentiel()->getFonction()->getDomaineFonctionnel();
+        return $this->getServiceReferentiel()->getFonctionReferentiel()->getDomaineFonctionnel();
     }
 
 

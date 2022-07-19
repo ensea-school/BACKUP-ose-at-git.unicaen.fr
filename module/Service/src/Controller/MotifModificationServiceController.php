@@ -1,15 +1,16 @@
 <?php
 
-namespace Application\Controller;
+namespace Service\Controller;
 
-use Application\Service\Traits\MotifModificationServiceServiceAwareTrait;
+use Application\Controller\AbstractController;
 use Service\Entity\Db\MotifModificationServiceDu;
-use Application\Form\MotifModificationService\Traits\MotifModificationServiceSaisieFormAwareTrait;
+use Service\Form\MotifModificationServiceSaisieFormAwareTrait;
+use Service\Service\MotifModificationServiceDuServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 class MotifModificationServiceController extends AbstractController
 {
-    use MotifModificationServiceServiceAwareTrait;
+    use MotifModificationServiceDuServiceAwareTrait;
     use MotifModificationServiceSaisieFormAwareTrait;
 
 
@@ -19,7 +20,7 @@ class MotifModificationServiceController extends AbstractController
             MotifModificationServiceDu::class,
         ]);
 
-        $motifModificationServices = $this->getServiceMotifModificationService()->getList();
+        $motifModificationServices = $this->getServiceMotifModificationServiceDu()->getList();
 
         return compact('motifModificationServices');
     }
@@ -35,14 +36,14 @@ class MotifModificationServiceController extends AbstractController
         $form = $this->getFormMotifModificationServiceMotifModificationServiceSaisie();
         if (empty($motifModificationServiceDu)) {
             $title                      = 'Création d\'un nouveau motif de modification de service dû';
-            $motifModificationServiceDu = $this->getServiceMotifModificationService()->newEntity();
+            $motifModificationServiceDu = $this->getServiceMotifModificationServiceDu()->newEntity();
         } else {
             $title = 'Édition d\'un motif de modification de service dû';
         }
 
         $form->bindRequestSave($motifModificationServiceDu, $this->getRequest(), function (MotifModificationServiceDu $fr) {
             try {
-                $this->getServiceMotifModificationService()->save($fr);
+                $this->getServiceMotifModificationServiceDu()->save($fr);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -59,7 +60,7 @@ class MotifModificationServiceController extends AbstractController
         $motifModificationServiceDu = $this->getEvent()->getParam('motifModificationServiceDu');
 
         try {
-            $this->getServiceMotifModificationService()->delete($motifModificationServiceDu);
+            $this->getServiceMotifModificationServiceDu()->delete($motifModificationServiceDu);
             $this->flashMessenger()->addSuccessMessage("Motif de Modification de Service supprimé avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());

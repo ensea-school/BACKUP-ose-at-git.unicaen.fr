@@ -501,7 +501,6 @@ return [
             Service\FonctionReferentielService::class    => Service\FonctionReferentielService::class,
             Service\PeriodeService::class                => Service\PeriodeService::class,
             Service\MotifNonPaiementService::class       => Service\MotifNonPaiementService::class,
-            Service\ModificationServiceDuService::class  => Service\ModificationServiceDuService::class,
             Service\CampagneSaisieService::class         => Service\CampagneSaisieService::class,
             Processus\ServiceProcessus::class            => Processus\ServiceProcessus::class,
             Processus\ServiceReferentielProcessus::class => Processus\ServiceReferentielProcessus::class,

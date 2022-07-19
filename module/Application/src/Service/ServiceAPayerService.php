@@ -80,10 +80,10 @@ class ServiceAPayerService extends AbstractService
             /* @var $a \Application\Entity\Db\FormuleResultatServiceReferentiel */
             /* @var $b \Application\Entity\Db\FormuleResultatServiceReferentiel */
             $aTriStr = $a->getStructure()->getLibelleCourt();
-            $aTriStr .= ' ' . $a->getServiceReferentiel()->getFonction()->getLibelleCourt();
+            $aTriStr .= ' ' . $a->getServiceReferentiel()->getFonctionReferentiel()->getLibelleCourt();
 
             $bTriStr = $b->getStructure()->getLibelleCourt();
-            $bTriStr .= ' ' . $b->getServiceReferentiel()->getFonction()->getLibelleCourt();
+            $bTriStr .= ' ' . $b->getServiceReferentiel()->getFonctionReferentiel()->getLibelleCourt();
 
             return $aTriStr > $bTriStr ? 1 : 0;
         });

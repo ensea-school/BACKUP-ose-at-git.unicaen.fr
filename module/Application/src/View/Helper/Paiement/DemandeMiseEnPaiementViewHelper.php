@@ -266,7 +266,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
             }
         } elseif ($serviceAPayer instanceof FormuleResultatServiceReferentiel) {
             $cartridgeItems[] = 'Référentiel';
-            $cartridgeItems[] = $this->getView()->fonctionReferentiel($serviceAPayer->getServiceReferentiel()->getFonction())->renderLink();
+            $cartridgeItems[] = $this->getView()->fonctionReferentiel($serviceAPayer->getServiceReferentiel()->getFonctionReferentiel())->renderLink();
         }
 
         return $this->getView()->cartridge($cartridgeItems, [

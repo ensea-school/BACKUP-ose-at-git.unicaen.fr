@@ -1,19 +1,13 @@
 <?php
 
-namespace Application\Form\Intervenant;
+namespace Service\Form;
 
 use Service\Entity\Db\ModificationServiceDu;
 use Application\Form\AbstractFieldset;
-use Application\Form\Intervenant\Traits\MotifModificationServiceDuFieldsetAwareTrait;
 use Application\Entity\Db\Intervenant;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\Hydrator\HydratorInterface;
 
-/**
- * Fieldset de saisie des modifications de service dû par un intervenant.
- *
- * @see    FonctionModificationServiceDuFieldset
- */
 class ModificationServiceDuFieldset extends AbstractFieldset
 {
     use MotifModificationServiceDuFieldsetAwareTrait;

@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Form\MotifModificationService\Traits;
-
-use Application\Form\MotifModificationService\MotifModificationServiceSaisieForm;
+namespace Service\Form;
 
 /**
  * Description of MotifModificationServiceSaisieFormAwareTrait

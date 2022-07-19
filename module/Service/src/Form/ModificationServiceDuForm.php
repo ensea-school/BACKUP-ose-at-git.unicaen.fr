@@ -1,9 +1,8 @@
 <?php
 
-namespace Application\Form\Intervenant;
+namespace Service\Form;
 
 use Application\Form\AbstractForm;
-use Application\Form\Intervenant\Traits\ModificationServiceDuFieldsetAwareTrait;
 
 /**
  * Formulaire de modification de service dû d'un intervenant.

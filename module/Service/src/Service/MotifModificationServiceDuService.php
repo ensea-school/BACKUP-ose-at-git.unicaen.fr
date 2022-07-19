@@ -2,29 +2,27 @@
 
 namespace Service\Service;
 
-/**
- * Description of ModificationServiceDu
- *
- * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
- */
+use Application\Service\AbstractEntityService;
+use Doctrine\ORM\QueryBuilder;
+use Service\Entity\Db\MotifModificationServiceDu;
+
 class MotifModificationServiceDuService extends AbstractEntityService
 {
-
     /**
-     * retourne la classe des entités
+     * retourne la classe des entit?s
      *
      * @return string
      * @throws RuntimeException
      */
     public function getEntityClass()
     {
-        return \Service\Entity\Db\MotifModificationServiceDu::class;
+        return MotifModificationServiceDu::class;
     }
 
 
 
     /**
-     * Retourne l'alias d'entité courante
+     * Retourne l'alias d'entit? courante
      *
      * @return string
      */
@@ -35,12 +33,20 @@ class MotifModificationServiceDuService extends AbstractEntityService
 
 
 
-    public function getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
-        $qb->addOrderBy($alias . '.libelle');
+        $qb->addOrderBy("$alias.libelle");
+
+        return $qb;
+    }
+
+
+
+    public function getList(QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery();
 
         return parent::getList($qb, $alias);
     }
-
 }

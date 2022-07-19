@@ -2,6 +2,7 @@
 
 namespace Service\Service;
 
+use Application\Service\AbstractEntityService;
 use Service\Entity\Db\CampagneSaisie;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\TypeVolumeHoraire;

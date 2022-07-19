@@ -5,6 +5,7 @@ namespace Service\Assertion;
 use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Acl\Role;
+use Service\Controller\ModificationServiceDuController;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
@@ -38,7 +39,7 @@ class ModificationServiceDuAssertion extends AbstractAssertion
 
     protected function assertController($controller, $action = null, $privilege = null)
     {
-        if ($controller == 'Service\Controller\ModificationServiceDu' && $action == 'saisir') {
+        if ($controller == ModificationServiceDuController::class && $action == 'saisir') {
             $intervenant = $this->getMvcEvent()->getParam('intervenant');
             if ($intervenant) {
                 return $this->assertIntervenant($intervenant);

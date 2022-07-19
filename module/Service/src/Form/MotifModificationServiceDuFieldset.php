@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Form\Intervenant;
+namespace Service\Form;
 
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
@@ -8,7 +8,8 @@ use Application\Form\AbstractFieldset;
 use Doctrine\Laminas\Hydrator\DoctrineObject;
 use Laminas\Validator\LessThan;
 use Service\Entity\Db\ModificationServiceDu;
-use Application\Entity\Db\MotifModificationService;
+use Service\Entity\Db\MotifModificationServiceDu;
+use Service\Service\MotifModificationServiceDuServiceAwareTrait;
 
 /**
  * Description of MotifModificationServiceDu
@@ -16,7 +17,7 @@ use Application\Entity\Db\MotifModificationService;
  */
 class MotifModificationServiceDuFieldset extends AbstractFieldset
 {
-    use \Application\Service\Traits\MotifModificationServiceDuServiceAwareTrait;
+    use MotifModificationServiceDuServiceAwareTrait;
 
     /**
      * This function is automatically called when creating element with factory. It
@@ -74,7 +75,7 @@ class MotifModificationServiceDuFieldset extends AbstractFieldset
             'type'       => 'Button',
             'name'       => 'remove',
             'options'    => [
-                'label'         => "<span class=\"fas fa-minus\"></i> Supprimer",
+                'label'         => "<i class=\"fas fa-minus\"></i> Supprimer",
                 'label_options' => ['disable_html_escape' => true],
             ],
             'attributes' => [
@@ -101,7 +102,7 @@ class MotifModificationServiceDuFieldset extends AbstractFieldset
             return $id == $item->getId();
         };
         $motif = current(array_filter($this->getMotifs(), $p));
-        /* @var $motif MotifModificationService */
+        /* @var $motif MotifModificationServiceDu */
         if ($motif) {
             $v = new LessThan(['max' => $max = (float)$motif->getPlafond(), 'inclusive' => true]);
             $v->setMessages([LessThan::NOT_LESS_INCLUSIVE => "Le plafond pour ce motif est de $max"]);

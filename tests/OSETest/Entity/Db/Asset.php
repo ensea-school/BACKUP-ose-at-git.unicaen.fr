@@ -209,7 +209,7 @@ class Asset
     {
         $e = new ServiceReferentiel();
         $e
-            ->setFonction($fonction)
+            ->setFonctionReferentiel($fonction)
             ->setHeures(rand(1, 50))
             ->setIntervenant($intervenant)
             ->setStructure($structure);

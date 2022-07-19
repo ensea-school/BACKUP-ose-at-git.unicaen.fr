@@ -190,7 +190,7 @@ class FormuleResultatService extends AbstractEntityService
                 $drId = (int)$vhd['SERVICE_REFERENTIEL_ID'];
                 if (!isset($data['r'][$drId])) {
                     $data['r'][$drId] = [
-                        'fonction'           => $this->getServiceServiceReferentiel()->get($drId)->getFonction(),
+                        'fonction'           => $this->getServiceServiceReferentiel()->get($drId)->getFonctionReferentiel(),
                         'structure'          => $this->getServiceStructure()->get($vhd['STRUCTURE_ID']),
                         'SERVICE_STATUTAIRE' => $vhd['SERVICE_STATUTAIRE'] == '1',
                         'heures'             => 0,

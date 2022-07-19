@@ -78,7 +78,7 @@ class ServiceReferentielService extends AbstractEntityService
 
         $this
             ->join($this->getServiceStructure(), $qb, 'structure', true, $alias)
-            ->join($this->getServiceFonctionReferentiel(), $qb, 'fonction', true, $alias)
+            ->join($this->getServiceFonctionReferentiel(), $qb, 'fonctionReferentiel', true, $alias)
             ->join($this->getServiceIntervenant(), $qb, 'intervenant', true, $alias);
 
         return [$qb, $alias];
@@ -248,7 +248,7 @@ class ServiceReferentielService extends AbstractEntityService
             if (!$entity->getId()) { // uniquement pour les nouveaux services!!
                 $serviceAllreadyExists = $this->getBy(
                     $entity->getIntervenant(),
-                    $entity->getFonction(),
+                    $entity->getFonctionReferentiel(),
                     $entity->getStructure(),
                     $entity->getCommentaires()
                 );
@@ -354,7 +354,7 @@ class ServiceReferentielService extends AbstractEntityService
             if (!$service) {
                 $service = $this->newEntity();
                 $service->setIntervenant($intervenant);
-                $service->setFonction($o['fonction']);
+                $service->setFonctionReferentiel($o['fonction']);
                 $service->setStructure($o['structure']);
                 $service->setCommentaires($o['commentaires']);
                 $service->setTypeVolumeHoraire($o['type-volume-horaire']);
@@ -385,7 +385,7 @@ class ServiceReferentielService extends AbstractEntityService
 
         $sVolumeHoraireReferentiel = $this->getServiceVolumeHoraireReferentiel();
 
-        $qb = $this->select(['id', 'fonction', 'structure', 'commentaires']);
+        $qb = $this->select(['id', 'fonctionReferentiel', 'structure', 'commentaires']);
         //@formatter:off
         $this->join(FonctionReferentielService::class,   $qb, 'fonctionReferentiel',     true);
         $this->Join(StructureService::class,             $qb, 'structure',               true);
@@ -407,19 +407,19 @@ class ServiceReferentielService extends AbstractEntityService
 
             /* @var $service \Referentiel\Entity\Db\ServiceReferentiel */
 
-            $ok = $service->getFonction()->estNonHistorise()
+            $ok = $service->getFonctionReferentiel()->estNonHistorise()
                 && $service->getStructure()->estNonHistorise();
 
             if ($ok) {
                 $o = [
                     'type-volume-horaire' => $tvhPrevu,
-                    'fonction'            => $service->getFonction(),
+                    'fonctionReferentiel' => $service->getFonctionReferentiel(),
                     'structure'           => $service->getStructure(),
                     'commentaires'        => $service->getCommentaires(),
                     'heures'              => $service->getVolumeHoraireReferentielListe()->getHeures(),
                     'service'             => $this->getBy(
                         $intervenant,
-                        $service->getFonction(),
+                        $service->getFonctionReferentiel(),
                         $service->getStructure()
                     ),
                 ];

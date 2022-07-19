@@ -1,16 +1,12 @@
 <?php
 
-namespace Application\Form\MotifModificationService;
+namespace Service\Form;
 
 use Application\Form\AbstractForm;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
+use Service\Entity\Db\MotifModificationServiceDu;
 
-/**
- * Description of MotifModificationServiceSaisieForm
- *
- * @author ZVENIGOROSKY Alexandre <alexandre.zvenigorosky@unicaen.fr>
- */
 class MotifModificationServiceSaisieForm extends AbstractForm
 {
 
@@ -109,8 +105,8 @@ class MotifModificationServiceHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                                         $data
-     * @param \Service\Entity\Db\MotifModificationServiceDu $object
+     * @param array                      $data
+     * @param MotifModificationServiceDu $object
      *
      * @return object
      */
@@ -129,7 +125,7 @@ class MotifModificationServiceHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Service\Entity\Db\MotifModificationServiceDu $object
+     * @param MotifModificationServiceDu $object
      *
      * @return array
      */

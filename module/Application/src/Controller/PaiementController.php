@@ -279,7 +279,7 @@ class PaiementController extends AbstractController
               JOIN frsr.serviceReferentiel sr
               LEFT JOIN mep.centreCout cc
               LEFT JOIN mep.domaineFonctionnel df
-              LEFT JOIN sr.fonction f
+              LEFT JOIN sr.fonctionReferentiel f
               LEFT JOIN sr.structure str
             WHERE
               fr.intervenant = :intervenant

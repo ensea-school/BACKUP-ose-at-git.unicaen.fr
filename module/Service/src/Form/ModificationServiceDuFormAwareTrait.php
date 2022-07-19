@@ -1,8 +1,7 @@
 <?php
 
-namespace Application\Form\Intervenant\Traits;
+namespace Service\Form;
 
-use Application\Form\Intervenant\ModificationServiceDuForm;
 
 /**
  * Description of ModificationServiceDuFormAwareTrait

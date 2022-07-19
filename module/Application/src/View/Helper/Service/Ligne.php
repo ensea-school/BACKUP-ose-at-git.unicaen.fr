@@ -5,7 +5,7 @@ namespace Application\View\Helper\Service;
 use Application\Provider\Privilege\Privileges;
 use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\Db\Service;
-use Application\Entity\Db\Traits\ServiceAwareTrait;
+use Enseignement\Entity\Db\ServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 
 /**

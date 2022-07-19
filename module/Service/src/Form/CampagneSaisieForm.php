@@ -1,8 +1,9 @@
 <?php
 
-namespace Application\Form;
+namespace Service\Form;
 
 use Application\Constants;
+use Application\Form\AbstractForm;
 use Service\Entity\Db\CampagneSaisie;
 use Laminas\Hydrator\HydratorInterface;
 
@@ -88,6 +89,7 @@ class CampagneSaisieForm extends AbstractForm
     }
 
 
+
     /**
      * Should return an array specification compatible with
      * {@link Laminas\InputFilter\Factory::createInputFilter()}.
@@ -115,11 +117,14 @@ class CampagneSaisieForm extends AbstractForm
 }
 
 
+
+
+
 class CampagneSaisieFormHydrator implements HydratorInterface
 {
 
     /**
-     * @param array $data
+     * @param array          $data
      * @param CampagneSaisie $object
      *
      * @return CampagneSaisie
@@ -133,6 +138,7 @@ class CampagneSaisieFormHydrator implements HydratorInterface
 
         return $object;
     }
+
 
 
     /**

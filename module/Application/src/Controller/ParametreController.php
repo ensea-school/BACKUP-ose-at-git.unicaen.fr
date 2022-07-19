@@ -4,15 +4,11 @@ namespace Application\Controller;
 
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
-use Application\Form\Traits\CampagneSaisieFormAwareTrait;
 use Application\Form\Traits\ParametresFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\EtablissementServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Intervenant\Service\TypeIntervenantServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 
 
@@ -27,10 +23,6 @@ class ParametreController extends AbstractController
     use ParametresServiceAwareTrait;
     use EtablissementServiceAwareTrait;
     use AnneeServiceAwareTrait;
-    use TypeIntervenantServiceAwareTrait;
-    use TypeVolumeHoraireServiceAwareTrait;
-    use CampagneSaisieServiceAwareTrait;
-    use CampagneSaisieFormAwareTrait;
 
 
     public function indexAction()
@@ -61,49 +53,6 @@ class ParametreController extends AbstractController
 
             return compact('annees', 'canEdit');
         }
-    }
-
-
-
-    public function campagnesSaisieAction()
-    {
-        $typeIntervenant   = $this->context()->typeIntervenantFromPost();
-        $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromPost();
-
-        $typesIntervenants    = $this->getServiceTypeIntervenant()->getList();
-        $typesVolumesHoraires = $this->getServiceTypeVolumeHoraire()->getList();
-
-        $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_CAMPAGNES_SAISIE_EDITION));
-
-        foreach ($typesIntervenants as $ti) {
-            foreach ($typesVolumesHoraires as $tvh) {
-                $campagne = $this->getServiceCampagneSaisie()->getBy($ti, $tvh);
-                $form     = $this->getFormCampagneSaisie();
-
-                if (!$canEdit) {
-                    foreach ($form->getElements() as $element) {
-                        $element->setAttribute('disabled', true);
-                    }
-                }
-
-                $form->bind($campagne);
-                $forms[$ti->getId()][$tvh->getId()] = $form;
-
-                if ($canEdit && $ti->getId() == $typeIntervenant && $tvh == $typeVolumeHoraire) {
-                    $form->requestSave($this->getRequest(), function () use ($campagne) {
-                        if (!$campagne->getDateDebut() && !$campagne->getDateFin() && !$campagne->getMessageIntervenant() && !$campagne->getMessageAutres()) {
-                            $this->getServiceCampagneSaisie()->delete($campagne);
-                        } elseif (!$campagne->getMessageIntervenant() && ($campagne->getDateDebut() || $campagne->getDateFin() || $campagne->getMessageAutres())) {
-                            $this->flashMessenger()->addErrorMessage('Il est obligatoire de saisir un message à destination des intervenants');
-                        } else {
-                            $this->getServiceCampagneSaisie()->save($campagne);
-                        }
-                    });
-                }
-            }
-        }
-
-        return compact('typesIntervenants', 'typesVolumesHoraires', 'canEdit', 'forms');
     }
 
 

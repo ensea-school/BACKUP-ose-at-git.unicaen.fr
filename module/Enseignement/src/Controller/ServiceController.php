@@ -27,7 +27,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielServiceAwareTrait;

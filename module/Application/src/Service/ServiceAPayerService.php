@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 
 /**

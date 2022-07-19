@@ -29,7 +29,7 @@ use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;

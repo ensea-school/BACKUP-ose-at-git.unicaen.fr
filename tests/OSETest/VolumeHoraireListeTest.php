@@ -15,7 +15,7 @@ use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use DoctrineORMModule\Proxy\__CG__\UnicaenImport\Entity\Db\Source;
 
 class VolumeHoraireListeTest

@@ -105,8 +105,6 @@ return [
             Service\VolumeHoraireService::class            => Service\VolumeHoraireService::class,
             Service\VolumeHoraireEnsService::class         => Service\VolumeHoraireEnsService::class,
             Service\VolumeHoraireReferentielService::class => Service\VolumeHoraireReferentielService::class,
-            Service\TypeVolumeHoraireService::class        => Service\TypeVolumeHoraireService::class,
-            Service\EtatVolumeHoraireService::class        => Service\EtatVolumeHoraireService::class,
         ],
     ],
     'view_helpers'    => [

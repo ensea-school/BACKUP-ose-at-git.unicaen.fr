@@ -11,7 +11,7 @@ use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Plafond\Entity\Db\Plafond;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Plafond\Entity\Db\PlafondEtat;

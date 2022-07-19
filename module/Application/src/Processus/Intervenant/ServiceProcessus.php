@@ -7,7 +7,7 @@ use Application\Entity\Db\Intervenant;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
 class ServiceProcessus

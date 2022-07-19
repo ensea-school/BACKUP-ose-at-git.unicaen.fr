@@ -19,7 +19,7 @@ use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;

@@ -10,7 +10,7 @@ use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Intervenant;

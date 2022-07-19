@@ -12,7 +12,7 @@ use Enseignement\Hydrator\ListeFilterHydrator;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;

@@ -3,7 +3,7 @@
 namespace Service\Hydrator;
 
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 
 class RegleStructureValidationHydrator implements HydratorInterface

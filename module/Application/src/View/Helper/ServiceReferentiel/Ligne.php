@@ -4,7 +4,7 @@ namespace Application\View\Helper\ServiceReferentiel;
 
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;

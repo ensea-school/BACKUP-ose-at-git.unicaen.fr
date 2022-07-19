@@ -3,7 +3,7 @@
 namespace Plafond\Service;
 
 
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Indicateur\Entity\Db\Indicateur;
 use Plafond\Entity\Db\PlafondPerimetre;
 

@@ -16,7 +16,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Plafond\Form\PlafondConfigFormAwareTrait;
 use Plafond\Form\PlafondFormAwareTrait;
 use Plafond\Service\PlafondServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 

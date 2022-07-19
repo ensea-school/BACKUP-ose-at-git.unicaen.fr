@@ -16,7 +16,7 @@ use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\TypeIntervention;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait as ServiceTypeVolumeHoraireAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait as ServiceTypeVolumeHoraireAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une liste de services

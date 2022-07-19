@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Form\Traits;
-
-use Application\Form\CampagneSaisieForm;
+namespace Service\Form;
 
 /**
  * Description of CampagneSaisieFormAwareTrait

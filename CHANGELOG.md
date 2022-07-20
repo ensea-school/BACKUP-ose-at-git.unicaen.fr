@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.0](#ose-19-12072022)
+[OSE 19.0](#ose-190-12072022)
 
 
 # OSE 20 (à venir)
@@ -11,9 +11,19 @@
 
 
 
+# OSE 19.1 (à venir)
+
+## nouveautés
+
+* formule de calcul de Picardie
+
+## Corrections de bugs
+
+* La synchronisation via la ligne de commande ne fonctionnait plus. C'est rétabli
 
 
-# OSE 19 (12/07/2022)
+
+# OSE 19.0 (12/07/2022)
 
 ## Nouveautés
 

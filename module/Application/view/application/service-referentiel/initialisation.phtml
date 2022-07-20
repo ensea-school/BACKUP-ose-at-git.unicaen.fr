@@ -1,9 +1,0 @@
-<?php
-
-/* @var $errors array */
-
-if (! empty($errors)){
-    echo $this->messenger()->setMessages([\UnicaenApp\View\Helper\Messenger::ERROR => $errors]);
-}else{
-    echo 'OK';
-}

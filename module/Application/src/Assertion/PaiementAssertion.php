@@ -14,7 +14,7 @@ use Application\Acl\Role;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
+use Referentiel\Service\ServiceReferentielServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 /**

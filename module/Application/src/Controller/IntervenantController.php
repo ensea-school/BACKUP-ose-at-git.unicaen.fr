@@ -12,7 +12,7 @@ use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Application\Processus\Traits\ServiceProcessusAwareTrait;
-use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
+use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Service\Service\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;

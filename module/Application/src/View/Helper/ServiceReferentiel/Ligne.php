@@ -7,7 +7,7 @@ use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Referentiel\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;
+use Referentiel\Entity\Db\ServiceReferentielAwareTrait;
 
 
 /**

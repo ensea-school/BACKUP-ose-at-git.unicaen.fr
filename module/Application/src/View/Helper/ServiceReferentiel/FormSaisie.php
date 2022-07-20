@@ -4,13 +4,13 @@ namespace Application\View\Helper\ServiceReferentiel;
 
 use Service\Entity\Db\TypeVolumeHoraire;
 use Referentiel\Entity\VolumeHoraireReferentielListe;
-use Application\Form\ServiceReferentiel\SaisieFieldset;
+use Referentiel\Form\SaisieFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use UnicaenApp\Util;
-use Application\Form\ServiceReferentiel\Saisie as SaisieForm;
+use Referentiel\Form\Saisie as SaisieForm;
 
 /**
  * Description of SaisieForm

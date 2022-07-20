@@ -31,7 +31,7 @@ namespace Application\View\Renderer;
  * @method \Application\View\Helper\Paiement\DemandeMiseEnPaiementViewHelper demandeMiseEnPaiement(array $servicesAPayer, $changeIndex = null)
  * @method \Application\View\Helper\Paiement\TypeHeuresViewHelper typeHeures(?\Application\Entity\Db\TypeHeures $typeHeures = null)
  * @method \Application\View\Helper\ServiceReferentiel\FonctionReferentielViewHelper fonctionReferentiel(?\Referentiel\Entity\Db\FonctionReferentiel $fonctionReferentiel = null)
- * @method \Application\View\Helper\ServiceReferentiel\FormSaisie formServiceReferentielSaisie(?\Application\Form\ServiceReferentiel\Saisie $form = null)
+ * @method \Application\View\Helper\ServiceReferentiel\FormSaisie formServiceReferentielSaisie(?\Referentiel\Form\Saisie $form = null)
  * @method \Application\View\Helper\ServiceReferentiel\Ligne serviceReferentielLigne(\Application\View\Helper\ServiceReferentiel\Liste $liste, \Referentiel\Entity\Db\ServiceReferentiel $service)
  * @method \Application\View\Helper\ServiceReferentiel\Liste serviceReferentielListe($services)
  * @method \Application\View\Helper\Service\Ligne serviceLigne(\Application\View\Helper\Service\Liste $liste, \Enseignement\Entity\Db\Service $service)

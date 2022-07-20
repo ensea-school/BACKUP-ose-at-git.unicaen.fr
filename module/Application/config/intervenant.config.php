@@ -172,57 +172,6 @@ return [
                             ],
                         ],
                     ],
-                    'services-prevus'     => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/services-prevus',
-                            'defaults' => [
-                                'controller' => 'Application\Controller\Intervenant',
-                                'action'     => 'services-prevus',
-                            ],
-                        ],
-                    ],
-                    'referentiel'         => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/referentiel',
-                            'defaults' => [
-                                'controller'               => 'Application\Controller\ServiceReferentiel',
-                                'action'                   => 'index',
-                                'type-volume-horaire-code' => 'PREVU',
-                            ],
-                        ],
-                    ],
-                    'services-realises'   => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/services-realises',
-                            'defaults' => [
-                                'controller' => 'Application\Controller\Intervenant',
-                                'action'     => 'services-realises',
-                            ],
-                        ],
-                    ],
-                    'referentiel-realise' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/referentiel',
-                            'defaults' => [
-                                'controller'               => 'Application\Controller\ServiceReferentiel',
-                                'action'                   => 'index',
-                                'type-volume-horaire-code' => 'REALISE',
-                            ],
-                        ],
-                    ],
-                    'cloturer'            => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/cloturer',
-                            'defaults' => [
-                                'action' => 'cloturer',
-                            ],
-                        ],
-                    ],
                     'mise-en-paiement'    => [
                         'type'          => 'Segment',
                         'may_terminate' => false,
@@ -287,7 +236,7 @@ return [
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'index'),
                         'order'    => 1,
                         'pages'    => [
-                            'rechercher'        => [
+                            'rechercher'       => [
                                 'label'        => " Rechercher",
                                 'title'        => "Rechercher un intervenant",
                                 'route'        => 'intervenant/rechercher',
@@ -299,7 +248,7 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'rechercher'),
                                 'order'        => 1,
                             ],
-                            'voir'              => [
+                            'voir'             => [
                                 'label'        => "Fiche individuelle",
                                 'title'        => "Consultation de la fiche de l'intervenant {id}",
                                 'route'        => 'intervenant/voir',
@@ -310,7 +259,7 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'voir'),
                                 'order'        => 2,
                             ],
-                            'voir-heures-comp'  => [
+                            'voir-heures-comp' => [
                                 'label'        => "Calcul HETD",
                                 'title'        => "Calcul des heures équivalent TD {id}",
                                 'route'        => 'intervenant/voir-heures-comp',
@@ -322,20 +271,7 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'voir-heures-comp'),
                                 'order'        => 3,
                             ],
-                            'services-prevus'   => [
-                                'label'               => "Enseignements prévisionnels",
-                                'title'               => "Enseignements prévisionnels de l'intervenant",
-                                'route'               => 'intervenant/services-prevus',
-                                'paramsInject'        => [
-                                    'intervenant',
-                                ],
-                                'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE,
-                                'withtarget'          => true,
-                                'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services-prevus'),
-                                'visible'             => Assertion\ServiceAssertion::class,
-                                'order'               => 6,
-                            ],
-                            'contrat'           => [
+                            'contrat'          => [
                                 'label'        => "Contrat / avenant",
                                 'title'        => "Contrat et avenants de l'intervenant",
                                 'route'        => 'intervenant/contrat',
@@ -345,19 +281,6 @@ return [
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Contrat', 'index'),
                                 'order'        => 12,
-                            ],
-                            'services-realises' => [
-                                'label'               => "Enseignements réalisés",
-                                'title'               => "Constatation des enseignements réalisés",
-                                'route'               => 'intervenant/services-realises',
-                                'paramsInject'        => [
-                                    'intervenant',
-                                ],
-                                'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE_REALISE,
-                                'withtarget'          => true,
-                                'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services-realises'),
-                                'visible'             => Assertion\ServiceAssertion::class,
-                                'order'               => 13,
                             ],
                         ],
                     ],
@@ -381,24 +304,6 @@ return [
                     'privileges' => [
                         Privileges::INTERVENANT_FICHE,
                     ],
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['services-prevus'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
-                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
-                    ],
-                    'assertion'  => Assertion\ServiceAssertion::class,
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['services-realises'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
-                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
-                    ],
-                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
@@ -427,15 +332,6 @@ return [
                     'privileges' => [
                         Privileges::INTERVENANT_CALCUL_HETD,
                     ],
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['cloturer'],
-                    'privileges' => [
-                        Privileges::CLOTURE_CLOTURE,
-                        Privileges::CLOTURE_REOUVERTURE,
-                    ],
-                    'assertion'  => Assertion\IntervenantAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',

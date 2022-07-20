@@ -102,9 +102,8 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\VolumeHoraireService::class            => Service\VolumeHoraireService::class,
-            Service\VolumeHoraireEnsService::class         => Service\VolumeHoraireEnsService::class,
-            Service\VolumeHoraireReferentielService::class => Service\VolumeHoraireReferentielService::class,
+            Service\VolumeHoraireService::class    => Service\VolumeHoraireService::class,
+            Service\VolumeHoraireEnsService::class => Service\VolumeHoraireEnsService::class,
         ],
     ],
     'view_helpers'    => [

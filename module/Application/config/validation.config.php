@@ -16,69 +16,12 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'service'     => [
+                            'service' => [
                                 'type'          => 'Literal',
                                 'options'       => [
                                     'route'    => '/service',
                                     'defaults' => [
                                         'controller' => 'Application\Controller\Service',
-                                    ],
-                                ],
-                                'may_terminate' => false,
-                                'child_routes'  => [
-                                    'prevu'     => [
-                                        'type'    => 'Literal',
-                                        'options' => [
-                                            'route'    => '/prevu',
-                                            'defaults' => [
-                                                'action'                   => 'validation',
-                                                'type-volume-horaire-code' => 'PREVU',
-                                            ],
-                                        ],
-                                    ],
-                                    'realise'   => [
-                                        'type'    => 'Literal',
-                                        'options' => [
-                                            'route'    => '/realise',
-                                            'defaults' => [
-                                                'action'                   => 'validation',
-                                                'type-volume-horaire-code' => 'REALISE',
-                                            ],
-                                        ],
-                                    ],
-                                    'valider'   => [
-                                        'type'    => 'Segment',
-                                        'options' => [
-                                            'route'       => '/valider/:typeVolumeHoraire/:structure',
-                                            'constraints' => [
-                                                'typeVolumeHoraire' => '[0-9]*',
-                                                'structure'         => '[0-9]*',
-                                            ],
-                                            'defaults'    => [
-                                                'action' => 'valider',
-                                            ],
-                                        ],
-                                    ],
-                                    'devalider' => [
-                                        'type'    => 'Segment',
-                                        'options' => [
-                                            'route'       => '/devalider/:validation',
-                                            'constraints' => [
-                                                'validation' => '[0-9]*',
-                                            ],
-                                            'defaults'    => [
-                                                'action' => 'devalider',
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                            'referentiel' => [
-                                'type'          => 'Literal',
-                                'options'       => [
-                                    'route'    => '/referentiel',
-                                    'defaults' => [
-                                        'controller' => 'Application\Controller\ServiceReferentiel',
                                     ],
                                 ],
                                 'may_terminate' => false,
@@ -143,7 +86,7 @@ return [
                 'pages' => [
                     'intervenant' => [
                         'pages' => [
-                            'validation-service-prevu'       => [
+                            'validation-service-prevu'   => [
                                 'label'               => "Validation des enseignements prévisionnels",
                                 'title'               => "Validation des enseignements prévisionnels de l'intervenant",
                                 'route'               => 'intervenant/validation/service/prevu',
@@ -155,19 +98,7 @@ return [
                                 'visible'             => Assertion\ServiceAssertion::class,
                                 'order'               => 8,
                             ],
-                            'validation-referentiel-prevu'   => [
-                                'label'               => "Validation du référentiel prévisionnel",
-                                'title'               => "Validation du référentiel prévisionnel de l'intervenant",
-                                'route'               => 'intervenant/validation/referentiel/prevu',
-                                'paramsInject'        => [
-                                    'intervenant',
-                                ],
-                                'workflow-etape-code' => WfEtape::CODE_REFERENTIEL_VALIDATION,
-                                'withtarget'          => true,
-                                'visible'             => Assertion\ServiceAssertion::class,
-                                'order'               => 9,
-                            ],
-                            'validation-service-realise'     => [
+                            'validation-service-realise' => [
                                 'label'               => "Validation des enseignements réalisés",
                                 'title'               => "Validation des enseignements réalisés de l'intervenant",
                                 'route'               => 'intervenant/validation/service/realise',
@@ -178,18 +109,6 @@ return [
                                 'withtarget'          => true,
                                 'visible'             => Assertion\ServiceAssertion::class,
                                 'order'               => 14,
-                            ],
-                            'validation-referentiel-realise' => [
-                                'label'               => "Validation du référentiel réalisé",
-                                'title'               => "Validation du référentiel réalisé de l'intervenant",
-                                'route'               => 'intervenant/validation/referentiel/realise',
-                                'paramsInject'        => [
-                                    'intervenant',
-                                ],
-                                'workflow-etape-code' => WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE,
-                                'withtarget'          => true,
-                                'visible'             => Assertion\ServiceAssertion::class,
-                                'order'               => 15,
                             ],
                         ],
                     ],
@@ -203,7 +122,6 @@ return [
             Service\TypeValidationService::class             => Service\TypeValidationService::class,
             Service\ValidationService::class                 => Service\ValidationService::class,
             Processus\ValidationEnseignementProcessus::class => Processus\ValidationEnseignementProcessus::class,
-            Processus\ValidationReferentielProcessus::class  => Processus\ValidationReferentielProcessus::class,
         ],
     ],
 ];

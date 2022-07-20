@@ -129,7 +129,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class => [
                 /* Dossier */
                 [
@@ -172,12 +172,7 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'PieceJointe' => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [

@@ -366,7 +366,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards' => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Intervenant',
@@ -449,12 +449,8 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'Intervenant' => [],
-            ],
-        ],
-        'rule_providers'     => [
+        
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [

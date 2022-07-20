@@ -13,6 +13,20 @@ use UnicaenAuth\Guard\PrivilegeController;
 
 return [
     'routes' => [
+        'service' => [
+            'child_routes' => [
+                'horodatage' => [
+                    'controller'  => ServiceController::class,
+                    'route'       => '/horodatage/:intervenant/:typeVolumeHoraire/:referentiel',
+                    'action'      => 'horodatage',
+                    'constraints' => [
+                        'typeVolumeHoraire' => '[0-9]*',
+                        'referentiel'       => '[0-9]*',
+                    ],
+                ],
+            ],
+        ],
+
         'parametres' => [
             'child_routes' => [
                 'campagnes-saisie' => [
@@ -76,10 +90,6 @@ return [
         ],
     ],
 
-    'resources' => [
-
-    ],
-
     'rules' => [
 
     ],
@@ -105,6 +115,17 @@ return [
             'privileges' => [
                 Privileges::PARAMETRES_REGLES_STRUCTURE_VALIDATION_EDITION,
             ],
+        ],
+        [
+            'controller' => ServiceController::class,
+            'action'     => ['horodatage'],
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                Privileges::REFERENTIEL_PREVU_EDITION,
+                Privileges::REFERENTIEL_REALISE_EDITION,
+            ],
+            //'assertion'  => Assertion\ServiceAssertion::class,
         ],
     ],
 

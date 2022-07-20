@@ -198,14 +198,6 @@ return [
         ],
     ],
 
-    'bjyauthorize' => [
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'Validation' => [],
-            ],
-        ],
-    ],
-
     'service_manager' => [
         'invokables' => [
             Service\TypeValidationService::class             => Service\TypeValidationService::class,

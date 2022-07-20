@@ -325,7 +325,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class => [
                 /* Global */
                 [
@@ -428,16 +428,7 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'ElementPedagogique' => [],
-                'Etape'              => [],
-                'CentreCoutEp'       => [],
-                'ElementModulateur'  => [],
-                'VolumeHoraireEns'   => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [

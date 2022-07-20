@@ -8,18 +8,8 @@
  * @var $viewFile   string
  */
 
-/** @var \Application\Service\ContextService $c */
-$c = $container->get(\Application\Service\ContextService::class);
+$c = $container->get('config');
 
-$roleId = $c->getSelectedIdentityRole()->getRoleId();
-var_dump($roleId);
+$d = $c['bjyauthorize']['resource_providers']['BjyAuthorize\Provider\Resource\Config'];
 
-
-$p = $c->getIntervenant()->getStatut()->getPrivileges();
-foreach ($p as $priv => $ok) {
-    if (!$ok) unset($p[$priv]);
-}
-
-//$p = $r->getPrivileges();
-
-var_dump(array_keys($p));
+var_dump($d);

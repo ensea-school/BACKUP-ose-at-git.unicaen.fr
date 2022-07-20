@@ -15,10 +15,6 @@ return [
 
     ],
 
-    'resources' => [
-
-    ],
-
     'rules' => [
 
     ],

@@ -144,6 +144,7 @@ $config = [
             \BjyAuthorize\Provider\Resource\Config::class => [
                 'Information' => [],
             ],
+            Provider\Resource\ResourceProvider::class     => [],
         ],
         'rule_providers'     => [
             PrivilegeRuleProvider::class => [
@@ -178,6 +179,7 @@ $config = [
         'factories'  => [
             \Laminas\Navigation\Navigation::class         => Navigation\NavigationFactory::class,
             Provider\Role\RoleProvider::class             => Provider\Role\RoleProviderFactory::class,
+            Provider\Resource\ResourceProvider::class     => Provider\Resource\ResourceProviderFactory::class,
             Provider\Identity\IdentityProvider::class     => Provider\Identity\IdentityProviderFactory::class,
             Service\ContextService::class                 => Service\Factory\ContextServiceFactory::class,
             'MouchardCompleterContext'                    => MouchardCompleterContextFactory::class,

@@ -56,19 +56,6 @@ return [
                             ],
                         ],
                     ],
-                    'horodatage'               => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/horodatage/:intervenant/:typeVolumeHoraire/:referentiel',
-                            'constraints' => [
-                                'typeVolumeHoraire' => '[0-9]*',
-                                'referentiel'       => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'horodatage',
-                            ],
-                        ],
-                    ],
                     'modifier'                 => [
                         'type'    => 'Segment',
                         'options' => [
@@ -259,7 +246,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class      => [
                 /* Enseignements */
                 [
@@ -273,7 +260,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Service',
-                    'action'     => ['saisie', 'suppression', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'horodatage'],
+                    'action'     => ['saisie', 'suppression', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation'],
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_PREVU_EDITION,
                         Privileges::ENSEIGNEMENT_REALISE_EDITION,
@@ -405,15 +392,7 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'Service'                  => [],
-                'ServiceReferentiel'       => [],
-                'VolumeHoraire'            => [],
-                'VolumeHoraireReferentiel' => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     /* Enseignements */

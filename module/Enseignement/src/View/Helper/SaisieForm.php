@@ -11,7 +11,7 @@ use \Application\Service\Traits\ContextServiceAwareTrait;
 use \Application\Service\Traits\PeriodeServiceAwareTrait;
 use \Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use \Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use \Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use \Service\Service\EtatVolumeHoraireServiceAwareTrait;
 
 
 /**

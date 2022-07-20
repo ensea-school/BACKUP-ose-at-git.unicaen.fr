@@ -449,18 +449,16 @@ return [
                 ],
             ],
         ],
-        
+
         'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
                         'privileges' => [
-                            Privileges::CLOTURE_CLOTURE,
-                            Privileges::CLOTURE_REOUVERTURE,
                             Privileges::INTERVENANT_EDITION,
                             Privileges::INTERVENANT_EDITION_AVANCEE,
                         ],
-                        'resources'  => ['Validation', 'Intervenant'],
+                        'resources'  => ['Intervenant'],
                         'assertion'  => Assertion\IntervenantAssertion::class,
                     ],
                 ],

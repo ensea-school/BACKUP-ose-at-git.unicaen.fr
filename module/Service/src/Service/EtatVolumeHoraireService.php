@@ -2,6 +2,7 @@
 
 namespace Service\Service;
 
+use Application\Service\AbstractEntityService;
 use Doctrine\ORM\QueryBuilder;
 use Service\Entity\Db\EtatVolumeHoraire;
 

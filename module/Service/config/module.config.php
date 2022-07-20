@@ -3,6 +3,7 @@
 namespace Service;
 
 use Application\Provider\Privilege\Privileges;
+use Assert\Assertion;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\CampagneSaisieController;
 use Service\Controller\CampagneSaisieControllerFactory;
@@ -91,7 +92,14 @@ return [
     ],
 
     'rules' => [
-
+        [
+            'privileges' => [
+                Privileges::CLOTURE_CLOTURE,
+                Privileges::CLOTURE_REOUVERTURE,
+            ],
+            'resources'  => ['Validation', 'Intervenant'],
+            //'assertion'  => Assertion\ClotureAssertion::class,
+        ],
     ],
 
     'guards' => [
@@ -140,6 +148,7 @@ return [
         Service\TypeVolumeHoraireService::class        => InvokableFactory::class,
         Service\CampagneSaisieService::class           => InvokableFactory::class,
         Service\RegleStructureValidationService::class => InvokableFactory::class,
+        Assertion\ClotureAssertion::class              => Assertion\ClotureAssertionFactory::class,
     ],
 
 

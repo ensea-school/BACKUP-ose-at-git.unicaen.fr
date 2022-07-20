@@ -4,7 +4,7 @@ namespace Application\Processus;
 
 use Application\Entity\Db\Intervenant;
 use Service\Entity\Recherche;
-use Application\Service\EtatVolumeHoraireService;
+use Service\Service\EtatVolumeHoraireService;
 use Application\Service\IntervenantService;
 use Application\Service\MotifNonPaiementService;
 use Application\Service\Traits\ContextServiceAwareTrait;

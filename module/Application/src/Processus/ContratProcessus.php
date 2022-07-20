@@ -13,7 +13,7 @@ use Enseignement\Entity\Db\VolumeHoraire;
 use Application\ORM\Event\Listeners\HistoriqueListenerAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ContratServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\TypeContratServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;

@@ -3,7 +3,7 @@
 namespace Application\Form\Intervenant;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Laminas\Form\Element\Select;
 

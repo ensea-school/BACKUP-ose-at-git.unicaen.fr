@@ -4,7 +4,7 @@ namespace Application\Processus;
 
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Service\Entity\Recherche;
-use Application\Service\EtatVolumeHoraireService;
+use Service\Service\EtatVolumeHoraireService;
 use Application\Service\IntervenantService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielServiceAwareTrait;

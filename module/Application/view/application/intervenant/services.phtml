@@ -42,7 +42,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 echo $this->plafonds($intervenant, $typeVolumeHoraire);
 
 $bottom = false;
-if ($cloture) echo $this->partial('application/intervenant/partial/cloture', compact('cloture', 'role', 'bottom'));
+if ($cloture) echo $this->partial('service/partial/cloture', compact('cloture', 'role', 'bottom'));
 
 /* Services et horodatage */
 if ($services !== false) {
@@ -54,7 +54,7 @@ if ($services !== false) {
     }
     echo $serviceListe->render();
 
-    echo $this->partial('application/intervenant/partial/horodatage', [
+    echo $this->partial('service/partial/horodatage', [
         'intervenant'       => $intervenant,
         'typeVolumeHoraire' => $typeVolumeHoraire,
         'referentiel'       => false,
@@ -71,7 +71,7 @@ if ($servicesReferentiel !== false) {
     echo '<h1>Référentiel</h1><hr />';
     echo $serviceReferentielListe->render();
 
-    echo $this->partial('application/intervenant/partial/horodatage', [
+    echo $this->partial('service/partial/horodatage', [
         'intervenant'       => $intervenant,
         'typeVolumeHoraire' => $typeVolumeHoraire,
         'referentiel'       => true,
@@ -79,7 +79,7 @@ if ($servicesReferentiel !== false) {
 }
 
 $bottom = true;
-if ($cloture) echo $this->partial('application/intervenant/partial/cloture', compact('cloture', 'role', 'bottom'));
+if ($cloture) echo $this->partial('service/partial/cloture', compact('cloture', 'role', 'bottom'));
 
 
 echo $formuleTotauxHetd;

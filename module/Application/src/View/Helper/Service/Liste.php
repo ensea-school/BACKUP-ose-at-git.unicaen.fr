@@ -8,7 +8,7 @@ use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;

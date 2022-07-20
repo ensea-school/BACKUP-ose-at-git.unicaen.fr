@@ -32,7 +32,7 @@ use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Laminas\Session\Container as SessionContainer;
 

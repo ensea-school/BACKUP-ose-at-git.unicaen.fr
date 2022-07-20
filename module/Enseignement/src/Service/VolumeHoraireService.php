@@ -5,7 +5,7 @@ namespace Enseignement\Service;
 use Application\Entity\Db\Contrat;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;

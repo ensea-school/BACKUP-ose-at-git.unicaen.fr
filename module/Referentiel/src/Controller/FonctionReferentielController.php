@@ -1,10 +1,11 @@
 <?php
 
-namespace Application\Controller;
+namespace Referentiel\Controller;
 
+use Application\Controller\AbstractController;
 use Referentiel\Entity\Db\FonctionReferentiel;
-use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
-use Application\Form\FonctionReferentiel\Traits\FonctionReferentielSaisieFormAwareTrait;
+use Referentiel\Service\FonctionReferentielServiceAwareTrait;
+use Referentiel\Form\FonctionReferentielSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 class FonctionReferentielController extends AbstractController

@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Form\FonctionReferentiel\Traits;
-
-use Application\Form\FonctionReferentiel\FonctionReferentielSaisieForm;
+namespace Referentiel\Form;
 
 /**
  * Description of FonctionReferentielSaisieFormAwareTrait

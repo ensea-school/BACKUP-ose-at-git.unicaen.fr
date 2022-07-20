@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Form\ServiceReferentiel\Traits;
-
-use Application\Form\ServiceReferentiel\Saisie;
+namespace Referentiel\Form;
 
 /**
  * Description of SaisieAwareTrait

@@ -1,14 +1,15 @@
 <?php
 
-namespace Application\Processus;
+namespace Referentiel\Processus;
 
+use Application\Processus\AbstractProcessus;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Service\Entity\Recherche;
 use Service\Service\EtatVolumeHoraireService;
 use Application\Service\IntervenantService;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
+use Referentiel\Service\ServiceReferentielServiceAwareTrait;
+use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
 
 /**
  * Description of ServiceReferentielProcessus

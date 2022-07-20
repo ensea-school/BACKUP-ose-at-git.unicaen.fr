@@ -1,11 +1,11 @@
 <?php
 
-namespace Application\Form\ServiceReferentiel;
+namespace Referentiel\Form;
 
 use Enseignement\Entity\Db\Service;
 use Application\Form\AbstractForm;
-use Application\Form\ServiceReferentiel\Traits\SaisieFieldsetAwareTrait;
-use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
+use Referentiel\Form\SaisieFieldsetAwareTrait;
+use Referentiel\Service\FonctionReferentielServiceAwareTrait;
 use Laminas\Form\FormInterface;
 use Laminas\Form\Element\Hidden;
 use Laminas\Hydrator\HydratorInterface;

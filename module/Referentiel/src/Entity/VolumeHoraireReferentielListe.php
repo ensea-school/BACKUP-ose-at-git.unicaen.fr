@@ -9,7 +9,7 @@ use Application\Entity\Db\Validation;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Referentiel\Hydrator\ListeFilterHydrator;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
+use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
 use LogicException;
 use RuntimeException;
 use UnicaenImport\Entity\Db\Source;

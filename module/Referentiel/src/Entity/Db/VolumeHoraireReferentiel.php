@@ -186,7 +186,7 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
 
 
 
-    public function getEtatVolumeHoraireReferentiel(): Collection
+    public function getEtatVolumeHoraireReferentiel(): EtatVolumeHoraire
     {
         return $this->etatVolumeHoraireReferentiel->first();
     }

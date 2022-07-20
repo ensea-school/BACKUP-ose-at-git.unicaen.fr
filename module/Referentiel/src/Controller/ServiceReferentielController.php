@@ -1,22 +1,23 @@
 <?php
 
-namespace Application\Controller;
+namespace Referentiel\Controller;
 
+use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Service\Entity\Db\TypeVolumeHoraire;
-use Application\Form\ServiceReferentiel\Traits\SaisieAwareTrait;
+use Referentiel\Form\SaisieAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
-use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
-use Application\Processus\Traits\ValidationReferentielProcessusAwareTrait;
+use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
+use Referentiel\Processus\ValidationReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
-use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
+use Referentiel\Service\ServiceReferentielServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
+use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
 use Service\Entity\Recherche;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;

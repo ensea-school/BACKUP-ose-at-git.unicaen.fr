@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Processus\Traits;
-
-use Application\Processus\ValidationReferentielProcessus;
+namespace Referentiel\Processus;
 
 /**
  * Description of ValidationReferentielProcessusAwareTrait

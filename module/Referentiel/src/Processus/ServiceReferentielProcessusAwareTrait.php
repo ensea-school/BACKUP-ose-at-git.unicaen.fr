@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Processus\Traits;
-
-use Application\Processus\ServiceReferentielProcessus;
+namespace Referentiel\Processus;
 
 /**
  * Description of ServiceReferentielProcessusAwareTrait

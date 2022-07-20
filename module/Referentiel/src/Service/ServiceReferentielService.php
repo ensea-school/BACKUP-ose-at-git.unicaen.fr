@@ -78,7 +78,7 @@ class ServiceReferentielService extends AbstractEntityService
 
         $this
             ->join($this->getServiceStructure(), $qb, 'structure', true, $alias)
-            ->join($this->getServiceFonctionReferentiel(), $qb, 'fonction', true, $alias)
+            ->join($this->getServiceFonctionReferentiel(), $qb, 'fonctionReferentiel', true, $alias)
             ->join($this->getServiceIntervenant(), $qb, 'intervenant', true, $alias);
 
         return [$qb, $alias];
@@ -150,9 +150,9 @@ class ServiceReferentielService extends AbstractEntityService
     )
     {
         $result = $this->getRepo()->findBy([
-            'intervenant' => $intervenant,
-            'fonction'    => $fonction,
-            'structure'   => $structure,
+            'intervenant'         => $intervenant,
+            'fonctionReferentiel' => $fonction,
+            'structure'           => $structure,
         ]);
 
         /* Retourne le premier NON historisé */
@@ -385,7 +385,7 @@ class ServiceReferentielService extends AbstractEntityService
 
         $sVolumeHoraireReferentiel = $this->getServiceVolumeHoraireReferentiel();
 
-        $qb = $this->select(['id', 'fonction', 'structure', 'commentaires']);
+        $qb = $this->select(['id', 'fonctionReferentiel', 'structure', 'commentaires']);
         //@formatter:off
         $this->join(FonctionReferentielService::class,   $qb, 'fonctionReferentiel',     true);
         $this->Join(StructureService::class,             $qb, 'structure',               true);

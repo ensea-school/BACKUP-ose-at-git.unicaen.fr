@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Form\ServiceReferentiel;
+namespace Referentiel\Form;
 
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
@@ -8,7 +8,7 @@ use Referentiel\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
+use Referentiel\Service\FonctionReferentielServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;

@@ -1,8 +1,9 @@
 <?php
 
-namespace Application\Processus;
+namespace Referentiel\Processus;
 
 use Application\Entity\Db\Intervenant;
+use Application\Processus\AbstractProcessus;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
 use Referentiel\Entity\Db\TblValidationReferentiel;

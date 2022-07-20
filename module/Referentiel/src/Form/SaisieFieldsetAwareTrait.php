@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Form\ServiceReferentiel\Traits;
+namespace Referentiel\Form;
 
-use Application\Form\ServiceReferentiel\SaisieFieldset;
+use Referentiel\Form\SaisieFieldset;
 
 /**
  * Description of SaisieFieldsetAwareTrait

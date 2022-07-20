@@ -11,10 +11,7 @@ use Application\Service\TypeInterventionStatutService;
  */
 trait TypeInterventionStatutServiceAwareTrait
 {
-    /**
-     * @var TypeInterventionStatutService
-     */
-    private $serviceTypeInterventionStatut;
+    protected ?TypeInterventionStatutService $serviceTypeInterventionStatut = null;
 
 
 
@@ -23,7 +20,7 @@ trait TypeInterventionStatutServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeInterventionStatut(TypeInterventionStatutService $serviceTypeInterventionStatut)
+    public function setServiceTypeInterventionStatut(?TypeInterventionStatutService $serviceTypeInterventionStatut)
     {
         $this->serviceTypeInterventionStatut = $serviceTypeInterventionStatut;
 
@@ -32,10 +29,7 @@ trait TypeInterventionStatutServiceAwareTrait
 
 
 
-    /**
-     * @return TypeInterventionStatutService
-     */
-    public function getServiceTypeInterventionStatut()
+    public function getServiceTypeInterventionStatut(): ?TypeInterventionStatutService
     {
         if (empty($this->serviceTypeInterventionStatut)) {
             $this->serviceTypeInterventionStatut = \Application::$container->get(TypeInterventionStatutService::class);

@@ -6,7 +6,7 @@ FROM
   JOIN parametre               p ON p.nom = 'centres_couts_paye'
   JOIN service_referentiel    sr ON sr.id = frsr.service_referentiel_id
   JOIN intervenant             i ON i.id = sr.intervenant_id
-  JOIN statut_intervenant     si ON si.id = i.statut_id
+  JOIN statut                 si ON si.id = i.statut_id
   JOIN type_intervenant       ti ON ti.id = si.type_intervenant_id
   JOIN centre_cout            cc ON cc.histo_destruction IS NULL
 

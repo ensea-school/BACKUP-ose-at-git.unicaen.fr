@@ -11,36 +11,28 @@ use Application\Form\MotifNonPaiement\MotifNonPaiementSaisieForm;
  */
 trait MotifNonPaiementSaisieFormAwareTrait
 {
-    /**
-     * @var MotifNonPaiementSaisieForm
-     */
-    private $formMotifNonPaiementSaisie;
+    protected ?MotifNonPaiementSaisieForm $formMotifNonPaiementMotifNonPaiementSaisie = null;
 
 
 
     /**
-     * @param MotifNonPaiementSaisieForm $formMotifNonPaiementSaisie
+     * @param MotifNonPaiementSaisieForm $formMotifNonPaiementMotifNonPaiementSaisie
      *
      * @return self
      */
-    public function setFormMotifNonPaiementSaisie(MotifNonPaiementSaisieForm $formMotifNonPaiementSaisie)
+    public function setFormMotifNonPaiementMotifNonPaiementSaisie(?MotifNonPaiementSaisieForm $formMotifNonPaiementMotifNonPaiementSaisie)
     {
-        $this->formMotifNonPaiementSaisie = $formMotifNonPaiementSaisie;
+        $this->formMotifNonPaiementMotifNonPaiementSaisie = $formMotifNonPaiementMotifNonPaiementSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return MotifNonPaiementSaisieForm
-     */
-    public function getFormMotifNonPaiementSaisie()
+    public function getFormMotifNonPaiementMotifNonPaiementSaisie(): ?MotifNonPaiementSaisieForm
     {
-        if (!empty($this->formMotifNonPaiementSaisie)) {
-            return $this->formMotifNonPaiementSaisie;
+        if (!empty($this->formMotifNonPaiementMotifNonPaiementSaisie)) {
+            return $this->formMotifNonPaiementMotifNonPaiementSaisie;
         }
 
         return \Application::$container->get('FormElementManager')->get(MotifNonPaiementSaisieForm::class);

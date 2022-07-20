@@ -10,7 +10,7 @@ use UnicaenApp\Util;
 function affBooleen($flg)
 {
     // affiche booléen avec des glypheIcon
-    return ($flg ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>');
+    return ($flg ? '<i class="fas fa-check text-succes"></i>' : '<i class="fas fa-xmark text-danger refuse"></i>');
 }
 
 $this->headTitle()->append("Structures");
@@ -26,7 +26,6 @@ $globalCanEdit = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTUR
     <th style="word-wrap: break-word ; ">Libelle Court</th>
     <th style="word-wrap: break-word ; ">Libelle Long</th>
     <th style="word-wrap: break-word ; ">Enseignement</th>
-    <th style="word-wrap: break-word ; ">Plafond Référentiel</th>
     <th style="word-wrap: break-word ; ">Aff. adresse sur contrat</th>
     <th style="word-wrap: break-word ; ">Source</th>
     <?php if ($globalCanEdit) echo '<th>Actions</th>' ?>
@@ -40,7 +39,6 @@ $globalCanEdit = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTUR
             <td style="word-wrap: break-word ; "><?= $structure->getLibelleCourt() ?></td>
             <td style="word-wrap: break-word ; "><?= $structure->getLibelleLong() ?></td>
             <td style="word-wrap: break-word ; "><?= affBooleen($structure->isEnseignement()) ?></td>
-            <td style="word-wrap: break-word ; "><?= ($structure->getPlafondReferentiel()) ? Util::formattedNumber($structure->getPlafondReferentiel()) : '' ?></td>
             <td style="word-wrap: break-word ; "><?= affBooleen($structure->isAffAdresseContrat()) ?></td>
             <td style="word-wrap: break-word ; "><?= $structure->getSource() . ($structure->getSource()->getImportable() ? ' (' . $structure->getSourceCode() . ')' : '') ?></td>
             <?php if ($canEdit): ?>
@@ -49,7 +47,7 @@ $globalCanEdit = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTUR
                         <a class="ajax-modal" data-event="structure-saisie"
                            href="<?= $this->url('structure/voir', ['structure' => $structure->getId()], ['query' => ['tab' => 'edition']]) ?>"
                            title="Modifier la Structure">
-                            <span class="glyphicon glyphicon-edit"></span></a>
+                            <i class="fas fa-pen-to-square"></i></a>
                     <?php endif; ?>
                     <?php if ($canDelete): ?>
                         <a class="pop-ajax"
@@ -61,7 +59,7 @@ $globalCanEdit = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTUR
                            data-cancel-button="Non"
                            data-submit-reload="true"
                         >
-                            <span class="glyphicon glyphicon-remove"></span>
+                            <i class="fas fa-trash-can"></i>
                         </a>
                     <?php endif; ?>
                 </td>
@@ -76,7 +74,7 @@ $globalCanEdit = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTUR
     <a class="btn btn-primary ajax-modal" data-event="structure-saisie"
        href="<?= $this->url('structure/saisie') ?>"
        title="Ajouter une structure">
-        <span class="glyphicon glyphicon-edit"></span>
+        <i class="fas fa-pen-to-square"></i>
         Ajouter une structure</a>
 
     <script type="text/javascript">

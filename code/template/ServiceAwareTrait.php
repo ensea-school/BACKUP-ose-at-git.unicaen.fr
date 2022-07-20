@@ -12,19 +12,16 @@ namespace <namespace>;
  */
 trait <classname>
 {
-    /**
-     * @var <targetClassname>
-     */
-    protected $<variable>;
+    protected ?<targetClassname> $<variable> = null;
 
 
 
     /**
      * @param <targetClassname> $<variable>
-     *
+     *                      
      * @return self
      */
-    public function set<method>( <targetClassname> $<variable> )
+    public function set<method>(?<targetClassname> $<variable>)
     {
         $this-><variable> = $<variable>;
 
@@ -33,15 +30,12 @@ trait <classname>
 <if useGetter notrim>
 
 
-    /**
-     * @return <targetClassname>
-     */
     public function get<method>(): ?<targetClassname>
     {
-        if (!$this-><variable>){
+        if (empty($this-><variable>)) {
             $this-><variable> = \Application::$container->get(<targetClassname>::class);
         }
-
+        
         return $this-><variable>;
     }
 <endif useGetter>

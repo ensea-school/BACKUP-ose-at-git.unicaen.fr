@@ -2,145 +2,78 @@
 
 namespace Application\Entity\Db;
 
-/**
- * TblContrat
- */
 class TblContrat
 {
-    /**
-     * @var float
-     */
-    private $edite = false;
+    private int         $id;
 
-    /**
-     * @var float
-     */
-    private $nbvh = false;
+    private Annee       $annee;
 
-    /**
-     * @var boolean
-     */
-    private $peutAvoirContrat = false;
+    private Intervenant $intervenant;
 
-    /**
-     * @var float
-     */
-    private $signe = 0;
+    private ?Structure  $structure;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private bool        $actif = false;
 
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
+    private float       $edite = 0;
 
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    private $intervenant;
+    private float       $signe = 0;
 
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
+    private float       $nbvh  = 0;
 
 
 
-    /**
-     * Get edite
-     *
-     * @return float
-     */
-    public function getEdite()
-    {
-        return $this->edite;
-    }
-
-
-
-    /**
-     * Get nbvh
-     *
-     * @return float
-     */
-    public function getNbvh()
-    {
-        return $this->nbvh;
-    }
-
-
-
-    /**
-     * Get peutAvoirContrat
-     *
-     * @return boolean
-     */
-    public function getPeutAvoirContrat()
-    {
-        return $this->peutAvoirContrat;
-    }
-
-
-
-    /**
-     * Get signe
-     *
-     * @return float
-     */
-    public function getSigne()
-    {
-        return $this->signe;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure
-     */
-    public function getStructure()
+    public function getAnnee(): Annee
     {
-        return $this->structure;
+        return $this->annee;
     }
 
 
 
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\Intervenant
-     */
-    public function getIntervenant()
+    public function getIntervenant(): Intervenant
     {
         return $this->intervenant;
     }
 
 
 
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee
-     */
-    public function getAnnee()
+    public function getStructure(): ?Structure
     {
-        return $this->annee;
+        return $this->structure;
     }
-}
 
+
+
+    public function getActif(): bool
+    {
+        return $this->actif;
+    }
+
+
+
+    public function getEdite(): float|int
+    {
+        return $this->edite;
+    }
+
+
+
+    public function getSigne(): float|int
+    {
+        return $this->signe;
+    }
+
+
+
+    public function getNbvh(): float|int
+    {
+        return $this->nbvh;
+    }
+
+}

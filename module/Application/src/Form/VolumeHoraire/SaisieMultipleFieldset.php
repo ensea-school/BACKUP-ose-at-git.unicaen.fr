@@ -9,9 +9,8 @@ use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Laminas\Form\Element\Hidden;
 use Application\Filter\StringFromFloat;
 use Laminas\Hydrator\HydratorInterface;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwaretrait;
 use Application\Entity\Db\Service;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 
 
 /**
@@ -21,10 +20,9 @@ use Application\Entity\Db\Service;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieMultipleFieldset extends AbstractFieldset implements EntityManagerAwareInterface
+class SaisieMultipleFieldset extends AbstractFieldset
 {
     use TypeInterventionServiceAwareTrait;
-    use EntityManagerAwareTrait;
 
     /**
      *
@@ -112,7 +110,7 @@ class SaisieMultipleFieldset extends AbstractFieldset implements EntityManagerAw
  */
 class SaisieMultipleHydrator implements HydratorInterface
 {
-    use EntityManagerAwaretrait;
+    use EntityManagerAwareTrait;
     use TypeInterventionServiceAwareTrait;
 
 

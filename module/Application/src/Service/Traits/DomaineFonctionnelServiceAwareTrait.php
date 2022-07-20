@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\DomaineFonctionnelService;
 
 /**
- * Description of DomaineFonctionnelAwareTrait
+ * Description of DomaineFonctionnelServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait DomaineFonctionnelServiceAwareTrait
 {
-    /**
-     * @var DomaineFonctionnelService
-     */
-    private $serviceDomaineFonctionnel;
+    protected ?DomaineFonctionnelService $serviceDomaineFonctionnel = null;
 
 
 
@@ -23,7 +20,7 @@ trait DomaineFonctionnelServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDomaineFonctionnel(DomaineFonctionnelService $serviceDomaineFonctionnel)
+    public function setServiceDomaineFonctionnel(?DomaineFonctionnelService $serviceDomaineFonctionnel)
     {
         $this->serviceDomaineFonctionnel = $serviceDomaineFonctionnel;
 
@@ -32,10 +29,7 @@ trait DomaineFonctionnelServiceAwareTrait
 
 
 
-    /**
-     * @return DomaineFonctionnelService
-     */
-    public function getServiceDomaineFonctionnel()
+    public function getServiceDomaineFonctionnel(): ?DomaineFonctionnelService
     {
         if (empty($this->serviceDomaineFonctionnel)) {
             $this->serviceDomaineFonctionnel = \Application::$container->get(DomaineFonctionnelService::class);

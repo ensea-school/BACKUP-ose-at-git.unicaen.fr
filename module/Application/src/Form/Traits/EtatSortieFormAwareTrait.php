@@ -11,19 +11,16 @@ use Application\Form\EtatSortieForm;
  */
 trait EtatSortieFormAwareTrait
 {
-    /**
-     * @var EtatSortieForm
-     */
-    protected $formEtatSortie;
+    protected ?EtatSortieForm $formEtatSortie = null;
 
 
 
     /**
-     * @param EtatSortieForm $formContratModele
+     * @param EtatSortieForm $formEtatSortie
      *
      * @return self
      */
-    public function setFormEtatSortie( ModeleForm $formEtatSortie )
+    public function setFormEtatSortie(?EtatSortieForm $formEtatSortie)
     {
         $this->formEtatSortie = $formEtatSortie;
 
@@ -32,18 +29,12 @@ trait EtatSortieFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return EtatSortieForm
-     * @throws RuntimeException
-     */
-    public function getFormEtatSortie() : EtatSortieForm
+    public function getFormEtatSortie(): ?EtatSortieForm
     {
-        if ($this->formEtatSortie){
+        if (!empty($this->formEtatSortie)) {
             return $this->formEtatSortie;
-        }else{
-            return \Application::$container->get('FormElementManager')->get(EtatSortieForm::class);
         }
+
+        return \Application::$container->get('FormElementManager')->get(EtatSortieForm::class);
     }
 }

@@ -11,10 +11,7 @@ use Application\Form\Budget\DotationSaisieForm;
  */
 trait DotationSaisieFormAwareTrait
 {
-    /**
-     * @var DotationSaisieForm
-     */
-    private $formBudgetDotationSaisie;
+    protected ?DotationSaisieForm $formBudgetDotationSaisie = null;
 
 
 
@@ -23,7 +20,7 @@ trait DotationSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormBudgetDotationSaisie(DotationSaisieForm $formBudgetDotationSaisie)
+    public function setFormBudgetDotationSaisie(?DotationSaisieForm $formBudgetDotationSaisie)
     {
         $this->formBudgetDotationSaisie = $formBudgetDotationSaisie;
 
@@ -32,12 +29,7 @@ trait DotationSaisieFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return DotationSaisieForm
-     */
-    public function getFormBudgetDotationSaisie()
+    public function getFormBudgetDotationSaisie(): ?DotationSaisieForm
     {
         if (!empty($this->formBudgetDotationSaisie)) {
             return $this->formBudgetDotationSaisie;

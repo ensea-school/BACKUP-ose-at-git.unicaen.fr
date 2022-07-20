@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\ContratService;
 
 /**
- * Description of ContratAwareTrait
+ * Description of ContratServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait ContratServiceAwareTrait
 {
-    /**
-     * @var ContratService
-     */
-    private $serviceContrat;
+    protected ?ContratService $serviceContrat = null;
 
 
 
@@ -23,7 +20,7 @@ trait ContratServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceContrat(ContratService $serviceContrat)
+    public function setServiceContrat(?ContratService $serviceContrat)
     {
         $this->serviceContrat = $serviceContrat;
 
@@ -32,11 +29,7 @@ trait ContratServiceAwareTrait
 
 
 
-    /**
-     * @return ContratService
-     * @throws RuntimeException
-     */
-    public function getServiceContrat()
+    public function getServiceContrat(): ?ContratService
     {
         if (empty($this->serviceContrat)) {
             $this->serviceContrat = \Application::$container->get(ContratService::class);

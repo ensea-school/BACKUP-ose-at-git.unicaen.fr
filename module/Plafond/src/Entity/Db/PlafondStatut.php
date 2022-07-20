@@ -2,8 +2,8 @@
 
 namespace Plafond\Entity\Db;
 
-use Application\Entity\Db\StatutIntervenant;
-use Application\Entity\Db\Traits\StatutIntervenantAwareTrait;
+use Intervenant\Entity\Db\Statut;
+use Intervenant\Entity\Db\StatutAwareTrait;
 use Plafond\Interfaces\PlafondConfigInterface;
 use Plafond\Traits\PlafondConfigTrait;
 
@@ -13,21 +13,21 @@ use Plafond\Traits\PlafondConfigTrait;
 class PlafondStatut implements PlafondConfigInterface
 {
     use PlafondConfigTrait;
-    use StatutIntervenantAwareTrait;
+    use StatutAwareTrait;
 
     public function getEntity()
     {
-        return $this->getStatutIntervenant();
+        return $this->getStatut();
     }
 
 
 
     public function setEntity($entity): PlafondConfigInterface
     {
-        if (!$entity instanceof StatutIntervenant) {
+        if (!$entity instanceof Statut) {
             throw new \Exception('Un statut doit être fourni');
         }
-        $this->setStatutIntervenant($entity);
+        $this->setStatut($entity);
 
         return $this;
     }
@@ -36,7 +36,7 @@ class PlafondStatut implements PlafondConfigInterface
 
     public static function getEntityClass(): ?string
     {
-        return StatutIntervenant::class;
+        return Statut::class;
     }
 
 

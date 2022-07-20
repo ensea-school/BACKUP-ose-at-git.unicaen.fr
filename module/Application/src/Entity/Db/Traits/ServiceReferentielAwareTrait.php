@@ -11,31 +11,25 @@ use Application\Entity\Db\ServiceReferentiel;
  */
 trait ServiceReferentielAwareTrait
 {
-    /**
-     * @var ServiceReferentiel
-     */
-    private $serviceReferentiel;
-
-
+    protected ?ServiceReferentiel $serviceReferentiel = null;
 
 
 
     /**
      * @param ServiceReferentiel $serviceReferentiel
+     *
      * @return self
      */
-    public function setServiceReferentiel( ServiceReferentiel $serviceReferentiel = null )
+    public function setServiceReferentiel( ?ServiceReferentiel $serviceReferentiel )
     {
         $this->serviceReferentiel = $serviceReferentiel;
+
         return $this;
     }
 
 
 
-    /**
-     * @return ServiceReferentiel
-     */
-    public function getServiceReferentiel()
+    public function getServiceReferentiel(): ?ServiceReferentiel
     {
         return $this->serviceReferentiel;
     }

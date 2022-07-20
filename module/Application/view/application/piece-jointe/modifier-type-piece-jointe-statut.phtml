@@ -1,6 +1,6 @@
 <?php
 
-use Application\Entity\Db\StatutIntervenant;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Provider\Privilege\Privileges;
 use Application\Form\PieceJointe\ModifierTypePieceJointeStatutForm;
@@ -10,7 +10,7 @@ use Application\Form\PieceJointe\ModifierTypePieceJointeStatutForm;
  * @var $title               string
  * @var $form                ModifierTypePieceJointeStatutForm
  * @var $typePieceJointe     TypePieceJointe
- * @var $statutIntervenant   StatutIntervenant
+ * @var $statut              Statut
  */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION));
@@ -23,7 +23,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 <div class="row">
     <div class="col-md-12">
-        <?= $this->formControlGroup($form->get('typePieceJointe')); ?>
+        <?= $this->formControlGroup($form->get('obligatoire')); ?>
     </div>
 </div>
 <div class="row">
@@ -42,23 +42,15 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('seuil-hetd')); ?>
+    </div>
+    <div class="col-md-6">
         <?= $this->formControlGroup($form->get('type-heure-hetd')); ?>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-4">
-        <?= $this->formControlGroup($form->get('seuil-hetd')); ?>
-    </div>
-    <div class=col-md-4>
-        <?= $this->formControlGroup($form->get('annee-debut')); ?>
-    </div>
-    <div class=col-md-4>
-        <?= $this->formControlGroup($form->get('annee-fin')); ?>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <?= $this->formControlGroup($form->get('duree-vie')); ?>
     </div>
 
@@ -79,7 +71,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     >Supprimer</a>
 
     <a class="btn btn-default"
-       href= <?= $this->url('piece-jointe/modifier-type-piece-jointe-statut', ['typePieceJointe' => $typePieceJointe->getId(), 'statutIntervenant' => $statutIntervenant->getId()]) ?>
+       href= <?= $this->url('piece-jointe/modifier-type-piece-jointe-statut', ['typePieceJointe' => $typePieceJointe->getId(), 'statut' => $statut->getId()]) ?>
        class="ajax-modal"
        data-event="event-update-tpjs"
     >Ajouter une autre règle</a>

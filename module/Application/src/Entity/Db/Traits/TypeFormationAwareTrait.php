@@ -11,31 +11,25 @@ use Application\Entity\Db\TypeFormation;
  */
 trait TypeFormationAwareTrait
 {
-    /**
-     * @var TypeFormation
-     */
-    private $typeFormation;
-
-
+    protected ?TypeFormation $typeFormation = null;
 
 
 
     /**
      * @param TypeFormation $typeFormation
+     *
      * @return self
      */
-    public function setTypeFormation( TypeFormation $typeFormation = null )
+    public function setTypeFormation( ?TypeFormation $typeFormation )
     {
         $this->typeFormation = $typeFormation;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeFormation
-     */
-    public function getTypeFormation()
+    public function getTypeFormation(): ?TypeFormation
     {
         return $this->typeFormation;
     }

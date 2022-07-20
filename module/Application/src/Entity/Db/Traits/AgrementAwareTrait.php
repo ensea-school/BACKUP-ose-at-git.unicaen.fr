@@ -5,37 +5,31 @@ namespace Application\Entity\Db\Traits;
 use Application\Entity\Db\Agrement;
 
 /**
- * Description of AgrementServiceAwareTrait
+ * Description of AgrementAwareTrait
  *
  * @author UnicaenCode
  */
 trait AgrementAwareTrait
 {
-    /**
-     * @var Agrement
-     */
-    private $agrement;
-
-
+    protected ?Agrement $agrement = null;
 
 
 
     /**
      * @param Agrement $agrement
+     *
      * @return self
      */
-    public function setAgrement( Agrement $agrement = null )
+    public function setAgrement( ?Agrement $agrement )
     {
         $this->agrement = $agrement;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Agrement
-     */
-    public function getAgrement()
+    public function getAgrement(): ?Agrement
     {
         return $this->agrement;
     }

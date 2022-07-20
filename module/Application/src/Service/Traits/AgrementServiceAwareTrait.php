@@ -11,10 +11,7 @@ use Application\Service\AgrementService;
  */
 trait AgrementServiceAwareTrait
 {
-    /**
-     * @var AgrementService
-     */
-    private $serviceAgrement;
+    protected ?AgrementService $serviceAgrement = null;
 
 
 
@@ -23,7 +20,7 @@ trait AgrementServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceAgrement(AgrementService $serviceAgrement)
+    public function setServiceAgrement(?AgrementService $serviceAgrement)
     {
         $this->serviceAgrement = $serviceAgrement;
 
@@ -32,10 +29,7 @@ trait AgrementServiceAwareTrait
 
 
 
-    /**
-     * @return AgrementService
-     */
-    public function getServiceAgrement()
+    public function getServiceAgrement(): ?AgrementService
     {
         if (empty($this->serviceAgrement)) {
             $this->serviceAgrement = \Application::$container->get(AgrementService::class);

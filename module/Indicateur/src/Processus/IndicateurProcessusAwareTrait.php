@@ -2,6 +2,7 @@
 
 namespace Indicateur\Processus;
 
+
 /**
  * Description of IndicateurProcessusAwareTrait
  *
@@ -9,10 +10,7 @@ namespace Indicateur\Processus;
  */
 trait IndicateurProcessusAwareTrait
 {
-    /**
-     * @var IndicateurProcessus
-     */
-    private $processusIndicateur;
+    protected ?IndicateurProcessus $processusIndicateur = null;
 
 
 
@@ -21,7 +19,7 @@ trait IndicateurProcessusAwareTrait
      *
      * @return self
      */
-    public function setProcessusIndicateur(IndicateurProcessus $processusIndicateur)
+    public function setProcessusIndicateur(?IndicateurProcessus $processusIndicateur)
     {
         $this->processusIndicateur = $processusIndicateur;
 
@@ -30,10 +28,7 @@ trait IndicateurProcessusAwareTrait
 
 
 
-    /**
-     * @return IndicateurProcessus
-     */
-    public function getProcessusIndicateur()
+    public function getProcessusIndicateur(): ?IndicateurProcessus
     {
         if (empty($this->processusIndicateur)) {
             $this->processusIndicateur = \Application::$container->get(IndicateurProcessus::class);

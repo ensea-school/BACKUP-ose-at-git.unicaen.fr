@@ -11,31 +11,25 @@ use Application\Entity\Db\Modulateur;
  */
 trait ModulateurAwareTrait
 {
-    /**
-     * @var Modulateur
-     */
-    private $modulateur;
-
-
+    protected ?Modulateur $modulateur = null;
 
 
 
     /**
      * @param Modulateur $modulateur
+     *
      * @return self
      */
-    public function setModulateur( Modulateur $modulateur = null )
+    public function setModulateur( ?Modulateur $modulateur )
     {
         $this->modulateur = $modulateur;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Modulateur
-     */
-    public function getModulateur()
+    public function getModulateur(): ?Modulateur
     {
         return $this->modulateur;
     }

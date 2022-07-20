@@ -1,23 +1,33 @@
 <?php
 
+use \Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Provider\Privilege\Privileges;
 
 /**
- * @var $this        \Application\View\Renderer\PhpRenderer
- * @var $title       string
- * @var $intervenant \Application\Entity\Db\Intervenant
- * @var $contrats    \Application\Entity\Db\Contrat[]
+ * @var $this                       \Application\View\Renderer\PhpRenderer
+ * @var $title                      string
+ * @var $intervenant                \Application\Entity\Db\Intervenant
+ * @var $contrats                   \Application\Entity\Db\Contrat[]
+ * @var $avenant_param              boolean
+ * @var $contratDirect              boolean
+ * @var $hasContrat                 boolean
  */
 
-$hasContrat = false;
+$structList = [];
 foreach ($contrats as $contrat) {
-    if (!$contrat->estUnProjet()) {
-        $hasContrat = true;
+    $structList[] = $contrat->getStructure();
+}
+
+$serviceNonContractToShow = [];
+foreach ($services['non-contractualises'] as $sid => $servicesNC) {
+    $structure = current($servicesNC)->getElementPedagogique()->getStructure();
+    if ($avenant_param == 1 || (!in_array($structure, $structList) && !in_array(null, $structList) && !($avenant_param < 0 && $hasContrat))) {
+        $serviceNonContractToShow[] = $structure;
     }
 }
 
-$this->intervenant($intervenant)->renderTitle("Contrat/avenant");
 
+$this->intervenant($intervenant)->renderTitle("Contrat/avenant");
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 if ($services['non-contractualises']) {
@@ -43,58 +53,66 @@ $this->messenger() ?>
 
 </style>
 
-<?php if ($contrats || $services['non-contractualises']): ?>
-
-    <?php if ($services['non-contractualises']): ?>
-        <table class="table table-bordered table-hover">
-            <tr>
-                <th class="structure">Composante</th>
-                <th>Enseignement(s) non contractualisé(s)</th>
-            </tr>
-
-            <?php foreach ($services['non-contractualises'] as $sid => $servicesNC):
-                $structure = current($servicesNC)->getElementPedagogique()->getStructure();
-                $contrat = new \Application\Entity\Db\Contrat();
-                $contrat->setIntervenant($intervenant);
-                $contrat->setStructure($structure);
-
-                $canCreer = $this->isAllowed($contrat, Privileges::CONTRAT_CREATION);
-                ?>
+<?php if ($contrats || $services['non-contractualises']):
+    if ($services['non-contractualises']):?>
+        <?php if (!$hasContrat || $avenant_param > 0 || ($avenant_param == 0 && !empty($serviceNonContractToShow))): ?>
+            <table class="table table-bordered table-hover">
                 <tr>
-                    <td><?= $structure ?></td>
-                    <td>
-                        <?php if ($canCreer): ?>
-                            <a class="btn btn-primary"
-                               href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
-                                <span class="glyphicon glyphicon-file"></span> Créer un
-                                projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
-                            </a>
-                        <?php else:
-                            echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
-                        endif; ?>
-                        <p>
-                            Enseignements (validés) non contractualisés :<br/>
-                            <small><a title="Cliquez pour afficher/masquer les enseignements concernés"
-                                      href="#details-enseignements-structure-<?= $sid ?>"
-                                      role="button"
-                                      aria-expanded="true" aria-controls="details-enseignements-structure-<?= $sid ?>"
-                                      data-toggle="collapse"
-                                >Afficher/masquer</a></small>
-                        </p>
-                        <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>"
-                             id="details-enseignements-structure-<?= $sid ?>">
-                            <?= $this->serviceListe($servicesNC)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
-                        </div>
-                    </td>
+                    <th class="structure">Composante</th>
+                    <th>Enseignement(s) non contractualisé(s)</th>
                 </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php endif; ?>
+
+                <?php foreach ($services['non-contractualises'] as $sid => $servicesNC):
+                    $structure = current($servicesNC)->getElementPedagogique()->getStructure();
+                    $contrat = new \Application\Entity\Db\Contrat();
+                    $contrat->setIntervenant($intervenant);
+                    $contrat->setStructure($structure);
+                    if (!in_array($structure, $serviceNonContractToShow)) {
+                        continue;
+                    }
+                    $canCreer = $this->isAllowed($contrat, Privileges::CONTRAT_CREATION);
+                    ?>
+                    <tr>
+                        <td><?= $structure ?></td>
+                        <td>
+                            <?php if ($canCreer):
+                                if ($contratDirect):?>
+                                    <a class="btn btn-primary"
+                                       href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
+                                        <i class="fas fa-file"></i> Créer un <?= $hasContrat ? 'avenant' : 'contrat' ?>
+                                    </a>
+                                <?php else: ?>
+                                    <a class="btn btn-primary"
+                                       href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
+                                        <i class="fas fa-file"></i> Créer un projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
+                                    </a>
+                                <?php endif;
+                            else:
+                                echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
+                            endif; ?>
+                            <p>
+                                Enseignements (validés) non contractualisés :<br/>
+                                <small><a title="Cliquez pour afficher/masquer les enseignements concernés"
+                                          href="#details-enseignements-structure-<?= $sid ?>"
+                                          role="button"
+                                          aria-expanded="true" aria-controls="details-enseignements-structure-<?= $sid ?>"
+                                          data-toggle="collapse"
+                                    >Afficher/masquer</a></small>
+                            </p>
+                            <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>"
+                                 id="details-enseignements-structure-<?= $sid ?>">
+                                <?= $this->serviceListe($servicesNC)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php endif; endif; ?>
     <div class="well">
         <h2>Contrats et avenants</h2>
         <?php foreach ($contrats as $contrat): ?>
-
-            <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant]) ?>
+            <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param]);
+            ?>
 
         <?php endforeach; ?>
     </div>

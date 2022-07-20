@@ -8,7 +8,6 @@ return [
     'table'   => 'TYPE_INTERVENANT',
     'columns' => [
         'CODE',
-        'HISTO_DESTRUCTION',
     ],
 ];
 

@@ -11,10 +11,7 @@ use Application\Service\GradeService;
  */
 trait GradeServiceAwareTrait
 {
-    /**
-     * @var GradeService
-     */
-    private $serviceGrade;
+    protected ?GradeService $serviceGrade = null;
 
 
 
@@ -23,7 +20,7 @@ trait GradeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceGrade(GradeService $serviceGrade)
+    public function setServiceGrade(?GradeService $serviceGrade)
     {
         $this->serviceGrade = $serviceGrade;
 
@@ -32,10 +29,7 @@ trait GradeServiceAwareTrait
 
 
 
-    /**
-     * @return GradeService
-     */
-    public function getServiceGrade()
+    public function getServiceGrade(): ?GradeService
     {
         if (empty($this->serviceGrade)) {
             $this->serviceGrade = \Application::$container->get(GradeService::class);

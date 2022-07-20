@@ -2,43 +2,38 @@
 
 namespace ExportRh\Service;
 
+
 /**
  * Description of ExportRhServiceAwareTrait
  *
- * @author Antony LE COURTES <antony.lecourtes at unicaen.fr>
+ * @author UnicaenCode
  */
 trait ExportRhServiceAwareTrait
 {
-    /**
-     * @var ExportRhService
-     */
-    protected $exportRhService;
+    protected ?ExportRhService $serviceExportRh = null;
 
 
 
     /**
-     * @param ExportRhService $exportRhService
+     * @param ExportRhService $serviceExportRh
      *
      * @return self
      */
-    public function setExportRhService(ExportRhService $exportRhService)
+    public function setServiceExportRh(?ExportRhService $serviceExportRh)
     {
-        $this->exportRhService = $exportRhService;
+        $this->serviceExportRh = $serviceExportRh;
 
         return $this;
     }
 
 
 
-    /**
-     * @return ExportRhService
-     */
-    public function getExportRhService(): ExportRhService
+    public function getServiceExportRh(): ?ExportRhService
     {
-        if (!$this->exportRhService) {
-            $this->exportRhService = \Application::$container->get(ExportRhService::class);
+        if (empty($this->serviceExportRh)) {
+            $this->serviceExportRh = \Application::$container->get(ExportRhService::class);
         }
 
-        return $this->exportRhService;
+        return $this->serviceExportRh;
     }
 }

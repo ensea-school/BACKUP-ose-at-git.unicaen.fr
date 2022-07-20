@@ -11,31 +11,25 @@ use Application\Entity\Db\Formule;
  */
 trait FormuleAwareTrait
 {
-    /**
-     * @var Formule
-     */
-    private $formule;
-
-
+    protected ?Formule $formule = null;
 
 
 
     /**
      * @param Formule $formule
+     *
      * @return self
      */
-    public function setFormule( Formule $formule = null )
+    public function setFormule( ?Formule $formule )
     {
         $this->formule = $formule;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Formule
-     */
-    public function getFormule()
+    public function getFormule(): ?Formule
     {
         return $this->formule;
     }

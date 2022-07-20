@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceReferentiel;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Form\ServiceReferentiel\Traits\SaisieAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
@@ -59,8 +60,9 @@ class ServiceReferentielController extends AbstractController
         $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU');
         $viewHelperParams      = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $role                  = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant           = $this->params()->fromRoute('intervenant');
-        $viewModel             = new \Laminas\View\Model\ViewModel();
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->params()->fromRoute('intervenant');
+        $viewModel   = new \Laminas\View\Model\ViewModel();
 
         if (!$intervenant) {
             $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
@@ -112,8 +114,8 @@ class ServiceReferentielController extends AbstractController
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
         $service = $this->getServiceServiceReferentiel();
-        //$role    = $this->getServiceContext()->getSelectedIdentityRole();
-        $form = $this->getFormServiceReferentielSaisie();
+        $role    = $this->getServiceContext()->getSelectedIdentityRole();
+        $form    = $this->getFormServiceReferentielSaisie();
         $form->get('type-volume-horaire')->setValue($typeVolumeHoraire->getId());
 
         $intervenant = $this->getServiceLocalContext()->getIntervenant();
@@ -136,7 +138,10 @@ class ServiceReferentielController extends AbstractController
         $assertionEntity
             ->setTypeVolumeHoraire($typeVolumeHoraire)
             ->setIntervenant($intervenant);
-        if (!$this->isAllowed($assertionEntity, Privileges::REFERENTIEL_EDITION)) {
+        if ($assertionEntity->getStructure() == null) {
+            $assertionEntity->setStructure($role->getStructure());
+        }
+        if (!$this->isAllowed($assertionEntity, $typeVolumeHoraire->getPrivilegeReferentielEdition())) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }
         $hDeb    = $entity->getVolumeHoraireReferentielListe()->getHeures();
@@ -213,7 +218,7 @@ class ServiceReferentielController extends AbstractController
             foreach ($services as $sid) {
                 $service = $this->getServiceServiceReferentiel()->get($sid);
                 $service->setTypeVolumeHoraire($typeVolumeHoraire);
-                if ($this->isAllowed($service, Privileges::REFERENTIEL_EDITION)) {
+                if ($this->isAllowed($service, Privileges::REFERENTIEL_REALISE_EDITION)) {
                     $this->getProcessusPlafond()->beginTransaction();
                     $this->getServiceServiceReferentiel()->setRealisesFromPrevus($service);
                     $this->updateTableauxBord($service->getIntervenant());
@@ -243,7 +248,7 @@ class ServiceReferentielController extends AbstractController
             throw new \LogicException('Le service référentiel n\'existe pas');
         }
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
-        if (!$this->isAllowed($service, Privileges::REFERENTIEL_EDITION)) {
+        if (!$this->isAllowed($service, $typeVolumeHoraire->getPrivilegeReferentielEdition())) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }
         if ($this->getRequest()->isPost()) {
@@ -338,7 +343,7 @@ class ServiceReferentielController extends AbstractController
 
         $validation = $this->getProcessusValidationReferentiel()->creer($intervenant, $structure);
 
-        if ($this->isAllowed($validation, Privileges::REFERENTIEL_VALIDATION)) {
+        if ($this->isAllowed($validation, $typeVolumeHoraire->getPrivilegeReferentielValidation())) {
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusValidationReferentiel()->enregistrer($typeVolumeHoraire, $validation);
@@ -389,9 +394,9 @@ class ServiceReferentielController extends AbstractController
 
     private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
-        $this->getServiceWorkflow()->calculerTableauxBord(['formule', 'validation_referentiel', 'service_referentiel'], $intervenant);
+        $this->getServiceWorkflow()->calculerTableauxBord(['formule', 'validation_referentiel', 'referentiel'], $intervenant);
         if (!$validation) {
-            $this->getServiceWorkflow()->calculerTableauxBord(['service_saisie', 'piece_jointe_fournie'], $intervenant);
+            $this->getServiceWorkflow()->calculerTableauxBord(['piece_jointe_fournie'], $intervenant);
         }
     }
 

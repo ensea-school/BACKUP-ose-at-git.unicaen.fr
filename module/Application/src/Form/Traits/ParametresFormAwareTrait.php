@@ -11,10 +11,7 @@ use Application\Form\ParametresForm;
  */
 trait ParametresFormAwareTrait
 {
-    /**
-     * @var ParametresForm
-     */
-    private $formParametres;
+    protected ?ParametresForm $formParametres = null;
 
 
 
@@ -23,7 +20,7 @@ trait ParametresFormAwareTrait
      *
      * @return self
      */
-    public function setFormParametres(ParametresForm $formParametres)
+    public function setFormParametres(?ParametresForm $formParametres)
     {
         $this->formParametres = $formParametres;
 
@@ -32,12 +29,7 @@ trait ParametresFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ParametresForm
-     */
-    public function getFormParametres()
+    public function getFormParametres(): ?ParametresForm
     {
         if (!empty($this->formParametres)) {
             return $this->formParametres;

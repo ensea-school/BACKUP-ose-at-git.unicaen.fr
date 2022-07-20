@@ -11,18 +11,16 @@ use Application\Service\FormuleTestIntervenantService;
  */
 trait FormuleTestIntervenantServiceAwareTrait
 {
-    /**
-     * @var FormuleTestIntervenantService
-     */
-    protected $serviceFormuleTestIntervenant;
+    protected ?FormuleTestIntervenantService $serviceFormuleTestIntervenant = null;
 
 
 
     /**
      * @param FormuleTestIntervenantService $serviceFormuleTestIntervenant
+     *
      * @return self
      */
-    public function setServiceFormuleTestIntervenant( FormuleTestIntervenantService $serviceFormuleTestIntervenant )
+    public function setServiceFormuleTestIntervenant(?FormuleTestIntervenantService $serviceFormuleTestIntervenant)
     {
         $this->serviceFormuleTestIntervenant = $serviceFormuleTestIntervenant;
 
@@ -31,12 +29,9 @@ trait FormuleTestIntervenantServiceAwareTrait
 
 
 
-    /**
-     * @return FormuleTestIntervenantService
-     */
-    public function getServiceFormuleTestIntervenant() : FormuleTestIntervenantService
+    public function getServiceFormuleTestIntervenant(): ?FormuleTestIntervenantService
     {
-        if (!$this->serviceFormuleTestIntervenant){
+        if (empty($this->serviceFormuleTestIntervenant)) {
             $this->serviceFormuleTestIntervenant = \Application::$container->get(FormuleTestIntervenantService::class);
         }
 

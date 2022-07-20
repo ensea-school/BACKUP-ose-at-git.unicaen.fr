@@ -1,13 +1,13 @@
 <?php
 
-use Application\Entity\Db\StatutIntervenant;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 
 /**
  * @var $this                \Application\View\Renderer\PhpRenderer
  * @var $canEdit             boolean
- * @var $statutsIntervenants StatutIntervenant[][]
+ * @var $statutsIntervenants Statut[][]
  * @var $typePieceJointe     TypePieceJointe
  * @var $tpjss               TypePieceJointeStatut[][]
  * @var $j                   int
@@ -26,14 +26,14 @@ $i = 0;
         <?= $typePieceJointe ?>
         <?php if ($canEdit): ?>
             <span class="pull-right">
-                <span class="glyphicon glyphicon-move"
-                      title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></span>&nbsp;
+                <i class="fas fa-arrows-alt"
+                   title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></i>&nbsp;
 
                 <a class="pop-ajax"
                    href="<?= $urlEdit ?>"
                    title="Modifier le type de pièce jointe"
                    data-submit-reload="true"
-                ><span class="glyphicon pull-right glyphicon-edit"></span></a>
+                ><i class="fa pull-right fa-pen-to-square"></i></a>
 
                 <a class="pop-ajax"
                    href="<?= $urlDelete ?>"
@@ -50,15 +50,15 @@ $i = 0;
     <?php
 
     foreach ($statutsIntervenants as $sis) {
-        foreach ($sis as $statutIntervenant) {
+        foreach ($sis as $statut) {
             $i++;
             echo $this->partial('partial/tpjs-cell', [
-                'canEdit'           => $canEdit,
-                'typePieceJointe'   => $typePieceJointe,
-                'statutIntervenant' => $statutIntervenant,
-                'tpjss'             => isset($tpjss[$statutIntervenant->getId()]) ? $tpjss[$statutIntervenant->getId()] : [],
-                'i'                 => $i,
-                'j'                 => $j,
+                'canEdit'         => $canEdit,
+                'typePieceJointe' => $typePieceJointe,
+                'statut'          => $statut,
+                'tpjss'           => isset($tpjss[$statut->getId()]) ? $tpjss[$statut->getId()] : [],
+                'i'               => $i,
+                'j'               => $j,
             ]);
         }
     }

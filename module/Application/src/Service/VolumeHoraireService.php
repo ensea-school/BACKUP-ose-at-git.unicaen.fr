@@ -95,7 +95,7 @@ class VolumeHoraireService extends AbstractEntityService
     /**
      * Sauvegarde une entité
      *
-     * @param mixed $entity
+     * @param VolumeHoraire $entity
      *
      * @return mixed
      * @throws \RuntimeException
@@ -108,7 +108,8 @@ class VolumeHoraireService extends AbstractEntityService
         if (!$entity->getSourceCode()) {
             $entity->setSourceCode(uniqid('ose-'));
         }
-        $canAutoValidate = $this->getAuthorize()->isAllowed($entity, Privileges::ENSEIGNEMENT_AUTOVALIDATION);
+        $typeVolumeHoraire = $entity->getTypeVolumeHoraire();
+        $canAutoValidate   = $this->getAuthorize()->isAllowed($entity, $typeVolumeHoraire->getPrivilegeEnseignementAutoValidation());
 
         if ($canAutoValidate) $entity->setAutoValidation(true);
 

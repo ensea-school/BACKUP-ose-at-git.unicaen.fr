@@ -1,0 +1,76 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $typesIntervenants \Intervenant\Entity\Db\TypeIntervenant[]
+ * @var $statuts           \Intervenant\Entity\Db\Statut[]
+ *
+ */
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+$this->headTitle()->append($title = "Statuts des intervenants");
+
+?>
+<h1 class="page-header"><?php echo $title ?></h1>
+<div class="resultats"></div>
+<div>
+    <?php foreach ($typesIntervenants as $typeIntervenant): ?>
+        <h3><?= $typeIntervenant ?></h3>
+        <?php
+        echo $this->tag('div', ['style' => 'padding-left: 3em;padding-right:3em']);
+        echo $this->tag('div', ['class' => 'list-group statuts']);
+        foreach ($statuts as $s) {
+            if ($s->getTypeIntervenant() == $typeIntervenant) {
+                ?>
+                <div class="list-group-item statut" data-id="<?= $s->getId() ?>">
+                    <a href="<?= $this->url('statut/saisie', ['statut' => $s->getId()]) ?>">
+                        <?= $s ?>
+                    </a>
+                    <?php if ($canEdit): ?>
+                        <i class="fas fa-arrows-up-down pull-right" title="Vous pouvez trier les statuts en déplaçant les lignes"></i>
+                    <?php endif; ?>
+                </div>
+                <?php
+            }
+        }
+
+        echo '</div></div>';
+        ?>
+
+    <?php endforeach; ?>
+</div>
+
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary" href="<?= $this->url('statut/saisie') ?>" title="Ajouter un statut">
+        <span class="fas fa-plus"></span> Ajouter un statut
+    </a>
+
+    <script type="text/javascript">
+
+        $(".statuts").sortable({
+            handle: '.fa-arrows-up-down',
+            axis: 'y',
+            update: function (event, ui) {
+                var ids = [];
+                $(".statuts .statut").each(function () {
+                    ids.push($(this).data('id'));
+                });
+                $('.resultats').html('<div class="alert alert-info"><span class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Tri en cours ...</div>');
+                $.ajax({
+                    type: 'POST',
+                    url: "<?= $this->url('statut/trier')?>",
+                    data: {ids: ids},
+                    success: function (res) {
+                        $('.resultats').html(res);
+                    }
+                });
+            }
+        });
+
+    </script>
+<?php endif; ?>

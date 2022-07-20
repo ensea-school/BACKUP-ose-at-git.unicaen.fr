@@ -11,10 +11,7 @@ use Application\Service\CorpsService;
  */
 trait CorpsServiceAwareTrait
 {
-    /**
-     * @var CorpsService
-     */
-    private $serviceCorps;
+    protected ?CorpsService $serviceCorps = null;
 
 
 
@@ -23,7 +20,7 @@ trait CorpsServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceCorps(CorpsService $serviceCorps)
+    public function setServiceCorps(?CorpsService $serviceCorps)
     {
         $this->serviceCorps = $serviceCorps;
 
@@ -32,10 +29,7 @@ trait CorpsServiceAwareTrait
 
 
 
-    /**
-     * @return CorpsService
-     */
-    public function getServiceCorps()
+    public function getServiceCorps(): ?CorpsService
     {
         if (empty($this->serviceCorps)) {
             $this->serviceCorps = \Application::$container->get(CorpsService::class);

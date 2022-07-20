@@ -52,7 +52,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'valider'    => [
+                            'valider'   => [
                                 // valider la PJ
                                 'type'    => 'Segment',
                                 'options' => [
@@ -66,7 +66,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'devalider'  => [
+                            'devalider' => [
                                 // dévalider la PJ
                                 'type'    => 'Segment',
                                 'options' => [
@@ -80,7 +80,21 @@ return [
                                     ],
                                 ],
                             ],
-                            'archiver'   => [
+                            'refuser'   => [
+                                // refuser la PJ
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/refuser/:pieceJointe',
+                                    'constraints' => [
+                                        'pieceJointe' => '[0-9]*',
+                                        'fichier'     => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action' => 'refuser',
+                                    ],
+                                ],
+                            ],
+                            'archiver'  => [
                                 // archiver la PJ
                                 'type'    => 'Segment',
                                 'options' => [
@@ -93,7 +107,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'fichier'    => [
+                            'fichier'   => [
                                 'type'          => 'Literal',
                                 'options'       => [
                                     'route' => '/fichier',
@@ -171,9 +185,9 @@ return [
                         ],
                     ],
                     'type-piece-jointe-statut'          => [
-                        'type'    => 'Literal',
+                        'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/type-piece-jointe-statut',
+                            'route'    => '/type-piece-jointe-statut[/:codeTypeIntervenant]',
                             'defaults' => [
                                 'action' => 'type-piece-jointe-statut',
                             ],
@@ -220,7 +234,7 @@ return [
                     'modifier-type-piece-jointe-statut' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/modifier-type-piece-jointe-statut/:typePieceJointe/:statutIntervenant[/:typePieceJointeStatut]',
+                            'route'    => '/modifier-type-piece-jointe-statut/:typePieceJointe/:statut[/:typePieceJointeStatut]',
                             'defaults' => [
                                 'action' => 'modifier-type-piece-jointe-statut',
                             ],
@@ -310,6 +324,11 @@ return [
                     'action'     => ['supprimer'],
                     'privileges' => [Privileges::DOSSIER_SUPPRESSION],
                 ],
+                [
+                    'controller' => 'Application\Controller\Dossier',
+                    'action'     => ['supprimer'],
+                    'privileges' => [Privileges::DOSSIER_SUPPRESSION],
+                ],
 
                 [
                     'controller' => 'Application\Controller\IntervenantDossier',
@@ -359,7 +378,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
-                    'action'     => ['infos', 'lister', 'validation'],
+                    'action'     => ['infos', 'lister', 'validation', 'refuser'],
                     'privileges' => Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
                 ],
                 [

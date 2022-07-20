@@ -5,16 +5,13 @@ namespace Application\Form\Chargens\Traits;
 use Application\Form\Chargens\DifferentielForm;
 
 /**
- * Description of ScenarioFormAwareTrait
+ * Description of DifferentielFormAwareTrait
  *
  * @author UnicaenCode
  */
 trait DifferentielFormAwareTrait
 {
-    /**
-     * @var DifferentielForm
-     */
-    private $formChargensDifferenitel;
+    protected ?DifferentielForm $formChargensDifferentiel = null;
 
 
 
@@ -23,24 +20,19 @@ trait DifferentielFormAwareTrait
      *
      * @return self
      */
-    public function setFormChargensDifferentiel(DifferentielForm $formChargensDifferentiel)
+    public function setFormChargensDifferentiel(?DifferentielForm $formChargensDifferentiel)
     {
-        $this->formChargensDifferenitel = $formChargensDifferentiel;
+        $this->formChargensDifferentiel = $formChargensDifferentiel;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return DifferentielForm
-     */
-    public function getFormChargensDifferentiel()
+    public function getFormChargensDifferentiel(): ?DifferentielForm
     {
-        if (!empty($this->formChargensDifferenitel)) {
-            return $this->formChargensDifferenitel;
+        if (!empty($this->formChargensDifferentiel)) {
+            return $this->formChargensDifferentiel;
         }
 
         return \Application::$container->get('FormElementManager')->get(DifferentielForm::class);

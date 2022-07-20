@@ -11,10 +11,7 @@ use Application\Service\AffectationService;
  */
 trait AffectationServiceAwareTrait
 {
-    /**
-     * @var AffectationService
-     */
-    private $serviceAffectation;
+    protected ?AffectationService $serviceAffectation = null;
 
 
 
@@ -23,7 +20,7 @@ trait AffectationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceAffectation(AffectationService $serviceAffectation)
+    public function setServiceAffectation(?AffectationService $serviceAffectation)
     {
         $this->serviceAffectation = $serviceAffectation;
 
@@ -32,10 +29,7 @@ trait AffectationServiceAwareTrait
 
 
 
-    /**
-     * @return AffectationService
-     */
-    public function getServiceAffectation()
+    public function getServiceAffectation(): ?AffectationService
     {
         if (empty($this->serviceAffectation)) {
             $this->serviceAffectation = \Application::$container->get(AffectationService::class);

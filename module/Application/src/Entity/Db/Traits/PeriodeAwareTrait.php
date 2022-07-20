@@ -11,31 +11,25 @@ use Application\Entity\Db\Periode;
  */
 trait PeriodeAwareTrait
 {
-    /**
-     * @var Periode
-     */
-    private $periode;
-
-
+    protected ?Periode $periode = null;
 
 
 
     /**
      * @param Periode $periode
+     *
      * @return self
      */
-    public function setPeriode( Periode $periode = null )
+    public function setPeriode( ?Periode $periode )
     {
         $this->periode = $periode;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Periode
-     */
-    public function getPeriode()
+    public function getPeriode(): ?Periode
     {
         return $this->periode;
     }

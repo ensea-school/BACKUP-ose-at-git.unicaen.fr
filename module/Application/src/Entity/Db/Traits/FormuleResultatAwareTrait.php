@@ -11,31 +11,25 @@ use Application\Entity\Db\FormuleResultat;
  */
 trait FormuleResultatAwareTrait
 {
-    /**
-     * @var FormuleResultat
-     */
-    private $formuleResultat;
-
-
+    protected ?FormuleResultat $formuleResultat = null;
 
 
 
     /**
      * @param FormuleResultat $formuleResultat
+     *
      * @return self
      */
-    public function setFormuleResultat( FormuleResultat $formuleResultat = null )
+    public function setFormuleResultat( ?FormuleResultat $formuleResultat )
     {
         $this->formuleResultat = $formuleResultat;
+
         return $this;
     }
 
 
 
-    /**
-     * @return FormuleResultat
-     */
-    public function getFormuleResultat()
+    public function getFormuleResultat(): ?FormuleResultat
     {
         return $this->formuleResultat;
     }

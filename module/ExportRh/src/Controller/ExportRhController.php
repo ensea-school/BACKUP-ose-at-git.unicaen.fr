@@ -38,14 +38,10 @@ class ExportRhController extends AbstractController
      */
     protected $exportRhService;
 
-
-
     public function __construct(ExportRhService $exportRhService)
     {
-
         $this->exportRhService = $exportRhService;
     }
-
 
 
     public function indexAction()
@@ -54,10 +50,9 @@ class ExportRhController extends AbstractController
     }
 
 
-
     public function chercherIntervenantRhAction(): array
     {
-        $connecteurRh = $this->getExportRhService();
+        $connecteurRh = $this->getServiceExportRh();
 
         $params = [
             'nomUsuel' => '',
@@ -70,9 +65,9 @@ class ExportRhController extends AbstractController
 
             if ($this->getRequest()->isPost()) {
 
-                $nomUsuel          = $this->getRequest()->getPost('nomUsuel');
-                $prenom            = $this->getRequest()->getPost('prenom');
-                $insee             = $this->getRequest()->getPost('insee');
+                $nomUsuel = $this->getRequest()->getPost('nomUsuel');
+                $prenom = $this->getRequest()->getPost('prenom');
+                $insee = $this->getRequest()->getPost('insee');
                 $listIntervenantRh = $connecteurRh->getListIntervenantRh($nomUsuel, $prenom, $insee);
             }
         } catch (SihamException $e) {
@@ -83,20 +78,17 @@ class ExportRhController extends AbstractController
     }
 
 
-
     public function exporterAction()
     {
 
         /* Initialisation */
-        $role               = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant        = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $intervenantRh      = '';
-        $form               = '';
-        $nameConnecteur     = '';
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenantRh = '';
+        $form = '';
+        $nameConnecteur = '';
         $affectationEnCours = '';
-        $contratEnCours     = '';
-
-
+        $contratEnCours = '';
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
@@ -104,14 +96,14 @@ class ExportRhController extends AbstractController
         $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
         /* Récupération de la validation du dossier si elle existe */
         $intervenantDossierValidation = $this->getServiceDossier()->getValidation($intervenant);
-        $typeIntervenant              = $intervenant->getStatut()->getTypeIntervenant()->getCode();
-        $renouvellement               = false;
-        $priseEnCharge                = false;
+        $typeIntervenant = $intervenant->getStatut()->getTypeIntervenant()->getCode();
+        $renouvellement = false;
+        $priseEnCharge = false;
 
         /*Vérifier si l'étape du worflow pour faire une PEC ou REN est franchie*/
-        $canExport                    = false;
+        $canExport = false;
         $etapeFranchissementParametre = $this->getServiceParametres()->get('export_rh_franchissement');
-        $etapeFranchissement          = $this->getServiceWorkflow()?->getEtape($this->getServiceWfEtape()?->get($etapeFranchissementParametre), $intervenant);
+        $etapeFranchissement = $this->getServiceWorkflow()?->getEtape($this->getServiceWfEtape()?->get($etapeFranchissementParametre), $intervenant);
 
         $etapeFranchissementLibelle = ($etapeFranchissement?->getEtape()->getCode() == WfEtape::CODE_CONTRAT) ? $etapeFranchissement?->getEtape()?->getLibelle($role) . ' et une date de retour signé de renseignée' : $etapeFranchissement?->getEtape()?->getLibelle($role);
         if ($etapeFranchissement && $etapeFranchissement->getFranchie()) {
@@ -149,7 +141,7 @@ class ExportRhController extends AbstractController
             if (!empty($intervenantRh)) {
                 //On regarde si il a une affectation en cours pour l'année courante si oui alors on propose uniquement une synchronisation des données personnelles
                 $affectationEnCours = current($this->exportRhService->getAffectationEnCoursIntervenantRh($intervenant));
-                $contratEnCours     = current($this->exportRhService->getContratEnCoursIntervenantRh($intervenant));
+                $contratEnCours = current($this->exportRhService->getContratEnCoursIntervenantRh($intervenant));
 
                 $renouvellement = true;
                 if (!empty($affectationEnCours)) {
@@ -161,7 +153,7 @@ class ExportRhController extends AbstractController
 
 
             $nameConnecteur = $this->exportRhService->getConnecteurName();
-            $form           = $this->getExportRhForm($intervenant);
+            $form = $this->getFormExportRh($intervenant);
             $form->bind($intervenantDossier);
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
@@ -189,7 +181,6 @@ class ExportRhController extends AbstractController
     }
 
 
-
     public function priseEnChargeAction()
     {
         try {
@@ -200,13 +191,17 @@ class ExportRhController extends AbstractController
                     throw new \LogicException('Intervenant non précisé ou inexistant');
                 }
 
-                $posts  = $this->getRequest()->getPost();
+                $posts = $this->getRequest()->getPost();
                 $result = $this->exportRhService->priseEnChargeIntrervenantRh($intervenant, $posts);
 
                 if ($result !== false) {
                     $this->exportRhService->cloreDossier($intervenant);
                     $this->flashMessenger()->addSuccessMessage('La prise en charge s\'est déroulée avec succés et le dossier a été cloturé');
                     $this->getServiceIntervenant()->updateExportDate($intervenant);
+                    //On met à jour le code intervenant si l'option est activée
+                    if ($this->exportRhService->haveToSyncCode()) {
+                        $this->getServiceIntervenant()->updateCode($intervenant, $result);
+                    }
                 } else {
                     $this->flashMessenger()->addErrorMessage('Probleme prise en charge');
                 }
@@ -220,16 +215,16 @@ class ExportRhController extends AbstractController
     }
 
 
-
     public function renouvellementAction()
     {
         try {
+
             if ($this->getRequest()->isPost()) {
                 $intervenant = $this->getEvent()->getParam('intervenant');
                 if (!$intervenant) {
                     throw new \LogicException('Intervenant non précisé ou inexistant');
                 }
-                $posts           = $this->getRequest()->getPost();
+                $posts = $this->getRequest()->getPost();
                 $missingArgument = 0;
                 if (empty($posts['connecteurForm']['affectation'])) {
                     $this->flashMessenger()->addErrorMessage('Vous n\'avez pas choisi d\'affectation pour l\'agent');
@@ -245,6 +240,10 @@ class ExportRhController extends AbstractController
                         $this->exportRhService->cloreDossier($intervenant);
                         $this->flashMessenger()->addSuccessMessage('Le renouvellement s\'est déroulé avec succés et le dossier a été cloturé');
                         $this->getServiceIntervenant()->updateExportDate($intervenant);
+                        if ($this->exportRhService->haveToSyncCode()) {
+                            $this->getServiceIntervenant()->updateCode($intervenant, $result);
+                        }
+
                     } else {
                         $this->flashMessenger()->addErrorMessage('Un problème est survenu lors de la tentative de renouvellement de l\'intervenant');
                     }
@@ -258,7 +257,6 @@ class ExportRhController extends AbstractController
     }
 
 
-
     public function synchroniserAction()
     {
         try {
@@ -268,7 +266,7 @@ class ExportRhController extends AbstractController
                     throw new \LogicException('Intervenant non précisé ou inexistant');
                 }
 
-                $posts  = $this->getRequest()->getPost();
+                $posts = $this->getRequest()->getPost();
                 $result = $this->exportRhService->synchroniserDonneesPersonnellesIntervenantRh($intervenant, $posts);
                 if ($result !== false) {
                     $this->flashMessenger()->addSuccessMessage('Les données personnelles ont bien été synchronisé');

@@ -7,13 +7,11 @@ use Application\Entity\Chargens\ScenarioNoeud;
 /**
  * Description of ScenarioNoeudAwareTrait
  *
+ * @author UnicaenCode
  */
 trait ScenarioNoeudAwareTrait
 {
-    /**
-     * @var ScenarioNoeud
-     */
-    private $scenarioNoeud;
+    protected ?ScenarioNoeud $scenarioNoeud = null;
 
 
 
@@ -22,7 +20,7 @@ trait ScenarioNoeudAwareTrait
      *
      * @return self
      */
-    public function setScenarioNoeud(ScenarioNoeud $scenarioNoeud = null)
+    public function setScenarioNoeud( ?ScenarioNoeud $scenarioNoeud )
     {
         $this->scenarioNoeud = $scenarioNoeud;
 
@@ -31,10 +29,7 @@ trait ScenarioNoeudAwareTrait
 
 
 
-    /**
-     * @return ScenarioNoeud
-     */
-    public function getScenarioNoeud()
+    public function getScenarioNoeud(): ?ScenarioNoeud
     {
         return $this->scenarioNoeud;
     }

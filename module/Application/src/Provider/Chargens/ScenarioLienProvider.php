@@ -99,8 +99,7 @@ class ScenarioLienProvider
      */
     private function persistScenarioLien(ScenarioLien $scenarioLien, array $changes)
     {
-        $bdd         = $this->chargens->getBdd();
-        $conn        = $bdd->getEntityManager()->getConnection();
+        $conn        = $this->chargens->getEntityManager()->getConnection();
         $userId      = $this->chargens->getServiceContext()->getUtilisateur()->getId();
         $date        = $conn->convertToDatabaseValue(new \DateTime(), 'datetime');
         $oseSourceId = $this->chargens->getServiceSource()->getOse()->getId();
@@ -112,7 +111,7 @@ class ScenarioLienProvider
             $changes['HISTO_MODIFICATION']    = $date;
             $conn->update('SCENARIO_LIEN', $changes, ['ID' => $scenarioLien->getId()]);
         } else {
-            $scenarioLien->setId($bdd->sequenceNextVal('SCENARIO_LIEN_ID_SEQ'));
+            $scenarioLien->setId((int)$conn->fetchAssociative('SELECT SCENARIO_LIEN_ID_SEQ.NEXTVAL VAL FROM DUAL')['VAL']);
             $changes['ID']                    = $scenarioLien->getId();
             $changes['SCENARIO_ID']           = $scenarioLien->getScenario()->getId();
             $changes['LIEN_ID']               = $scenarioLien->getLien()->getId();
@@ -126,20 +125,20 @@ class ScenarioLienProvider
         }
 
         $noeudSup = $scenarioLien->getLien()->getNoeudSup();
-        if ($noeudSup->isListe()){
-            $noeuds = [];
+        if ($noeudSup->isListe()) {
+            $noeuds   = [];
             $liensSup = $noeudSup->getLiensSup();
-            foreach($liensSup as $lienSup){
-                if ($lienSup->getScenarioLien()->isActif()){
+            foreach ($liensSup as $lienSup) {
+                if ($lienSup->getScenarioLien()->isActif()) {
                     $noeuds[] = $lienSup->getNoeudSup();
                 }
             }
-        }else{
+        } else {
             $noeuds = [$noeudSup];
         }
 
         /** @var Noeud $noeud */
-        foreach($noeuds as $noeud ){
+        foreach ($noeuds as $noeud) {
             $this->chargens->getScenarioNoeuds()->calculSousEffectifsByNoeud($noeud);
         }
 
@@ -170,7 +169,7 @@ class ScenarioLienProvider
           AND sl.lien_id IN ($lienIds)
         ";
 
-        return $this->chargens->getBdd()->fetch($sql);
+        return $this->chargens->getEntityManager()->getConnection()->fetchAllAssociative($sql);
     }
 
 
@@ -203,9 +202,9 @@ class ScenarioLienProvider
      * This method is called by var_dump() when dumping an object to get the properties that should be shown.
      * If the method isn't defined on an object, then all public, protected and private properties will be shown.
      *
+     * @return array
      * @since PHP 5.6.0
      *
-     * @return array
      * @link  http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.debuginfo
      */
     function __debugInfo()

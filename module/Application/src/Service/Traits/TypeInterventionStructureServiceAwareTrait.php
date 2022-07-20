@@ -11,10 +11,7 @@ use Application\Service\TypeInterventionStructureService;
  */
 trait TypeInterventionStructureServiceAwareTrait
 {
-    /**
-     * @var TypeInterventionStructureService
-     */
-    private $serviceTypeInterventionStructure;
+    protected ?TypeInterventionStructureService $serviceTypeInterventionStructure = null;
 
 
 
@@ -23,7 +20,7 @@ trait TypeInterventionStructureServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeInterventionStructure(TypeInterventionStructureService $serviceTypeInterventionStructure)
+    public function setServiceTypeInterventionStructure(?TypeInterventionStructureService $serviceTypeInterventionStructure)
     {
         $this->serviceTypeInterventionStructure = $serviceTypeInterventionStructure;
 
@@ -32,10 +29,7 @@ trait TypeInterventionStructureServiceAwareTrait
 
 
 
-    /**
-     * @return TypeInterventionStructureService
-     */
-    public function getServiceTypeInterventionStructure()
+    public function getServiceTypeInterventionStructure(): ?TypeInterventionStructureService
     {
         if (empty($this->serviceTypeInterventionStructure)) {
             $this->serviceTypeInterventionStructure = \Application::$container->get(TypeInterventionStructureService::class);

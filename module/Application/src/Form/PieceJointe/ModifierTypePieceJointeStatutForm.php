@@ -11,11 +11,6 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 
 
-/**
- * Description of ModifierTypePieceJointeSaisieForm
- *
- * @author ZVENIGOROSKY Alexandre <alexandre.zvenigorosky at unicaen.fr>
- */
 class ModifierTypePieceJointeStatutForm extends AbstractForm
 {
     use AnneeServiceAwareTrait;
@@ -36,9 +31,9 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
 
         $this->add([
             'type'    => 'Checkbox',
-            'name'    => 'typePieceJointe',
+            'name'    => 'obligatoire',
             'options' => [
-                'label' => "La pièce justifitative doit être fournie obligatoirement",
+                'label' => "La pièce justificative doit être fournie obligatoirement",
             ],
         ]);
 
@@ -56,7 +51,7 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
         $this->add([
             'name'    => 'type-heure-hetd',
             'options' => [
-                'label' => 'Calculer les seuils en utilisant les heures  en équivalent HETD',
+                'label' => 'Calculer les seuils en utilisant les heures équivalent TD',
             ],
             'type'    => 'Checkbox',
         ]);
@@ -78,34 +73,11 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'Select',
-            'name'       => 'annee-debut',
-            'options'    => [
-                'label' => 'À partir de',
-            ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
-            ],
-        ]);
-
-        $this->add([
-            'type'       => 'Select',
-            'name'       => 'annee-fin',
-            'options'    => [
-                'label' => 'Jusqu\'à',
-            ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
-            ],
-        ]);
-
-        $this->add([
             'type'       => 'Number',
             'name'       => 'duree-vie',
             'options'    => [
-                'label' => "Durée de vie de la pièce jointe (en année)",
+                'label'  => "Durée de vie de la pièce jointe",
+                'suffix' => "année(s)",
             ],
             'attributes' => [
                 'min'       => '1',
@@ -125,72 +97,9 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
 
         $this->add(new Csrf('security'));
 
-        $this->add([
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'attributes' => [
-                'value' => "Enregistrer",
-                'class' => 'btn btn-primary',
-            ],
-        ]);
+        $this->addSubmit();
 
         return $this;
-    }
-
-
-
-    /**
-     * @param TypePieceJointeStatut $tpjs
-     *
-     * @return $this
-     */
-    public function buildAnnees(TypePieceJointeStatut $tpjs)
-    {
-        /* Limitations des années de début */
-        $derniereAnneeDebut = $this->getServiceTypePieceJointeStatut()->derniereAnneeDebut($tpjs);
-        if ($derniereAnneeDebut) {
-            $this->get('annee-debut')->setValueOptions($this->getAnnees($derniereAnneeDebut, null));
-            if (!$tpjs->getId()) {
-                $tpjs->setAnneeDebut($this->getServiceAnnee()->getSuivante($derniereAnneeDebut));
-            }
-        } else {
-            $this->get('annee-debut')->setValueOptions($this->getAnnees(null, null));
-            $this->get('annee-debut')->setEmptyOption('Pas de limite');
-        }
-
-
-        /* Limitations des années de fin */
-        $premiereAnneeFin = $this->getServiceTypePieceJointeStatut()->premiereAnneeFin($tpjs);
-        if ($premiereAnneeFin) {
-            $this->get('annee-fin')->setValueOptions($this->getAnnees(null, $premiereAnneeFin));
-            if (!$tpjs->getId()) {
-                $tpjs->setAnneeFin($this->getServiceAnnee()->getPrecedente($premiereAnneeFin));
-            }
-        } else {
-            $this->get('annee-fin')->setValueOptions($this->getAnnees(null, null));
-            $this->get('annee-fin')->setEmptyOption('Pas de limite');
-        }
-
-        return $this;
-    }
-
-
-
-    private function getAnnees($min, $max)
-    {
-        $annee = $this->getServiceContext()->getAnnee()->getId();
-        $as    = $this->getServiceAnnee()->getList();
-
-        $annees = [];
-        foreach ($as as $ak => $av) {
-            if ($ak >= $annee - 10 && $ak <= $annee + 10) {
-                if ((!$min || $ak > $min->getId()) && (!$max || $ak < $max->getId())) {
-                    $annees[$ak] = $av->getLibelle();
-                }
-            }
-        }
-
-        return $annees;
     }
 
 
@@ -204,7 +113,7 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'typePieceJointe' => [
+            'obligatoire'     => [
                 'required' => true,
             ],
             'seuil-hetd'      => [
@@ -233,12 +142,6 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             ],
             'obligatoire-hnp' => [
                 'required' => true,
-            ],
-            'annee-debut'     => [
-                'required' => false,
-            ],
-            'annee-fin'       => [
-                'required' => false,
             ],
             'duree-vie'       => [
                 'required' => true,
@@ -269,16 +172,9 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
     {
 
         $object->setChangementRIB($data['changement-rib']);
-        $object->setObligatoire($data['typePieceJointe']);
-        $object->setSeuilHetd((empty($data['seuil-hetd']) ? null : $data['seuil-hetd']));
+        $object->setObligatoire($data['obligatoire']);
+        $object->setSeuilHetd((empty($data['seuil-hetd']) ? 0 : $data['seuil-hetd']));
         $object->setTypeHeureHetd($data['type-heure-hetd']);
-
-        if (array_key_exists('annee-debut', $data)) {
-            $object->setAnneeDebut($this->getServiceAnnee()->get($data['annee-debut']));
-        }
-        if (array_key_exists('annee-fin', $data)) {
-            $object->setAnneeFin($this->getServiceAnnee()->get($data['annee-fin']));
-        }
         $object->setFC($data['fc']);
         $object->setDureeVie($data['duree-vie']);
         $object->setObligatoireHNP($data['obligatoire-hnp']);
@@ -299,15 +195,13 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
     {
         $data = [
             'id'              => $object->getId(),
-            'typePieceJointe' => $object->getObligatoire(),
+            'obligatoire'     => $object->getObligatoire(),
             'seuil-hetd'      => $object->getSeuilHetd(),
             'type-heure-hetd' => $object->getTypeHeureHetd(),
             'changement-rib'  => $object->getChangementRIB(),
-            'fc'              => $object->getFC(),
+            'fc'              => $object->getFc(),
             'duree-vie'       => $object->getDureeVie(),
-            'annee-debut'     => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
-            'annee-fin'       => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
-            'obligatoire-hnp' => $object->isObligatoireHNP(),
+            'obligatoire-hnp' => $object->getObligatoireHNP(),
         ];
 
         return $data;

@@ -11,10 +11,7 @@ use Application\Form\Intervenant\HeuresCompForm;
  */
 trait HeuresCompFormAwareTrait
 {
-    /**
-     * @var HeuresCompForm
-     */
-    private $formIntervenantHeuresComp;
+    protected ?HeuresCompForm $formIntervenantHeuresComp = null;
 
 
 
@@ -23,7 +20,7 @@ trait HeuresCompFormAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantHeuresComp(HeuresCompForm $formIntervenantHeuresComp)
+    public function setFormIntervenantHeuresComp(?HeuresCompForm $formIntervenantHeuresComp)
     {
         $this->formIntervenantHeuresComp = $formIntervenantHeuresComp;
 
@@ -32,12 +29,7 @@ trait HeuresCompFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return HeuresCompForm
-     */
-    public function getFormIntervenantHeuresComp()
+    public function getFormIntervenantHeuresComp(): ?HeuresCompForm
     {
         if (!empty($this->formIntervenantHeuresComp)) {
             return $this->formIntervenantHeuresComp;

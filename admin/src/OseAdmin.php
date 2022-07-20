@@ -9,20 +9,11 @@ class OseAdmin
     const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE.git';
     const MIN_VERSION = 14; // version minimum installable
 
-    /**
-     * @var self
-     */
-    private static $instance;
+    private static ?OseAdmin $instance = null;
 
-    /**
-     * @var Console
-     */
-    protected $console;
+    protected Console        $console;
 
-    /**
-     * @var Bdd
-     */
-    protected $bdd;
+    protected ?\BddAdmin\Bdd $bdd      = null;
 
     /**
      * @var array
@@ -56,21 +47,19 @@ class OseAdmin
 
 
 
-    /**
-     * OseAdmin constructor.
-     *
-     * @param Console $console
-     */
-    public function __construct(Console $console)
+    private function __construct()
     {
-        $this->console  = $console;
-        self::$instance = $this;
     }
 
 
 
     public static function getInstance(): self
     {
+        if (!self::$instance) {
+            self::$instance = new self();
+            self::$instance->init();
+        }
+
         return self::$instance;
     }
 
@@ -78,6 +67,26 @@ class OseAdmin
 
     public function init()
     {
+        spl_autoload_register(function ($class) {
+            $root = self::getInstance()->getOseDir();
+
+            $dirs = [
+                $root . '/admin/src/',
+                $root . '/admin/actul/src/',
+            ];
+
+            foreach ($dirs as $dir) {
+                $filename = $dir . str_replace('\\', '/', $class) . '.php';
+
+                if (file_exists($filename)) {
+                    require_once $filename;
+                    break;
+                }
+            }
+        });
+
+        $this->console = new Console();
+
         $this->version    = $this->currentVersion();
         $this->oldVersion = $this->version;
 
@@ -120,7 +129,7 @@ class OseAdmin
                     $vb = (int)$b;
                 }
 
-                if ($va == $vb) return $a > $b;
+                if ($va == $vb) return 1;
 
                 return $va - $vb;
             });
@@ -229,6 +238,8 @@ class OseAdmin
         } elseif (is_dir($cible . $action)) {
             $sousAction = $this->getConsole()->getArg(2);
             $filename   = $cible . $action . '/actions/' . $sousAction . '.php';
+        } else {
+            $filename = null;
         }
 
         if ($filename) {
@@ -298,6 +309,43 @@ class OseAdmin
 
 
 
+    public function getConfig(string $section = null, string $key = null, $default = null)
+    {
+        $configFilename = $this->getOseDir() . '/config.local.php';
+        if (file_exists($configFilename)) {
+            $config = require $configFilename;
+        } else {
+            $config = [];
+        }
+
+        if ($config && $section && $key) {
+            if (isset($config[$section][$key])) {
+                return $config[$section][$key];
+            } else {
+                return $default;
+            }
+        }
+
+        if ($config && $section) {
+            if (isset($config[$section])) {
+                return $config[$section];
+            }
+        }
+
+        return $config;
+    }
+
+
+
+    public function inMaintenance(): bool
+    {
+        $config = $this->getConfig();
+
+        return $config['maintenance']['modeMaintenance'] ?? true;
+    }
+
+
+
     /**
      * @return \BddAdmin\Bdd
      */
@@ -309,7 +357,9 @@ class OseAdmin
                     . "\nVeuillez contrôler vos paramètres de configuration s'il vous plaît, avant de refaire une tentative de MAJ de la base de données (./bin/ose update-bdd).");
             }
             $this->bdd = new \BddAdmin\Bdd(Config::getBdd());
-            $this->bdd->setLogger($this->console);
+            if (PHP_SAPI == 'cli') {
+                $this->bdd->setLogger($this->console);
+            }
         }
 
         return $this->bdd;

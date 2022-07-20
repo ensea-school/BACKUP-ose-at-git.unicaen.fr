@@ -5,7 +5,10 @@ namespace Application\ORM;
 
 use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\TypeAgrement;
+use Application\Interfaces\ParametreEntityInterface;
+use Application\ORM\Event\Listeners\ParametreEntityListener;
 use Application\Service\IntervenantService;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\Mvc\MvcEvent;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -18,6 +21,7 @@ class RouteEntitiesInjector
 {
     use CacheContainerTrait;
     use EntityManagerAwareTrait;
+    use ContextServiceAwareTrait;
 
 
     public function __invoke(MvcEvent $e)
@@ -28,7 +32,7 @@ class RouteEntitiesInjector
             switch ($name) {
                 case 'intervenant':
                     /** @var IntervenantService $serviceIntervenant */
-                    $serviceIntervenant = \Application::$container->get(IntervenantService::class);
+                    $serviceIntervenant = $e->getApplication()->getServiceManager()->get(IntervenantService::class);
 
                     /* @var $role \Application\Acl\Role */
                     $role   = $serviceIntervenant->getServiceContext()->getSelectedIdentityRole();
@@ -38,6 +42,15 @@ class RouteEntitiesInjector
                             $entity = $role->getIntervenant(); // c'est l'intervenant du rôle qui prime
                         } else {
                             $role->setIntervenant($entity); // Si c'est la même personne, on lui donne sa fiche d'ID demandée
+                        }
+
+                        $contextIntervenant = $this->getServiceContext()->getIntervenant();
+                        $roleIntervenant    = $role->getIntervenant();
+
+                        if ($contextIntervenant && $contextIntervenant !== $roleIntervenant) {
+                            if ($contextIntervenant->getCode() === $roleIntervenant->getCode()) {
+                                $this->getServiceContext()->setIntervenant($roleIntervenant);
+                            }
                         }
                     }
                     $e->setParam($name, $entity);
@@ -49,8 +62,17 @@ class RouteEntitiesInjector
                 default:
                     if (array_key_exists($name, $entityParams)) {
                         if (0 !== (int)$value) {
-                            $repo = $this->getEntityManager()->getRepository($entityParams[$name]);
-                            $e->setParam($name, $repo->find($value));
+                            $repo   = $this->getEntityManager()->getRepository($entityParams[$name]);
+                            $entity = $repo->find($value);
+                            if ($entity instanceof ParametreEntityInterface) {
+                                $annee = $this->getServiceContext()->getAnnee();
+                                if ($entity->getAnnee() != $annee) {
+                                    $pel = new ParametreEntityListener();
+                                    $pel->setEntityManager($this->getEntityManager());
+                                    $entity = $pel->entityAutreAnnee($entity, $annee);
+                                }
+                            }
+                            $e->setParam($name, $entity);
                         }
                     }
                 break;

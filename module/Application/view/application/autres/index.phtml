@@ -13,7 +13,7 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-m
 
 
 ?>
-<h1 class="page-header">Gestion des dossiers autres</h1>
+<h1 class="page-header">Gestion des champs personnalisés pour le dossier intervenant</h1>
 
 <table class="table table-bordered table-condensed table-hover">
     <thead>
@@ -42,7 +42,7 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-m
                        data-event="dossier-autre-saisie"
                        href="<?= $this->url('autres-infos/saisie', ['dossierAutre' => $autre->getId()]) ?>"
                        data-submit-reload="true">
-                        <span class="glyphicon glyphicon-edit"></span></a>
+                        <i class="fas fa-pen-to-square"></i></a>
                 </td>
             <?php endif; ?>
         </tr>

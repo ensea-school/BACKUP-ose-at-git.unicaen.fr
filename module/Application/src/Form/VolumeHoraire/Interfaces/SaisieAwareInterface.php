@@ -3,7 +3,6 @@
 namespace Application\Form\VolumeHoraire\Interfaces;
 
 use Application\Form\VolumeHoraire\Saisie;
-use RuntimeException;
 
 /**
  * Description of SaisieAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface SaisieAwareInterface
 {
     /**
-     * @param Saisie $formVolumeHoraireSaisie
+     * @param Saisie|null $formVolumeHoraireSaisie
+     *
      * @return self
      */
-    public function setFormVolumeHoraireSaisie( Saisie $formVolumeHoraireSaisie );
+    public function setFormVolumeHoraireSaisie( ?Saisie $formVolumeHoraireSaisie );
 
 
 
-    /**
-     * @return SaisieAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormVolumeHoraireSaisie();
+    public function getFormVolumeHoraireSaisie(): ?Saisie;
 }

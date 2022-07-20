@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\FonctionReferentielService;
 
 /**
- * Description of FonctionReferentielAwareTrait
+ * Description of FonctionReferentielServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait FonctionReferentielServiceAwareTrait
 {
-    /**
-     * @var FonctionReferentielService
-     */
-    private $serviceFonctionReferentiel;
+    protected ?FonctionReferentielService $serviceFonctionReferentiel = null;
 
 
 
@@ -23,7 +20,7 @@ trait FonctionReferentielServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceFonctionReferentiel(FonctionReferentielService $serviceFonctionReferentiel)
+    public function setServiceFonctionReferentiel(?FonctionReferentielService $serviceFonctionReferentiel)
     {
         $this->serviceFonctionReferentiel = $serviceFonctionReferentiel;
 
@@ -32,10 +29,7 @@ trait FonctionReferentielServiceAwareTrait
 
 
 
-    /**
-     * @return FonctionReferentielService
-     */
-    public function getServiceFonctionReferentiel()
+    public function getServiceFonctionReferentiel(): ?FonctionReferentielService
     {
         if (empty($this->serviceFonctionReferentiel)) {
             $this->serviceFonctionReferentiel = \Application::$container->get(FonctionReferentielService::class);

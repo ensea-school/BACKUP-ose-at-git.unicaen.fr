@@ -187,7 +187,7 @@ class Liste extends AbstractViewHelper
         if (count($this->getServices()) > 150) {
             return $out . '<div class="alert alert-danger" role="alert">Le nombre de services à afficher est trop important. Merci d\'affiner vos critères de recherche.</div></div>';
         }
-        if ($this->getAddButtonVisibility() && !$this->getReadOnly()) {
+        if ($this->getAddButtonVisibility() && !$this->getReadOnly() && $this->getIntervenant()) {
             $out .= $this->renderActionButtons();
         }
         $out .= $this->renderShowHide();
@@ -226,7 +226,7 @@ class Liste extends AbstractViewHelper
 
 
 
-    public function renderActionButtons()
+    protected function renderActionButtons()
     {
         $out = '';
         if ($this->isInRealise()) {
@@ -240,7 +240,7 @@ class Liste extends AbstractViewHelper
                     'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
                         . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
                 ];
-                $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>&nbsp;';
+                $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
                 $out     .= '<div class="modal fade" id="prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
                 $out     .= '<div class="modal-dialog modal-md">';
                 $out     .= '<div class="modal-content">';
@@ -271,7 +271,7 @@ class Liste extends AbstractViewHelper
                     'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
                 ];
                 $source  = $typeVolumeHoraire->getLibelle();
-                $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <span class="glyphicon glyphicon-arrow-right"></span> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
+                $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <i class="fas fa-arrow-right"></i> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
                 $out     .= '<div class="modal fade" id="prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
                 $out     .= '<div class="modal-dialog modal-md">';
                 $out     .= '<div class="modal-content">';
@@ -301,7 +301,7 @@ class Liste extends AbstractViewHelper
             'href'       => $this->getAddUrl(),
             'title'      => 'Ajouter un nouvel enseignement',
         ];
-        $out     .= '<a ' . $this->htmlAttribs($attribs) . '><span class="glyphicon glyphicon-plus"></span> Je saisis</a>';
+        $out     .= '<a ' . $this->htmlAttribs($attribs) . '><i class="fas fa-plus"></i> Je saisis</a>';
 
         return $out;
     }
@@ -315,10 +315,12 @@ class Liste extends AbstractViewHelper
         $evhSaisi   = $this->getServiceEtatVolumeHoraire()->getSaisi();
         $evhValide  = $this->getServiceEtatVolumeHoraire()->getValide();
 
-        $heures = 0;
+        $heures         = 0;
+        $modeCalendaire = false;
         if (!$this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())) {
             // Si on n'est pas en semestriel, donc en calendaire, alors on ajoute une heure fictive afin d'afficher
             // tout le temps la ligne
+            $modeCalendaire = true;
             $heures++;
         }
         $volumeHoraireListe = $service->getVolumeHoraireListe();
@@ -338,10 +340,11 @@ class Liste extends AbstractViewHelper
             return ''; // on n'affiche pas les lignes de services avec 0 heures
         }
         $ligneView = $this->getView()->serviceLigne($this, $service);
+        $class     = ($modeCalendaire) ? 'service-ligne mode-calendaire' : 'service-ligne';
         $attribs   = [
             'id'       => 'service-' . $service->getId() . '-ligne',
             'data-id'  => $service->getId(),
-            'class'    => 'service-ligne',
+            'class'    => $class,
             'data-url' => $ligneView->getRefreshUrl(),
         ];
         if (!$show) $attribs['style'] = 'display:none';
@@ -447,8 +450,8 @@ class Liste extends AbstractViewHelper
     {
         return
             '<div class="service-show-hide-buttons">'
-            . '<button type="button" class="btn btn-default btn-xs service-show-all-details"><span class="glyphicon glyphicon-chevron-down"></span> Tout déplier</button> '
-            . '<button type="button" class="btn btn-default btn-xs service-hide-all-details"><span class="glyphicon glyphicon-chevron-up"></span> Tout replier</button>'
+            . '<button type="button" class="btn btn-default btn-xs service-show-all-details"><i class="fas fa-chevron-down"></i> Tout déplier</button> '
+            . '<button type="button" class="btn btn-default btn-xs service-hide-all-details"><i class="fas fa-chevron-up"></i> Tout replier</button>'
             . '</div>';
     }
 

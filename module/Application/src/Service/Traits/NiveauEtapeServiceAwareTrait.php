@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\NiveauEtapeService;
 
 /**
- * Description of NiveauEtapeAwareTrait
+ * Description of NiveauEtapeServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait NiveauEtapeServiceAwareTrait
 {
-    /**
-     * @var NiveauEtapeService
-     */
-    private $serviceNiveauEtape;
+    protected ?NiveauEtapeService $serviceNiveauEtape = null;
 
 
 
@@ -23,7 +20,7 @@ trait NiveauEtapeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceNiveauEtape(NiveauEtapeService $serviceNiveauEtape)
+    public function setServiceNiveauEtape(?NiveauEtapeService $serviceNiveauEtape)
     {
         $this->serviceNiveauEtape = $serviceNiveauEtape;
 
@@ -32,10 +29,7 @@ trait NiveauEtapeServiceAwareTrait
 
 
 
-    /**
-     * @return NiveauEtapeService
-     */
-    public function getServiceNiveauEtape()
+    public function getServiceNiveauEtape(): ?NiveauEtapeService
     {
         if (empty($this->serviceNiveauEtape)) {
             $this->serviceNiveauEtape = \Application::$container->get(NiveauEtapeService::class);

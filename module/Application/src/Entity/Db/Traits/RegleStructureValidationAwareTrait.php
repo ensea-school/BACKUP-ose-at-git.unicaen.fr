@@ -11,31 +11,25 @@ use Application\Entity\Db\RegleStructureValidation;
  */
 trait RegleStructureValidationAwareTrait
 {
-    /**
-     * @var RegleStructureValidation
-     */
-    private $regleStructureValidation;
-
-
+    protected ?RegleStructureValidation $regleStructureValidation = null;
 
 
 
     /**
      * @param RegleStructureValidation $regleStructureValidation
+     *
      * @return self
      */
-    public function setRegleStructureValidation( RegleStructureValidation $regleStructureValidation = null )
+    public function setRegleStructureValidation( ?RegleStructureValidation $regleStructureValidation )
     {
         $this->regleStructureValidation = $regleStructureValidation;
+
         return $this;
     }
 
 
 
-    /**
-     * @return RegleStructureValidation
-     */
-    public function getRegleStructureValidation()
+    public function getRegleStructureValidation(): ?RegleStructureValidation
     {
         return $this->regleStructureValidation;
     }

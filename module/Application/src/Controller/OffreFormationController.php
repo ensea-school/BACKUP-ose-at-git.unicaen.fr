@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\CheminPedagogique;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\GroupeTypeFormation;
@@ -18,6 +19,7 @@ use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Application\Service\Traits\OffreFormationServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
+use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 
 /**
@@ -36,6 +38,7 @@ class OffreFormationController extends AbstractController
     use AnneeServiceAwareTrait;
     use ReconductionProcessusAwareTrait;
     use OffreFormationServiceAwareTrait;
+    use SchemaServiceAwareTrait;
 
 
     public function indexAction()
@@ -56,7 +59,7 @@ class OffreFormationController extends AbstractController
 
         $params = [];
         if ($structure) $params['structure'] = $structure->getId();
-        if ($niveau) $params['niveau'] = $niveau->getId();
+        if ($niveau) $params['niveau'] = ($niveau->getPertinence()) ? $niveau->getId() : $niveau->getLib();
         if ($etape) $params['etape'] = $etape->getId();
 
 
@@ -64,7 +67,6 @@ class OffreFormationController extends AbstractController
         if (($element = $this->params()->fromPost('element')) && isset($element['id'])) {
             $form->get('element')->setValue($element);
         }
-
         return [
             'structures'     => $structures,
             'niveaux'        => $niveaux,
@@ -75,9 +77,9 @@ class OffreFormationController extends AbstractController
             'etape'          => $etape,
             'serviceEtape'   => $this->getServiceEtape(), // pour déterminer les droits
             'serviceElement' => $this->getServiceElementPedagogique(), // pour déterminer les droits
+            'serviceSchema'  => $this->getServiceSchema(),
         ];
     }
-
 
 
     public function exportAction()
@@ -116,30 +118,30 @@ class OffreFormationController extends AbstractController
 
 
         foreach ($elements as $element) {
-            $cm       = '0';
-            $td       = '0';
-            $tp       = '0';
+            $cm = '0';
+            $td = '0';
+            $tp = '0';
             $cmGroupe = '0';
             $tdGroupe = '0';
             $tpGroupe = '0';
 
             foreach ($element->getVolumeHoraireEns() as $vhe) {
                 if ($vhe->getTypeIntervention()->getCode() == 'CM') {
-                    $cm       = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
+                    $cm = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
                     $cmGroupe = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
                 }
                 if ($vhe->getTypeIntervention()->getCode() == 'TD') {
-                    $td       = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
+                    $td = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
                     $tdGroupe = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
                 }
                 if ($vhe->getTypeIntervention()->getCode() == 'TP') {
-                    $tp       = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
+                    $tp = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
                     $tpGroupe = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
                 }
             }
 
-            $etape      = $element->getEtape();
-            $effectifs  = $element->getEffectifs();
+            $etape = $element->getEtape();
+            $effectifs = $element->getEffectifs();
             $discipline = $element->getDiscipline();
             $csvModel->addLine([
                 $etape->getCode(),
@@ -171,12 +173,10 @@ class OffreFormationController extends AbstractController
     }
 
 
-
     public function administrationOffreAction()
     {
         return [];
     }
-
 
 
     public function reconductionAction()
@@ -195,13 +195,13 @@ class OffreFormationController extends AbstractController
         [$offresComplementaires, $mappingEtape, $reconductionTotale] = $this->getServiceOffreFormation()->getOffreComplementaire($structure, $niveau, $etape);
 
         $reconductionStep = '';
-        $messageStep      = '';
-        $fromPost         = false;
+        $messageStep = '';
+        $fromPost = false;
 
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $datas    = $request->getPost();
+            $datas = $request->getPost();
             $fromPost = true;
             //Ajout du mapping des EtapesN et EtapesN1 pour pouvoir reconduire un element pédagogique sur une etape déjà reconduite.
             $datas['mappingEtape'] = $mappingEtape;
@@ -216,7 +216,7 @@ class OffreFormationController extends AbstractController
                 }
             } catch (\Exception $e) {
                 $reconductionStep = false;
-                $messageStep      = $e->getMessage();
+                $messageStep = $e->getMessage();
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
         }
@@ -233,7 +233,6 @@ class OffreFormationController extends AbstractController
             'messageStep'           => $messageStep,
         ];
     }
-
 
 
     public function reconductionCentreCoutAction()
@@ -256,7 +255,7 @@ class OffreFormationController extends AbstractController
             $datas = $request->getPost();
             //Reconduire les centres de coût des EP de l'étape.
             try {
-                $etapesReconduites   = $this->getServiceEtape()->getEtapeCentreCoutReconductible($structure);
+                $etapesReconduites = $this->getServiceEtape()->getEtapeCentreCoutReconductible($structure);
                 $etapesReconduitesCc = [];
                 if (isset($datas['etapes'])) {
                     foreach ($datas['etapes'] as $code) {
@@ -265,7 +264,7 @@ class OffreFormationController extends AbstractController
                         }
                     }
                 }
-                $result            = $this->getProcessusReconduction()->reconduireCCFormation($etapesReconduitesCc);
+                $result = $this->getProcessusReconduction()->reconduireCCFormation($etapesReconduitesCc);
                 $etapesReconduites = $this->getServiceEtape()->getEtapeCentreCoutReconductible($structure);
 
                 $this->flashMessenger()->addSuccessMessage("$result centre(s) de coût(s) ont été reconduit pour l'année prochaine. ");
@@ -287,14 +286,13 @@ class OffreFormationController extends AbstractController
     }
 
 
-
     public function reconductionModulateurAction()
     {
         $this->initFilterHistorique();
 
         [$structure, $niveau, $etape] = $this->getParams();
         $etapesReconduites = [];
-        $role              = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $qb = $this->getServiceStructure()->finderByHistorique();
         $this->getServiceStructure()->finderByEnseignement($qb);
@@ -304,7 +302,7 @@ class OffreFormationController extends AbstractController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $datas             = $request->getPost();
+            $datas = $request->getPost();
             $etapesReconduites = $this->getServiceEtape()->getEtapeModulateurReconductible($structure);
             try {
                 $etapesReconduitesCc = [];
@@ -340,13 +338,11 @@ class OffreFormationController extends AbstractController
     }
 
 
-
     protected function initFilters()
     {
         $this->initFilterAnnee();
         $this->initFilterHistorique();
     }
-
 
 
     protected function initFilterAnnee()
@@ -359,12 +355,12 @@ class OffreFormationController extends AbstractController
     }
 
 
-
     protected function initFilterHistorique()
     {
         /* Mise en place des filtres */
         $this->em()->getFilters()->enable('historique')->init([
             ElementPedagogique::class,
+            CheminPedagogique::class,
             TypeFormation::class,
             GroupeTypeFormation::class,
             TypeModulateur::class,
@@ -373,19 +369,17 @@ class OffreFormationController extends AbstractController
     }
 
 
-
     protected function disableFilters($name)
     {
         $this->em()->getFilters()->disable($name);
     }
 
 
-
     protected function getParams()
     {
         $structure = $this->context()->structureFromQuery() ?: $this->getServiceContext()->getStructure();
-        $niveau    = $this->context()->niveauFromQuery();
-        $etape     = $this->context()->etapeFromQuery();
+        $niveau = $this->context()->niveauFromQuery();
+        $etape = $this->context()->etapeFromQuery();
         if ($niveau) $niveau = $this->getServiceNiveauEtape()->get($niveau); // entité Niveau
 
         return [$structure, $niveau, $etape];

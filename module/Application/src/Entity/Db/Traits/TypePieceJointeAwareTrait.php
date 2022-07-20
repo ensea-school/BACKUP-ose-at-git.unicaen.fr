@@ -11,31 +11,25 @@ use Application\Entity\Db\TypePieceJointe;
  */
 trait TypePieceJointeAwareTrait
 {
-    /**
-     * @var TypePieceJointe
-     */
-    private $typePieceJointe;
-
-
+    protected ?TypePieceJointe $typePieceJointe = null;
 
 
 
     /**
      * @param TypePieceJointe $typePieceJointe
+     *
      * @return self
      */
-    public function setTypePieceJointe( TypePieceJointe $typePieceJointe = null )
+    public function setTypePieceJointe( ?TypePieceJointe $typePieceJointe )
     {
         $this->typePieceJointe = $typePieceJointe;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypePieceJointe
-     */
-    public function getTypePieceJointe()
+    public function getTypePieceJointe(): ?TypePieceJointe
     {
         return $this->typePieceJointe;
     }

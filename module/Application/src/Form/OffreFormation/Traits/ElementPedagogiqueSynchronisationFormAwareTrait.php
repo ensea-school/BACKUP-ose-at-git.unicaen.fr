@@ -11,10 +11,7 @@ use Application\Form\OffreFormation\ElementPedagogiqueSynchronisationForm;
  */
 trait ElementPedagogiqueSynchronisationFormAwareTrait
 {
-    /**
-     * @var ElementPedagogiqueSynchronisationForm
-     */
-    private $formOffreFormationElementPedagogiqueSynchronisation;
+    protected ?ElementPedagogiqueSynchronisationForm $formOffreFormationElementPedagogiqueSynchronisation = null;
 
 
 
@@ -23,7 +20,7 @@ trait ElementPedagogiqueSynchronisationFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationElementPedagogiqueSynchronisation(ElementPedagogiqueSynchronisationForm $formOffreFormationElementPedagogiqueSynchronisation)
+    public function setFormOffreFormationElementPedagogiqueSynchronisation(?ElementPedagogiqueSynchronisationForm $formOffreFormationElementPedagogiqueSynchronisation)
     {
         $this->formOffreFormationElementPedagogiqueSynchronisation = $formOffreFormationElementPedagogiqueSynchronisation;
 
@@ -32,12 +29,7 @@ trait ElementPedagogiqueSynchronisationFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ElementPedagogiqueSynchronisationForm
-     */
-    public function getFormOffreFormationElementPedagogiqueSynchronisation()
+    public function getFormOffreFormationElementPedagogiqueSynchronisation(): ?ElementPedagogiqueSynchronisationForm
     {
         if (!empty($this->formOffreFormationElementPedagogiqueSynchronisation)) {
             return $this->formOffreFormationElementPedagogiqueSynchronisation;

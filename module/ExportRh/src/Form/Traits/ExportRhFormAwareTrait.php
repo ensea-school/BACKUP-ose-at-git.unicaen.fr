@@ -2,19 +2,39 @@
 
 namespace ExportRh\Form\Traits;
 
-
 use ExportRh\Form\ExportRhForm;
 
+/**
+ * Description of ExportRhFormAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait ExportRhFormAwareTrait
 {
+    protected ?ExportRhForm $formExportRh = null;
+
+
 
     /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
+     * @param ExportRhForm $formExportRh
      *
-     * @return ExportRhForm
+     * @return self
      */
-    public function getExportRhForm()
+    public function setFormExportRh(?ExportRhForm $formExportRh)
     {
-        return \Application::$container->get('FormElementManager')->get(ExportRhForm::class, []);
+        $this->formExportRh = $formExportRh;
+
+        return $this;
+    }
+
+
+
+    public function getFormExportRh(): ?ExportRhForm
+    {
+        if (!empty($this->formExportRh)) {
+            return $this->formExportRh;
+        }
+
+        return \Application::$container->get('FormElementManager')->get(ExportRhForm::class);
     }
 }

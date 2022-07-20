@@ -7,16 +7,17 @@ SELECT
   p.ELEMENT_PEDAGOGIQUE_ID,
   p.TYPE_INTERVENTION_ID,
   p.HEURES,
-  p.PLAFOND,
+  COALESCE(p.PLAFOND,ps.heures,0) PLAFOND,
   CASE
-    WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)
-    WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)
+    WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+    WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+    ELSE COALESCE(p.plafond_etat_id,1)
   END plafond_etat_id,
   COALESCE(pd.heures, 0) derogation,
-  CASE WHEN p.heures > p.plafond + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
+  CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
 FROM
   (
-  SELECT 9 PLAFOND_ID, p.* FROM (
+  SELECT 5 PLAFOND_ID, NULL PLAFOND_ETAT_ID, p.* FROM (
     WITH c AS (
         SELECT
           vhe.element_pedagogique_id,
@@ -76,13 +77,12 @@ FROM
     ) p
   ) p
   JOIN intervenant i ON i.id = p.intervenant_id
-  LEFT JOIN plafond_application pa ON pa.plafond_id = p.plafond_id AND p.annee_id = pa.annee_id
   LEFT JOIN plafond_statut ps ON 1 = 0
   LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL
 WHERE
   CASE
-    WHEN p.type_volume_horaire_id = 1 THEN COALESCE(ps.plafond_etat_prevu_id,pa.plafond_etat_prevu_id)
-    WHEN p.type_volume_horaire_id = 2 THEN COALESCE(ps.plafond_etat_realise_id, pa.plafond_etat_realise_id)
+    WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+    WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
   END IS NOT NULL
   /*@PLAFOND_ID=p.PLAFOND_ID*/
   /*@ANNEE_ID=p.ANNEE_ID*/

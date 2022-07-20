@@ -11,31 +11,25 @@ use Application\Entity\Db\Parametre;
  */
 trait ParametreAwareTrait
 {
-    /**
-     * @var Parametre
-     */
-    private $parametre;
-
-
+    protected ?Parametre $parametre = null;
 
 
 
     /**
      * @param Parametre $parametre
+     *
      * @return self
      */
-    public function setParametre( Parametre $parametre = null )
+    public function setParametre( ?Parametre $parametre )
     {
         $this->parametre = $parametre;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Parametre
-     */
-    public function getParametre()
+    public function getParametre(): ?Parametre
     {
         return $this->parametre;
     }

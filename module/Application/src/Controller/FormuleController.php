@@ -7,7 +7,8 @@ use Application\Entity\Db\Annee;
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\FormuleTestIntervenant;
-use Application\Entity\Db\TypeIntervenant;
+use Application\Model\FormuleCalcul;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\FormuleTestIntervenantServiceAwareTrait;
@@ -31,7 +32,9 @@ class FormuleController extends AbstractController
     {
         $fti = $this->getServiceFormuleTestIntervenant()->getList();
 
-        return compact('fti');
+        $formules = $this->em()->createQuery("SELECT f FROM " . Formule::class . " f ORDER BY f.id")->execute();
+
+        return compact('fti', 'formules');
     }
 
 
@@ -142,6 +145,29 @@ class FormuleController extends AbstractController
         $result['data'] = $formuleTestIntervenant->toArray();
 
         return new JsonModel($result);
+    }
+
+
+
+    public function testImportAction()
+    {
+        if (!isset($_FILES['fichier'])) {
+            throw new  \Exception('Fichier tableau non transmis');
+        }
+
+        $file     = $_FILES['fichier']['tmp_name'];
+        $filename = $_FILES['fichier']['name'];
+
+        $formuleId = $this->params()->fromPost('formule');
+        $formule   = $this->em()->find(Formule::class, $formuleId);
+
+        $fc = new FormuleCalcul($file);
+
+        $fti = $this->getServiceFormuleTestIntervenant()->creerDepuisTableur($fc, $formule, $filename);
+
+        $url = $this->url()->fromRoute('formule-calcul/test/saisir', ['formuleTestIntervenant' => $fti->getId()]);
+
+        return $this->redirect()->toUrl($url);
     }
 
 

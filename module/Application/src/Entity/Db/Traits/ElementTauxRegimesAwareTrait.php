@@ -11,31 +11,25 @@ use Application\Entity\Db\ElementTauxRegimes;
  */
 trait ElementTauxRegimesAwareTrait
 {
-    /**
-     * @var ElementTauxRegimes
-     */
-    protected $elementTauxRegimes;
-
-
+    protected ?ElementTauxRegimes $elementTauxRegimes = null;
 
 
 
     /**
      * @param ElementTauxRegimes $elementTauxRegimes
+     *
      * @return self
      */
-    public function setElementTauxRegimes( ElementTauxRegimes $elementTauxRegimes = null )
+    public function setElementTauxRegimes( ?ElementTauxRegimes $elementTauxRegimes )
     {
         $this->elementTauxRegimes = $elementTauxRegimes;
+
         return $this;
     }
 
 
 
-    /**
-     * @return ElementTauxRegimes
-     */
-    public function getElementTauxRegimes()
+    public function getElementTauxRegimes(): ?ElementTauxRegimes
     {
         return $this->elementTauxRegimes;
     }

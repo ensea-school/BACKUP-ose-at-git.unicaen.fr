@@ -11,10 +11,7 @@ use Application\Service\TauxHoraireHETDService;
  */
 trait TauxHoraireHETDServiceAwareTrait
 {
-    /**
-     * @var TauxHoraireHETDService
-     */
-    private $serviceTauxHoraireHETD;
+    protected ?TauxHoraireHETDService $serviceTauxHoraireHETD = null;
 
 
 
@@ -23,7 +20,7 @@ trait TauxHoraireHETDServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTauxHoraireHETD(TauxHoraireHETDService $serviceTauxHoraireHETD)
+    public function setServiceTauxHoraireHETD(?TauxHoraireHETDService $serviceTauxHoraireHETD)
     {
         $this->serviceTauxHoraireHETD = $serviceTauxHoraireHETD;
 
@@ -32,10 +29,7 @@ trait TauxHoraireHETDServiceAwareTrait
 
 
 
-    /**
-     * @return TauxHoraireHETDService
-     */
-    public function getServiceTauxHoraireHETD()
+    public function getServiceTauxHoraireHETD(): ?TauxHoraireHETDService
     {
         if (empty($this->serviceTauxHoraireHETD)) {
             $this->serviceTauxHoraireHETD = \Application::$container->get(TauxHoraireHETDService::class);

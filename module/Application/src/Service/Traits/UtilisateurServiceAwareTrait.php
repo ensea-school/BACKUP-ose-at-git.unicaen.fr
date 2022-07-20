@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\UtilisateurService;
 
 /**
- * Description of UtilisateurAwareTrait
+ * Description of UtilisateurServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait UtilisateurServiceAwareTrait
 {
-    /**
-     * @var UtilisateurService
-     */
-    private $serviceUtilisateur;
+    protected ?UtilisateurService $serviceUtilisateur = null;
 
 
 
@@ -23,7 +20,7 @@ trait UtilisateurServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceUtilisateur(UtilisateurService $serviceUtilisateur)
+    public function setServiceUtilisateur(?UtilisateurService $serviceUtilisateur)
     {
         $this->serviceUtilisateur = $serviceUtilisateur;
 
@@ -32,10 +29,7 @@ trait UtilisateurServiceAwareTrait
 
 
 
-    /**
-     * @return UtilisateurService
-     */
-    public function getServiceUtilisateur()
+    public function getServiceUtilisateur(): ?UtilisateurService
     {
         if (empty($this->serviceUtilisateur)) {
             $this->serviceUtilisateur = \Application::$container->get(UtilisateurService::class);

@@ -48,7 +48,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ANN
 
         $.ajax({
             type: 'POST',
-            url: "<?= var_export($this->url('parametres/annees'), true) ?>",
+            url: "<?= $this->url('parametres/annees') ?>",
             data: {annee: anneeId},
             success: function (data) {
                 alertFlash(data.message, data.status, 5000);

@@ -1,16 +1,21 @@
-**ATTENTION** : cette docmuentation est valable à partir de la version 17 de OSE. Pour les versions antérieures le module exportRh n'est pas disponible.
+**ATTENTION** : cette docmuentation est valable à partir de la version 17 de OSE. Pour les versions antérieures le
+module exportRh n'est pas disponible.
 
 # Principe
 
-Le module ExportRh de OSE permet de rendre une disponible au sein de l'applicatif une fonctionnalité d'export des données intervenants dans le SI RH. Pour le moment, seul SIHAM est pris en charge par ce module.
+Le module ExportRh de OSE permet de rendre une disponible au sein de l'applicatif une fonctionnalité d'export des
+données intervenants dans le SI RH. Pour le moment, seul SIHAM est pris en charge par ce module.
 
-Si vous activez le module export et que vous avez SIHAM, vous pourrez pour un intervenant, vacataire et uniquement pour l'année universitaire en cours, lancer une prise en charge ou un renouvellement directement dans SIHAM à partir de OSE.
+Si vous activez le module export et que vous avez SIHAM, vous pourrez pour un intervenant, vacataire et uniquement pour
+l'année universitaire en cours, lancer une prise en charge ou un renouvellement directement dans SIHAM à partir de OSE.
 
-A noter que le renouvellement, ou la prise en charge SIHAM n'est possible que si le contrat OSE a une date de retour signée.
+A noter que le renouvellement, ou la prise en charge SIHAM n'est possible que si le contrat OSE a une date de retour
+signée.
 
 # Configuration du connecteur SIHAM
 
-Pour utiliser le module ExportRh Siham vous devez ajouter dans le fichier de configuration config.local.php les lignes suivantes :
+Pour utiliser le module ExportRh Siham vous devez ajouter dans le fichier de configuration config.local.php les lignes
+suivantes :
 
 ```php
    'export-rh' => [
@@ -21,7 +26,8 @@ Pour utiliser le module ExportRh Siham vous devez ajouter dans le fichier de con
     ],
 ```
 
-L'utilisation du connecteur SIHAM du module ExportRh nécessite aussi l'ajout d'un fichier de configration spécifique à SIHAM dans le dossier à la racine /config/autoload/unicaen-siham.local.php
+L'utilisation du connecteur SIHAM du module ExportRh nécessite aussi l'ajout d'un fichier de configration spécifique à
+SIHAM dans le dossier à la racine /config/autoload/unicaen-siham.local.php
 
 ```php
 <?php
@@ -96,6 +102,11 @@ return [
         'code-administration' => 'UCN',
         'code-etablissement'  => '0141408E',
         
+        //Permet de renseigner le code typeUO à remonter dans la liste des structures  sélectionnable dans l'export RH
+        //Vous pouvez mettre plusieurs code séparés par des virgules
+        'code-type-structure-affectation' => 'CODEA,CODEB,....',
+
+        
         //Permet de filtrer les valeurs affichées dans le formulaire de prise en charge SIHAM par code répertoire
         'filters'            => [
             'HKK'     => [
@@ -125,6 +136,25 @@ return [
             'IMP'                => 'Vacataire académique sur convention',
 
         ],
+        
+        //Permet de rajouter manuellement des structures dans la liste de choix et d'en exclure
+         'unites-organisationelles' => [
+            'includes' => [
+                'U550000000' => 'U55 Carrée international',
+                'U610000000' => 'U61 SUAPS',
+                'U450000000' => 'U45 SUFCA',
+            ],
+            'excludes' => [
+                'U960000000',
+                'U970000000',
+                'U980000000',
+                'U990000000',
+                'U560000000',
+                'U250000000',
+                'U230000000',
+            ],
+        ],
+        
 
     ],
 ];

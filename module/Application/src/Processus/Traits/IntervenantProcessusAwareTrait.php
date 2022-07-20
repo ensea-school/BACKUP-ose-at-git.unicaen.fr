@@ -11,10 +11,7 @@ use Application\Processus\IntervenantProcessus;
  */
 trait IntervenantProcessusAwareTrait
 {
-    /**
-     * @var IntervenantProcessus
-     */
-    private $processusIntervenant;
+    protected ?IntervenantProcessus $processusIntervenant = null;
 
 
 
@@ -23,7 +20,7 @@ trait IntervenantProcessusAwareTrait
      *
      * @return self
      */
-    public function setProcessusIntervenant(IntervenantProcessus $processusIntervenant)
+    public function setProcessusIntervenant(?IntervenantProcessus $processusIntervenant)
     {
         $this->processusIntervenant = $processusIntervenant;
 
@@ -32,10 +29,7 @@ trait IntervenantProcessusAwareTrait
 
 
 
-    /**
-     * @return IntervenantProcessus
-     */
-    public function getProcessusIntervenant()
+    public function getProcessusIntervenant(): ?IntervenantProcessus
     {
         if (empty($this->processusIntervenant)) {
             $this->processusIntervenant = \Application::$container->get(IntervenantProcessus::class);

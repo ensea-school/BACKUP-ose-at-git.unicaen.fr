@@ -298,14 +298,14 @@ class WorkflowService extends AbstractService
             $begin = microtime(true);
             $tbl   = $tbl['TBL_NAME'];
             $sql   = 'BEGIN UNICAEN_TBL.CALCULER(\'' . $tbl . '\'); END;';
-            if (is_callable($beforeTrigger)) {
+            if ($beforeTrigger instanceof \Closure) {
                 $beforeTrigger([
                     'tableau-bord' => $tbl,
                 ]);
             }
             try {
                 $this->getEntityManager()->getConnection()->executeStatement($sql);
-                if (is_callable($afterTrigger)) {
+                if ($afterTrigger instanceof \Closure) {
                     $afterTrigger([
                         'tableau-bord' => $tbl,
                         'result'       => true,
@@ -313,7 +313,7 @@ class WorkflowService extends AbstractService
                     ]);
                 }
             } catch (\Exception $e) {
-                if (is_callable($afterTrigger)) {
+                if ($afterTrigger instanceof \Closure) {
                     $afterTrigger([
                         'tableau-bord' => $tbl,
                         'result'       => false,
@@ -334,7 +334,7 @@ class WorkflowService extends AbstractService
      * @param array|string    $tableauxBords
      * @param Intervenant|int $intervenant
      */
-    public function calculerTableauxBord($tableauxBords, $intervenant): array
+    public function calculerTableauxBord(array|string|null $tableauxBords, Intervenant|int $intervenant): array
     {
         $errors = [];
 
@@ -348,12 +348,16 @@ class WorkflowService extends AbstractService
             'dossier'                 => ['workflow'],
             'paiement'                => ['workflow'],
             'piece_jointe'            => ['workflow'],
-            'service_saisie'          => ['workflow'],
-            'service_referentiel'     => ['workflow'],
+            'service'                 => ['workflow'],
+            'referentiel'             => ['workflow'],
             'validation_enseignement' => ['workflow'],
             'validation_referentiel'  => ['workflow'],
-            'service'                 => [],
             'workflow'                => [],
+            'plafond_intervenant'     => [],
+            'plafond_structure'       => [],
+            'plafond_referentiel'     => [],
+            'plafond_element'         => [],
+            'plafond_volume_horaire'  => [],
         ];
 
         if ($tableauxBords) {

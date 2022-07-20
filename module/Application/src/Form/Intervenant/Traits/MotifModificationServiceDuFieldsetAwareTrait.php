@@ -11,10 +11,7 @@ use Application\Form\Intervenant\MotifModificationServiceDuFieldset;
  */
 trait MotifModificationServiceDuFieldsetAwareTrait
 {
-    /**
-     * @var MotifModificationServiceDuFieldset
-     */
-    private $fieldsetIntervenantMotifModificationServiceDu;
+    protected ?MotifModificationServiceDuFieldset $fieldsetIntervenantMotifModificationServiceDu = null;
 
 
 
@@ -23,7 +20,7 @@ trait MotifModificationServiceDuFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetIntervenantMotifModificationServiceDu(MotifModificationServiceDuFieldset $fieldsetIntervenantMotifModificationServiceDu)
+    public function setFieldsetIntervenantMotifModificationServiceDu(?MotifModificationServiceDuFieldset $fieldsetIntervenantMotifModificationServiceDu)
     {
         $this->fieldsetIntervenantMotifModificationServiceDu = $fieldsetIntervenantMotifModificationServiceDu;
 
@@ -32,12 +29,7 @@ trait MotifModificationServiceDuFieldsetAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return MotifModificationServiceDuFieldset
-     */
-    public function getFieldsetIntervenantMotifModificationServiceDu()
+    public function getFieldsetIntervenantMotifModificationServiceDu(): ?MotifModificationServiceDuFieldset
     {
         if (!empty($this->fieldsetIntervenantMotifModificationServiceDu)) {
             return $this->fieldsetIntervenantMotifModificationServiceDu;

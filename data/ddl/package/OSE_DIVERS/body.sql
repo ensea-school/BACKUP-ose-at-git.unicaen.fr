@@ -187,56 +187,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
 
 
 
-  FUNCTION INTERVENANT_HAS_PRIVILEGE( intervenant_id NUMERIC, privilege_name VARCHAR2 ) RETURN NUMERIC IS
-    statut statut_intervenant%rowtype;
-    itype  type_intervenant%rowtype;
-    res NUMERIC;
-  BEGIN
-    res := 1;
-    SELECT si.* INTO statut FROM statut_intervenant si JOIN intervenant i ON i.statut_id = si.id WHERE i.id = intervenant_id;
-    SELECT ti.* INTO itype  FROM type_intervenant ti WHERE ti.id = statut.type_intervenant_id;
-
-    /* DEPRECATED */
-    IF 'saisie_service' = privilege_name THEN
-      res := statut.peut_saisir_service;
-      RETURN res;
-    ELSIF 'saisie_service_exterieur' = privilege_name THEN
-      --IF INTERVENANT_HAS_PRIVILEGE( intervenant_id, 'saisie_service' ) = 0 OR itype.code = 'E' THEN -- cascade
-      IF itype.code = 'E' THEN
-        res := 0;
-      END IF;
-      RETURN res;
-    ELSIF 'saisie_service_referentiel' = privilege_name THEN
-      IF itype.code = 'E' THEN
-        res := 0;
-      END IF;
-      RETURN res;
-    ELSIF 'saisie_service_referentiel_autre_structure' = privilege_name THEN
-      res := 1;
-      RETURN res;
-    ELSIF 'saisie_motif_non_paiement' = privilege_name THEN
-      res := statut.peut_saisir_motif_non_paiement;
-      RETURN res;
-    END IF;
-    /* FIN DE DEPRECATED */
-
-    SELECT
-      count(*)
-    INTO
-      res
-    FROM
-      intervenant i
-      JOIN statut_privilege sp ON sp.statut_id = i.statut_id
-      JOIN privilege p ON p.id = sp.privilege_id
-      JOIN categorie_privilege cp ON cp.id = p.categorie_id
-    WHERE
-      i.id = INTERVENANT_HAS_PRIVILEGE.intervenant_id
-      AND cp.code || '-' || p.code = privilege_name;
-
-    RETURN res;
-  END;
-
-
   PROCEDURE intervenant_horodatage_service( INTERVENANT_ID NUMERIC, TYPE_VOLUME_HORAIRE_ID NUMERIC, REFERENTIEL NUMERIC, HISTO_MODIFICATEUR_ID NUMERIC, HISTO_MODIFICATION DATE ) AS
   BEGIN
       MERGE INTO histo_intervenant_service his USING dual ON (

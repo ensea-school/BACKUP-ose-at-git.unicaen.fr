@@ -11,10 +11,7 @@ use Application\Form\VolumeHoraire\SaisieMultipleFieldset;
  */
 trait SaisieMultipleFieldsetAwareTrait
 {
-    /**
-     * @var SaisieMultipleFieldset
-     */
-    private $fieldsetVolumeHoraireSaisieMultiple;
+    protected ?SaisieMultipleFieldset $fieldsetVolumeHoraireSaisieMultiple = null;
 
 
 
@@ -23,7 +20,7 @@ trait SaisieMultipleFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetVolumeHoraireSaisieMultiple(SaisieMultipleFieldset $fieldsetVolumeHoraireSaisieMultiple)
+    public function setFieldsetVolumeHoraireSaisieMultiple(?SaisieMultipleFieldset $fieldsetVolumeHoraireSaisieMultiple)
     {
         $this->fieldsetVolumeHoraireSaisieMultiple = $fieldsetVolumeHoraireSaisieMultiple;
 
@@ -32,12 +29,7 @@ trait SaisieMultipleFieldsetAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return SaisieMultipleFieldset
-     */
-    public function getFieldsetVolumeHoraireSaisieMultiple()
+    public function getFieldsetVolumeHoraireSaisieMultiple(): ?SaisieMultipleFieldset
     {
         if (!empty($this->fieldsetVolumeHoraireSaisieMultiple)) {
             return $this->fieldsetVolumeHoraireSaisieMultiple;

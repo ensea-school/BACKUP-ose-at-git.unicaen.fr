@@ -7,14 +7,11 @@ use Application\Connecteur\LdapConnecteur;
 /**
  * Description of LdapConnecteurAwareTrait
  *
- * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ * @author UnicaenCode
  */
 trait LdapConnecteurAwareTrait
 {
-    /**
-     * @var LdapConnecteur
-     */
-    private $connecteurLdap;
+    protected ?LdapConnecteur $connecteurLdap = null;
 
 
 
@@ -23,7 +20,7 @@ trait LdapConnecteurAwareTrait
      *
      * @return self
      */
-    public function setConnecteurLdap(LdapConnecteur $connecteurLdap)
+    public function setConnecteurLdap(?LdapConnecteur $connecteurLdap)
     {
         $this->connecteurLdap = $connecteurLdap;
 
@@ -32,10 +29,7 @@ trait LdapConnecteurAwareTrait
 
 
 
-    /**
-     * @return LdapConnecteur
-     */
-    public function getConnecteurLdap()
+    public function getConnecteurLdap(): ?LdapConnecteur
     {
         if (empty($this->connecteurLdap)) {
             $this->connecteurLdap = \Application::$container->get(LdapConnecteur::class);

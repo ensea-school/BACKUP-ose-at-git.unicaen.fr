@@ -2,16 +2,50 @@
 
 namespace Application\Service;
 
-use Application\Cache\Traits\CacheContainerTrait;
+use Application\Entity\Db\Annee;
+use Application\Entity\Db\Role;
+use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
+use BjyAuthorize\Provider\Resource\ProviderInterface;
+use Intervenant\Entity\Db\Statut;
+use Intervenant\Service\StatutServiceAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenAuth\Entity\Db\PrivilegeInterface;
+use UnicaenAuth\Provider\Privilege\PrivilegeProviderInterface;
 
 /**
- * Description of Privilege
+ * Description of PrivilegeService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
 {
-    use CacheContainerTrait;
+    use EntityManagerAwareTrait;
+    use ContextServiceAwareTrait;
+    use StatutServiceAwareTrait;
+
+
+    private array $privilegesCache       = [];
+
+    private array $privilegesRolesConfig = [];
+
+    private array $noAdminPrivileges     = [
+        Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
+        Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
+        Privileges::REFERENTIEL_PREVU_AUTOVALIDATION,
+        Privileges::REFERENTIEL_REALISE_AUTOVALIDATION,
+    ];
+
+
+
+    /**
+     * @param array $privilegesRolesConfig
+     */
+    public function __construct(array $privilegesRolesConfig)
+    {
+        $this->privilegesRolesConfig = $privilegesRolesConfig;
+    }
+
 
 
     /**
@@ -27,24 +61,72 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
      */
     public function getPrivilegesRoles()
     {
-        return $this->getCacheContainer()->privilegesRoles('makePrivilegesRoles');
+        if (empty($this->privilegesCache)) {
+            $this->privilegesCache = $this->makePrivilegesRoles();
+        }
+
+        return $this->privilegesCache;
+    }
+
+
+
+    /**
+     * @return PrivilegeInterface[]
+     */
+    public function getList()
+    {
+        $qb = $this->getRepo()->createQueryBuilder('p')
+            ->addSelect('c')
+            ->join('p.categorie', 'c')
+            ->addOrderBy('c.libelle')
+            ->addOrderBy('p.ordre');
+
+        return $qb->getQuery()->getResult();
     }
 
 
 
     public function makePrivilegesRoles()
     {
-        $privilegesRoles = [];
-        $sql             = 'SELECT * FROM v_privileges_roles';
-        $prl             = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
-        foreach ($prl as $pr) {
-            extract(array_change_key_case($pr, CASE_LOWER));
+        $privilegesRoles = $this->privilegesRolesConfig;
 
-            if (!array_key_exists($privilege, $privilegesRoles)) {
-                $privilegesRoles[$privilege] = [];
+        /* L'administrateur a tous les privilèges obligatoirement */
+        $rc         = new \ReflectionClass(\Application\Provider\Privilege\Privileges::class);
+        $privileges = array_values($rc->getConstants());
+        foreach ($privileges as $privilege) {
+            if (!in_array($privilege, $this->noAdminPrivileges)) {
+                // On ne pet plus l'auto-validation à l'administrateur par défaut
+                if (!isset($privilegesRoles[$privilege])) {
+                    $privilegesRoles[$privilege] = [];
+                }
+                $privilegesRoles[$privilege][] = Role::ADMINISTRATEUR;
             }
-            if ($role) {
-                $privilegesRoles[$privilege][] = $role;
+        }
+
+        $sql   = "
+          SELECT
+          cp.code || '-' || p.code privilege,
+          r.code role
+        FROM
+          role_privilege rp
+          JOIN privilege p ON p.id = rp.privilege_id
+          JOIN categorie_privilege cp ON cp.id = p.categorie_id
+          JOIN role r ON r.id = rp.role_id AND r.histo_destruction IS NULL
+        ";
+        $query = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        while ($pr = $query->fetchAssociative()) {
+            $privilege                     = $pr['PRIVILEGE'];
+            $role                          = $pr['ROLE'];
+            $privilegesRoles[$privilege][] = $role;
+        }
+
+        $statuts = $this->getServiceStatut()->getStatuts();
+        foreach ($statuts as $statut) {
+            $sp = $statut->getPrivileges();
+            foreach ($sp as $privilege => $has) {
+                if ($has) {
+                    $privilegesRoles[$privilege][] = $statut->getRoleId();
+                }
             }
         }
 

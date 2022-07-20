@@ -7,7 +7,7 @@ use Application\Entity\Db\Annee;
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\FormuleTestVolumeHoraire;
-use Application\Entity\Db\TypeIntervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Laminas\Hydrator\HydratorInterface;
 use Application\Entity\Db\FormuleTestIntervenant;
@@ -87,7 +87,7 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
                     $object->removeVolumeHoraireTest($vhs[$index]);
                 } elseif (!$exists && !$toDelete) {
                     $vhs[$index] = new FormuleTestVolumeHoraire();
-                    $vhs[$index]->setIntervenantTest($object);
+                    $vhs[$index]->setFormuleTestIntervenant($object);
                     $object->addVolumeHoraireTest($vhs[$index]);
                 }
                 if (!$toDelete) {
@@ -182,7 +182,7 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
         }
 
         for ($p = 1; $p < 6; $p++) {
-            if (!$object->getIntervenantTest()->getFormule()->{'getVhParam' . $p . 'Libelle'}()) {
+            if (!$object->getFormuleTestIntervenant()->getFormule()->{'getVhParam' . $p . 'Libelle'}()) {
                 $object->{'setParam' . $p}(null);
             }
         }

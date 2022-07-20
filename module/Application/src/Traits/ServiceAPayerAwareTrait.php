@@ -16,6 +16,8 @@ trait ServiceAPayerAwareTrait
      */
     protected $serviceAPayer;
 
+
+
     /**
      * Spécifie le service à payer concerné.
      *
@@ -28,12 +30,14 @@ trait ServiceAPayerAwareTrait
         return $this;
     }
 
+
+
     /**
      * Retourne le service à payer concerné.
      *
      * @return ServiceAPayerInterface
      */
-    public function getServiceAPayer()
+    public function getServiceAPayer(): ServiceAPayerInterface
     {
         return $this->serviceAPayer;
     }

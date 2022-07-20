@@ -77,7 +77,7 @@ FROM
     MAX(empl.source_code)          z_employeur_id
   FROM
               intervenant             i
-         JOIN statut_intervenant     si ON si.id = i.statut_id
+         JOIN statut                 si ON si.id = i.statut_id
          JOIN intervenant_dossier     d ON d.intervenant_id = i.id
                                        AND d.histo_destruction IS NULL
 
@@ -85,7 +85,7 @@ FROM
          JOIN validation              v ON v.intervenant_id = i.id
                                        AND v.type_validation_id = tv.id
                                        AND v.histo_destruction IS NULL
-         JOIN statut_intervenant     ds ON ds.id = d.statut_id
+         JOIN statut                 ds ON ds.id = d.statut_id
          JOIN civilite               cv ON cv.id = d.civilite_id
     LEFT JOIN pays                   pn ON pn.id = d.pays_naissance_id
     LEFT JOIN departement           dep ON dep.id = d.departement_naissance_id
@@ -97,8 +97,8 @@ FROM
   WHERE
     i.histo_destruction IS NULL
     AND si.code NOT IN ('AUTRES')
-    AND si.peut_saisir_dossier = 1
+    AND si.dossier = 1
   GROUP BY
     i.annee_id, i.code
   ) t
-  JOIN statut_intervenant si ON si.ordre = t.z_statut_ordre
+  JOIN statut si ON si.ordre = t.z_statut_ordre

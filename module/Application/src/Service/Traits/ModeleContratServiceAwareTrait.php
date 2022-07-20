@@ -11,18 +11,16 @@ use Application\Service\ModeleContratService;
  */
 trait ModeleContratServiceAwareTrait
 {
-    /**
-     * @var ModeleContratService
-     */
-    protected $serviceModeleContrat;
+    protected ?ModeleContratService $serviceModeleContrat = null;
 
 
 
     /**
      * @param ModeleContratService $serviceModeleContrat
+     *
      * @return self
      */
-    public function setServiceModeleContrat( ModeleContratService $serviceModeleContrat )
+    public function setServiceModeleContrat(?ModeleContratService $serviceModeleContrat)
     {
         $this->serviceModeleContrat = $serviceModeleContrat;
 
@@ -31,12 +29,9 @@ trait ModeleContratServiceAwareTrait
 
 
 
-    /**
-     * @return ModeleContratService
-     */
-    public function getServiceModeleContrat() : ModeleContratService
+    public function getServiceModeleContrat(): ?ModeleContratService
     {
-        if (!$this->serviceModeleContrat){
+        if (empty($this->serviceModeleContrat)) {
             $this->serviceModeleContrat = \Application::$container->get(ModeleContratService::class);
         }
 

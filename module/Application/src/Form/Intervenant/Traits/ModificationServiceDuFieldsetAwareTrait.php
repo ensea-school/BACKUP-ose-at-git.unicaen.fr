@@ -11,10 +11,7 @@ use Application\Form\Intervenant\ModificationServiceDuFieldset;
  */
 trait ModificationServiceDuFieldsetAwareTrait
 {
-    /**
-     * @var ModificationServiceDuFieldset
-     */
-    private $fieldsetIntervenantModificationServiceDu;
+    protected ?ModificationServiceDuFieldset $fieldsetIntervenantModificationServiceDu = null;
 
 
 
@@ -23,7 +20,7 @@ trait ModificationServiceDuFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetIntervenantModificationServiceDu(ModificationServiceDuFieldset $fieldsetIntervenantModificationServiceDu)
+    public function setFieldsetIntervenantModificationServiceDu(?ModificationServiceDuFieldset $fieldsetIntervenantModificationServiceDu)
     {
         $this->fieldsetIntervenantModificationServiceDu = $fieldsetIntervenantModificationServiceDu;
 
@@ -32,12 +29,7 @@ trait ModificationServiceDuFieldsetAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ModificationServiceDuFieldset
-     */
-    public function getFieldsetIntervenantModificationServiceDu()
+    public function getFieldsetIntervenantModificationServiceDu(): ?ModificationServiceDuFieldset
     {
         if (!empty($this->fieldsetIntervenantModificationServiceDu)) {
             return $this->fieldsetIntervenantModificationServiceDu;

@@ -3,32 +3,39 @@
 /**
  * @var $this                 \Application\View\Renderer\PhpRenderer
  * @var $title                string
- * @var $configs              \Plafond\Entity\Db\PlafondStructure[]
+ * @var $configs              \Plafond\Interfaces\PlafondConfigInterface[]
  * @var $entity               object
  * @var $canEdit              bool
+ * @var $autoSave             bool
  */
 
-?>
-    <h1 class="page-header"><?= $title ?></h1>
+$autoSave = isset($autoSave) ? $autoSave : true;
 
-    <table class="table table-condensed table-hover table-bordered plafonds-config">
-        <thead>
+?>
+<?php if ($title): ?><h1 class="page-header"><?= $title ?></h1><?php endif; ?>
+
+<table class="table table-condensed table-hover table-bordered plafonds-config">
+    <thead>
+    <tr>
+        <th rowspan="2">Plafond</th>
+        <th>Prévisionnel</th>
+        <th>Réalisé</th>
+        <th>Heures<sup>*</sup></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($configs as $config): ?>
         <tr>
-            <th rowspan="2">Plafond</th>
-            <th>Prévisionnel</th>
-            <th>Réalisé</th>
-            <th>Heures<sup>*</sup></th>
+            <td style="width:50%"><?= $config->getPlafond() ?></td>
+            <td><?= $this->plafondConfig($config)->etatPrevu($canEdit); ?></td>
+            <td><?= $this->plafondConfig($config)->etatRealise($canEdit); ?></td>
+            <td><?= $this->plafondConfig($config)->heures($canEdit); ?></td>
         </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($configs as $config): ?>
-            <tr>
-                <td style="width:50%"><?= $config->getPlafond() ?></td>
-                <td><?= $this->plafondConfig($config)->etatPrevu($canEdit); ?></td>
-                <td><?= $this->plafondConfig($config)->etatRealise($canEdit); ?></td>
-                <td><?= $this->plafondConfig($config)->heures($canEdit); ?></td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-<?= $this->plafondConfig()->script($entity); ?>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<?php if ($autoSave): ?>
+    <?= $this->plafondConfig()->script($entity); ?>
+    <a href="<?= $this->url('plafond/construire-calculer') ?>" class="btn btn-info pop-ajax">Construction & calcul de tous les plafonds</a>
+<?php endif; ?>

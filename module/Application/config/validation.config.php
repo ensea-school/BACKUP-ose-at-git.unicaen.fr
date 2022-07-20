@@ -12,7 +12,7 @@ return [
                     'validation' => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'       => '/:intervenant/validation',
+                            'route' => '/:intervenant/validation',
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [

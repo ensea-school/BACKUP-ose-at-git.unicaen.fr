@@ -1,26 +1,10 @@
 #!/usr/bin/env php
 <?php
 
-spl_autoload_register(function ($class) {
-    $root = dirname(__DIR__);
+require_once dirname(__DIR__) . '/admin/src/OseAdmin.php';
 
-    $dirs = [
-            $root . '/admin/src/',
-            $root . '/admin/actul/src/',
-    ];
+$oa = OseAdmin::getInstance();
 
-    foreach($dirs as $dir) {
-        $filename = $dir . str_replace('\\', '/', $class) . '.php';
-
-        if (file_exists($filename)) {
-            require_once $filename;
-            break;
-        }
-    }
-});
-
-$c  = new Console();
-$oa = new OseAdmin($c);
-$oa->init();
+$c = $oa->getConsole();
 
 $oa->run($c->getArg(1) ?: 'help');

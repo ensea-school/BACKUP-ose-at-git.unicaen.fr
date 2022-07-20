@@ -3,7 +3,6 @@
 namespace Application\Form\OffreFormation\Interfaces;
 
 use Application\Form\OffreFormation\ElementModulateursFieldset;
-use RuntimeException;
 
 /**
  * Description of ElementModulateursFieldsetAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface ElementModulateursFieldsetAwareInterface
 {
     /**
-     * @param ElementModulateursFieldset $fieldsetOffreFormationElementModulateurs
+     * @param ElementModulateursFieldset|null $formOffreFormationElementModulateursFieldset
+     *
      * @return self
      */
-    public function setFieldsetOffreFormationElementModulateurs( ElementModulateursFieldset $fieldsetOffreFormationElementModulateurs );
+    public function setFormOffreFormationElementModulateursFieldset( ?ElementModulateursFieldset $formOffreFormationElementModulateursFieldset );
 
 
 
-    /**
-     * @return ElementModulateursFieldsetAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFieldsetOffreFormationElementModulateurs();
+    public function getFormOffreFormationElementModulateursFieldset(): ?ElementModulateursFieldset;
 }

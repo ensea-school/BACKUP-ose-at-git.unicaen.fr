@@ -11,31 +11,25 @@ use Application\Entity\Db\Discipline;
  */
 trait DisciplineAwareTrait
 {
-    /**
-     * @var Discipline
-     */
-    private $discipline;
-
-
+    protected ?Discipline $discipline = null;
 
 
 
     /**
      * @param Discipline $discipline
+     *
      * @return self
      */
-    public function setDiscipline( Discipline $discipline = null )
+    public function setDiscipline( ?Discipline $discipline )
     {
         $this->discipline = $discipline;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Discipline
-     */
-    public function getDiscipline()
+    public function getDiscipline(): ?Discipline
     {
         return $this->discipline;
     }

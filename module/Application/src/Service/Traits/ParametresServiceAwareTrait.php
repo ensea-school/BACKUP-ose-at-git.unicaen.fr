@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\ParametresService;
 
 /**
- * Description of ParametresAwareTrait
+ * Description of ParametresServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait ParametresServiceAwareTrait
 {
-    /**
-     * @var ParametresService
-     */
-    private $serviceParametres;
+    protected ?ParametresService $serviceParametres = null;
 
 
 
@@ -23,7 +20,7 @@ trait ParametresServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceParametres(ParametresService $serviceParametres)
+    public function setServiceParametres(?ParametresService $serviceParametres)
     {
         $this->serviceParametres = $serviceParametres;
 
@@ -32,10 +29,7 @@ trait ParametresServiceAwareTrait
 
 
 
-    /**
-     * @return ParametresService
-     */
-    public function getServiceParametres()
+    public function getServiceParametres(): ?ParametresService
     {
         if (empty($this->serviceParametres)) {
             $this->serviceParametres = \Application::$container->get(ParametresService::class);

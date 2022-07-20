@@ -9,7 +9,19 @@ return [
     'commentaire' => 'Contrats de travail',
     'sequence'    => 'TBL_CONTRAT_ID_SEQ',
     'columns'     => [
-        'ANNEE_ID'           => [
+        'ACTIF'          => [
+            'name'        => 'ACTIF',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 4,
+            'commentaire' => 'Témoin (0 ou 1 : 1 si l\'intervenant doit avoir un contrat)',
+        ],
+        'ANNEE_ID'       => [
             'name'        => 'ANNEE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +33,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'EDITE'              => [
+        'EDITE'          => [
             'name'        => 'EDITE',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -33,7 +45,7 @@ return [
             'position'    => 7,
             'commentaire' => 'Nombre de volumes horaires contractualisés',
         ],
-        'ID'                 => [
+        'ID'             => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -45,7 +57,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'INTERVENANT_ID'     => [
+        'INTERVENANT_ID' => [
             'name'        => 'INTERVENANT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -57,7 +69,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'NBVH'               => [
+        'NBVH'           => [
             'name'        => 'NBVH',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -69,19 +81,7 @@ return [
             'position'    => 6,
             'commentaire' => 'Nombre de volumes horaires contractualisables',
         ],
-        'PEUT_AVOIR_CONTRAT' => [
-            'name'        => 'PEUT_AVOIR_CONTRAT',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 4,
-            'commentaire' => 'Témoin (0 ou 1 : 1 si l\'intervenant doit avoir un contrat)',
-        ],
-        'SIGNE'              => [
+        'SIGNE'          => [
             'name'        => 'SIGNE',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -93,7 +93,7 @@ return [
             'position'    => 8,
             'commentaire' => 'Nombre de volumes horaires signés',
         ],
-        'STRUCTURE_ID'       => [
+        'STRUCTURE_ID'   => [
             'name'        => 'STRUCTURE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

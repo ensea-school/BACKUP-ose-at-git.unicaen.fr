@@ -11,33 +11,26 @@ use Application\Entity\Db\Civilite;
  */
 trait CiviliteAwareTrait
 {
-    /**
-     * @var Civilite|null
-     */
-    private $civilite;
+    protected ?Civilite $civilite = null;
 
 
 
     /**
-     * @return Civilite|null
-     */
-    public function getCivilite(): ?Civilite
-    {
-        return $this->civilite;
-    }
-
-
-
-    /**
-     * @param Civilite|null $civilite
+     * @param Civilite $civilite
      *
      * @return self
      */
-    public function setCivilite(?Civilite $civilite): self
+    public function setCivilite( ?Civilite $civilite )
     {
         $this->civilite = $civilite;
 
         return $this;
     }
 
+
+
+    public function getCivilite(): ?Civilite
+    {
+        return $this->civilite;
+    }
 }

@@ -13,22 +13,21 @@ use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
 use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
 use Laminas\Form\Element\Hidden;
 use Laminas\Hydrator\HydratorInterface;
+use UnicaenApp\Service\EntityManagerAwareTrait;
+
 
 /**
  * Description of SaisieCalendaire
  *
  */
-class SaisieCalendaire extends AbstractForm implements EntityManagerAwareInterface
+class SaisieCalendaire extends AbstractForm
 {
     use MotifNonPaiementServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;
     use PeriodeServiceAwareTrait;
-    use EntityManagerAwareTrait;
 
     /**
      * @var boolean

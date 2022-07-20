@@ -11,31 +11,25 @@ use Application\Entity\Db\FormuleTestIntervenant;
  */
 trait FormuleTestIntervenantAwareTrait
 {
-    /**
-     * @var FormuleTestIntervenant
-     */
-    private $intervenantTest;
-
-
+    protected ?FormuleTestIntervenant $intervenantTest = null;
 
 
 
     /**
      * @param FormuleTestIntervenant $intervenantTest
+     *
      * @return self
      */
-    public function setIntervenantTest( FormuleTestIntervenant $intervenantTest = null )
+    public function setFormuleTestIntervenant(FormuleTestIntervenant $intervenantTest)
     {
         $this->intervenantTest = $intervenantTest;
+
         return $this;
     }
 
 
 
-    /**
-     * @return FormuleTestIntervenant
-     */
-    public function getIntervenantTest()
+    public function getFormuleTestIntervenant(): ?FormuleTestIntervenant
     {
         return $this->intervenantTest;
     }

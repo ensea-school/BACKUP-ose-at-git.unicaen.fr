@@ -22,7 +22,19 @@ $params = [
        title="Valider la pièce justificative '<?= $pj->getType() ?>'"
        data-loading-text="Patientez..."
     >
-        <span class="glyphicon glyphicon-thumbs-up"></span> Valider
+        <i class="fas fa-thumbs-up"></i> Valider
+    </a>
+<?php endif ?>
+
+<?php if ($pj->getFichier()->count() > 0 && !$pj->getValidation() && $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_REFUS_PIECE))): ?>
+    <!--    data-loading-text="Patientez..."-->
+
+    <a class="refuser-pj btn btn-danger ajax-modal"
+       href="<?= $this->url('piece-jointe/intervenant/refuser', $params, [], true) ?>"
+       title="Refuser la pièce justificative '<?= $pj->getType() ?>'"
+       data-event="pj-refus-event"
+       data-tpj="<?= $pj->getType()->getId() ?>">
+        <i class="fas fa-trash-can"></i> Refuser
     </a>
 <?php endif ?>
 
@@ -33,6 +45,6 @@ $params = [
        title="Dévalider la pièce justificative <?= "'" . $pj->getType() . "'.\n" . $pj->getValidation() ?>"
        data-loading-text="Patientez..."
     >
-        <span class="glyphicon glyphicon-thumbs-down"></span> Dévalider
+        <i class="fas fa-thumbs-down"></i> Dévalider
     </a>
 <?php endif ?>

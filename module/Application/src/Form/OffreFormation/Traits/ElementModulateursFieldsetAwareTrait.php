@@ -11,10 +11,7 @@ use Application\Form\OffreFormation\ElementModulateursFieldset;
  */
 trait ElementModulateursFieldsetAwareTrait
 {
-    /**
-     * @var ElementModulateursFieldset
-     */
-    private $fieldsetOffreFormationElementModulateurs;
+    protected ?ElementModulateursFieldset $fieldsetOffreFormationElementModulateurs = null;
 
 
 
@@ -23,7 +20,7 @@ trait ElementModulateursFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetOffreFormationElementModulateurs(ElementModulateursFieldset $fieldsetOffreFormationElementModulateurs)
+    public function setFieldsetOffreFormationElementModulateurs(?ElementModulateursFieldset $fieldsetOffreFormationElementModulateurs)
     {
         $this->fieldsetOffreFormationElementModulateurs = $fieldsetOffreFormationElementModulateurs;
 
@@ -32,12 +29,7 @@ trait ElementModulateursFieldsetAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ElementModulateursFieldset
-     */
-    public function getFieldsetOffreFormationElementModulateurs()
+    public function getFieldsetOffreFormationElementModulateurs(): ?ElementModulateursFieldset
     {
         if (!empty($this->fieldsetOffreFormationElementModulateurs)) {
             return $this->fieldsetOffreFormationElementModulateurs;

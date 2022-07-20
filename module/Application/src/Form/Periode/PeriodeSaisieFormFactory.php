@@ -1,8 +1,4 @@
 <?php
-/*
-* @author JORIOT Florian <florian.joriot at unicaen.fr>
-*/
-
 namespace Application\Form\Periode;
 
 use Psr\Container\ContainerInterface;

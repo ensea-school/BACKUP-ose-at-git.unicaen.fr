@@ -11,31 +11,25 @@ use Application\Entity\Db\TypeModulateurStructure;
  */
 trait TypeModulateurStructureAwareTrait
 {
-    /**
-     * @var TypeModulateurStructure
-     */
-    private $typeModulateurStructure;
-
-
+    protected ?TypeModulateurStructure $typeModulateurStructure = null;
 
 
 
     /**
      * @param TypeModulateurStructure $typeModulateurStructure
+     *
      * @return self
      */
-    public function setTypeModulateurStructure( TypeModulateurStructure $typeModulateurStructure = null )
+    public function setTypeModulateurStructure( ?TypeModulateurStructure $typeModulateurStructure )
     {
         $this->typeModulateurStructure = $typeModulateurStructure;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeModulateurStructure
-     */
-    public function getTypeModulateurStructure()
+    public function getTypeModulateurStructure(): ?TypeModulateurStructure
     {
         return $this->typeModulateurStructure;
     }

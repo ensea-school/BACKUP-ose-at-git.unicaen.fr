@@ -2,21 +2,13 @@
 
 namespace Application\Form\Contrat;
 
-use Application\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionStatutServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Form\Element;
 use Laminas\Form\Element\Csrf;
-use Laminas\Hydrator\HydratorInterface;
-use Laminas\Validator\EmailAddress;
-use UnicaenApp\Service\EntityManagerAwareTrait;
-use Application\Filter\FloatFromString;
-use Application\Filter\StringFromFloat;
-use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 
 
 class EnvoiMailContratForm extends AbstractForm

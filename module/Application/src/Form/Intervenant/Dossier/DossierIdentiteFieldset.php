@@ -4,18 +4,12 @@ namespace Application\Form\Intervenant\Dossier;
 
 use Application\Form\AbstractFieldset;
 use Application\Form\CustomElements\PaysSelect;
-use Application\Form\Intervenant\Dossier;
 use Application\Form\Intervenant\IntervenantDossier;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
-use Application\Validator\DepartementNaissanceValidator;
-use Application\Validator\PaysNaissanceValidator;
-use Application\Constants;
-use DoctrineORMModule\Form\Element\EntitySelect;
-use Laminas\Validator\Date as DateValidator;
+use Intervenant\Service\StatutServiceAwareTrait;
 
 /**
  * Description of DossierFieldset
@@ -24,7 +18,7 @@ use Laminas\Validator\Date as DateValidator;
 class DossierIdentiteFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use PaysServiceAwareTrait;
     use DepartementServiceAwareTrait;
     use CiviliteServiceAwareTrait;

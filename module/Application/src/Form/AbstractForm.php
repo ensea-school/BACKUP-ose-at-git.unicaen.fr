@@ -2,83 +2,41 @@
 
 namespace Application\Form;
 
-use Application\Constants;
-use Application\Hydrator\GenericHydrator;
 use Application\Service\AbstractEntityService;
-use Application\Traits\TranslatorTrait;
+use Application\Traits\FormFieldsetTrait;
+use Laminas\Form\Element\Csrf;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\InputFilter\InputFilterProviderInterface;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Stdlib\ArrayUtils;
 
 
-abstract class AbstractForm extends Form implements InputFilterProviderInterface
+abstract class  AbstractForm extends Form implements InputFilterProviderInterface
 {
-    use TranslatorTrait;
-
-    /**
-     * @var FlashMessenger
-     */
-    private $controllerPluginFlashMessenger;
-
-    /**
-     * @var \Exception
-     */
-    private $exception;
+    use FormFieldsetTrait;
 
 
-
-    /**
-     * Generates a url given the name of a route.
-     *
-     * @param string            $name               Name of the route
-     * @param array             $params             Parameters for the link
-     * @param array|Traversable $options            Options for the route
-     * @param bool              $reuseMatchedParams Whether to reuse matched parameters
-     *
-     * @return string Url                         For the link href attribute
-     * @see    \Laminas\Mvc\Router\RouteInterface::assemble()
-     *
-     */
-    protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false)
+    public function addSubmit(string $value = 'Enregistrer'): self
     {
-        $url = \Application::$container->get('ViewHelperManager')->get('url');
+        $this->add([
+            'name'       => 'submit',
+            'type'       => 'Submit',
+            'attributes' => [
+                'value' => $value,
+                'class' => 'btn btn-primary btn-save',
+            ],
+        ]);
 
-        /* @var $url \Laminas\View\Helper\Url */
-        return $url->__invoke($name, $params, $options, $reuseMatchedParams);
+        return $this;
     }
 
 
 
-    /**
-     * @return string
-     */
-    protected function getCurrentUrl()
+    public function addSecurity(): self
     {
-        return $this->getUrl(null, [], [], true);
-    }
+        $this->add(new Csrf('security'));
 
-
-
-    /**
-     * @param array       $hydratorElements
-     * @param string|null $hydratorClass
-     *
-     * @return GenericHydrator
-     */
-    protected function useGenericHydrator(array $hydratorElements, ?string $hydratorClass = null): GenericHydrator
-    {
-        $em = \Application::$container->get(Constants::BDD);
-
-        if ($hydratorClass) {
-            $hydrator = new $hydratorClass($em, $hydratorElements);
-        } else {
-            $hydrator = new GenericHydrator($em, $hydratorElements);
-        }
-
-        $this->setHydrator($hydrator);
-
-        return $hydrator;
+        return $this;
     }
 
 
@@ -98,59 +56,37 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
      *
      * @return bool
      */
-    public function bindRequestSave($entity, Request $request, $saveFnc, $successMessage = 'Enregistrement effectué')
+    public function bindRequestSave($entity, Request $request, $saveFnc, string $successMessage = 'Enregistrement effectué'): bool
     {
-        $this->exception = null;
         $this->bind($entity);
         if ($request->isPost()) {
-            $data = array_merge_recursive(
+            $data = ArrayUtils::merge(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
             );
 
             $this->setData($data);
             if ($this->isValid()) {
-                if ($saveFnc instanceof AbstractEntityService) {
-                    try {
+                try {
+                    if ($saveFnc instanceof AbstractEntityService) {
                         $saveFnc->save($entity);
                         $this->getControllerPluginFlashMessenger()->addSuccessMessage($successMessage);
-                    } catch (\Exception $e) {
-                        $this->getControllerPluginFlashMessenger()->addErrorMessage($this->translate($e->getMessage()));
-                    }
-                } elseif ($saveFnc instanceof \Closure) {
-                    try {
+                    } elseif ($saveFnc instanceof \Closure) {
                         $saveFnc($entity);
-                    } catch (\Exception $e) {
-                        $this->exception = $e;
-                        $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
+                    }
+                } catch (\Exception $e) {
+                    $this->getControllerPluginFlashMessenger()->addErrorMessage($this->translate($e->getMessage()));
 
-                        return false;
+                    return false;
+                }
+            } else {
+                $messages = $this->getMessages();
+                foreach ($messages as $element => $msgs) {
+                    foreach ($msgs as $msg) {
+                        $this->getControllerPluginFlashMessenger()->addErrorMessage($msg . ' [' . $element . ']');
                     }
                 }
             }
-        }
-
-        return true;
-    }
-
-
-
-    /**
-     * @param                       $entity
-     * @param AbstractEntityService $service
-     * @param string                $successMessage
-     *
-     * @return bool
-     */
-    public function delete($entity, AbstractEntityService $service, $successMessage = 'Donnée supprimée avec succès.')
-    {
-        try {
-            $service->delete($entity);
-            $this->getControllerPluginFlashMessenger()->addSuccessMessage($successMessage);
-        } catch (\Exception $e) {
-            $this->getControllerPluginFlashMessenger()->addErrorMessage($this->translate($e->getMessage()));
-
-            return false;
         }
 
         return true;
@@ -171,19 +107,24 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
      *
      * @return bool
      */
-    public function requestSave(Request $request, $saveFnc)
+    public function requestSave(Request $request, $saveFnc): bool
     {
-        $this->exception = null;
         if ($request->isPost()) {
             $this->setData($request->getPost());
             if ($this->isValid()) {
                 try {
                     $saveFnc($this->getData());
                 } catch (\Exception $e) {
-                    $this->exception = $e;
                     $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
 
                     return false;
+                }
+            } else {
+                $messages = $this->getMessages();
+                foreach ($messages as $element => $msgs) {
+                    foreach ($msgs as $msg) {
+                        $this->getControllerPluginFlashMessenger()->addErrorMessage($msg . ' [' . $element . ']');
+                    }
                 }
             }
         }
@@ -191,27 +132,4 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
         return true;
     }
 
-
-
-    /**
-     * @return \Exception
-     */
-    public function getException()
-    {
-        return $this->exception;
-    }
-
-
-
-    /**
-     * @return FlashMessenger
-     */
-    private function getControllerPluginFlashMessenger()
-    {
-        if (!$this->controllerPluginFlashMessenger) {
-            $this->controllerPluginFlashMessenger = \Application::$container->get('ControllerPluginManager')->get('flashMessenger');
-        }
-
-        return $this->controllerPluginFlashMessenger;
-    }
 }

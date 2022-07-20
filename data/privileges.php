@@ -11,6 +11,8 @@ return [
             'element-synchronisation'            => 'Enseignements - Synchronisation',
             'etape-visualisation'                => 'Formations - Visualisation',
             'etape-edition'                      => 'Formations - Édition',
+            'type-formation-visualisation'       => 'Type formations - Visualisation',
+            'type-formation-edition'             => 'Type formations - Édition',
             'centres-cout-edition'               => 'Centres de coûts - Édition',
             'modulateurs-edition'                => 'Modulateurs - Édition',
             'taux-mixite-edition'                => 'Taux de mixité - Édition',
@@ -55,6 +57,10 @@ return [
             'autres-visualisation'     => 'Champs autres (Visualisation)',
             'autres-edition'           => 'Champs autres (Edition)',
             'lien-systeme-information' => 'Afficher le lien vers le système d\'information dans la fiche',
+            'note-visualisation'       => 'Visualiser des notes',
+            'note-ajout'               => 'Ajouter des notes',
+            'note-administration'      => 'Administrer les notes',
+            'note-email'               => 'Envoyer un email à l\'intervenant',
         ],
     ],
 
@@ -111,6 +117,7 @@ return [
             'visualisation'         => 'Visualisation',
             'edition'               => 'Édition',
             'validation'            => 'Validation',
+            'refus-piece'           => 'Refus - Pièce justificative',
             'devalidation'          => 'Dévalidation',
             'archivage'             => 'Archivage',
             'gestion-edition'       => 'Gestion des pièces justificatives (édition)',
@@ -122,13 +129,17 @@ return [
     'enseignement' => [
         'libelle'    => 'Enseignement',
         'privileges' => [
-            'visualisation'                          => 'Visualisation',
-            'edition'                                => 'Édition',
             'edition-masse'                          => 'Édition en masse',
-            'exterieur'                              => 'Saisie de service dans une autre université',
-            'validation'                             => 'Validation',
-            'autovalidation'                         => 'Validation automatique',
+            'prevu-visualisation'                    => 'Visualisation du prévisionnel',
+            'prevu-edition'                          => 'Édition du prévisionnel',
+            'prevu-validation'                       => 'Validation du prévisionnel',
+            'prevu-autovalidation'                   => 'Validation automatique du prévisionnel',
+            'realise-visualisation'                  => 'Visualisation du réalisé',
+            'realise-edition'                        => 'Édition du réalisé',
+            'realise-validation'                     => 'Validation du réalisé',
+            'realise-autovalidation'                 => 'Validation automatique du réalisé',
             'devalidation'                           => 'Dévalidation',
+            'exterieur'                              => 'Saisie de service dans une autre université',
             'export-pdf'                             => 'Export PDF',
             'export-csv'                             => 'Export CSV',
             'import-intervenant-previsionnel-agenda' => 'Import service prévisionnel depuis agenda',
@@ -139,18 +150,24 @@ return [
     'motif-non-paiement' => [
         'libelle'    => 'Motifs de non paiement (pour enseignements)',
         'privileges' => [
-            'visualisation' => 'Visualisation',
-            'edition'       => 'Édition',
+            'visualisation'                => 'Visualisation',
+            'edition'                      => 'Édition',
+            'administration-visualisation' => 'Administration - Visualisation',
+            'administration-edition'       => 'Administration - Édition',
         ],
     ],
 
     'referentiel' => [
         'libelle'    => 'Référentiel',
         'privileges' => [
-            'visualisation'             => 'Visualisation',
-            'edition'                   => 'Édition',
-            'validation'                => 'Validation',
-            'autovalidation'            => 'Validation automatique',
+            'prevu-visualisation'       => 'Visualisation du prévisionnel',
+            'prevu-edition'             => 'Édition du prévisionnel',
+            'prevu-validation'          => 'Validation du prévisionnel',
+            'prevu-autovalidation'      => 'Validation automatique du prévisionnel',
+            'realise-visualisation'     => 'Visualisation du réalisé',
+            'realise-edition'           => 'Édition du réalisé',
+            'realise-validation'        => 'Validation du réalisé',
+            'realise-autovalidation'    => 'Validation automatique du réalisé',
             'admin-edition'             => 'Administration - Édition',
             'devalidation'              => 'Dévalidation',
             'admin-visualisation'       => 'Administration - Visualisation',
@@ -227,7 +244,7 @@ return [
         ],
     ],
 
-    'import'            => [
+    'import' => [
         'libelle'    => 'Import',
         'privileges' => [
             'ecarts'                => 'Écarts',
@@ -240,6 +257,7 @@ return [
             'tables-visualisation'  => 'Tables (visualisation)',
         ],
     ],
+
     'type-intervention' => [
         'libelle'    => 'Type d\'intervention',
         'privileges' => [
@@ -247,19 +265,12 @@ return [
             'edition'       => 'Édition',
         ],
     ],
-    'type-ressource'    => [
+
+    'type-ressource' => [
         'libelle'    => 'Types de ressources',
         'privileges' => [
             'visualisation' => 'Visualisation',
             'edition'       => 'Édition',
-        ],
-    ],
-
-    'unicaen-tbl' => [
-        'libelle'    => 'Tableaux de bord',
-        'privileges' => [
-            'admin'         => 'Gestion des tableaux de bord',
-            'actualisation' => 'Actualisation',
         ],
     ],
 
@@ -320,7 +331,7 @@ return [
     ],
 
     'etat-sortie' => [
-        'libelle'    => 'États de sortie',
+        'libelle'    => 'Etats de sortie',
         'privileges' => [
             'administration-visualisation' => 'Administration (visualisation)',
             'administration-edition'       => 'Administration (édition)',
@@ -338,6 +349,12 @@ return [
             'annees-visualisation'           => 'Années - Visualisation',
             'periodes-edition'               => 'Périodes - Édition',
             'periodes-visualisation'         => 'Périodes - Visualisation',
+            'etablissement-edition'          => 'Établissement - Édition',
+            'etablissement-visualisation'    => 'Établissement - Visualisation',
+            'Pays-visualisation'             => 'Pays - Visualisation',
+            'Pays-edition'                   => 'Pays - Édition',
+            'Departement-visualisation'      => 'Departement - Visualisation',
+            'Departement-edition'            => 'Departement - Édition',
         ],
     ],
 
@@ -397,7 +414,6 @@ return [
         'privileges' => [
             'visualisation'             => 'Visualisation',
             'edition'                   => 'Édition',
-            'config-application'        => 'Application',
             'config-structure'          => 'Configuration par composante',
             'config-referentiel'        => 'Configuration par fonction référentielle',
             'config-statut'             => 'Configuration par statut d\'intervenant',
@@ -406,12 +422,13 @@ return [
         ],
     ],
 
-    'formule'            => [
+    'formule' => [
         'libelle'    => 'Formule de calcul',
         'privileges' => [
             'tests' => 'Tests',
         ],
     ],
+
     'referentiel-commun' => [
         'libelle'    => 'Référentiels communs',
         'privileges' => [
@@ -421,11 +438,14 @@ return [
             'employeur-edition'       => 'Édition employeurs',
         ],
     ],
-    'nomenclature-rh'    => [
+
+    'nomenclature-rh' => [
         'libelle'    => 'Nomenclature RH',
         'privileges' => [
             'grades-visualisation' => 'Visualisation grades',
             'grades-edition'       => 'Édition grades',
+            'corps-visualisation'  => 'Visualisation corps',
+            'corps-edition'        => 'Édition corps',
         ],
     ],
 

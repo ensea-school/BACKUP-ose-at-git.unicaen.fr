@@ -10,12 +10,11 @@ return [
         'routes' => [
             'pilotage' => [
                 'type'          => 'Literal',
-                'may_terminate' => true,
                 'options'       => [
                     'route'    => '/pilotage',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Pilotage',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Pilotage',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -43,7 +42,7 @@ return [
                             'pilotage' => [
                                 'label'        => 'Pilotage',
                                 'title'        => 'Pilotage',
-                                'icon'         => 'fa fa-tachometer',
+                                'icon'         => 'fas fa-tachometer',
                                 'route'        => 'pilotage',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'index'),
                                 'pages'        => [

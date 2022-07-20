@@ -2,7 +2,6 @@
 
 namespace Application\Processus;
 
-use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
@@ -24,7 +23,6 @@ class ReconductionProcessus extends AbstractProcessus
 {
 
     use EtapeServiceAwareTrait;
-    use BddConnecteurAwareTrait;
     use ElementPedagogiqueServiceAwareTrait;
     use CheminPedagogiqueServiceAwareTrait;
     use VolumeHoraireEnsServiceAwareTrait;
@@ -49,19 +47,17 @@ class ReconductionProcessus extends AbstractProcessus
     protected $centreCoutEpService;
 
 
-
     public function __construct()
     {
-        $this->etapeService              = $this->getServiceEtape();
+        $this->etapeService = $this->getServiceEtape();
         $this->elementPedagogiqueService = $this->getServiceElementPedagogique();
-        $this->cheminPedagogiqueService  = $this->getServiceCheminPedagogique();
-        $this->volumeHoraireEnsService   = $this->getServiceVolumeHoraireEns();
-        $this->anneeService              = $this->getServiceAnnee();
-        $this->contextService            = $this->getServiceContext();
-        $this->centreCoutEpService       = $this->getServiceCentreCoutEp();
-        $this->elementModulateurService  = $this->getServiceElementModulateur();
+        $this->cheminPedagogiqueService = $this->getServiceCheminPedagogique();
+        $this->volumeHoraireEnsService = $this->getServiceVolumeHoraireEns();
+        $this->anneeService = $this->getServiceAnnee();
+        $this->contextService = $this->getServiceContext();
+        $this->centreCoutEpService = $this->getServiceCentreCoutEp();
+        $this->elementModulateurService = $this->getServiceElementModulateur();
     }
-
 
 
     public function reconduction($datas)
@@ -74,24 +70,24 @@ class ReconductionProcessus extends AbstractProcessus
             $datas['etape'] = [];
         }
         $etapeOfElements = array_keys($datas['element']);
-        $etapeManquante  = array_diff($etapeOfElements, $datas['etape']);
-        $etapes          = array_merge($datas['etape'], $etapeManquante);
+        $etapeManquante = array_diff($etapeOfElements, $datas['etape']);
+        $etapes = array_merge($datas['etape'], $etapeManquante);
 
         if (!empty($etapes)) {
             $anneeEnCours = $this->contextService->getAnnee();
-            $em           = $this->getEntityManager();
-            $dateDuJour   = new \DateTime();
+            $em = $this->getEntityManager();
+            $dateDuJour = new \DateTime();
             $dateDuJour->format('d/m/Y');
             foreach ($etapes as $idEtape) {
                 if (in_array($idEtape, $etapeManquante)) {
                     if (!array_key_exists($idEtape, $datas['mappingEtape'])) {
                         throw new \Exception('Impossible de reconduire les éléments sélectionné');
                     }
-                    $idEtapeN1      = $datas['mappingEtape'][$idEtape];
+                    $idEtapeN1 = $datas['mappingEtape'][$idEtape];
                     $etapeReconduit = $this->etapeService->get($idEtapeN1);
                 } else {
                     //Check si l'étape reconduite n'a pas déjà été supprimé
-                    $etapeEnCours   = $this->etapeService->get($idEtape);
+                    $etapeEnCours = $this->etapeService->get($idEtape);
                     $etapeReconduit = $this->getServiceEtape()->getByCode(
                         $etapeEnCours->getCode(),
                         $this->contextService->getAnneeSuivante()
@@ -189,7 +185,6 @@ class ReconductionProcessus extends AbstractProcessus
     }
 
 
-
     /**
      * Reconduit les centres de coutq des élements pédagogiques d'une sélection d'étapes
      *
@@ -203,22 +198,22 @@ class ReconductionProcessus extends AbstractProcessus
     {
         //Récupération des étapes dont il faut reconduire les cc
         $etapes_codes = array_keys($etapes);
-        $sql          = '
+        $sql = '
         SELECT 
             *            
         FROM 
-            V_RECONDUCTION_CENTRE_COUT
+            v_reconduction_centre_cout
         WHERE
-          ANNEE_ID = ?
-          AND ETAPE_CODE IN (?)';
+          annee_id = ?
+          AND etape_code IN (?)';
 
-        $connection    = $this->getEntityManager()->getConnection();
-        $ccepN         = $connection->fetchAssociative($sql, [$this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
+        $connection = $this->getEntityManager()->getConnection();
+        $ccepN = $connection->fetchAllAssociative($sql, [$this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
         $nbCCReconduit = 0;
         foreach ($ccepN as $key => $value) {
             //Récupération de la dernière incrémentation ID CCEP
             $nextSequence = $this->getNextSequence('CENTRE_COUT_EP_ID_SEQ');
-            $stmt         = $connection->insert('centre_cout_ep',
+            $stmt = $connection->insert('centre_cout_ep',
                 ['id'                     => $nextSequence,
                  'centre_cout_id'         => $value['CENTRE_COUT_ID'],
                  'element_pedagogique_id' => $value['NEW_EP_ID'],
@@ -236,22 +231,21 @@ class ReconductionProcessus extends AbstractProcessus
     }
 
 
-
     public function reconduireModulateurFormation($etapes)
     {
         //Récupération des étapes dont il faut reconduire les cc
         $etapes_codes = array_keys($etapes);
-        $sql          = '
+        $sql = '
         SELECT 
             *            
         FROM 
-            V_RECONDUCTION_MODULATEUR
+            v_reconduction_modulateur
         WHERE
-            ANNEE_ID = ?
-            AND ETAPE_CODE IN (?)';
+            annee_id = ?
+            AND etape_code IN (?)';
 
-        $connection   = $this->getEntityManager()->getConnection();
-        $mepN         = $connection->fetchAssociative($sql, [$this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
+        $connection = $this->getEntityManager()->getConnection();
+        $mepN = $connection->fetchAllAssociative($sql, [$this->getServiceContext()->getAnnee()->getId(), $etapes_codes], [ParameterType::INTEGER, Connection::PARAM_STR_ARRAY]);
         $nbMReconduit = 0;
 
 
@@ -273,12 +267,11 @@ class ReconductionProcessus extends AbstractProcessus
     }
 
 
-
     public function getNextSequence($sequenceName = '')
     {
         $connection = $this->getEntityManager()->getConnection();
-        $stmt       = $connection->executeQuery('SELECT ' . $sequenceName . '.NEXTVAL val FROM DUAL');
-        $result     = $stmt->fetch();
+        $stmt = $connection->executeQuery('SELECT ' . $sequenceName . '.NEXTVAL val FROM DUAL');
+        $result = $stmt->fetchAssociative();
 
         return $result['VAL'];
     }

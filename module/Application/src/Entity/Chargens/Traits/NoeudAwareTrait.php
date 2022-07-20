@@ -7,13 +7,11 @@ use Application\Entity\Chargens\Noeud;
 /**
  * Description of NoeudAwareTrait
  *
+ * @author UnicaenCode
  */
 trait NoeudAwareTrait
 {
-    /**
-     * @var Noeud
-     */
-    private $noeud;
+    protected ?Noeud $noeud = null;
 
 
 
@@ -22,7 +20,7 @@ trait NoeudAwareTrait
      *
      * @return self
      */
-    public function setNoeud(Noeud $noeud = null)
+    public function setNoeud( ?Noeud $noeud )
     {
         $this->noeud = $noeud;
 
@@ -31,10 +29,7 @@ trait NoeudAwareTrait
 
 
 
-    /**
-     * @return Noeud
-     */
-    public function getNoeud()
+    public function getNoeud(): ?Noeud
     {
         return $this->noeud;
     }

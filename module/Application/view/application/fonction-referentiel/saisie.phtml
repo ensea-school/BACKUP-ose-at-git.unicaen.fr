@@ -6,6 +6,9 @@
  */
 
 /** @var \Application\Entity\Db\FonctionReferentiel $fonction */
+
+use Application\Provider\Privilege\Privileges;
+
 $fonction = $form->getObject();
 
 $visu = $this->messenger()->addCurrentMessagesFromFlashMessenger() . $this->form($form);
@@ -18,16 +21,15 @@ $tabs = [
     ],
 ];
 
-$id = $fonction->getId();
+$id      = $fonction->getId();
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CONFIG_REFERENTIEL));
 
-$canEdit = $this->isAllowed($fonction, \Application\Provider\Privilege\Privileges::PLAFONDS_CONFIG_REFERENTIEL);
-$canEdit = true;
 
 if ($id && $canEdit) {
 
     $tabs[] = [
         'id'    => 'plafonds',
-        'label' => '<span class="glyphicon glyphicon-signal"></span> Plafonds',
+        'label' => '<i class="fas fa-signal"></i> Plafonds',
         'url'   => $this->url('plafond/referentiel', ['fonctionReferentiel' => $id]),
     ];
 

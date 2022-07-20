@@ -2,68 +2,24 @@
 
 namespace Application\Entity\Db;
 
-/**
- * TblClotureRealise
- */
 class TblClotureRealise
 {
-    /**
-     * @var boolean
-     */
-    private $cloture = false;
+    private int         $id;
 
-    /**
-     * @var boolean
-     */
-    private $peutCloturerSaisie = false;
+    private Annee       $annee;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private Intervenant $intervenant;
 
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    private $intervenant;
+    private bool        $actif   = false;
 
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
+    private bool        $cloture = false;
 
 
 
     /**
-     * Get cloture
-     *
-     * @return boolean
+     * @return int
      */
-    public function getCloture()
-    {
-        return $this->cloture;
-    }
-
-
-
-    /**
-     * Get peutCloturerSaisie
-     *
-     * @return boolean
-     */
-    public function getPeutCloturerSaisie()
-    {
-        return $this->peutCloturerSaisie;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -71,11 +27,19 @@ class TblClotureRealise
 
 
     /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\Intervenant
+     * @return Annee
      */
-    public function getIntervenant()
+    public function getAnnee(): Annee
+    {
+        return $this->annee;
+    }
+
+
+
+    /**
+     * @return Intervenant
+     */
+    public function getIntervenant(): Intervenant
     {
         return $this->intervenant;
     }
@@ -83,13 +47,22 @@ class TblClotureRealise
 
 
     /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee
+     * @return bool
      */
-    public function getAnnee()
+    public function getActif(): bool
     {
-        return $this->annee;
+        return $this->actif;
     }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getCloture(): bool
+    {
+        return $this->cloture;
+    }
+
 }
 

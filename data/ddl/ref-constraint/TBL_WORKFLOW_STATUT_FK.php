@@ -5,11 +5,11 @@
 return [
     'name'        => 'TBL_WORKFLOW_STATUT_FK',
     'table'       => 'TBL_WORKFLOW',
-    'rtable'      => 'STATUT_INTERVENANT',
+    'rtable'      => 'STATUT',
     'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [
-        'STATUT_INTERVENANT_ID' => 'ID',
+        'STATUT_ID' => 'ID',
     ],
 ];
 

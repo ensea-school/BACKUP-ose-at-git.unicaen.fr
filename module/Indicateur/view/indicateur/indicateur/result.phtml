@@ -33,6 +33,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
             unset($supCols['structure-libelle']);
             unset($supCols['prioritaire']);
             unset($supCols['intervenant-code']);
+            unset($supCols['intervenant-code-rh']);
             unset($supCols['intervenant-prenom']);
             unset($supCols['intervenant-nom']);
             unset($supCols['intervenant-email-pro']);
@@ -76,17 +77,38 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                     <?php foreach ($result as $intervenantId => $r): ?>
                         <tr>
                             <?php if ($mailUrl): ?>
-                                <th class="cc"><input type="checkbox" checked="checked" value="<?= $intervenantId ?>" class="indic-intervenant"/></th>
+                                <th class="cc"><input type="checkbox" checked="checked" value="<?= $intervenantId ?>"
+                                                      class="indic-intervenant"/></th>
                             <?php endif; ?>
-                            <td style="text-align: center"><?= $r['prioritaire'] ? '<span class="glyphicon glyphicon-star"></span>' : '' ?></td>
+                            <td style="text-align: center"><?= $r['prioritaire'] ? '<i class="fas fa-star"></i>' : '' ?></td>
                             <td><?php printValue($r['structure-libelle']); ?></td>
                             <td>
                                 <a href="<?= $this->url($indicateur->getRoute(), ['intervenant' => $intervenantId]) ?>">
-                                    <?= $r['intervenant-nom'] . ' ' . $r['intervenant-prenom'] . ' <small>(n°' . $r['intervenant-code'] . ' / ' . $r['statut-libelle'] . ')</small>' ?>
+                                    <?php
+                                    if (!empty($r['intervenant-code-rh'])) {
+                                        echo $r['intervenant-nom'] . ' ' . $r['intervenant-prenom'] . " <small>(n°" . $r['intervenant-code-rh'] . ' / ' . $r['statut-libelle'] . ")</small>";
+                                    } else {
+                                        echo $r['intervenant-nom'] . ' ' . $r['intervenant-prenom'] . " <small>(" . $r['statut-libelle'] . ")</small>";
+                                    }
+                                    ?>
                                 </a>
                             </td>
-                            <?php foreach ($supCols as $supCol): ?>
-                                <td><?php printValue($r[$supCol]); ?></td>
+
+                            <?php
+                            foreach ($supCols as $supCol):
+                                if (!is_array($r[$supCol])) {
+                                    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $r[$supCol]);
+                                    if ($dt && $dt->format('Y-m-d H:i:s') === $r[$supCol]) {
+                                        $dtOrder = $dt->format(\Application\Constants::DATE_SORT); ?>
+                                        <td data-order=<?php echo $dtOrder ?>><?php printValue($dt->format(\Application\Constants::DATE_FORMAT)); ?></td>
+
+                                    <?php }
+                                } else {
+                                    ?>
+                                    <td><?php printValue($r[$supCol]); ?></td>
+
+                                <?php }
+                                ?>
                             <?php endforeach; ?>
                         </tr>
                     <?php endforeach; ?>
@@ -97,11 +119,12 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
             </div>
         <?php endif; ?>
         <a class="btn btn-default" href="<?= $this->url('indicateur'); ?>">
-            <i class="fa fa-undo" aria-hidden="true"></i>
-            Retour à la liste des indicateurs
+            <i class="fas fa-rotate-left" aria-hidden="true"></i
+                    Retour à la liste des indicateurs
         </a>
-        <a class="btn btn-default" href="<?= $this->url('indicateur/export-csv', ['indicateur' => $indicateur->getId()]); ?>">
-            <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+        <a class="btn btn-default"
+           href="<?= $this->url('indicateur/export-csv', ['indicateur' => $indicateur->getId()]); ?>">
+            <i class="fas fa-upload" aria-hidden="true"></i>
             Export de la liste au format CSV
         </a>
         <?php if ($mailUrl): ?>
@@ -114,19 +137,16 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
 <?php if ($mailUrl): ?>
     <script>
 
-        function cocherTout()
-        {
+        function cocherTout() {
             $(".indic-intervenant").prop("checked", true);
         }
 
 
-        function decocherTout()
-        {
+        function decocherTout() {
             $(".indic-intervenant").prop("checked", false);
         }
 
-        function envoiMail()
-        {
+        function envoiMail() {
             var url = <?= json_encode($mailUrl) ?>;
             var ids = '';
             $(".indic-intervenant:checked").each(function () {

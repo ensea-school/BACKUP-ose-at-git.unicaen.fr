@@ -3,7 +3,6 @@
 namespace Application\Form\Intervenant\Interfaces;
 
 use Application\Form\Intervenant\ModificationServiceDuForm;
-use RuntimeException;
 
 /**
  * Description of ModificationServiceDuFormAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface ModificationServiceDuFormAwareInterface
 {
     /**
-     * @param ModificationServiceDuForm $formIntervenantModificationServiceDu
+     * @param ModificationServiceDuForm|null $formIntervenantModificationServiceDu
+     *
      * @return self
      */
-    public function setFormIntervenantModificationServiceDu( ModificationServiceDuForm $formIntervenantModificationServiceDu );
+    public function setFormIntervenantModificationServiceDu( ?ModificationServiceDuForm $formIntervenantModificationServiceDu );
 
 
 
-    /**
-     * @return ModificationServiceDuFormAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormIntervenantModificationServiceDu();
+    public function getFormIntervenantModificationServiceDu(): ?ModificationServiceDuForm;
 }

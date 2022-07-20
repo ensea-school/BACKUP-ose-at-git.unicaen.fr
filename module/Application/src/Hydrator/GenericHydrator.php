@@ -61,28 +61,24 @@ class GenericHydrator implements HydratorInterface
                 $value = null;
                 if (is_string($getter) && method_exists($object, $getter)) {
                     $value = $object->$getter();
+                } elseif ($getter instanceof \Closure) {
+                    $value = $getter($object, $name);
                 } elseif (method_exists($object, $gget = 'get' . ucFirst($name))) {
                     $value = $object->$gget();
                 } elseif (method_exists($object, $gis = 'is' . ucFirst($name))) {
                     $value = $object->$gis();
-                } elseif (is_callable($getter)) {
-                    $value = $getter($name, $object);
                 }
 
                 /* Transformation en string */
                 if ('float' == $type && is_float($value)) {
                     $value = floatToString($value);
-                }
-                if ('int' == $type && is_int($value)) {
+                } elseif ('int' == $type && is_int($value)) {
                     $value = intToString($value);
-                }
-                if (('bool' == $type || 'boolean' == $type) && is_bool($value)) {
+                } elseif (('bool' == $type || 'boolean' == $type) && is_bool($value)) {
                     $value = booleanToString($value, '1', '0');
-                }
-                if (\DateTime::class == $type && $value instanceof \DateTime) {
+                } elseif (\DateTime::class == $type && $value instanceof \DateTime) {
                     $value = $value->format(Constants::DATE_FORMAT);
-                }
-                if (class_exists($type) && $value instanceof $type && method_exists($value, 'getId')) {
+                } elseif (class_exists($type) && $value instanceof $type && method_exists($value, 'getId')) {
                     $value = (string)$value->getId();
                 }
 
@@ -99,8 +95,8 @@ class GenericHydrator implements HydratorInterface
     {
         foreach ($this->elements as $name => $params) {
             if (!in_array($name, $this->noGenericParse)) {
-                $type     = isset($params['type']) ? $params['type'] : null;
                 $setter   = isset($params['setter']) ? $params['setter'] : 'set' . ucfirst($name);
+                $type     = ($setter instanceof \Closure) ? 'string' : (isset($params['type']) ? $params['type'] : null);
                 $readOnly = isset($params['readonly']) ? (bool)$params['readonly'] : false;
 
                 if ($readOnly || !isset($data[$name])) continue;
@@ -129,10 +125,10 @@ class GenericHydrator implements HydratorInterface
                 }
 
                 /* Injection de la valeur dans l'objet */
-                if (is_string($setter) && method_exists($object, $setter)) {
+                if ($setter instanceof \Closure) {
+                    $setter($object, $value, $name);
+                } elseif (is_string($setter) && method_exists($object, $setter)) {
                     $object->$setter($value);
-                } elseif (is_callable($setter)) {
-                    $setter($object, $name, $value);
                 }
             }
         }

@@ -11,10 +11,7 @@ use Application\Form\Chargens\ScenarioForm;
  */
 trait ScenarioFormAwareTrait
 {
-    /**
-     * @var ScenarioForm
-     */
-    private $formChargensScenario;
+    protected ?ScenarioForm $formChargensScenario = null;
 
 
 
@@ -23,7 +20,7 @@ trait ScenarioFormAwareTrait
      *
      * @return self
      */
-    public function setFormChargensScenario(ScenarioForm $formChargensScenario)
+    public function setFormChargensScenario(?ScenarioForm $formChargensScenario)
     {
         $this->formChargensScenario = $formChargensScenario;
 
@@ -32,12 +29,7 @@ trait ScenarioFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ScenarioForm
-     */
-    public function getFormChargensScenario()
+    public function getFormChargensScenario(): ?ScenarioForm
     {
         if (!empty($this->formChargensScenario)) {
             return $this->formChargensScenario;

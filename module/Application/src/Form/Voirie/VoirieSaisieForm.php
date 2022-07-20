@@ -22,10 +22,10 @@ class VoirieSaisieForm extends AbstractForm
         'id'         => ['type' => 'int'],
         'libelle'    => ['type' => 'string'],
         'code'       => ['type' => 'string'],
+        'codeRh'     => ['type' => 'string'],
         'source'     => ['type' => Source::class],
         'sourceCode' => ['type' => 'string'],
     ];
-
 
 
     public function init()
@@ -56,6 +56,18 @@ class VoirieSaisieForm extends AbstractForm
             ],
             'type'       => 'Text',
         ]);
+
+        $this->add([
+            'name'       => 'codeRh',
+            'options'    => [
+                'label' => "Code RH",
+            ],
+            'attributes' => [
+                'id' => uniqid('codeRh'),
+            ],
+            'type'       => 'Text',
+        ]);
+
 
         $this->add([
             'name'    => 'source',
@@ -90,10 +102,8 @@ class VoirieSaisieForm extends AbstractForm
             'type' => 'Hidden',
         ]);
 
-
         return $this;
     }
-
 
 
     /**
@@ -111,10 +121,10 @@ class VoirieSaisieForm extends AbstractForm
             'code'    => [
                 'required' => false,
             ],
+            'code_rh' => [
+                'required' => false,
+            ],
         ];
     }
 
 }
-
-
-

@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\DepartementService;
 
 /**
- * Description of DepartementAwareTrait
+ * Description of DepartementServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait DepartementServiceAwareTrait
 {
-    /**
-     * @var DepartementService
-     */
-    private $serviceDepartement;
+    protected ?DepartementService $serviceDepartement = null;
 
 
 
@@ -23,7 +20,7 @@ trait DepartementServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDepartement(DepartementService $serviceDepartement)
+    public function setServiceDepartement(?DepartementService $serviceDepartement)
     {
         $this->serviceDepartement = $serviceDepartement;
 
@@ -32,10 +29,7 @@ trait DepartementServiceAwareTrait
 
 
 
-    /**
-     * @return DepartementService
-     */
-    public function getServiceDepartement()
+    public function getServiceDepartement(): ?DepartementService
     {
         if (empty($this->serviceDepartement)) {
             $this->serviceDepartement = \Application::$container->get(DepartementService::class);

@@ -66,6 +66,12 @@ class IntervenantViewHelper extends AbstractHtmlElement
             $code = $this->getView()->tag('a', ['href' => $systemeInformationUrl, 'target' => '_blank'])->text($code);
         }
 
+        $statut = $entity->getStatut();
+        if ($this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_VISUALISATION))) {
+            $statutUrl = $this->getView()->url('statut/saisie', ['statut' => $statut->getId()]);
+            $statut    = $this->getView()->tag('a', ['href' => $statutUrl, 'target' => '_blank'])->text((string)$statut);
+        }
+
         $vars = [
             'identite'     => [
                 "Civilité"   => (string)($entity->getCivilite()) ? $entity->getCivilite()->getLibelleLong() : '',
@@ -80,7 +86,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
             ],
             'metier'       => [
                 "Type d'intervenant"       => $entity->getStatut()->getTypeIntervenant(),
-                "Statut de l'intervenant"  => $entity->getStatut(),
+                "Statut de l'intervenant"  => $statut,
                 "Composante d'affectation" => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
                 "Grade"                    => $entity->getGrade() ?: '<span class="inconnu">(Inconnue)</span>',
                 "Discipline"               => (!empty($entity->getDiscipline()) && $entity->getDiscipline() != '00 Non renseignée') ? $entity->getDiscipline() : '<span class="inconnu">(Inconnue)</span>',
@@ -179,16 +185,15 @@ class IntervenantViewHelper extends AbstractHtmlElement
                         <a href="<?= $this->getView()->url('intervenant/voir', ['intervenant' => $intervenantId]); ?>">
                             <span class="type-intervenant"><?= $iStatut->getStatut()->getTypeIntervenant() ?></span>
                             <span class="validite-intervenant"><?= $iStatut->getValidite(); ?></span><br/>
-                            <span class="statut-intervenant"><?= $iStatut->getStatut()->getLibelle() ?></span>
-                            <?php if ($iStatut->estHistorise()) echo $this->getView()->tag('span', ['class' => 'text-danger glyphicon glyphicon-warning-sign', 'title' => 'Intervenant historisé'])->text('') ?>
+                            <span class="statut"><?= $iStatut->getStatut()->getLibelle() ?></span>
+                            <?php if ($iStatut->estHistorise()) echo $this->getView()->tag('span', ['class' => 'text-danger fas fa-triangle-exclamation', 'title' => 'Intervenant historisé'])->text('') ?>
                         </a>
                         </li>
                     <?php endif; endforeach; ?>
                     <?php if ($canAddIntervenant && $intervenant->getId()): ?>
                         <li class="ajout-intervenant">
                             <a href="<?= $this->getView()->url('intervenant/dupliquer', ['intervenant' => $intervenant->getId()]); ?>"
-                               title="Ajout d'un nouveau statut à l'intervenant"><span
-                                        class="glyphicon glyphicon-plus"></span></a>
+                               title="Ajout d'un nouveau statut à l'intervenant"><i class="fas fa-plus"></i></a>
                         </li>
                     <?php endif; ?>
                 </ul>

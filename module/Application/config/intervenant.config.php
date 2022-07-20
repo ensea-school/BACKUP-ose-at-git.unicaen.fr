@@ -182,14 +182,13 @@ return [
                             ],
                         ],
                     ],
-                    'services'                => [
+                    'services-prevus'         => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/:intervenant/services',
+                            'route'    => '/:intervenant/services-prevus',
                             'defaults' => [
-                                'controller'               => 'Application\Controller\Intervenant',
-                                'action'                   => 'services',
-                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
+                                'controller' => 'Application\Controller\Intervenant',
+                                'action'     => 'services-prevus',
                             ],
                         ],
                     ],
@@ -209,9 +208,8 @@ return [
                         'options' => [
                             'route'    => '/:intervenant/services-realises',
                             'defaults' => [
-                                'controller'               => 'Application\Controller\Intervenant',
-                                'action'                   => 'services',
-                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
+                                'controller' => 'Application\Controller\Intervenant',
+                                'action'     => 'services-realises',
                             ],
                         ],
                     ],
@@ -353,7 +351,7 @@ return [
                         'pages' => [
                             'modification-service-du-export-csv' => [
                                 'label'        => "Modifications de service dû (CSV)",
-                                'icon'         => 'glyphicon glyphicon-adjust',
+                                'icon'         => 'fas fa-fill',
                                 'title'        => "Modifications de service dû (CSV)",
                                 'route'        => 'modification-service-du/export-csv',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\ModificationServiceDu', 'export-csv'),
@@ -376,7 +374,7 @@ return [
                                 'paramsInject' => [
                                     'intervenant',
                                 ],
-                                'icon'         => "glyphicon glyphicon-search",
+                                'icon'         => "fas fa-magnifying-glass",
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'rechercher'),
                                 'order'        => 1,
@@ -415,16 +413,16 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\ModificationServiceDu', 'saisir'),
                                 'order'        => 4,
                             ],
-                            'service'                 => [
+                            'services-prevus'         => [
                                 'label'               => "Enseignements prévisionnels",
                                 'title'               => "Enseignements prévisionnels de l'intervenant",
-                                'route'               => 'intervenant/services',
+                                'route'               => 'intervenant/services-prevus',
                                 'paramsInject'        => [
                                     'intervenant',
                                 ],
                                 'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE,
                                 'withtarget'          => true,
-                                'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services'),
+                                'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services-prevus'),
                                 'visible'             => Assertion\ServiceAssertion::class,
                                 'order'               => 6,
                             ],
@@ -448,7 +446,7 @@ return [
                                 ],
                                 'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE_REALISE,
                                 'withtarget'          => true,
-                                'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services'),
+                                'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services-realises'),
                                 'visible'             => Assertion\ServiceAssertion::class,
                                 'order'               => 13,
                             ],
@@ -477,10 +475,19 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['services'],
+                    'action'     => ['services-prevus'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_VISUALISATION,
-                        Privileges::REFERENTIEL_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                    ],
+                    'assertion'  => Assertion\ServiceAssertion::class,
+                ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['services-realises'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -540,8 +547,10 @@ return [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['formule-totaux-hetd'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_VISUALISATION,
-                        Privileges::REFERENTIEL_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                 ],
                 [
@@ -602,8 +611,6 @@ return [
             Service\MotifModificationServiceDuService::class => Service\MotifModificationServiceDuService::class,
             Service\CiviliteService::class                   => Service\CiviliteService::class,
             Service\GradeService::class                      => Service\GradeService::class,
-            Service\StatutIntervenantService::class          => Service\StatutIntervenantService::class,
-            Service\TypeIntervenantService::class            => Service\TypeIntervenantService::class,
         ],
     ],
     'view_helpers'    => [

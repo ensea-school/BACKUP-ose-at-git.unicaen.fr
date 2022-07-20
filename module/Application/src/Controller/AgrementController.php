@@ -11,6 +11,7 @@ use Application\Form\Agrement\Traits\SaisieAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AgrementService;
 use Application\Service\Traits\AgrementServiceAwareTrait;
+use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
@@ -36,6 +37,7 @@ class AgrementController extends AbstractController
     use SaisieAwareTrait;
     use StructureServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use EtatSortieServiceAwareTrait;
 
 
     /**
@@ -94,7 +96,7 @@ class AgrementController extends AbstractController
         }
 
         $qb = $this->getServiceTblAgrement()->finderByTypeAgrement($typeAgrement);
-        $this->getServiceTblAgrement()->finderByCodeIntervenant($intervenant->getCode(), $qb);
+        $this->getServiceTblAgrement()->finderByIntervenant($intervenant, $qb);
         $annee = $this->getServiceContext()->getAnnee();
         $this->getServiceTblAgrement()->finderByAnnee($annee, $qb);
         $this->getServiceTblAgrement()->leftJoin(AgrementService::class, $qb, 'agrement', true);
@@ -115,7 +117,7 @@ class AgrementController extends AbstractController
                     'intervenant' => $ta->getIntervenant()->getId(),
                 ];
                 $actionUrl   = $this->url()->fromRoute('intervenant/agrement/supprimer', $params);
-                $actionLabel = '<span class="glyphicon glyphicon-trash"></span> Retirer l\'agrément';
+                $actionLabel = '<i class="fas fa-trash-can"></i> Retirer l\'agrément';
             } elseif (!$ta->getAgrement() && $this->isAllowed($ta, $ta->getTypeAgrement()->getPrivilegeEdition())) {
                 $params = [
                     'typeAgrement' => $ta->getTypeAgrement()->getId(),
@@ -124,7 +126,7 @@ class AgrementController extends AbstractController
                 if ($ta->getStructure()) $params['structure'] = $ta->getStructure()->getId();
 
                 $actionUrl   = $this->url()->fromRoute('intervenant/agrement/ajouter', $params);
-                $actionLabel = '<span class="glyphicon glyphicon-ok"></span> Agréer';
+                $actionLabel = '<i class="fas fa-check"></i> Agréer';
             } else {
                 $actionUrl   = null;
                 $actionLabel = null;
@@ -284,15 +286,19 @@ class AgrementController extends AbstractController
 
     public function exportCsvAction()
     {
-        $annee = $this->getServiceContext()->getAnnee();
-        $role  = $this->getServiceContext()->getSelectedIdentityRole();
+        //Contexte année et structure
+        $annee     = $this->getServiceContext()->getAnnee();
+        $structure = $this->getServiceContext()->getStructure();
 
-        $data = $this->getServiceAgrement()->getExportCsvData($annee, $role->getStructure());
+        $filters['ANNEE_ID'] = $annee->getId();
+        if ($structure) {
+            $filters['STRUCTURE_ID'] = $structure->getId();
+        }
+        //On récupére l'état de sortie pour l'export des agréments
+        $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'export-agrement']);
+        $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters);
+        $csvModel->setFilename('export-agrement.csv');
 
-        $csvModel = new CsvModel();
-        $csvModel->setHeader($data['head']);
-        $csvModel->addLines($data['data']);
-        $csvModel->setFilename('agrements-' . $annee . '.csv');
 
         return $csvModel;
     }

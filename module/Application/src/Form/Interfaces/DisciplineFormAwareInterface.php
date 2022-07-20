@@ -3,7 +3,6 @@
 namespace Application\Form\Interfaces;
 
 use Application\Form\DisciplineForm;
-use RuntimeException;
 
 /**
  * Description of DisciplineFormAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface DisciplineFormAwareInterface
 {
     /**
-     * @param DisciplineForm $formDiscipline
+     * @param DisciplineForm|null $formDiscipline
+     *
      * @return self
      */
-    public function setFormDiscipline( DisciplineForm $formDiscipline );
+    public function setFormDiscipline( ?DisciplineForm $formDiscipline );
 
 
 
-    /**
-     * @return DisciplineFormAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormDiscipline();
+    public function getFormDiscipline(): ?DisciplineForm;
 }

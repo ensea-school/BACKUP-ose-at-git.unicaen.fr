@@ -40,13 +40,13 @@ return [
         /**
          * Période d'exécution de la requête de rafraîchissement de la session utilisateur, en millisecondes.
          */
-        'session_refresh_period' => 1 * 30 * 1000, // 10*60*1000 ms = 10 min
+        'session_refresh_period' => 10 * 60 * 1000, // 10*60*1000 ms = 10 min
 
         'ldap' => [
             'connection'  => [
                 'default' => [
                     'params' => [
-                        'host'                => AppConfig::get('ldap', 'actif', true) ? AppConfig::get('ldap', 'host') : null,
+                        'host'                => (AppConfig::get('ldap', 'actif', true) || AppConfig::get('cas', 'actif', true)) ? AppConfig::get('ldap', 'host') : null,
                         'username'            => AppConfig::get('ldap', 'username'),
                         'password'            => AppConfig::get('ldap', 'password'),
                         'baseDn'              => AppConfig::get('ldap', 'baseDn'),

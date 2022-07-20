@@ -124,6 +124,71 @@ class Console implements \BddAdmin\Logger\LoggerInterface
 
 
 
+    public function printArray(array $a)
+    {
+        function mb_str_pad($input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+        {
+            $diff = strlen($input) - mb_strlen($input);
+
+            return str_pad($input, $pad_length + $diff, $pad_string, $pad_type);
+        }
+
+        $lengths = [];
+
+        $head = reset($a);
+        if (isset($head)) {
+            foreach ($head as $k => $null) {
+                $head[$k] = $k;
+                if (($lengths[$k] ?? 0) < mb_strlen($k)) {
+                    $lengths[$k] = mb_strlen($k);
+                }
+            }
+        } else {
+            $head = [];
+        }
+
+        foreach ($a as $l) {
+            foreach ($l as $k => $v) {
+                if (($lengths[$k] ?? 0) < mb_strlen($v)) {
+                    $lengths[$k] = mb_strlen($v);
+                }
+            }
+        }
+
+        $this->println('');
+        $this->print('|');
+        foreach ($head as $k => $v) {
+            $this->print(mb_str_pad('', $lengths[$k], '-') . ' | ');
+        }
+        $this->println('');
+        if ($head) {
+            $this->print('|');
+            foreach ($head as $k => $v) {
+                $this->print(mb_str_pad($v, $lengths[$k], ' ') . ' | ');
+            }
+            $this->println('');
+            $this->print('|');
+            foreach ($head as $k => $v) {
+                $this->print(mb_str_pad('', $lengths[$k], '-') . ' | ');
+            }
+            $this->println('');
+        }
+        foreach ($a as $n => $l) {
+            $this->print('|');
+            foreach ($l as $k => $v) {
+                $this->print(mb_str_pad($v, $lengths[$k], ' ') . ' | ');
+            }
+            $this->println('');
+        }
+        $this->print('|');
+        foreach ($head as $k => $v) {
+            $this->print(mb_str_pad('', $lengths[$k], '-') . ' | ');
+        }
+        $this->println('');
+    }
+
+
+
     public function msg($message, bool $rewrite = false)
     {
         if ($this->logCurrentLevel <= $this->logLevel) {

@@ -1,7 +1,7 @@
 CREATE OR REPLACE FORCE VIEW V_INDIC_ATTENTE_DEMANDE_MEP AS
 select to_number(i.id||dmep.structure_id) id, i.id intervenant_id, i.source_code, ti.code, i.annee_id, dmep.structure_id, 0 TOTAL_HEURES_MEP, 0 TOTAL_HEURES_COMPL
   from intervenant i
-  join statut_intervenant si on si.id = i.statut_id
+  join statut si on si.id = i.statut_id
   join type_intervenant ti on ti.id = si.type_intervenant_id
   -- l'intervenant doit avoir des heures disponibles pour une demande de MEP
   join V_HAS_DMEP_A_FAIRE dmep on dmep.intervenant_id = i.id and dmep.has_dmep_a_faire <> 0

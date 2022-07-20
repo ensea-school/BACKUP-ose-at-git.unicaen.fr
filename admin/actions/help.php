@@ -22,6 +22,7 @@ $actions    = [
     "install-bdd"               => "Installe la base de données"
         . "\n\t--oseappli-pwd=<votre mdp> : mot de passe de l'utilisateur oseappli"
     ,
+    "update-code"               => "Mise à jour du code source de l'application (sans toucher à la BDD)",
     "update-bdd"                => "Mise à jour de la base de données de l'application (sans les fichiers)",
     "update-employeur"          => "Mise à jour de la table employeur à partir d'une source (par défault source INSEE)",
     "build-synchronisation"     => "Reconstruction des vues différentielles et des procédures de mise à jour",
@@ -33,6 +34,7 @@ $actionsDev = [
     "update-ddl"            => "Mise à jour du fichier de définition de la base de données à partir de cette dernière",
     "update-bdd-data"       => "Mise à jour des données de la base de données",
     "update-bdd-privileges" => "Mise à jour des privilèges de la base de données",
+    "update-bdd-formules"   => "Mise à jour de le liste des formules de calcul",
     "test"                  => "Script de tests divers",
     "test-migration"        => "Script de test de migration. Paramètres : [before|after nom_du_script_de_migration]",
     "build-tableaux-bord"   => "Reconstruction des tableaux de bord",

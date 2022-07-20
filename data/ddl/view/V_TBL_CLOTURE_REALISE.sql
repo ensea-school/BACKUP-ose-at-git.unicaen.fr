@@ -3,11 +3,11 @@ WITH t AS (
   SELECT
     i.annee_id              annee_id,
     i.id                    intervenant_id,
-    si.peut_cloturer_saisie peut_cloturer_saisie,
+    si.cloture              actif,
     CASE WHEN v.id IS NULL THEN 0 ELSE 1 END cloture
   FROM
               intervenant         i
-         JOIN statut_intervenant si ON si.id = i.statut_id
+         JOIN statut             si ON si.id = i.statut_id
          JOIN type_validation    tv ON tv.code = 'CLOTURE_REALISE'
 
     LEFT JOIN validation          v ON v.intervenant_id = i.id
@@ -22,11 +22,11 @@ WITH t AS (
 SELECT
   annee_id,
   intervenant_id,
-  peut_cloturer_saisie,
+  actif,
   CASE WHEN sum(cloture) = 0 THEN 0 ELSE 1 END cloture
 FROM
   t
 GROUP BY
   annee_id,
   intervenant_id,
-  peut_cloturer_saisie
+  actif

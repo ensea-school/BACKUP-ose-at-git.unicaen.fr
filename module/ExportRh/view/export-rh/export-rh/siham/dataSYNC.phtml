@@ -86,7 +86,7 @@
                 <td>
                     <?= $intervenantDossier->getIBAN() ?>
                     <?php if ($intervenantRh->getIBAN() != $intervenantDossier->getIBAN()): ?>
-                        <span class="glyphicon glyphicon-alert" style="color:#a40000;"></span>
+                        <i class="fas fa-triangle-exclamation" style="color:#a40000;"></i>
                     <?php endif; ?>
                 </td>
                 <td class="active">
@@ -102,7 +102,7 @@
                 <td>
                     <?= $intervenantDossier->getBIC() ?>
                     <?php if ($intervenantRh->getBIC() != $intervenantDossier->getBIC()): ?>
-                        <span class="glyphicon glyphicon-alert" style="color:#a40000;"></span>
+                        <i class="fas fa-triangle-exclamation" style="color:#a40000;"></i>
                     <?php endif; ?>
                 </td>
                 <td class="active">

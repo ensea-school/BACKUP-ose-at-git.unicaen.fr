@@ -11,10 +11,7 @@ use Application\Form\ServiceReferentiel\Saisie;
  */
 trait SaisieAwareTrait
 {
-    /**
-     * @var Saisie
-     */
-    private $formServiceReferentielSaisie;
+    protected ?Saisie $formServiceReferentielSaisie = null;
 
 
 
@@ -23,7 +20,7 @@ trait SaisieAwareTrait
      *
      * @return self
      */
-    public function setFormServiceReferentielSaisie(Saisie $formServiceReferentielSaisie)
+    public function setFormServiceReferentielSaisie(?Saisie $formServiceReferentielSaisie)
     {
         $this->formServiceReferentielSaisie = $formServiceReferentielSaisie;
 
@@ -32,12 +29,7 @@ trait SaisieAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return Saisie
-     */
-    public function getFormServiceReferentielSaisie()
+    public function getFormServiceReferentielSaisie(): ?Saisie
     {
         if (!empty($this->formServiceReferentielSaisie)) {
             return $this->formServiceReferentielSaisie;

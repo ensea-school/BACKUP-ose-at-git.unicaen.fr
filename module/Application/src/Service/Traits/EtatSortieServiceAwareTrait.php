@@ -11,18 +11,16 @@ use Application\Service\EtatSortieService;
  */
 trait EtatSortieServiceAwareTrait
 {
-    /**
-     * @var EtatSortieService
-     */
-    protected $serviceEtatSortie;
+    protected ?EtatSortieService $serviceEtatSortie = null;
 
 
 
     /**
      * @param EtatSortieService $serviceEtatSortie
+     *
      * @return self
      */
-    public function setServiceEtatSortie( EtatSortieService $serviceEtatSortie )
+    public function setServiceEtatSortie(?EtatSortieService $serviceEtatSortie)
     {
         $this->serviceEtatSortie = $serviceEtatSortie;
 
@@ -31,12 +29,9 @@ trait EtatSortieServiceAwareTrait
 
 
 
-    /**
-     * @return EtatSortieService
-     */
-    public function getServiceEtatSortie() : EtatSortieService
+    public function getServiceEtatSortie(): ?EtatSortieService
     {
-        if (!$this->serviceEtatSortie){
+        if (empty($this->serviceEtatSortie)) {
             $this->serviceEtatSortie = \Application::$container->get(EtatSortieService::class);
         }
 

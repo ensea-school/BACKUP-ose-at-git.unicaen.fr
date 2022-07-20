@@ -3,14 +3,14 @@
 namespace Application\Entity\Service;
 
 use Application\Entity\Db\EtatVolumeHoraire;
-use Application\Entity\Db\Interfaces\TypeIntervenantAwareInterface;       use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
-use Application\Entity\Db\Interfaces\IntervenantAwareInterface;           use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Interfaces\NiveauEtapeAwareInterface;                     use Application\Traits\NiveauEtapeAwareTrait;
-use Application\Entity\Db\Interfaces\EtapeAwareInterface;                 use Application\Entity\Db\Traits\EtapeAwareTrait;
-use Application\Entity\Db\Interfaces\ElementPedagogiqueAwareInterface;    use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
-use Application\Entity\Db\Interfaces\TypeVolumeHoraireAwareInterface;     use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
-use Application\Entity\Db\Interfaces\EtatVolumeHoraireAwareInterface;     use Application\Entity\Db\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Traits\NiveauEtapeAwareTrait;
+use Application\Entity\Db\Traits\EtapeAwareTrait;
+use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Entity\Db\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Entity\Db\Structure;
 
 /**
@@ -19,16 +19,6 @@ use Application\Entity\Db\Structure;
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class Recherche
-
-implements
-    TypeIntervenantAwareInterface,
-    IntervenantAwareInterface,
-    NiveauEtapeAwareInterface,
-    EtapeAwareInterface,
-    ElementPedagogiqueAwareInterface,
-    TypeVolumeHoraireAwareInterface,
-    EtatVolumeHoraireAwareInterface
-
 {
 
     use TypeIntervenantAwareTrait;
@@ -53,6 +43,8 @@ implements
      */
     protected $structureEns;
 
+
+
     /**
      * Retourne la structure d'affectation
      *
@@ -63,17 +55,23 @@ implements
         return $this->structureAff;
     }
 
+
+
     /**
      * Assigne une structure d'affectation
      *
      * @param Structure $structureAff
+     *
      * @return self
      */
     function setStructureAff(Structure $structureAff = null)
     {
         $this->structureAff = $structureAff;
+
         return $this;
     }
+
+
 
     /**
      * Retourne la structure d'enseignement
@@ -85,15 +83,19 @@ implements
         return $this->structureEns;
     }
 
+
+
     /**
      * Assigne une structure d'enseignement
      *
      * @param Structure $structureEns
+     *
      * @return self
      */
     function setStructureEns(Structure $structureEns = null)
     {
         $this->structureEns = $structureEns;
+
         return $this;
     }
 
@@ -129,7 +131,7 @@ implements
      * @return void
      * @link http://php.net/manual/en/language.oop5.decon.php
      */
-    public function __construct( TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumeHoraire=null )
+    public function __construct(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumeHoraire = null)
     {
         if ($typeVolumeHoraire) $this->setTypeVolumeHoraire($typeVolumeHoraire);
         if ($etatVolumeHoraire) $this->setEtatVolumeHoraire($etatVolumeHoraire);

@@ -3,6 +3,7 @@
 namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
+use Application\Form\AbstractFieldset;
 use Application\Form\AbstractForm;
 use Application\Form\Employeur\EmployeurFieldset;
 use Application\Form\Adresse\AdresseFieldset;
@@ -17,7 +18,7 @@ use Application\Hydrator\IntervenantDossierHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Validator\NumeroINSEEValidator;
 use Laminas\Form\Element\Csrf;
 
@@ -27,43 +28,39 @@ use Laminas\Form\Element\Csrf;
  */
 class IntervenantDossierForm extends AbstractForm
 {
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use ContextServiceAwareTrait;
     use DossierServiceAwareTrait;
     use ServiceServiceAwareTrait;
     use DossierServiceAwareTrait;
 
-    protected $dossierIdentiteFieldset;
+    protected AbstractFieldset $dossierIdentiteFieldset;
 
-    protected $dossierAdresseFieldset;
+    protected AbstractFieldset $dossierIdentiteComplementaireFieldset;
 
-    protected $dossierContactFiedlset;
+    protected AbstractFieldset $dossierAdresseFieldset;
 
-    protected $dossierInseeFiedlset;
+    protected AbstractFieldset $dossierStatutFieldset;
 
-    protected $dossierBancaireFieldset;
+    protected AbstractFieldset $dossierContactFiedlset;
 
-    protected $dossierEmployeurFieldset;
+    protected AbstractFieldset $dossierInseeFiedlset;
 
-    protected $dossierAutresFiedlset;
+    protected AbstractFieldset $dossierBancaireFieldset;
 
-    protected $intervenant;
+    protected AbstractFieldset $dossierEmployeurFieldset;
 
+    protected AbstractFieldset $dossierAutresFiedlset;
 
-
-    public function __construct(Intervenant $intervenant)
-    {
-        $this->intervenant = $intervenant;
-        parent::__construct('IntervenantDossierForm', []);
-    }
+    protected Intervenant      $intervenant;
 
 
 
-    public function init()
+    public function initForm()
     {
 
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($this->intervenant);
-        $statutIntervenant  = $this->intervenant->getStatut();
+        $statut             = $this->intervenant->getStatut();
         $intervenant        = $dossierIntervenant->getIntervenant();
 
         $this->setAttribute('action', $this->getCurrentUrl());
@@ -73,8 +70,8 @@ class IntervenantDossierForm extends AbstractForm
 
 
         $this->dossierStatutFieldset = new DossierStatutFieldset('DossierStatut', [
-            'statutIntervenant' => $statutIntervenant,
-            'intervenant'       => $intervenant,
+            'statut'      => $statut,
+            'intervenant' => $intervenant,
         ]);
         $this->dossierStatutFieldset->init();
 
@@ -139,19 +136,13 @@ class IntervenantDossierForm extends AbstractForm
                 'class' => 'btn btn-primary',
             ],
         ]);
+
+        return $this;
     }
 
 
 
-    public function isValid(): bool
-    {
-
-        return parent::isValid();
-    }
-
-
-
-    public function setIntervenant(Intervenant $intervenant)
+    public function setIntervenant(Intervenant $intervenant): self
     {
         $this->intervenant = $intervenant;
 
@@ -162,11 +153,11 @@ class IntervenantDossierForm extends AbstractForm
 
     /**
      * Should return an array specification compatible with
-     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
+     * {@link \Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
-    public function getInputFilterSpecification()
+    public function getInputFilterSpecification(): array
     {
         return [];
     }

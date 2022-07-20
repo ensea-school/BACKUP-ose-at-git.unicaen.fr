@@ -2,7 +2,7 @@
 
 namespace Application\View\Helper\Service;
 
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 
 /**
@@ -45,17 +45,6 @@ class Resume extends AbstractViewHelper
     public function __toString()
     {
         return $this->render();
-    }
-
-
-
-    /**
-     *
-     * @return \Application\Entity\Db\TypeIntervention[]
-     */
-    public function getTypesIntervention()
-    {
-
     }
 
 
@@ -112,10 +101,10 @@ class Resume extends AbstractViewHelper
 
             $na = '<abbr title="Non applicable (intervenant vacataire))">NA</abbr>';
 
-            $intervenantPermanent = $line['intervenant-type-code'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
+            $intervenantPermanent = $line['intervenant-type-code'] === \Intervenant\Entity\Db\TypeIntervenant::CODE_PERMANENT;
 
             $res .= '<tr>' . "\n";
-            $url = $this->getView()->url('intervenant/services', ['intervenant' => $line['intervenant-id']]);
+            $url = $this->getView()->url('intervenant/services-prevus', ['intervenant' => $line['intervenant-id']]);
 
             $res .= '<td><a href="' . $url . '">' . strtoupper($line['intervenant-nom']) . '</a></td>' . "\n";
             $totaux['intervenant']++;

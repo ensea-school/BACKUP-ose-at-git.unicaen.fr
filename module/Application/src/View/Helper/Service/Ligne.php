@@ -292,7 +292,7 @@ class Ligne extends AbstractViewHelper
         }
         $url = $this->getView()->url('service/saisie', ['id' => $this->getService()->getId()], ['query' => $query]);
 
-        return '<a class="ajax-modal" data-event="service-modify-message" href="' . $url . '" title="Modifier l\'enseignement"><span class="glyphicon glyphicon-pencil"></span></a>';
+        return '<a class="ajax-modal" data-event="service-modify-message" href="' . $url . '" title="Modifier l\'enseignement"><i class="fas fa-pencil"></i></a>';
     }
 
 
@@ -309,7 +309,7 @@ class Ligne extends AbstractViewHelper
             'data-id'      => $this->getService()->getId(),
             'href'         => $url,
             'title'        => 'Supprimer cet enseignement',
-        ])->html('<span class="glyphicon glyphicon-trash"></span>');
+        ])->html('<i class="fas fa-trash-can"></i>');
     }
 
 
@@ -318,7 +318,7 @@ class Ligne extends AbstractViewHelper
     {
         $out =
             '<a class="service-details-button" title="Détail des heures">'
-            . '<span class="glyphicon glyphicon-chevron-' . ($details ? 'up' : 'down') . '"></span>'
+            . '<i class="fas fa-chevron-' . ($details ? 'up' : 'down') . '"></span>'
             . '</a>';
 
         return $out;
@@ -380,7 +380,8 @@ class Ligne extends AbstractViewHelper
     public function setService(Service $service = null)
     {
         $service->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire());
-        $this->forcedReadOnly = !$this->getView()->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION);
+        $typeVolumeHoraire    = $this->getListe()->getTypeVolumeHoraire();
+        $this->forcedReadOnly = !$this->getView()->isAllowed($service, $typeVolumeHoraire->getPrivilegeEnseignementEdition());
         $this->service        = $service;
 
         return $this;

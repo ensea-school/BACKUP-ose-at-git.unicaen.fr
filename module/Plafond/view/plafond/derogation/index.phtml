@@ -7,11 +7,11 @@
  *
  */
 
+use Application\Provider\Privilege\Privileges;
+
 echo '<h1>Dérogations accordées</h1>';
 
-//var_dump($data);
-
-$canDerog = true;
+$canDerog = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_DEROGATIONS_EDITION));
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
@@ -49,7 +49,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 <?php endforeach; ?>
 
                 <td>
-                    <input class="form-control" type="text" name="plafond-<?= $id ?>" value="<?= $plafond['derogation'] ?>"/>
+                    <?php if ($canDerog): ?>
+                        <input class="form-control" type="text" name="plafond-<?= $id ?>" value="<?= $plafond['derogation'] ?>"/>
+                    <?php else: ?>
+                        <?= floatToString($plafond['derogation']) ?>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; ?>

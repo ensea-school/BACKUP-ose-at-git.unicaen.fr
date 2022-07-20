@@ -11,31 +11,25 @@ use Application\Entity\Db\TypeInterventionStatut;
  */
 trait TypeInterventionStatutAwareTrait
 {
-    /**
-     * @var TypeInterventionStatut
-     */
-    private $typeInterventionStatut;
-
-
+    protected ?TypeInterventionStatut $typeInterventionStatut = null;
 
 
 
     /**
      * @param TypeInterventionStatut $typeInterventionStatut
+     *
      * @return self
      */
-    public function setTypeInterventionStatut( TypeInterventionStatut $typeInterventionStatut = null )
+    public function setTypeInterventionStatut( ?TypeInterventionStatut $typeInterventionStatut )
     {
         $this->typeInterventionStatut = $typeInterventionStatut;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TypeInterventionStatut
-     */
-    public function getTypeInterventionStatut()
+    public function getTypeInterventionStatut(): ?TypeInterventionStatut
     {
         return $this->typeInterventionStatut;
     }

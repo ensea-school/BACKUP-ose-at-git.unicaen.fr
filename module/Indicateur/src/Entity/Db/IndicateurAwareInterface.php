@@ -2,6 +2,7 @@
 
 namespace Indicateur\Entity\Db;
 
+
 /**
  * Description of IndicateurAwareInterface
  *
@@ -10,16 +11,13 @@ namespace Indicateur\Entity\Db;
 interface IndicateurAwareInterface
 {
     /**
-     * @param Indicateur $indicateur
+     * @param Indicateur|null $indicateur
      *
      * @return self
      */
-    public function setIndicateur(Indicateur $indicateur = null);
+    public function setIndicateur( ?Indicateur $indicateur );
 
 
 
-    /**
-     * @return Indicateur
-     */
-    public function getIndicateur();
+    public function getIndicateur(): ?Indicateur;
 }

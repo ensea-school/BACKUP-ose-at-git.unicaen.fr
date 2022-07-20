@@ -11,10 +11,7 @@ use Application\Service\TypeRessourceService;
  */
 trait TypeRessourceServiceAwareTrait
 {
-    /**
-     * @var TypeRessourceService
-     */
-    private $serviceTypeRessource;
+    protected ?TypeRessourceService $serviceTypeRessource = null;
 
 
 
@@ -23,7 +20,7 @@ trait TypeRessourceServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeRessource(TypeRessourceService $serviceTypeRessource)
+    public function setServiceTypeRessource(?TypeRessourceService $serviceTypeRessource)
     {
         $this->serviceTypeRessource = $serviceTypeRessource;
 
@@ -32,10 +29,7 @@ trait TypeRessourceServiceAwareTrait
 
 
 
-    /**
-     * @return TypeRessourceService
-     */
-    public function getServiceTypeRessource()
+    public function getServiceTypeRessource(): ?TypeRessourceService
     {
         if (empty($this->serviceTypeRessource)) {
             $this->serviceTypeRessource = \Application::$container->get(TypeRessourceService::class);

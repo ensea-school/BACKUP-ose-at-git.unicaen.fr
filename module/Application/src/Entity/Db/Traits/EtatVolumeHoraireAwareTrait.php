@@ -11,31 +11,25 @@ use Application\Entity\Db\EtatVolumeHoraire;
  */
 trait EtatVolumeHoraireAwareTrait
 {
-    /**
-     * @var EtatVolumeHoraire
-     */
-    private $etatVolumeHoraire;
-
-
+    protected ?EtatVolumeHoraire $etatVolumeHoraire = null;
 
 
 
     /**
      * @param EtatVolumeHoraire $etatVolumeHoraire
+     *
      * @return self
      */
-    public function setEtatVolumeHoraire( EtatVolumeHoraire $etatVolumeHoraire = null )
+    public function setEtatVolumeHoraire( ?EtatVolumeHoraire $etatVolumeHoraire )
     {
         $this->etatVolumeHoraire = $etatVolumeHoraire;
+
         return $this;
     }
 
 
 
-    /**
-     * @return EtatVolumeHoraire
-     */
-    public function getEtatVolumeHoraire()
+    public function getEtatVolumeHoraire(): ?EtatVolumeHoraire
     {
         return $this->etatVolumeHoraire;
     }

@@ -7,7 +7,7 @@ use Application\Form\Elements\PaysSelect;
 use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\VoirieServiceAwareTrait;
 
 /**
@@ -17,13 +17,12 @@ use Application\Service\Traits\VoirieServiceAwareTrait;
 class AdresseFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use PaysServiceAwareTrait;
     use VoirieServiceAwareTrait;
     use AdresseNumeroComplServiceAwareTrait;
 
     static private $franceId;
-
 
 
     /**
@@ -34,7 +33,6 @@ class AdresseFieldset extends AbstractFieldset
     {
         $this->addElements();
     }
-
 
 
     /**
@@ -115,7 +113,7 @@ class AdresseFieldset extends AbstractFieldset
         /**
          * voirie
          */
-        $qb      = $this->getServiceVoirie()->finderByHistorique();
+        $qb = $this->getServiceVoirie()->finderByHistorique();
         $voiries = \UnicaenApp\Util::collectionAsOptions($this->getServiceVoirie()->getList($qb));
         $this->add([
             'name'       => 'voirie',
@@ -143,6 +141,7 @@ class AdresseFieldset extends AbstractFieldset
             'attributes' => [
                 'class'       => 'dossierElement',
                 'placeholder' => 'nom de la voie',
+                'maxlength'   => 32,
             ],
             'type'       => 'Text',
         ]);
@@ -205,7 +204,6 @@ class AdresseFieldset extends AbstractFieldset
 
         return $this;
     }
-
 
 
     /**

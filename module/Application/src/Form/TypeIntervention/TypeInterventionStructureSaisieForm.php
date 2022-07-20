@@ -2,6 +2,7 @@
 
 namespace Application\Form\TypeIntervention;
 
+use Application\Entity\Db\Traits\TypeInterventionStructureAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionStructureServiceAwareTrait;
@@ -10,8 +11,8 @@ use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use UnicaenApp\Util;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenApp\Util;
 
 /**
  * Description of TypeInterventionStructureSaisieForm
@@ -20,7 +21,7 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
  */
 class TypeInterventionStructureSaisieForm extends AbstractForm
 {
-    use \Application\Entity\Db\Traits\TypeInterventionStructureAwareTrait;
+    use TypeInterventionStructureAwareTrait;
     use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
     use AnneeServiceAwareTrait;
@@ -30,6 +31,7 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
     {
         $hydrator = new TypeInterventionStructureHydrator();
         $this->setHydrator($hydrator);
+        $hydrator->setEntityManager($this->getEntityManager());
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([

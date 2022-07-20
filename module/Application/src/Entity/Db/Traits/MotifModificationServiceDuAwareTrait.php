@@ -11,31 +11,25 @@ use Application\Entity\Db\MotifModificationServiceDu;
  */
 trait MotifModificationServiceDuAwareTrait
 {
-    /**
-     * @var MotifModificationServiceDu
-     */
-    private $motifModificationServiceDu;
-
-
+    protected ?MotifModificationServiceDu $motifModificationServiceDu = null;
 
 
 
     /**
      * @param MotifModificationServiceDu $motifModificationServiceDu
+     *
      * @return self
      */
-    public function setMotifModificationServiceDu( MotifModificationServiceDu $motifModificationServiceDu = null )
+    public function setMotifModificationServiceDu( ?MotifModificationServiceDu $motifModificationServiceDu )
     {
         $this->motifModificationServiceDu = $motifModificationServiceDu;
+
         return $this;
     }
 
 
 
-    /**
-     * @return MotifModificationServiceDu
-     */
-    public function getMotifModificationServiceDu()
+    public function getMotifModificationServiceDu(): ?MotifModificationServiceDu
     {
         return $this->motifModificationServiceDu;
     }

@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\ModificationServiceDuService;
 
 /**
- * Description of ModificationServiceDuAwareTrait
+ * Description of ModificationServiceDuServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait ModificationServiceDuServiceAwareTrait
 {
-    /**
-     * @var ModificationServiceDuService
-     */
-    private $serviceModificationServiceDu;
+    protected ?ModificationServiceDuService $serviceModificationServiceDu = null;
 
 
 
@@ -23,7 +20,7 @@ trait ModificationServiceDuServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceModificationServiceDu(ModificationServiceDuService $serviceModificationServiceDu)
+    public function setServiceModificationServiceDu(?ModificationServiceDuService $serviceModificationServiceDu)
     {
         $this->serviceModificationServiceDu = $serviceModificationServiceDu;
 
@@ -32,10 +29,7 @@ trait ModificationServiceDuServiceAwareTrait
 
 
 
-    /**
-     * @return ModificationServiceDuService
-     */
-    public function getServiceModificationServiceDu()
+    public function getServiceModificationServiceDu(): ?ModificationServiceDuService
     {
         if (empty($this->serviceModificationServiceDu)) {
             $this->serviceModificationServiceDu = \Application::$container->get(ModificationServiceDuService::class);

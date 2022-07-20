@@ -1,29 +1,31 @@
 <?php
 
+/**
+ * @var $this       \Application\View\Renderer\PhpRenderer
+ * @var $structure  \Application\Entity\Db\Structure
+ * @var $niveau     \Application\Entity\NiveauEtape
+ * @var $etape      \Application\Entity\Db\Etape
+ * @var $structures \Application\Entity\Db\Structure[]
+ * @var $niveaux    \Application\Entity\NiveauEtape[]
+ * @var $etapes     \Application\Entity\Db\Etape[]
+ * @var $elements   \Application\Entity\Db\ElementPedagogique[]
+ */
+
 use Application\Provider\Privilege\Privileges;
-
-/* @var $structure \Application\Entity\Db\Structure */
-/* @var $niveau \Application\Entity\NiveauEtape */
-/* @var $etape \Application\Entity\Db\Etape */
-
-/* @var $structures \Application\Entity\Db\Structure[] */
-/* @var $niveaux \Application\Entity\NiveauEtape[] */
-/* @var $etapes \Application\Entity\Db\Etape[] */
-/* @var $elements \Application\Entity\Db\ElementPedagogique[] */
 
 
 /**
  * @param \Application\Entity\Db\Structure $structure
- * @param \Application\Entity\NiveauEtape  $niveau
- * @param \Application\Entity\Db\Etape     $etape
+ * @param \Application\Entity\NiveauEtape $niveau
+ * @param \Application\Entity\Db\Etape $etape
  */
 function makeQuery($structure = null, $niveau = null, $etape = null)
 {
     $params = [];
     //@formatter:off
-    if ($structure) $params['structure']    = $structure->getId();
-    if ($niveau)    $params['niveau']       = $niveau->getId();
-    if ($etape)     $params['etape']        = $etape->getId();
+    if ($structure) $params['structure'] = $structure->getId();
+    if ($niveau) $params['niveau'] = ($niveau->getPertinence()) ? $niveau->getId() : $niveau->getLib();
+    if ($etape) $params['etape'] = $etape->getId();
     //@formatter:on
 
     return ['query' => $params];
@@ -39,9 +41,9 @@ $niveauxItems = [
     ],
 ];
 
-foreach ($niveaux as $niv) {
-    $niveauxItems[$niv->getId()] = [
-        'label'  => (string)$niv,
+foreach ($niveaux as $code => $niv) {
+    $niveauxItems[$code] = [
+        'label'  => ($niv->getPertinence()) ? (string)$niv : $code,
         'niveau' => $niv,
         'url'    => $this->url('of', [], makeQuery($structure, $niv)),
     ];
@@ -60,9 +62,9 @@ $etapesItems = [
 
 foreach ($etapes as $etp) {
     $etapesItems[$etp->getId()] = [
-        'label'     => sprintf("%s (%s EP)", $etp, count($etp->getElementPedagogique())),
+        'label'     => sprintf("%s (%s EP)", $etp, count($etp->getCheminPedagogique())),
         'etape'     => $etp,
-        'orpheline' => $etp->getElementPedagogique()->count() === 0,
+        'orpheline' => $etp->getCheminPedagogique()->count() === 0,
         'url'       => $this->url('of', [], makeQuery($structure, $niveau, $etp)),
     ];
 }
@@ -75,8 +77,8 @@ if ($structure) {
 }
 $this->headTitle()->append("Offre de formation");
 
-$canExport      = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV)) && count($elements);
-$canViewEtape   = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
+$canExport = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV)) && count($elements);
+$canViewEtape = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
 $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
 $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELEMENT_SYNCHRONISATION));
 ?>
@@ -164,7 +166,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
         <div class="panel panel-default">
             <div class="panel-heading">
                 Formation
-                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<span class="glyphicon glyphicon-plus"></span>', ['class' => 'btn-xs', 'style' => 'float:right']) ?>
+                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<i class="fas fa-plus"></i>', ['class' => 'btn-xs', 'style' => 'float:right'], $structure) ?>
             </div>
             <div class="panel-body">
                 Cliquez sur la formation dont vous voulez voir les enseignements...
@@ -183,7 +185,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                         <?php endif; ?>
                         <?php
                         if ($canViewEtape && $ei['etape']) {
-                            echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-default btn-xs glyphicon glyphicon-search" style="float:right"></span>');
+                            echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-default btn-xs fas fa-magnifying-glass" style="float:right"></span>');
                         }
                         ?>
                         <div style="clear: both"></div>
@@ -215,14 +217,14 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                     Enseignements <?= $compl ?>
                     <!--------------- Bouton d'ajout d'élément pédagogique --------------->
                     <?php
-                    if ($canSyncElement && $structure) {
+                    if ($canSyncElement && $structure && $serviceSchema->isImportedEntity($structure)) {
                         $attrs = [
                             'href'       => $this->url('of/element/synchronisation-par-code', [], ['query' => ['structure' => $structure->getId()]]),
                             'class'      => ['element-pedagogique-synchronisation', 'ajax-modal', 'iconify', 'btn', 'btn-default', 'pull-right', 'btn-xs'],
                             'data-event' => 'element-pedagogique-synchronisation',
                             'title'      => 'Importer ou synchroniser un enseignement',
                         ];
-                        echo $this->tag('a', $attrs)->html('<span class="glyphicon glyphicon-refresh"></span> Import élément');
+                        echo $this->tag('a', $attrs)->html('<i class="fas fa-arrows-rotate"></i> Import élément');
                     }
                     if ($canEditElement) {
                         $attrs = [
@@ -231,10 +233,10 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                             'data-event' => 'element-pedagogique-ajouter',
                             'title'      => 'Ajouter un enseignement',
                         ];
-                        echo $this->tag('a', $attrs)->html('<span class="glyphicon glyphicon-plus"></span> Nouvel enseignement');
+                        echo $this->tag('a', $attrs)->html('<i class="fas fa-plus"></i> Nouvel enseignement');
                     }
                     if ($canExport) {
-                        $params      = [
+                        $params = [
                             'structure' => $structure ? $structure->getId() : null,
                             'niveau'    => $niveau ? $niveau->getId() : null,
                             'etape'     => $etape ? $etape->getId() : null,
@@ -243,7 +245,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
 
                         ?>
                         <a class="pull-right btn btn-default btn-xs" href="<?= $urlExportOf ?>">
-                            <span class="glyphicon glyphicon-export"></span> Télécharger (CSV)
+                            <i class="fas fa-upload"></i> Télécharger (CSV)
                         </a>
                         <?php
                     }

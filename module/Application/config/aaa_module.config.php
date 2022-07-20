@@ -44,6 +44,7 @@ $config = [
                     \Doctrine\DBAL\Event\Listeners\OracleSessionInit::class,
                     ORM\Event\Listeners\HistoriqueListener::class,
                     ORM\Event\Listeners\ParametreEntityListener::class,
+                    ORM\Event\Listeners\EntityManagerListener::class,
                 ],
             ],
         ],
@@ -107,6 +108,21 @@ $config = [
             ],
         ],
     ],
+    'console'            => [
+        'router' => [
+            'routes' => [
+                'generate-proxies' => [
+                    'options' => [
+                        'route'    => 'generate-proxies',
+                        'defaults' => [
+                            'controller' => 'Application\Controller\Index',
+                            'action'     => 'generate-proxies',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
     'bjyauthorize'       => [
         'identity_provider' => Provider\Identity\IdentityProvider::class,
 
@@ -143,42 +159,48 @@ $config = [
     ],
     'service_manager'    => [
         'invokables' => [
-            Service\AnneeService::class                   => Service\AnneeService::class,
-            Service\LocalContextService::class            => Service\LocalContextService::class,
-            Service\ParametresService::class              => Service\ParametresService::class,
-            Service\TypeInterventionService::class        => Service\TypeInterventionService::class,
-            Service\SourceService::class                  => Service\SourceService::class,
-            Service\AffectationService::class             => Service\AffectationService::class,
-            Service\RoleService::class                    => Service\RoleService::class,
-            Service\PaysService::class                    => Service\PaysService::class,
-            Service\DepartementService::class             => Service\DepartementService::class,
-            Service\VoirieService::class                  => Service\VoirieService::class,
-            Service\GradeService::class                   => Service\GradeService::class,
-            Service\CorpsService::class                   => Service\CorpsService::class,
-            Service\FichierService::class                 => Service\FichierService::class,
-            Service\TauxHoraireHETDService::class         => Service\TauxHoraireHETDService::class,
-            Assertion\InformationAssertion::class         => Assertion\InformationAssertion::class,
-            ORM\Event\Listeners\HistoriqueListener::class => ORM\Event\Listeners\HistoriqueListener::class,
+            Service\AnneeService::class            => Service\AnneeService::class,
+            Service\LocalContextService::class     => Service\LocalContextService::class,
+            Service\ParametresService::class       => Service\ParametresService::class,
+            Service\TypeInterventionService::class => Service\TypeInterventionService::class,
+            Service\SourceService::class           => Service\SourceService::class,
+            Service\AffectationService::class      => Service\AffectationService::class,
+            Service\RoleService::class             => Service\RoleService::class,
+            Service\PaysService::class             => Service\PaysService::class,
+            Service\DepartementService::class      => Service\DepartementService::class,
+            Service\VoirieService::class           => Service\VoirieService::class,
+            Service\GradeService::class            => Service\GradeService::class,
+            Service\CorpsService::class            => Service\CorpsService::class,
+            Service\FichierService::class          => Service\FichierService::class,
+            Service\TauxHoraireHETDService::class  => Service\TauxHoraireHETDService::class,
+            Assertion\InformationAssertion::class  => Assertion\InformationAssertion::class,
         ],
         'factories'  => [
-            \Laminas\Navigation\Navigation::class       => Navigation\NavigationFactory::class,
-            Provider\Role\RoleProvider::class           => Provider\Role\RoleProviderFactory::class,
-            Provider\Identity\IdentityProvider::class   => Provider\Identity\IdentityProviderFactory::class,
-            Service\ContextService::class               => Service\Factory\ContextServiceFactory::class,
-            'MouchardCompleterContext'                  => MouchardCompleterContextFactory::class,
-            'UnicaenAuth\Service\Privilege'             => Service\Factory\PrivilegeServiceFactory::class,
-            Connecteur\LdapConnecteur::class            => Connecteur\Factory\LdapConnecteurFactory::class,
-            Cache\CacheService::class                   => Cache\Factory\CacheServiceFactory::class,
-            Service\UtilisateurService::class           => Service\Factory\UtilisateurServiceFactory::class,
-            Assertion\InformationAssertion::class       => \UnicaenAuth\Assertion\AssertionFactory::class,
-            HostLocalization\HostLocalizationOse::class => HostLocalization\HostLocalizationOseFactory::class,
-            ORM\RouteEntitiesInjector::class            => ORM\RouteEntitiesInjectorFactory::class,
+            \Laminas\Navigation\Navigation::class         => Navigation\NavigationFactory::class,
+            Provider\Role\RoleProvider::class             => Provider\Role\RoleProviderFactory::class,
+            Provider\Identity\IdentityProvider::class     => Provider\Identity\IdentityProviderFactory::class,
+            Service\ContextService::class                 => Service\Factory\ContextServiceFactory::class,
+            'MouchardCompleterContext'                    => MouchardCompleterContextFactory::class,
+            'UnicaenAuth\Service\Privilege'               => Service\Factory\PrivilegeServiceFactory::class,
+            Connecteur\LdapConnecteur::class              => Connecteur\Factory\LdapConnecteurFactory::class,
+            Cache\CacheService::class                     => Cache\Factory\CacheServiceFactory::class,
+            Service\UtilisateurService::class             => Service\Factory\UtilisateurServiceFactory::class,
+            Assertion\InformationAssertion::class         => \UnicaenAuth\Assertion\AssertionFactory::class,
+            HostLocalization\HostLocalizationOse::class   => HostLocalization\HostLocalizationOseFactory::class,
+            ORM\RouteEntitiesInjector::class              => ORM\RouteEntitiesInjectorFactory::class,
+            ORM\Event\Listeners\HistoriqueListener::class => ORM\Event\Listeners\HistoriqueListenerFactory::class,
         ],
         'aliases'    => [
             'HostLocalization' => HostLocalization\HostLocalizationOse::class,
         ],
     ],
     'view_helpers'       => [
+        'aliases'    => [
+            // on utilise les objets standards de Laminas, et plus ceux d'Unicaen
+            'headLink'     => \Laminas\View\Helper\HeadLink::class,
+            'headScript'   => \Laminas\View\Helper\HeadScript::class,
+            'inlineScript' => \Laminas\View\Helper\InlineScript::class,
+        ],
         'factories'  => [
             \UnicaenAuth\View\Helper\UserProfileSelectRadioItem::class => View\Helper\UserProfileSelectRadioItemFactory::class,
             \UnicaenApp\View\Helper\AppLink::class                     => View\Helper\AppLinkFactory::class,
@@ -209,41 +231,6 @@ $config = [
         ],
         'template_map'        => include __DIR__ . '/../template_map.php',
         'layout'              => 'layout/layout', // e.g., 'layout/layout'
-    ],
-    'public_files'       => [
-        'head_scripts'   => [
-            '010_jquery'   => 'vendor/jquery-1.11.3.min.js',
-            '020_jqueryui' => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
-        ],
-        'inline_scripts' => [
-            '010_bootstrap'   => 'vendor/bootstrap-5.0.2/js/bootstrap.min.js',
-            '030_util'        => 'js/util.js',
-            '040_unicaen'     => 'js/unicaen.js',
-            '050_jquery_form' => 'vendor/jquery.form-3.51.js', // pour l'uploader Unicaen uniquement!!,
-
-            '001_' => 'js/datepicker-fr.js',
-            '113_' => 'js/paiement.js',
-
-            '121_' => 'js/piece-jointe.js',
-        ],
-        'stylesheets'    => [
-            '010_jquery-ui'           => 'vendor/jquery-ui-1.11.4/jquery-ui.min.css',
-            '020_jquery-ui-structure' => 'vendor/jquery-ui-1.11.4/jquery-ui.structure.min.css',
-            '030_jquery-ui-theme'     => 'vendor/jquery-ui-1.11.4/jquery-ui.theme.min.css',
-            '040_bootstrap'           => 'vendor/bootstrap-5.0.2/css/bootstrap.min.css',
-            //'050_bootstrap-theme'     => 'vendor/bootstrap-5.0.2/css/bootstrap-theme.min.css',
-            '060_unicaen'             => null,
-
-            //            '111_' => 'css/cartridge.css',
-            //            '112_' => 'vendor/font-awesome-4.5.0/css/font-awesome.min.css',
-            //            '113_' => 'vendor/open-sans-gh-pages/open-sans.css',
-            //            '114_' => 'css/budget.css',
-            //            '115_' => 'css/paiement.css',
-            //            '116_' => 'css/agrement.css',
-            //            '118_' => 'css/acceuil.css',
-            //            '120_' => 'css/callout.css',
-            //            '121_' => 'css/piece-jointe.css',
-        ],
     ],
 ];
 

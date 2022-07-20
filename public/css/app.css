@@ -627,11 +627,11 @@ td .alert {
 }
 
 
-.progressbar {
+.progress-bar {
     box-shadow: 1px 0px 2px gray;
 }
 
-.progressbar.active {
+.progress-bar.active {
     animation: 2s linear 0s normal none infinite running progress-bar-stripes;
 }
 
@@ -686,7 +686,15 @@ td .alert {
 
 
 
+.table-header-rotated {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
 
+.table-header-rotated thead th:first-child {
+/*    border-bottom: none; */
+}
 
 .table-header-rotated th.row-header {
     width: auto;
@@ -723,6 +731,11 @@ td .alert {
 
 .table-header-rotated th.rotate-45.first > div {
     border-left: 1px solid #ddd;
+}
+
+.table-header-rotated thead tr th div {
+    background-color:white;
+    border-top: 1px solid #ddd;
 }
 
 .table-header-rotated th.rotate-45 span {
@@ -812,7 +825,7 @@ td .alert {
     font-size: 10pt;
 }
 
-.intervenant-statuts span.statut-intervenant {
+.intervenant-statuts span.statut {
     font-weight: bold;
 }
 
@@ -824,4 +837,65 @@ td .alert {
 .intervenant-statuts li.ajout-intervenant{
     padding-top: 10px;
     float:right;
+}
+
+form.statut fieldset legend {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+
+
+
+
+
+.indicateurs table td.numero {
+    width: 5em;
+    text-align: center;
+}
+
+.indicateurs table th.numero {
+    width: 5em;
+    text-align: center;
+}
+
+.indicateurs .notification {
+    width: 12em;
+}
+
+.indicateurs .page-accueil {
+    width: 2em;
+    text-align:center;
+}
+
+.indicateurs-result {
+    margin-bottom: 1em;
+}
+
+.indicateurs-result table {
+    margin-bottom: 0px;
+}
+
+.indicateurs-result table .cc {
+    width: 2em;
+}
+
+
+
+
+
+/* Plafonds */
+.plafonds .plafond .progress {
+  margin-bottom: 0px;
+}
+
+.plafonds .plafond {
+    margin-bottom: 10px;
+}
+
+div.div-connexion {
+    width:50%;
+    margin: auto;
+    min-width:30em;
 }

@@ -11,10 +11,7 @@ use Application\Service\VoirieService;
  */
 trait VoirieServiceAwareTrait
 {
-    /**
-     * @var VoirieService
-     */
-    private $serviceVoirie;
+    protected ?VoirieService $serviceVoirie = null;
 
 
 
@@ -23,7 +20,7 @@ trait VoirieServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceVoirie(VoirieService $serviceVoirie)
+    public function setServiceVoirie(?VoirieService $serviceVoirie)
     {
         $this->serviceVoirie = $serviceVoirie;
 
@@ -32,10 +29,7 @@ trait VoirieServiceAwareTrait
 
 
 
-    /**
-     * @return VoirieService
-     */
-    public function getServiceVoirie()
+    public function getServiceVoirie(): ?VoirieService
     {
         if (empty($this->serviceVoirie)) {
             $this->serviceVoirie = \Application::$container->get(VoirieService::class);

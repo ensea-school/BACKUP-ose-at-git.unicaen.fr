@@ -11,29 +11,20 @@ use Application\Entity\NiveauEtape;
  */
 trait NiveauEtapeAwareTrait
 {
-    /**
-     * @var NiveauEtape
-     */
-    protected $niveauEtape;
+    protected ?NiveauEtape $niveauEtape = null;
 
-    /**
-     * Spécifie le niveau d'étape concerné.
-     *
-     * @param NiveauEtape $niveauEtape le niveau d'étape concerné
-     */
-    public function setNiveauEtape(NiveauEtape $niveauEtape = null)
+
+
+    public function setNiveauEtape(?NiveauEtape $niveauEtape = null)
     {
         $this->niveauEtape = $niveauEtape;
 
         return $this;
     }
 
-    /**
-     * Retourne le niveau d'étape concerné.
-     *
-     * @return NiveauEtape
-     */
-    public function getNiveauEtape()
+
+
+    public function getNiveauEtape(): ?NiveauEtape
     {
         return $this->niveauEtape;
     }

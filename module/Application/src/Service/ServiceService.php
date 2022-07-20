@@ -10,7 +10,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervention;
-use Application\Entity\Db\TypeIntervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\NiveauEtape;
 use Application\Entity\Service\Recherche;
@@ -25,9 +25,9 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
@@ -60,7 +60,7 @@ class ServiceService extends AbstractEntityService
     use LocalContextServiceAwareTrait;
     use RechercheHydratorAwareTrait;
     use ValidationServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use SourceServiceAwareTrait;
     use ParametresServiceAwareTrait;
 
@@ -264,7 +264,7 @@ class ServiceService extends AbstractEntityService
             if (!$entity->getIntervenant() && $intervenant = $role->getIntervenant()) {
                 $entity->setIntervenant($intervenant);
             }
-            if (!$this->getAuthorize()->isAllowed($entity, Privileges::ENSEIGNEMENT_EDITION)) {
+            if (!$this->getAuthorize()->isAllowed($entity, $entity->getTypeVolumeHoraire()->getPrivilegeEnseignementEdition())) {
                 throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
             }
 
@@ -482,12 +482,12 @@ class ServiceService extends AbstractEntityService
         $serviceStructure          = $this->getServiceStructure();
         $serviceIntervenant        = $this->getServiceIntervenant();
         $serviceElementPedagogique = $this->getServiceElementPedagogique();
-        $serviceStatutIntervenant  = $this->getServiceStatutIntervenant();
+        $serviceStatut             = $this->getServiceStatut();
         $iAlias                    = $serviceIntervenant->getAlias();
-        $sAlias                    = $serviceStatutIntervenant->getAlias();
+        $sAlias                    = $serviceStatut->getAlias();
 
         $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
-        $serviceIntervenant->join($serviceStatutIntervenant, $qb, 'statut', false);
+        $serviceIntervenant->join($serviceStatut, $qb, 'statut', false);
         $this->leftJoin($serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias);
         $serviceElementPedagogique->leftJoin($serviceStructure, $qb, 'structure', false, null, 's_ens');
 

@@ -11,36 +11,28 @@ use Application\Form\OffreFormation\TauxMixite\TauxMixiteForm;
  */
 trait TauxMixiteFormAwareTrait
 {
-    /**
-     * @var TauxMixiteForm
-     */
-    private $formOffreFormationTauxMixite;
+    protected ?TauxMixiteForm $formOffreFormationTauxMixiteTauxMixite = null;
 
 
 
     /**
-     * @param TauxMixiteForm $formOffreFormationTauxMixite
+     * @param TauxMixiteForm $formOffreFormationTauxMixiteTauxMixite
      *
      * @return self
      */
-    public function setFormOffreFormationTauxMixite(TauxMixiteForm $formOffreFormationTauxMixite)
+    public function setFormOffreFormationTauxMixiteTauxMixite(?TauxMixiteForm $formOffreFormationTauxMixiteTauxMixite)
     {
-        $this->formOffreFormationTauxMixite = $formOffreFormationTauxMixite;
+        $this->formOffreFormationTauxMixiteTauxMixite = $formOffreFormationTauxMixiteTauxMixite;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return TauxMixiteForm
-     */
-    public function getFormOffreFormationTauxMixite()
+    public function getFormOffreFormationTauxMixiteTauxMixite(): ?TauxMixiteForm
     {
-        if (!empty($this->formOffreFormationTauxMixite)) {
-            return $this->formOffreFormationTauxMixite;
+        if (!empty($this->formOffreFormationTauxMixiteTauxMixite)) {
+            return $this->formOffreFormationTauxMixiteTauxMixite;
         }
 
         return \Application::$container->get('FormElementManager')->get(TauxMixiteForm::class);

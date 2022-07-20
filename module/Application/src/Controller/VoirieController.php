@@ -30,7 +30,7 @@ class VoirieController extends AbstractController
     {
         $voirie = $this->getEvent()->getParam('voirie');
 
-        $form = $this->getFormVoirieSaisie();
+        $form = $this->getFormVoirieVoirieSaisie();
 
         if (empty($voirie)) {
             $title  = "Création d'une nouvelle voirie";

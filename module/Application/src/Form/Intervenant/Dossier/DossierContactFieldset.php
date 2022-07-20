@@ -3,7 +3,7 @@
 namespace Application\Form\Intervenant\Dossier;
 
 use Application\Entity\Db\IntervenantDossier;
-use Application\Entity\Db\StatutIntervenant;
+use Intervenant\Entity\Db\Statut;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\Form\Element\Email;
@@ -109,7 +109,7 @@ class DossierContactFieldset extends AbstractFieldset
         $statutDossierIntervenant = $dossierIntervenant->getStatut();
 
         /**
-         * @var $statutDossierIntervenant StatutIntervenant
+         * @var $statutDossierIntervenant Statut
          * @var $dossierIntervenant       IntervenantDossier
          */
 

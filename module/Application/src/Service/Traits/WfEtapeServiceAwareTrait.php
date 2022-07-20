@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\WfEtapeService;
 
 /**
- * Description of WfEtapeAwareTrait
+ * Description of WfEtapeServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait WfEtapeServiceAwareTrait
 {
-    /**
-     * @var WfEtapeService
-     */
-    private $serviceWfEtape;
+    protected ?WfEtapeService $serviceWfEtape = null;
 
 
 
@@ -23,7 +20,7 @@ trait WfEtapeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceWfEtape(WfEtapeService $serviceWfEtape)
+    public function setServiceWfEtape(?WfEtapeService $serviceWfEtape)
     {
         $this->serviceWfEtape = $serviceWfEtape;
 
@@ -32,10 +29,7 @@ trait WfEtapeServiceAwareTrait
 
 
 
-    /**
-     * @return WfEtapeService
-     */
-    public function getServiceWfEtape()
+    public function getServiceWfEtape(): ?WfEtapeService
     {
         if (empty($this->serviceWfEtape)) {
             $this->serviceWfEtape = \Application::$container->get(WfEtapeService::class);

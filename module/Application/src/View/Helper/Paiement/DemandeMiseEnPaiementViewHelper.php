@@ -153,7 +153,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
             $out .= '</div>';
             $out .= '<div class="depassement-budget">';
             $out .= '<div class="alert alert-danger" role="alert">
-                <span class="glyphicon glyphicon-minus-sign"></span>
+                <i class="fas fa-circle-minus"></i>
                 <h1>Dépassement de budget!!</h1>
                 Les demandes de mise en paiement que vous avez saisies engendrent un ou plusieurs dépassements budgétaires.
                 Vous ne pouvez donc pas enregistrer votre saisie en l\'état.
@@ -210,7 +210,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
                             'data-usage'          => $this->budget[$sid][$trid]['usage'],
                         ])->html(
                             $t('div', [
-                                'class'         => 'progressbar progress-bar-striped',
+                                'class'         => 'progress-bar progress-bar-striped',
                                 'role'          => 'progressbar',
                                 'aria-valuenow' => 0,
                                 'aria-valuemin' => 0,

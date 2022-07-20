@@ -11,31 +11,25 @@ use Application\Entity\Db\FormuleResultatVolumeHoraireReferentiel;
  */
 trait FormuleResultatVolumeHoraireReferentielAwareTrait
 {
-    /**
-     * @var FormuleResultatVolumeHoraireReferentiel
-     */
-    private $formuleResultatVolumeHoraireReferentiel;
-
-
+    protected ?FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel = null;
 
 
 
     /**
      * @param FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel
+     *
      * @return self
      */
-    public function setFormuleResultatVolumeHoraireReferentiel( FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel = null )
+    public function setFormuleResultatVolumeHoraireReferentiel( ?FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel )
     {
         $this->formuleResultatVolumeHoraireReferentiel = $formuleResultatVolumeHoraireReferentiel;
+
         return $this;
     }
 
 
 
-    /**
-     * @return FormuleResultatVolumeHoraireReferentiel
-     */
-    public function getFormuleResultatVolumeHoraireReferentiel()
+    public function getFormuleResultatVolumeHoraireReferentiel(): ?FormuleResultatVolumeHoraireReferentiel
     {
         return $this->formuleResultatVolumeHoraireReferentiel;
     }

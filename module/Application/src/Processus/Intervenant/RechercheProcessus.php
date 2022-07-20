@@ -18,9 +18,8 @@ class RechercheProcessus
     protected $showHisto = false;
 
 
-
     /**
-     * @param string  $critere
+     * @param string $critere
      * @param integer $limit
      *
      * @return array
@@ -35,7 +34,6 @@ class RechercheProcessus
     }
 
 
-
     /**
      * @return bool
      */
@@ -43,7 +41,6 @@ class RechercheProcessus
     {
         return $this->showHisto;
     }
-
 
 
     /**
@@ -59,9 +56,8 @@ class RechercheProcessus
     }
 
 
-
     /**
-     * @param string  $critere
+     * @param string $critere
      * @param integer $limit
      *
      * @return array
@@ -70,7 +66,6 @@ class RechercheProcessus
     {
         return $this->rechercheGenerique($critere, $limit, $key, true);
     }
-
 
 
     private function sqlLocale(): string
@@ -95,7 +90,7 @@ class RechercheProcessus
           intervenant i
           LEFT JOIN structure s ON s.id = i.structure_id
           LEFT JOIN civilite c ON c.id = i.civilite_id
-          LEFT JOIN statut_intervenant si ON si.id = i.statut_id
+          LEFT JOIN statut si ON si.id = i.statut_id
         ";
         if (!$this->showHisto) {
             $sql .= "WHERE i.histo_destruction IS NULL";
@@ -105,12 +100,11 @@ class RechercheProcessus
     }
 
 
-
     private function sqlSource(): string
     {
         return "
         SELECT
-          null id,
+          NULL id,
           i.code,
           i.statut_id,
           i.nom_usuel,
@@ -122,15 +116,14 @@ class RechercheProcessus
           si.libelle statut,
           i.critere_recherche critere,
           i.annee_id,
-          null histo_destruction
+          NULL histo_destruction
         FROM
           src_intervenant i
           LEFT JOIN structure s ON s.id = i.structure_id
           LEFT JOIN civilite c ON c.id = i.civilite_id
-          LEFT JOIN statut_intervenant si ON si.id = i.statut_id
+          LEFT JOIN statut si ON si.id = i.statut_id
         ";
     }
-
 
 
     protected function makeKey(array $data, string $key): string
@@ -144,14 +137,13 @@ class RechercheProcessus
     }
 
 
-
     private function rechercheGenerique($critere, $limit = 50, string $key = ':CODE', $onlyLocale = false)
     {
         if (strlen($critere) < 2) return [];
 
         $anneeId = (int)$this->getServiceContext()->getAnnee()->getId();
 
-        $critere  = Util::reduce($critere);
+        $critere = Util::reduce($critere);
         $criteres = explode('_', $critere);
 
         $sqlSource = '';
@@ -159,14 +151,14 @@ class RechercheProcessus
             $sqlSource = ' UNION ALL ' . $this->sqlSource();
         }
 
-        $sql     = '
+        $sql = '
         WITH vrec AS (
             ' . $this->sqlLocale() . '
             ' . $sqlSource . '  
         )
         SELECT * FROM vrec WHERE 
           rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
-        $sqlCri  = '';
+        $sqlCri = '';
         $criCode = 0;
 
         foreach ($criteres as $c) {
@@ -206,9 +198,10 @@ class RechercheProcessus
                     'destruction'      => $r['HISTO_DESTRUCTION'],
                 ];
             } else {
-                if ($intervenants[$k]['destruction'] && !$r['destruction']) {
+                if ($intervenants[$k]['destruction'] && !$r['HISTO_DESTRUCTION']) {
                     $intervenants[$k]['destruction'] = null;
                 }
+                
                 if ($intervenants[$k]['statut'] && !is_array($intervenants[$k]['statut'])) {
                     $intervenants[$k]['statut'] = [$intervenants[$k]['statut']];
                 }

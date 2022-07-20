@@ -3,7 +3,6 @@
 namespace Application\Form\Intervenant\Interfaces;
 
 use Application\Form\Intervenant\ModificationServiceDuFieldset;
-use RuntimeException;
 
 /**
  * Description of ModificationServiceDuFieldsetAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface ModificationServiceDuFieldsetAwareInterface
 {
     /**
-     * @param ModificationServiceDuFieldset $fieldsetIntervenantModificationServiceDu
+     * @param ModificationServiceDuFieldset|null $formIntervenantModificationServiceDuFieldset
+     *
      * @return self
      */
-    public function setFieldsetIntervenantModificationServiceDu( ModificationServiceDuFieldset $fieldsetIntervenantModificationServiceDu );
+    public function setFormIntervenantModificationServiceDuFieldset( ?ModificationServiceDuFieldset $formIntervenantModificationServiceDuFieldset );
 
 
 
-    /**
-     * @return ModificationServiceDuFieldsetAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFieldsetIntervenantModificationServiceDu();
+    public function getFormIntervenantModificationServiceDuFieldset(): ?ModificationServiceDuFieldset;
 }

@@ -11,31 +11,25 @@ use Application\Entity\Db\TblDmepLiquidation;
  */
 trait TblDmepLiquidationAwareTrait
 {
-    /**
-     * @var TblDmepLiquidation
-     */
-    private $tblDmepLiquidation;
-
-
+    protected ?TblDmepLiquidation $tblDmepLiquidation = null;
 
 
 
     /**
      * @param TblDmepLiquidation $tblDmepLiquidation
+     *
      * @return self
      */
-    public function setTblDmepLiquidation( TblDmepLiquidation $tblDmepLiquidation = null )
+    public function setTblDmepLiquidation( ?TblDmepLiquidation $tblDmepLiquidation )
     {
         $this->tblDmepLiquidation = $tblDmepLiquidation;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TblDmepLiquidation
-     */
-    public function getTblDmepLiquidation()
+    public function getTblDmepLiquidation(): ?TblDmepLiquidation
     {
         return $this->tblDmepLiquidation;
     }

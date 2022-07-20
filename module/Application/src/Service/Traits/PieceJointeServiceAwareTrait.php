@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\PieceJointeService;
 
 /**
- * Description of PieceJointeAwareTrait
+ * Description of PieceJointeServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait PieceJointeServiceAwareTrait
 {
-    /**
-     * @var PieceJointeService
-     */
-    private $servicePieceJointe;
+    protected ?PieceJointeService $servicePieceJointe = null;
 
 
 
@@ -23,7 +20,7 @@ trait PieceJointeServiceAwareTrait
      *
      * @return self
      */
-    public function setServicePieceJointe(PieceJointeService $servicePieceJointe)
+    public function setServicePieceJointe(?PieceJointeService $servicePieceJointe)
     {
         $this->servicePieceJointe = $servicePieceJointe;
 
@@ -32,10 +29,7 @@ trait PieceJointeServiceAwareTrait
 
 
 
-    /**
-     * @return PieceJointeService
-     */
-    public function getServicePieceJointe()
+    public function getServicePieceJointe(): ?PieceJointeService
     {
         if (empty($this->servicePieceJointe)) {
             $this->servicePieceJointe = \Application::$container->get(PieceJointeService::class);

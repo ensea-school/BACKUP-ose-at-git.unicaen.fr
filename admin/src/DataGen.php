@@ -68,6 +68,11 @@ class DataGen
             'key'     => 'NUMERO',
         ],
         [
+            'table'   => 'TYPE_NOTE',
+            'context' => ['install', 'update'],
+            'key'     => 'CODE',
+        ],
+        [
             'table'   => 'TYPE_VOLUME_HORAIRE',
             'context' => ['install', 'update'],
             'key'     => 'CODE',
@@ -117,7 +122,7 @@ class DataGen
             'table'   => 'PRIVILEGE',
             'context' => ['install', 'update', 'privileges'],
             'key'     => ['CATEGORIE_ID', 'CODE'],
-            'options' => ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT ID FROM CATEGORIE_PRIVILEGE WHERE CODE = %s']]],
+            'options' => ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT id FROM categorie_privilege WHERE code = %s']]],
         ],
         [
             'table'   => 'TYPE_INDICATEUR',
@@ -127,7 +132,7 @@ class DataGen
         [
             'table'   => 'INDICATEUR',
             'context' => ['install', 'update'],
-            'key'     => 'NUMERO',
+            'key'     => ['TYPE_INDICATEUR_ID', 'NUMERO'],
         ],
         [
             'table'   => 'FORMULE',
@@ -156,9 +161,8 @@ class DataGen
         ],
         [
             'table'   => 'TYPE_RESSOURCE',
-            'context' => ['install', 'update'],
+            'context' => ['install'],
             'key'     => 'CODE',
-            'options' => ['update' => false, 'delete' => false],
         ],
         [
             'table'   => 'DOSSIER_CHAMP_AUTRE_TYPE',
@@ -197,7 +201,7 @@ class DataGen
             'table'   => 'IMPORT_TABLES',
             'context' => ['install', 'update'],
             'key'     => 'TABLE_NAME',
-            'options' => ['update' => true, 'delete' => true],
+            //'options' => ['update' => true, 'delete' => true],
             'options' => ['update-ignore-cols' => ['SYNC_FILTRE', 'SYNC_ENABLED', 'SYNC_JOB', 'SYNC_HOOK_BEFORE', 'SYNC_HOOK_AFTER']],
         ],
         [
@@ -233,15 +237,15 @@ class DataGen
             'table'   => 'ROLE',
             'context' => ['install'],
             'key'     => 'CODE',
-            'options' => ['columns' => ['PERIMETRE_ID' => ['transformer' => 'SELECT ID FROM PERIMETRE WHERE CODE = %s']]],
+            'options' => ['columns' => ['PERIMETRE_ID' => ['transformer' => 'SELECT id FROM perimetre WHERE code = %s']]],
         ],
         [
             'table'   => 'ROLE_PRIVILEGE',
             'context' => ['install'],
             'key'     => ['ROLE_ID', 'PRIVILEGE_ID'],
             'options' => ['columns' => [
-                'ROLE_ID'      => ['transformer' => 'SELECT ID FROM ROLE WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
-                'PRIVILEGE_ID' => ['transformer' => 'SELECT P.ID FROM PRIVILEGE P JOIN CATEGORIE_PRIVILEGE CP ON CP.ID = P.CATEGORIE_ID WHERE CP.CODE || \'-\' || P.CODE = %s'],
+                'ROLE_ID'      => ['transformer' => 'SELECT id FROM role WHERE histo_destruction IS NULL AND code = %s'],
+                'PRIVILEGE_ID' => ['transformer' => 'SELECT p.id FROM privilege p JOIN categorie_privilege cp ON cp.id = p.categorie_id WHERE cp.code || \'-\' || p.code = %s'],
             ],],
         ],
         [
@@ -249,8 +253,8 @@ class DataGen
             'context' => ['install'],
             'key'     => ['UTILISATEUR_ID', 'ROLE_ID'],
             'options' => ['columns' => [
-                'ROLE_ID'        => ['transformer' => 'SELECT ID FROM ROLE WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
-                'UTILISATEUR_ID' => ['transformer' => 'SELECT ID FROM UTILISATEUR WHERE USERNAME = %s'],
+                'ROLE_ID'        => ['transformer' => 'SELECT id FROM role WHERE histo_destruction IS NULL AND code = %s'],
+                'UTILISATEUR_ID' => ['transformer' => 'SELECT id FROM utilisateur WHERE username = %s'],
             ],],
         ],
 
@@ -285,7 +289,7 @@ class DataGen
             'table'   => 'GRADE',
             'context' => ['install'],
             'key'     => 'SOURCE_CODE',
-            'options' => ['columns' => ['CORPS_ID' => ['transformer' => 'SELECT ID FROM CORPS WHERE SOURCE_CODE = %s']]],
+            'options' => ['columns' => ['CORPS_ID' => ['transformer' => 'SELECT id FROM corps WHERE source_code = %s']]],
         ],
         [
             'table'   => 'DISCIPLINE',
@@ -301,7 +305,7 @@ class DataGen
             'table'   => 'FONCTION_REFERENTIEL',
             'context' => ['install'],
             'key'     => 'CODE',
-            'options' => ['columns' => ['DOMAINE_FONCTIONNEL_ID' => ['transformer' => 'SELECT ID FROM DOMAINE_FONCTIONNEL WHERE SOURCE_CODE = %s']]],
+            'options' => ['columns' => ['DOMAINE_FONCTIONNEL_ID' => ['transformer' => 'SELECT id FROM domaine_fonctionnel WHERE source_code = %s']]],
         ],
         [
             'table'   => 'MOTIF_MODIFICATION_SERVICE',
@@ -314,28 +318,10 @@ class DataGen
             'key'     => 'CODE',
         ],
         [
-            'table'   => 'STATUT_INTERVENANT',
+            'table'   => 'STATUT',
             'context' => ['install'],
-            'key'     => 'CODE',
-            'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM TYPE_INTERVENANT WHERE CODE = %s']]],
-        ],
-        [
-            'table'   => 'STATUT_PRIVILEGE',
-            'context' => ['install'],
-            'key'     => ['STATUT_ID', 'PRIVILEGE_ID'],
-            'options' => ['columns' => [
-                'STATUT_ID'    => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
-                'PRIVILEGE_ID' => ['transformer' => 'SELECT P.ID FROM PRIVILEGE P JOIN CATEGORIE_PRIVILEGE CP ON CP.ID = P.CATEGORIE_ID WHERE CP.CODE || \'-\' || P.CODE = %s'],
-            ],],
-        ],
-        [
-            'table'   => 'TYPE_AGREMENT_STATUT',
-            'context' => ['install'],
-            'key'     => ['STATUT_INTERVENANT_ID', 'TYPE_AGREMENT_ID'],
-            'options' => ['columns' => [
-                'STATUT_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
-                'TYPE_AGREMENT_ID'      => ['transformer' => 'SELECT ID FROM TYPE_AGREMENT WHERE CODE = %s'],
-            ],],
+            'key'     => ['CODE', 'ANNEE_ID'],
+            'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s']]],
         ],
         [
             'table'   => 'TYPE_PIECE_JOINTE',
@@ -345,10 +331,10 @@ class DataGen
         [
             'table'   => 'TYPE_PIECE_JOINTE_STATUT',
             'context' => ['install'],
-            'key'     => ['STATUT_INTERVENANT_ID', 'TYPE_PIECE_JOINTE_ID'],
+            'key'     => ['STATUT_ID', 'TYPE_PIECE_JOINTE_ID'],
             'options' => ['columns' => [
-                'STATUT_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM STATUT_INTERVENANT WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
-                'TYPE_PIECE_JOINTE_ID'  => ['transformer' => 'SELECT ID FROM TYPE_PIECE_JOINTE WHERE HISTO_DESTRUCTION IS NULL AND CODE = %s'],
+                'STATUT_ID'            => ['transformer' => 'SELECT id FROM statut WHERE histo_destruction IS NULL AND code = %s'],
+                'TYPE_PIECE_JOINTE_ID' => ['transformer' => 'SELECT id FROM type_piece_jointe WHERE histo_destruction IS NULL AND code = %s'],
             ],],
         ],
         [
@@ -356,9 +342,9 @@ class DataGen
             'context' => ['install'],
             'key'     => ['ETAPE_SUIV_ID', 'ETAPE_PREC_ID'],
             'options' => ['columns' => [
-                'ETAPE_PREC_ID'       => ['transformer' => 'SELECT ID FROM WF_ETAPE WHERE CODE = %s'],
-                'ETAPE_SUIV_ID'       => ['transformer' => 'SELECT ID FROM WF_ETAPE WHERE CODE = %s'],
-                'TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT ID FROM TYPE_INTERVENANT WHERE CODE = %s'],
+                'ETAPE_PREC_ID'       => ['transformer' => 'SELECT id FROM wf_etape WHERE code = %s'],
+                'ETAPE_SUIV_ID'       => ['transformer' => 'SELECT id FROM wf_etape WHERE code = %s'],
+                'TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s'],
             ],],
         ],
 
@@ -376,7 +362,7 @@ class DataGen
     public function __construct(OseAdmin $oseAdmin)
     {
         $this->oseAdmin = $oseAdmin;
-        $this->setLogger($oseAdmin->getConsole());
+        $this->setLogger($oseAdmin->getBdd()->getLogger());
     }
 
 
@@ -415,23 +401,10 @@ class DataGen
             }
         }
 
-        /* L'administrateur doit avoir tous les droits obligatoirement! */
-        $this->logMsg('Attribution de tous les droits au rôle Administrateur ...', true);
-        $this->oseAdmin->getBdd()->exec("
-        INSERT INTO
-          ROLE_PRIVILEGE(PRIVILEGE_ID, ROLE_ID)
-        SELECT
-          P.ID PRIVILEGE_ID, R.ID ROLE_ID
-        FROM
-          PRIVILEGE P
-          JOIN ROLE R ON R.CODE = 'administrateur'
-          LEFT JOIN ROLE_PRIVILEGE RP ON RP.PRIVILEGE_ID = P.ID AND RP.ROLE_ID = R.ID
-        WHERE
-          RP.ROLE_ID IS NULL
-        ");
-
-        $this->logMsg('Mise à jour du point d\'indice pour les HETD ...', true);
-        $this->oseAdmin->getBdd()->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');
+        if (!$table) {
+            $this->logMsg('Mise à jour du point d\'indice pour les HETD ...', true);
+            $this->oseAdmin->getBdd()->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');
+        }
         $this->logEnd();
     }
 
@@ -618,11 +591,11 @@ class DataGen
 
     public function FORMULE()
     {
-        $data     = $this->nomenclature['FORMULE'];
+        $data = require $this->oseAdmin->getOseDir() . 'data/formules.php';;
         $formules = [];
         foreach ($data as $id => $formule) {
-            $formule['ID']             = $id;
-            $formule['PROCEDURE_NAME'] = 'CALCUL_RESULTAT';
+            $formule['ID'] = $id;
+            if (!isset($formule['ACTIVE'])) $formule['ACTIVE'] = true;
             for ($i = 1; $i < 6; $i++) {
                 if (!isset($formule['I_PARAM_' . $i . '_LIBELLE'])) $formule['I_PARAM_' . $i . '_LIBELLE'] = null;
                 if (!isset($formule['VH_PARAM_' . $i . '_LIBELLE'])) $formule['VH_PARAM_' . $i . '_LIBELLE'] = null;
@@ -631,6 +604,42 @@ class DataGen
         }
 
         return $formules;
+    }
+
+
+
+    public function STATUT()
+    {
+        $data = $this->donneesDefaut['STATUT'];
+
+        $statuts = [];
+        for ($a = 2010; $a <= 2099; $a++) {
+            foreach ($data as $d) {
+                $d['ANNEE_ID']              = $a;
+                $d['HISTO_MODIFICATEUR_ID'] = null;
+                $statuts[]                  = $d;
+            }
+        }
+
+        return $statuts;
+    }
+
+
+
+    public function TYPE_PIECE_JOINTE_STATUT()
+    {
+        $data = $this->donneesDefaut['TYPE_PIECE_JOINTE_STATUT'];
+
+        $statuts = [];
+        for ($a = 2010; $a <= 2099; $a++) {
+            foreach ($data as $d) {
+                $d['ANNEE_ID']              = $a;
+                $d['HISTO_MODIFICATEUR_ID'] = null;
+                $statuts[]                  = $d;
+            }
+        }
+
+        return $statuts;
     }
 
 
@@ -646,6 +655,7 @@ class DataGen
             $plafond     = [
                 'NUMERO'               => $numero,
                 'LIBELLE'              => $p['libelle'],
+                'MESSAGE'              => $p['message'] ?? null,
                 'PLAFOND_PERIMETRE_ID' => $perimetreId,
                 'REQUETE'              => $p['requete'],
             ];
@@ -734,6 +744,11 @@ class DataGen
                 }
                 $indicateurs[] = $indicateur;
             }
+        }
+
+        $pis = $this->oseAdmin->getBdd()->select('SELECT * FROM V_PLAFOND_INDICATEURS');
+        foreach ($pis as $pi) {
+            $indicateurs[] = $pi;
         }
 
         return $indicateurs;

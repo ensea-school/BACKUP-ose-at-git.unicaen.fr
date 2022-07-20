@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
+CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
   TYPE t_dep_bloquante IS RECORD (
     id NUMERIC,
     to_delete BOOLEAN DEFAULT TRUE
@@ -22,7 +22,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
   TYPE t_intervenant IS RECORD (
     annee_id NUMERIC,
     intervenant_id NUMERIC,
-    statut_intervenant_id NUMERIC,
+    statut_id NUMERIC,
     type_intervenant_id NUMERIC,
     type_intervenant_code VARCHAR2(1),
     feuille_de_route t_workflow
@@ -78,7 +78,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     ose_test.echo('');
     */
     ose_test.echo('annee_id              = ' || intervenant.annee_id );
-    ose_test.echo('statut_intervenant_id = ' || intervenant.statut_intervenant_id );
+    ose_test.echo('statut_id = ' || intervenant.statut_id );
     ose_test.echo('type_intervenant_id   = ' || intervenant.type_intervenant_id );
     ose_test.echo('type_intervenant_code = ' || intervenant.type_intervenant_code );
     ose_test.echo('feuille_de_route      = [');
@@ -139,7 +139,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     ELSE
       w.annee_id              := intervenant.annee_id;
       w.intervenant_id        := intervenant.intervenant_id;
-      w.statut_intervenant_id := intervenant.statut_intervenant_id;
+      w.statut_id             := intervenant.statut_id;
       w.type_intervenant_id   := intervenant.type_intervenant_id;
       w.type_intervenant_code := intervenant.type_intervenant_code;
       w.etape_id              := e.etape_id;
@@ -150,7 +150,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       w.objectif              := e.objectif;
       IF e.id IS NULL THEN
         w.id := tbl_workflow_id_seq.NEXTVAL;
-        INSERT INTO tbl_workflow values w;
+        INSERT INTO tbl_workflow VALUES w;
       ELSE
         w.id := e.id;
         IF e.old_atteignable <> e.atteignable
@@ -160,7 +160,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           e.to_update := TRUE;
         END IF;
         IF e.to_update THEN
-          UPDATE tbl_workflow SET row = w WHERE id = w.id;
+          UPDATE tbl_workflow SET ROW = w WHERE id = w.id;
         END IF;
       END IF;
 
@@ -188,7 +188,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
 
 
-  FUNCTION ETAPE_FRANCHIE( etape IN t_workflow_etape, need_done boolean default false ) RETURN FLOAT IS
+  FUNCTION ETAPE_FRANCHIE( etape IN t_workflow_etape, need_done BOOLEAN DEFAULT FALSE ) RETURN FLOAT IS
     res FLOAT DEFAULT 0;
   BEGIN
     IF etape.objectif = 0 THEN
@@ -346,12 +346,13 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
 
 
-  FUNCTION MAKE_V_TBL_WORKFLOW(param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL) RETURN CLOB IS
+  FUNCTION MAKE_V_TBL_WORKFLOW(param VARCHAR2 DEFAULT NULL, VALUE VARCHAR2 DEFAULT NULL) RETURN CLOB IS
     p VARCHAR2(30);
     dems CLOB;
     intervenant CLOB;
     dossier CLOB;
     service_saisie CLOB;
+    service_saisie_realise CLOB;
     validation_enseignement CLOB;
     validation_referentiel CLOB;
     pieces_justificatives CLOB;
@@ -362,46 +363,43 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
   BEGIN
     dems := '
         WHEN e.code = ''DONNEES_PERSO_SAISIE'' OR e.code = ''DONNEES_PERSO_VALIDATION'' THEN
-          si.peut_saisir_dossier
+          si.dossier
 
         WHEN e.code = ''SERVICE_SAISIE'' THEN
-          CASE WHEN si.peut_saisir_service + si.peut_saisir_referentiel = 0 THEN 0 ELSE 1 END
+          CASE WHEN si.service_prevu + si.referentiel_prevu = 0 THEN 0 ELSE 1 END
 
         WHEN e.code = ''PJ_SAISIE'' OR e.code = ''PJ_VALIDATION'' THEN
           CASE WHEN EXISTS(
-            SELECT statut_intervenant_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_intervenant_id = si.id
+            SELECT statut_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_id = si.id
             --SELECT intervenant_id FROM tbl_piece_jointe_demande WHERE intervenant_id = i.id
           ) THEN 1 ELSE 0 END
 
         WHEN e.code = ''SERVICE_VALIDATION'' THEN
-          si.peut_saisir_service
+          si.service_prevu
 
         WHEN e.code = ''REFERENTIEL_VALIDATION'' THEN
-          si.peut_saisir_referentiel
+          si.referentiel_prevu
 
-        WHEN e.code = ''CONSEIL_ACADEMIQUE'' OR e.code = ''CONSEIL_RESTREINT'' THEN
-          CASE WHEN EXISTS(
-            SELECT statut_intervenant_id
-            FROM type_agrement_statut tas JOIN type_agrement ta ON ta.id = tas.type_agrement_id
-            WHERE tas.histo_destruction IS NULL
-              AND ta.code = e.code
-              AND tas.statut_intervenant_id = si.id
-          ) THEN 1 ELSE 0 END
+        WHEN e.code = ''CONSEIL_ACADEMIQUE'' THEN
+          si.conseil_aca
+
+        WHEN e.code = ''CONSEIL_RESTREINT'' THEN
+          si.conseil_restreint
 
         WHEN e.code = ''CONTRAT'' THEN
-          si.peut_avoir_contrat
+          si.contrat
 
         WHEN e.code = ''SERVICE_SAISIE_REALISE'' OR e.code = ''DEMANDE_MEP'' OR e.code = ''SAISIE_MEP'' THEN
-          CASE WHEN si.peut_saisir_service + si.peut_saisir_referentiel = 0 THEN 0 ELSE 1 END
+          CASE WHEN si.service_realise + si.referentiel_realise = 0 THEN 0 ELSE 1 END
 
         WHEN e.code = ''CLOTURE_REALISE'' THEN
-          si.peut_cloturer_saisie
+          si.cloture
 
         WHEN e.code = ''SERVICE_VALIDATION_REALISE'' THEN
-          si.peut_saisir_service
+          si.service_realise
 
         WHEN e.code = ''REFERENTIEL_VALIDATION_REALISE'' THEN
-          si.peut_saisir_referentiel
+          si.referentiel_realise
     ';
 
 
@@ -410,11 +408,11 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       SELECT
         id                  intervenant_id,
         annee_id            annee_id,
-        statut_id           statut_intervenant_id
+        statut_id           statut_id
       FROM
         intervenant
       WHERE
-        ' || unicaen_tbl.MAKE_WHERE(CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, value) || '
+        ' || unicaen_tbl.MAKE_WHERE(CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, VALUE) || '
     ';
 
 
@@ -427,7 +425,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           1                                                         objectif,
           CASE
             WHEN e.code = ''DONNEES_PERSO_SAISIE'' THEN
-              (d.completude_statut + d.completude_identite + d.completude_identite_comp + d.completude_contact + d.completude_adresse + d.completude_insee + d.completude_iban + d.completude_employeur) / 8
+              (d.completude_statut + d.completude_identite + d.completude_identite_comp + d.completude_contact + d.completude_adresse + d.completude_insee + d.completude_banque + d.completude_employeur) / 8
 
             WHEN e.code = ''DONNEES_PERSO_VALIDATION'' THEN
               CASE WHEN d.validation_id IS NULL THEN 0 ELSE 1 END
@@ -440,35 +438,64 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
             UNION SELECT ''DONNEES_PERSO_VALIDATION'' code FROM dual
           ) e ON 1=1
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
-          AND d.peut_saisir_dossier = 1
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
+          AND d.actif = 1
     ';
 
 
 
     service_saisie := '
         SELECT
-          e.code                                                    etape_code,
-          tss.intervenant_id                                        intervenant_id,
-          NULL                                                      structure_id,
-          1                                                         objectif,
-          CASE
-            WHEN e.code = ''SERVICE_SAISIE'' THEN
-              CASE WHEN tss.heures_service_prev + tss.heures_referentiel_prev > 0 THEN 1 ELSE 0 END
-
-            WHEN e.code = ''SERVICE_SAISIE_REALISE'' THEN
-              CASE WHEN tss.heures_service_real + tss.heures_referentiel_real > 0 THEN 1 ELSE 0 END
-
-          END                                                       realisation
+          ''SERVICE_SAISIE''                                   etape_code,
+          i.id                                                 intervenant_id,
+          NULL                                                 structure_id,
+          1                                                    objectif,
+          CASE WHEN t.intervenant_id IS NULL THEN 0 ELSE 1 END realisation
         FROM
-          TBL_SERVICE_SAISIE tss
-          JOIN (
-                  SELECT ''SERVICE_SAISIE''                 code FROM dual
-            UNION SELECT ''SERVICE_SAISIE_REALISE''         code FROM dual
-          ) e ON 1=1
+          intervenant i
+          JOIN statut si ON si.id = i.statut_id
+          LEFT JOIN (
+            SELECT DISTINCT t.intervenant_id
+            FROM tbl_service t
+            WHERE t.heures > 0 AND t.type_volume_horaire_code = ''PREVU''
+
+            UNION
+
+            SELECT DISTINCT t.intervenant_id
+            FROM tbl_referentiel t
+            WHERE t.heures > 0 AND t.type_volume_horaire_code = ''PREVU''
+          ) t ON t.intervenant_id = i.id
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
-          AND (tss.peut_saisir_service = 1 OR tss.peut_saisir_referentiel = 1)
+          i.histo_destruction IS NULL
+          AND (si.service_prevu = 1 OR si.referentiel_prevu = 1)
+    ';
+
+
+
+    service_saisie_realise := '
+        SELECT
+          ''SERVICE_SAISIE_REALISE''                           etape_code,
+          i.id                                                 intervenant_id,
+          NULL                                                 structure_id,
+          1                                                    objectif,
+          CASE WHEN t.intervenant_id IS NULL THEN 0 ELSE 1 END realisation
+        FROM
+          intervenant i
+          JOIN statut si ON si.id = i.statut_id
+          LEFT JOIN (
+            SELECT DISTINCT t.intervenant_id
+            FROM tbl_service t
+            WHERE t.heures > 0 AND t.type_volume_horaire_code = ''REALISE''
+
+            UNION
+
+            SELECT DISTINCT t.intervenant_id
+            FROM tbl_referentiel t
+            WHERE t.heures > 0 AND t.type_volume_horaire_code = ''REALISE''
+          ) t ON t.intervenant_id = i.id
+        WHERE
+          i.histo_destruction IS NULL
+          AND (si.service_realise = 1 OR si.referentiel_realise = 1)
     ';
 
 
@@ -487,7 +514,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_validation_enseignement tve
           JOIN type_volume_horaire tvh ON tvh.id = tve.type_volume_horaire_id
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
           AND tve.auto_validation = 0
         GROUP BY
           tve.intervenant_id,
@@ -511,7 +538,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_validation_referentiel tvr
           JOIN type_volume_horaire tvh ON tvh.id = tvr.type_volume_horaire_id
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
           AND tvr.auto_validation = 0
         GROUP BY
           tvr.intervenant_id,
@@ -539,14 +566,14 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           SELECT
             intervenant_id,
             SUM(demandee) demandees,
-            SUM(fournie)  fournies,
-            SUM(validee)  validees
+            SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE fournie END)  fournies,
+            SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE validee END)  validees,
+			SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE 0 END) facultatives
           FROM
             tbl_piece_jointe
           WHERE
-            ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+            ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
             AND demandee > 0
-            AND obligatoire = 1
           GROUP BY
             annee_id,
             intervenant_id
@@ -573,7 +600,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           tbl_agrement a
           JOIN type_agrement ta ON ta.id = a.type_agrement_id
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
     ';
 
 
@@ -588,8 +615,8 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
         FROM
           tbl_cloture_realise c
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
-          AND c.peut_cloturer_saisie = 1
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
+          AND c.actif = 1
     ';
 
 
@@ -618,7 +645,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
             FROM
               tbl_paiement
             WHERE
-              ' || unicaen_tbl.MAKE_WHERE(param, value) || '
+              ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
             GROUP BY
               annee_id,
               intervenant_id,
@@ -637,21 +664,41 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
     contrat := '
         SELECT
-          ''CONTRAT''                                               etape_code,
-          intervenant_id                                            intervenant_id,
-          structure_id                                              structure_id,
-          nbvh                                                      objectif,
-          CASE p.valeur
-            WHEN ''date-retour'' THEN signe
-            ELSE edite
-          END                                                       realisation
-        FROM
-          tbl_contrat c
-          JOIN parametre p on p.nom = ''contrat_regle_franchissement''
-        WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, value) || '
-          AND peut_avoir_contrat = 1
-          AND nbvh > 0
+          c.etape_code,
+          c.intervenant_id,
+          CASE WHEN c.avenant_mode = ''avenant_desactive'' THEN NULL ELSE c.structure_id END structure_id,
+          c.objectif,
+          CASE WHEN
+            CASE
+              WHEN c.avenant_mode = ''avenant_struct'' THEN sum(c.realisation) over (partition by c.structure_id)
+              WHEN c.avenant_mode = ''avenant_desactive'' THEN sum(c.realisation) over (partition by c.intervenant_id)
+              ELSE 0
+            END > 0
+            THEN c.objectif
+            ELSE c.realisation
+          END realisation
+        FROM (
+          SELECT
+            ''CONTRAT''                      etape_code,
+            intervenant_id                 intervenant_id,
+            structure_id                   structure_id,
+            nbvh                           objectif,
+            CASE p.valeur
+              WHEN ''date-retour'' THEN signe
+              ELSE edite
+            END                            realisation,
+            p2.valeur                      avenant_mode,
+            CASE WHEN p2.valeur = ''avenant_desactive'' THEN rownum ELSE 1 END to_delete
+          FROM
+            tbl_contrat c
+            JOIN parametre p on p.nom = ''contrat_regle_franchissement''
+            JOIN parametre p2 on p2.nom = ''avenant''
+          WHERE
+            ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
+            AND actif = 1
+            AND nbvh > 0
+        ) c
+        WHERE to_delete = 1
     ';
 
 
@@ -666,16 +713,17 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       ROUND(COALESCE(w.objectif,0),2)                      objectif,
       CASE WHEN w.intervenant_id IS NULL THEN 0 ELSE 1 END atteignable,
       ROUND(COALESCE(w.realisation,0),2)                   realisation,
-      i.statut_intervenant_id                              statut_intervenant_id,
+      i.statut_id                                          statut_id,
       ti.id                                                type_intervenant_id,
       ti.code                                              type_intervenant_code
     FROM
       ( ' || intervenant || ') i
-      JOIN statut_intervenant      si ON si.id = i.statut_intervenant_id
+      JOIN statut                  si ON si.id = i.statut_id
       JOIN type_intervenant        ti ON ti.id = si.type_intervenant_id
       JOIN wf_etape                 e ON 1 = CASE ' || dems || ' END
       LEFT JOIN ( ' || dossier || '
         UNION ALL ' || service_saisie || '
+        UNION ALL ' || service_saisie_realise || '
         UNION ALL ' || validation_enseignement || '
         UNION ALL ' || validation_referentiel || '
         UNION ALL ' || pieces_justificatives || '
@@ -691,7 +739,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
 
 
 
-  PROCEDURE CALCULER_TBL( param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL ) IS
+  PROCEDURE CALCULER_TBL( param VARCHAR2 DEFAULT NULL, VALUE VARCHAR2 DEFAULT NULL ) IS
     TYPE t_v_tbl_workflow IS RECORD(
       annee_id              NUMERIC,
       intervenant_id        NUMERIC,
@@ -700,7 +748,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       objectif              FLOAT,
       atteignable           NUMERIC,
       realisation           FLOAT,
-      statut_intervenant_id NUMERIC,
+      statut_id             NUMERIC,
       type_intervenant_id   NUMERIC,
       type_intervenant_code VARCHAR2(1)
     );
@@ -730,13 +778,13 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     u BOOLEAN;
   BEGIN
     INITIALISATION;
-    OPEN c FOR 'SELECT * FROM tbl_workflow WHERE ' || unicaen_tbl.MAKE_WHERE(param, value);
+    OPEN c FOR 'SELECT * FROM tbl_workflow WHERE ' || unicaen_tbl.MAKE_WHERE(param, VALUE);
     LOOP
       FETCH c INTO t; EXIT WHEN c%NOTFOUND;
       IF NOT intervenants.exists(t.intervenant_id) THEN
         intervenants(t.intervenant_id).annee_id              := t.annee_id;
         intervenants(t.intervenant_id).intervenant_id        := t.intervenant_id;
-        intervenants(t.intervenant_id).statut_intervenant_id := t.statut_intervenant_id;
+        intervenants(t.intervenant_id).statut_id             := t.statut_id;
         intervenants(t.intervenant_id).type_intervenant_id   := t.type_intervenant_id;
         intervenants(t.intervenant_id).type_intervenant_code := t.type_intervenant_code;
       END IF;
@@ -757,7 +805,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     END LOOP;
     CLOSE c;
 
-    OPEN c FOR MAKE_V_TBL_WORKFLOW(param, value);
+    OPEN c FOR MAKE_V_TBL_WORKFLOW(param, VALUE);
     LOOP
       FETCH c INTO v; EXIT WHEN c%NOTFOUND;
 
@@ -768,8 +816,8 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           intervenants(v.intervenant_id).annee_id := v.annee_id;
           u := TRUE;
         END IF;
-        IF ci.statut_intervenant_id <> v.statut_intervenant_id THEN
-          intervenants(v.intervenant_id).statut_intervenant_id := v.statut_intervenant_id;
+        IF ci.statut_id <> v.statut_id THEN
+          intervenants(v.intervenant_id).statut_id := v.statut_id;
           u := TRUE;
         END IF;
         IF ci.type_intervenant_id <> v.type_intervenant_id THEN
@@ -783,7 +831,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       ELSE
         intervenants(v.intervenant_id).annee_id              := v.annee_id;
         intervenants(v.intervenant_id).intervenant_id        := v.intervenant_id;
-        intervenants(v.intervenant_id).statut_intervenant_id := v.statut_intervenant_id;
+        intervenants(v.intervenant_id).statut_id             := v.statut_id;
         intervenants(v.intervenant_id).type_intervenant_id   := v.type_intervenant_id;
         intervenants(v.intervenant_id).type_intervenant_code := v.type_intervenant_code;
       END IF;
@@ -810,7 +858,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     FROM
       wf_dep_bloquante wdb
       JOIN tbl_workflow v ON v.id= wdb.tbl_workflow_id
-    WHERE ' || unicaen_tbl.MAKE_WHERE( param, value, 'v' );
+    WHERE ' || unicaen_tbl.MAKE_WHERE( param, VALUE, 'v' );
     LOOP
       FETCH c INTO wdb; EXIT WHEN c%NOTFOUND;
       we_ec := MAKE_FR_ETAPE_INDEX( wdb.etape_id, wdb.structure_id );

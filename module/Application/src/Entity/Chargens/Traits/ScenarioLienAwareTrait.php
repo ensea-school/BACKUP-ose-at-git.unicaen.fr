@@ -7,13 +7,11 @@ use Application\Entity\Chargens\ScenarioLien;
 /**
  * Description of ScenarioLienAwareTrait
  *
+ * @author UnicaenCode
  */
 trait ScenarioLienAwareTrait
 {
-    /**
-     * @var ScenarioLien
-     */
-    private $scenarioLien;
+    protected ?ScenarioLien $scenarioLien = null;
 
 
 
@@ -22,7 +20,7 @@ trait ScenarioLienAwareTrait
      *
      * @return self
      */
-    public function setScenarioLien(ScenarioLien $scenarioLien = null)
+    public function setScenarioLien( ?ScenarioLien $scenarioLien )
     {
         $this->scenarioLien = $scenarioLien;
 
@@ -31,10 +29,7 @@ trait ScenarioLienAwareTrait
 
 
 
-    /**
-     * @return ScenarioLien
-     */
-    public function getScenarioLien()
+    public function getScenarioLien(): ?ScenarioLien
     {
         return $this->scenarioLien;
     }

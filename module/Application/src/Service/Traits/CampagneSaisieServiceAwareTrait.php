@@ -11,10 +11,7 @@ use Application\Service\CampagneSaisieService;
  */
 trait CampagneSaisieServiceAwareTrait
 {
-    /**
-     * @var CampagneSaisieService
-     */
-    private $serviceCampagneSaisie;
+    protected ?CampagneSaisieService $serviceCampagneSaisie = null;
 
 
 
@@ -23,7 +20,7 @@ trait CampagneSaisieServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceCampagneSaisie(CampagneSaisieService $serviceCampagneSaisie)
+    public function setServiceCampagneSaisie(?CampagneSaisieService $serviceCampagneSaisie)
     {
         $this->serviceCampagneSaisie = $serviceCampagneSaisie;
 
@@ -32,10 +29,7 @@ trait CampagneSaisieServiceAwareTrait
 
 
 
-    /**
-     * @return CampagneSaisieService
-     */
-    public function getServiceCampagneSaisie()
+    public function getServiceCampagneSaisie(): ?CampagneSaisieService
     {
         if (empty($this->serviceCampagneSaisie)) {
             $this->serviceCampagneSaisie = \Application::$container->get(CampagneSaisieService::class);

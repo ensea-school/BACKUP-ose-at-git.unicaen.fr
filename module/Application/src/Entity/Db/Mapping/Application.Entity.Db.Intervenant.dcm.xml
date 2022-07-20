@@ -16,7 +16,7 @@
         <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
             <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="statut" target-entity="Application\Entity\Db\StatutIntervenant">
+        <many-to-one field="statut" target-entity="Intervenant\Entity\Db\Statut">
             <join-column name="STATUT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="grade" target-entity="Application\Entity\Db\Grade">

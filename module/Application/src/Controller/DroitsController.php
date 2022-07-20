@@ -2,7 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
 use Application\Form\Droits\Traits\AffectationFormAwareTrait;
@@ -12,13 +11,14 @@ use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Doctrine\Common\Cache\FilesystemCache;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Form\Droits\Traits\RoleFormAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
-use Application\Traits\DoctrineCacheAwareTrait;
+use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
-use Application\Entity\Db\StatutIntervenant;
+use Intervenant\Entity\Db\Statut;
 use UnicaenAuth\Entity\Db\Privilege;
 
 /**
@@ -30,7 +30,7 @@ use UnicaenAuth\Entity\Db\Privilege;
 class DroitsController extends AbstractController
 {
     use RoleServiceAwareTrait;
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use PrivilegeServiceAwareTrait;
     use AffectationServiceAwareTrait;
     use StructureServiceAwareTrait;
@@ -39,8 +39,20 @@ class DroitsController extends AbstractController
     use RoleFormAwareTrait;
     use AffectationFormAwareTrait;
     use ContextServiceAwareTrait;
-    use CacheContainerTrait;
-    use DoctrineCacheAwareTrait;
+    use SessionContainerTrait;
+
+    protected FilesystemCache $doctrineCache;
+
+
+
+    /**
+     * @param FilesystemCache $doctrineCache
+     */
+    public function __construct(FilesystemCache $doctrineCache)
+    {
+        $this->doctrineCache = $doctrineCache;
+    }
+
 
 
     /**
@@ -85,7 +97,7 @@ class DroitsController extends AbstractController
             if ($form->isValid()) {
                 try {
                     $this->getServiceRole()->save($role);
-                    $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
+                    $this->doctrineCache->delete(RoleProvider::class . '/affectations');
                     $form->get('id')->setValue($role->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
                     $errors[] = $this->translate($e);
@@ -105,9 +117,8 @@ class DroitsController extends AbstractController
         $title = "Suppression du rôle";
         $form  = $this->makeFormSupprimer(function () use ($role) {
             $this->getServiceRole()->delete($role);
-            $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
-            $cc = $this->getCacheContainer(PrivilegeService::class);
-            unset($cc->privilegesRoles);
+            $this->doctrineCache->delete(RoleProvider::class . '/affectations');
+            $this->getSessionContainer()->offsetUnset('privileges' . $this->getServiceContext()->getAnnee()->getId());
         });
 
         return compact('role', 'title', 'form');
@@ -117,49 +128,24 @@ class DroitsController extends AbstractController
 
     public function privilegesAction()
     {
-        $filters = [];
-        if ($categorieFilter = $this->params()->fromQuery('cat')) {
-            $filters['cat'] = $categorieFilter;
-        }
-        if ($rsFilter = $this->params()->fromQuery('rs')) {
-            $filters['rs'] = $rsFilter;
-        }
-
         $ps         = $this->getServicePrivilege()->getList();
         $privileges = [];
         foreach ($ps as $privilege) {
             $categorie = $privilege->getCategorie();
 
-            $ok = true;
-            if ($categorieFilter && $categorieFilter != $categorie->getCode()) $ok = false;
-
-            if ($ok) {
-                if (!isset($privileges[$categorie->getCode()])) {
-                    $privileges[$categorie->getCode()] = [
-                        'categorie'     => $categorie,
-                        'categorieLink' => $this->url()->fromRoute(null, [], ['query' => $filters + ['cat' => $categorie->getCode()]], true),
-                        'privileges'    => [],
-                    ];
-                }
-                $privileges[$categorie->getCode()]['privileges'][] = $privilege;
+            if (!isset($privileges[$categorie->getCode()])) {
+                $privileges[$categorie->getCode()] = [
+                    'categorie'  => $categorie,
+                    'privileges' => [],
+                ];
             }
+            $privileges[$categorie->getCode()]['privileges'][] = $privilege;
         }
 
-        if ($rsFilter == 'r' || !$rsFilter) {
-            $qb    = $this->getServiceRole()->finderByHistorique();
-            $roles = $this->getServiceRole()->getList($qb);
-        } else {
-            $roles = [];
-        }
+        $dql   = "SELECT r FROM " . Role::class . " r WHERE r.histoDestruction IS NULL AND r.code <> :roleAdmin ORDER BY r.libelle";
+        $roles = $this->em()->createQuery($dql)->setParameter('roleAdmin', Role::ADMINISTRATEUR)->getResult();
 
-        if ($rsFilter == 's' || !$rsFilter) {
-            $qb      = $this->getServiceStatutIntervenant()->finderByHistorique();
-            $statuts = $this->getServiceStatutIntervenant()->getList($qb);
-        } else {
-            $statuts = [];
-        }
-
-        return compact('privileges', 'roles', 'statuts', 'filters');
+        return compact('privileges', 'roles');
     }
 
 
@@ -167,25 +153,22 @@ class DroitsController extends AbstractController
     public function privilegesModifierAction()
     {
         $role      = $this->context()->roleFromPost();
-        $statut    = $this->context()->statutIntervenantFromPost('statut');
         $privilege = $this->getServicePrivilege()->get($this->params()->fromPost('privilege'));
         $action    = $this->params()->fromPost('action');
-        $cc        = $this->getCacheContainer(PrivilegeService::class);
-        unset($cc->privilegesRoles);
+
+        $this->getSessionContainer()->offsetUnset('privileges' . $this->getServiceContext()->getAnnee()->getId());
 
         switch ($action) {
             case 'accorder':
                 if ($role) $this->roleAddPrivilege($role, $privilege);
-                if ($statut) $this->statutAddPrivilege($statut, $privilege);
             break;
             case 'refuser':
                 if ($role) $this->roleRemovePrivilege($role, $privilege);
-                if ($statut) $this->statutRemovePrivilege($statut, $privilege);
             break;
         }
-        $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
+        $this->doctrineCache->delete(RoleProvider::class . '/affectations');
 
-        return compact('role', 'statut', 'privilege');
+        return compact('role', 'privilege');
     }
 
 
@@ -207,26 +190,6 @@ class DroitsController extends AbstractController
         $this->em()->getConnection()->executeStatement($sql);
         $this->em()->refresh($privilege);
         $this->em()->refresh($role);
-    }
-
-
-
-    private function statutAddPrivilege(StatutIntervenant $statut, Privilege $privilege)
-    {
-        $sql = "INSERT INTO STATUT_PRIVILEGE (statut_id, privilege_id) VALUES (" . $statut->getId() . ", " . $privilege->getId() . ")";
-        $this->em()->getConnection()->executeStatement($sql);
-        $this->em()->refresh($privilege);
-        $this->em()->refresh($statut);
-    }
-
-
-
-    private function statutRemovePrivilege(StatutIntervenant $statut, Privilege $privilege)
-    {
-        $sql = "DELETE STATUT_PRIVILEGE WHERE statut_id = " . $statut->getId() . " AND privilege_id = " . $privilege->getId();
-        $this->em()->getConnection()->executeStatement($sql);
-        $this->em()->refresh($privilege);
-        $this->em()->refresh($statut);
     }
 
 
@@ -289,7 +252,7 @@ class DroitsController extends AbstractController
                 }
             }
         }
-        $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
+        $this->doctrineCache->delete(RoleProvider::class . '/affectations');
 
         return compact('form', 'title', 'errors');
     }
@@ -305,7 +268,7 @@ class DroitsController extends AbstractController
         $form = $this->makeFormSupprimer(function () use ($affectation) {
             $this->getServiceAffectation()->delete($affectation);
         });
-        $this->getCacheFilesystem()->delete(RoleProvider::class . '/affectations');
+        $this->doctrineCache->delete(RoleProvider::class . '/affectations');
 
         return compact('affectation', 'title', 'form');
     }
@@ -333,8 +296,8 @@ class DroitsController extends AbstractController
             $options['roles']['options']['r-' . $role->getCode()] = (string)$role;
         }
 
-        $qb      = $this->getServiceStatutIntervenant()->finderByHistorique();
-        $statuts = $this->getServiceStatutIntervenant()->getList($qb);
+        $qb      = $this->getServiceStatut()->finderByHistorique();
+        $statuts = $this->getServiceStatut()->getList($qb);
         foreach ($statuts as $statut) {
             $options['statuts']['options']['s-' . $statut->getCode()] = (string)$statut;
         }

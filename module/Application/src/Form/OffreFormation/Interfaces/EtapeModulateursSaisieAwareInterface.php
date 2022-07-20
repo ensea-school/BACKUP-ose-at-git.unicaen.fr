@@ -3,7 +3,6 @@
 namespace Application\Form\OffreFormation\Interfaces;
 
 use Application\Form\OffreFormation\EtapeModulateursSaisie;
-use RuntimeException;
 
 /**
  * Description of EtapeModulateursSaisieAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface EtapeModulateursSaisieAwareInterface
 {
     /**
-     * @param EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie
+     * @param EtapeModulateursSaisie|null $formOffreFormationEtapeModulateursSaisie
+     *
      * @return self
      */
-    public function setFormOffreFormationEtapeModulateursSaisie( EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie );
+    public function setFormOffreFormationEtapeModulateursSaisie( ?EtapeModulateursSaisie $formOffreFormationEtapeModulateursSaisie );
 
 
 
-    /**
-     * @return EtapeModulateursSaisieAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormOffreFormationEtapeModulateursSaisie();
+    public function getFormOffreFormationEtapeModulateursSaisie(): ?EtapeModulateursSaisie;
 }

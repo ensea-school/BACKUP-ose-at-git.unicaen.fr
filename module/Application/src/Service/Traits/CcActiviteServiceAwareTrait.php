@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\CcActiviteService;
 
 /**
- * Description of CcActiviteAwareTrait
+ * Description of CcActiviteServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait CcActiviteServiceAwareTrait
 {
-    /**
-     * @var CcActiviteService
-     */
-    private $serviceCcActivite;
+    protected ?CcActiviteService $serviceCcActivite = null;
 
 
 
@@ -23,7 +20,7 @@ trait CcActiviteServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceCcActivite(CcActiviteService $serviceCcActivite)
+    public function setServiceCcActivite(?CcActiviteService $serviceCcActivite)
     {
         $this->serviceCcActivite = $serviceCcActivite;
 
@@ -32,10 +29,7 @@ trait CcActiviteServiceAwareTrait
 
 
 
-    /**
-     * @return CcActiviteService
-     */
-    public function getServiceCcActivite()
+    public function getServiceCcActivite(): ?CcActiviteService
     {
         if (empty($this->serviceCcActivite)) {
             $this->serviceCcActivite = \Application::$container->get(CcActiviteService::class);

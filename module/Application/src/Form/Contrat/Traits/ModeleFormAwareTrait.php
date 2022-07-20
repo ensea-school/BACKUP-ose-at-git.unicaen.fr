@@ -11,10 +11,7 @@ use Application\Form\Contrat\ModeleForm;
  */
 trait ModeleFormAwareTrait
 {
-    /**
-     * @var ModeleForm
-     */
-    protected $formContratModele;
+    protected ?ModeleForm $formContratModele = null;
 
 
 
@@ -23,7 +20,7 @@ trait ModeleFormAwareTrait
      *
      * @return self
      */
-    public function setFormContratModele( ModeleForm $formContratModele )
+    public function setFormContratModele(?ModeleForm $formContratModele)
     {
         $this->formContratModele = $formContratModele;
 
@@ -32,18 +29,12 @@ trait ModeleFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ModeleForm
-     * @throws RuntimeException
-     */
-    public function getFormContratModele() : ModeleForm
+    public function getFormContratModele(): ?ModeleForm
     {
-        if ($this->formContratModele){
+        if (!empty($this->formContratModele)) {
             return $this->formContratModele;
-        }else{
-            return \Application::$container->get('FormElementManager')->get(ModeleForm::class);
         }
+
+        return \Application::$container->get('FormElementManager')->get(ModeleForm::class);
     }
 }

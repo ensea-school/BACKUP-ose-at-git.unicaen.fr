@@ -161,7 +161,7 @@ class Table
                 $val = round($current * 100 / $count, 2);
                 $this->getBdd()->logMsg("Copie de la table " . $this->getName() . " en cours (" . $val . "%)", true);
             }
-            if (is_callable($fnc)) $data = $fnc($data);
+            if ($fnc instanceof \Closure) $data = $fnc($data);
             if (null !== $data) {
                 $this->insert($data);
             }
@@ -207,7 +207,7 @@ class Table
                 $val = round($current * 100 / $count, 2);
                 $this->getBdd()->logMsg("Sauvegarde de la table " . $this->getName() . " en cours (" . $val . "%)", true);
             }
-            if (is_callable($fnc)) $data = $fnc($data);
+            if ($fnc instanceof \Closure) $data = $fnc($data);
             if (null !== $data) {
                 fwrite($buff, serialize($data) . "{<{//#end}>}\n");
             }
@@ -243,7 +243,7 @@ class Table
             $data .= $d;
             if (substr($d, -13) == "{<{//#end}>}\n") {
                 $line = unserialize(substr($data, 0, -12));
-                if (is_callable($fnc)) $line = $fnc($line);
+                if ($fnc instanceof \Closure) $line = $fnc($line);
                 $current++;
                 $val = round($current * 100 / $count, 2);
                 $this->getBdd()->logMsg("Restauration de la table " . $this->getName() . " en cours (" . $val . "%)", true);

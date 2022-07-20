@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\TypeFormationService;
 
 /**
- * Description of TypeFormationAwareTrait
+ * Description of TypeFormationServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait TypeFormationServiceAwareTrait
 {
-    /**
-     * @var TypeFormationService
-     */
-    private $serviceTypeFormation;
+    protected ?TypeFormationService $serviceTypeFormation = null;
 
 
 
@@ -23,7 +20,7 @@ trait TypeFormationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeFormation(TypeFormationService $serviceTypeFormation)
+    public function setServiceTypeFormation(?TypeFormationService $serviceTypeFormation)
     {
         $this->serviceTypeFormation = $serviceTypeFormation;
 
@@ -32,10 +29,7 @@ trait TypeFormationServiceAwareTrait
 
 
 
-    /**
-     * @return TypeFormationService
-     */
-    public function getServiceTypeFormation()
+    public function getServiceTypeFormation(): ?TypeFormationService
     {
         if (empty($this->serviceTypeFormation)) {
             $this->serviceTypeFormation = \Application::$container->get(TypeFormationService::class);

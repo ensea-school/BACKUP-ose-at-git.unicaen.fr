@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\DossierService;
 
 /**
- * Description of DossierAwareTrait
+ * Description of DossierServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait DossierServiceAwareTrait
 {
-    /**
-     * @var DossierService
-     */
-    private $serviceDossier;
+    protected ?DossierService $serviceDossier = null;
 
 
 
@@ -23,7 +20,7 @@ trait DossierServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDossier(DossierService $serviceDossier)
+    public function setServiceDossier(?DossierService $serviceDossier)
     {
         $this->serviceDossier = $serviceDossier;
 
@@ -32,10 +29,7 @@ trait DossierServiceAwareTrait
 
 
 
-    /**
-     * @return DossierService
-     */
-    public function getServiceDossier()
+    public function getServiceDossier(): ?DossierService
     {
         if (empty($this->serviceDossier)) {
             $this->serviceDossier = \Application::$container->get(DossierService::class);

@@ -213,8 +213,9 @@ return [
                             'ajouter'       => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'    => '/ajouter',
-                                    'defaults' => ['action' => 'saisir'],
+                                    'route'       => '/ajouter/:structure',
+                                    'constraints' => ['structure' => '[0-9]*'],
+                                    'defaults'    => ['action' => 'saisir'],
                                 ],
                             ],
                             'modifier'      => [
@@ -290,7 +291,7 @@ return [
                         'pages' => [
                             'offre-formation' => [
                                 'label'          => 'Administration de l\'offre de formation',
-                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'icon'           => 'fas fa-table-list',
                                 'route'          => 'aof',
                                 'resource'       => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'administrationOffre'),
                                 'order'          => 0,
@@ -375,7 +376,8 @@ return [
                     'action'     => ['search', 'getPeriode'], // getPeriode est utilisé pour la saisie de service!!!
                     'privileges' => [
                         Privileges::ODF_ELEMENT_VISUALISATION,
-                        Privileges::ENSEIGNEMENT_EDITION,
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
                     ],
                 ],
                 [
@@ -479,12 +481,12 @@ return [
     ],
     'controllers'     => [
         'invokables' => [
-            'Application\Controller\OffreFormation'                 => Controller\OffreFormationController::class,
             'Application\Controller\OffreFormation\Etape'           => Controller\OffreFormation\EtapeController::class,
             'Application\Controller\OffreFormation\Modulateur'      => Controller\OffreFormation\ModulateurController::class,
             'Application\Controller\OffreFormation\EtapeCentreCout' => Controller\OffreFormation\EtapeCentreCoutController::class,
         ],
         'factories'  => [
+            'Application\Controller\OffreFormation'                    => Controller\Factory\OffreFormationControllerFactory::class,
             'Application\Controller\OffreFormation\ElementPedagogique' => Controller\OffreFormation\Factory\ElementPedagogiqueControllerFactory::class,
         ],
     ],
@@ -531,7 +533,6 @@ return [
         'invokables' => [
             'etapeModulateursSaisieForm'          => View\Helper\OffreFormation\EtapeModulateursSaisieForm::class,
             'elementModulateursSaisieFieldset'    => View\Helper\OffreFormation\ElementModulateursSaisieFieldset::class,
-            'elementPedagogique'                  => View\Helper\OffreFormation\ElementPedagogiqueViewHelper::class,
             'etape'                               => View\Helper\OffreFormation\EtapeViewHelper::class,
             'etapeCentreCoutForm'                 => View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper::class,
             'elementCentreCoutFieldset'           => View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper::class,
@@ -539,5 +540,9 @@ return [
             'elementTauxMixiteFieldset'           => View\Helper\OffreFormation\ElementTauxMixiteFieldsetViewHelper::class,
             'fieldsetElementPedagogiqueRecherche' => View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche::class,
         ],
+        'factories'  => [
+            'elementPedagogique' => View\Helper\OffreFormation\Factory\ElementPedagogiqueViewHelperFactory::class,
+        ],
+
     ],
 ];

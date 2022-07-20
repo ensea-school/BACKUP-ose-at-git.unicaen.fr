@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\PerimetreService;
 
 /**
- * Description of PerimetreAwareTrait
+ * Description of PerimetreServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait PerimetreServiceAwareTrait
 {
-    /**
-     * @var PerimetreService
-     */
-    private $servicePerimetre;
+    protected ?PerimetreService $servicePerimetre = null;
 
 
 
@@ -23,7 +20,7 @@ trait PerimetreServiceAwareTrait
      *
      * @return self
      */
-    public function setServicePerimetre(PerimetreService $servicePerimetre)
+    public function setServicePerimetre(?PerimetreService $servicePerimetre)
     {
         $this->servicePerimetre = $servicePerimetre;
 
@@ -32,10 +29,7 @@ trait PerimetreServiceAwareTrait
 
 
 
-    /**
-     * @return PerimetreService
-     */
-    public function getServicePerimetre()
+    public function getServicePerimetre(): ?PerimetreService
     {
         if (empty($this->servicePerimetre)) {
             $this->servicePerimetre = \Application::$container->get(PerimetreService::class);

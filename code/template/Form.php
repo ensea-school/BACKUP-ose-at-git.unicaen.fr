@@ -28,31 +28,8 @@ class <classname> extends AbstractForm
 
         /* Ajoutez vos éléments de formulaire ici */
 
-        $this->add([
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'attributes' => [
-                'value' => 'Enregistrer',
-                'class' => 'btn btn-primary',
-            ],
-        ]);
+        $this->addSubmit();
     }
-
-
-
-    /**
-     * Should return an array specification compatible with
-     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
-     *
-     * @return array
-     */
-    public function getInputFilterSpecification()
-    {
-        return [
-            /* Filtres et validateurs */
-        ];
-    }
-
 }
 
 

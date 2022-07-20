@@ -11,10 +11,7 @@ use Application\Form\CampagneSaisieForm;
  */
 trait CampagneSaisieFormAwareTrait
 {
-    /**
-     * @var CampagneSaisieForm
-     */
-    private $formCampagneSaisie;
+    protected ?CampagneSaisieForm $formCampagneSaisie = null;
 
 
 
@@ -23,7 +20,7 @@ trait CampagneSaisieFormAwareTrait
      *
      * @return self
      */
-    public function setFormCampagneSaisie(CampagneSaisieForm $formCampagneSaisie)
+    public function setFormCampagneSaisie(?CampagneSaisieForm $formCampagneSaisie)
     {
         $this->formCampagneSaisie = $formCampagneSaisie;
 
@@ -32,12 +29,7 @@ trait CampagneSaisieFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return CampagneSaisieForm
-     */
-    public function getFormCampagneSaisie()
+    public function getFormCampagneSaisie(): ?CampagneSaisieForm
     {
         if (!empty($this->formCampagneSaisie)) {
             return $this->formCampagneSaisie;

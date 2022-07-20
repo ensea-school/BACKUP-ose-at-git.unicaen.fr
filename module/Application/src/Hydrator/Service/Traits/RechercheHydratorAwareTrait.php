@@ -11,10 +11,7 @@ use Application\Hydrator\Service\RechercheHydrator;
  */
 trait RechercheHydratorAwareTrait
 {
-    /**
-     * @var RechercheHydrator
-     */
-    private $hydratorServiceRecherche;
+    protected ?RechercheHydrator $hydratorServiceRecherche = null;
 
 
 
@@ -23,7 +20,7 @@ trait RechercheHydratorAwareTrait
      *
      * @return self
      */
-    public function setHydratorServiceRecherche(RechercheHydrator $hydratorServiceRecherche)
+    public function setHydratorServiceRecherche(?RechercheHydrator $hydratorServiceRecherche)
     {
         $this->hydratorServiceRecherche = $hydratorServiceRecherche;
 
@@ -32,13 +29,10 @@ trait RechercheHydratorAwareTrait
 
 
 
-    /**
-     * @return RechercheHydrator
-     */
-    public function getHydratorServiceRecherche()
+    public function getHydratorServiceRecherche(): ?RechercheHydrator
     {
         if (empty($this->hydratorServiceRecherche)) {
-            $this->hydratorServiceRecherche = \Application::$container->get('HydratorManager')->get(RechercheHydrator::class);
+            $this->hydratorServiceRecherche = \Application::$container->get(RechercheHydrator::class);
         }
 
         return $this->hydratorServiceRecherche;

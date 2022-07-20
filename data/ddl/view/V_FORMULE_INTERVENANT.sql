@@ -15,7 +15,7 @@ FROM
   LEFT JOIN structure                    s ON s.id = i.structure_id
   LEFT JOIN modification_service_du    msd ON msd.intervenant_id = i.id AND msd.histo_destruction IS NULL
   LEFT JOIN motif_modification_service mms ON mms.id = msd.motif_id
-       JOIN statut_intervenant          si ON si.id = i.statut_id
+       JOIN statut                      si ON si.id = i.statut_id
        JOIN type_intervenant            ti ON ti.id = si.type_intervenant_id
 WHERE
   i.id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, i.id )

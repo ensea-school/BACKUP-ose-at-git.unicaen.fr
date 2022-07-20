@@ -2,17 +2,15 @@
 
 namespace Indicateur\Service;
 
+
 /**
- * Description of NotificationIndicateurAwareTrait
+ * Description of NotificationIndicateurServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait NotificationIndicateurServiceAwareTrait
 {
-    /**
-     * @var NotificationIndicateurService
-     */
-    private $serviceNotificationIndicateur;
+    protected ?NotificationIndicateurService $serviceNotificationIndicateur = null;
 
 
 
@@ -21,7 +19,7 @@ trait NotificationIndicateurServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceNotificationIndicateur(NotificationIndicateurService $serviceNotificationIndicateur)
+    public function setServiceNotificationIndicateur(?NotificationIndicateurService $serviceNotificationIndicateur)
     {
         $this->serviceNotificationIndicateur = $serviceNotificationIndicateur;
 
@@ -30,10 +28,7 @@ trait NotificationIndicateurServiceAwareTrait
 
 
 
-    /**
-     * @return NotificationIndicateurService
-     */
-    public function getServiceNotificationIndicateur()
+    public function getServiceNotificationIndicateur(): ?NotificationIndicateurService
     {
         if (empty($this->serviceNotificationIndicateur)) {
             $this->serviceNotificationIndicateur = \Application::$container->get(NotificationIndicateurService::class);

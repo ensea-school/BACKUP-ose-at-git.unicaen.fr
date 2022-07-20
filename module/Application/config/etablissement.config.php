@@ -2,6 +2,9 @@
 
 namespace Application;
 
+use UnicaenAuth\Guard\PrivilegeController;
+use Application\Provider\Privilege\Privileges;
+
 return [
     'router'          => [
         'routes' => [
@@ -10,8 +13,8 @@ return [
                 'options'       => [
                     'route'    => '/etablissement',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Etablissement',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Etablissement',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -37,18 +40,25 @@ return [
                             ],
                         ],
                     ],
-                    'default'   => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:action[/:id]',
-                            'constraints' => [
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'index',
+                    'saisie'    => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'    => '/saisie[/:etablissement]',
+                            'defaults' => [
+                                'action' => 'saisie',
                             ],
                         ],
+                        'may_terminate' => true,
+                    ],
+                    'supprimer' => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'    => '/supprimer/:etablissement',
+                            'defaults' => [
+                                'action' => 'supprimer',
+                            ],
+                        ],
+                        'may_terminate' => true,
                     ],
                 ],
             ],
@@ -59,14 +69,32 @@ return [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Etablissement',
-                    'action'     => ['index', 'choisir', 'recherche', 'voir', 'apercevoir'],
+                    'action'     => ['choisir', 'recherche', 'voir', 'apercevoir',],
                     'roles'      => ['user']],
             ],
+            PrivilegeController::class      => [
+                [
+                    'controller' => 'Application\Controller\Etablissement',
+                    'action'     => ['index'],
+                    'privileges' => [Privileges::PARAMETRES_ETABLISSEMENT_VISUALISATION],
+                ],
+                [
+                    'controller' => 'Application\Controller\Etablissement',
+                    'action'     => ['saisie', 'supprimer'],
+                    'privileges' => [Privileges::PARAMETRES_ETABLISSEMENT_EDITION],
+                ],
+            ],
         ],
+
     ],
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Etablissement' => Controller\EtablissementController::class,
+        'factories' => [
+            'Application\Controller\Etablissement' => Controller\Factory\EtablissementControllerFactory::class,
+        ],
+    ],
+    'form_elements'   => [
+        'factories' => [
+            Form\Etablissement\EtablissementSaisieForm::class => Form\Etablissement\EtablissementSaisieFormFactory::class,
         ],
     ],
     'service_manager' => [

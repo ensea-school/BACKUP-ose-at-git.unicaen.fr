@@ -1,7 +1,7 @@
 <?php
 /**
- * @var \Application\Entity\Db\Intervenant        $intervenant
- * @var \ExportRh\Entity\IntervenantRh            $intervenantRh
+ * @var \Application\Entity\Db\Intervenant $intervenant
+ * @var \ExportRh\Entity\IntervenantRh $intervenantRh
  * @var \Application\Entity\Db\IntervenantDossier $intervenantDossier
  * @var                                           $this \Application\View\Renderer\PhpRenderer
  *
@@ -22,6 +22,13 @@
             </tr>
             </thead>
             <tbody>
+            <tr>
+                <td>
+                    <?= $this->formCheckbox($generiqueFieldset->get('civilite')); ?>
+                    <?= $this->formLabel($generiqueFieldset->get('civilite')) ?> :
+                </td>
+                <td><?= $intervenantDossier->getCivilite()->getLibelleCourt() ?></td>
+            </tr>
             <tr>
                 <td>
                     <?= $this->formCheckbox($generiqueFieldset->get('nomUsuel')); ?>

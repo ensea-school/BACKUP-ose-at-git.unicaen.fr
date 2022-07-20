@@ -11,31 +11,25 @@ use Application\Entity\Db\WfDepBloquante;
  */
 trait WfDepBloquanteAwareTrait
 {
-    /**
-     * @var WfDepBloquante
-     */
-    private $wfDepBloquante;
-
-
+    protected ?WfDepBloquante $wfDepBloquante = null;
 
 
 
     /**
      * @param WfDepBloquante $wfDepBloquante
+     *
      * @return self
      */
-    public function setWfDepBloquante( WfDepBloquante $wfDepBloquante = null )
+    public function setWfDepBloquante( ?WfDepBloquante $wfDepBloquante )
     {
         $this->wfDepBloquante = $wfDepBloquante;
+
         return $this;
     }
 
 
 
-    /**
-     * @return WfDepBloquante
-     */
-    public function getWfDepBloquante()
+    public function getWfDepBloquante(): ?WfDepBloquante
     {
         return $this->wfDepBloquante;
     }

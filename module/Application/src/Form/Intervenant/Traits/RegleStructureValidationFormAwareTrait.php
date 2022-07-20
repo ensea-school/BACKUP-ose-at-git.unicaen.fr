@@ -11,35 +11,28 @@ use Application\Form\Intervenant\RegleStructureValidationForm;
  */
 trait RegleStructureValidationFormAwareTrait
 {
-    /**
-     * @var RegleStructureValidationForm
-     */
-    private $formRegleStructureValidationSaisie;
+    protected ?RegleStructureValidationForm $formIntervenantRegleStructureValidation = null;
 
 
 
     /**
-     * @param RegleStructureValidationForm $formRegleStructureValidationSaisie
+     * @param RegleStructureValidationForm $formIntervenantRegleStructureValidation
      *
      * @return self
      */
-    public function setFormRegleStructureValidationSaisie(RegleStructureValidationForm $formRegleStructureValidationSaisie)
+    public function setFormIntervenantRegleStructureValidation(?RegleStructureValidationForm $formIntervenantRegleStructureValidation)
     {
-        $this->formRegleStructureValidationSaisie = $formRegleStructureValidationSaisie;
+        $this->formIntervenantRegleStructureValidation = $formIntervenantRegleStructureValidation;
 
         return $this;
     }
 
 
 
-    /**
-     *
-     * @return RegleStructureValidationForm
-     */
-    public function getFormRegleStructureValidationSaisie()
+    public function getFormIntervenantRegleStructureValidation(): ?RegleStructureValidationForm
     {
-        if (!empty($this->formRegleStructureValidationSaisie)) {
-            return $this->formRegleStructureValidationSaisie;
+        if (!empty($this->formIntervenantRegleStructureValidation)) {
+            return $this->formIntervenantRegleStructureValidation;
         }
 
         return \Application::$container->get('FormElementManager')->get(RegleStructureValidationForm::class);

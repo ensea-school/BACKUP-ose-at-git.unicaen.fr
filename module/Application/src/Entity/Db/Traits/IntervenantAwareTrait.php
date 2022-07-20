@@ -5,37 +5,31 @@ namespace Application\Entity\Db\Traits;
 use Application\Entity\Db\Intervenant;
 
 /**
- * Description of IntervenantServiceAwareTrait
+ * Description of IntervenantAwareTrait
  *
  * @author UnicaenCode
  */
 trait IntervenantAwareTrait
 {
-    /**
-     * @var Intervenant
-     */
-    private $intervenant;
-
-
+    protected ?Intervenant $intervenant = null;
 
 
 
     /**
      * @param Intervenant $intervenant
+     *
      * @return self
      */
-    public function setIntervenant( Intervenant $intervenant = null )
+    public function setIntervenant( ?Intervenant $intervenant )
     {
         $this->intervenant = $intervenant;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Intervenant
-     */
-    public function getIntervenant()
+    public function getIntervenant(): ?Intervenant
     {
         return $this->intervenant;
     }

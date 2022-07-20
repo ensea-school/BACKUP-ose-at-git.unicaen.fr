@@ -57,9 +57,6 @@ class VolumeHoraireReferentielService extends AbstractEntityService
         $entity = parent::newEntity();
         $entity->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
 
-        $canAutoValidate = $this->getAuthorize()->isAllowed($entity, Privileges::REFERENTIEL_AUTOVALIDATION);
-        if ($canAutoValidate) $entity->setAutoValidation(true);
-
         return $entity;
     }
 
@@ -81,7 +78,12 @@ class VolumeHoraireReferentielService extends AbstractEntityService
         if (!$entity->getSourceCode()) {
             $entity->setSourceCode(uniqid('ose-'));
         }
-        
+
+        $typeVolumeHoraire = $entity->getTypeVolumeHoraire();
+        $canAutoValidate   = $this->getAuthorize()->isAllowed($entity, $typeVolumeHoraire->getPrivilegeReferentielAutoValidation());
+
+        if ($canAutoValidate) $entity->setAutoValidation(true);
+
         return parent::save($entity);
     }
 

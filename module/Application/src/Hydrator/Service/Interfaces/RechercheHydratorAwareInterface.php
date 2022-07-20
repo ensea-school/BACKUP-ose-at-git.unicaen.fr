@@ -12,15 +12,13 @@ use Application\Hydrator\Service\RechercheHydrator;
 interface RechercheHydratorAwareInterface
 {
     /**
-     * @param RechercheHydrator $hydratorServiceRecherche
+     * @param RechercheHydrator|null $hydratorServiceRecherche
+     *
      * @return self
      */
-    public function setHydratorServiceRecherche( RechercheHydrator $hydratorServiceRecherche = null );
+    public function setHydratorServiceRecherche( ?RechercheHydrator $hydratorServiceRecherche );
 
 
 
-    /**
-     * @return RechercheHydrator
-     */
-    public function getHydratorServiceRecherche();
+    public function getHydratorServiceRecherche(): ?RechercheHydrator;
 }

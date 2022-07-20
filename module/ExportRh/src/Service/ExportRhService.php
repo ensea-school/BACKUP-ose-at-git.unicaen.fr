@@ -27,26 +27,24 @@ class ExportRhService extends AbstractService
     /**
      * @var IntervenantRHExportParams
      */
-    private   $intervenantEportParams;
+    private $intervenantEportParams;
 
     protected $connecteur;
 
     protected $config;
 
 
-
     public function __construct($connecteur, $config)
     {
         $this->connecteur = $connecteur;
-        $this->config     = $config;
+        $this->config = $config;
     }
-
 
 
     public function getListIntervenantRh($nomUsuel, $prenom, $insee)
     {
 
-        $listIntervenantRh  = $this->connecteur->rechercherIntervenantRH($nomUsuel, $prenom, $insee);
+        $listIntervenantRh = $this->connecteur->rechercherIntervenantRH($nomUsuel, $prenom, $insee);
         $intervenantService = $this->getServiceIntervenant();
         if (!empty($listIntervenantRh)) {
             foreach ($listIntervenantRh as $key => $intervenantRh) {
@@ -62,7 +60,6 @@ class ExportRhService extends AbstractService
     }
 
 
-
     public function getIntervenantRh($intervenant)
     {
         $intervenantRh = $this->connecteur->recupererIntervenantRh($intervenant);
@@ -71,14 +68,12 @@ class ExportRhService extends AbstractService
     }
 
 
-
     public function getDonneesAdministrativeIntervenantRh($intervenant)
     {
         $donneesAdministratives = $this->connecteur->recupererDonneesAdministrativesIntervenantRh($intervenant);
 
         return $donneesAdministratives;
     }
-
 
 
     public function getAffectationEnCoursIntervenantRh($intervenant)
@@ -90,7 +85,6 @@ class ExportRhService extends AbstractService
     }
 
 
-
     public function getContratEnCoursIntervenantRh($intervenant)
     {
         $contrat = $this->connecteur->recupererContratEnCoursIntervenantRh($intervenant);
@@ -99,12 +93,10 @@ class ExportRhService extends AbstractService
     }
 
 
-
     public function getListeUO()
     {
         return $this->connecteur->recupererListeUO();
     }
-
 
 
     public function getListePositions()
@@ -113,12 +105,10 @@ class ExportRhService extends AbstractService
     }
 
 
-
     public function getListeEmplois()
     {
         return $this->connecteur->recupererListeEmplois();
     }
-
 
 
     public function getListeStatuts()
@@ -127,12 +117,10 @@ class ExportRhService extends AbstractService
     }
 
 
-
     public function getListeModalites()
     {
         return $this->connecteur->recupererListeModalites();
     }
-
 
 
     public function getListContrats()
@@ -141,12 +129,10 @@ class ExportRhService extends AbstractService
     }
 
 
-
     public function priseEnChargeIntrervenantRh(Intervenant $intervenant, $datas)
     {
         return $this->connecteur->prendreEnChargeIntervenantRh($intervenant, $datas);
     }
-
 
 
     public function renouvellementIntervenantRh(Intervenant $intervenant, $datas)
@@ -155,12 +141,10 @@ class ExportRhService extends AbstractService
     }
 
 
-
     public function synchroniserDonneesPersonnellesIntervenantRh(Intervenant $intervenant, $datas)
     {
         return $this->connecteur->synchroniserDonneesPersonnellesIntervenantRh($intervenant, $datas);
     }
-
 
 
     public function cloreDossier(Intervenant $intervenant)
@@ -169,12 +153,10 @@ class ExportRhService extends AbstractService
     }
 
 
-
     public function getFieldsetConnecteur(): Fieldset
     {
         return $this->connecteur->recupererFormulairePriseEnCharge();
     }
-
 
 
     public function getConnecteurName(): string
@@ -183,12 +165,10 @@ class ExportRhService extends AbstractService
     }
 
 
-
     public function getConnecteur()
     {
         return $this->connecteur;
     }
-
 
 
     public function getAnneeUniversitaireEnCours(): ?Annee
@@ -199,15 +179,26 @@ class ExportRhService extends AbstractService
     }
 
 
-
     public function getExcludeStatutOse(): array
     {
         $config = $this->config;
-        if (array_key_exists('exclude-statut-ose', $config)) {
-            return $config['exclude-statut-ose'];
+        $configUnicaenSiham = $config['unicaen-siham'];
+        if (array_key_exists('exclude-statut-ose', $configUnicaenSiham)) {
+            return $configUnicaenSiham['exclude-statut-ose'];
         }
 
         return [];
+    }
+
+    public function haveToSyncCode(): bool
+    {
+        $config = $this->config;
+        if ($config['export-rh']['sync-code'] === true) {
+            return true;
+        }
+
+        return false;
+
     }
 
 }

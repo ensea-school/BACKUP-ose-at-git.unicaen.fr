@@ -10,8 +10,8 @@ use Application\Entity\Db\RegimeSecu;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\IntervenantExterieur;
-use Application\Entity\Db\TypeIntervenant;
-use Application\Entity\Db\StatutIntervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
@@ -29,7 +29,6 @@ use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\TypeAgrement;
-use Application\Entity\Db\TypeAgrementStatut;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\Contrat;
@@ -79,7 +78,7 @@ class EntityProvider
     private $structureEns;
 
     /**
-     * @var StatutIntervenant[]
+     * @var Statut[]
      */
     private $statuts;
 
@@ -365,16 +364,16 @@ class EntityProvider
 
 
     /**
-     * Retourne à chaque appel une nouvelle instance de StatutIntervenant persistée.
+     * Retourne à chaque appel une nouvelle instance de Statut persistée.
      *
      * @param boolean $permanent
      *
-     * @return StatutIntervenant
+     * @return Statut
      */
-    public function getStatutIntervenant($permanent = true)
+    public function getStatut($permanent = true)
     {
         $typeIntervenant = $this->getTypeIntervenant($permanent);
-        $statut          = Asset::newStatutIntervenant($typeIntervenant);
+        $statut          = Asset::newStatut($typeIntervenant);
 
         $this->getEntityManager()->persist($statut);
 
@@ -386,20 +385,20 @@ class EntityProvider
 
 
     /**
-     * Recherche et retourne le StatutIntervenant correspondant au code spécifié.
+     * Recherche et retourne le Statut correspondant au code spécifié.
      *
-     * @param string $sourceCode Code "source" du statut, ex: StatutIntervenant::SALAR_PRIVE
+     * @param string $sourceCode Code "source" du statut, ex: Statut::SALAR_PRIVE
      *
-     * @return StatutIntervenant
+     * @return Statut
      */
-    public function getStatutIntervenantByCode($sourceCode)
+    public function getStatutByCode($sourceCode)
     {
         if (!$sourceCode) {
             throw new LogicException("Un code de statut intervenant est requis.");
         }
 
         if (!isset($this->statuts[$sourceCode])) {
-            $this->statuts[$sourceCode] = $this->getEntityManager()->getRepository('Application\Entity\Db\StatutIntervenant')
+            $this->statuts[$sourceCode] = $this->getEntityManager()->getRepository('Intervenant\Entity\Db\Statut')
                 ->findOneBySourceCode($sourceCode);
             if (!$this->statuts[$sourceCode]) {
                 throw new RuntimeException("Statut intervenant introuvable avec le code '$sourceCode'.");
@@ -695,12 +694,12 @@ class EntityProvider
     /**
      * Retourne à chaque appel une nouvelle instance de TypePieceJointeStatut persistée.
      *
-     * @param StatutIntervenant $statut
-     * @param TypePieceJointe   $type
+     * @param Statut          $statut
+     * @param TypePieceJointe $type
      *
      * @return TypePieceJointeStatut
      */
-    public function getTypePieceJointeStatut(StatutIntervenant $statut, TypePieceJointe $type = null)
+    public function getTypePieceJointeStatut(Statut $statut, TypePieceJointe $type = null)
     {
         $tpjs = Asset::newTypePieceJointeStatut(
             $statut,
@@ -768,29 +767,6 @@ class EntityProvider
         $this->newEntities->push($type);
 
         return $type;
-    }
-
-
-
-    /**
-     * Retourne à chaque appel une nouvelle instance de TypeAgrementStatut persistée.
-     *
-     * @param StatutIntervenant $statut
-     * @param TypeAgrement      $type
-     *
-     * @return TypeAgrementStatut
-     */
-    public function getTypeAgrementStatut(StatutIntervenant $statut, TypeAgrement $type = null)
-    {
-        $tas = Asset::newTypeAgrementStatut(
-            $statut,
-            $type ?: $this->getTypeAgrement());
-
-        $this->getEntityManager()->persist($tas);
-
-        $this->newEntities->push($tas);
-
-        return $tas;
     }
 
 

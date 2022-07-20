@@ -2,6 +2,7 @@
 
 namespace Application\Form;
 
+use Application\Entity\Db\Formule;
 use Application\Entity\Db\Parametre;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\AnneeServiceAwareTrait;
@@ -183,14 +184,12 @@ class ParametresForm extends AbstractForm
         $this->add([
             'type'       => 'Select',
             'name'       => 'formule',
-            'options'    => [
-                'value_options' => Util::collectionAsOptions($this->getServiceFormule()->getList()),
-            ],
             'attributes' => [
                 'class'            => 'selectpicker',
                 'data-live-search' => 'true',
             ],
         ]);
+        $this->setValueOptions('formule', 'SELECT f FROM ' . Formule::class . ' f WHERE f.active = true ORDER BY f.libelle');
 
         $this->add([
             'type'       => 'Select',
@@ -270,10 +269,10 @@ class ParametresForm extends AbstractForm
 
         $this->add([
             'type'       => 'Select',
-            'name'       => 'es_winpaie',
+            'name'       => 'es_extraction_paie',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
-                'label'         => 'État de sortie pour l\'extraction Winpaie',
+                'label'         => 'État de sortie pour l\'extraction de la paie',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -490,7 +489,7 @@ class ParametresForm extends AbstractForm
 
             ],
             'attributes' => [
-                'rows' => 6,
+                'rows' => 12,
             ],
         ]);
 
@@ -563,6 +562,56 @@ class ParametresForm extends AbstractForm
             'attributes' => [
                 'value' => 'Enregistrer',
                 'class' => 'btn btn-primary',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'avenant',
+            'options'    => [
+                'label' => 'Possibilité de créer des avenants',
+
+                'value_options' => [
+                    PARAMETRE::AVENANT_AUTORISE  => 'Tous les avenants sont disponibles',
+                    PARAMETRE::AVENANT_STRUCT    => 'Un contrat ou un avenant par composante',
+                    PARAMETRE::AVENANT_DESACTIVE => 'Un contrat unique sans avenant',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'contrat_direct',
+            'options'    => [
+                'label'         => 'Étape facultative de projet de contrat',
+                'value_options' => [
+                    PARAMETRE::CONTRAT_DIRECT => 'Le contrat est créé directement sans passer par l\'étape projet',
+                    'desactive'               => 'Un projet de contrat doit être validé pour devenir un contrat',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'contrat_date',
+            'options'    => [
+                'label'         => 'Possibilité de saisir la date de retour signé sans ajouté le contrat',
+                'value_options' => [
+                    PARAMETRE::CONTRAT_DATE => 'La saisie est possible sans contrat',
+                    'desactive'             => 'Le contrat est nécessaire pour pouvoir saisir',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+                'data-size' => 20,
             ],
         ]);
     }

@@ -2,8 +2,13 @@
 
 namespace Plafond\Form;
 
+use Application\Entity\Db\FonctionReferentiel;
+use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
+use Intervenant\Entity\Db\Statut;
 use Laminas\Form\Element;
+use Laminas\Http\Request;
+use Plafond\Entity\Db\Plafond;
 use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Interfaces\PlafondConfigInterface;
 use Plafond\Service\PlafondServiceAwareTrait;
@@ -13,7 +18,7 @@ use UnicaenApp\Util;
 /**
  * Description of PlafondConfigForm
  *
- * @author UnicaenCode
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class PlafondConfigForm extends AbstractForm
 {
@@ -43,14 +48,7 @@ class PlafondConfigForm extends AbstractForm
             ],
         ]);
 
-        $this->add([
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'attributes' => [
-                'value' => 'Enregistrer',
-                'class' => 'btn btn-primary',
-            ],
-        ]);
+        $this->addSubmit();
     }
 
 
@@ -102,17 +100,67 @@ class PlafondConfigForm extends AbstractForm
 
 
 
-    /**
-     * Should return an array specification compatible with
-     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
-     *
-     * @return array
-     */
-    public function getInputFilterSpecification()
+    public function requestSaveConfig(PlafondConfigInterface $plafondConfig, Request $request)
     {
-        return [
-            /* Filtres et validateurs */
-        ];
+        /** @var Plafond $plafond */
+        $plafondId = $request->getPost('plafond');
+        $name      = $request->getPost('name');
+        $value     = $request->getPost('value');
+
+        switch ($name) {
+            case 'plafondEtatPrevu':
+                $plafondConfig->setEtatPrevu($this->getEntityManager()->find(PlafondEtat::class, $value));
+            break;
+            case 'plafondEtatRealise':
+                $plafondConfig->setEtatRealise($this->getEntityManager()->find(PlafondEtat::class, $value));
+            break;
+            case 'heures':
+                $plafondConfig->setHeures(stringToFloat($value));
+            break;
+        }
+        $this->getServicePlafond()->saveConfig($plafondConfig);
+    }
+
+
+
+    /**
+     * @param PlafondConfigInterface[] $plafondConfigs
+     * @param Request                  $request
+     *
+     * @return void
+     */
+    public function requestSaveConfigs(Statut|Structure|FonctionReferentiel $entity, Request $request)
+    {
+        $heures      = $request->getPost('heures', []);
+        $etatPrevu   = $request->getPost('plafondEtatPrevu', []);
+        $etatRealise = $request->getPost('plafondEtatRealise', []);
+
+        $plafondConfigs = $this->getServicePlafond()->getPlafondsConfig($entity);
+
+        foreach ($plafondConfigs as $plafondConfig) {
+            if (isset($heures[$plafondConfig->getPlafond()->getId()])) {
+                $v = stringToFloat($heures[$plafondConfig->getPlafond()->getId()]);
+                $plafondConfig->setHeures($v ?? 0);
+            }
+
+            if (isset($etatPrevu[$plafondConfig->getPlafond()->getId()])) {
+                $v = (int)$etatPrevu[$plafondConfig->getPlafond()->getId()];
+                if ($v != $plafondConfig->getEtatPrevu()?->getId()) {
+                    $v = $this->getEntityManager()->find(PlafondEtat::class, $v);
+                    $plafondConfig->setEtatPrevu($v);
+                }
+            }
+
+            if (isset($etatRealise[$plafondConfig->getPlafond()->getId()])) {
+                $v = (int)$etatRealise[$plafondConfig->getPlafond()->getId()];
+                if ($v != $plafondConfig->getEtatRealise()?->getId()) {
+                    $v = $this->getEntityManager()->find(PlafondEtat::class, $v);
+                    $plafondConfig->setEtatRealise($v);
+                }
+            }
+
+            $this->getServicePlafond()->saveConfig($plafondConfig);
+        }
     }
 
 }

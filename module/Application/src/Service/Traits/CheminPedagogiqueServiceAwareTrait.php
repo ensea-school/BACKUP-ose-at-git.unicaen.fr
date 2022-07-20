@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\CheminPedagogiqueService;
 
 /**
- * Description of CheminPedagogiqueAwareTrait
+ * Description of CheminPedagogiqueServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait CheminPedagogiqueServiceAwareTrait
 {
-    /**
-     * @var CheminPedagogiqueService
-     */
-    private $serviceCheminPedagogique;
+    protected ?CheminPedagogiqueService $serviceCheminPedagogique = null;
 
 
 
@@ -23,7 +20,7 @@ trait CheminPedagogiqueServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceCheminPedagogique(CheminPedagogiqueService $serviceCheminPedagogique)
+    public function setServiceCheminPedagogique(?CheminPedagogiqueService $serviceCheminPedagogique)
     {
         $this->serviceCheminPedagogique = $serviceCheminPedagogique;
 
@@ -32,10 +29,7 @@ trait CheminPedagogiqueServiceAwareTrait
 
 
 
-    /**
-     * @return CheminPedagogiqueService
-     */
-    public function getServiceCheminPedagogique()
+    public function getServiceCheminPedagogique(): ?CheminPedagogiqueService
     {
         if (empty($this->serviceCheminPedagogique)) {
             $this->serviceCheminPedagogique = \Application::$container->get(CheminPedagogiqueService::class);

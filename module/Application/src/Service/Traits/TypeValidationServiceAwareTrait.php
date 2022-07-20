@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\TypeValidationService;
 
 /**
- * Description of TypeValidationAwareTrait
+ * Description of TypeValidationServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait TypeValidationServiceAwareTrait
 {
-    /**
-     * @var TypeValidationService
-     */
-    private $serviceTypeValidation;
+    protected ?TypeValidationService $serviceTypeValidation = null;
 
 
 
@@ -23,7 +20,7 @@ trait TypeValidationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeValidation(TypeValidationService $serviceTypeValidation)
+    public function setServiceTypeValidation(?TypeValidationService $serviceTypeValidation)
     {
         $this->serviceTypeValidation = $serviceTypeValidation;
 
@@ -32,10 +29,7 @@ trait TypeValidationServiceAwareTrait
 
 
 
-    /**
-     * @return TypeValidationService
-     */
-    public function getServiceTypeValidation()
+    public function getServiceTypeValidation(): ?TypeValidationService
     {
         if (empty($this->serviceTypeValidation)) {
             $this->serviceTypeValidation = \Application::$container->get(TypeValidationService::class);

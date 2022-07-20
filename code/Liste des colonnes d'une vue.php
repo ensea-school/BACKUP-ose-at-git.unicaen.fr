@@ -22,10 +22,7 @@ class Lcv
 {
     use EntityManagerAwareTrait;
 
-    /**
-     * @var string
-     */
-    protected $view;
+    protected ?string $view;
 
 
 
@@ -36,22 +33,14 @@ class Lcv
 
 
 
-    /**
-     * @return string
-     */
-    public function getView()
+    public function getView(): ?string
     {
         return $this->view;
     }
 
 
 
-    /**
-     * @param string $view
-     *
-     * @return Lcv
-     */
-    public function setView($view)
+    public function setView(string $view): Lcv
     {
         $this->view = $view;
 
@@ -63,7 +52,7 @@ class Lcv
     public function getViewDefinition()
     {
         $sql    = "SELECT TEXT FROM USER_VIEWS WHERE VIEW_NAME = '" . strtoupper($this->getView()) . "'";
-        $result = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 
         return $result[0]['TEXT'];
     }
@@ -74,7 +63,7 @@ class Lcv
     {
         $sql = "SELECT referenced_name FROM user_dependencies WHERE name = '" . strtoupper($this->getView()) . "'";
 
-        $result = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         $tables = [];
 
         foreach ($result as $r) {

@@ -11,10 +11,7 @@ use Application\Form\Intervenant\EditionForm;
  */
 trait EditionFormAwareTrait
 {
-    /**
-     * @var EditionForm
-     */
-    private $formIntervenantEdition;
+    protected ?EditionForm $formIntervenantEdition = null;
 
 
 
@@ -23,7 +20,7 @@ trait EditionFormAwareTrait
      *
      * @return self
      */
-    public function setFormIntervenantEdition(EditionForm $formIntervenantEdition)
+    public function setFormIntervenantEdition(?EditionForm $formIntervenantEdition)
     {
         $this->formIntervenantEdition = $formIntervenantEdition;
 
@@ -32,12 +29,7 @@ trait EditionFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return EditionForm
-     */
-    public function getFormIntervenantEdition()
+    public function getFormIntervenantEdition(): ?EditionForm
     {
         if (!empty($this->formIntervenantEdition)) {
             return $this->formIntervenantEdition;

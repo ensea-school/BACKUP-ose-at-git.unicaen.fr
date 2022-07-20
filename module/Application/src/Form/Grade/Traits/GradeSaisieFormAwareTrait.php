@@ -2,42 +2,39 @@
 
 namespace Application\Form\Grade\Traits;
 
-
 use Application\Form\Grade\GradeSaisieForm;
 
 /**
  * Description of GradeSaisieFormAwareTrait
+ *
+ * @author UnicaenCode
  */
 trait GradeSaisieFormAwareTrait
 {
-    /**
-     * @var VoirieGradeForm
-     */
-    private $formGradeSaisie;
+    protected ?GradeSaisieForm $formGradeGradeSaisie = null;
 
 
 
     /**
-     * @param GradeSaisieForm $formGradeSaisie
+     * @param GradeSaisieForm $formGradeGradeSaisie
      *
      * @return self
      */
-    public function setFormGradeSaisie(VoirieSaisieForm $formGradeSaisie)
+    public function setFormGradeGradeSaisie(?GradeSaisieForm $formGradeGradeSaisie)
     {
-        $this->formGradeSaisie = $formGradeSaisie;
+        $this->formGradeGradeSaisie = $formGradeGradeSaisie;
 
         return $this;
     }
 
 
 
-    public function getFormGradeSaisie()
+    public function getFormGradeGradeSaisie(): ?GradeSaisieForm
     {
-        if (!empty($this->formGradeSaisie)) {
-            return $this->formGradeSaisie;
+        if (!empty($this->formGradeGradeSaisie)) {
+            return $this->formGradeGradeSaisie;
         }
 
         return \Application::$container->get('FormElementManager')->get(GradeSaisieForm::class);
     }
 }
-

@@ -3,7 +3,6 @@
 namespace Application\Form\Service\Interfaces;
 
 use Application\Form\Service\RechercheForm;
-use RuntimeException;
 
 /**
  * Description of RechercheFormAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface RechercheFormAwareInterface
 {
     /**
-     * @param RechercheForm $formServiceRecherche
+     * @param RechercheForm|null $formServiceRecherche
+     *
      * @return self
      */
-    public function setFormServiceRecherche( RechercheForm $formServiceRecherche );
+    public function setFormServiceRecherche( ?RechercheForm $formServiceRecherche );
 
 
 
-    /**
-     * @return RechercheFormAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormServiceRecherche();
+    public function getFormServiceRecherche(): ?RechercheForm;
 }

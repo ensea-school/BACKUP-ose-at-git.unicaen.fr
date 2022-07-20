@@ -266,7 +266,8 @@ return [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['index'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -274,8 +275,10 @@ return [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['saisie', 'suppression', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'horodatage'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_EDITION,
-                        Privileges::REFERENTIEL_EDITION,
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                        Privileges::REFERENTIEL_PREVU_EDITION,
+                        Privileges::REFERENTIEL_REALISE_EDITION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -291,7 +294,8 @@ return [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['validation'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -299,7 +303,8 @@ return [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['valider'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_VALIDATION,
+                        Privileges::ENSEIGNEMENT_PREVU_VALIDATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VALIDATION,
                     ],
                 ],
                 [
@@ -329,7 +334,8 @@ return [
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action'     => ['index'],
                     'privileges' => [
-                        Privileges::REFERENTIEL_VISUALISATION,
+                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -337,7 +343,8 @@ return [
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action'     => ['saisie', 'suppression', 'rafraichir-ligne', 'initialisation', 'constatation'],
                     'privileges' => [
-                        Privileges::REFERENTIEL_EDITION,
+                        Privileges::REFERENTIEL_PREVU_EDITION,
+                        Privileges::REFERENTIEL_REALISE_EDITION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -345,7 +352,8 @@ return [
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action'     => ['validation'],
                     'privileges' => [
-                        Privileges::REFERENTIEL_VISUALISATION,
+                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -353,7 +361,8 @@ return [
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action'     => ['valider'],
                     'privileges' => [
-                        Privileges::REFERENTIEL_VALIDATION,
+                        Privileges::REFERENTIEL_PREVU_VALIDATION,
+                        Privileges::REFERENTIEL_REALISE_VALIDATION,
                     ],
                 ],
                 [
@@ -369,16 +378,20 @@ return [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['resume-refresh'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_EDITION,
-                        Privileges::REFERENTIEL_EDITION,
+                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
+                        Privileges::REFERENTIEL_PREVU_EDITION,
+                        Privileges::REFERENTIEL_REALISE_EDITION,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['resume', 'recherche'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_VISUALISATION,
-                        Privileges::REFERENTIEL_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -406,16 +419,20 @@ return [
                     /* Enseignements */
                     [
                         'privileges' => [
-                            Privileges::ENSEIGNEMENT_VISUALISATION,
-                            Privileges::ENSEIGNEMENT_EDITION,
+                            Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                            Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                            Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                            Privileges::ENSEIGNEMENT_REALISE_EDITION,
                         ],
                         'resources'  => ['Service', 'Intervenant'],
                         'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                     [
                         'privileges' => [
-                            Privileges::ENSEIGNEMENT_VALIDATION,
-                            Privileges::ENSEIGNEMENT_AUTOVALIDATION,
+                            Privileges::ENSEIGNEMENT_PREVU_VALIDATION,
+                            Privileges::ENSEIGNEMENT_REALISE_VALIDATION,
+                            Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
+                            Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
                         ],
                         'resources'  => ['Service', 'VolumeHoraire', 'Validation'],
                         'assertion'  => Assertion\ServiceAssertion::class,
@@ -444,16 +461,20 @@ return [
                     /* Référentiel */
                     [
                         'privileges' => [
-                            Privileges::REFERENTIEL_VISUALISATION,
-                            Privileges::REFERENTIEL_EDITION,
+                            Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                            Privileges::REFERENTIEL_PREVU_EDITION,
+                            Privileges::REFERENTIEL_REALISE_VISUALISATION,
+                            Privileges::REFERENTIEL_REALISE_EDITION,
                         ],
                         'resources'  => ['ServiceReferentiel', 'Intervenant'],
                         'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                     [
                         'privileges' => [
-                            Privileges::REFERENTIEL_VALIDATION,
-                            Privileges::REFERENTIEL_AUTOVALIDATION,
+                            Privileges::REFERENTIEL_PREVU_VALIDATION,
+                            Privileges::REFERENTIEL_REALISE_VALIDATION,
+                            Privileges::REFERENTIEL_PREVU_AUTOVALIDATION,
+                            Privileges::REFERENTIEL_REALISE_AUTOVALIDATION,
                         ],
                         'resources'  => ['ServiceReferentiel', 'VolumeHoraireReferentiel', 'Validation'],
                         'assertion'  => Assertion\ServiceAssertion::class,
@@ -484,14 +505,10 @@ return [
             Service\CampagneSaisieService::class         => Service\CampagneSaisieService::class,
             Processus\ServiceProcessus::class            => Processus\ServiceProcessus::class,
             Processus\ServiceReferentielProcessus::class => Processus\ServiceReferentielProcessus::class,
+            Hydrator\Service\RechercheHydrator::class    => Hydrator\Service\RechercheHydrator::class,
         ],
         'factories'  => [
             Assertion\ServiceAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
-        ],
-    ],
-    'hydrators'       => [
-        'invokables' => [
-            Hydrator\Service\RechercheHydrator::class => Hydrator\Service\RechercheHydrator::class,
         ],
     ],
     'form_elements'   => [

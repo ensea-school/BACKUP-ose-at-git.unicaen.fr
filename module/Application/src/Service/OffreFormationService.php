@@ -30,11 +30,9 @@ class OffreFormationService extends AbstractEntityService
     }
 
 
-
     public function getAlias()
     {
     }
-
 
 
     public function getNeep($structure, $niveau, $etape, $annee = null, $source = null)
@@ -50,14 +48,14 @@ class OffreFormationService extends AbstractEntityService
 
         if (!$structure) return [[], [], []];
 
-        $niveaux  = [];
-        $etapes   = [];
+        $niveaux = [];
+        $etapes = [];
         $elements = [];
 
-        $sql = 'SELECT
+        $dql = 'SELECT
                 partial e.{id,code,annee,libelle,sourceCode,niveau,histoDestruction},
                 partial tf.{id},
-                partial gtf.{id, libelleCourt, ordre},
+                partial gtf.{id, libelleCourt, ordre, pertinenceNiveau},
                 partial ep.{id,code,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa},
                 partial vme.{id,heures, groupes}
             FROM
@@ -71,13 +69,13 @@ class OffreFormationService extends AbstractEntityService
               (s = :structure OR ep.structure = :structure) AND e.annee = :annee ';
 
         if (!empty($source)) {
-            $sql .= 'AND e.source = :source ';
+            $dql .= 'AND e.source = :source ';
         }
 
-        $sql .= 'ORDER BY
+        $dql .= 'ORDER BY
               gtf.ordre, e.niveau';
 
-        $query = $this->getEntityManager()->createQuery($sql);
+        $query = $this->getEntityManager()->createQuery($dql);
 
         $query->setParameter('structure', $structure);
         $query->setParameter('annee', $annee);
@@ -92,9 +90,14 @@ class OffreFormationService extends AbstractEntityService
             if ($object instanceof Etape) {
                 $n = NiveauEtape::getInstanceFromEtape($object);
                 if ($object->estNonHistorise()) {
-                    $niveaux[$n->getId()] = $n;
+                    $gtf = $object->getTypeFormation()->getGroupe()->getPertinenceNiveau();
+                    if ($gtf) {
+                        $niveaux[$n->getId()] = $n;
+                    } else {
+                        $niveaux[$n->getLib()] = $n;
+                    }
                 }
-                if (!$niveau || $niveau->getId() == $n->getId()) {
+                if (!$niveau || ($niveau->getId() == $n->getId() && $n->getPertinence()) || ($niveau->getLib() == $n->getLib() && !$n->getPertinence())) {
                     if ($object->estNonHistorise() || $object->getElementPedagogique()->count() > 0) {
                         $etapes[] = $object;
                     }
@@ -122,18 +125,18 @@ class OffreFormationService extends AbstractEntityService
             return $e1Lib > $e2Lib ? 1 : 0;
         });
 
+
         return [$niveaux, $etapes, $elements];
     }
 
 
-
     public function getNeepEtape($etape)
     {
-        $niveaux  = [];
-        $etapes   = [];
+        $niveaux = [];
+        $etapes = [];
         $elements = [];
 
-        $sql = 'SELECT
+        $dql = 'SELECT
                 cp,
                 partial e.{id,code,annee,libelle,sourceCode,niveau,histoDestruction},
                 partial ep.{id,code,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa},
@@ -146,7 +149,7 @@ class OffreFormationService extends AbstractEntityService
             WHERE
               cp.etape = :etape';
 
-        $query = $this->getEntityManager()->createQuery($sql);
+        $query = $this->getEntityManager()->createQuery($dql);
 
         $query->setParameter('etape', $etape);
 
@@ -155,12 +158,12 @@ class OffreFormationService extends AbstractEntityService
             /** @var CheminPedagogique $object */
             if ($object->estHistorise()) continue;
 
-            $etape   = $object->getEtape();
+            $etape = $object->getEtape();
             $element = $object->getElementPedagogique();
 
-            $n                           = NiveauEtape::getInstanceFromEtape($etape);
-            $niveaux[$n->getId()]        = $n;
-            $etapes[$etape->getId()]     = $etape;
+            $n = NiveauEtape::getInstanceFromEtape($etape);
+            $niveaux[$n->getId()] = $n;
+            $etapes[$etape->getId()] = $etape;
             $elements[$element->getId()] = $element;
         }
 
@@ -176,7 +179,6 @@ class OffreFormationService extends AbstractEntityService
     }
 
 
-
     /**
      * @return array
      */
@@ -184,9 +186,9 @@ class OffreFormationService extends AbstractEntityService
     public function getOffreComplementaire($structure, $niveau, $etape)
     {
         $offresComplementaires = [];
-        $anneeEnCours          = $this->getServiceContext()->getAnnee();
-        $anneeSuivante         = $this->getServiceAnnee()->getSuivante($anneeEnCours);
-        $source                = $this->getServiceSource()->getOse();
+        $anneeEnCours = $this->getServiceContext()->getAnnee();
+        $anneeSuivante = $this->getServiceAnnee()->getSuivante($anneeEnCours);
+        $source = $this->getServiceSource()->getOse();
 
         $this->getServiceLocalContext()
             ->setStructure($structure)
@@ -200,9 +202,9 @@ class OffreFormationService extends AbstractEntityService
         [$niveauxN1, $etapesN1, $elementsN1] = $this->getNeep($structure, $niveau, $etape, $anneeSuivante, $source);
 
         //Organisation pour traitement dans la vue
-        $codesEtapeN1          = [];
-        $codesElementN1        = [];
-        $etapesNonReconduits   = array_diff($etapes, $etapesN1);
+        $codesEtapeN1 = [];
+        $codesElementN1 = [];
+        $etapesNonReconduits = array_diff($etapes, $etapesN1);
         $elementsNonReconduits = array_diff($elements, $elementsN1);
 
         $reconductionTotale = 'non';
@@ -223,8 +225,8 @@ class OffreFormationService extends AbstractEntityService
                 continue;
             }*/
             $offresComplementaires[$v->getId()]['reconduction_partiel'] = 'non';
-            $offresComplementaires[$v->getId()]['reconduction']         = (in_array($v->getCode(), $codesEtapeN1)) ? 'oui' : 'non';
-            $offresComplementaires[$v->getId()]['etape']                = $v;
+            $offresComplementaires[$v->getId()]['reconduction'] = (in_array($v->getCode(), $codesEtapeN1)) ? 'oui' : 'non';
+            $offresComplementaires[$v->getId()]['etape'] = $v;
             $offresComplementaires[$v->getId()]['elements_pedagogique'] = [];
         }
 
@@ -241,7 +243,7 @@ class OffreFormationService extends AbstractEntityService
             }
 
             $offresComplementaires[$etapeId]['elements_pedagogique'][$v->getId()]['reconduction'] = (in_array($v->getCode(), $codesElementN1)) ? 'oui' : 'non';
-            $offresComplementaires[$etapeId]['elements_pedagogique'][$v->getId()]['element']      = $v;
+            $offresComplementaires[$etapeId]['elements_pedagogique'][$v->getId()]['element'] = $v;
         }
 
         $mappingEtape = $this->createMappingEtapeNEtapeN1($etapes, $etapesN1);
@@ -250,10 +252,9 @@ class OffreFormationService extends AbstractEntityService
     }
 
 
-
     public function createMappingEtapeNEtapeN1($etapesN, $etapesN1)
     {
-        $codesEtapeN  = [];
+        $codesEtapeN = [];
         $codesEtapeN1 = [];
         $mappingEtape = [];
 

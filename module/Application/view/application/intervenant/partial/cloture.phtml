@@ -30,41 +30,42 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
 
     <a
             href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getId()]) ?>"
-            class="pop-ajax btn-cloturer-saisie btn btn-lg btn-info"
+            class="pop-ajax btn-cloturer-saisie btn btn-lg btn-primary"
             data-title="Clôture des services réalisés"
             data-content="
             <p class='lead text-danger'><strong>Attention!</strong></p>
             <p>Confirmez-vous avoir saisi la totalité de vos services réalisés (enseignements et référentiel),
-                quelle que soit la composante d'intervention ?</p>
+                quelle que soit la composante d'intervention ?
+                Ne cliquer que lorsque le tableau de service réalisé est complet toute composante d'intervention confondue</p>
             <p>Cliquer sur &OpenCurlyDoubleQuote;Je clôture&CloseCurlyDoubleQuote; vous empêchera de revenir sur votre saisie.</p>
         "
             data-confirm="true"
-            data-confirm-button="<span class='glyphicon glyphicon-ok'></span> Je clôture mes services"
+            data-confirm-button="<span class='fas fa-check'></span> Je clôture mes services"
             data-submit-reload="true"
-    ><?= $this->translate('J\'ai terminé la saisie de la totalité de mon service réalisé') ?></a>
+    ><?= $this->translate('Je cloture la saisie de mon service réalisé') ?></a>
     <br/><br/>
 
 <?php elseif (!$isSelf && !$isCloture): ?>
 
     <a
             href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getId()]) ?>"
-            class="pop-ajax btn-cloturer-saisie btn btn-lg btn-info"
+            class="pop-ajax btn-cloturer-saisie btn btn-lg btn-primary"
             data-title="Clôture des services réalisés"
             data-content="
             <p class='lead text-danger'><strong>Attention!</strong></p>
             <p>Confirmez-vous vouloir clôturer les services réalisés de <?= $cloture->getIntervenant() ?>
-            quelle que soit la composante d'intervention ?</p>
-        "
+            quelle que soit la composante d'intervention ?
+            Ne cliquer que lorsque le tableau de service réalisé est complet toute composante d'intervention confondue</p></p>"
             data-confirm="true"
-            data-confirm-button="<span class='glyphicon glyphicon-ok'></span> Clôture des services"
+            data-confirm-button="<span class='fas fa-check'></span> Clôture des services"
             data-submit-reload="true"
-    ><?= $this->translate('L\'intervenant a terminé la saisie de la totalité de son service réalisé') ?></a>
+    ><?= $this->translate('Je clôture la saisie du service réalisé de l\'intervenant') ?></a>
     <br/><br/>
 
 <?php elseif ($isCloture && !$bottom): ?>
 
     <div class="alert alert-success">
-        <span class="glyphicon glyphicon-off pull-left" style="font-size: 48pt;margin-right:.2em"></span>
+        <i class="fas fa-power-off pull-left" style="font-size: 48pt;margin-right:.2em"></i>
         <p>La saisie du service réalisé a été clôturée par <?= $cloture->getHistoModificateur() ?>
             le <?= $cloture->getHistoModification()->format(Application\Constants::DATETIME_FORMAT) ?>.</p>
         <?php if (!$canEditAfter): ?>
@@ -88,7 +89,7 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
             <p>Êtes-vous sûr de vouloir supprimer la clôture des services réalisés ?</p>
         "
                     data-confirm="true"
-                    data-confirm-button="<span class='glyphicon glyphicon-ok'></span> Oui, supprimer la clôture"
+                    data-confirm-button="<span class='fas fa-check'></span> Oui, supprimer la clôture"
                     data-submit-reload="true"
             >Supprimer la clôture</a>
         <?php endif; ?>

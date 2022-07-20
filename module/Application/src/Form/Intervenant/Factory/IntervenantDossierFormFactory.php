@@ -17,10 +17,9 @@ class IntervenantDossierFormFactory
     protected $options;
 
 
-
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $form = new IntervenantDossierForm($options['intervenant']);
+        $form = new IntervenantDossierForm;
 
         return $form;
     }

@@ -4,7 +4,6 @@ namespace Application\Controller;
 
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
-use Application\Form\CampagneSaisieFieldset;
 use Application\Form\Traits\CampagneSaisieFormAwareTrait;
 use Application\Form\Traits\ParametresFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
@@ -12,7 +11,7 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\EtablissementServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 
@@ -90,7 +89,7 @@ class ParametreController extends AbstractController
                 $form->bind($campagne);
                 $forms[$ti->getId()][$tvh->getId()] = $form;
 
-                if ($canEdit && $ti == $typeIntervenant && $tvh == $typeVolumeHoraire) {
+                if ($canEdit && $ti->getId() == $typeIntervenant && $tvh == $typeVolumeHoraire) {
                     $form->requestSave($this->getRequest(), function () use ($campagne) {
                         if (!$campagne->getDateDebut() && !$campagne->getDateFin() && !$campagne->getMessageIntervenant() && !$campagne->getMessageAutres()) {
                             $this->getServiceCampagneSaisie()->delete($campagne);

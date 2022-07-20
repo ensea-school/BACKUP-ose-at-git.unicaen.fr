@@ -4,6 +4,7 @@ namespace Application\Controller\OffreFormation\Factory;
 
 use Application\Controller\OffreFormation\ElementPedagogiqueController;
 use Psr\Container\ContainerInterface;
+use UnicaenImport\Service\SchemaService;
 
 
 /**
@@ -16,7 +17,9 @@ class ElementPedagogiqueControllerFactory
 
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $controller = new ElementPedagogiqueController;
+        $renderer   = $container->get('ViewRenderer');
+        $controller = new ElementPedagogiqueController($renderer);
+        $controller->setServiceSchema($container->get(SchemaService::class));
 
         return $controller;
     }

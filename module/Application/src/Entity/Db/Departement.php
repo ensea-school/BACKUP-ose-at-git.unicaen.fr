@@ -16,19 +16,19 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
     use ImportAwareTrait;
 
     /**
-     * @var int|null
+     * @var int
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
      * @var string|null
      */
-    protected $code;
+    protected ?string $code = null;
 
     /**
      * @var string|null
      */
-    protected $libelle;
+    protected ?string $libelle = null;
 
 
 
@@ -44,14 +44,10 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
 
     /**
      * @param int|null $id
-     *
-     * @return Departement
      */
-    public function setId(?int $id): Departement
+    public function setId(?int $id): void
     {
         $this->id = $id;
-
-        return $this;
     }
 
 
@@ -68,14 +64,10 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
 
     /**
      * @param string|null $code
-     *
-     * @return Departement
      */
-    public function setCode(?string $code): Departement
+    public function setCode(?string $code): void
     {
         $this->code = $code;
-
-        return $this;
     }
 
 
@@ -92,14 +84,10 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
 
     /**
      * @param string|null $libelle
-     *
-     * @return Departement
      */
-    public function setLibelle(?string $libelle): Departement
+    public function setLibelle(?string $libelle): void
     {
         $this->libelle = $libelle;
-
-        return $this;
     }
 
 

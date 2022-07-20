@@ -11,10 +11,7 @@ use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset;
  */
 trait ElementCentreCoutFieldsetAwareTrait
 {
-    /**
-     * @var ElementCentreCoutFieldset
-     */
-    private $fieldsetOffreFormationEtapeCentreCoutElementCentreCout;
+    protected ?ElementCentreCoutFieldset $fieldsetOffreFormationEtapeCentreCoutElementCentreCout = null;
 
 
 
@@ -23,7 +20,7 @@ trait ElementCentreCoutFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetOffreFormationEtapeCentreCoutElementCentreCout(ElementCentreCoutFieldset $fieldsetOffreFormationEtapeCentreCoutElementCentreCout)
+    public function setFieldsetOffreFormationEtapeCentreCoutElementCentreCout(?ElementCentreCoutFieldset $fieldsetOffreFormationEtapeCentreCoutElementCentreCout)
     {
         $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout = $fieldsetOffreFormationEtapeCentreCoutElementCentreCout;
 
@@ -32,12 +29,7 @@ trait ElementCentreCoutFieldsetAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ElementCentreCoutFieldset
-     */
-    public function getFieldsetOffreFormationEtapeCentreCoutElementCentreCout()
+    public function getFieldsetOffreFormationEtapeCentreCoutElementCentreCout(): ?ElementCentreCoutFieldset
     {
         if (!empty($this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout)) {
             return $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout;

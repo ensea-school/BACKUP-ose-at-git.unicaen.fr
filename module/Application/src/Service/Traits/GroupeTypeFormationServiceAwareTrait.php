@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\GroupeTypeFormationService;
 
 /**
- * Description of GroupeTypeFormationAwareTrait
+ * Description of GroupeTypeFormationServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait GroupeTypeFormationServiceAwareTrait
 {
-    /**
-     * @var GroupeTypeFormationService
-     */
-    private $serviceGroupeTypeFormation;
+    protected ?GroupeTypeFormationService $serviceGroupeTypeFormation = null;
 
 
 
@@ -23,7 +20,7 @@ trait GroupeTypeFormationServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceGroupeTypeFormation(GroupeTypeFormationService $serviceGroupeTypeFormation)
+    public function setServiceGroupeTypeFormation(?GroupeTypeFormationService $serviceGroupeTypeFormation)
     {
         $this->serviceGroupeTypeFormation = $serviceGroupeTypeFormation;
 
@@ -32,10 +29,7 @@ trait GroupeTypeFormationServiceAwareTrait
 
 
 
-    /**
-     * @return GroupeTypeFormationService
-     */
-    public function getServiceGroupeTypeFormation()
+    public function getServiceGroupeTypeFormation(): ?GroupeTypeFormationService
     {
         if (empty($this->serviceGroupeTypeFormation)) {
             $this->serviceGroupeTypeFormation = \Application::$container->get(GroupeTypeFormationService::class);

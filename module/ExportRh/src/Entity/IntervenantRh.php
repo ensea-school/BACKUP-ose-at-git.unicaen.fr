@@ -9,7 +9,7 @@ use Application\Entity\Db\Discipline;
 use Application\Entity\Db\Grade;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Pays;
-use Application\Entity\Db\StatutIntervenant;
+use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Voirie;
 
@@ -23,7 +23,7 @@ class IntervenantRh
 
     public ?Structure          $structure;
 
-    public StatutIntervenant   $statut;
+    public Statut              $statut;
 
     public ?Grade              $grade;
 
@@ -246,9 +246,9 @@ class IntervenantRh
 
 
     /**
-     * @return StatutIntervenant
+     * @return Statut
      */
-    public function getStatut(): StatutIntervenant
+    public function getStatut(): Statut
     {
         return $this->statut;
     }
@@ -256,11 +256,11 @@ class IntervenantRh
 
 
     /**
-     * @param StatutIntervenant $statut
+     * @param Statut $statut
      *
      * @return IntervenantRH
      */
-    public function setStatut(StatutIntervenant $statut): IntervenantRH
+    public function setStatut(Statut $statut): IntervenantRH
     {
         $this->statut = $statut;
 

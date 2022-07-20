@@ -11,10 +11,7 @@ use Application\Form\Agrement\Saisie;
  */
 trait SaisieAwareTrait
 {
-    /**
-     * @var Saisie
-     */
-    private $formAgrementSaisie;
+    protected ?Saisie $formAgrementSaisie = null;
 
 
 
@@ -23,7 +20,7 @@ trait SaisieAwareTrait
      *
      * @return self
      */
-    public function setFormAgrementSaisie(Saisie $formAgrementSaisie)
+    public function setFormAgrementSaisie(?Saisie $formAgrementSaisie)
     {
         $this->formAgrementSaisie = $formAgrementSaisie;
 
@@ -32,12 +29,7 @@ trait SaisieAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return Saisie
-     */
-    public function getFormAgrementSaisie()
+    public function getFormAgrementSaisie(): ?Saisie
     {
         if (!empty($this->formAgrementSaisie)) {
             return $this->formAgrementSaisie;

@@ -3,7 +3,6 @@
 namespace Application\Form\OffreFormation\EtapeCentreCout\Interfaces;
 
 use Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm;
-use RuntimeException;
 
 /**
  * Description of EtapeCentreCoutFormAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface EtapeCentreCoutFormAwareInterface
 {
     /**
-     * @param EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout
+     * @param EtapeCentreCoutForm|null $formOffreFormationEtapeCentreCoutEtapeCentreCout
+     *
      * @return self
      */
-    public function setFormOffreFormationEtapeCentreCoutEtapeCentreCout( EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout );
+    public function setFormOffreFormationEtapeCentreCoutEtapeCentreCout( ?EtapeCentreCoutForm $formOffreFormationEtapeCentreCoutEtapeCentreCout );
 
 
 
-    /**
-     * @return EtapeCentreCoutFormAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormOffreFormationEtapeCentreCoutEtapeCentreCout();
+    public function getFormOffreFormationEtapeCentreCoutEtapeCentreCout(): ?EtapeCentreCoutForm;
 }

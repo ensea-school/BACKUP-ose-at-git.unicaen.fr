@@ -38,7 +38,6 @@ class MigrationManager
         $this->oseAdmin = $oseAdmin;
         $this->ref      = $ref;
         $this->filtres  = DdlFilters::normalize($filters);
-        $this->old      = $oseAdmin->getBdd()->getDdl($filters);
     }
 
 
@@ -130,6 +129,20 @@ class MigrationManager
 
 
     /**
+     * Détermine si une table existe dans la base de données avant migration
+     *
+     * @param string $tableName
+     *
+     * @return bool
+     */
+    public function hasTable(string $tableName): bool
+    {
+        return isset($this->old->get(Ddl::TABLE)[$tableName]);
+    }
+
+
+
+    /**
      * Détermine si une colonne existe dans la base de données avant migration
      *
      * @param string $tableName
@@ -180,7 +193,7 @@ class MigrationManager
 
 
 
-    protected function tableRealExists($tableName): bool
+    public function tableRealExists($tableName): bool
     {
         $sql = "SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME = :tableName";
         $tn  = $this->getBdd()->select($sql, compact('tableName'), ['fetch' => Bdd::FETCH_ONE]);
@@ -245,11 +258,16 @@ class MigrationManager
         if (
             $migration
             && $migration instanceof AbstractMigration
-            && ($contexte == $migration->getContexte() || AbstractMigration::CONTEXTE_ALL == $migration->getContexte())
+            && (method_exists($migration, $contexte))
         ) {
-            $console->print("[$contexte MIGRATION] " . $migration->description() . ' ... ');
+            $traducs     = [
+                'before' => 'AVANT',
+                'after'  => 'APRES',
+            ];
+            $contexteLib = $traducs[$contexte] ?? $contexte;
+            $console->print("[$contexteLib MIGRATION] " . $migration->description() . ' ... ');
             try {
-                $migration->action($contexte);
+                $migration->$contexte();
                 $console->println('OK', $console::COLOR_GREEN);
             } catch (\Throwable $e) {
                 $console->println('Erreur : ' . $e->getMessage(), $console::COLOR_RED);
@@ -270,10 +288,14 @@ class MigrationManager
 
     public function migration(string $context = 'pre', string $action = null)
     {
+        if (!$this->old) {
+            $this->old = $this->oseAdmin->getBdd()->getDdl($this->filters);
+        }
+
         if (!is_dir($this->getMigrationDir())) return;
         $files = scandir($this->getMigrationDir());
         sort($files);
-        
+
         foreach ($files as $i => $file) {
             if ($file == '.' || $file == '..') {
                 continue;

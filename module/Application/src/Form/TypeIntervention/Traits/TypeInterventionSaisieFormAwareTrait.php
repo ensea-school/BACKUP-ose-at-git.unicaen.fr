@@ -11,36 +11,28 @@ use Application\Form\TypeIntervention\TypeInterventionSaisieForm;
  */
 trait TypeInterventionSaisieFormAwareTrait
 {
-    /**
-     * @var TypeInterventionSaisieForm
-     */
-    private $formTypeInterventionSaisie;
+    protected ?TypeInterventionSaisieForm $formTypeInterventionTypeInterventionSaisie = null;
 
 
 
     /**
-     * @param TypeInterventionSaisieForm $formTypeInterventionSaisie
+     * @param TypeInterventionSaisieForm $formTypeInterventionTypeInterventionSaisie
      *
      * @return self
      */
-    public function setFormTypeInterventionSaisie(TypeInterventionSaisieForm $formTypeInterventionSaisie)
+    public function setFormTypeInterventionTypeInterventionSaisie(?TypeInterventionSaisieForm $formTypeInterventionTypeInterventionSaisie)
     {
-        $this->formTypeInterventionSaisie = $formTypeInterventionSaisie;
+        $this->formTypeInterventionTypeInterventionSaisie = $formTypeInterventionTypeInterventionSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return TypeInterventionSaisieForm
-     */
-    public function getFormTypeInterventionSaisie()
+    public function getFormTypeInterventionTypeInterventionSaisie(): ?TypeInterventionSaisieForm
     {
-        if (!empty($this->formTypeInterventionSaisie)) {
-            return $this->formTypeInterventionSaisie;
+        if (!empty($this->formTypeInterventionTypeInterventionSaisie)) {
+            return $this->formTypeInterventionTypeInterventionSaisie;
         }
 
         return \Application::$container->get('FormElementManager')->get(TypeInterventionSaisieForm::class);

@@ -68,13 +68,29 @@ class IndexController extends AbstractController
                 $intervenant = $this->getServiceIntervenant()->getByCode($role->getIntervenant()->getCode());
                 if ($intervenant) {
                     //Correction mauvais refresh du role lors du changement d'année
-                    // $this->serviceUserContext->setSelectedIdentityRole($intervenant->getStatut()->getRoleId());
-                    $this->serviceUserContext->setNextSelectedIdentityRole($intervenant->getStatut()->getRoleId());
+                    $this->serviceUserContext->setSelectedIdentityRole($intervenant->getStatut()->getRoleId());
+                    //$this->serviceUserContext->setNextSelectedIdentityRole($intervenant->getStatut()->getRoleId());
                 }
             }
         }
 
         return [];
+    }
+
+
+
+    public function generateProxiesAction()
+    {
+        $destPath = $this->em()->getConfiguration()->getProxyDir();
+
+        if (!is_dir($destPath)) {
+            mkdir($destPath, 0775, true);
+        }
+
+        $destPath = realpath($destPath);
+
+        $metadatas = $this->em()->getMetadataFactory()->getAllMetadata();
+        $this->em()->getProxyFactory()->generateProxyClasses($metadatas, $destPath);
     }
 
 }

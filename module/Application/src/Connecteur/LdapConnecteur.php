@@ -280,36 +280,20 @@ class LdapConnecteur extends AbstractService
 
 
 
-    /**
-     * @return string
-     */
-    public function getUtilisateurCourantCode()
+    public function getUtilisateurCourantCode(): ?string
     {
         $utilisateur = $this->getUtilisateurCourant();
 
-        if ($utilisateur && $utilisateur->getCode()) return $utilisateur->getCode();
+        if (!$utilisateur) return null;
 
-        $ldapUser = $this->serviceUserContext->getLdapUser();
+        if ($utilisateur->getCode()) return $utilisateur->getCode();
 
-        if ($ldapUser) {
-            // si utilisateur_code_filtre présent : regexp pour recupérer une valeur précise d'un attribut multivalué,
-            // par exemple l'attribut étiqueté supannRefId
-            $utilisateurCodeFiltre = $this->getUtilisateurCodeFiltre();
+        if ($this->isActif()) {
+            $ldapUser = $this->mapperPeople->findOneByUsername($utilisateur->getUsername());
 
-            if ($utilisateurCodeFiltre != '') {
-                $utilisateurCourantCode = $this->getPeopleAttribute($ldapUser, $this->getUtilisateurCode());
+            if (!$ldapUser) return null;
 
-                // si attribut multivalué, valeurs séparées par de virgules -> transformation en array
-                $utilisateurCourantCodeArr = explode(',', $utilisateurCourantCode);
-
-                foreach ($utilisateurCourantCodeArr as $utilisateurCourantCodeElem) {
-                    if (preg_match($utilisateurCodeFiltre, $utilisateurCourantCodeElem, $matches)) {
-                        return $matches[1];
-                    }
-                }
-            } else {
-                return $this->getPeopleAttribute($ldapUser, $this->getUtilisateurCode());
-            }
+            return $this->getPeopleAttribute($ldapUser, $this->getUtilisateurCode());
         }
 
         return null;

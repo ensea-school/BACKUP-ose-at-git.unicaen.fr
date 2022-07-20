@@ -2,24 +2,25 @@
 
 namespace Application\Service\Traits;
 
-
 use Application\Service\OffreFormationService;
 
+/**
+ * Description of OffreFormationServiceAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait OffreFormationServiceAwareTrait
 {
-    /**
-     * @var OffreFormationService
-     */
-    private $serviceOffreFormation;
+    protected ?OffreFormationService $serviceOffreFormation = null;
 
 
 
     /**
-     * @param ServiceOffreFormation $offreFormation
+     * @param OffreFormationService $serviceOffreFormation
      *
      * @return self
      */
-    public function setServiceOffreFormation(OffreFormationService $serviceOffreFormation)
+    public function setServiceOffreFormation(?OffreFormationService $serviceOffreFormation)
     {
         $this->serviceOffreFormation = $serviceOffreFormation;
 
@@ -28,10 +29,7 @@ trait OffreFormationServiceAwareTrait
 
 
 
-    /**
-     * @return OffreFormationService
-     */
-    public function getServiceOffreFormation()
+    public function getServiceOffreFormation(): ?OffreFormationService
     {
         if (empty($this->serviceOffreFormation)) {
             $this->serviceOffreFormation = \Application::$container->get(OffreFormationService::class);
@@ -39,5 +37,4 @@ trait OffreFormationServiceAwareTrait
 
         return $this->serviceOffreFormation;
     }
-
 }

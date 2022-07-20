@@ -8,6 +8,7 @@
         </id>
         <field name="numero" type="integer" column="NUMERO" nullable="false"/>
         <field name="libelle" type="string" column="LIBELLE" length="150" nullable="false"/>
+        <field name="message" type="string" column="MESSAGE" length="500" nullable="true"/>
         <field name="requete" type="string" column="REQUETE" length="4000" nullable="false"/>
 
         <many-to-one field="plafondPerimetre" target-entity="Plafond\Entity\Db\PlafondPerimetre">
@@ -15,7 +16,6 @@
                 <join-column name="PLAFOND_PERIMETRE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <one-to-many field="plafondApplication" target-entity="Plafond\Entity\Db\PlafondApplication" mapped-by="plafond"/>
         <one-to-many field="plafondStructure" target-entity="Plafond\Entity\Db\PlafondStructure" mapped-by="plafond"/>
         <one-to-many field="plafondReferentiel" target-entity="Plafond\Entity\Db\PlafondReferentiel" mapped-by="plafond"/>
         <one-to-many field="plafondStatut" target-entity="Plafond\Entity\Db\PlafondStatut" mapped-by="plafond"/>

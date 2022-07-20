@@ -104,6 +104,7 @@ class AppConfig
             'UnicaenTbl',
             'UnicaenSiham',
             'Application',
+            'Intervenant',
             'Plafond',
             'Indicateur',
             'ExportRh',

@@ -11,10 +11,7 @@ use Application\Service\SourceService;
  */
 trait SourceServiceAwareTrait
 {
-    /**
-     * @var SourceService
-     */
-    private $serviceSource;
+    protected ?SourceService $serviceSource = null;
 
 
 
@@ -23,7 +20,7 @@ trait SourceServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceSource(SourceService $serviceSource)
+    public function setServiceSource(?SourceService $serviceSource)
     {
         $this->serviceSource = $serviceSource;
 
@@ -32,10 +29,7 @@ trait SourceServiceAwareTrait
 
 
 
-    /**
-     * @return SourceService
-     */
-    public function getServiceSource()
+    public function getServiceSource(): ?SourceService
     {
         if (empty($this->serviceSource)) {
             $this->serviceSource = \Application::$container->get(SourceService::class);

@@ -16,7 +16,7 @@ use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
-
+use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 /**
  * Description of ElementPedagogiqueController
@@ -34,6 +34,7 @@ class ElementPedagogiqueController extends AbstractController
     use CentreCoutEpServiceAwareTrait;
     use ElementPedagogiqueSynchronisationFormAwareTrait;
     use StructureServiceAwareTrait;
+    use SchemaServiceAwareTrait;
 
 
     public function voirAction()
@@ -42,10 +43,11 @@ class ElementPedagogiqueController extends AbstractController
             \Application\Entity\Db\CheminPedagogique::class,
             \Application\Entity\Db\VolumeHoraire::class,
         ]);
-        $element = $this->getEvent()->getParam('elementPedagogique');
-        $title   = $element->getLibelle() . ' (' . $element->getCode() . ')';
+        $element       = $this->getEvent()->getParam('elementPedagogique');
+        $title         = $element->getLibelle() . ' (' . $element->getCode() . ')';
+        $serviceSchema = $this->getServiceSchema();
 
-        return compact('element', 'title');
+        return compact('element', 'title', 'serviceSchema');
     }
 
 
@@ -284,7 +286,7 @@ class ElementPedagogiqueController extends AbstractController
         ]);
 
         $element = $this->getEvent()->getParam('elementPedagogique');
-        $form    = $this->getElementModulateurCentreCoutForm();
+        $form    = $this->getFormOffreFormationElementModulateurCentreCout();
         //Traitement retour formulaire
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -306,7 +308,7 @@ class ElementPedagogiqueController extends AbstractController
 
         $form->setElementPedagogique($element);
         $form->setAttribute('action', $this->url()->fromRoute('of/element/modulateurs-centres-couts', ['elementPedagogique' => $element->getId()]));
-        $form->build();
+        $form->buildElements();
 
         return [
             'form' => $form,

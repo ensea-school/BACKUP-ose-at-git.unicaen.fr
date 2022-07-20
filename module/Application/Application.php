@@ -39,6 +39,7 @@ class Application
         if (AppConfig::get('global', 'affichageErreurs')) {
             error_reporting(E_ALL);
         } else {
+            error_reporting(E_ERROR);
             set_exception_handler(function ($e) { // on affiche quand même les erreurs fatales pour expliquer!
                 self::error($e);
             });
@@ -122,7 +123,9 @@ class Application
     public static function error($exception)
     {
         header("HTTP/1.0 500 Internal Server Error");
-        self::$maintenanceText = '<h2>Une erreur est survenue !</h2>' . $exception->getMessage();
+        self::$maintenanceText = '<h2>Une erreur est survenue !</h2>'
+            . '<p>' . $exception->getMessage() . '</p>'
+            . '<p style="color:darkred">' . $exception->getFile() . ' ligne ' . $exception->getLine() . '</p>';
         if (php_sapi_name() !== 'cli') {
             require 'public/maintenance.php';
         } else {

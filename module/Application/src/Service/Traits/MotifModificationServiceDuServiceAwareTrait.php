@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\MotifModificationServiceDuService;
 
 /**
- * Description of MotifModificationServiceDuAwareTrait
+ * Description of MotifModificationServiceDuServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait MotifModificationServiceDuServiceAwareTrait
 {
-    /**
-     * @var MotifModificationServiceDuService
-     */
-    private $serviceMotifModificationServiceDu;
+    protected ?MotifModificationServiceDuService $serviceMotifModificationServiceDu = null;
 
 
 
@@ -23,7 +20,7 @@ trait MotifModificationServiceDuServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceMotifModificationServiceDu(MotifModificationServiceDuService $serviceMotifModificationServiceDu)
+    public function setServiceMotifModificationServiceDu(?MotifModificationServiceDuService $serviceMotifModificationServiceDu)
     {
         $this->serviceMotifModificationServiceDu = $serviceMotifModificationServiceDu;
 
@@ -32,10 +29,7 @@ trait MotifModificationServiceDuServiceAwareTrait
 
 
 
-    /**
-     * @return MotifModificationServiceDuService
-     */
-    public function getServiceMotifModificationServiceDu()
+    public function getServiceMotifModificationServiceDu(): ?MotifModificationServiceDuService
     {
         if (empty($this->serviceMotifModificationServiceDu)) {
             $this->serviceMotifModificationServiceDu = \Application::$container->get(MotifModificationServiceDuService::class);

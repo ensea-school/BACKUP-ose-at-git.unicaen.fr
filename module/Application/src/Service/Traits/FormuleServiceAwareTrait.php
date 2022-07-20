@@ -11,18 +11,16 @@ use Application\Service\FormuleService;
  */
 trait FormuleServiceAwareTrait
 {
-    /**
-     * @var FormuleService
-     */
-    protected $serviceFormule;
+    protected ?FormuleService $serviceFormule = null;
 
 
 
     /**
      * @param FormuleService $serviceFormule
+     *
      * @return self
      */
-    public function setServiceFormule( FormuleService $serviceFormule )
+    public function setServiceFormule(?FormuleService $serviceFormule)
     {
         $this->serviceFormule = $serviceFormule;
 
@@ -31,12 +29,9 @@ trait FormuleServiceAwareTrait
 
 
 
-    /**
-     * @return FormuleService
-     */
-    public function getServiceFormule() : FormuleService
+    public function getServiceFormule(): ?FormuleService
     {
-        if (!$this->serviceFormule){
+        if (empty($this->serviceFormule)) {
             $this->serviceFormule = \Application::$container->get(FormuleService::class);
         }
 

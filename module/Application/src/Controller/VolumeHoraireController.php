@@ -158,7 +158,7 @@ class VolumeHoraireController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'formule', 'validation_enseignement', 'service', 'service_saisie', 'piece_jointe_fournie',
+            'formule', 'validation_enseignement', 'service', 'piece_jointe_fournie',
         ], $intervenant);
     }
 

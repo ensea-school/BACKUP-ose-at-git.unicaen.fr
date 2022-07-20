@@ -2,6 +2,7 @@
 
 namespace Application\ORM\Event\Listeners;
 
+use Application\Constants;
 use Application\Entity\Db\Annee;
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -14,7 +15,6 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Laminas\Hydrator\ClassMethodsHydrator;
 
 class ParametreEntityListener implements EventSubscriber
 {
@@ -29,13 +29,14 @@ class ParametreEntityListener implements EventSubscriber
 
     protected ParametreEntityInterface $entity;
 
-    protected ClassMetadata            $metadata;
-
-    protected array                    $key      = [];
-
-    protected ClassMethodsHydrator     $hydrator;
-
     protected bool                     $isSaving = false;
+
+
+
+    public function setEntityManager(EntityManager $entityManager)
+    {
+        $this->em = $entityManager;
+    }
 
 
 
@@ -44,12 +45,11 @@ class ParametreEntityListener implements EventSubscriber
         if ($this->isSaving) return;
 
         /* Initialisation */
-        $this->args     = $args;
-        $this->em       = $args->getEntityManager();
-        $this->entity   = $args->getEntity();
-        $this->metadata = $this->em->getClassMetadata(get_class($this->entity));
-        $this->hydrator = new ClassMethodsHydrator();
-        $this->hydrator->setUnderscoreSeparatedKeys(false);
+        $this->args   = $args;
+        $this->em     = $args->getEntityManager();
+        $this->entity = $args->getEntity();
+
+        $disabledFilters = $this->disableFilters();
 
         /* Gestion de l'historique en délégation à l'HistoriqueListener */
         $histoListener = new HistoriqueListener();
@@ -78,6 +78,8 @@ class ParametreEntityListener implements EventSubscriber
                 $this->saveNextEntities();
             }
         }
+
+        $this->enableFilters($disabledFilters);
 
         $this->isSaving = false;
     }
@@ -109,7 +111,7 @@ class ParametreEntityListener implements EventSubscriber
 
     protected function deleteHisto()
     {
-        $key          = $this->key();
+        $key          = $this->extract($this->entity)['key'];
         $key['annee'] = $this->entity->getAnnee();
         /** @var $entity ParametreEntityInterface */
         $entity = $this->repo()->findOneBy($key);
@@ -135,24 +137,36 @@ class ParametreEntityListener implements EventSubscriber
 
     protected function saveNextEntities()
     {
-        $data = $this->hydrator->extract($this->entity);
-        unset($data['annee']);
-        unset($data['histoModificateur']);
-        unset($data['histoDestruction']);
-        unset($data['histoDestructeur']);
-        unset($data['id']);
+        $data = $this->extract($this->entity);
+        unset($data['data']['histoModificateur']);
+        unset($data['data']['histoDestruction']);
+        unset($data['data']['histoDestructeur']);
         $classname = get_class($this->entity);
 
-        $next = $this->nextEntities();
+        $next = $this->nextEntities($this->entity);
         foreach ($next as $anneeId => $entity) {
             if (null === $entity) {
-                $entity              = new $classname;
-                $entityData          = $data;
-                $entityData['annee'] = $this->annee($anneeId);
-                $this->hydrator->hydrate($entityData, $entity);
+                $entity                     = new $classname;
+                $annnee                     = $this->em->getRepository(Annee::class)->find($anneeId);
+                $entityData                 = $data;
+                $entityData['key']['annee'] = $annnee;
+                foreach ($entityData['key'] as $k => $v) {
+                    if ($v instanceof ParametreEntityInterface) {
+                        $entityData['key'][$k] = $this->entityAutreAnnee($v, $annnee);
+                    }
+                }
+                foreach ($entityData['data'] as $k => $v) {
+                    if ($v instanceof ParametreEntityInterface) {
+                        $entityData['data'][$k] = $this->entityAutreAnnee($v, $annnee);
+                    }
+                }
+                $this->hydrate($entityData, $entity);
             } else {
-                $this->hydrator->hydrate($data, $entity);
+                $entityData        = $data;
+                $entityData['key'] = [];
+                $this->hydrate($entityData, $entity);
             }
+
             $this->em->persist($entity);
             $this->em->flush($entity);
         }
@@ -162,18 +176,37 @@ class ParametreEntityListener implements EventSubscriber
 
     protected function deleteNextEntities()
     {
-        $next = $this->nextEntities();
+        $next = $this->nextEntities($this->entity);
         foreach ($next as $entity) {
-            $this->em->remove($entity);
-            $this->em->flush($entity);
+            if ($entity) {
+                $this->em->remove($entity);
+                $this->em->flush($entity);
+            }
         }
     }
 
 
 
-    protected function annee(int $anneeId): Annee
+    public function entityAutreAnnee(ParametreEntityInterface $entity, Annee $annee): ?ParametreEntityInterface
     {
-        return $this->em->getRepository(Annee::class)->find($anneeId);
+        if ($entity->getAnnee() == $annee) {
+            return $entity;
+        }
+
+        $key          = $this->extract($entity)['key'];
+        $key['annee'] = $annee;
+
+        $buff    = $this->em->getRepository(get_class($entity))->findBy($key);
+        $bentity = null;
+        if (!empty($buff)) {
+            foreach ($buff as $bentity) {
+                if ($bentity->estNonHistorise()) {
+                    return $bentity;
+                }
+            }
+        }
+
+        return $bentity;
     }
 
 
@@ -203,24 +236,60 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
-    protected function nextEntities(): array
+    protected function nextEntities(ParametreEntityInterface $entity, bool $stopManuel = true): array
     {
+        $repo = $this->em->getRepository(get_class($entity));
+
+        $key = $this->extract($entity)['key'];
+        unset($key['annee']);
+
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('e');
+        $qb->from(get_class($entity), 'e');
+        $qb->where('e.annee > :annee');
+        $qb->setParameter('annee', $entity->getAnnee());
+        $pi = 1;
+        foreach ($key as $k => $v) {
+            if ($v instanceof ParametreEntityInterface) {
+                $qb->join('e.' . $k, 'j_' . $k);
+                $qb->addSelect('j_' . $k);
+                $vkey = $this->extract($v)['key'];
+                unset($vkey['annee']);
+                foreach ($vkey as $vk => $vv) {
+                    $qb->andWhere('j_' . $k . '.' . $vk . ' = :p' . $pi)->setParameter('p' . $pi, $vv);
+                    $pi++;
+                }
+            } else {
+                $qb->andWhere('e.' . $k . ' = :p' . $pi)->setParameter('p' . $pi, $v);
+                $pi++;
+            }
+        }
+        $query = $qb->getQuery();
+        //sqlDump($query);die();
+
         /** @var ParametreEntityInterface[] $nexts */
-        $buff  = $this->repo()->findBy($this->key(), ['annee' => 'asc']);
+        /** @var ParametreEntityInterface[] $buff */
+        $buff  = $query->getResult();
         $nexts = [];
-        foreach ($buff as $entity) {
-            $nexts[$entity->getAnnee()->getId()] = $entity;
+        foreach ($buff as $bentity) {
+            $aid = $bentity->getAnnee()->getId();
+
+            // Si jamais on a déjà trouvé l'entité et qu'elle n'est pas historisée, alors on la garde, sinon on peut remplacer
+            if (!(isset($nexts[$aid]) && $nexts[$aid]->estNonHistorise())) {
+                $nexts[$aid] = $bentity;
+            }
         }
 
         $nexta = [];
-        for ($a = $this->entity->getAnnee()->getId() + 1; $a <= Annee::MAX; $a++) {
+        for ($a = $entity->getAnnee()->getId() + 1; $a <= Annee::MAX; $a++) {
 
             if (isset($nexts[$a])) {
-                $next = $nexts[$a];
+                // si une modif manuelle a été apportée, alors ce n'est plus la suite d'un même entité, mais une autre suite donc on stoppe
+                if ($stopManuel && $this->isManuel($nexts[$a])) {
+                    break;
+                }
 
-                if ($this->isManuel($next)) break;
-
-                $nexta[$a] = $next;
+                $nexta[$a] = $nexts[$a];
             } else {
                 $nexta[$a] = null;
             }
@@ -233,31 +302,94 @@ class ParametreEntityListener implements EventSubscriber
 
     protected function nextEntity(): ?ParametreEntityInterface
     {
-        $params          = $this->key();
-        $params['annee'] = $this->annee($this->entity->getAnnee()->getId() + 1);
+        $params          = $this->extract($this->entity)['key'];
+        $params['annee'] = $this->em->getRepository(Annee::class)->find($this->entity->getAnnee()->getId() + 1);
 
         return $this->repo()->findOneBy($params);
     }
 
 
 
-    protected function key(): array
+    protected function extract(ParametreEntityInterface $entity): array
     {
-        if (!$this->key) {
+        $metadata = $this->em->getClassMetadata(get_class($entity));
 
-            $this->key = [];
+        /* Récupération de la liste des champs de la clé de l'entité */
+        $keyFields = [];
+        $tableName = $metadata->table['name'];
+        if (!isset($metadata->table['uniqueConstraints'][$tableName . '_UN'])) {
+            throw new \Exception('Contrainte d\'unicité "' . $tableName . '_UN" non trouvée dans le mapping Doctrine pour la classe ' . get_class($entity));
+        }
+        $cols = $metadata->table['uniqueConstraints'][$tableName . '_UN']['columns'];
 
-            $ucc  = $this->getUniqueConstraintCols();
-            $cols = $this->getColumns();
-
-            $data = $this->hydrator->extract($this->entity);
-            foreach ($ucc as $col) {
-                $col             = $cols[$col];
-                $this->key[$col] = $data[$col];
+        foreach ($cols as $consCol) {
+            if (!in_array($consCol, ['HISTO_DESTRUCTION'])) {
+                if (isset($metadata->fieldNames[$consCol])) {
+                    $keyFields[] = $metadata->fieldNames[$consCol];
+                } else {
+                    foreach ($metadata->associationMappings as $property => $associationMapping) {
+                        if ($consCol == $associationMapping['joinColumns'][0]['name']) {
+                            $keyFields[] = $property;
+                        }
+                    }
+                }
             }
         }
 
-        return $this->key;
+
+        /* Récupération de la liste des champs de l'entité */
+        $dataFields = ['histoDestruction'];
+        foreach ($metadata->fieldMappings as $field => $fieldParams) {
+            if (!in_array($field, $keyFields) && !in_array($field, ['id'])) {
+                $dataFields[] = $field;
+            }
+        }
+
+        foreach ($metadata->associationMappings as $field => $associationMapping) {
+            if (!in_array($field, $keyFields) && !in_array($field, ['annee'])) {
+                $dataFields[] = $field;
+            }
+        }
+
+
+        /* Récupération des valeurs des champs */
+        $res = [
+            'key'  => [],
+            'data' => [],
+        ];
+        foreach ($keyFields as $keyField) {
+            if (method_exists($entity, $method = 'get' . ucfirst($keyField))) {
+                $res['key'][$keyField] = $entity->$method();
+            } elseif (method_exists($entity, $method = 'is' . ucfirst($keyField))) {
+                $res['key'][$keyField] = $entity->$method();
+            } else {
+                throw new \Exception('Aucun accesseur trouvé pour le champ ' . $keyField . ' de l\'entité ' . get_class($entity));
+            }
+        }
+
+        foreach ($dataFields as $dataField) {
+            if (method_exists($entity, $method = 'get' . ucfirst($dataField))) {
+                $res['data'][$dataField] = $entity->$method();
+            } elseif (method_exists($entity, $method = 'is' . ucfirst($dataField))) {
+                $res['data'][$dataField] = $entity->$method();
+            } else {
+                throw new \Exception('Aucun accesseur trouvé pour le champ ' . $keyField . ' de l\'entité ' . get_class($entity));
+            }
+        }
+
+        return $res;
+    }
+
+
+
+    protected function hydrate(array $data, ParametreEntityInterface $entity)
+    {
+        foreach ($data['key'] as $field => $value) {
+            $entity->{'set' . ucfirst($field)}($value);
+        }
+        foreach ($data['data'] as $field => $value) {
+            $entity->{'set' . ucfirst($field)}($value);
+        }
     }
 
 
@@ -269,36 +401,24 @@ class ParametreEntityListener implements EventSubscriber
 
 
 
-    protected function getUniqueConstraintCols(): array
+    protected function disableFilters()
     {
-        $tableName = $this->metadata->table['name'];
+        $filters = $this->em->getFilters()->getEnabledFilters();
 
-        if (!isset($this->metadata->table['uniqueConstraints'][$tableName . '_UN'])) {
-            throw new \Exception('Contrainte d\'unicité non trouvée');
+        foreach ($filters as $name => $filter) {
+            $this->em->getFilters()->disable($name);
         }
 
-        $ucc = $this->metadata->table['uniqueConstraints'][$tableName . '_UN']['columns'];
-
-        foreach ($ucc as $i => $consCol) {
-            if ($consCol == 'ANNEE_ID') {
-                unset($ucc[$i]);
-            }
-        }
-
-        return $ucc;
+        return $filters;
     }
 
 
 
-    protected function getColumns(): array
+    protected function enableFilters(array $filters)
     {
-        $columns = $this->metadata->fieldNames;
-        foreach ($this->metadata->associationMappings as $am) {
-            $col           = array_keys($am['joinColumnFieldNames'])[0];
-            $columns[$col] = $am['fieldName'];
+        foreach ($filters as $name => $filter) {
+            $this->em->getFilters()->enable($name);
         }
-
-        return $columns;
     }
 
 

@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db;
 
-use Application\Entity\Db\Traits\StatutIntervenantAwareTrait;
+use Intervenant\Entity\Db\StatutAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 
 /**
@@ -10,7 +10,7 @@ use Application\Entity\Db\Traits\StructureAwareTrait;
  */
 class ModeleContrat
 {
-    use StatutIntervenantAwareTrait;
+    use StatutAwareTrait;
     use StructureAwareTrait;
 
     /**
@@ -198,9 +198,9 @@ class ModeleContrat
      */
     public function hasFichier(): bool
     {
-        if (is_resource($this->fichier)){
+        if (is_resource($this->fichier)) {
             return !empty(stream_get_contents($this->fichier, 1));
-        }else{
+        } else {
             return !empty($this->fichier);
         }
     }
@@ -272,7 +272,7 @@ class ModeleContrat
             $this->{$requeteVar} = $requete;
             $i++;
         }
-        for( null;$i<=10;$i++){ // on vide le reste!!
+        for (null; $i <= 10; $i++) { // on vide le reste!!
             $nomVar              = "bloc$i" . "Nom";
             $requeteVar          = "bloc$i" . "Requete";
             $this->{$nomVar}     = null;

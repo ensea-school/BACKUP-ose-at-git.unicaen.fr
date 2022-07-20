@@ -2,140 +2,52 @@
 
 namespace Application\Entity\Db;
 
-/**
- * TypeInterventionStatut
- */
-class TypeInterventionStatut
+use Application\Entity\Db\Traits\TypeInterventionAwareTrait;
+use Application\Interfaces\ParametreEntityInterface;
+use Application\Traits\ParametreEntityTrait;
+use Intervenant\Entity\Db\StatutAwareTrait;
+use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
+
+class TypeInterventionStatut implements ParametreEntityInterface
 {
-    /**
-     * @var integer
-     */
-protected $id;
+    use ParametreEntityTrait;
+    use TypeInterventionAwareTrait;
+    use StatutAwareTrait;
 
-    /**
-     * @var integer
-     */
-protected $typeIntervention;
+    protected float $tauxHETDService        = 1;
 
-    /**
-     * @var integer
-     */
-protected $statutIntervenant;
+    protected float $tauxHETDComplementaire = 1;
 
-    /**
-     * @var float
-     */
-protected $tauxHETDService;
 
-    /**
-     * @var float
-     */
-protected $tauxHETDComplementaire;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getTauxHETDService(): float
     {
-        return $this->id;
+        return $this->tauxHETDService;
     }
 
-    /**
-     * Set typeIntervention
-     *
-     * @param integer $typeIntervention
-     *
-     * @return TypeInterventionStatut
-     */
-    public function setTypeIntervention($typeIntervention)
-    {
-        $this->typeIntervention=$typeIntervention;
 
-        return $this;
-    }
 
-    /**
-     * Get typeIntevention
-     *
-     * @return integer
-     */
-    public function getTypeIntervention()
-    {
-        return $this->typeIntervention;
-    }
-
-    /**
-     * Set statutIntervenant
-     *
-     * @param integer $statutIntervenant
-     *
-     * @return statutIntervenant
-     */
-    public function setStatutIntervenant($statutIntervenant)
-    {
-        $this->statutIntervenant = $statutIntervenant;
-
-        return $this;
-    }
-
-    /**
-     * Get statutIntervenant
-     *
-     * @return integer
-     */
-    public function getStatutIntervenant()
-    {
-        return $this->statutIntervenant;
-    }
-
-    /**
-     * Set tauxHetdService
-     *
-     * @param float $tauxHETDService
-     *
-     * @return TypeInterventionStatut
-     */
-    public function setTauxHETDService($tauxHETDService)
+    public function setTauxHETDService(float $tauxHETDService): TypeInterventionStatut
     {
         $this->tauxHETDService = $tauxHETDService;
 
         return $this;
     }
 
-    /**
-     * Get tauxHETDService
-     *
-     * @return float
-     */
-    public function getTauxHETDService()
-    {
-        return $this->tauxHETDService;
-    }
 
-    /**
-     * Set tauxHETDComplementaire
-     *
-     * @param float $tauxHETDComplementaire
-     *
-     * @return TypeInterventionStatut
-     */
-    public function setTauxHETDComplementaire($tauxHETDComplementaire)
-    {
-        $this->tauxHETDComplementaire=$tauxHETDComplementaire;
 
-        return $this;
-    }
-
-    /**
-     * Get tauxHETDComplementaire
-     *
-     * @return float
-     */
-    public function getTauxHETDComplementaire()
+    public function getTauxHETDComplementaire(): float
     {
         return $this->tauxHETDComplementaire;
+    }
+
+
+
+    public function setTauxHETDComplementaire(float $tauxHETDComplementaire): TypeInterventionStatut
+    {
+        $this->tauxHETDComplementaire = $tauxHETDComplementaire;
+
+        return $this;
     }
 
 }

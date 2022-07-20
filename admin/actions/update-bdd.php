@@ -23,6 +23,10 @@ foreach ($ref as $ddlClass => $objects) {
     }
 }
 
+if (($_SERVER['IGNORE_MV_EXT_SERVICE'] ?? "false") == "true") {
+    $filters['materialized-view']['excludes'][] = 'MV_EXT_SERVICE';
+}
+
 $tablesDep = [
     Ddl::INDEX,
     Ddl::PRIMARY_CONSTRAINT,
@@ -42,7 +46,7 @@ foreach ($tablesDep as $tableDep) {
 
 // Initialisation et lancement de la pré-migration
 $mm = new MigrationManager($oa, $ref, $filters);
-$mm->migration('pre');
+$mm->migration('before');
 
 
 // Mise à jour de la BDD (structures)
@@ -66,7 +70,7 @@ $c->end();
 
 // Post-migration
 $c->println('');
-$mm->migration('post');
+$mm->migration('after');
 
 // Néttoyage des caches
 $oa->run('clear-cache');

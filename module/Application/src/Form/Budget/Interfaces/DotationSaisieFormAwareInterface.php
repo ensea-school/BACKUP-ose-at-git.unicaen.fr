@@ -3,7 +3,6 @@
 namespace Application\Form\Budget\Interfaces;
 
 use Application\Form\Budget\DotationSaisieForm;
-use RuntimeException;
 
 /**
  * Description of DotationSaisieFormAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface DotationSaisieFormAwareInterface
 {
     /**
-     * @param DotationSaisieForm $formBudgetDotationSaisie
+     * @param DotationSaisieForm|null $formBudgetDotationSaisie
+     *
      * @return self
      */
-    public function setFormBudgetDotationSaisie( DotationSaisieForm $formBudgetDotationSaisie );
+    public function setFormBudgetDotationSaisie( ?DotationSaisieForm $formBudgetDotationSaisie );
 
 
 
-    /**
-     * @return DotationSaisieFormAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormBudgetDotationSaisie();
+    public function getFormBudgetDotationSaisie(): ?DotationSaisieForm;
 }

@@ -3,7 +3,6 @@
 namespace Application\Form\Intervenant\Interfaces;
 
 use Application\Form\Intervenant\MotifModificationServiceDuFieldset;
-use RuntimeException;
 
 /**
  * Description of MotifModificationServiceDuFieldsetAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface MotifModificationServiceDuFieldsetAwareInterface
 {
     /**
-     * @param MotifModificationServiceDuFieldset $fieldsetIntervenantMotifModificationServiceDu
+     * @param MotifModificationServiceDuFieldset|null $formIntervenantMotifModificationServiceDuFieldset
+     *
      * @return self
      */
-    public function setFieldsetIntervenantMotifModificationServiceDu( MotifModificationServiceDuFieldset $fieldsetIntervenantMotifModificationServiceDu );
+    public function setFormIntervenantMotifModificationServiceDuFieldset( ?MotifModificationServiceDuFieldset $formIntervenantMotifModificationServiceDuFieldset );
 
 
 
-    /**
-     * @return MotifModificationServiceDuFieldsetAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFieldsetIntervenantMotifModificationServiceDu();
+    public function getFormIntervenantMotifModificationServiceDuFieldset(): ?MotifModificationServiceDuFieldset;
 }

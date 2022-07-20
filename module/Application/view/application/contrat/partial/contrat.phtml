@@ -4,9 +4,10 @@ use Application\Assertion\ContratAssertion;
 use Application\Provider\Privilege\Privileges;
 
 /**
- * @var $this     \Application\View\Renderer\PhpRenderer
- * @var $contrat  \Application\Entity\Db\Contrat
- * @var $services \Application\Entity\Db\Service[]
+ * @var $this          \Application\View\Renderer\PhpRenderer
+ * @var $contrat       \Application\Entity\Db\Contrat
+ * @var $services      \Application\Entity\Db\Service[]
+ * @var $avenant_param int
  */
 
 $validation     = $contrat->getValidation();
@@ -70,7 +71,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
 
                        href="<?= $urlEmail ?>">
                 <?php endif; ?>
-                <span class="glyphicon glyphicon-send"></span> Envoyer par mail
+                <i class="fas fa-paper-plane-top"></i> Envoyer par mail
             </a>
             </span>
         <?php endif; ?>
@@ -79,35 +80,40 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
 
             <span class="pull-right">
             <a class="btn btn-<?= $panel ?>" href="<?= $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
-                <span class="glyphicon glyphicon-export"></span> Exporter en PDF
+                <i class="fas fa-upload"></i> Exporter en PDF
             </a>
             </span>
         <?php endif; ?>
         <!-- Lien de téléchargement du fichier -->
 
-        <h3><?= $contrat->toString() ?> - <?= $contrat->getStructure() ?></h3>
+        <h3><?= $contrat->toString() ?>
+            <?php if ($avenant_param >= 0): ?>- <?= $contrat->getStructure() ?><?php endif; ?></h3>
     </div>
 
     <div class="panel-body">
         <!-- Informations -->
         <ul style="list-style-type: none">
-            <li><span class="glyphicon glyphicon-thumbs-up"></span> Créé
+            <li><i class="fas fa-thumbs-up"></i> Créé
                 le <?= $contrat->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
                 par <?= $this->utilisateur($contrat->getHistoCreateur()) ?></li>
             <?php if ($validation): ?>
-                <li><span class="glyphicon glyphicon-thumbs-up"></span> Validé
+                <li><i class="fas fa-thumbs-up"></i> Validé
                     le <?= $validation->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
                     par <?= $this->utilisateur($validation->getHistoCreateur()) ?></li>
             <?php endif; ?>
             <?php if ($dateEnvoiEmail): ?>
-                <li><span class="glyphicon glyphicon-thumbs-up"></span> Envoyé par email
+                <li><i class="fas fa-thumbs-up"></i> Envoyé par email
                     le <?= $dateEnvoiEmail->format(\Application\Constants::DATE_FORMAT) ?>
                 </li>
             <?php endif; ?>
             <?php if ($retourSigne): ?>
-                <li><span class="glyphicon glyphicon-thumbs-up"></span> Retourné signé
+                <li><i class="fas fa-thumbs-up"></i> Retourné signé
                     le <?= $retourSigne->format(Application\Constants::DATE_FORMAT) ?></li>
             <?php endif ?>
+            <?php if ($avenant_param < 0): ?>
+                <li><i class="fas fa-thumbs-up"></i> Modifiable par la structure
+                    <?= $contrat->getStructure() ?></li>
+            <?php endif; ?>
         </ul>
 
         <!-- Upload de fichiers -->
@@ -161,15 +167,15 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                         data-cancel-button="Non"
                         data-submit-reload="true"
                 >
-                    <span class="glyphicon glyphicon-thumbs-up"></span> Valider
+                    <i class="fas fa-thumbs-up"></i> Valider
                 </a>
             <?php endif; ?>
 
             <?php if ($urlSaisieRetour): ?>
                 <a href="<?= $urlSaisieRetour ?>" class="btn btn-primary pop-ajax"
                    data-submit-reload="true">
-                    <span
-                            class="glyphicon glyphicon-calendar"></span> <?= $contrat->getDateRetourSigne() ? 'Modifier' : 'Saisir' ?>
+                    <i
+                            class="fas fa-calendar-days"></i> <?= $contrat->getDateRetourSigne() ? 'Modifier' : 'Saisir' ?>
                     la date de retour signé
                 </a>
             <?php endif; ?>
@@ -184,7 +190,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                         data-confirm-button="Oui"
                         data-cancel-button="Non"
                 >
-                    <span class="glyphicon glyphicon-thumbs-down"></span> Dévalider
+                    <i class="fas fa-thumbs-down"></i> Dévalider
                 </a>
             <?php endif; ?>
 
@@ -198,7 +204,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                         data-cancel-button="Non"
                         data-submit-reload="true"
                 >
-                    <span class="glyphicon glyphicon-trash"></span> Supprimer
+                    <i class="fas fa-trash-can"></i> Supprimer
                 </a>
             <?php endif; ?>
         </div>

@@ -998,7 +998,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LILLE AS
     FROM
       v_formule_intervenant fi
       JOIN intervenant i ON i.id = fi.intervenant_id
-      JOIN statut_intervenant si ON si.id = i.statut_id
+      JOIN statut si ON si.id = i.statut_id
     ';
   END;
 

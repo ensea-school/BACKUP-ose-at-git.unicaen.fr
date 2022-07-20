@@ -18,6 +18,7 @@ SELECT
   t.structure_code,
   t.structure_is_affectation,
   t.structure_is_univ,
+  t.structure_is_exterieur,
   t.PONDERATION_SERVICE_DU,
   t.PONDERATION_SERVICE_COMPL,
   t.SERVICE_STATUTAIRE,
@@ -47,8 +48,9 @@ SELECT
   str.code                                                             structure_code,
   CASE WHEN COALESCE(str.id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
   CASE WHEN COALESCE(str.id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
-  MAX(COALESCE( m.ponderation_service_du, 1))                          ponderation_service_du,
-  MAX(COALESCE( m.ponderation_service_compl, 1))                       ponderation_service_compl,
+  CASE WHEN s.element_pedagogique_id IS NULL THEN 1 ELSE 0 END         structure_is_exterieur,
+  COALESCE(ep.ponderation_service_du,1)                                ponderation_service_du,
+  COALESCE(ep.ponderation_service_compl,1)                             ponderation_service_compl,
   COALESCE(tf.service_statutaire,1)                                    service_statutaire,
 
   vh.heures                                                            heures,
@@ -66,25 +68,39 @@ FROM
        JOIN v_volume_horaire_etat    vhe ON vhe.volume_horaire_id = vh.id
        JOIN type_volume_horaire      tvh ON tvh.id = vh.type_volume_horaire_id
 
-  LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
+  LEFT JOIN (
+    SELECT
+      ep.id,
+      ep.structure_id,
+      ep.etape_id,
+      ep.taux_fi,
+      ep.taux_fa,
+      ep.taux_fc,
+      MAX(COALESCE( m.ponderation_service_du, 1))                          ponderation_service_du,
+      MAX(COALESCE( m.ponderation_service_compl, 1))                       ponderation_service_compl
+    FROM
+      element_pedagogique ep
+      LEFT JOIN element_modulateur        em ON em.element_id = ep.id
+                                            AND em.histo_destruction IS NULL
+      LEFT JOIN modulateur                 m ON m.id = em.modulateur_id
+    GROUP BY
+      ep.id,
+      ep.structure_id,
+      ep.etape_id,
+      ep.taux_fi,
+      ep.taux_fa,
+      ep.taux_fc
+  )                                   ep ON ep.id = s.element_pedagogique_id
   LEFT JOIN structure                str ON str.id = ep.structure_id
   LEFT JOIN etape                      e ON e.id = ep.etape_id
   LEFT JOIN type_formation            tf ON tf.id = e.type_formation_id
-  LEFT JOIN element_modulateur        em ON em.element_id = s.element_pedagogique_id
-                                        AND em.histo_destruction IS NULL
-  LEFT JOIN modulateur                 m ON m.id = em.modulateur_id
-  LEFT JOIN type_intervention_statut tis ON tis.type_intervention_id = ti.id AND tis.statut_intervenant_id = i.statut_id
+  LEFT JOIN type_intervention_statut tis ON tis.type_intervention_id = ti.id AND tis.statut_id = i.statut_id
 WHERE
   vh.histo_destruction IS NULL
   AND s.histo_destruction IS NULL
   AND vh.heures <> 0
   AND vh.motif_non_paiement_id IS NULL
   AND s.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, s.intervenant_id )
-GROUP BY
-  vh.id, s.id, s.intervenant_id, ti.id, vh.type_volume_horaire_id, vhe.etat_volume_horaire_id, tvh.code,
-  ep.id, ep.taux_fi, ep.taux_fa, ep.taux_fc, str.id, str.code, tf.service_statutaire, vh.heures,
-  vh.horaire_debut, vh.horaire_fin, tis.taux_hetd_service, tis.taux_hetd_complementaire,
-  ti.code, ti.taux_hetd_service, ti.taux_hetd_complementaire, i.structure_id, p.valeur
 
 UNION ALL
 
@@ -107,6 +123,7 @@ SELECT
   s.code                            structure_code,
   CASE WHEN COALESCE(sr.structure_id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
   CASE WHEN COALESCE(sr.structure_id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
+  0                                 structure_is_exterieur,
   1                                 ponderation_service_du,
   1                                 ponderation_service_compl,
   COALESCE(fr.service_statutaire,1) service_statutaire,

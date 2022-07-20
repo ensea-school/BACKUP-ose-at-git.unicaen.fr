@@ -11,31 +11,25 @@ use Application\Entity\Db\Utilisateur;
  */
 trait UtilisateurAwareTrait
 {
-    /**
-     * @var Utilisateur
-     */
-    private $utilisateur;
-
-
+    protected ?Utilisateur $utilisateur = null;
 
 
 
     /**
      * @param Utilisateur $utilisateur
+     *
      * @return self
      */
-    public function setUtilisateur( Utilisateur $utilisateur = null )
+    public function setUtilisateur( ?Utilisateur $utilisateur )
     {
         $this->utilisateur = $utilisateur;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Utilisateur
-     */
-    public function getUtilisateur()
+    public function getUtilisateur(): ?Utilisateur
     {
         return $this->utilisateur;
     }

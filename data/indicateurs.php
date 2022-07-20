@@ -4,14 +4,14 @@ return [
     'Données personnelles' => [
         'id'          => 1,
         'indicateurs' => [
-            410 => [
+            110 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire est en attente de validation de ses données personnelles',
                 'libelle_pluriel'   => '%s vacataires sont en attente de validation de leurs données personnelles',
                 'route'             => 'intervenant/dossier',
                 'irrecevables'      => false,
             ],
-            420 => [
+            120 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire a saisi des données personnelles qui diffèrent de celles importées',
                 'libelle_pluriel'   => '%s vacataires ont saisi des données personnelles qui diffèrent de celles importées',
@@ -25,28 +25,28 @@ return [
     'Pièces justificatives' => [
         'id'          => 2,
         'indicateurs' => [
-            1010 => [
+            210 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire n\'a pas fourni toutes les pièces justificatives obligatoires',
                 'libelle_pluriel'   => '%s vacataires n\'ont pas fourni toutes les pièces justificatives obligatoires',
                 'route'             => 'piece-jointe/intervenant',
                 'irrecevables'      => false,
             ],
-            1011 => [
+            220 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent n\'a pas fourni toutes ses pièces justificatives obligatoires',
                 'libelle_pluriel'   => '%s permanents n\'ont pas fourni toutes leurs pièces justificatives obligatoires',
                 'route'             => 'piece-jointe/intervenant',
                 'irrecevables'      => false,
             ],
-            1020 => [
+            230 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire est en attente de validation de ses pièces justificatives obligatoires',
                 'libelle_pluriel'   => '%s vacataires sont en attente de validation de leurs pièces justificatives obligatoires',
                 'route'             => 'piece-jointe/intervenant',
                 'irrecevables'      => false,
             ],
-            1021 => [
+            240 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent est en attente de validation de ses pièces justificatives obligatoires',
                 'libelle_pluriel'   => '%s permanents sont en attente de validation de leurs pièces justificatives obligatoires',
@@ -60,26 +60,26 @@ return [
     'Agrément' => [
         'id'          => 3,
         'indicateurs' => [
-            200 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s dossier d\'intervenant est considéré comme irrecevable',
-                'libelle_pluriel'   => '%s dossiers d\'intervenants sont considérés comme irrecevables',
-                'route'             => 'intervenant/voir',
-                'irrecevables'      => true,
-            ],
-            210 => [
+            310 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire est en attente d\'agrément du conseil restreint',
                 'libelle_pluriel'   => '%s vacataires sont en attente d\'agrément du conseil restreint',
                 'route'             => 'intervenant/agrement/conseil-restreint',
                 'irrecevables'      => false,
             ],
-            220 => [
+            320 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire est en attente d\'agrément du conseil académique',
                 'libelle_pluriel'   => '%s vacataires sont en attente d\'agrément du conseil académique',
                 'route'             => 'intervenant/agrement/conseil-academique',
                 'irrecevables'      => false,
+            ],
+            330 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s dossier d\'intervenant est considéré comme irrecevable',
+                'libelle_pluriel'   => '%s dossiers d\'intervenants sont considérés comme irrecevables',
+                'route'             => 'intervenant/voir',
+                'irrecevables'      => true,
             ],
         ],
     ],
@@ -88,63 +88,63 @@ return [
     'Contrat / avenant' => [
         'id'          => 4,
         'indicateurs' => [
-            310 => [
+            410 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire a reçu l\'agrément du Conseil Académique et n\'a pas encore de contrat/avenant',
                 'libelle_pluriel'   => '%s vacataires ont reçu l\'agrément du Conseil Académique et n\'ont pas encore de contrat/avenant',
                 'route'             => 'intervenant/contrat',
                 'irrecevables'      => false,
             ],
-            320 => [
+            420 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire est en attente de son contrat initial',
                 'libelle_pluriel'   => '%s vacataires sont en attente de leur contrat initial',
                 'route'             => 'intervenant/contrat',
                 'irrecevables'      => false,
             ],
-            330 => [
+            430 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire est en attente de son avenant',
                 'libelle_pluriel'   => '%s vacataires sont en attente de leur avenant',
                 'route'             => 'intervenant/contrat',
                 'irrecevables'      => false,
             ],
-            340 => [
+            440 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s intervenant a saisi des heures d\'enseignements prévisionnels supplémentaires depuis l\'édition de son contrat ou avenant',
                 'libelle_pluriel'   => '%s intervenants ont saisi des heures d\'enseignements <i>prévisionnels</i> supplémentaires depuis l\'édition de leur contrat ou avenant',
                 'route'             => 'intervenant/validation/service/prevu',
                 'irrecevables'      => false,
             ],
-            350 => [
+            450 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s contrat/avenant a été déposé',
                 'libelle_pluriel'   => '%s contrats/avenants ont été déposés',
                 'route'             => 'intervenant/contrat',
                 'irrecevables'      => false,
             ],
-            360 => [
+            460 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s contrat est en attente de retour',
                 'libelle_pluriel'   => '%s contrats sont en attente de retour',
                 'route'             => 'intervenant/contrat',
                 'irrecevables'      => false,
             ],
-            361 => [
+            470 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s contrat  <i>envoyé par e-mail</i> est en attente de retour',
                 'libelle_pluriel'   => '%s contrats  <i>envoyés par e-mail</i> sont en attente de retour',
                 'route'             => 'intervenant/contrat',
                 'irrecevables'      => false,
             ],
-            370 => [
+            480 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s contrat n\'a pas de date de retour',
                 'libelle_pluriel'   => '%s contrats n\'ont pas de date de retour',
                 'route'             => 'intervenant/contrat',
                 'irrecevables'      => false,
             ],
-            380 => [
+            490 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire doit être pris en charge ou renouvelés dans le SI RH',
                 'libelle_pluriel'   => '%s vacataires doivent être pris en charge ou renouvelés dans le SI RH',
@@ -155,66 +155,52 @@ return [
     ],
 
 
-    'Enseignements et référentiel' => [
-        'id'          => 5,
-        'indicateurs' => [
-            510 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s intervenant a saisi des enseignements dont l\'étape, l\'élément pédagogique ou la période ont disparu',
-                'libelle_pluriel'   => '%s intervenants ont saisi des enseignements dont l\'étape, l\'élément pédagogique ou la période ont disparu',
-                'route'             => 'intervenant/services',
-                'irrecevables'      => false,
-            ],
-        ],
-    ],
-
-
     'Enseignements et référentiel <em>Permanents</em>' => [
         'id'          => 6,
         'indicateurs' => [
-            610 => [
+            510 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent est en attente de validation de ses enseignements <i>prévisionnels</i>',
                 'libelle_pluriel'   => '%s permanents sont en attente de validation de leurs enseignements <i>prévisionnels</i>',
                 'route'             => 'intervenant/validation/service/prevu',
                 'irrecevables'      => false,
             ],
-            620 => [
+            520 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent est en attente de validation de son référentiel <i>prévisionnel</i>',
                 'libelle_pluriel'   => '%s permanents sont en attente de validation de leur référentiel <i>prévisionnel</i>',
                 'route'             => 'intervenant/validation/referentiel/prevu',
                 'irrecevables'      => false,
             ],
-            630 => [
+            530 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent n\'a pas clôturé la saisie de ses services <i>réalisés</i>',
                 'libelle_pluriel'   => '%s permanents n\'ont pas clôturé la saisie de leurs services <i>réalisés</i>',
                 'route'             => 'intervenant/services-realises',
                 'irrecevables'      => false,
             ],
-            640 => [
+            540 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent a clôturé la saisie de ses services réalisés et est en attente de validation de ses enseignements <i>réalisés</i>',
                 'libelle_pluriel'   => '%s permanents ont clôturé la saisie de leurs services réalisés et sont en attente de validation de leurs enseignements <i>réalisés</i>',
                 'route'             => 'intervenant/validation/service/realise',
                 'irrecevables'      => false,
             ],
-            650 => [
+            550 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent a clôturé la saisie de ses services réalisés et est en attente de validation de ses enseignements <i>réalisés</i> par d\'autres composantes',
                 'libelle_pluriel'   => '%s permanents ont clôturé la saisie de leurs services réalisés et sont en attente de validation de leurs enseignements <i>réalisés</i> par d\'autres composantes',
                 'route'             => 'intervenant/validation/service/realise',
                 'irrecevables'      => false,
             ],
-            660 => [
+            560 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent a clôturé la saisie de ses services réalisés et est en attente de validation de son référentiel <i>réalisé</i>',
                 'libelle_pluriel'   => '%s permanents ont clôturé la saisie de leurs services réalisés et sont en attente de validation de leur référentiel <i>réalisé</i>',
                 'route'             => 'intervenant/validation/referentiel/realise',
                 'irrecevables'      => false,
             ],
-            670 => [
+            570 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent a clôturé la saisie de ses services réalisés et est en attente de validation de son référentiel <i>réalisé</i> par d\'autres composantes',
                 'libelle_pluriel'   => '%s permanents ont clôturé la saisie de leurs services réalisés et sont en attente de validation de leur référentiel <i>réalisé</i> par d\'autres composantes',
@@ -227,28 +213,35 @@ return [
     'Enseignements <em>Permanents</em> ou <em>Vacataires</em>' => [
         'id'          => 7,
         'indicateurs' => [
-            710 => [
+            610 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s intervenant a saisi des enseignements dont l\'étape, l\'élément pédagogique ou la période ont disparu',
+                'libelle_pluriel'   => '%s intervenants ont saisi des enseignements dont l\'étape, l\'élément pédagogique ou la période ont disparu',
+                'route'             => 'intervenant/services-prevus',
+                'irrecevables'      => false,
+            ],
+            620 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire est en attente de validation de ses enseignements <i>prévisionnels</i>',
                 'libelle_pluriel'   => '%s vacataires sont en attente de validation de leurs enseignements <i>prévisionnels</i>',
                 'route'             => 'intervenant/validation/service/prevu',
                 'irrecevables'      => false,
             ],
-            720 => [
+            630 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s vacataire est en attente de validation de ses enseignements <i>réalisés</i>',
                 'libelle_pluriel'   => '%s vacataires sont en attente de validation de leurs enseignements <i>réalisés</i>',
                 'route'             => 'intervenant/validation/service/realise',
                 'irrecevables'      => false,
             ],
-            730 => [
+            640 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanents est en attente de validation de ses enseignements <i>prévisionnels</i>',
                 'libelle_pluriel'   => '%s permanents sont en attente de validation de leurs enseignements <i>prévisionnels</i>',
                 'route'             => 'intervenant/validation/service/prevu',
                 'irrecevables'      => false,
             ],
-            740 => [
+            650 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanents est en attente de validation de ses enseignements <i>réalisés</i>',
                 'libelle_pluriel'   => '%s permanents sont en attente de validation de leurs enseignements <i>réalisés</i>',
@@ -262,21 +255,21 @@ return [
     'Affectation' => [
         'id'          => 8,
         'indicateurs' => [
-            110 => [
+            710 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent affecté dans une autre structure a des enseignements <i>prévisionnels validés</i> dans ma structure',
                 'libelle_pluriel'   => '%s permanents affectés dans une autre structure ont des enseignements <i>prévisionnels validés</i> dans ma structure',
                 'route'             => 'intervenant/validation/service/prevu',
                 'irrecevables'      => false,
             ],
-            120 => [
+            720 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent affecté dans ma structure a des enseignements <i>prévisionnels validés</i> dans une autre structure',
                 'libelle_pluriel'   => '%s permanents affectés dans ma structure ont des enseignements <i>prévisionnels validés</i> dans une autre structure',
                 'route'             => 'intervenant/validation/service/prevu',
                 'irrecevables'      => false,
             ],
-            130 => [
+            730 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s intervenant \'BIATSS\' affecté dans ma structure a des enseignements <i>prévisionnels validés</i> dans une autre structure',
                 'libelle_pluriel'   => '%s intervenants \'BIATSS\' affectés dans ma structure ont des enseignements <i>prévisionnels validés</i> dans une autre structure',
@@ -290,28 +283,28 @@ return [
     'Charges d\'enseignement' => [
         'id'          => 9,
         'indicateurs' => [
-            1110 => [
+            810 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s intervenant a des heures d\'enseignement <i>prévisionnel</i> dépassant la charge programmée au <i>premier semestre</i>',
                 'libelle_pluriel'   => '%s intervenants ont des heures d\'enseignement <i>prévisionnel</i> dépassant la charge programmée au <i>premier semestre</i>',
                 'route'             => 'indicateur/depassement-charges/prevu/s1',
                 'irrecevables'      => false,
             ],
-            1111 => [
+            820 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s intervenant a des heures d\'enseignement <i>prévisionnel</i> dépassant la charge programmée au <i>second semestre</i>',
                 'libelle_pluriel'   => '%s intervenants ont des heures d\'enseignement <i>prévisionnel</i> dépassant la charge programmée au <i>second semestre</i>',
                 'route'             => 'indicateur/depassement-charges/prevu/s2',
                 'irrecevables'      => false,
             ],
-            1120 => [
+            830 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s intervenant a des heures d\'enseignement <i>réalisé</i> dépassant la charge programmée au <i>premier semestre</i>',
                 'libelle_pluriel'   => '%s intervenants ont des heures d\'enseignement <i>réalisé</i> dépassant la charge programmée au <i>premier semestre</i>',
                 'route'             => 'indicateur/depassement-charges/realise/s1',
                 'irrecevables'      => false,
             ],
-            1121 => [
+            840 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s intervenant a des heures d\'enseignement <i>réalisé</i> dépassant la charge programmée au <i>second semestre</i>',
                 'libelle_pluriel'   => '%s intervenants ont des heures d\'enseignement <i>réalisé</i> dépassant la charge programmée au <i>second semestre</i>',
@@ -322,7 +315,7 @@ return [
     ],
 
 
-    'Mise en paiement <em>Vacataires</em>' => [
+    'Mises en paiement' => [
         'id'          => 10,
         'indicateurs' => [
             910 => [
@@ -334,8 +327,22 @@ return [
             ],
             920 => [
                 'enabled'           => true,
+                'libelle_singulier' => '%s permanent peut faire l\'objet d\'une demande de mise en paiement',
+                'libelle_pluriel'   => '%s permanents peuvent faire l\'objet d\'une demande de mise en paiement',
+                'route'             => 'intervenant/mise-en-paiement/demande',
+                'irrecevables'      => false,
+            ],
+            930 => [
+                'enabled'           => true,
                 'libelle_singulier' => '%s vacataire peut faire l\'objet d\'une mise en paiement',
                 'libelle_pluriel'   => '%s vacataires peuvent faire l\'objet d\'une mise en paiement',
+                'route'             => 'paiement/etat-demande-paiement',
+                'irrecevables'      => false,
+            ],
+            940 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s permanent peut faire l\'objet d\'une mise en paiement',
+                'libelle_pluriel'   => '%s permanents peuvent faire l\'objet d\'une mise en paiement',
                 'route'             => 'paiement/etat-demande-paiement',
                 'irrecevables'      => false,
             ],
@@ -343,23 +350,37 @@ return [
     ],
 
 
-    'Mise en paiement <em>Permanents</em>' => [
-        'id'          => 11,
+    'Plafonds par intervenants' => [
+        'id'          => 12,
         'indicateurs' => [
-            810 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s permanent peut faire l\'objet d\'une demande de mise en paiement',
-                'libelle_pluriel'   => '%s permanents peuvent faire l\'objet d\'une demande de mise en paiement',
-                'route'             => 'intervenant/mise-en-paiement/demande',
-                'irrecevables'      => false,
-            ],
-            820 => [
-                'enabled'           => true,
-                'libelle_singulier' => '%s permanent peut faire l\'objet d\'une mise en paiement',
-                'libelle_pluriel'   => '%s permanents peuvent faire l\'objet d\'une mise en paiement',
-                'route'             => 'paiement/etat-demande-paiement',
-                'irrecevables'      => false,
-            ],
+        ],
+    ],
+
+
+    'Plafonds par structures' => [
+        'id'          => 13,
+        'indicateurs' => [
+        ],
+    ],
+
+
+    'Plafonds par fonctions référentielles' => [
+        'id'          => 14,
+        'indicateurs' => [
+        ],
+    ],
+
+
+    'Plafonds par enseignements' => [
+        'id'          => 15,
+        'indicateurs' => [
+        ],
+    ],
+
+
+    'Plafonds par volumes horaires d\'enseignements' => [
+        'id'          => 16,
+        'indicateurs' => [
         ],
     ],
 ];

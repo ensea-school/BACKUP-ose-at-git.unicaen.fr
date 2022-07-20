@@ -2,46 +2,37 @@
 
 namespace Application\Form\OffreFormation\Traits;
 
-
 use Application\Form\OffreFormation\ElementModulateurCentreCoutForm;
 
 /**
- * Description of ElementModulateurCentreCoutAwareTrait
+ * Description of ElementModulateurCentreCoutFormAwareTrait
  *
  * @author UnicaenCode
  */
 trait ElementModulateurCentreCoutFormAwareTrait
 {
-    /**
-     * @var ElementModulateurCentreCoutForm
-     */
-    private $elementModulateurCentreCoutForm;
+    protected ?ElementModulateurCentreCoutForm $formOffreFormationElementModulateurCentreCout = null;
 
 
 
     /**
-     * @param ElementModulateurCentreCoutForm $elementModulateurCentreCoutForm
+     * @param ElementModulateurCentreCoutForm $formOffreFormationElementModulateurCentreCout
      *
      * @return self
      */
-    public function setElementModulateurCentreCoutForm(ElementModulateurCentreCoutForm $elementModulateurCentreCoutForm)
+    public function setFormOffreFormationElementModulateurCentreCout(?ElementModulateurCentreCoutForm $formOffreFormationElementModulateurCentreCout)
     {
-        $this->elementModulateurCentreCoutForm = $elementModulateurCentreCoutForm;
+        $this->formOffreFormationElementModulateurCentreCout = $formOffreFormationElementModulateurCentreCout;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire
-     *
-     * @return ElementModulateurCentreCoutForm
-     */
-    public function getElementModulateurCentreCoutForm()
+    public function getFormOffreFormationElementModulateurCentreCout(): ?ElementModulateurCentreCoutForm
     {
-        if (!empty($this->elementModulateurCentreCoutForm)) {
-            return $this->elementModulateurCentreCoutForm;
+        if (!empty($this->formOffreFormationElementModulateurCentreCout)) {
+            return $this->formOffreFormationElementModulateurCentreCout;
         }
 
         return \Application::$container->get('FormElementManager')->get(ElementModulateurCentreCoutForm::class);

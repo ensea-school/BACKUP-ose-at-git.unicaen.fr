@@ -11,10 +11,7 @@ use Application\Service\DossierAutreTypeService;
  */
 trait DossierAutreTypeServiceAwareTrait
 {
-    /**
-     * @var DossierAutreTypeService
-     */
-    private $serviceDossierAutreType;
+    protected ?DossierAutreTypeService $serviceDossierAutreType = null;
 
 
 
@@ -23,19 +20,16 @@ trait DossierAutreTypeServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDossierAutreType(DossierAutreTypeService $serviceDossierAutreType)
+    public function setServiceDossierAutreType(?DossierAutreTypeService $serviceDossierAutreType)
     {
-        $this->$serviceDossierAutreType = $serviceDossierAutreType;
+        $this->serviceDossierAutreType = $serviceDossierAutreType;
 
         return $this;
     }
 
 
 
-    /**
-     * @return DossierAutreTypeService
-     */
-    public function getServiceDossierAutreType()
+    public function getServiceDossierAutreType(): ?DossierAutreTypeService
     {
         if (empty($this->serviceDossierAutreType)) {
             $this->serviceDossierAutreType = \Application::$container->get(DossierAutreTypeService::class);

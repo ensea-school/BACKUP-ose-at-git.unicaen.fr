@@ -1,0 +1,72 @@
+<?php
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+/**
+ * @var $form \Intervenant\Form\MailerIntervenantForm
+ */
+
+
+echo $this->form()->openTag($form);
+
+echo $this->formControlGroup($form->get('from'));
+echo $this->formControlGroup($form->get('to'));
+echo $this->formControlGroup($form->get('copy'));
+echo $this->formControlGroup($form->get('subject'));
+echo $this->formControlGroup($form->get('content'));
+echo $this->formRow($form->get('submit'));
+echo $this->formElement($form->get('security'));
+
+echo $this->form()->closeTag();
+
+?>
+
+<script type="text/javascript">
+    $(function () {
+        var selector = "textarea#<?= $form->get('content')->getAttribute('id') ?>";
+        var form = $("form#<?= $form->getAttribute('id') ?>");
+        var message = "Êtes-vous sûr(e) de vouloir envoyer ce message à l'intervenant ?";
+
+
+        installEditor(selector, form);
+
+        //  avant de POSTer
+        form.submit(function (e) {
+            if (!confirm(message)) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+    });
+
+    /**
+     * Installation d'un éditeur WYSIWYG (vers HTML) : http://www.tinymce.com
+     * NB: l'inclusion du script de TinyMCE est faite dans la vue "mère" (application/indicateur/result.phtml).
+     * @param {string} selector
+     * @param {object} form
+     */
+    function installEditor(selector, form) {
+        WidgetInitializer.includeJs(Url('vendor/tinymce-4.4.1/js/tinymce/tinymce.min.js'));
+        tinymce.editors = [];
+        tinymce.init({
+            selector: selector,
+            language: 'fr_FR',
+            width: '100%',
+            height: 250,
+            plugins: "link",
+            statusbar: false,
+            menubar: false,
+            toolbar: "bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | undo redo"
+        });
+        // Prevent bootstrap dialog from blocking focusin
+        $(document).on('focusin', function (e) {
+            if ($(e.target).closest(".mce-window").length) {
+                e.stopImmediatePropagation();
+            }
+        });
+        // Indispensable pour que le contenu du textarea soit mis à jour avant de POSTer
+        form.submit(function () {
+            tinymce.triggerSave();
+        });
+    }
+</script>

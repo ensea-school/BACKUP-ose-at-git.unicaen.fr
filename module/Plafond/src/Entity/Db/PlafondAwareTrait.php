@@ -2,6 +2,7 @@
 
 namespace Plafond\Entity\Db;
 
+
 /**
  * Description of PlafondAwareTrait
  *
@@ -9,10 +10,7 @@ namespace Plafond\Entity\Db;
  */
 trait PlafondAwareTrait
 {
-    /**
-     * @var Plafond
-     */
-    protected $plafond;
+    protected ?Plafond $plafond = null;
 
 
 
@@ -21,7 +19,7 @@ trait PlafondAwareTrait
      *
      * @return self
      */
-    public function setPlafond(Plafond $plafond = null)
+    public function setPlafond( ?Plafond $plafond )
     {
         $this->plafond = $plafond;
 

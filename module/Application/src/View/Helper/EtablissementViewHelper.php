@@ -58,7 +58,6 @@ class EtablissementViewHelper extends AbstractHelper
 
         $vars = [
             "Libellé"                                   => $entity->getLibelle(),
-            "Localisation :"                            => $entity->getLocalisation(),
             "Département :"                             => $entity->getDepartement(),
             "Localisation :"                            => $entity->getLocalisation() . " (" . $entity->getDepartement() . ")",
             "N° {$entity->getSource()->getLibelle()} :" => $entity->getSourceCode(),
@@ -86,8 +85,8 @@ class EtablissementViewHelper extends AbstractHelper
             return '<p class="bg-danger"><abbr title="Cet établissement n\'existe plus">' . $etablissement . '</abbr></p>';
         }
 
-        $url   = $this->getView()->url('etablissement/default', ['action' => 'voir', 'id' => $etablissement->getId()]);
-        $pourl = $this->getView()->url('etablissement/default', ['action' => 'apercevoir', 'id' => $etablissement->getId()]);
+        $url   = $this->getView()->url('etablissement', ['action' => 'voir', 'id' => $etablissement->getId()]);
+        $pourl = $this->getView()->url('etablissement', ['action' => 'apercevoir', 'id' => $etablissement->getId()]);
         $out   = '<a href="' . $url . '" data-po-href="' . $pourl . '" class="ajax-modal">' . $etablissement . '</a>';
 
         return $out;

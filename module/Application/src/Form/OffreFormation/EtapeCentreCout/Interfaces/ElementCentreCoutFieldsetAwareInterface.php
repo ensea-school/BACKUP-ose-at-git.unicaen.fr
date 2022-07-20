@@ -3,7 +3,6 @@
 namespace Application\Form\OffreFormation\EtapeCentreCout\Interfaces;
 
 use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset;
-use RuntimeException;
 
 /**
  * Description of ElementCentreCoutFieldsetAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface ElementCentreCoutFieldsetAwareInterface
 {
     /**
-     * @param ElementCentreCoutFieldset $fieldsetOffreFormationEtapeCentreCoutElementCentreCout
+     * @param ElementCentreCoutFieldset|null $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset
+     *
      * @return self
      */
-    public function setFieldsetOffreFormationEtapeCentreCoutElementCentreCout( ElementCentreCoutFieldset $fieldsetOffreFormationEtapeCentreCoutElementCentreCout );
+    public function setFormOffreFormationEtapeCentreCoutElementCentreCoutFieldset( ?ElementCentreCoutFieldset $formOffreFormationEtapeCentreCoutElementCentreCoutFieldset );
 
 
 
-    /**
-     * @return ElementCentreCoutFieldsetAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFieldsetOffreFormationEtapeCentreCoutElementCentreCout();
+    public function getFormOffreFormationEtapeCentreCoutElementCentreCoutFieldset(): ?ElementCentreCoutFieldset;
 }

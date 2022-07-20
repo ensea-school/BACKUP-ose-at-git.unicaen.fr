@@ -1,24 +1,8 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_330 AS
 SELECT
-  w.intervenant_id,
-  w.structure_id
+  i.id intervenant_id,
+  i.structure_id
 FROM
-	intervenant i
-	JOIN tbl_workflow w ON w.intervenant_id = i.id
-	JOIN (
-    SELECT DISTINCT
-      c.intervenant_id,
-      c.structure_id
-    FROM
-    	contrat c
-    WHERE
-      c.type_contrat_id = 1 --a déjà un contrat de type 'CONTRAT'
-      AND c.histo_destruction IS NULL
-  ) hc ON hc.intervenant_id = i.id
-	LEFT JOIN contrat c ON c.intervenant_id = i.id AND c.structure_id = w.structure_id AND c.histo_destruction IS NULL
+  intervenant i
 WHERE
-  w.atteignable = 1
-  AND w.etape_code = 'CONTRAT'
-  AND w.objectif > 0
-  AND w.realisation < w.objectif
-  AND c.id IS NULL
+  i.irrecevable = 1

@@ -34,6 +34,15 @@ return [
                         'plafond' => '[0-9]*',
                     ],
                 ],
+                'plafonds'  => [
+                    'route'       => '/plafonds/:perimetre/:id/:typeVolumeHoraire',
+                    'action'      => 'plafonds',
+                    'constraints' => [
+                        'perimetre'         => '[a-z_]*',
+                        'id'                => '[0-9]*',
+                        'typeVolumeHoraire' => '[0-9]*',
+                    ],
+                ],
 
                 'config-application' => [
                     'route'  => '/config/application',
@@ -110,7 +119,7 @@ return [
         'administration' => [
             'pages' => [
                 'plafonds' => [
-                    'icon'         => 'glyphicon glyphicon-wrench',
+                    'icon'         => 'fas fa-wrench',
                     'label'        => "Plafonds",
                     'route'        => 'plafond',
                     'resource'     => PrivilegeController::getResourceId('Plafond\Controller\Plafond', 'index'),
@@ -134,8 +143,14 @@ return [
         ],
         [
             'controller' => 'Plafond\Controller\Plafond',
-            'action'     => ['config-application'],
-            'privileges' => Privileges::PLAFONDS_CONFIG_APPLICATION,
+            'action'     => ['plafonds'],
+            'privileges' => [
+                Privileges::PLAFONDS_VISUALISATION,
+                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                Privileges::REFERENTIEL_REALISE_VISUALISATION,
+            ],
         ],
         [
             'controller' => 'Plafond\Controller\Plafond',
@@ -185,23 +200,24 @@ return [
         ],*/
 
     'controllers' => [
-        'Plafond\Controller\Plafond'          => Controller\PlafondControllerFactory::class,
-        'Plafond\Controller\PlafondStructure' => Controller\PlafondStructureControllerFactory::class,
-        'Plafond\Controller\Derogation'       => Controller\DerogationControllerFactory::class,
+        'Plafond\Controller\Plafond'    => Controller\PlafondControllerFactory::class,
+        'Plafond\Controller\Derogation' => Controller\DerogationControllerFactory::class,
     ],
 
     'services' => [
-        Assertion\PlafondAssertion::class      => AssertionFactory::class,
-        Service\PlafondService::class          => Service\PlafondServiceFactory::class,
-        Service\PlafondStructureService::class => Service\PlafondStructureServiceFactory::class,
-        Processus\PlafondProcessus::class      => Processus\PlafondProcessusFactory::class,
+        Assertion\PlafondAssertion::class => AssertionFactory::class,
+        Service\PlafondService::class     => Service\PlafondServiceFactory::class,
+        Processus\PlafondProcessus::class => Processus\PlafondProcessusFactory::class,
+        Service\IndicateurService::class  => Service\IndicateurServiceFactory::class,
     ],
 
     'forms' => [
-        Form\PlafondForm::class => Form\PlafondFormFactory::class,
+        Form\PlafondForm::class           => Form\PlafondFormFactory::class,
+        Form\PlafondConfigFieldset::class => Form\PlafondConfigFieldsetFactory::class,
     ],
 
     'view_helpers' => [
         'plafondConfig' => PlafondConfigElementViewHelperFactory::class,
+        'plafonds'      => View\Helper\PlafondsViewHelperFactory::class,
     ],
 ];

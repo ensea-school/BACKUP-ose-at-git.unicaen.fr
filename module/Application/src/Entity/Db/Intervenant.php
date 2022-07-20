@@ -11,11 +11,11 @@ use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Traits\AdresseTrait;
 use Application\Interfaces\AdresseInterface;
 use Doctrine\Persistence\Mapping\ClassMetadata;
-use Doctrine\Persistence\ObjectManager;
-use Doctrine\Persistence\ObjectManagerAware;
 use Indicateur\Entity\Db\IndicModifDossier;
+use Intervenant\Entity\Db\Statut;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
@@ -26,7 +26,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
  * Intervenant
  *
  */
-class Intervenant implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, ObjectManagerAware, AdresseInterface
+class Intervenant implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, EntityManagerAwareInterface, AdresseInterface
 {
     use AnneeAwareTrait;
     use StructureAwareTrait;
@@ -60,7 +60,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     protected $utilisateurCode;
 
     /**
-     * @var \Application\Entity\Db\StatutIntervenant
+     * @var \Intervenant\Entity\Db\Statut
      */
     protected $statut;
 
@@ -364,21 +364,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
     /**
-     * Injects responsible ObjectManager and the ClassMetadata into this persistent object.
-     *
-     * @param ObjectManager $objectManager
-     * @param ClassMetadata $classMetadata
-     *
-     * @return void
-     */
-    public function injectObjectManager(ObjectManager $objectManager, ClassMetadata $classMetadata)
-    {
-        $this->setEntityManager($objectManager);
-    }
-
-
-
-    /**
      * @param bool $demande
      */
     public function hasMiseEnPaiement($demande = true)
@@ -475,7 +460,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get statut
      *
-     * @return StatutIntervenant
+     * @return Statut
      */
     public function getStatut()
     {
@@ -487,11 +472,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Set statut
      *
-     * @param StatutIntervenant $statut
+     * @param Statut $statut
      *
      * @return Intervenant
      */
-    public function setStatut(StatutIntervenant $statut = null)
+    public function setStatut(Statut $statut = null)
     {
         $this->statut = $statut;
 
@@ -1351,7 +1336,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
             if ($typeContrat && $typeContrat !== $contrat->getTypeContrat()) {
                 return false;
             }
-            if ($structure && $structure !== $contrat->getStructure()) {
+            if ($structure && $structure !== $contrat->getStructure() && $contrat->getStructure() !== null) {
                 return false;
             }
 
@@ -1606,7 +1591,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     }
 
 
-    
+
     /**
      * Get validation
      *

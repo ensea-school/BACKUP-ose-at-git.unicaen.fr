@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Validation;
+use Application\Form\Service\Saisie;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
@@ -93,7 +94,7 @@ class ServiceController extends AbstractController
         $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $viewModel        = new \Laminas\View\Model\ViewModel();
 
-        $canAddService = Privileges::ENSEIGNEMENT_EDITION;
+        $canAddService = Privileges::ENSEIGNEMENT_PREVU_EDITION || Privileges::ENSEIGNEMENT_REALISE_EDITION;
 
         $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
         $params             = $this->getEvent()->getRouteMatch()->getParams();
@@ -293,7 +294,7 @@ class ServiceController extends AbstractController
             }
         }
 
-        return compact('rechercheForm', $errors);
+        return compact('rechercheForm', 'errors');
     }
 
 
@@ -415,7 +416,7 @@ class ServiceController extends AbstractController
 
         foreach ($services as $service) {
             $service->setTypeVolumeHoraire($realise);
-            if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
+            if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_REALISE_EDITION)) {
                 $this->getServiceService()->setRealisesFromPrevus($service);
             }
         }
@@ -447,7 +448,10 @@ class ServiceController extends AbstractController
             throw new \LogicException('Le service n\'existe pas');
         }
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
-        if (!$this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
+        $privilege = null;
+        if ($typeVolumeHoraire->isPrevu()) $privilege = Privileges::ENSEIGNEMENT_PREVU_EDITION;
+        if ($typeVolumeHoraire->isRealise()) $privilege = Privileges::ENSEIGNEMENT_REALISE_EDITION;
+        if ((!$privilege) || !$this->isAllowed($service, $privilege)) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }
 
@@ -514,7 +518,7 @@ class ServiceController extends AbstractController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                if (!$this->isAllowed($entity, Privileges::ENSEIGNEMENT_EDITION)) {
+                if (!$this->isAllowed($entity, $typeVolumeHoraire->getPrivilegeEnseignementEdition())) {
                     $this->flashMessenger()->addErrorMessage("Vous n'êtes pas autorisé à créer ou modifier ce service.");
                 } else {
                     $form->saveToContext();
@@ -522,13 +526,14 @@ class ServiceController extends AbstractController
                     try {
                         $entity = $service->save($entity);
                         $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
+                        $hFin = $entity->getVolumeHoraireListe()->getHeures();
+                        $this->updateTableauxBord($entity->getIntervenant());
+                        if (!$this->getProcessusPlafond()->endTransaction($entity->getIntervenant(), $typeVolumeHoraire, $hFin < $hDeb)) {
+                            $this->updateTableauxBord($entity->getIntervenant());
+                        }
                     } catch (\Exception $e) {
                         $this->flashMessenger()->addErrorMessage($this->translate($e));
-                    }
-                    $hFin = $entity->getVolumeHoraireListe()->getHeures();
-                    $this->updateTableauxBord($entity->getIntervenant());
-                    if (!$this->getProcessusPlafond()->endTransaction($entity->getIntervenant(), $typeVolumeHoraire, $hFin < $hDeb)) {
-                        $this->updateTableauxBord($entity->getIntervenant());
+                        $this->em()->rollback();
                     }
                 }
             } else {
@@ -620,9 +625,14 @@ class ServiceController extends AbstractController
         /* @var $structure Structure */
 
 
+        $plafondOk = $this->getProcessusPlafond()->controle($intervenant, $typeVolumeHoraire, true);
+        if (!$plafondOk) {
+            return new MessengerViewModel();
+        }
+
         $validation = $this->getProcessusValidationEnseignement()->creer($intervenant, $structure);
 
-        if ($this->isAllowed($validation, Privileges::ENSEIGNEMENT_VALIDATION)) {
+        if ($this->isAllowed($validation, $typeVolumeHoraire->getPrivilegeEnseignementValidation())) {
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusValidationEnseignement()->enregistrer($typeVolumeHoraire, $validation);
@@ -677,10 +687,11 @@ class ServiceController extends AbstractController
             'formule',
             'validation_enseignement',
             'contrat',
+            'service',
         ], $intervenant);
 
         if (!$validation) {
-            $this->getServiceWorkflow()->calculerTableauxBord(['service_saisie', 'service', 'piece_jointe_demande', 'piece_jointe_fournie'], $intervenant);
+            $this->getServiceWorkflow()->calculerTableauxBord(['piece_jointe_demande', 'piece_jointe_fournie'], $intervenant);
         }
     }
 }

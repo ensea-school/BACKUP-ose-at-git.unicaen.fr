@@ -11,10 +11,7 @@ use Application\Form\Service\RechercheForm;
  */
 trait RechercheFormAwareTrait
 {
-    /**
-     * @var RechercheForm
-     */
-    private $formServiceRecherche;
+    protected ?RechercheForm $formServiceRecherche = null;
 
 
 
@@ -23,7 +20,7 @@ trait RechercheFormAwareTrait
      *
      * @return self
      */
-    public function setFormServiceRecherche(RechercheForm $formServiceRecherche)
+    public function setFormServiceRecherche(?RechercheForm $formServiceRecherche)
     {
         $this->formServiceRecherche = $formServiceRecherche;
 
@@ -32,12 +29,7 @@ trait RechercheFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return RechercheForm
-     */
-    public function getFormServiceRecherche()
+    public function getFormServiceRecherche(): ?RechercheForm
     {
         if (!empty($this->formServiceRecherche)) {
             return $this->formServiceRecherche;

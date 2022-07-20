@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Form\TypeIntervention\Traits;
 
 use Application\Form\TypeIntervention\TypeInterventionStatutSaisieForm;
@@ -10,36 +11,28 @@ use Application\Form\TypeIntervention\TypeInterventionStatutSaisieForm;
  */
 trait TypeInterventionStatutSaisieFormAwareTrait
 {
-    /**
-     * @var TypeInterventionStatutSaisieForm
-     */
-    private $formTypeInterventionStatutSaisie;
+    protected ?TypeInterventionStatutSaisieForm $formTypeInterventionTypeInterventionStatutSaisie = null;
 
 
 
     /**
-     * @param TypeInterventionStatutSaisieForm $formTypeInterventionStatutSaisie
+     * @param TypeInterventionStatutSaisieForm $formTypeInterventionTypeInterventionStatutSaisie
      *
      * @return self
      */
-    public function setFormTypeInterventionStatutSaisie(TypeInterventionStatutSaisieForm $formTypeInterventionStatutSaisie)
+    public function setFormTypeInterventionTypeInterventionStatutSaisie(?TypeInterventionStatutSaisieForm $formTypeInterventionTypeInterventionStatutSaisie)
     {
-        $this->formTypeInterventionStatutSaisie = $formTypeInterventionStatutSaisie;
+        $this->formTypeInterventionTypeInterventionStatutSaisie = $formTypeInterventionTypeInterventionStatutSaisie;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return TypeInterventionStatutSaisieForm
-     */
-    public function getFormTypeInterventionStatutSaisie()
+    public function getFormTypeInterventionTypeInterventionStatutSaisie(): ?TypeInterventionStatutSaisieForm
     {
-        if (!empty($this->formTypeInterventionStatutSaisie)) {
-            return $this->formTypeInterventionStatutSaisie;
+        if (!empty($this->formTypeInterventionTypeInterventionStatutSaisie)) {
+            return $this->formTypeInterventionTypeInterventionStatutSaisie;
         }
 
         return \Application::$container->get('FormElementManager')->get(TypeInterventionStatutSaisieForm::class);

@@ -1,8 +1,9 @@
 <?php
 
 /**
- * @var $this \Application\View\Renderer\PhpRenderer
- * @var $fti  FormuleTestIntervenant[]
+ * @var $this     \Application\View\Renderer\PhpRenderer
+ * @var $fti      FormuleTestIntervenant[]
+ * @var $formules array
  */
 
 use Application\Entity\Db\FormuleTestIntervenant;
@@ -29,8 +30,8 @@ $title = "Page de tests de formule de calcul des HETD";
             <td><?= $formuleTestIntervenant->getFormule() ?></td>
             <td><?= $formuleTestIntervenant->getAnnee() ?></td>
             <td>
-                <a href="<?= $this->url('formule-calcul/test/saisir', ['formuleTestIntervenant' => $formuleTestIntervenant->getId()]) ?>"><span
-                            class="glyphicon glyphicon-pencil"></span></span></a>
+                <a href="<?= $this->url('formule-calcul/test/saisir', ['formuleTestIntervenant' => $formuleTestIntervenant->getId()]) ?>"><i
+                            class="fas fa-pencil"></i></i></a>
                 <a class="pop-ajax"
                    href="<?= $this->url('formule-calcul/test/supprimer', ['formuleTestIntervenant' => $formuleTestIntervenant->getId()]) ?>"
                    title="Supprimer le test de formule"
@@ -40,10 +41,31 @@ $title = "Page de tests de formule de calcul des HETD";
                    data-cancel-button="Non"
                    data-submit-reload="true"
 
-                ><span class="glyphicon glyphicon-trash"></span></span></a>
+                ><i class="fas fa-trash-can"></i></span></a>
             </td>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
-<a class="btn btn-primary" href="<?= $this->url('formule-calcul/test/saisir') ?>">Nouveau test de formule</a>
+<a class="btn btn-primary" href="<?= $this->url('formule-calcul/test/saisir') ?>">Ajouter un test de formule à saisir manuellement</a>
+
+
+<h2>Ajouter un test de formule en important les données d'un tableur</h2>
+<form method="post" enctype="multipart/form-data" action="<?= $this->url('formule-calcul/test/import') ?>">
+    <div class="form-group">
+        <label for="formule-name">Feuille de calcul (format Excel ou Calc)</label>
+        <input class="form-control" id="formule-fichier" type="file" name="fichier"/>
+    </div>
+
+    <?php
+    $selFormules = new \Laminas\Form\Element\Select();
+    $selFormules->setName('formule');
+    $selFormules->setValueOptions(\UnicaenApp\Util::collectionAsOptions($formules));
+    $selFormules->setLabel('Formule correspondante');
+    echo $this->formControlGroup($selFormules);
+    ?>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Ajout à partir d'un tableur</button>
+    </div>
+</form>

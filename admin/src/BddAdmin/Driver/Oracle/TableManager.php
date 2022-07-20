@@ -134,6 +134,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
                 break;
                 case 'VARCHAR2':
                 case 'CHAR':
+                case 'RAW':
                     $type = Bdd::TYPE_STRING;
                 break;
                 case 'DATE':
@@ -146,10 +147,11 @@ class TableManager extends AbstractManager implements TableManagerInterface
                     $type = Bdd::TYPE_BLOB;
                 break;
                 case 'CLOB':
+                case 'LONG':
                     $type = Bdd::TYPE_CLOB;
                 break;
                 default:
-                    throw new BddException('Le type de colonne "' . $paq['type'] . '" n\'est pas reconnu');
+                    throw new BddException('Le type de colonne "' . $paq['type'] . '" n\'est pas reconnu pour ' . $paq['name'] . '.' . $paq['cname']);
             }
 
             $data[$paq['name']]['columns'][$paq['cname']] = [

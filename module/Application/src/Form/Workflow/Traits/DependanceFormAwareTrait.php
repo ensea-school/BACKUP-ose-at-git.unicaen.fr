@@ -11,10 +11,7 @@ use Application\Form\Workflow\DependanceForm;
  */
 trait DependanceFormAwareTrait
 {
-    /**
-     * @var DependanceForm
-     */
-    private $formWorkflowDependance;
+    protected ?DependanceForm $formWorkflowDependance = null;
 
 
 
@@ -23,7 +20,7 @@ trait DependanceFormAwareTrait
      *
      * @return self
      */
-    public function setFormWorkflowDependance(DependanceForm $formWorkflowDependance)
+    public function setFormWorkflowDependance(?DependanceForm $formWorkflowDependance)
     {
         $this->formWorkflowDependance = $formWorkflowDependance;
 
@@ -32,13 +29,7 @@ trait DependanceFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return DependanceForm
-     * @throws RuntimeException
-     */
-    public function getFormWorkflowDependance()
+    public function getFormWorkflowDependance(): ?DependanceForm
     {
         if (!empty($this->formWorkflowDependance)) {
             return $this->formWorkflowDependance;

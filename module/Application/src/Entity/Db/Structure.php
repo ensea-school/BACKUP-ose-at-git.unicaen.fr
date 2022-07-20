@@ -6,6 +6,7 @@ use Application\Entity\Traits\AdresseTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -19,62 +20,23 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     use ImportAwareTrait;
     use HistoriqueAwareTrait;
 
-    /**
-     * @var string
-     */
-    protected $code;
+    protected int        $id;
 
-    /**
-     * @var string
-     */
-    protected $libelleCourt;
+    protected ?string    $code              = null;
 
-    /**
-     * @var string
-     */
-    protected $libelleLong;
+    protected ?string    $libelleCourt      = null;
 
-    /**
-     * @var integer
-     */
-    protected $id;
+    protected ?string    $libelleLong       = null;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $elementPedagogique;
+    protected Collection $elementPedagogique;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $centreCout;
+    protected Collection $centreCout;
 
-    /**
-     * miseEnPaiementIntervenantStructure
-     *
-     * @var MiseEnPaiementIntervenantStructure
-     */
-    protected $miseEnPaiementIntervenantStructure;
+    protected Collection $miseEnPaiementIntervenantStructure;
 
-    /**
-     * @var boolean
-     */
-    protected $enseignement;
+    protected bool       $enseignement      = false;
 
-    /**
-     * @var float
-     */
-    protected $plafondReferentiel;
-
-    /**
-     * @var boolean
-     */
-    protected $affAdresseContrat;
-
-    /**
-     * @var string
-     */
-    protected $sourceCode;
+    protected            $affAdresseContrat = true;
 
 
 
@@ -87,22 +49,21 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
-    /**
-     * @return string
-     */
-    public function getCode()
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+
+
+    public function getCode(): ?string
     {
         return $this->code;
     }
 
 
 
-    /**
-     * @param string $code
-     *
-     * @return Structure
-     */
-    public function setCode($code)
+    public function setCode(?string $code): Structure
     {
         $this->code = $code;
 
@@ -111,14 +72,14 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
-    /**
-     * Set libelleCourt
-     *
-     * @param string $libelleCourt
-     *
-     * @return Structure
-     */
-    public function setLibelleCourt($libelleCourt)
+    public function getLibelleCourt(): ?string
+    {
+        return $this->libelleCourt;
+    }
+
+
+
+    public function setLibelleCourt(?string $libelleCourt): Structure
     {
         $this->libelleCourt = $libelleCourt;
 
@@ -127,76 +88,16 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
-    /**
-     * Get libelleCourt
-     *
-     * @return string
-     */
-    public function getLibelleCourt()
-    {
-        return $this->libelleCourt;
-    }
-
-
-
-    /**
-     * Set libelleLong
-     *
-     * @param string $libelleLong
-     *
-     * @return Structure
-     */
-    public function setLibelleLong($libelleLong)
-    {
-        $this->libelleLong = $libelleLong;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get libelleLong
-     *
-     * @return string
-     */
-    public function getLibelleLong()
+    public function getLibelleLong(): ?string
     {
         return $this->libelleLong;
     }
 
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function setLibelleLong(?string $libelleLong): Structure
     {
-        return $this->id;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-
-
-    /**
-     * @param string $sourceCode
-     *
-     * @return Structure
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
+        $this->libelleLong = $libelleLong;
 
         return $this;
     }
@@ -295,22 +196,14 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
-    /**
-     * @return bool
-     */
-    public function isEnseignement()
+    public function isEnseignement(): bool
     {
         return $this->enseignement;
     }
 
 
 
-    /**
-     * @param bool $enseignement
-     *
-     * @return Structure
-     */
-    public function setEnseignement($enseignement)
+    public function setEnseignement(bool $enseignement): Structure
     {
         $this->enseignement = $enseignement;
 
@@ -319,50 +212,14 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
-    /**
-     * Set plafondReferentiel
-     *
-     * @param string $plafondReferentiel
-     *
-     * @return Structure
-     */
-    public function setPlafondReferentiel($plafondReferentiel)
-    {
-        $this->plafondReferentiel = $plafondReferentiel;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get plafondReferentiel
-     *
-     * @return float
-     */
-    public function getPlafondReferentiel()
-    {
-        return $this->plafondReferentiel;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isAffAdresseContrat()
+    public function isAffAdresseContrat(): bool
     {
         return $this->affAdresseContrat;
     }
 
 
 
-    /**
-     * @param bool $affAdresseContrat
-     *
-     * @return Structure
-     */
-    public function setAffAdresseContrat($affAdresseContrat)
+    public function setAffAdresseContrat(bool $affAdresseContrat): Structure
     {
         $this->affAdresseContrat = $affAdresseContrat;
 

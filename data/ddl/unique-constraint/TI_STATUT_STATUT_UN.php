@@ -8,7 +8,7 @@ return [
     'index'   => 'TI_STATUT_STATUT_UN',
     'columns' => [
         'TYPE_INTERVENTION_ID',
-        'STATUT_INTERVENANT_ID',
+        'STATUT_ID',
     ],
 ];
 

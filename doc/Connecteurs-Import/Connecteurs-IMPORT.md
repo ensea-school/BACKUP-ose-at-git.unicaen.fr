@@ -1,6 +1,5 @@
-**ATTENTION** : cette docmuentation est valable à partir de la version 15 de OSE. Pour les versions antérieures, les vues sources sont
-plutôt à récupérer dans l'ancienne version de la
-documentation : [Ancienne documentation](https://git.unicaen.fr/open-source/OSE/-/tree/b14/connecteurs)
+**ATTENTION** : cette documentation est valable à partir de la version 15 de OSE. Pour les versions antérieures, les vues sources sont plutôt à récupérer dans
+l'ancienne version de la documentation : [Ancienne documentation](https://git.unicaen.fr/open-source/OSE/-/tree/b14/connecteurs)
 
 # Mécanisme
 
@@ -797,6 +796,5 @@ UNICAEN_IMPORT.REFRESH_MV('MV_INTERVENANT');
 - Table NOEUD : mise à jour de tableaux de bord après la synchro :
 
 ```sql
-UNICAEN_IMPORT.REFRESH_MV('TBL_NOEUD');
-UNICAEN_TBL.CALCULER('chargens');
+OSE_CHARGENS.MAJ_CACHE;
 ```

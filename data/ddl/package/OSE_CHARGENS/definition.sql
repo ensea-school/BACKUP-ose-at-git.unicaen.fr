@@ -1,5 +1,7 @@
 CREATE OR REPLACE PACKAGE "OSE_CHARGENS" AS
 
+  PROCEDURE MAJ_CACHE;
+
   PROCEDURE CALC_EFFECTIF( noeud_id NUMERIC, scenario_id NUMERIC, type_heures_id NUMERIC, etape_id NUMERIC);
   PROCEDURE CALC_SUB_EFFECTIF( noeud_id NUMERIC, scenario_id NUMERIC, type_heures_id NUMERIC, etape_id NUMERIC);
 

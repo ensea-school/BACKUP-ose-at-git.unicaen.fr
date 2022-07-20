@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\MotifNonPaiementService;
 
 /**
- * Description of MotifNonPaiementAwareTrait
+ * Description of MotifNonPaiementServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait MotifNonPaiementServiceAwareTrait
 {
-    /**
-     * @var MotifNonPaiementService
-     */
-    private $serviceMotifNonPaiement;
+    protected ?MotifNonPaiementService $serviceMotifNonPaiement = null;
 
 
 
@@ -23,7 +20,7 @@ trait MotifNonPaiementServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceMotifNonPaiement(MotifNonPaiementService $serviceMotifNonPaiement)
+    public function setServiceMotifNonPaiement(?MotifNonPaiementService $serviceMotifNonPaiement)
     {
         $this->serviceMotifNonPaiement = $serviceMotifNonPaiement;
 
@@ -32,10 +29,7 @@ trait MotifNonPaiementServiceAwareTrait
 
 
 
-    /**
-     * @return MotifNonPaiementService
-     */
-    public function getServiceMotifNonPaiement()
+    public function getServiceMotifNonPaiement(): ?MotifNonPaiementService
     {
         if (empty($this->serviceMotifNonPaiement)) {
             $this->serviceMotifNonPaiement = \Application::$container->get(MotifNonPaiementService::class);

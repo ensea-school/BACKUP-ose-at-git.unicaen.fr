@@ -10,7 +10,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
-use Application\ORM\Event\Listeners\HistoriqueListener;
+use Application\ORM\Event\Listeners\HistoriqueListenerAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ContratServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
@@ -36,6 +36,7 @@ class ContratProcessus extends AbstractProcessus
     use TypeValidationServiceAwareTrait;
     use VolumeHoraireServiceAwareTrait;
     use ValidationServiceAwareTrait;
+    use HistoriqueListenerAwareTrait;
 
 
     /**
@@ -143,12 +144,12 @@ class ContratProcessus extends AbstractProcessus
     /**
      * Création ET peuplement d'un nouveau contrat
      *
-     * @param Intervenant $intervenant
-     * @param Structure   $structure
+     * @param Intervenant    $intervenant
+     * @param Structure|null $structure
      *
      * @return Contrat
      */
-    public function creer(Intervenant $intervenant, Structure $structure)
+    public function creer(Intervenant $intervenant, Structure $structure = null)
     {
         $contrat = $this->getServiceContrat()->newEntity();
         /* @var $contrat Contrat */
@@ -181,14 +182,15 @@ class ContratProcessus extends AbstractProcessus
 
         // on récupère les services non contractualisés et on la place les VH correspondants dans le contrat
         $services = $this->getServices($contrat->getIntervenant(), null, $contrat->getStructure(), false);
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
         foreach ($services as $service) {
             foreach ($service->getVolumeHoraire() as $vh) {
                 /* @var $vh VolumeHoraire */
                 $vh->setContrat($contrat);
-                $this->desactivateHistoriqueListenerEvent();
                 $this->getEntityManager()->persist($vh);
             }
         }
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(true);
         $this->getEntityManager()->flush();
 
         return $this;
@@ -215,12 +217,13 @@ class ContratProcessus extends AbstractProcessus
         $vhs = $sVH->getList($sVH->finderByContrat($contrat));
 
         // détachement du contrat et des VH
-        $this->desactivateHistoriqueListenerEvent();
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
         foreach ($vhs as $vh) {
             /* @var $vh \Application\Entity\Db\VolumeHoraire */
             $vh->setContrat(null);
             $sVH->save($vh);
         }
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(true);
         $this->getServiceContrat()->delete($contrat);
 
         return $this;
@@ -381,18 +384,4 @@ class ContratProcessus extends AbstractProcessus
         return $fr->getServiceDu() + $fr->getSolde();
     }
 
-
-
-    public function desactivateHistoriqueListenerEvent()
-    {
-        $eventManager = $this->getEntityManager()->getEventManager();
-        $allListeners = $eventManager->getListeners();
-        foreach ($allListeners as $event => $listeners) {
-            foreach ($listeners as $listener) {
-                if ($listener instanceof HistoriqueListener) {
-                    $this->getEntityManager()->getEventManager()->removeEventListener(['prePersist', 'preUpdate'], $listener);
-                }
-            }
-        }
-    }
 }

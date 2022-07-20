@@ -2,6 +2,7 @@
 
 namespace Plafond\Entity\Db;
 
+
 /**
  * Description of PlafondPerimetreAwareTrait
  *
@@ -9,10 +10,7 @@ namespace Plafond\Entity\Db;
  */
 trait PlafondPerimetreAwareTrait
 {
-    /**
-     * @var PlafondPerimetre
-     */
-    protected $plafondPerimetre;
+    protected ?PlafondPerimetre $plafondPerimetre = null;
 
 
 
@@ -21,7 +19,7 @@ trait PlafondPerimetreAwareTrait
      *
      * @return self
      */
-    public function setPlafondPerimetre(PlafondPerimetre $plafondPerimetre)
+    public function setPlafondPerimetre( ?PlafondPerimetre $plafondPerimetre )
     {
         $this->plafondPerimetre = $plafondPerimetre;
 
@@ -30,9 +28,6 @@ trait PlafondPerimetreAwareTrait
 
 
 
-    /**
-     * @return PlafondPerimetre
-     */
     public function getPlafondPerimetre(): ?PlafondPerimetre
     {
         return $this->plafondPerimetre;

@@ -3,7 +3,6 @@
 namespace Application\Form\Service\Interfaces;
 
 use Application\Form\Service\Saisie;
-use RuntimeException;
 
 /**
  * Description of SaisieAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface SaisieAwareInterface
 {
     /**
-     * @param Saisie $formServiceSaisie
+     * @param Saisie|null $formServiceSaisie
+     *
      * @return self
      */
-    public function setFormServiceSaisie( Saisie $formServiceSaisie );
+    public function setFormServiceSaisie( ?Saisie $formServiceSaisie );
 
 
 
-    /**
-     * @return SaisieAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormServiceSaisie();
+    public function getFormServiceSaisie(): ?Saisie;
 }

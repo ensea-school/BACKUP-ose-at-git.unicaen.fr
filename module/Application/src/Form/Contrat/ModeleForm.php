@@ -4,7 +4,7 @@ namespace Application\Form\Contrat;
 
 use Application\Entity\Db\ModeleContrat;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Util;
 use Laminas\Hydrator\HydratorInterface;
@@ -17,7 +17,7 @@ use Laminas\Hydrator\HydratorInterface;
  */
 class ModeleForm extends AbstractForm
 {
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use StructureServiceAwareTrait;
 
 
@@ -31,11 +31,9 @@ class ModeleForm extends AbstractForm
 
 
 
-    public function getStatutsIntervenants()
+    public function getStatuts()
     {
-        $qb = $this->getServiceStatutIntervenant()->finderByHistorique();
-
-        return $this->getServiceStatutIntervenant()->getList($qb);
+        return $this->getServiceStatut()->getStatuts();
     }
 
 
@@ -44,7 +42,7 @@ class ModeleForm extends AbstractForm
     {
         $hydrator = new ModeleFormHydrator;
         $hydrator->setServiceStructure($this->getServiceStructure());
-        $hydrator->setServiceStatutIntervenant($this->getServiceStatutIntervenant());
+        $hydrator->setServiceStatut($this->getServiceStatut());
         $this->setHydrator($hydrator);
 
 
@@ -64,11 +62,11 @@ class ModeleForm extends AbstractForm
 
         $this->add([
             'type'    => 'Select',
-            'name'    => 'statut-intervenant',
+            'name'    => 'statut',
             'options' => [
                 'label'         => 'Statut intervenant',
                 'empty_option'  => "Tous statuts",
-                'value_options' => Util::collectionAsOptions($this->getStatutsIntervenants()),
+                'value_options' => Util::collectionAsOptions($this->getStatuts()),
             ],
         ]);
 
@@ -154,10 +152,10 @@ class ModeleForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         $filters = [
-            'structure'          => [
+            'structure' => [
                 'required' => false,
             ],
-            'statut-intervenant' => [
+            'statut'    => [
                 'required' => false,
             ],
         ];
@@ -177,7 +175,7 @@ class ModeleForm extends AbstractForm
 
 class ModeleFormHydrator implements HydratorInterface
 {
-    use StatutIntervenantServiceAwareTrait;
+    use StatutServiceAwareTrait;
     use StructureServiceAwareTrait;
 
 
@@ -193,7 +191,7 @@ class ModeleFormHydrator implements HydratorInterface
 
         $object->setLibelle($data['libelle']);
         $object->setStructure($this->getServiceStructure()->get($data['structure']));
-        $object->setStatutIntervenant($this->getServiceStatutIntervenant()->get($data['statut-intervenant']));
+        $object->setStatut($this->getServiceStatut()->get($data['statut']));
         $object->setRequete($data['requete']);
         if (isset($data['fichier']['tmp_name']) && $data['fichier']['tmp_name']) {
             $object->setFichier(file_get_contents($data['fichier']['tmp_name']));
@@ -222,11 +220,16 @@ class ModeleFormHydrator implements HydratorInterface
      */
     public function extract($object): array
     {
+        $statut = null;
+        if ($object->getStatut()) {
+            $statut = $this->getServiceStatut()->getByCode($object->getStatut()->getCode());
+        }
+
         $data = [
-            'libelle'            => $object->getLibelle(),
-            'structure'          => $object->getStructure() ? $object->getStructure()->getId() : null,
-            'statut-intervenant' => $object->getStatutIntervenant() ? $object->getStatutIntervenant()->getId() : null,
-            'requete'            => $object->getRequete(),
+            'libelle'   => $object->getLibelle(),
+            'structure' => $object->getStructure() ? $object->getStructure()->getId() : null,
+            'statut'    => $statut?->getId(),
+            'requete'   => $object->getRequete(),
         ];
 
         $blocs = $object->getBlocs();

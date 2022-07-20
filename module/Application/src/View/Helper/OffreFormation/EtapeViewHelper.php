@@ -3,6 +3,7 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Entity\Db\Etape as Entity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtapeServiceAwareTrait as ServiceEtapeAwareTrait;
@@ -98,8 +99,8 @@ class EtapeViewHelper extends AbstractViewHelper
 
         $buttons = '';
         if ($this->getView()->isAllowed($entity, Privileges::ODF_ETAPE_EDITION)) {
-            $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/modifier', ['etape' => $entity->getId()]) . '" data-event="etape-modifier"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>';
-            $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/supprimer', ['etape' => $entity->getId()]) . '" data-event="etape-supprimer"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>';
+            $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/modifier', ['etape' => $entity->getId()]) . '" data-event="etape-modifier"><i class="fas fa-pencil"></i> Modifier</a>';
+            $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/supprimer', ['etape' => $entity->getId()]) . '" data-event="etape-supprimer"><i class="fas fa-trash-can"></i> Supprimer</a>';
         }
 
         if ($buttons) {
@@ -140,12 +141,12 @@ class EtapeViewHelper extends AbstractViewHelper
 
 
 
-    public function renderAjouterLink($content = '', $attributes = [])
+    public function renderAjouterLink(string $content, array $attributes, Structure $structure)
     {
-        if (!$content) $content = '<span class="glyphicon glyphicon-plus"></span> Ajouter une formation';
+        if (!$content) $content = '<i class="fas fa-plus"></i> Ajouter une formation';
 
         $default = [
-            'href'       => $this->getView()->url('of/etape/ajouter'),
+            'href'       => $this->getView()->url('of/etape/ajouter', ['structure' => $structure->getId()]),
             'class'      => ['etape-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-default'],
             'data-event' => 'etape-ajouter',
             'title'      => 'Ajouter une formation',

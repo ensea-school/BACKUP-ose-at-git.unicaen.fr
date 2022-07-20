@@ -5,7 +5,7 @@
 return [
     'name'        => 'INTERVENANT_STATUT_FK',
     'table'       => 'INTERVENANT',
-    'rtable'      => 'STATUT_INTERVENANT',
+    'rtable'      => 'STATUT',
     'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [

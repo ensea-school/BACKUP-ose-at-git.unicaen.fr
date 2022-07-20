@@ -4,7 +4,6 @@ namespace Application\View\Helper\Intervenant;
 
 use Laminas\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\FormuleResultat;
-use Application\Entity\Db\Interfaces\FormuleResultatAwareInterface;
 use Application\Entity\Db\Traits\FormuleResultatAwareTrait;
 
 /**
@@ -12,7 +11,7 @@ use Application\Entity\Db\Traits\FormuleResultatAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResultatAwareInterface
+class TotauxHetdViewHelper extends AbstractHtmlElement
 {
     use FormuleResultatAwareTrait;
 

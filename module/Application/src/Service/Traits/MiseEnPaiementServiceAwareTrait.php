@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\MiseEnPaiementService;
 
 /**
- * Description of MiseEnPaiementAwareTrait
+ * Description of MiseEnPaiementServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait MiseEnPaiementServiceAwareTrait
 {
-    /**
-     * @var MiseEnPaiementService
-     */
-    private $serviceMiseEnPaiement;
+    protected ?MiseEnPaiementService $serviceMiseEnPaiement = null;
 
 
 
@@ -23,7 +20,7 @@ trait MiseEnPaiementServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceMiseEnPaiement(MiseEnPaiementService $serviceMiseEnPaiement)
+    public function setServiceMiseEnPaiement(?MiseEnPaiementService $serviceMiseEnPaiement)
     {
         $this->serviceMiseEnPaiement = $serviceMiseEnPaiement;
 
@@ -32,10 +29,7 @@ trait MiseEnPaiementServiceAwareTrait
 
 
 
-    /**
-     * @return MiseEnPaiementService
-     */
-    public function getServiceMiseEnPaiement()
+    public function getServiceMiseEnPaiement(): ?MiseEnPaiementService
     {
         if (empty($this->serviceMiseEnPaiement)) {
             $this->serviceMiseEnPaiement = \Application::$container->get(MiseEnPaiementService::class);

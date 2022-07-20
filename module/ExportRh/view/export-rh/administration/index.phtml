@@ -35,14 +35,14 @@ echo $this->navigation('navigation')->menuContextuel()->setPartial('unicaen-app/
                                 <?php if (true): ?>
                                     <?php if ($canEdit): ?><a href="javascript:void(0)" data-action="desactiver"
                                         title="Synchronisation activée. Cliquez pour la désactiver."><?php endif; ?>
-                                    <span class="glyphicon glyphicon-ok text-success"></span>
+                                    <i class="fas fa-check text-succes"></i
                                     <?php if ($canEdit): ?></a><?php endif; ?>
 
                                 <?php else: ?>
 
                                     <?php if ($canEdit): ?><a href="javascript:void(0)" data-action="activer"
                                         title="Synchtronisation désactivée. Cliquez pour l'activer."><?php endif; ?>
-                                    <span class="glyphicon glyphicon-remove text-danger refuse"></span>
+                                    <i class="fas fa-xmark text-danger refuse"></i
                                     <?php if ($canEdit): ?></a><?php endif; ?>
                                 <?php endif; ?>
                             </div>

@@ -52,6 +52,6 @@ class ModificationServiceDuAssertion extends AbstractAssertion
 
     protected function assertIntervenant(Intervenant $intervenant)
     {
-        return $intervenant->getStatut()->hasPrivilege(Privileges::MODIF_SERVICE_DU_ASSOCIATION);
+        return $intervenant->getStatut()->getModificationServiceDu();
     }
 }

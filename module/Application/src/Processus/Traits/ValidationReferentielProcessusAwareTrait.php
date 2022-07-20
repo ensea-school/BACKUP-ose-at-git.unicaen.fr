@@ -11,10 +11,7 @@ use Application\Processus\ValidationReferentielProcessus;
  */
 trait ValidationReferentielProcessusAwareTrait
 {
-    /**
-     * @var ValidationReferentielProcessus
-     */
-    private $processusValidationReferentiel;
+    protected ?ValidationReferentielProcessus $processusValidationReferentiel = null;
 
 
 
@@ -23,7 +20,7 @@ trait ValidationReferentielProcessusAwareTrait
      *
      * @return self
      */
-    public function setProcessusValidationReferentiel(ValidationReferentielProcessus $processusValidationReferentiel)
+    public function setProcessusValidationReferentiel(?ValidationReferentielProcessus $processusValidationReferentiel)
     {
         $this->processusValidationReferentiel = $processusValidationReferentiel;
 
@@ -32,10 +29,7 @@ trait ValidationReferentielProcessusAwareTrait
 
 
 
-    /**
-     * @return ValidationReferentielProcessus
-     */
-    public function getProcessusValidationReferentiel()
+    public function getProcessusValidationReferentiel(): ?ValidationReferentielProcessus
     {
         if (empty($this->processusValidationReferentiel)) {
             $this->processusValidationReferentiel = \Application::$container->get(ValidationReferentielProcessus::class);

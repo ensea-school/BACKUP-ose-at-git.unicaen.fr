@@ -2,6 +2,7 @@
 
 namespace Indicateur\Entity\Db;
 
+
 /**
  * Description of NotificationIndicateurAwareInterface
  *
@@ -10,16 +11,13 @@ namespace Indicateur\Entity\Db;
 interface NotificationIndicateurAwareInterface
 {
     /**
-     * @param NotificationIndicateur $notificationIndicateur
+     * @param NotificationIndicateur|null $notificationIndicateur
      *
      * @return self
      */
-    public function setNotificationIndicateur(NotificationIndicateur $notificationIndicateur = null);
+    public function setNotificationIndicateur( ?NotificationIndicateur $notificationIndicateur );
 
 
 
-    /**
-     * @return NotificationIndicateur
-     */
-    public function getNotificationIndicateur();
+    public function getNotificationIndicateur(): ?NotificationIndicateur;
 }

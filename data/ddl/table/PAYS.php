@@ -21,6 +21,18 @@ return [
             'position'    => 14,
             'commentaire' => NULL,
         ],
+        'CODE_ISO3'             => [
+            'name'        => 'CODE_ISO3',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 15,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 15,
+            'commentaire' => NULL,
+        ],
         'HISTO_CREATEUR_ID'     => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',

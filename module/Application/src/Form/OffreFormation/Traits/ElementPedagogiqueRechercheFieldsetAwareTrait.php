@@ -11,10 +11,7 @@ use Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset;
  */
 trait ElementPedagogiqueRechercheFieldsetAwareTrait
 {
-    /**
-     * @var ElementPedagogiqueRechercheFieldset
-     */
-    private $fieldsetOffreFormationElementPedagogiqueRecherche;
+    protected ?ElementPedagogiqueRechercheFieldset $fieldsetOffreFormationElementPedagogiqueRecherche = null;
 
 
 
@@ -23,7 +20,7 @@ trait ElementPedagogiqueRechercheFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetOffreFormationElementPedagogiqueRecherche(ElementPedagogiqueRechercheFieldset $fieldsetOffreFormationElementPedagogiqueRecherche)
+    public function setFieldsetOffreFormationElementPedagogiqueRecherche(?ElementPedagogiqueRechercheFieldset $fieldsetOffreFormationElementPedagogiqueRecherche)
     {
         $this->fieldsetOffreFormationElementPedagogiqueRecherche = $fieldsetOffreFormationElementPedagogiqueRecherche;
 
@@ -32,12 +29,7 @@ trait ElementPedagogiqueRechercheFieldsetAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ElementPedagogiqueRechercheFieldset
-     */
-    public function getFieldsetOffreFormationElementPedagogiqueRecherche()
+    public function getFieldsetOffreFormationElementPedagogiqueRecherche(): ?ElementPedagogiqueRechercheFieldset
     {
         if (!empty($this->fieldsetOffreFormationElementPedagogiqueRecherche)) {
             return $this->fieldsetOffreFormationElementPedagogiqueRecherche;

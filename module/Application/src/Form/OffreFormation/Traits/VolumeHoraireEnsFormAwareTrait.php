@@ -11,10 +11,7 @@ use Application\Form\OffreFormation\VolumeHoraireEnsForm;
  */
 trait VolumeHoraireEnsFormAwareTrait
 {
-    /**
-     * @var VolumeHoraireEnsForm
-     */
-    protected $formOffreFormationVolumeHoraireEns;
+    protected ?VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns = null;
 
 
 
@@ -23,7 +20,7 @@ trait VolumeHoraireEnsFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationVolumeHoraireEns(VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns)
+    public function setFormOffreFormationVolumeHoraireEns(?VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns)
     {
         $this->formOffreFormationVolumeHoraireEns = $formOffreFormationVolumeHoraireEns;
 
@@ -32,12 +29,7 @@ trait VolumeHoraireEnsFormAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return VolumeHoraireEnsForm
-     */
-    public function getFormOffreFormationVolumeHoraireEns()
+    public function getFormOffreFormationVolumeHoraireEns(): ?VolumeHoraireEnsForm
     {
         if (!empty($this->formOffreFormationVolumeHoraireEns)) {
             return $this->formOffreFormationVolumeHoraireEns;

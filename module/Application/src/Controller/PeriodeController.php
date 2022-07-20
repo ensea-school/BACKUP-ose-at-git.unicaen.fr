@@ -11,7 +11,6 @@ use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Cassandra\Exception\ExecutionException;
 use Laminas\View\Model\JsonModel;
 use UnicaenApp\View\Model\MessengerViewModel;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 
 
 /**
@@ -21,7 +20,6 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
  */
 class PeriodeController extends AbstractController
 {
-    use EntityManagerAwareTrait;
     use PeriodeSaisieFormAwareTrait;
     use PeriodeServiceAwareTrait;
 
@@ -38,19 +36,19 @@ class PeriodeController extends AbstractController
     public function saisieAction()
     {
         $periode = $this->getEvent()->getParam('periode');
-        $form    = $this->getFormPeriodeSaisie();
+        $form    = $this->getFormPeriodePeriodeSaisie();
 
         if (empty($periode)) {
-            $title   = "Création d'une nouvelle periode";
+            $title   = "Création d'une nouvelle période";
             $periode = $this->getServicePeriode()->newEntity();
         } else {
-            $title = "Edition d'une periode";
+            $title = "Edition d'une période";
         }
 
         $form->bindRequestSave($periode, $this->getRequest(), function () use ($periode, $form) {
             $this->getServicePeriode()->save($periode);
             $this->flashMessenger()->addSuccessMessage(
-                "Ajout réussis"
+                "Ajout réussi"
             );
         });
 
@@ -82,6 +80,7 @@ class PeriodeController extends AbstractController
                 $this->getServicePeriode()->save($sp);
             }
         }
+
         return new MessengerViewModel();
     }
 }

@@ -11,10 +11,7 @@ use Application\Service\DossierAutreService;
  */
 trait DossierAutreServiceAwareTrait
 {
-    /**
-     * @var DossierAutreService
-     */
-    private $serviceDossierAutre;
+    protected ?DossierAutreService $serviceDossierAutre = null;
 
 
 
@@ -23,19 +20,16 @@ trait DossierAutreServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceDossierAutre(DossierAutreService $serviceDossierAutre)
+    public function setServiceDossierAutre(?DossierAutreService $serviceDossierAutre)
     {
-        $this->$serviceDossierAutre = $serviceDossierAutre;
+        $this->serviceDossierAutre = $serviceDossierAutre;
 
         return $this;
     }
 
 
 
-    /**
-     * @return DossierAutreService
-     */
-    public function getServiceDossierAutre()
+    public function getServiceDossierAutre(): ?DossierAutreService
     {
         if (empty($this->serviceDossierAutre)) {
             $this->serviceDossierAutre = \Application::$container->get(DossierAutreService::class);

@@ -3,7 +3,6 @@
 namespace Application\Form\Intervenant\Interfaces;
 
 use Application\Form\Intervenant\ContratRetour;
-use RuntimeException;
 
 /**
  * Description of ContratRetourAwareInterface
@@ -13,16 +12,13 @@ use RuntimeException;
 interface ContratRetourAwareInterface
 {
     /**
-     * @param ContratRetour $formIntervenantContratRetour
+     * @param ContratRetour|null $formIntervenantContratRetour
+     *
      * @return self
      */
-    public function setFormIntervenantContratRetour( ContratRetour $formIntervenantContratRetour );
+    public function setFormIntervenantContratRetour( ?ContratRetour $formIntervenantContratRetour );
 
 
 
-    /**
-     * @return ContratRetourAwareInterface
-     * @throws RuntimeException
-     */
-    public function getFormIntervenantContratRetour();
+    public function getFormIntervenantContratRetour(): ?ContratRetour;
 }

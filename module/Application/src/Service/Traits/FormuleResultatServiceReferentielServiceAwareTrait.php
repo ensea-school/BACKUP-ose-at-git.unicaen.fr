@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\FormuleResultatServiceReferentielService;
 
 /**
- * Description of FormuleResultatServiceReferentielAwareTrait
+ * Description of FormuleResultatServiceReferentielServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait FormuleResultatServiceReferentielServiceAwareTrait
 {
-    /**
-     * @var FormuleResultatServiceReferentielService
-     */
-    private $serviceFormuleResultatServiceReferentiel;
+    protected ?FormuleResultatServiceReferentielService $serviceFormuleResultatServiceReferentiel = null;
 
 
 
@@ -23,7 +20,7 @@ trait FormuleResultatServiceReferentielServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceFormuleResultatServiceReferentiel(FormuleResultatServiceReferentielService $serviceFormuleResultatServiceReferentiel)
+    public function setServiceFormuleResultatServiceReferentiel(?FormuleResultatServiceReferentielService $serviceFormuleResultatServiceReferentiel)
     {
         $this->serviceFormuleResultatServiceReferentiel = $serviceFormuleResultatServiceReferentiel;
 
@@ -32,10 +29,7 @@ trait FormuleResultatServiceReferentielServiceAwareTrait
 
 
 
-    /**
-     * @return FormuleResultatServiceReferentielService
-     */
-    public function getServiceFormuleResultatServiceReferentiel()
+    public function getServiceFormuleResultatServiceReferentiel(): ?FormuleResultatServiceReferentielService
     {
         if (empty($this->serviceFormuleResultatServiceReferentiel)) {
             $this->serviceFormuleResultatServiceReferentiel = \Application::$container->get(FormuleResultatServiceReferentielService::class);

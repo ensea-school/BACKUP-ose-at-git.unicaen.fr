@@ -11,31 +11,25 @@ use Application\Entity\Db\FormuleResultatVolumeHoraire;
  */
 trait FormuleResultatVolumeHoraireAwareTrait
 {
-    /**
-     * @var FormuleResultatVolumeHoraire
-     */
-    private $formuleResultatVolumeHoraire;
-
-
+    protected ?FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire = null;
 
 
 
     /**
      * @param FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire
+     *
      * @return self
      */
-    public function setFormuleResultatVolumeHoraire( FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire = null )
+    public function setFormuleResultatVolumeHoraire( ?FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire )
     {
         $this->formuleResultatVolumeHoraire = $formuleResultatVolumeHoraire;
+
         return $this;
     }
 
 
 
-    /**
-     * @return FormuleResultatVolumeHoraire
-     */
-    public function getFormuleResultatVolumeHoraire()
+    public function getFormuleResultatVolumeHoraire(): ?FormuleResultatVolumeHoraire
     {
         return $this->formuleResultatVolumeHoraire;
     }

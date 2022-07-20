@@ -2,6 +2,7 @@
 
 namespace Indicateur\Entity\Db;
 
+
 /**
  * Description of IndicateurDepassementChargesAwareTrait
  *
@@ -9,10 +10,7 @@ namespace Indicateur\Entity\Db;
  */
 trait IndicateurDepassementChargesAwareTrait
 {
-    /**
-     * @var IndicateurDepassementCharges
-     */
-    protected $indicateurDepassementCharges;
+    protected ?IndicateurDepassementCharges $indicateurDepassementCharges = null;
 
 
 
@@ -21,7 +19,7 @@ trait IndicateurDepassementChargesAwareTrait
      *
      * @return self
      */
-    public function setIndicateurDepassementCharges(IndicateurDepassementCharges $indicateurDepassementCharges = null)
+    public function setIndicateurDepassementCharges( ?IndicateurDepassementCharges $indicateurDepassementCharges )
     {
         $this->indicateurDepassementCharges = $indicateurDepassementCharges;
 
@@ -30,10 +28,7 @@ trait IndicateurDepassementChargesAwareTrait
 
 
 
-    /**
-     * @return IndicateurDepassementCharges
-     */
-    public function getIndicateurDepassementCharges()
+    public function getIndicateurDepassementCharges(): ?IndicateurDepassementCharges
     {
         return $this->indicateurDepassementCharges;
     }

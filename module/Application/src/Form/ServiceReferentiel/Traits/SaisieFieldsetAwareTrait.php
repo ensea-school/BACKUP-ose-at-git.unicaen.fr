@@ -11,10 +11,7 @@ use Application\Form\ServiceReferentiel\SaisieFieldset;
  */
 trait SaisieFieldsetAwareTrait
 {
-    /**
-     * @var SaisieFieldset
-     */
-    private $fieldsetServiceReferentielSaisie;
+    protected ?SaisieFieldset $fieldsetServiceReferentielSaisie = null;
 
 
 
@@ -23,7 +20,7 @@ trait SaisieFieldsetAwareTrait
      *
      * @return self
      */
-    public function setFieldsetServiceReferentielSaisie(SaisieFieldset $fieldsetServiceReferentielSaisie)
+    public function setFieldsetServiceReferentielSaisie(?SaisieFieldset $fieldsetServiceReferentielSaisie)
     {
         $this->fieldsetServiceReferentielSaisie = $fieldsetServiceReferentielSaisie;
 
@@ -32,12 +29,7 @@ trait SaisieFieldsetAwareTrait
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return SaisieFieldset
-     */
-    public function getFieldsetServiceReferentielSaisie()
+    public function getFieldsetServiceReferentielSaisie(): ?SaisieFieldset
     {
         if (!empty($this->fieldsetServiceReferentielSaisie)) {
             return $this->fieldsetServiceReferentielSaisie;

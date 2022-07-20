@@ -43,9 +43,9 @@ return [
 
 
     /* Etats de sortie */
-    "es_winpaie"                                 => [
+    "es_extraction_paie"                         => [
         "VALEUR"      => "winpaie",
-        "DESCRIPTION" => "État de sortie pour l'extraction Winpaie",
+        "DESCRIPTION" => "État de sortie pour l'extraction de paie",
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
     "es_services_pdf"                            => [
@@ -138,12 +138,12 @@ return [
 
 
     /* Statuts */
-    "statut_intervenant_codes_corresp_1_libelle" => [
-        "VALEUR"      => "Types de contrats Harpège",
-        "DESCRIPTION" => "Libellé de la liste 1 des correspondances de codes des statuts (en majuscules séparés par des virgules)",
-    ],
     "statut_intervenant_codes_corresp_2_libelle" => [
-        "VALEUR"      => "Types de population Harpège",
+        "VALEUR"      => "ATV ? (saisir oui ou non)",
+        "DESCRIPTION" => "Témoin précisant si le statut correspond à des intervenants ATV (saisir oui ou non)",
+    ],
+    "statut_intervenant_codes_corresp_1_libelle" => [
+        "VALEUR"      => null,
         "DESCRIPTION" => "Libellé de la liste 2 des correspondances de codes des statuts (en majuscules séparés par des virgules)",
     ],
     "statut_intervenant_codes_corresp_3_libelle" => [
@@ -223,4 +223,19 @@ Cordialement,
         "DESCRIPTION" => "Adresse email d'expéditeur des mails via les indicateur, si vide alors l'email de l'utilisateur sera utilisé",
     ],
 
+    /* Contrat */
+    "avenant"                       => [
+        "VALEUR"      => "avenant_autorise",
+        "DESCRIPTION" => "Permettre la création d'avenants au contrat",
+    ],
+
+    "contrat_direct" => [
+        "VALEUR"      => "desactive",
+        "DESCRIPTION" => "Permettre la création d'un contrat sans passé par le projet",
+    ],
+
+    "contrat_date" => [
+        "VALEUR"      => "desactive",
+        "DESCRIPTION" => "Permettre de saisir une date de retour signé pour un contrat sans ajouter de fichier",
+    ],
 ];

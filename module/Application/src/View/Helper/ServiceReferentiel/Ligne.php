@@ -100,13 +100,13 @@ class Ligne extends AbstractViewHelper
         $service       = $this->getServiceReferentiel();
         $vhlListe      = $service->getVolumeHoraireReferentielListe();
         $heuresTVH     = $vhlListe
-                            ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
-                            ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi())
-                            ->getHeures();
+            ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
+            ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi())
+            ->getHeures();
         $heuresPrevues = $vhlListe
-                            ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
-                            ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide())
-                            ->getHeures();
+            ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
+            ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide())
+            ->getHeures();
         $out           = '';
         if ($liste->getColumnVisibility('intervenant')) {
             $out .= '<td>' . $this->renderIntervenant($service->getIntervenant()) . '</td>';
@@ -234,7 +234,7 @@ class Ligne extends AbstractViewHelper
     {
         $url = $this->getView()->url('referentiel/saisie', ['id' => $this->getServiceReferentiel()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
 
-        return '<a class="ajax-modal" data-event="service-referentiel-modify-message" href="' . $url . '" title="Modifier cette ligne de référentiel"><span class="glyphicon glyphicon-pencil"></span></a>';
+        return '<a class="ajax-modal" data-event="service-referentiel-modify-message" href="' . $url . '" title="Modifier cette ligne de référentiel"><i class="fas fa-pencil"></i></a>';
     }
 
 
@@ -251,7 +251,7 @@ class Ligne extends AbstractViewHelper
             'data-id'      => $this->getServiceReferentiel()->getId(),
             'href'         => $url,
             'title'        => 'Supprimer cette ligne de référentiel',
-        ])->html('<span class="glyphicon glyphicon-trash"></span>');
+        ])->html('<i class="fas fa-trash-can"></i');
     }
 
 
@@ -325,7 +325,8 @@ class Ligne extends AbstractViewHelper
      */
     public function setServiceReferentiel(ServiceReferentiel $serviceReferentiel = null)
     {
-        $this->forcedReadOnly = !$this->getView()->isAllowed($serviceReferentiel, Privileges::REFERENTIEL_EDITION);
+        $typeVolumeHoraire        = $serviceReferentiel->getTypeVolumeHoraire();
+        $this->forcedReadOnly     = !$this->getView()->isAllowed($serviceReferentiel, $typeVolumeHoraire->getPrivilegeReferentielEdition());
         $this->serviceReferentiel = $serviceReferentiel;
 
         return $this;

@@ -11,31 +11,25 @@ use Application\Entity\Db\FormuleResultatServiceReferentiel;
  */
 trait FormuleResultatServiceReferentielAwareTrait
 {
-    /**
-     * @var FormuleResultatServiceReferentiel
-     */
-    private $formuleResultatServiceReferentiel;
-
-
+    protected ?FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null;
 
 
 
     /**
      * @param FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel
+     *
      * @return self
      */
-    public function setFormuleResultatServiceReferentiel( FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null )
+    public function setFormuleResultatServiceReferentiel( ?FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel )
     {
         $this->formuleResultatServiceReferentiel = $formuleResultatServiceReferentiel;
+
         return $this;
     }
 
 
 
-    /**
-     * @return FormuleResultatServiceReferentiel
-     */
-    public function getFormuleResultatServiceReferentiel()
+    public function getFormuleResultatServiceReferentiel(): ?FormuleResultatServiceReferentiel
     {
         return $this->formuleResultatServiceReferentiel;
     }

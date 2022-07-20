@@ -59,7 +59,7 @@ class EtapeCentreCoutForm extends AbstractForm
 
 
 
-    private function build()
+    public function build()
     {
         $elements = $this->getEtape()->getElementPedagogique();
         foreach ($elements as $element) {

@@ -18,7 +18,7 @@ function DemandeMiseEnPaiement(id)
     this.showError = function (serviceElement, errorStr)
     {
         var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
-            + '<span class="glyphicon glyphicon-exclamation-sign"></span> '
+            + '<i class="fas fa-exclamation"></i> '
             + errorStr
             + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>'
             + '</div>';
@@ -240,7 +240,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
     this.showError = function (errorStr)
     {
         var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
-            + '<span class="glyphicon glyphicon-exclamation-sign"></span> '
+            + '<i class="fas fa-exclamation"></i> '
             + errorStr
             + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>'
             + '</div>';
@@ -457,12 +457,12 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
 
         if (data['read-only']) {
             if (data['validation'] != undefined) {
-                outA = '<span class="glyphicon glyphicon-ok-circle" title="Validé par ' + data['validation']['utilisateur'] + ' le ' + data['validation']['date'] + '">';
+                outA = '<i class="fas fa-circle-check" title="Validé par ' + data['validation']['utilisateur'] + ' le ' + data['validation']['date'] + '">';
             } else {
                 outA = '';
             }
         } else {
-            outA = '<a role="button" class="action-delete" title="Supprimer la ligne"><span class="glyphicon glyphicon-remove"></span></a>';
+            outA = '<a role="button" class="action-delete" title="Supprimer la ligne"><i class="fas fa-trash-can"></i></a>';
         }
 
         return outA;
@@ -1015,7 +1015,7 @@ $.widget("ose.dmepBudget", {
     setDiffValue: function (typeRessourceId, structureId, value)
     {
         var progress = this.getElementEnveloppe(typeRessourceId, structureId);
-        var bar = progress.find('.progressbar');
+        var bar = progress.find('.progress-bar');
         var dotation = progress.data('dotation');
         var usage = progress.data('usage') + value;
         var restant = dotation - usage;

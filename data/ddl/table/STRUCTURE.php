@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'ADRESSE_COMMUNE'         => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'ADRESSE_LIEU_DIT'        => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'ADRESSE_NUMERO'          => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 19,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'ADRESSE_NUMERO_COMPL_ID' => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 20,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'ADRESSE_PAYS_ID'         => [
@@ -78,7 +78,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 21,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'ADRESSE_PRECISIONS'      => [
@@ -90,7 +90,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 22,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'ADRESSE_VOIE'            => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 23,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'ADRESSE_VOIRIE_ID'       => [
@@ -114,7 +114,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 24,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'AFF_ADRESSE_CONTRAT'     => [
@@ -259,18 +259,6 @@ return [
             'nullable'    => FALSE,
             'default'     => NULL,
             'position'    => 2,
-            'commentaire' => NULL,
-        ],
-        'PLAFOND_REFERENTIEL'     => [
-            'name'        => 'PLAFOND_REFERENTIEL',
-            'type'        => 'float',
-            'bdd-type'    => 'FLOAT',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => 126,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 15,
             'commentaire' => NULL,
         ],
         'SOURCE_CODE'             => [

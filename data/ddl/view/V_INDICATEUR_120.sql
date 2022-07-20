@@ -1,12 +1,11 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_120 AS
 SELECT DISTINCT
-  s.intervenant_id intervenant_id,
-  s.intervenant_structure_id structure_id
+  i.id intervenant_id,
+  i.structure_id,
+  MAX(d.HISTO_MODIFICATION) AS "Date de modification"
 FROM
-  tbl_service s
+  indic_modif_dossier d
+  JOIN intervenant i ON i.id = d.intervenant_id
 WHERE
-  s.type_intervenant_code = 'P'
-  AND s.type_volume_horaire_code = 'PREVU'
-  AND s.intervenant_structure_id <> s.structure_id
-  AND s.valide > 0
-  AND s.structure_id IS NOT NULL
+  d.histo_destruction IS NULL
+GROUP BY (i.id, i.STRUCTURE_ID)

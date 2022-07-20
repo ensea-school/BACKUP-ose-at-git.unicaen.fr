@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Intervenant\Entity\Db\Statut" table="STATUT">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <unique-constraints>
+            <unique-constraint name="STATUT_UN" columns="CODE,ANNEE_ID,HISTO_DESTRUCTION"/>
+        </unique-constraints>
+        <field name="code" type="string" column="CODE" length="50" nullable="false"/>
+        <field name="libelle" type="string" column="LIBELLE" length="128" nullable="false"/>
+        <many-to-one field="typeIntervenant" target-entity="Intervenant\Entity\Db\TypeIntervenant">
+            <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+            <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
+        <field name="prioritaireIndicateurs" type="boolean" column="PRIORITAIRE_INDICATEURS" nullable="false"/>
+        <field name="serviceStatutaire" type="float" column="SERVICE_STATUTAIRE" precision="126" scale="0" nullable="false"/>
+        <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC" nullable="false"/>
+        <field name="tauxChargesPatronales" type="float" column="TAUX_CHARGES_PATRONALES" precision="126" scale="0" nullable="false"/>
+        <field name="tauxChargesTTC" type="float" column="TAUX_CHARGES_TTC" precision="126" scale="0" nullable="true"/>
+
+        <field name="dossier" type="boolean" column="DOSSIER" nullable="false"/>
+        <field name="dossierVisualisation" type="boolean" column="DOSSIER_VISUALISATION" nullable="false"/>
+        <field name="dossierEdition" type="boolean" column="DOSSIER_EDITION" nullable="false"/>
+        <field name="dossierSelectionnable" type="boolean" column="DOSSIER_SELECTIONNABLE" nullable="false"/>
+        <field name="dossierIdentiteComplementaire" type="boolean" column="DOSSIER_IDENTITE_COMP" nullable="false"/>
+        <field name="dossierContact" type="boolean" column="DOSSIER_CONTACT" nullable="false"/>
+        <field name="dossierTelPerso" type="boolean" column="DOSSIER_TEL_PERSO" nullable="false"/>
+        <field name="dossierEmailPerso" type="boolean" column="DOSSIER_EMAIL_PERSO" nullable="false"/>
+        <field name="dossierAdresse" type="boolean" column="DOSSIER_ADRESSE" nullable="false"/>
+        <field name="dossierBanque" type="boolean" column="DOSSIER_BANQUE" nullable="false"/>
+        <field name="dossierInsee" type="boolean" column="DOSSIER_INSEE" nullable="false"/>
+        <field name="dossierEmployeur" type="boolean" column="DOSSIER_EMPLOYEUR" nullable="false"/>
+        <field name="dossierAutre1" type="boolean" column="DOSSIER_AUTRE_1" nullable="false"/>
+        <field name="dossierAutre1Visualisation" type="boolean" column="DOSSIER_AUTRE_1_VISUALISATION" nullable="false"/>
+        <field name="dossierAutre1Edition" type="boolean" column="DOSSIER_AUTRE_1_EDITION" nullable="false"/>
+        <field name="dossierAutre2" type="boolean" column="DOSSIER_AUTRE_2" nullable="false"/>
+        <field name="dossierAutre2Visualisation" type="boolean" column="DOSSIER_AUTRE_2_VISUALISATION" nullable="false"/>
+        <field name="dossierAutre2Edition" type="boolean" column="DOSSIER_AUTRE_2_EDITION" nullable="false"/>
+        <field name="dossierAutre3" type="boolean" column="DOSSIER_AUTRE_3" nullable="false"/>
+        <field name="dossierAutre3Visualisation" type="boolean" column="DOSSIER_AUTRE_3_VISUALISATION" nullable="false"/>
+        <field name="dossierAutre3Edition" type="boolean" column="DOSSIER_AUTRE_3_EDITION" nullable="false"/>
+        <field name="dossierAutre4" type="boolean" column="DOSSIER_AUTRE_4" nullable="false"/>
+        <field name="dossierAutre4Visualisation" type="boolean" column="DOSSIER_AUTRE_4_VISUALISATION" nullable="false"/>
+        <field name="dossierAutre4Edition" type="boolean" column="DOSSIER_AUTRE_4_EDITION" nullable="false"/>
+        <field name="dossierAutre5" type="boolean" column="DOSSIER_AUTRE_5" nullable="false"/>
+        <field name="dossierAutre5Visualisation" type="boolean" column="DOSSIER_AUTRE_5_VISUALISATION" nullable="false"/>
+        <field name="dossierAutre5Edition" type="boolean" column="DOSSIER_AUTRE_5_EDITION" nullable="false"/>
+
+        <field name="pieceJustificativeVisualisation" type="boolean" column="PJ_VISUALISATION" nullable="false"/>
+        <field name="pieceJustificativeEdition" type="boolean" column="PJ_EDITION" nullable="false"/>
+
+        <field name="conseilRestreint" type="boolean" column="CONSEIL_RESTREINT" nullable="false"/>
+        <field name="conseilRestreintVisualisation" type="boolean" column="CONSEIL_RESTREINT_VISU" nullable="false"/>
+        <field name="conseilRestreintDureeVie" type="integer" column="CONSEIL_RESTREINT_DUREE_VIE" nullable="false"/>
+        <field name="conseilAcademique" type="boolean" column="CONSEIL_ACA" nullable="false"/>
+        <field name="conseilAcademiqueVisualisation" type="boolean" column="CONSEIL_ACA_VISUALISATION" nullable="false"/>
+        <field name="conseilAcademiqueDureeVie" type="integer" column="CONSEIL_ACA_DUREE_VIE" nullable="false"/>
+
+        <field name="contrat" type="boolean" column="CONTRAT" nullable="false"/>
+        <field name="contratVisualisation" type="boolean" column="CONTRAT_VISUALISATION" nullable="false"/>
+        <field name="contratDepot" type="boolean" column="CONTRAT_DEPOT" nullable="false"/>
+
+        <field name="servicePrevu" type="boolean" column="SERVICE_PREVU" nullable="false"/>
+        <field name="servicePrevuVisualisation" type="boolean" column="SERVICE_PREVU_VISU" nullable="false"/>
+        <field name="servicePrevuEdition" type="boolean" column="SERVICE_PREVU_EDITION" nullable="false"/>
+        <field name="serviceRealise" type="boolean" column="SERVICE_REALISE" nullable="false"/>
+        <field name="serviceRealiseVisualisation" type="boolean" column="SERVICE_REALISE_VISU" nullable="false"/>
+        <field name="serviceRealiseEdition" type="boolean" column="SERVICE_REALISE_EDITION" nullable="false"/>
+        <field name="serviceExterieur" type="boolean" column="SERVICE_EXTERIEUR" nullable="false"/>
+
+        <field name="referentielPrevu" type="boolean" column="REFERENTIEL_PREVU" nullable="false"/>
+        <field name="referentielPrevuVisualisation" type="boolean" column="REFERENTIEL_PREVU_VISU" nullable="false"/>
+        <field name="referentielPrevuEdition" type="boolean" column="REFERENTIEL_PREVU_EDITION" nullable="false"/>
+        <field name="referentielRealise" type="boolean" column="REFERENTIEL_REALISE" nullable="false"/>
+        <field name="referentielRealiseVisualisation" type="boolean" column="REFERENTIEL_REALISE_VISU" nullable="false"/>
+        <field name="referentielRealiseEdition" type="boolean" column="REFERENTIEL_REALISE_EDITION" nullable="false"/>
+
+        <field name="cloture" type="boolean" column="CLOTURE" nullable="false"/>
+
+        <field name="modificationServiceDu" type="boolean" column="MODIF_SERVICE_DU" nullable="false"/>
+        <field name="modificationServiceDuVisualisation" type="boolean" column="MODIF_SERVICE_DU_VISUALISATION" nullable="false"/>
+
+        <field name="paiementVisualisation" type="boolean" column="PAIEMENT_VISUALISATION" nullable="false"/>
+        <field name="motifNonPaiement" type="boolean" column="MOTIF_NON_PAIEMENT" nullable="false"/>
+        <field name="formuleVisualisation" type="boolean" column="FORMULE_VISUALISATION" nullable="false"/>
+
+        <field name="codesCorresp1" type="string" column="CODES_CORRESP_1" length="1000" nullable="true"/>
+        <field name="codesCorresp2" type="string" column="CODES_CORRESP_2" length="1000" nullable="true"/>
+        <field name="codesCorresp3" type="string" column="CODES_CORRESP_3" length="1000" nullable="true"/>
+        <field name="codesCorresp4" type="string" column="CODES_CORRESP_4" length="1000" nullable="true"/>
+
+        <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-columns>
+                <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

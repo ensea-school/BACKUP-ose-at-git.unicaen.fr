@@ -14,6 +14,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
   TYPE t_colls IS TABLE OF t_coll INDEX BY VARCHAR2(50);
   feuille t_colls;
 
+  debugActif BOOLEAN DEFAULT TRUE;
   debugLine NUMERIC;
 
 
@@ -64,7 +65,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
 
     feuille(c).cells(l).enCalcul := true;
     val := calcCell( c, l );
-    IF ose_formule.debug_actif THEN
+    IF debugActif THEN
       dbgCell( c, l, val );
     END IF;
     feuille(c).cells(l).valeur := val;
@@ -113,7 +114,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
     ELSE
       raise_application_error( -20001, 'La formule "' || fncName || '" n''existe pas!');
     END CASE;
-    IF ose_formule.debug_actif THEN
+    IF debugActif THEN
       dbgCalc(fncName, c, val );
     END IF;
     feuille('__' || fncName || '__' || c || '__').cells(1).valeur := val;
@@ -192,40 +193,14 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
 
 
 
-    -- =SI(I9=0;2/3;SI(I8="Oui";1                                                                       ;SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)))))
-    -- I8= TP vaut TD
-    -- I9 = i.heures_service_statutaire
-    -- I15 = i.service_du
-    -- I26:I35 = Somme des CM I=CM, J=TD, K=TP
-    -- K26:K35 = Somme des TP
-    WHEN c = 'tauxTPService' AND v >= 1 THEN
-      IF i.heures_service_statutaire = 0  OR LOWER(i.param_2)='oui' THEN
-        RETURN 2/3;
-      ELSE
-        -- SI(I8="Oui";SI(SOMME(I26:K35)=0;1;(2+(I15/((1,5*SOMME(I26:I35))+SOMME(J26:K35))))/3);SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35))))
-        IF LOWER(i.param_1)='oui' THEN
-          RETURN 1;
-        ELSE
-          -- SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)))
-          IF cell('sTP') <= 384 THEN
-            RETURN 1;
-          ELSE
-            --(384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)
-            RETURN (384+((cell('sTP')-384)*(2/3)))/cell('sTP');
-          END IF;
-        END IF;
-      END IF;
-
-
-
     -- =SI(I9=0;2/3;SI(I8="Oui";SI(SOMME(I26:K35)=0;1;(2+(I15/((1,5*SOMME(I26:I35))+SOMME(J26:K35))))/3);SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)))))
     -- I8= TP vaut TD
     -- I9 = i.heures_service_statutaire
     -- I15 = i.service_du
     -- I26:I35 = Somme des CM I=CM, J=TD, K=TP
     -- K26:K35 = Somme des TP
-    WHEN c = 'tauxTPCompl' AND v >= 1 THEN
-      IF i.heures_service_statutaire = 0  OR LOWER(i.param_2)='oui' THEN
+    WHEN c = 'tauxTP' AND v >= 1 THEN
+      IF i.heures_service_statutaire = 0 THEN
         RETURN 2/3;
       ELSE
         -- SI(I8="Oui";SI(SOMME(I26:K35)=0;1;(2+(I15/((1,5*SOMME(I26:I35))+SOMME(J26:K35))))/3);SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35))))
@@ -252,7 +227,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
 
     WHEN c = 'tauxServiceDu' AND v >= 1 THEN
       IF vh.type_intervention_code = 'TP' THEN
-        RETURN cell('tauxTPService');
+        RETURN cell('tauxTP');
       ELSE
         RETURN vh.taux_service_du;
       END IF;
@@ -261,7 +236,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
 
     WHEN c = 'tauxServiceCompl' AND v >= 1 THEN
       IF vh.type_intervention_code = 'TP' THEN
-        RETURN cell('tauxTPCompl');
+        RETURN cell('tauxTP');
       ELSE
         RETURN vh.taux_service_compl;
       END IF;
@@ -879,11 +854,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
 
     -- us=SI($I$13="Oui";SOMME(I182:AU182);0)
     WHEN c = 'us' AND v >= 1 THEN
-      IF NOT ose_formule.intervenant.depassement_service_du_sans_hc THEN
-        RETURN cell('t131',l) + cell('t132',l);
-      ELSE
-        RETURN 0;
-      END IF;
+      RETURN cell('t131',l) + cell('t132',l);
 
 
 
@@ -943,10 +914,6 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
   BEGIN
     feuille.delete;
 
-    IF ose_formule.intervenant.depassement_service_du_sans_hc THEN -- HC traitées comme du service
-      ose_formule.intervenant.service_du := ose_formule.intervenant.heures_service_statutaire + ose_formule.intervenant.heures_service_modifie;
-    END IF;
-
     -- transmission des résultats aux volumes horaires et volumes horaires référentiel
     FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
       ose_formule.volumes_horaires.items(l).service_fi               := mainCell('Service FI', 'rs',l);
@@ -959,43 +926,6 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
       ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'xs',l);
       ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'ur',l);
     END LOOP;
-  END;
-
-
-
-  FUNCTION INTERVENANT_QUERY RETURN CLOB IS
-  BEGIN
-    RETURN '
-    SELECT
-      fi.*,
-      CASE WHEN si.code IN (''ENS_CH'',''ASS_MI_TPS'',''ENS_CH_LRU'',''DOCTOR'') THEN ''oui'' ELSE ''non'' END param_1,
-	    CASE WHEN si.code IN (''LECTEUR'',''ATER'') THEN ''oui'' ELSE ''non'' END param_2,
-      NULL param_3,
-      NULL param_4,
-      NULL param_5
-    FROM
-      V_FORMULE_INTERVENANT fi
-      JOIN intervenant i ON i.id = fi.intervenant_id
-      JOIN statut_intervenant si ON si.id = i.statut_id
-    ';
-  END;
-
-
-
-  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB IS
-  BEGIN
-    RETURN '
-    SELECT
-      fvh.*,
-      NULL param_1,
-      NULL param_2,
-      NULL param_3,
-      NULL param_4,
-      NULL param_5
-    FROM
-      V_FORMULE_VOLUME_HORAIRE fvh
-    ORDER BY
-      ordre';
   END;
 
 END FORMULE_UBO;

@@ -62,6 +62,16 @@ return [
                                 ],
                                 'may_terminate' => true,
                             ],
+                            'import'          => [
+                                'type'          => 'Literal',
+                                'options'       => [
+                                    'route'    => '/import',
+                                    'defaults' => [
+                                        'action' => 'test-import',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
                             'supprimer'       => [
                                 'type'          => 'Segment',
                                 'options'       => [
@@ -120,7 +130,7 @@ return [
                         'pages' => [
                             'formule-calcul' => [
                                 'label'        => 'Test de formule de calcul',
-                                'icon'         => 'glyphicon glyphicon-briefcase',
+                                'icon'         => 'fas fa-briefcase',
                                 'route'        => 'formule-calcul/test',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Formule', 'test'),
                                 'order'        => 80,
@@ -138,7 +148,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Formule',
-                    'action'     => ['test', 'test-saisir', 'test-enregistrement', 'test-supprimer', 'test-creer-from-reel'],
+                    'action'     => ['test', 'test-saisir', 'test-enregistrement', 'test-supprimer', 'test-creer-from-reel', 'test-import'],
                     'privileges' => [Privileges::FORMULE_TESTS],
                 ],
             ],

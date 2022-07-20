@@ -105,8 +105,8 @@ return [
             'position'    => 7,
             'commentaire' => 'Pourcentage de réalisation de l\'étape de Workflow (entre 0 et 1)',
         ],
-        'STATUT_INTERVENANT_ID' => [
-            'name'        => 'STATUT_INTERVENANT_ID',
+        'STATUT_ID'             => [
+            'name'        => 'STATUT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

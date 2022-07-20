@@ -11,31 +11,25 @@ use Application\Entity\Db\TblContrat;
  */
 trait TblContratAwareTrait
 {
-    /**
-     * @var TblContrat
-     */
-    private $tblContrat;
-
-
+    protected ?TblContrat $tblContrat = null;
 
 
 
     /**
      * @param TblContrat $tblContrat
+     *
      * @return self
      */
-    public function setTblContrat( TblContrat $tblContrat = null )
+    public function setTblContrat( ?TblContrat $tblContrat )
     {
         $this->tblContrat = $tblContrat;
+
         return $this;
     }
 
 
 
-    /**
-     * @return TblContrat
-     */
-    public function getTblContrat()
+    public function getTblContrat(): ?TblContrat
     {
         return $this->tblContrat;
     }

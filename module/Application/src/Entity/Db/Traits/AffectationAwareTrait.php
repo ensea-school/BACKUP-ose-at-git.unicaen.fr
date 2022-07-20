@@ -5,37 +5,31 @@ namespace Application\Entity\Db\Traits;
 use Application\Entity\Db\Affectation;
 
 /**
- * Description of AffectationServiceAwareTrait
+ * Description of AffectationAwareTrait
  *
  * @author UnicaenCode
  */
 trait AffectationAwareTrait
 {
-    /**
-     * @var Affectation
-     */
-    private $affectation;
-
-
+    protected ?Affectation $affectation = null;
 
 
 
     /**
      * @param Affectation $affectation
+     *
      * @return self
      */
-    public function setAffectation( Affectation $affectation = null )
+    public function setAffectation( ?Affectation $affectation )
     {
         $this->affectation = $affectation;
+
         return $this;
     }
 
 
 
-    /**
-     * @return Affectation
-     */
-    public function getAffectation()
+    public function getAffectation(): ?Affectation
     {
         return $this->affectation;
     }

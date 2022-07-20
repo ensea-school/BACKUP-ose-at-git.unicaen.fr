@@ -12,7 +12,7 @@
 <?php
 
 if (!$done) echo $this->messenger()->addMessagesFromFlashMessenger();
-if ($canSaisieDateSigne) {
+if ($canSaisieDateSigne || $contratDate) {
     $form->prepare();
     echo $this->form()->openTag($form);
     echo $this->formControlGroup($form->get('dateRetourSigne'));

@@ -2,7 +2,6 @@
 
 namespace Application\Form\Intervenant\Traits;
 
-use Application\Entity\Db\Intervenant;
 use Application\Form\Intervenant\IntervenantDossierForm;
 
 /**
@@ -12,23 +11,30 @@ use Application\Form\Intervenant\IntervenantDossierForm;
  */
 trait IntervenantDossierFormAwareTrait
 {
-    /**
-     * @var IntervenantDossierForm
-     */
-    private $intervenantDossierForm;
+    protected ?IntervenantDossierForm $formIntervenantIntervenantDossier = null;
+
 
 
     /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
+     * @param IntervenantDossierForm $formIntervenantIntervenantDossier
      *
-     * @return IntervenantDossierForm
+     * @return self
      */
-    public function getIntervenantDossierForm(Intervenant $intervenant)
+    public function setFormIntervenantIntervenantDossier(?IntervenantDossierForm $formIntervenantIntervenantDossier)
     {
-        if (!empty($this->intervenantDossierForm)) {
-            return $this->intervenantDossierForm;
+        $this->formIntervenantIntervenantDossier = $formIntervenantIntervenantDossier;
+
+        return $this;
+    }
+
+
+
+    public function getFormIntervenantIntervenantDossier(): ?IntervenantDossierForm
+    {
+        if (!empty($this->formIntervenantIntervenantDossier)) {
+            return $this->formIntervenantIntervenantDossier;
         }
 
-        return \Application::$container->get('FormElementManager')->get(IntervenantDossierForm::class,['intervenant' => $intervenant]);
+        return \Application::$container->get('FormElementManager')->get(IntervenantDossierForm::class);
     }
 }

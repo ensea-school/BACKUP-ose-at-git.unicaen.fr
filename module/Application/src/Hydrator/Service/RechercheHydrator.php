@@ -7,7 +7,7 @@ use Application\Entity\Db\Etape;
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeIntervenant;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;

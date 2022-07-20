@@ -82,9 +82,6 @@ class TypePieceJointeSaisieForm extends AbstractForm
             'libelle' => [
                 'required' => true,
             ],
-            'libelle' => [
-                'required' => false,
-            ],
         ];
     }
 

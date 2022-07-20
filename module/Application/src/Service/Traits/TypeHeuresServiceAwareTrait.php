@@ -5,16 +5,13 @@ namespace Application\Service\Traits;
 use Application\Service\TypeHeuresService;
 
 /**
- * Description of TypeHeuresAwareTrait
+ * Description of TypeHeuresServiceAwareTrait
  *
  * @author UnicaenCode
  */
 trait TypeHeuresServiceAwareTrait
 {
-    /**
-     * @var TypeHeuresService
-     */
-    private $serviceTypeHeures;
+    protected ?TypeHeuresService $serviceTypeHeures = null;
 
 
 
@@ -23,7 +20,7 @@ trait TypeHeuresServiceAwareTrait
      *
      * @return self
      */
-    public function setServiceTypeHeures(TypeHeuresService $serviceTypeHeures)
+    public function setServiceTypeHeures(?TypeHeuresService $serviceTypeHeures)
     {
         $this->serviceTypeHeures = $serviceTypeHeures;
 
@@ -32,10 +29,7 @@ trait TypeHeuresServiceAwareTrait
 
 
 
-    /**
-     * @return TypeHeuresService
-     */
-    public function getServiceTypeHeures()
+    public function getServiceTypeHeures(): ?TypeHeuresService
     {
         if (empty($this->serviceTypeHeures)) {
             $this->serviceTypeHeures = \Application::$container->get(TypeHeuresService::class);

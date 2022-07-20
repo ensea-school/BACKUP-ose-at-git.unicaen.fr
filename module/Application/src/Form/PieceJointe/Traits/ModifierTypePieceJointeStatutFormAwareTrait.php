@@ -11,36 +11,28 @@ use Application\Form\PieceJointe\ModifierTypePieceJointeStatutForm;
  */
 trait ModifierTypePieceJointeStatutFormAwareTrait
 {
-    /**
-     * @var ModifierTypePieceJointeStatutForm
-     */
-    private $formModifierTypePieceJointeStatut;
+    protected ?ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut = null;
 
 
 
     /**
-     * @param ModifierTypePieceJointeStatutForm $formModifierTypePieceJointeStatut
+     * @param ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut
      *
      * @return self
      */
-    public function setFormModifierTypePieceJointeStatut(ModifierTypePieceJointeStatutForm $formModifierTypePieceJointeStatut)
+    public function setFormPieceJointeModifierTypePieceJointeStatut(?ModifierTypePieceJointeStatutForm $formPieceJointeModifierTypePieceJointeStatut)
     {
-        $this->formModifierTypePieceJointeStatut = $formModifierTypePieceJointeStatut;
+        $this->formPieceJointeModifierTypePieceJointeStatut = $formPieceJointeModifierTypePieceJointeStatut;
 
         return $this;
     }
 
 
 
-    /**
-     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
-     *
-     * @return ModifierTypePieceJointeStatutForm
-     */
-    public function getFormModifierTypePieceJointeStatut()
+    public function getFormPieceJointeModifierTypePieceJointeStatut(): ?ModifierTypePieceJointeStatutForm
     {
-        if (!empty($this->formModifierTypePieceJointeStatut)) {
-            return $this->formModifierTypePieceJointeStatut;
+        if (!empty($this->formPieceJointeModifierTypePieceJointeStatut)) {
+            return $this->formPieceJointeModifierTypePieceJointeStatut;
         }
 
         return \Application::$container->get('FormElementManager')->get(ModifierTypePieceJointeStatutForm::class);

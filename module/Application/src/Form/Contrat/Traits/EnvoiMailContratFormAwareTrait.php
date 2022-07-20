@@ -2,29 +2,39 @@
 
 namespace Application\Form\Contrat\Traits;
 
-
 use Application\Form\Contrat\EnvoiMailContratForm;
 
+/**
+ * Description of EnvoiMailContratFormAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait EnvoiMailContratFormAwareTrait
 {
-    /**
-     * @var EnvoiMailContratForm
-     */
-    protected $formEnvoiMailContrat;
+    protected ?EnvoiMailContratForm $formContratEnvoiMailContrat = null;
 
 
 
     /**
-     * Retourne un nouveau formulaire d'envoi de contrat
+     * @param EnvoiMailContratForm $formContratEnvoiMailContrat
      *
-     * @return EnvoiMailContratForm
+     * @return self
      */
-    public function getFormEnvoiMailContrat(): EnvoiMailContratForm
+    public function setFormContratEnvoiMailContrat(?EnvoiMailContratForm $formContratEnvoiMailContrat)
     {
-        if ($this->formEnvoiMailContrat) {
-            return $this->formEnvoiMailContrat;
-        } else {
-            return \Application::$container->get('FormElementManager')->get(EnvoiMailContratForm::class);
+        $this->formContratEnvoiMailContrat = $formContratEnvoiMailContrat;
+
+        return $this;
+    }
+
+
+
+    public function getFormContratEnvoiMailContrat(): ?EnvoiMailContratForm
+    {
+        if (!empty($this->formContratEnvoiMailContrat)) {
+            return $this->formContratEnvoiMailContrat;
         }
+
+        return \Application::$container->get('FormElementManager')->get(EnvoiMailContratForm::class);
     }
 }

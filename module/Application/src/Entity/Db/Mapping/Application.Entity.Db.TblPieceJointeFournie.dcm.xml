@@ -50,10 +50,8 @@
         <option name="default">1</option>
       </options>
     </field>
-    <field name="dateValidite" type="integer" column="DATE_VALIDITE" nullable="true" >
-    </field>
-    <field name="codeIntervenant" type="string" column="CODE_INTERVENANT" nullable="true" >
-    </field>
+    <field name="dateValidite" type="integer" column="DATE_VALIDITE" nullable="true" />
+    <field name="codeIntervenant" type="string" column="CODE_INTERVENANT" nullable="false" />
     <many-to-one field="dateArchive" target-entity="Application\Entity\Db\Annee">
       <join-columns>
         <join-column name="DATE_ARCHIVE" referenced-column-name="ID"/>

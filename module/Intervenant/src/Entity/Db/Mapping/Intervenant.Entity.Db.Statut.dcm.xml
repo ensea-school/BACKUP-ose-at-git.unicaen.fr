@@ -22,6 +22,7 @@
         <field name="serviceStatutaire" type="float" column="SERVICE_STATUTAIRE" precision="126" scale="0" nullable="false"/>
         <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC" nullable="false"/>
         <field name="tauxChargesPatronales" type="float" column="TAUX_CHARGES_PATRONALES" precision="126" scale="0" nullable="false"/>
+        <field name="tauxChargesTTC" type="float" column="TAUX_CHARGES_TTC" precision="126" scale="0" nullable="true"/>
 
         <field name="dossier" type="boolean" column="DOSSIER" nullable="false"/>
         <field name="dossierVisualisation" type="boolean" column="DOSSIER_VISUALISATION" nullable="false"/>

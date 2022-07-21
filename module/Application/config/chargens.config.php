@@ -203,7 +203,7 @@ return [
                         'title'    => "Charges d'enseignement",
                         'route'    => 'chargens',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Chargens', 'index'),
-                        'order'    => 5,
+                        'order'    => 4,
                         'pages'    => [
                             'scenario'     => [
                                 'label'       => "Gestion des scénarios",

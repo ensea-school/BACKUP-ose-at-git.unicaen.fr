@@ -252,6 +252,7 @@ return [
                         'label'    => 'Services',
                         'title'    => "Visualisation et export des services",
                         'route'    => 'service/resume',
+                        'order'    => 3,
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Service', 'resume'),
                     ],
                 ],

@@ -53,6 +53,7 @@ return [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/offre-de-formation',
+                    'order'    => 2,
                     'defaults' => [
                         'controller' => 'Application\Controller\OffreFormation',
                         'action'     => 'index',
@@ -285,6 +286,7 @@ return [
                         'label'    => 'Offre de formation',
                         'title'    => "Gestion de l'offre de formation",
                         'route'    => 'of',
+                        'order'    => 2,
                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'index'),
                     ],
                     'administration' => [

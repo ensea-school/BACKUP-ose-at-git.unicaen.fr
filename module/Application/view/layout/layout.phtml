@@ -16,7 +16,7 @@ echo $this->doctype();
 
 <html lang="fr">
 <head>
-    <link href="/vendor/bootstrap-5.0.2/css/bootstrap.min.css" media="all" rel="stylesheet" type="text/css">
+    <link href="" media="all" rel="stylesheet" type="text/css">
     <!-- Meta -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,8 +28,7 @@ echo $this->doctype();
     <link href="<?= $this->basePath('/vendor/jquery-ui-1.11.4/jquery-ui.min.css') ?>" media="all" rel="stylesheet" type="text/css">
     <link href="<?= $this->basePath('/vendor/jquery-ui-1.11.4/jquery-ui.structure.min.css') ?>" media="all" rel="stylesheet" type="text/css">
     <link href="<?= $this->basePath('/vendor/jquery-ui-1.11.4/jquery-ui.theme.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/bootstrap-3.3.5/css/bootstrap.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/bootstrap-3.3.5/css/bootstrap-theme.min.css') ?>" media="all" rel="stylesheet" type="text/css">
+    <link href="<?= $this->basePath('/vendor/bootstrap-5.0.2/css/bootstrap.min.css') ?>" media="all" rel="stylesheet" type="text/css">
     <link href="<?= $this->basePath('/vendor/open-sans-gh-pages/open-sans.css') ?>" media="all" rel="stylesheet" type="text/css">
 
     <!-- CSS générales à l'application -->
@@ -74,7 +73,7 @@ echo $this->doctype();
 
 <body class="<?= getenv('APPLICATION_ENV') ?: 'dev' ?> p-0" data-base-url="<?= $this->url('home') ?>">
 
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color: #002768">
+<nav id="navbar" class="navbar sticky-top navbar-expand-lg navbar-dark navbar-inverse">
     <div class="container-fluid center">
         <a class="navbar-brand" href="#"><?= $this->appLink($this->appInfos()->nom) ?></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

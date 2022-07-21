@@ -73,7 +73,7 @@ class CampagneSaisieForm extends AbstractForm
             'name'    => 'messageAutres',
             'type'    => 'Text',
             'options' => [
-                'label' => 'Message informatif affiché pour les intervenants uniquement hors période de campagne',
+                'label' => 'Message informatif affiché pour les personnels uniquement hors période de campagne',
             ],
         ]);
 

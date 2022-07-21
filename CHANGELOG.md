@@ -15,7 +15,8 @@
 
 ## nouveautés
 
-* formule de calcul de Picardie
+* Formule de calcul de Picardie
+* Nouvel état de sortie pour les écarts des heures complémentaires, maintenant personnalisable
 
 ## Corrections de bugs
 

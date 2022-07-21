@@ -2,28 +2,61 @@
 
 namespace Service;
 
+use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use Assert\Assertion;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\CampagneSaisieController;
-use Service\Controller\CampagneSaisieControllerFactory;
 use Service\Controller\RegleStructureValidationController;
-use Service\Controller\RegleStructureValidationControllerFactory;
+use Service\Controller\ServiceController;
+use UnicaenAuth\Assertion\AssertionFactory;
 use UnicaenAuth\Guard\PrivilegeController;
 
 
 return [
     'routes' => [
         'service' => [
-            'child_routes' => [
+            'route'         => '/service',
+            'controller'    => ServiceController::class,
+            'action'        => 'index',
+            'may_terminate' => true,
+            'child_routes'  => [
+                'resume'     => [
+                    'route'  => '/resume',
+                    'action' => 'resume',
+                ],
                 'horodatage' => [
-                    'controller'  => ServiceController::class,
                     'route'       => '/horodatage/:intervenant/:typeVolumeHoraire/:referentiel',
                     'action'      => 'horodatage',
                     'constraints' => [
                         'typeVolumeHoraire' => '[0-9]*',
-                        'referentiel'       => '[0-9]*',
+                        'referentiel'       => '[0-1]',
                     ],
+                ],
+            ],
+        ],
+
+        'intervenant' => [
+            'child_routes' => [
+                'services-prevus'   => [
+                    'route'      => '/:intervenant/services-prevus',
+                    'controller' => ServiceController::class,
+                    'action'     => 'intervenant-saisie',
+                    'defaults'   => [
+                        'type-volume-horaire-code' => 'PREVU',
+                    ],
+                ],
+                'services-realises' => [
+                    'route'      => '/:intervenant/services-realises',
+                    'controller' => ServiceController::class,
+                    'action'     => 'intervenant-saisie',
+                    'defaults'   => [
+                        'type-volume-horaire-code' => 'REALISE',
+                    ],
+                ],
+                'cloturer'          => [
+                    'route'      => '/:intervenant/cloturer',
+                    'controller' => ServiceController::class,
+                    'action'     => 'intervenant-cloture',
                 ],
             ],
         ],
@@ -63,6 +96,44 @@ return [
     ],
 
     'navigation' => [
+        'service' => [
+            'label'    => 'Services',
+            'title'    => "Visualisation et export des services",
+            'route'    => 'service',
+            'resource' => PrivilegeController::getResourceId(ServiceController::class, 'index'),
+        ],
+
+        'intervenant' => [
+            'pages' => [
+                'services-prevus'   => [
+                    'label'               => "Enseignements prévisionnels",
+                    'title'               => "Enseignements prévisionnels de l'intervenant",
+                    'route'               => 'intervenant/services-prevus',
+                    'paramsInject'        => [
+                        'intervenant',
+                    ],
+                    'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE,
+                    'withtarget'          => true,
+                    'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services-prevus'),
+                    'visible'             => Assertion\ServiceAssertion::class,
+                    'order'               => 6,
+                ],
+                'services-realises' => [
+                    'label'               => "Enseignements réalisés",
+                    'title'               => "Constatation des enseignements réalisés",
+                    'route'               => 'intervenant/services-realises',
+                    'paramsInject'        => [
+                        'intervenant',
+                    ],
+                    'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE_REALISE,
+                    'withtarget'          => true,
+                    'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services-realises'),
+                    'visible'             => Assertion\ServiceAssertion::class,
+                    'order'               => 13,
+                ],
+            ],
+        ],
+
         'administration' => [
             'pages' => [
                 'parametres' => [
@@ -104,6 +175,15 @@ return [
 
     'guards' => [
         [
+            'controller' => ServiceController::class,
+            'action'     => ['index', 'resume'],
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+            ],
+            'assertion'  => Assertion\ServiceAssertion::class,
+        ],
+        [
             'controller' => CampagneSaisieController::class,
             'action'     => ['campagnes-saisie'],
             'privileges' => [
@@ -135,12 +215,41 @@ return [
             ],
             //'assertion'  => Assertion\ServiceAssertion::class,
         ],
+        [
+            'controller' => ServiceController::class,
+            'action'     => ['intervenant-cloture'],
+            'privileges' => [
+                Privileges::CLOTURE_CLOTURE,
+                Privileges::CLOTURE_REOUVERTURE,
+            ],
+            //'assertion'  => Assertion\IntervenantAssertion::class,
+        ],
+
+        [
+            'controller' => ServiceController::class,
+            'action'     => ['intervenant-saisie'],
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                Privileges::REFERENTIEL_PREVU_VISUALISATION,
+            ],
+            'assertion'  => Assertion\ServiceAssertion::class,
+        ],
+        [
+            'controller' => ServiceController::class,
+            'action'     => ['intervenant-saisie'],
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                Privileges::REFERENTIEL_REALISE_VISUALISATION,
+            ],
+            'assertion'  => Assertion\ServiceAssertion::class,
+        ],
     ],
 
 
     'controllers' => [
-        CampagneSaisieController::class           => CampagneSaisieControllerFactory::class,
-        RegleStructureValidationController::class => RegleStructureValidationControllerFactory::class,
+        CampagneSaisieController::class           => Controller\CampagneSaisieControllerFactory::class,
+        RegleStructureValidationController::class => Controller\RegleStructureValidationControllerFactory::class,
+        ServiceController::class                  => InvokableFactory::class,
     ],
 
     'services' => [
@@ -148,7 +257,8 @@ return [
         Service\TypeVolumeHoraireService::class        => InvokableFactory::class,
         Service\CampagneSaisieService::class           => InvokableFactory::class,
         Service\RegleStructureValidationService::class => InvokableFactory::class,
-        Assertion\ClotureAssertion::class              => Assertion\ClotureAssertionFactory::class,
+        Assertion\ClotureAssertion::class              => AssertionFactory::class,
+        Assertion\ServiceAssertion::class              => AssertionFactory::class,
     ],
 
 

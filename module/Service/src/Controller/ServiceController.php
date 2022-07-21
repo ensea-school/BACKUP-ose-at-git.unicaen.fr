@@ -1,17 +1,18 @@
 <?php
 
-namespace Application\Controller;
+namespace Service\Controller;
 
+use Application\Controller\AbstractController;
 use Application\Entity\Db\ElementPedagogique;
 use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Validation;
 use Application\Form\Service\Saisie;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
+use Laminas\View\Model\ViewModel;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Application\Processus\Traits\ServiceProcessusAwareTrait;
 use Application\Processus\Traits\ValidationEnseignementProcessusAwareTrait;
-use Application\Processus\Traits\ValidationProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
@@ -30,7 +31,7 @@ use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
+use Referentiel\Service\ServiceReferentielServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
@@ -91,15 +92,18 @@ class ServiceController extends AbstractController
     {
         $this->initFilters();
 
+        $annee  = $this->getServiceContext()->getAnnee();
+        $action = $this->getRequest()->getQuery('action', null);
+        $tri    = ('trier' == $action) ? $this->getRequest()->getQuery('tri', null) : null;
+
         $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $viewModel        = new \Laminas\View\Model\ViewModel();
+        $viewModel        = new ViewModel();
 
         $canAddService = Privileges::ENSEIGNEMENT_PREVU_EDITION || Privileges::ENSEIGNEMENT_REALISE_EDITION;
 
-        $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
         $params             = $this->getEvent()->getRouteMatch()->getParams();
         $params['action']   = 'recherche';
-        $rechercheViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
+        $rechercheViewModel = $this->forward()->dispatch(ServiceController::class, $params);
         $viewModel->addChild($rechercheViewModel, 'recherche');
 
         $recherche = $this->getServiceService()->loadRecherche();
@@ -113,10 +117,181 @@ class ServiceController extends AbstractController
         }
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params            = $viewHelperParams;
-        $viewModel->setVariables(compact('services', 'typeVolumeHoraire', 'action', 'canAddService', 'params'));
-        $viewModel->setTemplate('application/service/index');
+        $viewModel->setVariables(compact('services', 'annee', 'typeVolumeHoraire', 'action', 'canAddService', 'params'));
+        $viewModel->setTemplate('service/service/index');
 
         return $viewModel;
+    }
+
+
+
+    public function resumeAction()
+    {
+        $annee  = $this->getServiceContext()->getAnnee();
+        $action = $this->getRequest()->getQuery('action', null);
+        $tri    = null;
+        if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
+
+
+        $this->rechercheAction();
+        $recherche = $this->getServiceService()->loadRecherche();
+
+        $viewModel = new \Laminas\View\Model\ViewModel();
+
+        $params           = $this->getEvent()->getRouteMatch()->getParams();
+        $params['action'] = 'recherche';
+        $listeViewModel   = $this->forward()->dispatch(ServiceController::class, $params);
+        $viewModel->addChild($listeViewModel, 'recherche');
+
+        if ('afficher' == $action || 'trier' == $action) {
+            $params = [
+                'tri'              => $tri,
+                'isoler-non-payes' => false,
+                'regroupement'     => 'intervenant',
+            ];
+            if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure()) {
+                $params['composante'] = $structure;
+            }
+            $resumeServices = $this->getServiceService()->getTableauBord($recherche, $params);
+        } else {
+            $resumeServices = null;
+        }
+
+        $viewModel->setVariables(compact('annee', 'action', 'resumeServices'));
+        $viewModel->setTemplate('service/service/index');
+
+        return $viewModel;
+    }
+
+
+
+    public function intervenantSaisieAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            \Enseignement\Entity\Db\Service::class,
+            \Enseignement\Entity\Db\VolumeHoraire::class,
+            \Application\Entity\Db\CheminPedagogique::class,
+            \Referentiel\Entity\Db\ServiceReferentiel::class,
+            \Referentiel\Entity\Db\VolumeHoraireReferentiel::class,
+            \Application\Entity\Db\Validation::class,
+        ]);
+        $this->em()->getFilters()->enable('annee')->init([
+            \Application\Entity\Db\ElementPedagogique::class,
+        ]);
+
+        $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code');
+        $typeVolumeHoraire     = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
+
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
+            $vh = new ViewModel();
+            $vh->setTemplate('application/intervenant/menu');
+
+            return $vh;
+        }
+
+        $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
+        if (!$campagneSaisie->estOuverte()) {
+
+            $role = $this->getServiceContext()->getSelectedIdentityRole();
+            if ($message = $campagneSaisie->getMessage($role)) {
+                if ($role->getIntervenant()) {
+                    $this->flashMessenger()->addErrorMessage($message);
+                } else {
+                    $this->flashMessenger()->addWarningMessage($message);
+                }
+            }
+        }
+
+        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
+
+        $vm = new ViewModel();
+        $vm->setTemplate('services/intervenant/saisie');
+
+        /* Liste des services */
+        $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
+        $recherche = new Recherche($typeVolumeHoraire, $etatVolumeHoraire);
+
+        if ($this->isAllowed($intervenant, $typeVolumeHoraire->getPrivilegeEnseignementVisualisation())) {
+            $services = $this->getProcessusService()->getServices($intervenant, $recherche);
+        } else {
+            $services = false;
+        }
+
+        /* Services référentiels (si nécessaire) */
+        if ($this->isAllowed($intervenant, $typeVolumeHoraire->getPrivilegeReferentielVisualisation())) {
+            $servicesReferentiel = $this->getProcessusServiceReferentiel()->getServices($intervenant, $recherche);
+        } else {
+            $servicesReferentiel = false;
+        }
+
+        /* Totaux HETD */
+        $params = $this->getEvent()->getRouteMatch()->getParams();
+        $this->getEvent()->setParam('typeVolumeHoraire', $typeVolumeHoraire);
+        $this->getEvent()->setParam('etatVolumeHoraire', $etatVolumeHoraire);
+        $params['action'] = 'formuleTotauxHetd';
+        $widget           = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
+        if ($widget) $vm->addChild($widget, 'formuleTotauxHetd');
+
+        /* Clôture de saisie (si nécessaire) */
+        if ($typeVolumeHoraire->isRealise() && $intervenant->getStatut()->getCloture()) {
+            $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
+        } else {
+            $cloture = null;
+        }
+
+        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'services', 'servicesReferentiel', 'cloture', 'role'));
+
+        return $vm;
+    }
+
+
+
+    public function intervenantClotureAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            Validation::class,
+        ]);
+
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+
+        $validation = $this->getServiceValidation()->getValidationClotureServices($intervenant);
+
+        if ($this->getRequest()->isPost()) {
+            if ($validation->getId()) {
+                if (!$this->isAllowed($intervenant, Privileges::CLOTURE_REOUVERTURE)) {
+                    throw new \Exception("Vous n'avez pas le droit de déclôturer la saisie de services réalisés d'un intervenant");
+                }
+                try {
+                    $this->getServiceValidation()->delete($validation);
+                    $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
+                    $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été réouverte", 'success');
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
+                }
+            } else {
+                if (!$this->isAllowed($intervenant, Privileges::CLOTURE_CLOTURE)) {
+                    throw new \Exception("Vous n'avez pas le droit de clôturer la saisie de services réalisés d'un intervenant");
+                }
+                try {
+                    $this->getServiceValidation()->save($validation);
+                    $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
+                    $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été clôturée", 'success');
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
+                }
+            }
+        }
+
+        return new MessengerViewModel;
     }
 
 
@@ -205,75 +380,8 @@ class ServiceController extends AbstractController
 
 
 
-    /**
-     * Totaux de services et de référentiel par intervenant.
-     *
-     * @return \Laminas\View\Model\ViewModel
-     */
-    public function resumeAction()
-    {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervernant');
-        /* @var $intervenant Intervenant */
-
-        $canAddService = $this->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EDITION_MASSE));
-        $annee         = $this->getServiceContext()->getAnnee();
-        $action        = $this->getRequest()->getQuery('action', null);
-        $tri           = null;
-        if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
-
-        if (!$intervenant) {
-            $this->rechercheAction();
-            $recherche = $this->getServiceService()->loadRecherche();
-        } else {
-            $this->getServiceLocalContext()->setIntervenant($intervenant);
-
-            $recherche = new Recherche;
-            $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getPrevu());
-            $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
-            $recherche->setIntervenant($intervenant);
-        }
-
-        $viewModel = new \Laminas\View\Model\ViewModel();
-
-        $params           = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action'] = 'recherche';
-        $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
-        $viewModel->addChild($listeViewModel, 'recherche');
-
-        if ('afficher' == $action || 'trier' == $action) {
-            $params = [
-                'tri'              => $tri,
-                'isoler-non-payes' => false,
-                'regroupement'     => 'intervenant',
-            ];
-            if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure()) {
-                $params['composante'] = $structure;
-            }
-            $resumeServices = $this->getServiceService()->getTableauBord($recherche, $params);
-        } else {
-            $resumeServices = null;
-        }
-
-        $viewModel->setVariables(compact('annee', 'action', 'resumeServices', 'canAddService'));
-
-        return $viewModel;
-    }
-
-
-
-    public function resumeRefreshAction()
-    {
-        $filter = $this->getFormServiceRecherche()->hydrateFromSession();
-
-        return compact('filter');
-    }
-
-
-
     public function rechercheAction()
     {
-        $errors        = [];
         $service       = $this->getServiceService();
         $rechercheForm = $this->getFormServiceRecherche();
         $entity        = $service->loadRecherche();
@@ -284,17 +392,13 @@ class ServiceController extends AbstractController
         if ('afficher' === $request->getQuery('action', null)) {
             $rechercheForm->setData($request->getQuery());
             if ($rechercheForm->isValid()) {
-                try {
-                    $service->saveRecherche($entity);
-                } catch (\Exception $e) {
-                    $errors[] = $e->getMessage();
-                }
+                $service->saveRecherche($entity);
             } else {
                 $errors[] = 'Les données de recherche saisies sont invalides.';
             }
         }
 
-        return compact('rechercheForm', 'errors');
+        return compact('rechercheForm');
     }
 
 

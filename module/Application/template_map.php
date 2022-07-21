@@ -4,4 +4,10 @@
  * Commande : php public/index.php UnicaenCode  module='Application'
  */
 return [
+    'error/index'                     => __DIR__ . '/view/error/index.phtml',
+    'error/exception'                 => __DIR__ . '/view/error/exception.phtml',
+    'unicaen-app/application/contact' => __DIR__ . '/view/unicaen-app/application/contact.phtml',
+    'unicaen-app/application/apropos' => __DIR__ . '/view/unicaen-app/application/apropos.phtml',
+    'layout/ajax'                     => __DIR__ . '/view/layout/ajax.phtml',
+    'layout/layout'                   => __DIR__ . '/view/layout/layout.phtml',
 ];

@@ -6,22 +6,11 @@ use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
-return [];
-
 return [
     'router'          => [
         'routes' => [
             'service' => [
                 'child_routes' => [
-                    'resume'                   => [
-                        'type'    => 'Literal',
-                        'options' => [
-                            'route'    => '/resume',
-                            'defaults' => [
-                                'action' => 'resume',
-                            ],
-                        ],
-                    ],
                     'export-csv'               => [
                         'type'    => 'Literal',
                         'options' => [
@@ -37,15 +26,6 @@ return [
                             'route'    => '/export-pdf',
                             'defaults' => [
                                 'action' => 'export-pdf',
-                            ],
-                        ],
-                    ],
-                    'resume-refresh'           => [
-                        'type'    => 'Literal',
-                        'options' => [
-                            'route'    => '/resume-refresh',
-                            'defaults' => [
-                                'action' => 'resumeRefresh',
                             ],
                         ],
                     ],
@@ -149,15 +129,6 @@ return [
                 /* Enseignements */
                 [
                     'controller' => 'Application\Controller\Service',
-                    'action'     => ['index'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
-                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
-                    ],
-                    'assertion'  => Assertion\ServiceAssertion::class,
-                ],
-                [
-                    'controller' => 'Application\Controller\Service',
                     'action'     => ['saisie', 'suppression', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation'],
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_PREVU_EDITION,
@@ -212,30 +183,6 @@ return [
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_EXPORT_PDF,
                     ],
-                ],
-
-
-                /* Commun */
-                [
-                    'controller' => 'Application\Controller\Service',
-                    'action'     => ['resume-refresh'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
-                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
-                        Privileges::REFERENTIEL_PREVU_EDITION,
-                        Privileges::REFERENTIEL_REALISE_EDITION,
-                    ],
-                ],
-                [
-                    'controller' => 'Application\Controller\Service',
-                    'action'     => ['resume', 'recherche'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
-                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
-                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
-                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
-                    ],
-                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
             ],
             'BjyAuthorize\Guard\Controller' => [

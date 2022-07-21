@@ -30,7 +30,7 @@ use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
+use Referentiel\Service\ServiceReferentielServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
@@ -258,15 +258,6 @@ class ServiceController extends AbstractController
         $viewModel->setVariables(compact('annee', 'action', 'resumeServices', 'canAddService'));
 
         return $viewModel;
-    }
-
-
-
-    public function resumeRefreshAction()
-    {
-        $filter = $this->getFormServiceRecherche()->hydrateFromSession();
-
-        return compact('filter');
     }
 
 

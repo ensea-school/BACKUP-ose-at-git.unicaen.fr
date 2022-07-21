@@ -5,7 +5,7 @@ if ($oa->inMaintenance()) {
 } elseif ($oa->getConfig('maintenance', 'desactivationSynchronisation', false)) {
     $c->println("La synchronisation est désactivée");
 } else {
-//    $job = $c->getArg(2);
-//    $oa->exec('UnicaenImport SyncJob ' . $job);
+    $job = $c->getArg(2);
+    $oa->exec('UnicaenImport SyncJob ' . $job);
     $c->println("Opération terminée");
 }

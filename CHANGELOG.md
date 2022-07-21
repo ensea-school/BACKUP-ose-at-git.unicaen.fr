@@ -16,7 +16,9 @@
 ## nouveautés
 
 * Formule de calcul de Picardie
-* Nouvel état de sortie pour les écarts des heures complémentaires, maintenant personnalisable
+* Nouvel état de sortie pour les écarts des heures complémentaires, maintenant personnalisable (#45807)
+* Possibilité de faire une PEC ou REN (SIHAM) l'année universitaire N-1
+* Nouvel état de sortie pour télécharger une synthèse des privliges par rôle (#45629)
 
 ## Corrections de bugs
 

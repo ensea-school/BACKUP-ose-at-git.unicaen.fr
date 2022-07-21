@@ -379,7 +379,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       volumes_horaires.items(length).service_statutaire        := d.service_statutaire = 1;
       volumes_horaires.items(length).heures                    := d.heures;
       volumes_horaires.items(length).type_intervention_code    := CASE WHEN d.referentiel = 1 THEN NULL ELSE d.type_intervention_code END;
-      volumes_horaires.items(length).structure_code            := CASE WHEN d.structure_code = '__EXTERIEUR__' THEN NULL ELSE d.structure_code END;
+      volumes_horaires.items(length).structure_code            := CASE WHEN d.structure_code IN ('__EXTERIEUR__', '__UNIV__') THEN NULL ELSE d.structure_code END;
       volumes_horaires.items(length).taux_service_du           := d.taux_service_du;
       volumes_horaires.items(length).taux_service_compl        := d.taux_service_compl;
       volumes_horaires.items(length).param_1                   := d.param_1;

@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.0](#ose-19-12072022)
+[OSE 19.0](#ose-190-12072022)
 
 
 # OSE 20 (à venir)
@@ -11,9 +11,22 @@
 
 
 
+# OSE 19.1 (à venir)
+
+## nouveautés
+
+* Formule de calcul de Picardie
+* Nouvel état de sortie pour les écarts des heures complémentaires, maintenant personnalisable (#45807)
+* Possibilité de faire une PEC ou REN (SIHAM) l'année universitaire N-1
+* Nouvel état de sortie pour télécharger une synthèse des privliges par rôle (#45629)
+
+## Corrections de bugs
+
+* La synchronisation via la ligne de commande ne fonctionnait plus. C'est rétabli
 
 
-# OSE 19 (12/07/2022)
+
+# OSE 19.0 (12/07/2022)
 
 ## Nouveautés
 

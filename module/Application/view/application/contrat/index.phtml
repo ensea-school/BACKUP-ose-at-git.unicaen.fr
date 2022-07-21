@@ -18,15 +18,12 @@ foreach ($contrats as $contrat) {
     $structList[] = $contrat->getStructure();
 }
 
-$notshow                  = false;
 $serviceNonContractToShow = [];
 foreach ($services['non-contractualises'] as $sid => $servicesNC) {
     $structure = current($servicesNC)->getElementPedagogique()->getStructure();
     if ($avenant_param == 1 || (!in_array($structure, $structList) && !in_array(null, $structList) && !($avenant_param < 0 && $hasContrat))) {
         $serviceNonContractToShow[] = $structure;
-    } else {
-        $notshow = true;
-    };
+    }
 }
 
 

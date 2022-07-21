@@ -355,7 +355,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
 
-            $anneeUniversitaire = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
+            $anneeUniversitaire = $intervenant->getAnnee();//$this->getServiceExportRh()->getAnneeUniversitaireEnCours();
             $dateEffet = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
             $dateFin = $anneeUniversitaire->getDateFin()->format('Y-m-d');
 
@@ -537,7 +537,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
-            $anneeUniversitaire = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
+            $anneeUniversitaire = $intervenant->getAnnee();//$this->getServiceExportRh()->getAnneeUniversitaireEnCours();
 
             $dateEffet = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
             $dateFin = $anneeUniversitaire->getDateFin()->format('Y-m-d');

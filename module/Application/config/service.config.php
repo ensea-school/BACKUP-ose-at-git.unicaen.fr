@@ -11,24 +11,6 @@ return [
         'routes' => [
             'service' => [
                 'child_routes' => [
-                    'export-csv'               => [
-                        'type'    => 'Literal',
-                        'options' => [
-                            'route'    => '/export-csv',
-                            'defaults' => [
-                                'action' => 'export-csv',
-                            ],
-                        ],
-                    ],
-                    'export-pdf'               => [
-                        'type'    => 'Literal',
-                        'options' => [
-                            'route'    => '/export-pdf',
-                            'defaults' => [
-                                'action' => 'export-pdf',
-                            ],
-                        ],
-                    ],
                     'modifier'                 => [
                         'type'    => 'Segment',
                         'options' => [
@@ -170,20 +152,6 @@ return [
                         Privileges::ENSEIGNEMENT_DEVALIDATION,
                     ],
                 ],
-                [
-                    'controller' => 'Application\Controller\Service',
-                    'action'     => ['export-csv'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_EXPORT_CSV,
-                    ],
-                ],
-                [
-                    'controller' => 'Application\Controller\Service',
-                    'action'     => ['export-pdf'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_EXPORT_PDF,
-                    ],
-                ],
             ],
             'BjyAuthorize\Guard\Controller' => [
                 [
@@ -286,7 +254,6 @@ return [
     'form_elements'   => [
         'factories'  => [
             Form\Service\SaisieFieldset::class => Form\Service\Factory\SaisieFieldsetFactory::class,
-            Form\Service\RechercheForm::class  => Form\Service\Factory\RechercheFormFactory::class,
         ],
         'invokables' => [
             Form\Service\Saisie::class => Form\Service\Saisie::class,

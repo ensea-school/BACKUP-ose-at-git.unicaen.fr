@@ -6,8 +6,7 @@ use Application\Controller\AbstractController;
 use Application\Entity\Db\ElementPedagogique;
 use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Validation;
-use Application\Form\Service\Saisie;
-use Application\Form\Service\Traits\RechercheFormAwareTrait;
+use Service\Form\RechercheFormAwareTrait;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
 use Laminas\View\Model\ViewModel;
 use Application\Provider\Privilege\Privileges;
@@ -15,6 +14,8 @@ use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Service\Service\RechercheServiceAwareTrait;
+use Service\Service\ResumeServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Laminas\Http\Request;
@@ -22,7 +23,6 @@ use Application\Entity\Db\Intervenant;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Recherche;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
 
 /**
  * Description of ServiceController
@@ -33,13 +33,15 @@ class ServiceController extends AbstractController
 {
     use EnseignementProcessusAwareTrait;
     use ContextServiceAwareTrait;
-    use ServiceServiceAwareTrait;
+    use RechercheServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
     use LocalContextServiceAwareTrait;
     use RechercheFormAwareTrait;
     use WorkflowServiceAwareTrait;
     use EtatSortieServiceAwareTrait;
+    use RechercheServiceAwareTrait;
+    use ResumeServiceAwareTrait;
 
 
     /**
@@ -80,7 +82,7 @@ class ServiceController extends AbstractController
         $rechercheViewModel = $this->forward()->dispatch(ServiceController::class, $params);
         $viewModel->addChild($rechercheViewModel, 'recherche');
 
-        $recherche = $this->getServiceService()->loadRecherche();
+        $recherche = $this->getServiceRecherche()->loadRecherche();
 
         /* Préparation et affichage */
         if ('afficher' === $action) {
@@ -108,7 +110,7 @@ class ServiceController extends AbstractController
 
 
         $this->rechercheAction();
-        $recherche = $this->getServiceService()->loadRecherche();
+        $recherche = $this->getServiceRecherche()->loadRecherche();
 
         $viewModel = new \Laminas\View\Model\ViewModel();
 
@@ -126,7 +128,7 @@ class ServiceController extends AbstractController
             if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure()) {
                 $params['composante'] = $structure;
             }
-            $resumeServices = $this->getServiceService()->getTableauBord($recherche, $params);
+            $resumeServices = $this->getServiceResume()->getTableauBord($recherche, $params);
         } else {
             $resumeServices = null;
         }
@@ -357,9 +359,8 @@ class ServiceController extends AbstractController
 
     public function rechercheAction()
     {
-        $service       = $this->getServiceService();
         $rechercheForm = $this->getFormServiceRecherche();
-        $entity        = $service->loadRecherche();
+        $entity        = $this->getServiceRecherche()->loadRecherche();
         $rechercheForm->bind($entity);
 
         $request = $this->getRequest();
@@ -367,7 +368,7 @@ class ServiceController extends AbstractController
         if ('afficher' === $request->getQuery('action', null)) {
             $rechercheForm->setData($request->getQuery());
             if ($rechercheForm->isValid()) {
-                $service->saveRecherche($entity);
+                $this->getServiceRecherche()->saveRecherche($entity);
             } else {
                 $errors[] = 'Les données de recherche saisies sont invalides.';
             }

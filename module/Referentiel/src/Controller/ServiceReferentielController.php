@@ -13,8 +13,8 @@ use Referentiel\Processus\ValidationReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
 use Referentiel\Service\ServiceReferentielServiceAwareTrait;
+use Service\Service\RechercheServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Service\Entity\Recherche;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -30,7 +30,7 @@ class ServiceReferentielController extends AbstractController
 {
     use ContextServiceAwareTrait;
     use LocalContextServiceAwareTrait;
-    use ServiceServiceAwareTrait;
+    use RechercheServiceAwareTrait;
     use ServiceReferentielServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
@@ -68,7 +68,7 @@ class ServiceReferentielController extends AbstractController
             $rechercheViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
             $viewModel->addChild($rechercheViewModel, 'recherche');
 
-            $recherche = $this->getServiceService()->loadRecherche();
+            $recherche = $this->getServiceRecherche()->loadRecherche();
         } else {
             $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
             $action    = 'afficher'; // Affichage par défaut

@@ -6,7 +6,7 @@ use Application\Entity\Db\ElementPedagogique;
 use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Validation;
 use Application\Form\Service\Saisie;
-use Application\Form\Service\Traits\RechercheFormAwareTrait;
+use Service\Form\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;

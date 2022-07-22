@@ -24,6 +24,14 @@ return [
                     'route'  => '/resume',
                     'action' => 'resume',
                 ],
+                'export-csv' => [
+                    'route'  => '/export-csv',
+                    'action' => 'export-csv',
+                ],
+                'export-pdf' => [
+                    'route'  => '/export-pdf',
+                    'action' => 'export-pdf',
+                ],
                 'horodatage' => [
                     'route'       => '/horodatage/:intervenant/:typeVolumeHoraire/:referentiel',
                     'action'      => 'horodatage',
@@ -184,6 +192,20 @@ return [
             'assertion'  => Assertion\ServiceAssertion::class,
         ],
         [
+            'controller' => ServiceController::class,
+            'action'     => ['export-csv'],
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_EXPORT_CSV,
+            ],
+        ],
+        [
+            'controller' => ServiceController::class,
+            'action'     => ['export-pdf'],
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_EXPORT_PDF,
+            ],
+        ],
+        [
             'controller' => CampagneSaisieController::class,
             'action'     => ['campagnes-saisie'],
             'privileges' => [
@@ -257,12 +279,16 @@ return [
         Service\TypeVolumeHoraireService::class        => InvokableFactory::class,
         Service\CampagneSaisieService::class           => InvokableFactory::class,
         Service\RegleStructureValidationService::class => InvokableFactory::class,
+        Service\ResumeService::class                   => InvokableFactory::class,
         Assertion\ClotureAssertion::class              => AssertionFactory::class,
         Assertion\ServiceAssertion::class              => AssertionFactory::class,
+        Service\RechercheService::class                => InvokableFactory::class,
+        Hydrator\RechercheHydrator::class              => InvokableFactory::class,
     ],
 
 
     'forms' => [
         Form\CampagneSaisieForm::class => InvokableFactory::class,
+        Form\RechercheForm::class      => Form\RechercheFormFactory::class,
     ],
 ];

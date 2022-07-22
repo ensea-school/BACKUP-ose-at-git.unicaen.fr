@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Form\Service\Traits;
-
-use Application\Form\Service\RechercheForm;
+namespace Service\Form;
 
 /**
  * Description of RechercheFormAwareTrait

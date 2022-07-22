@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Form\Service;
+namespace Service\Form;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;

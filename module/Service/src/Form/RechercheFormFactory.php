@@ -1,8 +1,7 @@
 <?php
 
-namespace Application\Form\Service\Factory;
+namespace Service\Form;
 
-use Application\Form\Service\RechercheForm;
 use Psr\Container\ContainerInterface;
 
 

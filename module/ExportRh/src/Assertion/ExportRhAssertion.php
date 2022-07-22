@@ -8,7 +8,6 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use ExportRh\Service\ExportRhServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;

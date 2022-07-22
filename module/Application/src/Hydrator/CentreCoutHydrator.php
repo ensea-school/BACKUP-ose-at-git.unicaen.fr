@@ -31,7 +31,7 @@ class CentreCoutHydrator implements HydratorInterface
         $object->setSourceCode($data['code']);
         $object->setUniteBudgetaire($data['unite-budgetaire']);
         if (array_key_exists('activite', $data)) {
-            $object->setActivite($this->getServiceccActivite()->get($data['activite']));
+            $object->setActivite($this->getServiceCcActivite()->get($data['activite']));
         }
         if (array_key_exists('type-ressource', $data)) {
             $object->setTypeRessource($this->getServiceTypeRessource()->get($data['type-ressource']));

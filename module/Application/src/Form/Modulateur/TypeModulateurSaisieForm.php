@@ -5,8 +5,6 @@ namespace Application\Form\modulateur;
 use Application\Form\AbstractForm;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 
 /**
  * Description of typeModulateurSaisieForm
@@ -15,9 +13,6 @@ use Application\Service\Traits\TypeModulateurServiceAwareTrait;
  */
 class typeModulateurSaisieForm extends AbstractForm
 {
-    use ContextServiceAwareTrait;
-    use TypeModulateurServiceAwareTrait;
-
 
     public function init()
     {
@@ -86,8 +81,6 @@ class typeModulateurSaisieForm extends AbstractForm
 
 class typeModulateurHydrator implements HydratorInterface
 {
-    use TypeModulateurServiceAwareTrait;
-
 
     /**
      * Hydrate $object with the provided $data.

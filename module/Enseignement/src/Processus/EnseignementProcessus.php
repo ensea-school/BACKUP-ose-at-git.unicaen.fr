@@ -1,8 +1,13 @@
 <?php
 
-namespace Application\Processus;
+namespace Enseignement\Processus;
 
 use Application\Entity\Db\Intervenant;
+use Application\Processus\AbstractProcessus;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
+use Enseignement\Entity\Db\Service;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Recherche;
 use Service\Service\EtatVolumeHoraireService;
 use Application\Service\IntervenantService;
@@ -16,14 +21,15 @@ use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
 use Application\Service\TypeInterventionService;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 
 /**
- * Description of ServiceProcessus
+ * Description of EnseignementProcessus
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class ServiceProcessus extends AbstractProcessus
+class EnseignementProcessus extends AbstractProcessus
 {
     use ContextServiceAwareTrait;
     use ServiceServiceAwareTrait;
@@ -33,20 +39,23 @@ class ServiceProcessus extends AbstractProcessus
     use EtapeServiceAwareTrait;
     use PeriodeServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;
+    use IntervenantServiceAwareTrait;
+    use ParametresServiceAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
 
 
     /**
+     * @param Recherche $recherche
      *
-     * @param Intervenant|null $intervenant
-     * @param Recherche        $recherche
-     *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return array|Service[]
      */
-    public function getServices($intervenant, $recherche)
+    public function getEnseignements(Recherche $recherche): array
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         if ($role->getIntervenant()) {
             $intervenant = $role->getIntervenant();
+        } else {
+            $intervenant = $recherche->getIntervenant();
         }
 
         $service                   = $this->getServiceService();
@@ -97,6 +106,53 @@ class ServiceProcessus extends AbstractProcessus
         $services = $service->getList($qb);
 
         return $services;
+    }
+
+
+
+    public function initializeRealise(Intervenant $intervenant): ?TypeVolumeHoraire
+    {
+        $constatationServiceTvh = $this->getServiceParametres()->get('constatation_realise');
+        $typeVolumeHoraire      = $this->getServiceTypeVolumeHoraire()->getByCode($constatationServiceTvh);
+
+        if (!$typeVolumeHoraire) return null;
+
+        $sql = "SELECT valide FROM tbl_service WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :typeVolumeHoraire AND valide > 0";
+        $res = $this->getEntityManager()->getConnection()->fetchOne($sql, [
+            'intervenant'       => $intervenant->getId(),
+            'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
+        ]);
+
+        if ($res) {
+            return $typeVolumeHoraire;
+        } else {
+            return null;
+        }
+    }
+
+
+
+    public function initializePrevu(Intervenant $intervenant): ?TypeVolumeHoraire
+    {
+        $reportServiceTvh  = $this->getServiceParametres()->get('report_service');
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($reportServiceTvh);
+
+        if (!$typeVolumeHoraire) return null;
+
+        $intervenant = $this->getServiceIntervenant()->getPrecedent($intervenant);
+        if (!$intervenant) return null;
+
+        $sql = "SELECT valide FROM tbl_service WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :typeVolumeHoraire AND valide > 0";
+        $res = $this->getEntityManager()->getConnection()->fetchOne($sql, [
+            'intervenant'       => $intervenant->getId(),
+            'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
+        ]);
+
+        if ($res) {
+            return $typeVolumeHoraire;
+        } else {
+            return null;
+        }
     }
 
 }

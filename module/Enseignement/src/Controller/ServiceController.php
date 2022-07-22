@@ -8,10 +8,9 @@ use Application\Entity\Db\Validation;
 use Application\Form\Service\Saisie;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
+use Enseignement\Processus\EnseignementProcessusAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
-use Application\Processus\Traits\ServiceProcessusAwareTrait;
-use Application\Processus\Traits\ValidationEnseignementProcessusAwareTrait;
-use Application\Processus\Traits\ValidationProcessusAwareTrait;
+use Enseignement\Processus\ValidationEnseignementProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
@@ -30,7 +29,6 @@ use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Referentiel\Service\ServiceReferentielServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
@@ -43,7 +41,7 @@ use Application\Service\Traits\PeriodeServiceAwareTrait;
  */
 class ServiceController extends AbstractController
 {
-    use ServiceProcessusAwareTrait;
+    use EnseignementProcessusAwareTrait;
     use ContextServiceAwareTrait;
     use ServiceServiceAwareTrait;
     use VolumeHoraireServiceAwareTrait;
@@ -51,7 +49,6 @@ class ServiceController extends AbstractController
     use TypeVolumeHoraireServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;
     use IntervenantServiceAwareTrait;
-    use ServiceReferentielServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
     use StructureServiceAwareTrait;
     use EtapeServiceAwareTrait;
@@ -87,209 +84,6 @@ class ServiceController extends AbstractController
 
 
 
-    public function indexAction()
-    {
-        $this->initFilters();
-
-        $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $viewModel        = new \Laminas\View\Model\ViewModel();
-
-        $canAddService = Privileges::ENSEIGNEMENT_PREVU_EDITION || Privileges::ENSEIGNEMENT_REALISE_EDITION;
-
-        $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
-        $params             = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action']   = 'recherche';
-        $rechercheViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
-        $viewModel->addChild($rechercheViewModel, 'recherche');
-
-        $recherche = $this->getServiceService()->loadRecherche();
-
-        /* Préparation et affichage */
-        if ('afficher' === $action) {
-            $services = $this->getProcessusService()->getServices(null, $recherche);
-            /* Services référentiels */
-        } else {
-            $services = [];
-        }
-        $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
-        $params            = $viewHelperParams;
-        $viewModel->setVariables(compact('services', 'typeVolumeHoraire', 'action', 'canAddService', 'params'));
-        $viewModel->setTemplate('application/service/index');
-
-        return $viewModel;
-    }
-
-
-
-    public function exportCsvAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-        $annee     = $this->getServiceContext()->getAnnee();
-        $structure = $this->getServiceContext()->getStructure();
-
-        if (!$intervenant) {
-            $rr        = $this->rechercheAction();
-            $recherche = $rr['rechercheForm']->getObject();
-        } else {
-            $recherche = new Recherche;
-            $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getPrevu());
-            $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
-            $recherche->setIntervenant($intervenant);
-        }
-
-        /* Préparation et affichage */
-        $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_services_csv');
-        $fileName   = 'Listing des services - ' . date('dmY') . '.csv';
-
-        $filters             = $recherche->getFilters();
-        $filters['ANNEE_ID'] = $annee->getId();
-        if ($structure) {
-            $filters['STRUCTURE_AFF_ID OR STRUCTURE_ENS_ID'] = $structure->getId();
-        }
-
-        $options = [
-            'annee'               => $annee->getLibelle(),
-            'type_volume_horaire' => $recherche->getTypeVolumeHoraire()->getLibelle(),
-            'etat_volume_horaire' => $recherche->getEtatVolumeHoraire()->getLibelle(),
-            'composante'          => $recherche->getStructureAff() ? $recherche->getStructureAff()->getLibelleCourt() : 'Toutes',
-            'type_intervenant'    => $recherche->getTypeIntervenant() ? $recherche->getTypeIntervenant()->getLibelle() : 'Tous intervenants',
-        ];
-
-        $csv = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, $options);
-        $csv->setFilename($fileName);
-
-        return $csv;
-    }
-
-
-
-    public function exportPdfAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-        $annee     = $this->getServiceContext()->getAnnee();
-        $structure = $this->getServiceContext()->getStructure();
-
-        if (!$intervenant) {
-            $rr        = $this->rechercheAction();
-            $recherche = $rr['rechercheForm']->getObject();
-        } else {
-            $recherche = new Recherche();
-            $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getPrevu());
-            $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
-            $recherche->setIntervenant($intervenant);
-        }
-
-        $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_services_pdf');
-        $fileName   = 'Listing des services - ' . date('dmY') . '.pdf';
-
-        $filters             = $recherche->getFilters();
-        $filters['ANNEE_ID'] = $annee->getId();
-        if ($structure) {
-            $filters['STRUCTURE_AFF_ID OR STRUCTURE_ENS_ID'] = $structure->getId();
-        }
-
-        $options = [
-            'annee'               => $annee->getLibelle(),
-            'type_volume_horaire' => $recherche->getTypeVolumeHoraire()->getLibelle(),
-            'etat_volume_horaire' => $recherche->getEtatVolumeHoraire()->getLibelle(),
-            'composante'          => $recherche->getStructureAff() ? $recherche->getStructureAff()->getLibelleCourt() : 'Toutes',
-            'type_intervenant'    => $recherche->getTypeIntervenant() ? $recherche->getTypeIntervenant()->getLibelle() : 'Tous intervenants',
-        ];
-
-        $document = $this->getServiceEtatSortie()->genererPdf($etatSortie, $filters, $options);
-
-        $document->download($fileName);
-    }
-
-
-
-    /**
-     * Totaux de services et de référentiel par intervenant.
-     *
-     * @return \Laminas\View\Model\ViewModel
-     */
-    public function resumeAction()
-    {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervernant');
-        /* @var $intervenant Intervenant */
-
-        $canAddService = $this->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EDITION_MASSE));
-        $annee         = $this->getServiceContext()->getAnnee();
-        $action        = $this->getRequest()->getQuery('action', null);
-        $tri           = null;
-        if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
-
-        if (!$intervenant) {
-            $this->rechercheAction();
-            $recherche = $this->getServiceService()->loadRecherche();
-        } else {
-            $this->getServiceLocalContext()->setIntervenant($intervenant);
-
-            $recherche = new Recherche;
-            $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getPrevu());
-            $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
-            $recherche->setIntervenant($intervenant);
-        }
-
-        $viewModel = new \Laminas\View\Model\ViewModel();
-
-        $params           = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action'] = 'recherche';
-        $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
-        $viewModel->addChild($listeViewModel, 'recherche');
-
-        if ('afficher' == $action || 'trier' == $action) {
-            $params = [
-                'tri'              => $tri,
-                'isoler-non-payes' => false,
-                'regroupement'     => 'intervenant',
-            ];
-            if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure()) {
-                $params['composante'] = $structure;
-            }
-            $resumeServices = $this->getServiceService()->getTableauBord($recherche, $params);
-        } else {
-            $resumeServices = null;
-        }
-
-        $viewModel->setVariables(compact('annee', 'action', 'resumeServices', 'canAddService'));
-
-        return $viewModel;
-    }
-
-
-
-    public function rechercheAction()
-    {
-        $errors        = [];
-        $service       = $this->getServiceService();
-        $rechercheForm = $this->getFormServiceRecherche();
-        $entity        = $service->loadRecherche();
-        $rechercheForm->bind($entity);
-
-        $request = $this->getRequest();
-        /* @var $request Request */
-        if ('afficher' === $request->getQuery('action', null)) {
-            $rechercheForm->setData($request->getQuery());
-            if ($rechercheForm->isValid()) {
-                try {
-                    $service->saveRecherche($entity);
-                } catch (\Exception $e) {
-                    $errors[] = $e->getMessage();
-                }
-            } else {
-                $errors[] = 'Les données de recherche saisies sont invalides.';
-            }
-        }
-
-        return compact('rechercheForm', 'errors');
-    }
-
-
-
     public function rafraichirLigneAction()
     {
         $this->initFilters();
@@ -300,17 +94,6 @@ class ServiceController extends AbstractController
         $service     = $this->getEvent()->getParam('service');
 
         return compact('service', 'params', 'details', 'onlyContent');
-    }
-
-
-
-    public function horodatageAction()
-    {
-        $intervenant       = $this->getEvent()->getParam('intervenant');
-        $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
-        $referentiel       = $this->params('referentiel') ? true : false;
-
-        return compact('intervenant', 'typeVolumeHoraire', 'referentiel');
     }
 
 

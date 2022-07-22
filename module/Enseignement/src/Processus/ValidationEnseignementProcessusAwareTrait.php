@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Processus\Traits;
-
-use Application\Processus\ValidationEnseignementProcessus;
+namespace Enseignement\Processus;
 
 /**
  * Description of ValidationEnseignementProcessusAwareTrait

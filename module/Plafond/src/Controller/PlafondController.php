@@ -12,11 +12,9 @@ use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Plafond\Entity\Db\Plafond;
 use Plafond\Entity\Db\PlafondEtat;
-use Application\Service\Traits\ContextServiceAwareTrait;
 use Plafond\Form\PlafondConfigFormAwareTrait;
 use Plafond\Form\PlafondFormAwareTrait;
 use Plafond\Service\PlafondServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 
@@ -28,8 +26,6 @@ use UnicaenApp\View\Model\MessengerViewModel;
 class PlafondController extends AbstractController
 {
     use PlafondServiceAwareTrait;
-    use TypeVolumeHoraireServiceAwareTrait;
-    use ContextServiceAwareTrait;
     use PlafondFormAwareTrait;
     use PlafondConfigFormAwareTrait;
 

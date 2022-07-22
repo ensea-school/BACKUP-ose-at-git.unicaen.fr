@@ -11,7 +11,6 @@ use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
-use Application\Processus\Traits\ServiceProcessusAwareTrait;
 use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Service\Service\CampagneSaisieServiceAwareTrait;
@@ -51,7 +50,6 @@ class  IntervenantController extends AbstractController
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
     use IntervenantProcessusAwareTrait;
-    use ServiceProcessusAwareTrait;
     use ServiceReferentielProcessusAwareTrait;
     use LocalContextServiceAwareTrait;
     use CampagneSaisieServiceAwareTrait;

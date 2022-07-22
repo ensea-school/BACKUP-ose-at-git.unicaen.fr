@@ -3,7 +3,6 @@
 namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\TypeInterventionStatutServiceAwareTrait;
 use Application\Entity\Db\Traits\TypeInterventionStatutAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
@@ -128,7 +127,6 @@ class TypeInterventionStatutHydrator implements HydratorInterface
 {
     use TypeInterventionServiceAwareTrait;
     use StatutServiceAwareTrait;
-    use TypeInterventionStatutServiceAwareTrait;
     use EntityManagerAwareTrait;
 
 

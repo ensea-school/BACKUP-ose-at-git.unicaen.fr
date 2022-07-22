@@ -6,9 +6,7 @@ use Application\Entity\Db\IntervenantDossier;
 use Intervenant\Entity\Db\Statut;
 use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
-use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
-use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\EmployeurServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
@@ -21,8 +19,6 @@ use Laminas\Hydrator\HydratorInterface;
  */
 class IntervenantDossierHydrator implements HydratorInterface
 {
-    use DossierServiceAwareTrait;
-    use ContextServiceAwareTrait;
     use CiviliteServiceAwareTrait;
     use PaysServiceAwareTrait;
     use DepartementServiceAwareTrait;

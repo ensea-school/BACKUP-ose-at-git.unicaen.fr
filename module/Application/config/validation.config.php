@@ -119,9 +119,8 @@ return [
 
     'service_manager' => [
         'invokables' => [
-            Service\TypeValidationService::class             => Service\TypeValidationService::class,
-            Service\ValidationService::class                 => Service\ValidationService::class,
-            Processus\ValidationEnseignementProcessus::class => Processus\ValidationEnseignementProcessus::class,
+            Service\TypeValidationService::class => Service\TypeValidationService::class,
+            Service\ValidationService::class     => Service\ValidationService::class,
         ],
     ],
 ];

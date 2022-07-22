@@ -16,8 +16,6 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Referentiel\Service\ServiceReferentielServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\ValidationServiceAwareTrait;
-use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
 use Service\Entity\Recherche;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -36,9 +34,7 @@ class ServiceReferentielController extends AbstractController
     use ServiceReferentielServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
-    use VolumeHoraireReferentielServiceAwareTrait;
     use SaisieAwareTrait;
-    use ValidationServiceAwareTrait;
     use ServiceReferentielProcessusAwareTrait;
     use ValidationReferentielProcessusAwareTrait;
     use WorkflowServiceAwareTrait;

@@ -7,9 +7,3 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
-
-$c = $container->get('config');
-
-$d = $c['bjyauthorize']['resource_providers']['BjyAuthorize\Provider\Resource\Config'];
-
-var_dump($d);

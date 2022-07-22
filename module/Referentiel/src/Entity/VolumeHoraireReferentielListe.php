@@ -8,7 +8,6 @@ use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Referentiel\Hydrator\ListeFilterHydrator;
-use Application\Service\Traits\SourceServiceAwareTrait;
 use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
 use LogicException;
 use RuntimeException;
@@ -78,7 +77,6 @@ class VolumeHoraireReferentielListe
         ],
     ];
 
-    use SourceServiceAwareTrait;
     use VolumeHoraireReferentielServiceAwareTrait;
 
     /**

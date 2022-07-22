@@ -4,6 +4,7 @@ namespace Enseignement\Service;
 
 use Application\Entity\Db\Contrat;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\AbstractEntityService;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;

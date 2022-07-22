@@ -5,8 +5,6 @@ namespace Application\Form\modulateur;
 use Application\Form\AbstractForm;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 
@@ -17,9 +15,6 @@ use Application\Filter\StringFromFloat;
  */
 class modulateurSaisieForm extends AbstractForm
 {
-    use ContextServiceAwareTrait;
-    use TypeModulateurServiceAwareTrait;
-
 
     public function init()
     {

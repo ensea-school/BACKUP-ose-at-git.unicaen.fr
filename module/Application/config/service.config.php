@@ -276,10 +276,8 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\ServiceService::class          => Service\ServiceService::class,
             Service\PeriodeService::class          => Service\PeriodeService::class,
             Service\MotifNonPaiementService::class => Service\MotifNonPaiementService::class,
-            Processus\ServiceProcessus::class      => Processus\ServiceProcessus::class,
         ],
         'factories'  => [
             Assertion\ServiceAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,

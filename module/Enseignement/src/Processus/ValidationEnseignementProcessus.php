@@ -1,8 +1,9 @@
 <?php
 
-namespace Application\Processus;
+namespace Enseignement\Processus;
 
 use Application\Entity\Db\Intervenant;
+use Application\Processus\AbstractProcessus;
 use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Enseignement\Entity\Db\TblValidationEnseignement;

@@ -10,8 +10,6 @@ use Laminas\Mime\Message;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part;
 
-use Intervenant\Form\MailerIntervenantFormAwareTrait;
-use Intervenant\Form\NoteSaisieFormAwareTrait;
 use UnicaenApp\Controller\Plugin\Mail;
 
 /**
@@ -23,14 +21,13 @@ class MailService extends AbstractService
 {
 
     use NoteServiceAwareTrait;
-    use NoteSaisieFormAwareTrait;
-    use MailerIntervenantFormAwareTrait;
     use MailServiceAwareTrait;
 
     /**
      * @var Mail
      */
     private Mail $mail;
+
 
 
     /**
@@ -42,6 +39,7 @@ class MailService extends AbstractService
     }
 
 
+
     /**
      * @param Mail $mail
      */
@@ -51,10 +49,12 @@ class MailService extends AbstractService
     }
 
 
+
     public function __construct(Mail $mail)
     {
         $this->mail = $mail;
     }
+
 
 
     /**
@@ -71,8 +71,8 @@ class MailService extends AbstractService
 
         $body = new Message();
 
-        $text = new Part($content);
-        $text->type = Mime::TYPE_HTML;
+        $text          = new Part($content);
+        $text->type    = Mime::TYPE_HTML;
         $text->charset = 'utf-8';
         $body->addPart($text);
         $message = new MailMessage();

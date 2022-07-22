@@ -8,7 +8,6 @@ use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeModulateurStructureServiceAwareTrait;
 use UnicaenApp\Util;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 
@@ -21,7 +20,6 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 class typeModulateurStructureSaisieForm extends AbstractForm
 {
     use ContextServiceAwareTrait;
-    use TypeModulateurStructureServiceAwareTrait;
     use StructureServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use TypeModulateurServiceAwareTrait;

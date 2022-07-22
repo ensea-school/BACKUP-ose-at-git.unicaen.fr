@@ -2,6 +2,7 @@
 
 namespace Application\View\Helper\Service;
 
+use Enseignement\Processus\EnseignementProcessusAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
@@ -34,6 +35,7 @@ class Liste extends AbstractViewHelper
     use IntervenantProcessusAwareTrait;
     use IntervenantAwareTrait;
     use ParametresServiceAwareTrait;
+    use EnseignementProcessusAwareTrait;
 
     /**
      *
@@ -230,7 +232,7 @@ class Liste extends AbstractViewHelper
     {
         $out = '';
         if ($this->isInRealise()) {
-            if ($this->getProcessusIntervenant()->service()->initializeRealise($this->getIntervenant())) {
+            if ($this->getProcessusEnseignement()->initializeRealise($this->getIntervenant())) {
                 $attribs = [
                     'class'       => 'btn btn-warning prevu-to-realise-show',
                     'data-toggle' => 'modal',
@@ -261,7 +263,7 @@ class Liste extends AbstractViewHelper
                 $out     .= '</div>';
             }
         } elseif ($this->prevuToPrevu) {
-            if ($typeVolumeHoraire = $this->getProcessusIntervenant()->service()->initializePrevu($this->prevuToPrevu)) {
+            if ($typeVolumeHoraire = $this->getProcessusEnseignement()->initializePrevu($this->prevuToPrevu)) {
                 $attribs = [
                     'class'       => 'btn btn-warning prevu-to-prevu-show',
                     'data-toggle' => 'modal',

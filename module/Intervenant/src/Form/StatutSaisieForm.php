@@ -6,7 +6,6 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\TypeAgrementServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 
 /**
@@ -15,7 +14,6 @@ use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 class StatutSaisieForm extends AbstractForm
 {
     use TypeIntervenantServiceAwareTrait;
-    use TypeAgrementServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use DossierAutreServiceAwareTrait;
 

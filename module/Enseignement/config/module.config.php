@@ -29,7 +29,9 @@ return [
     ],
 
     'services' => [
-        Hydrator\RechercheHydrator::class => InvokableFactory::class,
+        Hydrator\RechercheHydrator::class                => InvokableFactory::class,
+        Processus\EnseignementProcessus::class           => InvokableFactory::class,
+        Processus\ValidationEnseignementProcessus::class => InvokableFactory::class,
     ],
 
 

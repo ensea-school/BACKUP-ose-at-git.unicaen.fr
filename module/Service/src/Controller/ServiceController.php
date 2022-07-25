@@ -6,12 +6,14 @@ use Application\Controller\AbstractController;
 use Application\Entity\Db\ElementPedagogique;
 use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Validation;
+use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
 use Service\Form\RechercheFormAwareTrait;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
 use Laminas\View\Model\ViewModel;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Service\Service\CampagneSaisieServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Service\Service\RechercheServiceAwareTrait;
@@ -42,6 +44,8 @@ class ServiceController extends AbstractController
     use EtatSortieServiceAwareTrait;
     use RechercheServiceAwareTrait;
     use ResumeServiceAwareTrait;
+    use CampagneSaisieServiceAwareTrait;
+    use ServiceReferentielProcessusAwareTrait;
 
 
     /**
@@ -141,7 +145,25 @@ class ServiceController extends AbstractController
 
 
 
-    public function intervenantSaisieAction()
+    public function intervenantSaisiePrevuAction()
+    {
+        $prevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
+
+        return $this->intervenantSaisieAction($prevu);
+    }
+
+
+
+    public function intervenantSaisieRealiseAction()
+    {
+        $realise = $this->getServiceTypeVolumeHoraire()->getRealise();
+
+        return $this->intervenantSaisieAction($realise);
+    }
+
+
+
+    protected function intervenantSaisieAction(TypeVolumeHoraire $typeVolumeHoraire)
     {
         $this->em()->getFilters()->enable('historique')->init([
             \Enseignement\Entity\Db\Service::class,
@@ -154,9 +176,6 @@ class ServiceController extends AbstractController
         $this->em()->getFilters()->enable('annee')->init([
             \Application\Entity\Db\ElementPedagogique::class,
         ]);
-
-        $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code');
-        $typeVolumeHoraire     = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
@@ -189,7 +208,7 @@ class ServiceController extends AbstractController
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
 
         $vm = new ViewModel();
-        $vm->setTemplate('services/intervenant/saisie');
+        $vm->setTemplate('service/intervenant/saisie');
 
         /* Liste des services */
         $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie

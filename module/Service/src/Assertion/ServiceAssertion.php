@@ -7,6 +7,7 @@ use Application\Entity\Db\Intervenant;
 use Enseignement\Entity\Db\Service;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
+use Service\Controller\ServiceController;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Enseignement\Entity\Db\VolumeHoraire;
@@ -240,10 +241,10 @@ class ServiceAssertion extends AbstractAssertion
                 return $this->assertImportAgenda($role);
 
             break;
-            case 'Application\Controller\Intervenant.servicesPrevus':
+            case ServiceController::class . '.intervenant-saisie-prevu':
                 return $this->assertPageServices($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
             break;
-            case 'Application\Controller\Intervenant.servicesRealises':
+            case ServiceController::class . '.intervenant-saisie-prevu':
                 return $this->assertPageServices($role, $intervenant, TypeVolumeHoraire::CODE_REALISE);
             break;
         }

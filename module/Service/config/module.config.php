@@ -48,7 +48,7 @@ return [
                 'services-prevus'   => [
                     'route'      => '/:intervenant/services-prevus',
                     'controller' => ServiceController::class,
-                    'action'     => 'intervenant-saisie',
+                    'action'     => 'intervenant-saisie-prevu',
                     'defaults'   => [
                         'type-volume-horaire-code' => 'PREVU',
                     ],
@@ -56,7 +56,7 @@ return [
                 'services-realises' => [
                     'route'      => '/:intervenant/services-realises',
                     'controller' => ServiceController::class,
-                    'action'     => 'intervenant-saisie',
+                    'action'     => 'intervenant-saisie-realise',
                     'defaults'   => [
                         'type-volume-horaire-code' => 'REALISE',
                     ],
@@ -122,7 +122,7 @@ return [
                     ],
                     'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE,
                     'withtarget'          => true,
-                    'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services-prevus'),
+                    'resource'            => PrivilegeController::getResourceId(ServiceController::class, 'intervenant-saisie-prevu'),
                     'visible'             => Assertion\ServiceAssertion::class,
                     'order'               => 6,
                 ],
@@ -135,7 +135,7 @@ return [
                     ],
                     'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE_REALISE,
                     'withtarget'          => true,
-                    'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services-realises'),
+                    'resource'            => PrivilegeController::getResourceId(ServiceController::class, 'intervenant-saisie-realise'),
                     'visible'             => Assertion\ServiceAssertion::class,
                     'order'               => 13,
                 ],
@@ -249,21 +249,21 @@ return [
 
         [
             'controller' => ServiceController::class,
-            'action'     => ['intervenant-saisie'],
+            'action'     => ['intervenant-saisie-prevu'],
             'privileges' => [
                 Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
                 Privileges::REFERENTIEL_PREVU_VISUALISATION,
             ],
-            'assertion'  => Assertion\ServiceAssertion::class,
+            //'assertion'  => Assertion\ServiceAssertion::class,
         ],
         [
             'controller' => ServiceController::class,
-            'action'     => ['intervenant-saisie'],
+            'action'     => ['intervenant-saisie-realise'],
             'privileges' => [
                 Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
                 Privileges::REFERENTIEL_REALISE_VISUALISATION,
             ],
-            'assertion'  => Assertion\ServiceAssertion::class,
+            //'assertion'  => Assertion\ServiceAssertion::class,
         ],
     ],
 

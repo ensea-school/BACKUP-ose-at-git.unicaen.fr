@@ -9,11 +9,11 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Referentiel\Service\ServiceReferentielServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 
 /**
  * Description of FormuleResultat

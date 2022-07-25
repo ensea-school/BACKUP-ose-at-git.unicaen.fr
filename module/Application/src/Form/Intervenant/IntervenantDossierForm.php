@@ -17,7 +17,7 @@ use Application\Form\Intervenant\Dossier\DossierStatutFieldset;
 use Application\Hydrator\IntervenantDossierHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Validator\NumeroINSEEValidator;
 use Laminas\Form\Element\Csrf;

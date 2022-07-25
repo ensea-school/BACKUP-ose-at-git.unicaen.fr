@@ -18,7 +18,7 @@ use Application\Service\Traits\TypeContratServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 
 
 /**

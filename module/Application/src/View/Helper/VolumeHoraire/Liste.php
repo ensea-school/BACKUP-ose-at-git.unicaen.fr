@@ -5,7 +5,7 @@ namespace Application\View\Helper\VolumeHoraire;
 use Application\Entity\Db\MotifNonPaiement;
 use Enseignement\Hydrator\ListeFilterHydrator;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ServiceServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\VolumeHoraireListe;

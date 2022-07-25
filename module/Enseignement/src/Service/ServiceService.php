@@ -16,8 +16,6 @@ use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\NiveauEtape;
 use Service\Entity\Recherche;
 use Enseignement\Entity\VolumeHoraireListe;
-use Enseignement\Hydrator\RechercheHydrator;
-use Enseignement\Hydrator\RechercheHydratorAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;

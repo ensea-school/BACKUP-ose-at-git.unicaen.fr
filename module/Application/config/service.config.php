@@ -239,7 +239,7 @@ return [
     ],
     'controllers'     => [
         'invokables' => [
-            'Application\Controller\Service' => Controller\ServiceController::class,
+            'Application\Controller\Service' => Controller\IntervenantController::class,
         ],
     ],
     'service_manager' => [

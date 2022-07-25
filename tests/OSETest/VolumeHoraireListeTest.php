@@ -12,7 +12,7 @@ use Enseignement\Entity\Db\VolumeHoraire;
 use Enseignement\Entity\VolumeHoraireListe;
 use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;

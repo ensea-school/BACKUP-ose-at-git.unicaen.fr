@@ -102,7 +102,6 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\VolumeHoraireService::class    => Service\VolumeHoraireService::class,
             Service\VolumeHoraireEnsService::class => Service\VolumeHoraireEnsService::class,
         ],
     ],

@@ -7,6 +7,7 @@ use Application\Processus\AbstractProcessus;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Recherche;
 use Service\Service\EtatVolumeHoraireService;
@@ -16,10 +17,9 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Application\Service\TypeInterventionService;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
@@ -32,7 +32,6 @@ use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 class EnseignementProcessus extends AbstractProcessus
 {
     use ContextServiceAwareTrait;
-    use ServiceServiceAwareTrait;
     use VolumeHoraireServiceAwareTrait;
     use ElementPedagogiqueServiceAwareTrait;
     use StructureServiceAwareTrait;
@@ -42,6 +41,7 @@ class EnseignementProcessus extends AbstractProcessus
     use IntervenantServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
+    use ServiceServiceAwareTrait;
 
 
     /**

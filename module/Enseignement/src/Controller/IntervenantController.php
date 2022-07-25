@@ -1,11 +1,13 @@
 <?php
 
-namespace Application\Controller;
+namespace Enseignement\Controller;
 
+use Application\Controller\AbstractController;
 use Application\Entity\Db\ElementPedagogique;
 use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Validation;
 use Application\Form\Service\Saisie;
+use Laminas\View\Model\ViewModel;
 use Service\Form\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
@@ -23,8 +25,8 @@ use Application\Entity\Db\Intervenant;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Recherche;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
+use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
@@ -35,11 +37,11 @@ use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 
 /**
- * Description of ServiceController
+ * Description of IntervenantController
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ServiceController extends AbstractController
+class IntervenantController extends AbstractController
 {
     use EnseignementProcessusAwareTrait;
     use ContextServiceAwareTrait;
@@ -80,6 +82,62 @@ class ServiceController extends AbstractController
         $this->em()->getFilters()->enable('annee')->init([
             ElementPedagogique::class,
         ]);
+    }
+
+
+
+    public function prevuAction()
+    {
+        $prevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
+
+        return $this->affichageAction($prevu);
+    }
+
+
+
+    public function realiseAction()
+    {
+        $realise = $this->getServiceTypeVolumeHoraire()->getRealise();
+
+        return $this->affichageAction($realise);
+    }
+
+
+
+    private function affichageAction(TypeVolumeHoraire $typeVolumeHoraire)
+    {
+        $this->initFilters();
+        $this->em()->getFilters()->enable('historique')->init([
+            \Application\Entity\Db\CheminPedagogique::class,
+        ]);
+
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
+
+        $vm = new ViewModel();
+        $vm->setTemplate('enseignement/affichage-intervenant');
+
+        /* Liste des services */
+        $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
+        $recherche = new Recherche($typeVolumeHoraire, $etatVolumeHoraire);
+        $recherche->setIntervenant($intervenant);
+
+        if ($this->isAllowed($intervenant, $typeVolumeHoraire->getPrivilegeEnseignementVisualisation())) {
+            $enseignements = $this->getProcessusEnseignement()->getEnseignements($recherche);
+        } else {
+            $services = false;
+        }
+
+        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'enseignements', 'role'));
+
+        return $vm;
     }
 
 

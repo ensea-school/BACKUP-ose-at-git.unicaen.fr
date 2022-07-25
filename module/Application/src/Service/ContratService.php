@@ -7,7 +7,7 @@ use Application\Service\Traits\TypeContratServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Contrat;
 use Application\Entity\Db\Intervenant;

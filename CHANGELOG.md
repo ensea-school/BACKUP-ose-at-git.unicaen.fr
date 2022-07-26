@@ -19,6 +19,7 @@
 * Nouvel état de sortie pour les écarts des heures complémentaires, maintenant personnalisable (#45807)
 * Possibilité de faire une PEC ou REN (SIHAM) l'année universitaire N-1
 * Nouvel état de sortie pour télécharger une synthèse des privilèges par rôle (#45629)
+* Nouveau paramètre du module export RH (SIHAM) permettant de synchroniser le code intervenant avec le matricule SIHAM lors d'une PEC ou d'un renouvellement
 
 ## Corrections de bugs
 

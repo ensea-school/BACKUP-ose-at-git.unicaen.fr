@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @var $this                     Application\View\Renderer\PhpRenderer
+ * @var $typeVolumeHoraire        Service\Entity\Db\TypeVolumeHoraire
+ * @var $intervenant              Application\Entity\Db\Intervenant
+ * @var $enseignements            Enseignement\Entity\Db\Service[]
+ */
+
+use Application\Entity\Db\WfEtape;
+use Application\Provider\Privilege\Privileges;
+
+
+if ($typeVolumeHoraire->isPrevu()) {
+    $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
+    $title     = 'Enseignements';
+} else {
+    $nextEtape = WfEtape::CODE_SERVICE_SAISIE_REALISE;
+    $title     = 'Constatation des enseignements réalisés';
+}
+
+$menuUrl = $this->url(null, ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
+
+
+$this->intervenant($intervenant)->renderTitle($title);
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+$serviceListe = $this->enseignements($typeVolumeHoraire, $intervenant, $enseignements);
+
+
+echo $serviceListe->render();
+echo $serviceListe->horodatage();
+
+echo '<hr />';
+
+echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);

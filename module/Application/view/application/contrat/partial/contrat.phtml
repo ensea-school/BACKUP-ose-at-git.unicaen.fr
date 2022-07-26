@@ -148,7 +148,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                 <small>(cliquez pour afficher/cacher)</small>
             </a>
             <div class="collapse" id="details-enseignements-contrat-<?= $contrat->getId() ?>">
-                <?= $this->serviceListe($services)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
+                <?= $this->enseignements($services)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
             </div>
         </div>
     </div>

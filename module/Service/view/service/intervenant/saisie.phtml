@@ -46,7 +46,7 @@ if ($cloture) echo $this->partial('service/partial/cloture', compact('cloture', 
 
 /* Services et horodatage */
 if ($services !== false) {
-    $serviceListe = $this->serviceListe($services);
+    $serviceListe = $this->enseignements($services);
     $serviceListe->setIntervenant($intervenant);
     $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)->setAddButtonVisibility($canAddService);
     if ($canAddService && $typeVolumeHoraire->isPrevu()) {

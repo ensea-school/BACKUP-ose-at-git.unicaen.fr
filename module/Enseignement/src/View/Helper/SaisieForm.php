@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\View\Helper\Service;
+namespace Enseignement\View\Helper;
 
 use Application\Entity\Db\Periode;
 use Enseignement\Entity\Db\Service;

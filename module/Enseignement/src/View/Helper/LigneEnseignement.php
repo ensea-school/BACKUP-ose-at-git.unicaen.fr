@@ -1,48 +1,40 @@
 <?php
 
-namespace Application\View\Helper\Service;
+namespace Enseignement\View\Helper;
 
 use Application\Provider\Privilege\Privileges;
 use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\Db\Service;
-use Enseignement\Entity\Db\ServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Enseignement\Entity\Db\ServiceAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Ligne extends AbstractViewHelper
+class LigneEnseignement extends AbstractViewHelper
 {
     use ServiceAwareTrait;
     use ContextServiceAwareTrait;
 
-    /**
-     * @var Liste
-     */
-    protected $liste;
+    protected Enseignements $enseignements;
 
-    /**
-     * forcedReadOnly
-     *
-     * @var boolean
-     */
-    protected $forcedReadOnly = false;
+    protected bool          $forcedReadOnly = false;
 
 
 
     /**
      * Helper entry point.
      *
-     * @param Liste   $liste
-     * @param Service $service
+     * @param Enseignements $enseignements
+     * @param Service       $service
      *
      * @return self
      */
-    final public function __invoke(Liste $liste, Service $service)
+    final public function __invoke(Enseignements $enseignements, Service $service)
     {
-        $this->setListe($liste);
+        $this->enseignements = $enseignements;
         $this->setService($service);
 
         return $this;
@@ -67,11 +59,6 @@ class Ligne extends AbstractViewHelper
      */
     public function getRefreshUrl()
     {
-        $typesIntervention = [];
-        foreach ($this->getListe()->getTypesIntervention() as $typeIntervention) {
-            $typesIntervention[] = $typeIntervention->getCode();
-        }
-
         $url = $this->getView()->url(
             'service/rafraichir-ligne',
             [
@@ -94,15 +81,15 @@ class Ligne extends AbstractViewHelper
      *
      * @return string
      */
-    public function render($details = false)
+    public function render(bool $details = false)
     {
-        $liste   = $this->getListe();
+        $liste   = $this->enseignements;
         $service = $this->getService();
         $element = $service->getElementPedagogique();
 
         $vhl = $service->getVolumeHoraireListe()->setTypeVolumeHoraire($liste->getTypeVolumeHoraire());
 
-        $typesIntervention = $this->getListe()->getTypesIntervention();
+        $typesIntervention = $liste->getTypesIntervention();
 
         $out = '';
         if ($liste->getColumnVisibility('intervenant')) {
@@ -154,9 +141,6 @@ class Ligne extends AbstractViewHelper
             if ($colspan > 0) {
                 $out .= '<td colspan="' . $colspan . '">' . $service->getDescription() . "</td>\n";
             }
-        }
-        if ($liste->getColumnVisibility('annee')) {
-            $out .= '<td>' . $this->renderAnnee($element ? $element->getAnnee() : null) . "</td>\n";
         }
         foreach ($typesIntervention as $ti) {
             $out .= $this->renderTypeIntervention($vhl->setTypeIntervention($ti));
@@ -231,15 +215,6 @@ class Ligne extends AbstractViewHelper
 
 
 
-    protected function renderAnnee($annee)
-    {
-        $out = $annee->getLibelle();
-
-        return $out;
-    }
-
-
-
     protected function renderEtablissement($etablissement)
     {
         return $this->getView()->etablissement()->setEtablissement($etablissement)->renderLink();
@@ -258,7 +233,7 @@ class Ligne extends AbstractViewHelper
             && $liste->getService()->getElementPedagogique()
             && !$liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention());
 
-        $display = $this->getListe()->getTypeInterventionVisibility($liste->getTypeIntervention()) ? '' : ';display:none';
+        $display = $this->enseignements->getTypeInterventionVisibility($liste->getTypeIntervention()) ? '' : ';display:none';
 
         $attribs = [
             'class'                       => 'heures type-intervention ' . $liste->getTypeIntervention()->getCode(),
@@ -285,10 +260,10 @@ class Ligne extends AbstractViewHelper
     protected function renderModifier()
     {
         $query = [
-            'type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId(),
+            'type-volume-horaire' => $this->enseignements->getTypeVolumeHoraire()->getId(),
         ];
-        if ($this->getListe()->getIntervenant()) {
-            $query['intervenant'] = $this->getListe()->getIntervenant()->getId();
+        if ($this->enseignements->getIntervenant()) {
+            $query['intervenant'] = $this->enseignements->getIntervenant()->getId();
         }
         $url = $this->getView()->url('service/saisie', ['id' => $this->getService()->getId()], ['query' => $query]);
 
@@ -299,7 +274,7 @@ class Ligne extends AbstractViewHelper
 
     protected function renderSupprimer()
     {
-        $url = $this->getView()->url('service/suppression', ['service' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
+        $url = $this->getView()->url('service/suppression', ['service' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->enseignements->getTypeVolumeHoraire()->getId()]]);
 
         return $this->getView()->tag('a', [
             'class'        => 'pop-ajax service-delete',
@@ -338,35 +313,9 @@ class Ligne extends AbstractViewHelper
 
 
 
-    /**
-     *
-     * @return Liste
-     */
-    function getListe()
-    {
-        return $this->liste;
-    }
-
-
-
-    /**
-     *
-     * @param Liste $liste
-     *
-     * @return self
-     */
-    function setListe(Liste $liste)
-    {
-        $this->liste = $liste;
-
-        return $this;
-    }
-
-
-
     public function getReadOnly()
     {
-        return $this->getListe()->getReadOnly() || $this->forcedReadOnly;
+        return $this->enseignements->getReadOnly() || $this->forcedReadOnly;
     }
 
 
@@ -379,8 +328,8 @@ class Ligne extends AbstractViewHelper
      */
     public function setService(Service $service = null)
     {
-        $service->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire());
-        $typeVolumeHoraire    = $this->getListe()->getTypeVolumeHoraire();
+        $service->setTypeVolumeHoraire($this->enseignements->getTypeVolumeHoraire());
+        $typeVolumeHoraire    = $this->enseignements->getTypeVolumeHoraire();
         $this->forcedReadOnly = !$this->getView()->isAllowed($service, $typeVolumeHoraire->getPrivilegeEnseignementEdition());
         $this->service        = $service;
 

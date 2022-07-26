@@ -37,11 +37,11 @@ use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 
 /**
- * Description of IntervenantController
+ * Description of EnseignementController
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class IntervenantController extends AbstractController
+class EnseignementController extends AbstractController
 {
     use EnseignementProcessusAwareTrait;
     use ContextServiceAwareTrait;
@@ -90,7 +90,7 @@ class IntervenantController extends AbstractController
     {
         $prevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
 
-        return $this->affichageAction($prevu);
+        return $this->indexAction($prevu);
     }
 
 
@@ -99,43 +99,38 @@ class IntervenantController extends AbstractController
     {
         $realise = $this->getServiceTypeVolumeHoraire()->getRealise();
 
-        return $this->affichageAction($realise);
+        return $this->indexAction($realise);
     }
 
 
 
-    private function affichageAction(TypeVolumeHoraire $typeVolumeHoraire)
+    public function indexAction(?TypeVolumeHoraire $typeVolumeHoraire = null)
     {
         $this->initFilters();
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\CheminPedagogique::class,
         ]);
 
-        $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
+
+        $intervenant       = $this->getEvent()->getParam('intervenant');
+        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
+
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
-
         $vm = new ViewModel();
-        $vm->setTemplate('enseignement/affichage-intervenant');
+        $vm->setTemplate('enseignement/index');
 
         /* Liste des services */
         $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
         $recherche = new Recherche($typeVolumeHoraire, $etatVolumeHoraire);
         $recherche->setIntervenant($intervenant);
 
-        if ($this->isAllowed($intervenant, $typeVolumeHoraire->getPrivilegeEnseignementVisualisation())) {
-            $enseignements = $this->getProcessusEnseignement()->getEnseignements($recherche);
-        } else {
-            $services = false;
-        }
+        $enseignements = $this->getProcessusEnseignement()->getEnseignements($recherche);
 
-        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'enseignements', 'role'));
+        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'enseignements'));
 
         return $vm;
     }

@@ -267,8 +267,6 @@ return [
             'fonctionReferentiel'          => View\Helper\ServiceReferentiel\FonctionReferentielViewHelper::class,
         ],
         'factories'  => [
-            'serviceListe'            => View\Helper\Service\ListeFactory::class,
-            'serviceLigne'            => View\Helper\Service\LigneFactory::class,
             'serviceReferentielListe' => View\Helper\ServiceReferentiel\ListeFactory::class,
             'serviceReferentielLigne' => View\Helper\ServiceReferentiel\LigneFactory::class,
         ],

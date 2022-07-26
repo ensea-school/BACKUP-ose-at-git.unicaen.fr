@@ -56,7 +56,7 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
             <small>(cliquez pour afficher/cacher)</small>
         </a>
         <div class="collapse <?= $validation->getId() ? '' : 'in' ?>" id="details-enseignements-<?= $id ?>">
-            <?= $this->serviceListe($services)->setTypeVolumeHoraire($typeVolumeHoraire)->setReadonly(true)->render(); ?>
+            <?= $this->enseignements($services)->setTypeVolumeHoraire($typeVolumeHoraire)->setReadonly(true)->render(); ?>
         </div>
 
     </div>

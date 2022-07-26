@@ -1,15 +1,17 @@
 <?php
 
-/* @var $service Enseignement\Entity\Db\Service */
-/* @var $params array */
+/**
+ * @var $this                     Application\View\Renderer\PhpRenderer
+ * @var $service                  Enseignement\Entity\Db\Service
+ * @var $params                   array
+ */
 
-$serviceListe = $this->serviceListe([$service]);
-/* @var $serviceListe Application\View\Helper\Service\Liste */
+$serviceListe = $this->enseignements([$service]);
 
 if (!empty($params)) $serviceListe->applyParams($params);
 
 if ($onlyContent) {
-    echo $this->serviceLigne($serviceListe, $service)->render($details);
+    echo $serviceListe->renderInterieurLigne($service, $details);
 } else {
     echo $serviceListe->renderLigne($service, $details);
 }

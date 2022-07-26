@@ -32,8 +32,8 @@ if ('afficher' === $action || 'trier' === $action) {
         echo $this->messenger()->setMessages(['warning' => "Les totaux en heures équivalent TD sont calculés à partir de l'ensemble des enseignements de chaque intervenant. En outre, les heures non payables ne sont pas prises en compte."]);
         echo $this->serviceResume($resumeServices)->render();
     } else {
-        $serviceListe = $this->serviceListe($services);
-        /* @var $serviceListe \Application\View\Helper\Service\Liste */
+        $serviceListe = $this->enseignements($services);
+        /* @var $serviceListe \Application\View\Helper\Service\Enseignements */
         $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)->setAddButtonVisibility($canAddService);
         echo $serviceListe->render();
     }

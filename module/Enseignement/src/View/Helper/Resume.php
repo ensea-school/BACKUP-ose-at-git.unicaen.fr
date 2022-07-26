@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\View\Helper\Service;
+namespace Enseignement\View\Helper;
 
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;

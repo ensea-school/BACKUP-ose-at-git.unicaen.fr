@@ -1,19 +1,18 @@
 <?php
 
-namespace Application\View\Helper\Service;
-
+namespace Enseignement\View\Helper;
 
 use Psr\Container\ContainerInterface;
 
 /**
- * Description of LigneFactory
+ * Description of EnseignementsFactory
  *
  */
-class LigneFactory
+class EnseignementsFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $helper = new Ligne();
+        $helper = new Enseignements();
 
         return $helper;
     }

@@ -3,8 +3,8 @@
 /* @var $service Enseignement\Entity\Db\Service */
 /* @var $params array */
 
-$serviceListe = $this->serviceListe([$service]);
-/* @var $serviceListe Application\View\Helper\Service\Liste */
+$serviceListe = $this->enseignements([$service]);
+/* @var $serviceListe Application\View\Helper\Service\Enseignements */
 
 if (!empty($params)) $serviceListe->applyParams($params);
 

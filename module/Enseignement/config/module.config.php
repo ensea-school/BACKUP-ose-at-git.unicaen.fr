@@ -3,7 +3,7 @@
 namespace Enseignement;
 
 use Application\Provider\Privilege\Privileges;
-use Enseignement\Controller\IntervenantController;
+use Enseignement\Controller\EnseignementController;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
 
@@ -11,17 +11,17 @@ return [
     'routes' => [
         'intervenant' => [
             'child_routes' => [
-                'enseignements-prevus'   => [
-                    'route'      => '/:intervenant/enseignements-prevus',
-                    'controller' => IntervenantController::class,
+                'enseignement-prevu'   => [
+                    'route'      => '/:intervenant/enseignement-prevu',
+                    'controller' => EnseignementController::class,
                     'action'     => 'prevu',
                     'defaults'   => [
                         'type-volume-horaire-code' => 'PREVU',
                     ],
                 ],
-                'enseignements-realises' => [
-                    'route'      => '/:intervenant/enseignements-realises',
-                    'controller' => IntervenantController::class,
+                'enseignement-realise' => [
+                    'route'      => '/:intervenant/enseignement-realise',
+                    'controller' => EnseignementController::class,
                     'action'     => 'realise',
                     'defaults'   => [
                         'type-volume-horaire-code' => 'REALISE',
@@ -29,6 +29,27 @@ return [
                 ],
             ],
         ],
+        /*
+                'enseignement' => [
+                    'child_routes' => [
+                        'prevu'   => [
+                            'route'      => 'prevu',
+                            'controller' => EnseignementController::class,
+                            'action'     => 'prevu',
+                            'defaults'   => [
+                                'type-volume-horaire-code' => 'PREVU',
+                            ],
+                        ],
+                        'realise' => [
+                            'route'      => 'realise',
+                            'controller' => EnseignementController::class,
+                            'action'     => 'realise',
+                            'defaults'   => [
+                                'type-volume-horaire-code' => 'REALISE',
+                            ],
+                        ],
+                    ],
+                ],*/
     ],
 
     'navigation' => [
@@ -41,7 +62,7 @@ return [
 
     'guards' => [
         [
-            'controller' => IntervenantController::class,
+            'controller' => EnseignementController::class,
             'action'     => ['prevu'],
             'privileges' => [
                 Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
@@ -49,7 +70,7 @@ return [
             //'assertion'  => Assertion\ServiceAssertion::class,
         ],
         [
-            'controller' => IntervenantController::class,
+            'controller' => EnseignementController::class,
             'action'     => ['realise'],
             'privileges' => [
                 Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
@@ -60,7 +81,7 @@ return [
 
 
     'controllers' => [
-        IntervenantController::class => InvokableFactory::class,
+        EnseignementController::class => InvokableFactory::class,
     ],
 
     'services' => [
@@ -73,5 +94,11 @@ return [
 
     'forms' => [
 
+    ],
+
+
+    'view_helpers' => [
+        'enseignements'     => View\Helper\EnseignementsFactory::class,
+        'ligneEnseignement' => View\Helper\LigneEnseignementFactory::class,
     ],
 ];

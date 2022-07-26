@@ -454,7 +454,7 @@ class Liste extends AbstractViewHelper
     /**
      * Calcule la visibilité par défaut des colonnes en fonction des données transmises!!
      *
-     * @return \Application\View\Helper\Service\Liste
+     * @return \Application\View\Helper\Service\Enseignements
      */
     public function calcDefaultColumnsVisibility()
     {

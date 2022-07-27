@@ -6,7 +6,7 @@
  * @var $params                   array
  */
 
-$serviceListe = $this->enseignements([$service]);
+$serviceListe = $this->enseignements($service->getTypeVolumeHoraire(), $service->getIntervenant(), [$service]);
 
 if (!empty($params)) $serviceListe->applyParams($params);
 

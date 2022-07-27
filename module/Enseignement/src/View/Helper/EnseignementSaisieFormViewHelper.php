@@ -4,6 +4,7 @@ namespace Enseignement\View\Helper;
 
 use Application\Entity\Db\Periode;
 use Enseignement\Entity\Db\Service;
+use Enseignement\Form\EnseignementSaisieForm;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Form\Service\Saisie;
 use Application\View\Helper\AbstractViewHelper;
@@ -15,11 +16,11 @@ use \Service\Service\EtatVolumeHoraireServiceAwareTrait;
 
 
 /**
- * Description of SaisieForm
+ * Description of EnseignementSaisieFormViewHelper
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieForm extends AbstractViewHelper
+class EnseignementSaisieFormViewHelper extends AbstractViewHelper
 {
     use ContextServiceAwareTrait;
     use PeriodeServiceAwareTrait;
@@ -27,10 +28,7 @@ class SaisieForm extends AbstractViewHelper
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
 
-    /**
-     * @var Saisie
-     */
-    protected $form;
+    protected EnseignementSaisieForm $form;
 
 
 
@@ -103,9 +101,9 @@ class SaisieForm extends AbstractViewHelper
      *
      * @param Saisie $form
      *
-     * @return SaisieForm|string
+     * @return EnseignementSaisieForm|string
      */
-    public function __invoke(Saisie $form = null)
+    public function __invoke(EnseignementSaisieForm $form = null)
     {
         $this->form = $form;
         $this->form->prepare();
@@ -169,7 +167,6 @@ class SaisieForm extends AbstractViewHelper
         $res .= '</div>';
         $res .= '<br />';
         $res .= $this->getView()->formRow($this->form->get('submit'));
-        $res .= $this->getView()->formHidden($this->form->get('type-volume-horaire'));
         $res .= $this->getView()->formHidden($fservice->get('id'));
         $res .= $this->getView()->form()->closeTag() . '<br />';
 

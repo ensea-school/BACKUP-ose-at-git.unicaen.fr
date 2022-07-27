@@ -18,9 +18,9 @@ class LigneEnseignement extends AbstractViewHelper
     use ServiceAwareTrait;
     use ContextServiceAwareTrait;
 
-    protected Enseignements $enseignements;
+    protected EnseignementsViewHelper $enseignements;
 
-    protected bool          $forcedReadOnly = false;
+    protected bool                    $forcedReadOnly = false;
 
 
 
@@ -32,7 +32,7 @@ class LigneEnseignement extends AbstractViewHelper
      *
      * @return self
      */
-    final public function __invoke(Enseignements $enseignements, Service $service)
+    final public function __invoke(EnseignementsViewHelper $enseignements, Service $service)
     {
         $this->enseignements = $enseignements;
         $this->setService($service);
@@ -60,7 +60,7 @@ class LigneEnseignement extends AbstractViewHelper
     public function getRefreshUrl()
     {
         $url = $this->getView()->url(
-            'service/rafraichir-ligne',
+            'enseignement/rafraichir-ligne',
             [
                 'service' => $this->getService()->getId(),
             ],
@@ -259,13 +259,15 @@ class LigneEnseignement extends AbstractViewHelper
 
     protected function renderModifier()
     {
-        $query = [
-            'type-volume-horaire' => $this->enseignements->getTypeVolumeHoraire()->getId(),
-        ];
+        $query = [];
         if ($this->enseignements->getIntervenant()) {
             $query['intervenant'] = $this->enseignements->getIntervenant()->getId();
         }
-        $url = $this->getView()->url('service/saisie', ['id' => $this->getService()->getId()], ['query' => $query]);
+        $params = [
+            'type-volume-horaire-code' => $this->enseignements->getTypeVolumeHoraire()->getCode(),
+            'service'                  => $this->getService()->getId(),
+        ];
+        $url    = $this->getView()->url('enseignement/saisie', $params, ['query' => $query]);
 
         return '<a class="ajax-modal" data-event="service-modify-message" href="' . $url . '" title="Modifier l\'enseignement"><i class="fas fa-pencil"></i></a>';
     }

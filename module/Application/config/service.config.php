@@ -11,18 +11,6 @@ return [
         'routes' => [
             'service' => [
                 'child_routes' => [
-                    'modifier'                 => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/modifier/:id',
-                            'constraints' => [
-                                'id' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'modifier',
-                            ],
-                        ],
-                    ],
                     'suppression'              => [
                         'type'    => 'Segment',
                         'options' => [
@@ -41,30 +29,6 @@ return [
                             'route'    => '/recherche',
                             'defaults' => [
                                 'action' => 'recherche',
-                            ],
-                        ],
-                    ],
-                    'rafraichir-ligne'         => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/rafraichir-ligne/:service',
-                            'constraints' => [
-                                'service' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'rafraichir-ligne',
-                            ],
-                        ],
-                    ],
-                    'saisie'                   => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/saisie[/:id]',
-                            'constraints' => [
-                                'id' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'saisie',
                             ],
                         ],
                     ],
@@ -109,25 +73,6 @@ return [
         'guards'         => [
             PrivilegeController::class      => [
                 /* Enseignements */
-                [
-                    'controller' => 'Application\Controller\Service',
-                    'action'     => ['saisie', 'suppression', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_PREVU_EDITION,
-                        Privileges::ENSEIGNEMENT_REALISE_EDITION,
-                        Privileges::REFERENTIEL_PREVU_EDITION,
-                        Privileges::REFERENTIEL_REALISE_EDITION,
-                    ],
-                    'assertion'  => Assertion\ServiceAssertion::class,
-                ],
-                /*[
-                    'controller' => 'Application\Controller\Service',
-                    'action'     => ['import-agenda'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_IMPORT_INTERVENANT_PREVISIONNEL_AGENDA,
-                    ],
-                    'assertion'  => Assertion\ServiceAssertion::class,
-                ],*/
                 [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['validation'],
@@ -252,16 +197,12 @@ return [
         ],
     ],
     'form_elements'   => [
-        'factories'  => [
+        'factories' => [
             Form\Service\SaisieFieldset::class => Form\Service\Factory\SaisieFieldsetFactory::class,
-        ],
-        'invokables' => [
-            Form\Service\Saisie::class => Form\Service\Saisie::class,
         ],
     ],
     'view_helpers'    => [
         'invokables' => [
-            'serviceSaisieForm'            => View\Helper\Service\SaisieForm::class,
             'formServiceReferentielSaisie' => View\Helper\ServiceReferentiel\FormSaisie::class,
             'serviceResume'                => View\Helper\Service\Resume::class,
             'fonctionReferentiel'          => View\Helper\ServiceReferentiel\FonctionReferentielViewHelper::class,

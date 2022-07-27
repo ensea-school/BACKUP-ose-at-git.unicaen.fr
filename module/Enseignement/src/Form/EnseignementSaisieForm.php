@@ -1,9 +1,10 @@
 <?php
 
-namespace Application\Form\Service;
+namespace Enseignement\Form;
 
 use Application\Entity\Db\Periode;
 use Enseignement\Entity\Db\Service;
+use Laminas\Form\FormInterface;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Form\Service\Traits\SaisieFieldsetAwareTrait;
@@ -16,11 +17,11 @@ use Laminas\Hydrator\HydratorInterface;
 
 
 /**
- * Description of Saisie
+ * Description of EnseignementSaisieForm
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Saisie extends AbstractForm
+class EnseignementSaisieForm extends AbstractForm
 {
     use TypeVolumeHoraireAwareTrait;
     use PeriodeServiceAwareTrait;
@@ -51,11 +52,8 @@ class Saisie extends AbstractForm
      *
      * @return mixed|void
      */
-    public function bind($object, $flags = \Laminas\Form\FormInterface::VALUES_NORMALIZED)
+    public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
     {
-        if ($object instanceof Service && $object->getTypeVolumeHoraire()) {
-            $this->get('type-volume-horaire')->setValue($object->getTypeVolumeHoraire()->getId());
-        }
         if ($object instanceof Service && $object->getIntervenant()) {
             $this->get('intervenant')->setValue($object->getIntervenant()->getId());
         }
@@ -70,7 +68,7 @@ class Saisie extends AbstractForm
         $this->setName('service')
             ->setAttribute('class', 'service-form');
 
-        $hydrator = new SaisieHydrator();
+        $hydrator = new EnseignementSaisieFormHydrator();
         $hydrator->setServicePeriode($this->getServicePeriode());
         $this->setHydrator($hydrator);
 
@@ -84,7 +82,6 @@ class Saisie extends AbstractForm
                 $this->add($pf);
             }
         }
-        $this->add(new Hidden('type-volume-horaire'));
         $this->add(new Hidden('intervenant'));
 
         $this->add([
@@ -130,7 +127,7 @@ class Saisie extends AbstractForm
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieHydrator implements HydratorInterface
+class EnseignementSaisieFormHydrator implements HydratorInterface
 {
     use PeriodeServiceAwareTrait;
 

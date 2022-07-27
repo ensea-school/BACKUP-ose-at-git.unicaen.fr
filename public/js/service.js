@@ -37,7 +37,6 @@ $.widget("ose.serviceListe", {
         this.element.find("table.service tr.service-ligne td.type-intervention").each(function () {
             var typeInterventionCode = $(this).data('type-intervention-code');
             var value = $(this).data('value');
-
             if (that.totaux[typeInterventionCode] == undefined) that.totaux[typeInterventionCode] = 0;
 
             that.totaux[typeInterventionCode] += value;

@@ -25,7 +25,7 @@ use Service\Service\TypeVolumeHoraireServiceAwareTrait as ServiceTypeVolumeHorai
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Enseignements extends AbstractViewHelper
+class EnseignementsViewHelper extends AbstractViewHelper
 {
     use TypeVolumeHoraireAwareTrait;
     use ContextServiceAwareTrait;
@@ -309,12 +309,13 @@ class Enseignements extends AbstractViewHelper
         ];
 
         $params = [
-            'type-volume-horaire' => $this->getTypeVolumeHoraire()->getId(),
+            'type-volume-horaire-code' => $this->getTypeVolumeHoraire()->getCode(),
         ];
+        $query  = [];
         if ($this->getIntervenant()) {
-            $params['intervenant'] = $this->getIntervenant()->getId();
+            $query['intervenant'] = $this->getIntervenant()->getId();
         }
-        $attribs['href'] = $this->getView()->url('service/saisie', [], ['query' => $params]);
+        $attribs['href'] = $this->getView()->url('enseignement/saisie', $params, ['query' => $query]);
 
         return '<a ' . $this->htmlAttribs($attribs) . '><i class="fas fa-plus"></i> Je saisis</a>';
     }
@@ -680,7 +681,7 @@ class Enseignements extends AbstractViewHelper
      */
     public function getTypesIntervention()
     {
-        if (!isset($this->typesIntervention)) {
+        if (empty($this->typesIntervention)) {
             $qb = $this->getServiceTypeIntervention()->finderByContext();
             $this->getServiceTypeIntervention()->finderByHistorique($qb);
             $this->typesIntervention = $this->getServiceTypeIntervention()->getList($qb);

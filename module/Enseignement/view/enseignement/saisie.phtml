@@ -4,8 +4,8 @@
  * @var $this \Application\View\Renderer\PhpRenderer
  */
 
-echo $this->serviceSaisieForm( $form )->render();
+echo $this->enseignementSaisieForm($form)->render();
 
-echo $this->formErrors( $form );
+echo $this->formErrors($form);
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();

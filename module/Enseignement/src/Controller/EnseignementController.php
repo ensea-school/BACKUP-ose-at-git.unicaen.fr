@@ -7,6 +7,7 @@ use Application\Entity\Db\ElementPedagogique;
 use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Validation;
 use Application\Form\Service\Saisie;
+use Enseignement\Form\EnseignementSaisieFormAwareTrait;
 use Laminas\View\Model\ViewModel;
 use Service\Form\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
@@ -56,7 +57,7 @@ class EnseignementController extends AbstractController
     use EtapeServiceAwareTrait;
     use PeriodeServiceAwareTrait;
     use LocalContextServiceAwareTrait;
-    use SaisieAwareTrait;
+    use EnseignementSaisieFormAwareTrait;
     use RechercheFormAwareTrait;
     use ValidationEnseignementProcessusAwareTrait;
     use RegleStructureValidationServiceAwareTrait;
@@ -137,6 +138,83 @@ class EnseignementController extends AbstractController
 
 
 
+    public function saisieAction()
+    {
+        $this->initFilters();
+
+        $intervenantId = (int)$this->params()->fromQuery('intervenant', 0);
+        if (!$intervenantId) {
+            $service = $this->params()->fromPost('service');
+            if (isset($service['intervenant-id'])) {
+                $intervenantId = (int)$service['intervenant-id'];
+            }
+        }
+        $intervenant = $intervenantId ? $this->getServiceIntervenant()->get($intervenantId) : null;
+
+        $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU);
+        $typeVolumeHoraire     = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
+
+
+        $serviceId = (int)$this->params()->fromRoute('service', 0);
+        if ($serviceId) {
+            $service = $this->getServiceService()->get($serviceId);
+        } else {
+            $service = $this->getServiceService()->newEntity();
+            $service->setIntervenant($intervenant);
+        }
+        $service->setTypeVolumeHoraire($typeVolumeHoraire);
+
+
+        $form = $this->getFormServiceEnseignementSaisie();
+        $form->setTypeVolumeHoraire($typeVolumeHoraire);
+        $form->bind($service);
+
+        if ($service->getId()) {
+            $title = "Modification d'enseignement";
+        } else {
+            $form->initFromContext();
+            $title = "Ajout d'enseignement";
+        }
+
+        $form->get('service')->setIntervenant($intervenant);
+        $form->get('service')->removeUnusedElements();
+        $hDeb    = $service->getVolumeHoraireListe()->getHeures();
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                if (!$this->isAllowed($service, $typeVolumeHoraire->getPrivilegeEnseignementEdition())) {
+                    $this->flashMessenger()->addErrorMessage("Vous n'êtes pas autorisé à créer ou modifier ce service.");
+                } else {
+                    $form->saveToContext();
+                    $this->getProcessusPlafond()->beginTransaction();
+                    try {
+                        $this->getServiceService()->save($service);
+                        $form->get('service')->get('id')->setValue($service->getId()); // transmet le nouvel ID
+                        $hFin = $service->getVolumeHoraireListe()->getHeures();
+                        $this->updateTableauxBord($service->getIntervenant());
+                        if (!$this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire, $hFin < $hDeb)) {
+                            $this->updateTableauxBord($service->getIntervenant());
+                        }
+                    } catch (\Exception $e) {
+                        $this->flashMessenger()->addErrorMessage($this->translate($e));
+                        $this->em()->rollback();
+                    }
+                }
+            } else {
+                $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
+            }
+        }
+
+        $vm = new ViewModel();
+        $vm->setTemplate('enseignement/saisie');
+        $vm->setVariables(compact('form', 'title'));
+
+        return $vm;
+    }
+
+
+
     public function rafraichirLigneAction()
     {
         $this->initFilters();
@@ -145,8 +223,13 @@ class EnseignementController extends AbstractController
         $details     = 1 == (int)$this->params()->fromQuery('details', (int)$this->params()->fromPost('details', 0));
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content', 0);
         $service     = $this->getEvent()->getParam('service');
+        $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->get($params['type-volume-horaire']));
 
-        return compact('service', 'params', 'details', 'onlyContent');
+        $vm = new ViewModel();
+        $vm->setTemplate('enseignement/rafraichir-ligne');
+        $vm->setVariables(compact('service', 'params', 'details', 'onlyContent'));
+
+        return $vm;
     }
 
 
@@ -295,80 +378,6 @@ class EnseignementController extends AbstractController
         }
 
         return new MessengerViewModel;
-    }
-
-
-
-    public function saisieAction()
-    {
-        $this->initFilters();
-        $id                = (int)$this->params()->fromRoute('id');
-        $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
-
-        $intervenant = $this->context()->intervenantFromQuery('intervenant');
-        if (!$intervenant) {
-            $service = $this->params()->fromPost('service');
-            if (isset($service['intervenant-id'])) {
-                $intervenant = $this->getServiceIntervenant()->get($service['intervenant-id']);
-            }
-        }
-
-        if (empty($typeVolumeHoraire)) {
-            $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
-        } else {
-            $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
-        }
-
-
-        $service = $this->getServiceService();
-        $form    = $this->getFormServiceSaisie();
-        $form->setTypeVolumeHoraire($typeVolumeHoraire);
-
-        if ($id) {
-            $entity = $service->get($id);
-            $entity->setTypeVolumeHoraire($typeVolumeHoraire);
-            $form->bind($entity);
-            $title = "Modification d'enseignement";
-        } else {
-            $entity = $service->newEntity();
-            $entity->setTypeVolumeHoraire($typeVolumeHoraire);
-            $entity->setIntervenant($intervenant);
-            $form->bind($entity);
-            $form->initFromContext();
-            $title = "Ajout d'enseignement";
-        }
-
-        $form->get('service')->setIntervenant($intervenant);
-        $form->get('service')->removeUnusedElements();
-        $hDeb    = $entity->getVolumeHoraireListe()->getHeures();
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $form->setData($request->getPost());
-            if ($form->isValid()) {
-                if (!$this->isAllowed($entity, $typeVolumeHoraire->getPrivilegeEnseignementEdition())) {
-                    $this->flashMessenger()->addErrorMessage("Vous n'êtes pas autorisé à créer ou modifier ce service.");
-                } else {
-                    $form->saveToContext();
-                    $this->getProcessusPlafond()->beginTransaction();
-                    try {
-                        $entity = $service->save($entity);
-                        $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
-                        $hFin = $entity->getVolumeHoraireListe()->getHeures();
-                        $this->updateTableauxBord($entity->getIntervenant());
-                        if (!$this->getProcessusPlafond()->endTransaction($entity->getIntervenant(), $typeVolumeHoraire, $hFin < $hDeb)) {
-                            $this->updateTableauxBord($entity->getIntervenant());
-                        }
-                    } catch (\Exception $e) {
-                        $this->flashMessenger()->addErrorMessage($this->translate($e));
-                        $this->em()->rollback();
-                    }
-                }
-            } else {
-                $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
-            }
-        }
-
-        return compact('form', 'title');
     }
 
 

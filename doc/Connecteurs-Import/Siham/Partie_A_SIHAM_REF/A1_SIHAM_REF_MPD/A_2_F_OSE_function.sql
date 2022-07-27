@@ -27,9 +27,11 @@
 	OSE.UM_EXISTE_ADR_NUM_COMPL
 	----------------------------
 	
-	-- v2.0b- 24/01/2020 - MYP - var v_stat_transfert : augmentation taille variable
-	-- v2.1 - 07/07/2020 - MYP - modif regle  affectation statut Mapping_STATUT_SIHAM-OSE_v12.xlsx
-	-- v2.2 - 30/11/2020 - MYP - V15 + UM_EST_CTR_PERMANENT + UM_EST_CTR_PERM_OU_VAC + OSE.UM_EXISTE_VOIRIE
+	-- v2.0b- 24/01/20 - MYP - var v_stat_transfert : augmentation taille variable
+	-- v2.1 - 07/07/20 - MYP - modif regle  affectation statut Mapping_STATUT_SIHAM-OSE_v12.xlsx
+	-- v2.2 - 30/11/20 - MYP - V15 + UM_EST_CTR_PERMANENT + UM_EST_CTR_PERM_OU_VAC + OSE.UM_EXISTE_VOIRIE
+	-- v2.3 - 20/09/21 - MYP - V15 : pour Prose : besoin fonction  UM_AFFICH_UO_INF
+	-- v2.3b- 04/02/22 - MYP - dblink .world
 =====================================================================================================*/
 
 
@@ -78,7 +80,7 @@ create or replace FUNCTION OSE.UM_UO_TYPE_ENS(p_uo  VARCHAR2) RETURN NUMBER IS
 -- retourne 1 si uo avec une sous-uo de type ens
  CURSOR cu_uo_ens IS
 	select distinct 1
-    from hr.ze00@SIHAM_TEST
+    from hr.ze00@SIHAM.WORLD
     where tyou00 = 'ENS' 
        and substr(trim(idou00),1,3) = substr(trim(p_uo),1,3);  --v1.9
 v_type_ens	 NUMBER;
@@ -106,7 +108,7 @@ v_c_uo_niveau_hie         varchar2(10);
 -- Conseil : a appeler avec p_uo de l'affectation fine
 CURSOR c_uo_niveau_hie IS
       select idou01
-      from hr.ze2a@SIHAM_TEST
+      from hr.ze2a@SIHAM.WORLD
       where trim(idou00) = trim(p_uo) --v1.9
 		and trim(tytrst) = 'HIE'
 		and nbordr = p_niveau_dessus;
@@ -154,7 +156,7 @@ create or replace FUNCTION OSE.UM_NIVEAU_UO(p_uo  VARCHAR2) RETURN NUMBER IS
 -- retourne pour une UO le niveau réel de l'UO dans l'arbre 
  CURSOR cu_str IS
             select max(nbordr)+1 as niveau
-			from hr.ze2a@SIHAM_TEST
+			from hr.ze2a@SIHAM.WORLD
 			where tytrst = 'HIE'
 			and trim(idou00) = trim(p_uo); --v1.9
 v_c_uo	 NUMBER;
@@ -245,7 +247,7 @@ create or replace FUNCTION OSE.UM_UO_NUDOSS(p_uo  VARCHAR2) RETURN NUMBER IS
 -- retourne le nudoss de l'uo passée en param
  CURSOR cu_uo IS
 		select trim(uo.nudoss)
-		from hr.ze00@SIHAM_TEST uo
+		from hr.ze00@SIHAM.WORLD uo
 		where trim(uo.idou00) = trim(p_uo);  --v1.9
 v_c_nudoss	 NUMBER;
    
@@ -434,7 +436,6 @@ END;
 /
 
 
-
 CREATE OR REPLACE FUNCTION OSE.UM_EXISTE_ADR_NUM_COMPL(p_lettre_num_compl IN VARCHAR2) RETURN NUMBER IS
 /* =============================================================
 	UM_EXISTE_ADR_NUM_COMPL -- v2.2
@@ -453,3 +454,88 @@ BEGIN
 	return v_id_num_compl;
 END;
 /
+
+
+CREATE OR REPLACE FUNCTION OSE.UM_AFFICH_UO_INF(p_uo IN varchar2) RETURN VARCHAR2 IS
+/* =============================================================
+	UM_AFFICH_UO_INF
+===============================================================*/
+v_c_uo 	         varchar2(10);
+v_lc_uo          varchar2(25);
+v_c_uo_ll_uo     varchar2(36);
+v_temp_uo		 varchar2(10);
+
+-- !! OSE : via DBLINK sur SIHAM
+-- UM_AFFICH_UO_INF: pour remonter le département quand HE% (dont IUT FDS)
+-- Récupere le code uo + '#' + ll_uo de la structure de x niveaux au dessus
+-- conseil : a appeller avec p_uo de l'affectation fine
+
+CURSOR cur_infos_uo_niveau_hie IS
+	select 
+	-- Renseigner ce select, se baser sur le niveau de hierarchie voulu suivant si recherche, direction, compo péda...
+	-- pour cela se baser sur le tableau excel pour le choix du niveau d'UO /branches : choix_niveaux_UO_pour_OSE.xlsx
+	
+	case 
+		-- ##A_PERSONNALISER_CHOIX_SIHAM## 
+		when UM_EST_STRUCT_MANU(p_uo) = 'O' then trim(p_uo) -- v1.12 - 12/09/2019 - MYP - ajout structure EDTTSD - spéciale OREC car n existe pas dans Siham
+		-- recherchedepart scient
+		when v_temp_uo like 'HR1%' then ''
+		-- Recherche autres
+		when v_temp_uo like 'HR%'  then ''
+		-- directions
+		when v_temp_uo like 'HD%'  then ''
+		-- composantes pedagogisques
+		when v_temp_uo like 'HE%'  then trim(UM_CODE_UO_NIVEAU_DESSUS(v_temp_uo, UM_NIVEAU_UO(v_temp_uo)-6))
+		-- Autres - Fondations UM
+		when v_temp_uo like 'HF%'  then ''
+		-- Autres -PrésidenceUM
+		when v_temp_uo like 'HG%'  then ''
+		-- Autres -Services Communs UM
+		when v_temp_uo like 'HS%'  then ''
+		-- Autres - Partenaires exterieurs UM pour AMUE et CINES
+		when v_temp_uo like 'HX%'  then ''
+		else
+			''
+	end as c_uo_niveau_voulu
+	from dual;	
+
+BEGIN
+	--- ##A_PERSONNALISER_CHOIX_SIHAM##   composantes ex-aes ou ex-isem qui ont fusionné en moma
+	IF (p_uo like 'HER%' or p_uo like 'HEG%') then 
+		v_temp_uo := '';  -- Pour MOMA pas de departement d'ens
+	ELSE 
+		v_temp_uo := p_uo;
+	END IF;
+			
+	-- recup code uo niveau defini pour extraction badge principal vers ARD
+   OPEN cur_infos_uo_niveau_hie;
+    FETCH cur_infos_uo_niveau_hie  INTO v_c_uo;
+
+	-- recup lib court correspondant au departement
+	-- MYP corrigé le 12/06/2018 : sortir de la boucle sinon up n'a pas le flag type ENS et pas renseigné
+	select trim(b.lboush) INTO v_lc_uo
+	from 
+		hr.ze00@SIHAM.WORLD a,
+		hr.ze01@SIHAM.WORLD b
+	where trim(a.idou00) = v_c_uo --v1.9
+	and trim(a.idos00) = 'HIE'
+	and a.nudoss = b.nudoss
+	and a.tyou00 = 'ENS'   -- uo de type enseignement TYPE ENS
+	and b.cdlang = 'F' 
+	;
+	
+	IF v_lc_uo is null then 
+		v_c_uo := '';  -- Pas de departement d'ens : tout à blanc
+	END IF;
+	
+	
+	IF v_lc_uo is null then 
+		v_c_uo := '';  -- Pas de departement d'ens : tout à blanc
+	END IF;
+	
+	-- retourne le code et le libelle court
+	v_c_uo_ll_uo := v_c_uo||'#'||v_lc_uo;
+	
+    return trim(v_c_uo_ll_uo);
+
+END;

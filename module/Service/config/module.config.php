@@ -291,4 +291,8 @@ return [
         Form\CampagneSaisieForm::class => InvokableFactory::class,
         Form\RechercheForm::class      => Form\RechercheFormFactory::class,
     ],
+
+    'view_helpers' => [
+        'horodatage'          => View\Helper\HorodatageViewHelperFactory::class,
+    ],
 ];

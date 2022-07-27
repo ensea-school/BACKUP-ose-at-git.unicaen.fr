@@ -120,7 +120,8 @@ return [
 
 
     'forms' => [
-        Form\EnseignementSaisieForm::class => InvokableFactory::class,
+        Form\EnseignementSaisieForm::class     => InvokableFactory::class,
+        Form\EnseignementSaisieFieldset::class => Form\EnseignementSaisieFieldsetFactory::class,
     ],
 
 

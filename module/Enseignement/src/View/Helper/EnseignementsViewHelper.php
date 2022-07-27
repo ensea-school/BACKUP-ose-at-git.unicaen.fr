@@ -46,6 +46,8 @@ class EnseignementsViewHelper extends AbstractViewHelper
 
     private bool   $addButtonVisibility         = true;
 
+    private bool   $horodatage                  = false;
+
     private array  $columns                     = [
         'intervenant'         => [
             'visibility' => false,
@@ -165,26 +167,14 @@ class EnseignementsViewHelper extends AbstractViewHelper
         $out   .= '</tfoot>' . "\n";
         $out   .= '</table>' . "\n";
         $out   .= $this->renderShowHide();
-        $out   .= '</div>' . "\n";
 
-        return $out;
-    }
-
-
-
-    public function horodatage(): string
-    {
-        $out = '';
-        if ($this->getIntervenant()) {
-            $ihs = $this->getIntervenant()->getHistoService($this->getTypeVolumeHoraire(), false);
-            if ($ihs) {
-                $out .= $this->getView()->historique()
-                    ->setHistoModification($ihs->getHistoModification())
-                    ->setHistoModificateur($ihs->getHistoModificateur());
-            }
+        if ($this->hasHorodatage() && $this->getIntervenant()) {
+            $out .= $this->getView()->horodatage($this->getTypeVolumeHoraire(), $this->getIntervenant(), false);
         }
 
-        return $this->getView()->tag('div', ['class' => 'horodatage-enseignements'])->html($out);
+        $out .= '</div>' . "\n";
+
+        return $out;
     }
 
 
@@ -700,6 +690,22 @@ class EnseignementsViewHelper extends AbstractViewHelper
     public function setTypesIntervention($typesIntervention)
     {
         $this->typesIntervention = $typesIntervention;
+
+        return $this;
+    }
+
+
+
+    public function hasHorodatage(): bool
+    {
+        return $this->horodatage;
+    }
+
+
+
+    public function setHorodatage(bool $horodatage): EnseignementsViewHelper
+    {
+        $this->horodatage = $horodatage;
 
         return $this;
     }

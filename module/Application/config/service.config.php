@@ -196,11 +196,6 @@ return [
             Assertion\ServiceAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
-    'form_elements'   => [
-        'factories' => [
-            Form\Service\SaisieFieldset::class => Form\Service\Factory\SaisieFieldsetFactory::class,
-        ],
-    ],
     'view_helpers'    => [
         'invokables' => [
             'formServiceReferentielSaisie' => View\Helper\ServiceReferentiel\FormSaisie::class,

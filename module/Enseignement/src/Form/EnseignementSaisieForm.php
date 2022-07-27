@@ -7,7 +7,7 @@ use Enseignement\Entity\Db\Service;
 use Laminas\Form\FormInterface;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Application\Form\AbstractForm;
-use Application\Form\Service\Traits\SaisieFieldsetAwareTrait;
+use Enseignement\Form\EnseignementSaisieFieldsetAwareTrait;
 use Application\Form\VolumeHoraire\Traits\SaisieMultipleFieldsetAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
@@ -26,7 +26,7 @@ class EnseignementSaisieForm extends AbstractForm
     use TypeVolumeHoraireAwareTrait;
     use PeriodeServiceAwareTrait;
     use ContextServiceAwareTrait;
-    use SaisieFieldsetAwareTrait;
+    use EnseignementSaisieFieldsetAwareTrait;
     use SaisieMultipleFieldsetAwareTrait;
 
 
@@ -72,7 +72,7 @@ class EnseignementSaisieForm extends AbstractForm
         $hydrator->setServicePeriode($this->getServicePeriode());
         $this->setHydrator($hydrator);
 
-        $this->add($this->getFieldsetServiceSaisie());
+        $this->add($this->getFieldsetEnseignementSaisie());
 
         // Product Fieldset
         if ($this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())) {

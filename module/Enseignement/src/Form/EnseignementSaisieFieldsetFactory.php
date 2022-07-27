@@ -1,9 +1,8 @@
 <?php
 
-namespace Application\Form\Service\Factory;
+namespace Enseignement\Form;
 
 use Psr\Container\ContainerInterface;
-use Application\Form\Service\SaisieFieldset;
 
 
 /**
@@ -11,7 +10,7 @@ use Application\Form\Service\SaisieFieldset;
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class SaisieFieldsetFactory
+class EnseignementSaisieFieldsetFactory
 {
 
     /**
@@ -23,7 +22,7 @@ class SaisieFieldsetFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $fieldset = new SaisieFieldset;
+        $fieldset = new EnseignementSaisieFieldset();
         $fieldset->setServiceAuthorize($container->get('BjyAuthorize\Service\Authorize'));
 
         return $fieldset;

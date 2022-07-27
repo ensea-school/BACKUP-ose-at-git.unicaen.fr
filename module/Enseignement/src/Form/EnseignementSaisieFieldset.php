@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Form\Service;
+namespace Enseignement\Form;
 
 use Application\Entity\Db\ElementPedagogique;
 use Enseignement\Entity\Db\Service;
@@ -27,7 +27,7 @@ use Laminas\Hydrator\HydratorInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieFieldset extends AbstractFieldset
+class EnseignementSaisieFieldset extends AbstractFieldset
 {
     use IntervenantAwareTrait;
     use ContextServiceAwareTrait;

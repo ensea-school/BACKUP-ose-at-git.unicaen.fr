@@ -108,6 +108,12 @@ $.widget("ose.serviceListe", {
         if (this.heures != exHeures) {
             this._trigger('heures-change', null, this);
         }
+        console.log(this.element.find(".horodatage"));
+        console.log(this.element.find(".horodatage2"));
+
+        this.element.find(".horodatage").each(function () {
+            $(this).refresh();
+        });
 
         if ($("#service-resume").length > 0) { // Si on est dans le résumé (si nécessaire)
             $("#service-resume").refresh();

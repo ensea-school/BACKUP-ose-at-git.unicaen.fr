@@ -4,6 +4,7 @@ namespace Enseignement;
 
 use Application\Provider\Privilege\Privileges;
 use Enseignement\Controller\EnseignementController;
+use Enseignement\Controller\VolumeHoraireController;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
 
@@ -49,7 +50,7 @@ return [
                               'type-volume-horaire-code' => 'REALISE',
                           ],
                       ],*/
-                'saisie'           => [
+                'saisie'                 => [
                     'route'       => '/saisie/:type-volume-horaire-code[/:service]',
                     'action'      => 'saisie',
                     'constraints' => [
@@ -57,12 +58,56 @@ return [
                     ],
 
                 ],
-                'rafraichir-ligne' => [
+                'rafraichir-ligne'       => [
                     'route'       => '/rafraichir-ligne/:service',
                     'action'      => 'rafraichir-ligne',
                     'constraints' => [
                         'service' => '[0-9]*',
                     ],
+                ],
+                'saisie-form-refresh-vh' => [
+                    'route'       => 'saisie-form-refresh-vh[/:service]',
+                    'action'      => 'saisie-form-refresh-vh',
+                    'constraints' => [
+                        'id' => '[0-9]*',
+                    ],
+                ],
+            ],
+        ],
+
+        'volume-horaire' => [
+            'route'         => '/volume-horaire',
+            'controller'    => VolumeHoraireController::class,
+            'action'        => 'index',
+            'may_terminate' => true,
+            'child_routes'  => [
+                'liste'                  => [
+                    'route'       => '/liste[/:service]',
+                    'constraints' => [
+                        'service' => '[0-9]*',
+                    ],
+                    'action'      => 'liste',
+                ],
+                'saisie'                 => [
+                    'route'       => '/saisie/:service',
+                    'constraints' => [
+                        'service' => '[0-9]*',
+                    ],
+                    'action'      => 'saisie',
+                ],
+                'saisie-calendaire'      => [
+                    'route'       => '/saisie-calendaire/:service',
+                    'constraints' => [
+                        'service' => '[0-9]*',
+                    ],
+                    'action'      => 'saisie-calendaire',
+                ],
+                'suppression-calendaire' => [
+                    'route'       => '/suppression-calendaire/:service',
+                    'constraints' => [
+                        'service' => '[0-9]*',
+                    ],
+                    'action'      => 'suppression-calendaire',
                 ],
             ],
         ],
@@ -95,7 +140,7 @@ return [
         ],
         [
             'controller' => EnseignementController::class,
-            'action'     => ['saisie', 'rafraichir-ligne'], // , 'suppression', , 'volumes-horaires-refresh', 'initialisation', 'constatation'
+            'action'     => ['saisie', 'rafraichir-ligne', 'saisie-form-refresh-vh'], // , 'suppression', 'initialisation', 'constatation'
             'privileges' => [
                 Privileges::ENSEIGNEMENT_PREVU_EDITION,
                 Privileges::ENSEIGNEMENT_REALISE_EDITION,
@@ -104,12 +149,33 @@ return [
             ],
             //  'assertion'  => Assertion\ServiceAssertion::class,
         ],
+
+        [
+            'controller' => VolumeHoraireController::class,
+            'action'     => ['liste'],
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+            ],
+        ],
+        [
+            'controller' => VolumeHoraireController::class,
+            'action'     => ['saisie', 'saisie-calendaire', 'suppression-calendaire'],
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                Privileges::ENSEIGNEMENT_REALISE_EDITION,
+            ],
+            // 'assertion'  => Assertion\ServiceAssertion::class,
+        ],
+
     ],
 
 
     'controllers' => [
-        EnseignementController::class => InvokableFactory::class,
+        EnseignementController::class  => InvokableFactory::class,
+        VolumeHoraireController::class => InvokableFactory::class,
     ],
+
 
     'services' => [
         Processus\EnseignementProcessus::class           => InvokableFactory::class,
@@ -120,14 +186,19 @@ return [
 
 
     'forms' => [
-        Form\EnseignementSaisieForm::class     => InvokableFactory::class,
-        Form\EnseignementSaisieFieldset::class => Form\EnseignementSaisieFieldsetFactory::class,
+        Form\EnseignementSaisieForm::class              => InvokableFactory::class,
+        Form\EnseignementSaisieFieldset::class          => Form\EnseignementSaisieFieldsetFactory::class,
+        Form\VolumeHoraireSaisieForm::class             => InvokableFactory::class,
+        Form\VolumeHoraireSaisieCalendaireForm::class   => InvokableFactory::class,
+        Form\VolumeHoraireSaisieMultipleFieldset::class => InvokableFactory::class,
     ],
 
 
     'view_helpers' => [
-        'enseignements'          => View\Helper\EnseignementsFactory::class,
-        'ligneEnseignement'      => View\Helper\LigneEnseignementFactory::class,
-        'enseignementSaisieForm' => View\Helper\EnseignementSaisieFormFactory::class,
+        'enseignements'                => View\Helper\EnseignementsFactory::class,
+        'ligneEnseignement'            => View\Helper\LigneEnseignementFactory::class,
+        'enseignementSaisieForm'       => View\Helper\EnseignementSaisieFormFactory::class,
+        'volumeHoraireListe'           => View\Helper\VolumeHoraire\ListeFactory::class,
+        'volumeHoraireListeCalendaire' => View\Helper\VolumeHoraire\ListeCalendaireFactory::class,
     ],
 ];

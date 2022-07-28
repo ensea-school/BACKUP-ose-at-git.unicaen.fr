@@ -8,7 +8,6 @@ use Laminas\Form\FormInterface;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Application\Form\AbstractForm;
 use Enseignement\Form\EnseignementSaisieFieldsetAwareTrait;
-use Application\Form\VolumeHoraire\Traits\SaisieMultipleFieldsetAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Entity\Db\Etablissement;
@@ -27,7 +26,7 @@ class EnseignementSaisieForm extends AbstractForm
     use PeriodeServiceAwareTrait;
     use ContextServiceAwareTrait;
     use EnseignementSaisieFieldsetAwareTrait;
-    use SaisieMultipleFieldsetAwareTrait;
+    use VolumeHoraireSaisieMultipleFieldsetAwareTrait;
 
 
     /**

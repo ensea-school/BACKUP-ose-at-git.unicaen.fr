@@ -497,6 +497,7 @@ return [
             Service\OffreFormationService::class       => Service\OffreFormationService::class,
             Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
             Processus\ReconductionProcessus::class     => Processus\ReconductionProcessus::class,
+            Service\VolumeHoraireEnsService::class     => Service\VolumeHoraireEnsService::class,
         ],
         'factories'  => [
             Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,

@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\View\Helper\VolumeHoraire;
+namespace Enseignement\View\Helper\VolumeHoraire;
 
 use Application\Constants;
 use Application\Entity\Db\TypeIntervention;
@@ -17,7 +17,7 @@ use Application\View\Helper\AbstractViewHelper;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ListeCalendaire extends AbstractViewHelper
+class ListeCalendaireViewHelper extends AbstractViewHelper
 {
     use ServiceServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;

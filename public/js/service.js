@@ -132,7 +132,7 @@ $.widget("ose.enseignements", {
             });
             that.element.find("#service-" + serviceId + "-volume-horaire-td div#vhl").refresh();
         } else { // nouveau service
-            var url = Url("service/rafraichir-ligne/" + serviceId, {
+            var url = Url("enseignement/rafraichir-ligne/" + serviceId, {
                 'only-content': 0,
                 'details': 1,
                 params: that.params

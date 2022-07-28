@@ -1,13 +1,16 @@
 <?php
 
-namespace Application\Controller;
+namespace Enseignement\Controller;
 
+use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\MotifNonPaiement;
 use Enseignement\Entity\Db\Service;
+use Enseignement\Entity\Db\VolumeHoraire;
 use Enseignement\Entity\VolumeHoraireListe;
 use Application\Form\AbstractForm;
-use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
-use Application\Form\VolumeHoraire\Traits\SaisieCalendaireAwareTrait;
+use Enseignement\Form\VolumeHoraireSaisieCalendaireFormAwareTrait;
+use Enseignement\Form\VolumeHoraireSaisieFormAwareTrait;
 use Enseignement\Hydrator\ListeFilterHydrator;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
@@ -29,17 +32,17 @@ class VolumeHoraireController extends AbstractController
     use ContextServiceAwareTrait;
     use VolumeHoraireServiceAwareTrait;
     use ServiceServiceAwareTrait;
-    use SaisieAwareTrait;
+    use VolumeHoraireSaisieFormAwareTrait;
     use WorkflowServiceAwareTrait;
     use PlafondProcessusAwareTrait;
-    use SaisieCalendaireAwareTrait;
+    use VolumeHoraireSaisieCalendaireFormAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
 
 
     public function listeAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Enseignement\Entity\Db\VolumeHoraire::class,
+            VolumeHoraire::class,
         ]);
         $service = $this->getEvent()->getParam('service');
         /* @var $service Service */
@@ -76,8 +79,8 @@ class VolumeHoraireController extends AbstractController
     private function saisieMixte(AbstractForm $form)
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Enseignement\Entity\Db\VolumeHoraire::class,
-            \Application\Entity\Db\MotifNonPaiement::class,
+            VolumeHoraire::class,
+            MotifNonPaiement::class,
         ]);
 
         /** @var Service $service */

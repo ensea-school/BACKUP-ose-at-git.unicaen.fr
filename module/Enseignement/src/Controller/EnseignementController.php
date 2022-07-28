@@ -6,11 +6,9 @@ use Application\Controller\AbstractController;
 use Application\Entity\Db\ElementPedagogique;
 use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Validation;
-use Application\Form\Service\Saisie;
 use Enseignement\Form\EnseignementSaisieFormAwareTrait;
 use Laminas\View\Model\ViewModel;
 use Service\Form\RechercheFormAwareTrait;
-use Application\Form\Service\Traits\SaisieAwareTrait;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Enseignement\Processus\ValidationEnseignementProcessusAwareTrait;
@@ -234,11 +232,11 @@ class EnseignementController extends AbstractController
 
 
 
-    public function volumesHorairesRefreshAction()
+    public function saisieFormRefreshVhAction()
     {
         $this->initFilters();
 
-        $id                = (int)$this->params()->fromRoute('id');
+        $serviceId         = (int)$this->params()->fromRoute('service');
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
         if (empty($typeVolumeHoraire)) {
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
@@ -246,14 +244,14 @@ class EnseignementController extends AbstractController
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
         $service = $this->getServiceService();
-        $form    = $this->getFormServiceSaisie();
+        $form    = $this->getFormServiceEnseignementSaisie();
         $form->setTypeVolumeHoraire($typeVolumeHoraire);
         $element       = $this->context()->elementPedagogiqueFromPost('element');
         $etablissement = $this->context()->etablissementFromPost();
 
-        if ($id) {
-            $entity = $service->get($id);
-            /* @var $entity \Enseignement\Entity\Db\Service */
+        if ($serviceId) {
+            /* @var $entity Service */
+            $entity = $service->get($serviceId);
         } else {
             $entity = $service->newEntity();
         }
@@ -262,9 +260,13 @@ class EnseignementController extends AbstractController
         $entity->setElementPedagogique($element);
         $form->bind($entity);
 
-        if (!$id) $form->initFromContext();
+        if (!$serviceId) $form->initFromContext();
 
-        return compact('form');
+        $vm = new ViewModel();
+        $vm->setTemplate('enseignement/saisie-form-refresh-vh');
+        $vm->setVariables(compact('form'));
+
+        return $vm;
     }
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Form\VolumeHoraire;
+namespace Enseignement\Form;
 
 use Enseignement\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
@@ -20,7 +20,7 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieMultipleFieldset extends AbstractFieldset
+class VolumeHoraireSaisieMultipleFieldset extends AbstractFieldset
 {
     use TypeInterventionServiceAwareTrait;
 
@@ -135,7 +135,7 @@ class SaisieMultipleHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                                  $data
+     * @param array                                   $data
      * @param \Enseignement\Entity\VolumeHoraireListe $object
      *
      * @return object

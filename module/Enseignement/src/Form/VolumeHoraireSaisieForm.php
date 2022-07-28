@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Form\VolumeHoraire;
+namespace Enseignement\Form;
 
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
@@ -17,11 +17,7 @@ use UnicaenApp\Util;
 use Laminas\Form\Element\Hidden;
 use Laminas\Hydrator\HydratorInterface;
 
-/**
- * Description of Saisie
- *
- */
-class Saisie extends AbstractForm
+class VolumeHoraireSaisieForm extends AbstractForm
 {
     use MotifNonPaiementServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;
@@ -167,7 +163,7 @@ class Saisie extends AbstractForm
      *
      * @return Saisie
      */
-    public function setViewMNP(bool $viewMNP): Saisie
+    public function setViewMNP(bool $viewMNP): self
     {
         $this->viewMNP = $viewMNP;
 
@@ -191,7 +187,7 @@ class Saisie extends AbstractForm
      *
      * @return Saisie
      */
-    public function setEditMNP(bool $editMNP): Saisie
+    public function setEditMNP(bool $editMNP): self
     {
         $this->editMNP = $editMNP;
 

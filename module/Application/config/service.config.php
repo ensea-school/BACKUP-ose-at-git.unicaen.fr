@@ -11,7 +11,7 @@ return [
         'routes' => [
             'service' => [
                 'child_routes' => [
-                    'suppression'              => [
+                    'suppression'    => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/suppression/:service',
@@ -23,7 +23,7 @@ return [
                             ],
                         ],
                     ],
-                    'recherche'                => [
+                    'recherche'      => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/recherche',
@@ -32,7 +32,7 @@ return [
                             ],
                         ],
                     ],
-                    'constatation'             => [
+                    'constatation'   => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/constatation',
@@ -41,19 +41,7 @@ return [
                             ],
                         ],
                     ],
-                    'volumes-horaires-refresh' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/volumes-horaires-refresh[/:id]',
-                            'constraints' => [
-                                'id' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'volumes-horaires-refresh',
-                            ],
-                        ],
-                    ],
-                    'initialisation'           => [
+                    'initialisation' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/initialisation/:intervenant',

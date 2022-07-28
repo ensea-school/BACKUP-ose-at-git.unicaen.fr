@@ -1,10 +1,9 @@
 <?php
 
-use Application\Form\VolumeHoraire\SaisieCalendaire;
 
 /**
  * @var $this  \Application\View\Renderer\PhpRenderer
- * @var $form  SaisieCalendaire
+ * @var $form  \Enseignement\Form\VolumeHoraireSaisieCalendaireForm
  */
 
 $horaireDebut     = $this->formControlGroup($form->get('horaire-debut'));
@@ -47,7 +46,7 @@ echo $this->form()->openTag($form);
 
 echo $this->formHidden($form->get('type-volume-horaire'));
 echo $this->formHidden($form->get('service'));
-if (!$form->canEditMNP()){
+if (!$form->canEditMNP()) {
     echo $this->formHidden($form->get('motif-non-paiement'));
 }
 echo $this->formHidden($form->get('ancien-motif-non-paiement'));

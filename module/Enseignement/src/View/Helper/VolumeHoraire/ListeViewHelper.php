@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\View\Helper\VolumeHoraire;
+namespace Enseignement\View\Helper\VolumeHoraire;
 
 use Application\Entity\Db\MotifNonPaiement;
 use Enseignement\Hydrator\ListeFilterHydrator;
@@ -17,7 +17,7 @@ use Application\Entity\Db\TypeIntervention;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractViewHelper
+class ListeViewHelper extends AbstractViewHelper
 {
     use ServiceServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;

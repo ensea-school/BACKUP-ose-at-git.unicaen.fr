@@ -123,9 +123,9 @@ class EnseignementSaisieFormViewHelper extends AbstractViewHelper
     public function getVolumesHorairesRefreshUrl()
     {
         $url = $this->getView()->url(
-            'service/volumes-horaires-refresh',
+            'enseignement/saisie-form-refresh-vh',
             [
-                'id' => $this->form->get('service')->get('id')->getValue(),
+                'service' => $this->form->get('service')->get('id')->getValue(),
             ]);
 
         return $url;

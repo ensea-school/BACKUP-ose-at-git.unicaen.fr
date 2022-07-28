@@ -72,6 +72,13 @@ return [
                         'id' => '[0-9]*',
                     ],
                 ],
+                'suppression'            => [
+                    'route'       => '/suppression/:service',
+                    'action'      => 'suppression',
+                    'constraints' => [
+                        'service' => '[0-9]*',
+                    ],
+                ],
             ],
         ],
 
@@ -140,7 +147,7 @@ return [
         ],
         [
             'controller' => EnseignementController::class,
-            'action'     => ['saisie', 'rafraichir-ligne', 'saisie-form-refresh-vh'], // , 'suppression', 'initialisation', 'constatation'
+            'action'     => ['saisie', 'rafraichir-ligne', 'saisie-form-refresh-vh', 'suppression'], //', 'initialisation', 'constatation'
             'privileges' => [
                 Privileges::ENSEIGNEMENT_PREVU_EDITION,
                 Privileges::ENSEIGNEMENT_REALISE_EDITION,

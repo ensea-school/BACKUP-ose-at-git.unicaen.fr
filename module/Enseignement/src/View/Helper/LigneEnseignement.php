@@ -276,7 +276,7 @@ class LigneEnseignement extends AbstractViewHelper
 
     protected function renderSupprimer()
     {
-        $url = $this->getView()->url('service/suppression', ['service' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->enseignements->getTypeVolumeHoraire()->getId()]]);
+        $url = $this->getView()->url('enseignement/suppression', ['service' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->enseignements->getTypeVolumeHoraire()->getId()]]);
 
         return $this->getView()->tag('a', [
             'class'        => 'pop-ajax service-delete',

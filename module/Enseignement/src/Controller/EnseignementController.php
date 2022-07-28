@@ -271,6 +271,45 @@ class EnseignementController extends AbstractController
 
 
 
+    public function suppressionAction()
+    {
+        $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
+        if (empty($typeVolumeHoraire)) {
+            $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
+        } else {
+            $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
+        }
+        $service = $this->getEvent()->getParam('service');
+        /* @var $service Service */
+
+        if (!$service) {
+            throw new \LogicException('Le service n\'existe pas');
+        }
+        $service->setTypeVolumeHoraire($typeVolumeHoraire);
+        $privilege = null;
+        if ($typeVolumeHoraire->isPrevu()) $privilege = Privileges::ENSEIGNEMENT_PREVU_EDITION;
+        if ($typeVolumeHoraire->isRealise()) $privilege = Privileges::ENSEIGNEMENT_REALISE_EDITION;
+        if ((!$privilege) || !$this->isAllowed($service, $privilege)) {
+            throw new \LogicException("Cette opération n'est pas autorisée.");
+        }
+
+        if ($this->getRequest()->isPost()) {
+            $this->getProcessusPlafond()->beginTransaction();
+            try {
+                $this->getServiceService()->delete($service);
+                $this->updateTableauxBord($service->getIntervenant());
+                $this->flashMessenger()->addSuccessMessage('Suppression effectuée');
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
+            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire, true);
+        }
+
+        return new MessengerViewModel;
+    }
+
+
+
     public function initialisationAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -341,45 +380,6 @@ class EnseignementController extends AbstractController
         }
 
         return [];
-    }
-
-
-
-    public function suppressionAction()
-    {
-        $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
-        if (empty($typeVolumeHoraire)) {
-            $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
-        } else {
-            $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
-        }
-        $service = $this->getEvent()->getParam('service');
-        /* @var $service Service */
-
-        if (!$service) {
-            throw new \LogicException('Le service n\'existe pas');
-        }
-        $service->setTypeVolumeHoraire($typeVolumeHoraire);
-        $privilege = null;
-        if ($typeVolumeHoraire->isPrevu()) $privilege = Privileges::ENSEIGNEMENT_PREVU_EDITION;
-        if ($typeVolumeHoraire->isRealise()) $privilege = Privileges::ENSEIGNEMENT_REALISE_EDITION;
-        if ((!$privilege) || !$this->isAllowed($service, $privilege)) {
-            throw new \LogicException("Cette opération n'est pas autorisée.");
-        }
-
-        if ($this->getRequest()->isPost()) {
-            $this->getProcessusPlafond()->beginTransaction();
-            try {
-                $this->getServiceService()->delete($service);
-                $this->updateTableauxBord($service->getIntervenant());
-                $this->flashMessenger()->addSuccessMessage('Suppression effectuée');
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
-            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire, true);
-        }
-
-        return new MessengerViewModel;
     }
 
 

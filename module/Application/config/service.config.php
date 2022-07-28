@@ -11,18 +11,6 @@ return [
         'routes' => [
             'service' => [
                 'child_routes' => [
-                    'suppression'    => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/suppression/:service',
-                            'constraints' => [
-                                'service' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'suppression',
-                            ],
-                        ],
-                    ],
                     'recherche'      => [
                         'type'    => 'Literal',
                         'options' => [

@@ -2,7 +2,7 @@
  Propre à l'affichage des services
  /***************************************************************************************************************************************************/
 
-$.widget("ose.serviceListe", {
+$.widget("ose.enseignements", {
     totaux: {},
     total: 0,
 
@@ -272,7 +272,7 @@ $.widget("ose.serviceListe", {
         });
 
         $("body").on("service-add-message", function (event, data) {
-            var thatId = event.a.parents('div.service-liste').attr('id');
+            var thatId = event.a.parents('div.enseignements').attr('id');
             var serviceId = null;
             if ($("div .messenger, div .alert", event.div).length ? false : true) { // si aucune erreur n'a été rencontrée
                 event.div.modal('hide'); // ferme la fenêtre modale

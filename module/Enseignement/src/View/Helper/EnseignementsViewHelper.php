@@ -129,7 +129,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
 
         $attribs = [
             'id'          => $this->getId(true),
-            'class'       => 'service-liste',
+            'class'       => 'enseignements',
             'data-params' => json_encode($this->exportParams()),
         ];
 
@@ -481,7 +481,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
     public function getId($reNew = false): string
     {
         if (null === $this->id || $reNew) {
-            $this->id = uniqid('service-liste-');
+            $this->id = uniqid('enseignements-');
         }
 
         return $this->id;

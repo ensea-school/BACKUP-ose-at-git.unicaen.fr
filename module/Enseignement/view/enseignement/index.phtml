@@ -19,17 +19,30 @@ if ($typeVolumeHoraire->isPrevu()) {
     $title     = 'Constatation des enseignements réalisés';
 }
 
-$menuUrl = $this->url(null, ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
-
+//$menuUrl = $this->url(null, ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
 
 $this->intervenant($intervenant)->renderTitle($title);
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
-$serviceListe = $this->enseignements($typeVolumeHoraire, $intervenant, $enseignements);
-$serviceListe->setHorodatage(true);
+$evh = $this->enseignements($typeVolumeHoraire, $intervenant, $enseignements);
+$evh->setHorodatage(true);
 
-echo $serviceListe;
+echo $evh;
 
 echo '<hr />';
 
 echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
+?>
+<script>
+    /*
+        $(function () {
+            WidgetInitializer.includeJs(Url('js/service.js'));
+
+            $('.enseignements').enseignements({
+                'heures-change': function () {
+
+                }
+            });
+        });
+    */
+</script>

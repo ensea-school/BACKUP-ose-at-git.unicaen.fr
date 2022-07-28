@@ -63,7 +63,7 @@ $(function ()
     });
 
     /* Services */
-    WidgetInitializer.add('service-liste', 'serviceListe', function () {
+    WidgetInitializer.add('enseignements', 'enseignements', function () {
         WidgetInitializer.includeJs(Url('js/service.js'));
         WidgetInitializer.includeCss(Url('css/service.css'));
     });

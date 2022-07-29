@@ -319,18 +319,11 @@ class EnseignementController extends AbstractController
         $this->getProcessusPlafond()->endTransaction($intervenant, $this->getServiceTypeVolumeHoraire()->getPrevu());
         $errors = [];
 
-        return compact('errors');
-    }
+        $vm = new ViewModel();
+        $vm->setTemplate('enseignement/initialisation');
+        $vm->setVariables(compact('errors'));
 
-
-
-    public function importAgendaPrevisionnelAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        $this->getServiceService()->setPrevusFromAgenda($intervenant);
-        $this->updateTableauxBord($intervenant);
-
-        return new MessengerViewModel();
+        return $vm;
     }
 
 
@@ -379,7 +372,21 @@ class EnseignementController extends AbstractController
             $this->flashMessenger()->addSuccessMessage('Les services prévisionnels ont été reportés comme réalisés.');
         }
 
-        return [];
+        $vm = new ViewModel();
+        $vm->setTemplate('enseignement/constatation');
+
+        return $vm;
+    }
+
+
+
+    public function importAgendaPrevisionnelAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $this->getServiceService()->setPrevusFromAgenda($intervenant);
+        $this->updateTableauxBord($intervenant);
+
+        return new MessengerViewModel();
     }
 
 

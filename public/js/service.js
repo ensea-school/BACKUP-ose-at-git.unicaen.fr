@@ -164,7 +164,7 @@ $.widget("ose.enseignements", {
             services += $(this).data('id');
         });
         $.get(
-            Url("service/constatation"),
+            Url("enseignement/constatation"),
             {services: services},
             function (data) {
                 if (data != 'OK') {
@@ -182,7 +182,7 @@ $.widget("ose.enseignements", {
         var that = this;
         that.element.find('#prevu-to-prevu-attente').show();
         $.get(
-            Url("service/initialisation/" + this.getElementPrevuToPrevu().data('intervenant')),
+            Url("enseignement/initialisation/" + this.getElementPrevuToPrevu().data('intervenant')),
             {},
             function (data) {
                 if (data != 'OK') {

@@ -271,6 +271,7 @@ return [
             Service\TypeHeuresService::class                         => Service\TypeHeuresService::class,
             Service\CentreCoutService::class                         => Service\CentreCoutService::class,
             Service\CentreCoutEpService::class                       => Service\CentreCoutEpService::class,
+            Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementService::class,
         ],
         'factories'  => [
             Assertion\PaiementAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,

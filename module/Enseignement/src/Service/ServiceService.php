@@ -5,7 +5,12 @@ namespace Enseignement\Service;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Etape;
+use Application\Entity\Db\Periode;
 use Application\Service\AbstractEntityService;
+use Application\Service\ElementPedagogiqueService;
+use Application\Service\EtablissementService;
+use Application\Service\PeriodeService;
+use Application\Service\TypeInterventionService;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Enseignement\Entity\Db\Service;
@@ -223,7 +228,7 @@ class ServiceService extends AbstractEntityService
                 }
             }
             $this->getEntityManager()->commit();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->getEntityManager()->rollBack();
             throw $e;
         }

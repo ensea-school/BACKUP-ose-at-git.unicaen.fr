@@ -7,44 +7,6 @@ use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
-    'router'          => [
-        'routes' => [
-            'service' => [
-                'child_routes' => [
-                    'recherche'      => [
-                        'type'    => 'Literal',
-                        'options' => [
-                            'route'    => '/recherche',
-                            'defaults' => [
-                                'action' => 'recherche',
-                            ],
-                        ],
-                    ],
-                    'constatation'   => [
-                        'type'    => 'Literal',
-                        'options' => [
-                            'route'    => '/constatation',
-                            'defaults' => [
-                                'action' => 'constatation',
-                            ],
-                        ],
-                    ],
-                    'initialisation' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/initialisation/:intervenant',
-                            'constraints' => [
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'initialisation',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
     'bjyauthorize'    => [
         'guards'         => [
             PrivilegeController::class      => [
@@ -158,17 +120,8 @@ return [
             ],
         ],
     ],
-    'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Service' => Controller\IntervenantController::class,
-        ],
-    ],
     'service_manager' => [
-        'invokables' => [
-            Service\PeriodeService::class          => Service\PeriodeService::class,
-            Service\MotifNonPaiementService::class => Service\MotifNonPaiementService::class,
-        ],
-        'factories'  => [
+        'factories' => [
             Assertion\ServiceAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],

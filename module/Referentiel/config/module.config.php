@@ -306,7 +306,7 @@ return [
     'view_helpers' => [
         'formServiceReferentielSaisie' => View\Helper\FormSaisieFactory::class,
         'fonctionReferentiel'          => View\Helper\FonctionReferentielFactory::class,
-        'serviceReferentielListe'      => View\Helper\ListeFactory::class,
+        'referentiels'                 => View\Helper\ReferentielsFactory::class,
         'serviceReferentielLigne'      => View\Helper\LigneFactory::class,
 
     ],

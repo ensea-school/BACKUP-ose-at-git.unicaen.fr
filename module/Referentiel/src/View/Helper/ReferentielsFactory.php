@@ -9,11 +9,11 @@ use Psr\Container\ContainerInterface;
  * Description of ListeFactory
  *
  */
-class ListeFactory
+class ReferentielsFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $helper = new ListeViewHelper();
+        $helper = new ReferentielsViewHelper();
 
         return $helper;
     }

@@ -3,13 +3,15 @@
 namespace Referentiel\View\Helper;
 
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Referentiel\Service\ServiceReferentielServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Referentiel\Entity\Db\ServiceReferentiel;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
@@ -18,38 +20,24 @@ use Service\Service\TypeVolumeHoraireServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ListeViewHelper extends AbstractViewHelper
+class ReferentielsViewHelper extends AbstractViewHelper
 {
     use ContextServiceAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use ServiceReferentielServiceAwareTrait;
-    use LocalContextServiceAwareTrait;
     use ParametresServiceAwareTrait;
+    use IntervenantAwareTrait;
 
-    /**
-     *
-     * @var string
-     */
-    private $id;
+    private string $id                  = 'referentiels';
 
-    /**
-     *
-     * @var array
-     */
-    private $totaux;
+    private array  $totaux              = [];
 
-    /**
-     *
-     * @var boolean
-     */
-    private $addButtonVisibility;
+    private bool   $addButtonVisibility = true;
 
-    /**
-     *
-     * @var array
-     */
-    private $columns = [
+    private bool   $horodatage          = false;
+
+    private array  $columns             = [
         'intervenant'  => [
             'visibility' => false,
             'head-text'  => "<th>Intervenant</th>",
@@ -76,17 +64,7 @@ class ListeViewHelper extends AbstractViewHelper
         ],
     ];
 
-    /**
-     * Lecture seule ou non
-     *
-     * @var boolean
-     */
-    private $readOnly = false;
-
-    /**
-     * @var Intervenant|null
-     */
-    private $prevuToPrevu;
+    private bool   $readOnly            = false;
 
 
 
@@ -97,9 +75,11 @@ class ListeViewHelper extends AbstractViewHelper
      *
      * @return self
      */
-    final public function __invoke($services)
+    final public function __invoke(TypeVolumeHoraire $typeVolumeHoraire, ?Intervenant $intervenant, array $referentiels)
     {
-        $this->setServices($services);
+        $this->setTypeVolumeHoraire($typeVolumeHoraire);
+        $this->setIntervenant($intervenant);
+        $this->setServices($referentiels);
         $this->calcDefaultColumnsVisibility();
 
         return $this;
@@ -119,26 +99,18 @@ class ListeViewHelper extends AbstractViewHelper
 
 
 
-    public function getTotalRefreshUrl()
+    public function getTotalRefreshUrl(): string
     {
-        if (($intervenant = $this->getServiceLocalContext()->getIntervenant())) {
-            if ($this->isInRealise()) {
-                $route = 'intervenant/referentiel-realise';
-            } else {
-                $route = 'intervenant/referentiel-prevu';
-            }
-
-            return $this->getView()->url($route,
-                [
-                    'intervenant' => $intervenant->getId(),
-                ],
-                [
-                    'query' => ['totaux' => 1],
-                ],
-                true);
+        if ($this->isInRealise()) {
+            $route = 'intervenant/referentiel-realise';
+        } else {
+            $route = 'intervenant/referentiel-prevu';
         }
 
-        return null;
+        return (string)$this->getView()->url($route,
+            ['intervenant' => $this->getIntervenant()->getId()],
+            ['query' => ['totaux' => 1]],
+            true);
     }
 
 
@@ -155,13 +127,13 @@ class ListeViewHelper extends AbstractViewHelper
      *
      * @return string
      */
-    public function render($details = false)
+    public function render($details = false): string
     {
         $colspan = 2;
 
         $attribs = [
             'id'          => $this->getId(true),
-            'class'       => 'service-referentiel-liste',
+            'class'       => 'referentiels',
             'data-params' => json_encode($this->exportParams()),
         ];
 
@@ -170,7 +142,7 @@ class ListeViewHelper extends AbstractViewHelper
             return $out . '<div class="alert alert-danger" role="alert">Le nombre de lignes à afficher est trop important. Merci d\'affiner vos critères de recherche.</div></div>';
         }
         if ($this->getAddButtonVisibility() && !$this->getReadOnly()) {
-            $out .= $this->renderAddButton();
+            $out .= $this->renderActionButtons();
         }
 
         $out .= '<table class="table table-bordered table-extra-condensed service-referentiel">';
@@ -195,6 +167,11 @@ class ListeViewHelper extends AbstractViewHelper
         $out .= $this->renderTotaux();
         $out .= '</tfoot>' . "\n";
         $out .= '</table>' . "\n";
+
+        if ($this->hasHorodatage() && $this->getIntervenant()) {
+            $out .= $this->getView()->horodatage($this->getTypeVolumeHoraire(), $this->getIntervenant(), true);
+        }
+
         $out .= '</div>' . "\n";
 
         return $out;
@@ -202,40 +179,44 @@ class ListeViewHelper extends AbstractViewHelper
 
 
 
-    public function renderAddButton()
+    protected function renderActionButtons()
+    {
+        if ($this->getReadOnly()) return '';
+
+        if ($this->getIntervenant()) {
+            $serviceReferentiel = new ServiceReferentiel();
+            $serviceReferentiel->setIntervenant($this->getIntervenant());
+            $serviceReferentiel->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
+            $canAddReferentiel = $this->getView()->isAllowed($serviceReferentiel, $this->getTypeVolumeHoraire()->getPrivilegeReferentielEdition());
+        } else {
+            $canAddReferentiel = $this->getView()->isAllowed(Privileges::getResourceId($this->getTypeVolumeHoraire()->getPrivilegeReferentielEdition()));
+        }
+
+        if (!$canAddReferentiel) return '';
+
+
+        $out = '';
+
+        if ($this->getIntervenant()) {
+            if ($this->isInRealise()) {
+                $out .= $this->renderActionPrevuToRealise();
+            } else {
+                $out .= $this->renderActionPrevuToPrevu();
+            }
+        }
+
+        $out .= $this->renderActionSaisie();
+
+        return $out;
+    }
+
+
+
+    public function renderActionPrevuToPrevu(): string
     {
         $out = '';
 
-        if ($this->isInRealise()) {
-            $attribs = [
-                'class'       => 'btn btn-warning referentiel-prevu-to-realise-show',
-                'data-toggle' => 'modal',
-                'data-target' => '#referentiel-prevu-to-realise-modal',
-                //'data-event'    => 'service-constatation',
-                //'href'          => $this->getAddUrl(),
-                'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles de référentiel"
-                    . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
-            ];
-            $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
-            $out     .= '<div class="modal fade" id="referentiel-prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out     .= '<div class="modal-dialog modal-md">';
-            $out     .= '<div class="modal-content">';
-            $out     .= '<div class="modal-header">';
-            $out     .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
-            $out     .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
-            $out     .= '</div>';
-            $out     .= '<div class="modal-body">';
-            $out     .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
-            $out     .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
-            $out     .= '</div>';
-            $out     .= '<div class="modal-footer">';
-            $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
-            $out     .= '<button type="button" class="btn btn-primary referentiel-prevu-to-realise">OK</button>';
-            $out     .= '</div>';
-            $out     .= '</div>';
-            $out     .= '</div>';
-            $out     .= '</div>';
-        } elseif ($this->prevuToPrevu && $this->getServiceServiceReferentiel()->getPrevusFromPrevusData($this->prevuToPrevu)) {
+        if ($this->getServiceServiceReferentiel()->getPrevusFromPrevusData($this->getIntervenant())) {
             $attribs = [
                 'class'       => 'btn btn-warning referentiel-prevu-to-prevu-show',
                 'data-toggle' => 'modal',
@@ -258,21 +239,66 @@ class ListeViewHelper extends AbstractViewHelper
             $out     .= '</div>';
             $out     .= '<div class="modal-footer">';
             $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
-            $out     .= '<button type="button" class="btn btn-primary referentiel-prevu-to-prevu" data-intervenant="' . $this->prevuToPrevu->getId() . '">OK</button>';
+            $out     .= '<button type="button" class="btn btn-primary referentiel-prevu-to-prevu" data-intervenant="' . $this->getIntervenant()->getId() . '">OK</button>';
             $out     .= '</div>';
             $out     .= '</div>';
             $out     .= '</div>';
             $out     .= '</div>';
         }
+
+        return $out;
+    }
+
+
+
+    public function renderActionPrevuToRealise(): string
+    {
+        $out = '';
+
+        $attribs = [
+            'class'       => 'btn btn-warning referentiel-prevu-to-realise-show',
+            'data-toggle' => 'modal',
+            'data-target' => '#referentiel-prevu-to-realise-modal',
+            //'data-event'    => 'service-constatation',
+            //'href'          => $this->getAddUrl(),
+            'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles de référentiel"
+                . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
+        ];
+        $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
+        $out     .= '<div class="modal fade" id="referentiel-prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
+        $out     .= '<div class="modal-dialog modal-md">';
+        $out     .= '<div class="modal-content">';
+        $out     .= '<div class="modal-header">';
+        $out     .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
+        $out     .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
+        $out     .= '</div>';
+        $out     .= '<div class="modal-body">';
+        $out     .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
+        $out     .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
+        $out     .= '</div>';
+        $out     .= '<div class="modal-footer">';
+        $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+        $out     .= '<button type="button" class="btn btn-primary referentiel-prevu-to-realise">OK</button>';
+        $out     .= '</div>';
+        $out     .= '</div>';
+        $out     .= '</div>';
+        $out     .= '</div>';
+
+        return $out;
+    }
+
+
+
+    public function renderActionSaisie(): string
+    {
         $attribs = [
             'class'      => 'ajax-modal services btn btn-primary',
             'data-event' => 'service-referentiel-add-message',
             'href'       => $this->getAddUrl(),
             'title'      => 'Ajouter une nouvelle fonction',
         ];
-        $out     .= '<a ' . $this->htmlAttribs($attribs) . '><i class="fas fa-plus"></i> Je saisis</a>';
 
-        return $out;
+        return $this->getView()->tag('a', $attribs)->html('<i class="fas fa-plus"></i> Je saisis');
     }
 
 
@@ -364,9 +390,9 @@ class ListeViewHelper extends AbstractViewHelper
      *
      * @return boolean
      */
-    public function isInRealise()
+    public function isInRealise(): bool
     {
-        return $this->getTypeVolumeHoraire()->getCode() === \Service\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
+        return $this->getTypeVolumeHoraire()->isRealise();
     }
 
 
@@ -374,7 +400,7 @@ class ListeViewHelper extends AbstractViewHelper
     /**
      * @return string
      */
-    public function getId($reNew = false)
+    public function getId($reNew = false): string
     {
         if (null === $this->id || $reNew) {
             $this->id = uniqid('referentiel-liste-');
@@ -385,7 +411,7 @@ class ListeViewHelper extends AbstractViewHelper
 
 
 
-    protected function getTotaux()
+    protected function getTotaux(): array
     {
         if (!$this->totaux) {
             $data = [
@@ -408,7 +434,7 @@ class ListeViewHelper extends AbstractViewHelper
      *
      * @return array
      */
-    public function exportParams()
+    public function exportParams(): array
     {
         $params = [
             'read-only'           => $this->getReadOnly(),
@@ -451,12 +477,7 @@ class ListeViewHelper extends AbstractViewHelper
 
 
 
-    /**
-     * Calcule la visibilité par défaut des colonnes en fonction des données transmises!!
-     *
-     * @return \Application\View\Helper\Service\Enseignements
-     */
-    public function calcDefaultColumnsVisibility()
+    public function calcDefaultColumnsVisibility(): self
     {
         $services = $this->getServices();
 
@@ -485,22 +506,6 @@ class ListeViewHelper extends AbstractViewHelper
         $this->setColumnVisibility('intervenant', $multiIntervenants);
 
         return $this;
-    }
-
-
-
-    /**
-     * Détermine si le bouton prévu => prévu doit être affiché ou non.
-     *
-     * @param $intervenant
-     */
-    public function showPrevuToPrevu($intervenant)
-    {
-        if ($intervenant instanceof Intervenant) {
-            $this->prevuToPrevu = $intervenant;
-        } else {
-            $this->prevuToPrevu = null;
-        }
     }
 
 
@@ -654,6 +659,22 @@ class ListeViewHelper extends AbstractViewHelper
     function setAddButtonVisibility($addButtonVisibility)
     {
         $this->addButtonVisibility = $addButtonVisibility;
+
+        return $this;
+    }
+
+
+
+    public function hasHorodatage(): bool
+    {
+        return $this->horodatage;
+    }
+
+
+
+    public function setHorodatage(bool $horodatage): self
+    {
+        $this->horodatage = $horodatage;
 
         return $this;
     }

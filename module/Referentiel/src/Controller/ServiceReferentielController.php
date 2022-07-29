@@ -73,41 +73,19 @@ class ServiceReferentielController extends AbstractController
 
     public function indexAction(?TypeVolumeHoraire $typeVolumeHoraire = null)
     {
-        $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $role             = $this->getServiceContext()->getSelectedIdentityRole();
+        $this->initFilters();
+
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $viewModel   = new ViewModel();
 
-        if (!$intervenant) {
-            $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
-            $params             = $this->getEvent()->getRouteMatch()->getParams();
-            $params['action']   = 'recherche';
-            $rechercheViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
-            $viewModel->addChild($rechercheViewModel, 'recherche');
+        $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
+        $recherche = new Recherche($typeVolumeHoraire, $this->getServiceEtatVolumeHoraire()->getSaisi());
+        $recherche->setIntervenant($intervenant);
 
-            $recherche = $this->getServiceRecherche()->loadRecherche();
-        } else {
-            $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
-            $action    = 'afficher'; // Affichage par défaut
-            $recherche = new Recherche;
-            $recherche->setTypeVolumeHoraire($typeVolumeHoraire);
-            $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
-            $this->getEvent()->setParam('typeVolumeHoraire', $recherche->getTypeVolumeHoraire());
-            $this->getEvent()->setParam('etatVolumeHoraire', $recherche->getEtatVolumeHoraire());
-        }
+        $referentiels = $this->getProcessusServiceReferentiel()->getReferentiels($recherche);
 
-        /* Préparation et affichage */
-        if ('afficher' === $action) {
-            $services = $this->getProcessusServiceReferentiel()->getServices($intervenant, $recherche);
-        } else {
-            $services = [];
-        }
-
-        $renderReferentiel = $intervenant && $intervenant->getStatut()->estPermanent();
-        $params            = $viewHelperParams;
-
-        $viewModel->setVariables(compact('services', 'typeVolumeHoraire', 'action', 'role', 'intervenant', 'renderReferentiel', 'params'));
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(compact('typeVolumeHoraire', 'intervenant', 'referentiels'));
         $viewModel->setTemplate('referentiel/index');
 
         return $viewModel;

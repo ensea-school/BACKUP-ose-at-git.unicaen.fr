@@ -22,7 +22,7 @@ class LigneViewHelper extends AbstractViewHelper
     use EtatVolumeHoraireServiceAwareTrait;
 
     /**
-     * @var ListeViewHelper
+     * @var ReferentielsViewHelper
      */
     protected $liste;
 
@@ -38,12 +38,12 @@ class LigneViewHelper extends AbstractViewHelper
     /**
      * Helper entry point.
      *
-     * @param ListeViewHelper    $liste
-     * @param ServiceReferentiel $service
+     * @param ReferentielsViewHelper $liste
+     * @param ServiceReferentiel     $service
      *
      * @return self
      */
-    final public function __invoke(ListeViewHelper $liste, ServiceReferentiel $service)
+    final public function __invoke(ReferentielsViewHelper $liste, ServiceReferentiel $service)
     {
         $this->setListe($liste);
         $this->setServiceReferentiel($service);
@@ -282,7 +282,7 @@ class LigneViewHelper extends AbstractViewHelper
 
     /**
      *
-     * @return ListeViewHelper
+     * @return ReferentielsViewHelper
      */
     function getListe()
     {
@@ -293,11 +293,11 @@ class LigneViewHelper extends AbstractViewHelper
 
     /**
      *
-     * @param ListeViewHelper $liste
+     * @param ReferentielsViewHelper $liste
      *
      * @return self
      */
-    function setListe(ListeViewHelper $liste)
+    function setListe(ReferentielsViewHelper $liste)
     {
         $this->liste = $liste;
 

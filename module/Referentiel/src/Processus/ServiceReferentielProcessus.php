@@ -24,13 +24,11 @@ class ServiceReferentielProcessus extends AbstractProcessus
 
 
     /**
+     * @param Recherche $recherche
      *
-     * @param Intervenant|null $intervenant
-     * @param Recherche        $recherche
-     *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return ServiceReferentiel[]|array
      */
-    public function getServices($intervenant, Recherche $recherche)
+    public function getReferentiels(Recherche $recherche): array
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -48,10 +46,10 @@ class ServiceReferentielProcessus extends AbstractProcessus
         $serviceReferentiel->finderByContext($qb);
         $serviceReferentiel->finderByFilterObject($recherche, new \Laminas\Hydrator\ClassMethodsHydrator(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
 
-        if ($intervenant) {
-            $serviceReferentiel->finderByIntervenant($intervenant, $qb);
+        if ($recherche->getIntervenant()) {
+            $serviceReferentiel->finderByIntervenant($recherche->getIntervenant(), $qb);
         }
-        if (!$intervenant && $role->getStructure()) {
+        if (!$recherche->getIntervenant() && $role->getStructure()) {
             $serviceReferentiel->finderByStructure($role->getStructure(), $qb);
         }
 

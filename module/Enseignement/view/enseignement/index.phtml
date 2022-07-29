@@ -8,8 +8,6 @@
  */
 
 use Application\Entity\Db\WfEtape;
-use Application\Provider\Privilege\Privileges;
-
 
 if ($typeVolumeHoraire->isPrevu()) {
     $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
@@ -24,10 +22,9 @@ if ($typeVolumeHoraire->isPrevu()) {
 $this->intervenant($intervenant)->renderTitle($title);
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
-$evh = $this->enseignements($typeVolumeHoraire, $intervenant, $enseignements);
-$evh->setHorodatage(true);
-
-echo $evh;
+$ens = $this->enseignements($typeVolumeHoraire, $intervenant, $enseignements);
+$ens->setHorodatage(true);
+echo $ens;
 
 echo '<hr />';
 

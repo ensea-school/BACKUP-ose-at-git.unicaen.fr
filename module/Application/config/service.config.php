@@ -125,14 +125,4 @@ return [
             Assertion\ServiceAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
-    'view_helpers'    => [
-        'invokables' => [
-            'formServiceReferentielSaisie' => View\Helper\ServiceReferentiel\FormSaisie::class,
-            'fonctionReferentiel'          => View\Helper\ServiceReferentiel\FonctionReferentielViewHelper::class,
-        ],
-        'factories'  => [
-            'serviceReferentielListe' => View\Helper\ServiceReferentiel\ListeFactory::class,
-            'serviceReferentielLigne' => View\Helper\ServiceReferentiel\LigneFactory::class,
-        ],
-    ],
 ];

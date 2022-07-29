@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\View\Helper\ServiceReferentiel;
+namespace Referentiel\View\Helper;
 
 use Application\Provider\Privilege\Privileges;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
@@ -15,14 +15,14 @@ use Referentiel\Entity\Db\ServiceReferentielAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Ligne extends AbstractViewHelper
+class LigneViewHelper extends AbstractViewHelper
 {
     use ServiceReferentielAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
 
     /**
-     * @var Liste
+     * @var ListeViewHelper
      */
     protected $liste;
 
@@ -38,12 +38,12 @@ class Ligne extends AbstractViewHelper
     /**
      * Helper entry point.
      *
-     * @param Liste              $liste
+     * @param ListeViewHelper    $liste
      * @param ServiceReferentiel $service
      *
      * @return self
      */
-    final public function __invoke(Liste $liste, ServiceReferentiel $service)
+    final public function __invoke(ListeViewHelper $liste, ServiceReferentiel $service)
     {
         $this->setListe($liste);
         $this->setServiceReferentiel($service);
@@ -282,7 +282,7 @@ class Ligne extends AbstractViewHelper
 
     /**
      *
-     * @return Liste
+     * @return ListeViewHelper
      */
     function getListe()
     {
@@ -293,11 +293,11 @@ class Ligne extends AbstractViewHelper
 
     /**
      *
-     * @param Liste $liste
+     * @param ListeViewHelper $liste
      *
      * @return self
      */
-    function setListe(Liste $liste)
+    function setListe(ListeViewHelper $liste)
     {
         $this->liste = $liste;
 

@@ -1,19 +1,19 @@
 <?php
 
-namespace Application\View\Helper\ServiceReferentiel;
+namespace Referentiel\View\Helper;
 
 
 use Psr\Container\ContainerInterface;
 
 /**
- * Description of LigneFactory
+ * Description of FormSaisieFactory
  *
  */
-class LigneFactory
+class FormSaisieFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $helper = new Ligne();
+        $helper = new FormSaisieViewHelper();
 
         return $helper;
     }

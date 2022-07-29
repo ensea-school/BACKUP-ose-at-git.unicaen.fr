@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\View\Helper\ServiceReferentiel;
+namespace Referentiel\View\Helper;
 
 use Laminas\View\Helper\AbstractHelper;
 use Referentiel\Entity\Db\FonctionReferentiel;
-use Application\Entity\Db\Traits\FonctionReferentielAwareTrait;
+use Referentiel\Entity\Db\FonctionReferentielAwareTrait;
 
 /**
  * Description of FonctionReferentielViewHelper

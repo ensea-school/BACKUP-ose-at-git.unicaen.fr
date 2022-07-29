@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\View\Helper\ServiceReferentiel;
+namespace Referentiel\View\Helper;
 
 
 use Psr\Container\ContainerInterface;
@@ -13,7 +13,7 @@ class LigneFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $helper = new Ligne();
+        $helper = new LigneViewHelper();
 
         return $helper;
     }

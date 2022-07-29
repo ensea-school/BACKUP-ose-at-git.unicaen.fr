@@ -4,6 +4,7 @@ namespace Referentiel\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
+use Laminas\View\Model\ViewModel;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Referentiel\Form\SaisieAwareTrait;
@@ -52,14 +53,31 @@ class ServiceReferentielController extends AbstractController
 
 
 
-    public function indexAction()
+    public function prevuAction()
     {
-        $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU');
-        $viewHelperParams      = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $role                  = $this->getServiceContext()->getSelectedIdentityRole();
+        $prevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
+
+        return $this->indexAction($prevu);
+    }
+
+
+
+    public function realiseAction()
+    {
+        $realise = $this->getServiceTypeVolumeHoraire()->getRealise();
+
+        return $this->indexAction($realise);
+    }
+
+
+
+    public function indexAction(?TypeVolumeHoraire $typeVolumeHoraire = null)
+    {
+        $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
+        $role             = $this->getServiceContext()->getSelectedIdentityRole();
         /** @var Intervenant $intervenant */
-        $intervenant = $this->params()->fromRoute('intervenant');
-        $viewModel   = new \Laminas\View\Model\ViewModel();
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $viewModel   = new ViewModel();
 
         if (!$intervenant) {
             $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
@@ -73,7 +91,7 @@ class ServiceReferentielController extends AbstractController
             $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
             $action    = 'afficher'; // Affichage par défaut
             $recherche = new Recherche;
-            $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getByCode($typeVolumeHoraireCode));
+            $recherche->setTypeVolumeHoraire($typeVolumeHoraire);
             $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
             $this->getEvent()->setParam('typeVolumeHoraire', $recherche->getTypeVolumeHoraire());
             $this->getEvent()->setParam('etatVolumeHoraire', $recherche->getEtatVolumeHoraire());
@@ -87,10 +105,10 @@ class ServiceReferentielController extends AbstractController
         }
 
         $renderReferentiel = $intervenant && $intervenant->getStatut()->estPermanent();
-        $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params            = $viewHelperParams;
 
         $viewModel->setVariables(compact('services', 'typeVolumeHoraire', 'action', 'role', 'intervenant', 'renderReferentiel', 'params'));
+        $viewModel->setTemplate('referentiel/index');
 
         return $viewModel;
     }
@@ -165,7 +183,11 @@ class ServiceReferentielController extends AbstractController
             }
         }
 
-        return compact('form', 'title');
+        $vm = new ViewModel();
+        $vm->setVariables(compact('form', 'title'));
+        $vm->setTemplate('referentiel/saisie');
+
+        return $vm;
     }
 
 
@@ -185,7 +207,11 @@ class ServiceReferentielController extends AbstractController
             $service->setTypeVolumeHoraire($typeVolumeHoraire);
         }
 
-        return compact('service', 'params', 'details', 'onlyContent');
+        $vm = new ViewModel();
+        $vm->setVariables(compact('service', 'params', 'details', 'onlyContent'));
+        $vm->setTemplate('referentiel/rafraichir-ligne');
+
+        return $vm;
     }
 
 

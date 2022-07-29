@@ -41,10 +41,10 @@ return [
 
         'intervenant' => [
             'child_routes' => [
-                'referentiel'         => [
-                    'route'      => '/:intervenant/referentiel',
+                'referentiel-prevu'   => [
+                    'route'      => '/:intervenant/referentiel-prevu',
                     'controller' => ServiceReferentielController::class,
-                    'action'     => 'index',
+                    'action'     => 'prevu',
                     'defaults'   => [
                         'type-volume-horaire-code' => 'PREVU',
                     ],
@@ -52,7 +52,7 @@ return [
                 'referentiel-realise' => [
                     'route'      => '/:intervenant/referentiel',
                     'controller' => ServiceReferentielController::class,
-                    'action'     => 'index',
+                    'action'     => 'realise',
                     'defaults'   => [
                         'type-volume-horaire-code' => 'REALISE',
                     ],
@@ -234,9 +234,16 @@ return [
 
         [
             'controller' => ServiceReferentielController::class,
-            'action'     => ['index'],
+            'action'     => ['prevu'],
             'privileges' => [
                 Privileges::REFERENTIEL_PREVU_VISUALISATION,
+            ],
+            //      'assertion'  => Assertion\ServiceAssertion::class,
+        ],
+        [
+            'controller' => ServiceReferentielController::class,
+            'action'     => ['realise'],
+            'privileges' => [
                 Privileges::REFERENTIEL_REALISE_VISUALISATION,
             ],
             //      'assertion'  => Assertion\ServiceAssertion::class,
@@ -294,5 +301,13 @@ return [
         Form\FonctionReferentielSaisieForm::class => InvokableFactory::class,
         Form\Saisie::class                        => InvokableFactory::class,
         Form\SaisieFieldset::class                => InvokableFactory::class,
+    ],
+
+    'view_helpers' => [
+        'formServiceReferentielSaisie' => View\Helper\FormSaisieFactory::class,
+        'fonctionReferentiel'          => View\Helper\FonctionReferentielFactory::class,
+        'serviceReferentielListe'      => View\Helper\ListeFactory::class,
+        'serviceReferentielLigne'      => View\Helper\LigneFactory::class,
+
     ],
 ];

@@ -3,17 +3,17 @@
 /* @var $service Referentiel\Entity\Db\ServiceReferentiel */
 /* @var $params array */
 
-if (! $service) {
+if (!$service) {
     return;
 }
 
-$serviceListe = $this->serviceReferentielListe( [$service] );
-/* @var $serviceListe Application\View\Helper\ServiceReferentiel\Liste */
+$serviceListe = $this->serviceReferentielListe([$service]);
+/* @var $serviceListe \Referentiel\View\Helper\ListeViewHelper */
 
-if (! empty($params)) $serviceListe->applyParams($params);
+if (!empty($params)) $serviceListe->applyParams($params);
 
-if ($onlyContent){
-    echo $this->serviceReferentielLigne( $serviceListe, $service )->render($details);
-}else{
-    echo $serviceListe->renderLigne( $service, $details );
+if ($onlyContent) {
+    echo $this->serviceReferentielLigne($serviceListe, $service)->render($details);
+} else {
+    echo $serviceListe->renderLigne($service, $details);
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\View\Helper\ServiceReferentiel;
+namespace Referentiel\View\Helper;
 
 use Application\Entity\Db\Intervenant;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
@@ -18,7 +18,7 @@ use Service\Service\TypeVolumeHoraireServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractViewHelper
+class ListeViewHelper extends AbstractViewHelper
 {
     use ContextServiceAwareTrait;
     use TypeVolumeHoraireAwareTrait;
@@ -125,7 +125,7 @@ class Liste extends AbstractViewHelper
             if ($this->isInRealise()) {
                 $route = 'intervenant/referentiel-realise';
             } else {
-                $route = 'intervenant/referentiel';
+                $route = 'intervenant/referentiel-prevu';
             }
 
             return $this->getView()->url($route,
@@ -306,7 +306,7 @@ class Liste extends AbstractViewHelper
     public function renderLigne(ServiceReferentiel $service, $details = false, $show = true)
     {
         $ligneView = $this->getView()->serviceReferentielLigne($this, $service);
-        /* @var $ligneView Ligne */
+        /* @var $ligneView LigneViewHelper */
         $attribs = [
             'id'       => 'referentiel-' . $service->getId() . '-ligne',
             'data-id'  => $service->getId(),

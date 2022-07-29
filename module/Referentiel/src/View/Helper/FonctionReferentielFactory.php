@@ -1,19 +1,19 @@
 <?php
 
-namespace Application\View\Helper\ServiceReferentiel;
+namespace Referentiel\View\Helper;
 
 
 use Psr\Container\ContainerInterface;
 
 /**
- * Description of ListeFactory
+ * Description of FonctionReferentielFactory
  *
  */
-class ListeFactory
+class FonctionReferentielFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $helper = new Liste();
+        $helper = new FonctionReferentielViewHelper();
 
         return $helper;
     }

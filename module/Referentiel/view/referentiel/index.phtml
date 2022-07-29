@@ -6,54 +6,47 @@ use UnicaenApp\View\Helper\Messenger;
 /* @var $typeVolumeHoraire TypeVolumeHoraire */
 
 $titles = [
-  TypeVolumeHoraire::CODE_PREVU   => 'Référentiel',
-  TypeVolumeHoraire::CODE_REALISE => 'Constatation du référentiel réalisé',
+    TypeVolumeHoraire::CODE_PREVU   => 'Référentiel',
+    TypeVolumeHoraire::CODE_REALISE => 'Constatation du référentiel réalisé',
 ];
 
 $title = $titles[$typeVolumeHoraire->getCode()];
-//if ($intervenant){
-//    $title .= ' <small>'.$intervenant.'</small>';
-//    $this->headTitle()->append($intervenant->getNomUsuel())->append("Enseignements");
-//}
-//else {
-//    $this->headTitle()->append("Référentiel");
-//}
+$title .= ' <small>' . $intervenant . '</small>';
+$this->headTitle()->append($intervenant->getNomUsuel())->append("Enseignements");
 
-$serviceReferentielListe = $this->serviceReferentielListe( $services );
-$serviceReferentielListe
-        ->setTypeVolumeHoraire($typeVolumeHoraire)
-        ->setAddButtonVisibility($canAddServiceReferentiel);
-if ($intervenant)
-    $serviceReferentielListe->showPrevuToPrevu($intervenant);
+$canAddServiceReferentiel = true;
+
 ?>
 
-<h1 class="page-header"><?= $title; ?></h1>
+    <h1 class="page-header"><?= $title; ?></h1>
 
 <?php //echo $this->messenger()->addMessagesFromFlashMessenger() ?>
 
-<style>
-    .modal-dialog {
-        width: 60%;
-    }
-    div.row {
-        padding:1px;
-    }
-    th.heures, td.heures { width: 3em !important; }
-</style>
+    <style>
+        .modal-dialog {
+            width: 60%;
+        }
 
-<?php if (! $intervenant): ?>
-    <?php if ($this->isAllowed('Information', 'info-only-structure')): ?>
-        <?= $this->messenger()->setMessages(['warning' => "Est visible ici le référentiel prévisionnel des intervenants affectés "
-                . "ou enseignant dans votre structure de responsabilité ({$role->getStructure()}) ou l'une de ses sous-structures."]); ?>
-    <?php endif; ?>
-<?php endif; ?>
+        div.row {
+            padding: 1px;
+        }
 
-<?php if ('afficher' === $action ): ?>
+        th.heures, td.heures {
+            width: 3em !important;
+        }
+    </style>
 
-    <?= $serviceReferentielListe->render(); ?>
+<?php
 
-<?php else:?>
+if ('afficher' === $action) {
+    $serviceReferentielListe = $this->serviceReferentielListe($services);
+    $serviceReferentielListe
+        ->setTypeVolumeHoraire($typeVolumeHoraire)
+        ->setAddButtonVisibility($canAddServiceReferentiel);
 
-    <?= $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher le référentiel.', Messenger::INFO); ?>
+    $serviceReferentielListe->showPrevuToPrevu($intervenant);
 
-<?php endif;
+    echo $serviceReferentielListe->render();
+} else {
+    echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher le référentiel.', Messenger::INFO);
+}

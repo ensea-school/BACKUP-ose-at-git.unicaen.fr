@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\View\Helper\ServiceReferentiel;
+namespace Referentiel\View\Helper;
 
 use Service\Entity\Db\TypeVolumeHoraire;
 use Referentiel\Entity\VolumeHoraireReferentielListe;
@@ -12,11 +12,7 @@ use Application\View\Helper\AbstractViewHelper;
 use UnicaenApp\Util;
 use Referentiel\Form\Saisie as SaisieForm;
 
-/**
- * Description of SaisieForm
- *
- */
-class FormSaisie extends AbstractViewHelper
+class FormSaisieViewHelper extends AbstractViewHelper
 {
     use ContextServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;

@@ -13,7 +13,7 @@ use Enseignement\Entity\Db\ServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class LigneEnseignement extends AbstractViewHelper
+class LigneEnseignementViewHelper extends AbstractViewHelper
 {
     use ServiceAwareTrait;
     use ContextServiceAwareTrait;

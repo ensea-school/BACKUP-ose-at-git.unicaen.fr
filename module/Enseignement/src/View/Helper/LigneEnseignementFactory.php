@@ -13,7 +13,7 @@ class LigneEnseignementFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $helper = new LigneEnseignement();
+        $helper = new LigneEnseignementViewHelper();
 
         return $helper;
     }

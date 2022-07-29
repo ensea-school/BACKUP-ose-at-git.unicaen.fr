@@ -212,7 +212,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
      *
      * @return SaisieCalendaire
      */
-    public function setViewMNP(bool $viewMNP): SaisieCalendaire
+    public function setViewMNP(bool $viewMNP): self
     {
         $this->viewMNP = $viewMNP;
 
@@ -236,7 +236,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
      *
      * @return SaisieCalendaire
      */
-    public function setEditMNP(bool $editMNP): SaisieCalendaire
+    public function setEditMNP(bool $editMNP): self
     {
         $this->editMNP = $editMNP;
 

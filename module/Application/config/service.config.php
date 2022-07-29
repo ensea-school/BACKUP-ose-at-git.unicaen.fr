@@ -128,7 +128,6 @@ return [
     'view_helpers'    => [
         'invokables' => [
             'formServiceReferentielSaisie' => View\Helper\ServiceReferentiel\FormSaisie::class,
-            'serviceResume'                => View\Helper\Service\Resume::class,
             'fonctionReferentiel'          => View\Helper\ServiceReferentiel\FonctionReferentielViewHelper::class,
         ],
         'factories'  => [

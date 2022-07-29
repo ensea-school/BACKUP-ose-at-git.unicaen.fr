@@ -293,6 +293,7 @@ return [
     ],
 
     'view_helpers' => [
-        'horodatage'          => View\Helper\HorodatageViewHelperFactory::class,
+        'horodatage'    => View\Helper\HorodatageViewHelperFactory::class,
+        'serviceResume' => View\Helper\ResumeViewHelper::class,
     ],
 ];

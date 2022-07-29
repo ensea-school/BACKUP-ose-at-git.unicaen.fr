@@ -1,6 +1,6 @@
 <?php
 
-namespace Enseignement\View\Helper;
+namespace Service\View\Helper;
 
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
@@ -10,7 +10,7 @@ use Application\View\Helper\AbstractViewHelper;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Resume extends AbstractViewHelper
+class ResumeViewHelper extends AbstractViewHelper
 {
     use TypeIntervenantServiceAwareTrait;
 

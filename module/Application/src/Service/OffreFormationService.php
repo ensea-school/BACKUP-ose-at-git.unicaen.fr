@@ -228,9 +228,11 @@ class OffreFormationService extends AbstractEntityService
             $offresComplementaires[$v->getId()]['elements_pedagogique'] = [];
             $offresComplementaires[$v->getId()]['etape']                = $v;
             if ($v->getSource() == $source) {
-                $offresComplementaires[$v->getId()]['reconduction'] = (in_array($v->getCode(), $codesEtapeN1)) ? 'oui' : 'non';
+                $offresComplementaires[$v->getId()]['reconduction']     = (in_array($v->getCode(), $codesEtapeN1)) ? 'oui' : 'non';
+                $offresComplementaires[$v->getId()]['reconductionFait'] = (in_array($v->getCode(), $codesEtapeN1)) ? 'oui' : 'non';
             } else {
-                $offresComplementaires[$v->getId()]['reconduction'] = 'non';
+                $offresComplementaires[$v->getId()]['reconduction']     = 'oui';
+                $offresComplementaires[$v->getId()]['reconductionFait'] = 'non';
             }
         }
 

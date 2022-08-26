@@ -93,11 +93,19 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                                     echo "info";
                                 } ?>">
                                     <?php if ($ec['reconduction'] == 'oui'): ?>
-                                        <th><input title="Formation déjà reconduite pour l'année prochaine" type="checkbox"
-                                                   class="checkbox-formation" disabled="disabled" name="etape[]"
-                                                   value="<?= $ec['etape']->getId(); ?>"/> <span class="label label-warning"
-                                                                                                 style="margin:0 auto;">Reconduit</span>
-                                        </th>
+                                        <?php if ($ec['reconductionFait'] == 'oui'): ?>
+                                            <th><input title="Formation déjà reconduite pour l'année prochaine" type="checkbox"
+                                                       class="checkbox-formation" disabled="disabled" name="etape[]"
+                                                       value="<?= $ec['etape']->getId(); ?>"/> <span class="label label-warning"
+                                                                                                     style="margin:0 auto;">Reconduit</span>
+                                            </th>
+                                        <?php else: ?>
+                                            <th><input title="Formation non reconductible" type="checkbox"
+                                                       class="checkbox-formation" disabled="disabled" name="etape[]"
+                                                       value="<?= $ec['etape']->getId(); ?>"/> <span class="label label-warning"
+                                                                                                     style="margin:0 auto;">Non reconductible</span>
+                                            </th>
+                                        <?php endif; ?>
                                     <?php else: ?>
                                         <th><input type="checkbox" class="checkbox-formation" checked="checked" name="etape[]"
                                                    value="<?= $ec['etape']->getId(); ?>"/></th>

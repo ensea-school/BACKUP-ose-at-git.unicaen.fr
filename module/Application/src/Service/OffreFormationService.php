@@ -223,7 +223,12 @@ class OffreFormationService extends AbstractEntityService
             $codesEtapeN1[] = $v->getCode();
         }
 
+//        $histoDestru = [];
+
         foreach ($etapes as $v) {
+//            if($v->getHistoDestruction() != NULL){
+//                $histoDestru[] = $v;
+//            }
             $offresComplementaires[$v->getId()]['reconduction_partiel'] = 'non';
             $offresComplementaires[$v->getId()]['elements_pedagogique'] = [];
             $offresComplementaires[$v->getId()]['etape']                = $v;
@@ -236,10 +241,9 @@ class OffreFormationService extends AbstractEntityService
             }
         }
 
-        $elementResultat = [];
         foreach ($elements as $v) {
 
-            if ($v->getSource() != $source) {
+            if ($v->getSource() != $source || $v->getHistoDestruction() != null) {
                 continue;
             }
             $etapeId = $v->getEtape()->getId();

@@ -18,7 +18,7 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                 $selectStructure = new \Laminas\Form\Element\Select('structure');
                 $selectStructure
                     ->setValueOptions(['' => "(Sélectionnez une composante)"] + \UnicaenApp\Util::collectionAsOptions($structures))
-                    ->setValue($structure ? $structure->getId() : null)
+                    ->setValue($structure?->getId())
                     ->setAttributes(['class' => 'structure',
                                      'style' => 'width:250px;']);
                 echo $this->formSelect($selectStructure);

@@ -32,6 +32,7 @@ CREATE OR REPLACE PROCEDURE OSE.UM_INSERT_INTERVENANT(p_source_id number, p_anne
   -- v4.3  25/03/22 MYP : pour les dossiers devenant HOSE, remonter test END IF pour les tracer dans cgmt statut table UM_SYNCHRO_A_VALIDER
   -- v5.0  30/05/22 MYP : test sexe pour affecter civilite + 17/06/22 param v_uo_a_exclure
   -- v5.1  20/07/22 MYP : param C_ORG_RATTACH passage de valeur unique à multiple codes UAI => variable + test avec in (v_org_rattach)
+  -- v5.2  29/08/22 MYP : update grade... si statut identique
 
 =====================================================================================================*/
 
@@ -1587,8 +1588,50 @@ BEGIN
                             v_maj_statut_a_faire := UM_CHGT_STATUT_VALIDE(cur_pop.matcle, p_annee_id, v_statut_actuel, v_statut_new);    -- v3.1
                             dbms_output.put_line('      => CHGT NB HEURE MCE ... '||cur_pop.matcle||' : Maj OSE = '||v_maj_statut_a_faire);        
                     end case;
-                end if;
-            end if;    
+				
+				else -- v5.2  29/08/22 update si statut identique
+				  if (v_statut_new.id = v_statut_actuel.id and v_statut_actuel.id <> 0 and v_statut_actuel.id is not null) then 
+						BEGIN
+						update OSE.UM_INTERVENANT        -- maj de tous les champs utiles pour le statut ou MCE (si pas de chgt statut ou si chgt statut validé)
+						set                    
+							--STATUT_ID             = v_statut_new.id
+							SOURCE_CODE         = c1.source_code
+							,GRADE_ID             = v_id_grade_ose                -- v4.0  21/09/21
+							,W_STATUT_PIP         = c1.W_STATUT_PIP
+							,W_GROUPE_HIE         = c1.W_GROUPE_HIE
+							,W_CODE_EMPLOI         = c1.W_CODE_EMPLOI
+							,W_LIB_EMPLOI         = c1.W_LIB_EMPLOI
+							,W_FONCTION         = c1.W_FONCTION
+							,W_TYPE_FONCTION    = c1.W_TYPE_FONCTION
+							,W_POSITION         = c1.W_POSITION
+							,W_LIB_POSITION     = c1.W_LIB_POSITION
+							,W_NB_HEURE_MCE        = v_statut_new.nb_h_mce
+							,RECRUTEMENT        = c1.RECRUTEMENT
+							,QUOTITE_TEMPS_PARTAGE = c1.quotite_temps_partage
+							--,DATE_DEB_STATUT    = v_new_date_deb_statut            -- v4.2  25/01/22
+							--,DATE_FIN_STATUT     = v_statut_new.date_fin_statut    -- v3.0  08/03/2021
+							,DATE_HORODATAGE_STATUT = sysdate
+						where ID = cur_pop.ID;
+			
+						EXCEPTION
+							when no_data_found then 
+									dbms_output.put_line  ('   !!! Pb update UM_INTERVENANT PARTIE 2 - NO DATA FOUND : '||trim(c1.source_code)||' ID : '||cur_pop.ID);
+									update OSE.UM_TRANSFERT_INDIVIDU ose_tr set ose_tr.TEM_OSE_UPDATE = 'PB' where ose_tr.MATCLE = cur_pop.matcle and ose_tr.annee_id = p_annee_id;  -- v1.14
+									commit;
+							when too_many_rows then 
+									dbms_output.put_line  ('   !!! Pb update UM_INTERVENANT PARTIE 2 - TOO MANY ROWS : '||trim(c1.source_code)||' ID : '||cur_pop.ID);
+									update OSE.UM_TRANSFERT_INDIVIDU ose_tr set ose_tr.TEM_OSE_UPDATE = 'PB' where ose_tr.MATCLE = cur_pop.matcle and ose_tr.annee_id = p_annee_id;  -- v1.14
+									commit;
+							when others then
+									dbms_output.put_line  ('   !!! Pb update UM_INTERVENANT PARTIE 2 - OTHERS : '||trim(c1.source_code)||' ID : '||cur_pop.ID||' : '||SQLERRM);
+									update OSE.UM_TRANSFERT_INDIVIDU ose_tr set ose_tr.TEM_OSE_UPDATE = 'PB' where ose_tr.MATCLE = cur_pop.matcle and ose_tr.annee_id = p_annee_id;  -- v1.14
+									commit;
+						END;
+						update OSE.UM_TRANSFERT_INDIVIDU ose_tr set ose_tr.TEM_OSE_UPDATE = 'DONE' where ose_tr.MATCLE = cur_pop.matcle and ose_tr.TEM_OSE_UPDATE = 'TODO' and ose_tr.annee_id = p_annee_id;  -- v1.14
+						COMMIT;
+					end if; -- statut identique -- v5.2  29/08/22
+                end if; -- changement mce 		-- v5.2  29/08/22
+            end if;   -- changement statut 		-- v5.2  29/08/22 
         
             if v_maj_statut_a_faire in ('AUTO','OUI') then    -- v3.0
                     -- Statut écrasé automatiquement ou validé dans UM_SYNCHRO_A_VALIDER par 'O' pour écraser (!! si validé par I pour Insert sera traité à part)
@@ -1609,7 +1652,7 @@ BEGIN
                         ,W_CODE_EMPLOI         = c1.W_CODE_EMPLOI
                         ,W_LIB_EMPLOI         = c1.W_LIB_EMPLOI
                         ,W_FONCTION         = c1.W_FONCTION
-                        ,W_TYPE_FONCTION     = c1.W_TYPE_FONCTION
+                        ,W_TYPE_FONCTION    = c1.W_TYPE_FONCTION
                         ,W_POSITION         = c1.W_POSITION
                         ,W_LIB_POSITION     = c1.W_LIB_POSITION
                         ,W_NB_HEURE_MCE        = v_statut_new.nb_h_mce

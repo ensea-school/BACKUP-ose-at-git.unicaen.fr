@@ -211,6 +211,10 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
         <?php else: ?>
 
             <!---------------- Champ de recherche d'un élément pédagogique --------------->
+            <?php if ($compl = $etape && $etape->estHistorise()):
+                echo "<br />" . $this->tag('a', ['class' => 'no-intranavigation', 'href' => $this->url('of/etape/restaurer', ['etape' => $etape->getId()])])->html('Restaurer la formation');
+            endif; ?>
+
             <div class="element-rech panel panel-default">
                 <div class="panel-heading" style="margin-bottom:1em">
                     <?php $compl = $etape ? "de la formation <strong>$etape</strong>" : "toutes formations confondues"; ?>
@@ -273,6 +277,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                     </tr>
                     </thead>
                     <tbody>
+
                     <?php foreach ($elements as $ep): /* @var $ep \Application\Entity\Db\ElementPedagogique */ ?>
                         <tr id="<?= $ep->getId() ?>">
                             <td><?= $ep->getEtape()->getNiveauToString() ?></td>

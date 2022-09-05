@@ -74,6 +74,24 @@ class EtapeController extends AbstractController
 
 
 
+    public function restaurerAction()
+    {
+        if (!($etape = $this->getEvent()->getParam('etape'))) {
+            throw new \RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
+        }
+
+        $etape->dehistoriser();
+        $this->getServiceEtape()->save($etape);
+
+        $elems = $this->em()->getRepository(ElementPedagogique::class)->findBy([
+            'etape'            => $etape,
+            'histodestruction' => null,
+        ]);
+
+
+        return $this->redirect()->toRoute('of', ['etape' => $etape->getId()], [], true);
+    }
+
     public function voirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([

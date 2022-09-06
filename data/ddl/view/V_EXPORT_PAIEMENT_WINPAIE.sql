@@ -32,7 +32,7 @@ FROM (SELECT i.annee_id                                                         
              t2.code_origine                                                                                   code_origine,
              CASE WHEN ind <> ceil(t2.nbu / max_nbu) THEN max_nbu ELSE t2.nbu - max_nbu * (ind - 1) END        nbu,
              t2.nbu                                                                                            tnbu,
-             ose_formule.get_taux_horaire_hetd(nvl(t2.date_mise_en_paiement, sysdate))                         montant,
+             (select taux_hetd from annee ann where ann.id = i.annee_id)                         montant,
              COALESCE(t2.unite_budgetaire, '') || ' ' || to_char(i.annee_id) || ' ' || to_char(i.annee_id + 1) libelle
       FROM (SELECT structure_id,
                    periode_paiement_id,

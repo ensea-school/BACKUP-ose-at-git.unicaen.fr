@@ -30,7 +30,7 @@ WITH t AS (
                                         total_hetd,
 
     cc.source_code || ' ' || cc.libelle centre_couts,
-    OSE_FORMULE.GET_TAUX_HORAIRE_HETD( NVL(mep.date_mise_en_paiement,SYSDATE) ) * CASE WHEN mep.id IS NULL THEN frs.total ELSE mep.heures END
+    a.taux_hetd * CASE WHEN mep.id IS NULL THEN frs.total ELSE mep.heures END
                                         total_euros
   FROM
               formule_resultat_service  frs
@@ -62,7 +62,7 @@ WITH t AS (
     type_volume_horaire, etat_volume_horaire, annee, code_intervenant, intervenant, statut_intervenant,
     type_intervenant, grade, structure_enseignement, groupe_type_formation, type_formation,
     code_formation, total_hetd, centre_couts,
-    OSE_FORMULE.GET_TAUX_HORAIRE_HETD( SYSDATE ) * total_hetd total_euros
+    (select taux_hetd from annee ann where ann.id = annee_id) * total_hetd total_euros
   FROM (
   SELECT
     tvh.id                              type_volume_horaire_id,

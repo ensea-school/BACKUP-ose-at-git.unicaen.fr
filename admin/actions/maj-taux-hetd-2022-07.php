@@ -24,7 +24,7 @@ INSERT INTO TAUX_HORAIRE_HETD(
   42.86,
   TO_DATE('01/09/2022 00:00', 'dd/mm/YYYY HH24:MI'),
   (SELECT id FROM utilisateur where username='oseappli'),
-  TO_DATE('01/09/2022 00:00', 'dd/mm/YYYY HH24:MI'),
+  TO_DATE('01/07/2022 00:00', 'dd/mm/YYYY HH24:MI'),
   (SELECT id FROM utilisateur where username='oseappli')
 )
 ";

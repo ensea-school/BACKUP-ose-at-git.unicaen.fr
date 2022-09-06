@@ -10,7 +10,16 @@
 	-- v1.8 - 02/12/19 MYP : aucune modif pour ces tables de referentiel
 	-- v2.0 - 11/20-01/21 MYP : V15 ajout VOIRIE
 	-- v2.1 - 28/05/21 MYP : retaillage zones adresse
+	-- v2.2 - 20/07/22 MYP : param C_ORG_RATTACH passage de valeur unique à multiple codes UAI => variable + test avec in (v_org_rattach)
 =====================================================================================================*/
+
+
+/* === V2.2 20/07/2021  ================================================================================*/
+-- !! update à passer si vous avez une seule valeur de code UAI
+update OSE.UM_PARAM_ETABL set valeur = ''''||valeur||'''' where CODE = 'C_ORG_RATTACH';
+
+-- sinon exemple d'insert multi valeurs :
+--insert into OSE.UM_PARAM_ETABL (CODE, VALEUR, COMMENTAIRE) values ('C_ORG_RATTACH','''0342321N'',''0342490X''','Liste des codes UAI de l''établissement dans Siham - utilisé dans proc UM_SYNCHRO_STRUCTURE');  -- v2.2 - 20/07/22
 
 
 /* === V2.1 16/07/2021  ================================================================================*/

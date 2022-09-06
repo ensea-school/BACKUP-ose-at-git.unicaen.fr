@@ -9,6 +9,10 @@
 
 * Les modèles de contrats de travail sont maintenant gérés comme n'importe quel autre état de sortie
 
+## Notes de mise à jour
+
+* Supprimer la ligne faisant référence à TBL_NOEUD dans Administration/Synchronisation/Tables, table NOEUD, champ "Traitements postérieurs : à exécuter après la synchro".
+
 
 
 # OSE 19.1 (21/07/2022)
@@ -19,6 +23,7 @@
 * Nouvel état de sortie pour les écarts des heures complémentaires, maintenant personnalisable (#45807)
 * Possibilité de faire une PEC ou REN (SIHAM) l'année universitaire N-1
 * Nouvel état de sortie pour télécharger une synthèse des privilèges par rôle (#45629)
+* Nouveau paramètre du module export RH (SIHAM) permettant de synchroniser le code intervenant avec le matricule SIHAM lors d'une PEC ou d'un renouvellement
 
 ## Corrections de bugs
 

@@ -12,13 +12,17 @@ CREATE OR REPLACE PROCEDURE OSE.UM_SELECT_INTERVENANT (p_annee_id number, p_d_de
   Sortie : 	Remplissage TABLE OSE.UM_TRANSFERT_INDIVIDU avec la population ciblée, flag témoins traitements d'update ou insert à "TODO" 
 			+ rapatrie également les infos complementaires qui ne sont pas dans siham pour les vacataires (infos OREC appli locale Montpellier)
 
-  -- v2.2  03/04/2020 MYP : v_orec rectif nb_h_service_rectorat enlever replace . par , car fait planter le to_number, ca marche avec un .
-  -- v2.3  27/04/2020 MYP : si contractuel date prolongation après age limite saisie dans carriere complement retraire
-  -- v2.3b 05/05/2020 MYP : pb date prolongation complement retraire : date en zone texte saisie libre
-  -- v2.4  22/09/2020 MYP : pb pour recup lib_cat orec car croise avec aff future
-  -- v2.4b 19/11/2020 MYP : adaptation prép V15 : v_annee_id remplacé par param p_annee_id
-  -- v2.5  23/02/2020 MYP : test intitule_categorie orec 
-  -- v3.0  04/12/2020 MYP : adaptations pour OSE V15
+  -- v2.2  03/04/20 MYP : v_orec rectif nb_h_service_rectorat enlever replace . par , car fait planter le to_number, ca marche avec un .
+  -- v2.3  27/04/20 MYP : si contractuel date prolongation après age limite saisie dans carriere complement retraire
+  -- v2.3b 05/05/20 MYP : pb date prolongation complement retraire : date en zone texte saisie libre
+  -- v2.4  22/09/20 MYP : pb pour recup lib_cat orec car croise avec aff future
+  -- v2.4b 19/11/20 MYP : adaptation prép V15 : v_annee_id remplacé par param p_annee_id
+  -- v2.5  23/02/20 MYP : test intitule_categorie orec 
+  -- v3.0  04/12/20 MYP : adaptations pour OSE V15
+  -- v3.1  11/10/21 MYP : ajout EMP_SOURCE_CODE provenant d'orec : pour rafp
+  -- v3.1b 04/02/22 MYP : dblink .world
+  -- v3.2  25/03/22 MYP : ajout col sexe dans UM_TRANSFERT_INDIVIDU
+  -- v3.3  18/07/22 MYP : correction test format date
 =====================================================================================================*/
 
 			   
@@ -48,8 +52,8 @@ cursor cur_dossier_diff is
 	from (
 		select distinct td12.nudoss, i.matcle
 			--to_char(td12.timjif,'YYYY-MM-DD') as date_maj, td12.cdinfo, count(distinct td12.nudoss)
-			from hr.zytd12@SIHAM_PREP    td12
-				, hr.zy00@SIHAM_PREP i
+			from hr.zytd12@SIHAM.WORLD    td12
+				, hr.zy00@SIHAM.WORLD i
 			--  Maj pour les types de modifs non techniques comme pour les TM tables Miroirs de Siham + 'ES' Entrées sorties
 			-- '0F' Adresses, '0H' tel mail, '0I' bq, '18' sit fam, '3B' '3C' affectations, 'CO' contrat, 'GR' 'GS' carriere, 'PO' positions, 'V1' fonctions
 			-- ##A_PERSONNALISER_CHOIX_SIHAM##
@@ -67,7 +71,7 @@ cursor cur_dossier_diff is
 					where annee_id = p_annee_id  -- v2.1
 					--and service_rectorat  like '%.%'
 			) v_new_orec
-			,hr.zy00@SIHAM_PREP i
+			,hr.zy00@SIHAM.WORLD i
 			where v_new_orec.matricule = i.matcle
 		union
 			-- v0.4 - 07/06/2018 - MYP - Matricules forcés manuellement
@@ -88,18 +92,32 @@ cursor cur_dossier_actif is
 	select DISTINCT 
 	i.nudoss, i.matcle as matricule, substr(trim(i_adm.lognid),1,12) 	as uid_ldap 
    ,i.qualit, i.nomuse, i.prenom, i.nompat
-   ,naiss.datnai
-   ,floor(floor(months_between(p_date_systeme, naiss.datnai))/12) 		as nb_an
-   ,mod(floor(months_between(p_date_systeme, naiss.datnai)),12) 		as nb_mois
+   ,v_naiss.datnai ,v_naiss.sexe													-- v3.2																
+   ,floor(floor(months_between(p_date_systeme, v_naiss.datnai))/12) 	as nb_an	-- v3.2
+   ,mod(floor(months_between(p_date_systeme, v_naiss.datnai)),12) 		as nb_mois	-- v3.2
    ,nvl( situ_strat.dtef1s-1,  v_pos.date_maintien_activ_pos) 			as date_maintien_activ
-   from hr.zy00@SIHAM_PREP i            	-- dossier agent
-		,hr.zy4i@SIHAM_PREP i_adm     	-- HRA id user
-		,hr.zy10@SIHAM_PREP naiss    	-- naissance
-		,hr.zy1S@SIHAM_PREP situ_strat 	-- carriere situation strategique
+   from hr.zy00@SIHAM.WORLD i            	-- dossier agent
+		,hr.zy4i@SIHAM.WORLD i_adm     	-- HRA id user
+		,(	---- v_naiss -----------------------------------------------------------------
+        select naiss.nudoss
+            , naiss.datnai
+            , substr(lib_reg.libabr,1,1) as sexe
+            from hr.zy10@SIHAM.WORLD naiss 
+            ,hr.zd00@SIHAM.WORLD reg          -- reglementation
+            , hr.zd01@SIHAM.WORLD lib_reg
+        where     -- statut actif
+            --naiss.nudoss = p_nudoss
+            -- reglementation UGP
+            naiss.sexemp = reg.cdcode
+            and reg.cdstco='UGP'
+            and reg.nudoss = lib_reg.nudoss
+            and lib_reg.cdlang = 'F' 
+		) v_naiss  -- vue infos naissance  -- v3.2
+		,hr.zy1S@SIHAM.WORLD situ_strat 	-- carriere situation strategique
 		-- ##A_PERSONNALISER_CHOIX_SIHAM##
 		,(  -- v1.4b position admin
 			select nudoss, datxxx-1 as date_maintien_activ_pos
-			from hr.zyPO@SIHAM_PREP pos 		
+			from hr.zyPO@SIHAM.WORLD pos 		
 			where p_date_systeme between pos.dateff and pos.datxxx-1
 			and pos.posits = 'AC'    -- en activite
 			and pos.RSPRO like 'PA%' -- Prolongation activite
@@ -111,7 +129,7 @@ cursor cur_dossier_actif is
 				  else 'ACTIF'
 				end as ETAT
 				,trim(aff_hie.idps00) as code_poste                                    
-			from hr.zy3b@SIHAM_PREP aff_hie         -- affectation HIE
+			from hr.zy3b@SIHAM.WORLD aff_hie         -- affectation HIE
 			where 
 			-- ##A_PERSONNALISER_CHOIX_SIHAM##
 			trim(aff_hie.idou00) not in (v_uo_a_exclure) 	-- v3.0 04/12/2020 voir remplissage variable
@@ -126,7 +144,7 @@ cursor cur_dossier_actif is
 						trunc(aff_hie.dtef00) > p_date_systeme
 						and not exists (
 								select 1
-								from hr.zy3b@SIHAM_PREP -- affectation HIE
+								from hr.zy3b@SIHAM.WORLD -- affectation HIE
 								where
 								-- ##A_PERSONNALISER_CHOIX_SIHAM##
 								trim(idou00) not in (v_uo_a_exclure) -- v3.0 04/12/2020 voir remplissage variable
@@ -142,7 +160,7 @@ cursor cur_dossier_actif is
 	-- ##A_PERSONNALISER_CHOIX_SIHAM##
 	where i.matcle like v_prefixe_matricule||'%'
 	and i.nudoss = i_adm.nudoss(+)
-	and i.nudoss = naiss.nudoss(+)
+	and i.nudoss = v_naiss.nudoss(+)   -- v3.2
 	and i.nudoss = situ_strat.nudoss(+)
 	-- ##A_PERSONNALISER_CHOIX_SIHAM##
 	and situ_strat.cgstat(+) = 'MC100'   -- Maintien activite
@@ -186,8 +204,10 @@ select
 		  when v_depart_def.date_deb is null and i.date_limite_activite is not null then 'LIMITE ACTIVITE' 
 		  else null
 	end as cause_depart_def
-	,v_groupe_hie.groupe_hierarchique		-- correspond a la population Harpege IA/AA/SA...
-	,v_orec.type_vac 						as orec_type_vac -- v1.5  ATV/CEV
+	,v_groupe_hie.groupe_hierarchique							-- correspond a la population Harpege IA/AA/SA...
+	,v_orec.type_vac 						as orec_type_vac 	-- v1.5  ATV/CEV
+	,v_orec.emp_source_code 									-- v3.1  11/10/2021
+	,i.sexe														-- v3.2 30/05/22
 from
     ( 	--- dossier agent
 		select
@@ -201,6 +221,7 @@ from
 		,v_ind.datnai
 		,v_ind.nb_an
 		,v_ind.nb_mois
+		,v_ind.sexe		-- v3.2
 		-- ##A_PERSONNALISER_CHOIX_SIHAM## si maintien activite renseigné alors cette date sinon calcul suivant regle DRH -- ex UDM%100940
         ,nvl(v_ind.date_maintien_activ,
              case  when to_char(v_ind.datnai,'YYYYMM') < '195107' and v_ind.nb_an>=65 then trunc(add_months(v_ind.datnai,65*12)) 
@@ -214,18 +235,32 @@ from
 		from
 		(  select i.nudoss, i.matcle, substr(trim(i_adm.lognid),1,12) as uid_ldap 
            ,i.qualit, i.nomuse, i.prenom, i.nompat
-           ,naiss.datnai
-           ,floor(floor(months_between(p_date_systeme, naiss.datnai))/12) as nb_an
-           ,mod(floor(months_between(p_date_systeme, naiss.datnai)),12) as nb_mois
+           ,v_naiss.datnai ,v_naiss.sexe  --v3.2
+           ,floor(floor(months_between(p_date_systeme, v_naiss.datnai))/12) as nb_an			-- v3.2
+           ,mod(floor(months_between(p_date_systeme, v_naiss.datnai)),12) as nb_mois			-- v3.2
 		   -- date maintien de situ stratégique sinon date fin position admin type prolong = PA%
            ,nvl(nvl( trim(situ_strat.dtef1s-1),  v_pos.date_maintien_activ_pos),v_compl_carr.date_suite_prolong) as date_maintien_activ
-           from hr.zy00@SIHAM_PREP i            	-- dossier agent
-                ,hr.zy4i@SIHAM_PREP i_adm     	-- HRA id user
-                ,hr.zy10@SIHAM_PREP naiss    	-- naissance
-                ,hr.zy1S@SIHAM_PREP situ_strat 	-- carriere situation strategique
+           from hr.zy00@SIHAM.WORLD i            	-- dossier agent
+                ,hr.zy4i@SIHAM.WORLD i_adm     	-- HRA id user
+                ,(	---- v_naiss -----------------------------------------------------------------
+					select naiss.nudoss
+						, naiss.datnai
+						, trim(substr(lib_reg.libabr,1,1)) as sexe
+						from hr.zy10@SIHAM.WORLD naiss 
+						,hr.zd00@SIHAM.WORLD reg          -- reglementation
+						, hr.zd01@SIHAM.WORLD lib_reg
+					where     -- statut actif
+						naiss.nudoss = p_nudoss
+						-- reglementation UGP
+						and naiss.sexemp = reg.cdcode
+						and reg.cdstco='UGP'
+						and reg.nudoss = lib_reg.nudoss
+						and lib_reg.cdlang = 'F' 
+				) v_naiss  -- naissance  -- v3.2
+                ,hr.zy1S@SIHAM.WORLD situ_strat 	-- carriere situation strategique
 				,(  -- v1.4b position admin
 					select nudoss, trim(datxxx-1) as date_maintien_activ_pos
-                    from hr.zyPO@SIHAM_PREP pos 		
+                    from hr.zyPO@SIHAM.WORLD pos 		
                     where pos.nudoss = p_nudoss
 					and p_date_systeme between pos.dateff and pos.datxxx-1
                     and pos.posits = 'AC'    -- en activite
@@ -233,15 +268,16 @@ from
                 ) v_pos
 				,( -- v2.3 si contractuel date prolongation saisie dans carriere complement retraire
 				   -- v2.3b pb date en zone texte saisie libre
-					select nudoss, decode(trim(dtrtpr),'01/01/01',null,trim(dtrtpr)) as date_suite_prolong
-					from zy19@SIHAM_PREP
+				   -- v3.3  dans zy19 la zone est maintenant au format date donc to_date pour que ca marche !
+					select nudoss, decode(trim(dtrtpr),to_date('01/01/01','DD/MM/YY'),null,trim(dtrtpr)) as date_suite_prolong   -- v3.3  18/07/22
+					from zy19@SIHAM.WORLD
 					where nudoss = p_nudoss
 				) v_compl_carr
 			where i.nudoss = p_nudoss
 			-- ##A_PERSONNALISER_CHOIX_SIHAM## tous nos agents sont codes UDM<matricule harpege avec zero devant> et les enfants REL<matricule>...
 			and i.matcle like 'UDM%'
             and i.nudoss = i_adm.nudoss(+)
-            and i.nudoss = naiss.nudoss(+)
+            and i.nudoss = v_naiss.nudoss(+)		-- v3.2
             and i.nudoss = situ_strat.nudoss(+)
 			-- ##A_PERSONNALISER_CHOIX_SIHAM##
             and situ_strat.cgstat(+) = 'MC100'   -- Maintien activite sup age limite pour les TITU
@@ -269,7 +305,8 @@ from
 		,intitule_corps
 		,libelle
 		,tem_remunere
-		,type_vac		-- v1.5
+		,type_vac			-- v1.5
+		,emp_source_code 	-- v3.1  11/10/2021
 		from 
 		(	select matricule
 				,trim(recrutement) recrutement
@@ -322,7 +359,8 @@ from
 					when instr(intitule_corps,'titre gracieux') >= 1 	then 'G'  
 					else ''
 				end tem_remunere
-				,type_vac		-- v1.5
+				,type_vac			-- v1.5
+				,emp_source_code  	-- v3.1  11/10/2021
 			from OSE.UM_OREC_INFO
 			where matricule = p_siham_matricule
 			and annee_id = p_annee_id 	-- v2.1
@@ -343,7 +381,7 @@ from
 				,dten00  -- date_fin
 				,idjb00	 -- code_emploi
 				,row_number() over (partition by nudoss order by dtef00 desc) as rnum	-- la plus récente en premier
-				from hr.zy3b@SIHAM_PREP 	-- affectation HIE
+				from hr.zy3b@SIHAM.WORLD 	-- affectation HIE
 				where nudoss = p_nudoss
 					-- ##A_PERSONNALISER_CHOIX_SIHAM##
 					and trim(idou00) not in (v_uo_a_exclure) 	-- v3.0 04/12/2020 voir remplissage variable
@@ -357,10 +395,10 @@ from
 					    or ( trunc(dtef00) > p_date_systeme
 							and not exists (
 									select 1
-									from hr.zy3b@SIHAM_PREP -- affectation HIE
+									from hr.zy3b@SIHAM.WORLD -- affectation HIE
 									where nudoss = p_nudoss
 									-- ##A_PERSONNALISER_CHOIX_SIHAM##
-									and trim(idou00) not in ('0000000000','UO_REP','UM1REP','UO_UM1','HZD0000003')
+									and trim(idou00) not in (v_uo_a_exclure) 	-- v3.2 17/06/22 voir remplissage variable
 									and ( trunc(dtef00) <= p_d_fin_annee_univ
 											and trunc(dtef00) <= p_date_systeme
 											and trunc(dten00) >= p_d_deb_annee_univ
@@ -377,9 +415,9 @@ from
             ,trim(st.statut) statut_pip
 			,trunc(st.dateff) as date_effet
             ,row_number() over (partition by st.nudoss order by st.dateff desc) as rnum 
-            from hr.zyfl@SIHAM_PREP st		-- statut pip
-            ,hr.zd00@SIHAM_PREP reg      	-- reglementation
-            ,hr.zdvp@SIHAM_PREP ens        	-- recup temoin enseig
+            from hr.zyfl@SIHAM.WORLD st		-- statut pip
+            ,hr.zd00@SIHAM.WORLD reg      	-- reglementation
+            ,hr.zdvp@SIHAM.WORLD ens        	-- recup temoin enseig
         where 	-- statut actif
 			st.nudoss = p_nudoss
 			-- v2.4 rajout not exists sinon je recup toujours la future année
@@ -392,7 +430,7 @@ from
 					trunc(st.dateff) > p_date_systeme
 					and not exists (
 							select 1
-							from hr.zyfl@SIHAM_PREP -- statut pip
+							from hr.zyfl@SIHAM.WORLD -- statut pip
 							where nudoss = p_nudoss
 							 and trunc(dateff) <= p_d_fin_annee_univ
 							 and trunc(dateff) <= p_date_systeme
@@ -420,7 +458,7 @@ from
             ,trim(adecod)   as adecod
 			,dateff
 			,datfin
-			from hr.zygr@SIHAM_PREP 		--carriere administrative
+			from hr.zygr@SIHAM.WORLD 		--carriere administrative
 			where nudoss = p_nudoss
 				and numcar = 1
                 -- carriere normale (pas secondaire) 
@@ -434,7 +472,7 @@ from
                         trunc(dateff) > p_date_systeme
                         and not exists (
                                 select 1
-                                from hr.zygr@SIHAM_PREP -- statut pip
+                                from hr.zygr@SIHAM.WORLD -- statut pip
                                 where nudoss = p_nudoss
                                  and numcar = 1
                                     -- carriere normale (pas secondaire) 
@@ -451,7 +489,7 @@ from
 			,decode(trim(adecod),null,'0000',adecod)
 			,dateff
 			,decode(to_char(datxxx,'YYYY-MM-DD'),'2999-12-31',datxxx, datxxx-1)
-			from hr.zyfa@SIHAM_PREP 	 	-- administration origine
+			from hr.zyfa@SIHAM.WORLD 	 	-- administration origine
 			where nudoss = p_nudoss
 				and rtrim(orgori,' ') is null
 				-- toutes les périodes sur l'année univ
@@ -467,9 +505,9 @@ from
 		select rtrim(g.cdcode,' ') cdcode
 		,h.liblon
 		,trim(i.cdhiec) as groupe_hierarchique
-		from hr.zd00@SIHAM_PREP g,
-			hr.zd01@SIHAM_PREP h,
-			hr.zd63@SIHAM_PREP i
+		from hr.zd00@SIHAM.WORLD g,
+			hr.zd01@SIHAM.WORLD h,
+			hr.zd63@SIHAM.WORLD i
 		where g.nudoss = p_nudoss
 		and g.nudoss = h.nudoss
 		and g.nudoss = i.nudoss
@@ -498,11 +536,11 @@ from
 				  when trim(f.cgstat) = 'MUTATI' 				then 'MUTATION'
 				  else ''
 				end as lib_depart
-			  from hr.zy1s@SIHAM_PREP f -- statut depart
-					,hr.zypo@SIHAM_PREP b -- positions
-					,hr.ZD00@SIHAM_PREP c, hr.ZD01@SIHAM_PREP d -- repertoire hors univ
-					,hr.ZD00@SIHAM_PREP g, hr.ZD01@SIHAM_PREP h -- repertoire fin de travail
-					,hr.zytd12@SIHAM_PREP    z
+			  from hr.zy1s@SIHAM.WORLD f -- statut depart
+					,hr.zypo@SIHAM.WORLD b -- positions
+					,hr.ZD00@SIHAM.WORLD c, hr.ZD01@SIHAM.WORLD d -- repertoire hors univ
+					,hr.ZD00@SIHAM.WORLD g, hr.ZD01@SIHAM.WORLD h -- repertoire fin de travail
+					,hr.zytd12@SIHAM.WORLD    z
 			  where f.nudoss = p_nudoss
 				and f.rsstat <> 'PEC'
 			  -- ##A_PERSONNALISER_CHOIX_SIHAM##
@@ -539,10 +577,10 @@ from
 				end as lib_depart
 				--,d.liblon as ll_position
 				from 
-				hr.zypo@SIHAM_PREP b,				  -- positions
-				hr.zy1s@SIHAM_PREP f,				  -- statut
-				hr.ZD00@SIHAM_PREP c, hr.ZD01@SIHAM_PREP d, -- repertoire
-				hr.ZD00@SIHAM_PREP g, hr.ZD01@SIHAM_PREP h  -- repertoire
+				hr.zypo@SIHAM.WORLD b,				  -- positions
+				hr.zy1s@SIHAM.WORLD f,				  -- statut
+				hr.ZD00@SIHAM.WORLD c, hr.ZD01@SIHAM.WORLD d, -- repertoire
+				hr.ZD00@SIHAM.WORLD g, hr.ZD01@SIHAM.WORLD h  -- repertoire
 				where 
 				b.nudoss = p_nudoss
 				-- ##A_PERSONNALISER_CHOIX_SIHAM##
@@ -599,7 +637,7 @@ BEGIN
 				BEGIN
 				-- SPECIF OREC (Mariadb): 
 				v_service_rectorat := c_compl.nb_h_service_rectorat;
-				-- dbms_output.put_line ('v_service_rectorat|'||v_service_rectorat||'|');
+				-- dbms_output.put_line ('v_service_rectorat :'||v_service_rectorat||'|');
 				select
 					case when v_service_rectorat is null then 0
 						when instr(v_service_rectorat,'.') <> 0 then to_number(v_service_rectorat, '999D99', 'NLS_NUMERIC_CHARACTERS=''. ''')
@@ -632,7 +670,9 @@ BEGIN
 					orec_code_uo,
 					orec_lib_categorie,
 					orec_type_vac,		-- v1.5
-					annee_id
+					annee_id,
+					emp_source_code,	-- v3.1  11/10/21
+					sexe				-- v3.2  25/03/22
 					) 
 				values (c_compl.type_transfert
 					,sysdate
@@ -662,6 +702,8 @@ BEGIN
 					,c_compl.orec_lib_categorie			-- specif OREC
 					,c_compl.orec_type_vac				-- specif OREC -- v1.5
 					,p_annee_id							-- v2.1
+					,c_compl.emp_source_code			-- v3.1  11/10/2021
+					,c_compl.sexe						-- v3.2  03/05/22
 					);
 				EXCEPTION
 				when NO_DATA_FOUND then 
@@ -724,8 +766,10 @@ BEGIN
 					nb_h_service_rectorat,
 					orec_code_uo,
 					orec_lib_categorie,
-					orec_type_vac,		-- v1.5
-					annee_id			-- v2.1
+					orec_type_vac,			-- v1.5
+					annee_id,				-- v2.1
+					emp_source_code,		-- v3.1  11/10/21
+					sexe					-- v3.2  30/05/22
 					) 
 				values (c_compl.type_transfert
 					,sysdate
@@ -755,6 +799,8 @@ BEGIN
 					,c_compl.orec_lib_categorie			-- specif OREC
 					,c_compl.orec_type_vac				-- specif OREC -- v1.5
 					,p_annee_id							-- v2.1
+					,c_compl.emp_source_code			-- v3.1  11/10/21
+					,c_compl.sexe						-- v3.2  30/05/22
 					);
 				EXCEPTION
 				when NO_DATA_FOUND then 
@@ -817,7 +863,9 @@ BEGIN
 					orec_code_uo,
 					orec_lib_categorie,
 					orec_type_vac,			-- v1.5
-					annee_id				-- v2.1
+					annee_id,				-- v2.1
+					emp_source_code,		-- v3.1  11/10/2021
+					sexe					-- v3.2  30/05/22
 					) 
 				values (c_compl.type_transfert
 					,sysdate
@@ -847,6 +895,8 @@ BEGIN
 					,c_compl.orec_lib_categorie			-- specif OREC
 					,c_compl.orec_type_vac				-- specif OREC -- v1.5
 					,p_annee_id							-- v2.1
+					,c_compl.emp_source_code			-- v3.1  11/10/21
+					,c_compl.sexe 						-- v3.2  25/03/22
 					);
 				EXCEPTION
 				when NO_DATA_FOUND then 

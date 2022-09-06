@@ -13,12 +13,17 @@
 	OSE.UM_MAJ_UM_SYNCHRO_A_VALIDER
 	OSE.UM_SELECT_MULTI_STATUT
 	OSE.UM_MAJ_INSERT_STATUT
+	OSE.UM_INSERT_UM_STATUT
 	----------------------------
 	
 	-- v2.1 - 03/07/20 MYP : pour Ose v14
 	-- v2.2 - 03/12/20 MYP : pour OSE V15 : découpage adresses intervenant avec numero compl et voirie
 	-- v2.3 - 18/06/21 MYP : raz numero_compl_code si inexistant dans OSE.ADRESSE_NUMERO_COMPL 
 		                     + correction car si MULTI_AUTO 'AI' tous les flags et dates ne suivent pas 
+							 
+	-- v2.4 - 19/07/21 MYP : mail perso rempli meme si VAC et compte um validé
+	-- v2.4b- 04/02/22 MYP : dblink .world
+	-- v2.5 - 14/06/22 MYP : ajout UM_INSERT_UM_STATUT + remplacer UM_STATUT_INTERVENANT par UM_STATUT + jointure annee_id
 =====================================================================================================*/
 
 
@@ -50,6 +55,7 @@ CREATE OR REPLACE PROCEDURE OSE.UM_SYNCHRO_ADRESSE_INTERVENANT (p_source_id numb
 v_nb_insert				number(9) := 0;
 v_nb_update				number(9) := 0;
 v_nb_total				number(9) := 0;
+v_nb_traites			number(9) := 0;	--- MYP
 
 v_existe_adr			number(9);
 v_tel_domicile			varchar2(25);
@@ -75,7 +81,7 @@ cursor cur_adr_interv_OSE is
 	 -- si VACATAIRE remonter tel perso et pas mail perso -- ##A_PERSONNALISER_CHOIX_SIHAM## 
 	 -- si PERMANENT remonter mail_perso et pas tel_perso -- ##A_PERSONNALISER_CHOIX_SIHAM## 
 	 ,case when typ.code = 'E' then v_tel.tel_perso else '' end			as tel_domicile
-	 ,case when typ.code = 'E' then '' else v_tel.mail_perso end 		as mail_perso
+	 ,v_tel.mail_perso as mail_perso  -- ,case when typ.code = 'E' then '' else v_tel.mail_perso end 		as mail_perso -- v2.4
 	 ,v_adr.batiment			as batiment
 	 --,v_adr.no_voie||' '||v_adr.bis_ter 	as no_voie
 	 ,v_adr.no_voie			 	as no_voie		-- v2.2 OSE V15
@@ -89,7 +95,7 @@ cursor cur_adr_interv_OSE is
 	 ,v_adr.NUMERO_COMPL						 	as NUMERO_COMPL_CODE 	-- v2.2 26/01/2021
 	 ,UM_EXISTE_VOIRIE_LIB(v_adr.VOIRIE) 			as VOIRIE_CODE			-- v2.2 26/01/2021
 	from OSE.UM_INTERVENANT ose_i
-		,hr.zy00@SIHAM_PREP i
+		,hr.zy00@SIHAM.WORLD i
 		 ,(    ---- v_tel -----------------------------------------------------------------
 			select 
 				nudoss
@@ -99,7 +105,7 @@ cursor cur_adr_interv_OSE is
 				,trim(TRANSLATE(upper(trim(max(decode(typtel,'PPE', numtel,'')))), '? -_./@ABCDEFGHIJKLMNOPQRSTUVWXYZ', ' ' )) as tel_mobile_perso
 				,trim(max(decode(typtel,'MPR', numtel,''))) as mail_pro
 				,trim(max(decode(typtel,'MPE', numtel,''))) as mail_perso
-			from hr.zy0h@SIHAM_PREP
+			from hr.zy0h@SIHAM.WORLD
 			where typtel in ('TPR','TPE','PPR','PPE','MPR','MPE') -- ##A_PERSONNALISER_CHOIX_SIHAM## suivant vos types de coordonnees
 			group by nudoss
 		 ) v_tel
@@ -119,18 +125,19 @@ cursor cur_adr_interv_OSE is
 				,trim(substr(zonadd,7,32)) 	as ville
 				,cdpays 					as pays_code_insee
 				,trim(p.libelle_court)		as pays_libelle
-			from hr.zy0f@SIHAM_PREP,
+			from hr.zy0f@SIHAM.WORLD,
 				UM_PAYS p,
 				OSE.ADRESSE_NUMERO_COMPL compl		-- v2.3 11/06/2020
 			where temadd = 1
 			 and cdpays = p.source_code(+)
 			 and upper(trim(substr(zonadb,5,2))) = compl.code(+)		-- v2.3 11/06/2020
 		 ) v_adr
-		,OSE.UM_STATUT_INTERVENANT st
+		,OSE.UM_STATUT st
         ,OSE.TYPE_INTERVENANT typ
 	where  ose_i.annee_id = p_annee_id 			-- v1.12 ordre champs clés
         and ose_i.date_horodatage >= p_date_horodatage
         and OSE_I.STATUT_ID = st.id
+		and ose_i.annee_id = st.annee_id		-- v2.5 14/06/22
         and st.type_intervenant_id = typ.id
         and OSE_I.SOURCE_CODE = i.matcle		-- v2.2 26/01/2021
         and i.nudoss = v_tel.nudoss(+)
@@ -143,6 +150,8 @@ BEGIN
 	dbms_output.put_line(' ');
 	dbms_output.put_line('   Lancement synchro UM_ADRESSE_INTERVENANT OSE : ');
 	FOR c1 in cur_adr_interv_OSE LOOP
+		--v_nb_traites := v_nb_traites+1;	-- MYP
+		--dbms_output.put_line('   Nb adr traitees : '||v_nb_traites); -- MYP
 		
 		v_existe_adr := 0;
 	    v_existe_adr := UM_EXISTE_ADR_INTERVENANT(c1.id);
@@ -157,18 +166,18 @@ BEGIN
             from OSE.UM_ADRESSE_INTERVENANT
             where intervenant_id = c1.id;
 
-            IF ( v_tel_domicile 		<> c1.tel_domicile 
-                    or v_batiment 		<> c1.batiment
-					or v_no_voie 		<> c1.no_voie
-					or v_nom_voie 		<> c1.nom_voie
-					or v_localite 		<> c1.localite
-					or v_code_postal 	<> c1.code_postal
-					or v_ville		 	<> c1.ville
-					or v_pays_code_insee <> c1.pays_code_insee
-					or v_pays_libelle 	<> c1.pays_libelle
-					or v_w_mail_perso 	<> c1.mail_perso
-					or (v_numero_compl_code <> c1.numero_compl_code  or (v_numero_compl_code is null and c1.numero_compl_code is not null) ) 		-- v2.2 - 03/12/2020
-					or (v_voirie_code 	<> c1.voirie_code or (v_voirie_code is null and c1.voirie_code is not null))					-- v2.2 - 26/01/2021
+            IF ( v_tel_domicile 		<> c1.tel_domicile 		or v_tel_domicile is null or c1.tel_domicile is null    -- v2.4 19/07/21
+                    or v_batiment 		<> c1.batiment			or v_batiment is null or c1.batiment is null    		-- v2.4 19/07/21
+					or v_no_voie 		<> c1.no_voie			or v_no_voie is null or c1.no_voie is null    			-- v2.4 19/07/21
+					or v_nom_voie 		<> c1.nom_voie			or v_nom_voie is null or c1.nom_voie is null			-- v2.4 19/07/21
+					or v_localite 		<> c1.localite			or v_localite is null or c1.localite is null    		-- v2.4 19/07/21
+					or v_code_postal 	<> c1.code_postal		or v_code_postal is null or c1.code_postal is null    	-- v2.4 19/07/21
+					or v_ville		 	<> c1.ville				or v_ville is null or c1.ville is null    				-- v2.4 19/07/21
+					or v_pays_code_insee <> c1.pays_code_insee	or v_pays_code_insee is null or c1.pays_code_insee is null	-- v2.4 19/07/21
+					or v_pays_libelle 	<> c1.pays_libelle		or v_pays_libelle is null or c1.pays_libelle is null	-- v2.4 19/07/21
+					or v_w_mail_perso 	<> c1.mail_perso 		or v_w_mail_perso is null or c1.mail_perso is null  -- v2.4 19/07/21
+					or v_numero_compl_code <> c1.numero_compl_code  or v_numero_compl_code is null or c1.numero_compl_code is null 	-- v2.2 - 03/12/2020
+					or v_voirie_code 	<> c1.voirie_code 		or v_voirie_code is null or c1.voirie_code is null	-- v2.2 - 26/01/2021
 				) THEN
 			BEGIN
 				v_nb_update := v_nb_update+1 ;
@@ -184,7 +193,7 @@ BEGIN
 					,pays_libelle 		= c1.pays_libelle
 					,W_mail_perso		= c1.mail_perso
 					,NUMERO_COMPL_CODE 	= c1.numero_compl_code	-- v2.2 - 26/01/2021
-					,VOIRIE_CODE			= c1.voirie_code	-- v2.2 - 26/01/2021
+					,VOIRIE_CODE			= c1.voirie_code	-- v2.2 - 26/01/2021	
 			WHERE intervenant_id = c1.id;
 			EXCEPTION
 			-- when no_data_found then null;
@@ -243,7 +252,7 @@ END;
 
 CREATE OR REPLACE PROCEDURE OSE.UM_INIT_RIB_HORS_SEPA IS
 /* ===================================================================================================
-			PROCEDURE UM_SYNCHRO_ADRESSE_INTERVENANT	-- v2.2
+			PROCEDURE UM_INIT_RIB_HORS_SEPA
 ====================================================================================================*/					   
 
 -- VARIABLES DE TRAITEMENT ----------------------------
@@ -260,10 +269,10 @@ select bq.nudoss
         ,trim(bq.swift)     as bic
         ,trunc(bq.datdeb)      as datdeb
         ,case when trim(d.liblon) = 'Virement hors SEPA' then 1 else 0 end as rib_hors_sepa     -- v3.0 07/01/2021
-        from hr.zy0i@SIHAM_PREP bq,         -- coord bancaires
-            hr.ZD00@SIHAM_PREP c,         	-- reglementation        -- v3.0 07/01/2021
-            hr.ZD01@SIHAM_PREP d,			-- v3.0 07/01/2021
-			hr.zy00@SIHAM_PREP i
+        from hr.zy0i@SIHAM.WORLD bq,         -- coord bancaires
+            hr.ZD00@SIHAM.WORLD c,         	-- reglementation        -- v3.0 07/01/2021
+            hr.ZD01@SIHAM.WORLD d,			-- v3.0 07/01/2021
+			hr.zy00@SIHAM.WORLD i
         where bq.modpai= c.CDCODE 
             and c.cdstco = 'DRN'
             and c.nudoss = d.nudoss
@@ -328,8 +337,8 @@ CURSOR cur_synchro_a_valider IS
 
 /*========= PROG PRINCIPAL PROCEDURE UM_MAJ_UM_SYNCHRO_A_VALIDER ===============================*/
 BEGIN
-	dbms_output.put_line(' ');
-	dbms_output.put_line('   Lancement maj UM_SYNCHRO_A_VALIDER : ');
+	--dbms_output.put_line(' ');
+	--dbms_output.put_line('   Lancement maj UM_SYNCHRO_A_VALIDER : ');
 
 	FOR c1 in cur_synchro_a_valider LOOP
 			BEGIN
@@ -442,8 +451,8 @@ CURSOR cur_multi_statut_auto IS
 
 /*========= PROG PRINCIPAL PROCEDURE UM_MAJ_INSERT_STATUT ===============================*/
 BEGIN
-	dbms_output.put_line(' ');
-	dbms_output.put_line('   Lancement maj UM_SYNCHRO_A_VALIDER quand validation = I pour INSERT : ');
+	--dbms_output.put_line(' ');
+	--dbms_output.put_line('   Lancement maj UM_SYNCHRO_A_VALIDER quand validation = I pour INSERT : ');
 
 	FOR c1 in cur_multi_statut_auto LOOP
 			dbms_output.put_line(c1.matcle);
@@ -470,5 +479,74 @@ BEGIN
 			
 	END LOOP;
 	COMMIT;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE OSE.UM_INSERT_UM_STATUT(p_annee_id IN number) IS
+/* ===================================================================================================
+    PROCEDURE UM_INSERT_UM_STATUT  -- v2.5
+====================================================================================================*/   
+-- A partir de UM_STATUT, créé les enregistrements pour l'année donnée en paramètre
+
+BEGIN
+	dbms_output.put_line('   - Insertion UM_STATUT pour l''annee : '||p_annee_id);
+    INSERT INTO OSE.UM_STATUT(ANNEE_ID,CODE_STATUT,LIBELLE,SERVICE_STATUTAIRE
+				,DEPASSEMENT
+				,PLAFOND_REFERENTIEL
+				,MAXIMUM_HETD
+				,FONCTION_E_C
+				,TYPE_INTERVENANT_ID
+				,SOURCE_ID
+				,SOURCE_CODE
+				,ORDRE
+				,NON_AUTORISE
+				,PEUT_SAISIR_SERVICE
+				,PEUT_CHOISIR_DANS_DOSSIER
+				,PEUT_SAISIR_DOSSIER
+				,PEUT_SAISIR_MOTIF_NON_PAIEMENT
+				,PEUT_AVOIR_CONTRAT
+				,PEUT_SAISIR_REFERENTIEL
+				,PLAFOND_HC_HORS_REMU_FC
+				,PLAFOND_HC_REMU_FC
+				,DEPASSEMENT_SERVICE_DU_SANS_HC
+				,PEUT_CLOTURER_SAISIE
+				,TEM_BIATSS
+				,PEUT_SAISIR_SERVICE_EXT
+				,TEM_ATV
+				,PROSE_LIB_STATUT)
+		SELECT 
+			p_annee_id
+			,CODE_STATUT
+			,LIBELLE
+			,SERVICE_STATUTAIRE
+			,DEPASSEMENT
+			,PLAFOND_REFERENTIEL
+			,MAXIMUM_HETD
+			,FONCTION_E_C
+			,TYPE_INTERVENANT_ID
+			,SOURCE_ID
+			,SOURCE_CODE
+			,ORDRE
+			,NON_AUTORISE
+			,PEUT_SAISIR_SERVICE
+			,PEUT_CHOISIR_DANS_DOSSIER
+			,PEUT_SAISIR_DOSSIER
+			,PEUT_SAISIR_MOTIF_NON_PAIEMENT
+			,PEUT_AVOIR_CONTRAT
+			,PEUT_SAISIR_REFERENTIEL
+			,PLAFOND_HC_HORS_REMU_FC
+			,PLAFOND_HC_REMU_FC
+			,DEPASSEMENT_SERVICE_DU_SANS_HC
+			,PEUT_CLOTURER_SAISIE
+			,TEM_BIATSS
+			,PEUT_SAISIR_SERVICE_EXT
+			,TEM_ATV
+			,PROSE_LIB_STATUT
+			FROM UM_STATUT
+			order by id;
+		exception
+			when others then
+				dbms_output.put_line (p_annee_id||'   !!! Pb insert UM_STATUT - OTHERS : '||SQLERRM);
+    commit;
 END;
 /

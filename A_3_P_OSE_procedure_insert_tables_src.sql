@@ -20,6 +20,8 @@
 	-- v2.2 - 03/12/20 MYP : V15 : UM_SYNCHRO_VOIRIE + ajout NUMERO_COMPL et VOIRIE dans adresses structure
 	-- v2.3 - 28/05/21 MYP : retaillage zones adresse
 	-- v2.4 - 11/06/21 MYP : raz numero_compl_code si inexistant dans OSE.ADRESSE_NUMERO_COMPL
+	-- v2.5 - 05/10/21 MYP : UM_ALIM_ADRESSE_NUMERO_COMPL : prevoir retour null qd aucun enreg : commencer à 1
+	-- v2.5b- 04/02/22 MYP : dblink .world
 =====================================================================================================*/
 
 CREATE OR REPLACE PROCEDURE OSE.UM_SYNCHRO_PAYS (p_source_id number) IS
@@ -51,13 +53,13 @@ cursor cur_pays is
         , trunc(reg.dtfva) as date_fin_val
         , trim(reg.cdcode) as source_code  -- code SIHAM
     from 
-        hr.zd00@SIHAM_PREP reg      	-- reglementation pour dept naissance
-        ,hr.zd01@SIHAM_PREP lreg     -- libelle reglementation
+        hr.zd00@SIHAM.WORLD reg      	-- reglementation pour dept naissance
+        ,hr.zd01@SIHAM.WORLD lreg     -- libelle reglementation
         ,(
             select trim(cont.cdcode) as continent, trim(cont_pays.idcoun) as code_pays
             from
-                hr.zd00@SIHAM_PREP cont
-                ,hr.zd4k@SIHAM_PREP cont_pays
+                hr.zd00@SIHAM.WORLD cont
+                ,hr.zd4k@SIHAM.WORLD cont_pays
             where cont.cdcode = 'EUROPE' 
                 and cont.nudoss = cont_pays.nudoss
         ) v_europe
@@ -165,8 +167,8 @@ UNION
         , trim(lreg.libabr) as lc_dept
         , 'Siham' as source
     from 
-        hr.zd00@SIHAM_PREP reg      -- reglementation pour dept naissance
-        ,hr.zd01@SIHAM_PREP lreg     -- libelle reglementation
+        hr.zd00@SIHAM.WORLD reg      -- reglementation pour dept naissance
+        ,hr.zd01@SIHAM.WORLD lreg     -- libelle reglementation
     where
         reg.cdstco(+)in ('UGJ')
         and reg.nudoss=lreg.nudoss
@@ -252,23 +254,23 @@ v_ll                    varchar2(120);
 cursor cur_voirie is
 		select distinct trim(reg.cdcode) as code_voie
 			, upper(trim(l_reg.liblon)) as ll_voie
-		 from zd00@SIHAM_PREP reg	-- reglementation
-			, zd01@SIHAM_PREP l_reg  -- libelle reglementation
+		 from zd00@SIHAM.WORLD reg	-- reglementation
+			, zd01@SIHAM.WORLD l_reg  -- libelle reglementation
 		where cdstco = 'VNT'	-- adresse VNT ou WAM
 		and reg.nudoss = l_reg.nudoss
 	UNION
 		select distinct trim(reg.cdcode) as code_voie
 			, upper(trim(l_reg.liblon)) as ll_voie
-		 from zd00@SIHAM_PREP reg
-			, zd01@SIHAM_PREP l_reg
+		 from zd00@SIHAM.WORLD reg
+			, zd01@SIHAM.WORLD l_reg
 		where cdstco = 'WAM'
 		-- code de WAM qui n existent pas en VNT car libelles pas identiques pour meme code !
 		and trim(reg.cdcode) in (select distinct trim(reg.cdcode)
-						   from zd00@SIHAM_PREP reg
+						   from zd00@SIHAM.WORLD reg
 							where cdstco = 'WAM'
 						   minus
 							 select distinct trim(reg.cdcode)
-						   from zd00@SIHAM_PREP reg
+						   from zd00@SIHAM.WORLD reg
 							where cdstco = 'VNT'
 							)
 		and reg.nudoss = l_reg.nudoss
@@ -340,15 +342,15 @@ v_new_id				number(9) := 0;
 cursor cur_numero_compl is
  select distinct trim(reg.cdcode) as code_adr_num_compl
             , trim(l_reg.liblon) as ll_adr_num_compl
-         from zd00@SIHAM_PREP reg    -- reglementation
-            , zd01@SIHAM_PREP l_reg  -- libelle reglementation
+         from zd00@SIHAM.WORLD reg    -- reglementation
+            , zd01@SIHAM.WORLD l_reg  -- libelle reglementation
         where cdstco = 'WAN'    
         and reg.nudoss = l_reg.nudoss
         and trim(reg.cdcode) in 
 		(	-- code pas deja ixistant dans table livree
 		    select distinct trim(reg.cdcode) 
-			from zd00@SIHAM_PREP reg    -- reglementation
-				,zd01@SIHAM_PREP l_reg  -- libelle reglementation
+			from zd00@SIHAM.WORLD reg    -- reglementation
+				,zd01@SIHAM.WORLD l_reg  -- libelle reglementation
 			where cdstco = 'WAN'    
 			and reg.nudoss = l_reg.nudoss
 			minus 
@@ -371,7 +373,7 @@ BEGIN
            BEGIN
             v_nb_insert := v_nb_insert+1 ;
 			
-			select max(id)+1 into v_new_id 
+			select decode(max(id)+1,null,1, max(id)+1) into v_new_id 		-- v2.5 - 05/10/21 
 			from OSE.adresse_numero_compl;
 			
             insert into OSE.ADRESSE_NUMERO_COMPL(ID, CODE, LIBELLE)
@@ -463,10 +465,10 @@ cursor cur_structure_mere is
 		,substr(trim(l_uo.lboush),1,25)     as lc_uo
 		,trim(uo.idou00)					as code_uo_niveau_voulu --v1.9
 		from 
-			hr.ze00@SIHAM_PREP uo               -- uo 
-			,hr.ze01@SIHAM_PREP l_uo            -- libelles_uo    
-			,hr.ze0a@SIHAM_PREP h_situ          -- histo_situations
-			,hr.zev2@SIHAM_PREP rattach         -- rattachement u mixte
+			hr.ze00@SIHAM.WORLD uo               -- uo 
+			,hr.ze01@SIHAM.WORLD l_uo            -- libelles_uo    
+			,hr.ze0a@SIHAM.WORLD h_situ          -- histo_situations
+			,hr.zev2@SIHAM.WORLD rattach         -- rattachement u mixte
 		where trim(uo.idou00) = trim(v_structure_mere)
 			and uo.idos00 = 'HIE'
             and trunc(uo.dtef00) <= p_date_systeme
@@ -543,12 +545,12 @@ cursor cur_structure is
 		-- trim(UM_CODE_UO_NIVEAU_DESSUS(trim(uo_niv.idou00),2)) as uo_mere
 		,2										as niveau
 		from 
-			hr.ze00@SIHAM_PREP uo  			-- uo 
-			,hr.ze01@SIHAM_PREP l_uo  		-- libelles_uo	
-			,hr.ze0a@SIHAM_PREP h_situ 	 	-- histo_situations
-			,hr.zev2@SIHAM_PREP rattach 	 	-- rattachement u mixte
-			,hr.ze00@SIHAM_PREP uo_niv 		-- uo_niveau_voulu
-			,hr.ze01@SIHAM_PREP l_uo_niv		-- libelles_uo_niveau_voulu
+			hr.ze00@SIHAM.WORLD uo  			-- uo 
+			,hr.ze01@SIHAM.WORLD l_uo  		-- libelles_uo	
+			,hr.ze0a@SIHAM.WORLD h_situ 	 	-- histo_situations
+			,hr.zev2@SIHAM.WORLD rattach 	 	-- rattachement u mixte
+			,hr.ze00@SIHAM.WORLD uo_niv 		-- uo_niveau_voulu
+			,hr.ze01@SIHAM.WORLD l_uo_niv		-- libelles_uo_niveau_voulu
 		where uo.idos00 = 'HIE'
 			and trim(uo.idou00) not in (v_uo_a_exclure)
 			and OSE.UM_NIVEAU_UO(trim(uo_niv.idou00)) >= 3		-- composante/direction dans siahm au niveau 3
@@ -620,12 +622,12 @@ cursor cur_adr_structure is
 		,substr(trim(pays.libelle_court),1,30)	as pays_libelle					-- v2.3 - 28/05/2021
 		,row_number() over (partition by uo.source_code order by  str_adr.dtbg00 desc) as rnum
 	from OSE.UM_STRUCTURE uo
-		, hr.ze00@SIHAM_PREP str
-		, hr.ze0f@SIHAM_PREP str_adr
+		, hr.ze00@SIHAM.WORLD str
+		, hr.ze0f@SIHAM.WORLD str_adr
 		, ( select distinct str_tel.nudoss
 				--, trim(str_tel.txadr0) as type_tel, trim(str_tel.nbad00) as num_tel
 				,substr(listagg(trim(str_tel.nbad00),' - ') within group (order by trim(str_tel.txadr0)),1,20) as telephone
-			from hr.zef9@SIHAM_PREP str_tel
+			from hr.zef9@SIHAM.WORLD str_tel
 			where  str_tel.txadr0 in ('TPE','TPR','TPS',' PPE','PPR')
 			group by str_tel.nudoss
 		) str_tel
@@ -917,8 +919,8 @@ cursor cur_corps is
         ,reg.dtdva
         ,reg.dtfva 
         ,reg.teregx
-        from hr.zd00@SIHAM_PREP reg,        -- reglementation
-            hr.zd01@SIHAM_PREP lreg        -- libelle reglementation
+        from hr.zd00@SIHAM.WORLD reg,        -- reglementation
+            hr.zd01@SIHAM.WORLD lreg        -- libelle reglementation
         where
         -- corps
         reg.cdstco = 'HJV'
@@ -951,9 +953,9 @@ cursor cur_grade is
         ,case when UM_EXISTE_CORPS(trim(gr_car.corps)) = 0 then (select id from um_corps where source_code = 'NC')
             else UM_EXISTE_CORPS(trim(gr_car.corps))
         end as id_corps
-        from hr.zd00@SIHAM_PREP reg,        -- reglementation pour grades corps
-            hr.zd01@SIHAM_PREP lreg,        -- libelle reglementation
-            hr.zd63@SIHAM_PREP gr_car       -- caracteristiques du grade 
+        from hr.zd00@SIHAM.WORLD reg,        -- reglementation pour grades corps
+            hr.zd01@SIHAM.WORLD lreg,        -- libelle reglementation
+            hr.zd63@SIHAM.WORLD gr_car       -- caracteristiques du grade 
         where
         -- grades
         reg.cdstco = 'HJB'    
@@ -981,8 +983,8 @@ cursor cur_statut_pip is
 		else 
 			(select id from OSE.UM_CORPS where source_code = 'STSV')    -- non Titu Vac dans OSE
 		end as id_corps
-		from hr.zd00@SIHAM_PREP reg,        -- reglementation
-			hr.zd01@SIHAM_PREP lreg        -- libelle reglementation
+		from hr.zd00@SIHAM.WORLD reg,        -- reglementation
+			hr.zd01@SIHAM.WORLD lreg        -- libelle reglementation
         where
         reg.cdstco = 'HJ8'    
         --and reg.teregx = 'A' -- statut actif 
@@ -1002,8 +1004,8 @@ cursor cur_statut_pip is
         ,reg.dtfva 
         ,reg.teregx
 		,v_corps.id as id_corps
-        from hr.zd00@SIHAM_PREP reg,        -- reglementation
-            hr.zd01@SIHAM_PREP lreg,        -- libelle reglementation
+        from hr.zd00@SIHAM.WORLD reg,        -- reglementation
+            hr.zd01@SIHAM.WORLD lreg,        -- libelle reglementation
 			(select id, source_code 
 			from um_corps where source_code in ('STSP') ) v_corps
         where
@@ -1028,8 +1030,8 @@ cursor cur_statut_pip is
         ,reg.dtfva 
         ,reg.teregx
 		,v_corps.id as id_corps
-        from hr.zd00@SIHAM_PREP reg,        -- reglementation
-            hr.zd01@SIHAM_PREP lreg,        -- libelle reglementation
+        from hr.zd00@SIHAM.WORLD reg,        -- reglementation
+            hr.zd01@SIHAM.WORLD lreg,        -- libelle reglementation
 			(select id, source_code 
 			from um_corps where source_code in ('STSV') ) v_corps
         where

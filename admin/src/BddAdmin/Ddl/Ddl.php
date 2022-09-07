@@ -334,16 +334,25 @@ class Ddl implements \Iterator, \ArrayAccess
 
 
 
+    public function saveToString(): string
+    {
+        $data = $this->data;
+        asort($data);
+
+        $ddlString = "<?php\n\n//@" . "formatter:off\n\nreturn " . $this->arrayExport($data) . ";\n\n//@" . "formatter:on\n";
+
+        return $ddlString;
+    }
+
+
+
     /**
      * @param array  $ddl
      * @param string $filename
      */
     public function saveToFile(string $filename)
     {
-        $data = $this->data;
-        asort($data);
-
-        $this->writeArray($filename, $data);
+        file_put_contents($filename, $this->saveToString());
     }
 
 

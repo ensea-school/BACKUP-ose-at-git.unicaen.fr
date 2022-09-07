@@ -1,5 +1,4 @@
-CREATE
-OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE_SIHAM AS
+CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE_SIHAM AS
 SELECT 'P'                                                                                type,
        NULL                                                                               uo,
        intervenant_matricule                                                              matricule,

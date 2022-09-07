@@ -1,5 +1,4 @@
-CREATE
-OR REPLACE FORCE VIEW V_INDICATEUR_490 AS
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_490 AS
 SELECT i.id           intervenant_id,
        i.structure_id structure_id
 FROM intervenant i

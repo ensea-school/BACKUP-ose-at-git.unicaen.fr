@@ -1,5 +1,4 @@
-CREATE
-OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
+CREATE OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
 WITH hs AS (
   SELECT contrat_id, SUM(heures) "serviceTotal", MAX("libelleAutres") "libelleAutres" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
 )

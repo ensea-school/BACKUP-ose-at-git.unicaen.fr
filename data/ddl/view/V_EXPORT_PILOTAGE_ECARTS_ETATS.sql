@@ -1,5 +1,4 @@
-CREATE
-OR REPLACE FORCE VIEW V_EXPORT_PILOTAGE_ECARTS_ETATS AS
+CREATE OR REPLACE FORCE VIEW V_EXPORT_PILOTAGE_ECARTS_ETATS AS
 SELECT t3.annee_id                             annee_id,
        t3.annee_id || '-' || (t3.annee_id + 1) annee,
        t3.etat,

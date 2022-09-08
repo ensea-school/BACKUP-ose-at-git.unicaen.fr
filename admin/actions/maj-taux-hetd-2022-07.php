@@ -37,7 +37,7 @@ $vreps = [
         'th.histo_creation' => 'th.histo_modification',
     ],
     'V_ETAT_PAIEMENT'               => [
-        'OSE_FORMULE . GET_TAUX_HORAIRE_HETD(NVL(mep . date_mise_en_paiement, SYSDATE))' => 'a.taux_hetd',
+        'OSE_FORMULE.GET_TAUX_HORAIRE_HETD( NVL(mep.date_mise_en_paiement,SYSDATE) )' => 'a.taux_hetd',
     ],
     'V_EXPORT_PAIEMENT_WINPAIE'     => [
         'ose_formule.get_taux_horaire_hetd(nvl(t2.date_mise_en_paiement, sysdate))'  => '(select taux_hetd from annee ann where ann.id = i.annee_id)',

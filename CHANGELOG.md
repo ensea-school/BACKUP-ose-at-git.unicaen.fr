@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.2](#ose-192-06092022)
+[OSE 19.3](#ose-193-08092022)
 
 
 # OSE 20 (à venir)
@@ -15,9 +15,17 @@
 
 
 
+# OSE 19.3 (08/09/2022)
+
+## Corrections de bugs
+
+* Pb lié à la 19.2 : la vue V_ETAT_PAIEMENT n'était pas mise à jour correctement. 
+
+
+
 # OSE 19.2 (06/09/2022)
 
-## nouveautés
+## Nouveautés
 
 * Prise en compte du nouveau point d'indice valable à partir du 1er juillet 2022
 

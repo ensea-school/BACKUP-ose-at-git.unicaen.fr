@@ -118,8 +118,7 @@ FROM (SELECT c.*,
                JOIN etat_volume_horaire evh ON evh.code = 'valide'
                LEFT JOIN formule_resultat fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND
                                                 fr.etat_volume_horaire_id = evh.id
-               LEFT JOIN taux_horaire_hetd th
-                         ON a.date_debut BETWEEN th.histo_modification AND COALESCE(th.histo_destruction, sysdate)
+               LEFT JOIN taux_horaire_hetd    th ON th.valeur = OSE_FORMULE.GET_TAUX_HORAIRE_HETD(a.date_debut)
                LEFT JOIN hs ON hs.contrat_id = c.id
                LEFT JOIN contrat cp ON cp.id = c.contrat_id
       WHERE c.histo_destruction IS NULL) ct

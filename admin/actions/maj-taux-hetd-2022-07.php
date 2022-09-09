@@ -33,40 +33,42 @@ $bdd->exec($isql);
 
 $vreps = [
     'V_CONTRAT_MAIN'                => [
-        'c.histo_creation'  => 'a.date_debut',
-        'th.histo_creation' => 'th.histo_modification',
+        'left join taux_horaire_hetd( +)th[\n\(\= ._,a-zA-Z]*' => "LEFT JOIN taux_horaire_hetd    th ON th.valeur = OSE_FORMULE.GET_TAUX_HORAIRE_HETD(a.date_debut",
+        'th.histo_creation'                        => 'th.histo_modification',
     ],
     'V_ETAT_PAIEMENT'               => [
-        'OSE_FORMULE . GET_TAUX_HORAIRE_HETD(NVL(mep . date_mise_en_paiement, SYSDATE))' => 'a.taux_hetd',
+        'OSE_FORMULE.GET_TAUX_HORAIRE_HETD\( *NVL\( *mep.date_mise_en_paiement, *SYSDATE *\) *\)' => 'a.taux_hetd',
     ],
     'V_EXPORT_PAIEMENT_WINPAIE'     => [
-        'ose_formule.get_taux_horaire_hetd(nvl(t2.date_mise_en_paiement, sysdate))'  => '(select taux_hetd from annee ann where ann.id = i.annee_id)',
-        'OSE_FORMULE.GET_TAUX_HORAIRE_HETD( NVL(t2.date_mise_en_paiement,SYSDATE) )' => '(select taux_hetd from annee ann where ann.id = i.annee_id)',
-
+        'ose_formule.get_taux_horaire_hetd\( *nvl\( *t2.date_mise_en_paiement, *sysdate\) *\)' => '(select taux_hetd from annee ann where ann.id = i.annee_id)',
     ],
     'V_EXPORT_PAIEMENT_SIHAM'       => [
-        'ose_formule.get_taux_horaire_hetd(nvl(t2.date_mise_en_paiement, sysdate))' => '(select taux_hetd from annee ann where ann.id = i.annee_id)',
+        'ose_formule.get_taux_horaire_hetd\( *nvl\( *t2.date_mise_en_paiement, *sysdate\)\)' => '(select taux_hetd from annee ann where ann.id = i.annee_id)',
     ],
     'V_EXP_HETD_CENTRE_COUT'        => [
-        'OSE_FORMULE.GET_TAUX_HORAIRE_HETD( NVL(mep.date_mise_en_paiement,SYSDATE) )' => 'a.taux_hetd',
-        'OSE_FORMULE.GET_TAUX_HORAIRE_HETD( SYSDATE )'                                => '(select taux_hetd from annee ann where ann.id = annee_id)',
+        'OSE_FORMULE.GET_TAUX_HORAIRE_HETD\( *NVL\( *mep.date_mise_en_paiement, *SYSDATE *\) *\)' => 'a.taux_hetd',
+        'OSE_FORMULE.GET_TAUX_HORAIRE_HETD\( *SYSDATE *\)'                                        => '(select taux_hetd from annee ann where ann.id = annee_id)',
     ],
     'V_IMPUTATION_BUDGETAIRE_SIHAM' => [
-        'ose_formule.get_taux_horaire_hetd(nvl(mep.date_mise_en_paiement, sysdate))'  => 'a.taux_hetd',
-        'OSE_FORMULE.GET_TAUX_HORAIRE_HETD( NVL(mep.date_mise_en_paiement,SYSDATE) )' => 'a.taux_hetd',
+        'ose_formule.get_taux_horaire_hetd\( *nvl\( *mep.date_mise_en_paiement, *sysdate *\) *\)' => 'a.taux_hetd',
     ],
 ];
-
+$dir   = '/app/data/ddl/view/';
 
 foreach ($vreps as $view => $reps) {
-    $c->msg('Mise à jour de la vue ' . $view);
+
     $vcm = $bdd->view()->get($view);
 
+    $count = 0;
     if (isset($vcm[$view]['definition'])) {
         $vcm = $vcm[$view]['definition'];
         foreach ($reps as $s => $r) {
-            $vcm = str_ireplace($s, $r, $vcm);
+            $cnt = 0;
+            $vcm = preg_replace('/' . $s . '/si', $r, $vcm, -1, $cnt);
+            $count += $cnt;
         }
+
+        $c->msg('Mise à jour de la vue ' . $view.' : '.$count.' modification(s) apportée(s)');
         $bdd->exec($vcm);
     }
 }

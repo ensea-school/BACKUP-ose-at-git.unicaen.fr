@@ -1530,7 +1530,6 @@ return [
         'HEURES_POUR_SEUIL',
         'OBLIGATOIRE',
         'HEURES_POUR_SEUIL_HETD',
-        'DUREE_VIE',
     ],
     'TBL_PIECE_JOINTE_FOURNIE'       => [
         'ID',

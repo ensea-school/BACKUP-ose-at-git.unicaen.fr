@@ -33,18 +33,6 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'DUREE_VIE'              => [
-            'name'        => 'DUREE_VIE',
-            'type'        => 'int',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => FALSE,
-            'default'     => '1',
-            'position'    => 9,
-            'commentaire' => NULL,
-        ],
         'HEURES_POUR_SEUIL'      => [
             'name'        => 'HEURES_POUR_SEUIL',
             'type'        => 'float',

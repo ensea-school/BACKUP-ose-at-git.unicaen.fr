@@ -11,7 +11,7 @@ WITH i_h AS (
     JOIN volume_horaire       vh ON vh.service_id = s.id
                                 AND vh.type_volume_horaire_id = tvh.id
                                 AND vh.histo_destruction IS NULL
-    JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id -- Service sur l'établissement
+    JOIN element_pedagogique  ep ON ep.id = s.element_pedagogique_id -- Service sur l'établissement
   WHERE
     s.histo_destruction IS NULL
     /*@INTERVENANT_ID=s.intervenant_id*/
@@ -31,52 +31,49 @@ hetd AS (
   GROUP BY
     intervenant_id
 )
-SELECT i.annee_id                        annee_id,
-       i.code                            code_intervenant,
-       i.id                              intervenant_id,
-       tpj.id                            type_piece_jointe_id,
-       MAX(COALESCE(i_h.heures, 0))      heures_pour_seuil,
-       MAX(tpjs.obligatoire)             obligatoire,
-       MAX(COALESCE(hetd.total_hetd, 0)) heures_pour_seuil_hetd
-FROM intervenant i
-
-         LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id
-    AND d.histo_destruction IS NULL
-
-         JOIN type_piece_jointe_statut tpjs ON tpjs.statut_id = i.statut_id
-    AND tpjs.histo_destruction IS NULL
-    AND i.annee_id = tpjs.annee_id
-
-         JOIN type_piece_jointe tpj ON tpj.id = tpjs.type_piece_jointe_id
-    AND tpj.histo_destruction IS NULL
-
-         LEFT JOIN i_h ON i_h.intervenant_id = i.id
-         LEFT JOIN hetd ON hetd.intervenant_id = i.id
+SELECT
+  i.annee_id                        annee_id,
+  i.code                            code_intervenant,
+  i.id                              intervenant_id,
+  tpj.id                            type_piece_jointe_id,
+  MAX(COALESCE(i_h.heures, 0))      heures_pour_seuil,
+  MAX(tpjs.obligatoire)             obligatoire,
+  MAX(COALESCE(hetd.total_hetd, 0)) heures_pour_seuil_hetd,
+  MIN(tpjs.duree_vie)               duree_vie
+FROM
+            intervenant                 i
+  LEFT JOIN intervenant_dossier         d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
+       JOIN type_piece_jointe_statut tpjs ON tpjs.statut_id = i.statut_id AND tpjs.histo_destruction IS NULL AND i.annee_id = tpjs.annee_id
+       JOIN type_piece_jointe         tpj ON tpj.id = tpjs.type_piece_jointe_id AND tpj.histo_destruction IS NULL
+  LEFT JOIN                           i_h ON i_h.intervenant_id = i.id
+  LEFT JOIN                          hetd ON hetd.intervenant_id = i.id
 WHERE
-  -- Gestion de l'historique
-    i.histo_destruction IS NULL
-    /*@INTERVENANT_ID=i.id*/
-    /*@ANNEE_ID=i.annee_id*/
+  i.histo_destruction IS NULL
+  /*@INTERVENANT_ID=i.id*/
+  /*@ANNEE_ID=i.annee_id*/
 
   -- Seuil heure soit en HETD soit en heure ou PJ obligatoire meme avec des heures non payables
-  AND (COALESCE(tpjs.seuil_hetd, 0) = 0
+  AND (
+       COALESCE(tpjs.seuil_hetd, 0) = 0
     OR (COALESCE(tpjs.type_heure_hetd, 0) = 0 AND COALESCE(i_h.heures, 0) > COALESCE(tpjs.seuil_hetd, -1))
     OR (tpjs.type_heure_hetd = 1 AND COALESCE(hetd.total_hetd, 0) > COALESCE(tpjs.seuil_hetd, -1))
-    OR (COALESCE(i_h.heures_non_payables, 0) > 0 AND tpjs.obligatoire_hnp = 1))
-
+    OR (COALESCE(i_h.heures_non_payables, 0) > 0 AND tpjs.obligatoire_hnp = 1)
+  )
 
   -- Le RIB n'est demandé QUE s'il est différent!!
   AND CASE
-          WHEN tpjs.changement_rib = 0 OR d.id IS NULL THEN 1
-          ELSE CASE
-                   WHEN replace(i.bic, ' ', '') = replace(d.bic, ' ', '') AND
-                        replace(i.iban, ' ', '') = replace(d.iban, ' ', '') THEN 0
-                   ELSE 1 END
-          END = 1
+    WHEN tpjs.changement_rib = 0 OR d.id IS NULL
+      THEN 1
+      ELSE CASE WHEN
+            replace(i.bic, ' ', '') = replace(d.bic, ' ', '')
+        AND replace(i.iban, ' ', '') = replace(d.iban, ' ', '')
+      THEN 0 ELSE 1 END
+  END = 1
 
   -- Filtre FC
   AND (tpjs.fc = 0 OR i_h.fc > 0)
-GROUP BY i.annee_id,
-         i.id,
-         i.code,
-         tpj.id
+GROUP BY
+  i.annee_id,
+  i.id,
+  i.code,
+  tpj.id

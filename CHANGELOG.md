@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.1](#ose-191-21072022)
+[OSE 19.3](#ose-193-08092022)
 
 
 # OSE 20 (à venir)
@@ -12,6 +12,22 @@
 ## Notes de mise à jour
 
 * Supprimer la ligne faisant référence à TBL_NOEUD dans Administration/Synchronisation/Tables, table NOEUD, champ "Traitements postérieurs : à exécuter après la synchro".
+
+
+
+# OSE 19.3 (08/09/2022)
+
+## Corrections de bugs
+
+* Pb lié à la 19.2 : la vue V_ETAT_PAIEMENT n'était pas mise à jour correctement. 
+
+
+
+# OSE 19.2 (06/09/2022)
+
+## Nouveautés
+
+* Prise en compte du nouveau point d'indice valable à partir du 1er juillet 2022
 
 
 

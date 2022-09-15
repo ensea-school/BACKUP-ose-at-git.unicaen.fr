@@ -421,7 +421,7 @@ return [
         [
             'ID'                 => 3,
             'VALEUR'             => 42.86,
-            'HISTO_CREATION'     => '2022-07-01 00:00:00',
+            'HISTO_CREATION'     => '2022-09-01 00:00:00',
             'HISTO_MODIFICATION' => '2022-07-01 00:00:00',
         ],
     ],

@@ -538,6 +538,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_RENNES2 AS
   BEGIN
     feuille.delete;
 
+    -- si l'année est antérieure à 2022/2023 alors on utilise la formule de l'Université de Caen
+    IF ose_formule.intervenant.annee_id < 2022 THEN
+      FORMULE_UNICAEN.CALCUL_RESULTAT;
+      RETURN;
+    END IF;
+
     IF ose_formule.intervenant.depassement_service_du_sans_hc THEN -- HC traitées comme du service
       ose_formule.intervenant.service_du := ose_formule.intervenant.heures_service_statutaire + ose_formule.intervenant.heures_service_modifie;
     END IF;

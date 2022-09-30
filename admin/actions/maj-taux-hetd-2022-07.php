@@ -33,7 +33,7 @@ $bdd->exec($isql);
 
 $vreps = [
     'V_CONTRAT_MAIN'                => [
-        'taux_horaire_hetd( +)th[\n\( ._,a-zA-Z]*' => "taux_horaire_hetd    th ON th.valeur = OSE_FORMULE.GET_TAUX_HORAIRE_HETD(a.date_debut",
+        'left join taux_horaire_hetd( +)th[\n\(\= ._,a-zA-Z]*' => "LEFT JOIN taux_horaire_hetd    th ON th.valeur = OSE_FORMULE.GET_TAUX_HORAIRE_HETD(a.date_debut",
         'th.histo_creation'                        => 'th.histo_modification',
     ],
     'V_ETAT_PAIEMENT'               => [
@@ -56,14 +56,19 @@ $vreps = [
 $dir   = '/app/data/ddl/view/';
 
 foreach ($vreps as $view => $reps) {
-    $c->msg('Mise à jour de la vue ' . $view);
+
     $vcm = $bdd->view()->get($view);
 
+    $count = 0;
     if (isset($vcm[$view]['definition'])) {
         $vcm = $vcm[$view]['definition'];
         foreach ($reps as $s => $r) {
-            $vcm = preg_replace('/' . $s . '/si', $r, $vcm);
+            $cnt = 0;
+            $vcm = preg_replace('/' . $s . '/si', $r, $vcm, -1, $cnt);
+            $count += $cnt;
         }
+
+        $c->msg('Mise à jour de la vue ' . $view.' : '.$count.' modification(s) apportée(s)');
         $bdd->exec($vcm);
     }
 }

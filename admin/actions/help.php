@@ -27,8 +27,9 @@ $actions    = [
     "update-employeur"          => "Mise à jour de la table employeur à partir d'une source (par défault source INSEE)",
     "build-synchronisation"     => "Reconstruction des vues différentielles et des procédures de mise à jour",
     "fichiers-vers-filesystem"  => "Déplace le contenu des fichiers (table FICHIER) vers le système de fichiers",
-    "save-bdd"                  => "Sauvegarde une base de données dans un répertoire du système de fichiers",
-    "load-bdd"                  => "Charge une base de données à partir d'un répertoire du système de fichiers",
+    "save-bdd <Fichier cible>"  => "Sauvegarde une base de données dans un fichier"
+        . "\n\t--fichiers=n : Ignore le contenu des fichiers stockée dans la table FICHIER",
+    "load-bdd <Fichier source>" => "Charge une base de données à partir d'un fichier de sauvegarde",
 ];
 $actionsDev = [
     "update-ddl"            => "Mise à jour du fichier de définition de la base de données à partir de cette dernière",

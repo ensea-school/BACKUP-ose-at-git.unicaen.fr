@@ -3,6 +3,7 @@
 namespace Application\Controller\OffreFormation;
 
 use Application\Controller\AbstractController;
+use Application\Entity\Db\CheminPedagogique;
 use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
@@ -10,6 +11,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeFormation;
 use Application\Form\OffreFormation\TauxMixite\Traits\TauxMixiteFormAwareTrait;
 use Application\Form\OffreFormation\Traits\EtapeSaisieAwareTrait;
+use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
@@ -27,6 +29,7 @@ class EtapeController extends AbstractController
     use NiveauEtapeServiceAwareTrait;
     use EtapeSaisieAwareTrait;
     use TauxMixiteFormAwareTrait;
+    use CheminPedagogiqueServiceAwareTrait;
 
 
     protected function saisirAction()
@@ -73,6 +76,30 @@ class EtapeController extends AbstractController
     }
 
 
+
+    public function restaurerAction()
+    {
+        if (!($etape = $this->getEvent()->getParam('etape'))) {
+            throw new \RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
+        }
+
+        $etape->dehistoriser();
+        $this->getServiceEtape()->save($etape);
+
+        $elems = $this->em()->getRepository(ElementPedagogique::class)->findBy([
+            'etape'            => $etape,
+            'histoDestruction' => null,
+        ]);
+        foreach ($elems as $elem) {
+            $entity = $this->getServiceCheminPedagogique()->newEntity();
+            /* @see CheminPedagogique $entity */
+            $entity->setEtape($etape);
+            $entity->setElementPedagogique($elem);
+            $this->getServiceCheminPedagogique()->save($entity);
+        }
+
+        return $this->redirect()->toRoute('of', ['etape' => $etape->getId()], [], true);
+    }
 
     public function voirAction()
     {

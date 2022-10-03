@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.0](#ose-19-12072022)
+[OSE 19.3](#ose-193-08092022)
 
 
 # OSE 20 (à venir)
@@ -9,11 +9,45 @@
 
 * Les modèles de contrats de travail sont maintenant gérés comme n'importe quel autre état de sortie
 
+## Notes de mise à jour
+
+* Supprimer la ligne faisant référence à TBL_NOEUD dans Administration/Synchronisation/Tables, table NOEUD, champ "Traitements postérieurs : à exécuter après la synchro".
 
 
 
+# OSE 19.3 (08/09/2022)
 
-# OSE 19 (12/07/2022)
+## Corrections de bugs
+
+* Pb lié à la 19.2 : la vue V_ETAT_PAIEMENT n'était pas mise à jour correctement. 
+
+
+
+# OSE 19.2 (06/09/2022)
+
+## Nouveautés
+
+* Prise en compte du nouveau point d'indice valable à partir du 1er juillet 2022
+
+
+
+# OSE 19.1 (21/07/2022)
+
+## nouveautés
+
+* Formule de calcul de Picardie
+* Nouvel état de sortie pour les écarts des heures complémentaires, maintenant personnalisable (#45807)
+* Possibilité de faire une PEC ou REN (SIHAM) l'année universitaire N-1
+* Nouvel état de sortie pour télécharger une synthèse des privilèges par rôle (#45629)
+* Nouveau paramètre du module export RH (SIHAM) permettant de synchroniser le code intervenant avec le matricule SIHAM lors d'une PEC ou d'un renouvellement
+
+## Corrections de bugs
+
+* La synchronisation via la ligne de commande ne fonctionnait plus. C'est rétabli
+
+
+
+# OSE 19.0 (12/07/2022)
 
 ## Nouveautés
 

@@ -67,6 +67,9 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                     <div class="col-md-4">
                         <?= $this->formControlGroup($form->get('tauxChargesPatronales')); ?>
                     </div>
+                    <div class="col-md-4">
+                        <?= $this->formControlGroup($form->get('tauxChargesTTC')); ?>
+                    </div>
                 </div>
                 <div class="row">
                     <?php for ($i = 1; $i <= 4; $i++): if ($form->has('codesCorresp' . $i)): ?>

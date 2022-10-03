@@ -27,39 +27,41 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     use EntityManagerAwareTrait;
 
 
-    private ?string $code                               = null;
+    private ?string $code                          = null;
 
-    private ?string $libelle                            = null;
+    private ?string $libelle                       = null;
 
-    private int     $ordre                              = 9999;
+    private int     $ordre                         = 9999;
 
-    private bool    $prioritaireIndicateurs             = false;
+    private bool    $prioritaireIndicateurs        = false;
 
-    private float   $serviceStatutaire                  = 0;
+    private float   $serviceStatutaire             = 0;
 
-    private bool    $depassementServiceDuSansHC         = false;
+    private bool    $depassementServiceDuSansHC    = false;
 
-    private float   $tauxChargesPatronales              = 1.0;
+    private float   $tauxChargesPatronales         = 1.0;
 
-    private bool    $dossier                            = true;
+    private float   $tauxChargesTTC                = 1.0;
 
-    private bool    $dossierVisualisation               = true;
+    private bool    $dossier                       = true;
 
-    private bool    $dossierEdition                     = true;
+    private bool    $dossierVisualisation          = true;
 
-    private bool    $dossierSelectionnable              = true;
+    private bool    $dossierEdition                = true;
 
-    private bool    $dossierIdentiteComplementaire      = true;
+    private bool    $dossierSelectionnable         = true;
 
-    private bool    $dossierContact                     = true;
+    private bool    $dossierIdentiteComplementaire = true;
 
-    private bool    $dossierTelPerso                    = false;
+    private bool    $dossierContact                = true;
 
-    private bool    $dossierEmailPerso                  = false;
+    private bool    $dossierTelPerso               = false;
 
-    private bool    $dossierAdresse                     = true;
+    private bool    $dossierEmailPerso             = false;
 
-    private bool    $dossierBanque                      = true;
+    private bool    $dossierAdresse                = true;
+
+    private bool    $dossierBanque                 = true;
 
     private bool    $dossierInsee                       = true;
 
@@ -320,6 +322,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setTauxChargesPatronales(float $tauxChargesPatronales): Statut
     {
         $this->tauxChargesPatronales = $tauxChargesPatronales;
+
+        return $this;
+    }
+
+
+
+    public function getTauxChargesTTC(): float
+    {
+        return $this->tauxChargesTTC;
+    }
+
+
+
+    public function setTauxChargesTTC(float $tauxChargesTTC): Statut
+    {
+        $this->tauxChargesTTC = $tauxChargesTTC;
 
         return $this;
     }

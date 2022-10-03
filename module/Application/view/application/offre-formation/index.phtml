@@ -77,9 +77,10 @@ if ($structure) {
 }
 $this->headTitle()->append("Offre de formation");
 
-$canExport = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV)) && count($elements);
-$canViewEtape = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
+$canExport      = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV)) && count($elements);
+$canViewEtape   = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
 $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
+$canEditEtape   = $this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION);
 $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELEMENT_SYNCHRONISATION));
 ?>
 <style>
@@ -211,6 +212,10 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
         <?php else: ?>
 
             <!---------------- Champ de recherche d'un élément pédagogique --------------->
+            <?php if ($canEditEtape && $compl = $etape && $etape->estHistorise()):
+                echo "<br />" . $this->tag('a', ['class' => 'btn btn-primary', 'href' => $this->url('of/etape/restaurer', ['etape' => $etape->getId()])])->html('Restaurer la formation');
+            endif; ?>
+
             <div class="element-rech panel panel-default">
                 <div class="panel-heading" style="margin-bottom:1em">
                     <?php $compl = $etape ? "de la formation <strong>$etape</strong>" : "toutes formations confondues"; ?>
@@ -273,6 +278,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                     </tr>
                     </thead>
                     <tbody>
+
                     <?php foreach ($elements as $ep): /* @var $ep \Application\Entity\Db\ElementPedagogique */ ?>
                         <tr id="<?= $ep->getId() ?>">
                             <td><?= $ep->getEtape()->getNiveauToString() ?></td>

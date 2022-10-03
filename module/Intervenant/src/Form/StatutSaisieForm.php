@@ -25,6 +25,7 @@ class StatutSaisieForm extends AbstractForm
             'serviceStatutaire'             => 'Nombre d\'heures de service statutaire',
             'depassementServiceDuSansHC'    => 'Le dépassement du service statutaire n\'occasionne aucune heure complémentaire',
             'tauxChargesPatronales'         => 'Taux de charges patronales',
+            'tauxChargesTTC'                => 'Taux de charges TTC',
             'dossier'                       => '',
             'servicePrevu'                  => 'Prévisionnel',
             'serviceRealise'                => 'Réalisé',
@@ -123,6 +124,25 @@ class StatutSaisieForm extends AbstractForm
                 'setter' => function (Statut $statut, $value, string $name) {
                     $taux = $value / 100;
                     $statut->setTauxChargesPatronales($taux);
+                },
+            ],
+        ]]);
+
+        $this->spec(['tauxChargesTTC' => [
+            'type'       => 'Text',
+            'name'       => 'tauxChargesTTC',
+            'attributes' => [
+                'pattern' => '[0-9]*',
+            ],
+            'hydrator'   => [
+                'getter' => function (Statut $statut, string $name) {
+                    $taux = $statut->getTauxChargesTTC();
+
+                    return $taux * 100;
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $taux = $value / 100;
+                    $statut->setTauxChargesTTC($taux);
                 },
             ],
         ]]);
@@ -381,6 +401,7 @@ class StatutSaisieForm extends AbstractForm
         $this->addSubmit();
         $this->get('serviceStatutaire')->setOption('suffix', 'HETD');
         $this->get('tauxChargesPatronales')->setOption('suffix', '%');
+        $this->get('tauxChargesTTC')->setOption('suffix', '%');
         $this->get('conseilRestreintDureeVie')->setOption('suffix', 'an(s)');
         $this->get('conseilAcademiqueDureeVie')->setOption('suffix', 'an(s)');
         $this->setLabels($labels);

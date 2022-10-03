@@ -271,7 +271,7 @@ choix : tout le monde devra tout suivre.
 Certaines nomenclatures, par nécessairement liées à l'offre de formation, pourront être récupérées de Pégase.
 D'autres ne sont pas synchronisables et ne sont présentes que dans OSE.
 
-### INTERVENANT
+### PEGASE_INTERVENANT
 
 Depuis Pégase, il peut être nécessaire de récupérer la liste des étudiants, en particulier si vous souhaitez établir des contrats étudiants.
 Ces étudiants seront traités dans OSE comme étant des intervenants ayant un statut spécifique (étudiant, donc).
@@ -321,9 +321,11 @@ Les données nécessaires sont les suivantes :
 | VALIDITE_DEBUT             | DATE     |          | Oui      | Date de début de validité (NULL = depuis toujours)                          |
 | VALIDITE_FIN               | DATE     |          | Oui      | Date de fin   de validité (NULL = pas d'expiration)                         |
 
-### ETABLISSEMENT
+### PEGASE_ETABLISSEMENT
 
-Liste des établissements utilisables dans OSE
+Liste des établissements utilisables dans OSE.
+
+Données présentes dans Pégase ? ==> à étudier.
 
 | Colonne       | Type      | Longueur | Nullable | Commentaire     |
 |---------------|-----------|----------|----------|-----------------|

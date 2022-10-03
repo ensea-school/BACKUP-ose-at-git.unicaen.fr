@@ -8,7 +8,7 @@ Elle sera mise à jour au fur et à mesure de l'évolution des développements p
 
 Le connecteur sera composé de deux parties :
 
-- la première partie sera chargée d'extraire les données de Pégase, selon une tyechnique encore à définir. Puis ces données seront enregistrées dans des tables
+- la première partie sera chargée d'extraire les données de Pégase, selon une technique encore à définir. Puis ces données seront enregistrées dans des tables
   tampon situées sur la base de données OSE.
 - la deuxième partie sera contituée des vues sources. Ces dernières vont exploiter les tables tampon pour présenter les données au mécanisme de synchronisation
   de l'application, qui se chargera des modifications effectives en BDD.
@@ -111,7 +111,7 @@ Contrainte d'unicité : [SOURCE_CODE]
 
 `ORDRE` est utilisée pour le tri.
 
-`PERTINENCE_NIVEAU` sert à préciser si les étapes qui en dépendant delèvent de formations pluriannuelles (License, Master), ou bien si le niveau n'a pas de
+`PERTINENCE_NIVEAU` sert à préciser si les étapes qui en dépendant relèvent de formations pluriannuelles (License, Master), ou bien si le niveau n'a pas de
 sens (DU, etc.)
 
 Exemples de groupes de types de formations : License, Master, Doctorat, DU.
@@ -127,7 +127,6 @@ Idem, mais à un niveau plus fin.
 |Z_GROUPE_ID       | NUMBER   |          | Oui      | ==> GROUPE_TYPE_FORMATION.SOURCE_CODE |
 |LIBELLE_COURT     | VARCHAR2 | 15       | Non      |                                       |
 |LIBELLE_LONG      | VARCHAR2 | 80       | Non      |                                       |
-|SERVICE_STATUTAIRE| NUMBER   | 1        | Non      | 1 ou 0 (bool)                         |
 
 Contrainte d'unicité : [SOURCE_CODE]
 
@@ -147,9 +146,7 @@ Les étapes matérialisent des années de formations. Exemple : la L1 de Chimie 
 | LIBELLE                  | VARCHAR2 | 200      | Non      |                                     |
 | Z_TYPE_FORMATION_ID      | NUMBER   |          | Non      | ==> TYPE_FORMATION.SOURCE_CODE      |
 | Z_STRUCTURE_ID           | NUMBER   |          | Non      | ==> STRUCTURE.SOURCE_CODE           |
-| Z_DOMAINE_FONCTIONNEL_ID | NUMBER   |          | Non      | ==> DOMAINE_FONCTIONNEL.SOURCE_CODE |
 | NIVEAU                   | NUMBER   |          | Oui      |                                     |
-| SPECIFIQUE_ECHANGES      | NUMBER   | 1        | Non      | 1 ou 0 (bool)                       |
 | EFFECTIF_FI              | NUMBER   |          | Oui      |                                     |
 | EFFECTIF_FA              | NUMBER   |          | Oui      |                                     |
 | EFFECTIF_FC              | NUMBER   |          | Oui      |                                     |
@@ -158,7 +155,6 @@ Contrainte d'unicité : [SOURCE_CODE,ANNEE_ID]
 
 `Z_STRUCTURE_ID` structure (généralement une composante) chargés de gérer l'étape et tout ce qui lui est associé
 `NIVEAU` devra être renseigné si l'étape relève d'un groupe de type de formation avec `PERTINENCE_NIVEAU` à 1.
-`SPECIFIQUE_ECHANGES` à 1 si l'étape est liés aux échanges d'étudiants internationaux (Erasmus)
 `EFFECTIF_%` Nombre d'étudiants inscrits, ventilés en FI, FA et FC. NULL si l'information n'est pas connue
 
 ### Table PEGASE_ELEMENT_PEDAGOGIQUE
@@ -308,16 +304,6 @@ Les données nécessaires sont les suivantes :
 | ADRESSE_CODE_POSTAL        | VARCHAR2 | 15       | Oui      |                                                                             |
 | ADRESSE_COMMUNE            | VARCHAR2 | 50       | Oui      |                                                                             |
 | Z_ADRESSE_PAYS_ID          | VARCHAR2 | 100      | Oui      | ==> PAYS.SOURCE_CODE                                                        |
-| NUMERO_INSEE               | VARCHAR2 | 20       | Oui      |                                                                             |
-| NUMERO_INSEE_PROVISOIRE    | NUMBER   |          | Non      | Flag (1 ou 0)                                                               |
-| IBAN                       | VARCHAR2 | 50       | Oui      |                                                                             |
-| BIC                        | VARCHAR2 | 20       | Oui      |                                                                             |
-| RIB_HORS_SEPA              | NUMBER   |          | Non      | Flag (1 ou 0)                                                               |
-| AUTRE_1                    | VARCHAR2 | 1000     | Oui      |                                                                             |
-| AUTRE_2                    | VARCHAR2 | 1000     | Oui      |                                                                             |
-| AUTRE_3                    | VARCHAR2 | 1000     | Oui      |                                                                             |
-| AUTRE_4                    | VARCHAR2 | 1000     | Oui      |                                                                             |
-| AUTRE_5                    | VARCHAR2 | 1000     | Oui      |                                                                             |
 | VALIDITE_DEBUT             | DATE     |          | Oui      | Date de début de validité (NULL = depuis toujours)                          |
 | VALIDITE_FIN               | DATE     |          | Oui      | Date de fin   de validité (NULL = pas d'expiration)                         |
 

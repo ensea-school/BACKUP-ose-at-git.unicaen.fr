@@ -4,6 +4,7 @@ namespace Application\Form\modulateur;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
+use Application\Service\Traits\TypeModulateurStructureServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;

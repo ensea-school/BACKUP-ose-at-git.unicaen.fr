@@ -3,6 +3,7 @@
 namespace Application\Form\modulateur;
 
 use Application\Form\AbstractForm;
+use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use Application\Filter\FloatFromString;

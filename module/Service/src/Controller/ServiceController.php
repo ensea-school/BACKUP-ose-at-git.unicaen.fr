@@ -72,9 +72,10 @@ class ServiceController extends AbstractController
     {
         $this->initFilters();
 
-        $annee  = $this->getServiceContext()->getAnnee();
-        $action = $this->getRequest()->getQuery('action', null);
-        $tri    = ('trier' == $action) ? $this->getRequest()->getQuery('tri', null) : null;
+        $annee   = $this->getServiceContext()->getAnnee();
+        $action  = $this->getRequest()->getQuery('action', null);
+        $element = $this->getRequest()->getQuery('element-pedagogique', null);
+        $tri     = ('trier' == $action) ? $this->getRequest()->getQuery('tri', null) : null;
 
         $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $viewModel        = new ViewModel();
@@ -87,6 +88,13 @@ class ServiceController extends AbstractController
         $viewModel->addChild($rechercheViewModel, 'recherche');
 
         $recherche = $this->getServiceRecherche()->loadRecherche();
+        if ($recherche->getEtape() != null && $recherche->getStructureEns() != null) {
+            if (isset($element['element-liste']) && $element['element-liste'] != null) {
+                $recherche->setElementPedagogique($this->getServiceElementPedagogique()->get($element['element-liste']));
+            } else {
+                $recherche->setElementPedagogique(null);
+            }
+        }
 
         /* Préparation et affichage */
         if ('afficher' === $action) {
@@ -107,9 +115,10 @@ class ServiceController extends AbstractController
 
     public function resumeAction()
     {
-        $annee  = $this->getServiceContext()->getAnnee();
-        $action = $this->getRequest()->getQuery('action', null);
-        $tri    = null;
+        $annee   = $this->getServiceContext()->getAnnee();
+        $action  = $this->getRequest()->getQuery('action', null);
+        $tri     = null;
+        $element = $this->getRequest()->getQuery('element-pedagogique', null);
         if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
 
 
@@ -122,6 +131,14 @@ class ServiceController extends AbstractController
         $params['action'] = 'recherche';
         $listeViewModel   = $this->forward()->dispatch(ServiceController::class, $params);
         $viewModel->addChild($listeViewModel, 'recherche');
+
+        if ($recherche->getEtape() != null && $recherche->getStructureEns() != null) {
+            if (isset($element['element-liste']) && $element['element-liste'] != null) {
+                $recherche->setElementPedagogique($this->getServiceElementPedagogique()->get($element['element-liste']));
+            } else {
+                $recherche->setElementPedagogique(null);
+            }
+        }
 
         if ('afficher' == $action || 'trier' == $action) {
             $params = [

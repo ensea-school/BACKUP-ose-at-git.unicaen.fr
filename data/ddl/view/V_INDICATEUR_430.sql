@@ -3,22 +3,22 @@ SELECT
   w.intervenant_id,
   w.structure_id
 FROM
-	intervenant i
-	JOIN tbl_workflow w ON w.intervenant_id = i.id
-	JOIN (
+  intervenant i
+  JOIN tbl_workflow w ON w.intervenant_id = i.id
+  JOIN (
     SELECT DISTINCT
       c.intervenant_id,
       c.structure_id
     FROM
-    	contrat c
+      contrat c
     WHERE
       c.type_contrat_id = 1 --a déjà un contrat de type 'CONTRAT'
       AND c.histo_destruction IS NULL
   ) hc ON hc.intervenant_id = i.id
-	LEFT JOIN contrat c ON c.intervenant_id = i.id AND c.structure_id = w.structure_id AND c.histo_destruction IS NULL
+  LEFT JOIN contrat c ON c.intervenant_id = i.id AND c.structure_id = w.structure_id AND c.histo_destruction IS NULL
 WHERE
   w.atteignable = 1
   AND w.etape_code = 'CONTRAT'
   AND w.objectif > 0
   AND w.realisation < w.objectif
-  AND c.id IS NULL
+  AND c.id IS NULL;

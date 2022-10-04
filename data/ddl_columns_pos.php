@@ -1337,6 +1337,8 @@ return [
         'REFERENTIEL_REALISE',
         'REFERENTIEL_REALISE_EDITION',
         'REFERENTIEL_REALISE_VISU',
+        'CONTRAT_ETAT_SORTIE_ID',
+        'TAUX_CHARGES_TTC',
     ],
     'STRUCTURE'                      => [
         'ID',

@@ -21,4 +21,4 @@ WHERE
   AND w.etape_code = 'CONTRAT'
   AND w.objectif > 0
   AND w.realisation < w.objectif
-  AND c.id IS NULL;
+  AND c.id IS NULL

@@ -1,5 +1,4 @@
-CREATE
-OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
+CREATE OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
 WITH hs AS (
   SELECT contrat_id, SUM(heures) "serviceTotal", MAX("libelleAutres") "libelleAutres" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
 )
@@ -77,8 +76,8 @@ FROM (SELECT c.*,
                  )                                                                               "adresse",
              COALESCE(d.numero_insee, i.numero_insee)                                            "numInsee",
              si.libelle                                                                          "statut",
-             replace(ltrim(to_char(COALESCE(c.total_hetd, fr.total, 0), '999999.00')), '.', ',') "totalHETD",
-             replace(ltrim(to_char(COALESCE(th.valeur, 0), '999999.00')), '.', ',')              "tauxHoraireValeur",
+             REPLACE(ltrim(to_char(COALESCE(c.total_hetd, fr.total, 0), '999999.00')), '.', ',') "totalHETD",
+             REPLACE(ltrim(to_char(COALESCE(th.valeur, 0), '999999.00')), '.', ',')              "tauxHoraireValeur",
              COALESCE(to_char(th.histo_modification, 'dd/mm/YYYY'), 'TAUX INTROUVABLE')              "tauxHoraireDate",
              to_char(COALESCE(v.histo_creation, a.date_debut), 'dd/mm/YYYY')                 "dateSignature",
              CASE
@@ -87,7 +86,7 @@ FROM (SELECT c.*,
              CASE
                  WHEN s.aff_adresse_contrat = 1 THEN
                          ' signé à l''adresse suivante :' || chr(13) || chr(10) ||
-                         s.libelle_court || ' - ' || replace(ose_divers.formatted_adresse(
+                         s.libelle_court || ' - ' || REPLACE(ose_divers.formatted_adresse(
                                                                      s.adresse_precisions, s.adresse_lieu_dit,
                                                                      s.adresse_numero, s.adresse_numero_compl_id,
                                                                      s.adresse_voirie_id, s.adresse_voie,
@@ -95,7 +94,7 @@ FROM (SELECT c.*,
                                                                      s.adresse_pays_id
                                                                  ), chr(13), ' - ')
                  ELSE '' END                                                                     "exemplaire2",
-             replace(ltrim(to_char(COALESCE(hs."serviceTotal", 0), '999999.00')), '.', ',')      "serviceTotal",
+             REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal", 0), '999999.00')), '.', ',')      "serviceTotal",
              CASE
                  WHEN hs."libelleAutres" IS NOT NULL
                      THEN '*Dont type(s) intervention(s) : ' || hs."libelleAutres" END           "legendeAutresHeures",
@@ -111,7 +110,7 @@ FROM (SELECT c.*,
                JOIN intervenant i ON i.id = c.intervenant_id
                JOIN annee a ON a.id = i.annee_id
                JOIN statut si ON si.id = i.statut_id
-               JOIN structure s ON s.id = c.structure_id
+               JOIN STRUCTURE s ON s.id = c.structure_id
                LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
                JOIN civilite civ ON civ.id = COALESCE(d.civilite_id, i.civilite_id)
                LEFT JOIN validation v ON v.id = c.validation_id AND v.histo_destruction IS NULL

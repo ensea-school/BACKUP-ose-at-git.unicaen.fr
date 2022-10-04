@@ -1,5 +1,4 @@
-CREATE
-OR REPLACE FORCE VIEW V_HETD_PREV_VAL_STRUCT AS
+CREATE VIEW V_HETD_PREV_VAL_STRUCT AS
 SELECT annee_id,
        structure_id,
        SUM(heures) heures

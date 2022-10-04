@@ -97,7 +97,7 @@ class ServiceController extends AbstractController
         $canAddService = Privileges::ENSEIGNEMENT_PREVU_EDITION || Privileges::ENSEIGNEMENT_REALISE_EDITION;
 
         $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
-        $element             = $this->getRequest()->getQuery('element-pedagogique', null); // ne pas afficher par défaut, sauf si demandé explicitement
+        $element             = $this->getRequest()->getQuery('element-pedagogique', null);
         $params             = $this->getEvent()->getRouteMatch()->getParams();
         $params['action']   = 'recherche';
         $rechercheViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
@@ -111,6 +111,7 @@ class ServiceController extends AbstractController
                 $recherche->setElementPedagogique(null);
             }
         }
+
         /* Préparation et affichage */
         if ('afficher' === $action) {
             $services = $this->getProcessusService()->getServices(null, $recherche);
@@ -227,6 +228,9 @@ class ServiceController extends AbstractController
         $annee         = $this->getServiceContext()->getAnnee();
         $action        = $this->getRequest()->getQuery('action', null);
         $tri           = null;
+        $element             = $this->getRequest()->getQuery('element-pedagogique', null);
+
+
         if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
 
         if (!$intervenant) {

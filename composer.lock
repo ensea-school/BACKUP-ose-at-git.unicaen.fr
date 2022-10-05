@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de42e8e9ea39b40d7bff446f23e2aa50",
+    "content-hash": "3cdb192ce6dc9a717a2a1026c56c6be7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7123,11 +7123,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "dev-ll-php8",
+            "version": "7.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "76717e9df60a08e84afd550a91e3eab21e7667c7"
+                "reference": "b2d681c1c664564d52d561014255b9fd4feccf4c"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7145,7 +7145,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2022-07-26T12:51:39+00:00"
+            "time": "2022-10-04T15:11:18+00:00"
         },
         {
             "name": "unicaen/console",
@@ -8686,7 +8686,6 @@
     "stability-flags": {
         "unicaen/app": 20,
         "unicaen/auth": 20,
-        "unicaen/code": 20,
         "unicaen/import": 20,
         "unicaen/tbl": 20,
         "laminas/laminas-cache-storage-adapter-memory": 20,

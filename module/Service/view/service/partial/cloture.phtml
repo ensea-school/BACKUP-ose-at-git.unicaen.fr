@@ -5,11 +5,10 @@ use Application\Provider\Privilege\Privileges;
 /**
  * @var $this               \Application\View\Renderer\PhpRenderer
  * @var $cloture            \Application\Entity\Db\Validation|null
- * @var $role               \Application\Acl\Role
  * @var $bottom             boolean
  */
 
-$isSelf    = $role->getIntervenant() == $cloture->getIntervenant();
+$isSelf    = $this->intervenant()->getServiceContext()->getIntervenant() == $cloture->getIntervenant();
 $isCloture = $cloture->getId() !== null;
 
 $canCloturer   = $this->isAllowed($cloture, Privileges::CLOTURE_CLOTURE);

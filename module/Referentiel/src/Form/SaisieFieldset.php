@@ -64,17 +64,17 @@ class SaisieFieldset extends AbstractFieldset
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        if (!($role && $role->getIntervenant())) {
-            $intervenant = new SearchAndSelect('intervenant');
-            $intervenant->setRequired(true)
-                ->setSelectionRequired(true)
-                ->setAutocompleteSource(
-                    $this->getUrl('recherche', ['action' => 'intervenantFind'])
-                )
-                ->setLabel("Intervenant :")
-                ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
-            $this->add($intervenant);
-        }
+        /*  if (!($role && $role->getIntervenant())) {
+              $intervenant = new SearchAndSelect('intervenant');
+              $intervenant->setRequired(true)
+                  ->setSelectionRequired(true)
+                  ->setAutocompleteSource(
+                      $this->getUrl('recherche', ['action' => 'intervenantFind'])
+                  )
+                  ->setLabel("Intervenant :")
+                  ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
+              $this->add($intervenant);
+          }*/
 
         $this->add([
             'name'       => 'structure',
@@ -186,12 +186,12 @@ class SaisieFieldset extends AbstractFieldset
     {
         /* Peuple le formulaire avec les valeurs issues du contexte local */
         $cl = $this->getServiceLocalContext();
-        if ($this->has('intervenant') && $cl->getIntervenant()) {
-            $this->get('intervenant')->setValue([
-                'id'    => $cl->getIntervenant()->getId(),
-                'label' => (string)$cl->getIntervenant(),
-            ]);
-        }
+//        if ($this->has('intervenant') && $cl->getIntervenant()) {
+//            $this->get('intervenant')->setValue([
+//                'id'    => $cl->getIntervenant()->getId(),
+//                'label' => (string)$cl->getIntervenant(),
+//            ]);
+//        }
 
         if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure() ?: $cl->getStructure()) {
             $this->get('structure')->setValue($structure->getId());
@@ -350,8 +350,8 @@ class SaisieFieldsetHydrator implements HydratorInterface
     {
         $em = $this->getEntityManager();
 
-        $intervenant = isset($data['intervenant']['id']) ? (int)$data['intervenant']['id'] : null;
-        $object->setIntervenant($intervenant ? $em->getRepository(Intervenant::class)->findOneBySourceCode($intervenant) : null);
+//        $intervenant = isset($data['intervenant']['id']) ? (int)$data['intervenant']['id'] : null;
+//        $object->setIntervenant($intervenant ? $em->getRepository(Intervenant::class)->findOneBySourceCode($intervenant) : null);
 
         $structure = isset($data['structure']) ? (int)$data['structure'] : null;
         $object->setStructure($structure ? $em->find(Structure::class, $structure) : null);
@@ -388,14 +388,14 @@ class SaisieFieldsetHydrator implements HydratorInterface
             $data['id'] = $object->getId();
         }
 
-        if ($object->getIntervenant()) {
-            $data['intervenant'] = [
-                'id'    => $object->getIntervenant()->getId(),
-                'label' => (string)$object->getIntervenant(),
-            ];
-        } else {
-            $data['intervenant'] = null;
-        }
+//        if ($object->getIntervenant()) {
+//            $data['intervenant'] = [
+//                'id'    => $object->getIntervenant()->getId(),
+//                'label' => (string)$object->getIntervenant(),
+//            ];
+//        } else {
+//            $data['intervenant'] = null;
+//        }
 
         if ($object->getStructure()) {
             $data['structure'] = $object->getStructure()->getId();

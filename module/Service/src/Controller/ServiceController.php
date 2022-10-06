@@ -4,6 +4,7 @@ namespace Service\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\ElementPedagogique;
+use Application\Service\Traits\ValidationServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Validation;
 use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
@@ -46,6 +47,7 @@ class ServiceController extends AbstractController
     use ResumeServiceAwareTrait;
     use CampagneSaisieServiceAwareTrait;
     use ServiceReferentielProcessusAwareTrait;
+    use ValidationServiceAwareTrait;
 
 
     /**
@@ -194,13 +196,12 @@ class ServiceController extends AbstractController
             \Application\Entity\Db\ElementPedagogique::class,
         ]);
 
-        $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
-
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
 
         if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
             $vh = new ViewModel();
@@ -208,6 +209,20 @@ class ServiceController extends AbstractController
 
             return $vh;
         }
+
+        $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
+        $recherche = new Recherche($typeVolumeHoraire, $etatVolumeHoraire);
+        $recherche->setIntervenant($intervenant);
+
+        $vm = new ViewModel();
+
+
+        //        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
+        //            $vh = new ViewModel();
+        //            $vh->setTemplate('application/intervenant/menu');
+        //
+        //            return $vh;
+        //        }
 
         $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
         if (!$campagneSaisie->estOuverte()) {
@@ -222,27 +237,18 @@ class ServiceController extends AbstractController
             }
         }
 
-        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
-
-        $vm = new ViewModel();
-        $vm->setTemplate('service/intervenant/saisie');
-
         /* Liste des services */
-        $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
-        $recherche = new Recherche($typeVolumeHoraire, $etatVolumeHoraire);
-        $recherche->setIntervenant($intervenant);
-
         if ($this->isAllowed($intervenant, $typeVolumeHoraire->getPrivilegeEnseignementVisualisation())) {
-            $services = $this->getProcessusEnseignement()->getEnseignements($recherche);
+            $enseignements = $this->getProcessusEnseignement()->getEnseignements($recherche);
         } else {
-            $services = false;
+            $enseignements = false;
         }
 
         /* Services référentiels (si nécessaire) */
         if ($this->isAllowed($intervenant, $typeVolumeHoraire->getPrivilegeReferentielVisualisation())) {
-            $servicesReferentiel = $this->getProcessusServiceReferentiel()->getServices($intervenant, $recherche);
+            $referentiels = $this->getProcessusServiceReferentiel()->getReferentiels($recherche);
         } else {
-            $servicesReferentiel = false;
+            $referentiels = false;
         }
 
         /* Totaux HETD */
@@ -260,7 +266,8 @@ class ServiceController extends AbstractController
             $cloture = null;
         }
 
-        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'services', 'servicesReferentiel', 'cloture', 'role'));
+        $vm->setTemplate('service/intervenant/saisie');
+        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'enseignements', 'referentiels', 'cloture'));
 
         return $vm;
     }

@@ -76,16 +76,16 @@ class FormSaisieViewHelper extends AbstractViewHelper
 
         $part = $this->getView()->form()->openTag($this->form);
 
-        if (!$this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
-            $template = <<<EOS
-<div>
-    %s
-</div>
-EOS;
-            $part     .= sprintf(
-                $template,
-                $this->getView()->formControlGroup($fservice->get('intervenant')));
-        }
+//        if (!$this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
+//            $template = <<<EOS
+//<div>
+//    %s
+//</div>
+//EOS;
+//            $part     .= sprintf(
+//                $template,
+//                $this->getView()->formControlGroup($fservice->get('intervenant')));
+//        }
 
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get($this->form->get('type-volume-horaire')->getValue());
         $inRealise         = TypeVolumeHoraire::CODE_REALISE === $typeVolumeHoraire->getCode();

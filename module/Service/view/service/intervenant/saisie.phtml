@@ -8,90 +8,56 @@ use Application\Provider\Privilege\Privileges;
  * @var $intervenant         \Application\Entity\Db\Intervenant
  * @var $typeVolumeHoraire   \Service\Entity\Db\TypeVolumeHoraire
  * @var $cloture             \Application\Entity\Db\Validation|null
- * @var $role                \Application\Acl\Role
- * @var $services            \Enseignement\Entity\Db\Service[]
- * @var $servicesReferentiel \Referentiel\Entity\Db\ServiceReferentiel[]
+ * @var $enseignements       \Enseignement\Entity\Db\Service[]
+ * @var $referentiels        \Referentiel\Entity\Db\ServiceReferentiel[]
  */
 
-$service = new \Enseignement\Entity\Db\Service();
-$service->setIntervenant($intervenant);
-$service->setTypeVolumeHoraire($typeVolumeHoraire);
-$canAddService = $this->isAllowed($service, $typeVolumeHoraire->getPrivilegeEnseignementEdition());
-
-$serviceReferentiel = new \Referentiel\Entity\Db\ServiceReferentiel();
-$serviceReferentiel->setIntervenant($intervenant);
-$serviceReferentiel->setTypeVolumeHoraire($typeVolumeHoraire);
-$serviceReferentiel->setStructure($role->getStructure());
-$canAddServiceReferentiel = $this->isAllowed($serviceReferentiel, $typeVolumeHoraire->getPrivilegeReferentielEdition());
 
 if ($typeVolumeHoraire->isPrevu()) {
     $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
-    $title     = 'Enseignements';
+    $title     = 'Services';
 } else {
     $nextEtape = WfEtape::CODE_SERVICE_SAISIE_REALISE;
-    $title     = 'Constatation des enseignements réalisés';
+    $title     = 'Constatation des services réalisés';
 }
 
 $menuUrl = $this->url(null, ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
 
 $btnNextUrl = $this->url('workflow/feuille-de-route-btn-next', ['intervenant' => $intervenant->getId(), 'wfEtapeCode' => $nextEtape]);
 
+// campagnes de saisie...
 $this->intervenant($intervenant)->renderTitle($title);
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 echo $this->plafonds($intervenant, $typeVolumeHoraire);
 
 $bottom = false;
-if ($cloture) echo $this->partial('service/partial/cloture', compact('cloture', 'role', 'bottom'));
+if ($cloture) echo $this->partial('service/partial/cloture', compact('cloture', 'bottom'));
 
-/* Services et horodatage */
-if ($services !== false) {
-    $serviceListe = $this->enseignements($services);
-    $serviceListe->setIntervenant($intervenant);
-    $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)->setAddButtonVisibility($canAddService);
-    if ($canAddService && $typeVolumeHoraire->isPrevu()) {
-        $serviceListe->showPrevuToPrevu($intervenant);
-    }
-    echo $serviceListe->render();
 
-    echo $this->partial('service/partial/horodatage', [
-        'intervenant'       => $intervenant,
-        'typeVolumeHoraire' => $typeVolumeHoraire,
-        'referentiel'       => false,
-    ]);
+if ($enseignements !== false) {
+    echo '<h2>Enseignement</h2>';
+    $ens = $this->enseignements($typeVolumeHoraire, $intervenant, $enseignements);
+    $ens->setHorodatage(true);
+    echo $ens;
 }
 
-/* Référentiel et horodatage */
-if ($servicesReferentiel !== false) {
-    $serviceReferentielListe = $this->serviceReferentielListe($servicesReferentiel);
-    $serviceReferentielListe->setTypeVolumeHoraire($typeVolumeHoraire)->setAddButtonVisibility($canAddServiceReferentiel);
-    if ($canAddServiceReferentiel && $typeVolumeHoraire->isPrevu()) {
-        $serviceReferentielListe->showPrevuToPrevu($intervenant);
-    }
-    echo '<h1>Référentiel</h1><hr />';
-    echo $serviceReferentielListe->render();
-
-    echo $this->partial('service/partial/horodatage', [
-        'intervenant'       => $intervenant,
-        'typeVolumeHoraire' => $typeVolumeHoraire,
-        'referentiel'       => true,
-    ]);
+if ($referentiels !== false) {
+    echo '<h2>Référentiel</h2>';
+    $ref = $this->referentiels($typeVolumeHoraire, $intervenant, $referentiels);
+    $ref->setHorodatage(true);
+    echo $ref;
 }
 
 $bottom = true;
-if ($cloture) echo $this->partial('service/partial/cloture', compact('cloture', 'role', 'bottom'));
+if ($cloture) echo $this->partial('service/partial/cloture', compact('cloture', 'bottom'));
 
 
 echo $formuleTotauxHetd;
 
-?>
+echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
 
-    <hr/>
-    <div id="feuille-de-route-btn-next" data-url="<?= $btnNextUrl ?>">
-        <?= $this->feuilleDeRoute($intervenant)->renderNav($nextEtape); ?>
-    </div>
-
-<?php if ($services !== false || $servicesReferentiel !== false): ?>
+if ($enseignements !== false || $referentiels !== false): ?>
     <script>
 
         $(function ()
@@ -100,7 +66,7 @@ echo $formuleTotauxHetd;
             WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
             WidgetInitializer.includeCss(Url('css/service.css'));
 
-            <?php if ($services !== false): ?>$('.service-liste').serviceListe({
+            <?php if ($enseignements !== false): ?>$('.enseignements').enseignements({
                 'heures-change-exists': function ()
                 {
 
@@ -125,7 +91,7 @@ echo $formuleTotauxHetd;
             });<?php endif; ?>
 
 
-            <?php if ($servicesReferentiel !== false): ?>$('.referentiels').referentiels({
+            <?php if ($referentiels !== false): ?>$('.referentiels').referentiels({
                 'heures-change-exists': function ()
                 {
 

@@ -11,30 +11,6 @@ return [
         'guards'         => [
             PrivilegeController::class      => [
                 /* Enseignements */
-                [
-                    'controller' => 'Application\Controller\Service',
-                    'action'     => ['validation'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
-                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
-                    ],
-                    'assertion'  => Assertion\ServiceAssertion::class,
-                ],
-                [
-                    'controller' => 'Application\Controller\Service',
-                    'action'     => ['valider'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_PREVU_VALIDATION,
-                        Privileges::ENSEIGNEMENT_REALISE_VALIDATION,
-                    ],
-                ],
-                [
-                    'controller' => 'Application\Controller\Service',
-                    'action'     => ['devalider'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_DEVALIDATION,
-                    ],
-                ],
             ],
             'BjyAuthorize\Guard\Controller' => [
                 [

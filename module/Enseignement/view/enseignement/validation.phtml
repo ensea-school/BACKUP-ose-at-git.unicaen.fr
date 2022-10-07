@@ -22,7 +22,7 @@ foreach ($wells as $well => $title) {
         echo '<div class="well"><h2>' . $title . '</h2>';
         foreach ($services[$well] as $validationId => $srvs) {
             $validation = $validations[$validationId];
-            echo $this->partial('application/service/partial/validation-service', [
+            echo $this->partial('enseignement/partial/validation-enseignement', [
                 'validation'        => $validation,
                 'structure'         => $validation->getStructure(),
                 'services'          => $srvs,

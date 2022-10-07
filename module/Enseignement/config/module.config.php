@@ -2,6 +2,7 @@
 
 namespace Enseignement;
 
+use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Enseignement\Controller\EnseignementController;
 use Enseignement\Controller\VolumeHoraireController;
@@ -26,6 +27,48 @@ return [
                     'action'     => 'realise',
                     'defaults'   => [
                         'type-volume-horaire-code' => 'REALISE',
+                    ],
+                ],
+                'validation'           => [
+                    'route'         => '/:intervenant/validation',
+                    'may_terminate' => false,
+                    'child_routes'  => [
+                        'enseignement' => [
+                            'route'         => '/enseignement',
+                            'controller'    => EnseignementController::class,
+                            'may_terminate' => false,
+                            'child_routes'  => [
+                                'prevu'     => [
+                                    'route'    => '/prevu',
+                                    'action'   => 'validation',
+                                    'defaults' => [
+                                        'type-volume-horaire-code' => 'PREVU',
+                                    ],
+                                ],
+                                'realise'   => [
+                                    'route'    => '/realise',
+                                    'action'   => 'validation',
+                                    'defaults' => [
+                                        'type-volume-horaire-code' => 'REALISE',
+                                    ],
+                                ],
+                                'valider'   => [
+                                    'route'       => '/valider/:typeVolumeHoraire/:structure',
+                                    'action'      => 'valider',
+                                    'constraints' => [
+                                        'typeVolumeHoraire' => '[0-9]*',
+                                        'structure'         => '[0-9]*',
+                                    ],
+                                ],
+                                'devalider' => [
+                                    'route'       => '/devalider/:validation',
+                                    'action'      => 'devalider',
+                                    'constraints' => [
+                                        'validation' => '[0-9]*',
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -129,7 +172,34 @@ return [
     ],
 
     'navigation' => [
-
+        'intervenant' => [
+            'pages' => [
+                'validation-enseignement-prevu'   => [
+                    'label'               => "Validation des enseignements prévisionnels",
+                    'title'               => "Validation des enseignements prévisionnels de l'intervenant",
+                    'route'               => 'intervenant/validation/enseignement/prevu',
+                    'paramsInject'        => [
+                        'intervenant',
+                    ],
+                    'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION,
+                    'withtarget'          => true,
+                    //   'visible'             => Assertion\ServiceAssertion::class,
+                    'order'               => 8,
+                ],
+                'validation-enseignement-realise' => [
+                    'label'               => "Validation des enseignements réalisés",
+                    'title'               => "Validation des enseignements réalisés de l'intervenant",
+                    'route'               => 'intervenant/validation/enseignement/realise',
+                    'paramsInject'        => [
+                        'intervenant',
+                    ],
+                    'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION_REALISE,
+                    'withtarget'          => true,
+                    //   'visible'             => Assertion\ServiceAssertion::class,
+                    'order'               => 14,
+                ],
+            ],
+        ],
     ],
 
     'rules' => [
@@ -181,6 +251,30 @@ return [
                 Privileges::ENSEIGNEMENT_REALISE_EDITION,
             ],
             // 'assertion'  => Assertion\ServiceAssertion::class,
+        ],
+        [
+            'controller' => EnseignementController::class,
+            'action'     => ['validation'],
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+            ],
+            //            'assertion'  => Assertion\ServiceAssertion::class,
+        ],
+        [
+            'controller' => EnseignementController::class,
+            'action'     => ['valider'],
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_PREVU_VALIDATION,
+                Privileges::ENSEIGNEMENT_REALISE_VALIDATION,
+            ],
+        ],
+        [
+            'controller' => EnseignementController::class,
+            'action'     => ['devalider'],
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_DEVALIDATION,
+            ],
         ],
 
     ],

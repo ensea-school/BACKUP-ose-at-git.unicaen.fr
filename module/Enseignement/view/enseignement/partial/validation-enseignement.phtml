@@ -15,14 +15,14 @@ $validerUrl   = null;
 $devaliderUrl = null;
 
 if ($this->isAllowed($validation, $typeVolumeHoraire->getPrivilegeEnseignementValidation())) {
-    $validerUrl = $this->url('intervenant/validation/service/valider', [
+    $validerUrl = $this->url('intervenant/validation/enseignement/valider', [
         'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
         'structure'         => $structure->getId(),
     ], [], true);
 }
 
 if ($this->isAllowed($validation, Privileges::ENSEIGNEMENT_DEVALIDATION)) {
-    $devaliderUrl = $this->url('intervenant/validation/service/devalider', [
+    $devaliderUrl = $this->url('intervenant/validation/enseignement/devalider', [
         'validation' => $validation->getId(),
     ], [], true);
 }
@@ -56,7 +56,7 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
             <small>(cliquez pour afficher/cacher)</small>
         </a>
         <div class="collapse <?= $validation->getId() ? '' : 'in' ?>" id="details-enseignements-<?= $id ?>">
-            <?= $this->enseignements($services)->setTypeVolumeHoraire($typeVolumeHoraire)->setReadonly(true)->render(); ?>
+            <?= $this->enseignements($typeVolumeHoraire, current($services)->getIntervenant(), $services)->setReadonly(true)->render(); ?>
         </div>
 
     </div>

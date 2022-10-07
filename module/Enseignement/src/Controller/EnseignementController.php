@@ -451,7 +451,11 @@ class EnseignementController extends AbstractController
             $this->flashMessenger()->addSuccessMessage($message);
         }
 
-        return compact('title', 'typeVolumeHoraire', 'intervenant', 'validations', 'services');
+        $vm = new ViewModel();
+        $vm->setVariables(compact('title', 'typeVolumeHoraire', 'intervenant', 'validations', 'services'));
+        $vm->setTemplate('enseignement/validation');
+
+        return $vm;
     }
 
 

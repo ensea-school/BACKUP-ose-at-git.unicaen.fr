@@ -28,7 +28,7 @@ foreach ($wells as $well => $title) {
         echo '<div class="well"><h2>' . $title . '</h2>';
         foreach ($services[$well] as $validationId => $srvs) {
             $validation = $validations[$validationId];
-            echo $this->partial('application/service-referentiel/partial/validation-referentiel', [
+            echo $this->partial('referentiel/partial/validation-referentiel', [
                 'validation'        => $validation,
                 'structure'         => $validation->getStructure(),
                 'services'          => $srvs,

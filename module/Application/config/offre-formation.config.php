@@ -203,7 +203,7 @@ return [
                         ],
                         'may_terminate' => false,
                         'child_routes'  => [
-                            'voir'          => [
+                            'voir'      => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/voir/:etape',
@@ -211,7 +211,7 @@ return [
                                     'defaults'    => ['action' => 'voir'],
                                 ],
                             ],
-                            'ajouter'       => [
+                            'ajouter'   => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/ajouter/:structure',
@@ -219,6 +219,15 @@ return [
                                     'defaults'    => ['action' => 'saisir'],
                                 ],
                             ],
+                            'restaurer' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/restaurer/:etape',
+                                    'constraints' => ['etape' => '[0-9]*'],
+                                    'defaults'    => ['action' => 'restaurer'],
+                                ],
+                            ],
+
                             'modifier'      => [
                                 'type'    => 'Segment',
                                 'options' => [
@@ -364,7 +373,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\Etape',
-                    'action'     => ['saisir', 'supprimer'],
+                    'action'     => ['restaurer', 'saisir', 'supprimer'],
                     'privileges' => Privileges::ODF_ETAPE_EDITION,
                 ],
                 /* Éléments pédagogiques */

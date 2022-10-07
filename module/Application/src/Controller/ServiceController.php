@@ -97,12 +97,20 @@ class ServiceController extends AbstractController
         $canAddService = Privileges::ENSEIGNEMENT_PREVU_EDITION || Privileges::ENSEIGNEMENT_REALISE_EDITION;
 
         $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
+        $element             = $this->getRequest()->getQuery('element-pedagogique', null);
         $params             = $this->getEvent()->getRouteMatch()->getParams();
         $params['action']   = 'recherche';
         $rechercheViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
         $viewModel->addChild($rechercheViewModel, 'recherche');
 
         $recherche = $this->getServiceService()->loadRecherche();
+        if($recherche->getEtape() != null && $recherche->getStructureEns() != null){
+            if(isset($element['element-liste'])&& $element['element-liste'] != null){
+                $recherche->setElementPedagogique($this->getServiceElementPedagogique()->get($element['element-liste']));
+            }else{
+                $recherche->setElementPedagogique(null);
+            }
+        }
 
         /* Préparation et affichage */
         if ('afficher' === $action) {
@@ -220,6 +228,9 @@ class ServiceController extends AbstractController
         $annee         = $this->getServiceContext()->getAnnee();
         $action        = $this->getRequest()->getQuery('action', null);
         $tri           = null;
+        $element             = $this->getRequest()->getQuery('element-pedagogique', null);
+
+
         if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
 
         if (!$intervenant) {
@@ -234,12 +245,20 @@ class ServiceController extends AbstractController
             $recherche->setIntervenant($intervenant);
         }
 
-        $viewModel = new \Laminas\View\Model\ViewModel();
 
+        $viewModel = new \Laminas\View\Model\ViewModel();
         $params           = $this->getEvent()->getRouteMatch()->getParams();
         $params['action'] = 'recherche';
         $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
         $viewModel->addChild($listeViewModel, 'recherche');
+
+        if($recherche->getEtape() != null && $recherche->getStructureEns() != null){
+            if(isset($element['element-liste'])&& $element['element-liste'] != null){
+                $recherche->setElementPedagogique($this->getServiceElementPedagogique()->get($element['element-liste']));
+            }else{
+                $recherche->setElementPedagogique(null);
+            }
+        }
 
         if ('afficher' == $action || 'trier' == $action) {
             $params = [

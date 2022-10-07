@@ -106,4 +106,13 @@ return [
         'PACKAGE_NAME'       => 'FORMULE_ROUEN',
         'VH_PARAM_1_LIBELLE' => 'Type de référentiel',
     ],
+    26 => [
+        'LIBELLE'            => 'Université de Picardie Jules Verne',
+        'PACKAGE_NAME'       => 'FORMULE_PICARDIE',
+        'VH_PARAM_1_LIBELLE' => 'param 1',
+        'VH_PARAM_2_LIBELLE' => 'param 2',
+        'VH_PARAM_3_LIBELLE' => 'param 3',
+        'VH_PARAM_4_LIBELLE' => 'param 4',
+        'VH_PARAM_5_LIBELLE' => 'param 5',
+    ],
 ];

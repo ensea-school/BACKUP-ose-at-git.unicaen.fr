@@ -34,6 +34,9 @@
 	-- v3.2  15/06/21 MYP : report modifs V14 depuis ex v2.2
 			-- v2.3 - 14/12/20 MYP : nouveau statut CONV_MAIEU
 			-- v2.4 - 28/05/21 MYP : suppression espaces décalage
+	-- v3.3  25/01/22 MYP : UM_AJOUT_UM_SYNCHRO_A_VALIDER : qd de IE à IE forcer date_deb au 01/09
+	-- v3.4  14/06/22 MYP : remplacer UM_STATUT_INTERVENANT par UM_STATUT
+	-- v3.5  26/07/22 MYP : modifier mapping tests statut siham pour les nouveaux codes HU
 =====================================================================================================*/
 
 /* --------------- VERSION V15.1 - ATIVE ------------------------------------------*/
@@ -54,7 +57,8 @@ v_code_statut		VARCHAR2(20) := 'HOSE'; 		-- v1.14 Code statut intervenant qui se
 v_type_interv		VARCHAR2(1)	 := '';				-- v3.0 08/03/2021 type statut intervenant qui sera affecté P = PERM / E = IE
 v_date_deb_statut	DATE		 :=  p_d_deb_annee_univ;
 v_date_fin_statut	DATE 		 :=  p_d_fin_annee_univ;
-v_nb_h_mce			NUMBER(8,2)	 := 0;	
+v_nb_h_mce			NUMBER(8,2)	 := 0;
+v_annee_id			NUMBER(9) 	 := to_number(to_char(p_d_deb_annee_univ,'YYYY'));
 
 -- v3.0b -- une seule fonction pour id statut, code et dates 
 v_new_statut		T_UM_ENREG_STATUT := T_UM_ENREG_STATUT(v_id_statut,v_code_statut,v_type_interv, trunc(p_d_deb_annee_univ),trunc(p_d_fin_annee_univ), v_nb_h_mce);
@@ -73,7 +77,7 @@ BEGIN
 				when (p_gp_hie in ('DA') or (p_gp_hie = 'EA' and p_corps = '364'))
 						and p_modserv like 'TI%' 										then v_new_statut.CODE_STATUT := 'SPART';		v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut, p_dat_grade, p_dat_modserv);	-- Service partagé FDE
 				when p_gp_hie in ('OA') 												then v_new_statut.CODE_STATUT := 'INF_ORIEN_EDU';	v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut, p_dat_grade);		-- Personnel d'éducation et d'orientation
-				when p_gp_hie in ('SB', 'SD', 'SP', 'MG') 								then v_new_statut.CODE_STATUT := 'ENS_HU';	 	v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut, p_dat_grade);			-- Enseignant-chercheur HU TITU
+				when p_gp_hie in ('SB', 'SD', 'SP', 'MG','HU')							then v_new_statut.CODE_STATUT := 'ENS_HU';	 	v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut, p_dat_grade);			-- Enseignant-chercheur HU TITU  -- v3.5  26/07/22
 			else 
 				case when p_recrutement = 'R' 											then v_new_statut.CODE_STATUT := 'CEV_TIT_R';	v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut,p_d_deb_annee_univ);	-- CEV TITU Rémunéré
 					 when p_recrutement = 'G' 											then v_new_statut.CODE_STATUT := 'CEV_TIT_G';	v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut,p_d_deb_annee_univ);	-- CEV TITU Titre gracieux
@@ -89,7 +93,9 @@ BEGIN
 		when p_statut_pip = 'C2001' 													then v_new_statut.CODE_STATUT := 'ATER_50';		v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut);						-- ATER mi-temps	
 		when p_statut_pip in ('C2006','C2008')					 						then v_new_statut.CODE_STATUT := 'ENS_ASS';		v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut);						-- Enseignant associé
 		when p_statut_pip in ('C2007','C2009')					 						then v_new_statut.CODE_STATUT := 'ENS_ASS_50';	v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut);						-- Enseignant associé mi-temps
-		when p_statut_pip >= 'C2010' and  p_statut_pip <= 'C2029' 						then v_new_statut.CODE_STATUT := 'ENS_HU_CTR';	v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut);						-- Enseignant-chercheur HU CTR	
+		when ((p_statut_pip >= 'C2010' and  p_statut_pip <= 'C2029')
+				or (p_statut_pip >= 'C0602' and  p_statut_pip <= 'C0604')  -- v3.5  26/07/22
+			 ) 																			then v_new_statut.CODE_STATUT := 'ENS_HU_CTR';	v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut);						-- Enseignant-chercheur HU CTR	
 		when p_statut_pip = 'C2042' 													then v_new_statut.CODE_STATUT := 'LECT';		v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut);						-- Lecteurs
 		when p_statut_pip in ('C2043','C2047') 											then v_new_statut.CODE_STATUT := 'MLV';			v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut);						-- Maîtres de langues  -- v1.5c
 		when p_statut_pip = 'C2049' and p_modserv = 'MS100'								then v_new_statut.CODE_STATUT := 'ENS_CH_CTR';	v_new_statut.DATE_DEB_STATUT := greatest(p_dat_aff, p_dat_statut,p_dat_modserv);		-- Enseignant-chercheur contractuel
@@ -136,9 +142,10 @@ BEGIN
     -- recup de l id statut + 
 	IF v_new_statut.code_statut <> 'HOSE' then   -- v1.14
 		select st.ID, typ.code INTO v_id_statut, v_type_interv
-		from OSE.UM_STATUT_INTERVENANT st
+		from OSE.UM_STATUT st 				-- v3.4 14/06/22 
 			, OSE.TYPE_INTERVENANT typ
 		where st.code_statut = v_new_statut.code_statut
+			and st.annee_id = v_annee_id	-- v3.4 14/06/22
 			and st.type_intervenant_id = typ.id ;
 		
 		v_new_statut.id 					:= v_id_statut;
@@ -265,12 +272,13 @@ CURSOR cur_statut IS
 	select i.statut_id, st.code_statut, typ.code, i.date_deb_statut, i.date_fin_statut, i.w_nb_heure_mce
 			
 	from OSE.UM_INTERVENANT i,
-		OSE.UM_STATUT_INTERVENANT st,
+		OSE.UM_STATUT st,
 		OSE.TYPE_INTERVENANT typ
 	where trim(i.source_code) = trim(p_siham_matricule)
 	  and i.annee_id = p_annee_id 
 	  and i.date_deb_statut <= p_date_systeme and i.date_fin_statut >= p_date_systeme  -- v3.0 statut de la periode de synchro
 	  and i.statut_id = st.id
+	  and i.annee_id = st.annee_id	-- v3.4 14/06/22
 	  and st.type_intervenant_id = typ.id
 	;
 
@@ -330,7 +338,7 @@ v_statut_doc_mce	varchar2(20) := '';	-- v3.0 04/12/20
 
 CURSOR cur_statut IS
 	 select id
-	 from OSE.UM_STATUT_INTERVENANT
+	 from OSE.UM_STATUT  -- v3.4 14/06/22
 	 where id = p_statut_id
 		and trim(code_statut) = v_statut_doc_mce; 
 
@@ -360,8 +368,8 @@ v_trouve 			number(9) 	:= 0;
 
 CURSOR cur_statut IS
 	 select st.id
-	 from OSE.UM_STATUT_INTERVENANT st,
-		OSE.TYPE_INTERVENANT ti
+	 from OSE.UM_STATUT st -- v3.4 14/06/22
+		,OSE.TYPE_INTERVENANT ti
 	 where st.id = p_statut_id
 		and st.type_intervenant_id = ti.id
 		and ti.code = 'E';		-- ##A_PERSONNALISER_CHOIX_OSE## type intervenant extérieur fourni avec Ose
@@ -498,10 +506,17 @@ CREATE OR REPLACE FUNCTION OSE.UM_AJOUT_UM_SYNCHRO_A_VALIDER(p_matricule IN VARC
 	v3.1 09/03/21 creation procedure pour maj de la table 
 ===============================================================*/
 -- retourne true si OSE.UM_TRANSFERT_INDIVIDU.CHANGEMENT_STATUT a pu etre maj
-v_est_bien_insere 	boolean 	:= false;  
+v_est_bien_insere 		boolean 	:= false;  
+v_new_date_deb_statut	DATE		:= p_statut_nouveau.date_deb_statut;		-- v3.3  25/01/22
+
 
 BEGIN
 	BEGIN
+
+	--- si IE à IE alors 1 seule période sur l annee et on ecrase -- v3.3  25/01/22
+	if p_statut_actuel.code_type_intervenant = 'E' and p_statut_nouveau.code_type_intervenant = 'E' THEN
+			v_new_date_deb_statut := p_statut_actuel.date_deb_statut;
+	end if;
 	
 	insert into OSE.UM_SYNCHRO_A_VALIDER (D_HORODATAGE, NUDOSS, MATCLE, QUALIT , NOMUSE, PRENOM ,NOMPAT ,CHANGEMENT_STATUT, TEM_VALIDATION, D_VALIDATION, D_TRANSFERT_FORCE, ANNEE_ID,
 											ACTU_STATUT_ID, ACTU_CODE_STATUT, ACTU_CODE_TYPE_INT, ACTU_DATE_DEB_STATUT, ACTU_DATE_FIN_STATUT, ACTU_NB_H_MCE,
@@ -510,7 +525,7 @@ BEGIN
 			
 	select tr.d_horodatage, tr.nudoss, tr.matcle, tr.qualit, tr.nomuse, tr.prenom, tr.nompat, tr.changement_statut, p_temoin_validation, p_date_validation, p_date_transfert_force, p_annee_id,
 			p_statut_actuel.id, p_statut_actuel.code_statut, p_statut_actuel.code_type_intervenant, p_statut_actuel.date_deb_statut, p_statut_actuel.date_fin_statut, p_statut_actuel.nb_h_mce,
-			p_statut_nouveau.id, p_statut_nouveau.code_statut, p_statut_nouveau.code_type_intervenant, p_statut_nouveau.date_deb_statut, p_statut_nouveau.date_fin_statut, p_statut_nouveau.nb_h_mce,
+			p_statut_nouveau.id, p_statut_nouveau.code_statut, p_statut_nouveau.code_type_intervenant, v_new_date_deb_statut, p_statut_nouveau.date_fin_statut, p_statut_nouveau.nb_h_mce,			-- v3.3  25/01/22
 			p_param_gestion_statut
 	from OSE.UM_TRANSFERT_INDIVIDU tr
 	where tr.matcle = p_matricule and tr.annee_id = p_annee_id and tr.changement_statut is not null 

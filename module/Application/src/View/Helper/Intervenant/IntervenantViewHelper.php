@@ -46,21 +46,6 @@ class IntervenantViewHelper extends AbstractHtmlElement
 
 
 
-    public function getCurrentIntervenant(): ?Intervenant
-    {
-        if ($this->intervenant) {
-            return $this->intervenant;
-        }
-
-        if ($intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
-            return $intervenant;
-        }
-
-        return null;
-    }
-
-
-
     /**
      *
      *

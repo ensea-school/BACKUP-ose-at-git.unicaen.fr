@@ -246,7 +246,12 @@ return [
             ],
             //'assertion'  => Assertion\IntervenantAssertion::class,
         ],
-
+        //        [
+        //            'controller' => 'Application\Controller\Service',
+        //            'action'     => ['cloturer-saisie'],
+        //            'roles'      => ['user'],
+        //            'assertion'  => Assertion\ServiceAssertion::class,
+        //        ],
         [
             'controller' => ServiceController::class,
             'action'     => ['intervenant-saisie-prevu'],

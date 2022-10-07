@@ -216,7 +216,31 @@ return [
     ],
 
     'rules' => [
-
+//        [
+//            'privileges' => [
+//                Privileges::REFERENTIEL_PREVU_VISUALISATION,
+//                Privileges::REFERENTIEL_PREVU_EDITION,
+//                Privileges::REFERENTIEL_REALISE_VISUALISATION,
+//                Privileges::REFERENTIEL_REALISE_EDITION,
+//            ],
+//            'resources'  => ['ServiceReferentiel', 'Intervenant'],
+//            'assertion'  => Assertion\ServiceAssertion::class,
+//        ],
+//        [
+//            'privileges' => [
+//                Privileges::REFERENTIEL_PREVU_VALIDATION,
+//                Privileges::REFERENTIEL_REALISE_VALIDATION,
+//                Privileges::REFERENTIEL_PREVU_AUTOVALIDATION,
+//                Privileges::REFERENTIEL_REALISE_AUTOVALIDATION,
+//            ],
+//            'resources'  => ['ServiceReferentiel', 'VolumeHoraireReferentiel', 'Validation'],
+//            'assertion'  => Assertion\ServiceAssertion::class,
+//        ],
+//        [
+//            'privileges' => Privileges::REFERENTIEL_DEVALIDATION,
+//            'resources'  => 'Validation',
+//            'assertion'  => Assertion\ServiceAssertion::class,
+//        ],
     ],
 
     'guards' => [

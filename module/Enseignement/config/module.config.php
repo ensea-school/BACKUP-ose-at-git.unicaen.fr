@@ -203,7 +203,46 @@ return [
     ],
 
     'rules' => [
-
+//        [
+//            'privileges' => [
+//                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+//                Privileges::ENSEIGNEMENT_PREVU_EDITION,
+//                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+//                Privileges::ENSEIGNEMENT_REALISE_EDITION,
+//            ],
+//            'resources'  => ['Service', 'Intervenant'],
+//            'assertion'  => Assertion\ServiceAssertion::class,
+//        ],
+//        [
+//            'privileges' => [
+//                Privileges::ENSEIGNEMENT_PREVU_VALIDATION,
+//                Privileges::ENSEIGNEMENT_REALISE_VALIDATION,
+//                Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
+//                Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
+//            ],
+//            'resources'  => ['Service', 'VolumeHoraire', 'Validation'],
+//            'assertion'  => Assertion\ServiceAssertion::class,
+//        ],
+//        [
+//            'privileges' => Privileges::ENSEIGNEMENT_DEVALIDATION,
+//            'resources'  => 'Validation',
+//            'assertion'  => Assertion\ServiceAssertion::class,
+//        ],
+//        [
+//            'privileges' => [
+//                Privileges::ENSEIGNEMENT_EXTERIEUR,
+//            ],
+//            'resources'  => ['Intervenant', 'Service'],
+//            'assertion'  => Assertion\ServiceAssertion::class,
+//        ],
+//        [
+//            'privileges' => [
+//                Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
+//                Privileges::MOTIF_NON_PAIEMENT_EDITION,
+//            ],
+//            'resources'  => 'Intervenant',
+//            'assertion'  => Assertion\ServiceAssertion::class,
+//        ],
     ],
 
     'guards' => [

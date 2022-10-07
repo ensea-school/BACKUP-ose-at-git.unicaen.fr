@@ -175,6 +175,8 @@ $config = [
             Service\FichierService::class          => Service\FichierService::class,
             Service\TauxHoraireHETDService::class  => Service\TauxHoraireHETDService::class,
             Assertion\InformationAssertion::class  => Assertion\InformationAssertion::class,
+            Service\TypeValidationService::class   => Service\TypeValidationService::class,
+            Service\ValidationService::class       => Service\ValidationService::class,
         ],
         'factories'  => [
             \Laminas\Navigation\Navigation::class         => Navigation\NavigationFactory::class,

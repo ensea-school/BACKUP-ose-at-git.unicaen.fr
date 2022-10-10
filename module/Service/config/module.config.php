@@ -235,7 +235,7 @@ return [
                 Privileges::REFERENTIEL_PREVU_EDITION,
                 Privileges::REFERENTIEL_REALISE_EDITION,
             ],
-            //'assertion'  => Assertion\ServiceAssertion::class,
+            'assertion'  => Assertion\ServiceAssertion::class,
         ],
         [
             'controller' => ServiceController::class,
@@ -244,14 +244,14 @@ return [
                 Privileges::CLOTURE_CLOTURE,
                 Privileges::CLOTURE_REOUVERTURE,
             ],
-            //'assertion'  => Assertion\IntervenantAssertion::class,
+            'assertion'  => Assertion\ClotureAssertion::class,
         ],
-        //        [
-        //            'controller' => 'Application\Controller\Service',
-        //            'action'     => ['cloturer-saisie'],
-        //            'roles'      => ['user'],
-        //            'assertion'  => Assertion\ServiceAssertion::class,
-        //        ],
+        [
+            'controller' => ServiceController::class,
+            'action'     => ['intervenant-cloture'],
+            'roles'      => ['user'],
+            'assertion'  => Assertion\ClotureAssertion::class,
+        ],
         [
             'controller' => ServiceController::class,
             'action'     => ['intervenant-saisie-prevu'],
@@ -259,7 +259,7 @@ return [
                 Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
                 Privileges::REFERENTIEL_PREVU_VISUALISATION,
             ],
-            //'assertion'  => Assertion\ServiceAssertion::class,
+            'assertion'  => Assertion\ServiceAssertion::class,
         ],
         [
             'controller' => ServiceController::class,
@@ -268,7 +268,7 @@ return [
                 Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
                 Privileges::REFERENTIEL_REALISE_VISUALISATION,
             ],
-            //'assertion'  => Assertion\ServiceAssertion::class,
+            'assertion'  => Assertion\ServiceAssertion::class,
         ],
     ],
 

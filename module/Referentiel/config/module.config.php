@@ -182,7 +182,7 @@ return [
                     ],
                     'workflow-etape-code' => WfEtape::CODE_REFERENTIEL_VALIDATION,
                     'withtarget'          => true,
-                    'visible'             => Assertion\ServiceAssertion::class,
+                    'visible'             => Assertion\ReferentielAssertion::class,
                     'order'               => 9,
                 ],
                 'validation-referentiel-realise' => [
@@ -194,7 +194,7 @@ return [
                     ],
                     'workflow-etape-code' => WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE,
                     'withtarget'          => true,
-                    'visible'             => Assertion\ServiceAssertion::class,
+                    'visible'             => Assertion\ReferentielAssertion::class,
                     'order'               => 15,
                 ],
             ],
@@ -216,31 +216,31 @@ return [
     ],
 
     'rules' => [
-//        [
-//            'privileges' => [
-//                Privileges::REFERENTIEL_PREVU_VISUALISATION,
-//                Privileges::REFERENTIEL_PREVU_EDITION,
-//                Privileges::REFERENTIEL_REALISE_VISUALISATION,
-//                Privileges::REFERENTIEL_REALISE_EDITION,
-//            ],
-//            'resources'  => ['ServiceReferentiel', 'Intervenant'],
-//            'assertion'  => Assertion\ServiceAssertion::class,
-//        ],
-//        [
-//            'privileges' => [
-//                Privileges::REFERENTIEL_PREVU_VALIDATION,
-//                Privileges::REFERENTIEL_REALISE_VALIDATION,
-//                Privileges::REFERENTIEL_PREVU_AUTOVALIDATION,
-//                Privileges::REFERENTIEL_REALISE_AUTOVALIDATION,
-//            ],
-//            'resources'  => ['ServiceReferentiel', 'VolumeHoraireReferentiel', 'Validation'],
-//            'assertion'  => Assertion\ServiceAssertion::class,
-//        ],
-//        [
-//            'privileges' => Privileges::REFERENTIEL_DEVALIDATION,
-//            'resources'  => 'Validation',
-//            'assertion'  => Assertion\ServiceAssertion::class,
-//        ],
+        [
+            'privileges' => [
+                Privileges::REFERENTIEL_PREVU_VISUALISATION,
+                Privileges::REFERENTIEL_PREVU_EDITION,
+                Privileges::REFERENTIEL_REALISE_VISUALISATION,
+                Privileges::REFERENTIEL_REALISE_EDITION,
+            ],
+            'resources'  => ['ServiceReferentiel', 'Intervenant'],
+            'assertion'  => Assertion\ReferentielAssertion::class,
+        ],
+        [
+            'privileges' => [
+                Privileges::REFERENTIEL_PREVU_VALIDATION,
+                Privileges::REFERENTIEL_REALISE_VALIDATION,
+                Privileges::REFERENTIEL_PREVU_AUTOVALIDATION,
+                Privileges::REFERENTIEL_REALISE_AUTOVALIDATION,
+            ],
+            'resources'  => ['ServiceReferentiel', 'VolumeHoraireReferentiel', 'Validation'],
+            'assertion'  => Assertion\ReferentielAssertion::class,
+        ],
+        [
+            'privileges' => Privileges::REFERENTIEL_DEVALIDATION,
+            'resources'  => 'Validation',
+            'assertion'  => Assertion\ReferentielAssertion::class,
+        ],
     ],
 
     'guards' => [
@@ -254,15 +254,13 @@ return [
             'action'     => ['saisie', 'delete'],
             'privileges' => [Privileges::REFERENTIEL_ADMIN_EDITION],
         ],
-
-
         [
             'controller' => ServiceReferentielController::class,
             'action'     => ['prevu'],
             'privileges' => [
                 Privileges::REFERENTIEL_PREVU_VISUALISATION,
             ],
-            //      'assertion'  => Assertion\ServiceAssertion::class,
+            'assertion'  => Assertion\ReferentielAssertion::class,
         ],
         [
             'controller' => ServiceReferentielController::class,
@@ -270,7 +268,7 @@ return [
             'privileges' => [
                 Privileges::REFERENTIEL_REALISE_VISUALISATION,
             ],
-            //      'assertion'  => Assertion\ServiceAssertion::class,
+            'assertion'  => Assertion\ReferentielAssertion::class,
         ],
         [
             'controller' => ServiceReferentielController::class,
@@ -279,7 +277,7 @@ return [
                 Privileges::REFERENTIEL_PREVU_EDITION,
                 Privileges::REFERENTIEL_REALISE_EDITION,
             ],
-            //      'assertion'  => Assertion\ServiceAssertion::class,
+            'assertion'  => Assertion\ReferentielAssertion::class,
         ],
         [
             'controller' => ServiceReferentielController::class,
@@ -288,7 +286,7 @@ return [
                 Privileges::REFERENTIEL_PREVU_VISUALISATION,
                 Privileges::REFERENTIEL_REALISE_VISUALISATION,
             ],
-            //         'assertion'  => Assertion\ServiceAssertion::class,
+            'assertion'  => Assertion\ReferentielAssertion::class,
         ],
         [
             'controller' => ServiceReferentielController::class,
@@ -318,7 +316,7 @@ return [
         Service\VolumeHoraireReferentielService::class  => InvokableFactory::class,
         Processus\ServiceReferentielProcessus::class    => InvokableFactory::class,
         Processus\ValidationReferentielProcessus::class => InvokableFactory::class,
-        Assertion\ServiceAssertion::class               => AssertionFactory::class,
+        Assertion\ReferentielAssertion::class           => AssertionFactory::class,
     ],
 
     'forms' => [

@@ -7,6 +7,7 @@ use Application\Provider\Privilege\Privileges;
 use Enseignement\Controller\EnseignementController;
 use Enseignement\Controller\VolumeHoraireController;
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use UnicaenAuth\Assertion\AssertionFactory;
 
 
 return [
@@ -183,7 +184,7 @@ return [
                     ],
                     'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION,
                     'withtarget'          => true,
-                    //   'visible'             => Assertion\ServiceAssertion::class,
+                    'visible'             => Assertion\EnseignementAssertion::class,
                     'order'               => 8,
                 ],
                 'validation-enseignement-realise' => [
@@ -195,7 +196,7 @@ return [
                     ],
                     'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION_REALISE,
                     'withtarget'          => true,
-                    //   'visible'             => Assertion\ServiceAssertion::class,
+                    'visible'             => Assertion\EnseignementAssertion::class,
                     'order'               => 14,
                 ],
             ],
@@ -203,46 +204,46 @@ return [
     ],
 
     'rules' => [
-//        [
-//            'privileges' => [
-//                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
-//                Privileges::ENSEIGNEMENT_PREVU_EDITION,
-//                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
-//                Privileges::ENSEIGNEMENT_REALISE_EDITION,
-//            ],
-//            'resources'  => ['Service', 'Intervenant'],
-//            'assertion'  => Assertion\ServiceAssertion::class,
-//        ],
-//        [
-//            'privileges' => [
-//                Privileges::ENSEIGNEMENT_PREVU_VALIDATION,
-//                Privileges::ENSEIGNEMENT_REALISE_VALIDATION,
-//                Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
-//                Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
-//            ],
-//            'resources'  => ['Service', 'VolumeHoraire', 'Validation'],
-//            'assertion'  => Assertion\ServiceAssertion::class,
-//        ],
-//        [
-//            'privileges' => Privileges::ENSEIGNEMENT_DEVALIDATION,
-//            'resources'  => 'Validation',
-//            'assertion'  => Assertion\ServiceAssertion::class,
-//        ],
-//        [
-//            'privileges' => [
-//                Privileges::ENSEIGNEMENT_EXTERIEUR,
-//            ],
-//            'resources'  => ['Intervenant', 'Service'],
-//            'assertion'  => Assertion\ServiceAssertion::class,
-//        ],
-//        [
-//            'privileges' => [
-//                Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
-//                Privileges::MOTIF_NON_PAIEMENT_EDITION,
-//            ],
-//            'resources'  => 'Intervenant',
-//            'assertion'  => Assertion\ServiceAssertion::class,
-//        ],
+        [
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+                Privileges::ENSEIGNEMENT_PREVU_EDITION,
+                Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
+                Privileges::ENSEIGNEMENT_REALISE_EDITION,
+            ],
+            'resources'  => ['Service', 'Intervenant'],
+            'assertion'  => Assertion\EnseignementAssertion::class,
+        ],
+        [
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_PREVU_VALIDATION,
+                Privileges::ENSEIGNEMENT_REALISE_VALIDATION,
+                Privileges::ENSEIGNEMENT_PREVU_AUTOVALIDATION,
+                Privileges::ENSEIGNEMENT_REALISE_AUTOVALIDATION,
+            ],
+            'resources'  => ['Service', 'VolumeHoraire', 'Validation'],
+            'assertion'  => Assertion\EnseignementAssertion::class,
+        ],
+        [
+            'privileges' => Privileges::ENSEIGNEMENT_DEVALIDATION,
+            'resources'  => 'Validation',
+            'assertion'  => Assertion\EnseignementAssertion::class,
+        ],
+        [
+            'privileges' => [
+                Privileges::ENSEIGNEMENT_EXTERIEUR,
+            ],
+            'resources'  => ['Intervenant', 'Service'],
+            'assertion'  => Assertion\EnseignementAssertion::class,
+        ],
+        [
+            'privileges' => [
+                Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
+                Privileges::MOTIF_NON_PAIEMENT_EDITION,
+            ],
+            'resources'  => 'Intervenant',
+            'assertion'  => Assertion\EnseignementAssertion::class,
+        ],
     ],
 
     'guards' => [
@@ -252,7 +253,7 @@ return [
             'privileges' => [
                 Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
             ],
-            //'assertion'  => Assertion\ServiceAssertion::class,
+            'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
             'controller' => EnseignementController::class,
@@ -260,7 +261,7 @@ return [
             'privileges' => [
                 Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
             ],
-            //'assertion'  => Assertion\ServiceAssertion::class,
+            'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
             'controller' => EnseignementController::class,
@@ -271,7 +272,7 @@ return [
                 Privileges::REFERENTIEL_PREVU_EDITION,
                 Privileges::REFERENTIEL_REALISE_EDITION,
             ],
-            //  'assertion'  => Assertion\ServiceAssertion::class,
+            'assertion'  => Assertion\EnseignementAssertion::class,
         ],
 
         [
@@ -289,7 +290,7 @@ return [
                 Privileges::ENSEIGNEMENT_PREVU_EDITION,
                 Privileges::ENSEIGNEMENT_REALISE_EDITION,
             ],
-            // 'assertion'  => Assertion\ServiceAssertion::class,
+            'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
             'controller' => EnseignementController::class,
@@ -298,7 +299,7 @@ return [
                 Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
                 Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
             ],
-            //            'assertion'  => Assertion\ServiceAssertion::class,
+            'assertion'  => Assertion\EnseignementAssertion::class,
         ],
         [
             'controller' => EnseignementController::class,
@@ -330,6 +331,7 @@ return [
         Processus\ValidationEnseignementProcessus::class => InvokableFactory::class,
         Service\ServiceService::class                    => InvokableFactory::class,
         Service\VolumeHoraireService::class              => InvokableFactory::class,
+        Assertion\EnseignementAssertion::class           => AssertionFactory::class,
     ],
 
 

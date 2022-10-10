@@ -24,11 +24,11 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**
- * Description of ServiceAssertion
+ * Description of ReferentielAssertion
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class ServiceAssertion extends AbstractAssertion
+class ReferentielAssertion extends AbstractAssertion
 {
     use WorkflowServiceAwareTrait;
     use ContextServiceAwareTrait;
@@ -73,13 +73,9 @@ class ServiceAssertion extends AbstractAssertion
 
         if ($intervenant && isset($page['route'])) {
             switch ($page['route']) {
-                case 'intervenant/validation/service/prevu':
-                    return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_PREVU_VISUALISATION);
                 case 'intervenant/validation/referentiel/prevu':
                     return $this->assertEntity($intervenant, Privileges::REFERENTIEL_PREVU_VISUALISATION);
                 break;
-                case 'intervenant/validation/service/realise':
-                    return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_REALISE_VISUALISATION);
                 case 'intervenant/validation/referentiel/realise':
                     return $this->assertEntity($intervenant, Privileges::REFERENTIEL_REALISE_VISUALISATION);
                 break;
@@ -114,28 +110,6 @@ class ServiceAssertion extends AbstractAssertion
 
         // Si c'est bon alors on affine...
         switch (true) {
-            case $entity instanceof Service:
-                switch ($privilege) {
-                    case Privileges::ENSEIGNEMENT_PREVU_VISUALISATION:
-                    case Privileges::ENSEIGNEMENT_REALISE_VISUALISATION:
-                        return $this->assertServiceVisualisation($role, $entity);
-                    case Privileges::ENSEIGNEMENT_PREVU_EDITION:
-                    case Privileges::ENSEIGNEMENT_REALISE_EDITION:
-                        return $this->assertServiceEdition($role, $entity);
-                    case Privileges::ENSEIGNEMENT_EXTERIEUR:
-                        return $this->assertServiceExterieur($role, $entity);
-                    case Privileges::ENSEIGNEMENT_PREVU_VALIDATION:
-                    case Privileges::ENSEIGNEMENT_REALISE_VALIDATION:
-                        return $this->assertServiceValidation($role, $entity);
-                }
-            break;
-            case $entity instanceof VolumeHoraire:
-                switch ($privilege) {
-                    case Privileges::ENSEIGNEMENT_PREVU_VALIDATION:
-                    case Privileges::ENSEIGNEMENT_REALISE_VALIDATION:
-                        return $this->assertVolumeHoraireValidation($role, $entity);
-                }
-            break;
             case $entity instanceof ServiceReferentiel:
                 switch ($privilege) {
                     case Privileges::REFERENTIEL_PREVU_VISUALISATION:
@@ -158,18 +132,6 @@ class ServiceAssertion extends AbstractAssertion
             break;
             case $entity instanceof Intervenant:
                 switch ($privilege) {
-                    case Privileges::ENSEIGNEMENT_PREVU_VISUALISATION:
-                        return $this->assertIntervenantService($role, $entity, TypeVolumeHoraire::CODE_PREVU, false);
-
-                    case Privileges::ENSEIGNEMENT_PREVU_EDITION:
-                        return $this->assertIntervenantService($role, $entity, TypeVolumeHoraire::CODE_PREVU, true);
-
-                    case Privileges::ENSEIGNEMENT_REALISE_VISUALISATION:
-                        return $this->assertIntervenantService($role, $entity, TypeVolumeHoraire::CODE_REALISE, false);
-
-                    case Privileges::ENSEIGNEMENT_REALISE_EDITION:
-                        return $this->assertIntervenantService($role, $entity, TypeVolumeHoraire::CODE_REALISE, true);
-
                     case Privileges::REFERENTIEL_PREVU_VISUALISATION:
                         return $this->assertIntervenantReferentiel($role, $entity, TypeVolumeHoraire::CODE_PREVU, false);
 
@@ -181,23 +143,13 @@ class ServiceAssertion extends AbstractAssertion
 
                     case Privileges::REFERENTIEL_REALISE_EDITION:
                         return $this->assertIntervenantReferentiel($role, $entity, TypeVolumeHoraire::CODE_REALISE, true);
-
-                    case Privileges::MOTIF_NON_PAIEMENT_VISUALISATION:
-                    case Privileges::MOTIF_NON_PAIEMENT_EDITION:
-                        return $this->assertMotifNonPaiement($role, $entity);
-
-                    case Privileges::ENSEIGNEMENT_EXTERIEUR:
-                        return $this->assertIntervenantServiceExterieur($role, $entity);
                 }
             break;
             case $entity instanceof Validation:
                 switch ($privilege) {
-                    case Privileges::ENSEIGNEMENT_PREVU_VALIDATION:
-                    case Privileges::ENSEIGNEMENT_REALISE_VALIDATION:
                     case Privileges::REFERENTIEL_PREVU_VALIDATION:
                     case Privileges::REFERENTIEL_REALISE_VALIDATION:
                         return $this->assertValidationValidation($role, $entity);
-                    case Privileges::ENSEIGNEMENT_DEVALIDATION:
                     case Privileges::REFERENTIEL_DEVALIDATION:
                         return $this->assertValidationDevalidation($role, $entity);
                 }
@@ -230,14 +182,6 @@ class ServiceAssertion extends AbstractAssertion
         switch ($controller . '.' . $action) {
             case 'Application\Controller\Service.validation':
                 return $role->hasPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION) || $role->hasPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION);
-
-            break;
-            case 'Application\Controller\Service.resume':
-                return $this->assertEnseignements($role);
-
-            break;
-            case 'Application\Controller\Service.importAgenda':
-                return $this->assertImportAgenda($role);
 
             break;
             case 'Application\Controller\Intervenant.servicesPrevus':
@@ -279,53 +223,6 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignements(Role $role)
-    {
-        return $this->asserts([
-            (
-                $role->hasPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION)
-                || $role->hasPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION)
-                || $role->hasPrivilege(Privileges::REFERENTIEL_PREVU_VISUALISATION)
-                || $role->hasPrivilege(Privileges::REFERENTIEL_REALISE_VISUALISATION)
-            ),
-            !$role->getIntervenant(),
-        ]);
-    }
-
-
-
-    protected function assertImportAgenda(Role $role)
-    {
-        return true;
-        //return $this->assertEtapeAtteignable(WfEtape::CODE_SERVICE_SAISIE);
-    }
-
-
-
-    protected function assertServiceVisualisation(Role $role, Service $service)
-    {
-        $typeVolumeHoraire = $service->getTypeVolumeHoraire();
-        $intervenant       = $service->getIntervenant();
-        $statut            = $intervenant->getStatut();
-
-        $wfEtape = $this->getWorkflowEtape($typeVolumeHoraire, 'saisie');
-
-        $asserts = [
-            $this->assertIntervenant($role, $intervenant),
-            $this->assertEtapeAtteignable($wfEtape, $intervenant),
-        ];
-        if ($typeVolumeHoraire->isPrevu()) {
-            $asserts[] = $statut->getServicePrevu();
-        }
-        if ($typeVolumeHoraire->isRealise()) {
-            $asserts[] = $statut->getServiceRealise();
-        }
-
-        return $this->asserts($asserts);
-    }
-
-
-
     protected function assertServiceReferentielVisualisation(Role $role, ServiceReferentiel $serviceReferentiel)
     {
         $typeVolumeHoraire = $serviceReferentiel->getTypeVolumeHoraire();
@@ -344,39 +241,6 @@ class ServiceAssertion extends AbstractAssertion
         if ($typeVolumeHoraire->isRealise()) {
             $asserts[] = $statut->getServiceRealise();
         }
-
-        return $this->asserts($asserts);
-    }
-
-
-
-    protected function assertServiceEdition(Role $role, Service $service)
-    {
-        $structure = $role->getStructure();
-
-        $asserts = [];
-
-        if ($structure) {
-            $structureAffectation  = $service->getIntervenant() ? $service->getIntervenant()->getStructure() : null;
-            $structureEnseignement = $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null;
-
-            if ($structureAffectation && $structureEnseignement) {
-                // cas d'un intervenant d'une autre structure prenant un enseignement dans une autre structure
-                $asserts[] = $structure == $structureAffectation || $structure == $structureEnseignement; // le service doit avoir un lien avec la structure
-            } elseif ($structureAffectation && !$structureEnseignement) {
-                // cas d'un intervenant prenant des enseignements à l'extérieur
-                //$asserts[] = $structure == $structureAffectation;
-            }
-        }
-
-        $asserts[] = $this->assertIntervenant($role, $service->getIntervenant());
-
-        if ($service->getEtablissement() && $service->getEtablissement() != $this->getServiceContext()->getEtablissement()) {
-            $asserts[] = $this->assertServiceExterieur($role, $service);
-        }
-
-        $asserts[] = $this->assertCampagneSaisie($role, $service->getTypeVolumeHoraire());
-        $asserts[] = $this->assertCloture($role, $service->getIntervenant());
 
         return $this->asserts($asserts);
     }
@@ -497,34 +361,6 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertServiceVisualisationValidation(Role $role, Service $service)
-    {
-        $wfEtape = $this->getWorkflowEtape($service->getTypeVolumeHoraire(), 'validation-enseignement');
-
-        return $this->asserts([
-            $this->assertIntervenant($role, $service->getIntervenant()),
-            $this->assertEtapeAtteignable($wfEtape, $service->getIntervenant()),
-        ]);
-    }
-
-
-
-    protected function assertVolumeHoraireValidation(Role $role, VolumeHoraire $volumeHoraire)
-    {
-        $service = $volumeHoraire->getService();
-
-        return $this->assertServiceValidation($role, $service);
-    }
-
-
-
-    protected function assertServiceValidation(Role $role, Service $service)
-    {
-        return $this->assertValidation($role, $service->getIntervenant(), $service->getStructure());
-    }
-
-
-
     protected function assertVolumeHoraireReferentielValidation(Role $role, VolumeHoraireReferentiel $volumeHoraireReferentiel)
     {
         $serviceReferentiel = $volumeHoraireReferentiel->getServiceReferentiel();
@@ -572,36 +408,6 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertServiceExterieur(Role $role, Service $service)
-    {
-        return $this->asserts([
-            $this->assertIntervenantServiceExterieur($role, $service->getIntervenant()),
-        ]);
-    }
-
-
-
-    protected function assertIntervenantServiceExterieur(Role $role, Intervenant $intervenant)
-    {
-        return $this->asserts([
-            $intervenant->getStatut()->estPermanent(),
-            $role->hasPrivilege(Privileges::ENSEIGNEMENT_EXTERIEUR),
-        ]);
-    }
-
-
-
-    protected function assertMotifNonPaiement(Role $role, Intervenant $intervenant)
-    {
-        // filtrer pour la structure ? ?
-        return $this->asserts([
-            $intervenant->getStatut()->getMotifNonPaiement(),
-            $this->assertIntervenant($role, $intervenant),
-        ]);
-    }
-
-
-
     protected function assertIntervenant(Role $role, Intervenant $intervenant = null)
     {
         if ($intervenant) {
@@ -610,28 +416,6 @@ class ServiceAssertion extends AbstractAssertion
                     return false;
                 }
             }
-        }
-
-        return true;
-    }
-
-
-
-    protected function assertIntervenantService(
-        Role $role,
-        Intervenant $intervenant,
-        string $typeVolumeHoraireCode,
-        bool $edition = false
-    )
-    {
-        if (!$this->assertIntervenant($role, $intervenant)) return false; // si on n'est pas le bon intervenant!!
-
-        $statut = $intervenant->getStatut();
-        if (TypeVolumeHoraire::CODE_PREVU == $typeVolumeHoraireCode) {
-            if (!$statut->getServicePrevu()) return false;
-        }
-        if (TypeVolumeHoraire::CODE_REALISE == $typeVolumeHoraireCode) {
-            if (!$statut->getServiceRealise()) return false;
         }
 
         return true;
@@ -694,12 +478,10 @@ class ServiceAssertion extends AbstractAssertion
     {
         $key    = $action . '-' . strtolower($typeVolumeHoraire->getCode());
         $etapes = [
-            'saisie-prevu'                    => WfEtape::CODE_SERVICE_SAISIE,
-            'saisie-realise'                  => WfEtape::CODE_SERVICE_SAISIE_REALISE,
-            'validation-enseignement-prevu'   => WfEtape::CODE_SERVICE_VALIDATION,
-            'validation-enseignement-realise' => WfEtape::CODE_SERVICE_VALIDATION_REALISE,
-            'validation-referentiel-prevu'    => WfEtape::CODE_REFERENTIEL_VALIDATION,
-            'validation-referentiel-realise'  => WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE,
+            'saisie-prevu'                   => WfEtape::CODE_SERVICE_SAISIE,
+            'saisie-realise'                 => WfEtape::CODE_SERVICE_SAISIE_REALISE,
+            'validation-referentiel-prevu'   => WfEtape::CODE_REFERENTIEL_VALIDATION,
+            'validation-referentiel-realise' => WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE,
         ];
 
         return $etapes[$key];

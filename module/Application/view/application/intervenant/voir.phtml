@@ -82,17 +82,12 @@ $this->intervenant($intervenant)->renderTitle('Fiche');
 <ul class="nav onglet nav-tabs">
     <li class="nav-item">
         <a class="nav-link" href="#fiche" aria-controls="fiche" role="tab" data-bs-toggle="tab">
-            Edition
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#notes" aria-controls="notes" role="tab" data-bs-toggle="tab">
-            Notes
+            Fiche
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#edition" aria-controls="edition" role="tab" data-bs-toggle="tab">
-            Notes
+            Edition
         </a>
     </li>
 </ul>
@@ -100,27 +95,29 @@ $this->intervenant($intervenant)->renderTitle('Fiche');
     <div class="tab-pane fade show active" id="fiche" role="tabpanel" aria-labelledby="fiche-tab">
         <?php echo $this->partial('fiche', ['intervenant' => $intervenant]); ?>
     </div>
-    <div class="tab-pane fade show" id="notes" role="tabpanel" aria-labelledby="notes-tab">
-        <?php $this->partial('note/voir', ['intervenant' => $intervenant->getId()]); ?>
-    </div>
-    <div class="tab-pane fade show" id="edition" role="tabpanel" aria-labelledby="edition-tab">
-        <?php $this->partial('edition', ['intervenant' => $intervenant->getId()]); ?>
+    <div class="tab-pane fade show" id="edition" role="tabpanel" aria-labelledby="edition-tab"
+         data-url="<?= $this->url('intervenant/saisir', ['intervenant' => $intervenant->getId()]); ?>">
+        test
     </div>
 </div>
-
 <script>
-    $(function() {
-    let hash = $(location).attr('hash');
-    let name = hash.substr(1);
-    if (name === undefined || name === "") name = "edition";
-
-    $('a[aria-controls=' + name + ']').tab('active');
-
-    $('ul.onglet.nav a').click(function (e) {
-    let anchor = $(this).attr('aria-controls');
-    e.preventDefault(); // >> bloque le scrolling, mais aussi la ré-écriture de l'url "#info" ...
-    history.replaceState(null, null, "#" + anchor);
-    $(this).tab('show');
+    //Rechargement de la page sur event
+    $(function () {
+        $("#edition").refresh();
     });
+
+    $(function () {
+        let hash = $(location).attr('hash');
+        let name = hash.substr(1);
+        if (name === undefined || name === "") name = "edition";
+
+        $('a[aria-controls=' + name + ']').tab('active');
+
+        $('ul.onglet.nav a').click(function (e) {
+            let anchor = $(this).attr('aria-controls');
+            e.preventDefault(); // >> bloque le scrolling, mais aussi la ré-écriture de l'url "#info" ...
+            history.replaceState(null, null, "#" + anchor);
+            $(this).tab('show');
+        });
     });
-</scirpt>
+</script>

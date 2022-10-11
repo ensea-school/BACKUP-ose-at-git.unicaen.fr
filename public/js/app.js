@@ -1,8 +1,8 @@
 $(function ()
 {
     WidgetInitializer.add('selectpicker', 'selectpicker', function () {
-        WidgetInitializer.includeJs(Url('vendor/bootstrap-select-1.9.4/dist/js/bootstrap-select.min.js'));
-        WidgetInitializer.includeCss(Url('vendor/bootstrap-select-1.9.4/dist/css/bootstrap-select.min.css'));
+        WidgetInitializer.includeJs(Url('vendor/bootstrap-select-1.14.0/dist/js/bootstrap-select.min.js'));
+        WidgetInitializer.includeCss(Url('vendor/bootstrap-select-1.14.0/dist/css/bootstrap-select.min.css'));
         $('.selectpicker').data('liveSearchNormalize', true); // insensible aux accents
     });
 

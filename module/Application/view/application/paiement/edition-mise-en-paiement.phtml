@@ -77,7 +77,7 @@ $this->intervenant($intervenant)->renderTitle('Annulation de mises en paiement')
         <button class="btn btn-danger pop-ajax" type="button"
                 data-content="Voulez-vous réellement annuler ces mises en paiement ?
             <div class='alert alert-warning'>
-            <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            <button type='button' class='close' data-bs-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                 Attention : Retirer les mises en paiement ne signifie pas qu'elles sont supprimées. Elles ne sont remises qu'à l'état de simples demandes de mises en paiement.
                 Pour les supprimer définitivement, il convient de retirer également les <a class='no-intranavigation' href='<?= $this->url('intervenant/mise-en-paiement/demande', ['intervenant' => $intervenant->getId()]) ?>'>demandes de mises en paiement</a>.
             </div>

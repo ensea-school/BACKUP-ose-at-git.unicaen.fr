@@ -524,7 +524,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             affErreur: function (erreur)
             {
                 var errStr = "<div class=\"messenger alert alert-danger \">\n" +
-                    "<button type=\"button\" class=\"close\" title=\"Fermer cette alerte\" data-dismiss=\"alert\">×</button>\n" +
+                    "<button type=\"button\" class=\"close\" title=\"Fermer cette alerte\" data-bs-dismiss=\"alert\">×</button>\n" +
                     "<span class=\"fas fa-triangle-exclamation\"></span>\n" +
                     Util.nl2br(erreur, true) +
                     "</div>";

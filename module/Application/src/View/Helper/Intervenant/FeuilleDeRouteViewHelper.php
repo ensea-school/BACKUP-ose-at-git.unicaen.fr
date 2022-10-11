@@ -367,7 +367,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
             $desc = $dep->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie();
             ?>
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <?= $desc ?>
             </div>
             <?php

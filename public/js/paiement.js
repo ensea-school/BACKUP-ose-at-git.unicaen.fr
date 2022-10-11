@@ -20,7 +20,7 @@ function DemandeMiseEnPaiement(id)
         var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
             + '<i class="fas fa-exclamation"></i> '
             + errorStr
-            + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>'
+            + '<button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">&times;</button>'
             + '</div>';
         serviceElement.find(".breadcrumb").after(out);
     }
@@ -242,7 +242,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
         var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
             + '<i class="fas fa-exclamation"></i> '
             + errorStr
-            + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>'
+            + '<button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">&times;</button>'
             + '</div>';
         this.element.parents('.type-heures').prepend(out);
         this.validation = false;
@@ -294,8 +294,8 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
 
         this.element.append(this.renderMiseEnPaiement(id));
 
-        WidgetInitializer.includeJs(Url('vendor/bootstrap-select-1.9.4/dist/js/bootstrap-select.min.js'));
-        WidgetInitializer.includeCss(Url('vendor/bootstrap-select-1.9.4/dist/css/bootstrap-select.min.css'));
+        WidgetInitializer.includeJs(Url('vendor/bootstrap-select-1.14.0/dist/js/bootstrap-select.min.js'));
+        WidgetInitializer.includeCss(Url('vendor/bootstrap-select-1.14.0/dist/css/bootstrap-select.min.css'));
         $('.selectpicker').selectpicker();
 
         if (isNew) {

@@ -221,7 +221,7 @@ class Liste extends AbstractViewHelper
             $out     .= '<div class="modal-dialog modal-md">';
             $out     .= '<div class="modal-content">';
             $out     .= '<div class="modal-header">';
-            $out     .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
+            $out     .= '<button type="button" class="close" data-bs-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
             $out     .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
             $out     .= '</div>';
             $out     .= '<div class="modal-body">';
@@ -229,7 +229,7 @@ class Liste extends AbstractViewHelper
             $out     .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
             $out     .= '</div>';
             $out     .= '<div class="modal-footer">';
-            $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+            $out     .= '<button type="button" class="btn btn-default" data-bs-dismiss="modal">Annuler</button>';
             $out     .= '<button type="button" class="btn btn-primary referentiel-prevu-to-realise">OK</button>';
             $out     .= '</div>';
             $out     .= '</div>';
@@ -250,14 +250,14 @@ class Liste extends AbstractViewHelper
             $out     .= '<div class="modal-dialog modal-md">';
             $out     .= '<div class="modal-content">';
             $out     .= '<div class="modal-header">';
-            $out     .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
+            $out     .= '<button type="button" class="close" data-bs-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
             $out     .= '<h4 class="modal-title">Reporter ici le service ' . strtolower($source) . ' validé de l\'année précédente.</h4>';
             $out     .= '</div>';
             $out     .= '<div class="modal-body">';
             $out     .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service ' . strtolower($source) . ' validé de l\'an dernier ?</p>';
             $out     .= '</div>';
             $out     .= '<div class="modal-footer">';
-            $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+            $out     .= '<button type="button" class="btn btn-default" data-bs-dismiss="modal">Annuler</button>';
             $out     .= '<button type="button" class="btn btn-primary referentiel-prevu-to-prevu" data-intervenant="' . $this->prevuToPrevu->getId() . '">OK</button>';
             $out     .= '</div>';
             $out     .= '</div>';

@@ -73,7 +73,7 @@ $(document).ready(function() {
 				option and the export buttons will start to operate.</p>
 				<p>A resize is often required when the table is hidden in a tab when initialised - for example if using Bootstrap tabs you might use:</p>
 				<pre>
-<code class="multiline language-js">$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+<code class="multiline language-js">$('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
 	$.fn.dataTable.tables( { visible: true, api: true } ).buttons.resize();
 })
 </code>

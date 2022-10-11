@@ -37,7 +37,7 @@ class FormButtonGroupViewHelper extends FormRadio
             $globalLabelAttributes = $this->labelAttributes;
         }
 
-        $out = '<div class="btn-group" data-toggle="buttons">';
+        $out = '<div class="btn-group" data-bs-toggle="buttons">';
         foreach ($options as $key => $optionSpec) {
             $value = $key;
             $label = $optionSpec;

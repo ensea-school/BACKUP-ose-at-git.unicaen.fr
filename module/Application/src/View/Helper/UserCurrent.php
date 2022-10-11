@@ -69,7 +69,7 @@ class UserCurrent extends UserAbstract
    id="$id" 
    title="$title" 
    data-placement="bottom" 
-   data-toggle="popover" 
+   data-bs-toggle="popover" 
    data-html="true" 
    data-content="$content" 
    href="#">$status</a>

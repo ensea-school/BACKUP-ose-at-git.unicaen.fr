@@ -119,7 +119,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
         if (count($etape->getEtapes()) > 1) {
             $collapseId = 'collapse-' . $this->getIntervenant()->getId() . '-' . $etape->getEtape()->getId();
 
-            $detailsLink = $tag('a', ['data-toggle' => 'collapse', 'href' => '#' . $collapseId]);
+            $detailsLink = $tag('a', ['data-bs-toggle' => 'collapse', 'href' => '#' . $collapseId]);
             $detailsRes  = $this->renderDetails($etape, $collapseId);
         } else {
             $detailsLink = null;

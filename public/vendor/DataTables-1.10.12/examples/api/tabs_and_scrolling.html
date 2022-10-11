@@ -28,7 +28,7 @@
 	
 
 $(document).ready(function() {
-	$('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
+	$('a[data-bs-toggle="tab"]').on( 'shown.bs.tab', function (e) {
 		$.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
 	} );
 	
@@ -65,10 +65,10 @@ $(document).ready(function() {
 			<div>
 				<ul class="nav nav-tabs" role="tablist">
 					<li class="active">
-						<a href="#tab-table1" data-toggle="tab">Table 1</a>
+						<a href="#tab-table1" data-bs-toggle="tab">Table 1</a>
 					</li>
 					<li>
-						<a href="#tab-table2" data-toggle="tab">Table 2</a>
+						<a href="#tab-table2" data-bs-toggle="tab">Table 2</a>
 					</li>
 				</ul>
 				<div class="tab-content">
@@ -112,7 +112,7 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
-	$('a[data-toggle=&quot;tab&quot;]').on( 'shown.bs.tab', function (e) {
+	$('a[data-bs-toggle=&quot;tab&quot;]').on( 'shown.bs.tab', function (e) {
 		$.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
 	} );
 	

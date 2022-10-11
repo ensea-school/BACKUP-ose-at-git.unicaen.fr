@@ -209,7 +209,7 @@ class Liste extends AbstractViewHelper
         if ($this->isInRealise()) {
             $attribs = [
                 'class'       => 'btn btn-warning referentiel-prevu-to-realise-show',
-                'data-toggle' => 'modal',
+                'data-bs-toggle' => 'modal',
                 'data-target' => '#referentiel-prevu-to-realise-modal',
                 //'data-event'    => 'service-constatation',
                 //'href'          => $this->getAddUrl(),
@@ -238,7 +238,7 @@ class Liste extends AbstractViewHelper
         } elseif ($this->prevuToPrevu && $this->getServiceServiceReferentiel()->getPrevusFromPrevusData($this->prevuToPrevu)) {
             $attribs = [
                 'class'       => 'btn btn-warning referentiel-prevu-to-prevu-show',
-                'data-toggle' => 'modal',
+                'data-bs-toggle' => 'modal',
                 'data-target' => '#referentiel-prevu-to-prevu-modal',
                 //'data-event'    => 'service-constatation',
                 //'href'          => $this->getAddUrl(),

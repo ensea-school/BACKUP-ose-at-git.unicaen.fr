@@ -233,7 +233,7 @@ class Liste extends AbstractViewHelper
             if ($this->getProcessusIntervenant()->service()->initializeRealise($this->getIntervenant())) {
                 $attribs = [
                     'class'       => 'btn btn-warning prevu-to-realise-show',
-                    'data-toggle' => 'modal',
+                    'data-bs-toggle' => 'modal',
                     'data-target' => '#prevu-to-realise-modal',
                     //'data-event'    => 'service-constatation',
                     //'href'          => $this->getAddUrl(),
@@ -264,7 +264,7 @@ class Liste extends AbstractViewHelper
             if ($typeVolumeHoraire = $this->getProcessusIntervenant()->service()->initializePrevu($this->prevuToPrevu)) {
                 $attribs = [
                     'class'       => 'btn btn-warning prevu-to-prevu-show',
-                    'data-toggle' => 'modal',
+                    'data-bs-toggle' => 'modal',
                     'data-target' => '#prevu-to-prevu-modal',
                     //'data-event'    => 'service-constatation',
                     //'href'          => $this->getAddUrl(),

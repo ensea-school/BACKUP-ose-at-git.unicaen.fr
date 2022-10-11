@@ -65,7 +65,7 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
                             <td class="notification">
                                 <?= $this->formSelect($notif->setValue($abonnement->getFrequence())); ?>
                                 <span class="indicateur-info fas fa-circle-info" aria-hidden="true"
-                                      data-toggle="tooltip" data-placement="auto" data-html="true"
+                                      data-bs-toggle="tooltip" data-placement="auto" data-html="true"
                                       title="<?= $abonnement->getFrequence() ? $abonnement->getExtraInfos() : '' ?>"
                                       style="<?= $abonnement->getFrequence() ? '' : 'display: none' ?>"></span>
                             </td>

@@ -38,7 +38,7 @@ echo $this->tree($tree, ['id' => 'intervenant-suppr']);
 ?>
     <br/>
 
-    <button id="suppressionIntervenantData" type="button" class="btn btn-danger" data-toggle="popover" data-trigger="focus"
+    <button id="suppressionIntervenantData" type="button" class="btn btn-danger" data-bs-toggle="popover" data-trigger="focus"
             title="Suppression de données intervenant">
         Supprimer les données sélectionnées
     </button>
@@ -46,7 +46,7 @@ echo $this->tree($tree, ['id' => 'intervenant-suppr']);
         ...
     </div>
 <?php if ($intervenant->estNonHistorise()): ?>
-    <button id="historisationIntervenantData" type="button" class="btn btn-default" data-toggle="popover" data-trigger="focus"
+    <button id="historisationIntervenantData" type="button" class="btn btn-default" data-bs-toggle="popover" data-trigger="focus"
             title="Historisation de la fiche de l'intervenant">
         Historiser la fiche de l'intervenant
     </button>

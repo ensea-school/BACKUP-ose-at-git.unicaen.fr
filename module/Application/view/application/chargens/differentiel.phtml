@@ -103,7 +103,7 @@ if ($error) {
     $first = true;
     echo '<ul class="nav nav-tabs" role="tablist">';
     foreach ($diff as $dk => $dc) {
-        echo '<li role="presentation"' . ($first ? ' class="active"' : '') . '><a href="#composante-' . $dk . '" aria-controls="home" role="tab" data-toggle="tab">' . $dc['libelle'] . '</a></li>';
+        echo '<li role="presentation"' . ($first ? ' class="active"' : '') . '><a href="#composante-' . $dk . '" aria-controls="home" role="tab" data-bs-toggle="tab">' . $dc['libelle'] . '</a></li>';
         $first = false;
     }
     echo '</ul>';

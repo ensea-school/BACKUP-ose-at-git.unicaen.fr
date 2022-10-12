@@ -2,6 +2,7 @@
 
 
 use Application\Provider\Privilege\Privileges;
+use ExportRh\Assertion\ExportRhAssertion;
 
 /* @var $intervenant \Application\Entity\Db\Intervenant */
 /* @var $tab string */
@@ -19,7 +20,6 @@ $this->intervenant($intervenant)->renderTitle('Fiche');
 //    ],
 //];
 //
-//if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))) {
 //    $tabs[] = [
 //        'id'    => 'edition',
 //        'label' => '<i class="fas fa-pencil"></i> Édition',
@@ -81,15 +81,31 @@ $this->intervenant($intervenant)->renderTitle('Fiche');
 //echo $this->tabajax($tabs, $tab);?>
 <ul class="nav onglet nav-tabs">
     <li class="nav-item">
-        <a class="nav-link" href="#fiche" aria-controls="fiche" role="tab" data-bs-toggle="tab">
+        <a class="nav-link active" href="#fiche" aria-controls="fiche" role="tab" data-bs-toggle="tab">
             Fiche
         </a>
     </li>
+    <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))) : ?>
     <li class="nav-item">
         <a class="nav-link" href="#edition" aria-controls="edition" role="tab" data-bs-toggle="tab">
             Edition
         </a>
     </li>
+    <?php endif; ?>
+    <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))) : ?>
+    <li class="nav-item">
+        <a class="nav-link" href="#synchronisation" aria-controls="synchronisation" role="tab" data-bs-toggle="tab">
+            Synchronisation
+        </a>
+    </li>
+    <?php endif; ?>
+    <?php if ($this->isAllowed($intervenant, ExportRhAssertion::PRIV_CAN_INTERVENANT_EXPORT_RH)) : ?>
+    <li class="nav-item">
+        <a class="nav-link" href="#exportRH" aria-controls="exportRH" role="tab" data-bs-toggle="tab">
+            export RH
+        </a>
+    </li>
+    <?php endif; ?>
 </ul>
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="fiche" role="tabpanel" aria-labelledby="fiche-tab">
@@ -97,13 +113,19 @@ $this->intervenant($intervenant)->renderTitle('Fiche');
     </div>
     <div class="tab-pane fade show" id="edition" role="tabpanel" aria-labelledby="edition-tab"
          data-url="<?= $this->url('intervenant/saisir', ['intervenant' => $intervenant->getId()]); ?>">
-        test
+    </div>
+    <div class="tab-pane fade show" id="synchronisation" role="tabpanel" aria-labelledby="synchronisation-tab"
+         data-url="<?= $this->url('intervenant/synchronisation', ['intervenant' => $intervenant->getId()]); ?>">
+    </div>
+    <div class="tab-pane fade show" id="exportRH" role="tabpanel" aria-labelledby="exportRH-tab"
+         data-url="<?= $this->url('intervenant/exporter', ['intervenant' => $intervenant->getId()]); ?>">
     </div>
 </div>
 <script>
     //Rechargement de la page sur event
     $(function () {
         $("#edition").refresh();
+        $("#synchronisation").refresh();
     });
 
     $(function () {

@@ -40,18 +40,12 @@ return [
                             'may_terminate' => false,
                             'child_routes'  => [
                                 'prevu'     => [
-                                    'route'    => '/prevu',
-                                    'action'   => 'validation',
-                                    'defaults' => [
-                                        'type-volume-horaire-code' => 'PREVU',
-                                    ],
+                                    'route'  => '/prevu',
+                                    'action' => 'validation-prevu',
                                 ],
                                 'realise'   => [
-                                    'route'    => '/realise',
-                                    'action'   => 'validation',
-                                    'defaults' => [
-                                        'type-volume-horaire-code' => 'REALISE',
-                                    ],
+                                    'route'  => '/realise',
+                                    'action' => 'validation-realise',
                                 ],
                                 'valider'   => [
                                     'route'       => '/valider/:typeVolumeHoraire/:structure',
@@ -294,9 +288,16 @@ return [
         ],
         [
             'controller' => EnseignementController::class,
-            'action'     => ['validation'],
+            'action'     => ['validation-prevu'],
             'privileges' => [
                 Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
+            ],
+            'assertion'  => Assertion\EnseignementAssertion::class,
+        ],
+        [
+            'controller' => EnseignementController::class,
+            'action'     => ['validation-realise'],
+            'privileges' => [
                 Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
             ],
             'assertion'  => Assertion\EnseignementAssertion::class,

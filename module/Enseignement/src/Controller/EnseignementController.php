@@ -391,7 +391,25 @@ class EnseignementController extends AbstractController
 
 
 
-    public function validationAction()
+    public function validationPrevuAction()
+    {
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+
+        return $this->validationAction($typeVolumeHoraire);
+    }
+
+
+
+    public function validationRealiseAction()
+    {
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
+
+        return $this->validationAction($typeVolumeHoraire);
+    }
+
+
+
+    private function validationAction(TypeVolumeHoraire $typeVolumeHoraire)
     {
         $this->initFilters();
 
@@ -406,8 +424,6 @@ class EnseignementController extends AbstractController
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
-
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', 'PREVU'));
 
         $rsv = $this->getServiceRegleStructureValidation()->getBy($typeVolumeHoraire, $intervenant);
         if ($rsv && $rsv->getMessage()) {

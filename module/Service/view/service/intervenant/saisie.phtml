@@ -30,7 +30,7 @@ echo $this->plafonds($intervenant, $typeVolumeHoraire);
 
 if ($cloture && ($enseignements || $referentiels)) {
     $bottom = false;
-    echo $this->partial('service/partial/cloture', compact('cloture', 'bottom'));
+    echo $this->partial('service/intervenant/cloture', compact('cloture', 'bottom'));
 }
 
 if ($enseignements !== false) {
@@ -49,7 +49,7 @@ if ($referentiels !== false) {
 
 if ($cloture && ($enseignements || $referentiels)) {
     $bottom = true;
-    echo $this->partial('service/partial/cloture', compact('cloture', 'bottom'));
+    echo $this->partial('service/intervenant/cloture', compact('cloture', 'bottom'));
 }
 
 

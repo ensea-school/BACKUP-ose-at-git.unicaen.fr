@@ -177,7 +177,7 @@ return [
                 Privileges::CLOTURE_REOUVERTURE,
             ],
             'resources'  => ['Validation', 'Intervenant'],
-            //'assertion'  => Assertion\ClotureAssertion::class,
+            'assertion'  => Assertion\ClotureAssertion::class,
         ],
     ],
 

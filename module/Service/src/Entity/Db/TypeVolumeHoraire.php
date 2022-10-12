@@ -2,6 +2,7 @@
 
 namespace Service\Entity\Db;
 
+use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 
 class TypeVolumeHoraire
@@ -165,6 +166,42 @@ class TypeVolumeHoraire
         }
         if ($this->isRealise()) {
             return Privileges::REFERENTIEL_REALISE_AUTOVALIDATION;
+        }
+    }
+
+
+
+    public function getWfEtapeServiceSaisie(): string
+    {
+        if ($this->isPrevu()) {
+            return WfEtape::CODE_SERVICE_SAISIE;
+        }
+        if ($this->isRealise()) {
+            return WfEtape::CODE_SERVICE_SAISIE_REALISE;
+        }
+    }
+
+
+
+    public function getWfEtapeEnseignementValidation(): string
+    {
+        if ($this->isPrevu()) {
+            return WfEtape::CODE_SERVICE_VALIDATION;
+        }
+        if ($this->isRealise()) {
+            return WfEtape::CODE_SERVICE_VALIDATION_REALISE;
+        }
+    }
+
+
+
+    public function getWfEtapeReferentielValidation(): string
+    {
+        if ($this->isPrevu()) {
+            return WfEtape::CODE_REFERENTIEL_VALIDATION;
+        }
+        if ($this->isRealise()) {
+            return WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE;
         }
     }
 }

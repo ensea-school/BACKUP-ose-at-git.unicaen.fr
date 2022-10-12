@@ -61,58 +61,31 @@ return [
                 'validation' => [
                     'child_routes' => [
                         'referentiel' => [
-                            'type'          => 'Literal',
-                            'options'       => [
-                                'route'    => '/referentiel',
-                                'defaults' => [
-                                    'controller' => ServiceReferentielController::class,
-                                ],
-                            ],
+                            'route'         => '/referentiel',
+                            'controller'    => ServiceReferentielController::class,
                             'may_terminate' => false,
                             'child_routes'  => [
                                 'prevu'     => [
-                                    'type'    => 'Literal',
-                                    'options' => [
-                                        'route'    => '/prevu',
-                                        'defaults' => [
-                                            'action'                   => 'validation',
-                                            'type-volume-horaire-code' => 'PREVU',
-                                        ],
-                                    ],
+                                    'route'  => '/prevu',
+                                    'action' => 'validation-prevu',
                                 ],
                                 'realise'   => [
-                                    'type'    => 'Literal',
-                                    'options' => [
-                                        'route'    => '/realise',
-                                        'defaults' => [
-                                            'action'                   => 'validation',
-                                            'type-volume-horaire-code' => 'REALISE',
-                                        ],
-                                    ],
+                                    'route'  => '/realise',
+                                    'action' => 'validation-realise',
                                 ],
                                 'valider'   => [
-                                    'type'    => 'Segment',
-                                    'options' => [
-                                        'route'       => '/valider/:typeVolumeHoraire/:structure',
-                                        'constraints' => [
-                                            'typeVolumeHoraire' => '[0-9]*',
-                                            'structure'         => '[0-9]*',
-                                        ],
-                                        'defaults'    => [
-                                            'action' => 'valider',
-                                        ],
+                                    'route'       => '/valider/:typeVolumeHoraire/:structure',
+                                    'action'      => 'valider',
+                                    'constraints' => [
+                                        'typeVolumeHoraire' => '[0-9]*',
+                                        'structure'         => '[0-9]*',
                                     ],
                                 ],
                                 'devalider' => [
-                                    'type'    => 'Segment',
-                                    'options' => [
-                                        'route'       => '/devalider/:validation',
-                                        'constraints' => [
-                                            'validation' => '[0-9]*',
-                                        ],
-                                        'defaults'    => [
-                                            'action' => 'devalider',
-                                        ],
+                                    'route'       => '/devalider/:validation',
+                                    'action'      => 'devalider',
+                                    'constraints' => [
+                                        'validation' => '[0-9]*',
                                     ],
                                 ],
                             ],
@@ -281,9 +254,16 @@ return [
         ],
         [
             'controller' => ServiceReferentielController::class,
-            'action'     => ['validation'],
+            'action'     => ['validation-prevu'],
             'privileges' => [
                 Privileges::REFERENTIEL_PREVU_VISUALISATION,
+            ],
+            'assertion'  => Assertion\ReferentielAssertion::class,
+        ],
+        [
+            'controller' => ServiceReferentielController::class,
+            'action'     => ['validation-realise'],
+            'privileges' => [
                 Privileges::REFERENTIEL_REALISE_VISUALISATION,
             ],
             'assertion'  => Assertion\ReferentielAssertion::class,

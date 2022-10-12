@@ -39,8 +39,4 @@ foreach ($wells as $well => $title) {
     }
 }
 
-echo $this->feuilleDeRoute($intervenant)->renderNav(
-    $typeVolumeHoraire->isPrevu() ?
-        \Application\Entity\Db\WfEtape::CODE_REFERENTIEL_VALIDATION
-        : \Application\Entity\Db\WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE
-);
+echo $this->feuilleDeRoute($intervenant)->renderNav($typeVolumeHoraire->getWfEtapeReferentielValidation());

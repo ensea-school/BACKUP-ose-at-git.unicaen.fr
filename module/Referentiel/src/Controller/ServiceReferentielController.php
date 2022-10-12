@@ -269,7 +269,25 @@ class ServiceReferentielController extends AbstractController
 
 
 
-    public function validationAction()
+    public function validationPrevuAction()
+    {
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+
+        return $this->validationAction($typeVolumeHoraire);
+    }
+
+
+
+    public function validationRealiseAction()
+    {
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
+
+        return $this->validationAction($typeVolumeHoraire);
+    }
+
+
+
+    private function validationAction(TypeVolumeHoraire $typeVolumeHoraire)
     {
         $this->initFilters();
 
@@ -282,8 +300,6 @@ class ServiceReferentielController extends AbstractController
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
-
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', 'PREVU'));
 
         $title = "Validation du référentiel";
 
@@ -323,7 +339,11 @@ class ServiceReferentielController extends AbstractController
             $this->flashMessenger()->addSuccessMessage($message);
         }
 
-        return compact('title', 'typeVolumeHoraire', 'intervenant', 'validations', 'services');
+        $vm = new ViewModel();
+        $vm->setVariables(compact('title', 'typeVolumeHoraire', 'intervenant', 'validations', 'services'));
+        $vm->setTemplate('referentiel/validation');
+
+        return $vm;
     }
 
 

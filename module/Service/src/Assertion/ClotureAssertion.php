@@ -7,6 +7,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
@@ -18,6 +19,8 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
  */
 class ClotureAssertion extends AbstractAssertion
 {
+    use ServiceAssertionAwareTrait;
+    use WorkflowServiceAwareTrait;
 
     /**
      * @param ResourceInterface $entity
@@ -63,7 +66,7 @@ class ClotureAssertion extends AbstractAssertion
             $etape       = $page['workflow-etape-code'];
             $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
-            if (!$this->assertEtapeAtteignable($etape, $intervenant)) {
+            if (!$this->getAssertionService()->assertEtapeAtteignable($etape, $intervenant)) {
                 return false;
             }
         }
@@ -77,7 +80,7 @@ class ClotureAssertion extends AbstractAssertion
     {
         return $this->asserts([
             $intervenant,
-            $this->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant),
+            $this->getAssertionService()->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant),
         ]);
     }
 
@@ -94,7 +97,7 @@ class ClotureAssertion extends AbstractAssertion
         return $this->asserts([
             $hasNoDMEP,
             $intervenant,
-            $this->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant),
+            $this->getAssertionService()->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant),
         ]);
     }
 

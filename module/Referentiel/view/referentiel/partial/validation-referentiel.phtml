@@ -57,7 +57,7 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
             <small>(cliquez pour afficher/cacher)</small>
         </a>
         <div class="collapse <?= $validation->getId() ? '' : 'in' ?>" id="details-referentiel-<?= $id ?>">
-            <?= $this->referentiels($services)->setTypeVolumeHoraire($typeVolumeHoraire)->setReadonly(true)->render(); ?>
+            <?= $this->referentiels($typeVolumeHoraire, current($services)->getIntervenant(), $services)->setReadonly(true)->render(); ?>
         </div>
 
     </div>

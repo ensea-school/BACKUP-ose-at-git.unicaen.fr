@@ -1,53 +1,97 @@
 <?php
-$libelle = $this->translate('Je clôture la saisie de mon service réalisé.');
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this               \Application\View\Renderer\PhpRenderer
+ * @var $cloture            \Application\Entity\Db\Validation|null
+ * @var $bottom             boolean
+ */
+
+$isSelf    = $this->intervenant()->getServiceContext()->getIntervenant() == $cloture->getIntervenant();
+$isCloture = $cloture->getId() !== null;
+
+$canCloturer   = $this->isAllowed($cloture, Privileges::CLOTURE_CLOTURE);
+$canDecloturer = $this->isAllowed($cloture, Privileges::CLOTURE_REOUVERTURE);
+$canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_EDITION_SERVICES))
+    || $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_EDITION_SERVICES_AVEC_MEP));
+
 ?>
 
-<!----------------------------------------------------------------------------->
-<!--                            Bouton de clôture                            -->
-<!----------------------------------------------------------------------------->
+<?php if ($isSelf && !$isCloture && $canCloturer): ?>
 
+    <div class="alert alert-warning text-warning">
+        <strong>Attention!</strong> <br/>
+        Assurez-vous d'avoir saisi la totalité de vos services réalisés (enseignements et référentiel),
+        quelle que soit la composante d'intervention. <br/>
+        Cliquer sur le bouton ci-dessous vous empêchera de revenir sur votre saisie.
+    </div>
 
+    <a
+            href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getId()]) ?>"
+            class="pop-ajax btn-cloturer-saisie btn btn-lg btn-info"
+            data-title="Clôture des services réalisés"
+            data-content="
+            <p class='lead text-danger'><strong>Attention!</strong></p>
+            <p>Confirmez-vous avoir saisi la totalité de vos services réalisés (enseignements et référentiel),
+                quelle que soit la composante d'intervention ?</p>
+            <p>Cliquer sur &OpenCurlyDoubleQuote;Je clôture&CloseCurlyDoubleQuote; vous empêchera de revenir sur votre saisie.</p>
+        "
+            data-confirm="true"
+            data-confirm-button="<span class='fas fa-check'></span> Je clôture mes services"
+            data-submit-reload="true"
+    ><?= $this->translate('J\'ai terminé la saisie de la totalité de mon service réalisé') ?></a>
+    <br/><br/>
 
-    <?= $this->messenger()->renderMessage($this->avertissement, 'warning') ?>
+<?php elseif (!$isSelf && !$isCloture && $canCloturer): ?>
 
-    <button type="button" class="btn-cloturer-saisie btn btn-lg btn-info"><?= $libelle ?></button>
+    <a
+            href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getId()]) ?>"
+            class="pop-ajax btn-cloturer-saisie btn btn-lg btn-info"
+            data-title="Clôture des services réalisés"
+            data-content="
+            <p class='lead text-danger'><strong>Attention!</strong></p>
+            <p>Confirmez-vous vouloir clôturer les services réalisés de <?= $cloture->getIntervenant() ?>
+            quelle que soit la composante d'intervention ?</p>
+        "
+            data-confirm="true"
+            data-confirm-button="<span class='fas fa-check'></span> Clôture des services"
+            data-submit-reload="true"
+    ><?= $this->translate('L\'intervenant a terminé la saisie de la totalité de son service réalisé') ?></a>
+    <br/><br/>
 
-    <script>
-        var url = '<?= $this->url('intervenant/cloturer-saisie', [], [], true) ?>';
-        $(function() {
-            $(".btn-cloturer-saisie").one('click', function(e) {
-                e.preventDefault();
-                e.stopImmediatePropagation(); // nécessaire si cette vue est rendue plus d'une fois.
-                if (!confirm("<?= $this->confirm ?>")) {
-                    return;
-                }
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {cloturer: 1},
-                    success: function () {
-                        window.location.reload();
-                    },
-                });
-            });
-        });
-    </script>
+<?php elseif ($isCloture && !$bottom): ?>
 
+    <div class="alert alert-success">
+        <i class="fas fa-power-off pull-left" style="font-size: 48pt;margin-right:.2em"></i>
+        <p>La saisie du service réalisé a été clôturée par <?= $cloture->getHistoModificateur() ?>
+            le <?= $cloture->getHistoModification()->format(Application\Constants::DATETIME_FORMAT) ?>.</p>
+        <?php if (!$canEditAfter): ?>
+            <p><strong>Vous ne pouvez donc plus modifier <?= $isSelf ? 'vos' : 'les' ?> données.</strong></p>
+        <?php else: ?>
+            <?php if ($cloture->getIntervenant()->hasMiseEnPaiement()): ?>
+                <p><strong>Vous ne pouvez plus modifier le service réalisé car outre la clôture de saisie,
+                        des demandes de mise en paiement et/ou des mises en paiement ont été faites.
+                        Pour pouvoir modifier à nouveau le service, toutes les demandes de mise en paiement ET toutes les
+                        mises en paiement
+                        doivent être supprimées.
+                    </strong></p>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php if ($canDecloturer): ?>
+            <a
+                    href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getId()]) ?>"
+                    class="pop-ajax btn-decloturer-saisie btn btn-danger"
+                    data-content="
+            <p class='lead text-danger'><strong>Attention!</strong></p>
+            <p>Êtes-vous sûr de vouloir supprimer la clôture des services réalisés ?</p>
+        "
+                    data-confirm="true"
+                    data-confirm-button="<span class='fas fa-check'></span> Oui, supprimer la clôture"
+                    data-submit-reload="true"
+            >Supprimer la clôture</a>
+        <?php endif; ?>
+        <div style="clear:both"></div>
+    </div>
 
-    <!----------------------------------------------------------------------------->
-    <!--                       Clôture existante éventuelle                      -->
-    <!----------------------------------------------------------------------------->
-<?php if ($this->validation && $this->validation->getHistoModification() ): ?>
-<?php if ($this->isAllowed($this->validation, 'read')): ?>
-
-    <button type="button" class="btn-cloturer-saisie btn btn-lg btn-success" disabled="disabled"><?= $libelle ?> le
-            <?= $this->validation->getHistoModification()->format(Application\Constants::DATETIME_FORMAT) ?></button>
-
-    <script>
-        $(function() {
-            $(".btn-cloturer-saisie").parent().tooltip();
-        });
-    </script>
-
-<?php endif;
-endif;
+<?php endif; ?>

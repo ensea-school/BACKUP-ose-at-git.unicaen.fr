@@ -19,7 +19,6 @@ use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
-use Enseignement\Service\Traits\VolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\Mapping\MappingException;
@@ -105,6 +104,7 @@ class ContratProcessus extends AbstractProcessus
             if ($detach) {
                 $this->getEntityManager()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
             }
+            $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
             $services[$service->getId()] = $service;
         }
 

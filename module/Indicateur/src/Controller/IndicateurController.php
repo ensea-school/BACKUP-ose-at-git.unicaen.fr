@@ -3,22 +3,20 @@
 namespace Indicateur\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Indicateur\Entity\Db\IndicateurDepassementCharges;
 use Application\Entity\Db\Intervenant;
 use Indicateur\Entity\Db\TypeIndicateur;
 use Indicateur\Processus\IndicateurProcessusAwareTrait;
 use Indicateur\Entity\Db\Indicateur;
 use Application\Service\ContextService;
-use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DossierServiceAwareTrait;
 use Indicateur\Service\IndicateurServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Indicateur\Service\NotificationIndicateurServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Intervenant\Entity\Db\Note;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Laminas\Form\Element\Checkbox;
@@ -45,9 +43,7 @@ class IndicateurController extends AbstractController
     use IntervenantServiceAwareTrait;
     use ContextServiceAwareTrait;
     use NotificationIndicateurServiceAwareTrait;
-    use AffectationServiceAwareTrait;
     use IndicateurProcessusAwareTrait;
-    use DossierServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use PeriodeServiceAwareTrait;
     use NoteServiceAwareTrait;

@@ -48,20 +48,9 @@ class IntervenantAssertion extends AbstractAssertion
         switch (true) {
             case $entity instanceof Intervenant:
                 switch ($privilege) {
-                    case Privileges::CLOTURE_CLOTURE:
-                    case Privileges::CLOTURE_REOUVERTURE:
-                        return $this->assertCloture($entity);
                     case Privileges::INTERVENANT_EDITION:
                     case Privileges::INTERVENANT_EDITION_AVANCEE:
                         return $this->assertEdition($entity);
-                }
-            break;
-            case $entity instanceof Validation:
-                switch ($privilege) {
-                    case Privileges::CLOTURE_CLOTURE:
-                        return $this->assertCloture($entity->getIntervenant());
-                    case Privileges::CLOTURE_REOUVERTURE:
-                        return $this->assertReouverture($entity->getIntervenant());
                 }
             break;
         }
@@ -87,41 +76,14 @@ class IntervenantAssertion extends AbstractAssertion
 
 
 
-    protected function assertCloture(Intervenant $intervenant = null)
-    {
-        return $this->asserts([
-            $intervenant,
-            $this->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant),
-        ]);
-    }
-
-
-
     protected function assertEdition(Intervenant $intervenant = null)
     {
         $role = $this->getRole();
         if ($role instanceof Role && $role->getStructure() && $intervenant->getStructure()) {
             return $role->getStructure() == $intervenant->getStructure();
         }
-        
+
         return true;
-    }
-
-
-
-    protected function assertReouverture(Intervenant $intervenant = null)
-    {
-        $hasNoDMEP = false;
-        if ($intervenant) {
-            $dmepEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
-            $hasNoDMEP = !$dmepEtape || $dmepEtape->getFranchie() == 0;
-        }
-
-        return $this->asserts([
-            $hasNoDMEP,
-            $intervenant,
-            $this->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant),
-        ]);
     }
 
 

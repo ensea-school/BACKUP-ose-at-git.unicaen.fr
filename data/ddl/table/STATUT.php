@@ -957,6 +957,18 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
+        'TAUX_CHARGES_TTC'               => [
+            'name'        => 'TAUX_CHARGES_TTC',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 81,
+            'commentaire' => NULL,
+        ],
         'TYPE_INTERVENANT_ID'            => [
             'name'        => 'TYPE_INTERVENANT_ID',
             'type'        => 'int',

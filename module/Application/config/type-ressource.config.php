@@ -74,12 +74,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'TypeRessource' => [],
-            ],
-        ],
-        'guards'             => [
+        'guards' => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\TypeRessource',

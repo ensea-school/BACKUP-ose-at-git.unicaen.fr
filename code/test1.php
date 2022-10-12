@@ -8,27 +8,25 @@
  * @var $viewFile   string
  */
 
-/** @var $em \Doctrine\ORM\EntityManager */
-$em = $container->get(\Application\Constants::BDD);
+use UnicaenCode\Util;
+
+$file = getcwd() . '/cache/t.xlsx';
+
+$fc = new \Application\Model\FormuleCalcul($file, 'TEST');
 
 
-/** @var \Intervenant\Entity\Db\Statut $s */
-$s = $em->find(\Intervenant\Entity\Db\Statut::class, 2799);
-//$s->setServiceStatutaire($s->getServiceStatutaire() + 1);
-//$em->persist($s);
-//$em->flush($s);
+$cell = 'AN20';
 
-/*
-$ps = new \Plafond\Entity\Db\PlafondStatut();
-$ps->setPlafond($em->find(\Plafond\Entity\Db\Plafond::class, 2));
-$ps->setStatut($s);
-$ps->setEtatRealise($em->find(\Plafond\Entity\Db\PlafondEtat::class, 1));
-$ps->setEtatPrevu($em->find(\Plafond\Entity\Db\PlafondEtat::class, 2));
-$ps->setHeures(1);
-*/
+$formule = 'IF(AND([.$E20]="Oui";[.$I20]<>"Référentiel";[.$I20]<>"ETD";[.$G20]=1;OR([.$A20]="I2000";[.$A20]="I2300"));[.$N20]*[.$AE20];0)';
 
-/** @var \Plafond\Entity\Db\PlafondStatut $ps */
-$ps = $em->find(\Plafond\Entity\Db\PlafondStatut::class, 952);
-$ps->setHeures($ps->getHeures() + 1);
-$em->persist($ps);
-$em->flush($ps);
+
+$fc->testFormule($cell, $formule);
+
+//xmlDump($fc->getSheet()->getCell($cell)->getNode());
+
+
+//echo $fc->getSheet(1)->html();
+//Util::highlight($fc->makePackageBody(), 'plsql', true, ['show-line-numbers' => true]);
+
+
+

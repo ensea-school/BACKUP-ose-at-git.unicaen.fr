@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @var $this                     Application\View\Renderer\PhpRenderer
+ * @var $service                  Enseignement\Entity\Db\Service
+ * @var $params                   array
+ */
+
+$serviceListe = $this->enseignements($service->getTypeVolumeHoraire(), $service->getIntervenant(), [$service]);
+
+if (!empty($params)) $serviceListe->applyParams($params);
+
+if ($onlyContent) {
+    echo $serviceListe->renderInterieurLigne($service, $details);
+} else {
+    echo $serviceListe->renderLigne($service, $details);
+}

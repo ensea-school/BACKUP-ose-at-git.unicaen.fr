@@ -1,0 +1,79 @@
+<?php
+/**
+ * @var $this                  \Application\View\Renderer\PhpRenderer
+ * @var $fonctionsReferentiels \Referentiel\Entity\Db\FonctionReferentiel[]
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+$this->headTitle()->append("Référentiel fonctions");
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_ADMIN_EDITION));
+
+?>
+<h1 class="page-header">Référentiel fonctions</h1>
+
+<table class="table table-bordered table-sort">
+    <thead>
+    <th>Code</th>
+    <th>Libelle</th>
+    <th>Libelle court</th>
+    <th>Domaine Fonctionnel</th>
+    <th>Structure</th>
+    <th>Formation à préciser</th>
+    <th>
+        <abbr title="Détermine si les heures de cette fonction référentielle peuvent être comptées dans le service statutaire des intervenants ou non">Peut
+            dans serv.</abbr></th>
+    <?php if ($canEdit) echo '<th>Actions</th>' ?>
+    </thead>
+    <tbody>
+    <?php foreach ($fonctionsReferentiels as $fr): if ($fr->estNonHistorise()): ?>
+        <tr>
+            <td data-order="<?= (($fr->getParent() && $fr->getParent()->estNonHistorise()) ? $fr->getParent()->getCode() . '.' : '') . $fr->getCode() ?>"
+                style="<?= ($fr->getParent() && $fr->getParent()->estNonHistorise()) ? 'padding-left: 5em' : '' ?>"><?= $fr->getCode() ?>
+            </td>
+            <td><?= $fr->getLibelleLong() ?></td>
+            <td><?= $fr->getLibelleCourt() ?></td>
+            <td><?= $fr->getDomaineFonctionnel() ?></td>
+            <td><?= $this->structure($fr->getStructure())->renderLink() ?></td>
+            <td style="text-align:center"><?php if ($fr->isEtapeRequise()): ?><i
+                        class="text-success fas fa-check"></i><?php else: ?><i class="fas fa-xmark"></i><?php endif; ?></td>
+            <td style="text-align:center"><?= $fr->isServiceStatutaire() ? 'Oui' : 'Non' ?></td>
+            <?php if ($canEdit) { ?>
+                <td style="text-align:center;width:1px;white-space: nowrap">
+                    <a class="ajax-modal" data-event="fonction-referentiel-saisie"
+                       href="<?= $this->url('fonction-referentiel/saisie', ['fonctionReferentiel' => $fr->getId()]) ?>"
+                       title="Modifier la fonction référentielle">
+                        <i class="fas fa-pen-to-square"></i></a>
+                    <a class="pop-ajax"
+                       href="<?= $this->url('fonction-referentiel/delete', ['fonctionReferentiel' => $fr->getId()]) ?>"
+                       title="Supprimer la fonction référentielle"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <i class="fas fa-trash-can"></i>
+                    </a>
+                </td>
+            <?php } ?>
+        </tr>
+    <?php endif; endforeach; ?>
+    </tbody>
+</table>
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary ajax-modal" data-event="fonction-referentiel-saisie"
+       href="<?= $this->url('fonction-referentiel/saisie') ?>"
+       title="Ajouter une fonction référentielle">
+        <i class="fas fa-pen-to-square"></i>
+        Ajouter une fonction référentielle</a>
+
+    <script type="text/javascript">
+        $(function () {
+            $("body").on("fonction-referentiel-saisie", function (event, data) {
+                window.location.reload();
+            });
+        });
+    </script>
+<?php endif ?>

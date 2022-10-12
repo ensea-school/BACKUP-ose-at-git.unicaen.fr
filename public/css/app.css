@@ -895,3 +895,9 @@ form.statut fieldset legend {
 .plafonds .plafond {
     margin-bottom: 10px;
 }
+
+div.div-connexion {
+    width:50%;
+    margin: auto;
+    min-width:30em;
+}

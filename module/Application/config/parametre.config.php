@@ -21,7 +21,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'generaux'         => [
+                    'generaux' => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/generaux',
@@ -30,21 +30,12 @@ return [
                             ],
                         ],
                     ],
-                    'annees'           => [
+                    'annees'   => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/annees',
                             'defaults' => [
                                 'action' => 'annees',
-                            ],
-                        ],
-                    ],
-                    'campagnes-saisie' => [
-                        'type'    => 'Literal',
-                        'options' => [
-                            'route'    => '/campagnes-saisie',
-                            'defaults' => [
-                                'action' => 'campagnes-saisie',
                             ],
                         ],
                     ],
@@ -68,20 +59,15 @@ return [
                                 'border-color' => '#9B9B9B',
                                 'order'        => 120,
                                 'pages'        => [
-                                    'annees'           => [
+                                    'annees'   => [
                                         'label'    => "Années",
                                         'route'    => 'parametres/annees',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Parametre', 'annees'),
                                     ],
-                                    'generaux'         => [
+                                    'generaux' => [
                                         'label'    => "Paramètres généraux",
                                         'route'    => 'parametres/generaux',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Parametre', 'generaux'),
-                                    ],
-                                    'campagnes-saisie' => [
-                                        'label'    => "Campagnes de saisie des services",
-                                        'route'    => 'parametres/campagnes-saisie',
-                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Parametre', 'campagnes-saisie'),
                                     ],
                                 ],
                             ],
@@ -117,13 +103,6 @@ return [
                         Privileges::PARAMETRES_GENERAL_VISUALISATION,
                     ],
                 ],
-                [
-                    'controller' => 'Application\Controller\Parametre',
-                    'action'     => ['campagnes-saisie'],
-                    'privileges' => [
-                        Privileges::PARAMETRES_CAMPAGNES_SAISIE_VISUALISATION,
-                    ],
-                ],
             ],
         ],
     ],
@@ -137,8 +116,7 @@ return [
 
     'form_elements' => [
         'invokables' => [
-            Form\ParametresForm::class     => Form\ParametresForm::class,
-            Form\CampagneSaisieForm::class => Form\CampagneSaisieForm::class,
+            Form\ParametresForm::class => Form\ParametresForm::class,
         ],
     ],
 ];

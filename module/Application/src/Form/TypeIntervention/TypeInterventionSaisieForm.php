@@ -2,8 +2,9 @@
 
 namespace Application\Form\TypeIntervention;
 
+use Application\Entity\Db\Traits\TypeInterventionAwareTrait;
+use Application\Entity\Db\TypeIntervention;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use Application\Filter\FloatFromString;
@@ -18,7 +19,7 @@ use UnicaenApp\Util;
  */
 class TypeInterventionSaisieForm extends AbstractForm
 {
-    use \Application\Entity\Db\Traits\TypeInterventionAwareTrait;
+    use TypeInterventionAwareTrait;
     use AnneeServiceAwareTrait;
 
     public function init()
@@ -156,7 +157,7 @@ class TypeInterventionSaisieForm extends AbstractForm
                     new \Laminas\Validator\Callback([
                         'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
-                            return (FloatFromString::run($value) >= 0.0 ? true : false);
+                            return FloatFromString::run($value) >= 0.0;
                         }]),
                 ],
             ],
@@ -166,7 +167,7 @@ class TypeInterventionSaisieForm extends AbstractForm
                     new \Laminas\Validator\Callback([
                         'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
-                            return (StringFromFloat::run($value) >= 0.0 ? true : false);
+                            return (FloatFromString::run($value)) >= 0.0;
                         }]),
                 ],
             ],
@@ -196,14 +197,13 @@ class TypeInterventionSaisieForm extends AbstractForm
 
 class TypeInterventionHydrator implements HydratorInterface
 {
-    use TypeInterventionServiceAwareTrait;
     use AnneeServiceAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                                   $data
-     * @param \Application\Entity\Db\TypeIntervention $object
+     * @param array            $data
+     * @param TypeIntervention $object
      *
      * @return object
      */
@@ -233,7 +233,7 @@ class TypeInterventionHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Db\TypeIntervention $object
+     * @param TypeIntervention $object
      *
      * @return array
      */

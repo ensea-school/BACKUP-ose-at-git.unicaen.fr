@@ -2,6 +2,128 @@
 
 return [
     [
+        'CODE'           => 'preliquidation-siham',
+        'LIBELLE'        => 'Préliquidation SIHAM',
+        'PDF_TRAITEMENT' => null,
+        'AUTO_BREAK'     => false,
+        'REQUETE'        => 'SELECT * FROM v_export_paiement_siham',
+        'CSV_PARAMS'     => '{
+    "ANNEE_ID": {
+        "visible": false
+    },
+    "TYPE_INTERVENANT_ID": {
+        "visible": false
+    },
+    "STRUCTURE_ID": {
+        "visible": false
+    },
+    "PERIODE_ID": {
+        "visible": false
+    },
+    "INTERVENANT_ID": {
+        "visible": false
+    },
+    "TYPE": {
+        "libelle": "type"
+    },
+    "MATRICULE": {
+        "libelle": "Matricule"
+    },
+     "RETENUE": {
+        "libelle": "Retenue"
+    },
+     "DU_MOIS": {
+        "libelle": "Du mois (AAAA-MM)"
+    },
+     "ANNEE_DE_PAYE": {
+        "libelle": "Année de paye (AA)"
+    },
+     "MOIS_DE_PAYE": {
+        "libelle": "Mois de paye (MM)"
+    },
+    "NUMERO_DE_REMISE": {
+        "libelle": "Numéro de remise"
+    },
+    "TG_SPECIFIQUE": {
+        "libelle": "TG spécifique"
+    },
+    "DOSSIER_DE_PAYE": {
+        "libelle": "Dossier de paye"
+    },
+    "DATE_PECUNIAIRE": {
+        "libelle": "Date pécuniaire"
+    },
+    "NOMBRE_D_UNITES": {
+        "libelle": "Nombre d’unités",
+        "type": "float"
+    },
+    "MONTANT": {
+        "libelle": "Montant",
+        "type": "float"
+    },
+    "LIBELLE": {
+        "libelle": "Libellé"
+    },
+    "MODE_DE_CALCUL": {
+        "libelle": "Mode de calcul"
+    },
+    "CODE_ORIGINE": {
+        "libelle": "Code origine"
+    }
+}',
+    ],
+    [
+        'CODE'           => 'ecarts-heures-complementaire',
+        'LIBELLE'        => 'Ecarts heures complémentaires',
+        'PDF_TRAITEMENT' => null,
+        'AUTO_BREAK'     => false,
+        'REQUETE'        => 'SELECT * FROM v_export_pilotage_ecarts_etats',
+        'CSV_PARAMS'     => '{
+    "INTERVENANT_TYPE_ID": {
+        "visible": false
+    },
+    "STRUCTURE_ID": {
+        "visible": false
+    },
+    "TYPE_HEURES_ID": {
+        "visible": false
+    },
+    "INTERVENANT_ID": {
+        "visible": false
+    },
+    "ANNEE_ID": {
+        "visible": false
+    },
+    "ANNEE": {
+        "libelle": "Année"
+    },
+    "ETAT": {
+        "libelle": "Etat"
+    },
+    "TYPE_HEURES": {
+        "libelle": "Type heures"
+    },
+    "STRUCTURE": {
+        "libelle": "Structure"
+    },
+     "INTERVENANT_TYPE": {
+        "libelle": "Type intervenant"
+    },
+     "INTERVENANT_CODE": {
+        "libelle": "Code intervenant"
+    },
+     "NOM_USUEL": {
+        "libelle": "Nom"
+    },
+    "PRENOM": {
+        "libelle": "Prénom"
+    },
+     "HETD_PAYABLES": {
+        "libelle": "HETD payables"
+    }
+}',
+    ],
+    [
         'CODE'           => 'winpaie',
         'LIBELLE'        => 'Extraction Winpaie',
         'PDF_TRAITEMENT' => null,
@@ -185,5 +307,23 @@ ORDER BY
     "NUMORD"                      : { "libelle": "NUMORD" },
     "NUMGRP"                      : { "libelle": "NUMGRP" }
 }',
+    ],
+    [
+        'CODE'           => 'synthese-privilege',
+        'LIBELLE'        => 'Synthèse des privilèges par rôle',
+        'PDF_TRAITEMENT' => null,
+        'AUTO_BREAK'     => false,
+        'REQUETE'        => 'SELECT 
+  r.libelle role,
+  cp.libelle categorie_privilege,
+  p.libelle privilege,
+  CASE WHEN rp.privilege_id IS NULL THEN \'Non\' ELSE \'Oui\' END acces
+FROM
+  role r
+  JOIN privilege p ON 1=1
+  JOIN categorie_privilege cp ON cp.id = p.categorie_id
+  LEFT JOIN role_privilege rp ON rp.privilege_id = p.id AND rp.role_id = r.id
+  ORDER BY r.libelle, cp.libelle, p.libelle',
+        'CSV_PARAMS'     => '',
     ],
 ];

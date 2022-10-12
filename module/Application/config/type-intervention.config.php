@@ -149,12 +149,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'TypeIntervention' => [],
-            ],
-        ],
-        'guards'             => [
+        'guards' => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\TypeIntervention',

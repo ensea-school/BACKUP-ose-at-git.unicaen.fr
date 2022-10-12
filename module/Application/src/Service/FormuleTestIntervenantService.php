@@ -2,13 +2,16 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Application\Entity\Db\Formule;
 use Application\Entity\Db\FormuleTestIntervenant;
-use Application\Entity\Db\FormuleTestStructure;
 use Application\Entity\Db\FormuleTestVolumeHoraire;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Application\Model\FormuleCalcul;
 use Application\Service\Traits\FormuleServiceAwareTrait;
+use Intervenant\Entity\Db\TypeIntervenant;
+use UnicaenApp\Util;
 
 
 /**
@@ -92,8 +95,8 @@ class FormuleTestIntervenantService extends AbstractEntityService
         $conn = $this->getEntityManager()->getConnection();
 
         $formule            = $this->getServiceFormule()->getCurrent();
-        $intervenantQuery   = trim($conn->fetchColumn('SELECT ' . $formule->getPackageName() . '.INTERVENANT_QUERY Q FROM DUAL', [], 0));
-        $volumeHoraireQuery = trim($conn->fetchColumn('SELECT ' . $formule->getPackageName() . '.VOLUME_HORAIRE_QUERY Q FROM DUAL', [], 0));
+        $intervenantQuery   = trim($conn->executeQuery('SELECT ' . $formule->getPackageName() . '.INTERVENANT_QUERY Q FROM DUAL')->fetchOne());
+        $volumeHoraireQuery = trim($conn->executeQuery('SELECT ' . $formule->getPackageName() . '.VOLUME_HORAIRE_QUERY Q FROM DUAL')->fetchOne());
 
         $sql = "BEGIN ose_formule.intervenant.id := " . $intervenant->getId() . "; END;";
         $conn->executeStatement($sql);
@@ -219,6 +222,171 @@ class FormuleTestIntervenantService extends AbstractEntityService
             $ftvh->setParam4($vh['PARAM_4']);
             $ftvh->setParam5($vh['PARAM_5']);
             $ftvh->setHeures((float)$vh['HEURES']);
+            $fti->addVolumeHoraireTest($ftvh);
+        }
+        $this->save($fti);
+
+        return $fti;
+    }
+
+
+
+    public function creerDepuisTableur(FormuleCalcul $formuleCalcul, Formule $formule, string $filename): FormuleTestIntervenant
+    {
+        $em = $this->getEntityManager();
+
+        $data = $formuleCalcul->getData();
+        $vhs  = $data['volumes-horaires'];
+
+        $typeInterveant    = $em->getRepository(TypeIntervenant::class)->findOneBy(['code' => $data['i.type_intervenant_code'] ?? TypeIntervenant::CODE_PERMANENT]);
+        $typeVolumeHoraire = $em->getRepository(TypeVolumeHoraire::class)->findOneBy(['code' => $data['i.type_volume_horaire_code'] ?? TypeVolumeHoraire::CODE_REALISE]);
+        $etatVolumeHoraire = $em->getRepository(EtatVolumeHoraire::class)->findOneBy(['code' => EtatVolumeHoraire::CODE_SAISI]);
+
+        $fti = new FormuleTestIntervenant();
+        $fti->setLibelle($filename);
+        $fti->setFormule($formule);
+        $fti->setAnnee($this->getServiceContext()->getAnnee());
+        $fti->setTypeIntervenant($typeInterveant);
+        $fti->setTypeVolumeHoraire($typeVolumeHoraire);
+        $fti->setEtatVolumeHoraire($etatVolumeHoraire);
+        $fti->setHeuresServiceStatutaire($data['i.heures_service_statutaire'] ?? 0);
+        $fti->setHeuresServiceModifie($data['i.heures_service_modifie'] ?? 0);
+        $fti->setDepassementServiceDuSansHC($data['i.depassement_service_du_sans_hc'] ?? false);
+        $fti->setParam1($data['i.param_1'] ?? null);
+        $fti->setParam2($data['i.param_2'] ?? null);
+        $fti->setParam3($data['i.param_3'] ?? null);
+        $fti->setParam4($data['i.param_4'] ?? null);
+        $fti->setParam5($data['i.param_5'] ?? null);
+        $fti->setStructureCode($data['i.structure_code'] ?? '');
+
+        /* Réduction des types d'intervention de la fiche à CP/TD/TP/AUTRE */
+        $typesIntervention = [
+            'CM' => [1.5, 1.5],
+            'TD' => [1, 1],
+            'TP' => [1, 2 / 3],
+        ];
+        $nbAutres          = 0;
+
+        foreach ($vhs as $vh) {
+            if ($vh['vh.type_intervention_code']) {
+                $typesIntervention[$vh['vh.type_intervention_code']] = [
+                    $vh['vh.taux_service_du'],
+                    $vh['vh.taux_service_compl'],
+                ];
+            }
+        }
+        foreach ($typesIntervention as $tic => $tit) {
+            if (!in_array($tic, ['CM', 'TD', 'TP'])) {
+                $nbAutres++;
+            } else {
+                $typesIntervention[$tic][2] = $tic;
+            }
+        }
+        if ($nbAutres == 1) {
+            foreach ($typesIntervention as $tic => $tit) {
+                if (!in_array($tic, ['CM', 'TD', 'TP'])) {
+                    $typesIntervention[$tic][2] = 'AUTRE';
+                    $nbAutres--;
+                }
+            }
+        } else {
+            if ($nbAutres > 1) {
+                foreach ($typesIntervention as $tic => $tit) {
+                    if (!in_array($tic, ['CM', 'TD', 'TP'])) {
+                        if ($tit[0] == $typesIntervention['CM'][0] && $tit[1] == $typesIntervention['CM'][1]) {
+                            $typesIntervention[$tic][2] = 'CM';
+                            $nbAutres--;
+                        }
+                        if ($tit[0] == $typesIntervention['TD'][0] && $tit[1] == $typesIntervention['TD'][1]) {
+                            $typesIntervention[$tic][2] = 'TD';
+                            $nbAutres--;
+                        }
+                        if ($tit[0] == $typesIntervention['TP'][0] && $tit[1] == $typesIntervention['TP'][1]) {
+                            $typesIntervention[$tic][2] = 'TP';
+                            $nbAutres--;
+                        }
+                    }
+                }
+            }
+        }
+        if ($nbAutres == 1) {
+            foreach ($typesIntervention as $tic => $tit) {
+                if (!isset($tit[2])) {
+                    $typesIntervention[$tic][2] = 'AUTRE';
+                }
+            }
+        }
+
+        if ($nbAutres > 1) {
+            throw new \Exception('La fiche de service de cet intervenant ne peut pas être transformée en test de formule : elle comporte de trop nombreux types d\'intervention différents des CM/TP/TP');
+        }
+
+        /* On applique les taux au test de formule */
+        foreach ($typesIntervention as $tic => $tit) {
+            switch ($tit[2]) {
+                case 'CM':
+                    $fti->setTauxCmServiceDu($tit[0]);
+                    $fti->setTauxCmServiceCompl($tit[1]);
+                break;
+                case 'TP':
+                    $fti->setTauxTpServiceDu($tit[0]);
+                    $fti->setTauxTpServiceCompl($tit[1]);
+                break;
+                case 'AUTRE':
+                    $fti->setTauxAutreServiceDu($tit[0]);
+                    $fti->setTauxAutreServiceCompl($tit[1]);
+                break;
+            }
+        }
+
+
+        foreach ($vhs as $vh) {
+            $isReferentiel = Util::reduce($vh['vh.type_intervention_code'] ?? '') === 'referentiel';
+
+            if ($vh['vh.structure_is_exterieur'] ?? false) {
+                $structureCode = '__EXTERIEUR__';
+            } elseif ($vh['vh.structure_is_univ'] ?? false) {
+                $structureCode = '__UNIV__';
+            } elseif ($vh['vh.structure_is_affectation'] ?? false) {
+                $structureCode = $fti->getStructureCode();
+            } else {
+                $structureCode = $vh['vh.structure_code'] ?? null;
+            }
+
+            $typeInterventionCode = $vh['vh.type_intervention_code'] ?? null;
+            if ($isReferentiel) {
+                $typeInterventionCode = null;
+            } elseif (!in_array($typeInterventionCode, ['CM', 'TD', 'TP'])) {
+                $typeInterventionCode = 'AUTRE';
+            }
+
+            $ftvh = new FormuleTestVolumeHoraire();
+            $ftvh->setFormuleTestIntervenant($fti);
+            $ftvh->setReferentiel($isReferentiel);
+            $ftvh->setServiceStatutaire($vh['vh.service_statutaire'] ?? true);
+            $ftvh->setTypeInterventionCode($typeInterventionCode);
+            $ftvh->setStructureCode($structureCode);
+            $ftvh->setTauxFi((float)$vh['vh.taux_fi'] ?? 1);
+            $ftvh->setTauxFa((float)$vh['vh.taux_fa'] ?? 0);
+            $ftvh->setTauxFc((float)$vh['vh.taux_fc'] ?? 0);
+            $ftvh->setPonderationServiceDu($vh['vh.ponderation_service_du'] ?? 1);
+            $ftvh->setPonderationServiceCompl($vh['vh.ponderation_service_compl'] ?? 1);
+            $ftvh->setParam1($vh['vh.param_1'] ?? null);
+            $ftvh->setParam2($vh['vh.param_2'] ?? null);
+            $ftvh->setParam3($vh['vh.param_3'] ?? null);
+            $ftvh->setParam4($vh['vh.param_4'] ?? null);
+            $ftvh->setParam5($vh['vh.param_5'] ?? null);
+            $ftvh->setHeures($vh['vh.heures']);
+            $ftvh->setAServiceFi($vh['vh.service_fi'] ?? null);
+            $ftvh->setAServiceFa($vh['vh.service_fa'] ?? null);
+            $ftvh->setAServiceFc($vh['vh.service_fc'] ?? null);
+            $ftvh->setAServiceReferentiel($vh['vh.service_referentiel'] ?? null);
+            $ftvh->setAHeuresComplFi($vh['vh.heures_compl_fi'] ?? null);
+            $ftvh->setAHeuresComplFa($vh['vh.heures_compl_fa'] ?? null);
+            $ftvh->setAHeuresComplFc($vh['vh.heures_compl_fc'] ?? null);
+            $ftvh->setAHeuresComplFcMajorees($vh['vh.heures_compl_fc_majorees'] ?? null);
+            $ftvh->setAHeuresComplReferentiel($vh['vh.heures_compl_referentiel'] ?? null);
+
             $fti->addVolumeHoraireTest($ftvh);
         }
         $this->save($fti);

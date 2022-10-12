@@ -30,13 +30,11 @@ namespace Application\View\Renderer;
  * @method \Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche fieldsetElementPedagogiqueRecherche(?\Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset $fieldset = null)
  * @method \Application\View\Helper\Paiement\DemandeMiseEnPaiementViewHelper demandeMiseEnPaiement(array $servicesAPayer, $changeIndex = null)
  * @method \Application\View\Helper\Paiement\TypeHeuresViewHelper typeHeures(?\Application\Entity\Db\TypeHeures $typeHeures = null)
- * @method \Application\View\Helper\ServiceReferentiel\FonctionReferentielViewHelper fonctionReferentiel(?\Application\Entity\Db\FonctionReferentiel $fonctionReferentiel = null)
- * @method \Application\View\Helper\ServiceReferentiel\FormSaisie formServiceReferentielSaisie(?\Application\Form\ServiceReferentiel\Saisie $form = null)
- * @method \Application\View\Helper\ServiceReferentiel\Ligne serviceReferentielLigne(\Application\View\Helper\ServiceReferentiel\Liste $liste, \Application\Entity\Db\ServiceReferentiel $service)
- * @method \Application\View\Helper\ServiceReferentiel\Liste serviceReferentielListe($services)
- * @method \Application\View\Helper\Service\Ligne serviceLigne(\Application\View\Helper\Service\Liste $liste, \Application\Entity\Db\Service $service)
- * @method \Application\View\Helper\Service\Liste serviceListe($services)
- * @method \Application\View\Helper\Service\Resume serviceResume($resumeServices)
+ * @method \Application\View\Helper\ServiceReferentiel\FonctionReferentielViewHelper fonctionReferentiel(?\Referentiel\Entity\Db\FonctionReferentiel $fonctionReferentiel = null)
+ * @method \Application\View\Helper\ServiceReferentiel\FormSaisieViewHelper formServiceReferentielSaisie(?\Referentiel\Form\Saisie $form = null)
+ * @method \Application\View\Helper\ServiceReferentiel\LigneViewHelper serviceReferentielLigne(\Application\View\Helper\ServiceReferentiel\ListeViewHelper $liste, \Referentiel\Entity\Db\ServiceReferentiel $service)
+ * @method \Application\View\Helper\ServiceReferentiel\ListeViewHelper serviceReferentielListe($services)
+ * @method \Application\View\Helper\Service\ResumeViewHelper serviceResume($resumeServices)
  * @method \Application\View\Helper\Service\SaisieForm serviceSaisieForm(?\Application\Form\Service\Saisie $form = null)
  * @method \Application\View\Helper\StructureViewHelper structure(?\Application\Entity\Db\Structure $structure = null)
  * @method \Application\View\Helper\TreeViewHelper tree(\Application\Model\TreeNode $tree, array $attributes = [])
@@ -45,8 +43,10 @@ namespace Application\View\Renderer;
  * @method \Application\View\Helper\UserProfileSelectRadioItem userProfileSelectRadioItem(Laminas\Permissions\Acl\Role\RoleInterface $role, $selected = false)
  * @method string utilisateur(\Application\Entity\Db\Utilisateur $utilisateur, $title = null, $subject = null, $body = null)
  * @method \Application\View\Helper\ValidationViewHelper validation(?\Application\Entity\Db\Validation $validation = null)
- * @method \Application\View\Helper\VolumeHoraire\Liste volumeHoraireListe(\Application\Entity\VolumeHoraireListe $volumeHoraireListe)
- * @method \Application\View\Helper\VolumeHoraire\ListeCalendaire volumeHoraireListeCalendaire(\Application\Entity\VolumeHoraireListe $volumeHoraireListe)
+ * @method \Application\View\Helper\VolumeHoraire\Liste volumeHoraireListe(\Enseignement\Entity\VolumeHoraireListe $volumeHoraireListe)
+ * @method \Application\View\Helper\VolumeHoraire\ListeCalendaire volumeHoraireListeCalendaire(\Enseignement\Entity\VolumeHoraireListe $volumeHoraireListe)
+ * @method \Enseignement\View\Helper\EnseignementsViewHelper enseignements($services)
+ * @method \Enseignement\View\Helper\LigneEnseignementViewHelper ligneEnseignement(\Enseignement\View\Helper\EnseignementsViewHelper $enseignements, \Enseignement\Entity\Db\Service $service)
  * @method \Laminas\Form\View\Helper\Captcha\Dumb captchaDumb(?Laminas\Form\ElementInterface $element = null)
  * @method \Laminas\Form\View\Helper\Captcha\Dumb formCaptchaDumb(?Laminas\Form\ElementInterface $element = null)
  * @method \Laminas\Form\View\Helper\Captcha\Figlet captchaFiglet(?Laminas\Form\ElementInterface $element = null)
@@ -67,7 +67,7 @@ namespace Application\View\Renderer;
  * @method \Laminas\Form\View\Helper\FormDateSelect formDateSelect(?Laminas\Form\ElementInterface $element = null, int $dateType = 1, ?string $locale = null)
  * @method \Laminas\Form\View\Helper\FormDateTimeLocal formDateTimeLocal(?Laminas\Form\ElementInterface $element = null)
  * @method \Laminas\Form\View\Helper\FormDateTimeSelect formDateTimeSelect(?Laminas\Form\ElementInterface $element = null, int $dateType = 1, int $timeType = 1, ?string $locale = null)
- * @method \Laminas\Form\View\Helper\FormElement formElement(?Laminas\Form\ElementInterface $element = null)
+ * @method \Laminas\Form\View\Helper\FormElement formElement(?\Laminas\Form\ElementInterface $element = null)
  * @method \Laminas\Form\View\Helper\FormElementErrors formElementErrors(?Laminas\Form\ElementInterface $element = null, array $attributes = [])
  * @method \Laminas\Form\View\Helper\FormEmail formEmail(?Laminas\Form\ElementInterface $element = null)
  * @method \Laminas\Form\View\Helper\FormFile formFile(?Laminas\Form\ElementInterface $element = null)
@@ -175,7 +175,7 @@ namespace Application\View\Renderer;
  * @method \Laminas\View\Helper\ViewModel viewModel()
  * @method \Laminas\View\Helper\ViewModel zendviewhelperviewmodel()
  * @method \Plafond\View\Helper\PlafondConfigElementViewHelper plafondConfig(?Plafond\Interfaces\PlafondConfigInterface $plafondConfig = null)
- * @method \Plafond\View\Helper\PlafondsViewHelper plafonds()
+ * @method \Plafond\View\Helper\PlafondsViewHelper plafonds(\Application\Entity\Db\Structure|\Application\Entity\Db\Intervenant|\Application\Entity\Db\ElementPedagogique|\Enseignement\Entity\Db\VolumeHoraire|\Referentiel\Entity\Db\FonctionReferentiel $entity, \Service\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire)
  * @method \UnicaenApp\Form\View\Helper\FormAdvancedMultiCheckbox formAdvancedMultiCheckbox(?Laminas\Form\ElementInterface $element = null, ?string $labelPosition = null)
  * @method \UnicaenApp\Form\View\Helper\FormControlGroup formControlGroup(?Laminas\Form\ElementInterface $element = null, $pluginClass = 'formElement')
  * @method \UnicaenApp\Form\View\Helper\FormDate formDate(?\UnicaenApp\Form\Element\Date $element = null, $dateReadonly = false)
@@ -219,8 +219,7 @@ namespace Application\View\Renderer;
  *
  * @author UnicaenCode
  */
-class PhpRenderer extends \Laminas\View\Renderer\PhpRenderer {
-
-
+class PhpRenderer extends \Laminas\View\Renderer\PhpRenderer
+{
 
 }

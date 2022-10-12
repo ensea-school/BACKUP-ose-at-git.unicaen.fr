@@ -4,6 +4,7 @@ namespace Application\View\Helper;
 
 use Application\Entity\Db\TypeIntervention;
 use Application\Filter\StringFromFloat;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 
 /**
@@ -12,6 +13,7 @@ use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 class TypeInterventionAdminViewHelper extends AbstractViewHelper
 {
     use TypeInterventionServiceAwareTrait;
+    use ContextServiceAwareTrait;
 
     /**
      *
@@ -90,7 +92,7 @@ class TypeInterventionAdminViewHelper extends AbstractViewHelper
         $ti = $this->getTypeIntervention();
 
         $title   = '';
-        $statuts = $ti->getTypeInterventionStatut();
+        $statuts = $ti->getTypeInterventionStatut($this->getServiceContext()->getAnnee());
         foreach ($statuts as $tis) {
             if ($title) $title .= ' - ';
             $title .= $tis->getStatut()->getLibelle();

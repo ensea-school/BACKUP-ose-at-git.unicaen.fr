@@ -13,16 +13,16 @@ use Application\Entity\Db\IntervenantExterieur;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\Service;
-use Application\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\VolumeHoraire;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Enseignement\Entity\Db\Service;
+use Referentiel\Entity\Db\ServiceReferentiel;
+use Enseignement\Entity\Db\VolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Entity\Db\TypePieceJointe;
@@ -641,7 +641,7 @@ class EntityProvider
     public function getFonctionReferentiel()
     {
         if (null === $this->fonction) {
-            $qb             = $this->getEntityManager()->getRepository('Application\Entity\Db\FonctionReferentiel')->createQueryBuilder("fr");
+            $qb             = $this->getEntityManager()->getRepository('Referentiel\Entity\Db\FonctionReferentiel')->createQueryBuilder("fr");
             $this->fonction = $qb->getQuery()->setMaxResults(1)->getSingleResult();
             if (!$this->fonction) {
                 throw new RuntimeException("Fonction Referentiel quelconque introuvable.");
@@ -661,7 +661,7 @@ class EntityProvider
     public function getTypeVolumeHoraire()
     {
         if (null === $this->typeVolumeHoraire) {
-            $this->typeVolumeHoraire = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeVolumeHoraire')
+            $this->typeVolumeHoraire = $this->getEntityManager()->getRepository('Service\Entity\Db\TypeVolumeHoraire')
                 ->findOneByCode($code = TypeVolumeHoraire::CODE_PREVU);
             if (!$this->typeVolumeHoraire) {
                 throw new RuntimeException(sprintf("Type de volume horaire '%s' introuvable.", $code));

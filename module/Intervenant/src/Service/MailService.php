@@ -10,8 +10,6 @@ use Laminas\Mime\Message;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part;
 
-use Intervenant\Form\MailerIntervenantFormAwareTrait;
-use Intervenant\Form\NoteSaisieFormAwareTrait;
 use UnicaenApp\Controller\Plugin\Mail;
 
 /**
@@ -23,8 +21,6 @@ class MailService extends AbstractService
 {
 
     use NoteServiceAwareTrait;
-    use NoteSaisieFormAwareTrait;
-    use MailerIntervenantFormAwareTrait;
     use MailServiceAwareTrait;
 
     /**
@@ -70,7 +66,7 @@ class MailService extends AbstractService
      *
      * @return void
      */
-    public function envoyerMail(string $from, string $to, string $subject, string $content)
+    public function envoyerMail(string $from, string $to, string $subject, string $content, string $copy)
     {
 
         $body = new Message();
@@ -86,6 +82,10 @@ class MailService extends AbstractService
             ->setSubject($subject)
             ->addTo($to)
             ->setBody($body);
+
+        if (!empty($copy)) {
+            $message->addBcc($copy);
+        }
 
         //Envoi du mail
         $this->getMail()->send($message);

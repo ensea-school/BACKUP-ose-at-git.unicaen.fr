@@ -35,7 +35,7 @@ class NoteController extends AbstractController
             throw new \Exception('Intervenant introuvable');
         }
 
-        $notes  = $this->getServiceNote()->getByIntervenant($intervenant, 'note');
+        $notes = $this->getServiceNote()->getByIntervenant($intervenant, 'note');
         $emails = $this->getServiceNote()->getByIntervenant($intervenant, 'email');
 
         $historique = $this->getServiceNote()->getHistoriqueIntervenant($intervenant);
@@ -45,22 +45,21 @@ class NoteController extends AbstractController
     }
 
 
-
     public function saisirAction()
     {
 
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $note        = $this->getEvent()->getParam('note');
-        $form        = $this->getFormNoteSaisie();
+        $note = $this->getEvent()->getParam('note');
+        $form = $this->getFormNoteSaisie();
 
         if (empty($note)) {
             $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_AJOUT));
-            $title   = 'Création d\'une nouvelle note intervenant';
-            $note    = $this->getServiceNote()->newEntity();
+            $title = 'Création d\'une nouvelle note intervenant';
+            $note = $this->getServiceNote()->newEntity();
             $note->setIntervenant($intervenant);
         } else {
             $canEdit = $this->isAllowed($note, NoteAssertion::PRIV_EDITER_NOTE);
-            $title   = 'Édition d\'une note intervenant';
+            $title = 'Édition d\'une note intervenant';
         }
 
 
@@ -83,23 +82,21 @@ class NoteController extends AbstractController
     }
 
 
-
     public function voirAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $note        = $this->getEvent()->getParam('note');
-        $title       = 'Visualisation d\'une note intervenant';
+        $note = $this->getEvent()->getParam('note');
+        $title = 'Visualisation d\'une note intervenant';
 
 
         return compact('intervenant', 'note', 'title');
     }
 
 
-
     public function supprimerAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $note        = $this->getEvent()->getParam('note');
+        $note = $this->getEvent()->getParam('note');
 
         $canDelete = $this->isAllowed($note, NoteAssertion::PRIV_SUPPRIMER_NOTE);
 
@@ -119,22 +116,22 @@ class NoteController extends AbstractController
     }
 
 
-
     public function envoyerEmailAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $title       = 'Rédiger un email à l\'intervenant';
+        $title = 'Rédiger un email à l\'intervenant';
 
         $form = $this->getFormMailerIntervenant()->setIntervenant($intervenant)->initForm();
 
         if ($this->getRequest()->isPost()) {
             try {
-                $data    = $this->getRequest()->getPost();
-                $from    = $data['from'];
-                $to      = $data['to'];
+                $data = $this->getRequest()->getPost();
+                $from = $data['from'];
+                $to = $data['to'];
                 $subject = $data['subject'];
                 $content = $data['content'];
-                $this->getServiceMail()->envoyerMail($from, $to, $subject, $content);
+                $copy = $data['copy'];
+                $this->getServiceMail()->envoyerMail($from, $to, $subject, $content, $copy);
                 //Création d'une trace de l'envoi dans les notes de l'intervenant
                 $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $content);
                 $this->flashMessenger()->addSuccessMessage('Email envoyé à l\'intervenant');

@@ -109,6 +109,9 @@ class OseAdmin
 
     public function getTags($minVersion = self::MIN_VERSION): array
     {
+        if (Dep::config('local')){
+            return [];
+        }
         if (false === $this->tags) {
             $this->tags = [];
 
@@ -152,6 +155,9 @@ class OseAdmin
 
     public function getBranches(): array
     {
+        if (Dep::config('local')){
+            return [];
+        }
         if (false === $this->branches) {
             $this->branches = [];
 
@@ -309,14 +315,30 @@ class OseAdmin
 
 
 
-    public function getConfig(): array
+    public function getConfig(string $section = null, string $key = null, $default = null)
     {
         $configFilename = $this->getOseDir() . '/config.local.php';
         if (file_exists($configFilename)) {
-            return require $configFilename;
+            $config = require $configFilename;
         } else {
-            return [];
+            $config = [];
         }
+
+        if ($config && $section && $key) {
+            if (isset($config[$section][$key])) {
+                return $config[$section][$key];
+            } else {
+                return $default;
+            }
+        }
+
+        if ($config && $section) {
+            if (isset($config[$section])) {
+                return $config[$section];
+            }
+        }
+
+        return $config;
     }
 
 

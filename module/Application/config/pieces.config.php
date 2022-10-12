@@ -52,7 +52,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'valider'   => [
+                            'valider'    => [
                                 // valider la PJ
                                 'type'    => 'Segment',
                                 'options' => [
@@ -66,7 +66,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'devalider' => [
+                            'devalider'  => [
                                 // dévalider la PJ
                                 'type'    => 'Segment',
                                 'options' => [
@@ -80,7 +80,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'refuser'   => [
+                            'refuser'    => [
                                 // refuser la PJ
                                 'type'    => 'Segment',
                                 'options' => [
@@ -94,7 +94,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'archiver'  => [
+                            'archiver'   => [
                                 // archiver la PJ
                                 'type'    => 'Segment',
                                 'options' => [
@@ -107,7 +107,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'fichier'   => [
+                            'fichier'    => [
                                 'type'          => 'Literal',
                                 'options'       => [
                                     'route' => '/fichier',
@@ -288,7 +288,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class => [
                 /* Dossier */
                 [
@@ -412,12 +412,7 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'PieceJointe' => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [

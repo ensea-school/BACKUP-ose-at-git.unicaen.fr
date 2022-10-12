@@ -261,6 +261,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     vh_etat_volume_horaire_id NUMERIC;
     vh_structure_is_affectation NUMERIC;
     vh_structure_is_univ NUMERIC;
+    vh_structure_is_exterieur NUMERIC;
     vh t_volume_horaire;
     etat_volume_horaire_id NUMERIC DEFAULT 1;
     length NUMERIC;
@@ -290,6 +291,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         vh.structure_code,
         vh_structure_is_affectation,
         vh_structure_is_univ,
+        vh_structure_is_exterieur,
         vh.ponderation_service_du,
         vh.ponderation_service_compl,
         vh.service_statutaire,
@@ -309,6 +311,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
       vh.structure_is_affectation := vh_structure_is_affectation = 1;
       vh.structure_is_univ        := vh_structure_is_univ = 1;
+      vh.structure_is_exterieur   := vh_structure_is_exterieur = 1;
 
       FOR etat_volume_horaire_id IN 1 .. vh_etat_volume_horaire_id LOOP
         BEGIN
@@ -372,10 +375,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       volumes_horaires.items(length).ponderation_service_compl := d.ponderation_service_compl;
       volumes_horaires.items(length).structure_is_affectation  := COALESCE(d.structure_code,' ') = COALESCE(intervenant.structure_code,' ');
       volumes_horaires.items(length).structure_is_univ         := d.structure_code = '__UNIV__';
+      volumes_horaires.items(length).structure_is_exterieur    := d.structure_code = '__EXTERIEUR__';
       volumes_horaires.items(length).service_statutaire        := d.service_statutaire = 1;
       volumes_horaires.items(length).heures                    := d.heures;
       volumes_horaires.items(length).type_intervention_code    := CASE WHEN d.referentiel = 1 THEN NULL ELSE d.type_intervention_code END;
-      volumes_horaires.items(length).structure_code            := CASE WHEN d.structure_code = '__EXTERIEUR__' THEN NULL ELSE d.structure_code END;
+      volumes_horaires.items(length).structure_code            := CASE WHEN d.structure_code IN ('__EXTERIEUR__', '__UNIV__') THEN NULL ELSE d.structure_code END;
       volumes_horaires.items(length).taux_service_du           := d.taux_service_du;
       volumes_horaires.items(length).taux_service_compl        := d.taux_service_compl;
       volumes_horaires.items(length).param_1                   := d.param_1;
@@ -806,7 +810,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         LOOP EXIT WHEN etat_volume_horaire_id IS NULL;
           intervenant.etat_volume_horaire_id := etat_volume_horaire_id;
           volumes_horaires := all_volumes_horaires(intervenant.id)(type_volume_horaire_id)(etat_volume_horaire_id);
-          EXECUTE IMMEDIATE 'BEGIN ' || formule_definition.package_name || '.' || formule_definition.procedure_name || '; END;';
+          EXECUTE IMMEDIATE 'BEGIN ' || formule_definition.package_name || '.CALCUL_RESULTAT; END;';
           all_volumes_horaires(intervenant.id)(type_volume_horaire_id)(etat_volume_horaire_id) := volumes_horaires;
           etat_volume_horaire_id := all_volumes_horaires(intervenant.id)(type_volume_horaire_id).NEXT(etat_volume_horaire_id);
         END LOOP;
@@ -839,13 +843,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
 
   PROCEDURE TEST( INTERVENANT_TEST_ID NUMERIC ) IS
-    procedure_name VARCHAR2(30);
     package_name VARCHAR2(30);
   BEGIN
     intervenant.id := INTERVENANT_TEST_ID;
 
     SELECT
-      package_name, procedure_name INTO package_name, procedure_name
+      package_name INTO package_name
     FROM
       formule f JOIN formule_test_intervenant fti ON fti.formule_id = f.id
     WHERE
@@ -856,7 +859,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     debug_actif := TRUE;
 
     BEGIN
-      EXECUTE IMMEDIATE 'BEGIN ' || package_name || '.' || procedure_name || '; END;';
+      EXECUTE IMMEDIATE 'BEGIN ' || package_name || '.CALCUL_RESULTAT; END;';
       SAVE_TO_TEST(1);
     EXCEPTION WHEN OTHERS THEN
       SAVE_TO_TEST(0);

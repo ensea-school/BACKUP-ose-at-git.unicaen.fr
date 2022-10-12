@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Interfaces;
 
-use Application\Entity\Db\ServiceAPayerInterface;
+use Enseignement\Entity\Db\ServiceAPayerInterface;
 
 /**
  * Description of ServiceAPayerInterfaceAwareInterface
@@ -16,7 +16,7 @@ interface ServiceAPayerInterfaceAwareInterface
      *
      * @return self
      */
-    public function setServiceAPayerInterface( ?ServiceAPayerInterface $serviceAPayerInterface );
+    public function setServiceAPayerInterface(?ServiceAPayerInterface $serviceAPayerInterface);
 
 
 

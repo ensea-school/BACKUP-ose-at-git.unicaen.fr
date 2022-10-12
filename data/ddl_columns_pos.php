@@ -532,7 +532,7 @@ return [
         'ID',
         'LIBELLE',
         'PACKAGE_NAME',
-        'PROCEDURE_NAME',
+        'ACTIVE',
         'I_PARAM_1_LIBELLE',
         'I_PARAM_2_LIBELLE',
         'I_PARAM_3_LIBELLE',
@@ -1300,6 +1300,7 @@ return [
         'REFERENTIEL_REALISE_EDITION',
         'REFERENTIEL_REALISE_VISU',
         'CONTRAT_ETAT_SORTIE_ID',
+        'TAUX_CHARGES_TTC',
     ],
     'STRUCTURE'                      => [
         'ID',

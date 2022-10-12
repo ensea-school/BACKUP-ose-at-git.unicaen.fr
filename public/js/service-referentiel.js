@@ -2,7 +2,7 @@
  Propre à l'affichage du référentiel
  /***************************************************************************************************************************************************/
 
-$.widget("ose.serviceReferentielListe", {
+$.widget("ose.referentiels", {
     total: 0,
 
     calculTotaux: function ()
@@ -56,6 +56,10 @@ $.widget("ose.serviceReferentielListe", {
         if (this.heures != exHeures) {
             this._trigger('heures-change', null, this);
         }
+
+        this.element.find(".horodatage").each(function () {
+            $(this).refresh();
+        });
     },
 
 
@@ -232,13 +236,13 @@ $.widget("ose.serviceReferentielForm", {
             that.prevuToRealise();
         });
 
-        this.element.find('select.fonction-referentiel-fonction').change(function(){ that.majDisplay(); });
+        this.element.find('select.fonction-referentiel-fonction').change(function () { that.majDisplay(); });
         that.majDisplay();
     },
 
 
 
-    majDisplay: function()
+    majDisplay: function ()
     {
         this.majDisplayStructure();
         this.majDisplayFormation();
@@ -246,15 +250,15 @@ $.widget("ose.serviceReferentielForm", {
 
 
 
-    majDisplayFormation: function()
+    majDisplayFormation: function ()
     {
         var currentFonction = this.element.find('select.fonction-referentiel-fonction').val();
         var aPreciser = this.element.data('fonctions')['etape-requise'];
         var divFormation = this.getDivFormationElement();
 
-        if (Util.inArray(currentFonction,aPreciser)){
+        if (Util.inArray(currentFonction, aPreciser)) {
             divFormation.show();
-        }else{
+        } else {
             divFormation.hide();
         }
 
@@ -263,33 +267,31 @@ $.widget("ose.serviceReferentielForm", {
 
 
 
-    majDisplayStructure: function()
+    majDisplayStructure: function ()
     {
         var currentFonction = this.element.find('select.fonction-referentiel-fonction').val();
         var structures = this.element.data('fonctions')['structures'];
 
         $('option', this.getStructureElement()).attr('disabled', false);
-        if (structures[currentFonction] != undefined){
+        if (structures[currentFonction] != undefined) {
             var structure = structures[currentFonction];
 
             this.getStructureElement().val(structure);
             $('option:not(:selected)', this.getStructureElement()).attr('disabled', true);
-        }else{
-            console.log('Toutes!!');
         }
         this.getStructureElement().selectpicker('refresh');
     },
 
 
 
-    getDivFormationElement: function()
+    getDivFormationElement: function ()
     {
         return this.element.find('.fonction-referentiel-formation').parent();
     },
 
 
 
-    getStructureElement: function()
+    getStructureElement: function ()
     {
         return this.element.find('select.fonction-referentiel-structure');
     }

@@ -9,10 +9,9 @@ use Application\Entity\Db\Traits\PeriodeAwareTrait;
 use Application\Entity\Db\Traits\SourceAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Doctrine\Persistence\Mapping\ClassMetadata;
-use Doctrine\Persistence\ObjectManager;
-use Doctrine\Persistence\ObjectManagerAware;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
@@ -22,7 +21,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 /**
  * ElementPedagogique
  */
-class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, ObjectManagerAware
+class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, EntityManagerAwareInterface
 {
     use HistoriqueAwareTrait;
     use DisciplineAwareTrait;
@@ -627,11 +626,11 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * Add service
      *
-     * @param \Application\Entity\Db\Service $service
+     * @param \Enseignement\Entity\Db\Service $service
      *
      * @return Service
      */
-    public function addService(\Application\Entity\Db\Service $service)
+    public function addService(\Enseignement\Entity\Db\Service $service)
     {
         $this->service[] = $service;
 
@@ -643,9 +642,9 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * Remove service
      *
-     * @param \Application\Entity\Db\Service $service
+     * @param \Enseignement\Entity\Db\Service $service
      */
-    public function removeService(\Application\Entity\Db\Service $service)
+    public function removeService(\Enseignement\Entity\Db\Service $service)
     {
         $this->service->removeElement($service);
     }
@@ -804,21 +803,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
     public function getResourceId()
     {
         return 'ElementPedagogique';
-    }
-
-
-
-    /**
-     * Injects responsible ObjectManager and the ClassMetadata into this persistent object.
-     *
-     * @param ObjectManager $objectManager
-     * @param ClassMetadata $classMetadata
-     *
-     * @return void
-     */
-    public function injectObjectManager(ObjectManager $objectManager, ClassMetadata $classMetadata)
-    {
-        $this->setEntityManager($objectManager);
     }
 
 

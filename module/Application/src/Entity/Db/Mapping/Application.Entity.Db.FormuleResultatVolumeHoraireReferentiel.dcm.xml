@@ -7,7 +7,7 @@
         <join-column name="FORMULE_RESULTAT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="volumeHoraireReferentiel" target-entity="Application\Entity\Db\VolumeHoraireReferentiel">
+    <many-to-one field="volumeHoraireReferentiel" target-entity="Referentiel\Entity\Db\VolumeHoraireReferentiel">
       <join-columns>
         <join-column name="VOLUME_HORAIRE_REF_ID" referenced-column-name="ID"/>
       </join-columns>

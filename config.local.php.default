@@ -35,6 +35,9 @@ return [
         /* Détermine si le mode maintenante est activé ou non */
         'modeMaintenance' => false,
 
+        /* Désacive la synchronisation des données via le CRON */
+        'desactivationSynchronisation' => false,
+
         /* Message précisant pourquoi l'application est en maintenance */
         'messageInfo'  => 'OSE est actuellement en cours de mise à jour. Veuillez nous excuser pour ce déagrément.',
 
@@ -245,6 +248,9 @@ return [
         /* Détermine si OSE est cassifiée ou pas */
         'actif'   => false,
 
+        /* Si true, alors on ne peut se connecter QUE via le CAS, les autres options ne seront pas proposées */
+        'exclusif' => false,
+
         /* IP ou nom DNS du serveur CAS */
         'host'    => 'cas.xxx.fr',
 
@@ -290,6 +296,7 @@ return [
         //définition du connecteur SI RH à utiliser pour le module export RH de OSE
         'actif'      => true,
         'connecteur' => 'siham',
+        'sync-code' => true,
     ],
 
 

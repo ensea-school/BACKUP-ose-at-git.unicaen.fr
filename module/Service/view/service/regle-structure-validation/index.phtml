@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $rsv   \Service\Entity\Db\RegleStructureValidation
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+$this->headTitle()->append("Type activité des centres de coûts");
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION));
+$canEdit = true;
+
+?>
+<h1 class="page-header">Règles de validation enseignements par type d'intervenant</h1>
+<table class="table table-bordered table-condensed table-hover">
+    <thead>
+    <tr>
+        <th>Type Volume Horaire</th>
+        <th>Type Intervenant</th>
+        <th>Priorité composante</th>
+        <th>Message</th>
+        <?php if ($canEdit): ?>
+            <th>Actions</th>
+        <?php endif; ?>
+    </tr>
+    </thead>
+    <tbody class="triables">
+    <?php foreach ($listeRsv as $rsv): ?>
+        <tr class="champ-triable" data-id="<?= $rsv->getId() ?>">
+            <td>
+                <?= $rsv->getTypeVolumeHoraire()->getLibelle() ?>&nbsp;
+            </td>
+            <td><?= $rsv->getTypeIntervenant()->getLibelle() ?></td>
+            <td><?= $rsv->getPriorite() ?></td>
+            <td><?= $rsv->getMessage() ?></td>
+
+            <?php if ($canEdit): ?>
+                <td style="text-align:center;width:1px;white-space: nowrap">
+                    <a class="ajax-modal"
+                       data-event="regle-structure-validation-saisie"
+                       href="<?= $this->url('parametres/regle-structure-validation/saisie', ['regleStructureValidation' => $rsv->getId()]) ?>"
+                       data-submit-reload="true">
+                        <i class="fas fa-pen-to-square"></i></a>
+                </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(function () {
+        $("body").on("regle-structure-validation-saisie", function (event, data) {
+            window.location.reload();
+        });
+    });
+</script>
+<style>
+    .triables {
+        align: left;
+    }
+
+    .champ-triable tr {
+        align: left;
+    }
+
+    .tbl-tis {
+        margin-bottom: 1px;
+    }
+</style>

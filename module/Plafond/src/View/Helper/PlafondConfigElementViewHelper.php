@@ -2,7 +2,7 @@
 
 namespace Plafond\View\Helper;
 
-use Application\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Laminas\View\Helper\AbstractHtmlElement;

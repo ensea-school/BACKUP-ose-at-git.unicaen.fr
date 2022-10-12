@@ -43,19 +43,22 @@ $dossierAutres = $form->get('DossierAutres');
             <div class="panel-body">
                 <?php foreach ($champsAutres as $champ): ?>
                     <?php if (!$this->isAllowed($intervenant, constant('Application\Assertion\IntervenantDossierAssertion::PRIV_EDIT_AUTRE' . $champ->getId()))): ?>
-                        <div class="form-group">
-                            <?= $this->formLabel($dossierAutres->get('champ-autre-' . $champ->getId()),); ?>
-                            <div class="input-group cold-md-6 readonly">
-                                <?php
-                                $method = 'getAutre' . $champ->getId();
-                                $value  = $intervenantDossier->$method();
-                                if (!empty($intervenantDossier->$method())) {
-                                    $viewAutre = $this->isAllowed($intervenant, constant('Application\Assertion\IntervenantDossierAssertion::PRIV_VIEW_AUTRE' . $champ->getId()));
-                                    echo ($viewAutre) ? $intervenantDossier->$method() : '***************';
-                                }
-                                ?>
+                        <?php if ($this->isAllowed($intervenant, constant('Application\Assertion\IntervenantDossierAssertion::PRIV_VIEW_AUTRE' . $champ->getId()))): ?>
+
+                            <div class="form-group">
+                                <?php echo $this->formLabel($dossierAutres->get('champ-autre-' . $champ->getId()),); ?>
+                                <div class="input-group cold-md-6 readonly">
+                                    <?php
+                                    $method = 'getAutre' . $champ->getId();
+                                    $value = $intervenantDossier->$method();
+                                    if (!empty($intervenantDossier->$method())) {
+                                        $viewAutre = $this->isAllowed($intervenant, constant('Application\Assertion\IntervenantDossierAssertion::PRIV_VIEW_AUTRE' . $champ->getId()));
+                                        echo ($viewAutre) ? $intervenantDossier->$method() : '***************';
+                                    }
+                                    ?>
+                                </div>
                             </div>
-                        </div>
+                        <?php endif; ?>
                     <?php else: ?>
                         <?php echo $this->formControlGroup($dossierAutres->get('champ-autre-' . $champ->getId())); ?>
                     <?php endif; ?>

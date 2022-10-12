@@ -4,9 +4,10 @@ use Application\Assertion\ContratAssertion;
 use Application\Provider\Privilege\Privileges;
 
 /**
- * @var $this     \Application\View\Renderer\PhpRenderer
- * @var $contrat  \Application\Entity\Db\Contrat
- * @var $services \Application\Entity\Db\Service[]
+ * @var $this          \Application\View\Renderer\PhpRenderer
+ * @var $contrat       \Application\Entity\Db\Contrat
+ * @var $services      \Enseignement\Entity\Db\Service[]
+ * @var $avenant_param int
  */
 
 $validation     = $contrat->getValidation();
@@ -85,7 +86,8 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
         <?php endif; ?>
         <!-- Lien de téléchargement du fichier -->
 
-        <h3><?= $contrat->toString() ?> - <?= $contrat->getStructure() ?></h3>
+        <h3><?= $contrat->toString() ?>
+            <?php if ($avenant_param >= 0): ?>- <?= $contrat->getStructure() ?><?php endif; ?></h3>
     </div>
 
     <div class="panel-body">
@@ -108,6 +110,10 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                 <li><i class="fas fa-thumbs-up"></i> Retourné signé
                     le <?= $retourSigne->format(Application\Constants::DATE_FORMAT) ?></li>
             <?php endif ?>
+            <?php if ($avenant_param < 0): ?>
+                <li><i class="fas fa-thumbs-up"></i> Modifiable par la structure
+                    <?= $contrat->getStructure() ?></li>
+            <?php endif; ?>
         </ul>
 
         <!-- Upload de fichiers -->
@@ -142,7 +148,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                 <small>(cliquez pour afficher/cacher)</small>
             </a>
             <div class="collapse" id="details-enseignements-contrat-<?= $contrat->getId() ?>">
-                <?= $this->serviceListe($services)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
+                <?= $this->enseignements($services)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
             </div>
         </div>
     </div>

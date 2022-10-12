@@ -2,8 +2,9 @@
 
 namespace Application\Form;
 
+use Application\Entity\Db\Formule;
 use Application\Entity\Db\Parametre;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
@@ -183,14 +184,12 @@ class ParametresForm extends AbstractForm
         $this->add([
             'type'       => 'Select',
             'name'       => 'formule',
-            'options'    => [
-                'value_options' => Util::collectionAsOptions($this->getServiceFormule()->getList()),
-            ],
             'attributes' => [
                 'class'            => 'selectpicker',
                 'data-live-search' => 'true',
             ],
         ]);
+        $this->setValueOptions('formule', 'SELECT f FROM ' . Formule::class . ' f WHERE f.active = true ORDER BY f.libelle');
 
         $this->add([
             'type'       => 'Select',
@@ -270,10 +269,10 @@ class ParametresForm extends AbstractForm
 
         $this->add([
             'type'       => 'Select',
-            'name'       => 'es_winpaie',
+            'name'       => 'es_extraction_paie',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
-                'label'         => 'État de sortie pour l\'extraction Winpaie',
+                'label'         => 'État de sortie pour l\'extraction de la paie',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -573,8 +572,9 @@ class ParametresForm extends AbstractForm
                 'label' => 'Possibilité de créer des avenants',
 
                 'value_options' => [
-                    PARAMETRE::AVENANT => 'Les avenants sont disponibles',
-                    'desactive'        => 'Fonctionnalité désactivée',
+                    PARAMETRE::AVENANT_AUTORISE  => 'Tous les avenants sont disponibles',
+                    PARAMETRE::AVENANT_STRUCT    => 'Un contrat ou un avenant par composante',
+                    PARAMETRE::AVENANT_DESACTIVE => 'Un contrat unique sans avenant',
                 ],
             ],
             'attributes' => [
@@ -587,9 +587,9 @@ class ParametresForm extends AbstractForm
             'type'       => 'Select',
             'name'       => 'contrat_direct',
             'options'    => [
-                'label'         => 'Création de contrat sans passer par un projet',
+                'label'         => 'Étape facultative de projet de contrat',
                 'value_options' => [
-                    PARAMETRE::CONTRAT_DIRECT => 'Le contrat est crée directement',
+                    PARAMETRE::CONTRAT_DIRECT => 'Le contrat est créé directement sans passer par l\'étape projet',
                     'desactive'               => 'Un projet de contrat doit être validé pour devenir un contrat',
                 ],
             ],

@@ -10,7 +10,7 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router' => [
         'routes' => [
-            'employeur'      => [
+            'employeur'        => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/employeur',
@@ -48,7 +48,6 @@ return [
     ],
 
 
-
     'console' => [
         'router' => [
             'routes' => [
@@ -75,7 +74,7 @@ return [
     ],
 
     'bjyauthorize' => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class      => [
                 [
                     'controller' => 'Application\Controller\Employeur',
@@ -89,12 +88,7 @@ return [
                     'roles'      => ['user']],
             ],
         ],
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'Employeur' => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [

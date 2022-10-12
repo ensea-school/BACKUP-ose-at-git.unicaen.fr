@@ -161,7 +161,7 @@ FROM volume_horaire vh
          JOIN type_intervention ti ON ti.id = vh.type_intervention_id
          JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
          JOIN validation v ON v.id = vvh.validation_id
-         JOIN utilisateur u ON u.id = vh.histo_modificateur_id
+         JOIN utilisateur u ON u.id = v.histo_modificateur_id
          GROUP BY s.intervenant_id, ep.structure_id
 
          UNION ALL
@@ -179,7 +179,7 @@ FROM
   JOIN validation_vol_horaire_ref vvhr ON s.id = vvhr.volume_horaire_ref_id
   JOIN validation v ON v.id = vvhr.validation_id
   JOIN fonction_referentiel fr ON fr.id = s.fonction_id
-  JOIN utilisateur u ON u.id = s.histo_modificateur_id
+  JOIN utilisateur u ON u.id = v.histo_modificateur_id
   LEFT JOIN STRUCTURE str ON str.id = s.structure_id
 WHERE
  s.histo_destruction IS NULL
@@ -339,7 +339,7 @@ FROM volume_horaire vh
          JOIN type_intervention ti ON ti.id = vh.type_intervention_id
          JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
          JOIN validation v ON v.id = vvh.validation_id
-         JOIN utilisateur u ON u.id = vh.histo_modificateur_id
+         JOIN utilisateur u ON u.id = v.histo_modificateur_id
          LEFT JOIN motif_non_paiement mnp ON mnp.id = vh.motif_non_paiement_id
 GROUP BY s.intervenant_id, ep.structure_id
 

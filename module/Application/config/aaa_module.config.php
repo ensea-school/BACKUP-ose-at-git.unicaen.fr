@@ -44,6 +44,7 @@ $config = [
                     \Doctrine\DBAL\Event\Listeners\OracleSessionInit::class,
                     ORM\Event\Listeners\HistoriqueListener::class,
                     ORM\Event\Listeners\ParametreEntityListener::class,
+                    ORM\Event\Listeners\EntityManagerListener::class,
                 ],
             ],
         ],
@@ -143,6 +144,7 @@ $config = [
             \BjyAuthorize\Provider\Resource\Config::class => [
                 'Information' => [],
             ],
+            Provider\Resource\ResourceProvider::class     => [],
         ],
         'rule_providers'     => [
             PrivilegeRuleProvider::class => [
@@ -173,10 +175,13 @@ $config = [
             Service\FichierService::class          => Service\FichierService::class,
             Service\TauxHoraireHETDService::class  => Service\TauxHoraireHETDService::class,
             Assertion\InformationAssertion::class  => Assertion\InformationAssertion::class,
+            Service\TypeValidationService::class   => Service\TypeValidationService::class,
+            Service\ValidationService::class       => Service\ValidationService::class,
         ],
         'factories'  => [
             \Laminas\Navigation\Navigation::class         => Navigation\NavigationFactory::class,
             Provider\Role\RoleProvider::class             => Provider\Role\RoleProviderFactory::class,
+            Provider\Resource\ResourceProvider::class     => Provider\Resource\ResourceProviderFactory::class,
             Provider\Identity\IdentityProvider::class     => Provider\Identity\IdentityProviderFactory::class,
             Service\ContextService::class                 => Service\Factory\ContextServiceFactory::class,
             'MouchardCompleterContext'                    => MouchardCompleterContextFactory::class,

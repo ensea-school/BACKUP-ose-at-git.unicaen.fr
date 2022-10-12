@@ -24,7 +24,6 @@ class AdresseFieldset extends AbstractFieldset
     static private $franceId;
 
 
-
     /**
      * This function is automatically called when creating element with factory. It
      * allows to perform various operations (add elements...)
@@ -33,7 +32,6 @@ class AdresseFieldset extends AbstractFieldset
     {
         $this->addElements();
     }
-
 
 
     /**
@@ -114,7 +112,7 @@ class AdresseFieldset extends AbstractFieldset
         /**
          * voirie
          */
-        $qb      = $this->getServiceVoirie()->finderByHistorique();
+        $qb = $this->getServiceVoirie()->finderByHistorique();
         $voiries = \UnicaenApp\Util::collectionAsOptions($this->getServiceVoirie()->getList($qb));
         $this->add([
             'name'       => 'voirie',
@@ -142,6 +140,7 @@ class AdresseFieldset extends AbstractFieldset
             'attributes' => [
                 'class'       => 'dossierElement',
                 'placeholder' => 'nom de la voie',
+                'maxlength'   => 32,
             ],
             'type'       => 'Text',
         ]);
@@ -204,7 +203,6 @@ class AdresseFieldset extends AbstractFieldset
 
         return $this;
     }
-
 
 
     /**

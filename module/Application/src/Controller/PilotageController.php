@@ -2,6 +2,8 @@
 
 namespace Application\Controller;
 
+use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\PilotageServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 
@@ -11,9 +13,9 @@ use UnicaenApp\View\Model\CsvModel;
  */
 class PilotageController extends AbstractController
 {
+    use ContextServiceAwareTrait;
+    use EtatSortieServiceAwareTrait;
     use PilotageServiceAwareTrait;
-
-
 
 
     public function indexAction()
@@ -22,28 +24,24 @@ class PilotageController extends AbstractController
     }
 
 
-
     public function ecartsEtatsACtion()
     {
 
-        $csvModel = new CsvModel();
-        $csvModel->setHeader([
-            'Année',
-            'État',
-            'Type d\'heures',
-            'Structure',
-            'Intervenant (type)',
-            'Intervenant (code)',
-            'Intervenant',
-            'HETD payables'
-        ]);
+        //Contexte année et structure
+        $annee = $this->getServiceContext()->getAnnee();
+        $structure = $this->getServiceContext()->getStructure();
 
-        $data = $this->getServicePilotage()->getEcartsEtats();
-        foreach ($data as $d) {
-            $csvModel->addLine($d);
+        $filters['ANNEE_ID'] = $annee->getId();
+        if ($structure) {
+            $filters['STRUCTURE_ID'] = $structure->getId();
         }
-        $csvModel->setFilename('pilotage-ecarts-etats.csv');
+        //On récupére l'état de sortie pour l'export des agréments
+        $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'ecarts-heures-complementaire']);
+        $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters);
+        $csvModel->setFilename('ecarts-heures-complementaires-' . $annee->getId() . '.csv');
+
 
         return $csvModel;
+
     }
 }

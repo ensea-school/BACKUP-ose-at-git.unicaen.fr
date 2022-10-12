@@ -117,7 +117,7 @@ return [
 
                                 ],
                             ],
-                            'gestion-nomenclature-rh' => [
+                            'gestion-nomenclature-rh'    => [
                                 'label'          => 'Gestion des nomenclatures RH',
                                 'icon'           => 'fas fa-table-list',
                                 'route'          => 'administration-nomenclature-rh',
@@ -152,7 +152,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'gestion-periode'         => [
+                            'gestion-periode'            => [
                                 'label'          => 'Gestion des périodes',
                                 'icon'           => 'fas fa-table-list',
                                 'route'          => 'periodes',
@@ -160,7 +160,7 @@ return [
                                 'order'          => 84,
                                 'border - color' => '#111',
                             ],
-                            'gestion-etablissement'   => [
+                            'gestion-etablissement'      => [
                                 'label'          => 'Gestion des établissements',
                                 'icon'           => 'fas fa-table-list',
                                 'route'          => 'etablissement',
@@ -168,7 +168,7 @@ return [
                                 'order'          => 85,
                                 'border - color' => '#111',
                             ],
-                            'gestion-type-formation'  => [
+                            'gestion-type-formation'     => [
                                 'label'          => 'Gestion des types de formations',
                                 'icon'           => 'fas fa-table-list',
                                 'route'          => 'type-formation',
@@ -176,7 +176,7 @@ return [
                                 'order'          => 86,
                                 'border - color' => '#111',
                             ],
-                            'gestion-pays'            => [
+                            'gestion-pays'               => [
                                 'label'          => 'Gestion des Pays',
                                 'icon'           => 'fas fa-table-list',
                                 'route'          => 'pays',
@@ -184,7 +184,7 @@ return [
                                 'order'          => 87,
                                 'border - color' => '#111',
                             ],
-                            'gestion-departement'     => [
+                            'gestion-departement'        => [
                                 'label'          => 'Gestion des Départements',
                                 'icon'           => 'fas fa-table-list',
                                 'route'          => 'departement',
@@ -192,7 +192,7 @@ return [
                                 'order'          => 88,
                                 'border - color' => '#111',
                             ],
-                            'gestion-intervenant'     => [
+                            'gestion-intervenant'        => [
                                 'label'          => 'Gestion intervenants (Statuts, PJ,  etc...)',
                                 'icon'           => 'fas fa-table-list',
                                 'route'          => 'administration-intervenant',
@@ -200,7 +200,7 @@ return [
                                 'order'          => 80,
                                 'border - color' => '#111',
                                 'pages'          => [
-                                    'statut'                                     => [
+                                    'statut'                                    => [
                                         'label'        => 'Edition des statuts des intervenants',
                                         'icon'         => 'fas fa-graduation-cap',
                                         'route'        => 'statut',
@@ -208,7 +208,7 @@ return [
                                         'order'        => 90,
                                         'border-color' => '#BBCF55',
                                     ],
-                                    'type-piece-jointe-statut'                   => [
+                                    'type-piece-jointe-statut'                  => [
                                         'label'      => "Pièces justificatives attendues par statut d'intervenant",
                                         'title'      => "Permet de personnaliser les pièces justificatives à demander en fonction du statut des intervenants",
                                         'route'      => 'piece-jointe/type-piece-jointe-statut',
@@ -216,21 +216,13 @@ return [
                                         'order'      => 91,
                                         'resource'   => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'type-piece-jointe-statut'),
                                     ],
-                                    'gestion-champs-autres-dossier-intervenant'  => [
+                                    'gestion-champs-autres-dossier-intervenant' => [
                                         'label'      => "Gestion des champs personnalisés pour le dossier intervenant",
                                         'title'      => "Editer et modifier les 5 champs personnalisables pour les dossiers des intervenant",
                                         'route'      => 'autres-infos',
                                         'withtarget' => true,
                                         'order'      => 92,
                                         'resource'   => PrivilegeController::getResourceId('Application\Controller\Autres', 'index'),
-                                    ],
-                                    'validation-volume-horaire-type-intervenant' => [
-                                        'label'      => "Règles de validation enseignements par type d'intervenant",
-                                        'title'      => "Permet de définir les priorités de validation de volumes horaires par type d'intervenant",
-                                        'route'      => 'validation-volume-horaire-type-intervenant',
-                                        'withtarget' => true,
-                                        'order'      => 93,
-                                        'resource'   => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'validation-volume-horaire-type-intervenant'),
                                     ],
                                 ],
                             ],

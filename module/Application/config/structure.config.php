@@ -83,12 +83,7 @@ return [
     ],
 
     'bjyauthorize' => [
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'Structure' => [],
-            ],
-        ],
-        'guards'             => [
+        'guards' => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Structure',

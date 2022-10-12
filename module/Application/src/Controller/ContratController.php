@@ -6,23 +6,24 @@ use Application\Assertion\ContratAssertion;
 use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Parametre;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Validation;
-use Application\Entity\Db\VolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 use Application\Form\Contrat\Traits\EnvoiMailContratFormAwareTrait;
 use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
 use Application\Processus\Traits\ContratProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContratServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Application\Service\Traits\TauxHoraireHETDServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Doctrine\ORM\Query\Expr\Orx;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Laminas\Http\Response;
 use LogicException;
@@ -106,11 +107,35 @@ class ContratController extends AbstractController
 
         $title = "Contrat/avenants <small>{$intervenant}</small>";
 
+
+        $avenantResult = $this->getServiceParametres()->get('avenant');
+        switch ($avenantResult) {
+            case Parametre::AVENANT_AUTORISE :
+                $avenant_param = 1;
+            break;
+            case Parametre::AVENANT_STRUCT :
+                $avenant_param = 0;
+            break;
+            default :
+                $avenant_param = -1;
+        }
+
+        $sContrat     = $this->getServiceContrat();
+        $qbTest       = $sContrat->finderByIntervenant($intervenant);
+        $contratsTest = $sContrat->getList($qbTest);
+        if (empty($contratsTest)) {
+            $hasContrat = false;
+        } else {
+            $hasContrat = true;
+        }
+
+
         $sContrat = $this->getServiceContrat();
         $qb       = $sContrat->finderByIntervenant($intervenant);
-        if ($structure) {
+        if ($structure && $avenant_param >= 0) {
             $sContrat->finderByStructure($structure, $qb);
         }
+
         $contrats = $sContrat->getList($qb);
 
         //Récupération email intervenant (Perso puis unicaen)
@@ -136,14 +161,13 @@ class ContratController extends AbstractController
             }
             $services['non-contractualises'][$sid][] = $service;
         }
-        $avenantResult = $this->getServiceParametres()->get('avenant');
-        $avenant       = ($avenantResult == Parametre::AVENANT);
+
 
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
 
-        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'avenant', 'contratDirect');
+        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'hasContrat', 'avenant_param', 'contratDirect');
     }
 
 
@@ -157,6 +181,7 @@ class ContratController extends AbstractController
         $structure = $this->getEvent()->getParam('structure');
         /* @var $structure Structure */
 
+        $avenantResult       = $this->getServiceParametres()->get('avenant');
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
@@ -164,9 +189,9 @@ class ContratController extends AbstractController
             throw new LogicException('L\'intervenant n\'est pas précisé');
         }
 
-        if (!$structure) {
-            throw new LogicException('La structure n\'est pas précisée');
-        }
+//        if (!$structure) {
+//            throw new LogicException('La structure n\'est pas précisée');
+//        }
 
         $contrat = $this->getProcessusContrat()->creer($intervenant, $structure);
 

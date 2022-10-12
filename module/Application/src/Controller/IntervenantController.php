@@ -2,28 +2,25 @@
 
 namespace Application\Controller;
 
-use Application\Entity\Db\RegleStructureValidation;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\RegleStructureValidation;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Application\Entity\Service\Recherche;
+use Service\Entity\Recherche;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
-use Application\Form\Intervenant\Traits\RegleStructureValidationFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
-use Application\Processus\Traits\ServiceProcessusAwareTrait;
-use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
+use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
+use Service\Service\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -53,15 +50,12 @@ class  IntervenantController extends AbstractController
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
     use IntervenantProcessusAwareTrait;
-    use ServiceProcessusAwareTrait;
     use ServiceReferentielProcessusAwareTrait;
     use LocalContextServiceAwareTrait;
     use CampagneSaisieServiceAwareTrait;
     use ValidationServiceAwareTrait;
     use PlafondProcessusAwareTrait;
     use FormuleResultatServiceAwareTrait;
-    use RegleStructureValidationServiceAwareTrait;
-    use RegleStructureValidationFormAwareTrait;
     use StatutServiceAwareTrait;
     use SourceServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
@@ -154,153 +148,6 @@ class  IntervenantController extends AbstractController
         $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
 
         return compact('definiParDefaut');
-    }
-
-
-
-    public function servicesPrevusAction()
-    {
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
-
-        return $this->servicesAction($typeVolumeHoraire);
-    }
-
-
-
-    public function servicesRealisesAction()
-    {
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
-
-        return $this->servicesAction($typeVolumeHoraire);
-    }
-
-
-
-    private function servicesAction(TypeVolumehoraire $typeVolumeHoraire)
-    {
-        $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\Service::class,
-            \Application\Entity\Db\VolumeHoraire::class,
-            \Application\Entity\Db\CheminPedagogique::class,
-            \Application\Entity\Db\ServiceReferentiel::class,
-            \Application\Entity\Db\VolumeHoraireReferentiel::class,
-            \Application\Entity\Db\Validation::class,
-        ]);
-        $this->em()->getFilters()->enable('annee')->init([
-            \Application\Entity\Db\ElementPedagogique::class,
-        ]);
-
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant non précisé ou inexistant');
-        }
-
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
-            $vh = new ViewModel();
-            $vh->setTemplate('application/intervenant/menu');
-
-            return $vh;
-        }
-
-        $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
-
-        if (!$campagneSaisie->estOuverte()) {
-
-            $role = $this->getServiceContext()->getSelectedIdentityRole();
-            if ($message = $campagneSaisie->getMessage($role)) {
-                if ($role->getIntervenant()) {
-                    $this->flashMessenger()->addErrorMessage($message);
-                } else {
-                    $this->flashMessenger()->addWarningMessage($message);
-                }
-            }
-        }
-
-        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
-
-        $vm = new ViewModel();
-        $vm->setTemplate('application/intervenant/services');
-
-        /* Liste des services */
-        $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
-        $recherche = new Recherche($typeVolumeHoraire, $etatVolumeHoraire);
-
-        if ($this->isAllowed($intervenant, $typeVolumeHoraire->getPrivilegeEnseignementVisualisation())) {
-            $services = $this->getProcessusService()->getServices($intervenant, $recherche);
-        } else {
-            $services = false;
-        }
-
-        /* Services référentiels (si nécessaire) */
-        if ($this->isAllowed($intervenant, $typeVolumeHoraire->getPrivilegeReferentielVisualisation())) {
-            $servicesReferentiel = $this->getProcessusServiceReferentiel()->getServices($intervenant, $recherche);
-        } else {
-            $servicesReferentiel = false;
-        }
-
-        /* Totaux HETD */
-        $params = $this->getEvent()->getRouteMatch()->getParams();
-        $this->getEvent()->setParam('typeVolumeHoraire', $typeVolumeHoraire);
-        $this->getEvent()->setParam('etatVolumeHoraire', $etatVolumeHoraire);
-        $params['action'] = 'formuleTotauxHetd';
-        $widget           = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
-        if ($widget) $vm->addChild($widget, 'formuleTotauxHetd');
-
-        /* Clôture de saisie (si nécessaire) */
-        if ($typeVolumeHoraire->isRealise() && $intervenant->getStatut()->getCloture()) {
-            $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
-        } else {
-            $cloture = null;
-        }
-
-        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'services', 'servicesReferentiel', 'cloture', 'role'));
-
-        return $vm;
-    }
-
-
-
-    public function cloturerAction()
-    {
-        $this->em()->getFilters()->enable('historique')->init([
-            Validation::class,
-        ]);
-
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-
-        $validation = $this->getServiceValidation()->getValidationClotureServices($intervenant);
-
-        if ($this->getRequest()->isPost()) {
-            if ($validation->getId()) {
-                if (!$this->isAllowed($intervenant, Privileges::CLOTURE_REOUVERTURE)) {
-                    throw new \Exception("Vous n'avez pas le droit de déclôturer la saisie de services réalisés d'un intervenant");
-                }
-                try {
-                    $this->getServiceValidation()->delete($validation);
-                    $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
-                    $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été réouverte", 'success');
-                } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage($this->translate($e));
-                }
-            } else {
-                if (!$this->isAllowed($intervenant, Privileges::CLOTURE_CLOTURE)) {
-                    throw new \Exception("Vous n'avez pas le droit de clôturer la saisie de services réalisés d'un intervenant");
-                }
-                try {
-                    $this->getServiceValidation()->save($validation);
-                    $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
-                    $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été clôturée", 'success');
-                } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage($this->translate($e));
-                }
-            }
-        }
-
-        return new MessengerViewModel;
     }
 
 
@@ -453,13 +300,13 @@ class  IntervenantController extends AbstractController
         $form = $this->getFormIntervenantHeuresComp();
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
-        /* @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire */
+        /* @var $typeVolumeHoraire \Service\Entity\Db\TypeVolumeHoraire */
         if (!isset($typeVolumeHoraire)) {
             throw new LogicException('Type de volume horaire erroné');
         }
 
         $etatVolumeHoraire = $this->context()->etatVolumeHoraireFromQuery('etat-volume-horaire', $form->get('etat-volume-horaire')->getValue());
-        /* @var $etatVolumeHoraire \Application\Entity\Db\EtatVolumeHoraire */
+        /* @var $etatVolumeHoraire \Service\Entity\Db\EtatVolumeHoraire */
         if (!isset($etatVolumeHoraire)) {
             throw new LogicException('Etat de volume horaire erroné');
         }
@@ -559,41 +406,6 @@ class  IntervenantController extends AbstractController
         $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()]);
-    }
-
-
-
-    public function validationVolumeHoraireTypeIntervenantAction()
-    {
-        $serviceRVS = $this->getServiceRegleStructureValidation();
-        $listeRsv   = $serviceRVS->getList();
-
-        return compact('listeRsv');
-    }
-
-
-
-    public function validationVolumeHoraireTypeIntervenantSaisieAction()
-    {
-        $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
-        $form                     = $this->getFormIntervenantRegleStructureValidation();
-        $title                    = 'Édition de la régle de validation';
-        $form->bindRequestSave($regleStructureValidation, $this->getRequest(), function (RegleStructureValidation $rsv) {
-            try {
-                $this->getServiceRegleStructureValidation()->save($rsv);
-                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-            } catch (\Exception $e) {
-                $message = $this->translate($e);
-
-                if (false !== strpos($message, 'ORA - 00001')) {
-                    $this->flashMessenger()->addErrorMessage("Règle non enregistrée car elle existe déjà dans OSE");
-                } else {
-                    $this->flashMessenger()->addErrorMessage($this->translate($e));
-                }
-            }
-        });
-
-        return compact('form', 'title');
     }
 
 

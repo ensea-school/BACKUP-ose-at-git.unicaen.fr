@@ -8,12 +8,87 @@
  * @var $viewFile   string
  */
 
-$filename = getcwd() . '/cache/testRunner';
-echo file_get_contents($filename);
+$si = $container->get(\Service\Assertion\ServiceAssertion::class);
+
+var_dump($si);
+
 
 /*
-$oseAdmin = oseAdmin();
-$dataGen  = new DataGen($oseAdmin);
-var_dump($dataGen);
-//$dataGen->update('PRIVILEGE');
+
+contexte :
+
+
+périmètre composante
+intervenant
+campagnes de saisie
+clôtures
+campagnes
+privilèges
+statut ?
+workflow
+autovalidations
+
+
+Enseignement
+    Visualisation
+        ENSEIGNEMENT_PREVU_VISUALISATION,ENSEIGNEMENT_REALISE_VISUALISATION
+    Edition
+        ENSEIGNEMENT_PREVU_EDITION,ENSEIGNEMENT_REALISE_EDITION
+        ENSEIGNEMENT_EXTERIEUR
+        ENSEIGNEMENT_IMPORT_INTERVENANT_PREVISIONNEL_AGENDA,ENSEIGNEMENT_IMPORT_INTERVENANT_REALISE_AGENDA
+        ENSEIGNEMENT_EDITION_MASSE
+    Validation
+        ENSEIGNEMENT_PREVU_VALIDATION,ENSEIGNEMENT_REALISE_VALIDATION
+        ENSEIGNEMENT_PREVU_AUTOVALIDATION,ENSEIGNEMENT_REALISE_AUTOVALIDATION
+    Dévalidation
+        ENSEIGNEMENT_DEVALIDATION
+
+
+Référentiel
+    Visualisation
+        REFERENTIEL_PREVU_VISUALISATION,REFERENTIEL_REALISE_VISUALISATION
+    Edition
+        REFERENTIEL_PREVU_EDITION,REFERENTIEL_REALISE_EDITION
+        REFERENTIEL_SAISIE_TOUTES_COMPOSANTES
+    Validation
+        REFERENTIEL_PREVU_VALIDATION,REFERENTIEL_REALISE_VALIDATION
+        REFERENTIEL_PREVU_AUTOVALIDATION,REFERENTIEL_REALISE_AUTOVALIDATION
+    Dévalidation
+        REFERENTIEL_DEVALIDATION
+
+
+
+
+
+
+
+
+
+
+
+
+
+Services
+    Visualisation
+        prévu-visualisation => ENSEIGNEMENT_PREVU_VISUALISATION || REFERENTIEL_PREVU_VISUALISATION
+        réalisé-visualisation => ENSEIGNEMENT_REALISE_VISUALISATION || REFERENTIEL_REALISE_VISUALISATION
+    Modif service dû
+        MODIF_SERVICE_DU_VISUALISATION
+        MODIF_SERVICE_DU_EDITION
+        MODIF_SERVICE_DU_ASSOCIATION
+
+
+
+        ? MOTIF_NON_PAIEMENT_VISUALISATION
+        ? MOTIF_NON_PAIEMENT_EDITION
+
+
+        CLOTURE_CLOTURE
+        CLOTURE_EDITION_SERVICES
+        CLOTURE_EDITION_SERVICES_AVEC_MEP
+
+    Export
+        ENSEIGNEMENT_EXPORT_CSV
+        ENSEIGNEMENT_EXPORT_PDF
+
 */

@@ -160,7 +160,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards' => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Contrat',
@@ -222,12 +222,8 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'Contrat' => [],
-            ],
-        ],
-        'rule_providers'     => [
+        
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [

@@ -103,10 +103,6 @@ return [
         ],
     ],
 
-    'resources' => [
-        'Statut', 'Note',
-    ],
-
     'rules' => [
         [
             'privileges' => Privileges::INTERVENANT_STATUT_EDITION,

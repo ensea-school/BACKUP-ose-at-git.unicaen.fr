@@ -3,22 +3,23 @@
 namespace Application\Processus;
 
 use Application\Entity\Db\Contrat;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Application\Entity\Db\VolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 use Application\ORM\Event\Listeners\HistoriqueListenerAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ContratServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\TypeContratServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use Enseignement\Service\Traits\VolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\Mapping\MappingException;
@@ -75,7 +76,7 @@ class ContratProcessus extends AbstractProcessus
         SELECT
           s, ep, vh, str, i, evh, tvh
         FROM
-          Application\Entity\Db\Service s
+          Enseignement\Entity\Db\Service s
           JOIN s.volumeHoraire      vh
           JOIN s.elementPedagogique ep
           JOIN ep.structure         str
@@ -124,7 +125,7 @@ class ContratProcessus extends AbstractProcessus
         SELECT
           s, ep, vh, str, i
         FROM
-          Application\Entity\Db\Service s
+          Enseignement\Entity\Db\Service s
           JOIN s.volumeHoraire      vh
           JOIN s.elementPedagogique ep
           JOIN ep.structure         str
@@ -157,12 +158,12 @@ class ContratProcessus extends AbstractProcessus
     /**
      * Création ET peuplement d'un nouveau contrat
      *
-     * @param Intervenant $intervenant
-     * @param Structure   $structure
+     * @param Intervenant    $intervenant
+     * @param Structure|null $structure
      *
      * @return Contrat
      */
-    public function creer(Intervenant $intervenant, Structure $structure): Contrat
+    public function creer(Intervenant $intervenant, Structure $structure = null): Contrat
     {
         $contrat = $this->getServiceContrat()->newEntity();
         /* @var $contrat Contrat */

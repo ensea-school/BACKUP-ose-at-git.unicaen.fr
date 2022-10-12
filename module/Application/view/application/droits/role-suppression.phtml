@@ -7,5 +7,9 @@
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 if ($form) {
     echo '<p class="lead text-danger"><strong>Attention!</strong> Confirmez-vous la suppression du rôle ' . $role . ' ?</p>';
-    echo $this->formsupprimer($form);
+    echo $this->form()->openTag($form);
+    echo $this->formHidden($form->get('id'));
+    echo $this->formHidden($form->get('security'));
+    echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
+    echo $this->form()->closeTag();
 }

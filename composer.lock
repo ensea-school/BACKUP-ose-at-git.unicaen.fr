@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3cdb192ce6dc9a717a2a1026c56c6be7",
+    "content-hash": "05e603d0419ff11ff6d6b28665503249",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -994,34 +994,35 @@
         },
         {
             "name": "doctrine/event-manager",
-            "version": "1.1.2",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/event-manager.git",
-                "reference": "eb2ecf80e3093e8f3c2769ac838e27d8ede8e683"
+                "reference": "95aa4cb529f1e96576f3fda9f5705ada4056a520"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/event-manager/zipball/eb2ecf80e3093e8f3c2769ac838e27d8ede8e683",
-                "reference": "eb2ecf80e3093e8f3c2769ac838e27d8ede8e683",
+                "url": "https://api.github.com/repos/doctrine/event-manager/zipball/95aa4cb529f1e96576f3fda9f5705ada4056a520",
+                "reference": "95aa4cb529f1e96576f3fda9f5705ada4056a520",
                 "shasum": ""
             },
             "require": {
+                "doctrine/deprecations": "^0.5.3 || ^1",
                 "php": "^7.1 || ^8.0"
             },
             "conflict": {
                 "doctrine/common": "<2.9"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^9",
-                "phpstan/phpstan": "~1.4.10 || ^1.5.4",
+                "doctrine/coding-standard": "^9 || ^10",
+                "phpstan/phpstan": "~1.4.10 || ^1.8.8",
                 "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
-                "vimeo/psalm": "^4.22"
+                "vimeo/psalm": "^4.24"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Doctrine\\Common\\": "lib/Doctrine/Common"
+                    "Doctrine\\Common\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1065,7 +1066,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/event-manager/issues",
-                "source": "https://github.com/doctrine/event-manager/tree/1.1.2"
+                "source": "https://github.com/doctrine/event-manager/tree/1.2.0"
             },
             "funding": [
                 {
@@ -1081,7 +1082,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-27T22:18:11+00:00"
+            "time": "2022-10-12T20:51:15+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1422,20 +1423,20 @@
         },
         {
             "name": "doctrine/persistence",
-            "version": "3.0.3",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "ac6fce61f037d7e54dbb2435f5b5648d86548e23"
+                "reference": "05612da375f8a3931161f435f91d6704926e6ec5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/ac6fce61f037d7e54dbb2435f5b5648d86548e23",
-                "reference": "ac6fce61f037d7e54dbb2435f5b5648d86548e23",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/05612da375f8a3931161f435f91d6704926e6ec5",
+                "reference": "05612da375f8a3931161f435f91d6704926e6ec5",
                 "shasum": ""
             },
             "require": {
-                "doctrine/event-manager": "^1.0",
+                "doctrine/event-manager": "^1 || ^2",
                 "php": "^7.2 || ^8.0",
                 "psr/cache": "^1.0 || ^2.0 || ^3.0"
             },
@@ -1446,14 +1447,14 @@
             "require-dev": {
                 "composer/package-versions-deprecated": "^1.11",
                 "doctrine/annotations": "^1.7",
-                "doctrine/coding-standard": "^9.0",
+                "doctrine/coding-standard": "^10",
                 "doctrine/common": "^3.0",
-                "phpstan/phpstan": "1.5.0",
+                "phpstan/phpstan": "1.8.8",
                 "phpstan/phpstan-phpunit": "^1",
                 "phpstan/phpstan-strict-rules": "^1.1",
                 "phpunit/phpunit": "^8.5 || ^9.5",
                 "symfony/cache": "^4.4 || ^5.4 || ^6.0",
-                "vimeo/psalm": "4.22.0"
+                "vimeo/psalm": "4.29.0"
             },
             "type": "library",
             "autoload": {
@@ -1502,7 +1503,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/persistence/issues",
-                "source": "https://github.com/doctrine/persistence/tree/3.0.3"
+                "source": "https://github.com/doctrine/persistence/tree/3.0.4"
             },
             "funding": [
                 {
@@ -1518,7 +1519,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-04T21:14:21+00:00"
+            "time": "2022-10-13T07:34:14+00:00"
         },
         {
             "name": "easybook/geshi",
@@ -2212,28 +2213,28 @@
         },
         {
             "name": "laminas/laminas-dependency-plugin",
-            "version": "2.4.0",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-dependency-plugin.git",
-                "reference": "9f75aa145ea21bed5fef8dbbabf930430fbcddbd"
+                "reference": "73cfb63ddca9d6bfedad5e0a038f6d55063975a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-dependency-plugin/zipball/9f75aa145ea21bed5fef8dbbabf930430fbcddbd",
-                "reference": "9f75aa145ea21bed5fef8dbbabf930430fbcddbd",
+                "url": "https://api.github.com/repos/laminas/laminas-dependency-plugin/zipball/73cfb63ddca9d6bfedad5e0a038f6d55063975a3",
+                "reference": "73cfb63ddca9d6bfedad5e0a038f6d55063975a3",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": ">=1.1.0 <2.3.0",
-                "php": "^7.4 || ~8.0.0 || ~8.1.0"
+                "composer-plugin-api": "^1.1 || ^2.0",
+                "php": "^7.3 || ~8.0.0 || ~8.1.0"
             },
             "require-dev": {
-                "composer/composer": ">=1.9.0 <2.3.0",
-                "laminas/laminas-coding-standard": "~2.4.0",
-                "mikey179/vfsstream": "^1.6.11",
+                "composer/composer": "^1.9 || ^2.0",
+                "laminas/laminas-coding-standard": "^2.2.1",
+                "mikey179/vfsstream": "^1.6.10@alpha",
                 "phpunit/phpunit": "^9.5.5",
-                "psalm/plugin-phpunit": "^0.17.0",
+                "psalm/plugin-phpunit": "^0.15.1",
                 "roave/security-advisories": "dev-master",
                 "vimeo/psalm": "^4.5"
             },
@@ -2253,7 +2254,7 @@
             "description": "Replace zendframework and zfcampus packages with their Laminas Project equivalents.",
             "support": {
                 "issues": "https://github.com/laminas/laminas-dependency-plugin/issues",
-                "source": "https://github.com/laminas/laminas-dependency-plugin/tree/2.4.0"
+                "source": "https://github.com/laminas/laminas-dependency-plugin/tree/2.2.0"
             },
             "funding": [
                 {
@@ -2261,7 +2262,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-09-12T19:05:50+00:00"
+            "time": "2021-09-08T17:51:35+00:00"
         },
         {
             "name": "laminas/laminas-developer-tools",
@@ -6959,11 +6960,11 @@
         },
         {
             "name": "unicaen/app",
-            "version": "dev-ll-php8",
+            "version": "dev-ll-php8-bs5",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "3f945c4da7f96cd76145334b66d18daebdaac764"
+                "reference": "42ba438b70aaa955c1ffea3497b926ff9fd02afa"
             },
             "require": {
                 "beberlei/assert": "^3.3",
@@ -7020,21 +7021,21 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2022-10-12T08:06:36+00:00"
+            "time": "2022-10-05T14:17:30+00:00"
         },
         {
             "name": "unicaen/auth",
-            "version": "dev-ll-php8",
+            "version": "dev-ll-php8-bs5",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/auth.git",
-                "reference": "e0cc60d78c307f72287ab572d304f96b4cc10700"
+                "reference": "de95d8dfdd4a61984d0515a427779795af5ac1a2"
             },
             "require": {
                 "jasig/phpcas": "^1.4",
                 "ramsey/uuid": "^4.2",
-                "unicaen/app": "^4.0 || dev-ll-php8",
-                "unicaen/bjy-authorize": "^4.0 || dev-ll-php8"
+                "unicaen/app": "^4.0 || dev-ll-php8-bs5",
+                "unicaen/bjy-authorize": "^4.0 || dev-ll-php8-bs5"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.6"
@@ -7050,15 +7051,15 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen",
-            "time": "2022-01-06T14:12:24+00:00"
+            "time": "2022-10-13T08:32:30+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",
-            "version": "dev-ll-php8",
+            "version": "dev-ll-php8-bs5",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bjy-authorize.git",
-                "reference": "fd2432c9cf614885dd69b94fafdae3c68a135542"
+                "reference": "9840e7f87b140b8904c16e4f997e7d8dae9facdc"
             },
             "require": {
                 "doctrine/common": "^3.2",
@@ -7114,21 +7115,20 @@
                 "zf2",
                 "zfc-user"
             ],
-            "time": "2022-01-06T08:41:13+00:00"
+            "time": "2022-10-13T08:37:06+00:00"
         },
         {
             "name": "unicaen/code",
-            "version": "7.0",
+            "version": "7.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "b2d681c1c664564d52d561014255b9fd4feccf4c"
+                "reference": "b81326b34e8a993d771fa2aa682322e1908f6f9a"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
                 "laminas/laminas-developer-tools": "^2.3",
-                "laminas/laminas-file": "^2.10",
-                "unicaen/app": "^4.0 || dev-ll-php8"
+                "laminas/laminas-file": "^2.10"
             },
             "type": "library",
             "autoload": {
@@ -7140,7 +7140,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2022-10-04T15:11:18+00:00"
+            "time": "2022-10-05T15:04:59+00:00"
         },
         {
             "name": "unicaen/console",
@@ -7192,14 +7192,14 @@
         },
         {
             "name": "unicaen/import",
-            "version": "dev-ll-php8",
+            "version": "dev-ll-php8-bs5",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "98889ccb8df20bf051460d6dab85473ae2588629"
+                "reference": "6c5be2bc201357b282da76a02bee8a5ac3df50fe"
             },
             "require": {
-                "unicaen/auth": "^4.0 || dev-ll-php8"
+                "unicaen/auth": "^4.0 || dev-ll-php8-bs5"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7"
@@ -7214,7 +7214,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2022-07-13T13:45:56+00:00"
+            "time": "2022-10-13T08:38:00+00:00"
         },
         {
             "name": "unicaen/open-document",
@@ -7271,14 +7271,14 @@
         },
         {
             "name": "unicaen/tbl",
-            "version": "dev-ll-php8",
+            "version": "dev-ll-php8-bs5",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/tbl.git",
-                "reference": "dfa4393442ce8fc7c9a7f0968fc8af283870b01b"
+                "reference": "5e98da354c13abd914813fe9b77a7bca783d5c1b"
             },
             "require": {
-                "unicaen/app": "^4.0 || dev-ll-php8"
+                "unicaen/app": "^4.0 || dev-ll-php8-bs5"
             },
             "type": "library",
             "autoload": {
@@ -7290,7 +7290,7 @@
                 ]
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
-            "time": "2022-01-05T15:23:27+00:00"
+            "time": "2022-10-13T08:39:16+00:00"
         },
         {
             "name": "unicaen/zfc-user",
@@ -8692,5 +8692,5 @@
         "php": ">=8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

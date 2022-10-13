@@ -80,9 +80,7 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_VISU
 }
 
 echo $this->tabajax($tabs, $tab);?>
-
 <script>
-    //Rechargement de la page sur event
     $(function () {
         $("#fiche").refresh();
         $("#edition").refresh();

@@ -144,7 +144,7 @@ return [
 
         'administration' => [
             'pages' => [
-                'parametres' => [
+                'configuration' => [
                     'pages' => [
                         'campagnes-saisie' => [
                             'label'    => "Campagnes de saisie des services",

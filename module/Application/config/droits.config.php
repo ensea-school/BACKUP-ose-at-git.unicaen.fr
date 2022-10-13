@@ -129,14 +129,7 @@ return [
                     'administration' => [
                         'pages' => [
                             'droits' => [
-                                'icon'         => 'fas fa-power-off',
-                                'label'        => "Droits d'accès",
-                                'title'        => "Gestion des droits d'accès",
-                                'route'        => 'droits',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Droits', 'index'),
-                                'order'        => 100,
-                                'border-color' => '#E5272E',
-                                'pages'        => [
+                                'pages' => [
                                     'roles'        => [
                                         'label'       => "Rôles",
                                         'title'       => "Gestion des rôles",
@@ -228,7 +221,7 @@ return [
         ],
     ],
     'form_elements'   => [
-        'factories' => [
+        'factories'  => [
             'UnicaenAuth\Form\Droits\Role' => Form\Droits\RoleFormFactory::class,
         ],
         'invokables' => [

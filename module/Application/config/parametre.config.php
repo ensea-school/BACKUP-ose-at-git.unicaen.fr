@@ -16,7 +16,6 @@ return [
                     'route'    => '/parametres',
                     'defaults' => [
                         'controller' => 'Application\Controller\Parametre',
-                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -51,14 +50,8 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'parametres' => [
-                                'icon'         => 'fas fa-wrench',
-                                'label'        => "Paramétrages",
-                                'route'        => 'parametres',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Parametre', 'index'),
-                                'border-color' => '#9B9B9B',
-                                'order'        => 120,
-                                'pages'        => [
+                            'configuration' => [
+                                'pages' => [
                                     'annees'   => [
                                         'label'    => "Années",
                                         'route'    => 'parametres/annees',
@@ -82,13 +75,6 @@ return [
     'bjyauthorize' => [
         'guards' => [
             PrivilegeController::class => [
-                [
-                    'controller' => 'Application\Controller\Parametre',
-                    'action'     => ['index'],
-                    'privileges' => [
-                        Privileges::PARAMETRES_GENERAL_VISUALISATION,
-                    ],
-                ],
                 [
                     'controller' => 'Application\Controller\Parametre',
                     'action'     => ['annees'],

@@ -5,10 +5,70 @@ namespace Application;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 
-return [
+$rubriques = [
+    'droits'          => [
+        'icon'         => 'fas fa-power-off',
+        'label'        => "Droits d'accès",
+        'title'        => "Gestion des droits d'accès",
+        'resource'     => PrivilegeController::getResourceId('Application\Controller\Droits', 'index'),
+        'border-color' => '#bbcf55',
+    ],
+    'configuration'   => [
+        'icon'         => 'fas fa-power-off',
+        'label'        => "Configuration",
+        'title'        => "Paramétrages de base de l'application",
+        'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+        'border-color' => '#f5e79e',
+    ],
+    'nomenclatures'   => [
+        'icon'         => 'fas fa-power-off',
+        'label'        => "Nomenclatures",
+        'title'        => "Diverses nomenclatures en usage",
+        'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+        'border-color' => '#217dd8',
+    ],
+    'intervenants'    => [
+        'icon'         => 'fas fa-power-off',
+        'label'        => "Intervenants",
+        'title'        => "Paramétrages liés aux intervenants",
+        'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+        'border-color' => '#E5272E',
+    ],
+    'odf'             => [
+        'icon'         => 'fas fa-power-off',
+        'label'        => "Offre de formation",
+        'title'        => "Administration du fonctionnement de l'offre de formation",
+        'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+        'border-color' => '#71dfd7',
+    ],
+    'rh'              => [
+        'icon'         => 'fas fa-power-off',
+        'label'        => "RH",
+        'title'        => "Nomenclatures et paramétrages relatifs aux ressources humaines",
+        'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+        'border-color' => '#9e9e9e',
+    ],
+    'finances'        => [
+        'icon'         => 'fas fa-power-off',
+        'label'        => "Finances",
+        'title'        => "Nomenclatures et paramétrages liés aux aspects financiers",
+        'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+        'border-color' => '#eb4995',
+    ],
+    'synchronisation' => [
+        'icon'         => 'fas fa-power-off',
+        'label'        => "Synchronisation",
+        'title'        => "Liaisons entre OSE et le système d'information",
+        'resource'     => PrivilegeController::getResourceId('Import\Controller\Import', 'index'),
+        'border-color' => '#9f491f',
+        'route'        => 'import',
+    ],
+];
+
+$config = [
     'router' => [
         'routes' => [
-            'administration'                    => [
+            'administration' => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration',
@@ -18,7 +78,12 @@ return [
                     ],
                 ],
                 'may_terminate' => true,
+                'child_routes'  => [
+                    // remplies automatiquement
+                ],
             ],
+
+
             'administration-type'               => [
                 'type'          => 'Literal',
                 'options'       => [
@@ -98,6 +163,8 @@ return [
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
                         'order'    => 7,
                         'pages'    => [
+                            // remplies automatiquement
+
                             'gestion-referentiel-commun' => [
                                 'label'          => 'Gestion dictionnaires de données',
                                 'icon'           => 'fas fa-table-list',
@@ -265,17 +332,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Administration',
-                    'action'     => ['index',
-                                     'administration-types',
-                                     'administration-financiere',
-                                     'administration-intervenant',
-                                     'administration-referentiel-commun',
-                                     'administration-nomenclature-rh',
-                                     'administration-periode',
-                                     'administration-etablissement',
-                                     'administration-pays',
-                                     'administration-departement',
-                                     'administration-type-formation',],
+                    'action'     => ['index'],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,
                         Privileges::IMPORT_MAJ,
@@ -315,6 +372,11 @@ return [
                     ],
                     'assertion'  => Assertion\GestionAssertion::class,
                 ],
+                [
+                    'controller' => 'Application\Controller\Administration',
+                    'action'     => ['rubrique'],
+                    'roles'      => 'user',
+                ],
             ],
         ],
     ],
@@ -324,3 +386,30 @@ return [
         ],
     ],
 ];
+
+$order = 1;
+foreach ($rubriques as $route => $rubrique) {
+    $hasRoute          = array_key_exists('route', $rubrique);
+    $rubrique['order'] = $order++;
+    if (!$hasRoute) {
+        $rubrique['route'] = 'administration/' . $route;
+    }
+
+    $config['navigation']['default']['home']['pages']['administration']['pages'][$route] = $rubrique;
+
+    if (!$hasRoute) {
+        $config['router']['routes']['administration']['child_routes'][$route] = [
+            'type'          => 'Literal',
+            'options'       => [
+                'route'    => '/' . $route,
+                'defaults' => [
+                    'controller' => 'Application\Controller\Administration',
+                    'action'     => 'rubrique',
+                ],
+            ],
+            'may_terminate' => true,
+        ];
+    }
+}
+
+return $config;

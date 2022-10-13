@@ -6,7 +6,6 @@ use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Func;
 use Application\Entity\Db\Structure;
@@ -24,11 +23,9 @@ use Application\Entity\Db\Structure;
 class StructureService extends AbstractEntityService
 {
     use Traits\AffectationServiceAwareTrait;
-    use ServiceServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
-
 
 
     /**
@@ -76,7 +73,7 @@ class StructureService extends AbstractEntityService
      */
     public function finderByRole($role, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         if (true === $role) {
             $qb->andWhere("EXISTS ( SELECT a from Application\Entity\Db\Affectation a WHERE a.structure = $alias)");
@@ -101,7 +98,7 @@ class StructureService extends AbstractEntityService
      */
     public function finderByStructure(Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         //$f = new Func('OSE_DIVERS.STRUCTURE_DANS_STRUCTURE', array("$alias.id", ":structure_cible"));
 
@@ -121,7 +118,7 @@ class StructureService extends AbstractEntityService
      */
     public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         if ($cStructure = $this->getServiceContext()->getStructure()) {
             $this->finderById($cStructure->getId(), $qb, $alias);
@@ -144,7 +141,7 @@ class StructureService extends AbstractEntityService
     {
         $term = str_replace(' ', '', $term);
 
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $libelleLong  = new Func('CONVERT', ["$alias.libelleLong", '?3']);
         $libelleCourt = new Func('CONVERT', ["$alias.libelleCourt", '?3']);
@@ -178,8 +175,8 @@ class StructureService extends AbstractEntityService
      */
     public function finderByEnseignement(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        $qb->andWhere('('.$alias.'.enseignement = 1 OR EXISTS (SELECT ep FROM Application\Entity\Db\ElementPedagogique ep WHERE ep.structure = ' . $alias . '))');
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        $qb->andWhere('(' . $alias . '.enseignement = 1 OR EXISTS (SELECT ep FROM Application\Entity\Db\ElementPedagogique ep WHERE ep.structure = ' . $alias . '))');
 
         return $qb;
     }
@@ -193,7 +190,7 @@ class StructureService extends AbstractEntityService
         $serviceMiseEnPaiement = $this->getServiceMiseEnPaiement();
         $serviceIntervenant    = $this->getServiceIntervenant();
 
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
         $serviceMIS->join($serviceMiseEnPaiement, $qb, 'miseEnPaiement');
@@ -207,31 +204,13 @@ class StructureService extends AbstractEntityService
 
 
     /**
-     * Fetch des structures d'enseignement distinctes d'un intervenant.
-     *
-     * @param Intervenant $intervenant
-     */
-    public function getListStructuresEnseignIntervenant(Intervenant $intervenant)
-    {
-        $serviceService = $this->getServiceService();
-
-        $qb = $this->finderByEnseignement();
-        $this->join($serviceService, $qb, 'service');
-        $serviceService->finderByIntervenant($intervenant, $qb);
-
-        return $this->getList($qb);
-    }
-
-
-
-    /**
      *
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelleCourt");
 
         return $qb;

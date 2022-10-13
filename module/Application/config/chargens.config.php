@@ -337,12 +337,6 @@ return [
             ],
         ],
 
-        'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'Scenario' => [],
-            ],
-        ],
-
         'rule_providers' => [
             \UnicaenAuth\Provider\Rule\PrivilegeRuleProvider::class => [
                 'allow' => [

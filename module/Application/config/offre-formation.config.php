@@ -336,7 +336,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class => [
                 /* Global */
                 [
@@ -439,16 +439,7 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'ElementPedagogique' => [],
-                'Etape'              => [],
-                'CentreCoutEp'       => [],
-                'ElementModulateur'  => [],
-                'VolumeHoraireEns'   => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
@@ -517,6 +508,8 @@ return [
             Service\OffreFormationService::class       => Service\OffreFormationService::class,
             Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
             Processus\ReconductionProcessus::class     => Processus\ReconductionProcessus::class,
+            Service\VolumeHoraireEnsService::class     => Service\VolumeHoraireEnsService::class,
+            Service\PeriodeService::class              => Service\PeriodeService::class,
         ],
         'factories'  => [
             Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,

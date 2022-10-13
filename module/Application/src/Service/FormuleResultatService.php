@@ -4,16 +4,16 @@ namespace Application\Service;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etablissement;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Referentiel\Service\ServiceReferentielServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
+use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 
 /**
  * Description of FormuleResultat
@@ -190,7 +190,7 @@ class FormuleResultatService extends AbstractEntityService
                 $drId = (int)$vhd['SERVICE_REFERENTIEL_ID'];
                 if (!isset($data['r'][$drId])) {
                     $data['r'][$drId] = [
-                        'fonction'           => $this->getServiceServiceReferentiel()->get($drId)->getFonction(),
+                        'fonction'           => $this->getServiceServiceReferentiel()->get($drId)->getFonctionReferentiel(),
                         'structure'          => $this->getServiceStructure()->get($vhd['STRUCTURE_ID']),
                         'SERVICE_STATUTAIRE' => $vhd['SERVICE_STATUTAIRE'] == '1',
                         'heures'             => 0,

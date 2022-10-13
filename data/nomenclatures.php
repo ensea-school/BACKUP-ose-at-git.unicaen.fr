@@ -134,12 +134,6 @@ return [
         ],
     ],
 
-    'MODELE_CONTRAT' => [
-        [
-            'ID'      => 1,
-            'LIBELLE' => 'Modèle par défaut',
-        ],
-    ],
 
     'PERIMETRE' => [
         [

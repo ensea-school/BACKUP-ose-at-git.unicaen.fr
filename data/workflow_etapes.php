@@ -39,7 +39,7 @@ return [
     "SERVICE_VALIDATION"             => [
         "LIBELLE_INTERVENANT" => "Je visualise la validation de mes services prévisionnels",
         "LIBELLE_AUTRES"      => "Je visualise la validation des enseignements prévisionnels",
-        "ROUTE"               => "intervenant/validation/service/prevu",
+        "ROUTE"               => "intervenant/validation/enseignement/prevu",
         "DESC_NON_FRANCHIE"   => "Les enseignements prévisionnels n'ont pas été validés",
         "OBLIGATOIRE"         => true,
     ],
@@ -88,7 +88,7 @@ return [
     "SERVICE_VALIDATION_REALISE"     => [
         "LIBELLE_INTERVENANT" => "Je visualise la validation de mes services réalisés",
         "LIBELLE_AUTRES"      => "Je visualise la validation des enseignements réalisés",
-        "ROUTE"               => "intervenant/validation/service/realise",
+        "ROUTE"               => "intervenant/validation/enseignement/realise",
         "DESC_NON_FRANCHIE"   => "Le service réalisé n'a été intégralement validé",
         "OBLIGATOIRE"         => true,
     ],

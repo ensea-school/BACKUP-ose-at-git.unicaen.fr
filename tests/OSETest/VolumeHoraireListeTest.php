@@ -2,20 +2,20 @@
 
 namespace OSETest;
 
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\TypeIntervention;
-use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\Db\VolumeHoraire;
-use Application\Entity\VolumeHoraireListe;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
+use Enseignement\Entity\VolumeHoraireListe;
 use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use DoctrineORMModule\Proxy\__CG__\UnicaenImport\Entity\Db\Source;
 
 class VolumeHoraireListeTest

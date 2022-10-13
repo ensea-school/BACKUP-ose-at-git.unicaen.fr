@@ -186,7 +186,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
     /**
      * @param $etape
      */
-    public function renderNav($etape)
+    public function renderNavBtn($etape)
     {
         $nextEtape = $this->getServiceWorkflow()->getNextAccessibleEtape($etape, $this->getIntervenant());
 
@@ -195,6 +195,17 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
         } else {
             return '';
         }
+    }
+
+
+
+    public function renderNav(string $etape): string
+    {
+        $btnNextUrl = $this->getView()->url('workflow/feuille-de-route-btn-next', ['intervenant' => $this->getIntervenant()->getId(), 'wfEtapeCode' => $etape]);
+
+        return $this->getView()->tag('div', ['id' => 'feuille-de-route-btn-next', 'data-url' => $btnNextUrl])->html(
+            $this->renderNavBtn($etape)
+        );
     }
 
 

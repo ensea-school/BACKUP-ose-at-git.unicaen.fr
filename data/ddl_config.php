@@ -18,6 +18,7 @@ return [
     'materialized-view' => [
         'includes' => [
             'TBL_NOEUD',
+            'MV_LIEN',
         ],
         'excludes' => [
             //'MV_EXT_SERVICE',
@@ -73,6 +74,9 @@ return [
             'V_TBL_VOLUME_HORAIRE',
             'V_PRIVILEGES_ROLES',
             'V_CTL_SERVICES_ODF_HISTO',
+
+            'V_SERVICE_VALIDE',
+            'V_SERVICE_NON_VALIDE',
         ], 'excludes' => [
             'V_TBL_PLAFOND_%', // Les vues plafonds sont générées et non créées à partir de la DDL
         ],

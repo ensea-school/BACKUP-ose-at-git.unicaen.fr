@@ -1,12 +1,11 @@
-CREATE
-OR REPLACE FORCE VIEW V_EXPORT_PILOTAGE_ECARTS_ETATS AS
+CREATE OR REPLACE FORCE VIEW V_EXPORT_PILOTAGE_ECARTS_ETATS AS
 SELECT t3.annee_id                             annee_id,
        t3.annee_id || '-' || (t3.annee_id + 1) annee,
        t3.etat,
        t3.type_heures_id,
        t3.type_heures,
        s.id                                    structure_id,
-       s.libelle_court                         structure,
+       s.libelle_court                         STRUCTURE,
        i.id                                    intervenant_id,
        ti.libelle                              intervenant_type,
        i.source_code                           intervenant_code,
@@ -189,4 +188,4 @@ FROM (SELECT annee_id,
          JOIN intervenant i ON i.id = t3.intervenant_id
          JOIN statut si ON si.id = i.statut_id
          JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
-         JOIN structure s ON s.id = t3.structure_id
+         JOIN STRUCTURE s ON s.id = t3.structure_id

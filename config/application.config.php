@@ -105,6 +105,9 @@ class AppConfig
             'UnicaenSiham',
             'Application',
             'Intervenant',
+            'Service',
+            'Enseignement',
+            'Referentiel',
             'Plafond',
             'Indicateur',
             'ExportRh',
@@ -136,8 +139,8 @@ class AppConfig
                     './vendor',
                 ],
                 'cache_dir'                => 'cache/',
-                'config_cache_enabled'     => ('prod' == $env  && !self::inConsole()),
-                'module_map_cache_enabled' => ('prod' == $env  && !self::inConsole()),
+                'config_cache_enabled'     => ('prod' == $env && !self::inConsole()),
+                'module_map_cache_enabled' => ('prod' == $env && !self::inConsole()),
             ],
         ];
     }

@@ -63,7 +63,7 @@ $(function ()
     });
 
     /* Services */
-    WidgetInitializer.add('service-liste', 'serviceListe', function () {
+    WidgetInitializer.add('enseignements', 'enseignements', function () {
         WidgetInitializer.includeJs(Url('js/service.js'));
         WidgetInitializer.includeCss(Url('css/service.css'));
     });
@@ -77,7 +77,7 @@ $(function ()
     });
 
     /* Service référentiel */
-    WidgetInitializer.add('service-referentiel-liste', 'serviceReferentielListe', function () {
+    WidgetInitializer.add('referentiels', 'referentiels', function () {
         WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
         WidgetInitializer.includeCss(Url('css/service.css'));
     });

@@ -3,8 +3,6 @@
 namespace Application\Form;
 
 use Application\Entity\Db\EtatSortie;
-use Intervenant\Service\StatutServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 
 
@@ -67,7 +65,7 @@ class EtatSortieForm extends AbstractForm
             'type'       => 'Textarea',
             'name'       => 'pdf-traitement',
             'options'    => [
-                'label' => "Traitement des données",
+                'label' => "Traitement des données (code PHP)",
             ],
             'attributes' => [
                 'id'   => 'pdf-traitement',
@@ -79,7 +77,7 @@ class EtatSortieForm extends AbstractForm
             'type'       => 'Textarea',
             'name'       => 'csv-traitement',
             'options'    => [
-                'label' => "Traitement des données",
+                'label' => "Traitement des données (code PHP)",
             ],
             'attributes' => [
                 'id'   => 'csv-traitement',
@@ -91,7 +89,7 @@ class EtatSortieForm extends AbstractForm
             'type'    => 'Checkbox',
             'name'    => 'auto-break',
             'options' => [
-                'label'              => 'Saut de page automatique',
+                'label'              => 'Saut de page automatique : en cas de publipostage, chaque copie démarre en haut de page plutôt qu\'à la suite',
                 'use_hidden_element' => true,
                 'checked_value'      => 'true',
                 'unchecked_value'    => 'false',
@@ -203,9 +201,6 @@ class EtatSortieForm extends AbstractForm
 
 class EtatSortieHydrator implements HydratorInterface
 {
-    use StatutServiceAwareTrait;
-    use StructureServiceAwareTrait;
-
 
     /**
      * @param array      $data

@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
+CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
   TYPE t_dep_bloquante IS RECORD (
     id NUMERIC,
     to_delete BOOLEAN DEFAULT TRUE
@@ -568,7 +568,7 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
             SUM(demandee) demandees,
             SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE fournie END)  fournies,
             SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE validee END)  validees,
-			SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE 0 END) facultatives
+		      	SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE 0 END)        facultatives
           FROM
             tbl_piece_jointe
           WHERE

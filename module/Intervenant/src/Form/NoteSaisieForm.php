@@ -4,8 +4,6 @@ namespace Intervenant\Form;
 
 use Application\Form\AbstractForm;
 use Intervenant\Entity\Db\Note;
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
-use Intervenant\Service\NoteServiceAwareTrait;
 use Intervenant\Service\TypeNoteServiceAwareTrait;
 
 /**
@@ -15,7 +13,6 @@ use Intervenant\Service\TypeNoteServiceAwareTrait;
  */
 class NoteSaisieForm extends AbstractForm
 {
-    use NoteServiceAwareTrait;
     use TypeNoteServiceAwareTrait;
 
     public function init()

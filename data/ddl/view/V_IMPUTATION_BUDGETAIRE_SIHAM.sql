@@ -1,6 +1,5 @@
-CREATE
-OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE_SIHAM AS
-SELECT 'P'                                                                                type,
+CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE_SIHAM AS
+SELECT 'P'                                                                                TYPE,
        NULL                                                                               uo,
        intervenant_matricule                                                              matricule,
        date_debut                                                                         date_debut,
@@ -23,7 +22,7 @@ SELECT 'P'                                                                      
            END)) * 100                                                                    pourcentage,
        --pourc_ecart,
        --pourc_diff,
-       (lpad(floor(hetd), 2, '0')) || ':' || lpad(floor((hetd - floor(hetd)) * 60), 2, 0) nombres_heures,
+       (lpad(FLOOR(hetd), 2, '0')) || ':' || lpad(FLOOR((hetd - FLOOR(hetd)) * 60), 2, 0) nombres_heures,
        NULL                                                                               flmodi,
        NULL                                                                               numord,
        NULL                                                                               numgrp,

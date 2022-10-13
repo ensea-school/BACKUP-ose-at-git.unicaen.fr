@@ -3,7 +3,6 @@
 namespace Application\Form\Adresse;
 
 use Application\Form\AbstractFieldset;
-use Application\Form\Elements\PaysSelect;
 use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;

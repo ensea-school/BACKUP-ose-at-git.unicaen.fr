@@ -4,16 +4,13 @@ namespace Intervenant\Controller;
 
 use Application\Cache\Traits\CacheContainerTrait;
 use Application\Controller\AbstractController;
-use Application\Service\Traits\ContextServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Application\Provider\Privilege\Privileges;
 use Intervenant\Form\StatutSaisieForm;
 use Intervenant\Form\StatutSaisieFormAwareTrait;
 use Application\Provider\Role\RoleProvider;
-use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Plafond\Form\PlafondConfigFormAwareTrait;
-use Plafond\Service\PlafondServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
@@ -25,9 +22,6 @@ class StatutController extends AbstractController
     use StatutSaisieFormAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use CacheContainerTrait;
-    use DossierAutreServiceAwareTrait;
-    use ContextServiceAwareTrait;
-    use PlafondServiceAwareTrait;
     use PlafondConfigFormAwareTrait;
 
     public function indexAction()

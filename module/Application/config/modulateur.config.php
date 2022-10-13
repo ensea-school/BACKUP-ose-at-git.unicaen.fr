@@ -123,7 +123,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Modulateur',
@@ -138,12 +138,7 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'TypeModulateur' => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
@@ -159,8 +154,8 @@ return [
         'invokables' => [
             Service\TypeModulateurStructureService::class => Service\TypeModulateurStructureService::class,
         ],
-        'factories' => [
-            Assertion\ModulateurAssertion::class          => \UnicaenAuth\Assertion\AssertionFactory::class,
+        'factories'  => [
+            Assertion\ModulateurAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'controllers'     => [

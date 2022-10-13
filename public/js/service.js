@@ -2,7 +2,7 @@
  Propre à l'affichage des services
  /***************************************************************************************************************************************************/
 
-$.widget("ose.serviceListe", {
+$.widget("ose.enseignements", {
     totaux: {},
     total: 0,
 
@@ -37,7 +37,6 @@ $.widget("ose.serviceListe", {
         this.element.find("table.service tr.service-ligne td.type-intervention").each(function () {
             var typeInterventionCode = $(this).data('type-intervention-code');
             var value = $(this).data('value');
-
             if (that.totaux[typeInterventionCode] == undefined) that.totaux[typeInterventionCode] = 0;
 
             that.totaux[typeInterventionCode] += value;
@@ -109,6 +108,12 @@ $.widget("ose.serviceListe", {
         if (this.heures != exHeures) {
             this._trigger('heures-change', null, this);
         }
+        console.log(this.element.find(".horodatage"));
+        console.log(this.element.find(".horodatage2"));
+
+        this.element.find(".horodatage").each(function () {
+            $(this).refresh();
+        });
 
         if ($("#service-resume").length > 0) { // Si on est dans le résumé (si nécessaire)
             $("#service-resume").refresh();
@@ -127,7 +132,7 @@ $.widget("ose.serviceListe", {
             });
             that.element.find("#service-" + serviceId + "-volume-horaire-td div#vhl").refresh();
         } else { // nouveau service
-            var url = Url("service/rafraichir-ligne/" + serviceId, {
+            var url = Url("enseignement/rafraichir-ligne/" + serviceId, {
                 'only-content': 0,
                 'details': 1,
                 params: that.params
@@ -159,7 +164,7 @@ $.widget("ose.serviceListe", {
             services += $(this).data('id');
         });
         $.get(
-            Url("service/constatation"),
+            Url("enseignement/constatation"),
             {services: services},
             function (data) {
                 if (data != 'OK') {
@@ -177,7 +182,7 @@ $.widget("ose.serviceListe", {
         var that = this;
         that.element.find('#prevu-to-prevu-attente').show();
         $.get(
-            Url("service/initialisation/" + this.getElementPrevuToPrevu().data('intervenant')),
+            Url("enseignement/initialisation/" + this.getElementPrevuToPrevu().data('intervenant')),
             {},
             function (data) {
                 if (data != 'OK') {
@@ -267,7 +272,7 @@ $.widget("ose.serviceListe", {
         });
 
         $("body").on("service-add-message", function (event, data) {
-            var thatId = event.a.parents('div.service-liste').attr('id');
+            var thatId = event.a.parents('div.enseignements').attr('id');
             var serviceId = null;
             if ($("div .messenger, div .alert", event.div).length ? false : true) { // si aucune erreur n'a été rencontrée
                 event.div.modal('hide'); // ferme la fenêtre modale

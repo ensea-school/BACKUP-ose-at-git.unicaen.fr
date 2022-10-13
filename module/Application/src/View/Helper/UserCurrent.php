@@ -82,7 +82,7 @@ $(function() {
 });
 EOS;
 
-        //$this->getView()->plugin('inlineScript')->offsetSetScript(1000, $js);
+        $this->getView()->plugin('inlineScript')->offsetSetScript(1000, $js);
 
         return $out;
     }

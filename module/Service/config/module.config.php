@@ -107,6 +107,7 @@ return [
         'service' => [
             'label'    => 'Services',
             'title'    => "Visualisation et export des services",
+            'order'    => 3,
             'route'    => 'service',
             'resource' => PrivilegeController::getResourceId(ServiceController::class, 'index'),
         ],

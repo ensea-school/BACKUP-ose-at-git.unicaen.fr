@@ -64,6 +64,31 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'rh' => [
+                                'pages' => [
+                                    'Employeurs' => [
+                                        'border-color' => '#9F491F',
+                                        'label'        => "Employeurs",
+                                        'title'        => "Gestion des employeurs",
+                                        'route'        => 'employeur',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Employeur', 'index'),
+                                        'order'        => 20,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'controllers' => [
         'factories'  => [
             'Application\Controller\Employeur' => Controller\Factory\EmployeurControllerFactory::class,

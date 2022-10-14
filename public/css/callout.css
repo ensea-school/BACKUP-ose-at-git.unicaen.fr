@@ -15,7 +15,7 @@
     border: 1px #ddd solid;
     border-left: 6px #9E9E9E solid;
     padding:1em;
-    min-height:10em;
+    min-height:13em;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.075);
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
 

@@ -145,24 +145,25 @@ return [
 
         'administration' => [
             'pages' => [
-                'parametres' => [
+                'configuration' => [
                     'pages' => [
                         'campagnes-saisie' => [
                             'label'    => "Campagnes de saisie des services",
                             'route'    => 'parametres/campagnes-saisie',
+                            'order'    => 20,
                             'resource' => PrivilegeController::getResourceId(CampagneSaisieController::class, 'campagnes-saisie'),
                         ],
                     ],
                 ],
 
-                'gestion-intervenant' => [
+                'intervenants' => [
                     'pages' => [
                         'regle-structure-validation' => [
-                            'label'      => "Règles de validation enseignements par type d'intervenant",
+                            'label'      => "Règles de validation des enseignements",
                             'title'      => "Permet de définir les priorités de validation de volumes horaires par type d'intervenant",
                             'route'      => 'parametres/regle-structure-validation',
                             'withtarget' => true,
-                            'order'      => 93,
+                            'order'      => 30,
                             'resource'   => PrivilegeController::getResourceId(RegleStructureValidationController::class, 'index'),
                         ],
                     ],

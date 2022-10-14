@@ -25,13 +25,6 @@ class ParametreController extends AbstractController
     use AnneeServiceAwareTrait;
 
 
-    public function indexAction()
-    {
-        return [];
-    }
-
-
-
     public function anneesAction()
     {
         $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ANNEES_EDITION));

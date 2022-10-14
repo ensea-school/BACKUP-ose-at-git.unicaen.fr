@@ -113,19 +113,13 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'workflow' => [
-                                'label'        => "Workflow",
-                                'title'        => "Workflow",
-                                'route'        => 'workflow',
-                                'icon'         => 'fas fa-gears',
-                                'resource'     => Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_VISUALISATION),
-                                'order'        => 110,
-                                'border-color' => '#111',
-                                'pages'        => [
+                            'configuration' => [
+                                'pages' => [
                                     'dependances' => [
-                                        'label'    => "Gestion des dépendances",
-                                        'title'    => "Gestion des dépendances",
+                                        'label'    => "Workflow",
+                                        'title'    => "Gestion des dépendances des feuilles de route",
                                         'route'    => 'workflow/dependances',
+                                        'order'    => 60,
                                         'resource' => Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_VISUALISATION),
                                     ],
                                 ],

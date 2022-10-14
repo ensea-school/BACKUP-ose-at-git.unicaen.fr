@@ -6,7 +6,7 @@ use UnicaenAuth\Guard\PrivilegeController;
 use Application\Provider\Privilege\Privileges;
 
 return [
-    'router'          => [
+    'router' => [
         'routes' => [
             'departement' => [
                 'type'          => 'Literal',
@@ -43,6 +43,31 @@ return [
             ],
         ],
     ],
+
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'nomenclatures' => [
+                                'pages' => [
+                                    'gestion-departement' => [
+                                        'label'          => 'Départements',
+                                        'route'          => 'departement',
+                                        'resource'       => PrivilegeController::getResourceId('Application\Controller\Departement', 'index'),
+                                        'order'          => 10,
+                                        'border - color' => '#111',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'bjyauthorize'    => [
         'guards' => [
             PrivilegeController::class => [

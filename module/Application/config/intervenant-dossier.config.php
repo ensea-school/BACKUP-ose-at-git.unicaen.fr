@@ -124,6 +124,23 @@ return [
                             ],
                         ],
                     ],
+
+                    'administration' => [
+                        'pages' => [
+                            'intervenants' => [
+                                'pages' => [
+                                    'gestion-champs-autres-dossier-intervenant' => [
+                                        'label'      => "Champs personnalisés du dossier",
+                                        'title'      => "Editer et modifier les 5 champs personnalisables pour les dossiers des intervenant",
+                                        'route'      => 'autres-infos',
+                                        'withtarget' => true,
+                                        'order'      => 10,
+                                        'resource'   => PrivilegeController::getResourceId('Application\Controller\Autres', 'index'),
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],

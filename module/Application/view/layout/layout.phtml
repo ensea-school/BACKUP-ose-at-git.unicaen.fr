@@ -73,8 +73,8 @@ echo $this->doctype();
 <body class="<?= getenv('APPLICATION_ENV') ?: 'dev' ?> p-0" data-base-url="<?= $this->url('home') ?>">
 
 <nav id="navbar" class="navbar sticky-top navbar-expand-lg navbar-dark navbar-inverse">
-    <div class="container-fluid center">
-        <a class="navbar-brand" href="#"><?= $this->appLink($this->appInfos()->nom) ?></a>
+    <div class="container center">
+        <?= $this->appLink($this->appInfos()->nom) ?>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

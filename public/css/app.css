@@ -1,5 +1,11 @@
 body {
     font-family: ubuntu, arial, sans-serif;
+    font-size: 14px;
+}
+
+
+.form-control {
+    font-size: 14px;
 }
 
 
@@ -374,6 +380,12 @@ dl.dl-horizontal.element dd {
     white-space: nowrap;
 }
 
+.page-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+}
+
 h1.page-header {
     margin-top: 10px;
 }
@@ -551,6 +563,9 @@ form#modulateurs-saisie th select {
     line-height: 2em;
 }
 
+.container {
+    display: table;
+}
 
 
 

@@ -2213,28 +2213,28 @@
         },
         {
             "name": "laminas/laminas-dependency-plugin",
-            "version": "2.2.0",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-dependency-plugin.git",
-                "reference": "73cfb63ddca9d6bfedad5e0a038f6d55063975a3"
+                "reference": "9f75aa145ea21bed5fef8dbbabf930430fbcddbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-dependency-plugin/zipball/73cfb63ddca9d6bfedad5e0a038f6d55063975a3",
-                "reference": "73cfb63ddca9d6bfedad5e0a038f6d55063975a3",
+                "url": "https://api.github.com/repos/laminas/laminas-dependency-plugin/zipball/9f75aa145ea21bed5fef8dbbabf930430fbcddbd",
+                "reference": "9f75aa145ea21bed5fef8dbbabf930430fbcddbd",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.1 || ^2.0",
-                "php": "^7.3 || ~8.0.0 || ~8.1.0"
+                "composer-plugin-api": ">=1.1.0 <2.3.0",
+                "php": "^7.4 || ~8.0.0 || ~8.1.0"
             },
             "require-dev": {
-                "composer/composer": "^1.9 || ^2.0",
-                "laminas/laminas-coding-standard": "^2.2.1",
-                "mikey179/vfsstream": "^1.6.10@alpha",
+                "composer/composer": ">=1.9.0 <2.3.0",
+                "laminas/laminas-coding-standard": "~2.4.0",
+                "mikey179/vfsstream": "^1.6.11",
                 "phpunit/phpunit": "^9.5.5",
-                "psalm/plugin-phpunit": "^0.15.1",
+                "psalm/plugin-phpunit": "^0.17.0",
                 "roave/security-advisories": "dev-master",
                 "vimeo/psalm": "^4.5"
             },
@@ -2254,7 +2254,7 @@
             "description": "Replace zendframework and zfcampus packages with their Laminas Project equivalents.",
             "support": {
                 "issues": "https://github.com/laminas/laminas-dependency-plugin/issues",
-                "source": "https://github.com/laminas/laminas-dependency-plugin/tree/2.2.0"
+                "source": "https://github.com/laminas/laminas-dependency-plugin/tree/2.4.0"
             },
             "funding": [
                 {
@@ -2262,7 +2262,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-09-08T17:51:35+00:00"
+            "time": "2022-09-12T19:05:50+00:00"
         },
         {
             "name": "laminas/laminas-developer-tools",
@@ -7029,12 +7029,12 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/auth.git",
-                "reference": "de95d8dfdd4a61984d0515a427779795af5ac1a2"
+                "reference": "a266e7850aab07bad9c942b6c6ddd5e641a97240"
             },
             "require": {
                 "jasig/phpcas": "^1.4",
                 "ramsey/uuid": "^4.2",
-                "unicaen/app": "^4.0 || dev-ll-php8-bs5",
+                "unicaen/app": "^5.0 || dev-ll-php8-bs5",
                 "unicaen/bjy-authorize": "^4.0 || dev-ll-php8-bs5"
             },
             "require-dev": {
@@ -7051,7 +7051,7 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen",
-            "time": "2022-10-13T08:32:30+00:00"
+            "time": "2022-10-13T12:44:41+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",
@@ -8692,5 +8692,5 @@
         "php": ">=8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }

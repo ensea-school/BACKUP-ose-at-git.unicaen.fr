@@ -176,13 +176,17 @@ return [
 
         'administration' => [
             'pages' => [
-                'fonction-referentiel' => [
-                    'label'        => 'Référentiel fonctions',
-                    'icon'         => 'fas fa-graduation-cap',
-                    'route'        => 'fonction-referentiel',
-                    'resource'     => PrivilegeController::getResourceId(FonctionReferentielController::class, 'index'),
-                    'order'        => 80,
-                    'border-color' => '#BBCF55',
+                'rh' => [
+                    'pages' => [
+                        'fonction-referentiel' => [
+                            'label'        => 'Référentiel fonctions',
+                            'icon'         => 'fas fa-graduation-cap',
+                            'route'        => 'fonction-referentiel',
+                            'resource'     => PrivilegeController::getResourceId(FonctionReferentielController::class, 'index'),
+                            'order'        => 80,
+                            'border-color' => '#BBCF55',
+                        ],
+                    ],
                 ],
             ],
         ],

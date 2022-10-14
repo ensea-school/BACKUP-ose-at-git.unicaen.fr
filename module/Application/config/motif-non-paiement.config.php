@@ -31,7 +31,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisir' => [
+                    'saisir'    => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/saisir/[:motifNonPaiement]',
@@ -53,13 +53,17 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'motif-non-paiement' => [
-                                'label'        => 'Motifs de non paiement',
-                                'icon'         => 'fas fa-graduation-cap',
-                                'route'        => 'motif-non-paiement',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\MotifNonPaiement', 'index'),
-                                'order'        => 80,
-                                'border-color' => '#BBCF55',
+                            'rh' => [
+                                'pages' => [
+                                    'motif-non-paiement' => [
+                                        'label'        => 'Motifs de non paiement',
+                                        'icon'         => 'fas fa-graduation-cap',
+                                        'route'        => 'motif-non-paiement',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\MotifNonPaiement', 'index'),
+                                        'order'        => 80,
+                                        'border-color' => '#BBCF55',
+                                    ],
+                                ],
                             ],
                         ],
                     ],

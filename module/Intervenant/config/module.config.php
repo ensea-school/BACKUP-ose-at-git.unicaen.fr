@@ -6,6 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use Intervenant\Assertion\NoteAssertion;
 use Intervenant\Entity\Db\Note;
 use Intervenant\Entity\Db\Statut;
+use UnicaenAuth\Guard\PrivilegeController;
 
 
 return [
@@ -97,6 +98,25 @@ return [
                     'action'      => 'dupliquer',
                     'constraints' => [
                         'statut' => '[0-9]*',
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'navigation' => [
+        'administration' => [
+            'pages' => [
+                'intervenants' => [
+                    'pages' => [
+                        'statut' => [
+                            'label'        => 'Edition des statuts des intervenants',
+                            'icon'         => 'fas fa-graduation-cap',
+                            'route'        => 'statut',
+                            'resource'     => PrivilegeController::getResourceId('Intervenant\Controller\Statut', 'index'),
+                            'order'        => 90,
+                            'border-color' => '#BBCF55',
+                        ],
                     ],
                 ],
             ],

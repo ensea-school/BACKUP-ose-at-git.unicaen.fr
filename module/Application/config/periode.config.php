@@ -66,6 +66,31 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'finances' => [
+                                'pages' => [
+                                    'gestion-periode' => [
+                                        'label'          => 'Gestion des périodes',
+                                        'icon'           => 'fas fa-table-list',
+                                        'route'          => 'periodes',
+                                        'resource'       => PrivilegeController::getResourceId('Application\Controller\Periode', 'index'),
+                                        'order'          => 84,
+                                        'border - color' => '#111',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'bjyauthorize'  => [
         'guards' => [
             PrivilegeController::class => [

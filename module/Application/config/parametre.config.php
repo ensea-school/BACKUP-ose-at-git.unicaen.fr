@@ -55,11 +55,13 @@ return [
                                     'annees'   => [
                                         'label'    => "Années",
                                         'route'    => 'parametres/annees',
+                                        'order'    => 10,
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Parametre', 'annees'),
                                     ],
                                     'generaux' => [
                                         'label'    => "Paramètres généraux",
                                         'route'    => 'parametres/generaux',
+                                        'order'    => 40,
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Parametre', 'generaux'),
                                     ],
                                 ],

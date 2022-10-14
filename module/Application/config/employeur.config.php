@@ -64,6 +64,32 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'rh' => [
+                                'pages' => [
+                                    'Employeurs' => [
+                                        'border-color' => '#9F491F',
+                                        'icon'         => 'fas fa-table-list',
+                                        'label'        => "Gestion des employeurs",
+                                        'title'        => "Gestion des employeurs",
+                                        'route'        => 'employeur',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Employeur', 'index'),
+                                        'order'        => 799,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'controllers' => [
         'factories'  => [
             'Application\Controller\Employeur' => Controller\Factory\EmployeurControllerFactory::class,

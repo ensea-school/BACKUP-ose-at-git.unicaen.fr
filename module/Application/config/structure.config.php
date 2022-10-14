@@ -67,13 +67,17 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'structure' => [
-                                'label'        => 'Structures',
-                                'icon'         => 'fas fa-graduation-cap',
-                                'route'        => 'structure',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Structure', 'index'),
-                                'order'        => 80,
-                                'border-color' => '#BBCF55',
+                            'nomenclatures' => [
+                                'pages' => [
+                                    'structure' => [
+                                        'label'        => 'Structures',
+                                        'icon'         => 'fas fa-graduation-cap',
+                                        'route'        => 'structure',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Structure', 'index'),
+                                        'order'        => 80,
+                                        'border-color' => '#BBCF55',
+                                    ],
+                                ],
                             ],
                         ],
                     ],

@@ -118,13 +118,17 @@ return [
     'navigation' => [
         'administration' => [
             'pages' => [
-                'plafonds' => [
-                    'icon'         => 'fas fa-wrench',
-                    'label'        => "Plafonds",
-                    'route'        => 'plafond',
-                    'resource'     => PrivilegeController::getResourceId('Plafond\Controller\Plafond', 'index'),
-                    'border-color' => '#9B9B9B',
-                    'order'        => 120,
+                'rh' => [
+                    'pages' => [
+                        'plafonds' => [
+                            'icon'         => 'fas fa-wrench',
+                            'label'        => "Plafonds",
+                            'route'        => 'plafond',
+                            'resource'     => PrivilegeController::getResourceId('Plafond\Controller\Plafond', 'index'),
+                            'border-color' => '#9B9B9B',
+                            'order'        => 120,
+                        ],
+                    ],
                 ],
             ],
         ],

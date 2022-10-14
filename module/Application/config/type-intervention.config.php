@@ -134,13 +134,17 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'type-intervention' => [
-                                'label'        => 'Types d\'interventions',
-                                'icon'         => 'fas fa-commenting',
-                                'route'        => 'type-intervention',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeIntervention', 'index'),
-                                'order'        => 60,
-                                'border-color' => '#71DFD7',
+                            'odf' => [
+                                'pages' => [
+                                    'type-intervention' => [
+                                        'label'        => 'Types d\'interventions',
+                                        'icon'         => 'fas fa-commenting',
+                                        'route'        => 'type-intervention',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeIntervention', 'index'),
+                                        'order'        => 60,
+                                        'border-color' => '#71DFD7',
+                                    ],
+                                ],
                             ],
                         ],
                     ],

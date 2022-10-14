@@ -51,6 +51,32 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'nomenclatures' => [
+                                'pages' => [
+                                    'voirie' => [
+                                        'label'        => 'Gestion des voiries',
+                                        'icon'         => 'fas fa-graduation-cap',
+                                        'route'        => 'voirie',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Voirie', 'index'),
+                                        'order'        => 800,
+                                        'border-color' => '#BBCF55',
+                                    ],
+
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'bjyauthorize'  => [
         'guards' => [
             PrivilegeController::class => [

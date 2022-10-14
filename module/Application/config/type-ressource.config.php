@@ -55,7 +55,7 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'administration-financiere' => [
+                            'finances' => [
                                 'pages' => [
                                     'type-ressource' => [
                                         'label'        => 'Types de ressources',

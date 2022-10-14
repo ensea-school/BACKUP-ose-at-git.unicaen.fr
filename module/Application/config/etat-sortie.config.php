@@ -94,14 +94,18 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'etat-sortie' => [
-                                'border-color' => '#9F491F',
-                                'icon'         => 'fas fa-table-list',
-                                'label'        => "États de sortie",
-                                'title'        => "États de sortie",
-                                'route'        => 'etat-sortie',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\EtatSortie', 'index'),
-                                'order'        => 71,
+                            'configuration' => [
+                                'pages' => [
+                                    'etat-sortie' => [
+                                        'border-color' => '#9F491F',
+                                        'icon'         => 'fas fa-table-list',
+                                        'label'        => "États de sortie",
+                                        'title'        => "États de sortie",
+                                        'route'        => 'etat-sortie',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\EtatSortie', 'index'),
+                                        'order'        => 30,
+                                    ],
+                                ],
                             ],
                         ],
                     ],

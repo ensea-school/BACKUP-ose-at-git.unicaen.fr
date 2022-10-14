@@ -298,14 +298,8 @@ return [
                     ],
                     'administration' => [
                         'pages' => [
-                            'offre-formation' => [
-                                'label'          => 'Administration de l\'offre de formation',
-                                'icon'           => 'fas fa-table-list',
-                                'route'          => 'aof',
-                                'resource'       => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'administrationOffre'),
-                                'order'          => 0,
-                                'border - color' => '#111',
-                                'pages'          => [
+                            'odf' => [
+                                'pages' => [
                                     'reconduction-offre'       => [
                                         'label'    => 'Reconduction de l\'offre de formation complémentaire',
                                         'title'    => 'Reconduction de l\'offre de formation complémentaire',

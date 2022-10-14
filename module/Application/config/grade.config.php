@@ -51,6 +51,31 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'rh' => [
+                                'pages' => [
+                                    'grade' => [
+                                        'label'        => 'Gestion des grades',
+                                        'icon'         => 'fas fa-graduation-cap',
+                                        'route'        => 'grades',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Grade', 'index'),
+                                        'order'        => 800,
+                                        'border-color' => '#BBCF55',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'bjyauthorize'  => [
         'guards' => [
             PrivilegeController::class => [

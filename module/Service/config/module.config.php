@@ -149,12 +149,13 @@ return [
                         'campagnes-saisie' => [
                             'label'    => "Campagnes de saisie des services",
                             'route'    => 'parametres/campagnes-saisie',
+                            'order'    => 20,
                             'resource' => PrivilegeController::getResourceId(CampagneSaisieController::class, 'campagnes-saisie'),
                         ],
                     ],
                 ],
 
-                'gestion-intervenant' => [
+                'intervenants' => [
                     'pages' => [
                         'regle-structure-validation' => [
                             'label'      => "Règles de validation enseignements par type d'intervenant",

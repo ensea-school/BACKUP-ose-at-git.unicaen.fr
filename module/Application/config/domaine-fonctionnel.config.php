@@ -53,13 +53,17 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'domaine-fonctionnel' => [
-                                'label'        => 'Domaines fonctionnels',
-                                'icon'         => 'fas fa-graduation-cap',
-                                'route'        => 'domaine-fonctionnel',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\DomaineFonctionnel', 'index'),
-                                'order'        => 80,
-                                'border-color' => '#BBCF55',
+                            'finances' => [
+                                'pages' => [
+                                    'domaine-fonctionnel' => [
+                                        'label'        => 'Domaines fonctionnels',
+                                        'icon'         => 'fas fa-graduation-cap',
+                                        'route'        => 'domaine-fonctionnel',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\DomaineFonctionnel', 'index'),
+                                        'order'        => 80,
+                                        'border-color' => '#BBCF55',
+                                    ],
+                                ],
                             ],
                         ],
                     ],

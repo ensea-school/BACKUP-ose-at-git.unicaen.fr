@@ -54,6 +54,31 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'rh' => [
+                                'pages' => [
+                                    'corps' => [
+                                        'label'        => 'Gestion des corps',
+                                        'icon'         => 'fas fa-graduation-cap',
+                                        'route'        => 'corps',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Corps', 'index'),
+                                        'order'        => 801,
+                                        'border-color' => '#BBCF55',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'bjyauthorize'  => [
         'guards' => [
             PrivilegeController::class => [

@@ -6,7 +6,7 @@ use UnicaenAuth\Guard\PrivilegeController;
 use Application\Provider\Privilege\Privileges;
 
 return [
-    'router'          => [
+    'router'       => [
         'routes' => [
             'etablissement' => [
                 'type'          => 'Literal',
@@ -64,7 +64,7 @@ return [
             ],
         ],
     ],
-    'bjyauthorize'    => [
+    'bjyauthorize' => [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 [
@@ -87,6 +87,32 @@ return [
         ],
 
     ],
+
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'nomenclatures' => [
+                                'pages' => [
+                                    'gestion-etablissement' => [
+                                        'label'          => 'Établissements',
+                                        'icon'           => 'fas fa-table-list',
+                                        'route'          => 'etablissement',
+                                        'resource'       => PrivilegeController::getResourceId('Application\Controller\Etablissement', 'index'),
+                                        'order'          => 20,
+                                        'border - color' => '#111',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'controllers'     => [
         'factories' => [
             'Application\Controller\Etablissement' => Controller\Factory\EtablissementControllerFactory::class,

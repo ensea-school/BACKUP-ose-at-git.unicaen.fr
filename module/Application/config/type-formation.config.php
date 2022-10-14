@@ -92,6 +92,31 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'odf' => [
+                                'pages' => [
+                                    'gestion-type-formation' => [
+                                        'label'          => 'Gestion des types de formations',
+                                        'icon'           => 'fas fa-table-list',
+                                        'route'          => 'type-formation',
+                                        'resource'       => PrivilegeController::getResourceId('Application\Controller\TypeFormation', 'index'),
+                                        'order'          => 86,
+                                        'border - color' => '#111',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'bjyauthorize'  => [
         'guards' => [
             PrivilegeController::class => [

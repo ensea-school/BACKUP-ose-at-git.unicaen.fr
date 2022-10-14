@@ -6,7 +6,7 @@ use UnicaenAuth\Guard\PrivilegeController;
 use Application\Provider\Privilege\Privileges;
 
 return [
-    'router'          => [
+    'router' => [
         'routes' => [
             'pays' => [
                 'type'          => 'Literal',
@@ -55,6 +55,32 @@ return [
             ],
         ],
     ],
+
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'nomenclatures' => [
+                                'pages' => [
+                                    'gestion-pays' => [
+                                        'label'          => 'Gestion des Pays',
+                                        'icon'           => 'fas fa-table-list',
+                                        'route'          => 'pays',
+                                        'resource'       => PrivilegeController::getResourceId('Application\Controller\Pays', 'index'),
+                                        'order'          => 87,
+                                        'border - color' => '#111',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'bjyauthorize'    => [
         'guards' => [
             PrivilegeController::class => [

@@ -13,8 +13,8 @@ return [
                 'options'       => [
                     'route'    => '/discipline',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Discipline',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Discipline',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -67,15 +67,19 @@ return [
             'home' => [
                 'pages' => [
                     'administration' => [
-                        'pages'    => [
-                            'discipline' => [
-                                'border-color' => '#9F491F',
-                                'icon'         => 'fas fa-table-list',
-                                'label'        => "Disciplines",
-                                'title'        => "Gestion des disciplines",
-                                'route'        => 'discipline',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Discipline', 'index'),
-                                'order'        => 70,
+                        'pages' => [
+                            'odf' => [
+                                'pages' => [
+                                    'discipline' => [
+                                        'border-color' => '#9F491F',
+                                        'icon'         => 'fas fa-table-list',
+                                        'label'        => "Disciplines",
+                                        'title'        => "Gestion des disciplines",
+                                        'route'        => 'discipline',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Discipline', 'index'),
+                                        'order'        => 70,
+                                    ],
+                                ],
                             ],
                         ],
                     ],

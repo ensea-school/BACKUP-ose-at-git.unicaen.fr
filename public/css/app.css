@@ -531,17 +531,24 @@ form#modulateurs-saisie th select {
 }
 
 #navbar .btn-outline-success a {
-    color: #777;
+    color: rgba(255,255,255,.75);
+    font-size: 16px;
+}
+
+#navbar .btn-outline-success a small {
+    color: rgba(255,255,255,.75);
 }
 
 #navbar {
     padding-top: 0px;
     padding-bottom: 0px;
+    font-size: 16px;
+    min-height: 50px;
 }
 
 #navbar a.nav-link {
-    padding-top: .9rem;
-    padding-bottom: .9rem;
+    padding-top: .8rem;
+    padding-bottom: .8rem;
 }
 
 #navbar {
@@ -554,6 +561,7 @@ form#modulateurs-saisie th select {
 
 #navbar .navbar-brand h1 {
     font-weight: 500;
+    font-size: 35px;
 }
 
 #navbar .navbar-brand h1 span {

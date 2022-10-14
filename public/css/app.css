@@ -10,6 +10,12 @@ body {
 
 a {
     text-decoration: none;
+    color: #337ab7;
+}
+
+a:hover {
+    color:#0089ff;
+    text-decoration: underline;
 }
 
 h1 small, h2 small, h3 small, h4 small, h5 small {
@@ -249,11 +255,11 @@ select.loading {
 
 
 
-table.table-extra-condensed tr td {
-    padding: 2px;
+table.table-condensed tr th, table.table-condensed tr td {
+    padding: 5px;
 }
 
-table.table-extra-condensed tr th {
+table.table-extra-condensed tr th, table.table-extra-condensed tr td {
     padding: 2px;
 }
 
@@ -745,6 +751,8 @@ td .alert {
 .panel .panel-heading-h3 {
     padding: 0px;
 }
+
+
 
 
 

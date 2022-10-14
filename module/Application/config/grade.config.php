@@ -60,11 +60,10 @@ return [
                             'rh' => [
                                 'pages' => [
                                     'grade' => [
-                                        'label'        => 'Gestion des grades',
-                                        'icon'         => 'fas fa-graduation-cap',
+                                        'label'        => 'Grades',
                                         'route'        => 'grades',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Grade', 'index'),
-                                        'order'        => 800,
+                                        'order'        => 30,
                                         'border-color' => '#BBCF55',
                                     ],
                                 ],

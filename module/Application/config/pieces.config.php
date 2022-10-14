@@ -289,11 +289,11 @@ return [
                             'intervenants' => [
                                 'pages' => [
                                     'type-piece-jointe-statut' => [
-                                        'label'      => "Pièces justificatives attendues par statut d'intervenant",
+                                        'label'      => "Pièces justificatives attendues par statut",
                                         'title'      => "Permet de personnaliser les pièces justificatives à demander en fonction du statut des intervenants",
                                         'route'      => 'piece-jointe/type-piece-jointe-statut',
                                         'withtarget' => true,
-                                        'order'      => 91,
+                                        'order'      => 20,
                                         'resource'   => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'type-piece-jointe-statut'),
                                     ],
                                 ],

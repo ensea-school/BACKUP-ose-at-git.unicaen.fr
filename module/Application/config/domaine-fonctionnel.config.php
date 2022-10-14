@@ -57,10 +57,9 @@ return [
                                 'pages' => [
                                     'domaine-fonctionnel' => [
                                         'label'        => 'Domaines fonctionnels',
-                                        'icon'         => 'fas fa-graduation-cap',
                                         'route'        => 'domaine-fonctionnel',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\DomaineFonctionnel', 'index'),
-                                        'order'        => 80,
+                                        'order'        => 20,
                                         'border-color' => '#BBCF55',
                                     ],
                                 ],

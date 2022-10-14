@@ -98,7 +98,6 @@ return [
                                 'pages' => [
                                     'gestion-etablissement' => [
                                         'label'          => 'Établissements',
-                                        'icon'           => 'fas fa-table-list',
                                         'route'          => 'etablissement',
                                         'resource'       => PrivilegeController::getResourceId('Application\Controller\Etablissement', 'index'),
                                         'order'          => 20,

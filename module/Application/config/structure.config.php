@@ -71,10 +71,9 @@ return [
                                 'pages' => [
                                     'structure' => [
                                         'label'        => 'Structures',
-                                        'icon'         => 'fas fa-graduation-cap',
                                         'route'        => 'structure',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Structure', 'index'),
-                                        'order'        => 80,
+                                        'order'        => 40,
                                         'border-color' => '#BBCF55',
                                     ],
                                 ],

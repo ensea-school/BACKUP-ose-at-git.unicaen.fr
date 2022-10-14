@@ -57,10 +57,9 @@ return [
                                 'pages' => [
                                     'motif-non-paiement' => [
                                         'label'        => 'Motifs de non paiement',
-                                        'icon'         => 'fas fa-graduation-cap',
                                         'route'        => 'motif-non-paiement',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\MotifNonPaiement', 'index'),
-                                        'order'        => 80,
+                                        'order'        => 50,
                                         'border-color' => '#BBCF55',
                                     ],
                                 ],

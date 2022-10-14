@@ -60,11 +60,10 @@ return [
                             'nomenclatures' => [
                                 'pages' => [
                                     'voirie' => [
-                                        'label'        => 'Gestion des voiries',
-                                        'icon'         => 'fas fa-graduation-cap',
+                                        'label'        => 'Voiries',
                                         'route'        => 'voirie',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Voirie', 'index'),
-                                        'order'        => 800,
+                                        'order'        => 50,
                                         'border-color' => '#BBCF55',
                                     ],
 

@@ -114,8 +114,8 @@ return [
                                 'pages' => [
                                     'modulateur' => [
                                         'label'    => 'Modulateurs des taux horaires',
-                                        'icon'     => 'fas fa-tachometer',
                                         'route'    => 'modulateur',
+                                        'order'    => 10,
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Modulateur', 'index'),
                                     ],
                                 ],

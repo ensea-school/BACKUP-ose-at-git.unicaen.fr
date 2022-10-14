@@ -121,12 +121,11 @@ return [
                 'rh' => [
                     'pages' => [
                         'plafonds' => [
-                            'icon'         => 'fas fa-wrench',
                             'label'        => "Plafonds",
                             'route'        => 'plafond',
                             'resource'     => PrivilegeController::getResourceId('Plafond\Controller\Plafond', 'index'),
                             'border-color' => '#9B9B9B',
-                            'order'        => 120,
+                            'order'        => 60,
                         ],
                     ],
                 ],

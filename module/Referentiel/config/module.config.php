@@ -180,10 +180,9 @@ return [
                     'pages' => [
                         'fonction-referentiel' => [
                             'label'        => 'Référentiel fonctions',
-                            'icon'         => 'fas fa-graduation-cap',
                             'route'        => 'fonction-referentiel',
                             'resource'     => PrivilegeController::getResourceId(FonctionReferentielController::class, 'index'),
-                            'order'        => 80,
+                            'order'        => 70,
                             'border-color' => '#BBCF55',
                         ],
                     ],

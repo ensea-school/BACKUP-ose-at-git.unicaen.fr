@@ -110,11 +110,10 @@ return [
                 'intervenants' => [
                     'pages' => [
                         'statut' => [
-                            'label'        => 'Edition des statuts des intervenants',
-                            'icon'         => 'fas fa-graduation-cap',
+                            'label'        => 'Statuts',
                             'route'        => 'statut',
                             'resource'     => PrivilegeController::getResourceId('Intervenant\Controller\Statut', 'index'),
-                            'order'        => 90,
+                            'order'        => 40,
                             'border-color' => '#BBCF55',
                         ],
                     ],

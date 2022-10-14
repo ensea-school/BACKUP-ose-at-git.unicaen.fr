@@ -101,11 +101,10 @@ return [
                             'odf' => [
                                 'pages' => [
                                     'gestion-type-formation' => [
-                                        'label'          => 'Gestion des types de formations',
-                                        'icon'           => 'fas fa-table-list',
+                                        'label'          => 'Types de formations',
                                         'route'          => 'type-formation',
                                         'resource'       => PrivilegeController::getResourceId('Application\Controller\TypeFormation', 'index'),
-                                        'order'          => 86,
+                                        'order'          => 60,
                                         'border - color' => '#111',
                                     ],
                                 ],

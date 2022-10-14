@@ -54,7 +54,6 @@ return [
                                 'pages' => [
                                     'gestion-departement' => [
                                         'label'          => 'Départements',
-                                        'icon'           => 'fas fa-table-list',
                                         'route'          => 'departement',
                                         'resource'       => PrivilegeController::getResourceId('Application\Controller\Departement', 'index'),
                                         'order'          => 10,

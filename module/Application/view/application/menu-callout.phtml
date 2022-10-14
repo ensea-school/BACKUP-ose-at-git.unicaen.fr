@@ -1,6 +1,7 @@
 <?php
 
 use UnicaenApp\View\Helper\TagViewHelper;
+use Laminas\Navigation\Page\Mvc;
 
 /**
  * @var $container Laminas\Navigation\Navigation
@@ -29,10 +30,13 @@ foreach ($container as $page) {
 
         if ($page->hasPages()) {
             echo '<ul>';
-            $children = $page->getPages();
+            $children = (array)$page->getPages();
+            uasort($children, function (Mvc $a, Mvc $b) {
+                return $a->getOrder() > $b->getOrder() ? 1 : 0;
+            });
             foreach ($children as $child) {
                 if ($this->navigation()->accept($child)) {
-                    echo $this->tag('li')->html($this->navigation()->htmlify($child));
+                    echo $this->tag('li')->html(/*$child->getOrder() . ' ' .*/ $this->navigation()->htmlify($child));
                 }
             }
             echo '</ul>';

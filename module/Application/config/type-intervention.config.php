@@ -138,10 +138,9 @@ return [
                                 'pages' => [
                                     'type-intervention' => [
                                         'label'        => 'Types d\'interventions',
-                                        'icon'         => 'fas fa-commenting',
                                         'route'        => 'type-intervention',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeIntervention', 'index'),
-                                        'order'        => 60,
+                                        'order'        => 70,
                                         'border-color' => '#71DFD7',
                                     ],
                                 ],

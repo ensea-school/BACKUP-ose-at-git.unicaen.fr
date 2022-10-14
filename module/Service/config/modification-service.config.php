@@ -76,10 +76,9 @@ return [
                     'pages' => [
                         'motif-modification-service' => [
                             'label'        => 'Motifs de modification du service dû',
-                            'icon'         => 'fas fa-graduation-cap',
                             'route'        => 'motif-modification-service',
                             'resource'     => PrivilegeController::getResourceId(MotifModificationServiceController::class, 'index'),
-                            'order'        => 80,
+                            'order'        => 40,
                             'border-color' => '#BBCF55',
                         ],
                     ],

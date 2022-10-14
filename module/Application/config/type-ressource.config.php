@@ -59,10 +59,9 @@ return [
                                 'pages' => [
                                     'type-ressource' => [
                                         'label'        => 'Types de ressources',
-                                        'icon'         => 'fas fa-commenting',
                                         'route'        => 'type-ressource',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeRessource', 'index'),
-                                        'order'        => 60,
+                                        'order'        => 50,
                                         'border-color' => '#71DFD7',
                                     ],
                                 ],

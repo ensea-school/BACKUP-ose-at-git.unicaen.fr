@@ -74,12 +74,11 @@ return [
                                 'pages' => [
                                     'Employeurs' => [
                                         'border-color' => '#9F491F',
-                                        'icon'         => 'fas fa-table-list',
-                                        'label'        => "Gestion des employeurs",
+                                        'label'        => "Employeurs",
                                         'title'        => "Gestion des employeurs",
                                         'route'        => 'employeur',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Employeur', 'index'),
-                                        'order'        => 799,
+                                        'order'        => 20,
                                     ],
                                 ],
                             ],

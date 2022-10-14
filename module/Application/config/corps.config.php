@@ -63,11 +63,10 @@ return [
                             'rh' => [
                                 'pages' => [
                                     'corps' => [
-                                        'label'        => 'Gestion des corps',
-                                        'icon'         => 'fas fa-graduation-cap',
+                                        'label'        => 'Corps',
                                         'route'        => 'corps',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Corps', 'index'),
-                                        'order'        => 801,
+                                        'order'        => 10,
                                         'border-color' => '#BBCF55',
                                     ],
                                 ],

@@ -304,18 +304,21 @@ return [
                                         'label'    => 'Reconduction de l\'offre de formation complémentaire',
                                         'title'    => 'Reconduction de l\'offre de formation complémentaire',
                                         'route'    => 'aof/reconduction',
+                                        'order'    => 20,
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
                                     ],
                                     'reconduction-centre-cout' => [
-                                        'label'    => 'Reconduction des centres de coûts de l\'offre de formation',
+                                        'label'    => 'Reconduction des centres de coûts',
                                         'title'    => 'Reconduction des centres de coûts de l\'offre de formation',
                                         'route'    => 'aof/reconduction-centre-cout',
+                                        'order'    => 30,
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconductionCentreCout'),
                                     ],
                                     'reconduction-modulateur'  => [
-                                        'label'    => 'Reconduction des modulateurs de l\'offre de formation',
+                                        'label'    => 'Reconduction des modulateurs',
                                         'title'    => 'Reconduction des modulateurs de l\'offre de formation',
                                         'route'    => 'aof/reconduction-modulateur',
+                                        'order'    => 40,
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconductionModulateur'),
                                     ],
 

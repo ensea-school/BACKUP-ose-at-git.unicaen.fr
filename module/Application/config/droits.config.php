@@ -132,7 +132,7 @@ return [
                                 'pages' => [
                                     'affectations' => [
                                         'label'       => "Affectations",
-                                        'title'       => "Gestion des affectations",
+                                        'title'       => "Administration des affectations",
                                         'description' => 'Permet de visualiser les affectations existantes et de les modifier le cas échéant. Pour rappel, une affectation est la liaison entre un rôle et un personnel.',
                                         'route'       => 'droits/affectations',
                                         'order'       => 10,
@@ -140,7 +140,7 @@ return [
                                     ],
                                     'privileges'   => [
                                         'label'       => "Privilèges",
-                                        'title'       => "Gestion des privilèges",
+                                        'title'       => "Administration des privilèges",
                                         'description' => 'Tableau de bord listant, par rôle, les privilèges qui lui sont accordés. Le tableau permet également, si vous en avez le droit, de modifier les privilèges accordés par rôle.',
                                         'route'       => 'droits/privileges',
                                         'order'       => 20,
@@ -148,7 +148,7 @@ return [
                                     ],
                                     'roles'        => [
                                         'label'       => "Rôles",
-                                        'title'       => "Gestion des rôles",
+                                        'title'       => "Administration des rôles",
                                         'description' => 'Permet de visualiser les rôles existants. Permet également de les modifier, d\'en ajouter ou d\'en supprimer si vous avez les droits requis pour cela.',
                                         'route'       => 'droits/roles',
                                         'order'       => 30,

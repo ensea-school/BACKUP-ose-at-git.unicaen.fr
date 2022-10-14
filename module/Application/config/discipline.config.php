@@ -72,12 +72,11 @@ return [
                                 'pages' => [
                                     'discipline' => [
                                         'border-color' => '#9F491F',
-                                        'icon'         => 'fas fa-table-list',
-                                        'label'        => "Disciplines",
+                                        'label'        => "Types de disciplines",
                                         'title'        => "Gestion des disciplines",
                                         'route'        => 'discipline',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Discipline', 'index'),
-                                        'order'        => 70,
+                                        'order'        => 50,
                                     ],
                                 ],
                             ],

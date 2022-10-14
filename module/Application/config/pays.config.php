@@ -65,11 +65,10 @@ return [
                             'nomenclatures' => [
                                 'pages' => [
                                     'gestion-pays' => [
-                                        'label'          => 'Gestion des Pays',
-                                        'icon'           => 'fas fa-table-list',
+                                        'label'          => 'Pays',
                                         'route'          => 'pays',
                                         'resource'       => PrivilegeController::getResourceId('Application\Controller\Pays', 'index'),
-                                        'order'          => 87,
+                                        'order'          => 30,
                                         'border - color' => '#111',
                                     ],
                                 ],

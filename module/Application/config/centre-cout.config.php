@@ -120,19 +120,17 @@ return [
                             'finances' => [
                                 'pages' => [
                                     'centre-cout'          => [
-                                        'label'        => 'Edition des centres de coûts',
-                                        'icon'         => 'fas fa-graduation-cap',
+                                        'label'        => 'Centres de coûts',
                                         'route'        => 'centre-cout',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
-                                        'order'        => 80,
+                                        'order'        => 10,
                                         'border-color' => '#BBCF55',
                                     ],
                                     'centre-cout-activite' => [
-                                        'label'        => 'Edition des types d\'activités des centres de coûts',
-                                        'icon'         => 'fas fa-graduation-cap',
+                                        'label'        => 'Types d\'activités des centres de coûts',
                                         'route'        => 'centre-cout-activite',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
-                                        'order'        => 80,
+                                        'order'        => 40,
                                         'border-color' => '#BBCF55',
                                     ],
                                 ],

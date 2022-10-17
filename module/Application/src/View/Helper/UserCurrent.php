@@ -71,7 +71,7 @@ class UserCurrent extends UserAbstract
    data-placement="bottom" 
    data-bs-toggle="popover" 
    data-html="true" 
-   data-content="$content" 
+   data-bs-content="$content" 
    href="#">$status</a>
 EOS;
         $out .= PHP_EOL;

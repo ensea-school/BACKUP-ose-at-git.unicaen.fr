@@ -19,9 +19,9 @@ $(function ()
 
     WidgetInitializer.add('table-sort', 'tableSort', function ()
     {
-        WidgetInitializer.includeJs(Url('vendor/DataTables-1.12.1/media/js/jquery.dataTables.min.js'));
-        WidgetInitializer.includeJs(Url('vendor/DataTables-1.12.1/media/js/dataTables.bootstrap.min.js'));
-        WidgetInitializer.includeCss(Url('vendor/DataTables-1.12.1/media/css/dataTables.bootstrap.min.css'));
+        WidgetInitializer.includeJs(Url('vendor/DataTables-1.12.1/js/jquery.dataTables.min.js'));
+        WidgetInitializer.includeJs(Url('vendor/DataTables-1.12.1/js/dataTables.bootstrap5.min.js'));
+        WidgetInitializer.includeCss(Url('vendor/DataTables-1.12.1/css/dataTables.bootstrap5.min.css'));
 
         WidgetInitializer.includeJs(Url('table-sort/widget.js'));
 

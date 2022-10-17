@@ -27,9 +27,9 @@ $dossierAutres = $form->get('DossierAutres');
 <?php if (count($champsAutres) > 0): ?>
 
     <div class="col-md-6">
-        <div class="panel panel-default ">
+        <div class="card bg-default ">
 
-            <div class="panel-heading">
+            <div class="card-header">
                 AUTRES
                 <?php if (!empty($tblDossier)): ?>
                     <?php if (!$intervenantDossier->getTblDossier()->getCompletudeAutres()): ?>
@@ -40,7 +40,7 @@ $dossierAutres = $form->get('DossierAutres');
                 <?php endif; ?>
 
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <?php foreach ($champsAutres as $champ): ?>
                     <?php if (!$this->isAllowed($intervenant, constant('Application\Assertion\IntervenantDossierAssertion::PRIV_EDIT_AUTRE' . $champ->getId()))): ?>
                         <?php if ($this->isAllowed($intervenant, constant('Application\Assertion\IntervenantDossierAssertion::PRIV_VIEW_AUTRE' . $champ->getId()))): ?>

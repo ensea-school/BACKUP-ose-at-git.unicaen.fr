@@ -18,8 +18,8 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
 
 <!-- Fiedlset Adresse -->
 <div class="col-md-6">
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bg-default">
+        <div class="card-header">
             ADRESSE
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$intervenantDossier->getTblDossier()->getCompletudeAdresse()): ?>
@@ -29,7 +29,7 @@ $dossierAdresse = $form->get('DossierAdresse'); /* @var $dossier \Application\Fo
                 <?php endif; ?>
             <?php endif; ?>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
 
             <div class="form-group">
                 <?= $this->formLabel($dossierAdresse->get('precisions')); ?>

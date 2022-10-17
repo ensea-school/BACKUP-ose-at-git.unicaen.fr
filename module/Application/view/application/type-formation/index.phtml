@@ -24,10 +24,10 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 <div class="triables ui-sortable">
     <?php foreach ($groupeTypeFormations as $groupeTypeFormation): ?>
         <div class="champ-triable" data-id= <?php echo $groupeTypeFormation->getId() ?>>
-            <div class="panel panel-default">
-                <div class="panel-heading"><?= $groupeTypeFormation->getLibelleLong(); ?> (<?= $groupeTypeFormation->getLibelleCourt(); ?>)
+            <div class="panel bg-default">
+                <div class="card-header"><?= $groupeTypeFormation->getLibelleLong(); ?> (<?= $groupeTypeFormation->getLibelleCourt(); ?>)
                     <?php if ($canEdit): ?>
-                        <div class="pull-right">
+                        <div class="float-end">
                             <a class="ajax-modal " data-event="type-formation-edition"
                                href="<?= $this->url('type-formation/saisie-groupe', ['groupeTypeFormation' => $groupeTypeFormation->getId()], ['query' => ['tab' => 'edition']]) ?>"
                                title="Modifier la collection"><i class="fas fa-pen-to-square"></i></a>
@@ -89,8 +89,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <?php endforeach; ?>
 </div>
 <?php if (!empty($typeFormationsWithoutGroupe)): ?>
-    <div class="panel panel-danger">
-        <div class="panel-heading ">Type de formation ne possédant pas de groupe
+    <div class="panel bg-danger">
+        <div class="card-header ">Type de formation ne possédant pas de groupe
         </div>
         <table class="table table-bordered table-condensed bg-danger">
             <thead>

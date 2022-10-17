@@ -25,7 +25,7 @@ $i = 0;
     <th>
         <?= $typePieceJointe ?>
         <?php if ($canEdit): ?>
-            <span class="pull-right">
+            <span class="float-end">
                 <i class="fas fa-arrows-alt"
                    title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></i>&nbsp;
 
@@ -33,7 +33,7 @@ $i = 0;
                    href="<?= $urlEdit ?>"
                    title="Modifier le type de pièce jointe"
                    data-submit-reload="true"
-                ><i class="fa pull-right fa-pen-to-square"></i></a>
+                ><i class="fa float-end fa-pen-to-square"></i></a>
 
                 <a class="pop-ajax"
                    href="<?= $urlDelete ?>"
@@ -43,7 +43,7 @@ $i = 0;
                    data-confirm-button="Oui"
                    data-cancel-button="Non"
                    data-submit-reload="true"
-                ><span style="padding-right: 8px" class="glyphicon pull-right glyphicon-trash"></span></a>
+                ><span style="padding-right: 8px" class="glyphicon float-end glyphicon-trash"></span></a>
             </span>
         <?php endif; ?>
     </th>

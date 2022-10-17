@@ -35,7 +35,7 @@ $menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant
 
         $restantes = $fournies;
         if (!empty($demandees)) {
-            echo '<div class="well">';
+            echo '<div class="card card-well">';
             echo '<h2>Pièces demandées</h2>';
             $obligatoire = true;
             foreach ($demandees as $pj) { // on liste les pièces demandées
@@ -68,7 +68,7 @@ $menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant
 
 
         if (!empty($restantes)) {
-            $html         = '<div class="well">';
+            $html         = '<div class="card card-well">';
             $html         .= '<h2>Autres pièces fournies</h2>';
             $obligatoire  = false;
             $haveRestante = false;

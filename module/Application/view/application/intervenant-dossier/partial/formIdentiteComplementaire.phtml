@@ -19,8 +19,8 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
 ?>
 <!-- Fiedlset Identite Complementaire -->
 <div class="col-md-6">
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bg-default">
+        <div class="card-header">
             IDENTITÉ COMPLEMENTAIRE
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$tblDossier->getCompletudeIdentiteComp()): ?>
@@ -30,7 +30,7 @@ $dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
                 <?php endif; ?>
             <?php endif; ?>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
 
             <?php
             echo $this->formControlGroup($dossierIdentiteComplementaire->get('dateNaissance'));

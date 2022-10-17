@@ -103,7 +103,7 @@ class FormSaisieViewHelper extends AbstractViewHelper
             $heures = $vhl->getHeures();
 
             $template    = <<<EOS
-<div class="pull-right" style="opacity: 0.5">
+<div class="float-end" style="opacity: 0.5">
     <strong>Prévu :</strong> <span id="rappel-heures-prevu" data-heures="%s">%s</span>
 </div>
 EOS;

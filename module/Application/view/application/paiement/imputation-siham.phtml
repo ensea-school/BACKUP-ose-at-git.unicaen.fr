@@ -16,9 +16,9 @@ $this->headTitle()->append($title);
 
 ?>
     <h1><?= $title ?></h1>
-    <div class="panel panel-default filter" data-etat="<?= $recherche->getEtat() ?>">
+    <div class="panel bg-default filter" data-etat="<?= $recherche->getEtat() ?>">
 
-        <div class="panel-heading">Filtres</div>
+        <div class="card-header">Filtres</div>
         <div class="panel-body">
             <?= $this->form()->openTag($rechercheForm->prepare()); ?>
             <?php

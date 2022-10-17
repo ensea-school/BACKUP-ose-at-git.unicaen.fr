@@ -69,15 +69,15 @@ $.widget("ose.pieceJointe", {
             success: function (data, textStatus, jqXHR) {
                 var container = that.getContainer(tpj);
                 container.find('.validation-bar').html(data);
-                container.removeClass('panel-default');
-                container.removeClass('panel-success');
+                container.removeClass('card-default');
+                container.removeClass('card-success');
 
                 var isValider = data.indexOf("/valider/") !== -1;
 
                 if (isValider) {
-                    container.addClass('panel-default');
+                    container.addClass('card-default');
                 } else {
-                    container.addClass('panel-success');
+                    container.addClass('card-success');
                 }
 
                 that.onValidationChange(tpj, isValider);

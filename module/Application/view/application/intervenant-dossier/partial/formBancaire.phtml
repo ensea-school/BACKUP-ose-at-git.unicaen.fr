@@ -24,8 +24,8 @@ $dossierBancaire = $form->get('DossierBancaire');
 
 <!-- Fiedlset Bancaire -->
 <div class="col-md-6">
-    <div class="panel panel-default ">
-        <div class="panel-heading">
+    <div class="card bg-default ">
+        <div class="card-header">
             COORDONNÉES BANCAIRES
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$tblDossier->getCompletudeBanque()): ?>
@@ -36,7 +36,7 @@ $dossierBancaire = $form->get('DossierBancaire');
             <?php endif; ?>
 
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <?php
 
             echo $this->formControlGroup($dossierBancaire->get('ribIban'));

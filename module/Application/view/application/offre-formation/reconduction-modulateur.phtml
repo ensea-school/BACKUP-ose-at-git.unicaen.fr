@@ -5,9 +5,9 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-modula
 <div class="row" id="reconduction-filters">
     <div class="col-md-12">
         <!---------------- Champ de sélection d'une structure --------------->
-        <div class="panel panel-default">
-            <div class="panel-heading">Veuillez sélectionner une composante :</div>
-            <div class="panel-body">
+        <div class="card bg-default">
+            <div class="card-header">Veuillez sélectionner une composante :</div>
+            <div class="card-body">
                 <?php
                 $selectStructure = new \Laminas\Form\Element\Select('structure');
                 $selectStructure

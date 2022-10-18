@@ -86,9 +86,9 @@ echo $this->doctype();
                 ->setPartial('layout/menu-principal.phtml'); ?>
             <!--                A remplacer par   $navigationHelper->menuPrincipal() suite au merge de unicaenApp mis à jour avec l'utilisation de la vue partiel -->
             <form class="d-flex">
-                <button class="btn btn-outline-success" type="submit">
+                <div class="navbar-text text-end">
                     <?= $this->appConnection(); ?>
-                </button>
+                </div>
             </form>
         </div>
     </div>

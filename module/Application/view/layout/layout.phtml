@@ -84,12 +84,10 @@ echo $this->doctype();
                 ->menu('navigation')
                 ->setUlClass('navbar-nav me-auto')
                 ->setPartial('layout/menu-principal.phtml'); ?>
-            <!--                A remplacer par   $navigationHelper->menuPrincipal() suite au merge de unicaenApp mis à jour avec l'utilisation de la vue partiel -->
-            <form class="d-flex">
-                <div class="navbar-text text-end">
-                    <?= $this->appConnection(); ?>
-                </div>
-            </form>
+
+            <div class="navbar-text text-end">
+                <?= $this->appConnection(); ?>
+            </div>
         </div>
     </div>
 </nav>

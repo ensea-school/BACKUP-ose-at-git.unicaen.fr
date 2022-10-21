@@ -101,7 +101,7 @@ $this->messenger() ?>
                             </p>
                             <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>"
                                  id="details-enseignements-structure-<?= $sid ?>">
-                                <?= $this->enseignements($servicesNC)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
+                                <?= $this->enseignements(current($servicesNC)->getTypeVolumeHoraire(), $intervenant, $servicesNC)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
                             </div>
                         </td>
                     </tr>

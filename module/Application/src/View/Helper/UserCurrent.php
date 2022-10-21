@@ -57,7 +57,7 @@ class UserCurrent extends UserAbstract
 
             $content = $userProfileHelper;
         } else {
-            $status = "Vous n'êtes pas connecté(e)";
+            $status = "<span id=\"user-status-icon\" class=\"fa fa-user\"></span> Vous n'êtes pas connecté(e)";
             $content = _("Aucun");
         }
 

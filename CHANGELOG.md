@@ -23,6 +23,22 @@
 
 
 
+
+# OSE 19.4 (21/10/2022)
+
+## Corrections de bugs
+
+* Les types d'intervention personnalisés par statut peuvent de nouveau être saisis (#46930)
+
+## Petites corrections
+
+* Modification de la formule de calcul de Poitiers
+* Modification de la formule de calcul de Rennes 2
+* Modification de la formule de calcul de Lyon 2
+* Modification de la formule de calcul de Nice Cote d'Azur
+
+
+
 # OSE 19.3 (08/09/2022)
 
 ## Corrections de bugs

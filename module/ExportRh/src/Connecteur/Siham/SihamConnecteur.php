@@ -284,7 +284,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                     'complementAdresse'  => substr($complement, 0, 37),
                     'ville'              => $commune,
                     'codePostal'         => $codePostal,
-                    'codePays'           => $dossierIntervenant->getAdressePays()->getCode(),
+                    'codePays'           => $dossierIntervenant->getAdressePays()->getCodeIso3(),
 
                 ];
 
@@ -426,7 +426,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'complementAdresse'  => substr($complement, 0, 37),
                 'commune'            => $commune,
                 'codePostal'         => $codePostal,
-                'codePays'           => $dossierIntervenant->getAdressePays()->getCode(),
+                'codePays'           => $dossierIntervenant->getAdressePays()->getCodeIso3(),
                 'debutAdresse'       => $dateEffet,
             ];
 

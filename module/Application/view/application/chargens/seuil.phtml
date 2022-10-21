@@ -27,11 +27,11 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
 
 <?php if ($scenario) {
     foreach ($seuils['structures'] as $sid => $structure): ?>
-        <div class="panel panel-default">
-            <div class="panel-heading panel-heading-h3">
+        <div class="card bg-default">
+            <div class="card-header card-header-h3">
                 <h3>
                     <?= $structure['libelle'] ?>
-                    <span class="pull-right" style="font-size:80%" id="heures-<?= $sid ?>"></span>
+                    <span class="float-end" style="font-size:80%" id="heures-<?= $sid ?>"></span>
                 </h3>
             </div>
             <table class="table table-hover table-bordered seuils-dedoublement">

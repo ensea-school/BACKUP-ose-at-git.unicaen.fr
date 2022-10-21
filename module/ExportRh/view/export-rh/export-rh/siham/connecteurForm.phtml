@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="card bg-default">
     <?php
     if ($priseEnCharge) {
         $libelle = "de la prise en charge";
@@ -7,8 +7,8 @@
     }
     ?>
 
-    <div class="panel-heading">Configuration <?= $libelle ?> dans <?= $nameConnecteur; ?></div>
-    <div class="panel-body">
+    <div class="card-header">Configuration <?= $libelle ?> dans <?= $nameConnecteur; ?></div>
+    <div class="card-body">
         <!-- Année universitaire de prise en charge -->
         <input type="hidden" name="connecteurForm[anneeUniversitaire]" value="<?= $intervenant->getAnnee()->getId() ?>"/>
         <table class="table">

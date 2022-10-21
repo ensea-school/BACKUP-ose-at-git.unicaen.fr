@@ -822,10 +822,10 @@ $.widget("ose.chargens", {
                     mouseEnter: function (e, obj) { that.highlight(obj.part.data.id, true); },
                     mouseLeave: function (e, obj) { that.highlight(obj.part.data.id, false); }
                 },
-                $(go.Panel, "Auto",
-                    {name: 'panel', width: 110},
+                $(go.Card, "Auto",
+                    {name: 'card', width: 110},
                     $(go.Shape, "RoundedRectangle", gradient, {name: "SHAPE"}),
-                    $(go.Panel, "Vertical",
+                    $(go.card, "Vertical",
                         $(go.TextBlock, new go.Binding("text", "code"), {stroke: "#999"}),
                         $(go.TextBlock,
                             {
@@ -841,14 +841,14 @@ $.widget("ose.chargens", {
                             },
                             new go.Binding("text", "libelle")
                         ),
-                        $(go.Panel, "Table",
+                        $(go.Card, "Table",
                             new go.Binding("itemArray", "proprietes"),
                             {
                                 name: "details",
                                 defaultAlignment: go.Spot.Left,
                                 background: "white",
                                 padding: 1.5,
-                                itemTemplate: $(go.Panel, "TableRow",
+                                itemTemplate: $(go.Card, "TableRow",
                                     $(go.TextBlock, new go.Binding("text", 'label'), {
                                         column: 0,
                                         width: 50,
@@ -880,8 +880,8 @@ $.widget("ose.chargens", {
                 mouseEnter: function (e, obj) { that.highlight(obj.part.data.id, true); },
                 mouseLeave: function (e, obj) { that.highlight(obj.part.data.id, false); }
             },
-            $(go.Panel, "Auto",
-                {name: 'panel', width: 10, height: 10},
+            $(go.Card, "Auto",
+                {name: 'card', width: 10, height: 10},
                 $(go.Shape, "Circle", {
                         name: "SHAPE",
                         fill: '#3F3F3F',
@@ -890,7 +890,7 @@ $.widget("ose.chargens", {
                     new go.Binding("fill", "hover", function (hover) {return hover ? highlightColor : "#3F3F3F";}),
                     new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#3F3F3F";})
                 ),
-                $(go.Panel, "Vertical",
+                $(go.Card, "Vertical",
                     {padding: 10}
                 )
             )

@@ -45,14 +45,14 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
 
 ?>
     <div
-            class="tpj <?= $obligatoire ? 'tpj-obligatoire ' : '' ?>tpj-<?= $tpj->getId() ?> panel panel-<?= $pj && $pj->getValidation() ? 'success' : 'default' ?> upload-container"
+            class="tpj <?= $obligatoire ? 'tpj-obligatoire ' : '' ?>tpj-<?= $tpj->getId() ?> card bg-<?= $pj && $pj->getValidation() ? 'success' : 'default' ?> upload-container"
             data-tpj="<?= $tpj->getId() ?>"
             id="valide-pj-<?= $tpj->getId() ?>"
     >
-        <div class="panel-heading panel-heading-h3">
+        <div class="card-header card-header-h3">
             <h3>
                 <?php if ($hasValidation && $canArchiver && $pj && $pj->getIntervenant()->getAnnee()->getId() != $annee->getId()): ?>
-                    <div class="validation-bar pull-right">
+                    <div class="validation-bar float-end">
                         <a class="archiver-pj btn btn-success"
                            title="Archiver cette pièce jointe pour en fournir une plus récente ?"
                            id="update-pj-<?= $tpj->getId() ?>">
@@ -61,7 +61,7 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
 
                     </div>
                 <?php else: ?>
-                    <div class="validation-bar pull-right"
+                    <div class="validation-bar float-end"
                          data-url="<?= $this->url('piece-jointe/intervenant/validation', ['typePieceJointe' => $tpj->getId()], [], true) ?>">
                         <?= $this->partial('application/piece-jointe/validation', compact('pj')) ?>
                     </div>
@@ -78,7 +78,7 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
                 <br/>
             </h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
                     <!-- Modèle de document éventuel -->
@@ -106,14 +106,14 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
 <?php if ($hasValidation && $canArchiver && $pj && $pj->getIntervenant()->getAnnee()->getId() != $annee->getId()): ?>
 
     <div
-            class="tpj <?= $obligatoire ? 'tpj-obligatoire ' : '' ?>tpj-archive-<?= $tpj->getId() ?> panel panel-default upload-container"
+            class="tpj <?= $obligatoire ? 'tpj-obligatoire ' : '' ?>tpj-archive-<?= $tpj->getId() ?> card bg-default upload-container"
             data-tpj="archive-<?= $tpj->getId() ?>"
             style="display:none;"
             id="archive-form-pj-<?= $tpj->getId() ?>"
     >
-        <div class="panel-heading panel-heading-h3">
+        <div class="card-header card-header-h3">
             <h3>
-                <div class="validation-bar pull-right"
+                <div class="validation-bar float-end"
                      data-url="<?= $this->url('piece-jointe/intervenant/validation', ['typePieceJointe' => $tpj->getId()], [], true) ?>">
                     <?= $this->partial('application/piece-jointe/validation', []) ?>
                 </div>
@@ -130,7 +130,7 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
                 <br/>
             </h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
                     <!-- Modèle de document éventuel -->

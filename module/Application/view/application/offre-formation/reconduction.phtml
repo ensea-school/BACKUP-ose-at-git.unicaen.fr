@@ -11,9 +11,9 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
 <div class="row" id="reconduction-filters">
     <div class="col-md-12">
         <!---------------- Champ de sélection d'une structure --------------->
-        <div class="panel panel-default">
-            <div class="panel-heading">Veuillez sélectionner une composante :</div>
-            <div class="panel-body">
+        <div class="card bg-default">
+            <div class="card-header">Veuillez sélectionner une composante :</div>
+            <div class="card-body">
                 <?php
                 $selectStructure = new \Laminas\Form\Element\Select('structure');
                 $selectStructure
@@ -71,7 +71,7 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                         des formations.</a></p>
             <?php else: ?>
                 <?php if ($reconductionTotale == 'non'): ?>
-                    <div class="well well-sm">Les lignes avec le fond gris ont déjà été reconduites pour la prochaine année
+                    <div class="card card-well">Les lignes avec le fond gris ont déjà été reconduites pour la prochaine année
                         universitaire.
                     </div>
                     <form action="<?= $this->url('aof/reconduction', [], ['query' => ['structure' => $structure->getId()]]) ?>"

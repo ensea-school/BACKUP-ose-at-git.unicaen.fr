@@ -49,8 +49,8 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <h1><?= $title ?></h1>
 
         <!-- Informations générales -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Informations générales</div>
+        <div class="card bg-default">
+            <div class="card-header">Informations générales</div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-4">
@@ -84,8 +84,8 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Données personnelles -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Données personnelles</div>
+        <div class="panel bg-default">
+            <div class="card-header">Données personnelles</div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
@@ -153,8 +153,8 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Pièces justificatives -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Pièces justificatives</div>
+        <div class="panel bg-default">
+            <div class="card-header">Pièces justificatives</div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
@@ -172,8 +172,8 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Services -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Services d'enseignement</div>
+        <div class="panel bg-default">
+            <div class="card-header">Services d'enseignement</div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -193,8 +193,8 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Référentiel -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Référentiel</div>
+        <div class="panel bg-default">
+            <div class="card-header">Référentiel</div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -209,8 +209,8 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Agréments -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Agréments</div>
+        <div class="panel bg-default">
+            <div class="card-header">Agréments</div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -233,8 +233,8 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Contrat -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Contrat de travail et avenants</div>
+        <div class="panel bg-default">
+            <div class="card-header">Contrat de travail et avenants</div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
@@ -252,8 +252,8 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Calcul des heures complémentaires et mises en paiement -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Calcul des heures complémentaires et mises en paiement</div>
+        <div class="panel bg-default">
+            <div class="card-header">Calcul des heures complémentaires et mises en paiement</div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -273,11 +273,11 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Plafonds -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Plafonds</div>
+        <div class="panel bg-default">
+            <div class="card-header">Plafonds</div>
             <?= $this->plafondConfig()->afficher($statut, $canEdit); ?>
             <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_VISUALISATION))): ?>
-                <div class="panel panel-body"><a target="_blank" href="<?= $this->url('plafond'); ?>">
+                <div class="panel bg-body"><a target="_blank" href="<?= $this->url('plafond'); ?>">
                         Page d'administration des plafonds
                     </a>
                 </div>

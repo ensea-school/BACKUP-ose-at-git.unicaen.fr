@@ -27,8 +27,8 @@ $dossierContact = $form->get('DossierContact');
 
 <!-- Fiedlset Contact -->
 <div class="col-md-6 ">
-    <div class="panel panel-default ">
-        <div class="panel-heading">
+    <div class="card bg-default ">
+        <div class="card-header">
             CONTACT
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$tblDossier->getCompletudeContact()): ?>
@@ -38,7 +38,7 @@ $dossierContact = $form->get('DossierContact');
                 <?php endif; ?>
             <?php endif; ?>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <?php
             echo $this->formControlGroup($dossierContact->get('emailEtablissement'));
             echo $this->formControlGroup($dossierContact->get('emailPersonnel'));

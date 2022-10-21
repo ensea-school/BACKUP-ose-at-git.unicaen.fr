@@ -99,7 +99,7 @@ if ($error) {
 } elseif (empty($diff)) {
     echo '<br /><div class="alert alert-info">Il n\'y a aucune différence entre les deux exports de charges</div>';
 } else {
-    echo '<br /><div class="well">';
+    echo '<br /><div class="card card-well">';
     $first = true;
     echo '<ul class="nav nav-tabs" role="tablist">';
     foreach ($diff as $dk => $dc) {
@@ -110,7 +110,7 @@ if ($error) {
     echo '<div class="tab-content">';
 
     foreach ($diff as $dk => $dc) {
-        echo '<div role="tabpanel" class="tab-pane active" id="composante-' . $dk . '">';
+        echo '<div role="tabcard" class="tab-pane active" id="composante-' . $dk . '">';
         echo '<br /><h2>' . $dc['libelle'] . '</h2>';
         echo '<table class="table table-bordered table-condensed" style="width:70%">'
             . '<tr><th style="width:25%">Totaux Heures/HETD</th><th style="width:25%">' . $avantLibelle . '</th><th style="width:25%">' . $apresLibelle . '</th><th style="width:25%">Différence</th></tr>'
@@ -128,11 +128,11 @@ if ($error) {
             . '</tr>'
             . '</table>';
         foreach ($dc['etapes'] as $de) {
-            echo '<div class="panel panel-default">';
-            echo '<div class="panel-heading">';
-            echo '<h3 class="panel-title"><span class="label label-default">' . $de['code'] . '</span> ' . $de['libelle'] . '</h3>';
+            echo '<div class="card bg-default">';
+            echo '<div class="card-header">';
+            echo '<h3 class="card-title"><span class="label label-default">' . $de['code'] . '</span> ' . $de['libelle'] . '</h3>';
             echo '</div>';
-            echo '<div class="panel-body">';
+            echo '<div class="card-body">';
             echo '<div class="row">';
             echo '<div class="col-md-9">';
             echo '<table class="table table-bordered table-condensed">'

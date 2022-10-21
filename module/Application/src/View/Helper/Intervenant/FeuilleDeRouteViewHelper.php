@@ -243,20 +243,20 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
             case $franchissement == 1:
                 $attrs   = [
                     'title' => 'Fait',
-                    'class' => 'text-success pull-right',
+                    'class' => 'text-success float-end',
                 ];
                 $content = $tag('span', ['class' => 'text-success fas fa-check']);
             break;
             case $franchissement == 0:
                 if ($objectif === .0) {
                     $attrs   = [
-                        'class' => 'text-danger pull-right',
+                        'class' => 'text-danger float-end',
                     ];
                     $content = $tag('span', ['class' => 'fas fa-xmark text-danger']);
                 } else {
                     $attrs   = [
                         'title' => 'À faire',
-                        'class' => 'text-danger pull-right',
+                        'class' => 'text-danger float-end',
                     ];
                     $content = Util::formattedPourcentage($franchissement, true);
                 }
@@ -264,7 +264,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
             default:
                 $attrs   = [
                     'title' => 'En cours',
-                    'class' => 'text-warning pull-right',
+                    'class' => 'text-warning float-end',
                 ];
                 $content = Util::formattedPourcentage($franchissement, true);
         }

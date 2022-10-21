@@ -54,19 +54,19 @@ if ($urlAjouter) {
     $uploader->setUrl($urlAjouter);
 }
 
-$panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default');
+$card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default');
 
 ?>
-<div class="contrat panel panel-<?= $panel ?>" id="contrat-<?= $contrat->getId() ?>">
-    <div class="panel-heading panel-heading-h3">
+<div class="contrat card bg-<?= $card ?>" id="contrat-<?= $contrat->getId() ?>">
+    <div class="card-header card-header-h3">
         <?php if ($urlExport && $urlEmail): ?>
-            <span class="pull-right">
+            <span class="float-end">
                 <?php if ($disableEmail): ?>
-                    <a class="disabled btn btn-<?= $panel ?>" href="<?= $urlEmail ?>"
+                    <a class="disabled btn btn-<?= $card ?>" href="<?= $urlEmail ?>"
                        title="L'intervenant du contrat n'a pas renseigné son email.">
                 <?php endif; ?>
                         <?php if (!$disableEmail): ?>
-                    <a data-event="envoi-mail-contrat" class="ajax-modal btn btn-<?= $panel ?>"
+                    <a data-event="envoi-mail-contrat" class="ajax-modal btn btn-<?= $card ?>"
                        title="Envoyer le contrat par mail"
 
                        href="<?= $urlEmail ?>">
@@ -78,8 +78,8 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
         <!-- Lien de téléchargement du fichier -->
         <?php if ($urlExport): ?>
 
-            <span class="pull-right">
-            <a class="btn btn-<?= $panel ?>" href="<?= $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
+            <span class="float-end">
+            <a class="btn btn-<?= $card ?>" href="<?= $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
                 <i class="fas fa-upload"></i> Exporter en PDF
             </a>
             </span>
@@ -90,7 +90,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
             <?php if ($avenant_param >= 0): ?>- <?= $contrat->getStructure() ?><?php endif; ?></h3>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <!-- Informations -->
         <ul style="list-style-type: none">
             <li><i class="fas fa-thumbs-up"></i> Créé
@@ -154,7 +154,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
     </div>
 
     <?php if ($urlValidation || $urlSaisieRetour || $urlDevalidation || $urlSuppression): ?>
-        <div class="panel-footer">
+        <div class="card-footer">
             <!-- Actions -->
             <?php if ($urlValidation): ?>
                 <a

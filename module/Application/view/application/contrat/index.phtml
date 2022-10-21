@@ -47,7 +47,7 @@ $this->messenger() ?>
         z-index: 1151 !important;
     }
 
-    td .panel {
+    td .card {
         margin-bottom: 0px;
     }
 
@@ -108,7 +108,7 @@ $this->messenger() ?>
                 <?php endforeach; ?>
             </table>
         <?php endif; endif; ?>
-    <div class="well">
+    <div class="card card-well">
         <h2>Contrats et avenants</h2>
         <?php foreach ($contrats as $contrat): ?>
             <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param]);

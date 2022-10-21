@@ -29,8 +29,8 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
 <h1 class="page-header"><?= $title ?></h1>
 <div class="indicateurs-liste">
     <?php foreach ($indicateurs as $typeIndicateur): ?>
-        <div class="panel panel-default indicateurs">
-            <div class="panel-heading"><?= $typeIndicateur ?></div>
+        <div class="panel bg-default indicateurs">
+            <div class="card-header"><?= $typeIndicateur ?></div>
             <table class="table table-bordered table-condensed type-indicateur non-calcule" data-id="<?= $typeIndicateur->getId() ?>">
                 <thead>
                 <tr>

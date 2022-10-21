@@ -24,10 +24,10 @@ echo $this->navigation('navigation')->menuContextuel()->setPartial('unicaen-app/
     <h2>Données exportables</h2>
     <div style="column-count: 3;column-gap: 3em;">
         <?php foreach ($champs as $rubrique => $chs) : ?>
-            <div class="panel panel-default" style="break-inside: avoid">
+            <div class="card bg-default" style="break-inside: avoid">
 
-                <div class="panel-heading"><?= $rubrique ?></div>
-                <div class="panel-body">
+                <div class="card-header"><?= $rubrique ?></div>
+                <div class="card-body">
                     <?php foreach ($chs as $champ => $libelle) : ?>
                         <div class="row" style="border-bottom: 1px #eee solid">
                             <div class="col-md-10"><?= $libelle ?></div>

@@ -24,8 +24,8 @@ $dossierStatut = $form->get('DossierStatut');
 
 <!-- Fiedlset Insee -->
 <div class="col-md-12">
-    <div class="panel panel-default ">
-        <div class="panel-heading">
+    <div class="card bg-default ">
+        <div class="card-header">
             STATUT
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$tblDossier->getCompletudeStatut()): ?>
@@ -35,7 +35,7 @@ $dossierStatut = $form->get('DossierStatut');
                 <?php endif; ?>
             <?php endif; ?>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <?php
             echo $this->formControlGroup($dossierStatut->get('statut'));
 

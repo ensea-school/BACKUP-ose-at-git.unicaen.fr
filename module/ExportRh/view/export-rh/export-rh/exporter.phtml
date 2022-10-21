@@ -36,7 +36,7 @@ if ($priseEnCharge) {
 
     <?php elseif ($canExport === true): ?>
 
-        <div class="well">
+        <div class="card card-well">
             <?php if (empty($intervenantRh)): ?>
                 <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>) n'a
                     pas été trouvé
@@ -74,9 +74,9 @@ if ($priseEnCharge) {
             ?>
             <!-- BLOC AFFECTATION -->
             <?php if (!empty($affectationEnCours)): ?>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Affectation <?= $nameConnecteur ?> en cours</div>
-                    <div class="panel-body">
+                <div class="card bg-default">
+                    <div class="card-header">Affectation <?= $nameConnecteur ?> en cours</div>
+                    <div class="card-body">
                         <table class="table">
                             <thead>
                             <tr>
@@ -114,17 +114,17 @@ if ($priseEnCharge) {
                     </div>
                 </div>
             <?php else: ?>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Affectation <?= $nameConnecteur ?> en cours</div>
-                    <div class="panel-body" style="text-align:center;">
+                <div class="card bg-default">
+                    <div class="card-header">Affectation <?= $nameConnecteur ?> en cours</div>
+                    <div class="card-body" style="text-align:center;">
                         Aucune affectation en cours dans SIHAM
                     </div>
                 </div>
             <?php endif; ?>
             <?php if (!empty($contratEnCours)): ?>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Contrat <?= $nameConnecteur ?> en cours</div>
-                    <div class="panel-body">
+                <div class="card bg-default">
+                    <div class="card-header">Contrat <?= $nameConnecteur ?> en cours</div>
+                    <div class="card-body">
                         <table class="table">
                             <thead>
                             <tr>
@@ -161,9 +161,9 @@ if ($priseEnCharge) {
                     </div>
                 </div>
             <?php else: ?>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Contrat <?= $nameConnecteur ?> en cours</div>
-                    <div class="panel-body" style="text-align:center;">
+                <div class="card bg-default">
+                    <div class="card-header">Contrat <?= $nameConnecteur ?> en cours</div>
+                    <div class="card-body" style="text-align:center;">
                         Aucun contrat en cours dans SIHAM
                     </div>
                 </div>

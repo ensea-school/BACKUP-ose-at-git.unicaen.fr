@@ -27,8 +27,8 @@ $dossierIdentite = $form->get('DossierIdentite');
 <!-- Fiedlset Identite -->
 
 <div class="col-md-6">
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bg-default">
+        <div class="card-header">
             IDENTITÉ
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$intervenantDossier->getTblDossier()->getCompletudeIdentite()): ?>
@@ -38,7 +38,7 @@ $dossierIdentite = $form->get('DossierIdentite');
                 <?php endif; ?>
             <?php endif; ?>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
 
             <div class="form-group">
                 <?= $this->formLabel($dossierIdentite->get('civilite')); ?>

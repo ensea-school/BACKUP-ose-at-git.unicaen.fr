@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.3](#ose-193-08092022)
+[OSE 19.4](#ose-194-21102022)
 
 
 # OSE 20 (à venir)
@@ -26,12 +26,9 @@
 
 # OSE 19.4 (21/10/2022)
 
-## Corrections de bugs
+## Corrections de bugs/petites évolutions
 
 * Les types d'intervention personnalisés par statut peuvent de nouveau être saisis (#46930)
-
-## Petites corrections
-
 * Modification de la formule de calcul de Poitiers
 * Modification de la formule de calcul de Rennes 2
 * Modification de la formule de calcul de Lyon 2

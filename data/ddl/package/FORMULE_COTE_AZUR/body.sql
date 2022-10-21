@@ -298,9 +298,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_COTE_AZUR AS
 
 
 
-      -- AM=IF([.AM19]+[.AL20]>[.$AL$17];[.$AL$17];[.AM19]+[.AL20])
+      -- AM=IF(AND([.AM19]+[.AL20]>[.$AL$17];i_type_intervenant_code="P");[.$AL$17];[.AM19]+[.AL20])
       WHEN 'AM' THEN
-        IF cell('AM',l-1) + cell('AL',l) > cell('AL17') THEN
+        IF cell('AM',l-1) + cell('AL',l) > cell('AL17') AND i.type_intervenant_code = 'P' THEN
           RETURN cell('AL17');
         ELSE
           RETURN cell('AM',l-1) + cell('AL',l);

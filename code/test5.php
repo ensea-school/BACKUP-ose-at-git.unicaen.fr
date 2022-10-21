@@ -8,17 +8,19 @@
  * @var $viewFile   string
  */
 
+$url = (string)$this->url('chargens');
 
 ?>
+
+<button type="button" data-confirm="sür ?" data-b-title="Mon titre" class="btn btn-secondary pop-ajax tt" data-url="<?= $url ?>">
+    pop-ajax
+</button>
 <script>
 
     $(function () {
-        $('[data-bs-toggle="popover"]').popover()
-    })
+
+    });
 
 </script>
 
 
-<button type="button" class="btn btn-lg btn-danger" data-bs-toggle="popover" title="Popover title"
-        data-bs-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover
-</button>

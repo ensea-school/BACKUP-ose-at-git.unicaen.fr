@@ -1,11 +1,229 @@
+$.widget("unicaen.popAjax", {
+
+    popDiv: undefined, loading: false, contentGuid: null, container: undefined,
+
+    options: {
+        url: undefined,
+        confirm: undefined,
+        confirmButton: '<i class="fas fa-check"></i> OK',
+        cancelButton: '<i class="fas fa-xmark"></i> Annuler',
+        submitEvent: undefined,
+        submitClose: false,
+        submitReload: false,
+        maxWidth: '600px',
+        maxHeight: 'none',
+        loadingTitle: 'Chargement...',
+        loadingContent: '<div class="loading"></div>',
+    },
+
+
+
+    _create: function () {
+        var that = this;
+
+        /* Traitement des options de configuration */
+        var optionsKeys = {
+            url: 'url',
+            confirm: 'confirm',
+            confirmButton: 'confirm-button',
+            cancelButton: 'cancel-button',
+            submitEvent: 'submit-event',
+            submitClose: 'submit-close',
+            submitReload: 'submit-reload',
+            maxWidth: 'max-width',
+            maxHeight: 'max-height',
+            loadingTitle: 'loading-title',
+            loadingContent: 'loading-content',
+        };
+
+        for (var k in optionsKeys) {
+            if (typeof this.element.data(optionsKeys[k]) !== 'undefined') {
+                this.options[k] = this.element.data(optionsKeys[k]);
+            }
+        }
+
+        if (href = this.element.attr('href')) {
+            this.options.url = href;
+        }
+
+        /* Récupération des événements divers */
+        $('html').click(function (e) {
+            that.htmlClick(e);
+        });
+        $("body").on('intranavigator-refresh', function (event, args) {
+            if (that && that.getContentElement() && $(args.element).parents(that.getContentElement()).length > 0) {
+                that.contentChange(args.isSubmit);
+            }
+        });
+
+        /* Préparation du popover */
+        popoptions = {"html": true, "sanitize": false};
+        if (!that.element.data('bs-content')) {
+            popoptions.title = that.options.loadingTitle;
+            popoptions.content = function () {
+                return that.makeContent();
+            };
+        }
+
+        that.element.popover(popoptions);
+    },
+
+
+
+    makeContent: function () {
+        var that = this;
+
+        var out = '<div class="intranavigator">';
+        if (that.options.confirm !== undefined) {
+            out += that.makeConfirmBox(that.options.confirm);
+        } else {
+            $.ajax({
+                url: that.options.url, success: function (response) {
+                    that.setContent(response);
+                }
+            });
+            out += that.options.loadingContent;
+        }
+        out += '</div>';
+
+        return out;
+    },
+
+
+
+    setContent: function (content) {
+        var contentElement = this.getContentElement();
+
+        contentElement.html(content);
+        this.contentChange(false);
+
+    },
+
+
+
+    contentChange: function (isSubmit) {
+        var contentElement = this.getContentElement();
+
+        /* Mise à jour éventuelle du titre du popajax */
+        var extractedTitle = contentElement.find('.popover-title,.page-header');
+        if (extractedTitle.length > 0) {
+            this.setTitle(extractedTitle.html());
+            extractedTitle.remove();
+        } else if ($(this.element).data('bs-title')) {
+            this.setTitle($(this.element).data('bs-title'));
+        } else {
+            this.setTitle(null);
+        }
+
+        /* Gestion des événements */
+        if (isSubmit && !this.errorsInContent()) {
+            if (this.options.submitEvent) {
+                $("body").trigger(this.options.submitEvent, this);
+            }
+            if (this.options.submitClose) {
+                $(this.element).popover('hide');
+            }
+            if (this.options.submitReload) {
+                window.location.reload();
+            }
+
+            // this._trigger('submit', null, this); // @todo
+        }
+        //this._trigger('change', null, this); // @todo
+    },
+
+
+
+    makeConfirmBox: function (content) {
+        var c = '<form action="' + this.options.url + '" method="post">' + content + '<div class="btn-goup" style="text-align:right;padding-top: 10px" role="group">';
+        if (this.options.cancelButton) {
+            c += '<button type="button" class="btn btn-secondary pop-ajax-hide">' + this.options.cancelButton + '</button>';
+        }
+        if (this.options.confirmButton && this.options.cancelButton) {
+            c += '&nbsp;';
+        }
+        if (this.options.confirmButton) {
+            c += '<button type="submit" class="btn btn-primary">' + this.options.confirmButton + '</button>';
+        }
+        c += '</div>' + '</form>';
+
+        return c;
+    },
+
+
+
+    setTitle: function (title) { // @todo gérer les NULL
+        if (title) {
+            this.getPopoverElement().find('.popover-header').html(title);
+            this.getPopoverElement().find('.popover-header').show();
+        } else {
+            this.getPopoverElement().find('.popover-header').hide();
+        }
+    },
+
+
+
+    errorsInContent: function () {
+        var ce = this.getContentElement();
+
+        if (!ce) return false;
+
+        var errs = ce.find('.input-error, .has-error, .has-errors, .alert.alert-danger').length;
+
+        return errs > 0;
+    },
+
+
+
+    htmlClick: function (e) {
+        var popEl = this.getPopoverElement();
+
+        if ($(e.target).hasClass('pop-ajax-hide')) {
+            $(this.element).popover('hide');
+        }
+
+        if (!popEl || !popEl[0] || e.target == this.element[0]) return true;
+
+        var p = popEl[0].getBoundingClientRect();
+        var horsZonePop = e.clientX < p.left || e.clientX > p.left + p.width || e.clientY < p.top || e.clientY > p.top + p.height;
+        var horsElementFils = $(e.target).parents('.popover-content,.ui-autocomplete').length == 0;
+
+        if (horsZonePop) {
+            if (horsElementFils) { // il ne faut pas que l'élément soit dans le popover
+                $(this.element).popover('hide');
+            }
+        }
+    },
+
+
+
+    getContentElement: function () {
+        return this.getPopoverElement().find('popover-body');
+    },
+
+
+
+    getPopoverElement: function () {
+        var id = $(this.element).attr('aria-describedby');
+
+        if (!id) {
+            return undefined;
+        }
+        return $('#' + id);
+    },
+});
+
+
+
+
+
 /**
  *
  * @constructor
  */
-$.widget("unicaen.popAjax", {
+$.widget("unicaen.popAjaxOld", {
 
-    popDiv: undefined,
-    inChange: false,
+    popDiv: undefined, inChange: false,
 
     options: {
         url: undefined,
@@ -31,25 +249,21 @@ $.widget("unicaen.popAjax", {
 
 
 
-    _create: function ()
-    {
+    _create: function () {
         var that = this;
 
 
-        this.element.click(function ()
-        {
+        this.element.click(function () {
             that.showHide();
 
             return false;
         });
 
-        $('html').click(function (e)
-        {
+        $('html').click(function (e) {
             that.htmlClick(e);
         });
 
-        $("body").on('intranavigator-refresh', function (event, args)
-        {
+        $("body").on('intranavigator-refresh', function (event, args) {
             if (that && that.popDiv && $(args.element).parents(that.popDiv).length > 0) {
                 that.afterRefresh(args.isSubmit);
             }
@@ -61,15 +275,11 @@ $.widget("unicaen.popAjax", {
             this.options.url = this.element.attr('href');
         }
 
-        if (this.options.autoShow) {
-            setTimeout(function () { that.show(); }, 100);
-        }
     },
 
 
 
-    initOptions: function ()
-    {
+    initOptions: function () {
         var optionsKeys = {
             url: 'url',
             content: 'content',
@@ -101,47 +311,7 @@ $.widget("unicaen.popAjax", {
 
 
 
-    showHide: function ()
-    {
-        if (this.shown()) {
-            this.hide();
-        } else {
-            this.show();
-        }
-        return this;
-    },
-
-
-
-    htmlClick: function (e)
-    {
-        if (!this.popDiv) return true;
-
-        var p = this.popDiv[0].getBoundingClientRect();
-
-        var horsZonePop = e.clientX < p.left || e.clientX > p.left + p.width
-            || e.clientY < p.top || e.clientY > p.top + p.height;
-
-        var horsElementFils = $(e.target).parents('.popover-content,.ui-autocomplete').length == 0;
-
-        if (horsZonePop) {
-            if (horsElementFils) { // il ne faut pas que l'élément soit dans le popover
-                this.hide();
-            }
-        }
-    },
-
-
-
-    shown: function ()
-    {
-        return this.popDiv != undefined;
-    },
-
-
-
-    show: function ()
-    {
+    show: function () {
         this.inChange = true;
         if (this.options.animation) {
             this.makePopDiv().fadeIn(this.options.delay);
@@ -149,7 +319,7 @@ $.widget("unicaen.popAjax", {
             this.makePopDiv().show();
         }
         this.inChange = false;
-        this.posPop();
+        //this.posPop();
 
         this._trigger('show', null, this);
 
@@ -158,28 +328,7 @@ $.widget("unicaen.popAjax", {
 
 
 
-    hide: function ()
-    {
-        if (this.popDiv) {
-            if (this.options.animation) {
-                this.popDiv.fadeOut(this.options.delay, function () { $(this).remove(); });
-            } else {
-                this.popDiv.hide();
-                this.popDiv.remove();
-            }
-
-            this.popDiv = undefined;
-        }
-
-        this._trigger('hide', null, this);
-
-        return this;
-    },
-
-
-
-    afterRefresh: function (isSubmit)
-    {
+    afterRefresh: function (isSubmit) {
         this.extractTitle(); // on rafraichit le titre, éventuellement
         if (isSubmit && !this.errorsInContent()) {
             if (this.options.submitEvent) {
@@ -199,8 +348,7 @@ $.widget("unicaen.popAjax", {
 
 
 
-    errorsInContent: function ()
-    {
+    errorsInContent: function () {
         var that = this;
 
         if (!this.popDiv) return false;
@@ -213,10 +361,8 @@ $.widget("unicaen.popAjax", {
 
 
 
-    makeConfirmBox: function (content)
-    {
-        var c = '<form action="' + this.options.url + '" method="post">' + content +
-            '<div class="btn-goup" style="text-align:right;padding-top: 10px" role="group">';
+    makeConfirmBox: function (content) {
+        var c = '<form action="' + this.options.url + '" method="post">' + content + '<div class="btn-goup" style="text-align:right;padding-top: 10px" role="group">';
         if (this.options.cancelButton) {
             c += '<button type="button" class="btn btn-default pop-ajax-hide">' + this.options.cancelButton + '</button>';
         }
@@ -226,16 +372,14 @@ $.widget("unicaen.popAjax", {
         if (this.options.confirmButton) {
             c += '<button type="submit" class="btn btn-primary">' + this.options.confirmButton + '</button>';
         }
-        c += '</div>' +
-            '</form>';
+        c += '</div>' + '</form>';
 
         return c;
     },
 
 
 
-    makePopDiv: function ()
-    {
+    makePopDiv: function () {
         var that = this;
 
         if (this.options.content !== undefined) {
@@ -277,27 +421,24 @@ $.widget("unicaen.popAjax", {
 
             if (this.options.content !== undefined) {
                 this._trigger('change', null, this);
-                this.posPop();
+                //this.posPop();
             } else {
                 $.get(this.options.url)
-                    .done(function (res)
-                    {
+                    .done(function (res) {
                         if (that.options.confirm) {
                             res = that.makeConfirmBox(res);
                         }
                         that.populate(res);
                     })
-                    .fail(function (err)
-                    {
+                    .fail(function (err) {
                         msg = '<div class="alert alert-danger">Erreur ' + err.status + ' : ' + err.statusText + '</div>';
 
                         that.populate(msg + "\n" + err.responseText);
                     });
             }
 
-            this.getContent().bind('DOMNodeInserted DOMNodeRemoved', function ()
-            {
-                that.posPop();
+            this.getContent().bind('DOMNodeInserted DOMNodeRemoved', function () {
+                //that.posPop();
             });
         }
 
@@ -306,8 +447,7 @@ $.widget("unicaen.popAjax", {
 
 
 
-    populate: function (content)
-    {
+    populate: function (content) {
         var that = this;
         var pc = this.getContent();
 
@@ -324,142 +464,11 @@ $.widget("unicaen.popAjax", {
             pc.show();
         }
         this.inChange = false;
-        this.posPop();
-        this.posPop();
-        this.posPop(); // on répête 3 fois car il est un peu dûr d'oreille...
+        //this.posPop();
     },
-
-
-
-    extractTitle: function ()
-    {
-        var pc = this.getContent();
-
-        var title = pc.find('h1,.popover-title,.page-header');
-
-        if (title.length > 0) {
-            this.popDiv.find('.popover-title').html(title.html()).show();
-            title.remove();
-        } else if (this.options.title) {
-            this.popDiv.find('.popover-title').html(this.options.title).show();
-        } else {
-            this.popDiv.find('.popover-title').hide();
-        }
-    },
-
-
-
-    posPop: function ()
-    {
-        if (this.inChange) return;
-        if (!this.popDiv) return;
-
-        /* Position de l'élément qui ouvre le popover */
-        var aPos = this.element[0].getBoundingClientRect();
-
-        /* Espace d'affichage */
-        var doc = {
-            left: $(window).scrollLeft(),
-            top: $(window).scrollTop(),
-            width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-            height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
-        };
-
-        /* position du popover */
-        var pop = {
-            left: 0,
-            top: 0,
-            width: this.popDiv.width(),
-            height: this.popDiv.height()
-        };
-
-        var placement = this.options.placement;
-
-        if (placement == 'auto') {
-            if (aPos.right + pop.width <= doc.width - 2) placement = 'right';
-            if ((aPos.left - pop.width >= 2) && (aPos.left + (aPos.width / 2) < (doc.width / 2))) placement = 'left';
-            if (aPos.top - pop.height >= 2) placement = 'top';
-            if ((aPos.bottom + pop.height <= doc.height - 2) && (aPos.top + (aPos.height / 2) < (doc.height / 2))) placement = 'bottom';
-        }
-
-        this.popDiv.removeClass('bottom');
-        this.popDiv.removeClass('top');
-        this.popDiv.removeClass('left');
-        this.popDiv.removeClass('right');
-        this.popDiv.addClass(placement);
-        switch (placement) {
-            case 'bottom':
-                pop.left = aPos.left + (aPos.width / 2) - (pop.width / 2);
-                pop.top = aPos.bottom;
-                break;
-            case 'top':
-                pop.left = aPos.left + (aPos.width / 2) - (pop.width / 2);
-                pop.top = aPos.top - pop.height;
-                break;
-            case 'left':
-                pop.left = aPos.left - pop.width;
-                pop.top = aPos.top + (aPos.height / 2) - (pop.height / 2);
-                break;
-            case 'right':
-                pop.left = aPos.right;
-                pop.top = aPos.top + (aPos.height / 2) - (pop.height / 2);
-                break;
-        }
-
-        if (pop.left + pop.width > doc.width - 2) pop.left = doc.width - 2 - pop.width;
-        if (pop.top + pop.height > doc.height - 2) pop.top = doc.height - 2 - pop.height;
-
-        if (pop.left < 2) pop.left = 2;
-        if (pop.top < 2) pop.top = 2;
-
-        this.popDiv.css({left: doc.left + pop.left, top: doc.top + pop.top});
-
-        switch (placement) {
-            case 'bottom':
-            case 'top':
-                var l = pop.left > aPos.left ? pop.left : aPos.left;
-                var r = (pop.left + pop.width) < (aPos.right) ? (pop.left + pop.width) : aPos.right;
-
-                var pos = ((r - l) / 2) + l - pop.left;
-                if (pos < 20) pos = 20;
-                if (pos > (pop.width - 20)) pos = pop.width - 20;
-
-                this.popDiv.find('.arrow').css({left: pos});
-                break;
-            case 'left':
-            case 'right':
-                var t = pop.top > aPos.top ? pop.top : aPos.top;
-                var h = (pop.top + pop.height) < aPos.bottom ? (pop.top + pop.height) : aPos.bottom;
-
-                var pos = ((h - t) / 2) + t - pop.top;
-                if (pos < 20) pos = 20;
-                if (pos > (pop.height - 20)) pos = pop.height - 20;
-
-                this.popDiv.find('.arrow').css({top: pos});
-                break;
-        }
-        return this;
-    },
-
-
-
-    getContent: function ()
-    {
-        if (!this.popDiv) return undefined;
-        return this.popDiv.find('.popover-content');
-    },
-
-
-
-    setContent: function (content)
-    {
-        this.options.content = content;
-        return this;
-    }
 
 });
 
-$(function ()
-{
+$(function () {
     WidgetInitializer.add('pop-ajax', 'popAjax');
 });

@@ -2,7 +2,13 @@
 // Option A: Include all of Bootstrap
 
 // Include any default variable overrides here (though functions won't be available)
+
 $primary: #265a88 !default;
+$primary-top: #337ab7;
+$danger: #f2dede !default;
+$success: #dff0d8 !default;
+$warning: #f8efc0 !default;
+$info: #b9def0 !default;
 
 @import "../bootstrap-5.0.2/scss/bootstrap";
 @import "../bootstrap-5.0.2/scss/functions";
@@ -10,3 +16,20 @@ $primary: #265a88 !default;
 @import "../bootstrap-5.0.2/scss/mixins";
 // Then add additional custom code here
 
+.btn-primary{
+  background: linear-gradient(to bottom,$primary-top 0, $primary 100%) repeat-x;
+}
+.alert-info{
+  color: #31708f;
+  background-color: $info;
+}
+
+.alert-success{
+  color: #3c763d;
+  background-color: $success;
+}
+
+.alert-warning{
+  color:#8a6d3b;
+  background-color: $warning;
+}

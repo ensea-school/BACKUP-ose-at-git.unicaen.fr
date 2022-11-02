@@ -28,21 +28,11 @@ echo $this->doctype();
     <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.css') ?>" media="all" rel="stylesheet" type="text/css">
     <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.structure.min.css') ?>" media="all" rel="stylesheet" type="text/css">
     <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.theme.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/bootstrap-5.0.2/dist/css/bootstrap.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/scss/custom.css') ?>" media="all" rel="stylesheet" type="text/css">
     <link href="<?= $this->basePath('/vendor/open-sans-gh-pages/open-sans.css') ?>" media="all" rel="stylesheet" type="text/css">
-
-    <!-- CSS générales à l'application -->
-    <link href="<?= $this->basePath('/css/app.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/cartridge.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/budget.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/paiement.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/agrement.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/acceuil.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/callout.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/piece-jointe.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-
     <link href="<?= $this->basePath('/vendor/font-awesome-6.0.0/css/all.min.css') ?>" media="all" rel="stylesheet" type="text/css">
+
+    <!-- CSS générale à l'application -->
+    <link href="<?= $this->basePath('/css/app.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
 
     <!-- Autres links ajoutés dynamiquement -->
     <?= $this->headLink(); ?>

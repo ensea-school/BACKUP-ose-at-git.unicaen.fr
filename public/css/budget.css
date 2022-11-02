@@ -1,71 +1,71 @@
-
 .engagement .ha {
-    border-collapse: collapse;
-    border:1px gray solid;
-    text-align: right;
+  border-collapse: collapse;
+  border: 1px gray solid;
+  text-align: right;
 }
 
 .engagement .label {
-    color:#ccc;
+  color: #ccc;
 }
 
 .engagement .ha.ha2 {
-    border-left:none;
+  border-left: none;
 }
+
 .engagement .ha.ha3 {
-    border-top:none
+  border-top: none;
 }
 
 .engagement td.dotation {
-    padding: .2em;
+  padding: 0.2em;
 }
 
 .engagement td.dotation {
-    padding: .2em;
+  padding: 0.2em;
 }
 
 .engagement td.hetd {
-    text-align: right;
+  text-align: right;
 }
 
 .engagement td.action {
-    text-align: center;
-    vertical-align: middle;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .engagement .liquidation {
-    clear: both;
+  clear: both;
 }
 
-
 .engagement .liquidation h2 {
-    text-align: center;
+  text-align: center;
 }
 
 .engagement .liquidation table {
-    width: auto;
-    margin:auto;
+  width: auto;
+  margin: auto;
 }
 
-
 table.budget-tbl {
-    width:auto;
-    margin: auto;
+  width: auto;
+  margin: auto;
 }
 
 table.budget-tbl th {
-    width:12em;
+  width: 12em;
 }
 
 table.budget-tbl td.hetd {
-    text-align: right;
+  text-align: right;
 }
 
 table.budget-tbl .label {
-    color: #ccc;
+  color: #ccc;
 }
 
 .budget-export {
-    margin-top: .5em;
-    text-align:center;
+  margin-top: 0.5em;
+  text-align: center;
 }
+
+/*# sourceMappingURL=budget.css.map */

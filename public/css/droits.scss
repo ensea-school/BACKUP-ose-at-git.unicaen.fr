@@ -1,0 +1,52 @@
+ul.privileges-form {
+    list-style-type: none;
+}
+
+ul.privileges-form li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+ul.privileges-form li label {
+    margin-left: 0.5em;
+}
+
+.droits-tbl th.privilege {
+    min-width: 200px;
+    max-width: 200px;
+    width: 200px;
+}
+
+.droits_tbl th.role {
+    width: 15px;
+}
+
+.droits_tbl td.role {
+    width: 15px;
+}
+
+.droits-tbl td i.refuse {
+    opacity: 0.5;
+}
+
+.droits-tbl th.categorie {
+    padding-top: 10pt;
+    font-size: 16pt;
+    font-family: "Open Sans",Helvetica,Arial,sans-serif;
+    font-weight: 200;
+}
+
+.droits-tbl {
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+.droits-tbl thead tr th div {
+    border-bottom: 1px solid #ddd;
+}
+
+
+.selected {
+    background-color:#FCF8E3 !important;
+}

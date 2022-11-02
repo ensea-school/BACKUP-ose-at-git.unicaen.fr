@@ -1,65 +1,66 @@
 table.service, table.service-referentiel {
-  margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 table.service table.volume-horaire, table.service-referentiel table.volume-horaire {
-  margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 table.service div#vhl-prev {
-  margin-bottom: 2px;
-  opacity: 0.5;
+    margin-bottom: 2px;
+    opacity: .5;
 }
 
 table.service div#vhl-prev table {
-  background-color: #EDEAD2;
+    background-color: #EDEAD2;
 }
 
 table.service td.volume-horaire {
-  font-size: 90%;
+    font-size: 90%;
 }
 
 table.service td.actions, table.service-referentiel td.actions {
-  white-space: nowrap;
-  text-align: center;
+    white-space: nowrap;
+    text-align: center;
 }
 
 table.service tfoot td.type-intervention {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
 table.service td.actions a, table.service-referentiel td.actions a {
-  margin-left: 0.2em;
-  margin-right: 0.2em;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
 }
 
 div.service-show-hide-buttons {
-  padding-bottom: 3px;
-  padding-top: 3px;
-  text-align: right;
+    padding-bottom: 3px;
+    padding-top: 3px;
+    text-align: right;
 }
 
 div.enseignements table.service tr.volume-horaire {
-  background-color: #fafafa;
+    background-color: #fafafa;
 }
 
+
+
+
 form#service div#element-interne div.col-md-5 {
-  clear: both;
+    clear: both;
 }
 
 form#service div.volume-horaire-saisie-multiple div {
-  float: left;
-  width: 10em;
-  height: 5em;
+    float: left;
+    width: 10em;
+    height: 5em;
 }
 
 form#service div.volume-horaire-saisie-multiple div input {
-  width: 7em;
-  display: inline;
+    width: 7em;
+    display: inline;
 }
 
 form#service div.volume-horaire-saisie-multiple-fin {
-  clear: both;
+    clear: both;
 }
-
-/*# sourceMappingURL=service.css.map */

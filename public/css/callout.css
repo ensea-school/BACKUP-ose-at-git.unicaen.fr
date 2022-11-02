@@ -1,50 +1,47 @@
-.callout-menu {
-
-}
-
 .callout-menu .callout-container {
-    margin: auto;
-    width: 50%;
-    min-width:25em;
-    float: left;
-    padding:.5em;
+  margin: auto;
+  width: 50%;
+  min-width: 25em;
+  float: left;
+  padding: 0.5em;
 }
 
 .callout-menu .callout {
-    border-radius: 5px;
-    border: 1px #ddd solid;
-    border-left: 6px #9E9E9E solid;
-    padding:1em;
-    min-height:13em;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.075);
-    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-
+  border-radius: 5px;
+  border: 1px #ddd solid;
+  border-left: 6px #9E9E9E solid;
+  padding: 1em;
+  min-height: 13em;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.075);
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
 }
 
 .callout-menu .callout:hover {
-    border-color: #ddd;
-    outline: 0px none;
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px #bbb;
+  border-color: #ddd;
+  outline: 0px none;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px #bbb;
 }
 
 .callout-menu .callout h1 {
-    margin-top: 0px;
-    margin-bottom: 0px;
-    font-size: 18pt;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-size: 18pt;
 }
 
 .callout-menu .callout ul {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 
 .callout-menu .callout .glyphicon {
-    float:right;
-    font-size: 40pt;
-    color: #ddd;
+  float: right;
+  font-size: 40pt;
+  color: #ddd;
 }
 
 .callout-menu .callout .fas {
-    float: right;
-    font-size: 40pt;
-    color: #ddd;
+  float: right;
+  font-size: 40pt;
+  color: #ddd;
 }
+
+/*# sourceMappingURL=callout.css.map */

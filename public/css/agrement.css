@@ -1,16 +1,18 @@
 dl.dl-horizontal.agrement dt {
-    width: 180px;
+  width: 180px;
 }
 
 .agrement-box dl {
-    float: left;
+  float: left;
 }
 
 .agrement-box hr {
-    clear:both
+  clear: both;
 }
 
 .agrement-box span.glyphicon {
-    float: right;
-    font-size:40pt;
+  float: right;
+  font-size: 40pt;
 }
+
+/*# sourceMappingURL=agrement.css.map */

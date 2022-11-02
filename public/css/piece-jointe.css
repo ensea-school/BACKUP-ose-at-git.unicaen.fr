@@ -1,16 +1,16 @@
-
 .piece-jointe .tpj .card-header .validation-bar a {
-    margin-top: -5px;
+  margin-top: -5px;
 }
 
-
 .contrat .card-header-h3 .float-end {
-    line-height: 3.4em;
-    padding-right: 1em;
+  line-height: 3.4em;
+  padding-right: 1em;
 }
 
 #tblTpjs tr th:first-child {
-    min-width: 260px;
-    max-width: 260px;
-    width: 260px;
+  min-width: 260px;
+  max-width: 260px;
+  width: 260px;
 }
+
+/*# sourceMappingURL=piece-jointe.css.map */

@@ -1,0 +1,64 @@
+.chargens {
+    width: 100%;
+    background-color: white;
+}
+
+.chargens.fullscreen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1050;
+    height: 100%;
+    width: 100%;
+}
+
+.chargens .controles .navbar {
+    margin-bottom: 1px;
+}
+
+.form-noeud {
+    overflow: hidden !important;
+}
+
+.form-lien {
+    overflow: hidden !important;
+}
+
+.ui-front {
+    z-index: 1051;
+}
+
+.chargens .navbar .div-filtre {
+    padding:4px;
+    padding-bottom: 0px;
+}
+
+.chargens .navbar .div-filtre .div-structure {
+    padding-right:2px;
+}
+
+.chargens .navbar .div-filtre .div-etape {
+    padding-left:2px;
+    padding-right:2px;
+}
+
+.chargens .navbar .div-filtre .div-scenario {
+    padding-left:2px;
+}
+
+.chargens .navbar .div-filtre .div-scenario-edit {
+    padding-left:2px;
+}
+
+.chargens .navbar .div-controles {
+    padding:4px;
+}
+
+.chargens .controles .div-hetd-composante{
+    margin-right: 0px;
+    height: auto;
+    padding-top: 7px;
+    padding-bottom: 5px;
+}

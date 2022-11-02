@@ -5,29 +5,28 @@ namespace Application\Controller;
 use Application\Assertion\ContratAssertion;
 use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\ModeleContrat;
 use Application\Entity\Db\Parametre;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Validation;
-use Application\Entity\Db\VolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 use Application\Form\Contrat\Traits\EnvoiMailContratFormAwareTrait;
-use Application\Form\Contrat\Traits\ModeleFormAwareTrait;
 use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
 use Application\Processus\Traits\ContratProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContratServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\ModeleContratServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Application\Service\Traits\TauxHoraireHETDServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Doctrine\ORM\Query\Expr\Orx;
 use Intervenant\Service\NoteServiceAwareTrait;
+use Laminas\Http\Response;
+use LogicException;
 use Phan\Debug;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\Util;
@@ -57,8 +56,6 @@ class ContratController extends AbstractController
     use TauxHoraireHETDServiceAwareTrait;
     use DossierServiceAwareTrait;
     use WorkflowServiceAwareTrait;
-    use ModeleContratServiceAwareTrait;
-    use ModeleFormAwareTrait;
     use EnvoiMailContratFormAwareTrait;
     use NoteServiceAwareTrait;
 
@@ -104,7 +101,7 @@ class ContratController extends AbstractController
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         if (!$intervenant) {
-            throw new \LogicException('Intervenant non précisé ou inexistant');
+            throw new LogicException('Intervenant non précisé ou inexistant');
         }
         $structure = $role->getStructure();
 
@@ -152,9 +149,8 @@ class ContratController extends AbstractController
             'non-contractualises' => [],
         ];
 
-
         foreach ($contrats as $contrat) {
-                $services['contractualises'][$contrat->getId()] = $this->getProcessusContrat()->getServices($intervenant, $contrat, $role->getStructure());
+            $services['contractualises'][$contrat->getId()] = $this->getProcessusContrat()->getServices($intervenant, $contrat, $role->getStructure());
         }
 
         $nc = $this->getProcessusContrat()->getServices($intervenant, null, $role->getStructure());
@@ -185,16 +181,16 @@ class ContratController extends AbstractController
         $structure = $this->getEvent()->getParam('structure');
         /* @var $structure Structure */
 
-        $avenantResult = $this->getServiceParametres()->get('avenant');
+        $avenantResult       = $this->getServiceParametres()->get('avenant');
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
         if (!$intervenant) {
-            throw new \LogicException('L\'intervenant n\'est pas précisé');
+            throw new LogicException('L\'intervenant n\'est pas précisé');
         }
 
 //        if (!$structure) {
-//            throw new \LogicException('La structure n\'est pas précisée');
+//            throw new LogicException('La structure n\'est pas précisée');
 //        }
 
         $contrat = $this->getProcessusContrat()->creer($intervenant, $structure);
@@ -228,7 +224,7 @@ class ContratController extends AbstractController
      * Suppression d'un projet de contrat/avenant par la composante d'intervention.
      *
      * @return \Laminas\View\Model\ViewModel
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function supprimerAction()
     {
@@ -240,7 +236,7 @@ class ContratController extends AbstractController
         $contratToString = lcfirst($contrat->toString(true, true));
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_SUPPRESSION)) {
-            throw new \LogicException("La suppression $contratToString n'est pas possible.");
+            throw new LogicException("La suppression $contratToString n'est pas possible.");
         }
 
         if ($this->getRequest()->isPost()) {
@@ -310,7 +306,7 @@ class ContratController extends AbstractController
      * Dévalidation du contrat/avenant par la composante d'intervention.
      *
      * @return \Laminas\View\Model\ViewModel
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function devaliderAction()
     {
@@ -346,7 +342,7 @@ class ContratController extends AbstractController
      * Saisie de la date de retour du contrat/avenant signé par l'intervenant.
      *
      * @return \Laminas\View\Model\ViewModel
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function saisirRetourAction()
     {
@@ -400,7 +396,7 @@ class ContratController extends AbstractController
             throw new UnAuthorizedException("Génération du contrat interdite.");
         }
 
-        $this->getServiceModeleContrat()->generer($contrat);
+        $this->getServiceContrat()->generer($contrat);
         die();
     }
 
@@ -408,11 +404,7 @@ class ContratController extends AbstractController
 
     public function envoyerMailAction()
     {
-        /**
-         * @var Contrat $contrat
-         */
-
-
+        /** @var Contrat $contrat */
         $contrat = $this->getEvent()->getParam('contrat');
 
         if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
@@ -447,7 +439,7 @@ class ContratController extends AbstractController
                     $to           = $this->getRequest()->getPost('destinataire-mail-hide');
                     $cci          = $this->getRequest()->getPost('destinataire-cc-mail');
 
-                    $message = $this->getServiceModeleContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject);
+                    $message = $this->getProcessusContrat()->prepareMail($contrat, $html, $from, $to, $cci, $subject);
                     /*Create Note from email for this intervenant*/
                     $this->getServiceNote()->createNoteFromEmail($intervenant, $subject, $html);
                     $mail           = $this->mail()->send($message);
@@ -500,7 +492,7 @@ class ContratController extends AbstractController
     /**
      * Listing des fichiers déposés pour le contrat.
      *
-     * @return aarray
+     * @return array
      */
     public function listerFichierAction()
     {
@@ -577,77 +569,5 @@ class ContratController extends AbstractController
             'formule',
             'contrat',
         ], $intervenant);
-    }
-
-
-
-    public function modelesListeAction()
-    {
-        $modeles = $this->getServiceModeleContrat()->getList();
-
-        return compact('modeles');
-    }
-
-
-
-    public function modelesEditerAction()
-    {
-        /* @var $modeleContrat ModeleContrat */
-        $modeleContrat = $this->getEvent()->getParam('modeleContrat');
-
-        $form = $this->getFormContratModele();
-
-        if (!$modeleContrat) {
-            $title         = 'Ajout d\'un modèle de contrat';
-            $modeleContrat = new ModeleContrat();
-        } else {
-            $title = 'Modification d\'un modèle de contrat';
-        }
-
-        $form->bindRequestSave($modeleContrat, $this->getRequest(), function (ModeleContrat $mc) {
-            try {
-                $this->getServiceModeleContrat()->save($mc);
-                $this->flashMessenger()->addSuccessMessage('Modèle de contrat bien enregistré');
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
-        });
-
-        return compact('form', 'title');
-    }
-
-
-
-    public function modelesSupprimerAction()
-    {
-        /* @var $modeleContrat ModeleContrat */
-        $modeleContrat = $this->getEvent()->getParam('modeleContrat');
-
-        try {
-            $this->getServiceModeleContrat()->delete($modeleContrat);
-            $this->flashMessenger()->addSuccessMessage("Modèle de contrat supprimé avec succès.");
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translate($e));
-        }
-
-        return new MessengerViewModel();
-    }
-
-
-
-    public function modelesTelechargerAction()
-    {
-        /* @var $modeleContrat ModeleContrat */
-        $modeleContrat = $this->getEvent()->getParam('modeleContrat');
-
-        $fichier = new Fichier();
-        $fichier->setNom(Util::reduce($modeleContrat->getLibelle()) . '.odt');
-        $fichier->setTypeMime('application/vnd.oasis.opendocument.text');
-        if ($modeleContrat->hasFichier()) {
-            $fichier->setContenu(stream_get_contents($modeleContrat->getFichier(), -1, 0));
-        } else {
-            $fichier->setContenu(file_get_contents($this->getServiceModeleContrat()->getModeleGeneriqueFile()));
-        }
-        $this->uploader()->download($fichier);
     }
 }

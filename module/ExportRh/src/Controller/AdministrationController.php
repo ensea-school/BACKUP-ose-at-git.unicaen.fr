@@ -4,6 +4,7 @@ namespace ExportRh\Controller;
 
 use Application\Controller\AbstractController;
 use ExportRh\Service\ExportRhServiceAwareTrait;
+use UnicaenSiham\Exception\SihamException;
 
 
 class AdministrationController extends AbstractController

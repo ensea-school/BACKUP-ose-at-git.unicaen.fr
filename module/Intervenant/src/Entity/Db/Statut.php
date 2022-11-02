@@ -3,6 +3,7 @@
 namespace Intervenant\Entity\Db;
 
 use Application\Entity\Db\DossierAutre;
+use Application\Entity\Db\EtatSortie;
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Provider\Privilege\Privileges;
 use Application\Traits\ParametreEntityTrait;
@@ -27,143 +28,145 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     use EntityManagerAwareTrait;
 
 
-    private ?string $code                          = null;
+    private ?string     $code                               = null;
 
-    private ?string $libelle                       = null;
+    private ?string     $libelle                            = null;
 
-    private int     $ordre                         = 9999;
+    private int         $ordre                              = 9999;
 
-    private bool    $prioritaireIndicateurs        = false;
+    private bool        $prioritaireIndicateurs             = false;
 
-    private float   $serviceStatutaire             = 0;
+    private float       $serviceStatutaire                  = 0;
 
-    private bool    $depassementServiceDuSansHC    = false;
+    private bool        $depassementServiceDuSansHC         = false;
 
-    private float   $tauxChargesPatronales         = 1.0;
+    private float       $tauxChargesPatronales              = 1.0;
 
-    private float   $tauxChargesTTC                = 1.0;
+    private float       $tauxChargesTTC                     = 1.0;
 
-    private bool    $dossier                       = true;
+    private bool        $dossier                            = true;
 
-    private bool    $dossierVisualisation          = true;
+    private bool        $dossierVisualisation               = true;
 
-    private bool    $dossierEdition                = true;
+    private bool        $dossierEdition                     = true;
 
-    private bool    $dossierSelectionnable         = true;
+    private bool        $dossierSelectionnable              = true;
 
-    private bool    $dossierIdentiteComplementaire = true;
+    private bool        $dossierIdentiteComplementaire      = true;
 
-    private bool    $dossierContact                = true;
+    private bool        $dossierContact                     = true;
 
-    private bool    $dossierTelPerso               = false;
+    private bool        $dossierTelPerso                    = false;
 
-    private bool    $dossierEmailPerso             = false;
+    private bool        $dossierEmailPerso                  = false;
 
-    private bool    $dossierAdresse                = true;
+    private bool        $dossierAdresse                     = true;
 
-    private bool    $dossierBanque                 = true;
+    private bool        $dossierBanque                      = true;
 
-    private bool    $dossierInsee                       = true;
+    private bool        $dossierInsee                       = true;
 
-    private bool    $dossierEmployeur                   = false;
+    private bool        $dossierEmployeur                   = false;
 
-    private bool    $dossierAutre1                      = false;
+    private bool        $dossierAutre1                      = false;
 
-    private bool    $dossierAutre1Visualisation         = true;
+    private bool        $dossierAutre1Visualisation         = true;
 
-    private bool    $dossierAutre1Edition               = true;
+    private bool        $dossierAutre1Edition               = true;
 
-    private bool    $dossierAutre2                      = false;
+    private bool        $dossierAutre2                      = false;
 
-    private bool    $dossierAutre2Visualisation         = true;
+    private bool        $dossierAutre2Visualisation         = true;
 
-    private bool    $dossierAutre2Edition               = true;
+    private bool        $dossierAutre2Edition               = true;
 
-    private bool    $dossierAutre3                      = false;
+    private bool        $dossierAutre3                      = false;
 
-    private bool    $dossierAutre3Visualisation         = true;
+    private bool        $dossierAutre3Visualisation         = true;
 
-    private bool    $dossierAutre3Edition               = true;
+    private bool        $dossierAutre3Edition               = true;
 
-    private bool    $dossierAutre4                      = false;
+    private bool        $dossierAutre4                      = false;
 
-    private bool    $dossierAutre4Visualisation         = true;
+    private bool        $dossierAutre4Visualisation         = true;
 
-    private bool    $dossierAutre4Edition               = true;
+    private bool        $dossierAutre4Edition               = true;
 
-    private bool    $dossierAutre5                      = false;
+    private bool        $dossierAutre5                      = false;
 
-    private bool    $dossierAutre5Visualisation         = true;
+    private bool        $dossierAutre5Visualisation         = true;
 
-    private bool    $dossierAutre5Edition               = true;
+    private bool        $dossierAutre5Edition               = true;
 
-    private bool    $pieceJustificativeVisualisation    = true;
+    private bool        $pieceJustificativeVisualisation    = true;
 
-    private bool    $pieceJustificativeEdition          = true;
+    private bool        $pieceJustificativeEdition          = true;
 
-    private bool    $conseilRestreint                   = true;
+    private bool        $conseilRestreint                   = true;
 
-    private bool    $conseilRestreintVisualisation      = true;
+    private bool        $conseilRestreintVisualisation      = true;
 
-    private int     $conseilRestreintDureeVie           = 1;
+    private int         $conseilRestreintDureeVie           = 1;
 
-    private bool    $conseilAcademique                  = true;
+    private bool        $conseilAcademique                  = true;
 
-    private bool    $conseilAcademiqueVisualisation     = true;
+    private bool        $conseilAcademiqueVisualisation     = true;
 
-    private int     $conseilAcademiqueDureeVie          = 5;
+    private int         $conseilAcademiqueDureeVie          = 5;
 
-    private bool    $contrat                            = true;
+    private bool        $contrat                            = true;
 
-    private bool    $contratVisualisation               = true;
+    private ?EtatSortie $contratEtatSortie                  = null;
 
-    private bool    $contratDepot                       = true;
+    private bool        $contratVisualisation               = true;
 
-    private bool    $servicePrevu                       = true;
+    private bool        $contratDepot                       = true;
 
-    private bool    $servicePrevuVisualisation          = true;
+    private bool        $servicePrevu                       = true;
 
-    private bool    $servicePrevuEdition                = true;
+    private bool        $servicePrevuVisualisation          = true;
 
-    private bool    $serviceRealise                     = true;
+    private bool        $servicePrevuEdition                = true;
 
-    private bool    $serviceRealiseVisualisation        = true;
+    private bool        $serviceRealise                     = true;
 
-    private bool    $serviceRealiseEdition              = true;
+    private bool        $serviceRealiseVisualisation        = true;
 
-    private bool    $serviceExterieur                   = true;
+    private bool        $serviceRealiseEdition              = true;
 
-    private bool    $referentielPrevu                   = true;
+    private bool        $serviceExterieur                   = true;
 
-    private bool    $referentielPrevuVisualisation      = true;
+    private bool        $referentielPrevu                   = true;
 
-    private bool    $referentielPrevuEdition            = true;
+    private bool        $referentielPrevuVisualisation      = true;
 
-    private bool    $referentielRealise                 = true;
+    private bool        $referentielPrevuEdition            = true;
 
-    private bool    $referentielRealiseVisualisation    = true;
+    private bool        $referentielRealise                 = true;
 
-    private bool    $referentielRealiseEdition          = true;
+    private bool        $referentielRealiseVisualisation    = true;
 
-    private bool    $cloture                            = true;
+    private bool        $referentielRealiseEdition          = true;
 
-    private bool    $modificationServiceDu              = true;
+    private bool        $cloture                            = true;
 
-    private bool    $modificationServiceDuVisualisation = true;
+    private bool        $modificationServiceDu              = true;
 
-    private bool    $paiementVisualisation              = true;
+    private bool        $modificationServiceDuVisualisation = true;
 
-    private bool    $motifNonPaiement                   = true;
+    private bool        $paiementVisualisation              = true;
 
-    private bool    $formuleVisualisation               = true;
+    private bool        $motifNonPaiement                   = true;
 
-    private ?string $codesCorresp1                      = null;
+    private bool        $formuleVisualisation               = true;
 
-    private ?string $codesCorresp2                      = null;
+    private ?string     $codesCorresp1                      = null;
 
-    private ?string $codesCorresp3                      = null;
+    private ?string     $codesCorresp2                      = null;
 
-    private ?string $codesCorresp4                      = null;
+    private ?string     $codesCorresp3                      = null;
+
+    private ?string     $codesCorresp4                      = null;
 
 
 
@@ -914,6 +917,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setContrat(bool $contrat): Statut
     {
         $this->contrat = $contrat;
+
+        return $this;
+    }
+
+
+
+    public function getContratEtatSortie(): ?EtatSortie
+    {
+        return $this->contratEtatSortie;
+    }
+
+
+
+    public function setContratEtatSortie(?EtatSortie $contratEtatSortie): Statut
+    {
+        $this->contratEtatSortie = $contratEtatSortie;
 
         return $this;
     }

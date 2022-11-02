@@ -2,11 +2,11 @@
 
 namespace Intervenant\Form;
 
+use Application\Entity\Db\EtatSortie;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\TypeAgrementServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 
 /**
@@ -15,7 +15,6 @@ use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 class StatutSaisieForm extends AbstractForm
 {
     use TypeIntervenantServiceAwareTrait;
-    use TypeAgrementServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use DossierAutreServiceAwareTrait;
 
@@ -48,6 +47,7 @@ class StatutSaisieForm extends AbstractForm
             'conseilAcademique'             => 'Conseil académique',
             'conseilAcademiqueDureeVie'     => 'Durée de vie du CAC',
             'contrat'                       => '',
+            'contratEtatSortie'             => 'État de sortie à utiliser pour générer le contrat',
             'serviceExterieur'              => 'L\'intervenant pourra assurer des services dans d\'autres établissements',
             'cloture'                       => 'Le service réalisé devra être clôturé avant d\'accéder aux demandes de mise en paiement',
             'modificationServiceDu'         => 'Modifications de service dû',
@@ -409,6 +409,8 @@ class StatutSaisieForm extends AbstractForm
         $this->setLabels($labels);
 
         $this->setValueOptions('typeIntervenant', $this->getServiceTypeIntervenant()->getList());
+        $this->setValueOptions('contratEtatSortie', 'SELECT es FROM ' . EtatSortie::class . ' es ORDER BY es.libelle');
+        $this->get('contratEtatSortie')->setEmptyOption('- Aucun état de sortie n\'est spécifié -');
 
         return $this;
     }

@@ -6,7 +6,6 @@ use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 use Laminas\Form\FormInterface;
-use Application\Service\Traits\SourceServiceAwareTrait;
 
 /**
  * Description of StructureSaisieForm
@@ -15,7 +14,6 @@ use Application\Service\Traits\SourceServiceAwareTrait;
  */
 class StructureSaisieForm extends AbstractForm
 {
-    use SourceServiceAwareTrait;
     use SchemaServiceAwareTrait;
 
 

@@ -4,12 +4,12 @@ MATERIALIZED VIEW MV_INTERVENANT AS
 WITH i AS (
 
      SELECT DISTINCT code,
-                    MAX(z_statut_id) OVER (partition by code, z_statut_id)               z_statut_id,
-				    MAX(z_type) OVER (partition by code, z_statut_id)                    z_type,
-                    MIN(source_code)    OVER (partition by code, z_statut_id)            source_code,
-                    MIN(validite_debut) OVER (partition by code, z_statut_id)            validite_debut,
-                    MAX(validite_fin)   OVER (partition by code, z_statut_id)            validite_fin,
-                    MAX(fin_affectation_siham) OVER (partition by code, z_statut_id)     fin_affectation_siham
+                    MAX(z_statut_id) OVER (PARTITION BY code, z_statut_id)               z_statut_id,
+				    MAX(z_type) OVER (PARTITION BY code, z_statut_id)                    z_type,
+                    MIN(source_code)    OVER (PARTITION BY code, z_statut_id)            source_code,
+                    MIN(validite_debut) OVER (PARTITION BY code, z_statut_id)            validite_debut,
+                    MAX(validite_fin)   OVER (PARTITION BY code, z_statut_id)            validite_fin,
+                    MAX(fin_affectation_siham) OVER (PARTITION BY code, z_statut_id)     fin_affectation_siham
 
     FROM (
 	    	 --Step 1 : On prend tous les individus qui ont ou ont eu un contrat à l'université
@@ -23,8 +23,9 @@ WITH i AS (
                     	ELSE 'vacataire' END                                        z_type,
                     icto.id_orig                                                source_code,
                     COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
-                    CASE
-                    	WHEN icto.d_fin = to_date('01/09/2021', 'dd/mm/YYYY') THEN to_date('31/08/2021', 'dd/mm/YYYY')
+                     CASE
+	                    --Si date de fin est réglée au 1er sept, on la repasse au 31/08 de la même année (Bug Octopus)
+                    	WHEN to_char(icto.d_fin, 'dd/mm') = '01/09' THEN icto.d_fin-1
                     	ELSE COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) END   validite_fin,
                     NULL	   													fin_affectation_siham
              FROM octo.v_individu_contrat_type_ose@octoprod icto
@@ -74,7 +75,7 @@ WITH i AS (
      telephone_pro_principal AS (
         SELECT
 	        indtel.individu_id individu_id,
-	        MAX(tel.numero) keep (DENSE_RANK FIRST ORDER BY tel.type_id ASC) numero
+	        MAX(tel.numero) KEEP (DENSE_RANK FIRST ORDER BY tel.type_id ASC) numero
         FROM octo.individu_telephone@octoprod indtel
         JOIN octo.telephone@octoprod tel ON (tel.id = indtel.telephone_id AND tel.t_principal = 'O')
         GROUP BY indtel.individu_id
@@ -96,8 +97,8 @@ WITH i AS (
              -- Si plusieurs, alors c'est celle qui commence le + tard qui est prise en comtpe
             SELECT
                 individu_id,
-                max(structure_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1  WHEN source_id = 'OCTOREFID' THEN 2 ELSE 999 END DESC , t_principale, date_debut)   structure_id,
-                max(source_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1 WHEN source_id = 'OCTOREFID' THEN 2 ELSE 999 END DESC,t_principale, date_debut) source_id
+                MAX(structure_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1  WHEN source_id = 'OCTOREFID' THEN 2 ELSE 999 END DESC , t_principale, date_debut)   structure_id,
+                MAX(source_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1 WHEN source_id = 'OCTOREFID' THEN 2 ELSE 999 END DESC,t_principale, date_debut) source_id
              FROM octo.individu_affectation@octoprod
              WHERE type_id = 4
              AND date_fin + 1 >= (SYSDATE - (365 * 2))
@@ -106,18 +107,18 @@ WITH i AS (
      --CNU arrangé
      cnua AS (
          SELECT gra.individu_id                   individu_id,
-                max(nvl(carr.c_cnu, darr.c_cnu))       code_cnu_arrange,
-                max(nvl(carr.lib_long, darr.lib_long)) libelle_cnu_arrange,
-                max(nvl(carr.groupe, darr.groupe))     groupe_cnu_arrange
+                MAX(nvl(carr.c_cnu, darr.c_cnu))       code_cnu_arrange,
+                MAX(nvl(carr.lib_long, darr.lib_long)) libelle_cnu_arrange,
+                MAX(nvl(carr.groupe, darr.groupe))     groupe_cnu_arrange
          FROM octo.individu_grade@octoprod gra
                   LEFT JOIN octo.cnu_spec_cnu_adapte@octoprod ccarr ON (gra.cnu_id = ccarr.cnu_id AND
-                                                                        (gra.cnu_specialite_id is null OR
+                                                                        (gra.cnu_specialite_id IS NULL OR
                                                                          gra.cnu_specialite_id = ccarr.cnu_specialite_id))
                   LEFT JOIN octo.cnu_adapte@octoprod carr ON (ccarr.cnu_adapte_id = carr.id)
                   LEFT JOIN octo.discipline_cnu_adapte@octoprod dcarr ON (gra.discipline_sec_id = dcarr.discipline_sec_id)
                   LEFT JOIN octo.cnu_adapte@octoprod darr ON (dcarr.cnu_adapte_id = darr.id)
          WHERE sysdate BETWEEN gra.d_debut AND nvl(gra.d_fin, sysdate)
-           AND (gra.cnu_id is not null OR gra.discipline_sec_id is not null)
+           AND (gra.cnu_id IS NOT NULL OR gra.discipline_sec_id IS NOT NULL)
            GROUP BY gra.individu_id
      ),
     /*Individu unique pour avoir qu'un seul individu unique dans l'ordre c_source SIHAM, HARP, APO
@@ -158,11 +159,11 @@ WITH i AS (
 				MAX(REPLACE(d.iban, ' ', '')) iban,
 				MAX(REPLACE(d.bic, ' ', ''))   bic
 			FROM intervenant i
-			JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS null
+			JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
 			WHERE  i.annee_id = 2020 AND i.histo_destruction IS NULL AND d.iban IS NOT NULL AND d.rib_hors_sepa = 0 AND i.source_id = '24' AND i.code_rh IS NOT NULL
 			GROUP BY i.code
          ),
-         compte as
+         compte AS
          (
 	         SELECT
 				MAX(indc.individu_id) individu_id,
@@ -179,84 +180,85 @@ WITH i AS (
 
 SELECT DISTINCT
     /*Octopus id, id unique pour un individu immuable dans le temps, remplace le code harpege*/
-    ltrim(TO_CHAR(i.code, '99999999'))                             code,
-    'Octopus'                                                      z_source_id,
+    ltrim(to_char(i.code, '99999999'))                                                 code,
+    'Octopus'                                                                          z_source_id,
     /*Code RH si l'utilisateur est dans SIHAM*/
-    ind.c_rh    												   code_rh,
-    compte.ldap_uid                                                utilisateur_code,
-    str2.code                                                      z_structure_id,
-    i.z_statut_id                                                  z_statut_id,
-    grade.c_grade                                                  z_grade_id,
-    COALESCE(cnua.code_cnu_arrange, '00')                          z_discipline_id,
+    ind.c_rh                                                                           code_rh,
+    compte.ldap_uid                                                                    utilisateur_code,
+    str2.code                                                                          z_structure_id,
+    i.z_statut_id                                                                      z_statut_id,
+    grade.c_grade                                                                      z_grade_id,
+    COALESCE(cnua.code_cnu_arrange, '00')                                              z_discipline_id,
     /* Données identifiantes de base */
-    CASE COALESCE(ind.sexe_ow,ind.sexe)
+    CASE COALESCE(ind.sexe_ow, ind.sexe)
         WHEN 'M' THEN 'M.'
         ELSE 'Mme'
-        END                                                        z_civilite_id,
-    COALESCE(initcap(vind.nom_usage), initcap(ind.nom_famille))     nom_usuel,
-    COALESCE (initcap(vind.prenom), initcap(ind.prenom))             prenom,
+        END                                                                            z_civilite_id,
+    COALESCE(initcap(vind.nom_usage), initcap(ind.nom_famille))                        nom_usuel,
+    COALESCE(initcap(vind.prenom), initcap(ind.prenom))                                prenom,
     COALESCE(ind.d_naissance_ow, ind.d_naissance, to_date('01/01/1900', 'dd/mm/YYYY')) date_naissance,
     /* Données identifiantes complémentaires */
-    initcap(ind.nom_famille)                                       nom_patronymique,
-    COALESCE(ind.ville_de_naissance_ow, ind.ville_de_naissance)    commune_naissance,
-    COALESCE(ind.c_pays_naissance_ow, ind.c_pays_naissance)        z_pays_naissance_id,
-    COALESCE(ind.c_dept_naissance_ow, ind.c_dept_naissance)        z_departement_naissance_id,
-    COALESCE(ind.c_pays_nationalite_ow, ind.c_pays_nationalite)    z_pays_nationalite_id,
-    telpro.numero                                                  tel_pro,
-    COALESCE(ind.tel_perso_ow, ind.tel_perso)                      tel_perso,
-    compte.email                                                   email_pro,
-    COALESCE(ind.email_perso_ow, ind.email_perso)                  email_perso,
+    initcap(ind.nom_famille)                                                           nom_patronymique,
+    COALESCE(ind.ville_de_naissance_ow, ind.ville_de_naissance)                        commune_naissance,
+    COALESCE(ind.c_pays_naissance_ow, ind.c_pays_naissance)                            z_pays_naissance_id,
+    COALESCE(ind.c_dept_naissance_ow, ind.c_dept_naissance)                            z_departement_naissance_id,
+    COALESCE(ind.c_pays_nationalite_ow, ind.c_pays_nationalite)                        z_pays_nationalite_id,
+    telpro.numero                                                                      tel_pro,
+    COALESCE(ind.tel_perso_ow, ind.tel_perso)                                          tel_perso,
+    compte.email                                                                       email_pro,
+    COALESCE(ind.email_perso_ow, ind.email_perso)                                      email_perso,
     /* Adresse */
-    trim(adr.adresse1 ||
+    TRIM(adr.adresse1 ||
          CASE
              WHEN adr.adresse1 IS NOT NULL
                  AND adr.adresse2 IS NOT NULL
-                 THEN CHR(13)
+                 THEN chr(13)
              ELSE '' END || adr.adresse2 ||
          CASE
              WHEN adr.adresse2 IS NOT NULL
                  AND adr.adresse3 IS NOT NULL
-                 THEN CHR(13)
-             ELSE '' END || adr.adresse3)                          adresse_precisions,
-    CAST(NULL AS varchar2(255))                                    adresse_numero,
-    CAST(NULL AS varchar2(255))                                    z_adresse_numero_compl_id,
-    CAST(NULL AS varchar2(255))                                    z_adresse_voirie_id,
-    CAST(NULL AS varchar2(255))                                    adresse_voie,
-    CAST(NULL AS varchar2(255))                                    adresse_lieu_dit,
-    adr.code_postal                                                adresse_code_postal,
-    adr.ville_nom                                                  adresse_commune,
-    pays.code_pays                                                 z_adresse_pays_id,
+                 THEN chr(13)
+             ELSE '' END || adr.adresse3)                                              adresse_precisions,
+    CAST(NULL AS varchar2(255))                                                        adresse_numero,
+    CAST(NULL AS varchar2(255))                                                        z_adresse_numero_compl_id,
+    CAST(NULL AS varchar2(255))                                                        z_adresse_voirie_id,
+    CAST(NULL AS varchar2(255))                                                        adresse_voie,
+    CAST(NULL AS varchar2(255))                                                        adresse_lieu_dit,
+    adr.code_postal                                                                    adresse_code_postal,
+    adr.ville_nom                                                                      adresse_commune,
+    pays.code_pays                                                                     z_adresse_pays_id,
     /* INSEE */
-    COALESCE(TRIM(vindinsee.no_insee), TRIM(vindinsee.no_insee_provisoire))    numero_insee,
+    COALESCE(TRIM(vindinsee.no_insee), TRIM(vindinsee.no_insee_provisoire))            numero_insee,
     CASE
-    	WHEN vindinsee.no_insee IS NULL
-	    	AND vindinsee.no_insee_provisoire IS NOT NULL
-    		THEN 1
-    	ELSE 0 END                                                 numero_insee_provisoire,
-     /* Banque */
-    COALESCE(TRIM(vindiban.iban), ibandossier.iban)                iban,
-    COALESCE(TRIM(vindiban.bic), ibandossier.bic)                  bic,
-    0                                                              rib_hors_sepa,
+        WHEN vindinsee.no_insee IS NULL
+            AND vindinsee.no_insee_provisoire IS NOT NULL
+            THEN 1
+        ELSE 0 END                                                                     numero_insee_provisoire,
+    /* Banque */
+    COALESCE(TRIM(vindiban.iban), ibandossier.iban)                                    iban,
+    COALESCE(TRIM(vindiban.bic), ibandossier.bic)                                      bic,
+    0                                                                                  rib_hors_sepa,
     /* Données complémentaires */
-    CAST(NULL AS varchar2(255))                                    autre_1,
-    CAST(NULL AS varchar2(255))                                    autre_2,
-    CAST(NULL AS varchar2(255))                                    autre_3,
-    CAST(NULL AS varchar2(255))                                    autre_4,
-    CAST(NULL AS varchar2(255))                                    autre_5,
+    CAST(NULL AS varchar2(255))                                                        autre_1,
+    CAST(NULL AS varchar2(255))                                                        autre_2,
+    CAST(NULL AS varchar2(255))                                                        autre_3,
+    CAST(NULL AS varchar2(255))                                                        autre_4,
+    CAST(NULL AS varchar2(255))                                                        autre_5,
     /* Employeur */
-    CAST(NULL AS varchar2(255))                                    z_employeur_id,
+    CAST(NULL AS varchar2(255))                                                        z_employeur_id,
     CASE
         WHEN i.validite_debut = to_date('01/01/1900', 'dd/mm/YYYY')
             THEN NULL
         ELSE i.validite_debut
-        END                                                        validite_debut,
+        END                                                                            validite_debut,
     CASE
         WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY')
             THEN NULL
-        WHEN (i.z_type = 'vacataire' AND i.validite_fin < compte.date_fin AND i.validite_fin IS NOT NULL) THEN compte.date_fin
+        WHEN (i.z_type = 'vacataire' AND i.validite_fin < compte.date_fin AND i.validite_fin IS NOT NULL)
+            THEN compte.date_fin
         ELSE i.validite_fin
-        END                                                        validite_fin,
-    	i.fin_affectation_siham                                    affectation_fin
+        END                                                                            validite_fin,
+    i.fin_affectation_siham                                                            affectation_fin
 
 FROM i
          JOIN induni
@@ -282,13 +284,13 @@ FROM i
     --On récupére le téléphone pro principal de l'indivdu
          LEFT JOIN telephone_pro_principal telpro ON telpro.individu_id = induni.c_individu_chaine
     -- On ne prend que les comptes qui ne sont pas étudiants
-         --LEFT JOIN octo.individu_compte@octoprod indc
-           --        ON indc.individu_id = induni.c_individu_chaine AND not regexp_like(ldap_uid, 'e[0-9]{8}') AND
-             --         indc.statut_id = 1
+    --LEFT JOIN octo.individu_compte@octoprod indc
+    --        ON indc.individu_id = induni.c_individu_chaine AND not regexp_like(ldap_uid, 'e[0-9]{8}') AND
+    --         indc.statut_id = 1
          LEFT JOIN compte ON compte.individu_id = induni.c_individu_chaine
     --On récupére la discipline adaptée directement dans Octopus
          LEFT JOIN cnua cnua ON cnua.individu_id = induni.c_individu_chaine
-WHERE i.validite_fin >= (SYSDATE - (365 * 2))
+WHERE i.validite_fin >= (sysdate - (365 * 2))
 
 
 

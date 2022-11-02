@@ -66,6 +66,30 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'finances' => [
+                                'pages' => [
+                                    'gestion-periode' => [
+                                        'label'          => 'Périodes',
+                                        'route'          => 'periodes',
+                                        'resource'       => PrivilegeController::getResourceId('Application\Controller\Periode', 'index'),
+                                        'order'          => 30,
+                                        'border - color' => '#111',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'bjyauthorize'  => [
         'guards' => [
             PrivilegeController::class => [

@@ -3,22 +3,31 @@
 namespace Application\Processus;
 
 use Application\Entity\Db\Contrat;
-use Application\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Application\Entity\Db\VolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 use Application\ORM\Event\Listeners\HistoriqueListenerAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ContratServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\TypeContratServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\Persistence\Mapping\MappingException;
+use Exception;
+use Laminas\Mail\Message as MailMessage;
+use Laminas\Mime\Message;
+use Laminas\Mime\Mime;
+use Laminas\Mime\Part;
+use LogicException;
 
 
 /**
@@ -43,10 +52,11 @@ class ContratProcessus extends AbstractProcessus
      * @param Intervenant    $intervenant
      * @param Contrat|null   $contrat
      * @param Structure|null $structure
+     * @param bool           $detach
      *
      * @return Service[]
      */
-    public function getServices(Intervenant $intervenant, Contrat $contrat = null, Structure $structure = null, $detach = true)
+    public function getServices(Intervenant $intervenant, Contrat $contrat = null, Structure $structure = null, bool $detach = true): array
     {
         $services = [];
 
@@ -65,7 +75,7 @@ class ContratProcessus extends AbstractProcessus
         SELECT
           s, ep, vh, str, i, evh, tvh
         FROM
-          Application\Entity\Db\Service s
+          Enseignement\Entity\Db\Service s
           JOIN s.volumeHoraire      vh
           JOIN s.elementPedagogique ep
           JOIN ep.structure         str
@@ -90,10 +100,11 @@ class ContratProcessus extends AbstractProcessus
         }
 
         foreach ($query->execute() as $service) {
-            /* @var $service \Application\Entity\Db\Service */
+            /* @var $service Service */
             if ($detach) {
                 $this->getEntityManager()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
             }
+            $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
             $services[$service->getId()] = $service;
         }
 
@@ -102,16 +113,19 @@ class ContratProcessus extends AbstractProcessus
 
 
 
-    public function getServicesRecaps(Contrat $contrat)
+    /**
+     * @throws MappingException
+     */
+    public function getServicesRecaps(Contrat $contrat): array
     {
-        $this->getEntityManager()->clear(\Application\Entity\Db\Service::class);
+        $this->getEntityManager()->clear(Service::class);
         // indispensable si on requête N fois la même entité avec des critères différents
 
         $dql = "
         SELECT
           s, ep, vh, str, i
         FROM
-          Application\Entity\Db\Service s
+          Enseignement\Entity\Db\Service s
           JOIN s.volumeHoraire      vh
           JOIN s.elementPedagogique ep
           JOIN ep.structure         str
@@ -149,7 +163,7 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return Contrat
      */
-    public function creer(Intervenant $intervenant, Structure $structure = null)
+    public function creer(Intervenant $intervenant, Structure $structure = null): Contrat
     {
         $contrat = $this->getServiceContrat()->newEntity();
         /* @var $contrat Contrat */
@@ -170,11 +184,13 @@ class ContratProcessus extends AbstractProcessus
      * @param Contrat $contrat
      *
      * @return $this
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    public function enregistrer(Contrat $contrat)
+    public function enregistrer(Contrat $contrat): self
     {
         if ($contrat->getId()) {
-            throw new \LogicException('Le contrat existe déjà. Il ne peut pas être recréé');
+            throw new LogicException('Le contrat existe déjà. Il ne peut pas être recréé');
         }
 
         // on sauvegarde le contrat
@@ -205,10 +221,10 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return self
      */
-    public function supprimer(Contrat $contrat)
+    public function supprimer(Contrat $contrat): self
     {
         if ($contrat->getValidation()) {
-            throw new \LogicException("Impossible de supprimer un contrat/avenant validé.");
+            throw new LogicException("Impossible de supprimer un contrat/avenant validé.");
         }
 
         $sVH = $this->getServiceVolumeHoraire();
@@ -219,8 +235,8 @@ class ContratProcessus extends AbstractProcessus
         // détachement du contrat et des VH
         $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
         foreach ($vhs as $vh) {
-            /* @var $vh \Application\Entity\Db\VolumeHoraire */
-            $vh->setContrat(null);
+            /* @var $vh VolumeHoraire */
+            $vh->setContrat();
             $sVH->save($vh);
         }
         $this->getORMEventListenersHistoriqueListener()->setEnabled(true);
@@ -237,7 +253,7 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return Validation
      */
-    public function valider(Contrat $contrat)
+    public function valider(Contrat $contrat): Validation
     {
         $validation = $this->getServiceValidation()->newEntity($this->getServiceTypeValidation()->getContrat())
             ->setIntervenant($contrat->getIntervenant())
@@ -247,7 +263,7 @@ class ContratProcessus extends AbstractProcessus
         $contrat->setValidation($validation);
 
         if ($contrat->estUnAvenant()) {
-            // on recalcule l'index car il peut avoir changé... ? ? ?
+            // On recalcule l'index, car il peut avoir changé... ? ? ?
             $contrat->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($contrat->getIntervenant()));
         }
 
@@ -265,9 +281,9 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return self
      */
-    public function devalider(Contrat $contrat)
+    public function devalider(Contrat $contrat): self
     {
-        $contrat->setValidation(null);
+        $contrat->setValidation();
         $this->getServiceContrat()->save($contrat);
 
         return $this;
@@ -282,18 +298,16 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return bool
      */
-    public function doitEtreRequalifie(Contrat $contrat)
+    public function doitEtreRequalifie(Contrat $contrat): bool
     {
         if (!$contrat->getTypeContrat()) return true; // pas de type alors oui, on qualifie!!
 
         $contratInitial = $contrat->getIntervenant()->getContratInitial();
-        if (($contratInitial && !$contratInitial->getValidation()) || $contrat == $contratInitial) {
+        if (($contratInitial && !$contratInitial->getValidation()) || $contrat === $contratInitial) {
             $contratInitial = null; //projet ou lui-même seulement donc on oublie
         }
 
-        $result = (bool)$contrat->estUnAvenant() === !(bool)$contratInitial;
-
-        return $result;
+        return $contrat->estUnAvenant() === !$contratInitial;
     }
 
 
@@ -305,12 +319,12 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return $this
      */
-    public function qualification(Contrat $contrat)
+    public function qualification(Contrat $contrat): self
     {
         if (null !== $contrat->getTypeContrat()) return $this;
 
         $contratInitial = $contrat->getIntervenant()->getContratInitial();
-        if (($contratInitial && !$contratInitial->getValidation()) || $contrat == $contratInitial) {
+        if (($contratInitial && !$contratInitial->getValidation()) || $contrat === $contratInitial) {
             $contratInitial = null; //projet ou lui-même seulement donc on oublie
         }
 
@@ -332,7 +346,7 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return $this
      */
-    public function requalification(Contrat $contrat)
+    public function requalification(Contrat $contrat): self
     {
         if (!$this->doitEtreRequalifie($contrat)) return $this; // pas besoin
 
@@ -347,7 +361,7 @@ class ContratProcessus extends AbstractProcessus
 
 
 
-    protected function qualificationEnAvenant(Contrat $contrat)
+    protected function qualificationEnAvenant(Contrat $contrat): self
     {
         $contratInitial = $contrat->getIntervenant()->getContratInitial();
 
@@ -360,9 +374,9 @@ class ContratProcessus extends AbstractProcessus
 
 
 
-    protected function qualificationEnContrat(Contrat $contrat)
+    protected function qualificationEnContrat(Contrat $contrat): self
     {
-        $contrat->setContrat(null);
+        $contrat->setContrat();
         $contrat->setTypeContrat($this->getServiceTypeContrat()->getContrat());
         $contrat->setNumeroAvenant(0);
 
@@ -372,9 +386,11 @@ class ContratProcessus extends AbstractProcessus
 
 
     /**
+     * @param Intervenant $intervenant
+     *
      * @return float
      */
-    public function getIntervenantTotalHetd(Intervenant $intervenant)
+    public function getIntervenantTotalHetd(Intervenant $intervenant): float
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
@@ -384,4 +400,64 @@ class ContratProcessus extends AbstractProcessus
         return $fr->getServiceDu() + $fr->getSolde();
     }
 
+
+
+    /**
+     * @throws Exception
+     */
+    public function prepareMail(Contrat $contrat, string $htmlContent, string $from, string $to, string $cci = null, string $subject = null): MailMessage
+    {
+        $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
+            $contrat->getStructure()?->getCode(),
+            $contrat->getIntervenant()->getNomUsuel(),
+            $contrat->getIntervenant()->getCode());
+
+        $document = $this->getServiceContrat()->generer($contrat, false);
+        $content  = $document->saveToData();
+
+        if (empty($subject)) {
+            $subject = "Contrat " . $contrat->getIntervenant()->getCivilite() . " " . $contrat->getIntervenant()->getNomUsuel();
+        }
+
+
+        if (empty($to)) {
+            throw new Exception("Aucun email disponible pour le destinataire / Envoi du contrat impossible");
+        }
+        if (empty($from)) {
+            throw new Exception("Aucun email disponible pour l'expéditeur / Envoi du contrat impossible");
+        }
+        $bcc = [];
+        if (!empty($cci)) {
+            $bcc = explode(';', $cci);
+        }
+
+        $body = new Message();
+
+        $text          = new Part($htmlContent);
+        $text->type    = Mime::TYPE_HTML;
+        $text->charset = 'utf-8';
+        $body->addPart($text);
+        $nameFrom = "Application OSE";
+
+
+        //Contrat en pièce jointe
+        $attachment              = new Part($content);
+        $attachment->type        = 'application/pdf';
+        $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+        $attachment->encoding    = Mime::ENCODING_BASE64;
+        $attachment->filename    = $fileName;
+        $body->addPart($attachment);
+
+        $message     = new MailMessage();
+        $messageType = 'multipart/related';
+        $message->setEncoding('UTF-8')
+            ->setFrom($from, $nameFrom)
+            ->setSubject($subject)
+            ->addTo($to)
+            ->addBcc($bcc)
+            ->setBody($body)
+            ->getHeaders()->get('content-type')->setType($messageType);
+
+        return $message;
+    }
 }

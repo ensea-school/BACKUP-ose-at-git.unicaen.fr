@@ -298,30 +298,27 @@ return [
                     ],
                     'administration' => [
                         'pages' => [
-                            'offre-formation' => [
-                                'label'          => 'Administration de l\'offre de formation',
-                                'icon'           => 'fas fa-table-list',
-                                'route'          => 'aof',
-                                'resource'       => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'administrationOffre'),
-                                'order'          => 0,
-                                'border - color' => '#111',
-                                'pages'          => [
+                            'odf' => [
+                                'pages' => [
                                     'reconduction-offre'       => [
                                         'label'    => 'Reconduction de l\'offre de formation complémentaire',
                                         'title'    => 'Reconduction de l\'offre de formation complémentaire',
                                         'route'    => 'aof/reconduction',
+                                        'order'    => 20,
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
                                     ],
                                     'reconduction-centre-cout' => [
-                                        'label'    => 'Reconduction des centres de coûts de l\'offre de formation',
+                                        'label'    => 'Reconduction des centres de coûts',
                                         'title'    => 'Reconduction des centres de coûts de l\'offre de formation',
                                         'route'    => 'aof/reconduction-centre-cout',
+                                        'order'    => 30,
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconductionCentreCout'),
                                     ],
                                     'reconduction-modulateur'  => [
-                                        'label'    => 'Reconduction des modulateurs de l\'offre de formation',
+                                        'label'    => 'Reconduction des modulateurs',
                                         'title'    => 'Reconduction des modulateurs de l\'offre de formation',
                                         'route'    => 'aof/reconduction-modulateur',
+                                        'order'    => 40,
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconductionModulateur'),
                                     ],
 
@@ -334,7 +331,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class => [
                 /* Global */
                 [
@@ -437,16 +434,7 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'ElementPedagogique' => [],
-                'Etape'              => [],
-                'CentreCoutEp'       => [],
-                'ElementModulateur'  => [],
-                'VolumeHoraireEns'   => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
@@ -515,6 +503,8 @@ return [
             Service\OffreFormationService::class       => Service\OffreFormationService::class,
             Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
             Processus\ReconductionProcessus::class     => Processus\ReconductionProcessus::class,
+            Service\VolumeHoraireEnsService::class     => Service\VolumeHoraireEnsService::class,
+            Service\PeriodeService::class              => Service\PeriodeService::class,
         ],
         'factories'  => [
             Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,

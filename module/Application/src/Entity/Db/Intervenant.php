@@ -13,6 +13,10 @@ use Application\Interfaces\AdresseInterface;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Intervenant\Entity\Db\Statut;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\HistoIntervenantService;
+use Service\Entity\Db\ModificationServiceDu;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
@@ -1354,7 +1358,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Contrat|null
      */
-    public function getContratInitial()
+    public function getContratInitial(): ?Contrat
     {
         if (!count($this->getContrat())) {
             return null;
@@ -1468,11 +1472,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Add modificationServiceDu
      *
-     * @param \Application\Entity\Db\ModificationServiceDu $modificationServiceDu
+     * @param ModificationServiceDu $modificationServiceDu
      *
      * @return Intervenant
      */
-    public function addModificationServiceDu(\Application\Entity\Db\ModificationServiceDu $modificationServiceDu)
+    public function addModificationServiceDu(ModificationServiceDu $modificationServiceDu)
     {
         $this->modificationServiceDu[] = $modificationServiceDu;
 
@@ -1484,10 +1488,10 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Remove modificationServiceDu
      *
-     * @param \Application\Entity\Db\ModificationServiceDu $modificationServiceDu
-     * @param bool                                         $softDelete
+     * @param ModificationServiceDu $modificationServiceDu
+     * @param bool                  $softDelete
      */
-    public function removeModificationServiceDu(\Application\Entity\Db\ModificationServiceDu $modificationServiceDu, $softDelete = true)
+    public function removeModificationServiceDu(ModificationServiceDu $modificationServiceDu, $softDelete = true)
     {
         if ($softDelete && $modificationServiceDu instanceof HistoriqueAwareInterface) {
             $modificationServiceDu->setHistoDestruction(new \DateTime());

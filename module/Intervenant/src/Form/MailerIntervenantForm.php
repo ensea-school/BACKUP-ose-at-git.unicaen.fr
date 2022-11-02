@@ -11,8 +11,6 @@ use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Entity\Db\Note;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
-use Intervenant\Service\NoteServiceAwareTrait;
-use Intervenant\Service\TypeNoteServiceAwareTrait;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Text;
@@ -33,6 +31,7 @@ class MailerIntervenantForm extends AbstractForm
 
 
     protected Intervenant $intervenant;
+
 
 
     public function initForm()
@@ -96,8 +95,8 @@ class MailerIntervenantForm extends AbstractForm
         $this->setValueOptions('to', $emailValues);
 
         //On set l'email expéditeur par rapport au contexte utilisateur
-        $context = $this->getServiceContext();
-        $parametre = $this->getServiceParametres();
+        $context     = $this->getServiceContext();
+        $parametre   = $this->getServiceParametres();
         $fromDefault = trim($parametre->get('indicateur_email_expediteur'));
         if (!empty($fromDefault)) {
             $from = $fromDefault;
@@ -121,12 +120,14 @@ class MailerIntervenantForm extends AbstractForm
     }
 
 
+
     public function setIntervenant(Intervenant $intervenant)
     {
         $this->intervenant = $intervenant;
 
         return $this;
     }
+
 
 
     public function getIntervenant(): Intervenant

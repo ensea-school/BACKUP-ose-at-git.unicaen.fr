@@ -6,6 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use Intervenant\Assertion\NoteAssertion;
 use Intervenant\Entity\Db\Note;
 use Intervenant\Entity\Db\Statut;
+use UnicaenAuth\Guard\PrivilegeController;
 
 
 return [
@@ -103,8 +104,22 @@ return [
         ],
     ],
 
-    'resources' => [
-        'Statut', 'Note',
+    'navigation' => [
+        'administration' => [
+            'pages' => [
+                'intervenants' => [
+                    'pages' => [
+                        'statut' => [
+                            'label'        => 'Statuts',
+                            'route'        => 'statut',
+                            'resource'     => PrivilegeController::getResourceId('Intervenant\Controller\Statut', 'index'),
+                            'order'        => 40,
+                            'border-color' => '#BBCF55',
+                        ],
+                    ],
+                ],
+            ],
+        ],
     ],
 
     'rules' => [

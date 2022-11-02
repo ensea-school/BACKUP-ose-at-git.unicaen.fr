@@ -128,13 +128,16 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'formule-calcul' => [
-                                'label'        => 'Test de formule de calcul',
-                                'icon'         => 'fas fa-briefcase',
-                                'route'        => 'formule-calcul/test',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Formule', 'test'),
-                                'order'        => 80,
-                                'border-color' => '#0C8758',
+                            'configuration' => [
+                                'pages' => [
+                                    'formule-calcul' => [
+                                        'label'        => 'Test de formule de calcul',
+                                        'route'        => 'formule-calcul/test',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Formule', 'test'),
+                                        'order'        => 50,
+                                        'border-color' => '#0C8758',
+                                    ],
+                                ],
                             ],
                         ],
                     ],

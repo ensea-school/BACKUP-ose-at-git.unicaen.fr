@@ -10,7 +10,7 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router' => [
         'routes' => [
-            'employeur'      => [
+            'employeur'        => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/employeur',
@@ -48,7 +48,6 @@ return [
     ],
 
 
-
     'console' => [
         'router' => [
             'routes' => [
@@ -58,6 +57,31 @@ return [
                         'defaults' => [
                             'controller' => 'Application\Controller\Employeur',
                             'action'     => 'update-employeur',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'rh' => [
+                                'pages' => [
+                                    'Employeurs' => [
+                                        'border-color' => '#9F491F',
+                                        'label'        => "Employeurs",
+                                        'title'        => "Gestion des employeurs",
+                                        'route'        => 'employeur',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Employeur', 'index'),
+                                        'order'        => 20,
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -75,7 +99,7 @@ return [
     ],
 
     'bjyauthorize' => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class      => [
                 [
                     'controller' => 'Application\Controller\Employeur',
@@ -89,12 +113,7 @@ return [
                     'roles'      => ['user']],
             ],
         ],
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'Employeur' => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [

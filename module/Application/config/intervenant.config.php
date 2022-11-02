@@ -10,7 +10,7 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router'          => [
         'routes' => [
-            'intervenant'                                => [
+            'intervenant' => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/intervenant',
@@ -21,7 +21,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'rechercher'              => [
+                    'rechercher'          => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/rechercher',
@@ -30,7 +30,7 @@ return [
                             ],
                         ],
                     ],
-                    'recherche'               => [
+                    'recherche'           => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/recherche',
@@ -39,7 +39,7 @@ return [
                             ],
                         ],
                     ],
-                    'voir'                    => [
+                    'voir'                => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/voir',
@@ -48,7 +48,7 @@ return [
                             ],
                         ],
                     ],
-                    'fiche'                   => [
+                    'fiche'               => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/fiche',
@@ -57,7 +57,7 @@ return [
                             ],
                         ],
                     ],
-                    'creer'                   => [
+                    'creer'               => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/creer',
@@ -67,7 +67,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisir'                  => [
+                    'saisir'              => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/saisir',
@@ -77,7 +77,7 @@ return [
                             ],
                         ],
                     ],
-                    'dupliquer'               => [
+                    'dupliquer'           => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/dupliquer',
@@ -87,7 +87,7 @@ return [
                             ],
                         ],
                     ],
-                    'synchronisation'         => [
+                    'synchronisation'     => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/synchronisation',
@@ -96,7 +96,7 @@ return [
                             ],
                         ],
                     ],
-                    'synchroniser'            => [
+                    'synchroniser'        => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/synchroniser',
@@ -105,7 +105,7 @@ return [
                             ],
                         ],
                     ],
-                    'supprimer'               => [
+                    'supprimer'           => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/supprimer',
@@ -114,7 +114,7 @@ return [
                             ],
                         ],
                     ],
-                    'historiser'              => [
+                    'historiser'          => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/historiser',
@@ -123,7 +123,7 @@ return [
                             ],
                         ],
                     ],
-                    'restaurer'               => [
+                    'restaurer'           => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/restaurer',
@@ -132,7 +132,7 @@ return [
                             ],
                         ],
                     ],
-                    'definir-par-defaut'      => [
+                    'definir-par-defaut'  => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/definir-par-defaut',
@@ -141,7 +141,7 @@ return [
                             ],
                         ],
                     ],
-                    'voir-heures-comp'        => [
+                    'voir-heures-comp'    => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/voir-heures-comp/:intervenant',
@@ -150,7 +150,7 @@ return [
                             ],
                         ],
                     ],
-                    'formule-totaux-hetd'     => [
+                    'formule-totaux-hetd' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire',
@@ -163,7 +163,7 @@ return [
                             ],
                         ],
                     ],
-                    'feuille-de-route'        => [
+                    'feuille-de-route'    => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/feuille-de-route',
@@ -172,68 +172,7 @@ return [
                             ],
                         ],
                     ],
-                    'modification-service-du' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/modification-service-du',
-                            'defaults' => [
-                                'controller' => 'Application\Controller\ModificationServiceDu',
-                                'action'     => 'saisir',
-                            ],
-                        ],
-                    ],
-                    'services-prevus'         => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/services-prevus',
-                            'defaults' => [
-                                'controller' => 'Application\Controller\Intervenant',
-                                'action'     => 'services-prevus',
-                            ],
-                        ],
-                    ],
-                    'referentiel'             => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/referentiel',
-                            'defaults' => [
-                                'controller'               => 'Application\Controller\ServiceReferentiel',
-                                'action'                   => 'index',
-                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
-                            ],
-                        ],
-                    ],
-                    'services-realises'       => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/services-realises',
-                            'defaults' => [
-                                'controller' => 'Application\Controller\Intervenant',
-                                'action'     => 'services-realises',
-                            ],
-                        ],
-                    ],
-                    'referentiel-realise'     => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/referentiel',
-                            'defaults' => [
-                                'controller'               => 'Application\Controller\ServiceReferentiel',
-                                'action'                   => 'index',
-                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
-                            ],
-                        ],
-                    ],
-                    'cloturer'                => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/cloturer',
-                            'defaults' => [
-                                'action' => 'cloturer',
-                            ],
-                        ],
-                    ],
-                    'mise-en-paiement'        => [
+                    'mise-en-paiement'    => [
                         'type'          => 'Segment',
                         'may_terminate' => false,
                         'options'       => [
@@ -272,7 +211,7 @@ return [
                             ],
                         ],
                     ],
-                    'contrat'                 => [
+                    'contrat'             => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/contrat',
@@ -284,82 +223,12 @@ return [
                     ],
                 ],
             ],
-            'modification-service-du'                    => [
-                'type'         => 'Literal',
-                'options'      => [
-                    'route'    => '/modification-service-du',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\ModificationServiceDu',
-                    ],
-                ],
-                'child_routes' => [
-                    'export-csv' => [
-                        'type'    => 'Literal',
-                        'options' => [
-                            'route'    => '/export-csv',
-                            'defaults' => [
-                                'action' => 'export-csv',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'validation-volume-horaire-type-intervenant' => [
-                'type'          => 'Literal',
-                'options'       => [
-                    'route'    => '/validation-vh-ti',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\Intervenant',
-                        'action'     => 'validation-volume-horaire-type-intervenant',
-                    ],
-                ],
-                'may_terminate' => true,
-                'child_routes'  => [
-                    'delete' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/delete/:regleStructureValidation',
-                            'constraints' => [
-                                'regleStructureValidation' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'validation-volume-horaire-type-intervenant-delete',
-                            ],
-                        ],
-                    ],
-                    'saisie' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/saisie/[:regleStructureValidation]',
-                            'constraints' => [
-                                'regleStructureValidation' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'validation-volume-horaire-type-intervenant-saisie',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
         ],
     ],
     'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
-                    'gestion'     => [
-                        'pages' => [
-                            'modification-service-du-export-csv' => [
-                                'label'        => "Modifications de service dû (CSV)",
-                                'icon'         => 'fas fa-fill',
-                                'title'        => "Modifications de service dû (CSV)",
-                                'route'        => 'modification-service-du/export-csv',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\ModificationServiceDu', 'export-csv'),
-                                'order'        => 45,
-                                'border-color' => '#45DAE0',
-                            ],
-                        ],
-                    ],
                     'intervenant' => [
                         'label'    => 'Intervenant',
                         'title'    => "Intervenant",
@@ -367,7 +236,7 @@ return [
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'index'),
                         'order'    => 1,
                         'pages'    => [
-                            'rechercher'              => [
+                            'rechercher'       => [
                                 'label'        => " Rechercher",
                                 'title'        => "Rechercher un intervenant",
                                 'route'        => 'intervenant/rechercher',
@@ -379,7 +248,7 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'rechercher'),
                                 'order'        => 1,
                             ],
-                            'voir'                    => [
+                            'voir'             => [
                                 'label'        => "Fiche individuelle",
                                 'title'        => "Consultation de la fiche de l'intervenant {id}",
                                 'route'        => 'intervenant/voir',
@@ -390,7 +259,7 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'voir'),
                                 'order'        => 2,
                             ],
-                            'voir-heures-comp'        => [
+                            'voir-heures-comp' => [
                                 'label'        => "Calcul HETD",
                                 'title'        => "Calcul des heures équivalent TD {id}",
                                 'route'        => 'intervenant/voir-heures-comp',
@@ -402,31 +271,7 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'voir-heures-comp'),
                                 'order'        => 3,
                             ],
-                            'modification-service-du' => [
-                                'label'        => "Modification de service dû",
-                                'title'        => "Modification de service dû de l'intervenant {id}",
-                                'route'        => 'intervenant/modification-service-du',
-                                'paramsInject' => [
-                                    'intervenant',
-                                ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\ModificationServiceDu', 'saisir'),
-                                'order'        => 4,
-                            ],
-                            'services-prevus'         => [
-                                'label'               => "Enseignements prévisionnels",
-                                'title'               => "Enseignements prévisionnels de l'intervenant",
-                                'route'               => 'intervenant/services-prevus',
-                                'paramsInject'        => [
-                                    'intervenant',
-                                ],
-                                'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE,
-                                'withtarget'          => true,
-                                'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services-prevus'),
-                                'visible'             => Assertion\ServiceAssertion::class,
-                                'order'               => 6,
-                            ],
-                            'contrat'                 => [
+                            'contrat'          => [
                                 'label'        => "Contrat / avenant",
                                 'title'        => "Contrat et avenants de l'intervenant",
                                 'route'        => 'intervenant/contrat',
@@ -437,19 +282,6 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Contrat', 'index'),
                                 'order'        => 12,
                             ],
-                            'services-realises'       => [
-                                'label'               => "Enseignements réalisés",
-                                'title'               => "Constatation des enseignements réalisés",
-                                'route'               => 'intervenant/services-realises',
-                                'paramsInject'        => [
-                                    'intervenant',
-                                ],
-                                'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE_REALISE,
-                                'withtarget'          => true,
-                                'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services-realises'),
-                                'visible'             => Assertion\ServiceAssertion::class,
-                                'order'               => 13,
-                            ],
                         ],
                     ],
                 ],
@@ -457,7 +289,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards' => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Intervenant',
@@ -472,24 +304,6 @@ return [
                     'privileges' => [
                         Privileges::INTERVENANT_FICHE,
                     ],
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['services-prevus'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
-                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
-                    ],
-                    'assertion'  => Assertion\ServiceAssertion::class,
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['services-realises'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
-                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
-                    ],
-                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
@@ -513,35 +327,11 @@ return [
                     ],
                 ],
                 [
-                    'controller' => 'Application\Controller\ModificationServiceDu',
-                    'action'     => ['saisir'],
-                    'privileges' => [
-                        Privileges::MODIF_SERVICE_DU_VISUALISATION,
-                    ],
-                    'assertion'  => Assertion\ModificationServiceDuAssertion::class,
-                ],
-                [
-                    'controller' => 'Application\Controller\ModificationServiceDu',
-                    'action'     => ['export-csv'],
-                    'privileges' => [
-                        Privileges::MODIF_SERVICE_DU_EXPORT_CSV,
-                    ],
-                ],
-                [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['voir-heures-comp'],
                     'privileges' => [
                         Privileges::INTERVENANT_CALCUL_HETD,
                     ],
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['cloturer'],
-                    'privileges' => [
-                        Privileges::CLOTURE_CLOTURE,
-                        Privileges::CLOTURE_REOUVERTURE,
-                    ],
-                    'assertion'  => Assertion\IntervenantAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
@@ -553,39 +343,18 @@ return [
                         Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                 ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['validation-volume-horaire-type-intervenant',
-                                     'validation-volume-horaire-type-intervenant-saisie',
-                                     'validation-volume-horaire-type-intervenant-delete',
-                    ],
-                    'privileges' => [
-                        Privileges::MODIF_SERVICE_DU_EDITION,
-                    ],
-                ],
             ],
         ],
-        'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'Intervenant' => [],
-            ],
-        ],
-        'rule_providers'     => [
+
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
-                        'privileges' => Privileges::MODIF_SERVICE_DU_EDITION,
-                        'resources'  => 'Intervenant',
-                        'assertion'  => Assertion\ModificationServiceDuAssertion::class,
-                    ],
-                    [
                         'privileges' => [
-                            Privileges::CLOTURE_CLOTURE,
-                            Privileges::CLOTURE_REOUVERTURE,
                             Privileges::INTERVENANT_EDITION,
                             Privileges::INTERVENANT_EDITION_AVANCEE,
                         ],
-                        'resources'  => ['Validation', 'Intervenant'],
+                        'resources'  => ['Intervenant'],
                         'assertion'  => Assertion\IntervenantAssertion::class,
                     ],
                 ],
@@ -593,24 +362,19 @@ return [
         ],
     ],
     'controllers'     => [
-        'factories'  => [
+        'factories' => [
             'Application\Controller\Intervenant' => Controller\Factory\IntervenantControllerFactory::class,
-        ],
-        'invokables' => [
-            'Application\Controller\ModificationServiceDu' => Controller\ModificationServiceDuController::class,
         ],
     ],
     'service_manager' => [
         'factories'  => [
-            Service\IntervenantService::class               => Service\Factory\IntervenantServiceFactory::class,
-            Processus\IntervenantProcessus::class           => Processus\Factory\IntervenantProcessusFactory::class,
-            Assertion\ModificationServiceDuAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
-            Assertion\IntervenantAssertion::class           => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Service\IntervenantService::class     => Service\Factory\IntervenantServiceFactory::class,
+            Processus\IntervenantProcessus::class => Processus\Factory\IntervenantProcessusFactory::class,
+            Assertion\IntervenantAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
         'invokables' => [
-            Service\MotifModificationServiceDuService::class => Service\MotifModificationServiceDuService::class,
-            Service\CiviliteService::class                   => Service\CiviliteService::class,
-            Service\GradeService::class                      => Service\GradeService::class,
+            Service\CiviliteService::class => Service\CiviliteService::class,
+            Service\GradeService::class    => Service\GradeService::class,
         ],
     ],
     'view_helpers'    => [
@@ -624,12 +388,7 @@ return [
             Form\Intervenant\EditionForm::class => Form\Intervenant\Factory\EditionFormFactory::class,
         ],
         'invokables' => [
-
-            Form\Intervenant\HeuresCompForm::class                     => Form\Intervenant\HeuresCompForm::class,
-            Form\Intervenant\ModificationServiceDuForm::class          => Form\Intervenant\ModificationServiceDuForm::class,
-            Form\Intervenant\ModificationServiceDuFieldset::class      => Form\Intervenant\ModificationServiceDuFieldset::class,
-            Form\Intervenant\MotifModificationServiceDuFieldset::class => Form\Intervenant\MotifModificationServiceDuFieldset::class,
-            Form\Intervenant\RegleStructureValidationForm::class       => Form\Intervenant\RegleStructureValidationForm::class,
+            Form\Intervenant\HeuresCompForm::class => Form\Intervenant\HeuresCompForm::class,
         ],
     ],
 ];

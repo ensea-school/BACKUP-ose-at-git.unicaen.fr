@@ -5,7 +5,6 @@ namespace Application\Form\TypeIntervention;
 use Application\Entity\Db\Traits\TypeInterventionStructureAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionStructureServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
@@ -138,7 +137,6 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
 
 class TypeInterventionStructureHydrator implements HydratorInterface
 {
-    use TypeInterventionStructureServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;
     use StructureServiceAwareTrait;
     use EntityManagerAwareTrait;

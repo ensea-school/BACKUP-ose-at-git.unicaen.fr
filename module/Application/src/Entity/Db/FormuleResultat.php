@@ -2,6 +2,9 @@
 
 namespace Application\Entity\Db;
 
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
+
 /**
  * FormuleResultat
  */
@@ -60,32 +63,38 @@ class FormuleResultat
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\TypeVolumeHoraire
+     * @var \Service\Entity\Db\TypeVolumeHoraire
      */
     private $typeVolumeHoraire;
 
     /**
-     * @var \Application\Entity\Db\EtatVolumeHoraire
+     * @var \Service\Entity\Db\EtatVolumeHoraire
      */
     private $etatVolumeHoraire;
+
+
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->formuleResultatService                   = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleResultatServiceReferentiel        = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleResultatVolumeHoraire             = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleResultatVolumeHoraireReferentiel  = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultatService                  = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultatServiceReferentiel       = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultatVolumeHoraire            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultatVolumeHoraireReferentiel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function init( Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
+
+
+    public function init(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
     {
-        $this->intervenant = $intervenant;
+        $this->intervenant       = $intervenant;
         $this->typeVolumeHoraire = $typeVolumeHoraire;
         $this->etatVolumeHoraire = $etatVolumeHoraire;
     }
+
+
 
     /**
      * Get id
@@ -97,6 +106,8 @@ class FormuleResultat
         return $this->id;
     }
 
+
+
     /**
      * Get serviceDu
      *
@@ -107,25 +118,31 @@ class FormuleResultat
         return $this->serviceDu;
     }
 
+
+
     /**
      * Get solde
      *
-     * @return float 
+     * @return float
      */
     public function getSolde()
     {
         return $this->solde;
     }
 
+
+
     /**
      * Get sousService
      *
-     * @return float 
+     * @return float
      */
     public function getSousService()
     {
         return $this->sousService;
     }
+
+
 
     /**
      * Get heuresCompl
@@ -137,70 +154,84 @@ class FormuleResultat
         return $this->heuresCompl;
     }
 
+
+
     /**
      * Get formuleResultatService
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFormuleResultatService()
     {
         return $this->formuleResultatService;
     }
 
+
+
     /**
      * Get formuleResultatServiceReferentiel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFormuleResultatServiceReferentiel()
     {
         return $this->formuleResultatServiceReferentiel;
     }
 
+
+
     /**
      * Get formuleResultatVolumeHoraire
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFormuleResultatVolumeHoraire()
     {
         return $this->formuleResultatVolumeHoraire;
     }
 
+
+
     /**
      * Get formuleResultatVolumeHoraireReferentiel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFormuleResultatVolumeHoraireReferentiel()
     {
         return $this->formuleResultatVolumeHoraireReferentiel;
     }
 
+
+
     /**
      * Get intervenant
      *
-     * @return \Application\Entity\Db\Intervenant 
+     * @return \Application\Entity\Db\Intervenant
      */
     public function getIntervenant()
     {
         return $this->intervenant;
     }
 
+
+
     /**
      * Get typeVolumeHoraire
      *
-     * @return \Application\Entity\Db\TypeVolumeHoraire 
+     * @return \Service\Entity\Db\TypeVolumeHoraire
      */
     public function getTypeVolumeHoraire()
     {
         return $this->typeVolumeHoraire;
     }
 
+
+
     /**
      * Get etatVolumeHoraire
      *
-     * @return \Application\Entity\Db\EtatVolumeHoraire 
+     * @return \Service\Entity\Db\EtatVolumeHoraire
      */
     public function getEtatVolumeHoraire()
     {

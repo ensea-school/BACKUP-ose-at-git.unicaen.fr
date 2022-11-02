@@ -7,6 +7,9 @@
             <generator strategy="SEQUENCE"/>
             <sequence-generator sequence-name="TYPE_INTERVENTION_STATU_ID_SEQ" allocation-size="1"/>
         </id>
+        <unique-constraints>
+            <unique-constraint name="TYPE_INTERVENTION_STATUT_UN" columns="TYPE_INTERVENTION_ID,STATUT_ID,HISTO_DESTRUCTION"/>
+        </unique-constraints>
         <field name="tauxHETDService" type="float" column="TAUX_HETD_SERVICE" nullable="true"/>
         <field name="tauxHETDComplementaire" type="float" column="TAUX_HETD_COMPLEMENTAIRE" nullable="true"/>
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">

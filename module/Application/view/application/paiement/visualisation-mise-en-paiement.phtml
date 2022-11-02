@@ -48,7 +48,7 @@ foreach ($paiements as $paiement) {
             /* @var $sap \Application\Entity\Db\FormuleResultatServiceReferentiel */
             $serviceReferentiel = $sap->getServiceReferentiel();
             $d['structure']     = (string)$this->structure($serviceReferentiel->getStructure())->renderLink();
-            $d['fonction']      = (string)$this->fonctionReferentiel($serviceReferentiel->getFonction())->renderLink();
+            $d['fonction']      = (string)$this->fonctionReferentiel($serviceReferentiel->getFonctionReferentiel())->renderLink();
             $d['description']   = $serviceReferentiel->getCommentaires();
         }
         $d['heures-a-payer']     = $paiement->getHeuresAPayer();

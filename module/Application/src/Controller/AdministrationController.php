@@ -3,6 +3,8 @@
 namespace Application\Controller;
 
 
+use Laminas\View\Model\ViewModel;
+
 /**
  * Description of AdministrationController
  *
@@ -19,35 +21,7 @@ class AdministrationController extends AbstractController
 
 
 
-    public function administrationTypesAction()
-    {
-        return [];
-    }
-
-
-
-    public function administrationFinanciereAction()
-    {
-        return [];
-    }
-
-
-
-    public function administrationIntervenantAction()
-    {
-        return [];
-    }
-
-
-
-    public function administrationReferentielCommunAction()
-    {
-        return [];
-    }
-
-
-
-    public function administrationNomenclatureRhAction()
+    public function rubriqueAction()
     {
         return [];
     }

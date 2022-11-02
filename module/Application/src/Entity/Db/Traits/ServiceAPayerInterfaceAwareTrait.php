@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Traits;
 
-use Application\Entity\Db\ServiceAPayerInterface;
+use Enseignement\Entity\Db\ServiceAPayerInterface;
 
 /**
  * Description of ServiceAPayerInterfaceAwareTrait
@@ -20,7 +20,7 @@ trait ServiceAPayerInterfaceAwareTrait
      *
      * @return self
      */
-    public function setServiceAPayerInterface( ?ServiceAPayerInterface $serviceAPayerInterface )
+    public function setServiceAPayerInterface(?ServiceAPayerInterface $serviceAPayerInterface)
     {
         $this->serviceAPayerInterface = $serviceAPayerInterface;
 

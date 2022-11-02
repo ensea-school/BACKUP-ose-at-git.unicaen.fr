@@ -5,7 +5,6 @@ namespace Application\Processus;
 use Application\Entity\Db\Intervenant;
 use Application\Processus\Intervenant\RechercheProcessus;
 use Application\Processus\Intervenant\SuppressionProcessus;
-use Application\Processus\Intervenant\ServiceProcessus as IntervenantServiceProcessus;
 
 
 /**
@@ -54,17 +53,5 @@ class IntervenantProcessus extends AbstractProcessus
         }
 
         return $this->suppression;
-    }
-
-
-
-    public function service(): IntervenantServiceProcessus
-    {
-        if (!$this->service) {
-            $this->service = new IntervenantServiceProcessus;
-            $this->service->setEntityManager($this->getEntityManager());
-        }
-
-        return $this->service;
     }
 }

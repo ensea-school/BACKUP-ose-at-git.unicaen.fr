@@ -65,6 +65,9 @@
         <field name="contrat" type="boolean" column="CONTRAT" nullable="false"/>
         <field name="contratVisualisation" type="boolean" column="CONTRAT_VISUALISATION" nullable="false"/>
         <field name="contratDepot" type="boolean" column="CONTRAT_DEPOT" nullable="false"/>
+        <many-to-one field="contratEtatSortie" target-entity="Application\Entity\Db\EtatSortie">
+            <join-column name="CONTRAT_ETAT_SORTIE_ID" referenced-column-name="ID"/>
+        </many-to-one>
 
         <field name="servicePrevu" type="boolean" column="SERVICE_PREVU" nullable="false"/>
         <field name="servicePrevuVisualisation" type="boolean" column="SERVICE_PREVU_VISU" nullable="false"/>

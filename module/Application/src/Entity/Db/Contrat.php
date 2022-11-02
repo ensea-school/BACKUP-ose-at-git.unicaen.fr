@@ -134,9 +134,9 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Indique s'il s'agit d'un avenant.
      *
-     * @return boolean
+     * @return bool
      */
-    public function estUnAvenant()
+    public function estUnAvenant(): bool
     {
         return $this->getTypeContrat() && $this->getTypeContrat()->estUnAvenant();
     }
@@ -146,9 +146,9 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Indique s'il s'agit d'un projet de contrat/avenant.
      *
-     * @return boolean
+     * @return bool
      */
-    public function estUnProjet()
+    public function estUnProjet(): bool
     {
         return null === $this->getValidation();
     }

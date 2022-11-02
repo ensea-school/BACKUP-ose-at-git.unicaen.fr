@@ -2,7 +2,7 @@
 
 namespace Plafond\Form;
 
-use Application\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
 use Intervenant\Entity\Db\Statut;

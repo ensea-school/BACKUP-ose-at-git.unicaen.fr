@@ -3,7 +3,6 @@
 namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\TypeInterventionStatutServiceAwareTrait;
 use Application\Entity\Db\Traits\TypeInterventionStatutAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
@@ -108,7 +107,7 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
                     new \Laminas\Validator\Callback([
                         'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
-                            return (StringFromFloat::run($value) >= 0.0 ? true : false);
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }]),
                 ],
             ],
@@ -128,7 +127,6 @@ class TypeInterventionStatutHydrator implements HydratorInterface
 {
     use TypeInterventionServiceAwareTrait;
     use StatutServiceAwareTrait;
-    use TypeInterventionStatutServiceAwareTrait;
     use EntityManagerAwareTrait;
 
 

@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $service           \Referentiel\Entity\Db\ServiceReferentiel
+ * @var $params            array
+ * @var $onlyContent       bool
+ * @var $details           bool
+ */
+
+if (!$service) {
+    return;
+}
+
+$serviceListe = $this->referentiels($service->getTypeVolumeHoraire(), $service->getIntervenant(), [$service]);
+/* @var $serviceListe \Referentiel\View\Helper\ReferentielsViewHelper */
+
+if (!empty($params)) $serviceListe->applyParams($params);
+
+if ($onlyContent) {
+    echo $this->serviceReferentielLigne($serviceListe, $service)->render($details);
+} else {
+    echo $serviceListe->renderLigne($service, $details);
+}

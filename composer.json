@@ -12,7 +12,7 @@
         "unicaen/app"            : "dev-ll-php8",
         "unicaen/auth"           : "dev-ll-php8",
         "laminas/laminas-file"   : "^2.8",
-        "unicaen/code"           : "dev-ll-php8",
+        "unicaen/code"           : "7.0",
         "unicaen/import"         : "dev-ll-php8",
         "unicaen/tbl"            : "dev-ll-php8",
         "unicaen/open-document"  : "^4.0",

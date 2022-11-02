@@ -32,12 +32,10 @@ echo $this->form()->openTag($form);
     <li role="presentation"><a href="#pdf" aria-controls="pdf" role="tab" data-toggle="tab">Export PDF</a></li>
 </ul>
 
-<div class="tab-content">
+<div class="tab-content etat-sortie-saisir">
     <div role="tabpanel" class="tab-pane active" id="sql">
 
-        <h2>Requête SQL de document
-            <small>(facultative)</small>
-        </h2>
+        <h2>Requête SQL de document</h2>
         <div class="panel panel-default etat-sortie-requete">
             <div class="panel-heading" role="tab">
                 <label>Champ clé : </label>
@@ -72,13 +70,106 @@ echo $this->form()->openTag($form);
     </div>
     <div role="tabpanel" class="tab-pane" id="csv">
         <?= $this->formControlGroup($form->get('csv-params')) ?>
-        <?= $this->formControlGroup($form->get('csv-traitement')) ?>
+        <?= $this->formLabel($form->get('csv-traitement')) ?>
+        <div class="panel panel-default variables">
+            <div class="panel-heading">Variables disponibles en entrée</div>
+            <table class="table table-condensed table-extra-condensed">
+                <tr>
+                    <th>$csv</th>
+                    <td>
+                        <a href="https://git.unicaen.fr/lib/unicaen/app/-/blob/master/src/UnicaenApp/View/Model/CsvModel.php"
+                           target="_blank">UnicaenApp\View\Model\CsvModel</a>
+                    </td>
+                    <td>Document permettant de travailler à sa mise en page</td>
+                </tr>
+                <tr>
+                    <th>$etatSortie</th>
+                    <td>
+                        <a href="https://git.unicaen.fr/open-source/OSE/-/blob/master/module/Application/src/Entity/Db/EtatSortie.php"
+                           target="_blank">Application\Entity\Db\EtatSortie</a>
+                    </td>
+                    <td>Etat de sortie</td>
+                </tr>
+                <tr>
+                    <th>$data</th>
+                    <td>array</td>
+                    <td>Tableau de données issu de la requête exécutée</td>
+                </tr>
+                <tr>
+                    <th>$filtres</th>
+                    <td>array</td>
+                    <td>Liste des filtres avec les valeurs transmises (format COLONNE => Valeur)</td>
+                </tr>
+                <tr>
+                    <th>$entityManager</th>
+                    <td>
+                        <a href="https://github.com/webmozart/doctrine-orm/blob/master/lib/Doctrine/ORM/EntityManager.php"
+                           target="_blank">Doctrine\ORM\EntityManager</a>
+                    </td>
+                    <td>Gestionaire d'entités Doctrine (permet d'accéder à la base de données)</td>
+                </tr>
+            </table>
+        </div>
+        <?= $this->formTextarea($form->get('csv-traitement')) ?>
+        <div class="panel panel-default variables">
+            <div class="panel-heading">Données en sortie</div>
+            <div class="panel-body">
+                Le traitement doit retourner un tableau de données (array) à publiposter, ou NULL.
+            </div>
+        </div>
+
 
     </div>
     <div role="tabpanel" class="tab-pane" id="pdf">
         <?= $this->formControlGroup($form->get('fichier')) ?>
         <?= $this->formControlGroup($form->get('auto-break')) ?>
-        <?= $this->formControlGroup($form->get('pdf-traitement')) ?>
+        <?= $this->formLabel($form->get('pdf-traitement')) ?>
+        <div class="panel panel-default variables">
+            <div class="panel-heading">Variables disponibles en entrée</div>
+            <table class="table table-condensed table-extra-condensed">
+                <tr>
+                    <th>$document</th>
+                    <td>
+                        <a href="https://git.unicaen.fr/lib/unicaen/open-document/-/blob/master/src/Document.php"
+                           target="_blank">Unicaen\OpenDocument\Document</a>
+                    </td>
+                    <td>Document permettant de travailler à sa mise en page</td>
+                </tr>
+                <tr>
+                    <th>$etatSortie</th>
+                    <td>
+                        <a href="https://git.unicaen.fr/open-source/OSE/-/blob/master/module/Application/src/Entity/Db/EtatSortie.php"
+                           target="_blank">Application\Entity\Db\EtatSortie</a>
+                    </td>
+                    <td>Etat de sortie</td>
+                </tr>
+                <tr>
+                    <th>$data</th>
+                    <td>array</td>
+                    <td>Tableau de données issu de la requête exécutée</td>
+                </tr>
+                <tr>
+                    <th>$filtres</th>
+                    <td>array</td>
+                    <td>Liste des filtres avec les valeurs transmises (format COLONNE => Valeur)</td>
+                </tr>
+                <tr>
+                    <th>$entityManager</th>
+                    <td>
+                        <a href="https://github.com/webmozart/doctrine-orm/blob/master/lib/Doctrine/ORM/EntityManager.php"
+                           target="_blank">Doctrine\ORM\EntityManager</a>
+                    </td>
+                    <td>Gestionaire d'entités Doctrine (permet d'accéder à la base de données)</td>
+                </tr>
+            </table>
+        </div>
+        <?= $this->formTextarea($form->get('pdf-traitement')) ?>
+        <div class="panel panel-default variables">
+            <div class="panel-heading">Données en sortie</div>
+            <div class="panel-body">
+                Le traitement doit retourner un tableau de données (array) à publiposter, ou NULL.
+            </div>
+        </div>
     </div>
 </div>
 
@@ -239,5 +330,23 @@ echo $this->form()->closeTag();
         border-radius: 0;
         margin-bottom: 0px;
         margin-top: 0px;
+    }
+
+    .etat-sortie-saisir #pdf .ace_editor {
+        margin: 0 0 1px;
+    }
+
+    .etat-sortie-saisir #pdf .variables {
+        font-size: 12px;
+        margin-bottom: 1px;
+    }
+
+    .etat-sortie-saisir #csv .ace_editor {
+        margin: 0 0 1px;
+    }
+
+    .etat-sortie-saisir #csv .variables {
+        font-size: 12px;
+        margin-bottom: 1px;
     }
 </style>

@@ -49,7 +49,7 @@ class AffectationRecherche implements HistoriqueAwareInterface, ImportAwareInter
     /**
      * Set structure
      *
-     * @param $structureId interger
+     * @param $structureId int
      *
      * @return AffectationRecherche
      */

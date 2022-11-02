@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Referentiel\Entity\Db\FonctionReferentiel" table="FONCTION_REFERENTIEL">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <field name="code" type="string" column="CODE" length="10" nullable="false"/>
+        <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+        <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="90" nullable="false"/>
+        <field name="libelleLong" type="string" column="LIBELLE_LONG" length="150" nullable="false"/>
+        <field name="etapeRequise" type="boolean" column="ETAPE_REQUISE" nullable="false"/>
+        <field name="serviceStatutaire" type="boolean" column="SERVICE_STATUTAIRE" nullable="false"/>
+        <many-to-one field="parent" target-entity="Referentiel\Entity\Db\FonctionReferentiel">
+            <join-columns>
+                <join-column name="PARENT_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <one-to-many field="fille" target-entity="Referentiel\Entity\Db\FonctionReferentiel" mapped-by="parent"/>
+
+        <many-to-one field="domaineFonctionnel" target-entity="Application\Entity\Db\DomaineFonctionnel">
+            <join-column name="DOMAINE_FONCTIONNEL_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+            <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

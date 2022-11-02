@@ -10,10 +10,10 @@ $success: #dff0d8 !default;
 $warning: #f8efc0 !default;
 $info: #b9def0 !default;
 
-@import "../bootstrap-5.0.2/scss/bootstrap";
-@import "../bootstrap-5.0.2/scss/functions";
-@import "../bootstrap-5.0.2/scss/variables";
-@import "../bootstrap-5.0.2/scss/mixins";
+@import "../vendor/bootstrap-5.0.2/scss/bootstrap";
+@import "../vendor/bootstrap-5.0.2/scss/functions";
+@import "../vendor/bootstrap-5.0.2/scss/variables";
+@import "../vendor/bootstrap-5.0.2/scss/mixins";
 // Then add additional custom code here
 
 .btn-primary{

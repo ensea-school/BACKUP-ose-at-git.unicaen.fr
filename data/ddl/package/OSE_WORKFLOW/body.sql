@@ -687,7 +687,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
               WHEN ''date-retour'' THEN signe
               ELSE edite
             END                            realisation,
-            p2.valeur                      avenant_mode,
+            p2.valeur                      avenant_mode
           FROM
             tbl_contrat c
             JOIN parametre p on p.nom = ''contrat_regle_franchissement''

@@ -16,6 +16,42 @@ $info: #b9def0 !default;
 @import "../vendor/bootstrap-5.0.2/scss/mixins";
 // Then add additional custom code here
 
+
+body {
+  font-family: ubuntu, arial, sans-serif;
+  font-size: 14px;
+}
+
+
+.form-control {
+  font-size: 14px;
+}
+
+a {
+  text-decoration: none;
+  color: #337ab7;
+}
+
+a:hover {
+  color: #0089ff;
+  text-decoration: underline;
+}
+
+h1 small, h2 small, h3 small, h4 small, h5 small {
+  font-size: 65%;
+}
+
+.small, small {
+  font-size: 85%;
+  color: #777;
+  font-weight: 400;
+}
+
+.btn {
+  font-size: 14px;
+}
+
+
 .btn-primary{
   background: linear-gradient(to bottom,$primary-top 0, $primary 100%) repeat-x;
 }

@@ -9736,6 +9736,39 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+body {
+  font-family: ubuntu, arial, sans-serif;
+  font-size: 14px;
+}
+
+.form-control {
+  font-size: 14px;
+}
+
+a {
+  text-decoration: none;
+  color: #337ab7;
+}
+
+a:hover {
+  color: #0089ff;
+  text-decoration: underline;
+}
+
+h1 small, .h1 small, h1 .small, .h1 .small, h2 small, .h2 small, h2 .small, .h2 .small, h3 small, .h3 small, h3 .small, .h3 .small, h4 small, .h4 small, h4 .small, .h4 .small, h5 small, .h5 small, h5 .small, .h5 .small {
+  font-size: 65%;
+}
+
+.small, small {
+  font-size: 85%;
+  color: #777;
+  font-weight: 400;
+}
+
+.btn {
+  font-size: 14px;
+}
+
 .btn-primary {
   background: linear-gradient(to bottom, #337ab7 0, #265a88 100%) repeat-x;
 }
@@ -10159,39 +10192,6 @@ dl.dl-horizontal.agrement dt {
   min-width: 260px;
   max-width: 260px;
   width: 260px;
-}
-
-body {
-  font-family: ubuntu, arial, sans-serif;
-  font-size: 14px;
-}
-
-.form-control {
-  font-size: 14px;
-}
-
-a {
-  text-decoration: none;
-  color: #337ab7;
-}
-
-a:hover {
-  color: #0089ff;
-  text-decoration: underline;
-}
-
-h1 small, .h1 small, h1 .small, .h1 .small, h2 small, .h2 small, h2 .small, .h2 .small, h3 small, .h3 small, h3 .small, .h3 .small, h4 small, .h4 small, h4 .small, .h4 .small, h5 small, .h5 small, h5 .small, .h5 .small {
-  font-size: 65%;
-}
-
-.small, small {
-  font-size: 85%;
-  color: #777;
-  font-weight: 400;
-}
-
-.btn {
-  font-size: 14px;
 }
 
 /* Personnalisation de l'affichage en fonction de l'état du l'application (development, test, production) */

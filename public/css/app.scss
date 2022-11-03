@@ -7,40 +7,6 @@
 @import "callout";
 @import "piece-jointe";
 
-body {
-    font-family: ubuntu, arial, sans-serif;
-    font-size: 14px;
-}
-
-
-.form-control {
-    font-size: 14px;
-}
-
-a {
-    text-decoration: none;
-    color: #337ab7;
-}
-
-a:hover {
-    color: #0089ff;
-    text-decoration: underline;
-}
-
-h1 small, h2 small, h3 small, h4 small, h5 small {
-    font-size: 65%;
-}
-
-.small, small {
-    font-size: 85%;
-    color: #777;
-    font-weight: 400;
-}
-
-.btn {
-    font-size: 14px;
-}
-
 
 /* Personnalisation de l'affichage en fonction de l'état du l'application (development, test, production) */
 body.dev {

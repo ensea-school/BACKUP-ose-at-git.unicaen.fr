@@ -5,9 +5,9 @@ SELECT
   Max(vh.HISTO_MODIFICATION) AS "Date de modification"
 FROM
   tbl_workflow w
-  JOIN type_volume_horaire tvh ON tvh.code = 'REALISE'
-  JOIN contrat c ON c.intervenant_id = w.intervenant_id
-  JOIN volume_horaire vh ON c.id = vh.contrat_id
+  LEFT JOIN type_volume_horaire tvh ON tvh.code = 'REALISE'
+  LEFT JOIN service s ON s.intervenant_id = w.intervenant_id
+  LEFT JOIN volume_horaire vh ON s.id = vh.service_id
 WHERE
   w.etape_code = 'DEMANDE_MEP'
   AND w.type_intervenant_code = 'E'

@@ -688,7 +688,6 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
               ELSE edite
             END                            realisation,
             p2.valeur                      avenant_mode,
-            CASE WHEN p2.valeur = ''avenant_desactive'' THEN rownum ELSE 1 END to_delete
           FROM
             tbl_contrat c
             JOIN parametre p on p.nom = ''contrat_regle_franchissement''
@@ -698,7 +697,6 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
             AND actif = 1
             AND nbvh > 0
         ) c
-        WHERE to_delete = 1
     ';
 
 

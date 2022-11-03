@@ -351,10 +351,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
           WHEN 'TP' THEN COALESCE(fti.taux_tp_service_compl,2/3)
           WHEN 'AUTRE' THEN COALESCE(fti.taux_autre_service_compl,1)
           ELSE 1
-        END taux_service_compl
+        END taux_service_compl,
+        tvh.code type_volume_horaire_code
       FROM
         formule_test_volume_horaire ftvh
         JOIN formule_test_intervenant fti ON fti.id = intervenant.id
+        JOIN type_volume_horaire tvh ON tvh.id = fti.type_volume_horaire_id
       WHERE  ftvh.intervenant_test_id = intervenant.id
       ORDER BY ftvh.id
     ) LOOP
@@ -378,6 +380,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       volumes_horaires.items(length).structure_is_exterieur    := d.structure_code = '__EXTERIEUR__';
       volumes_horaires.items(length).service_statutaire        := d.service_statutaire = 1;
       volumes_horaires.items(length).heures                    := d.heures;
+      volumes_horaires.items(length).type_volume_horaire_code  := d.type_volume_horaire_code;
       volumes_horaires.items(length).type_intervention_code    := CASE WHEN d.referentiel = 1 THEN NULL ELSE d.type_intervention_code END;
       volumes_horaires.items(length).structure_code            := CASE WHEN d.structure_code IN ('__EXTERIEUR__', '__UNIV__') THEN NULL ELSE d.structure_code END;
       volumes_horaires.items(length).taux_service_du           := d.taux_service_du;

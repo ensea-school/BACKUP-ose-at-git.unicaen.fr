@@ -88,6 +88,7 @@ class FormuleCalcul
             'taux_fi'                   => 'vh.taux_fi',
             'taux_fa'                   => 'vh.taux_fa',
             'taux_fc'                   => 'vh.taux_fc',
+            'type_volume_horaire_code'  => 'vh.type_volume_horaire_code',
             'type_intervention_code'    => 'vh.type_intervention_code',
             'taux_service_du'           => 'vh.taux_service_du',
             'taux_service_compl'        => 'vh.taux_service_compl',
@@ -133,7 +134,6 @@ class FormuleCalcul
         $iColsRefs = [
             'type_intervenant_code'          => 'i.type_intervenant_code',
             'structure_code'                 => 'i.structure_code',
-            'type_volume_horaire_code'       => 'i.type_volume_horaire_code',
             'heures_service_statutaire'      => 'i.heures_service_statutaire',
             'heures_service_modifie'         => 'i.heures_service_modifie',
             'depassement_service_du_sans_hc' => 'i.depassement_service_du_sans_hc',
@@ -180,6 +180,7 @@ class FormuleCalcul
             'vh.taux_fi'                       => 'pourc',
             'vh.taux_fa'                       => 'pourc',
             'vh.taux_fc'                       => 'pourc',
+            'vh.type_volume_horaire_code'      => 'string',
             'vh.type_intervention_code'        => 'string',
             'vh.taux_service_du'               => 'float',
             'vh.taux_service_compl'            => 'float',
@@ -202,7 +203,6 @@ class FormuleCalcul
             'vh.heures_compl_referentiel'      => 'float',
             'i.type_intervenant_code'          => 'string',
             'i.structure_code'                 => 'string',
-            'i.type_volume_horaire_code'       => 'string',
             'i.heures_service_statutaire'      => 'float',
             'i.heures_service_modifie'         => 'float',
             'i.depassement_service_du_sans_hc' => 'bool',
@@ -397,15 +397,7 @@ END FORMULE_" . $this->getName() . ";";
         $s        = $this->getSheet();
         $formules = $this->getFormuleCells();
 
-        $cells = $this->indent('-- Colonnes de base', 3);
-        foreach ($this->getCellsPos() as $prop => $name) {
-            if (str_starts_with($prop, 'vh.')) {
-                $cellPlsql = "WHEN '$name' THEN RETURN $prop;";
-                $cells     .= $this->indent($cellPlsql, 3);
-            }
-        }
-
-        $cells .= "\n\n\n";
+        $cells = "\n\n\n";
 
         foreach ($formules as $name => $cell) {
             $this->currentCellName = $name;
@@ -949,7 +941,7 @@ END FORMULE_" . $this->getName() . ";";
         $traductions = [
             'i_type_intervenant_code'          => 'i.type_intervenant_code',
             'i_structure_code'                 => 'i.structure_code',
-            'i_type_volume_horaire_code'       => 'i.type_volume_horaire_code',
+            'i_type_volume_horaire_code'       => 'vh.type_volume_horaire_code',
             'i_heures_decharge'                => 'i.heures_service_statutaire',
             'i_heures_service_modifie'         => 'i.heures_service_modifie',
             'i_depassement_service_du_sans_hc' => 'i.depassement_service_du_sans_hc',

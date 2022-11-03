@@ -6,8 +6,9 @@ return [
         'PACKAGE_NAME' => 'FORMULE_MONTPELLIER',
     ],
     3  => [
-        'LIBELLE'      => 'Université Le Havre Normandie',
-        'PACKAGE_NAME' => 'FORMULE_ULHN',
+        'LIBELLE'            => 'Université Le Havre Normandie',
+        'PACKAGE_NAME'       => 'FORMULE_ULHN',
+        'VH_PARAM_1_LIBELLE' => 'Code enseignement',
     ],
     4  => [
         'LIBELLE'      => 'Université de Nanterre',

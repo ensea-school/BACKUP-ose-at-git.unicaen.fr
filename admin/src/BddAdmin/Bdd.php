@@ -669,7 +669,6 @@ class Bdd
      */
     public function diff2($src, $dest, $filters = []): DdlDiff
     {
-        $this->logBegin('Génération du différentiel de DDLs');
         if ($src instanceof self) {
             $src = $src->getDdl($filters);
         } else {
@@ -688,14 +687,12 @@ class Bdd
         foreach ($this->changements as $changement => $label) {
             $c++;
             [$ddlName, $action] = explode('.', $changement);
-            $this->logMsg($label . " (opération $c/$cc) ...", true);
             $object  = $this->manager($ddlName);
             $queries = $this->alterDdlObject($object, $action, $src[$ddlName] ?: [], $dest[$ddlName] ?: []);
             if (!empty($queries)) {
                 $diff->set($changement, $queries);
             }
         }
-        $this->logEnd();
 
         return $diff;
     }

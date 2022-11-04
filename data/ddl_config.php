@@ -107,6 +107,7 @@ return [
             'TBL_NOEUD_ID_SEQ',
             'STATUT_INTERVENANT_ID_SEQ',
             'PLAFOND_APPLICATION_ID_SEQ',
+            'MODELE_CONTRAT_ID_SEQ',
         ],
     ],
 ];

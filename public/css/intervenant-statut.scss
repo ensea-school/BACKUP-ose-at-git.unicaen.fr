@@ -1,0 +1,40 @@
+.intervenant-statuts {
+  font-size: 12pt;
+}
+
+.intervenant-statuts .navbar-nav {
+  width: 100%;
+}
+
+.intervenant-statuts .navbar-nav li.historise a {
+  color: #a94442;
+  text-decoration: line-through;
+}
+
+.intervenant-statuts .navbar-nav li a {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.intervenant-statuts span.type-intervenant {
+  font-size: 10pt;
+}
+
+.intervenant-statuts span.statut {
+  font-weight: bold;
+}
+
+.intervenant-statuts span.validite-intervenant {
+  font-size: 10pt;
+  font-style: italic;
+}
+
+.intervenant-statuts li.ajout-intervenant {
+  padding-top: 10px;
+  float: right;
+}
+
+form.statut fieldset legend {
+  font-size: 12px;
+  font-weight: 700;
+}

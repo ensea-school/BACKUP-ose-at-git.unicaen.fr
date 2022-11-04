@@ -7,6 +7,12 @@
 @import "callout";
 @import "piece-jointe";
 
+@import "intervenant-recherche";
+@import "service";
+@import "chargens";
+@import "droits";
+
+
 
 /* Personnalisation de l'affichage en fonction de l'état du l'application (development, test, production) */
 body.dev {

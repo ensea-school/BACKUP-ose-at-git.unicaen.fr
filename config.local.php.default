@@ -51,19 +51,19 @@ return [
     /* Personnalisation de OSE pour votre établissement */
     'etablissement' => [
         /* Nom de l'établissement */
-        'nom'                    => 'Université de Caen Normandie',
+        'nom'                    => 'Université de [votre établissement]',
 
         /* Description du logo de l'établissement */
-        'logoDescription'        => 'Page d\'accueil du site de l\'Université de Caen Normandie',
+        'logoDescription'        => 'Page d\'accueil du site de votre établissement',
 
         /* URI du logo de l'établissement */
-        'logoUri'                => 'http://www.unicaen.fr',
+        'logoUri'                => 'http://votre-etablissement.fr',
 
         /* Page web des mentions légales de votre établissement */
-        'mentionsLegales'        => "http://www.unicaen.fr/acces-direct/mentions-legales/",
+        'mentionsLegales'        => "http://votre-etablissement.fr/acces-direct/mentions-legales/",
 
         /* Page web mentionnant vos règles "vie privée" */
-        'viePrivee'              => "http://www.unicaen.fr/vie-privee/",
+        'viePrivee'              => "http://votre-etablissement.fr/vie-privee/",
 
         /* URL de votre propre feuille de style pour personnaliser OSE */
         'css'                    => null,
@@ -72,28 +72,8 @@ return [
         'icons' => [
             [
                 'type' => 'image/png',
-                'href' => '//www.unicaen.fr/images/favicon/favicon-16x16.png',
+                'href' => '//votre-etablissement.fr/images/favicon/favicon-16x16.png',
                 'sizes' => '16x16',
-            ],
-            [
-                'type' => 'image/png',
-                'href' => '//www.unicaen.fr/images/favicon/favicon-32x32.png',
-                'sizes' => '32x32',
-            ],
-            [
-                'type' => 'image/png',
-                'href' => '//www.unicaen.fr/images/favicon/favicon-96x96.png',
-                'sizes' => '96x96',
-            ],
-            [
-                'type' => 'image/png',
-                'href' => '//www.unicaen.fr/images/favicon/android-chrome-192x192.png',
-                'sizes' => '192x192',
-            ],
-            [
-                'type' => 'image/png',
-                'href' => '//www.unicaen.fr/images/favicon/favicon-194x194.png',
-                'sizes' => '194x194',
             ],
         ],
     ],
@@ -102,7 +82,7 @@ return [
     /* Base de données */
     'bdd'    => [
         /* IP ou nom DNS du serveur de base de données */
-        'host'            => 'xxx.unicaen.fr',
+        'host'            => 'xxx.votre-etablissement.fr',
 
         /* Port d'accès au serveur */
         'port'            => 9999,
@@ -142,16 +122,16 @@ return [
         'autorisationsUrsurpation'     => [],
 
         /* IP ou nom DNS de la machine hébergeant le serveur LDAP. */
-        'host'                         => 'ldap.unicaen.fr',
+        'host'                         => 'ldap.votre-etablissement.fr',
 
         /* UID d'accès au serveur (format uid=nom_utilisateur,ou=system,dc=mon_dc,dc=fr*/
-        'username'                     => "uid=xxx,ou=system,dc=unicaen,dc=fr",
+        'username'                     => "uid=xxx,ou=system,dc=votre-etablissement,dc=fr",
 
         /* Mot de passe de l'utilisateur système */
         'password'                     => 'password',
 
         /* DN par défaut */
-        'baseDn'                       => 'ou=people,dc=unicaen,dc=fr',
+        'baseDn'                       => 'ou=people,dc=votre-etablissement,dc=fr',
 
         /* Port d'accès au serveur */
         'port'                         => 389,
@@ -189,16 +169,16 @@ return [
         'utilisateurExtraAttributes'   => ['supannEmpId', 'mail'],
 
         /* DN des utilisateurs */
-        'utilisateursBaseDN'           => 'ou=people,dc=unicaen,dc=fr',
+        'utilisateursBaseDN'           => 'ou=people,dc=votre-etablissement,dc=fr',
 
         /* DN des utilisateurs désactivés (si besoin) */
-        'utilisateursDesactivesBaseDN' => 'ou=deactivated,dc=unicaen,dc=fr',
+        'utilisateursDesactivesBaseDN' => 'ou=deactivated,dc=votre-etablissement,dc=fr',
 
         /* DN pour les groupes d'utilisateurs */
-        'groupsBaseDN'                 => 'ou=groups,dc=unicaen,dc=fr',
+        'groupsBaseDN'                 => 'ou=groups,dc=votre-etablissement,dc=fr',
 
         /* DN pour les structures présentes dans le LDAP (si besoin) */
-        'structuresBaseDN'             => 'ou=structures,dc=unicaen,dc=fr',
+        'structuresBaseDN'             => 'ou=structures,dc=votre-etablissement,dc=fr',
 
         /* Attribut correspondant au code de la structure */
         'structureCode'                => 'supannCodeEntite',
@@ -212,7 +192,7 @@ return [
          * - codeRh
          * - autre1 (et autre2 ... autre5)
          *
-         * Exemple : https://octopus.unicaen.fr/individu/afficher/:code
+         * Exemple : https://votre-etablissement.fr/individu/afficher/:code
          */
         'systemeInformationUrl'        => '',
     ],
@@ -227,7 +207,7 @@ return [
         'smtpPort'       => 25,
 
         /* Adresse de l'expéditeur par défaut */
-        'from' => 'ne_pas_repondre@unicaen.fr',
+        'from' => 'ne_pas_repondre@votre-etablissement.fr',
 
         /* Mails utilisés pour la redirection
          * La redirection est utile uniquement en mode développement ou en test.
@@ -306,7 +286,7 @@ return [
         'driver'   => 'Mysql',
 
         /* IP ou nom DNS du serveur de base de données */
-        'host'            => 'xxx.unicaen.fr',
+        'host'            => 'xxx.votre-etablissement.fr',
 
         /* Port d'accès au serveur */
         'port'            => 9999,

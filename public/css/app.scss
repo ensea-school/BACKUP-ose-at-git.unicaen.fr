@@ -7,6 +7,16 @@
 @import "callout";
 @import "piece-jointe";
 
+@import "intervenant-recherche";
+@import "service";
+@import "chargens";
+@import "droits";
+@import "plafonds";
+@import "odf";
+@import "indicateurs";
+@import "intervenant";
+@import "intervenant-statut";
+
 
 /* Personnalisation de l'affichage en fonction de l'état du l'application (development, test, production) */
 body.dev {
@@ -316,24 +326,7 @@ table.table-extra-condensed tr th {
     padding: 2px;
 }
 
-/**
- * Offre de formation
- */
-span.element-rech.niveau,
-span.element-rech.etape,
-span.element-rech.periode,
-span.element-rech.element {
-    font-size: 80%;
-    padding: 0 5px 0 5px;
-    margin-right: 0.5em;
-}
 
-span.element-rech.etape,
-span.element-rech.periode {
-    /*background-color: #babdb6;*/
-    /*background-color: #729fcf*/
-    background-color: #caddf4;
-}
 
 /**
  * Autre
@@ -426,10 +419,7 @@ span.sas-highlight {
     font-weight: bold;
 }
 
-/* Gestion des popovers */
-div.popover {
-    max-width: 600px;
-}
+
 
 div.scr-center {
     position: fixed;
@@ -454,10 +444,7 @@ td .form-group {
     margin-bottom: 0px;
 }
 
-form#modulateurs-saisie th select {
-    display: inline;
-    width: auto;
-}
+
 
 /* Personnalisation du bootstrap-select */
 .bootstrap-select .dropdown-menu li.divider {
@@ -619,60 +606,14 @@ div.navbar.breadcrumbs {
     color: gray;
 }
 
-.etape-centre-cout {
-    margin-top: 2px;
-}
 
-.etape-taux-mixite {
-    margin-top: 2px;
-}
-
-.etape-modulateurs {
-    margin-top: 2px;
-}
-
-.etape-modulateurs th.element-pedagogique, .etape-modulateurs td.element-pedagogique {
-    width: 50%;
-}
 
 form#dossier .form-control[disabled], form#dossier .form-control[readonly], form#dossier fieldset[disabled] .form-control {
     cursor: text;
 }
 
 
-.feuille-de-route li.after-courante {
-    opacity: .5;
-    background-color: #eee;
-}
 
-.feuille-de-route li span.label {
-    margin-right: 1em;
-    display: block;
-    float: left;
-    min-width: 3em;
-    line-height: 1.4em;
-}
-
-.feuille-de-route li div.row {
-    padding-top: 1em;
-}
-
-.feuille-de-route li div ul {
-    margin-bottom: .3em;
-}
-
-.feuille-de-route li div ul li {
-    padding-top: .2em;
-    padding-bottom: .2em;
-}
-
-.feuille-de-route li div ul li span {
-    margin-left: -0.1em;
-}
-
-.feuille-de-route li div ul li span.pull-right {
-    margin-left: 1em;
-}
 
 
 td .alert {
@@ -849,89 +790,6 @@ td .alert {
     color: darkgrey;
 }
 
-
-.intervenant-statuts {
-    font-size: 12pt;
-}
-
-.intervenant-statuts .navbar-nav {
-    width: 100%;
-}
-
-.intervenant-statuts .navbar-nav li.historise a {
-    color: #a94442;
-    text-decoration: line-through;
-}
-
-.intervenant-statuts .navbar-nav li a {
-    padding-top: 4px;
-    padding-bottom: 4px;
-}
-
-.intervenant-statuts span.type-intervenant {
-    font-size: 10pt;
-}
-
-.intervenant-statuts span.statut {
-    font-weight: bold;
-}
-
-.intervenant-statuts span.validite-intervenant {
-    font-size: 10pt;
-    font-style: italic;
-}
-
-.intervenant-statuts li.ajout-intervenant {
-    padding-top: 10px;
-    float: right;
-}
-
-form.statut fieldset legend {
-    font-size: 12px;
-    font-weight: 700;
-}
-
-
-.indicateurs table td.numero {
-    width: 5em;
-    text-align: center;
-}
-
-.indicateurs table th.numero {
-    width: 5em;
-    text-align: center;
-}
-
-.indicateurs .notification {
-    width: 12em;
-}
-
-.indicateurs .page-accueil {
-    width: 2em;
-    text-align: center;
-}
-
-.indicateurs-result {
-    margin-bottom: 1em;
-}
-
-.indicateurs-result table {
-    margin-bottom: 0px;
-}
-
-.indicateurs-result table .cc {
-    width: 2em;
-}
-
-
-/* Plafonds */
-.plafonds .plafond .progress {
-    margin-bottom: 0px;
-}
-
-.plafonds .plafond {
-    margin-bottom: 10px;
-}
 
 div.div-connexion {
     width: 50%;

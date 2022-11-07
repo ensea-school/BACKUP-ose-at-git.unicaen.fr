@@ -218,10 +218,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AB=IF([.$H20]="Référentiel";[.$AQ20]+[.$BC20];0)
+      -- AB=IF([.$H20]="Référentiel";[.$AQ20]+[.$BC20]+[.$BQ20];0)
       WHEN 'AB' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('AQ',l) + cell('BC',l);
+          RETURN cell('AQ',l) + cell('BC',l) + cell('BQ',l);
         ELSE
           RETURN 0;
         END IF;
@@ -618,6 +618,16 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
       WHEN 'BO' THEN
         IF NOT i.depassement_service_du_sans_hc THEN
           RETURN cell('BN',l) * cell('AE',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- BQ=IF(AND([.$D20]<>"Oui";[.$BL$17]=0;[.$H20]="Référentiel");[.$M20]*[.$AE20];0)
+      WHEN 'BQ' THEN
+        IF NOT vh.service_statutaire AND cell('BL17') = 0 AND vh.volume_horaire_ref_id IS NOT NULL THEN
+          RETURN vh.heures * cell('AE',l);
         ELSE
           RETURN 0;
         END IF;

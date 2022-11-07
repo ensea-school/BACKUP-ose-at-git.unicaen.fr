@@ -10194,6 +10194,346 @@ dl.dl-horizontal.agrement dt {
   width: 260px;
 }
 
+.intervenant-recherche .critere {
+  padding-bottom: 1em;
+}
+
+table.service, table.service-referentiel {
+  margin-bottom: 0px;
+}
+
+table.service table.volume-horaire, table.service-referentiel table.volume-horaire {
+  margin-bottom: 0px;
+}
+
+table.service div#vhl-prev {
+  margin-bottom: 2px;
+  opacity: 0.5;
+}
+
+table.service div#vhl-prev table {
+  background-color: #EDEAD2;
+}
+
+table.service td.volume-horaire {
+  font-size: 90%;
+}
+
+table.service td.actions, table.service-referentiel td.actions {
+  white-space: nowrap;
+  text-align: center;
+}
+
+table.service tfoot td.type-intervention {
+  white-space: nowrap;
+}
+
+table.service td.actions a, table.service-referentiel td.actions a {
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+}
+
+div.service-show-hide-buttons {
+  padding-bottom: 3px;
+  padding-top: 3px;
+  text-align: right;
+}
+
+div.enseignements table.service tr.volume-horaire {
+  background-color: #fafafa;
+}
+
+form#service div#element-interne div.col-md-5 {
+  clear: both;
+}
+
+form#service div.volume-horaire-saisie-multiple div {
+  float: left;
+  width: 10em;
+  height: 5em;
+}
+
+form#service div.volume-horaire-saisie-multiple div input {
+  width: 7em;
+  display: inline;
+}
+
+form#service div.volume-horaire-saisie-multiple-fin {
+  clear: both;
+}
+
+.chargens {
+  width: 100%;
+  background-color: white;
+}
+
+.chargens.fullscreen {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1050;
+  height: 100%;
+  width: 100%;
+}
+
+.chargens .controles .navbar {
+  margin-bottom: 1px;
+}
+
+.form-noeud {
+  overflow: hidden !important;
+}
+
+.form-lien {
+  overflow: hidden !important;
+}
+
+.ui-front {
+  z-index: 1051;
+}
+
+.chargens .navbar .div-filtre {
+  padding: 4px;
+  padding-bottom: 0px;
+}
+
+.chargens .navbar .div-filtre .div-structure {
+  padding-right: 2px;
+}
+
+.chargens .navbar .div-filtre .div-etape {
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.chargens .navbar .div-filtre .div-scenario {
+  padding-left: 2px;
+}
+
+.chargens .navbar .div-filtre .div-scenario-edit {
+  padding-left: 2px;
+}
+
+.chargens .navbar .div-controles {
+  padding: 4px;
+}
+
+.chargens .controles .div-hetd-composante {
+  margin-right: 0px;
+  height: auto;
+  padding-top: 7px;
+  padding-bottom: 5px;
+}
+
+ul.privileges-form {
+  list-style-type: none;
+}
+
+ul.privileges-form li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul.privileges-form li label {
+  margin-left: 0.5em;
+}
+
+.droits-tbl th.privilege {
+  min-width: 200px;
+  max-width: 200px;
+  width: 200px;
+}
+
+.droits_tbl th.role {
+  width: 15px;
+}
+
+.droits_tbl td.role {
+  width: 15px;
+}
+
+.droits-tbl td i.refuse {
+  opacity: 0.5;
+}
+
+.droits-tbl th.categorie {
+  padding-top: 10pt;
+  font-size: 16pt;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-weight: 200;
+}
+
+.droits-tbl {
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+.droits-tbl thead tr th div {
+  border-bottom: 1px solid #ddd;
+}
+
+.selected {
+  background-color: #FCF8E3 !important;
+}
+
+/* Plafonds */
+.plafonds .plafond .progress {
+  margin-bottom: 0px;
+}
+
+.plafonds .plafond {
+  margin-bottom: 10px;
+}
+
+/**
+ * Offre de formation
+ */
+span.element-rech.niveau,
+span.element-rech.etape,
+span.element-rech.periode,
+span.element-rech.element {
+  font-size: 80%;
+  padding: 0 5px 0 5px;
+  margin-right: 0.5em;
+}
+
+span.element-rech.etape,
+span.element-rech.periode {
+  /*background-color: #babdb6;*/
+  /*background-color: #729fcf*/
+  background-color: #caddf4;
+}
+
+.etape-centre-cout {
+  margin-top: 2px;
+}
+
+.etape-taux-mixite {
+  margin-top: 2px;
+}
+
+.etape-modulateurs {
+  margin-top: 2px;
+}
+
+.etape-modulateurs th.element-pedagogique, .etape-modulateurs td.element-pedagogique {
+  width: 50%;
+}
+
+form#modulateurs-saisie th select {
+  display: inline;
+  width: auto;
+}
+
+.indicateurs table td.numero {
+  width: 5em;
+  text-align: center;
+}
+
+.indicateurs table th.numero {
+  width: 5em;
+  text-align: center;
+}
+
+.indicateurs .notification {
+  width: 12em;
+}
+
+.indicateurs .page-accueil {
+  width: 2em;
+  text-align: center;
+}
+
+.indicateurs-result {
+  margin-bottom: 1em;
+}
+
+.indicateurs-result table {
+  margin-bottom: 0px;
+}
+
+.indicateurs-result table .cc {
+  width: 2em;
+}
+
+.feuille-de-route li.after-courante {
+  opacity: 0.5;
+  background-color: #eee;
+}
+
+.feuille-de-route li span.label {
+  margin-right: 1em;
+  display: block;
+  float: left;
+  min-width: 3em;
+  line-height: 1.4em;
+}
+
+.feuille-de-route li div.row {
+  padding-top: 1em;
+}
+
+.feuille-de-route li div ul {
+  margin-bottom: 0.3em;
+}
+
+.feuille-de-route li div ul li {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+.feuille-de-route li div ul li span {
+  margin-left: -0.1em;
+}
+
+.feuille-de-route li div ul li span.pull-right {
+  margin-left: 1em;
+}
+
+.intervenant-statuts {
+  font-size: 12pt;
+}
+
+.intervenant-statuts .navbar-nav {
+  width: 100%;
+}
+
+.intervenant-statuts .navbar-nav li.historise a {
+  color: #a94442;
+  text-decoration: line-through;
+}
+
+.intervenant-statuts .navbar-nav li a {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.intervenant-statuts span.type-intervenant {
+  font-size: 10pt;
+}
+
+.intervenant-statuts span.statut {
+  font-weight: bold;
+}
+
+.intervenant-statuts span.validite-intervenant {
+  font-size: 10pt;
+  font-style: italic;
+}
+
+.intervenant-statuts li.ajout-intervenant {
+  padding-top: 10px;
+  float: right;
+}
+
+form.statut fieldset legend {
+  font-size: 12px;
+  font-weight: 700;
+}
+
 /* Personnalisation de l'affichage en fonction de l'état du l'application (development, test, production) */
 body.dev {
   background-image: url(data:image/png;base64,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);
@@ -10480,25 +10820,6 @@ table.table-extra-condensed tr th {
 }
 
 /**
- * Offre de formation
- */
-span.element-rech.niveau,
-span.element-rech.etape,
-span.element-rech.periode,
-span.element-rech.element {
-  font-size: 80%;
-  padding: 0 5px 0 5px;
-  margin-right: 0.5em;
-}
-
-span.element-rech.etape,
-span.element-rech.periode {
-  /*background-color: #babdb6;*/
-  /*background-color: #729fcf*/
-  background-color: #caddf4;
-}
-
-/**
  * Autre
  */
 dl.dl-horizontal.intervenant dt {
@@ -10588,11 +10909,6 @@ span.sas-highlight {
   font-weight: bold;
 }
 
-/* Gestion des popovers */
-div.popover {
-  max-width: 600px;
-}
-
 div.scr-center {
   position: fixed;
   width: 100%;
@@ -10614,11 +10930,6 @@ div.scr-center div.alert {
 
 td .form-group {
   margin-bottom: 0px;
-}
-
-form#modulateurs-saisie th select {
-  display: inline;
-  width: auto;
 }
 
 /* Personnalisation du bootstrap-select */
@@ -10775,58 +11086,8 @@ div.navbar.breadcrumbs {
   color: gray;
 }
 
-.etape-centre-cout {
-  margin-top: 2px;
-}
-
-.etape-taux-mixite {
-  margin-top: 2px;
-}
-
-.etape-modulateurs {
-  margin-top: 2px;
-}
-
-.etape-modulateurs th.element-pedagogique, .etape-modulateurs td.element-pedagogique {
-  width: 50%;
-}
-
 form#dossier .form-control[disabled], form#dossier .form-control[readonly], form#dossier fieldset[disabled] .form-control {
   cursor: text;
-}
-
-.feuille-de-route li.after-courante {
-  opacity: 0.5;
-  background-color: #eee;
-}
-
-.feuille-de-route li span.label {
-  margin-right: 1em;
-  display: block;
-  float: left;
-  min-width: 3em;
-  line-height: 1.4em;
-}
-
-.feuille-de-route li div.row {
-  padding-top: 1em;
-}
-
-.feuille-de-route li div ul {
-  margin-bottom: 0.3em;
-}
-
-.feuille-de-route li div ul li {
-  padding-top: 0.2em;
-  padding-bottom: 0.2em;
-}
-
-.feuille-de-route li div ul li span {
-  margin-left: -0.1em;
-}
-
-.feuille-de-route li div ul li span.pull-right {
-  margin-left: 1em;
 }
 
 td .alert {
@@ -10986,87 +11247,6 @@ td .alert {
 
 .seuils-dedoublement td span.aucun {
   color: darkgrey;
-}
-
-.intervenant-statuts {
-  font-size: 12pt;
-}
-
-.intervenant-statuts .navbar-nav {
-  width: 100%;
-}
-
-.intervenant-statuts .navbar-nav li.historise a {
-  color: #a94442;
-  text-decoration: line-through;
-}
-
-.intervenant-statuts .navbar-nav li a {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.intervenant-statuts span.type-intervenant {
-  font-size: 10pt;
-}
-
-.intervenant-statuts span.statut {
-  font-weight: bold;
-}
-
-.intervenant-statuts span.validite-intervenant {
-  font-size: 10pt;
-  font-style: italic;
-}
-
-.intervenant-statuts li.ajout-intervenant {
-  padding-top: 10px;
-  float: right;
-}
-
-form.statut fieldset legend {
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.indicateurs table td.numero {
-  width: 5em;
-  text-align: center;
-}
-
-.indicateurs table th.numero {
-  width: 5em;
-  text-align: center;
-}
-
-.indicateurs .notification {
-  width: 12em;
-}
-
-.indicateurs .page-accueil {
-  width: 2em;
-  text-align: center;
-}
-
-.indicateurs-result {
-  margin-bottom: 1em;
-}
-
-.indicateurs-result table {
-  margin-bottom: 0px;
-}
-
-.indicateurs-result table .cc {
-  width: 2em;
-}
-
-/* Plafonds */
-.plafonds .plafond .progress {
-  margin-bottom: 0px;
-}
-
-.plafonds .plafond {
-  margin-bottom: 10px;
 }
 
 div.div-connexion {

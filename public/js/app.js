@@ -2,13 +2,11 @@ $(function ()
 {
     WidgetInitializer.add('selectpicker', 'selectpicker', function () {
         WidgetInitializer.includeJs(Url('vendor/bootstrap-select-1.14.0/js/bootstrap-select.min.js'));
-        WidgetInitializer.includeCss(Url('vendor/bootstrap-select-1.14.0/css/bootstrap-select.min.css'));
         $('.selectpicker').data('liveSearchNormalize', true); // insensible aux accents
     });
 
     WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche', function () {
-        WidgetInitializer.includeJs(Url('intervenant-recherche/widget.js'));
-        WidgetInitializer.includeCss(Url('intervenant-recherche/widget.css'));
+        WidgetInitializer.includeJs(Url('intervenant-recherche.js'));
     });
 
     WidgetInitializer.add('jstree', 'jstree', function ()
@@ -21,8 +19,6 @@ $(function ()
     {
         WidgetInitializer.includeJs(Url('vendor/DataTables-1.12.1/js/jquery.dataTables.min.js'));
         WidgetInitializer.includeJs(Url('vendor/DataTables-1.12.1/js/dataTables.bootstrap5.min.js'));
-        WidgetInitializer.includeCss(Url('vendor/DataTables-1.12.1/css/dataTables.bootstrap5.min.css'));
-
         WidgetInitializer.includeJs(Url('table-sort/widget.js'));
 
         (function () {
@@ -65,33 +61,22 @@ $(function ()
     /* Services */
     WidgetInitializer.add('enseignements', 'enseignements', function () {
         WidgetInitializer.includeJs(Url('js/service.js'));
-        WidgetInitializer.includeCss(Url('css/service.css'));
     });
     WidgetInitializer.add('service-form', 'serviceForm', function () {
         WidgetInitializer.includeJs(Url('js/service.js'));
-        WidgetInitializer.includeCss(Url('css/service.css'));
     });
     WidgetInitializer.add('service-filtres', 'serviceFiltres', function () {
         WidgetInitializer.includeJs(Url('js/service.js'));
-        WidgetInitializer.includeCss(Url('css/service.css'));
     });
 
     /* Service référentiel */
     WidgetInitializer.add('referentiels', 'referentiels', function () {
         WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
-        WidgetInitializer.includeCss(Url('css/service.css'));
     });
     WidgetInitializer.add('service-referentiel-form', 'serviceReferentielForm', function () {
         WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
-        WidgetInitializer.includeCss(Url('css/service.css'));
     });
 
-
-    /* Pièces jointes */
-    //  WidgetInitializer.add('piece-jointe', 'pieceJointe', function(){
-    //      WidgetInitializer.includeJs(Url('js/piece_jointe.js'));
-    //      WidgetInitializer.includeCss(Url('css/piece_jointe.css'));
-    //  });
 
     /* Offre de formation */
     WidgetInitializer.add('element-pedagogique-recherche', 'elementPedagogiqueRecherche', function () {
@@ -113,31 +98,27 @@ $(function ()
         WidgetInitializer.includeJs(Url('js/offre-formation.js'));
     });
 
+
     /* Charges d'enseignement */
     WidgetInitializer.add('chargens', 'chargens', function () {
         WidgetInitializer.includeJs(Url('vendor/go.js'));
         WidgetInitializer.includeJs(Url('js/chargens.js'));
-        WidgetInitializer.includeCss(Url('css/chargens.css'));
     });
     WidgetInitializer.add('chargens-filtre', 'chargensFiltre', function () {
         WidgetInitializer.includeJs(Url('js/chargens.js'));
-        WidgetInitializer.includeCss(Url('css/chargens.css'));
     });
 
     /* Droits */
     WidgetInitializer.add('droits-tbl', 'droitsTbl', function () {
         WidgetInitializer.includeJs(Url('js/droits.js'));
-        WidgetInitializer.includeCss(Url('css/droits.css'));
     });
     WidgetInitializer.add('affectation-form', 'affectationForm', function () {
         WidgetInitializer.includeJs(Url('js/droits.js'));
-        WidgetInitializer.includeCss(Url('css/droits.css'));
     });
 
     /* DateTime Picker */
     WidgetInitializer.add('bootstrap-datetimepicker', 'bootstrapDatetimepicker', function () {
         WidgetInitializer.includeJs(Url('vendor/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'));
-        WidgetInitializer.includeCss(Url('vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css'));
     });
 
     // installation de tooltip Bootstrap sur les icônes d'information (i)

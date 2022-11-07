@@ -9788,6 +9788,12 @@ h1 small, .h1 small, h1 .small, .h1 .small, h2 small, .h2 small, h2 .small, .h2 
   background-color: #f8efc0;
 }
 
+table thead th {
+  padding: 10px 18px;
+  border-bottom: red;
+  border-bottom-style: none;
+}
+
 div.cartridge {
   margin-left: 1em;
   margin-right: 1em;

@@ -12,7 +12,10 @@ ini_set('memory_limit', '-1');
 $importDirectory = $osedir . 'cache/employeurs/';
 $importArchive = 'employeurs.tar.gz';
 $importFilePath = $importDirectory . $importArchive;
-mkdir($importDirectory);
+if (!file_exists($importDirectory)) {
+    mkdir($importDirectory);
+}
+
 if (file_exists($importFilePath)) {
     unlink($importFilePath);
 }
@@ -23,13 +26,14 @@ if (!file_exists($importFilePath)) {
     $c->printDie("L'archive $importArchive manquante");
 }
 //On vérifie que le répertoire import contient uniquement l'archive et aucun autre CSV
+
 $listFiles = preg_grep('~\.(csv)$~', scandir($importDirectory));
 if (count($listFiles) > 0) {
     $c->printDie("Merci de supprimer les fichiers CSV présents dans le dossier $importDirectory");
 }
 //Extraction du PharData
-//$phar = new PharData($importFilePath);
-//$phar->extractTo($importDirectory);
+$phar = new PharData($importFilePath);
+$phar->extractTo($importDirectory);
 exec('cd ' . $importDirectory . ' && tar -xvf ' . $importFilePath);
 //Verification si des SIRET sont déjà chargé en base
 $bdd = $oa->getBdd();
@@ -40,6 +44,7 @@ $haveAlreadyEmployeur = $bdd->select("SELECT * FROM employeur e");
 
 //récupération de la liste des fichiers CSV
 $listFiles = preg_grep('~\.(csv)$~', scandir($importDirectory));
+
 $nbFiles = count($listFiles);
 $i = 1;
 $c->println("Nombre de fichier à charger : $nbFiles", $c::COLOR_LIGHT_GREEN);
@@ -50,11 +55,15 @@ foreach ($listFiles as $file) {
     $num = str_replace('.csv', '', $file);
 
     $c->println("Chargement du fichier employeur N° $i sur $nbFiles");
+
     $csvFile = fopen($importDirectory . $file, "r");
+
     $row = 0;
     $datas = [];
 
     while (($data = fgetcsv($csvFile, 1000, ",")) !== false) {
+
+
         /*
         * $data[0] = Siren
         * $data[1] = Etat Administratif
@@ -124,7 +133,7 @@ foreach ($listFiles as $file) {
         $datas[] = $data;
         $options['histo-user-id'] = $oseId;
         $options['where'] = 'SIREN LIKE \'' . $num . '%\' AND SOURCE_ID = (SELECT id FROM source WHERE code = \'OSE\') AND SIREN NOT IN (\'999999999\', \'000000000000\')';
-        $options['soft-delete'] = false;
+        $options['soft-delete'] = true;
     }
 
     $i++;

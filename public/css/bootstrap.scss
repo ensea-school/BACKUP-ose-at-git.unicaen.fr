@@ -9,7 +9,7 @@ $danger: #f2dede !default;
 $success: #dff0d8 !default;
 $warning: #f8efc0 !default;
 $info: #b9def0 !default;
-
+$border-bottom-color : #dee2e6;
 @import "../vendor/bootstrap-5.0.2/scss/bootstrap";
 @import "../vendor/bootstrap-5.0.2/scss/functions";
 @import "../vendor/bootstrap-5.0.2/scss/variables";
@@ -71,8 +71,5 @@ h1 small, h2 small, h3 small, h4 small, h5 small {
 }
 
 table thead th {
-  padding: 10px 18px;
-  border-bottom: red;
-  border-bottom-style: none;
-
+  border-bottom: 1px solid $border-bottom-color !important;
 }

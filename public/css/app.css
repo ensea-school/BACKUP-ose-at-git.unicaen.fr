@@ -9770,7 +9770,13 @@ h1 small, .h1 small, h1 .small, .h1 .small, h2 small, .h2 small, h2 .small, .h2 
 }
 
 .btn-primary {
+  color: white;
   background: linear-gradient(to bottom, #337ab7 0, #265a88 100%) repeat-x;
+}
+
+.btn-danger {
+  color: white;
+  background: linear-gradient(to bottom, #d9534f 0, #c12e2a 100%) repeat-x;
 }
 
 .alert-info {

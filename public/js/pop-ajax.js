@@ -15,6 +15,7 @@ $.widget("unicaen.popAjax", {
         submitEvent: undefined,
         submitClose: false,
         submitReload: false,
+        forced: false,
         loadingTitle: 'Chargement...',
         loadingContent: '<div class="loading"></div>',
     },
@@ -86,6 +87,7 @@ $.widget("unicaen.popAjax", {
             submitEvent: 'submit-event',
             submitClose: 'submit-close',
             submitReload: 'submit-reload',
+            forced: 'forced',
             loadingTitle: 'loading-title',
             loadingContent: 'loading-content',
         };
@@ -111,18 +113,19 @@ $.widget("unicaen.popAjax", {
 
         this.ajaxLoaded = true;
         this.setTitle(this.options.loadingTitle);
-        this.setContent(this.options.loadingContent);
+        this.setContent(this.options.loadingContent, true);
         $.ajax({
             url: this.options.url,
             success: (response) => {
                 that.setContent(response);
+                that.contentSubmit(that.getPopoverElement().find('.popover-body'));
             }
         });
     },
 
 
 
-    setContent: function (content) {
+    setContent: function (content, loading) {
         var ct = IntraNavigator.extractTitle(content);
 
         this.popInstance._config.content = ct.content;
@@ -132,7 +135,9 @@ $.widget("unicaen.popAjax", {
             this.setTitle(ct.title);
         }
 
-        this._trigger('change', null, this);
+        if (loading !== true) {
+            this._trigger('change', null, this);
+        }
     },
 
 
@@ -167,7 +172,7 @@ $.widget("unicaen.popAjax", {
     show: function (shown) {
         var that = this;
 
-        if (!this.ajaxLoaded && this.options.url) {
+        if ((this.options.forced || !this.ajaxLoaded) && this.options.url) {
             if (this.options.confirm) {
                 this.setContent(this.makeConfirmBox());
             } else {
@@ -198,6 +203,12 @@ $.widget("unicaen.popAjax", {
 
     shown: function () {
         return this.getPopoverElement() !== undefined;
+    },
+
+
+
+    hasErrors: function () {
+        return IntraNavigator.hasErrors(this.getContent());
     },
 
 

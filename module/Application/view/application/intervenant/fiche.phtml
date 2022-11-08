@@ -9,33 +9,30 @@ echo $this->intervenant($intervenant);
 $urlRefresh = $this->url('workflow/feuille-de-route-refresh', ['intervenant' => $intervenant->getId()]);
 
 ?>
-    <script>
-        $(function () {
-            $('#feuille-de-route-refresh').popAjax({
-                change: function (event, popAjax) {
-                    if (0 == popAjax.popDiv.find('.alert-danger').length) {
-                        window.location.reload();
-
-                    } else {
-                        console.log(popAjax.popDiv);
-                        popAjax.popDiv.find('.popover-content').append(
-                            '<button onclick="window.location.reload();" type="button" class="btn btn-primary">J\'ai lu, recharger la page</button>'
-                        );
-                    }
-                }
-            });
-        });
-    </script>
     <hr/>
     <h2>Feuille de route
         <a href="<?= $urlRefresh ?>"
            id="feuille-de-route-refresh"
+           class="pop-ajax"
            data-loading-title="Mise à jour de la feuille de route..."
+           data-forced="true"
+           data-submit-reload="true"
            style="font-size:12pt"
            title="Mettre à jour la feuille de route"
         >
             <i class="fas fa-arrows-rotate"></i>
         </a>
     </h2>
+    <script>
+        $(function () {
+            $('#feuille-de-route-refresh').popAjax({
+                error: (event, popAjax) => {
+                    var errBtn = '<button onclick="window.location.reload();" type="button" class="btn btn-primary">J\'ai lu, recharger la page</button>';
+
+                    popAjax.setContent(popAjax.getContent() + errBtn);
+                }
+            });
+        });
+    </script>
 <?php
 echo $this->feuilleDeRoute($intervenant)->render();

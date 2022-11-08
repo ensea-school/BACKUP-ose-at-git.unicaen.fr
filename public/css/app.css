@@ -9789,9 +9789,7 @@ h1 small, .h1 small, h1 .small, .h1 .small, h2 small, .h2 small, h2 .small, .h2 
 }
 
 table thead th {
-  padding: 10px 18px;
-  border-bottom: red;
-  border-bottom-style: none;
+  border-bottom: 1px solid #dee2e6 !important;
 }
 
 div.cartridge {

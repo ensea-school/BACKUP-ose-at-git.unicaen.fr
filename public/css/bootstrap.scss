@@ -5,11 +5,18 @@
 
 $primary: #265a88 !default;
 $primary-top: #337ab7;
+
 $danger: #f2dede !default;
+
 $success: #dff0d8 !default;
+$success-texte: #3c763d;
+
 $warning: #f8efc0 !default;
+$warning-texte: #8a6d3b;
+
 $info: #b9def0 !default;
-$border-bottom-color : #dee2e6;
+$info-texte: #31708f;
+$border-bottom-color: #dee2e6;
 @import "../vendor/bootstrap-5.0.2/scss/bootstrap";
 @import "../vendor/bootstrap-5.0.2/scss/functions";
 @import "../vendor/bootstrap-5.0.2/scss/variables";
@@ -52,21 +59,28 @@ h1 small, h2 small, h3 small, h4 small, h5 small {
 }
 
 
-.btn-primary{
-  background: linear-gradient(to bottom,$primary-top 0, $primary 100%) repeat-x;
+.btn-primary {
+  color: white;
+  background: linear-gradient(to bottom, $primary-top 0, $primary 100%) repeat-x;
 }
-.alert-info{
-  color: #31708f;
+
+.btn-danger {
+  color: white;
+  background: linear-gradient(to bottom, #d9534f 0, #c12e2a 100%) repeat-x;
+}
+
+.alert-info {
+  color: $info-texte;
   background-color: $info;
 }
 
-.alert-success{
-  color: #3c763d;
+.alert-success {
+  color: $success-texte;
   background-color: $success;
 }
 
-.alert-warning{
-  color:#8a6d3b;
+.alert-warning {
+  color: $warning-texte;
   background-color: $warning;
 }
 
@@ -74,6 +88,6 @@ table thead th {
   border-bottom: 1px solid $border-bottom-color !important;
 }
 
-.indicateurs .card-header{
-  background: linear-gradient(to bottom,#f5f5f5 0, #e8e8e8 100%) repeat-x;
+.indicateurs .card-header {
+  background: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%) repeat-x;
 }

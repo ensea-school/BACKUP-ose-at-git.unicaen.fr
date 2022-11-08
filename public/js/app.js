@@ -6,7 +6,7 @@ $(function ()
     });
 
     WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche', function () {
-        WidgetInitializer.includeJs(Url('intervenant-recherche.js'));
+        WidgetInitializer.includeJs(Url('js/intervenant-recherche.js'));
     });
 
     WidgetInitializer.add('jstree', 'jstree', function ()

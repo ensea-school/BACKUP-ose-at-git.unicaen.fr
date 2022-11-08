@@ -73,3 +73,7 @@ h1 small, h2 small, h3 small, h4 small, h5 small {
 table thead th {
   border-bottom: 1px solid $border-bottom-color !important;
 }
+
+.indicateurs .card-header{
+  background: linear-gradient(to bottom,#f5f5f5 0, #e8e8e8 100%) repeat-x;
+}

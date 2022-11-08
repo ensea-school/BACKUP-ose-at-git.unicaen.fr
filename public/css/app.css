@@ -9792,6 +9792,10 @@ table thead th {
   border-bottom: 1px solid #dee2e6 !important;
 }
 
+.indicateurs .card-header {
+  background: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%) repeat-x;
+}
+
 div.cartridge {
   margin-left: 1em;
   margin-right: 1em;

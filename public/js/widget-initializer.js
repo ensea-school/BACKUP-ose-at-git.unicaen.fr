@@ -30,7 +30,11 @@ WidgetInitializer = {
             if (widgetName) {
                 widgets.each(function ()
                 {
-                    $(this)[widgetName]($(this).data('widget'));
+                    try {
+                        $(this)[widgetName]($(this).data('widget'));
+                    } catch (e) {
+                        console.log('ERREUR : Widget "' + widgetName + '" non trouvé');
+                    }
                 });
             }
         }

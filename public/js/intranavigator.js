@@ -1,19 +1,61 @@
 IntraNavigator = {
+
     getElementToRefresh: function (element)
     {
         return $($(element).parents('.intranavigator').get(0));
     },
 
+
+
     refreshElement: function (element, data, isSubmit)
     {
         element.html(data);
-        $("body").trigger('intranavigator-refresh', {element: element, isSubmit: isSubmit});
+        element.trigger('intranavigator-refresh', {element: element, isSubmit: isSubmit});
     },
+
+
+
+    hasErrors: function (element) {
+        if (typeof element === 'string') {
+            element = $('<div>' + element + '</div>');
+        }
+
+        var errs = element.find('.input-error, .has-error, .has-errors, .alert.alert-danger').length;
+
+        return errs > 0;
+    },
+
+
+
+    extractTitle: function (element) {
+        var res = {
+            content: undefined,
+            title: undefined
+        };
+
+        if (typeof element === 'string') {
+            element = $('<div>' + element + '</div>');
+        }
+
+        var extractedTitle = element.find('.title,.modal-title,.popover-title,.page-header');
+
+        if (extractedTitle.length > 0) {
+            res.title = extractedTitle.html().trim();
+            extractedTitle.remove();
+        }
+        res.content = element.html().trim();
+
+        return res;
+    },
+
+
 
     embeds: function (element)
     {
         return $(element).parents('.intranavigator').length > 0;
     },
+
+
 
     add: function (element)
     {
@@ -22,6 +64,8 @@ IntraNavigator = {
             //IntraNavigator.run();
         }
     },
+
+
 
     waiting: function (element, message)
     {
@@ -35,10 +79,14 @@ IntraNavigator = {
         }
     },
 
+
+
     endWaiting: function ()
     {
         $('.intramessage').hide();
     },
+
+
 
     formSubmitListener: function (e)
     {
@@ -58,6 +106,8 @@ IntraNavigator = {
         e.preventDefault();
     },
 
+
+
     innerAnchorClickListener: function (e)
     {
         var anchor = $(e.currentTarget);
@@ -69,12 +119,14 @@ IntraNavigator = {
             IntraNavigator.waiting(elementToRefresh, 'Chargement');
             $.get(url, {}, $.proxy(function (data)
             {
-                IntraNavigator.refreshElement(elementToRefresh, data, true);
+                IntraNavigator.refreshElement(elementToRefresh, data, false);
             }, this));
         }
 
         e.preventDefault();
     },
+
+
 
     /*btnPrimaryClickListener: function (e)
      {
@@ -106,6 +158,8 @@ IntraNavigator = {
         // Réglage du focus sur le champ de formulaire ayant l'attribut 'autofocus'
         $('.intranavigator [autofocus]').focus();
     },
+
+
 
     /**
      * Installe le WidgetInitializer pour qu'il se lance au chargement de la page ET après chaque requête AJAX

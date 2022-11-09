@@ -4,5 +4,6 @@
  * @var $form  \Application\Form\MotifNonPaiement\MotifNonPaiementSaisieForm
  */
 
-echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->tag('h1', ['class' => 'page-header'])->html($title);
+echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNoNamespace();
 echo $this->form($form);

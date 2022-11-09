@@ -1,6 +1,5 @@
 $.widget("unicaen.popAjax", {
 
-    popDiv: undefined, loading: false, contentGuid: null, container: undefined,
     popInstance: undefined,
     loading: true,
     ajaxLoaded: false,

@@ -9802,6 +9802,42 @@ table thead th {
   background: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%) repeat-x;
 }
 
+/* Fenêtres modales */
+.modal-backdrop.show {
+  opacity: 0.3;
+}
+
+.modal-dialog .modal-content {
+  border-radius: 0.6em;
+  background-clip: border-box;
+}
+
+.modal-dialog .modal-header {
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  padding: 0.7em;
+  margin: none;
+  background: #428BCA;
+  font-weight: 700;
+  color: #FFF;
+}
+
+.modal-dialog .modal-footer {
+  padding: 0.25em;
+}
+
+.modal-title {
+  line-height: 90%;
+  font-size: 12pt;
+  font-weight: 100;
+  text-shadow: 0px 1px 0px #194B7E;
+  color: white;
+}
+
+.modal-dialog .modal-body h1, .modal-dialog .modal-body .h1 {
+  margin-top: 0;
+}
+
 div.cartridge {
   margin-left: 1em;
   margin-right: 1em;
@@ -10865,40 +10901,6 @@ dl.dl-horizontal.element dd {
 
 h1.page-header, .page-header.h1 {
   margin-top: 10px;
-}
-
-/* Fenêtres modales */
-.modal-backdrop.in {
-  opacity: 0.3;
-}
-
-.modal-dialog .modal-content {
-  border-radius: 0.6em;
-  background-clip: border-box;
-}
-
-.modal-dialog .modal-header {
-  border-top-left-radius: inherit;
-  border-top-right-radius: inherit;
-  padding: 0.8em;
-  margin: none;
-  background: #428BCA;
-  font-weight: 700;
-  color: #FFF;
-}
-
-.modal-dialog .modal-header h1, .modal-dialog .modal-header .h1,
-.modal-dialog .modal-header h2,
-.modal-dialog .modal-header .h2 {
-  line-height: 90%;
-  font-size: 12pt;
-  font-weight: 100;
-  text-shadow: 0px 1px 0px #194B7E;
-  color: white;
-}
-
-.modal-dialog .modal-body h1, .modal-dialog .modal-body .h1 {
-  margin-top: 0;
 }
 
 /* Autocomplete jQuery */

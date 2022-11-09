@@ -30,7 +30,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIE
             <td style="word-wrap: break-word ; "><?= $fr->getLibelleLong() ?></td>
             <?php if ($canEdit) { ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">
-                    <a class="ajax-modal" data-event="motif-non-paiement-saisie"
+                    <a class="mod-ajax" data-submit-reload="true"
                        href="<?= $this->url('motif-non-paiement/saisir', ['motifNonPaiement' => $fr->getId()]) ?>"
                        title="Modifier le motif de non paiement">
                         <i class="fas fa-pen-to-square"></i></a>
@@ -52,16 +52,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIE
     </tbody>
 </table>
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-event="motif-non-paiement-saisie"
-       href="<?= $this->url('motif-non-paiement/saisir') ?>">
-        <i class="fas fa-pen-to-square"></i>
-        Ajouter un motif de non paiement</a>
-
-    <script type="text/javascript">
-        $(function () {
-            $("body").on("motif-non-paiement-saisie", function (event, data) {
-                window.location.reload();
-            });
-        });
-    </script>
+    <a class="btn btn-primary mod-ajax" data-submit-reload="true" href="<?= $this->url('motif-non-paiement/saisir') ?>">
+        <i class="fas fa-pen-to-square"></i>Ajouter un motif de non paiement
+    </a>
 <?php endif ?>

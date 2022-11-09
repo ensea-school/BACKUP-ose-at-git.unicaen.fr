@@ -21,7 +21,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
 <div class="chargens-filtre">
     <label>Scénario : </label>
     <?= $this->formSelect($filtre->get('scenario')) ?>
-    <button class="btn btn-default" type="button" onclick="changeScenario()"><i class="fas fa-square-right"></i> Afficher</button>
+    <button class="btn btn-secondary" type="button" onclick="changeScenario()"><i class="fas fa-square-right"></i> Afficher</button>
 </div>
 <br/>
 
@@ -80,7 +80,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
     <?php endforeach;
 } ?>
 
-<a class="btn btn-default" href="<?= $this->url('chargens'); ?>">
+<a class="btn btn-secondary" href="<?= $this->url('chargens'); ?>">
     <i class="fas fa-rotate-left" aria-hidden="true"></i>
     Retour au menu des charges d'enseignement
 </a>

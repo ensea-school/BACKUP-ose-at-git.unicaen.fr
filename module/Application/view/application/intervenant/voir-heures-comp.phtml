@@ -266,7 +266,7 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
 
 if ($canPutInTest) {
     echo $this->tag('a', [
-        'class' => 'btn btn-default',
+        'class' => 'btn btn-secondary',
         'href'  => $this->url('formule-calcul/test/creer-from-reel', [
             'intervenant'       => $intervenant->getId(),
             'typeVolumeHoraire' => $form->get('type-volume-horaire')->getValue(),

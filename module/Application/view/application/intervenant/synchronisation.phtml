@@ -24,6 +24,6 @@ if ($isImportable && !empty($data)) {
     echo $this->tag('a', [
         'href'  => $this->url('intervenant/synchroniser', ['intervenant' => $intervenant->getId()]),
         'title' => 'Synchroniser (import vers OSE)',
-        'class' => 'btn btn-default no-intranavigation',
+        'class' => 'btn btn-secondary no-intranavigation',
     ])->html('Synchroniser (import vers OSE)');
 }

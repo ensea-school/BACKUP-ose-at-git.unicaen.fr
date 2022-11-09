@@ -59,7 +59,7 @@ class FormButtonGroupViewHelper extends FormRadio
             $inputAttributes['value'] = $value;
 
             $labelAttributes = [
-                'class' => 'btn btn-default',
+                'class' => 'btn btn-secondary',
             ];
             if ($selected) {
                 $labelAttributes['class']   .= ' active';

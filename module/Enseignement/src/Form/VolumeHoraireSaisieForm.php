@@ -141,7 +141,7 @@ class VolumeHoraireSaisieForm extends AbstractForm
             ],
             'attributes' => [
                 'title' => "Abandonner cette saisie",
-                'class' => 'volume-horaire volume-horaire-annuler btn btn-default fermer pop-ajax-hide',
+                'class' => 'volume-horaire volume-horaire-annuler btn btn-secondary fermer pop-ajax-hide',
             ],
         ]);
     }

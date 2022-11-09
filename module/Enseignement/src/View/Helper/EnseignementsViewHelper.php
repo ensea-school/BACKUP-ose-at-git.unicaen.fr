@@ -239,7 +239,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
             $out     .= '</div>';
             $out     .= '</div>';
             $out     .= '<div class="modal-footer">';
-            $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+            $out     .= '<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>';
             $out     .= '<button type="button" class="btn btn-primary prevu-to-prevu" data-intervenant="' . $this->getIntervenant()->getId() . '">OK</button>';
             $out     .= '</div>';
             $out     .= '</div>';
@@ -277,7 +277,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
             $out     .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
             $out     .= '</div>';
             $out     .= '<div class="modal-footer">';
-            $out     .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+            $out     .= '<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>';
             $out     .= '<button type="button" class="btn btn-primary prevu-to-realise">OK</button>';
             $out     .= '</div>';
             $out     .= '</div>';
@@ -461,8 +461,8 @@ class EnseignementsViewHelper extends AbstractViewHelper
     {
         return
             '<div class="service-show-hide-buttons">'
-            . '<button type="button" class="btn btn-default btn-xs service-show-all-details"><i class="fas fa-chevron-down"></i> Tout déplier</button> '
-            . '<button type="button" class="btn btn-default btn-xs service-hide-all-details"><i class="fas fa-chevron-up"></i> Tout replier</button>'
+            . '<button type="button" class="btn btn-secondary btn-xs service-show-all-details"><i class="fas fa-chevron-down"></i> Tout déplier</button> '
+            . '<button type="button" class="btn btn-secondary btn-xs service-hide-all-details"><i class="fas fa-chevron-up"></i> Tout replier</button>'
             . '</div>';
     }
 

@@ -16,7 +16,7 @@
                 <label for="">Numéro INSEE</label>
                 <input class="form-control" type="text" name="insee" value=""/>
             </div>
-            <button type="submit" class="btn btn-default">Rechercher</button>
+            <button type="submit" class="btn btn-secondary">Rechercher</button>
         </form>
     </div>
 </div>
@@ -44,7 +44,9 @@
                     <td><?= $intervenantRh->getPrenom() ?></td>
                     <td><?= $intervenantRh->getCodeRh() ?></td>
                     <td><?= $intervenantRh->getDateNaissance()->format('d/m/Y') ?></td>
-                    <td><a href="<?= $this->url('intervenant/voir', ['intervenant' => 'code:' . $intervenantRh->getIntervenant()->getCode()]); ?>"><?php echo (!empty($intervenantRh->getIntervenant())) ? 'OUI' : 'NON'; ?></a></td>
+                    <td>
+                        <a href="<?= $this->url('intervenant/voir', ['intervenant' => 'code:' . $intervenantRh->getIntervenant()->getCode()]); ?>"><?php echo (!empty($intervenantRh->getIntervenant())) ? 'OUI' : 'NON'; ?></a>
+                    </td>
                     <td><a href="" class="button">VOIR</a></td>
                 </tr>
             <?php endforeach; ?>

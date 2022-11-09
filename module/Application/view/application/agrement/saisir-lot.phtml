@@ -58,10 +58,10 @@ $tid = uniqid('agrements-lot-');
         </table>
         <?php if ($needAction): ?>
             <div style="text-align:right">
-                <button class="btn btn-default btn-xs" type="button"
+                <button class="btn btn-secondary btn-xs" type="button"
                         onclick="$('#<?= $tid ?> :checkbox').prop('checked', true);">Tout sélectionner
                 </button>
-                <button class="btn btn-default btn-xs" type="button"
+                <button class="btn btn-secondary btn-xs" type="button"
                         onclick="$('#<?= $tid ?> :checkbox').prop('checked', false);">Ne rien sélectionner
                 </button>
             </div>

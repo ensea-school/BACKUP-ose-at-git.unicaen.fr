@@ -243,7 +243,7 @@ class EnseignementSaisieFormViewHelper extends AbstractViewHelper
             }
         }
         if ($inRealise) {
-            $res .= '<div><label>&nbsp;</label><br /><br /><button type="button" class="btn btn-default prevu-to-realise" title="Initialise le formulaire avec les heures prévues">Prévu <i class="fas fa-arrow-right"></i> réalisé</button>';
+            $res .= '<div><label>&nbsp;</label><br /><br /><button type="button" class="btn btn-secondary prevu-to-realise" title="Initialise le formulaire avec les heures prévues">Prévu <i class="fas fa-arrow-right"></i> réalisé</button>';
 
             $res .= '</div>';
         }

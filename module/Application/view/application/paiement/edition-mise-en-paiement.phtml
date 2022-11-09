@@ -66,10 +66,10 @@ $this->intervenant($intervenant)->renderTitle('Annulation de mises en paiement')
         </tbody>
     </table>
     <div>
-        <button class="btn btn-default btn-xs" type="button" onclick="$('.table-sort :checkbox').prop('checked', true);">Tout
+        <button class="btn btn-secondary btn-xs" type="button" onclick="$('.table-sort :checkbox').prop('checked', true);">Tout
             sélectionner
         </button>
-        <button class="btn btn-default btn-xs" type="button" onclick="$('.table-sort :checkbox').prop('checked', false);">Ne
+        <button class="btn btn-secondary btn-xs" type="button" onclick="$('.table-sort :checkbox').prop('checked', false);">Ne
             rien sélectionner
         </button>
     </div>
@@ -82,7 +82,7 @@ $this->intervenant($intervenant)->renderTitle('Annulation de mises en paiement')
                 Pour les supprimer définitivement, il convient de retirer également les <a class='no-intranavigation' href='<?= $this->url('intervenant/mise-en-paiement/demande', ['intervenant' => $intervenant->getId()]) ?>'>demandes de mises en paiement</a>.
             </div>
             <div style='text-align:right'>
-            <button type='button' class='btn btn-default pop-ajax-hide'>Non</button>
+            <button type='button' class='btn btn-secondary pop-ajax-hide'>Non</button>
             <button type='button' class='btn btn-primary' onclick='enregistrer()'>Oui</button></div>"
         ><i class="fas fa-trash-can"></i> Annuler les mises en paiement
         </button>

@@ -73,7 +73,7 @@ class EtapeCentreCoutFormViewHelper extends AbstractHtmlElement
         foreach ($typesHeures as $th) {
             $res .= '<th>';
             $res .= $this->getView()->formSelect($form->get($th->getCode()));
-            $res .= ' <button type="button" class="btn btn-default btn-sm form-set-value float-end" data-code="' . $th->getCode() . '" title="Appliquer à tous"><i class="fas fa-arrow-down"></i></button>';
+            $res .= ' <button type="button" class="btn btn-secondary btn-sm form-set-value float-end" data-code="' . $th->getCode() . '" title="Appliquer à tous"><i class="fas fa-arrow-down"></i></button>';
             $res .= '</th>';
         }
         $res .= '</tr>';

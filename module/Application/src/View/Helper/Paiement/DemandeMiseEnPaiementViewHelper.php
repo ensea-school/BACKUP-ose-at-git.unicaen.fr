@@ -138,7 +138,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
         }
         $out .= '<div ' . $this->htmlAttribs($attrs) . '>';
         if ((!$this->getReadOnly()) && $canDemande) {
-            $out .= '<div style="padding-bottom:1em"><button type="button" class="btn btn-default toutes-heures-non-dmep">Demander le paiement de toutes les HETD</button></div>';
+            $out .= '<div style="padding-bottom:1em"><button type="button" class="btn btn-secondary toutes-heures-non-dmep">Demander le paiement de toutes les HETD</button></div>';
         }
         foreach ($servicesAPayer as $serviceAPayer) {
             $out .= $this->renderServiceAPayer($serviceAPayer);
@@ -329,7 +329,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
         if (!$saisieTerminee) {
             $out .= '<tr>';
             $out .= '<td class="nombre">';
-            if (!$readOnly) $out .= '<button class="btn btn-default heures-non-dmep" type="button" title="Demander ces heures en paiement">';
+            if (!$readOnly) $out .= '<button class="btn btn-secondary heures-non-dmep" type="button" title="Demander ces heures en paiement">';
             $out .= \UnicaenApp\Util::formattedNumber($params['heures-non-dmep']);
             if (!$readOnly) $out .= '</button>';
             $out .= '</td>';

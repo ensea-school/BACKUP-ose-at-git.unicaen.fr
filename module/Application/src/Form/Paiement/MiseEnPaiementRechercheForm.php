@@ -125,7 +125,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
             'name'       => 'exporter-pdf',
             'type'       => 'Submit',
             'attributes' => [
-                'class' => 'btn btn-default',
+                'class' => 'btn btn-secondary',
             ],
         ]);
 
@@ -133,7 +133,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
             'name'       => 'exporter-csv-etat',
             'type'       => 'Submit',
             'attributes' => [
-                'class' => 'btn btn-default',
+                'class' => 'btn btn-secondary',
             ],
         ]);
 
@@ -141,7 +141,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
             'name'       => 'exporter-csv-imputation',
             'type'       => 'Submit',
             'attributes' => [
-                'class' => 'btn btn-default',
+                'class' => 'btn btn-secondary',
             ],
         ]);
     }

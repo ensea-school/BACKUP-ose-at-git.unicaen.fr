@@ -259,7 +259,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 </tr>
             </table>
             <button class="enregistrer btn btn-primary">Enregistrer et recalculer les HETD</button>
-            <button class="exporter btn btn-default">Télécharger</button>
+            <button class="exporter btn btn-secondary">Télécharger</button>
             <input type="file" id="importbtn" class="importer">
         </div>
     </div>
@@ -392,7 +392,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     </table>
     <div>
         <h2>Informations de débogage
-            <button class="btn btn-default btn-xs" type="button" data-bs-toggle="collapse" data-target="#debug-info"
+            <button class="btn btn-secondary btn-xs" type="button" data-bs-toggle="collapse" data-target="#debug-info"
                     aria-expanded="false" aria-controls="debug-info">
                 Afficher/masquer
             </button>
@@ -400,7 +400,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
         <div class="collapse debug-info" id="debug-info"></div>
     </div>
 
-    <a class="btn btn-default" href="<?= $this->url('formule-calcul/test') ?>"><i class="fas fa-rotate-left" aria-hidden="true"></i>
+    <a class="btn btn-secondary" href="<?= $this->url('formule-calcul/test') ?>"><i class="fas fa-rotate-left" aria-hidden="true"></i>
         Retour à la liste des formules</a>
 
 </div>

@@ -80,7 +80,7 @@ class MotifModificationServiceDuFieldset extends AbstractFieldset
             ],
             'attributes' => [
                 'title' => "Supprimer cette ligne",
-                'class' => 'modification-service-du modification-service-du-supprimer btn btn-default btn-xs',
+                'class' => 'modification-service-du modification-service-du-supprimer btn btn-secondary btn-xs',
             ],
         ]);
 

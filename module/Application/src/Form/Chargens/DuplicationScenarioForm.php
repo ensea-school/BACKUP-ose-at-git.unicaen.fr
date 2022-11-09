@@ -78,7 +78,7 @@ class DuplicationScenarioForm extends AbstractForm
                 'label' => 'Annuler',
             ],
             'attributes' => [
-                'class' => 'btn btn-default pop-ajax-hide',
+                'class' => 'btn btn-secondary pop-ajax-hide',
             ],
         ]);
     }

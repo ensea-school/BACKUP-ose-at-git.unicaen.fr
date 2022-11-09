@@ -117,7 +117,7 @@ EOS;
             $button = new \Laminas\Form\Element\Button('referentiel-prevu-to-realise');
             $button
                 ->setAttributes([
-                    'class' => 'btn btn-default referentiel-prevu-to-realise',
+                    'class' => 'btn btn-secondary referentiel-prevu-to-realise',
                     'title' => "Initialise le formulaire avec les heures prévues",
                 ])
                 ->setLabel(str_replace('=>', '<i class="fas fa-arrow-right"></i>', $this->getView()->translate('Prévu => réalisé')))

@@ -90,7 +90,7 @@ class RechercheForm extends AbstractForm
     public function addActionButton($name, $label, $actionUrl, $primary = false, array $attributes = [])
     {
         if (!isset($attributes['type'])) $attributes['type'] = 'submit';
-        if (!isset($attributes['class'])) $attributes['class'] = 'btn ' . ($primary ? 'btn-primary' : 'btn-default');
+        if (!isset($attributes['class'])) $attributes['class'] = 'btn ' . ($primary ? 'btn-primary' : 'btn-secondary');
         if (!isset($attributes['onclick'])) $attributes['onclick'] = '$("#' . $this->getId() . '").attr("action", "' . $actionUrl . '");';
 
         $this->add([

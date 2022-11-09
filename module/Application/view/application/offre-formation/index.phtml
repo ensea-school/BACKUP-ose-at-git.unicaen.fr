@@ -16,8 +16,8 @@ use Application\Provider\Privilege\Privileges;
 
 /**
  * @param \Application\Entity\Db\Structure $structure
- * @param \Application\Entity\NiveauEtape $niveau
- * @param \Application\Entity\Db\Etape $etape
+ * @param \Application\Entity\NiveauEtape  $niveau
+ * @param \Application\Entity\Db\Etape     $etape
  */
 function makeQuery($structure = null, $niveau = null, $etape = null)
 {
@@ -186,7 +186,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                         <?php endif; ?>
                         <?php
                         if ($canViewEtape && $ei['etape']) {
-                            echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-default btn-xs fas fa-magnifying-glass" style="float:right"></span>');
+                            echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-secondary btn-xs" style="float:right"><i class="fas fa-magnifying-glass"></i></span>');
                         }
                         ?>
                         <div style="clear: both"></div>
@@ -225,7 +225,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                     if ($canSyncElement && $structure && $serviceSchema->isImportedEntity($structure)) {
                         $attrs = [
                             'href'       => $this->url('of/element/synchronisation-par-code', [], ['query' => ['structure' => $structure->getId()]]),
-                            'class'      => ['element-pedagogique-synchronisation', 'ajax-modal', 'iconify', 'btn', 'btn-default', 'float-end', 'btn-xs'],
+                            'class'      => ['element-pedagogique-synchronisation', 'ajax-modal', 'iconify', 'btn', 'btn-secondary', 'float-end', 'btn-xs'],
                             'data-event' => 'element-pedagogique-synchronisation',
                             'title'      => 'Importer ou synchroniser un enseignement',
                         ];
@@ -234,14 +234,14 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                     if ($canEditElement) {
                         $attrs = [
                             'href'       => $this->url('of/element/ajouter'),
-                            'class'      => ['element-pedagogique-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-default', 'float-end', 'btn-xs'],
+                            'class'      => ['element-pedagogique-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-secondary', 'float-end', 'btn-xs'],
                             'data-event' => 'element-pedagogique-ajouter',
                             'title'      => 'Ajouter un enseignement',
                         ];
                         echo $this->tag('a', $attrs)->html('<i class="fas fa-plus"></i> Nouvel enseignement');
                     }
                     if ($canExport) {
-                        $params = [
+                        $params      = [
                             'structure' => $structure ? $structure->getId() : null,
                             'niveau'    => $niveau ? $niveau->getId() : null,
                             'etape'     => $etape ? $etape->getId() : null,
@@ -249,7 +249,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                         $urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $params]);
 
                         ?>
-                        <a class="float-end btn btn-default btn-xs" href="<?= $urlExportOf ?>">
+                        <a class="float-end btn btn-secondary btn-xs" href="<?= $urlExportOf ?>">
                             <i class="fas fa-upload"></i> Télécharger (CSV)
                         </a>
                         <?php

@@ -8,10 +8,6 @@
     padding-bottom: 2em;
 }
 
-.card-jumbotron .lead {
-    margin-left: 190px;
-}
-
 .appname > .c1 {
     color: #3399ff;
     /*color:#5cb85c;*/
@@ -26,4 +22,11 @@
 .appname > .c3 {
     color:orangered;
     /*olor: #d9534f;*/
+}
+
+.abonnements {
+    clear: both;
+    display: block;
+    margin-top: 20px;
+    font-size: 30px;
 }

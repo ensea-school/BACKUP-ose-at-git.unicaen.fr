@@ -4,7 +4,10 @@
 // Include any default variable overrides here (though functions won't be available)
 
 $primary: #265a88 !default;
-$primary-top: #337ab7;
+$primary-top: #5790c0;
+
+$secondary: #e0e0e0;
+$secondary-top: #fff;
 
 $danger: #f2dede !default;
 
@@ -34,6 +37,8 @@ body {
   font-size: 14px;
 }
 
+/* -------------- LIENS -------------- */
+
 a {
   text-decoration: none;
   color: #337ab7;
@@ -44,8 +49,40 @@ a:hover {
   text-decoration: underline;
 }
 
+a.btn:hover {
+  text-decoration: none;
+}
+
 h1 small, h2 small, h3 small, h4 small, h5 small {
   font-size: 65%;
+}
+
+
+/* Labels */
+.label-primary {
+  background-color: #337ab7;
+}
+.label {
+  display: inline;
+  padding: .2em .6em .3em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+}
+
+/* -------------- Textes -------------- */
+
+h1 {
+  font-size: 36px;
+}
+
+h2 {
+  font-size: 30px;
 }
 
 .small, small {
@@ -54,8 +91,26 @@ h1 small, h2 small, h3 small, h4 small, h5 small {
   font-weight: 400;
 }
 
+.text-danger {
+  color: #a94442 !important;
+}
+
+
+/* -------------- BOUTONS -------------- */
+
 .btn {
   font-size: 14px;
+  transition: none;
+}
+
+.btn-sm {
+  font-size: 12px;
+}
+
+.btn-xs {
+  padding: 0.05rem 0.3rem;
+  font-size: 12px;
+  border-radius: 0.2rem;
 }
 
 
@@ -64,10 +119,100 @@ h1 small, h2 small, h3 small, h4 small, h5 small {
   background: linear-gradient(to bottom, $primary-top 0, $primary 100%) repeat-x;
 }
 
+.btn-primary:hover,.btn-primary:focus {
+  background-color: $primary;
+  background-image: none;
+  border-color: $primary-top;
+}
+
+
+.btn-secondary {
+  border: 1px solid transparent;
+  border-color: #ccc;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+  background-image: linear-gradient(to bottom,$secondary-top 0,$secondary 100%);
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background-color: $secondary;
+  background-image: none;
+  color: #333;
+  border-color: #adadad;
+}
+
+.btn-secondary:focus {
+  color: #333;
+  border-color: #adadad;
+}
+
+
+.btn-info {
+  color: #fff;
+  border-color: #269abc;
+  background: linear-gradient(to bottom, #5bc0de 0, #2aabd2 100%) repeat-x;
+}
+
+.btn-info:hover {
+  background-color: #2aabd2;
+  background-position: 0 -15px;
+  color: #fff;
+  border-color: #269abc;
+}
+
+.btn-info:focus {
+  color: #fff;
+  border-color: #269abc;
+}
+
+
+
 .btn-danger {
   color: white;
   background: linear-gradient(to bottom, #d9534f 0, #c12e2a 100%) repeat-x;
+  border-color: #ac2925;
 }
+
+.btn-danger:hover {
+  background-color: #c12e2a;
+  background-position: 0 -15px;
+  color: #fff;
+  background-color: #c9302c;
+  border-color: #ac2925;
+}
+
+.btn-danger:focus {
+  color: #fff;
+  border-color: #ac2925;
+}
+
+
+
+.btn-success {
+  text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+  background: linear-gradient(to bottom, #5cb85c 0, #419641 100%) repeat-x;
+  color: #fff;
+  border-color: #398439;
+}
+
+.btn-success:hover, {
+  color: #fff;
+  background-color: #419641;
+  background-position: 0 -15px;
+  background-color: #449d44;
+  border-color: #398439;
+}
+
+.btn-success:focus {
+  color: #fff;
+  border-color: #398439;
+}
+
+
+
+
+/* -------------- ALERTS -------------- */
 
 .alert-info {
   color: $info-texte;
@@ -77,6 +222,7 @@ h1 small, h2 small, h3 small, h4 small, h5 small {
 .alert-success {
   color: $success-texte;
   background-color: $success;
+  border-color: #b2dba1;
 }
 
 .alert-warning {
@@ -93,7 +239,82 @@ table thead th {
 }
 
 
-/* Fenêtres modales */
+/* Cards */
+.card {
+  margin-bottom: 20px;
+}
+
+
+/* -------------- NAVs -------------- */
+
+.navbar {
+  border: 1px solid transparent;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+}
+
+.navbar-nav {
+  float: left;
+  display: block;
+  margin: 0;
+}
+
+.navbar-default {
+  background-color: #f8f8f8;
+  border-color: #e7e7e7;
+  background: linear-gradient(to bottom,#fff 0,#f8f8f8 100%) repeat-x;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 5px rgba(0,0,0,.075);
+  min-height: 50px;
+  margin-bottom: 20px;
+}
+
+.navbar-nav > li {
+  float: left;
+}
+.nav > li {
+  position: relative;
+  display: block;
+}
+
+.nav > li > a {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+}
+
+.nav > li > a:focus,
+.nav > li > a:hover {
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
+
+.navbar-nav > li > a {
+  line-height: 20px;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: #777;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .open > a {
+  background: linear-gradient(to bottom,#dbdbdb 0,#e2e2e2 100%) repeat-x;
+  box-shadow: inset 0 3px 9px rgba(0,0,0,.075);
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .active > a:hover {
+  color: #555;
+/*  background-color: #e7e7e7;*/
+}
+
+
+
+
+/* -------------- Fenêtres modales -------------- */
 .modal-backdrop.show {
   opacity: 0.3;
 }
@@ -129,3 +350,65 @@ table thead th {
 .modal-dialog .modal-body h1 {
   margin-top: 0;
 }
+
+
+
+/* -------------- Jumbotron -------------- */
+
+.jumbotron {
+  margin-bottom: 30px;
+  background-color: #eee;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  border-radius: 6px;
+}
+
+.jumbotron h1 {
+  font-size: 63px;
+}
+
+.jumbotron .lead {
+  margin-left: 190px;
+  line-height: 1.4;
+}
+
+.jumbotron p {
+  margin-bottom: 15px;
+  font-size: 21px;
+  font-weight: 200;
+}
+
+
+/* -------------- Listes d dé"finition -------------- */
+
+dl {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+dt {
+  font-weight: 700;
+}
+.dl-horizontal dt {
+  float: left;
+  width: 160px;
+  overflow: hidden;
+  clear: left;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+dd {
+  margin-left: 0;
+}
+dd, dt {
+  line-height: 1.42857143;
+}
+
+.dl-horizontal dd {
+  margin-left: 180px;
+}
+
+

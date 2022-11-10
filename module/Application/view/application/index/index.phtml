@@ -18,7 +18,7 @@ $intervenant     = $context->getIntervenant();
 $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()->getDbRole());
 
 ?>
-    <div class="container-fluid text-sm p-5 bg-light card-jumbotron">
+    <div class="container-fluid text-sm p-5 jumbotron">
         <h1><span class="appname"><span class="c1">O</span><span class="c2">S</span><span class="c3">E</span></span>
             <small>Organisation des Services d'Enseignement</small>
         </h1>
@@ -77,10 +77,12 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
             });
         });
     </script>
-    <h2 class="abonnements">Vos indicateurs <?php if ($canAbonne): ?><a class="btn btn-secondary btn-sm float-end"
-                                                                        href="<?= $this->url('indicateur') ?>">Gérer
-                vos abonnements à des
-                indicateurs</a><?php endif; ?></h2>
+    <h2 class="abonnements">
+        Vos indicateurs
+        <?php if ($canAbonne): ?><a class="btn btn-secondary btn-sm float-end" href="<?= $this->url('indicateur') ?>">
+                Gérer vos abonnements à des indicateurs
+            </a><?php endif; ?>
+    </h2>
     <div id="abonnements">
         <div class="loading"></div>
     </div>

@@ -9,7 +9,8 @@ $primary-top: #5790c0;
 $secondary: #e0e0e0;
 $secondary-top: #fff;
 
-$danger: #f2dede !default;
+$danger: #c12e2a !default;
+$danger-border-color: #ac2925 !default;
 
 $success: #dff0d8 !default;
 $success-texte: #3c763d;
@@ -170,21 +171,20 @@ h2 {
 
 .btn-danger {
   color: white;
-  background: linear-gradient(to bottom, #d9534f 0, #c12e2a 100%) repeat-x;
-  border-color: #ac2925;
+  background: linear-gradient(to bottom, #d9534f 0, $danger 100%) repeat-x;
+  border-color: $danger-border-color;
 }
 
 .btn-danger:hover {
-  background-color: #c12e2a;
   background-position: 0 -15px;
   color: #fff;
   background-color: #c9302c;
-  border-color: #ac2925;
+  border-color: $danger-border-color;
 }
 
 .btn-danger:focus {
   color: #fff;
-  border-color: #ac2925;
+  border-color: $danger-border-color;
 }
 
 
@@ -199,7 +199,6 @@ h2 {
 
 .btn-success:hover, {
   color: #fff;
-  background-color: #419641;
   background-position: 0 -15px;
   background-color: #449d44;
   border-color: #398439;
@@ -213,6 +212,19 @@ h2 {
 .btn-warning {
   color: white;
   background: linear-gradient(to bottom, #f0ad4e 0, #eb9316 100%) repeat-x;
+}
+
+
+.btn-warning :hover {
+  background-position: 0 -15px;
+  color: #fff;
+  background-color: #c9302c;
+  border-color: $danger-border-color;
+}
+
+.btn-warning :focus {
+  color: #fff;
+  border-color: $danger-border-color;
 }
 
 
@@ -248,6 +260,13 @@ table thead th {
   margin-bottom: 20px;
 }
 
+.card .card-footer{
+  background-color: #f5f5f5;
+}
+
+.card .card-body{
+  background-color: white;
+}
 
 /* -------------- NAVs -------------- */
 

@@ -16,6 +16,7 @@
 * Sur la page "Services", la sélection d'un élément après selection d'une composante et d'une formation est désormais fonctionnel
 * Correction des indicateur 910 et 920 qui étaient non fonctionnels dans le cas d'une autovalidation ou d'une absence de contrat
 * Correction de la suppression d'un role dans la page d'administration des roles.
+* Correction mineure sur les notes intervenants au niveau de l'historique (#46303)
 
 ## Notes de mise à jour
 

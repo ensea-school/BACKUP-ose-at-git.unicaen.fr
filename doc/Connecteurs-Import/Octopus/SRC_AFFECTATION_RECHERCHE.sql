@@ -18,7 +18,7 @@ SELECT DISTINCT i.id                intervenant_id,
                 s.id                structure_id,
                 src.id              source_id,
                 i.id || '_' || s.id source_code,
-                s.libelle_court     labo_libelle
+                s.libelle_long      labo_libelle
 FROM affectation_recherche affrech
          JOIN source src ON src.code = 'Octopus'
          JOIN intervenant i

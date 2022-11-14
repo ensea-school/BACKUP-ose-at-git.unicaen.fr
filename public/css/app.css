@@ -9947,20 +9947,21 @@ h2, .h2 {
 }
 
 table thead th {
-  border-bottom: 1px solid #dee2e6 !important;
+  border-bottom: 1px solid #ddd !important;
 }
 
-.card .table {
-  margin-bottom: 0px;
+/* -------------- Cards -------------- */
+.card {
+  margin-bottom: 20px;
 }
 
-.card-header {
+.card .card-header {
   background: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%) repeat-x;
 }
 
-/* Cards */
-.card {
-  margin-bottom: 20px;
+.card.bg-success .card-header {
+  background: linear-gradient(to bottom, #dff0d8 0, #d0e9c6 100%) repeat-x;
+  color: #3c763d;
 }
 
 .card .card-footer {
@@ -9969,6 +9970,10 @@ table thead th {
 
 .card .card-body {
   background-color: white;
+}
+
+.card .table {
+  margin-bottom: 0px;
 }
 
 /* -------------- NAVs -------------- */
@@ -11196,6 +11201,10 @@ dl.dl-horizontal.agrement dt {
   width: 260px;
 }
 
+#tblTpjs th {
+  font-weight: normal;
+}
+
 .intervenant-recherche .critere {
   padding-bottom: 1em;
 }
@@ -11900,7 +11909,13 @@ td .form-group {
   margin-bottom: 0px;
 }
 
-/* Personnalisation du bootstrap-select *
+/* Personnalisation du bootstrap-select */
+.bootstrap-select .btn.dropdown-toggle {
+  background-color: white;
+  /*    border-color:*/
+}
+
+/*
 .bootstrap-select .dropdown-menu li.divider {
     display: none;
 }
@@ -12118,6 +12133,7 @@ td .alert {
   border-top: none;
   border-left: none;
   border-right: none;
+  border-color: #ddd;
 }
 
 .table-header-rotated thead th:first-child {

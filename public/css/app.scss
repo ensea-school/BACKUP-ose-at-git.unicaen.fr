@@ -417,7 +417,14 @@ td .form-group {
 
 
 
-/* Personnalisation du bootstrap-select *
+/* Personnalisation du bootstrap-select */
+
+.bootstrap-select .btn.dropdown-toggle {
+    background-color:white;
+/*    border-color:*/
+}
+
+/*
 .bootstrap-select .dropdown-menu li.divider {
     display: none;
 }
@@ -653,6 +660,7 @@ td .alert {
     border-top: none;
     border-left: none;
     border-right: none;
+    border-color: $border-bottom-color;
 }
 
 .table-header-rotated thead th:first-child {

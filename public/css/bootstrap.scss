@@ -21,7 +21,7 @@ $warning-texte: #8a6d3b;
 $info: #b9def0 !default;
 $info-texte: #31708f;
 
-$border-bottom-color: #dee2e6;
+$border-bottom-color: #ddd;
 @import "../vendor/bootstrap-5.0.2/scss/bootstrap";
 @import "../vendor/bootstrap-5.0.2/scss/functions";
 @import "../vendor/bootstrap-5.0.2/scss/variables";
@@ -259,18 +259,21 @@ table thead th {
 }
 
 
-.card .table {
-  margin-bottom: 0px;
+
+
+
+/* -------------- Cards -------------- */
+.card {
+  margin-bottom: 20px;
 }
 
-.card-header {
+.card .card-header {
   background: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%) repeat-x;
 }
 
-
-/* Cards */
-.card {
-  margin-bottom: 20px;
+.card.bg-success .card-header {
+  background: linear-gradient(to bottom,#dff0d8 0,#d0e9c6 100%) repeat-x;
+  color: $success-texte;
 }
 
 .card .card-footer{
@@ -280,6 +283,15 @@ table thead th {
 .card .card-body{
   background-color: white;
 }
+
+.card .table {
+  margin-bottom: 0px;
+}
+
+
+
+
+
 
 /* -------------- NAVs -------------- */
 

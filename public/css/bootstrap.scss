@@ -34,8 +34,16 @@ body {
   font-size: 14px;
 }
 
+.input-group-text {
+  font-size: 14px;
+}
+
 
 .form-control {
+  font-size: 14px;
+}
+
+.form-select {
   font-size: 14px;
 }
 
@@ -250,7 +258,12 @@ table thead th {
   border-bottom: 1px solid $border-bottom-color !important;
 }
 
-.indicateurs .card-header {
+
+.card .table {
+  margin-bottom: 0px;
+}
+
+.card-header {
   background: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%) repeat-x;
 }
 

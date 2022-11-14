@@ -1,10 +1,5 @@
 $(function ()
 {
-    WidgetInitializer.add('selectpicker', 'selectpicker', function () {
-        WidgetInitializer.includeJs(Url('vendor/bootstrap-select-1.14.0/js/bootstrap-select.min.js'));
-        $('.selectpicker').data('liveSearchNormalize', true); // insensible aux accents
-    });
-
     WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche', function () {
         WidgetInitializer.includeJs(Url('js/intervenant-recherche.js'));
     });
@@ -124,6 +119,9 @@ $(function ()
     // installation de tooltip Bootstrap sur les icônes d'information (i)
     $(".info-icon").tooltip();
 
+    // Bootstrap Select insensible aux accents
+    $('.selectpicker').data('liveSearchNormalize', true);
+    //$('.selectpicker').selectpicker('render');
 });
 
 $(document).ajaxError(function (event, request, settings) {

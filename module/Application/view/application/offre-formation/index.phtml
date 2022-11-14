@@ -121,7 +121,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                 $selectStructure
                     ->setValueOptions(['' => "(Sélectionnez...)"] + \UnicaenApp\Util::collectionAsOptions($structures))
                     ->setValue($structure ? $structure->getId() : null)
-                    ->setAttributes(['class' => 'struct']);
+                    ->setAttributes(['class' => 'struct form-select']);
                 echo $this->formSelect($selectStructure);
                 ?>
                 <script>

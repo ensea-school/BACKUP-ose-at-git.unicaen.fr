@@ -1,4 +1,7 @@
 @import "bootstrap";
+@import "../vendor/bootstrap-select-1.14.0/sass/bootstrap-select";
+@import "../vendor/bootstrap-select-1.14.0/sass/variables";
+@import "unicaen-icon";
 @import "cartridge";
 @import "budget";
 @import "paiement";
@@ -414,7 +417,7 @@ td .form-group {
 
 
 
-/* Personnalisation du bootstrap-select */
+/* Personnalisation du bootstrap-select *
 .bootstrap-select .dropdown-menu li.divider {
     display: none;
 }
@@ -440,7 +443,7 @@ td .form-group {
     width: auto;
     float: left !important;
 }
-
+*/
 
 #navbar .btn-outline-success {
     border: none;

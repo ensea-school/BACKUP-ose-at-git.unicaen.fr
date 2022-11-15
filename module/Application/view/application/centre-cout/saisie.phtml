@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @var $this  \Application\View\Renderer\PhpRenderer
  * @var $form  \Application\Form\FonctionReferentiel\TypeInterventionSaisieForm
  */
+
+echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 echo $this->form()->openTag($form); ?>

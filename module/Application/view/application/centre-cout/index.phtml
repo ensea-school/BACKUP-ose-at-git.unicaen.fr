@@ -57,7 +57,7 @@ while ($i < $nTblListe) {
         <td><?= $fr->getTypeRessource() . '<br>' ?></td>
         <td><?= $fr->getUniteBudgetaire() . '<br>' ?></td>
         <td style=" text-align: center;"><?php if ((!$fr->getSource()->getImportable()) && ($canEdit)) { ?>
-                <a class="ajax-modal" data-event="centre-cout-saisie"
+                <a class="mod-ajax" data-submit-reload="true"
                    href="<?= $this->url('centre-cout/saisie', ['centreCout' => $fr->getId()]) ?>"
                    title="Modifier le Centre de Coûts">
                     <i class="fas fa-pen-to-square"></i></a>
@@ -105,7 +105,7 @@ while ($i < $nTblListe) {
                 } ?>
             <?php } ?>
             <?php if ($canEdit) { ?>
-                <a class="ajax-modal" data-event="centre-cout-saisie"
+                <a class="mod-ajax" data-submit-reload="true"
                    href="<?= $this->url('centre-cout/saisie-structure', ['centreCout' => $fr->getId()]) ?>"
                    title="Ajouter une structure">
                     <button type="button" class="btn btn-xs btn-primary">Ajouter une structure</button>
@@ -127,7 +127,7 @@ while ($i < $nTblListe) {
                 <td style="word-wrap: break-word ; "><?= $frf->getUniteBudgetaire() ?></td>
                 <?php if ((!$frf->getSource()->getImportable()) && $canEdit) { ?>
                     <td style="text-align:center;width:1px;white-space: nowrap">
-                        <a class="ajax-modal" data-event="centre-cout-saisie"
+                        <a class="mod-ajax" data-submit-reload="true"
                            href="<?= $this->url('centre-cout/saisie', ['centreCout' => $frf->getId()]) ?>"
                            title="Modifier le Centre de Coûts">
                             <i class="fas fa-pen-to-square"></i></a>
@@ -158,7 +158,7 @@ while ($i < $nTblListe) {
                             if ($ccs->getCentreCout()->getId() == $frf->getId()) { ?>
                                 <?= $ccs->getStructure() ?>
                                 <?php if ((!$ccs->getSource()->getImportable()) && $canEdit) { ?>
-                                    <a class="ajax-modal" data-event="centre-cout-saisie"
+                                    <a class="mod-ajax" data-submit-reload="true"
                                        href="<?= $this->url('centre-cout/saisie-structure', ['centreCout' => $fr->getId(), 'centreCoutStructure' => $ccs->getId()]) ?>"
                                        title="Modifier la structure">
                                         <i class="fas fa-pen-to-square"></i></a>
@@ -179,7 +179,7 @@ while ($i < $nTblListe) {
                         } ?>
                     <?php } ?>
                     <?php if ($canEdit) { ?>
-                        <a class="ajax-modal" data-event="centre-cout-saisie"
+                        <a class="mod-ajax" data-submit-reload="true"
                            href="<?= $this->url('centre-cout/saisie-structure', ['centreCout' => $frf->getId()]) ?>"
                            title="Ajouter une structure">
                             <button type="button" class="btn btn-xs btn-primary">Ajouter une structure</button>
@@ -193,17 +193,9 @@ while ($i < $nTblListe) {
     </tbody>
 </table>
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-event="centre-cout-saisie"
+    <a class="btn btn-primary class="mod-ajax" data-submit-reload="true"
        href="<?= $this->url('centre-cout/saisie') ?>"
        title="Ajouter un Centre de Coûts">
         <i class="fas fa-pen-to-square"></i>
         Ajouter un centre de coûts</a>
-
-    <script type="text/javascript">
-        $(function () {
-            $("body").on("centre-cout-saisie", function (event, data) {
-                window.location.reload();
-            });
-        });
-    </script>
 <?php endif ?>

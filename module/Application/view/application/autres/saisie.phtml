@@ -3,6 +3,8 @@
  * @var $this  \Application\View\Renderer\PhpRenderer
  * @var $form  \Application\Form\TypeRessource\TypeRessourceSaisieForm
  */
+echo $this->tag('h1', ['class' => 'page-header'])->html($title);
+
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 $type = $dossierAutre->getType()->getId();
 

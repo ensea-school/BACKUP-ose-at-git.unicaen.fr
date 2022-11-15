@@ -12,8 +12,8 @@ if ($form) {
     $fid = uniqid('form-saisie-dotation-');
     $form->setAttribute('id', $fid);
 }
+echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
-echo '<h1 class="page-header">' . $title . '</h1>';
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 ?>

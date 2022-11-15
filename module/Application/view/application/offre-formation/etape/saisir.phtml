@@ -5,7 +5,7 @@
  * @var $form  \Application\Form\OffreFormation\EtapeSaisie
  * @var $title string
  */
-
+echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 echo $this->form()->openTag($form->prepare());
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 

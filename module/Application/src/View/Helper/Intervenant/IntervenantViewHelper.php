@@ -145,7 +145,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
         }
 
         $pourl = $this->getView()->url('intervenant/voir', ['intervenant' => $intervenant->getId()]);
-        $out   = '<a href="' . $pourl . '" data-po-href="' . $pourl . '" class="ajax-modal">' . $intervenant . '</a>';
+        $out   = '<a href="' . $pourl . '" data-po-href="' . $pourl . '" class="mod-ajax">' . $intervenant . '</a>';
 
         return $out;
     }

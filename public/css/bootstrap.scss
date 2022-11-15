@@ -17,11 +17,14 @@ $success-texte: #3c763d;
 
 $warning: #f8efc0 !default;
 $warning-texte: #8a6d3b;
+$warning-border-color: #d58512 !default;
 
 $info: #b9def0 !default;
 $info-texte: #31708f;
 
 $border-bottom-color: #ddd;
+
+$grey-color: #f5f5f5;
 @import "../vendor/bootstrap-5.0.2/scss/bootstrap";
 @import "../vendor/bootstrap-5.0.2/scss/functions";
 @import "../vendor/bootstrap-5.0.2/scss/variables";
@@ -220,19 +223,20 @@ h2 {
 .btn-warning {
   color: white;
   background: linear-gradient(to bottom, #f0ad4e 0, #eb9316 100%) repeat-x;
+  border-color: $warning-border-color;
 }
 
 
-.btn-warning :hover {
+.btn-warning:hover {
   background-position: 0 -15px;
   color: #fff;
-  background-color: #c9302c;
-  border-color: $danger-border-color;
+  background-color: #eb9316;
+  border-color: $warning-border-color;
 }
 
-.btn-warning :focus {
+.btn-warning:focus {
   color: #fff;
-  border-color: $danger-border-color;
+  border-color: $warning-border-color;
 }
 
 
@@ -283,7 +287,7 @@ table thead th {
 }
 
 .card .card-header {
-  background: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%) repeat-x;
+  background: linear-gradient(to bottom, $grey-color 0, #e8e8e8 100%) repeat-x;
 }
 
 .card.bg-success .card-header {
@@ -292,7 +296,7 @@ table thead th {
 }
 
 .card .card-footer{
-  background-color: #f5f5f5;
+  background-color: $grey-color;
 }
 
 .card .card-body{
@@ -303,7 +307,10 @@ table thead th {
   margin-bottom: 0px;
 }
 
-
+.card-well{
+  background : linear-gradient(to bottom,#e8e8e8 0,$grey-color 100%);
+  padding : 19px;
+}
 
 
 
@@ -350,7 +357,7 @@ table thead th {
 .nav > li > a:focus,
 .nav > li > a:hover {
   text-decoration: none;
-  background-color: #f5f5f5;
+  background-color: $grey-color;
 }
 
 .navbar-nav > li > a {

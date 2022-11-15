@@ -62,3 +62,14 @@
     padding-top: 7px;
     padding-bottom: 5px;
 }
+
+
+/* Seuils de dédoublement */
+.seuils-dedoublement tr#seuil-gtf-0 {
+    font-weight: bold;
+    background-color: oldlace;
+}
+
+.seuils-dedoublement td span.aucun {
+    color: darkgrey;
+}

@@ -121,7 +121,13 @@ $(function ()
 
     // Bootstrap Select insensible aux accents
     $('.selectpicker').data('liveSearchNormalize', true);
-    //$('.selectpicker').selectpicker('render');
+    $('.selectpicker').data('size', 'auto');
+});
+
+$(document).ajaxSuccess(function () {
+    // correction d'un bug de bootstrap-select à la MAJ AJAX d'une page
+    $('.selectpicker').selectpicker('render');
+
 });
 
 $(document).ajaxError(function (event, request, settings) {

@@ -254,6 +254,21 @@ h2 {
   background-color: $warning;
 }
 
+
+.alert.exception {
+  padding-left: 100px;
+}
+
+.alert.exception .glyphicon {
+  float: left;
+  margin-left: -80px;
+  font-size: 60px;
+}
+
+.alert.exception h1 {
+  margin-top: 0px;
+}
+
 table thead th {
   border-bottom: 1px solid $border-bottom-color !important;
 }
@@ -357,6 +372,130 @@ table thead th {
 .navbar-default .navbar-nav > .active > a:hover {
   color: #555;
 /*  background-color: #e7e7e7;*/
+}
+
+
+
+/* Personnalisation de la navbar principale */
+#navbar .btn-outline-success {
+  border: none;
+}
+
+#navbar .btn-outline-success a {
+  color: rgba(255, 255, 255, .75);
+  font-size: 16px;
+}
+
+#navbar .btn-outline-success a small {
+  color: rgba(255, 255, 255, .75);
+}
+
+#navbar {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  font-size: 16px;
+  min-height: 50px;
+}
+
+#navbar a.nav-link {
+  padding-top: .8rem;
+  padding-bottom: .8rem;
+}
+
+#navbar {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+#navbar pre {
+  position: relative !important;
+}
+
+a.navbar-brand h1 {
+  font-size: 30px;
+  padding: 0;
+  margin: 0;
+  line-height: 20px;
+}
+
+a.navbar-brand {
+
+}
+
+a.navbar-brand:hover {
+  text-decoration: none;
+  color:white;
+}
+
+div.navbar.breadcrumbs {
+  margin-top: 20px;
+}
+
+#navbar .navbar-brand h1 {
+  font-weight: 500;
+  font-size: 35px;
+  color: rgba(255, 255, 255, .75);
+}
+
+#navbar .navbar-brand h1:hover {
+  font-weight: 500;
+  font-size: 35px;
+  color: white;
+}
+
+#navbar .navbar-brand h1 span {
+  font-size: 12pt;
+}
+
+#navbar .container {
+  padding-left: 0px;
+  padding-right: 2px;
+}
+
+#navbar .container .navbar-header {
+  margin-left: -15px;
+}
+
+#navbar .container .navbar-collapse {
+  margin-right: -15px;
+}
+
+#navbar .container .navbar-header select {
+  margin-top: 12px;
+  height: 26px;
+}
+
+#navbar .navbar-nav li a {
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+#navbar .navbar-nav li a:hover {
+  text-decoration: none;
+  color:white;
+}
+
+#navbar .navbar-collapse.collapse .navbar-right {
+  float: none !important;
+  text-align: right;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  height: 50px;
+  line-height: 50px;
+  height: 50px;
+  white-space: nowrap;
+}
+
+#navbar .navbar-collapse.collapse.in .navbar-right {
+  text-align: left;
+  height: auto;
+  max-height: 900px;
+  white-space: normal;
+  line-height: 2em;
+}
+
+.container {
+  display: table;
 }
 
 

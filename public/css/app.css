@@ -9915,18 +9915,19 @@ h2, .h2 {
 .btn-warning {
   color: white;
   background: linear-gradient(to bottom, #f0ad4e 0, #eb9316 100%) repeat-x;
+  border-color: #d58512;
 }
 
-.btn-warning :hover {
+.btn-warning:hover {
   background-position: 0 -15px;
   color: #fff;
-  background-color: #c9302c;
-  border-color: #ac2925;
+  background-color: #eb9316;
+  border-color: #d58512;
 }
 
-.btn-warning :focus {
+.btn-warning:focus {
   color: #fff;
-  border-color: #ac2925;
+  border-color: #d58512;
 }
 
 /* -------------- ALERTS -------------- */
@@ -9988,6 +9989,11 @@ table thead th {
 
 .card .table {
   margin-bottom: 0px;
+}
+
+.card-well {
+  background: linear-gradient(to bottom, #e8e8e8 0, #f5f5f5 100%);
+  padding: 19px;
 }
 
 /* -------------- NAVs -------------- */

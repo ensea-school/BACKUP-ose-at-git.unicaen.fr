@@ -9826,7 +9826,7 @@ h2, .h2 {
 }
 
 .btn-primary {
-  color: white;
+  color: #fff;
   background: linear-gradient(to bottom, #5790c0 0, #265a88 100%) repeat-x;
 }
 
@@ -9875,7 +9875,7 @@ h2, .h2 {
 }
 
 .btn-danger {
-  color: white;
+  color: #fff;
   background: linear-gradient(to bottom, #d9534f 0, #c12e2a 100%) repeat-x;
   border-color: #ac2925;
 }
@@ -9913,20 +9913,21 @@ h2, .h2 {
 }
 
 .btn-warning {
-  color: white;
+  color: #fff;
   background: linear-gradient(to bottom, #f0ad4e 0, #eb9316 100%) repeat-x;
+  border-color: #d58512;
 }
 
-.btn-warning :hover {
+.btn-warning:hover {
   background-position: 0 -15px;
   color: #fff;
-  background-color: #c9302c;
-  border-color: #ac2925;
+  background-color: #eb9316;
+  border-color: #d58512;
 }
 
-.btn-warning :focus {
+.btn-warning:focus {
   color: #fff;
-  border-color: #ac2925;
+  border-color: #d58512;
 }
 
 /* -------------- ALERTS -------------- */
@@ -9946,6 +9947,7 @@ h2, .h2 {
   background-color: #f8efc0;
 }
 
+/* -------------- Tableau -------------- */
 table thead th {
   border-bottom: 1px solid #ddd !important;
 }
@@ -9969,11 +9971,16 @@ table thead th {
 }
 
 .card .card-body {
-  background-color: white;
+  background-color: #fff;
 }
 
 .card .table {
   margin-bottom: 0px;
+}
+
+.card-well {
+  background: linear-gradient(to bottom, #e8e8e8 0, #f5f5f5 100%);
+  padding: 19px;
 }
 
 /* -------------- NAVs -------------- */
@@ -10071,7 +10078,7 @@ table thead th {
   font-size: 12pt;
   font-weight: 100;
   text-shadow: 0px 1px 0px #194B7E;
-  color: white;
+  color: #fff;
 }
 
 .modal-dialog .modal-body h1, .modal-dialog .modal-body .h1 {

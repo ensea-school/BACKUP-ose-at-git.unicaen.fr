@@ -99,8 +99,8 @@ class EtapeViewHelper extends AbstractViewHelper
 
         $buttons = '';
         if ($this->getView()->isAllowed($entity, Privileges::ODF_ETAPE_EDITION)) {
-            $buttons .= '<a class="btn btn-secondary ajax-modal" href="' . $this->getView()->url('of/etape/modifier', ['etape' => $entity->getId()]) . '" data-event="etape-modifier"><i class="fas fa-pencil"></i> Modifier</a>';
-            $buttons .= '<a class="btn btn-secondary ajax-modal" href="' . $this->getView()->url('of/etape/supprimer', ['etape' => $entity->getId()]) . '" data-event="etape-supprimer"><i class="fas fa-trash-can"></i> Supprimer</a>';
+            $buttons .= '<a class="btn btn-secondary mod-ajax" data-submit-reload="true" href="' . $this->getView()->url('of/etape/modifier', ['etape' => $entity->getId()]) . '" data-event="etape-modifier"><i class="fas fa-pencil"></i> Modifier</a>';
+            $buttons .= '<a class="btn btn-secondary mod-ajax" data-submit-reload="true" href="' . $this->getView()->url('of/etape/supprimer', ['etape' => $entity->getId()]) . '" data-event="etape-supprimer"><i class="fas fa-trash-can"></i> Supprimer</a>';
         }
 
         if ($buttons) {

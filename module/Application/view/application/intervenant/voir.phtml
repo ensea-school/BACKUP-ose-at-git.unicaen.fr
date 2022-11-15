@@ -79,15 +79,4 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_VISU
     ];
 }
 
-echo $this->tabajax($tabs, $tab);?>
-<script>
-    $(function () {
-        $("#fiche").refresh();
-        $("#edition").refresh();
-        $("#synchronisation").refresh();
-        $("#export-rh").refresh();
-        $("#suppression").refresh();
-        $("#derogations").refresh();
-        $("#notes").refresh();
-    });
-</script>
+echo $this->tabajax($tabs, $tab);

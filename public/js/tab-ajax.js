@@ -52,7 +52,7 @@ $.widget("unicaen.tabAjax", {
         tab = this.getTab(tab);
         if (tab.attr('href')[0] !== '#' && (!this.getIsLoaded(tab) || this.getForceRefresh(tab))) {
             var loadurl = tab.attr('href'),
-                tid = tab.attr('data-target');
+                tid = tab.data('bs-target');
 
             that.element.find(".tab-pane" + tid).html("<div class=\"loading\">&nbsp;</div>");
             IntraNavigator.add(that.element.find(".tab-pane" + tid));
@@ -72,7 +72,7 @@ $.widget("unicaen.tabAjax", {
         var that = this;
 
         tab = this.getTab(tab);
-        tid = tab.attr('data-target');
+        tid = tab.data('bs-target');
         return that.element.find(".tab-pane" + tid).html();
     },
 

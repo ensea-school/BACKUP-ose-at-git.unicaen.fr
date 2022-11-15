@@ -165,7 +165,7 @@ class RechercheProcessus
             $cc = (int)$c;
             if (0 === $cc) {
                 if ($sqlCri != '') $sqlCri .= ' AND ';
-                $sqlCri .= 'critere LIKE q\'[%' . $c . '%]\'';
+                $sqlCri .= 'instr(\' \' || critere ,\' ' . $c . '\') > 0';
             } else {
                 $criCode = $cc;
             }

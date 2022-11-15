@@ -29,12 +29,12 @@ $.widget("unicaen.popAjax", {
         /* Traitement des événements */
         if ('A' === this.element.prop("tagName")) {
             // On retire le comportement normal du click sur les ancres
-            that.element.click(function (e) {
+            that.element.on("click", () => {
                 return false;
             });
         }
 
-        $('html').click((e) => {
+        $('html').on("click", (e) => {
             // On détecte si on fait un clic ailleurs afin de fermer la pop-ajax
             that.htmlClick(e);
         });

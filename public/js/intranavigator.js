@@ -156,7 +156,7 @@ IntraNavigator = {
 
         //$('body').one("click", ".intranavigator .btn-primary", IntraNavigator.btnPrimaryClickListener);
         // Réglage du focus sur le champ de formulaire ayant l'attribut 'autofocus'
-        $('.intranavigator [autofocus]').focus();
+        $('.intranavigator [autofocus]').trigger("focus");
     },
 
 

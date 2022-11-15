@@ -12,11 +12,8 @@ $(function ()
     $(document).ajaxComplete(function (event, xhr, settings)
     {
         if (xhr.status === 403) {
-            if (confirm("Votre session a expiré, vous devez vous reconnecter.\n\nCliquez sur OK pour être redirigé(e) vers la page de connexion...")) {
-                var pne = window.location.pathname.split('/');
-                var url = "/" + (pne[0] ? pne[0] : pne[1]) + "/auth/connexion?redirect=" + $(location).attr('href');
-                $(location).attr('href', url);
-            }
+            alert("Opération non autorisée ou session expirée.");
+            xhr.abort();
         }
     });
 
@@ -27,7 +24,7 @@ $(function ()
     if ($(window).scrollTop() > 100) {
         $('.scrollup').fadeIn();
     }
-    $(window).scroll(function ()
+    $(window).on("scroll", function ()
     {
         if ($(this).scrollTop() > 100) {
             $('.scrollup').fadeIn();
@@ -35,7 +32,7 @@ $(function ()
             $('.scrollup').fadeOut();
         }
     });
-    $('.scrollup').click(function ()
+    $('.scrollup').on("click", function ()
     {
         $("html, body").animate({scrollTop: 0}, 300);
         return false;
@@ -125,7 +122,7 @@ $.fn.autocompleteUnicaen = function (options)
         highlight(element.val(), li, 'sas-highlight');
         // si l'item ne possède pas d'id, on fait en sorte qu'il ne soit pas sélectionnable
         if (!item.id) {
-            li.click(function () { return false; });
+            li.on("click", function () { return false; });
         }
         return li;
     };
@@ -405,7 +402,9 @@ AjaxModalListener.prototype.start = function ()
     this.eventListener.on("click", "#" + this.modalContainerId + " a:not([download])", $.proxy(this.innerAnchorClickListener, this));
 
     // le formulaire éventuel est soumis lorsque le bouton principal de la fenêtre modale est cliqué
-    this.eventListener.on("click", this.getSubmitButton().selector, $.proxy(this.btnPrimaryClickListener, this));
+    if (this.getSubmitButton().length) {
+        this.eventListener.on("click", this.getSubmitButton().selector, $.proxy(this.btnPrimaryClickListener, this));
+    }
 
     // interception la soumission classique du formulaire pour le faire à la sauce AJAX
     this.eventListener.on("submit", "#" + this.modalContainerId + " form", $.proxy(this.formSubmitListener, this));

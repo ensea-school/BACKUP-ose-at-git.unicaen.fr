@@ -8,7 +8,7 @@ use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
- * Discipline
+ * Employeur
  */
 class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
 {
@@ -23,28 +23,32 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @var string
      */
-    protected $raisonSociale;
+    protected ?string $raisonSociale = null;
 
     /**
      * @var string
      */
-    protected $nomCommercial;
+    protected ?string $nomCommercial = null;
 
     /**
      * @var string
      */
-    protected $identifiantAssociation;
+    protected ?string $identifiantAssociation = null;
 
     /**
      * @var string
      */
-    protected $siren;
+    protected ?string $siren = null;
 
     /**
      * @var string
      */
-    protected $siret;
+    protected ?string $siret = null;
 
+    /**
+     * @var string
+     */
+    protected ?string $critereRecherche = null;
 
 
     /**
@@ -58,115 +62,112 @@ class Employeur implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
-
     /**
      * @return string
      */
-    public function getRaisonSociale()
+    public function getRaisonSociale(): ?string
     {
         return $this->raisonSociale;
     }
 
 
-
     /**
      * @param string $raisonSociale
      */
-    public function setRaisonSociale($raisonSociale)
+    public function setRaisonSociale($raisonSociale): void
     {
         $this->raisonSociale = $raisonSociale;
 
-        return $this;
     }
-
 
 
     /**
      * @return string
      */
-    public function getSiren()
+    public function getSiren(): ?string
     {
         return $this->siren;
     }
 
 
-
     /**
      * @param string $siren
      */
-    public function setSiren($siren)
+    public function setSiren($siren): void
     {
         $this->siren = $siren;
-
-        return $this;
     }
-
 
 
     /**
      * @return string
      */
-    public function getSiret()
+    public function getSiret(): ?string
     {
         return $this->siret;
     }
 
 
-
     /**
      * @param string $siret
      */
-    public function setSiret($siret)
+    public function setSiret($siret): void
     {
         $this->siret = $siret;
-
-        return $this;
     }
-
 
 
     /**
      * @return string
      */
-    public function getNomCommercial()
+    public function getNomCommercial(): ?string
     {
         return $this->nomCommercial;
     }
 
 
-
     /**
      * @param string $nomCommercial
      */
-    public function setNomCommercial($nomCommercial)
+    public function setNomCommercial($nomCommercial): void
     {
         $this->nomCommercial = $nomCommercial;
-
-        return $this;
     }
-
 
 
     /**
      * @return string
      */
-    public function getIdentifiantAssociation()
+    public function getIdentifiantAssociation(): ?string
     {
         return $this->identifiantAssociation;
     }
 
 
-
     /**
      * @param string $identifiantAssociation
      */
-    public function setIdentifiantAssociation($identifiantAssociation)
+    public function setIdentifiantAssociation($identifiantAssociation): void
     {
         $this->identifiantAssociation = $identifiantAssociation;
-
-        return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getCritereRecherche(): ?string
+    {
+        return $this->critereRecherche;
+    }
+
+
+    /**
+     * @param string $critereRecherche
+     */
+    public function setCritereRecherche($critereRecherche): void
+    {
+        $this->critereRecherche = $critereRecherche;
+    }
 
 
     public function __toString()

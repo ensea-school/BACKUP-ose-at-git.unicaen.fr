@@ -4,14 +4,14 @@
 <h1 class="page-header">Rechercher un employeur</h1>
 
 <div style="padding:1em">
-    <div class="intervenant-recherche">
-        <div class="critere">
+    <div>
+        <div class="critere" style="margin-bottom: 10px;">
             Saisissez le nom ou le siren de l'employeur<br/>
             <form method="POST" action="/employeur">
-                <input id="critere" name="critere" class="form-control input" type="text" style="width:15em;display:inline"/>
+                <input id="critere" name="critere" class="form-control input" type="text"
+                       style="width:15em;display:inline"/>
                 <input type="submit" value="chercher"/>
             </form>
-            <!--<span class="loading" id="intervenant-recherche-loading" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
         </div>
         <?= $this->partial('liste', compact('employeurs')); ?>
 

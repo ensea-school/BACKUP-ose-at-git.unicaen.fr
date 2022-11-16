@@ -19,7 +19,6 @@ class EmployeurService extends AbstractEntityService
     }
 
 
-
     /**
      * Retourne l'alias d'entité courante
      *
@@ -29,7 +28,6 @@ class EmployeurService extends AbstractEntityService
     {
         return 'emp';
     }
-
 
 
     public function getEmployeurs($limit = 100)
@@ -44,14 +42,13 @@ class EmployeurService extends AbstractEntityService
     }
 
 
-
     public function getEmployeursIntervenants()
     {
         $sql = "
             SELECT 
                 * 
-            FROM EMPLOYEUR e
-            JOIN INTERVENANT i ON i.employeur_id = e.id
+            FROM employeur e
+            JOIN intervenant i ON i.employeur_id = e.id
         ";
 
         $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
@@ -60,17 +57,18 @@ class EmployeurService extends AbstractEntityService
     }
 
 
-
     public function rechercheEmployeur($criteria = null, $limit = 50)
     {
         $employeurs = [];
-        $criteria   = Util::reduce($criteria);
+        $criteria = Util::reduce($criteria);
+
 
         $sql = "
             SELECT 
-                * 
+                s.code, e.* 
             FROM 
-                EMPLOYEUR e 
+                EMPLOYEUR e
+            JOIN source s on s.id =e.source_id
             WHERE rownum <= $limit
             AND HISTO_DESTRUCTION IS NULL
         ";
@@ -85,17 +83,19 @@ class EmployeurService extends AbstractEntityService
 
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
         while ($r = $stmt->fetch()) {
-            $siren                = $r['SIREN'];
-            $siret                = $r['SIRET'];
+            $siren = $r['SIREN'];
+            $siret = $r['SIRET'];
             $employeurs[$r['ID']] = [
-                'id'    => $r['ID'],
-                'label' => $r['RAISON_SOCIALE'],
-                'siret' => $siret,
-                'extra' => "<small>($siret)</small>",
+                'id'          => $r['ID'],
+                'label'       => $r['RAISON_SOCIALE'],
+                'siret'       => $siret,
+                'extra'       => "<small>($siret)</small>",
+                'source'      => $r['SOURCE_ID'],
+                'source_code' => $r['CODE'],
             ];
         }
 
-
+     
         return $employeurs;
     }
 

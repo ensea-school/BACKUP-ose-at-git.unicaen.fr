@@ -10004,7 +10004,6 @@ table thead th {
 }
 
 .navbar-nav {
-  float: left;
   display: block;
   margin: 0;
 }
@@ -10019,28 +10018,14 @@ table thead th {
   margin-bottom: 20px;
 }
 
-.navbar-nav > li {
-  float: left;
+@media (min-width: 992px) {
+  .navbar-nav {
+    float: left;
+  }
+  .navbar-nav > li {
+    float: left;
+  }
 }
-
-.nav > li {
-  position: relative;
-  display: block;
-}
-
-.nav > li > a {
-  position: relative;
-  display: block;
-  padding: 10px 15px;
-  text-decoration: none;
-}
-
-.nav > li > a:focus,
-.nav > li > a:hover {
-  text-decoration: none;
-  background-color: #f5f5f5;
-}
-
 .navbar-nav > li > a {
   line-height: 20px;
 }
@@ -10174,6 +10159,29 @@ div.navbar.breadcrumbs {
   max-height: 900px;
   white-space: normal;
   line-height: 2em;
+}
+
+/* -------------- Menu secondaire -------------- */
+#sidebar ul.nav li.nav-item a {
+  text-decoration: none;
+}
+
+#sidebar ul.nav li.nav-item {
+  border-radius: 4px;
+}
+
+#sidebar ul.nav li.nav-item:hover {
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
+
+#sidebar ul.nav li.nav-item.active {
+  color: #fff;
+  background-color: #337ab7;
+}
+
+#sidebar ul.nav li.nav-item.active a {
+  color: white;
 }
 
 .container {

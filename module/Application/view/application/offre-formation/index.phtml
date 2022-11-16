@@ -94,12 +94,12 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
     }
 
     /*th.action, td.action { min-width: 70px; }*/
-    div.element-rech div.card-body label,
-    div.element-rech div.card-body input {
+    div.card-body label,
+    div.card-body input {
         display: inline;
     }
 
-    div.element-rech div.card-body input.form-control {
+    div.card-body input.form-control {
         width: 75%
     }
 </style>
@@ -216,7 +216,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                 echo "<br />" . $this->tag('a', ['class' => 'btn btn-primary', 'href' => $this->url('of/etape/restaurer', ['etape' => $etape->getId()])])->html('Restaurer la formation');
             endif; ?>
 
-            <div class="element-rech card bg-default">
+            <div class="card bg-default">
                 <div class="card-header" style="margin-bottom:1em">
                     <?php $compl = $etape ? "de la formation <strong>$etape</strong>" : "toutes formations confondues"; ?>
                     Enseignements <?= $compl ?>

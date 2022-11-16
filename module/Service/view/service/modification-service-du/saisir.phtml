@@ -51,7 +51,7 @@ foreach ($modificationServiceDu->get('modificationServiceDu')->getIterator() as 
 
     echo '<fieldset><div class="form-group">';
     if ($motif && $motif->getHistoDestruction()) {
-        $motifElement->setAttribute('class', $motifElement->getAttribute('class') . ' bg-historique');
+        $motifElement->setAttribute('class', $motifElement->getAttribute('class') . ' bg-danger');
         $motifElement->setValueOptions(array_merge($motifElement->getValueOptions(), [$motif->getId() => $motif->getLibelle() . ' (MOTIF OBSOLÈTE)']));
         echo $this->formControlGroup($motifElement);
     } else {

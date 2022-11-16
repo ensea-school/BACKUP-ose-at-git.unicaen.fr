@@ -10,6 +10,27 @@
 
 ?>
 
+<style>
+    h1 {
+        margin-top: 2em;
+    }
+</style>
+
+<h1>Titre 1</h1>
+<h2>Titre 2</h2>
+<h3>Titre 3</h3>
+<h4>Titre 4</h4>
+<h5>Titre 5</h5>
+
+<p>Texte normal : Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pulvinar dolor justo, a convallis elit molestie in. Donec cursus faucibus quam
+    egestas egestas.
+    Aliquam vitae maximus quam. Aliquam neque massa, tincidunt vel velit ut, ornare molestie augue. Vestibulum cursus sed orci et posuere. Nulla suscipit
+    aliquet eros sed euismod. Fusce efficitur sodales laoreet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Maecenas
+    viverra condimentum ligula, at sollicitudin diam tempus a. Fusce lacinia est at massa elementum lacinia. Etiam rhoncus varius tortor, et porttitor dolor
+    aliquet ut. Phasellus dapibus diam sit amet commodo sollicitudin. Sed vehicula nulla id tellus aliquam, vel egestas felis fermentum. Duis sem dui,
+    condimentum eu magna sed, congue volutpat lectus. Donec suscipit tellus justo, vel tristique ex interdum id. </p>
+<strong>Texte en gras</strong>
+
 
 <h1>Buttons</h1>
 
@@ -69,24 +90,8 @@
     alert alert-info
 </div>
 
-<div class="alert alert-success">
-    <h4>Titre</h4>
-    alert alert-success
-</div>
-
-<div class="alert alert-danger">
-    <h4>Titre</h4>
-    alert alert-danger
-</div>
-
-<div class="alert alert-warning">
-    <h4>Titre</h4>
-    alert alert-warning
-</div>
-
 
 <h1>Wells</h1>
-
 
 <div class="card-well">
     <h2>Titre du well</h2>
@@ -154,6 +159,33 @@
     <span><a href="#">UFR HSS</a></span>
     <span><a href="#">Master 2A Arts, Lettres et Civilisations</a></span>
     <span><a href="#">2MPROD2A - Développement de l'entreprise de production</a></span>
+</div>
+
+
+<h1>Callout</h1>
+
+<div class="callout-menu">
+    <div class="callout-container">
+        <div class="callout" style="border-left-color: #FFA643">
+            <span class="fas fa-tachometer"></span>
+            <h1><a href="#">Callout 1</a></h1>
+            <ul>
+                <li><a title="Sous-item 1" href="#">Sous-item 1</a></li>
+                <li><a title="Sous-item 2" href="#">Sous-item 2</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="callout-container">
+        <div class="callout" style="border-left-color: #BBCF55">
+            <span class="fas fa-table-list"></span>
+            <h1><a href="#">Callout 2</a></h1>
+            <ul>
+                <li><a title="Sous-item 1" href="#">Sous-item 1</a></li>
+                <li><a title="Sous-item 2" href="#">Sous-item 2</a></li>
+                <li><a title="Sous-item 3" href="#">Sous-item 3</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 

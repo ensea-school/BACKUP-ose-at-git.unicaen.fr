@@ -31,3 +31,17 @@
 .feuille-de-route li div ul li span.pull-right {
   margin-left: 1em;
 }
+
+
+dl.dl-horizontal.intervenant dt {
+  width: 200px;
+}
+
+dl.dl-horizontal.intervenant dd {
+  margin-left: 220px;
+}
+
+.inconnu {
+  font-style: italic;
+  color: gray;
+}

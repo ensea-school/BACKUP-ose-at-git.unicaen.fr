@@ -1,18 +1,9 @@
-
-table {
-  background-color: white;
-}
-
-table.table-xs tr td {
-  padding: 2px;
-}
-
-table.table-xs tr th {
+table.table-xs tr td, table.table-xs tr th {
   padding: 2px;
 }
 
 thead {
-  font-weight: bold;
+/*  font-weight: bold;*/
 }
 
 
@@ -100,4 +91,3 @@ thead {
   padding-left: 2em;
   padding-top: 2em;
 }
-

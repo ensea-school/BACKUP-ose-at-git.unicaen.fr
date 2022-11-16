@@ -46,7 +46,7 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
         ?>
 
         <?php if (empty($offresComplementaires)): ?>
-            <table class="reconduction-offre table table-bordered table-condensed table-hover">
+            <table class="reconduction-offre table table-bordered table-sm table-hover">
                 <thead>
                 <tr>
                     <th colspan="2">Code</th>
@@ -81,9 +81,9 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
 
                         as $ec): ?>
                         <?php if ($ec['reconduction_partiel'] == 'oui'): ?>
-                        <table class="reconduction-offre table table-bordered table-condensed table-hover">
+                        <table class="reconduction-offre table table-bordered table-sm table-hover">
                             <?php else: ?>
-                            <table class="reconduction-offre table table-bordered table-condensed table-hover"
+                            <table class="reconduction-offre table table-bordered table-sm table-hover"
                                    style="display: none" ;>
                                 <?php endif; ?>
                                 <thead>
@@ -169,7 +169,7 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                             </button>
                     </form>
                 <?php else: ?>
-                    <table class="reconduction-offre table table-bordered table-condensed table-hover">
+                    <table class="reconduction-offre table table-bordered table-sm table-hover">
                         <thead>
                         <tr>
                             <th colspan="2">Code</th>

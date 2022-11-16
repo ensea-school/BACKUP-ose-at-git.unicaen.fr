@@ -158,7 +158,7 @@ class ListeCalendaireViewHelper extends AbstractViewHelper
             $filtres[] = VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT;
         }
 
-        $out = '<table class="table table-condensed table-extra-condensed table-bordered volume-horaire">';
+        $out = '<table class="table table-xs table-bordered volume-horaire">';
         $out .= '<thead>';
         $out .= '<tr>';
         $out .= "<th style=\"width:10em\">Début</th>\n";

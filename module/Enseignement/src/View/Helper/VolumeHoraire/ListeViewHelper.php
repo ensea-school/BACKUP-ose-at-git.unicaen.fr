@@ -146,7 +146,7 @@ class ListeViewHelper extends AbstractViewHelper
         $canViewMNP                 = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
         $canEditMNP                 = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_EDITION);
 
-        $out = '<table class="table table-condensed table-bordered volume-horaire">';
+        $out = '<table class="table table-sm table-bordered volume-horaire">';
         $out .= '<tr>';
         $out .= "<th style=\"width:10%\">Période</th>\n";
         foreach ($this->getTypesInterventions() as $ti) {

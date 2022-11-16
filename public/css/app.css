@@ -10942,11 +10942,11 @@ table {
   background-color: white;
 }
 
-table.table-extra-condensed tr td {
+table.table-xs tr td {
   padding: 2px;
 }
 
-table.table-extra-condensed tr th {
+table.table-xs tr th {
   padding: 2px;
 }
 
@@ -12010,11 +12010,11 @@ select.loading {
   color: transparent;
 }
 
-table.table-condensed tr th, table.table-condensed tr td {
+table.table-sm tr th, table.table-sm tr td {
   padding: 5px;
 }
 
-table.table-extra-condensed tr th, table.table-extra-condensed tr td {
+table.table-xs tr th, table.table-xs tr td {
   padding: 2px;
 }
 

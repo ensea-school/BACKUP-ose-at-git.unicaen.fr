@@ -58,7 +58,7 @@ class EtapeCentreCoutFormViewHelper extends AbstractHtmlElement
 
         $form->prepare();
         $res = $this->getView()->form()->openTag($form);
-        $res .= '<table class="table table-bordered table-extra-condensed">';
+        $res .= '<table class="table table-bordered table-xs">';
 
         $res .= '<tr>';
         $res .= '<th rowspan="2" class="element-pedagogique">Elément</th>';

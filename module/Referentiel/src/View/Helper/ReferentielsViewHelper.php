@@ -145,7 +145,7 @@ class ReferentielsViewHelper extends AbstractViewHelper
             $out .= $this->renderActionButtons();
         }
 
-        $out .= '<table class="table table-bordered table-extra-condensed service-referentiel">';
+        $out .= '<table class="table table-bordered table-xs service-referentiel">';
         $out .= '<tr>';
 
         foreach ($this->getColumnsList() as $columnName) {

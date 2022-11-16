@@ -39,7 +39,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
 ?>
 
 <?php if (empty($etapesReconduites)): ?>
-    <table class="reconduction-centre-cout table table-bordered table-condensed table-hover">
+    <table class="reconduction-centre-cout table table-bordered table-sm table-hover">
         <thead>
         <tr>
             <th colspan="2">Code</th>
@@ -61,7 +61,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
     <form action="<?= $this->url('aof/reconduction-centre-cout', [], ['query' => ['structure' => $structure->getId()]]) ?>"
           method="POST" id="form-reconduction">
 
-        <table class="reconduction-offre table table-bordered table-condensed table-hover table-sort">
+        <table class="reconduction-offre table table-bordered table-sm table-hover table-sort">
             <thead>
             <tr>
                 <th><input class="checkbox-element" type="checkbox" value="" id="check-all"></th>

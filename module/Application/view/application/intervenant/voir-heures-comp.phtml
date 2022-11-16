@@ -93,7 +93,7 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
 
     <h2>Heures effectives d'enseignement</h2>
 <?php if (count($data['s']) > 0): ?>
-    <table class="table table-bordered table-condensed table-extra-condensed">
+    <table class="table table-bordered table-xs">
         <tr>
             <th rowspan="4">Elément ou établissement</th>
             <th colspan="3">Taux</th>
@@ -177,7 +177,7 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
 
 <?php if (!empty($data['r'])): ?>
     <h2>Heures de référentiel</h2>
-    <table class="table table-bordered table-condensed table-extra-condensed" style="width:auto">
+    <table class="table table-bordered table-xs" style="width:auto">
         <tr>
             <th>Structure</th>
             <th>Heures réelles</th>

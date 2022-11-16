@@ -71,7 +71,7 @@ class EtapeModulateursSaisieForm extends AbstractHelper
 
         $form->prepare();
         $res = $this->getView()->form()->openTag($form);
-        $res .= '<table class="table table-bordered table-extra-condensed">';
+        $res .= '<table class="table table-bordered table-xs">';
         $res .= '<tr>';
         $res .= '<th rowspan="2">Elément</th>';
         foreach ($displayTypesModulateurs as $typeModulateur) {

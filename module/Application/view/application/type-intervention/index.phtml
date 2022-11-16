@@ -17,7 +17,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
 ?>
 <h1 class="page-header">Types d'interventions</h1>
 
-<table class="table table-bordered table-condensed table-hover">
+<table class="table table-bordered table-sm table-hover">
     <thead>
     <tr>
         <th rowspan="2">Code</th>
@@ -51,7 +51,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                 $hasTis  = $tisList->count() > 0;
                 ?>
                 <?php if ($hasTis): ?>
-                    <table class="table table-bordered table-condensed table-extra-condensed tbl-tis">
+                    <table class="table table-bordered table-xs tbl-tis">
                         <?php foreach ($tisList as $tis) : ?>
                             <tr>
                                 <td><?= ($tis->isVisible() ? $tis->getStructure() : '<s>' . $tis->getStructure() . '</s>') ?></td>

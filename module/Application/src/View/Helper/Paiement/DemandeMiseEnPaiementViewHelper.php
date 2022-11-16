@@ -296,7 +296,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
         $out = '<div ' . $this->htmlAttribs($attrs) . '>';
 
         $attrs = [
-            'class'       => ['table', 'table-condensed', 'table-extra-condensed', 'table-bordered', 'mise-en-paiement-liste'],
+            'class'       => ['table', 'table-sm', 'table-xs', 'table-bordered', 'mise-en-paiement-liste'],
             'id'          => (string)self::$miseEnPaiementListeIdSequence++,
             'data-params' => json_encode($params),
         ];

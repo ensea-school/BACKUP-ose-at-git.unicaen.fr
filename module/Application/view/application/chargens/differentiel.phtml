@@ -112,7 +112,7 @@ if ($error) {
     foreach ($diff as $dk => $dc) {
         echo '<div role="tabcard" class="tab-pane active" id="composante-' . $dk . '">';
         echo '<br /><h2>' . $dc['libelle'] . '</h2>';
-        echo '<table class="table table-bordered table-condensed" style="width:70%">'
+        echo '<table class="table table-bordered table-sm" style="width:70%">'
             . '<tr><th style="width:25%">Totaux Heures/HETD</th><th style="width:25%">' . $avantLibelle . '</th><th style="width:25%">' . $apresLibelle . '</th><th style="width:25%">Différence</th></tr>'
             . '<tr>'
             . '<th>Heures</th>'
@@ -135,7 +135,7 @@ if ($error) {
             echo '<div class="card-body">';
             echo '<div class="row">';
             echo '<div class="col-md-9">';
-            echo '<table class="table table-bordered table-condensed">'
+            echo '<table class="table table-bordered table-sm">'
                 . '<tr><th style="width:25%">Totaux Heures/HETD</th><th style="width:25%">' . $avantLibelle . '</th><th style="width:25%">' . $apresLibelle . '</th><th style="width:25%">Différence</th></tr>'
                 . '<tr>'
                 . '<th>Heures</th>'
@@ -161,7 +161,7 @@ if ($error) {
                 echo '<h4><span class="label label-default">' . $ep['code'] . '</span> ' . $ep['libelle'] . '</h4>';
                 echo '<div style="margin-left:2em;">';
                 if (is_array($diff)) {
-                    echo '<table class="table table-bordered table-condensed table-extra-condensed table-hover">';
+                    echo '<table class="table table-bordered table-xs table-hover">';
                     echo '<tr><th style="width:50%">Différentiel</th><th style="width:25%">' . $avantLibelle . '</th><th style="width:25%">' . $apresLibelle . '</th></tr>';
                     if (isset($diff['effectifs'])) {
                         echo '<tr><th>Effectifs</th><td></td><td></td></tr>';

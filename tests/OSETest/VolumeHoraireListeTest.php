@@ -648,7 +648,7 @@ class VolumeHoraireListeTest
             echo implode('<span style="color:gray">, </span>', $action) ?><span style="color:gray">);</span>
         </div>
     <?php endforeach; ?>
-        <table class="table table-bordered table-condensed">
+        <table class="table table-bordered table-sm">
             <thead>
             <tr>
                 <th>Id</th>

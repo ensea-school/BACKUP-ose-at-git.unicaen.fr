@@ -140,7 +140,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
         $out .= $this->renderActionButtons();
         $out .= $this->renderShowHide();
 
-        $out .= '<table class="table table-condensed table-extra-condensed table-bordered service">';
+        $out .= '<table class="table table-xs table-bordered service">';
         $out .= '<tr>';
 
         foreach ($this->getColumnsList() as $columnName) {

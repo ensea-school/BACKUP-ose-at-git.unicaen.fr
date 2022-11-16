@@ -130,7 +130,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     <div class="row">
         <div class="col-md-6">
             <h2>Intervenant</h2>
-            <table class="table table-condensed table-extra-condensed fti">
+            <table class="table table-xs fti">
                 <tr>
                     <th>Libellé</th>
                     <td class="saisie"><?= $lf->input('libelle', ['maxlength' => "150", 'data-type' => 'string']) ?></td>
@@ -181,7 +181,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
         </div>
         <div class="col-md-5">
             <h2>Types d'intervention (HETD)</h2>
-            <table class="table table-condensed table-extra-condensed table-bordered">
+            <table class="table table-xs table-bordered">
                 <tr>
                     <th style="width:20%"></th>
                     <th style="width:20%">CM</th>
@@ -205,7 +205,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 </tr>
             </table>
             <h2>Résultat</h2>
-            <table class="table table-condensed table-extra-condensed">
+            <table class="table table-xs">
                 <tr>
                     <th colspan="2">Service dû</th>
                     <td class="doutput" data-type="float" data-name="cServiceDu"></td>
@@ -265,7 +265,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     </div>
 
     <h2>Heures effectuées (A saisir de manière chronologique)</h2>
-    <table class="table table-bordered table-condensed table-extra-condensed table-hover fvh">
+    <table class="table table-bordered table-xs table-hover fvh">
         <thead>
         <tr>
             <th rowspan="3" style="width: 2em"></th>
@@ -881,7 +881,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
                 var h = '';
 
-                h += '<div class="debug-info-table"><table class="table table-bordered table-condensed table-extra-condensed debug-table">';
+                h += '<div class="debug-info-table"><table class="table table-bordered table-xs debug-table">';
                 h += '<tr><th></th>';
                 for (var c in data.cols) {
                     h += '<th>' + data.cols[c] + '</th>';
@@ -905,7 +905,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 }
                 h += '</table></div>';
 
-                h += '<table class="table table-bordered table-condensed table-extra-condensed debug-table" style="width:20em">';
+                h += '<table class="table table-bordered table-xs debug-table" style="width:20em">';
                 for (var i in data.inds) {
                     var val = data.inds[i];
 

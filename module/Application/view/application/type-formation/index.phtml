@@ -24,7 +24,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 <div class="triables ui-sortable">
     <?php foreach ($groupeTypeFormations as $groupeTypeFormation): ?>
         <div class="champ-triable" data-id= <?php echo $groupeTypeFormation->getId() ?>>
-            <div class="panel bg-default">
+            <div class="card bg-default">
                 <div class="card-header"><?= $groupeTypeFormation->getLibelleLong(); ?> (<?= $groupeTypeFormation->getLibelleCourt(); ?>)
                     <?php if ($canEdit): ?>
                         <div class="float-end">
@@ -89,7 +89,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <?php endforeach; ?>
 </div>
 <?php if (!empty($typeFormationsWithoutGroupe)): ?>
-    <div class="panel bg-danger">
+    <div class="card bg-danger">
         <div class="card-header ">Type de formation ne possédant pas de groupe
         </div>
         <table class="table table-bordered table-sm bg-danger">

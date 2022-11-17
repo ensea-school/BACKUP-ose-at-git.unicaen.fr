@@ -138,16 +138,16 @@
 </div>
 
 
-<div class="contrat panel panel-success" id="contrat-25014">
-    <div class="panel-heading panel-heading-h3">
-        <h3>Contrat n°25014 - UFR HSS</h3>
+<div class="contrat card bg-success" id="contrat-25014">
+    <div class="card-header card-heading-h3">
+        Contrat n°25014 - UFR HSS
     </div>
 
     <div class="card-body">
         body
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         footer
     </div>
 </div>

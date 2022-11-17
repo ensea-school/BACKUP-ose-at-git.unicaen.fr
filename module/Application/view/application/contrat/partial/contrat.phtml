@@ -62,11 +62,11 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
         <?php if ($urlExport && $urlEmail): ?>
             <span class="float-end">
                 <?php if ($disableEmail): ?>
-                    <a class="disabled btn btn-<?= $card ?>" href="<?= $urlEmail ?>"
+                    <a class="disabled btn btn-seconrary" href="<?= $urlEmail ?>"
                        title="L'intervenant du contrat n'a pas renseigné son email.">
                 <?php endif; ?>
                         <?php if (!$disableEmail): ?>
-                    <a data-event="envoi-mail-contrat" class="ajax-modal btn btn-<?= $card ?>"
+                    <a data-event="envoi-mail-contrat" class="ajax-modal btn btn-secondary"
                        title="Envoyer le contrat par mail"
 
                        href="<?= $urlEmail ?>">
@@ -79,7 +79,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
         <?php if ($urlExport): ?>
 
             <span class="float-end">
-            <a class="btn btn-<?= $card ?>" href="<?= $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
+            <a class="btn btn-secondary" href="<?= $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
                 <i class="fas fa-upload"></i> Exporter en PDF
             </a>
             </span>

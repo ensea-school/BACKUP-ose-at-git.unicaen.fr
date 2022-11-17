@@ -27218,19 +27218,27 @@ a {
   margin-bottom: 20px;
 }
 
+.card div:last-child {
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+}
+
+.card ul:last-child {
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+}
+
+.card table:last-child {
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+}
+
 .card.bg-default .card-header {
   background-color: #f5f5f5;
 }
 
 .card-body {
   background-color: white;
-  border-bottom-left-radius: 0.5em;
-  border-bottom-right-radius: 0.5em;
-}
-
-.card .list-group-flush {
-  border-bottom-left-radius: 0.5em;
-  border-bottom-right-radius: 0.5em;
 }
 
 .card > .table {

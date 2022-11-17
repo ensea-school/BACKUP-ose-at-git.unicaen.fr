@@ -50,7 +50,7 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
             id="valide-pj-<?= $tpj->getId() ?>"
     >
         <div class="card-header card-header-h3">
-            <h3>
+            <h5>
                 <?php if ($hasValidation && $canArchiver && $pj && $pj->getIntervenant()->getAnnee()->getId() != $annee->getId()): ?>
                     <div class="validation-bar float-end">
                         <a class="archiver-pj btn btn-success"
@@ -76,7 +76,7 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
                 !$obligatoire ? '<span style="font-size:0.6em;"> (Document facultatif)</span>' : ''
                 ?>
                 <br/>
-            </h3>
+            </h5>
         </div>
         <div class="card-body">
             <div class="row">

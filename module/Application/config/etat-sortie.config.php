@@ -97,7 +97,7 @@ return [
                             'configuration' => [
                                 'pages' => [
                                     'etat-sortie' => [
-                                        'border-color' => '#9F491F',
+                                        'color' => '#9F491F',
                                         'label'        => "États de sortie",
                                         'title'        => "États de sortie",
                                         'route'        => 'etat-sortie',

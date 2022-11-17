@@ -1,0 +1,621 @@
+// Custom.scss
+// Option A: Include all of Bootstrap
+
+// Include any default variable overrides here (though functions won't be available)
+
+$primary: #265a88 !default;
+$primary-top: #5790c0;
+
+$secondary: #e0e0e0;
+$secondary-top: #fff;
+
+$danger: #c12e2a !default;
+$danger-border-color: #ac2925 !default;
+
+$success: #dff0d8 !default;
+$success-texte: #3c763d;
+
+$warning: #f8efc0 !default;
+$warning-texte: #8a6d3b;
+$warning-border-color: #d58512 !default;
+
+$info: #b9def0 !default;
+$info-texte: #31708f;
+
+$border-bottom-color: #ddd;
+
+$grey-color: #f5f5f5;
+@import "../vendor/bootstrap-5.0.2/scss/bootstrap";
+@import "../vendor/bootstrap-5.0.2/scss/functions";
+@import "../vendor/bootstrap-5.0.2/scss/variables";
+@import "../vendor/bootstrap-5.0.2/scss/mixins";
+// Then add additional custom code here
+
+
+body {
+  font-family: ubuntu, arial, sans-serif;
+  font-size: 14px;
+}
+
+.input-group-text {
+  font-size: 14px;
+}
+
+
+.form-control {
+  font-size: 14px;
+}
+
+.form-select {
+  font-size: 14px;
+}
+
+/* -------------- LIENS -------------- */
+
+a {
+  text-decoration: none;
+  color: $primary-top;
+}
+
+a:hover {
+  color: #0089ff;
+  text-decoration: underline;
+}
+
+a.btn:hover {
+  text-decoration: none;
+}
+
+h1 small, h2 small, h3 small, h4 small, h5 small {
+  font-size: 65%;
+}
+
+
+/* Labels */
+.label-primary {
+  background-color: #337ab7;
+}
+.label {
+  display: inline;
+  padding: .2em .6em .3em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+}
+
+/* -------------- Textes -------------- */
+
+h1 {
+  font-size: 36px;
+}
+
+h2 {
+  font-size: 30px;
+}
+
+.small, small {
+  font-size: 85%;
+  color: #777;
+  font-weight: 400;
+}
+
+.text-danger {
+  color: #a94442 !important;
+}
+
+
+/* -------------- BOUTONS -------------- */
+
+.btn {
+  font-size: 14px;
+  transition: none;
+}
+
+.btn-sm {
+  font-size: 12px;
+}
+
+.btn-xs {
+  padding: 0.05rem 0.3rem;
+  font-size: 12px;
+  border-radius: 0.2rem;
+}
+
+
+.btn-primary {
+  color: white;
+  background: linear-gradient(to bottom, $primary-top 0, $primary 100%) repeat-x;
+}
+
+.btn-primary:hover,.btn-primary:focus {
+  background-color: $primary;
+  background-image: none;
+  border-color: $primary-top;
+}
+
+
+.btn-secondary {
+  border: 1px solid transparent;
+  border-color: #ccc;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+  background-image: linear-gradient(to bottom,$secondary-top 0,$secondary 100%);
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background-color: $secondary;
+  background-image: none;
+  color: #333;
+  border-color: #adadad;
+}
+
+.btn-secondary:focus {
+  color: #333;
+  border-color: #adadad;
+}
+
+
+.btn-info {
+  color: #fff;
+  border-color: #269abc;
+  background: linear-gradient(to bottom, #5bc0de 0, #2aabd2 100%) repeat-x;
+}
+
+.btn-info:hover {
+  background-color: #2aabd2;
+  background-position: 0 -15px;
+  color: #fff;
+  border-color: #269abc;
+}
+
+.btn-info:focus {
+  color: #fff;
+  border-color: #269abc;
+}
+
+
+
+.btn-danger {
+  color: white;
+  background: linear-gradient(to bottom, #d9534f 0, $danger 100%) repeat-x;
+  border-color: $danger-border-color;
+}
+
+.btn-danger:hover {
+  background-position: 0 -15px;
+  color: #fff;
+  background-color: #c9302c;
+  border-color: $danger-border-color;
+}
+
+.btn-danger:focus {
+  color: #fff;
+  border-color: $danger-border-color;
+}
+
+
+
+.btn-success {
+  text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+  background: linear-gradient(to bottom, #5cb85c 0, #419641 100%) repeat-x;
+  color: #fff;
+  border-color: #398439;
+}
+
+.btn-success:hover, {
+  color: #fff;
+  background-position: 0 -15px;
+  background-color: #449d44;
+  border-color: #398439;
+}
+
+.btn-success:focus {
+  color: #fff;
+  border-color: #398439;
+}
+
+.btn-warning {
+  color: white;
+  background: linear-gradient(to bottom, #f0ad4e 0, #eb9316 100%) repeat-x;
+  border-color: $warning-border-color;
+}
+
+
+.btn-warning:hover {
+  background-position: 0 -15px;
+  color: #fff;
+  background-color: #eb9316;
+  border-color: $warning-border-color;
+}
+
+.btn-warning:focus {
+  color: #fff;
+  border-color: $warning-border-color;
+}
+
+
+/* -------------- ALERTS -------------- */
+
+.alert-info {
+  color: $info-texte;
+  background-color: $info;
+}
+
+.alert-success {
+  color: $success-texte;
+  background-color: $success;
+  border-color: #b2dba1;
+}
+
+.alert-warning {
+  color: $warning-texte;
+  background-color: $warning;
+}
+
+
+.alert.exception {
+  padding-left: 100px;
+}
+
+.alert.exception .glyphicon {
+  float: left;
+  margin-left: -80px;
+  font-size: 60px;
+}
+
+.alert.exception h1 {
+  margin-top: 0px;
+}
+
+
+
+
+
+
+
+/* -------------- Cards -------------- */
+.card {
+  margin-bottom: 20px;
+}
+
+.card .card-header {
+  background: linear-gradient(to bottom, $grey-color 0, #e8e8e8 100%) repeat-x;
+}
+
+.card.bg-success .card-header {
+  background: linear-gradient(to bottom,#dff0d8 0,#d0e9c6 100%) repeat-x;
+  color: $success-texte;
+}
+
+.card .card-footer{
+  background-color: $grey-color;
+}
+
+.card .card-body{
+  background-color: white;
+}
+
+.card .table {
+  margin-bottom: 0px;
+}
+
+.card-well{
+  background : linear-gradient(to bottom,#e8e8e8 0,$grey-color 100%);
+  padding : 19px;
+}
+
+
+
+
+/* -------------- NAVs -------------- */
+
+.navbar {
+  border: 1px solid transparent;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+}
+
+.navbar-nav {
+  display: block;
+  margin: 0;
+}
+
+.navbar-default {
+  background-color: #f8f8f8;
+  border-color: #e7e7e7;
+  background: linear-gradient(to bottom,#fff 0,#f8f8f8 100%) repeat-x;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 5px rgba(0,0,0,.075);
+  min-height: 50px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 992px) {
+
+  .navbar-nav {
+    float: left;
+  }
+
+  .navbar-nav > li {
+    float: left;
+  }
+}
+
+
+.navbar-nav > li > a {
+  line-height: 20px;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: #777;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .open > a {
+  background: linear-gradient(to bottom,#dbdbdb 0,#e2e2e2 100%) repeat-x;
+  box-shadow: inset 0 3px 9px rgba(0,0,0,.075);
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .active > a:hover {
+  color: #555;
+/*  background-color: #e7e7e7;*/
+}
+
+
+
+/* Personnalisation de la navbar principale */
+#navbar .btn-outline-success {
+  border: none;
+}
+
+#navbar .btn-outline-success a {
+  color: rgba(255, 255, 255, .75);
+  font-size: 16px;
+}
+
+#navbar .btn-outline-success a small {
+  color: rgba(255, 255, 255, .75);
+}
+
+#navbar {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  font-size: 16px;
+  min-height: 50px;
+}
+
+#navbar a.nav-link {
+  padding-top: .8rem;
+  padding-bottom: .8rem;
+}
+
+#navbar {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+#navbar pre {
+  position: relative !important;
+}
+
+a.navbar-brand h1 {
+  font-size: 30px;
+  padding: 0;
+  margin: 0;
+  line-height: 20px;
+}
+
+a.navbar-brand {
+
+}
+
+a.navbar-brand:hover {
+  text-decoration: none;
+  color:white;
+}
+
+div.navbar.breadcrumbs {
+  margin-top: 20px;
+}
+
+#navbar .navbar-brand h1 {
+  font-weight: 500;
+  font-size: 35px;
+  color: rgba(255, 255, 255, .75);
+}
+
+#navbar .navbar-brand h1:hover {
+  font-weight: 500;
+  font-size: 35px;
+  color: white;
+}
+
+#navbar .navbar-brand h1 span {
+  font-size: 12pt;
+}
+
+#navbar .container {
+  padding-left: 0px;
+  padding-right: 2px;
+}
+
+#navbar .container .navbar-header {
+  margin-left: -15px;
+}
+
+#navbar .container .navbar-collapse {
+  margin-right: -15px;
+}
+
+#navbar .container .navbar-header select {
+  margin-top: 12px;
+  height: 26px;
+}
+
+#navbar .navbar-nav li a {
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+#navbar .navbar-nav li a:hover {
+  text-decoration: none;
+  color:white;
+}
+
+#navbar .navbar-collapse.collapse .navbar-right {
+  float: none !important;
+  text-align: right;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  height: 50px;
+  line-height: 50px;
+  height: 50px;
+  white-space: nowrap;
+}
+
+#navbar .navbar-collapse.collapse.in .navbar-right {
+  text-align: left;
+  height: auto;
+  max-height: 900px;
+  white-space: normal;
+  line-height: 2em;
+}
+
+/* -------------- Menu secondaire -------------- */
+
+
+#sidebar ul.nav li.nav-item a {
+  text-decoration: none;
+}
+
+#sidebar ul.nav li.nav-item {
+  border-radius: 4px;
+}
+
+#sidebar ul.nav li.nav-item:hover {
+  text-decoration: none;
+  background-color: $grey-color;
+}
+
+#sidebar ul.nav li.nav-item.active {
+  color: #fff;
+  background-color: #337ab7;
+}
+
+#sidebar ul.nav li.nav-item.active a {
+  color: white;
+}
+
+.container {
+  display: table;
+}
+
+
+
+
+/* -------------- Fenêtres modales -------------- */
+.modal-backdrop.show {
+  opacity: 0.3;
+}
+
+.modal-dialog .modal-content {
+  border-radius: 0.6em;
+  background-clip: border-box;
+}
+
+.modal-dialog .modal-header {
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  padding: .7em;
+  margin: none;
+  background: #428BCA;
+  font-weight: 700;
+  color: #FFF;
+
+}
+
+.modal-dialog .modal-footer {
+  padding: 0.25em;
+}
+
+.modal-title {
+  line-height: 90%;
+  font-size: 12pt;
+  font-weight: 100;
+  text-shadow: 0px 1px 0px #194B7E;
+  color: white;
+}
+
+.modal-dialog .modal-body h1 {
+  margin-top: 0;
+}
+
+
+
+/* -------------- Jumbotron -------------- */
+
+.jumbotron {
+  margin-bottom: 30px;
+  background-color: #eee;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  border-radius: 6px;
+}
+
+.jumbotron h1 {
+  font-size: 63px;
+}
+
+.jumbotron .lead {
+  margin-left: 190px;
+  line-height: 1.4;
+}
+
+.jumbotron p {
+  margin-bottom: 15px;
+  font-size: 21px;
+  font-weight: 200;
+}
+
+
+/* -------------- Listes de définition -------------- */
+
+dl {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+dt {
+  font-weight: 700;
+}
+.dl-horizontal dt {
+  float: left;
+  width: 160px;
+  overflow: hidden;
+  clear: left;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+dd {
+  margin-left: 0;
+}
+dd, dt {
+  line-height: 1.42857143;
+}
+
+.dl-horizontal dd {
+  margin-left: 180px;
+}
+
+

@@ -141,7 +141,7 @@ return [
                                         'route'        => 'type-intervention',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeIntervention', 'index'),
                                         'order'        => 70,
-                                        'border-color' => '#71DFD7',
+                                        'color' => '#71DFD7',
                                     ],
                                 ],
                             ],

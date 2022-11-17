@@ -11,7 +11,7 @@
 ?>
 
 <style>
-    h1 {
+    h1:not(.title) {
         margin-top: 2em;
     }
 </style>
@@ -56,13 +56,13 @@
 
 <h2>Taille XS</h2>
 
-<button class="btn btn-xs btn-primary">btn btn-primary</button>
+<button class="btn btn-sm btn-primary">btn btn-primary</button>
 
-<button class="btn btn-xs btn-secondary">btn btn-secondary</button>
+<button class="btn btn-sm btn-secondary">btn btn-secondary</button>
 
-<button class="btn btn-xs btn-warning">btn btn-warning</button>
+<button class="btn btn-sm btn-warning">btn btn-warning</button>
 
-<button class="btn btn-xs btn-danger">btn btn-danger</button>
+<button class="btn btn-sm btn-danger">btn btn-danger</button>
 
 
 <h1>Alerts</h1>
@@ -93,7 +93,7 @@
 
 <h1>Wells</h1>
 
-<div class="card-well">
+<div class="well">
     <h2>Titre du well</h2>
     contenu du well
 </div>
@@ -143,7 +143,7 @@
         <h3>Contrat n°25014 - UFR HSS</h3>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         body
     </div>
 

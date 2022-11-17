@@ -12,17 +12,17 @@ echo $this->tag('div', ['class' => 'callout-menu']);
 foreach ($container as $page) {
     if ($this->navigation()->accept($page)) {
         $attrs = [
-            'class' => 'callout',
+            'class' => 'callout-container',
         ];
-        if ($borderColor = $page->get('border-color')) {
-            $attrs['style'] = 'border-left-color:' . $borderColor;
+        if ($borderColor = $page->get('color')) {
+            $attrs['style'] = 'background-color:' . $borderColor;
         }
         if ($description = $page->get('description')) {
             $attrs['title'] = $description;
         }
 
-        echo $this->tag('div', ['class' => 'callout-container']);
         echo $this->tag('div', $attrs);
+        echo $this->tag('div', ['class' => 'callout']);
         if ($icon = $page->get('icon')) {
             echo $this->tag('span', ['class' => $icon])->open(TagViewHelper::AUTOCLOSE_FULL);
         }
@@ -45,4 +45,7 @@ foreach ($container as $page) {
         echo '</div>';
     }
 }
+echo '<div style="clear: both"></div>';
 echo '</div>';
+
+

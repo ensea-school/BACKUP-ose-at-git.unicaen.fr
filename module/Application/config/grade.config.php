@@ -64,7 +64,7 @@ return [
                                         'route'        => 'grades',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Grade', 'index'),
                                         'order'        => 30,
-                                        'border-color' => '#BBCF55',
+                                        'color' => '#BBCF55',
                                     ],
                                 ],
                             ],

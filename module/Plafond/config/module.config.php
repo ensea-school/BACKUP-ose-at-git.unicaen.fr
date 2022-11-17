@@ -124,7 +124,7 @@ return [
                             'label'        => "Plafonds",
                             'route'        => 'plafond',
                             'resource'     => PrivilegeController::getResourceId('Plafond\Controller\Plafond', 'index'),
-                            'border-color' => '#9B9B9B',
+                            'color' => '#9B9B9B',
                             'order'        => 60,
                         ],
                     ],

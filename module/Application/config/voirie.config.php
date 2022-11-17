@@ -64,7 +64,7 @@ return [
                                         'route'        => 'voirie',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Voirie', 'index'),
                                         'order'        => 50,
-                                        'border-color' => '#BBCF55',
+                                        'color' => '#BBCF55',
                                     ],
 
                                 ],

@@ -100,8 +100,8 @@ uasort($pagesNiv1, $sorterByOrder);
 
         <?php endif ?>
         <?php if (!$hasChildren || !$access): ?>
-            <li class="nav-item <?php if ($page->isActive()) echo 'active' ?>">
-                <a class="nav-link" href="<?php echo $page->getHref() ?>"
+            <li class="nav-item">
+                <a class="nav-link <?php if ($page->isActive()) echo ' active' ?>" href="<?php echo $page->getHref() ?>"
                     <?php if ($page->getTarget() != ""): ?>
                         target="<?php echo $page->getTarget(); ?>"
                     <?php endif; ?>>

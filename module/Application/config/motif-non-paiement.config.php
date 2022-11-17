@@ -60,7 +60,7 @@ return [
                                         'route'        => 'motif-non-paiement',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\MotifNonPaiement', 'index'),
                                         'order'        => 50,
-                                        'border-color' => '#BBCF55',
+                                        'color' => '#BBCF55',
                                     ],
                                 ],
                             ],

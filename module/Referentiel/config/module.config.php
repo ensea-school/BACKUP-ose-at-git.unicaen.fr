@@ -183,7 +183,7 @@ return [
                             'route'        => 'fonction-referentiel',
                             'resource'     => PrivilegeController::getResourceId(FonctionReferentielController::class, 'index'),
                             'order'        => 70,
-                            'border-color' => '#BBCF55',
+                            'color' => '#BBCF55',
                         ],
                     ],
                 ],

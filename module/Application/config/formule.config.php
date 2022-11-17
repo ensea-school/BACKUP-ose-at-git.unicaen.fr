@@ -135,7 +135,7 @@ return [
                                         'route'        => 'formule-calcul/test',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Formule', 'test'),
                                         'order'        => 50,
-                                        'border-color' => '#0C8758',
+                                        'color' => '#0C8758',
                                     ],
                                 ],
                             ],

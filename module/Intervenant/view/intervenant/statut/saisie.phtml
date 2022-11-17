@@ -51,7 +51,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <!-- Informations générales -->
         <div class="card bg-default">
             <div class="card-header">Informations générales</div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
                         <?= $this->formControlGroup($form->get('typeIntervenant')); ?>
@@ -86,7 +86,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <!-- Données personnelles -->
         <div class="panel bg-default">
             <div class="card-header">Données personnelles</div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('dossier')); ?>
@@ -155,7 +155,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <!-- Pièces justificatives -->
         <div class="panel bg-default">
             <div class="card-header">Pièces justificatives</div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('pieceJustificative')); ?>
@@ -174,7 +174,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <!-- Services -->
         <div class="panel bg-default">
             <div class="card-header">Services d'enseignement</div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('servicePrevu')); ?>
@@ -195,7 +195,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <!-- Référentiel -->
         <div class="panel bg-default">
             <div class="card-header">Référentiel</div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('referentielPrevu')); ?>
@@ -211,7 +211,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <!-- Agréments -->
         <div class="panel bg-default">
             <div class="card-header">Agréments</div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('conseilRestreint')); ?>
@@ -235,7 +235,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <!-- Contrat -->
         <div class="panel bg-default">
             <div class="card-header">Contrat de travail et avenants</div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('contrat')); ?>
@@ -254,7 +254,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <!-- Calcul des heures complémentaires et mises en paiement -->
         <div class="panel bg-default">
             <div class="card-header">Calcul des heures complémentaires et mises en paiement</div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('serviceStatutaire')); ?>

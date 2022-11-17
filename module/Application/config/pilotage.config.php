@@ -55,7 +55,7 @@ return [
                                     ],
                                 ],
                                 'order'        => 20,
-                                'border-color' => '#00A020',
+                                'color' => '#00A020',
                             ],
                         ],
                     ],

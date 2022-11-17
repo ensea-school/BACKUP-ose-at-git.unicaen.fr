@@ -103,7 +103,7 @@ return [
                                 'route'        => 'budget',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Budget', 'index'),
                                 'order'        => 30,
-                                'border-color' => '#EB4995',
+                                'color' => '#EB4995',
                                 'pages'        => [
                                     'tableau-de-bord'         => [
                                         'label'    => 'Tableau de bord',

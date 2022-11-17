@@ -114,7 +114,7 @@ return [
                             'route'        => 'statut',
                             'resource'     => PrivilegeController::getResourceId('Intervenant\Controller\Statut', 'index'),
                             'order'        => 40,
-                            'border-color' => '#BBCF55',
+                            'color' => '#BBCF55',
                         ],
                     ],
                 ],

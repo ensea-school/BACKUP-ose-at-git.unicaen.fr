@@ -167,7 +167,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
         <div class="card bg-default">
             <div class="card-header">
                 Formation
-                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<i class="fas fa-plus"></i>', ['class' => 'btn-xs', 'style' => 'float:right'], $structure) ?>
+                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<i class="fas fa-plus"></i>', ['class' => 'btn-sm', 'style' => 'float:right'], $structure) ?>
             </div>
             <div class="card-body">
                 Cliquez sur la formation dont vous voulez voir les enseignements...
@@ -186,7 +186,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                         <?php endif; ?>
                         <?php
                         if ($canViewEtape && $ei['etape']) {
-                            echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-secondary btn-xs" style="float:right"><i class="fas fa-magnifying-glass"></i></span>');
+                            echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-secondary btn-sm" style="float:right"><i class="fas fa-magnifying-glass"></i></span>');
                         }
                         ?>
                         <div style="clear: both"></div>
@@ -225,7 +225,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                     if ($canSyncElement && $structure && $serviceSchema->isImportedEntity($structure)) {
                         $attrs = [
                             'href'       => $this->url('of/element/synchronisation-par-code', [], ['query' => ['structure' => $structure->getId()]]),
-                            'class'      => ['element-pedagogique-synchronisation', 'ajax-modal', 'iconify', 'btn', 'btn-secondary', 'float-end', 'btn-xs'],
+                            'class'      => ['element-pedagogique-synchronisation', 'ajax-modal', 'iconify', 'btn', 'btn-secondary', 'float-end', 'btn-sm'],
                             'data-event' => 'element-pedagogique-synchronisation',
                             'title'      => 'Importer ou synchroniser un enseignement',
                         ];
@@ -234,7 +234,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                     if ($canEditElement) {
                         $attrs = [
                             'href'       => $this->url('of/element/ajouter'),
-                            'class'      => ['element-pedagogique-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-secondary', 'float-end', 'btn-xs'],
+                            'class'      => ['element-pedagogique-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-secondary', 'float-end', 'btn-sm'],
                             'data-event' => 'element-pedagogique-ajouter',
                             'title'      => 'Ajouter un enseignement',
                         ];
@@ -249,7 +249,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                         $urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $params]);
 
                         ?>
-                        <a class="float-end btn btn-secondary btn-xs" href="<?= $urlExportOf ?>">
+                        <a class="float-end btn btn-secondary btn-sm" href="<?= $urlExportOf ?>">
                             <i class="fas fa-upload"></i> Télécharger (CSV)
                         </a>
                         <?php

@@ -38,7 +38,7 @@ class ModificationServiceDuForm extends AbstractForm
             ],
             'attributes' => [
                 'title' => "Ajouter une modification de service dû",
-                'class' => 'modification-service-du modification-service-du-ajouter btn btn-secondary btn-xs',
+                'class' => 'modification-service-du modification-service-du-ajouter btn btn-secondary btn-sm',
             ],
         ]);
 

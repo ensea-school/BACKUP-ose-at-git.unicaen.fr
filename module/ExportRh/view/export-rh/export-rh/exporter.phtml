@@ -25,39 +25,49 @@ if ($priseEnCharge) {
 
     <?php if ($typeIntervenant == 'P' || array_key_exists($intervenant->getStatut()->getCode(), $excludeStatut)): ?>
         <div class="messenger alert alert-warning">
-            L'export des données intervenants vers <?= $nameConnecteur; ?> est disponible uniquement pour les vacataires (hors <?= implode(', ', $excludeStatut) ?> )
+            L'export des données intervenants vers <?= $nameConnecteur; ?> est disponible uniquement pour les vacataires
+            (hors <?= implode(', ', $excludeStatut) ?> )
         </div>
     <?php elseif ($canExport === false): ?>
         <div class="messenger alert alert-warning">
-            L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>) n'a pas
+            L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
+            (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
+            n'a pas
             encore franchi l'étape de la feuille de route permettant la PEC ou la REN. Il doit avoir franchi l'étape "<?= $etapeFranchissementLibelle ?>"
         </div>
 
 
     <?php elseif ($canExport === true): ?>
 
-        <div class="card card-well">
+        <div class="well">
             <?php if (empty($intervenantRh)): ?>
-                <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>) n'a
+                <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
+                    (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
+                    n'a
                     pas été trouvé
                     dans <?= $nameConnecteur; ?>. Vous pouvez si vous le souhaitez prendre en charge cet intervenant avec les
                     données de son dossier, résumées ci-dessous :</p>
             <?php else: ?>
 
                 <?php if (!empty($affectationEnCours) && !empty($contratEnCours)): ?>
-                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
+                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
+                        (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
                         est bien dans
                         <?= $nameConnecteur ?> (<strong>matricule : <?= $intervenantRh->getCodeRh() ?></strong>). Il
                         possède déjà actuellement une affectation pour l'année
-                        universitaire <?= $intervenant->getAnnee()->getLibelle() ?> ainsi qu'un contrat. Vous pouvez mettre à jour ses données personnelles si vous le souhaitez avec le bouton synchronisation en bas de page.</p>
+                        universitaire <?= $intervenant->getAnnee()->getLibelle() ?> ainsi qu'un contrat. Vous pouvez mettre à jour ses données personnelles si
+                        vous le souhaitez avec le bouton synchronisation en bas de page.</p>
                 <?php elseif (!empty($affectationEnCours) && empty($contratsEnCours)): ?>
-                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
+                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
+                        (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
                         est bien dans
                         <?= $nameConnecteur ?> (<strong>matricule : <?= $intervenantRh->getCodeRh() ?></strong>).Il
                         possède une affectation mais pas encore de contrat
-                        pour l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez mettre à jour ses données personnelles si vous le souhaitez avec le bouton synchronisation en bas de page</p>
+                        pour l'année <?= $intervenant->getAnnee()->getLibelle() ?>. Vous pouvez mettre à jour ses données personnelles si vous le souhaitez avec
+                        le bouton synchronisation en bas de page</p>
                 <?php else: ?>
-                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?> (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
+                    <p>L'intervenant <?= $intervenantDossier->getPrenom() . ' ' . $intervenantDossier->getNomUsuel() ?>
+                        (<strong><?= $intervenantDossier->getStatut()->getLibelle() ?> <?= (!empty($intervenant->getStructure())) ? ' / ' . $intervenant->getStructure()->getLibelleLong() : '' ?></strong>)
                         est bien dans
                         <?= $nameConnecteur ?> (<strong>matricule : <?= $intervenantRh->getCodeRh() ?></strong>).Il ne
                         possède pas encore d'affectation pour

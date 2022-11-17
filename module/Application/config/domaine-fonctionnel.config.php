@@ -60,7 +60,7 @@ return [
                                         'route'        => 'domaine-fonctionnel',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\DomaineFonctionnel', 'index'),
                                         'order'        => 20,
-                                        'border-color' => '#BBCF55',
+                                        'color' => '#BBCF55',
                                     ],
                                 ],
                             ],

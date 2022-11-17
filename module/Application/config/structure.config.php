@@ -74,7 +74,7 @@ return [
                                         'route'        => 'structure',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Structure', 'index'),
                                         'order'        => 40,
-                                        'border-color' => '#BBCF55',
+                                        'color' => '#BBCF55',
                                     ],
                                 ],
                             ],

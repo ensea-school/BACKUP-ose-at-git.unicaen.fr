@@ -62,7 +62,7 @@ return [
                                         'route'        => 'type-ressource',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeRessource', 'index'),
                                         'order'        => 50,
-                                        'border-color' => '#71DFD7',
+                                        'color' => '#71DFD7',
                                     ],
                                 ],
                             ],

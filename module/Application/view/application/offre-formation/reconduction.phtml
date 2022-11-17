@@ -71,7 +71,7 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                         des formations.</a></p>
             <?php else: ?>
                 <?php if ($reconductionTotale == 'non'): ?>
-                    <div class="card-well">Les lignes avec le fond gris ont déjà été reconduites pour la prochaine année
+                    <div class="well">Les lignes avec le fond gris ont déjà été reconduites pour la prochaine année
                         universitaire.
                     </div>
                     <form action="<?= $this->url('aof/reconduction', [], ['query' => ['structure' => $structure->getId()]]) ?>"

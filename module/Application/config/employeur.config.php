@@ -73,7 +73,7 @@ return [
                             'rh' => [
                                 'pages' => [
                                     'Employeurs' => [
-                                        'border-color' => '#9F491F',
+                                        'color' => '#9F491F',
                                         'label'        => "Employeurs",
                                         'title'        => "Gestion des employeurs",
                                         'route'        => 'employeur',

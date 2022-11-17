@@ -378,8 +378,8 @@ class ReferentielsViewHelper extends AbstractViewHelper
     {
         return
             '<div class="service-show-hide-buttons">'
-            . '<button type="button" class="btn btn-secondary btn-xs service-show-all-details"><i class="fas fa-chevron-down"></i> Tout déplier</button> '
-            . '<button type="button" class="btn btn-secondary btn-xs service-hide-all-details"><i class="fas fa-chevron-up"></i> Tout replier</button>'
+            . '<button type="button" class="btn btn-secondary btn-sm service-show-all-details"><i class="fas fa-chevron-down"></i> Tout déplier</button> '
+            . '<button type="button" class="btn btn-secondary btn-sm service-hide-all-details"><i class="fas fa-chevron-up"></i> Tout replier</button>'
             . '</div>';
     }
 

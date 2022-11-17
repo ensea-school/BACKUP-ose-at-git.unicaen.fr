@@ -71,7 +71,7 @@ return [
                             'odf' => [
                                 'pages' => [
                                     'discipline' => [
-                                        'border-color' => '#9F491F',
+                                        'color' => '#9F491F',
                                         'label'        => "Types de disciplines",
                                         'title'        => "Gestion des disciplines",
                                         'route'        => 'discipline',

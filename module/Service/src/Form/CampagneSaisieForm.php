@@ -6,6 +6,7 @@ use Application\Constants;
 use Application\Form\AbstractForm;
 use Service\Entity\Db\CampagneSaisie;
 use Laminas\Hydrator\HydratorInterface;
+use UnicaenApp\Form\Element\Date;
 
 
 /**
@@ -39,7 +40,7 @@ class CampagneSaisieForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'UnicaenApp\Form\Element\Date',
+            'type'       => 'DateTime',
             'name'       => 'dateDebut',
             'options'    => [
                 'label'  => 'Date de début',
@@ -51,7 +52,7 @@ class CampagneSaisieForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'UnicaenApp\Form\Element\Date',
+            'type'       => 'DateTime',
             'name'       => 'dateFin',
             'options'    => [
                 'label'  => 'Date de fin',

@@ -15,15 +15,15 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::CENTRES_COUTS_
 <h1 class="page-header">Centres de coûts</h1>
 <?php
 $tblListe = [];
-$tblRef = [];
-$i = 0;
+$tblRef   = [];
+$i        = 0;
 foreach ($centreCouts as $fr) {
     if ($fr->getParent() == null) $tblRef[$i++] = $fr;
 }
 $nTblListe = $i;
-$i = 0;
+$i         = 0;
 while ($i < $nTblListe) {
-    $j = 0;
+    $j            = 0;
     $tblListe[$i] = [];
     foreach ($centreCouts as $frf) {
         if (($frf->getParent()) && ($frf->getParent()->getId() == $tblRef[$i]->getId())) {
@@ -49,7 +49,7 @@ while ($i < $nTblListe) {
     for ($i = 0;
          $i < $nTblListe;
          $i++) {
-        $fr = $tblRef[$i];
+        $fr  = $tblRef[$i];
         $nFr = count($tblListe[$i]); ?>
         <td data-order="<?= $fr->getCode() ?>"><?= $fr->getCode() ?><br></td>
         <td><?= $fr->getLibelle() . '<br>' ?></td>
@@ -108,7 +108,7 @@ while ($i < $nTblListe) {
                 <a class="mod-ajax" data-submit-reload="true"
                    href="<?= $this->url('centre-cout/saisie-structure', ['centreCout' => $fr->getId()]) ?>"
                    title="Ajouter une structure">
-                    <button type="button" class="btn btn-xs btn-primary">Ajouter une structure</button>
+                    <button type="button" class="btn btn-sm btn-primary">Ajouter une structure</button>
                 </a>
             <?php } ?>
         </td>
@@ -182,7 +182,7 @@ while ($i < $nTblListe) {
                         <a class="mod-ajax" data-submit-reload="true"
                            href="<?= $this->url('centre-cout/saisie-structure', ['centreCout' => $frf->getId()]) ?>"
                            title="Ajouter une structure">
-                            <button type="button" class="btn btn-xs btn-primary">Ajouter une structure</button>
+                            <button type="button" class="btn btn-sm btn-primary">Ajouter une structure</button>
                         </a>
                     <?php } ?>
                 </td>
@@ -193,9 +193,9 @@ while ($i < $nTblListe) {
     </tbody>
 </table>
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary class="mod-ajax" data-submit-reload="true"
-       href="<?= $this->url('centre-cout/saisie') ?>"
-       title="Ajouter un Centre de Coûts">
-        <i class="fas fa-pen-to-square"></i>
-        Ajouter un centre de coûts</a>
+    <a class="btn btn-primary class=" mod-ajax" data-submit-reload="true"
+    href="<?= $this->url('centre-cout/saisie') ?>"
+    title="Ajouter un Centre de Coûts">
+    <i class="fas fa-pen-to-square"></i>
+    Ajouter un centre de coûts</a>
 <?php endif ?>

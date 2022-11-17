@@ -67,7 +67,7 @@ return [
                                         'route'        => 'corps',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\Corps', 'index'),
                                         'order'        => 10,
-                                        'border-color' => '#BBCF55',
+                                        'color' => '#BBCF55',
                                     ],
                                 ],
                             ],

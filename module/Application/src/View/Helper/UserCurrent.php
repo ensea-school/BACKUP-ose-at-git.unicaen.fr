@@ -79,7 +79,7 @@ EOS;
 
         $js = <<<EOS
 $(function() {
-    $("#$id").popover({ html: true, sanitize: false, container: '#navbar' });
+    $("#$id").popover({ html: true, sanitize: false, container: '.navbar' });
 });
 EOS;
         $this->getView()->plugin('inlineScript')->offsetSetScript(1000, $js);

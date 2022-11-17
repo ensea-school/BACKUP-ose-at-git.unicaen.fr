@@ -27228,6 +27228,11 @@ a {
   border-bottom-right-radius: 0.5em;
 }
 
+.card .list-group-flush {
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+}
+
 .card > .table {
   margin-bottom: 0px;
   border-top: 0px white solid;
@@ -27260,6 +27265,22 @@ table thead th {
   border-bottom: 1px solid #ddd !important;
 }
 
+.progress {
+  height: 20px;
+}
+
+@media (min-width: 8000px) {
+  .modal-dialog {
+    width: 600px;
+    max-width: 600px;
+  }
+}
+@media (min-width: 1000px) {
+  .modal-dialog {
+    width: 800px;
+    max-width: 800px;
+  }
+}
 /* -------------- Listes de définition -------------- */
 dl {
   margin-top: 0;

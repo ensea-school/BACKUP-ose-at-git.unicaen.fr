@@ -49,6 +49,19 @@ a {
   border-bottom-right-radius: 0.5em;
 }
 
+.card > .table {
+  margin-bottom: 0px;
+  border-top: 0px white solid;
+}
+
+.card .dataTables_wrapper .row {
+  margin-left: -9px;
+  margin-right: -9px;
+}
+
+.card .dataTables_wrapper .table {
+  margin-left: -2px;
+}
 
 
 .page-header {
@@ -102,3 +115,8 @@ dd, dt {
   margin-left: 180px;
 }
 
+
+
+.form-check-input:checked[type="checkbox"] {
+  background-image: none;
+}

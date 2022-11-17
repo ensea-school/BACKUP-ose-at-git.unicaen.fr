@@ -122,13 +122,35 @@ span.sas-highlight {
 
 /* Personnalisation du bootstrap-select */
 
-.bootstrap-select .btn.dropdown-toggle {
+.bootstrap-select .btn {
+    box-shadow: none;
+    border:1px #ced4da solid;
+    border-radius: 4px;
     background-color:white;
+    text-transform: none;
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: "Open Sans";
+    color: rgb(79, 79, 79);
+    transition: none;
+}
+
+.bootstrap-select .btn.show:hover {
+    background-color: white;
+    box-shadow: none;
+    transition: none;
 }
 
 .bootstrap-select .btn-light {
     border-color:#ced4da;
 }
+
+/*
+.bootstrap-select .btn.dropdown-toggle {
+    background-color:white;
+}
+
+
 
 .bootstrap-select .dropdown-menu {
     font-size: 14px;
@@ -148,7 +170,7 @@ span.sas-highlight {
 
 .bootstrap-select .dropdown-toggle:after { content: none }
 
-
+*/
 
 
 

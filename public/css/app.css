@@ -27325,6 +27325,30 @@ dd, dt {
   background-image: none;
 }
 
+/*
+.navbar.navbar-default .navbar-nav {
+  display: block;
+  margin: 0;
+}
+
+.navbar-default {
+  background-color: #f8f8f8;
+  border-color: #e7e7e7;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+
+  min-height: 50px;
+  margin-bottom: 20px;
+}
+
+.navbar.navbar-default .navbar-nav > li > a {
+  line-height: 20px;
+}
+
+.navbar.navbar-default .navbar-nav > li > a {
+  color: #777;
+}
+/**/
 @keyframes bs-notify-fadeOut {
   0% {
     opacity: 0.9;
@@ -28904,22 +28928,14 @@ dl.dl-horizontal.intervenant dd {
   font-size: 12pt;
 }
 
-.intervenant-statuts .navbar-nav {
-  width: 100%;
-}
-
-.intervenant-statuts .navbar-nav li.historise a {
-  color: #a94442;
-  text-decoration: line-through;
-}
-
-.intervenant-statuts .navbar-nav li a {
+.intervenant-statuts li {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
 .intervenant-statuts span.type-intervenant {
   font-size: 10pt;
+  padding-right: 4px;
 }
 
 .intervenant-statuts span.statut {
@@ -28932,7 +28948,8 @@ dl.dl-horizontal.intervenant dd {
 }
 
 .intervenant-statuts li.ajout-intervenant {
-  padding-top: 10px;
+  padding-top: 12px;
+  padding-right: 10px;
   float: right;
 }
 
@@ -28987,13 +29004,7 @@ select.loading {
   color: transparent;
 }
 
-/* Autocomplete jQuery */
-/* Mise en évidence des mots recherchés dans les SearchAndSelect */
-span.sas-highlight {
-  font-weight: bold;
-}
-
-/* Personnalisation du bootstrap-select */
+/* -------------- Personnalisation du bootstrap-select -------------- */
 .bootstrap-select .btn {
   box-shadow: none;
   border: 1px #ced4da solid;
@@ -29017,32 +29028,7 @@ span.sas-highlight {
   border-color: #ced4da;
 }
 
-/*
-.bootstrap-select .btn.dropdown-toggle {
-    background-color:white;
-}
-
-
-
-.bootstrap-select .dropdown-menu {
-    font-size: 14px;
-    font-weight: 300;
-    font-family: Open Sans;
-    z-index: 1040;
-}
-
-.bootstrap-select .btn.dropdown-toggle {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 16px 12px;
-    appearance: none !important;
-
-}
-
-.bootstrap-select .dropdown-toggle:after { content: none }
-
-*/
+/* -------------- Well -------------- */
 .well {
   min-height: 20px;
   padding: 19px;
@@ -29057,6 +29043,58 @@ span.sas-highlight {
   margin-bottom: 20px;
   text-shadow: 1px 1px 3px #fff;
   text-outline: #eee;
+  color: gray;
+}
+
+/* -------------- Jumbotron -------------- */
+.jumbotron {
+  margin-bottom: 30px;
+  background-color: #eee;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  border-radius: 6px;
+}
+
+.jumbotron h1, .jumbotron .h1 {
+  font-size: 63px;
+}
+
+.jumbotron .lead {
+  margin-left: 190px;
+  line-height: 1.4;
+}
+
+.jumbotron p {
+  margin-bottom: 15px;
+  font-size: 21px;
+  font-weight: 200;
+}
+
+/* -------------- nav-local -------------- */
+.nav-local {
+  background-color: #f8f8f8;
+  border: 1px #e7e7e7 solid;
+  border-radius: 0.3em;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 4px 9px -4px;
+}
+
+.nav-local ul {
+  list-style: none;
+  padding-left: 0px;
+}
+
+.nav-local li.nav-item {
+  float: left;
+  width: auto;
+}
+
+.nav-local li.nav-item.active {
+  background-color: #e0e0e0;
+}
+
+.nav-local li a {
+  padding-top: 0px;
+  padding-bottom: 0px;
   color: gray;
 }
 
@@ -29080,6 +29118,11 @@ span.sas-highlight {
 
 .ui-datepicker {
   z-index: 1061 !important; /* NB: doit être supérieur à la modale Bootstrap qui est à 1050 et au popover(1060) */
+}
+
+/* Mise en évidence des mots recherchés dans les SearchAndSelect */
+span.sas-highlight {
+  font-weight: bold;
 }
 
 .ui-autocomplete-loading {

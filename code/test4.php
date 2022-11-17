@@ -14,7 +14,35 @@
     h1:not(.title) {
         margin-top: 2em;
     }
+
+
 </style>
+
+
+<nav class="nav-local intervenant-statuts">
+    <ul class="">
+        <li class="nav-item historise" title="Cliquez pour afficher">
+            <a class="nav-link" href="/intervenant/647908/voir">
+                <span class="type-intervenant">Vacataire</span>
+                <span class="validite-intervenant">du 01/09/2017 au 30/05/2023</span><br/>
+                <span class="statut">Autres <i class="text-danger fas fa-triangle-exclamation" title="Intervenant historisé"></i></span>
+            </a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/intervenant/635955/voir">
+                <span class="type-intervenant">Vacataire</span>
+                <span class="validite-intervenant">du 01/09/2017 au 16/10/2021</span><br/>
+                <span class="statut">Autres</span>
+            </a>
+        </li>
+
+        <li class="nav-item ajout-intervenant">
+            <a href="/intervenant/635955/dupliquer" title="Ajout d'un nouveau statut à l'intervenant"><i class="fas fa-plus"></i></a>
+        </li>
+    </ul>
+    <div style="clear: both"></div>
+</nav>
+
 
 <h1>Titre 1</h1>
 <h2>Titre 2</h2>

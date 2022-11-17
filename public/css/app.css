@@ -28559,6 +28559,12 @@ div.div-connexion {
   font-weight: normal;
 }
 
+.type-intervenant > li.active > a {
+  color: #fff;
+  background-color: #3b71ca;
+  opacity: 0.6;
+}
+
 .intervenant-recherche .critere {
   padding-bottom: 1em;
 }

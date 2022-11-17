@@ -18,3 +18,9 @@
 #tblTpjs th {
     font-weight: normal;
 }
+
+.type-intervenant > li.active > a {
+    color: #fff;
+    background-color: #3b71ca;
+    opacity: 0.6;
+}

@@ -27218,8 +27218,14 @@ a {
   margin-bottom: 20px;
 }
 
+.card.bg-default .card-header {
+  background-color: #f5f5f5;
+}
+
 .card-body {
   background-color: white;
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
 }
 
 .page-header {
@@ -27232,8 +27238,44 @@ h1.page-header, .page-header.h1 {
   margin-top: 10px;
 }
 
+.table th {
+  font-weight: 600;
+}
+
 table thead th {
   border-bottom: 1px solid #ddd !important;
+}
+
+/* -------------- Listes de définition -------------- */
+dl {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+dt {
+  font-weight: 700;
+}
+
+.dl-horizontal dt {
+  float: left;
+  width: 160px;
+  overflow: hidden;
+  clear: left;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+dd {
+  margin-left: 0;
+}
+
+dd, dt {
+  line-height: 1.42857143;
+}
+
+.dl-horizontal dd {
+  margin-left: 180px;
 }
 
 @keyframes bs-notify-fadeOut {

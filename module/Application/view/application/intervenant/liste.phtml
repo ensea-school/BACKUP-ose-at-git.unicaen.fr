@@ -19,7 +19,7 @@
 
     as $code => $intervenant): ?>
     <tr<?php if (isset($intervenant['destruction']) && $intervenant['destruction']) {
-        echo ' class="bg-danger" title="Fiche historisée" style="color:gray"';
+        echo ' class="bg-danger" title="Fiche historisée"';
     } ?>>
         <td style="white-space: nowrap"><a href="<?= $this->url('intervenant/voir', ['intervenant' => 'code:' . $code]); ?>">
                 <i class="fas fa-eye"></i> Fiche

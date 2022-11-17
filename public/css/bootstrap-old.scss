@@ -586,36 +586,4 @@ div.navbar.breadcrumbs {
 }
 
 
-/* -------------- Listes de définition -------------- */
-
-dl {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
-dt {
-  font-weight: 700;
-}
-.dl-horizontal dt {
-  float: left;
-  width: 160px;
-  overflow: hidden;
-  clear: left;
-  text-align: right;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-
-dd {
-  margin-left: 0;
-}
-dd, dt {
-  line-height: 1.42857143;
-}
-
-.dl-horizontal dd {
-  margin-left: 180px;
-}
-
 

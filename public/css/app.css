@@ -28786,6 +28786,12 @@ form#service div.volume-horaire-saisie-multiple-fin {
   color: darkgrey;
 }
 
+.chargens-formation-edit.form-lien #actif {
+  line-height: 2rem;
+  width: 2rem;
+  height: 2rem;
+}
+
 ul.privileges-form {
   list-style-type: none;
 }

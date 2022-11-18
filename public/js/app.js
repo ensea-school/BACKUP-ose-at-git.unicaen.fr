@@ -97,10 +97,10 @@ $(function ()
     /* Charges d'enseignement */
     WidgetInitializer.add('chargens', 'chargens', function () {
         WidgetInitializer.includeJs(Url('vendor/go.js'));
-        WidgetInitializer.includeJs(Url('js/chargens.js'));
+        //   WidgetInitializer.includeJs(Url('js/chargens.js'));
     });
     WidgetInitializer.add('chargens-filtre', 'chargensFiltre', function () {
-        WidgetInitializer.includeJs(Url('js/chargens.js'));
+        //     WidgetInitializer.includeJs(Url('js/chargens.js'));
     });
 
     /* Droits */

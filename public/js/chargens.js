@@ -10,7 +10,9 @@ $.widget("ose.chargens", {
     typesHeures: {},
     diagramme: undefined,
     formNoeud: undefined,
+    formNoeudModal: undefined,
     formLien: undefined,
+    formLienModal: undefined,
     mousePosEvent: undefined,
     editionNoeudId: undefined,
     editionLienId: undefined,
@@ -27,24 +29,10 @@ $.widget("ose.chargens", {
         this.diagramme = this.__makeGraph();
 
         this.formNoeud = this.element.find(".form-noeud");
-        this.formNoeud.dialog({
-            autoOpen: false,
-            hide: {effect: 'clip', duration: 200},
-            show: {effect: 'clip', duration: 200},
-            title: 'Édition',
-            width: 500
-        });
-        this.formNoeud.css('display:block');
+        this.formNoeudModal = new bootstrap.Modal(this.formNoeud, {});
 
         this.formLien = this.element.find(".form-lien");
-        this.formLien.dialog({
-            autoOpen: false,
-            hide: {effect: 'clip', duration: 200},
-            show: {effect: 'clip', duration: 200},
-            title: 'Édition',
-            width: 280
-        });
-        this.formLien.css('display:block');
+        this.formLienModal = new bootstrap.Modal(this.formLien, {});
 
         $(document).mousemove(function (event)
         {
@@ -70,13 +58,12 @@ $.widget("ose.chargens", {
 
         this.getFormNoeudBtnCancel().click(function ()
         {
-            that.formNoeud.dialog('close');
             that.diagramme.clearSelection();
         });
         this.getFormNoeudBtnSave().click(function ()
         {
             that.applicationEditionNoeud();
-            that.formNoeud.dialog("close");
+            that.formNoeudModal.hide();
             that.diagramme.clearSelection();
         });
 
@@ -88,7 +75,7 @@ $.widget("ose.chargens", {
         this.getFormLienBtnSave().click(function ()
         {
             that.applicationEditionLien();
-            that.formLien.dialog("close");
+            that.formLienModal.hide();
             that.diagramme.clearSelection();
         });
 
@@ -226,20 +213,12 @@ $.widget("ose.chargens", {
             }
         }
 
-
         if (this.formNoeud.find('#choix-assiduite').css('display') != 'none'
             || this.formNoeud.find('#effectifs').css('display') != 'none'
             || this.formNoeud.find('#seuils').css('display') != 'none'
         ) {
-            this.formNoeud.dialog({
-                position: {
-                    my: "center center",
-                    of: this.mousePosEvent
-                },
-                title: noeud.libelle + ' (' + noeud.code + ')'
-            });
-
-            this.formNoeud.dialog("open");
+            this.formNoeud.find('.modal-title').html(noeud.libelle + ' (' + noeud.code + ')');
+            this.formNoeudModal.show();
         }
     },
 
@@ -450,14 +429,7 @@ $.widget("ose.chargens", {
             || this.formLien.find('#div-actif').css('display') != 'none'
             || this.formLien.find('#div-poids').css('display') != 'none'
         ) {
-            this.formLien.dialog({
-                position: {
-                    my: "center center",
-                    of: this.mousePosEvent
-                }
-            });
-
-            this.formLien.dialog("open");
+            this.formLienModal.show();
         }
     },
 
@@ -596,7 +568,7 @@ $.widget("ose.chargens", {
         this.structure = data.structure;
 
         if (etape != this.etape) {
-            console.log('chargerDonnees');
+            //console.log('chargerDonnees');
             this.etape = etape;
             this.majDiagramme();
         } else {

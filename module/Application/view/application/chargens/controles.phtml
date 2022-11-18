@@ -67,105 +67,124 @@ $canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENA
 </div>
 
 
-<div class="form-noeud" style="display:none">
-    <div class="row" id="choix-assiduite">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="groupes">Assiduité</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" min="0" placeholder="Assiduité" id="assiduite"
-                           aria-describedby="add-assiduite">
-                    <span class="input-group-addon" id="add-assiduite">%</span>
-                </div>
+<div class="chargens-formation-edit form-noeud modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Titre</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
-    </div>
-
-    <div class="form-group" id="effectifs">
-        <label for="groupes" title="Effectifs">Effectifs</label>
-        <div class="input-group">
-
-            <div class="row">
-                <?php foreach ($typeHeures as $tid => $tval): ?>
-                    <div class="col-md-<?= floor(12 / count($typeHeures)) ?>">
-                        <div class="input-group">
-                            <input type="number" class="form-control" min="0" placeholder="<?= $tval ?>"
-                                   id="effectifs-<?= $tid ?>"
-                                   aria-describedby="add-effectifs-<?= $tid ?>">
-                            <span class="input-group-addon" id="add-effectifs-<?= $tid ?>"><?= $tval ?></span>
+            <div class="modal-body">
+                <div class="row" id="choix-assiduite">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="groupes">Assiduité</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" min="0" placeholder="Assiduité" id="assiduite"
+                                       aria-describedby="add-assiduite">
+                                <span class="input-group-addon" id="add-assiduite">%</span>
+                            </div>
                         </div>
                     </div>
-                <?php endforeach; ?>
+                </div>
+
+                <div class="form-group" id="effectifs">
+                    <label for="groupes" title="Effectifs">Effectifs</label>
+                    <div class="input-group">
+
+                        <div class="row">
+                            <?php foreach ($typeHeures as $tid => $tval): ?>
+                                <div class="col-md-<?= floor(12 / count($typeHeures)) ?>">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" min="0" placeholder="<?= $tval ?>"
+                                               id="effectifs-<?= $tid ?>"
+                                               aria-describedby="add-effectifs-<?= $tid ?>">
+                                        <span class="input-group-addon" id="add-effectifs-<?= $tid ?>"><?= $tval ?></span>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table table-sm" id="seuils">
+                    <thead>
+                    <th>Seuils</th>
+                    <th>Ouverture</th>
+                    <th>Dédoublement</th>
+                    <th class="seuil-assiduite">Assiduité</th>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($typeInterventions as $tid => $tval): ?>
+                        <tr class="seuil" id="seuil-<?= $tid ?>">
+                            <th style="width:20%"><?= $tval ?></th>
+                            <td>
+                                <input type="number" class="form-control" placeholder="Aucun" min="0" id="seuil-ouverture-<?= $tid ?>"/>
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" placeholder="Aucun" min="0" id="seuil-dedoublement-<?= $tid ?>"/>
+                            </td>
+                            <td>
+                                <div class="input-group seuil-assiduite">
+                                    <input type="number" class="form-control" min="0" aria-describedby="pseuil-assiduite-<?= $tid ?>" placeholder="100"
+                                           id="seuil-assiduite-<?= $tid ?>"/>
+                                    <span class="input-group-addon" id="pseuil-assiduite-<?= $tid ?>">%</span>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="btn-cancel"><i class="fas fa-rotate-left"></i> Annuler</button>
+                <button type="button" class="btn btn-primary" id="btn-save"><i class="fas fa-floppy-disk"></i> Enregistrer</button>
             </div>
         </div>
-    </div>
-
-    <table class="table table-sm" id="seuils">
-        <thead>
-        <th>Seuils</th>
-        <th>Ouverture</th>
-        <th>Dédoublement</th>
-        <th class="seuil-assiduite">Assiduité</th>
-        </thead>
-        <tbody>
-        <?php foreach ($typeInterventions as $tid => $tval): ?>
-            <tr class="seuil" id="seuil-<?= $tid ?>">
-                <th style="width:20%"><?= $tval ?></th>
-                <td>
-                    <input type="number" class="form-control" placeholder="Aucun" min="0" id="seuil-ouverture-<?= $tid ?>"/>
-                </td>
-                <td>
-                    <input type="number" class="form-control" placeholder="Aucun" min="0" id="seuil-dedoublement-<?= $tid ?>"/>
-                </td>
-                <td>
-                    <div class="input-group seuil-assiduite">
-                        <input type="number" class="form-control" min="0" aria-describedby="pseuil-assiduite-<?= $tid ?>" placeholder="100"
-                               id="seuil-assiduite-<?= $tid ?>"/>
-                        <span class="input-group-addon" id="pseuil-assiduite-<?= $tid ?>">%</span>
-                    </div>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-
-    <div class="text-right">
-        <button type="button" class="btn btn-warning" id="btn-cancel"><i class="fas fa-rotate-left"></i> Annuler</button>
-        <button type="button" class="btn btn-primary" id="btn-save"><i class="fas fa-floppy-disk"></i> Enregistrer</button>
     </div>
 </div>
-<div class="form-lien" style="display:none">
-    <div class="row" id="choix">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="choix-minimum" title="Choix minimum">Choix min.</label>
-                <input type="number" class="form-control" placeholder="Min." id="choix-minimum"/>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="choix-maximum" title="Choix maximum">Choix max.</label>
-                <input type="number" class="form-control" placeholder="Max." id="choix-maximum"/>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6" id="div-actif">
-            <div class="form-group">
-                <label for="actif" title="Lien actif">Actif</label>
-                <input type="checkbox" class="form-control" placeholder="Actif" id="actif" value="1"/>
-            </div>
-        </div>
-        <div class="col-md-6" id="div-poids">
-            <div class="form-group">
-                <label for="poids" title="Poids du lien par rapport aux autres">Poids</label>
-                <input type="text" class="form-control" placeholder="Poids" id="poids"/>
-            </div>
-        </div>
-    </div>
 
-    <div class="text-right">
-        <button type="button" class="btn btn-warning" id="btn-cancel"><i class="fas fa-rotate-left"></i> Annuler</button>
-        <button type="button" class="btn btn-primary" id="btn-save"><i class="fas fa-floppy-disk"></i> Enregistrer</button>
+<div class="chargens-formation-edit form-lien modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Modification du lien</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="choix">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="choix-minimum" title="Choix minimum">Choix min.</label>
+                            <input type="number" class="form-control" placeholder="Min." id="choix-minimum"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="choix-maximum" title="Choix maximum">Choix max.</label>
+                            <input type="number" class="form-control" placeholder="Max." id="choix-maximum"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6" id="div-actif">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-control form-check-input" id="actif" value="1"/>
+                            <label for="actif" title="Lien actif" class="form-check-label">Actif</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6" id="div-poids">
+                        <div class="form-group">
+                            <label for="poids" title="Poids du lien par rapport aux autres">Poids</label>
+                            <input type="text" class="form-control" placeholder="Poids" id="poids"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="btn-cancel"><i class="fas fa-rotate-left"></i> Annuler</button>
+                <button type="button" class="btn btn-primary" id="btn-save"><i class="fas fa-floppy-disk"></i> Enregistrer</button>
+            </div>
+        </div>
     </div>
 </div>

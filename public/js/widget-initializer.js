@@ -34,6 +34,7 @@ WidgetInitializer = {
                         $(this)[widgetName]($(this).data('widget'));
                     } catch (e) {
                         console.log('ERREUR : Widget "' + widgetName + '" non trouvé');
+                        console.log(e);
                     }
                 });
             }

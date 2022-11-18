@@ -117,7 +117,7 @@ $.widget("unicaen.popAjax", {
             url: this.options.url,
             success: (response) => {
                 that.setContent(response);
-                that.contentSubmit(that.getPopoverElement().find('.popover-body'));
+                //that.contentSubmit(that.getPopoverElement().find('.popover-body'));
             }
         });
     },

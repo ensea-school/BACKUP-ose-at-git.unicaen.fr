@@ -147,6 +147,59 @@ function highlight(term, base, cssClass)
 
 
 
+$.widget("unicaen.formAdvancedMultiCheckbox", {
+
+    height: function (height)
+    {
+        if (height === undefined) {
+            return this.getItemsDiv().css('max-height');
+        } else {
+            this.getItemsDiv().css('max-height', height);
+        }
+    },
+
+    overflow: function (overflow)
+    {
+        if (overflow === undefined) {
+            return this.getItemsDiv().css('overflow');
+        } else {
+            this.getItemsDiv().css('overflow', overflow);
+        }
+    },
+
+    selectAll: function ()
+    {
+        this.getItems().prop("checked", true);
+    },
+
+    selectNone: function ()
+    {
+        this.getItems().prop("checked", false);
+    },
+
+    _create: function ()
+    {
+        var that = this;
+        this.getSelectAllBtn().on('click', function () { that.selectAll(); });
+        this.getSelectNoneBtn().on('click', function () { that.selectNone(); });
+    },
+
+    //@formatter:off
+    getItemsDiv     : function() { return this.element.find('div#items');           },
+    getItems        : function() { return this.element.find("input[type=checkbox]");},
+    getSelectAllBtn : function() { return this.element.find("a.btn.select-all");    },
+    getSelectNoneBtn: function() { return this.element.find("a.btn.select-none");   }
+    //@formatter:on
+
+});
+
+$(function ()
+{
+    WidgetInitializer.add('form-advanced-multi-checkbox', 'formAdvancedMultiCheckbox');
+});
+
+
+
 
 /**
  * Installation d'un mécanisme d'ouverture de fenêtre modale Bootstrap 3 lorsqu'un lien

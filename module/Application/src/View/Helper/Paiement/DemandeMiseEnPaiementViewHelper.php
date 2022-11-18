@@ -295,19 +295,22 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
         if ($notAllowed) $attrs['class'][] = 'not-allowed';
         $out = '<div ' . $this->htmlAttribs($attrs) . '>';
 
-        $attrs = [
+        $attrs  = [
             'class'       => ['table', 'table-sm', 'table-xs', 'table-bordered', 'mise-en-paiement-liste'],
             'id'          => (string)self::$miseEnPaiementListeIdSequence++,
             'data-params' => json_encode($params),
         ];
-        if ($notAllowed && !$saisieTerminee) $attrs['class'][] = 'bg-warning';
+        $hattrs = [
+            'class' => [],
+        ];
+        if ($notAllowed && !$saisieTerminee) $hattrs['class'][] = 'bg-warning';
         if ($readOnly) $attrs['class'][] = 'read-only';
-        if ($saisieTerminee) $attrs['class'][] = 'bg-success';
+        if ($saisieTerminee) $hattrs['class'][] = 'bg-success';
         if (!$serviceAPayer->isPayable()) {
             $out .= '<div class="alert alert-danger" role="alert">Des heures à payer ont été positionnées sur ce service alors que c\'est normalement impossible.</div>';
         }
         $out .= '<table ' . $this->htmlAttribs($attrs) . '>';
-        $out .= '<thead><tr><th colspan="3">' . $typeHeures->getLibelleLong() . '</th></tr><tr>';
+        $out .= '<thead ' . $this->htmlAttribs($hattrs) . '><tr><th colspan="3">' . $typeHeures->getLibelleLong() . '</th></tr><tr>';
         $out .= '<th style="width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
         $out .= '<th>Centre de coûts</th>';
         if ($serviceAPayer->isDomaineFonctionnelModifiable()) {
@@ -322,7 +325,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
                 $title[] = $periode . ' : ' . strip_tags(\UnicaenApp\Util::formattedNumber($heures)) . ' hetd mis en paiement';
             }
             $title = implode('&#13;', $title);
-            $out   .= '<tr><td class="nombre"><abbr title="' . $title . '">' . \UnicaenApp\Util::formattedNumber($params['heures-mep']) . '</td><td>HETD déjà mises en paiement</td></tr>';
+            $out   .= '<tr><td class="nombre"><abbr title="' . $title . '">' . \UnicaenApp\Util::formattedNumber($params['heures-mep']) . '</td><td>HETD déjà mises en paiement</td><td></td></tr>';
         }
         $out .= '<tfoot>';
 

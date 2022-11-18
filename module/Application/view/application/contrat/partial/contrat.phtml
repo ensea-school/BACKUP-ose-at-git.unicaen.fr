@@ -172,11 +172,9 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
             <?php endif; ?>
 
             <?php if ($urlSaisieRetour): ?>
-                <a href="<?= $urlSaisieRetour ?>" class="btn btn-primary pop-ajax"
-                   data-submit-reload="true">
-                    <i
-                            class="fas fa-calendar-days"></i> <?= $contrat->getDateRetourSigne() ? 'Modifier' : 'Saisir' ?>
-                    la date de retour signé
+                <a href="<?= $urlSaisieRetour ?>" class="btn btn-primary pop-ajax" data-submit-reload="true">
+                    <i class="fas fa-calendar-days"></i>
+                    <?= $contrat->getDateRetourSigne() ? 'Modifier' : 'Saisir' ?> la date de retour signé
                 </a>
             <?php endif; ?>
 

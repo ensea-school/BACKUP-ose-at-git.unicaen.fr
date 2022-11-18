@@ -27277,7 +27277,7 @@ table thead th {
   height: 20px;
 }
 
-@media (min-width: 8000px) {
+@media (min-width: 800px) {
   .modal-dialog {
     width: 600px;
     max-width: 600px;
@@ -27325,30 +27325,44 @@ dd, dt {
   background-image: none;
 }
 
-/*
-.navbar.navbar-default .navbar-nav {
-  display: block;
-  margin: 0;
+.modal-header {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: #69a9dd;
+  color: navy;
 }
 
-.navbar-default {
-  background-color: #f8f8f8;
-  border-color: #e7e7e7;
-  background-color: #f8f8f8;
-  border-radius: 4px;
-
-  min-height: 50px;
-  margin-bottom: 20px;
+.modal-header .modal-title {
+  font-size: 1.5rem;
 }
 
-.navbar.navbar-default .navbar-nav > li > a {
-  line-height: 20px;
+.modal-footer {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 5px;
+  background-color: #fafafa;
 }
 
-.navbar.navbar-default .navbar-nav > li > a {
-  color: #777;
+@media (min-width: 400px) {
+  .popover {
+    max-width: 350px;
+  }
 }
-/**/
+@media (min-width: 600px) {
+  .popover {
+    max-width: 300px;
+  }
+}
+@media (min-width: 800px) {
+  .popover {
+    max-width: 400px;
+  }
+}
+@media (min-width: 1000px) {
+  .popover {
+    max-width: 600px;
+  }
+}
 @keyframes bs-notify-fadeOut {
   0% {
     opacity: 0.9;
@@ -28007,12 +28021,20 @@ select.selectpicker {
   content: "\f252";
 }
 
-table.table-xs tr td, table.table-xs tr th {
-  padding: 2px;
-}
-
 table {
   background-color: white;
+}
+
+.table > :not(caption) > * > * {
+  padding: 0.5rem 0.9rem;
+}
+
+.table.table-sm > :not(caption) > * > * {
+  padding: 0.3rem 0.6rem;
+}
+
+.table.table-xs > :not(caption) > * > * {
+  padding: 0rem 0.2rem;
 }
 
 /* Tableaux avec entêtes à 45° */
@@ -28300,6 +28322,7 @@ table {
   padding: 1em;
   min-height: 13em;
   background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 4px 9px -4px;
 }
 
 .callout-menu .callout:hover {
@@ -28702,7 +28725,7 @@ form#service div.volume-horaire-saisie-multiple-fin {
   width: 100%;
 }
 
-.chargens .controles .navbar {
+.chargens .controles .nav-local {
   margin-bottom: 1px;
 }
 
@@ -28718,33 +28741,35 @@ form#service div.volume-horaire-saisie-multiple-fin {
   z-index: 1051;
 }
 
-.chargens .navbar .div-filtre {
+.chargens .nav-local .div-filtre {
   padding: 4px;
   padding-bottom: 0px;
 }
 
-.chargens .navbar .div-filtre .div-structure {
+.chargens .nav-local .div-filtre .div-structure {
   padding-right: 2px;
 }
 
-.chargens .navbar .div-filtre .div-etape {
+.chargens .nav-local .div-filtre .div-etape {
   padding-left: 2px;
   padding-right: 2px;
 }
 
-.chargens .navbar .div-filtre .div-scenario {
+.chargens .nav-local .div-filtre .div-scenario {
   padding-left: 2px;
 }
 
-.chargens .navbar .div-filtre .div-scenario-edit {
+.chargens .nav-local .div-filtre .div-scenario-edit {
   padding-left: 2px;
 }
 
-.chargens .navbar .div-controles {
+.chargens .nav-local .div-controles {
   padding: 4px;
+  padding-left: 0px;
+  margin-left: -17px;
 }
 
-.chargens .controles .div-hetd-composante {
+.chargens .nav-local .div-hetd-composante {
   margin-right: 0px;
   height: auto;
   padding-top: 7px;
@@ -28953,6 +28978,12 @@ dl.dl-horizontal.intervenant dd {
   float: right;
 }
 
+.intervenant-statuts li a {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  color: gray;
+}
+
 form.statut fieldset legend {
   font-size: 12px;
   font-weight: 700;
@@ -29076,6 +29107,12 @@ select.loading {
   border: 1px #e7e7e7 solid;
   border-radius: 0.3em;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 4px 9px -4px;
+  margin-bottom: 1em;
+}
+
+.nav-local .navbar-brand {
+  float: left;
+  padding-left: 10px;
 }
 
 .nav-local ul {
@@ -29093,8 +29130,8 @@ select.loading {
 }
 
 .nav-local li a {
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   color: gray;
 }
 
@@ -29135,6 +29172,23 @@ span.sas-highlight {
   /* prevent horizontal scrollbar */
   overflow-x: hidden;
   z-index: 5000;
+}
+
+.navbar-dark #user-current-info, .navbar-dark .user-connection {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.navbar-dark #user-current-info:hover, .navbar-dark .user-connection:hover {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.user-profile-select-form .radio {
+  white-space: nowrap;
+}
+
+.user-profile-select-form .radio input {
+  margin-left: 1em;
+  margin-right: 0.3em;
 }
 
 /*# sourceMappingURL=app.css.map */

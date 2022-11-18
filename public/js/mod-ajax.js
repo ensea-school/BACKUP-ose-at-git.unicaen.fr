@@ -88,7 +88,7 @@ $.widget("unicaen.modAjax", {
             '  <div class="modal-dialog">\n' +
             '    <div class="modal-content">\n' +
             '      <div class="modal-header">\n' +
-            '        <h5 class="modal-title"></h5>\n' +
+            '        <h2 class="modal-title"></h2>\n' +
             '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\n' +
             '      </div>\n' +
             '      <div class="modal-body intranavigator"></div>\n' +
@@ -327,7 +327,7 @@ $.widget("unicaen.modAjax", {
                 '  <div class="modal-dialog">\n' +
                 '    <div class="modal-content">\n' +
                 '      <div class="modal-header">\n' +
-                '        <h5 class="modal-title">Modal title</h5>\n' +
+                '        <h2 class="modal-title">Modal title</h2>\n' +
                 '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\n' +
                 '      </div>\n' +
                 '      <div class="modal-body">Modal Body</div>\n' +

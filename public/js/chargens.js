@@ -596,6 +596,7 @@ $.widget("ose.chargens", {
         this.structure = data.structure;
 
         if (etape != this.etape) {
+            console.log('chargerDonnees');
             this.etape = etape;
             this.majDiagramme();
         } else {

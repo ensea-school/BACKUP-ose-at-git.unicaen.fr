@@ -12,7 +12,7 @@ use Application\Provider\Privilege\Privileges;
 $canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENARIO_DUPLICATION));
 
 ?>
-<nav class="navbar navbar-default">
+<div class="nav-local">
     <?php if ($filtre): ?>
         <div class="row div-filtre chargens-filtre">
             <div class="col-md-2 div-structure">
@@ -64,7 +64,7 @@ $canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENA
             </div>
         </div>
     </div>
-</nav>
+</div>
 
 
 <div class="form-noeud" style="display:none">

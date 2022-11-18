@@ -1,11 +1,19 @@
-table.table-xs tr td, table.table-xs tr th {
-  padding: 2px;
-}
-
 table {
   background-color:white;
 }
 
+
+.table > :not(caption) > * > * {
+  padding: 0.5rem 0.9rem;
+}
+
+.table.table-sm > :not(caption) > * > * {
+  padding: 0.3rem 0.6rem;
+}
+
+.table.table-xs > :not(caption) > * > * {
+  padding: 0.0rem 0.2rem;
+}
 
 
 

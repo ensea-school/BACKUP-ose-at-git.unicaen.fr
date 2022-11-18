@@ -14,7 +14,7 @@
     width: 100%;
 }
 
-.chargens .controles .navbar {
+.chargens .controles .nav-local {
     margin-bottom: 1px;
 }
 
@@ -30,33 +30,35 @@
     z-index: 1051;
 }
 
-.chargens .navbar .div-filtre {
+.chargens .nav-local .div-filtre {
     padding:4px;
     padding-bottom: 0px;
 }
 
-.chargens .navbar .div-filtre .div-structure {
+.chargens .nav-local .div-filtre .div-structure {
     padding-right:2px;
 }
 
-.chargens .navbar .div-filtre .div-etape {
+.chargens .nav-local .div-filtre .div-etape {
     padding-left:2px;
     padding-right:2px;
 }
 
-.chargens .navbar .div-filtre .div-scenario {
+.chargens .nav-local .div-filtre .div-scenario {
     padding-left:2px;
 }
 
-.chargens .navbar .div-filtre .div-scenario-edit {
+.chargens .nav-local .div-filtre .div-scenario-edit {
     padding-left:2px;
 }
 
-.chargens .navbar .div-controles {
+.chargens .nav-local .div-controles {
     padding:4px;
+    padding-left: 0px;
+    margin-left: -17px;
 }
 
-.chargens .controles .div-hetd-composante{
+.chargens .nav-local .div-hetd-composante{
     margin-right: 0px;
     height: auto;
     padding-top: 7px;

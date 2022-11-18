@@ -17,27 +17,6 @@ $(function ()
         }
     });
 
-    /**
-     * Installation d'un lien permettant de remonter en haut de la page.
-     * Ce lien apparaît lorsque c'est nécessaire.
-     */
-    if ($(window).scrollTop() > 100) {
-        $('.scrollup').fadeIn();
-    }
-    $(window).on("scroll", function ()
-    {
-        if ($(this).scrollTop() > 100) {
-            $('.scrollup').fadeIn();
-        } else {
-            $('.scrollup').fadeOut();
-        }
-    });
-    $('.scrollup').on("click", function ()
-    {
-        $("html, body").animate({scrollTop: 0}, 300);
-        return false;
-    });
-
     AjaxModalListener.install();
 
     /* Utilisation du WidgetInitializer et de l'intranavigator */

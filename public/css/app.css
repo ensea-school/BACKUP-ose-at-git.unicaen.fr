@@ -27270,6 +27270,23 @@ textarea.form-control-lg {
   margin-left: -2px;
 }
 
+/* -------------- DataTables -------------- */
+.dt-bootstrap5 .page-link {
+  border-radius: 0px;
+}
+
+.page-link.active, .active > .page-link {
+  border: 0;
+  border-top-color: currentcolor;
+  border-right-color: currentcolor;
+  border-bottom-color: currentcolor;
+  border-left-color: currentcolor;
+  /*border-top-color: currentcolor;
+  border-right-color: currentcolor;
+  border-bottom-color: currentcolor;
+  border-left-color: currentcolor;*/
+}
+
 /* -------------- Textes -------------- */
 a {
   text-decoration: none;
@@ -27385,6 +27402,30 @@ dd, dt {
 
 .form-check-input:checked[type=checkbox] {
   background-image: none;
+}
+
+/* -------------- Personnalisation du bootstrap-select -------------- */
+.bootstrap-select .btn {
+  box-shadow: none;
+  border: 1px #ced4da solid;
+  border-radius: 4px;
+  background-color: white;
+  text-transform: none;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: "Open Sans";
+  color: rgb(79, 79, 79);
+  transition: none;
+}
+
+.bootstrap-select .btn.show:hover {
+  background-color: white;
+  box-shadow: none;
+  transition: none;
+}
+
+.bootstrap-select .btn-light {
+  border-color: #ced4da;
 }
 
 @keyframes bs-notify-fadeOut {
@@ -29060,30 +29101,6 @@ fieldset > fieldset {
 
 pre.prettyprint {
   white-space: pre;
-}
-
-/* -------------- Personnalisation du bootstrap-select -------------- */
-.bootstrap-select .btn {
-  box-shadow: none;
-  border: 1px #ced4da solid;
-  border-radius: 4px;
-  background-color: white;
-  text-transform: none;
-  font-size: 1rem;
-  font-weight: 400;
-  font-family: "Open Sans";
-  color: rgb(79, 79, 79);
-  transition: none;
-}
-
-.bootstrap-select .btn.show:hover {
-  background-color: white;
-  box-shadow: none;
-  transition: none;
-}
-
-.bootstrap-select .btn-light {
-  border-color: #ced4da;
 }
 
 /* -------------- Well -------------- */

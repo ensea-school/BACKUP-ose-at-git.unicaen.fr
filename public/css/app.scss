@@ -107,6 +107,11 @@ div#contenu-principal {
 
 /* Menu secondaire */
 
+.menu-secondaire.nav li ul li a {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
 .menu-secondaire.nav li:hover > a /*, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus*/
 {
     background-color: #eee;

@@ -27275,18 +27275,6 @@ textarea.form-control-lg {
   border-radius: 0px;
 }
 
-.page-link.active, .active > .page-link {
-  border: 0;
-  border-top-color: currentcolor;
-  border-right-color: currentcolor;
-  border-bottom-color: currentcolor;
-  border-left-color: currentcolor;
-  /*border-top-color: currentcolor;
-  border-right-color: currentcolor;
-  border-bottom-color: currentcolor;
-  border-left-color: currentcolor;*/
-}
-
 /* -------------- Textes -------------- */
 a {
   text-decoration: none;
@@ -29065,6 +29053,11 @@ div#contenu-principal {
 }
 
 /* Menu secondaire */
+.menu-secondaire.nav li ul li a {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
 .menu-secondaire.nav li:hover > a {
   background-color: #eee;
   border-radius: 4px;

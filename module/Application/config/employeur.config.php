@@ -20,6 +20,34 @@ return [
                     ],
                 ],
                 'may_terminate' => true,
+                'child_routes'  => [
+                    'saisie'    => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/saisie[/:employeur]',
+                            'constraints' => [
+                                'employeur' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'saisie',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'supprimer' => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/supprimer/:employeur',
+                            'constraints' => [
+                                'employeur' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'supprimer',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                ],
             ],
             'employeur-search' => [
                 'type'          => 'Literal',
@@ -103,7 +131,7 @@ return [
             PrivilegeController::class      => [
                 [
                     'controller' => 'Application\Controller\Employeur',
-                    'action'     => ['index', 'recherche-json'],
+                    'action'     => ['index', 'recherche-json', 'saisie'],
                     'privileges' => Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION,
                 ],
             ],

@@ -122,6 +122,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool        $contratDepot                       = true;
 
+    private bool        $contratGeneration                  = true;
+
     private bool        $servicePrevu                       = true;
 
     private bool        $servicePrevuVisualisation          = true;
@@ -971,6 +973,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
+     public function getContratGeneration(): bool
+    {
+        return $this->contratGeneration;
+    }
+
+
+
+    public function setContratGeneration(bool $contratGeneration): Statut
+    {
+        $this->contratGeneration = $contratGeneration;
+
+        return $this;
+    }
+
+
+
     public function getServicePrevu(): bool
     {
         return $this->servicePrevu;
@@ -1398,6 +1416,7 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
             Privileges::CONTRAT_DEPOT_RETOUR_SIGNE                 => $this->contrat && $this->contratDepot,
             Privileges::MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT => $this->paiementVisualisation,
             Privileges::CLOTURE_CLOTURE                            => $this->cloture && ($this->serviceRealiseEdition || $this->referentielRealiseEdition),
+            Privileges::CONTRAT_CONTRAT_GENERATION                 => $this->contrat && $this->contratGeneration,
         ];
 
         return $privileges;

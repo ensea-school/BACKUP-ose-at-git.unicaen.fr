@@ -18,6 +18,7 @@
 * Correction des indicateur 910 et 920 qui étaient non fonctionnels dans le cas d'une autovalidation ou d'une absence de contrat
 * Correction de la suppression d'un role dans la page d'administration des roles.
 * Correction mineure sur les notes intervenants au niveau de l'historique (#46303)
+* La durée de vie attendue des pièces justificatives est maintenant celle de l'année en cours et plus celle de l'année de dépôt de la pièce
 
 ## Notes de mise à jour
 

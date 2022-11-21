@@ -693,6 +693,18 @@ return [
             'position'    => 63,
             'commentaire' => NULL,
         ],
+        'MODIF_SERVICE_DU_EDITION' => [
+            'name'        => 'MODIF_SERVICE_DU_EDITION',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 63,
+            'commentaire' => NULL,
+        ],
         'MOTIF_NON_PAIEMENT'             => [
             'name'        => 'MOTIF_NON_PAIEMENT',
             'type'        => 'bool',

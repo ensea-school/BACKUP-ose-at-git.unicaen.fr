@@ -122,7 +122,7 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool        $contratDepot                       = true;
 
-    private bool        $contratGeneration                  = true;
+    private bool        $contratGeneration                  = false;
 
     private bool        $servicePrevu                       = true;
 
@@ -155,6 +155,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     private bool        $modificationServiceDu              = true;
 
     private bool        $modificationServiceDuVisualisation = true;
+
+    private bool        $modificationServiceDuEdition       = false;
 
     private bool        $paiementVisualisation              = true;
 
@@ -973,7 +975,7 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-     public function getContratGeneration(): bool
+    public function getContratGeneration(): bool
     {
         return $this->contratGeneration;
     }
@@ -1245,6 +1247,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
+    public function getModificationServiceDuEdition(): bool
+    {
+        return $this->modificationServiceDuEdition;
+    }
+
+
+
+    public function setModificationServiceDuEdition(bool $modificationServiceDuEdition): Statut
+    {
+        $this->modificationServiceDuEdition = $modificationServiceDuEdition;
+
+        return $this;
+    }
+
+
+
     public function getPaiementVisualisation(): bool
     {
         return $this->paiementVisualisation;
@@ -1373,6 +1391,7 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
             Privileges::INTERVENANT_CALCUL_HETD                    => $this->formuleVisualisation,
             Privileges::MODIF_SERVICE_DU_ASSOCIATION               => $this->modificationServiceDu,
             Privileges::MODIF_SERVICE_DU_VISUALISATION             => $this->modificationServiceDu && $this->modificationServiceDuVisualisation,
+            Privileges::MODIF_SERVICE_DU_EDITION                   => $this->modificationServiceDu && $this->modificationServiceDuEdition,
             Privileges::DOSSIER_VISUALISATION                      => $this->dossier && $this->dossierVisualisation,
             Privileges::DOSSIER_EDITION                            => $this->dossier && $this->dossierEdition,
             Privileges::DOSSIER_ADRESSE_VISUALISATION              => $this->dossier && $this->dossierVisualisation && $this->dossierAdresse,

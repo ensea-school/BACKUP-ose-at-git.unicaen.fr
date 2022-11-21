@@ -28830,13 +28830,18 @@ ul.privileges-form li label {
   border-left: none;
   border-right: none;
   border-bottom: none;
+  border-color: #ddd;
+}
+
+.droits-tbl td, .droits-tbl th {
+  border: 1px #ddd solid;
 }
 
 .droits-tbl thead tr th div {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px #ddd solid;
 }
 
-.droits-tbl .selected {
+.droits-tbl td.selected, .droits-tbl th.selected, .droits-tbl div.selected {
   background-color: #FCF8E3 !important;
 }
 

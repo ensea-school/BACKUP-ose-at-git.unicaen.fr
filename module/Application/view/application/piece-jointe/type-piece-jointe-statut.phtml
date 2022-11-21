@@ -11,6 +11,7 @@ use Intervenant\Entity\Db\TypeIntervenant;
  * @var $statutsIntervenants       Statut[][]
  * @var $typesPiecesJointesStatuts TypePieceJointeStatut[][][]
  * @var $codeIntervenant           string
+ * @var $typesIntervenants         TypeIntervenant[]
  */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION));
@@ -134,30 +135,24 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFIC
     </script>
 
 <?php $this->headTitle()->append($title = "Pièces justificatives attendues par statut d'intervenant") ?>
+<h1 class="page-header"><?= $title ?></h1>
 
-    <h1 class="page-header"><?= $title ?></h1>
-    <ul class="type-intervenant">
-        <?php if ($codeIntervenant == TypeIntervenant::CODE_PERMANENT): ?>
-            <li>
-                <a href="<?= $this->url('piece-jointe/type-piece-jointe-statut', ['codeTypeIntervenant' => TypeIntervenant::CODE_EXTERIEUR]); ?>"
-                   data-placement="bottom"><i class="fas fa-eye"></i> Vacataires</a>
+<div class="nav-local">
+    <ul>
+        <?php foreach ($typesIntervenants as $intervenant):
+            if ($codeIntervenant == $intervenant->getCode()):?>
+                <li class="nav-item active">
+            <?php else: ?>
+                <li class="nav-item">
+            <?php endif; ?>
+            <a class="nav-link"
+               href="<?= $this->url('piece-jointe/type-piece-jointe-statut', ['codeTypeIntervenant' => $intervenant->getCode()]); ?>"
+               data-placement="bottom"><i class="fas fa-eye"></i> <?php echo $intervenant->getLibelle() ?></a>
             </li>
-            <li class="active">
-                <a href="<?= $this->url('piece-jointe/type-piece-jointe-statut', ['codeTypeIntervenant' => TypeIntervenant::CODE_PERMANENT]); ?>"
-                   data-placement="bottom"><i class="fas fa-eye"></i> Permanents</a>
-            </li>
-        <?php else: ?>
-            <li class="active">
-                <a href="<?= $this->url('piece-jointe/type-piece-jointe-statut', ['codeTypeIntervenant' => TypeIntervenant::CODE_EXTERIEUR]); ?>"
-                   data-placement="bottom"><i class="fas fa-eye"></i> Vacataires</a>
-            </li>
-            <li>
-                <a href="<?= $this->url('piece-jointe/type-piece-jointe-statut', ['codeTypeIntervenant' => TypeIntervenant::CODE_PERMANENT]); ?>"
-                   data-placement="bottom"><i class="fas fa-eye"></i> Permanents</a>
-            </li>
-
-        <?php endif; ?>
+        <?php endforeach; ?>
     </ul>
+    <div style="clear:both"></div>
+</div>
 
     <table id="tblTpjs" class="table-bordered table-sm table-header table-header-rotated" style="width:1121px">
         <thead>

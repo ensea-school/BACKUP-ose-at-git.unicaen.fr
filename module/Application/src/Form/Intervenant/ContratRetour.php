@@ -61,7 +61,10 @@ class ContratRetour extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'valide' => [
+            'valide'          => [
+                'required' => false,
+            ],
+            'dateRetourSigne' => [
                 'required' => false,
             ],
         ];

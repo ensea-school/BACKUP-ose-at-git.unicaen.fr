@@ -28,12 +28,12 @@ $.widget("ose.pieceJointe", {
         $("body").on("upload-event-file-deleted upload-event-file-uploaded", function (event, container)
         {
             var tpj = container.data('tpj');
-            that.onFileChange( tpj );
+            that.onFileChange(tpj);
         });
 
     },
 
-    archiver: function( element)
+    archiver: function (element)
     {
         var that = this;
         var tpj = element.parent('.tpj').data('tpj');
@@ -55,7 +55,7 @@ $.widget("ose.pieceJointe", {
         });
     },
 
-    validerDevalider: function( element )
+    validerDevalider: function (element)
     {
         var that = this;
         var tpj = element.parents('.tpj').data('tpj');
@@ -69,15 +69,15 @@ $.widget("ose.pieceJointe", {
             success: function (data, textStatus, jqXHR) {
                 var container = that.getContainer(tpj);
                 container.find('.validation-bar').html(data);
-                container.removeClass('card-default');
-                container.removeClass('card-success');
+                container.removeClass('bg-default');
+                container.removeClass('bg-success');
 
                 var isValider = data.indexOf("/valider/") !== -1;
 
                 if (isValider) {
-                    container.addClass('card-default');
+                    container.addClass('bg-default');
                 } else {
-                    container.addClass('card-success');
+                    container.addClass('bg-success');
                 }
 
                 that.onValidationChange(tpj, isValider);
@@ -98,7 +98,7 @@ $.widget("ose.pieceJointe", {
 
 
 
-    onFileChange: function( tpj )
+    onFileChange: function (tpj)
     {
         var toutFourni;
 
@@ -112,33 +112,33 @@ $.widget("ose.pieceJointe", {
 
 
 
-    onToutFourni: function()
+    onToutFourni: function ()
     {
         this.element.find('#alert-contrat').fadeIn(200);
     },
 
 
 
-    onPasToutFourni: function()
+    onPasToutFourni: function ()
     {
         this.element.find('#alert-contrat').fadeOut(200);
     },
 
 
 
-    isToutFourni: function()
+    isToutFourni: function ()
     {
         var countObligatoires = 0;
         var countFournies = 0;
 
-        this.element.find('.tpj-obligatoire').each( function(){
+        this.element.find('.tpj-obligatoire').each(function () {
             var nbFichiers = $(this).find('.download-file').length;
 
             countObligatoires++;
             if (nbFichiers > 0) countFournies++;
         });
 
-        if (countObligatoires == 0){
+        if (countObligatoires == 0) {
             return null;
         } else {
             return countFournies == countObligatoires;
@@ -161,12 +161,12 @@ $.widget("ose.pieceJointe", {
 
 
 
-    refreshFiles: function(tpj, isValider)
+    refreshFiles: function (tpj, isValider)
     {
         this.getContainer(tpj).find('.uploaded-files-div').refresh();
-        if (isValider){
+        if (isValider) {
             this.getContainer(tpj).find('#upload-form').show();
-        }else{
+        } else {
             this.getContainer(tpj).find('#upload-form').hide();
         }
     },

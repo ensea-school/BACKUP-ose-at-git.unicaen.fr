@@ -8,6 +8,7 @@ $font-size-base: .9rem;
 
 
 
+/* -------------- Navbar principale  -------------- */
 
 .navbar {
   border: 1px solid transparent;
@@ -29,11 +30,26 @@ $font-size-base: .9rem;
   padding-right: 0px;
 }
 
-a {
-  text-decoration: none;
+.navbar-dark #user-current-info, .navbar-dark .user-connection,  {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.navbar-dark #user-current-info:hover, .navbar-dark .user-connection:hover, {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.user-profile-select-form .radio {
+  white-space: nowrap;
+}
+
+.user-profile-select-form .radio input {
+  margin-left: 1em;
+  margin-right: 0.3em;
 }
 
 
+
+/* -------------- Cards -------------- */
 
 .card {
   margin-bottom: 20px;
@@ -78,6 +94,32 @@ a {
 }
 
 
+/* -------------- DataTables -------------- */
+
+.dt-bootstrap5 .page-link {
+  border-radius: 0px;
+}
+
+.page-link.active, .active > .page-link {
+  border: 0;
+  border-top-color: currentcolor;
+  border-right-color: currentcolor;
+  border-bottom-color: currentcolor;
+  border-left-color: currentcolor;
+  /*border-top-color: currentcolor;
+  border-right-color: currentcolor;
+  border-bottom-color: currentcolor;
+  border-left-color: currentcolor;*/
+}
+
+
+
+/* -------------- Textes -------------- */
+
+a {
+  text-decoration: none;
+}
+
 .page-header {
   border-bottom: 1px solid #eee;
   padding-bottom: 9px;
@@ -88,6 +130,9 @@ h1.page-header {
   margin-top: 10px;
 }
 
+
+
+/* -------------- Tableaux -------------- */
 .table th {
   font-weight: 600;
 }
@@ -97,64 +142,8 @@ table thead th {
 }
 
 
-.progress {
-  height: 20px;
-}
 
-
-@media(min-width: 800px) {
-  .modal-dialog {
-    width: 600px;
-    max-width: 600px;
-  }
-}
-
-@media(min-width: 1000px) {
-  .modal-dialog {
-    width: 800px;
-    max-width: 800px;
-  }
-}
-
-/* -------------- Listes de définition -------------- */
-
-dl {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
-dt {
-  font-weight: 700;
-}
-.dl-horizontal dt {
-  float: left;
-  width: 160px;
-  overflow: hidden;
-  clear: left;
-  text-align: right;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-
-dd {
-  margin-left: 0;
-}
-dd, dt {
-  line-height: 1.42857143;
-}
-
-.dl-horizontal dd {
-  margin-left: 180px;
-}
-
-
-
-.form-check-input:checked[type="checkbox"] {
-  background-image: none;
-}
-
-
+/* -------------- Modales -------------- */
 
 .modal-header {
   padding-top: 5px;
@@ -174,6 +163,23 @@ dd, dt {
   background-color: #fafafa;
 }
 
+@media(min-width: 800px) {
+  .modal-dialog {
+    width: 600px;
+    max-width: 600px;
+  }
+}
+
+@media(min-width: 1000px) {
+  .modal-dialog {
+    width: 800px;
+    max-width: 800px;
+  }
+}
+
+
+
+/* -------------- Popovers -------------- */
 
 @media(min-width: 400px) {
   .popover {
@@ -199,4 +205,76 @@ dd, dt {
   .popover {
     max-width: 600px;
   }
+}
+
+
+
+/* -------------- Listes de définition -------------- */
+
+dl {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+dt {
+  font-weight: 700;
+}
+.dl-horizontal dt {
+  float: left;
+  width: 160px;
+  overflow: hidden;
+  clear: left;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+dd {
+  margin-left: 0;
+}
+dd, dt {
+  line-height: 1.42857143;
+}
+
+.dl-horizontal dd {
+  margin-left: 180px;
+}
+
+
+
+/* -------------- Divers -------------- */
+
+.progress {
+  height: 20px;
+}
+
+.form-check-input:checked[type="checkbox"] {
+  background-image: none;
+}
+
+
+
+/* -------------- Personnalisation du bootstrap-select -------------- */
+
+.bootstrap-select .btn {
+  box-shadow: none;
+  border:1px #ced4da solid;
+  border-radius: 4px;
+  background-color:white;
+  text-transform: none;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: "Open Sans";
+  color: rgb(79, 79, 79);
+  transition: none;
+}
+
+.bootstrap-select .btn.show:hover {
+  background-color: white;
+  box-shadow: none;
+  transition: none;
+}
+
+.bootstrap-select .btn-light {
+  border-color:#ced4da;
 }

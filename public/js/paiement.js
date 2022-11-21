@@ -585,10 +585,10 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
             this.element.removeClass('bg-danger');
             if (0 == this.params['heures-non-dmep']) {
                 this.element.find('.heures-non-dmep').parents('tr').hide();
-                this.element.addClass('bg-success');
+                this.element.find('thead').addClass('bg-success');
             } else {
                 this.element.find('.heures-non-dmep').parents('tr').show();
-                this.element.removeClass('bg-success');
+                this.element.find('thead').removeClass('bg-success');
             }
         }
     }

@@ -10,7 +10,8 @@
 * Les modèles de contrats de travail sont maintenant gérés comme n'importe quel autre état de sortie
 * Reconduction de l'offre de formation pour les éléments de OSE porté par un élément synchroniser
 * Possibilité de rentrer un taux de charge par statut d'intervenant
-* Ajout d'un paramétre par statut pour la possibilité de télécharger le contrat par l'intervenant 
+* Ajout d'un paramétre par statut pour la possibilité de télécharger le contrat par l'intervenant
+* Migration technnique vers le frmework Bootstrap 5 et modernisation de l'identité visuelle
 
 ## Corrections de bugs
 

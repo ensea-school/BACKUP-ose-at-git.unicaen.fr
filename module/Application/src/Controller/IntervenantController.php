@@ -300,12 +300,18 @@ class  IntervenantController extends AbstractController
         $form = $this->getFormIntervenantHeuresComp();
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
+        if(!$typeVolumeHoraire instanceof TypeVolumeHoraire){
+            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraire);
+        }
         /* @var $typeVolumeHoraire \Service\Entity\Db\TypeVolumeHoraire */
         if (!isset($typeVolumeHoraire)) {
             throw new LogicException('Type de volume horaire erroné');
         }
 
         $etatVolumeHoraire = $this->context()->etatVolumeHoraireFromQuery('etat-volume-horaire', $form->get('etat-volume-horaire')->getValue());
+        if(!$etatVolumeHoraire instanceof EtatVolumeHoraire){
+            $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->get($etatVolumeHoraire);
+        }
         /* @var $etatVolumeHoraire \Service\Entity\Db\EtatVolumeHoraire */
         if (!isset($etatVolumeHoraire)) {
             throw new LogicException('Etat de volume horaire erroné');

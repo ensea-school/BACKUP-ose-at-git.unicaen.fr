@@ -107,9 +107,9 @@ echo $this->doctype();
 <nav id="footer" class="nav justify-content-center">
     <a title="<?= AppConfig::get('etablissement', 'logoDescription') ?>" class="nav-link lien-univ"
        href="<?= AppConfig::get('etablissement', 'logoUri') ?>"><?= AppConfig::get('etablissement', 'nom') ?></a>
-    <a title="&#xC0;propos de cette application" class="nav-link apropos" href="/apropos">À propos</a>
-    <a title="Contact concernant l'application" class="nav-link contact" href="/contact">Contact</a>
-    <a title="Page de navigation au sein de l'application" class="nav-link plan" href="/plan">Plan de navigation</a>
+    <a title="&#xC0;propos de cette application" class="nav-link apropos" href="<?= $this->basePath('/apropos') ?>">À propos</a>
+    <a title="Contact concernant l'application" class="nav-link contact" href="<?= $this->basePath('/contact') ?>">Contact</a>
+    <a title="Page de navigation au sein de l'application" class="nav-link plan" href="<?= $this->basePath('/plan') ?>">Plan de navigation</a>
     <a title="Mentions légales" class="nav-link ml" href="<?= AppConfig::get('etablissement', 'mentionsLegales') ?>">Mentions légales</a>
     <a title="Vie privée" class="nav-link il" href="<?= AppConfig::get('etablissement', 'viePrivee') ?>">Vie privée</a>
 </nav>

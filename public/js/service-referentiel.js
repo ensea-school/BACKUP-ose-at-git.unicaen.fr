@@ -198,7 +198,7 @@ $.widget("ose.referentiels", {
         this.element.find('.referentiel-delete').popAjax({
             submit: function (event, popAjax)
             {
-                if (!popAjax.errorsInContent()) {
+                if (!popAjax.hasErrors()) {
                     var serviceId = popAjax.element.parents('tr.referentiel-ligne').data('id');
                     popAjax.hide();
                     that.onAfterDelete(serviceId);

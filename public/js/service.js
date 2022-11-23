@@ -221,7 +221,7 @@ $.widget("ose.enseignements", {
 
         this.element.find('.service-delete').popAjax({
             submit: function (event, popAjax) {
-                if (!popAjax.errorsInContent()) {
+                if (!popAjax.hasErrors()) {
                     var serviceId = popAjax.element.parents('tr.service-ligne').data('id');
                     popAjax.hide();
                     that.onAfterDelete(serviceId);

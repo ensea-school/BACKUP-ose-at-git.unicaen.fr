@@ -296,7 +296,6 @@ class PaiementController extends AbstractController
                     $paiement->setPeriodePaiement(null);
                     $paiement->setDateMiseEnPaiement(null);
                     $this->getServiceMiseEnPaiement()->save($paiement);
-                    $this->updateTableauxBord($intervenant);
                 } else {
                     $this->getServiceMiseEnPaiement()->delete($paiement);
                 }
@@ -304,6 +303,7 @@ class PaiementController extends AbstractController
                 unset($paiements[$index]);
             }
         }
+        $this->updateTableauxBord($intervenant);
 
         return compact('intervenant', 'paiements');
     }

@@ -23,7 +23,7 @@
 * La durée de vie attendue des pièces justificatives est maintenant celle de l'année en cours et plus celle de l'année de dépôt de la pièce
 * Les "Annulation de mises en paiement" sont désormais bien prise en compte dès la première annulation
 * Il est désormais possible de cloturer le service réalisé même si aucune heure n'est saisie
-
+* Les indicateurs 530 et 540 ne renvoient plus de vacataires
 
 ## Notes de mise à jour
 

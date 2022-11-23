@@ -10,6 +10,7 @@ FROM
   LEFT JOIN HISTO_INTERVENANT_SERVICE his ON his.INTERVENANT_ID = w.intervenant_id
 WHERE
   w.etape_code = 'SERVICE_VALIDATION_REALISE'
+  AND w.type_intervenant_code = 'P'
   AND w.objectif > w.realisation
   AND w.atteignable = 1
   AND wc.etape_code = 'CLOTURE_REALISE'

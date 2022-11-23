@@ -7,5 +7,6 @@ FROM
   JOIN intervenant i ON i.id = w.intervenant_id
 WHERE
   w.etape_code = 'CLOTURE_REALISE'
+  AND w.type_intervenant_code = 'P'
   AND w.atteignable = 1
   AND w.objectif > w.realisation

@@ -198,7 +198,7 @@ class AdresseFieldset extends AbstractFieldset
         ]);
 
         $this->get('pays')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
+            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getListValide()));
 
 
         return $this;

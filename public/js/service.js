@@ -339,8 +339,7 @@ $.widget("ose.serviceForm", {
         this.updateVolumesHorairesSaisie();
         this.getElementVolumesHoraires().refresh({
             element: this.getElementElementPedagogiqueId().val(),
-            etablissement: this.getElementEtablissementId().val(),
-            'type-volume-horaire': this.getElementTypeVolumeHoraire().val()
+            etablissement: this.getElementEtablissementId().val()
         }, function () {
             that.getElementVolumesHoraires().find('input.form-control').val('0');
             that.updating = false;

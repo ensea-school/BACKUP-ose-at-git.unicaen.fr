@@ -52,8 +52,12 @@ form#service div#element-interne div.col-md-5 {
 
 form#service div.volume-horaire-saisie-multiple div {
     float: left;
-    width: 10em;
-    height: 5em;
+    margin-right: 1em;
+    margin-bottom: 1em;
+}
+
+form#service div.volume-horaire-saisie-multiple label {
+    font-weight: 600;
 }
 
 form#service div.volume-horaire-saisie-multiple div input {

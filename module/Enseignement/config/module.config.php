@@ -104,10 +104,11 @@ return [
                     ],
                 ],
                 'saisie-form-refresh-vh' => [
-                    'route'       => 'saisie-form-refresh-vh[/:service]',
+                    'route'       => '/saisie-form-refresh-vh[/:service]',
                     'action'      => 'saisie-form-refresh-vh',
                     'constraints' => [
-                        'id' => '[0-9]*',
+                        'id'      => '[0-9]*',
+                        'service' => '[0-9]*',
                     ],
                 ],
                 'suppression'            => [

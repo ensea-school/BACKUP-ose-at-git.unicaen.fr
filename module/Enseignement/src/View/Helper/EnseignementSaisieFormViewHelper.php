@@ -6,13 +6,12 @@ use Application\Entity\Db\Periode;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Form\EnseignementSaisieForm;
 use Service\Entity\Db\TypeVolumeHoraire;
-use Application\Form\Service\Saisie;
 use Application\View\Helper\AbstractViewHelper;
-use \Application\Service\Traits\ContextServiceAwareTrait;
-use \Application\Service\Traits\PeriodeServiceAwareTrait;
-use \Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use \Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use \Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 
 
 /**
@@ -126,7 +125,7 @@ class EnseignementSaisieFormViewHelper extends AbstractViewHelper
             'enseignement/saisie-form-refresh-vh',
             [
                 'service' => $this->form->get('service')->get('id')->getValue(),
-            ]);
+            ], ['query' => ['type-volume-horaire' => $this->form->getTypeVolumeHoraire()->getId()]]);
 
         return $url;
     }

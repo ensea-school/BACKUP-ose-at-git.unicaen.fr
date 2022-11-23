@@ -106,12 +106,12 @@ class PlafondsViewHelper extends AbstractHtmlElement
     {
         $t = $this->getView()->tag();
 
-        $labAttrs = ['class' => ['label']];
+        $labAttrs = ['class' => ['badge']];
         if ($plafond->isBloquant()) {
-            $labAttrs['class'][] = 'label-danger';
+            $labAttrs['class'][] = 'bg-danger';
             $labAttrs['title']   = 'Plafond bloquant';
         } else {
-            $labAttrs['class'][] = 'label-info';
+            $labAttrs['class'][] = 'bg-info';
             $labAttrs['title']   = 'Plafond informatif';
         }
 

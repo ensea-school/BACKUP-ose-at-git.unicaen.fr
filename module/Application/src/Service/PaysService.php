@@ -25,7 +25,6 @@ class PaysService extends AbstractEntityService
     private $idsByLibelle;
 
 
-
     /**
      * retourne la classe des entités
      *
@@ -35,7 +34,6 @@ class PaysService extends AbstractEntityService
     {
         return Pays::class;
     }
-
 
 
     /**
@@ -49,6 +47,22 @@ class PaysService extends AbstractEntityService
     }
 
 
+    /**
+     * Retourne une liste de pays avec des dates de validitée valide
+     *
+     * @return Pays[]|array
+     */
+    public function getListValide(): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('p');
+        $qb->from($this->getEntityClass(), 'p');
+        $qb->where('(p.validiteFin > :date AND p.validiteDebut < :date AND p.histoDestruction IS NULL) OR (p.validiteFin IS NULL AND p.histoDestruction IS NULL)');
+        $qb->setParameter('date', new \DateTime('now'));
+
+        return $this->getList($qb);
+    }
+
 
     /**
      * @return int|null
@@ -56,7 +70,7 @@ class PaysService extends AbstractEntityService
     public function getIdByLibelle(string $libelle)
     {
         if (!isset($this->idsByLibelle[$libelle])) {
-            $sql = 'SELECT ID FROM PAYS WHERE OSE_DIVERS.str_reduce(LIBELLE) = :pays AND HISTO_DESTRUCTION IS NULL';
+            $sql = 'SELECT id FROM pays WHERE ose_divers.str_reduce(libelle) = :pays AND histo_destruction IS NULL';
 
             $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['pays' => Util::reduce($libelle)]);
 
@@ -71,12 +85,10 @@ class PaysService extends AbstractEntityService
     }
 
 
-
     public function getByLibelle(string $libelle)
     {
         return $this->getRepo()->findOneBy(['libelle' => $libelle]);
     }
-
 
 
     /**
@@ -90,7 +102,6 @@ class PaysService extends AbstractEntityService
     }
 
 
-
     /**
      * @param Pays $pays
      *
@@ -100,7 +111,6 @@ class PaysService extends AbstractEntityService
     {
         return $pays->getId() == $this->getIdByLibelle(self::PAYS_ALGERIE);
     }
-
 
 
     /**
@@ -114,7 +124,6 @@ class PaysService extends AbstractEntityService
     }
 
 
-
     /**
      * @param Pays $pays
      *
@@ -126,10 +135,9 @@ class PaysService extends AbstractEntityService
     }
 
 
-
     /**
      * @param QueryBuilder|null $qb
-     * @param null              $alias
+     * @param null $alias
      *
      * @return QueryBuilder
      */
@@ -140,7 +148,6 @@ class PaysService extends AbstractEntityService
 
         return $qb;
     }
-
 
 
     public function save($entity)

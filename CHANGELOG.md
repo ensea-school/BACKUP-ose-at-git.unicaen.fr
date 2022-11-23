@@ -21,6 +21,9 @@
 * Correction de la suppression d'un role dans la page d'administration des roles.
 * Correction mineure sur les notes intervenants au niveau de l'historique (#46303)
 * La durée de vie attendue des pièces justificatives est maintenant celle de l'année en cours et plus celle de l'année de dépôt de la pièce
+* Les "Annulation de mises en paiement" sont désormais bien prise en compte dès la première annulation
+* Il est désormais possible de cloturer le service réalisé même si aucune heure n'est saisie
+
 
 ## Notes de mise à jour
 

@@ -28,7 +28,7 @@ $this->intervenant($intervenant)->renderTitle($title);
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 echo $this->plafonds($intervenant, $typeVolumeHoraire);
 
-if ($cloture && ($enseignements || $referentiels)) {
+if ($cloture) {
     $bottom = false;
     echo $this->partial('service/intervenant/cloture', compact('cloture', 'bottom'));
 }
@@ -47,7 +47,7 @@ if ($referentiels !== false) {
     echo $ref;
 }
 
-if ($cloture && ($enseignements || $referentiels)) {
+if ($cloture) {
     $bottom = true;
     echo $this->partial('service/intervenant/cloture', compact('cloture', 'bottom'));
 }

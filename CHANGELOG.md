@@ -31,6 +31,14 @@
 
 
 
+# OSE 19.5 (à venir)
+
+## Corrections de bugs
+
+* Dans le module Charges, la saisie de seuils par défaut refonctionne normalement (#47451)
+* Les plafonds de périmètre "volume horaire" sont de nouveau activables (#47340,#45225)
+
+
 
 # OSE 19.4 (21/10/2022)
 

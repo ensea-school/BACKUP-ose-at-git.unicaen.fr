@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\ElementTauxRegimes;
 use Application\Entity\Db\Etape;
+use Application\Entity\NiveauEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ElementModulateurServiceAwareTrait;
@@ -103,7 +104,7 @@ class ElementPedagogiqueService extends AbstractEntityService
             if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
                 $filters['niveau'] = $filters['niveau']->getId();
             }
-            $niveau           = str_replace('-', '', $filters['niveau']);
+            $niveau           = str_replace(NiveauEtape::SEPARATOR, '', $filters['niveau']);
             $whereContext[]   = 'CONCAT(gtf.libelle_court, e.niveau) = :niveau';
             $params['niveau'] = $niveau;
         }

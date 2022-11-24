@@ -311,7 +311,7 @@ class ServiceService extends AbstractEntityService
     public function finderByNiveauEtape(NiveauEtape $niveauEtape, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
-        if ($niveauEtape && $niveauEtape->getId() !== '-') {
+        if ($niveauEtape && $niveauEtape->getId() !== '|') {
             $serviceElement = $this->getServiceElementPedagogique();
             $serviceEtape   = $this->getServiceEtape();
 

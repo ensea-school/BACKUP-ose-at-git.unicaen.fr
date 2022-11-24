@@ -37,6 +37,9 @@
 
 * Dans le module Charges, la saisie de seuils par défaut refonctionne normalement (#47451)
 * Les plafonds de périmètre "volume horaire" sont de nouveau activables (#47340,#45225)
+* Filtre des pays avec dates de validité périmées dans les listing des données personnelles (#47492)
+* Correction sur le script de mise à jour des employeurs
+* Correction sur les notes de l'intervenant au niveau de l'historique (#46303)
 
 
 

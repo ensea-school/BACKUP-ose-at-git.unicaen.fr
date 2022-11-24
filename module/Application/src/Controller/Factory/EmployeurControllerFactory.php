@@ -10,12 +10,13 @@ class EmployeurControllerFactory
     /**
      * @param ContainerInterface $container
      * @param                    $requestedName
-     * @param null               $options
+     * @param null $options
      *
      * @return EmployeurController
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
+
         $controller = new EmployeurController();
 
         return $controller;

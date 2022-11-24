@@ -2,6 +2,7 @@
 
 namespace Application\Form\Intervenant\Dossier;
 
+use Application\Entity\Db\Pays;
 use Application\Form\AbstractFieldset;
 use Application\Form\CustomElements\PaysSelect;
 use Application\Form\Intervenant\IntervenantDossier;
@@ -28,7 +29,6 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
     use CiviliteServiceAwareTrait;
 
     static private $franceId;
-
 
 
     public function init()
@@ -69,9 +69,8 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
-
         $this->get('paysNaissance')
-            ->setValueOptions(['' => '(Sélectionnez un pays)'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
+            ->setValueOptions(['' => '(Sélectionnez un pays)'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getListValide()));
 
         /**
          * Pays nationalité
@@ -92,7 +91,7 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
 
 
         $this->get('paysNationalite')
-            ->setValueOptions(['' => '(Sélectionnez une nationalité)'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
+            ->setValueOptions(['' => '(Sélectionnez une nationalité)'] + \UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getListValide()));
 
 
         /**
@@ -138,7 +137,6 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
     }
 
 
-
     /**
      * Should return an array specification compatible with
      * {@link Laminas\InputFilter\Factory::createInputFilter()}.
@@ -151,7 +149,7 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
 
         // la sélection du département n'est obligatoire que si le pays sélectionné est la France
         $departementRequired = (self::$franceId === $paysNaissanceId);
-        $spec                = [];
+        $spec = [];
 
         $spec = [
             'dateNaissance'        => [

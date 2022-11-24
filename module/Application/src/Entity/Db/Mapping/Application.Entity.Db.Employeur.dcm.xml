@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Application\Entity\Db\Employeur" table="EMPLOYEUR">
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
@@ -8,7 +10,11 @@
         <field name="nomCommercial" type="string" column="NOM_COMMERCIAL" length="250" nullable="false"/>
         <field name="siren" type="string" column="SIREN" length="250" nullable="false"/>
         <field name="siret" type="string" column="SIRET" length="250" nullable="true"/>
-        <field name="identifiantAssociation" type="string" column="IDENTIFIANT_ASSOCIATION" length="250" nullable="false"/>
+        <field name="identifiantAssociation" type="string" column="IDENTIFIANT_ASSOCIATION" length="250"
+               nullable="false"/>
+        <field name="critereRecherche" type="string" column="CRITERE_RECHERCHE" length="500"
+               nullable="false"/>
+
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
             <join-columns>
                 <join-column name="SOURCE_ID" referenced-column-name="ID"/>

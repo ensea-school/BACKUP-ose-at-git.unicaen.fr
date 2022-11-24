@@ -39,13 +39,14 @@ WITH c AS (
     vh.type_intervention_id
 )
 SELECT
-  s.annee_id                                  annee_id,
-  s.type_volume_horaire_id                    type_volume_horaire_id,
-  s.intervenant_id                            intervenant_id,
-  s.element_pedagogique_id                    element_pedagogique_id,
-  s.type_intervention_id                      type_intervention_id,
-  s.heures                                    heures,
-  COALESCE(c.heures * c.groupes,0)            plafond
+  s.annee_id                                    annee_id,
+  s.type_volume_horaire_id                      type_volume_horaire_id,
+  s.intervenant_id                              intervenant_id,
+  s.element_pedagogique_id                      element_pedagogique_id,
+  s.type_intervention_id                        type_intervention_id,
+  s.heures                                      heures,
+  COALESCE(c.heures * c.groupes,0)              plafond,
+  (SELECT id FROM plafond_etat WHERE code = 'desactive') plafond_etat_id
 FROM
             s
        JOIN type_intervention ti ON ti.id = s.type_intervention_id

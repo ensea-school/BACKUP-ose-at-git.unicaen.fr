@@ -41,6 +41,7 @@
 * Filtre des pays avec dates de validité périmées dans les listing des données personnelles (#47492)
 * Correction sur le script de mise à jour des employeurs
 * Correction sur les notes de l'intervenant au niveau de l'historique (#46303)
+* Vue V_IMPORT_DEPUIS_DOSSIERS permettant de réinsjectere les données personnelles dans les fiches corrigée (pb de filtre année) (#46769)
 
 
 

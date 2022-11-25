@@ -13,6 +13,7 @@
 * Ajout d'un choix par statut pour "contrat de travail et avenants" pour laisser la possibilité à l'intervenant de télécharger sont contrat en pdf
 * Ajout d'un choix par statut pour "Modifications de service dû" pour laisser la possibilité à l'intervenant de modifier son service dû
 * Migration technnique vers le framework Bootstrap 5 et modernisation de l'identité visuelle
+* Réorganisation du menu "Administration" pour plus de lisibilité
 
 ## Corrections de bugs
 
@@ -22,13 +23,16 @@
 * Correction mineure sur les notes intervenants au niveau de l'historique (#46303)
 * La durée de vie attendue des pièces justificatives est maintenant celle de l'année en cours et plus celle de l'année de dépôt de la pièce
 * Les annulations de mises en paiement sont désormais bien prises en compte dès la première annulation
-* Il est désormais possible de cloturer le service réalisé même si aucune heure n'est saisie
+* Il est désormais possible de clôturer le service réalisé même si aucune heure n'est saisie
 * Les indicateurs 530 et 540 ne renvoient plus de vacataires
 * Les étapes d'ODF complémentaire peuvent de nouveau être modifiées (#46922)
+* Dans les diagrammes du module Charges, la boite de dialogue s'affiche correctement, même avec beaucoup de types d'intervention
+* Le plafond relatif aux charges / services saisis est maintenant opérationnel
 
 ## Notes de mise à jour
 
 * Supprimer la ligne faisant référence à TBL_NOEUD dans Administration/Synchronisation/Tables, table NOEUD, champ "Traitements postérieurs : à exécuter après la synchro".
+* La génération des contrats de travail ayant été remaniée, veuillez vérifier que vous pouvez générer correctement de nouveaux contrats de travail
 
 
 
@@ -41,7 +45,7 @@
 * Filtre des pays avec dates de validité périmées dans les listing des données personnelles (#47492)
 * Correction sur le script de mise à jour des employeurs
 * Correction sur les notes de l'intervenant au niveau de l'historique (#46303)
-* Vue V_IMPORT_DEPUIS_DOSSIERS permettant de réinsjectere les données personnelles dans les fiches corrigée (pb de filtre année) (#46769)
+* Vue V_IMPORT_DEPUIS_DOSSIERS permettant de réinjecter les données personnelles dans les fiches corrigée (pb de filtre année) (#46769)
 
 
 

@@ -1,0 +1,35 @@
+
+.piece-jointe .tpj .card-header {
+    padding: 6px 8px;
+}
+
+.piece-jointe .tpj .card-header h5 {
+    padding-top: 7px;
+    padding-left: 13px;
+    font-weight: 500;
+}
+
+.piece-jointe .tpj .card-header h5 .validation-bar {
+    margin-top: -5px;
+}
+
+.contrat .card-header-h3 .float-end {
+    line-height: 3.4em;
+    padding-right: 1em;
+}
+
+#tblTpjs tr th:first-child {
+    min-width: 260px;
+    max-width: 260px;
+    width: 260px;
+}
+
+#tblTpjs th {
+    font-weight: normal;
+}
+
+.type-intervenant > li.active > a {
+    color: #fff;
+    background-color: #3b71ca;
+    opacity: 0.6;
+}

@@ -10,6 +10,8 @@ use Application\Entity\Db\Etape;
  */
 class NiveauEtape
 {
+    const SEPARATOR = '|';
+
     /**
      * @var Etape
      */
@@ -27,6 +29,8 @@ class NiveauEtape
 
     protected $pertinence;
 
+
+
     /**
      *
      * @param \Application\Entity\Db\Etape $etape
@@ -39,10 +43,13 @@ class NiveauEtape
         return $i;
     }
 
+
+
     /**
      *
      * @param string $lib
      * @param string $niv
+     *
      * @return NiveauEtape
      */
     static public function getInstance($lib, $niv = null)
@@ -53,9 +60,12 @@ class NiveauEtape
         return $i;
     }
 
+
+
     /**
      *
      * @param \Traversable $etapes
+     *
      * @return NiveauEtape[]
      */
     static public function getInstancesFromEtapes($etapes)
@@ -63,67 +73,91 @@ class NiveauEtape
         $instances = [];
 
         foreach ($etapes as $e) {
-            $n = static::getInstanceFromEtape($e);
+            $n                           = static::getInstanceFromEtape($e);
             $instances[$n->__toString()] = $n;
         }
 
         return $instances;
     }
 
+
+
     public function __toString()
     {
         return $this->getLib() . $this->getNiv();
     }
 
+
+
     public function getId()
     {
-        return sprintf("%s-%s", $this->getLib(), $this->getNiv());
+        return sprintf("%s%s%s", $this->getLib(), self::SEPARATOR, $this->getNiv());
     }
+
+
 
     public function getEtape()
     {
         return $this->etape;
     }
 
+
+
     public function getNiv()
     {
         return $this->niv;
     }
+
+
 
     public function getLib()
     {
         return $this->lib;
     }
 
+
+
     public function getPertinence()
     {
         return $this->pertinence;
     }
 
+
+
     public function setNiv($niv)
     {
         $this->niv = $niv;
+
         return $this;
     }
+
+
 
     public function setLib($lib)
     {
         $this->lib = $lib;
+
         return $this;
     }
+
+
 
     public function setPertinence($pertinence)
     {
         $this->pertinence = $pertinence;
+
         return $this;
     }
 
+
+
     public function setEtape(Etape $etape)
     {
-        $this->etape = $etape;
-        $this->niv = $this->etape->getNiveau();
-        $this->lib = $this->etape->getTypeFormation()->getGroupe()->getLibelleCourt();
+        $this->etape      = $etape;
+        $this->niv        = $this->etape->getNiveau();
+        $this->lib        = $this->etape->getTypeFormation()->getGroupe()->getLibelleCourt();
         $this->pertinence = $this->etape->getTypeFormation()->getGroupe()->getPertinenceNiveau();
+
         return $this;
     }
 }

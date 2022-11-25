@@ -6,8 +6,9 @@ return [
         'PACKAGE_NAME' => 'FORMULE_MONTPELLIER',
     ],
     3  => [
-        'LIBELLE'      => 'Université Le Havre Normandie',
-        'PACKAGE_NAME' => 'FORMULE_ULHN',
+        'LIBELLE'            => 'Université Le Havre Normandie',
+        'PACKAGE_NAME'       => 'FORMULE_ULHN',
+        'VH_PARAM_1_LIBELLE' => 'Code enseignement',
     ],
     4  => [
         'LIBELLE'      => 'Université de Nanterre',
@@ -100,5 +101,19 @@ return [
     24 => [
         'LIBELLE'      => 'Université Paris-Saclay',
         'PACKAGE_NAME' => 'FORMULE_SACLAY',
+    ],
+    25 => [
+        'LIBELLE'            => 'Université de ROUEN',
+        'PACKAGE_NAME'       => 'FORMULE_ROUEN',
+        'VH_PARAM_1_LIBELLE' => 'Type de référentiel',
+    ],
+    26 => [
+        'LIBELLE'            => 'Université de Picardie Jules Verne',
+        'PACKAGE_NAME'       => 'FORMULE_PICARDIE',
+        'VH_PARAM_1_LIBELLE' => 'param 1',
+        'VH_PARAM_2_LIBELLE' => 'param 2',
+        'VH_PARAM_3_LIBELLE' => 'param 3',
+        'VH_PARAM_4_LIBELLE' => 'param 4',
+        'VH_PARAM_5_LIBELLE' => 'param 5',
     ],
 ];

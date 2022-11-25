@@ -120,7 +120,7 @@ return [
                     'route'        => 'indicateur',
                     'resource'     => PrivilegeController::getResourceId('Indicateur\Controller\Indicateur', 'index'),
                     'order'        => 10,
-                    'border-color' => '#217DD8',
+                    'color' => '#217DD8',
                 ],
             ],
         ],

@@ -46,7 +46,7 @@
                 <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-many field="volumeHoraire" target-entity="Application\Entity\Db\VolumeHoraire">
+        <many-to-many field="volumeHoraire" target-entity="Enseignement\Entity\Db\VolumeHoraire">
             <join-table name="VALIDATION_VOL_HORAIRE">
                 <join-columns>
                     <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
@@ -56,7 +56,7 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
-        <many-to-many field="volumeHoraireReferentiel" target-entity="Application\Entity\Db\VolumeHoraireReferentiel">
+        <many-to-many field="volumeHoraireReferentiel" target-entity="Referentiel\Entity\Db\VolumeHoraireReferentiel">
             <join-table name="VALIDATION_VOL_HORAIRE_REF">
                 <join-columns>
                     <join-column name="VALIDATION_ID" referenced-column-name="ID"/>

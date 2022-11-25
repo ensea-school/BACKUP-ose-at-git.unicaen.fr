@@ -103,16 +103,16 @@ if ($error) {
     $first = true;
     echo '<ul class="nav nav-tabs" role="tablist">';
     foreach ($diff as $dk => $dc) {
-        echo '<li role="presentation"' . ($first ? ' class="active"' : '') . '><a href="#composante-' . $dk . '" aria-controls="home" role="tab" data-toggle="tab">' . $dc['libelle'] . '</a></li>';
+        echo '<li role="presentation"' . ($first ? ' class="active"' : '') . '><a href="#composante-' . $dk . '" aria-controls="home" role="tab" data-bs-toggle="tab">' . $dc['libelle'] . '</a></li>';
         $first = false;
     }
     echo '</ul>';
     echo '<div class="tab-content">';
 
     foreach ($diff as $dk => $dc) {
-        echo '<div role="tabpanel" class="tab-pane active" id="composante-' . $dk . '">';
+        echo '<div role="tabcard" class="tab-pane active" id="composante-' . $dk . '">';
         echo '<br /><h2>' . $dc['libelle'] . '</h2>';
-        echo '<table class="table table-bordered table-condensed" style="width:70%">'
+        echo '<table class="table table-bordered table-sm" style="width:70%">'
             . '<tr><th style="width:25%">Totaux Heures/HETD</th><th style="width:25%">' . $avantLibelle . '</th><th style="width:25%">' . $apresLibelle . '</th><th style="width:25%">Différence</th></tr>'
             . '<tr>'
             . '<th>Heures</th>'
@@ -128,14 +128,14 @@ if ($error) {
             . '</tr>'
             . '</table>';
         foreach ($dc['etapes'] as $de) {
-            echo '<div class="panel panel-default">';
-            echo '<div class="panel-heading">';
-            echo '<h3 class="panel-title"><span class="label label-default">' . $de['code'] . '</span> ' . $de['libelle'] . '</h3>';
+            echo '<div class="card bg-default">';
+            echo '<div class="card-header">';
+            echo '<h3 class="card-title"><span class="label label-default">' . $de['code'] . '</span> ' . $de['libelle'] . '</h3>';
             echo '</div>';
-            echo '<div class="panel-body">';
+            echo '<div class="card-body">';
             echo '<div class="row">';
             echo '<div class="col-md-9">';
-            echo '<table class="table table-bordered table-condensed">'
+            echo '<table class="table table-bordered table-sm">'
                 . '<tr><th style="width:25%">Totaux Heures/HETD</th><th style="width:25%">' . $avantLibelle . '</th><th style="width:25%">' . $apresLibelle . '</th><th style="width:25%">Différence</th></tr>'
                 . '<tr>'
                 . '<th>Heures</th>'
@@ -161,7 +161,7 @@ if ($error) {
                 echo '<h4><span class="label label-default">' . $ep['code'] . '</span> ' . $ep['libelle'] . '</h4>';
                 echo '<div style="margin-left:2em;">';
                 if (is_array($diff)) {
-                    echo '<table class="table table-bordered table-condensed table-extra-condensed table-hover">';
+                    echo '<table class="table table-bordered table-xs table-hover">';
                     echo '<tr><th style="width:50%">Différentiel</th><th style="width:25%">' . $avantLibelle . '</th><th style="width:25%">' . $apresLibelle . '</th></tr>';
                     if (isset($diff['effectifs'])) {
                         echo '<tr><th>Effectifs</th><td></td><td></td></tr>';
@@ -214,7 +214,7 @@ if ($error) {
 }
 
 ?>
-<a class="btn btn-default" href="<?= $this->url('chargens'); ?>">
+<a class="btn btn-secondary" href="<?= $this->url('chargens'); ?>">
     <i class="fas fa-rotate-left" aria-hidden="true"></i>
     Retour au menu des charges d'enseignement
 </a>

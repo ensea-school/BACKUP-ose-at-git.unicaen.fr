@@ -5,6 +5,7 @@ namespace Application\Entity\Traits;
 use Application\Entity\Db\AdresseNumeroCompl;
 use Application\Entity\Db\Pays;
 use Application\Entity\Db\Voirie;
+use Application\Interfaces\AdresseInterface;
 
 trait AdresseTrait
 {
@@ -85,7 +86,7 @@ trait AdresseTrait
         }
 
         if (!empty($adresse)) {
-            if ($withIdentite && $this instanceof \AdresseInterface && ($identite = $this->getAdresseIdentite())) {
+            if ($withIdentite && $this instanceof AdresseInterface && ($identite = $this->getAdresseIdentite())) {
                 $adresse = [$identite] + $adresse;
             }
 

@@ -119,7 +119,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
         if (count($etape->getEtapes()) > 1) {
             $collapseId = 'collapse-' . $this->getIntervenant()->getId() . '-' . $etape->getEtape()->getId();
 
-            $detailsLink = $tag('a', ['data-toggle' => 'collapse', 'href' => '#' . $collapseId]);
+            $detailsLink = $tag('a', ['data-bs-toggle' => 'collapse', 'href' => '#' . $collapseId]);
             $detailsRes  = $this->renderDetails($etape, $collapseId);
         } else {
             $detailsLink = null;
@@ -186,7 +186,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
     /**
      * @param $etape
      */
-    public function renderNav($etape)
+    public function renderNavBtn($etape)
     {
         $nextEtape = $this->getServiceWorkflow()->getNextAccessibleEtape($etape, $this->getIntervenant());
 
@@ -195,6 +195,17 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
         } else {
             return '';
         }
+    }
+
+
+
+    public function renderNav(string $etape): string
+    {
+        $btnNextUrl = $this->getView()->url('workflow/feuille-de-route-btn-next', ['intervenant' => $this->getIntervenant()->getId(), 'wfEtapeCode' => $etape]);
+
+        return $this->getView()->tag('div', ['id' => 'feuille-de-route-btn-next', 'data-url' => $btnNextUrl])->html(
+            $this->renderNavBtn($etape)
+        );
     }
 
 
@@ -232,20 +243,20 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
             case $franchissement == 1:
                 $attrs   = [
                     'title' => 'Fait',
-                    'class' => 'text-success pull-right',
+                    'class' => 'text-success float-end',
                 ];
                 $content = $tag('span', ['class' => 'text-success fas fa-check']);
             break;
             case $franchissement == 0:
                 if ($objectif === .0) {
                     $attrs   = [
-                        'class' => 'text-danger pull-right',
+                        'class' => 'text-danger float-end',
                     ];
                     $content = $tag('span', ['class' => 'fas fa-xmark text-danger']);
                 } else {
                     $attrs   = [
                         'title' => 'À faire',
-                        'class' => 'text-danger pull-right',
+                        'class' => 'text-danger float-end',
                     ];
                     $content = Util::formattedPourcentage($franchissement, true);
                 }
@@ -253,7 +264,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
             default:
                 $attrs   = [
                     'title' => 'En cours',
-                    'class' => 'text-warning pull-right',
+                    'class' => 'text-warning float-end',
                 ];
                 $content = Util::formattedPourcentage($franchissement, true);
         }
@@ -367,7 +378,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
             $desc = $dep->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie();
             ?>
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <?= $desc ?>
             </div>
             <?php

@@ -11,7 +11,7 @@ use Application\Provider\Privilege\Privileges;
 
 function affBooleen($flg)
 {
-    // affiche booléen avec des glypheIcon
+    // affiche booléen avec des icones
     return ($flg ? '<i class="fas fa-check text-succes"></i>' : '<i class="fas fa-xmark text-danger refuse"></i>');
 }
 
@@ -22,7 +22,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 <h1 class="page-header">Gestion des pays</h1>
 
-<table class="table table-bordered table-sort table-condensed">
+<table class="table table-bordered table-sort table-sm">
     <thead>
     <tr>
         <th style="text-align: center">Libellé</th>

@@ -1,0 +1,121 @@
+<?php
+
+use Application\Entity\Db\WfEtape;
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this                \Application\View\Renderer\PhpRenderer
+ * @var $intervenant         \Application\Entity\Db\Intervenant
+ * @var $typeVolumeHoraire   \Service\Entity\Db\TypeVolumeHoraire
+ * @var $cloture             \Application\Entity\Db\Validation|null
+ * @var $enseignements       \Enseignement\Entity\Db\Service[]
+ * @var $referentiels        \Referentiel\Entity\Db\ServiceReferentiel[]
+ */
+
+
+if ($typeVolumeHoraire->isPrevu()) {
+    $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
+    $title     = 'Services';
+} else {
+    $nextEtape = WfEtape::CODE_SERVICE_SAISIE_REALISE;
+    $title     = 'Constatation des services réalisés';
+}
+
+$menuUrl = (string)$this->url(null, ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
+
+$this->intervenant($intervenant)->renderTitle($title);
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->plafonds($intervenant, $typeVolumeHoraire);
+
+if ($cloture) {
+    $bottom = false;
+    echo $this->partial('service/intervenant/cloture', compact('cloture', 'bottom'));
+}
+
+if ($enseignements !== false) {
+    echo '<h2>Enseignement</h2>';
+    $ens = $this->enseignements($typeVolumeHoraire, $intervenant, $enseignements);
+    $ens->setHorodatage(true);
+    echo $ens;
+}
+
+if ($referentiels !== false) {
+    echo '<h2>Référentiel</h2>';
+    $ref = $this->referentiels($typeVolumeHoraire, $intervenant, $referentiels);
+    $ref->setHorodatage(true);
+    echo $ref;
+}
+
+if ($cloture) {
+    $bottom = true;
+    echo $this->partial('service/intervenant/cloture', compact('cloture', 'bottom'));
+}
+
+
+echo $formuleTotauxHetd;
+
+
+echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
+
+if ($enseignements !== false || $referentiels !== false): ?>
+    <script>
+
+        $(function ()
+        {
+            WidgetInitializer.includeJs(Url('js/service.js'));
+            WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
+
+            <?php if ($enseignements !== false): ?>$('.enseignements').enseignements({
+                'heures-change-exists': function ()
+                {
+
+                },
+                'heures-change': function ()
+                {
+                    // on met à jour le résultat de la formule
+                    $("#formule-totaux-hetd").refresh(); // HETD rafraichis
+
+                    // on met à jour l'horodatage des services !!
+                    $("#s-horodatage").refresh();
+
+                    // Mise à jour des plafonds
+                    $(".plafonds").refresh();
+
+                    // chargement du menu pour faire apparaître ou disparaitre les liens de validation
+                    $('#sidebar').load('<?= $menuUrl; ?>');
+
+                    // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
+                    $('#feuille-de-route-btn-next').refresh();
+                }
+            });<?php endif; ?>
+
+
+            <?php if ($referentiels !== false): ?>$('.referentiels').referentiels({
+                'heures-change-exists': function ()
+                {
+
+                },
+                'heures-change': function ()
+                {
+                    // on met à jour le résultat de la formule
+                    $("#formule-totaux-hetd").refresh(); // HETD rafraichis
+
+                    // on met à jour l'horodatage des services !!
+                    $("#sr-horodatage").refresh();
+
+                    // Mise à jour des plafonds
+                    $(".plafonds").refresh();
+
+                    // chargement du menu pour faire apparaître ou disparaitre les liens de validation
+                    $('#sidebar').load('<?= $menuUrl; ?>');
+
+                    // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
+                    $('#feuille-de-route-btn-next').refresh();
+                }
+            });<?php endif; ?>
+
+        });
+
+    </script>
+<?php endif; ?>

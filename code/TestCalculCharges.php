@@ -70,7 +70,7 @@ echo "Effectifs = " . $effectifs . '<br />';
 echo "Total Poids = " . $totalPoids . '<br />';
 echo "Nombre de noeuds = " . $nbChoix . '<br />';
 ?>
-<table class="table table-bordered table-condensed">
+<table class="table table-bordered table-sm">
     <thead>
     <tr>
         <th rowspan="2" style="width:5em">Choix min</th>

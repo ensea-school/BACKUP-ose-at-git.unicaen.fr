@@ -129,34 +129,30 @@ return [
                     'administration' => [
                         'pages' => [
                             'droits' => [
-                                'icon'         => 'fas fa-power-off',
-                                'label'        => "Droits d'accès",
-                                'title'        => "Gestion des droits d'accès",
-                                'route'        => 'droits',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Droits', 'index'),
-                                'order'        => 100,
-                                'border-color' => '#E5272E',
-                                'pages'        => [
-                                    'roles'        => [
-                                        'label'       => "Rôles",
-                                        'title'       => "Gestion des rôles",
-                                        'description' => 'Permet de visualiser les rôles existants. Permet également de les modifier, d\'en ajouter ou d\'en supprimer si vous avez les droits requis pour cela.',
-                                        'route'       => 'droits/roles',
-                                        'resource'    => PrivilegeController::getResourceId('Application\Controller\Droits', 'roles'),
+                                'pages' => [
+                                    'affectations' => [
+                                        'label'       => "Affectations",
+                                        'title'       => "Administration des affectations",
+                                        'description' => 'Permet de visualiser les affectations existantes et de les modifier le cas échéant. Pour rappel, une affectation est la liaison entre un rôle et un personnel.',
+                                        'route'       => 'droits/affectations',
+                                        'order'       => 10,
+                                        'resource'    => PrivilegeController::getResourceId('Application\Controller\Droits', 'affectations'),
                                     ],
                                     'privileges'   => [
                                         'label'       => "Privilèges",
-                                        'title'       => "Gestion des privilèges",
+                                        'title'       => "Administration des privilèges",
                                         'description' => 'Tableau de bord listant, par rôle, les privilèges qui lui sont accordés. Le tableau permet également, si vous en avez le droit, de modifier les privilèges accordés par rôle.',
                                         'route'       => 'droits/privileges',
+                                        'order'       => 20,
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Droits', 'privileges'),
                                     ],
-                                    'affectations' => [
-                                        'label'       => "Affectations",
-                                        'title'       => "Gestion des affectations",
-                                        'description' => 'Permet de visualiser les affectations existantes et de les modifier le cas échéant. Pour rappel, une affectation est la liaison entre un rôle et un personnel.',
-                                        'route'       => 'droits/affectations',
-                                        'resource'    => PrivilegeController::getResourceId('Application\Controller\Droits', 'affectations'),
+                                    'roles'        => [
+                                        'label'       => "Rôles",
+                                        'title'       => "Administration des rôles",
+                                        'description' => 'Permet de visualiser les rôles existants. Permet également de les modifier, d\'en ajouter ou d\'en supprimer si vous avez les droits requis pour cela.',
+                                        'route'       => 'droits/roles',
+                                        'order'       => 30,
+                                        'resource'    => PrivilegeController::getResourceId('Application\Controller\Droits', 'roles'),
                                     ],
                                 ],
                             ],
@@ -228,7 +224,7 @@ return [
         ],
     ],
     'form_elements'   => [
-        'factories' => [
+        'factories'  => [
             'UnicaenAuth\Form\Droits\Role' => Form\Droits\RoleFormFactory::class,
         ],
         'invokables' => [

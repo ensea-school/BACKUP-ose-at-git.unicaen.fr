@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Referentiel\Entity\Db\VolumeHoraireReferentiel" table="VOLUME_HORAIRE_REF">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+        <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+        <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <many-to-one field="typeVolumeHoraire" target-entity="Service\Entity\Db\TypeVolumeHoraire">
+            <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="serviceReferentiel" target-entity="Referentiel\Entity\Db\ServiceReferentiel">
+            <join-column name="SERVICE_REFERENTIEL_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-many field="validation" target-entity="Application\Entity\Db\Validation">
+            <join-table name="VALIDATION_VOL_HORAIRE_REF">
+                <join-columns>
+                    <join-column name="VOLUME_HORAIRE_REF_ID" referenced-column-name="ID"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+        <many-to-many field="etatVolumeHoraireReferentiel" target-entity="Service\Entity\Db\EtatVolumeHoraire">
+            <join-table name="V_VOLUME_HORAIRE_REF_ETAT">
+                <join-columns>
+                    <join-column name="VOLUME_HORAIRE_REF_ID" referenced-column-name="ID" unique="true" on-delete="CASCADE"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID" on-delete="CASCADE"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+        <one-to-many field="formuleResultatVolumeHoraireReferentiel"
+                     target-entity="Application\Entity\Db\FormuleResultatVolumeHoraireReferentiel"
+                     mapped-by="volumeHoraireReferentiel"/>
+
+        <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
+            <join-column name="SOURCE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
+
+        <field name="autoValidation" type="boolean" column="AUTO_VALIDATION" nullable="false"/>
+        <field name="horaireDebut" type="datetime" column="HORAIRE_DEBUT" nullable="true"/>
+        <field name="horaireFin" type="datetime" column="HORAIRE_FIN" nullable="true"/>
+    </entity>
+</doctrine-mapping>

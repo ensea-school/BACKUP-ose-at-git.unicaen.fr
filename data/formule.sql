@@ -123,9 +123,6 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_<--NAME--> AS
       vh := ose_formule.volumes_horaires.items(l);
     END IF;
     CASE c
-
-
-
 <--CELLS-->
     ELSE
       dbms_output.put_line('La colonne c=' || c || ', l=' || l || ' n''existe pas!');

@@ -145,7 +145,7 @@ return [
                                 'title'        => "Paiement",
                                 'route'        => 'paiement',
                                 'icon'         => 'fas fa-credit-card',
-                                'border-color' => '#F5E79E',
+                                'color' => '#F5E79E',
                                 'resource'     => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION),
                                 'order'        => 40,
                                 'pages'        => [
@@ -189,7 +189,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Paiement',
@@ -251,13 +251,7 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'MiseEnPaiement' => [],
-                'TypeRessource'  => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
@@ -277,6 +271,7 @@ return [
             Service\TypeHeuresService::class                         => Service\TypeHeuresService::class,
             Service\CentreCoutService::class                         => Service\CentreCoutService::class,
             Service\CentreCoutEpService::class                       => Service\CentreCoutEpService::class,
+            Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementService::class,
         ],
         'factories'  => [
             Assertion\PaiementAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,

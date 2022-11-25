@@ -72,7 +72,7 @@ class ElementModulateurSaisieForm extends AbstractHelper
 
          $form->prepare();
          $res = $this->getView()->form()->openTag($form);
-         $res .= '<table class="table table-bordered table-extra-condensed">';
+         $res .= '<table class="table table-bordered table-xs">';
          $res .= '<tr>';
          $res .= '<th rowspan="2">Elément</th>';
          foreach ($displayTypesModulateurs as $typeModulateur) {
@@ -94,7 +94,7 @@ class ElementModulateurSaisieForm extends AbstractHelper
              $res .= '<th>';
              $res .= $this->getView()->formSelect($typeModulateurElement);
  //href="javascript:return false;" onclick="Modulateur.setFormValues($(this).data(\'code\'), $($(this).data(\'code\')).val())
-             $res .= ' <button type="button" class="btn btn-default btn-sm form-set-value" data-code="' . $typeModulateur->getCode() . '" title="Appliquer à tous"><i class="fas fa-arrow-down"></i></button>';
+             $res .= ' <button type="button" class="btn btn-secondary btn-sm form-set-value" data-code="' . $typeModulateur->getCode() . '" title="Appliquer à tous"><i class="fas fa-arrow-down"></i></button>';
              $res .= '</th>';
          }
          $res .= '</tr>';

@@ -1,0 +1,170 @@
+.cartridge {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.cartridge>span {
+    margin-top: 1px;
+    position: relative;
+    display: inline-block;
+    padding: 0px 4px;
+    z-index: 2;
+    margin-left: -.37em;
+    padding-left: .5em;
+    padding-right: 1em;
+    line-height: 1.5em;
+    font-weight: 100;
+}
+
+.cartridge>span:first-child {
+    border-top-left-radius: .25em;
+    border-bottom-left-radius: .25em;
+
+    margin-left: 0em;
+    font-weight: 700;
+    text-shadow: -1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.cartridge>span:last-child {
+    border-top-right-radius: .25em;
+    border-bottom-right-radius: .25em;
+    padding-right: .5em;
+}
+
+.cartridge>span:nth-child(5) {
+    border-top-right-radius: .25em;
+    border-bottom-right-radius: .25em;
+}
+
+.cartridge>span:nth-child(n+2)::before {
+    content: '.';
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    top: .35em;
+    left: -.35em;
+    width: .7em;
+    height: .7em;
+    position: absolute;
+    display: block;
+    z-index: 3;
+    text-indent: -50px;
+    overflow: hidden;
+}
+
+.cartridge a {
+    padding: 0px;
+}
+
+/* Ajout de bordure */
+
+.cartridge bordered {
+    margin: 1px;
+}
+
+.cartridge.bordered>span {
+    border: 1px black solid;
+}
+
+.cartridge.bordered>span:nth-child(n+2) {
+    border-right: 1px black dashed;
+}
+
+.cartridge.bordered>span:nth-child(n+2)::before {
+    top: .38em;
+    left: -.4em;
+    border-bottom: 1px black solid;
+    border-left: 1px black solid;
+}
+
+.cartridge.bordered>span:last-child {
+    border-right: 1px black solid;
+}
+
+
+/* Thème de couleurs : dégradé de gris */
+
+.cartridge.gray>span:nth-child(1), .cartridge.gray>span:nth-child(1) a, .cartridge.gray>span:nth-child(1)::before {
+    background-color: #444;
+    color:white;
+}
+
+.cartridge.gray>span:nth-child(2), .cartridge.gray>span:nth-child(2) a, .cartridge.gray>span:nth-child(2)::before {
+    background-color: #acacac;
+    color:black;
+}
+
+.cartridge.gray>span:nth-child(3), .cartridge.gray>span:nth-child(3) a, .cartridge.gray>span:nth-child(3)::before {
+    background-color: #cccccc;
+    color: black;
+}
+
+.cartridge.gray>span:nth-child(4), .cartridge.gray>span:nth-child(4) a, .cartridge.gray>span:nth-child(4)::before {
+    background-color: #e5e5e5;
+    color: black;
+}
+
+.cartridge.gray>span:nth-child(5), .cartridge.gray>span:nth-child(5) a, .cartridge.gray>span:nth-child(5)::before {
+    background-color: #fafafa;
+    color: black;
+}
+
+
+/* Thème de couleurs : couleurs par défaut */
+
+.cartridge>span:nth-child(1), .cartridge>span:nth-child(1) a, .cartridge>span:nth-child(1)::before {
+    background-color: #083d77;
+    color: white;
+}
+
+.cartridge>span:nth-child(2), .cartridge>span:nth-child(2) a, .cartridge>span:nth-child(2)::before {
+    background-color: #ebebd3;
+    color: black;
+}
+
+.cartridge>span:nth-child(3), .cartridge>span:nth-child(3) a, .cartridge>span:nth-child(3)::before {
+    background-color: #f4d35e;
+    color: black;
+}
+
+.cartridge>span:nth-child(4), .cartridge>span:nth-child(4) a, .cartridge>span:nth-child(4)::before {
+    background-color: #ee964b;
+    color:black;
+}
+
+.cartridge>span:nth-child(5), .cartridge>span:nth-child(5) a, .cartridge>span:nth-child(5)::before {
+    background-color: #f95738;
+    color:black;
+}
+
+
+/* Thème de couleurs : hérité de Purple #OSCAR*/
+
+.cartridge.purple>span:nth-child(1), .cartridge.purple>span:nth-child(1) a, .cartridge.purple>span:nth-child(1)::before {
+    background-color: #853F89;
+    border-color: #853F89;
+    color: white;
+}
+
+.cartridge.purple>span:nth-child(2), .cartridge.purple>span:nth-child(2) a, .cartridge.purple>span:nth-child(2)::before {
+    background-color: #CA93CE;
+    border-color: #853F89;
+    color: black;
+}
+
+.cartridge.purple>span:nth-child(3), .cartridge.purple>span:nth-child(3) a, .cartridge.purple>span:nth-child(3)::before {
+    background-color: #cca9cc;
+    border-color: #853F89;
+    color: black;
+}
+
+.cartridge.purple>span:nth-child(4), .cartridge.purple>span:nth-child(4) a, .cartridge.purple>span:nth-child(4)::before {
+    background-color: #e2c7de;
+    border-color: #853F89;
+    color:black;
+}
+
+.cartridge.purple>span:nth-child(5), .cartridge.purple>span:nth-child(5) a, .cartridge.purple>span:nth-child(5)::before {
+    background-color: #efe3ed;
+    border-color: #853F89;
+    color:black;
+}

@@ -1,0 +1,25 @@
+/**
+ * Offre de formation
+ */
+
+
+.etape-centre-cout {
+  margin-top: 2px;
+}
+
+.etape-taux-mixite {
+  margin-top: 2px;
+}
+
+.etape-modulateurs {
+  margin-top: 2px;
+}
+
+.etape-modulateurs th.element-pedagogique, .etape-modulateurs td.element-pedagogique {
+  width: 50%;
+}
+
+form#modulateurs-saisie th select {
+  display: inline;
+  width: auto;
+}

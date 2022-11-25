@@ -2,11 +2,11 @@
 
 namespace Intervenant\Form;
 
+use Application\Entity\Db\EtatSortie;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\TypeAgrementServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 
 /**
@@ -15,7 +15,6 @@ use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 class StatutSaisieForm extends AbstractForm
 {
     use TypeIntervenantServiceAwareTrait;
-    use TypeAgrementServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use DossierAutreServiceAwareTrait;
 
@@ -27,6 +26,7 @@ class StatutSaisieForm extends AbstractForm
             'serviceStatutaire'             => 'Nombre d\'heures de service statutaire',
             'depassementServiceDuSansHC'    => 'Le dépassement du service statutaire n\'occasionne aucune heure complémentaire',
             'tauxChargesPatronales'         => 'Taux de charges patronales',
+            'tauxChargesTTC'                => 'Taux de charges TTC',
             'dossier'                       => '',
             'servicePrevu'                  => 'Prévisionnel',
             'serviceRealise'                => 'Réalisé',
@@ -47,6 +47,7 @@ class StatutSaisieForm extends AbstractForm
             'conseilAcademique'             => 'Conseil académique',
             'conseilAcademiqueDureeVie'     => 'Durée de vie du CAC',
             'contrat'                       => '',
+            'contratEtatSortie'             => 'État de sortie à utiliser pour générer le contrat',
             'serviceExterieur'              => 'L\'intervenant pourra assurer des services dans d\'autres établissements',
             'cloture'                       => 'Le service réalisé devra être clôturé avant d\'accéder aux demandes de mise en paiement',
             'modificationServiceDu'         => 'Modifications de service dû',
@@ -73,7 +74,9 @@ class StatutSaisieForm extends AbstractForm
             'conseilAcademiqueVisualisation',
             'contratVisualisation',
             'contratDepot',
+            'contratGeneration',
             'modificationServiceDuVisualisation',
+            'modificationServiceDuEdition',
         ];
 
         for ($i = 1; $i <= 5; $i++) {
@@ -125,6 +128,25 @@ class StatutSaisieForm extends AbstractForm
                 'setter' => function (Statut $statut, $value, string $name) {
                     $taux = $value / 100;
                     $statut->setTauxChargesPatronales($taux);
+                },
+            ],
+        ]]);
+
+        $this->spec(['tauxChargesTTC' => [
+            'type'       => 'Text',
+            'name'       => 'tauxChargesTTC',
+            'attributes' => [
+                'pattern' => '[0-9]*',
+            ],
+            'hydrator'   => [
+                'getter' => function (Statut $statut, string $name) {
+                    $taux = $statut->getTauxChargesTTC();
+
+                    return $taux * 100;
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $taux = $value / 100;
+                    $statut->setTauxChargesTTC($taux);
                 },
             ],
         ]]);
@@ -300,15 +322,19 @@ class StatutSaisieForm extends AbstractForm
                         'active'        => 'Activé mais non visible par l\'intervenant',
                         'visualisation' => 'Activé et visible par l\'intervenant',
                         'depot'         => 'Activé et contrat téléversable par l\'intervenant',
+                        'generation'    => 'Activé et contrat téléchargeable et téléversable par l\'intervenant',
                     ],
                 ],
                 'hydrator' => [
                     'getter' => function (Statut $statut, string $name) {
-                        $access = $statut->getContrat();
-                        $visu   = $statut->getContratVisualisation();
-                        $depot  = $statut->getContratDepot();
+                        $access     = $statut->getContrat();
+                        $visu       = $statut->getContratVisualisation();
+                        $depot      = $statut->getContratDepot();
+                        $generation = $statut->getContratGeneration();
 
-                        if ($depot && $visu && $access) {
+                        if ($generation && $depot && $visu && $access) {
+                            return 'generation';
+                        } elseif ($depot && $visu && $access) {
                             return 'depot';
                         } elseif ($visu && $access) {
                             return 'visualisation';
@@ -319,10 +345,13 @@ class StatutSaisieForm extends AbstractForm
                         }
                     },
                     'setter' => function (Statut $statut, $value, string $name) {
-                        $access = false;
-                        $visu   = false;
-                        $depot  = false;
+                        $access     = false;
+                        $visu       = false;
+                        $depot      = false;
+                        $generation = false;
                         switch ($value) {
+                            case 'generation':
+                                $generation = true;
                             case 'depot':
                                 $depot = true;
                             case 'visualisation':
@@ -333,6 +362,7 @@ class StatutSaisieForm extends AbstractForm
                         $statut->setContrat($access);
                         $statut->setContratVisualisation($visu);
                         $statut->setContratDepot($depot);
+                        $statut->setContratGeneration($generation);
                     },
                 ],
             ],
@@ -344,14 +374,18 @@ class StatutSaisieForm extends AbstractForm
                         'desactive'     => 'Désactivé',
                         'active'        => 'Activé mais non visible par l\'intervenant',
                         'visualisation' => 'Activé et visible par l\'intervenant',
+                        'edition'       => 'Activé et modifiable par l\'intervenant',
                     ],
                 ],
                 'hydrator' => [
                     'getter' => function (Statut $statut, string $name) {
-                        $access = $statut->getModificationServiceDu();
-                        $visu   = $statut->getModificationServiceDuVisualisation();
+                        $access  = $statut->getModificationServiceDu();
+                        $visu    = $statut->getModificationServiceDuVisualisation();
+                        $edition = $statut->getModificationServiceDuEdition();
 
-                        if ($visu && $access) {
+                        if ($edition && $visu && $access) {
+                            return 'edition';
+                        } elseif ($visu && $access) {
                             return 'visualisation';
                         } elseif ($access) {
                             return 'active';
@@ -360,18 +394,22 @@ class StatutSaisieForm extends AbstractForm
                         }
                     },
                     'setter' => function (Statut $statut, $value, string $name) {
-                        $access = false;
-                        $visu   = false;
+                        $access  = false;
+                        $visu    = false;
+                        $edition = false;
                         switch ($value) {
 
+                            case 'edition':
+                                $edition = true;
                             case 'visualisation':
                                 $visu = true;
-
                             case 'active':
                                 $access = true;
                         }
                         $statut->setModificationServiceDu($access);
                         $statut->setModificationServiceDuVisualisation($visu);
+                        $statut->setModificationServiceDuEdition($edition);
+
                     },
                 ],
             ],
@@ -383,11 +421,14 @@ class StatutSaisieForm extends AbstractForm
         $this->addSubmit();
         $this->get('serviceStatutaire')->setOption('suffix', 'HETD');
         $this->get('tauxChargesPatronales')->setOption('suffix', '%');
+        $this->get('tauxChargesTTC')->setOption('suffix', '%');
         $this->get('conseilRestreintDureeVie')->setOption('suffix', 'an(s)');
         $this->get('conseilAcademiqueDureeVie')->setOption('suffix', 'an(s)');
         $this->setLabels($labels);
 
         $this->setValueOptions('typeIntervenant', $this->getServiceTypeIntervenant()->getList());
+        $this->setValueOptions('contratEtatSortie', 'SELECT es FROM ' . EtatSortie::class . ' es ORDER BY es.libelle');
+        $this->get('contratEtatSortie')->setEmptyOption('- Aucun état de sortie n\'est spécifié -');
 
         return $this;
     }

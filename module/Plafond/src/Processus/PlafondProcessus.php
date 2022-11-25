@@ -3,11 +3,11 @@
 namespace Plafond\Processus;
 
 use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\Db\VolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 use Plafond\Service\PlafondServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;

@@ -21,7 +21,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ANN
 
             <div style="margin:5px">
                 <button type="button" <?= (!$canEdit) ? 'disabled="disabled"' : ''; ?> data-id="<?= $annee->getId() ?>"
-                        class="btn btn-annee <?= $annee->isActive() ? 'btn-info active' : 'btn-default' ?>"><?= $annee ?></button>
+                        class="btn btn-annee <?= $annee->isActive() ? 'btn-info active' : 'btn-secondary' ?>"><?= $annee ?></button>
             </div>
 
         <?php endforeach; ?>
@@ -37,12 +37,12 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ANN
         if (isActive) {
             $(this).removeClass('active');
             $(this).removeClass('btn-info');
-            $(this).addClass('btn-default');
+            $(this).addClass('btn-secondary');
             isActive = false;
         } else {
             $(this).addClass('active');
             $(this).addClass('btn-info');
-            $(this).removeClass('btn-default');
+            $(this).removeClass('btn-secondary');
             isActive = true;
         }
 

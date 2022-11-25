@@ -27,58 +27,149 @@ echo $this->form()->openTag($form);
 </div>
 
 <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#sql" aria-controls="sql" role="tab" data-toggle="tab">Requêtage</a></li>
-    <li role="presentation"><a href="#csv" aria-controls="csv" role="tab" data-toggle="tab">Export CSV</a></li>
-    <li role="presentation"><a href="#pdf" aria-controls="pdf" role="tab" data-toggle="tab">Export PDF</a></li>
+    <li role="presentation" class="active"><a href="#sql" aria-controls="sql" role="tab" data-bs-toggle="tab">Requêtage</a></li>
+    <li role="presentation"><a href="#csv" aria-controls="csv" role="tab" data-bs-toggle="tab">Export CSV</a></li>
+    <li role="presentation"><a href="#pdf" aria-controls="pdf" role="tab" data-bs-toggle="tab">Export PDF</a></li>
 </ul>
 
-<div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="sql">
+<div class="tab-content etat-sortie-saisir">
+    <div role="tabcard" class="tab-pane active" id="sql">
 
-        <h2>Requête SQL de document
-            <small>(facultative)</small>
-        </h2>
-        <div class="panel panel-default etat-sortie-requete">
-            <div class="panel-heading" role="tab">
+        <h2>Requête SQL de document</h2>
+        <div class="card bg-default etat-sortie-requete">
+            <div class="card-header" role="tab">
                 <label>Champ clé : </label>
                 <?= $this->formText($form->get('cle')) ?>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <?= $this->formTextarea($form->get('requete')) ?>
             </div>
         </div>
         <h2>Requêtes SQL par zones</h2>
-        <div class="panel-group" id="blocs" role="tablist" aria-multiselectable="true">
+        <div class="card-group" id="blocs" role="tablist" aria-multiselectable="true">
 
             <?php for ($i = 1; $i <= 10; $i++): ?>
-                <div class="panel panel-default etat-sortie-bloc" id="bloc<?= $i ?>">
-                    <div class="panel-heading" role="tab" id="headingOne">
+                <div class="card bg-default etat-sortie-bloc" id="bloc<?= $i ?>">
+                    <div class="card-header" role="tab" id="headingOne">
                         <label>Champ de référence : </label>
                         <?= $this->formText($form->get("bloc-$i-nom")) ?>
                         &nbsp;<label>Zone : </label>
                         <?= $this->formSelect($form->get("bloc-$i-zone")) ?>
                     </div>
-                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                        <div class="panel-body">
+                    <div id="collapseOne" class="card-collapse collapse in" role="tabcard" aria-labelledby="headingOne">
+                        <div class="card-body">
                             <?= $this->formTextarea($form->get("bloc-$i-requete")) ?>
                         </div>
                     </div>
                 </div>
             <?php endfor; ?>
-            <button type="button" class="btn btn-default btn-xs ajout-bloc">
+            <button type="button" class="btn btn-secondary btn-sm ajout-bloc">
                 <i class="fas fa-plus"></i> Ajouter une requête
             </button>
         </div>
     </div>
-    <div role="tabpanel" class="tab-pane" id="csv">
+    <div role="tabcard" class="tab-pane" id="csv">
         <?= $this->formControlGroup($form->get('csv-params')) ?>
-        <?= $this->formControlGroup($form->get('csv-traitement')) ?>
+        <?= $this->formLabel($form->get('csv-traitement')) ?>
+        <div class="card bg-default variables">
+            <div class="card-header">Variables disponibles en entrée</div>
+            <table class="table table-xs">
+                <tr>
+                    <th>$csv</th>
+                    <td>
+                        <a href="https://git.unicaen.fr/lib/unicaen/app/-/blob/master/src/UnicaenApp/View/Model/CsvModel.php"
+                           target="_blank">UnicaenApp\View\Model\CsvModel</a>
+                    </td>
+                    <td>Document permettant de travailler à sa mise en page</td>
+                </tr>
+                <tr>
+                    <th>$etatSortie</th>
+                    <td>
+                        <a href="https://git.unicaen.fr/open-source/OSE/-/blob/master/module/Application/src/Entity/Db/EtatSortie.php"
+                           target="_blank">Application\Entity\Db\EtatSortie</a>
+                    </td>
+                    <td>Etat de sortie</td>
+                </tr>
+                <tr>
+                    <th>$data</th>
+                    <td>array</td>
+                    <td>Tableau de données issu de la requête exécutée</td>
+                </tr>
+                <tr>
+                    <th>$filtres</th>
+                    <td>array</td>
+                    <td>Liste des filtres avec les valeurs transmises (format COLONNE => Valeur)</td>
+                </tr>
+                <tr>
+                    <th>$entityManager</th>
+                    <td>
+                        <a href="https://github.com/webmozart/doctrine-orm/blob/master/lib/Doctrine/ORM/EntityManager.php"
+                           target="_blank">Doctrine\ORM\EntityManager</a>
+                    </td>
+                    <td>Gestionaire d'entités Doctrine (permet d'accéder à la base de données)</td>
+                </tr>
+            </table>
+        </div>
+        <?= $this->formTextarea($form->get('csv-traitement')) ?>
+        <div class="card bg-default variables">
+            <div class="card-header">Données en sortie</div>
+            <div class="card-body">
+                Le traitement doit retourner un tableau de données (array) à publiposter, ou NULL.
+            </div>
+        </div>
+
 
     </div>
-    <div role="tabpanel" class="tab-pane" id="pdf">
+    <div role="tabcard" class="tab-pane" id="pdf">
         <?= $this->formControlGroup($form->get('fichier')) ?>
         <?= $this->formControlGroup($form->get('auto-break')) ?>
-        <?= $this->formControlGroup($form->get('pdf-traitement')) ?>
+        <?= $this->formLabel($form->get('pdf-traitement')) ?>
+        <div class="card bg-default variables">
+            <div class="card-header">Variables disponibles en entrée</div>
+            <table class="table table-xs">
+                <tr>
+                    <th>$document</th>
+                    <td>
+                        <a href="https://git.unicaen.fr/lib/unicaen/open-document/-/blob/master/src/Document.php"
+                           target="_blank">Unicaen\OpenDocument\Document</a>
+                    </td>
+                    <td>Document permettant de travailler à sa mise en page</td>
+                </tr>
+                <tr>
+                    <th>$etatSortie</th>
+                    <td>
+                        <a href="https://git.unicaen.fr/open-source/OSE/-/blob/master/module/Application/src/Entity/Db/EtatSortie.php"
+                           target="_blank">Application\Entity\Db\EtatSortie</a>
+                    </td>
+                    <td>Etat de sortie</td>
+                </tr>
+                <tr>
+                    <th>$data</th>
+                    <td>array</td>
+                    <td>Tableau de données issu de la requête exécutée</td>
+                </tr>
+                <tr>
+                    <th>$filtres</th>
+                    <td>array</td>
+                    <td>Liste des filtres avec les valeurs transmises (format COLONNE => Valeur)</td>
+                </tr>
+                <tr>
+                    <th>$entityManager</th>
+                    <td>
+                        <a href="https://github.com/webmozart/doctrine-orm/blob/master/lib/Doctrine/ORM/EntityManager.php"
+                           target="_blank">Doctrine\ORM\EntityManager</a>
+                    </td>
+                    <td>Gestionaire d'entités Doctrine (permet d'accéder à la base de données)</td>
+                </tr>
+            </table>
+        </div>
+        <?= $this->formTextarea($form->get('pdf-traitement')) ?>
+        <div class="card bg-default variables">
+            <div class="card-header">Données en sortie</div>
+            <div class="card-body">
+                Le traitement doit retourner un tableau de données (array) à publiposter, ou NULL.
+            </div>
+        </div>
     </div>
 </div>
 
@@ -217,7 +308,7 @@ echo $this->form()->closeTag();
         display: none;
     }
 
-    .etat-sortie-saisir .etat-sortie-bloc .panel-heading .form-control {
+    .etat-sortie-saisir .etat-sortie-bloc .card-header .form-control {
         display: inline;
     }
 
@@ -225,12 +316,12 @@ echo $this->form()->closeTag();
         height: none;
     }
 
-    .etat-sortie-saisir .panel-heading {
+    .etat-sortie-saisir .card-header {
         padding-top: 3px;
         padding-bottom: 3px;
     }
 
-    .etat-sortie-saisir .panel-body {
+    .etat-sortie-saisir .card-body {
         padding: 0px;
     }
 
@@ -239,5 +330,23 @@ echo $this->form()->closeTag();
         border-radius: 0;
         margin-bottom: 0px;
         margin-top: 0px;
+    }
+
+    .etat-sortie-saisir #pdf .ace_editor {
+        margin: 0 0 1px;
+    }
+
+    .etat-sortie-saisir #pdf .variables {
+        font-size: 12px;
+        margin-bottom: 1px;
+    }
+
+    .etat-sortie-saisir #csv .ace_editor {
+        margin: 0 0 1px;
+    }
+
+    .etat-sortie-saisir #csv .variables {
+        font-size: 12px;
+        margin-bottom: 1px;
     }
 </style>

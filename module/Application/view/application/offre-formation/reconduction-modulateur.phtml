@@ -5,9 +5,9 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-modula
 <div class="row" id="reconduction-filters">
     <div class="col-md-12">
         <!---------------- Champ de sélection d'une structure --------------->
-        <div class="panel panel-default">
-            <div class="panel-heading">Veuillez sélectionner une composante :</div>
-            <div class="panel-body">
+        <div class="card bg-default">
+            <div class="card-header">Veuillez sélectionner une composante :</div>
+            <div class="card-body">
                 <?php
                 $selectStructure = new \Laminas\Form\Element\Select('structure');
                 $selectStructure
@@ -36,7 +36,7 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-modula
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 ?>
 <?php if (empty($etapesReconduites)): ?>
-    <table class="reconduction-centre-cout table table-bordered table-condensed table-hover">
+    <table class="reconduction-centre-cout table table-bordered table-sm table-hover">
         <thead>
         <tr>
             <th colspan="2">Code</th>
@@ -58,7 +58,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <form action="<?= $this->url('aof/reconduction-modulateur', [], ['query' => ['structure' => $structure->getId()]]) ?>"
           method="POST" id="form-reconduction">
 
-        <table class="reconduction-offre table table-bordered table-condensed table-hover table-sort">
+        <table class="reconduction-offre table table-bordered table-sm table-hover table-sort">
             <thead>
             <tr>
                 <th><input class="checkbox-element" type="checkbox" value="" id="check-all"></th>
@@ -87,11 +87,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         <button disabled="disabled" id="reconduction-modulateur-button" class="btn btn-primary pop-ajax" type="button"
                 data-content="Voulez-vous réellement reconduire ces centres de coût pour l'année prochaine ?
                 <div class='alert alert-warning'>
-                <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                <button type='button' class='close' data-bs-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                     Les modulateurs seront reconduits dans leurs globalités pour la prochaine année universitaire sur les formations séléctionnées. Si des modulateurs ont été renseignés manuellement pour l'année prochaine, ils seront écrasés par ceux de cette année.
                 </div>
                 <div style='text-align:right'>
-                <button type='button' class='btn btn-default pop-ajax-hide'>Non</button>
+                <button type='button' class='btn btn-secondary pop-ajax-hide'>Non</button>
                 <button type='button' class='btn btn-primary' id='confirm-reconduction'>Oui</button></div>"><i
                     class="fas fa-share"></i> Reconduire les modulateurs pour l'année suivante
         </button>

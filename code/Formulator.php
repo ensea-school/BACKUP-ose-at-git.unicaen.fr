@@ -27,7 +27,7 @@ $name = trim(strtoupper($_POST['name'] ?? ''));
         <div class="form-group">
             <button type="submit" name="action" value="gen" class="btn btn-primary">Générer le package et l'implenter en BDD</button>
             <button type="submit" name="action" value="aff" class="btn btn-primary">Simple affichage du package généré</button>
-            <button type="submit" name="action" value="feuille" class="btn btn-default">Voir la feuille de calcul</button>
+            <button type="submit" name="action" value="feuille" class="btn btn-secondary">Voir la feuille de calcul</button>
         </div>
     </form>
 <?php

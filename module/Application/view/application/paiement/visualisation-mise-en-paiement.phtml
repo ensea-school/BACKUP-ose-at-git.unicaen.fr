@@ -48,7 +48,7 @@ foreach ($paiements as $paiement) {
             /* @var $sap \Application\Entity\Db\FormuleResultatServiceReferentiel */
             $serviceReferentiel = $sap->getServiceReferentiel();
             $d['structure']     = (string)$this->structure($serviceReferentiel->getStructure())->renderLink();
-            $d['fonction']      = (string)$this->fonctionReferentiel($serviceReferentiel->getFonction())->renderLink();
+            $d['fonction']      = (string)$this->fonctionReferentiel($serviceReferentiel->getFonctionReferentiel())->renderLink();
             $d['description']   = $serviceReferentiel->getCommentaires();
         }
         $d['heures-a-payer']     = $paiement->getHeuresAPayer();
@@ -93,7 +93,7 @@ foreach ($periodes as $id => $periode) {
 }
 
 ?>
-<table class="table table-bordered table-condensed">
+<table class="table table-bordered table-sm">
     <tr>
         <th style="width:10%">Composante</th>
         <th style="width:25%">Formation</th>
@@ -127,7 +127,7 @@ foreach ($periodes as $id => $periode) {
 
             echo '<td>' . \UnicaenApp\Util::formattedNumber($d['heures-a-payer']) . '</td>';
             echo '<td>' . \UnicaenApp\Util::formattedNumber($d['heures-demandees']) . '</td>';
-            echo '<td><table class="table table-bordered table-condensed table-extra-condensed" style="margin-bottom: 0px">';
+            echo '<td><table class="table table-bordered table-xs" style="margin-bottom: 0px">';
 
             foreach ($periodes as $pid => $periode) {
                 if (isset($d['heures-payees'][$pid])) {
@@ -147,7 +147,7 @@ foreach ($periodes as $id => $periode) {
     }
     ?>
 </table>
-<table class="table table-bordered table-condensed" style="width:30em">
+<table class="table table-bordered table-sm" style="width:30em">
     <tr>
         <th>Heures à payer <abbr title="Heures équivalent TD">(HETD)</abbr></th>
         <td colspan="2" style="text-align:right"><?= \UnicaenApp\Util::formattedNumber($total['heures-a-payer']) ?></td>

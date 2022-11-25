@@ -8,7 +8,6 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use ExportRh\Service\ExportRhServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
@@ -26,13 +25,11 @@ class ExportRhAssertion extends AbstractAssertion
     const PRIV_CAN_INTERVENANT_EXPORT_RH = 'intervenant-export-rh';
 
 
-
     /* ---- Routage général ---- */
     public function __invoke(array $page) // gestion des visibilités de menus
     {
         return $this->assertPage($page);
     }
-
 
 
     protected function assertEntity(ResourceInterface $entity, $privilege = null)
@@ -44,7 +41,7 @@ class ExportRhAssertion extends AbstractAssertion
         if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
 
-        $config        = $this->getMvcEvent()->getApplication()->getServiceManager()->get('Config');
+        $config = $this->getMvcEvent()->getApplication()->getServiceManager()->get('Config');
         $exportRhActif = $config['export-rh']['actif'];
         //Si le module export rh n'est pas activé alors on renvoie toujours false
         if (!$exportRhActif) {
@@ -57,13 +54,12 @@ class ExportRhAssertion extends AbstractAssertion
                     case self::PRIV_CAN_INTERVENANT_EXPORT_RH:
                         return $this->assertIntervenantExportRh($entity);
                 }
-            break;
+                break;
         }
 
 
         return true;
     }
-
 
 
     protected function assertIntervenantExportRh(Intervenant $intervenant)
@@ -72,16 +68,16 @@ class ExportRhAssertion extends AbstractAssertion
             return false;
         }
 
-        $config                    = $this->getMvcEvent()->getApplication()->getServiceManager()->get('Config');
+        $config = $this->getMvcEvent()->getApplication()->getServiceManager()->get('Config');
         $anneeUniversitaireEnCours = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
-        $anneeContexte             = $this->getServiceContext()->getAnnee();
+        $anneeContexte = $this->getServiceContext()->getAnnee();
 
         //Si nous ne sommes dans l'année universitaire en cours le module export reste inactif
-        if ($anneeContexte->getId() != $anneeUniversitaireEnCours->getId()) {
-            return false;
+        if ($anneeContexte->getId() == $anneeUniversitaireEnCours->getId() || $anneeContexte->getId() == $anneeUniversitaireEnCours->getId() - 1) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
 }

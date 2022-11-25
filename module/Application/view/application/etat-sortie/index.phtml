@@ -48,17 +48,17 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::ETAT_SORTIE_AD
                 <?php if ($etatSortie->hasFichier()) {
 
                     echo $this->tag('a', [
-                        'class' => 'btn btn-default btn-xs',
+                        'class' => 'btn btn-secondary btn-sm',
                         'href'  => $this->url('etat-sortie/telecharger', ['etatSortie' => $etatSortie->getId()]),
                     ])->text('Télécharger le modèle');
 
                     echo $this->tag('a', [
-                        'class' => 'btn btn-default btn-xs',
+                        'class' => 'btn btn-secondary btn-sm',
                         'href'  => $this->url('etat-sortie/generer-pdf', ['etatSortie' => $etatSortie->getId()]),
                     ])->text('Extraction en PDF');
                 }
                 echo $this->tag('a', [
-                    'class' => 'btn btn-default btn-xs',
+                    'class' => 'btn btn-secondary btn-sm',
                     'href'  => $this->url('etat-sortie/generer-csv', ['etatSortie' => $etatSortie->getId()]),
                 ])->text('Extraction pour tableur (CSV)');
                 ?>

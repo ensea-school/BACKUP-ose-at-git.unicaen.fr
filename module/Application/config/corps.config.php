@@ -54,6 +54,30 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'rh' => [
+                                'pages' => [
+                                    'corps' => [
+                                        'label'        => 'Corps',
+                                        'route'        => 'corps',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Corps', 'index'),
+                                        'order'        => 10,
+                                        'color' => '#BBCF55',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'bjyauthorize'  => [
         'guards' => [
             PrivilegeController::class => [

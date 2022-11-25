@@ -2,6 +2,7 @@
 
 
 use Application\Provider\Privilege\Privileges;
+use ExportRh\Assertion\ExportRhAssertion;
 
 /* @var $intervenant \Application\Entity\Db\Intervenant */
 /* @var $tab string */
@@ -18,8 +19,8 @@ $tabs = [
         'force-refresh' => true,
     ],
 ];
-
 if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))) {
+
     $tabs[] = [
         'id'    => 'edition',
         'label' => '<i class="fas fa-pencil"></i> Édition',
@@ -68,7 +69,7 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_DEROGATIONS_
 if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_VISUALISATION))) {
     $label = '<span class="glyphicon glyphicon-book"></span> Notes';
     if ($notificationNote > 0) {
-        $label .= ' <span class="badge" style="background-color: red;font-size:10px;margin-bottom:5px;">' . $notificationNote . '</span>';
+        $label .= ' <span class="badge" style="background-color: #fc1010;font-size:10px;margin-bottom:5px;">' . $notificationNote . '</span>';
     }
     $tabs[] = [
         'id'            => 'notes',

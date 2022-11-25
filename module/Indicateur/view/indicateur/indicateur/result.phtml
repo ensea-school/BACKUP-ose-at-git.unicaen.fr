@@ -59,7 +59,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
             <div class="indicateurs-result">
                 <small><a href="javascript:cocherTout()">Cocher tout</a> / <a href="javascript:decocherTout()">Décocher
                         tout</a></small>
-                <table class="table table-bordered table-condensed table-hover table-sort">
+                <table class="table table-bordered table-sm table-hover table-sort">
                     <thead>
                     <tr>
                         <?php if ($mailUrl): ?>
@@ -118,11 +118,11 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                         tout</a></small>
             </div>
         <?php endif; ?>
-        <a class="btn btn-default" href="<?= $this->url('indicateur'); ?>">
+        <a class="btn btn-secondary" href="<?= $this->url('indicateur'); ?>">
             <i class="fas fa-rotate-left" aria-hidden="true"></i
                     Retour à la liste des indicateurs
         </a>
-        <a class="btn btn-default"
+        <a class="btn btn-secondary"
            href="<?= $this->url('indicateur/export-csv', ['indicateur' => $indicateur->getId()]); ?>">
             <i class="fas fa-upload" aria-hidden="true"></i>
             Export de la liste au format CSV
@@ -137,16 +137,19 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
 <?php if ($mailUrl): ?>
     <script>
 
-        function cocherTout() {
+        function cocherTout()
+        {
             $(".indic-intervenant").prop("checked", true);
         }
 
 
-        function decocherTout() {
+        function decocherTout()
+        {
             $(".indic-intervenant").prop("checked", false);
         }
 
-        function envoiMail() {
+        function envoiMail()
+        {
             var url = <?= json_encode($mailUrl) ?>;
             var ids = '';
             $(".indic-intervenant:checked").each(function () {

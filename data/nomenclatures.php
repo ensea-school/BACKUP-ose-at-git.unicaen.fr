@@ -134,12 +134,6 @@ return [
         ],
     ],
 
-    'MODELE_CONTRAT' => [
-        [
-            'ID'      => 1,
-            'LIBELLE' => 'Modèle par défaut',
-        ],
-    ],
 
     'PERIMETRE' => [
         [
@@ -417,6 +411,12 @@ return [
             'VALEUR'             => 41.41,
             'HISTO_CREATION'     => '2017-02-01 00:00:00',
             'HISTO_MODIFICATION' => '2017-02-01 00:00:00',
+        ],
+        [
+            'ID'                 => 3,
+            'VALEUR'             => 42.86,
+            'HISTO_CREATION'     => '2022-09-01 00:00:00',
+            'HISTO_MODIFICATION' => '2022-07-01 00:00:00',
         ],
     ],
 

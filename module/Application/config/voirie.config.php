@@ -51,6 +51,31 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'nomenclatures' => [
+                                'pages' => [
+                                    'voirie' => [
+                                        'label'        => 'Voiries',
+                                        'route'        => 'voirie',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Voirie', 'index'),
+                                        'order'        => 50,
+                                        'color' => '#BBCF55',
+                                    ],
+
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'bjyauthorize'  => [
         'guards' => [
             PrivilegeController::class => [

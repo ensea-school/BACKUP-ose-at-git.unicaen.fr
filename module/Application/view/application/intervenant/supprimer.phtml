@@ -38,7 +38,7 @@ echo $this->tree($tree, ['id' => 'intervenant-suppr']);
 ?>
     <br/>
 
-    <button id="suppressionIntervenantData" type="button" class="btn btn-danger" data-toggle="popover" data-trigger="focus"
+    <button id="suppressionIntervenantData" type="button" class="btn btn-danger" data-bs-toggle="popover" data-trigger="focus"
             title="Suppression de données intervenant">
         Supprimer les données sélectionnées
     </button>
@@ -46,7 +46,7 @@ echo $this->tree($tree, ['id' => 'intervenant-suppr']);
         ...
     </div>
 <?php if ($intervenant->estNonHistorise()): ?>
-    <button id="historisationIntervenantData" type="button" class="btn btn-default" data-toggle="popover" data-trigger="focus"
+    <button id="historisationIntervenantData" type="button" class="btn btn-secondary" data-bs-toggle="popover" data-trigger="focus"
             title="Historisation de la fiche de l'intervenant">
         Historiser la fiche de l'intervenant
     </button>
@@ -59,7 +59,7 @@ echo $this->tree($tree, ['id' => 'intervenant-suppr']);
                     '<div class="alert alert-warning">Attention : les données supprimées ne pourront pas être restaurées</div>' +
                     'Souhaitez-vous vraiment supprimer les données sélectionnées ?<br /><br />' +
                     '<button onclick="supprimer()" class="btn btn-danger">Oui, supprimer</button>' +
-                    '&nbsp;<button onclick="$(\'#suppressionIntervenantData\').popover(\'hide\')" class="btn btn-default">Non, laisser telle qu\'elle la fiche</button>'
+                    '&nbsp;<button onclick="$(\'#suppressionIntervenantData\').popover(\'hide\')" class="btn btn-secondary">Non, laisser telle qu\'elle la fiche</button>'
             });
 
             $('#historisationIntervenantData').popover({
@@ -68,7 +68,7 @@ echo $this->tree($tree, ['id' => 'intervenant-suppr']);
                     '<div class="alert alert-warning">Attention : Aucune donnée ne sera véritablement supprimée. La fiche de l\'intervenant ne sera simplement plus visible dans OSE ni dans les extractions (CSV, PDF, ...)</div>' +
                     'Souhaitez-vous vraiment historiser la fiche de l\'intervenant ?<br /><br />' +
                     '<button onclick="historiser()" class="btn btn-warning">Oui, historiser</button>' +
-                    '&nbsp;<button onclick="$(\'#historisationIntervenantData\').popover(\'hide\')" class="btn btn-default">Non, laisser telle qu\'elle la fiche</button>'
+                    '&nbsp;<button onclick="$(\'#historisationIntervenantData\').popover(\'hide\')" class="btn btn-secondary">Non, laisser telle qu\'elle la fiche</button>'
             });
         });
 

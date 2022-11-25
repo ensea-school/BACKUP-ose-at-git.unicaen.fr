@@ -11,14 +11,14 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
 <div class="row" id="reconduction-filters">
     <div class="col-md-12">
         <!---------------- Champ de sélection d'une structure --------------->
-        <div class="panel panel-default">
-            <div class="panel-heading">Veuillez sélectionner une composante :</div>
-            <div class="panel-body">
+        <div class="card bg-default">
+            <div class="card-header">Veuillez sélectionner une composante :</div>
+            <div class="card-body">
                 <?php
                 $selectStructure = new \Laminas\Form\Element\Select('structure');
                 $selectStructure
                     ->setValueOptions(['' => "(Sélectionnez une composante)"] + \UnicaenApp\Util::collectionAsOptions($structures))
-                    ->setValue($structure ? $structure->getId() : null)
+                    ->setValue($structure?->getId())
                     ->setAttributes(['class' => 'structure',
                                      'style' => 'width:250px;']);
                 echo $this->formSelect($selectStructure);
@@ -46,7 +46,7 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
         ?>
 
         <?php if (empty($offresComplementaires)): ?>
-            <table class="reconduction-offre table table-bordered table-condensed table-hover">
+            <table class="reconduction-offre table table-bordered table-sm table-hover">
                 <thead>
                 <tr>
                     <th colspan="2">Code</th>
@@ -71,7 +71,7 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                         des formations.</a></p>
             <?php else: ?>
                 <?php if ($reconductionTotale == 'non'): ?>
-                    <div class="well well-sm">Les lignes avec le fond gris ont déjà été reconduites pour la prochaine année
+                    <div class="well">Les lignes avec le fond gris ont déjà été reconduites pour la prochaine année
                         universitaire.
                     </div>
                     <form action="<?= $this->url('aof/reconduction', [], ['query' => ['structure' => $structure->getId()]]) ?>"
@@ -81,10 +81,10 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
 
                         as $ec): ?>
                         <?php if ($ec['reconduction_partiel'] == 'oui'): ?>
-                        <table class="reconduction-offre table table-bordered table-condensed table-hover">
+                        <table class="reconduction-offre table table-bordered table-sm table-hover">
                             <?php else: ?>
-                            <table class="reconduction-offre table table-bordered table-condensed table-hover"
-                                   style="display: none;">
+                            <table class="reconduction-offre table table-bordered table-sm table-hover"
+                                   style="display: none" ;>
                                 <?php endif; ?>
                                 <thead>
                                 <tr class="<?php if ($ec['reconduction'] == 'oui') {
@@ -93,11 +93,19 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                                     echo "info";
                                 } ?>">
                                     <?php if ($ec['reconduction'] == 'oui'): ?>
-                                        <th><input title="Formation déjà reconduite pour l'année prochaine" type="checkbox"
-                                                   class="checkbox-formation" disabled="disabled" name="etape[]"
-                                                   value="<?= $ec['etape']->getId(); ?>"/> <span class="label label-warning"
-                                                                                                 style="margin:0 auto;">Reconduit</span>
-                                        </th>
+                                        <?php if ($ec['reconductionFait'] == 'oui'): ?>
+                                            <th><input title="Formation déjà reconduite pour l'année prochaine" type="checkbox"
+                                                       class="checkbox-formation" disabled="disabled" name="etape[]"
+                                                       value="<?= $ec['etape']->getId(); ?>"/> <span class="label label-warning"
+                                                                                                     style="margin:0 auto;">Reconduit</span>
+                                            </th>
+                                        <?php else: ?>
+                                            <th><input title="Formation non reconductible" type="checkbox"
+                                                       class="checkbox-formation" disabled="disabled" name="etape[]"
+                                                       value="<?= $ec['etape']->getId(); ?>"/> <span class="label label-warning"
+                                                                                                     style="margin:0 auto;">Non reconductible</span>
+                                            </th>
+                                        <?php endif; ?>
                                     <?php else: ?>
                                         <th><input type="checkbox" class="checkbox-formation" checked="checked" name="etape[]"
                                                    value="<?= $ec['etape']->getId(); ?>"/></th>
@@ -151,17 +159,17 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                             <?php endforeach; ?>
                             <button id="reconduction-button" class="btn btn-primary pop-ajax" type="button" data-content="Voulez-vous réellement reconduire ces offres pour l'année prochaine ?
                 <div class='alert alert-warning'>
-                <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                <button type='button' class='close' data-bs-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                     Les formations ainsi que les éléments pédagogiques sélectionnés seront reconduits pour l'année universitaire prochaine.
                 </div>
                 <div style='text-align:right'>
-                <button type='button' class='btn btn-default pop-ajax-hide'>Non</button>
+                <button type='button' class='btn btn-secondary pop-ajax-hide'>Non</button>
                 <button type='button' class='btn btn-primary' id='confirm-reconduction'>Oui</button></div>"><i
                                         class="fas fa-share"></i> Reconduire l'offre pour l'année suivante
                             </button>
                     </form>
                 <?php else: ?>
-                    <table class="reconduction-offre table table-bordered table-condensed table-hover">
+                    <table class="reconduction-offre table table-bordered table-sm table-hover">
                         <thead>
                         <tr>
                             <th colspan="2">Code</th>

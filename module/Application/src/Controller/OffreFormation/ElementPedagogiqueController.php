@@ -41,7 +41,7 @@ class ElementPedagogiqueController extends AbstractController
     {
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\CheminPedagogique::class,
-            \Application\Entity\Db\VolumeHoraire::class,
+            \Enseignement\Entity\Db\VolumeHoraire::class,
         ]);
         $element       = $this->getEvent()->getParam('elementPedagogique');
         $title         = $element->getLibelle() . ' (' . $element->getCode() . ')';
@@ -175,14 +175,14 @@ class ElementPedagogiqueController extends AbstractController
 
                 $extra = '';
                 if (!$niveau) {
-                    $extra .= sprintf('<span class="element-rech niveau" title="%s">%s</span>', "Niveau", $item['LIBELLE_GTF'] . $item['NIVEAU']);
+                    $extra .= sprintf('<span class="niveau" title="%s">%s</span>', "Niveau", $item['LIBELLE_GTF'] . $item['NIVEAU']);
                 }
                 if (!$etape) {
-                    $extra .= sprintf('<span class="element-rech etape" title="%s">%s</span>', "Formation", $item['LIBELLE_ETAPE']);
+                    $extra .= sprintf('<span class="etape" title="%s">%s</span>', "Formation", $item['LIBELLE_ETAPE']);
                 }
-                $extra .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="element-rech periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
+                $extra .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
 
-                $template = sprintf('<span class="element-rech extra">{extra}</span><span class="element-rech element" title="%s">{label}</span>', "Enseignement");
+                $template = sprintf('<span class="extra">{extra}</span><span class="element" title="%s">{label}</span>', "Enseignement");
                 $result[] = [
                     'id'       => $item['ID'],
                     'label'    => $item['CODE'] . ' ' . $item['LIBELLE'],
@@ -218,7 +218,7 @@ class ElementPedagogiqueController extends AbstractController
     public function volumeHoraireAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\VolumeHoraireEns::class,
+            \Enseignement\Entity\Db\VolumeHoraireEns::class,
         ]);
 
         $title = 'Volumes horaires';

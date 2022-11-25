@@ -88,6 +88,7 @@ class FormuleCalcul
             'taux_fi'                   => 'vh.taux_fi',
             'taux_fa'                   => 'vh.taux_fa',
             'taux_fc'                   => 'vh.taux_fc',
+            'type_volume_horaire_code'  => 'vh.type_volume_horaire_code',
             'type_intervention_code'    => 'vh.type_intervention_code',
             'taux_service_du'           => 'vh.taux_service_du',
             'taux_service_compl'        => 'vh.taux_service_compl',
@@ -118,10 +119,11 @@ class FormuleCalcul
         for ($colNum = 1; $colNum <= $maxCol; $colNum++) {
             $cell   = $this->getSheet()->getCellByCoords($colNum, $this->mainLine - 2);
             $colLib = Util::reduce($cell?->getContent() ?? '');
-            if (str_contains($colLib, Util::reduce('spécifique'))) {
+            if (str_contains($colLib, Util::reduce('specifique'))) {
                 for ($pnum = 1; $pnum <= 5; $pnum++) {
-                    $cell = $this->getSheet()->getCellByCoords($colNum - 1 + $pnum, $this->mainLine);
-                    if (($cell?->getContent() ?? '') != '') {
+                    $cell = $this->getSheet()->getCellByCoords($colNum - 1 + $pnum, $this->mainLine - 1);
+                    $name = $cell?->getContent();
+                    if (!in_array($name, ['P1', 'P2', 'P3', 'P4', 'P5'])) {
                         $this->cellsPos['vh.param_' . $pnum] = Calc::numberToLetter($colNum - 1 + $pnum);
                     }
                 }
@@ -132,7 +134,6 @@ class FormuleCalcul
         $iColsRefs = [
             'type_intervenant_code'          => 'i.type_intervenant_code',
             'structure_code'                 => 'i.structure_code',
-            'type_volume_horaire_code'       => 'i.type_volume_horaire_code',
             'heures_service_statutaire'      => 'i.heures_service_statutaire',
             'heures_service_modifie'         => 'i.heures_service_modifie',
             'depassement_service_du_sans_hc' => 'i.depassement_service_du_sans_hc',
@@ -179,6 +180,7 @@ class FormuleCalcul
             'vh.taux_fi'                       => 'pourc',
             'vh.taux_fa'                       => 'pourc',
             'vh.taux_fc'                       => 'pourc',
+            'vh.type_volume_horaire_code'      => 'string',
             'vh.type_intervention_code'        => 'string',
             'vh.taux_service_du'               => 'float',
             'vh.taux_service_compl'            => 'float',
@@ -201,7 +203,6 @@ class FormuleCalcul
             'vh.heures_compl_referentiel'      => 'float',
             'i.type_intervenant_code'          => 'string',
             'i.structure_code'                 => 'string',
-            'i.type_volume_horaire_code'       => 'string',
             'i.heures_service_statutaire'      => 'float',
             'i.heures_service_modifie'         => 'float',
             'i.depassement_service_du_sans_hc' => 'bool',
@@ -396,7 +397,8 @@ END FORMULE_" . $this->getName() . ";";
         $s        = $this->getSheet();
         $formules = $this->getFormuleCells();
 
-        $cells = '';
+        $cells = "\n\n\n";
+
         foreach ($formules as $name => $cell) {
             $this->currentCellName = $name;
 
@@ -566,7 +568,7 @@ END FORMULE_" . $this->getName() . ";";
 
     private function returnPlsql(string $plsql): string
     {
-        if (!(str_starts_with($plsql, 'IF') || str_starts_with($plsql, 'RETURN'))) {
+        if (!(str_starts_with($plsql, 'IF') || str_starts_with($plsql, 'RETURN') || str_contains($plsql, 'sumIfRow'))) {
             $plsql = 'RETURN ' . $plsql;
         }
 
@@ -686,6 +688,19 @@ END FORMULE_" . $this->getName() . ";";
             $expr[$i]['exprs'][1] = $then;
             if ($hasElse) {
                 $expr[$i]['exprs'][2] = $else;
+            }
+        }
+
+        // report des opération faites avant et après les SUMIF à l'intérieur des expressions de résultat du SUMIF
+        if ($expr[$i]['name'] === 'SUMIF' && count($expr) > 1) {
+            $expr[$i]['valExpr'] = [];
+            foreach ($expr as $a => $aitem) {
+                if ($a != $i) {
+                    $expr[$i]['valExpr'][] = $aitem;
+                    unset($expr[$a]);
+                } else {
+                    $expr[$i]['valExpr'][] = ['type' => 'plsql', 'code' => 'val'];
+                }
             }
         }
     }
@@ -812,6 +827,8 @@ END FORMULE_" . $this->getName() . ";";
                 }
                 if (array_key_exists($term['type'], $methods)) {
                     $plsql .= $this->{$methods[$term['type']]}($expr, $i);
+                } elseif ($term['type'] === 'plsql') {
+                    $plsql .= $term['code'];
                 } else {
                     $plsql .= '[PB TRADUCTION]';
                 }
@@ -854,7 +871,16 @@ END FORMULE_" . $this->getName() . ";";
     {
         $term = $expr[$i];
 
-        return ' ' . $term['name'] . ' ';
+        $trads = [
+            '&' => '||',
+        ];
+
+        $op = $term['name'];
+        if (isset($trads[$op])) {
+            $op = $trads[$op];
+        }
+
+        return ' ' . $op . ' ';
     }
 
 
@@ -876,7 +902,7 @@ END FORMULE_" . $this->getName() . ";";
 
         $col = Calc::numberToLetter($col);
 
-        $absName = $term['absName'];
+        $absName = $term['absName'] ?? $term['name'];
         if (str_starts_with($absName, '$')) {
             $absName = substr($absName, 1); // on élimine le premier $ lié à la colonne
         }
@@ -915,7 +941,7 @@ END FORMULE_" . $this->getName() . ";";
         $traductions = [
             'i_type_intervenant_code'          => 'i.type_intervenant_code',
             'i_structure_code'                 => 'i.structure_code',
-            'i_type_volume_horaire_code'       => 'i.type_volume_horaire_code',
+            'i_type_volume_horaire_code'       => 'vh.type_volume_horaire_code',
             'i_heures_decharge'                => 'i.heures_service_statutaire',
             'i_heures_service_modifie'         => 'i.heures_service_modifie',
             'i_depassement_service_du_sans_hc' => 'i.depassement_service_du_sans_hc',
@@ -940,9 +966,11 @@ END FORMULE_" . $this->getName() . ";";
     {
         $term      = $expr[$i];
         $functions = [
-            'IF'  => 'traductionFunctionIf',
-            'AND' => 'traductionFunctionAnd',
-            'OR'  => 'traductionFunctionOr',
+            'IF'      => 'traductionFunctionIf',
+            'AND'     => 'traductionFunctionAnd',
+            'OR'      => 'traductionFunctionOr',
+            'ISBLANK' => 'traductionFunctionIsBlank',
+            'SUMIF'   => 'traductionFunctionSumIf',
         ];
 
         if (array_key_exists($term['name'], $functions)) {
@@ -1078,6 +1106,81 @@ END FORMULE_" . $this->getName() . ";";
 
 
 
+    private function traductionFunctionIsBlank(array &$expr, int $i): string
+    {
+        $term = $expr[$i];
+        $test = $term['exprs'][0];
+
+        if (1 === count($test)) {
+            $plsql = $this->traductionExpr($test) . ' IS NULL';
+        } elseif (count($test) > 1) {
+            $plsql = '(' . $this->traductionExpr($test) . ') IS NULL';
+        }
+
+        return $plsql;
+    }
+
+
+
+    private function traductionFunctionSumIf(array &$expr, int $i): string
+    {
+        $term = $expr[$i];
+
+//SUMIF([.AD21:.AD$500];[.AD20];[.M21:.$M500])
+        $plage   = $term['exprs'][0][0];
+        $critere = $term['exprs'][1];
+        if (isset($term['exprs'][2][0])) {
+            $plageSomme = $term['exprs'][2][0];
+        } else {
+            $plageSomme = $plage;
+        }
+
+        if ($critere[0]['type'] != 'op') { // ajout du =, valeuir par défaut
+            $cc      = $critere;
+            $critere = [['type' => 'op', 'name' => '=']];
+            foreach ($cc as $c) {
+                $critere[] = $c;
+            }
+        }
+
+        var_dump($plage);
+        var_dump($critere);
+        var_dump($plageSomme);
+
+        $plsql = "val := 0;\n";
+        for ($c = 0; $c <= ($plage['colEnd'] - $plage['colBegin']); $c++) {
+            $col     = Calc::numberToLetter($plage['colBegin'] + $c);
+            $colDest = Calc::numberToLetter($plageSomme['colBegin'] + $c);
+
+            $rowBegin = $plage['rowBegin'] - $this->mainLine;
+            if ($rowBegin === 0) {
+                $rowBegin = 'l';
+            } else {
+                $rowBegin = 'l + ' . $rowBegin;
+            }
+
+            if ($plage['rowEnd'] >= 500) {
+                $rowEnd = 'ose_formule.volumes_horaires.length';
+            } else {
+                $rowEnd = (string)($plage['rowEnd'] - $this->mainLine);
+            }
+
+            $plsql .= "FOR sumIfRow IN $rowBegin .. $rowEnd LOOP\n";
+            $plsql .= "  IF cell('" . $col . "',sumIfRow)" . $this->traductionExpr($critere) . " THEN\n";
+            $plsql .= "    val := val + cell('" . $colDest . "',sumIfRow);\n";
+            $plsql .= "  END IF;\n";
+            $plsql .= "END LOOP;\n";
+        }
+
+        $plsql .= 'RETURN ' . $this->traductionExpr($term['valExpr']);
+
+        echo '<pre>' . htmlentities($plsql) . '</pre>';
+
+        return $plsql;
+    }
+
+
+
     private function indent(string $plsql, int $levels = 1): string
     {
 
@@ -1100,6 +1203,8 @@ END FORMULE_" . $this->getName() . ";";
         $boolSar = [
             'vh.service_statutaire',
             'vh.structure_is_exterieur',
+            'vh.structure_is_affectation',
+            'vh.structure_is_univ',
             'i.depassement_service_du_sans_hc',
         ];
 
@@ -1121,8 +1226,8 @@ END FORMULE_" . $this->getName() . ";";
             $sar[$variable . " <> 'Non'"] = $variable;
         }
 
-        $plsql = str_replace(array_keys($sar), array_values($sar), $plsql);
+        $result = str_replace(array_keys($sar), array_values($sar), $plsql);
 
-        return $plsql;
+        return $result;
     }
 }

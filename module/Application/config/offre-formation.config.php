@@ -53,6 +53,7 @@ return [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/offre-de-formation',
+                    'order'    => 2,
                     'defaults' => [
                         'controller' => 'Application\Controller\OffreFormation',
                         'action'     => 'index',
@@ -202,7 +203,7 @@ return [
                         ],
                         'may_terminate' => false,
                         'child_routes'  => [
-                            'voir'          => [
+                            'voir'      => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/voir/:etape',
@@ -210,7 +211,7 @@ return [
                                     'defaults'    => ['action' => 'voir'],
                                 ],
                             ],
-                            'ajouter'       => [
+                            'ajouter'   => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/ajouter/:structure',
@@ -218,6 +219,15 @@ return [
                                     'defaults'    => ['action' => 'saisir'],
                                 ],
                             ],
+                            'restaurer' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/restaurer/:etape',
+                                    'constraints' => ['etape' => '[0-9]*'],
+                                    'defaults'    => ['action' => 'restaurer'],
+                                ],
+                            ],
+
                             'modifier'      => [
                                 'type'    => 'Segment',
                                 'options' => [
@@ -285,34 +295,32 @@ return [
                         'label'    => 'Offre de formation',
                         'title'    => "Gestion de l'offre de formation",
                         'route'    => 'of',
+                        'order'    => 2,
                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'index'),
                     ],
                     'administration' => [
                         'pages' => [
-                            'offre-formation' => [
-                                'label'          => 'Administration de l\'offre de formation',
-                                'icon'           => 'fas fa-table-list',
-                                'route'          => 'aof',
-                                'resource'       => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'administrationOffre'),
-                                'order'          => 0,
-                                'border - color' => '#111',
-                                'pages'          => [
+                            'odf' => [
+                                'pages' => [
                                     'reconduction-offre'       => [
                                         'label'    => 'Reconduction de l\'offre de formation complémentaire',
                                         'title'    => 'Reconduction de l\'offre de formation complémentaire',
                                         'route'    => 'aof/reconduction',
+                                        'order'    => 20,
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
                                     ],
                                     'reconduction-centre-cout' => [
-                                        'label'    => 'Reconduction des centres de coûts de l\'offre de formation',
+                                        'label'    => 'Reconduction des centres de coûts',
                                         'title'    => 'Reconduction des centres de coûts de l\'offre de formation',
                                         'route'    => 'aof/reconduction-centre-cout',
+                                        'order'    => 30,
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconductionCentreCout'),
                                     ],
                                     'reconduction-modulateur'  => [
-                                        'label'    => 'Reconduction des modulateurs de l\'offre de formation',
+                                        'label'    => 'Reconduction des modulateurs',
                                         'title'    => 'Reconduction des modulateurs de l\'offre de formation',
                                         'route'    => 'aof/reconduction-modulateur',
+                                        'order'    => 40,
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconductionModulateur'),
                                     ],
 
@@ -325,7 +333,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class => [
                 /* Global */
                 [
@@ -362,7 +370,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\Etape',
-                    'action'     => ['saisir', 'supprimer'],
+                    'action'     => ['restaurer', 'saisir', 'supprimer'],
                     'privileges' => Privileges::ODF_ETAPE_EDITION,
                 ],
                 /* Éléments pédagogiques */
@@ -428,16 +436,7 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'ElementPedagogique' => [],
-                'Etape'              => [],
-                'CentreCoutEp'       => [],
-                'ElementModulateur'  => [],
-                'VolumeHoraireEns'   => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
@@ -506,6 +505,8 @@ return [
             Service\OffreFormationService::class       => Service\OffreFormationService::class,
             Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
             Processus\ReconductionProcessus::class     => Processus\ReconductionProcessus::class,
+            Service\VolumeHoraireEnsService::class     => Service\VolumeHoraireEnsService::class,
+            Service\PeriodeService::class              => Service\PeriodeService::class,
         ],
         'factories'  => [
             Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,

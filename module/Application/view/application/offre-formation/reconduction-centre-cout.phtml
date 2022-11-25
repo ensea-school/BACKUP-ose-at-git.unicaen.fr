@@ -5,9 +5,9 @@ $this->headScript()->offsetSetFile(130, $this->basePath('/js/reconduction-centre
 <div class="row" id="reconduction-filters">
     <div class="col-md-12">
         <!---------------- Champ de sélection d'une structure --------------->
-        <div class="panel panel-default">
-            <div class="panel-heading">Veuillez sélectionner une composante :</div>
-            <div class="panel-body">
+        <div class="card bg-default">
+            <div class="card-header">Veuillez sélectionner une composante :</div>
+            <div class="card-body">
                 <?php
                 $selectStructure = new \Laminas\Form\Element\Select('structure');
                 $selectStructure
@@ -39,7 +39,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
 ?>
 
 <?php if (empty($etapesReconduites)): ?>
-    <table class="reconduction-centre-cout table table-bordered table-condensed table-hover">
+    <table class="reconduction-centre-cout table table-bordered table-sm table-hover">
         <thead>
         <tr>
             <th colspan="2">Code</th>
@@ -61,7 +61,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
     <form action="<?= $this->url('aof/reconduction-centre-cout', [], ['query' => ['structure' => $structure->getId()]]) ?>"
           method="POST" id="form-reconduction">
 
-        <table class="reconduction-offre table table-bordered table-condensed table-hover table-sort">
+        <table class="reconduction-offre table table-bordered table-sm table-hover table-sort">
             <thead>
             <tr>
                 <th><input class="checkbox-element" type="checkbox" value="" id="check-all"></th>
@@ -88,11 +88,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
         </table>
         <button disabled="disabled" id="reconduction-cc-button" class="btn btn-primary pop-ajax" type="button" data-content="Voulez-vous réellement reconduire ces centres de coût pour l'année prochaine ?
                 <div class='alert alert-warning'>
-                <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                <button type='button' class='close' data-bs-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                     Les centres de coûts seront reconduits uniquement sur les éléments pédagogiques / types heures non encore paramétrés. Les centres de coûts déjà positionnés ne seront pas modifiés.
                 </div>
                 <div style='text-align:right'>
-                <button type='button' class='btn btn-default pop-ajax-hide'>Non</button>
+                <button type='button' class='btn btn-secondary pop-ajax-hide'>Non</button>
                 <button type='button' class='btn btn-primary' id='confirm-reconduction'>Oui</button></div>"><i
                     class="fas fa-share"></i> Reconduire les centres de coûts pour l'année suivante
         </button>

@@ -718,7 +718,6 @@ class Bdd
      */
     public function diff2($src, $dest, $filters = []): DdlDiff
     {
-        $this->logBegin('Génération du différentiel de DDLs');
         if ($src instanceof self) {
             $src = $src->getDdl($filters);
         } else {
@@ -737,14 +736,12 @@ class Bdd
         foreach ($this->changements as $changement => $label) {
             $c++;
             [$ddlName, $action] = explode('.', $changement);
-            $this->logMsg($label . " (opération $c/$cc) ...", true);
             $object  = $this->manager($ddlName);
             $queries = $this->alterDdlObject($object, $action, $src[$ddlName] ?: [], $dest[$ddlName] ?: []);
             if (!empty($queries)) {
                 $diff->set($changement, $queries);
             }
         }
-        $this->logEnd();
 
         return $diff;
     }
@@ -894,26 +891,25 @@ class Bdd
 
 
     /**
+     * @param string                $filename
      * @param DdlFilters|array|null $filters
+     * @param array                 $fncs
      *
      * @throws Exception
      */
-    public function save(string $dirname, $filters = [], array $fncs = [])
+    public function save(string $filename, $filters = [], array $fncs = [])
     {
         $this->logBegin("Sauvegarde de la base de données");
 
-        if (!is_dir($dirname)) {
-            mkdir($dirname);
-        }
-        if (!is_dir($dirname)) {
-            throw new \Exception("Création du répertoire $dirname impossible");
+        if (file_exists($filename)) {
+            throw new Exception('Le fichier existe déjà, merci de le supprimer ou bien de trouver un nouveau nom');
         }
 
-        // On supprime les fichiers existants s'il y en a
-        $files = array_diff(scandir($dirname), ['.', '..']);
-        foreach ($files as $file) {
-            unlink("$dirname/$file");
+        if (!class_exists('ZipArchive')) {
+            throw new Exception('Zip extension not loaded');
         }
+        $archive = new \ZipArchive();
+        $archive->open($filename, \ZipArchive::CREATE);
 
         foreach ($fncs as $table => $fnc) {
             if (false === $fnc) {
@@ -925,32 +921,54 @@ class Bdd
         }
         $ddl = $this->getDdl($filters);
 
-        $ddl->saveToFile($dirname . '/bdd.ddl');
+        $archive->addFromString('bdd.ddl', $ddl->saveToString());
 
         $tables = array_keys($ddl->get(Ddl::TABLE));
         sort($tables);
+        $tmpNames = [];
         foreach ($tables as $table) {
             $fnc = isset($fncs[$table]) ? $fncs[$table] : null;
             if (false !== $fnc) {
-                $this->getTable($table)->save($dirname . '/' . $table . '.tbl', $fnc);
+                $tmpname    = tempnam(sys_get_temp_dir(), uniqid());
+                $tmpNames[] = $tmpname;
+                $this->getTable($table)->save($tmpname, $fnc);
+                if (file_exists($tmpname)) {
+                    $archive->addFile($tmpname, $table . '.tbl');
+                }
             }
         }
 
+        $archive->close();
+        foreach ($tmpNames as $tmpName) {
+            if (file_exists($tmpName)) {
+                unlink($tmpName);
+            }
+        }
         $this->logEnd();
     }
 
 
 
-    public function load(string $dirname, $filters = [], array $fncs = [])
+    public function load(string $filename, $filters = [], array $fncs = [])
     {
         $this->logBegin("Restauration de la base de données");
 
-        if (!file_exists($dirname . '/bdd.ddl')) {
-            throw new \Exception("Le répertoire $dirname ne contient pas de sauvegarde valide de base de données");
+        if (!file_exists($filename)) {
+            throw new \Exception("Le fichier $filename n\'existe pas ou bien il n'a pas été trouvé");
         }
 
+        $tmpPath = tempnam(sys_get_temp_dir(), uniqid());
+        unlink($tmpPath);
+
+        $archive = new \ZipArchive();
+        if (true !== $archive->open($filename)) {
+            throw new Exception('La sauvegarde n\'est pas lisible');
+        }
+        $archive->extractTo($tmpPath);
+        $archive->close();
+
         $ddl = new Ddl();
-        $ddl->loadFromFile($dirname . '/bdd.ddl');
+        $ddl->loadFromFile($tmpPath . '/bdd.ddl');
         $ddl->filter($filters);
 
         $tDdl = $ddl->get(Ddl::TABLE);
@@ -963,10 +981,10 @@ class Bdd
         sort($tables);
         $this->inCopy = true;
         foreach ($tables as $table) {
-            if (file_exists($dirname . '/' . $table . '.tbl')) {
+            if (file_exists($tmpPath . '/' . $table . '.tbl')) {
                 $fnc = isset($fncs[$table]) ? $fncs[$table] : null;
                 if (false !== $fnc) {
-                    $this->getTable($table)->load($dirname . '/' . $table . '.tbl', $fnc);
+                    $this->getTable($table)->load($tmpPath . '/' . $table . '.tbl', $fnc);
                 }
             }
         }
@@ -976,6 +994,15 @@ class Bdd
         $this->majSequences($ddl);
 
         $this->logEnd();
+
+        $dir = opendir($tmpPath);
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                unlink($tmpPath . '/' . $file);
+            }
+        }
+        closedir($dir);
+        rmdir($tmpPath);
 
         return $this;
     }

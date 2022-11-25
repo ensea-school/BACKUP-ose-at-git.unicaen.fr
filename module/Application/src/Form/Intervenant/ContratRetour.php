@@ -2,8 +2,10 @@
 
 namespace Application\Form\Intervenant;
 
+use Application\Constants;
 use Application\Entity\Db\Traits\ContratAwareTrait;
 use Application\Form\AbstractForm;
+use Laminas\Hydrator\HydratorInterface;
 use UnicaenApp\Hydrator\Strategy\DateStrategy;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\ClassMethodsHydrator;
@@ -18,7 +20,7 @@ class ContratRetour extends AbstractForm
 
     public function init2()
     {
-        $this->setHydrator(new ClassMethodsHydrator(false));
+        $this->setHydrator(new ContratRetourFormHydrator());
         $this->setAttribute('method', 'POST');
         $this->setAttribute('action', $this->getCurrentUrl());
 
@@ -26,9 +28,10 @@ class ContratRetour extends AbstractForm
 
         $this->add([
             'name'       => 'dateRetourSigne',
-            'type'       => 'UnicaenApp\Form\Element\Date',
+            'type'       => 'DateTime',
             'options'    => [
-                'label' => "Date de retour $contratToString signé",
+                'label'  => "Date de retour $contratToString signé",
+                'format' => Constants::DATE_FORMAT,
             ],
             'attributes' => [
             ],
@@ -44,8 +47,6 @@ class ContratRetour extends AbstractForm
             ],
         ]);
 
-        $this->getHydrator()->addStrategy('dateRetourSigne', new DateStrategy($this->get('dateRetourSigne')));
-
         return $this;
     }
 
@@ -60,9 +61,49 @@ class ContratRetour extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'valide' => [
+            'valide'          => [
+                'required' => false,
+            ],
+            'dateRetourSigne' => [
                 'required' => false,
             ],
         ];
+    }
+}
+
+
+
+
+
+class ContratRetourFormHydrator implements HydratorInterface
+{
+
+    /**
+     * @param array          $data
+     * @param CampagneSaisie $object
+     *
+     * @return CampagneSaisie
+     */
+    public function hydrate(array $data, $object)
+    {
+        $object->setDateRetourSigne($data['dateRetourSigne'] ? \DateTime::createFromFormat(Constants::DATE_FORMAT, $data['dateRetourSigne']) : null);
+
+        return $object;
+    }
+
+
+
+    /**
+     * @param CampagneSaisie $object
+     *
+     * @return array
+     */
+    public function extract($object): array
+    {
+        $data = [
+            'dateRetourSigne' => $object->getDateRetourSigne() ? $object->getDateRetourSigne()->format(Constants::DATE_FORMAT) : null,
+        ];
+
+        return $data;
     }
 }

@@ -9,7 +9,7 @@ use Laminas\View\Helper\AbstractHtmlElement;
  * Dessine le formulaire de type EtapeTauxMixiteFormViewHelper.
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
- * @see TauxMixiteForm
+ * @see    TauxMixiteForm
  */
 class EtapeTauxMixiteFormViewHelper extends AbstractHtmlElement
 {
@@ -19,9 +19,12 @@ class EtapeTauxMixiteFormViewHelper extends AbstractHtmlElement
      */
     protected $form;
 
+
+
     /**
      *
      * @param TauxMixiteForm $form
+     *
      * @return self|string
      */
     public function __invoke(TauxMixiteForm $form = null)
@@ -33,15 +36,18 @@ class EtapeTauxMixiteFormViewHelper extends AbstractHtmlElement
         return $this->render($form);
     }
 
+
+
     /**
      * Rendu du formulaire
      *
      * @param TauxMixiteForm $form
+     *
      * @return string
      */
     public function render(TauxMixiteForm $form)
     {
-        $elements = $form->getEtape()->getElementPedagogique();
+        $elements    = $form->getEtape()->getElementPedagogique();
         $typesHeures = $form->getTypesHeures();
 
         if (empty($elements)) {
@@ -53,7 +59,7 @@ class EtapeTauxMixiteFormViewHelper extends AbstractHtmlElement
 
         $form->prepare();
         $res = $this->getView()->form()->openTag($form);
-        $res .= '<table class="table table-bordered table-extra-condensed">';
+        $res .= '<table class="table table-bordered table-xs">';
 
         $res .= '<tr>';
         $res .= '<th rowspan="2" class="element-pedagogique">Elément</th>';
@@ -68,9 +74,9 @@ class EtapeTauxMixiteFormViewHelper extends AbstractHtmlElement
         foreach ($typesHeures as $th) {
             $res .= '<th>';
             $res .= '<div class="input-group">';
-            $res .= $this->getView()->formText( $form->get($th->getCode()) );
+            $res .= $this->getView()->formText($form->get($th->getCode()));
             $res .= '<span class="input-group-btn">';
-            $res .= '<button type="button" class="btn btn-default form-set-value" data-code="' . $th->getCode() . '" title="Appliquer à tous"><i class="fas fa-arrow-down"></i></button>';
+            $res .= '<button type="button" class="btn btn-secondary form-set-value" data-code="' . $th->getCode() . '" title="Appliquer à tous"><i class="fas fa-arrow-down"></i></button>';
             $res .= '</span>';
             $res .= '</div>';
             $res .= '</th>';
@@ -78,11 +84,11 @@ class EtapeTauxMixiteFormViewHelper extends AbstractHtmlElement
         $res .= '</tr>';
 
         foreach ($elements as $element) {
-            $res .= '<tr>';
-            $res .= '<th class="element-pedagogique">' . $element . '</th>';
+            $res         .= '<tr>';
+            $res         .= '<th class="element-pedagogique">' . $element . '</th>';
             $formElement = $form->get('EL' . $element->getId());
-            $res .= $this->getView()->elementTauxMixiteFieldset()->render($formElement, $typesHeures, true);
-            $res .= '</tr>';
+            $res         .= $this->getView()->elementTauxMixiteFieldset()->render($formElement, $typesHeures, true);
+            $res         .= '</tr>';
         }
 
         $res .= '</table>';

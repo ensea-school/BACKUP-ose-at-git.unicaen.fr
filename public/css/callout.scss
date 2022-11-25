@@ -1,0 +1,46 @@
+.callout-menu {
+
+}
+
+.callout-menu .callout-container {
+    border: 10px white solid;
+    border-radius: 20px;
+    margin: 0px;
+    width: 50%;
+    min-width:25em;
+    float: left;
+    padding:.6em;
+    padding-right: 1px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.callout-menu .callout {
+    border: 1px white solid;
+    border-top-right-radius: 9px;
+    border-bottom-right-radius: 9px;
+    padding:1em;
+    min-height:14em;
+    background-color:white;
+    box-shadow:rgba(0, 0, 0, 0.35) 0px 4px 9px -4px
+}
+
+.callout-menu .callout:hover {
+    background-color:rgba(255, 255, 255, 0.95);
+}
+
+.callout-menu .callout h1 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 18pt;
+}
+
+.callout-menu .callout ul {
+    margin-bottom: 0px;
+}
+
+.callout-menu .callout .fas {
+    float: right;
+    font-size: 40pt;
+    color: #ddd;
+}

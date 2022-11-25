@@ -1,8 +1,94 @@
 # Version stable
 
-[OSE 18.2](#ose-182-15062022)
+[OSE 19.4](#ose-194-21102022)
 
-# OSE 19 (à venir)
+
+# OSE 20 (à venir)
+
+## Nouveautés
+
+* Les modèles de contrats de travail sont maintenant gérés comme n'importe quel autre état de sortie
+* Reconduction de l'offre de formation pour les éléments de OSE porté par un élément synchroniser
+* Possibilité de rentrer un taux de charge par statut d'intervenant
+* Ajout d'un choix par statut pour "contrat de travail et avenants" pour laisser la possibilité à l'intervenant de télécharger sont contrat en pdf
+* Ajout d'un choix par statut pour "Modifications de service dû" pour laisser la possibilité à l'intervenant de modifier son service dû
+* Migration technnique vers le framework Bootstrap 5 et modernisation de l'identité visuelle
+
+## Corrections de bugs
+
+* Sur la page "Services", la sélection d'un élément après selection d'une composante et d'une formation est désormais fonctionnel
+* Correction des indicateur 910 et 920 qui étaient non fonctionnels dans le cas d'une autovalidation ou d'une absence de contrat
+* Correction de la suppression d'un role dans la page d'administration des roles.
+* Correction mineure sur les notes intervenants au niveau de l'historique (#46303)
+* La durée de vie attendue des pièces justificatives est maintenant celle de l'année en cours et plus celle de l'année de dépôt de la pièce
+* Les annulations de mises en paiement sont désormais bien prises en compte dès la première annulation
+* Il est désormais possible de cloturer le service réalisé même si aucune heure n'est saisie
+* Les indicateurs 530 et 540 ne renvoient plus de vacataires
+* Les étapes d'ODF complémentaire peuvent de nouveau être modifiées (#46922)
+
+## Notes de mise à jour
+
+* Supprimer la ligne faisant référence à TBL_NOEUD dans Administration/Synchronisation/Tables, table NOEUD, champ "Traitements postérieurs : à exécuter après la synchro".
+
+
+
+# OSE 19.5 (à venir)
+
+## Corrections de bugs
+
+* Dans le module Charges, la saisie de seuils par défaut refonctionne normalement (#47451)
+* Les plafonds de périmètre "volume horaire" sont de nouveau activables (#47340,#45225)
+* Filtre des pays avec dates de validité périmées dans les listing des données personnelles (#47492)
+* Correction sur le script de mise à jour des employeurs
+* Correction sur les notes de l'intervenant au niveau de l'historique (#46303)
+
+
+
+# OSE 19.4 (21/10/2022)
+
+## Corrections de bugs/petites évolutions
+
+* Les types d'intervention personnalisés par statut peuvent de nouveau être saisis (#46930)
+* Modification de la formule de calcul de Poitiers
+* Modification de la formule de calcul de Rennes 2
+* Modification de la formule de calcul de Lyon 2
+* Modification de la formule de calcul de Nice Cote d'Azur
+
+
+
+# OSE 19.3 (08/09/2022)
+
+## Corrections de bugs
+
+* Pb lié à la 19.2 : la vue V_ETAT_PAIEMENT n'était pas mise à jour correctement. 
+
+
+
+# OSE 19.2 (06/09/2022)
+
+## Nouveautés
+
+* Prise en compte du nouveau point d'indice valable à partir du 1er juillet 2022
+
+
+
+# OSE 19.1 (21/07/2022)
+
+## nouveautés
+
+* Formule de calcul de Picardie
+* Nouvel état de sortie pour les écarts des heures complémentaires, maintenant personnalisable (#45807)
+* Possibilité de faire une PEC ou REN (SIHAM) l'année universitaire N-1
+* Nouvel état de sortie pour télécharger une synthèse des privilèges par rôle (#45629)
+* Nouveau paramètre du module export RH (SIHAM) permettant de synchroniser le code intervenant avec le matricule SIHAM lors d'une PEC ou d'un renouvellement
+
+## Corrections de bugs
+
+* La synchronisation via la ligne de commande ne fonctionnait plus. C'est rétabli
+
+
+
+# OSE 19.0 (12/07/2022)
 
 ## Nouveautés
 
@@ -16,8 +102,9 @@
 * Nouvel état de sortie pour l'extraction des paiements dans le cadre de la pré-liquidation SIHAM
 * Ajout d'un bouton de refus de pièce justificative avec envoie d'email à l'intervenant
 * Changement du bouton de cloture de service pour un libellé plus parlant et un style de bouton plus prononcé
-* Formules nouvelles ou mises à jour : Rennes 2, Paris Saclay, Guyane, Côte d'Azur, La Réunion, Poitiers, Brest
+* Formules nouvelles ou mises à jour : Rennes 2, Paris Saclay, Guyane, Côte d'Azur, La Réunion, Poitiers, Brest, Rouen
 * Possibilité de créer un nouveau test de formule en téléversant une feuille de calcul au format tableur
+* Ajout d'un champs cci pour l'envoi de mail aux intervenants et le refus de pièces jointes (#45083)
 
 ## Corrections de bugs
 
@@ -27,6 +114,43 @@
 * Forcer l'activiation de l'étape pièces justificatives même si il n'y a pas de service prévisionnel de renseigné.
 * Choix du bon modèle de contrat dans le cas de plusieurs modèles de contrat (par structure et/ou par statut) (#45520)
 * Bouton Prévu->réalisé Apparait correctement pour le service réalisé.
+* Correction sur la reconduction des centres de coût et modulateurs (#45746)
+
+
+## Notes de mise à jour
+
+* Si vous êtes en version 17.x, se référer à toutes les notes de migration de la version [18.0](#ose-18-23052022)
+Une fois la migration réalisée et quelques tests effectués, vous devrez supprimer manuellement les tables de sauvegarde listées ci-dessous.
+Si vous ne le faites pas, le risque est que les scripts de migration de la version 17 à la version 18 soient rejoués sans qu'il n'en soit nécessaire, avec en sus un *risque de perte de données* pour des intervenants ayant changé de statut entre temps.
+
+
+* Si vous êtes déjà en version 18.x et si ce n'est déjà fait, il vous faudra supprimer les tables de sauvegardes liées à la migration 17 --> 18 et
+la table STATUT_INTERVENANT
+**avant** de migrer en 19.0.
+
+#### Liste des tables de sauvegardes de migration 17=>18 concernées :
+```sql
+DROP TABLE save_v18_dossier_autre_statut;
+DROP TABLE save_v18_plafond;
+DROP TABLE save_v18_plafond_app;
+DROP TABLE save_v18_referentiel;
+DROP TABLE save_v18_statut;
+DROP TABLE save_v18_statut_privilege;
+DROP TABLE save_v18_structure;
+DROP TABLE save_v18_ta_statut;
+DROP TABLE save_v18_tis;
+DROP TABLE save_v18_tpjs;
+DROP TABLE save_v18_dossier;
+DROP TABLE save_v18_intervenant;
+DROP TABLE save_v18_privilege;
+DROP TABLE save_v18_role_privilege;
+DROP TABLE statut_intervenant;
+
+```
+
+
+
+
 
 # OSE 18.2 (15/06/2022)
 
@@ -52,7 +176,7 @@
 
 Si vous êtes en version 17, se référer à toutes les notes de migration de la version 18.0
 
-Si vous êtes déjà en version 18.0, il vous faudra supprimer les tables de sauvegardes liées à la migration 17 --> 18 et
+Si vous êtes déjà en version 18.x et si ce n'est déjà fait, il vous faudra supprimer les tables de sauvegardes liées à la migration 17 --> 18 et
 la table STATUT_INTERVENANT
 **avant** de migrer en 18.1.
 

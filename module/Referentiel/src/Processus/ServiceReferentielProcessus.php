@@ -1,0 +1,65 @@
+<?php
+
+namespace Referentiel\Processus;
+
+use Application\Processus\AbstractProcessus;
+use Referentiel\Entity\Db\ServiceReferentiel;
+use Service\Entity\Recherche;
+use Service\Service\EtatVolumeHoraireService;
+use Application\Service\IntervenantService;
+use Application\Service\Traits\ContextServiceAwareTrait;
+use Referentiel\Service\ServiceReferentielServiceAwareTrait;
+use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
+
+/**
+ * Description of ServiceReferentielProcessus
+ *
+ * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
+ */
+class ServiceReferentielProcessus extends AbstractProcessus
+{
+    use ContextServiceAwareTrait;
+    use ServiceReferentielServiceAwareTrait;
+    use VolumeHoraireReferentielServiceAwareTrait;
+
+
+    /**
+     * @param Recherche $recherche
+     *
+     * @return ServiceReferentiel[]|array
+     */
+    public function getReferentiels(Recherche $recherche): array
+    {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $serviceReferentiel              = $this->getServiceServiceReferentiel();
+        $volumeHoraireReferentielService = $this->getServiceVolumeHoraireReferentiel();
+
+        $qb = $serviceReferentiel->initQuery()[0];
+
+        $serviceReferentiel
+            ->join(IntervenantService::class, $qb, 'intervenant', ['id', 'nomUsuel', 'prenom', 'sourceCode'])
+            ->join($volumeHoraireReferentielService, $qb, 'volumeHoraireReferentiel', ['id', 'heures', 'autoValidation']);
+
+        $volumeHoraireReferentielService->leftJoin(EtatVolumeHoraireService::class, $qb, 'etatVolumeHoraireReferentiel', ['id', 'code', 'libelle', 'ordre']);
+
+        $serviceReferentiel->finderByContext($qb);
+        $serviceReferentiel->finderByFilterObject($recherche, new \Laminas\Hydrator\ClassMethodsHydrator(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
+
+        if ($recherche->getIntervenant()) {
+            $serviceReferentiel->finderByIntervenant($recherche->getIntervenant(), $qb);
+        }
+        if (!$recherche->getIntervenant() && $role->getStructure()) {
+            $serviceReferentiel->finderByStructure($role->getStructure(), $qb);
+        }
+
+        $services = $serviceReferentiel->getList($qb);
+        /* @var $services ServiceReferentiel[] */
+
+        foreach ($services as $k => $service) {
+            $service->setTypeVolumeHoraire($recherche->getTypeVolumehoraire());
+        }
+
+        return $services;
+    }
+}

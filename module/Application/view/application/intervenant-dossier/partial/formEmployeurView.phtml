@@ -17,8 +17,8 @@ $dossierEmployeur = $form->get('DossierEmployeur');
 
 <!-- Fiedlset Employeur -->
 <div class="col-md-6">
-    <div class="panel panel-default ">
-        <div class="panel-heading">
+    <div class="card bg-default ">
+        <div class="card-header">
             EMPLOYEUR PRINCIPAL
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$intervenantDossier->getTblDossier()->getCompletudeEmployeur()): ?>
@@ -29,7 +29,7 @@ $dossierEmployeur = $form->get('DossierEmployeur');
             <?php endif; ?>
 
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="form-group">
                 <?= $this->formLabel($dossierEmployeur->get('employeur')); ?>
                 <div class="input-group cold-md-6 readonly">

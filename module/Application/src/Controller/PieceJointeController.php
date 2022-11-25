@@ -21,6 +21,7 @@ use Application\Service\Traits\TypePieceJointeServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
 use Application\Form\PieceJointe\Traits\TypePieceJointeSaisieFormAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use phpDocumentor\Reflection\Types\Array_;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Model\JsonModel;
@@ -161,7 +162,7 @@ class PieceJointeController extends AbstractController
         $msgs = [];
 
         if (0 == $nbDemandees) {
-            $msgs['info'][] = 'Aucune pièce justificative n\'est à fournir';
+            $msgs['info'][] = 'Aucune pièce justificative obligatoire n\'est à fournir';
         } elseif ($nbFournies < $nbDemandees) {
             $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
         } elseif ($nbFournies == $nbDemandees && $nbValidees == $nbDemandees) {
@@ -364,10 +365,17 @@ class PieceJointeController extends AbstractController
 
         $anneeId = $this->getServiceContext()->getAnnee()->getId();
 
-        $typesPiecesJointes = $this->getServiceTypePieceJointe()->getList();
-        $statuts            = $this->getServiceStatut()->getList();
+        $typesPiecesJointes  = $this->getServiceTypePieceJointe()->getList();
+        $statuts             = $this->getServiceStatut()->getList();
+        $typesIntervenants = [];
+        foreach ($statuts as $intervenant) {
+            if (!in_array($intervenant->getTypeIntervenant(), $typesIntervenants)) {
+                $typesIntervenants[] = $intervenant->getTypeIntervenant();
+            }
+        }
 
-        $statutsIntervenants = [];
+
+        $statutsIntervenants = null;
         foreach ($statuts as $statut) {
             if ($statut->getTypeIntervenant()->getCode() == $codeIntervenant) {
                 $statutsIntervenants[$statut->getTypeIntervenant()->getId()][] = $statut;
@@ -400,7 +408,7 @@ class PieceJointeController extends AbstractController
             $typesPiecesJointesStatuts[$tpjID][$siId][] = $tpjs;
         }
 
-        return compact('typesPiecesJointes', 'statutsIntervenants', 'typesPiecesJointesStatuts', 'codeIntervenant');
+        return compact('typesPiecesJointes', 'statutsIntervenants', 'typesPiecesJointesStatuts', 'codeIntervenant', 'typesIntervenants');
     }
 
 
@@ -553,7 +561,8 @@ class PieceJointeController extends AbstractController
                 $to      = $data['to'];
                 $subject = $data['subject'];
                 $content = $data['content'];
-                $this->getServiceMail()->envoyerMail($from, $to, $subject, $content);
+                $copy    = $data['copy'];
+                $this->getServiceMail()->envoyerMail($from, $to, $subject, $content, $copy);
                 //Création d'une trace de l'envoi dans les notes de l'intervenant
                 $this->getServiceNote()->createNoteFromEmail($pj->getIntervenant(), $subject, $content);
                 $this->flashMessenger()->addSuccessMessage('Email envoyé à l\'intervenant');

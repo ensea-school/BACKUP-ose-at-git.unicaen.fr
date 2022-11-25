@@ -1,0 +1,83 @@
+.chargens {
+    width: 100%;
+    background-color: white;
+}
+
+.chargens.fullscreen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1050;
+    height: 100%;
+    width: 100%;
+}
+
+.chargens .controles .nav-local {
+    margin-bottom: 1px;
+}
+
+.form-noeud {
+    overflow: hidden !important;
+}
+
+.form-lien {
+    overflow: hidden !important;
+}
+
+.ui-front {
+    z-index: 1051;
+}
+
+.chargens .nav-local .div-filtre {
+    padding:4px;
+    padding-bottom: 0px;
+}
+
+.chargens .nav-local .div-filtre .div-structure {
+    padding-right:2px;
+}
+
+.chargens .nav-local .div-filtre .div-etape {
+    padding-left:2px;
+    padding-right:2px;
+}
+
+.chargens .nav-local .div-filtre .div-scenario {
+    padding-left:2px;
+}
+
+.chargens .nav-local .div-filtre .div-scenario-edit {
+    padding-left:2px;
+}
+
+.chargens .nav-local .div-controles {
+    padding:4px;
+    padding-left: 0px;
+    margin-left: -8px;
+}
+
+.chargens .nav-local .div-hetd-composante{
+    margin-right: 0px;
+    height: auto;
+    padding-top: 7px;
+    padding-bottom: 5px;
+}
+
+
+/* Seuils de dédoublement */
+.seuils-dedoublement tr#seuil-gtf-0 {
+    font-weight: bold;
+    background-color: oldlace;
+}
+
+.seuils-dedoublement td span.aucun {
+    color: darkgrey;
+}
+
+.chargens-formation-edit.form-lien #actif {
+    line-height: 2rem;
+    width: 2rem;
+    height:2rem;
+}

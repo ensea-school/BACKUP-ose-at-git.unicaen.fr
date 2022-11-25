@@ -94,6 +94,7 @@ Dépendances requises :
     * zip
     * bcmath
     * gd
+    * soap
     * OCI8 (pilote pour Oracle).
 
 Le mode installation de OSE liste toutes les dépendances nécessaires et teste leur présence sur votre serveur.

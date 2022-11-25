@@ -22,6 +22,7 @@
         <field name="serviceStatutaire" type="float" column="SERVICE_STATUTAIRE" precision="126" scale="0" nullable="false"/>
         <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC" nullable="false"/>
         <field name="tauxChargesPatronales" type="float" column="TAUX_CHARGES_PATRONALES" precision="126" scale="0" nullable="false"/>
+        <field name="tauxChargesTTC" type="float" column="TAUX_CHARGES_TTC" precision="126" scale="0" nullable="true"/>
 
         <field name="dossier" type="boolean" column="DOSSIER" nullable="false"/>
         <field name="dossierVisualisation" type="boolean" column="DOSSIER_VISUALISATION" nullable="false"/>
@@ -64,6 +65,10 @@
         <field name="contrat" type="boolean" column="CONTRAT" nullable="false"/>
         <field name="contratVisualisation" type="boolean" column="CONTRAT_VISUALISATION" nullable="false"/>
         <field name="contratDepot" type="boolean" column="CONTRAT_DEPOT" nullable="false"/>
+        <field name="contratGeneration" type="boolean" column="CONTRAT_GENERATION" nullable="false"/>
+        <many-to-one field="contratEtatSortie" target-entity="Application\Entity\Db\EtatSortie">
+            <join-column name="CONTRAT_ETAT_SORTIE_ID" referenced-column-name="ID"/>
+        </many-to-one>
 
         <field name="servicePrevu" type="boolean" column="SERVICE_PREVU" nullable="false"/>
         <field name="servicePrevuVisualisation" type="boolean" column="SERVICE_PREVU_VISU" nullable="false"/>
@@ -84,6 +89,7 @@
 
         <field name="modificationServiceDu" type="boolean" column="MODIF_SERVICE_DU" nullable="false"/>
         <field name="modificationServiceDuVisualisation" type="boolean" column="MODIF_SERVICE_DU_VISUALISATION" nullable="false"/>
+        <field name="modificationServiceDuEdition" type="boolean" column="MODIF_SERVICE_DU_EDITION" nullable="false"/>
 
         <field name="paiementVisualisation" type="boolean" column="PAIEMENT_VISUALISATION" nullable="false"/>
         <field name="motifNonPaiement" type="boolean" column="MOTIF_NON_PAIEMENT" nullable="false"/>

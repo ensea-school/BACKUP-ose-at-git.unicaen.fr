@@ -3,6 +3,8 @@
  * @var $this  \Application\View\Renderer\PhpRenderer
  * @var $form  \Application\Form\TypeRessource\TypeRessourceSaisieForm
  */
+echo $this->tag('h1', ['class' => 'page-header'])->html($title);
+
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 $type = $dossierAutre->getType()->getId();
 
@@ -33,27 +35,27 @@ echo $this->form()->openTag($form); ?>
         </ul>
 
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane <?= ($type != '3') ? 'active' : ''; ?>"
+            <div role="tabcard" class="tab-pane <?= ($type != '3') ? 'active' : ''; ?>"
                  id="json">
-                <div class="panel panel-default json-value">
-                    <div class="panel-heading" role="tab">
+                <div class="card bg-default json-value">
+                    <div class="card-header" role="tab">
                         <label>Valeurs sous forme JSON<br/>
                             <small style="font-weight:normal">Format : { "0":"VALUE1" , "1":"VALUE2" ...}</small></label>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <?= $this->formTextarea($form->get('json-value')) ?>
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane <?= ($dossierAutre->getType()->getId() == '3') ? 'active' : ''; ?>"
+            <div role="tabcard" class="tab-pane <?= ($dossierAutre->getType()->getId() == '3') ? 'active' : ''; ?>"
                  id="sql">
-                <div class="panel panel-default sql-value">
-                    <div class="panel-heading" role="tab">
+                <div class="card bg-default sql-value">
+                    <div class="card-header" role="tab">
                         <label>Valeurs sous forme SQL<br/> <small style="font-weight:normal">Format : SELECT
                                 votre_champs as VALUE_OPTION FROM
                                 votre_table</small></label>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <?= $this->formTextarea($form->get('sql-value')) ?>
                     </div>
                 </div>
@@ -128,12 +130,12 @@ echo $this->form()->openTag($form); ?>
 </script>
 <style>
 
-    .autres-saisir .panel-heading {
+    .autres-saisir .card-header {
         padding-top: 3px;
         padding-bottom: 3px;
     }
 
-    .autres-saisir .panel-body {
+    .autres-saisir .card-body {
         padding: 0px;
     }
 

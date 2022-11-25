@@ -14,7 +14,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\ServiceServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;

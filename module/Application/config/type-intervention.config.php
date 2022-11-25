@@ -134,13 +134,16 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'type-intervention' => [
-                                'label'        => 'Types d\'interventions',
-                                'icon'         => 'fas fa-commenting',
-                                'route'        => 'type-intervention',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeIntervention', 'index'),
-                                'order'        => 60,
-                                'border-color' => '#71DFD7',
+                            'odf' => [
+                                'pages' => [
+                                    'type-intervention' => [
+                                        'label'        => 'Types d\'interventions',
+                                        'route'        => 'type-intervention',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeIntervention', 'index'),
+                                        'order'        => 70,
+                                        'color' => '#71DFD7',
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -149,12 +152,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'TypeIntervention' => [],
-            ],
-        ],
-        'guards'             => [
+        'guards' => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\TypeIntervention',

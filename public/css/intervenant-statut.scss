@@ -1,0 +1,41 @@
+.intervenant-statuts {
+  font-size: 12pt;
+}
+
+.intervenant-statuts li {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.intervenant-statuts span.type-intervenant {
+  font-size: 10pt;
+  padding-right: 4px;
+}
+
+.intervenant-statuts span.statut {
+  font-weight: bold;
+}
+
+.intervenant-statuts span.validite-intervenant {
+  font-size: 10pt;
+  font-style: italic;
+}
+
+.intervenant-statuts li.ajout-intervenant {
+  padding-top: 12px;
+  padding-right: 10px;
+  float: right;
+}
+
+.intervenant-statuts li a {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  color: gray;
+}
+
+
+
+form.statut fieldset legend {
+  font-size: 12px;
+  font-weight: 700;
+}

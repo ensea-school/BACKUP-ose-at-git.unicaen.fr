@@ -6,7 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
-    'router'          => [
+    'router' => [
         'routes' => [
             'centre-cout-activite' => [
                 'type'          => 'Literal',
@@ -19,7 +19,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'delete'           => [
+                    'delete' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/delete/:ccActivite',
@@ -31,7 +31,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisie'           => [
+                    'saisie' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/saisie/[:ccActivite]',
@@ -103,6 +103,37 @@ return [
                             ],
                             'defaults'    => [
                                 'action' => 'saisie-structure',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'finances' => [
+                                'pages' => [
+                                    'centre-cout'          => [
+                                        'label'        => 'Centres de coûts',
+                                        'route'        => 'centre-cout',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
+                                        'order'        => 10,
+                                        'color' => '#BBCF55',
+                                    ],
+                                    'centre-cout-activite' => [
+                                        'label'        => 'Types d\'activités des centres de coûts',
+                                        'route'        => 'centre-cout-activite',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
+                                        'order'        => 40,
+                                        'color' => '#BBCF55',
+                                    ],
+                                ],
                             ],
                         ],
                     ],

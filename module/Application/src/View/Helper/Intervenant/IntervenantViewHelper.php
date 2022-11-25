@@ -145,7 +145,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
         }
 
         $pourl = $this->getView()->url('intervenant/voir', ['intervenant' => $intervenant->getId()]);
-        $out   = '<a href="' . $pourl . '" data-po-href="' . $pourl . '" class="ajax-modal">' . $intervenant . '</a>';
+        $out   = '<a href="' . $pourl . '" data-po-href="' . $pourl . '" class="mod-ajax">' . $intervenant . '</a>';
 
         return $out;
     }
@@ -156,51 +156,59 @@ class IntervenantViewHelper extends AbstractHtmlElement
     {
         $title       = $title;
         $intervenant = $this->getIntervenant();
+        $v           = $this->getView();
 
-        $canAddIntervenant = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
-        $canShowHistorises = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
+        $canAddIntervenant = $v->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
+        $canShowHistorises = $v->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
 
-        $this->getView()->headTitle()->append($intervenant->getNomUsuel())->append($title);
+        $v->headTitle()->append($intervenant->getNomUsuel())->append($title);
         $title .= ' <small>' . $intervenant . '</small>';
 
-        echo $this->getView()->tag('h1', ['class' => 'page-header'])->open();
+        echo $v->tag('h1', ['class' => 'page-header'])->open();
         echo $title . '<br />';
         $statuts = $this->getStatuts();
         if (!empty($statuts)) {
-            ?>
-            <nav class="navbar navbar-default intervenant-statuts">
-                <ul class="nav navbar-nav">
-                    <?php foreach ($statuts as $intervenantId => $iStatut): if ($canShowHistorises || $iStatut->estNonHistorise() || $iStatut == $intervenant): ?>
-                        <?php
-                        $attrs = ['class' => ''];
-                        if ($iStatut == $intervenant) {
-                            $attrs['class'] = "active";
-                        } else {
-                            $attrs['title'] = 'Cliquez pour afficher';
-                        }
-                        if ($iStatut->estHistorise()) {
-                            $attrs['class'] .= ' historise';
-                        }
-                        echo $this->getView()->tag('li', $attrs)->open(); ?>
-                        <a href="<?= $this->getView()->url('intervenant/voir', ['intervenant' => $intervenantId]); ?>">
-                            <span class="type-intervenant"><?= $iStatut->getStatut()->getTypeIntervenant() ?></span>
-                            <span class="validite-intervenant"><?= $iStatut->getValidite(); ?></span><br/>
-                            <span class="statut"><?= $iStatut->getStatut()->getLibelle() ?></span>
-                            <?php if ($iStatut->estHistorise()) echo $this->getView()->tag('span', ['class' => 'text-danger fas fa-triangle-exclamation', 'title' => 'Intervenant historisé'])->text('') ?>
-                        </a>
-                        </li>
-                    <?php endif; endforeach; ?>
-                    <?php if ($canAddIntervenant && $intervenant->getId()): ?>
-                        <li class="ajout-intervenant">
-                            <a href="<?= $this->getView()->url('intervenant/dupliquer', ['intervenant' => $intervenant->getId()]); ?>"
-                               title="Ajout d'un nouveau statut à l'intervenant"><i class="fas fa-plus"></i></a>
-                        </li>
-                    <?php endif; ?>
-                </ul>
-            </nav>
-            <?php
+            echo $v->tag('div', ['class' => 'nav-local intervenant-statuts'])->open();
+            echo $v->tag('ul')->open();
+            foreach ($statuts as $intervenantId => $iStatut) {
+                if ($canShowHistorises || $iStatut->estNonHistorise() || $iStatut == $intervenant) {
+
+                    $liattrs = ['class' => 'nav-item'];
+                    $aattrs  = ['class' => 'nav-link', 'href' => $v->url('intervenant/voir', ['intervenant' => $intervenantId])];
+                    if ($iStatut == $intervenant) {
+                        $liattrs['class'] .= " active";
+                    } else {
+                        $liattrs['title'] = 'Cliquez pour afficher';
+                    }
+                    if ($iStatut->estHistorise()) {
+                        $liattrs['class'] .= ' historise';
+                    }
+                    echo $v->tag('li', $liattrs)->open();
+                    echo $v->tag('a', $aattrs)->open();
+                    echo $v->tag('span', ['class' => 'type-intervenant'])->html($iStatut->getStatut()->getTypeIntervenant());
+                    echo $v->tag('span', ['class' => 'validite-intervenant'])->html($iStatut->getValidite());
+                    echo '<br />';
+                    echo $v->tag('span', ['class' => 'statut'])->html($iStatut->getStatut()->getLibelle());
+                    if ($iStatut->estHistorise()) echo $v->tag('i', ['class' => 'text-danger fas fa-triangle-exclamation', 'title' => 'Intervenant historisé'])->text('');
+                    echo $v->tag('a')->close();
+                    echo $v->tag('li')->close();
+                }
+            }
+
+            if ($canAddIntervenant && $intervenant->getId()) {
+                echo $v->tag('li', ['class' => 'ajout-intervenant float-end'])->html(
+                    $v->tag('a', [
+                            'href'  => $v->url('intervenant/dupliquer', ['intervenant' => $intervenant->getId()]),
+                            'title' => 'Ajout d\'un nouveau statut à l\'intervenant',
+                        ]
+                    )->html($v->tag('i', ['class' => 'fas fa-plus'])->html(''))
+                );
+            }
+            echo $v->tag('ul')->close();
+            echo $v->tag('div', ['style' => 'clear:both'])->html();
+            echo $v->tag('div')->close();
         }
-        echo $this->getView()->tag('h1')->close();
+        echo $v->tag('h1')->close();
     }
 
 

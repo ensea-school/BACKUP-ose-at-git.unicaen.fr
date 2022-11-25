@@ -1,0 +1,25 @@
+@media print {
+  #footer.container {
+    display: none;
+  }
+  .card .collapse {
+    display: block;
+  }
+  .card-well {
+    border: none;
+    margin: none;
+    padding: none;
+    background: none;
+  }
+  .container {
+    width: 100%;
+  }
+  #sidebar {
+    display: none;
+  }
+  .noprint {
+    display: none;
+  }
+}
+
+/*# sourceMappingURL=print.css.map */

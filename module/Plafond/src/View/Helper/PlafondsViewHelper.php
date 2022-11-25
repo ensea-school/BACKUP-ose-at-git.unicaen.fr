@@ -3,11 +3,11 @@
 namespace Plafond\View\Helper;
 
 use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\Db\VolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Enseignement\Entity\Db\VolumeHoraire;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Plafond\Entity\PlafondControle;
 use Plafond\Service\PlafondServiceAwareTrait;
@@ -106,12 +106,12 @@ class PlafondsViewHelper extends AbstractHtmlElement
     {
         $t = $this->getView()->tag();
 
-        $labAttrs = ['class' => ['label']];
+        $labAttrs = ['class' => ['badge']];
         if ($plafond->isBloquant()) {
-            $labAttrs['class'][] = 'label-danger';
+            $labAttrs['class'][] = 'bg-danger';
             $labAttrs['title']   = 'Plafond bloquant';
         } else {
-            $labAttrs['class'][] = 'label-info';
+            $labAttrs['class'][] = 'bg-info';
             $labAttrs['title']   = 'Plafond informatif';
         }
 

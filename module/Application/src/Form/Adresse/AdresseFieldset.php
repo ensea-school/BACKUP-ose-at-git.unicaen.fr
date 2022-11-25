@@ -3,7 +3,6 @@
 namespace Application\Form\Adresse;
 
 use Application\Form\AbstractFieldset;
-use Application\Form\Elements\PaysSelect;
 use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
@@ -199,7 +198,7 @@ class AdresseFieldset extends AbstractFieldset
         ]);
 
         $this->get('pays')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getList()));
+            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServicePays()->getListValide()));
 
 
         return $this;

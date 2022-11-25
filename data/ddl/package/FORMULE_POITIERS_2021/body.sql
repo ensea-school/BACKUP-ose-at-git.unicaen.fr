@@ -52,13 +52,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS_2021 AS
       END IF;
     END IF;
 
-    feuille(c).cells(l).enCalcul := true;
+    feuille(c).cells(l).enCalcul := TRUE;
     val := calcCell( c, l );
     IF ose_formule.debug_actif THEN
       dbgCell( c, l, val );
     END IF;
     feuille(c).cells(l).valeur := val;
-    feuille(c).cells(l).enCalcul := false;
+    feuille(c).cells(l).enCalcul := FALSE;
 
     RETURN val;
   END;
@@ -288,9 +288,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS_2021 AS
 
 
 
-      -- AN=IF(AND([.$E20]="Oui";[.$I20]<>"Référentiel";[.$I20]<>"ETD";[.$G20]=1;OR([.$A20]="I2000";[.$A20]="I2300"));[.$N20]*[.$AE20];0)
+      -- AN=IF(AND([.$E20]="Oui";[.$I20]<>"Référentiel";[.$I20]<>"ETD";NOT(AND([.$G20]=1;OR([.$A20]="I2000";[.$A20]="I2300"))));[.$N20]*[.$AE20];0)
       WHEN 'AN' THEN
-        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'ETD' AND vh.taux_fa = 1 AND (vh.structure_code = 'I2000' OR vh.structure_code = 'I2300') THEN
+        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'ETD' AND NOT(vh.taux_fa = 1 AND (vh.structure_code = 'I2000' OR vh.structure_code = 'I2300')) THEN
           RETURN vh.heures * cell('AE',l);
         ELSE
           RETURN 0;
@@ -352,9 +352,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS_2021 AS
 
 
 
-      -- AT=IF(AND([.$E20]="Oui";[.$I20]<>"Référentiel";[.$I20]<>"ETD";NOT(AND([.$G20]=1;OR([.$A20]="I2000";[.$A20]="I2300"))));[.$N20]*[.$AE20];0)
+      -- AT=IF(AND([.$E20]="Oui";[.$I20]<>"Référentiel";[.$I20]<>"ETD";[.$G20]=1;OR([.$A20]="I2000";[.$A20]="I2300"));[.$N20]*[.$AE20];0)
       WHEN 'AT' THEN
-        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'ETD' AND NOT(vh.taux_fa = 1 AND (vh.structure_code = 'I2000' OR vh.structure_code = 'I2300')) THEN
+        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND vh.type_intervention_code <> 'ETD' AND vh.taux_fa = 1 AND (vh.structure_code = 'I2000' OR vh.structure_code = 'I2300') THEN
           RETURN vh.heures * cell('AE',l);
         ELSE
           RETURN 0;

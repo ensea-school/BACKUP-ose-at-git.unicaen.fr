@@ -1,9 +1,11 @@
-<div class="jumbotron">
+<div class="container-fluid text-sm-center p-5 bg-light jumbotron">
     <h1>Choisir un établissement</h1>
 </div>
 
 <style>
-    span.sas-highlight { font-weight: bold; }
+    span.sas-highlight {
+        font-weight: bold;
+    }
 </style>
 
 <?php $form->prepare(); ?>
@@ -14,7 +16,7 @@
 <?= $this->form()->closeTag() ?>
 
 <script>
-    $(function() {
-        $(":input").tooltip({ /*placement: 'left'*/ });
+    $(function () {
+        $(":input").tooltip({ /*placement: 'left'*/});
     });
 </script>

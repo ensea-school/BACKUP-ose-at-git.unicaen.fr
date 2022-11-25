@@ -203,7 +203,7 @@ return [
                         'title'    => "Charges d'enseignement",
                         'route'    => 'chargens',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Chargens', 'index'),
-                        'order'    => 5,
+                        'order'    => 4,
                         'pages'    => [
                             'scenario'     => [
                                 'label'       => "Gestion des scénarios",
@@ -334,12 +334,6 @@ return [
                         Privileges::CHARGENS_DEPASSEMENT_CSV,
                     ],
                 ],
-            ],
-        ],
-
-        'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'Scenario' => [],
             ],
         ],
 

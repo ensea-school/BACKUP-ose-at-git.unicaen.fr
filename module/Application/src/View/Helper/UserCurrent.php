@@ -57,6 +57,7 @@ class UserCurrent extends UserAbstract
 
             $content = $userProfileHelper;
         } else {
+            $status = "<span id=\"user-status-icon\" class=\"fa fa-user\"></span> Vous n'êtes pas connecté(e)";
             $content = _("Aucun");
         }
 
@@ -68,22 +69,21 @@ class UserCurrent extends UserAbstract
 <a class="navbar-link" 
    id="$id" 
    title="$title" 
-   data-placement="bottom" 
-   data-toggle="popover" 
-   data-html="true" 
-   data-content="$content" 
-   href="#">$status</a>
+   data-bs-placement="bottom" 
+   data-bs-toggle="popover" 
+   data-bs-html="true" 
+   data-bs-content="$content" 
+   href="#">$status<span class="caret"></span></a>
 EOS;
         $out .= PHP_EOL;
 
         $js = <<<EOS
 $(function() {
-    $("#$id").popover({ html: true, container: '#navbar' });
+    $("#$id").popover({ html: true, sanitize: false, container: '.navbar' });
 });
 EOS;
         $this->getView()->plugin('inlineScript')->offsetSetScript(1000, $js);
 
         return $out;
     }
-
 }

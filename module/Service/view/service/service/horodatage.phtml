@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @var $this              Application\View\Renderer\PhpRenderer
+ * @var $intervenant       Application\Entity\Db\Intervenant
+ * @var $typeVolumeHoraire Service\Entity\Db\TypeVolumeHoraire
+ * @var $referentiel       bool
+ */
+
+$ihs = $intervenant->getHistoService($typeVolumeHoraire, $referentiel);
+if ($ihs) {
+    echo $this->historique()
+        ->setHistoModification($ihs->getHistoModification())
+        ->setHistoModificateur($ihs->getHistoModificateur());
+}

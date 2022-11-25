@@ -4,7 +4,6 @@ namespace Intervenant\Service;
 
 use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\ContextServiceAwareTrait;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Intervenant\Entity\Db\Note;
 use Laminas\Validator\Date;
@@ -17,7 +16,6 @@ use Laminas\Validator\Date;
 class NoteService extends AbstractEntityService
 {
 
-    use ContextServiceAwareTrait;
     use TypeNoteServiceAwareTrait;
 
     /**
@@ -32,6 +30,7 @@ class NoteService extends AbstractEntityService
     }
 
 
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -42,9 +41,12 @@ class NoteService extends AbstractEntityService
         return 'note';
     }
 
+
+
     /**
-     * @param Intervenant $intervenant Intervenant concerné
+     * @param Intervenant $intervenant  Intervenant concerné
      * @param string|null $typeNoteCode Code du type de note souhaité, si null renvoi toutes les notes
+     *
      * @return array
      */
 
@@ -69,11 +71,13 @@ class NoteService extends AbstractEntityService
         return $notes;
     }
 
+
+
     public function getHistoriqueIntervenant(Intervenant $intervenant)
     {
         $historique = [];
-        $sql = 'SELECT * FROM v_intervenant_historique where intervenant_id =  ' . $intervenant->getId() . ' ORDER BY ordre ASC, histo_date ASC';
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        $sql        = 'SELECT * FROM v_intervenant_historique where intervenant_id =  ' . $intervenant->getId() . ' ORDER BY ordre ASC, histo_date ASC';
+        $stmt       = $this->getEntityManager()->getConnection()->executeQuery($sql);
         while ($r = $stmt->fetch()) {
             $historique[$r['CATEGORIE']][] = [
                 'id'             => $r['ID'],
@@ -84,18 +88,18 @@ class NoteService extends AbstractEntityService
                 'ordre'          => $r['ORDRE'],
 
             ];
-
-
         }
 
         return $historique;
-
     }
+
+
 
     /**
      * @param Intervenant $intervenant
-     * @param $sujet string Sujet du mail
-     * @param $message string Contenu du mail
+     * @param             $sujet   string Sujet du mail
+     * @param             $message string Contenu du mail
+     *
      * @return Note
      */
 
@@ -109,12 +113,14 @@ class NoteService extends AbstractEntityService
         $this->save($note);
 
         return $note;
-
     }
 
+
+
     /**
-     * @param Intervenant $intervenant
+     * @param Intervenant    $intervenant
      * @param \DateTime|null $since Date à partir de laquelle on calcule le nombre de note, si NULL on compte toutes les notes
+     *
      * @return int
      */
 
@@ -135,6 +141,8 @@ class NoteService extends AbstractEntityService
 
         return $count;
     }
+
+
 
     /**
      * Retourne une nouvelle entité, initialisée avec les bons paramètres

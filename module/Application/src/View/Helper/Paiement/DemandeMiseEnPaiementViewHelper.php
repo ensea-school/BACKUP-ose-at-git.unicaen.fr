@@ -138,7 +138,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
         }
         $out .= '<div ' . $this->htmlAttribs($attrs) . '>';
         if ((!$this->getReadOnly()) && $canDemande) {
-            $out .= '<div style="padding-bottom:1em"><button type="button" class="btn btn-default toutes-heures-non-dmep">Demander le paiement de toutes les HETD</button></div>';
+            $out .= '<div style="padding-bottom:1em"><button type="button" class="btn btn-secondary toutes-heures-non-dmep">Demander le paiement de toutes les HETD</button></div>';
         }
         foreach ($servicesAPayer as $serviceAPayer) {
             $out .= $this->renderServiceAPayer($serviceAPayer);
@@ -266,7 +266,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
             }
         } elseif ($serviceAPayer instanceof FormuleResultatServiceReferentiel) {
             $cartridgeItems[] = 'Référentiel';
-            $cartridgeItems[] = $this->getView()->fonctionReferentiel($serviceAPayer->getServiceReferentiel()->getFonction())->renderLink();
+            $cartridgeItems[] = $this->getView()->fonctionReferentiel($serviceAPayer->getServiceReferentiel()->getFonctionReferentiel())->renderLink();
         }
 
         return $this->getView()->cartridge($cartridgeItems, [
@@ -295,19 +295,22 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
         if ($notAllowed) $attrs['class'][] = 'not-allowed';
         $out = '<div ' . $this->htmlAttribs($attrs) . '>';
 
-        $attrs = [
-            'class'       => ['table', 'table-condensed', 'table-extra-condensed', 'table-bordered', 'mise-en-paiement-liste'],
+        $attrs  = [
+            'class'       => ['table', 'table-sm', 'table-xs', 'table-bordered', 'mise-en-paiement-liste'],
             'id'          => (string)self::$miseEnPaiementListeIdSequence++,
             'data-params' => json_encode($params),
         ];
-        if ($notAllowed && !$saisieTerminee) $attrs['class'][] = 'bg-warning';
+        $hattrs = [
+            'class' => [],
+        ];
+        if ($notAllowed && !$saisieTerminee) $hattrs['class'][] = 'bg-warning';
         if ($readOnly) $attrs['class'][] = 'read-only';
-        if ($saisieTerminee) $attrs['class'][] = 'bg-success';
+        if ($saisieTerminee) $hattrs['class'][] = 'bg-success';
         if (!$serviceAPayer->isPayable()) {
             $out .= '<div class="alert alert-danger" role="alert">Des heures à payer ont été positionnées sur ce service alors que c\'est normalement impossible.</div>';
         }
         $out .= '<table ' . $this->htmlAttribs($attrs) . '>';
-        $out .= '<thead><tr><th colspan="3">' . $typeHeures->getLibelleLong() . '</th></tr><tr>';
+        $out .= '<thead ' . $this->htmlAttribs($hattrs) . '><tr><th colspan="3">' . $typeHeures->getLibelleLong() . '</th></tr><tr>';
         $out .= '<th style="width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
         $out .= '<th>Centre de coûts</th>';
         if ($serviceAPayer->isDomaineFonctionnelModifiable()) {
@@ -322,14 +325,14 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
                 $title[] = $periode . ' : ' . strip_tags(\UnicaenApp\Util::formattedNumber($heures)) . ' hetd mis en paiement';
             }
             $title = implode('&#13;', $title);
-            $out   .= '<tr><td class="nombre"><abbr title="' . $title . '">' . \UnicaenApp\Util::formattedNumber($params['heures-mep']) . '</td><td>HETD déjà mises en paiement</td></tr>';
+            $out   .= '<tr><td class="nombre"><abbr title="' . $title . '">' . \UnicaenApp\Util::formattedNumber($params['heures-mep']) . '</td><td>HETD déjà mises en paiement</td><td></td></tr>';
         }
         $out .= '<tfoot>';
 
         if (!$saisieTerminee) {
             $out .= '<tr>';
             $out .= '<td class="nombre">';
-            if (!$readOnly) $out .= '<button class="btn btn-default heures-non-dmep" type="button" title="Demander ces heures en paiement">';
+            if (!$readOnly) $out .= '<button class="btn btn-secondary heures-non-dmep" type="button" title="Demander ces heures en paiement">';
             $out .= \UnicaenApp\Util::formattedNumber($params['heures-non-dmep']);
             if (!$readOnly) $out .= '</button>';
             $out .= '</td>';

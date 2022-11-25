@@ -16,8 +16,8 @@ class ExportRhServiceFactory
 
     /**
      * @param ContainerInterface $container
-     * @param string             $requestedName
-     * @param array|null         $options
+     * @param string $requestedName
+     * @param array|null $options
      *
      * @return ExportRhService
      */
@@ -28,10 +28,10 @@ class ExportRhServiceFactory
         switch ($config['export-rh']['connecteur']) {
             case 'siham':
                 $connecteur = $container->get(SihamConnecteur::class);
-            break;
+                break;
         }
 
-        $service = new ExportRhService($connecteur, $config['unicaen-siham']);
+        $service = new ExportRhService($connecteur, $config);
 
         return $service;
     }

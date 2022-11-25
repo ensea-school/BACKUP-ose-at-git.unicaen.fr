@@ -127,7 +127,7 @@ return [
                                          'route'        => 'intervenant/administration/chercher-intervenant-rh',
                                          'resource'     => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'chercher-intervenant-rh'),
                                          'order'        => 800,
-                                         'border-color' => '#BBCF55',
+                                         'color' => '#BBCF55',
                                      ],
                                  ],
                              ],

@@ -2,28 +2,25 @@
 
 namespace Application\Controller;
 
-use Application\Entity\Db\RegleStructureValidation;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\RegleStructureValidation;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Application\Entity\Service\Recherche;
+use Service\Entity\Recherche;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
-use Application\Form\Intervenant\Traits\RegleStructureValidationFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
-use Application\Processus\Traits\ServiceProcessusAwareTrait;
-use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
+use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
+use Service\Service\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -53,15 +50,12 @@ class  IntervenantController extends AbstractController
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
     use IntervenantProcessusAwareTrait;
-    use ServiceProcessusAwareTrait;
     use ServiceReferentielProcessusAwareTrait;
     use LocalContextServiceAwareTrait;
     use CampagneSaisieServiceAwareTrait;
     use ValidationServiceAwareTrait;
     use PlafondProcessusAwareTrait;
     use FormuleResultatServiceAwareTrait;
-    use RegleStructureValidationServiceAwareTrait;
-    use RegleStructureValidationFormAwareTrait;
     use StatutServiceAwareTrait;
     use SourceServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
@@ -91,6 +85,7 @@ class  IntervenantController extends AbstractController
     }
 
 
+
     public function rechercherAction()
     {
         $recents = $this->getIntervenantsRecents();
@@ -99,13 +94,14 @@ class  IntervenantController extends AbstractController
     }
 
 
+
     public function rechercheAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Intervenant::class,
         ]);
 
-        $critere = $this->params()->fromPost('critere');
+        $critere   = $this->params()->fromPost('critere');
         $recherche = $this->getProcessusIntervenant()->recherche();
 
         $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
@@ -117,10 +113,11 @@ class  IntervenantController extends AbstractController
     }
 
 
+
     public function voirAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $tab = $this->params()->fromQuery('tab');
+        $tab         = $this->params()->fromQuery('tab');
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant introuvable');
@@ -141,6 +138,7 @@ class  IntervenantController extends AbstractController
     }
 
 
+
     public function definirParDefautAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -153,163 +151,23 @@ class  IntervenantController extends AbstractController
     }
 
 
-    public function servicesPrevusAction()
-    {
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
-
-        return $this->servicesAction($typeVolumeHoraire);
-    }
-
-
-    public function servicesRealisesAction()
-    {
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
-
-        return $this->servicesAction($typeVolumeHoraire);
-    }
-
-
-    private function servicesAction(TypeVolumehoraire $typeVolumeHoraire)
-    {
-        $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\Service::class,
-            \Application\Entity\Db\VolumeHoraire::class,
-            \Application\Entity\Db\CheminPedagogique::class,
-            \Application\Entity\Db\ServiceReferentiel::class,
-            \Application\Entity\Db\VolumeHoraireReferentiel::class,
-            \Application\Entity\Db\Validation::class,
-        ]);
-        $this->em()->getFilters()->enable('annee')->init([
-            \Application\Entity\Db\ElementPedagogique::class,
-        ]);
-
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant non précisé ou inexistant');
-        }
-
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
-            $vh = new ViewModel();
-            $vh->setTemplate('application/intervenant/menu');
-
-            return $vh;
-        }
-
-        $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
-        if (!$campagneSaisie->estOuverte()) {
-
-            $role = $this->getServiceContext()->getSelectedIdentityRole();
-            if ($message = $campagneSaisie->getMessage($role)) {
-                if ($role->getIntervenant()) {
-                    $this->flashMessenger()->addErrorMessage($message);
-                } else {
-                    $this->flashMessenger()->addWarningMessage($message);
-                }
-            }
-        }
-
-        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
-
-        $vm = new ViewModel();
-        $vm->setTemplate('application/intervenant/services');
-
-        /* Liste des services */
-        $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
-        $recherche = new Recherche($typeVolumeHoraire, $etatVolumeHoraire);
-
-        if ($this->isAllowed($intervenant, $typeVolumeHoraire->getPrivilegeEnseignementVisualisation())) {
-            $services = $this->getProcessusService()->getServices($intervenant, $recherche);
-        } else {
-            $services = false;
-        }
-
-        /* Services référentiels (si nécessaire) */
-        if ($this->isAllowed($intervenant, $typeVolumeHoraire->getPrivilegeReferentielVisualisation())) {
-            $servicesReferentiel = $this->getProcessusServiceReferentiel()->getServices($intervenant, $recherche);
-        } else {
-            $servicesReferentiel = false;
-        }
-
-        /* Totaux HETD */
-        $params = $this->getEvent()->getRouteMatch()->getParams();
-        $this->getEvent()->setParam('typeVolumeHoraire', $typeVolumeHoraire);
-        $this->getEvent()->setParam('etatVolumeHoraire', $etatVolumeHoraire);
-        $params['action'] = 'formuleTotauxHetd';
-        $widget = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
-        if ($widget) $vm->addChild($widget, 'formuleTotauxHetd');
-
-        /* Clôture de saisie (si nécessaire) */
-        if ($typeVolumeHoraire->isRealise() && $intervenant->getStatut()->getCloture()) {
-            $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
-        } else {
-            $cloture = null;
-        }
-
-        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'services', 'servicesReferentiel', 'cloture', 'role'));
-
-        return $vm;
-    }
-
-
-    public function cloturerAction()
-    {
-        $this->em()->getFilters()->enable('historique')->init([
-            Validation::class,
-        ]);
-
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-
-        $validation = $this->getServiceValidation()->getValidationClotureServices($intervenant);
-
-        if ($this->getRequest()->isPost()) {
-            if ($validation->getId()) {
-                if (!$this->isAllowed($intervenant, Privileges::CLOTURE_REOUVERTURE)) {
-                    throw new \Exception("Vous n'avez pas le droit de déclôturer la saisie de services réalisés d'un intervenant");
-                }
-                try {
-                    $this->getServiceValidation()->delete($validation);
-                    $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
-                    $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été réouverte", 'success');
-                } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage($this->translate($e));
-                }
-            } else {
-                if (!$this->isAllowed($intervenant, Privileges::CLOTURE_CLOTURE)) {
-                    throw new \Exception("Vous n'avez pas le droit de clôturer la saisie de services réalisés d'un intervenant");
-                }
-                try {
-                    $this->getServiceValidation()->save($validation);
-                    $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
-                    $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été clôturée", 'success');
-                } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage($this->translate($e));
-                }
-            }
-        }
-
-        return new MessengerViewModel;
-    }
-
 
     public function ficheAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
 
         return compact('intervenant', 'role');
     }
 
 
+
     public function saisirAction()
     {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        $title = "Saisie d'un intervenant";
-        $form = $this->getFormIntervenantEdition();
-        $errors = [];
+        $intervenant  = $this->getEvent()->getParam('intervenant');
+        $title        = "Saisie d'un intervenant";
+        $form         = $this->getFormIntervenantEdition();
+        $errors       = [];
         $actionDetail = $this->params()->fromRoute('action-detail');
         if ($intervenant) {
             $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
@@ -341,19 +199,19 @@ class  IntervenantController extends AbstractController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $oriData = $form->getHydrator()->extract($intervenant);
+            $oriData  = $form->getHydrator()->extract($intervenant);
             $postData = $request->getPost()->toArray();
-            $data = array_merge($oriData, $postData);
+            $data     = array_merge($oriData, $postData);
             $form->setData($data);
             if ((!$form->isReadOnly()) && $form->isValid()) {
                 try {
                     if ($form->get('intervenant-edition-login')->getValue() && $form->get('intervenant-edition-password')->getValue()) {
-                        $nom = $intervenant->getNomUsuel();
-                        $prenom = $intervenant->getPrenom();
+                        $nom           = $intervenant->getNomUsuel();
+                        $prenom        = $intervenant->getPrenom();
                         $dateNaissance = $intervenant->getDateNaissance();
-                        $login = $form->get('intervenant-edition-login')->getValue();
-                        $password = $form->get('intervenant-edition-password')->getValue();
-                        $utilisateur = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
+                        $login         = $form->get('intervenant-edition-login')->getValue();
+                        $password      = $form->get('intervenant-edition-password')->getValue();
+                        $utilisateur   = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
                         $utilisateur->setCode($intervenant->getUtilisateurCode() ?: $intervenant->getCode());
                         $this->getServiceUtilisateur()->save($utilisateur);
                         if ($utilisateur->getCode() != $intervenant->getUtilisateurCode()) {
@@ -393,6 +251,7 @@ class  IntervenantController extends AbstractController
     }
 
 
+
     public function synchronisationAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -417,6 +276,7 @@ class  IntervenantController extends AbstractController
     }
 
 
+
     public function synchroniserAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -425,6 +285,7 @@ class  IntervenantController extends AbstractController
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'synchronisation']]);
     }
+
 
 
     public function voirHeuresCompAction()
@@ -439,13 +300,19 @@ class  IntervenantController extends AbstractController
         $form = $this->getFormIntervenantHeuresComp();
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
-        /* @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire */
+        if (!$typeVolumeHoraire instanceof TypeVolumeHoraire) {
+            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraire);
+        }
+        /* @var $typeVolumeHoraire \Service\Entity\Db\TypeVolumeHoraire */
         if (!isset($typeVolumeHoraire)) {
             throw new LogicException('Type de volume horaire erroné');
         }
 
         $etatVolumeHoraire = $this->context()->etatVolumeHoraireFromQuery('etat-volume-horaire', $form->get('etat-volume-horaire')->getValue());
-        /* @var $etatVolumeHoraire \Application\Entity\Db\EtatVolumeHoraire */
+        if (!$etatVolumeHoraire instanceof EtatVolumeHoraire) {
+            $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->get($etatVolumeHoraire);
+        }
+        /* @var $etatVolumeHoraire \Service\Entity\Db\EtatVolumeHoraire */
         if (!isset($etatVolumeHoraire)) {
             throw new LogicException('Etat de volume horaire erroné');
         }
@@ -465,16 +332,18 @@ class  IntervenantController extends AbstractController
     }
 
 
+
     public function formuleTotauxHetdAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
         $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
-        $formuleResultat = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
+        $formuleResultat   = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return compact('formuleResultat');
     }
+
 
 
     public function supprimerAction()
@@ -514,6 +383,7 @@ class  IntervenantController extends AbstractController
     }
 
 
+
     public function historiserAction()
     {
         /* @var $intervenant \Application\Entity\Db\Intervenant */
@@ -526,6 +396,7 @@ class  IntervenantController extends AbstractController
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => 'code:' . $intervenant->getCode()]);
     }
+
 
 
     public function restaurerAction()
@@ -543,38 +414,6 @@ class  IntervenantController extends AbstractController
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()]);
     }
 
-
-    public function validationVolumeHoraireTypeIntervenantAction()
-    {
-        $serviceRVS = $this->getServiceRegleStructureValidation();
-        $listeRsv = $serviceRVS->getList();
-
-        return compact('listeRsv');
-    }
-
-
-    public function validationVolumeHoraireTypeIntervenantSaisieAction()
-    {
-        $regleStructureValidation = $this->getEvent()->getParam('regleStructureValidation');
-        $form = $this->getFormIntervenantRegleStructureValidation();
-        $title = 'Édition de la régle de validation';
-        $form->bindRequestSave($regleStructureValidation, $this->getRequest(), function (RegleStructureValidation $rsv) {
-            try {
-                $this->getServiceRegleStructureValidation()->save($rsv);
-                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-            } catch (\Exception $e) {
-                $message = $this->translate($e);
-
-                if (false !== strpos($message, 'ORA - 00001')) {
-                    $this->flashMessenger()->addErrorMessage("Règle non enregistrée car elle existe déjà dans OSE");
-                } else {
-                    $this->flashMessenger()->addErrorMessage($this->translate($e));
-                }
-            }
-        });
-
-        return compact('form', 'title');
-    }
 
 
     /**
@@ -604,6 +443,7 @@ class  IntervenantController extends AbstractController
             return [];
         }
     }
+
 
 
     /**

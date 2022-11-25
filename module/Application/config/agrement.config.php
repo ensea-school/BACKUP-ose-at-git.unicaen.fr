@@ -186,7 +186,7 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'index'),
                                 'visible'      => Assertion\AgrementAssertion::class,
                                 'order'        => 50,
-                                'border-color' => '#E1AC5A',
+                                'color' => '#E1AC5A',
                                 'pages'        => [
                                     'conseil-restreint'  => [
                                         'label'       => 'Conseil restreint',
@@ -220,7 +220,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Agrement',
@@ -260,13 +260,7 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'Agrement'    => [],
-                'TblAgrement' => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [

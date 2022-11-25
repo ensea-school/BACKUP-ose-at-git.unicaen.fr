@@ -78,7 +78,7 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
 
     <?php if (vn($data, 'DEPASSEMENT_SERVICE_DU_SANS_HC', 'f')): ?>
         <div class="alert alert-info alert-dismissible" role="alert" style="margin-top:1em">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
             <strong>* </strong>
             Le statut de cet intervenant (<?= $intervenant->getStatut() ?>) ne lui permet pas de prétendre à des heures
@@ -93,7 +93,7 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
 
     <h2>Heures effectives d'enseignement</h2>
 <?php if (count($data['s']) > 0): ?>
-    <table class="table table-bordered table-condensed table-extra-condensed">
+    <table class="table table-bordered table-xs">
         <tr>
             <th rowspan="4">Elément ou établissement</th>
             <th colspan="3">Taux</th>
@@ -177,7 +177,7 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
 
 <?php if (!empty($data['r'])): ?>
     <h2>Heures de référentiel</h2>
-    <table class="table table-bordered table-condensed table-extra-condensed" style="width:auto">
+    <table class="table table-bordered table-xs" style="width:auto">
         <tr>
             <th>Structure</th>
             <th>Heures réelles</th>
@@ -266,7 +266,7 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
 
 if ($canPutInTest) {
     echo $this->tag('a', [
-        'class' => 'btn btn-default',
+        'class' => 'btn btn-secondary',
         'href'  => $this->url('formule-calcul/test/creer-from-reel', [
             'intervenant'       => $intervenant->getId(),
             'typeVolumeHoraire' => $form->get('type-volume-horaire')->getValue(),

@@ -51,6 +51,30 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'rh' => [
+                                'pages' => [
+                                    'grade' => [
+                                        'label'        => 'Grades',
+                                        'route'        => 'grades',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Grade', 'index'),
+                                        'order'        => 30,
+                                        'color' => '#BBCF55',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'bjyauthorize'  => [
         'guards' => [
             PrivilegeController::class => [

@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
+CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
   TYPE t_dep_bloquante IS RECORD (
     id NUMERIC,
     to_delete BOOLEAN DEFAULT TRUE
@@ -558,7 +558,6 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
             WHEN e.code = ''PJ_VALIDATION'' THEN pj.demandees
           END                                                       objectif,
           CASE
-			WHEN pj.obligatoire = 0 THEN 1
             WHEN e.code = ''PJ_SAISIE'' THEN pj.fournies
             WHEN e.code = ''PJ_VALIDATION'' THEN pj.validees
           END                                                       realisation
@@ -567,9 +566,9 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
           SELECT
             intervenant_id,
             SUM(demandee) demandees,
-            SUM(fournie)  fournies,
-            SUM(validee)  validees,
-			MIN(obligatoire) obligatoire
+            SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE fournie END)  fournies,
+            SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE validee END)  validees,
+		      	SUM(CASE WHEN obligatoire = 0 THEN 1 ELSE 0 END)        facultatives
           FROM
             tbl_piece_jointe
           WHERE
@@ -688,8 +687,7 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
               WHEN ''date-retour'' THEN signe
               ELSE edite
             END                            realisation,
-            p2.valeur                      avenant_mode,
-            CASE WHEN p2.valeur = ''avenant_desactive'' THEN rownum ELSE 1 END to_delete
+            p2.valeur                      avenant_mode
           FROM
             tbl_contrat c
             JOIN parametre p on p.nom = ''contrat_regle_franchissement''
@@ -699,7 +697,6 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
             AND actif = 1
             AND nbvh > 0
         ) c
-        WHERE to_delete = 1
     ';
 
 

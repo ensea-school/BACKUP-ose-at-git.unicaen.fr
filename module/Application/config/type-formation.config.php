@@ -92,6 +92,30 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'odf' => [
+                                'pages' => [
+                                    'gestion-type-formation' => [
+                                        'label'          => 'Types de formations',
+                                        'route'          => 'type-formation',
+                                        'resource'       => PrivilegeController::getResourceId('Application\Controller\TypeFormation', 'index'),
+                                        'order'          => 60,
+                                        'border - color' => '#111',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'bjyauthorize'  => [
         'guards' => [
             PrivilegeController::class => [

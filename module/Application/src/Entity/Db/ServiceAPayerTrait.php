@@ -2,6 +2,9 @@
 
 namespace Application\Entity\Db;
 
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraire;
+
 trait ServiceAPayerTrait
 {
 
@@ -25,14 +28,18 @@ trait ServiceAPayerTrait
      */
     private $centreCout;
 
+
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->miseEnPaiement = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->centreCout = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->centreCout     = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+
 
     /**
      * Get id
@@ -44,29 +51,39 @@ trait ServiceAPayerTrait
         return $this->id;
     }
 
+
+
     /**
      * Add miseEnPaiement
      *
      * @param MiseEnPaiement $miseEnPaiement
+     *
      * @return ServiceAPayerInterface
      */
     public function addMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement)
     {
         $this->miseEnPaiement[] = $miseEnPaiement;
+
         return $this;
     }
+
+
 
     /**
      * Remove miseEnPaiement
      *
      * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
+     *
      * @return ServiceAPayerInterface
      */
     public function removeMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement)
     {
         $this->miseEnPaiement->removeElement($miseEnPaiement);
+
         return $this;
     }
+
+
 
     /**
      * Get miseEnPaiement
@@ -78,34 +95,43 @@ trait ServiceAPayerTrait
         return $this->miseEnPaiement;
     }
 
+
+
     /**
      * Get centreCout
      *
      * @param TypeHeures $typeHeures
+     *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCentreCout( TypeHeures $typeHeures=null )
+    public function getCentreCout(TypeHeures $typeHeures = null)
     {
-        $filter = function( CentreCout $centreCout ) use ($typeHeures) {
-            if ($typeHeures){
-                return $centreCout->typeHeuresMatches( $typeHeures );
-            }else{
+        $filter = function (CentreCout $centreCout) use ($typeHeures) {
+            if ($typeHeures) {
+                return $centreCout->typeHeuresMatches($typeHeures);
+            } else {
                 return true;
             }
         };
+
         return $this->centreCout->filter($filter);
     }
+
+
 
     /**
      * @return MiseEnPaiementListe
      */
-    public function getMiseEnPaiementListe( \DateTime $dateMiseEnPaiement=null, Periode $periodePaiement=null )
+    public function getMiseEnPaiementListe(\DateTime $dateMiseEnPaiement = null, Periode $periodePaiement = null)
     {
-        $liste = new MiseEnPaiementListe( $this );
-        if ($dateMiseEnPaiement) $liste->setDateMiseEnPaiement( $dateMiseEnPaiement );
-        if ($periodePaiement)    $liste->setPeriodePaiement( $periodePaiement );
+        $liste = new MiseEnPaiementListe($this);
+        if ($dateMiseEnPaiement) $liste->setDateMiseEnPaiement($dateMiseEnPaiement);
+        if ($periodePaiement) $liste->setPeriodePaiement($periodePaiement);
+
         return $liste;
     }
+
+
 
     /**
      * Get formuleResultat
@@ -116,6 +142,8 @@ trait ServiceAPayerTrait
     {
         return $this->formuleResultat;
     }
+
+
 
     /**
      * @retun boolean

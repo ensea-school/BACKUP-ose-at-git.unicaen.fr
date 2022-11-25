@@ -95,8 +95,9 @@ UNION ALL
 SELECT s.intervenant_id                                                                          intervenant_id,
        '3 - Service prévisionnel et/ou service référentiel'                                                              categorie,
        'Modification/Ajout du service prévisionnel pour la composante ' || MAX(st.libelle_court) label,
-       MAX(vh.histo_creation)                                                                histo_date,
-       MAX(vh.histo_createur_id)                                                             KEEP (dense_rank FIRST ORDER BY vh.histo_modification DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY vh.histo_modification DESC)    histo_user,
+       MAX(s.histo_creation)                                                                histo_date,
+       MAX(s.histo_createur_id)                                                             KEEP (dense_rank FIRST ORDER BY s.histo_modification DESC)   histo_createur_id,
+       MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY s.histo_modification DESC)    histo_user,
        'glyphicon glyphicon-ok'                           icon,
        3                                                                                         ordre
 FROM volume_horaire vh
@@ -106,7 +107,7 @@ FROM volume_horaire vh
          JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id AND tvh.code = 'PREVU'
          JOIN periode p ON p.id = vh.periode_id
          JOIN type_intervention ti ON ti.id = vh.type_intervention_id
-         JOIN utilisateur u ON u.id = vh.histo_modificateur_id
+         JOIN utilisateur u ON u.id = s.histo_modificateur_id
          LEFT JOIN motif_non_paiement mnp ON mnp.id = vh.motif_non_paiement_id
 GROUP BY s.intervenant_id, ep.structure_id
 

@@ -1,10 +1,9 @@
-CREATE
-OR REPLACE FORCE VIEW V_EXPORT_PAIEMENT_SIHAM AS
+CREATE OR REPLACE FORCE VIEW V_EXPORT_PAIEMENT_SIHAM AS
 SELECT annee_id,
        type_intervenant_id,
        structure_id,
        periode_id,
-       'P'                                                                   type,
+       'P'                                                                   TYPE,
        code_rh                                                               matricule,
        CASE WHEN type_intervenant_code = 'P' THEN '200204' ELSE '202251' END retenue,
        ose_paiement.get_format_mois_du()                                     du_mois,
@@ -38,9 +37,9 @@ FROM (SELECT i.annee_id                                                         
                  END                                                                                           insee,
              i.nom_usuel || ',' || i.prenom                                                                    nom,
              t2.code_origine                                                                                   code_origine,
-             CASE WHEN ind <> ceil(t2.nbu / max_nbu) THEN max_nbu ELSE t2.nbu - max_nbu * (ind - 1) END        nbu,
+             CASE WHEN ind <> CEIL(t2.nbu / max_nbu) THEN max_nbu ELSE t2.nbu - max_nbu * (ind - 1) END        nbu,
              t2.nbu                                                                                            tnbu,
-             ose_formule.get_taux_horaire_hetd(nvl(t2.date_mise_en_paiement, sysdate))                         montant,
+             (SELECT taux_hetd FROM annee ann WHERE ann.id = i.annee_id)                         montant,
              COALESCE(t2.unite_budgetaire, '') || ' ' || to_char(i.annee_id) || ' ' || to_char(i.annee_id + 1) libelle
       FROM (SELECT structure_id,
                    periode_paiement_id,
@@ -98,11 +97,11 @@ FROM (SELECT i.annee_id                                                         
                      unite_budgetaire,
                      date_mise_en_paiement) t2
                JOIN (SELECT level ind, 99 max_nbu FROM dual CONNECT BY 1=1 AND LEVEL <= 11) tnbu
-                    ON ceil(t2.nbu / max_nbu) >= ind
+                    ON CEIL(t2.nbu / max_nbu) >= ind
                JOIN intervenant i ON i.id = t2.intervenant_id
                JOIN annee a ON a.id = i.annee_id
                LEFT JOIN intervenant_dossier d ON i.id = d.intervenant_id AND d.histo_destruction IS NULL
                JOIN statut si ON si.id = i.statut_id
                JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
-               JOIN structure s ON s.id = i.structure_id) t3
+               JOIN STRUCTURE s ON s.id = i.structure_id) t3
 ORDER BY annee_id, type_intervenant_id, structure_id, periode_id, nom, code_origine, nbu DESC

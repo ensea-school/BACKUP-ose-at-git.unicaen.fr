@@ -104,7 +104,7 @@ class TypeInterventionAdminViewHelper extends AbstractViewHelper
         $html = '<td>';
         $html .= $this->getView()->tag('a', [
             'class'              => 'ajax-modal',
-            'data-toggle'        => 'tooltip',
+            'data-bs-toggle'        => 'tooltip',
             'data-placement'     => 'bottom',
             'title'              => $title,
             'href'               => $url,
@@ -114,7 +114,7 @@ class TypeInterventionAdminViewHelper extends AbstractViewHelper
 
         $html .= $this->getView()->tag('a', [
             'class'              => 'ajax-modal',
-            'data-toggle'        => 'tooltip',
+            'data-bs-toggle'        => 'tooltip',
             'data-placement'     => 'bottom',
             'title'              => $title,
             'href'               => $url,

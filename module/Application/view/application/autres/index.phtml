@@ -15,7 +15,7 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-m
 ?>
 <h1 class="page-header">Gestion des champs personnalisés pour le dossier intervenant</h1>
 
-<table class="table table-bordered table-condensed table-hover">
+<table class="table table-bordered table-sm table-hover">
     <thead>
     <tr>
         <th>Champs N°</th>
@@ -38,8 +38,7 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-m
             <td><?= $autre->getDescription() ?></td>
             <?php if ($canEdit): ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">
-                    <a class="ajax-modal"
-                       data-event="dossier-autre-saisie"
+                    <a class="mod-ajax" data-submit-reload="true"
                        href="<?= $this->url('autres-infos/saisie', ['dossierAutre' => $autre->getId()]) ?>"
                        data-submit-reload="true">
                         <i class="fas fa-pen-to-square"></i></a>
@@ -49,15 +48,6 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-m
     <?php endforeach; ?>
     </tbody>
 </table>
-
-
-<script type="text/javascript">
-    $(function () {
-        $("body").on("dossier-autre-saisie", function (event, data) {
-            window.location.reload();
-        });
-    });
-</script>
 <style>
     .triables {
         align: left;

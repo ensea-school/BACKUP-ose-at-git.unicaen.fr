@@ -55,15 +55,14 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'administration-financiere' => [
+                            'finances' => [
                                 'pages' => [
                                     'type-ressource' => [
                                         'label'        => 'Types de ressources',
-                                        'icon'         => 'fas fa-commenting',
                                         'route'        => 'type-ressource',
                                         'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeRessource', 'index'),
-                                        'order'        => 60,
-                                        'border-color' => '#71DFD7',
+                                        'order'        => 50,
+                                        'color' => '#71DFD7',
                                     ],
                                 ],
                             ],
@@ -74,12 +73,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'TypeRessource' => [],
-            ],
-        ],
-        'guards'             => [
+        'guards' => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\TypeRessource',

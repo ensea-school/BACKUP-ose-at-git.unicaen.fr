@@ -2,16 +2,19 @@
 
 namespace Application\Service;
 
+use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\TypeContratServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Contrat;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Fichier;
+use RuntimeException;
+use Unicaen\OpenDocument\Document;
 
 
 /**
@@ -26,10 +29,11 @@ class ContratService extends AbstractEntityService
     use VolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
     use FichierServiceAwareTrait;
+    use EtatSortieServiceAwareTrait;
 
 
     /**
-     * retourne la classe des entités
+     * Retourne la classe des entités
      *
      * @return string
      * @throws RuntimeException
@@ -196,6 +200,38 @@ class ContratService extends AbstractEntityService
         $this->getEntityManager()->flush();
 
         return $instances;
+    }
+
+
+
+    public function generer(Contrat $contrat, $download = true)
+    {
+        $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
+            ($contrat->getStructure() == null ? null : $contrat->getStructure()->getCode()),
+            $contrat->getIntervenant()->getNomUsuel(),
+            $contrat->getIntervenant()->getCode());
+
+        $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
+
+        if (!$modele) {
+            throw new \Exception('Aucun modèle ne correspond à ce contrat');
+        }
+
+        $filtres = ['CONTRAT_ID' => $contrat->getId()];
+
+        $document = $this->getServiceEtatSortie()->genererPdf($modele, $filtres);
+
+        if ($contrat->estUnProjet()) {
+            $document->getStylist()->addFiligrane('PROJET');
+        }
+
+        if ($download) {
+            $document->download($fileName);
+
+            return null;
+        } else {
+            return $document;
+        }
     }
 
 }

@@ -46,7 +46,6 @@ class MiseEnPaiementService extends AbstractEntityService
     }
 
 
-
     /**
      * Retourne l'alias d'entité courante
      *
@@ -56,7 +55,6 @@ class MiseEnPaiementService extends AbstractEntityService
     {
         return 'mep';
     }
-
 
 
     /**
@@ -73,15 +71,14 @@ class MiseEnPaiementService extends AbstractEntityService
         switch ($etat) {
             case MiseEnPaiement::A_METTRE_EN_PAIEMENT:
                 $qb->andWhere("$alias.dateMiseEnPaiement IS NULL");
-            break;
+                break;
             case MiseEnPaiement::MIS_EN_PAIEMENT:
                 $qb->andWhere("$alias.dateMiseEnPaiement IS NOT NULL");
-            break;
+                break;
         }
 
         return $qb;
     }
-
 
 
     public function finderByTypeIntervenant(TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
@@ -100,7 +97,6 @@ class MiseEnPaiementService extends AbstractEntityService
     }
 
 
-
     public function finderByStructure(Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
@@ -112,7 +108,6 @@ class MiseEnPaiementService extends AbstractEntityService
 
         return $qb;
     }
-
 
 
     public function finderByIntervenants($intervenants, QueryBuilder $qb = null, $alias = null)
@@ -128,7 +123,6 @@ class MiseEnPaiementService extends AbstractEntityService
     }
 
 
-
     /**
      * Retourne les données du TBL des mises en paiement en fonction des critères de recherche transmis
      *
@@ -142,8 +136,8 @@ class MiseEnPaiementService extends AbstractEntityService
         $defaultOptions = [
             'composante' => null,            // Composante qui en fait la demande
         ];
-        $options        = array_merge($defaultOptions, $options);
-        $annee          = $this->getServiceContext()->getAnnee();
+        $options = array_merge($defaultOptions, $options);
+        $annee = $this->getServiceContext()->getAnnee();
 
         $defaultTotal = [
             'hetd'                => 0,
@@ -155,7 +149,7 @@ class MiseEnPaiementService extends AbstractEntityService
             'exercice-ac'         => 0,
             'exercice-ac-montant' => 0,
         ];
-        $data         = [
+        $data = [
             'total' => $defaultTotal,
         ];
 
@@ -188,7 +182,7 @@ class MiseEnPaiementService extends AbstractEntityService
             $conditions['composante'] = "structure_id = " . (int)$options['composante']->getId();
         }
 
-        $sql  = 'SELECT * FROM V_ETAT_PAIEMENT WHERE ' . implode(' AND ', $conditions) . ' ORDER BY INTERVENANT_NOM, CENTRE_COUT_CODE';
+        $sql = 'SELECT * FROM V_ETAT_PAIEMENT WHERE ' . implode(' AND ', $conditions) . ' ORDER BY INTERVENANT_NOM, CENTRE_COUT_CODE';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
 
         // récupération des données
@@ -249,7 +243,6 @@ class MiseEnPaiementService extends AbstractEntityService
     }
 
 
-
     /**
      * Retourne les données du TBL des mises en paiement en fonction des critères de recherche transmis
      *
@@ -289,12 +282,12 @@ class MiseEnPaiementService extends AbstractEntityService
             $conditions['intervenant_id'] = 'intervenant_id IN (' . implode(',', $iIdList) . ')';
         }
 
-        $sql  = 'SELECT * FROM V_ETAT_PAIEMENT WHERE ' . implode(' AND ', $conditions) . ' ORDER BY INTERVENANT_NOM, CENTRE_COUT_CODE';
+        $sql = 'SELECT * FROM V_ETAT_PAIEMENT WHERE ' . implode(' AND ', $conditions) . ' ORDER BY INTERVENANT_NOM, CENTRE_COUT_CODE';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
 
         // récupération des données
         while ($d = $stmt->fetch()) {
-            $ds     = [
+            $ds = [
                 'annee-libelle'            => (string)$annee,
                 'etat'                     => $d['ETAT'],
                 'structure-libelle'        => $d['STRUCTURE_LIBELLE'],
@@ -326,7 +319,6 @@ class MiseEnPaiementService extends AbstractEntityService
     }
 
 
-
     /**
      * Retourne les données du TBL des services en fonction des critères de recherche transmis
      *
@@ -337,16 +329,16 @@ class MiseEnPaiementService extends AbstractEntityService
     public function getTableauBord(Structure $structure = null)
     {
         $annee = $this->getServiceContext()->getAnnee();
-        $data  = [];
+        $data = [];
 
         $params = [
             'annee' => $annee->getId(),
         ];
-        $sql    = 'SELECT * FROM V_EXPORT_DMEP WHERE annee_id = :annee';
+        $sql = 'SELECT * FROM v_export_dmep WHERE annee_id = :annee';
 
         if ($structure) {
             $params['structure'] = $structure->getId();
-            $sql                 .= ' AND structure_id = :structure';
+            $sql .= ' AND structure_id = :structure';
         }
 
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
@@ -358,6 +350,7 @@ class MiseEnPaiementService extends AbstractEntityService
                 'annee-libelle' => (string)$annee,
 
                 'intervenant-code'               => $d['INTERVENANT_CODE'],
+                'intervenant-code-rh'            => $d['CODE_RH'],
                 'intervenant-nom'                => $d['INTERVENANT_NOM'],
                 'intervenant-date-naissance'     => new \DateTime($d['INTERVENANT_DATE_NAISSANCE']),
                 'intervenant-statut-libelle'     => $d['INTERVENANT_STATUT_LIBELLE'],
@@ -407,7 +400,6 @@ class MiseEnPaiementService extends AbstractEntityService
     }
 
 
-
     /**
      * Retourne le tableau de bord des liquidations.
      * Il retourne le nb d'heures demandées en paiement par type de ressource pour une structure donnée
@@ -441,7 +433,7 @@ class MiseEnPaiementService extends AbstractEntityService
           type_ressource_id,
           heures
         FROM
-          V_TBL_DMEP_LIQUIDATION
+          v_tbl_dmep_liquidation
         WHERE
           annee_id = :annee
           AND structure_id = :structure";
@@ -450,18 +442,17 @@ class MiseEnPaiementService extends AbstractEntityService
             'annee'     => $annee->getId(),
             'structure' => $structure->getId(),
         ];
-        $stmt   = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
         while ($d = $stmt->fetch()) {
             $typeRessourceId = (int)$d['TYPE_RESSOURCE_ID'];
-            $heures          = (float)$d['HEURES'];
+            $heures = (float)$d['HEURES'];
 
             $res[$typeRessourceId] = $heures;
-            $res['total']          += $heures;
+            $res['total'] += $heures;
         }
 
         return $res;
     }
-
 
 
     private function getTblLiquidationMS(array $structures = [])
@@ -484,21 +475,20 @@ class MiseEnPaiementService extends AbstractEntityService
         $params = [
             'annee' => $annee->getId(),
         ];
-        $stmt   = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
         while ($d = $stmt->fetch()) {
-            $structureId     = (int)$d['STRUCTURE_ID'];
+            $structureId = (int)$d['STRUCTURE_ID'];
             $typeRessourceId = (int)$d['TYPE_RESSOURCE_ID'];
-            $heures          = (float)$d['HEURES'];
+            $heures = (float)$d['HEURES'];
 
             $res[$structureId][$typeRessourceId] = $heures;
             if (!isset($res[$structureId]['total'])) $res[$structureId]['total'] = 0;
             $res[$structureId]['total'] += $heures;
-            $res['total']               += $heures;
+            $res['total'] += $heures;
         }
 
         return $res;
     }
-
 
 
     /**
@@ -527,13 +517,12 @@ class MiseEnPaiementService extends AbstractEntityService
     }
 
 
-
     /**
      *
-     * @param Structure                            $structure
+     * @param Structure $structure
      * @param \Application\Entity\Db\Intervenant[] $intervenants
-     * @param Periode                              $periodePaiement
-     * @param \DateTime                            $dateMiseEnPaiement
+     * @param Periode $periodePaiement
+     * @param \DateTime $dateMiseEnPaiement
      */
     public function mettreEnPaiement(Structure $structure, $intervenants, Periode $periodePaiement, \DateTime $dateMiseEnPaiement)
     {
@@ -551,7 +540,6 @@ class MiseEnPaiementService extends AbstractEntityService
     }
 
 
-
     /**
      * @param ServiceAPayerInterface $sap
      *
@@ -567,7 +555,6 @@ class MiseEnPaiementService extends AbstractEntityService
 
         return $this;
     }
-
 
 
     private function hydrateFromChangements(MiseEnPaiement $object, $data)

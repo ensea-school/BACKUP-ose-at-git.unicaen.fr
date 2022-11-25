@@ -103,7 +103,7 @@ return [
                                 'route'        => 'budget',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Budget', 'index'),
                                 'order'        => 30,
-                                'border-color' => '#EB4995',
+                                'color' => '#EB4995',
                                 'pages'        => [
                                     'tableau-de-bord'         => [
                                         'label'    => 'Tableau de bord',
@@ -132,7 +132,7 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Budget',
@@ -191,12 +191,7 @@ return [
                 ],
             ],
         ],
-        'resource_providers' => [
-            \BjyAuthorize\Provider\Resource\Config::class => [
-                'Dotation' => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [

@@ -93,8 +93,14 @@ $.widget("ose.elementPedagogiqueRecherche", {
             option.data('subtext', data[i].extra);
             select.append(option);
         }
+
+        if (Util.json.count(data) == 1) {
+            value = data[i].id;
+        }
+
         select.val(value);
-        select.selectpicker('refresh');
+        select.selectpicker('destroy');
+        select.selectpicker();
         this.setElementState('liste');
         this.updateElementValue();
     },

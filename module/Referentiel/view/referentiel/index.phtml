@@ -1,0 +1,48 @@
+<?php
+
+use Service\Entity\Db\TypeVolumeHoraire;
+use UnicaenApp\View\Helper\Messenger;
+use Application\Entity\Db\WfEtape;
+
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $typeVolumeHoraire TypeVolumeHoraire
+ * @var $intervenant       \Application\Entity\Db\Intervenant
+ * @var $referentiels      \Referentiel\Entity\Db\ServiceReferentiel[]
+ */
+
+
+if ($typeVolumeHoraire->isPrevu()) {
+    $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
+    $title     = 'Référentiel';
+} else {
+    $nextEtape = WfEtape::CODE_SERVICE_SAISIE_REALISE;
+    $title     = 'Constatation du référentiel réalisé';
+}
+
+//$menuUrl = $this->url(null, ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
+
+$this->intervenant($intervenant)->renderTitle($title);
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+$ref = $this->referentiels($typeVolumeHoraire, $intervenant, $referentiels);
+$ref->setHorodatage(true);
+echo $ref;
+
+echo '<hr />';
+
+echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);
+?>
+<script>
+    /*
+        $(function () {
+            WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
+
+            $('.referentiels').referentiels({
+                'heures-change': function () {
+
+                }
+            });
+        });
+    */
+</script>

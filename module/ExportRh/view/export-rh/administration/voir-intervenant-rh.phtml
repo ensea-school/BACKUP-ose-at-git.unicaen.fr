@@ -7,10 +7,10 @@
 ?>
 
 <?php if (!empty($agent)): ?>
-    <div class="panel panel-default">
-        <div class="panel-heading">Données personnelles
+    <div class="card bg-default">
+        <div class="card-header">Données personnelles
             de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
                     <strong>Matricule : </strong><?= $agent->getMatricule() ?><br/>
@@ -29,10 +29,10 @@
         </div>
     </div>
     <form action="/siham/save-adresse" method="post">
-        <div class="panel panel-default">
-            <div class="panel-heading">Adresse principale
+        <div class="card bg-default">
+            <div class="card-header">Adresse principale
                 de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="form-group">
                     <label for="">Numero de voie : </label>
                     <input class="form-control" type="text" name="noVoieAdresse" value="<?= $agent->getNoVoieAdresse() ?>"/>
@@ -68,20 +68,20 @@
                     <input type="hidden" name="matricule" value="<?= $agent->getMatricule() ?>"/>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-default">Enregistrer adresse</button>
+                    <button type="submit" class="btn btn-secondary">Enregistrer adresse</button>
                 </div>
             </div>
         </div>
     </form>
     <form action="/siham/save-coordonnees" method="post">
-        <div class="panel panel-default">
-            <div class="panel-heading">Numéros de téléphone et Emails
+        <div class="card bg-default">
+            <div class="card-header">Numéros de téléphone et Emails
                 de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="form-group">
                     <label for="">Téléphone fixe professionnel : </label>
                     <input class="form-control" type="text" name="telFixePro" value="<?= $agent->getTelephonePro() ?>"/>
-                    <div class="pull-right" style="margin:10px 0;">
+                    <div class="float-end" style="margin:10px 0;">
                         <a class="btn btn-danger" href="/siham/historiser-coordonnees/<?= $agent->getMatricule() ?>/telpro" role="button">
                             Historiser
                         </a>
@@ -92,7 +92,7 @@
                     <label for="">Téléphone portable perso : </label>
                     <input class="form-control" type="text" name="telPortablePerso"
                            value="<?= $agent->getTelephonePerso() ?>"/>
-                    <div class="pull-right" style="margin:10px 0;">
+                    <div class="float-end" style="margin:10px 0;">
                         <a class="btn btn-danger" href="/siham/historiser-coordonnees/<?= $agent->getMatricule() ?>/telperso" role="button">
                             Historiser
                         </a>
@@ -103,7 +103,7 @@
                     <label for="">Email pro : </label>
                     <input class="form-control" type="text" name="emailPro"
                            value="<?= $agent->getEmailPro() ?>"/>
-                    <div class="pull-right" style="margin:10px 0;">
+                    <div class="float-end" style="margin:10px 0;">
                         <a class="btn btn-danger" href="/siham/historiser-coordonnees/<?= $agent->getMatricule() ?>/emailpro" role="button">
                             Historiser
                         </a>
@@ -114,7 +114,7 @@
                     <label for="">Email perso : </label>
                     <input class="form-control" type="text" name="emailPerso"
                            value="<?= $agent->getEmailPerso() ?>"/>
-                    <div class="pull-right" style="margin:10px 0;">
+                    <div class="float-end" style="margin:10px 0;">
                         <a class="btn btn-danger" href="/siham/historiser-coordonnees/<?= $agent->getMatricule() ?>/emailperso" role="button">
                             Historiser
                         </a>
@@ -136,16 +136,16 @@
                 <div class="clearfix"></div>
 
                 <div>
-                    <button type="submit" class="btn btn-default">Enregistrer coordonnées</button>
+                    <button type="submit" class="btn btn-secondary">Enregistrer coordonnées</button>
                 </div>
             </div>
         </div>
     </form>
     <form action="/siham/save-iban" method="post">
-        <div class="panel panel-default">
-            <div class="panel-heading">Coordonnées bancaires
+        <div class="card bg-default">
+            <div class="card-header">Coordonnées bancaires
                 de <?= $agent->getPrenom() . ' ' . $agent->getNomUsuel() ?></div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="form-group">
                     <input class="form-control" type="text" name="iban"
                            value="<?= $agent->getIban() ?>"/>
@@ -155,7 +155,7 @@
                            value="<?= $agent->getBic() ?>"/>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-default">Enregistrer iban</button>
+                    <button type="submit" class="btn btn-secondary">Enregistrer iban</button>
                 </div>
             </div>
         </div>

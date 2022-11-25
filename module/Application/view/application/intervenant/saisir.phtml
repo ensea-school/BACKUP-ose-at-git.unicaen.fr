@@ -24,9 +24,9 @@ if ($errors) {
     <div>&nbsp;</div>
     <div class="row">
         <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">Données essentielles</div>
-                <div class="panel-body">
+            <div class="card bg-default">
+                <div class="card-header">Données essentielles</div>
+                <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
                             <?= $this->formControlGroup($form->get('nomUsuel')); ?>
@@ -54,9 +54,9 @@ if ($errors) {
             </div>
         </div>
         <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">Nomenclatures</div>
-                <div class="panel-body">
+            <div class="card bg-default">
+                <div class="card-header">Nomenclatures</div>
+                <div class="card-body">
                     <?php
                     echo $this->formControlGroup($form->get('statut'));
                     echo $this->formControlGroup($form->get('structure'));
@@ -69,9 +69,9 @@ if ($errors) {
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">Divers</div>
-                <div class="panel-body">
+            <div class="card bg-default">
+                <div class="card-header">Divers</div>
+                <div class="card-body">
                     <div class="row">
                         <div class="col-md-4"><?= $this->formControlGroup($form->get('civilite')); ?></div>
                         <div class="col-md-8"><?= $this->formControlGroup($form->get('nomPatronymique')); ?></div>
@@ -89,26 +89,28 @@ if ($errors) {
             </div>
         </div>
         <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">Liens avec le système d'information</div>
-                <div class="panel-body">
+            <div class="card bg-default">
+                <div class="card-header">Liens avec le système d'information</div>
+                <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active"><a href="#exists-user" aria-controls="exists-user"
-                                                                          role="tab" data-toggle="tab">Compte existant</a>
+                                <li role="presentation" class="active">
+                                    <a class="nav-link active" href="#exists-user" data-bs-target="#exists-user" aria-controls="exists-user" role="tab"
+                                       data-bs-toggle="tab">Compte existant</a>
                                 </li>
-                                <li role="presentation"><a href="#new-user" aria-controls=new-user" role="tab"
-                                                           data-toggle="tab">Créer un nouveau compte</a></li>
+                                <li role="presentation">
+                                    <a class="nav-link" href="#new-user" data-bs-target="#new-user" aria-controls=new-user" role="tab" data-bs-toggle="tab">Créer
+                                        un nouveau compte</a></li>
                             </ul>
 
                             <!-- Tab panes -->
                             <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane active" id="exists-user">
+                                <div role="tabcard" class="tab-pane active" id="exists-user">
                                     <?= $this->formControlGroup($form->get('utilisateur')); ?>
                                 </div>
-                                <div role="tabpanel" class="tab-pane" id="new-user">
+                                <div role="tabcard" class="tab-pane" id="new-user">
                                     <div class="row">
                                         <div class="col-md-6"><?= $this->formControlGroup($form->get('intervenant-edition-login')); ?></div>
                                         <div class="col-md-6"><?= $this->formControlGroup($form->get('intervenant-edition-password')); ?></div>

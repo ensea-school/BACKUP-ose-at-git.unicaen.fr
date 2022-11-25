@@ -36,13 +36,13 @@ if ($canPurge) {
                 <td><?= $difference->getAttrName() ?></td>
                 <td>
                     <pre><?= $difference->getAttrOldValue() ?></pre>
-                    <div class="pull-right">
+                    <div class="float-end">
                         <small>Source: <?= $difference->getAttrOldSourceName() ?></small>
                     </div>
                 </td>
                 <td>
                     <pre><?= $difference->getAttrNewValue() ?></pre>
-                    <div class="pull-right">
+                    <div class="float-end">
                         <small>Source: <?= $difference->getAttrNewSourceName() ?></small>
                     </div>
                 </td>
@@ -56,7 +56,7 @@ if ($canPurge) {
         </tbody>
     </table>
 
-    <a class="btn btn-default" href="javascript:window.history.back()">
+    <a class="btn btn-secondary" href="javascript:window.history.back()">
         <i class="fas fa-rotate-left" aria-hidden="true"></i>
         Page précédente
     </a>

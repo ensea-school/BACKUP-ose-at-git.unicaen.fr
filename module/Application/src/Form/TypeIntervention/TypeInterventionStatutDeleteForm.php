@@ -2,8 +2,8 @@
 
 namespace Application\Form\TypeIntervention;
 
+use Application\Entity\Db\Traits\TypeInterventionStatutAwareTrait;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Application\Filter\FloatFromString;
@@ -16,8 +16,7 @@ use Application\Filter\StringFromFloat;
  */
 class TypeInterventionStatutDeleteForm extends AbstractForm
 {
-    use \Application\Entity\Db\Traits\TypeInterventionStatutAwareTrait;
-    use TypeInterventionServiceAwareTrait;
+    use TypeInterventionStatutAwareTrait;
     use StatutServiceAwareTrait;
 
 

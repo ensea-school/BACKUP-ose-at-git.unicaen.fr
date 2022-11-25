@@ -19,9 +19,9 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MODULATEUR_EDI
 <?php
 foreach ($typeModulateurs as $tm) {
     if ($this->isAllowed($tm, Privileges::MODULATEUR_VISUALISATION)) { ?>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="panel-title"><?= $tm->getCode() ?>
+        <div class="card bg-default">
+            <div class="card-header">
+                <div class="card-title"><?= $tm->getCode() ?>
                     <span style="position:absolute; left: 300px"><?= $tm->getLibelle() ?></span>
                     <span style="position:absolute; right: 50px;">
 
@@ -50,10 +50,10 @@ foreach ($typeModulateurs as $tm) {
                 </div>
                 <?php endif ?>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <table class="table table-bordered table-condensed table-extra-condensed" style="margin-top:0.5em; margin-bottom:1px;">
+                        <table class="table table-bordered table-xs" style="margin-top:0.5em; margin-bottom:1px;">
                             <?php foreach ($typeModulateurStructures
                                            as $tms) { ?>
                                 <?php if (($tm->getId() == $tms->getTypeModulateur()->getId()) && ((!$tms->getAnneeDebut()) || ($tms->getAnneeDebut()->getId() <= $anneeId)) && ((!$tms->getAnneeFin()) || ($tms->getAnneeFin()->getId() >= $anneeId))) { ?>
@@ -98,7 +98,7 @@ foreach ($typeModulateurs as $tm) {
                             <a class="ajax-modal" data-event="modulateur-saisie"
                                href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId()]) ?>"
                                title="Ajouter un type de modulateur pour une structure">
-                                <button type="button" class="btn btn-xs btn-primary">Ajouter une structure</button>
+                                <button type="button" class="btn btn-sm btn-primary">Ajouter une structure</button>
                             </a>
                         <?php } ?>
                     </div>

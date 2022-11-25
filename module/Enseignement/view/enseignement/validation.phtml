@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $validations       \Application\Entity\Db\Validation[]
+ * @var $typeVolumehoraire \Service\Entity\Db\TypeVolumeHoraire
+ */
+
+
+$this->intervenant($intervenant)->renderTitle($title);
+
+$wells = [
+    'non-valides' => 'Enseignements non validés',
+    'valides'     => 'Enseignements validés',
+];
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->plafonds($intervenant, $typeVolumeHoraire);
+
+foreach ($wells as $well => $title) {
+    if ($services[$well]) {
+        echo '<div class="well"><h2>' . $title . '</h2>';
+        foreach ($services[$well] as $validationId => $srvs) {
+            $validation = $validations[$validationId];
+            echo $this->partial('enseignement/partial/validation-enseignement', [
+                'validation'        => $validation,
+                'structure'         => $validation->getStructure(),
+                'services'          => $srvs,
+                'typeVolumeHoraire' => $typeVolumeHoraire,
+            ]);
+        }
+        echo '</div>';
+    }
+}
+
+echo $this->feuilleDeRoute($intervenant)->renderNav(
+    $typeVolumeHoraire->isPrevu() ?
+        \Application\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION
+        : \Application\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION_REALISE
+);

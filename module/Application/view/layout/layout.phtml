@@ -6,7 +6,9 @@
 
 use Laminas\View\Helper\Navigation as NavigationHelper;
 
+/** @var NavigationHelper $navigationHelper */
 $navigationHelper = $this->navigation('navigation');
+$pages            = $navigationHelper->getContainer();
 
 $version = $this->appInfos()->getConfig()->get('version');
 
@@ -15,6 +17,7 @@ echo $this->doctype();
 
 <html lang="fr">
 <head>
+    <link href="" media="all" rel="stylesheet" type="text/css">
     <!-- Meta -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,24 +26,18 @@ echo $this->doctype();
     <?= $this->headTitle($this->appInfos()->nom)->setSeparator(' - ')->setAutoEscape(true) . "\n"; ?>
 
     <!-- Dépendances -->
-    <link href="<?= $this->basePath('/vendor/jquery-ui-1.11.4/jquery-ui.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/jquery-ui-1.11.4/jquery-ui.structure.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/jquery-ui-1.11.4/jquery-ui.theme.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/bootstrap-3.3.5/css/bootstrap.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/bootstrap-3.3.5/css/bootstrap-theme.min.css') ?>" media="all" rel="stylesheet" type="text/css">
+    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.css') ?>" media="all" rel="stylesheet" type="text/css">
+    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.structure.min.css') ?>" media="all" rel="stylesheet" type="text/css">
+    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.theme.min.css') ?>" media="all" rel="stylesheet" type="text/css">
     <link href="<?= $this->basePath('/vendor/open-sans-gh-pages/open-sans.css') ?>" media="all" rel="stylesheet" type="text/css">
-
-    <!-- CSS générales à l'application -->
-    <link href="<?= $this->basePath('/css/app.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/cartridge.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/budget.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/paiement.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/agrement.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/acceuil.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/callout.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/css/piece-jointe.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
-
     <link href="<?= $this->basePath('/vendor/font-awesome-6.0.0/css/all.min.css') ?>" media="all" rel="stylesheet" type="text/css">
+    <link href="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/css/bootstrap-select.min.css') ?>" media="all" rel="stylesheet" type="text/css">
+    <link href="<?= $this->basePath('/vendor/DataTables-1.12.1/css/dataTables.bootstrap5.min.css') ?>" media="all" rel="stylesheet" type="text/css">
+    <link href="<?= $this->basePath('/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') ?>" media="all" rel="stylesheet" type="text/css">
+
+
+    <!-- CSS générale à l'application -->
+    <link href="<?= $this->basePath('/css/app.css?v=' . $version) ?>" media="all" rel="stylesheet" type="text/css">
 
     <!-- Autres links ajoutés dynamiquement -->
     <?= $this->headLink(); ?>
@@ -65,34 +62,34 @@ echo $this->doctype();
     ?>
 
     <!-- Scripts globaux -->
-    <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-1.11.3.min.js?v=' . $version) ?>"></script>
-    <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-ui-1.11.4/jquery-ui.min.js?v=' . $version) ?>"></script>
-    <?= $this->headScript(); ?>
+    <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-3.6.0.min.js?v=' . $version) ?>"></script>
+    <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js?v=' . $version) ?>"></script>
 </head>
 
-<body class="<?= getenv('APPLICATION_ENV') ?: 'dev' ?>" data-base-url="<?= $this->url('home') ?>">
-<div id="navbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<body class="<?= getenv('APPLICATION_ENV') ?: 'dev' ?> p-0" data-base-url="<?= $this->url('home') ?>">
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".bs-navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <?= $this->appLink($this->appInfos()->nom) ?>
+        <?= $this->appLink($this->appInfos()->nom) ?>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <?= $navigationHelper
+                ->menu($pages)
+                ->setUlClass('navbar-nav me-auto mb-2 mb-lg-0')
+                ->setPartial('layout/menu-principal.phtml'); ?>
+            <?= $this->appConnection(); ?>
         </div>
-        <div class="navbar-collapse bs-navbar-collapse collapse">
-            <?= $navigationHelper->menuPrincipal(); ?>
-            <p class="navbar-text navbar-right">
-                <?= $this->appConnection(); ?>
-            </p>
-        </div><!--/.nav-collapse -->
     </div>
-</div>
+</nav>
+
 
 <div id="contenu-principal" class="container">
-    <?php if (($menuSecondaire = $navigationHelper->menuSecondaire()->render())): ?>
+    <?php $pages->rewind();
+    if ($menuSecondaire = $navigationHelper->menuSecondaire($pages)->render()): ?>
         <div class="row">
             <div id="sidebar" class="col-xs-6 col-md-2" role="navigation">
                 <?= $menuSecondaire; ?>
@@ -106,42 +103,33 @@ echo $this->doctype();
     <?php endif; ?>
 </div>
 
-<div id="footer" class="container">
-    <ul class="navigation">
-        <li>
-            <a title="<?= AppConfig::get('etablissement', 'logoDescription') ?>" class="lien-univ"
-               href="<?= AppConfig::get('etablissement', 'logoUri') ?>"><?= AppConfig::get('etablissement', 'nom') ?></a>
-        </li>
-        <li>
-            <a title="&#xC0;propos de cette application" class="apropos" href="/apropos">À propos</a>
-        </li>
-        <li>
-            <a title="Contact concernant l'application" class="contact" href="/contact">Contact</a>
-        </li>
-        <li>
-            <a title="Page de navigation au sein de l'application" class="plan" href="/plan">Plan de navigation</a>
-        </li>
-        <li>
-            <a title="Mentions légales" class="ml" href="<?= AppConfig::get('etablissement', 'mentionsLegales') ?>">Mentions légales</a>
-        </li>
-        <li>
-            <a title="Vie privée" class="il" href="<?= AppConfig::get('etablissement', 'viePrivee') ?>">Vie privée</a>
-        </li>
-    </ul>
-</div>
 
-<a href="#" class="scrollup" title="Remonter en haut de cette page">
-    <img alt="Remonter"
-         src="data:image/png;base64,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"/>
-</a>
+<nav id="footer" class="nav justify-content-center">
+    <a title="<?= AppConfig::get('etablissement', 'logoDescription') ?>" class="nav-link lien-univ"
+       href="<?= AppConfig::get('etablissement', 'logoUri') ?>"><?= AppConfig::get('etablissement', 'nom') ?></a>
+    <a title="&#xC0;propos de cette application" class="nav-link apropos" href="<?= $this->basePath('apropos') ?>">À propos</a>
+    <a title="Contact concernant l'application" class="nav-link contact" href="<?= $this->basePath('contact') ?>">Contact</a>
+    <a title="Page de navigation au sein de l'application" class="nav-link plan" href="<?= $this->basePath('plan') ?>">Plan de navigation</a>
+    <a title="Mentions légales" class="nav-link ml" href="<?= AppConfig::get('etablissement', 'mentionsLegales') ?>">Mentions légales</a>
+    <a title="Vie privée" class="nav-link il" href="<?= AppConfig::get('etablissement', 'viePrivee') ?>">Vie privée</a>
+</nav>
+
 
 <!-- Scripts (dépendances) -->
-<script type="text/javascript" src="<?= $this->basePath('/vendor/bootstrap-3.3.5/js/bootstrap.min.js') ?>"></script>
+<script type="text/javascript" src="<?= $this->basePath('/vendor/bootstrap-5.0.2/dist/js/bootstrap.bundle.js') ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery.form-3.51.js') ?>"></script>
+<script type="text/javascript" src="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/js/bootstrap-select.min.js') ?>"></script>
+<script type="text/javascript" src="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/js/i18n/defaults-fr_FR.js') ?>"></script>
 
 <!-- Scripts de l'application -->
 <script type="text/javascript" src="<?= $this->basePath('/js/datepicker-fr.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/unicaen.js?v=' . $version) ?>"></script>
+<script type="text/javascript" src="<?= $this->basePath('/js/widget-initializer.js?v=' . $version) ?>"></script>
+<script type="text/javascript" src="<?= $this->basePath('/js/intranavigator.js?v=' . $version) ?>"></script>
+<script type="text/javascript" src="<?= $this->basePath('/js/pop-ajax.js?v=' . $version) ?>"></script>
+<script type="text/javascript" src="<?= $this->basePath('/js/chargens.js?v=' . $version) ?>"></script>
+<script type="text/javascript" src="<?= $this->basePath('/js/mod-ajax.js?v=' . $version) ?>"></script>
+<script type="text/javascript" src="<?= $this->basePath('/js/tab-ajax.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/util.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/app.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/paiement.js?v=' . $version) ?>"></script>

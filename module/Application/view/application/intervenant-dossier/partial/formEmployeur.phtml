@@ -27,8 +27,8 @@ $dossierInsee = $form->get('DossierEmployeur');
 
 <!-- Fiedlset Employeur -->
 <div class="col-md-6">
-    <div class="panel panel-default ">
-        <div class="panel-heading">
+    <div class="card bg-default ">
+        <div class="card-header">
             EMPLOYEUR PRINCIPAL
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$tblDossier->getCompletudeEmployeur()): ?>
@@ -38,7 +38,7 @@ $dossierInsee = $form->get('DossierEmployeur');
                 <?php endif; ?>
             <?php endif; ?>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="well" role="alert">Saissisez les premières lettres de votre employeur ou directement le N° de SIRET.
             </div>
             <?= $this->formControlGroup($dossierInsee->get('employeur')); ?>

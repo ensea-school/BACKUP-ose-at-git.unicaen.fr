@@ -32,6 +32,7 @@ class Application
     {
         $appDir = dirname(dirname(__DIR__));
 
+        ini_set('session.cookie_samesite', 'Strict');
         define('REQUEST_MICROTIME', microtime(true));
         chdir($appDir);
 

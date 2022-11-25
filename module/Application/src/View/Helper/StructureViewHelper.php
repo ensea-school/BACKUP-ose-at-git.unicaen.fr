@@ -15,7 +15,6 @@ class StructureViewHelper extends AbstractViewHelper
     use StructureAwareTrait;
 
 
-
     /**
      *
      * @param Structure $structure
@@ -57,7 +56,7 @@ class StructureViewHelper extends AbstractViewHelper
         }
 
         $vars = [
-            "Libellé long :"                          => $entity->getLibelleLong(),
+            "Libellé long"                            => $entity->getLibelleLong(),
             "Libellé court"                           => $entity->getLibelleCourt(),
             "N° {$entity->getSource()->getLibelle()}" => $entity->getCode(),
         ];
@@ -84,8 +83,8 @@ class StructureViewHelper extends AbstractViewHelper
             return '<span class="bg-danger"><abbr title="Cette structure n\'existe plus">' . $structure . '</abbr></span>';
         }
 
-        $url   = $this->getView()->url('structure/voir', ['structure' => $structure->getId()]);
-        $out   = '<a href="' . $url . '" class="ajax-modal">' . $structure . '</a>';
+        $url = $this->getView()->url('structure/voir', ['structure' => $structure->getId()]);
+        $out = '<a href="' . $url . '" class="ajax-modal">' . $structure . '</a>';
 
         return $out;
     }

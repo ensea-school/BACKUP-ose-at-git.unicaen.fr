@@ -1,6 +1,5 @@
-CREATE
-OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE_SIHAM AS
-SELECT 'P'                                                                                type,
+CREATE OR REPLACE FORCE VIEW V_IMPUTATION_BUDGETAIRE_SIHAM AS
+SELECT 'P'                                                                                TYPE,
        NULL                                                                               uo,
        intervenant_matricule                                                              matricule,
        date_debut                                                                         date_debut,
@@ -23,7 +22,7 @@ SELECT 'P'                                                                      
            END)) * 100                                                                    pourcentage,
        --pourc_ecart,
        --pourc_diff,
-       (lpad(floor(hetd), 2, '0')) || ':' || lpad(floor((hetd - floor(hetd)) * 60), 2, 0) nombres_heures,
+       (lpad(FLOOR(hetd), 2, '0')) || ':' || lpad(FLOOR((hetd - FLOOR(hetd)) * 60), 2, 0) nombres_heures,
        NULL                                                                               flmodi,
        NULL                                                                               numord,
        NULL                                                                               numgrp,
@@ -104,7 +103,7 @@ FROM (SELECT dep3.*,
                        i.numero_insee                                                             intervenant_numero_insee,
                        CASE
                            WHEN round(CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE 0 END *
-                                      ose_formule.get_taux_horaire_hetd(nvl(mep.date_mise_en_paiement, sysdate)), 2) > 0
+                                      a.taux_hetd, 2) > 0
                                THEN '1542'
                            ELSE
                                CASE WHEN ti.code = 'P' THEN '="0204"' ELSE '="2251"' END
@@ -121,7 +120,7 @@ FROM (SELECT dep3.*,
                        CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE 0 END               fc_majorees,
                        mis.heures_aa                                                              exercice_aa,
                        mis.heures_ac                                                              exercice_ac,
-                       ose_formule.get_taux_horaire_hetd(nvl(mep.date_mise_en_paiement, sysdate)) taux_horaire
+                       a.taux_hetd taux_horaire
                 FROM tbl_paiement mis
                          JOIN mise_en_paiement mep
                               ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL

@@ -70,7 +70,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
        data-submit-reload="true"
     >Supprimer</a>
 
-    <a class="btn btn-default"
+    <a class="btn btn-secondary"
        href= <?= $this->url('piece-jointe/modifier-type-piece-jointe-statut', ['typePieceJointe' => $typePieceJointe->getId(), 'statut' => $statut->getId()]) ?>
        class="ajax-modal"
        data-event="event-update-tpjs"

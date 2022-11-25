@@ -4,8 +4,6 @@ namespace Application\Form\Corps;
 
 use Application\Entity\Db\Corps;
 use Application\Form\AbstractForm;
-use Application\Form\Corps\Traits\CorpsSaisieFormAwareTrait;
-use Application\Service\Traits\SourceServiceAwareTrait;
 use Laminas\Form\FormInterface;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
@@ -17,9 +15,7 @@ use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
  */
 class CorpsSaisieForm extends AbstractForm
 {
-    use SourceServiceAwareTrait;
     use SchemaServiceAwareTrait;
-    use CorpsSaisieFormAwareTrait;
 
     public function init()
     {

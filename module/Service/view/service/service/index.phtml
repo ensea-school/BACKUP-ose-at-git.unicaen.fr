@@ -1,0 +1,52 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this              Application\View\Renderer\PhpRenderer
+ * @var $typeVolumeHoraire Service\Entity\Db\TypeVolumeHoraire
+ * @var $annee             Application\Entity\Db\Annee
+ */
+
+$canAddService = $this->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EDITION_MASSE));
+
+$this->headTitle()->append("Services $annee");
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+?>
+    <h1 class="page-header">Services <small>Année universitaire <?= $annee; ?></small></h1>
+<?php
+
+if ($this->isAllowed('Information', 'info-only-structure')) {
+    echo $this->messenger()->setMessages(['warning' => "Sont visibles ici les référentiels et les enseignements prévisionnels des intervenants affectés "
+        . "ou enseignant dans votre structure de responsabilité ou l'une de ses sous-structures."]);
+}
+
+echo $this->recherche;
+
+$isResume = isset($resumeServices);
+
+if ('afficher' === $action || 'trier' === $action) {
+    if ($isResume) {
+        echo $this->messenger()->setMessages(['warning' => "Les totaux en heures équivalent TD sont calculés à partir de l'ensemble des enseignements de chaque intervenant. En outre, les heures non payables ne sont pas prises en compte."]);
+        echo $this->serviceResume($resumeServices)->render();
+    } else {
+        $serviceListe = $this->enseignements($typeVolumeHoraire, null, $services);
+        $serviceListe->setReadOnly(!$canAddService);
+        echo $serviceListe->render();
+    }
+} else {
+    echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les enseignements.', \UnicaenApp\View\Helper\Messenger::INFO);
+}
+
+?>
+<style>
+    .modal-dialog {
+        width: 70%;
+    }
+
+    div.row {
+        padding: 1px;
+    }
+</style>

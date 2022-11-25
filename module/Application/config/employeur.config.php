@@ -10,7 +10,7 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router' => [
         'routes' => [
-            'employeur'      => [
+            'employeur'        => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/employeur',
@@ -20,6 +20,34 @@ return [
                     ],
                 ],
                 'may_terminate' => true,
+                'child_routes'  => [
+                    'saisie'    => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/saisie[/:employeur]',
+                            'constraints' => [
+                                'employeur' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'saisie',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'supprimer' => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/supprimer/:employeur',
+                            'constraints' => [
+                                'employeur' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'supprimer',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                ],
             ],
             'employeur-search' => [
                 'type'          => 'Literal',
@@ -48,7 +76,6 @@ return [
     ],
 
 
-
     'console' => [
         'router' => [
             'routes' => [
@@ -58,6 +85,31 @@ return [
                         'defaults' => [
                             'controller' => 'Application\Controller\Employeur',
                             'action'     => 'update-employeur',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'rh' => [
+                                'pages' => [
+                                    'Employeurs' => [
+                                        'color' => '#9F491F',
+                                        'label'        => "Employeurs",
+                                        'title'        => "Gestion des employeurs",
+                                        'route'        => 'employeur',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\Employeur', 'index'),
+                                        'order'        => 20,
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -75,11 +127,11 @@ return [
     ],
 
     'bjyauthorize' => [
-        'guards'             => [
+        'guards'         => [
             PrivilegeController::class      => [
                 [
                     'controller' => 'Application\Controller\Employeur',
-                    'action'     => ['index', 'recherche-json'],
+                    'action'     => ['index', 'recherche-json', 'saisie'],
                     'privileges' => Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION,
                 ],
             ],
@@ -89,12 +141,7 @@ return [
                     'roles'      => ['user']],
             ],
         ],
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'Employeur' => [],
-            ],
-        ],
-        'rule_providers'     => [
+        'rule_providers' => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
                     [

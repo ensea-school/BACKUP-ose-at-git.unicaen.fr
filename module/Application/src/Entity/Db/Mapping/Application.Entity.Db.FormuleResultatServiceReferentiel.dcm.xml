@@ -11,7 +11,7 @@
         <join-column name="FORMULE_RESULTAT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel">
+    <many-to-one field="serviceReferentiel" target-entity="Referentiel\Entity\Db\ServiceReferentiel">
       <join-columns>
         <join-column name="SERVICE_REFERENTIEL_ID" referenced-column-name="ID"/>
       </join-columns>

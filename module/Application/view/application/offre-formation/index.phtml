@@ -16,8 +16,8 @@ use Application\Provider\Privilege\Privileges;
 
 /**
  * @param \Application\Entity\Db\Structure $structure
- * @param \Application\Entity\NiveauEtape $niveau
- * @param \Application\Entity\Db\Etape $etape
+ * @param \Application\Entity\NiveauEtape  $niveau
+ * @param \Application\Entity\Db\Etape     $etape
  */
 function makeQuery($structure = null, $niveau = null, $etape = null)
 {
@@ -77,9 +77,10 @@ if ($structure) {
 }
 $this->headTitle()->append("Offre de formation");
 
-$canExport = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV)) && count($elements);
-$canViewEtape = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
+$canExport      = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV)) && count($elements);
+$canViewEtape   = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
 $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
+$canEditEtape   = $this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION);
 $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELEMENT_SYNCHRONISATION));
 ?>
 <style>
@@ -93,12 +94,12 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
     }
 
     /*th.action, td.action { min-width: 70px; }*/
-    div.element-rech div.panel-body label,
-    div.element-rech div.panel-body input {
+    div.card-body label,
+    div.card-body input {
         display: inline;
     }
 
-    div.element-rech div.panel-body input.form-control {
+    div.card-body input.form-control {
         width: 75%
     }
 </style>
@@ -112,15 +113,15 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
     <div class="col-md-3">
 
         <!---------------- Champ de sélection d'une structure --------------->
-        <div class="panel panel-default">
-            <div class="panel-heading">Structure</div>
-            <div class="panel-body">
+        <div class="card bg-default">
+            <div class="card-header">Structure</div>
+            <div class="card-body">
                 <?php
                 $selectStructure = new \Laminas\Form\Element\Select('structure');
                 $selectStructure
                     ->setValueOptions(['' => "(Sélectionnez...)"] + \UnicaenApp\Util::collectionAsOptions($structures))
                     ->setValue($structure ? $structure->getId() : null)
-                    ->setAttributes(['class' => 'struct']);
+                    ->setAttributes(['class' => 'struct form-select']);
                 echo $this->formSelect($selectStructure);
                 ?>
                 <script>
@@ -135,13 +136,10 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
         </div>
 
         <!---------------- Filtre niveau --------------->
-        <div class="panel panel-default">
-            <div class="panel-heading">Niveau</div>
-            <div class="panel-body">
-                Cliquez sur le niveau dont vous voulez voir les formations et enseignements...
-            </div>
+        <div class="card bg-default">
+            <div class="card-header">Niveau</div>
             <?php if (count($niveaux)): ?>
-                <ul class="list-group">
+                <ul class="list-group list-group-flush">
                     <?php foreach ($niveauxItems as $ni): ?>
                         <?php if (($niveau === $ni['niveau']) || ($niveau && $ni['niveau'] && $niveau->getId() === $ni['niveau']->getId())): ?>
                             <li class="list-group-item active"><strong><?= $ni['label'] ?></strong></li>
@@ -154,7 +152,12 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </ul>
+            <?php else: ?>
+                <div class="card-body">
+                    Cliquez sur le niveau dont vous voulez voir les formations et enseignements...
+                </div>
             <?php endif; ?>
+
             <script>
                 $("body").on("click", "a.niveau", function (event) {
                     $("*").css('cursor', 'wait');
@@ -163,16 +166,13 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
         </div>
 
         <!---------------- Filtre étape --------------->
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card bg-default">
+            <div class="card-header">
                 Formation
-                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<i class="fas fa-plus"></i>', ['class' => 'btn-xs', 'style' => 'float:right'], $structure) ?>
-            </div>
-            <div class="panel-body">
-                Cliquez sur la formation dont vous voulez voir les enseignements...
+                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<i class="fas fa-plus"></i>', ['class' => 'btn-sm', 'style' => 'float:right'], $structure) ?>
             </div>
             <?php if (count($etapes)): ?>
-                <ul class="list-group">
+                <ul class="list-group list-group-flush">
                     <?php foreach ($etapesItems as $ei): ?>
                         <?php if ($etape === $ei['etape']): ?>
                             <li class="list-group-item active">
@@ -185,13 +185,17 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                         <?php endif; ?>
                         <?php
                         if ($canViewEtape && $ei['etape']) {
-                            echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-default btn-xs fas fa-magnifying-glass" style="float:right"></span>');
+                            echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-secondary btn-sm" style="float:right"><i class="fas fa-magnifying-glass"></i></span>');
                         }
                         ?>
                         <div style="clear: both"></div>
                         </li>
                     <?php endforeach; ?>
                 </ul>
+            <?php else: ?>
+                <div class="card-body">
+                    Cliquez sur la formation dont vous voulez voir les enseignements...
+                </div>
             <?php endif; ?>
             <script>
                 $("body").on("click", "a.etape", function (event) {
@@ -211,16 +215,21 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
         <?php else: ?>
 
             <!---------------- Champ de recherche d'un élément pédagogique --------------->
-            <div class="element-rech panel panel-default">
-                <div class="panel-heading" style="margin-bottom:1em">
+            <?php if ($canEditEtape && $compl = $etape && $etape->estHistorise()):
+                echo "<br />" . $this->tag('a', ['class' => 'btn btn-primary', 'href' => $this->url('of/etape/restaurer', ['etape' => $etape->getId()])])->html('Restaurer la formation');
+            endif; ?>
+
+            <div class="card bg-default">
+                <div class="card-header" style="margin-bottom:1em">
                     <?php $compl = $etape ? "de la formation <strong>$etape</strong>" : "toutes formations confondues"; ?>
                     Enseignements <?= $compl ?>
                     <!--------------- Bouton d'ajout d'élément pédagogique --------------->
+                    <span class="float-end">
                     <?php
                     if ($canSyncElement && $structure && $serviceSchema->isImportedEntity($structure)) {
                         $attrs = [
                             'href'       => $this->url('of/element/synchronisation-par-code', [], ['query' => ['structure' => $structure->getId()]]),
-                            'class'      => ['element-pedagogique-synchronisation', 'ajax-modal', 'iconify', 'btn', 'btn-default', 'pull-right', 'btn-xs'],
+                            'class'      => ['element-pedagogique-synchronisation', 'ajax-modal', 'iconify', 'btn', 'btn-secondary', 'btn-sm'],
                             'data-event' => 'element-pedagogique-synchronisation',
                             'title'      => 'Importer ou synchroniser un enseignement',
                         ];
@@ -229,14 +238,14 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                     if ($canEditElement) {
                         $attrs = [
                             'href'       => $this->url('of/element/ajouter'),
-                            'class'      => ['element-pedagogique-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-default', 'pull-right', 'btn-xs'],
+                            'class'      => ['element-pedagogique-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-secondary', 'btn-sm'],
                             'data-event' => 'element-pedagogique-ajouter',
                             'title'      => 'Ajouter un enseignement',
                         ];
                         echo $this->tag('a', $attrs)->html('<i class="fas fa-plus"></i> Nouvel enseignement');
                     }
                     if ($canExport) {
-                        $params = [
+                        $params      = [
                             'structure' => $structure ? $structure->getId() : null,
                             'niveau'    => $niveau ? $niveau->getId() : null,
                             'etape'     => $etape ? $etape->getId() : null,
@@ -244,7 +253,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                         $urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $params]);
 
                         ?>
-                        <a class="pull-right btn btn-default btn-xs" href="<?= $urlExportOf ?>">
+                        <a class="btn btn-secondary btn-sm" href="<?= $urlExportOf ?>">
                             <i class="fas fa-upload"></i> Télécharger (CSV)
                         </a>
                         <?php
@@ -252,11 +261,11 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
 
 
                     ?>
-
+                    </span>
                 </div>
 
                 <!---------------- Tableau des éléments pédagogiques --------------->
-                <table class="table table-bordered table-condensed table-hover table-sort">
+                <table class="table table-bordered table-sm table-hover table-sort">
                     <thead>
                     <tr>
                         <th colspan="2">Formation</th>
@@ -273,6 +282,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                     </tr>
                     </thead>
                     <tbody>
+
                     <?php foreach ($elements as $ep): /* @var $ep \Application\Entity\Db\ElementPedagogique */ ?>
                         <tr id="<?= $ep->getId() ?>">
                             <td><?= $ep->getEtape()->getNiveauToString() ?></td>

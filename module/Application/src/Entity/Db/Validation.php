@@ -167,11 +167,11 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Add volumeHoraire
      *
-     * @param \Application\Entity\Db\VolumeHoraire $volumeHoraire
+     * @param \Enseignement\Entity\Db\VolumeHoraire $volumeHoraire
      *
      * @return self
      */
-    public function addVolumeHoraire(\Application\Entity\Db\VolumeHoraire $volumeHoraire)
+    public function addVolumeHoraire(\Enseignement\Entity\Db\VolumeHoraire $volumeHoraire)
     {
         $this->volumeHoraire[] = $volumeHoraire;
 
@@ -183,9 +183,9 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Remove volumeHoraire
      *
-     * @param \Application\Entity\Db\VolumeHoraire $volumeHoraire
+     * @param \Enseignement\Entity\Db\VolumeHoraire $volumeHoraire
      */
-    public function removeVolumeHoraire(\Application\Entity\Db\VolumeHoraire $volumeHoraire)
+    public function removeVolumeHoraire(\Enseignement\Entity\Db\VolumeHoraire $volumeHoraire)
     {
         $this->volumeHoraire->removeElement($volumeHoraire);
     }
@@ -207,11 +207,11 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Add volumeHoraireReferentiel
      *
-     * @param \Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
+     * @param \Referentiel\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
      *
      * @return self
      */
-    public function addVolumeHoraireReferentiel(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    public function addVolumeHoraireReferentiel(\Referentiel\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
     {
         $this->volumeHoraireReferentiel[] = $volumeHoraireReferentiel;
 
@@ -223,9 +223,9 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Remove volumeHoraireReferentiel
      *
-     * @param \Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
+     * @param \Referentiel\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
      */
-    public function removeVolumeHoraireReferentiel(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    public function removeVolumeHoraireReferentiel(\Referentiel\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
     {
         $this->volumeHoraireReferentiel->removeElement($volumeHoraireReferentiel);
     }

@@ -21,20 +21,20 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
 <div class="chargens-filtre">
     <label>Scénario : </label>
     <?= $this->formSelect($filtre->get('scenario')) ?>
-    <button class="btn btn-default" type="button" onclick="changeScenario()"><i class="fas fa-square-right"></i> Afficher</button>
+    <button class="btn btn-secondary" type="button" onclick="changeScenario()"><i class="fas fa-square-right"></i> Afficher</button>
 </div>
 <br/>
 
 <?php if ($scenario) {
     foreach ($seuils['structures'] as $sid => $structure): ?>
-        <div class="panel panel-default">
-            <div class="panel-heading panel-heading-h3">
+        <div class="card bg-default">
+            <div class="card-header card-header-h3">
                 <h3>
                     <?= $structure['libelle'] ?>
-                    <span class="pull-right" style="font-size:80%" id="heures-<?= $sid ?>"></span>
+                    <span class="float-end" style="font-size:80%" id="heures-<?= $sid ?>"></span>
                 </h3>
             </div>
-            <table class="table table-hover table-bordered seuils-dedoublement">
+            <table class="table table-hover table-xs table-bordered seuils-dedoublement">
                 <thead>
                 <tr>
                     <th style="width:30%">Type de formation</th>
@@ -80,7 +80,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
     <?php endforeach;
 } ?>
 
-<a class="btn btn-default" href="<?= $this->url('chargens'); ?>">
+<a class="btn btn-secondary" href="<?= $this->url('chargens'); ?>">
     <i class="fas fa-rotate-left" aria-hidden="true"></i>
     Retour au menu des charges d'enseignement
 </a>
@@ -94,9 +94,9 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
         $.ajax({
             type: 'POST',
             url: "<?= $scenario ? $this->url('chargens/seuil/modifier', ['scenario' => $scenario->getId()]) : null ?>",
-            data: {params: params},
+            data: params,
             success: function () {
-                alertFlash("Tri effectué", 'success', 3000);
+                alertFlash("Le nouveau seuil a bien été pris en compte", 'success', 3000);
                 seuilCalcHeures();
             },
         });

@@ -12,8 +12,10 @@ use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Application\Service\Traits\ContratServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
+use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 
 /**
@@ -22,8 +24,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class ValidationService extends AbstractEntityService
 {
-    use Traits\TypeValidationServiceAwareTrait;
-    use Traits\TypeVolumeHoraireServiceAwareTrait;
+    use TypeValidationServiceAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
     use ContratServiceAwareTrait;
 

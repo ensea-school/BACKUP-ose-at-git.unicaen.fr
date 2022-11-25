@@ -1,5 +1,4 @@
-CREATE
-OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
+CREATE OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
 WITH hs AS (
   SELECT contrat_id, SUM(heures) "serviceTotal", MAX("libelleAutres") "libelleAutres" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
 )
@@ -77,17 +76,17 @@ FROM (SELECT c.*,
                  )                                                                               "adresse",
              COALESCE(d.numero_insee, i.numero_insee)                                            "numInsee",
              si.libelle                                                                          "statut",
-             replace(ltrim(to_char(COALESCE(c.total_hetd, fr.total, 0), '999999.00')), '.', ',') "totalHETD",
-             replace(ltrim(to_char(COALESCE(th.valeur, 0), '999999.00')), '.', ',')              "tauxHoraireValeur",
-             COALESCE(to_char(th.histo_creation, 'dd/mm/YYYY'), 'TAUX INTROUVABLE')              "tauxHoraireDate",
-             to_char(COALESCE(v.histo_creation, c.histo_creation), 'dd/mm/YYYY')                 "dateSignature",
+             REPLACE(ltrim(to_char(COALESCE(c.total_hetd, fr.total, 0), '999999.00')), '.', ',') "totalHETD",
+             REPLACE(ltrim(to_char(COALESCE(th.valeur, 0), '999999.00')), '.', ',')              "tauxHoraireValeur",
+             COALESCE(to_char(th.histo_modification, 'dd/mm/YYYY'), 'TAUX INTROUVABLE')              "tauxHoraireDate",
+             to_char(COALESCE(v.histo_creation, a.date_debut), 'dd/mm/YYYY')                 "dateSignature",
              CASE
                  WHEN c.structure_id <> COALESCE(cp.structure_id, 0) THEN 'modifié'
                  ELSE 'complété' END                                                             "modifieComplete",
              CASE
                  WHEN s.aff_adresse_contrat = 1 THEN
                          ' signé à l''adresse suivante :' || chr(13) || chr(10) ||
-                         s.libelle_court || ' - ' || replace(ose_divers.formatted_adresse(
+                         s.libelle_court || ' - ' || REPLACE(ose_divers.formatted_adresse(
                                                                      s.adresse_precisions, s.adresse_lieu_dit,
                                                                      s.adresse_numero, s.adresse_numero_compl_id,
                                                                      s.adresse_voirie_id, s.adresse_voie,
@@ -95,7 +94,7 @@ FROM (SELECT c.*,
                                                                      s.adresse_pays_id
                                                                  ), chr(13), ' - ')
                  ELSE '' END                                                                     "exemplaire2",
-             replace(ltrim(to_char(COALESCE(hs."serviceTotal", 0), '999999.00')), '.', ',')      "serviceTotal",
+             REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal", 0), '999999.00')), '.', ',')      "serviceTotal",
              CASE
                  WHEN hs."libelleAutres" IS NOT NULL
                      THEN '*Dont type(s) intervention(s) : ' || hs."libelleAutres" END           "legendeAutresHeures",
@@ -106,21 +105,22 @@ FROM (SELECT c.*,
              CASE WHEN v.id IS NULL THEN 1 ELSE 0 END                                            est_projet,
              CASE WHEN LOWER(si.codes_corresp_2) = 'oui' THEN 1 ELSE 0 END                       est_atv
 
-      FROM contrat c
-               JOIN type_contrat tc ON tc.id = c.type_contrat_id
-               JOIN intervenant i ON i.id = c.intervenant_id
-               JOIN annee a ON a.id = i.annee_id
-               JOIN statut si ON si.id = i.statut_id
-               JOIN structure s ON s.id = c.structure_id
-               LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
-               JOIN civilite civ ON civ.id = COALESCE(d.civilite_id, i.civilite_id)
-               LEFT JOIN validation v ON v.id = c.validation_id AND v.histo_destruction IS NULL
-               JOIN type_volume_horaire tvh ON tvh.code = 'PREVU'
-               JOIN etat_volume_horaire evh ON evh.code = 'valide'
-               LEFT JOIN formule_resultat fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND
-                                                fr.etat_volume_horaire_id = evh.id
-               LEFT JOIN taux_horaire_hetd th
-                         ON c.histo_creation BETWEEN th.histo_creation AND COALESCE(th.histo_destruction, sysdate)
-               LEFT JOIN hs ON hs.contrat_id = c.id
-               LEFT JOIN contrat cp ON cp.id = c.contrat_id
-      WHERE c.histo_destruction IS NULL) ct
+  FROM
+              contrat               c
+         JOIN type_contrat         tc ON tc.id = c.type_contrat_id
+         JOIN intervenant           i ON i.id = c.intervenant_id
+         JOIN annee                 a ON a.id = i.annee_id
+         JOIN statut               si ON si.id = i.statut_id
+         JOIN structure             s ON s.id = c.structure_id
+    LEFT JOIN intervenant_dossier   d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
+         JOIN civilite            civ ON civ.id = COALESCE(d.civilite_id,i.civilite_id)
+    LEFT JOIN validation            v ON v.id = c.validation_id AND v.histo_destruction IS NULL
+         JOIN type_volume_horaire tvh ON tvh.code = 'PREVU'
+         JOIN etat_volume_horaire evh ON evh.code = 'valide'
+    LEFT JOIN formule_resultat     fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
+    LEFT JOIN taux_horaire_hetd    th ON th.valeur = OSE_FORMULE.GET_TAUX_HORAIRE_HETD(a.date_debut)
+    LEFT JOIN                      hs ON hs.contrat_id = c.id
+    LEFT JOIN contrat              cp ON cp.id = c.contrat_id
+  WHERE
+    c.histo_destruction IS NULL
+) ct

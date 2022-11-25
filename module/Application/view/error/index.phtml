@@ -32,7 +32,7 @@ $details = AppConfig::get('global', 'affichageErreurs') && isset($this->exceptio
             <h2><?= $this->translate('Previous exceptions') ?>:</h2>
             <ul class="unstyled">
                 <?php while ($e) : $id = uniqid('bloc_code_'); ?>
-                    <a role="button" data-toggle="collapse" href="#<?= $id ?>" aria-expanded="false"
+                    <a role="button" data-bs-toggle="collapse" href="#<?= $id ?>" aria-expanded="false"
                        aria-controls="collapseExample">
                         <?= get_class($e) ?>
                     </a><br/>

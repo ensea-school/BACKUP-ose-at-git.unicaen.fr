@@ -111,6 +111,9 @@ class OseAdmin
 
     public function getTags($minVersion = self::MIN_VERSION): array
     {
+        if (Dep::config('local')){
+            return [];
+        }
         if (false === $this->tags) {
             $this->tags = [];
 
@@ -154,6 +157,9 @@ class OseAdmin
 
     public function getBranches(): array
     {
+        if (Dep::config('local')){
+            return [];
+        }
         if (false === $this->branches) {
             $this->branches = [];
 

@@ -123,6 +123,7 @@ $.widget("ose.enseignements", {
 
     onAfterSaisie: function (serviceId) {
         var that = this;
+        console.log('onAfterSaisie');
         if (that.element.find("#service-" + serviceId + "-ligne").length) { // simple modification
             that.element.find("#service-" + serviceId + "-ligne").refresh({
                 details: that.element.find('#service-' + serviceId + '-volume-horaire-tr').css('display') == 'none' ? '0' : '1',
@@ -137,6 +138,7 @@ $.widget("ose.enseignements", {
                 'details': 1,
                 params: that.params
             });
+            console.log('nouveau');
             $.get(url, function (data) {
                 that.element.find("table:first > tbody:last").append(data);
                 that.onAfterChange();
@@ -282,9 +284,9 @@ $.widget("ose.enseignements", {
                     serviceId = data[i].value;
                 }
             }
-            if (serviceId) {
-                that.onAfterSaisie(serviceId);
-            }
+            // if (serviceId) {
+            that.onAfterSaisie(serviceId);
+            // }
 
         });
 

@@ -54,15 +54,9 @@ $(function ()
     });
 
     /* Services */
-    WidgetInitializer.add('enseignements', 'enseignements', function () {
-        WidgetInitializer.includeJs(Url('js/service.js'));
-    });
-    WidgetInitializer.add('service-form', 'serviceForm', function () {
-        WidgetInitializer.includeJs(Url('js/service.js'));
-    });
-    WidgetInitializer.add('service-filtres', 'serviceFiltres', function () {
-        WidgetInitializer.includeJs(Url('js/service.js'));
-    });
+    WidgetInitializer.add('enseignements', 'enseignements');
+    WidgetInitializer.add('service-form', 'serviceForm');
+    WidgetInitializer.add('service-filtres', 'serviceFiltres');
 
     /* Service référentiel */
     WidgetInitializer.add('referentiels', 'referentiels', function () {

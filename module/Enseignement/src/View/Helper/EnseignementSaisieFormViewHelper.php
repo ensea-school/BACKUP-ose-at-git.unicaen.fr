@@ -143,6 +143,8 @@ class EnseignementSaisieFormViewHelper extends AbstractViewHelper
     {
         $fservice = $this->form->get('service');
 
+        echo $this->getView()->inlineScript()->appendFile($this->getView()->basePath() . '/js/service.js');
+
         $res = $this->getView()->form()->openTag($this->form);
         if ($fservice->has('intervenant')) {
             $res .= $this->getView()->formControlGroup($fservice->get('intervenant'));

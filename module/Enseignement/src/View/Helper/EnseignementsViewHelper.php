@@ -133,6 +133,8 @@ class EnseignementsViewHelper extends AbstractViewHelper
             'data-params' => json_encode($this->exportParams()),
         ];
 
+        echo $this->getView()->inlineScript()->appendFile($this->getView()->basePath() . '/js/service.js');
+
         $out = '<div ' . $this->htmlAttribs($attribs) . '>';
         if (count($this->getServices()) > 150) {
             return $out . '<div class="alert alert-danger" role="alert">Le nombre de services à afficher est trop important. Merci d\'affiner vos critères de recherche.</div></div>';

@@ -10,6 +10,8 @@ if ($rechercheForm):
             margin-right: 3px;
         }
     </style>
+
+    <?= $this->getView()->inlineScript()->appendFile($this->getView()->basePath() . '/js/service.js'); ?>
     <div class="service-filtres">
         <div class="card bg-default filter">
 

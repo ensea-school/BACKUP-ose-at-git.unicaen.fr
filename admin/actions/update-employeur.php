@@ -12,7 +12,10 @@ ini_set('memory_limit', '-1');
 $importDirectory = $osedir . 'cache/employeurs/';
 $importArchive = 'employeurs.tar.gz';
 $importFilePath = $importDirectory . $importArchive;
-mkdir($importDirectory);
+if (!file_exists($importDirectory)) {
+    mkdir($importDirectory);
+}
+
 if (file_exists($importFilePath)) {
     unlink($importFilePath);
 }
@@ -23,16 +26,30 @@ if (!file_exists($importFilePath)) {
     $c->printDie("L'archive $importArchive manquante");
 }
 //On vérifie que le répertoire import contient uniquement l'archive et aucun autre CSV
+
 $listFiles = preg_grep('~\.(csv)$~', scandir($importDirectory));
 if (count($listFiles) > 0) {
     $c->printDie("Merci de supprimer les fichiers CSV présents dans le dossier $importDirectory");
 }
 //Extraction du PharData
-//$phar = new PharData($importFilePath);
-//$phar->extractTo($importDirectory);
+$phar = new PharData($importFilePath);
+$phar->extractTo($importDirectory);
 exec('cd ' . $importDirectory . ' && tar -xvf ' . $importFilePath);
 //Verification si des SIRET sont déjà chargé en base
 $bdd = $oa->getBdd();
+
+//On vérifie si la source INSEE existe dans OSE
+
+$haveAlreadyInseeSource = $bdd->select("SELECT * FROM source WHERE code='INSEE'", [], ['fetch' => $bdd::FETCH_ONE]);
+if (!($haveAlreadyInseeSource)) {
+    $idSource = $bdd->sequenceNextVal('SOURCE_ID_SEQ');
+    $bdd->exec("INSERT INTO source (id, code, libelle, importable) VALUES ($idSource, 'INSEE', 'INSEE', 1)");
+    //Le source INSEE n'existe pas encore, donc on migre tout ce qui est source OSE vers source INSEE
+    $bdd->exec("UPDATE employeur SET source_id = $idSource");
+} else {
+    $idSource = $haveAlreadyInseeSource['ID'];
+}
+
 //$haveAlreadySiret     = $bdd->select("SELECT siret FROM employeur e WHERE siret IS NOT null FETCH FIRST 5 ROWS ONLY", [], ['fetch' => $bdd::FETCH_ONE]);
 $haveAlreadySiret = $bdd->select("SELECT siret FROM (SELECT siret, rownum AS rn FROM employeur e WHERE siret IS NOT NULL) e WHERE e.rn < 10", [], ['fetch' => $bdd::FETCH_ONE]);
 $haveAlreadyEmployeur = $bdd->select("SELECT * FROM employeur e");
@@ -40,6 +57,7 @@ $haveAlreadyEmployeur = $bdd->select("SELECT * FROM employeur e");
 
 //récupération de la liste des fichiers CSV
 $listFiles = preg_grep('~\.(csv)$~', scandir($importDirectory));
+
 $nbFiles = count($listFiles);
 $i = 1;
 $c->println("Nombre de fichier à charger : $nbFiles", $c::COLOR_LIGHT_GREEN);
@@ -50,11 +68,15 @@ foreach ($listFiles as $file) {
     $num = str_replace('.csv', '', $file);
 
     $c->println("Chargement du fichier employeur N° $i sur $nbFiles");
+
     $csvFile = fopen($importDirectory . $file, "r");
+
     $row = 0;
     $datas = [];
 
     while (($data = fgetcsv($csvFile, 1000, ",")) !== false) {
+
+
         /*
         * $data[0] = Siren
         * $data[1] = Etat Administratif
@@ -115,7 +137,7 @@ foreach ($listFiles as $file) {
         $data['RAISON_SOCIALE'] = $raisonSociale;
         $data['NOM_COMMERCIAL'] = $nomCommercial;
         $data['SOURCE_CODE'] = $siret;
-        $data['SOURCE_ID'] = $oseSource;
+        $data['SOURCE_ID'] = $idSource;
         $data['IDENTIFIANT_ASSOCIATION'] = $identifiantAssociation;
         $data['HISTO_DESTRUCTEUR_ID'] = null;
         $data['HISTO_DESTRUCTION'] = null;
@@ -123,8 +145,8 @@ foreach ($listFiles as $file) {
         $data['CRITERE_RECHERCHE'] = reduce($raisonSociale . ' ' . $nomCommercial . ' ' . $siren . ' ' . $siret);
         $datas[] = $data;
         $options['histo-user-id'] = $oseId;
-        $options['where'] = 'SIREN LIKE \'' . $num . '%\' AND SOURCE_ID = (SELECT id FROM source WHERE code = \'OSE\') AND SIREN NOT IN (\'999999999\', \'000000000000\')';
-        $options['soft-delete'] = false;
+        $options['where'] = 'SIREN LIKE \'' . $num . '%\' AND SOURCE_ID = (SELECT id FROM source WHERE code = \'INSEE\') AND SIREN NOT IN (\'999999999\', \'000000000000\')';
+        $options['delete'] = false;
     }
 
     $i++;
@@ -135,13 +157,14 @@ foreach ($listFiles as $file) {
         $tableEmployeur->merge($datas, 'SIRET', $options);
     }
 }
+
 //On remet l'insertion de l'employeur étrangé
 $data = [];
 $data['SIREN'] = '999999999';
 $data['RAISON_SOCIALE'] = 'EMPLOYEUR ETRANGÉ';
 $data['NOM_COMMERCIAL'] = 'EMPLOYEUR ETRANGÉ';
 $data['SOURCE_CODE'] = '999999999';
-$data['SOURCE_ID'] = $oseSource;
+$data['SOURCE_ID'] = $idSource;
 $data['IDENTIFIANT_ASSOCIATION'] = null;
 $data['HISTO_DESTRUCTEUR_ID'] = null;
 $data['HISTO_DESTRUCTION'] = null;
@@ -159,7 +182,7 @@ $data['SIREN'] = '000000000000';
 $data['RAISON_SOCIALE'] = 'Employeur non présent dans la liste';
 $data['NOM_COMMERCIAL'] = 'Employeur non présent dans la liste';
 $data['SOURCE_CODE'] = '000000000000';
-$data['SOURCE_ID'] = $oseSource;
+$data['SOURCE_ID'] = $idSource;
 $data['IDENTIFIANT_ASSOCIATION'] = null;
 $data['HISTO_DESTRUCTEUR_ID'] = null;
 $data['HISTO_DESTRUCTION'] = null;

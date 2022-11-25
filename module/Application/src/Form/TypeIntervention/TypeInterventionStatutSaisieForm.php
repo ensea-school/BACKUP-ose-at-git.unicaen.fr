@@ -108,7 +108,7 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
                     new \Laminas\Validator\Callback([
                         'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
-                            return (StringFromFloat::run($value) >= 0.0 ? true : false);
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
                         }]),
                 ],
             ],

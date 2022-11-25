@@ -339,12 +339,17 @@ class PlafondService extends AbstractEntityService
                     $view .= "\n  p.$col,";
                 }
             }
-            $view     .= "\n  COALESCE(p.PLAFOND,ps.heures,0) PLAFOND,";
-            $view     .= "\n  CASE";
-            $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN ps.plafond_etat_prevu_id";
-            $view     .= "\n    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN ps.plafond_etat_realise_id";
-            $view     .= "\n    ELSE COALESCE(p.plafond_etat_id,1)";
-            $view     .= "\n  END plafond_etat_id,";
+            $view .= "\n  COALESCE(p.PLAFOND,ps.heures,0) PLAFOND,";
+            if ($perimetre->getCode() !== $perimetre::VOLUME_HORAIRE) {
+                $view .= "\n  CASE";
+                $view .= "\n    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN ps.plafond_etat_prevu_id";
+                $view .= "\n    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN ps.plafond_etat_realise_id";
+                $view .= "\n    ELSE COALESCE(p.plafond_etat_id,1)";
+                $view .= "\n  END plafond_etat_id,";
+            } else {
+                $view .= "\n  COALESCE(p.plafond_etat_id,1) plafond_etat_id,";
+            }
+
             $view     .= "\n  COALESCE(pd.heures, 0) derogation,";
             $view     .= "\n  CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement";
             $view     .= "\nFROM\n  (";
@@ -383,10 +388,14 @@ class PlafondService extends AbstractEntityService
             $view .= "\n  LEFT JOIN " . $configTablesJoin[$perimetre->getCode()];
             $view .= "\n  LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL";
             $view .= "\nWHERE\n";
-            $view .= "  CASE\n";
-            $view .= "    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN ps.plafond_etat_prevu_id\n";
-            $view .= "    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN ps.plafond_etat_realise_id\n";
-            $view .= "  END IS NOT NULL";
+            if ($perimetre->getCode() !== $perimetre::VOLUME_HORAIRE) {
+                $view .= "  CASE\n";
+                $view .= "    WHEN p.type_volume_horaire_id = $tvhPrevuId THEN ps.plafond_etat_prevu_id\n";
+                $view .= "    WHEN p.type_volume_horaire_id = $tvhRealiseId THEN ps.plafond_etat_realise_id\n";
+                $view .= "  END IS NOT NULL";
+            } else {
+                $view .= "  1=1";
+            }
             foreach ($cols as $col) {
                 if ($col != 'PLAFOND' && $col != 'HEURES' && $col != 'DEROGATION') {
                     $view .= "\n  /*@$col=p.$col*/";

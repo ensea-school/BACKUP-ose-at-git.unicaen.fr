@@ -109,7 +109,7 @@ class LigneEnseignementViewHelper extends AbstractViewHelper
             if ($liste->getColumnVisibility('formation')) {
                 $out .= '<td>';
                 if ($element && $element->getCheminPedagogique()->count() > 1) {
-                    $out .= '<small class="badge" style="font-size:8pt" title="Enseignement mutualisé entre plusieures formations. Seule la formation principale est présentée ci-dessous">Enseignement mutualisé</small><br />';
+                    $out .= '<small class="badge bg-secondary" style="font-size:8pt" title="Enseignement mutualisé entre plusieures formations. Seule la formation principale est présentée ci-dessous">Enseignement mutualisé</small><br />';
                 }
                 $out .= $this->renderEtape($element ? $element->getEtape() : null) . "</td>\n";
             }

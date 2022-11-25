@@ -165,9 +165,6 @@ return [
                       'update-only-null' => ['CSV_PARAMS', 'CSV_TRAITEMENT', 'PDF_TRAITEMENT'],
         ],
     ],
-    'MODELE_CONTRAT'             => [
-        'actions' => ['install'],
-    ],
     'ROLE'                       => [
         'actions' => ['install'],
         'key'     => 'CODE',

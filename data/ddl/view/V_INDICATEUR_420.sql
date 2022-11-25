@@ -1,7 +1,7 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_420 AS
 SELECT DISTINCT
   w.intervenant_id,
-  w.structure_id
+  i.structure_id
 FROM
   tbl_workflow w
   JOIN intervenant  i ON w.intervenant_id = i.id

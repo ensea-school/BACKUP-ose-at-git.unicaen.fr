@@ -33,10 +33,6 @@
 
 /* Texte & nombres */
 
-* {
-    font-family: Open Sans;
-}
-
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family: "Open Sans", Helvetica, Arial, sans-serif;
     font-weight: 200;
@@ -57,6 +53,7 @@ span.number span.number-dec-00 {
 
 body {
     background-color: #f8f8fa;
+    font-family: "Open Sans";
 }
 
 body.wait * {

@@ -23,6 +23,7 @@ SELECT
   t.PONDERATION_SERVICE_COMPL,
   t.SERVICE_STATUTAIRE,
   t.HEURES,
+  t.PERIODE_ID,
   t.HORAIRE_DEBUT,
   t.HORAIRE_FIN,
   t.TYPE_INTERVENTION_CODE,
@@ -54,6 +55,7 @@ SELECT
   COALESCE(tf.service_statutaire,1)                                    service_statutaire,
 
   vh.heures                                                            heures,
+  vh.periode_id                                                        periode_id,
   vh.horaire_debut                                                     horaire_debut,
   vh.horaire_fin                                                       horaire_fin,
   ti.code                                                              type_intervention_code,
@@ -129,6 +131,7 @@ SELECT
   COALESCE(fr.service_statutaire,1) service_statutaire,
 
   vhr.heures                        heures,
+  null                              periode_id,
   vhr.horaire_debut                 horaire_debut,
   vhr.horaire_fin                   horaire_fin,
   null                              type_intervention_code,

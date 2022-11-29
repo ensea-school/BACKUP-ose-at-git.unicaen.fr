@@ -392,10 +392,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     </table>
     <div>
         <h2>Informations de débogage
-            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-target="#debug-info"
-                    aria-expanded="false" aria-controls="debug-info">
-                Afficher/masquer
-            </button>
+            <a class="btn btn-secondary btn-sm" data-bs-toggle="collapse" href="#debug-info">Afficher/masquer</a>
         </h2>
         <div class="collapse debug-info" id="debug-info"></div>
     </div>

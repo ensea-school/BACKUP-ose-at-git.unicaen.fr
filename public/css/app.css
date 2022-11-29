@@ -27392,6 +27392,11 @@ dd, dt {
   background-image: none;
 }
 
+.danger-light {
+  background-color: #dc4c64;
+  color: #fff;
+}
+
 /* -------------- Personnalisation du bootstrap-select -------------- */
 .bootstrap-select .btn {
   box-shadow: none;

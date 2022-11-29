@@ -173,16 +173,34 @@ class ElementPedagogiqueController extends AbstractController
                     $item['LIBELLE_ETAPE'] = 'Enseignement commun à plusieurs parcours';
                 }
 
-                $extra = '';
-                if (!$niveau) {
-                    $extra .= sprintf('<span class="niveau" title="%s">%s</span>', "Niveau", $item['LIBELLE_GTF'] . $item['NIVEAU']);
-                }
-                if (!$etape) {
-                    $extra .= sprintf('<span class="etape" title="%s">%s</span>', "Formation", $item['LIBELLE_ETAPE']);
-                }
-                $extra .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
 
-                $template = sprintf('<span class="extra">{extra}</span><span class="element" title="%s">{label}</span>', "Enseignement");
+                //TODO : verif sur has_type_intervention --> changer title and mettre bg-danger-light --> créer nouvelle regle CSS rouge claire
+                $extra = '';
+                $template = '';
+                if($item['HAS_TYPE_INTERVENTION'] == 1){
+                    if (!$niveau) {
+                        $extra .= sprintf('<span class="niveau" title="%s">%s</span>', "Niveau", $item['LIBELLE_GTF'] . $item['NIVEAU']);
+                    }
+                    if (!$etape) {
+                        $extra .= sprintf('<span class="etape" title="%s">%s</span>', "Formation", $item['LIBELLE_ETAPE']);
+                    }
+                    $extra .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
+                    $template = sprintf('<span class="extra">{extra}</span><span class="element" title="%s">{label}</span>', "Enseignement");
+
+                }else{
+                    $SaisieImpossible = "Saisie impossible sur cet élément pédagogique : aucun type d'intervention associé";
+                    if (!$niveau) {
+                        $extra .= sprintf('<span class="niveau" title="%s">%s</span>', $SaisieImpossible, $item['LIBELLE_GTF'] . $item['NIVEAU']);
+                    }
+                    if (!$etape) {
+                        $extra .= sprintf('<span class="etape" title="%s">%s</span>', $SaisieImpossible, $item['LIBELLE_ETAPE']);
+                    }
+                    $extra .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="periode" title="%s">%s</span>', $SaisieImpossible, $item['LIBELLE_PE']) : null;
+                    $template = sprintf('<span class="extra danger-light">{extra}</span><span class="element danger-light" title="%s">{label}</span>', $SaisieImpossible);
+                }
+
+
+
                 $result[] = [
                     'id'       => $item['ID'],
                     'label'    => $item['CODE'] . ' ' . $item['LIBELLE'],

@@ -133,7 +133,8 @@ select * from (
     pe.libelle_long libelle_pe,
     gtf.libelle_court libelle_gtf,
     tf.libelle_long libelle_tf,
-    ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info
+    ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info,
+    CASE WHEN tiep.element_pedagogique_id is NULL THEN 0 ELSE 1 END has_type_intervention
   from
     chemin_pedagogique cp
     JOIN element_pedagogique ep ON$af cp.element_pedagogique_id = ep.id  AND ep.histo_destruction IS NULL$orEp
@@ -142,6 +143,7 @@ select * from (
     JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID
     JOIN structure s ON s.id = e.structure_id OR s.id = ep.structure_id
     LEFT JOIN periode pe ON ep.periode_id = pe.id
+    LEFT JOIN (SELECT DISTINCT element_pedagogique_id FROM type_intervention_ep WHERE histo_destruction IS NULL) tiep ON tiep.element_pedagogique_id = ep.id
   where
     (cp.histo_destruction IS NULL$orCp)
     and $whereTerm

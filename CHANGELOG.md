@@ -46,6 +46,8 @@
 * Correction sur le script de mise à jour des employeurs
 * Correction sur les notes de l'intervenant au niveau de l'historique (#46303)
 * Vue V_IMPORT_DEPUIS_DOSSIERS permettant de réinjecter les données personnelles dans les fiches corrigée (pb de filtre année) (#46769)
+* Formule de calcul du Havre mise à jour
+* Correction de bug dans la formule de Picardie
 
 
 

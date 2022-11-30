@@ -877,7 +877,7 @@ return [
     'UTILISATEUR' => [
         [
             'USERNAME'             => 'oseappli',
-            'EMAIL'                => 'dsi.applications@unicaen.fr',
+            'EMAIL'                => 'votre_mail@votre_etablissement.fr',
             'DISPLAY_NAME'         => 'Application OSE',
             'PASSWORD'             => 'x',
             'STATE'                => 1,

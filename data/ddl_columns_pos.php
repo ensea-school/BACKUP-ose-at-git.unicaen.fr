@@ -1301,6 +1301,8 @@ return [
         'REFERENTIEL_REALISE_VISU',
         'CONTRAT_ETAT_SORTIE_ID',
         'TAUX_CHARGES_TTC',
+        'CONTRAT_GENERATION',
+        'MODIF_SERVICE_DU_EDITION',
     ],
     'STRUCTURE'                      => [
         'ID',

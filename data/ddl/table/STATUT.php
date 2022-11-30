@@ -189,18 +189,6 @@ return [
             'position'    => 50,
             'commentaire' => NULL,
         ],
-        'CONTRAT_GENERATION'                  => [
-            'name'        => 'CONTRAT_GENERATION',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 50,
-            'commentaire' => NULL,
-        ],
         'CONTRAT_ETAT_SORTIE_ID'         => [
             'name'        => 'CONTRAT_ETAT_SORTIE_ID',
             'type'        => 'int',
@@ -211,6 +199,18 @@ return [
             'nullable'    => TRUE,
             'default'     => NULL,
             'position'    => 80,
+            'commentaire' => NULL,
+        ],
+        'CONTRAT_GENERATION'             => [
+            'name'        => 'CONTRAT_GENERATION',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 82,
             'commentaire' => NULL,
         ],
         'CONTRAT_VISUALISATION'          => [
@@ -681,8 +681,8 @@ return [
             'position'    => 62,
             'commentaire' => NULL,
         ],
-        'MODIF_SERVICE_DU_VISUALISATION' => [
-            'name'        => 'MODIF_SERVICE_DU_VISUALISATION',
+        'MODIF_SERVICE_DU_EDITION'       => [
+            'name'        => 'MODIF_SERVICE_DU_EDITION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
@@ -690,11 +690,11 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 63,
+            'position'    => 83,
             'commentaire' => NULL,
         ],
-        'MODIF_SERVICE_DU_EDITION' => [
-            'name'        => 'MODIF_SERVICE_DU_EDITION',
+        'MODIF_SERVICE_DU_VISUALISATION' => [
+            'name'        => 'MODIF_SERVICE_DU_VISUALISATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

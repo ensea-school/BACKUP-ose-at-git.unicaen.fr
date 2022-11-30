@@ -2115,6 +2115,30 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
     ],
+    'MISSION_TAUX_REMU'              => [
+        'ID',
+        'CODE',
+        'LIBELLE',
+    ],
+    'MISSION_TAUX_REMU_VALEUR'       => [
+        'ID',
+        'MISSION_TAUX_REMU_ID',
+        'DATE_EFFET',
+        'VALEUR',
+    ],
+    'TYPE_MISSION'                   => [
+        'ID',
+        'CODE',
+        'LIBELLE',
+        'MISSION_TAUX_REMU_ID',
+        'ANNEE_ID',
+        'HISTO_CREATION',
+        'HISTO_CREATEUR_ID',
+        'HISTO_MODIFICATION',
+        'HISTO_MODIFICATEUR_ID',
+        'HISTO_DESTRUCTION',
+        'HISTO_DESTRUCTEUR_ID',
+    ],
 ];
 
 //@formatter:on

@@ -193,7 +193,7 @@ return [
     "AGREE"            : { "visible": false },
     "ANNEE": { "libelle": "Année"},
     "INTERVENANT_CODE": { "libelle": "Code intervenant"},
-    "STRUCTURE_LIBELLE": {"libelle": "Structure hiérarchique"},
+    "STRUCTURE_LIBELLE": {"libelle": "Structure d\'enseignement"},
     "INTERVENANT_STRUCTURE_LIBELLE": {"libelle": "Structure d\'affectation"},
     "INTERVENANT_NOM_USUEL": {"libelle": "Nom usuel"},
     "INTERVENANT_NOM_PATRONYMIQUE": {"libelle": "Nom patronymique"},

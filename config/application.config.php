@@ -108,6 +108,7 @@ class AppConfig
             'Service',
             'Enseignement',
             'Referentiel',
+            'Mission',
             'Plafond',
             'Indicateur',
             'ExportRh',

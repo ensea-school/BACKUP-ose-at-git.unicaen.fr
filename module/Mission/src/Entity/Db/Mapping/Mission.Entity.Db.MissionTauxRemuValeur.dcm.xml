@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Mission\Entity\Db\MissionTauxRemuValeur" table="MISSION_TAUX_REMU_VALEUR">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <many-to-one field="missionTauxRemu" target-entity="Mission\Entity\Db\MissionTauxRemu">
+            <join-column name="MISSION_TAUX_REMU_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="dateEffet" type="datetime" column="DATE_EFFET" nullable="false"/>
+        <field name="valeur" type="float" column="VALEUR" precision="126" scale="0" nullable="false"/>
+    </entity>
+</doctrine-mapping>

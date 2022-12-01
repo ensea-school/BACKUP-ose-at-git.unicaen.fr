@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'MISSION_TAUX_REMU_VALEU_ID_SEQ',
     'columns'     => [
         'DATE_EFFET'           => [
             'name'        => 'DATE_EFFET',

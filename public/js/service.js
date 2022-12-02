@@ -290,11 +290,11 @@ $.widget("ose.enseignements", {
 
         });
 
-        $("body").tooltip({
-            selector: 'a.volume-horaire',
-            placement: 'top',
-            title: "Cliquez pour ouvrir/fermer le formulaire de modification..."
-        });
+        /* this.element.find('a.volume-horaire').tooltip({
+             selector: 'a.volume-horaire',
+             placement: 'top',
+             title: "Cliquez pour ouvrir/fermer le formulaire de modification..."
+         });*/
 
         $("body").on('save-volume-horaire', function (event, popAjax) {
             var serviceId = popAjax.element.data('service');

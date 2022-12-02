@@ -58,8 +58,6 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const CONTRAT_DEPOT_RETOUR_SIGNE                           = 'contrat-depot-retour-signe';
     const CONTRAT_DEVALIDATION                                 = 'contrat-devalidation';
     const CONTRAT_ENVOI_EMAIL                                  = 'contrat-envoi-email';
-    const CONTRAT_MODELES_EDITION                              = 'contrat-modeles-edition';
-    const CONTRAT_MODELES_VISUALISATION                        = 'contrat-modeles-visualisation';
     const CONTRAT_PROJET_GENERATION                            = 'contrat-projet-generation';
     const CONTRAT_SAISIE_DATE_RETOUR_SIGNE                     = 'contrat-saisie-date-retour-signe';
     const CONTRAT_SUPPRESSION                                  = 'contrat-suppression';
@@ -252,6 +250,10 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const REFERENTIEL_SAISIE_TOUTES_COMPOSANTES                = 'referentiel-saisie-toutes-composantes';
     const STRUCTURES_ADMINISTRATION_EDITION                    = 'structures-administration-edition';
     const STRUCTURES_ADMINISTRATION_VISUALISATION              = 'structures-administration-visualisation';
+    const TAG_ADMINISTRATION_EDITION                           = 'tag-administration-edition';
+    const TAG_ADMINISTRATION_VISUALISATION                     = 'tag-administration-visualisation';
+    const TAG_EDITION                                          = 'tag-edition';
+    const TAG_VISUALISATION                                    = 'tag-visualisation';
     const TYPE_INTERVENTION_EDITION                            = 'type-intervention-edition';
     const TYPE_INTERVENTION_VISUALISATION                      = 'type-intervention-visualisation';
     const TYPE_RESSOURCE_EDITION                               = 'type-ressource-edition';

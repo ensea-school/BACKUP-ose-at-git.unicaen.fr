@@ -3,6 +3,7 @@
 namespace Enseignement\Entity\Db;
 
 use Application\Entity\Db\Contrat;
+use Application\Entity\Db\Traits\TagAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\FormuleResultatVolumeHoraire;
 use Application\Entity\Db\Periode;
@@ -28,30 +29,30 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     use ImportAwareTrait;
     use ServiceAwareTrait;
     use MotifNonPaiementAwareTrait;
+    use TagAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use TypeInterventionAwareTrait;
     use PeriodeAwareTrait;
 
-    protected ?int       $id             = null;
+    protected ?int $id = null;
 
-    protected ?float     $heures         = null;
+    protected ?float $heures = null;
 
-    protected ?\DateTime $horaireDebut   = null;
+    protected ?\DateTime $horaireDebut = null;
 
-    protected ?\DateTime $horaireFin     = null;
+    protected ?\DateTime $horaireFin = null;
 
-    protected ?Contrat   $contrat        = null;
+    protected ?Contrat $contrat = null;
 
-    protected bool       $autoValidation = false;
+    protected bool $autoValidation = false;
 
-    protected bool       $remove         = false;
+    protected bool $remove = false;
 
-    private Collection   $validation;
+    private Collection $validation;
 
-    private Collection   $etatVolumeHoraire;
+    private Collection $etatVolumeHoraire;
 
-    private Collection   $formuleResultatVolumeHoraire;
-
+    private Collection $formuleResultatVolumeHoraire;
 
 
     /**
@@ -60,10 +61,9 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     public function __construct()
     {
         $this->formuleResultatVolumeHoraire = new ArrayCollection();
-        $this->validation                   = new ArrayCollection();
-        $this->etatVolumeHoraire            = new ArrayCollection();
+        $this->validation = new ArrayCollection();
+        $this->etatVolumeHoraire = new ArrayCollection();
     }
-
 
 
     /**
@@ -88,7 +88,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     }
 
 
-
     public function setRemove($remove): VolumeHoraire
     {
         $this->remove = (boolean)$remove;
@@ -97,12 +96,10 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     }
 
 
-
     public function getRemove(): bool
     {
         return $this->remove;
     }
-
 
 
     public function setHeures(?float $heures): VolumeHoraire
@@ -113,12 +110,10 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     }
 
 
-
     public function getHeures(): ?float
     {
         return $this->heures;
     }
-
 
 
     public function getId(): ?int
@@ -127,12 +122,10 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     }
 
 
-
     public function setId(int $id)
     {
         $this->id = $id;
     }
-
 
 
     public function setContrat(?Contrat $contrat = null): VolumeHoraire
@@ -143,12 +136,10 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     }
 
 
-
     public function getContrat(): ?Contrat
     {
         return $this->contrat;
     }
-
 
 
     public function addValidation(Validation $validation): VolumeHoraire
@@ -159,14 +150,12 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     }
 
 
-
     public function removeValidation(Validation $validation): VolumeHoraire
     {
         $this->validation->removeElement($validation);
 
         return $this;
     }
-
 
 
     /**
@@ -185,7 +174,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
             return null;
         }
 
-        $filter      = function (Validation $validation) use ($type) {
+        $filter = function (Validation $validation) use ($type) {
             return $type === $validation->getTypeValidation();
         };
         $validations = $this->validation->filter($filter);
@@ -194,14 +183,12 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     }
 
 
-
     public function getEtatVolumeHoraire(): ?EtatVolumeHoraire
     {
         if (!$this->etatVolumeHoraire) return null;
 
         return $this->etatVolumeHoraire->first();
     }
-
 
 
     /**
@@ -226,12 +213,10 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     }
 
 
-
     public function getUniqueFormuleResultatVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): ?FormuleResultatVolumeHoraire
     {
         return $this->getFormuleResultatVolumeHoraire($typeVolumeHoraire, $etatVolumeHoraire)->first();
     }
-
 
 
     public function getResourceId(): string
@@ -240,12 +225,10 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     }
 
 
-
     public function isAutoValidation(): bool
     {
         return $this->autoValidation;
     }
-
 
 
     public function isValide(): bool
@@ -262,7 +245,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     }
 
 
-
     public function setAutoValidation(bool $autoValidation): VolumeHoraire
     {
         $this->autoValidation = $autoValidation;
@@ -271,12 +253,10 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     }
 
 
-
     public function getHoraireDebut(): ?\DateTime
     {
         return $this->horaireDebut;
     }
-
 
 
     public function setHoraireDebut(?\DateTime $horaireDebut): VolumeHoraire
@@ -287,12 +267,10 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     }
 
 
-
     public function getHoraireFin(): ?\DateTime
     {
         return $this->horaireFin;
     }
-
 
 
     public function setHoraireFin(?\DateTime $horaireFin): VolumeHoraire

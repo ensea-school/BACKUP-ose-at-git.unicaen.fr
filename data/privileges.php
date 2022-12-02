@@ -156,6 +156,15 @@ return [
             'administration-edition'       => 'Administration - Édition',
         ],
     ],
+    'tag'                => [
+        'libelle'    => 'Tag',
+        'privileges' => [
+            'visualisation'                => 'Visualisation',
+            'edition'                      => 'Édition',
+            'administration-visualisation' => 'Administration - Visualisation',
+            'administration-edition'       => 'Administration - Édition',
+        ],
+    ],
 
     'referentiel' => [
         'libelle'    => 'Référentiel',

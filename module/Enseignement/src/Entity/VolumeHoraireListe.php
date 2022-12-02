@@ -3,6 +3,7 @@
 namespace Enseignement\Entity;
 
 use Application\Entity\Db\Contrat;
+use Application\Entity\Db\Tag;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
@@ -140,6 +141,12 @@ class VolumeHoraireListe
     protected $motifNonPaiement = false;
 
     /**
+     * @var Tag
+     */
+    protected $tag = false;
+
+
+    /**
      * @var Contrat|boolean
      */
     protected $contrat = false;
@@ -162,11 +169,11 @@ class VolumeHoraireListe
     /**
      * @var Source|boolean
      */
-    protected      $source             = false;
+    protected $source = false;
 
     protected bool $filterByHistorique = true;
 
-    protected bool $new                = false;
+    protected bool $new = false;
 
     /**
      * @var object
@@ -174,12 +181,10 @@ class VolumeHoraireListe
     public $__debug;
 
 
-
     function __construct(Service $service)
     {
         $this->setService($service);
     }
-
 
 
     /**
@@ -203,12 +208,10 @@ class VolumeHoraireListe
     }
 
 
-
     public function getService(): Service
     {
         return $this->service;
     }
-
 
 
     public function setService(Service $service): VolumeHoraireListe
@@ -217,7 +220,6 @@ class VolumeHoraireListe
 
         return $this;
     }
-
 
 
     /**
@@ -323,7 +325,6 @@ class VolumeHoraireListe
     }
 
 
-
     private function timestamp(?\DateTime $dateTime): int
     {
         if ($dateTime instanceof \DateTime) {
@@ -334,7 +335,6 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      * @return Source|bool
      */
@@ -342,7 +342,6 @@ class VolumeHoraireListe
     {
         return $this->source;
     }
-
 
 
     /**
@@ -359,12 +358,10 @@ class VolumeHoraireListe
     }
 
 
-
     public function getFilterByHistorique(): bool
     {
         return $this->filterByHistorique;
     }
-
 
 
     public function setFilterByHistorique(bool $filterByHistorique): VolumeHoraireListe
@@ -376,12 +373,10 @@ class VolumeHoraireListe
     }
 
 
-
     public function getNew(): bool
     {
         return $this->new;
     }
-
 
 
     /**
@@ -396,7 +391,6 @@ class VolumeHoraireListe
 
         return $this;
     }
-
 
 
     /**
@@ -416,14 +410,13 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      * Retourne la liste des types d'intervention concernés par le service
      */
     public function getTypesIntervention(): array
     {
         $typesIntervention = [];
-        $vhs               = $this->getVolumeHoraires();
+        $vhs = $this->getVolumeHoraires();
         foreach ($vhs as $vh) {
             if (!isset($typesIntervention[$vh->getTypeIntervention()->getId()])) {
                 $typesIntervention[$vh->getTypeIntervention()->getId()] = $vh->getTypeIntervention();
@@ -432,7 +425,6 @@ class VolumeHoraireListe
 
         return $typesIntervention;
     }
-
 
 
     /**
@@ -453,14 +445,13 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      *
      * @return MotifNonPaiement[]
      */
     public function getMotifsNonPaiement(): array
     {
-        $mnps   = [];
+        $mnps = [];
         $vChild = $this->createChild();
         foreach ($this->getVolumeHoraires() as $volumeHoraire) {
             if ($mnp = $volumeHoraire->getMotifNonPaiement()) {
@@ -482,6 +473,33 @@ class VolumeHoraireListe
         return $mnps;
     }
 
+    /**
+     *
+     * @return Tag[]
+     */
+    public function getTags(): array
+    {
+        $mnps = [];
+        $vChild = $this->createChild();
+        foreach ($this->getVolumeHoraires() as $volumeHoraire) {
+            if ($mnp = $volumeHoraire->getTag()) {
+                $vChild->setTag($mnp);
+                if ($vChild->getHeures() !== 0) {
+                    $mnps[$mnp->getId()] = $mnp;
+                }
+            } else {
+                $vChild->setTag(null);
+                if ($vChild->getHeures() !== 0) {
+                    $mnps[0] = null;
+                }
+            }
+        }
+        uasort($mnps, function ($a, $b) {
+            return ($a ? $a->getLibelleLong() : '') > ($b ? $b->getLibelleLong() : '') ? 1 : 0;
+        });
+
+        return $mnps;
+    }
 
 
     private function makeSousListeId(VolumeHoraire $vh, array $filtres = []): string
@@ -489,8 +507,8 @@ class VolumeHoraireListe
         $id = [];
 
         foreach ($filtres as $filtre) {
-            $rule      = self::FILTRES_LIST[$filtre];
-            $getter    = 'get' . $rule['accessor'];
+            $rule = self::FILTRES_LIST[$filtre];
+            $getter = 'get' . $rule['accessor'];
             $toIntFunc = $rule['to-int-func'];
             if (is_object($v = $vh->$getter()) && is_a($v, $rule['class'])) {
                 if ($toIntFunc) {
@@ -517,7 +535,6 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      * @param array $filtres
      *
@@ -526,7 +543,7 @@ class VolumeHoraireListe
     public function getSousListes(array $filtres = []): array
     {
         $listes = [];
-        $vhs    = $this->getService()->getOrderedVolumeHoraire();
+        $vhs = $this->getService()->getOrderedVolumeHoraire();
         foreach ($vhs as $vh) {
             $vhId = $this->makeSousListeId($vh, $filtres);
             if (!array_key_exists($vhId, $listes)) {
@@ -538,13 +555,12 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      * retourne une liste fille de volumes horaires
      */
     public function createChild(): VolumeHoraireListe
     {
-        $vhlph              = new ListeFilterHydrator();
+        $vhlph = new ListeFilterHydrator();
         $volumeHoraireListe = new VolumeHoraireListe($this->getService());
         $vhlph->hydrate($vhlph->extract($this), $volumeHoraireListe);
         $volumeHoraireListe->__debug = $this->__debug;
@@ -553,10 +569,9 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      * @param VolumeHoraire $vh
-     * @param array         $filtres
+     * @param array $filtres
      *
      * @return VolumeHoraireListe
      */
@@ -605,10 +620,9 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      * @param VolumeHoraireListe $vhl
-     * @param array              $filtres
+     * @param array $filtres
      *
      * @return VolumeHoraireListe
      */
@@ -655,18 +669,16 @@ class VolumeHoraireListe
     }
 
 
-
     public function getHeures(): float
     {
         $volumesHoraires = $this->getVolumeHoraires();
-        $heures          = 0;
+        $heures = 0;
         foreach ($volumesHoraires as $volumeHoraire) {
             $heures += $volumeHoraire->getHeures();
         }
 
         return $heures;
     }
-
 
 
     public function isVolumeHoraireModifiable(VolumeHoraire $volumeHoraire): bool
@@ -678,7 +690,6 @@ class VolumeHoraireListe
             || $volumeHoraire->getHistoDestruction()
         );
     }
-
 
 
     /**
@@ -707,7 +718,7 @@ class VolumeHoraireListe
         }
 
         $lastHeures = $this->getHeures();
-        $newHeures  = $heures - $lastHeures;
+        $newHeures = $heures - $lastHeures;
 
         if (0 == $newHeures) return $this; // pas de changement!!
 
@@ -794,35 +805,35 @@ class VolumeHoraireListe
             foreach ($vhs as $volumeHoraire) {
                 if ($newHeures == 0) break;
 
-                $vhHeures    = $volumeHoraire->getHeures();
+                $vhHeures = $volumeHoraire->getHeures();
                 $vhNewHeures = $vhHeures;
 
                 /* Si les heures sont de signe différent et qu'il y a */
                 if ($newHeures < 0) {
                     if ($vhHeures < 0) {
                         $vhNewHeures += $newHeures;
-                        $newHeures   = 0;// OK
+                        $newHeures = 0;// OK
                     } else {
                         if ($vhHeures <= $newHeures * -1) {
                             $vhNewHeures = 0;
-                            $newHeures   += $vhHeures;
+                            $newHeures += $vhHeures;
                         } else {
                             $vhNewHeures += $newHeures;
-                            $newHeures   = 0; // OK
+                            $newHeures = 0; // OK
                         }
                     }
                 } else {
                     if ($vhHeures < 0) {
                         if ($vhHeures * -1 <= $newHeures) {
                             $vhNewHeures = 0; // OK
-                            $newHeures   += $vhHeures;
+                            $newHeures += $vhHeures;
                         } else {
                             $vhNewHeures += $newHeures;
-                            $newHeures   = 0; // OK
+                            $newHeures = 0; // OK
                         }
                     } else {
                         $vhNewHeures += $newHeures; // OK
-                        $newHeures   = 0;
+                        $newHeures = 0;
                     }
                 }
 
@@ -871,7 +882,6 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      * @param $heures
      * @param $ancienMotifNonPaiement
@@ -900,12 +910,11 @@ class VolumeHoraireListe
     }
 
 
-
     /**
-     * @param bool|\DateTime|null        $horaireDebut
-     * @param bool|\DateTime|null        $horaireFin
-     * @param bool|TypeIntervention      $typeIntervention
-     * @param bool|Periode               $periode
+     * @param bool|\DateTime|null $horaireDebut
+     * @param bool|\DateTime|null $horaireFin
+     * @param bool|TypeIntervention $typeIntervention
+     * @param bool|Periode $periode
      * @param bool|MotifNonPaiement|null $motifNonPaiement
      *
      * @return $this
@@ -914,9 +923,9 @@ class VolumeHoraireListe
     {
         if ($this->__debug) $this->__debug->dumpAction('changeAll', $horaireDebut, $horaireFin, $typeIntervention, $periode, $motifNonPaiement);
 
-        $vhs             = $this->getVolumeHoraires();
+        $vhs = $this->getVolumeHoraires();
         $heuresAReporter = 0;
-        $reports         = [];
+        $reports = [];
 
         $reportFilters = [
             self::FILTRE_HORAIRE_DEBUT,
@@ -946,7 +955,7 @@ class VolumeHoraireListe
                     }
                 } else {
                     $heuresAReporter += $vh->getHeures();
-                    $rid             = $this->makeSousListeId($vh, $reportFilters);
+                    $rid = $this->makeSousListeId($vh, $reportFilters);
                     if (!isset($reports[$rid])) {
                         $reports[$rid] = [
                             'liste'  => $this->createChild()->filterByVolumeHoraire($vh, $reportFilters),
@@ -979,7 +988,6 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      * Détermine si la liste est vide ou non
      */
@@ -987,7 +995,6 @@ class VolumeHoraireListe
     {
         return 0 === $this->count();
     }
-
 
 
     /**
@@ -999,7 +1006,6 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      *
      * @return TypeVolumeHoraire|boolean
@@ -1008,7 +1014,6 @@ class VolumeHoraireListe
     {
         return $this->typeVolumeHoraire;
     }
-
 
 
     /**
@@ -1032,7 +1037,6 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      *
      * @return Periode|boolean
@@ -1041,7 +1045,6 @@ class VolumeHoraireListe
     {
         return $this->periode;
     }
-
 
 
     /**
@@ -1065,7 +1068,6 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      *
      * @return TypeIntervention|boolean
@@ -1074,7 +1076,6 @@ class VolumeHoraireListe
     {
         return $this->typeIntervention;
     }
-
 
 
     /**
@@ -1098,7 +1099,6 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      * @return bool|\DateTime
      */
@@ -1106,7 +1106,6 @@ class VolumeHoraireListe
     {
         return $this->horaireDebut;
     }
-
 
 
     /**
@@ -1129,7 +1128,6 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      * @return bool|\DateTime
      */
@@ -1137,7 +1135,6 @@ class VolumeHoraireListe
     {
         return $this->horaireFin;
     }
-
 
 
     /**
@@ -1160,7 +1157,6 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      *
      * @return EtatVolumeHoraire|boolean
@@ -1169,7 +1165,6 @@ class VolumeHoraireListe
     {
         return $this->etatVolumeHoraire;
     }
-
 
 
     /**
@@ -1193,7 +1188,6 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      *
      * @return MotifNonPaiement|boolean
@@ -1202,7 +1196,6 @@ class VolumeHoraireListe
     {
         return $this->motifNonPaiement;
     }
-
 
 
     /**
@@ -1225,7 +1218,33 @@ class VolumeHoraireListe
         return $this;
     }
 
+    /**
+     *
+     * @return Tag|boolean
+     */
+    public function getTag()
+    {
+        return $this->tag;
+    }
 
+    /**
+     *
+     * @param MotifNonPaiement|boolean $motifNonPaiement
+     *
+     * @return self
+     */
+    public function setTag($tag): VolumeHoraireListe
+    {
+        if ($tag !== $this->tag) {
+
+            if (!(is_bool($tag) || null === $tag || $tag instanceof Tag)) {
+                throw new RuntimeException('Valeur non autorisée');
+            }
+            $this->tag = $tag;
+        }
+
+        return $this;
+    }
 
     /**
      *
@@ -1235,7 +1254,6 @@ class VolumeHoraireListe
     {
         return $this->contrat;
     }
-
 
 
     /**
@@ -1259,7 +1277,6 @@ class VolumeHoraireListe
     }
 
 
-
     /**
      *
      * @return Validation|boolean
@@ -1268,7 +1285,6 @@ class VolumeHoraireListe
     {
         return $this->validation;
     }
-
 
 
     /**

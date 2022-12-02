@@ -26,7 +26,6 @@ class MotifNonPaiementController extends AbstractController
     }
 
 
-
     public function saisirAction()
     {
         /* @var $motifNonPaiement MotifNonPaiement */
@@ -34,7 +33,7 @@ class MotifNonPaiementController extends AbstractController
 
         $form = $this->getFormMotifNonPaiementMotifNonPaiementSaisie();
         if (empty($motifNonPaiement)) {
-            $title            = 'Création d\'un nouveau motif de non paiement';
+            $title = 'Création d\'un nouveau motif de non paiement';
             $motifNonPaiement = $this->getServiceMotifNonPaiement()->newEntity();
         } else {
             $title = 'Édition d\'un motif de non paiement';
@@ -51,7 +50,6 @@ class MotifNonPaiementController extends AbstractController
 
         return compact('form', 'title');
     }
-
 
 
     public function supprimerAction()

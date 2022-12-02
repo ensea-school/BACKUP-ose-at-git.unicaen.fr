@@ -8,7 +8,7 @@
 if ($form->canEditMNP()) {
     $motifNonPaiement = $this->formControlGroup($form->get('motif-non-paiement'));
 }
-$submit  = $this->formSubmit($form->get('submit'));
+$submit = $this->formSubmit($form->get('submit'));
 $annuler = $this->formButton($form->get('annuler'));
 
 $form->prepare();
@@ -17,6 +17,10 @@ echo $this->form()->openTag($form);
 echo $this->formControlGroup($form->get('heures'));
 if ($form->canEditMNP()) {
     echo $this->formControlGroup($form->get('motif-non-paiement'));
+}
+
+if ($form->canEditMNP()) {
+    echo $this->formControlGroup($form->get('tag'));
 }
 echo '<hr /><div style="text-align:right">';
 echo $this->formRow($form->get('submit'));

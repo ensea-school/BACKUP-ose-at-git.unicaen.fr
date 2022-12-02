@@ -1,0 +1,58 @@
+<?php
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $motifNonPaiements \Application\Entity\Db\MotifNonPaiement[]
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+$title = "Tag";
+
+$this->headTitle()->append($title);
+//TODO gestion du privilege spécifique pour les tags
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIEMENT_EDITION));
+
+?>
+<h1 class="page-header"><?= $title ?></h1>
+
+<table class="table table-bordered table-sort">
+    <thead>
+    <th style="word-wrap: break-word ; ">Code</th>
+    <th style="word-wrap: break-word ; ">Libelle Court</th>
+    <th style="word-wrap: break-word ; ">Libelle Long</th>
+    <?php if ($canEdit) echo '<th>Actions</th>' ?>
+    </thead>
+    <tbody>
+    <?php foreach ($tags as $fr): ?>
+        <tr>
+            <td style="word-wrap: break-word ; "><?= $fr->getCode() ?></td>
+            <td style="word-wrap: break-word ; "><?= $fr->getLibelleCourt() ?></td>
+            <td style="word-wrap: break-word ; "><?= $fr->getLibelleLong() ?></td>
+            <?php if ($canEdit) { ?>
+                <td style="text-align:center;width:1px;white-space: nowrap">
+                    <a class="mod-ajax" data-submit-reload="true"
+                       href="<?= $this->url('tag/saisir', ['tag' => $fr->getId()]) ?>"
+                       title="Modifier le tag">
+                        <i class="fas fa-pen-to-square"></i></a>
+                    <a class="pop-ajax"
+                       href="<?= $this->url('tag/supprimer', ['tag' => $fr->getId()]) ?>"
+                       title="Supprimer le tag"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <i class="fas fa-trash-can"></i>
+                    </a>
+                </td>
+            <?php } ?>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary mod-ajax" data-submit-reload="true" href="<?= $this->url('tag/saisir') ?>">
+        <i class="fas fa-pen-to-square"></i>Ajouter un tag
+    </a>
+<?php endif ?>

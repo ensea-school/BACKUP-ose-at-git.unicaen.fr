@@ -741,6 +741,11 @@ return [
             "CODE"    => "E",
             "LIBELLE" => "Vacataire",
         ],
+        [
+            'ID'      => 3,
+            "CODE"    => "S",
+            "LIBELLE" => "Étudiant",
+        ],
     ],
 
     'TYPE_INTERVENTION' => [

@@ -862,6 +862,16 @@ return [
             "CODE"    => "CLOTURE_REALISE",
             "LIBELLE" => "Clôture de la saisie des enseignements réalisés",
         ],
+        [
+            'ID'      => 8,
+            "CODE"    => "MISSION",
+            "LIBELLE" => "Validation de mission par la DRH",
+        ],
+        [
+            'ID'      => 9,
+            "CODE"    => "MISSION_REALISE",
+            "LIBELLE" => "Validation d'heures de mission réalisées",
+        ],
     ],
 
     'TYPE_VOLUME_HORAIRE' => [

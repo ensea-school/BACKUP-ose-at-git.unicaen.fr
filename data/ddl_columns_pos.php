@@ -2155,6 +2155,7 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
         'STRUCTURE_ID',
+        'AUTO_VALIDATION',
     ],
     'MISSION_ETUDIANT'               => [
         'MISSION_ID',
@@ -2182,6 +2183,10 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+    ],
+    'VALIDATION_MISSION'             => [
+        'VALIDATION_ID',
+        'MISSION_ID',
     ],
 ];
 

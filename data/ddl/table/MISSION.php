@@ -9,6 +9,18 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'MISSION_ID_SEQ',
     'columns'     => [
+        'AUTO_VALIDATION'       => [
+            'name'        => 'AUTO_VALIDATION',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 15,
+            'commentaire' => NULL,
+        ],
         'DATE_DEBUT'            => [
             'name'        => 'DATE_DEBUT',
             'type'        => 'date',

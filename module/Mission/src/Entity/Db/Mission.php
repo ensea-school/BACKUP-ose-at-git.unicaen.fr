@@ -5,6 +5,7 @@ namespace Mission\Entity\Db;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -28,13 +29,18 @@ class Mission implements HistoriqueAwareInterface
 
     protected ?string          $description     = null;
 
+    protected bool             $autoValidation  = false;
+
     private Collection         $etudiants;
+
+    private Collection         $validations;
 
 
 
     public function __construct()
     {
-        $this->etudiants = new ArrayCollection();
+        $this->etudiants   = new ArrayCollection();
+        $this->validations = new ArrayCollection();
     }
 
 
@@ -127,6 +133,30 @@ class Mission implements HistoriqueAwareInterface
 
 
     /**
+     * @return bool
+     */
+    public function isAutoValidation(): bool
+    {
+        return $this->autoValidation;
+    }
+
+
+
+    /**
+     * @param bool $autoValidation
+     *
+     * @return Mission
+     */
+    public function setAutoValidation(bool $autoValidation): Mission
+    {
+        $this->autoValidation = $autoValidation;
+
+        return $this;
+    }
+
+
+
+    /**
      * @return Collection|Intervenant[]
      */
     public function getEtudiants(): Collection
@@ -150,5 +180,48 @@ class Mission implements HistoriqueAwareInterface
         $this->etudiants->removeElement($intervenant);
 
         return $this;
+    }
+
+
+
+    /**
+     * @return Collection|Validation[]
+     */
+    public function getValidations(): Collection
+    {
+        return $this->validations;
+    }
+
+
+
+    public function addValidation(Validation $validation): self
+    {
+        $this->validations[] = $validation;
+
+        return $this;
+    }
+
+
+
+    public function removeValidation(Validation $validation): self
+    {
+        $this->validations->removeElement($validation);
+
+        return $this;
+    }
+
+
+
+    public function isValide(): bool
+    {
+        if ($this->isAutoValidation()) return true;
+
+        if ($validations = $this->getValidation()) {
+            foreach ($validations as $validation) {
+                if ($validation->estNonHistorise()) return true;
+            }
+        }
+
+        return false;
     }
 }

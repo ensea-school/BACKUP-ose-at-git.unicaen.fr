@@ -32,6 +32,18 @@
             </join-table>
         </many-to-many>
 
+        <field name="autoValidation" type="boolean" column="AUTO_VALIDATION" nullable="false"/>
+        <many-to-many field="validations" target-entity="Application\Entity\Db\Validation">
+            <join-table name="VALIDATION_MISSION">
+                <join-columns>
+                    <join-column name="MISSION_ID" referenced-column-name="ID"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
             <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>

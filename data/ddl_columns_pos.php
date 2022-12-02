@@ -2154,6 +2154,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'STRUCTURE_ID',
     ],
     'MISSION_ETUDIANT'               => [
         'MISSION_ID',

@@ -4,6 +4,7 @@ namespace Mission\Entity\Db;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -13,6 +14,7 @@ class Mission implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
+    use StructureAwareTrait;
 
     protected ?int             $id              = null;
 

@@ -8,6 +8,9 @@
         <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
             <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+            <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+        </many-to-one>
         <many-to-one field="typeMission" target-entity="Mission\Entity\Db\TypeMission">
             <join-column name="TYPE_MISSION_ID" referenced-column-name="ID"/>
         </many-to-one>

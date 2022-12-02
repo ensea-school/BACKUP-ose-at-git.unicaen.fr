@@ -261,7 +261,7 @@ $.widget("unicaen.popAjax", {
 
         var p = popEl[0].getBoundingClientRect();
         var horsZonePop = e.clientX < p.left || e.clientX > p.left + p.width || e.clientY < p.top || e.clientY > p.top + p.height;
-        var horsElementFils = $(e.target).parents('.popover-content,.ui-autocomplete').length == 0;
+        var horsElementFils = $(e.target).parents('.popover-content,.popover-body,.ui-autocomplete').length == 0;
 
         if ($(e.target).hasClass('pop-ajax-hide')) {
             this.hide();

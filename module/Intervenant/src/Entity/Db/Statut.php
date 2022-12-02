@@ -172,6 +172,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private ?string     $codesCorresp4                      = null;
 
+    private bool        $mission                            = false;
+
+    private bool        $missionVisualisation               = true;
+
+    private bool        $missionEdition                     = false;
+
+    private bool        $missionRealiseEdition              = false;
+
 
 
     public function __toString(): string
@@ -1369,6 +1377,70 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setCodesCorresp4(?string $codesCorresp4): Statut
     {
         $this->codesCorresp4 = $codesCorresp4;
+
+        return $this;
+    }
+
+
+
+    public function getMission(): bool
+    {
+        return $this->mission;
+    }
+
+
+
+    public function setMission(bool $mission): Statut
+    {
+        $this->mission = $mission;
+
+        return $this;
+    }
+
+
+
+    public function getMissionVisualisation(): bool
+    {
+        return $this->missionVisualisation;
+    }
+
+
+
+    public function setMissionVisualisation(bool $missionVisualisation): Statut
+    {
+        $this->missionVisualisation = $missionVisualisation;
+
+        return $this;
+    }
+
+
+
+    public function getMissionEdition(): bool
+    {
+        return $this->missionEdition;
+    }
+
+
+
+    public function setMissionEdition(bool $missionEdition): Statut
+    {
+        $this->missionEdition = $missionEdition;
+
+        return $this;
+    }
+
+
+
+    public function getMissionRealiseEdition(): bool
+    {
+        return $this->missionRealiseEdition;
+    }
+
+
+
+    public function setMissionRealiseEdition(bool $missionRealiseEdition): Statut
+    {
+        $this->missionRealiseEdition = $missionRealiseEdition;
 
         return $this;
     }

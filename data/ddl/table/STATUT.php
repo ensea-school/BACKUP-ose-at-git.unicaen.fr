@@ -669,6 +669,18 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
+        'MISSION'                        => [
+            'name'        => 'MISSION',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 84,
+            'commentaire' => NULL,
+        ],
         'MODIF_SERVICE_DU'               => [
             'name'        => 'MODIF_SERVICE_DU',
             'type'        => 'bool',

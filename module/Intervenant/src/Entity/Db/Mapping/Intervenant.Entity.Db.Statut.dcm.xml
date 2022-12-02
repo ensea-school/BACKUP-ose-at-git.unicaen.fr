@@ -85,6 +85,8 @@
         <field name="referentielRealiseVisualisation" type="boolean" column="REFERENTIEL_REALISE_VISU" nullable="false"/>
         <field name="referentielRealiseEdition" type="boolean" column="REFERENTIEL_REALISE_EDITION" nullable="false"/>
 
+        <field name="mission" type="boolean" column="MISSION" nullable="false"/>
+
         <field name="cloture" type="boolean" column="CLOTURE" nullable="false"/>
 
         <field name="modificationServiceDu" type="boolean" column="MODIF_SERVICE_DU" nullable="false"/>

@@ -1303,6 +1303,7 @@ return [
         'TAUX_CHARGES_TTC',
         'CONTRAT_GENERATION',
         'MODIF_SERVICE_DU_EDITION',
+        'MISSION',
     ],
     'STRUCTURE'                      => [
         'ID',

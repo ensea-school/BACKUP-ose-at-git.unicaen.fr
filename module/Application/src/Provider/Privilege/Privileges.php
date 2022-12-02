@@ -58,8 +58,6 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const CONTRAT_DEPOT_RETOUR_SIGNE                           = 'contrat-depot-retour-signe';
     const CONTRAT_DEVALIDATION                                 = 'contrat-devalidation';
     const CONTRAT_ENVOI_EMAIL                                  = 'contrat-envoi-email';
-    const CONTRAT_MODELES_EDITION                              = 'contrat-modeles-edition';
-    const CONTRAT_MODELES_VISUALISATION                        = 'contrat-modeles-visualisation';
     const CONTRAT_PROJET_GENERATION                            = 'contrat-projet-generation';
     const CONTRAT_SAISIE_DATE_RETOUR_SIGNE                     = 'contrat-saisie-date-retour-signe';
     const CONTRAT_SUPPRESSION                                  = 'contrat-suppression';
@@ -161,6 +159,15 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const MISE_EN_PAIEMENT_MISE_EN_PAIEMENT                    = 'mise-en-paiement-mise-en-paiement';
     const MISE_EN_PAIEMENT_VISUALISATION_GESTION               = 'mise-en-paiement-visualisation-gestion';
     const MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT           = 'mise-en-paiement-visualisation-intervenant';
+    const MISSION_AUTOVALIDATION                               = 'mission-autovalidation';
+    const MISSION_AUTOVALIDATION_REALISE                       = 'mission-autovalidation-realise';
+    const MISSION_DEVALIDATION                                 = 'mission-devalidation';
+    const MISSION_DEVALIDATION_REALISE                         = 'mission-devalidation-realise';
+    const MISSION_EDITION                                      = 'mission-edition';
+    const MISSION_EDITION_REALISE                              = 'mission-edition-realise';
+    const MISSION_VALIDATION                                   = 'mission-validation';
+    const MISSION_VALIDATION_REALISE                           = 'mission-validation-realise';
+    const MISSION_VISUALISATION                                = 'mission-visualisation';
     const MODIF_SERVICE_DU_ASSOCIATION                         = 'modif-service-du-association';
     const MODIF_SERVICE_DU_EDITION                             = 'modif-service-du-edition';
     const MODIF_SERVICE_DU_EXPORT_CSV                          = 'modif-service-du-export-csv';

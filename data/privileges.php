@@ -147,6 +147,21 @@ return [
         ],
     ],
 
+    'mission' => [
+        'libelle'    => 'Missions',
+        'privileges' => [
+            'visualisation'          => 'Visualisation',
+            'edition'                => 'Edition',
+            'validation'             => 'Validation',
+            'devalidation'           => 'Dévalidation',
+            'autovalidation'         => 'Autovalidation',
+            'edition-realise'        => 'Edition des heures réalisées',
+            'validation-realise'     => 'Validation des heures réalisées',
+            'devalidation-realise'   => 'Dévalidation des heures réalisées',
+            'autovalidation-realise' => 'Auto-validation des heures réalisées',
+        ],
+    ],
+
     'motif-non-paiement' => [
         'libelle'    => 'Motifs de non paiement (pour enseignements)',
         'privileges' => [

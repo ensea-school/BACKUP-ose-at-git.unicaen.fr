@@ -86,6 +86,7 @@
         <field name="referentielRealiseEdition" type="boolean" column="REFERENTIEL_REALISE_EDITION" nullable="false"/>
 
         <field name="mission" type="boolean" column="MISSION" nullable="false"/>
+        <field name="missionRealiseEdition" type="boolean" column="MISSION_REALISE_EDITION" nullable="false"/>
 
         <field name="cloture" type="boolean" column="CLOTURE" nullable="false"/>
 

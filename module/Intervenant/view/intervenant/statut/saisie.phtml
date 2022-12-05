@@ -31,7 +31,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
             echo $this->tag('div', ['class' => 'list-group']);
             foreach ($statuts as $s) {
                 if ($s->getTypeIntervenant() == $typeIntervenant) {
-                    $url = $this->url('statut/saisie', ['statut' => $s->getId()]);
+                    $url    = $this->url('statut/saisie', ['statut' => $s->getId()]);
                     $active = $s == $statut ? ' active' : '';
                     echo $this->tag('a', ['class' => 'list-group-item' . $active, 'href' => $url])->html($s) . "\n";
                 }
@@ -202,6 +202,22 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                     </div>
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('referentielRealise')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Missions -->
+        <div class="card bg-default">
+            <div class="card-header">Missions</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('mission')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('missionRealise')); ?>
                     </div>
                 </div>
             </div>

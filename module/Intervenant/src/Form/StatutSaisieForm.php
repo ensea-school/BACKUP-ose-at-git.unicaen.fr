@@ -55,6 +55,8 @@ class StatutSaisieForm extends AbstractForm
             'motifNonPaiement'              => 'Le gestionnaire peut déclarer des heures comme non payables',
             'formuleVisualisation'          => 'Visibilité par l\'intervenant du détail des heures pour le calcul des HETD',
             'typeIntervenant'               => 'Type d\'intervenant',
+            'mission'                       => 'Visualisation/Modification de mission',
+            'missionRealise'                => 'Saisie du réalisé',
         ];
 
         $dveElements = [
@@ -63,6 +65,7 @@ class StatutSaisieForm extends AbstractForm
             'serviceRealise',
             'referentielPrevu',
             'referentielRealise',
+            'mission',
         ];
 
         $ignored = [
@@ -77,6 +80,7 @@ class StatutSaisieForm extends AbstractForm
             'contratGeneration',
             'modificationServiceDuVisualisation',
             'modificationServiceDuEdition',
+            'missionRealiseEdition',
         ];
 
         for ($i = 1; $i <= 5; $i++) {
@@ -147,6 +151,29 @@ class StatutSaisieForm extends AbstractForm
                 'setter' => function (Statut $statut, $value, string $name) {
                     $taux = $value / 100;
                     $statut->setTauxChargesTTC($taux);
+                },
+            ],
+        ]]);
+
+        $this->spec(['missionRealise' => [
+            'type'     => 'Select',
+            'name'     => 'missionRealise',
+            'options'  => [
+                'value_options' => [
+                    'desactive' => 'Désactivé',
+                    //'active'        => 'Activé mais non visible par l\'intervenant',
+                    //'visualisation' => 'Activé et visible par l\'intervenant',
+                    'edition'   => 'Activé et modifiable par l\'intervenant',
+                ],
+            ],
+            'hydrator' => [
+                'getter' => function (Statut $statut, string $name) {
+                    $real = $statut->getMissionRealiseEdition() ? 'edition' : 'desactive';
+
+                    return $real;
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $statut->setMissionRealiseEdition($value === 'edition');
                 },
             ],
         ]]);
@@ -409,7 +436,6 @@ class StatutSaisieForm extends AbstractForm
                         $statut->setModificationServiceDu($access);
                         $statut->setModificationServiceDuVisualisation($visu);
                         $statut->setModificationServiceDuEdition($edition);
-
                     },
                 ],
             ],

@@ -2188,6 +2188,18 @@ return [
         'VALIDATION_ID',
         'MISSION_ID',
     ],
+    'TBL_MISSION'                    => [
+        'ID',
+        'ANNEE_ID',
+        'INTERVENANT_ID',
+        'ACTIF',
+        'MISSION_ID',
+        'STRUCTURE_ID',
+        'INTERVENANT_STRUCTURE_ID',
+        'VALIDE',
+        'HEURES_REALISEES',
+        'HEURES_VALIDEES',
+    ],
 ];
 
 //@formatter:on

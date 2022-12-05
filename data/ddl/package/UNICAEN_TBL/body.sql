@@ -1223,6 +1223,96 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
+  PROCEDURE C_MISSION(useParams BOOLEAN DEFAULT FALSE) IS
+  TYPE r_cursor IS REF CURSOR;
+  c r_cursor;
+  d TBL_MISSION%rowtype;
+  viewQuery CLOB;
+  BEGIN
+    viewQuery := 'SELECT
+          i.annee_id                                                                               annee_id,
+          i.id                                                                                     intervenant_id,
+          1                                                                                        actif,
+          m.id                                                                                     mission_id,
+          m.structure_id                                                                           structure_id,
+          i.structure_id                                                                           intervenant_structure_id,
+          CASE WHEN m.auto_validation = 1 OR vm.id IS NOT NULL THEN 1 ELSE 0 END                   valide,
+          SUM(vhm.heures)                                                                          heures_realisees,
+          SUM(CASE WHEN vvhm.id IS NOT NULL OR vhm.auto_validation = 1 THEN vhm.heures ELSE 0 END) heures_validees
+        FROM
+                    intervenant                     i
+               JOIN statut                         si on si.id = i.statut_id
+               JOIN type_validation               tvm on tvm.code = ''MISSION''
+               JOIN type_validation              tvvh on tvvh.code = ''MISSION_REALISE''
+          LEFT JOIN mission                         m on m.intervenant_id = i.id AND m.histo_destruction IS NULL
+          LEFT JOIN validation_mission            vml on vml.mission_id = m.id
+               JOIN validation                     vm on vm.id = vml.validation_id AND vm.histo_destruction IS NULL
+
+          LEFT JOIN volume_horaire_mission        vhm on vhm.mission_id = m.id AND vhm.histo_destruction IS NULL
+          LEFT JOIN validation_vol_horaire_miss vvhml on vvhml.volume_horaire_mission_id = vhm.id
+               JOIN validation                   vvhm on vvhm.id = vvhml.validation_id AND vvhm.histo_destruction IS NULL
+
+        WHERE
+          i.histo_destruction IS NULL
+          AND si.mission = 1
+        GROUP BY
+          i.annee_id,
+          i.id,
+          m.id,
+          m.structure_id,
+          i.structure_id,
+          m.auto_validation,
+          vm.id';
+
+    OPEN c FOR '
+    SELECT
+      CASE WHEN
+            t.ANNEE_ID                             = v.ANNEE_ID
+        AND t.INTERVENANT_ID                       = v.INTERVENANT_ID
+        AND t.ACTIF                                = v.ACTIF
+        AND COALESCE(t.MISSION_ID,0)               = COALESCE(v.MISSION_ID,0)
+        AND COALESCE(t.STRUCTURE_ID,0)             = COALESCE(v.STRUCTURE_ID,0)
+        AND COALESCE(t.INTERVENANT_STRUCTURE_ID,0) = COALESCE(v.INTERVENANT_STRUCTURE_ID,0)
+        AND t.VALIDE                               = v.VALIDE
+        AND t.HEURES_REALISEES                     = v.HEURES_REALISEES
+        AND t.HEURES_VALIDEES                      = v.HEURES_VALIDEES
+      THEN -1 ELSE t.ID END ID,
+      v.ANNEE_ID,
+      v.INTERVENANT_ID,
+      v.ACTIF,
+      v.MISSION_ID,
+      v.STRUCTURE_ID,
+      v.INTERVENANT_STRUCTURE_ID,
+      v.VALIDE,
+      v.HEURES_REALISEES,
+      v.HEURES_VALIDEES
+    FROM
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      FULL JOIN TBL_MISSION t ON
+            t.INTERVENANT_ID                       = v.INTERVENANT_ID
+        AND COALESCE(t.MISSION_ID,0)               = COALESCE(v.MISSION_ID,0)
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    LOOP
+      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+
+      IF d.id IS NULL THEN
+        d.id := TBL_MISSION_ID_SEQ.NEXTVAL;
+        INSERT INTO TBL_MISSION values d;
+      ELSIF
+            d.INTERVENANT_ID IS NULL
+        AND d.MISSION_ID IS NULL
+      THEN
+        DELETE FROM TBL_MISSION WHERE id = d.id;
+      ELSIF d.id <> -1 THEN
+        UPDATE TBL_MISSION SET row = d WHERE id = d.id;
+      END IF;
+    END LOOP;
+    CLOSE c;
+  END;
+
+
+
+
   PROCEDURE C_PAIEMENT(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;

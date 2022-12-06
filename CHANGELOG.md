@@ -49,7 +49,7 @@
 * Formule de calcul du Havre mise à jour
 * Correction de bug dans la formule de Picardie
 * Correction de bug de l'envoi du contrat par email lorsque la civilité est absente
-
+* Correction du bouton "Prévu->Réalisé" absent pour le service réalisé
 
 # OSE 19.4 (21/10/2022)
 

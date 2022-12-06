@@ -605,7 +605,7 @@ class ServiceController extends AbstractController
             }
             $this->flashMessenger()->addSuccessMessage($message);
         }
-
+        $this->updateTableauxBord($intervenant);
         return compact('title', 'typeVolumeHoraire', 'intervenant', 'validations', 'services');
     }
 

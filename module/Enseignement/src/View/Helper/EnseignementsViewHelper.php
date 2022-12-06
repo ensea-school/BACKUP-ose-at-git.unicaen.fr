@@ -220,8 +220,8 @@ class EnseignementsViewHelper extends AbstractViewHelper
         if ($typeVolumeHoraire = $this->getProcessusEnseignement()->initializePrevu($this->getIntervenant())) {
             $attribs = [
                 'class'       => 'btn btn-warning prevu-to-prevu-show',
-                'data-toggle' => 'modal',
-                'data-target' => '#prevu-to-prevu-modal',
+                'data-bs-toggle' => 'modal',
+                'data-bs-target' => '#prevu-to-prevu-modal',
                 'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
             ];
             $source  = $typeVolumeHoraire->getLibelle();
@@ -261,8 +261,8 @@ class EnseignementsViewHelper extends AbstractViewHelper
         if ($this->getProcessusEnseignement()->initializeRealise($this->getIntervenant())) {
             $attribs = [
                 'class'       => 'btn btn-warning prevu-to-realise-show',
-                'data-toggle' => 'modal',
-                'data-target' => '#prevu-to-realise-modal',
+                'data-bs-toggle' => 'modal',
+                'data-bs-target' => '#prevu-to-realise-modal',
                 'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
                     . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
             ];

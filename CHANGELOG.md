@@ -28,6 +28,7 @@
 * Les étapes d'ODF complémentaire peuvent de nouveau être modifiées (#46922)
 * Dans les diagrammes du module Charges, la boite de dialogue s'affiche correctement, même avec beaucoup de types d'intervention
 * Le plafond relatif aux charges / services saisis est maintenant opérationnel
+* Lors de la saisir d'enseignement, les elements pedagogique sur lesquels il est impossible de saisir des heures seront surlignés en rouge
 
 ## Notes de mise à jour
 
@@ -50,6 +51,7 @@
 * Correction de bug dans la formule de Picardie
 * Correction de bug de l'envoi du contrat par email lorsque la civilité est absente
 * Correction du bouton "Prévu->Réalisé" absent pour le service réalisé
+* Lors de la saisir de référentiel, le tri se fait correctement sur les fonction référentielles et sur les types de fonction
 
 # OSE 19.4 (21/10/2022)
 

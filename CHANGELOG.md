@@ -25,7 +25,6 @@
 * Les annulations de mises en paiement sont désormais bien prises en compte dès la première annulation
 * Il est désormais possible de clôturer le service réalisé même si aucune heure n'est saisie
 * Les indicateurs 530 et 540 ne renvoient plus de vacataires
-* Les étapes d'ODF complémentaire peuvent de nouveau être modifiées (#46922)
 * Dans les diagrammes du module Charges, la boite de dialogue s'affiche correctement, même avec beaucoup de types d'intervention
 * Le plafond relatif aux charges / services saisis est maintenant opérationnel
 * Lors de la saisir d'enseignement, les elements pedagogique sur lesquels il est impossible de saisir des heures seront surlignés en rouge
@@ -54,6 +53,7 @@
 * Lors de la saisir de référentiel, le tri se fait correctement sur les fonction référentielles et sur les types de fonction
 * Les caractères spéciaux sont bien pris en compte dans les types d'intervention (exemple : CM/TD)
 * Le tableau des services d'enseignement n'affiche plus les colonnes inutiles
+* Les étapes d'ODF complémentaire peuvent de nouveau être modifiées (#46922)
 
 # OSE 19.4 (21/10/2022)
 

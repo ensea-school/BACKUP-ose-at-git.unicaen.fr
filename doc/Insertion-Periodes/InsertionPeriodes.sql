@@ -7,7 +7,7 @@ v_ordre         number := 18;
 v_delta_mois    number := 17;
 v_id_periode    number;
 begin
-  for i in 2..12 loop
+  for i in 1..12 loop
     select periode_id_seq.nextval into v_id_periode from dual;
     insert into periode(id,code,libelle_long,libelle_court,ecart_mois,ordre,enseignement,paiement,histo_creation,histo_createur_id,histo_modification,histo_modificateur_id) values (
       v_id_periode
@@ -50,7 +50,6 @@ begin
     v_ordre := v_ordre+1;
   end loop;
   commit;
-  update periode set libelle_long = 'Reliquat Janvier', libelle_court = 'Reliquat 01' where code = 'PTD';
 end;
      
 -- 3 année univ dans OSE 

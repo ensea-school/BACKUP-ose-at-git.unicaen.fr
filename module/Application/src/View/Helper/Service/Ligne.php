@@ -261,11 +261,11 @@ class Ligne extends AbstractViewHelper
         $display = $this->getListe()->getTypeInterventionVisibility($liste->getTypeIntervention()) ? '' : ';display:none';
 
         $attribs = [
-            'class'                       => 'heures type-intervention ' . $liste->getTypeIntervention()->getCode(),
-            'style'                       => 'text-align:right' . $display,
-            'id'                          => 'service-' . $liste->getService()->getId() . '-ti-' . $liste->getTypeIntervention()->getId(),
-            'data-value'                  => $heures,
-            'data-type-intervention-code' => $liste->getTypeIntervention()->getCode(),
+            'class'                     => 'heures type-intervention ti' . $liste->getTypeIntervention()->getId(),
+            'style'                     => 'text-align:right' . $display,
+            'id'                        => 'service-' . $liste->getService()->getId() . '-ti-' . $liste->getTypeIntervention()->getId(),
+            'data-value'                => $heures,
+            'data-type-intervention-id' => $liste->getTypeIntervention()->getId(),
         ];
         $out     = '<td ' . $this->htmlAttribs($attribs) . '>';
         if ($hasForbiddenPeriodes) $out .= '<abbr class="bg-danger" title="Des heures sont renseignées sur une période non conforme à la période de l\'enseignement">';

@@ -47,7 +47,7 @@ $.widget("ose.serviceListe", {
         // on met à jour aussi les entêtes et les totaux
         for (var ti in this.totaux) {
             var heures = this.totaux[ti];
-            this.element.find("table.service tfoot tr td." + ti).html(Util.formattedHeures(heures));
+            this.element.find("table.service tfoot tr td.ti" + ti).html(Util.formattedHeures(heures));
         }
         this.element.find("table.service #total-general").html(Util.formattedHeures(this.total));
     },

@@ -296,6 +296,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         vh.ponderation_service_compl,
         vh.service_statutaire,
         vh.heures,
+        length, -- on ignore ensuite
         vh_horaire_debut,
         vh_horaire_fin,
         vh.type_intervention_code,

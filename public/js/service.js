@@ -22,6 +22,7 @@ $.widget("ose.enseignements", {
         }
         this.element.find("table.service #total-general").attr('colspan', count);
         if (count == 0) {
+            this.element.find("table.service tr th.type-intervention").hide(); // entête
             this.element.find("table.service tfoot").hide();
         } else {
             this.element.find("table.service tfoot").show();

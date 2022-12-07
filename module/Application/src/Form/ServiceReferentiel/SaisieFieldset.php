@@ -170,6 +170,7 @@ class SaisieFieldset extends AbstractFieldset
                 $filles = [];
                 foreach ($fonction->getFille() as $fille) {
                     $filles[$fille->getId()] = (string)$fille;
+                    asort($filles);
                 }
                 $fonctions[$fonction->getId()] = ['label' => (string)$fonction, 'options' => $filles];
             } elseif (!$fonction->getParent()) {
@@ -177,12 +178,6 @@ class SaisieFieldset extends AbstractFieldset
             }
         }
         asort($fonctions);
-        foreach ($fonctions as $key => $fonction) {
-            if (isset($fonction['options']) && is_array($fonction['options'])) {
-                asort($fonctions[$key]['options']);
-            }
-        }
-
         return $fonctions;
     }
 

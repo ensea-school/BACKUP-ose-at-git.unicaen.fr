@@ -1304,6 +1304,7 @@ return [
         'CONTRAT_GENERATION',
         'MODIF_SERVICE_DU_EDITION',
         'MISSION',
+        'MISSION_REALISE_EDITION',
     ],
     'STRUCTURE'                      => [
         'ID',

@@ -681,6 +681,18 @@ return [
             'position'    => 84,
             'commentaire' => NULL,
         ],
+        'MISSION_REALISE_EDITION'        => [
+            'name'        => 'MISSION_REALISE_EDITION',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 85,
+            'commentaire' => NULL,
+        ],
         'MODIF_SERVICE_DU'               => [
             'name'        => 'MODIF_SERVICE_DU',
             'type'        => 'bool',

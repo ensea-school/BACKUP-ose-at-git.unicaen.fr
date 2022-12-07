@@ -172,6 +172,7 @@ class SaisieFieldset extends AbstractFieldset
                 foreach ($fonction->getFille() as $fille) {
                     $filles[$fille->getId()] = (string)$fille;
                 }
+                asort($filles);
                 $fonctions[$fonction->getId()] = ['label' => (string)$fonction, 'options' => $filles];
             } elseif (!$fonction->getParent()) {
                 $fonctions[$id] = (string)$fonction;

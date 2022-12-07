@@ -154,7 +154,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
         foreach ($typesIntervention as $ti) {
             $display = $this->getTypeInterventionVisibility($ti) ? '' : ';display:none';
             $colspan++;
-            $out .= "<th class=\"heures type-intervention " . $ti->getCode() . "\" style=\"width:8%$display\"><abbr title=\"" . $ti->getLibelle() . "\">" . $ti->getCode() . "</abbr></th>\n";
+            $out .= "<th class=\"heures type-intervention ti" . $ti->getId() . "\" style=\"width:8%$display\"><abbr title=\"" . $ti->getLibelle() . "\">" . $ti->getCode() . "</abbr></th>\n";
         }
         $out .= "<th>&nbsp;</th>\n";
         $out .= "</tr>\n";
@@ -444,7 +444,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
             } else {
                 $display = ';display:none';
             }
-            $out .= "<td id=\"" . $ti->getCode() . "\" class=\"type-intervention " . $ti->getCode() . "\" style=\"text-align:right$display\">" . \UnicaenApp\Util::formattedNumber($data[$ti->getCode()]) . "</td>\n";
+            $out .= "<td id=\"" . $ti->getCode() . "\" class=\"type-intervention ti" . $ti->getId() . "\" style=\"text-align:right$display\">" . \UnicaenApp\Util::formattedNumber($data[$ti->getCode()]) . "</td>\n";
         }
         $out .= "<td>&nbsp;</td>\n";
         $out .= "</tr>\n";

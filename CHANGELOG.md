@@ -52,6 +52,8 @@
 * Correction de bug de l'envoi du contrat par email lorsque la civilité est absente
 * Correction du bouton "Prévu->Réalisé" absent pour le service réalisé
 * Lors de la saisir de référentiel, le tri se fait correctement sur les fonction référentielles et sur les types de fonction
+* Les caractères spéciaux sont bien pris en compte dans les types d'intervention (exemple : CM/TD)
+* Le tableau des services d'enseignement n'affiche plus les colonnes inutiles
 
 # OSE 19.4 (21/10/2022)
 

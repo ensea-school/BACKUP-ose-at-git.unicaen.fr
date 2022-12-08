@@ -31,16 +31,16 @@ return [
         'intervenant' => [
             'pages' => [
                 'missions' => [
-                    'label'        => "Missions",
-                    'title'        => "Missions",
-                    'route'        => 'intervenant/missions',
-                    'paramsInject' => [
+                    'label'               => "Missions",
+                    'title'               => "Missions",
+                    'route'               => 'intervenant/missions',
+                    'paramsInject'        => [
                         'intervenant',
                     ],
-                    //'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION,
-                    'withtarget'   => true,
-                    'visible'      => Assertion\MissionAssertion::class,
-                    'order'        => 4,
+                    'workflow-etape-code' => WfEtape::CODE_MISSION_SAISIE,
+                    'withtarget'          => true,
+                    'visible'             => Assertion\MissionAssertion::class,
+                    'order'               => 4,
                 ],
             ],
         ],

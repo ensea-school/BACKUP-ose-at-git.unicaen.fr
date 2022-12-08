@@ -3,6 +3,7 @@
 namespace Mission\Assertion;
 
 use Application\Acl\Role;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -33,42 +34,17 @@ class MissionAssertion extends AbstractAssertion
 
         $intervenant = null;
         if (isset($page['workflow-etape-code'])) {
-            $etape       = $page['workflow-etape-code'];
+            $etape = $page['workflow-etape-code'];
+
+            /** @var Intervenant $intervenant */
             $intervenant = $this->getMvcEvent()->getParam('intervenant');
-            /*
-                        if (
-                            $intervenant
-                            && $role
-                            && $role->getStructure()
-            //                && (WfEtape::CODE_SERVICE_VALIDATION == $etape || WfEtape::CODE_SERVICE_VALIDATION_REALISE == $etape)
-                        ) { // dans ce cas ce n'est pas le WF qui agit, mais on voit la validation dès qu'on a des services directement,
-                            // car on peut très bien avoir à visualiser cette page sans pour autant avoir de services à soi à valider!!
-                            return $this->assertHasMission($intervenant, $role->getStructure(), $etape, $role);
-                        } else {
-                            if (!$this->getAssertionService()->assertEtapeAtteignable($etape, $intervenant)) {
-                                return false;
-                            }
-                        }*/
+
+            if (!$intervenant) return false;
+
+            return $this->assertVisualisationMission($role, $intervenant);
         }
 
-        /*
-                if ($intervenant && isset($page['route'])) {
-                    switch ($page['route']) {
-                        case 'intervenant/validation/enseignement/prevu':
-                            return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_PREVU_VISUALISATION);
-                        case 'intervenant/validation/enseignement/realise':
-                            return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_REALISE_VISUALISATION);
-                        case 'intervenant/enseignement-prevu':
-                            return $this->assertPageEnseignements($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
-                        break;
-                        case 'intervenant/enseignement-realise':
-                            return $this->assertPageEnseignements($role, $intervenant, TypeVolumeHoraire::CODE_REALISE);
-                        break;
-                    }
-                }
-        */
-
-        return true;
+        return false;
     }
 
 
@@ -91,6 +67,14 @@ class MissionAssertion extends AbstractAssertion
         return true;
     }
 
-    /* Vos autres tests */
+
+
+    protected function assertVisualisationMission(Role $role, Intervenant $intervenant)
+    {
+        return $this->asserts([
+            $role->hasPrivilege(Privileges::MISSION_VISUALISATION),
+            $intervenant->getStatut()->getMission(),
+        ]);
+    }
 
 }

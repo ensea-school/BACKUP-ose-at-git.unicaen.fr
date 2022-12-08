@@ -59,6 +59,7 @@ return [
             'privileges' => [
                 Privileges::MISSION_VISUALISATION,
             ],
+            'assertion'  => Assertion\MissionAssertion::class,
         ],
     ],
 

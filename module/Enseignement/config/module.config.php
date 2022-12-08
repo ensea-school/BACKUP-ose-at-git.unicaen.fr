@@ -235,6 +235,8 @@ return [
             'privileges' => [
                 Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
                 Privileges::MOTIF_NON_PAIEMENT_EDITION,
+                Privileges::TAG_EDITION,
+                Privileges::TAG_VISUALISATION,
             ],
             'resources'  => 'Intervenant',
             'assertion'  => Assertion\EnseignementAssertion::class,

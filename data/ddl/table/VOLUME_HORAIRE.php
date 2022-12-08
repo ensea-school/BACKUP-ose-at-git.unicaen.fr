@@ -165,6 +165,18 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
+        'TAG_ID'                 => [
+            'name'        => 'TAG_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 16,
+            'commentaire' => NULL,
+        ],
         'PERIODE_ID'             => [
             'name'        => 'PERIODE_ID',
             'type'        => 'int',

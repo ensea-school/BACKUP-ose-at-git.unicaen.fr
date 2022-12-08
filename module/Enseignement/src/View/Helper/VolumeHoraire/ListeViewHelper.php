@@ -97,6 +97,7 @@ class ListeViewHelper extends AbstractViewHelper
     final public function __invoke(VolumeHoraireListe $volumeHoraireListe)
     {
         /* Initialisation */
+
         $this->setVolumeHoraireListe($volumeHoraireListe);
 
         return $this;
@@ -142,8 +143,6 @@ class ListeViewHelper extends AbstractViewHelper
         $canViewTag = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::TAG_VISUALISATION);
         $canEditTag = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::TAG_EDITION);
 
-        var_dump($canViewTag);
-        die;
 
         $out = '<table class="table table-sm table-bordered volume-horaire">';
         $out .= '<tr>';
@@ -209,18 +208,20 @@ class ListeViewHelper extends AbstractViewHelper
                 }
 
                 foreach ($this->typesIntervention as $typeIntervention) {
-                    $vhl->setTypeIntervention($typeIntervention);
-                    if ($vhl->getHeures() == 0) {
+
+                    $vhlt = $vhl->createChild()->setTypeIntervention($typeIntervention);
+
+                    if ($vhlt->getHeures() == 0) {
                         $class = "heures-empty";
                     } else {
                         $class = "heures-not-empty";
                     }
-                    $out .= '<td style="text-align:right" class="' . $class . '">' . $this->renderHeures($vhl, $readOnly) . '</td>';
+                    $out .= '<td style="text-align:right" class="' . $class . '">' . $this->renderHeures($vhlt, $readOnly) . '</td>';
                 }
                 if ($canViewMNP) {
                     $out .= "<td>" . $this->renderMotifNonPaiement($motifNonPaiement) . "</td>\n";
                 }
-                if ($canViewTag) {
+                if (!$canViewTag) {
                     $out .= "<td>" . $this->renderTag($tag) . "</td>";
                 }
                 $out .= "</tr>\n";
@@ -281,8 +282,9 @@ class ListeViewHelper extends AbstractViewHelper
         /**
          * @var Tag $tag
          */
+
         if (!empty($tag)) {
-            $out = $tag->getLibelleLong();
+            $out = 'tazg';
         } else {
             $out = '';
         }

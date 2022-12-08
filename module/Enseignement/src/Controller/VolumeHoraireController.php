@@ -9,7 +9,9 @@ use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Enseignement\Entity\VolumeHoraireListe;
 use Application\Form\AbstractForm;
+use Enseignement\Form\VolumeHoraireSaisieCalendaireForm;
 use Enseignement\Form\VolumeHoraireSaisieCalendaireFormAwareTrait;
+use Enseignement\Form\VolumeHoraireSaisieForm;
 use Enseignement\Form\VolumeHoraireSaisieFormAwareTrait;
 use Enseignement\Hydrator\ListeFilterHydrator;
 use Plafond\Processus\PlafondProcessusAwareTrait;
@@ -49,17 +51,18 @@ class VolumeHoraireController extends AbstractController
         if (!$service) throw new RuntimeException("Service non spécifié ou introuvable.");
 
         $typeVolumeHoraireId = $this->params()->fromPost('type-volume-horaire', $this->params()->fromQuery('type-volume-horaire'));
-        $typeVolumeHoraire   = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraireId);
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraireId);
+
 
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
         $readOnly = 1 == (int)$this->params()->fromQuery('read-only', 0);
 
         $volumeHoraireListe = $service->getVolumeHoraireListe()->setTypeVolumehoraire($typeVolumeHoraire);
-        $semestriel         = $this->getServiceContext()->isModaliteServicesSemestriel($typeVolumeHoraire);
+        $semestriel = $this->getServiceContext()->isModaliteServicesSemestriel($typeVolumeHoraire);
+
 
         return compact('volumeHoraireListe', 'readOnly', 'semestriel');
     }
-
 
 
     public function saisieAction()
@@ -68,12 +71,10 @@ class VolumeHoraireController extends AbstractController
     }
 
 
-
     public function saisieCalendaireAction()
     {
         return $this->saisieMixte($this->getFormVolumeHoraireSaisieCalendaire());
     }
-
 
 
     private function saisieMixte(AbstractForm $form)
@@ -81,28 +82,51 @@ class VolumeHoraireController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             VolumeHoraire::class,
             MotifNonPaiement::class,
+            Tag::class,
         ]);
 
         /** @var Service $service */
         $service = $this->getEvent()->getParam('service');
+        /*foreach ($service->getVolumeHoraire() as $v) {
+
+        $tag = $v->getTag();
+        var_dump($tag->getLibelleLong());
+
+    }
+die;
+*/
 
         if (!$service) {
             throw new \Exception('Service non fourni');
         }
 
         $volumeHoraireListe = new VolumeHoraireListe($service);
-        $vhlph              = new ListeFilterHydrator();
+        $tags = $volumeHoraireListe->getTags();
+        foreach ($tags as $tag) {
+            // var_dump($tag->getLibelleLong());
+        }
+        $vhlph = new ListeFilterHydrator();
         $vhlph->setEntityManager($this->em());
+        $paramsQuery = $this->params()->fromQuery();
+        $paramsPost = $this->params()->fromPost();
         $vhlph->hydrate($this->params()->fromQuery() + $this->params()->fromPost(), $volumeHoraireListe);
         $service->setTypeVolumeHoraire($volumeHoraireListe->getTypeVolumeHoraire());
 
         $canViewMNP = $this->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
         $canEditMNP = $canViewMNP && $this->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_EDITION);
+        $canViewTag = $this->isAllowed(Privileges::getResourceId(Privileges::TAG_VISUALISATION));
+        $canEditTag = $canViewTag && $this->isAllowed(Privileges::getResourceId(Privileges::TAG_EDITION));
 
         $hDeb = $volumeHoraireListe->getHeures();
 
+        /**
+         * @var VolumeHoraireSaisieForm $form
+         */
+
         $form->setViewMNP($canViewMNP);
         $form->setEditMNP($canEditMNP);
+        $form->setViewTag($canViewTag);
+        $form->setEditTag($canEditTag);
         $form->build();
         $form->bindRequestSave($volumeHoraireListe, $this->getRequest(), function (VolumeHoraireListe $vhl) use ($hDeb, $volumeHoraireListe) {
             try {
@@ -125,8 +149,8 @@ class VolumeHoraireController extends AbstractController
     }
 
 
-
-    public function suppressionCalendaireAction()
+    public
+    function suppressionCalendaireAction()
     {
         /** @var Service $service */
         $service = $this->getEvent()->getParam('service');
@@ -136,7 +160,7 @@ class VolumeHoraireController extends AbstractController
         }
 
         $volumeHoraireListe = new VolumeHoraireListe($service);
-        $vhlph              = new ListeFilterHydrator();
+        $vhlph = new ListeFilterHydrator();
         $vhlph->setEntityManager($this->em());
         $vhlph->hydrate($this->params()->fromQuery(), $volumeHoraireListe);
 
@@ -157,8 +181,8 @@ class VolumeHoraireController extends AbstractController
     }
 
 
-
-    private function updateTableauxBord(Intervenant $intervenant)
+    private
+    function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'formule', 'validation_enseignement', 'service', 'piece_jointe_fournie',

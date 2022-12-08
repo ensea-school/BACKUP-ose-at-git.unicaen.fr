@@ -30,6 +30,7 @@ class VolumeHoraireListe
     const FILTRE_HORAIRE_DEBUT       = 'horaire-debut';
     const FILTRE_HORAIRE_FIN         = 'horaire-fin';
     const FILTRE_MOTIF_NON_PAIEMENT  = 'motif-non-paiement';
+    const FILTRE_TAG                 = 'tag';
     const FILTRE_PERIODE             = 'periode';
     const FILTRE_TYPE_INTERVENTION   = 'type-intervention';
     const FILTRE_TYPE_VOLUME_HORAIRE = 'type-volume-horaire';
@@ -39,7 +40,7 @@ class VolumeHoraireListe
     const FILTRE_NEW                 = 'new';
     const FILTRE_LIST                = [
         self::FILTRE_CONTRAT, self::FILTRE_ETAT_VOLUME_HORAIRE, self::FILTRE_HORAIRE_DEBUT, self::FILTRE_HORAIRE_FIN,
-        self::FILTRE_MOTIF_NON_PAIEMENT, self::FILTRE_PERIODE, self::FILTRE_TYPE_INTERVENTION,
+        self::FILTRE_MOTIF_NON_PAIEMENT, self::FILTRE_TAG, self::FILTRE_PERIODE, self::FILTRE_TYPE_INTERVENTION,
         self::FILTRE_TYPE_VOLUME_HORAIRE, self::FILTRE_VALIDATION, self::FILTRE_SOURCE, self::FILTRE_HISTORIQUE,
         self::FILTRE_NEW,
     ];
@@ -68,6 +69,11 @@ class VolumeHoraireListe
         self::FILTRE_MOTIF_NON_PAIEMENT  => [
             'class'       => MotifNonPaiement::class,
             'accessor'    => 'MotifNonPaiement',
+            'to-int-func' => 'getId',
+        ],
+        self::FILTRE_TAG                 => [
+            'class'       => Tag::class,
+            'accessor'    => 'Tag',
             'to-int-func' => 'getId',
         ],
         self::FILTRE_PERIODE             => [
@@ -198,11 +204,13 @@ class VolumeHoraireListe
         $data = [];
 
         $vhs = $this->getService()->getVolumeHoraire();
+
         foreach ($vhs as $volumeHoraire) {
             if ($this->match($volumeHoraire)) {
                 $data[$volumeHoraire->getId()] = $volumeHoraire;
             }
         }
+
 
         return $data;
     }
@@ -227,6 +235,7 @@ class VolumeHoraireListe
      */
     public function match(VolumeHoraire $volumeHoraire): bool
     {
+        $var = '';
         if ($volumeHoraire->getRemove()) { // Si le volume horaire est en cours de suppression
             return false;
         }
@@ -275,6 +284,14 @@ class VolumeHoraireListe
                 if (null === $motifNonPaiement) return false;
             } else {
                 if ($motifNonPaiement !== $this->motifNonPaiement) return false;
+            }
+        }
+        if (false !== $this->tag) {
+            $tag = $volumeHoraire->getTag();
+            if (true === $this->tag) {
+                if (null === $tag) return false;
+            } else {
+                if ($tag !== $this->tag) return false;
             }
         }
         if (false !== $this->contrat) {
@@ -479,26 +496,26 @@ class VolumeHoraireListe
      */
     public function getTags(): array
     {
-        $mnps = [];
+        $tags = [];
         $vChild = $this->createChild();
         foreach ($this->getVolumeHoraires() as $volumeHoraire) {
-            if ($mnp = $volumeHoraire->getTag()) {
-                $vChild->setTag($mnp);
+            if ($tag = $volumeHoraire->getTag()) {
+                $vChild->setTag($tag);
                 if ($vChild->getHeures() !== 0) {
-                    $mnps[$mnp->getId()] = $mnp;
+                    $tags[$tag->getId()] = $tag;
                 }
             } else {
                 $vChild->setTag(null);
                 if ($vChild->getHeures() !== 0) {
-                    $mnps[0] = null;
+                    $tags[0] = null;
                 }
             }
         }
-        uasort($mnps, function ($a, $b) {
+        uasort($tags, function ($a, $b) {
             return ($a ? $a->getLibelleLong() : '') > ($b ? $b->getLibelleLong() : '') ? 1 : 0;
         });
 
-        return $mnps;
+        return $tags;
     }
 
 
@@ -598,6 +615,9 @@ class VolumeHoraireListe
         if (in_array(self::FILTRE_MOTIF_NON_PAIEMENT, $filtres)) {
             $this->setMotifNonPaiement($vh->getMotifNonPaiement());
         }
+        if (in_array(self::FILTRE_TAG, $filtres)) {
+            $this->setTag($vh->getTag());
+        }
         if (in_array(self::FILTRE_PERIODE, $filtres)) {
             $this->setPeriode($vh->getPeriode());
         }
@@ -648,6 +668,9 @@ class VolumeHoraireListe
         }
         if (in_array(self::FILTRE_MOTIF_NON_PAIEMENT, $filtres)) {
             $this->setMotifNonPaiement($vhl->getMotifNonPaiement());
+        }
+        if (in_array(self::FILTRE_TAG, $filtres)) {
+            $this->setTag($vhl->getTag());
         }
         if (in_array(self::FILTRE_PERIODE, $filtres)) {
             $this->setPeriode($vhl->getPeriode());
@@ -874,6 +897,9 @@ class VolumeHoraireListe
             if ($this->getMotifNonPaiement() instanceof MotifNonPaiement) {
                 $volumeHoraire->setMotifNonPaiement($this->getMotifNonPaiement());
             }
+            if ($this->getTag() instanceof Tag) {
+                $volumeHoraire->setTag($this->getTag());
+            }
             $volumeHoraire->setHeures($newHeures);
             $this->getService()->addVolumeHoraire($volumeHoraire);
         }
@@ -889,11 +915,11 @@ class VolumeHoraireListe
      *
      * @return $this
      */
-    public function moveHeuresFromAncienMotifNonPaiement($heures, $ancienMotifNonPaiement): VolumeHoraireListe
+    public function moveHeuresFromAncienMotifNonPaiementOrTag($heures, $ancienMotifNonPaiement, $ancienTag): VolumeHoraireListe
     {
-        if ($this->__debug) $this->__debug->dumpAction('moveHeuresFromAncienMotifNonPaiement', $heures, $ancienMotifNonPaiement);
+        if ($this->__debug) $this->__debug->dumpAction('moveHeuresFromAncienMotifNonPaiementOrTag', $heures, $ancienMotifNonPaiement, $ancienTag);
 
-        if ($ancienMotifNonPaiement == $this->getMotifNonPaiement()) {
+        if ($ancienMotifNonPaiement == $this->getMotifNonPaiement() && $ancienTag == $this->getTag()) {
             return $this->setHeures($heures);
         }
 
@@ -901,6 +927,7 @@ class VolumeHoraireListe
 
         $vhl = $this->createChild();
         $vhl->setMotifNonPaiement($ancienMotifNonPaiement);
+        $vhl->setTag($ancienTag);
         $heuresAnciennes = $vhl->getHeures();
 
         $vhl->setHeures(max($heuresAnciennes - $heures, 0));
@@ -919,7 +946,7 @@ class VolumeHoraireListe
      *
      * @return $this
      */
-    public function changeAll($horaireDebut, $horaireFin, $typeIntervention, $periode, $motifNonPaiement): VolumeHoraireListe
+    public function changeAll($horaireDebut, $horaireFin, $typeIntervention, $periode, $motifNonPaiement, $tag): VolumeHoraireListe
     {
         if ($this->__debug) $this->__debug->dumpAction('changeAll', $horaireDebut, $horaireFin, $typeIntervention, $periode, $motifNonPaiement);
 
@@ -933,6 +960,7 @@ class VolumeHoraireListe
             self::FILTRE_TYPE_INTERVENTION,
             self::FILTRE_PERIODE,
             self::FILTRE_MOTIF_NON_PAIEMENT,
+            self::FILTRE_TAG,
         ];
 
         foreach ($vhs as $vh) {
@@ -952,6 +980,9 @@ class VolumeHoraireListe
                     }
                     if ($motifNonPaiement !== false) {
                         $vh->setMotifNonPaiement($motifNonPaiement);
+                    }
+                    if ($tag !== false) {
+                        $vh->setTag($tag);
                     }
                 } else {
                     $heuresAReporter += $vh->getHeures();
@@ -978,6 +1009,7 @@ class VolumeHoraireListe
         $this->setTypeIntervention($typeIntervention);
         $this->setPeriode($periode);
         $this->setMotifNonPaiement($motifNonPaiement);
+        $this->setTag($tag);
 
         /* On ajoute les heures correspondant aux nouveaux filtres */
         if ($heuresAReporter !== 0) {
@@ -1229,7 +1261,7 @@ class VolumeHoraireListe
 
     /**
      *
-     * @param MotifNonPaiement|boolean $motifNonPaiement
+     * @param Tag|boolean $tag
      *
      * @return self
      */

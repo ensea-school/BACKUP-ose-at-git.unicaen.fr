@@ -55,6 +55,7 @@
 * Le tableau des services d'enseignement n'affiche plus les colonnes inutiles
 * Les étapes d'ODF complémentaire peuvent de nouveau être modifiées (#46922)
 * Ajout du libelle du statut (champ STATUT_LIBELLE) pour affichage dans les états de paiement si nécessaire (#47762)
+* Correction pour prise en compte des départements de naissance dans les DOM TOM dans la PEC Siham.
 
 # OSE 19.4 (21/10/2022)
 

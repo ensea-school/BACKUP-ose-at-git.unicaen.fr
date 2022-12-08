@@ -11,17 +11,18 @@ $.widget("ose.serviceListe", {
         for (var i in this.totaux) {
             if (this.totaux[i] != 0) {
                 count++;
-                this.element.find("table.service tr th." + i).show(); // entête
-                this.element.find("table.service tr.service-ligne td.type-intervention." + i).show();
-                this.element.find("table.service tfoot tr td." + i).show(); // total
+                this.element.find("table.service tr th.ti" + i).show(); // entête
+                this.element.find("table.service tr.service-ligne td.type-intervention.ti" + i).show();
+                this.element.find("table.service tfoot tr td.ti" + i).show(); // total
             } else {
-                this.element.find("table.service tr th." + i).hide(); // entête
-                this.element.find("table.service tr.service-ligne td.type-intervention." + i).hide();
-                this.element.find("table.service tfoot tr td." + i).hide(); // total
+                this.element.find("table.service tr th.ti" + i).hide(); // entête
+                this.element.find("table.service tr.service-ligne td.type-intervention.ti" + i).hide();
+                this.element.find("table.service tfoot tr td.ti" + i).hide(); // total
             }
         }
         this.element.find("table.service #total-general").attr('colspan', count);
         if (count == 0) {
+            this.element.find("table.service tr th.type-intervention").hide(); // entête
             this.element.find("table.service tfoot").hide();
         } else {
             this.element.find("table.service tfoot").show();
@@ -35,19 +36,19 @@ $.widget("ose.serviceListe", {
         this.total = 0;
 
         this.element.find("table.service tr.service-ligne td.type-intervention").each(function () {
-            var typeInterventionCode = $(this).data('type-intervention-code');
+            var typeInterventionId = $(this).data('type-intervention-id');
             var value = $(this).data('value');
 
-            if (that.totaux[typeInterventionCode] == undefined) that.totaux[typeInterventionCode] = 0;
+            if (that.totaux[typeInterventionId] == undefined) that.totaux[typeInterventionId] = 0;
 
-            that.totaux[typeInterventionCode] += value;
+            that.totaux[typeInterventionId] += value;
             that.total += value;
         });
 
         // on met à jour aussi les entêtes et les totaux
         for (var ti in this.totaux) {
             var heures = this.totaux[ti];
-            this.element.find("table.service tfoot tr td." + ti).html(Util.formattedHeures(heures));
+            this.element.find("table.service tfoot tr td.ti" + ti).html(Util.formattedHeures(heures));
         }
         this.element.find("table.service #total-general").html(Util.formattedHeures(this.total));
     },

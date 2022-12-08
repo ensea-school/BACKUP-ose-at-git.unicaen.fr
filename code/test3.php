@@ -7,3 +7,11 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
+
+
+/** @var \Doctrine\ORM\EntityManager $em */
+$em = $container->get(\Application\Constants::BDD);
+
+$e = $em->find(\Mission\Entity\Db\TypeMission::class, 1);
+
+var_dump($e);

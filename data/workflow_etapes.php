@@ -1,6 +1,20 @@
 <?php
 
 return [
+    "MISSION_SAISIE"                 => [
+        "LIBELLE_INTERVENANT" => "Je visualise mes missions",
+        "LIBELLE_AUTRES"      => "J'accède aux missions",
+        "ROUTE"               => "intervenant/missions",
+        "DESC_NON_FRANCHIE"   => "Aucune mission attibuée",
+        "OBLIGATOIRE"         => true,
+    ],
+    "MISSION_VALIDATION"             => [
+        "LIBELLE_INTERVENANT" => "Je visualise la validation de mes missions",
+        "LIBELLE_AUTRES"      => "Je valide les missions saisies",
+        "ROUTE"               => "intervenant/missions",
+        "DESC_NON_FRANCHIE"   => "Certaines missions n'ont pas été validées",
+        "OBLIGATOIRE"         => true,
+    ],
     "DONNEES_PERSO_SAISIE"           => [
         "LIBELLE_INTERVENANT" => "Je saisis mes données personnelles",
         "LIBELLE_AUTRES"      => "J'accède aux données personnelles",
@@ -50,34 +64,6 @@ return [
         "DESC_NON_FRANCHIE"   => "Le référentiel prévisionnel n'a pas été validé",
         "OBLIGATOIRE"         => false,
     ],
-    "MISSION_SAISIE"                 => [
-        "LIBELLE_INTERVENANT" => "Je visualise mes missions",
-        "LIBELLE_AUTRES"      => "J'accède aux missions",
-        "ROUTE"               => "intervenant/validation/referentiel/prevu",
-        "DESC_NON_FRANCHIE"   => "Le référentiel prévisionnel n'a pas été validé",
-        "OBLIGATOIRE"         => true,
-    ],
-    "MISSION_VALIDATION"             => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation de mes missions",
-        "LIBELLE_AUTRES"      => "Je valide les missions saisies",
-        "ROUTE"               => "intervenant/validation/referentiel/prevu",
-        "DESC_NON_FRANCHIE"   => "Certaines missions n'ont pas été validées",
-        "OBLIGATOIRE"         => true,
-    ],
-    "MISSION_SAISIE_REALISE"         => [
-        "LIBELLE_INTERVENANT" => "Je renseigne mon suivi de mission",
-        "LIBELLE_AUTRES"      => "J'accède au suivi de mission",
-        "ROUTE"               => "intervenant/validation/referentiel/prevu",
-        "DESC_NON_FRANCHIE"   => "Aucune heure de mission réalisée n'a été renseignée",
-        "OBLIGATOIRE"         => true,
-    ],
-    "MISSION_VALIDATION_REALISE"     => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation de mon suivi de mission",
-        "LIBELLE_AUTRES"      => "J'accède à la validation du suivi de mission",
-        "ROUTE"               => "intervenant/validation/referentiel/prevu",
-        "DESC_NON_FRANCHIE"   => "Des heures de mission réalisées n'ont pas été validées",
-        "OBLIGATOIRE"         => true,
-    ],
     "CONSEIL_RESTREINT"              => [
         "LIBELLE_INTERVENANT" => "Je visualise l'agrément 'Conseil restreint'",
         "LIBELLE_AUTRES"      => "Je visualise l'agrément 'Conseil restreint'",
@@ -106,6 +92,13 @@ return [
         "DESC_NON_FRANCHIE"   => "Aucun enseignement réalisé n'a été saisi",
         "OBLIGATOIRE"         => true,
     ],
+    "MISSION_SAISIE_REALISE"         => [
+        "LIBELLE_INTERVENANT" => "Je renseigne mon suivi de mission",
+        "LIBELLE_AUTRES"      => "J'accède au suivi de mission",
+        "ROUTE"               => "intervenant/missions",
+        "DESC_NON_FRANCHIE"   => "Aucune heure de mission réalisée n'a été renseignée",
+        "OBLIGATOIRE"         => true,
+    ],
     "CLOTURE_REALISE"                => [
         "LIBELLE_INTERVENANT" => "Je visualise la clôture de la saisie de mes services réalisés",
         "LIBELLE_AUTRES"      => "Je visualise la clôture de la saisie des services réalisés",
@@ -118,6 +111,13 @@ return [
         "LIBELLE_AUTRES"      => "Je visualise la validation des enseignements réalisés",
         "ROUTE"               => "intervenant/validation/enseignement/realise",
         "DESC_NON_FRANCHIE"   => "Le service réalisé n'a été intégralement validé",
+        "OBLIGATOIRE"         => true,
+    ],
+    "MISSION_VALIDATION_REALISE"     => [
+        "LIBELLE_INTERVENANT" => "Je visualise la validation de mon suivi de mission",
+        "LIBELLE_AUTRES"      => "J'accède à la validation du suivi de mission",
+        "ROUTE"               => "intervenant/missions",
+        "DESC_NON_FRANCHIE"   => "Des heures de mission réalisées n'ont pas été validées",
         "OBLIGATOIRE"         => true,
     ],
     "REFERENTIEL_VALIDATION_REALISE" => [

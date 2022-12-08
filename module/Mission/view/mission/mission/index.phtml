@@ -1,0 +1,19 @@
+<?php
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ */
+
+use Application\Entity\Db\WfEtape;
+
+$title     = 'Missions';
+$nextEtape = WfEtape::CODE_SERVICE_SAISIE;
+
+$this->intervenant($intervenant)->renderTitle($title);
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+//echo $this->form()->openTag($form);
+//echo $this->formHidden($form->get('id'));
+
+echo '<hr />';
+
+echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);

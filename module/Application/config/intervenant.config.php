@@ -332,6 +332,7 @@ return [
                     'privileges' => [
                         Privileges::INTERVENANT_CALCUL_HETD,
                     ],
+                    'assertion'  => Assertion\IntervenantAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',

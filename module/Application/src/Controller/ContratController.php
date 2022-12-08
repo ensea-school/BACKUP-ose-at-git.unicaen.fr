@@ -429,7 +429,13 @@ class ContratController extends AbstractController
                     //Ajout pour transformer les sauts de lignes en html <br/>
                     $html = nl2br($html);
                     //Personnalisation des variables
-                    $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " " . $contrat->getIntervenant()->getNomUsuel();
+                    if ($contrat->getIntervenant()->getCivilite() != null) {
+                        $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " " . $contrat->getIntervenant()->getNomUsuel();
+                    } elseif ($dossierIntervenant != null && $dossierIntervenant->getCivilite() != null) {
+                        $vIntervenant = $dossierIntervenant->getCivilite()->getLibelleCourt() . " " . $contrat->getIntervenant()->getNomUsuel();
+                    } else {
+                        $vIntervenant = $contrat->getIntervenant()->getNomUsuel();
+                    }
                     $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
                     $vAnnee       = $this->getServiceContext()->getAnnee()->getLibelle();
                     $html         = str_replace([':intervenant', ':utilisateur', ':annee'], [$vIntervenant, $vUtilisateur, $vAnnee], $html);

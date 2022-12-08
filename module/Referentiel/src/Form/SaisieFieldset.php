@@ -2,6 +2,7 @@
 
 namespace Referentiel\Form;
 
+use phpDocumentor\Reflection\Types\Array_;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
 use Referentiel\Entity\Db\ServiceReferentiel;
@@ -171,12 +172,13 @@ class SaisieFieldset extends AbstractFieldset
                 foreach ($fonction->getFille() as $fille) {
                     $filles[$fille->getId()] = (string)$fille;
                 }
+                asort($filles);
                 $fonctions[$fonction->getId()] = ['label' => (string)$fonction, 'options' => $filles];
             } elseif (!$fonction->getParent()) {
                 $fonctions[$id] = (string)$fonction;
             }
         }
-
+        asort($fonctions);
         return $fonctions;
     }
 

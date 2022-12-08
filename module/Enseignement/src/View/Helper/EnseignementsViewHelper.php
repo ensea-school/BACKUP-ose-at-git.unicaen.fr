@@ -151,7 +151,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
         foreach ($typesIntervention as $ti) {
             $display = $this->getTypeInterventionVisibility($ti) ? '' : ';display:none';
             $colspan++;
-            $out .= "<th class=\"heures type-intervention " . $ti->getCode() . "\" style=\"width:8%$display\"><abbr title=\"" . $ti->getLibelle() . "\">" . $ti->getCode() . "</abbr></th>\n";
+            $out .= "<th class=\"heures type-intervention ti" . $ti->getId() . "\" style=\"width:8%$display\"><abbr title=\"" . $ti->getLibelle() . "\">" . $ti->getCode() . "</abbr></th>\n";
         }
         $out .= "<th>&nbsp;</th>\n";
         $out .= "</tr>\n";
@@ -215,8 +215,8 @@ class EnseignementsViewHelper extends AbstractViewHelper
         if ($typeVolumeHoraire = $this->getProcessusEnseignement()->initializePrevu($this->getIntervenant())) {
             $attribs = [
                 'class'       => 'btn btn-warning prevu-to-prevu-show',
-                'data-toggle' => 'modal',
-                'data-target' => '#prevu-to-prevu-modal',
+                'data-bs-toggle' => 'modal',
+                'data-bs-target' => '#prevu-to-prevu-modal',
                 'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
             ];
             $source = $typeVolumeHoraire->getLibelle();
@@ -255,8 +255,8 @@ class EnseignementsViewHelper extends AbstractViewHelper
         if ($this->getProcessusEnseignement()->initializeRealise($this->getIntervenant())) {
             $attribs = [
                 'class'       => 'btn btn-warning prevu-to-realise-show',
-                'data-toggle' => 'modal',
-                'data-target' => '#prevu-to-realise-modal',
+                'data-bs-toggle' => 'modal',
+                'data-bs-target' => '#prevu-to-realise-modal',
                 'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
                     . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
             ];
@@ -433,7 +433,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
             } else {
                 $display = ';display:none';
             }
-            $out .= "<td id=\"" . $ti->getCode() . "\" class=\"type-intervention " . $ti->getCode() . "\" style=\"text-align:right$display\">" . \UnicaenApp\Util::formattedNumber($data[$ti->getCode()]) . "</td>\n";
+            $out .= "<td id=\"" . $ti->getCode() . "\" class=\"type-intervention ti" . $ti->getId() . "\" style=\"text-align:right$display\">" . \UnicaenApp\Util::formattedNumber($data[$ti->getCode()]) . "</td>\n";
         }
         $out .= "<td>&nbsp;</td>\n";
         $out .= "</tr>\n";

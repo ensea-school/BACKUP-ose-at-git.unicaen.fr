@@ -219,8 +219,8 @@ class ReferentielsViewHelper extends AbstractViewHelper
         if ($this->getServiceServiceReferentiel()->getPrevusFromPrevusData($this->getIntervenant())) {
             $attribs = [
                 'class'       => 'btn btn-warning referentiel-prevu-to-prevu-show',
-                'data-toggle' => 'modal',
-                'data-target' => '#referentiel-prevu-to-prevu-modal',
+                'data-bs-toggle' => 'modal',
+                'data-bs-target' => '#referentiel-prevu-to-prevu-modal',
                 //'data-event'    => 'service-constatation',
                 //'href'          => $this->getAddUrl(),
                 'title'       => "Initialiser le service référentiel prévisionnel avec le service référentiel prévisionnel validé l'année dernière",

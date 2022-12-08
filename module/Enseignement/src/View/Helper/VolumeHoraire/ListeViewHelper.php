@@ -161,6 +161,7 @@ class ListeViewHelper extends AbstractViewHelper
 
         foreach ($periodes as $periode) {
             $vhl = $this->getVolumeHoraireListe()->createChild()->setPeriode($periode)->setTypeIntervention(false);
+            $vhl = $this->getVolumeHoraireListe()->createChild()->setPeriode($periode)->setTag(false);
 
 
             /* Gestion des mauvaises périodes */
@@ -182,49 +183,55 @@ class ListeViewHelper extends AbstractViewHelper
                 $motifsNonPaiement = [0 => false];
             }
 
-            $tag = [];
+            $tags = [];
             if ($canViewTag) {
-                $tag = $vhl->getTags();
-                if (!isset($tag[0]) && !$canEditTag) {
-                    $tag = [0 => null] + $tag;
+                $tags = $vhl->getTags();
+                if (!isset($tags[0]) && !$canEditTag) {
+                    $tags = [0 => null] + $tags;
                 }
             }
-            if (empty($tag)) {
-                $tag = [0 => false];
+            if (empty($tags)) {
+                $tags = [0 => false];
             }
 
             /* Affichage par motif de non paiement */
             foreach ($motifsNonPaiement as $motifNonPaiement) {
+
                 $vhl->setMotifNonPaiement($motifNonPaiement);
-                if ($vhl->getHeures() == 0) continue; // rien à afficher
+                foreach ($tags as $tag) {
+                    $vhl->setTag($tag);
 
-                $readOnly = $motifNonPaiement instanceof MotifNonPaiement && !$canEditMNP;
-                if ($forbiddenPeriode) {
-                    $out .= '<tr class="bg-danger">';
-                    $out .= "<td><abbr title=\"La période n'est pas conforme à l'enseignement\">" . $this->renderPeriode($periode) . "</abbr></td>\n";
-                } else {
-                    $out .= '<tr>';
-                    $out .= "<td>" . $this->renderPeriode($periode) . "</td>\n";
-                }
+                    if ($vhl->getHeures() == 0) continue; // rien à afficher
 
-                foreach ($this->typesIntervention as $typeIntervention) {
-
-                    $vhlt = $vhl->createChild()->setTypeIntervention($typeIntervention);
-
-                    if ($vhlt->getHeures() == 0) {
-                        $class = "heures-empty";
+                    $readOnly = $motifNonPaiement instanceof MotifNonPaiement && !$canEditMNP;
+                    if ($forbiddenPeriode) {
+                        $out .= '<tr class="bg-danger">';
+                        $out .= "<td><abbr title=\"La période n'est pas conforme à l'enseignement\">" . $this->renderPeriode($periode) . "</abbr></td>\n";
                     } else {
-                        $class = "heures-not-empty";
+                        $out .= '<tr>';
+                        $out .= "<td>" . $this->renderPeriode($periode) . "</td>\n";
                     }
-                    $out .= '<td style="text-align:right" class="' . $class . '">' . $this->renderHeures($vhlt, $readOnly) . '</td>';
+
+                    foreach ($this->typesIntervention as $typeIntervention) {
+
+                        $vhlt = $vhl->createChild()->setTypeIntervention($typeIntervention);
+
+                        if ($vhlt->getHeures() == 0) {
+                            $class = "heures-empty";
+                        } else {
+                            $class = "heures-not-empty";
+                        }
+                        $out .= '<td style="text-align:right" class="' . $class . '">' . $this->renderHeures($vhlt, $readOnly) . '</td>';
+                    }
+                    if ($canViewMNP) {
+                        $out .= "<td>" . $this->renderMotifNonPaiement($motifNonPaiement) . "</td>\n";
+                    }
+                    if ($canViewTag) {
+                        $out .= "<td>" . $this->renderTag($tag) . "</td>";
+                    }
+                    $out .= "</tr>\n";
                 }
-                if ($canViewMNP) {
-                    $out .= "<td>" . $this->renderMotifNonPaiement($motifNonPaiement) . "</td>\n";
-                }
-                if (!$canViewTag) {
-                    $out .= "<td>" . $this->renderTag($tag) . "</td>";
-                }
-                $out .= "</tr>\n";
+
             }
         }
         $out .= '</table>' . "\n";
@@ -284,10 +291,12 @@ class ListeViewHelper extends AbstractViewHelper
          */
 
         if (!empty($tag)) {
-            $out = 'tazg';
+            $out = $tag->getLibelleLong();
         } else {
             $out = '';
         }
+
+        return $out;
     }
 
 

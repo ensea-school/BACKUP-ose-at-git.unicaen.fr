@@ -487,13 +487,25 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $paysNaissance = '';
             }
 
+            //Traitement du départmenent
+            $valueDepartement = '';
+            if (!empty($dossierIntervenant->getDepartementNaissance())) {
+                $departementCode = $dossierIntervenant->getDepartementNaissance()->getCode();
+                if (substr($departementCode, 0, 1) == '9') {
+                    $valueDepartement = $departementCode;
+                } else {
+                    $valueDepartement = substr($departementCode, 1, 2);
+                }
+            }
+
+
             $params = [
                 'categorieEntree'           => 'ACTIVE',
                 'civilite'                  => ($dossierIntervenant->getCivilite() == 'M.') ? '1' : '2',
                 'dateEmbauche'              => $dateEffet,
                 'dateNaissance'             => $dossierIntervenant->getDateNaissance()->format('Y-m-d'),
                 'villeNaissance'            => $dossierIntervenant->getCommuneNaissance(),
-                'departementNaissance'      => (!empty($dossierIntervenant->getDepartementNaissance())) ? substr($dossierIntervenant->getDepartementNaissance()->getCode(), 1, 2) : '',
+                'departementNaissance'      => $valueDepartement,
                 'paysNaissance'             => $paysNaissance,
                 'emploi'                    => $datas['connecteurForm']['emploi'],
                 'listeCoordonneesPostales'  => $coordonneesPostales,

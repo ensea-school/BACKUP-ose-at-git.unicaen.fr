@@ -128,8 +128,7 @@ class PieceJointeController extends AbstractController
 
 
     /**
-     * @param TblPieceJointeDemande[] $demandees
-     * @param TblPieceJointeFournie[] $fournies
+     * @param Intervenant $intervenant
      *
      * @return array
      */
@@ -139,7 +138,7 @@ class PieceJointeController extends AbstractController
         $workflowEtapePjSaisie = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_SAISIE, $intervenant);
         $workflowEtapePjValide = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_VALIDATION, $intervenant);
         $msgs = [];
-        
+
         if ($workflowEtapePjSaisie->getFranchie() != 1) {
             $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
         } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() == 1) {

@@ -57,6 +57,7 @@
 * Ajout du libelle du statut (champ STATUT_LIBELLE) pour affichage dans les états de paiement si nécessaire (#47762)
 * Correction pour prise en compte des départements de naissance dans les DOM TOM dans la PEC Siham.
 * Le workflow se calcule correctement lorsqu'il n'y a qu'un seul contrat par intervenant
+* Correction sur la gestion des pièces jointes demandées uniquement dans le cadre de la formation continue
 
 # OSE 19.4 (21/10/2022)
 

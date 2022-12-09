@@ -50,11 +50,13 @@
 * Correction de bug dans la formule de Picardie
 * Correction de bug de l'envoi du contrat par email lorsque la civilité est absente
 * Correction du bouton "Prévu->Réalisé" absent pour le service réalisé
-* Lors de la saisir de référentiel, le tri se fait correctement sur les fonction référentielles et sur les types de fonction
+* Lors de la saisie de référentiel, le tri se fait correctement sur les fonction référentielles et sur les types de fonction
 * Les caractères spéciaux sont bien pris en compte dans les types d'intervention (exemple : CM/TD)
 * Le tableau des services d'enseignement n'affiche plus les colonnes inutiles
 * Les étapes d'ODF complémentaire peuvent de nouveau être modifiées (#46922)
 * Ajout du libelle du statut (champ STATUT_LIBELLE) pour affichage dans les états de paiement si nécessaire (#47762)
+* Correction pour prise en compte des départements de naissance dans les DOM TOM dans la PEC Siham.
+* Le workflow se calcule correctement lorsqu'il n'y a qu'un seul contrat par intervenant
 
 # OSE 19.4 (21/10/2022)
 

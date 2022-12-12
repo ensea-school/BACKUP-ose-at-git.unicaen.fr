@@ -121,7 +121,7 @@ class StatutSaisieForm extends AbstractForm
             'type'       => 'Text',
             'name'       => 'tauxChargesPatronales',
             'attributes' => [
-                'pattern' => '[0-9]*[,.][0-9]*',
+                'pattern' => '[0-9]+([,.][0-9]+)?',
             ],
             'hydrator'   => [
                 'getter' => function (Statut $statut, string $name) {
@@ -140,7 +140,7 @@ class StatutSaisieForm extends AbstractForm
             'type'       => 'Text',
             'name'       => 'tauxChargesTTC',
             'attributes' => [
-                'pattern' => '[0-9]*[,.][0-9]*',
+                'pattern' => '[0-9]+([,.][0-9]+)?',
             ],
             'hydrator'   => [
                 'getter' => function (Statut $statut, string $name) {

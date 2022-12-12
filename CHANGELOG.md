@@ -58,6 +58,7 @@
 * Correction pour prise en compte des départements de naissance dans les DOM TOM dans la PEC Siham.
 * Le workflow se calcule correctement lorsqu'il n'y a qu'un seul contrat par intervenant
 * Correction sur la gestion des pièces jointes demandées uniquement dans le cadre de la formation continue
+* Formule de calcul de ROUEN corrigée (#47876)
 
 # OSE 19.4 (21/10/2022)
 

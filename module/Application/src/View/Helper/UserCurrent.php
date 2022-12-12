@@ -59,7 +59,7 @@ class UserCurrent extends UserAbstract
             // - Lien de déconnexion.
             /** @var \UnicaenAuth\View\Helper\UserConnection $userConnectionHelper */
             $userConnectionHelper = $this->getView()->plugin('userConnection');
-            $deconnexion = $userConnectionHelper->renderDisconnection();
+            $deconnexion = "|".$userConnectionHelper->renderDisconnection();
         } else {
             $status = "<span id=\"user-status-icon\" class=\"fa fa-user\"></span> Vous n'êtes pas connecté(e)";
             $content = _("Aucun");

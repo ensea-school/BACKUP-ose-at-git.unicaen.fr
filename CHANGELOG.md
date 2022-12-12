@@ -36,7 +36,8 @@
 * Les indicateurs 530 et 540 ne renvoient plus de vacataires
 * Dans les diagrammes du module Charges, la boite de dialogue s'affiche correctement, même avec beaucoup de types d'intervention
 * Le plafond relatif aux charges / services saisis est maintenant opérationnel
-* Lors de la saisir d'enseignement, les elements pedagogique sur lesquels il est impossible de saisir des heures seront surlignés en rouge
+* Lors de la saisie d'enseignement, les elements pedagogique sur lesquels il est impossible de saisir des heures seront surlignés en rouge
+* Il est de nouveau possible de saisir des taux de charge TTC et des taux de charge patronale a virgule
 
 ## Notes de mise à jour
 

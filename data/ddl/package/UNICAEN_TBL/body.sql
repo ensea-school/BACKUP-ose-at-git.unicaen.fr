@@ -1237,7 +1237,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           m.structure_id                                                                           structure_id,
           i.structure_id                                                                           intervenant_structure_id,
           CASE WHEN m.auto_validation = 1 OR vm.id IS NOT NULL THEN 1 ELSE 0 END                   valide,
-          SUM(vhm.heures)                                                                          heures_realisees,
+          COALESCE(SUM(vhm.heures),0)                                                              heures_realisees,
           SUM(CASE WHEN vvhm.id IS NOT NULL OR vhm.auto_validation = 1 THEN vhm.heures ELSE 0 END) heures_validees
         FROM
                     intervenant                     i

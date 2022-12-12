@@ -350,6 +350,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     p VARCHAR2(30);
     dems CLOB;
     intervenant CLOB;
+    mission CLOB;
     dossier CLOB;
     service_saisie CLOB;
     service_saisie_realise CLOB;
@@ -362,6 +363,9 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     contrat CLOB;
   BEGIN
     dems := '
+        WHEN e.code = ''MISSION_SAISIE'' OR e.code = ''MISSION_VALIDATION'' OR e.code = ''MISSION_SAISIE_REALISE'' OR e.code = ''MISSION_VALIDATION_REALISE'' THEN
+          si.mission
+
         WHEN e.code = ''DONNEES_PERSO_SAISIE'' OR e.code = ''DONNEES_PERSO_VALIDATION'' THEN
           si.dossier
 
@@ -413,6 +417,60 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
         intervenant
       WHERE
         ' || unicaen_tbl.MAKE_WHERE(CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, VALUE) || '
+    ';
+
+
+
+    mission := '
+        SELECT
+          ''MISSION_SAISIE''                                   etape_code,
+          m.intervenant_id                                     intervenant_id,
+          COALESCE(m.structure_id,m.intervenant_structure_id)  structure_id,
+          1                                                    objectif,
+          CASE WHEN m.mission_id IS NULL THEN 0 ELSE 1 END     realisation
+        FROM
+          tbl_mission m
+        WHERE
+          m.actif = 1
+
+        UNION ALL
+
+        SELECT
+          ''MISSION_VALIDATION''                               etape_code,
+          m.intervenant_id                                     intervenant_id,
+          m.structure_id                                       structure_id,
+          1                                                    objectif,
+          m.valide                                             realisation
+        FROM
+          tbl_mission m
+        WHERE
+          m.actif = 1
+
+        UNION ALL
+
+        SELECT
+          ''MISSION_SAISIE_REALISE''                           etape_code,
+          m.intervenant_id                                     intervenant_id,
+          m.structure_id                                       structure_id,
+          1                                                    objectif,
+          CASE WHEN m.heures_realisees > 0 THEN 1 ELSE 0 END   realisation
+        FROM
+          tbl_mission m
+        WHERE
+          m.actif = 1
+
+        UNION ALL
+
+        SELECT
+          ''MISSION_VALIDATION_REALISE''                       etape_code,
+          m.intervenant_id                                     intervenant_id,
+          m.structure_id                                       structure_id,
+          m.heures_realisees                                   objectif,
+          m.heures_validees                                    realisation
+        FROM
+          tbl_mission m
+        WHERE
+          m.actif = 1
     ';
 
 
@@ -720,6 +778,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       JOIN type_intervenant        ti ON ti.id = si.type_intervenant_id
       JOIN wf_etape                 e ON 1 = CASE ' || dems || ' END
       LEFT JOIN ( ' || dossier || '
+        UNION ALL ' || mission || '
         UNION ALL ' || service_saisie || '
         UNION ALL ' || service_saisie_realise || '
         UNION ALL ' || validation_enseignement || '

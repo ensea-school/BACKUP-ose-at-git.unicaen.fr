@@ -36,7 +36,7 @@
 
 
 
-# OSE 19.5 (à venir)
+# OSE 19.5 (12/12/2022)
 
 ## Corrections de bugs
 

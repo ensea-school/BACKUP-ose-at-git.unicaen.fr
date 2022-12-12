@@ -10,6 +10,7 @@ use Application\Entity\Db\TblPieceJointeDemande;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Entity\Db\Validation;
+use Application\Entity\Db\WfEtape;
 use Application\Form\PieceJointe\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PieceJointeServiceAwareTrait;
@@ -97,7 +98,7 @@ class PieceJointeController extends AbstractController
 
         $annee = $this->getServiceContext()->getAnnee();
 
-        $messages = $this->makeMessages($demandees, $fournies);
+        $messages = $this->makeMessages($intervenant);
 
         $alertContrat = $role->getIntervenant() && $intervenant->getStatut()->getContrat();
 
@@ -119,51 +120,29 @@ class PieceJointeController extends AbstractController
         $demandees = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
         $fournies = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
 
-        $messages = $this->makeMessages($demandees, $fournies);
+        $messages = $this->makeMessages($intervenant);
 
         return compact('messages');
     }
 
 
     /**
-     * @param TblPieceJointeDemande[] $demandees
-     * @param TblPieceJointeFournie[] $fournies
+     * @param Intervenant $intervenant
      *
      * @return array
      */
-    protected function makeMessages(array $demandees, array $fournies)
+    protected function makeMessages(Intervenant $intervenant)
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $isIntervenant = (boolean)$role->getIntervenant();
-        $nbDemandees = 0;
-        $nbFournies = 0;
-        $nbValidees = 0;
-        $nbObligatoiresNonFournis = 0;
 
-        foreach ($demandees as $demandee) {
-            if ($demandee->isObligatoire()) {
-                $nbDemandees++;
-                if (isset($fournies[$demandee->getTypePieceJointe()->getId()])) {
-                    $pj = $fournies[$demandee->getTypePieceJointe()->getId()];
-                    if (!$pj->getFichier()->isEmpty()) {
-                        $nbFournies++;
-                        if ($pj->getValidation()) {
-                            $nbValidees++;
-                        }
-                    }
-                }
-            }
-        }
-
+        $workflowEtapePjSaisie = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_SAISIE, $intervenant);
+        $workflowEtapePjValide = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_VALIDATION, $intervenant);
         $msgs = [];
 
-        if (0 == $nbDemandees) {
-            $msgs['info'][] = 'Aucune pièce justificative obligatoire n\'est à fournir';
-        } elseif ($nbFournies < $nbDemandees) {
+        if ($workflowEtapePjSaisie->getFranchie() != 1) {
             $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
-        } elseif ($nbFournies == $nbDemandees && $nbValidees == $nbDemandees) {
+        } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() == 1) {
             $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
-        } elseif ($nbFournies == $nbDemandees && $nbValidees < $nbFournies) {
+        } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() != 1) {
             $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
             $msgs['warning'][] = "Mais certaines doivent encore être validées par un gestionnaire.";
         }

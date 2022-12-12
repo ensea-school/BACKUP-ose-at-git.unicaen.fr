@@ -1,10 +1,12 @@
-CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_DEMANDE AS
+CREATE
+OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_DEMANDE AS
 WITH i_h AS (
   SELECT
     s.intervenant_id,
     SUM(CASE WHEN vh.MOTIF_NON_PAIEMENT_ID IS NULL THEN vh.heures ELSE 0 END) heures,
     SUM(CASE WHEN vh.MOTIF_NON_PAIEMENT_ID IS NOT NULL THEN vh.heures ELSE 0 END) heures_non_payables,
-    SUM(ep.taux_fc) fc
+    --SUM(ep.taux_fc) fc
+    SUM(CASE WHEN ep.taux_fc > 0 THEN vh.heures ELSE 0 END) fc
   FROM
          service               s
     JOIN type_volume_horaire tvh ON tvh.code = 'PREVU'

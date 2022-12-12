@@ -37,8 +37,13 @@ class EtapeController extends AbstractController
             Structure::class,
         ]);
 
-        $structure = $this->em()->find(Structure::class, $this->params()->fromRoute('structure'));
-        $etape     = $this->getEvent()->getParam('etape');
+        $structureId = $this->params()->fromRoute('structure');
+        if ($structureId) {
+            $structure = $this->em()->find(Structure::class, $structureId);
+        } else {
+            $structure = null;
+        }
+        $etape = $this->getEvent()->getParam('etape');
 
         $title  = $etape ? "Modification d'une formation" : "Création d'une nouvelle formation";
         $form   = $this->getFormOffreFormationEtapeSaisie();

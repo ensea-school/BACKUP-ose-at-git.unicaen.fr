@@ -6,6 +6,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Mission\Controller\MissionController;
+use Mission\Controller\TauxMissionController;
 use UnicaenAuth\Assertion\AssertionFactory;
 use UnicaenAuth\Guard\PrivilegeController;
 
@@ -25,7 +26,22 @@ return [
                 ],
             ],
         ],
+        'tauxMission' => [
+            'type'          => 'Literal',
+            'options'       => [
+                'route'    => '/taux-mission',
+                'defaults' => [
+                    'controller' => TauxMissionController::class,
+                    'action'     => 'index',
+                ],
+            ],
+            'may_terminate' => true,
+            'child_routes'  => [
+                /* Placez ici vos routes filles */
+            ],
+        ],
     ],
+
 
     'navigation' => [
         'intervenant' => [
@@ -47,6 +63,20 @@ return [
     ],
 
     'administration' => [
+        'pages' => [
+            'intervenants' => [
+                'pages' => [
+                    'taux-mission' => [
+                        'label'      => "Taux de mission",
+                        'title'      => "Editer et modifier les taux de mission",
+                        'route'      => 'taux-missions',
+                        'withtarget' => true,
+                        'order'      => 10,
+                        'visible'    => true,
+                    ],
+                ],
+            ],
+        ],
     ],
 
     'rules' => [
@@ -61,10 +91,18 @@ return [
             ],
             'assertion'  => Assertion\MissionAssertion::class,
         ],
+        [
+            'controller' => TauxMissionController::class,
+            'action'     => ['index'],
+            'privileges' => [
+                Privileges::MISSION_VISUALISATION,
+            ],
+        ],
     ],
 
     'controllers' => [
-        MissionController::class => Controller\MissionControllerFactory::class,
+        MissionController::class     => Controller\MissionControllerFactory::class,
+        TauxMissionController::class => Controller\TauxMissionControllerFactory::class,
     ],
 
     'services' => [

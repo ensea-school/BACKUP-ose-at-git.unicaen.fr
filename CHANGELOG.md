@@ -1,9 +1,18 @@
 # Version stable
 
-[OSE 19.4](#ose-194-21102022)
+[OSE 19.5](#ose-195--12122022-)
 
 
-# OSE 20 (à venir)
+# OSE 21 (à venir)
+
+## Nouveautés
+
+* Nouvelle notion de mission, permettant de gérer les contrats étudiants
+
+
+
+
+# OSE 20 (janvier 2023)
 
 ## Nouveautés
 
@@ -18,9 +27,9 @@
 ## Corrections de bugs
 
 * Sur la page "Services", la sélection d'un élément après selection d'une composante et d'une formation est désormais fonctionnel
-* Correction des indicateur 910 et 920 qui étaient non fonctionnels dans le cas d'une autovalidation ou d'une absence de contrat
+* Correction des indicateurs 910 et 920 qui étaient non fonctionnels dans le cas d'une autovalidation ou d'une absence de contrat
 * Correction de la suppression d'un role dans la page d'administration des roles.
-* Correction mineure sur les notes intervenants au niveau de l'historique (#46303)
+* Correction mineure sur les notes des intervenants au niveau de l'historique (#46303)
 * La durée de vie attendue des pièces justificatives est maintenant celle de l'année en cours et plus celle de l'année de dépôt de la pièce
 * Les annulations de mises en paiement sont désormais bien prises en compte dès la première annulation
 * Il est désormais possible de clôturer le service réalisé même si aucune heure n'est saisie

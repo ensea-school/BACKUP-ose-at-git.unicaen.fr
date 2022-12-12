@@ -1,0 +1,14 @@
+<?php
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ */
+
+use Application\Entity\Db\WfEtape;
+
+$title     = 'Missions';
+$nextEtape = WfEtape::CODE_SERVICE_SAISIE;
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+echo '<hr />';
+

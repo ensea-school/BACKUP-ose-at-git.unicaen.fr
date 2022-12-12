@@ -13,7 +13,7 @@ use UnicaenAuth\Guard\PrivilegeController;
 
 return [
     'routes' => [
-        'intervenant' => [
+        'intervenant'   => [
             'child_routes' => [
                 'missions' => [
                     'route'         => '/:intervenant/missions',
@@ -26,10 +26,10 @@ return [
                 ],
             ],
         ],
-        'tauxMission' => [
+        'taux-missions' => [
             'type'          => 'Literal',
             'options'       => [
-                'route'    => '/taux-mission',
+                'route'    => '/taux-missions',
                 'defaults' => [
                     'controller' => TauxMissionController::class,
                     'action'     => 'index',
@@ -44,7 +44,7 @@ return [
 
 
     'navigation' => [
-        'intervenant' => [
+        'intervenant'    => [
             'pages' => [
                 'missions' => [
                     'label'               => "Missions",
@@ -60,19 +60,16 @@ return [
                 ],
             ],
         ],
-    ],
-
-    'administration' => [
-        'pages' => [
-            'intervenants' => [
-                'pages' => [
-                    'taux-mission' => [
-                        'label'      => "Taux de mission",
-                        'title'      => "Editer et modifier les taux de mission",
-                        'route'      => 'taux-missions',
-                        'withtarget' => true,
-                        'order'      => 10,
-                        'visible'    => true,
+        'administration' => [
+            'pages' => [
+                'intervenants' => [
+                    'pages' => [
+                        'taux-mission' => [
+                            'label'      => "Taux de mission",
+                            'route'      => 'taux-missions',
+                            'resource'     => PrivilegeController::getResourceId(TauxMissionController::class, 'index'),
+                            'order'      => 60,
+                        ],
                     ],
                 ],
             ],

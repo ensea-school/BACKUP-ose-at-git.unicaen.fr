@@ -20,7 +20,6 @@
 * Reconduction de l'offre de formation pour les éléments de OSE porté par un élément synchroniser
 * Possibilité de rentrer un taux de charge par statut d'intervenant
 * Ajout d'un choix par statut pour "contrat de travail et avenants" pour laisser la possibilité à l'intervenant de télécharger sont contrat en pdf
-* Ajout d'un choix par statut pour "Modifications de service dû" pour laisser la possibilité à l'intervenant de modifier son service dû
 * Migration technnique vers le framework Bootstrap 5 et modernisation de l'identité visuelle
 * Réorganisation du menu "Administration" pour plus de lisibilité
 

@@ -76,7 +76,6 @@ class StatutSaisieForm extends AbstractForm
             'contratDepot',
             'contratGeneration',
             'modificationServiceDuVisualisation',
-            'modificationServiceDuEdition',
         ];
 
         for ($i = 1; $i <= 5; $i++) {
@@ -374,18 +373,14 @@ class StatutSaisieForm extends AbstractForm
                         'desactive'     => 'Désactivé',
                         'active'        => 'Activé mais non visible par l\'intervenant',
                         'visualisation' => 'Activé et visible par l\'intervenant',
-                        'edition'       => 'Activé et modifiable par l\'intervenant',
                     ],
                 ],
                 'hydrator' => [
                     'getter' => function (Statut $statut, string $name) {
                         $access  = $statut->getModificationServiceDu();
                         $visu    = $statut->getModificationServiceDuVisualisation();
-                        $edition = $statut->getModificationServiceDuEdition();
 
-                        if ($edition && $visu && $access) {
-                            return 'edition';
-                        } elseif ($visu && $access) {
+                        if ($visu && $access) {
                             return 'visualisation';
                         } elseif ($access) {
                             return 'active';
@@ -396,11 +391,7 @@ class StatutSaisieForm extends AbstractForm
                     'setter' => function (Statut $statut, $value, string $name) {
                         $access  = false;
                         $visu    = false;
-                        $edition = false;
                         switch ($value) {
-
-                            case 'edition':
-                                $edition = true;
                             case 'visualisation':
                                 $visu = true;
                             case 'active':
@@ -408,8 +399,6 @@ class StatutSaisieForm extends AbstractForm
                         }
                         $statut->setModificationServiceDu($access);
                         $statut->setModificationServiceDuVisualisation($visu);
-                        $statut->setModificationServiceDuEdition($edition);
-
                     },
                 ],
             ],

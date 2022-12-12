@@ -10,6 +10,7 @@ use Application\Entity\Db\TblPieceJointeDemande;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Entity\Db\Validation;
+use Application\Entity\Db\WfEtape;
 use Application\Form\PieceJointe\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PieceJointeServiceAwareTrait;
@@ -65,7 +66,6 @@ class PieceJointeController extends AbstractController
     }
 
 
-
     /**
      *
      * @return ViewModel
@@ -93,19 +93,18 @@ class PieceJointeController extends AbstractController
         $title = "Pièces justificatives <small>{$intervenant}</small>";
 
         $heuresPourSeuil = $this->getServicePieceJointe()->getHeuresPourSeuil($intervenant);
-        $fournies        = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
-        $demandees       = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
-        $synthese        = $this->getServicePieceJointe()->getPiecesSynthese($intervenant);
+        $fournies = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
+        $demandees = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
+        $synthese = $this->getServicePieceJointe()->getPiecesSynthese($intervenant);
 
         $annee = $this->getServiceContext()->getAnnee();
 
-        $messages = $this->makeMessages($demandees, $fournies);
+        $messages = $this->makeMessages($intervenant);
 
         $alertContrat = $role->getIntervenant() && $intervenant->getStatut()->getContrat();
 
         return compact('intervenant', 'title', 'heuresPourSeuil', 'demandees', 'synthese', 'fournies', 'messages', 'alertContrat', 'annee');
     }
-
 
 
     /**
@@ -120,54 +119,31 @@ class PieceJointeController extends AbstractController
         /* @var $intervenant Intervenant */
 
         $demandees = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
-        $fournies  = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
+        $fournies = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
 
-        $messages = $this->makeMessages($demandees, $fournies);
+        $messages = $this->makeMessages($intervenant);
 
         return compact('messages');
     }
 
 
-
     /**
-     * @param TblPieceJointeDemande[] $demandees
-     * @param TblPieceJointeFournie[] $fournies
+     * @param Intervenant $intervenant
      *
      * @return array
      */
-    protected function makeMessages(array $demandees, array $fournies)
+    protected function makeMessages(Intervenant $intervenant)
     {
-        $role                     = $this->getServiceContext()->getSelectedIdentityRole();
-        $isIntervenant            = (boolean)$role->getIntervenant();
-        $nbDemandees              = 0;
-        $nbFournies               = 0;
-        $nbValidees               = 0;
-        $nbObligatoiresNonFournis = 0;
 
-        foreach ($demandees as $demandee) {
-            if ($demandee->isObligatoire()) {
-                $nbDemandees++;
-                if (isset($fournies[$demandee->getTypePieceJointe()->getId()])) {
-                    $pj = $fournies[$demandee->getTypePieceJointe()->getId()];
-                    if (!$pj->getFichier()->isEmpty()) {
-                        $nbFournies++;
-                        if ($pj->getValidation()) {
-                            $nbValidees++;
-                        }
-                    }
-                }
-            }
-        }
-
+        $workflowEtapePjSaisie = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_SAISIE, $intervenant);
+        $workflowEtapePjValide = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_VALIDATION, $intervenant);
         $msgs = [];
 
-        if (0 == $nbDemandees) {
-            $msgs['info'][] = 'Aucune pièce justificative obligatoire n\'est à fournir';
-        } elseif ($nbFournies < $nbDemandees) {
+        if ($workflowEtapePjSaisie->getFranchie() != 1) {
             $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
-        } elseif ($nbFournies == $nbDemandees && $nbValidees == $nbDemandees) {
+        } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() == 1) {
             $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
-        } elseif ($nbFournies == $nbDemandees && $nbValidees < $nbFournies) {
+        } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() != 1) {
             $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
             $msgs['warning'][] = "Mais certaines doivent encore être validées par un gestionnaire.";
         }
@@ -176,18 +152,16 @@ class PieceJointeController extends AbstractController
     }
 
 
-
     public function validationAction()
     {
         $this->initFilters();
 
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $tpj         = $this->getEvent()->getParam('typePieceJointe');
-        $pj          = $this->getServicePieceJointe()->getByType($intervenant, $tpj);
+        $tpj = $this->getEvent()->getParam('typePieceJointe');
+        $pj = $this->getServicePieceJointe()->getByType($intervenant, $tpj);
 
         return compact('pj');
     }
-
 
 
     public function validerAction()
@@ -205,7 +179,6 @@ class PieceJointeController extends AbstractController
 
         return $viewModel;
     }
-
 
 
     public function archiverAction()
@@ -229,7 +202,6 @@ class PieceJointeController extends AbstractController
     }
 
 
-
     public function devaliderAction()
     {
         $this->initFilters();
@@ -247,16 +219,15 @@ class PieceJointeController extends AbstractController
     }
 
 
-
     public function listerAction()
     {
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $pj          = $this->getEvent()->getParam('pieceJointe');
+        $pj = $this->getEvent()->getParam('pieceJointe');
 
         if (empty($pj) || $pj->estHistorise()) {
             $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
-            $pj              = $this->getServicePieceJointe()->getByType($intervenant, $typePieceJointe);
+            $pj = $this->getServicePieceJointe()->getByType($intervenant, $typePieceJointe);
         } else {
             if ($pj->getIntervenant()->getCode() != $intervenant->getCode()) {
                 // un intervenant tente d'archiver la PJ d'un autre intervenant
@@ -268,10 +239,9 @@ class PieceJointeController extends AbstractController
     }
 
 
-
     public function televerserAction()
     {
-        $intervenant     = $this->getEvent()->getParam('intervenant');
+        $intervenant = $this->getEvent()->getParam('intervenant');
         $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
 
         $result = $this->uploader()->upload();
@@ -290,7 +260,6 @@ class PieceJointeController extends AbstractController
 
         return new JsonModel();
     }
-
 
 
     public function telechargerAction()
@@ -313,7 +282,6 @@ class PieceJointeController extends AbstractController
     }
 
 
-
     public function supprimerAction()
     {
         if (!$this->getRequest()->isPost()) {
@@ -321,7 +289,7 @@ class PieceJointeController extends AbstractController
         }
 
         /** @var PieceJointe $pj */
-        $pj      = $this->getEvent()->getParam('pieceJointe');
+        $pj = $this->getEvent()->getParam('pieceJointe');
         $fichier = $this->getEvent()->getParam('fichier');
 
         $intervenant = $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant();
@@ -340,14 +308,12 @@ class PieceJointeController extends AbstractController
     }
 
 
-
     /* Actions liées à la configuration des PJ */
 
     public function configurationAction()
     {
         return [];
     }
-
 
 
     public function typePieceJointeStatutAction()
@@ -365,8 +331,8 @@ class PieceJointeController extends AbstractController
 
         $anneeId = $this->getServiceContext()->getAnnee()->getId();
 
-        $typesPiecesJointes  = $this->getServiceTypePieceJointe()->getList();
-        $statuts             = $this->getServiceStatut()->getList();
+        $typesPiecesJointes = $this->getServiceTypePieceJointe()->getList();
+        $statuts = $this->getServiceStatut()->getList();
         $typesIntervenants = [];
         foreach ($statuts as $intervenant) {
             if (!in_array($intervenant->getTypeIntervenant(), $typesIntervenants)) {
@@ -395,12 +361,12 @@ class PieceJointeController extends AbstractController
         AND ti.code = :code";
 
         /* @var $tpjss TypePieceJointeStatut[] */
-        $query                     = $this->em()->createQuery($dql)->setParameters(['annee' => $this->getServiceContext()->getAnnee()->getId(), 'code' => $codeIntervenant]);
-        $tpjss                     = $query->getResult();
+        $query = $this->em()->createQuery($dql)->setParameters(['annee' => $this->getServiceContext()->getAnnee()->getId(), 'code' => $codeIntervenant]);
+        $tpjss = $query->getResult();
         $typesPiecesJointesStatuts = [];
         foreach ($tpjss as $tpjs) {
             $tpjID = $tpjs->getTypePieceJointe()->getId();
-            $siId  = $tpjs->getStatut()->getId();
+            $siId = $tpjs->getStatut()->getId();
 
             if (!isset($typesPiecesJointesStatuts[$tpjID][$siId])) {
                 $typesPiecesJointesStatuts[$tpjID][$siId] = [];
@@ -410,7 +376,6 @@ class PieceJointeController extends AbstractController
 
         return compact('typesPiecesJointes', 'statutsIntervenants', 'typesPiecesJointesStatuts', 'codeIntervenant', 'typesIntervenants');
     }
-
 
 
     public function typePieceJointeDeleteAction()
@@ -428,7 +393,6 @@ class PieceJointeController extends AbstractController
     }
 
 
-
     public function typePieceJointeSaisieAction()
     {
         /* @var $typePieceJointe TypePieceJointe */
@@ -436,7 +400,7 @@ class PieceJointeController extends AbstractController
 
         $form = $this->getFormPieceJointeTypePieceJointeSaisie();
         if (empty($typePieceJointe)) {
-            $title           = 'Création d\'un nouveau type de pièce jointe';
+            $title = 'Création d\'un nouveau type de pièce jointe';
             $typePieceJointe = $this->getServiceTypePieceJointe()->newEntity();
             $typePieceJointe->setOrdre(9999);
         } else {
@@ -448,7 +412,6 @@ class PieceJointeController extends AbstractController
     }
 
 
-
     public function modifierTypePieceJointeStatutAction()
     {
         /* @var $tpjs TypePieceJointeStatut */
@@ -456,17 +419,17 @@ class PieceJointeController extends AbstractController
 
         $form = $this->getFormPieceJointeModifierTypePieceJointeStatut();
         if (empty($tpjs)) {
-            $title           = 'Nouveau paramètre de gestion de pièce justificative';
-            $tpjs            = $this->getServiceTypePieceJointeStatut()->newEntity();
+            $title = 'Nouveau paramètre de gestion de pièce justificative';
+            $tpjs = $this->getServiceTypePieceJointeStatut()->newEntity();
             $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
-            $statut          = $this->getEvent()->getParam('statut');
+            $statut = $this->getEvent()->getParam('statut');
             $tpjs->setTypePieceJointe($typePieceJointe);
             $tpjs->setStatut($statut);
             $this->getServiceTypePieceJointeStatut()->incrementerNumPiece($tpjs);
         } else {
-            $title           = 'Édition du paramètre de gestion de pièce justificative';
+            $title = 'Édition du paramètre de gestion de pièce justificative';
             $typePieceJointe = $tpjs->getTypePieceJointe();
-            $statut          = $tpjs->getStatut();
+            $statut = $tpjs->getStatut();
         }
         $form->bindRequestSave($tpjs, $this->getRequest(), $this->getServiceTypePieceJointeStatut());
 
@@ -474,13 +437,12 @@ class PieceJointeController extends AbstractController
     }
 
 
-
     public function typePieceJointeTrierAction()
     {
         /* @var $tpj TypePieceJointe */
-        $txt       = 'result=';
+        $txt = 'result=';
         $champsIds = explode(',', $this->params()->fromPost('champsIds', ''));
-        $ordre     = 1;
+        $ordre = 1;
         foreach ($champsIds as $champId) {
             $txt .= $champId . '=>';
             $tpj = $this->getServiceTypePieceJointe()->get($champId);
@@ -500,7 +462,6 @@ class PieceJointeController extends AbstractController
     }
 
 
-
     public function deleteTypePieceJointeStatutAction()
     {
         $typePieceJointeStatut = $this->getEvent()->getParam('typePieceJointeStatut');
@@ -514,7 +475,6 @@ class PieceJointeController extends AbstractController
 
         return new MessengerViewModel();
     }
-
 
 
     private function updateTableauxBord(Intervenant $intervenant, $validation = false)
@@ -537,7 +497,6 @@ class PieceJointeController extends AbstractController
     }
 
 
-
     public function refuserAction()
     {
         /** @var PieceJointe $pj */
@@ -556,12 +515,12 @@ class PieceJointeController extends AbstractController
 
         if ($this->getRequest()->isPost() && $this->getRequest()->getPost()->count() > 0) {
             try {
-                $data    = $this->getRequest()->getPost();
-                $from    = $data['from'];
-                $to      = $data['to'];
+                $data = $this->getRequest()->getPost();
+                $from = $data['from'];
+                $to = $data['to'];
                 $subject = $data['subject'];
                 $content = $data['content'];
-                $copy    = $data['copy'];
+                $copy = $data['copy'];
                 $this->getServiceMail()->envoyerMail($from, $to, $subject, $content, $copy);
                 //Création d'une trace de l'envoi dans les notes de l'intervenant
                 $this->getServiceNote()->createNoteFromEmail($pj->getIntervenant(), $subject, $content);

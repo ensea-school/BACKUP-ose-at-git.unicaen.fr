@@ -277,7 +277,6 @@ SELECT C.intervenant_id                                intervenant_id,
        5                                               ordre
 FROM fichier f
          JOIN contrat_fichier cf ON cf.fichier_id = f.id AND histo_destruction IS NULL
-         JOIN fichier f ON f.id = cf.fichier_id AND f.histo_destruction IS NULL
          JOIN contrat C ON C.id = cf.contrat_id
          JOIN type_contrat tc ON tc.id = C.type_contrat_id
          JOIN STRUCTURE s ON s.id = C.structure_id

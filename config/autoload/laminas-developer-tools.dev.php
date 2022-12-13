@@ -148,11 +148,12 @@ return [
              * Expects: array
              */
             'entries'       => [
-                'config'                                 => false,
-                'db'                                     => false,
-                'doctrine.mapping_collector.orm_default' => false,
-                //'bjy_authorize_role_collector'           => false,
-                //'request'                                => true,
+                'config'                                            => false,
+                'db'                                                => false,
+                'doctrine.mapping_collector.orm_default'            => false,
+                'UnicaenApp\DeveloperTools\MessageCollectorService' => false,
+                'bjy_authorize_role_collector'                      => false,
+                //'request'                                                 => true,
                 //'memory'                                 => true,
             ],
         ],

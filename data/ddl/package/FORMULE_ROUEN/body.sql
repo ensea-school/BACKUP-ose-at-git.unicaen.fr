@@ -186,12 +186,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ROUEN AS
 
 
 
-      -- AA=IF([.$I20]="Référentiel";0;([.$AL20]+[.$AX20])*[.H20])
+      -- AA=IF([.$I20]="Référentiel";0;([.$AL20]+[.$AR20])*[.H20])
       WHEN 'AA' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AL',l) + cell('AX',l)) * vh.taux_fc;
+          RETURN (cell('AL',l) + cell('AR',l)) * vh.taux_fc;
         END IF;
 
 

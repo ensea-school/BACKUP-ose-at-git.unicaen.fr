@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.5](#ose-195--12122022-)
+[OSE 19.4](#ose-194--21102022-)
 
 
 # OSE 21 (à venir)
@@ -44,8 +44,17 @@
 * La génération des contrats de travail ayant été remaniée, veuillez vérifier que vous pouvez générer correctement de nouveaux contrats de travail
 
 
+# OSE 19.6 (à venir 14/12/2022)
+
+## Corrections de bugs
+
+* Correction régression 19.5 : les indicateurs 910 et 920 fonctionnent de nouveau
+* Correction régression 19.5 : les formules de calcul fonctionnent de nouveau
+
 
 # OSE 19.5 (12/12/2022)
+
+## Attention : il est déconseillé d'utiliser la 19.5, des régressions ont été constatées au niveau des indicateurs 910, 920 et des formules de calcul. Merci d'attendre la 19.6
 
 ## Corrections de bugs
 

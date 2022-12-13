@@ -772,15 +772,22 @@ class VolumeHoraireListe
                     }
                 }
 
+                /* Sinon on privilégie sans tag */
+                $taga = $a->getTag() ? 1 : 0;
+                $tagb = $b->getTag() ? 1 : 0;
+                if ($taga != $tagb) return $taga > $tagb;
+
                 /* Sinon on trie par date */
                 $hda = $a->getHoraireDebut() ? $a->getHoraireDebut()->getTimestamp() : 0;
                 $hdb = $b->getHoraireDebut() ? $b->getHoraireDebut()->getTimestamp() : 0;
                 if ($hda != $hdb) return ($hda > $hdb) ? 1 : -1;
 
+
                 /* Sinon on privilégie sans motif de non paiement */
                 $mnpa = $a->getMotifNonPaiement() ? 1 : 0;
                 $mnpb = $b->getMotifNonPaiement() ? 1 : 0;
                 if ($mnpa != $mnpb) return $mnpa > $mnpb;
+
 
                 /* Si c'est pareil alors on ne supprime surtout pas pour pouvoir garder!! */
                 if ($heures + $aHeures * -1 == 0) {
@@ -959,8 +966,6 @@ class VolumeHoraireListe
             self::FILTRE_HORAIRE_FIN,
             self::FILTRE_TYPE_INTERVENTION,
             self::FILTRE_PERIODE,
-            self::FILTRE_MOTIF_NON_PAIEMENT,
-            self::FILTRE_TAG,
         ];
 
         foreach ($vhs as $vh) {
@@ -981,9 +986,7 @@ class VolumeHoraireListe
                     if ($motifNonPaiement !== false) {
                         $vh->setMotifNonPaiement($motifNonPaiement);
                     }
-                    if ($tag !== false) {
-                        $vh->setTag($tag);
-                    }
+
                 } else {
                     $heuresAReporter += $vh->getHeures();
                     $rid = $this->makeSousListeId($vh, $reportFilters);

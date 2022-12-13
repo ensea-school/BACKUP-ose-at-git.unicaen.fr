@@ -50,7 +50,7 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
      *
      * @return int
      */
-    public function dataToInt(string $filter, $value): int
+    public function dataToInt(string $filter, $value): ?int
     {
         if (false === $value) return -2;
         if (true === $value) return -1;

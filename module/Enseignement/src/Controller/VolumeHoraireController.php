@@ -87,28 +87,17 @@ class VolumeHoraireController extends AbstractController
 
         /** @var Service $service */
         $service = $this->getEvent()->getParam('service');
-        /*foreach ($service->getVolumeHoraire() as $v) {
 
-        $tag = $v->getTag();
-        var_dump($tag->getLibelleLong());
-
-    }
-die;
-*/
 
         if (!$service) {
             throw new \Exception('Service non fourni');
         }
 
         $volumeHoraireListe = new VolumeHoraireListe($service);
-        $tags = $volumeHoraireListe->getTags();
-        foreach ($tags as $tag) {
-            // var_dump($tag->getLibelleLong());
-        }
+
         $vhlph = new ListeFilterHydrator();
         $vhlph->setEntityManager($this->em());
-        $paramsQuery = $this->params()->fromQuery();
-        $paramsPost = $this->params()->fromPost();
+
         $vhlph->hydrate($this->params()->fromQuery() + $this->params()->fromPost(), $volumeHoraireListe);
         $service->setTypeVolumeHoraire($volumeHoraireListe->getTypeVolumeHoraire());
 
@@ -128,7 +117,7 @@ die;
         $form->setViewTag($canViewTag);
         $form->setEditTag($canEditTag);
         $form->build();
-        $form->bindRequestSave($volumeHoraireListe, $this->getRequest(), function (VolumeHoraireListe $vhl) use ($hDeb, $volumeHoraireListe) {
+        $bind = $form->bindRequestSave($volumeHoraireListe, $this->getRequest(), function (VolumeHoraireListe $vhl) use ($hDeb, $volumeHoraireListe) {
             try {
                 $service = $vhl->getService();
                 $this->getProcessusPlafond()->beginTransaction();
@@ -149,8 +138,7 @@ die;
     }
 
 
-    public
-    function suppressionCalendaireAction()
+    public function suppressionCalendaireAction()
     {
         /** @var Service $service */
         $service = $this->getEvent()->getParam('service');
@@ -181,8 +169,7 @@ die;
     }
 
 
-    private
-    function updateTableauxBord(Intervenant $intervenant)
+    private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'formule', 'validation_enseignement', 'service', 'piece_jointe_fournie',

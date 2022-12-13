@@ -6,42 +6,57 @@
  * @var $form  \Enseignement\Form\VolumeHoraireSaisieCalendaireForm
  */
 
-$horaireDebut     = $this->formControlGroup($form->get('horaire-debut'));
-$horaireFin       = $this->formControlGroup($form->get('horaire-fin'));
+$horaireDebut = $this->formControlGroup($form->get('horaire-debut'));
+$horaireFin = $this->formControlGroup($form->get('horaire-fin'));
+
 $typeIntervention = $this->formControlGroup($form->get('type-intervention'));
-$periode          = $this->formControlGroup($form->get('periode'));
-$heures           = $this->formControlGroup($form->get('heures'));
+$periode = $this->formControlGroup($form->get('periode'));
+$heures = $this->formControlGroup($form->get('heures'));
+
 if ($form->canEditMNP()) {
     $motifNonPaiement = $this->formControlGroup($form->get('motif-non-paiement'));
 }
-$submit  = $this->formSubmit($form->get('submit'));
+if ($form->canEditTag()) {
+    $tag = $this->formControlGroup($form->get('tag'));
+}
+$submit = $this->formSubmit($form->get('submit'));
 $annuler = $this->formButton($form->get('annuler'));
 
 $form->prepare();
 
 echo $this->form()->openTag($form);
 ?>
-    <div class="row">
-        <div class="col-md-6"><?= $horaireDebut ?></div>
-        <div class="col-md-6"><?= $horaireFin ?></div>
-    </div>
-    <div class="row">
-<?php if ($form->canEditMNP()): ?>
-    <div class="col-md-6"><?= $periode ?></div>
-    <div class="col-md-6"><?= $typeIntervention ?></div>
-    </div>
-    <div class="row">
-    <div class="col-md-3"><?= $heures ?></div>
-    <div class="col-md-9"><?= $motifNonPaiement ?></div>
-<?php else: ?>
-    <div class="col-md-4"><?= $periode ?></div>
-    <div class="col-md-5"><?= $typeIntervention ?></div>
-    <div class="col-md-3"><?= $heures ?></div>
-<?php endif; ?>
-    </div>
-    <div class="row">
-        <div class="col-md-12"><?= $submit ?><?= $annuler ?></div>
-    </div>
+
+<div class="row">
+    <div class="col-md-6"><?= $horaireDebut ?></div>
+    <div class="col-md-6"><?= $horaireFin ?></div>
+</div>
+
+<div class="row">
+    <?php if ($form->canEditMNP() || $form->canEditTag()): ?>
+        <div class="row">
+            <div class="col-md-4"><?= $periode ?></div>
+            <div class="col-md-5"><?= $typeIntervention ?></div>
+            <div class="col-md-3"><?= $heures ?></div>
+        </div>
+
+        <div class="row">
+            <?php if ($form->canEditMNP()): ?>
+                <div class="col-md-6"><?= $motifNonPaiement ?></div>
+            <?php endif; ?>
+            <?php if ($form->canEditMNP()): ?>
+                <div class="col-md-6"><?= $tag ?></div>
+            <?php endif; ?>
+        </div>
+    <?php else: ?>
+        <div class="col-md-4"><?= $periode ?></div>
+        <div class="col-md-5"><?= $typeIntervention ?></div>
+        <div class="col-md-3"><?= $heures ?></div>
+    <?php endif; ?>
+</div>
+<div class="row">
+    <div class="col-md-12"><?= $submit ?><?= $annuler ?></div>
+</div>
 <?php
 
 echo $this->formHidden($form->get('type-volume-horaire'));
@@ -50,6 +65,7 @@ if (!$form->canEditMNP()) {
     echo $this->formHidden($form->get('motif-non-paiement'));
 }
 echo $this->formHidden($form->get('ancien-motif-non-paiement'));
+echo $this->formHidden($form->get('ancien-tag'));
 echo $this->formHidden($form->get('ancien-horaire-debut'));
 echo $this->formHidden($form->get('ancien-horaire-fin'));
 echo $this->formHidden($form->get('ancien-periode'));
@@ -58,3 +74,18 @@ echo $this->formHidden($form->get('new'));
 echo $this->form()->closeTag();
 echo $this->formErrors($form);
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+?>
+
+<script type="text/javascript">
+
+    $(function () {
+        console.log($('#dateDebut'));
+        $('#dateDebut').datetimepicker({
+            inline: true,
+            sideBySide: false
+        });
+    });
+
+
+</script>

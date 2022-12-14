@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.4](#ose-194--21102022-)
+[OSE 19.6](#ose-196--14122022-)
 
 
 # OSE 21 (à venir)
@@ -44,12 +44,15 @@
 * La génération des contrats de travail ayant été remaniée, veuillez vérifier que vous pouvez générer correctement de nouveaux contrats de travail
 
 
-# OSE 19.6 (à venir 14/12/2022)
+# OSE 19.6 (14/12/2022)
 
 ## Corrections de bugs
 
 * Correction régression 19.5 : les indicateurs 910 et 920 fonctionnent de nouveau
 * Correction régression 19.5 : les formules de calcul fonctionnent de nouveau
+* Correction régression 19.5 : la page d'administration des statuts fonctionne de nouveau (#47976)
+* Correction sur l'état de sortie préliquidation SIHAM (#47678)
+* Prise dans compte des modulateurs pour la formule de Rennes 2 (#47753)
 
 
 # OSE 19.5 (12/12/2022)

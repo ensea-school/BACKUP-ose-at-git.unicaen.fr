@@ -365,6 +365,12 @@ class StatutSaisieForm extends AbstractForm
                     },
                 ],
             ],
+            //TODO : Créer un validateur pour le rendre false que quand contrat desactivé
+            'contratEtatSortie'     => [
+                'input' => [
+                    'required' => false,
+                ],
+            ],
             'modificationServiceDu' => [
                 'type'     => 'Select',
                 'name'     => 'modificationServiceDu',

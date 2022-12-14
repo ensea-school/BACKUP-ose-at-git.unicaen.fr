@@ -31,7 +31,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
             echo $this->tag('div', ['class' => 'list-group']);
             foreach ($statuts as $s) {
                 if ($s->getTypeIntervenant() == $typeIntervenant) {
-                    $url = $this->url('statut/saisie', ['statut' => $s->getId()]);
+                    $url    = $this->url('statut/saisie', ['statut' => $s->getId()]);
                     $active = $s == $statut ? ' active' : '';
                     echo $this->tag('a', ['class' => 'list-group-item' . $active, 'href' => $url])->html($s) . "\n";
                 }
@@ -49,9 +49,9 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <h1><?= $title ?></h1>
 
         <!-- Informations générales -->
-        <div class="card bg-default">
-            <div class="card-header">Informations générales</div>
-            <div class="card-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">Informations générales</div>
+            <div class="panel-body">
                 <div class="row">
                     <div class="col-md-4">
                         <?= $this->formControlGroup($form->get('typeIntervenant')); ?>
@@ -67,9 +67,6 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                     <div class="col-md-4">
                         <?= $this->formControlGroup($form->get('tauxChargesPatronales')); ?>
                     </div>
-                    <div class="col-md-4">
-                        <?= $this->formControlGroup($form->get('tauxChargesTTC')); ?>
-                    </div>
                 </div>
                 <div class="row">
                     <?php for ($i = 1; $i <= 4; $i++): if ($form->has('codesCorresp' . $i)): ?>
@@ -84,9 +81,9 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Données personnelles -->
-        <div class="card bg-default">
-            <div class="card-header">Données personnelles</div>
-            <div class="card-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">Données personnelles</div>
+            <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('dossier')); ?>
@@ -153,18 +150,19 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Pièces justificatives -->
-        <div class="card bg-default">
-            <div class="card-header">Pièces justificatives</div>
-            <div class="card-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">Pièces justificatives</div>
+            <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('pieceJustificative')); ?>
                         <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION))): ?>
+                        <a target="_blank" href="<?= $this->url('piece-jointe/type-piece-jointe-statut'); ?>">
                             <a target="_blank"
                                href="<?= $this->url('piece-jointe/type-piece-jointe-statut', ['codeTypeIntervenant' => TypeIntervenant::CODE_EXTERIEUR]); ?>">
                                 Page d'administration des pièces justificatives
                             </a>
-                        <?php endif; ?>
+                            <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -172,9 +170,9 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Services -->
-        <div class="card bg-default">
-            <div class="card-header">Services d'enseignement</div>
-            <div class="card-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">Services d'enseignement</div>
+            <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('servicePrevu')); ?>
@@ -193,9 +191,9 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Référentiel -->
-        <div class="card bg-default">
-            <div class="card-header">Référentiel</div>
-            <div class="card-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">Référentiel</div>
+            <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('referentielPrevu')); ?>
@@ -209,9 +207,9 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Agréments -->
-        <div class="card bg-default">
-            <div class="card-header">Agréments</div>
-            <div class="card-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">Agréments</div>
+            <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('conseilRestreint')); ?>
@@ -233,19 +231,15 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Contrat -->
-        <div class="card bg-default">
-            <div class="card-header">Contrat de travail et avenants</div>
-            <div class="card-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">Contrat de travail et avenants</div>
+            <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('contrat')); ?>
-                        <div class="contratDetails">
-                            <?= $this->formControlGroup($form->get('contratEtatSortie')); ?>
-                            <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::ETAT_SORTIE_ADMINISTRATION_VISUALISATION))): ?>
-                                <a target="_blank" href="<?= $this->url('etat-sortie'); ?>">Page d'administration des
-                                    états de sortie</a>
-                            <?php endif; ?>
-                        </div>
+                        <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::CONTRAT_MODELES_VISUALISATION))): ?>
+                            <a target="_blank" href="<?= $this->url('contrat/modeles'); ?>">Page d'administration des modèles de contrats de travail</a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -253,9 +247,9 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Calcul des heures complémentaires et mises en paiement -->
-        <div class="card bg-default">
-            <div class="card-header">Calcul des heures complémentaires et mises en paiement</div>
-            <div class="card-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">Calcul des heures complémentaires et mises en paiement</div>
+            <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('serviceStatutaire')); ?>
@@ -274,11 +268,11 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Plafonds -->
-        <div class="card bg-default">
-            <div class="card-header">Plafonds</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Plafonds</div>
             <?= $this->plafondConfig()->afficher($statut, $canEdit); ?>
             <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_VISUALISATION))): ?>
-                <div class="card-body"><a target="_blank" href="<?= $this->url('plafond'); ?>">
+                <div class="panel panel-body"><a target="_blank" href="<?= $this->url('plafond'); ?>">
                         Page d'administration des plafonds
                     </a>
                 </div>
@@ -287,7 +281,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
         <!-- Boutons d'actions -->
-        <a href="<?= $this->url('statut') ?>" class="btn btn-secondary">
+        <a href="<?= $this->url('statut') ?>" class="btn btn-default">
             <i class="fas fa-rotate-left"></i> Retour à la liste des statuts
         </a>
         <?php if ($canEdit): ?>
@@ -306,8 +300,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                    title="Dupliquer le statut d'intervenant">
                     <i class="fas fa-rotate-right"></i> Dupliquer</a>
             <?php endif; ?>
-            <a href="<?= $this->url('plafond/construire-calculer') ?>" class="btn btn-info pop-ajax">Construction &
-                calcul de tous les plafonds</a>
+            <a href="<?= $this->url('plafond/construire-calculer') ?>" class="btn btn-info pop-ajax">Construction & calcul de tous les plafonds</a>
         <?php endif; ?>
 
         <?= $this->form()->closeTag(); ?>
@@ -318,52 +311,53 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 <script type="text/javascript">
     $(function () {
-        $("body").on("statut_delete", function (event, popAjax) {
+        $("body").on("statut_delete", function (event, popAjax)
+        {
             window.location.href = '<?= (string)$this->url('statut'); ?>';
         });
 
 
         WidgetInitializer.add('statut', {
 
-            donneesVisu: function () {
+            donneesVisu: function ()
+            {
                 var visible = this.el('dossier').val() != 'desactive';
 
                 this.element.find('.donneesDetails').toggle(visible);
             },
 
 
-            donneesContactVisu: function () {
+            donneesContactVisu: function ()
+            {
                 var visible = this.el('dossierContact').is(':checked');
 
                 this.element.find('.donneesContactDetails').toggle(visible);
             },
 
 
-            servicesVisu: function () {
+            servicesVisu: function ()
+            {
                 var visible = !(this.el('servicePrevu').val() == 'desactive' && this.el('serviceRealise').val() == 'desactive');
 
                 this.element.find('.servicesDetails').toggle(visible);
             },
 
-            agrementCRVisu: function () {
+            agrementCRVisu: function ()
+            {
                 var visible = this.el('conseilRestreint').val() != 'desactive';
 
                 this.element.find('.agrementCRDetails').toggle(visible);
             },
 
-            agrementCAVisu: function () {
+            agrementCAVisu: function ()
+            {
                 var visible = this.el('conseilAcademique').val() != 'desactive';
 
                 this.element.find('.agrementCADetails').toggle(visible);
             },
 
-            contratVisu: function () {
-                var visible = this.el('contrat').val() != 'desactive';
-
-                this.element.find('.contratDetails').toggle(visible);
-            },
-
-            _create: function () {
+            _create: function ()
+            {
                 var that = this;
 
                 that.donneesVisu();
@@ -371,33 +365,18 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 that.servicesVisu();
                 that.agrementCRVisu();
                 that.agrementCAVisu();
-                that.contratVisu();
 
-                that.el('dossier').change(function () {
-                    that.donneesVisu()
-                });
-                that.el('dossierContact').change(function () {
-                    that.donneesContactVisu()
-                });
-                that.el('servicePrevu').change(function () {
-                    that.servicesVisu()
-                });
-                that.el('serviceRealise').change(function () {
-                    that.servicesVisu()
-                });
-                that.el('conseilRestreint').change(function () {
-                    that.agrementCRVisu()
-                });
-                that.el('conseilAcademique').change(function () {
-                    that.agrementCAVisu()
-                });
-                that.el('contrat').change(function () {
-                    that.contratVisu()
-                });
+                that.el('dossier').change(function () {that.donneesVisu()});
+                that.el('dossierContact').change(function () {that.donneesContactVisu()});
+                that.el('servicePrevu').change(function () {that.servicesVisu()});
+                that.el('serviceRealise').change(function () {that.servicesVisu()});
+                that.el('conseilRestreint').change(function () {that.agrementCRVisu()});
+                that.el('conseilAcademique').change(function () {that.agrementCAVisu()});
             },
 
 
-            el: function (name) {
+            el: function (name)
+            {
                 return this.element.find('[name=' + name + ']');
             }
         });

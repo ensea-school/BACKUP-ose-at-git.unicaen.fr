@@ -89,7 +89,6 @@
 
         <field name="modificationServiceDu" type="boolean" column="MODIF_SERVICE_DU" nullable="false"/>
         <field name="modificationServiceDuVisualisation" type="boolean" column="MODIF_SERVICE_DU_VISUALISATION" nullable="false"/>
-        <field name="modificationServiceDuEdition" type="boolean" column="MODIF_SERVICE_DU_EDITION" nullable="false"/>
 
         <field name="paiementVisualisation" type="boolean" column="PAIEMENT_VISUALISATION" nullable="false"/>
         <field name="motifNonPaiement" type="boolean" column="MOTIF_NON_PAIEMENT" nullable="false"/>

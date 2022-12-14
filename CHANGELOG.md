@@ -22,6 +22,7 @@
 * Ajout d'un choix par statut pour "contrat de travail et avenants" pour laisser la possibilité à l'intervenant de télécharger sont contrat en pdf
 * Migration technnique vers le framework Bootstrap 5 et modernisation de l'identité visuelle
 * Réorganisation du menu "Administration" pour plus de lisibilité
+* Filtrage des caractères interdits lors de l'export RH SIHAM (#47267)
 
 ## Corrections de bugs
 

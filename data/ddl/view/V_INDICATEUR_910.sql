@@ -2,7 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_INDICATEUR_910 AS
 SELECT
   w.intervenant_id,
   w.structure_id,
-  Max(v.HISTO_CREATION) AS "Date de modification"
+  Max(vh.HISTO_MODIFICATION) AS "Date de modification"
 FROM
   tbl_workflow w
   LEFT JOIN type_volume_horaire tvh ON tvh.code = 'REALISE'

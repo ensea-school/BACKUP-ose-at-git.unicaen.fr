@@ -44,7 +44,7 @@
 * La génération des contrats de travail ayant été remaniée, veuillez vérifier que vous pouvez générer correctement de nouveaux contrats de travail
 
 
-# OSE 19.6 (à venir 14/12/2022)
+# OSE 19.6 (14/12/2022)
 
 ## Corrections de bugs
 

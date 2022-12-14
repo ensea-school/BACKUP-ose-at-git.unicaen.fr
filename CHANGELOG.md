@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.4](#ose-194--21102022-)
+[OSE 19.6](#ose-196--14122022-)
 
 
 # OSE 21 (à venir)
@@ -50,7 +50,7 @@
 
 * Correction régression 19.5 : les indicateurs 910 et 920 fonctionnent de nouveau
 * Correction régression 19.5 : les formules de calcul fonctionnent de nouveau
-* Correction régression 19.5 : la page d'administration des statuts fonctionne de nouveau #47976
+* Correction régression 19.5 : la page d'administration des statuts fonctionne de nouveau (#47976)
 * Correction sur l'état de sortie préliquidation SIHAM (#47678)
 * Prise dans compte des modulateurs pour la formule de Rennes 2 (#47753)
 

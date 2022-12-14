@@ -365,6 +365,11 @@ class StatutSaisieForm extends AbstractForm
                     },
                 ],
             ],
+            'contratEtatSortie'     => [
+                'input' => [
+                    'required' => false,
+                ],
+            ],
             'modificationServiceDu' => [
                 'type'     => 'Select',
                 'name'     => 'modificationServiceDu',

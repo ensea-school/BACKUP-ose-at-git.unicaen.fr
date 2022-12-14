@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE "OSE_FORMULE" AS
+create or replace PACKAGE "OSE_FORMULE" AS
 
   TYPE t_intervenant IS RECORD (
     -- identifiants
@@ -8,7 +8,6 @@ CREATE OR REPLACE PACKAGE "OSE_FORMULE" AS
     etat_volume_horaire_id         NUMERIC,
 
     -- paramètres globaux
-    type_volume_horaire_code       VARCHAR(15),
     heures_service_statutaire      FLOAT DEFAULT 0,
     heures_service_modifie         FLOAT DEFAULT 0,
     depassement_service_du_sans_hc BOOLEAN DEFAULT FALSE,

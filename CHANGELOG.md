@@ -50,6 +50,7 @@
 
 * Correction régression 19.5 : les indicateurs 910 et 920 fonctionnent de nouveau
 * Correction régression 19.5 : les formules de calcul fonctionnent de nouveau
+* Correction sur l'état de sortie préliquidation SIHAM (#47678)
 
 
 # OSE 19.5 (12/12/2022)

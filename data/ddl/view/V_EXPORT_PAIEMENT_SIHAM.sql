@@ -1,25 +1,27 @@
-CREATE OR REPLACE FORCE VIEW V_EXPORT_PAIEMENT_SIHAM AS
+CREATE
+OR REPLACE FORCE VIEW V_EXPORT_PAIEMENT_SIHAM AS
 SELECT annee_id,
        type_intervenant_id,
        structure_id,
        periode_id,
-       'P'                                                                   type,
-       code_rh                                                               matricule,
-       CASE WHEN type_intervenant_code = 'P' THEN '200204' ELSE '202251' END retenue,
-       ose_paiement.get_format_mois_du()                                     du_mois,
-       '20' || ose_paiement.get_annee_extraction_paie()                      annee_de_paye,
-       ose_paiement.get_mois_extraction_paie()                               mois_de_paye,
-       'N'                                                                   tg_specifique,
-       'A definir'                                                           dossier_de_paye,
+       'P'                                                               type,
+       code_rh                                                           matricule,
+       CASE WHEN type_intervenant_code = 'P' THEN '0204' ELSE '1578' END code_indemnite_retenu,
+       ose_paiement.get_format_mois_du()                                 du_mois,
+       '20' || ose_paiement.get_annee_extraction_paie()                  annee_de_paye,
+       ose_paiement.get_mois_extraction_paie()                           mois_de_paye,
+       '01'                                                              numero_de_remise,
+       'N'                                                               tg_specifique,
+       'A definir'                                                       dossier_de_paye,
        '01/' || ose_paiement.get_mois_extraction_paie() || '/20' ||
-       ose_paiement.get_annee_extraction_paie()                              date_pecuniaire,
-       nbu                                                                   nombre_d_unites,
-       montant                                                               montant,
+       ose_paiement.get_annee_extraction_paie()                          date_pecuniaire,
+       nbu                                                               nombre_d_unites,
+       montant                                                           montant,
        'DN ' || type_intervenant_code || ' '
            || substr(UPPER(structure_libelle), 0, 10)
-           || ' ' || annee_libelle                                           libelle,
-       'B'                                                                   mode_de_calcul,
-       code_origine                                                          code_origine
+           || ' ' || annee_libelle                                       libelle,
+       'B'                                                               mode_de_calcul,
+       code_origine                                                      code_origine
 FROM (SELECT i.annee_id                                                                                        annee_id,
              a.libelle                                                                                         annee_libelle,
              ti.id                                                                                             type_intervenant_id,
@@ -39,7 +41,7 @@ FROM (SELECT i.annee_id                                                         
              t2.code_origine                                                                                   code_origine,
              CASE WHEN ind <> ceil(t2.nbu / max_nbu) THEN max_nbu ELSE t2.nbu - max_nbu * (ind - 1) END        nbu,
              t2.nbu                                                                                            tnbu,
-             (select taux_hetd from annee ann where ann.id = i.annee_id)                         montant,
+             (SELECT taux_hetd FROM annee ann WHERE ann.id = i.annee_id)                                       montant,
              COALESCE(t2.unite_budgetaire, '') || ' ' || to_char(i.annee_id) || ' ' || to_char(i.annee_id + 1) libelle
       FROM (SELECT structure_id,
                    periode_paiement_id,

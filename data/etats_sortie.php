@@ -29,9 +29,9 @@ return [
     "MATRICULE": {
         "libelle": "Matricule"
     },
-     "RETENUE": {
-        "libelle": "Retenue"
-    },
+     "CODE_INDEMNITE_RETENU": {
+        "libelle": "Code indemnité/retenue"
+    }
      "DU_MOIS": {
         "libelle": "Du mois (AAAA-MM)"
     },

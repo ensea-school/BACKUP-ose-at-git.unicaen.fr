@@ -214,10 +214,10 @@ class EnseignementsViewHelper extends AbstractViewHelper
 
         if ($typeVolumeHoraire = $this->getProcessusEnseignement()->initializePrevu($this->getIntervenant())) {
             $attribs = [
-                'class'       => 'btn btn-warning prevu-to-prevu-show',
+                'class'          => 'btn btn-warning prevu-to-prevu-show',
                 'data-bs-toggle' => 'modal',
                 'data-bs-target' => '#prevu-to-prevu-modal',
-                'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
+                'title'          => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
             ];
             $source = $typeVolumeHoraire->getLibelle();
             $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <i class="fas fa-arrow-right"></i> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
@@ -254,10 +254,10 @@ class EnseignementsViewHelper extends AbstractViewHelper
 
         if ($this->getProcessusEnseignement()->initializeRealise($this->getIntervenant())) {
             $attribs = [
-                'class'       => 'btn btn-warning prevu-to-realise-show',
+                'class'          => 'btn btn-warning prevu-to-realise-show',
                 'data-bs-toggle' => 'modal',
                 'data-bs-target' => '#prevu-to-realise-modal',
-                'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
+                'title'          => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
                     . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
             ];
             $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
@@ -315,7 +315,8 @@ class EnseignementsViewHelper extends AbstractViewHelper
 
         $heures = 0;
         $modeCalendaire = false;
-        if (!$this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())) {
+        $intervenant = $service->getIntervenant();
+        if (!$this->getServiceContext()->isModaliteServicesSemestriel($intervenant)) {
             // Si on n'est pas en semestriel, donc en calendaire, alors on ajoute une heure fictive afin d'afficher
             // tout le temps la ligne
             $modeCalendaire = true;
@@ -394,8 +395,11 @@ class EnseignementsViewHelper extends AbstractViewHelper
         $volumeHoraireListe = $service->getVolumeHoraireListe();
         $volumeHoraireListe->setTypeVolumeHoraire($typeVolumeHoraire);
         $volumeHoraireListe->setEtatVolumeHoraire($etatVolumeHoraire);
+        $statut = $service->getIntervenant()->getStatut();
+        $code = $service->getIntervenant()->getStatut()->getCode();
 
-        if ($this->getServiceContext()->isModaliteServicesSemestriel($typeVolumeHoraire)) {
+
+        if ($code == 'ENS_CH') {
             $vhlvh = $this->getView()->volumeHoraireListe($volumeHoraireListe);
             /* @var $vhlvh \Application\View\Helper\VolumeHoraire\Liste */
         } else {

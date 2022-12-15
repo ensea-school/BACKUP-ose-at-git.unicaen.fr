@@ -2,6 +2,8 @@
 
 namespace Referentiel\Form;
 
+use Application\Service\Traits\TagServiceAwareTrait;
+use Laminas\Form\Element\Hidden;
 use phpDocumentor\Reflection\Types\Array_;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
@@ -34,6 +36,7 @@ class SaisieFieldset extends AbstractFieldset
     use LocalContextServiceAwareTrait;
     use StructureServiceAwareTrait;
     use FonctionReferentielServiceAwareTrait;
+    use TagServiceAwareTrait;
 
     /**
      * @var Structure[]
@@ -41,12 +44,10 @@ class SaisieFieldset extends AbstractFieldset
     protected $structures;
 
 
-
     public function __construct($name = null, $options = [])
     {
         parent::__construct('service', $options);
     }
-
 
 
     public function init()
@@ -127,6 +128,26 @@ class SaisieFieldset extends AbstractFieldset
             'type'       => 'Text',
         ]);
 
+        //Gestion des tags
+        if ($this->canEditTag()) {
+            $this->add([
+                'type'       => 'Select',
+                'name'       => 'tag',
+                'options'    => [
+                    'label'         => "Tag :",
+                    'empty_option'  => "Aucun tag",
+                    'value_options' => Util::collectionAsOptions($this->getServiceTag()->getList()),
+                ],
+                'attributes' => [
+                    'value' => "",
+                    'title' => "Tag",
+                    'class' => 'volume-horaire volume-horaire-tag input-sm',
+                ],
+            ]);
+        } else {
+            $this->add(new Hidden('tag'));
+        }
+
         $this->add([
             'name'       => 'commentaires',
             'options'    => [
@@ -144,7 +165,6 @@ class SaisieFieldset extends AbstractFieldset
     }
 
 
-
     protected function getStructures()
     {
         if (!$this->structures) {
@@ -160,10 +180,9 @@ class SaisieFieldset extends AbstractFieldset
     }
 
 
-
     public function getFonctions()
     {
-        $fncs      = $this->getServiceFonctionReferentiel()->getList($this->getServiceFonctionReferentiel()->finderByHistorique());
+        $fncs = $this->getServiceFonctionReferentiel()->getList($this->getServiceFonctionReferentiel()->finderByHistorique());
         $fonctions = [];
         foreach ($fncs as $id => $fonction) {
             if ($fonction->getFille()->count() > 0) {
@@ -183,7 +202,6 @@ class SaisieFieldset extends AbstractFieldset
     }
 
 
-
     public function initFromContext()
     {
         /* Peuple le formulaire avec les valeurs issues du contexte local */
@@ -201,7 +219,6 @@ class SaisieFieldset extends AbstractFieldset
     }
 
 
-
     public function saveToContext()
     {
         $cl = $this->getServiceLocalContext();
@@ -214,7 +231,6 @@ class SaisieFieldset extends AbstractFieldset
     }
 
 
-
     /**
      *
      * @return Callback|null
@@ -222,15 +238,15 @@ class SaisieFieldset extends AbstractFieldset
     protected function getValidatorStructure()
     {
         // recherche de la FonctionReferentiel sélectionnée pour connaître la structure associée éventuelle
-        $value          = $this->get('fonction')->getValue();
+        $value = $this->get('fonction')->getValue();
         $fonctionSaisie = $this->getServiceFonctionReferentiel()->get($value);
         if (!$fonctionSaisie) {
             return null;
         }
 
         // recherche de la Structure sélectionnée
-        $structures      = $this->getStructures();
-        $value           = $this->get('structure')->getValue();
+        $structures = $this->getStructures();
+        $value = $this->get('structure')->getValue();
         $structureSaisie = isset($structures[$value]) ? $structures[$value] : null;
         if (!$structureSaisie) {
             return null;
@@ -244,13 +260,13 @@ class SaisieFieldset extends AbstractFieldset
             $callback = function () use ($structureSaisie) {
                 return true;
             };
-            $message  = "Composante d'enseignement requise";
+            $message = "Composante d'enseignement requise";
         } // si une structure est associée à la fonction, la structure sélectionnée soit être celle-là
         else {
             $callback = function () use ($structureSaisie, $structureFonction) {
                 return $structureSaisie === $structureFonction;
             };
-            $message  = sprintf("Structure obligatoire : '%s'", $structureFonction);
+            $message = sprintf("Structure obligatoire : '%s'", $structureFonction);
         }
 
         $v = new Callback($callback);
@@ -258,7 +274,6 @@ class SaisieFieldset extends AbstractFieldset
 
         return $v;
     }
-
 
 
     /**
@@ -327,9 +342,6 @@ class SaisieFieldset extends AbstractFieldset
 }
 
 
-
-
-
 /**
  *
  *
@@ -343,7 +355,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array              $data
+     * @param array $data
      * @param ServiceReferentiel $object
      *
      * @return object
@@ -372,7 +384,6 @@ class SaisieFieldsetHydrator implements HydratorInterface
 
         return $object;
     }
-
 
 
     /**
@@ -414,7 +425,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
         $data['heures'] = StringFromFloat::run($object->getVolumeHoraireReferentielListe()->getHeures());
 
         $data['commentaires'] = $object->getCommentaires();
-        $data['formation']    = $object->getFormation();
+        $data['formation'] = $object->getFormation();
 
         return $data;
     }

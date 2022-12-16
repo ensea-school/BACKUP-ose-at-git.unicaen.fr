@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.4](#ose-194--21102022-)
+[OSE 19.4](#ose-197--16122022-)
 
 
 # OSE 21 (à venir)
@@ -44,7 +44,7 @@
 * Supprimer la ligne faisant référence à TBL_NOEUD dans Administration/Synchronisation/Tables, table NOEUD, champ "Traitements postérieurs : à exécuter après la synchro".
 * La génération des contrats de travail ayant été remaniée, veuillez vérifier que vous pouvez générer correctement de nouveaux contrats de travail
 
-# OSE 19.7 (à venir 16/12/2022)
+# OSE 19.7 (16/12/2022)
 
 ## Corrections de bugs
 

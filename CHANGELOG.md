@@ -44,8 +44,18 @@
 * Supprimer la ligne faisant référence à TBL_NOEUD dans Administration/Synchronisation/Tables, table NOEUD, champ "Traitements postérieurs : à exécuter après la synchro".
 * La génération des contrats de travail ayant été remaniée, veuillez vérifier que vous pouvez générer correctement de nouveaux contrats de travail
 
+# OSE 19.7 (à venir 16/12/2022)
+
+## Corrections de bugs
+
+* Correction régression 19.5 : le workflow fonctionne à nouveau
+* Correction formule de clcul du Havre (#48024)
+
+
 
 # OSE 19.6 (14/12/2022)
+
+### Attention : il est déconseillé d'utiliser les 19.5 et 19.6, des régressions ont été constatées à plusieurs niveaux. Merci d'attendre la 19.7
 
 ## Corrections de bugs
 
@@ -58,7 +68,7 @@
 
 # OSE 19.5 (12/12/2022)
 
-## Attention : il est déconseillé d'utiliser la 19.5, des régressions ont été constatées au niveau des indicateurs 910, 920 et des formules de calcul. Merci d'attendre la 19.6
+### Attention : il est déconseillé d'utiliser les 19.5 et 19.6, des régressions ont été constatées à plusieurs niveaux. Merci d'attendre la 19.7
 
 ## Corrections de bugs
 

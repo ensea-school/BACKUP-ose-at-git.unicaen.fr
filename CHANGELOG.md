@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.4](#ose-197--16122022-)
+[OSE 19.7](#ose-197--16122022-)
 
 
 # OSE 21 (à venir)
@@ -48,8 +48,8 @@
 
 ## Corrections de bugs
 
-* Correction régression 19.5 : le workflow fonctionne à nouveau
-* Correction formule de clcul du Havre (#48024)
+* Correction régression 19.5 : le workflow fonctionne à nouveau (#47982)
+* Correction formule de calcul du Havre (#48024)
 
 
 

@@ -55,7 +55,7 @@
 
 # OSE 19.6 (14/12/2022)
 
-### Attention : il est déconseillé d'utiliser les 19.5 et 19.6, des régressions ont été constatées à plusieurs niveaux. Merci d'attendre la 19.7
+### Attention : il est déconseillé d'utiliser les 19.5 et 19.6, des régressions ont été constatées à plusieurs niveaux.
 
 ## Corrections de bugs
 
@@ -68,7 +68,7 @@
 
 # OSE 19.5 (12/12/2022)
 
-### Attention : il est déconseillé d'utiliser les 19.5 et 19.6, des régressions ont été constatées à plusieurs niveaux. Merci d'attendre la 19.7
+### Attention : il est déconseillé d'utiliser les 19.5 et 19.6, des régressions ont été constatées à plusieurs niveaux.
 
 ## Corrections de bugs
 

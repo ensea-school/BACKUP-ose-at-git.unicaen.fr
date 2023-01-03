@@ -4,6 +4,7 @@ namespace Application\Form\Intervenant;
 
 use Application\Constants;
 use Application\Entity\Db\Traits\ContratAwareTrait;
+use Application\Filter\DateTimeFromString;
 use Application\Form\AbstractForm;
 use Laminas\Hydrator\HydratorInterface;
 use UnicaenApp\Hydrator\Strategy\DateStrategy;
@@ -28,10 +29,9 @@ class ContratRetour extends AbstractForm
 
         $this->add([
             'name'       => 'dateRetourSigne',
-            'type'       => 'DateTime',
+            'type'       => 'Date',
             'options'    => [
-                'label'  => "Date de retour $contratToString signé",
-                'format' => Constants::DATE_FORMAT,
+                'label' => "Date de retour $contratToString signé",
             ],
             'attributes' => [
             ],
@@ -86,7 +86,7 @@ class ContratRetourFormHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $object->setDateRetourSigne($data['dateRetourSigne'] ? \DateTime::createFromFormat(Constants::DATE_FORMAT, $data['dateRetourSigne']) : null);
+        $object->setDateRetourSigne(DateTimeFromString::run($data['dateRetourSigne'] ?? null));
 
         return $object;
     }
@@ -101,7 +101,7 @@ class ContratRetourFormHydrator implements HydratorInterface
     public function extract($object): array
     {
         $data = [
-            'dateRetourSigne' => $object->getDateRetourSigne() ? $object->getDateRetourSigne()->format(Constants::DATE_FORMAT) : null,
+            'dateRetourSigne' => $object->getDateRetourSigne(),
         ];
 
         return $data;

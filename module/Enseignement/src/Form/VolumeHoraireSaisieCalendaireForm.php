@@ -6,6 +6,7 @@ use Application\Constants;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\TypeIntervention;
+use Application\Filter\DateTimeFromString;
 use Enseignement\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
@@ -13,6 +14,7 @@ use Enseignement\Hydrator\ListeFilterHydrator;
 use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
+use Laminas\Form\Element\DateTimeLocal;
 use UnicaenApp\Util;
 use Laminas\Form\Element\Hidden;
 use Laminas\Hydrator\HydratorInterface;
@@ -88,20 +90,18 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
         $this->setHydrator($hydrator);
 
         $this->add([
-            'type'    => 'DateTime',
+            'type'    => DateTimeLocal::class,
             'name'    => 'horaire-debut',
             'options' => [
-                'label'  => 'Horaire de début',
-                'format' => Constants::DATETIME_FORMAT,
+                'label' => 'Horaire de début',
             ],
         ]);
 
         $this->add([
-            'type'    => 'DateTime',
+            'type'    => DateTimeLocal::class,
             'name'    => 'horaire-fin',
             'options' => [
-                'label'  => 'Horaire de fin',
-                'format' => Constants::DATETIME_FORMAT,
+                'label' => 'Horaire de fin',
             ],
         ]);
 
@@ -268,8 +268,8 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
                                          'callback' => function ($value, $context = []) {
                                              if (!$context['horaire-debut'] && $context['horaire-fin']) return true; // pas d'horaires de saisis
 
-                                             $horaireDebut = \DateTime::createFromFormat(Constants::DATETIME_FORMAT, $context['horaire-debut']);
-                                             $horaireFin   = \DateTime::createFromFormat(Constants::DATETIME_FORMAT, $context['horaire-fin']);
+                                             $horaireDebut = DateTimeFromString::run($context['horaire-debut']);
+                                             $horaireFin   = DateTimeFromString::run($context['horaire-fin']);
                                              $deb          = $horaireDebut->getTimestamp();
                                              $fin          = $horaireFin->getTimestamp();
                                              $diff         = $fin - $deb;
@@ -336,7 +336,13 @@ class SaisieCalendaireHydrator implements HydratorInterface
     private function getVal($key)
     {
         if (isset($this->data[$key])) {
-            return $this->data[$key];
+            switch ($key) {
+                case 'horaire-debut':
+                case 'horaire-fin':
+                    return DateTimeFromString::run($this->data[$key]);
+                default:
+                    return $this->data[$key];
+            }
         } else {
             return null;
         }
@@ -361,14 +367,12 @@ class SaisieCalendaireHydrator implements HydratorInterface
         $lfh = new ListeFilterHydrator();
         $lfh->setEntityManager($this->getEntityManager());
 
-        $ho = ['format' => Constants::DATETIME_FORMAT];
-
-        $ancienHoraireDebut = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('ancien-horaire-debut'), $ho);
-        $horaireDebut       = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('horaire-debut'), $ho);
+        $ancienHoraireDebut = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('ancien-horaire-debut'));
+        $horaireDebut       = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('horaire-debut'));
         $object->setHoraireDebut($ancienHoraireDebut != $horaireDebut ? $ancienHoraireDebut : $horaireDebut);
 
-        $ancienHoraireFin = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('ancien-horaire-fin'), $ho);
-        $horaireFin       = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('horaire-fin'), $ho);
+        $ancienHoraireFin = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('ancien-horaire-fin'));
+        $horaireFin       = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('horaire-fin'));
         $object->setHoraireFin($ancienHoraireFin != $horaireFin ? $ancienHoraireFin : $horaireFin);
 
         $ancienTypeIntervention = $lfh->allToData(VolumeHoraireListe::FILTRE_TYPE_INTERVENTION, $this->getVal('ancien-type-intervention'));

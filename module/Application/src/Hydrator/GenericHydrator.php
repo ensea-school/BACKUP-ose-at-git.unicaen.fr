@@ -3,7 +3,10 @@
 namespace Application\Hydrator;
 
 use Application\Constants;
+use Application\Filter\DateTimeFromString;
 use Doctrine\ORM\EntityManager;
+use Laminas\Form\Element\Date;
+use Laminas\Form\Element\DateTimeLocal;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 
@@ -76,8 +79,8 @@ class GenericHydrator implements HydratorInterface
                     $value = intToString($value);
                 } elseif (('bool' == $type || 'boolean' == $type) && is_bool($value)) {
                     $value = booleanToString($value, '1', '0');
-                } elseif (\DateTime::class == $type && $value instanceof \DateTime) {
-                    $value = $value->format(Constants::DATE_FORMAT);
+                } elseif ('Date' == $type && $value instanceof \DateTime) {
+                    $value = $value->format('Y-m-d');
                 } elseif (class_exists($type) && $value instanceof $type && method_exists($value, 'getId')) {
                     $value = (string)$value->getId();
                 }
@@ -115,10 +118,8 @@ class GenericHydrator implements HydratorInterface
                 if (('bool' == $type || 'boolean' == $type)) {
                     $value = stringToBoolean($value);
                 }
-                if (\DateTime::class == $type) {
-                    $value = \DateTime::createFromFormat(Constants::DATE_FORMAT, $value);
-                    if ($value) $value->setTime(0, 0, 0);
-                    if (!$value) $value = null;
+                if ('Date' == $type || 'DateTime' == $type || Date::class == $type || DateTimeLocal::class == $type || 'DateTimeLocal' == $type) {
+                    $value = DateTimeFromString::run($value);
                 }
                 if (class_exists($type) && $this->isEntity($type) && $value) {
                     $value = $this->getEntityManager()->find($type, $value);

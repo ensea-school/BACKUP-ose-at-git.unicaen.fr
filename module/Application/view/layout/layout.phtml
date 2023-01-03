@@ -12,6 +12,8 @@ $pages            = $navigationHelper->getContainer();
 
 $version = $this->appInfos()->getConfig()->get('version');
 
+$inDev = (getenv('APPLICATION_ENV') ?: 'dev') == 'dev';
+
 echo $this->doctype();
 ?>
 
@@ -63,6 +65,7 @@ echo $this->doctype();
     <!-- Scripts globaux -->
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-3.6.0.min.js?v=' . $version) ?>"></script>
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js?v=' . $version) ?>"></script>
+    <script type="text/javascript" src="<?= $this->basePath('/vendor/' . ($inDev ? 'vue.js' : 'vue.min.js')) ?>"></script>
 </head>
 
 <body class="<?= getenv('APPLICATION_ENV') ?: 'dev' ?> p-0" data-base-url="<?= $this->url('home') ?>">

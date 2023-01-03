@@ -9,9 +9,21 @@
  */
 
 
-/** @var \Doctrine\ORM\EntityManager $em */
-$em = $container->get(\Application\Constants::BDD);
+?>
+<div id="app-2">
+  <span v-bind:title="message">
+    Passez votre souris sur moi pendant quelques secondes
+    pour voir mon titre lié dynamiquement !
+  </span>
+</div>
 
-$e = $em->find(\Mission\Entity\Db\TypeMission::class, 1);
+<script type="application/javascript">
 
-var_dump($e);
+    var app2 = new Vue({
+        el: '#app-2',
+        data: {
+            message: 'Vous avez affiché cette page le ' + new Date().toLocaleString()
+        }
+    })
+
+</script>

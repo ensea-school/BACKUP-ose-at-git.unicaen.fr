@@ -103,7 +103,7 @@ return [
              * Expects: bool
              * Default: false
              */
-            'enabled'       => false,
+            'enabled'       => true,
 
             /**
              * If enabled, every empty collector will be hidden.

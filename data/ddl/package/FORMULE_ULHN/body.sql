@@ -470,6 +470,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ULHN AS
               SUM(heures) OVER (PARTITION BY service_id, type_intervention_id, periode_id, horaire_debut, horaire_fin)
             ELSE 0 END
           ELSE heures END HEURES,
+        PERIODE_ID,
         HORAIRE_DEBUT,
         HORAIRE_FIN,
         TYPE_INTERVENTION_CODE,

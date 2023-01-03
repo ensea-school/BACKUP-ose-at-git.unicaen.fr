@@ -280,8 +280,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                     'bisTer'             => $bisTer,
                     'noVoie'             => $numeroVoie,
                     'natureVoie'         => $natureVoie,
-                    'nomVoie'            => $nomVoie,
-                    'complementAdresse'  => substr($complement, 0, 37),
+                    'nomVoie'            => self::cleanDatas(substr($nomVoie, 0, 32)),
+                    'complementAdresse'  => self::cleanDatas(substr($complement, 0, 37)),
                     'ville'              => $commune,
                     'codePostal'         => $codePostal,
                     'codePays'           => $dossierIntervenant->getAdressePays()->getCodeIso3(),
@@ -368,7 +368,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             ];
             /*CONTRAT*/
             $contrat[] =
-                ['dateDebutContrat'  => $dateEffet,
+                ['dateDebutContrat'  => Util::$dateEffet,
                  'dateFinContrat'    => $dateFin,
                  'natureContrat'     => 'CO',
                  'typeContrat'       => 'TC01',
@@ -421,9 +421,9 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'bureauDistributeur' => $commune,
                 'bisTer'             => $bisTer,
                 'natureVoie'         => $natureVoie,
-                'nomVoie'            => substr($nomVoie, 0, 32),
+                'nomVoie'            => self::cleanDatas(substr($nomVoie, 0, 32)),
                 'numAdresse'         => $numeroVoie,
-                'complementAdresse'  => substr($complement, 0, 37),
+                'complementAdresse'  => self::cleanDatas(substr($complement, 0, 37)),
                 'commune'            => $commune,
                 'codePostal'         => $codePostal,
                 'codePays'           => $dossierIntervenant->getAdressePays()->getCodeIso3(),
@@ -504,7 +504,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'civilite'                  => ($dossierIntervenant->getCivilite() == 'M.') ? '1' : '2',
                 'dateEmbauche'              => $dateEffet,
                 'dateNaissance'             => $dossierIntervenant->getDateNaissance()->format('Y-m-d'),
-                'villeNaissance'            => $dossierIntervenant->getCommuneNaissance(),
+                'villeNaissance'            => self::cleanDatas($dossierIntervenant->getCommuneNaissance()),
                 'departementNaissance'      => $valueDepartement,
                 'paysNaissance'             => $paysNaissance,
                 'emploi'                    => $datas['connecteurForm']['emploi'],
@@ -519,11 +519,11 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'listeNumerosTelephoneFax'  => $coordonneesTelMail,
                 'listePositions'            => $position,
                 'motifEntree'               => 'PEC',
-                'nomPatronymique'           => $dossierIntervenant->getNomPatronymique(),
-                'nomUsuel'                  => $dossierIntervenant->getNomUsuel(),
+                'nomPatronymique'           => self::cleanDatas($dossierIntervenant->getNomPatronymique()),
+                'nomUsuel'                  => self::cleanDatas($dossierIntervenant->getNomUsuel()),
                 'numeroInsee'               => (!$dossierIntervenant->getNumeroInseeProvisoire()) ? $dossierIntervenant->getNumeroInsee() : '',
                 'numeroInseeProvisoire'     => ($dossierIntervenant->getNumeroInseeProvisoire()) ? $dossierIntervenant->getNumeroInsee() : '',
-                'prenom'                    => $dossierIntervenant->getPrenom(),
+                'prenom'                    => self::cleanDatas($dossierIntervenant->getPrenom()),
                 'sexe'                      => ($dossierIntervenant->getCivilite() == 'M.') ? '1' : '2',
                 'temoinValidite'            => 1,
                 'UO'                        => $datas['connecteurForm']['affectation'],
@@ -735,4 +735,30 @@ class SihamConnecteur implements ConnecteurRhInterface
 
         return $fieldset;
     }
+
+
+    public static function cleanDatas($str, $strict = false, $encoding = 'UTF-8')
+    {
+        $from = 'ÀÁÂÃÄÅÇÐÈÉÊËÌÍÎÏÒÓÔÕÖØÙÚÛÜŸÑàáâãäåçðèéêëìíîïòóôõöøùúûüÿñ()…,<> /?€%!":’\'+.';
+        $to = 'AAAAAACDEEEEIIIIOOOOOOUUUUYNaaaaaacdeeeeiiiioooooouuuuyn                  ';
+
+        $rstr = '';
+        $ok = true;
+        $len = mb_strlen($str, $encoding);
+        for ($i = 0; $i < $len; $i++) {
+            $char = mb_substr($str, $i, 1, $encoding);
+            $pos = mb_strpos($from, $char, 0, $encoding);
+            if (false === $pos) {
+                if ($strict) {
+                    return false;
+                } else $rstr .= $char;
+            } else {
+                $rstr .= mb_substr($to, $pos, 1, $encoding);
+            }
+        }
+
+        return $rstr;
+
+    }
+
 }

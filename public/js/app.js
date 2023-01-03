@@ -105,11 +105,6 @@ $(function ()
         WidgetInitializer.includeJs(Url('js/droits.js'));
     });
 
-    /* DateTime Picker */
-    WidgetInitializer.add('bootstrap-datetimepicker', 'bootstrapDatetimepicker', function () {
-        WidgetInitializer.includeJs(Url('vendor/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'));
-    });
-
     // installation de tooltip Bootstrap sur les icônes d'information (i)
     $(".info-icon").tooltip();
 

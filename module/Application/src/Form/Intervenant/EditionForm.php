@@ -120,17 +120,13 @@ class EditionForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'dateNaissance',
-            'type'       => 'DateTime',
-            'options'    => [
+            'name'    => 'dateNaissance',
+            'type'    => 'Date',
+            'options' => [
                 'label'         => 'Date de naissance <span class="text-danger">*</span>',
-                'format'        => Constants::DATE_FORMAT,
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],
-            ],
-            'attributes' => [
-                'placeholder' => "jj/mm/aaaa",
             ],
         ]);
 
@@ -284,41 +280,29 @@ class EditionForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'validiteDebut',
-            'type'       => 'DateTime',
-            'options'    => [
-                'label'  => 'Début de validité',
-                'format' => Constants::DATE_FORMAT,
-            ],
-            'attributes' => [
-                'placeholder' => "jj/mm/aaaa",
+            'name'    => 'validiteDebut',
+            'type'    => 'Date',
+            'options' => [
+                'label' => 'Début de validité',
             ],
         ]);
 
         $this->add([
-            'name'       => 'validiteFin',
-            'type'       => 'DateTime',
-            'options'    => [
-                'label'  => 'Fin de validité',
-                'format' => Constants::DATE_FORMAT,
-            ],
-            'attributes' => [
-                'placeholder' => "jj/mm/aaaa",
+            'name'    => 'validiteFin',
+            'type'    => 'Date',
+            'options' => [
+                'label' => 'Fin de validité',
             ],
         ]);
 
         $this->add([
-            'name'       => 'dateNaissance',
-            'type'       => 'DateTime',
-            'options'    => [
+            'name'    => 'dateNaissance',
+            'type'    => 'Date',
+            'options' => [
                 'label'         => 'Date de naissance <span class="text-danger">*</span>',
-                'format'        => Constants::DATE_FORMAT,
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],
-            ],
-            'attributes' => [
-                'placeholder' => "jj/mm/aaaa",
             ],
         ]);
 

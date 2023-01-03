@@ -79,7 +79,6 @@ class StatutSaisieForm extends AbstractForm
             'contratDepot',
             'contratGeneration',
             'modificationServiceDuVisualisation',
-            'modificationServiceDuEdition',
             'missionRealiseEdition',
         ];
 
@@ -393,6 +392,12 @@ class StatutSaisieForm extends AbstractForm
                     },
                 ],
             ],
+            //TODO : Créer un validateur pour le rendre false que quand contrat desactivé
+            'contratEtatSortie'     => [
+                'input' => [
+                    'required' => false,
+                ],
+            ],
             'modificationServiceDu' => [
                 'type'     => 'Select',
                 'name'     => 'modificationServiceDu',
@@ -401,18 +406,14 @@ class StatutSaisieForm extends AbstractForm
                         'desactive'     => 'Désactivé',
                         'active'        => 'Activé mais non visible par l\'intervenant',
                         'visualisation' => 'Activé et visible par l\'intervenant',
-                        'edition'       => 'Activé et modifiable par l\'intervenant',
                     ],
                 ],
                 'hydrator' => [
                     'getter' => function (Statut $statut, string $name) {
                         $access  = $statut->getModificationServiceDu();
                         $visu    = $statut->getModificationServiceDuVisualisation();
-                        $edition = $statut->getModificationServiceDuEdition();
 
-                        if ($edition && $visu && $access) {
-                            return 'edition';
-                        } elseif ($visu && $access) {
+                        if ($visu && $access) {
                             return 'visualisation';
                         } elseif ($access) {
                             return 'active';
@@ -423,11 +424,7 @@ class StatutSaisieForm extends AbstractForm
                     'setter' => function (Statut $statut, $value, string $name) {
                         $access  = false;
                         $visu    = false;
-                        $edition = false;
                         switch ($value) {
-
-                            case 'edition':
-                                $edition = true;
                             case 'visualisation':
                                 $visu = true;
                             case 'active':
@@ -435,7 +432,6 @@ class StatutSaisieForm extends AbstractForm
                         }
                         $statut->setModificationServiceDu($access);
                         $statut->setModificationServiceDuVisualisation($visu);
-                        $statut->setModificationServiceDuEdition($edition);
                     },
                 ],
             ],

@@ -1,9 +1,18 @@
 # Version stable
 
-[OSE 19.4](#ose-194-21102022)
+[OSE 19.7](#ose-197--16122022-)
 
 
-# OSE 20 (à venir)
+# OSE 21 (à venir)
+
+## Nouveautés
+
+* Nouvelle notion de mission, permettant de gérer les contrats étudiants
+
+
+
+
+# OSE 20 (janvier 2023)
 
 ## Nouveautés
 
@@ -11,32 +20,55 @@
 * Reconduction de l'offre de formation pour les éléments de OSE porté par un élément synchroniser
 * Possibilité de rentrer un taux de charge par statut d'intervenant
 * Ajout d'un choix par statut pour "contrat de travail et avenants" pour laisser la possibilité à l'intervenant de télécharger sont contrat en pdf
-* Ajout d'un choix par statut pour "Modifications de service dû" pour laisser la possibilité à l'intervenant de modifier son service dû
 * Migration technnique vers le framework Bootstrap 5 et modernisation de l'identité visuelle
 * Réorganisation du menu "Administration" pour plus de lisibilité
+* Filtrage des caractères interdits lors de l'export RH SIHAM (#47267)
 
 ## Corrections de bugs
 
 * Sur la page "Services", la sélection d'un élément après selection d'une composante et d'une formation est désormais fonctionnel
-* Correction des indicateur 910 et 920 qui étaient non fonctionnels dans le cas d'une autovalidation ou d'une absence de contrat
+* Correction des indicateurs 910 et 920 qui étaient non fonctionnels dans le cas d'une autovalidation ou d'une absence de contrat
 * Correction de la suppression d'un role dans la page d'administration des roles.
-* Correction mineure sur les notes intervenants au niveau de l'historique (#46303)
+* Correction mineure sur les notes des intervenants au niveau de l'historique (#46303)
 * La durée de vie attendue des pièces justificatives est maintenant celle de l'année en cours et plus celle de l'année de dépôt de la pièce
 * Les annulations de mises en paiement sont désormais bien prises en compte dès la première annulation
 * Il est désormais possible de clôturer le service réalisé même si aucune heure n'est saisie
 * Les indicateurs 530 et 540 ne renvoient plus de vacataires
 * Dans les diagrammes du module Charges, la boite de dialogue s'affiche correctement, même avec beaucoup de types d'intervention
 * Le plafond relatif aux charges / services saisis est maintenant opérationnel
-* Lors de la saisir d'enseignement, les elements pedagogique sur lesquels il est impossible de saisir des heures seront surlignés en rouge
+* Lors de la saisie d'enseignement, les elements pedagogique sur lesquels il est impossible de saisir des heures seront surlignés en rouge
+* Il est de nouveau possible de saisir des taux de charge TTC et des taux de charge patronale a virgule
 
 ## Notes de mise à jour
 
 * Supprimer la ligne faisant référence à TBL_NOEUD dans Administration/Synchronisation/Tables, table NOEUD, champ "Traitements postérieurs : à exécuter après la synchro".
 * La génération des contrats de travail ayant été remaniée, veuillez vérifier que vous pouvez générer correctement de nouveaux contrats de travail
 
+# OSE 19.7 (16/12/2022)
+
+## Corrections de bugs
+
+* Correction régression 19.5 : le workflow fonctionne à nouveau (#47982)
+* Correction formule de calcul du Havre (#48024)
+
+
+
+# OSE 19.6 (14/12/2022)
+
+### Attention : il est déconseillé d'utiliser les 19.5 et 19.6, des régressions ont été constatées à plusieurs niveaux.
+
+## Corrections de bugs
+
+* Correction régression 19.5 : les indicateurs 910 et 920 fonctionnent de nouveau
+* Correction régression 19.5 : les formules de calcul fonctionnent de nouveau
+* Correction régression 19.5 : la page d'administration des statuts fonctionne de nouveau (#47976)
+* Correction sur l'état de sortie préliquidation SIHAM (#47678)
+* Prise dans compte des modulateurs pour la formule de Rennes 2 (#47753)
 
 
 # OSE 19.5 (12/12/2022)
+
+### Attention : il est déconseillé d'utiliser les 19.5 et 19.6, des régressions ont été constatées à plusieurs niveaux.
 
 ## Corrections de bugs
 

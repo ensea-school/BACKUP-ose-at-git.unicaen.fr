@@ -31,6 +31,7 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
     static private $franceId;
 
 
+
     public function init()
     {
         /**
@@ -137,6 +138,7 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
     }
 
 
+
     /**
      * Should return an array specification compatible with
      * {@link Laminas\InputFilter\Factory::createInputFilter()}.
@@ -149,7 +151,7 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
 
         // la sélection du département n'est obligatoire que si le pays sélectionné est la France
         $departementRequired = (self::$franceId === $paysNaissanceId);
-        $spec = [];
+        $spec                = [];
 
         $spec = [
             'dateNaissance'        => [

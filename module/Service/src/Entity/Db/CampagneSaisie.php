@@ -148,11 +148,4 @@ class CampagneSaisie
         return true;
     }
 
-
-
-    public function __toString(): string
-    {
-        return $this->getMessage();
-    }
-
 }

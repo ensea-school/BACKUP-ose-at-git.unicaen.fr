@@ -123,6 +123,23 @@ div#contenu-principal {
 }
 
 
+/* forms */
+.form-inline .mb-2
+{
+    display: inline;
+}
+
+.form-inline .form-control
+{
+    width: auto;
+    display: inline;
+}
+
+.form-inline .form-select
+{
+    width: auto;
+    display: inline;
+}
 
 
 /* Multi checkbox */

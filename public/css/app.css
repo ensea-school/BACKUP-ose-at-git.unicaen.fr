@@ -29080,6 +29080,21 @@ div#contenu-principal {
   border-radius: 4px;
 }
 
+/* forms */
+.form-inline .mb-2 {
+  display: inline;
+}
+
+.form-inline .form-control {
+  width: auto;
+  display: inline;
+}
+
+.form-inline .form-select {
+  width: auto;
+  display: inline;
+}
+
 /* Multi checkbox */
 div.multicheckbox label input[type=checkbox],
 div.multicheckbox label input[type=radio] {

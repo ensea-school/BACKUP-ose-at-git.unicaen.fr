@@ -1,6 +1,8 @@
 <?php
 /**
  * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $intervenant       \Application\Entity\Db\Intervenant
+ * @var $missionForm       \Mission\Form\MissionForm
  */
 
 use Application\Entity\Db\WfEtape;
@@ -8,12 +10,77 @@ use Application\Entity\Db\WfEtape;
 $title     = 'Missions';
 $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
 
+$canAddMission = false;
+$missionForm->vueJsify('mission', 'submitForm');
+
 $this->intervenant($intervenant)->renderTitle($title);
+
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
-//echo $this->form()->openTag($form);
-//echo $this->formHidden($form->get('id'));
+?>
+    <template id="mission">
+        <div :id="mission.id" class="card bg-default">
+            <div class="card-header form-inline">
+                <?= $this->formControlGroup($missionForm->get('typeMission')->setAttribute('style', 'width: 50%')) ?>
+                &nbsp;, du&nbsp;<?= $this->formControlGroup($missionForm->get('dateDebut')) ?>
+                &nbsp;au&nbsp;<?= $this->formControlGroup($missionForm->get('dateFin')) ?>
 
-echo '<hr />';
+            </div>
+            <div class="card-body">
+                <?= $this->form()->openTag($missionForm); ?>
+                <div class="row">
+                    <div class="col-md-6"><?= $this->formControlGroup($missionForm->get('structure')) ?></div>
+                    <div class="col-md-3"><?= $this->formControlGroup($missionForm->get('missionTauxRemu')) ?></div>
+                    <div class="col-md-3"><?= $this->formControlGroup($missionForm->get('autoValidation')) ?></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12"><?= $this->formControlGroup($missionForm->get('description')) ?></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12"><?= $this->formSubmit($missionForm->get('submit')) ?></div>
+                </div>
+                <?= $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </template>
+    <script>
+
+        Vue.component('mission', {
+            template: '#mission',
+            props: ['mission'],
+            methods: {
+                submitForm()
+                {
+                    alert("coucou");
+                }
+            }
+        })
+
+    </script>
+
+
+    <div id="missions">
+        <mission v-for="mission in missions" :mission="mission"></mission>
+        <a v-if="canAddMission" class="btn btn-primary" @click="addMission">Ajout d'une nouvelle mission</a>
+    </div>
+    <script>
+
+        var missions = new Vue({
+            el: '#missions',
+            data: {
+                missions: <?= json_encode($missions) ?>,
+                canAddMission: <?= $canAddMission ? 'true' : 'false' ?>
+            },
+            methods: {
+                addMission()
+                {
+                    console.log('addMission')
+                }
+            }
+        })
+
+    </script>
+    <hr/>
+<?php
 
 echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);

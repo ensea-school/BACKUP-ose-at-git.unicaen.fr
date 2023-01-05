@@ -65,10 +65,10 @@ return [
                 'intervenants' => [
                     'pages' => [
                         'taux-mission' => [
-                            'label'      => "Taux de mission",
-                            'route'      => 'taux-missions',
-                            'resource'     => PrivilegeController::getResourceId(TauxMissionController::class, 'index'),
-                            'order'      => 60,
+                            'label'    => "Taux de mission",
+                            'route'    => 'taux-missions',
+                            'resource' => PrivilegeController::getResourceId(TauxMissionController::class, 'index'),
+                            'order'    => 60,
                         ],
                     ],
                 ],
@@ -104,9 +104,11 @@ return [
 
     'services' => [
         Assertion\MissionAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+        Service\MissionService::class     => Service\MissionServiceFactory::class,
     ],
 
     'forms' => [
+        Form\MissionForm::class => Form\MissionFormFactory::class,
     ],
 
     'view_helpers' => [

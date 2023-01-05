@@ -199,24 +199,27 @@ $config = [
         ],
     ],
     'view_helpers'       => [
-        'aliases'    => [
+        'aliases'      => [
             // on utilise les objets standards de Laminas, et plus ceux d'Unicaen
             'headLink'     => \Laminas\View\Helper\HeadLink::class,
             'headScript'   => \Laminas\View\Helper\HeadScript::class,
             'inlineScript' => \Laminas\View\Helper\InlineScript::class,
         ],
-        'factories'  => [
+        'factories'    => [
             \UnicaenAuth\View\Helper\UserProfileSelectRadioItem::class => View\Helper\UserProfileSelectRadioItemFactory::class,
             \UnicaenApp\View\Helper\AppLink::class                     => View\Helper\AppLinkFactory::class,
             \UnicaenAuth\View\Helper\UserCurrent::class                => View\Helper\UserCurrentFactory::class,
             \UnicaenAuth\View\Helper\LocalConnectViewHelper::class     => View\Helper\LocalConnectViewHelperFactory::class,
         ],
-        'invokables' => [
+        'invokables'   => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,
             'tree'            => View\Helper\TreeViewHelper::class,
             'formSupprimer'   => View\Helper\FormSupprimerViewHelper::class,
             'formButtonGroup' => View\Helper\FormButtonGroupViewHelper::class,
             'cartridge'       => View\Helper\CartridgeViewHelper::class,
+        ],
+        'initializers' => [
+            View\VueJsInitializer::class,
         ],
     ],
     'controllers'        => [

@@ -12,6 +12,7 @@ use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\Csrf;
 use Laminas\Form\Element\Number;
 use Laminas\Form\Element\Select;
+use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Form;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
@@ -250,6 +251,21 @@ trait FormFieldsetTrait
                 } catch (\Throwable $e) {
                     throw new \Exception('L\'élément de formulaire "' . $elName . '" n\'a pas pu être généré depuis sa spécification', 0, $e);
                 }
+            }
+        }
+    }
+
+
+
+    public function vueJsify(string $entityVariableName = 'entity', ?string $submitEventName = null)
+    {
+        if ($submitEventName) {
+            $this->setAttribute('@submit.prevent', $submitEventName);
+        }
+
+        foreach ($this->getElements() as $element) {
+            if (!$element instanceof Submit) {
+                $element->setAttribute('v-model', $entityVariableName . '.' . $element->getName());
             }
         }
     }

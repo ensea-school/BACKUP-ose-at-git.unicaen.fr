@@ -32,7 +32,7 @@ class ServiceReferentielProcessus extends AbstractProcessus
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        $serviceReferentiel              = $this->getServiceServiceReferentiel();
+        $serviceReferentiel = $this->getServiceServiceReferentiel();
         $volumeHoraireReferentielService = $this->getServiceVolumeHoraireReferentiel();
 
         $qb = $serviceReferentiel->initQuery()[0];
@@ -60,6 +60,7 @@ class ServiceReferentielProcessus extends AbstractProcessus
             $service->setTypeVolumeHoraire($recherche->getTypeVolumehoraire());
         }
 
+        
         return $services;
     }
 }

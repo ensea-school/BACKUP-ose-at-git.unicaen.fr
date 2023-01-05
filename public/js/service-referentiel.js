@@ -62,6 +62,11 @@ $.widget("ose.referentiels", {
                 params: that.params
             }, function () {
                 that.onAfterChange();
+                //Si total heure realisées sur la ligne égal à 0 alors on supprime la ligne
+                heures = that.getHeures(serviceId);
+                if (heures == 0) {
+                    $('tr#referentiel-' + serviceId + '-ligne').remove();
+                }
             });
             that.element.find("#referentiel-" + serviceId + "-volume-horaire-td").refresh();
         } else { // nouveau service
@@ -71,10 +76,16 @@ $.widget("ose.referentiels", {
                 params: that.params
             });
             $.get(url, function (data) {
+                //Si total heure realisées sur la ligne égal à 0 alors on supprime la ligne
+                heures = that.getHeures(serviceId);
+                if (heures == 0) {
+                    $('tr#referentiel-' + serviceId + '-ligne').remove();
+                }
                 that.element.find("table.service-referentiel > tbody:last").append(data);
                 that.onAfterChange();
             });
         }
+
     },
 
     onAfterDelete: function (serviceId) {
@@ -131,16 +142,27 @@ $.widget("ose.referentiels", {
         });
 
         $("body").on("service-referentiel-modify-message", function (event, data) {
+
             var serviceId = null;
             if ($("div .messenger, div .alert", event.div).length ? false : true) {
                 event.div.modal('hide'); // ferme la fenêtre modale
             }
+
             for (i in data) {
                 if (data[i].name == 'service[id]') {
                     serviceId = data[i].value;
                 }
+                if (data[i].name == 'service[idPrev]') {
+                    serviceIdPrev = data[i].value;
+                    if (serviceId != serviceIdPrev) {
+                        that.onAfterSaisie(serviceIdPrev);
+
+                    }
+                }
             }
+
             if (serviceId) {
+                heuresPrev = $("heures-realises-" + serviceId + " span").html();
                 that.onAfterSaisie(serviceId);
             }
         });
@@ -183,12 +205,14 @@ $.widget("ose.referentiels", {
         });
 
         this.calculTotaux();
-    },
+    }
+    ,
 
     getElementPrevuToPrevu: function () {
         return this.element.find(".referentiel-prevu-to-prevu")
     }
-});
+})
+;
 
 
 $.widget("ose.serviceReferentielForm", {
@@ -246,7 +270,8 @@ $.widget("ose.serviceReferentielForm", {
             this.getStructureElement().val(structure);
             $('option:not(:selected)', this.getStructureElement()).attr('disabled', true);
         }
-        this.getStructureElement().selectpicker('refresh');
+        this.getStructureElement().selectpicker('destroy');
+        this.getStructureElement().selectpicker();
     },
 
 

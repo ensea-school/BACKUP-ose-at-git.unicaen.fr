@@ -52,7 +52,6 @@ class ServiceReferentielController extends AbstractController
     }
 
 
-
     public function prevuAction()
     {
         $prevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
@@ -61,14 +60,12 @@ class ServiceReferentielController extends AbstractController
     }
 
 
-
     public function realiseAction()
     {
         $realise = $this->getServiceTypeVolumeHoraire()->getRealise();
 
         return $this->indexAction($realise);
     }
-
 
 
     public function indexAction(?TypeVolumeHoraire $typeVolumeHoraire = null)
@@ -92,14 +89,14 @@ class ServiceReferentielController extends AbstractController
     }
 
 
-
     public function saisieAction()
     {
         $this->initFilters();
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\Structure::class,
         ]);
-        $id                = (int)$this->params()->fromRoute('id');
+        $id = (int)$this->params()->fromRoute('id');
+
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
         if (empty($typeVolumeHoraire)) {
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
@@ -107,8 +104,8 @@ class ServiceReferentielController extends AbstractController
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
         $service = $this->getServiceServiceReferentiel();
-        $role    = $this->getServiceContext()->getSelectedIdentityRole();
-        $form    = $this->getFormServiceReferentielSaisie();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $form = $this->getFormServiceReferentielSaisie();
         $form->get('type-volume-horaire')->setValue($typeVolumeHoraire->getId());
 
         $intervenant = $this->getServiceLocalContext()->getIntervenant();
@@ -137,7 +134,7 @@ class ServiceReferentielController extends AbstractController
         if (!$this->isAllowed($assertionEntity, $typeVolumeHoraire->getPrivilegeReferentielEdition())) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }
-        $hDeb    = $entity->getVolumeHoraireReferentielListe()->getHeures();
+        $hDeb = $entity->getVolumeHoraireReferentielListe()->getHeures();
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
@@ -169,15 +166,14 @@ class ServiceReferentielController extends AbstractController
     }
 
 
-
     public function rafraichirLigneAction()
     {
         $this->initFilters();
 
-        $params      = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $details     = 1 == (int)$this->params()->fromQuery('details', (int)$this->params()->fromPost('details', 0));
+        $params = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
+        $details = 1 == (int)$this->params()->fromQuery('details', (int)$this->params()->fromPost('details', 0));
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content', 0);
-        $service     = $this->getEvent()->getParam('serviceReferentiel');
+        $service = $this->getEvent()->getParam('serviceReferentiel');
         /* @var $service ServiceReferentiel */
 
         if (isset($params['type-volume-horaire'])) {
@@ -193,7 +189,6 @@ class ServiceReferentielController extends AbstractController
     }
 
 
-
     public function initialisationAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -205,7 +200,6 @@ class ServiceReferentielController extends AbstractController
 
         return compact('errors');
     }
-
 
 
     public function constatationAction()
@@ -232,7 +226,6 @@ class ServiceReferentielController extends AbstractController
     }
 
 
-
     public function suppressionAction()
     {
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
@@ -241,7 +234,7 @@ class ServiceReferentielController extends AbstractController
         } else {
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
-        $id      = (int)$this->params()->fromRoute('id', null);
+        $id = (int)$this->params()->fromRoute('id', null);
         $service = $this->getServiceServiceReferentiel()->get($id);
         /* @var $service ServiceReferentiel */
 
@@ -268,7 +261,6 @@ class ServiceReferentielController extends AbstractController
     }
 
 
-
     public function validationPrevuAction()
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
@@ -277,14 +269,12 @@ class ServiceReferentielController extends AbstractController
     }
 
 
-
     public function validationRealiseAction()
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
 
         return $this->validationAction($typeVolumeHoraire);
     }
-
 
 
     private function validationAction(TypeVolumeHoraire $typeVolumeHoraire)
@@ -316,9 +306,9 @@ class ServiceReferentielController extends AbstractController
 
         $validations = $this->getProcessusValidationReferentiel()->lister($typeVolumeHoraire, $intervenant, $filterStructure);
         foreach ($validations as $validation) {
-            $key                  = $validation->getId() ? 'valides' : 'non-valides';
-            $vid                  = $this->getProcessusValidationReferentiel()->getValidationId($validation);
-            $sList                = $this->getProcessusValidationReferentiel()->getServices($typeVolumeHoraire, $validation);
+            $key = $validation->getId() ? 'valides' : 'non-valides';
+            $vid = $this->getProcessusValidationReferentiel()->getValidationId($validation);
+            $sList = $this->getProcessusValidationReferentiel()->getServices($typeVolumeHoraire, $validation);
             $services[$key][$vid] = $sList;
         }
 
@@ -345,7 +335,6 @@ class ServiceReferentielController extends AbstractController
 
         return $vm;
     }
-
 
 
     public function validerAction()
@@ -384,7 +373,6 @@ class ServiceReferentielController extends AbstractController
     }
 
 
-
     public function devaliderAction()
     {
         $this->initFilters();
@@ -410,7 +398,6 @@ class ServiceReferentielController extends AbstractController
 
         return new MessengerViewModel();
     }
-
 
 
     private function updateTableauxBord(Intervenant $intervenant, $validation = false)

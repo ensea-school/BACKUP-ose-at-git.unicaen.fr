@@ -2,6 +2,9 @@
 
 namespace Referentiel\Form;
 
+use Application\Entity\Db\MotifNonPaiement;
+use Application\Entity\Db\Tag;
+use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
 use Application\Service\Traits\TagServiceAwareTrait;
 use Laminas\Form\Element\Hidden;
 use phpDocumentor\Reflection\Types\Array_;
@@ -37,6 +40,7 @@ class SaisieFieldset extends AbstractFieldset
     use StructureServiceAwareTrait;
     use FonctionReferentielServiceAwareTrait;
     use TagServiceAwareTrait;
+    use MotifNonPaiementServiceAwareTrait;
 
     /**
      * @var Structure[]
@@ -64,19 +68,13 @@ class SaisieFieldset extends AbstractFieldset
             'type' => 'Hidden',
         ]);
 
+        $this->add([
+            'name' => 'idPrev',
+            'type' => 'Hidden',
+        ]);
+
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        /*  if (!($role && $role->getIntervenant())) {
-              $intervenant = new SearchAndSelect('intervenant');
-              $intervenant->setRequired(true)
-                  ->setSelectionRequired(true)
-                  ->setAutocompleteSource(
-                      $this->getUrl('recherche', ['action' => 'intervenantFind'])
-                  )
-                  ->setLabel("Intervenant :")
-                  ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
-              $this->add($intervenant);
-          }*/
 
         $this->add([
             'name'       => 'structure',
@@ -128,25 +126,37 @@ class SaisieFieldset extends AbstractFieldset
             'type'       => 'Text',
         ]);
 
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'motif-non-paiement',
+            'options'    => [
+                'label'         => "Motif de non paiement :",
+                'empty_option'  => "Aucun motif : paiement prévu",
+                'value_options' => Util::collectionAsOptions($this->getMotifsNonPaiement()),
+            ],
+            'attributes' => [
+                'value' => "",
+                'title' => "Motif de non paiement",
+                'class' => 'volume-horaire volume-horaire-motif-non-paiement input-sm',
+            ],
+        ]);
+
         //Gestion des tags
-        if ($this->canEditTag()) {
-            $this->add([
-                'type'       => 'Select',
-                'name'       => 'tag',
-                'options'    => [
-                    'label'         => "Tag :",
-                    'empty_option'  => "Aucun tag",
-                    'value_options' => Util::collectionAsOptions($this->getServiceTag()->getList()),
-                ],
-                'attributes' => [
-                    'value' => "",
-                    'title' => "Tag",
-                    'class' => 'volume-horaire volume-horaire-tag input-sm',
-                ],
-            ]);
-        } else {
-            $this->add(new Hidden('tag'));
-        }
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'tag',
+            'options'    => [
+                'label'         => "Tag :",
+                'empty_option'  => "Aucun tag",
+                'value_options' => Util::collectionAsOptions($this->getServiceTag()->getList()),
+            ],
+            'attributes' => [
+                'value' => "",
+                'title' => "Tag",
+                'class' => 'volume-horaire volume-horaire-tag input-sm',
+            ],
+        ]);
+
 
         $this->add([
             'name'       => 'commentaires',
@@ -206,12 +216,6 @@ class SaisieFieldset extends AbstractFieldset
     {
         /* Peuple le formulaire avec les valeurs issues du contexte local */
         $cl = $this->getServiceLocalContext();
-//        if ($this->has('intervenant') && $cl->getIntervenant()) {
-//            $this->get('intervenant')->setValue([
-//                'id'    => $cl->getIntervenant()->getId(),
-//                'label' => (string)$cl->getIntervenant(),
-//            ]);
-//        }
 
         if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure() ?: $cl->getStructure()) {
             $this->get('structure')->setValue($structure->getId());
@@ -228,6 +232,16 @@ class SaisieFieldset extends AbstractFieldset
         } else {
             $cl->setStructure(null);
         }
+    }
+
+    /**
+     * @return MotifNonPaiement[]
+     */
+    protected function getMotifsNonPaiement()
+    {
+        $qb = $this->getServiceMotifNonPaiement()->finderByHistorique();
+
+        return $this->getServiceMotifNonPaiement()->getList($qb);
     }
 
 
@@ -285,8 +299,14 @@ class SaisieFieldset extends AbstractFieldset
     public function getInputFilterSpecification()
     {
         $specs = [
-            'structure'    => [
-                'required'   => true,
+            'motif-non-paiement' => [
+                'required' => false,
+            ],
+            'tag'                => [
+                'required' => false,
+            ],
+            'structure'          => [
+                'required'   => false,
                 'validators' => [
                     [
                         'name'    => 'Laminas\Validator\NotEmpty',
@@ -298,7 +318,7 @@ class SaisieFieldset extends AbstractFieldset
                     ],
                 ],
             ],
-            'fonction'     => [
+            'fonction'           => [
                 'required'   => true,
                 'validators' => [
                     [
@@ -311,20 +331,20 @@ class SaisieFieldset extends AbstractFieldset
                     ],
                 ],
             ],
-            'heures'       => [
+            'heures'             => [
                 'required' => true,
                 'filters'  => [
                     ['name' => 'Laminas\Filter\StringTrim'],
                     new PregReplace(['pattern' => '/,/', 'replacement' => '.']),
                 ],
             ],
-            'commentaires' => [
+            'commentaires'       => [
                 'required' => false,
                 'filters'  => [
                     ['name' => 'Laminas\Filter\StringTrim'],
                 ],
             ],
-            'formation'    => [
+            'formation'          => [
                 'required' => false,
                 'filters'  => [
                     ['name' => 'Laminas\Filter\StringTrim'],
@@ -376,6 +396,9 @@ class SaisieFieldsetHydrator implements HydratorInterface
         $heures = isset($data['heures']) ? FloatFromString::run($data['heures']) : 0;
         $object->getVolumeHoraireReferentielListe()->setHeures($heures);
 
+        $tag = isset($data['tag']) ? (int)$data['tag'] : null;
+        $object->setTag($tag ? $em->find(Tag::class, $tag) : null);
+
         $commentaires = isset($data['commentaires']) ? $data['commentaires'] : null;
         $object->setCommentaires($commentaires);
 
@@ -399,6 +422,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
 
         if ($object) {
             $data['id'] = $object->getId();
+            $data['idPrev'] = $object->getId();
         }
 
 //        if ($object->getIntervenant()) {
@@ -421,6 +445,13 @@ class SaisieFieldsetHydrator implements HydratorInterface
         } else {
             $data['fonction'] = null;
         }
+
+        if ($object->getTag()) {
+            $data['tag'] = $object->getTag()->getId();
+        } else {
+            $data['tag'] = null;
+        }
+
 
         $data['heures'] = StringFromFloat::run($object->getVolumeHoraireReferentielListe()->getHeures());
 

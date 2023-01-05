@@ -7,6 +7,8 @@ use Application\Provider\Privilege\Privileges;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Mission\Controller\MissionController;
 use Mission\Controller\TauxMissionController;
+use Mission\Service\MissionTauxService;
+use Mission\Service\MissionTauxServiceFactory;
 use UnicaenAuth\Assertion\AssertionFactory;
 use UnicaenAuth\Guard\PrivilegeController;
 
@@ -103,6 +105,7 @@ return [
     ],
 
     'services' => [
+        MissionTauxService::class => MissionTauxServiceFactory::class,
         Assertion\MissionAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         Service\MissionService::class     => Service\MissionServiceFactory::class,
     ],

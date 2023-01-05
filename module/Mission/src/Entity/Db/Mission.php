@@ -216,7 +216,7 @@ class Mission implements HistoriqueAwareInterface
     {
         if ($this->isAutoValidation()) return true;
 
-        if ($validations = $this->getValidation()) {
+        if ($validations = $this->getValidations()) {
             foreach ($validations as $validation) {
                 if ($validation->estNonHistorise()) return true;
             }

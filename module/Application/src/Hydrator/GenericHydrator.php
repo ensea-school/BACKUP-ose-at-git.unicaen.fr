@@ -79,7 +79,7 @@ class GenericHydrator implements HydratorInterface
                     $value = intToString($value);
                 } elseif (('bool' == $type || 'boolean' == $type) && is_bool($value)) {
                     $value = booleanToString($value, '1', '0');
-                } elseif ('Date' == $type && $value instanceof \DateTime) {
+                } elseif (\DateTime::class == $type && $value instanceof \DateTime) {
                     $value = $value->format('Y-m-d');
                 } elseif (class_exists($type) && $value instanceof $type && method_exists($value, 'getId')) {
                     $value = (string)$value->getId();

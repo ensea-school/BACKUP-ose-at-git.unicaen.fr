@@ -3,7 +3,8 @@
 namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
-
+use Mission\Entity\Db\MissionTauxRemu;
+use Mission\Service\MissionTauxServiceAwareTrait;
 /**
  * Description of TauxMissionController
  *
@@ -11,9 +12,16 @@ use Application\Controller\AbstractController;
  */
 class TauxMissionController extends AbstractController
 {
+    use MissionTauxServiceAwareTrait;
+
+
     public function indexAction()
     {
-        return [];
+
+        $tauxMissions = $this->getServiceMissionTaux()->getTauxRemus();
+
+
+        return ['tauxMissions'];
     }
 }
 

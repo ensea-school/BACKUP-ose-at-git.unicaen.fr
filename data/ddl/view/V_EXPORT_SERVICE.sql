@@ -164,7 +164,7 @@ SELECT
   0                                 heures_compl_fc_majorees,
   NULL                              heures_compl_referentiel,
   0                                 total,
-  0                                 solde,
+  si.service_statutaire + SUM(msd.heures * mms.multiplicateur) solde,
   NULL                              service_ref_formation,
   NULL                              commentaires
 FROM
@@ -172,16 +172,15 @@ FROM
   JOIN statut               si ON si.id = i.statut_id
   JOIN etat_volume_horaire evh ON evh.code IN ('saisi','valide')
   JOIN type_volume_horaire tvh ON tvh.code IN ('PREVU','REALISE')
-  LEFT JOIN modification_service_du msd ON msd.intervenant_id = i.id AND msd.histo_destruction IS NULL
-  LEFT JOIN motif_modification_service mms ON mms.id = msd.motif_id
+  JOIN modification_service_du msd ON msd.intervenant_id = i.id AND msd.histo_destruction IS NULL
+  JOIN motif_modification_service mms ON mms.id = msd.motif_id
+  LEFT JOIN formule_resultat fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
 WHERE
   i.histo_destruction IS NULL
-  AND si.service_statutaire > 0
+  AND COALESCE(fr.total,0) = 0
+  AND msd.heures <> 0
 GROUP BY
   i.id, si.service_statutaire, evh.id, tvh.id
-HAVING
-  si.service_statutaire + SUM(msd.heures * mms.multiplicateur) = 0
-
 
 ), ponds AS (
 SELECT

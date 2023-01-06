@@ -3,6 +3,7 @@
 namespace Application\Form\Agrement;
 
 use Application\Constants;
+use Application\Filter\DateTimeFromString;
 use Application\Form\AbstractForm;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\ClassMethodsHydrator;
@@ -25,10 +26,9 @@ class Saisie extends AbstractForm
 
         $this->add([
             'name'       => 'dateDecision',
-            'type'       => 'DateTime',
+            'type'       => 'Date',
             'options'    => [
                 'label' => "Date de la décision",
-                'format' => Constants::DATE_FORMAT,
             ],
             'attributes' => [
                 'id' => uniqid('dateDecision'),
@@ -67,6 +67,10 @@ class Saisie extends AbstractForm
     }
 }
 
+
+
+
+
 class AgreementRetourFormHydrator implements HydratorInterface
 {
 
@@ -76,7 +80,7 @@ class AgreementRetourFormHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $object->setDateDecision($data['dateDecision'] ? \DateTime::createFromFormat(Constants::DATE_FORMAT, $data['dateDecision']) : null);
+        $object->setDateDecision(DateTimeFromString::run($data['dateDecision'] ?? null);
     }
 
 
@@ -90,7 +94,7 @@ class AgreementRetourFormHydrator implements HydratorInterface
     public function extract($object): array
     {
         $data = [
-            'dateDecision' => $object->getDateDecision() ? $object->getDateDecision()->format(Constants::DATE_FORMAT) : null,
+            'dateDecision' => $object->getDateDecision() ? $object->getDateDecision()->format('Y-m-d') : null,
         ];
 
         return $data;

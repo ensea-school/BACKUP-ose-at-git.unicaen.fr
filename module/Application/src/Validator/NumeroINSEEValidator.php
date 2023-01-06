@@ -6,9 +6,11 @@ use Application\Constants;
 use Application\Entity\Db\Civilite;
 use Application\Entity\Db\Departement;
 use Application\Entity\Db\Pays;
+use Application\Filter\DateTimeFromString;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
+use UnicaenApp\Form\Element\Date;
 use UnicaenApp\Validator\NumeroINSEE;
 
 /**
@@ -102,8 +104,7 @@ class NumeroINSEEValidator extends NumeroINSEE
 
         if ($this->civilite && !$this->isValidCivilite()) return false;*/
 
-        $this->dateNaissance = (!empty($dateDeNaissance)) ?
-            \DateTime::createFromFormat(Constants::DATE_FORMAT, $dateDeNaissance) : null;
+        $this->dateNaissance = (!empty($dateDeNaissance)) ? \DateTime::createFromFormat(Date::DATE_FORMAT_PHP, $dateDeNaissance) : null;
 
         if ($this->dateNaissance && !$this->isValidDateNaissance()) return false;
 

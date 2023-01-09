@@ -90,7 +90,7 @@ class StatutService extends AbstractEntityService
         $result = [];
         foreach ($statuts as $value) {
             if ($value instanceof Statut) {
-                if (($value->estNonHistorise() && $value->getDossierSelectionnable()) ||
+                if (($value->estNonHistorise() && $value->getDossierSelectionnable() && $value->getDossier()) ||
                     $statut->getCode() == $value->getCode()) {
                     $result[] = $value;
                 }

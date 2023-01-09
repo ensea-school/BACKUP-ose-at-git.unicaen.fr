@@ -2,6 +2,7 @@
 
 namespace Mission\Controller;
 
+use Mission\Service\MissionTauxService;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -21,8 +22,9 @@ class TauxMissionControllerFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): TauxMissionController
     {
         $controller = new TauxMissionController;
-            /* Injectez vos dépendances ICI */
-            return $controller;
-        }
+        $controller->setServiceMissionTaux($container->get(MissionTauxService::class));
+
+        return $controller;
+    }
 }
 

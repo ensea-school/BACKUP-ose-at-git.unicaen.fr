@@ -2,6 +2,7 @@
 
 namespace Mission\Service;
 
+use Mission\Entity\Db\MissionTauxRemu;
 use Psr\Container\ContainerInterface;
 
 
@@ -25,7 +26,6 @@ class MissionTauxServiceFactory
         $service = new MissionTauxService;
 
         /* Injectez vos dépendances ICI */
-
         return $service;
     }
 }

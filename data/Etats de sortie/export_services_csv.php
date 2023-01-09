@@ -116,12 +116,8 @@ foreach ($data as $d) {
         'date-cloture-service-realise' => $d['DATE_CLOTURE_REALISE'],
     ];
 
-    if (
-        $ds['heures-service-statutaire'] > 0
-        && $ds['heures-service-statutaire'] + $ds['heures-service-du-modifie'] == 0
-        && empty($ds['etape-code'])
-    ) {
-        $ds['__total__']++; // pour que le cas spécifique des décharges totales soit pris en compte
+    if ($ds['heures-service-du-modifie'] != 0) {
+        $ds['__total__']++; // pour que les modifs de service apparaissent
     }
 
     if ($d['TYPE_INTERVENTION_ID'] != null) {

@@ -55,6 +55,9 @@ class GenericHydrator implements HydratorInterface
     public function extract($object): array
     {
         $data = [];
+        if (method_exists($object, 'getId')) {
+            $data['id'] = (string)$object->getId();
+        }
         foreach ($this->elements as $name => $params) {
             if (!in_array($name, $this->noGenericParse)) {
                 $type   = isset($params['type']) ? $params['type'] : null;

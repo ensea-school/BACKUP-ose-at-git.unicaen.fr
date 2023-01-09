@@ -172,3 +172,33 @@ Formatter = {
     }
 
 };
+
+
+
+function waitPop(button, msg)
+{
+    return new WaitPop(button, msg);
+}
+
+class WaitPop {
+    constructor(button, content)
+    {
+        if (!content) {
+            content = "Enregistrement en cours ..."
+        }
+        var popover = new bootstrap.Popover(event.submitter, {
+            content: content
+        });
+        popover.show();
+    }
+
+    ok(msg)
+    {
+        // Corps de la méthode
+    }
+
+    error(msg)
+    {
+
+    }
+}

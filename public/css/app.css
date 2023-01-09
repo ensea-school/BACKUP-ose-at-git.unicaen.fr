@@ -27351,6 +27351,10 @@ table thead th {
     max-width: 600px;
   }
 }
+.popover .popover-body.alert {
+  margin-bottom: 0px;
+}
+
 /* -------------- Listes de définition -------------- */
 dl {
   margin-top: 0;

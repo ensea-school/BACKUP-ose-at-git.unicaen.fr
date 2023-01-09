@@ -156,6 +156,20 @@ class Mission implements HistoriqueAwareInterface
 
 
 
+    public function getHeures(): ?float
+    {
+        return null;
+    }
+
+
+
+    public function setHeures(?float $heures)
+    {
+        return $this;
+    }
+
+
+
     /**
      * @return Collection|Intervenant[]
      */

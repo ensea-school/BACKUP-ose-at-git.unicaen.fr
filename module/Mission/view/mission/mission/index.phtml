@@ -10,7 +10,7 @@ use Application\Entity\Db\WfEtape;
 $title     = 'Missions';
 $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
 
-$canAddMission = false;
+$canAddMission = true;
 $missionForm->vueJsify('mission', 'submitForm');
 
 $this->intervenant($intervenant)->renderTitle($title);
@@ -31,13 +31,17 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 <div class="row">
                     <div class="col-md-6"><?= $this->formControlGroup($missionForm->get('structure')) ?></div>
                     <div class="col-md-3"><?= $this->formControlGroup($missionForm->get('missionTauxRemu')) ?></div>
-                    <div class="col-md-3"><?= $this->formControlGroup($missionForm->get('autoValidation')) ?></div>
+                    <div class="col-md-3"><?= $this->formControlGroup($missionForm->get('heures')) ?></div>
                 </div>
                 <div class="row">
                     <div class="col-md-12"><?= $this->formControlGroup($missionForm->get('description')) ?></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12"><?= $this->formSubmit($missionForm->get('submit')) ?></div>
+                    <div class="col-md-12">
+                        <?= $this->formSubmit($missionForm->get('submit')) ?>
+                        <a class="btn btn-danger" @click="deleteMission">Suppression de la mission</a>
+                    </div>
+
                 </div>
                 <?= $this->form()->closeTag(); ?>
             </div>
@@ -49,9 +53,31 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             template: '#mission',
             props: ['mission'],
             methods: {
-                submitForm()
+                submitForm(event)
                 {
-                    alert("coucou");
+                    var that = this
+                    // var popover = new bootstrap.Popover(event.submitter, {
+                    //     content: 'Enregistrement en cours...'
+                    // });
+                    // popover.show();
+
+                    $.ajax({
+                        type: 'POST',
+                        submitter: event.submitter,
+                        msg: 'Enregistrement en cours',
+                        successMsg: 'Enregistrement effectué',
+                        url: '<?= $this->url('mission/modifier') ?>',
+                        data: this.mission,
+                        success: function (response) {
+                            // mettre à jour l'ID de la mission avec l'ID retourné par le serveur
+                            that.mission = response.data;
+                            //this.mission = response.data;
+                        }
+                    });
+                },
+                deleteMission(mission)
+                {
+                    this.$emit('delete', this.mission);
                 }
             }
         })
@@ -60,7 +86,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 
     <div id="missions">
-        <mission v-for="mission in missions" :mission="mission"></mission>
+        <mission v-for="mission in missions" v-on:delete="deleteMission" :key="mission.id" :mission="mission"></mission>
         <a v-if="canAddMission" class="btn btn-primary" @click="addMission">Ajout d'une nouvelle mission</a>
     </div>
     <script>
@@ -69,12 +95,18 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             el: '#missions',
             data: {
                 missions: <?= json_encode($missions) ?>,
-                canAddMission: <?= $canAddMission ? 'true' : 'false' ?>
+                canAddMission: <?= $canAddMission ? 'true' : 'false' ?>,
+                nextMissionId: -1
             },
             methods: {
                 addMission()
                 {
-                    console.log('addMission')
+                    this.missions.push({id: this.nextMissionId--});
+                },
+                deleteMission(mission)
+                {
+                    const index = this.missions.indexOf(mission);
+                    this.missions.splice(index, 1);
                 }
             }
         })

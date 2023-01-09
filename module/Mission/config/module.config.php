@@ -23,8 +23,38 @@ return [
                     'action'        => 'index',
                     'may_terminate' => true,
                     'child_routes'  => [
-                        /* Placez ici vos routes filles */
+                        'modification' => [
+                            'route'      => '/modification',
+                            'controller' => MissionController::class,
+                            'action'     => 'modification',
+                        ],
                     ],
+                ],
+            ],
+        ],
+        'mission'       => [
+            'route'         => '/mission',
+            'may_terminate' => false,
+            'child_routes'  => [
+                'modifier'  => [
+                    'route'      => '/modifier',
+                    'controller' => MissionController::class,
+                    'action'     => 'modifier',
+                ],
+                'supprimer' => [
+                    'route'      => '/supprimer',
+                    'controller' => MissionController::class,
+                    'action'     => 'supprimer',
+                ],
+                'valider'   => [
+                    'route'      => '/valider',
+                    'controller' => MissionController::class,
+                    'action'     => 'valider',
+                ],
+                'devalider' => [
+                    'route'      => '/devalider',
+                    'controller' => MissionController::class,
+                    'action'     => 'devalider',
                 ],
             ],
         ],
@@ -91,6 +121,38 @@ return [
             'assertion'  => Assertion\MissionAssertion::class,
         ],
         [
+            'controller' => MissionController::class,
+            'action'     => ['modifier'],
+            'privileges' => [
+                Privileges::MISSION_EDITION,
+            ],
+            //'assertion'  => Assertion\MissionAssertion::class,
+        ],
+        [
+            'controller' => MissionController::class,
+            'action'     => ['supprimer'],
+            'privileges' => [
+                Privileges::MISSION_EDITION,
+            ],
+            //'assertion'  => Assertion\MissionAssertion::class,
+        ],
+        [
+            'controller' => MissionController::class,
+            'action'     => ['valider'],
+            'privileges' => [
+                Privileges::MISSION_VALIDATION,
+            ],
+            //'assertion'  => Assertion\MissionAssertion::class,
+        ],
+        [
+            'controller' => MissionController::class,
+            'action'     => ['devalider'],
+            'privileges' => [
+                Privileges::MISSION_DEVALIDATION,
+            ],
+            //'assertion'  => Assertion\MissionAssertion::class,
+        ],
+        [
             'controller' => TauxMissionController::class,
             'action'     => ['index'],
             'privileges' => [
@@ -105,7 +167,7 @@ return [
     ],
 
     'services' => [
-        MissionTauxService::class => MissionTauxServiceFactory::class,
+        MissionTauxService::class         => MissionTauxServiceFactory::class,
         Assertion\MissionAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         Service\MissionService::class     => Service\MissionServiceFactory::class,
     ],

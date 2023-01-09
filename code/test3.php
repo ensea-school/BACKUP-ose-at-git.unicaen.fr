@@ -10,20 +10,21 @@
 
 
 ?>
-<div id="app-2">
-  <span v-bind:title="message">
-    Passez votre souris sur moi pendant quelques secondes
-    pour voir mon titre lié dynamiquement !
-  </span>
-</div>
+<template>
+    <div>
+        <button ref="button" class="btn btn-secondary" v-b-popover.hover="popoverContent">
+            Afficher la popover
+        </button>
+    </div>
+</template>
 
-<script type="application/javascript">
-
-    var app2 = new Vue({
-        el: '#app-2',
-        data: {
-            message: 'Vous avez affiché cette page le ' + new Date().toLocaleString()
+<script>
+    export default {
+        data()
+        {
+            return {
+                popoverContent: 'Contenu de la popover'
+            }
         }
-    })
-
+    }
 </script>

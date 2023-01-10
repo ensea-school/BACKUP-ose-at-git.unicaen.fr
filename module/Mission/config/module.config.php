@@ -59,14 +59,10 @@ return [
             ],
         ],
         'taux-missions' => [
-            'type'          => 'Literal',
-            'options'       => [
-                'route'    => '/taux-missions',
-                'defaults' => [
-                    'controller' => TauxMissionController::class,
-                    'action'     => 'index',
-                ],
-            ],
+
+            'route'         => '/taux-missions',
+            'controller'    => TauxMissionController::class,
+            'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
                 /* Placez ici vos routes filles */

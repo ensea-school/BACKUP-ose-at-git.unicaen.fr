@@ -5,6 +5,7 @@ namespace Mission\Service;
 
 use Application\Service\AbstractEntityService;
 use Mission\Entity\Db\MissionTauxRemu;
+use Mission\Entity\Db\MissionTauxRemuValeur;
 use UnicaenApp\Traits\SessionContainerTrait;
 
 /**
@@ -26,6 +27,8 @@ class MissionTauxService extends AbstractEntityService
         return MissionTauxRemu::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -36,13 +39,17 @@ class MissionTauxService extends AbstractEntityService
         return 'MissionTaux';
     }
 
+
+
     /**
      * @return MissionTauxRemu[]
      */
     public function getTauxRemus(): array
     {
-        $dql          = "SELECT msr FROM " . MissionTauxRemu::class . " msr";
-        $query        = $this->getEntityManager()->createQuery($dql);
+        $dql   = "SELECT mtr, mtrv
+                 FROM " . MissionTauxRemu::class . " mtr
+                 LEFT JOIN mtr.tauxRemuValeurs mtrv";
+        $query = $this->getEntityManager()->createQuery($dql);
         return $query->getResult();
     }
 }

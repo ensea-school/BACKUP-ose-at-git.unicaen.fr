@@ -1,0 +1,23 @@
+{
+  "name": "ose",
+  "author": "Université de Caen Normandie",
+  "license": "ISC",
+  "version": "21.0.0",
+  "description": "Organisation des Services d'Enseignement",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.unicaen.fr/open-source/OSE.git"
+  },
+  "devDependencies": {
+    "@vue/cli": "^5.0.8",
+    "node": "^19.3.0"
+  }
+}

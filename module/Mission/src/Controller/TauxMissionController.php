@@ -21,7 +21,7 @@ class TauxMissionController extends AbstractController
         $tauxMissions = $this->getServiceMissionTaux()->getTauxRemus();
 
 
-        return ['tauxMissions'];
+        return compact('tauxMissions');
     }
 }
 

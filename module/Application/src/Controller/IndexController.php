@@ -80,8 +80,7 @@ class IndexController extends AbstractController
 
 
     public function generateProxiesAction()
-    {
-        $destPath = $this->em()->getConfiguration()->getProxyDir();
+    {$destPath = $this->em()->getConfiguration()->getProxyDir();
 
         if (!is_dir($destPath)) {
             mkdir($destPath, 0775, true);

@@ -19,9 +19,6 @@ class MissionForm extends AbstractForm
 
     public function init()
     {
-
-        $this->setAttribute('action', $this->getCurrentUrl());
-
         $this->spec(Mission::class, ['intervenant']);
         $this->build();
         $this->setValueOptions('typeMission', "SELECT tm FROM " . TypeMission::class . " tm WHERE tm.histoDestruction IS NULL");

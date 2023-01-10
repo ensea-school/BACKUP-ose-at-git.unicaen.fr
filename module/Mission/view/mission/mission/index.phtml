@@ -56,22 +56,15 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 submitForm(event)
                 {
                     var that = this
-                    // var popover = new bootstrap.Popover(event.submitter, {
-                    //     content: 'Enregistrement en cours...'
-                    // });
-                    // popover.show();
-
                     $.ajax({
                         type: 'POST',
                         submitter: event.submitter,
                         msg: 'Enregistrement en cours',
                         successMsg: 'Enregistrement effectué',
-                        url: '<?= $this->url('mission/modifier') ?>',
+                        url: event.target.getAttribute("action"),
                         data: this.mission,
                         success: function (response) {
-                            // mettre à jour l'ID de la mission avec l'ID retourné par le serveur
                             that.mission = response.data;
-                            //this.mission = response.data;
                         }
                     });
                 },

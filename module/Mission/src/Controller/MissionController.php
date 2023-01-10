@@ -27,6 +27,7 @@ class MissionController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
 
         $missionForm = $this->getFormMission();
+        $missionForm->setAttribute('action', $this->url()->fromRoute('mission/modifier'));
 
         $dql = "SELECT m FROM " . Mission::class . " m WHERE m.histoDestruction IS NULL AND m.intervenant = :intervenant";
 
@@ -56,30 +57,36 @@ class MissionController extends AbstractController
         }
 
         $missionForm = $this->getFormMission();
-        $missionForm->getHydrator()->hydrate($data, $mission);
+        $missionForm->bind($mission);
+        $missionForm->setData($data);
+        $result = [];
 
-        return new JsonModel(['error' => 'c\'est la merde']);
-        //*
-        try {
-            $this->getServiceMission()->save($mission);
-            $result = [
-                'data' => $missionForm->getHydrator()->extract($mission),
-            ];
-
-            return new JsonModel($result);
-        } catch (\Exception $e) {
-            return new JsonModel(['error' => $e->getMessage()]);
+        if ($missionForm->isValid()) {
+            try {
+                $this->getServiceMission()->save($mission);
+            } catch (\Exception $e) {
+                $result = [
+                    'error' => $e->getMessage(),
+                ];
+            }
+        } else {
+            $result['form-errors'] = [];
+            foreach ($missionForm->getElements() as $element) {
+                if ($messages = $element->getMessages()) {
+                    $result['form-errors'][$element->getName()] = [];
+                    foreach ($messages as $message) {
+                        $result['form-errors'][$element->getName()][] = $message;
+                    }
+                }
+            }
+            if (empty($result['form-errors'])) {
+                unset($result['form-errors']);
+            }
         }
-        /**/
-//        try {
-//            $this->getServiceMission()->save($mission);
-//            $result['msg'] = 'Enregistrement effectué';
-//        } catch (\Exception $e) {
-        //$result['error'] = 'il y a une erreur';
 
-//        }
+        $result['data'] = $missionForm->getHydrator()->extract($mission);
 
-
+        return new JsonModel($result);
     }
 
 

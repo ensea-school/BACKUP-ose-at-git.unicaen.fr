@@ -2,28 +2,29 @@
 
 namespace Mission\Controller;
 
+use Application\Service\ContextService;
 use Mission\Service\MissionTauxService;
 use Psr\Container\ContainerInterface;
 
 /**
- * Description of TauxMissionControllerFactory
+ * Description of MissionTauxControllerFactory
  *
  * @author Florian Joriot <florian.joriot at unicaen.fr>
  */
-class TauxMissionControllerFactory
+class MissionTauxControllerFactory
 {
     /**
      * @param ContainerInterface $container
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return TauxMissionController
+     * @return MissionTauxController
      */
-    public function __invoke(ContainerInterface $container, $requestedName, $options = null): TauxMissionController
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null): MissionTauxController
     {
-        $controller = new TauxMissionController;
+        $controller = new MissionTauxController;
         $controller->setServiceMissionTaux($container->get(MissionTauxService::class));
-
+        $controller->setServiceContext($container->get(ContextService::class));
         return $controller;
     }
 }

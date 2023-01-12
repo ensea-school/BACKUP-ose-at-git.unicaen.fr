@@ -4,6 +4,7 @@ namespace Referentiel\Entity\Db;
 
 use Application\Entity\Db\FormuleResultatServiceReferentiel;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\MotifNonPaiementAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\TagAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
@@ -31,6 +32,7 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
     use TypeVolumeHoraireAwareTrait;
     use ImportAwareTrait;
     use TagAwareTrait;
+    use MotifNonPaiementAwareTrait;
 
     protected ?int $id = null;
 

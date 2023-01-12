@@ -38,31 +38,35 @@ class ReferentielsViewHelper extends AbstractViewHelper
     private bool $horodatage = false;
 
     private array $columns = [
-        'intervenant'  => [
+        'intervenant'        => [
             'visibility' => false,
             'head-text'  => "<th>Intervenant</th>",
         ],
-        'structure'    => [
+        'structure'          => [
             'visibility' => true,
             'head-text'  => "<th title=\"Structure\">Structure</th>",
         ],
-        'fonction'     => [
+        'fonction'           => [
             'visibility' => true,
             'head-text'  => "<th title=\"Fonction référentiel\">Fonction</th>",
         ],
-        'commentaires' => [
+        'commentaires'       => [
             'visibility' => true,
             'head-text'  => "<th title=\">Commentaires éventuels\">Commentaires</th>",
         ],
-        'tags'         => [
+        'motif-non-paiement' => [
+            'visibility' => true,
+            'head-text'  => "<th title=\">Motif de non paiement\">Motif de non paiement</th>",
+        ],
+        'tags'               => [
             'visibility' => true,
             'head-text'  => "<th title=\">Commentaires éventuels\">Tag</th>",
         ],
-        'heures'       => [
+        'heures'             => [
             'visibility' => true,
             'head-text'  => "<th title=\"Nombre d'heures\">Heures</th>",
         ],
-        'annee'        => [
+        'annee'              => [
             'visibility' => false,
             'head-text'  => "<th>Année univ.</th>",
         ],

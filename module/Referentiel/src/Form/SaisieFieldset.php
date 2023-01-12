@@ -399,6 +399,9 @@ class SaisieFieldsetHydrator implements HydratorInterface
         $tag = isset($data['tag']) ? (int)$data['tag'] : null;
         $object->setTag($tag ? $em->find(Tag::class, $tag) : null);
 
+        $motifNonPaiement = isset($data['motif-non-paiement']) ? (int)$data['motif-non-paiement'] : null;
+        $object->setMotifNonPaiement($motifNonPaiement ? $em->find(MotifNonPaiement::class, $motifNonPaiement) : null);
+
         $commentaires = isset($data['commentaires']) ? $data['commentaires'] : null;
         $object->setCommentaires($commentaires);
 
@@ -450,6 +453,12 @@ class SaisieFieldsetHydrator implements HydratorInterface
             $data['tag'] = $object->getTag()->getId();
         } else {
             $data['tag'] = null;
+        }
+
+        if ($object->getMotifNonPaiement()) {
+            $data['motif-non-paiement'] = $object->getMotifNonPaiement()->getId();
+        } else {
+            $data['motif-non-paiement'] = null;
         }
 
 

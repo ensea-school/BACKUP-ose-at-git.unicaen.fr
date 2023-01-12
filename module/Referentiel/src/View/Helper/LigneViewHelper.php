@@ -2,6 +2,7 @@
 
 namespace Referentiel\View\Helper;
 
+use Application\Entity\Db\MotifNonPaiement;
 use Application\Provider\Privilege\Privileges;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
@@ -116,6 +117,10 @@ class LigneViewHelper extends AbstractViewHelper
         if ($liste->getColumnVisibility('commentaires')) {
             $out .= '<td>' . $this->renderCommentaires($service->getCommentaires()) . "</td>\n";
         }
+        if ($liste->getColumnVisibility('motif-non-paiement')) {
+
+            $out .= '<td>' . $this->renderMotifNonPaiement($service->getMotifNonPaiement()) . "</td>\n";
+        }
         if ($liste->getColumnVisibility('tags')) {
 
             $out .= '<td>' . $this->renderTag($service->getTag()) . "</td>\n";
@@ -180,6 +185,17 @@ class LigneViewHelper extends AbstractViewHelper
     {
         if (!$tag) return '';
         $out = $tag->getLibelleLong();
+
+        return $out;
+    }
+
+    protected function renderMotifNonPaiement($motifNonPaiement)
+    {
+        /**
+         * @var $motifNonPaiement MotifNonPaiement
+         */
+        if (!$motifNonPaiement) return '';
+        $out = $motifNonPaiement->getLibelleLong();
 
         return $out;
     }

@@ -399,7 +399,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
         $code = $service->getIntervenant()->getStatut()->getCode();
 
 
-        if ($code == 'ENS_CH') {
+        if ($this->getServiceContext()->isModaliteServicesSemestriel($typeVolumeHoraire)) {
             $vhlvh = $this->getView()->volumeHoraireListe($volumeHoraireListe);
             /* @var $vhlvh \Application\View\Helper\VolumeHoraire\Liste */
         } else {

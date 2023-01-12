@@ -2,6 +2,7 @@
 
 namespace Referentiel\Service;
 
+use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Tag;
 use Application\Service\AbstractEntityService;
 use Application\Service\StructureService;
@@ -146,6 +147,7 @@ class ServiceReferentielService extends AbstractEntityService
         FonctionReferentiel $fonction,
         Structure           $structure,
         ?Tag                $tag,
+        ?MotifNonPaiement   $motifNonPaiement,
                             $commentaires = null
     )
     {
@@ -154,6 +156,7 @@ class ServiceReferentielService extends AbstractEntityService
             'fonctionReferentiel' => $fonction,
             'structure'           => $structure,
             'tag'                 => $tag,
+            'motifNonPaiement'    => $motifNonPaiement,
         ]);
 
         /* Retourne le premier NON historisé */
@@ -248,6 +251,7 @@ class ServiceReferentielService extends AbstractEntityService
                 $entity->getFonctionReferentiel(),
                 $entity->getStructure(),
                 $entity->getTag(),
+                $entity->getMotifNonPaiement(),
                 $entity->getCommentaires()
             );
 

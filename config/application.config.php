@@ -73,6 +73,27 @@ class AppConfig
 
 
 
+    public static function inDev()
+    {
+        return 'dev' == self::getEnv();
+    }
+
+
+
+    public static function inTest()
+    {
+        return 'test' == self::getEnv();
+    }
+
+
+
+    public static function inProd()
+    {
+        return 'prod' == self::getEnv();
+    }
+
+
+
     private static function makeGlobal()
     {
         $env = self::getEnv();

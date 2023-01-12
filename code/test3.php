@@ -8,11 +8,17 @@
  * @var $viewFile   string
  */
 ?>
-<h2>mission</h2>
-<mission mission="{msg:'test de mission'}"></mission>
+<div class="vue-app">
 
-<h2>test</h2>
-<mission-test msg="Et voici mon test!"></mission-test>
 
-<h2>Hello world</h2>
-<hello-world msg="bonjour le monde de partout!"></hello-world>
+    <h2>mission</h2>
+    <mission mission="{msg:'test de mission'}"></mission>
+
+    <h2>test</h2>
+    <mission-test msg="Et voici mon test!"></mission-test>
+
+    <h2>Hello world</h2>
+    <hello-world msg="bonjour le monde de partout!"></hello-world>
+
+
+</div>

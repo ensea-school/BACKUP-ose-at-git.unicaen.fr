@@ -4,18 +4,18 @@
     "src": "assets/logo.png"
   },
   "main.css": {
-    "file": "assets/main-b0e26ab3.css",
+    "file": "assets/main-1e764854.css",
     "src": "main.css"
   },
   "main.js": {
-    "file": "assets/main-cc3be632.js",
+    "file": "assets/main-6fde9ee8.js",
     "src": "main.js",
     "isEntry": true,
     "imports": [
       "_vendor-35a5dead.js"
     ],
     "css": [
-      "assets/main-b0e26ab3.css"
+      "assets/main-1e764854.css"
     ],
     "assets": [
       "assets/logo-03d6d6da.png"

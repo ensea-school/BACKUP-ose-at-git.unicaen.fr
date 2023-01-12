@@ -217,6 +217,7 @@ $config = [
             'formSupprimer'   => View\Helper\FormSupprimerViewHelper::class,
             'formButtonGroup' => View\Helper\FormButtonGroupViewHelper::class,
             'cartridge'       => View\Helper\CartridgeViewHelper::class,
+            'vite'            => View\Helper\ViteViewHelper::class,
         ],
         'initializers' => [
             View\VueJsInitializer::class,

@@ -3,4 +3,4 @@
 // import './base/reset.css'
 // etc
 
-import './example.css'
+//import './example.scss'

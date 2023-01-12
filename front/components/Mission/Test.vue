@@ -1,6 +1,6 @@
 <template>
   {{ msg }}
-  <a href="#">Mon lien</a>
+  <a href="#">Mon lien hgicc ha hi</a>
 </template>
 
 <script>
@@ -13,6 +13,6 @@ export default {
 
 <style scoped>
 a {
-  color: yellowgreen;
+  color: blue;
 }
 </style>

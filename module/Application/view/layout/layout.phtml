@@ -65,12 +65,10 @@ echo $this->doctype();
     <!-- Scripts globaux -->
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-3.6.0.min.js?v=' . $version) ?>"></script>
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js?v=' . $version) ?>"></script>
-    <script type="text/javascript" src="<?= $this->basePath('/vendor/vue.js?v=' . $version) ?>"></script>
-
-    <?= vite('main.js') ?>
+    <?= $this->vite()->head(); ?>
 </head>
 
-<body class="<?= getenv('APPLICATION_ENV') ?: 'dev' ?> p-0" data-base-url="<?= $this->url('home') ?>">
+<body class="<?= AppConfig::getEnv() ?> p-0" data-base-url="<?= $this->url('home') ?>">
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -91,7 +89,7 @@ echo $this->doctype();
 </nav>
 
 
-<div id="contenu-principal" class="container vue-app">
+<div id="contenu-principal" class="container">
     <?php $pages->rewind();
     if ($menuSecondaire = $navigationHelper->menuSecondaire($pages)->render()): ?>
         <div class="row">

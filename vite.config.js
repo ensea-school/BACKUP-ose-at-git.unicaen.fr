@@ -17,6 +17,10 @@ import vue from '@vitejs/plugin-vue'
 import liveReload from 'vite-plugin-live-reload'
 import path from 'path'
 
+let config = {
+    root: 'front',
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
 
@@ -33,7 +37,7 @@ export default defineConfig({
     ],
 
     // config
-    root: 'front',
+    root: config.root,
     base: process.env.APP_ENV === 'development'
         ? '/'
         : '/dist/',
@@ -48,7 +52,7 @@ export default defineConfig({
 
         // our entry
         rollupOptions: {
-            input: path.resolve(__dirname, 'front/main.js'),
+            input: path.resolve(__dirname, config.root + '/main.js'),
         }
     },
 

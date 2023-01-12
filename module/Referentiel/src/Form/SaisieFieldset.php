@@ -4,6 +4,7 @@ namespace Referentiel\Form;
 
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Tag;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
 use Application\Service\Traits\TagServiceAwareTrait;
 use Laminas\Form\Element\Hidden;
@@ -26,6 +27,7 @@ use Laminas\Validator\NotEmpty;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Laminas\Hydrator\HydratorInterface;
+use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 
 
 /**
@@ -41,6 +43,8 @@ class SaisieFieldset extends AbstractFieldset
     use FonctionReferentielServiceAwareTrait;
     use TagServiceAwareTrait;
     use MotifNonPaiementServiceAwareTrait;
+    use AuthorizeServiceAwareTrait;
+    use ContextServiceAwareTrait;
 
     /**
      * @var Structure[]
@@ -62,6 +66,13 @@ class SaisieFieldset extends AbstractFieldset
 
         $this->setHydrator($hydrator)
             ->setAllowedObjectBindingClass(ServiceReferentiel::class);
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $canViewMNP = $role->hasPrivilege(Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
+        $canEditMNP = $role->hasPrivilege(Privileges::MOTIF_NON_PAIEMENT_EDITION);
+        $canViewTag = $role->hasPrivilege(Privileges::TAG_VISUALISATION);
+        $canEditTag = $role->hasPrivilege(Privileges::TAG_EDITION);
 
         $this->add([
             'name' => 'id',
@@ -125,37 +136,46 @@ class SaisieFieldset extends AbstractFieldset
             ],
             'type'       => 'Text',
         ]);
+        if ($canEditMNP) {
+            $this->add([
+                'type'       => 'Select',
+                'name'       => 'motif-non-paiement',
+                'options'    => [
+                    'label'         => "Motif de non paiement :",
+                    'empty_option'  => "Aucun motif : paiement prévu",
+                    'value_options' => Util::collectionAsOptions($this->getMotifsNonPaiement()),
+                ],
+                'attributes' => [
+                    'value' => "",
+                    'title' => "Motif de non paiement",
+                    'class' => 'volume-horaire volume-horaire-motif-non-paiement input-sm',
+                ],
+            ]);
+        } else {
+            $this->add(new Hidden('motif-non-paiement'));
 
-        $this->add([
-            'type'       => 'Select',
-            'name'       => 'motif-non-paiement',
-            'options'    => [
-                'label'         => "Motif de non paiement :",
-                'empty_option'  => "Aucun motif : paiement prévu",
-                'value_options' => Util::collectionAsOptions($this->getMotifsNonPaiement()),
-            ],
-            'attributes' => [
-                'value' => "",
-                'title' => "Motif de non paiement",
-                'class' => 'volume-horaire volume-horaire-motif-non-paiement input-sm',
-            ],
-        ]);
+        }
+
 
         //Gestion des tags
-        $this->add([
-            'type'       => 'Select',
-            'name'       => 'tag',
-            'options'    => [
-                'label'         => "Tag :",
-                'empty_option'  => "Aucun tag",
-                'value_options' => Util::collectionAsOptions($this->getServiceTag()->getList()),
-            ],
-            'attributes' => [
-                'value' => "",
-                'title' => "Tag",
-                'class' => 'volume-horaire volume-horaire-tag input-sm',
-            ],
-        ]);
+        if ($canEditTag) {
+            $this->add([
+                'type'       => 'Select',
+                'name'       => 'tag',
+                'options'    => [
+                    'label'         => "Tag :",
+                    'empty_option'  => "Aucun tag",
+                    'value_options' => Util::collectionAsOptions($this->getServiceTag()->getList()),
+                ],
+                'attributes' => [
+                    'value' => "",
+                    'title' => "Tag",
+                    'class' => 'volume-horaire volume-horaire-tag input-sm',
+                ],
+            ]);
+        } else {
+            $this->add(new Hidden('tag'));
+        }
 
 
         $this->add([

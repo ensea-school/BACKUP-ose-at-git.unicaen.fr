@@ -262,9 +262,9 @@ class ServiceReferentielService extends AbstractEntityService
             if ($serviceAllreadyExists) {
                 $result = $serviceAllreadyExists;
                 if ($result->getId() != $entity->getId()) {
-                    //parent::delete($entity);
+                    //on remove l'ancien service puisque les volumes horaires vont être accrochés sur un service déjà existant
+                    parent::delete($entity);
                 }
-                //on remove l'ancien service
             } else {
                 $sourceOse = $this->getServiceSource()->getOse();
                 if (!$entity->getSource()) {

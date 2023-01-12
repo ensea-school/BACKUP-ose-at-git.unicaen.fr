@@ -134,6 +134,15 @@ class ReferentielsViewHelper extends AbstractViewHelper
     {
         $colspan = 2;
 
+        $canViewMNP = $this->getView()->isAllowed($this->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
+        $canEditMNP = $this->getView()->isAllowed($this->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_EDITION);
+        $canViewTag = $this->getView()->isAllowed($this->getIntervenant(), Privileges::TAG_VISUALISATION);
+        $canEditTag = $this->getView()->isAllowed($this->getIntervenant(), Privileges::TAG_EDITION);
+
+        $this->columns['tags']['visibility'] = ($canEditTag || $canViewTag) ? true : false;
+        $this->columns['motif-non-paiement']['visibility'] = ($canEditMNP || $canViewMNP) ? true : false;
+
+
         $attribs = [
             'id'          => $this->getId(true),
             'class'       => 'referentiels',
@@ -150,6 +159,8 @@ class ReferentielsViewHelper extends AbstractViewHelper
 
         $out .= '<table class="table table-bordered table-xs service-referentiel">';
         $out .= '<tr>';
+
+        /*On rend les colonnes visibles selon les privileges*/
 
         foreach ($this->getColumnsList() as $columnName) {
             if ($this->getColumnVisibility($columnName)) {

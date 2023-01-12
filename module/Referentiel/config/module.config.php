@@ -179,11 +179,11 @@ return [
                 'rh' => [
                     'pages' => [
                         'fonction-referentiel' => [
-                            'label'        => 'Référentiel fonctions',
-                            'route'        => 'fonction-referentiel',
-                            'resource'     => PrivilegeController::getResourceId(FonctionReferentielController::class, 'index'),
-                            'order'        => 70,
-                            'color' => '#BBCF55',
+                            'label'    => 'Référentiel fonctions',
+                            'route'    => 'fonction-referentiel',
+                            'resource' => PrivilegeController::getResourceId(FonctionReferentielController::class, 'index'),
+                            'order'    => 70,
+                            'color'    => '#BBCF55',
                         ],
                     ],
                 ],
@@ -198,6 +198,7 @@ return [
                 Privileges::REFERENTIEL_PREVU_EDITION,
                 Privileges::REFERENTIEL_REALISE_VISUALISATION,
                 Privileges::REFERENTIEL_REALISE_EDITION,
+                Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
             ],
             'resources'  => ['ServiceReferentiel', 'Intervenant'],
             'assertion'  => Assertion\ReferentielAssertion::class,
@@ -228,7 +229,7 @@ return [
         [
             'controller' => FonctionReferentielController::class,
             'action'     => ['saisie', 'delete'],
-            'privileges' => [Privileges::REFERENTIEL_ADMIN_EDITION],
+            'privileges' => [Privileges::REFERENTIEL_ADMIN_EDITION,],
         ],
         [
             'controller' => ServiceReferentielController::class,
@@ -252,6 +253,7 @@ return [
             'privileges' => [
                 Privileges::REFERENTIEL_PREVU_EDITION,
                 Privileges::REFERENTIEL_REALISE_EDITION,
+                Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
             ],
             'assertion'  => Assertion\ReferentielAssertion::class,
         ],

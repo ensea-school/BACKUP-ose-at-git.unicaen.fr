@@ -1,23 +1,22 @@
 {
   "name": "ose",
-  "author": "Université de Caen Normandie",
-  "license": "ISC",
   "version": "21.0.0",
+  "author": "Université de Caen Normandie",
   "description": "Organisation des Services d'Enseignement",
-  "main": "index.js",
-  "directories": {
-    "doc": "doc",
-    "test": "tests"
-  },
+  "license": "ISC",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "APP_ENV=development vite",
+    "build": "vite build"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://git.unicaen.fr/open-source/OSE.git"
+  "dependencies": {
+    "vue": "^3.2.45"
   },
   "devDependencies": {
-    "@vue/cli": "^5.0.8",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/compiler-sfc": "^3.2.45",
+    "vite": "^4.0.0",
+    "vite-plugin-live-reload": "^3.0.1",
     "sass": "^1.57.1"
   }
 }

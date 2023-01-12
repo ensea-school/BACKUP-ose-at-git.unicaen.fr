@@ -1,0 +1,27 @@
+{
+  "assets/logo.png": {
+    "file": "assets/logo-03d6d6da.png",
+    "src": "assets/logo.png"
+  },
+  "main.css": {
+    "file": "assets/main-b0e26ab3.css",
+    "src": "main.css"
+  },
+  "main.js": {
+    "file": "assets/main-cc3be632.js",
+    "src": "main.js",
+    "isEntry": true,
+    "imports": [
+      "_vendor-35a5dead.js"
+    ],
+    "css": [
+      "assets/main-b0e26ab3.css"
+    ],
+    "assets": [
+      "assets/logo-03d6d6da.png"
+    ]
+  },
+  "_vendor-35a5dead.js": {
+    "file": "assets/vendor-35a5dead.js"
+  }
+}

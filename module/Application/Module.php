@@ -16,6 +16,7 @@ use Laminas\Stdlib\Glob;
 use Laminas\Config\Factory as ConfigFactory;
 
 include_once(__DIR__ . '/src/functions.php');
+include_once(__DIR__ . '/src/viteHelpers.php');
 
 
 

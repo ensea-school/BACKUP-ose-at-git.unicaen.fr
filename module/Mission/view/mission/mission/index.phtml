@@ -17,10 +17,10 @@ $this->intervenant($intervenant)->renderTitle($title);
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
-echo $this->partial('mission.vue');
+//echo $this->partial('mission.vue');
 
 ?>
-    <div id="missions">
+    <div id="missions" class="vue-app">
         <mission v-for="mission in missions" v-on:delete="deleteMission" :key="mission.id" :mission="mission"></mission>
         <a v-if="canAddMission" class="btn btn-primary" @click="addMission">Ajout d'une nouvelle mission</a>
     </div>

@@ -7,24 +7,12 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
-
-
 ?>
-<template>
-    <div>
-        <button ref="button" class="btn btn-secondary" v-b-popover.hover="popoverContent">
-            Afficher la popover
-        </button>
-    </div>
-</template>
+<h2>mission</h2>
+<mission mission="{msg:'test de mission'}"></mission>
 
-<script>
-    export default {
-        data()
-        {
-            return {
-                popoverContent: 'Contenu de la popover'
-            }
-        }
-    }
-</script>
+<h2>test</h2>
+<mission-test msg="Et voici mon test!"></mission-test>
+
+<h2>Hello world</h2>
+<hello-world msg="bonjour le monde!"></hello-world>

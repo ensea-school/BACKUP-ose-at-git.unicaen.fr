@@ -4,9 +4,14 @@ namespace Mission\Entity\Db;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
+use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-class MissionTauxRemu
+class MissionTauxRemu implements HistoriqueAwareInterface
 {
+
+    use HistoriqueAwareTrait;
+
     protected ?int       $id      = null;
 
     protected ?string    $code    = null;

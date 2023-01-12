@@ -15,13 +15,56 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 <?php
 /** @var MissionTauxRemu[] $tauxMissions */
 /** @var string $annee */
-$anneeSplit = explode('/', $annee);
-foreach ($tauxMissions as $tauxRemu): ?>
-    <div class="card bg-default">
-        <div class="card-header"><?= $tauxRemu->getLibelle(); ?> (<?= $tauxRemu->getCode(); ?>)
-            <div class="float-end">
-                <a class="ajax-modal " data-event="taux-edition"
-                   href="<?= $this->url("missions-taux/saisir", ['tauxRemu' => $tauxRemu->getId()]) ?>"
+$anneeSplit = explode('/', $annee); ?>
+
+<table class="table table-bordered table-sm">
+    <thead>
+    <tr>
+        <th style="text-align: center">Libelle</th>
+        <th style="text-align: center">Code</th>
+        <th style="text-align: center">Valeurs de l'année <?php echo $annee ?></th>
+        <th style="text-align: center">Action</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <?php foreach ($tauxMissions as $tauxRemu):
+        $tauxRemuValeurs = $tauxRemu->getTauxRemuValeurs();
+        $dateDebutAnnee = "01-09-" . $anneeSplit[0];
+        $dateFinAnnee = "01-09-" . $anneeSplit[1];
+        $dateValide = false;
+        $taux = ""; ?>
+        <tr>
+            <td><?php echo $tauxRemu->getLibelle(); ?></td>
+            <td><?php echo $tauxRemu->getCode(); ?></td>
+            <td style="text-align: center">
+                <?php foreach ($tauxRemuValeurs as $tauxRemuValeur):
+                    /** @var MissionTauxRemuValeur $tauxRemuValeur */
+                    if ($tauxRemuValeur->getDateEffet() >= new DateTime($dateDebutAnnee) && $tauxRemuValeur->getDateEffet() < new DateTime($dateFinAnnee)):
+                        $dateValide = true; ?>
+                        <?php $newDate = $tauxRemuValeur->getDateEffet()->format('d/m/Y'); ?>
+
+                        <a class="ajax-modal " data-event="taux-valeur-edition"
+                           href="<?= $this->url("missions-taux/saisir-valeur", ['tauxRemuValeur' => $tauxRemuValeur->getId()], ['query' => ['tauxRemu' => $tauxRemu->getId()]]) ?>"
+                           title="Modifier la valeur du taux">
+                            <?php echo $tauxRemuValeur->getValeur() ?> - <?php echo $newDate ?><br>
+                        </a>
+                    <?php else:
+                        $taux = $taux . "valeur: " . $tauxRemuValeur->getValeur() . " - Date: " . $tauxRemuValeur->getDateEffet()->format('d/m/Y') . "\n";
+                    endif;
+                endforeach;
+                if ($taux != "") : ?>
+                    <i class="fa-solid fa-circle-question" title="<?= $taux ?>"></i>
+                <?php elseif (!$dateValide): ?>
+                    <a class="ajax-modal " data-event="taux-valeur-edition"
+                       href="<?= $this->url("missions-taux/saisir-valeur", ['tauxRemu' => $tauxRemu->getId()]) ?>"
+                       title="Ajouter une valeur">
+                        <i class="fas fa-plus"></i> Ajouter une valeur
+                    </a>
+                <?php endif; ?>
+            </td>
+            <td><a class="ajax-modal " data-event="taux-edition"
+                   href="<?= $this->url("missions-taux/saisir", ['tauxRemu' => $tauxRemu->getId()], []) ?>"
                    title="Modifier le taux"><i class="fas fa-pen-to-square"></i></a>
 
                 <a class="pop-ajax " data-title="Suppression d'un taux" data-content="Êtes-vous sur de vouloir supprimer"
@@ -30,69 +73,19 @@ foreach ($tauxMissions as $tauxRemu): ?>
                    href="<?= $this->url("missions-taux/supprimer", ['tauxRemu' => $tauxRemu->getId()]) ?>"
                    title="Supprimer le taux"><i class="fas fa-trash-can"></i></a>
 
-            </div>
-        </div>
+            </td>
+        </tr>
 
-        <table class="table table-bordered table-sm">
-            <thead>
-            <tr>
-                <th style="text-align: center" width="40%">Valeur de l'année <?php echo $annee ?></th>
-                <th style="text-align: center" width="40%">Date début</th>
-                <th style="text-align: center">Action</th>
-            </tr>
-            </thead>
-            <tbody>
+    <?php endforeach; ?>
+    </tbody>
 
-            <?php $tauxRemuValeurs = $tauxRemu->getTauxRemuValeurs();
-            $dateDebutAnnee        = "01-09-" . $anneeSplit[0];
-            $dateFinAnnee          = "01-09-" . $anneeSplit[1];
-            $dateValide            = false;
-            $tauxAutreAnnee        = "";
-            foreach ($tauxRemuValeurs as $tauxRemuValeur):
-                /** @var MissionTauxRemuValeur $tauxRemuValeur */
-                if ($tauxRemuValeur->getDateEffet() >= new DateTime($dateDebutAnnee) && $tauxRemuValeur->getDateEffet() < new DateTime($dateFinAnnee)):
-                    $dateValide = true; ?>
-                    <tr>
-                        <td style="text-align: center"><?php echo $tauxRemuValeur->getValeur() ?></td>
-                        <?php $newDate = $tauxRemuValeur->getDateEffet()->format('d/m/Y'); ?>
-                        <td style="text-align: center"><?php echo $newDate ?></td>
-                        <td style="text-align: center">
-                            <a class="ajax-modal " data-event="taux-valeur-edition"
-                               href="<?= $this->url("missions-taux/saisir-valeur", ['tauxRemuValeur' => $tauxRemuValeur->getId()]) ?>"
-                               title="Modifier la valeur du taux"><i class="fas fa-pen-to-square"></i></a>
-
-                            <a class="pop-ajax " data-title="Suppression d'une valeur de taux" data-content="Êtes-vous sur de vouloir supprimer"
-                               data-confirm="true"
-                               data-submit-reload="true"
-                               href="<?= $this->url("missions-taux/supprimer-valeur", ['tauxRemuValeur' => $tauxRemuValeur->getId()]) ?>"
-                               title="Supprimer la valeur du taux"><i class="fas fa-trash-can"></i></a></td>
-                    </tr>
-                <?php else:
-                    $tauxAutreAnnee = $tauxAutreAnnee . "valeur: " . $tauxRemuValeur->getValeur() . " - Date: " . $tauxRemuValeur->getDateEffet()->format('d/m/Y') . "\n";
-                endif;
-            endforeach;
-            if ($tauxAutreAnnee != "") : ?>
-                <td style="text-align: center" title="<?= $tauxAutreAnnee ?>">Valeur des autres années <i class="fa-solid fa-circle-question"></i></td>
-            <?php endif; ?>
-            </tbody>
-        </table>
-        <div class="card-body">
-            <div>
-                <button class="btn btn-primary ajax-modal" data-event="taux-valeur-edition"
-                        href="<?= $this->url("missions-taux/saisir-valeur", []) ?>"
-                        title="Ajouter une valeur au taux">
-                    Ajouter une valeur au taux
-                </button>
-            </div>
-        </div>
-    </div>
-
-<?php endforeach; ?>
-
+</table>
 <div>
-    <button class="btn btn-primary">
-        Ajouter un taux
-    </button>
+    <a class="btn btn-primary ajax-modal " data-event="taux-edition"
+       href="<?= $this->url("missions-taux/saisir", []) ?>"
+       title="Ajouter un taux">
+        <i class="fas fa-plus"></i> Ajouter un taux
+    </a>
 </div>
 
 

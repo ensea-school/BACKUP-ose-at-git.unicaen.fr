@@ -4,6 +4,7 @@
     <entity name="Mission\Entity\Db\MissionTauxRemuValeur" table="MISSION_TAUX_REMU_VALEUR">
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
+            <sequence-generator sequence-name="MISSION_TAUX_REMU_VALEU_ID_SEQ" allocation-size="1" initial-value="1"/>
         </id>
         <many-to-one field="missionTauxRemu" target-entity="Mission\Entity\Db\MissionTauxRemu">
             <join-column name="MISSION_TAUX_REMU_ID" referenced-column-name="ID"/>

@@ -28,7 +28,7 @@ class MissionTauxRemuValeur
 
 
 
-    public function setDateEffet(?\DateTime $dateEffet): MissionTauxRemu
+    public function setDateEffet(?\DateTime $dateEffet): MissionTauxRemuValeur
     {
         $this->dateEffet = $dateEffet;
 
@@ -44,7 +44,7 @@ class MissionTauxRemuValeur
 
 
 
-    public function setMissionTauxRemu(?MissionTauxRemu $missionTauxRemu): MissionTauxRemu
+    public function setMissionTauxRemu(?MissionTauxRemu $missionTauxRemu): MissionTauxRemuValeur
     {
         $this->missionTauxRemu = $missionTauxRemu;
 
@@ -60,7 +60,7 @@ class MissionTauxRemuValeur
 
 
 
-    public function setValeur(float $valeur): MissionTauxRemu
+    public function setValeur(float $valeur): MissionTauxRemuValeur
     {
         $this->valeur = $valeur;
 

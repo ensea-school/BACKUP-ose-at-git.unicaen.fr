@@ -4,7 +4,6 @@ namespace Mission\Service;
 
 
 use Application\Service\AbstractEntityService;
-use Mission\Entity\Db\MissionTauxRemu;
 use Mission\Entity\Db\MissionTauxRemuValeur;
 use UnicaenApp\Traits\SessionContainerTrait;
 
@@ -13,7 +12,7 @@ use UnicaenApp\Traits\SessionContainerTrait;
  *
  * @author Florian Joriot <florian.joriot at unicaen.fr>
  */
-class MissionTauxService extends AbstractEntityService
+class MissionTauxValeurService extends AbstractEntityService
 {
     use SessionContainerTrait;
 
@@ -24,7 +23,7 @@ class MissionTauxService extends AbstractEntityService
      */
     public function getEntityClass(): string
     {
-        return MissionTauxRemu::class;
+        return MissionTauxRemuValeur::class;
     }
 
 
@@ -39,20 +38,6 @@ class MissionTauxService extends AbstractEntityService
         return 'MissionTaux';
     }
 
-
-
-    /**
-     * @return MissionTauxRemu[]
-     */
-    public function getTauxRemus(): array
-    {
-        $dql   = "SELECT mtr, mtrv
-                 FROM " . MissionTauxRemu::class . " mtr
-                 LEFT JOIN mtr.tauxRemuValeurs mtrv
-                 WHERE mtr.histoDestruction IS NULL";
-        $query = $this->getEntityManager()->createQuery($dql);
-        return $query->getResult();
-    }
 }
 
 

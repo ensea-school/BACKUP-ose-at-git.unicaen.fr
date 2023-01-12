@@ -24,9 +24,9 @@ $dossierIdentite = $form->get('DossierIdentite');
             IDENTITÉ
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$tblDossier->getCompletudeIdentite()): ?>
-                    <span class="label label-warning">A compléter</span>
+                    <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
-                    <span class="label label-success">Complet</span>
+                    <span class="badge bg-success">Complet</span>
                 <?php endif; ?>
             <?php endif; ?>
         </div>

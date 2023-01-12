@@ -66,7 +66,8 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
             </table>
         <?php else: ?>
             <?php if ($fromPost): ?>
-                <p><a href="<?= $this->url('aof/reconduction', [], ['query' => ['structure' => $structure->getId()]]) ?>"><
+                <p>
+                    <a href="<?= $this->url('aof/reconduction', [], ['query' => ['structure' => $structure->getId()]]) ?>"><
                         Retour à la liste
                         des formations.</a></p>
             <?php else: ?>
@@ -94,20 +95,24 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                                 } ?>">
                                     <?php if ($ec['reconduction'] == 'oui'): ?>
                                         <?php if ($ec['reconductionFait'] == 'oui'): ?>
-                                            <th><input title="Formation déjà reconduite pour l'année prochaine" type="checkbox"
+                                            <th><input title="Formation déjà reconduite pour l'année prochaine"
+                                                       type="checkbox"
                                                        class="checkbox-formation" disabled="disabled" name="etape[]"
-                                                       value="<?= $ec['etape']->getId(); ?>"/> <span class="label label-warning"
-                                                                                                     style="margin:0 auto;">Reconduit</span>
+                                                       value="<?= $ec['etape']->getId(); ?>"/> <span
+                                                        class="badge bg-warning text-dark"
+                                                        style="margin:0 auto;">Reconduit</span>
                                             </th>
                                         <?php else: ?>
                                             <th><input title="Formation non reconductible" type="checkbox"
                                                        class="checkbox-formation" disabled="disabled" name="etape[]"
-                                                       value="<?= $ec['etape']->getId(); ?>"/> <span class="label label-warning"
-                                                                                                     style="margin:0 auto;">Non reconductible</span>
+                                                       value="<?= $ec['etape']->getId(); ?>"/> <span
+                                                        class="badge bg-warning text-dark"
+                                                        style="margin:0 auto;">Non reconductible</span>
                                             </th>
                                         <?php endif; ?>
                                     <?php else: ?>
-                                        <th><input type="checkbox" class="checkbox-formation" checked="checked" name="etape[]"
+                                        <th><input type="checkbox" class="checkbox-formation" checked="checked"
+                                                   name="etape[]"
                                                    value="<?= $ec['etape']->getId(); ?>"/></th>
                                     <?php endif; ?>
                                     <th colspan="6">Formation
@@ -131,16 +136,17 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                                 <?php } ?>
 
                                 <?php foreach ($ec['elements_pedagogique'] as $ep): ?>
-                                    <tr id="<?= $ep['element']->getId() ?>" class="<?php if ($ep['reconduction'] == 'oui') {
-                                        echo "active";
-                                    } ?>">
+                                    <tr id="<?= $ep['element']->getId() ?>"
+                                        class="<?php if ($ep['reconduction'] == 'oui') {
+                                            echo "active";
+                                        } ?>">
                                         <?php if ($ep['reconduction'] == 'oui'): ?>
                                             <td>
                                                 <input title="Elément pédagogique déjà reconduit pour l'année prochaine"
                                                        class="checkbox-element" disabled="disabled" type="checkbox"
                                                        name="element[<?php echo $ec['etape']->getId(); ?>][]"
                                                        value="<?= $ep['element']->getId(); ?>"/>
-                                                <span class="label label-warning">Reconduit</span>
+                                                <span class="badge bg-warning text-dark">Reconduit</span>
                                             </td>
                                         <?php else: ?>
                                             <td><input class="checkbox-element" type="checkbox" checked="checked"
@@ -157,7 +163,8 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                                 </tbody>
                             </table>
                             <?php endforeach; ?>
-                            <button id="reconduction-button" class="btn btn-primary pop-ajax" type="button" data-content="Voulez-vous réellement reconduire ces offres pour l'année prochaine ?
+                            <button id="reconduction-button" class="btn btn-primary pop-ajax" type="button"
+                                    data-content="Voulez-vous réellement reconduire ces offres pour l'année prochaine ?
                 <div class='alert alert-warning'>
                 <button type='button' class='close' data-bs-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                     Les formations ainsi que les éléments pédagogiques sélectionnés seront reconduits pour l'année universitaire prochaine.

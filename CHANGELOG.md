@@ -38,6 +38,7 @@
 * Le plafond relatif aux charges / services saisis est maintenant opérationnel
 * Lors de la saisie d'enseignement, les elements pedagogique sur lesquels il est impossible de saisir des heures seront surlignés en rouge
 * Il est de nouveau possible de saisir des taux de charge TTC et des taux de charge patronale a virgule
+* Modification du filtre des status séléctionnables dans les données personnelles (#48151)
 
 ## Notes de mise à jour
 

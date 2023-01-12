@@ -6,7 +6,7 @@ use Application\Constants;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\TypeIntervention;
-use Application\Service\Traits\TagServiceAwareTrait;
+use Application\Filter\DateTimeFromString;
 use Enseignement\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
@@ -14,6 +14,7 @@ use Enseignement\Hydrator\ListeFilterHydrator;
 use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
+use Laminas\Form\Element\DateTimeLocal;
 use UnicaenApp\Util;
 use Laminas\Form\Element\Hidden;
 use Laminas\Hydrator\HydratorInterface;
@@ -23,7 +24,6 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
 class VolumeHoraireSaisieCalendaireForm extends AbstractForm
 {
     use MotifNonPaiementServiceAwareTrait;
-    use TagServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;
     use PeriodeServiceAwareTrait;
 
@@ -37,15 +37,6 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
      */
     protected $editMNP = false;
 
-    /**
-     * @var boolean
-     */
-    protected $viewTag = false;
-
-    /**
-     * @var boolean
-     */
-    protected $editTag = false;
 
 
     /**
@@ -57,6 +48,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
 
         return $this->getServiceMotifNonPaiement()->getList($qb);
     }
+
 
 
     /**
@@ -71,6 +63,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
     }
 
 
+
     /**
      * @return Periode[]
      */
@@ -81,6 +74,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
 
         return $this->getServicePeriode()->getList($qb);
     }
+
 
 
     public function build()
@@ -96,23 +90,18 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
         $this->setHydrator($hydrator);
 
         $this->add([
-            'type'    => 'DateTime',
+            'type'    => DateTimeLocal::class,
             'name'    => 'horaire-debut',
             'options' => [
-                'label'  => 'Horaire de début',
-                'format' => Constants::DATETIME_FORMAT,
-
+                'label' => 'Horaire de début',
             ],
-
         ]);
 
         $this->add([
-            'type'    => 'DateTime',
+            'type'    => DateTimeLocal::class,
             'name'    => 'horaire-fin',
             'options' => [
-                'label'  => 'Horaire de fin',
-                'format' => Constants::DATETIME_FORMAT,
-
+                'label' => 'Horaire de fin',
             ],
         ]);
 
@@ -125,7 +114,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
             ],
             'attributes' => [
                 'value' => '',
-                'title' => 'Période(semestre 1 ou 2)',
+                'title' => 'Période (semestre 1 ou 2)',
             ],
         ]);
 
@@ -160,10 +149,9 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
                 'type'       => 'Select',
                 'name'       => 'motif-non-paiement',
                 'options'    => [
-                    'label'                     => "Motif de non paiement :",
-                    'empty_option'              => "Aucun motif : paiement prévu",
-                    'value_options'             => Util::collectionAsOptions($this->getMotifsNonPaiement()),
-                    'disable_inarray_validator' => true,
+                    'label'         => "Motif de non paiement :",
+                    'empty_option'  => "Aucun motif : paiement prévu",
+                    'value_options' => Util::collectionAsOptions($this->getMotifsNonPaiement()),
                 ],
                 'attributes' => [
                     'value' => "",
@@ -175,33 +163,9 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
             $this->add(new Hidden('motif-non-paiement'));
         }
 
-
-        //Gestion des tags
-        if ($this->canEditTag()) {
-            $this->add([
-                'type'       => 'Select',
-                'name'       => 'tag',
-                'options'    => [
-                    'label'                     => "Tag :",
-                    'empty_option'              => "Aucun tag",
-                    'value_options'             => Util::collectionAsOptions($this->getServiceTag()->getList()),
-                    'disable_inarray_validator' => true,
-
-                ],
-                'attributes' => [
-                    'value' => "",
-                    'title' => "Tag",
-                    'class' => 'volume-horaire volume-horaire-tag input-sm',
-                ],
-            ]);
-        } else {
-            $this->add(new Hidden('tag'));
-        }
-
         $this->add(new Hidden('service'));
         $this->add(new Hidden('type-volume-horaire'));
         $this->add(new Hidden('ancien-motif-non-paiement'));
-        $this->add(new Hidden('ancien-tag'));
         $this->add(new Hidden('ancien-horaire-debut'));
         $this->add(new Hidden('ancien-horaire-fin'));
         $this->add(new Hidden('ancien-periode'));
@@ -232,6 +196,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
     }
 
 
+
     /**
      * @return bool
      */
@@ -239,6 +204,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
     {
         return $this->viewMNP;
     }
+
 
 
     /**
@@ -254,6 +220,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
     }
 
 
+
     /**
      * @return bool
      */
@@ -262,49 +229,6 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
         return $this->editMNP;
     }
 
-
-    /**
-     * @return bool
-     */
-    public function canViewTag(): bool
-    {
-        return $this->viewTag;
-    }
-
-
-    /**
-     * @param bool $viewTag
-     *
-     * @return Saisie
-     */
-    public function setViewTag(bool $viewTag): self
-    {
-        $this->viewTag = $viewTag;
-
-        return $this;
-    }
-
-
-    /**
-     * @return bool
-     */
-    public function canEditTag(): bool
-    {
-        return $this->editTag;
-    }
-
-
-    /**
-     * @param bool $editTag
-     *
-     * @return Saisie
-     */
-    public function setEditTag(bool $editTag): self
-    {
-        $this->editTag = $editTag;
-
-        return $this;
-    }
 
 
     /**
@@ -318,6 +242,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
 
         return $this;
     }
+
 
 
     /**
@@ -335,34 +260,29 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
             'horaire-fin'               => [
                 'required'   => false,
                 'validators' => [[
-                    'name'    => 'Callback',
-                    'options' => [
-                        'messages' => [
-                            \Laminas\Validator\Callback::INVALID_VALUE => 'L\'horaire de fin doit être ultérieur à l\'horaire de début',
-                        ],
-                        'callback' => function ($value, $context = []) {
-                            if (!$context['horaire-debut'] && $context['horaire-fin']) return true; // pas d'horaires de saisis
-                            $horaireDebut = (!$context['horaire-debut'] instanceof \DateTime) ? \DateTime::createFromFormat(Constants::DATETIME_FORMAT, $context['horaire-debut']) : $context['horaire-debut'];
-                            $horaireFin = (!$context['horaire-fin'] instanceof \DateTime) ? \DateTime::createFromFormat(Constants::DATETIME_FORMAT, $context['horaire-fin']) : $context['horaire-fin'];
-                            $deb = $horaireDebut->getTimestamp();
-                            $fin = $horaireFin->getTimestamp();
-                            $diff = $fin - $deb;
+                                     'name'    => 'Callback',
+                                     'options' => [
+                                         'messages' => [
+                                             \Laminas\Validator\Callback::INVALID_VALUE => 'L\'horaire de fin doit être ultérieur à l\'horaire de début',
+                                         ],
+                                         'callback' => function ($value, $context = []) {
+                                             if (!$context['horaire-debut'] && $context['horaire-fin']) return true; // pas d'horaires de saisis
 
-                            return $diff >= 0;
-                        },
-                    ],
-                ]],
+                                             $horaireDebut = DateTimeFromString::run($context['horaire-debut']);
+                                             $horaireFin   = DateTimeFromString::run($context['horaire-fin']);
+                                             $deb          = $horaireDebut->getTimestamp();
+                                             $fin          = $horaireFin->getTimestamp();
+                                             $diff         = $fin - $deb;
+
+                                             return $diff >= 0;
+                                         },
+                                     ],
+                                 ]],
             ],
             'motif-non-paiement'        => [
                 'required' => false,
             ],
             'ancien-motif-non-paiement' => [
-                'required' => false,
-            ],
-            'tag'                       => [
-                'required' => false,
-            ],
-            'ancien-tag'                => [
                 'required' => false,
             ],
             'ancien-horaire-debut'      => [
@@ -394,6 +314,9 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
 }
 
 
+
+
+
 /**
  *
  *
@@ -409,68 +332,70 @@ class SaisieCalendaireHydrator implements HydratorInterface
     private $data;
 
 
+
     private function getVal($key)
     {
         if (isset($this->data[$key])) {
-            return $this->data[$key];
+            switch ($key) {
+                case 'horaire-debut':
+                case 'horaire-fin':
+                    return DateTimeFromString::run($this->data[$key]);
+                default:
+                    return $this->data[$key];
+            }
         } else {
             return null;
         }
     }
 
 
+
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array $data
+     * @param array              $data
      * @param VolumeHoraireListe $object
      *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
-
+        //$dumper = vhlDump($object);
 
         $this->data = $data;
 
         $lfh = new ListeFilterHydrator();
         $lfh->setEntityManager($this->getEntityManager());
 
-        $ho = ['format' => Constants::DATETIME_FORMAT];
-
-        $horaireDebut = $this->getVal('horaire-debut');
-
-        $ancienHoraireDebut = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('ancien-horaire-debut'), $ho);
-        $horaireDebut = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('horaire-debut'), $ho);
+        $ancienHoraireDebut = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('ancien-horaire-debut'));
+        $horaireDebut       = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('horaire-debut'));
         $object->setHoraireDebut($ancienHoraireDebut != $horaireDebut ? $ancienHoraireDebut : $horaireDebut);
 
-        $ancienHoraireFin = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('ancien-horaire-fin'), $ho);
-        $horaireFin = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('horaire-fin'), $ho);
+        $ancienHoraireFin = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('ancien-horaire-fin'));
+        $horaireFin       = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('horaire-fin'));
         $object->setHoraireFin($ancienHoraireFin != $horaireFin ? $ancienHoraireFin : $horaireFin);
 
         $ancienTypeIntervention = $lfh->allToData(VolumeHoraireListe::FILTRE_TYPE_INTERVENTION, $this->getVal('ancien-type-intervention'));
-        $typeIntervention = $lfh->allToData(VolumeHoraireListe::FILTRE_TYPE_INTERVENTION, $this->getVal('type-intervention'));
+        $typeIntervention       = $lfh->allToData(VolumeHoraireListe::FILTRE_TYPE_INTERVENTION, $this->getVal('type-intervention'));
         $object->setTypeIntervention($ancienTypeIntervention != $typeIntervention && $ancienTypeIntervention ? $ancienTypeIntervention : $typeIntervention);
 
         $ancienPeriode = $lfh->allToData(VolumeHoraireListe::FILTRE_PERIODE, $this->getVal('ancien-periode'));
-        $periode = $lfh->allToData(VolumeHoraireListe::FILTRE_PERIODE, $this->getVal('periode'));
+        $periode       = $lfh->allToData(VolumeHoraireListe::FILTRE_PERIODE, $this->getVal('periode'));
         $object->setPeriode($ancienPeriode != $periode && $ancienPeriode ? $ancienPeriode : $periode);
 
         $ancienMotifNonPaiement = $lfh->allToData(VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT, $this->getVal('ancien-motif-non-paiement'));
-        $motifNonPaiement = $lfh->allToData(VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT, $this->getVal('motif-non-paiement'));
-        $object->setMotifNonPaiement($ancienMotifNonPaiement != $motifNonPaiement && $ancienMotifNonPaiement ? $ancienMotifNonPaiement : $motifNonPaiement);
-        
-        $ancienTag = $lfh->allToData(VolumeHoraireListe::FILTRE_TAG, $this->getVal('ancien-tag'));
-        $tag = $lfh->allToData(VolumeHoraireListe::FILTRE_TAG, $this->getVal('tag'));
-        $object->setTag($ancienTag != $tag && $ancienTag ? $ancienTag : $tag);
+        $motifNonPaiement       = $lfh->allToData(VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT, $this->getVal('motif-non-paiement'));
+        $object->setMotifNonPaiement($ancienMotifNonPaiement != $motifNonPaiement ? $ancienMotifNonPaiement : $motifNonPaiement);
 
         $heures = (float)$this->getVal('heures');
-        $object->changeAll($horaireDebut, $horaireFin, $typeIntervention, $periode, $motifNonPaiement, $tag);
+        $object->changeAll($horaireDebut, $horaireFin, $typeIntervention, $periode, $motifNonPaiement);
         $object->setHeures($heures);
 
+        //$dumper->dumpEndToFile();
 
         return $object;
     }
+
 
 
     /**
@@ -493,7 +418,6 @@ class SaisieCalendaireHydrator implements HydratorInterface
         /* Gestion des valeurs anciennes */
         $anciens = [
             'motif-non-paiement',
-            'tag',
             'periode',
             'horaire-debut',
             'horaire-fin',
@@ -504,7 +428,7 @@ class SaisieCalendaireHydrator implements HydratorInterface
                 $data['ancien-' . $ancien] = $data[$ancien];
             }
         }
-        /*WIP TAG*/
+
         /* Conversion des dates en objets */
         if (isset($data['horaire-debut']) && $data['horaire-debut'] > 0) {
             $data['horaire-debut'] = (new \DateTime)->setTimestamp($data['horaire-debut']);

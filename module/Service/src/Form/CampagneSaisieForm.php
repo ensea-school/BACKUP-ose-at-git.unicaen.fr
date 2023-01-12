@@ -3,7 +3,9 @@
 namespace Service\Form;
 
 use Application\Constants;
+use Application\Filter\DateTimeFromString;
 use Application\Form\AbstractForm;
+use Laminas\Filter\DateTimeFormatter;
 use Service\Entity\Db\CampagneSaisie;
 use Laminas\Hydrator\HydratorInterface;
 use UnicaenApp\Form\Element\Date;
@@ -40,26 +42,18 @@ class CampagneSaisieForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'DateTime',
-            'name'       => 'dateDebut',
-            'options'    => [
-                'label'  => 'Date de début',
-                'format' => 'd/m/Y',
-            ],
-            'attributes' => [
-                'step' => '1',
+            'type'    => 'Date',
+            'name'    => 'dateDebut',
+            'options' => [
+                'label' => 'Date de début',
             ],
         ]);
 
         $this->add([
-            'type'       => 'DateTime',
-            'name'       => 'dateFin',
-            'options'    => [
-                'label'  => 'Date de fin',
-                'format' => 'd/m/Y',
-            ],
-            'attributes' => [
-                'step' => '1',
+            'type'    => 'Date',
+            'name'    => 'dateFin',
+            'options' => [
+                'label' => 'Date de fin',
             ],
         ]);
 
@@ -132,8 +126,8 @@ class CampagneSaisieFormHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $object->setDateDebut($data['dateDebut'] ? \DateTime::createFromFormat(Constants::DATE_FORMAT, $data['dateDebut']) : null);
-        $object->setDateFin($data['dateFin'] ? \DateTime::createFromFormat(Constants::DATE_FORMAT, $data['dateFin']) : null);
+        $object->setDateDebut(DateTimeFromString::run($data['dateDebut'] ?? null));
+        $object->setDateFin(DateTimeFromString::run($data['dateFin'] ?? null));
         $object->setMessageIntervenant($data['messageIntervenant']);
         $object->setMessageAutres($data['messageAutres']);
 
@@ -153,8 +147,8 @@ class CampagneSaisieFormHydrator implements HydratorInterface
             'id'                 => $object->getId(),
             'typeIntervenant'    => $object->getTypeIntervenant()->getId(),
             'typeVolumeHoraire'  => $object->getTypeVolumeHoraire()->getId(),
-            'dateDebut'          => $object->getDateDebut() ? $object->getDateDebut()->format(Constants::DATE_FORMAT) : null,
-            'dateFin'            => $object->getDateFin() ? $object->getDateFin()->format(Constants::DATE_FORMAT) : null,
+            'dateDebut'          => $object->getDateDebut(),
+            'dateFin'            => $object->getDateFin(),
             'messageIntervenant' => $object->getMessageIntervenant(),
             'messageAutres'      => $object->getMessageAutres(),
         ];

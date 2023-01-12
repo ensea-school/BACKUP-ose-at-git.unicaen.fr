@@ -24,6 +24,7 @@ function vite(string $entry): string
 
 function isDev(string $entry): bool
 {
+    return true;
     // This method is very useful for the local server
     // if we try to access it, and by any means, didn't started Vite yet
     // it will fallback to load the production files from manifest

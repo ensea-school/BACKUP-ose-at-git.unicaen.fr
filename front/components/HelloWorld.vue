@@ -15,7 +15,7 @@
     count is: {{ state.count }}
   </button>
   <p>
-    Edit
+    Edit bla bla
     <code>components/HelloWorld.vue</code>
   </p>
 </template>
@@ -32,6 +32,6 @@ const state = reactive({count: 0})
 
 <style scoped>
 a {
-  color: blue;
+  color: yellow;
 }
 </style>

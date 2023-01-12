@@ -15,4 +15,4 @@
 <mission-test msg="Et voici mon test!"></mission-test>
 
 <h2>Hello world</h2>
-<hello-world msg="bonjour le monde!"></hello-world>
+<hello-world msg="bonjour le monde de partout!"></hello-world>

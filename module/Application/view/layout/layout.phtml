@@ -65,6 +65,8 @@ echo $this->doctype();
     <!-- Scripts globaux -->
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-3.6.0.min.js?v=' . $version) ?>"></script>
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js?v=' . $version) ?>"></script>
+    <script type="text/javascript" src="<?= $this->basePath('/vendor/vue.js?v=' . $version) ?>"></script>
+
     <?= vite('main.js') ?>
 </head>
 

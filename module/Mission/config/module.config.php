@@ -4,12 +4,13 @@ namespace Mission;
 
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use Laminas\ServiceManager\Factory\InvokableFactory;
 use Mission\Controller\MissionController;
 use Mission\Controller\MissionTauxController;
 use Mission\Service\MissionTauxService;
 use Mission\Service\MissionTauxServiceFactory;
 use UnicaenAuth\Assertion\AssertionFactory;
+use Mission\Service\MissionTauxValeurService;
+use Mission\Service\MissionTauxValeurServiceFactory;
 use UnicaenAuth\Guard\PrivilegeController;
 
 
@@ -64,18 +65,18 @@ return [
             'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
-                'saisir' => [
+                'saisir'           => [
                     'route'      => '/saisir[/:tauxRemu]',
                     'controller' => MissionTauxController::class,
                     'action'     => 'saisir',
                 ],
-                'supprimer' => [
+                'supprimer'        => [
                     'route'      => '/supprimer/:tauxRemu',
                     'controller' => MissionTauxController::class,
                     'action'     => 'supprimer',
                 ],
-                'saisir-valeur' => [
-                    'route'      => '/saisir-valeur[/:tauxRemuValeur]',
+                'saisir-valeur'    => [
+                    'route'      => '/saisir-valeur[/:tauxRemu][/:tauxRemuValeur]',
                     'controller' => MissionTauxController::class,
                     'action'     => 'saisirValeur',
                 ],
@@ -168,7 +169,7 @@ return [
         ],
         [
             'controller' => MissionTauxController::class,
-            'action'     => ['index','supprimer','supprimerValeur','saisir','saisirValeur'],
+            'action'     => ['index', 'supprimer', 'supprimerValeur', 'saisir', 'saisirValeur'],
             'privileges' => [
                 Privileges::MISSION_VISUALISATION,
             ],
@@ -182,12 +183,14 @@ return [
 
     'services' => [
         MissionTauxService::class         => MissionTauxServiceFactory::class,
-        Assertion\MissionAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+        MissionTauxValeurService::class   => MissionTauxValeurServiceFactory::class,
+        Assertion\MissionAssertion::class => AssertionFactory::class,
         Service\MissionService::class     => Service\MissionServiceFactory::class,
     ],
 
     'forms' => [
-        Form\MissionForm::class => Form\MissionFormFactory::class,
+        Form\MissionForm::class     => Form\MissionFormFactory::class,
+        Form\MissionTauxForm::class => Form\MissionTauxFormFactory::class,
     ],
 
     'view_helpers' => [

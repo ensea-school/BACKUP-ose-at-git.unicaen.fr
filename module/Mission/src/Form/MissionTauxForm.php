@@ -2,9 +2,13 @@
 
 namespace Mission\Form;
 
+use Application\Filter\DateTimeFromString;
 use Application\Form\AbstractForm;
+use Application\Hydrator\GenericHydrator;
+use DateTime;
 use Laminas\Form\FormInterface;
 use Mission\Entity\Db\MissionTauxRemu;
+use Mission\Entity\Db\MissionTauxRemuValeur;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 class MissionTauxForm extends AbstractForm
@@ -13,49 +17,57 @@ class MissionTauxForm extends AbstractForm
 
     public function init()
     {
-//        $ignore = [""];
-//        $this->add([
-//            'type'    => 'Text',
-//            'name'    => 'Libelle',
-//            'options' => [
-//                'label' => 'Libelle',
-//            ],
-//        ]);
-//        $this->add([
-//            'type'    => 'Text',
-//            'name'    => 'Code',
-//            'options' => [
-//                'label' => 'Code',
-//            ],
-//        ]);
-//        $this->add([
-//            'type'    => 'Text',
-//            'name'    => 'Valeur',
-//            'options' => [
-//                'label' => 'Valeur',
-//            ],
-//        ]);        $this->add([
-//            'type'    => 'DateTime',
-//            'name'    => 'Date',
-//            'options' => [
-//                'label' => 'Date',
-//            ],
-//        ]);
-
+        $hydratorForm = new missionTauxRemuHydrator($this->getEntityManager());
+        $this->setHydrator($hydratorForm);
         $this->spec(MissionTauxRemu::class);
-
         $this->build();
-        $this->addSecurity();
-        $this->addSubmit();
+        $this->add([
+            'name'    => 'date',
+            'type'    => 'Date',
+            'options' => [
+                'label' => 'Date d\'effet',
+            ],
+        ]);
+        $this->add([
+            'name'       => 'submit',
+            'type'       => 'Submit',
+            'attributes' => [
+                'value' => 'Enregistrer',
+                'class' => 'btn btn-primary btn-save',
+            ],
+        ]);
 
         return $this;
     }
+}
 
 
-    public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
+
+
+
+class missionTauxRemuHydrator extends GenericHydrator
+{
+    public function extract($object): array
     {
-        /* @var $object MissionTauxRemu */
-        parent::bind($object, $flags);
-        return $this;
+
+        $data = [
+            'id'      => $object->getId(),
+            'code'    => $object->getCode(),
+            'libelle' => $object->getLibelle(),
+            'valeur'  => $object->getDerniereValeur(),
+            'date'    => $object->getDerniereValeurDate(),
+        ];
+
+
+        return $data;
+    }
+
+
+
+    public function hydrate(array $data, $object)
+    {
+        $object->setValeur(DateTimeFromString::run($data['date']), $data['valeur']);
+        $object->setCode($data['code']);
+        $object->setLibelle($data['libelle']);
     }
 }

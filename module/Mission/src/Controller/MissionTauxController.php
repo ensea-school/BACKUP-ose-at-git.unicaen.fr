@@ -6,7 +6,6 @@ use Application\Controller\AbstractController;
 use Mission\Form\MissionTauxFormAwareTrait;
 use Mission\Form\MissionTauxValeurFormAwareTrait;
 use Mission\Service\MissionTauxServiceAwareTrait;
-use Mission\Service\MissionTauxValeurServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
@@ -18,7 +17,6 @@ use UnicaenApp\View\Model\MessengerViewModel;
 class MissionTauxController extends AbstractController
 {
     use MissionTauxServiceAwareTrait;
-    use MissionTauxValeurServiceAwareTrait;
     use ContextServiceAwareTrait;
     use MissionTauxFormAwareTrait;
     use MissionTauxValeurFormAwareTrait;
@@ -37,24 +35,32 @@ class MissionTauxController extends AbstractController
     public function saisirAction()
     {
 
-        $tauxRemuId = $this->params()->fromRoute('tauxRemu');
-        $tauxRemu = $this->getServiceMissionTaux()->get($tauxRemuId);
-        $form = $this->getFormMissionTaux();
+        $tauxRemu = $this->getEvent()->getParam('missionTauxRemu');
+        $form     = $this->getFormMissionTaux();
         if (empty($tauxRemu)) {
-            $title               = "Création d'un nouveau taux";
+            $title    = "Création d'un nouveau taux";
             $tauxRemu = $this->getServiceMissionTaux()->newEntity();
         } else {
             $title = "Édition d'un taux";
         }
         $form->bindRequestSave($tauxRemu, $this->getRequest(), function () use ($tauxRemu, $form) {
 
-            $this->getServiceMissionTaux()->save($tauxRemu);
+            $this->em()->persist($tauxRemu);
+            $tauxRemuValeurs = $tauxRemu->getTauxRemuValeurs();
+            foreach ($tauxRemuValeurs as $tauxRemuValeur) {
+                $tauxRemuValeur->setMissionTauxRemu($tauxRemu);
+                $this->em()->persist($tauxRemuValeur);
+            }
+            $this->em()->flush($tauxRemu);
+            foreach ($tauxRemuValeurs as $tauxRemuValeur) {
+                $this->em()->flush($tauxRemuValeur);
+            }
             $this->flashMessenger()->addSuccessMessage(
                 "Ajout réussi"
             );
         });
 
-        return compact('form','title');
+        return compact('form', 'title');
     }
 
 
@@ -62,41 +68,38 @@ class MissionTauxController extends AbstractController
     public function saisirValeurAction(): array
     {
 
-        $tauxRemuValeurId = $this->params()->fromRoute('tauxRemuValeur');
-        $tauxRemuValeur = $this->getServiceMissionTauxValeur()->get($tauxRemuValeurId);
-        $form = $this->getFormMissionTauxValeur();
+        $tauxRemuValeur = $this->getEvent()->getParam('missionTauxRemuValeur');
+        $form           = $this->getFormMissionTauxValeur();
+
         if (empty($tauxRemuValeur)) {
-            $title               = "Création d'une nouvelle valeur";
-            /* @var \Mission\Entity\Db\MissionTauxRemuValeur $tauxRemuValeur */
-            $tauxRemuValeur = $this->getServiceMissionTauxValeur()->newEntity();
-
-
+            $title = "Création d'une nouvelle valeur";
+            $tauxRemuValeur = $this->getServiceMissionTaux()->newEntityValeur();
         } else {
-            $title = "Édition d'une nouvelle valeur";
+            $title = "Édition d'une valeur";
         }
-        if($tauxRemuValeur->getMissionTauxRemu() == null){
-            $tauxRemuId = $this->params()->fromRoute('tauxRemu');
-            $tauxRemu = $this->getServiceMissionTaux()->get($tauxRemuId);
-            $tauxRemuValeur = $tauxRemuValeur->setMissionTauxRemu($tauxRemu);
+
+        if ($tauxRemuValeur->getMissionTauxRemu() == null) {
+            $tauxRemu = $this->getEvent()->getParam('missionTauxRemu');
+            $tauxRemuValeur->setMissionTauxRemu($tauxRemu);
         }
 
 
         $form->bindRequestSave($tauxRemuValeur, $this->getRequest(), function () use ($tauxRemuValeur, $form) {
-
-            $this->getServiceMissionTauxValeur()->save($tauxRemuValeur);
+            $this->em()->persist($tauxRemuValeur);
+            $this->em()->flush($tauxRemuValeur);
             $this->flashMessenger()->addSuccessMessage(
                 "Ajout réussi"
             );
         });
 
-        return compact('form','title');
+        return compact('form', 'title');
     }
 
 
 
     public function supprimerAction(): MessengerViewModel
     {
-        $tauxRemu = $this->getEvent()->getParam('tauxRemu');
+        $tauxRemu = $this->getEvent()->getParam('missionTauxRemu');
         $this->getServiceMissionTaux()->delete($tauxRemu, true);
 
         return new MessengerViewModel();
@@ -108,7 +111,6 @@ class MissionTauxController extends AbstractController
     {
 
         return new MessengerViewModel();
-
     }
 }
 

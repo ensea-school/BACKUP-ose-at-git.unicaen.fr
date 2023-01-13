@@ -9,8 +9,6 @@ use Mission\Controller\MissionTauxController;
 use Mission\Service\MissionTauxService;
 use Mission\Service\MissionTauxServiceFactory;
 use UnicaenAuth\Assertion\AssertionFactory;
-use Mission\Service\MissionTauxValeurService;
-use Mission\Service\MissionTauxValeurServiceFactory;
 use UnicaenAuth\Guard\PrivilegeController;
 
 
@@ -71,22 +69,22 @@ return [
             'may_terminate' => true,
             'child_routes'  => [
                 'saisir'           => [
-                    'route'      => '/saisir[/:tauxRemu]',
+                    'route'      => '/saisir[/:missionTauxRemu]',
                     'controller' => MissionTauxController::class,
                     'action'     => 'saisir',
                 ],
                 'supprimer'        => [
-                    'route'      => '/supprimer/:tauxRemu',
+                    'route'      => '/supprimer/:missionTauxRemu',
                     'controller' => MissionTauxController::class,
                     'action'     => 'supprimer',
                 ],
                 'saisir-valeur'    => [
-                    'route'      => '/saisir-valeur[/:tauxRemu][/:tauxRemuValeur]',
+                    'route'      => '/saisir-valeur[/:missionTauxRemu][/:missionTauxRemuValeur]',
                     'controller' => MissionTauxController::class,
                     'action'     => 'saisirValeur',
                 ],
                 'supprimer-valeur' => [
-                    'route'      => '/supprimer-valeur/:tauxRemuValeur',
+                    'route'      => '/supprimer-valeur/:missionTauxRemuValeur',
                     'controller' => MissionTauxController::class,
                     'action'     => 'supprimerValeur',
                 ],
@@ -188,7 +186,6 @@ return [
 
     'services' => [
         MissionTauxService::class         => MissionTauxServiceFactory::class,
-        MissionTauxValeurService::class   => MissionTauxValeurServiceFactory::class,
         Assertion\MissionAssertion::class => AssertionFactory::class,
         Service\MissionService::class     => Service\MissionServiceFactory::class,
     ],

@@ -45,7 +45,7 @@ $anneeSplit = explode('/', $annee); ?>
                         <?php $newDate = $tauxRemuValeur->getDateEffet()->format('d/m/Y'); ?>
 
                         <a class="ajax-modal " data-event="taux-valeur-edition"
-                           href="<?= $this->url("missions-taux/saisir-valeur", ['tauxRemuValeur' => $tauxRemuValeur->getId()], ['query' => ['tauxRemu' => $tauxRemu->getId()]]) ?>"
+                           href="<?= $this->url("missions-taux/saisir-valeur", ['missionTauxRemuValeur' => $tauxRemuValeur->getId()], ['query' => ['missionTauxRemu' => $tauxRemu->getId()]]) ?>"
                            title="Modifier la valeur du taux">
                             <?php echo $tauxRemuValeur->getValeur() ?> - <?php echo $newDate ?><br>
                         </a>
@@ -57,20 +57,20 @@ $anneeSplit = explode('/', $annee); ?>
                     <i class="fa-solid fa-circle-question" title="<?= $taux ?>"></i>
                 <?php elseif (!$dateValide): ?>
                     <a class="ajax-modal " data-event="taux-valeur-edition"
-                       href="<?= $this->url("missions-taux/saisir-valeur", ['tauxRemu' => $tauxRemu->getId()]) ?>"
+                       href="<?= $this->url("missions-taux/saisir-valeur", ['missionTauxRemu' => $tauxRemu->getId()], []) ?>"
                        title="Ajouter une valeur">
                         <i class="fas fa-plus"></i> Ajouter une valeur
                     </a>
                 <?php endif; ?>
             </td>
             <td><a class="ajax-modal " data-event="taux-edition"
-                   href="<?= $this->url("missions-taux/saisir", ['tauxRemu' => $tauxRemu->getId()], []) ?>"
+                   href="<?= $this->url("missions-taux/saisir", ['missionTauxRemu' => $tauxRemu->getId()], []) ?>"
                    title="Modifier le taux"><i class="fas fa-pen-to-square"></i></a>
 
                 <a class="pop-ajax " data-title="Suppression d'un taux" data-content="Êtes-vous sur de vouloir supprimer"
                    data-confirm="true"
                    data-submit-reload="true"
-                   href="<?= $this->url("missions-taux/supprimer", ['tauxRemu' => $tauxRemu->getId()]) ?>"
+                   href="<?= $this->url("missions-taux/supprimer", ['missionTauxRemu' => $tauxRemu->getId()]) ?>"
                    title="Supprimer le taux"><i class="fas fa-trash-can"></i></a>
 
             </td>

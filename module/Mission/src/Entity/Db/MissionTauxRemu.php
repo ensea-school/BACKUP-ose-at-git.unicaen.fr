@@ -2,6 +2,7 @@
 
 namespace Mission\Entity\Db;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -130,5 +131,41 @@ class MissionTauxRemu implements HistoriqueAwareInterface
     public function __toString(): string
     {
         return $this->getLibelle();
+    }
+
+    public function getDerniereValeur(){
+        $valeurRetour = null;
+        $valeurRetourDate = null;
+        $valeurs = $this->tauxRemuValeurs->getValues();
+        foreach ($valeurs as $valeur){
+            if($valeurRetourDate == null || $valeur->getDateEffet() > $valeurRetourDate){
+                $valeurRetour = $valeur->getValeur();
+                $valeurRetourDate = $valeur->getDateEffet();
+            }
+        }
+        return $valeurRetour;
+    }
+    public function getDerniereValeurDate(){
+        $valeurRetourDate = null;
+        $valeurs = $this->tauxRemuValeurs->getValues();
+        foreach ($valeurs as $valeur){
+            if($valeurRetourDate == null || $valeur->getDateEffet() > $valeurRetourDate){
+                $valeurRetourDate = $valeur->getDateEffet();
+            }
+        }
+        return $valeurRetourDate;
+    }
+
+    public function setValeur(DateTime $date, float $valeur){
+        $tauxRemuValeurProche = $this->getTauxRemuValeur($date);
+        if($tauxRemuValeurProche != null && $tauxRemuValeurProche->getDateEffet() == $date){
+            $tauxRemuValeurProche->setValeur($valeur);
+        }else{
+            //new tauxremu
+            $newTauxRemu = new MissionTauxRemuValeur();
+            $newTauxRemu->setValeur($valeur);
+            $newTauxRemu->setDateEffet($date);
+            $this->addTauxRemuValeur($newTauxRemu);
+        }
     }
 }

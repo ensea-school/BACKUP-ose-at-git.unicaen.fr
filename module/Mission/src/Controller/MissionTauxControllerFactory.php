@@ -5,7 +5,6 @@ namespace Mission\Controller;
 use Application\Service\ContextService;
 use Mission\Form\MissionTauxForm;
 use Mission\Service\MissionTauxService;
-use Mission\Service\MissionTauxValeurService;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -26,7 +25,6 @@ class MissionTauxControllerFactory
     {
         $controller = new MissionTauxController;
         $controller->setServiceMissionTaux($container->get(MissionTauxService::class));
-        $controller->setServiceMissionTauxValeur($container->get(MissionTauxValeurService::class));
         $controller->setServiceContext($container->get(ContextService::class));
         return $controller;
     }

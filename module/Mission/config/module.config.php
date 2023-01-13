@@ -74,12 +74,12 @@ return [
                     'action'     => 'supprimer',
                 ],
                 'saisir-valeur'    => [
-                    'route'      => '/saisir-valeur[/:missionTauxRemuValeur]',
+                    'route'      => '/saisir-valeur[/:missionTauxRemu][/:missionTauxRemuValeur]',
                     'controller' => MissionTauxController::class,
                     'action'     => 'saisirValeur',
                 ],
                 'supprimer-valeur' => [
-                    'route'      => '/supprimer-valeur/:tauxRemuValeur',
+                    'route'      => '/supprimer-valeur/:missionTauxRemuValeur',
                     'controller' => MissionTauxController::class,
                     'action'     => 'supprimerValeur',
                 ],

@@ -57,7 +57,7 @@ $anneeSplit = explode('/', $annee); ?>
                     <i class="fa-solid fa-circle-question" title="<?= $taux ?>"></i>
                 <?php elseif (!$dateValide): ?>
                     <a class="ajax-modal " data-event="taux-valeur-edition"
-                       href="<?= $this->url("missions-taux/saisir-valeur", ['missionTauxRemu' => $tauxRemu->getId()]) ?>"
+                       href="<?= $this->url("missions-taux/saisir-valeur", ['missionTauxRemu' => $tauxRemu->getId()], []) ?>"
                        title="Ajouter une valeur">
                         <i class="fas fa-plus"></i> Ajouter une valeur
                     </a>

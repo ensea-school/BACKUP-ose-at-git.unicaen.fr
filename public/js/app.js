@@ -1,20 +1,20 @@
 $(function ()
 {
     WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche', function () {
-        WidgetInitializer.includeJs(Url('js/intervenant-recherche.js'));
+        WidgetInitializer.includeJs(Util.url('js/intervenant-recherche.js'));
     });
 
     WidgetInitializer.add('jstree', 'jstree', function ()
     {
-        WidgetInitializer.includeJs(Url('vendor/vakata-jstree-3.3.8/dist/jstree.min.js'));
-        WidgetInitializer.includeCss(Url('vendor/vakata-jstree-3.3.8/dist/themes/default/style.min.css'));
+        WidgetInitializer.includeJs(Util.url('vendor/vakata-jstree-3.3.8/dist/jstree.min.js'));
+        WidgetInitializer.includeCss(Util.url('vendor/vakata-jstree-3.3.8/dist/themes/default/style.min.css'));
     });
 
     WidgetInitializer.add('table-sort', 'tableSort', function ()
     {
-        WidgetInitializer.includeJs(Url('vendor/DataTables-1.12.1/js/jquery.dataTables.min.js'));
-        WidgetInitializer.includeJs(Url('vendor/DataTables-1.12.1/js/dataTables.bootstrap5.min.js'));
-        WidgetInitializer.includeJs(Url('table-sort/widget.js'));
+        WidgetInitializer.includeJs(Util.url('vendor/DataTables-1.12.1/js/jquery.dataTables.min.js'));
+        WidgetInitializer.includeJs(Util.url('vendor/DataTables-1.12.1/js/dataTables.bootstrap5.min.js'));
+        WidgetInitializer.includeJs(Util.url('table-sort/widget.js'));
 
         (function () {
 
@@ -60,49 +60,49 @@ $(function ()
 
     /* Service référentiel */
     WidgetInitializer.add('referentiels', 'referentiels', function () {
-        WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
+        WidgetInitializer.includeJs(Util.url('js/service-referentiel.js'));
     });
     WidgetInitializer.add('service-referentiel-form', 'serviceReferentielForm', function () {
-        WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
+        WidgetInitializer.includeJs(Util.url('js/service-referentiel.js'));
     });
 
 
     /* Offre de formation */
     WidgetInitializer.add('element-pedagogique-recherche', 'elementPedagogiqueRecherche', function () {
-        WidgetInitializer.includeJs(Url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
     });
     WidgetInitializer.add('etape-centre-cout', 'etapeCentreCout', function () {
-        WidgetInitializer.includeJs(Url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
     });
     WidgetInitializer.add('etape-taux-mixite', 'etapeTauxMixite', function () {
-        WidgetInitializer.includeJs(Url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
     });
     WidgetInitializer.add('etape-modulateurs', 'etapeModulateurs', function () {
-        WidgetInitializer.includeJs(Url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
     });
     WidgetInitializer.add('etape-saisie', 'etapeSaisie', function () {
-        WidgetInitializer.includeJs(Url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
     });
     WidgetInitializer.add('element-pedagogique-saisie', 'elementPedagogiqueSaisie', function () {
-        WidgetInitializer.includeJs(Url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
     });
 
 
     /* Charges d'enseignement */
     WidgetInitializer.add('chargens', 'chargens', function () {
-        WidgetInitializer.includeJs(Url('vendor/go.js'));
-        //   WidgetInitializer.includeJs(Url('js/chargens.js'));
+        WidgetInitializer.includeJs(Util.url('vendor/go.js'));
+        //   WidgetInitializer.includeJs(Util.url('js/chargens.js'));
     });
     WidgetInitializer.add('chargens-filtre', 'chargensFiltre', function () {
-        //     WidgetInitializer.includeJs(Url('js/chargens.js'));
+        //     WidgetInitializer.includeJs(Util.url('js/chargens.js'));
     });
 
     /* Droits */
     WidgetInitializer.add('droits-tbl', 'droitsTbl', function () {
-        WidgetInitializer.includeJs(Url('js/droits.js'));
+        WidgetInitializer.includeJs(Util.url('js/droits.js'));
     });
     WidgetInitializer.add('affectation-form', 'affectationForm', function () {
-        WidgetInitializer.includeJs(Url('js/droits.js'));
+        WidgetInitializer.includeJs(Util.url('js/droits.js'));
     });
 
     // installation de tooltip Bootstrap sur les icônes d'information (i)
@@ -111,243 +111,85 @@ $(function ()
     // Bootstrap Select insensible aux accents
     $('.selectpicker').data('liveSearchNormalize', true);
     $('.selectpicker').data('size', 'auto');
-});
 
 
-$(document).ajaxSend((event, xhr, settings) => {
-    if (settings.submitter) {
-        let msg = settings.msg ? settings.msg : 'Action en cours';
-        if (settings.popover === undefined) {
-            console.log(settings.submitter);
-            settings.popover = new bootstrap.Popover(settings.submitter, {
-                content: "<div class=\"spinner-border text-primary\" role=\"status\">\n" +
-                    "  <span class=\"visually-hidden\">Loading...</span>\n" +
-                    "</div> " + msg,
-                html: true
-            });
-            settings.popover.show();
+    $(document).ajaxSend((event, xhr, settings) => {
+        if (settings.submitter) {
+            let msg = settings.msg ? settings.msg : 'Action en cours';
+            if (settings.popover === undefined) {
+                console.log(settings.submitter);
+                settings.popover = new bootstrap.Popover(settings.submitter, {
+                    content: "<div class=\"spinner-border text-primary\" role=\"status\">\n" +
+                        "  <span class=\"visually-hidden\">Loading...</span>\n" +
+                        "</div> " + msg,
+                    html: true
+                });
+                settings.popover.show();
+            }
         }
-    }
-});
+    });
 
-$(document).ajaxSuccess((event, xhr, settings) => {
-    // Si une popover est lancée pour informer sur le'état de la requête
-    if (settings.popover) {
-        var popover = settings.popover;
+    $(document).ajaxSuccess((event, xhr, settings) => {
+        // Si une popover est lancée pour informer sur le'état de la requête
+        if (settings.popover) {
+            var popover = settings.popover;
 
-        // Si la réponse est en JSON, QUE C'EST ok et qu'il y a un truc à afficher
-        if (xhr.responseJSON && xhr.responseJSON.error) {
-            popover._config.content = xhr.responseJSON.error;
-            popover.setContent();
-            let id = $(settings.submitter).attr('aria-describedby');
-            $('#' + id).find('.popover-body').addClass('alert alert-danger');
-        } else if (xhr.responseJSON && xhr.responseJSON.msg || settings.successMsg) {
-            popover._config.content = xhr.responseJSON.msg ? xhr.responseJSON.msg : settings.successMsg;
-            popover.setContent();
-            let id = $(settings.submitter).attr('aria-describedby');
-            $('#' + id).find('.popover-body').addClass('alert alert-success');
-            setTimeout(() => {
+            // Si la réponse est en JSON, QUE C'EST ok et qu'il y a un truc à afficher
+            if (xhr.responseJSON && xhr.responseJSON.error) {
+                popover._config.content = xhr.responseJSON.error;
+                popover.setContent();
+                let id = $(settings.submitter).attr('aria-describedby');
+                $('#' + id).find('.popover-body').addClass('alert alert-danger');
+            } else if (xhr.responseJSON && xhr.responseJSON.msg || settings.successMsg) {
+                popover._config.content = xhr.responseJSON.msg ? xhr.responseJSON.msg : settings.successMsg;
+                popover.setContent();
+                let id = $(settings.submitter).attr('aria-describedby');
+                $('#' + id).find('.popover-body').addClass('alert alert-success');
+                setTimeout(() => {
+                    popover.hide();
+                }, 2000)
+            } else {
+                // la popover est masquée si tout est fini
                 popover.hide();
-            }, 2000)
+            }
+        }
+
+        // correction d'un bug de bootstrap-select à la MAJ AJAX d'une page
+        $('.selectpicker').selectpicker('render');
+    });
+
+    $(document).ajaxError((event, xhr, settings) => {
+        if (settings.popover) {
+            var popover = settings.popover;
+            popover._config.content = xhr.responseText;
+            popover.setContent();
         } else {
-            // la popover est masquée si tout est fini
-            popover.hide();
-        }
-    }
-
-    // correction d'un bug de bootstrap-select à la MAJ AJAX d'une page
-    $('.selectpicker').selectpicker('render');
-});
-
-$(document).ajaxError((event, xhr, settings) => {
-    if (settings.popover) {
-        var popover = settings.popover;
-        popover._config.content = xhr.responseText;
-        popover.setContent();
-    } else {
-        if (!(typeof settings.error === 'function')) {
-            alertFlash(xhr.responseText, 'error', 3000);
-        }
-    }
-});
-
-function Url(route, data)
-{
-    var getArgs = data ? $.param(data) : null;
-    return Url.getBase() + route + (getArgs ? '?' + getArgs : '');
-}
-
-Url.getBase = function ()
-{
-    return $('body').data('base-url');
-}
-
-Util = {
-    formattedHeures: function (heures, html)
-    {
-        heures = parseFloat(heures);
-
-        if (false === html) {
-            var snd0 = ',00';
-            var sn = '';
-            var snf = '';
-        } else {
-            var snd0 = '<span class="number-dec-00">,00</span>';
-            var sn = '<span class="number number-' + ((heures < 0) ? 'negatif' : 'positif') + '">';
-            var snf = '</span>';
-        }
-
-        heures = Math.round(heures * 100) / 100;
-        var parts = heures.toString().split(".");
-        if (undefined === parts[1]) {
-            parts[1] = snd0;
-        } else {
-            parts[1] = ',' + parts[1];
-        }
-        return sn + parts[0] + parts[1] + snf;
-    },
-
-    json: {
-
-        count: function (tab)
-        {
-            var key, result = 0;
-            for (key in tab) {
-                if (tab.hasOwnProperty(key)) {
-                    result++;
-                }
-            }
-            return result;
-        },
-
-        first: function (tab)
-        {
-            for (var key in tab) {
-                return tab[key];
+            if (!(typeof settings.error === 'function')) {
+                alertFlash(xhr.responseText, 'error', 3000);
             }
         }
-
-    },
-
-    changementAnnee: function (annee)
-    {
-        $.get(
-            Url('changement-annee/' + annee),
-            {},
-            function ()
-            {
-                //Préférable pour éviter de re-soumettre des posts lors d'un changement d'année
-                window.location = window.location.href;
-                //window.location.reload();
-            }
-        );
-    },
-
-    filterSelectPicker: function (select, values)
-    {
-        var ul = select.parent().find('ul');
-        var shown = 0;
-        var lastShown = null;
-
-        select.find('option').each(function ()
-        {
-            if (values === 'all' || Util.inArray(this.value, values) || this.value == '') {
-                $(this).show();
-                shown++;
-                lastShown = this.value;
-            } else {
-                if (select.val() == this.value) {
-                    select.selectpicker('val', '');
-                }
-                $(this).hide();
-            }
-        });
-
-        select.selectpicker('destroy');
-        select.selectpicker();
-        if (1 == shown) {
-            select.selectpicker('val', lastShown);
-        }
-    },
-
-    inArray: function (needle, haystack, strict)
-    {
-        for (var i in haystack) {
-            if (strict) {
-                if (haystack[i] === needle) return true;
-            } else {
-                if (haystack[i] == needle) return true;
-            }
-        }
-        return false;
-    },
-
-    fractions: {
-        0.333333: '1/3',
-        0.166667: '1/6',
-        0.142857: '1/7',
-        0.111111: '1/9',
-        0.666667: '2/3',
-        0.285714: '2/7',
-        0.222222: '2/9',
-        0.428571: '3/7',
-        1.333333: '4/3',
-        0.571429: '4/7',
-        0.444444: '4/9',
-        1.666667: '5/3',
-        0.833333: '5/6',
-        0.714286: '5/7',
-        0.555556: '5/9',
-        0.857143: '6/7',
-        2.333333: '7/3',
-        1.166667: '7/6',
-        0.777778: '7/9',
-        2.666667: '8/3',
-        1.142857: '8/7',
-        0.888889: '8/9',
-        1.285714: '9/7',
-    },
+    });
 
     /**
+     * Rafraichit un élément en fonction d'une url donnée.
+     * Se base sur l'attribut data-url de l'élément
+     * Si l'attribut data-url n'est pas renseigné alors il ne se passe rien
      *
-     * @param float value
-     *
-     * @return string
+     * @param array|FormElement|null    data    (json) à transmettre
+     * @param function                  onEnd   Fonction de callback à passer, si besoin. S'exécute une fois le rafraichissement terminé
+     * @returns Element
      */
-    floatToString: function (value)
+    $.fn.refresh = function (data, onEnd)
     {
-        var test = Math.round(value * 1000000) / 1000000;
-        if (undefined !== this.fractions[test]) {
-            return this.fractions[test];
+        var that = $(this);
+        var url = this.data('url');
+        if (data instanceof jQuery) {
+            data = data.serialize();
         }
-        var locale = 'fr';
-        var options = {minimumFractionDigits: 0, maximumFractionDigits: 2, useGrouping: false};
-        var formatter = new Intl.NumberFormat(locale, options);
-
-        return formatter.format(value);
-    },
-
-    stringToFloat: function (value)
-    {
-        if (null === value || '' === value || undefined === value) return null;
-
-        if (value.indexOf('/') !== -1) {
-            value = value.split('/');
-            value = Util.stringToFloat(value[0]) / Util.stringToFloat(value[1]);
-        } else {
-            value = parseFloat(value.replace(',', '.'));
+        if ("" !== url && undefined !== url) {
+            that.load(url, data, onEnd);
         }
-
-        return value;
-    },
-
-    nl2br: function (str, is_xhtml)
-    {
-        if (typeof str === 'undefined' || str === null) {
-            return '';
-        }
-        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+        return that;
     }
 
-};
+});

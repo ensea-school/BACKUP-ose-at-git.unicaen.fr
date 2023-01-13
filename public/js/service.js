@@ -134,7 +134,7 @@ $.widget("ose.enseignements", {
             });
             that.element.find("#service-" + serviceId + "-volume-horaire-td div#vhl").refresh();
         } else { // nouveau service
-            var url = Url("enseignement/rafraichir-ligne/" + serviceId, {
+            var url = Util.url("enseignement/rafraichir-ligne/:service", {service: serviceId}, {
                 'only-content': 0,
                 'details': 1,
                 params: that.params
@@ -167,7 +167,7 @@ $.widget("ose.enseignements", {
             services += $(this).data('id');
         });
         $.get(
-            Url("enseignement/constatation"),
+            Util.url("enseignement/constatation"),
             {services: services},
             function (data) {
                 if (data != 'OK') {
@@ -185,7 +185,7 @@ $.widget("ose.enseignements", {
         var that = this;
         that.element.find('#prevu-to-prevu-attente').show();
         $.get(
-            Url("enseignement/initialisation/" + this.getElementPrevuToPrevu().data('intervenant')),
+            Util.url("enseignement/initialisation/:intervenant", {intervenant: this.getElementPrevuToPrevu().data('intervenant')}),
             {},
             function (data) {
                 if (data != 'OK') {

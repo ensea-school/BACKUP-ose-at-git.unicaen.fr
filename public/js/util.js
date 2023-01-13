@@ -1,37 +1,4 @@
 /**
- * Définition d'une nouvelle fonction jQuery permettant de sérializer un formulaire
- * ou des éléments de formulaire au format tableau compatible JSON.
- * Même utilisation que "serializeArray()".
- */
-(function ($)
-{
-    /**
-     * Rafraichit un élément en fonction d'une url donnée.
-     * Se base sur l'attribut data-url de l'élément
-     * Si l'attribut data-url n'est pas renseigné alors il ne se passe rien
-     *
-     * @param array|FormElement|null    data    (json) à transmettre
-     * @param function                  onEnd   Fonction de callback à passer, si besoin. S'exécute une fois le rafraichissement terminé
-     * @returns Element
-     */
-    $.fn.refresh = function (data, onEnd)
-    {
-        var that = $(this);
-        var url = this.data('url');
-        if (data instanceof jQuery) {
-            data = data.serialize();
-        }
-        if ("" !== url && undefined !== url) {
-            that.load(url, data, onEnd);
-        }
-        return that;
-    }
-
-})(jQuery);
-
-
-
-/**
  * Ajoute/remplace un paramètre GET à une URL.
  *
  * @param String uri
@@ -175,30 +142,216 @@ Formatter = {
 
 
 
-function waitPop(button, msg)
+
+
+function Url(route, data)
 {
-    return new WaitPop(button, msg);
+    var getArgs = data ? $.param(data) : null;
+    return $('body').data('base-url') + route + (getArgs ? '?' + getArgs : '');
 }
 
-class WaitPop {
-    constructor(button, content)
+Util = {
+    url: function (route, params, query)
     {
-        if (!content) {
-            content = "Enregistrement en cours ..."
+        let baseUrl = $('body').data('base-url');
+
+        // Remplacement des paramètres de routes par leurs valeurs
+        if (params) {
+            for (var p in params) {
+                route = route.replace(':' + p, params[p]);
+            }
         }
-        var popover = new bootstrap.Popover(event.submitter, {
-            content: content
+
+        // traitement de la requête GET
+        let getArgs = query ? $.param(query) : null;
+
+        // Construction et retour de l'URL
+        return baseUrl + route + (getArgs ? '?' + getArgs : '');
+    },
+
+
+
+    formattedHeures: function (heures, html)
+    {
+        heures = parseFloat(heures);
+
+        if (false === html) {
+            var snd0 = ',00';
+            var sn = '';
+            var snf = '';
+        } else {
+            var snd0 = '<span class="number-dec-00">,00</span>';
+            var sn = '<span class="number number-' + ((heures < 0) ? 'negatif' : 'positif') + '">';
+            var snf = '</span>';
+        }
+
+        heures = Math.round(heures * 100) / 100;
+        var parts = heures.toString().split(".");
+        if (undefined === parts[1]) {
+            parts[1] = snd0;
+        } else {
+            parts[1] = ',' + parts[1];
+        }
+        return sn + parts[0] + parts[1] + snf;
+    },
+
+
+
+    json: {
+
+        count: function (tab)
+        {
+            var key, result = 0;
+            for (key in tab) {
+                if (tab.hasOwnProperty(key)) {
+                    result++;
+                }
+            }
+            return result;
+        },
+
+        first: function (tab)
+        {
+            for (var key in tab) {
+                return tab[key];
+            }
+        }
+
+    },
+
+
+
+    changementAnnee: function (annee)
+    {
+        $.get(
+            Util.url('changement-annee/:annee', {annee: annee}),
+            {},
+            function ()
+            {
+                //Préférable pour éviter de re-soumettre des posts lors d'un changement d'année
+                window.location = window.location.href;
+                //window.location.reload();
+            }
+        );
+    },
+
+
+
+    filterSelectPicker: function (select, values)
+    {
+        var ul = select.parent().find('ul');
+        var shown = 0;
+        var lastShown = null;
+
+        select.find('option').each(function ()
+        {
+            if (values === 'all' || Util.inArray(this.value, values) || this.value == '') {
+                $(this).show();
+                shown++;
+                lastShown = this.value;
+            } else {
+                if (select.val() == this.value) {
+                    select.selectpicker('val', '');
+                }
+                $(this).hide();
+            }
         });
-        popover.show();
-    }
 
-    ok(msg)
+        select.selectpicker('destroy');
+        select.selectpicker();
+        if (1 == shown) {
+            select.selectpicker('val', lastShown);
+        }
+    },
+
+
+
+    inArray: function (needle, haystack, strict)
     {
-        // Corps de la méthode
-    }
+        for (var i in haystack) {
+            if (strict) {
+                if (haystack[i] === needle) return true;
+            } else {
+                if (haystack[i] == needle) return true;
+            }
+        }
+        return false;
+    },
 
-    error(msg)
+
+
+    fractions: {
+        0.333333: '1/3',
+        0.166667: '1/6',
+        0.142857: '1/7',
+        0.111111: '1/9',
+        0.666667: '2/3',
+        0.285714: '2/7',
+        0.222222: '2/9',
+        0.428571: '3/7',
+        1.333333: '4/3',
+        0.571429: '4/7',
+        0.444444: '4/9',
+        1.666667: '5/3',
+        0.833333: '5/6',
+        0.714286: '5/7',
+        0.555556: '5/9',
+        0.857143: '6/7',
+        2.333333: '7/3',
+        1.166667: '7/6',
+        0.777778: '7/9',
+        2.666667: '8/3',
+        1.142857: '8/7',
+        0.888889: '8/9',
+        1.285714: '9/7',
+    },
+
+
+
+    /**
+     *
+     * @param float value
+     *
+     * @return string
+     */
+    floatToString: function (value)
     {
+        var test = Math.round(value * 1000000) / 1000000;
+        if (undefined !== this.fractions[test]) {
+            return this.fractions[test];
+        }
+        var locale = 'fr';
+        var options = {minimumFractionDigits: 0, maximumFractionDigits: 2, useGrouping: false};
+        var formatter = new Intl.NumberFormat(locale, options);
 
+        return formatter.format(value);
+    },
+
+
+
+    stringToFloat: function (value)
+    {
+        if (null === value || '' === value || undefined === value) return null;
+
+        if (value.indexOf('/') !== -1) {
+            value = value.split('/');
+            value = Util.stringToFloat(value[0]) / Util.stringToFloat(value[1]);
+        } else {
+            value = parseFloat(value.replace(',', '.'));
+        }
+
+        return value;
+    },
+
+    
+
+    nl2br: function (str, is_xhtml)
+    {
+        if (typeof str === 'undefined' || str === null) {
+            return '';
+        }
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
     }
-}
+
+};

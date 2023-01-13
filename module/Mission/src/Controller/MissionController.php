@@ -33,17 +33,17 @@ class MissionController extends AbstractController
 
 
 
-    public function index2Action()
+    public function listeAction()
     {
         /* @var $intervenant Intervenant */
-        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $missions Mission[] */
 
+
+        $intervenant = $this->getEvent()->getParam('intervenant');
         $missionForm = $this->getFormMission();
-        $missionForm->setAttribute('action', $this->url()->fromRoute('mission/modifier'));
 
         $dql = "SELECT m FROM " . Mission::class . " m WHERE m.histoDestruction IS NULL AND m.intervenant = :intervenant";
 
-        /* @var $missions Mission[] */
         $missions = $this->em()->createQuery($dql)->setParameters([
             'intervenant' => $intervenant,
         ])->getResult();
@@ -52,7 +52,7 @@ class MissionController extends AbstractController
             $missions[$k] = $missionForm->getHydrator()->extract($mission);
         }
 
-        return compact('intervenant', 'missions', 'missionForm');
+        return new JsonModel($missions);
     }
 
 

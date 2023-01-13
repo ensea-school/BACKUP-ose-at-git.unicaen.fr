@@ -63,6 +63,7 @@ echo $this->doctype();
     ?>
 
     <!-- Scripts globaux -->
+    <script type="text/javascript" src="<?= $this->basePath('/js/util.js?v=' . $version) ?>"></script>
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-3.6.0.min.js?v=' . $version) ?>"></script>
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js?v=' . $version) ?>"></script>
     <?= $this->vite()->head(); ?>
@@ -131,7 +132,6 @@ echo $this->doctype();
 <script type="text/javascript" src="<?= $this->basePath('/js/chargens.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/mod-ajax.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/tab-ajax.js?v=' . $version) ?>"></script>
-<script type="text/javascript" src="<?= $this->basePath('/js/util.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/app.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/paiement.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/piece-jointe.js?v=' . $version) ?>"></script>

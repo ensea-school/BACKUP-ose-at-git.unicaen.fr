@@ -78,7 +78,7 @@ $.widget("ose.referentiels", {
             });
             that.element.find("#referentiel-" + serviceId + "-volume-horaire-td").refresh();
         } else { // nouveau service
-            var url = Url("referentiel/rafraichir-ligne/" + serviceId, {
+            var url = Util.url("referentiel/rafraichir-ligne/:service", {service: serviceId}, {
                 'only-content': 0,
                 'details': 1,
                 params: that.params
@@ -111,7 +111,7 @@ $.widget("ose.referentiels", {
             services += $(this).data('id');
         });
         $.get(
-            Url("referentiel/constatation"),
+            Util.url("referentiel/constatation"),
             {services: services},
             function () { window.location.reload(); }
         );
@@ -121,7 +121,7 @@ $.widget("ose.referentiels", {
     {
         var that = this;
         $.get(
-            Url("referentiel/initialisation/" + this.getElementPrevuToPrevu().data('intervenant')),
+            Util.url("referentiel/initialisation/" + this.getElementPrevuToPrevu().data('intervenant')),
             {},
             function (data)
             {

@@ -145,7 +145,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                     console.debug(champsIds);
                     $.ajax({
                         type: 'POST',
-                        url: Url('type-intervention/type-intervention-trier'),
+                        url: Util.url('type-intervention/type-intervention-trier'),
                         data: {champsIds: champsIds},
                         success: function (res) {
                             alertFlash('Tri des champs effectué', 'success', 3000);

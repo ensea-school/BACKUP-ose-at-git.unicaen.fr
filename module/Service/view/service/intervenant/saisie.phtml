@@ -63,8 +63,8 @@ if ($enseignements !== false || $referentiels !== false): ?>
 
         $(function ()
         {
-            WidgetInitializer.includeJs(Url('js/service.js'));
-            WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
+            WidgetInitializer.includeJs(Util.url('js/service.js'));
+            WidgetInitializer.includeJs(Util.url('js/service-referentiel.js'));
 
             <?php if ($enseignements !== false): ?>$('.enseignements').enseignements({
                 'heures-change-exists': function ()

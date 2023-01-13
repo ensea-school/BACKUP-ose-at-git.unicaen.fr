@@ -294,8 +294,8 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
 
         this.element.append(this.renderMiseEnPaiement(id));
 
-        WidgetInitializer.includeJs(Url('vendor/bootstrap-select-1.14.0/dist/js/bootstrap-select.min.js'));
-        WidgetInitializer.includeCss(Url('vendor/bootstrap-select-1.14.0/dist/css/bootstrap-select.min.css'));
+        WidgetInitializer.includeJs(Util.url('vendor/bootstrap-select-1.14.0/dist/js/bootstrap-select.min.js'));
+        WidgetInitializer.includeCss(Util.url('vendor/bootstrap-select-1.14.0/dist/css/bootstrap-select.min.css'));
         $('.selectpicker').selectpicker();
 
         if (isNew) {

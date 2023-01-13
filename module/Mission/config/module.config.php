@@ -37,6 +37,11 @@ return [
             'route'         => '/mission',
             'may_terminate' => false,
             'child_routes'  => [
+                'liste'     => [
+                    'route'      => '/liste/:intervenant',
+                    'controller' => MissionController::class,
+                    'action'     => 'liste',
+                ],
                 'modifier'  => [
                     'route'      => '/modifier',
                     'controller' => MissionController::class,
@@ -129,7 +134,7 @@ return [
     'guards' => [
         [
             'controller' => MissionController::class,
-            'action'     => ['index'],
+            'action'     => ['index', 'liste'],
             'privileges' => [
                 Privileges::MISSION_VISUALISATION,
             ],

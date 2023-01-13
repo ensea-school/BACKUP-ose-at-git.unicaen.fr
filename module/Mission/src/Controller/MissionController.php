@@ -26,6 +26,18 @@ class MissionController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
+        $canAddMission = true;
+
+        return compact('intervenant', 'canAddMission');
+    }
+
+
+
+    public function index2Action()
+    {
+        /* @var $intervenant Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
         $missionForm = $this->getFormMission();
         $missionForm->setAttribute('action', $this->url()->fromRoute('mission/modifier'));
 

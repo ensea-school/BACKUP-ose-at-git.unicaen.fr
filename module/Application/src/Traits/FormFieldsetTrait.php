@@ -257,21 +257,6 @@ trait FormFieldsetTrait
 
 
 
-    public function vueJsify(string $entityVariableName = 'entity', ?string $submitEventName = null)
-    {
-        if ($submitEventName) {
-            $this->setAttribute('@submit.prevent', $submitEventName);
-        }
-
-        foreach ($this->getElements() as $element) {
-            if (!$element instanceof Submit) {
-                $element->setAttribute('v-model', $entityVariableName . '.' . $element->getName());
-            }
-        }
-    }
-
-
-
     private function specFromClass(string $class, array $ignore): self
     {
         $elements = [];

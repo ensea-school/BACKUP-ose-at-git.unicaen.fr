@@ -1,6 +1,6 @@
 <template>
   {{ msg }}
-  <a href="#">Mon lien hgicc ha hi</a>
+  <a href="#">Mon lien hgicc haccc hi</a>
 </template>
 
 <script>

@@ -1,27 +1,20 @@
 {
-  "assets/logo.png": {
-    "file": "assets/logo-03d6d6da.png",
-    "src": "assets/logo.png"
-  },
   "main.css": {
-    "file": "assets/main-1e764854.css",
+    "file": "assets/main-44ef2229.css",
     "src": "main.css"
   },
   "main.js": {
-    "file": "assets/main-6fde9ee8.js",
+    "file": "assets/main-d98d8d2d.js",
     "src": "main.js",
     "isEntry": true,
     "imports": [
-      "_vendor-35a5dead.js"
+      "_vendor-438ee68a.js"
     ],
     "css": [
-      "assets/main-1e764854.css"
-    ],
-    "assets": [
-      "assets/logo-03d6d6da.png"
+      "assets/main-44ef2229.css"
     ]
   },
-  "_vendor-35a5dead.js": {
-    "file": "assets/vendor-35a5dead.js"
+  "_vendor-438ee68a.js": {
+    "file": "assets/vendor-438ee68a.js"
   }
 }

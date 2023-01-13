@@ -20,5 +20,6 @@
     <h2>Hello world</h2>
     <hello-world msg="bonjour le monde de partout!"></hello-world>
 
-
+    <h2>Missions</h2>
+    <mission-missions intervenant="100000" can-add-mission="1"></mission-missions>
 </div>

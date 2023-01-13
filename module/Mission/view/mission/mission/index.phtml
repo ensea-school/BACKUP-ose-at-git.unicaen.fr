@@ -2,7 +2,7 @@
 /**
  * @var $this              \Application\View\Renderer\PhpRenderer
  * @var $intervenant       \Application\Entity\Db\Intervenant
- * @var $missionForm       \Mission\Form\MissionForm
+ * @var $canAddMission     bool
  */
 
 use Application\Entity\Db\WfEtape;
@@ -10,44 +10,14 @@ use Application\Entity\Db\WfEtape;
 $title     = 'Missions';
 $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
 
-$canAddMission = true;
-$missionForm->vueJsify('mission', 'submitForm');
-
 $this->intervenant($intervenant)->renderTitle($title);
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
-//echo $this->partial('mission.vue');
-
 ?>
-    <div id="missions" class="vue-app">
-        <mission v-for="mission in missions" v-on:delete="deleteMission" :key="mission.id" :mission="mission"></mission>
-        <a v-if="canAddMission" class="btn btn-primary" @click="addMission">Ajout d'une nouvelle mission</a>
+    <div class="vue-app">
+        <mission-missions intervenant="<?= $intervenant->getId() ?>" can-add-mission="<?= $canAddMission ?>"></mission-missions>
     </div>
-    <script>
-
-        var missions = new Vue({
-            el: '#missions',
-            data: {
-                missions: <?= json_encode($missions) ?>,
-                canAddMission: <?= $canAddMission ? 'true' : 'false' ?>,
-                nextMissionId: -1
-            },
-            methods: {
-                addMission()
-                {
-                    this.missions.push({id: this.nextMissionId--});
-                },
-                deleteMission(mission)
-                {
-                    const index = this.missions.indexOf(mission);
-                    this.missions.splice(index, 1);
-                }
-            }
-        })
-
-    </script>
-    <hr/>
 <?php
 
 echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);

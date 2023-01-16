@@ -68,13 +68,14 @@ class MissionTauxController extends AbstractController
     public function saisirValeurAction(): array
     {
 
-        $tauxRemuValeur = $this->getEvent()->getParam('missionTauxRemuValeur');
+        $tauxRemuValeurId = $this->params()->fromRoute('missionTauxRemuValeur');
         $form           = $this->getFormMissionTauxValeur();
 
-        if (empty($tauxRemuValeur)) {
+        if (empty($tauxRemuValeurId)) {
             $title = "Création d'une nouvelle valeur";
             $tauxRemuValeur = $this->getServiceMissionTaux()->newEntityValeur();
         } else {
+            $tauxRemuValeur = $this->getServiceMissionTaux()->getTauxRemusValeur($tauxRemuValeurId);
             $title = "Édition d'une valeur";
         }
 

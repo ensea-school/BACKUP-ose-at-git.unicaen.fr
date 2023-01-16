@@ -58,12 +58,15 @@ class MissionTauxService extends AbstractEntityService
 
     public function getTauxRemusValeur(mixed $tauxRemuValeurId)
     {
-        $dql   = "SELECT mtrv
-                 FROM " . MissionTauxRemuValeur::class . " mtrv
-                 WHERE mtrv.histoDestruction IS NULL
-                 AND mtrv.id = ".$tauxRemuValeurId;
+        $dql   = "SELECT mtr
+                 FROM " . MissionTauxRemuValeur::class . " mtr
+                 WHERE mtr.id =".$tauxRemuValeurId;
         $query = $this->getEntityManager()->createQuery($dql);
-        return $query->getResult();
+        $result = $query->getResult() ;
+        if(!empty($result)){
+            return $result[0];
+        }
+        return null;
     }
 
 

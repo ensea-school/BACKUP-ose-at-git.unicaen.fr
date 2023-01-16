@@ -1,26 +1,49 @@
 <template>
-  Liste des missions !
-  {{ intervenant }}
-  {{ canAddMission }}
+    <mission v-for="mission in missions" @delete="deleteMission" :key="mission.id" :options="options" :mission="mission"></mission>
+    <a v-if="canAddMission" class="btn btn-primary" @click="addMission">Ajout d'une nouvelle mission</a>
 </template>
 
 <script>
+
+import mission from './Mission.vue';
+
 export default {
-  props: {
-    intervenant: {},
-    canAddMission: {}
-  },
-  mounted()
-  {
-    $.ajax({
-      url: Util.url("mission/liste/:intervenant", {intervenant: this.intervenant}),
-      success: (response) => {
-
-        //console.log(response);
-      }
-    });
-  }
-
+    components: {
+        mission
+    },
+    props: {
+        intervenant: {type: Number, required: true},
+        canAddMission: {type: Boolean, required: true},
+        options: {type: Object}
+    },
+    data()
+    {
+        return {
+            missions: [],
+            nextMissionId: -1
+        };
+    },
+    methods: {
+        addMission()
+        {
+            this.missions.push({id: this.nextMissionId--});
+        },
+        deleteMission(mission)
+        {
+            const index = this.missions.indexOf(mission);
+            this.missions.splice(index, 1);
+        }
+    },
+    mounted()
+    {
+        var that = this;
+        $.ajax({
+            url: Util.url("mission/liste/:intervenant", {intervenant: this.intervenant}),
+            success: (response) => {
+                that.missions = response;
+            }
+        });
+    }
 }
 </script>
 

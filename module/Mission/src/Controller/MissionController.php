@@ -26,9 +26,11 @@ class MissionController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
+        $missionForm = $this->getFormMission();
+
         $canAddMission = true;
 
-        return compact('intervenant', 'canAddMission');
+        return compact('intervenant', 'canAddMission', 'missionForm');
     }
 
 
@@ -37,7 +39,6 @@ class MissionController extends AbstractController
     {
         /* @var $intervenant Intervenant */
         /* @var $missions Mission[] */
-
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         $missionForm = $this->getFormMission();

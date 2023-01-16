@@ -218,6 +218,7 @@ $config = [
             'formButtonGroup' => View\Helper\FormButtonGroupViewHelper::class,
             'cartridge'       => View\Helper\CartridgeViewHelper::class,
             'vite'            => View\Helper\ViteViewHelper::class,
+            'vue'             => View\Helper\VueViewHelper::class,
         ],
     ],
     'controllers'        => [

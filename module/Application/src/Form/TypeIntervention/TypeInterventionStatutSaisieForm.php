@@ -50,7 +50,7 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
         $this->add([
             'name'    => 'taux-hetd-service',
             'options' => [
-                'label' => "Taux HETD service",
+                'label' => "Taux HETD pour les heures de service",
             ],
             'type'    => 'text',
         ]);

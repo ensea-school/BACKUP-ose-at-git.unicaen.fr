@@ -50,7 +50,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     <a class="ajax-modal" data-event="periodes-edition"
                        href="<?= $this->url('periodes/saisie', ['periode' => $periode->getId()], ['query' => ['tab' => 'edition']]) ?>"
                        title="Modifier la période"><i class="fas fa-pen-to-square"></i></a>
-                    <a class="pop-ajax" data-title="Suppression de période" data-content="Êtes-vous sur de vouloir supprimer" data-confirm="true"
+                    <a class="pop-ajax" data-title="Suppression de période" data-content="Êtes-vous sur de vouloir supprimer ?" data-confirm="true"
                        data-submit-reload="true"
                        href="<?= $this->url('periodes/supprimer', ['periode' => $periode->getId()]) ?>"
                        title="Supprimer la periode"><i class="fas fa-trash-can"></i></a>

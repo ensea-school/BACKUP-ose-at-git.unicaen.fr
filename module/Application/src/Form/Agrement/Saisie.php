@@ -80,7 +80,7 @@ class AgreementRetourFormHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $object->setDateDecision(DateTimeFromString::run($data['dateDecision'] ?? null);
+        $object->setDateDecision(DateTimeFromString::run($data['dateDecision'] ?? null));
     }
 
 

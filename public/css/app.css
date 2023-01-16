@@ -28783,6 +28783,11 @@ form#service div.volume-horaire-saisie-multiple-fin {
   color: darkgrey;
 }
 
+.seuils-dedoublement .form-control {
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
 .chargens-formation-edit.form-lien #actif {
   line-height: 2rem;
   width: 2rem;

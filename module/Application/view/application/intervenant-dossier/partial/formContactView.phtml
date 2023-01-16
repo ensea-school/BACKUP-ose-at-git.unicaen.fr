@@ -29,9 +29,9 @@ $dossierContact = $form->get('DossierContact');
             CONTACT
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$intervenantDossier->getTblDossier()->getCompletudeContact()): ?>
-                    <span class="label label-warning">A compléter</span>
+                    <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
-                    <span class="label label-success">Complet</span>
+                    <span class="badge bg-success">Complet</span>
                 <?php endif; ?>
             <?php endif; ?>
         </div>

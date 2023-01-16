@@ -29,9 +29,9 @@ $dossierStatut = $form->get('DossierStatut');
             STATUT
             <?php if (!empty($tblDossier)): ?>
                 <?php if (!$tblDossier->getCompletudeStatut()): ?>
-                    <span class="label label-warning">A compléter</span>
+                    <span class="badge bg-warning text-dark">A compléter</span>
                 <?php else: ?>
-                    <span class="label label-success">Complet</span>
+                    <span class="badge bg-success">Complet</span>
                 <?php endif; ?>
             <?php endif; ?>
         </div>

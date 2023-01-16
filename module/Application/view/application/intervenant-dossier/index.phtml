@@ -16,17 +16,17 @@
 use Application\Assertion\IntervenantDossierAssertion;
 use Application\Entity\Db\WfEtape;
 
-$editIdentite  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IDENTITE);
-$editAdresse   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_ADRESSE);
-$editContact   = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_CONTACT);
-$editInsee     = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_INSEE);
-$editIban      = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IBAN);
+$editIdentite = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IDENTITE);
+$editAdresse = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_ADRESSE);
+$editContact = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_CONTACT);
+$editInsee = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_INSEE);
+$editIban = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_IBAN);
 $editEmployeur = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_EDIT_EMPLOYEUR);
-$canValider    = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_VALIDE);
-$canDevalider  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_DEVALIDE);
-$canEdit       = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_EDIT);
-$canSupprimer  = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_SUPPRIME);
-$formErrors    = $this->formErrors($form);
+$canValider = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_VALIDE);
+$canDevalider = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_DEVALIDE);
+$canEdit = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_EDIT);
+$canSupprimer = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_CAN_SUPPRIME);
+$formErrors = $this->formErrors($form);
 
 $nextEtape = $intervenantDossierValidation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
 $this->headTitle()->append($intervenant->getPrenom() . " " . $intervenant->getNomUsuel())->append("Données personnelles");
@@ -93,15 +93,15 @@ $fieldsets = $form->getFieldsets();
         <?php if (!empty($tblDossier)): ?>
             <div class="messenger alert <?= ($tblDossier->getCompletude()) ? 'alert-success' : 'alert-warning' ?> ">
                 <?php if ($tblDossier->getCompletude() && $intervenantDossierValidation): ?>
-                    Vos données personnelles sont maintenant <span style="font-size:1em;" class="label label-success">Complètes</span> et
+                    Vos données personnelles sont maintenant <span style="font-size:1em;" class="badge bg-success">Complètes</span> et
                     <span
-                            style="font-size:1em;" class="label label-success">Validées</span>
+                            style="font-size:1em;" class="badge bg-success">Validées</span>
                 <?php elseif ($tblDossier->getCompletude() && !$intervenantDossierValidation): ?>
                     Vos données personnelles sont maintenant <span style="font-size:1em;"
-                                                                   class="label label-success">complètes</span> et en attente de validation par nos services
+                                                                   class="badge bg-success">complètes</span> et en attente de validation par nos services
                 <?php else: ?>
                     Vos données personnelles sont incomplètes, merci de renseigner les informations obligatoires demandées dans les blocs
-                    <span style="font-size:1em;" class="label label-warning">A compléter</span>
+                    <span style="font-size:1em;" class="badge bg-warning text-dark">A compléter</span>
                 <?php endif; ?>
             </div>
         <?php else: ?>
@@ -281,8 +281,7 @@ $fieldsets = $form->getFieldsets();
             manageDepartementNaissance();
 
 
-            function manageDepartementNaissance()
-            {
+            function manageDepartementNaissance() {
                 var selectPays = $("select[name='DossierIdentiteComplementaire[paysNaissance]']");
                 var selectDept = $("select[name='DossierIdentiteComplementaire[departementNaissance]']");
                 var emptyDept = $("option[value='']", selectDept);

@@ -10,7 +10,7 @@
 
 use Application\Filter\StringFromFloat;
 
-$title    = "Différentiel entre deux exports des charges d'enseignement";
+$title = "Différentiel entre deux exports des charges d'enseignement";
 $uploader = $this->uploader();
 
 ?>
@@ -187,7 +187,7 @@ if ($error) {
                                 if ($tdata == 'new') {
                                     echo '<span class="label label-info">Nouveau type d\'intervention</span>';
                                 } elseif ($tdata == 'old') {
-                                    echo '<span class="label label-warning">Ancien type d\'intervention</span>';
+                                    echo '<span class="badge bg-warning text-dark">Ancien type d\'intervention</span>';
                                 }
                                 echo '</td></tr>';
                             }

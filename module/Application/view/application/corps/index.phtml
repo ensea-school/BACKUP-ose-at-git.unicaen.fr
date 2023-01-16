@@ -44,7 +44,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                        href="<?= $this->url('corps/saisie', ['corps' => $corps->getId()], ['query' => ['tab' => 'edition']]) ?>"
                        title="Modifier le corps"><i class="fas fa-pen-to-square"></i></a>
                     <?php if (!$corps->getSource()->getImportable()): ?>
-                        <a class="pop-ajax" data-title="Suppression du corps" data-content="Êtes-vous sur de vouloir supprimer"
+                        <a class="pop-ajax" data-title="Suppression du corps" data-content="Êtes-vous sur de vouloir supprimer ?"
                            data-confirm="true"
                            data-submit-reload="true"
                            href="<?= $this->url('corps/supprimer', ['corps' => $corps->getId()]) ?>"

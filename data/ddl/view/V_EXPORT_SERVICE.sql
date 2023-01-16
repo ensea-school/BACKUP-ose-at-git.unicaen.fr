@@ -1,3 +1,5 @@
+CREATE
+OR REPLACE FORCE VIEW V_EXPORT_SERVICE AS
 WITH t AS (
 --Volumes horaire sans tag et sans motif de non paiement
     SELECT 'vh_' || vh.id                id,

@@ -180,7 +180,7 @@ class AgrementController extends AbstractController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $dateDecision = $form->get('dateDecision')->normalizeDate($form->get('dateDecision')->getValue());
+                $dateDecision = \DateTime::createFromFormat('Y-m-d', $form->get('dateDecision')->getValue());
                 $agreer       = $this->params()->fromPost('agreer', []);
 
                 foreach ($agreer as $a => $val) {

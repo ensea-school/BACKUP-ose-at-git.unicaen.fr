@@ -2,6 +2,7 @@
 
 namespace Application\Form\Chargens;
 
+use Application\Entity\Db\Scenario;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use UnicaenApp\Util;
@@ -54,10 +55,8 @@ class DuplicationScenarioForm extends AbstractForm
                 'value_options'             => Util::collectionAsOptions($this->scenarios),
             ],
             'attributes' => [
-                'id'               => 'scenario',
-                'title'            => "Scénario ...",
-                'class'            => 'selectpicker',
-                'data-live-search' => "true",
+                'id'    => 'scenario',
+                'title' => "Scénario ...",
             ],
             'type'       => 'Select',
         ]);

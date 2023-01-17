@@ -6,8 +6,11 @@ use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Mission\Controller\MissionController;
 use Mission\Controller\MissionTauxController;
+use Mission\Controller\MissionTypeController;
 use Mission\Service\MissionTauxService;
 use Mission\Service\MissionTauxServiceFactory;
+use Mission\Service\MissionTypeService;
+use Mission\Service\MissionTypeServiceFactory;
 use UnicaenAuth\Assertion\AssertionFactory;
 use UnicaenAuth\Guard\PrivilegeController;
 
@@ -90,6 +93,14 @@ return [
                 ],
             ],
         ],
+        'missions-type' => [
+            'route'         => '/missions-type',
+            'controller'    => MissionTypeController::class,
+            'action'        => 'index',
+            'may_terminate' => true,
+            'child_routes'  => [
+                ]
+        ]
     ],
 
 
@@ -119,6 +130,12 @@ return [
                             'route'    => 'missions-taux',
                             'resource' => PrivilegeController::getResourceId(MissionTauxController::class, 'index'),
                             'order'    => 60,
+                        ],
+                        'missions-type' => [
+                            'label'    => "Type de mission",
+                            'route'    => 'missions-type',
+                            'resource' => PrivilegeController::getResourceId(MissionTauxController::class, 'index'),
+                            'order'    => 70,
                         ],
                     ],
                 ],
@@ -171,8 +188,18 @@ return [
             //'assertion'  => Assertion\MissionAssertion::class,
         ],
         [
+            //TODO droit acces
             'controller' => MissionTauxController::class,
             'action'     => ['index', 'supprimer', 'supprimerValeur', 'saisir', 'saisirValeur'],
+            'privileges' => [
+                Privileges::MISSION_VISUALISATION,
+            ],
+        ],
+
+        [
+            //TODO droit acces
+            'controller' => MissionTypeController::class,
+            'action'     => ['index', 'supprimer', 'saisir'],
             'privileges' => [
                 Privileges::MISSION_VISUALISATION,
             ],
@@ -182,10 +209,12 @@ return [
     'controllers' => [
         MissionController::class     => Controller\MissionControllerFactory::class,
         MissionTauxController::class => Controller\MissionTauxControllerFactory::class,
+        MissionTypeController::class => Controller\MissionTypeControllerFactory::class,
     ],
 
     'services' => [
         MissionTauxService::class         => MissionTauxServiceFactory::class,
+        MissionTypeService::class         => MissionTypeServiceFactory::class,
         Assertion\MissionAssertion::class => AssertionFactory::class,
         Service\MissionService::class     => Service\MissionServiceFactory::class,
     ],

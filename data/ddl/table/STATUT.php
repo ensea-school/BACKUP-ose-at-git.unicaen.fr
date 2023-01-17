@@ -189,18 +189,6 @@ return [
             'position'    => 50,
             'commentaire' => NULL,
         ],
-        'CONTRAT_GENERATION'                  => [
-            'name'        => 'CONTRAT_GENERATION',
-            'type'        => 'bool',
-            'bdd-type'    => 'NUMBER',
-            'length'      => 0,
-            'scale'       => '0',
-            'precision'   => 1,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 50,
-            'commentaire' => NULL,
-        ],
         'CONTRAT_ETAT_SORTIE_ID'         => [
             'name'        => 'CONTRAT_ETAT_SORTIE_ID',
             'type'        => 'int',
@@ -690,7 +678,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 84,
+            'position'    => 83,
             'commentaire' => NULL,
         ],
         'MISSION_REALISE_EDITION'        => [
@@ -702,7 +690,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 85,
+            'position'    => 84,
             'commentaire' => NULL,
         ],
         'MODIF_SERVICE_DU'               => [

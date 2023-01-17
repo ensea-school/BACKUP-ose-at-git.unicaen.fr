@@ -1302,7 +1302,6 @@ return [
         'CONTRAT_ETAT_SORTIE_ID',
         'TAUX_CHARGES_TTC',
         'CONTRAT_GENERATION',
-        'MODIF_SERVICE_DU_EDITION',
         'MISSION',
         'MISSION_REALISE_EDITION',
     ],

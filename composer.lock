@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "05e603d0419ff11ff6d6b28665503249",
+    "content-hash": "92bbf47c151d733243cf5c45bc070b52",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7036,11 +7036,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "7.1",
+            "version": "7.2",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "b81326b34e8a993d771fa2aa682322e1908f6f9a"
+                "reference": "86df91b5c75ae57ebdbd8f2dcf8c3c2c1df76adc"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7057,7 +7057,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2022-10-05T15:04:59+00:00"
+            "time": "2022-12-02T10:15:21+00:00"
         },
         {
             "name": "unicaen/console",
@@ -7113,7 +7113,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "3320b681baf05d79b85bbf793ba41eee5f9bf331"
+                "reference": "783c0a2cae5e5896ce71b2cd991e808f87bd1251"
             },
             "require": {
                 "unicaen/auth": "^4.0 || dev-ll-php8-bs5"
@@ -7131,7 +7131,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2023-01-16T15:37:10+00:00"
+            "time": "2023-01-16T15:42:52+00:00"
         },
         {
             "name": "unicaen/open-document",

@@ -8,6 +8,7 @@ return [
     'table'   => 'MISSION_TAUX_REMU_VALEUR',
     'columns' => [
         'DATE_EFFET',
+        'MISSION_TAUX_REMU_ID',
     ],
 ];
 

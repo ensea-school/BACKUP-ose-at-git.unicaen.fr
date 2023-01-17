@@ -60,7 +60,8 @@ class MissionController extends AbstractController
 
     public function modifierAction()
     {
-        $data                = $this->params()->fromPost();
+        $data = $this->axios()->fromPost();
+
         $id                  = (int)$data['id'];
         $data['description'] = str_replace(' ', '', $data['description']);
         if ($id <= 0) {

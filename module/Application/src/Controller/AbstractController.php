@@ -11,6 +11,7 @@ use Laminas\Mvc\Controller\AbstractActionController;
  * Description of AbstractController
  *
  * @method \Application\Controller\Plugin\Context context()
+ * @method \Application\Controller\Plugin\Axios axios()
  * @method \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger flashMessenger()
  * @method \BjyAuthorize\Controller\Plugin\IsAllowed isAllowed($resource, $privilege = null)
  *

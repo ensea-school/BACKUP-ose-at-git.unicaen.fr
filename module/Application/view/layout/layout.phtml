@@ -64,8 +64,9 @@ echo $this->doctype();
 
     <!-- Scripts globaux -->
     <script type="text/javascript" src="<?= $this->basePath('/js/util.js?v=' . $version) ?>"></script>
-    <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-3.6.0.min.js?v=' . $version) ?>"></script>
-    <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js?v=' . $version) ?>"></script>
+    <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-3.6.0.min.js') ?>"></script>
+    <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js') ?>"></script>
+    <script type="text/javascript" src="<?= $this->basePath('/vendor/axios/axios.min.js') ?>"></script>
     <?= $this->vite()->head(); ?>
 </head>
 

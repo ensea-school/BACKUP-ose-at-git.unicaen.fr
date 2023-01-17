@@ -66,22 +66,18 @@ export default {
     },
     data()
     {
-        return {};
+        return {
+            mission: this.mission
+        };
     },
     methods: {
         submitForm(event)
         {
-            var that = this
-            $.ajax({
-                type: 'POST',
-                submitter: event.submitter,
-                msg: 'Enregistrement en cours',
-                successMsg: 'Enregistrement effectué',
-                url: Util.url('mission/modifier'),
-                data: this.mission,
-                success: function (response) {
-                    that.mission = response.data;
-                }
+            axios.post(
+                Util.url('mission/modifier'),
+                this.mission
+            ).then((response) => {
+                this.mission = response.data.data;
             });
         },
         deleteMission(mission)

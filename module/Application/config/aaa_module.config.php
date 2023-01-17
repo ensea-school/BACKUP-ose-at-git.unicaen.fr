@@ -229,6 +229,7 @@ $config = [
     'controller_plugins' => [
         'factories' => [
             'context' => Controller\Plugin\ContextFactory::class,
+            'axios'   => Controller\Plugin\AxiosFactory::class,
         ],
     ],
     'view_manager'       => [

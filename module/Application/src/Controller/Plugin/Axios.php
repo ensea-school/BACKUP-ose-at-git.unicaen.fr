@@ -2,9 +2,11 @@
 
 namespace Application\Controller\Plugin;
 
+use Application\Constants;
 use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\View\Model\JsonModel;
+use UnicaenApp\Util;
 
 /**
  * Description of Axios
@@ -26,6 +28,53 @@ class Axios extends AbstractPlugin
         } else {
             return $post;
         }
+    }
+
+
+
+    public function extract($object, array $properties = []): ?array
+    {
+        if (!$object) {
+            return null;
+        }
+
+        $result = [];
+
+        if (method_exists($object, 'getId')) {
+            $result['id'] = $object->getId();
+        }
+        if (!empty($properties)) {
+            foreach ($properties as $property) {
+                if ($property == 'id') continue;
+                $method     = 'get' . ucfirst($property);
+                $foundValue = false;
+                if (method_exists($object, $method)) {
+                    $value      = $object->$method();
+                    $foundValue = true;
+                } else {
+                    $method = 'is' . ucfirst($property);
+                    if (method_exists($object, $method)) {
+                        $value      = $object->$method();
+                        $foundValue = true;
+                    }
+                }
+
+                if ($foundValue) {
+                    if (is_object($value)) {
+                        if ($value instanceof \DateTime) {
+                            $value = $value->format(Util::DATE_FORMAT);
+                        } else {
+                            $value = $this->extract($value);
+                        }
+                    }
+                    $result[$property] = $value;
+                }
+            }
+        } else {
+            $result['libelle'] = (string)$object;
+        }
+
+        return $result;
     }
 
 

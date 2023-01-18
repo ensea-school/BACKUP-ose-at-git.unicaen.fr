@@ -99,8 +99,18 @@ return [
             'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
-                ]
-        ]
+                'saisir'    => [
+                    'route'      => '/saisir[/:typeMission]',
+                    'controller' => MissionTypeController::class,
+                    'action'     => 'saisir',
+                ],
+                'supprimer' => [
+                    'route'      => '/supprimer/:typeMission',
+                    'controller' => MissionTypeController::class,
+                    'action'     => 'supprimer',
+                ],
+            ],
+        ],
     ],
 
 

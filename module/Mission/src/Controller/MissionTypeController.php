@@ -3,8 +3,8 @@
 namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
+use Mission\Entity\Db\TypeMission;
 use Mission\Form\MissionTypeFormAwareTrait;
-use Mission\Form\MissionTypeValeurFormAwareTrait;
 use Mission\Service\MissionTypeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
@@ -18,14 +18,16 @@ class MissionTypeController extends AbstractController
 {
     use MissionTypeServiceAwareTrait;
     use ContextServiceAwareTrait;
-//    use MissionTypeFormAwareTrait;
+    use MissionTypeFormAwareTrait;
 
     public function indexAction()
     {
+        $this->em()->getFilters()->enable('annee')->init([
+            TypeMission::class,
+        ]);
+        $missionsType = $this->getServiceMissionType()->getTypes();
 
-        $typeMissions = $this->getServiceMissionType()->getTypes();
-
-        return compact('typeMissions');
+        return compact('missionsType');
     }
 
 
@@ -33,16 +35,16 @@ class MissionTypeController extends AbstractController
     public function saisirAction()
     {
 
-        $type = $this->getEvent()->getParam('typeMission');
-        $form     = $this->getFormMissionType();
-        if (empty($type)) {
-            $title    = "Création d'un nouveau type";
-            $type = $this->getServiceMissionType()->newEntity();
+        $typeMission = $this->getEvent()->getParam('typeMission');
+        $form        = $this->getFormMissionType();
+        if (empty($typeMission)) {
+            $title       = "Création d'un nouveau type";
+            $typeMission = $this->getServiceMissionType()->newEntity();
         } else {
             $title = "Édition d'un type";
         }
-        $form->bindRequestSave($type, $this->getRequest(), function () use ($type, $form) {
-            $this->getServiceMissionTaux()->save($type);
+        $form->bindRequestSave($typeMission, $this->getRequest(), function () use ($typeMission, $form) {
+            $this->getServiceMissionType()->save($typeMission);
 
             $this->flashMessenger()->addSuccessMessage(
                 "Ajout réussi"
@@ -51,6 +53,9 @@ class MissionTypeController extends AbstractController
 
         return compact('form', 'title');
     }
+
+
+
     public function supprimerAction(): MessengerViewModel
     {
         $type = $this->getEvent()->getParam('typeMission');

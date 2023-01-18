@@ -33,7 +33,7 @@ class TypeMission implements ParametreEntityInterface
 
 
 
-    public function setCode(?string $code): MissionTauxRemu
+    public function setCode(?string $code): TypeMission
     {
         $this->code = $code;
 
@@ -49,7 +49,7 @@ class TypeMission implements ParametreEntityInterface
 
 
 
-    public function setLibelle(?string $libelle): MissionTauxRemu
+    public function setLibelle(?string $libelle): TypeMission
     {
         $this->libelle = $libelle;
 

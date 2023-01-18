@@ -45,6 +45,11 @@ class Axios extends AbstractPlugin
         }
         if (!empty($properties)) {
             foreach ($properties as $property) {
+                $subProperties = [];
+                if (is_array($property)) {
+                    [$property, $subProperties] = $property;
+                }
+
                 if ($property == 'id') continue;
                 $method     = 'get' . ucfirst($property);
                 $foundValue = false;
@@ -64,7 +69,7 @@ class Axios extends AbstractPlugin
                         if ($value instanceof \DateTime) {
                             $value = $value->format(Util::DATE_FORMAT);
                         } else {
-                            $value = $this->extract($value);
+                            $value = $this->extract($value, $subProperties);
                         }
                     }
                     $result[$property] = $value;

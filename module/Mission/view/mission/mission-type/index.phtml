@@ -32,7 +32,9 @@ $canSupprimer = true;
                    title="Modifier le type">
                     <i class="fas fa-pen-to-square"></i>
                 </a>
-                <a class="ajax-modal " data-event="type-suppression"
+                <a class="pop-ajax" data-event="type-suppression" data-content="Êtes-vous sur de vouloir supprimer"
+                   data-confirm="true"
+                   data-submit-reload="true"
                    href="<?= $this->url("missions-type/supprimer", ['typeMission' => $missionType->getId()]) ?>"
                    title="Supprimer le type">
                     <i class="fas fa-trash-can"></i>

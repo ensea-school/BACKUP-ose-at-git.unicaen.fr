@@ -5,3 +5,11 @@
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 echo $this->form($form);
+if($form->get('id')):?>
+<br>
+    <a class="pop-ajax btn btn-danger" data-title="Suppression d'une valeur de taux" data-content="Êtes-vous sur de vouloir supprimer"
+       data-confirm="true"
+       data-submit-reload="true"
+       href="<?= $this->url("missions-taux/supprimer-valeur", ['missionTauxRemuValeur' => $form->get('id')->getValue()]) ?>"
+       title="Supprimer la valeur du taux">Supprimer la valeur</a>
+<?php endif;?>

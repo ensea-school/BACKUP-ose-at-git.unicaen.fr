@@ -3,6 +3,7 @@
 namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
+use Mission\Entity\Db\MissionTauxRemu;
 use Mission\Form\MissionTauxFormAwareTrait;
 use Mission\Form\MissionTauxValeurFormAwareTrait;
 use Mission\Service\MissionTauxServiceAwareTrait;
@@ -24,6 +25,9 @@ class MissionTauxController extends AbstractController
     public function indexAction()
     {
 
+        $this->em()->getFilters()->enable('historique')->init([
+            MissionTauxRemu::class,
+        ]);
         $tauxMissions = $this->getServiceMissionTaux()->getTauxRemus();
         $annee        = $this->getServiceContext()->getAnnee();
 
@@ -110,6 +114,11 @@ class MissionTauxController extends AbstractController
 
     public function supprimerValeurAction(): MessengerViewModel
     {
+        $tauxRemuValeurId = $this->params()->fromRoute('missionTauxRemuValeur');
+        $tauxRemuValeur = $this->getServiceMissionTaux()->getTauxRemusValeur($tauxRemuValeurId);
+        $this->em()->remove($tauxRemuValeur);
+        $this->em()->flush();
+
 
         return new MessengerViewModel();
     }

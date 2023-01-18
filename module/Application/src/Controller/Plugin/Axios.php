@@ -35,19 +35,25 @@ class Axios extends AbstractPlugin
         /** @var FlashMessenger $flashMessenger */
         $flashMessenger = $this->controller->flashMessenger();
 
+        $namespaces = [
+            $flashMessenger::NAMESPACE_SUCCESS,
+            $flashMessenger::NAMESPACE_WARNING,
+            $flashMessenger::NAMESPACE_ERROR,
+            $flashMessenger::NAMESPACE_INFO,
+        ];
+
+        $messages = [];
+        foreach ($namespaces as $namespace) {
+            if ($flashMessenger->hasCurrentMessages($namespace)) {
+                $messages[$namespace] = $flashMessenger->getCurrentMessages($namespace);
+                $flashMessenger->clearCurrentMessages($namespace);
+            }
+        }
+
         $jsonData = [
             'data'     => $data,
-            'messages' => [
-                $flashMessenger::NAMESPACE_ERROR   => $flashMessenger->getCurrentErrorMessages(),
-                $flashMessenger::NAMESPACE_SUCCESS => $flashMessenger->getCurrentSuccessMessages(),
-                $flashMessenger::NAMESPACE_WARNING => $flashMessenger->getCurrentWarningMessages(),
-                $flashMessenger::NAMESPACE_INFO    => $flashMessenger->getCurrentInfoMessages(),
-            ],
+            'messages' => $messages,
         ];
-        $flashMessenger->clearCurrentMessages($flashMessenger::NAMESPACE_ERROR);
-        $flashMessenger->clearCurrentMessages($flashMessenger::NAMESPACE_SUCCESS);
-        $flashMessenger->clearCurrentMessages($flashMessenger::NAMESPACE_WARNING);
-        $flashMessenger->clearCurrentMessages($flashMessenger::NAMESPACE_INFO);
 
         $model = new JsonModel($jsonData);
 

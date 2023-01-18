@@ -65,6 +65,13 @@ Enfin, commitez le tout et testez avant de déployer!!!
 
 ## Création de composants Vue
 
+Sites officiels :
+- https://vuejs.org/
+- https://vitejs.dev/
+
+Doc Vue de Stéphane : 
+- https://git.unicaen.fr/bouvry/presentation-dev/-/blob/master/src/vuejs.md
+
 Les composants doivent être placés dnas le répertoire front/components.
 Ils peuvent être placés dans des sous-répertoires.
 
@@ -134,6 +141,8 @@ export default {
 
 
 ## Communication front/serveur en AJAX avec axios
+
+Site officiel : https://axios-http.com/fr/docs/intro
 
 Depuis un morceau de code javascript :
 ```js

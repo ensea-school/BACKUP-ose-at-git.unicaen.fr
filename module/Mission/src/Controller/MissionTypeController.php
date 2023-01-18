@@ -25,6 +25,9 @@ class MissionTypeController extends AbstractController
         $this->em()->getFilters()->enable('annee')->init([
             TypeMission::class,
         ]);
+        $this->em()->getFilters()->enable('historique')->init([
+            TypeMission::class,
+        ]);
         $missionsType = $this->getServiceMissionType()->getTypes();
 
         return compact('missionsType');

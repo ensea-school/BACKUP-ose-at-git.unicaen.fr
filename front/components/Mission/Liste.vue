@@ -36,12 +36,10 @@ export default {
     },
     mounted()
     {
-        var that = this;
-        $.ajax({
-            url: Util.url("mission/liste/:intervenant", {intervenant: this.intervenant}),
-            success: (response) => {
-                that.missions = response;
-            }
+        axios.get(
+            Util.url("mission/liste/:intervenant", {intervenant: this.intervenant})
+        ).then((response) => {
+            this.missions = response.data;
         });
     }
 }

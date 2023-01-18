@@ -1,20 +1,13 @@
 {
-  "main.css": {
-    "file": "assets/main-44ef2229.css",
-    "src": "main.css"
-  },
   "main.js": {
-    "file": "assets/main-d98d8d2d.js",
+    "file": "assets/main-e852962d.js",
     "src": "main.js",
     "isEntry": true,
     "imports": [
-      "_vendor-438ee68a.js"
-    ],
-    "css": [
-      "assets/main-44ef2229.css"
+      "_vendor-5a215836.js"
     ]
   },
-  "_vendor-438ee68a.js": {
-    "file": "assets/vendor-438ee68a.js"
+  "_vendor-5a215836.js": {
+    "file": "assets/vendor-5a215836.js"
   }
 }

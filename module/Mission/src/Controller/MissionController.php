@@ -73,34 +73,25 @@ class MissionController extends AbstractController
         $missionForm = $this->getFormMission();
         $missionForm->bind($mission);
         $missionForm->setData($data);
-        $result = [];
-
+        //$this->flashMessenger()->addErrorMessage('et merde!');
         if ($missionForm->isValid()) {
             try {
                 $this->getServiceMission()->save($mission);
             } catch (\Exception $e) {
-                $result = [
-                    'error' => $e->getMessage(),
-                ];
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
         } else {
-            $result['form-errors'] = [];
             foreach ($missionForm->getElements() as $element) {
                 if ($messages = $element->getMessages()) {
-                    $result['form-errors'][$element->getName()] = [];
                     foreach ($messages as $message) {
-                        $result['form-errors'][$element->getName()][] = $message;
+                        $this->flashMessenger()->addErrorMessage($message);
                     }
                 }
             }
-            if (empty($result['form-errors'])) {
-                unset($result['form-errors']);
-            }
         }
+        $result = $missionForm->getHydrator()->extract($mission);
 
-        $result['data'] = $missionForm->getHydrator()->extract($mission);
-
-        return new JsonModel($result);
+        return $this->axios()->send($result);
     }
 
 

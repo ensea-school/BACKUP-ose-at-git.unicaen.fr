@@ -13,10 +13,10 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-2">
-                        <label class=" form-label" for="structure">Composante en charge du suivi de mission</label>
-                        <select class="form-select" v-model="mission.structure">
-                            <option v-for="(label, value) in options.structure" :key="value" :value="value">{{ label }}</option>
-                        </select>
+                            <label class=" form-label" for="structure">Composante en charge du suivi de mission</label>
+                            <select class="form-select" v-model="mission.structure">
+                                <option v-for="(label, value) in options.structure" :key="value" :value="value">{{ label }}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -54,12 +54,19 @@
                 </div>
             </div>
         </form>
+        <popover title="Mon titre cool"></popover>
     </div>
 </template>
 
 <script>
+
+import popover from '@components/Application/Popover.vue';
+
 export default {
     name: 'Mission',
+    components: {
+        popover
+    },
     props: {
         mission: {required: true},
         options: {type: Object}
@@ -75,9 +82,10 @@ export default {
         {
             axios.post(
                 Util.url('mission/modifier'),
-                this.mission
+                this.mission,
+                {submitter: event.submitter}
             ).then((response) => {
-                this.mission = response.data.data;
+                this.mission = response.data;
             });
         },
         deleteMission(mission)

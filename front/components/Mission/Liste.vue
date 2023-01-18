@@ -14,7 +14,6 @@ export default {
     props: {
         intervenant: {type: Number, required: true},
         canAddMission: {type: Boolean, required: true},
-        options: {type: Object}
     },
     data()
     {
@@ -38,7 +37,7 @@ export default {
     {
         axios.get(
             Util.url("mission/liste/:intervenant", {intervenant: this.intervenant})
-        ).then((response) => {
+        ).then(response => {
             this.missions = response.data;
         });
     }

@@ -2,6 +2,7 @@
 
 namespace Mission\Controller;
 
+use Application\Constants;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
 use Laminas\View\Model\JsonModel;
@@ -37,23 +38,61 @@ class MissionController extends AbstractController
 
     public function listeAction()
     {
+        $ax = $this->axios();
+
         /* @var $intervenant Intervenant */
-        /* @var $missions Mission[] */
-
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $missionForm = $this->getFormMission();
 
-        $dql = "SELECT m FROM " . Mission::class . " m WHERE m.histoDestruction IS NULL AND m.intervenant = :intervenant";
+        $dql = "
+        SELECT 
+          m, tm, str, tr, valid
+        FROM 
+          " . Mission::class . " m
+          JOIN m.typeMission tm
+          JOIN m.structure str
+          JOIN m.missionTauxRemu tr
+          LEFT JOIN m.validations valid
+        WHERE 
+            m.histoDestruction IS NULL 
+            AND m.intervenant = :intervenant
+        ";
 
+        /* @var $missions Mission[] */
         $missions = $this->em()->createQuery($dql)->setParameters([
             'intervenant' => $intervenant,
         ])->getResult();
 
-        foreach ($missions as $k => $mission) {
-            $missions[$k] = $missionForm->getHydrator()->extract($mission);
+        foreach ($missions as $k => $m) {
+            $mission = $ax->extract($m, [
+                'typeMission',
+                'dateDebut',
+                'dateFin',
+                'structure',
+                'missionTauxRemu',
+                'description',
+                'histoCreation',
+                ['histoCreateur', ['email', 'displayName']],
+                'heures',
+                'valide',
+            ]);
+            if (empty($mission['heures'])) {
+                $mission['heures'] = 'Non renseignées';
+            }
+
+            $validation = $m->getValidation();
+            if ($validation) {
+                if ($validation->getId()) {
+                    $mission['validation'] = (string)$validation;
+                } else {
+                    $mission['validation'] = 'Validé automatiquement';
+                }
+            }
+
+            $mission['canEdit'] = true;
+            $missions[$k]       = $mission;
         }
 
-        return new JsonModel($missions);
+        return $ax->send($missions);
     }
 
 

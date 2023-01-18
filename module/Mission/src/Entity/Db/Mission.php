@@ -238,4 +238,19 @@ class Mission implements HistoriqueAwareInterface
 
         return false;
     }
+
+
+
+    public function getValidation(): ?Validation
+    {
+        if ($this->isAutoValidation()) {
+            return new Validation();
+        }
+
+        if ($validations = $this->getValidations()) {
+            foreach ($validations as $validation) {
+                if ($validation->estNonHistorise()) return $validation;
+            }
+        }
+    }
 }

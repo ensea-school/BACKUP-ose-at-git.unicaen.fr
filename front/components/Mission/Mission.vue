@@ -1,75 +1,70 @@
 <template>
     <div :id="mission.id" class="card bg-default">
         <form @submit.prevent="submitForm">
-            <div class="card-header form-inline">
-                <select class="form-select" v-model="mission.typeMission">
-                    <option v-for="(label, value) in options.typeMission" :key="value" :value="value">{{ label }}</option>
-                </select>
-                &nbsp;, du&nbsp;<input type="date" class="form-control" v-model="mission.dateDebut"/>
-                &nbsp;au&nbsp;<input type="date" class="form-control" v-model="mission.dateFin"/>
-
+            <div class="card-header">
+                {{ mission.typeMission.libelle }}
+                <span class="badge bg-secondary">Du {{ mission.dateDebut }} au {{ mission.dateFin }}</span>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-2">
-                            <label class=" form-label" for="structure">Composante en charge du suivi de mission</label>
-                            <select class="form-select" v-model="mission.structure">
-                                <option v-for="(label, value) in options.structure" :key="value" :value="value">{{ label }}</option>
-                            </select>
+                    <div class="col-md-8">
+                        <!-- Propriétés -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="form-label">Composante en charge du suivi</label>
+                                <div class="form-control">{{ mission.structure.libelle }}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class=" form-label">Taux de rémunération</label>
+                                <div class="form-control">{{ mission.missionTauxRemu.libelle }}</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class=" form-label">Nombre d'heures prévisionnelles</label>
+                                <div class="form-control">{{ mission.heures }}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class=" form-label">Descriptif de la mission</label>
+                                <div class="form-control">{{ mission.description }}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input v-if="mission.canEdit" type="submit" class="btn btn-primary" value="Modifier la mission"/>
+                                &nbsp;
+                                <a class="btn btn-danger" @click="deleteMission">Suppression de la mission</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="mb-2">
-                            <label class=" form-label" for="missionTauxRemu">Taux de rémunération</label>
-                            <select class="form-select" v-model="mission.missionTauxRemu">
-                                <option v-for="(label, value) in options.missionTauxRemu" :key="value" :value="value">{{ label }}</option>
-                            </select>
-                        </div>
+                    <div class="col-md-4">
+                        <!-- Suivi -->
+                        <icon name="thumbs-up" /> Créé le {{ mission.histoCreation }} par <utilisateur :nom="mission.histoCreateur.displayName" :mail="mission.histoCreateur.email" />
                     </div>
-                    <div class="col-md-3">
-                        <div class="mb-2">
-                            <label class=" form-label" for="heures">Heures</label>
-                            <input class="form-control" type="text" v-model="mission.heures"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="mb-2">
-                            <label class=" form-label" for="description">Descriptif de la mission</label>
-                            <input class="form-control" type="text" v-model="mission.description"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="mb-2">
-                            <input type="submit" class="btn btn-primary" value="Enregistrer"/>
-                            &nbsp;
-                            <a class="btn btn-danger" @click="deleteMission">Suppression de la mission</a>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </form>
-        <popover title="Mon titre cool"></popover>
     </div>
 </template>
 
 <script>
 
-import popover from '@components/Application/Popover.vue';
+import utilisateur from "@components/Application/Utilisateur.vue";
+import icon from "@components/Application/Icon.vue";
 
 export default {
     name: 'Mission',
     components: {
-        popover
+        utilisateur,
+        icon
     },
     props: {
-        mission: {required: true},
-        options: {type: Object}
+        mission: {required: true}
     },
     data()
     {
@@ -83,8 +78,7 @@ export default {
             axios.post(
                 Util.url('mission/modifier'),
                 this.mission,
-                {submitter: event.submitter}
-            ).then((response) => {
+            ).then(response => {
                 this.mission = response.data;
             });
         },

@@ -179,7 +179,6 @@ return [
             'privileges' => [
                 Privileges::MISSION_EDITION,
             ],
-            //'assertion'  => Assertion\MissionAssertion::class,
         ],
         [
             'controller' => MissionController::class,
@@ -187,7 +186,6 @@ return [
             'privileges' => [
                 Privileges::MISSION_VALIDATION,
             ],
-            //'assertion'  => Assertion\MissionAssertion::class,
         ],
         [
             'controller' => MissionController::class,
@@ -198,20 +196,42 @@ return [
             //'assertion'  => Assertion\MissionAssertion::class,
         ],
         [
-            //TODO droit acces
             'controller' => MissionTauxController::class,
-            'action'     => ['index', 'supprimer', 'supprimerValeur', 'saisir', 'saisirValeur'],
+            'action'     => ['index'],
             'privileges' => [
-                Privileges::MISSION_VISUALISATION,
+                Privileges::MISSION_VISUALISATION_TAUX,
+            ],
+        ],
+        [
+            'controller' => MissionTauxController::class,
+            'action'     => ['saisir', 'saisirValeur'],
+            'privileges' => [
+                Privileges::MISSION_EDITION_TAUX,
+            ],
+        ],
+        [
+            'controller' => MissionTauxController::class,
+            'action'     => ['supprimer', 'supprimerValeur'],
+            'privileges' => [
+                Privileges::MISSION_SUPPRESSION_TAUX,
             ],
         ],
 
         [
-            //TODO droit acces
+            'controller' => MissionTypeController::class,
+            'action'     => ['index'],
+            'privileges' => [
+                Privileges::MISSION_VISUALISATION_TYPE,
+            ],
             'controller' => MissionTypeController::class,
             'action'     => ['index', 'supprimer', 'saisir'],
             'privileges' => [
-                Privileges::MISSION_VISUALISATION,
+                Privileges::MISSION_EDITION_TYPE,
+            ],
+            'controller' => MissionTypeController::class,
+            'action'     => ['index', 'supprimer', 'saisir'],
+            'privileges' => [
+                Privileges::MISSION_SUPPRESSION_TYPE,
             ],
         ],
     ],

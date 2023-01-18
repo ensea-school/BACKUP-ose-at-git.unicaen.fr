@@ -159,6 +159,12 @@ return [
             'validation-realise'     => 'Validation des heures réalisées',
             'devalidation-realise'   => 'Dévalidation des heures réalisées',
             'autovalidation-realise' => 'Auto-validation des heures réalisées',
+            'visualisation-type'     => 'Visualisation des types de mission',
+            'edition-type'           => 'Edition des types de mission',
+            'suppression-type'       => 'Suppression des types de mission',
+            'visualisation-taux'     => 'Visualisation des taux de mission',
+            'edition-taux'           => 'Edition des taux de mission',
+            'suppression-taux'       => 'Suppression des taux de mission',
         ],
     ],
 

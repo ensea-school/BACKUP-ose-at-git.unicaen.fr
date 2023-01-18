@@ -1,3 +1,64 @@
+axios.interceptors.request.use(config => {
+    if (config.submitter) {
+        let msg = config.msg ? config.msg : 'Action en cours';
+        if (config.popover != undefined) {
+            config.popover.dispose();
+        }
+        config.popover = new bootstrap.Popover(config.submitter, {
+            content: "<div class=\"spinner-border text-primary\" role=\"status\">\n" +
+                "  <span class=\"visually-hidden\">Loading...</span>\n" +
+                "</div> " + msg,
+            html: true,
+            trigger: 'focus'
+        });
+        config.popover.show();
+    }
+    return config;
+});
+
+axios.interceptors.response.use(response => {
+    console.log('coucou');
+    response.messages = response.data.messages;
+    response.data = response.data.data;
+
+    if (response.config.popover) {
+        var popover = response.config.popover;
+
+        let content = '';
+        for (ns in response.messages) {
+            for (mid in response.messages[ns]) {
+                content += '<div class="alert fade show alert-' + (ns == 'error' ? 'danger' : ns) + '" role="alert">' + response.messages[ns][mid] + '</div>';
+            }
+        }
+
+        // S'il y a un truc à afficher
+        if (content) {
+            popover._config.content = content;
+            popover.setContent();
+            setTimeout(() => {
+                popover.dispose();
+            }, 3000)
+        } else {
+            // la popover est masquée si tout est fini
+            popover.dispose();
+        }
+    }
+
+    response.showMessages = function (element) {
+        content = '';
+        for (ns in this.messages) {
+            for (mid in this.messages[ns]) {
+                content += '<div class="alert alert-dismissible fade show alert-' + (ns == 'error' ? 'danger' : ns) + '" role="alert">' + this.messages[ns][mid] + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+            }
+        }
+        element.innerHTML = content;
+    };
+
+    return response;
+});
+
+
+
 /**
  * Ajoute/remplace un paramètre GET à une URL.
  *
@@ -343,7 +404,7 @@ Util = {
         return value;
     },
 
-    
+
 
     nl2br: function (str, is_xhtml)
     {

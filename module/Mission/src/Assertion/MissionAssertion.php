@@ -32,6 +32,8 @@ class MissionAssertion extends AbstractAssertion
         $role = $this->getRole();
         /* @var $role Role */
 
+        if (!$role) return false;
+
         $intervenant = null;
         if (isset($page['workflow-etape-code'])) {
             $etape = $page['workflow-etape-code'];

@@ -144,7 +144,7 @@ return [
                         'missions-type' => [
                             'label'    => "Type de mission",
                             'route'    => 'missions-type',
-                            'resource' => PrivilegeController::getResourceId(MissionTauxController::class, 'index'),
+                            'resource' => PrivilegeController::getResourceId(MissionTypeController::class, 'index'),
                             'order'    => 70,
                         ],
                     ],
@@ -223,13 +223,17 @@ return [
             'privileges' => [
                 Privileges::MISSION_VISUALISATION_TYPE,
             ],
+        ],
+        [
             'controller' => MissionTypeController::class,
-            'action'     => ['index', 'supprimer', 'saisir'],
+            'action'     => ['saisir'],
             'privileges' => [
                 Privileges::MISSION_EDITION_TYPE,
             ],
+        ],
+        [
             'controller' => MissionTypeController::class,
-            'action'     => ['index', 'supprimer', 'saisir'],
+            'action'     => ['supprimer'],
             'privileges' => [
                 Privileges::MISSION_SUPPRESSION_TYPE,
             ],

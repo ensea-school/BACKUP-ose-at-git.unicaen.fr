@@ -2,7 +2,6 @@ $("document").ready(function ()
 {
 
     $("body").on("click", "#confirm-reconduction", function () {
-
         $("#form-reconduction").submit();
     });
 

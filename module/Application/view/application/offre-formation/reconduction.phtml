@@ -19,7 +19,7 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-offre.
                 $selectStructure
                     ->setValueOptions(['' => "(Sélectionnez une composante)"] + \UnicaenApp\Util::collectionAsOptions($structures))
                     ->setValue($structure?->getId())
-                    ->setAttributes(['class' => 'structure',
+                    ->setAttributes(['class' => 'structure form-select',
                                      'style' => 'width:250px;']);
                 echo $this->formSelect($selectStructure);
                 ?>

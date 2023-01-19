@@ -33,7 +33,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                                title="Modifier la collection"><i class="fas fa-pen-to-square"></i></a>
 
                             <?php if (!$groupeTypeFormation->getSource()->getImportable()): ?>
-                                <a class="pop-ajax " data-title="Suppression d'une collection" data-content="Êtes-vous sur de vouloir supprimer"
+                                <a class="pop-ajax " data-title="Suppression d'une collection" data-content="Êtes-vous sur de vouloir supprimer ?"
                                    data-confirm="true"
                                    data-submit-reload="true"
                                    href="<?= $this->url('type-formation/supprimer-groupe', ['groupeTypeFormation' => $groupeTypeFormation->getId()]) ?>"
@@ -69,7 +69,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                                        href="<?= $this->url('type-formation/saisie', ['typeFormation' => $typeFormation->getId()], ['query' => ['tab' => 'edition']]) ?>"
                                        title="Modifier le type de formation"><i class="fas fa-pen-to-square"></i></a>
                                     <?php if (!$typeFormation->getSource()->getImportable()): ?>
-                                        <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer"
+                                        <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer ?"
                                            data-confirm="true"
                                            data-submit-reload="true"
                                            href="<?= $this->url('type-formation/supprimer', ['typeFormation' => $typeFormation->getId()]) ?>"
@@ -115,7 +115,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                                href="<?= $this->url('type-formation/saisie', ['typeFormation' => $typeFormationWithoutGroupe->getId()], ['query' => ['tab' => 'edition']]) ?>"
                                title="Modifier le type de formation"><i class="fas fa-pen-to-square"></i></a>
                             <?php if (!$typeFormationWithoutGroupe->getSource()->getImportable()): ?>
-                                <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer"
+                                <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer ?"
                                    data-confirm="true"
                                    data-submit-reload="true"
                                    href="<?= $this->url('type-formation/supprimer', ['typeFormation' => $typeFormationWithoutGroupe->getId()]) ?>"

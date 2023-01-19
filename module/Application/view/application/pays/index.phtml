@@ -48,7 +48,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                            href="<?= $this->url('pays/saisie', ['pays' => $pays->getId()], ['query' => ['tab' => 'edition']]) ?>"
                            title="Modifier le pays"><i class="fas fa-pen-to-square"></i></a>
                         <a class="pop-ajax" data-title="Suppression de l'établissement"
-                           data-content="Êtes-vous sur de vouloir supprimer" data-confirm="true"
+                           data-content="Êtes-vous sur de vouloir supprimer ?" data-confirm="true"
                            data-submit-reload="true"
                            href="<?= $this->url('pays/supprimer', ['pays' => $pays->getId()]) ?>"
                            title="Supprimer le pays"><i class="fas fa-trash-can"></i></a>

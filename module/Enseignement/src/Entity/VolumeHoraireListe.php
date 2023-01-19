@@ -4,6 +4,7 @@ namespace Enseignement\Entity;
 
 use Application\Entity\Db\Contrat;
 use Application\Entity\Db\Tag;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
@@ -114,6 +115,7 @@ class VolumeHoraireListe
     ];
 
     use SourceServiceAwareTrait;
+    use ContextServiceAwareTrait;
 
     /**
      * @var Service|boolean
@@ -235,7 +237,6 @@ class VolumeHoraireListe
      */
     public function match(VolumeHoraire $volumeHoraire): bool
     {
-        $var = '';
         if ($volumeHoraire->getRemove()) { // Si le volume horaire est en cours de suppression
             return false;
         }
@@ -278,7 +279,8 @@ class VolumeHoraireListe
                 if ($typeIntervention !== $this->typeIntervention) return false;
             }
         }
-        if (false !== $this->motifNonPaiement) {
+        //Uniquement en mode semestriel car en mode calendaire on ne doit pas être sur des mêmes horaires de début et de fin
+        if (false !== $this->motifNonPaiement && $this->getServiceContext()->isModaliteServicesSemestriel($volumeHoraire->getTypeVolumeHoraire()->getCode())) {
             $motifNonPaiement = $volumeHoraire->getMotifNonPaiement();
             if (true === $this->motifNonPaiement) {
                 if (null === $motifNonPaiement) return false;
@@ -286,7 +288,8 @@ class VolumeHoraireListe
                 if ($motifNonPaiement !== $this->motifNonPaiement) return false;
             }
         }
-        if (false !== $this->tag) {
+        //Uniquement en mode semestriel car en mode calendaire on ne doit pas être sur des mêmes horaires de début et de fin
+        if (false !== $this->tag && $this->getServiceContext()->isModaliteServicesSemestriel($volumeHoraire->getTypeVolumeHoraire()->getCode())) {
             $tag = $volumeHoraire->getTag();
             if (true === $this->tag) {
                 if (null === $tag) return false;
@@ -985,6 +988,9 @@ class VolumeHoraireListe
                     }
                     if ($motifNonPaiement !== false) {
                         $vh->setMotifNonPaiement($motifNonPaiement);
+                    }
+                    if ($tag !== false) {
+                        $vh->setTag($tag);
                     }
 
                 } else {

@@ -327,10 +327,10 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
     {
         return [
             'horaire-debut'             => [
-                'required' => false,
+                'required' => true,
             ],
             'horaire-fin'               => [
-                'required'   => false,
+                'required'   => true,
                 'validators' => [[
                     'name'    => 'Callback',
                     'options' => [
@@ -441,12 +441,12 @@ class SaisieCalendaireHydrator implements HydratorInterface
         $lfh->setEntityManager($this->getEntityManager());
 
 
-        $ancienHoraireDebut = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('ancien-horaire-debut'), $ho);
-        $horaireDebut = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('horaire-debut'), $ho);
+        $ancienHoraireDebut = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('ancien-horaire-debut'));
+        $horaireDebut = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('horaire-debut'));
         $object->setHoraireDebut($ancienHoraireDebut != $horaireDebut ? $ancienHoraireDebut : $horaireDebut);
 
-        $ancienHoraireFin = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('ancien-horaire-fin'), $ho);
-        $horaireFin = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('horaire-fin'), $ho);
+        $ancienHoraireFin = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('ancien-horaire-fin'));
+        $horaireFin = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('horaire-fin'));
         $object->setHoraireFin($ancienHoraireFin != $horaireFin ? $ancienHoraireFin : $horaireFin);
 
         $ancienTypeIntervention = $lfh->allToData(VolumeHoraireListe::FILTRE_TYPE_INTERVENTION, $this->getVal('ancien-type-intervention'));

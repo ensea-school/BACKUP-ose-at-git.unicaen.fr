@@ -158,6 +158,20 @@ return [
     'Enseignements et référentiel <em>Permanents</em>' => [
         'id'          => 6,
         'indicateurs' => [
+            500 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s permanent n\'a saisi aucun service <i>prévisionnels</i>',
+                'libelle_pluriel'   => '%s permanents n\'ont saisi aucun service <i>prévisionnels</i>',
+                'route'             => 'intervenant/voir',
+                'irrecevables'      => false,
+            ],
+            505 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s permanent n\'a saisi aucun service <i>réalisés</i>',
+                'libelle_pluriel'   => '%s permanents n\'ont saisi aucun service <i>réalisés</i>',
+                'route'             => 'intervenant/voir',
+                'irrecevables'      => false,
+            ],
             510 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent est en attente de validation de ses enseignements <i>prévisionnels</i>',

@@ -51,16 +51,16 @@ class Axios extends AbstractPlugin
                 }
 
                 if ($property == 'id') continue;
-                $method     = 'get' . ucfirst($property);
+
                 $foundValue = false;
-                if (method_exists($object, $method)) {
-                    $value      = $object->$method();
-                    $foundValue = true;
-                } else {
-                    $method = 'is' . ucfirst($property);
+
+                $prefixes = ['get', 'is', 'has'];
+                foreach ($prefixes as $prefix) {
+                    $method = $prefix . ucfirst($property);
                     if (method_exists($object, $method)) {
                         $value      = $object->$method();
                         $foundValue = true;
+                        break;
                     }
                 }
 

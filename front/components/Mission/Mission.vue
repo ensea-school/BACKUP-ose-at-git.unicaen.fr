@@ -1,9 +1,9 @@
 <template>
     <div :id="mission.id" class="card bg-default">
         <form @submit.prevent="submitForm">
-            <div class="card-header">
+            <div class="card-header" :class="{'bg-info':mission.valide}">
                 {{ mission.typeMission.libelle }}
-                <span class="badge bg-secondary">Du {{ mission.dateDebut }} au {{ mission.dateFin }}</span>
+                <span class="float-end">Du {{ mission.dateDebut }} au {{ mission.dateFin }}</span>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -22,7 +22,12 @@
                             </div>
                             <div class="col-md-6">
                                 <label class=" form-label">Nombre d'heures prévisionnelles</label>
-                                <div class="form-control">{{ mission.heures }}</div>
+                                <div class="input-group mb-3">
+                                    <div class="form-control">{{ heuresLib }}</div>
+                                    <button onclick="alert('non implémenté')" class="input-group-btn btn btn-secondary">Suivi</button>
+                                </div>
+
+                                <!--<div class="form-control">{{ mission.heures }}</div>-->
                             </div>
                         </div>
                         <div class="row">
@@ -36,15 +41,35 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <input v-if="mission.canEdit" type="submit" class="btn btn-primary" value="Modifier la mission"/>
-                                &nbsp;
-                                <a class="btn btn-danger" @click="deleteMission">Suppression de la mission</a>
+                                <a v-if="mission.canEdit" :href="saisieUrl" class="btn btn-primary" @click.prevent="saisie">Modifier la mission</a>
+                                <a class="btn btn-danger" @click.prevent="devalidation">Dévalidation de la mission</a>
+                                <!--<a class="btn btn-danger" @click="deleteMission">Suppression de la mission</a>-->
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <!-- Suivi -->
-                        <icon name="thumbs-up" /> Créé le {{ mission.histoCreation }} par <utilisateur :nom="mission.histoCreateur.displayName" :mail="mission.histoCreateur.email" />
+                        <div>
+                            <label class=" form-label">Suivi</label>
+                        </div>
+                        <div>
+                            <icon name="thumbs-up"/>
+                            Créé le {{ mission.histoCreation }} par
+                            <utilisateur :nom="mission.histoCreateur.displayName" :mail="mission.histoCreateur.email"/>
+                        </div>
+                        <div>
+                            <icon :name="mission.valide ? 'thumbs-up' : 'thumbs-down'"/>
+                            {{ validation }}
+                            <utilisateur v-if="mission.validation.histoCreateur" :nom="mission.validation.histoCreateur.displayName"
+                                         :mail="mission.validation.histoCreateur.email"/>
+                        </div>
+                        <div>
+                            <icon :name="mission.contrat ? 'thumbs-up' : 'thumbs-down'"/>
+                            {{ mission.contrat ? 'Contrat établi' : 'Pas de contrat' }}
+                        </div>
+                        <div>
+                            Aucune heure réalisée
+                        </div>
                     </div>
                 </div>
             </div>
@@ -54,8 +79,9 @@
 
 <script>
 
-import utilisateur from "@components/Application/Utilisateur.vue";
-import icon from "@components/Application/Icon.vue";
+import utilisateur from "@/components/Application/Utilisateur.vue";
+import icon from "@/components/Application/Icon.vue";
+import {e} from "../../../public/dist/assets/vendor-5a215836";
 
 export default {
     name: 'Mission',
@@ -69,24 +95,62 @@ export default {
     data()
     {
         return {
-            mission: this.mission
+            mission: this.mission,
+            saisieUrl: Util.url('mission/saisie/:mission', {mission: this.mission.id}),
         };
+    },
+    computed: {
+        heuresLib: function () {
+            if (this.mission.heures === null || this.mission.heures === 0) {
+                return 'Aucune heure saisie';
+            } else if (this.mission.heures - this.mission.heuresValidees == 0) {
+                return this.mission.heures + ' heures validés';
+            } else if (this.mission.heuresValidees == 0) {
+                return this.mission.heures + ' heures à valider';
+            } else {
+                return this.mission.heures + ' heures dont ' + (this.mission.heures - this.mission.heuresValidees) + ' à valider';
+            }
+        },
+        validation: function () {
+            if (this.mission.validation.id === undefined) {
+                return 'A valider';
+            } else if (this.mission.validation.id === null) {
+                return 'Autovalidée';
+            } else {
+                return 'Validation du ' + this.mission.validation.histoCreation + ' par ';
+            }
+        }
     },
     methods: {
         submitForm(event)
         {
-            axios.post(
-                Util.url('mission/modifier'),
-                this.mission,
-            ).then(response => {
-                this.mission = response.data;
-            });
+            // axios.post(
+            //     Util.url('mission/modifier'),
+            //     this.mission,
+            // ).then(response => {
+            //     this.mission = response.data;
+            // });
         },
         deleteMission(mission)
         {
             this.$emit('delete', this.mission);
-        }
+        },
+        devalidation()
+        {
+
+        },
+        saisie(event)
+        {
+            modAjax(event.target, (widget) => {
+                axios.get(
+                    Util.url("mission/mission/:mission", {mission: this.mission.id})
+                ).then(response => {
+                    this.mission = response.data;
+                });
+            });
+        },
     }
+
 }
 </script>
 

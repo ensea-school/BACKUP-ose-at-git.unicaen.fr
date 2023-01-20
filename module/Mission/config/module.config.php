@@ -43,10 +43,15 @@ return [
                     'controller' => MissionController::class,
                     'action'     => 'liste',
                 ],
-                'modifier'  => [
-                    'route'      => '/modifier',
+                'mission'   => [
+                    'route'      => '/mission/:mission',
                     'controller' => MissionController::class,
-                    'action'     => 'modifier',
+                    'action'     => 'mission',
+                ],
+                'saisie'    => [
+                    'route'      => '/saisie[/:mission]',
+                    'controller' => MissionController::class,
+                    'action'     => 'saisie',
                 ],
                 'supprimer' => [
                     'route'      => '/supprimer',
@@ -159,15 +164,15 @@ return [
     'guards' => [
         [
             'controller' => MissionController::class,
-            'action'     => ['index', 'liste'],
+            'action'     => ['index', 'liste', 'mission'],
             'privileges' => [
                 Privileges::MISSION_VISUALISATION,
             ],
-            'assertion'  => Assertion\MissionAssertion::class,
+            //'assertion'  => Assertion\MissionAssertion::class,
         ],
         [
             'controller' => MissionController::class,
-            'action'     => ['modifier'],
+            'action'     => ['saisie'],
             'privileges' => [
                 Privileges::MISSION_EDITION,
             ],

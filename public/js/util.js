@@ -17,7 +17,6 @@ axios.interceptors.request.use(config => {
 });
 
 axios.interceptors.response.use(response => {
-    console.log('coucou');
     response.messages = response.data.messages;
     response.data = response.data.data;
 

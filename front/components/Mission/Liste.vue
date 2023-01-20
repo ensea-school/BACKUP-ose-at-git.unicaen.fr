@@ -1,5 +1,5 @@
 <template>
-    <mission v-for="mission in missions" @delete="deleteMission" :key="mission.id" :options="options" :mission="mission"></mission>
+    <mission v-for="mission in missions" @delete="deleteMission" :key="mission.id" :mission="mission"></mission>
     <a v-if="canAddMission" class="btn btn-primary" @click="addMission">Ajout d'une nouvelle mission</a>
 </template>
 

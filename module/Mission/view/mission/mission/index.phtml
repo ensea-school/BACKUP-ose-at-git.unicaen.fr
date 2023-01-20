@@ -3,7 +3,6 @@
  * @var $this              \Application\View\Renderer\PhpRenderer
  * @var $intervenant       \Application\Entity\Db\Intervenant
  * @var $canAddMission     bool
- * @var $missionForm       \Mission\Form\MissionForm
  */
 
 use Application\Entity\Db\WfEtape;
@@ -18,11 +17,6 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 echo $this->vue('mission/liste', [
     'intervenant'   => $intervenant->getId(),
     'canAddMission' => $canAddMission,
-    'options'       => [
-        'typeMission'     => $missionForm->get('typeMission')->getValueOptions(),
-        'structure'       => $missionForm->get('structure')->getValueOptions(),
-        'missionTauxRemu' => $missionForm->get('missionTauxRemu')->getValueOptions(),
-    ],
 ]);
 
 echo '<br />';

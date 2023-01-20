@@ -32,7 +32,39 @@ class Axios extends AbstractPlugin
 
 
 
-    public function extract($object, array $properties = []): ?array
+    public function send(array $data): JsonModel
+    {
+        /** @var FlashMessenger $flashMessenger */
+        $flashMessenger = $this->controller->flashMessenger();
+
+        $namespaces = [
+            $flashMessenger::NAMESPACE_SUCCESS,
+            $flashMessenger::NAMESPACE_WARNING,
+            $flashMessenger::NAMESPACE_ERROR,
+            $flashMessenger::NAMESPACE_INFO,
+        ];
+
+        $messages = [];
+        foreach ($namespaces as $namespace) {
+            if ($flashMessenger->hasCurrentMessages($namespace)) {
+                $messages[$namespace] = $flashMessenger->getCurrentMessages($namespace);
+                $flashMessenger->clearCurrentMessages($namespace);
+            }
+        }
+
+        $jsonData = [
+            'data'     => $data,
+            'messages' => $messages,
+        ];
+
+        $model = new JsonModel($jsonData);
+
+        return $model;
+    }
+
+
+
+    public static function extract($object, array $properties = []): ?array
     {
         if (!$object) {
             return null;
@@ -69,7 +101,7 @@ class Axios extends AbstractPlugin
                         if ($value instanceof \DateTime) {
                             $value = $value->format(Util::DATE_FORMAT);
                         } else {
-                            $value = $this->extract($value, $subProperties);
+                            $value = self::extract($value, $subProperties);
                         }
                     }
                     $result[$property] = $value;
@@ -80,37 +112,5 @@ class Axios extends AbstractPlugin
         }
 
         return $result;
-    }
-
-
-
-    public function send(array $data): JsonModel
-    {
-        /** @var FlashMessenger $flashMessenger */
-        $flashMessenger = $this->controller->flashMessenger();
-
-        $namespaces = [
-            $flashMessenger::NAMESPACE_SUCCESS,
-            $flashMessenger::NAMESPACE_WARNING,
-            $flashMessenger::NAMESPACE_ERROR,
-            $flashMessenger::NAMESPACE_INFO,
-        ];
-
-        $messages = [];
-        foreach ($namespaces as $namespace) {
-            if ($flashMessenger->hasCurrentMessages($namespace)) {
-                $messages[$namespace] = $flashMessenger->getCurrentMessages($namespace);
-                $flashMessenger->clearCurrentMessages($namespace);
-            }
-        }
-
-        $jsonData = [
-            'data'     => $data,
-            'messages' => $messages,
-        ];
-
-        $model = new JsonModel($jsonData);
-
-        return $model;
     }
 }

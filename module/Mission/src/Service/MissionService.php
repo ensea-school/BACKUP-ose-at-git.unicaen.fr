@@ -2,6 +2,7 @@
 
 namespace Mission\Service;
 
+use Application\Controller\Plugin\Axios;
 use Application\Entity\Db\Intervenant;
 use Application\Hydrator\GenericHydrator;
 use Application\Service\AbstractEntityService;
@@ -41,6 +42,64 @@ class MissionService extends AbstractEntityService
     public function getAlias(): string
     {
         return 'm';
+    }
+
+
+
+    /**
+     * @param Intervenant $intervenant
+     *
+     * @return array|Mission[]
+     */
+    public function missionsByIntervenant(Intervenant $intervenant): array
+    {
+        $dql = "
+        SELECT 
+          m, tm, str, tr, valid, vh, ctr
+        FROM 
+          " . Mission::class . " m
+          JOIN m.typeMission tm
+          JOIN m.structure str
+          JOIN m.missionTauxRemu tr
+          LEFT JOIN m.validations valid
+          LEFT JOIN m.volumesHoraires vh
+          LEFT JOIN vh.contrat ctr
+        WHERE 
+            m.histoDestruction IS NULL 
+            AND m.intervenant = :intervenant
+        ";
+
+        $missions = $this->getEntityManager()
+            ->createQuery($dql)
+            ->setParameters(compact('intervenant'))
+            ->getResult();
+
+        return $missions;
+    }
+
+
+
+    public function missionWs(Mission $mission)
+    {
+        $json = Axios::extract($mission, [
+            'typeMission',
+            'dateDebut',
+            'dateFin',
+            'structure',
+            'missionTauxRemu',
+            'description',
+            'histoCreation',
+            ['histoCreateur', ['email', 'displayName']],
+            'heures',
+            'heuresValidees',
+            'contrat',
+            'valide',
+            ['validation', ['histoCreation', 'histoCreateur']],
+        ]);
+
+        $json['canEdit'] = true;
+
+        return $json;
     }
 
 }

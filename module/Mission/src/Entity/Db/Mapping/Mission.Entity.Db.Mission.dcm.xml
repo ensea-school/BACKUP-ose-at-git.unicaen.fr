@@ -43,6 +43,8 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
+        <one-to-many field="volumesHoraires" target-entity="Mission\Entity\Db\VolumeHoraireMission" mapped-by="mission">
+        </one-to-many>
 
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">

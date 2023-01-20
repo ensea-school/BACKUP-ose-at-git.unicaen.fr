@@ -35,12 +35,15 @@ class Mission implements HistoriqueAwareInterface
 
     private Collection         $validations;
 
+    private Collection         $volumesHoraires;
+
 
 
     public function __construct()
     {
-        $this->etudiants   = new ArrayCollection();
-        $this->validations = new ArrayCollection();
+        $this->etudiants       = new ArrayCollection();
+        $this->validations     = new ArrayCollection();
+        $this->volumesHoraires = new ArrayCollection();
     }
 
 
@@ -158,13 +161,55 @@ class Mission implements HistoriqueAwareInterface
 
     public function getHeures(): ?float
     {
-        return null;
+        $heures = null;
+
+        /** @var VolumeHoraireMission[] $vhs */
+        $vhs = $this->volumesHoraires;
+        foreach ($vhs as $vh) {
+            if ($vh->estNonHistorise() && $vh->getTypeVolumeHoraire()->isPrevu()) {
+                if ($heures === null) {
+                    $heures = 0;
+                }
+                $heures += $vh->getHeures();
+            }
+        }
+
+        return $heures;
     }
 
 
 
-    public function setHeures(?float $heures)
+    public function getHeuresValidees(): ?float
     {
+        $heures = null;
+
+        /** @var VolumeHoraireMission[] $vhs */
+        $vhs = $this->volumesHoraires;
+        foreach ($vhs as $vh) {
+            if ($vh->estNonHistorise() && $vh->getTypeVolumeHoraire()->isPrevu() && $vh->isValide()) {
+                if ($heures === null) {
+                    $heures = 0;
+                }
+                $heures += $vh->getHeures();
+            }
+        }
+
+        return $heures;
+    }
+
+
+
+    public function setHeures(float $heures): self
+    {
+        $oldHeures = $this->getHeures() ?: 0;
+        $newHeures = $heures - $oldHeures;
+
+        if ($newHeures != 0) {
+
+        }
+
+        var_dump($newHeures);
+
         return $this;
     }
 
@@ -252,5 +297,49 @@ class Mission implements HistoriqueAwareInterface
                 if ($validation->estNonHistorise()) return $validation;
             }
         }
+    }
+
+
+
+    /**
+     * @return Collection|VolumeHoraireMission[]
+     */
+    public function getVolumeHoraires(): Collection
+    {
+        return $this->volumesHoraires;
+    }
+
+
+
+    public function addVolumeHoraire(VolumeHoraireMission $volumeHoraireMission): self
+    {
+        $this->volumesHoraires[] = $volumeHoraireMission;
+
+        return $this;
+    }
+
+
+
+    public function removeVolumeHoraire(VolumeHoraireMission $volumeHoraireMission): self
+    {
+        $this->volumesHoraires->removeElement($volumeHoraireMission);
+
+        return $this;
+    }
+
+
+
+    public function hasContrat(): bool
+    {
+        /** @var VolumeHoraireMission[] $vhs */
+        $vhs = $this->getVolumeHoraires();
+
+        foreach ($vhs as $vh) {
+            if ($vh->estNonHistorise() && $vh->getContrat() && $vh->getContrat()->estNonHistorise()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -46,6 +46,7 @@ $this->headTitle()->append($title = "Statuts des intervenants");
 </div>
 
 <?php if ($canEdit): ?>
+    <br>
     <a class="btn btn-primary" href="<?= $this->url('statut/saisie') ?>" title="Ajouter un statut">
         <span class="fas fa-plus"></span> Ajouter un statut
     </a>

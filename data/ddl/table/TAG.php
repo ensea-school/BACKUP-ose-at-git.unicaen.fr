@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => 'TAG_SEQ',
+    'sequence'    => 'TAG_ID_SEQ',
     'columns'     => [
         'CODE'                  => [
             'name'        => 'CODE',

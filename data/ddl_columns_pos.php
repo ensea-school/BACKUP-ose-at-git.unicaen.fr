@@ -1197,6 +1197,8 @@ return [
         'FORMATION',
         'SOURCE_ID',
         'SOURCE_CODE',
+        'MOTIF_NON_PAIEMENT_ID',
+        'TAG_ID',
     ],
     'SEUIL_CHARGE'                   => [
         'ID',
@@ -1876,6 +1878,7 @@ return [
         'AUTO_VALIDATION',
         'HORAIRE_DEBUT',
         'HORAIRE_FIN',
+        'TAG_ID',
     ],
     'VOLUME_HORAIRE_CHARGE'          => [
         'ID',
@@ -2161,6 +2164,18 @@ return [
         'INTERVENANT_ID',
         'STATUT_CODE',
         'STATUT_DOSSIER_CODE',
+    ],
+    'TAG'                            => [
+        'ID',
+        'CODE',
+        'LIBELLE_COURT',
+        'LIBELLE_LONG',
+        'HISTO_CREATION',
+        'HISTO_CREATEUR_ID',
+        'HISTO_MODIFICATION',
+        'HISTO_MODIFICATEUR_ID',
+        'HISTO_DESTRUCTION',
+        'HISTO_DESTRUCTEUR_ID',
     ],
 ];
 

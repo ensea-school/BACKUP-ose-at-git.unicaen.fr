@@ -212,7 +212,7 @@ class ReferentielsViewHelper extends AbstractViewHelper
             }
         }
 
-        $out .= $this->renderActionSaisie();
+        $out .= $this->renderActionSaisie() . "<br/><br/>";
 
         return $out;
     }

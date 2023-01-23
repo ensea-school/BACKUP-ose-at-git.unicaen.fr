@@ -1,6 +1,7 @@
 config.local.php
 config/autoload/*.local.php
 vendor/*
+node_modules/*
 cache/*
 .idea
 deploy.log

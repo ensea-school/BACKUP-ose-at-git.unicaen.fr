@@ -151,6 +151,7 @@ WHERE
   vhr.histo_destruction IS NULL
   AND sr.histo_destruction IS NULL
   AND vhr.heures <> 0
+  AND sr.motif_non_paiement_id IS NULL
   AND sr.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, sr.intervenant_id )
 
 ORDER BY

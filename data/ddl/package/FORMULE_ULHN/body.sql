@@ -475,7 +475,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ULHN AS
         HORAIRE_FIN,
         TYPE_INTERVENTION_CODE,
         TAUX_SERVICE_DU,
-        TAUX_SERVICE_COMPL
+        TAUX_SERVICE_COMPL,
+        NULL param_1,
+        NULL param_2,
+        NULL param_3,
+        NULL param_4,
+        NULL param_5
       FROM
         v_formule_volume_horaire
       ORDER BY

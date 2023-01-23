@@ -7,6 +7,7 @@ use Application\Entity\Db\Employeur;
 use Application\Form\Employeur\Traits\EmployeurSaisieFormAwareTrait;
 use Application\Service\Traits\EmployeurServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
+use UnicaenApp\View\Model\MessengerViewModel;
 
 /**
  * Description of EmployeurController
@@ -21,19 +22,21 @@ class EmployeurController extends AbstractController
 
     public function indexAction()
     {
-        $critere = $this->params()->fromPost('critere');
+        $critere    = $this->params()->fromPost('critere');
         $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere, 1000);
 
 
         return compact('employeurs');
     }
 
+
+
     public function saisieAction()
     {
         $employeur = $this->getEvent()->getParam('employeur');
 
         if (empty($employeur)) {
-            $title = "Ajout d'un nouvel employeur";
+            $title     = "Ajout d'un nouvel employeur";
             $employeur = $this->getServiceEmployeur()->newEntity();
         } else {
             $title = "Édition d'un employeur";
@@ -57,10 +60,16 @@ class EmployeurController extends AbstractController
         return compact('form', 'title');
     }
 
+
+
     public function supprimerAction()
     {
-        return true;
+        $employeur = $this->getEvent()->getParam('employeur');
+        $this->getServiceEmployeur()->delete($employeur, true);
+
+        return new MessengerViewModel();
     }
+
 
 
     public function rechercheAction()
@@ -78,11 +87,12 @@ class EmployeurController extends AbstractController
     }
 
 
+
     public function rechercheJsonAction()
     {
         $critere = $this->params()->fromPost('critere');
 
-        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere);
+        $employeurs     = $this->getServiceEmployeur()->rechercheEmployeur($critere);
         $employeursJson = json_encode($employeurs);
 
         return $employeursJson;

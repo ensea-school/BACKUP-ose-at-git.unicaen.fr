@@ -1,4 +1,4 @@
-create or replace PACKAGE "OSE_FORMULE" AS
+CREATE OR REPLACE PACKAGE "OSE_FORMULE" AS
 
   TYPE t_intervenant IS RECORD (
     -- identifiants

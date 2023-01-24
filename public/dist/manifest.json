@@ -1,17 +1,10 @@
 {
-  "main.css": {
-    "file": "assets/main-cc68324d.css",
-    "src": "main.css"
-  },
   "main.js": {
-    "file": "assets/main-d6bc872e.js",
+    "file": "assets/main-a470d286.js",
     "src": "main.js",
     "isEntry": true,
     "imports": [
       "_vendor-eb9f4386.js"
-    ],
-    "css": [
-      "assets/main-cc68324d.css"
     ]
   },
   "_vendor-eb9f4386.js": {

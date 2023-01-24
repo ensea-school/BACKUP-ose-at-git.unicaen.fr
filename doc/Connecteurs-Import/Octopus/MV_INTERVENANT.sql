@@ -66,6 +66,24 @@ WITH i AS (
                AND icto.individu_id IS NULL
                --AND (vinds.t_doctorant='N' OR vinds.individu_id IS NULL)
                AND inds.c_source IN ('HARP', 'OCTO', 'SIHAM')
+
+             UNION ALL
+
+             SELECT uni.c_individu_chaine                                           code,
+                    'ETUDIANT'                                                      z_statut_id,
+					'etudiant'                                                      z_type,
+                    uni.c_individu_chaine || '-etudiant'                            source_code,
+                    COALESCE(inds.d_debut, to_date('01/01/1900', 'dd/mm/YYYY'))     validite_debut,
+                    CASE
+                    	WHEN inds.d_fin = to_date('01/09/2021', 'dd/mm/YYYY') THEN to_date('31/08/2021', 'dd/mm/YYYY')
+                    	ELSE COALESCE(inds.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) END   validite_fin,
+                    NULL 															fin_affectation_siham
+             FROM octo.individu_unique@octoprod uni
+                      JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
+   					  LEFT JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
+             WHERE inds.d_debut - 184 <= SYSDATE
+               AND inds.t_etudiant = 'O'
+               AND inds.c_source IN ('APO', 'OCTO')
          ) t
 
 
@@ -283,10 +301,6 @@ FROM i
          LEFT JOIN octo.pays@octoprod pays ON pays.id = adr.pays_id
     --On récupére le téléphone pro principal de l'indivdu
          LEFT JOIN telephone_pro_principal telpro ON telpro.individu_id = induni.c_individu_chaine
-    -- On ne prend que les comptes qui ne sont pas étudiants
-    --LEFT JOIN octo.individu_compte@octoprod indc
-    --        ON indc.individu_id = induni.c_individu_chaine AND not regexp_like(ldap_uid, 'e[0-9]{8}') AND
-    --         indc.statut_id = 1
          LEFT JOIN compte ON compte.individu_id = induni.c_individu_chaine
     --On récupére la discipline adaptée directement dans Octopus
          LEFT JOIN cnua cnua ON cnua.individu_id = induni.c_individu_chaine

@@ -218,7 +218,12 @@ $.widget("unicaen.popAjax", {
             this._trigger('error', null, this);
         } else {
             if (this.options.submitEvent) {
-                $("body").trigger(this.options.submitEvent, this);
+                if (this.options.submitEvent instanceof Function) {
+                    this.options.submitEvent(this);
+                    this.hide();
+                } else {
+                    $("body").trigger(this.options.submitEvent, this);
+                }
             }
             if (this.options.submitClose) {
                 this.hide();
@@ -291,3 +296,18 @@ $.widget("unicaen.popAjax", {
 $(function () {
     WidgetInitializer.add('pop-ajax', 'popAjax');
 });
+
+
+
+function popAjax(element, onSubmit)
+{
+    $(element).popAjax();
+
+    var widget = $(element).data('unicaenPopAjax');
+    if (onSubmit) {
+        widget.options.submitEvent = onSubmit;
+    }
+    widget.show();
+
+    return widget;
+}

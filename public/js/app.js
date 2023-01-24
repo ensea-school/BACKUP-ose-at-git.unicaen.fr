@@ -14,7 +14,7 @@ $(function ()
     {
         WidgetInitializer.includeJs(Util.url('vendor/DataTables-1.12.1/js/jquery.dataTables.min.js'));
         WidgetInitializer.includeJs(Util.url('vendor/DataTables-1.12.1/js/dataTables.bootstrap5.min.js'));
-        WidgetInitializer.includeJs(Util.url('table-sort/widget.js'));
+        WidgetInitializer.includeJs(Util.url('js/table-sort.js'));
 
         (function () {
 

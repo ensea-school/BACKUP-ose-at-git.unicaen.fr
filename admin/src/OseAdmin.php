@@ -263,6 +263,20 @@ class OseAdmin
 
 
 
+    public function getEnv(): string
+    {
+        return getenv('APPLICATION_ENV') ?: 'dev';
+    }
+
+
+
+    public function inDev(): bool
+    {
+        return 'dev' == $this->getEnv();
+    }
+
+
+
     public function exec($args)
     {
         $this->console->passthru("php " . $this->getOseDir() . "/public/index.php " . $args);

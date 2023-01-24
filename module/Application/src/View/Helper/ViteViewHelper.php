@@ -62,6 +62,17 @@ class ViteViewHelper extends AbstractHtmlElement
 
 
 
+    public function useNode(): bool
+    {
+        if (\AppConfig::inDev()) {
+            return \AppConfig::get('dev', 'hot-loading', true);
+        } else {
+            return false;
+        }
+    }
+
+
+
     public function getConfig(string $param)
     {
         return $this->config[$param] ?: null;
@@ -78,36 +89,10 @@ class ViteViewHelper extends AbstractHtmlElement
 
 
 
-    public function isDev(string $entry): bool
-    {
-        return true;
-        // This method is very useful for the local server
-        // if we try to access it, and by any means, didn't started Vite yet
-        // it will fallback to load the production files from manifest
-        // so you still navigate your site as you intended!
-
-        static $exists = null;
-        if ($exists !== null) {
-            return $exists;
-        }
-        $url    = $this->getConfig('host') . '/' . $entry;
-        $handle = curl_init($url);
-        curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($handle, CURLOPT_NOBODY, true);
-
-        curl_exec($handle);
-        $error = curl_errno($handle);
-        curl_close($handle);
-
-        return $exists = !$error;
-    }
-
-
-
     public function head(): string
     {
         $h = '';
-        if (\AppConfig::inDev()) {
+        if ($this->useNode()) {
             $url = $this->getView()->basePath($this->getConfig('vueUrl'));
             $h   = '<script type="text/javascript" src="' . $url . '"></script>';
         }
@@ -140,7 +125,7 @@ class ViteViewHelper extends AbstractHtmlElement
 
     protected function jsTag(string $entry): string
     {
-        $url = $this->isDev($entry)
+        $url = $this->useNode()
             ? $this->getConfig('host') . '/' . $entry
             : $this->assetUrl($entry);
 
@@ -155,7 +140,7 @@ class ViteViewHelper extends AbstractHtmlElement
 
     protected function jsPreloadImports(string $entry): string
     {
-        if ($this->isDev($entry)) {
+        if ($this->useNode()) {
             return '';
         }
 
@@ -172,7 +157,7 @@ class ViteViewHelper extends AbstractHtmlElement
     protected function cssTag(string $entry): string
     {
         // not needed on dev, it's inject by Vite
-        if ($this->isDev($entry)) {
+        if ($this->useNode()) {
             return '';
         }
 

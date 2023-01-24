@@ -1,11 +1,15 @@
 // https://vitejs.dev/config/#build-polyfillmodulepreload
-import 'vite/modulepreload-polyfill'
+import 'vite/modulepreload-polyfill';
 
 // Styles
-import './styles'
+//import.meta.glob('./styles/**/*.scss', {eager: true});
+import.meta.glob('./styles/**/*.css', {eager: true});
+
+// Scripts JS
+import.meta.glob('./scripts/**/*.js', {eager: true});
 
 // Vue
-import {createApp} from 'vue'
+import {createApp} from 'vue';
 
 // First let's load all components that should be available to in-browser template compilation
 

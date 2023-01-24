@@ -139,11 +139,11 @@ class AppConfig
             array_unshift($modules, 'BjyAuthorize'); // ne charge BjyAuthorize QUE si on n'est pas en mode console
         }
 
-        if ('dev' == $env) {
+        if (self::inDev()) {
             $modules[] = 'Laminas\DeveloperTools';
         }
 
-        if (self::inConsole() || 'dev' == $env) {
+        if (self::inConsole() || self::inDev()) {
             $modules[] = 'UnicaenCode';
         }
 
@@ -154,15 +154,15 @@ class AppConfig
             'modules'                 => $modules,
             'module_listener_options' => [
                 'config_glob_paths'        => [
-                    'config/autoload/{,*.}{global,local' . ('dev' == $env ? ',dev' : '') . '}.php',
+                    'config/autoload/{,*.}{global,local' . (self::inDev() ? ',dev' : '') . '}.php',
                 ],
                 'module_paths'             => [
                     './module',
                     './vendor',
                 ],
                 'cache_dir'                => 'cache/',
-                'config_cache_enabled'     => ('prod' == $env && !self::inConsole()),
-                'module_map_cache_enabled' => ('prod' == $env && !self::inConsole()),
+                'config_cache_enabled'     => (self::inProd() && !self::inConsole()),
+                'module_map_cache_enabled' => (self::inProd() && !self::inConsole()),
             ],
         ];
     }

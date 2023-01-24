@@ -12,8 +12,6 @@ $pages            = $navigationHelper->getContainer();
 
 $version = $this->appInfos()->getConfig()->get('version');
 
-$inDev = (getenv('APPLICATION_ENV') ?: 'dev') == 'dev';
-
 echo $this->doctype();
 ?>
 
@@ -29,8 +27,6 @@ echo $this->doctype();
 
     <!-- Dépendances -->
     <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.structure.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.theme.min.css') ?>" media="all" rel="stylesheet" type="text/css">
     <link href="<?= $this->basePath('/vendor/open-sans-gh-pages/open-sans.css') ?>" media="all" rel="stylesheet" type="text/css">
     <link href="<?= $this->basePath('/vendor/font-awesome-6.0.0/css/all.min.css') ?>" media="all" rel="stylesheet" type="text/css">
     <link href="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/css/bootstrap-select.min.css') ?>" media="all" rel="stylesheet" type="text/css">

@@ -5,7 +5,9 @@ namespace Mission\Controller;
 use Application\Constants;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
@@ -20,6 +22,7 @@ class MissionController extends AbstractController
 {
     use MissionServiceAwareTrait;
     use MissionFormAwareTrait;
+    use ContextServiceAwareTrait;
 
 
     /**
@@ -54,6 +57,8 @@ class MissionController extends AbstractController
             $missions[$k] = $this->getServiceMission()->missionWs($mission);
         }
 
+        $this->flashMessenger()->addSuccessMessage('coucou c\'est réussi!!!');
+
         return $this->axios()->send($missions);
     }
 
@@ -64,7 +69,7 @@ class MissionController extends AbstractController
      *
      * @return JsonModel
      */
-    public function missionAction()
+    public function getAction()
     {
         /** @var Mission $mission */
         $mission = $this->getEvent()->getParam('mission');
@@ -74,37 +79,67 @@ class MissionController extends AbstractController
 
 
 
+    public function ajoutAction()
+    {
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $mission = $this->getServiceMission()->newEntity();
+        $mission->setIntervenant($intervenant);
+
+        return $this->saisieAction($mission);
+    }
+
+
+
     /**
      * Formulaire de saisie
      *
      * @return array
      */
-    public function saisieAction()
+    public function saisieAction(?Mission $mission = null)
     {
-        /** @var Mission $mission */
-        $mission = $this->getEvent()->getParam('mission');
+        if (!$mission) {
+            /** @var Mission $mission */
+            $mission = $this->getEvent()->getParam('mission');
 
-        if ($mission) {
             $title = 'Modification d\'une mission';
         } else {
-            $title   = 'Ajout d\'une mission';
-            $mission = $this->getServiceMission()->newEntity();
+            $title = 'Ajout d\'une mission';
         }
 
         $form = $this->getFormMission();
-        $form->remove('structure');
+
+        if ($this->getServiceContext()->getStructure()) {
+            $form->remove('structure');
+        }
         $form->bindRequestSave($mission, $this->getRequest(), function ($mission) {
             $this->getServiceMission()->save($mission);
         });
 
-        return compact('form', 'title', 'mission');
+
+        $vm = new ViewModel();
+        $vm->setTemplate('mission/saisie');
+        $vm->setVariables(compact('form', 'title', 'mission'));
+
+        return $vm;
     }
 
 
 
     public function supprimerAction()
     {
-        /** @todo */
+        /** @var Mission $mission */
+        $mission = $this->getEvent()->getParam('mission');
+
+        try {
+            //$this->getServiceMission()->delete($mission);
+            $this->flashMessenger()->addSuccessMessage("Mission supprimée avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        }
+
+        return $this->axios()->send([]);
     }
 
 

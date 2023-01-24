@@ -297,6 +297,8 @@ class Mission implements HistoriqueAwareInterface
                 if ($validation->estNonHistorise()) return $validation;
             }
         }
+
+        return null;
     }
 
 

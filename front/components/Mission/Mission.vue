@@ -43,7 +43,9 @@
                             <div class="col-md-12">
                                 <a v-if="mission.canEdit" :href="saisieUrl" class="btn btn-primary" @click.prevent="saisie">Modifier la mission</a>
                                 <a class="btn btn-danger" @click.prevent="devalidation">Dévalidation de la mission</a>
-                                <!--<a class="btn btn-danger" @click="deleteMission">Suppression de la mission</a>-->
+                                <a class="btn btn-danger" :href="supprimerUrl" data-title="Suppression de la mission"
+                                   data-content="Êtes-vous sur de vouloir supprimer la mission ?"
+                                   data-confirm="true" @click.prevent="supprimer">Suppression de la mission</a>
                             </div>
                         </div>
                     </div>
@@ -60,7 +62,7 @@
                         <div>
                             <icon :name="mission.valide ? 'thumbs-up' : 'thumbs-down'"/>
                             {{ validation }}
-                            <utilisateur v-if="mission.validation.histoCreateur" :nom="mission.validation.histoCreateur.displayName"
+                            <utilisateur v-if="mission.validation && mission.validation.histoCreateur" :nom="mission.validation.histoCreateur.displayName"
                                          :mail="mission.validation.histoCreateur.email"/>
                         </div>
                         <div>
@@ -74,14 +76,15 @@
                 </div>
             </div>
         </form>
+        <button @click="test">Test</button>
     </div>
 </template>
 
 <script>
 
+import Toaster from "@/scripts/Toaster";
 import utilisateur from "@/components/Application/Utilisateur.vue";
 import icon from "@/components/Application/Icon.vue";
-import {e} from "../../../public/dist/assets/vendor-5a215836";
 
 export default {
     name: 'Mission',
@@ -97,6 +100,7 @@ export default {
         return {
             mission: this.mission,
             saisieUrl: Util.url('mission/saisie/:mission', {mission: this.mission.id}),
+            supprimerUrl: Util.url("mission/supprimer/:mission", {mission: this.mission.id}),
         };
     },
     computed: {
@@ -112,7 +116,7 @@ export default {
             }
         },
         validation: function () {
-            if (this.mission.validation.id === undefined) {
+            if (this.mission.validation === null) {
                 return 'A valider';
             } else if (this.mission.validation.id === null) {
                 return 'Autovalidée';
@@ -122,35 +126,36 @@ export default {
         }
     },
     methods: {
-        submitForm(event)
-        {
-            // axios.post(
-            //     Util.url('mission/modifier'),
-            //     this.mission,
-            // ).then(response => {
-            //     this.mission = response.data;
-            // });
-        },
-        deleteMission(mission)
-        {
-            this.$emit('delete', this.mission);
-        },
-        devalidation()
-        {
-
-        },
         saisie(event)
         {
             modAjax(event.target, (widget) => {
                 axios.get(
-                    Util.url("mission/mission/:mission", {mission: this.mission.id})
+                    Util.url("mission/get/:mission", {mission: this.mission.id})
                 ).then(response => {
                     this.mission = response.data;
                 });
             });
         },
-    }
+        supprimer(event)
+        {
+            popAjax(event.target, (widget) => {
+                this.$emit('supprimer', this.mission);
+                Toaster.toast();
+            });
+        },
+        valider()
+        {
 
+        },
+        devalider()
+        {
+
+        },
+        test()
+        {
+            Toaster.toast();
+        }
+    }
 }
 </script>
 

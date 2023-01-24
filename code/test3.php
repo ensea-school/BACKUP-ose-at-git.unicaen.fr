@@ -9,48 +9,15 @@
  */
 ?>
 <div class="res">
+    <?php
 
+
+    //return true;
+    // This method is very useful for the local server
+    // if we try to access it, and by any means, didn't started Vite yet
+    // it will fallback to load the production files from manifest
+    // so you still navigate your site as you intended!
+
+
+    ?>
 </div>
-<script type="text/javascript">
-
-    Util.ajax = function (params) {
-
-        if (params.type === undefined) {
-            params.type = 'POST';
-        }
-
-        params.url = Util.url(params.url);
-
-        // var getArgs = data ? $.param(data) : null;
-        // return Url.getBase() + route + (getArgs ? '?' + getArgs : '');
-        //
-        // params.url = Url.getBase().
-
-    };
-
-
-
-    $(function () {
-        console.clear();
-
-        let route = 'mission/liste/:intervenant';
-        let params = {intervenant: '1000000000'};
-        //let query = {order: 'ASC'};
-        let query = undefined;
-
-        console.log(Util.url(route, params, query));
-        /*
-                $.ajax({
-                    type: 'POST',
-                    //url: '/mission/liste/:intervenant',
-                    url: '/mission/liste/1000000000',
-                    urlParams: {intervenant: 1000000000},
-                    data: this.mission,
-                    success: function (response) {
-                        console.log(response);
-                    }
-                });
-        */
-
-    });
-</script>

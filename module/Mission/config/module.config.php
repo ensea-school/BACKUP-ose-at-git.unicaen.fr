@@ -43,18 +43,23 @@ return [
                     'controller' => MissionController::class,
                     'action'     => 'liste',
                 ],
-                'mission'   => [
-                    'route'      => '/mission/:mission',
+                'get'       => [
+                    'route'      => '/get/:mission',
                     'controller' => MissionController::class,
-                    'action'     => 'mission',
+                    'action'     => 'get',
+                ],
+                'ajout'     => [
+                    'route'      => '/ajout/:intervenant',
+                    'controller' => MissionController::class,
+                    'action'     => 'ajout',
                 ],
                 'saisie'    => [
-                    'route'      => '/saisie[/:mission]',
+                    'route'      => '/saisie/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'saisie',
                 ],
                 'supprimer' => [
-                    'route'      => '/supprimer',
+                    'route'      => '/supprimer/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'supprimer',
                 ],
@@ -164,7 +169,7 @@ return [
     'guards' => [
         [
             'controller' => MissionController::class,
-            'action'     => ['index', 'liste', 'mission'],
+            'action'     => ['index', 'get', 'liste'],
             'privileges' => [
                 Privileges::MISSION_VISUALISATION,
             ],
@@ -172,7 +177,7 @@ return [
         ],
         [
             'controller' => MissionController::class,
-            'action'     => ['saisie'],
+            'action'     => ['ajout', 'saisie'],
             'privileges' => [
                 Privileges::MISSION_EDITION,
             ],
@@ -200,6 +205,7 @@ return [
             ],
             //'assertion'  => Assertion\MissionAssertion::class,
         ],
+
         [
             'controller' => MissionTauxController::class,
             'action'     => ['index'],

@@ -17,7 +17,14 @@ $this->headScript()->offsetSetFile(130, $this->basePath('/js/reconduction-centre
                                      'style' => 'width:250px;']);
                 echo $this->formSelect($selectStructure);
                 ?>
-
+                <script>
+                    $("body").on("change", "select.structure", function (event) {
+                        $("*").css('cursor', 'wait');
+                        var id = $(this).val();
+                        var url = '<?= $this->url('of', [], ['query' => ['structure' => '__structure__']]) ?>';
+                        $(location).attr('href', url.replace('__structure__', id));
+                    });
+                </script>
             </div>
         </div>
     </div>

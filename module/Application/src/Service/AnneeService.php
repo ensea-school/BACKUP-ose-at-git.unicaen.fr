@@ -86,6 +86,16 @@ class AnneeService extends AbstractEntityService
 
 
 
+    public function resetChoixAnnees(): self
+    {
+        $session              = $this->getSessionContainer();
+        $session->choixAnnees = null;
+
+        return $this;
+    }
+
+
+
     /**
      * Retourne la liste des ID des années sélectionnables
      */

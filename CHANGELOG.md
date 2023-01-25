@@ -39,6 +39,7 @@
 * Lors de la saisie d'enseignement, les elements pedagogique sur lesquels il est impossible de saisir des heures seront surlignés en rouge
 * Il est de nouveau possible de saisir des taux de charge TTC et des taux de charge patronale a virgule
 * Modification du filtre des status séléctionnables dans les données personnelles (#48151)
+* Lors de la demande de mise en paiement, pouvoir choisir un EOTP même si son centre de coût parent n'est pas de l'activité attendue (pilotage / enseignement) (#48286)
 
 ## Notes de mise à jour
 

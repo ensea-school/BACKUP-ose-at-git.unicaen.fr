@@ -54,19 +54,23 @@ class TypeFormationController extends AbstractController
             GroupeTypeFormation::class,
         ]);
 
-        $typeFormations = $this->getEvent()->getParam('typeFormation');
+        $typeFormation = $this->getEvent()->getParam('typeFormation');
+
         $form           = $this->getFormTypeFormationTypeFormationSaisie();
 
-        if (empty($typeFormations)) {
+        if (empty($typeFormation)) {
             $title          = "Création d'un nouveau type de formation";
-            $typeFormations = $this->getServiceTypeFormation()->newEntity();
+            /** @var TypeFormation $typeFormation */
+            $typeFormation = $this->getServiceTypeFormation()->newEntity();
+            $groupeTypeFormation = $this->getEvent()->getParam('groupeTypeFormation');
+            $typeFormation->setGroupe($groupeTypeFormation);
         } else {
             $title = "Édition d'un type de formation";
         }
 
-        $form->bindRequestSave($typeFormations, $this->getRequest(), function () use ($typeFormations, $form) {
+        $form->bindRequestSave($typeFormation, $this->getRequest(), function () use ($typeFormation, $form) {
 
-            $this->getServiceTypeFormation()->save($typeFormations);
+            $this->getServiceTypeFormation()->save($typeFormation);
             $this->flashMessenger()->addSuccessMessage(
                 "Ajout réussi"
             );

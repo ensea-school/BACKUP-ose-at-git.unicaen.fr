@@ -9,30 +9,27 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
 
-    protected ?int    $id             = null;
+    protected ?int $id = null;
 
-    protected ?string $code           = null;
+    protected ?string $code = null;
 
-    protected ?string $libelle        = null;
+    protected ?string $libelle = null;
 
-    protected bool    $decharge       = false;
+    protected bool $decharge = false;
 
-    protected float   $multiplicateur = -1;
+    protected float $multiplicateur = -1;
 
 
-
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
-
 
 
     public function getCode(): ?string
     {
         return $this->code;
     }
-
 
 
     public function setCode(?string $code): MotifModificationServiceDu
@@ -43,12 +40,10 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
     }
 
 
-
     public function getLibelle(): ?string
     {
         return $this->libelle;
     }
-
 
 
     public function setLibelle(?string $libelle): MotifModificationServiceDu
@@ -59,12 +54,10 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
     }
 
 
-
     public function getDecharge(): bool
     {
         return $this->decharge;
     }
-
 
 
     public function setDecharge(bool $decharge): MotifModificationServiceDu
@@ -75,12 +68,10 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
     }
 
 
-
     public function getMultiplicateur(): float|int
     {
         return $this->multiplicateur;
     }
-
 
 
     public function setMultiplicateur(float|int $multiplicateur): MotifModificationServiceDu
@@ -89,7 +80,6 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
 
         return $this;
     }
-
 
 
     public function __toString(): string

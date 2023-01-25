@@ -36,6 +36,7 @@ class ParametreController extends AbstractController
 
             $annee->setActive(!$annee->isActive());
             $this->getServiceAnnee()->save($annee);
+            $this->getServiceAnnee()->resetChoixAnnees();
 
             return new JsonModel([
                 'message' => 'Action effectuée',

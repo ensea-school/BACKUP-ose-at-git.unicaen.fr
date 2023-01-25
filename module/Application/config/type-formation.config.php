@@ -26,7 +26,7 @@ return [
                     'saisie'           => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'       => '/saisie[/:typeFormation]',
+                            'route'       => '/saisie[/:typeFormation][/:groupeTypeFormation]',
                             'constraints' => [
                                 'typeFormation' => '[0-9]*',
                             ],

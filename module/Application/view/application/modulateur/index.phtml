@@ -71,16 +71,16 @@ foreach ($typeModulateurs as $tm) {
                                             <?php echo ($infoBulle ? '<abbr title="' . $infoBulle . '">' : '') . $tms->getStructure()->getLibelleCourt();
                                             echo($infoBulle ? '</abbr>' : '');
                                             if ($canEdit) { ?>
-                                                <a style="position:absolute; right:36px; " class="ajax-modal"
+                                                <a style="position:relative; left:10px;" class="ajax-modal"
                                                    data-event="modulateur-saisie"
                                                    href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId(), 'typeModulateurStructure' => $tms->getId()]) ?>"
                                                    title="Éditer un type de modulateur pour une structure">
                                                     <i class="fas fa-pen-to-square"></i>
                                                 </a>
-                                                <a style="position:absolute; right:20px; " class="pop-ajax"
-                                                   href="<?= $this->url('modulateur/type-modulateur-structure-delete', ['typeModulateurStructure' => $tms->getId()]) ?>"
-                                                   title="Supprimer le type de modulateur pour la structure"
-                                                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                                                <a style="position:relative; left:10px;" class=" pop-ajax"
+                                                href="<?= $this->url('modulateur/type-modulateur-structure-delete', ['typeModulateurStructure' => $tms->getId()]) ?>"
+                                                title="Supprimer le type de modulateur pour la structure"
+                                                data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                                                    data-confirm="true"
                                                    data-confirm-button="Oui"
                                                    data-cancel-button="Non"
@@ -95,6 +95,7 @@ foreach ($typeModulateurs as $tm) {
                             } ?>
                         </table>
                         <?php if ($canEdit) { ?>
+                            <br>
                             <a class="ajax-modal" data-event="modulateur-saisie"
                                href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId()]) ?>"
                                title="Ajouter un type de modulateur pour une structure">

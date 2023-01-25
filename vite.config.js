@@ -32,20 +32,21 @@ export default defineConfig({
     root: config.root,
     build: {
         // output dir for production build
-        outDir: path.resolve(__dirname, config.outDir), emptyOutDir: true,
-
+        outDir: path.resolve(__dirname, config.outDir),
+        emptyOutDir: true,
         manifest: true,
-
         rollupOptions: {
             input: path.resolve(__dirname, config.entry),
         }
     },
     server: {
-        strictPort: true, port: config.port
+        strictPort: true,
+        port: config.port
     },
     resolve: {
         alias: {
-            vue: 'vue/dist/vue.esm-bundler.js', '@': path.resolve(__dirname, config.root)
+            vue: 'vue/dist/vue.esm-bundler.js',
+            '@': path.resolve(__dirname, config.root)
         }
     }
 });

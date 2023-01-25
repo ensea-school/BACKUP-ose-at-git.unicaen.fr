@@ -83,22 +83,15 @@
 <script>
 
 import Toaster from "@/scripts/Toaster";
-import utilisateur from "@/components/Application/Utilisateur.vue";
-import icon from "@/components/Application/Icon.vue";
 
 export default {
     name: 'Mission',
-    components: {
-        utilisateur,
-        icon
-    },
     props: {
         mission: {required: true}
     },
     data()
     {
         return {
-            mission: this.mission,
             saisieUrl: Util.url('mission/saisie/:mission', {mission: this.mission.id}),
             supprimerUrl: Util.url("mission/supprimer/:mission", {mission: this.mission.id}),
         };
@@ -153,8 +146,8 @@ export default {
         },
         test()
         {
-            Toaster.toast();
-        }
+
+        },
     }
 }
 </script>

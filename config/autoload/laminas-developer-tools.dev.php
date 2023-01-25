@@ -103,7 +103,7 @@ return [
              * Expects: bool
              * Default: false
              */
-            'enabled'       => true,
+            'enabled'       => AppConfig::get('dev', 'toolbar', true),
 
             /**
              * If enabled, every empty collector will be hidden.

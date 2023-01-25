@@ -1,74 +1,51 @@
-// View your website at your own local server
-// for example http://vite-php-setup.test
-
-// http://localhost:5133 is serving Vite on development
-// but accessing it directly will be empty
-// TIP: consider changing the port for each project, see below
-
-// IMPORTANT image urls in CSS works fine
-// BUT you need to create a symlink on dev server to map this folder during dev:
-// ln -s {path_to_project_source}/src/assets {path_to_public_html}/assets
-// on production everything will work just fine
-// (this happens because our Vite code is outside the server public access,
-// if it where, we could use https://vitejs.dev/config/server-options.html#server-origin)
-
 import {defineConfig, splitVendorChunkPlugin} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import liveReload from 'vite-plugin-live-reload'
 import path from 'path'
 
-let config = {
+/* Directives de configuration */
+
+const config = {
     root: 'front',
+    entry: 'front/main.js',
+    outDir: 'public/dist',
+    port: 5133,
+    liveReloadPaths: ['public/css/**/*.css']
+}
+
+
+/* Configuration de Vite */
+
+// absolute paths for hot-loading
+let liveReloadPaths = [];
+for (p in config.liveReloadPaths) {
+    liveReloadPaths[p] = path.resolve(__dirname, config.liveReloadPaths[p]);
 }
 
 // https://vitejs.dev/config/
 export default defineConfig({
-
     plugins: [
         vue(),
-        liveReload([
-            // __dirname + '/code/**/*.php',
-            // __dirname + '/module/**/*.php',
-            // __dirname + '/module/**/*.phml',
-            __dirname + '/public/css/**/*.css',
-        ]),
-        splitVendorChunkPlugin(),
+        liveReload(liveReloadPaths),
+        splitVendorChunkPlugin()
     ],
-
-    // config
     root: config.root,
-    base: process.env.APP_ENV === 'development'
-        ? '/'
-        : '/dist/',
-
     build: {
         // output dir for production build
-        outDir: '../public/dist',
-        emptyOutDir: true,
+        outDir: path.resolve(__dirname, config.outDir), emptyOutDir: true,
 
-        // emit manifest so PHP can find the hashed files
         manifest: true,
 
-        // our entry
         rollupOptions: {
-            input: path.resolve(__dirname, config.root + '/main.js'),
+            input: path.resolve(__dirname, config.entry),
         }
     },
-
     server: {
-        // we need a strict port to match on PHP side
-        // change freely, but update on PHP to match the same port
-        // tip: choose a different port per project to run them at the same time
-        strictPort: true,
-        port: 5133
+        strictPort: true, port: config.port
     },
-
-    // required for in-browser template compilation
-    // https://vuejs.org/guide/scaling-up/tooling.html#note-on-in-browser-template-compilation
     resolve: {
         alias: {
-            vue: 'vue/dist/vue.esm-bundler.js',
-            '@': __dirname + '/front'
+            vue: 'vue/dist/vue.esm-bundler.js', '@': path.resolve(__dirname, config.root)
         }
     }
-})
+});

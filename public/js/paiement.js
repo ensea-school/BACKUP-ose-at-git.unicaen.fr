@@ -850,7 +850,9 @@ $.widget("ose.paiementMiseEnPaiementForm", {
     _create: function ()
     {
         var that = this;
-        this.getPeriodeElement().change(function () { that.onPeriodeChange() });
+        this.getPeriodeElement().change(function () {
+            that.onPeriodeChange()
+        });
     },
 
 
@@ -895,7 +897,9 @@ $.widget("ose.dmepBudget", {
 
         this.updateBlocageDepassement();
 
-        setTimeout(function () { that.update() }, 5000);
+        setTimeout(function () {
+            that.update()
+        }, 5000);
     },
 
 
@@ -931,7 +935,9 @@ $.widget("ose.dmepBudget", {
             that.updateBlocageDepassement();
         });
 
-        setTimeout(function () { that.update() }, 5000);
+        setTimeout(function () {
+            that.update()
+        }, 5000);
     },
 
 

@@ -9,7 +9,7 @@ use Application\Service\TypeInterventionStatutService;
  *
  * @author UnicaenCode
  */
-trait TypeInterventionStatutServiceAwareTrait
+trait TypeInterventionStatutAwareTrait
 {
     /**
      * @var TypeInterventionStatutService

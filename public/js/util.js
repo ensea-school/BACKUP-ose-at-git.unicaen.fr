@@ -85,6 +85,16 @@ function updateQueryStringParameter(uri, key, value)
  */
 function alertFlash(message, severity, duration)
 {
+    if (!duration) {
+        duration = 5000;
+    }
+    if ('error' == severity) {
+        duration *= 10;
+    }
+    if (!severity) {
+        severity = 'info';
+    }
+
     var alertClasses = {
         info: 'info',
         success: 'success',
@@ -92,26 +102,29 @@ function alertFlash(message, severity, duration)
         error: 'danger'
     };
     var iconClasses = {
-        info: 'info-sign',
-        success: 'ok-sign',
-        warning: 'warning-sign',
-        error: 'exclamation-sign'
+        info: 'info-circle',
+        success: 'check-circle',
+        warning: 'exclamation-circle',
+        error: 'exclamation-triangle'
     };
     var alertClass = 'alert-' + alertClasses[severity];
     var divId = "alert-div-" + Math.floor((Math.random() * 100000) + 1);
 
     var alertDiv = $(
-        '<div id="' + divId + '" class="alert fade in navbar-fixed-bottom" role="alert" style="display: none;">' +
+        '<div id="' + divId + '" class="alert navbar-fixed-bottom" role="alert" style="display: none">' +
+        '    <button type="button" class="btn-close float-md-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
         '    <div class="container">' +
-        '        <p class="text-center"><span class="icon glyphicon"></span> <span class="message"></span></p>' +
+        '        <p class="text-center"><span class="icon fas fa-' + iconClasses[severity] + '"></span> <span class="message"></span></p>' +
         '    </div>' +
         '</div>'
-    ).appendTo("body");
+    );
+
+
 
     alertDiv.addClass(alertClass);
     $("p .message", alertDiv).html(message);
-    $("p .icon", alertDiv).addClass('glyphicon-' + iconClasses[severity]);
 
+    $('body').append(alertDiv);
     alertDiv.slideToggle(500, function ()
     {
         window.setTimeout(function ()

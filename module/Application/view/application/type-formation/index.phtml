@@ -45,7 +45,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                         </div>
                     <?php endif; ?>
                 </div>
-
+                <div class="card-body">
                 <table class="table table-bordered table-sm">
                     <thead>
                     <tr>
@@ -66,7 +66,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                             <?php if ($canEdit): ?>
                                 <td style="text-align: center">
                                     <a class="ajax-modal" data-event="type-formation-edition"
-                                       href="<?= $this->url('type-formation/saisie', ['typeFormation' => $typeFormation->getId()], ['query' => ['tab' => 'edition']]) ?>"
+                                       href="<?= $this->url('type-formation/saisie', ['typeFormation' => $typeFormation->getId(), 'groupeTypeFormation' => $groupeTypeFormation->getId()], ['query' => ['tab' => 'edition']]) ?>"
                                        title="Modifier le type de formation"><i class="fas fa-pen-to-square"></i></a>
                                     <?php if (!$typeFormation->getSource()->getImportable()): ?>
                                         <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer ?"
@@ -82,8 +82,14 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     <?php endforeach; ?>
                     </tbody>
                 </table>
-
-
+                <?php if ($canEdit): ?>
+                    <tr class="champ-triable">
+                        <a class="btn btn-primary ajax-modal " data-event="type-formation-edition" href="<?= $this->url('type-formation/saisie', ['typeFormation' => '','groupeTypeFormation' => $groupeTypeFormation->getId()]); ?>"><i
+                                    class="fas fa-plus"></i>
+                            Ajout d'un nouveau type de formation</a>
+                    </tr>
+                <?php endif; ?>
+            </div>
             </div>
         </div>
     <?php endforeach; ?>
@@ -139,14 +145,6 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         </a>
     </tr>
 <?php endif; ?>
-<?php if ($canEdit): ?>
-    <tr class="champ-triable">
-        <a class="btn btn-primary ajax-modal " data-event="type-formation-edition" href="<?= $this->url('type-formation/saisie'); ?>"><i
-                    class="fas fa-plus"></i>
-            Ajout d'un nouveau type de formation</a>
-    </tr>
-<?php endif; ?>
-
 
 <script type="text/javascript">
     $(function () {

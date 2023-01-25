@@ -94,8 +94,8 @@ class TypeInterventionAdminViewHelper extends AbstractViewHelper
         $title   = '';
         $statuts = $ti->getTypeInterventionStatut($this->getServiceContext()->getAnnee());
         foreach ($statuts as $tis) {
-            if ($title) $title .= ' - ';
-            $title .= $tis->getStatut()->getLibelle();
+            $title .= '∙ ';
+            $title .= $tis->getStatut()->getLibelle() . '<br>';
         }
         $etoile = (strlen($title) ? '&#x2605;' : '');
 
@@ -104,21 +104,23 @@ class TypeInterventionAdminViewHelper extends AbstractViewHelper
         $html = '<td>';
         $html .= $this->getView()->tag('a', [
             'class'              => 'ajax-modal',
-            'data-bs-toggle'        => 'tooltip',
+            'data-bs-toggle'     => 'tooltip',
             'data-placement'     => 'bottom',
             'title'              => $title,
             'href'               => $url,
             'data-submit-reload' => 'true',
+            'data-bs-html'       => 'true',
         ])->text(StringFromFloat::run($ti->getTauxHetdService()) . $etoile);
         $html .= '</td><td>';
 
         $html .= $this->getView()->tag('a', [
             'class'              => 'ajax-modal',
-            'data-bs-toggle'        => 'tooltip',
+            'data-bs-toggle'     => 'tooltip',
             'data-placement'     => 'bottom',
             'title'              => $title,
             'href'               => $url,
             'data-submit-reload' => 'true',
+            'data-bs-html'       => 'true',
         ])->text(StringFromFloat::run($ti->getTauxHetdComplementaire()) . $etoile);
 
         $html .= '</td>';

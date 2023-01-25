@@ -76,13 +76,10 @@
                 </div>
             </div>
         </form>
-        <button @click="test">Test</button>
     </div>
 </template>
 
 <script>
-
-import Toaster from "@/scripts/Toaster";
 
 export default {
     name: 'Mission',
@@ -92,6 +89,7 @@ export default {
     data()
     {
         return {
+            mission: this.mission,
             saisieUrl: Util.url('mission/saisie/:mission', {mission: this.mission.id}),
             supprimerUrl: Util.url("mission/supprimer/:mission", {mission: this.mission.id}),
         };
@@ -133,7 +131,7 @@ export default {
         {
             popAjax(event.target, (widget) => {
                 this.$emit('supprimer', this.mission);
-                Toaster.toast();
+                alertFlash('Mission supprimée', 'success');
             });
         },
         valider()

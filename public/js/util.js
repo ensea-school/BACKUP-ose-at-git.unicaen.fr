@@ -43,16 +43,13 @@ axios.interceptors.response.use(response => {
             popover.dispose();
         }
     }
-
-    response.showMessages = function (element) {
-        content = '';
-        for (ns in this.messages) {
-            for (mid in this.messages[ns]) {
-                content += '<div class="alert alert-dismissible fade show alert-' + (ns == 'error' ? 'danger' : ns) + '" role="alert">' + this.messages[ns][mid] + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+    if (response.messages) {
+        for (s in response.messages) {
+            for (m in response.messages[s]) {
+                alertFlash(response.messages[s][m], s);
             }
         }
-        element.innerHTML = content;
-    };
+    }
 
     return response;
 });

@@ -57,8 +57,6 @@ class MissionController extends AbstractController
             $missions[$k] = $this->getServiceMission()->missionWs($mission);
         }
 
-        $this->flashMessenger()->addSuccessMessage('coucou c\'est réussi!!!');
-
         return $this->axios()->send($missions);
     }
 

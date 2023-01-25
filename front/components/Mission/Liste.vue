@@ -44,7 +44,7 @@ export default {
         supprimer(mission)
         {
             const index = this.missions.indexOf(mission);
-            //this.missions.splice(index, 1);
+            this.missions.splice(index, 1);
         }
     }
 }

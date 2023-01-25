@@ -2,6 +2,9 @@
 
 namespace Application\Entity\Db;
 
+use Application\Service\AbstractEntityService;
+use Application\Service\Traits\SourceServiceAwareTrait;
+use RuntimeException;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -10,11 +13,11 @@ use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 /**
  * TypeFormation
  */
-class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
+class TypeFormation extends AbstractEntityService implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
-
+    use SourceServiceAwareTrait;
     /**
      * @var string
      */
@@ -40,6 +43,29 @@ class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
      */
     protected bool $serviceStatutaire = true;
 
+
+    /**
+     * retourne la classe des entités
+     *
+     * @return string
+     * @throws RuntimeException
+     */
+    public function getEntityClass()
+    {
+        return TypeFormation::class;
+    }
+
+
+
+    /**
+     * Retourne l'alias d'entité courante
+     *
+     * @return string
+     */
+    public function getAlias()
+    {
+        return 'typeFormation';
+    }
 
 
     /**
@@ -147,4 +173,17 @@ class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
         return $this->getLibelleLong();
     }
 
+    /**
+     * Retourne une nouvelle entité, initialisée avec les bons paramètres
+     *
+     * @return TypeFormation
+     */
+    public function newEntity(): TypeFormation
+    {
+        $entity = parent::newEntity();
+        // toutes les entités créées ont OSE pour source!!
+        $entity->setSource($this->getServiceSource()->getOse());
+
+        return $entity;
+    }
 }

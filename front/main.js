@@ -1,20 +1,18 @@
 import {createApp} from 'vue';
 
-const styles = import.meta.glob('./styles/**/*.css', {eager: true});
-const scripts = import.meta.glob('./scripts/**/*.js', {eager: true});
-const modules = import.meta.glob('./components/**/*.vue', {eager: true});
+const vues = import.meta.glob('./**/*.vue', {eager: true});
 
-import autoloadComponents from './components/autoload.js';
+import autoloadComponents from './autoload.js';
 
 /* Chargement de tous les composants */
-let componentsPath = "./components/";
+let componentsPath = "./";
 
 const components = {}
-for (const path in modules) {
+for (const path in vues) {
     let compPath = path.slice(componentsPath.length, -4);
     let compName = compPath.replace('/', '');
 
-    components[compName] = modules[path].default;
+    components[compName] = vues[path].default;
 }
 
 // instantiate the Vue apps

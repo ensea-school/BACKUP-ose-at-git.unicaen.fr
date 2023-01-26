@@ -1,5 +1,5 @@
 <template>
-    <mission v-for="mission in missions" @supprimer="supprimer" :key="mission.id" :mission="mission"></mission>
+    <mission v-for="mission in missions" @supprimer="supprimer" @refresh="refresh" :key="mission.id" :mitem="mission"></mission>
     <a v-if="canAddMission" class="btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajout d'une nouvelle mission</a>
 </template>
 
@@ -24,28 +24,35 @@ export default {
     },
     mounted()
     {
-        axios.get(
-            Util.url("mission/liste/:intervenant", {intervenant: this.intervenant})
-        ).then(response => {
-            this.missions = response.data;
-        });
+        this.refresh();
     },
     methods: {
         ajout(event)
         {
             modAjax(event.target, (widget) => {
-                axios.get(
-                    Util.url("mission/get/:mission", {mission: this.mission.id})
-                ).then(response => {
-                    this.missions.push(response.data);
-                });
+                let newId = widget.contentDiv.find('form').data('id');
+                if (newId){
+                    axios.get(
+                        Util.url("mission/get/:mission", {mission: newId})
+                    ).then(response => {
+                        this.missions.push(response.data);
+                    });
+                }
             });
         },
         supprimer(mission)
         {
             const index = this.missions.indexOf(mission);
             this.missions.splice(index, 1);
-        }
+        },
+        refresh()
+        {
+            axios.get(
+                Util.url("mission/liste/:intervenant", {intervenant: this.intervenant})
+            ).then(response => {
+                this.missions = response.data;
+            });
+        },
     }
 }
 </script>

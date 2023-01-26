@@ -26,8 +26,6 @@
                                     <div class="form-control">{{ heuresLib }}</div>
                                     <button onclick="alert('non implémenté')" class="input-group-btn btn btn-secondary">Suivi</button>
                                 </div>
-
-                                <!--<div class="form-control">{{ mission.heures }}</div>-->
                             </div>
                         </div>
                         <div class="row">
@@ -42,7 +40,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <a v-if="mission.canEdit" :href="saisieUrl" class="btn btn-primary" @click.prevent="saisie">Modifier la mission</a>
-                                <a class="btn btn-danger" @click.prevent="devalidation">Dévalidation de la mission</a>
+                                <a v-if="!mission.validation" class="btn btn-secondary" @click.prevent="valider">Validation de la mission</a>
+                                <a v-if="mission.validation" class="btn btn-danger" @click.prevent="devalider">Dévalidation de la mission</a>
                                 <a class="btn btn-danger" :href="supprimerUrl" data-title="Suppression de la mission"
                                    data-content="Êtes-vous sur de vouloir supprimer la mission ?"
                                    data-confirm="true" @click.prevent="supprimer">Suppression de la mission</a>
@@ -61,8 +60,8 @@
                         </div>
                         <div>
                             <icon :name="mission.valide ? 'thumbs-up' : 'thumbs-down'"/>
-                            {{ validation }}
-                            <utilisateur v-if="mission.validation && mission.validation.histoCreateur" :nom="mission.validation.histoCreateur.displayName"
+                            {{ validationText }}
+                            <utilisateur v-if="mission.validation && mission.validation.histoCreateur" :nom="mission.validation.histoCreateur.libelle"
                                          :mail="mission.validation.histoCreateur.email"/>
                         </div>
                         <div>
@@ -84,15 +83,21 @@
 export default {
     name: 'Mission',
     props: {
-        mission: {required: true}
+        mitem: {required: true}
     },
     data()
     {
         return {
-            mission: this.mission,
-            saisieUrl: Util.url('mission/saisie/:mission', {mission: this.mission.id}),
-            supprimerUrl: Util.url("mission/supprimer/:mission", {mission: this.mission.id}),
+            mission: this.mitem,
+            validationText: this.calcValidation(this.mprop.validation),
+            saisieUrl: Util.url('mission/saisie/:mission', {mission: this.mprop.id}),
+            supprimerUrl: Util.url("mission/supprimer/:mission", {mission: this.mprop.id}),
         };
+    },
+    watch: {
+        'mission.validation'(validation) {
+            this.validationText = this.calcValidation(validation);
+        }
     },
     computed: {
         heuresLib: function () {
@@ -105,26 +110,23 @@ export default {
             } else {
                 return this.mission.heures + ' heures dont ' + (this.mission.heures - this.mission.heuresValidees) + ' à valider';
             }
-        },
-        validation: function () {
-            if (this.mission.validation === null) {
-                return 'A valider';
-            } else if (this.mission.validation.id === null) {
-                return 'Autovalidée';
-            } else {
-                return 'Validation du ' + this.mission.validation.histoCreation + ' par ';
-            }
         }
     },
     methods: {
+        calcValidation(validation)
+        {
+            if (validation === null) {
+                return 'A valider';
+            } else if (validation.id === null) {
+                return 'Autovalidée';
+            } else {
+                return 'Validation du ' + validation.histoCreation + ' par ';
+            }
+        },
         saisie(event)
         {
             modAjax(event.target, (widget) => {
-                axios.get(
-                    Util.url("mission/get/:mission", {mission: this.mission.id})
-                ).then(response => {
-                    this.mission = response.data;
-                });
+                this.refresh();
             });
         },
         supprimer(event)
@@ -136,15 +138,28 @@ export default {
         },
         valider()
         {
-
+            axios.get(
+                Util.url("mission/valider/:mission", {mission: this.mission.id})
+            ).then(response => {
+                this.$emit('refresh', this.mission);
+                this.mission = response.data;
+            });
         },
         devalider()
         {
-
+            axios.get(
+                Util.url("mission/devalider/:mission", {mission: this.mission.id})
+            ).then(response => {
+                this.mission = response.data;
+            });
         },
-        test()
+        refresh()
         {
-
+            axios.get(
+                Util.url("mission/get/:mission", {mission: this.mission.id})
+            ).then(response => {
+                this.mission = response.data;
+            });
         },
     }
 }

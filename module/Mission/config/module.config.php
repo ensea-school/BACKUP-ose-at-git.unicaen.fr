@@ -64,12 +64,12 @@ return [
                     'action'     => 'supprimer',
                 ],
                 'valider'   => [
-                    'route'      => '/valider',
+                    'route'      => '/valider/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'valider',
                 ],
                 'devalider' => [
-                    'route'      => '/devalider',
+                    'route'      => '/devalider/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'devalider',
                 ],

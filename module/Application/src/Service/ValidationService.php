@@ -13,6 +13,7 @@ use Application\Entity\Db\Validation;
 use Application\Service\Traits\ContratServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
+use Mission\Entity\Db\Mission;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
@@ -55,15 +56,27 @@ class ValidationService extends AbstractEntityService
 
 
 
-    public function validerDossier(IntervenantDossier $intervenantDossier)
+    public function validerDossier(IntervenantDossier $intervenantDossier): Validation
     {
-        $typeDonneesPerso = $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_DONNEES_PERSO);
-
         $validation = $this->newEntity();
         $validation->setIntervenant($intervenantDossier->getIntervenant());
-        $validation->setTypeValidation($typeDonneesPerso);
+        $validation->setTypeValidation($this->getServiceTypeValidation()->getDonneesPerso());
         $validation->setStructure($intervenantDossier->getIntervenant()->getStructure());
         $this->save($validation);
+
+        return $validation;
+    }
+
+
+
+    public function validerMission(Mission $mission): Validation
+    {
+        $validation = $this->newEntity();
+        $validation->setIntervenant($mission->getIntervenant());
+        $validation->setTypeValidation($this->getServiceTypeValidation()->getMission());
+        $validation->setStructure($mission->getStructure());
+        $this->save($validation);
+        $mission->addValidation($validation);
 
         return $validation;
     }

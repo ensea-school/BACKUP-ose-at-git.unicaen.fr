@@ -6,6 +6,8 @@ use Application\Constants;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\TypeValidationServiceAwareTrait;
+use Application\Service\Traits\ValidationServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
@@ -23,6 +25,7 @@ class MissionController extends AbstractController
     use MissionServiceAwareTrait;
     use MissionFormAwareTrait;
     use ContextServiceAwareTrait;
+    use ValidationServiceAwareTrait;
 
 
     /**
@@ -90,11 +93,6 @@ class MissionController extends AbstractController
 
 
 
-    /**
-     * Formulaire de saisie
-     *
-     * @return array
-     */
     public function saisieAction(?Mission $mission = null)
     {
         if (!$mission) {
@@ -114,7 +112,8 @@ class MissionController extends AbstractController
         $form->bindRequestSave($mission, $this->getRequest(), function ($mission) {
             $this->getServiceMission()->save($mission);
         });
-
+        // on passe le data-id pour pouvoir le récupérer dans la vue et mettre à jour la liste
+        $form->setAttribute('data-id', $mission->getId());
 
         $vm = new ViewModel();
         $vm->setTemplate('mission/saisie');
@@ -130,12 +129,8 @@ class MissionController extends AbstractController
         /** @var Mission $mission */
         $mission = $this->getEvent()->getParam('mission');
 
-        try {
-            //$this->getServiceMission()->delete($mission);
-            $this->flashMessenger()->addSuccessMessage("Mission supprimée avec succès.");
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translate($e));
-        }
+        $this->getServiceMission()->delete($mission);
+        $this->flashMessenger()->addSuccessMessage("Mission supprimée avec succès.");
 
         return $this->axios()->send([]);
     }
@@ -144,13 +139,33 @@ class MissionController extends AbstractController
 
     public function validerAction()
     {
+        /** @var Mission $mission */
+        $mission = $this->getEvent()->getParam('mission');
 
+        $this->getServiceValidation()->validerMission($mission);
+        $this->getServiceMission()->save($mission);
+        
+        $this->flashMessenger()->addSuccessMessage('Mission validée');
+
+        return $this->getAction();
     }
 
 
 
     public function devaliderAction()
     {
+        /** @var Mission $mission */
+        $mission = $this->getEvent()->getParam('mission');
 
+        $validation = $mission->getValidation();
+        if ($validation) {
+            $mission->removeValidation($validation);
+            $this->getServiceValidation()->delete($validation);
+            $this->flashMessenger()->addSuccessMessage("Validation de la mission <strong>retirée</strong> avec succès.");
+        } else {
+            $this->flashMessenger()->addInfoMessage("La mission n'était pas validée");
+        }
+
+        return $this->getAction();
     }
 }

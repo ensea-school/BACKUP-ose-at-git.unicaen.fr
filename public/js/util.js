@@ -17,7 +17,6 @@ axios.interceptors.request.use(config => {
 });
 
 axios.interceptors.response.use(response => {
-    console.log(response);
     response.messages = response.data.messages;
     response.data = response.data.data;
     response.hasErrors = response.messages && response.messages.error && response.messages.error.length > 0 ? true : false;
@@ -94,7 +93,7 @@ function updateQueryStringParameter(uri, key, value)
 function alertFlash(message, severity, duration)
 {
     if (!duration) {
-        duration = 5000;
+        duration = 3000;
     }
     if ('error' == severity) {
         duration *= 10000;

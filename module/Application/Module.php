@@ -10,6 +10,7 @@
 namespace Application;
 
 use Application\ORM\RouteEntitiesInjector;
+use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Mvc\ModuleRouteListener;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Stdlib\Glob;
@@ -43,7 +44,7 @@ class Module
         $moduleRouteListener->attach($eventManager);
 
         /* Utilise un layout spécial si on est en AJAX. Valable pour TOUS les modules de l'application */
-        $eventManager->getSharedManager()->attach('Laminas\Mvc\Controller\AbstractActionController', 'dispatch',
+        $eventManager->getSharedManager()->attach(AbstractActionController::class, MvcEvent::EVENT_DISPATCH,
             function (MvcEvent $e) {
                 $request = $e->getRequest();
                 if ($request instanceof \Laminas\Http\Request && $request->isXmlHttpRequest()) {

@@ -17,6 +17,7 @@ axios.interceptors.request.use(config => {
 });
 
 axios.interceptors.response.use(response => {
+    console.log(response);
     response.messages = response.data.messages;
     response.data = response.data.data;
     response.hasErrors = response.messages && response.messages.error && response.messages.error.length > 0 ? true : false;
@@ -52,8 +53,15 @@ axios.interceptors.response.use(response => {
     }
 
     return response;
+}, (error) => {
+    var text = $("<div>").html(error.response.data);
+
+    text.find('i.fas').hide();
+
+    alertFlash(text.find('.alert').html(), 'error');
 });
 
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 
 /**
@@ -89,10 +97,7 @@ function alertFlash(message, severity, duration)
         duration = 5000;
     }
     if ('error' == severity) {
-        duration *= 10;
-    }
-    if (!severity) {
-        severity = 'info';
+        duration *= 10000;
     }
 
     var alertClasses = {
@@ -127,13 +132,15 @@ function alertFlash(message, severity, duration)
     $('body').append(alertDiv);
     alertDiv.slideToggle(500, function ()
     {
-        window.setTimeout(function ()
-        {
-            alertDiv.slideToggle(500, function ()
+        if ('error' != severity) {
+            window.setTimeout(function ()
             {
-                $(this).removeClass(alertClass)
-            });
-        }, duration);
+                alertDiv.slideToggle(500, function ()
+                {
+                    $(this).removeClass(alertClass)
+                });
+            }, duration);
+        }
     });
 }
 

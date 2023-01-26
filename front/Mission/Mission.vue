@@ -83,15 +83,14 @@
 export default {
     name: 'Mission',
     props: {
-        mitem: {required: true}
+        mission: {required: true}
     },
     data()
     {
         return {
-            mission: this.mitem,
-            validationText: this.calcValidation(this.mprop.validation),
-            saisieUrl: Util.url('mission/saisie/:mission', {mission: this.mprop.id}),
-            supprimerUrl: Util.url("mission/supprimer/:mission", {mission: this.mprop.id}),
+            validationText: this.calcValidation(this.mission.validation),
+            saisieUrl: Util.url('mission/saisie/:mission', {mission: this.mission.id}),
+            supprimerUrl: Util.url("mission/supprimer/:mission", {mission: this.mission.id}),
         };
     },
     watch: {
@@ -133,7 +132,6 @@ export default {
         {
             popAjax(event.target, (widget) => {
                 this.$emit('supprimer', this.mission);
-                alertFlash('Mission supprimée', 'success');
             });
         },
         valider()
@@ -141,8 +139,7 @@ export default {
             axios.get(
                 Util.url("mission/valider/:mission", {mission: this.mission.id})
             ).then(response => {
-                this.$emit('refresh', this.mission);
-                this.mission = response.data;
+                this.$emit('refresh', response.data);
             });
         },
         devalider()
@@ -150,7 +147,7 @@ export default {
             axios.get(
                 Util.url("mission/devalider/:mission", {mission: this.mission.id})
             ).then(response => {
-                this.mission = response.data;
+                this.$emit('refresh', response.data);
             });
         },
         refresh()
@@ -158,7 +155,7 @@ export default {
             axios.get(
                 Util.url("mission/get/:mission", {mission: this.mission.id})
             ).then(response => {
-                this.mission = response.data;
+                this.$emit('refresh', response.data);
             });
         },
     }

@@ -113,12 +113,9 @@ $.widget("unicaen.popAjax", {
         this.ajaxLoaded = true;
         this.setTitle(this.options.loadingTitle);
         this.setContent(this.options.loadingContent, true);
-        $.ajax({
-            url: this.options.url,
-            success: (response) => {
-                that.setContent(response);
-                //that.contentSubmit(that.getPopoverElement().find('.popover-body'));
-            }
+        axios.get(this.options.url).then(response => {
+            that.setContent(response);
+            console.log(response);
         });
     },
 

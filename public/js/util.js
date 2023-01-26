@@ -1,3 +1,4 @@
+/* Tunning d'Axios pour gérer l'interconnexion avec le serveur avec gestion des alertes */
 axios.interceptors.request.use(config => {
     if (config.submitter) {
         let msg = config.msg ? config.msg : 'Action en cours';
@@ -44,11 +45,7 @@ axios.interceptors.response.use(response => {
         }
     }
     if (response.messages) {
-        for (s in response.messages) {
-            for (m in response.messages[s]) {
-                alertFlash(response.messages[s][m], s);
-            }
-        }
+        Util.alerts(response.messages);
     }
 
     return response;
@@ -57,30 +54,13 @@ axios.interceptors.response.use(response => {
 
     text.find('i.fas').hide();
 
-    alertFlash(text.find('.alert').html(), 'error');
+    Util.alert(text.find('.alert').html(), 'error');
 });
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 
-/**
- * Ajoute/remplace un paramètre GET à une URL.
- *
- * @param String uri
- * @param String key
- * @param String value
- * @returns String
- */
-function updateQueryStringParameter(uri, key, value)
-{
-    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
-    if (uri.match(re)) {
-        return uri.replace(re, '$1' + key + "=" + value + '$2');
-    } else {
-        return uri + separator + key + "=" + value;
-    }
-}
+
 
 /**
  * Affiche une alerte temporaire.
@@ -89,58 +69,12 @@ function updateQueryStringParameter(uri, key, value)
  * @param string severity 'info', 'success', 'warning' ou 'error'
  * @param int duration Durée d'affichage de l'alerte en ms
  * @returns void
+ *
+ * @deprecated
  */
 function alertFlash(message, severity, duration)
 {
-    if (!duration) {
-        duration = 3000;
-    }
-    if ('error' == severity) {
-        duration *= 10000;
-    }
-
-    var alertClasses = {
-        info: 'info',
-        success: 'success',
-        warning: 'warning',
-        error: 'danger'
-    };
-    var iconClasses = {
-        info: 'info-circle',
-        success: 'check-circle',
-        warning: 'exclamation-circle',
-        error: 'exclamation-triangle'
-    };
-    var alertClass = 'alert-' + alertClasses[severity];
-    var divId = "alert-div-" + Math.floor((Math.random() * 100000) + 1);
-
-    var alertDiv = $(
-        '<div id="' + divId + '" class="alert navbar-fixed-bottom" role="alert" style="display: none">' +
-        '    <button type="button" class="btn-close float-md-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
-        '    <div class="container">' +
-        '        <p class="text-center"><span class="icon fas fa-' + iconClasses[severity] + '"></span> <span class="message"></span></p>' +
-        '    </div>' +
-        '</div>'
-    );
-
-
-
-    alertDiv.addClass(alertClass);
-    $("p .message", alertDiv).html(message);
-
-    $('body').append(alertDiv);
-    alertDiv.slideToggle(500, function ()
-    {
-        if ('error' != severity) {
-            window.setTimeout(function ()
-            {
-                alertDiv.slideToggle(500, function ()
-                {
-                    $(this).removeClass(alertClass)
-                });
-            }, duration);
-        }
-    });
+    Util.alert(message, severity);
 }
 
 /**
@@ -220,14 +154,67 @@ Formatter = {
 
 
 
-
-function Url(route, data)
-{
-    var getArgs = data ? $.param(data) : null;
-    return $('body').data('base-url') + route + (getArgs ? '?' + getArgs : '');
-}
-
 Util = {
+
+    alerts: function (messages)
+    {
+        for (s in messages) {
+            for (m in messages[s]) {
+                Util.alert(messages[s][m], s);
+            }
+        }
+    },
+
+
+
+    alert: function (message, severity)
+    {
+        var alertClasses = {
+            info: 'info',
+            success: 'success',
+            warning: 'warning',
+            error: 'danger'
+        };
+        var iconClasses = {
+            info: 'info-circle',
+            success: 'check-circle',
+            warning: 'exclamation-circle',
+            error: 'exclamation-triangle'
+        };
+        var alertClass = 'alert-' + alertClasses[severity];
+        var divId = "alert-div-" + Math.floor((Math.random() * 100000) + 1);
+
+        var alertDiv = $(
+            '<div id="' + divId + '" class="alert navbar-fixed-bottom" role="alert" style="display: none">' +
+            '    <button type="button" class="btn-close float-md-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
+            '    <div class="container">' +
+            '        <p class="text-center"><span class="icon fas fa-' + iconClasses[severity] + '"></span> <span class="message"></span></p>' +
+            '    </div>' +
+            '</div>'
+        );
+
+
+
+        alertDiv.addClass(alertClass);
+        $("p .message", alertDiv).html(message);
+
+        $('body').append(alertDiv);
+        alertDiv.slideToggle(500, function ()
+        {
+            if ('error' != severity) {
+                window.setTimeout(function ()
+                {
+                    alertDiv.slideToggle(500, function ()
+                    {
+                        $(this).removeClass(alertClass)
+                    });
+                }, 3000);
+            }
+        });
+    },
+
+
+
     url: function (route, params, query)
     {
         let baseUrl = $('body').data('base-url');

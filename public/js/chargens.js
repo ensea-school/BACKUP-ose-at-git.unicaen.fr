@@ -698,17 +698,17 @@ $.widget("ose.chargens", {
             success: function (data)
             {
                 if (data.erreur) {
-                    alertFlash(data.erreur, 'error', 5000);
+                    Util.alert(data.erreur, 'error');
                 } else if (data.noeuds) {
                     that.chargerDonnees(p.etape, p.scenario, data);
                 } else {
-                    alertFlash(data, 'error', 15000);
+                    Util.alert(data, 'error');
                 }
 
             },
             error: function (jqXHR)
             {
-                alertFlash(jqXHR.responseText, 'error', 5000);
+                Util.alert(jqXHR.responseText, 'error');
                 console.log(jqXHR);
             }
         });

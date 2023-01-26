@@ -291,14 +291,25 @@ $.widget("ose.etapeModulateurs", {
  */
 $.widget("ose.etapeSaisie", {
 
+    updateQueryStringParameter: function (uri, key, value)
+    {
+        var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+        var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+        if (uri.match(re)) {
+            return uri.replace(re, '$1' + key + "=" + value + '$2');
+        } else {
+            return uri + separator + key + "=" + value;
+        }
+    },
+
     onAjouter: function (event)
     {
-        window.location = updateQueryStringParameter(window.location.href, "etape", this.getId());
+        window.location = this.updateQueryStringParameter(window.location.href, "etape", this.getId());
     },
 
     onModifier: function (event)
     {
-        window.location = updateQueryStringParameter(window.location.href, "etape", this.getId());
+        window.location = this.updateQueryStringParameter(window.location.href, "etape", this.getId());
     },
 
     getId: function ()

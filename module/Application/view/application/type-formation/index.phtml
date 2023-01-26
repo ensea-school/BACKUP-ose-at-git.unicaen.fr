@@ -46,50 +46,52 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     <?php endif; ?>
                 </div>
                 <div class="card-body">
-                <table class="table table-bordered table-sm">
-                    <thead>
-                    <tr>
-                        <th style="text-align: center" width="20%">Libellé court</th>
-                        <th style="text-align: center" width="60%">Libellé long</th>
-                        <th style="text-align: center">Source</th>
-                        <?php if ($canEdit): ?>
-                            <th style="text-align: center">Actions</th>
-                        <?php endif; ?>
-                    </tr>
-                    </thead>
-                    <tbody class="triables ui-sortable">
-                    <?php foreach ($groupeTypeFormation->getTypeFormation() as $typeFormation): ?>
-                        <tr class="champ-triable" data-id= <?php echo $typeFormation->getId() ?>>
-                            <td style=""><?= $typeFormation->getLibelleCourt(); ?></td>
-                            <td><?= $typeFormation->getLibelleLong(); ?></td>
-                            <td style="text-align: center"><?= $typeFormation->getSource()->getLibelle(); ?></td>
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center" width="20%">Libellé court</th>
+                            <th style="text-align: center" width="60%">Libellé long</th>
+                            <th style="text-align: center">Source</th>
                             <?php if ($canEdit): ?>
-                                <td style="text-align: center">
-                                    <a class="ajax-modal" data-event="type-formation-edition"
-                                       href="<?= $this->url('type-formation/saisie', ['typeFormation' => $typeFormation->getId(), 'groupeTypeFormation' => $groupeTypeFormation->getId()], ['query' => ['tab' => 'edition']]) ?>"
-                                       title="Modifier le type de formation"><i class="fas fa-pen-to-square"></i></a>
-                                    <?php if (!$typeFormation->getSource()->getImportable()): ?>
-                                        <a class="pop-ajax" data-title="Suppression du type de formation" data-content="Êtes-vous sur de vouloir supprimer ?"
-                                           data-confirm="true"
-                                           data-submit-reload="true"
-                                           href="<?= $this->url('type-formation/supprimer', ['typeFormation' => $typeFormation->getId()]) ?>"
-                                           title="Supprimer le type de formation"><i class="fas fa-trash-can"></i></a>
-                                    <?php endif; ?>
-                                </td>
+                                <th style="text-align: center">Actions</th>
                             <?php endif; ?>
-
                         </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <?php if ($canEdit): ?>
-                    <tr class="champ-triable">
-                        <a class="btn btn-primary ajax-modal " data-event="type-formation-edition" href="<?= $this->url('type-formation/saisie', ['typeFormation' => '','groupeTypeFormation' => $groupeTypeFormation->getId()]); ?>"><i
-                                    class="fas fa-plus"></i>
-                            Ajout d'un nouveau type de formation</a>
-                    </tr>
-                <?php endif; ?>
-            </div>
+                        </thead>
+                        <tbody class="triables ui-sortable">
+                        <?php foreach ($groupeTypeFormation->getTypeFormation() as $typeFormation): ?>
+                            <tr class="champ-triable" data-id= <?php echo $typeFormation->getId() ?>>
+                                <td style=""><?= $typeFormation->getLibelleCourt(); ?></td>
+                                <td><?= $typeFormation->getLibelleLong(); ?></td>
+                                <td style="text-align: center"><?= $typeFormation->getSource()->getLibelle(); ?></td>
+                                <?php if ($canEdit): ?>
+                                    <td style="text-align: center">
+                                        <a class="ajax-modal" data-event="type-formation-edition"
+                                           href="<?= $this->url('type-formation/saisie', ['typeFormation' => $typeFormation->getId(), 'groupeTypeFormation' => $groupeTypeFormation->getId()], ['query' => ['tab' => 'edition']]) ?>"
+                                           title="Modifier le type de formation"><i class="fas fa-pen-to-square"></i></a>
+                                        <?php if (!$typeFormation->getSource()->getImportable()): ?>
+                                            <a class="pop-ajax" data-title="Suppression du type de formation"
+                                               data-content="Êtes-vous sur de vouloir supprimer ?"
+                                               data-confirm="true"
+                                               data-submit-reload="true"
+                                               href="<?= $this->url('type-formation/supprimer', ['typeFormation' => $typeFormation->getId()]) ?>"
+                                               title="Supprimer le type de formation"><i class="fas fa-trash-can"></i></a>
+                                        <?php endif; ?>
+                                    </td>
+                                <?php endif; ?>
+
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <?php if ($canEdit): ?>
+                        <tr class="champ-triable">
+                            <a class="btn btn-primary ajax-modal " data-event="type-formation-edition"
+                               href="<?= $this->url('type-formation/saisie', ['typeFormation' => '', 'groupeTypeFormation' => $groupeTypeFormation->getId()]); ?>"><i
+                                        class="fas fa-plus"></i>
+                                Ajout d'un nouveau type de formation</a>
+                        </tr>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     <?php endforeach; ?>
@@ -162,7 +164,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     type: 'POST',
                     url: "<?= $this->url('type-formation/trier')?>",
                     data: {champsIds: champsIds},
-                    success: function () { alertFlash("Tri effectué", 'success', 3000); },
+                    success: function () { Util.alert("Tri effectué", 'success'); },
                 });
             }
         });

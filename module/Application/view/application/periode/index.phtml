@@ -85,7 +85,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     type: 'POST',
                     url: "<?= $this->url('periodes/trier')?>",
                     data: {champsIds: champsIds},
-                    success: function () { alertFlash("Tri effectué", 'success', 3000); },
+                    success: function () { Util.alert("Tri effectué", 'success'); },
                 });
 
 

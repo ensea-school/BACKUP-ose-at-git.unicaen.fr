@@ -129,10 +129,10 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
                                 entityId: <?= $entityId ?: 'null' ?>
                             },
                             success: function () {
-                                alertFlash('Votre modification a bien été prise en compte', 'success', 3000);
+                                Util.alert('Votre modification a bien été prise en compte', 'success');
                             },
                             error: function (jqXHR) {
-                                alertFlash(jqXHR.responseText, 'error', 3000);
+                                Util.alert(jqXHR.responseText, 'error');
                             }
                         });
                     },

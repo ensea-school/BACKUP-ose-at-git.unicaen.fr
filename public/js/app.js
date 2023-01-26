@@ -113,45 +113,12 @@ $(function ()
     $('.selectpicker').data('size', 'auto');
 
 
-    $(document).ajaxSend((event, xhr, settings) => {
-        if (settings.submitter) {
-            let msg = settings.msg ? settings.msg : 'Action en cours';
-            if (settings.popover === undefined) {
-                console.log(settings.submitter);
-                settings.popover = new bootstrap.Popover(settings.submitter, {
-                    content: "<div class=\"spinner-border text-primary\" role=\"status\">\n" +
-                        "  <span class=\"visually-hidden\">Loading...</span>\n" +
-                        "</div> " + msg,
-                    html: true
-                });
-                settings.popover.show();
-            }
-        }
-    });
-
     $(document).ajaxSuccess((event, xhr, settings) => {
-        // Si une popover est lancée pour informer sur le'état de la requête
-        if (settings.popover) {
-            var popover = settings.popover;
+        if (xhr.responseJSON && xhr.responseJSON.messages && xhr.responseJSON.data) {
+            let messages = xhr.responseJSON.messages;
+            xhr.responseJSON = xhr.responseJSON.data;
 
-            // Si la réponse est en JSON, QUE C'EST ok et qu'il y a un truc à afficher
-            if (xhr.responseJSON && xhr.responseJSON.error) {
-                popover._config.content = xhr.responseJSON.error;
-                popover.setContent();
-                let id = $(settings.submitter).attr('aria-describedby');
-                $('#' + id).find('.popover-body').addClass('alert alert-danger');
-            } else if (xhr.responseJSON && xhr.responseJSON.msg || settings.successMsg) {
-                popover._config.content = xhr.responseJSON.msg ? xhr.responseJSON.msg : settings.successMsg;
-                popover.setContent();
-                let id = $(settings.submitter).attr('aria-describedby');
-                $('#' + id).find('.popover-body').addClass('alert alert-success');
-                setTimeout(() => {
-                    popover.hide();
-                }, 2000)
-            } else {
-                // la popover est masquée si tout est fini
-                popover.hide();
-            }
+            Util.alerts(messages);
         }
 
         // correction d'un bug de bootstrap-select à la MAJ AJAX d'une page
@@ -159,14 +126,8 @@ $(function ()
     });
 
     $(document).ajaxError((event, xhr, settings) => {
-        if (settings.popover) {
-            var popover = settings.popover;
-            popover._config.content = xhr.responseText;
-            popover.setContent();
-        } else {
-            if (!(typeof settings.error === 'function')) {
-                alertFlash(xhr.responseText, 'error', 3000);
-            }
+        if (!(typeof settings.error === 'function')) {
+            Util.alert(xhr.responseText, 'error');
         }
     });
 

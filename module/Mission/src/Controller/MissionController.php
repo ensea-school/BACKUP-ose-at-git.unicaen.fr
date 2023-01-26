@@ -56,11 +56,12 @@ class MissionController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
 
         $missions = $this->getServiceMission()->missionsByIntervenant($intervenant);
-        foreach ($missions as $k => $mission) {
-            $missions[$k] = $this->getServiceMission()->missionWs($mission);
+        $liste    = [];
+        foreach ($missions as $mission) {
+            $liste[$mission->getId()] = $this->getServiceMission()->missionWs($mission);
         }
 
-        return $this->axios()->send($missions);
+        return $this->axios()->send($liste);
     }
 
 
@@ -88,6 +89,10 @@ class MissionController extends AbstractController
         $mission = $this->getServiceMission()->newEntity();
         $mission->setIntervenant($intervenant);
 
+        /* pour les tests */
+        $mission->setDateDebut(new \DateTime());
+        $mission->setDateFin(new \DateTime());
+
         return $this->saisieAction($mission);
     }
 
@@ -114,7 +119,7 @@ class MissionController extends AbstractController
         });
         // on passe le data-id pour pouvoir le récupérer dans la vue et mettre à jour la liste
         $form->setAttribute('data-id', $mission->getId());
-
+        $form->get('heures')->setValue('8');
         $vm = new ViewModel();
         $vm->setTemplate('mission/saisie');
         $vm->setVariables(compact('form', 'title', 'mission'));
@@ -144,7 +149,7 @@ class MissionController extends AbstractController
 
         $this->getServiceValidation()->validerMission($mission);
         $this->getServiceMission()->save($mission);
-        
+
         $this->flashMessenger()->addSuccessMessage('Mission validée');
 
         return $this->getAction();

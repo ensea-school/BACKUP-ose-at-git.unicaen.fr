@@ -51,7 +51,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ANN
             url: "<?= $this->url('parametres/annees') ?>",
             data: {annee: anneeId},
             success: function (data) {
-                alertFlash(data.message, data.status, 5000);
+                Util.alert(data.message, data.status);
             },
         });
 

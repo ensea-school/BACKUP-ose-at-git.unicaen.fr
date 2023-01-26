@@ -1,9 +1,11 @@
 <template>
-    <div :id="mission.id" class="card bg-default">
+    <div :id="mission.id" class="card" :class="{'bg-success':mission.valide,'bg-default':!mission.valide}">
         <form @submit.prevent="submitForm">
-            <div class="card-header" :class="{'bg-info':mission.valide}">
-                {{ mission.typeMission.libelle }}
-                <span class="float-end">Du {{ mission.dateDebut }} au {{ mission.dateFin }}</span>
+            <div class="card-header card-header-h3">
+                <h5>
+                    {{ mission.typeMission.libelle }}
+                    <span class="float-end">Du {{ mission.dateDebut }} au {{ mission.dateFin }}</span>
+                </h5>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -94,7 +96,8 @@ export default {
         };
     },
     watch: {
-        'mission.validation'(validation) {
+        'mission.validation'(validation)
+        {
             this.validationText = this.calcValidation(validation);
         }
     },
@@ -163,5 +166,7 @@ export default {
 </script>
 
 <style scoped>
-
+.card-header h5 {
+    font-weight: 500;
+}
 </style>

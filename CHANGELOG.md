@@ -50,15 +50,13 @@
 
 Ensuite si vous souhaitez faire apparaître les tags dans l'export des services, il vous faudra modifier l'état de sorte 'Export des services', dans l'onglet 'Export CSV' : 
 
-`
-// Ligne 56 ajouter TAG_ID à la variable $sid
-    $sid .= '_' . $d['TAG_ID'];
-// Ligne 102 ajouter la colonne TAG
-    'tag'                          => $d['TAG'],
-// Ligne 206 Ajouter le titre de colonne TAG
-    'tag'                           => 'Tags',
+A la Ligne 56 ajouter TAG_ID à la variable $sid : 
+    `$sid .= '_' . $d['TAG_ID'];`
+A la ligne 102 ajouter la colonne TAG : 
+`    'tag' => $d['TAG'],`
+A la ligne 206 Ajouter le titre de colonne TAG : 
+`    'tag' => 'Tags',`
 
-`
 
 # OSE 19.7 (16/12/2022)
 

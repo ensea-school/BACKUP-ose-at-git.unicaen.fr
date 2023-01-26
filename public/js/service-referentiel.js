@@ -279,7 +279,8 @@ $.widget("ose.serviceReferentielForm", {
             this.getStructureElement().val(structure);
             $('option:not(:selected)', this.getStructureElement()).attr('disabled', true);
         }
-        this.getStructureElement().selectpicker('refresh');
+        this.getStructureElement().selectpicker('destroy');
+        this.getStructureElement().selectpicker();
     },
 
 

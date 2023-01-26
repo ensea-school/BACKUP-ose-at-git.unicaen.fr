@@ -38,27 +38,35 @@ class ReferentielsViewHelper extends AbstractViewHelper
     private bool $horodatage = false;
 
     private array $columns = [
-        'intervenant'  => [
+        'intervenant'        => [
             'visibility' => false,
             'head-text'  => "<th>Intervenant</th>",
         ],
-        'structure'    => [
+        'structure'          => [
             'visibility' => true,
             'head-text'  => "<th title=\"Structure\">Structure</th>",
         ],
-        'fonction'     => [
+        'fonction'           => [
             'visibility' => true,
             'head-text'  => "<th title=\"Fonction référentiel\">Fonction</th>",
         ],
-        'commentaires' => [
+        'commentaires'       => [
             'visibility' => true,
             'head-text'  => "<th title=\">Commentaires éventuels\">Commentaires</th>",
         ],
-        'heures'       => [
+        'motif-non-paiement' => [
+            'visibility' => false,
+            'head-text'  => "<th title=\"Nombre d'heures\">Motif de non paiement</th>",
+        ],
+        'tags'               => [
+            'visibility' => false,
+            'head-text'  => "<th>Tag</th>",
+        ],
+        'heures'             => [
             'visibility' => true,
             'head-text'  => "<th title=\"Nombre d'heures\">Heures</th>",
         ],
-        'annee'        => [
+        'annee'              => [
             'visibility' => false,
             'head-text'  => "<th>Année univ.</th>",
         ],
@@ -132,9 +140,7 @@ class ReferentielsViewHelper extends AbstractViewHelper
         $canEditTag = $this->getView()->isAllowed($this->getIntervenant(), Privileges::TAG_EDITION);
 
         $this->columns['tags']['visibility'] = ($canEditTag || $canViewTag) ? true : false;
-        $this->columns['tags']['head-text'] = '<th>Tag</th>';
         $this->columns['motif-non-paiement']['visibility'] = ($canEditMNP || $canViewMNP) ? true : false;
-        $this->columns['motif-non-paiement']['head-text'] = '<th>Motif de non paiement</th>';
 
 
         $attribs = [

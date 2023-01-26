@@ -11,7 +11,7 @@
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
-        <field name="code" type="string" column="CODE" length="3" nullable="false"/>
+        <field name="code" type="string" column="CODE" length="10" nullable="false"/>
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
         <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>

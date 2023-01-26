@@ -96,6 +96,8 @@ return [
             'F_STATUT_INTERVENANT_S',
             'F_TYPE_INTERVENTION',
             'F_TYPE_INTERVENTION_S',
+            'F_MODULATEUR',
+            'F_MODULATEUR_S',
         ],
     ],
     'sequence'          => [

@@ -31,6 +31,7 @@ class TypeInterventionController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             TypeIntervention::class,
             TypeInterventionStructure::class,
+            TypeInterventionStatut::class,
         ]);
 
         $annee  = $this->getServiceContext()->getAnnee();
@@ -50,6 +51,10 @@ class TypeInterventionController extends AbstractController
 
     public function statutAction()
     {
+        $this->em()->getFilters()->enable('historique')->init([
+            TypeInterventionStatut::class,
+        ]);
+
         /** @var TypeIntervention $typeIntervention */
         $typeIntervention        = $typeIntervention = $this->getEvent()->getParam('typeIntervention');
         $typeInterventionStatuts = $typeIntervention->getTypeInterventionStatut($this->getServiceContext()->getAnnee());

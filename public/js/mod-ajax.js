@@ -364,7 +364,6 @@ function modAjax(element, onSubmit)
     if (onSubmit) {
         widget.options.submitEvent = onSubmit;
     }
-    widget.show();
 
     return widget;
 }

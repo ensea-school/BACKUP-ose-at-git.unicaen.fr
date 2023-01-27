@@ -10,7 +10,10 @@ const config = {
     entry: 'front/main.js',
     outDir: 'public/dist',
     port: 5133,
-    liveReloadPaths: ['public/css/**/*.css']
+    liveReloadPaths: [
+        'public/js/**/*.js',
+        'public/css/**/*.css'
+    ]
 }
 
 

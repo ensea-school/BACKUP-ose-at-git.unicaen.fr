@@ -97,7 +97,10 @@ class MissionService extends AbstractEntityService
             ['validation', ['histoCreation', 'histoCreateur']],
         ]);
 
-        $json['canEdit'] = true;
+        $json['canSaisie']    = !$mission->isValide();
+        $json['canValider']   = !$mission->isValide();
+        $json['canDevalider'] = $mission->isValide();
+        $json['canSupprimer'] = !$mission->isValide();
 
         return $json;
     }

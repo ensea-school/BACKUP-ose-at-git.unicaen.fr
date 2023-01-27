@@ -308,3 +308,73 @@ function popAjax(element, onSubmit)
 
     return widget;
 }
+
+
+
+function popConfirm(element, options)
+{
+    var popConfirm = bootstrap.Popover.getInstance(element);
+    if (!popConfirm) {
+        if (typeof options == 'function') {
+            options = {
+                onConfirm: options
+            };
+        }
+
+        if (!options) {
+            options = {};
+        }
+        if (!options.title) {
+            options.title = $(element).data('title');
+        }
+        if (!options.title) {
+            options.title = "Demande de confirmation";
+        }
+
+        if (!options.content) {
+            options.content = $(element).data('content');
+        }
+        if (!options.content) {
+            options.content = "Confirmez-vous cette action ?";
+        }
+
+        if (!options.onConfirm) {
+            options.onConfirm = function () {};
+        }
+
+        if (element.nodeName == 'A') {
+            goFunc = function () {
+                axios.get(element.href).then(response => {
+                    console.log('co');
+                    options.onConfirm(response, element);
+                });
+            };
+        } else {
+            goFunc = function () {
+                options.onConfirm(element);
+            }
+        }
+
+        let popoptions = {
+            html: true,
+            sanitize: false,
+            trigger: "focus",
+            title: options.title,
+            content: options.content + '<div class="btn-goup" style="text-align:right;padding-top: 10px" role="group"><button class="btn btn-secondary" id="nogo">Non</button><button class="btn btn-primary" id="go">Oui</button></div>',
+        };
+        popConfirm = new bootstrap.Popover(element, popoptions);
+        element.addEventListener('shown.bs.popover', (eventShown) => {
+            let popDivId = $(eventShown.target).attr('aria-describedby');
+            $("#" + popDivId).find("button#go").click(() => {
+                popConfirm.hide();
+                goFunc();
+            });
+
+            $("#" + popDivId).find("button#nogo").click(() => {
+                popConfirm.hide();
+            });
+        });
+    }
+
+    popConfirm.show();
+}

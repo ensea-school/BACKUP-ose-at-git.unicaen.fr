@@ -40,13 +40,33 @@
                             <div class="col-md-12">&nbsp;</div>
                         </div>
                         <div class="row">
+                            <!-- Boutons d'actions -->
                             <div class="col-md-12">
-                                <a v-if="mission.canEdit" :href="saisieUrl" class="btn btn-primary" @click.prevent="saisie">Modifier la mission</a>
-                                <a v-if="!mission.validation" class="btn btn-secondary" @click.prevent="valider">Validation de la mission</a>
-                                <a v-if="mission.validation" class="btn btn-danger" @click.prevent="devalider">Dévalidation de la mission</a>
-                                <a class="btn btn-danger" :href="supprimerUrl" data-title="Suppression de la mission"
+                                <a v-if="mission.canSaisie"
+                                   :href="saisieUrl"
+                                   class="btn btn-primary"
+                                   @click.prevent="saisie">Modifier</a>
+
+                                <a v-if="mission.canValider"
+                                   :href="validerUrl"
+                                   class="btn btn-secondary"
+                                   data-title="Validation de la mission"
+                                   data-content="Êtes-vous sur de vouloir valider la mission ?"
+                                   @click.prevent="valider">Valider</a>
+
+                                <a v-if="mission.canDevalider"
+                                   :href="devaliderUrl"
+                                   class="btn btn-danger"
+                                   data-title="Dévalidation de la mission"
+                                   data-content="Êtes-vous sur de vouloir dévalider la mission ?"
+                                   @click.prevent="devalider">Dévalider</a>
+
+                                <a v-if="mission.canSupprimer"
+                                   :href="supprimerUrl"
+                                   class="btn btn-danger"
+                                   data-title="Suppression de la mission"
                                    data-content="Êtes-vous sur de vouloir supprimer la mission ?"
-                                   data-confirm="true" @click.prevent="supprimer">Suppression de la mission</a>
+                                   @click.prevent="supprimer">Supprimer</a>
                             </div>
                         </div>
                     </div>
@@ -56,18 +76,18 @@
                             <label class=" form-label">Suivi</label>
                         </div>
                         <div>
-                            <icon name="thumbs-up"/>
+                            <u-icon name="thumbs-up"/>
                             Créé le {{ mission.histoCreation }} par
                             <utilisateur :nom="mission.histoCreateur.displayName" :mail="mission.histoCreateur.email"/>
                         </div>
                         <div>
-                            <icon :name="mission.valide ? 'thumbs-up' : 'thumbs-down'"/>
+                            <u-icon :name="mission.valide ? 'thumbs-up' : 'thumbs-down'"/>
                             {{ validationText }}
                             <utilisateur v-if="mission.validation && mission.validation.histoCreateur" :nom="mission.validation.histoCreateur.libelle"
                                          :mail="mission.validation.histoCreateur.email"/>
                         </div>
                         <div>
-                            <icon :name="mission.contrat ? 'thumbs-up' : 'thumbs-down'"/>
+                            <u-icon :name="mission.contrat ? 'thumbs-up' : 'thumbs-down'"/>
                             {{ mission.contrat ? 'Contrat établi' : 'Pas de contrat' }}
                         </div>
                         <div>
@@ -77,6 +97,7 @@
                 </div>
             </div>
         </form>
+
     </div>
 </template>
 
@@ -91,7 +112,10 @@ export default {
     {
         return {
             validationText: this.calcValidation(this.mission.validation),
+
             saisieUrl: Util.url('mission/saisie/:mission', {mission: this.mission.id}),
+            validerUrl: Util.url('mission/valider/:mission', {mission: this.mission.id}),
+            devaliderUrl: Util.url('mission/devalider/:mission', {mission: this.mission.id}),
             supprimerUrl: Util.url("mission/supprimer/:mission", {mission: this.mission.id}),
         };
     },
@@ -133,23 +157,19 @@ export default {
         },
         supprimer(event)
         {
-            popAjax(event.target, (widget) => {
+            popConfirm(event.target, (response) => {
                 this.$emit('supprimer', this.mission);
             });
         },
-        valider()
+        valider(event)
         {
-            axios.get(
-                Util.url("mission/valider/:mission", {mission: this.mission.id})
-            ).then(response => {
+            popConfirm(event.target, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
-        devalider()
+        devalider(event)
         {
-            axios.get(
-                Util.url("mission/devalider/:mission", {mission: this.mission.id})
-            ).then(response => {
+            popConfirm(event.target, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
@@ -161,6 +181,10 @@ export default {
                 this.$emit('refresh', response.data);
             });
         },
+        test()
+        {
+            console.log('Go go go!!!');
+        },
     }
 }
 </script>
@@ -168,5 +192,10 @@ export default {
 <style scoped>
 .card-header h5 {
     font-weight: 500;
+}
+
+.btn {
+    margin-left: 2px;
+    margin-right: 2px;
 }
 </style>

@@ -7,17 +7,12 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
-?>
-<div class="res">
-    <?php
 
+/** @var \Mission\Service\MissionService $sMission */
+$sMission = $container->get(\Mission\Service\MissionService::class);
 
-    //return true;
-    // This method is very useful for the local server
-    // if we try to access it, and by any means, didn't started Vite yet
-    // it will fallback to load the production files from manifest
-    // so you still navigate your site as you intended!
+$mission = $sMission->get(31);
 
+$mission->setHeures(10);
 
-    ?>
-</div>
+$sMission->save($mission);

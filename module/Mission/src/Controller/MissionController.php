@@ -5,6 +5,7 @@ namespace Mission\Controller;
 use Application\Constants;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
@@ -93,6 +94,10 @@ class MissionController extends AbstractController
         $mission->setDateDebut(new \DateTime());
         $mission->setDateFin(new \DateTime());
 
+        $canAutoValidate = $this->isAllowed($mission, Privileges::MISSION_AUTOVALIDATION);
+
+        if ($canAutoValidate) $mission->setAutoValidation(true);
+
         return $this->saisieAction($mission);
     }
 
@@ -147,10 +152,13 @@ class MissionController extends AbstractController
         /** @var Mission $mission */
         $mission = $this->getEvent()->getParam('mission');
 
-        $this->getServiceValidation()->validerMission($mission);
-        $this->getServiceMission()->save($mission);
-
-        $this->flashMessenger()->addSuccessMessage('Mission validée');
+        if ($mission->isValide()) {
+            $this->flashMessenger()->addInfoMessage('La mission est déjà validée');
+        } else {
+            $this->getServiceValidation()->validerMission($mission);
+            $this->getServiceMission()->save($mission);
+            $this->flashMessenger()->addSuccessMessage('Mission validée');
+        }
 
         return $this->getAction();
     }
@@ -164,6 +172,7 @@ class MissionController extends AbstractController
 
         $validation = $mission->getValidation();
         if ($validation) {
+            $mission->setAutoValidation(false);
             $mission->removeValidation($validation);
             $this->getServiceValidation()->delete($validation);
             $this->flashMessenger()->addSuccessMessage("Validation de la mission <strong>retirée</strong> avec succès.");

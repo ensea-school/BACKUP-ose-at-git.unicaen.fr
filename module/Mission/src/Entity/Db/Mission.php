@@ -8,10 +8,11 @@ use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-class Mission implements HistoriqueAwareInterface
+class Mission implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
@@ -44,6 +45,13 @@ class Mission implements HistoriqueAwareInterface
         $this->etudiants       = new ArrayCollection();
         $this->validations     = new ArrayCollection();
         $this->volumesHoraires = new ArrayCollection();
+    }
+
+
+
+    public function getResourceId()
+    {
+        return 'Mission';
     }
 
 

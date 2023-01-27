@@ -21,7 +21,7 @@ class MissionForm extends AbstractForm
 
     public function init()
     {
-        $this->spec(Mission::class, ['intervenant']);
+        $this->spec(Mission::class, ['intervenant', 'autoValidation']);
 
         $this->spec(['description' => ['type' => 'Textarea']]);
 
@@ -44,7 +44,6 @@ class MissionForm extends AbstractForm
             'dateDebut'       => 'Date de début',
             'dateFin'         => 'Date de fin',
             'description'     => 'Descriptif de la mission',
-            'autoValidation'  => 'La mission n\'a pas besoin d\'être validée',
         ]);
 
         $this->addSubmit();

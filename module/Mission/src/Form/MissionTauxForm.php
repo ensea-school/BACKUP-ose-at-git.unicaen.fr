@@ -20,6 +20,13 @@ class MissionTauxForm extends AbstractForm
         $this->setHydrator($hydratorForm);
 
         $this->spec(MissionTauxRemu::class);
+        $this->spec([
+            'missionTauxRemu' => [
+                'input' => [
+                    'required' => false,
+                ],
+            ],
+        ]);
         $this->build();
 
         $this->setValueOptions('missionTauxRemu', $this->getServiceMissionTaux()->getTauxRemusIndexable());
@@ -44,31 +51,6 @@ class MissionTauxForm extends AbstractForm
 
         return $this;
     }
-
-    /**
-     * Should return an array specification compatible with
-     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
-     *
-     * @return array
-     */
-    public function getInputFilterSpecification()
-    {
-        return [
-            'missionTauxRemu'     => [
-                'required' => false,
-            ],
-            'libelle'      => [
-                'required' => true,
-            ],
-            'code'  => [
-                'required' => true,
-            ],
-            'date' => [
-                'required' => true,
-            ],
-        ];
-    }
-
 }
 
 

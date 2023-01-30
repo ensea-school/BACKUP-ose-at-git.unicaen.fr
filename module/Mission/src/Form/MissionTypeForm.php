@@ -17,6 +17,13 @@ class MissionTypeForm extends AbstractForm
     {
         $ignore = [];
         $this->spec(TypeMission::class, $ignore);
+        $this->spec([
+            'missionTauxRemu' => [
+                'input' => [
+                    'required' => false,
+                ],
+            ],
+        ]);
         $this->build();
         $this->setValueOptions('missionTauxRemu', $this->getServiceMissionTaux()->getTauxRemus());
         $this->get('missionTauxRemu')->setEmptyOption("");

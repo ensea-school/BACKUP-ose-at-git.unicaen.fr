@@ -265,6 +265,10 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const REFERENTIEL_SAISIE_TOUTES_COMPOSANTES                = 'referentiel-saisie-toutes-composantes';
     const STRUCTURES_ADMINISTRATION_EDITION                    = 'structures-administration-edition';
     const STRUCTURES_ADMINISTRATION_VISUALISATION              = 'structures-administration-visualisation';
+    const TAG_ADMINISTRATION_EDITION                           = 'tag-administration-edition';
+    const TAG_ADMINISTRATION_VISUALISATION                     = 'tag-administration-visualisation';
+    const TAG_EDITION                                          = 'tag-edition';
+    const TAG_VISUALISATION                                    = 'tag-visualisation';
     const TYPE_INTERVENTION_EDITION                            = 'type-intervention-edition';
     const TYPE_INTERVENTION_VISUALISATION                      = 'type-intervention-visualisation';
     const TYPE_RESSOURCE_EDITION                               = 'type-ressource-edition';

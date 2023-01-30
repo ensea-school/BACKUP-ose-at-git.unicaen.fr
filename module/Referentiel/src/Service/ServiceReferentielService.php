@@ -2,8 +2,11 @@
 
 namespace Referentiel\Service;
 
+use Application\Entity\Db\MotifNonPaiement;
+use Application\Entity\Db\Tag;
 use Application\Service\AbstractEntityService;
 use Application\Service\StructureService;
+use Application\Service\Traits\TagServiceAwareTrait;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Provider\Privilege\Privileges;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
@@ -29,6 +32,7 @@ class ServiceReferentielService extends AbstractEntityService
 {
     use IntervenantServiceAwareTrait;
     use StructureServiceAwareTrait;
+    use TagServiceAwareTrait;
     use FonctionReferentielServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
@@ -80,6 +84,7 @@ class ServiceReferentielService extends AbstractEntityService
             ->join($this->getServiceStructure(), $qb, 'structure', true, $alias)
             ->join($this->getServiceFonctionReferentiel(), $qb, 'fonctionReferentiel', true, $alias)
             ->join($this->getServiceIntervenant(), $qb, 'intervenant', true, $alias);
+
 
         return [$qb, $alias];
     }
@@ -146,6 +151,8 @@ class ServiceReferentielService extends AbstractEntityService
         Intervenant $intervenant,
         FonctionReferentiel $fonction,
         Structure $structure,
+        ?Tag $tag,
+        ?MotifNonPaiement $motifNonPaiement,
         $commentaires = null
     )
     {
@@ -153,6 +160,8 @@ class ServiceReferentielService extends AbstractEntityService
             'intervenant'         => $intervenant,
             'fonctionReferentiel' => $fonction,
             'structure'           => $structure,
+            'tag'                 => $tag,
+            'motifNonPaiement'    => $motifNonPaiement,
         ]);
 
         /* Retourne le premier NON historisé */
@@ -245,16 +254,26 @@ class ServiceReferentielService extends AbstractEntityService
             }
 
             $serviceAllreadyExists = null;
-            if (!$entity->getId()) { // uniquement pour les nouveaux services!!
-                $serviceAllreadyExists = $this->getBy(
-                    $entity->getIntervenant(),
-                    $entity->getFonctionReferentiel(),
-                    $entity->getStructure(),
-                    $entity->getCommentaires()
-                );
-            }
+
+            $serviceAllreadyExists = $this->getBy(
+                $entity->getIntervenant(),
+                $entity->getFonctionReferentiel(),
+                $entity->getStructure(),
+                $entity->getTag(),
+                $entity->getMotifNonPaiement(),
+                $entity->getCommentaires()
+            );
+
+            //@TODO probleme de supression
+            //On regarde dans le cas d'un modification d'un service reférentiel
+
+
             if ($serviceAllreadyExists) {
                 $result = $serviceAllreadyExists;
+                if ($result->getId() != $entity->getId()) {
+                    //on remove l'ancien service puisque les volumes horaires vont être accrochés sur un service déjà existant
+                    parent::delete($entity);
+                }
             } else {
                 $sourceOse = $this->getServiceSource()->getOse();
                 if (!$entity->getSource()) {
@@ -361,8 +380,8 @@ class ServiceReferentielService extends AbstractEntityService
             }
             $volumeHoraire = $this->getServiceVolumeHoraireReferentiel()->newEntity();
             //@formatter:off
-            $volumeHoraire->setTypeVolumeHoraire( $o['type-volume-horaire'] );
-            $volumeHoraire->setHeures           ( $o['heures']              );
+            $volumeHoraire->setTypeVolumeHoraire($o['type-volume-horaire']);
+            $volumeHoraire->setHeures($o['heures']);
             //@formatter:on
             $volumeHoraire->setServiceReferentiel($service);
             $service->addVolumeHoraireReferentiel($volumeHoraire);
@@ -387,9 +406,9 @@ class ServiceReferentielService extends AbstractEntityService
 
         $qb = $this->select(['id', 'fonctionReferentiel', 'structure', 'commentaires']);
         //@formatter:off
-        $this->join(FonctionReferentielService::class,   $qb, 'fonctionReferentiel',     true);
-        $this->Join(StructureService::class,             $qb, 'structure',               true);
-        $this->Join($sVolumeHoraireReferentiel,         $qb, 'volumeHoraireReferentiel',true);
+        $this->join(FonctionReferentielService::class, $qb, 'fonctionReferentiel', true);
+        $this->Join(StructureService::class, $qb, 'structure', true);
+        $this->Join($sVolumeHoraireReferentiel, $qb, 'volumeHoraireReferentiel', true);
         //@formatter:on
 
         $this->finderByHistorique($qb);
@@ -420,7 +439,9 @@ class ServiceReferentielService extends AbstractEntityService
                     'service'             => $this->getBy(
                         $intervenant,
                         $service->getFonctionReferentiel(),
-                        $service->getStructure()
+                        $service->getStructure(),
+                        $service->getTag(),
+                        $service->getMotifNonPaiement()
                     ),
                 ];
 

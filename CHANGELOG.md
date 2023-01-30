@@ -23,6 +23,7 @@
 * Migration technnique vers le framework Bootstrap 5 et modernisation de l'identité visuelle
 * Réorganisation du menu "Administration" pour plus de lisibilité
 * Filtrage des caractères interdits lors de l'export RH SIHAM (#47267)
+* Associer des tags aux services afin de flécher certains financements (#42451)
 
 ## Corrections de bugs
 
@@ -45,6 +46,24 @@
 
 * Supprimer la ligne faisant référence à TBL_NOEUD dans Administration/Synchronisation/Tables, table NOEUD, champ "Traitements postérieurs : à exécuter après la synchro".
 * La génération des contrats de travail ayant été remaniée, veuillez vérifier que vous pouvez générer correctement de nouveaux contrats de travail
+
+
+Avec l'ajout de la notion de tag sur les services d'enseignement et référentiel, les champs 'TAG' et 'TAG_ID' ont été ajouté dans la V_EXPORT_SERVICE, si vous avez créer votre propre V_EXPORT_SERVICE, il vous faudra la modifier vous même en vous appuyant sur la V_EXPORT_SERVICE par défaut de OSE (https://git.unicaen.fr/open-source/OSE/-/blob/master/data/ddl/view/V_EXPORT_SERVICE.sql)
+
+Ensuite si vous souhaitez faire apparaître les tags dans l'export des services, il vous faudra modifier vous même l'état de sorte 'Export des services', dans l'onglet 'Export CSV' : 
+
+A la **ligne 56** ajouter TAG_ID à la variable $sid : 
+
+    $sid .= '_' . $d['TAG_ID'];
+
+A la **ligne 102** ajouter la colonne TAG dans le tableau $ds: 
+
+    tag' => $d['TAG'],
+
+A la **ligne 206** Ajouter le titre de colonne TAG dans le tableau $head : 
+  
+    'tag' => 'Tags',
+
 
 # OSE 19.7 (16/12/2022)
 

@@ -3,6 +3,7 @@
 namespace Enseignement\Entity\Db;
 
 use Application\Entity\Db\Contrat;
+use Application\Entity\Db\Traits\TagAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\FormuleResultatVolumeHoraire;
 use Application\Entity\Db\Periode;
@@ -28,6 +29,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     use ImportAwareTrait;
     use ServiceAwareTrait;
     use MotifNonPaiementAwareTrait;
+    use TagAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use TypeInterventionAwareTrait;
     use PeriodeAwareTrait;
@@ -203,7 +205,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
 
         return ($result) ?: null;
     }
-
 
 
     /**

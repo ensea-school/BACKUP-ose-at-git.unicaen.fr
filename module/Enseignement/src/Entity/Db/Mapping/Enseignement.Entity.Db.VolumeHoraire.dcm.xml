@@ -5,7 +5,7 @@
     <entity name="Enseignement\Entity\Db\VolumeHoraire" table="VOLUME_HORAIRE">
         <unique-constraints>
             <unique-constraint name="volume_horaire__un"
-                               columns="SERVICE_ID,PERIODE_ID,TYPE_INTERVENTION_ID,MOTIF_NON_PAIEMENT_ID"/>
+                               columns="SERVICE_ID,PERIODE_ID,TYPE_INTERVENTION_ID,MOTIF_NON_PAIEMENT_ID, TAG_ID"/>
         </unique-constraints>
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
@@ -35,6 +35,9 @@
         <many-to-one field="motifNonPaiement" target-entity="Application\Entity\Db\MotifNonPaiement">
             <join-column name="MOTIF_NON_PAIEMENT_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <many-to-one field="tag" target-entity="Application\Entity\Db\Tag">
+            <join-column name="TAG_ID" referenced-column-name="ID"/>
+        </many-to-one>
         <many-to-one field="periode" target-entity="Application\Entity\Db\Periode">
             <join-column name="PERIODE_ID" referenced-column-name="ID"/>
         </many-to-one>
@@ -61,7 +64,8 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
-        <one-to-many field="formuleResultatVolumeHoraire" target-entity="Application\Entity\Db\FormuleResultatVolumeHoraire" mapped-by="volumeHoraire"/>
+        <one-to-many field="formuleResultatVolumeHoraire"
+                     target-entity="Application\Entity\Db\FormuleResultatVolumeHoraire" mapped-by="volumeHoraire"/>
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
             <join-column name="SOURCE_ID" referenced-column-name="ID"/>
         </many-to-one>

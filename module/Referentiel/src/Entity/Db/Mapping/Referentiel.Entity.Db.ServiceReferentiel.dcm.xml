@@ -12,11 +12,18 @@
         <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
         <field name="commentaires" type="string" column="COMMENTAIRES" length="256" nullable="true"/>
         <field name="formation" type="string" column="FORMATION" length="256" nullable="true"/>
-        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="serviceReferentiel">
+        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant"
+                     inversed-by="serviceReferentiel">
             <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
             <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="tag" target-entity="Application\Entity\Db\Tag">
+            <join-column name="TAG_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="motifNonPaiement" target-entity="Application\Entity\Db\MotifNonPaiement">
+            <join-column name="MOTIF_NON_PAIEMENT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="fonctionReferentiel" target-entity="Referentiel\Entity\Db\FonctionReferentiel">
             <join-column name="FONCTION_ID" referenced-column-name="ID"/>
@@ -37,7 +44,8 @@
             </cascade>
         </one-to-many>
         <one-to-many field="formuleResultatServiceReferentiel"
-                     target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel" mapped-by="serviceReferentiel"/>
+                     target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel"
+                     mapped-by="serviceReferentiel"/>
 
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
             <join-column name="SOURCE_ID" referenced-column-name="ID"/>

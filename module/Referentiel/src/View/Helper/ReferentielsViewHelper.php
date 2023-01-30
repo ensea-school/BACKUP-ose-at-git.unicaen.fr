@@ -38,27 +38,35 @@ class ReferentielsViewHelper extends AbstractViewHelper
     private bool $horodatage = false;
 
     private array $columns = [
-        'intervenant'  => [
+        'intervenant'        => [
             'visibility' => false,
             'head-text'  => "<th>Intervenant</th>",
         ],
-        'structure'    => [
+        'structure'          => [
             'visibility' => true,
             'head-text'  => "<th title=\"Structure\">Structure</th>",
         ],
-        'fonction'     => [
+        'fonction'           => [
             'visibility' => true,
             'head-text'  => "<th title=\"Fonction référentiel\">Fonction</th>",
         ],
-        'commentaires' => [
+        'commentaires'       => [
             'visibility' => true,
             'head-text'  => "<th title=\">Commentaires éventuels\">Commentaires</th>",
         ],
-        'heures'       => [
+        'motif-non-paiement' => [
+            'visibility' => false,
+            'head-text'  => "<th title=\"Nombre d'heures\">Motif de non paiement</th>",
+        ],
+        'tags'               => [
+            'visibility' => false,
+            'head-text'  => "<th>Tag</th>",
+        ],
+        'heures'             => [
             'visibility' => true,
             'head-text'  => "<th title=\"Nombre d'heures\">Heures</th>",
         ],
-        'annee'        => [
+        'annee'              => [
             'visibility' => false,
             'head-text'  => "<th>Année univ.</th>",
         ],
@@ -126,6 +134,15 @@ class ReferentielsViewHelper extends AbstractViewHelper
     {
         $colspan = 2;
 
+        $canViewMNP = $this->getView()->isAllowed($this->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
+        $canEditMNP = $this->getView()->isAllowed($this->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_EDITION);
+        $canViewTag = $this->getView()->isAllowed($this->getIntervenant(), Privileges::TAG_VISUALISATION);
+        $canEditTag = $this->getView()->isAllowed($this->getIntervenant(), Privileges::TAG_EDITION);
+
+        $this->columns['tags']['visibility'] = ($canEditTag || $canViewTag) ? true : false;
+        $this->columns['motif-non-paiement']['visibility'] = ($canEditMNP || $canViewMNP) ? true : false;
+
+
         $attribs = [
             'id'          => $this->getId(true),
             'class'       => 'referentiels',
@@ -142,6 +159,8 @@ class ReferentielsViewHelper extends AbstractViewHelper
 
         $out .= '<table class="table table-bordered table-xs service-referentiel">';
         $out .= '<tr>';
+
+        /*On rend les colonnes visibles selon les privileges*/
 
         foreach ($this->getColumnsList() as $columnName) {
             if ($this->getColumnVisibility($columnName)) {
@@ -199,7 +218,7 @@ class ReferentielsViewHelper extends AbstractViewHelper
             }
         }
 
-        $out .= $this->renderActionSaisie();
+        $out .= $this->renderActionSaisie() . "<br/><br/>";
 
         return $out;
     }

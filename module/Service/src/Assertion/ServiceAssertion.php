@@ -107,6 +107,7 @@ class ServiceAssertion extends AbstractAssertion
         if (!$this->assertIntervenant($role, $intervenant)) return false; // si on n'est pas le bon intervenant!!
 
         switch ($controller . '.' . $action) {
+            case ServiceController::class . '.index':
             case ServiceController::class . '.resume':
                 return $this->assertResume($role);
             break;

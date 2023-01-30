@@ -130,7 +130,7 @@ export default {
             if (this.mission.heures === null || this.mission.heures === 0) {
                 return 'Aucune heure saisie';
             } else if (this.mission.heures - this.mission.heuresValidees == 0) {
-                return this.mission.heures + ' heures validés';
+                return this.mission.heures + ' heures validées';
             } else if (this.mission.heuresValidees == 0) {
                 return this.mission.heures + ' heures à valider';
             } else {

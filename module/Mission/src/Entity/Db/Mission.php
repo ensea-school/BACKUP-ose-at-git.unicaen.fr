@@ -213,10 +213,11 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
         $newHeures = $heures - $oldHeures;
 
         if ($newHeures != 0) {
-
+            $nvh = new VolumeHoraireMission();
+            $nvh->setMission($this);
+            $this->addVolumeHoraire($nvh);
+            $nvh->setHeures($newHeures);
         }
-
-        var_dump($newHeures);
 
         return $this;
     }

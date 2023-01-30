@@ -358,11 +358,15 @@ $(function () {
 
 function modAjax(element, onSubmit)
 {
-    $(element).modAjax();
-
     var widget = $(element).data('unicaenModAjax');
-    if (onSubmit) {
-        widget.options.submitEvent = onSubmit;
+
+    if (!widget) {
+        $(element).modAjax();
+        widget = $(element).data('unicaenModAjax');
+        if (onSubmit) {
+            widget.options.submitEvent = onSubmit;
+        }
+        widget.show();
     }
 
     return widget;

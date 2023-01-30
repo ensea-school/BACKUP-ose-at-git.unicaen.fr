@@ -182,12 +182,29 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     {
         if ($this->isAutoValidation()) return true;
 
-        if ($validations = $this->getValidation()) {
+        if ($validations = $this->getValidations()) {
             foreach ($validations as $validation) {
                 if ($validation->estNonHistorise()) return true;
             }
         }
 
         return false;
+    }
+
+
+
+    public function getValidation(): ?Validation
+    {
+        if ($this->isAutoValidation()) {
+            return new Validation();
+        }
+
+        if ($validations = $this->getValidations()) {
+            foreach ($validations as $validation) {
+                if ($validation->estNonHistorise()) return $validation;
+            }
+        }
+
+        return null;
     }
 }

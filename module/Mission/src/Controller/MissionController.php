@@ -124,7 +124,7 @@ class MissionController extends AbstractController
         });
         // on passe le data-id pour pouvoir le récupérer dans la vue et mettre à jour la liste
         $form->setAttribute('data-id', $mission->getId());
-        $form->get('heures')->setValue('8');
+
         $vm = new ViewModel();
         $vm->setTemplate('mission/saisie');
         $vm->setVariables(compact('form', 'title', 'mission'));

@@ -6,7 +6,10 @@ use Application\Controller\Plugin\Axios;
 use Application\Entity\Db\Intervenant;
 use Application\Hydrator\GenericHydrator;
 use Application\Service\AbstractEntityService;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\VolumeHoraireMission;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 /**
  * Description of MissionService
@@ -20,6 +23,8 @@ use Mission\Entity\Db\Mission;
  */
 class MissionService extends AbstractEntityService
 {
+    use TypeVolumeHoraireServiceAwareTrait;
+    use SourceServiceAwareTrait;
 
     /**
      * Retourne la classe des entités
@@ -42,6 +47,41 @@ class MissionService extends AbstractEntityService
     public function getAlias(): string
     {
         return 'm';
+    }
+
+
+
+    /**
+     * @param Mission $entity
+     *
+     * @return Mission
+     */
+    public function save($entity)
+    {
+        foreach ($entity->getVolumeHoraires() as $vh) {
+            $this->saveVolumeHoraire($vh);
+        }
+
+        parent::save($entity);
+
+        return $entity;
+    }
+
+
+
+    public function saveVolumeHoraire(VolumeHoraireMission $vhm): self
+    {
+        if (!$vhm->getTypeVolumeHoraire()) {
+            $vhm->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
+        }
+        if (!$vhm->getSource()) {
+            $vhm->setSource($this->getServiceSource()->getOse());
+        }
+
+        $this->getEntityManager()->persist($vhm);
+        $this->getEntityManager()->flush($vhm);
+
+        return $this;
     }
 
 

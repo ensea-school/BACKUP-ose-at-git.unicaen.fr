@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Application\Form\Supprimer;
 use Application\Traits\TranslatorTrait;
 use Doctrine\ORM\EntityManager;
+use Laminas\Http\Request;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Mvc\MvcEvent;
 
@@ -59,7 +60,7 @@ abstract class AbstractController extends AbstractActionController
     public function onDispatch(MvcEvent $e)
     {
         $request = $e->getRequest();
-        if ($request->isXmlHttpRequest()) {
+        if ($request instanceof Request && $request->isXmlHttpRequest()) {
             $e->getTarget()->layout('layout/ajax.phtml');
         }
 

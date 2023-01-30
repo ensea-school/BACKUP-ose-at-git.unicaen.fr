@@ -18,8 +18,15 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 <?php
 /** @var MissionTauxRemu[] $tauxMissions */
 /** @var string $annee */
-$anneeSplit = explode('/', $annee); ?>
+$anneeSplit = explode('/', $annee);
 
+
+echo $this->vue('mission/liste-taux', [
+    'canAddTaux' => true,
+]);
+
+
+?>
 <table class="table table-bordered table-sm">
     <thead>
     <tr>
@@ -75,7 +82,7 @@ $anneeSplit = explode('/', $annee); ?>
                 <?php endif; ?>
             </td>
             <td>
-                <?php if($tauxRemu->getMissionTauxRemu()):
+                <?php if ($tauxRemu->getMissionTauxRemu()):
                     echo $tauxRemu->getMissionTauxRemu()->getLibelle();
                 endif; ?>
 

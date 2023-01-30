@@ -26,6 +26,7 @@ $anneeSplit = explode('/', $annee); ?>
         <th style="text-align: center">Libelle</th>
         <th style="text-align: center">Code</th>
         <th style="text-align: center">Valeurs de l'année <?php echo $annee ?></th>
+        <th style="text-align: center">Taux de référence</th>
         <?php if ($canSupprimer || $canEdit): ?>
             <th style="text-align: center">Action</th>
         <?php endif; ?>
@@ -56,9 +57,9 @@ $anneeSplit = explode('/', $annee); ?>
                            title="Modifier la valeur du taux">
                             <?php echo $tauxRemuValeur->getValeur() ?> - <?php echo $newDate ?><br>
                         </a>
-                        <?php else: ?>
-                            <?php echo $tauxRemuValeur->getValeur() ?> - <?php echo $newDate ?><br>
-                        <?php endif; ?>
+                    <?php else: ?>
+                        <?php echo $tauxRemuValeur->getValeur() ?> - <?php echo $newDate ?><br>
+                    <?php endif; ?>
                     <?php else:
                         $taux = $taux . "valeur: " . $tauxRemuValeur->getValeur() . " - Date: " . $tauxRemuValeur->getDateEffet()->format('d/m/Y') . "\n";
                     endif;
@@ -73,8 +74,13 @@ $anneeSplit = explode('/', $annee); ?>
                     </a>
                 <?php endif; ?>
             </td>
-            <?php if ($canSupprimer || $canEdit): ?>
+            <td>
+                <?php if($tauxRemu->getMissionTauxRemu()):
+                    echo $tauxRemu->getMissionTauxRemu()->getLibelle();
+                endif; ?>
 
+            </td>
+            <?php if ($canSupprimer || $canEdit): ?>
                 <td>
                     <?php if ($canEdit): ?>
                         <a class="ajax-modal " data-event="taux-edition"
@@ -82,22 +88,17 @@ $anneeSplit = explode('/', $annee); ?>
                            title="Modifier le taux"><i class="fas fa-pen-to-square"></i></a>
                     <?php endif; ?>
                     <?php if ($canSupprimer): ?>
-
                         <a class="pop-ajax " data-title="Suppression d'un taux" data-content="Êtes-vous sur de vouloir supprimer"
                            data-confirm="true"
                            data-submit-reload="true"
                            href="<?= $this->url("missions-taux/supprimer", ['missionTauxRemu' => $tauxRemu->getId()]) ?>"
                            title="Supprimer le taux"><i class="fas fa-trash-can"></i></a>
                     <?php endif; ?>
-
                 </td>
             <?php endif; ?>
-
         </tr>
-
     <?php endforeach; ?>
     </tbody>
-
 </table>
 <?php if ($canEdit): ?>
     <div>

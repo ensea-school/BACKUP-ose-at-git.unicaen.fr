@@ -19,6 +19,9 @@ class MissionTypeForm extends AbstractForm
         $this->spec(TypeMission::class, $ignore);
         $this->build();
         $this->setValueOptions('missionTauxRemu', $this->getServiceMissionTaux()->getTauxRemus());
+        $this->get('missionTauxRemu')->setEmptyOption("");
+        $this->get('missionTauxRemu')->setLabel('Taux par défaut');
+
         $this->addSecurity();
         $this->addSubmit();
 

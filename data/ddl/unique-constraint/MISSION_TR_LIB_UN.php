@@ -8,6 +8,7 @@ return [
     'index'   => 'MISSION_TR_LIB_UN',
     'columns' => [
         'LIBELLE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

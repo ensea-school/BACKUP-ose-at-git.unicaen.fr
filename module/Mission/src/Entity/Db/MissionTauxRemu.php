@@ -13,13 +13,15 @@ class MissionTauxRemu implements HistoriqueAwareInterface
 
     use HistoriqueAwareTrait;
 
-    protected ?int       $id      = null;
+    protected ?int             $id              = null;
 
-    protected ?string    $code    = null;
+    protected ?string          $code            = null;
 
-    protected ?string    $libelle = null;
+    protected ?string          $libelle         = null;
 
-    protected Collection $tauxRemuValeurs;
+    protected ?MissionTauxRemu $missionTauxRemu = null;
+
+    protected Collection       $tauxRemuValeurs;
 
 
 
@@ -56,6 +58,22 @@ class MissionTauxRemu implements HistoriqueAwareInterface
     public function setLibelle(?string $libelle): MissionTauxRemu
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+
+
+    public function getMissionTauxRemu(): ?MissionTauxRemu
+    {
+        return $this->missionTauxRemu;
+    }
+
+
+
+    public function setMissionTauxRemu(?MissionTauxRemu $missionTauxRemu): MissionTauxRemu
+    {
+        $this->missionTauxRemu = $missionTauxRemu;
 
         return $this;
     }
@@ -133,34 +151,46 @@ class MissionTauxRemu implements HistoriqueAwareInterface
         return $this->getLibelle();
     }
 
-    public function getDerniereValeur(){
-        $valeurRetour = null;
+
+
+    public function getDerniereValeur()
+    {
+        $valeurRetour     = null;
         $valeurRetourDate = null;
-        $valeurs = $this->tauxRemuValeurs->getValues();
-        foreach ($valeurs as $valeur){
-            if($valeurRetourDate == null || $valeur->getDateEffet() > $valeurRetourDate){
-                $valeurRetour = $valeur->getValeur();
+        $valeurs          = $this->tauxRemuValeurs->getValues();
+        foreach ($valeurs as $valeur) {
+            if ($valeurRetourDate == null || $valeur->getDateEffet() > $valeurRetourDate) {
+                $valeurRetour     = $valeur->getValeur();
                 $valeurRetourDate = $valeur->getDateEffet();
             }
         }
+
         return $valeurRetour;
     }
-    public function getDerniereValeurDate(){
+
+
+
+    public function getDerniereValeurDate()
+    {
         $valeurRetourDate = null;
-        $valeurs = $this->tauxRemuValeurs->getValues();
-        foreach ($valeurs as $valeur){
-            if($valeurRetourDate == null || $valeur->getDateEffet() > $valeurRetourDate){
+        $valeurs          = $this->tauxRemuValeurs->getValues();
+        foreach ($valeurs as $valeur) {
+            if ($valeurRetourDate == null || $valeur->getDateEffet() > $valeurRetourDate) {
                 $valeurRetourDate = $valeur->getDateEffet();
             }
         }
+
         return $valeurRetourDate;
     }
 
-    public function setValeur(DateTime $date, float $valeur){
+
+
+    public function setValeur(DateTime $date, float $valeur)
+    {
         $tauxRemuValeurProche = $this->getTauxRemuValeur($date);
-        if($tauxRemuValeurProche != null && $tauxRemuValeurProche->getDateEffet() == $date){
+        if ($tauxRemuValeurProche != null && $tauxRemuValeurProche->getDateEffet() == $date) {
             $tauxRemuValeurProche->setValeur($valeur);
-        }else{
+        } else {
             //new tauxremu
             $newTauxRemu = new MissionTauxRemuValeur();
             $newTauxRemu->setValeur($valeur);

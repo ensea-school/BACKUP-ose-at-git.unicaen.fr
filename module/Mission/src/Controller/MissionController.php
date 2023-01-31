@@ -14,6 +14,7 @@ use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 
 /**
@@ -56,13 +57,32 @@ class MissionController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $missions = $this->getServiceMission()->missionsByIntervenant($intervenant);
-        $liste    = [];
-        foreach ($missions as $mission) {
-            $liste[$mission->getId()] = $this->getServiceMission()->missionWs($mission);
-        }
+        $dql = "
+        SELECT 
+          m, tm, str, tr, valid, vh, vvh, ctr
+        FROM 
+          " . Mission::class . " m
+          JOIN m.typeMission tm
+          JOIN m.structure str
+          JOIN m.missionTauxRemu tr
+          JOIN " . TypeVolumeHoraire::class . " tvh WITH tvh.code = :typeVolumeHorairePrevu
+          LEFT JOIN m.validations valid WITH valid.histoDestruction IS NULL
+          LEFT JOIN m.volumesHoraires vh WITH vh.histoDestruction IS NULL AND vh.typeVolumeHoraire = tvh
+          LEFT JOIN vh.validations vvh WITH vvh.histoDestruction IS NULL
+          LEFT JOIN vh.contrat ctr WITH ctr.histoDestruction IS NULL
+        WHERE 
+            m.histoDestruction IS NULL 
+            AND m.intervenant = :intervenant
+        ";
 
-        return $this->axios()->send($liste);
+        $queryParams = [
+            'intervenant'            => $intervenant,
+            'typeVolumeHorairePrevu' => TypeVolumeHoraire::CODE_PREVU,
+        ];
+
+        $query = $this->em()->createQuery($dql)->setParameters($queryParams);
+
+        return $this->axios()->send($query);
     }
 
 
@@ -77,7 +97,7 @@ class MissionController extends AbstractController
         /** @var Mission $mission */
         $mission = $this->getEvent()->getParam('mission');
 
-        return $this->axios()->send($this->getServiceMission()->missionWs($mission));
+        return $this->axios()->send($mission);
     }
 
 
@@ -89,10 +109,6 @@ class MissionController extends AbstractController
 
         $mission = $this->getServiceMission()->newEntity();
         $mission->setIntervenant($intervenant);
-
-        /* pour les tests */
-        $mission->setDateDebut(new \DateTime());
-        $mission->setDateFin(new \DateTime());
 
         $canAutoValidate = $this->isAllowed($mission, Privileges::MISSION_AUTOVALIDATION);
 

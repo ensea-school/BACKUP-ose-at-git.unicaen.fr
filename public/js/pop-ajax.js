@@ -345,7 +345,6 @@ function popConfirm(element, options)
         if (element.nodeName == 'A') {
             goFunc = function () {
                 axios.get(element.href).then(response => {
-                    console.log('co');
                     options.onConfirm(response, element);
                 });
             };

@@ -6,6 +6,7 @@ use Application\Entity\Db\Traits\ContratAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
+use Application\Interfaces\AxiosExtractor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Enseignement\Entity\Db\VolumeHoraire;
@@ -15,7 +16,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
-class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInterface
+class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInterface, AxiosExtractor
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
@@ -43,6 +44,13 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     public function __construct()
     {
         $this->validations = new ArrayCollection();
+    }
+
+
+
+    public function axiosDefinition(): array
+    {
+        return ['heures', 'valide', 'validation'];
     }
 
 

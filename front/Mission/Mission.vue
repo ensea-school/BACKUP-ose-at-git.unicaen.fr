@@ -26,7 +26,7 @@
                                 <label class=" form-label">Nombre d'heures prévisionnelles</label>
                                 <div class="input-group mb-3">
                                     <div class="form-control">{{ heuresLib }}</div>
-                                    <button onclick="alert('non implémenté')" class="input-group-btn btn btn-secondary">Suivi</button>
+                                    <button class="input-group-btn btn btn-secondary" data-bs-toggle="modal" data-bs-target="#details"><u-icon name=""/> Détails</button>
                                 </div>
                             </div>
                         </div>
@@ -97,8 +97,16 @@
                 </div>
             </div>
         </form>
-
     </div>
+    <u-modal id="details" title="Détail des heures">
+        <template #body>
+        Mon détail des heures
+        </template>
+        <template #footer>
+            Mon test de footer
+        </template>
+    </u-modal>
+
 </template>
 
 <script>
@@ -129,12 +137,12 @@ export default {
         heuresLib: function () {
             if (this.mission.heures === null || this.mission.heures === 0) {
                 return 'Aucune heure saisie';
-            } else if (this.mission.heures - this.mission.heuresValidees == 0) {
-                return this.mission.heures + ' heures validées';
+            } else if (this.mission.heures == this.mission.heuresValidees) {
+                return this.mission.heures + ' heures (validées)';
             } else if (this.mission.heuresValidees == 0) {
-                return this.mission.heures + ' heures à valider';
+                return this.mission.heures + ' heures (non validées)';
             } else {
-                return this.mission.heures + ' heures dont ' + (this.mission.heures - this.mission.heuresValidees) + ' à valider';
+                return this.mission.heures + ' heures (' + this.mission.heuresValidees + ' validées)';
             }
         }
     },

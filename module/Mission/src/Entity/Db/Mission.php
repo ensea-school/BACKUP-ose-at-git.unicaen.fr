@@ -6,13 +6,14 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Validation;
+use Application\Interfaces\AxiosExtractor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-class Mission implements HistoriqueAwareInterface, ResourceInterface
+class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtractor
 {
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
@@ -45,6 +46,32 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
         $this->etudiants       = new ArrayCollection();
         $this->validations     = new ArrayCollection();
         $this->volumesHoraires = new ArrayCollection();
+    }
+
+
+
+    public function axiosDefinition(): array
+    {
+        return [
+            'typeMission',
+            'dateDebut',
+            'dateFin',
+            'structure',
+            'missionTauxRemu',
+            'description',
+            'histoCreation',
+            'histoCreateur',
+            'heures',
+            'heuresValidees',
+            'volumesHoraires',
+            'contrat',
+            'valide',
+            'validation',
+            'canSaisie',
+            'canValider',
+            'canDevalider',
+            'canSupprimer',
+        ];
     }
 
 
@@ -187,9 +214,9 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    public function getHeuresValidees(): ?float
+    public function getHeuresValidees(): float
     {
-        $heures = null;
+        $heures = 0;
 
         /** @var VolumeHoraireMission[] $vhs */
         $vhs = $this->volumesHoraires;
@@ -265,6 +292,11 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
     public function addValidation(Validation $validation): self
     {
         $this->validations[] = $validation;
+        foreach ($this->getVolumesHoraires() as $vh) {
+            if (!$vh->isValide()) {
+                $vh->addValidation($validation);
+            }
+        }
 
         return $this;
     }
@@ -274,6 +306,9 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
     public function removeValidation(Validation $validation): self
     {
         $this->validations->removeElement($validation);
+        foreach ($this->getVolumesHoraires() as $vh) {
+            $vh->removeValidation($validation);
+        }
 
         return $this;
     }
@@ -315,7 +350,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @return Collection|VolumeHoraireMission[]
      */
-    public function getVolumeHoraires(): Collection
+    public function getVolumesHoraires(): Collection
     {
         return $this->volumesHoraires;
     }
@@ -343,7 +378,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
     public function hasContrat(): bool
     {
         /** @var VolumeHoraireMission[] $vhs */
-        $vhs = $this->getVolumeHoraires();
+        $vhs = $this->getVolumesHoraires();
 
         foreach ($vhs as $vh) {
             if ($vh->estNonHistorise() && $vh->getContrat() && $vh->getContrat()->estNonHistorise()) {
@@ -353,4 +388,33 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
 
         return false;
     }
+
+
+
+    public function canSaisie(): bool
+    {
+        return !$this->isValide();
+    }
+
+
+
+    public function canValider(): bool
+    {
+        return !$this->isValide();
+    }
+
+
+
+    public function canDevalider(): bool
+    {
+        return $this->isValide();
+    }
+
+
+
+    public function canSupprimer(): bool
+    {
+        return !$this->isValide();
+    }
+
 }

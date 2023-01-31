@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Application\Interfaces\AxiosExtractor;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
@@ -9,7 +10,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 /**
  * Validation
  */
-class Validation implements HistoriqueAwareInterface, ResourceInterface
+class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosExtractor
 {
     use HistoriqueAwareTrait;
 
@@ -64,6 +65,13 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
         return sprintf("Validation du %s par %s",
             $this->getHistoCreation()->format(\Application\Constants::DATETIME_FORMAT),
             $this->getHistoCreateur());
+    }
+
+
+
+    public function axiosDefinition(): array
+    {
+        return ['histoCreation', 'histoCreateur'];
     }
 
 

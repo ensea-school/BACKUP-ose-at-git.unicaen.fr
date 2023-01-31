@@ -9,6 +9,7 @@ use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 /**
@@ -58,7 +59,7 @@ class MissionService extends AbstractEntityService
      */
     public function save($entity)
     {
-        foreach ($entity->getVolumeHoraires() as $vh) {
+        foreach ($entity->getVolumesHoraires() as $vh) {
             $this->saveVolumeHoraire($vh);
         }
 
@@ -82,67 +83,6 @@ class MissionService extends AbstractEntityService
         $this->getEntityManager()->flush($vhm);
 
         return $this;
-    }
-
-
-
-    /**
-     * @param Intervenant $intervenant
-     *
-     * @return array|Mission[]
-     */
-    public function missionsByIntervenant(Intervenant $intervenant): array
-    {
-        $dql = "
-        SELECT 
-          m, tm, str, tr, valid, vh, ctr
-        FROM 
-          " . Mission::class . " m
-          JOIN m.typeMission tm
-          JOIN m.structure str
-          JOIN m.missionTauxRemu tr
-          LEFT JOIN m.validations valid
-          LEFT JOIN m.volumesHoraires vh
-          LEFT JOIN vh.contrat ctr
-        WHERE 
-            m.histoDestruction IS NULL 
-            AND m.intervenant = :intervenant
-        ";
-
-        $missions = $this->getEntityManager()
-            ->createQuery($dql)
-            ->setParameters(compact('intervenant'))
-            ->getResult();
-
-        return $missions;
-    }
-
-
-
-    public function missionWs(Mission $mission)
-    {
-        $json = Axios::extract($mission, [
-            'typeMission',
-            'dateDebut',
-            'dateFin',
-            'structure',
-            'missionTauxRemu',
-            'description',
-            'histoCreation',
-            ['histoCreateur', ['email', 'displayName']],
-            'heures',
-            'heuresValidees',
-            'contrat',
-            'valide',
-            ['validation', ['histoCreation', 'histoCreateur']],
-        ]);
-
-        $json['canSaisie']    = !$mission->isValide();
-        $json['canValider']   = !$mission->isValide();
-        $json['canDevalider'] = $mission->isValide();
-        $json['canSupprimer'] = !$mission->isValide();
-
-        return $json;
     }
 
 }

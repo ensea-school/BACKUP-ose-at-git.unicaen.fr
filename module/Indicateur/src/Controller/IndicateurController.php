@@ -64,7 +64,6 @@ class IndicateurController extends AbstractController
     private $cliConfig;
 
 
-
     /**
      * PHP 5 allows developers to declare constructor methods for classes.
      * Classes which have a constructor method call this method on each newly-created object,
@@ -81,10 +80,9 @@ class IndicateurController extends AbstractController
     public function __construct(TreeRouteStack $httpRouter, PhpRenderer $renderer, array $cliConfig)
     {
         $this->httpRouter = $httpRouter;
-        $this->renderer   = $renderer;
-        $this->cliConfig  = $cliConfig;
+        $this->renderer = $renderer;
+        $this->cliConfig = $cliConfig;
     }
-
 
 
     /**
@@ -107,14 +105,13 @@ class IndicateurController extends AbstractController
           ti.ordre, i.ordre
         ";
 
-        $params      = [
+        $params = [
             'affectation' => $this->getServiceContext()->getAffectation(),
         ];
         $indicateurs = $this->em()->createQuery($dql)->execute($params);
 
         return compact('indicateurs');
     }
-
 
 
     public function calculAction()
@@ -126,7 +123,7 @@ class IndicateurController extends AbstractController
 
         /** @var Indicateur[] $indicateurs */
         $indicateurs = $this->em()->createQuery($dql)->execute(['type' => $typeindicateur]);
-        $data        = [];
+        $data = [];
         foreach ($indicateurs as $indicateur) {
             $count = $this->getServiceIndicateur()->getCount($indicateur);
 
@@ -140,23 +137,21 @@ class IndicateurController extends AbstractController
     }
 
 
-
     public function resultAction()
     {
         /* @var $indicateur Indicateur */
         $indicateur = $this->getEvent()->getParam('indicateur');
-        $result     = $this->getServiceIndicateur()->getResult($indicateur);
+        $result = $this->getServiceIndicateur()->getResult($indicateur);
 
         return compact('indicateur', 'result');
     }
-
 
 
     public function exportCsvAction()
     {
         /* @var $indicateur Indicateur */
         $indicateur = $this->getEvent()->getParam('indicateur');
-        $result     = $this->getServiceIndicateur()->getCsv($indicateur);
+        $result = $this->getServiceIndicateur()->getCsv($indicateur);
 
         $csvModel = new CsvModel();
         if (!empty($result)) {
@@ -187,7 +182,6 @@ class IndicateurController extends AbstractController
     }
 
 
-
     /**
      * Réponse aux requêtes AJAX d'abonnement de l'utilisateur connecté aux notifications concernant un indicateur.
      *
@@ -201,22 +195,22 @@ class IndicateurController extends AbstractController
 
         /** @var Indicateur $indicateur */
         $indicateur = $this->getEvent()->getParam('indicateur');
-        $frequence  = $this->params()->fromPost('notification');
-        $inHome     = $this->params()->fromPost('in-home') == '1';
+        $frequence = $this->params()->fromPost('notification');
+        $inHome = $this->params()->fromPost('in-home') == '1';
 
         $serviceNotif = $this->getServiceNotificationIndicateur();
 
         try {
             $notificationIndicateur = $serviceNotif->abonner($indicateur, $frequence, $inHome);
-            $status                 = 'success';
-            $message                = 'Demande prise en compte';
+            $status = 'success';
+            $message = 'Demande prise en compte';
             if (!$notificationIndicateur) {
                 $message .= ' (Abonnement supprimé)';
             }
         } catch (Exception $e) {
             $notificationIndicateur = null;
-            $status                 = 'error';
-            $message                = "Abonnement impossible: {$e->getMessage()}";
+            $status = 'error';
+            $message = "Abonnement impossible: {$e->getMessage()}";
         }
 
         return new JsonModel([
@@ -225,7 +219,6 @@ class IndicateurController extends AbstractController
             'infos'   => $notificationIndicateur ? $notificationIndicateur->getExtraInfos() : null,
         ]);
     }
-
 
 
     /**
@@ -250,18 +243,17 @@ class IndicateurController extends AbstractController
           ti.ordre, i.ordre
         ";
 
-        $params      = [
+        $params = [
             'affectation' => $this->getServiceContext()->getAffectation(),
         ];
         $indicateurs = $this->em()->createQuery($dql)->execute($params);
-        $counts      = [];
+        $counts = [];
         foreach ($indicateurs as $indicateur) {
             $counts[$indicateur->getId()] = $this->getServiceIndicateur()->getCount($indicateur);
         }
 
         return compact('indicateurs', 'counts');
     }
-
 
 
     public function envoiMailIntervenantsAction()
@@ -278,23 +270,25 @@ class IndicateurController extends AbstractController
 
         $result = $this->getServiceIndicateur()->getResult($indicateur);
 
-        $emails                  = [];
+        $emails = [];
         $intervenantsWithNoEmail = [];
         foreach ($result as $intervenantId => $indicRes) {
             if (!in_array($intervenantId, $intervenantsIds)) {
                 continue;
             }
-            $email = $indicRes['intervenant-email-perso'] ?: $indicRes['intervenant-email-pro'];
+            $emailPerso = $indicRes['dossier-email-perso'] ?: $indicRes['intervenant-email-perso'];
+            
+            $email = $emailPerso ?: $indicRes['intervenant-email-pro'];
             if ($email) {
                 $emails[$email] = $indicRes['intervenant-nom'] . ' ' . $indicRes['intervenant-prenom'];
             } else {
                 $intervenantsWithNoEmail[$intervenantId] = $indicRes;
             }
         }
-        $mailer  = new IndicateurIntervenantsMailer($this, $indicateur, $this->renderer);
-        $from    = $mailer->getFrom();
+        $mailer = new IndicateurIntervenantsMailer($this, $indicateur, $this->renderer);
+        $from = $mailer->getFrom();
         $subject = $mailer->getDefaultSubject();
-        $body    = $mailer->getDefaultBody();
+        $body = $mailer->getDefaultBody();
 
         $form = new Form();
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
@@ -321,19 +315,19 @@ class IndicateurController extends AbstractController
                 }
                 if ($post['copy']) {
                     //envoi une copie du mail à l'utilisateur si il l'a demandé
-                    $utilisateur                                = $this->getServiceContext()->getUtilisateur();
+                    $utilisateur = $this->getServiceContext()->getUtilisateur();
                     $emailUtilisateur[$utilisateur->getEmail()] = $utilisateur->getDisplayName();
                     $mailer->sendCopyEmail($emailUtilisateur, $emails, $post);
                 }
                 if ($post['cci'] && !empty($post['cci'])) {
                     $emailsCci = explode(';', $post['cci']);
                     foreach ($emailsCci as $emailCci) {
-                        $listEmailsCci            = [];
+                        $listEmailsCci = [];
                         $listEmailsCci[$emailCci] = $emailCci;
                         $mailer->sendCopyEmail($listEmailsCci, $emails, $post);
                     }
                 }
-                $count   = count($intervenantsIds);
+                $count = count($intervenantsIds);
                 $pluriel = $count > 1 ? 's' : '';
                 $this->flashMessenger()->addSuccessMessage("Le mail a été envoyé à $count intervenant$pluriel");
                 $this->redirect()->toRoute('indicateur/result', ['indicateur' => $indicateur->getId()]);
@@ -349,7 +343,6 @@ class IndicateurController extends AbstractController
     }
 
 
-
     /**
      * Notifications par mail des personnes abonnées à des indicateurs.
      *
@@ -363,7 +356,7 @@ class IndicateurController extends AbstractController
         // S'il s'agit d'une requête de type Console (CLI), le plugin de contrôleur Url utilisé par les indicateurs
         // n'est pas en mesure de construire des URL (car le ConsoleRouter ne sait pas ce qu'est une URL!).
         // On injecte donc provisoirement un HttpRouter dans le circuit.
-        $event  = $this->getEvent();
+        $event = $this->getEvent();
         $router = $event->getRouter();
         $event->setRouter($this->httpRouter);
 
@@ -391,16 +384,15 @@ class IndicateurController extends AbstractController
     }
 
 
-
     public function depassementChargesAction()
     {
         /** @var Intervenant $intervenant */
-        $intervenant           = $this->getEvent()->getParam('intervenant');
+        $intervenant = $this->getEvent()->getParam('intervenant');
         $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code');
-        $typeVolumeHoraire     = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
 
         $periodeCode = $this->params()->fromRoute('periode-code');
-        $periode     = $this->getServicePeriode()->getByCode($periodeCode);
+        $periode = $this->getServicePeriode()->getByCode($periodeCode);
 
         if (!$intervenant) {
             throw new \Exception('Un intervenant doit être spécifié');
@@ -409,7 +401,7 @@ class IndicateurController extends AbstractController
         $params = compact('typeVolumeHoraire', 'periode', 'intervenant');
         if ($structure = $this->getServiceContext()->getStructure()) {
             $params['structure'] = $structure->getId();
-            $sFilter             = ' AND idc.structure = :structure';
+            $sFilter = ' AND idc.structure = :structure';
         } else {
             $sFilter = '';
         }
@@ -432,15 +424,12 @@ class IndicateurController extends AbstractController
         ";
 
 
-        $idcs  = $this->em()->createQuery($dql)->setParameters($params)->getResult();
+        $idcs = $this->em()->createQuery($dql)->setParameters($params)->getResult();
         $title = 'Dépassement d\'heures (' . $typeVolumeHoraire . ') par rapport aux charges <small>' . $intervenant . '</small>';
 
         return compact('title', 'intervenant', 'idcs', 'typeVolumeHoraireCode');
     }
 }
-
-
-
 
 
 /**
@@ -467,14 +456,12 @@ class IndicateurIntervenantsMailer
     private $renderer;
 
 
-
     public function __construct(IndicateurController $controller, Indicateur $indicateur, PhpRenderer $renderer)
     {
         $this->controller = $controller;
         $this->indicateur = $indicateur;
-        $this->renderer   = $renderer;
+        $this->renderer = $renderer;
     }
-
 
 
     public function send($emails, $data)
@@ -486,7 +473,6 @@ class IndicateurIntervenantsMailer
             $this->controller->mail()->send($message);
         }
     }
-
 
 
     private function createMessage($data)
@@ -501,12 +487,12 @@ class IndicateurIntervenantsMailer
                 $htmlLog .= $name . " / " . $email . "<br/>";
             }
             $htmlLog .= "</p>";
-            $html    .= $htmlLog;
+            $html .= $htmlLog;
         }
-        $part          = new MimePart($html);
-        $part->type    = Mime::TYPE_HTML;
+        $part = new MimePart($html);
+        $part->type = Mime::TYPE_HTML;
         $part->charset = 'UTF-8';
-        $body          = new MimeMessage();
+        $body = new MimeMessage();
         $body->addPart($part);
 
         return (new MailMessage())
@@ -517,11 +503,10 @@ class IndicateurIntervenantsMailer
     }
 
 
-
     public function getFrom()
     {
         /** @var ContextService $context */
-        $context   = $this->controller->getServiceContext();
+        $context = $this->controller->getServiceContext();
         $parametre = $this->getServiceParametres();
 
         $from = trim($parametre->get('indicateur_email_expediteur'));
@@ -533,7 +518,6 @@ class IndicateurIntervenantsMailer
 
         return $from;
     }
-
 
 
     public function getDefaultSubject()
@@ -549,7 +533,6 @@ class IndicateurIntervenantsMailer
 
         return $subject;
     }
-
 
 
     public function getDefaultBody()
@@ -568,11 +551,10 @@ class IndicateurIntervenantsMailer
     }
 
 
-
     public function sendCopyEmail($emailsUtilisateur, $emailsIntervenant, $data, $logs = null)
     {
         $data['emailsIntervenant'] = $emailsIntervenant;
-        $message                   = $this->createMessage($data);
+        $message = $this->createMessage($data);
         $message->setSubject('COPIE | ' . $data['subject']);
         foreach ($emailsUtilisateur as $email => $name) {
             $message->setTo($email, $name);

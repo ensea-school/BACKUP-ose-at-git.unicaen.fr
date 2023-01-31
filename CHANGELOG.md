@@ -41,6 +41,7 @@
 * Il est de nouveau possible de saisir des taux de charge TTC et des taux de charge patronale a virgule
 * Modification du filtre des status séléctionnables dans les données personnelles (#48151)
 * Lors de la demande de mise en paiement, pouvoir choisir un EOTP même si son centre de coût parent n'est pas de l'activité attendue (pilotage / enseignement) (#48286)
+* Utilisation prioritaire de l'email personnel des données personnelles pour l'envoi d'email via les indicateurs (#48393)
 
 ## Notes de mise à jour
 

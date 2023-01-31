@@ -3,6 +3,7 @@
 namespace Application\Controller\Plugin;
 
 use Application\Constants;
+use Doctrine\Common\Collections\Collection;
 use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\View\Model\JsonModel;
@@ -100,6 +101,12 @@ class Axios extends AbstractPlugin
                     if (is_object($value)) {
                         if ($value instanceof \DateTime) {
                             $value = $value->format(Util::DATE_FORMAT);
+                        } elseif ($value instanceof Collection) {
+                            $oriVals = $value;
+                            $value   = [];
+                            foreach ($oriVals as $oriVal) {
+                                $value[] = self::extract($oriVal, $subProperties);
+                            }
                         } else {
                             $value = self::extract($value, $subProperties);
                         }

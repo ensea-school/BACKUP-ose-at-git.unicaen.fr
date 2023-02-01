@@ -35,12 +35,9 @@ class Axios extends AbstractPlugin
 
 
 
-    public function send($data): JsonModel
+    public function send($data, array $properties = []): JsonModel
     {
-        if ($data instanceof Query) {
-            $data = $data->getResult();
-        }
-        $data = self::extract($data);
+        $data = self::extract($data, $properties);
 
         /** @var FlashMessenger $flashMessenger */
         $flashMessenger = $this->controller->flashMessenger();
@@ -72,84 +69,154 @@ class Axios extends AbstractPlugin
 
 
 
-    public static function extract($object, array $properties = []): ?array
+    public static function extract($data, array $properties = [])
     {
-        if (!$object) {
-            return null;
+        if ($data instanceof Query) {
+            return self::extract($data->getResult(), $properties);
+        } elseif (self::isList($data)) {
+            return self::extractList($data, $properties);
+        } elseif (is_array($data)) {
+            return self::extractArray($data, $properties);
+        } elseif ($data instanceof \DateTime) {
+            return $data->format(Util::DATE_FORMAT);
+        } elseif (is_object($data)) {
+            return self::extractObject($data, $properties);
+        } else {
+            return $data;
         }
+    }
 
-        if (is_array($object)) {
-            $result = [];
-            foreach ($object as $index => $sobj) {
-                $sObjData = self::extract($sobj, $properties);
-                if (isset($sObjData['id'])) {
-                    $index = $sObjData['id'];
-                }
-                $result[$index] = $sObjData;
-            }
 
-            return $result;
-        }
 
+    protected static function extractObject($data, array $properties): array
+    {
         $result = [];
 
-        if (is_object($object) && method_exists($object, 'getId')) {
-            $result['id'] = $object->getId();
-        }
-        if (!empty($properties)) {
-            foreach ($properties as $property) {
-                $subProperties = [];
-                if (is_array($property)) {
-                    [$property, $subProperties] = $property;
-                }
-
-                if ($property == 'id') continue;
-
-                $foundValue = false;
-
-                $prefixes = ['get', 'is', 'has'];
-                foreach ($prefixes as $prefix) {
-                    if (method_exists($object, $property)) {
-                        $value      = $object->$property();
-                        $foundValue = true;
-                    } else {
-                        $method = $prefix . ucfirst($property);
-                        if (method_exists($object, $method)) {
-                            $value      = $object->$method();
-                            $foundValue = true;
-                            break;
-                        }
+        $props = ['id'];
+        if (empty($properties)) {
+            if ($data instanceof AxiosExtractor) {
+                $ad = $data->axiosDefinition();
+                foreach ($ad as $prop) {
+                    if ($prop !== 'id') {
+                        $props[] = $prop;
                     }
                 }
-
-                if ($foundValue) {
-                    if (is_object($value)) {
-                        if ($value instanceof \DateTime) {
-                            $value = $value->format(Util::DATE_FORMAT);
-                        } elseif ($value instanceof Collection) {
-                            $oriVals = $value;
-                            $value   = [];
-                            foreach ($oriVals as $oriVal) {
-                                if (method_exists($oriVal, 'getId')) {
-                                    $id         = $oriVal->getId();
-                                    $value[$id] = self::extract($oriVal, $subProperties);
-                                } else {
-                                    $value[] = self::extract($oriVal, $subProperties);
-                                }
-                            }
-                        } else {
-                            $value = self::extract($value, $subProperties);
-                        }
-                    }
-                    $result[$property] = $value;
+            } else {
+                if (method_exists($data, '__toString')) {
+                    $props[] = '__toString';
                 }
             }
-        } elseif ($object instanceof AxiosExtractor) {
-            $result = self::extract($object, $object->axiosDefinition());
         } else {
-            $result['libelle'] = (string)$object;
+            foreach ($properties as $prop) {
+                if ($prop !== 'id') {
+                    $props[] = $prop;
+                }
+            }
+        }
+
+        foreach ($props as $property) {
+            if (is_array($property)) {
+                $subProperties = $property[1];
+                $property      = $property[0];
+            } else {
+                $subProperties = [];
+            }
+
+            $methods = [
+                $property,
+                'get' . ucfirst($property),
+                'is' . ucfirst($property),
+                'has' . ucfirst($property),
+            ];
+            foreach ($methods as $method) {
+                if (method_exists($data, $method)) {
+                    $value             = $data->$method();
+                    $result[$property] = self::extract($value, $subProperties);
+                    break;
+                }
+            }
+        }
+
+        if (array_key_exists('__toString', $result)) {
+            $result['libelle'] = $result['__toString'];
+            unset($result['__toString']);
         }
 
         return $result;
+    }
+
+
+
+    protected static function extractArray(array $data, array $properties): array
+    {
+        $result = [];
+
+
+        $props = ['id'];
+        if (empty($properties)) {
+            $properties = array_keys($data);
+        }
+        foreach ($properties as $prop) {
+            if ($prop !== 'id') {
+                $props[] = $prop;
+            }
+        }
+
+        foreach ($props as $property) {
+            if (is_array($property)) {
+                $subProperties = $property[1];
+                $property      = $property[0];
+            } else {
+                $subProperties = [];
+            }
+
+            if (array_key_exists($property, $data)) {
+                $result[$property] = self::extract($data[$property], $subProperties);
+            }
+        }
+
+        return $result;
+    }
+
+
+
+    protected static function extractList($list, array $properties = []): array
+    {
+        $newIndex = 0;
+        $result   = [];
+        foreach ($list as $index => $sobj) {
+            $sObjData = self::extract($sobj, $properties);
+            if (array_key_exists('id', $sObjData)) {
+                $index = $sObjData['id'];
+                if (!$index) $index = --$newIndex;
+            }
+            $result[$index] = $sObjData;
+        }
+
+        return $result;
+    }
+
+
+
+    protected static function isList($data): bool
+    {
+        if ($data instanceof Collection) {
+            return true;
+        }
+        if (!is_array($data)) {
+            return false;
+        }
+        foreach ($data as $k => $v) {
+            if (!is_numeric($k)) {
+                // une clé non numérique est rejetée
+                return false;
+            }
+            if (!(is_array($v) || is_object($v))) {
+                // une liste doit être une liste d'objets ou bien une liste de tableaux
+                return false;
+            }
+        }
+
+        return true;
     }
 }

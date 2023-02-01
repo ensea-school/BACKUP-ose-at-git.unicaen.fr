@@ -11,7 +11,8 @@ if (!$tree) {
     <script>
         window.location.href = "<?= $intervenant ? $this->url('intervenant/voir', ['intervenant' => 'code:' . $intervenant->getCode()]) : $this->url('intervenant/rechercher') ?>";
     </script>
-    <div class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Veuillez patienter pendant le rechargement de la page ...
+    <div class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Veuillez patienter pendant le rechargement de la page
+        ...
         ...
     </div>
     <?php
@@ -38,15 +39,15 @@ echo $this->tree($tree, ['id' => 'intervenant-suppr']);
 ?>
     <br/>
 
-    <button id="suppressionIntervenantData" type="button" class="btn btn-danger" data-bs-toggle="popover" data-trigger="focus"
+    <button id="suppressionIntervenantData" type="button" class="btn btn-danger" data-bs-toggle="popover"
+            data-trigger="focus"
             title="Suppression de données intervenant">
         Supprimer les données sélectionnées
     </button>
-    <div id="supprEnCours" style="display:none" class="loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Suppression en cours
-        ...
-    </div>
+    
 <?php if ($intervenant->estNonHistorise()): ?>
-    <button id="historisationIntervenantData" type="button" class="btn btn-secondary" data-bs-toggle="popover" data-trigger="focus"
+    <button id="historisationIntervenantData" type="button" class="btn btn-secondary" data-bs-toggle="popover"
+            data-trigger="focus"
             title="Historisation de la fiche de l'intervenant">
         Historiser la fiche de l'intervenant
     </button>
@@ -55,6 +56,8 @@ echo $this->tree($tree, ['id' => 'intervenant-suppr']);
         $(function () {
             $('#suppressionIntervenantData').popover({
                 html: true,
+                sanitize: false,
+                placement: 'top',
                 content:
                     '<div class="alert alert-warning">Attention : les données supprimées ne pourront pas être restaurées</div>' +
                     'Souhaitez-vous vraiment supprimer les données sélectionnées ?<br /><br />' +
@@ -64,6 +67,8 @@ echo $this->tree($tree, ['id' => 'intervenant-suppr']);
 
             $('#historisationIntervenantData').popover({
                 html: true,
+                sanitize: false,
+                placement: 'top',
                 content:
                     '<div class="alert alert-warning">Attention : Aucune donnée ne sera véritablement supprimée. La fiche de l\'intervenant ne sera simplement plus visible dans OSE ni dans les extractions (CSV, PDF, ...)</div>' +
                     'Souhaitez-vous vraiment historiser la fiche de l\'intervenant ?<br /><br />' +
@@ -73,16 +78,15 @@ echo $this->tree($tree, ['id' => 'intervenant-suppr']);
         });
 
 
-        function supprimer()
-        {
-            $('#supprEnCours').show();
-
+        function supprimer() {
+            //$('#supprEnCours').show();
+            $('#suppressionIntervenantData').text('Suppression en cours...')
+            $('#suppressionIntervenantData').popover('hide')
             var div = $('#int-suppr-div');
             var tree = $('#intervenant-suppr');
             var selectedElms = tree.jstree("get_selected", true);
             var ids = [];
-            $.each(selectedElms, function ()
-            {
+            $.each(selectedElms, function () {
                 ids.push(this.id);
             });
 
@@ -91,8 +95,8 @@ echo $this->tree($tree, ['id' => 'intervenant-suppr']);
             });
         }
 
-        function historiser()
-        {
+        function historiser() {
+            $('#historisationIntervenantData').popover('hide')
             var div = $('#int-suppr-div');
             window.location.href = div.data('historiser-url');
         }

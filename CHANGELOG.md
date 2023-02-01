@@ -41,6 +41,8 @@
 * Il est de nouveau possible de saisir des taux de charge TTC et des taux de charge patronale a virgule
 * Modification du filtre des status séléctionnables dans les données personnelles (#48151)
 * Lors de la demande de mise en paiement, pouvoir choisir un EOTP même si son centre de coût parent n'est pas de l'activité attendue (pilotage / enseignement) (#48286)
+* Utilisation prioritaire de l'email personnel des données personnelles pour l'envoi d'email via les indicateurs (#48393)
+* Meilleure gestion de la casse lors de la recherche d'un employeur (#48543)
 
 ## Notes de mise à jour
 
@@ -48,9 +50,9 @@
 * La génération des contrats de travail ayant été remaniée, veuillez vérifier que vous pouvez générer correctement de nouveaux contrats de travail
 
 
-Avec l'ajout de la notion de tag sur les services d'enseignement et référentiel, les champs 'TAG' et 'TAG_ID' ont été ajouté dans la V_EXPORT_SERVICE, si vous avez créer votre propre V_EXPORT_SERVICE, il vous faudra la modifier vous même en vous appuyant sur la V_EXPORT_SERVICE par défaut de OSE (https://git.unicaen.fr/open-source/OSE/-/blob/master/data/ddl/view/V_EXPORT_SERVICE.sql)
+Avec l'ajout de la notion de tag sur les services d'enseignement et référentiel, les champs 'TAG' et 'TAG_ID' ont été ajouté dans la V_EXPORT_SERVICE, si vous avez créé votre propre V_EXPORT_SERVICE, il vous faudra la modifier vous même en vous appuyant sur la V_EXPORT_SERVICE par défaut de OSE (https://git.unicaen.fr/open-source/OSE/-/blob/master/data/ddl/view/V_EXPORT_SERVICE.sql)
 
-Ensuite si vous souhaitez faire apparaître les tags dans l'export des services, il vous faudra modifier vous même l'état de sorte 'Export des services', dans l'onglet 'Export CSV' : 
+Ensuite si vous souhaitez faire apparaître les tags dans l'export des services, il vous faudra modifier vous même l'état de sortie 'Export des services', dans l'onglet 'Export CSV' : 
 
 A la **ligne 56** ajouter TAG_ID à la variable $sid : 
 

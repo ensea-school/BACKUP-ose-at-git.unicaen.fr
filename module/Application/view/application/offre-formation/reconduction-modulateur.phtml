@@ -17,14 +17,7 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-modula
                                      'style' => 'width:250px;']);
                 echo $this->formSelect($selectStructure);
                 ?>
-                <script>
-                    $("body").on("change", "select.structure", function (event) {
-                        $("*").css('cursor', 'wait');
-                        var id = $(this).val();
-                        var url = '<?= $this->url('of', [], ['query' => ['structure' => '__structure__']]) ?>';
-                        $(location).attr('href', url.replace('__structure__', id));
-                    });
-                </script>
+            
 
             </div>
         </div>
@@ -35,7 +28,8 @@ $this->headScript()->offsetSetFile(100, $this->basePath('/js/reconduction-modula
     <strong>IMPORTANT</strong><br/>
     Seules les formations reconduites pour la prochaine année universitaire peuvent bénéficier de la reconduction des
     modulateurs d'une année sur l'autre.
-    Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour la
+    Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour
+    la
     prochaine année universitaire.
 </div>
 
@@ -83,7 +77,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             <?php foreach ($etapesReconduites as $er): ?>
                 <tr>
                     <td>
-                        <input class="checkbox-element" type="checkbox" name="etapes[]" value="<?= $er['ETAPE_CODE']; ?>">
+                        <input class="checkbox-element" type="checkbox" name="etapes[]"
+                               value="<?= $er['ETAPE_CODE']; ?>">
                     </td>
                     <td><?= $er['ETAPE_CODE']; ?></td>
                     <td><?= $er['ETAPE_LIBELLE']; ?></td>

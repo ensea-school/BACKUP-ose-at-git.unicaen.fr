@@ -4,7 +4,6 @@
 
 $.widget("ose.referentiels", {
     total: 0,
-
     calculTotaux: function () {
         var that = this;
         this.total = 0;
@@ -100,6 +99,8 @@ $.widget("ose.referentiels", {
 
     setRealisesFromPrevus: function () {
         var services = '';
+        var that = this;
+
         this.element.find("table.service-referentiel tr.referentiel-ligne").each(function () {
             if (services != '') services += ',';
             services += $(this).data('id');
@@ -107,10 +108,17 @@ $.widget("ose.referentiels", {
         $.get(
             Util.url("referentiel/constatation"),
             {services: services},
-            function () {
-                window.location.reload();
+            function (data) {
+                console.log(data);
+                if (data != 'OK') {
+                    that.element.find("#referentiel-prevu-to-realise-modal").modal('hide');
+                    that.element.find("#referentiel-prevu-to-realise-modal").after('<div style="margin-top:.5em">' + data + '</div>');
+                } else {
+                    window.location.reload();
+                }
             }
-        );
+        )
+        ;
     },
 
     setPrevusFromPrevus: function () {
@@ -131,8 +139,8 @@ $.widget("ose.referentiels", {
 
     _create: function () {
         var that = this;
-
         this.params = this.element.data('params');
+
 
         this.element.find(".referentiel-prevu-to-realise").on('click', function () {
             that.setRealisesFromPrevus();

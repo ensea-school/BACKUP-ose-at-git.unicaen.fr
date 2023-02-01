@@ -279,6 +279,16 @@ Util = {
             for (var key in tab) {
                 return tab[key];
             }
+        },
+
+        indexById: function (tab, id)
+        {
+            for (var key in tab) {
+                if (tab[key].id && tab[key].id === id) {
+                    return key;
+                }
+            }
+            return null;
         }
 
     },

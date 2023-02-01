@@ -8,6 +8,7 @@ return [
     'table'   => 'MISSION_TAUX_REMU',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

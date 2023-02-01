@@ -3,7 +3,9 @@
 namespace Mission\Service;
 
 
+use Application\Controller\Plugin\Axios;
 use Application\Service\AbstractEntityService;
+use DateTime;
 use Mission\Entity\Db\MissionTauxRemu;
 use Mission\Entity\Db\MissionTauxRemuValeur;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -46,13 +48,17 @@ class MissionTauxService extends AbstractEntityService
      */
     public function getTauxRemus(): array
     {
-        $dql   = "SELECT mtr, mtrv
+        $dql   = "SELECT mtr, mtrv, mtrp
                  FROM " . MissionTauxRemu::class . " mtr
+                 LEFT JOIN mtr.missionTauxRemu mtrp
                  LEFT JOIN mtr.tauxRemuValeurs mtrv
                  WHERE mtr.histoDestruction IS NULL";
         $query = $this->getEntityManager()->createQuery($dql);
+
         return $query->getResult();
     }
+
+
 
     public function getTauxRemusIndexable(): array
     {
@@ -62,21 +68,58 @@ class MissionTauxService extends AbstractEntityService
                  WHERE mtr.histoDestruction IS NULL
                  AND mtr.missionTauxRemu IS NULL";
         $query = $this->getEntityManager()->createQuery($dql);
+
         return $query->getResult();
     }
 
 
+
     public function getTauxRemusValeur(mixed $tauxRemuValeurId)
     {
-        $dql   = "SELECT mtr
+        $dql    = "SELECT mtr
                  FROM " . MissionTauxRemuValeur::class . " mtr
-                 WHERE mtr.id =".$tauxRemuValeurId;
-        $query = $this->getEntityManager()->createQuery($dql);
-        $result = $query->getResult() ;
-        if(!empty($result)){
+                 WHERE mtr.id =" . $tauxRemuValeurId;
+        $query  = $this->getEntityManager()->createQuery($dql);
+        $result = $query->getResult();
+        if (!empty($result)) {
             return $result[0];
         }
+
         return null;
+    }
+
+
+
+    public function missionTauxWs(MissionTauxRemu $tauxRemu): ?array
+    {
+        $json = Axios::extract($tauxRemu, [
+            'code',
+            'libelle',
+            'missionTauxRemu',
+            ['tauxRemuValeurs', ['dateEffet', 'valeur']],
+            'tauxRemuValeursIndex',
+        ]);
+
+        return $json;
+    }
+
+    public function getTauxRemusAnnee($tauxRemus)
+    {
+
+        $annee = $this->getServiceContext()->getAnnee()->getId();
+
+
+        $result = [];
+        /** @var MissionTauxRemu $tauxRemu */
+        foreach ($tauxRemus as $tauxRemu) {
+            /** @var MissionTauxRemuValeur $valeur */
+            /** @var MissionTauxRemuValeur $temp */
+            $valeurs = $tauxRemu->getValeurAnnee($annee);
+            $tauxRemu->setValeurs($valeurs);
+            $result[$tauxRemu->getId()] = $tauxRemu;
+        }
+
+        return $result;
     }
 
 
@@ -85,6 +128,20 @@ class MissionTauxService extends AbstractEntityService
     {
         return new missionTauxRemuValeur();
     }
+
+
+
+    /**
+     * @param MissionTauxRemu                   $tauxRemu
+     * @param MissionTauxRemuValeur|string|null $temp
+     * @param string                            $dateDebutAnnee
+     * @param array                             $valeurs
+     * @param string                            $dateFinAnnee
+     *
+     * @return array
+     * @throws \Exception
+     */
+
 }
 
 

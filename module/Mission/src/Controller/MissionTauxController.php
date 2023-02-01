@@ -24,14 +24,32 @@ class MissionTauxController extends AbstractController
 
     public function indexAction()
     {
+        $annee = $this->getServiceContext()->getAnnee();
 
+        return compact('annee');
+    }
+
+
+
+    public function getListeTauxAction()
+    {
         $this->em()->getFilters()->enable('historique')->init([
             MissionTauxRemu::class,
         ]);
-        $tauxMissions = $this->getServiceMissionTaux()->getTauxRemus();
-        $annee        = $this->getServiceContext()->getAnnee();
 
-        return compact('tauxMissions', 'annee');
+
+        $tauxMissions = $this->getServiceMissionTaux()->getTauxRemus();
+        $tauxMissions = $this->getServiceMissionTaux()->getTauxRemusAnnee($tauxMissions);
+
+        $liste = [];
+
+        foreach ($tauxMissions as $tauxMission) {
+            //Calcul de la liste des taux
+            $liste[$tauxMission->getId()] = $this->getServiceMissionTaux()->missionTauxWs($tauxMission);
+        }
+
+
+        return $this->axios()->send($liste);
     }
 
 
@@ -73,14 +91,14 @@ class MissionTauxController extends AbstractController
     {
 
         $tauxRemuValeurId = $this->params()->fromRoute('missionTauxRemuValeur');
-        $form           = $this->getFormMissionTauxValeur();
+        $form             = $this->getFormMissionTauxValeur();
 
         if (empty($tauxRemuValeurId)) {
-            $title = "Création d'une nouvelle valeur";
+            $title          = "Création d'une nouvelle valeur";
             $tauxRemuValeur = $this->getServiceMissionTaux()->newEntityValeur();
         } else {
             $tauxRemuValeur = $this->getServiceMissionTaux()->getTauxRemusValeur($tauxRemuValeurId);
-            $title = "Édition d'une valeur";
+            $title          = "Édition d'une valeur";
         }
 
         if ($tauxRemuValeur->getMissionTauxRemu() == null) {
@@ -115,7 +133,7 @@ class MissionTauxController extends AbstractController
     public function supprimerValeurAction(): MessengerViewModel
     {
         $tauxRemuValeurId = $this->params()->fromRoute('missionTauxRemuValeur');
-        $tauxRemuValeur = $this->getServiceMissionTaux()->getTauxRemusValeur($tauxRemuValeurId);
+        $tauxRemuValeur   = $this->getServiceMissionTaux()->getTauxRemusValeur($tauxRemuValeurId);
         $this->em()->remove($tauxRemuValeur);
         $this->em()->flush();
 

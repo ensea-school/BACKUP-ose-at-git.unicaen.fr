@@ -1,5 +1,7 @@
 <template>
-    <taux v-for="taux in listeTaux" @refresh="refresh" :key="taux.id" :taux="taux"></taux>
+    <div v-for="taux in listeTaux">
+        <taux v-if="!taux.missionTauxRemu" :key="taux.id" :taux="taux" :listeTaux="listeTaux"></taux>
+    </div>
     <a v-if="canAddTaux" class="btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajout d'un nouveau taux</a>
 </template>
 
@@ -18,7 +20,7 @@ export default {
     {
         return {
             listeTaux: [],
-            ajoutUrl: "" //Util.url('mission/ajout/:intervenant', {intervenant: this.intervenant})
+            ajoutUrl: Util.url('missions-taux/saisir')
         };
     },
     mounted()
@@ -42,17 +44,12 @@ export default {
         },
         reload()
         {
-            this.listeTaux = {
-                1: {code: 'SMIC'},
-                2: {code: 'Taux 1'},
-                3: {code: 'Taux 2'},
-            }
 
-            /*axios.get(
-                Util.url("mission/liste-taux", {intervenant: this.intervenant})
+            axios.get(
+                Util.url("missions-taux/liste-taux",)
             ).then(response => {
                 this.listeTaux = response.data;
-            });*/
+            });
         },
     }
 }

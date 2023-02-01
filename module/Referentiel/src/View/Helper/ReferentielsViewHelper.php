@@ -266,12 +266,12 @@ class ReferentielsViewHelper extends AbstractViewHelper
         $out = '';
 
         $attribs = [
-            'class'       => 'btn btn-warning referentiel-prevu-to-realise-show',
-            'data-toggle' => 'modal',
-            'data-target' => '#referentiel-prevu-to-realise-modal',
+            'class'          => 'btn btn-warning referentiel-prevu-to-realise-show',
+            'data-bs-toggle' => 'modal',
+            'data-bs-target' => '#referentiel-prevu-to-realise-modal',
             //'data-event'    => 'service-constatation',
             //'href'          => $this->getAddUrl(),
-            'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles de référentiel"
+            'title'          => "Saisir comme réalisées l'ensemble des heures prévisionnelles de référentiel"
                 . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
         ];
         $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
@@ -279,10 +279,10 @@ class ReferentielsViewHelper extends AbstractViewHelper
         $out .= '<div class="modal-dialog modal-md">';
         $out .= '<div class="modal-content">';
         $out .= '<div class="modal-header">';
-        $out .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
+        $out .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles de référentiel</h4>';
         $out .= '</div>';
         $out .= '<div class="modal-body">';
-        $out .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
+        $out .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles de référentiel ?</p>';
         $out .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
         $out .= '</div>';
         $out .= '<div class="modal-footer">';

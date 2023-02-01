@@ -120,15 +120,28 @@ class MissionTauxController extends AbstractController
 
 
 
-    public function supprimerAction(): MessengerViewModel
+    public function supprimerAction(): \Laminas\View\Model\JsonModel
     {
         $tauxRemu = $this->getEvent()->getParam('missionTauxRemu');
         $this->getServiceMissionTaux()->delete($tauxRemu, true);
 
-        return new MessengerViewModel();
+        $this->flashMessenger()->addSuccessMessage("Taux supprimée avec succès.");
+
+        return $this->axios()->send([]);
     }
 
+    /**
+     * Retourne les données pour un taux
+     *
+     * @return \Laminas\View\Model\JsonModel
+     */
+    public function getAction()
+    {
+        /** @var Mission $mission */
+        $missionTauxRemu = $this->getEvent()->getParam('missionTauxRemu');
 
+        return $this->axios()->send($missionTauxRemu);
+    }
 
     public function supprimerValeurAction(): MessengerViewModel
     {

@@ -52,7 +52,8 @@ class MissionTauxService extends AbstractEntityService
                  FROM " . MissionTauxRemu::class . " mtr
                  LEFT JOIN mtr.missionTauxRemu mtrp
                  LEFT JOIN mtr.tauxRemuValeurs mtrv
-                 WHERE mtr.histoDestruction IS NULL";
+                 WHERE mtr.histoDestruction IS NULL
+                 ORDER BY mtr.id";
         $query = $this->getEntityManager()->createQuery($dql);
 
         return $query->getResult();
@@ -66,7 +67,8 @@ class MissionTauxService extends AbstractEntityService
                  FROM " . MissionTauxRemu::class . " mtr
                  LEFT JOIN mtr.tauxRemuValeurs mtrv
                  WHERE mtr.histoDestruction IS NULL
-                 AND mtr.missionTauxRemu IS NULL";
+                 AND mtr.missionTauxRemu IS NULL
+                 ORDER BY mtr.id";
         $query = $this->getEntityManager()->createQuery($dql);
 
         return $query->getResult();
@@ -78,7 +80,8 @@ class MissionTauxService extends AbstractEntityService
     {
         $dql    = "SELECT mtr
                  FROM " . MissionTauxRemuValeur::class . " mtr
-                 WHERE mtr.id =" . $tauxRemuValeurId;
+                 WHERE mtr.id =" . $tauxRemuValeurId
+        ." ORDER BY mtr.id";
         $query  = $this->getEntityManager()->createQuery($dql);
         $result = $query->getResult();
         if (!empty($result)) {

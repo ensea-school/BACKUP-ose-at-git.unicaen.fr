@@ -1,6 +1,6 @@
 <template>
     <div v-for="taux in listeTaux">
-        <taux v-if="!taux.missionTauxRemu" :key="taux.id" :taux="taux" :listeTaux="listeTaux"></taux>
+        <taux v-if="!taux.missionTauxRemu" @supprimer="supprimer" @refreshListe="refreshListe" :key="taux.id" :taux="taux" :listeTaux="listeTaux"></taux>
     </div>
     <a v-if="canAddTaux" class="btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajout d'un nouveau taux</a>
 </template>
@@ -34,19 +34,23 @@ export default {
                 this.reload();
             });
         },
-        supprimer(taux)
+        supprimer()
+        {
+            this.reload();
+        },
+        refreshListe()
         {
             this.reload();
         },
         refresh(taux)
         {
-            this.listeTaux[taux.id] = taux;
+            let index = Util.json.indexById(this.listeTaux, taux.id);
+            this.listeTaux[index] = taux;
         },
         reload()
         {
-
             axios.get(
-                Util.url("missions-taux/liste-taux",)
+                Util.url("missions-taux/liste-taux")
             ).then(response => {
                 this.listeTaux = response.data;
             });

@@ -182,17 +182,10 @@ class Axios extends AbstractPlugin
 
     protected static function extractList($list, array $properties = []): array
     {
-        $newIndex = 0;
         $result   = [];
-        foreach ($list as $index => $sobj) {
-            $sObjData = self::extract($sobj, $properties);
-            if (array_key_exists('id', $sObjData)) {
-                $index = $sObjData['id'];
-                if (!$index) $index = --$newIndex;
-            }
-            $result[$index] = $sObjData;
+        foreach ($list as $sobj) {
+            $result[] = self::extract($sobj, $properties);
         }
-
         return $result;
     }
 

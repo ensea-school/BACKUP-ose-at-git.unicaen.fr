@@ -8,7 +8,7 @@ use Laminas\View\Helper\Navigation as NavigationHelper;
 
 /** @var NavigationHelper $navigationHelper */
 $navigationHelper = $this->navigation('navigation');
-$pages            = $navigationHelper->getContainer();
+$pages = $navigationHelper->getContainer();
 
 $version = $this->appInfos()->getConfig()->get('version');
 
@@ -26,13 +26,20 @@ echo $this->doctype();
     <?= $this->headTitle($this->appInfos()->nom)->setSeparator(' - ')->setAutoEscape(true) . "\n"; ?>
 
     <!-- Dépendances -->
-    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.structure.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.theme.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/open-sans-gh-pages/open-sans.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/font-awesome-6.0.0/css/all.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/css/bootstrap-select.min.css') ?>" media="all" rel="stylesheet" type="text/css">
-    <link href="<?= $this->basePath('/vendor/DataTables-1.12.1/css/dataTables.bootstrap5.min.css') ?>" media="all" rel="stylesheet" type="text/css">
+    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.css') ?>" media="all" rel="stylesheet"
+          type="text/css">
+    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.structure.min.css') ?>" media="all"
+          rel="stylesheet" type="text/css">
+    <link href="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.theme.min.css') ?>" media="all" rel="stylesheet"
+          type="text/css">
+    <link href="<?= $this->basePath('/vendor/open-sans-gh-pages/open-sans.css') ?>" media="all" rel="stylesheet"
+          type="text/css">
+    <link href="<?= $this->basePath('/vendor/font-awesome-6.0.0/css/all.min.css') ?>" media="all" rel="stylesheet"
+          type="text/css">
+    <link href="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/css/bootstrap-select.min.css') ?>" media="all"
+          rel="stylesheet" type="text/css">
+    <link href="<?= $this->basePath('/vendor/DataTables-1.12.1/css/dataTables.bootstrap5.min.css') ?>" media="all"
+          rel="stylesheet" type="text/css">
 
 
     <!-- CSS générale à l'application -->
@@ -62,7 +69,8 @@ echo $this->doctype();
 
     <!-- Scripts globaux -->
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-3.6.0.min.js?v=' . $version) ?>"></script>
-    <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js?v=' . $version) ?>"></script>
+    <script type="text/javascript"
+            src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js?v=' . $version) ?>"></script>
 </head>
 
 <body class="<?= getenv('APPLICATION_ENV') ?: 'dev' ?> p-0" data-base-url="<?= $this->url('home') ?>">
@@ -71,7 +79,8 @@ echo $this->doctype();
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <?= $this->appLink($this->appInfos()->nom) ?>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -106,19 +115,25 @@ echo $this->doctype();
 <nav id="footer" class="nav justify-content-center">
     <a title="<?= AppConfig::get('etablissement', 'logoDescription') ?>" class="nav-link lien-univ"
        href="<?= AppConfig::get('etablissement', 'logoUri') ?>"><?= AppConfig::get('etablissement', 'nom') ?></a>
-    <a title="&#xC0;propos de cette application" class="nav-link apropos" href="<?= $this->basePath('apropos') ?>">À propos</a>
+    <a title="&#xC0;propos de cette application" class="nav-link apropos" href="<?= $this->basePath('apropos') ?>">À
+        propos</a>
     <a title="Contact concernant l'application" class="nav-link contact" href="<?= $this->basePath('contact') ?>">Contact</a>
-    <a title="Page de navigation au sein de l'application" class="nav-link plan" href="<?= $this->basePath('plan') ?>">Plan de navigation</a>
-    <a title="Mentions légales" class="nav-link ml" href="<?= AppConfig::get('etablissement', 'mentionsLegales') ?>">Mentions légales</a>
+    <a title="Page de navigation au sein de l'application" class="nav-link plan" href="<?= $this->basePath('plan') ?>">Plan
+        de navigation</a>
+    <a title="Mentions légales" class="nav-link ml" href="<?= AppConfig::get('etablissement', 'mentionsLegales') ?>">Mentions
+        légales</a>
     <a title="Vie privée" class="nav-link il" href="<?= AppConfig::get('etablissement', 'viePrivee') ?>">Vie privée</a>
 </nav>
 
 
 <!-- Scripts (dépendances) -->
-<script type="text/javascript" src="<?= $this->basePath('/vendor/bootstrap-5.0.2/dist/js/bootstrap.bundle.js') ?>"></script>
+<script type="text/javascript"
+        src="<?= $this->basePath('/vendor/bootstrap-5.0.2/dist/js/bootstrap.bundle.js') ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery.form-3.51.js') ?>"></script>
-<script type="text/javascript" src="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/js/bootstrap-select.min.js') ?>"></script>
-<script type="text/javascript" src="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/js/i18n/defaults-fr_FR.js') ?>"></script>
+<script type="text/javascript"
+        src="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/js/bootstrap-select.min.js') ?>"></script>
+<script type="text/javascript"
+        src="<?= $this->basePath('/vendor/bootstrap-select-1.14.0/js/i18n/defaults-fr_FR.js') ?>"></script>
 
 <!-- Scripts de l'application -->
 <script type="text/javascript" src="<?= $this->basePath('/js/unicaen.js?v=' . $version) ?>"></script>
@@ -132,6 +147,8 @@ echo $this->doctype();
 <script type="text/javascript" src="<?= $this->basePath('/js/app.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/paiement.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/piece-jointe.js?v=' . $version) ?>"></script>
+
+<?= $this->headScript(); ?>
 
 <!-- Scripts chargés dynamiquement -->
 <?= $this->inlineScript(); ?>

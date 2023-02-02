@@ -9,6 +9,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
@@ -29,6 +30,7 @@ class MissionController extends AbstractController
     use MissionFormAwareTrait;
     use ContextServiceAwareTrait;
     use ValidationServiceAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
     /**
@@ -95,6 +97,7 @@ class MissionController extends AbstractController
         }
         $form->bindRequestSave($mission, $this->getRequest(), function ($mission) {
             $this->getServiceMission()->save($mission);
+            $this->updateTableauxBord($mission);
             $this->flashMessenger()->addSuccessMessage('Mission bien enregistrée');
         });
         // on passe le data-id pour pouvoir le récupérer dans la vue et mettre à jour la liste
@@ -154,6 +157,7 @@ class MissionController extends AbstractController
         $mission = $this->getEvent()->getParam('mission');
 
         $this->getServiceMission()->delete($mission);
+        $this->updateTableauxBord($mission);
         $this->flashMessenger()->addSuccessMessage("Mission supprimée avec succès.");
 
         return $this->axios()->send([]);
@@ -171,6 +175,7 @@ class MissionController extends AbstractController
         } else {
             $this->getServiceValidation()->validerMission($mission);
             $this->getServiceMission()->save($mission);
+            $this->updateTableauxBord($mission);
             $this->flashMessenger()->addSuccessMessage('Mission validée');
         }
 
@@ -189,6 +194,7 @@ class MissionController extends AbstractController
             $mission->setAutoValidation(false);
             $mission->removeValidation($validation);
             $this->getServiceValidation()->delete($validation);
+            $this->updateTableauxBord($mission);
             $this->flashMessenger()->addSuccessMessage("Validation de la mission <strong>retirée</strong> avec succès.");
         } else {
             $this->flashMessenger()->addInfoMessage("La mission n'était pas validée");
@@ -205,6 +211,7 @@ class MissionController extends AbstractController
         $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
 
         $this->getServiceMission()->deleteVolumeHoraire($volumeHoraireMission);
+        $this->updateTableauxBord($volumeHoraireMission->getMission());
         $this->flashMessenger()->addSuccessMessage("Volume horaire supprimé avec succès.");
 
         return $this->getAction($volumeHoraireMission->getMission());
@@ -222,6 +229,7 @@ class MissionController extends AbstractController
         } else {
             $this->getServiceValidation()->validerVolumeHoraireMission($volumeHoraireMission);
             $this->getServiceMission()->saveVolumeHoraire($volumeHoraireMission);
+            $this->updateTableauxBord($volumeHoraireMission->getMission());
             $this->flashMessenger()->addSuccessMessage('Volume horaire validé');
         }
 
@@ -240,11 +248,21 @@ class MissionController extends AbstractController
             $volumeHoraireMission->setAutoValidation(false);
             $volumeHoraireMission->removeValidation($validation);
             $this->getServiceValidation()->delete($validation);
+            $this->updateTableauxBord($volumeHoraireMission->getMission());
             $this->flashMessenger()->addSuccessMessage("Validation du volume horaire <strong>retirée</strong> avec succès.");
         } else {
             $this->flashMessenger()->addInfoMessage("Ce volume horaire n'était pas validé");
         }
 
         return $this->getAction($volumeHoraireMission->getMission());
+    }
+
+
+
+    private function updateTableauxBord(Mission $mission)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'mission',
+        ], $mission->getIntervenant());
     }
 }

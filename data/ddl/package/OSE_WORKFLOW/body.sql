@@ -426,12 +426,14 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           ''MISSION_SAISIE''                                   etape_code,
           m.intervenant_id                                     intervenant_id,
           COALESCE(m.structure_id,m.intervenant_structure_id)  structure_id,
-          1                                                    objectif,
-          CASE WHEN m.mission_id IS NULL THEN 0 ELSE 1 END     realisation
+          SUM(1)                                               objectif,
+          SUM(CASE WHEN m.mission_id IS NULL THEN 0 ELSE 1 END) realisation
         FROM
           tbl_mission m
         WHERE
           m.actif = 1
+        GROUP BY
+          m.intervenant_id, m.structure_id, m.intervenant_structure_id
 
         UNION ALL
 
@@ -439,12 +441,14 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           ''MISSION_VALIDATION''                               etape_code,
           m.intervenant_id                                     intervenant_id,
           m.structure_id                                       structure_id,
-          1                                                    objectif,
-          m.valide                                             realisation
+          SUM(1)                                               objectif,
+          SUM(m.valide)                                        realisation
         FROM
           tbl_mission m
         WHERE
           m.actif = 1
+        GROUP BY
+          m.intervenant_id, m.structure_id
 
         UNION ALL
 

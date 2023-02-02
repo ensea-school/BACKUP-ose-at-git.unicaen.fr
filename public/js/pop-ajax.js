@@ -113,9 +113,12 @@ $.widget("unicaen.popAjax", {
         this.ajaxLoaded = true;
         this.setTitle(this.options.loadingTitle);
         this.setContent(this.options.loadingContent, true);
-        axios.get(this.options.url).then(response => {
-            that.setContent(response);
-            console.log(response);
+        $.ajax({
+            url: this.options.url,
+            success: (response) => {
+                that.setContent(response);
+                //that.contentSubmit(that.getPopoverElement().find('.popover-body'));
+            }
         });
     },
 
@@ -293,22 +296,6 @@ $.widget("unicaen.popAjax", {
 $(function () {
     WidgetInitializer.add('pop-ajax', 'popAjax');
 });
-
-
-
-function popAjax(element, onSubmit)
-{
-    $(element).popAjax();
-
-    var widget = $(element).data('unicaenPopAjax');
-    if (onSubmit) {
-        widget.options.submitEvent = onSubmit;
-    }
-    widget.show();
-
-    return widget;
-}
-
 
 
 function popConfirm(element, options)

@@ -2129,6 +2129,7 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_MODIFICATEUR_ID',
         'HISTO_MODIFICATION',
+        'MISSION_TAUX_REMU_ID',
     ],
     'MISSION_TAUX_REMU_VALEUR'       => [
         'ID',

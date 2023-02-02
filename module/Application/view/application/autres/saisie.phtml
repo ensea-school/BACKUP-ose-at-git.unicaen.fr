@@ -8,80 +8,77 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 $type = $dossierAutre->getType()->getId();
 
+echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-master/src-min/ace.js');
+
 echo $this->form()->openTag($form); ?>
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-6">
         <?= $this->formControlGroup($form->get('libelle')); ?>
     </div>
     <div class="col-md-6">
         <?= $this->formControlGroup($form->get('description')); ?>
     </div>
+</div>
+<div class="row">
     <div class="col-md-6">
         <?= $this->formControlGroup($form->get('type')); ?>
     </div>
     <div class="col-md-6">
         <?= $this->formControlGroup($form->get('obligatoire')); ?>
     </div>
-    <div class="col-md-12">
+</div>
 
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="<?= ($type != '3') ? 'active' : ''; ?>"><a href="#json" aria-controls="json"
-                                                                                      role="tab"
-                >Valeurs manuelles</a></li>
-            <li role="presentation" class="<?= ($type == '3') ? 'active' : ''; ?>"><a href="#sql" aria-controls="sql"
-                                                                                      role="tab"
-                >Valeurs via SQL </a></li>
-        </ul>
 
-        <div class="tab-content">
-            <div role="tabcard" class="tab-pane <?= ($type != '3') ? 'active' : ''; ?>"
-                 id="json">
-                <div class="card bg-default json-value">
-                    <div class="card-header" role="tab">
-                        <label>Valeurs sous forme JSON<br/>
-                            <small style="font-weight:normal">Format : { "0":"VALUE1" , "1":"VALUE2" ...}</small></label>
-                    </div>
-                    <div class="card-body">
-                        <?= $this->formTextarea($form->get('json-value')) ?>
-                    </div>
-                </div>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation"><a class="nav-link <?= ($type != '3') ? 'active' : ''; ?>" href="#json" aria-controls="json"
+                               role="tab" data-bs-toggle="tab">Valeurs manuelles</a></li>
+    <li role="presentation"><a class="nav-link <?= ($type == '3') ? 'active' : ''; ?>" href="#sql" aria-controls="sql"
+                               role="tab" data-bs-toggle="tab">Valeurs via SQL </a></li>
+</ul>
+
+<div class="tab-content">
+    <div role="tabcard" class="tab-pane <?= ($type != '3') ? 'active' : ''; ?>"
+         id="json">
+        <div class="card bg-default json-value">
+            <div class="card-header" role="tab">
+                <label>Valeurs sous forme JSON<br/>
+                    <small style="font-weight:normal">Format : { "0":"VALUE1" , "1":"VALUE2"
+                        ...}</small></label>
             </div>
-            <div role="tabcard" class="tab-pane <?= ($dossierAutre->getType()->getId() == '3') ? 'active' : ''; ?>"
-                 id="sql">
-                <div class="card bg-default sql-value">
-                    <div class="card-header" role="tab">
-                        <label>Valeurs sous forme SQL<br/> <small style="font-weight:normal">Format : SELECT
-                                votre_champs as VALUE_OPTION FROM
-                                votre_table</small></label>
-                    </div>
-                    <div class="card-body">
-                        <?= $this->formTextarea($form->get('sql-value')) ?>
-                    </div>
-                </div>
+            <div class="card-body">
+                <?= $this->formTextarea($form->get('json-value')) ?>
+            </div>
+        </div>
+    </div>
+    <div role="tabcard" class="tab-pane <?= ($dossierAutre->getType()->getId() == '3') ? 'active' : ''; ?>"
+         id="sql">
+        <div class="card bg-default sql-value">
+            <div class="card-header" role="tab">
+                <label>Valeurs sous forme SQL<br/> <small style="font-weight:normal">Format : SELECT
+                        votre_champs as VALUE_OPTION FROM
+                        votre_table</small></label>
+            </div>
+            <div class="card-body">
+                <?= $this->formTextarea($form->get('sql-value')) ?>
             </div>
         </div>
     </div>
 </div>
 <?= $this->formSubmit($form->get('submit')); ?>
 <?= $this->formControlGroup($form->get('security')); ?>
-
 <?= $this->form()->closeTag(); ?>
-</div>
 
 
 <script>
 
-
-    $(function ()
-    {
+    $(function () {
 
         WidgetInitializer.add('autres-saisir', {
             jsonValueEditor: null,
             sqlValueEditor: null,
 
-            save: function ()
-            {
+            save: function () {
                 var jsonValue = $("<input>")
                     .attr("type", 'hidden')
                     .attr("name", 'json-value')
@@ -96,11 +93,12 @@ echo $this->form()->openTag($form); ?>
 
             },
 
-            _create: function ()
-            {
+            _create: function () {
                 var that = this;
 
-                that.element.find('#btn-save').click(function () { that.save();});
+                that.element.find('#btn-save').click(function () {
+                    that.save();
+                });
                 that.element.find('.nav a').click(function (e) {
                     e.preventDefault();
                     $('a[href="' + $(this).attr('href') + '"]').tab('show');
@@ -108,7 +106,7 @@ echo $this->form()->openTag($form); ?>
                 })
 
                 var options = {
-                    minLines: 15, maxLines: 40,
+                    minLines: 40, maxLines: 40,
                 };
                 that.jsonValueEditor = ace.edit("json-value");
                 that.jsonValueEditor.setTheme("ace/theme/github");

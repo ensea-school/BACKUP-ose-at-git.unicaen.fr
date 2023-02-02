@@ -12,6 +12,7 @@ use Application\Service\Traits\ValidationServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -48,61 +49,11 @@ class MissionController extends AbstractController
 
 
     /**
-     * Retourne la liste des missions
+     * Ajoute une nouvelle mission (form)
      *
-     * @return JsonModel
+     * @return ViewModel
      */
-    public function listeAction()
-    {
-        /* @var $intervenant Intervenant */
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-        $dql = "
-        SELECT 
-          m, tm, str, tr, valid, vh, vvh, ctr
-        FROM 
-          " . Mission::class . " m
-          JOIN m.typeMission tm
-          JOIN m.structure str
-          JOIN m.missionTauxRemu tr
-          JOIN " . TypeVolumeHoraire::class . " tvh WITH tvh.code = :typeVolumeHorairePrevu
-          LEFT JOIN m.validations valid WITH valid.histoDestruction IS NULL
-          LEFT JOIN m.volumesHoraires vh WITH vh.histoDestruction IS NULL AND vh.typeVolumeHoraire = tvh
-          LEFT JOIN vh.validations vvh WITH vvh.histoDestruction IS NULL
-          LEFT JOIN vh.contrat ctr WITH ctr.histoDestruction IS NULL
-        WHERE 
-            m.histoDestruction IS NULL 
-            AND m.intervenant = :intervenant
-        ";
-
-        $queryParams = [
-            'intervenant'            => $intervenant,
-            'typeVolumeHorairePrevu' => TypeVolumeHoraire::CODE_PREVU,
-        ];
-
-        $query = $this->em()->createQuery($dql)->setParameters($queryParams);
-
-        return $this->axios()->send($query);
-    }
-
-
-
-    /**
-     * Retourne les données pour une mission
-     *
-     * @return JsonModel
-     */
-    public function getAction()
-    {
-        /** @var Mission $mission */
-        $mission = $this->getEvent()->getParam('mission');
-
-        return $this->axios()->send($mission);
-    }
-
-
-
-    public function ajoutAction()
+    public function ajoutAction(): ViewModel
     {
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -119,7 +70,14 @@ class MissionController extends AbstractController
 
 
 
-    public function saisieAction(?Mission $mission = null)
+    /**
+     * Modifie une mission (form)
+     *
+     * @param Mission|null $mission
+     *
+     * @return ViewModel
+     */
+    public function saisieAction(?Mission $mission = null): ViewModel
     {
         if (!$mission) {
             /** @var Mission $mission */
@@ -137,6 +95,7 @@ class MissionController extends AbstractController
         }
         $form->bindRequestSave($mission, $this->getRequest(), function ($mission) {
             $this->getServiceMission()->save($mission);
+            $this->flashMessenger()->addSuccessMessage('Mission bien enregistrée');
         });
         // on passe le data-id pour pouvoir le récupérer dans la vue et mettre à jour la liste
         $form->setAttribute('data-id', $mission->getId());
@@ -146,6 +105,45 @@ class MissionController extends AbstractController
         $vm->setVariables(compact('form', 'title', 'mission'));
 
         return $vm;
+    }
+
+
+
+    /**
+     * Retourne la liste des missions
+     *
+     * @return JsonModel
+     */
+    public function listeAction()
+    {
+        /* @var $intervenant Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $query = $this->getServiceMission()->query(['intervenant' => $intervenant]);
+
+        return $this->axios()->send($query);
+    }
+
+
+
+    /**
+     * Retourne les données pour une mission
+     *
+     * @return JsonModel
+     */
+    public function getAction(?Mission $mission = null)
+    {
+        if (!$mission) {
+            /** @var Mission $mission */
+            $mission = $this->getEvent()->getParam('mission');
+        }
+
+        // Vidage du cache d'exécution Doctrine pour être sûr de bien filter les données de la mission
+        $this->em()->clear();
+
+        $query = $this->getServiceMission()->query(['mission' => $mission]);
+
+        return $this->axios()->send($this->axios()::extract($query)[0]);
     }
 
 
@@ -176,7 +174,7 @@ class MissionController extends AbstractController
             $this->flashMessenger()->addSuccessMessage('Mission validée');
         }
 
-        return $this->getAction();
+        return $this->getAction($mission);
     }
 
 
@@ -196,6 +194,57 @@ class MissionController extends AbstractController
             $this->flashMessenger()->addInfoMessage("La mission n'était pas validée");
         }
 
-        return $this->getAction();
+        return $this->getAction($mission);
+    }
+
+
+
+    public function volumeHoraireSupprimerAction()
+    {
+        /** @var VolumeHoraireMission $volumeHoraireMission */
+        $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
+
+        $this->getServiceMission()->deleteVolumeHoraire($volumeHoraireMission);
+        $this->flashMessenger()->addSuccessMessage("Volume horaire supprimé avec succès.");
+
+        return $this->getAction($volumeHoraireMission->getMission());
+    }
+
+
+
+    public function volumeHoraireValiderAction()
+    {
+        /** @var VolumeHoraireMission $volumeHoraireMission */
+        $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
+
+        if ($volumeHoraireMission->isValide()) {
+            $this->flashMessenger()->addInfoMessage('Ce volume horaire est déjà validé');
+        } else {
+            $this->getServiceValidation()->validerVolumeHoraireMission($volumeHoraireMission);
+            $this->getServiceMission()->saveVolumeHoraire($volumeHoraireMission);
+            $this->flashMessenger()->addSuccessMessage('Volume horaire validé');
+        }
+
+        return $this->getAction($volumeHoraireMission->getMission());
+    }
+
+
+
+    public function volumeHoraireDevaliderAction()
+    {
+        /** @var VolumeHoraireMission $volumeHoraireMission */
+        $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
+
+        $validation = $volumeHoraireMission->getValidation();
+        if ($validation) {
+            $volumeHoraireMission->setAutoValidation(false);
+            $volumeHoraireMission->removeValidation($validation);
+            $this->getServiceValidation()->delete($validation);
+            $this->flashMessenger()->addSuccessMessage("Validation du volume horaire <strong>retirée</strong> avec succès.");
+        } else {
+            $this->flashMessenger()->addInfoMessage("Ce volume horaire n'était pas validé");
+        }
+
+        return $this->getAction($volumeHoraireMission->getMission());
     }
 }

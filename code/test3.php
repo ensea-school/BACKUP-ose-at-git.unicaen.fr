@@ -8,11 +8,29 @@
  * @var $viewFile   string
  */
 
-/** @var \Mission\Service\MissionService $sMission */
-$sMission = $container->get(\Mission\Service\MissionService::class);
+use Application\Entity\Db\Intervenant;
+use Mission\Entity\Db\Mission;
+use Service\Entity\Db\TypeVolumeHoraire;
 
-$mission = $sMission->get(31);
+?>
+<script>
 
-$mission->setHeures(10);
 
-$sMission->save($mission);
+    var data = {
+        0: {id: 15, heures: 15},
+        1: {id: 14, heures: 14},
+        2: {id: 120, heures: 120}
+    };
+
+    console.log(data[Util.json.indexById(data, 120)]);
+
+
+    var data2 = [
+        {id: 15, heures: 15},
+        {id: 14, heures: 14},
+        {id: 120, heures: 120}
+    ];
+
+    console.log(data2[Util.json.indexById(data2, 120)]);
+
+</script>

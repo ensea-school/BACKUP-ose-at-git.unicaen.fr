@@ -38,8 +38,9 @@ export default {
             this.reload();
         },
         refresh(mission)
-        {
-            this.missions[mission.id] = mission;
+        {console.log(mission);
+            let index = Util.json.indexById(this.missions, mission.id);
+            this.missions[index] = mission;
         },
         reload()
         {

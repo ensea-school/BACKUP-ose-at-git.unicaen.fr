@@ -38,40 +38,62 @@ return [
             'route'         => '/mission',
             'may_terminate' => false,
             'child_routes'  => [
-                'liste'     => [
+                'liste'          => [
                     'route'      => '/liste/:intervenant',
                     'controller' => MissionController::class,
                     'action'     => 'liste',
                 ],
-                'get'       => [
+                'get'            => [
                     'route'      => '/get/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'get',
                 ],
-                'ajout'     => [
+                'ajout'          => [
                     'route'      => '/ajout/:intervenant',
                     'controller' => MissionController::class,
                     'action'     => 'ajout',
                 ],
-                'saisie'    => [
+                'saisie'         => [
                     'route'      => '/saisie/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'saisie',
                 ],
-                'supprimer' => [
+                'supprimer'      => [
                     'route'      => '/supprimer/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'supprimer',
                 ],
-                'valider'   => [
+                'valider'        => [
                     'route'      => '/valider/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'valider',
                 ],
-                'devalider' => [
+                'devalider'      => [
                     'route'      => '/devalider/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'devalider',
+                ],
+                'volume-horaire' => [
+                    'route'         => '/volume-horaire',
+                    'controller'    => MissionController::class,
+                    'may_terminate' => false,
+                    'child_routes'  => [
+                        'supprimer' => [
+                            'route'      => '/supprimer/:volumeHoraireMission',
+                            'controller' => MissionController::class,
+                            'action'     => 'volume-horaire-supprimer',
+                        ],
+                        'valider'   => [
+                            'route'      => '/valider/:volumeHoraireMission',
+                            'controller' => MissionController::class,
+                            'action'     => 'volume-horaire-valider',
+                        ],
+                        'devalider' => [
+                            'route'      => '/devalider/:volumeHoraireMission',
+                            'controller' => MissionController::class,
+                            'action'     => 'volume-horaire-devalider',
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -185,21 +207,21 @@ return [
         ],
         [
             'controller' => MissionController::class,
-            'action'     => ['supprimer'],
+            'action'     => ['supprimer', 'volume-horaire-supprimer'],
             'privileges' => [
                 Privileges::MISSION_EDITION,
             ],
         ],
         [
             'controller' => MissionController::class,
-            'action'     => ['valider'],
+            'action'     => ['valider', 'volume-horaire-valider'],
             'privileges' => [
                 Privileges::MISSION_VALIDATION,
             ],
         ],
         [
             'controller' => MissionController::class,
-            'action'     => ['devalider'],
+            'action'     => ['devalider', 'volume-horaire-devalider'],
             'privileges' => [
                 Privileges::MISSION_DEVALIDATION,
             ],

@@ -52,6 +52,39 @@ class MissionService extends AbstractEntityService
 
 
 
+    public function query(array $parameters)
+    {
+        $dql = "
+        SELECT 
+          m, tm, str, tr, valid, vh, vvh, ctr
+        FROM 
+          " . Mission::class . " m
+          JOIN m.typeMission tm
+          JOIN m.structure str
+          JOIN m.missionTauxRemu tr
+          JOIN " . TypeVolumeHoraire::class . " tvh WITH tvh.code = :typeVolumeHorairePrevu
+          LEFT JOIN m.validations valid WITH valid.histoDestruction IS NULL
+          LEFT JOIN m.volumesHoraires vh WITH vh.histoDestruction IS NULL AND vh.typeVolumeHoraire = tvh
+          LEFT JOIN vh.validations vvh WITH vvh.histoDestruction IS NULL
+          LEFT JOIN vh.contrat ctr WITH ctr.histoDestruction IS NULL
+        WHERE 
+          m.histoDestruction IS NULL 
+          " . dqlAndWhere([
+                'intervenant' => 'm.intervenant',
+                'mission'     => 'm',
+            ], $parameters) . "
+        ORDER BY
+          m.dateDebut,
+          vh.histoCreation
+        ";
+
+        $parameters['typeVolumeHorairePrevu'] = TypeVolumeHoraire::CODE_PREVU;
+
+        return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+    }
+
+
+
     /**
      * @param Mission $entity
      *
@@ -81,6 +114,16 @@ class MissionService extends AbstractEntityService
 
         $this->getEntityManager()->persist($vhm);
         $this->getEntityManager()->flush($vhm);
+
+        return $this;
+    }
+
+
+
+    public function deleteVolumeHoraire(VolumeHoraireMission $volumeHoraireMission): self
+    {
+        $volumeHoraireMission->historiser();
+        $this->saveVolumeHoraire($volumeHoraireMission);
 
         return $this;
     }

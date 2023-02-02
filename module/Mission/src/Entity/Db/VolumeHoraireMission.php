@@ -50,7 +50,16 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
 
     public function axiosDefinition(): array
     {
-        return ['heures', 'valide', 'validation'];
+        return [
+            'heures',
+            'valide',
+            'validation',
+            'histoCreation',
+            'histoCreateur',
+            'canValider',
+            'canDevalider',
+            'canSupprimer',
+        ];
     }
 
 
@@ -214,5 +223,26 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
         }
 
         return null;
+    }
+
+
+
+    public function canValider(): bool
+    {
+        return !$this->isValide();
+    }
+
+
+
+    public function canDevalider(): bool
+    {
+        return $this->isValide() && !$this->getMission()->isValide();
+    }
+
+
+
+    public function canSupprimer(): bool
+    {
+        return !$this->isValide() && !$this->getMission()->isValide();
     }
 }

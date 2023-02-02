@@ -14,6 +14,7 @@ use Application\Service\Traits\ContratServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\VolumeHoraireMission;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
@@ -77,6 +78,20 @@ class ValidationService extends AbstractEntityService
         $validation->setStructure($mission->getStructure());
         $this->save($validation);
         $mission->addValidation($validation);
+
+        return $validation;
+    }
+
+
+
+    public function validerVolumeHoraireMission(VolumeHoraireMission $volumeHoraireMission): Validation
+    {
+        $validation = $this->newEntity();
+        $validation->setIntervenant($volumeHoraireMission->getMission()->getIntervenant());
+        $validation->setTypeValidation($this->getServiceTypeValidation()->getMission());
+        $validation->setStructure($volumeHoraireMission->getMission()->getStructure());
+        $this->save($validation);
+        $volumeHoraireMission->addValidation($validation);
 
         return $validation;
     }

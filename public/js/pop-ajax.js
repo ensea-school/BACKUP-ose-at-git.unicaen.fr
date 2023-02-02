@@ -317,7 +317,7 @@ function popConfirm(element, options)
     if (!popConfirm) {
         if (typeof options == 'function') {
             options = {
-                onConfirm: options
+                confirm: options
             };
         }
 
@@ -338,19 +338,22 @@ function popConfirm(element, options)
             options.content = "Confirmez-vous cette action ?";
         }
 
-        if (!options.onConfirm) {
-            options.onConfirm = function () {};
+        if (!options.confirm) {
+            options.confirm = function () {};
+        }
+        if (!options.url) {
+            options.url = element.href;
         }
 
         if (element.nodeName == 'A') {
             goFunc = function () {
-                axios.get(element.href).then(response => {
-                    options.onConfirm(response, element);
+                axios.get(options.url).then(response => {
+                    options.confirm(response, element);
                 });
             };
         } else {
             goFunc = function () {
-                options.onConfirm(element);
+                options.confirm(element);
             }
         }
 

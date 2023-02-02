@@ -17,14 +17,7 @@ $this->headScript()->offsetSetFile(130, $this->basePath('/js/reconduction-centre
                                      'style' => 'width:250px;']);
                 echo $this->formSelect($selectStructure);
                 ?>
-                <script>
-                    $("body").on("change", "select.structure", function (event) {
-                        $("*").css('cursor', 'wait');
-                        var id = $(this).val();
-                        var url = '<?= $this->url('of', [], ['query' => ['structure' => '__structure__']]) ?>';
-                        $(location).attr('href', url.replace('__structure__', id));
-                    });
-                </script>
+           
             </div>
         </div>
     </div>
@@ -33,9 +26,11 @@ $this->headScript()->offsetSetFile(130, $this->basePath('/js/reconduction-centre
 
 <div class="alert alert-warning" role="alert">
     <strong>IMPORTANT</strong><br/>
-    Seules les formations reconduites pour la prochaine année universitaire peuvent bénéficier de la reconduction des centres
+    Seules les formations reconduites pour la prochaine année universitaire peuvent bénéficier de la reconduction des
+    centres
     de coûts d'une année sur l'autre.
-    Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour la
+    Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour
+    la
     prochaine année universitaire.
 </div>
 
@@ -84,7 +79,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
             <?php foreach ($etapesReconduites as $er): ?>
                 <tr>
                     <td>
-                        <input class="checkbox-element" type="checkbox" name="etapes[]" value="<?= $er['ETAPE_CODE'] ?>">
+                        <input class="checkbox-element" type="checkbox" name="etapes[]"
+                               value="<?= $er['ETAPE_CODE'] ?>">
                     </td>
                     <td><?= $er['ETAPE_CODE']; ?></td>
                     <td><?= $er['ETAPE_LIBELLE']; ?></td>
@@ -93,7 +89,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFrom
             <?php endforeach; ?>
             </tbody>
         </table>
-        <button disabled="disabled" id="reconduction-cc-button" class="btn btn-primary pop-ajax" type="button" data-content="Voulez-vous réellement reconduire ces centres de coût pour l'année prochaine ?
+        <button disabled="disabled" id="reconduction-cc-button" class="btn btn-primary pop-ajax" type="button"
+                data-content="Voulez-vous réellement reconduire ces centres de coût pour l'année prochaine ?
                 <div class='alert alert-warning'>
                 <button type='button' class='close' data-bs-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                     Les centres de coûts seront reconduits uniquement sur les éléments pédagogiques / types heures non encore paramétrés. Les centres de coûts déjà positionnés ne seront pas modifiés.

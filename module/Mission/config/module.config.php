@@ -108,6 +108,16 @@ return [
                     'controller' => MissionTauxController::class,
                     'action'     => 'saisir',
                 ],
+                'get'       => [
+                    'route'      => '/get/:missionTauxRemu',
+                    'controller' => MissionTauxController::class,
+                    'action'     => 'get',
+                ],
+                'liste-taux'           => [
+                    'route'      => '/liste-taux',
+                    'controller' => MissionTauxController::class,
+                    'action'     => 'getListeTaux',
+                ],
                 'supprimer'        => [
                     'route'      => '/supprimer/:missionTauxRemu',
                     'controller' => MissionTauxController::class,
@@ -230,7 +240,7 @@ return [
 
         [
             'controller' => MissionTauxController::class,
-            'action'     => ['index'],
+            'action'     => ['index','get','getListeTaux'],
             'privileges' => [
                 Privileges::MISSION_VISUALISATION_TAUX,
             ],

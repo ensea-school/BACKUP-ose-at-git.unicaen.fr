@@ -8,6 +8,7 @@ return [
     'index'   => 'MISSION_TR_CODE_UN',
     'columns' => [
         'CODE',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

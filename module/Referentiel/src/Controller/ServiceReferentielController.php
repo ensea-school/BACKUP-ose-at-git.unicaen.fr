@@ -222,7 +222,10 @@ class ServiceReferentielController extends AbstractController
             }
         }
 
-        return new MessengerViewModel;
+        $vm = new ViewModel();
+        $vm->setTemplate('enseignement/constatation');
+
+        return $vm;
     }
 
 

@@ -22,7 +22,7 @@ class EmployeurController extends AbstractController
 
     public function indexAction()
     {
-        $critere    = $this->params()->fromPost('critere');
+        $critere = $this->params()->fromPost('critere');
         $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere, 1000);
 
 
@@ -30,13 +30,12 @@ class EmployeurController extends AbstractController
     }
 
 
-
     public function saisieAction()
     {
         $employeur = $this->getEvent()->getParam('employeur');
 
         if (empty($employeur)) {
-            $title     = "Ajout d'un nouvel employeur";
+            $title = "Ajout d'un nouvel employeur";
             $employeur = $this->getServiceEmployeur()->newEntity();
         } else {
             $title = "Édition d'un employeur";
@@ -49,7 +48,10 @@ class EmployeurController extends AbstractController
             /**
              * @var Employeur $employeur
              */
-            $employeur->setCritereRecherche($employeur->getRaisonSociale() . ' ' . $employeur->getNomCommercial() . ' ' . $employeur->getSiret());
+            $raisonSociale = $employeur->getRaisonSociale() ? strtolower($employeur->getRaisonSociale()) : '';
+            $nomCommercial = $employeur->getNomCommercial() ? strtolower($employeur->getNomCommercial()) : '';
+
+            $employeur->setCritereRecherche($raisonSociale . ' ' . $nomCommercial . ' ' . $employeur->getSiret());
             $employeur->setSourceCode($employeur->getSiret());
             $this->getServiceEmployeur()->save($employeur);
             $this->flashMessenger()->addSuccessMessage(
@@ -61,7 +63,6 @@ class EmployeurController extends AbstractController
     }
 
 
-
     public function supprimerAction()
     {
         $employeur = $this->getEvent()->getParam('employeur');
@@ -69,7 +70,6 @@ class EmployeurController extends AbstractController
 
         return new MessengerViewModel();
     }
-
 
 
     public function rechercheAction()
@@ -81,18 +81,18 @@ class EmployeurController extends AbstractController
         ]);*/
         $term = $this->params()->fromQuery('term');
 
+
         $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($term);
 
         return new JsonModel($employeurs);
     }
 
 
-
     public function rechercheJsonAction()
     {
         $critere = $this->params()->fromPost('critere');
 
-        $employeurs     = $this->getServiceEmployeur()->rechercheEmployeur($critere);
+        $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere);
         $employeursJson = json_encode($employeurs);
 
         return $employeursJson;

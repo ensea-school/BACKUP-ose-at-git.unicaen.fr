@@ -30,6 +30,12 @@ $urlRefresh = $this->url('workflow/feuille-de-route-refresh', ['intervenant' => 
                     var errBtn = '<button onclick="window.location.reload();" type="button" class="btn btn-primary">J\'ai lu, recharger la page</button>';
 
                     popAjax.setContent(popAjax.getContent() + errBtn);
+                },
+                change: function (event, popAjax) {
+                    if (!popAjax.hasErrors()) {
+                        window.location.reload();
+                        
+                    }
                 }
             });
         });

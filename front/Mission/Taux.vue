@@ -24,27 +24,25 @@
                 <ul>
                     <div v-for="tauxValeur in taux.tauxRemuValeurs" :key="tauxValeur.id">
                         <li>{{ tauxValeur.valeur }}€/h à partir du {{ tauxValeur.dateEffet }}
-                            <a class="btn btn-primary"
+                            <a class="btn btn-primary btn-sm"
                                @click.prevent="saisieValeur"
                                :data-id="tauxValeur.id">
-                                <u-icon name="pen-to-square"/>
+                                <i class="fas fa-pen-to-square" :data-id="tauxValeur.id"/>
                             </a>
-                            <a class="btn btn-danger"
+                            <a class="btn btn-danger btn-sm"
                                @click.prevent="supprimerValeur"
                                :data-id="tauxValeur.id">
-                                <u-icon name="trash-can"/>
+                                <i class="fas fa-trash-can" :data-id="tauxValeur.id"/>
                             </a>
                         </li>
                     </div>
                 </ul>
                 <a :href="ajoutValeurUrl"
-                   class="btn btn-primary"
+                   class="btn btn-primary btn-sm"
                    @click.prevent="ajoutValeur">
                     <u-icon name="plus"/>
                 </a>
             </div>
-
-
 
             <!--            Pour les taux qui dépende d'un autre taux -->
             <div v-if=taux.missionTauxRemu class="row">
@@ -62,12 +60,12 @@
                     <ul>
                         <div v-for="tauxValeur in taux.tauxRemuValeurs">
                             <li>Coéfficient de {{ tauxValeur.valeur }} à partir du {{ tauxValeur.dateEffet }}
-                                <a class="btn btn-primary"
+                                <a class="btn btn-primary btn-sm"
                                    @click.prevent="saisieValeur"
                                    :data-id="tauxValeur.id">
-                                    <i class=" fas fa-pen-square" :data-id="tauxValeur.id"/>
+                                    <i class=" fas fa-pen-to-square" :data-id="tauxValeur.id"/>
                                 </a>
-                                <a class="btn btn-danger"
+                                <a class="btn btn-sm btn-danger"
                                    @click.prevent="supprimerValeur"
                                    :data-id="tauxValeur.id">
                                     <i class=" fas fa-trash-can" :data-id="tauxValeur.id"/>
@@ -76,7 +74,7 @@
                         </div>
                     </ul>
                     <a :href="ajoutValeurUrl"
-                       class="btn btn-primary"
+                       class="btn btn-primary btn-sm"
                        @click.prevent="ajoutValeur">
                         <u-icon name="plus"/>
                     </a>
@@ -108,7 +106,7 @@ export default {
         return {
             saisieUrl: Util.url('missions-taux/saisir/:missionTauxRemu', {missionTauxRemu: this.taux.id}),
             supprimerUrl: Util.url("missions-taux/supprimer/:missionTauxRemu", {missionTauxRemu: this.taux.id}),
-            ajoutValeurUrl: Util.url("missions-taux/saisir-valeur/:missionTauxRemu",{missionTauxRemu: this.taux.id}),
+            ajoutValeurUrl: Util.url("missions-taux/saisir-valeur/:missionTauxRemu", {missionTauxRemu: this.taux.id}),
         };
     },
     methods: {
@@ -127,7 +125,7 @@ export default {
         saisieValeur(event)
         {
             event.target.href = Util.url("missions-taux/saisir-valeur/:missionTauxRemu/:missionTauxRemuValeur",
-                {missionTauxRemu: this.taux, missionTauxRemuValeur: event.target.dataset.id});
+                {missionTauxRemu: this.taux.id, missionTauxRemuValeur: event.target.dataset.id});
             modAjax(event.target, (response) => {
                 this.$emit('refreshListe');
             });

@@ -88,10 +88,7 @@ class MissionTauxRemu implements HistoriqueAwareInterface
 
 
         while ($i < $sizeIndex || $j < $sizeTaux) {
-            if ($valeursIndex[$i]->getDateEffet() < new DateTime($dateDebutAnnee) && $valeurs[$j]->getDateEffet() < new DateTime($dateDebutAnnee)) {
-                $valeur['valeur'] = $valeursIndex[$i]->getValeur() * $valeurs[$j]->getValeur();
-                $valeur['date']   = new DateTime($dateDebutAnnee);
-            } elseif ($valeursIndex[$i]->getDateEffet() == $valeurs[$j]->getDateEffet()) {
+            if ($valeursIndex[$i]->getDateEffet() == $valeurs[$j]->getDateEffet()) {
                 $valeur['valeur'] = $valeursIndex[$i]->getValeur() * $valeurs[$j]->getValeur();
                 $valeur['date']   = $valeursIndex[$i]->getDateEffet();
             } else {

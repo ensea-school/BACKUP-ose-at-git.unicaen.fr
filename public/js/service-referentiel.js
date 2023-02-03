@@ -109,7 +109,6 @@ $.widget("ose.referentiels", {
             Util.url("referentiel/constatation"),
             {services: services},
             function (data) {
-                console.log(data);
                 if (data != 'OK') {
                     that.element.find("#referentiel-prevu-to-realise-modal").modal('hide');
                     that.element.find("#referentiel-prevu-to-realise-modal").after('<div style="margin-top:.5em">' + data + '</div>');

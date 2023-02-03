@@ -38,10 +38,9 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-m
             <td><?= $autre->getDescription() ?></td>
             <?php if ($canEdit): ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">
-                    <a class="mod-ajax" data-submit-reload="true"
-                       href="<?= $this->url('autres-infos/saisie', ['dossierAutre' => $autre->getId()]) ?>"
-                       data-submit-reload="true">
-                        <i class="fas fa-pen-to-square"></i></a>
+                    <a
+                            href="<?= $this->url('autres-infos/saisie', ['dossierAutre' => $autre->getId()]) ?>"
+                    <i class="fas fa-pen-to-square"></i></a>
                 </td>
             <?php endif; ?>
         </tr>

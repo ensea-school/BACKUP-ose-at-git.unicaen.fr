@@ -23,17 +23,18 @@ class AutresController extends AbstractController
     }
 
 
-
     public function saisieAction()
     {
         $dossierAutre = $this->getEvent()->getParam('dossierAutre');
-        $form         = $this->getFormIntervenantAutres();
-        $title        = 'Édition champs autre';
+        $form = $this->getFormIntervenantAutres();
+        $title = 'Édition champs autre';
 
         $form->bindRequestSave($dossierAutre, $this->getRequest(), function (DossierAutre $autre) {
             try {
                 $this->getServiceDossierAutre()->save($autre);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+                return $this->redirect()->toRoute('autres-infos');
+
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }

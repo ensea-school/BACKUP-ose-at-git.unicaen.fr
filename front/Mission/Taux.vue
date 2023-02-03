@@ -23,31 +23,69 @@
                 Modification :<br/>
                 <ul>
                     <div v-for="tauxValeur in taux.tauxRemuValeurs" :key="tauxValeur.id">
-                        <li>{{ tauxValeur.valeur }}€/h à partir du {{ tauxValeur.dateEffet }}
-                            <a class="btn btn-primary"
-                               @click.prevent="saisieValeur"
-                               :data-id="tauxValeur.id">
-                                <u-icon name="pen-to-square"/>
-                            </a>
-                            <a class="btn btn-danger"
-                               @click.prevent="supprimerValeur"
-                               :data-id="tauxValeur.id">
-                                <u-icon name="trash-can"/>
-                            </a>
+                        <li>
+                            <div class="row align-items-start">
+                                <div class="col-md-4">
+                                    {{ tauxValeur.valeur }}€/h à partir du {{ tauxValeur.dateEffet }}
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-primary btn-sm"
+                                       @click.prevent="saisieValeur"
+                                       :data-id="tauxValeur.id">
+                                        <i class="fas fa-pen-to-square" :data-id="tauxValeur.id"/>
+                                    </a>
+                                    <a class="btn btn-danger btn-sm"
+                                       @click.prevent="supprimerValeur"
+                                       :data-id="tauxValeur.id">
+                                        <i class="fas fa-trash-can" :data-id="tauxValeur.id"/>
+                                    </a>
+                                </div>
+                            </div>
                         </li>
                     </div>
                 </ul>
                 <a :href="ajoutValeurUrl"
-                   class="btn btn-primary"
+                   class="btn btn-primary btn-sm"
                    @click.prevent="ajoutValeur">
                     <u-icon name="plus"/>
                 </a>
             </div>
 
-
-
             <!--            Pour les taux qui dépende d'un autre taux -->
             <div v-if=taux.missionTauxRemu class="row">
+                <div class="col-md-7">
+                    Modification :<br/>
+                    <ul>
+                        <div v-for="tauxValeur in taux.tauxRemuValeurs">
+                            <li>
+                                <div class="row align-items-start">
+                                    <div class="col-md-8">
+                                        Coéfficient de {{ tauxValeur.valeur }} à partir du {{ tauxValeur.dateEffet }}
+                                    </div>
+                                    <div class="col-md-auto">
+
+                                        <a class="btn btn-primary btn-sm"
+                                           @click.prevent="saisieValeur"
+                                           :data-id="tauxValeur.id">
+                                            <i class=" fas fa-pen-to-square" :data-id="tauxValeur.id"/>
+                                        </a>
+                                        <a class="btn btn-sm btn-danger"
+                                           @click.prevent="supprimerValeur"
+                                           :data-id="tauxValeur.id">
+                                            <i class=" fas fa-trash-can" :data-id="tauxValeur.id"/>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </li>
+                        </div>
+                    </ul>
+                    <a :href="ajoutValeurUrl"
+                       class="btn btn-primary btn-sm"
+                       @click.prevent="ajoutValeur">
+                        <u-icon name="plus"/>
+                    </a>
+                </div>
                 <div class="col">
                     Valeurs calculées (indexées sur le taux {{ taux.missionTauxRemu.libelle }}) :
                     <ul>
@@ -57,30 +95,7 @@
                     </ul>
                     <br>
                 </div>
-                <div class="col order-1">
-                    Modification :<br/>
-                    <ul>
-                        <div v-for="tauxValeur in taux.tauxRemuValeurs">
-                            <li>Coéfficient de {{ tauxValeur.valeur }} à partir du {{ tauxValeur.dateEffet }}
-                                <a class="btn btn-primary"
-                                   @click.prevent="saisieValeur"
-                                   :data-id="tauxValeur.id">
-                                    <i class=" fas fa-pen-square" :data-id="tauxValeur.id"/>
-                                </a>
-                                <a class="btn btn-danger"
-                                   @click.prevent="supprimerValeur"
-                                   :data-id="tauxValeur.id">
-                                    <i class=" fas fa-trash-can" :data-id="tauxValeur.id"/>
-                                </a>
-                            </li>
-                        </div>
-                    </ul>
-                    <a :href="ajoutValeurUrl"
-                       class="btn btn-primary"
-                       @click.prevent="ajoutValeur">
-                        <u-icon name="plus"/>
-                    </a>
-                </div>
+
             </div>
 
 
@@ -108,7 +123,7 @@ export default {
         return {
             saisieUrl: Util.url('missions-taux/saisir/:missionTauxRemu', {missionTauxRemu: this.taux.id}),
             supprimerUrl: Util.url("missions-taux/supprimer/:missionTauxRemu", {missionTauxRemu: this.taux.id}),
-            ajoutValeurUrl: Util.url("missions-taux/saisir-valeur/:missionTauxRemu",{missionTauxRemu: this.taux.id}),
+            ajoutValeurUrl: Util.url("missions-taux/saisir-valeur/:missionTauxRemu", {missionTauxRemu: this.taux.id}),
         };
     },
     methods: {
@@ -127,7 +142,7 @@ export default {
         saisieValeur(event)
         {
             event.target.href = Util.url("missions-taux/saisir-valeur/:missionTauxRemu/:missionTauxRemuValeur",
-                {missionTauxRemu: this.taux, missionTauxRemuValeur: event.target.dataset.id});
+                {missionTauxRemu: this.taux.id, missionTauxRemuValeur: event.target.dataset.id});
             modAjax(event.target, (response) => {
                 this.$emit('refreshListe');
             });

@@ -151,8 +151,8 @@ class ExportProvider
     protected function checkGoodCSV(array $data)
     {
         return
-            (isset($data[24]) && $data[24] === 'HETD')
-            && (isset($data[22]) && $data[22] === 'Groupes')
+            (isset($data[25]) && $data[25] === 'HETD')
+            && (isset($data[23]) && $data[23] === 'Groupes')
             && (isset($data[1]) && $data[1] === 'Composante porteuse (code)');
     }
 

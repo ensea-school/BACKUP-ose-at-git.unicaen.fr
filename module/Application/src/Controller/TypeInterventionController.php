@@ -58,7 +58,7 @@ class TypeInterventionController extends AbstractController
         /** @var TypeIntervention $typeIntervention */
         $typeIntervention        = $typeIntervention = $this->getEvent()->getParam('typeIntervention');
         $typeInterventionStatuts = $typeIntervention->getTypeInterventionStatut($this->getServiceContext()->getAnnee());
-        $title                   = "Statuts spécifique pour " . $typeIntervention;
+        $title                   = "Taux spécifiques par statuts pour " . $typeIntervention;
 
         return compact('typeIntervention', 'typeInterventionStatuts', 'title');
     }

@@ -184,6 +184,16 @@ Util = {
 
     },
 
+    userProfileStructureChange: function (select)
+    {
+        var roleInput = $(select).parent().find('input.user-profile-select-input');
+        if (!roleInput.attr("checked")) {
+            roleInput.attr("checked", "checked");
+        }
+        var event = new Event('change', {bubbles: true});
+        roleInput[0].dispatchEvent(event);
+    },
+
     changementAnnee: function (annee)
     {
         $.get(

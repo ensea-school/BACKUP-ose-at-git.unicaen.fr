@@ -22,13 +22,15 @@ echo $this->form()->openTag($this->form->setAttribute('id', 'mail-form'));
     </div>
 </div>
 <?= $this->formControlGroup($this->form->get('cci')->setLabel("Cci (E-mails séparés par un point virgule)")) ?>
+<?= $this->formControlGroup($this->form->get('cc-pro')->setLabel("Envoyer sur l'email professionnel et l'email personnel de l'intervenant")) ?>
 <?= $this->formControlGroup($this->form->get('subject')->setLabel("Objet du mail")) ?>
 <?= $this->formControlGroup($this->form->get('body')->setLabel("Corps du mail")->setAttributes(['rows' => 15, 'id' => 'body'])) ?>
 <?= $this->formControlGroup($this->form->get('copy')->setLabel("Recevoir une copie de l'email envoyé (incluant la liste des destinataires)")) ?>
 
 <?php if (!empty($sansMail)): ?>
     <div class="alert alert-warning">
-        Attention : faute de disposer d'une adresse mail, le ou les intervenants suivants ne pourront pas être contactés :
+        Attention : faute de disposer d'une adresse mail, le ou les intervenants suivants ne pourront pas être contactés
+        :
         <ul>
             <?php foreach ($sansMail as $intervenant): ?>
                 <li><?= $intervenant ?></li>
@@ -37,15 +39,15 @@ echo $this->form()->openTag($this->form->setAttribute('id', 'mail-form'));
     </div>
 <?php endif; ?>
 
-<button class="btn btn-secondary" type="button" onclick="window.history.back()"><i class="fas fa-rotate-left" aria-hidden="true"></i
+<button class="btn btn-secondary" type="button" onclick="window.history.back()"><i class="fas fa-rotate-left"
+                                                                                   aria-hidden="true"></i
             Retour à l'indicateur
 </button>
 <button class="btn btn-primary" type="submit"><span class='fas fa-paper-plane-top'></span> Envoyer</button>
 <?= $this->formHidden($form->get('intervenants')) . $this->form()->closeTag(); ?>
 
 <script type="text/javascript">
-    $(function ()
-    {
+    $(function () {
         var selector = "textarea#<?= $this->form->get('body')->getAttribute('id') ?>";
         var form = $("form#<?= $this->form->getAttribute('id') ?>");
         var message = "Êtes-vous sûr(e) de vouloir envoyer ce message aux intervenants (<?= $count ?>) ?";
@@ -53,8 +55,7 @@ echo $this->form()->openTag($this->form->setAttribute('id', 'mail-form'));
         installEditor(selector, form);
 
         //  avant de POSTer
-        form.submit(function (e)
-        {
+        form.submit(function (e) {
             if (!confirm(message)) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -68,8 +69,7 @@ echo $this->form()->openTag($this->form->setAttribute('id', 'mail-form'));
      * @param {string} selector
      * @param {object} form
      */
-    function installEditor(selector, form)
-    {
+    function installEditor(selector, form) {
         WidgetInitializer.includeJs(Url('vendor/tinymce-4.4.1/js/tinymce/tinymce.min.js'));
         tinymce.editors = [];
         tinymce.init({
@@ -83,15 +83,13 @@ echo $this->form()->openTag($this->form->setAttribute('id', 'mail-form'));
             toolbar: "bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | undo redo"
         });
         // Prevent bootstrap dialog from blocking focusin
-        $(document).on('focusin', function (e)
-        {
+        $(document).on('focusin', function (e) {
             if ($(e.target).closest(".mce-window").length) {
                 e.stopImmediatePropagation();
             }
         });
         // Indispensable pour que le contenu du textarea soit mis à jour avant de POSTer
-        form.submit(function ()
-        {
+        form.submit(function () {
             tinymce.triggerSave();
         });
     }

@@ -43,6 +43,7 @@
 * Lors de la demande de mise en paiement, pouvoir choisir un EOTP même si son centre de coût parent n'est pas de l'activité attendue (pilotage / enseignement) (#48286)
 * Utilisation prioritaire de l'email personnel des données personnelles pour l'envoi d'email via les indicateurs (#48393)
 * Meilleure gestion de la casse lors de la recherche d'un employeur (#48543)
+* Ajout d'une contrainte d'unicité sur la colonne code de la table type_intervention (#48727)
 
 ## Notes de mise à jour
 

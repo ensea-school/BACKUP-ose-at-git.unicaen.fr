@@ -339,7 +339,7 @@ class IndicateurController extends AbstractController
                         $mailer->sendCopyEmail($listEmailsCci, $emailsList, $post);
                     }
                 }
-                $count = count($intervenantsIds);
+                $count = count($emailsList);
                 $pluriel = $count > 1 ? 's' : '';
                 $this->flashMessenger()->addSuccessMessage("Le mail a été envoyé à $count intervenant$pluriel");
                 $this->redirect()->toRoute('indicateur/result', ['indicateur' => $indicateur->getId()]);

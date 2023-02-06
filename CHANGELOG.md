@@ -24,6 +24,7 @@
 * Réorganisation du menu "Administration" pour plus de lisibilité
 * Filtrage des caractères interdits lors de l'export RH SIHAM (#47267)
 * Associer des tags aux services afin de flécher certains financements (#42451)
+* Envoyer un email via un indicateur à la fois sur l'email perso et l'email pro de l'intervenant (#48687)
 
 ## Corrections de bugs
 

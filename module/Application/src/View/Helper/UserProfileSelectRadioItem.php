@@ -32,7 +32,7 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
         $perimetre = $this->role ? $this->role->getPerimetre() : null;
 
         if ($this->role->getPeutChangerStructure() && $perimetre && $perimetre->isEtablissement()) {
-            $selectClass = 'user-profile-select-input-structure';
+            $selectClass = 'user-profile-select-input user-profile-select-input-structure toto';
 
             $select = new \Laminas\Form\Element\Select('structure-' . $this->role->getRoleId());
             $select
@@ -40,24 +40,10 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
                 ->setValueOptions($this->getStructures())
                 ->setValue($this->getStructure() ? $this->getStructure()->getId() : null)
                 ->setAttribute('class', $selectClass)
+                ->setAttribute('onchange', 'Util.userProfileStructureChange(this)')
                 ->setAttribute('title', "Cliquez pour sélectionner la structure associée au profil $this->role");
 
-            $html .= ' ' . $this->getView()->formSelect($select);
-
-            $html .= <<<EOS
-<script>
-    $(function() {
-        $("select.$selectClass").tooltip({ delay: 500, placement: 'right' }).change(function() {
-            var roleInput = $(this).parent().find('input.user-profile-select-input');
-            if (roleInput.attr("checked")) {
-                submitProfile();
-            }else{
-                roleInput.attr("checked", "checked");
-            }
-        });
-    });
-</script>
-EOS;
+            $html .= $this->getView()->formSelect($select);
         }
 
         return $html;

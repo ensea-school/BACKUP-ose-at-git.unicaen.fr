@@ -8,7 +8,7 @@ use Laminas\View\Helper\Navigation as NavigationHelper;
 
 /** @var NavigationHelper $navigationHelper */
 $navigationHelper = $this->navigation('navigation');
-$pages = $navigationHelper->getContainer();
+$pages            = $navigationHelper->getContainer();
 
 $version = $this->appInfos()->getConfig()->get('version');
 
@@ -71,6 +71,7 @@ echo $this->doctype();
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-3.6.0.min.js?v=' . $version) ?>"></script>
     <script type="text/javascript"
             src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js?v=' . $version) ?>"></script>
+    <?= $this->headScript(); ?>
 </head>
 
 <body class="<?= getenv('APPLICATION_ENV') ?: 'dev' ?> p-0" data-base-url="<?= $this->url('home') ?>">
@@ -147,8 +148,6 @@ echo $this->doctype();
 <script type="text/javascript" src="<?= $this->basePath('/js/app.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/paiement.js?v=' . $version) ?>"></script>
 <script type="text/javascript" src="<?= $this->basePath('/js/piece-jointe.js?v=' . $version) ?>"></script>
-
-<?= $this->headScript(); ?>
 
 <!-- Scripts chargés dynamiquement -->
 <?= $this->inlineScript(); ?>

@@ -271,16 +271,21 @@ class IndicateurController extends AbstractController
         $result = $this->getServiceIndicateur()->getResult($indicateur);
 
         $emails = [];
+        $emailsPro = [];
         $intervenantsWithNoEmail = [];
         foreach ($result as $intervenantId => $indicRes) {
             if (!in_array($intervenantId, $intervenantsIds)) {
                 continue;
             }
             $emailPerso = $indicRes['dossier-email-perso'] ?: $indicRes['intervenant-email-perso'];
-            
-            $email = $emailPerso ?: $indicRes['intervenant-email-pro'];
+            $emailPro = $indicRes['intervenant-email-pro'];
+
+            $email = $emailPerso ?: $emailPro;
             if ($email) {
                 $emails[$email] = $indicRes['intervenant-nom'] . ' ' . $indicRes['intervenant-prenom'];
+                if ($email != $emailPro) {
+                    $emailsPro[$emailPro] = $indicRes['intervenant-nom'] . ' ' . $indicRes['intervenant-prenom'];
+                }
             } else {
                 $intervenantsWithNoEmail[$intervenantId] = $indicRes;
             }
@@ -298,6 +303,7 @@ class IndicateurController extends AbstractController
         $form->add((new Text('subject'))->setValue($subject));
         $form->add((new Textarea('body'))->setValue($body));
         $form->add((new Checkbox('copy'))->setValue(1));
+        $form->add((new Checkbox('cc-pro'))->setValue(0));
         $form->add((new Hidden('intervenants'))->setValue($intervenantsStringIds));
         $form->getInputFilter()->get('subject')->setRequired(true);
         $form->getInputFilter()->get('body')->setRequired(true);
@@ -305,7 +311,13 @@ class IndicateurController extends AbstractController
         if ($this->getRequest()->isPost()) {
             $post = $this->getRequest()->getPost();
             if ($form->setData($post)->isValid()) {
-                $mailer->send($emails, $post);
+                //Cas on je veux envoyer l'email également sur l'email pro de l'intervenant
+                if ($post['cc-pro']) {
+                    $emailsList = array_merge($emails, $emailsPro);
+                } else {
+                    $emailsList = $emails;
+                }
+                $mailer->send($emailsList, $post);
                 //Création d'une note email pour chaque intervenant concerné
                 foreach ($intervenantsIds as $id) {
                     $intervenant = $this->getServiceIntervenant()->get($id);
@@ -317,14 +329,14 @@ class IndicateurController extends AbstractController
                     //envoi une copie du mail à l'utilisateur si il l'a demandé
                     $utilisateur = $this->getServiceContext()->getUtilisateur();
                     $emailUtilisateur[$utilisateur->getEmail()] = $utilisateur->getDisplayName();
-                    $mailer->sendCopyEmail($emailUtilisateur, $emails, $post);
+                    $mailer->sendCopyEmail($emailUtilisateur, $emailsList, $post);
                 }
                 if ($post['cci'] && !empty($post['cci'])) {
                     $emailsCci = explode(';', $post['cci']);
                     foreach ($emailsCci as $emailCci) {
                         $listEmailsCci = [];
                         $listEmailsCci[$emailCci] = $emailCci;
-                        $mailer->sendCopyEmail($listEmailsCci, $emails, $post);
+                        $mailer->sendCopyEmail($listEmailsCci, $emailsList, $post);
                     }
                 }
                 $count = count($intervenantsIds);

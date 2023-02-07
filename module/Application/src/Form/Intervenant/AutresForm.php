@@ -96,7 +96,7 @@ class AutresForm extends AbstractForm
             'name'       => 'submit',
             'type'       => 'Submit',
             'attributes' => [
-                'value' => 'Appliquer',
+                'value' => 'Enregistrer',
                 'class' => 'btn btn-primary',
                 'id'    => 'btn-save',
             ],
@@ -104,7 +104,6 @@ class AutresForm extends AbstractForm
 
         $this->add(new Csrf('security'));
     }
-
 
 
     /**

@@ -1158,6 +1158,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'EFFECTIF_CALCULE',
     ],
     'SCENARIO_NOEUD_SEUIL'           => [
         'ID',

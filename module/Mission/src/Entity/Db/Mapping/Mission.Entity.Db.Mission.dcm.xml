@@ -14,8 +14,8 @@
         <many-to-one field="typeMission" target-entity="Mission\Entity\Db\TypeMission">
             <join-column name="TYPE_MISSION_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="missionTauxRemu" target-entity="Mission\Entity\Db\MissionTauxRemu">
-            <join-column name="MISSION_TAUX_REMU_ID" referenced-column-name="ID"/>
+        <many-to-one field="tauxRemu" target-entity="Paiement\Entity\Db\TauxRemu">
+            <join-column name="TAUX_REMU_ID" referenced-column-name="ID"/>
         </many-to-one>
         <field name="dateDebut" type="datetime" column="DATE_DEBUT" nullable="false"/>
         <field name="dateFin" type="datetime" column="DATE_FIN" nullable="false"/>

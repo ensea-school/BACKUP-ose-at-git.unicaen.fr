@@ -5,29 +5,29 @@ namespace Mission\Form;
 use Application\Form\AbstractForm;
 use Laminas\Form\FormInterface;
 use Mission\Entity\Db\TypeMission;
-use Mission\Service\MissionTauxServiceAwareTrait;
+use Paiement\Service\TauxServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 class MissionTypeForm extends AbstractForm
 {
     use SchemaServiceAwareTrait;
-    use MissionTauxServiceAwareTrait;
+    use TauxServiceAwareTrait;
 
     public function init()
     {
         $ignore = [];
         $this->spec(TypeMission::class, $ignore);
         $this->spec([
-            'missionTauxRemu' => [
+            'tauxRemu' => [
                 'input' => [
                     'required' => false,
                 ],
             ],
         ]);
         $this->build();
-        $this->setValueOptions('missionTauxRemu', $this->getServiceMissionTaux()->getTauxRemus());
-        $this->get('missionTauxRemu')->setEmptyOption("");
-        $this->get('missionTauxRemu')->setLabel('Taux par défaut');
+        $this->setValueOptions('tauxRemu', $this->getServiceTaux()->getTauxRemus());
+        $this->get('tauxRemu')->setEmptyOption("");
+        $this->get('tauxRemu')->setLabel('Taux par défaut');
 
         $this->addSecurity();
         $this->addSubmit();

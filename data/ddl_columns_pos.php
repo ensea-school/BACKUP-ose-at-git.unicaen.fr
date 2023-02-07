@@ -2119,7 +2119,7 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
     ],
-    'MISSION_TAUX_REMU'              => [
+    'TAUX_REMU'                      => [
         'ID',
         'CODE',
         'LIBELLE',
@@ -2129,11 +2129,11 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_MODIFICATEUR_ID',
         'HISTO_MODIFICATION',
-        'MISSION_TAUX_REMU_ID',
+        'TAUX_REMU_ID',
     ],
-    'MISSION_TAUX_REMU_VALEUR'       => [
+    'TAUX_REMU_VALEUR'               => [
         'ID',
-        'MISSION_TAUX_REMU_ID',
+        'TAUX_REMU_ID',
         'DATE_EFFET',
         'VALEUR',
     ],
@@ -2141,7 +2141,6 @@ return [
         'ID',
         'CODE',
         'LIBELLE',
-        'MISSION_TAUX_REMU_ID',
         'ANNEE_ID',
         'HISTO_CREATION',
         'HISTO_CREATEUR_ID',
@@ -2149,12 +2148,12 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'TAUX_REMU_ID',
     ],
     'MISSION'                        => [
         'ID',
         'INTERVENANT_ID',
         'TYPE_MISSION_ID',
-        'MISSION_TAUX_REMU_ID',
         'DATE_DEBUT',
         'DATE_FIN',
         'DESCRIPTION',
@@ -2166,6 +2165,7 @@ return [
         'HISTO_DESTRUCTEUR_ID',
         'STRUCTURE_ID',
         'AUTO_VALIDATION',
+        'TAUX_REMU_ID',
     ],
     'MISSION_ETUDIANT'               => [
         'MISSION_ID',

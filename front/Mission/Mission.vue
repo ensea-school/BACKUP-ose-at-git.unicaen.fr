@@ -20,7 +20,7 @@
                         <div class="row">
                             <div class="col-md-5">
                                 <label class=" form-label">Taux de rémunération</label>
-                                <div class="form-control">{{ mission.missionTauxRemu.libelle }}</div>
+                                <div class="form-control">{{ mission.tauxRemu.libelle }}</div>
                             </div>
                             <div class="col-md-7">
                                 <label class=" form-label">Nombre d'heures prévisionnelles</label>

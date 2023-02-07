@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Paiement\Entity\Db\TauxRemu" table="TAUX_REMU">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <field name="code" type="string" column="CODE" length="20" nullable="false"/>
+        <field name="libelle" type="string" column="LIBELLE" length="50" nullable="false"/>
+
+        <many-to-one field="tauxRemu" target-entity="Paiement\Entity\Db\TauxRemu">
+            <join-column name="TAUX_REMU_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <one-to-many field="tauxRemuValeurs" target-entity="Paiement\Entity\Db\TauxRemuValeur" mapped-by="tauxRemu">
+            <order-by>
+                <order-by-field name="dateEffet" direction="DESC"/>
+            </order-by>
+        </one-to-many>
+
+        <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-columns>
+                <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

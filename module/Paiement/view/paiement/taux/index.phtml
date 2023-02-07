@@ -1,0 +1,26 @@
+<?php
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ */
+
+use Application\Provider\Privilege\Privileges;
+use Paiement\Entity\Db\TauxRemu;
+
+
+$this->headTitle()->append("Gestion des taux");
+$canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::TAUX_EDITION));
+$canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::TAUX_SUPPRESSION));
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+?>
+    <h1 class="page-header">Gestion des taux</h1>
+
+<?php
+/** @var TauxRemu[] $tauxMissions */
+/** @var string $annee */
+$anneeSplit = explode('/', $annee);
+
+
+echo $this->vue('paiement/liste-taux', [
+    'canEditTaux' => $canEdit,
+    'canDeleteTaux' => $canSupprimer,
+]);

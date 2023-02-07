@@ -2,7 +2,6 @@
 
 namespace Mission\Service;
 
-use Mission\Entity\Db\TypeMission;
 use Psr\Container\ContainerInterface;
 
 

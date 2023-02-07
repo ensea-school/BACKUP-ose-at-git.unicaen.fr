@@ -130,6 +130,7 @@ class AppConfig
             'Enseignement',
             'Referentiel',
             'Mission',
+            'Paiement',
             'Plafond',
             'Indicateur',
             'ExportRh',

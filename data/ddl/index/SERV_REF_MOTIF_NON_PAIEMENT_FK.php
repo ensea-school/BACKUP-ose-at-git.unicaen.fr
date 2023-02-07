@@ -3,7 +3,7 @@
 //@formatter:off
 
 return [
-    'name'    => 'SERVICE_REFERENTIEL_MOTIF_NON_PAIEMENT_FK',
+    'name'    => 'SERV_REF_MOTIF_NON_PAIEMENT_FK',
     'unique'  => FALSE,
     'table'   => 'SERVICE_REFERENTIEL',
     'columns' => [

@@ -10,7 +10,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 /**
- * Description of MissionTauxController
+ * Description of tauxController
  *
  * @author Florian Joriot <florian.joriot at unicaen.fr>
  */

@@ -10,6 +10,7 @@ use Application\Interfaces\AxiosExtractor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -19,25 +20,25 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
     use IntervenantAwareTrait;
     use StructureAwareTrait;
 
-    protected ?int             $id              = null;
+    protected ?int         $id             = null;
 
-    protected ?TypeMission     $typeMission     = null;
+    protected ?TypeMission $typeMission    = null;
 
-    protected ?MissionTauxRemu $missionTauxRemu = null;
+    protected ?TauxRemu    $tauxRemu       = null;
 
-    protected ?\DateTime       $dateDebut       = null;
+    protected ?\DateTime   $dateDebut      = null;
 
-    protected ?\DateTime       $dateFin         = null;
+    protected ?\DateTime   $dateFin        = null;
 
-    protected ?string          $description     = null;
+    protected ?string      $description    = null;
 
-    protected bool             $autoValidation  = false;
+    protected bool         $autoValidation = false;
 
-    private Collection         $etudiants;
+    private Collection     $etudiants;
 
-    private Collection         $validations;
+    private Collection     $validations;
 
-    private Collection         $volumesHoraires;
+    private Collection     $volumesHoraires;
 
 
 
@@ -57,7 +58,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
             'dateDebut',
             'dateFin',
             'structure',
-            'missionTauxRemu',
+            'tauxRemu',
             'description',
             'histoCreation',
             'histoCreateur',
@@ -106,16 +107,16 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
 
 
 
-    public function getMissionTauxRemu(): ?MissionTauxRemu
+    public function getTauxRemu(): ?TauxRemu
     {
-        return $this->missionTauxRemu;
+        return $this->tauxRemu;
     }
 
 
 
-    public function setMissionTauxRemu(?MissionTauxRemu $missionTauxRemu): self
+    public function setTauxRemu(?TauxRemu $tauxRemu): self
     {
-        $this->missionTauxRemu = $missionTauxRemu;
+        $this->tauxRemu = $tauxRemu;
 
         return $this;
     }

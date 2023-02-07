@@ -86,9 +86,9 @@ echo $this->vue('mission/liste', [
     'intervenant'   => $intervenant->getId(),
     'canAddMission' => $canAddMission,
     'options'       => [
-        'typeMission'     => $missionForm->get('typeMission')->getValueOptions(),
-        'structure'       => $missionForm->get('structure')->getValueOptions(),
-        'missionTauxRemu' => $missionForm->get('missionTauxRemu')->getValueOptions(),
+        'typeMission' => $missionForm->get('typeMission')->getValueOptions(),
+        'structure'   => $missionForm->get('structure')->getValueOptions(),
+        'tauxRemu'    => $missionForm->get('tauxRemu')->getValueOptions(),
     ],
 ]);
 ```

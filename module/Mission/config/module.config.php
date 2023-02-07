@@ -5,10 +5,10 @@ namespace Mission;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Mission\Controller\MissionController;
-use Mission\Controller\MissionTauxController;
+use Mission\Controller\TauxController;
 use Mission\Controller\MissionTypeController;
-use Mission\Service\MissionTauxService;
-use Mission\Service\MissionTauxServiceFactory;
+use Mission\Service\TauxService;
+use Mission\Service\TauxServiceFactory;
 use Mission\Service\MissionTypeService;
 use Mission\Service\MissionTypeServiceFactory;
 use UnicaenAuth\Assertion\AssertionFactory;
@@ -97,44 +97,6 @@ return [
                 ],
             ],
         ],
-        'missions-taux' => [
-            'route'         => '/missions-taux',
-            'controller'    => MissionTauxController::class,
-            'action'        => 'index',
-            'may_terminate' => true,
-            'child_routes'  => [
-                'saisir'           => [
-                    'route'      => '/saisir[/:missionTauxRemu]',
-                    'controller' => MissionTauxController::class,
-                    'action'     => 'saisir',
-                ],
-                'get'       => [
-                    'route'      => '/get/:missionTauxRemu',
-                    'controller' => MissionTauxController::class,
-                    'action'     => 'get',
-                ],
-                'liste-taux'           => [
-                    'route'      => '/liste-taux',
-                    'controller' => MissionTauxController::class,
-                    'action'     => 'getListeTaux',
-                ],
-                'supprimer'        => [
-                    'route'      => '/supprimer/:missionTauxRemu',
-                    'controller' => MissionTauxController::class,
-                    'action'     => 'supprimer',
-                ],
-                'saisir-valeur'    => [
-                    'route'      => '/saisir-valeur[/:missionTauxRemu][/:missionTauxRemuValeur]',
-                    'controller' => MissionTauxController::class,
-                    'action'     => 'saisirValeur',
-                ],
-                'supprimer-valeur' => [
-                    'route'      => '/supprimer-valeur/:missionTauxRemuValeur',
-                    'controller' => MissionTauxController::class,
-                    'action'     => 'supprimerValeur',
-                ],
-            ],
-        ],
         'missions-type' => [
             'route'         => '/missions-type',
             'controller'    => MissionTypeController::class,
@@ -177,12 +139,6 @@ return [
             'pages' => [
                 'intervenants' => [
                     'pages' => [
-                        'missions-taux' => [
-                            'label'    => "Taux de mission",
-                            'route'    => 'missions-taux',
-                            'resource' => PrivilegeController::getResourceId(MissionTauxController::class, 'index'),
-                            'order'    => 60,
-                        ],
                         'missions-type' => [
                             'label'    => "Type de mission",
                             'route'    => 'missions-type',
@@ -237,29 +193,6 @@ return [
             ],
             //'assertion'  => Assertion\MissionAssertion::class,
         ],
-
-        [
-            'controller' => MissionTauxController::class,
-            'action'     => ['index','get','getListeTaux'],
-            'privileges' => [
-                Privileges::MISSION_VISUALISATION_TAUX,
-            ],
-        ],
-        [
-            'controller' => MissionTauxController::class,
-            'action'     => ['saisir', 'saisirValeur'],
-            'privileges' => [
-                Privileges::MISSION_EDITION_TAUX,
-            ],
-        ],
-        [
-            'controller' => MissionTauxController::class,
-            'action'     => ['supprimer', 'supprimerValeur'],
-            'privileges' => [
-                Privileges::MISSION_SUPPRESSION_TAUX,
-            ],
-        ],
-
         [
             'controller' => MissionTypeController::class,
             'action'     => ['index'],
@@ -285,20 +218,17 @@ return [
 
     'controllers' => [
         MissionController::class     => Controller\MissionControllerFactory::class,
-        MissionTauxController::class => Controller\MissionTauxControllerFactory::class,
         MissionTypeController::class => Controller\MissionTypeControllerFactory::class,
     ],
 
     'services' => [
-        MissionTauxService::class         => MissionTauxServiceFactory::class,
         MissionTypeService::class         => MissionTypeServiceFactory::class,
         Assertion\MissionAssertion::class => AssertionFactory::class,
         Service\MissionService::class     => Service\MissionServiceFactory::class,
     ],
 
     'forms' => [
-        Form\MissionForm::class     => Form\MissionFormFactory::class,
-        Form\MissionTauxForm::class => Form\MissionTauxFormFactory::class,
+        Form\MissionForm::class => Form\MissionFormFactory::class,
     ],
 
     'view_helpers' => [

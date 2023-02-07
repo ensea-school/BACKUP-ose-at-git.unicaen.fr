@@ -162,9 +162,6 @@ return [
             'visualisation-type'     => 'Visualisation des types de mission',
             'edition-type'           => 'Edition des types de mission',
             'suppression-type'       => 'Suppression des types de mission',
-            'visualisation-taux'     => 'Visualisation des taux de mission',
-            'edition-taux'           => 'Edition des taux de mission',
-            'suppression-taux'       => 'Suppression des taux de mission',
         ],
     ],
 
@@ -476,6 +473,15 @@ return [
             'grades-edition'       => 'Édition grades',
             'corps-visualisation'  => 'Visualisation corps',
             'corps-edition'        => 'Édition corps',
+        ],
+    ],
+
+    'taux' => [
+        'libelle'    => 'Taux',
+        'privileges' => [
+            'visualisation' => 'Visualisation des taux',
+            'edition'       => 'Edition des taux',
+            'suppression'   => 'Suppression des taux',
         ],
     ],
 

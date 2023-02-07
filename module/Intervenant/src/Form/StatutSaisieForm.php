@@ -8,6 +8,7 @@ use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
+use Paiement\Entity\Db\TauxRemu;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
@@ -54,6 +55,7 @@ class StatutSaisieForm extends AbstractForm
             'paiementVisualisation'         => 'Visibilité par l\'intervenant des mises en paiement',
             'motifNonPaiement'              => 'Le gestionnaire peut déclarer des heures comme non payables',
             'formuleVisualisation'          => 'Visibilité par l\'intervenant du détail des heures pour le calcul des HETD',
+            'tauxRemu'                      => 'Taux de rémunération',
             'typeIntervenant'               => 'Type d\'intervenant',
             'mission'                       => 'Visualisation/Modification de mission',
             'missionRealise'                => 'Saisie du réalisé',
@@ -410,8 +412,8 @@ class StatutSaisieForm extends AbstractForm
                 ],
                 'hydrator' => [
                     'getter' => function (Statut $statut, string $name) {
-                        $access  = $statut->getModificationServiceDu();
-                        $visu    = $statut->getModificationServiceDuVisualisation();
+                        $access = $statut->getModificationServiceDu();
+                        $visu   = $statut->getModificationServiceDuVisualisation();
 
                         if ($visu && $access) {
                             return 'visualisation';
@@ -422,8 +424,8 @@ class StatutSaisieForm extends AbstractForm
                         }
                     },
                     'setter' => function (Statut $statut, $value, string $name) {
-                        $access  = false;
-                        $visu    = false;
+                        $access = false;
+                        $visu   = false;
                         switch ($value) {
                             case 'visualisation':
                                 $visu = true;
@@ -433,6 +435,11 @@ class StatutSaisieForm extends AbstractForm
                         $statut->setModificationServiceDu($access);
                         $statut->setModificationServiceDuVisualisation($visu);
                     },
+                ],
+            ],
+            'tauxRemu'              => [
+                'input' => [
+                    'required' => false,
                 ],
             ],
         ]);
@@ -450,7 +457,10 @@ class StatutSaisieForm extends AbstractForm
 
         $this->setValueOptions('typeIntervenant', $this->getServiceTypeIntervenant()->getList());
         $this->setValueOptions('contratEtatSortie', 'SELECT es FROM ' . EtatSortie::class . ' es ORDER BY es.libelle');
+        $this->setValueOptions('tauxRemu', 'SELECT tr FROM ' . TauxRemu::class . ' tr WHERE tr.histoDestruction is NULL');
+
         $this->get('contratEtatSortie')->setEmptyOption('- Aucun état de sortie n\'est spécifié -');
+        $this->get('tauxRemu')->setEmptyOption('- Utilisation du taux légal standard -');
 
         return $this;
     }

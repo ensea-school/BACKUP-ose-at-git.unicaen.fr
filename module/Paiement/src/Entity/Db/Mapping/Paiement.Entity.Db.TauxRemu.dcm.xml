@@ -18,6 +18,12 @@
             </order-by>
         </one-to-many>
 
+        <one-to-many field="statuts" target-entity="Intervenant\Entity\Db\Statut" mapped-by="tauxRemu">
+            <order-by>
+                <order-by-field name="ordre" direction="ASC"/>
+            </order-by>
+        </one-to-many>
+
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
             <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>

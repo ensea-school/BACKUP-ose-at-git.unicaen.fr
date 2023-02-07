@@ -48,12 +48,12 @@ class TauxService extends AbstractEntityService
      */
     public function getTauxRemus(): array
     {
-        $dql   = "SELECT mtr, mtrv, mtrp
-                 FROM " . TauxRemu::class . " mtr
-                 LEFT JOIN mtr.tauxRemu mtrp
-                 LEFT JOIN mtr.tauxRemuValeurs mtrv
-                 WHERE mtr.histoDestruction IS NULL
-                 ORDER BY mtr.id";
+        $dql   = "SELECT tr, trv, trp
+                 FROM " . TauxRemu::class . " tr
+                 LEFT JOIN tr.tauxRemu trp
+                 LEFT JOIN tr.tauxRemuValeurs trv
+                 WHERE tr.histoDestruction IS NULL
+                 ORDER BY tr.id";
         $query = $this->getEntityManager()->createQuery($dql);
 
         return $query->getResult();

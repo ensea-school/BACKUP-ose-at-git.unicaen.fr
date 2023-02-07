@@ -206,6 +206,7 @@ class FiltreForm extends AbstractForm
 
         $sEtapes     = [];
         $eStructures = [];
+        $sScenarios  = [];
         foreach ($dEtapes as $e) {
             $id    = (int)$e['ID'];
             $label = $e['LIBELLE'] . ' (' . $e['CODE'] . ')';

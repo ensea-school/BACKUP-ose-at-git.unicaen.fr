@@ -24,6 +24,7 @@
 * Réorganisation du menu "Administration" pour plus de lisibilité
 * Filtrage des caractères interdits lors de l'export RH SIHAM (#47267)
 * Associer des tags aux services afin de flécher certains financements (#42451)
+* Envoyer un email via un indicateur à la fois sur l'email perso et l'email pro de l'intervenant (#48687)
 
 ## Corrections de bugs
 
@@ -43,6 +44,7 @@
 * Lors de la demande de mise en paiement, pouvoir choisir un EOTP même si son centre de coût parent n'est pas de l'activité attendue (pilotage / enseignement) (#48286)
 * Utilisation prioritaire de l'email personnel des données personnelles pour l'envoi d'email via les indicateurs (#48393)
 * Meilleure gestion de la casse lors de la recherche d'un employeur (#48543)
+* Ajout d'une contrainte d'unicité sur la colonne code de la table type_intervention (#48727)
 
 ## Notes de mise à jour
 

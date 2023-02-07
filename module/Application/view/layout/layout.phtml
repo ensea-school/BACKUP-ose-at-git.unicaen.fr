@@ -64,6 +64,7 @@ echo $this->doctype();
     <script type="text/javascript" src="<?= $this->basePath('/vendor/axios/axios.min.js') ?>"></script>
     <script type="text/javascript" src="<?= $this->basePath('/js/util.js?v=' . $version) ?>"></script>
     <?= $this->vite()->head(); ?>
+    <?= $this->headScript(); ?>
 </head>
 
 <body class="<?= AppConfig::getEnv() ?> p-0" data-base-url="<?= $this->url('home') ?>">

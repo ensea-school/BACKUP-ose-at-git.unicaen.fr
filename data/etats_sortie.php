@@ -2,6 +2,17 @@
 
 return [
     [
+        'CODE'           => 'contrat',
+        'LIBELLE'        => 'Contrat de travail',
+        'PDF_TRAITEMENT' => '/data/Etats de sortie/contrat.php',
+        'AUTO_BREAK'     => true,
+        'REQUETE'        => 'SELECT * FROM v_contrat_main',
+        'CLE'            => 'CONTRAT_ID',
+        'BLOC1_NOM'      => 'serviceCode',
+        'BLOC1_ZONE'     => 'table:table-row',
+        'BLOC1_REQUETE'  => 'SELECT * FROM V_CONTRAT_SERVICES',
+    ],
+    [
         'CODE'           => 'preliquidation-siham',
         'LIBELLE'        => 'Préliquidation SIHAM',
         'PDF_TRAITEMENT' => null,

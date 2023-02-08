@@ -10,7 +10,7 @@
                    @click.prevent="saisie">
                     <u-icon name="pen-to-square"/>
                     Modifier</a>
-                &nbsp;
+                &nbsp
                 <a v-if="canDeleteTaux"
                    :href="supprimerUrl"
                    class="btn btn-danger"
@@ -25,7 +25,7 @@
                 Modification :<br/>
                 <ul>
                     <div v-for="tauxValeur in taux.tauxRemuValeurs" :key="tauxValeur.id">
-                        <li>
+                        <li class="">
                             <div class="row align-items-start">
                                 <div class="col-md-4">
                                     {{ tauxValeur.valeur }}€/h à partir du {{ tauxValeur.dateEffet }}
@@ -37,6 +37,7 @@
                                        :data-id="tauxValeur.id">
                                         <i class="fas fa-pen-to-square" :data-id="tauxValeur.id"/>
                                     </a>
+                                    &nbsp
                                     <a v-if="canDeleteTaux"
                                        class="btn btn-danger btn-sm"
                                        @click.prevent="supprimerValeur"
@@ -75,6 +76,7 @@
                                            :data-id="tauxValeur.id">
                                             <i class=" fas fa-pen-to-square" :data-id="tauxValeur.id"/>
                                         </a>
+                                        &nbsp
                                         <a v-if="canDeleteTaux"
                                            class="btn btn-sm btn-danger"
                                            @click.prevent="supprimerValeur"

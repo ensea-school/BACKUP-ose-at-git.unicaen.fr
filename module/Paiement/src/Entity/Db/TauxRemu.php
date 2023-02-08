@@ -28,6 +28,9 @@ class TauxRemu implements HistoriqueAwareInterface
 
     protected Collection $tauxRemuValeurs;
 
+    protected Collection $statuts;
+
+
 
 
     public function getId(): ?int

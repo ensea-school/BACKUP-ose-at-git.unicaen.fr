@@ -1307,6 +1307,7 @@ return [
         'CONTRAT_GENERATION',
         'MISSION',
         'MISSION_REALISE_EDITION',
+        'TAUX_REMU_ID',
     ],
     'STRUCTURE'                      => [
         'ID',

@@ -457,16 +457,17 @@ CREATE OR REPLACE PACKAGE BODY "OSE_WORKFLOW" AS
           LEFT JOIN (
             SELECT DISTINCT t.intervenant_id
             FROM tbl_service t
-            WHERE t.heures > 0 AND t.type_volume_horaire_code = ''PREVU''
+            WHERE ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 't') || ' AND (t.heures <> 0 OR t.valide > 0) AND t.type_volume_horaire_code = ''PREVU''
 
             UNION
 
             SELECT DISTINCT t.intervenant_id
             FROM tbl_referentiel t
-            WHERE t.heures > 0 AND t.type_volume_horaire_code = ''PREVU''
+            WHERE ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 't') || ' AND (t.heures <> 0 OR t.valide > 0) AND t.type_volume_horaire_code = ''PREVU''
           ) t ON t.intervenant_id = i.id
         WHERE
-          i.histo_destruction IS NULL
+          ' || unicaen_tbl.MAKE_WHERE(CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, VALUE, 'i') || '
+          AND i.histo_destruction IS NULL
           AND (si.service_prevu = 1 OR si.referentiel_prevu = 1)
     ';
 
@@ -485,16 +486,17 @@ CREATE OR REPLACE PACKAGE BODY "OSE_WORKFLOW" AS
           LEFT JOIN (
             SELECT DISTINCT t.intervenant_id
             FROM tbl_service t
-            WHERE t.heures > 0 AND t.type_volume_horaire_code = ''REALISE''
+            WHERE ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 't') || ' AND (t.heures <> 0 OR t.valide > 0) AND t.type_volume_horaire_code = ''REALISE''
 
             UNION
 
             SELECT DISTINCT t.intervenant_id
             FROM tbl_referentiel t
-            WHERE t.heures > 0 AND t.type_volume_horaire_code = ''REALISE''
+            WHERE ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 't') || ' AND (t.heures <> 0 OR t.valide > 0) AND t.type_volume_horaire_code = ''REALISE''
           ) t ON t.intervenant_id = i.id
         WHERE
-          i.histo_destruction IS NULL
+          ' || unicaen_tbl.MAKE_WHERE(CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, VALUE, 'i') || '
+          AND i.histo_destruction IS NULL
           AND (si.service_realise = 1 OR si.referentiel_realise = 1)
     ';
 
@@ -514,7 +516,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_WORKFLOW" AS
           tbl_validation_enseignement tve
           JOIN type_volume_horaire tvh ON tvh.id = tve.type_volume_horaire_id
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'tve') || '
           AND tve.auto_validation = 0
         GROUP BY
           tve.intervenant_id,
@@ -538,7 +540,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_WORKFLOW" AS
           tbl_validation_referentiel tvr
           JOIN type_volume_horaire tvh ON tvh.id = tvr.type_volume_horaire_id
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'tvr') || '
           AND tvr.auto_validation = 0
         GROUP BY
           tvr.intervenant_id,
@@ -600,7 +602,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_WORKFLOW" AS
           tbl_agrement a
           JOIN type_agrement ta ON ta.id = a.type_agrement_id
         WHERE
-          ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'a') || '
     ';
 
 
@@ -693,7 +695,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_WORKFLOW" AS
             JOIN parametre p on p.nom = ''contrat_regle_franchissement''
             JOIN parametre p2 on p2.nom = ''avenant''
           WHERE
-            ' || unicaen_tbl.MAKE_WHERE(param, VALUE) || '
+            ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'c') || '
             AND actif = 1
             AND nbvh > 0
         ) c

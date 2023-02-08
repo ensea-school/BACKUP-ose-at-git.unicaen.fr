@@ -219,33 +219,33 @@ class EnseignementsViewHelper extends AbstractViewHelper
 
         if ($typeVolumeHoraire = $this->getProcessusEnseignement()->initializePrevu($this->getIntervenant())) {
             $attribs = [
-                'class'       => 'btn btn-warning prevu-to-prevu-show',
+                'class'          => 'btn btn-warning prevu-to-prevu-show',
                 'data-bs-toggle' => 'modal',
                 'data-bs-target' => '#prevu-to-prevu-modal',
-                'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
+                'title'          => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
             ];
-            $source = $typeVolumeHoraire->getLibelle();
-            $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <i class="fas fa-arrow-right"></i> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
-            $out .= '<div class="modal fade" id="prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out .= '<div class="modal-dialog modal-md">';
-            $out .= '<div class="modal-content">';
-            $out .= '<div class="modal-header">';
-            $out .= '<h4 class="modal-title">Reporter ici le service ' . strtolower($source) . ' validé de l\'année précédente.</h4>';
-            $out .= '</div>';
-            $out .= '<div class="modal-body">';
-            $out .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service ' . strtolower($source) . ' validé de l\'an dernier ?</p>';
-            $out .= '<div class="alert alert-info" id="prevu-to-prevu-attente" style="display:none">';
-            $out .= '<img src="' . $this->getView()->basePath() . '/images/wait.gif" alt="Attente..."/>';
-            $out .= '<div>Reprise des enseignements de l\'année dernière en cours... Merci de patienter.</div>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '<div class="modal-footer">';
-            $out .= '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>';
-            $out .= '<button type="button" class="btn btn-primary prevu-to-prevu" data-intervenant="' . $this->getIntervenant()->getId() . '">OK</button>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
+            $source  = $typeVolumeHoraire->getLibelle();
+            $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <i class="fas fa-arrow-right"></i> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
+            $out     .= '<div class="modal fade" id="prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
+            $out     .= '<div class="modal-dialog modal-md">';
+            $out     .= '<div class="modal-content">';
+            $out     .= '<div class="modal-header">';
+            $out     .= '<h4 class="modal-title">Reporter ici le service ' . strtolower($source) . ' validé de l\'année précédente.</h4>';
+            $out     .= '</div>';
+            $out     .= '<div class="modal-body">';
+            $out     .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service ' . strtolower($source) . ' validé de l\'an dernier ?</p>';
+            $out     .= '<div class="alert alert-info" id="prevu-to-prevu-attente" style="display:none">';
+            $out     .= '<img src="' . $this->getView()->basePath() . '/images/wait.gif" alt="Attente..."/>';
+            $out     .= '<div>Reprise des enseignements de l\'année dernière en cours... Merci de patienter.</div>';
+            $out     .= '</div>';
+            $out     .= '</div>';
+            $out     .= '<div class="modal-footer">';
+            $out     .= '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>';
+            $out     .= '<button type="button" class="btn btn-primary prevu-to-prevu" data-intervenant="' . $this->getIntervenant()->getId() . '">OK</button>';
+            $out     .= '</div>';
+            $out     .= '</div>';
+            $out     .= '</div>';
+            $out     .= '</div>';
         }
 
         return $out;
@@ -259,30 +259,30 @@ class EnseignementsViewHelper extends AbstractViewHelper
 
         if ($this->getProcessusEnseignement()->initializeRealise($this->getIntervenant())) {
             $attribs = [
-                'class'       => 'btn btn-warning prevu-to-realise-show',
+                'class'          => 'btn btn-warning prevu-to-realise-show',
                 'data-bs-toggle' => 'modal',
                 'data-bs-target' => '#prevu-to-realise-modal',
-                'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
+                'title'          => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
                     . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
             ];
-            $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
-            $out .= '<div class="modal fade" id="prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out .= '<div class="modal-dialog modal-md">';
-            $out .= '<div class="modal-content">';
-            $out .= '<div class="modal-header">';
-            $out .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
-            $out .= '</div>';
-            $out .= '<div class="modal-body">';
-            $out .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
-            $out .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
-            $out .= '</div>';
-            $out .= '<div class="modal-footer">';
-            $out .= '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>';
-            $out .= '<button type="button" class="btn btn-primary prevu-to-realise">OK</button>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
+            $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
+            $out     .= '<div class="modal fade" id="prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
+            $out     .= '<div class="modal-dialog modal-md">';
+            $out     .= '<div class="modal-content">';
+            $out     .= '<div class="modal-header">';
+            $out     .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
+            $out     .= '</div>';
+            $out     .= '<div class="modal-body">';
+            $out     .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
+            $out     .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
+            $out     .= '</div>';
+            $out     .= '<div class="modal-footer">';
+            $out     .= '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>';
+            $out     .= '<button type="button" class="btn btn-primary prevu-to-realise">OK</button>';
+            $out     .= '</div>';
+            $out     .= '</div>';
+            $out     .= '</div>';
+            $out     .= '</div>';
         }
 
         return $out;
@@ -334,7 +334,8 @@ class EnseignementsViewHelper extends AbstractViewHelper
             $heures += $volumeHoraireListe->getHeures();
             $volumeHoraireListe->setTypeVolumeHoraire($tvhRealise);
             $volumeHoraireListe->setEtatVolumeHoraire($evhSaisi);
-            $heures += $volumeHoraireListe->getHeures();
+            // on met en absolu pour ne pas que des heures réalisées négatives non validées ne viennent s'annuler avec le nombre équivalent en prévisionnel
+            $heures += abs($volumeHoraireListe->getHeures());
         } else {
             $volumeHoraireListe->setTypeVolumeHoraire($tvhPrevu);
             $volumeHoraireListe->setEtatVolumeHoraire($evhSaisi);
@@ -403,7 +404,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
         $volumeHoraireListe->setTypeVolumeHoraire($typeVolumeHoraire);
         $volumeHoraireListe->setEtatVolumeHoraire($etatVolumeHoraire);
         $statut = $service->getIntervenant()->getStatut();
-        $code = $service->getIntervenant()->getStatut()->getCode();
+        $code   = $service->getIntervenant()->getStatut()->getCode();
 
 
         if ($this->getServiceContext()->isModaliteServicesSemestriel($typeVolumeHoraire)) {

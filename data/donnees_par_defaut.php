@@ -27797,11 +27797,6 @@ return [
             "SOURCE_CODE" => "0912155Y",
         ],
         [
-            "DEPARTEMENT" => "061",
-            "LIBELLE" => "Institut de Formation et de Recherche En Santé de Normandie (IFRES)",
-            "LOCALISATION" => "Damigny",
-        ],
-        [
             "DEPARTEMENT" => "014",
             "LIBELLE" => "Institut de Formations Supérieures du Grand Ouest - IFSGO",
             "LOCALISATION" => "Organisme",

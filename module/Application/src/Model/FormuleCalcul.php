@@ -971,6 +971,7 @@ END FORMULE_" . $this->getName() . ";";
             'OR'      => 'traductionFunctionOr',
             'ISBLANK' => 'traductionFunctionIsBlank',
             'SUMIF'   => 'traductionFunctionSumIf',
+            'MID'     => 'traductionFunctionMid',
         ];
 
         if (array_key_exists($term['name'], $functions)) {
@@ -1143,9 +1144,9 @@ END FORMULE_" . $this->getName() . ";";
             }
         }
 
-        var_dump($plage);
-        var_dump($critere);
-        var_dump($plageSomme);
+//        var_dump($plage);
+//        var_dump($critere);
+//        var_dump($plageSomme);
 
         $plsql = "val := 0;\n";
         for ($c = 0; $c <= ($plage['colEnd'] - $plage['colBegin']); $c++) {
@@ -1174,7 +1175,26 @@ END FORMULE_" . $this->getName() . ";";
 
         $plsql .= 'RETURN ' . $this->traductionExpr($term['valExpr']);
 
-        echo '<pre>' . htmlentities($plsql) . '</pre>';
+//        echo '<pre>' . htmlentities($plsql) . '</pre>';
+
+        return $plsql;
+    }
+
+
+
+    private function traductionFunctionMid(array &$expr, int $i): string
+    {
+        $term  = $expr[$i];
+        $plsql = 'SUBSTR(';
+
+        $plExprs = [];
+        foreach ($term['exprs'] as $e => $fExpr) {
+            $fExpr[]     = null;
+            $plExprs[$e] = $this->traductionExpr($fExpr);
+        }
+        $plsql .= implode(', ', $plExprs);
+
+        $plsql .= ')';
 
         return $plsql;
     }

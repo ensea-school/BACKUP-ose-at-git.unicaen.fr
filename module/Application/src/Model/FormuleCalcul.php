@@ -1185,7 +1185,7 @@ END FORMULE_" . $this->getName() . ";";
     private function traductionFunctionMid(array &$expr, int $i): string
     {
         $term  = $expr[$i];
-        $plsql = 'SUBSTR(';
+        $plsql = 'COALESCE(SUBSTR(';
 
         $plExprs = [];
         foreach ($term['exprs'] as $e => $fExpr) {
@@ -1194,7 +1194,7 @@ END FORMULE_" . $this->getName() . ";";
         }
         $plsql .= implode(', ', $plExprs);
 
-        $plsql .= ')';
+        $plsql .= '),\' \')';
 
         return $plsql;
     }

@@ -94,6 +94,19 @@ $font-size-base: .9rem;
 }
 
 
+.card.bg-success {
+  background-color: #80c299 !important;
+}
+
+.card.bg-danger {
+  background-color: #e35858 !important;
+}
+
+.card.bg-warning {
+  background-color: #e3a72f !important;
+}
+
+
 
 /* -------------- DataTables -------------- */
 
@@ -196,6 +209,9 @@ table thead th {
   }
 }
 
+.popover .popover-body.alert {
+  margin-bottom: 0px;
+}
 
 
 /* -------------- Listes de définition -------------- */

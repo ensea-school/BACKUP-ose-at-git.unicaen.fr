@@ -295,7 +295,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
       -- AM=IF(AND([.$H20]="Référentiel";[.$A20]=[.$K$10];MID([.$A20];1;5)<>"15310");[.$M20]*[.$AD20];0)
       WHEN 'AM' THEN
-        IF vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_univ AND SUBSTR(vh.structure_code, 1, 5) <> '15310' THEN
+        IF vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_univ AND COALESCE(SUBSTR(vh.structure_code, 1, 5),' ') <> '15310' THEN
           RETURN vh.heures * cell('AD',l);
         ELSE
           RETURN 0;

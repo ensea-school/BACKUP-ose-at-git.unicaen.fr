@@ -12,12 +12,12 @@
 
 
 
-# OSE 20 (janvier 2023)
+# OSE 20 (fin février 2023)
 
 ## Nouveautés
 
 * Les modèles de contrats de travail sont maintenant gérés comme n'importe quel autre état de sortie
-* Reconduction de l'offre de formation pour les éléments de OSE porté par un élément synchroniser
+* Reconduction de l'offre de formation pour les éléments de OSE portés par un élément synchronisé
 * Possibilité de rentrer un taux de charge par statut d'intervenant
 * Ajout d'un choix par statut pour "contrat de travail et avenants" pour laisser la possibilité à l'intervenant de télécharger sont contrat en pdf
 * Migration technnique vers le framework Bootstrap 5 et modernisation de l'identité visuelle
@@ -25,6 +25,7 @@
 * Filtrage des caractères interdits lors de l'export RH SIHAM (#47267)
 * Associer des tags aux services afin de flécher certains financements (#42451)
 * Envoyer un email via un indicateur à la fois sur l'email perso et l'email pro de l'intervenant (#48687)
+* Nouveaux indicateurs 500 et 505 listant les permanents sans service ni référentiel
 
 ## Corrections de bugs
 
@@ -45,6 +46,7 @@
 * Utilisation prioritaire de l'email personnel des données personnelles pour l'envoi d'email via les indicateurs (#48393)
 * Meilleure gestion de la casse lors de la recherche d'un employeur (#48543)
 * Ajout d'une contrainte d'unicité sur la colonne code de la table type_intervention (#48727)
+* Et beaucoup d'autres ...
 
 ## Notes de mise à jour
 

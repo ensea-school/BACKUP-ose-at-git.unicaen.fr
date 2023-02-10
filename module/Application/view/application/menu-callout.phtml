@@ -8,44 +8,64 @@ use Laminas\Navigation\Page\Mvc;
  * @var $this      \Application\View\Renderer\PhpRenderer
  */
 
-echo $this->tag('div', ['class' => 'callout-menu']);
+$rubriques = [];
+
 foreach ($container as $page) {
     if ($this->navigation()->accept($page)) {
-        $attrs = [
-            'class' => 'callout-container',
+        $rubrique = [
+            'color'       => $page->get('color'),
+            'description' => $page->get('description'),
+            'icon'        => $page->get('icon'),
+            'html'        => $this->navigation()->htmlify($page),
+            'items'       => [],
         ];
-        if ($borderColor = $page->get('color')) {
-            $attrs['style'] = 'background-color:' . $borderColor;
-        }
-        if ($description = $page->get('description')) {
-            $attrs['title'] = $description;
-        }
-
-        echo $this->tag('div', $attrs);
-        echo $this->tag('div', ['class' => 'callout']);
-        if ($icon = $page->get('icon')) {
-            echo $this->tag('span', ['class' => $icon])->open(TagViewHelper::AUTOCLOSE_FULL);
-        }
-        echo $this->tag('h1')->html($this->navigation()->htmlify($page));
 
         if ($page->hasPages()) {
-            echo '<ul>';
             $children = (array)$page->getPages();
             uasort($children, function (Mvc $a, Mvc $b) {
                 return $a->getOrder() > $b->getOrder() ? 1 : 0;
             });
             foreach ($children as $child) {
                 if ($this->navigation()->accept($child)) {
-                    echo $this->tag('li')->html(/*$child->getOrder() . ' ' .*/ $this->navigation()->htmlify($child));
+                    $rubrique['items'][] = $this->navigation()->htmlify($child);
                 }
             }
-            echo '</ul>';
         }
+
+        $rubriques[] = $rubrique;
+    }
+}
+
+//var_dump($rubriques);
+
+
+echo $this->tag('div', ['class' => 'callout-menu']);
+foreach ($rubriques as $rubrique) {
+    if (!empty($rubrique['items'])) {
+        $attrs = [
+            'class' => 'callout-container',
+        ];
+        if ($borderColor = $rubrique['color']) {
+            $attrs['style'] = 'background-color:' . $borderColor;
+        }
+        if ($description = $rubrique['description']) {
+            $attrs['title'] = $description;
+        }
+
+        echo $this->tag('div', $attrs);
+        echo $this->tag('div', ['class' => 'callout']);
+        if ($icon = $rubrique['icon']) {
+            echo $this->tag('span', ['class' => $icon])->open(TagViewHelper::AUTOCLOSE_FULL);
+        }
+        echo $this->tag('h1')->html($rubrique['html']);
+        echo '<ul>';
+        foreach ($rubrique['items'] as $item) {
+            echo $this->tag('li')->html($item);
+        }
+        echo '</ul>';
         echo '</div>';
         echo '</div>';
     }
 }
 echo '<div style="clear: both"></div>';
 echo '</div>';
-
-

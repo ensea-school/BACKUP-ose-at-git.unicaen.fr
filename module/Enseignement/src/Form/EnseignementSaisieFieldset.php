@@ -6,18 +6,18 @@ use Application\Entity\Db\ElementPedagogique;
 use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Form\AbstractFieldset;
-use Application\Form\OffreFormation\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
+use OffreFormation\Form\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtapeServiceAwareTrait;
+use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
+use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Application\Entity\Db\Etablissement;
 use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtablissementServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 
@@ -118,7 +118,7 @@ class EnseignementSaisieFieldset extends AbstractFieldset
     {
         /* Peuple le formulaire avec les valeurs par défaut issues du contexte global */
         $fs = $this->get('element-pedagogique');
-        /* @var $fs \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
+        /* @var $fs \OffreFormation\Form\ElementPedagogiqueRechercheFieldset */
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
         if ($this->has('intervenant') && $this->getServiceLocalContext()->getIntervenant()) {
@@ -160,7 +160,7 @@ class EnseignementSaisieFieldset extends AbstractFieldset
     {
         /* Met à jour le contexte local en fonction des besoins... */
         $fs = $this->get('element-pedagogique');
-        /* @var $fs \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
+        /* @var $fs \OffreFormation\Form\ElementPedagogiqueRechercheFieldset */
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
         if ($structureId = $fs->get('structure')->getValue()) {

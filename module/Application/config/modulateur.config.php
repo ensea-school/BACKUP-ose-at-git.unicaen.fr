@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
+use Application\Service\TypeModulateurService;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 use UnicaenAuth\Guard\PrivilegeController;
 
@@ -157,6 +158,9 @@ return [
     'service_manager' => [
         'invokables' => [
             Service\TypeModulateurStructureService::class => Service\TypeModulateurStructureService::class,
+            Service\ModulateurService::class           => Service\ModulateurService::class,
+            TypeModulateurService::class               => TypeModulateurService::class,
+
         ],
         'factories'  => [
             Assertion\ModulateurAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,

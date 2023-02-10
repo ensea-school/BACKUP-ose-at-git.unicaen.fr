@@ -14,7 +14,7 @@ use Application\Form\Chargens\Traits\ScenarioFormAwareTrait;
 use Application\Provider\Chargens\ChargensProviderAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtapeServiceAwareTrait;
+use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\SeuilChargeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;

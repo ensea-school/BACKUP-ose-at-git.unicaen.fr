@@ -8,7 +8,7 @@ use Application\Entity\Db\SeuilCharge;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervention;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
+use OffreFormation\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;

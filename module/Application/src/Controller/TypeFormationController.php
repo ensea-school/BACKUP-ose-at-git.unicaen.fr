@@ -10,8 +10,8 @@ use Application\Entity\Db\GroupeTypeFormation;
 use Application\Entity\Db\TypeFormation;
 use Application\Form\GroupeTypeFormation\Traits\GroupeTypeFormationSaisieFormAwareTrait;
 use Application\Form\TypeFormation\Traits\TypeFormationSaisieFormAwareTrait;
-use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
-use Application\Service\Traits\TypeFormationServiceAwareTrait;
+use OffreFormation\Service\Traits\GroupeTypeFormationServiceAwareTrait;
+use OffreFormation\Service\Traits\TypeFormationServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 

@@ -9,7 +9,7 @@ use Application\Entity\Paiement\MiseEnPaiementRecherche;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
-use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceReferentielServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureServiceAwareTrait;

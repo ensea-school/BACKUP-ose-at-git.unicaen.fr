@@ -4,8 +4,8 @@ namespace Application\Service;
 
 use Application\Entity\Db\Modulateur;
 use Application\Entity\Db\ElementPedagogique;
-use Application\Service\Traits\ElementModulateurServiceAwareTrait;
-use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 

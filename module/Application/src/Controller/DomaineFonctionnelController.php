@@ -3,7 +3,7 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\DomaineFonctionnel;
-use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Form\DomaineFonctionnel\Traits\DomaineFonctionnelSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\SourceServiceAwareTrait;

@@ -1,0 +1,44 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/* @var $serviceEtape \OffreFormation\Service\EtapeService
+ * @var $etape \Application\Entity\Db\Etape
+ * @var $title string
+ */
+
+echo $this->tag('h1', ['class' => 'page-header'])->html($title);
+
+$tabs = [
+    [
+        'id'      => 'fiche',
+        'label'   => 'Fiche',
+        'content' => (string)$this->etape($etape),
+    ],
+];
+
+if ($this->isAllowed($etape, Privileges::ODF_CENTRES_COUT_EDITION)) {
+    $tabs[] = [
+        'id'    => 'centres-couts',
+        'label' => '<i class="fas fa-euro-sign"></i> Centres de coûts',
+//        'url'   => $this->url('of/etape/centres-couts', ['etape' => $etape->getId()]),
+    ];
+}
+
+if ($this->isAllowed($etape, Privileges::ODF_TAUX_MIXITE_EDITION)) {
+    $tabs[] = [
+        'id'    => 'taux-mixite',
+        'label' => '<i class="fas fa-weight-scale"></i> Taux de mixité',
+        'url'   => $this->url('of/etape/taux-mixite', ['etape' => $etape->getId()]),
+    ];
+}
+
+if ($this->isAllowed($etape, Privileges::ODF_MODULATEURS_EDITION)) {
+    $tabs[] = [
+        'id'    => 'modulateurs',
+        'label' => '<i class="fas fa-table-list"></i> Modulateurs',
+        'url'   => $this->url('of/etape/modulateurs', ['etape' => $etape->getId()]),
+    ];
+}
+
+echo $this->tabajax($tabs);

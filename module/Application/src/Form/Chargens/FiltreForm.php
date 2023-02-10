@@ -7,7 +7,7 @@ use Application\Entity\Db\Scenario;
 use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtapeServiceAwareTrait;
+use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Util;

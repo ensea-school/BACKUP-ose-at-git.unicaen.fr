@@ -3,10 +3,11 @@
 namespace Application\Service;
 
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Application\Service\Traits\EtapeServiceAwareTrait;
+use OffreFormation\Service\NiveauEtapeService;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
+use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Application\Entity\Db\Intervenant;

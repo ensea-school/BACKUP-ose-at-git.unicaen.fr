@@ -93,7 +93,7 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\DomaineFonctionnelService::class => Service\DomaineFonctionnelService::class,
+
         ],
     ],
     'view_helpers'    => [

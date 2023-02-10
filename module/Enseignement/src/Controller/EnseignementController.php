@@ -26,13 +26,13 @@ use Service\Entity\Recherche;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Enseignement\Service\ServiceServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\EtapeServiceAwareTrait;
+use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 
 /**

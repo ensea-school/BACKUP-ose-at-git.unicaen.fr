@@ -6,7 +6,7 @@ use Application\Entity\Db\GroupeTypeFormation;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Laminas\Form\FormInterface;
-use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
+use OffreFormation\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 

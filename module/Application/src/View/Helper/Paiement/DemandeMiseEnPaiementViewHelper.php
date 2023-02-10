@@ -6,7 +6,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeRessource;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\TypeHeuresServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use UnicaenApp\View\Helper\TagViewHelper;

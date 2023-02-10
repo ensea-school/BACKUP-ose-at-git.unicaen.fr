@@ -3,26 +3,20 @@
 namespace Indicateur\Controller;
 
 use Application\Controller\AbstractController;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Indicateur\Entity\Db\IndicateurDepassementCharges;
 use Application\Entity\Db\Intervenant;
-use Indicateur\Entity\Db\TypeIndicateur;
-use Indicateur\Processus\IndicateurProcessusAwareTrait;
-use Indicateur\Entity\Db\Indicateur;
 use Application\Service\ContextService;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Indicateur\Service\IndicateurServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Indicateur\Service\NotificationIndicateurServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Intervenant\Entity\Db\Note;
+use Exception;
+use Indicateur\Entity\Db\Indicateur;
+use Indicateur\Entity\Db\IndicateurDepassementCharges;
+use Indicateur\Entity\Db\TypeIndicateur;
+use Indicateur\Processus\IndicateurProcessusAwareTrait;
+use Indicateur\Service\IndicateurServiceAwareTrait;
+use Indicateur\Service\NotificationIndicateurServiceAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Laminas\Form\Element\Checkbox;
-use Laminas\Router\Http\TreeRouteStack;
-use Laminas\View\Renderer\PhpRenderer;
-use Exception;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Element\Textarea;
@@ -31,8 +25,12 @@ use Laminas\Mail\Message as MailMessage;
 use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part as MimePart;
+use Laminas\Router\Http\TreeRouteStack;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use Laminas\View\Renderer\PhpRenderer;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Unicaen\Console\Console;
 use UnicaenApp\View\Model\CsvModel;
 
@@ -88,7 +86,7 @@ class IndicateurController extends AbstractController
     /**
      * Liste des indicateurs.
      *
-     * @return ViewModel
+     * @return array
      */
     public function indexAction()
     {
@@ -185,7 +183,7 @@ class IndicateurController extends AbstractController
     /**
      * Réponse aux requêtes AJAX d'abonnement de l'utilisateur connecté aux notifications concernant un indicateur.
      *
-     * @return JsonModel
+     * @return \Laminas\Http\Response|JsonModel
      */
     public function abonnerAction()
     {
@@ -224,7 +222,7 @@ class IndicateurController extends AbstractController
     /**
      * Indicateurs auxquels est abonné l'utilisateur (un Personnel) spécifié dans la requête.
      *
-     * @return ViewModel
+     * @return array
      */
     public function abonnementsAction()
     {

@@ -3,7 +3,7 @@
 namespace Application\Entity\Db;
 
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Application\Service\DomaineFonctionnelService as DomaineFonctionnelService;
+use OffreFormation\Service\DomaineFonctionnelService;
 
 /**
  * FormuleResultatService

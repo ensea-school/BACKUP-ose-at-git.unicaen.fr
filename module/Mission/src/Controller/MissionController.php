@@ -50,6 +50,16 @@ class MissionController extends AbstractController
 
 
 
+    public function suiviAction()
+    {
+        /* @var $intervenant Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        return compact('intervenant');
+    }
+
+
+
     /**
      * Ajoute une nouvelle mission (form)
      *

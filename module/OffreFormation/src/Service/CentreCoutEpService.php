@@ -1,10 +1,11 @@
 <?php
 
-namespace Application\Service;
+namespace OffreFormation\Service;
 
 use Application\Entity\Db\CentreCoutEp;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\AbstractEntityService;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeHeuresServiceAwareTrait;

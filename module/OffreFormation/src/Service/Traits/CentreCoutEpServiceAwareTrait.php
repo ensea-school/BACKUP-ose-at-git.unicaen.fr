@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Service\Traits;
+namespace OffreFormation\Service\Traits;
 
 use OffreFormation\Service\CentreCoutEpService;
 

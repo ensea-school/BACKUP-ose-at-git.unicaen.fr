@@ -270,7 +270,7 @@ return [
             Service\MiseEnPaiementIntervenantStructureService::class => Service\MiseEnPaiementIntervenantStructureService::class,
             Service\TypeHeuresService::class                         => Service\TypeHeuresService::class,
             Service\CentreCoutService::class                         => Service\CentreCoutService::class,
-            Service\CentreCoutEpService::class                       => Service\CentreCoutEpService::class,
+            \OffreFormation\Service\CentreCoutEpService::class       => \OffreFormation\Service\CentreCoutEpService::class,
             Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementService::class,
         ],
         'factories'  => [

@@ -4,8 +4,8 @@ namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
 use Paiement\Controller\TauxController;
-use Paiement\Service\TauxService;
-use Paiement\Service\TauxServiceFactory;
+use Paiement\Service\TauxRemuService;
+use Paiement\Service\TauxRemuServiceFactory;
 use UnicaenAuth\Guard\PrivilegeController;
 
 
@@ -101,7 +101,7 @@ return [
     ],
 
     'services' => [
-        TauxService::class => TauxServiceFactory::class,
+        TauxRemuService::class => TauxRemuServiceFactory::class,
     ],
 
     'forms' => [

@@ -8,18 +8,18 @@ namespace Paiement\Service;
  *
  * @author UnicaenCode
  */
-trait TauxServiceAwareTrait
+trait TauxRemuServiceAwareTrait
 {
-    protected ?TauxService $serviceTaux = null;
+    protected ?TauxRemuService $serviceTaux = null;
 
 
 
     /**
-     * @param TauxService $serviceTaux
+     * @param TauxRemuService $serviceTaux
      *
      * @return self
      */
-    public function setServiceTaux(?TauxService $serviceTaux)
+    public function setServiceTaux(?TauxRemuService $serviceTaux)
     {
         $this->serviceTaux = $serviceTaux;
 
@@ -28,10 +28,10 @@ trait TauxServiceAwareTrait
 
 
 
-    public function getServiceTaux(): ?TauxService
+    public function getServiceTaux(): ?TauxRemuService
     {
         if (empty($this->serviceTaux)) {
-            $this->serviceTaux = \Application::$container->get(TauxService::class);
+            $this->serviceTaux = \Application::$container->get(TauxRemuService::class);
         }
 
         return $this->serviceTaux;

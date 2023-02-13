@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
  *
  * @author Florian Joriot <florian.joriot at unicaen.fr>
  */
-class TauxServiceFactory
+class TauxRemuServiceFactory
 {
 
     /**
@@ -19,11 +19,11 @@ class TauxServiceFactory
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return TauxService
+     * @return TauxRemuService
      */
-    public function __invoke(ContainerInterface $container, $requestedName, $options = null): TauxService
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null): TauxRemuService
     {
-        $service = new TauxService;
+        $service = new TauxRemuService;
 
         /* Injectez vos dépendances ICI */
         return $service;

@@ -15,7 +15,7 @@ use UnicaenApp\Traits\SessionContainerTrait;
  *
  * @author Florian Joriot <florian.joriot at unicaen.fr>
  */
-class TauxService extends AbstractEntityService
+class TauxRemuService extends AbstractEntityService
 {
     use SessionContainerTrait;
 

@@ -6,7 +6,7 @@ use Application\Controller\AbstractController;
 use Paiement\Entity\Db\TauxRemu;
 use Paiement\Form\TauxFormAwareTrait;
 use Paiement\Form\TauxValeurFormAwareTrait;
-use Paiement\Service\TauxServiceAwareTrait;
+use Paiement\Service\TauxRemuServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
@@ -17,7 +17,7 @@ use UnicaenApp\View\Model\MessengerViewModel;
  */
 class TauxController extends AbstractController
 {
-    use TauxServiceAwareTrait;
+    use TauxRemuServiceAwareTrait;
     use ContextServiceAwareTrait;
     use TauxFormAwareTrait;
     use TauxValeurFormAwareTrait;

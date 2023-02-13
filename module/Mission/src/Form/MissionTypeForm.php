@@ -5,13 +5,13 @@ namespace Mission\Form;
 use Application\Form\AbstractForm;
 use Laminas\Form\FormInterface;
 use Mission\Entity\Db\TypeMission;
-use Paiement\Service\TauxServiceAwareTrait;
+use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 class MissionTypeForm extends AbstractForm
 {
     use SchemaServiceAwareTrait;
-    use TauxServiceAwareTrait;
+    use TauxRemuServiceAwareTrait;
 
     public function init()
     {

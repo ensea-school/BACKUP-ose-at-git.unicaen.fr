@@ -20,7 +20,7 @@ class TauxMixiteFormFactory
      *
      * @return TauxMixiteForm
      */
-    public function __invoke(ContainerInterface $container, $requestedName, $options = null): TauxMixiteFormFactory
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null): TauxMixiteForm
     {
         $form = new TauxMixiteForm;
 

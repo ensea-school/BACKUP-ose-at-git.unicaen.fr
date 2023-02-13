@@ -8,7 +8,6 @@ use Application\Entity\Db\GroupeTypeFormation;
 use Application\Entity\Db\TypeFormation;
 use Application\Entity\Db\TypeModulateur;
 use Application\Entity\Db\VolumeHoraireEns;
-use Application\Processus\Traits\ReconductionProcessusAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
@@ -17,6 +16,7 @@ use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\OffreFormationServiceAwareTrait;
+use OffreFormation\Processus\Traits\ReconductionProcessusAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 

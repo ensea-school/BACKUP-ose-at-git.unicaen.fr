@@ -3,7 +3,6 @@
 <?php
 
 echo $this->etapeCentreCoutForm($form);
-
 echo $this->formErrors($form);
 if ($errors) {
     echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);

@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Processus\Traits;
+namespace OffreFormation\Processus\Traits;
 
-use Application\Processus\ReconductionProcessus;
+use OffreFormation\Processus\ReconductionProcessus;
 
 /**
  * Description of ReconductionProcessusAwareTrait

@@ -7,7 +7,6 @@ use Application\Entity\Db\Etape;
 use OffreFormation\Form\EtapeCentreCout\Traits\EtapeCentreCoutFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use RuntimeException;
 
 /**
  *
@@ -23,7 +22,7 @@ class EtapeCentreCoutController extends AbstractController
 
     /**
      *
-     * @return type
+     * @return array
      * @throws RuntimeException
      */
     protected function saisirAction()

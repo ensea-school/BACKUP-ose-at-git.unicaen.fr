@@ -392,7 +392,10 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     </table>
     <div>
         <h2>Informations de débogage
-            <a class="btn btn-secondary btn-sm" data-bs-toggle="collapse" href="#debug-info">Afficher/masquer</a>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#debug-info"
+                    aria-expanded="false" aria-controls="debug-info">
+                Afficher/masquer
+            </button>
         </h2>
         <div class="collapse debug-info" id="debug-info"></div>
     </div>
@@ -585,7 +588,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                         that.saving = false;
                     },
                     error: function (jqXHR) {
-                        Util.alert(jqXHR.responseText, 'error');
+                        alertFlash(jqXHR.responseText, 'error', 5000);
                         console.log(jqXHR);
                         that.saving = false;
                     }

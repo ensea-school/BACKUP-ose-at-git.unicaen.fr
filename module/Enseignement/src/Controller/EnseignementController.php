@@ -470,7 +470,6 @@ class EnseignementController extends AbstractController
         $vm = new ViewModel();
         $vm->setVariables(compact('title', 'typeVolumeHoraire', 'intervenant', 'validations', 'services'));
         $vm->setTemplate('enseignement/validation');
-        $this->updateTableauxBord($intervenant);
 
         return $vm;
     }

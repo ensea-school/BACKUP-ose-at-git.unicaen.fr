@@ -1005,6 +1005,18 @@ return [
             'position'    => 81,
             'commentaire' => NULL,
         ],
+        'TAUX_REMU_ID'                   => [
+            'name'        => 'TAUX_REMU_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 85,
+            'commentaire' => NULL,
+        ],
         'TYPE_INTERVENANT_ID'            => [
             'name'        => 'TYPE_INTERVENANT_ID',
             'type'        => 'int',

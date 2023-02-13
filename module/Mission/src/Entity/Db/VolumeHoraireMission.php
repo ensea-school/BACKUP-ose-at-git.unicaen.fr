@@ -3,13 +3,10 @@
 namespace Mission\Entity\Db;
 
 use Application\Entity\Db\Traits\ContratAwareTrait;
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Application\Interfaces\AxiosExtractor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Enseignement\Entity\Db\VolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;

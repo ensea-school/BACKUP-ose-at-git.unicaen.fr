@@ -15,7 +15,8 @@ class ConfigFactory
     {
         $paths = Glob::glob($dir . '/config/{,*.}{config}.php', Glob::GLOB_BRACE);
 
-        $config = Factory::fromFiles($paths);
+        $config      = Factory::fromFiles($paths);
+        $routeGuards = [];
 
         $finalConfig = [
             'doctrine' => [
@@ -44,14 +45,14 @@ class ConfigFactory
         if (isset($config['console'])) {
             $finalConfig['console']['router']['routes'] = [];
             foreach ($config['console'] as $cr => $cc) {
-                $finalConfig['console']['router']['routes'][$cr] = self::routeSimplified($cc, true);
+                $finalConfig['console']['router']['routes'][$cr] = self::routeSimplified($cc, $routeGuards, true);
             }
         }
 
         if (isset($config['routes'])) {
             $finalConfig['router']['routes'] = [];
             foreach ($config['routes'] as $cr => $cc) {
-                $finalConfig['router']['routes'][$cr] = self::routeSimplified($cc, false);
+                $finalConfig['router']['routes'][$cr] = self::routeSimplified($cc, $routeGuards, false);
             }
         }
 
@@ -71,6 +72,12 @@ class ConfigFactory
                     PrivilegeController::class => $config['guards'],
                 ],
             ];
+        }
+
+        if (!empty($routeGuards)) {
+            foreach ($routeGuards as $routeGuard) {
+                $finalConfig['bjyauthorize']['guards'][PrivilegeController::class][] = $routeGuard;
+            }
         }
 
         if (isset($config['rules'])) {
@@ -134,8 +141,26 @@ class ConfigFactory
 
 
 
-    public static function routeSimplified(array $config, bool $isConsole = false): array
+    public static function routeSimplified(array $config, array &$routeGuards, bool $isConsole = false): array
     {
+        /* Détection des guards */
+        if (isset($config['controller']) && isset($config['action']) && isset($config['privileges'])) {
+            $routeGuard = [
+                'controller' => $config['controller'],
+                'action'     => $config['action'],
+                'privileges' => $config['privileges'],
+            ];
+            unset($config['privileges']);
+
+            if (isset($config['assertion'])) {
+                $routeGuard['assertion'] = $config['assertion'];
+
+                unset($config['assertion']);
+            }
+
+            $routeGuards[] = $routeGuard;
+        }
+
         /* On remonte ces params dans le sous-menu options */
         $optionsParams = ['route', 'defaults', 'constraints'];
         foreach ($optionsParams as $param) {
@@ -169,7 +194,7 @@ class ConfigFactory
         /* Si il y a des routes filles, on les parse aussi */
         if (isset($config['child_routes'])) {
             foreach ($config['child_routes'] as $sRoute => $sConfig) {
-                $config['child_routes'][$sRoute] = self::routeSimplified($sConfig);
+                $config['child_routes'][$sRoute] = self::routeSimplified($sConfig, $routeGuards);
             }
         }
 

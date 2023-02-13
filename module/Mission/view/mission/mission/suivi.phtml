@@ -1,0 +1,21 @@
+<?php
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $intervenant       \Application\Entity\Db\Intervenant
+ */
+
+use Application\Entity\Db\WfEtape;
+
+$title     = 'Suivi de missions';
+$nextEtape = WfEtape::CODE_SERVICE_SAISIE;
+
+$this->intervenant($intervenant)->renderTitle($title);
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+echo $this->vue('mission/suivi', [
+    'intervenant' => $intervenant->getId(),
+]);
+
+echo '<br />';
+echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);

@@ -2,9 +2,6 @@
 
 namespace Mission\Service;
 
-use Application\Controller\Plugin\Axios;
-use Application\Entity\Db\Intervenant;
-use Application\Hydrator\GenericHydrator;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Mission\Entity\Db\Mission;
@@ -61,7 +58,7 @@ class MissionService extends AbstractEntityService
           " . Mission::class . " m
           JOIN m.typeMission tm
           JOIN m.structure str
-          JOIN m.missionTauxRemu tr
+          JOIN m.tauxRemu tr
           JOIN " . TypeVolumeHoraire::class . " tvh WITH tvh.code = :typeVolumeHorairePrevu
           LEFT JOIN m.validations valid WITH valid.histoDestruction IS NULL
           LEFT JOIN m.volumesHoraires vh WITH vh.histoDestruction IS NULL AND vh.typeVolumeHoraire = tvh

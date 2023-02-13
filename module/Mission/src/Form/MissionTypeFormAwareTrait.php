@@ -3,8 +3,9 @@
 namespace Mission\Form;
 
 
+
 /**
- * Description of MissionTauxFormAwareTrait
+ * Description of TauxFormAwareTrait
  *
  * @author UnicaenCode
  */
@@ -19,7 +20,7 @@ trait MissionTypeFormAwareTrait
      *
      * @return self
      */
-    public function setFormMissionType(?MissionTauxForm $formMissionType)
+    public function setFormMissionType(?MissionTypeForm $formMissionType)
     {
         $this->formMissionType = $formMissionType;
 

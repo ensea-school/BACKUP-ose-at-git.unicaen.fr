@@ -6,7 +6,7 @@ use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Mission\Entity\Db\Mission;
-use Mission\Entity\Db\MissionTauxRemu;
+use Paiement\Entity\Db\TauxRemu;
 use Mission\Entity\Db\TypeMission;
 
 
@@ -31,8 +31,8 @@ class MissionForm extends AbstractForm
         $tmDqlParams = ['annee' => $this->getServiceContext()->getAnnee()];
         $this->setValueOptions('typeMission', $tmDql, $tmDqlParams);
 
-        $trDql = "SELECT mtr FROM " . MissionTauxRemu::class . " mtr";
-        $this->setValueOptions('missionTauxRemu', $trDql);
+        $trDql = "SELECT mtr FROM " . TauxRemu::class . " mtr";
+        $this->setValueOptions('tauxRemu', $trDql);
 
         $sDql = "SELECT s FROM " . Structure::class . " s WHERE s.histoDestruction IS NULL";
         $this->setValueOptions('structure', $sDql);
@@ -40,7 +40,7 @@ class MissionForm extends AbstractForm
         $this->setLabels([
             'structure'       => 'Composante en charge du suivi de mission',
             'typeMission'     => 'Type de mission',
-            'missionTauxRemu' => 'Taux de rémunération',
+            'tauxRemu' => 'Taux de rémunération',
             'dateDebut'       => 'Date de début',
             'dateFin'         => 'Date de fin',
             'description'     => 'Descriptif de la mission',

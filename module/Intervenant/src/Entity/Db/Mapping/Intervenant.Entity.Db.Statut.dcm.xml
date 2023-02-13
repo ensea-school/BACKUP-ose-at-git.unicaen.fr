@@ -114,5 +114,8 @@
         <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
                 <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <many-to-one field="tauxRemu" target-entity="Paiement\Entity\Db\TauxRemu">
+            <join-column name="TAUX_REMU_ID" referenced-column-name="ID"/>
+        </many-to-one>
     </entity>
 </doctrine-mapping>

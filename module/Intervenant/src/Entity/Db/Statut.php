@@ -10,6 +10,7 @@ use Application\Traits\ParametreEntityTrait;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
+use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -177,6 +178,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     private bool        $missionEdition                     = false;
 
     private bool        $missionRealiseEdition              = false;
+
+    private ?TauxRemu   $tauxRemu                           = null;
 
 
 
@@ -1427,7 +1430,19 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
         return $this;
     }
 
+    public function getTauxRemu(): ?TauxRemu
+    {
+        return $this->tauxRemu;
+    }
 
+
+
+    public function setTauxRemu(TauxRemu $tauxRemu): Statut
+    {
+        $this->tauxRemu = $tauxRemu;
+
+        return $this;
+    }
 
     /**
      * Retourne la liste des privilèges associés à un statut sous forme de tableau associatif :

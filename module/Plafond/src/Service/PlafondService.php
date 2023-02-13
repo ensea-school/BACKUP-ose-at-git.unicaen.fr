@@ -440,7 +440,7 @@ class PlafondService extends AbstractEntityService
             }
 
             return $return;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $return['success'] = false;
             $return['error']   = $e->getMessage();
 

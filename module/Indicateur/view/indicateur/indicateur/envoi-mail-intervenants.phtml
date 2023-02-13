@@ -22,6 +22,7 @@ echo $this->form()->openTag($this->form->setAttribute('id', 'mail-form'));
     </div>
 </div>
 <?= $this->formControlGroup($this->form->get('cci')->setLabel("Cci (E-mails séparés par un point virgule)")) ?>
+<?= $this->formControlGroup($this->form->get('cc-pro')->setLabel("Envoyer sur l'email professionnel et l'email personnel de l'intervenant")) ?>
 <?= $this->formControlGroup($this->form->get('subject')->setLabel("Objet du mail")) ?>
 <?= $this->formControlGroup($this->form->get('body')->setLabel("Corps du mail")->setAttributes(['rows' => 15, 'id' => 'body'])) ?>
 <?= $this->formControlGroup($this->form->get('copy')->setLabel("Recevoir une copie de l'email envoyé (incluant la liste des destinataires)")) ?>

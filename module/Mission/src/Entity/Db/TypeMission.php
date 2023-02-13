@@ -4,18 +4,19 @@ namespace Mission\Entity\Db;
 
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Traits\ParametreEntityTrait;
+use Paiement\Entity\Db\TauxRemu;
 
 class TypeMission implements ParametreEntityInterface
 {
     use ParametreEntityTrait;
 
-    protected ?int             $id              = null;
+    protected ?int      $id       = null;
 
-    protected ?string          $code            = null;
+    protected ?string   $code     = null;
 
-    protected ?string          $libelle         = null;
+    protected ?string   $libelle  = null;
 
-    protected ?MissionTauxRemu $missionTauxRemu = null;
+    protected ?TauxRemu $tauxRemu = null;
 
 
 
@@ -58,16 +59,16 @@ class TypeMission implements ParametreEntityInterface
 
 
 
-    public function getMissionTauxRemu(): ?MissionTauxRemu
+    public function getTauxRemu(): ?TauxRemu
     {
-        return $this->missionTauxRemu;
+        return $this->tauxRemu;
     }
 
 
 
-    public function setMissionTauxRemu(?MissionTauxRemu $missionTauxRemu): TypeMission
+    public function setTauxRemu(?TauxRemu $tauxRemu): TypeMission
     {
-        $this->missionTauxRemu = $missionTauxRemu;
+        $this->tauxRemu = $tauxRemu;
 
         return $this;
     }

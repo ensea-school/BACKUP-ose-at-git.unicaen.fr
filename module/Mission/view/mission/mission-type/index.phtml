@@ -30,8 +30,8 @@ $canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_S
             <td style="text-align: center"><?php echo $missionType->getLibelle(); ?></td>
             <td style="text-align: center"><?php echo $missionType->getCode() ?></td>
             <td style="text-align: center">
-                <?php if ($missionType->getMissionTauxRemu()):
-                    echo $missionType->getMissionTauxRemu()->getLibelle();
+                <?php if ($missionType->getTauxRemu()):
+                    echo $missionType->getTauxRemu()->getLibelle();
                 endif; ?></td>
             <?php if ($canSupprimer || $canEdit): ?>
                 <td style="text-align: center">

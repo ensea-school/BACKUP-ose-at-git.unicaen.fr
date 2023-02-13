@@ -165,14 +165,11 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const MISSION_DEVALIDATION_REALISE                         = 'mission-devalidation-realise';
     const MISSION_EDITION                                      = 'mission-edition';
     const MISSION_EDITION_REALISE                              = 'mission-edition-realise';
-    const MISSION_EDITION_TAUX                                 = 'mission-edition-taux';
     const MISSION_EDITION_TYPE                                 = 'mission-edition-type';
-    const MISSION_SUPPRESSION_TAUX                             = 'mission-suppression-taux';
     const MISSION_SUPPRESSION_TYPE                             = 'mission-suppression-type';
     const MISSION_VALIDATION                                   = 'mission-validation';
     const MISSION_VALIDATION_REALISE                           = 'mission-validation-realise';
     const MISSION_VISUALISATION                                = 'mission-visualisation';
-    const MISSION_VISUALISATION_TAUX                           = 'mission-visualisation-taux';
     const MISSION_VISUALISATION_TYPE                           = 'mission-visualisation-type';
     const MODIF_SERVICE_DU_ASSOCIATION                         = 'modif-service-du-association';
     const MODIF_SERVICE_DU_EDITION                             = 'modif-service-du-edition';
@@ -269,6 +266,9 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const TAG_ADMINISTRATION_VISUALISATION                     = 'tag-administration-visualisation';
     const TAG_EDITION                                          = 'tag-edition';
     const TAG_VISUALISATION                                    = 'tag-visualisation';
+    const TAUX_EDITION                                         = 'taux-edition';
+    const TAUX_SUPPRESSION                                     = 'taux-suppression';
+    const TAUX_VISUALISATION                                   = 'taux-visualisation';
     const TYPE_INTERVENTION_EDITION                            = 'type-intervention-edition';
     const TYPE_INTERVENTION_VISUALISATION                      = 'type-intervention-visualisation';
     const TYPE_RESSOURCE_EDITION                               = 'type-ressource-edition';

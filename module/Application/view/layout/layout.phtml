@@ -48,6 +48,11 @@ echo $this->doctype();
     $icons = AppConfig::get('etablissement', 'icons');
     if (is_array($icons)) {
         foreach ($icons as $icon) {
+            // Protection pour éviter d'appeler d'anciennes icônes Unicaen
+            $forbidden = 'www.unicaen.fr/images/favicon/';
+            if (isset($icon['href']) && str_contains($icon['href'], $forbidden)) {
+                continue;
+            }
             $ihtml = "\t<link rel=\"icon\" ";
             foreach ($icon as $attrName => $attrVal) {
                 $ihtml .= $attrName . '="' . $attrVal . '" ';
@@ -64,6 +69,7 @@ echo $this->doctype();
     <script type="text/javascript" src="<?= $this->basePath('/vendor/axios/axios.min.js') ?>"></script>
     <script type="text/javascript" src="<?= $this->basePath('/js/util.js?v=' . $version) ?>"></script>
     <?= $this->vite()->head(); ?>
+    <?= $this->headScript(); ?>
 </head>
 
 <body class="<?= AppConfig::getEnv() ?> p-0" data-base-url="<?= $this->url('home') ?>">

@@ -68,6 +68,9 @@ class AppConfig
 
     public static function getEnv()
     {
+        $forcedEnv = self::get('dev', 'forced-env', false);
+        if (false !== $forcedEnv) return $forcedEnv;
+
         return getenv('APPLICATION_ENV') ?: 'dev';
     }
 
@@ -130,6 +133,7 @@ class AppConfig
             'Enseignement',
             'Referentiel',
             'Mission',
+            'Paiement',
             'Plafond',
             'Indicateur',
             'ExportRh',

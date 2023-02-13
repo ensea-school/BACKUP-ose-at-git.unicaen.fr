@@ -70,7 +70,16 @@ WHERE i.histo_destruction IS NULL
                        THEN 0
                    ELSE 1 END
           END = 1
-
+   -- Demandé uniquement si nationalité étrangère
+   AND CASE
+  		WHEN tpjs.nationalite_etrangere = 0 OR d.id IS null
+			THEN 1
+		ELSE CASE
+				WHEN
+					d.pays_nationalite_id = (SELECT MAX(id) FROM pays p WHERE libelle IN ('France','FRANCE') AND histo_destruction IS NULL GROUP BY id)
+				THEN 0
+				ELSE 1 END
+			END = 1
   -- Filtre FC
   AND (tpjs.fc = 0 OR i_h.fc > 0)
 GROUP BY i.annee_id,

@@ -33,6 +33,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 </div>
 <div class="row">
     <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('nationalite-etrangere')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
         <?= $this->formControlGroup($form->get('fc')); ?>
     </div>
 </div>

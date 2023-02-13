@@ -52,42 +52,42 @@ return [
                 ],
                 'element' => [
                     'route'         => '/element',
-                    'controller'    => OffreFormationController::class,
+                    'controller'    => ElementPedagogiqueController::class,
                     'may_terminate' => false,
                     'child_routes'  => [
                         'voir'      => [
                             'route'       => '/voir/:elementPedagogique',
                             'constraints' => ['elementPedagogique' => '[0-9]*'],
-                            'controller'  => OffreFormationController::class,
+                            'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'voir',
                         ],
                         'ajouter'   => [
                             'route'      => '/ajouter',
-                            'controller' => OffreFormationController::class,
+                            'controller' => ElementPedagogiqueController::class,
                             'action'     => 'saisir',
                         ],
                         'modifier'  => [
                             'route'       => '/modifier/:elementPedagogique',
                             'constraints' => ['elementPedagogique' => '[0-9]*'],
-                            'controller'  => OffreFormationController::class,
+                            'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'saisir',
                         ],
                         'supprimer' => [
                             'route'       => '/supprimer/:elementPedagogique',
                             'constraints' => ['elementPedagogique' => '[0-9]*'],
-                            'controller'  => OffreFormationController::class,
+                            'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'supprimer',
                         ],
                         'search'    => [
                             'route'      => '/search',
-                            'controller' => OffreFormationController::class,
+                            'controller' => ElementPedagogiqueController::class,
                             'action'     => 'search',
                         ],
 
                         'get-periode'               => [
                             'route'       => '/get-periode/:elementPedagogique',
                             'constraints' => ['elementPedagogique' => '[0-9]*'],
-                            'controller'  => OffreFormationController::class,
+                            'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'getPeriode',
                         ],
                         'volume-horaire'            => [
@@ -95,7 +95,7 @@ return [
                             'constraints' => [
                                 'elementPedagogique' => '[0-9]*',
                             ],
-                            'controller'  => OffreFormationController::class,
+                            'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'volume-horaire',
                         ],
                         'synchronisation'           => [
@@ -103,12 +103,12 @@ return [
                             'constraints' => [
                                 'elementPedagogique' => '[0-9]*',
                             ],
-                            'controller'  => OffreFormationController::class,
+                            'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'synchronisation',
                         ],
                         'synchronisation-par-code'  => [
                             'route'      => '/synchronisation-par-code/:elementPedagogique',
-                            'controller' => OffreFormationController::class,
+                            'controller' => ElementPedagogiqueController::class,
                             'action'     => 'synchronisation-par-code',
                         ],
                         'modulateurs-centres-couts' => [
@@ -116,7 +116,7 @@ return [
                             'constraints' => [
                                 'elementPedagogique' => '[0-9]*',
                             ],
-                            'controller'  => OffreFormationController::class,
+                            'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'modulateurs-centres-couts',
                         ],
                         'modifier-modulateurs'      => [
@@ -124,7 +124,7 @@ return [
                             'constraints' => [
                                 'elementPedagogique' => '[0-9]*',
                             ],
-                            'controller'  => OffreFormationController::class,
+                            'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'modifier-modulateur',
                         ],
                     ],

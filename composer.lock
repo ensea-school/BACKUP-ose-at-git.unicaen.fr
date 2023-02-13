@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7989c6c2f1d310d9a90814ad60e13366",
+    "content-hash": "2a24f58724430278ccdfb7e634b4b21f",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -460,16 +460,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.5.3",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "88fa7e5189fd5ec6682477044264dc0ed4e3aa1e"
+                "reference": "85b98cb23c8af471a67abfe14485da696bcabc2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/88fa7e5189fd5ec6682477044264dc0ed4e3aa1e",
-                "reference": "88fa7e5189fd5ec6682477044264dc0ed4e3aa1e",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/85b98cb23c8af471a67abfe14485da696bcabc2e",
+                "reference": "85b98cb23c8af471a67abfe14485da696bcabc2e",
                 "shasum": ""
             },
             "require": {
@@ -482,11 +482,12 @@
                 "psr/log": "^1|^2|^3"
             },
             "require-dev": {
-                "doctrine/coding-standard": "11.0.0",
+                "doctrine/coding-standard": "11.1.0",
+                "fig/log-test": "^1",
                 "jetbrains/phpstorm-stubs": "2022.3",
-                "phpstan/phpstan": "1.9.4",
+                "phpstan/phpstan": "1.9.14",
                 "phpstan/phpstan-strict-rules": "^1.4",
-                "phpunit/phpunit": "9.5.27",
+                "phpunit/phpunit": "9.6.3",
                 "psalm/plugin-phpunit": "0.18.4",
                 "squizlabs/php_codesniffer": "3.7.1",
                 "symfony/cache": "^5.4|^6.0",
@@ -551,7 +552,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.5.3"
+                "source": "https://github.com/doctrine/dbal/tree/3.6.0"
             },
             "funding": [
                 {
@@ -567,7 +568,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-12T10:21:44+00:00"
+            "time": "2023-02-07T22:52:03+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -614,29 +615,29 @@
         },
         {
             "name": "doctrine/doctrine-laminas-hydrator",
-            "version": "3.2.0",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine-laminas-hydrator.git",
-                "reference": "b76cfa71d5e494a8a71ada4e8ea6454fc0fc56ba"
+                "reference": "b41bc66a485f1e2ce4477517d29d1803d0f2cbb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine-laminas-hydrator/zipball/b76cfa71d5e494a8a71ada4e8ea6454fc0fc56ba",
-                "reference": "b76cfa71d5e494a8a71ada4e8ea6454fc0fc56ba",
+                "url": "https://api.github.com/repos/doctrine/doctrine-laminas-hydrator/zipball/b41bc66a485f1e2ce4477517d29d1803d0f2cbb4",
+                "reference": "b41bc66a485f1e2ce4477517d29d1803d0f2cbb4",
                 "shasum": ""
             },
             "require": {
-                "doctrine/collections": "^1.6.8",
+                "doctrine/collections": "^1.8.0 || ^2.0.0",
                 "doctrine/inflector": "^2.0.4",
                 "doctrine/persistence": "^2.2.3 || ^3.0.0",
                 "ext-ctype": "*",
                 "laminas/laminas-hydrator": "^4.3.1",
                 "laminas/laminas-stdlib": "^3.6.1",
-                "php": "^7.4 || ~8.0.0 || ~8.1.0 || ~8.2.0"
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^9.0.2",
+                "doctrine/coding-standard": "^11.1.0",
                 "phpstan/phpstan": "^1.9.2",
                 "phpunit/phpunit": "^9.5.26",
                 "vimeo/psalm": "^4.30"
@@ -676,7 +677,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-11-18T09:49:57+00:00"
+            "time": "2023-02-07T07:28:03+00:00"
         },
         {
             "name": "doctrine/doctrine-module",
@@ -6879,11 +6880,11 @@
         },
         {
             "name": "unicaen/app",
-            "version": "6.0.0",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "61aa9de298574376390767411f037f9ee3c68948"
+                "reference": "19335523fd529823d959a3c6cc9eccf3b0dc63b8"
             },
             "require": {
                 "beberlei/assert": "^3.3",
@@ -6939,7 +6940,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2023-01-26T12:51:36+00:00"
+            "time": "2023-02-08T15:57:37+00:00"
         },
         {
             "name": "unicaen/auth",
@@ -7137,11 +7138,11 @@
         },
         {
             "name": "unicaen/open-document",
-            "version": "6.0.0",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/open-document.git",
-                "reference": "e82f3990bd9a5c761e01310544236713a3c58535"
+                "reference": "3c71e1a7f2289bc5ca774dbc4a0b45bd9382a462"
             },
             "type": "library",
             "autoload": {
@@ -7153,7 +7154,7 @@
                 ]
             },
             "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
-            "time": "2022-09-16T12:46:10+00:00"
+            "time": "2023-02-08T10:58:46+00:00"
         },
         {
             "name": "unicaen/siham",

@@ -5,10 +5,7 @@ namespace Mission;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Mission\Controller\MissionController;
-use Mission\Controller\TauxController;
 use Mission\Controller\MissionTypeController;
-use Mission\Service\TauxService;
-use Mission\Service\TauxServiceFactory;
 use Mission\Service\MissionTypeService;
 use Mission\Service\MissionTypeServiceFactory;
 use UnicaenAuth\Assertion\AssertionFactory;
@@ -23,12 +20,16 @@ return [
                     'route'         => '/:intervenant/missions',
                     'controller'    => MissionController::class,
                     'action'        => 'index',
+                    'privileges'    => Privileges::MISSION_VISUALISATION,
+                    //'assertion'  => Assertion\MissionAssertion::class,
                     'may_terminate' => true,
                     'child_routes'  => [
                         'modification' => [
                             'route'      => '/modification',
                             'controller' => MissionController::class,
                             'action'     => 'modification',
+                            'privileges' => Privileges::MISSION_EDITION,
+                            //'assertion'  => Assertion\MissionAssertion::class,
                         ],
                     ],
                 ],
@@ -42,36 +43,52 @@ return [
                     'route'      => '/liste/:intervenant',
                     'controller' => MissionController::class,
                     'action'     => 'liste',
+                    'privileges' => Privileges::MISSION_VISUALISATION,
+                    //'assertion'  => Assertion\MissionAssertion::class,
                 ],
                 'get'            => [
                     'route'      => '/get/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'get',
+                    'privileges' => Privileges::MISSION_VISUALISATION,
+                    //'assertion'  => Assertion\MissionAssertion::class,
                 ],
                 'ajout'          => [
                     'route'      => '/ajout/:intervenant',
                     'controller' => MissionController::class,
                     'action'     => 'ajout',
+                    'privileges' => Privileges::MISSION_EDITION,
+                    //'assertion'  => Assertion\MissionAssertion::class,
                 ],
                 'saisie'         => [
                     'route'      => '/saisie/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'saisie',
+                    'privileges' => Privileges::MISSION_EDITION,
+                    //'assertion'  => Assertion\MissionAssertion::class,
+                ],
+                'suivi'          => [
+                    'route'      => '/suivi/:intervenant',
+                    'controller' => MissionController::class,
+                    'action'     => 'suivi',
                 ],
                 'supprimer'      => [
                     'route'      => '/supprimer/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'supprimer',
+                    'privileges' => Privileges::MISSION_EDITION,
                 ],
                 'valider'        => [
                     'route'      => '/valider/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'valider',
+                    'privileges' => Privileges::MISSION_VALIDATION,
                 ],
                 'devalider'      => [
                     'route'      => '/devalider/:mission',
                     'controller' => MissionController::class,
                     'action'     => 'devalider',
+                    'privileges' => Privileges::MISSION_DEVALIDATION,
                 ],
                 'volume-horaire' => [
                     'route'         => '/volume-horaire',
@@ -82,16 +99,19 @@ return [
                             'route'      => '/supprimer/:volumeHoraireMission',
                             'controller' => MissionController::class,
                             'action'     => 'volume-horaire-supprimer',
+                            'privileges' => Privileges::MISSION_EDITION,
                         ],
                         'valider'   => [
                             'route'      => '/valider/:volumeHoraireMission',
                             'controller' => MissionController::class,
                             'action'     => 'volume-horaire-valider',
+                            'privileges' => Privileges::MISSION_VALIDATION,
                         ],
                         'devalider' => [
                             'route'      => '/devalider/:volumeHoraireMission',
                             'controller' => MissionController::class,
                             'action'     => 'volume-horaire-devalider',
+                            'privileges' => Privileges::MISSION_DEVALIDATION,
                         ],
                     ],
                 ],
@@ -155,44 +175,6 @@ return [
     ],
 
     'guards' => [
-        [
-            'controller' => MissionController::class,
-            'action'     => ['index', 'get', 'liste'],
-            'privileges' => [
-                Privileges::MISSION_VISUALISATION,
-            ],
-            //'assertion'  => Assertion\MissionAssertion::class,
-        ],
-        [
-            'controller' => MissionController::class,
-            'action'     => ['ajout', 'saisie'],
-            'privileges' => [
-                Privileges::MISSION_EDITION,
-            ],
-            //'assertion'  => Assertion\MissionAssertion::class,
-        ],
-        [
-            'controller' => MissionController::class,
-            'action'     => ['supprimer', 'volume-horaire-supprimer'],
-            'privileges' => [
-                Privileges::MISSION_EDITION,
-            ],
-        ],
-        [
-            'controller' => MissionController::class,
-            'action'     => ['valider', 'volume-horaire-valider'],
-            'privileges' => [
-                Privileges::MISSION_VALIDATION,
-            ],
-        ],
-        [
-            'controller' => MissionController::class,
-            'action'     => ['devalider', 'volume-horaire-devalider'],
-            'privileges' => [
-                Privileges::MISSION_DEVALIDATION,
-            ],
-            //'assertion'  => Assertion\MissionAssertion::class,
-        ],
         [
             'controller' => MissionTypeController::class,
             'action'     => ['index'],

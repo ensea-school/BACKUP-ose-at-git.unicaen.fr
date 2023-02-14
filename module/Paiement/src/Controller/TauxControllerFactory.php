@@ -23,7 +23,7 @@ class TauxControllerFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): TauxController
     {
         $controller = new TauxController;
-        $controller->setServiceTaux($container->get(TauxRemuService::class));
+        $controller->setServiceTauxRemu($container->get(TauxRemuService::class));
         $controller->setServiceContext($container->get(ContextService::class));
 
         return $controller;

@@ -25,7 +25,7 @@ class MissionTypeForm extends AbstractForm
             ],
         ]);
         $this->build();
-        $this->setValueOptions('tauxRemu', $this->getServiceTaux()->getTauxRemus());
+        $this->setValueOptions('tauxRemu', $this->getServiceTauxRemu()->getTauxRemus());
         $this->get('tauxRemu')->setEmptyOption("");
         $this->get('tauxRemu')->setLabel('Taux par défaut');
 

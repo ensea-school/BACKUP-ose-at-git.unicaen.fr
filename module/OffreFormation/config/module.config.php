@@ -6,6 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use OffreFormation\Controller\ElementPedagogiqueController;
 use OffreFormation\Controller\EtapeCentreCoutController;
 use OffreFormation\Controller\EtapeController;
+use OffreFormation\Controller\EtapeTauxRemuController;
 use OffreFormation\Controller\ModulateurController;
 use OffreFormation\Controller\OffreFormationController;
 use UnicaenAuth\Guard\PrivilegeController;
@@ -179,6 +180,14 @@ return [
                             'controller'  => EtapeCentreCoutController::class,
                             'action'      => 'saisir',
                         ],
+                        'taux-remus'    => [
+                            'route'       => '/taux-remus/:etape',
+                            'constraints' => [
+                                'etape' => '[0-9]*',
+                            ],
+                            'controller'  => EtapeTauxRemuController::class,
+                            'action'      => 'saisir',
+                        ],
                         'taux-mixite'   => [
                             'route'       => '/taux-mixite/:etape',
                             'constraints' => [
@@ -272,6 +281,7 @@ return [
             'action'     => ['restaurer', 'saisir', 'supprimer'],
             'privileges' => Privileges::ODF_ETAPE_EDITION,
         ],
+
         /* Éléments pédagogiques */
         [
             'controller' => ElementPedagogiqueController::class,
@@ -327,6 +337,12 @@ return [
             'action'     => ['saisir'],
             'privileges' => Privileges::ODF_CENTRES_COUT_EDITION,
         ],
+        /* Taux de remus */
+        [
+            'controller' => EtapeTauxRemuController::class,
+            'action'     => ['saisir'],
+            'privileges' => Privileges::ODF_CENTRES_COUT_EDITION,
+        ],
         /* Taux de mixité */
         [
             'controller' => EtapeController::class,
@@ -377,6 +393,7 @@ return [
         Controller\EtapeController::class           => Controller\Factory\EtapeControllerFactory::class,
         Controller\ModulateurController::class      => Controller\Factory\ModulateurControllerFactory::class,
         Controller\EtapeCentreCoutController::class => Controller\Factory\EtapeCentreCoutControllerFactory::class,
+        Controller\EtapeTauxRemuController::class   => Controller\Factory\EtapeTauxRemuControllerFactory::class,
         OffreFormationController::class             => Controller\Factory\OffreFormationControllerFactory::class,
         ElementPedagogiqueController::class         => Controller\Factory\ElementPedagogiqueControllerFactory::class,
     ],
@@ -404,7 +421,9 @@ return [
         Form\EtapeModulateursSaisie::class                    => Form\Factory\EtapeModulateursSaisieFactory::class,
         Form\ElementModulateursFieldset::class                => Form\Factory\ElementModulateursFieldsetFactory::class,
         Form\EtapeCentreCout\EtapeCentreCoutForm::class       => Form\EtapeCentreCout\EtapeCentreCoutFormFactory::class,
+        Form\EtapeTauxRemu\EtapeTauxRemuForm::class           => Form\EtapeTauxRemu\EtapeTauxRemuFormFactory::class,
         Form\EtapeCentreCout\ElementCentreCoutFieldset::class => Form\EtapeCentreCout\ElementCentreCoutFieldsetFactory::class,
+        Form\EtapeTauxRemu\ElementTauxRemuFieldset::class     => Form\EtapeTauxRemu\ElementTauxRemuFieldsetFactory::class,
         Form\TauxMixite\TauxMixiteForm::class                 => Form\TauxMixite\TauxMixiteFormFactory::class,
         Form\TauxMixite\TauxMixiteFieldset::class             => Form\TauxMixite\TauxMixiteFieldsetFactory::class,
     ],
@@ -413,7 +432,9 @@ return [
         'etapeModulateursSaisieForm'          => View\Helper\Factory\EtapeModulateursSaisieFormFactory::class,
         'elementModulateursSaisieFieldset'    => View\Helper\Factory\ElementModulateursSaisieFieldsetFactory::class,
         'etapeCentreCoutForm'                 => View\Helper\Factory\EtapeCentreCoutFormViewHelperFactory::class,
+        'etapeTauxRemuForm'                   => View\Helper\Factory\EtapeTauxRemuFormViewHelperFactory::class,
         'elementCentreCoutFieldset'           => View\Helper\Factory\ElementCentreCoutFieldsetViewHelperFactory::class,
+        'elementTauxRemuFieldset'             => View\Helper\Factory\ElementTauxRemuFieldsetViewHelperFactory::class,
         'etapeTauxMixiteForm'                 => View\Helper\Factory\EtapeTauxMixiteFormViewHelperFactory::class,
         'elementTauxMixiteFieldset'           => View\Helper\Factory\ElementTauxMixiteFieldsetViewHelperFactory::class,
         'fieldsetElementPedagogiqueRecherche' => View\Helper\Factory\FieldsetElementPedagogiqueRechercheFactory::class,

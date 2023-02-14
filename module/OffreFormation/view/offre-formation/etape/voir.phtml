@@ -25,6 +25,15 @@ if ($this->isAllowed($etape, Privileges::ODF_CENTRES_COUT_EDITION)) {
     ];
 }
 
+if ($this->isAllowed($etape, Privileges::ODF_CENTRES_COUT_EDITION)) {
+    $tabs[] = [
+        'id'    => 'taux-remus',
+        'label' => '<i class="fas fa-euro-sign"></i> Taux de rémunération',
+        'url'   => $this->url('of/etape/taux-remus', ['etape' => $etape->getId()]),
+    ];
+}
+
+
 if ($this->isAllowed($etape, Privileges::ODF_TAUX_MIXITE_EDITION)) {
     $tabs[] = [
         'id'    => 'taux-mixite',

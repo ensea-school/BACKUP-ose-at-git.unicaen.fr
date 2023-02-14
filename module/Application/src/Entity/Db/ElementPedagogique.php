@@ -9,6 +9,7 @@ use Application\Entity\Db\Traits\PeriodeAwareTrait;
 use Application\Entity\Db\Traits\SourceAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Doctrine\Persistence\Mapping\ClassMetadata;
+use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
@@ -141,6 +142,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
      */
     private $centreCoutEp;
 
+    protected            $tauxRemu          = null;
+
     /**
      * @var \Application\Entity\Db\Effectifs
      */
@@ -259,6 +262,27 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
         return $this->libelle;
     }
 
+    /**
+     * Set un taux de rémunération
+     *
+     * @param TauxRemu $tauxRemu
+     */
+    public function setTauxRemu(TauxRemu $tauxRemu)
+    {
+        $this->tauxRemu = $tauxRemu;
+    }
+
+
+
+    /**
+     * Get centreCout
+     *
+     * @return TauxRemu|null
+     */
+    public function getTauxRemu(): ?TauxRemu
+    {
+        return $this->tauxRemu;
+    }
 
 
     /**

@@ -3,6 +3,7 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\Traits\AdresseTrait;
+use Paiement\Entity\Db\TauxRemu;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
@@ -37,6 +38,8 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     protected bool       $enseignement      = false;
 
     protected            $affAdresseContrat = true;
+
+    protected            $tauxRemu          = null;
 
 
 
@@ -180,6 +183,30 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     public function getCentreCout()
     {
         return $this->centreCout;
+    }
+
+
+
+    /**
+     * Set un taux de rémunération
+     *
+     * @param TauxRemu $tauxRemu
+     */
+    public function setTauxRemu(TauxRemu $tauxRemu)
+    {
+        $this->tauxRemu = $tauxRemu;
+    }
+
+
+
+    /**
+     * Get centreCout
+     *
+     * @return TauxRemu|null
+     */
+    public function getTauxRemu(): ?TauxRemu
+    {
+        return $this->tauxRemu;
     }
 
 

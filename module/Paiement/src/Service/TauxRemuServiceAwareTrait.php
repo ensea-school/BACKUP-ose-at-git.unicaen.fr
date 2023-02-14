@@ -15,11 +15,11 @@ trait TauxRemuServiceAwareTrait
 
 
     /**
-     * @param TauxRemuService $serviceTaux
+     * @param TauxRemuService|null $serviceTaux
      *
      * @return self
      */
-    public function setServiceTaux(?TauxRemuService $serviceTaux)
+    public function setServiceTauxRemu(?TauxRemuService $serviceTaux)
     {
         $this->serviceTaux = $serviceTaux;
 
@@ -28,7 +28,7 @@ trait TauxRemuServiceAwareTrait
 
 
 
-    public function getServiceTaux(): ?TauxRemuService
+    public function getServiceTauxRemu(): ?TauxRemuService
     {
         if (empty($this->serviceTaux)) {
             $this->serviceTaux = \Application::$container->get(TauxRemuService::class);

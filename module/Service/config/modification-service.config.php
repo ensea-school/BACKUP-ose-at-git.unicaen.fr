@@ -57,29 +57,17 @@ return [
     ],
 
     'navigation' => [
-        'gestion'        => [
-            'pages' => [
-                'modification-service-du-export-csv' => [
-                    'label'        => "Modifications de service dû (CSV)",
-                    'icon'         => 'fas fa-fill',
-                    'title'        => "Modifications de service dû (CSV)",
-                    'route'        => 'modification-service-du/export-csv',
-                    'resource'     => PrivilegeController::getResourceId(ModificationServiceDuController::class, 'export-csv'),
-                    'order'        => 45,
-                    'color' => '#45DAE0',
-                ],
-            ],
-        ],
+      
         'administration' => [
             'pages' => [
                 'rh' => [
                     'pages' => [
                         'motif-modification-service' => [
-                            'label'        => 'Motifs de modification du service dû',
-                            'route'        => 'motif-modification-service',
-                            'resource'     => PrivilegeController::getResourceId(MotifModificationServiceController::class, 'index'),
-                            'order'        => 40,
-                            'color' => '#BBCF55',
+                            'label'    => 'Motifs de modification du service dû',
+                            'route'    => 'motif-modification-service',
+                            'resource' => PrivilegeController::getResourceId(MotifModificationServiceController::class, 'index'),
+                            'order'    => 40,
+                            'color'    => '#BBCF55',
                         ],
                     ],
                 ],

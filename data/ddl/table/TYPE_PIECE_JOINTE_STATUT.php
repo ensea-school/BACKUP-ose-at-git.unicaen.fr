@@ -141,6 +141,18 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
+        'NATIONALITE_ETRANGERE' => [
+            'name'        => 'NATIONALITE_ETRANGERE',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 19,
+            'commentaire' => NULL,
+        ],
         'NUM_REGLE'             => [
             'name'        => 'NUM_REGLE',
             'type'        => 'int',

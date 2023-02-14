@@ -102,7 +102,7 @@ foreach ($listFiles as $file) {
         $nomCommercial = (!empty($data[5])) ? $data[5] : '';
         $nomCommercial .= (!empty($data[6])) ? ' ' . $data[6] : '';
         $nomCommercial .= (!empty($data[7])) ? ' ' . $data[7] : '';
-        $nomCommercial = str_replace("'", "''", $nomCommercial);
+        $nomCommercial = str_replace("''", "'", $nomCommercial);
         //RAISON_SOCIALE
         $nomJuridique = $data[4];
         //SIREN
@@ -124,7 +124,7 @@ foreach ($listFiles as $file) {
         } elseif (!empty($nomPropre)) {
             $raisonSociale = $nomPropre;
         }
-        $raisonSociale = str_replace("'", "''", $raisonSociale);
+        $raisonSociale = str_replace("''", "'", $raisonSociale);
         //Si pas de raison sociale et pas de nom commercial on passe
         if (empty($raisonSociale) && empty($nomCommercial)) {
             continue;

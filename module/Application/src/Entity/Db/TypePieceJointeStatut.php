@@ -16,29 +16,29 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     use StatutAwareTrait;
     use TypePieceJointeAwareTrait;
 
-    private float $seuilHetd      = 0;
+    private float $seuilHetd = 0;
 
-    private bool  $typeHeureHetd  = false;
+    private bool $typeHeureHetd = false;
 
-    private bool  $fc             = false;
+    private bool $fc = false;
 
-    private bool  $changementRIB  = false;
+    private bool $changementRIB = false;
 
-    private int   $dureeVie       = 1;
+    private bool $nationaliteEtrangere = false;
 
-    private bool  $obligatoireHNP = false;
+    private int $dureeVie = 1;
 
-    private bool  $obligatoire    = true;
+    private bool $obligatoireHNP = false;
 
-    protected int $numRegle       = 1;
+    private bool $obligatoire = true;
 
+    protected int $numRegle = 1;
 
 
     public function getSeuilHetd(): float|int
     {
         return $this->seuilHetd;
     }
-
 
 
     public function setSeuilHetd(float|int $seuilHetd): TypePieceJointeStatut
@@ -49,12 +49,10 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
-
     public function getTypeHeureHetd(): bool
     {
         return $this->typeHeureHetd;
     }
-
 
 
     public function setTypeHeureHetd(bool $typeHeureHetd): TypePieceJointeStatut
@@ -65,12 +63,10 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
-
     public function getFc(): bool
     {
         return $this->fc;
     }
-
 
 
     public function setFc(bool $fc): TypePieceJointeStatut
@@ -81,12 +77,10 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
-
     public function getChangementRIB(): bool
     {
         return $this->changementRIB;
     }
-
 
 
     public function setChangementRIB(bool $changementRIB): TypePieceJointeStatut
@@ -97,12 +91,30 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
+    /**
+     * @return bool
+     */
+    public function isNationaliteEtrangere(): bool
+    {
+        return $this->nationaliteEtrangere;
+    }
+
+    /**
+     * @param bool $nationaliteEtrangere
+     * @return TypePieceJointeStatut $this
+     */
+    public function setNationaliteEtrangere(bool $nationaliteEtrangere): TypePieceJointeStatut
+    {
+        $this->nationaliteEtrangere = $nationaliteEtrangere;
+
+        return $this;
+    }
+
 
     public function getDureeVie(): int
     {
         return $this->dureeVie;
     }
-
 
 
     public function setDureeVie(int $dureeVie): TypePieceJointeStatut
@@ -113,12 +125,10 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
-
     public function getObligatoireHNP(): bool
     {
         return $this->obligatoireHNP;
     }
-
 
 
     public function setObligatoireHNP(bool $obligatoireHNP): TypePieceJointeStatut
@@ -129,12 +139,10 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
-
     public function getObligatoire(): bool
     {
         return $this->obligatoire;
     }
-
 
 
     public function setObligatoire(bool $obligatoire): TypePieceJointeStatut
@@ -145,12 +153,10 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
-
     public function getNumRegle(): int
     {
         return $this->numRegle;
     }
-
 
 
     public function setNumRegle(int $numRegle): TypePieceJointeStatut
@@ -161,13 +167,13 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
-
     public function __toString()
     {
         $txt = $this->getObligatoire() ? 'Obl' : 'Fac';
         if ($this->getSeuilHetd()) $txt .= ' >' . $this->getSeuilHetd();
         if ($this->getFc()) $txt .= ' FC ';
         if ($this->getChangementRIB()) $txt .= ' RIB';
+        if ($this->isNationaliteEtrangere()) $txt .= ' Etr';
         if ($this->getDureeVie() && $this->getDureeVie() > 1) $txt .= ' ' . $this->getDureeVie() . 'ans';
 
 
@@ -175,17 +181,17 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
-
     /**
      * @return string
      */
     public function getTitle(): string
     {
-        $t   = [];
+        $t = [];
         $t[] = $this->getObligatoire() ? 'Pièce obligatoire' : 'Pièce facultative';
         if ($this->getSeuilHetd()) $t[] = 'À partir de ' . $this->getSeuilHetd() . ' heures';
         if ($this->getFc()) $t[] = 'Uniquement avec des enseignements en Formation Continue';
         if ($this->getChangementRIB()) $t[] = 'Uniquement si le RIB a changé';
+        if ($this->isNationaliteEtrangere()) $t[] = 'Uniquement si nationalité étrangère';
         if ($this->getDureeVie()) $t[] = 'Redemander la pièce tous les ' . $this->getDureeVie() . ' an(s)';
 
         return implode("\n", $t);

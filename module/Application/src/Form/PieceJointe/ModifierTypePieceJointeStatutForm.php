@@ -2,8 +2,8 @@
 
 namespace Application\Form\PieceJointe;
 
-use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Form\AbstractForm;
+use Application\Hydrator\TypePieceJointeStatutHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
@@ -65,6 +65,14 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'    => 'nationalite-etrangere',
+            'options' => [
+                'label' => 'Uniquement en cas de nationalité étrangère',
+            ],
+            'type'    => 'Checkbox',
+        ]);
+
+        $this->add([
             'name'    => 'fc',
             'options' => [
                 'label' => 'Limité aux actions de formation continue',
@@ -101,7 +109,6 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
 
         return $this;
     }
-
 
 
     /**
@@ -149,61 +156,4 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
         ];
     }
 
-}
-
-
-
-
-
-class TypePieceJointeStatutHydrator implements HydratorInterface
-{
-    use AnneeServiceAwareTrait;
-
-
-    /**
-     * Hydrate $object with the provided $data.
-     *
-     * @param array                                        $data
-     * @param \Application\Entity\Db\TypePieceJointeStatut $object
-     *
-     * @return object
-     */
-    public function hydrate(array $data, $object)
-    {
-
-        $object->setChangementRIB($data['changement-rib']);
-        $object->setObligatoire($data['obligatoire']);
-        $object->setSeuilHetd((empty($data['seuil-hetd']) ? 0 : $data['seuil-hetd']));
-        $object->setTypeHeureHetd($data['type-heure-hetd']);
-        $object->setFC($data['fc']);
-        $object->setDureeVie($data['duree-vie']);
-        $object->setObligatoireHNP($data['obligatoire-hnp']);
-
-        return $object;
-    }
-
-
-
-    /**
-     * Extract values from an object
-     *
-     * @param \Application\Entity\Db\TypePieceJointeStatut $object
-     *
-     * @return array
-     */
-    public function extract($object): array
-    {
-        $data = [
-            'id'              => $object->getId(),
-            'obligatoire'     => $object->getObligatoire(),
-            'seuil-hetd'      => $object->getSeuilHetd(),
-            'type-heure-hetd' => $object->getTypeHeureHetd(),
-            'changement-rib'  => $object->getChangementRIB(),
-            'fc'              => $object->getFc(),
-            'duree-vie'       => $object->getDureeVie(),
-            'obligatoire-hnp' => $object->getObligatoireHNP(),
-        ];
-
-        return $data;
-    }
 }

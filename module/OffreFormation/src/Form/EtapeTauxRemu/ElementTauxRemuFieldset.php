@@ -3,6 +3,7 @@
 namespace OffreFormation\Form\EtapeTauxRemu;
 
 use Application\Form\AbstractFieldset;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use Application\Entity\Db\ElementPedagogique;
 use Paiement\Entity\Db\TauxRemu;
@@ -17,6 +18,7 @@ use Laminas\Hydrator\HydratorInterface;
 class ElementTauxRemuFieldset extends AbstractFieldset
 {
     use TauxRemuServiceAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
 
     /**
      * element pédagogique associé
@@ -39,9 +41,11 @@ class ElementTauxRemuFieldset extends AbstractFieldset
     {
         $hydrator = new ElementTauxRemusFieldsetHydrator();
         $hydrator->setServiceTauxRemu($this->getServiceTauxRemu());
+        $hydrator->setServiceElementPedagogique($this->getServiceElementPedagogique());
         $this->setHydrator($hydrator);
         $this->setAllowedObjectBindingClass(ElementPedagogique::class);
     }
+
 
 
     /**
@@ -50,13 +54,14 @@ class ElementTauxRemuFieldset extends AbstractFieldset
      *
      * @return TauxRemu|null
      */
-    public function getTauxRemu()
+    public function getTauxRemus()
     {
         if (!isset($this->tauxRemus['tauxRemu'])) {
 
             $this->tauxRemus['tauxRemu']
-                = $this->getElementPedagogique()->getStructure()->getTauxRemu();
+                = $this->getServiceTauxRemu()->getTauxRemus();
         }
+
         return $this->tauxRemus['tauxRemu'];
     }
 
@@ -67,7 +72,7 @@ class ElementTauxRemuFieldset extends AbstractFieldset
      */
     public function build()
     {
-            $this->add($this->createSelectElement());
+        $this->add($this->createSelectElement());
     }
 
 
@@ -82,7 +87,7 @@ class ElementTauxRemuFieldset extends AbstractFieldset
         $element = new Select('tauxRemu');
         $element
             ->setLabel('taux')
-            ->setValueOptions(['' => '(Aucun)'] + $this->getServiceTauxRemu()->getTauxRemus())
+            ->setValueOptions(['' => '(Aucun)'] + $this->getServiceTauxRemu()->formatTauxRemus($this->getTauxRemus()))
             ->setAttribute('class', 'taux-remus selectpicker')
             ->setAttribute('data-live-search', 'true');
 
@@ -106,6 +111,7 @@ class ElementTauxRemuFieldset extends AbstractFieldset
 
         return parent::setObject($object);
     }
+
 
 
     /**
@@ -145,7 +151,7 @@ class ElementTauxRemuFieldset extends AbstractFieldset
 class ElementTauxRemusFieldsetHydrator implements HydratorInterface
 {
     use TauxRemuServiceAwareTrait;
-
+    use ElementPedagogiqueServiceAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.
@@ -157,6 +163,12 @@ class ElementTauxRemusFieldsetHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $element)
     {
+        $tauxRemu = null;
+        if ($data['tauxRemu']) {
+            $tauxRemu =  $this->getServiceTauxRemu()->get((int)$data['tauxRemu']);
+        }
+        $element->setTauxRemuEp($tauxRemu);
+        $this->getServiceElementPedagogique()->save($element);
 
         return $element;
     }
@@ -168,17 +180,22 @@ class ElementTauxRemusFieldsetHydrator implements HydratorInterface
      *
      * @param ElementPedagogique $element
      *
-     * @return int
+     * @return array
      */
-    public function extract($object): array
+    public function extract($element): array
     {
+        $data = [];
 
-        $data = [
-            'id'       => $object->getId(),
-            'libelle'  => $object->getLibelle(),
-            'tauxRemu' => $object->getTauxRemu()?->getId(),
-        ];
+        if (($trEp = $element->getTauxRemuEp())) {
+            $tr               = $trEp->getTauxRemu();
+            if($tr){
+                $trId             = $tr->getId();
+                $data['tauxRemu'] = $trId;
 
+            }else{
+                $data['tauxRemu'] = null;
+            }
+        }
 
         return $data;
     }

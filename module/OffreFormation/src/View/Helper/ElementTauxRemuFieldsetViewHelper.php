@@ -48,10 +48,7 @@ class ElementTauxRemuFieldsetViewHelper extends AbstractHtmlElement
             $vh->setIncludeLabel(false);
             $res .= '<td>';
         }
-        $taux = $fieldset->getTauxRemu();
-        if($taux){
-            $res .= $vh->render($taux);
-        }
+        $res .= $vh->render($fieldset->get('tauxRemu'));
 
         if ($inTable) {
             $res .= '</td>';

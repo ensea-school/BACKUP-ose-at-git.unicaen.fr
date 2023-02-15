@@ -5,7 +5,6 @@ namespace Paiement\Service;
 
 use Application\Controller\Plugin\Axios;
 use Application\Service\AbstractEntityService;
-use DateTime;
 use Paiement\Entity\Db\TauxRemu;
 use Paiement\Entity\Db\TauxRemuValeur;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -81,7 +80,7 @@ class TauxRemuService extends AbstractEntityService
         $dql    = "SELECT mtr
                  FROM " . TauxRemuValeur::class . " mtr
                  WHERE mtr.id =" . $tauxRemuValeurId
-        ." ORDER BY mtr.id";
+            . " ORDER BY mtr.id";
         $query  = $this->getEntityManager()->createQuery($dql);
         $result = $query->getResult();
         if (!empty($result)) {
@@ -106,6 +105,8 @@ class TauxRemuService extends AbstractEntityService
         return $json;
     }
 
+
+
     public function getTauxRemusAnnee($tauxRemus)
     {
 
@@ -127,19 +128,41 @@ class TauxRemuService extends AbstractEntityService
 
 
 
+    /**
+     * Formatte une liste d'entités CentreCout (centres de coûts et éventuels EOTP fils)
+     * en tableau attendu par l'aide de vue FormSelect.
+     *
+     * NB: la liste en entrée doit être triées par code parent (éventuel) PUIS par code.
+     *
+     * @param TauxRemu[] $centresCouts
+     */
+    public function formatTauxRemus($tauxRemus)
+    {
+        $result = [];
+        foreach ($tauxRemus as $tr) {
+            $id = $tr->getId();
+
+            $result[$id] = (string)$tr;
+        }
+
+        ksort($result);
+
+        return $result;
+    }
+
+
+
     public function newEntityValeur(): TauxRemuValeur
     {
         return new tauxRemuValeur();
     }
 
-
-
     /**
      * @param TauxRemu                   $tauxRemu
      * @param TauxRemuValeur|string|null $temp
-     * @param string                            $dateDebutAnnee
-     * @param array                             $valeurs
-     * @param string                            $dateFinAnnee
+     * @param string                     $dateDebutAnnee
+     * @param array                      $valeurs
+     * @param string                     $dateFinAnnee
      *
      * @return array
      * @throws \Exception

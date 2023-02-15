@@ -4,7 +4,6 @@ namespace OffreFormation\Form\EtapeTauxRemu;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
-use Application\Entity\Db\TypeHeures;
 use Application\Form\AbstractForm;
 use Laminas\Form\Element\Select;
 use Laminas\Hydrator\HydratorInterface;
@@ -30,6 +29,7 @@ class EtapeTauxRemuForm extends AbstractForm
     protected $etape;
 
     /**
+     * Centres de couts pour chaque (code de) type d'heures.
      *
      * @var TauxRemu[][]
      */
@@ -51,10 +51,11 @@ class EtapeTauxRemuForm extends AbstractForm
     public function build()
     {
         $elements = $this->getEtape()->getElementPedagogique();
-        $this->add($this->createSelectElement());
         foreach ($elements as $element) {
             $this->add($this->createFieldset($element));
         }
+        $this->add($this->createSelectElement());
+
 
         $this->add([
             'name' => 'id',
@@ -82,6 +83,7 @@ class EtapeTauxRemuForm extends AbstractForm
 
         return $f;
     }
+
 
 
     /**
@@ -124,27 +126,30 @@ class EtapeTauxRemuForm extends AbstractForm
 
 
     /**
-     * Retourne les taux de rémunération possible
+     * Retourne les taux de rémunération possibles
      *
      * @return TauxRemu[]
      */
-    public function getTauxRemus()
+    protected function getTauxRemus()
     {
-            $elements  = $this->getEtape()->getElementPedagogique();
+        if (!array_key_exists('tauxRemu', $this->tauxRemus)) {
+            $tauxRems = [];
+            $elements = $this->getEtape()->getElementPedagogique();
             foreach ($elements as $element) {
                 $elFieldset = $this->get('EL' . $element->getId());
-                /* @var ElementTauxRemuFieldset $elFieldset */
+                /* @var $elFieldset ElementTauxRemuFieldset */
 
-                $elementTauxRemus = $elFieldset->getTauxRemu();
-                foreach ($elementTauxRemus as $elementTauxRemu) {
-                    if (!isset($elementTauxRemus[$elementTauxRemu->getId()])) {
-                        $elementTauxRemus[$elementTauxRemu->getId()] = $elementTauxRemus;
+                $elementTauxRemu = $elFieldset->getTauxRemus();
+                foreach ($elementTauxRemu as $tauxRemu) {
+                    if (!isset($tauxRems[$tauxRemu->getId()])) {
+                        $tauxRems[$tauxRemu->getId()] = $tauxRemu;
                     }
                 }
             }
-            $this->tauxRemus = $elementTauxRemus;
+            $this->tauxRemus['tauxRemu'] = $tauxRems;
+        }
 
-        return $this->tauxRemus;
+        return $this->tauxRemus['tauxRemu'];
     }
 
 
@@ -154,7 +159,8 @@ class EtapeTauxRemuForm extends AbstractForm
      *
      * @return Etape
      */
-    public function getEtape()
+    public
+    function getEtape()
     {
         if (!$this->etape) {
             throw new RuntimeException('Aucune étape spécifiée.');
@@ -165,7 +171,8 @@ class EtapeTauxRemuForm extends AbstractForm
 
 
 
-    public function setEtape(Etape $etape)
+    public
+    function setEtape(Etape $etape)
     {
         $this->etape = $etape;
 
@@ -173,18 +180,20 @@ class EtapeTauxRemuForm extends AbstractForm
     }
 
 
+
     /**
      *
      *
      * @return Select
      */
-    private function createSelectElement()
+    private
+    function createSelectElement()
     {
         $element = new Select('tauxRemu');
         $element
             ->setLabel('tauxRemu')
-            ->setValueOptions(['' => '(Aucun)'] + $this->getServiceTauxRemu()->getTauxRemus())
-            ->setAttribute('class', 'form-control type-heures header-select selectpicker')
+            ->setValueOptions(['' => '(Aucun)'] + $this->getServiceTauxRemu()->formatTauxRemus($this->getTauxRemus()))
+            ->setAttribute('class', 'form-control taux-remus header-select selectpicker')
             ->setAttribute('data-live-search', 'true');
 
         return $element;

@@ -140,9 +140,9 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $centreCoutEp;
+    private   $centreCoutEp;
 
-    protected            $tauxRemu          = null;
+    protected $tauxRemuEp = null;
 
     /**
      * @var \Application\Entity\Db\Effectifs
@@ -262,14 +262,16 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
         return $this->libelle;
     }
 
+
+
     /**
      * Set un taux de rémunération
      *
-     * @param TauxRemu $tauxRemu
+     * @param TauxRemu|null $tauxRemuEp
      */
-    public function setTauxRemu(TauxRemu $tauxRemu)
+    public function setTauxRemuEp(?TauxRemu $tauxRemuEp)
     {
-        $this->tauxRemu = $tauxRemu;
+        $this->tauxRemuEp = $tauxRemuEp;
     }
 
 
@@ -279,10 +281,11 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
      *
      * @return TauxRemu|null
      */
-    public function getTauxRemu(): ?TauxRemu
+    public function getTauxRemuEp(): ?TauxRemu
     {
-        return $this->tauxRemu;
+        return $this->tauxRemuEp;
     }
+
 
 
     /**
@@ -747,6 +750,33 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
     public function removeCentreCoutEp(\Application\Entity\Db\CentreCoutEp $centreCoutEp)
     {
         $this->centreCoutEp->removeElement($centreCoutEp);
+    }
+
+
+    /**
+     * Add centreCoutEp
+     *
+     * @param \Paiement\Entity\Db\TauxRemu $tauxRemuEp
+     *
+     * @return ElementPedagogique
+     */
+    public function addTauxRemuEp(\Paiement\Entity\Db\TauxRemu $tauxRemuEp)
+    {
+        $this->tauxRemuEp[] = $tauxRemuEp;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Remove centreCoutEp
+     *
+     * @param \Paiement\Entity\Db\TauxRemu $tauxRemuEp
+     */
+    public function removeTauxRemuEp(\Paiement\Entity\Db\TauxRemu $tauxRemuEp)
+    {
+        $this->centreCoutEp->removeElement($tauxRemuEp);
     }
 
 

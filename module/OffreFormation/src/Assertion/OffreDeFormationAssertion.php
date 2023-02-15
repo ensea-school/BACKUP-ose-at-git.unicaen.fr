@@ -269,7 +269,6 @@ class OffreDeFormationAssertion extends AbstractAssertion
         if ($annee->getId() < $anneeMinimaleImportOdf) {
             return true;
         }
-
         return !$source->getImportable();
     }
 }

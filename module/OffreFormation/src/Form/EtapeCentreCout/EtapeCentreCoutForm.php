@@ -137,32 +137,6 @@ class EtapeCentreCoutForm extends AbstractForm
 
 
     /**
-     * Should return an array specification compatible with
-     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
-     *
-     * @return array
-     */
-    public function getInputFilterSpecification()
-    {
-        $elements = $this->getEtape()->getElementPedagogique();
-        $filters  = [];
-        foreach ($this->getTypesHeures() as $th) {
-            $filters[$th->getCode()] = [
-                'required' => false,
-            ];
-        }
-        foreach ($elements as $element) {
-            $filters['EL' . $element->getId()] = [
-                'required' => false,
-            ];
-        }
-
-        return $filters;
-    }
-
-
-
-    /**
      * Recherche, parmi les éléments de l'étape, des types d'heures distincts éligibles
      *
      * @return TypeHeures[]

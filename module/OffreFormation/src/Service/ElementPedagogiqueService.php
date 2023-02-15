@@ -9,6 +9,9 @@ use Application\Entity\Db\Etape;
 use Application\Entity\NiveauEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use Paiement\Entity\Db\TauxRemu;
 use RuntimeException;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
@@ -349,6 +352,24 @@ where rang = 1
     }
 
 
+
+    /**
+     * @param ElementPedagogique $elementPedagogique
+     * @param TauxRemu|null      $tauxRemu
+     *
+     * @return void
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function updateTauxRemu(ElementPedagogique $elementPedagogique, ?TauxRemu $tauxRemu){
+
+        /** @var ElementPedagogique $elp */
+        $elp = $this->get($elementPedagogique->getId());
+        $elp->setTauxRemuEp($tauxRemu);
+        $this->getEntityManager()->persist($elp);
+        $this->getEntityManager()->flush($elp);
+
+    }
 
     public function forcerTauxMixite(ElementPedagogique $elementPedagogique, $tauxFi, $tauxFc, $tauxFa)
     {

@@ -167,8 +167,7 @@ class ElementTauxRemusFieldsetHydrator implements HydratorInterface
         if ($data['tauxRemu']) {
             $tauxRemu =  $this->getServiceTauxRemu()->get((int)$data['tauxRemu']);
         }
-        $element->setTauxRemuEp($tauxRemu);
-        $this->getServiceElementPedagogique()->save($element);
+        $this->getServiceElementPedagogique()->updateTauxRemu($element, $tauxRemu);
 
         return $element;
     }

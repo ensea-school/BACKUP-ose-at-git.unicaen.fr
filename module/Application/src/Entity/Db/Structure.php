@@ -190,9 +190,9 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     /**
      * Set un taux de rémunération
      *
-     * @param TauxRemu $tauxRemu
+     * @param TauxRemu|null $tauxRemu
      */
-    public function setTauxRemu(TauxRemu $tauxRemu)
+    public function setTauxRemu(?TauxRemu $tauxRemu)
     {
         $this->tauxRemu = $tauxRemu;
     }

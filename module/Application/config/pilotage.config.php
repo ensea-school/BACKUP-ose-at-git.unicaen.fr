@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
+use Service\Controller\ModificationServiceDuController;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
@@ -46,14 +47,20 @@ return [
                                 'route'    => 'pilotage',
                                 'resource' => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'index'),
                                 'pages'    => [
-                                    'ecarts-etats' => [
+                                    'ecarts-etats'                       => [
                                         'label'       => 'Ecarts d\'heures complémentaires (CSV)',
                                         'title'       => 'Ecarts d\'heures complémentaires (CSV)',
                                         'description' => 'Export CSV des HETD (ne porte que sur les heures complémentaires et non sur le service dû)',
                                         'route'       => 'pilotage/ecarts-etats',
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'ecartsEtats'),
                                     ],
-                                    'indicateurs'  => [
+                                    'modification-service-du-export-csv' => [
+                                        'label'    => "Modifications de service dû (CSV)",
+                                        'title'    => "Modifications de service dû (CSV)",
+                                        'route'    => 'modification-service-du/export-csv',
+                                        'resource' => PrivilegeController::getResourceId(ModificationServiceDuController::class, 'export-csv'),
+                                    ],
+                                    'indicateurs'                        => [
                                         'label'       => 'Liste des indicateurs de suivi',
                                         'title'       => 'Liste des indicateurs de suivi',
                                         'description' => 'Liste des indicateurs de suivi',

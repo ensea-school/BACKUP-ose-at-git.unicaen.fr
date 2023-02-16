@@ -16,6 +16,7 @@ use Application\Service\Traits\StructureServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
+use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 /**
@@ -35,7 +36,7 @@ class ElementPedagogiqueController extends AbstractController
     use ElementPedagogiqueSynchronisationFormAwareTrait;
     use StructureServiceAwareTrait;
     use SchemaServiceAwareTrait;
-
+    use TauxRemuServiceAwareTrait;
 
     public function voirAction()
     {
@@ -322,6 +323,10 @@ class ElementPedagogiqueController extends AbstractController
                 'fc' => $datasPost['fc'],
             ];
             $element     = $this->getServiceCentreCoutEp()->addElementCentreCout($element, $centreCouts);
+            //Taux de remuneration
+            $tauxRemu =  $datasPost['tauxRemu'];
+
+            $this->getServiceElementPedagogique()->updateTauxRemu($element, $this->getServiceTauxRemu()->get($tauxRemu));
         }
 
         $form->setElementPedagogique($element);

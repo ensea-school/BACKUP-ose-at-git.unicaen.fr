@@ -10,6 +10,7 @@ use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Laminas\Form\Element\Select;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
+use Paiement\Service\TauxRemuServiceAwareTrait;
 
 /**
  * Description of ElementModulateurSaisie
@@ -23,6 +24,7 @@ class ElementModulateurCentreCoutForm extends AbstractForm
     use TypeModulateurServiceAwareTrait;
     use ElementModulateursFieldsetAwareTrait;
     use CentreCoutServiceAwareTrait;
+    use TauxRemuServiceAwareTrait;
 
     /**
      * Element
@@ -104,6 +106,21 @@ class ElementModulateurCentreCoutForm extends AbstractForm
             $this->add($selectCentreCout);
         }
 
+        /* partie taux de rémuneration */
+        //Formulaire partie Taux de rémunération de l'élément pédagogique en cours
+        $tauxRemu        = $elementPedagogique->getTauxRemuEp();
+        $tauxRemusValues = [];
+        if ($tauxRemu) {
+
+            $tauxRemusValues["tauxRemu"] = $tauxRemu->getCode();
+        }
+
+        $selectTauxRemu = $this->createSelectElementTauxRemu($elementPedagogique);
+        if (array_key_exists('tauxRemu', $centresCoutsValues)) {
+            $selectTauxRemu->setValue($centresCoutsValues['tauxRemu']);
+        }
+        $this->add($selectTauxRemu);
+
 
         $this->add([
             'name' => 'id',
@@ -128,6 +145,30 @@ class ElementModulateurCentreCoutForm extends AbstractForm
             ->setLabel($th->getLibelleCourt())
             ->setValueOptions(['' => '(Aucun)'] + $valueOptions)
             ->setAttribute('class', 'type-heures selectpicker')
+            ->setAttribute('data-live-search', 'true');
+
+        return $element;
+    }
+
+
+
+    /**
+     * @param ElementPedagogique $elementPedagogique
+     *
+     * @return Select
+     */
+    private function createSelectElementTauxRemu(ElementPedagogique $elementPedagogique)
+    {
+        $tauxRemus    = $this->getServiceTauxRemu()->getTauxRemus();
+        $valueOptions = [];
+        foreach ($tauxRemus as $tauxRemu) {
+            $valueOptions[$tauxRemu->getId()] = $tauxRemu->getCode() . ' - ' . $tauxRemu->getLibelle();
+        }
+        $element = new Select('tauxRemu');
+        $element
+            ->setLabel('tauxRemu')
+            ->setValueOptions(['' => '(Aucun)'] + $valueOptions)
+            ->setAttribute('class', 'taux-remu selectpicker')
             ->setAttribute('data-live-search', 'true');
 
         return $element;

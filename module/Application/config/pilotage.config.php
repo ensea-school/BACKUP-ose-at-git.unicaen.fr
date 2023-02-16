@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
+use Service\Controller\ModificationServiceDuController;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
@@ -40,22 +41,35 @@ return [
                     'gestion' => [
                         'pages' => [
                             'pilotage' => [
-                                'label'        => 'Pilotage',
-                                'title'        => 'Pilotage',
-                                'icon'         => 'fas fa-tachometer',
-                                'route'        => 'pilotage',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'index'),
-                                'pages'        => [
-                                    'ecarts-etats' => [
+                                'label'    => 'Pilotage et indicateurs',
+                                'title'    => 'Pilotage et indicateurs',
+                                'icon'     => 'fas fa-chart-line',
+                                'route'    => 'pilotage',
+                                'resource' => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'index'),
+                                'pages'    => [
+                                    'ecarts-etats'                       => [
                                         'label'       => 'Ecarts d\'heures complémentaires (CSV)',
                                         'title'       => 'Ecarts d\'heures complémentaires (CSV)',
                                         'description' => 'Export CSV des HETD (ne porte que sur les heures complémentaires et non sur le service dû)',
                                         'route'       => 'pilotage/ecarts-etats',
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'ecartsEtats'),
                                     ],
+                                    'modification-service-du-export-csv' => [
+                                        'label'    => "Modifications de service dû (CSV)",
+                                        'title'    => "Modifications de service dû (CSV)",
+                                        'route'    => 'modification-service-du/export-csv',
+                                        'resource' => PrivilegeController::getResourceId(ModificationServiceDuController::class, 'export-csv'),
+                                    ],
+                                    'indicateurs'                        => [
+                                        'label'       => 'Liste des indicateurs de suivi',
+                                        'title'       => 'Liste des indicateurs de suivi',
+                                        'description' => 'Liste des indicateurs de suivi',
+                                        'route'       => 'indicateur',
+                                        'resource'    => PrivilegeController::getResourceId('Indicateur\Controller\Indicateur', 'index'),
+                                    ],
                                 ],
-                                'order'        => 20,
-                                'color' => '#00A020',
+                                'order'    => 20,
+                                'color'    => '#00A020',
                             ],
                         ],
                     ],

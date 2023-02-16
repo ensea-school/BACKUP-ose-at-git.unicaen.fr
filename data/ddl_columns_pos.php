@@ -382,6 +382,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'TAUX_REMU_ID',
     ],
     'ELEMENT_TAUX_REGIMES'           => [
         'ID',
@@ -1333,6 +1334,7 @@ return [
         'ADRESSE_PRECISIONS',
         'ADRESSE_VOIE',
         'ADRESSE_VOIRIE_ID',
+        'TAUX_REMU_ID',
     ],
     'SYNC_LOG'                       => [
         'ID',

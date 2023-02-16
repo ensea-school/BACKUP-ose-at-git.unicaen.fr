@@ -17,7 +17,7 @@ use Paiement\Service\TauxRemuServiceAwareTrait;
  *
  * @author Antony Le Courtes <antony.lecourtes@unicaen.fr>
  */
-class ElementModulateurCentreCoutForm extends AbstractForm
+class ElementModulateurCentreCoutTauxRemuForm extends AbstractForm
 {
     use TypeModulateurServiceAwareTrait;
     use ElementPedagogiqueServiceAwareTrait;

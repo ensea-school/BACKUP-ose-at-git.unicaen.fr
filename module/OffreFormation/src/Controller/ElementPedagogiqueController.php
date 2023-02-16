@@ -5,7 +5,7 @@ namespace OffreFormation\Controller;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Filter\FloatFromString;
-use OffreFormation\Form\Traits\ElementModulateurCentreCoutFormAwareTrait;
+use OffreFormation\Form\Traits\ElementModulateurCentreCoutTauxRemuFormAwareTrait;
 use OffreFormation\Form\Traits\ElementPedagogiqueSaisieAwareTrait;
 use OffreFormation\Form\Traits\ElementPedagogiqueSynchronisationFormAwareTrait;
 use OffreFormation\Form\Traits\VolumeHoraireEnsFormAwareTrait;
@@ -30,7 +30,7 @@ class ElementPedagogiqueController extends AbstractController
     use ElementPedagogiqueSaisieAwareTrait;
     use VolumeHoraireEnsFormAwareTrait;
     use VolumeHoraireEnsServiceAwareTrait;
-    use ElementModulateurCentreCoutFormAwareTrait;
+    use ElementModulateurCentreCoutTauxRemuFormAwareTrait;
     use ElementModulateurServiceAwareTrait;
     use CentreCoutEpServiceAwareTrait;
     use ElementPedagogiqueSynchronisationFormAwareTrait;
@@ -237,7 +237,7 @@ class ElementPedagogiqueController extends AbstractController
     public function volumeHoraireAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Enseignement\Entity\Db\VolumeHoraireEns::class,
+            \Application\Entity\Db\VolumeHoraireEns::class,
         ]);
 
         $title = 'Volumes horaires';
@@ -296,7 +296,7 @@ class ElementPedagogiqueController extends AbstractController
 
 
 
-    public function modulateursCentresCoutsAction()
+    public function modulateursCentresCoutsTauxRemuAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\ElementModulateur::class,
@@ -305,7 +305,7 @@ class ElementPedagogiqueController extends AbstractController
         ]);
 
         $element = $this->getEvent()->getParam('elementPedagogique');
-        $form    = $this->getFormOffreFormationElementModulateurCentreCout();
+        $form    = $this->getFormElementModulateurCentreCoutTauxRemu();
         //Traitement retour formulaire
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -330,7 +330,7 @@ class ElementPedagogiqueController extends AbstractController
         }
 
         $form->setElementPedagogique($element);
-        $form->setAttribute('action', $this->url()->fromRoute('of/element/modulateurs-centres-couts', ['elementPedagogique' => $element->getId()]));
+        $form->setAttribute('action', $this->url()->fromRoute('of/element/modulateurs-centres-couts-taux-remu', ['elementPedagogique' => $element->getId()]));
         $form->buildElements();
 
         return [

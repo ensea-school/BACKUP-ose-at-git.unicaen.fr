@@ -112,13 +112,13 @@ return [
                             'controller' => ElementPedagogiqueController::class,
                             'action'     => 'synchronisation-par-code',
                         ],
-                        'modulateurs-centres-couts' => [
-                            'route'       => '/modulateurs-centres-couts/:elementPedagogique',
+                        'modulateurs-centres-couts-taux-remu' => [
+                            'route'       => '/modulateurs-centres-couts-taux-remu/:elementPedagogique',
                             'constraints' => [
                                 'elementPedagogique' => '[0-9]*',
                             ],
                             'controller'  => ElementPedagogiqueController::class,
-                            'action'      => 'modulateurs-centres-couts',
+                            'action'      => 'modulateurs-centres-couts-taux-remu',
                         ],
                         'modifier-modulateurs'      => [
                             'route'       => '/modulateurs/modifier/:elementPedagogique',
@@ -308,7 +308,7 @@ return [
         ],
         [
             'controller' => ElementPedagogiqueController::class,
-            'action'     => ['modulateurs-centres-couts'],
+            'action'     => ['modulateurs-centres-couts-taux-remu'],
             'privileges' => [
                 Privileges::ODF_CENTRES_COUT_EDITION,
                 Privileges::ODF_MODULATEURS_EDITION,

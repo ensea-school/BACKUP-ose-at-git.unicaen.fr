@@ -2,38 +2,37 @@
 
 namespace Application\Controller;
 
-use Service\Entity\Db\RegleStructureValidation;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\Db\Validation;
-use Service\Entity\Recherche;
+use Application\Controller\EtatVolumeHoraire;
+use Application\Entity\Db\Intervenant;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
-use Intervenant\Service\NoteServiceAwareTrait;
-use Plafond\Processus\PlafondProcessusAwareTrait;
-use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Service\Service\CampagneSaisieServiceAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
-use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Intervenant\Service\StatutServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use UnicaenApp\Traits\SessionContainerTrait;
+use Intervenant\Service\NoteServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use LogicException;
-use Application\Entity\Db\Intervenant;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
-use UnicaenApp\View\Model\MessengerViewModel;
+use Plafond\Processus\PlafondProcessusAwareTrait;
+use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Service\CampagneSaisieServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenImport\Entity\Differentiel\Query;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 use UnicaenImport\Service\Traits\DifferentielServiceAwareTrait;
-use Laminas\View\Model\ViewModel;
+use function Application\Controller\count;
 
 /**
  * Description of IntervenantController
@@ -85,7 +84,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function rechercherAction()
     {
         $recents = $this->getIntervenantsRecents();
@@ -94,14 +92,13 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function rechercheAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Intervenant::class,
         ]);
 
-        $critere   = $this->params()->fromPost('critere');
+        $critere = $this->params()->fromPost('critere');
         $recherche = $this->getProcessusIntervenant()->recherche();
 
         $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
@@ -112,12 +109,44 @@ class  IntervenantController extends AbstractController
         return compact('intervenants');
     }
 
+    public function rechercheJsonAction()
+    {
+        $recherche = $this->getProcessusIntervenant()->recherche();
+        $term = $this->getRequest()->getPost('term');
+        var_dump($term);
+        die;
+
+        $intervenants = $recherche->rechercher($term, 21);
+
+        $jsonData = [
+            'data'     => $intervenants,
+            'messages' => null,
+        ];
+
+        $model = new JsonModel($jsonData);
+
+
+        return $model;
+
+    }
+
+    /**
+     * Page d'index des missions
+     *
+     * @return array|\Laminas\View\Model\ViewModel
+     */
+    public function rechercheIntervenantAction()
+    {
+
+
+        return [];
+    }
 
 
     public function voirAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $tab         = $this->params()->fromQuery('tab');
+        $tab = $this->params()->fromQuery('tab');
 
         if (!$intervenant) {
             throw new \LogicException('Intervenant introuvable');
@@ -138,7 +167,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function definirParDefautAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -151,23 +179,21 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function ficheAction()
     {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
 
         return compact('intervenant', 'role');
     }
 
 
-
     public function saisirAction()
     {
-        $intervenant  = $this->getEvent()->getParam('intervenant');
-        $title        = "Saisie d'un intervenant";
-        $form         = $this->getFormIntervenantEdition();
-        $errors       = [];
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $title = "Saisie d'un intervenant";
+        $form = $this->getFormIntervenantEdition();
+        $errors = [];
         $actionDetail = $this->params()->fromRoute('action-detail');
         if ($intervenant) {
             $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
@@ -199,19 +225,19 @@ class  IntervenantController extends AbstractController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $oriData  = $form->getHydrator()->extract($intervenant);
+            $oriData = $form->getHydrator()->extract($intervenant);
             $postData = $request->getPost()->toArray();
-            $data     = array_merge($oriData, $postData);
+            $data = array_merge($oriData, $postData);
             $form->setData($data);
             if ((!$form->isReadOnly()) && $form->isValid()) {
                 try {
                     if ($form->get('intervenant-edition-login')->getValue() && $form->get('intervenant-edition-password')->getValue()) {
-                        $nom           = $intervenant->getNomUsuel();
-                        $prenom        = $intervenant->getPrenom();
+                        $nom = $intervenant->getNomUsuel();
+                        $prenom = $intervenant->getPrenom();
                         $dateNaissance = $intervenant->getDateNaissance();
-                        $login         = $form->get('intervenant-edition-login')->getValue();
-                        $password      = $form->get('intervenant-edition-password')->getValue();
-                        $utilisateur   = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
+                        $login = $form->get('intervenant-edition-login')->getValue();
+                        $password = $form->get('intervenant-edition-password')->getValue();
+                        $utilisateur = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
                         $utilisateur->setCode($intervenant->getUtilisateurCode() ?: $intervenant->getCode());
                         $this->getServiceUtilisateur()->save($utilisateur);
                         if ($utilisateur->getCode() != $intervenant->getUtilisateurCode()) {
@@ -251,7 +277,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function synchronisationAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -276,7 +301,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function synchroniserAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -285,7 +309,6 @@ class  IntervenantController extends AbstractController
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'synchronisation']]);
     }
-
 
 
     public function voirHeuresCompAction()
@@ -332,18 +355,16 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function formuleTotauxHetdAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
         $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
-        $formuleResultat   = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
+        $formuleResultat = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return compact('formuleResultat');
     }
-
 
 
     public function supprimerAction()
@@ -383,7 +404,6 @@ class  IntervenantController extends AbstractController
     }
 
 
-
     public function historiserAction()
     {
         /* @var $intervenant \Application\Entity\Db\Intervenant */
@@ -396,7 +416,6 @@ class  IntervenantController extends AbstractController
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => 'code:' . $intervenant->getCode()]);
     }
-
 
 
     public function restaurerAction()
@@ -413,7 +432,6 @@ class  IntervenantController extends AbstractController
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()]);
     }
-
 
 
     /**
@@ -443,7 +461,6 @@ class  IntervenantController extends AbstractController
             return [];
         }
     }
-
 
 
     /**

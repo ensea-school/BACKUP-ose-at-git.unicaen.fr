@@ -21,7 +21,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'rechercher'          => [
+                    'rechercher'            => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/rechercher',
@@ -30,7 +30,25 @@ return [
                             ],
                         ],
                     ],
-                    'recherche'           => [
+                    'recherche-intervenant' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/recherche-intervenant',
+                            'defaults' => [
+                                'action' => 'recherche-intervenant',
+                            ],
+                        ],
+                    ],
+                    'recherche-json'        => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/recherche-json',
+                            'defaults' => [
+                                'action' => 'recherche-json',
+                            ],
+                        ],
+                    ],
+                    'recherche'             => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/recherche',
@@ -39,7 +57,7 @@ return [
                             ],
                         ],
                     ],
-                    'voir'                => [
+                    'voir'                  => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/voir',
@@ -48,7 +66,7 @@ return [
                             ],
                         ],
                     ],
-                    'fiche'               => [
+                    'fiche'                 => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/fiche',
@@ -57,7 +75,7 @@ return [
                             ],
                         ],
                     ],
-                    'creer'               => [
+                    'creer'                 => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/creer',
@@ -67,7 +85,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisir'              => [
+                    'saisir'                => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/saisir',
@@ -77,7 +95,7 @@ return [
                             ],
                         ],
                     ],
-                    'dupliquer'           => [
+                    'dupliquer'             => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/dupliquer',
@@ -87,7 +105,7 @@ return [
                             ],
                         ],
                     ],
-                    'synchronisation'     => [
+                    'synchronisation'       => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/synchronisation',
@@ -96,7 +114,7 @@ return [
                             ],
                         ],
                     ],
-                    'synchroniser'        => [
+                    'synchroniser'          => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/synchroniser',
@@ -105,7 +123,7 @@ return [
                             ],
                         ],
                     ],
-                    'supprimer'           => [
+                    'supprimer'             => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/supprimer',
@@ -114,7 +132,7 @@ return [
                             ],
                         ],
                     ],
-                    'historiser'          => [
+                    'historiser'            => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/historiser',
@@ -123,7 +141,7 @@ return [
                             ],
                         ],
                     ],
-                    'restaurer'           => [
+                    'restaurer'             => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/restaurer',
@@ -132,7 +150,7 @@ return [
                             ],
                         ],
                     ],
-                    'definir-par-defaut'  => [
+                    'definir-par-defaut'    => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/definir-par-defaut',
@@ -141,7 +159,7 @@ return [
                             ],
                         ],
                     ],
-                    'voir-heures-comp'    => [
+                    'voir-heures-comp'      => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/voir-heures-comp/:intervenant',
@@ -150,7 +168,7 @@ return [
                             ],
                         ],
                     ],
-                    'formule-totaux-hetd' => [
+                    'formule-totaux-hetd'   => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire',
@@ -163,7 +181,7 @@ return [
                             ],
                         ],
                     ],
-                    'feuille-de-route'    => [
+                    'feuille-de-route'      => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/feuille-de-route',
@@ -172,7 +190,7 @@ return [
                             ],
                         ],
                     ],
-                    'mise-en-paiement'    => [
+                    'mise-en-paiement'      => [
                         'type'          => 'Segment',
                         'may_terminate' => false,
                         'options'       => [
@@ -211,7 +229,7 @@ return [
                             ],
                         ],
                     ],
-                    'contrat'             => [
+                    'contrat'               => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/contrat',
@@ -293,7 +311,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['rechercher', 'recherche'],
+                    'action'     => ['rechercher', 'recherche', 'recherche-json', 'recherche-intervenant'],
                     'privileges' => [
                         Privileges::INTERVENANT_RECHERCHE,
                     ],

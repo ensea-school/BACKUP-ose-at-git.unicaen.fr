@@ -202,7 +202,47 @@ $.widget("ose.etapeCentreCout", {
 
 });
 
+/**
+ * etapeTauxRemu
+ */
+$.widget("ose.etapeTauxRemu", {
 
+    _create: function ()
+    {
+        var that = this;
+
+        this.element.find("button.form-set-value").click(function (e)
+        {
+            console.log("test");
+
+            var value = that.getElementEtapeSelect('tauxRemu').val();
+            that.setFormValues('tauxRemu', value);
+            e.stopPropagation();
+        });
+    },
+
+    setFormValues: function (type, value)
+    {
+        this.getElementElementSelects(type).each(function ()
+        {
+            var canSetValue = value == "" || $(this).find("option[value=" + value + "]").length > 0;
+            if (canSetValue) {
+                $(this).selectpicker('val', value);
+            }
+        });
+    },
+
+    getElementEtapeSelect: function (type)
+    {
+        return this.element.find('select[name="' + type + '"]');
+    },
+
+    getElementElementSelects: function (type)
+    {
+        return this.element.find('select[name$="\\[' + type + '\\]"]');
+    }
+
+});
 
 
 /**

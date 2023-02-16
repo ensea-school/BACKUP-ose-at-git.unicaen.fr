@@ -74,6 +74,9 @@ $(function ()
     WidgetInitializer.add('etape-centre-cout', 'etapeCentreCout', function () {
         WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
     });
+    WidgetInitializer.add('etape-taux-remu', 'etapeTauxRemu', function () {
+        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
+    });
     WidgetInitializer.add('etape-taux-mixite', 'etapeTauxMixite', function () {
         WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
     });

@@ -97,6 +97,24 @@ class ElementTauxRemuFieldset extends AbstractFieldset
 
 
     /**
+     * Should return an array specification compatible with
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
+     *
+     * @return array
+     */
+    public function getInputFilterSpecification()
+    {
+        $filters             = [];
+        $filters['tauxRemu'] = [
+            'required' => false,
+        ];
+
+        return $filters;
+    }
+
+
+
+    /**
      *
      * @param ElementPedagogique $object
      *
@@ -165,7 +183,7 @@ class ElementTauxRemusFieldsetHydrator implements HydratorInterface
     {
         $tauxRemu = null;
         if ($data['tauxRemu']) {
-            $tauxRemu =  $this->getServiceTauxRemu()->get((int)$data['tauxRemu']);
+            $tauxRemu = $this->getServiceTauxRemu()->get((int)$data['tauxRemu']);
         }
         $this->getServiceElementPedagogique()->updateTauxRemu($element, $tauxRemu);
 
@@ -184,16 +202,9 @@ class ElementTauxRemusFieldsetHydrator implements HydratorInterface
     public function extract($element): array
     {
         $data = [];
-
-        if (($trEp = $element->getTauxRemuEp())) {
-            $tr               = $trEp->getTauxRemu();
-            if($tr){
-                $trId             = $tr->getId();
-                $data['tauxRemu'] = $trId;
-
-            }else{
-                $data['tauxRemu'] = null;
-            }
+        $trEp = $element->getTauxRemuEp();
+        if ($trEp) {
+            $data['tauxRemu'] = $trEp->getId();
         }
 
         return $data;

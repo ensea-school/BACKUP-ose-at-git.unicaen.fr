@@ -114,6 +114,9 @@ class EtapeTauxRemuForm extends AbstractForm
     {
         $elements = $this->getEtape()->getElementPedagogique();
         $filters  = [];
+        $filters['tauxRemu'] = [
+            'required' => false,
+        ];
         foreach ($elements as $element) {
             $filters['EL' . $element->getId()] = [
                 'required' => false,

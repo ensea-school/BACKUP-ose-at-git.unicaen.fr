@@ -3,7 +3,7 @@ $versionFile = dirname(dirname(__DIR__)) . '/VERSION';
 if (file_exists($versionFile)) {
     $version = file_get_contents($versionFile);
 } else {
-    $version = AppConfig::getEnv() . '12345';
+    $version = AppConfig::getEnv();
 }
 
 return [

@@ -5,11 +5,11 @@ namespace OffreFormation\Form;
 use Application\Entity\Db\CentreCout;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Form\AbstractForm;
-use OffreFormation\Form\Traits\ElementModulateursFieldsetAwareTrait;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
-use Laminas\Form\Element\Select;
-use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
+use Laminas\Form\Element\Select;
+use OffreFormation\Form\Traits\ElementModulateursFieldsetAwareTrait;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 
 /**
@@ -108,17 +108,15 @@ class ElementModulateurCentreCoutTauxRemuForm extends AbstractForm
 
         /* partie taux de rémuneration */
         //Formulaire partie Taux de rémunération de l'élément pédagogique en cours
-        $tauxRemu        = $elementPedagogique->getTauxRemuEp();
-        $tauxRemusValues = [];
-        if ($tauxRemu) {
-
-            $tauxRemusValues["tauxRemu"] = $tauxRemu->getCode();
-        }
-
+        $tauxRemu       = $elementPedagogique->getTauxRemuEp();
         $selectTauxRemu = $this->createSelectElementTauxRemu($elementPedagogique);
-        if (array_key_exists('tauxRemu', $centresCoutsValues)) {
-            $selectTauxRemu->setValue($centresCoutsValues['tauxRemu']);
+
+        if (array_key_exists($tauxRemu && $tauxRemu->getId(), $selectTauxRemu->getValueOptions())){
+            $selectTauxRemu->setValue($tauxRemu->getId());
         }
+
+
+
         $this->add($selectTauxRemu);
 
 
@@ -130,88 +128,88 @@ class ElementModulateurCentreCoutTauxRemuForm extends AbstractForm
 
 
 
-    private function createSelectElementCentreCout(\Application\Entity\Db\TypeHeures $th, ElementPedagogique $elementPedagogique)
-    {
-        $filter       = function (CentreCout $centreCout) use ($th) {
-            return $centreCout->getTypeHeures()->contains($th);
-        };
-        $centresCouts = $elementPedagogique->getStructure()->getCentreCout()->filter($filter);
-        $valueOptions = [];
-        foreach ($centresCouts as $centreCout) {
-            $valueOptions[$centreCout->getCode()] = $centreCout->getCode() . ' - ' . $centreCout->getLibelle();
-        }
-        $element = new Select($th->getCode());
-        $element
-            ->setLabel($th->getLibelleCourt())
-            ->setValueOptions(['' => '(Aucun)'] + $valueOptions)
-            ->setAttribute('class', 'type-heures selectpicker')
-            ->setAttribute('data-live-search', 'true');
+        private
+        function createSelectElementCentreCout(\Application\Entity\Db\TypeHeures $th, ElementPedagogique $elementPedagogique)
+        {
+            $filter       = function (CentreCout $centreCout) use ($th) {
+                return $centreCout->getTypeHeures()->contains($th);
+            };
+            $centresCouts = $elementPedagogique->getStructure()->getCentreCout()->filter($filter);
+            $valueOptions = [];
+            foreach ($centresCouts as $centreCout) {
+                $valueOptions[$centreCout->getCode()] = $centreCout->getCode() . ' - ' . $centreCout->getLibelle();
+            }
+            $element = new Select($th->getCode());
+            $element
+                ->setLabel($th->getLibelleCourt())
+                ->setValueOptions(['' => '(Aucun)'] + $valueOptions)
+                ->setAttribute('class', 'type-heures selectpicker')
+                ->setAttribute('data-live-search', 'true');
 
-        return $element;
-    }
-
-
-
-    /**
-     * @param ElementPedagogique $elementPedagogique
-     *
-     * @return Select
-     */
-    private function createSelectElementTauxRemu(ElementPedagogique $elementPedagogique)
-    {
-        $tauxRemus    = $this->getServiceTauxRemu()->getTauxRemus();
-        $valueOptions = [];
-        foreach ($tauxRemus as $tauxRemu) {
-            $valueOptions[$tauxRemu->getId()] = $tauxRemu->getCode() . ' - ' . $tauxRemu->getLibelle();
-        }
-        $element = new Select('tauxRemu');
-        $element
-            ->setLabel('tauxRemu')
-            ->setValueOptions(['' => '(Aucun)'] + $valueOptions)
-            ->setAttribute('class', 'taux-remu selectpicker')
-            ->setAttribute('data-live-search', 'true');
-
-        return $element;
-    }
-
-
-
-    /**
-     * Retourne la liste des types de modulateurs de l'element
-     *
-     * @return \Application\Entity\Db\Modulateur[]
-     */
-    public function getTypesModulateurs()
-    {
-
-        if (!$this->elementPedagogique) {
-            throw new \RuntimeException('Element non spécifié');
+            return $element;
         }
 
-        return $this->getServiceTypeModulateur()->getList($this->getServiceTypeModulateur()->finderByElementPedagogique($this->elementPedagogique));
+
+        /**
+         * @param ElementPedagogique $elementPedagogique
+         *
+         * @return Select
+         */
+        private
+        function createSelectElementTauxRemu(ElementPedagogique $elementPedagogique)
+        {
+            $tauxRemus    = $this->getServiceTauxRemu()->getTauxRemus();
+            $valueOptions = [];
+            foreach ($tauxRemus as $tauxRemu) {
+                $valueOptions[$tauxRemu->getId()] = $tauxRemu->getCode() . ' - ' . $tauxRemu->getLibelle();
+            }
+            $element = new Select('tauxRemu');
+            $element
+                ->setLabel('tauxRemu')
+                ->setValueOptions(['' => '(Aucun)'] + $valueOptions)
+                ->setAttribute('class', 'taux-remu selectpicker')
+                ->setAttribute('data-live-search', 'true');
+
+            return $element;
+        }
+
+
+        /**
+         * Retourne la liste des types de modulateurs de l'element
+         *
+         * @return \Application\Entity\Db\Modulateur[]
+         */
+        public
+        function getTypesModulateurs()
+        {
+
+            if (!$this->elementPedagogique) {
+                throw new \RuntimeException('Element non spécifié');
+            }
+
+            return $this->getServiceTypeModulateur()->getList($this->getServiceTypeModulateur()->finderByElementPedagogique($this->elementPedagogique));
+        }
+
+
+        public
+        function getElementPedagogique()
+        {
+            return $this->elementPedagogique;
+        }
+
+
+        public
+        function setElementPedagogique(ElementPedagogique $elementPedagogique)
+        {
+            $this->elementPedagogique = $elementPedagogique;
+
+            return $this;
+        }
+
+
+        public
+        function getInputFilterSpecification()
+        {
+
+        }
     }
-
-
-
-    public function getElementPedagogique()
-    {
-        return $this->elementPedagogique;
-    }
-
-
-
-    public function setElementPedagogique(ElementPedagogique $elementPedagogique)
-    {
-        $this->elementPedagogique = $elementPedagogique;
-
-        return $this;
-    }
-
-
-
-    public function getInputFilterSpecification()
-    {
-
-    }
-
-}

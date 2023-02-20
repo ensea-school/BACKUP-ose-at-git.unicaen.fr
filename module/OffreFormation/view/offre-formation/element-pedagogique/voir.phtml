@@ -22,7 +22,7 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::ODF_MODULATEURS_EDITI
     $this->isAllowed(Privileges::getResourceId(Privileges::ODF_CENTRES_COUT_EDITION))) {
     $tabs[] = [
         'id'    => 'modulateur-cc',
-        'label' => '<i class="fas fa-clock"></i> Modulateurs et Centres de coûts',
+        'label' => '<i class="fas fa-clock"></i> Modulateurs, Centres de coûts et Taux',
         'url'   => $this->url('of/element/modulateurs-centres-couts-taux-remu', ['elementPedagogique' => $element->getId()]),
     ];
 }

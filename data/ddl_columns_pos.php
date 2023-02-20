@@ -1334,7 +1334,6 @@ return [
         'ADRESSE_PRECISIONS',
         'ADRESSE_VOIE',
         'ADRESSE_VOIRIE_ID',
-        'TAUX_REMU_ID',
     ],
     'SYNC_LOG'                       => [
         'ID',

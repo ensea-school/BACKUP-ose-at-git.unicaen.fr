@@ -110,6 +110,32 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'gestion' => [
+            'pages' => [
+                'indicateurs' => [
+                    'label'    => "Indicateurs",
+                    'icon'     => 'fas fa-chart-line',
+                    'title'    => "Indicateurs",
+                    'route'    => 'indicateur',
+                    'resource' => PrivilegeController::getResourceId('Indicateur\Controller\Indicateur', 'index'),
+                    'order'    => 10,
+                    'color'    => '#217DD8',
+                    'pages'    => [
+                        'indicateurs' => [
+                            'label'    => "Indicateurs",
+                            'icon'     => 'fas fa-chart-line',
+                            'title'    => "Indicateurs",
+                            'route'    => 'indicateur',
+                            'resource' => PrivilegeController::getResourceId('Indicateur\Controller\Indicateur', 'index'),
+                            'order'    => 10,
+                            'color'    => '#217DD8',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 
     'guards' => [
         [

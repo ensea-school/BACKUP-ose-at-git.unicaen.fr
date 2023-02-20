@@ -41,8 +41,8 @@ return [
                     'gestion' => [
                         'pages' => [
                             'pilotage' => [
-                                'label'    => 'Pilotage et indicateurs',
-                                'title'    => 'Pilotage et indicateurs',
+                                'label'    => 'Pilotage',
+                                'title'    => 'Pilotage',
                                 'icon'     => 'fas fa-chart-line',
                                 'route'    => 'pilotage',
                                 'resource' => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'index'),
@@ -59,13 +59,6 @@ return [
                                         'title'    => "Modifications de service dû (CSV)",
                                         'route'    => 'modification-service-du/export-csv',
                                         'resource' => PrivilegeController::getResourceId(ModificationServiceDuController::class, 'export-csv'),
-                                    ],
-                                    'indicateurs'                        => [
-                                        'label'       => 'Liste des indicateurs de suivi',
-                                        'title'       => 'Liste des indicateurs de suivi',
-                                        'description' => 'Liste des indicateurs de suivi',
-                                        'route'       => 'indicateur',
-                                        'resource'    => PrivilegeController::getResourceId('Indicateur\Controller\Indicateur', 'index'),
                                     ],
                                 ],
                                 'order'    => 20,

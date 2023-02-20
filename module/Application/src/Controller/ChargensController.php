@@ -3,7 +3,6 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\SeuilCharge;
 use Application\Form\Chargens\Traits\DifferentielFormAwareTrait;
@@ -14,16 +13,17 @@ use Application\Form\Chargens\Traits\ScenarioFormAwareTrait;
 use Application\Provider\Chargens\ChargensProviderAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\SeuilChargeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
+use OffreFormation\Entity\Db\Etape;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Laminas\View\Model\JsonModel;
-use Laminas\View\Model\ViewModel;
 
 
 /**

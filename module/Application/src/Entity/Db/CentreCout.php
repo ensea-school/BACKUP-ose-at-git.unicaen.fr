@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use OffreFormation\Entity\Db\TypeHeures;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -291,7 +292,7 @@ class CentreCout implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * détermine si un type d'heures peut être appliqué à ce type de ressource ou non
      *
-     * @param \Application\Entity\Db\TypeHeures $typeHeures
+     * @param \OffreFormation\Entity\Db\TypeHeures $typeHeures
      *
      * @return boolean
      */

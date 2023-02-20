@@ -2,18 +2,18 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\GroupeTypeFormation;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\SeuilCharge;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeIntervention;
 use Application\Provider\Privilege\Privileges;
-use OffreFormation\Service\Traits\GroupeTypeFormationServiceAwareTrait;
-use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use OffreFormation\Entity\Db\GroupeTypeFormation;
+use OffreFormation\Entity\Db\TypeIntervention;
+use OffreFormation\Service\Traits\GroupeTypeFormationServiceAwareTrait;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 
 

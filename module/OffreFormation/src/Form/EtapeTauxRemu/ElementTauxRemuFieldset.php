@@ -3,13 +3,13 @@
 namespace OffreFormation\Form\EtapeTauxRemu;
 
 use Application\Form\AbstractFieldset;
-use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Paiement\Service\TauxRemuServiceAwareTrait;
-use Application\Entity\Db\ElementPedagogique;
-use Paiement\Entity\Db\TauxRemu;
-use RuntimeException;
 use Laminas\Form\Element\Select;
 use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use Paiement\Entity\Db\TauxRemu;
+use Paiement\Service\TauxRemuServiceAwareTrait;
+use RuntimeException;
 
 /**
  * Fieldset de saisie d'un taux de rémunération pour un élément pédagogique.

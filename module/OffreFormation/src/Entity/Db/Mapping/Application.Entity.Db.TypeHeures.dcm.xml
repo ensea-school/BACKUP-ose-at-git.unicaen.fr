@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="OffreFormation\Entity\Db\TypeHeures" table="TYPE_HEURES">
+    <indexes>
+      <index name="IDX_BFCC471159860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_BFCC47117E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_BFCC471163F06898" columns="HISTO_MODIFICATEUR_ID"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="type_heures_un" columns="CODE"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="code" type="string" column="CODE" length="20" nullable="false"/>
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="15" nullable="false"/>
+    <field name="libelleLong" type="string" column="LIBELLE_LONG" length="100" nullable="false"/>
+    <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
+    <field name="eligibleCentreCoutEp" type="boolean" column="ELIGIBLE_CENTRE_COUT_EP" nullable="false"/>
+    <field name="enseignement" type="boolean" column="ENSEIGNEMENT" nullable="false"/>
+    <many-to-one field="typeHeuresElement" target-entity="OffreFormation\Entity\Db\TypeHeures">
+      <join-columns>
+        <join-column name="TYPE_HEURES_ELEMENT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="centreCout" target-entity="Application\Entity\Db\CentreCout" mapped-by="typeHeures" />
+    <many-to-many field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique" mapped-by="typeHeures" />
+  </entity>
+</doctrine-mapping>

@@ -2,11 +2,11 @@
 
 namespace OffreFormation\Form\EtapeTauxRemu;
 
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Etape;
 use Application\Form\AbstractForm;
 use Laminas\Form\Element\Select;
 use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
 use Paiement\Entity\Db\TauxRemu;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use RuntimeException;

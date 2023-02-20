@@ -2,18 +2,14 @@
 
 namespace Plafond\Service;
 
-use Application\Entity\Db\ElementPedagogique;
-use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
-use Enseignement\Entity\Db\Service;
-use Referentiel\Entity\Db\ServiceReferentiel;
-use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
-use Enseignement\Entity\Db\VolumeHoraire;
 use Application\Service\AbstractEntityService;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Enseignement\Entity\Db\Service;
+use Enseignement\Entity\Db\VolumeHoraire;
+use Intervenant\Entity\Db\Statut;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use Plafond\Entity\Db\Plafond;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Entity\Db\PlafondPerimetre;
 use Plafond\Entity\Db\PlafondReferentiel;
@@ -21,6 +17,10 @@ use Plafond\Entity\Db\PlafondStatut;
 use Plafond\Entity\Db\PlafondStructure;
 use Plafond\Entity\PlafondControle;
 use Plafond\Interfaces\PlafondConfigInterface;
+use Referentiel\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\ServiceReferentiel;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenTbl\Service\Traits\QueryGeneratorServiceAwareTrait;
 use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 

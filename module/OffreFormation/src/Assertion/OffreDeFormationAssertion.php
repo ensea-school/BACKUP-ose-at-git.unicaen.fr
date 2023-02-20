@@ -2,21 +2,21 @@
 
 namespace OffreFormation\Assertion;
 
+use Application\Acl\Role;
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\TypeIntervention;
-use Application\Entity\Db\VolumeHoraireEns;
-use Application\Provider\Privilege\Privileges;
 use Application\Entity\Db\CentreCoutEp;
-use Application\Entity\Db\ElementModulateur;
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Etape;
+use Application\Entity\Db\Structure;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use UnicaenImport\Entity\Db\Source;
-use Application\Entity\Db\Structure;
-use UnicaenAuth\Assertion\AbstractAssertion;
-use Application\Acl\Role;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use OffreFormation\Entity\Db\ElementModulateur;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\Db\TypeIntervention;
+use OffreFormation\Entity\Db\VolumeHoraireEns;
+use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenImport\Entity\Db\Source;
 
 
 /**

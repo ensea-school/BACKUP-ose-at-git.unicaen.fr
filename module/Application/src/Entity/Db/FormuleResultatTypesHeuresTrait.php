@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use OffreFormation\Entity\Db\TypeHeures;
+
 trait FormuleResultatTypesHeuresTrait
 {
     /**

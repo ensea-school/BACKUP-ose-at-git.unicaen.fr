@@ -2,14 +2,14 @@
 
 namespace Enseignement\Form;
 
-use Enseignement\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
-use Application\Form\AbstractFieldset;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Laminas\Form\Element\Hidden;
 use Application\Filter\StringFromFloat;
-use Laminas\Hydrator\HydratorInterface;
+use Application\Form\AbstractFieldset;
 use Enseignement\Entity\Db\Service;
+use Enseignement\Entity\VolumeHoraireListe;
+use Laminas\Form\Element\Hidden;
+use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
 
@@ -26,7 +26,7 @@ class VolumeHoraireSaisieMultipleFieldset extends AbstractFieldset
 
     /**
      *
-     * @return \Application\Entity\Db\TypeIntervention[]
+     * @return \OffreFormation\Entity\Db\TypeIntervention[]
      */
     public function getTypesInterventions()
     {
@@ -116,7 +116,7 @@ class SaisieMultipleHydrator implements HydratorInterface
 
     /**
      *
-     * @return \Application\Service\TypeInterventionService[]
+     * @return \OffreFormation\Service\TypeInterventionService[]
      */
     public function getTypesInterventions(Service $service)
     {

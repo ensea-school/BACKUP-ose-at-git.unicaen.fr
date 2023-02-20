@@ -2,7 +2,7 @@
 
 namespace Application\Entity;
 
-use Application\Entity\Db\Etape;
+use OffreFormation\Entity\Db\Etape;
 
 /**
  * Description of NiveauEtape
@@ -33,7 +33,7 @@ class NiveauEtape
 
     /**
      *
-     * @param \Application\Entity\Db\Etape $etape
+     * @param \OffreFormation\Entity\Db\Etape $etape
      */
     static public function getInstanceFromEtape(Etape $etape)
     {

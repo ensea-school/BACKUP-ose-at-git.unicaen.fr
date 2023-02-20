@@ -2,10 +2,10 @@
 
 namespace OffreFormation\Service;
 
-use Application\Entity\Db\GroupeTypeFormation;
 use Application\Service\AbstractEntityService;
 use Application\Service\Periode;
 use Application\Service\RuntimeException;
+use OffreFormation\Entity\Db\GroupeTypeFormation;
 
 /**
  * Description of GroupeTypeFormation
@@ -25,7 +25,7 @@ class GroupeTypeFormationService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\GroupeTypeFormation::class;
+        return \OffreFormation\Entity\Db\GroupeTypeFormation::class;
     }
 
 

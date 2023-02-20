@@ -40,6 +40,6 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <one-to-many field="elementModulateur" target-entity="Application\Entity\Db\ElementModulateur" mapped-by="modulateur" />
+    <one-to-many field="elementModulateur" target-entity="OffreFormation\Entity\Db\ElementModulateur" mapped-by="modulateur" />
   </entity>
 </doctrine-mapping>

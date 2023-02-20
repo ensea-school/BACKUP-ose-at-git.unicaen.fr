@@ -5,12 +5,12 @@ namespace OffreFormation\Form;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\DisciplineServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Service\Traits\DisciplineServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
-use Application\Service\Traits\PeriodeServiceAwareTrait;
 
 /**
  * Description of ElementPedagogiqueSaisie
@@ -277,8 +277,8 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                                     $data
-     * @param \Application\Entity\Db\ElementPedagogique $object
+     * @param array                                            $data
+     * @param \OffreFormation\Entity\Db\ElementPedagogique $object
      *
      * @return object
      */
@@ -307,7 +307,7 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Db\ElementPedagogique $object
+     * @param \OffreFormation\Entity\Db\ElementPedagogique $object
      *
      * @return array
      */

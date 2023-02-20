@@ -3,8 +3,8 @@
 namespace Application\Entity\Chargens;
 
 use Application\Entity\Chargens\Traits\ScenarioNoeudAwareTrait;
-use Application\Entity\Db\Traits\TypeInterventionAwareTrait;
-use Application\Entity\Db\TypeIntervention;
+use OffreFormation\Entity\Db\Traits\TypeInterventionAwareTrait;
+use OffreFormation\Entity\Db\TypeIntervention;
 
 
 class ScenarioNoeudSeuil

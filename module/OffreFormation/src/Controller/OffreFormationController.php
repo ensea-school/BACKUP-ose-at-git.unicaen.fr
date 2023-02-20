@@ -1,22 +1,22 @@
 <?php
 namespace OffreFormation\Controller;
 
-use Application\Entity\Db\CheminPedagogique;
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Etape;
-use Application\Entity\Db\GroupeTypeFormation;
-use Application\Entity\Db\TypeFormation;
 use Application\Entity\Db\TypeModulateur;
-use Application\Entity\Db\VolumeHoraireEns;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use OffreFormation\Processus\Traits\ReconductionProcessusAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\OffreFormationServiceAwareTrait;
-use OffreFormation\Processus\Traits\ReconductionProcessusAwareTrait;
+use OffreFormation\Entity\Db\CheminPedagogique;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\Db\GroupeTypeFormation;
+use OffreFormation\Entity\Db\TypeFormation;
+use OffreFormation\Entity\Db\VolumeHoraireEns;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 

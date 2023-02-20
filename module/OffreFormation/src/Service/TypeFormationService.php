@@ -3,9 +3,8 @@
 namespace OffreFormation\Service;
 
 use Application\Service\AbstractEntityService;
-use Application;
-use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
+use RuntimeException;
 
 /**
  * Description of TypeFormation
@@ -23,7 +22,7 @@ class TypeFormationService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\TypeFormation::class;
+        return \OffreFormation\Entity\Db\TypeFormation::class;
     }
 
     /**
@@ -51,7 +50,8 @@ class TypeFormationService extends AbstractEntityService
      * Retourne la liste des types de formation
      *
      * @param QueryBuilder|null $queryBuilder
-     * @return Application\Entity\Db\TypeFormation[]
+     *
+     * @return \OffreFormation\Entity\Db\TypeFormation[]
      */
     public function getList( QueryBuilder $qb=null, $alias=null )
     {

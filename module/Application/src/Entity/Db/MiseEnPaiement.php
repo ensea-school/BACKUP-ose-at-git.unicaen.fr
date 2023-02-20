@@ -2,9 +2,10 @@
 
 namespace Application\Entity\Db;
 
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use OffreFormation\Entity\Db\TypeHeures;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * MiseEnPaiement
@@ -214,11 +215,11 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set typeHeures
      *
-     * @param \Application\Entity\Db\TypeHeures $typeHeures
+     * @param \OffreFormation\Entity\Db\TypeHeures $typeHeures
      *
      * @return self
      */
-    public function setTypeHeures(\Application\Entity\Db\TypeHeures $typeHeures = null)
+    public function setTypeHeures(\OffreFormation\Entity\Db\TypeHeures $typeHeures = null)
     {
         $this->typeHeures = $typeHeures;
 
@@ -230,7 +231,7 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get typeHeures
      *
-     * @return \Application\Entity\Db\TypeHeures
+     * @return \OffreFormation\Entity\Db\TypeHeures
      */
     public function getTypeHeures()
     {

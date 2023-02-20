@@ -3,9 +3,9 @@
 namespace Application\Service;
 
 use Application\Entity\Db\CentreCout;
-use Application\Entity\Db\TypeHeures;
-use Application\Service\Traits\TypeHeuresServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use OffreFormation\Entity\Db\TypeHeures;
+use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 
 
 /**
@@ -53,7 +53,7 @@ class CentreCoutService extends AbstractEntityService
      */
     public function finderByTypeHeures(TypeHeures $typeHeures, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->join($this->getServiceTypeHeures(), $qb, 'typeHeures', false, $alias);
         $qb->andWhere($this->getServiceTypeHeures()->getAlias() . ' = :typeHeures');
@@ -112,7 +112,7 @@ class CentreCoutService extends AbstractEntityService
      */
     public function getListeParent(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->where("$alias.parent is Null");
         $qb->andWhere("$alias.histoDestruction is Null");
         $this->orderBy($qb);

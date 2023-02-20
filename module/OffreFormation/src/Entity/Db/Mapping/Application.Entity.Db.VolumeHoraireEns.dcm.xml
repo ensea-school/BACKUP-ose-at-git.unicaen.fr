@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="OffreFormation\Entity\Db\VolumeHoraireEns" table="VOLUME_HORAIRE_ENS">
+    <indexes>
+      <index name="IDX_8909650482E51E2E" columns="ELEMENT_DISCIPLINE_ID"/>
+      <index name="IDX_890965046DA70281" columns="TYPE_INTERVENTION_ID"/>
+      <index name="IDX_8909650459860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_890965047E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_8909650463F06898" columns="HISTO_MODIFICATEUR_ID"/>
+      <index name="IDX_89096504E9B3446E" columns="SOURCE_ID"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="vhe_source_un" columns="SOURCE_CODE"/>
+      <unique-constraint name="volume_horaire_ens_un" columns="ELEMENT_DISCIPLINE_ID,TYPE_INTERVENTION_ID"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+    <field name="groupes" type="float" column="GROUPES" precision="126" scale="0" nullable="true"/>
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
+      <join-columns>
+        <join-column name="SOURCE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="typeIntervention" target-entity="OffreFormation\Entity\Db\TypeIntervention">
+      <join-columns>
+        <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique">
+      <join-columns>
+        <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

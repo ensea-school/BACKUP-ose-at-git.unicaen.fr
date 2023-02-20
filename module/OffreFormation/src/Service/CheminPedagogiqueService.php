@@ -2,9 +2,9 @@
 
 namespace OffreFormation\Service;
 
-use Application\Entity\Db\CheminPedagogique;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use OffreFormation\Entity\Db\CheminPedagogique;
 
 /**
  * Description of CheminPedagogique
@@ -23,7 +23,7 @@ class CheminPedagogiqueService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\CheminPedagogique::class;
+        return \OffreFormation\Entity\Db\CheminPedagogique::class;
     }
 
 

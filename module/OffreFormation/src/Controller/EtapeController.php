@@ -3,19 +3,19 @@
 namespace OffreFormation\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\CheminPedagogique;
 use Application\Entity\Db\DomaineFonctionnel;
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Etape;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeFormation;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use OffreFormation\Form\TauxMixite\Traits\TauxMixiteFormAwareTrait;
 use OffreFormation\Form\Traits\EtapeSaisieAwareTrait;
-use Application\Service\Traits\ContextServiceAwareTrait;
 use OffreFormation\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
+use OffreFormation\Entity\Db\CheminPedagogique;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\Db\TypeFormation;
 
 /**
  * Description of EtapeController
@@ -128,10 +128,10 @@ class EtapeController extends AbstractController
     public function tauxMixiteAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\ElementPedagogique::class,
+            \OffreFormation\Entity\Db\ElementPedagogique::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
-            \Application\Entity\Db\ElementPedagogique::class,
+            \OffreFormation\Entity\Db\ElementPedagogique::class,
         ]);
 
         $etape = $this->getEvent()->getParam('etape');

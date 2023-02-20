@@ -3,19 +3,19 @@
 namespace OffreFormation\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\ElementPedagogique;
 use Application\Filter\FloatFromString;
-use OffreFormation\Form\Traits\ElementModulateurCentreCoutTauxRemuFormAwareTrait;
-use OffreFormation\Form\Traits\ElementPedagogiqueSaisieAwareTrait;
-use OffreFormation\Form\Traits\ElementPedagogiqueSynchronisationFormAwareTrait;
-use OffreFormation\Form\Traits\VolumeHoraireEnsFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use OffreFormation\Form\Traits\ElementModulateurCentreCoutTauxRemuFormAwareTrait;
+use OffreFormation\Form\Traits\ElementPedagogiqueSaisieAwareTrait;
+use OffreFormation\Form\Traits\ElementPedagogiqueSynchronisationFormAwareTrait;
+use OffreFormation\Form\Traits\VolumeHoraireEnsFormAwareTrait;
 use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
@@ -41,7 +41,7 @@ class ElementPedagogiqueController extends AbstractController
     public function voirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\CheminPedagogique::class,
+            \OffreFormation\Entity\Db\CheminPedagogique::class,
             \Enseignement\Entity\Db\VolumeHoraire::class,
         ]);
         $element       = $this->getEvent()->getParam('elementPedagogique');
@@ -121,8 +121,8 @@ class ElementPedagogiqueController extends AbstractController
     public function searchAction()
     {
         $this->em()->getFilters()->enable('annee')->init([
-            \Application\Entity\Db\ElementPedagogique::class,
-            \Application\Entity\Db\Etape::class,
+            \OffreFormation\Entity\Db\ElementPedagogique::class,
+            \OffreFormation\Entity\Db\Etape::class,
         ]);
 
         $structure = $this->context()->structureFromQuery();
@@ -237,7 +237,7 @@ class ElementPedagogiqueController extends AbstractController
     public function volumeHoraireAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\VolumeHoraireEns::class,
+            \OffreFormation\Entity\Db\VolumeHoraireEns::class,
         ]);
 
         $title = 'Volumes horaires';
@@ -299,7 +299,7 @@ class ElementPedagogiqueController extends AbstractController
     public function modulateursCentresCoutsTauxRemuAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\ElementModulateur::class,
+            \OffreFormation\Entity\Db\ElementModulateur::class,
             \Application\Entity\Db\CentreCout::class,
             \Application\Entity\Db\CentreCoutEp::class,
         ]);

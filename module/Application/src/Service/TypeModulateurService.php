@@ -2,10 +2,10 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeModulateur;
 use Doctrine\ORM\QueryBuilder;
+use OffreFormation\Entity\Db\ElementPedagogique;
 
 
 /**
@@ -126,7 +126,7 @@ class TypeModulateurService extends AbstractEntityService
         return $qb;
     }
 
-    public function finderByEtape(\Application\Entity\Db\Etape $etape, QueryBuilder $qb=null, $alias=null )
+    public function finderByEtape(\OffreFormation\Entity\Db\Etape $etape, QueryBuilder $qb=null, $alias=null )
     {
         [$qb,$alias] = $this->initQuery($qb, $alias);
 

@@ -3,14 +3,14 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\Traits\AdresseTrait;
-use Paiement\Entity\Db\TauxRemu;
-use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
-use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * Structure
@@ -110,11 +110,11 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     /**
      * Add elementPedagogique
      *
-     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @param \OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique
      *
      * @return Intervenant
      */
-    public function addElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique)
+    public function addElementPedagogique(\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique)
     {
         $this->elementPedagogique[] = $elementPedagogique;
 
@@ -126,9 +126,9 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     /**
      * Remove elementPedagogique
      *
-     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @param \OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique
      */
-    public function removeElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique)
+    public function removeElementPedagogique(\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique)
     {
         $this->elementPedagogique->removeElement($elementPedagogique);
     }

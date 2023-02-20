@@ -36,12 +36,12 @@
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique">
+    <many-to-one field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique">
       <join-columns>
         <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="typeHeures" target-entity="Application\Entity\Db\TypeHeures">
+    <many-to-one field="typeHeures" target-entity="OffreFormation\Entity\Db\TypeHeures">
       <join-columns>
         <join-column name="TYPE_HEURES_ID" referenced-column-name="ID"/>
       </join-columns>

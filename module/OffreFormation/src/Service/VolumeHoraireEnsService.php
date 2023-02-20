@@ -2,11 +2,11 @@
 
 namespace OffreFormation\Service;
 
-use Application\Entity\Db\VolumeHoraireEns;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\TypeIntervention;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\TypeIntervention;
+use OffreFormation\Entity\Db\VolumeHoraireEns;
 use RuntimeException;
 
 
@@ -52,7 +52,7 @@ class VolumeHoraireEnsService extends AbstractEntityService
     /**
      * Retourne une nouvelle entité, initialisée avec les bons paramètres
      *
-     * @return \Application\Entity\Db\VolumeHoraireEns
+     * @return \OffreFormation\Entity\Db\VolumeHoraireEns
      */
     public function newEntity(ElementPedagogique $elementPedagogique = null, TypeIntervention $typeIntervention = null)
     {

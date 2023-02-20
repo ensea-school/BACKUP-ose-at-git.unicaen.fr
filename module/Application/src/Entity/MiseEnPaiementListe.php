@@ -2,10 +2,10 @@
 
 namespace Application\Entity;
 
+use Application\Entity\Db\Periode;
 use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Interfaces\ServiceAPayerAwareInterface;
 use Application\Traits\ServiceAPayerAwareTrait;
-use Application\Entity\Db\Periode;
 
 /**
  * Description of MiseEnPaiementListe
@@ -42,7 +42,7 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
     /**
      * Type d'heures
      *
-     * @var Db\TypeHeures
+     * @var \OffreFormation\Entity\Db\TypeHeures
      */
     protected $typeHeures = false;
 
@@ -180,7 +180,7 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
 
     /**
      *
-     * @return Db\TypeHeures|boolean|null
+     * @return \OffreFormation\Entity\Db\TypeHeures|boolean|null
      */
     function getTypeHeures()
     {
@@ -191,14 +191,14 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
 
     /**
      *
-     * @param Db\TypeHeures|null|boolean $typeHeures
+     * @param \OffreFormation\Entity\Db\TypeHeures|null|boolean $typeHeures
      *
      * @return self
      * @throws RuntimeException
      */
     function setTypeHeures($typeHeures)
     {
-        if (!(is_bool($typeHeures) || null === $typeHeures || $typeHeures instanceof Db\TypeHeures)) {
+        if (!(is_bool($typeHeures) || null === $typeHeures || $typeHeures instanceof \OffreFormation\Entity\Db\TypeHeures)) {
             throw new RuntimeException('Valeur non autorisée');
         }
         $this->typeHeures = $typeHeures;
@@ -440,7 +440,7 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
         if ($this->getCentreCout() instanceof Db\CentreCout && $miseEnPaiement->getCentreCout() !== $this->getCentreCout()) {
             throw new LogicException('Le centre de coûts de la mise en paiement ne correspond pas à celui de la liste');
         }
-        if ($this->getTypeHeures() instanceof Db\TypeHeures && $miseEnPaiement->getTypeHeures() !== $this->getTypeHeures()) {
+        if ($this->getTypeHeures() instanceof \OffreFormation\Entity\Db\TypeHeures && $miseEnPaiement->getTypeHeures() !== $this->getTypeHeures()) {
             throw new LogicException('Le type d\'heures de la mise en paiement ne correspond pas à celui de la liste');
         }
 
@@ -467,7 +467,7 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
         if ($this->getCentreCout() instanceof Db\CentreCout) {
             $result['centre-cout'] = $this->getCentreCout()->getId();
         }
-        if ($this->getTypeHeures() instanceof Db\TypeHeures) {
+        if ($this->getTypeHeures() instanceof \OffreFormation\Entity\Db\TypeHeures) {
             $result['type-heures'] = $this->getTypeHeures()->getId();
         }
 
@@ -478,7 +478,7 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
 
     /**
      *
-     * @return Db\TypeHeures[]
+     * @return \OffreFormation\Entity\Db\TypeHeures[]
      */
     public function getTypesHeures()
     {

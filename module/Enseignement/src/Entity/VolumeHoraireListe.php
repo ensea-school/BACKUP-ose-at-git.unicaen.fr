@@ -3,20 +3,20 @@
 namespace Enseignement\Entity;
 
 use Application\Entity\Db\Contrat;
-use Application\Entity\Db\Tag;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
-use Enseignement\Entity\Db\Service;
-use Application\Entity\Db\TypeIntervention;
-use Service\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\Tag;
 use Application\Entity\Db\Validation;
+use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
+use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Enseignement\Hydrator\ListeFilterHydrator;
-use Application\Service\Traits\SourceServiceAwareTrait;
 use LogicException;
+use OffreFormation\Entity\Db\TypeIntervention;
 use RuntimeException;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenImport\Entity\Db\Source;
 
 /**

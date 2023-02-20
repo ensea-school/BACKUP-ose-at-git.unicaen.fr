@@ -2,14 +2,14 @@
 
 namespace OffreFormation\Form;
 
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
 use Application\Form\AbstractFieldset;
-use Laminas\Form\Element\Select;
-use Laminas\Hydrator\HydratorInterface;
-use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use Application\Service\Traits\ModulateurServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
+use Laminas\Form\Element\Select;
+use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
+use OffreFormation\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
 
 /**
  * Description of ElementModulateursFieldset

@@ -4,7 +4,7 @@ $this->headTitle()->append("Gestion des disciplines");
 
 use Application\Provider\Privilege\Privileges;
 
-/* @var $disciplines \Application\Entity\Db\Discipline[] */
+/* @var $disciplines \OffreFormation\Entity\Db\Discipline[] */
 /* @var $libellesCodesCorresp string[] */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DISCIPLINE_EDITION));

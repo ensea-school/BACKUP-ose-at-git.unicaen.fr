@@ -3,19 +3,19 @@
 namespace OffreFormation\Service;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Etape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
-use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
-use RuntimeException;
 use Application\Service\Traits;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Doctrine\ORM\QueryBuilder;
 use OffreFormation\Service\Traits\CheminPedagogiqueServiceAwareTrait;
+use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use OffreFormation\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeFormationServiceAwareTrait;
+use OffreFormation\Entity\Db\Etape;
+use RuntimeException;
 
 /**
  * Description of ElementPedagogique
@@ -306,7 +306,7 @@ class EtapeService extends AbstractEntityService
 
         foreach ($entity->getCheminPedagogique() as $cp) {
             if ($cp->estNonHistorise()) {
-                /* @var $cp \Application\Entity\Db\CheminPedagogique */
+                /* @var $cp \OffreFormation\Entity\Db\CheminPedagogique */
                 $cp->getElementPedagogique()->removeCheminPedagogique($cp);
                 $entity->removeCheminPedagogique($cp);
                 $this->getServiceCheminPedagogique()->delete($cp);

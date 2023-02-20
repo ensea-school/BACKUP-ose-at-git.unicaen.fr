@@ -3,11 +3,11 @@
 namespace Application\Entity\Chargens;
 
 use Application\Entity\Chargens\Traits\NoeudAwareTrait;
-use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\Traits\ScenarioAwareTrait;
-use Application\Entity\Db\TypeHeures;
-use Application\Entity\Db\TypeIntervention;
+use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\Db\TypeHeures;
+use OffreFormation\Entity\Db\TypeIntervention;
 
 class ScenarioNoeud
 {

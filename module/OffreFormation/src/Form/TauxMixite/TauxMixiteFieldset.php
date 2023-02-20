@@ -2,14 +2,14 @@
 
 namespace OffreFormation\Form\TauxMixite;
 
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
-use Application\Entity\Db\TypeHeures;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Application\Form\AbstractFieldset;
 use Laminas\Form\Element\Text;
 use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\TypeHeures;
+use OffreFormation\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
 
 /**
  * Fieldset de saisie d'un centre de coûts pour chacun des types d'heures éligibles

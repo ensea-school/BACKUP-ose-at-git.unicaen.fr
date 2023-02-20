@@ -4,13 +4,13 @@ namespace Enseignement\View\Helper\VolumeHoraire;
 
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Tag;
-use Enseignement\Hydrator\ListeFilterHydrator;
 use Application\Provider\Privilege\Privileges;
-use Enseignement\Service\ServiceServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\VolumeHoraireListe;
-use Application\Entity\Db\TypeIntervention;
+use Enseignement\Hydrator\ListeFilterHydrator;
+use Enseignement\Service\ServiceServiceAwareTrait;
+use OffreFormation\Entity\Db\TypeIntervention;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 
 
 /**

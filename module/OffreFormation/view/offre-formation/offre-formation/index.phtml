@@ -4,20 +4,20 @@
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $structure  \Application\Entity\Db\Structure
  * @var $niveau     \Application\Entity\NiveauEtape
- * @var $etape      \Application\Entity\Db\Etape
+ * @var $etape      \OffreFormation\Entity\Db\Etape
  * @var $structures \Application\Entity\Db\Structure[]
  * @var $niveaux    \Application\Entity\NiveauEtape[]
- * @var $etapes     \Application\Entity\Db\Etape[]
- * @var $elements   \Application\Entity\Db\ElementPedagogique[]
+ * @var $etapes     \OffreFormation\Entity\Db\Etape[]
+ * @var $elements   \OffreFormation\Entity\Db\ElementPedagogique[]
  */
 
 use Application\Provider\Privilege\Privileges;
 
 
 /**
- * @param \Application\Entity\Db\Structure $structure
- * @param \Application\Entity\NiveauEtape $niveau
- * @param \Application\Entity\Db\Etape $etape
+ * @param \Application\Entity\Db\Structure    $structure
+ * @param \Application\Entity\NiveauEtape     $niveau
+ * @param \OffreFormation\Entity\Db\Etape $etape
  */
 function makeQuery($structure = null, $niveau = null, $etape = null)
 {
@@ -283,7 +283,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                     </thead>
                     <tbody>
 
-                    <?php foreach ($elements as $ep): /* @var $ep \Application\Entity\Db\ElementPedagogique */ ?>
+                    <?php foreach ($elements as $ep): /* @var $ep \OffreFormation\Entity\Db\ElementPedagogique */ ?>
                         <tr id="<?= $ep->getId() ?>">
                             <td><?= $ep->getEtape()->getNiveauToString() ?></td>
                             <td class="etape"><?= $ep->getEtape()->getCode() ?></td>

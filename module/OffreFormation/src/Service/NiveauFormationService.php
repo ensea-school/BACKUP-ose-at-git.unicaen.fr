@@ -2,8 +2,8 @@
 
 namespace OffreFormation\Service;
 
-use Application\Entity\Db\NiveauFormation;
 use Application\Service\AbstractEntityService;
+use OffreFormation\Entity\Db\NiveauFormation;
 use RuntimeException;
 
 /**

@@ -3,37 +3,36 @@
 namespace Enseignement\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\ElementPedagogique;
-use Enseignement\Entity\Db\Service;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Validation;
-use Enseignement\Form\EnseignementSaisieFormAwareTrait;
-use Laminas\View\Model\ViewModel;
-use Service\Form\RechercheFormAwareTrait;
-use Enseignement\Processus\EnseignementProcessusAwareTrait;
-use Plafond\Processus\PlafondProcessusAwareTrait;
-use Enseignement\Processus\ValidationEnseignementProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Service\Service\RegleStructureValidationServiceAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use UnicaenApp\View\Model\MessengerViewModel;
-use Laminas\Http\Request;
-use Application\Entity\Db\Intervenant;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Service\Entity\Recherche;
-use Application\Service\Traits\ContextServiceAwareTrait;
+use Enseignement\Entity\Db\Service;
+use Enseignement\Form\EnseignementSaisieFormAwareTrait;
+use Enseignement\Processus\EnseignementProcessusAwareTrait;
+use Enseignement\Processus\ValidationEnseignementProcessusAwareTrait;
 use Enseignement\Service\ServiceServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use Laminas\View\Model\ViewModel;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Service\Service\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
-use Application\Service\Traits\PeriodeServiceAwareTrait;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
+use Plafond\Processus\PlafondProcessusAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Recherche;
+use Service\Form\RechercheFormAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\RegleStructureValidationServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use UnicaenApp\View\Model\MessengerViewModel;
 
 /**
  * Description of EnseignementController
@@ -107,7 +106,7 @@ class EnseignementController extends AbstractController
     {
         $this->initFilters();
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\CheminPedagogique::class,
+            \OffreFormation\Entity\Db\CheminPedagogique::class,
         ]);
 
         /* @var $intervenant Intervenant */

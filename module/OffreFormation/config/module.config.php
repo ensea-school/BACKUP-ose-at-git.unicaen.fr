@@ -3,17 +3,20 @@
 namespace OffreFormation;
 
 use Application\Provider\Privilege\Privileges;
+use OffreFormation\Controller\DisciplineController;
 use OffreFormation\Controller\ElementPedagogiqueController;
 use OffreFormation\Controller\EtapeCentreCoutController;
 use OffreFormation\Controller\EtapeController;
 use OffreFormation\Controller\EtapeTauxRemuController;
 use OffreFormation\Controller\ModulateurController;
 use OffreFormation\Controller\OffreFormationController;
+use OffreFormation\Controller\TypeFormationController;
+use OffreFormation\Controller\TypeInterventionController;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
     'routes' => [
-        'aof' => [
+        'aof'               => [
             'route'         => '/administration-offre',
             'controller'    => OffreFormationController::class,
             'action'        => 'administrationOffre',
@@ -36,7 +39,7 @@ return [
                 ],
             ],
         ],
-        'of'  => [
+        'of'                => [
             'route'         => '/offre-de-formation',
             'order'         => 2,
             'controller'    => OffreFormationController::class,
@@ -85,13 +88,13 @@ return [
                             'action'     => 'search',
                         ],
 
-                        'get-periode'               => [
+                        'get-periode'                         => [
                             'route'       => '/get-periode/:elementPedagogique',
                             'constraints' => ['elementPedagogique' => '[0-9]*'],
                             'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'getPeriode',
                         ],
-                        'volume-horaire'            => [
+                        'volume-horaire'                      => [
                             'route'       => '/volume-horaire/:elementPedagogique',
                             'constraints' => [
                                 'elementPedagogique' => '[0-9]*',
@@ -99,7 +102,7 @@ return [
                             'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'volume-horaire',
                         ],
-                        'synchronisation'           => [
+                        'synchronisation'                     => [
                             'route'       => '/synchronisation/:elementPedagogique',
                             'constraints' => [
                                 'elementPedagogique' => '[0-9]*',
@@ -107,7 +110,7 @@ return [
                             'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'synchronisation',
                         ],
-                        'synchronisation-par-code'  => [
+                        'synchronisation-par-code'            => [
                             'route'      => '/synchronisation-par-code/:elementPedagogique',
                             'controller' => ElementPedagogiqueController::class,
                             'action'     => 'synchronisation-par-code',
@@ -120,7 +123,7 @@ return [
                             'controller'  => ElementPedagogiqueController::class,
                             'action'      => 'modulateurs-centres-couts-taux-remu',
                         ],
-                        'modifier-modulateurs'      => [
+                        'modifier-modulateurs'                => [
                             'route'       => '/modulateurs/modifier/:elementPedagogique',
                             'constraints' => [
                                 'elementPedagogique' => '[0-9]*',
@@ -200,6 +203,253 @@ return [
                 ],
             ],
         ],
+        'discipline'        => [
+            'type'          => 'Literal',
+            'options'       => [
+                'route'    => '/discipline',
+                'defaults' => [
+                    'controller' => DisciplineController::class,
+                    'action'     => 'index',
+                ],
+            ],
+            'may_terminate' => true,
+            'child_routes'  => [
+                'voir'      => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/voir/:discipline',
+                        'constraints' => [
+                            'discipline' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'voir',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'saisir'    => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/saisir[/:discipline]',
+                        'constraints' => [
+                            'discipline' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'saisir',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'supprimer' => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/supprimer/:discipline',
+                        'constraints' => [
+                            'discipline' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'supprimer',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+            ],
+        ],
+        'type-intervention' => [
+            'type'          => 'Segment',
+            'options'       => [
+                'route'    => '/type-intervention',
+                'defaults' => [
+                    'controller' => TypeInterventionController::class,
+                    'action'     => 'index',
+                ],
+            ],
+            'may_terminate' => true,
+            'child_routes'  => [
+                'saisie'                             => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/saisie[/:typeIntervention]',
+                        'constraints' => [
+                            'typeIntervention' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'saisie',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'statut'                             => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/statut/:typeIntervention',
+                        'constraints' => [
+                            'typeIntervention' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'statut',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'delete'                             => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/delete/:typeIntervention',
+                        'constraints' => [
+                            'typeIntervention' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'delete',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'type-intervention-trier'            => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'      => '/type-intervention-trier',
+                        'contraints' => [
+                        ],
+                        'defaults'   => [
+                            'action' => 'type-intervention-trier',
+                        ],
+                    ],
+                    'may_terminate' => 'true',
+                ],
+                'type-intervention-structure-saisie' => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/type-intervention-structure-saisie/:typeIntervention[/:typeInterventionStructure]',
+                        'constraints' => [
+                            'typeIntervention'          => '[0-9]*',
+                            'typeInterventionStructure' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'type-intervention-structure-saisie',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'type-intervention-structure-delete' => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/type-intervention-structure-delete/:typeInterventionStructure',
+                        'constraints' => [
+                            'typeInterventionStructure' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'type-intervention-structure-delete',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'statut-saisie'                      => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/statut-saisie/:typeIntervention[/:typeInterventionStatut]',
+                        'constraints' => [
+                            'typeIntervention'       => '[0-9]*',
+                            'typeInterventionStatut' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'statut-saisie',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'statut-delete'                      => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/statut-delete/:typeIntervention/:typeInterventionStatut',
+                        'constraints' => [
+                            'typeInterventionStatut' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'statut-delete',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+            ],
+        ],
+        'type-formation'    => [
+            'type'          => 'Literal',
+            'options'       => [
+                'route'    => '/type-formation',
+                'defaults' => [
+                    'controller' => TypeFormationController::class,
+                    'action'     => 'index',
+                ],
+            ],
+            'may_terminate' => true,
+            'child_routes'  => [
+                'saisie'           => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/saisie[/:typeFormation][/:groupeTypeFormation]',
+                        'constraints' => [
+                            'typeFormation' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'saisie',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'supprimer'        => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/supprimer/:typeFormation',
+                        'constraints' => [
+                            'typeFormation' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'supprimer',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'saisie-groupe'    => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/saisie-groupe[/:groupeTypeFormation]',
+                        'constraints' => [
+                            'groupeTypeFormation' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'saisieGroupe',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'supprimer-groupe' => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/supprimer-groupe/:groupeTypeFormation',
+                        'constraints' => [
+                            'groupeTypeFormation' => '[0-9]*',
+                        ],
+                        'defaults'    => [
+                            'action' => 'supprimerGroupe',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'trier'            => [
+                    'type'          => 'Segment',
+                    'options'       => [
+                        'route'       => '/trier/',
+                        'constraints' => [
+                        ],
+                        'defaults'    => [
+                            'action' => 'trier',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+            ],
+        ],
     ],
 
     'navigation' => [
@@ -235,7 +485,28 @@ return [
                             'order'    => 40,
                             'resource' => PrivilegeController::getResourceId(OffreFormationController::class, 'reconductionModulateur'),
                         ],
-
+                        'discipline'               => [
+                            'color'    => '#9F491F',
+                            'label'    => "Types de disciplines",
+                            'title'    => "Gestion des disciplines",
+                            'route'    => 'discipline',
+                            'resource' => PrivilegeController::getResourceId(DisciplineController::class, 'index'),
+                            'order'    => 50,
+                        ],
+                        'type-formation'           => [
+                            'label'          => 'Types de formations',
+                            'route'          => 'type-formation',
+                            'resource'       => PrivilegeController::getResourceId(TypeFormationController::class, 'index'),
+                            'order'          => 60,
+                            'border - color' => '#111',
+                        ],
+                        'type-intervention'        => [
+                            'label'    => 'Types d\'interventions',
+                            'route'    => 'type-intervention',
+                            'resource' => PrivilegeController::getResourceId(TypeInterventionController::class, 'index'),
+                            'order'    => 70,
+                            'color'    => '#71DFD7',
+                        ],
                     ],
                 ],
             ],
@@ -349,6 +620,54 @@ return [
             'action'     => ['taux-mixite'],
             'privileges' => Privileges::ODF_TAUX_MIXITE_EDITION,
         ],
+
+        /* discipline */
+        [
+            'controller' => DisciplineController::class,
+            'action'     => ['index'],
+            'privileges' => [
+                Privileges::DISCIPLINE_GESTION,
+            ],
+        ],
+        [
+            'controller' => DisciplineController::class,
+            'action'     => ['voir'],
+            'privileges' => [
+                Privileges::DISCIPLINE_VISUALISATION,
+            ],
+        ],
+        [
+            'controller' => DisciplineController::class,
+            'action'     => ['saisir', 'supprimer'],
+            'privileges' => [
+                Privileges::DISCIPLINE_EDITION,
+            ],
+        ],
+
+        /* type d'intervention */
+        [
+            'controller' => TypeInterventionController::class,
+            'action'     => ['index', 'statut'],
+            'privileges' => [Privileges::TYPE_INTERVENTION_VISUALISATION],
+        ],
+        [
+            'controller' => TypeInterventionController::class,
+            'action'     => ['saisie', 'delete', 'type-intervention-structure-saisie', 'type-intervention-structure-delete',
+                             'type-intervention-trier', 'statut-saisie', 'statut-delete'],
+            'privileges' => [Privileges::TYPE_INTERVENTION_EDITION],
+        ],
+
+        /* type formation */
+        [
+            'controller' => TypeFormationController::class,
+            'action'     => ['index'],
+            'privileges' => [Privileges::ODF_TYPE_FORMATION_VISUALISATION],
+        ],
+        [
+            'controller' => TypeFormationController::class,
+            'action'     => ['saisie', 'supprimer', 'saisieGroupe', 'supprimerGroupe', "trier"],
+            'privileges' => [Privileges::ODF_TYPE_FORMATION_EDITION],
+        ],
     ],
 
     'rules'        => [
@@ -390,42 +709,53 @@ return [
 
     ],
     'controllers'  => [
-        Controller\EtapeController::class           => Controller\Factory\EtapeControllerFactory::class,
-        Controller\ModulateurController::class      => Controller\Factory\ModulateurControllerFactory::class,
-        Controller\EtapeCentreCoutController::class => Controller\Factory\EtapeCentreCoutControllerFactory::class,
-        Controller\EtapeTauxRemuController::class   => Controller\Factory\EtapeTauxRemuControllerFactory::class,
-        OffreFormationController::class             => Controller\Factory\OffreFormationControllerFactory::class,
-        ElementPedagogiqueController::class         => Controller\Factory\ElementPedagogiqueControllerFactory::class,
+        Controller\DisciplineController::class       => Controller\Factory\DisciplineControllerFactory::class,
+        Controller\EtapeController::class            => Controller\Factory\EtapeControllerFactory::class,
+        Controller\ModulateurController::class       => Controller\Factory\ModulateurControllerFactory::class,
+        Controller\EtapeCentreCoutController::class  => Controller\Factory\EtapeCentreCoutControllerFactory::class,
+        Controller\EtapeTauxRemuController::class    => Controller\Factory\EtapeTauxRemuControllerFactory::class,
+        OffreFormationController::class              => Controller\Factory\OffreFormationControllerFactory::class,
+        ElementPedagogiqueController::class          => Controller\Factory\ElementPedagogiqueControllerFactory::class,
+        Controller\TypeInterventionController::class => Controller\Factory\TypeInterventionControllerFactory::class,
+        TypeFormationController::class               => Controller\Factory\TypeFormationControllerFactory::class,
     ],
     'services'     => [
-        Service\ElementPedagogiqueService::class   => Service\Factory\ElementPedagogiqueServiceFactory::class,
-        Service\CheminPedagogiqueService::class    => Service\Factory\CheminPedagogiqueServiceFactory::class,
-        Service\EtapeService::class                => Service\Factory\EtapeServiceFactory::class,
-        Service\TypeFormationService::class        => Service\Factory\TypeFormationServiceFactory::class,
-        Service\GroupeTypeFormationService::class  => Service\Factory\GroupeTypeFormationServiceFactory::class,
-        Service\NiveauEtapeService::class          => Service\Factory\NiveauEtapeServiceFactory::class,
-        Service\NiveauFormationService::class      => Service\Factory\NiveauFormationServiceFactory::class,
-        Service\ElementModulateurService::class    => Service\Factory\ElementModulateurServiceFactory::class,
-        Service\DomaineFonctionnelService::class   => Service\Factory\DomaineFonctionnelServiceFactory::class,
-        Service\OffreFormationService::class       => Service\Factory\OffreFormationServiceFactory::class,
-        Assertion\OffreDeFormationAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
-        Service\VolumeHoraireEnsService::class     => Service\Factory\VolumeHoraireEnsServiceFactory::class,
-        Processus\ReconductionProcessus::class     => Processus\Factory\ReconductionProcessusFactory::class,
+        Service\DisciplineService::class                => Service\Factory\DisciplineServiceFactory::class,
+        Service\ElementPedagogiqueService::class        => Service\Factory\ElementPedagogiqueServiceFactory::class,
+        Service\CheminPedagogiqueService::class         => Service\Factory\CheminPedagogiqueServiceFactory::class,
+        Service\EtapeService::class                     => Service\Factory\EtapeServiceFactory::class,
+        Service\TypeFormationService::class             => Service\Factory\TypeFormationServiceFactory::class,
+        Service\GroupeTypeFormationService::class       => Service\Factory\GroupeTypeFormationServiceFactory::class,
+        Service\NiveauEtapeService::class               => Service\Factory\NiveauEtapeServiceFactory::class,
+        Service\NiveauFormationService::class           => Service\Factory\NiveauFormationServiceFactory::class,
+        Service\ElementModulateurService::class         => Service\Factory\ElementModulateurServiceFactory::class,
+        Service\DomaineFonctionnelService::class        => Service\Factory\DomaineFonctionnelServiceFactory::class,
+        Service\OffreFormationService::class            => Service\Factory\OffreFormationServiceFactory::class,
+        Assertion\OffreDeFormationAssertion::class      => \UnicaenAuth\Assertion\AssertionFactory::class,
+        Service\VolumeHoraireEnsService::class          => Service\Factory\VolumeHoraireEnsServiceFactory::class,
+        Processus\ReconductionProcessus::class          => Processus\Factory\ReconductionProcessusFactory::class,
+        Service\TypeInterventionStructureService::class => Service\Factory\TypeInterventionStructureServiceFactory::class,
+        Service\TypeInterventionStatutService::class    => Service\Factory\TypeInterventionStatutServiceFactory::class,
     ],
     'forms'        => [
-
-        Form\ElementPedagogiqueRechercheFieldset::class       => Form\Factory\ElementPedagogiqueRechercheFieldsetFactory::class,
-        Form\EtapeSaisie::class                               => Form\Factory\EtapeSaisieFactory::class,
-        Form\ElementPedagogiqueSaisie::class                  => Form\Factory\ElementPedagogiqueSaisieFactory::class,
-        Form\ElementPedagogiqueSynchronisationForm::class     => Form\Factory\ElementPedagogiqueSynchronisationFormFactory::class,
-        Form\EtapeModulateursSaisie::class                    => Form\Factory\EtapeModulateursSaisieFactory::class,
-        Form\ElementModulateursFieldset::class                => Form\Factory\ElementModulateursFieldsetFactory::class,
-        Form\EtapeCentreCout\EtapeCentreCoutForm::class       => Form\EtapeCentreCout\EtapeCentreCoutFormFactory::class,
-        Form\EtapeTauxRemu\EtapeTauxRemuForm::class           => Form\EtapeTauxRemu\EtapeTauxRemuFormFactory::class,
-        Form\EtapeCentreCout\ElementCentreCoutFieldset::class => Form\EtapeCentreCout\ElementCentreCoutFieldsetFactory::class,
-        Form\EtapeTauxRemu\ElementTauxRemuFieldset::class     => Form\EtapeTauxRemu\ElementTauxRemuFieldsetFactory::class,
-        Form\TauxMixite\TauxMixiteForm::class                 => Form\TauxMixite\TauxMixiteFormFactory::class,
-        Form\TauxMixite\TauxMixiteFieldset::class             => Form\TauxMixite\TauxMixiteFieldsetFactory::class,
+        Form\DisciplineForm::class                                       => Form\Factory\DisciplineFormFactory::class,
+        Form\ElementPedagogiqueRechercheFieldset::class                  => Form\Factory\ElementPedagogiqueRechercheFieldsetFactory::class,
+        Form\EtapeSaisie::class                                          => Form\Factory\EtapeSaisieFactory::class,
+        Form\ElementPedagogiqueSaisie::class                             => Form\Factory\ElementPedagogiqueSaisieFactory::class,
+        Form\ElementPedagogiqueSynchronisationForm::class                => Form\Factory\ElementPedagogiqueSynchronisationFormFactory::class,
+        Form\EtapeModulateursSaisie::class                               => Form\Factory\EtapeModulateursSaisieFactory::class,
+        Form\ElementModulateursFieldset::class                           => Form\Factory\ElementModulateursFieldsetFactory::class,
+        Form\EtapeCentreCout\EtapeCentreCoutForm::class                  => Form\EtapeCentreCout\EtapeCentreCoutFormFactory::class,
+        Form\EtapeTauxRemu\EtapeTauxRemuForm::class                      => Form\EtapeTauxRemu\EtapeTauxRemuFormFactory::class,
+        Form\EtapeCentreCout\ElementCentreCoutFieldset::class            => Form\EtapeCentreCout\ElementCentreCoutFieldsetFactory::class,
+        Form\EtapeTauxRemu\ElementTauxRemuFieldset::class                => Form\EtapeTauxRemu\ElementTauxRemuFieldsetFactory::class,
+        Form\TauxMixite\TauxMixiteForm::class                            => Form\TauxMixite\TauxMixiteFormFactory::class,
+        Form\TauxMixite\TauxMixiteFieldset::class                        => Form\TauxMixite\TauxMixiteFieldsetFactory::class,
+        Form\TypeIntervention\TypeInterventionSaisieForm::class          => Form\TypeIntervention\Factory\TypeInterventionSaisieFormFactory::class,
+        Form\TypeIntervention\TypeInterventionStructureSaisieForm::class => Form\TypeIntervention\Factory\TypeInterventionStructureSaisieFormFactory::class,
+        Form\TypeIntervention\TypeInterventionStatutSaisieForm::class    => Form\TypeIntervention\Factory\TypeInterventionStatutSaisieFormFactory::class,
+        Form\TypeIntervention\TypeInterventionStatutDeleteForm::class    => Form\TypeIntervention\Factory\TypeInterventionStatutDeleteFormFactory::class,
+        Form\TypeFormation\TypeFormationSaisieForm::class                => Form\TypeFormation\TypeFormationSaisieFormFactory::class,
     ],
     'view_helpers' => [
         'etape'                               => View\Helper\Factory\EtapeViewHelperFactory::class,
@@ -439,5 +769,6 @@ return [
         'elementTauxMixiteFieldset'           => View\Helper\Factory\ElementTauxMixiteFieldsetViewHelperFactory::class,
         'fieldsetElementPedagogiqueRecherche' => View\Helper\Factory\FieldsetElementPedagogiqueRechercheFactory::class,
         'elementPedagogique'                  => View\Helper\Factory\ElementPedagogiqueViewHelperFactory::class,
+        'typeInterventionAdmin'               => View\Helper\Factory\TypeInterventionAdminViewHelperFactory::class,
     ],
 ];

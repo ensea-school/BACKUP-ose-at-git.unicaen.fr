@@ -1,12 +1,12 @@
 <?php
 
-namespace Application\Form\GroupeTypeFormation;
+namespace OffreFormation\Form\GroupeTypeFormation;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Laminas\Form\FormInterface;
-use OffreFormation\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use OffreFormation\Entity\Db\GroupeTypeFormation;
+use OffreFormation\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 

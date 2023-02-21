@@ -23,7 +23,7 @@ class DisciplineFormFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): DisciplineForm
     {
-        $form = new DisciplineForm;
+        $form = new DisciplineForm();
 
         /* Injectez vos dépendances ICI */
 

@@ -756,6 +756,7 @@ return [
         Form\TypeIntervention\TypeInterventionStatutSaisieForm::class    => Form\TypeIntervention\Factory\TypeInterventionStatutSaisieFormFactory::class,
         Form\TypeIntervention\TypeInterventionStatutDeleteForm::class    => Form\TypeIntervention\Factory\TypeInterventionStatutDeleteFormFactory::class,
         Form\TypeFormation\TypeFormationSaisieForm::class                => Form\TypeFormation\TypeFormationSaisieFormFactory::class,
+        Form\GroupeTypeFormation\GroupeTypeFormationSaisieForm::class    => Form\GroupeTypeFormation\GroupeTypeFormationSaisieFormFactory::class,
     ],
     'view_helpers' => [
         'etape'                               => View\Helper\Factory\EtapeViewHelperFactory::class,

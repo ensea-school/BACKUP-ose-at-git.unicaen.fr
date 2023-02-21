@@ -3,7 +3,7 @@
 namespace OffreFormation\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Form\Traits\DisciplineFormAwareTrait;
+use OffreFormation\Form\Traits\DisciplineFormAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use OffreFormation\Entity\Db\Discipline;

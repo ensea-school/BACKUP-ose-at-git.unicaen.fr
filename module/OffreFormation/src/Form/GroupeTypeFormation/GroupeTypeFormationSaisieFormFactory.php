@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Form\GroupeTypeFormation;
+namespace OffreFormation\Form\GroupeTypeFormation;
 
 use Psr\Container\ContainerInterface;
 use UnicaenImport\Service\SchemaService;

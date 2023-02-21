@@ -7,9 +7,9 @@ namespace OffreFormation\Controller;
 
 
 use Application\Controller\AbstractController;
-use Application\Form\GroupeTypeFormation\Traits\GroupeTypeFormationSaisieFormAwareTrait;
 use OffreFormation\Entity\Db\GroupeTypeFormation;
 use OffreFormation\Entity\Db\TypeFormation;
+use OffreFormation\Form\GroupeTypeFormation\Traits\GroupeTypeFormationSaisieFormAwareTrait;
 use OffreFormation\Form\TypeFormation\Traits\TypeFormationSaisieFormAwareTrait;
 use OffreFormation\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeFormationServiceAwareTrait;

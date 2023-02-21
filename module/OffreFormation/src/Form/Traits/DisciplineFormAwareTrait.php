@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Form\Traits;
+namespace OffreFormation\Form\Traits;
 
-use Application\Form\DisciplineForm;
+use OffreFormation\Form\DisciplineForm;
 
 /**
  * Description of DisciplineFormAwareTrait

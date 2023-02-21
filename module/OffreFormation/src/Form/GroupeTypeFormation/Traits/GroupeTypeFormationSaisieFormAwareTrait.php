@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Form\GroupeTypeFormation\Traits;
+namespace OffreFormation\Form\GroupeTypeFormation\Traits;
 
-use Application\Form\GroupeTypeFormation\GroupeTypeFormationSaisieForm;
+use OffreFormation\Form\GroupeTypeFormation\GroupeTypeFormationSaisieForm;
 
 /**
  * Description of GroupeTypeFormationSaisieFormAwareTrait

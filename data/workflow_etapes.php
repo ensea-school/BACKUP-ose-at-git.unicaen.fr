@@ -1,20 +1,6 @@
 <?php
 
 return [
-    "MISSION_SAISIE"                 => [
-        "LIBELLE_INTERVENANT" => "Je visualise mes missions",
-        "LIBELLE_AUTRES"      => "J'accède aux missions",
-        "ROUTE"               => "intervenant/missions",
-        "DESC_NON_FRANCHIE"   => "Aucune mission attibuée",
-        "OBLIGATOIRE"         => true,
-    ],
-    "MISSION_VALIDATION"             => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation de mes missions",
-        "LIBELLE_AUTRES"      => "Je valide les missions saisies",
-        "ROUTE"               => "intervenant/missions",
-        "DESC_NON_FRANCHIE"   => "Certaines missions n'ont pas été validées",
-        "OBLIGATOIRE"         => true,
-    ],
     "DONNEES_PERSO_SAISIE"           => [
         "LIBELLE_INTERVENANT" => "Je saisis mes données personnelles",
         "LIBELLE_AUTRES"      => "J'accède aux données personnelles",
@@ -48,6 +34,20 @@ return [
         "LIBELLE_AUTRES"      => "Je visualise la validation des données personnelles",
         "ROUTE"               => "intervenant/dossier",
         "DESC_NON_FRANCHIE"   => "Les données personnelles n'ont pas été validées",
+        "OBLIGATOIRE"         => true,
+    ],
+    "MISSION_SAISIE"                 => [
+        "LIBELLE_INTERVENANT" => "Je visualise mes missions",
+        "LIBELLE_AUTRES"      => "J'accède aux missions",
+        "ROUTE"               => "intervenant/missions",
+        "DESC_NON_FRANCHIE"   => "Aucune mission attibuée",
+        "OBLIGATOIRE"         => true,
+    ],
+    "MISSION_VALIDATION"             => [
+        "LIBELLE_INTERVENANT" => "Je visualise la validation de mes missions",
+        "LIBELLE_AUTRES"      => "Je valide les missions saisies",
+        "ROUTE"               => "intervenant/missions",
+        "DESC_NON_FRANCHIE"   => "Certaines missions n'ont pas été validées",
         "OBLIGATOIRE"         => true,
     ],
     "SERVICE_VALIDATION"             => [

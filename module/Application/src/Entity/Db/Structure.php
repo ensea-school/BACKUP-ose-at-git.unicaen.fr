@@ -3,14 +3,13 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\Traits\AdresseTrait;
-use Paiement\Entity\Db\TauxRemu;
-use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
-use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * Structure
@@ -38,8 +37,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     protected bool       $enseignement      = false;
 
     protected            $affAdresseContrat = true;
-
-    protected            $tauxRemu          = null;
 
 
 
@@ -110,11 +107,11 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     /**
      * Add elementPedagogique
      *
-     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @param \OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique
      *
      * @return Intervenant
      */
-    public function addElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique)
+    public function addElementPedagogique(\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique)
     {
         $this->elementPedagogique[] = $elementPedagogique;
 
@@ -126,9 +123,9 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     /**
      * Remove elementPedagogique
      *
-     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @param \OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique
      */
-    public function removeElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique)
+    public function removeElementPedagogique(\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique)
     {
         $this->elementPedagogique->removeElement($elementPedagogique);
     }
@@ -183,30 +180,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     public function getCentreCout()
     {
         return $this->centreCout;
-    }
-
-
-
-    /**
-     * Set un taux de rémunération
-     *
-     * @param TauxRemu|null $tauxRemu
-     */
-    public function setTauxRemu(?TauxRemu $tauxRemu)
-    {
-        $this->tauxRemu = $tauxRemu;
-    }
-
-
-
-    /**
-     * Get centreCout
-     *
-     * @return TauxRemu|null
-     */
-    public function getTauxRemu(): ?TauxRemu
-    {
-        return $this->tauxRemu;
     }
 
 

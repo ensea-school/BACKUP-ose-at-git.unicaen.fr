@@ -3,16 +3,16 @@
 namespace Enseignement\View\Helper;
 
 use Application\Entity\Db\Periode;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
+use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Form\EnseignementSaisieForm;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
-use Application\View\Helper\AbstractViewHelper;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 
 /**
@@ -33,7 +33,7 @@ class EnseignementSaisieFormViewHelper extends AbstractViewHelper
 
 
     /**
-     * @return \Application\Entity\Db\ElementPedagogique|null
+     * @return \OffreFormation\Entity\Db\ElementPedagogique|null
      */
     protected function getElementPedagogique()
     {

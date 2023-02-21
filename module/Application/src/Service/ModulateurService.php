@@ -3,10 +3,10 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Modulateur;
-use Application\Entity\Db\ElementPedagogique;
+use Doctrine\ORM\QueryBuilder;
 use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Doctrine\ORM\QueryBuilder;
+use OffreFormation\Entity\Db\ElementPedagogique;
 
 
 /**
@@ -55,7 +55,7 @@ class ModulateurService extends AbstractEntityService
 
     public function finderByElementPedagogique(ElementPedagogique $element, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $serviceElementModulateur = $this->getServiceElementModulateur();
 
@@ -80,7 +80,7 @@ class ModulateurService extends AbstractEntityService
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $qb->addOrderBy("$alias.libelle");
 

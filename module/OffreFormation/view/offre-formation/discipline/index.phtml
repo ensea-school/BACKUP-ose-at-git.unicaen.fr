@@ -1,0 +1,73 @@
+<?php
+
+$this->headTitle()->append("Gestion des disciplines");
+
+use Application\Provider\Privilege\Privileges;
+
+/* @var $disciplines \OffreFormation\Entity\Db\Discipline[] */
+/* @var $libellesCodesCorresp string[] */
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DISCIPLINE_EDITION));
+
+function truncCodesCorresp($value){
+    if (strlen($value) > 20) $value = '<span title="'.str_replace(',', ', ', $value).'">'.substr($value, 0, 19) . '...</span>';
+    return str_replace(',', ', ', $value);
+}
+
+
+?>
+<h1 class="page-header">Gestion des disciplines</h1>
+<table class="table table-bordered table-sort">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Libellé court</th>
+            <th>Libellé long</th>
+            <?php if (isset($libellesCodesCorresp[1])) echo '<th>'.$libellesCodesCorresp[1].'</th>' ?>
+            <?php if (isset($libellesCodesCorresp[2])) echo '<th>'.$libellesCodesCorresp[2].'</th>' ?>
+            <?php if (isset($libellesCodesCorresp[3])) echo '<th>'.$libellesCodesCorresp[3].'</th>' ?>
+            <?php if (isset($libellesCodesCorresp[4])) echo '<th>'.$libellesCodesCorresp[4].'</th>' ?>
+            <th>Src/Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach( $disciplines as $discipline ): ?>
+        <tr>
+            <td style="text-align: center"><?= $discipline->getSourceCode(); ?></td>
+            <td><?= $discipline->getLibelleCourt(); ?></td>
+            <td><?= $discipline->getLibelleLong(); ?></td>
+            <?php if (isset($libellesCodesCorresp[1])) echo '<td>'.truncCodesCorresp($discipline->getCodesCorresp1()).'</td>' ?>
+            <?php if (isset($libellesCodesCorresp[2])) echo '<td>'.truncCodesCorresp($discipline->getCodesCorresp2()).'</td>' ?>
+            <?php if (isset($libellesCodesCorresp[3])) echo '<td>'.truncCodesCorresp($discipline->getCodesCorresp3()).'</td>' ?>
+            <?php if (isset($libellesCodesCorresp[4])) echo '<td>'.truncCodesCorresp($discipline->getCodesCorresp4()).'</td>' ?>
+            <td style="text-align: center">
+            <?php if (! $discipline->getSource()->getImportable() && $canEdit): ?>
+                <a class="ajax-modal" data-event="discipline-edition" href="<?= $this->url('discipline/saisir', ['discipline' => $discipline->getId()]) ?>"
+                   title="Modifier la discipline"><i class="fas fa-pen-to-square"></i></a>
+                <a class="ajax-modal" data-event="discipline-suppression"
+                   href="<?= $this->url('discipline/supprimer', ['discipline' => $discipline->getId()]) ?>" title="Supprimer la discipline"><i
+                            class="fas fa-trash-can"></i></a>
+            <?php else: ?>
+                <?= $discipline->getSource(); ?>
+            <?php endif; ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary ajax-modal" data-event="discipline-edition" href="<?= $this->url('discipline/saisir'); ?>"><i class="fas fa-plus"></i> Ajout
+        d'une
+        nouvelle discipline</a>
+<?php endif; ?>
+<script type="text/javascript">
+    $(function () {
+        $("body").on("discipline-edition", function (event, data) {
+            window.location.reload();
+        });
+
+        $("body").on("discipline-suppression", function (event, data) {
+            window.location.reload();
+        });
+    });
+</script>

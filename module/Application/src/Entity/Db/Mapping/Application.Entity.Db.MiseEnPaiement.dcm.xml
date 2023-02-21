@@ -19,7 +19,7 @@
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <many-to-one field="typeHeures" target-entity="Application\Entity\Db\TypeHeures">
+    <many-to-one field="typeHeures" target-entity="OffreFormation\Entity\Db\TypeHeures">
       <join-columns>
         <join-column name="TYPE_HEURES_ID" referenced-column-name="ID"/>
       </join-columns>

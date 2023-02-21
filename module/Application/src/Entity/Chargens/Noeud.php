@@ -2,12 +2,12 @@
 
 namespace Application\Entity\Chargens;
 
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeIntervention;
 use Application\Provider\Chargens\ChargensProvider;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\Db\TypeIntervention;
 
 class Noeud
 {

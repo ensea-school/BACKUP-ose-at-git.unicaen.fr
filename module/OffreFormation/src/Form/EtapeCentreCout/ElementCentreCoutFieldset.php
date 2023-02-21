@@ -3,15 +3,15 @@
 namespace OffreFormation\Form\EtapeCentreCout;
 
 use Application\Entity\Db\CentreCout;
-use Application\Form\AbstractFieldset;
-use Application\Service\Traits\CentreCoutServiceAwareTrait;
-use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\TypeHeures;
-use RuntimeException;
-use Laminas\Form\Element\Select;
 use Application\Entity\Db\CentreCoutEp;
+use Application\Form\AbstractFieldset;
+use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
+use Application\Service\Traits\CentreCoutServiceAwareTrait;
+use Laminas\Form\Element\Select;
 use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\TypeHeures;
+use RuntimeException;
 
 /**
  * Fieldset de saisie d'un centre de coûts pour chacun des types d'heures éligibles

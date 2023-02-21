@@ -2,11 +2,11 @@
 
 namespace Application\Entity\Db;
 
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * CentreCoutEp
@@ -22,12 +22,12 @@ class CentreCoutEp implements HistoriqueAwareInterface, ResourceInterface, Impor
     private $id;
 
     /**
-     * @var \Application\Entity\Db\ElementPedagogique
+     * @var \OffreFormation\Entity\Db\ElementPedagogique
      */
     private $elementPedagogique;
 
     /**
-     * @var \Application\Entity\Db\TypeHeures
+     * @var \OffreFormation\Entity\Db\TypeHeures
      */
     private $typeHeures;
 
@@ -53,11 +53,11 @@ class CentreCoutEp implements HistoriqueAwareInterface, ResourceInterface, Impor
     /**
      * Set elementPedagogique
      *
-     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @param \OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique
      *
      * @return CentreCoutEp
      */
-    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
+    public function setElementPedagogique(\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique = null)
     {
         $this->elementPedagogique = $elementPedagogique;
 
@@ -69,7 +69,7 @@ class CentreCoutEp implements HistoriqueAwareInterface, ResourceInterface, Impor
     /**
      * Get elementPedagogique
      *
-     * @return \Application\Entity\Db\ElementPedagogique
+     * @return \OffreFormation\Entity\Db\ElementPedagogique
      */
     public function getElementPedagogique()
     {
@@ -81,11 +81,11 @@ class CentreCoutEp implements HistoriqueAwareInterface, ResourceInterface, Impor
     /**
      * Set typeHeures
      *
-     * @param \Application\Entity\Db\TypeHeures $typeHeures
+     * @param \OffreFormation\Entity\Db\TypeHeures $typeHeures
      *
      * @return TypeHeuresEp
      */
-    public function setTypeHeures(\Application\Entity\Db\TypeHeures $typeHeures = null)
+    public function setTypeHeures(\OffreFormation\Entity\Db\TypeHeures $typeHeures = null)
     {
         $this->typeHeures = $typeHeures;
 
@@ -97,7 +97,7 @@ class CentreCoutEp implements HistoriqueAwareInterface, ResourceInterface, Impor
     /**
      * Get typeHeures
      *
-     * @return \Application\Entity\Db\TypeHeures
+     * @return \OffreFormation\Entity\Db\TypeHeures
      */
     public function getTypeHeures()
     {

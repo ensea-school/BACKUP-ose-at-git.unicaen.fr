@@ -3,20 +3,20 @@
 namespace Application\Service;
 
 use Application\Entity\Db\MiseEnPaiement;
-use Application\Entity\Db\ServiceAPayerInterface;
-use Intervenant\Entity\Db\TypeIntervenant;
-use Application\Entity\Paiement\MiseEnPaiementRecherche;
-use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode;
+use Application\Entity\Db\ServiceAPayerInterface;
+use Application\Entity\Db\Structure;
+use Application\Entity\Paiement\MiseEnPaiementRecherche;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
-use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceReferentielServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureServiceAwareTrait;
-use Application\Service\Traits\TypeHeuresServiceAwareTrait;
 use Application\Util;
-use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
+use Intervenant\Entity\Db\TypeIntervenant;
+use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
+use RuntimeException;
 
 /**
  * Description of MiseEnPaiement

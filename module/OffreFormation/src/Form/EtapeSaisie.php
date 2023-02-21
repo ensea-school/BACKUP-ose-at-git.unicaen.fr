@@ -163,7 +163,7 @@ class EtapeSaisie extends AbstractForm
 
 
     /**
-     * @return \Application\Entity\Db\TypeFormation[]
+     * @return \OffreFormation\Entity\Db\TypeFormation[]
      */
     private function getTypesFormation()
     {
@@ -189,7 +189,7 @@ class EtapeSaisie extends AbstractForm
     {
         $pertinencesNiveau = [];
         foreach ($this->getTypesFormation() as $tf) {
-            /* @var $tf \Application\Entity\Db\TypeFormation */
+            /* @var $tf \OffreFormation\Entity\Db\TypeFormation */
             $pertinencesNiveau[$tf->getId()] = (bool)$tf->getGroupe()->getPertinenceNiveau();
         }
 
@@ -266,8 +266,8 @@ class EtapeSaisieHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                        $data
-     * @param \Application\Entity\Db\Etape $object
+     * @param array                               $data
+     * @param \OffreFormation\Entity\Db\Etape $object
      *
      * @return object
      */
@@ -296,7 +296,7 @@ class EtapeSaisieHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Db\Etape $object
+     * @param \OffreFormation\Entity\Db\Etape $object
      *
      * @return array
      */

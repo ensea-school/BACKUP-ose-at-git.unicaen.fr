@@ -268,7 +268,7 @@ return [
             Service\ServiceAPayerService::class                      => Service\ServiceAPayerService::class,
             Service\MiseEnPaiementService::class                     => Service\MiseEnPaiementService::class,
             Service\MiseEnPaiementIntervenantStructureService::class => Service\MiseEnPaiementIntervenantStructureService::class,
-            Service\TypeHeuresService::class                         => Service\TypeHeuresService::class,
+            \OffreFormation\Service\TypeHeuresService::class         => \OffreFormation\Service\TypeHeuresService::class,
             Service\CentreCoutService::class                         => Service\CentreCoutService::class,
             \OffreFormation\Service\CentreCoutEpService::class       => \OffreFormation\Service\CentreCoutEpService::class,
             Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementService::class,

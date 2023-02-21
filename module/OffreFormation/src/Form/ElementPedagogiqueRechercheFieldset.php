@@ -2,12 +2,12 @@
 
 namespace OffreFormation\Form;
 
-use Application\Entity\Db\ElementPedagogique;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Laminas\Hydrator\HydratorInterface;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use UnicaenApp\Traits\SessionContainerTrait;
 
 
@@ -386,7 +386,7 @@ class ElementPedagogiqueRechercheHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Db\ElementPedagogique $object
+     * @param \OffreFormation\Entity\Db\ElementPedagogique $object
      *
      * @return array
      */

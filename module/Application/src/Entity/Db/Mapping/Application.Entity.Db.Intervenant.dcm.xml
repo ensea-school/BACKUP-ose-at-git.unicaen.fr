@@ -22,7 +22,7 @@
         <many-to-one field="grade" target-entity="Application\Entity\Db\Grade">
             <join-column name="GRADE_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="discipline" target-entity="Application\Entity\Db\Discipline">
+        <many-to-one field="discipline" target-entity="OffreFormation\Entity\Db\Discipline">
             <join-column name="DISCIPLINE_ID" referenced-column-name="ID"/>
         </many-to-one>
 

@@ -3,15 +3,15 @@
 namespace OffreFormation\Service;
 
 
-use Application\Entity\Db\CheminPedagogique;
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Etape;
 use Application\Entity\NiveauEtape;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use OffreFormation\Entity\Db\CheminPedagogique;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
 
 /**
  * Description of OffreFormationService
@@ -62,7 +62,7 @@ class OffreFormationService extends AbstractEntityService
                 partial ep.{id,code,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa},
                 partial vme.{id,heures, groupes}
             FROM
-              Application\Entity\Db\Etape e
+              OffreFormation\Entity\Db\Etape e
               JOIN e.structure s
               JOIN e.typeFormation tf
               JOIN tf.groupe gtf
@@ -146,7 +146,7 @@ class OffreFormationService extends AbstractEntityService
                 partial ep.{id,code,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa},
                 partial vme.{id,heures, groupes}
             FROM
-              Application\Entity\Db\CheminPedagogique cp
+              OffreFormation\Entity\Db\CheminPedagogique cp
               JOIN cp.etape e
               JOIN cp.elementPedagogique ep
               LEFT JOIN ep.volumeHoraireEns vme

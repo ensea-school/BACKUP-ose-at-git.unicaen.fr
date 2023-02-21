@@ -2,10 +2,10 @@
 
 namespace OffreFormation\Form;
 
-use Application\Entity\Db\VolumeHoraireEns;
 use Application\Filter\StringFromFloat;
 use Laminas\Form\Form;
 use Laminas\InputFilter\InputFilterProviderInterface;
+use OffreFormation\Entity\Db\VolumeHoraireEns;
 
 
 /**

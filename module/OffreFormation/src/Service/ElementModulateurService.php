@@ -2,11 +2,11 @@
 
 namespace OffreFormation\Service;
 
-use Application\Entity\Db\ElementPedagogique;
 use Application\Service\AbstractEntityService;
-use RuntimeException;
-use Doctrine\ORM\QueryBuilder;
 use Application\Service\Traits\ModulateurServiceAwareTrait;
+use Doctrine\ORM\QueryBuilder;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use RuntimeException;
 
 /**
  * Description of ElementModulateur
@@ -28,7 +28,7 @@ class ElementModulateurService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\ElementModulateur::class;
+        return \OffreFormation\Entity\Db\ElementModulateur::class;
     }
 
 

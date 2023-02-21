@@ -3,13 +3,13 @@
 namespace OffreFormation\Form;
 
 use Application\Entity\Db\CentreCout;
-use Application\Entity\Db\ElementPedagogique;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Laminas\Form\Element\Select;
 use OffreFormation\Form\Traits\ElementModulateursFieldsetAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 
 /**
@@ -129,7 +129,7 @@ class ElementModulateurCentreCoutTauxRemuForm extends AbstractForm
 
 
         private
-        function createSelectElementCentreCout(\Application\Entity\Db\TypeHeures $th, ElementPedagogique $elementPedagogique)
+        function createSelectElementCentreCout(\OffreFormation\Entity\Db\TypeHeures $th, ElementPedagogique $elementPedagogique)
         {
             $filter       = function (CentreCout $centreCout) use ($th) {
                 return $centreCout->getTypeHeures()->contains($th);

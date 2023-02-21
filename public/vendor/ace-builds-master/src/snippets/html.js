@@ -138,7 +138,7 @@ snippet rel\n\
 	rel=\"${1}\"${2}\n\
 snippet scope\n\
 	scope=\"${1:row}\"${2}\n\
-snippet src\n\
+snippet \n\
 	src=\"${1}\"${2}\n\
 snippet title=\n\
 	title=\"${1}\"${2}\n\
@@ -651,7 +651,7 @@ snippet object\n\
 snippet movie\n\
 	<object width=\"$2\" height=\"$3\" classid=\"clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B\"\n\
 	 codebase=\"http://www.apple.com/qtactivex/qtplugin.cab\">\n\
-		<param name=\"src\" value=\"$1\" />\n\
+		<param name=\"\" value=\"$1\" />\n\
 		<param name=\"controller\" value=\"$4\" />\n\
 		<param name=\"autoplay\" value=\"$5\" />\n\
 		<embed src=\"${1:movie.mov}\"\n\
@@ -721,13 +721,13 @@ snippet script\n\
 	<script type=\"text/javascript\" charset=\"utf-8\">\n\
 		${1}\n\
 	</script>\n\
-snippet scriptsrc\n\
+snippet script\n\
 	<script src=\"${1}.js\" type=\"text/javascript\" charset=\"utf-8\"></script>\n\
 snippet newscript\n\
 	<script type=\"application/javascript\" charset=\"utf-8\">\n\
 		${1}\n\
 	</script>\n\
-snippet newscriptsrc\n\
+snippet newscript\n\
 	<script src=\"${1}.js\" type=\"application/javascript\" charset=\"utf-8\"></script>\n\
 snippet section\n\
 	<section>\n\

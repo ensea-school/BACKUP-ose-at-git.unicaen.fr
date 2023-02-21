@@ -1,0 +1,32 @@
+<?php
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form  \OffreFormation\Form\TypeIntervention\TypeInterventionStructureSaisieForm
+ */
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->form()->openTag($form); ?>
+<?= $this->formControlGroup($form->get('type-intervention')) ?>
+
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('structure')) ?>
+    </div>
+    <div class="col-md-6">
+        <?= '<br>'.$this->formControlGroup($form->get('visible')) ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('annee-debut')) ?>
+    </div>
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('annee-fin')) ?>
+    </div>
+</div>
+
+<?php
+echo $this->formSubmit($form->get('submit'));
+echo $this->formControlGroup($form->get('security'));
+echo $this->form()->closeTag();
+?>

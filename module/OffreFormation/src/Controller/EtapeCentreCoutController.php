@@ -3,10 +3,10 @@
 namespace OffreFormation\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Etape;
-use OffreFormation\Form\EtapeCentreCout\Traits\EtapeCentreCoutFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use OffreFormation\Form\EtapeCentreCout\Traits\EtapeCentreCoutFormAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Entity\Db\Etape;
 
 /**
  *
@@ -28,12 +28,12 @@ class EtapeCentreCoutController extends AbstractController
     protected function saisirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\ElementPedagogique::class,
+            \OffreFormation\Entity\Db\ElementPedagogique::class,
             \Application\Entity\Db\CentreCout::class,
             \Application\Entity\Db\CentreCoutEp::class
         ]);
         $this->em()->getFilters()->enable('annee')->init([
-            \Application\Entity\Db\ElementPedagogique::class,
+            \OffreFormation\Entity\Db\ElementPedagogique::class,
         ]);
 
         $etape = $this->getEvent()->getParam('etape');

@@ -3,15 +3,15 @@
 namespace Application\Provider\Chargens;
 
 use Application\Entity\Chargens\Noeud;
-use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\TypeHeuresServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use BjyAuthorize\Service\Authorize;
+use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 

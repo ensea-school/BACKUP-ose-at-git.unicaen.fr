@@ -2,12 +2,12 @@
 
 namespace OffreFormation\Form;
 
-use Application\Entity\Db\Etape;
 use Application\Form\AbstractForm;
-use OffreFormation\Form\Traits\ElementModulateursFieldsetAwareTrait;
-use Laminas\Hydrator\HydratorInterface;
-use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
+use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Form\Traits\ElementModulateursFieldsetAwareTrait;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Entity\Db\Etape;
 
 /**
  * Description of ElementModulateursSaisie
@@ -187,8 +187,8 @@ class EtapeModulateursHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                        $data
-     * @param \Application\Entity\Db\Etape $object
+     * @param array                               $data
+     * @param \OffreFormation\Entity\Db\Etape $object
      *
      * @return object
      */
@@ -202,7 +202,7 @@ class EtapeModulateursHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Db\Etape $object
+     * @param \OffreFormation\Entity\Db\Etape $object
      *
      * @return array
      */

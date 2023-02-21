@@ -2,14 +2,14 @@
 
 namespace OffreFormation\Form\TauxMixite;
 
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Etape;
-use Application\Entity\Db\Traits\EtapeAwareTrait;
-use Application\Entity\Db\TypeHeures;
 use Application\Form\AbstractForm;
-use OffreFormation\Form\TauxMixite\Traits\TauxMixiteFieldsetAwareTrait;
 use Laminas\Form\Element\Text;
 use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\Db\TypeHeures;
+use OffreFormation\Form\TauxMixite\Traits\TauxMixiteFieldsetAwareTrait;
+use OffreFormation\Entity\Db\Traits\EtapeAwareTrait;
 
 
 /**

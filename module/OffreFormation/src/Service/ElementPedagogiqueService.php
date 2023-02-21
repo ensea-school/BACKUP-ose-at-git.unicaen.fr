@@ -3,21 +3,21 @@
 namespace OffreFormation\Service;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\ElementTauxRegimes;
-use Application\Entity\Db\Etape;
 use Application\Entity\NiveauEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
-use Paiement\Entity\Db\TauxRemu;
-use RuntimeException;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
 use OffreFormation\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\ElementTauxRegimes;
+use OffreFormation\Entity\Db\Etape;
+use Paiement\Entity\Db\TauxRemu;
+use RuntimeException;
 use function count;
 
 /**
@@ -114,7 +114,7 @@ class ElementPedagogiqueService extends AbstractEntityService
             $whereContext[]   = 'CONCAT(gtf.libelle_court, e.niveau) = :niveau';
             $params['niveau'] = $niveau;
         }
-        if (isset($filters['etape']) && $filters['etape'] instanceof \Application\Entity\Db\Etape) {
+        if (isset($filters['etape']) && $filters['etape'] instanceof \OffreFormation\Entity\Db\Etape) {
             $whereContext[]  = 'cp.etape_id = :etape';
             $params['etape'] = $filters['etape']->getId();
         }
@@ -280,7 +280,7 @@ where rang = 1
     /**
      * Retourne une nouvelle entité, initialisée avec les bons paramètres
      *
-     * @return \Application\Entity\Db\ElementPedagogique
+     * @return \OffreFormation\Entity\Db\ElementPedagogique
      */
     public function newEntity()
     {
@@ -298,7 +298,7 @@ where rang = 1
     /**
      * Sauvegarde une entité
      *
-     * @param \Application\Entity\Db\ElementPedagogique $entity
+     * @param \OffreFormation\Entity\Db\ElementPedagogique $entity
      *
      * @return ElementPedagogique
      * @throws \RuntimeException
@@ -312,7 +312,7 @@ where rang = 1
         // si absence de chemin pédagogique, création du chemin
         if (!$entity->getCheminPedagogique()->count()) {
             $cp = $this->getServiceCheminPedagogique()->newEntity();
-            /* @var $cp \Application\Entity\Db\CheminPedagogique */
+            /* @var $cp \OffreFormation\Entity\Db\CheminPedagogique */
             $cp
                 ->setEtape($entity->getEtape())
                 ->setElementPedagogique($entity);
@@ -330,8 +330,8 @@ where rang = 1
     /**
      * Supprime (historise par défaut) le service spécifié.
      *
-     * @param \Application\Entity\Db\ElementPedagogique $entity Entité à détruire
-     * @param bool                                      $softDelete
+     * @param \OffreFormation\Entity\Db\ElementPedagogique $entity Entité à détruire
+     * @param bool                                             $softDelete
      *
      * @return self
      */
@@ -342,7 +342,7 @@ where rang = 1
         }
 
         foreach ($entity->getCheminPedagogique() as $cp) {
-            /* @var $cp \Application\Entity\Db\CheminPedagogique */
+            /* @var $cp \OffreFormation\Entity\Db\CheminPedagogique */
             $cp->getEtape()->removeCheminPedagogique($cp);
             $entity->removeCheminPedagogique($cp);
             $this->getServiceCheminPedagogique()->delete($cp);

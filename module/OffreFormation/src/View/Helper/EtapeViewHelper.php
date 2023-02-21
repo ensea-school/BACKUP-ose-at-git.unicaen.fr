@@ -2,13 +2,13 @@
 
 namespace OffreFormation\View\Helper;
 
-use Application\Entity\Db\Etape as Entity;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Util;
 use Application\View\Helper\AbstractViewHelper;
+use OffreFormation\Entity\Db\Etape as Entity;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
+use OffreFormation\Entity\Db\Traits\EtapeAwareTrait;
 
 /**
  * Description of ElementPedagogique

@@ -2,8 +2,9 @@
 
 namespace Application\Entity\Db;
 
-use Service\Entity\Db\TypeVolumeHoraire;
+use OffreFormation\Entity\Db\TypeHeures;
 use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 trait ServiceAPayerTrait
 {

@@ -3,10 +3,10 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\Db\Traits\AnneeAwareTrait;
-use Application\Entity\Db\Traits\GroupeTypeFormationAwareTrait;
 use Application\Entity\Db\Traits\ScenarioAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
-use Application\Entity\Db\Traits\TypeInterventionAwareTrait;
+use OffreFormation\Entity\Db\Traits\GroupeTypeFormationAwareTrait;
+use OffreFormation\Entity\Db\Traits\TypeInterventionAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 

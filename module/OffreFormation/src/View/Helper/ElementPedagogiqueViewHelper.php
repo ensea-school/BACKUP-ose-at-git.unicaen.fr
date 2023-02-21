@@ -2,11 +2,11 @@
 
 namespace OffreFormation\View\Helper;
 
-use Application\Entity\Db\ElementPedagogique as Entity;
-use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Util;
 use Laminas\View\Helper\AbstractHtmlElement;
+use OffreFormation\Entity\Db\ElementPedagogique as Entity;
+use OffreFormation\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 /**

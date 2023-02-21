@@ -21,14 +21,14 @@ class ModulateurController extends AbstractController
     protected function saisirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\ElementModulateur::class,
+            \OffreFormation\Entity\Db\ElementModulateur::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
-            \Application\Entity\Db\ElementPedagogique::class,
+            \OffreFormation\Entity\Db\ElementPedagogique::class,
         ]);
 
         $etape = $this->getEvent()->getParam('etape');
-        /* @var $etape \Application\Entity\Db\Etape */
+        /* @var $etape \OffreFormation\Entity\Db\Etape */
 
         if (!$etape) {
             throw new \RuntimeException('La formation n\'a pas été spécifiée ou bien elle est invalide.');

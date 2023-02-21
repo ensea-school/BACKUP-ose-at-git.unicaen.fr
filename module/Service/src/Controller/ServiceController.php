@@ -3,29 +3,28 @@
 namespace Service\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\ElementPedagogique;
-use Application\Service\Traits\ValidationServiceAwareTrait;
-use Enseignement\Entity\Db\Service;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Validation;
-use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
-use Service\Form\RechercheFormAwareTrait;
-use Enseignement\Processus\EnseignementProcessusAwareTrait;
-use Laminas\View\Model\ViewModel;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\ValidationServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Enseignement\Processus\EnseignementProcessusAwareTrait;
+use Laminas\Http\Request;
+use Laminas\View\Model\ViewModel;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Recherche;
+use Service\Form\RechercheFormAwareTrait;
 use Service\Service\CampagneSaisieServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Service\Service\RechercheServiceAwareTrait;
 use Service\Service\ResumeServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Laminas\Http\Request;
-use Application\Entity\Db\Intervenant;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Service\Entity\Recherche;
-use Application\Service\Traits\ContextServiceAwareTrait;
 
 /**
  * Description of ServiceController
@@ -187,13 +186,13 @@ class ServiceController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             \Enseignement\Entity\Db\Service::class,
             \Enseignement\Entity\Db\VolumeHoraire::class,
-            \Application\Entity\Db\CheminPedagogique::class,
+            \OffreFormation\Entity\Db\CheminPedagogique::class,
             \Referentiel\Entity\Db\ServiceReferentiel::class,
             \Referentiel\Entity\Db\VolumeHoraireReferentiel::class,
             \Application\Entity\Db\Validation::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
-            \Application\Entity\Db\ElementPedagogique::class,
+            \OffreFormation\Entity\Db\ElementPedagogique::class,
         ]);
 
         /* @var $intervenant Intervenant */

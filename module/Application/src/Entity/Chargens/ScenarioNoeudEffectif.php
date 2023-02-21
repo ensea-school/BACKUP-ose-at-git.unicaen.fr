@@ -3,10 +3,10 @@
 namespace Application\Entity\Chargens;
 
 use Application\Entity\Chargens\Traits\ScenarioNoeudAwareTrait;
-use Application\Entity\Db\Etape;
-use Application\Entity\Db\Traits\EtapeAwareTrait;
-use Application\Entity\Db\Traits\TypeHeuresAwareTrait;
-use Application\Entity\Db\TypeHeures;
+use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\Db\TypeHeures;
+use OffreFormation\Entity\Db\Traits\EtapeAwareTrait;
+use OffreFormation\Entity\Db\Traits\TypeHeuresAwareTrait;
 
 
 class ScenarioNoeudEffectif

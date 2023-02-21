@@ -22,11 +22,11 @@
             <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
         </many-to-one>
 
-        <many-to-one field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique">
+        <many-to-one field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique">
             <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
         </many-to-one>
 
-        <many-to-one field="typeIntervention" target-entity="Application\Entity\Db\TypeIntervention">
+        <many-to-one field="typeIntervention" target-entity="OffreFormation\Entity\Db\TypeIntervention">
             <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
         </many-to-one>
 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="OffreFormation\Entity\Db\TypeInterventionStatut" table="TYPE_INTERVENTION_STATUT">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+            <sequence-generator sequence-name="TYPE_INTERVENTION_STATU_ID_SEQ" allocation-size="1"/>
+        </id>
+        <unique-constraints>
+            <unique-constraint name="TYPE_INTERVENTION_STATUT_UN" columns="TYPE_INTERVENTION_ID,STATUT_ID,HISTO_DESTRUCTION"/>
+        </unique-constraints>
+        <field name="tauxHETDService" type="float" column="TAUX_HETD_SERVICE" nullable="true"/>
+        <field name="tauxHETDComplementaire" type="float" column="TAUX_HETD_COMPLEMENTAIRE" nullable="true"/>
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+            <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="typeIntervention" target-entity="OffreFormation\Entity\Db\TypeIntervention">
+            <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="statut" target-entity="Intervenant\Entity\Db\Statut">
+            <join-column name="STATUT_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

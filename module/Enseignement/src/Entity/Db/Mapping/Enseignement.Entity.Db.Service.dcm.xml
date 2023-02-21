@@ -23,7 +23,7 @@
         <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
             <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique">
+        <many-to-one field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique">
             <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="etablissement" target-entity="Application\Entity\Db\Etablissement">

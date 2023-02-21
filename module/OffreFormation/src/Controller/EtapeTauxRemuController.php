@@ -3,10 +3,10 @@
 namespace OffreFormation\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Etape;
-use OffreFormation\Form\EtapeTauxRemu\EtapeTauxRemuFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use OffreFormation\Form\EtapeTauxRemu\EtapeTauxRemuFormAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Entity\Db\Etape;
 
 /**
  *
@@ -28,11 +28,11 @@ class EtapeTauxRemuController extends AbstractController
     protected function saisirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\ElementPedagogique::class,
+            \OffreFormation\Entity\Db\ElementPedagogique::class,
             \Paiement\Entity\Db\TauxRemu::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
-            \Application\Entity\Db\ElementPedagogique::class,
+            \OffreFormation\Entity\Db\ElementPedagogique::class,
         ]);
 
         $etape = $this->getEvent()->getParam('etape');

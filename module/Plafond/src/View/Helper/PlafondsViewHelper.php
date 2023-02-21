@@ -2,15 +2,15 @@
 
 namespace Plafond\View\Helper;
 
-use Application\Entity\Db\ElementPedagogique;
-use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Laminas\View\Helper\AbstractHtmlElement;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use Plafond\Entity\PlafondControle;
 use Plafond\Service\PlafondServiceAwareTrait;
+use Referentiel\Entity\Db\FonctionReferentiel;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 
 /**

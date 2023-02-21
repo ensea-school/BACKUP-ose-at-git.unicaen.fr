@@ -379,6 +379,7 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
         $structure = $this->context()->structureFromQuery() ?: $this->getServiceContext()->getStructure();
         $niveau = $this->context()->niveauFromQuery();
         $etape = $this->context()->etapeFromQuery();
+        if ($etape) $etape = $this->getServiceEtape()->get($etape); // entité Niveau
         if ($niveau) $niveau = $this->getServiceNiveauEtape()->get($niveau); // entité Niveau
 
         return [$structure, $niveau, $etape];

@@ -199,11 +199,11 @@ class LocalContextService extends AbstractService
 
     /**
      *
-     * @param Etape $etape
+     * @param Etape|null $etape
      *
      * @return self
      */
-    public function setEtape(Etape $etape = null)
+    public function setEtape(?Etape $etape = null)
     {
         $this->etape                        = $etape;
         $this->getSessionContainer()->etape = $etape ? $etape->getId() : null;

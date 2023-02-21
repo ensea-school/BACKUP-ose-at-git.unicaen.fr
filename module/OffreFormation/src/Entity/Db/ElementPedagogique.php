@@ -3,10 +3,9 @@
 namespace OffreFormation\Entity\Db;
 
 use Application\Entity\Db\CentreCoutEp;
-use Application\Entity\Db\Service;
+use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
-use Application\Entity\Db\Traits\SourceAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\Traits\DisciplineAwareTrait;
@@ -18,7 +17,7 @@ use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use function Application\Entity\Db\count;
+use function count;
 
 
 /**
@@ -790,7 +789,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCentreCoutEp(TypeHeures $th = null)
+    public function getCentreCoutEp(TypeHeures $th = null): \Doctrine\Common\Collections\Collection
     {
         if (!$th) {
             return $this->centreCoutEp;

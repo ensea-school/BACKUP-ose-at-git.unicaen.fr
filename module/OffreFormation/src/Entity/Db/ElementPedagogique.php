@@ -2,11 +2,10 @@
 
 namespace OffreFormation\Entity\Db;
 
-use Application\Entity\Db\CentreCoutEp;
-use Enseignement\Entity\Db\Service;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
+use Enseignement\Entity\Db\Service;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\Traits\DisciplineAwareTrait;
 use OffreFormation\Entity\Db\Traits\EtapeAwareTrait;
@@ -730,11 +729,11 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * Add centreCoutEp
      *
-     * @param \Application\Entity\Db\CentreCoutEp $centreCoutEp
+     * @param \OffreFormation\Entity\Db\CentreCoutEp $centreCoutEp
      *
      * @return CentreCoutEp
      */
-    public function addCentreCoutEp(\Application\Entity\Db\CentreCoutEp $centreCoutEp)
+    public function addCentreCoutEp(\OffreFormation\Entity\Db\CentreCoutEp $centreCoutEp)
     {
         $this->centreCoutEp[] = $centreCoutEp;
 
@@ -746,9 +745,9 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
     /**
      * Remove centreCoutEp
      *
-     * @param \Application\Entity\Db\CentreCoutEp $centreCoutEp
+     * @param \OffreFormation\Entity\Db\CentreCoutEp $centreCoutEp
      */
-    public function removeCentreCoutEp(\Application\Entity\Db\CentreCoutEp $centreCoutEp)
+    public function removeCentreCoutEp(\OffreFormation\Entity\Db\CentreCoutEp $centreCoutEp)
     {
         $this->centreCoutEp->removeElement($centreCoutEp);
     }
@@ -777,7 +776,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
      */
     public function removeTauxRemuEp(\Paiement\Entity\Db\TauxRemu $tauxRemuEp)
     {
-        $this->centreCoutEp->removeElement($tauxRemuEp);
+        $this->tauxRemuEp->removeElement($tauxRemuEp);
     }
 
 

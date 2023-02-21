@@ -166,6 +166,9 @@ class ElementTauxRemuFieldset extends AbstractFieldset
 
 
 
+/**
+ *
+ */
 class ElementTauxRemusFieldsetHydrator implements HydratorInterface
 {
     use TauxRemuServiceAwareTrait;

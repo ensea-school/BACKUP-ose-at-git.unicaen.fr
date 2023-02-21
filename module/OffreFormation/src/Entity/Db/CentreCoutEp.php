@@ -1,7 +1,8 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace OffreFormation\Entity\Db;
 
+use Application\Entity\Db\TypeHeuresEp;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;

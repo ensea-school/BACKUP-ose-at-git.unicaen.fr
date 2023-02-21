@@ -4,9 +4,9 @@ namespace OffreFormation\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Form\EtapeCentreCout\Traits\EtapeCentreCoutFormAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use OffreFormation\Entity\Db\Etape;
 
 /**
  *
@@ -30,7 +30,7 @@ class EtapeCentreCoutController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             \OffreFormation\Entity\Db\ElementPedagogique::class,
             \Application\Entity\Db\CentreCout::class,
-            \Application\Entity\Db\CentreCoutEp::class
+            \OffreFormation\Entity\Db\CentreCoutEp::class
         ]);
         $this->em()->getFilters()->enable('annee')->init([
             \OffreFormation\Entity\Db\ElementPedagogique::class,

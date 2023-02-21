@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
+namespace OffreFormation\Entity\Db\Traits;
 
-use Application\Entity\Db\CentreCoutEp;
+use OffreFormation\Entity\Db\CentreCoutEp;
 
 /**
  * Description of CentreCoutEpAwareTrait

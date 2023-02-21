@@ -8,6 +8,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Form\Traits\ElementModulateurCentreCoutTauxRemuFormAwareTrait;
 use OffreFormation\Form\Traits\ElementPedagogiqueSaisieAwareTrait;
 use OffreFormation\Form\Traits\ElementPedagogiqueSynchronisationFormAwareTrait;
@@ -15,7 +16,6 @@ use OffreFormation\Form\Traits\VolumeHoraireEnsFormAwareTrait;
 use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
-use OffreFormation\Entity\Db\ElementPedagogique;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
@@ -301,7 +301,7 @@ class ElementPedagogiqueController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             \OffreFormation\Entity\Db\ElementModulateur::class,
             \Application\Entity\Db\CentreCout::class,
-            \Application\Entity\Db\CentreCoutEp::class,
+            \OffreFormation\Entity\Db\CentreCoutEp::class,
         ]);
 
         $element = $this->getEvent()->getParam('elementPedagogique');

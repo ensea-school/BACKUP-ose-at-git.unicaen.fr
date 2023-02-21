@@ -2,12 +2,12 @@
 
 namespace OffreFormation\Service;
 
-use Application\Entity\Db\CentreCoutEp;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
+use OffreFormation\Entity\Db\CentreCoutEp;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 

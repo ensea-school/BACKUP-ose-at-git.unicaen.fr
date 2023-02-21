@@ -4,12 +4,12 @@ namespace OffreFormation\Assertion;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\CentreCoutEp;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use OffreFormation\Entity\Db\CentreCoutEp;
 use OffreFormation\Entity\Db\ElementModulateur;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\Etape;

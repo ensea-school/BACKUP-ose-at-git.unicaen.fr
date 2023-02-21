@@ -126,6 +126,6 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
-        <one-to-many field="centreCoutEp" target-entity="Application\Entity\Db\CentreCoutEp" mapped-by="elementPedagogique"/>
+        <one-to-many field="centreCoutEp" target-entity="OffreFormation\Entity\Db\CentreCoutEp" mapped-by="elementPedagogique"/>
     </entity>
 </doctrine-mapping>

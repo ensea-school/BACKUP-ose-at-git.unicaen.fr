@@ -3,8 +3,9 @@
 namespace Application\Entity\Db;
 
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use OffreFormation\Service\DomaineFonctionnelService;
+use OffreFormation\Entity\Db\CentreCoutEp;
 use OffreFormation\Entity\Db\TypeHeures;
+use OffreFormation\Service\DomaineFonctionnelService;
 
 /**
  * FormuleResultatService

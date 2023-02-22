@@ -62,7 +62,7 @@ class EnseignementController extends AbstractController
     use WorkflowServiceAwareTrait;
     use PlafondProcessusAwareTrait;
     use EtatSortieServiceAwareTrait;
-
+    use ElementPedagogiqueServiceAwareTrait;
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -246,6 +246,7 @@ class EnseignementController extends AbstractController
         $form    = $this->getFormServiceEnseignementSaisie();
         $form->setTypeVolumeHoraire($typeVolumeHoraire);
         $element       = $this->context()->elementPedagogiqueFromPost('element');
+        $element       = $this->getServiceElementPedagogique()->get($element);
         $etablissement = $this->context()->etablissementFromPost();
 
         if ($serviceId) {

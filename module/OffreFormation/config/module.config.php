@@ -204,249 +204,134 @@ return [
             ],
         ],
         'discipline'        => [
-            'type'          => 'Literal',
-            'options'       => [
-                'route'    => '/discipline',
-                'defaults' => [
-                    'controller' => DisciplineController::class,
-                    'action'     => 'index',
-                ],
-            ],
+            'route'         => '/discipline',
+            'controller'    => DisciplineController::class,
+            'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
                 'voir'      => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/voir/:discipline',
-                        'constraints' => [
-                            'discipline' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'voir',
-                        ],
+                    'route'       => '/voir/:discipline',
+                    'constraints' => [
+                        'discipline' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'voir',
                 ],
                 'saisir'    => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/saisir[/:discipline]',
-                        'constraints' => [
-                            'discipline' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'saisir',
-                        ],
+                    'route'       => '/saisir[/:discipline]',
+                    'constraints' => [
+                        'discipline' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'saisir',
                 ],
                 'supprimer' => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/supprimer/:discipline',
-                        'constraints' => [
-                            'discipline' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'supprimer',
-                        ],
+                    'route'       => '/supprimer/:discipline',
+                    'constraints' => [
+                        'discipline' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'supprimer',
                 ],
             ],
         ],
         'type-intervention' => [
-            'type'          => 'Segment',
-            'options'       => [
-                'route'    => '/type-intervention',
-                'defaults' => [
-                    'controller' => TypeInterventionController::class,
-                    'action'     => 'index',
-                ],
-            ],
+            'route'         => '/type-intervention',
+            'controller'    => TypeInterventionController::class,
+            'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
                 'saisie'                             => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/saisie[/:typeIntervention]',
-                        'constraints' => [
-                            'typeIntervention' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'saisie',
-                        ],
+                    'route'       => '/saisie[/:typeIntervention]',
+                    'constraints' => [
+                        'typeIntervention' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'saisie',
                 ],
                 'statut'                             => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/statut/:typeIntervention',
-                        'constraints' => [
-                            'typeIntervention' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'statut',
-                        ],
+                    'route'       => '/statut/:typeIntervention',
+                    'constraints' => [
+                        'typeIntervention' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'statut',
                 ],
                 'delete'                             => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/delete/:typeIntervention',
-                        'constraints' => [
-                            'typeIntervention' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'delete',
-                        ],
+                    'route'       => '/delete/:typeIntervention',
+                    'constraints' => [
+                        'typeIntervention' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'delete',
                 ],
                 'type-intervention-trier'            => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'      => '/type-intervention-trier',
-                        'contraints' => [
-                        ],
-                        'defaults'   => [
-                            'action' => 'type-intervention-trier',
-                        ],
-                    ],
-                    'may_terminate' => 'true',
+                    'route'  => '/type-intervention-trier',
+                    'action' => 'type-intervention-trier',
                 ],
                 'type-intervention-structure-saisie' => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/type-intervention-structure-saisie/:typeIntervention[/:typeInterventionStructure]',
-                        'constraints' => [
-                            'typeIntervention'          => '[0-9]*',
-                            'typeInterventionStructure' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'type-intervention-structure-saisie',
-                        ],
+                    'route'       => '/type-intervention-structure-saisie/:typeIntervention[/:typeInterventionStructure]',
+                    'constraints' => [
+                        'typeIntervention'          => '[0-9]*',
+                        'typeInterventionStructure' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'type-intervention-structure-saisie',
                 ],
                 'type-intervention-structure-delete' => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/type-intervention-structure-delete/:typeInterventionStructure',
-                        'constraints' => [
-                            'typeInterventionStructure' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'type-intervention-structure-delete',
-                        ],
+                    'route'       => '/type-intervention-structure-delete/:typeInterventionStructure',
+                    'constraints' => [
+                        'typeInterventionStructure' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'type-intervention-structure-delete',
                 ],
                 'statut-saisie'                      => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/statut-saisie/:typeIntervention[/:typeInterventionStatut]',
-                        'constraints' => [
-                            'typeIntervention'       => '[0-9]*',
-                            'typeInterventionStatut' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'statut-saisie',
-                        ],
+                    'route'       => '/statut-saisie/:typeIntervention[/:typeInterventionStatut]',
+                    'constraints' => [
+                        'typeIntervention'       => '[0-9]*',
+                        'typeInterventionStatut' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'statut-saisie',
                 ],
                 'statut-delete'                      => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/statut-delete/:typeIntervention/:typeInterventionStatut',
-                        'constraints' => [
-                            'typeInterventionStatut' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'statut-delete',
-                        ],
+                    'route'       => '/statut-delete/:typeIntervention/:typeInterventionStatut',
+                    'constraints' => [
+                        'typeInterventionStatut' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'statut-delete',
                 ],
             ],
         ],
         'type-formation'    => [
-            'type'          => 'Literal',
-            'options'       => [
-                'route'    => '/type-formation',
-                'defaults' => [
-                    'controller' => TypeFormationController::class,
-                    'action'     => 'index',
-                ],
-            ],
+            'route'         => '/type-formation',
+            'controller'    => TypeFormationController::class,
+            'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
                 'saisie'           => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/saisie[/:typeFormation][/:groupeTypeFormation]',
-                        'constraints' => [
-                            'typeFormation' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'saisie',
-                        ],
+                    'route'       => '/saisie[/:typeFormation][/:groupeTypeFormation]',
+                    'constraints' => [
+                        'typeFormation' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'saisie',
                 ],
                 'supprimer'        => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/supprimer/:typeFormation',
-                        'constraints' => [
-                            'typeFormation' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'supprimer',
-                        ],
+                    'route'       => '/supprimer/:typeFormation',
+                    'constraints' => [
+                        'typeFormation' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'supprimer',
                 ],
                 'saisie-groupe'    => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/saisie-groupe[/:groupeTypeFormation]',
-                        'constraints' => [
-                            'groupeTypeFormation' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'saisieGroupe',
-                        ],
+                    'route'       => '/saisie-groupe[/:groupeTypeFormation]',
+                    'constraints' => [
+                        'groupeTypeFormation' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'saisieGroupe',
                 ],
                 'supprimer-groupe' => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/supprimer-groupe/:groupeTypeFormation',
-                        'constraints' => [
-                            'groupeTypeFormation' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'supprimerGroupe',
-                        ],
+                    'route'       => '/supprimer-groupe/:groupeTypeFormation',
+                    'constraints' => [
+                        'groupeTypeFormation' => '[0-9]*',
                     ],
-                    'may_terminate' => true,
+                    'action'      => 'supprimerGroupe',
                 ],
                 'trier'            => [
-                    'type'          => 'Segment',
-                    'options'       => [
-                        'route'       => '/trier/',
-                        'constraints' => [
-                        ],
-                        'defaults'    => [
-                            'action' => 'trier',
-                        ],
-                    ],
-                    'may_terminate' => true,
+                    'route'  => '/trier/',
+                    'action' => 'trier',
                 ],
             ],
         ],

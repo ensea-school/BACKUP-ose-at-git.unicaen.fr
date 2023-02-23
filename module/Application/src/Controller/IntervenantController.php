@@ -115,12 +115,14 @@ class  IntervenantController extends AbstractController
 
     public function rechercheJsonAction()
     {
-        $recherche = $this->getProcessusIntervenant()->recherche();
-        $term      = $this->getRequest()->getPost('term');
-        $term      = $this->axios()->fromPost('term');
+        $recherche    = $this->getProcessusIntervenant()->recherche();
+        $intervenants = [];
+        $term         = $this->axios()->fromPost('term');
 
+        if (!empty($term)) {
+            $intervenants = $recherche->rechercher($term, 21);
+        }
 
-        $intervenants = $recherche->rechercher($term, 21);
 
         $jsonData = [
             'data'     => $intervenants,

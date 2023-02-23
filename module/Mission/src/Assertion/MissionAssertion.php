@@ -4,9 +4,7 @@ namespace Mission\Assertion;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 

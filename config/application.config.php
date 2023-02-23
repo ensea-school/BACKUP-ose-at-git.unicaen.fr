@@ -134,6 +134,7 @@ class AppConfig
             'Referentiel',
             'Mission',
             'Paiement',
+            'OffreFormation',
             'Plafond',
             'Indicateur',
             'ExportRh',

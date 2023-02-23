@@ -8,7 +8,6 @@ namespace Application\Controller;
 
 use Application\Form\Periode\Traits\PeriodeSaisieFormAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Cassandra\Exception\ExecutionException;
 use Laminas\View\Model\JsonModel;
 use UnicaenApp\View\Model\MessengerViewModel;
 

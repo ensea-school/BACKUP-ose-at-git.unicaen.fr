@@ -5,13 +5,13 @@ namespace Mission\Form;
 use Application\Form\AbstractForm;
 use Laminas\Form\FormInterface;
 use Mission\Entity\Db\TypeMission;
-use Paiement\Service\TauxServiceAwareTrait;
+use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 class MissionTypeForm extends AbstractForm
 {
     use SchemaServiceAwareTrait;
-    use TauxServiceAwareTrait;
+    use TauxRemuServiceAwareTrait;
 
     public function init()
     {
@@ -25,7 +25,7 @@ class MissionTypeForm extends AbstractForm
             ],
         ]);
         $this->build();
-        $this->setValueOptions('tauxRemu', $this->getServiceTaux()->getTauxRemus());
+        $this->setValueOptions('tauxRemu', $this->getServiceTauxRemu()->getTauxRemus());
         $this->get('tauxRemu')->setEmptyOption("");
         $this->get('tauxRemu')->setLabel('Taux par défaut');
 

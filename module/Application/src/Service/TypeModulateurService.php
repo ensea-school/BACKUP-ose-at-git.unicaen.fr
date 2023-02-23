@@ -2,11 +2,10 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\TypeModulateur;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\TypeModulateurStructure;
+use Application\Entity\Db\TypeModulateur;
 use Doctrine\ORM\QueryBuilder;
+use OffreFormation\Entity\Db\ElementPedagogique;
 
 
 /**
@@ -62,7 +61,7 @@ class TypeModulateurService extends AbstractEntityService
      */
     public function finderByStructure(Structure $structure, QueryBuilder $qb=null, $alias=null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        [$qb,$alias] = $this->initQuery($qb, $alias);
 
         $pid = 'str'.uniqid();
         $qb->andWhere(":$pid MEMBER OF $alias.structure")->setParameter($pid, $structure);
@@ -80,7 +79,7 @@ class TypeModulateurService extends AbstractEntityService
     public function getByCode($code)
     {
         if(is_array($code)){
-            list($qb,$alias) = $this->initQuery();
+            [$qb,$alias] = $this->initQuery();
             $qb->andWhere($alias.'.code IN (:'.$alias.'_code)')->setParameter($alias.'_code', $code);
             return $this->getList( $qb );
         }elseif ($code){
@@ -100,7 +99,7 @@ class TypeModulateurService extends AbstractEntityService
     public function getById($id)
     {
         if(is_array($id)){
-            list($qb,$alias) = $this->initQuery();
+            [$qb,$alias] = $this->initQuery();
             $qb->andWhere($alias.'.id IN (:'.$alias.'_id)')->setParameter($alias.'_id', $id);
             return $this->getList( $qb );
         }elseif ($id){
@@ -119,7 +118,7 @@ class TypeModulateurService extends AbstractEntityService
      */
     public function finderByElementPedagogique(ElementPedagogique $element, QueryBuilder $qb=null, $alias=null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        [$qb,$alias] = $this->initQuery($qb, $alias);
 
         $pid = 'ep'.uniqid();
         $qb->andWhere(":$pid MEMBER OF $alias.elementPedagogique")->setParameter($pid, $element);
@@ -127,9 +126,9 @@ class TypeModulateurService extends AbstractEntityService
         return $qb;
     }
 
-    public function finderByEtape(\Application\Entity\Db\Etape $etape, QueryBuilder $qb=null, $alias=null )
+    public function finderByEtape(\OffreFormation\Entity\Db\Etape $etape, QueryBuilder $qb=null, $alias=null )
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        [$qb,$alias] = $this->initQuery($qb, $alias);
 
         $pid = 'etp'.uniqid();
         $qb->andWhere(":$pid MEMBER OF $alias.etape")->setParameter($pid, $etape);
@@ -146,7 +145,7 @@ class TypeModulateurService extends AbstractEntityService
      */
     public function getList( QueryBuilder $qb=null, $alias=null )
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        [$qb,$alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelle");
         return parent::getList($qb, $alias);
     }

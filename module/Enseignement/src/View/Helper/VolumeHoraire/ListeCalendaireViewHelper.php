@@ -4,13 +4,13 @@ namespace Enseignement\View\Helper\VolumeHoraire;
 
 use Application\Constants;
 use Application\Entity\Db\Tag;
-use Application\Entity\Db\TypeIntervention;
+use Application\Provider\Privilege\Privileges;
+use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\VolumeHoraireListe;
 use Enseignement\Hydrator\ListeFilterHydrator;
-use Application\Provider\Privilege\Privileges;
 use Enseignement\Service\ServiceServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\View\Helper\AbstractViewHelper;
+use OffreFormation\Entity\Db\TypeIntervention;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 
 
 /**

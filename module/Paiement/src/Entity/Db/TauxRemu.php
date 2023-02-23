@@ -6,7 +6,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Paiement\Service\TauxServiceAwareTrait;
+use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Util;
@@ -15,7 +15,7 @@ class TauxRemu implements HistoriqueAwareInterface
 {
 
     use HistoriqueAwareTrait;
-    use TauxServiceAwareTrait;
+    use TauxRemuServiceAwareTrait;
     use ContextServiceAwareTrait;
 
     protected ?int       $id       = null;

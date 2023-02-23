@@ -5,13 +5,13 @@ namespace ExportRh\Entity;
 use Application\Entity\Db\AdresseNumeroCompl;
 use Application\Entity\Db\Civilite;
 use Application\Entity\Db\Departement;
-use Application\Entity\Db\Discipline;
 use Application\Entity\Db\Grade;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Pays;
-use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Voirie;
+use Intervenant\Entity\Db\Statut;
+use OffreFormation\Entity\Db\Discipline;
 
 class IntervenantRh
 {

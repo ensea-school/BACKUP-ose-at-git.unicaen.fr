@@ -151,7 +151,7 @@ return [
                     'workflow-etape-code' => WfEtape::CODE_MISSION_SAISIE,
                     'withtarget'          => true,
                     'visible'             => Assertion\MissionAssertion::class,
-                    'order'               => 4,
+                    'order'               => 8,
                 ],
             ],
         ],

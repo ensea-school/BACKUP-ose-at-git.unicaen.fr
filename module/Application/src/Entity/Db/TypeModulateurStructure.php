@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+use OffreFormation\Entity\Db\TypeInterventionStructure;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 

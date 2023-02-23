@@ -2,32 +2,31 @@
 
 namespace Service\Form;
 
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Etape;
-use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Intervenant\Entity\Db\TypeIntervenant;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\NiveauEtape;
-use Service\Entity\Recherche;
 use Application\Form\AbstractForm;
-use Application\Form\OffreFormation\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
-use Laminas\Form\Element\Select;
 use Laminas\Form\Element\Hidden;
-use UnicaenApp\Form\Element\SearchAndSelect;
+use Laminas\Form\Element\Select;
 use Laminas\Form\ElementInterface;
 use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Form\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
+use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Recherche;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use UnicaenApp\Form\Element\SearchAndSelect;
+use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 
 
 /**

@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
+use OffreFormation\Entity\Db\TypeHeures;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -276,7 +276,7 @@ class CcActivite implements HistoriqueAwareInterface
     /**
      * détermine si un type d'heures peut être appliqué à ce type d'activité de centre de coûts ou non
      *
-     * @param \Application\Entity\Db\TypeHeures $typeHeures
+     * @param \OffreFormation\Entity\Db\TypeHeures $typeHeures
      *
      * @return boolean
      */

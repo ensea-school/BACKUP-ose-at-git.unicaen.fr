@@ -9,10 +9,10 @@
 
         <field name="dedoublement" type="integer" column="DEDOUBLEMENT" nullable="true"/>
 
-        <many-to-one field="typeIntervention" target-entity="Application\Entity\Db\TypeIntervention">
+        <many-to-one field="typeIntervention" target-entity="OffreFormation\Entity\Db\TypeIntervention">
             <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="groupeTypeFormation" target-entity="Application\Entity\Db\GroupeTypeFormation">
+        <many-to-one field="groupeTypeFormation" target-entity="OffreFormation\Entity\Db\GroupeTypeFormation">
             <join-column name="GROUPE_TYPE_FORMATION_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">

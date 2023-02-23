@@ -13,11 +13,13 @@
 
 // initialisation
 
-$res = [];
-$shown = [];
+use OffreFormation\Entity\Db\TypeIntervention;
+
+$res               = [];
+$shown             = [];
 $typesIntervention = [];
-$invertTi = [];
-$numericColunms = [
+$invertTi          = [];
+$numericColunms    = [
     'service-statutaire',
     'service-du-modifie',
     'heures-non-payees',
@@ -126,7 +128,7 @@ foreach ($data as $d) {
     if ($d['TYPE_INTERVENTION_ID'] != null) {
         $tid = $d['TYPE_INTERVENTION_ID'];
         if (!isset($typesIntervention[$tid])) {
-            $typesIntervention[$tid] = $entityManager->getRepository(\Application\Entity\Db\TypeIntervention::class)->find($tid);
+            $typesIntervention[$tid] = $entityManager->getRepository(TypeIntervention::class)->find($tid);
         }
         $typeIntervention = $typesIntervention[$tid];
         $invertTi['type-intervention-' . $typeIntervention->getCode()] = $typeIntervention->getId();
@@ -210,7 +212,7 @@ uasort($typesIntervention, function ($ti1, $ti2) {
     return $ti1->getOrdre() - $ti2->getOrdre();
 });
 foreach ($typesIntervention as $typeIntervention) {
-    /* @var $typeIntervention \Application\Entity\Db\TypeIntervention */
+    /* @var \OffreFormation\Entity\Db\TypeIntervention $typeIntervention */
     $head['type-intervention-' . $typeIntervention->getCode()] = $typeIntervention->getCode();
 }
 $head['heures-ref'] = 'Référentiel';

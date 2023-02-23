@@ -6,13 +6,13 @@ use Application\Filter\DateTimeFromString;
 use Application\Form\AbstractForm;
 use Application\Hydrator\GenericHydrator;
 use Paiement\Entity\Db\TauxRemu;
-use Paiement\Service\TauxServiceAwareTrait;
+use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 class TauxForm extends AbstractForm
 {
     use SchemaServiceAwareTrait;
-    use TauxServiceAwareTrait;
+    use TauxRemuServiceAwareTrait;
 
     public function init()
     {
@@ -59,7 +59,7 @@ class TauxForm extends AbstractForm
 
 class tauxRemuHydrator extends GenericHydrator
 {
-    use TauxServiceAwareTrait;
+    use TauxRemuServiceAwareTrait;
 
     public function extract($object): array
     {

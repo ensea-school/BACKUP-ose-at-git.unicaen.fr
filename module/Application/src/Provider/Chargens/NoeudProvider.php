@@ -3,10 +3,10 @@
 namespace Application\Provider\Chargens;
 
 use Application\Entity\Chargens\Noeud;
-use Application\Entity\Db\ElementPedagogique;
 use Application\Hydrator\Chargens\NoeudDbHydrator;
 use Application\Hydrator\Chargens\NoeudDiagrammeHydrator;
 use Application\Provider\Privilege\Privileges;
+use OffreFormation\Entity\Db\ElementPedagogique;
 
 class NoeudProvider
 {

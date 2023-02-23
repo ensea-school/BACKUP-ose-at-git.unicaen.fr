@@ -2,18 +2,18 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etablissement;
-use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Referentiel\Service\ServiceReferentielServiceAwareTrait;
-use Enseignement\Service\ServiceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
+use Referentiel\Service\ServiceReferentielServiceAwareTrait;
+use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 /**
  * Description of FormuleResultat

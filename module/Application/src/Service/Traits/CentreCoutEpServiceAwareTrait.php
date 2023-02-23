@@ -2,7 +2,7 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\CentreCoutEpService;
+use OffreFormation\Service\CentreCoutEpService;
 
 /**
  * Description of CentreCoutEpServiceAwareTrait

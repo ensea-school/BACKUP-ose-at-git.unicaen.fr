@@ -588,7 +588,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                         that.saving = false;
                     },
                     error: function (jqXHR) {
-                        Util.alert(jqXHR.responseText, 'error');
+                        alertFlash(jqXHR.responseText, 'error', 5000);
                         console.log(jqXHR);
                         that.saving = false;
                     }

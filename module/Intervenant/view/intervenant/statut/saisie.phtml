@@ -280,12 +280,17 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                         <?= $this->formControlGroup($form->get('modificationServiceDu')); ?>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('tauxRemu')); ?>
+                    </div>
+                </div>
+
                 <?= $this->formControlGroup($form->get('depassementServiceDuSansHC')); ?>
                 <?= $this->formControlGroup($form->get('cloture')); ?>
                 <?= $this->formControlGroup($form->get('motifNonPaiement')); ?>
                 <?= $this->formControlGroup($form->get('formuleVisualisation')); ?>
                 <?= $this->formControlGroup($form->get('paiementVisualisation')); ?>
-                <?= $this->formControlGroup($form->get('tauxRemu')); ?>
             </div>
         </div>
 

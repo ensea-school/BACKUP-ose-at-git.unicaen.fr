@@ -65,7 +65,7 @@
         <join-column name="ACTIVITE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-many field="typeHeures" target-entity="Application\Entity\Db\TypeHeures">
+    <many-to-many field="typeHeures" target-entity="OffreFormation\Entity\Db\TypeHeures">
         <join-table name="V_CENTRE_COUT_TYPE_HEURES">
             <join-columns>
                 <join-column name="CENTRE_COUT_ID" referenced-column-name="ID" />

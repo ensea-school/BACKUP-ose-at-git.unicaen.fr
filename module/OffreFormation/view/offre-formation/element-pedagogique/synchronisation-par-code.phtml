@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @var $this   \Application\View\Renderer\PhpRenderer
+ *
+ * @var $form   \OffreFormation\Form\ElementPedagogiqueSynchronisationForm
+ * @var $errors array
+ */
+
+if ($form) {
+    echo $this->form($form);
+} else {
+    ?>
+    Veuillez patienter pendant que la page se met à jour...
+    <script>
+        window.location.reload();
+    </script>
+    <?php
+}

@@ -382,6 +382,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'TAUX_REMU_ID',
     ],
     'ELEMENT_TAUX_REGIMES'           => [
         'ID',

@@ -3,17 +3,15 @@
 namespace Enseignement\Form;
 
 use Application\Entity\Db\Periode;
+use Application\Form\AbstractForm;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
-use Laminas\Form\FormInterface;
-use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
-use Application\Form\AbstractForm;
-use Enseignement\Form\EnseignementSaisieFieldsetAwareTrait;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Entity\Db\Etablissement;
 use Laminas\Form\Element\Hidden;
+use Laminas\Form\FormInterface;
 use Laminas\Hydrator\HydratorInterface;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 
 
 /**

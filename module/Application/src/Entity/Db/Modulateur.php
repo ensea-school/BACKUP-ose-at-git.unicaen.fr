@@ -2,10 +2,9 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Modulateur
@@ -213,11 +212,11 @@ class Modulateur implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Add elementModulateur
      *
-     * @param \Application\Entity\Db\ElementModulateur $elementModulateur
+     * @param \OffreFormation\Entity\Db\ElementModulateur $elementModulateur
      *
      * @return self
      */
-    public function addElementModulateur(\Application\Entity\Db\ElementModulateur $elementModulateur)
+    public function addElementModulateur(\OffreFormation\Entity\Db\ElementModulateur $elementModulateur)
     {
         $this->elementModulateur[] = $elementModulateur;
 
@@ -229,7 +228,7 @@ class Modulateur implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Remove elementModulateur
      *
-     * @param \Application\Entity\Db\ElementModulateur $elementModulateur
+     * @param \OffreFormation\Entity\Db\ElementModulateur $elementModulateur
      */
     public function removeElementModulateur(\Enseignement\Entity\Db\Service $elementModulateur)
     {

@@ -4,23 +4,23 @@ namespace Enseignement\Processus;
 
 use Application\Entity\Db\Intervenant;
 use Application\Processus\AbstractProcessus;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\ParametresServiceAwareTrait;
-use Enseignement\Entity\Db\Service;
-use Enseignement\Service\ServiceServiceAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Service\Entity\Recherche;
-use Service\Service\EtatVolumeHoraireService;
 use Application\Service\IntervenantService;
 use Application\Service\MotifNonPaiementService;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Application\Service\Traits\EtapeServiceAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
+use Enseignement\Entity\Db\Service;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
-use Application\Service\TypeInterventionService;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
+use OffreFormation\Service\TypeInterventionService;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Recherche;
+use Service\Service\EtatVolumeHoraireService;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 

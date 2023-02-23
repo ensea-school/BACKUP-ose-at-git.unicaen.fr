@@ -6,13 +6,13 @@ use Application\Entity\Chargens\Noeud;
 use Application\Entity\Chargens\ScenarioNoeud;
 use Application\Entity\Chargens\ScenarioNoeudEffectif;
 use Application\Entity\Chargens\ScenarioNoeudSeuil;
-use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
-use Application\Entity\Db\TypeHeures;
-use Application\Entity\Db\TypeIntervention;
 use Application\Hydrator\Chargens\ScenarioNoeudDbHydrator;
 use Application\Hydrator\Chargens\ScenarioNoeudEffectifDbHydrator;
 use Application\Hydrator\Chargens\ScenarioNoeudSeuilDbHydrator;
+use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\Db\TypeHeures;
+use OffreFormation\Entity\Db\TypeIntervention;
 
 class ScenarioNoeudProvider
 {

@@ -3,8 +3,8 @@
 namespace Application\View\Helper\Paiement;
 
 use Laminas\View\Helper\AbstractHelper;
-use Application\Entity\Db\TypeHeures;
-use Application\Entity\Db\Traits\TypeHeuresAwareTrait;
+use OffreFormation\Entity\Db\TypeHeures;
+use OffreFormation\Entity\Db\Traits\TypeHeuresAwareTrait;
 
 /**
  * Description of ElementPedagogique

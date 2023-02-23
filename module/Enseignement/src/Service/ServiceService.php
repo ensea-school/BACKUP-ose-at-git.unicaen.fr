@@ -2,42 +2,39 @@
 
 namespace Enseignement\Service;
 
-use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etablissement;
-use Application\Entity\Db\Etape;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
+use Application\Entity\Db\Structure;
+use Application\Entity\NiveauEtape;
 use Application\Service\AbstractEntityService;
-use Application\Service\ElementPedagogiqueService;
 use Application\Service\EtablissementService;
 use Application\Service\PeriodeService;
-use Application\Service\TypeInterventionService;
-use Service\Entity\Db\EtatVolumeHoraire;
-use Application\Entity\Db\Intervenant;
-use Enseignement\Entity\Db\Service;
-use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeIntervention;
-use Intervenant\Entity\Db\TypeIntervenant;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\NiveauEtape;
-use Service\Entity\Recherche;
-use Enseignement\Entity\VolumeHoraireListe;
-use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Intervenant\Service\TypeIntervenantServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
-use Laminas\Session\Container as SessionContainer;
+use Enseignement\Entity\Db\Service;
+use Enseignement\Entity\VolumeHoraireListe;
+use Intervenant\Entity\Db\TypeIntervenant;
+use Intervenant\Service\StatutServiceAwareTrait;
+use Intervenant\Service\TypeIntervenantServiceAwareTrait;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\Db\TypeIntervention;
+use OffreFormation\Service\ElementPedagogiqueService;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
+use OffreFormation\Service\TypeInterventionService;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 /**
  * Description of Service

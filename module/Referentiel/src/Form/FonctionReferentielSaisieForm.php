@@ -5,7 +5,7 @@ namespace Referentiel\Form;
 use Application\Provider\Privilege\Privileges;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Referentiel\Service\FonctionReferentielServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Util;

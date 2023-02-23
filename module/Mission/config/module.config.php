@@ -16,22 +16,19 @@ return [
     'routes' => [
         'intervenant'   => [
             'child_routes' => [
-                'missions' => [
-                    'route'         => '/:intervenant/missions',
-                    'controller'    => MissionController::class,
-                    'action'        => 'index',
-                    'privileges'    => Privileges::MISSION_VISUALISATION,
+                'missions'       => [
+                    'route'      => '/:intervenant/missions',
+                    'controller' => MissionController::class,
+                    'action'     => 'index',
+                    'privileges' => Privileges::MISSION_VISUALISATION,
                     //'assertion'  => Assertion\MissionAssertion::class,
-                    'may_terminate' => true,
-                    'child_routes'  => [
-                        'modification' => [
-                            'route'      => '/modification',
-                            'controller' => MissionController::class,
-                            'action'     => 'modification',
-                            'privileges' => Privileges::MISSION_EDITION,
-                            //'assertion'  => Assertion\MissionAssertion::class,
-                        ],
-                    ],
+                ],
+                'missions-suivi' => [
+                    'route'      => '/:intervenant/missions-suivi',
+                    'controller' => MissionController::class,
+                    'action'     => 'suivi',
+                    'privileges' => Privileges::MISSION_EDITION_REALISE,
+                    //'assertion'  => Assertion\MissionAssertion::class,
                 ],
             ],
         ],
@@ -66,11 +63,6 @@ return [
                     'action'     => 'saisie',
                     'privileges' => Privileges::MISSION_EDITION,
                     //'assertion'  => Assertion\MissionAssertion::class,
-                ],
-                'suivi'          => [
-                    'route'      => '/suivi/:intervenant',
-                    'controller' => MissionController::class,
-                    'action'     => 'suivi',
                 ],
                 'supprimer'      => [
                     'route'      => '/supprimer/:mission',
@@ -121,17 +113,20 @@ return [
             'route'         => '/missions-type',
             'controller'    => MissionTypeController::class,
             'action'        => 'index',
+            'privileges'    => Privileges::MISSION_VISUALISATION_TYPE,
             'may_terminate' => true,
             'child_routes'  => [
                 'saisir'    => [
                     'route'      => '/saisir[/:typeMission]',
                     'controller' => MissionTypeController::class,
                     'action'     => 'saisir',
+                    'privileges' => Privileges::MISSION_EDITION_TYPE,
                 ],
                 'supprimer' => [
                     'route'      => '/supprimer/:typeMission',
                     'controller' => MissionTypeController::class,
                     'action'     => 'supprimer',
+                    'privileges' => Privileges::MISSION_SUPPRESSION_TYPE,
                 ],
             ],
         ],
@@ -141,7 +136,7 @@ return [
     'navigation' => [
         'intervenant'    => [
             'pages' => [
-                'missions' => [
+                'missions'       => [
                     'label'               => "Missions",
                     'title'               => "Missions",
                     'route'               => 'intervenant/missions',
@@ -152,6 +147,18 @@ return [
                     'withtarget'          => true,
                     'visible'             => Assertion\MissionAssertion::class,
                     'order'               => 8,
+                ],
+                'missions-suivi' => [
+                    'label'               => "Suivi de missions",
+                    'title'               => "Suivi de missions",
+                    'route'               => 'intervenant/missions-suivi',
+                    'paramsInject'        => [
+                        'intervenant',
+                    ],
+                    'workflow-etape-code' => WfEtape::CODE_MISSION_SAISIE_REALISE,
+                    'withtarget'          => true,
+                    'visible'             => Assertion\MissionAssertion::class,
+                    'order'               => 10,
                 ],
             ],
         ],
@@ -172,30 +179,6 @@ return [
     ],
 
     'rules' => [
-    ],
-
-    'guards' => [
-        [
-            'controller' => MissionTypeController::class,
-            'action'     => ['index'],
-            'privileges' => [
-                Privileges::MISSION_VISUALISATION_TYPE,
-            ],
-        ],
-        [
-            'controller' => MissionTypeController::class,
-            'action'     => ['saisir'],
-            'privileges' => [
-                Privileges::MISSION_EDITION_TYPE,
-            ],
-        ],
-        [
-            'controller' => MissionTypeController::class,
-            'action'     => ['supprimer'],
-            'privileges' => [
-                Privileges::MISSION_SUPPRESSION_TYPE,
-            ],
-        ],
     ],
 
     'controllers' => [

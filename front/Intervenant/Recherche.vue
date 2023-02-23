@@ -46,10 +46,17 @@ export default {
       console.log(this.searchTerm);
 
       axios.post(
-          Util.url("intervenant/recherche-json"), {term: this.searchTerm}
-      ).then(response => {
-        this.intervenants = response.data;
-      });
+          Util.url("intervenant/recherche-json"), {
+            term: 'dupo'
+          })
+          .then(function (response) {
+            console.log(response.data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+      ;
     },
   }
 }

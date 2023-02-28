@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.7](#ose-197--16122022-)
+[OSE 20.0](#ose-20--28022023-)
 
 
 # OSE 21 (à venir)
@@ -8,11 +8,11 @@
 ## Nouveautés
 
 * Nouvelle notion de mission, permettant de gérer les contrats étudiants
+* Taux HETD personnalisables
 
 
 
-
-# OSE 20 (fin février 2023)
+# OSE 20 (28/02/2023)
 
 ## Nouveautés
 
@@ -46,6 +46,7 @@
 * Utilisation prioritaire de l'email personnel des données personnelles pour l'envoi d'email via les indicateurs (#48393)
 * Meilleure gestion de la casse lors de la recherche d'un employeur (#48543)
 * Ajout d'une contrainte d'unicité sur la colonne code de la table type_intervention (#48727)
+* Correction formule d'UVSQ (#47149)
 * Et beaucoup d'autres ...
 
 ## Notes de mise à jour

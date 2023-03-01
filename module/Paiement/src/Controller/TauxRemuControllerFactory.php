@@ -7,22 +7,22 @@ use Paiement\Service\TauxRemuService;
 use Psr\Container\ContainerInterface;
 
 /**
- * Description of TauxControllerFactory
+ * Description of TauxRemuControllerFactory
  *
  * @author Florian Joriot <florian.joriot at unicaen.fr>
  */
-class TauxControllerFactory
+class TauxRemuControllerFactory
 {
     /**
      * @param ContainerInterface $container
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return TauxController
+     * @return TauxRemuController
      */
-    public function __invoke(ContainerInterface $container, $requestedName, $options = null): TauxController
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null): TauxRemuController
     {
-        $controller = new TauxController;
+        $controller = new TauxRemuController;
         $controller->setServiceTauxRemu($container->get(TauxRemuService::class));
         $controller->setServiceContext($container->get(ContextService::class));
 

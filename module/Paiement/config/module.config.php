@@ -3,7 +3,7 @@
 namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
-use Paiement\Controller\TauxController;
+use Paiement\Controller\TauxRemuController;
 use Paiement\Service\TauxRemuService;
 use Paiement\Service\TauxRemuServiceFactory;
 use UnicaenAuth\Guard\PrivilegeController;
@@ -13,38 +13,38 @@ return [
     'routes' => [
         'taux' => [
             'route'         => '/taux',
-            'controller'    => TauxController::class,
+            'controller'    => TauxRemuController::class,
             'action'        => 'index',
             'may_terminate' => true,
             'child_routes'  => [
                 'saisir'           => [
                     'route'      => '/saisir[/:tauxRemu]',
-                    'controller' => TauxController::class,
+                    'controller' => TauxRemuController::class,
                     'action'     => 'saisir',
                 ],
                 'get'              => [
                     'route'      => '/get/:tauxRemu',
-                    'controller' => TauxController::class,
+                    'controller' => TauxRemuController::class,
                     'action'     => 'get',
                 ],
                 'liste-taux'       => [
                     'route'      => '/liste-taux',
-                    'controller' => TauxController::class,
+                    'controller' => TauxRemuController::class,
                     'action'     => 'getListeTaux',
                 ],
                 'supprimer'        => [
                     'route'      => '/supprimer/:tauxRemu',
-                    'controller' => TauxController::class,
+                    'controller' => TauxRemuController::class,
                     'action'     => 'supprimer',
                 ],
                 'saisir-valeur'    => [
                     'route'      => '/saisir-valeur[/:tauxRemu][/:tauxRemuValeur]',
-                    'controller' => TauxController::class,
+                    'controller' => TauxRemuController::class,
                     'action'     => 'saisirValeur',
                 ],
                 'supprimer-valeur' => [
                     'route'      => '/supprimer-valeur/:tauxRemuValeur',
-                    'controller' => TauxController::class,
+                    'controller' => TauxRemuController::class,
                     'action'     => 'supprimerValeur',
                 ],
             ],
@@ -60,7 +60,7 @@ return [
                         'taux' => [
                             'label'    => "Taux de rémunération",
                             'route'    => 'taux',
-                            'resource' => PrivilegeController::getResourceId(TauxController::class, 'index'),
+                            'resource' => PrivilegeController::getResourceId(TauxRemuController::class, 'index'),
                             'order'    => 60,
                         ],
                     ],
@@ -74,21 +74,21 @@ return [
 
     'guards' => [
         [
-            'controller' => TauxController::class,
+            'controller' => TauxRemuController::class,
             'action'     => ['index', 'get', 'getListeTaux'],
             'privileges' => [
                 Privileges::TAUX_VISUALISATION,
             ],
         ],
         [
-            'controller' => TauxController::class,
+            'controller' => TauxRemuController::class,
             'action'     => ['saisir', 'saisirValeur'],
             'privileges' => [
                 Privileges::TAUX_EDITION,
             ],
         ],
         [
-            'controller' => TauxController::class,
+            'controller' => TauxRemuController::class,
             'action'     => ['supprimer', 'supprimerValeur'],
             'privileges' => [
                 Privileges::TAUX_SUPPRESSION,
@@ -97,7 +97,7 @@ return [
     ],
 
     'controllers' => [
-        TauxController::class => Controller\TauxControllerFactory::class,
+        TauxRemuController::class => Controller\TauxRemuControllerFactory::class,
     ],
 
     'services' => [

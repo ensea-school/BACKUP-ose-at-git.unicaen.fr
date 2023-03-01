@@ -11,11 +11,11 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 /**
- * Description of TauxController
+ * Description of TauxRemuController
  *
  * @author Florian Joriot <florian.joriot at unicaen.fr>
  */
-class TauxController extends AbstractController
+class TauxRemuController extends AbstractController
 {
     use TauxRemuServiceAwareTrait;
     use ContextServiceAwareTrait;

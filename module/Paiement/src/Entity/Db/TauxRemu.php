@@ -304,7 +304,7 @@ class TauxRemu implements HistoriqueAwareInterface
                 $valeurs[] = $valeur;
                 break;
             }
-            if ($date >= new DateTime($dateDebutAnnee) && new $date < new DateTime($dateFinAnnee)) {
+            if ($date >= new DateTime($dateDebutAnnee) && $date < new DateTime($dateFinAnnee)) {
                 $valeurs[] = $valeur;
                 $temp      = $date;
             }

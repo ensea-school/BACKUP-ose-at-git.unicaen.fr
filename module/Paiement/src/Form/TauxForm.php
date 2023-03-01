@@ -29,7 +29,7 @@ class TauxForm extends AbstractForm
         ]);
         $this->build();
 
-        $this->setValueOptions('tauxRemu', $this->getServiceTaux()->getTauxRemusIndexable());
+        $this->setValueOptions('tauxRemu', $this->getServiceTauxRemu()->getTauxRemusIndexable());
         $this->get('tauxRemu')->setEmptyOption("");
         $this->get('tauxRemu')->setLabel('Taux de référence');
 
@@ -84,6 +84,6 @@ class tauxRemuHydrator extends GenericHydrator
         $object->setValeur(DateTimeFromString::run($data['date']), $data['valeur']);
         $object->setCode($data['code']);
         $object->setLibelle($data['libelle']);
-        $object->setTauxRemu($this->getServiceTaux()->get($data['tauxRemu']));
+        $object->setTauxRemu($this->getServiceTauxRemu()->get($data['tauxRemu']));
     }
 }

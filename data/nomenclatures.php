@@ -899,6 +899,41 @@ return [
         ],
     ],
 
+    'TAUX_REMU' => [
+        [
+            'ID'      => 1,
+            'CODE'    => 'TLD',
+            'LIBELLE' => 'Taux légal par défaut',
+        ],
+    ],
+
+    'TAUX_REMU_VALEUR' => [
+        [
+            'ID'           => 1,
+            'TAUX_REMu_ID' => 1,
+            'DATE_EFFET'   => '27/07/09',
+            'VALEUR'       => 40.58,
+        ],
+        [
+            'ID'           => 2,
+            'TAUX_REMu_ID' => 1,
+            'DATE_EFFET'   => '25/06/14',
+            'VALEUR'       => 40.91,
+        ],
+        [
+            'ID'           => 3,
+            'TAUX_REMu_ID' => 1,
+            'DATE_EFFET'   => '01/02/17',
+            'VALEUR'       => 41.41,
+        ],
+        [
+            'ID'           => 4,
+            'TAUX_REMu_ID' => 1,
+            'DATE_EFFET'   => '01/07/22',
+            'VALEUR'       => 42.86,
+        ],
+    ],
+
     'UTILISATEUR' => [
         [
             'USERNAME'             => 'oseappli',

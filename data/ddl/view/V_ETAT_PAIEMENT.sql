@@ -116,7 +116,16 @@ SELECT
                                 mis.heures_ac                                                       exercice_ac,
                              --CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END * 4 / 10                                                 exercice_aa,
                              --CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END * 6 / 10                                                 exercice_ac,
-                                OSE_FORMULE.GET_TAUX_HORAIRE_HETD( NVL(mep.date_mise_en_paiement,SYSDATE) )      taux_horaire
+                                OSE_PAIEMENT.GET_TAUX_HORAIRE(
+                                    CASE
+                                        WHEN (ep.taux_remu_id IS NOT NULL) THEN ep.taux_remu_id
+                                        WHEN (si.taux_remu_id IS NOT NULL) THEN si.taux_remu_id
+                                        ELSE tr.id
+                                    END,
+                                    NVL(mep.date_mise_en_paiement,SYSDATE)
+                                )      taux_horaire
+                             --OSE_FORMULE.GET_TAUX_HORAIRE_HETD( NVL(mep.date_mise_en_paiement,SYSDATE) )      taux_horaire
+
                          FROM
                                      tbl_paiement mis
                                 JOIN mise_en_paiement        mep ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
@@ -130,6 +139,9 @@ SELECT
                            LEFT JOIN validation                v ON   v.id = mep.validation_id       AND v.histo_destruction IS NULL
                            LEFT JOIN domaine_fonctionnel      df ON  df.id = mis.domaine_fonctionnel_id
                            LEFT JOIN periode                   p ON   p.id = mep.periode_paiement_id
+                           LEFT JOIN service                  se ON   mis.service_id = se.id
+                           LEFT JOIN element_pedagogique      ep ON   ep.id = se.element_pedagogique_id
+                           LEFT JOIN taux_remu                tr ON   tr.code = OSE_PAIEMENT.get_code_taux_remu_legal()
                      )
                      SELECT
                             periode_id,

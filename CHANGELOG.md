@@ -71,6 +71,13 @@ A la **ligne 206** Ajouter le titre de colonne TAG dans le tableau $head :
   
     'tag' => 'Tags',
 
+Le système de mise à jour peut - dans certaines circonstances - vous afficher quelques erreurs qui sont sans impact 
+sur le bon fonctionnement de l'application.
+Je vais modifier les scripts de mise à jour pour éviter qu'elles ne se produisent.
+Mais en attendant, si vous y êtes confrontés, vous en trouverez les explications sur le ticket suivant :
+https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_position=1&next_issue_id=48972
+
+
 
 # OSE 19.7 (16/12/2022)
 

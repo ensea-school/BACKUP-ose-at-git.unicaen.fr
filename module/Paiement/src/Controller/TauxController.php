@@ -38,14 +38,14 @@ class TauxController extends AbstractController
         ]);
 
 
-        $tauxListe = $this->getServiceTaux()->getTauxRemus();
-        $tauxListe = $this->getServiceTaux()->getTauxRemusAnnee($tauxListe);
+        $tauxListe = $this->getServiceTauxRemu()->getTauxRemus();
+        $tauxListe = $this->getServiceTauxRemu()->getTauxRemusAnnee($tauxListe);
 
         $liste = [];
 
         foreach ($tauxListe as $taux) {
             //Calcul de la liste des taux
-            $liste[$taux->getId()] = $this->getServiceTaux()->tauxWs($taux);
+            $liste[$taux->getId()] = $this->getServiceTauxRemu()->tauxWs($taux);
         }
 
 
@@ -61,7 +61,7 @@ class TauxController extends AbstractController
         $form     = $this->getFormTaux();
         if (empty($tauxRemu)) {
             $title    = "Création d'un nouveau taux";
-            $tauxRemu = $this->getServiceTaux()->newEntity();
+            $tauxRemu = $this->getServiceTauxRemu()->newEntity();
         } else {
             $title = "Édition d'un taux";
         }
@@ -95,9 +95,9 @@ class TauxController extends AbstractController
 
         if (empty($tauxRemuValeurId)) {
             $title          = "Création d'une nouvelle valeur";
-            $tauxRemuValeur = $this->getServiceTaux()->newEntityValeur();
+            $tauxRemuValeur = $this->getServiceTauxRemu()->newEntityValeur();
         } else {
-            $tauxRemuValeur = $this->getServiceTaux()->getTauxRemusValeur($tauxRemuValeurId);
+            $tauxRemuValeur = $this->getServiceTauxRemu()->getTauxRemusValeur($tauxRemuValeurId);
             $title          = "Édition d'une valeur";
         }
 
@@ -123,7 +123,7 @@ class TauxController extends AbstractController
     public function supprimerAction(): \Laminas\View\Model\JsonModel
     {
         $tauxRemu = $this->getEvent()->getParam('tauxRemu');
-        $this->getServiceTaux()->delete($tauxRemu, true);
+        $this->getServiceTauxRemu()->delete($tauxRemu, true);
 
         $this->flashMessenger()->addSuccessMessage("Taux supprimée avec succès.");
 
@@ -145,7 +145,7 @@ class TauxController extends AbstractController
     public function supprimerValeurAction(): MessengerViewModel
     {
         $tauxRemuValeurId = $this->params()->fromRoute('tauxRemuValeur');
-        $tauxRemuValeur   = $this->getServiceTaux()->getTauxRemusValeur($tauxRemuValeurId);
+        $tauxRemuValeur   = $this->getServiceTauxRemu()->getTauxRemusValeur($tauxRemuValeurId);
         $this->em()->remove($tauxRemuValeur);
         $this->em()->flush();
 

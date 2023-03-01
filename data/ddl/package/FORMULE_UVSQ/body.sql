@@ -373,6 +373,8 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UVSQ AS
         WHEN c = 'AQ' AND v >= 1 THEN
           IF cell('AO17') = 0 THEN
             RETURN (cell('AN',l) - cell('AP',l)) / cell('AE',l);
+          ELSE
+            RETURN 0;
           END IF;
 
 

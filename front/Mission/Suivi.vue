@@ -1,5 +1,5 @@
 <template>
-    <u-calendar :date="date" @changeDate="changeDate" :events="realise" />
+    <u-calendar :date="date" @changeDate="changeDate" @addEvent="addVolumeHoraire" :events="realise" />
     <button @click="test()">Test</button>
 </template>
 
@@ -51,7 +51,12 @@ export default {
         {
             console.log(dateObj);
             this.date = dateObj;
-        }
+        },
+
+        addVolumeHoraire(dateObj)
+        {
+            console.log(dateObj);
+        },
     }
 }
 </script>

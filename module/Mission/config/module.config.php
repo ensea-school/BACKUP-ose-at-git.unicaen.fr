@@ -30,6 +30,13 @@ return [
                     'privileges' => Privileges::MISSION_EDITION_REALISE,
                     //'assertion'  => Assertion\MissionAssertion::class,
                 ],
+                'missions-suivi-data' => [
+                    'route'      => '/:intervenant/missions-suivi-data',
+                    'controller' => MissionController::class,
+                    'action'     => 'suivi-data',
+                    'privileges' => Privileges::MISSION_VISUALISATION,
+                    //'assertion'  => Assertion\MissionAssertion::class,
+                ],
             ],
         ],
         'mission'       => [

@@ -14,6 +14,7 @@ use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 
 /**
@@ -53,6 +54,33 @@ class MissionController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
 
         return compact('intervenant');
+    }
+
+
+
+    public function suiviDataAction()
+    {
+        /* @var $intervenant Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $dql = "
+        SELECT
+            vhm, m
+        FROM
+            ".VolumeHoraireMission::class." vhm
+            JOIN vhm.typeVolumeHoraire tvh WITH tvh.code = :typeVolumeHoraireRealise
+            JOIN vhm.mission m
+        WHERE
+            vhm.histoDestruction IS NULL
+        ";
+
+        $parameters = [
+            'typeVolumeHoraireRealise' => TypeVolumeHoraire::CODE_REALISE,
+        ];
+        $query = $this->em()->createQuery($dql)->setParameters($parameters)->execute();
+
+
+        return $this->axios()->send($query);
     }
 
 

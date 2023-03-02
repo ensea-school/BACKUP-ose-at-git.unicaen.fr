@@ -1,5 +1,7 @@
 <template>
     {{ event.texte }}
+    <button class="btn btn-light"><u-icon name="pen-to-square" /></button>
+    <button class="btn btn-light"><u-icon name="trash-can" /></button>
 </template>
 
 <script>

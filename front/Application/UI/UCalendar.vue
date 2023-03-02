@@ -29,8 +29,14 @@
                     <div class="num-jour badge bg-secondary rounded-circle">{{ jour < 10 ? '0' + jour.toString() : jour }}</div>
                 </th>
                 <td>
-                    <div v-for="event in eventsByJour(jour)">
-                        <component :is="event.component" :event="event"/>
+                    <div>
+                        <div class="alert alert-info" v-for="event in eventsByJour(jour)">
+                            <component :is="event.component" :event="event"/>
+                        </div>
+                    </div>
+
+                    <div v-if="canAddEvent">
+                        <button @click="addEvent" :data-jour="jour" class="btn btn-light btn-sm"><u-icon name="plus" /> Nouvel événement</button>
                     </div>
                 </td>
             </tr>
@@ -45,6 +51,7 @@ export default {
     props: {
         date: {type: Date, required: true},
         events: {type: Array, required: true},
+        canAddEvent: {type: Boolean, required: true, default: true},
     },
     data()
     {
@@ -138,6 +145,14 @@ export default {
             return dateObj.getDate();
         },
 
+        addEvent(event)
+        {
+            const dateObj = new Date(this.date);
+            dateObj.setDate(event.target.dataset.jour);
+
+            this.$emit('addEvent', dateObj);
+        },
+
         prevMois()
         {
             const dateObj = new Date(this.date);
@@ -175,6 +190,10 @@ export default {
 </script>
 
 <style scoped>
+
+.table-hover tr:hover {
+    background-color:lightyellow;
+}
 
 .recherche {
     text-align: center;

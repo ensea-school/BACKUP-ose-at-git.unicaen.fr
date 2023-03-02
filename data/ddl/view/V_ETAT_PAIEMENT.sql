@@ -193,7 +193,4 @@ SELECT
       ORDER BY
                annee_id,
                type_intervenant_id,
-               statut_id,
-               structure_id,
-               periode_id,
                intervenant_nom

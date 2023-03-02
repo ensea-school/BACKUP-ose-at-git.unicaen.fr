@@ -37,6 +37,13 @@ return [
                     'privileges' => Privileges::MISSION_VISUALISATION,
                     //'assertion'  => Assertion\MissionAssertion::class,
                 ],
+                'missions-saisie-realise'         => [
+                    'route'      => '/:intervenant/missions-saisie-realise',
+                    'controller' => MissionController::class,
+                    'action'     => 'saisie-realise',
+                    'privileges' => Privileges::MISSION_EDITION_REALISE,
+                    //'assertion'  => Assertion\MissionAssertion::class,
+                ],
             ],
         ],
         'mission'       => [
@@ -201,8 +208,10 @@ return [
 
     'forms' => [
         Form\MissionForm::class => Form\MissionFormFactory::class,
+        Form\MissionSuiviForm::class => Form\MissionSuiviFormFactory::class,
     ],
 
     'view_helpers' => [
+
     ],
 ];

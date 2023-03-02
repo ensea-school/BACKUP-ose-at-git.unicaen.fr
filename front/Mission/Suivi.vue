@@ -25,7 +25,6 @@ export default {
                     component: SuiviEvent,
                     date: new Date(2023,1,5),
                     texte:'Coucou, le 505 février 2023',
-
                 },
                 {
                     component: SuiviEvent,
@@ -36,7 +35,6 @@ export default {
                     component: SuiviEvent,
                     date: new Date(2023,2,6),
                     texte:'Coucou, le 6 mars 2023',
-
                 },
             ]
         };

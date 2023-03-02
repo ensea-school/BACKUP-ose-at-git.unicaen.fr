@@ -13,6 +13,7 @@ use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Form\MissionFormAwareTrait;
+use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
 
@@ -29,6 +30,7 @@ class MissionController extends AbstractController
     use ContextServiceAwareTrait;
     use ValidationServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use MissionSuiviFormAwareTrait;
 
 
     /**
@@ -141,6 +143,46 @@ class MissionController extends AbstractController
         $vm = new ViewModel();
         $vm->setTemplate('mission/saisie');
         $vm->setVariables(compact('form', 'title', 'mission'));
+
+        return $vm;
+    }
+
+
+
+    /**
+     * Modifie une mission (form)
+     *
+     * @return ViewModel
+     */
+    public function saisieRealiseAction(): ViewModel
+    {
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+//        if (!$mission) {
+//            /** @var Mission $mission */
+//            $mission = $this->getEvent()->getParam('mission');
+//
+//            $title = 'Modification d\'un suivi de mission';
+//        } else {
+            $title = 'Ajout d\'un suivi de mission';
+//        }
+
+        $form = $this->getFormMissionSuivi();
+        $form->setIntervenant($intervenant);
+        $form->build();
+
+//        $form->bindRequestSave($mission, $this->getRequest(), function ($mission) {
+//            $this->getServiceMission()->save($mission);
+//            $this->updateTableauxBord($mission);
+//            $this->flashMessenger()->addSuccessMessage('Suivi bien enregistré');
+//        });
+        // on passe le data-id pour pouvoir le récupérer dans la vue et mettre à jour la liste
+//        $form->setAttribute('data-id', $mission->getId());
+
+        $vm = new ViewModel();
+        $vm->setTemplate('mission/saisie-realise');
+        $vm->setVariables(compact('form', 'title'));
 
         return $vm;
     }

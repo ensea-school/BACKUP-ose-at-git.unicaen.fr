@@ -211,6 +211,7 @@ $config = [
             \UnicaenApp\View\Helper\AppLink::class                     => View\Helper\AppLinkFactory::class,
             \UnicaenAuth\View\Helper\UserCurrent::class                => View\Helper\UserCurrentFactory::class,
             \UnicaenAuth\View\Helper\LocalConnectViewHelper::class     => View\Helper\LocalConnectViewHelperFactory::class,
+            'tab' => View\Helper\TabViewHelperFactory::class,
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,

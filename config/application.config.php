@@ -138,6 +138,7 @@ class AppConfig
             'Plafond',
             'Indicateur',
             'ExportRh',
+            'Dossier',
         ];
 
         if (!self::inConsole()) {

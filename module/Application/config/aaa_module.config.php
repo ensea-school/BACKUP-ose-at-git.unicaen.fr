@@ -160,6 +160,7 @@ $config = [
     ],
     'service_manager'    => [
         'invokables' => [
+            Service\AdresseNumeroComplService::class               => Service\AdresseNumeroComplService::class,
             Service\AnneeService::class                            => Service\AnneeService::class,
             Service\LocalContextService::class                     => Service\LocalContextService::class,
             Service\ParametresService::class                       => Service\ParametresService::class,

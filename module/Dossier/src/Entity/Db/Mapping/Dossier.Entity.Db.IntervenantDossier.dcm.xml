@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Dossier\Entity\Db\IntervenantDossier" table="INTERVENANT_DOSSIER">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+            <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="statut" target-entity="Intervenant\Entity\Db\Statut">
+            <join-column name="STATUT_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="civilite" target-entity="Application\Entity\Db\Civilite">
+            <join-column name="CIVILITE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="nomUsuel" type="string" column="NOM_USUEL" length="60" nullable="false"/>
+        <field name="prenom" type="string" column="PRENOM" length="60" nullable="false"/>
+        <field name="dateNaissance" type="datetime" column="DATE_NAISSANCE" nullable="false"/>
+        <field name="nomPatronymique" type="string" column="NOM_PATRONYMIQUE" length="60" nullable="true"/>
+        <field name="communeNaissance" type="string" column="COMMUNE_NAISSANCE" length="60" nullable="true"/>
+        <many-to-one field="paysNaissance" target-entity="Application\Entity\Db\Pays">
+            <join-column name="PAYS_NAISSANCE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="departementNaissance" target-entity="Application\Entity\Db\Departement">
+            <join-column name="DEPARTEMENT_NAISSANCE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="paysNationalite" target-entity="Application\Entity\Db\Pays">
+            <join-column name="PAYS_NATIONALITE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <field name="telPro" type="string" column="TEL_PRO" length="20" nullable="true"/>
+        <field name="telPerso" type="string" column="TEL_PERSO" length="20" nullable="true"/>
+        <field name="emailPro" type="string" column="EMAIL_PRO" length="255" nullable="true"/>
+        <field name="emailPerso" type="string" column="EMAIL_Perso" length="255" nullable="true"/>
+
+        <field name="adressePrecisions" type="string" column="ADRESSE_PRECISIONS" length="240" nullable="true"/>
+        <field name="adresseNumero" type="string" column="ADRESSE_NUMERO" length="4" nullable="true"/>
+        <many-to-one field="adresseNumeroCompl" target-entity="Application\Entity\Db\AdresseNumeroCompl">
+            <join-column name="ADRESSE_NUMERO_COMPL_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="adresseVoirie" target-entity="Application\Entity\Db\Voirie">
+            <join-column name="ADRESSE_VOIRIE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="adresseVoie" type="string" column="ADRESSE_VOIE" length="60" nullable="true"/>
+        <field name="adresseLieuDit" type="string" column="ADRESSE_LIEU_DIT" length="60" nullable="true"/>
+        <field name="adresseCodePostal" type="string" column="ADRESSE_CODE_POSTAL" length="15" nullable="true"/>
+        <field name="adresseCommune" type="string" column="ADRESSE_COMMUNE" length="50" nullable="true"/>
+        <many-to-one field="adressePays" target-entity="Application\Entity\Db\Pays">
+            <join-column name="ADRESSE_PAYS_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <field name="numeroInsee" type="string" column="NUMERO_INSEE" length="15" nullable="true"/>
+        <field name="numeroInseeProvisoire" type="integer" column="NUMERO_INSEE_PROVISOIRE" nullable="true"/>
+
+        <field name="IBAN" type="string" column="IBAN" length="255" nullable="true"/>
+        <field name="BIC" type="string" column="BIC" length="255" nullable="true"/>
+        <field name="ribHorsSepa" type="boolean" column="RIB_HORS_SEPA"/>
+
+        <field name="autre1" type="string" column="AUTRE_1" length="1000" nullable="true"/>
+        <field name="autre2" type="string" column="AUTRE_2" length="1000" nullable="true"/>
+        <field name="autre3" type="string" column="AUTRE_3" length="1000" nullable="true"/>
+        <field name="autre4" type="string" column="AUTRE_4" length="1000" nullable="true"/>
+        <field name="autre5" type="string" column="AUTRE_5" length="1000" nullable="true"/>
+
+        <one-to-one field="tblDossier" target-entity="Dossier\Entity\Db\TblDossier" mapped-by="dossier"/>
+
+        <many-to-one field="employeur" target-entity="Dossier\Entity\Db\Employeur">
+            <join-column name="EMPLOYEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

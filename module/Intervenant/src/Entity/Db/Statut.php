@@ -2,12 +2,11 @@
 
 namespace Intervenant\Entity\Db;
 
-use Application\Entity\Db\DossierAutre;
+use Dossier\Entity\Db\DossierAutre;
 use Application\Entity\Db\EtatSortie;
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Provider\Privilege\Privileges;
 use Application\Traits\ParametreEntityTrait;
-use Doctrine\Persistence\Mapping\ClassMetadata;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 use Paiement\Entity\Db\TauxRemu;
@@ -1430,6 +1429,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
         return $this;
     }
 
+
+
     public function getTauxRemu(): ?TauxRemu
     {
         return $this->tauxRemu;
@@ -1443,6 +1444,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
         return $this;
     }
+
+
 
     /**
      * Retourne la liste des privilèges associés à un statut sous forme de tableau associatif :

@@ -15,7 +15,7 @@ use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
 use Application\Processus\Traits\ContratProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContratServiceAwareTrait;
-use Application\Service\Traits\DossierServiceAwareTrait;
+use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Enseignement\Service\ServiceServiceAwareTrait;

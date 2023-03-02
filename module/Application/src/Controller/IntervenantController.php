@@ -2,14 +2,12 @@
 
 namespace Application\Controller;
 
-use Application\Controller\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
@@ -32,7 +30,6 @@ use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenImport\Entity\Differentiel\Query;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 use UnicaenImport\Service\Traits\DifferentielServiceAwareTrait;
-use function Application\Controller\count;
 
 /**
  * Description of IntervenantController
@@ -58,7 +55,6 @@ class  IntervenantController extends AbstractController
     use StatutServiceAwareTrait;
     use SourceServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
-    use DossierServiceAwareTrait;
     use ImportProcessusAwareTrait;
     use DifferentielServiceAwareTrait;
     use NoteServiceAwareTrait;

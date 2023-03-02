@@ -83,6 +83,8 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                             <td style="text-align: center"><?= $r['prioritaire'] ? '<i class="fas fa-star"></i>' : '' ?></td>
                             <td><?php printValue($r['structure-libelle']); ?></td>
                             <td>
+
+                              
                                 <a href="<?= $this->url($indicateur->getRoute(), ['intervenant' => $intervenantId]) ?>">
                                     <?php
                                     if (!empty($r['intervenant-code-rh'])) {

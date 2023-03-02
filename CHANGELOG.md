@@ -11,6 +11,17 @@
 
 
 
+# OSE 20.1 (à venir)
+
+## Nouveautés
+
+* Les jauges des plafonds affichent maintenant tout le temps les heures restantes
+
+## Corrections de bugs
+
+* Les données suplémentaires des indicateurs s'affichent de nouveau correctement
+
+
 
 # OSE 20 (fin février 2023)
 
@@ -149,7 +160,7 @@ A la **ligne 206** Ajouter le titre de colonne TAG dans le tableau $head :
 
 # OSE 19.1 (21/07/2022)
 
-## nouveautés
+## Nouveautés
 
 * Formule de calcul de Picardie
 * Nouvel état de sortie pour les écarts des heures complémentaires, maintenant personnalisable (#45807)

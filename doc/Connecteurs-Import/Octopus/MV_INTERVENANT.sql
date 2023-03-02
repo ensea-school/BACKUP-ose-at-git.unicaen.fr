@@ -290,7 +290,7 @@ FROM i
          LEFT JOIN compte ON compte.individu_id = induni.c_individu_chaine
     --On récupére la discipline adaptée directement dans Octopus
          LEFT JOIN cnua cnua ON cnua.individu_id = induni.c_individu_chaine
-WHERE i.validite_fin >= (sysdate - (365 * 2))
+WHERE i.validite_fin >= (sysdate - (365 * 2)) AND 1 = (CASE WHEN str2.code IS NULL AND i.z_type = 'permanent' AND i.z_statut_id NOT IN ('BIATSS', 'PAMSU') THEN 0 ELSE 1 END )
 
 
 

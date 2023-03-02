@@ -149,15 +149,19 @@ class PlafondsViewHelper extends AbstractHtmlElement
         }
 
         if (!$text) {
-            if ($progression > 49) {
-                $text = floatToString($plafond->getHeures()) . 'h, '
-                    . floatToString($max - $plafond->getHeures()) . ' dispo.';
-            } elseif ($progression > 10) {
-                $text = floatToString($plafond->getHeures()) . 'h';
-            }
+            $text = floatToString($plafond->getHeures()) . 'h, '
+                . floatToString($max - $plafond->getHeures()) . ' dispo.';
         }
 
         $html = '';
+
+        if ($progression > 49) {
+            $text1 = $text;
+            $text2 = '';
+        } else {
+            $text1 = '';
+            $text2 = '&nbsp;' . $text;
+        }
 
         $html .= $t('div', ['class' => 'col-md-4'])->html(
             $t('div', [
@@ -170,7 +174,7 @@ class PlafondsViewHelper extends AbstractHtmlElement
                     'aria-valuemin' => 0,
                     'aria-valuemax' => 100,
                     'style'         => 'width:' . $progression . '%',
-                ])->text($text)
+                ])->text($text1) . $text2
             )
         );
 

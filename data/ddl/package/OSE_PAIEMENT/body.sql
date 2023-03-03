@@ -65,21 +65,49 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
   Function get_taux_horaire (id_in IN NUMBER, date_val IN DATE) RETURN float IS
     valeur float;
   BEGIN
-    SELECT trv.valeur INTO valeur
+    SELECT valeur into valeur FROM
+    (
+    SELECT trv.valeur
     FROM taux_remu tr
     JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
     WHERE tr.id = id_in
     AND tr.histo_destruction IS NULL
     AND trv.date_effet <= date_val
-    AND rownum = 1
-    ORDER BY trv.date_effet DESC;
+    ORDER BY trv.date_effet DESC
+    )
+    WHERE rownum = 1;
 
     RETURN valeur;
 
     EXCEPTION
     WHEN OTHERS THEN
-       return null;
+       return -1;
   END get_taux_horaire;
+
+  Function get_taux_horaire_valeur_id (id_in IN NUMBER, date_val IN DATE) RETURN NUMBER IS
+    valeur NUMBER;
+  BEGIN
+    SELECT id into valeur FROM
+    (
+    SELECT trv.id
+    FROM taux_remu tr
+    JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
+    WHERE tr.id = id_in
+    AND tr.histo_destruction IS NULL
+    AND trv.date_effet <= date_val
+    ORDER BY trv.date_effet DESC
+    )
+    WHERE rownum = 1;
+
+    RETURN valeur;
+
+    EXCEPTION
+    WHEN OTHERS THEN
+       return -1;
+  END get_taux_horaire_valeur_id;
+
+
+
 
   FUNCTION get_code_taux_remu_legal RETURN VARCHAR2 IS
   BEGIN

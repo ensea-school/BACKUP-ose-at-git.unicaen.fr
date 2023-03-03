@@ -117,12 +117,11 @@ SELECT
                              --CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END * 4 / 10                                                 exercice_aa,
                              --CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END * 6 / 10                                                 exercice_ac,
                                 OSE_PAIEMENT.GET_TAUX_HORAIRE(
-                                    CASE
-                                        WHEN (ep.taux_remu_id IS NOT NULL) THEN ep.taux_remu_id
-                                        WHEN (si.taux_remu_id IS NOT NULL) THEN si.taux_remu_id
-                                        ELSE tr.id
-                                    END,
-                                    NVL(mep.date_mise_en_paiement,SYSDATE)
+                                    COALESCE(
+                                        ep.taux_remu_id ,
+                                        si.taux_remu_id ,
+                                        tr.id),
+                                        NVL(mep.date_mise_en_paiement,SYSDATE)
                                 )      taux_horaire
                              --OSE_FORMULE.GET_TAUX_HORAIRE_HETD( NVL(mep.date_mise_en_paiement,SYSDATE) )      taux_horaire
 

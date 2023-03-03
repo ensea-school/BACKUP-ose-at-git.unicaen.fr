@@ -97,7 +97,7 @@ class TauxRemuController extends AbstractController
             $title          = "Création d'une nouvelle valeur";
             $tauxRemuValeur = $this->getServiceTauxRemu()->newEntityValeur();
         } else {
-            $tauxRemuValeur = $this->getServiceTauxRemu()->getTauxRemusValeur($tauxRemuValeurId);
+            $tauxRemuValeur = $this->getServiceTauxRemu()->getTauxRemuValeur($tauxRemuValeurId);
             $title          = "Édition d'une valeur";
         }
 
@@ -145,7 +145,7 @@ class TauxRemuController extends AbstractController
     public function supprimerValeurAction(): MessengerViewModel
     {
         $tauxRemuValeurId = $this->params()->fromRoute('tauxRemuValeur');
-        $tauxRemuValeur   = $this->getServiceTauxRemu()->getTauxRemusValeur($tauxRemuValeurId);
+        $tauxRemuValeur   = $this->getServiceTauxRemu()->getTauxRemuValeur($tauxRemuValeurId);
         $this->em()->remove($tauxRemuValeur);
         $this->em()->flush();
 

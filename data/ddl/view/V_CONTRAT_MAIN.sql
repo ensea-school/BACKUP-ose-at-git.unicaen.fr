@@ -118,9 +118,10 @@ FROM (SELECT c.*,
          JOIN type_volume_horaire tvh ON tvh.code = 'PREVU'
          JOIN etat_volume_horaire evh ON evh.code = 'valide'
     LEFT JOIN formule_resultat     fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
-    LEFT JOIN taux_horaire_hetd    th ON th.valeur = OSE_FORMULE.GET_TAUX_HORAIRE_HETD(a.date_debut)
+    LEFT JOIN taux_horaire_hetd    th ON th.valeur = OSE_PAIEMENT.get_taux_horaire(tr.code, a.date_debut)
     LEFT JOIN                      hs ON hs.contrat_id = c.id
     LEFT JOIN contrat              cp ON cp.id = c.contrat_id
+    LEFT JOIN taux_remu            tr ON tr.code = OSE_PAIEMENT.get_code_taux_remu_legal()
   WHERE
     c.histo_destruction IS NULL
 ) ct

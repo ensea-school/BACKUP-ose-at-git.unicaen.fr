@@ -4,6 +4,7 @@ export default {
     uHeures: 'Application/UI/UHeures',
     uModal: 'Application/UI/UModal',
     uCalendar: 'Application/UI/UCalendar',
+    uTabs: 'Application/UI/UTabs',
 
     /* App common components */
     utilisateur: 'Application/Utilisateur',

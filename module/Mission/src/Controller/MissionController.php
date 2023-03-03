@@ -2,6 +2,7 @@
 
 namespace Mission\Controller;
 
+use Application\Constants;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
@@ -55,7 +56,12 @@ class MissionController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        return compact('intervenant');
+        $missions = [];
+        foreach ($intervenant->getMissions() as $mission){
+            $missions[$mission->getId()] = $mission->getLibelle();
+        }
+
+        return compact('intervenant', 'missions');
     }
 
 

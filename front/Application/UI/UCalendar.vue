@@ -134,17 +134,6 @@ export default {
             return annees;
         },
 
-        nombreJours()
-        {
-            const dateObj = new Date(this.date);
-
-            dateObj.setDate(1);
-            dateObj.setMonth(dateObj.getMonth() + 1);
-            dateObj.setDate(dateObj.getDate() - 1);
-
-            return dateObj.getDate();
-        },
-
         addEvent(event)
         {
             const dateObj = new Date(this.date);

@@ -1,6 +1,9 @@
 <template>
     {{ event.texte }}
-    <button class="btn btn-light"><u-icon name="pen-to-square" /></button>
+
+    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#suivi-form">
+        <u-icon name="pen-to-square" />
+    </button>
     <button class="btn btn-light"><u-icon name="trash-can" /></button>
 </template>
 

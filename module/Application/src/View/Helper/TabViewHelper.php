@@ -80,7 +80,7 @@ class TabViewHelper extends AbstractHtmlElement
 
     public function contentBegin(): string
     {
-        return '<div class="tab-content" id="myTabContent">';
+        return '<div class="tab-content">';
     }
 
 

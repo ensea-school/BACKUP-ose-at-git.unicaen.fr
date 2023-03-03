@@ -27,7 +27,6 @@
                                 <div class="input-group mb-3">
                                     <div class="form-control" v-html="heuresLib"></div>
                                     <button class="input-group-btn btn btn-secondary" data-bs-toggle="modal" :data-bs-target="`#details-${mission.id}`">
-                                        <u-icon name=""/>
                                         Détails
                                     </button>
                                 </div>

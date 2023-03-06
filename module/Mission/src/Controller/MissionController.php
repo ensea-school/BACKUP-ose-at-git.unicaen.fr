@@ -2,7 +2,6 @@
 
 namespace Mission\Controller;
 
-use Application\Constants;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
@@ -16,7 +15,6 @@ use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraire;
 
 
 /**

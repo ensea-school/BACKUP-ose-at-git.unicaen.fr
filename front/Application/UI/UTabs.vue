@@ -31,6 +31,7 @@ export default {
     methods: {
         selectTab(event){
             this.currentTab = event.target.attributes.getNamedItem('aria-controls').value;
+            this.$emit('changeTab', this.currentTab);
         },
     }
 }

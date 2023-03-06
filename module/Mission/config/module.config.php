@@ -212,6 +212,5 @@ return [
     ],
 
     'view_helpers' => [
-
     ],
 ];

@@ -1437,7 +1437,11 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function setTauxRemu(TauxRemu $tauxRemu): Statut
+    /**
+     * @param TauxRemu|null $tauxRemu
+     *
+     * @return $this
+     */public function setTauxRemu(?TauxRemu $tauxRemu): Statut
     {
         $this->tauxRemu = $tauxRemu;
 

@@ -11,6 +11,15 @@
 * Taux HETD personnalisables
 
 
+# OSE 20.1 (A venir)
+
+## Nouveautés
+
+* Ajout de la date de clôture dans la page historique de l'intervenant 
+
+## Corrections de bugs
+
+* Correction d'une régression de la V20 sur le module Export Siham
 
 # OSE 20 (28/02/2023)
 

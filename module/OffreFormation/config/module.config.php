@@ -111,7 +111,7 @@ return [
                             'action'      => 'synchronisation',
                         ],
                         'synchronisation-par-code'            => [
-                            'route'      => '/synchronisation-par-code/:elementPedagogique',
+                            'route'      => '/synchronisation-par-code',
                             'controller' => ElementPedagogiqueController::class,
                             'action'     => 'synchronisation-par-code',
                         ],

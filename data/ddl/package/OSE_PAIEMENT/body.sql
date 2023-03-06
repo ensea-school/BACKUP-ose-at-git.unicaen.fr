@@ -1,9 +1,9 @@
 CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
 
+  code_taux_remu_legal 	CONSTANT VARCHAR2(3) := 'TLD';
+
   mois_extraction_paie VARCHAR2(50) := '01';
   annee_extraction_paie VARCHAR2(50) := '22';
-
-
 
   PROCEDURE check_bad_paiements(formule_res_service_id NUMERIC DEFAULT NULL, formule_res_service_ref_id NUMERIC DEFAULT NULL) IS
     cc NUMERIC;
@@ -62,5 +62,56 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
     RETURN '20' || ose_paiement.annee_extraction_paie || '-' || ose_paiement.mois_extraction_paie;
   END;
 
+  Function get_taux_horaire (id_in IN NUMBER, date_val IN DATE) RETURN float IS
+    valeur float;
+  BEGIN
+    SELECT valeur into valeur FROM
+    (
+    SELECT trv.valeur
+    FROM taux_remu tr
+    JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
+    WHERE tr.id = id_in
+    AND tr.histo_destruction IS NULL
+    AND trv.date_effet <= date_val
+    ORDER BY trv.date_effet DESC
+    )
+    WHERE rownum = 1;
+
+    RETURN valeur;
+
+    EXCEPTION
+    WHEN OTHERS THEN
+       return -1;
+  END get_taux_horaire;
+
+  Function get_taux_horaire_valeur_id (id_in IN NUMBER, date_val IN DATE) RETURN NUMBER IS
+    valeur NUMBER;
+  BEGIN
+    SELECT id into valeur FROM
+    (
+    SELECT trv.id
+    FROM taux_remu tr
+    JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
+    WHERE tr.id = id_in
+    AND tr.histo_destruction IS NULL
+    AND trv.date_effet <= date_val
+    ORDER BY trv.date_effet DESC
+    )
+    WHERE rownum = 1;
+
+    RETURN valeur;
+
+    EXCEPTION
+    WHEN OTHERS THEN
+       return -1;
+  END get_taux_horaire_valeur_id;
+
+
+
+
+  FUNCTION get_code_taux_remu_legal RETURN VARCHAR2 IS
+  BEGIN
+    RETURN code_taux_remu_legal;
+  END;
 
 END ose_paiement;

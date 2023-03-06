@@ -89,7 +89,7 @@ class TauxRemu implements HistoriqueAwareInterface
         $j            = 0;
 
 
-        while ($i < $sizeIndex || $j < $sizeTaux) {
+        while ($sizeIndex != 0 && $sizeTaux != 0 && ($i < $sizeIndex || $j < $sizeTaux)) {
             if ($valeursIndex[$i]->getDateEffet() == $valeurs[$j]->getDateEffet()) {
                 $valeur['valeur'] = $valeursIndex[$i]->getValeur() * $valeurs[$j]->getValeur();
                 $valeur['date']   = $valeursIndex[$i]->getDateEffet();
@@ -304,7 +304,7 @@ class TauxRemu implements HistoriqueAwareInterface
                 $valeurs[] = $valeur;
                 break;
             }
-            if ($date >= new DateTime($dateDebutAnnee) && new $date < new DateTime($dateFinAnnee)) {
+            if ($date >= new DateTime($dateDebutAnnee) && $date < new DateTime($dateFinAnnee)) {
                 $valeurs[] = $valeur;
                 $temp      = $date;
             }

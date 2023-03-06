@@ -12,4 +12,10 @@ CREATE OR REPLACE PACKAGE "OSE_PAIEMENT" AS
 
   FUNCTION get_format_mois_du RETURN VARCHAR2;
 
+  FUNCTION get_taux_horaire(id_in IN NUMBER, date_val IN DATE) return float;
+
+  FUNCTION get_taux_horaire_valeur_id(id_in IN NUMBER, date_val IN DATE) return NUMBER;
+
+  FUNCTION get_code_taux_remu_legal RETURN VARCHAR2;
+
 END ose_paiement;

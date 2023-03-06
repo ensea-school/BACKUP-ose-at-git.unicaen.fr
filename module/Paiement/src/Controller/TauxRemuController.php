@@ -11,11 +11,11 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 /**
- * Description of TauxController
+ * Description of TauxRemuController
  *
  * @author Florian Joriot <florian.joriot at unicaen.fr>
  */
-class TauxController extends AbstractController
+class TauxRemuController extends AbstractController
 {
     use TauxRemuServiceAwareTrait;
     use ContextServiceAwareTrait;
@@ -97,7 +97,7 @@ class TauxController extends AbstractController
             $title          = "Création d'une nouvelle valeur";
             $tauxRemuValeur = $this->getServiceTauxRemu()->newEntityValeur();
         } else {
-            $tauxRemuValeur = $this->getServiceTauxRemu()->getTauxRemusValeur($tauxRemuValeurId);
+            $tauxRemuValeur = $this->getServiceTauxRemu()->getTauxRemuValeur($tauxRemuValeurId);
             $title          = "Édition d'une valeur";
         }
 
@@ -145,7 +145,7 @@ class TauxController extends AbstractController
     public function supprimerValeurAction(): MessengerViewModel
     {
         $tauxRemuValeurId = $this->params()->fromRoute('tauxRemuValeur');
-        $tauxRemuValeur   = $this->getServiceTauxRemu()->getTauxRemusValeur($tauxRemuValeurId);
+        $tauxRemuValeur   = $this->getServiceTauxRemu()->getTauxRemuValeur($tauxRemuValeurId);
         $this->em()->remove($tauxRemuValeur);
         $this->em()->flush();
 

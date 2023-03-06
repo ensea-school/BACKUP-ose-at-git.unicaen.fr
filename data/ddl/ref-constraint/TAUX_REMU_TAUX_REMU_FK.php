@@ -3,8 +3,8 @@
 //@formatter:off
 
 return [
-    'name'        => 'ELEMENT_PEDAGOGIQUE_FK1',
-    'table'       => 'ELEMENT_PEDAGOGIQUE',
+    'name'        => 'TAUX_REMU_TAUX_REMU_FK',
+    'table'       => 'TAUX_REMU',
     'rtable'      => 'TAUX_REMU',
     'delete_rule' => NULL,
     'index'       => NULL,

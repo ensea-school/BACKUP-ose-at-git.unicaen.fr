@@ -125,7 +125,7 @@ class  IntervenantController extends AbstractController
             'messages' => null,
         ];
 
-        $model = new JsonModel($jsonData);
+        return $this->axios()->send($intervenants);
 
 
         return $model;
@@ -140,7 +140,7 @@ class  IntervenantController extends AbstractController
      */
     public function rechercheIntervenantAction()
     {
-        
+
 
         return [];
     }

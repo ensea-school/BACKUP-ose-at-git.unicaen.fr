@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.7](#ose-197--16122022-)
+[OSE 20.0](#ose-20--28022023-)
 
 
 # OSE 21 (à venir)
@@ -8,11 +8,20 @@
 ## Nouveautés
 
 * Nouvelle notion de mission, permettant de gérer les contrats étudiants
+* Taux HETD personnalisables
 
 
+# OSE 20.1 (A venir)
 
+## Nouveautés
 
-# OSE 20 (fin février 2023)
+* Ajout de la date de clôture dans la page historique de l'intervenant 
+
+## Corrections de bugs
+
+* Correction d'une régression de la V20 sur le module Export Siham
+
+# OSE 20 (28/02/2023)
 
 ## Nouveautés
 
@@ -46,6 +55,7 @@
 * Utilisation prioritaire de l'email personnel des données personnelles pour l'envoi d'email via les indicateurs (#48393)
 * Meilleure gestion de la casse lors de la recherche d'un employeur (#48543)
 * Ajout d'une contrainte d'unicité sur la colonne code de la table type_intervention (#48727)
+* Correction formule d'UVSQ (#47149)
 * Et beaucoup d'autres ...
 
 ## Notes de mise à jour
@@ -69,6 +79,13 @@ A la **ligne 102** ajouter la colonne TAG dans le tableau $ds:
 A la **ligne 206** Ajouter le titre de colonne TAG dans le tableau $head : 
   
     'tag' => 'Tags',
+
+Le système de mise à jour peut - dans certaines circonstances - vous afficher quelques erreurs qui sont sans impact 
+sur le bon fonctionnement de l'application.
+Je vais modifier les scripts de mise à jour pour éviter qu'elles ne se produisent.
+Mais en attendant, si vous y êtes confrontés, vous en trouverez les explications sur le ticket suivant :
+https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_position=1&next_issue_id=48972
+
 
 
 # OSE 19.7 (16/12/2022)

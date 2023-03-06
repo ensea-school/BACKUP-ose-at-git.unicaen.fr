@@ -8,12 +8,11 @@
                        placeholder="Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"/><br/>
             </div>
             <div>
-                Type d'intervenant :
-                <input v-on:click="reload()" type="checkbox" name="type[]" value="permanent" checked="checked" v-model="checkedTypes"> Permanent
-                <input v-on:click="reload()" type="checkbox" name="type[]" value="vacataire" checked="checked" v-model="checkedTypes"> Vacataire
-                <input v-on:click="reload()" type="checkbox" name="type[]" value="etudiant" checked="checked" v-model="checkedTypes"> Etudiant
+                Types d'intervenant :
+                <input v-on:change="reload()" type="checkbox" name="type[]" value="permanent" checked="checked" v-model="checkedTypes"> Permanent
+                <input v-on:change="reload()" type="checkbox" name="type[]" value="vacataire" checked="checked" v-model="checkedTypes"> Vacataire
+                <input v-on:change="reload()" type="checkbox" name="type[]" value="etudiant" checked="checked" v-model="checkedTypes"> Etudiant
             </div>
-            <div>checked : {{ checkedTypes }}</div>
             <br/>
         </div>
     </div>
@@ -64,7 +63,7 @@ export default {
         return {
             searchTerm: [],
             intervenants: [],
-            checkedTypes: [],
+            checkedTypes: ['vacataire', 'permanent', 'etudiant'],
         };
     },
     mounted()
@@ -101,7 +100,24 @@ export default {
                     }
                 )
                     .then(response => {
-                        this.intervenants = response.data;
+                        let datas = response.data;
+                        for (const intervenant in datas) {
+                            if (datas[intervenant].typeIntervenantCode == 'E' && !this.checkedTypes.includes('vacataire')) {
+                                delete datas[intervenant]
+                                continue;
+                            }
+                            if (datas[intervenant].typeIntervenantCode == 'P' && !this.checkedTypes.includes('permanent')) {
+                                delete datas[intervenant]
+                                continue;
+                            }
+                            if (datas[intervenant].typeIntervenantCode == 'S' && !this.checkedTypes.includes('etudiant')) {
+                                delete datas[intervenant]
+                                continue;
+                            }
+
+                        }
+                        this.intervenants = datas;
+
                     })
                     .catch(response => {
                         console.log(response.message);

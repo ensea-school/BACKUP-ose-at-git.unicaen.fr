@@ -140,7 +140,7 @@ class  IntervenantController extends AbstractController
      */
     public function rechercheIntervenantAction()
     {
-
+        
 
         return [];
     }

@@ -344,6 +344,21 @@ FROM volume_horaire vh
 GROUP BY s.intervenant_id, ep.structure_id
 
 UNION ALL
+
+--Cloture de service
+SELECT i.id                                                                                 intervenant_id,
+       '6 - Services réalisés'                                                              categorie,
+       'Clôture de service réalisé '													    label,
+       MAX(v.histo_modification)                                                            histo_date,
+       MAX(v.histo_modificateur_id)                                                         KEEP (dense_rank FIRST ORDER BY v.histo_creation  DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY v.histo_creation  DESC)    histo_user, 'glyphicon glyphicon-calendar' icon,
+       5                                                                                    ordre
+FROM validation  v
+         JOIN intervenant i ON i.id = v.intervenant_id
+         JOIN utilisateur u ON u.id = v.histo_createur_id
+WHERE v.histo_destruction IS null
+GROUP BY i.id
+
+UNION ALL
 --Mise en paiement
 SELECT
    s.intervenant_id                                                                     intervenant_id,

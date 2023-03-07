@@ -119,16 +119,7 @@ class  IntervenantController extends AbstractController
             $intervenants = $recherche->rechercher($term, 21);
         }
 
-
-        $jsonData = [
-            'data'     => $intervenants,
-            'messages' => null,
-        ];
-
         return $this->axios()->send($intervenants);
-
-
-        return $model;
     }
 
 

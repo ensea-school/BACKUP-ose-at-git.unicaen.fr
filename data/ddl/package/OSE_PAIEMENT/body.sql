@@ -64,7 +64,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
 
   Function get_taux_horaire (id_in IN NUMBER, date_val IN DATE) RETURN float IS
     valeur float;
+    valeur_parent float;
   BEGIN
+
     SELECT valeur into valeur FROM
     (
     SELECT trv.valeur
@@ -77,19 +79,47 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
     )
     WHERE rownum = 1;
 
-    RETURN valeur;
+
+    SELECT(
+        SELECT valeur FROM
+        (
+            SELECT trv.valeur
+            FROM taux_remu tr
+            JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
+            WHERE tr.id IN
+            (
+                SELECT tr.taux_remu_id
+                FROM taux_remu tr
+                WHERE tr.id = id_in
+            )
+            AND tr.histo_destruction IS NULL
+            AND trv.date_effet <= date_val
+            ORDER BY trv.date_effet DESC
+        )
+        WHERE rownum = 1
+    ) into valeur_parent
+    FROM dual;
+
+    IF valeur_parent is NULL
+    THEN
+        RETURN valeur;
+    ELSE
+        RETURN valeur*valeur_parent;
+    END IF;
+
 
     EXCEPTION
     WHEN OTHERS THEN
        return -1;
   END get_taux_horaire;
 
-  Function get_taux_horaire_valeur_id (id_in IN NUMBER, date_val IN DATE) RETURN NUMBER IS
-    valeur NUMBER;
+  Function get_taux_horaire_date (id_in IN NUMBER, date_val IN DATE) RETURN DATE IS
+    date_valeur DATE;
+    date_parent DATE;
   BEGIN
-    SELECT id into valeur FROM
+    SELECT date_effet into date_valeur FROM
     (
-    SELECT trv.id
+    SELECT trv.date_effet
     FROM taux_remu tr
     JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
     WHERE tr.id = id_in
@@ -99,12 +129,38 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
     )
     WHERE rownum = 1;
 
-    RETURN valeur;
+
+    SELECT(
+        SELECT date_effet FROM
+        (
+            SELECT trv.date_effet
+            FROM taux_remu tr
+            JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
+            WHERE tr.id IN
+            (
+                SELECT tr.taux_remu_id
+                FROM taux_remu tr
+                WHERE tr.id = id_in
+            )
+            AND tr.histo_destruction IS NULL
+            AND trv.date_effet <= date_val
+            ORDER BY trv.date_effet DESC
+        )
+        WHERE rownum = 1
+    ) into date_parent
+    FROM dual;
+
+        IF date_parent is NULL
+    THEN
+        RETURN date_valeur;
+    ELSE
+        RETURN GREATEST(date_valeur, date_parent);
+    END IF;
 
     EXCEPTION
     WHEN OTHERS THEN
-       return -1;
-  END get_taux_horaire_valeur_id;
+       return '00/00/0000';
+  END get_taux_horaire_date;
 
 
 

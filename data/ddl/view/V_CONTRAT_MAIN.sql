@@ -77,8 +77,8 @@ FROM (SELECT c.*,
              COALESCE(d.numero_insee, i.numero_insee)                                            "numInsee",
              si.libelle                                                                          "statut",
              REPLACE(ltrim(to_char(COALESCE(c.total_hetd, fr.total, 0), '999999.00')), '.', ',') "totalHETD",
-             REPLACE(ltrim(to_char(COALESCE(trv.valeur, 0), '999999.00')), '.', ',')              "tauxHoraireValeur",
-             COALESCE(to_char(trv.date_effet, 'dd/mm/YYYY'), 'TAUX INTROUVABLE')              "tauxHoraireDate",
+             REPLACE(ltrim(to_char(COALESCE(OSE_PAIEMENT.get_taux_horaire(COALESCE(si.taux_remu_id,tr.id), a.date_debut), 0), '999999.00')), '.', ',')              "tauxHoraireValeur",
+             COALESCE(to_char(OSE_PAIEMENT.get_taux_horaire_date(COALESCE(si.taux_remu_id,tr.id), a.date_debut), 'dd/mm/YYYY'), 'TAUX INTROUVABLE')              "tauxHoraireDate",
              to_char(COALESCE(v.histo_creation, a.date_debut), 'dd/mm/YYYY')                 "dateSignature",
              CASE
                  WHEN c.structure_id <> COALESCE(cp.structure_id, 0) THEN 'modifié'
@@ -119,7 +119,6 @@ FROM (SELECT c.*,
          JOIN etat_volume_horaire evh ON evh.code = 'valide'
     LEFT JOIN formule_resultat     fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
     LEFT JOIN taux_remu            tr ON tr.code = OSE_PAIEMENT.get_code_taux_remu_legal()
-    LEFT JOIN taux_remu_valeur    trv ON trv.id = OSE_PAIEMENT.get_taux_horaire_valeur_id(COALESCE(si.taux_remu_id,tr.id), a.date_debut)
     LEFT JOIN                      hs ON hs.contrat_id = c.id
     LEFT JOIN contrat              cp ON cp.id = c.contrat_id
   WHERE

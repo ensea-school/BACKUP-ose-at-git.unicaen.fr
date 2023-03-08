@@ -12,7 +12,7 @@
                 <input v-on:change="reload()" type="checkbox" name="type[]" value="permanent" checked="checked" v-model="checkedTypes"> Permanent
                 <input v-on:change="reload()" type="checkbox" name="type[]" value="vacataire" checked="checked" v-model="checkedTypes"> Vacataire
                 <input v-on:change="reload()" type="checkbox" name="type[]" value="etudiant" checked="checked" v-model="checkedTypes"> Etudiant
-                
+
             </div>
             <br/>
         </div>
@@ -92,7 +92,7 @@ export default {
     methods: {
         rechercher: function (event)
         {
-            this.searchTerm = event.target.value;
+            this.searchTerm = event.currentTarget.value;
             if (this.searchTerm == '') {
                 this.noResult = 0;
             }

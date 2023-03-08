@@ -70,6 +70,16 @@ return [
     ],
 
     'rules' => [
+        [
+            'privileges' => Privileges::TAUX_EDITION,
+            'resources'  => 'TauxRemu',
+            'assertion'  => Assertion\TauxRemuAssertion::class,
+        ],
+        [
+            'privileges' => Privileges::TAUX_SUPPRESSION,
+            'resources'  => 'TauxRemu',
+            'assertion'  => Assertion\TauxRemuAssertion::class,
+        ],
     ],
 
     'guards' => [
@@ -86,6 +96,8 @@ return [
             'privileges' => [
                 Privileges::TAUX_EDITION,
             ],
+            'assertion'  => Assertion\TauxRemuAssertion::class,
+
         ],
         [
             'controller' => TauxRemuController::class,
@@ -93,6 +105,7 @@ return [
             'privileges' => [
                 Privileges::TAUX_SUPPRESSION,
             ],
+
         ],
     ],
 
@@ -102,6 +115,7 @@ return [
 
     'services' => [
         TauxRemuService::class => TauxRemuServiceFactory::class,
+        Assertion\TauxRemuAssertion::class => Assertion\TauxRemuAssertionFactory::class,
     ],
 
     'forms' => [
@@ -110,4 +124,6 @@ return [
 
     'view_helpers' => [
     ],
+
+
 ];

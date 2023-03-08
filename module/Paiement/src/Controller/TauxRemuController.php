@@ -3,6 +3,7 @@
 namespace Paiement\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Provider\Privilege\Privileges;
 use Paiement\Entity\Db\TauxRemu;
 use Paiement\Form\TauxFormAwareTrait;
 use Paiement\Form\TauxValeurFormAwareTrait;
@@ -38,14 +39,16 @@ class TauxRemuController extends AbstractController
         ]);
 
 
-        $tauxListe = $this->getServiceTauxRemu()->getTauxRemus();
-        $tauxListe = $this->getServiceTauxRemu()->getTauxRemusAnnee($tauxListe);
+        $tauxListe = $this->getServiceTauxRemu()->getTauxRemusAnnee();
 
         $liste = [];
-
+        /** @var TauxRemu $taux */
         foreach ($tauxListe as $taux) {
             //Calcul de la liste des taux
             $liste[$taux->getId()] = $this->getServiceTauxRemu()->tauxWs($taux);
+            $liste[$taux->getId()]['canEdit'] = $this->isAllowed($taux,Privileges::TAUX_EDITION);
+            $liste[$taux->getId()]['canDeleteValeur'] = $this->isAllowed($taux,Privileges::TAUX_SUPPRESSION);
+            $liste[$taux->getId()]['canDelete'] = $liste[$taux->getId()]['canDeleteValeur'] && !$taux->hasChildren();
         }
 
 

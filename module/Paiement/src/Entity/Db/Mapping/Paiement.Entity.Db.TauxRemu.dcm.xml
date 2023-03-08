@@ -11,6 +11,8 @@
         <many-to-one field="tauxRemu" target-entity="Paiement\Entity\Db\TauxRemu">
             <join-column name="TAUX_REMU_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <one-to-many field="sousTauxRemu" target-entity="Paiement\Entity\Db\TauxRemu" mapped-by="tauxRemu">
+        </one-to-many>
 
         <one-to-many field="tauxRemuValeurs" target-entity="Paiement\Entity\Db\TauxRemuValeur" mapped-by="tauxRemu">
             <order-by>

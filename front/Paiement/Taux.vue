@@ -2,16 +2,16 @@
 
     <div class="card" :class="{ 'ms-5':taux.tauxRemu}">
         <div class="card-header">
-            {{ taux.libelle }} ({{ taux.code }})
+            <h3 style="display:inline">{{ taux.libelle }} ({{ taux.code }})</h3>
             <div class="float-end">
-                <a v-if="canEditTaux"
+                <a v-if="taux.canEdit"
                    :href="saisieUrl"
                    class="btn btn-primary"
                    @click.prevent="saisie">
                     <u-icon name="pen-to-square"/>
                     Modifier</a>
                 &nbsp
-                <a v-if="canDeleteTaux"
+                <a v-if="taux.canDelete"
                    :href="supprimerUrl"
                    class="btn btn-danger"
                    @click.prevent="supprimer">
@@ -31,29 +31,30 @@
                                     {{ tauxValeur.valeur }}€/h à partir du {{ tauxValeur.dateEffet }}
                                 </div>
                                 <div class="col">
-                                    <a v-if="canEditTaux"
-                                       class="btn btn-primary btn-sm"
+                                    <a v-if="taux.canEdit"
+                                       class="text-primary"
                                        @click.prevent="saisieValeur"
                                        :data-id="tauxValeur.id">
-                                        <i class="fas fa-pen-to-square" :data-id="tauxValeur.id"/>
+                                        <u-icon name="pen-to-square"/>
                                     </a>
                                     &nbsp
-                                    <a v-if="canDeleteTaux"
-                                       class="btn btn-danger btn-sm"
+                                    <a v-if="taux.canEdit"
+                                       class="text-primary"
                                        @click.prevent="supprimerValeur"
                                        :data-id="tauxValeur.id">
-                                        <i class="fas fa-trash-can" :data-id="tauxValeur.id"/>
+                                        <u-icon name="trash-can"/>
                                     </a>
                                 </div>
                             </div>
                         </li>
                     </div>
                 </ul>
-                <a v-if="canEditTaux"
+                <a v-if="taux.canEdit"
                    :href="ajoutValeurUrl"
                    class="btn btn-primary btn-sm"
                    @click.prevent="ajoutValeur">
                     <u-icon name="plus"/>
+                    Ajouter une valeur
                 </a>
             </div>
 
@@ -70,18 +71,18 @@
                                     </div>
                                     <div class="col-md-auto">
 
-                                        <a v-if="canEditTaux"
-                                           class="btn btn-primary btn-sm"
+                                        <a v-if="taux.canEdit"
+                                           class="text-primary"
                                            @click.prevent="saisieValeur"
                                            :data-id="tauxValeur.id">
-                                            <i class=" fas fa-pen-to-square" :data-id="tauxValeur.id"/>
+                                            <u-icon name="pen-to-square"/>
                                         </a>
                                         &nbsp
-                                        <a v-if="canDeleteTaux"
-                                           class="btn btn-sm btn-danger"
+                                        <a v-if="taux.canEdit"
+                                           class="text-primary"
                                            @click.prevent="supprimerValeur"
                                            :data-id="tauxValeur.id">
-                                            <i class=" fas fa-trash-can" :data-id="tauxValeur.id"/>
+                                            <u-icon name="trash-can"/>
                                         </a>
                                     </div>
                                 </div>
@@ -89,7 +90,7 @@
                             </li>
                         </div>
                     </ul>
-                    <a v-if="canEditTaux"
+                    <a v-if="taux.canEdit"
                        :href="ajoutValeurUrl"
                        class="btn btn-primary btn-sm"
                        @click.prevent="ajoutValeur">
@@ -115,21 +116,21 @@
     <div v-if=!taux.tauxRemu>
         <div v-for="item in listeTaux" :key="item">
             <div v-if="item.tauxRemu && item.tauxRemu.id === taux.id">
-                <taux @supprimer="supprimer" @refreshListe="refreshListe" :key="taux.id" :taux="item" :listeTaux="listeTaux" :canEditTaux="canEditTaux"
-                      :canDeleteTaux="canDeleteTaux"></taux>
+                <taux @supprimer="supprimer" @refreshListe="refreshListe" :key="taux.id" :taux="item" :listeTaux="listeTaux"></taux>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import UIcon from "@/Application/UI/UIcon.vue";
+
 export default {
     name: "Taux",
+    components: {UIcon},
     props: {
         taux: {required: true},
         listeTaux: {required: true},
-        canEditTaux: {type: Boolean, required: true},
-        canDeleteTaux: {type: Boolean, required: true},
     },
     data()
     {
@@ -154,9 +155,10 @@ export default {
         },
         saisieValeur(event)
         {
-            event.target.href = Util.url("taux/saisir-valeur/:tauxRemu/:tauxRemuValeur",
-                {tauxRemu: this.taux.id, tauxRemuValeur: event.target.dataset.id});
-            modAjax(event.target, (response) => {
+            let target = event.target.parentElement;
+            target.href = Util.url("taux/saisir-valeur/:tauxRemu/:tauxRemuValeur",
+                {tauxRemu: this.taux.id, tauxRemuValeur: target.dataset.id});
+            modAjax(target, (response) => {
                 this.$emit('refreshListe');
             });
         },
@@ -172,10 +174,10 @@ export default {
         },
         supprimerValeur(event)
         {
-            event.target.href = Util.url("taux/supprimer-valeur/:tauxRemuValeur",
-                {tauxRemuValeur: event.target.dataset.id});
-            console.log(event.target.href);
-            popConfirm(event.target, (response) => {
+            let target = event.target.parentElement;
+            target.href = Util.url("taux/supprimer-valeur/:tauxRemuValeur",
+                {tauxRemuValeur: target.dataset.id});
+            popConfirm(target, (response) => {
                 this.$emit('refreshListe');
             });
         },

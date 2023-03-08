@@ -5,6 +5,7 @@ namespace Paiement\Service;
 
 use Application\Controller\Plugin\Axios;
 use Application\Service\AbstractEntityService;
+use Doctrine\Common\Collections\ArrayCollection;
 use Paiement\Entity\Db\TauxRemu;
 use Paiement\Entity\Db\TauxRemuValeur;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -43,14 +44,17 @@ class TauxRemuService extends AbstractEntityService
 
 
     /**
+     * Retourne tous les taux de rémunération non historisé
+     *
      * @return TauxRemu[]
      */
     public function getTauxRemus(): array
     {
-        $dql   = "SELECT tr, trv, trp
+        $dql   = "SELECT tr, trv, trp, str
                  FROM " . TauxRemu::class . " tr
                  LEFT JOIN tr.tauxRemu trp
                  LEFT JOIN tr.tauxRemuValeurs trv
+                 LEFT JOIN tr.sousTauxRemu str WITH str.histoDestruction IS NULL
                  WHERE tr.histoDestruction IS NULL
                  ORDER BY tr.id";
         $query = $this->getEntityManager()->createQuery($dql);
@@ -60,6 +64,11 @@ class TauxRemuService extends AbstractEntityService
 
 
 
+    /**
+     * Return les taux de rémunérations qui n'ont pas de taux de rémunération parents
+     *
+     * @return array
+     */
     public function getTauxRemusIndexable(): array
     {
         $dql   = "SELECT mtr, mtrv
@@ -75,7 +84,12 @@ class TauxRemuService extends AbstractEntityService
 
 
 
-    public function getTauxRemuValeur(mixed $tauxRemuValeurId)
+    /**
+     * @param int $tauxRemuValeurId
+     *
+     * @return TauxRemuValeur|null
+     */
+    public function getTauxRemuValeur(int $tauxRemuValeurId): ?TauxRemuValeur
     {
         $dql    = "SELECT mtr
                  FROM " . TauxRemuValeur::class . " mtr
@@ -92,6 +106,13 @@ class TauxRemuService extends AbstractEntityService
 
 
 
+    /**
+     * Retourne un JSON du tauxRemu
+     *
+     * @param TauxRemu $tauxRemu
+     *
+     * @return array|null
+     */
     public function tauxWs(TauxRemu $tauxRemu): ?array
     {
         $json = Axios::extract($tauxRemu, [
@@ -107,10 +128,23 @@ class TauxRemuService extends AbstractEntityService
 
 
 
-    public function getTauxRemusAnnee($tauxRemus)
+    /**
+     * Renvoie tous les tauxRemu non historisé et les valeurs concernant l'année en cours
+     *
+     * @return array|null
+     */
+    public function getTauxRemusAnnee(): ?array
     {
+        $dql   = "SELECT tr, trv, trp
+                 FROM " . TauxRemu::class . " tr
+                 LEFT JOIN tr.tauxRemu trp
+                 LEFT JOIN tr.tauxRemuValeurs trv
+                 WHERE tr.histoDestruction IS NULL
+                 ORDER BY tr.id";
+        $query = $this->getEntityManager()->createQuery($dql);
 
-        $annee = $this->getServiceContext()->getAnnee()->getId();
+        $tauxRemus = $query->getResult();
+        $annee     = $this->getServiceContext()->getAnnee();
 
 
         $result = [];
@@ -129,14 +163,51 @@ class TauxRemuService extends AbstractEntityService
 
 
     /**
-     * Formatte une liste d'entités CentreCout (centres de coûts et éventuels EOTP fils)
+     * Retourne les taux Remu qui possèdent une valeurs sur l'année
+     * @return array|null
+     */
+    public function getTauxRemusAnneeWithValeur(): ?array
+    {
+
+        $dql   = "SELECT tr, trv, trp
+                 FROM " . TauxRemu::class . " tr
+                 LEFT JOIN tr.tauxRemu trp
+                 LEFT JOIN tr.tauxRemuValeurs trv
+                 WHERE tr.histoDestruction IS NULL
+                 ORDER BY tr.id";
+        $query = $this->getEntityManager()->createQuery($dql);
+
+        $tauxRemus = $query->getResult();
+        $annee     = $this->getServiceContext()->getAnnee();
+
+
+        $result = [];
+        /** @var TauxRemu $tauxRemu */
+        foreach ($tauxRemus as $tauxRemu) {
+            /** @var TauxRemuValeur[] $valeurs */
+            $valeurs = $tauxRemu->getValeurAnnee($annee);
+            if($valeurs){
+                $tauxRemu->setValeurs($valeurs);
+                $result[$tauxRemu->getId()] = $tauxRemu;
+            }
+        }
+
+        return $result;
+    }
+
+
+
+    /**
+     * Formatte une liste d'entités TauxRemus
      * en tableau attendu par l'aide de vue FormSelect.
      *
-     * NB: la liste en entrée doit être triées par code parent (éventuel) PUIS par code.
      *
-     * @param TauxRemu[] $centresCouts
+     * @param TauxRemu[] $tauxRemus
+     *
+     * @return array
      */
-    public function formatTauxRemus($tauxRemus)
+    public
+    function formatTauxRemus(array $tauxRemus)
     {
         $result = [];
         foreach ($tauxRemus as $tr) {
@@ -152,22 +223,11 @@ class TauxRemuService extends AbstractEntityService
 
 
 
-    public function newEntityValeur(): TauxRemuValeur
+    public
+    function newEntityValeur(): TauxRemuValeur
     {
         return new tauxRemuValeur();
     }
-
-    /**
-     * @param TauxRemu                   $tauxRemu
-     * @param TauxRemuValeur|string|null $temp
-     * @param string                     $dateDebutAnnee
-     * @param array                      $valeurs
-     * @param string                     $dateFinAnnee
-     *
-     * @return array
-     * @throws \Exception
-     */
-
 }
 
 

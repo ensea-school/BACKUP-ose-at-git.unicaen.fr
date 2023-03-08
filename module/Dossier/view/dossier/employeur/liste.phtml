@@ -1,7 +1,3 @@
-<table class="table table-bordered table-sm">
-<?php
-$canEdit = true;
-?>
 <table id='table-employeur' class="table table-bordered table-sort" data-searching="false">
     <thead>
     <tr>
@@ -49,12 +45,10 @@ $canEdit = true;
 
 
 <?php if ($canEdit): ?>
-    <tr class="champ-triable">
-        <a class="btn btn-primary ajax-modal " data-event="employeur-saisie"
-           href="<?= $this->url('employeur/saisie'); ?>"><i
-                    class="fas fa-plus"></i>
-            Ajout d'un employeur</a>
-    </tr>
+    <a class="btn btn-primary ajax-modal " data-event="employeur-saisie"
+       href="<?= $this->url('employeur/saisie'); ?>"><i
+                class="fas fa-plus"></i>
+        Ajout d'un employeur</a>
 <?php endif; ?>
 
 

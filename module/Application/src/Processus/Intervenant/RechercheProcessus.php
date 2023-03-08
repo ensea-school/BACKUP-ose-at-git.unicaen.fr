@@ -205,13 +205,14 @@ class RechercheProcessus
                     'civilite'               => $r['CIVILITE'],
                     'nom'                    => $r['NOM_USUEL'],
                     'prenom'                 => $r['PRENOM'],
-                    'dateNaissance'          => new \DateTime($r['DATE_NAISSANCE']),
+                    'date-naissance'         => new \DateTime($r['DATE_NAISSANCE']),
                     'structure'              => $r['STRUCTURE'],
                     'statut'                 => $r['STATUT'],
                     'typeIntervenantCode'    => $r['TYPE_INTERVENANT_CODE'],
                     'typeIntervenantLibelle' => $r['TYPE_INTERVENANT_LIBELLE'],
-                    'numeroPersonnel'        => $r['CODE_RH'],
+                    'numero-personnel'       => $r['CODE_RH'],
                     'destruction'            => $r['HISTO_DESTRUCTION'],
+                    'code'                   => $r['CODE'],
 
                 ];
             } else {

@@ -90,50 +90,19 @@ class  IntervenantController extends AbstractController
 
 
 
-    public function rechercheAction()
-    {
-        $this->em()->getFilters()->enable('historique')->init([
-            Intervenant::class,
-        ]);
-
-        $critere   = $this->params()->fromPost('critere');
-        $recherche = $this->getProcessusIntervenant()->recherche();
-
-        $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
-        $recherche->setShowHisto($canShowHistorises);
-
-        $intervenants = $recherche->rechercher($critere, 21);
-
-        return compact('intervenants');
-    }
-
-
-
     public function rechercheJsonAction()
     {
-        $recherche    = $this->getProcessusIntervenant()->recherche();
+        $recherche         = $this->getProcessusIntervenant()->recherche();
+        $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
+        $recherche->setShowHisto($canShowHistorises);
         $intervenants = [];
         $term         = $this->axios()->fromPost('term');
 
         if (!empty($term)) {
-            $intervenants = $recherche->rechercher($term, 21);
+            $intervenants = $recherche->rechercher($term, 40);
         }
 
         return $this->axios()->send($intervenants);
-    }
-
-
-
-    /**
-     * Page d'index des missions
-     *
-     * @return array|\Laminas\View\Model\ViewModel
-     */
-    public function rechercheIntervenantAction()
-    {
-
-
-        return [];
     }
 
 

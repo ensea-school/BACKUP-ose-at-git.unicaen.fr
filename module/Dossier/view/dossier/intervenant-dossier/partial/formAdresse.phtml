@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * @var $this               \Application\View\Renderer\PhpRenderer
+ * @var $form               \Dossier\Form\IntervenantDossierForm
+ * @var $intervenant        \Application\Entity\Db\Intervenant
+ * @var $intervenantDossier \Dossier\Entity\Db\IntervenantDossier
+ * @var $tblDossier         \Dossier\Entity\Db\TblDossier
+ */
+$form->prepare();
+$dossierAdresse = $form->get('DossierAdresse');
+?>
+
+<!-- Fiedlset Adresse -->
+<div class="col-md-6">
+    <div class="card bg-default">
+        <div class="card-header">
+            ADRESSE
+            <?php if (!empty($tblDossier)): ?>
+                <?php if (!$tblDossier->getCompletudeAdresse()): ?>
+                    <span class="badge bg-warning text-dark">A compléter</span>
+                <?php else: ?>
+                    <span class="badge bg-success">Complet</span>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+        <div class="card-body">
+
+            <?= $this->formControlGroup($dossierAdresse->get('lieuDit')); ?>
+            <div class="row">
+                <div class="col-md-2">
+                    <?= $this->formControlGroup($dossierAdresse->get('numero')); ?>
+                </div>
+                <div class="col-md-2">
+                    <?= $this->formControlGroup($dossierAdresse->get('numeroComplement')); ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $this->formControlGroup($dossierAdresse->get('voirie')); ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $this->formControlGroup($dossierAdresse->get('voie')); ?>
+                </div>
+            </div>
+            <?= $this->formControlGroup($dossierAdresse->get('precisions')); ?>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <?= $this->formControlGroup($dossierAdresse->get('codePostal')); ?>
+                </div>
+                <div class="col-md-8">
+                    <?= $this->formControlGroup($dossierAdresse->get('ville')); ?>
+                </div>
+            </div>
+            <?= $this->formControlGroup($dossierAdresse->get('pays')); ?>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+

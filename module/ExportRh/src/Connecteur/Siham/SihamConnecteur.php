@@ -5,7 +5,7 @@ namespace ExportRh\Connecteur\Siham;
 
 use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
-use Application\Service\Traits\DossierServiceAwareTrait;
+use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\VoirieServiceAwareTrait;
 use ExportRh\Connecteur\ConnecteurRhInterface;
 use ExportRh\Entity\IntervenantRh;

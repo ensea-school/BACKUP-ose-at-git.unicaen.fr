@@ -4,7 +4,7 @@ namespace Intervenant\Form;
 
 use Application\Entity\Db\EtatSortie;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\DossierAutreServiceAwareTrait;
+use Dossier\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;

@@ -9,6 +9,8 @@ use Application\Entity\Db\Traits\GradeAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Traits\AdresseTrait;
 use Application\Interfaces\AdresseInterface;
+use Contrat\Entity\Db\Contrat;
+use Contrat\Entity\Db\TypeContrat;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Hydrator\ClassMethodsHydrator;
@@ -1296,11 +1298,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Add contrat
      *
-     * @param \Application\Entity\Db\Contrat $contrat
+     * @param \Contrat\Entity\Db\Contrat $contrat
      *
      * @return Intervenant
      */
-    public function addContrat(\Application\Entity\Db\Contrat $contrat)
+    public function addContrat(\Contrat\Entity\Db\Contrat $contrat)
     {
         $this->contrat[] = $contrat;
 
@@ -1312,9 +1314,9 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Remove contrat
      *
-     * @param \Application\Entity\Db\Contrat $contrat
+     * @param \Contrat\Entity\Db\Contrat $contrat
      */
-    public function removeContrat(\Application\Entity\Db\Contrat $contrat)
+    public function removeContrat(\Contrat\Entity\Db\Contrat $contrat)
     {
         $this->contrat->removeElement($contrat);
     }
@@ -1324,7 +1326,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get contrat
      *
-     * @param \Application\Entity\Db\TypeContrat $typeContrat
+     * @param \Contrat\Entity\Db\TypeContrat $typeContrat
      * @param \Application\Entity\Db\Structure   $structure
      *
      * @return \Doctrine\Common\Collections\Collection

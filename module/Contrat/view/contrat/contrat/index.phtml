@@ -1,0 +1,132 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this                       \Application\View\Renderer\PhpRenderer
+ * @var $title                      string
+ * @var $intervenant                \Application\Entity\Db\Intervenant
+ * @var $contrats                   \Contrat\Entity\Db\Contrat[]
+ * @var $avenant_param              boolean
+ * @var $contratDirect              boolean
+ * @var $hasContrat                 boolean
+ */
+
+$structList = [];
+foreach ($contrats as $contrat) {
+    $structList[] = $contrat->getStructure();
+}
+
+$serviceNonContractToShow = [];
+foreach ($services['non-contractualises'] as $sid => $servicesNC) {
+    $structure = current($servicesNC)->getElementPedagogique()->getStructure();
+    if ($avenant_param == 1 || (!in_array($structure, $structList) && !in_array(null, $structList) && !($avenant_param < 0 && $hasContrat))) {
+        $serviceNonContractToShow[] = $structure;
+    }
+}
+
+
+$this->intervenant($intervenant)->renderTitle("Contrat/avenant");
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+if ($services['non-contractualises']) {
+    $this->messenger()->addMessage('Des heures prévisionnelles d\'enseignement validées ne font l\'objet d\'aucun contrat ou avenant. En voici la liste ci-dessous :', 'danger');
+} else {
+    $this->messenger()->addMessage('Tous les enseignements prévisionnels validés ont fait l\'objet d\'un contrat ou d\'un avenant.', 'success');
+}
+
+$this->messenger() ?>
+
+<style>
+    th.structure, td.structure {
+        width: 10%;
+    }
+
+    .ui-datepicker {
+        z-index: 1151 !important;
+    }
+
+    td .card {
+        margin-bottom: 0px;
+    }
+
+</style>
+
+<?php if ($contrats || $services['non-contractualises']):
+    if ($services['non-contractualises']):?>
+        <?php if (!$hasContrat || $avenant_param > 0 || ($avenant_param == 0 && !empty($serviceNonContractToShow))): ?>
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th class="structure">Composante</th>
+                    <th>Enseignement(s) non contractualisé(s)</th>
+                </tr>
+
+                <?php foreach ($services['non-contractualises'] as $sid => $servicesNC):
+                    $structure = current($servicesNC)->getElementPedagogique()->getStructure();
+                    $contrat = new \Contrat\Entity\Db\Contrat();
+                    $contrat->setIntervenant($intervenant);
+                    $contrat->setStructure($structure);
+                    if (!in_array($structure, $serviceNonContractToShow)) {
+                        continue;
+                    }
+                    $canCreer = $this->isAllowed($contrat, Privileges::CONTRAT_CREATION);
+                    ?>
+                    <tr>
+                        <td><?= $structure ?></td>
+                        <td>
+                            <?php if ($canCreer):
+                                if ($contratDirect):?>
+                                    <a class="btn btn-primary"
+                                       href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
+                                        <i class="fas fa-file"></i> Créer un <?= $hasContrat ? 'avenant' : 'contrat' ?>
+                                    </a>
+                                <?php else: ?>
+                                    <a class="btn btn-primary"
+                                       href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
+                                        <i class="fas fa-file"></i> Créer un projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
+                                    </a>
+                                <?php endif;
+                            else:
+                                echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
+                            endif; ?>
+                            <p>
+                                Enseignements (validés) non contractualisés :<br/>
+                                <small><a title="Cliquez pour afficher/masquer les enseignements concernés"
+                                          href="#details-enseignements-structure-<?= $sid ?>"
+                                          role="button"
+                                          aria-expanded="true" aria-controls="details-enseignements-structure-<?= $sid ?>"
+                                          data-bs-toggle="collapse"
+                                    >Afficher/masquer</a></small>
+                            </p>
+                            <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>"
+                                 id="details-enseignements-structure-<?= $sid ?>">
+                                <?= $this->enseignements(current($servicesNC)->getTypeVolumeHoraire(), $intervenant, $servicesNC)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php endif; endif; ?>
+    <div class="well">
+        <h2>Contrats et avenants</h2>
+        <?php foreach ($contrats as $contrat): ?>
+            <?= $this->partial('contrat/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param]);
+            ?>
+
+        <?php endforeach; ?>
+    </div>
+<?php else: ?>
+    <p>Aucun contrat/avenant trouvé.</p>
+<?php endif; ?>
+
+<hr/>
+<?= $this->feuilleDeRoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_CONTRAT); ?>
+
+<script>
+    $("body").on("envoi-mail-contrat", function (event, data)
+    {
+        console.log('event envoyé et affiché');
+        event.div.modal('hide'); // ferme la fenêtre modale
+        window.location.reload();
+    });
+</script>

@@ -2,7 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Contrat;
 use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantDossier;
@@ -10,13 +9,14 @@ use Application\Entity\Db\MiseEnPaiement;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
-use Application\Service\Traits\ContratServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
+use Contrat\Entity\Db\Contrat;
+use Contrat\Service\ContratServiceAwareTrait;
+use Doctrine\ORM\QueryBuilder;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use RuntimeException;
-use Doctrine\ORM\QueryBuilder;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 

@@ -2,9 +2,9 @@
 
 namespace Mission\Entity\Db;
 
-use Application\Entity\Db\Traits\ContratAwareTrait;
 use Application\Entity\Db\Validation;
 use Application\Interfaces\AxiosExtractor;
+use Contrat\Entity\Db\ContratAwareTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;

@@ -15,7 +15,7 @@
             </cascade>
         </many-to-one>
         <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
-        <many-to-one field="contrat" target-entity="Application\Entity\Db\Contrat">
+        <many-to-one field="contrat" target-entity="Contrat\Entity\Db\Contrat">
             <join-column name="CONTRAT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <field name="autoValidation" type="boolean" column="AUTO_VALIDATION" nullable="false"/>

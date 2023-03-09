@@ -4,6 +4,7 @@ namespace Application;
 
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
+use Contrat\Controller\ContratController;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
@@ -216,7 +217,7 @@ return [
                         'options' => [
                             'route'    => '/:intervenant/contrat',
                             'defaults' => [
-                                'controller' => 'Application\Controller\Contrat',
+                                'controller' => ContratController::class,
                                 'action'     => 'index',
                             ],
                         ],
@@ -279,7 +280,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Contrat', 'index'),
+                                'resource'     => PrivilegeController::getResourceId(ContratController::class, 'index'),
                                 'order'        => 12,
                             ],
                         ],

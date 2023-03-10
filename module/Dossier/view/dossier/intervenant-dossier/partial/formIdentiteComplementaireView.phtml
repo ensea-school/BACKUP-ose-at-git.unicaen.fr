@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * @var $this               \Application\View\Renderer\PhpRenderer
+ * @var $form               \Dossier\Form\IntervenantDossierForm
+ * @var $intervenant        \Application\Entity\Db\Intervenant
+ * @var $intervenantDossier \Dossier\Entity\Db\IntervenantDossier
+ * @var $tblDossier         \Dossier\Entity\Db\TblDossier
+ */
+
+use Dossier\Assertion\IntervenantDossierAssertion;
+
+$viewIdentite = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_IDENTITE);
+
+/**
+ * @var \Dossier\Entity\Db\IntervenantDossier $intervenantDossier
+ */
+
+//$Dossier = $dossier;
+
+$form->prepare();
+$dossierIdentiteComplementaire = $form->get('DossierIdentiteComplementaire');
+
+
+?>
+
+<!-- Fiedlset Identite -->
+
+<div class="col-md-6">
+    <div class="card bg-default">
+        <div class="card-header">
+            IDENTITÉ COMPLEMENTAIRE
+            <?php if (!empty($tblDossier)): ?>
+                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeIdentiteComp()): ?>
+                    <span class="badge bg-warning text-dark">A compléter</span>
+                <?php else: ?>
+                    <span class="badge bg-success">Complet</span>
+                <?php endif; ?>
+            <?php endif; ?>
+
+        </div>
+        <div class="card-body">
+
+            <div class="form-group">
+                <?= $this->formLabel($dossierIdentiteComplementaire->get('dateNaissance')); ?>
+                <div class="input-group cold-md-6 readonly">
+                    <?php
+                    if (!empty($dossierIdentiteComplementaire->get('dateNaissance')->getValue())) {
+                        echo ($viewIdentite) ? $dossierIdentiteComplementaire->get('dateNaissance')->getValue() : '**/**/****';
+                    }
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?= $this->formLabel($dossierIdentiteComplementaire->get('paysNaissance')); ?>
+                <div class="input-group cold-md-6 readonly">
+                    <?php
+                    if (!empty($intervenantDossier->getPaysNaissance())) {
+                        echo ($viewIdentite) ? $intervenantDossier->getPaysNaissance()->getLibelle() : '*******************';
+                    }
+
+
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?= $this->formLabel($dossierIdentiteComplementaire->get('paysNationalite')); ?>
+                <div class="input-group cold-md-6 readonly">
+                    <?php
+                    if (!empty($intervenantDossier->getPaysNationalite())) {
+                        echo ($viewIdentite) ? $intervenantDossier->getPaysNationalite()->getLibelle() : '*******************';
+                    }
+
+                    ?>
+                </div>
+            </div>
+            <?php if ($intervenantDossier->getPaysNaissance() && $intervenantDossier->getPaysNaissance()->getLibelle() == 'FRANCE'): ?>
+                <div class="form-group">
+                    <?= $this->formLabel($dossierIdentiteComplementaire->get('departementNaissance')); ?>
+                    <div class="input-group cold-md-6 readonly">
+                        <?php
+                        if (!empty($intervenantDossier->getDepartementNaissance())) {
+                            echo ($viewIdentite) ? $intervenantDossier->getDepartementNaissance()->getLibelle() : '*******************';
+                        }
+                        ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <div class="form-group">
+                <?= $this->formLabel($dossierIdentiteComplementaire->get('villeNaissance')); ?>
+                <div class="input-group cold-md-6 readonly">
+                    <?php
+                    if (!empty($intervenantDossier->getCommuneNaissance())) {
+                        echo ($viewIdentite) ? $intervenantDossier->getCommuneNaissance() : '*******************';
+                    }
+
+
+                    ?>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+

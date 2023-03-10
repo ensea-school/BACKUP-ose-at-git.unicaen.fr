@@ -6,8 +6,6 @@ use Application\Entity\Db\Traits\TypePieceJointeAwareTrait;
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Traits\ParametreEntityTrait;
 use Intervenant\Entity\Db\StatutAwareTrait;
-use UnicaenApp\Entity\HistoriqueAwareInterface;
-use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 
 class TypePieceJointeStatut implements ParametreEntityInterface
@@ -16,29 +14,31 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     use StatutAwareTrait;
     use TypePieceJointeAwareTrait;
 
-    private float $seuilHetd = 0;
+    private float $seuilHetd            = 0;
 
-    private bool $typeHeureHetd = false;
+    private bool  $typeHeureHetd        = false;
 
-    private bool $fc = false;
+    private bool  $fc                   = false;
 
-    private bool $changementRIB = false;
+    private bool  $changementRIB        = false;
 
-    private bool $nationaliteEtrangere = false;
+    private bool  $nationaliteEtrangere = false;
 
-    private int $dureeVie = 1;
+    private int   $dureeVie             = 1;
 
-    private bool $obligatoireHNP = false;
+    private bool  $obligatoireHNP       = false;
 
-    private bool $obligatoire = true;
+    private bool  $obligatoire          = true;
 
-    protected int $numRegle = 1;
+    protected int $numRegle             = 1;
+
 
 
     public function getSeuilHetd(): float|int
     {
         return $this->seuilHetd;
     }
+
 
 
     public function setSeuilHetd(float|int $seuilHetd): TypePieceJointeStatut
@@ -49,10 +49,12 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
+
     public function getTypeHeureHetd(): bool
     {
         return $this->typeHeureHetd;
     }
+
 
 
     public function setTypeHeureHetd(bool $typeHeureHetd): TypePieceJointeStatut
@@ -63,10 +65,12 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
+
     public function getFc(): bool
     {
         return $this->fc;
     }
+
 
 
     public function setFc(bool $fc): TypePieceJointeStatut
@@ -77,10 +81,12 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
+
     public function getChangementRIB(): bool
     {
         return $this->changementRIB;
     }
+
 
 
     public function setChangementRIB(bool $changementRIB): TypePieceJointeStatut
@@ -91,6 +97,7 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
+
     /**
      * @return bool
      */
@@ -99,8 +106,11 @@ class TypePieceJointeStatut implements ParametreEntityInterface
         return $this->nationaliteEtrangere;
     }
 
+
+
     /**
      * @param bool $nationaliteEtrangere
+     *
      * @return TypePieceJointeStatut $this
      */
     public function setNationaliteEtrangere(bool $nationaliteEtrangere): TypePieceJointeStatut
@@ -111,10 +121,12 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
+
     public function getDureeVie(): int
     {
         return $this->dureeVie;
     }
+
 
 
     public function setDureeVie(int $dureeVie): TypePieceJointeStatut
@@ -125,10 +137,12 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
+
     public function getObligatoireHNP(): bool
     {
         return $this->obligatoireHNP;
     }
+
 
 
     public function setObligatoireHNP(bool $obligatoireHNP): TypePieceJointeStatut
@@ -139,10 +153,12 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
+
     public function getObligatoire(): bool
     {
         return $this->obligatoire;
     }
+
 
 
     public function setObligatoire(bool $obligatoire): TypePieceJointeStatut
@@ -153,10 +169,12 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
+
     public function getNumRegle(): int
     {
         return $this->numRegle;
     }
+
 
 
     public function setNumRegle(int $numRegle): TypePieceJointeStatut
@@ -165,6 +183,7 @@ class TypePieceJointeStatut implements ParametreEntityInterface
 
         return $this;
     }
+
 
 
     public function __toString()
@@ -181,12 +200,13 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     }
 
 
+
     /**
      * @return string
      */
     public function getTitle(): string
     {
-        $t = [];
+        $t   = [];
         $t[] = $this->getObligatoire() ? 'Pièce obligatoire' : 'Pièce facultative';
         if ($this->getSeuilHetd()) $t[] = 'À partir de ' . $this->getSeuilHetd() . ' heures';
         if ($this->getFc()) $t[] = 'Uniquement avec des enseignements en Formation Continue';

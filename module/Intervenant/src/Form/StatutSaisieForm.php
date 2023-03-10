@@ -41,6 +41,7 @@ class StatutSaisieForm extends AbstractForm
             'dossierAdresse'                => 'Adresse',
             'dossierBanque'                 => 'Banque',
             'dossierInsee'                  => 'Numéro INSEE',
+            'dossierStatut'                 => 'Statut',
             'dossierEmployeur'              => 'Employeur',
             'pieceJustificative'            => '',
             'conseilRestreint'              => 'Conseil restreint',

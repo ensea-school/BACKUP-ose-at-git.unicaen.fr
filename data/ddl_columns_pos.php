@@ -1309,6 +1309,7 @@ return [
         'MISSION',
         'MISSION_REALISE_EDITION',
         'TAUX_REMU_ID',
+        'DOSSIER_STATUT',
     ],
     'STRUCTURE'                      => [
         'ID',

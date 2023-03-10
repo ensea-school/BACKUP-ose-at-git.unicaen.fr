@@ -43,6 +43,7 @@ class DossierStatutFieldset extends AbstractFieldset
             'type'       => 'Select',
         ]);
 
+        
         /** @var Statut $statut */
         $statut      = $this->getOption('statut');
         $intervenant = $this->getOption('intervenant');
@@ -70,7 +71,7 @@ class DossierStatutFieldset extends AbstractFieldset
     {
         $spec = [
             'statut' => [
-                'required' => true,
+                'required' => false,
             ],
         ];
 

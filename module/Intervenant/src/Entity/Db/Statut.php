@@ -66,6 +66,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool        $dossierInsee                       = true;
 
+    private bool        $dossierStatut                      = true;
+
     private bool        $dossierEmployeur                   = false;
 
     private bool        $dossierAutre1                      = false;
@@ -529,6 +531,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setDossierInsee(bool $dossierInsee): Statut
     {
         $this->dossierInsee = $dossierInsee;
+
+        return $this;
+    }
+
+
+
+    public function getDossierStatut(): bool
+    {
+        return $this->dossierStatut;
+    }
+
+
+
+    public function setDossierStatut(bool $dossierStatut): Statut
+    {
+        $this->dossierStatut = $dossierStatut;
 
         return $this;
     }
@@ -1442,7 +1460,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
      * @param TauxRemu|null $tauxRemu
      *
      * @return $this
-     */public function setTauxRemu(?TauxRemu $tauxRemu): Statut
+     */
+    public function setTauxRemu(?TauxRemu $tauxRemu): Statut
     {
         $this->tauxRemu = $tauxRemu;
 

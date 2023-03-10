@@ -85,9 +85,13 @@ class IntervenantDossierController extends AbstractController
             $form->setData($data);
             if ($form->isValid()) {
                 /* Traitement du formulaire */
+                if (empty($intervenantDossier->getStatut()) && $intervenant->getStatut()->getCode() != 'AUTRES') {
+                    $intervenantDossier->setStatut($intervenant->getStatut());
+                }
                 $intervenantDossier = $this->getServiceDossier()->save($intervenantDossier);
+
                 /*On reinitialise le formulaire car le statut du dossier a
-                pu être changé donc les règles d'affichage ne sont plus les mêmes*/
+                pu être changé donc les règles d'affichage ne sont plus les mêmes */
                 $form = $this->getFormIntervenantIntervenantDossier()->setIntervenant($intervenant)->initForm();
                 $form->bind($intervenantDossier);
                 //Alimentation de la table INDIC_MODIF_DOSSIER
@@ -116,6 +120,7 @@ class IntervenantDossierController extends AbstractController
         //Règles pour afficher ou non les fieldsets
         $champsAutres  = $intervenantDossier->getStatut()->getChampsAutres();
         $fieldsetRules = [
+            'fieldset-statut'                  => $intervenantDossier->getStatut()->getDossierStatut(),
             'fieldset-identite-complementaire' => $intervenantDossier->getStatut()->getDossierIdentiteComplementaire(),
             'fieldset-adresse'                 => $intervenantDossier->getStatut()->getDossierAdresse(),
             'fieldset-contact'                 => $intervenantDossier->getStatut()->getDossierContact(),
@@ -156,7 +161,8 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function changeStatutDossierAction()
+    public
+    function changeStatutDossierAction()
     {
         if ($this->getRequest()->isPost()) {
             $data        = $this->getRequest()->getPost();
@@ -192,7 +198,8 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function validerAction()
+    public
+    function validerAction()
     {
         $this->initFilters();
 
@@ -217,7 +224,8 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function devaliderAction()
+    public
+    function devaliderAction()
     {
         $this->initFilters();
 
@@ -237,7 +245,8 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function supprimerAction()
+    public
+    function supprimerAction()
     {
         $this->initFilters();
 
@@ -258,7 +267,8 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function differencesAction()
+    public
+    function differencesAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
 
@@ -286,7 +296,8 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function purgerDifferencesAction()
+    public
+    function purgerDifferencesAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
 
@@ -312,7 +323,8 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    private function updateTableauxBord(Intervenant $intervenant, $validation = false)
+    private
+    function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'dossier',

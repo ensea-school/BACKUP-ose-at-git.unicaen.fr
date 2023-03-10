@@ -101,24 +101,32 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                     <fieldset>
                         <legend>Modules à activer :</legend>
 
+
                         <div class="row">
+                            <div class="col-md-4">
+                                <?= $this->formControlGroup($form->get('dossierStatut')); ?>
+                            </div>
                             <div class="col-md-4">
                                 <?= $this->formControlGroup($form->get('dossierIdentiteComplementaire')); ?>
                             </div>
                             <div class="col-md-4">
                                 <?= $this->formControlGroup($form->get('dossierContact')); ?>
                             </div>
-                            <div class="col-md-4">
-                                <?= $this->formControlGroup($form->get('dossierAdresse')); ?>
-                            </div>
+
                         </div>
                         <div class="row">
                             <div class="col-md-4">
+                                <?= $this->formControlGroup($form->get('dossierAdresse')); ?>
+                            </div>
+                            <div class="col-md-4">
+
                                 <?= $this->formControlGroup($form->get('dossierBanque')); ?>
                             </div>
                             <div class="col-md-4">
                                 <?= $this->formControlGroup($form->get('dossierInsee')); ?>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-4">
                                 <?= $this->formControlGroup($form->get('dossierEmployeur')); ?>
                             </div>
@@ -420,7 +428,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
             el: function (name) {
-                return this.element.find('[name=' + name + ']');
+                return this.element.find('[name='+name+']');
             }
         });
     });

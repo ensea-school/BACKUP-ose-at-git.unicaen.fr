@@ -15,6 +15,7 @@ use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
@@ -58,6 +59,7 @@ class  IntervenantController extends AbstractController
     use ImportProcessusAwareTrait;
     use DifferentielServiceAwareTrait;
     use NoteServiceAwareTrait;
+    use DossierServiceAwareTrait;
 
 
     public function indexAction()

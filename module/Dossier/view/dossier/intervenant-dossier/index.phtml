@@ -117,15 +117,19 @@ $fieldsets = $form->getFieldsets();
     <!-- legend champs obligatoire -->
     <p class="text-right"><span class="text-danger">*</span> champs obligatoires pour compléter vos données personnelles
     </p>
-    <div class="row">
-        <?php
-        if ($canEdit) {
-            echo $this->partial('dossier/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier',));
-        } else {
-            echo $this->partial('dossier/intervenant-dossier/partial/formStatutView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
-        }
-        ?>
-    </div>
+
+    <?php if ($fieldsetRules['fieldset-statut'])  : ?>
+        <div class="row">
+            <?php
+            if ($canEdit) {
+                echo $this->partial('dossier/intervenant-dossier/partial/formStatut', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier',));
+            } else {
+                echo $this->partial('dossier/intervenant-dossier/partial/formStatutView', compact('form', 'intervenant', 'intervenantDossier', 'tblDossier'));
+            }
+            ?>
+        </div>
+    <?php endif; ?>
+
 
 
     <?php if (empty($intervenantDossierStatut)): ?>
@@ -308,12 +312,12 @@ $fieldsets = $form->getFieldsets();
                         e.stopImmediatePropagation();
                     } else {
                         var action = $("form[id='dossier']").attr('action');
-                        $("form[id='dossier']").attr('action', action + '/change-statut-dossier');
+                        $("form[id='dossier']").attr('action', action+'/change-statut-dossier');
                         $("form[id='dossier']").submit();
                     }
                 } else {
                     var action = $("form[id='dossier']").attr('action');
-                    $("form[id='dossier']").attr('action', action + '/change-statut-dossier');
+                    $("form[id='dossier']").attr('action', action+'/change-statut-dossier');
                     $("form[id='dossier']").submit();
                 }
             });

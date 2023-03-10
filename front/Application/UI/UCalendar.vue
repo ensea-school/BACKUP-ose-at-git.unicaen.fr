@@ -29,14 +29,27 @@
                     <div class="num-jour badge bg-secondary rounded-circle">{{ jour < 10 ? '0' + jour.toString() : jour }}</div>
                 </th>
                 <td>
-                    <div>
-                        <div class="alert alert-info" v-for="event in eventsByJour(jour)">
-                            <component :is="event.component" :event="event"/>
+                    <div class="event" :style="'border-color:'+event.color" v-for="(event,index) in eventsByJour(jour)" :key="index">
+                        <div class="event-content">
+                            <component :is="event.component" :event="event"></component>
+                        </div>
+                        <div class="event-actions">
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-light" @click="editEvent" :data-index="index">
+                                    <u-icon name="pen-to-square"/>
+                                </button>
+                                <button class="btn btn-light" @click="deleteEvent" :data-index="index">
+                                    <u-icon name="trash-can" class="text-danger"/>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <div v-if="canAddEvent">
-                        <button @click="addEvent" :data-jour="jour" class="btn btn-light btn-sm"><u-icon name="plus" /> Nouvel événement</button>
+                        <button @click="addEvent" :data-jour="jour" class="btn btn-light btn-sm">
+                            <u-icon name="plus"/>
+                            Nouvel événement
+                        </button>
                     </div>
                 </td>
             </tr>
@@ -74,7 +87,7 @@ export default {
             let nombreJours = dateObj.getDate();
 
             return Array.from({length: nombreJours}, (v, k) => k + 1)
-        }
+        },
     },
     watch: {
         date: function (newVal, oldVal) { // watch it
@@ -137,9 +150,21 @@ export default {
         addEvent(event)
         {
             const dateObj = new Date(this.date);
-            dateObj.setDate(event.target.dataset.jour);
+            dateObj.setDate(event.currentTarget.dataset.jour);
 
             this.$emit('addEvent', dateObj);
+        },
+
+        editEvent(event)
+        {
+            const index = event.currentTarget.dataset.index;
+            this.$emit('editEvent', this.events[index]);
+        },
+
+        deleteEvent(event)
+        {
+            const index = event.currentTarget.dataset.index;
+            this.$emit('deleteEvent', this.events[index]);
         },
 
         prevMois()
@@ -162,14 +187,14 @@ export default {
         {
             const dateObj = new Date(this.date);
 
-            let res = [];
+            let res = {};
             for (let e in this.events) {
                 let event = this.events[e];
                 if (event.date.getFullYear() === dateObj.getFullYear()
                     && event.date.getMonth() + 1 === dateObj.getMonth() + 1
                     && event.date.getDate() === jour
                 ) {
-                    res.push(event);
+                    res[e] = event;
                 }
             }
             return res;
@@ -180,8 +205,14 @@ export default {
 
 <style scoped>
 
+.table tr {
+    background-color: #f4f4f4;
+    border-left: 1px #ddd solid;
+    border-right: 1px #ddd solid;
+}
+
 .table-hover tr:hover {
-    background-color:lightyellow;
+    background-color: #f7f7f7;
 }
 
 .recherche {
@@ -199,6 +230,7 @@ export default {
 
 th.nom-jour {
     width: 1%;
+    padding-left: 3px;
 }
 
 th.numero-jour {
@@ -209,6 +241,28 @@ th.numero-jour {
 .recherche {
     justify-content: center;
     padding-bottom: 5px;
+}
+
+
+.event {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+    border-left: 10px #bbb solid;
+    border-right: 10px #bbb solid;
+}
+
+.event:hover {
+    background-color: white;
+}
+
+.event-content {
+    flex-grow: 1;
+}
+
+.event-actions {
+    align-self: flex-start;
 }
 
 </style>

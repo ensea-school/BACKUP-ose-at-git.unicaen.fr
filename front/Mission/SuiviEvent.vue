@@ -1,10 +1,5 @@
 <template>
-    {{ event.texte }}
-
-    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#suivi-form">
-        <u-icon name="pen-to-square" />
-    </button>
-    <button class="btn btn-light"><u-icon name="trash-can" /></button>
+   {{ event.description }}
 </template>
 
 <script>
@@ -13,6 +8,12 @@ export default {
     props: {
         event: {type: Object, required: true},
     },
+    methods: {
+        editEvent()
+        {
+            console.log(this.event);
+        },
+    }
 }
 </script>
 

@@ -153,6 +153,43 @@ Formatter = {
 
 
 
+class Form {
+
+    constructor(spec)
+    {
+        this.spec = spec;
+        this.errors = {};
+    }
+
+
+
+    isValid(data)
+    {
+        this.errors = {};
+
+        for (let element in this.spec) {
+            if (this.spec[element].required === true) {
+                if (data[element] == null || data[element] === undefined) {
+                    this.addError(element, 'Une valeur est requise');
+                }
+            }
+        }
+
+        return Util.json.count(this.errors) == 0;
+    }
+
+
+
+    addError(element, message)
+    {
+        if (!this.errors[element] instanceof Array) {
+            this.errors[element] = [];
+        }
+        this.errors[element].push(message);
+    }
+}
+
+
 
 Util = {
 
@@ -321,7 +358,7 @@ Util = {
         roleInput[0].dispatchEvent(event);
     },
 
-    
+
 
     filterSelectPicker: function (select, values)
     {
@@ -427,6 +464,22 @@ Util = {
         }
 
         return value;
+    },
+
+
+
+    dateToString: function (date)
+    {
+        if (date === undefined) {
+            return undefined;
+        }
+
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const dateString = `${year}-${month}-${day}`;
+
+        return dateString;
     },
 
 

@@ -5,6 +5,7 @@ export default {
     uModal: 'Application/UI/UModal',
     uCalendar: 'Application/UI/UCalendar',
     uTabs: 'Application/UI/UTabs',
+    uFormDate: 'Application/UI/UFormDate',
 
     /* App common components */
     utilisateur: 'Application/Utilisateur',

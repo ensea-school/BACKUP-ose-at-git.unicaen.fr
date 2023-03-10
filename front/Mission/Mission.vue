@@ -212,46 +212,46 @@ export default {
         },
         saisie(event)
         {
-            modAjax(event.target, (widget) => {
+            modAjax(event.currentTarget, (widget) => {
                 this.refresh();
             });
         },
         supprimer(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('supprimer', this.mission);
             });
         },
         valider(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         devalider(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         volumeHoraireSupprimer(event)
         {
-            event.target.href = Util.url('mission/volume-horaire/supprimer/:missionVolumeHoraire', {missionVolumeHoraire: event.target.dataset.id});
-            popConfirm(event.target, (response) => {
+            event.currentTarget.href = Util.url('mission/volume-horaire/supprimer/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         volumeHoraireValider(event)
         {
-            event.target.href = Util.url('mission/volume-horaire/valider/:missionVolumeHoraire', {missionVolumeHoraire: event.target.dataset.id});
-            popConfirm(event.target, (response) => {
+            event.currentTarget.href = Util.url('mission/volume-horaire/valider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         volumeHoraireDevalider(event)
         {
-            event.target.href = Util.url('mission/volume-horaire/devalider/:missionVolumeHoraire', {missionVolumeHoraire: event.target.dataset.id});
-            popConfirm(event.target, (response) => {
+            event.currentTarget.href = Util.url('mission/volume-horaire/devalider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },

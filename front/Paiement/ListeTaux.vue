@@ -30,7 +30,7 @@ export default {
     methods: {
         ajout(event)
         {
-            modAjax(event.target, (widget) => {
+            modAjax(event.currentTarget, (widget) => {
                 this.reload();
             });
         },

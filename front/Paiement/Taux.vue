@@ -155,10 +155,9 @@ export default {
         },
         saisieValeur(event)
         {
-            let target = event.target.parentElement;
-            target.href = Util.url("taux/saisir-valeur/:tauxRemu/:tauxRemuValeur",
-                {tauxRemu: this.taux.id, tauxRemuValeur: target.dataset.id});
-            modAjax(target, (response) => {
+            event.currentTarget.href = Util.url("taux/saisir-valeur/:tauxRemu/:tauxRemuValeur",
+                {tauxRemu: this.taux.id, tauxRemuValeur: event.currentTarget.dataset.id});
+            modAjax(event.currentTarget, (response) => {
                 this.$emit('refreshListe');
             });
         },
@@ -174,10 +173,9 @@ export default {
         },
         supprimerValeur(event)
         {
-            let target = event.target.parentElement;
-            target.href = Util.url("taux/supprimer-valeur/:tauxRemuValeur",
-                {tauxRemuValeur: target.dataset.id});
-            popConfirm(target, (response) => {
+            event.currentTarget.href = Util.url("taux/supprimer-valeur/:tauxRemuValeur",
+                {tauxRemuValeur: event.currentTarget.dataset.id});
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refreshListe');
             });
         },

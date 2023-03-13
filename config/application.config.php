@@ -139,6 +139,7 @@ class AppConfig
             'Indicateur',
             'ExportRh',
             'Contrat',
+            'Dossier',
         ];
 
         if (!self::inConsole()) {

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Dossier\Entity\Db\TblDossier" table="TBL_DOSSIER">
+        <id name="id" type="integer" column="ID"/>
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee" fetch="LAZY">
+            <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" fetch="LAZY">
+            <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="actif" type="boolean" column="ACTIF" nullable="false"/>
+        <one-to-one field="dossier" target-entity="Dossier\Entity\Db\IntervenantDossier" inversed-by="tblDossier">
+            <join-column name="DOSSIER_ID" referenced-column-name="ID"/>
+        </one-to-one>
+        <many-to-one field="validation" target-entity="Application\Entity\Db\Validation" fetch="LAZY">
+            <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="completudeIdentite" type="boolean" column="COMPLETUDE_IDENTITE" nullable="false"/>
+        <field name="completudeIdentiteComp" type="boolean" column="COMPLETUDE_IDENTITE_COMP" nullable="false"/>
+        <field name="completudeStatut" type="boolean" column="COMPLETUDE_STATUT" nullable="false"/>
+        <field name="completudeContact" type="boolean" column="COMPLETUDE_CONTACT" nullable="false"/>
+        <field name="completudeAdresse" type="boolean" column="COMPLETUDE_ADRESSE" nullable="false"/>
+        <field name="completudeInsee" type="boolean" column="COMPLETUDE_INSEE" nullable="false"/>
+        <field name="completudeBanque" type="boolean" column="COMPLETUDE_BANQUE" nullable="false"/>
+        <field name="completudeEmployeur" type="boolean" column="COMPLETUDE_EMPLOYEUR" nullable="false"/>
+        <field name="completudeAutres" type="boolean" column="COMPLETUDE_AUTRES" nullable="false"/>
+    </entity>
+</doctrine-mapping>

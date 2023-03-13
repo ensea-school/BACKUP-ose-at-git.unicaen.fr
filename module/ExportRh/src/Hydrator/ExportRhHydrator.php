@@ -3,6 +3,7 @@
 namespace ExportRh\Hydrator;
 
 
+use Dossier\Entity\Db\IntervenantDossier;
 use Laminas\Hydrator\HydratorInterface;
 
 /**

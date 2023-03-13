@@ -2,12 +2,11 @@
 
 namespace Intervenant\Entity\Db;
 
-use Application\Entity\Db\DossierAutre;
+use Dossier\Entity\Db\DossierAutre;
 use Application\Entity\Db\EtatSortie;
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Provider\Privilege\Privileges;
 use Application\Traits\ParametreEntityTrait;
-use Doctrine\Persistence\Mapping\ClassMetadata;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 use Paiement\Entity\Db\TauxRemu;
@@ -66,6 +65,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     private bool        $dossierBanque                      = true;
 
     private bool        $dossierInsee                       = true;
+
+    private bool        $dossierStatut                      = true;
 
     private bool        $dossierEmployeur                   = false;
 
@@ -530,6 +531,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setDossierInsee(bool $dossierInsee): Statut
     {
         $this->dossierInsee = $dossierInsee;
+
+        return $this;
+    }
+
+
+
+    public function getDossierStatut(): bool
+    {
+        return $this->dossierStatut;
+    }
+
+
+
+    public function setDossierStatut(bool $dossierStatut): Statut
+    {
+        $this->dossierStatut = $dossierStatut;
 
         return $this;
     }
@@ -1430,6 +1447,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
         return $this;
     }
 
+
+
     public function getTauxRemu(): ?TauxRemu
     {
         return $this->tauxRemu;
@@ -1441,12 +1460,15 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
      * @param TauxRemu|null $tauxRemu
      *
      * @return $this
-     */public function setTauxRemu(?TauxRemu $tauxRemu): Statut
+     */
+    public function setTauxRemu(?TauxRemu $tauxRemu): Statut
     {
         $this->tauxRemu = $tauxRemu;
 
         return $this;
     }
+
+
 
     /**
      * Retourne la liste des privilèges associés à un statut sous forme de tableau associatif :

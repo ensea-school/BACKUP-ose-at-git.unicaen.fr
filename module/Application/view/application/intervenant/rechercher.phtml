@@ -6,23 +6,10 @@
 <?= $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?>
 
 <div style="padding:1em">
-    <div class="intervenant-recherche">
-        <div class="critere">
-            Saisissez le nom suivi éventuellement du prénom (2 lettres au moins) :<br/>
-            <input id="critere" class="form-control input" type="text" style="width:15em;display:inline"/>
-        </div>
-        <div class="recherche" data-url="<?= $this->url('intervenant/recherche') ?>">
-
-        </div>
-    </div>
 
     <?php
 
-    if (!empty($recents)) {
-        echo '<h3>Fiches récemment consultées :</h3>';
-        echo $this->partial('liste', ['intervenants' => $recents]);
-    }
-
+    echo $this->vue('intervenant/recherche', []);
 
     $canAddIntervenant = $this->isAllowed(\Application\Provider\Privilege\Privileges::getResourceId(\Application\Provider\Privilege\Privileges::INTERVENANT_CREATION));
 
@@ -30,6 +17,13 @@
         $url = $this->url('intervenant/creer');
         echo $this->tag('a', ['class' => 'btn btn-primary', 'href' => $url])->html("Ajout d'un nouvel intervenant");
     }
+
+
+    if (!empty($recents)) {
+        echo '<h3 style="margin-top:20px;">Intervenants récemment consultés :</h3>';
+        echo $this->partial('liste', ['intervenants' => $recents]);
+    }
+
 
     ?>
 </div>

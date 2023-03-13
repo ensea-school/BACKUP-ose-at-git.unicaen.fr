@@ -4,7 +4,7 @@ namespace Application\Entity\Db;
 
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\CiviliteAwareTrait;
-use Application\Entity\Db\Traits\EmployeurAwareTrait;
+use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Application\Entity\Db\Traits\GradeAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Traits\AdresseTrait;

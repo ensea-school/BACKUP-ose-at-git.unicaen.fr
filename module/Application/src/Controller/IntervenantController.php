@@ -2,38 +2,35 @@
 
 namespace Application\Controller;
 
-use Service\Entity\Db\RegleStructureValidation;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\Db\Validation;
-use Service\Entity\Recherche;
+use Application\Entity\Db\Intervenant;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
-use Intervenant\Service\NoteServiceAwareTrait;
-use Plafond\Processus\PlafondProcessusAwareTrait;
-use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Service\Service\CampagneSaisieServiceAwareTrait;
-use Application\Service\Traits\DossierServiceAwareTrait;
-use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Intervenant\Service\StatutServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use UnicaenApp\Traits\SessionContainerTrait;
+use Dossier\Service\Traits\DossierServiceAwareTrait;
+use Intervenant\Service\NoteServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use LogicException;
-use Application\Entity\Db\Intervenant;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
-use UnicaenApp\View\Model\MessengerViewModel;
+use Plafond\Processus\PlafondProcessusAwareTrait;
+use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Service\CampagneSaisieServiceAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenImport\Entity\Differentiel\Query;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 use UnicaenImport\Service\Traits\DifferentielServiceAwareTrait;
-use Laminas\View\Model\ViewModel;
 
 /**
  * Description of IntervenantController
@@ -59,10 +56,10 @@ class  IntervenantController extends AbstractController
     use StatutServiceAwareTrait;
     use SourceServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
-    use DossierServiceAwareTrait;
     use ImportProcessusAwareTrait;
     use DifferentielServiceAwareTrait;
     use NoteServiceAwareTrait;
+    use DossierServiceAwareTrait;
 
 
     public function indexAction()
@@ -95,21 +92,19 @@ class  IntervenantController extends AbstractController
 
 
 
-    public function rechercheAction()
+    public function rechercheJsonAction()
     {
-        $this->em()->getFilters()->enable('historique')->init([
-            Intervenant::class,
-        ]);
-
-        $critere   = $this->params()->fromPost('critere');
-        $recherche = $this->getProcessusIntervenant()->recherche();
-
+        $recherche         = $this->getProcessusIntervenant()->recherche();
         $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
         $recherche->setShowHisto($canShowHistorises);
+        $intervenants = [];
+        $term         = $this->axios()->fromPost('term');
 
-        $intervenants = $recherche->rechercher($critere, 21);
+        if (!empty($term)) {
+            $intervenants = $recherche->rechercher($term, 40);
+        }
 
-        return compact('intervenants');
+        return $this->axios()->send($intervenants);
     }
 
 

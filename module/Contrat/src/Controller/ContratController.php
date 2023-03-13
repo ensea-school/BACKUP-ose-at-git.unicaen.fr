@@ -9,7 +9,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DossierServiceAwareTrait;
+use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\TauxHoraireHETDServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;

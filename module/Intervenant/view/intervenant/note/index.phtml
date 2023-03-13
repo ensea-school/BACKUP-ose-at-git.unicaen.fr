@@ -10,8 +10,8 @@ use Application\Provider\Privilege\Privileges;
  */
 
 
-$canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_AJOUT));
-$canSee = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_VISUALISATION));
+$canAdd       = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_AJOUT));
+$canSee       = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_VISUALISATION));
 $canSendEmail = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_EMAIL));
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
@@ -35,12 +35,12 @@ $this->headTitle()->append($title = "Notes sur l'intervenant");
         <?php foreach ($notes
 
                        as $note): ?>
-            <tr class="note" data-id="<?= $note->getId() ?>">
+            <tr data-id="<?= $note->getId() ?>">
                 <td class="col-lg-2"><?= $note->getType()->getLibelle() ?></td>
                 <td class="col-lg-4"><?= $note->getLibelle() ?></td>
                 <td class="col-lg-5"><?= 'Par ' . $note->getHistoCreateur()->getDisplayName() . ' le ' . $note->getHistoCreation()->format(\Application\Constants::DATETIME_FORMAT) ?></td>
                 <td class="col-lg-1">
-                    <div class="btn-group">
+                    <div>
                         <?php if ($this->isAllowed($note, \Intervenant\Assertion\NoteAssertion::PRIV_EDITER_NOTE)): ?>
                             <a class="ajax-modal" data-event="note-edition"
                                href="<?= $this->url('note/saisir', ['intervenant' => $intervenant->getId(), 'note' => $note->getId()]); ?>"><i
@@ -103,12 +103,12 @@ $this->headTitle()->append($title = "Notes sur l'intervenant");
     <body>
     <?php if (!empty($emails)): ?>
         <?php foreach ($emails as $email): ?>
-            <tr class="note" data-id="<?= $email->getId() ?>">
+            <tr data-id="<?= $email->getId() ?>">
                 <td class="col-lg-2"><?= $email->getType()->getLibelle() ?></td>
                 <td class="col-lg-4"><?= $email->getLibelle() ?></td>
                 <td class="col-lg-5"><?= 'Par ' . $email->getHistoCreateur()->getDisplayName() . ' le ' . $email->getHistoCreation()->format(\Application\Constants::DATETIME_FORMAT) ?></td>
                 <td class="col-lg-1">
-                    <div class="btn-group">
+                    <div>
                         <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_NOTE_VISUALISATION))): ?>
                             <a class="ajax-modal" data-event="note-voir"
                                href="<?= $this->url('note/voir', ['intervenant' => $intervenant->getId(), 'note' => $email->getId()]); ?>"><i
@@ -164,7 +164,7 @@ $this->headTitle()->append($title = "Notes sur l'intervenant");
             </head>
             <body>
             <?php foreach ($values as $v): ?>
-                <tr class="note" data-id="<?= $v['id'] ?>">
+                <tr data-id="<?= $v['id'] ?>">
                     <td class="col-lg-6"><?= $v['label'] ?></td>
                     <td class="col-lg-3"><?= $v['histo_date']->format(\Application\Constants::DATETIME_FORMAT) ?></td>
                     <td class="col-lg-3"><?= $v['histo_user'] ?></td>
@@ -202,7 +202,7 @@ $this->headTitle()->append($title = "Notes sur l'intervenant");
             if (str.indexOf("tab=notes") !== -1) {
                 window.location.reload();
             } else {
-                window.location.assign(window.location.href + '?tab=notes');
+                window.location.assign(window.location.href+'?tab=notes');
             }
 
 
@@ -213,7 +213,7 @@ $this->headTitle()->append($title = "Notes sur l'intervenant");
             if (str.indexOf("tab=notes") !== -1) {
                 window.location.reload();
             } else {
-                window.location.assign(window.location.href + '?tab=notes');
+                window.location.assign(window.location.href+'?tab=notes');
             }
 
 
@@ -226,7 +226,7 @@ $this->headTitle()->append($title = "Notes sur l'intervenant");
             if (str.indexOf("tab=notes") !== -1) {
                 window.location.reload();
             } else {
-                window.location.assign(window.location.href + '?tab=notes');
+                window.location.assign(window.location.href+'?tab=notes');
             }
 
         });

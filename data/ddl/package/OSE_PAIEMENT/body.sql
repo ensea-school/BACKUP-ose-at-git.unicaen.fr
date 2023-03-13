@@ -69,16 +69,15 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
 
     SELECT valeur into valeur FROM
     (
-    SELECT trv.valeur
-    FROM taux_remu tr
-    JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
-    WHERE tr.id = id_in
-    AND tr.histo_destruction IS NULL
-    AND trv.date_effet <= date_val
-    ORDER BY trv.date_effet DESC
+        SELECT trv.valeur
+        FROM taux_remu tr
+        JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
+        WHERE tr.id = id_in
+        AND tr.histo_destruction IS NULL
+        AND trv.date_effet <= date_val
+        ORDER BY trv.date_effet DESC
     )
     WHERE rownum = 1;
-
 
     SELECT(
         SELECT valeur FROM
@@ -107,11 +106,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
         RETURN valeur*valeur_parent;
     END IF;
 
-
     EXCEPTION
     WHEN OTHERS THEN
-       return -1;
+       RETURN -1;
   END get_taux_horaire;
+
+
 
   Function get_taux_horaire_date (id_in IN NUMBER, date_val IN DATE) RETURN DATE IS
     date_valeur DATE;
@@ -119,16 +119,15 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
   BEGIN
     SELECT date_effet into date_valeur FROM
     (
-    SELECT trv.date_effet
-    FROM taux_remu tr
-    JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
-    WHERE tr.id = id_in
-    AND tr.histo_destruction IS NULL
-    AND trv.date_effet <= date_val
-    ORDER BY trv.date_effet DESC
+        SELECT trv.date_effet
+        FROM taux_remu tr
+        JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
+        WHERE tr.id = id_in
+        AND tr.histo_destruction IS NULL
+        AND trv.date_effet <= date_val
+        ORDER BY trv.date_effet DESC
     )
     WHERE rownum = 1;
-
 
     SELECT(
         SELECT date_effet FROM
@@ -159,9 +158,8 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
 
     EXCEPTION
     WHEN OTHERS THEN
-       return '00/00/0000';
+       RETURN to_date('00/00/0000', 'dd/mm/YYYY');
   END get_taux_horaire_date;
-
 
 
 

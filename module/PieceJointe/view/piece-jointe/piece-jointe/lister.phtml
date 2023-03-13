@@ -1,0 +1,51 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $pj   \PieceJointe\Entity\Db\PieceJointe
+ */
+
+$fichiers = $pj ? $pj->getFichier() : [];
+/* @var $fichiers \Application\Entity\Db\Fichier[] */
+
+
+$canEdit     = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION));
+$canDownload = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_TELECHARGEMENT));
+
+if (count($fichiers) > 0): ?>
+
+    <ul>
+        <?php foreach ($fichiers as $fichier): ?>
+            <li class="fichier-pj">
+
+                <!-- lien de téléchargement du fichier -->
+                <?php
+
+                $paramsTelecharger = ['fichier' => $fichier->getId(), 'nomFichier' => $fichier->getNom()];
+                if ($canDownload) {
+                    $urlTelecharger = $this->url('piece-jointe/intervenant/fichier/telecharger', $paramsTelecharger, [], true);
+                } else {
+                    $urlTelecharger = null;
+                }
+                echo $this->uploader()->renderUploadedFile($fichier, $urlTelecharger);
+
+                if ($canEdit && !$pj->getValidation()) {
+                    $paramsSupprimer = ['pieceJointe' => $pj->getId(), 'fichier' => $fichier->getId()];
+                    $urlSupprimer    = $this->url('piece-jointe/intervenant/fichier/supprimer', $paramsSupprimer, [], true);
+                    echo $this->uploader()->renderDeleteFile($fichier, $urlSupprimer);
+                }
+                ?>
+            </li>
+        <?php endforeach ?>
+    </ul>
+
+
+<?php else: ?>
+
+    <p>Aucun.</p>
+
+<?php endif ?>
+
+

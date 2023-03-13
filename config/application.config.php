@@ -135,6 +135,7 @@ class AppConfig
             'Mission',
             'Paiement',
             'OffreFormation',
+            'PieceJointe',
             'Plafond',
             'Indicateur',
             'ExportRh',

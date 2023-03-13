@@ -27270,6 +27270,18 @@ textarea.form-control-lg {
   margin-left: -2px;
 }
 
+.card.bg-success {
+  background-color: #80c299 !important;
+}
+
+.card.bg-danger {
+  background-color: #e35858 !important;
+}
+
+.card.bg-warning {
+  background-color: #e3a72f !important;
+}
+
 /* -------------- DataTables -------------- */
 .dt-bootstrap5 .page-link {
   border-radius: 0px;
@@ -27351,6 +27363,10 @@ table thead th {
     max-width: 600px;
   }
 }
+.popover .popover-body.alert {
+  margin-bottom: 0px;
+}
+
 /* -------------- Listes de définition -------------- */
 dl {
   margin-top: 0;
@@ -27390,6 +27406,11 @@ dd, dt {
 
 .form-check-input:checked[type=checkbox] {
   background-image: none;
+}
+
+.danger-light {
+  background-color: #dc4c64;
+  color: #fff;
 }
 
 /* -------------- Personnalisation du bootstrap-select -------------- */
@@ -28774,6 +28795,11 @@ form#service div.volume-horaire-saisie-multiple-fin {
   color: darkgrey;
 }
 
+.seuils-dedoublement .form-control {
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
 .chargens-formation-edit.form-lien #actif {
   line-height: 2rem;
   width: 2rem;
@@ -28855,6 +28881,10 @@ ul.privileges-form li label {
  * Offre de formation
  */
 .etape-centre-cout {
+  margin-top: 2px;
+}
+
+.etape-taux-remu {
   margin-top: 2px;
 }
 
@@ -28994,10 +29024,6 @@ form.statut fieldset legend {
 }
 
 /* Texte & nombres */
-* {
-  font-family: Open Sans;
-}
-
 h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
   font-weight: 200;
@@ -29015,6 +29041,7 @@ span.number span.number-dec-00 {
 /* Structure principale de page */
 body {
   background-color: #f8f8fa;
+  font-family: "Open Sans";
 }
 
 body.wait * {
@@ -29076,6 +29103,21 @@ div#contenu-principal {
   color: #fff;
   background-color: #3b71ca;
   border-radius: 4px;
+}
+
+/* forms */
+.form-inline .mb-2 {
+  display: inline;
+}
+
+.form-inline .form-control {
+  width: auto;
+  display: inline;
+}
+
+.form-inline .form-select {
+  width: auto;
+  display: inline;
 }
 
 /* Multi checkbox */

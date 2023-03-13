@@ -4,15 +4,16 @@ namespace Application\Entity\Db;
 
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\CiviliteAwareTrait;
-use Application\Entity\Db\Traits\DisciplineAwareTrait;
-use Application\Entity\Db\Traits\EmployeurAwareTrait;
+use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Application\Entity\Db\Traits\GradeAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Traits\AdresseTrait;
 use Application\Interfaces\AdresseInterface;
-use Doctrine\Persistence\Mapping\ClassMetadata;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Intervenant\Entity\Db\Statut;
+use Laminas\Hydrator\ClassMethodsHydrator;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use OffreFormation\Entity\Db\Traits\DisciplineAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\HistoIntervenantService;
 use Service\Entity\Db\ModificationServiceDu;
@@ -23,8 +24,6 @@ use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Laminas\Hydrator\ClassMethodsHydrator;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Intervenant

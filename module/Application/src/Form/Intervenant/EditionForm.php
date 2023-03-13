@@ -3,30 +3,29 @@
 namespace Application\Form\Intervenant;
 
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
-use Application\Constants;
 use Application\Entity\Db\Civilite;
-use Application\Entity\Db\Discipline;
 use Application\Entity\Db\Grade;
 use Application\Entity\Db\Intervenant;
-use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
 use Application\Hydrator\GenericHydrator;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DisciplineServiceAwareTrait;
 use Application\Service\Traits\GradeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Intervenant\Entity\Db\Statut;
+use Intervenant\Service\StatutServiceAwareTrait;
+use Laminas\Form\Element;
+use Laminas\Form\FormInterface;
+use OffreFormation\Entity\Db\Discipline;
+use OffreFormation\Service\Traits\DisciplineServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
 use UnicaenImport\Entity\Db\Source;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
-use Laminas\Form\Element;
-use Laminas\Form\FormInterface;
 
 /**
  * Description of EditionForm
@@ -120,17 +119,13 @@ class EditionForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'dateNaissance',
-            'type'       => 'DateTime',
-            'options'    => [
+            'name'    => 'dateNaissance',
+            'type'    => 'Date',
+            'options' => [
                 'label'         => 'Date de naissance <span class="text-danger">*</span>',
-                'format'        => Constants::DATE_FORMAT,
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],
-            ],
-            'attributes' => [
-                'placeholder' => "jj/mm/aaaa",
             ],
         ]);
 
@@ -284,41 +279,29 @@ class EditionForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'validiteDebut',
-            'type'       => 'DateTime',
-            'options'    => [
-                'label'  => 'Début de validité',
-                'format' => Constants::DATE_FORMAT,
-            ],
-            'attributes' => [
-                'placeholder' => "jj/mm/aaaa",
+            'name'    => 'validiteDebut',
+            'type'    => 'Date',
+            'options' => [
+                'label' => 'Début de validité',
             ],
         ]);
 
         $this->add([
-            'name'       => 'validiteFin',
-            'type'       => 'DateTime',
-            'options'    => [
-                'label'  => 'Fin de validité',
-                'format' => Constants::DATE_FORMAT,
-            ],
-            'attributes' => [
-                'placeholder' => "jj/mm/aaaa",
+            'name'    => 'validiteFin',
+            'type'    => 'Date',
+            'options' => [
+                'label' => 'Fin de validité',
             ],
         ]);
 
         $this->add([
-            'name'       => 'dateNaissance',
-            'type'       => 'DateTime',
-            'options'    => [
+            'name'    => 'dateNaissance',
+            'type'    => 'Date',
+            'options' => [
                 'label'         => 'Date de naissance <span class="text-danger">*</span>',
-                'format'        => Constants::DATE_FORMAT,
                 'label_options' => [
                     'disable_html_escape' => true,
                 ],
-            ],
-            'attributes' => [
-                'placeholder' => "jj/mm/aaaa",
             ],
         ]);
 

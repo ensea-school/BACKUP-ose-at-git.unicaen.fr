@@ -2,16 +2,16 @@
 
 namespace Service\Entity;
 
-use Service\Entity\Db\EtatVolumeHoraire;
-use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Application\Traits\NiveauEtapeAwareTrait;
-use Application\Entity\Db\Traits\EtapeAwareTrait;
-use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
-use Service\Entity\Db\EtatVolumeHoraireAwareTrait;
 use Application\Entity\Db\Structure;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Traits\NiveauEtapeAwareTrait;
+use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
+use OffreFormation\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
+use OffreFormation\Entity\Db\Traits\EtapeAwareTrait;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\EtatVolumeHoraireAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 
 class Recherche
 {

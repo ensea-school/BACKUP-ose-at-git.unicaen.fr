@@ -3,9 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Contrat;
-use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\IntervenantDossier;
 use Application\Entity\Db\MiseEnPaiement;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeValidation;
@@ -13,8 +11,12 @@ use Application\Entity\Db\Validation;
 use Application\Service\Traits\ContratServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
+use Dossier\Entity\Db\IntervenantDossier;
+use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\VolumeHoraireMission;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 
@@ -55,15 +57,45 @@ class ValidationService extends AbstractEntityService
 
 
 
-    public function validerDossier(IntervenantDossier $intervenantDossier)
+    public function validerDossier(IntervenantDossier $intervenantDossier): Validation
     {
-        $typeDonneesPerso = $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_DONNEES_PERSO);
-
         $validation = $this->newEntity();
+        /**
+         * @var Intervenant $intervenant
+         */
+        $intervenant = $intervenantDossier->getIntervenant();
         $validation->setIntervenant($intervenantDossier->getIntervenant());
-        $validation->setTypeValidation($typeDonneesPerso);
-        $validation->setStructure($intervenantDossier->getIntervenant()->getStructure());
+        $validation->setTypeValidation($this->getServiceTypeValidation()->getDonneesPerso());
+        $validation->setStructure($intervenant->getStructure());
         $this->save($validation);
+
+        return $validation;
+    }
+
+
+
+    public function validerMission(Mission $mission): Validation
+    {
+        $validation = $this->newEntity();
+        $validation->setIntervenant($mission->getIntervenant());
+        $validation->setTypeValidation($this->getServiceTypeValidation()->getMission());
+        $validation->setStructure($mission->getStructure());
+        $this->save($validation);
+        $mission->addValidation($validation);
+
+        return $validation;
+    }
+
+
+
+    public function validerVolumeHoraireMission(VolumeHoraireMission $volumeHoraireMission): Validation
+    {
+        $validation = $this->newEntity();
+        $validation->setIntervenant($volumeHoraireMission->getMission()->getIntervenant());
+        $validation->setTypeValidation($this->getServiceTypeValidation()->getMission());
+        $validation->setStructure($volumeHoraireMission->getMission()->getStructure());
+        $this->save($validation);
+        $volumeHoraireMission->addValidation($validation);
 
         return $validation;
     }

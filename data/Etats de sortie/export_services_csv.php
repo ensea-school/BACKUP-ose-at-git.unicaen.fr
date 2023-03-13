@@ -13,6 +13,8 @@
 
 // initialisation
 
+use OffreFormation\Entity\Db\TypeIntervention;
+
 $res               = [];
 $shown             = [];
 $typesIntervention = [];
@@ -34,12 +36,12 @@ $numericColunms    = [
     'total',
     'solde',
 ];
-$dateColumns       = [
+$dateColumns = [
     'service-date-modification',
     'intervenant-date-naissance',
     'date-cloture-service-realise',
 ];
-$addableColumns    = [
+$addableColumns = [
     '__total__',
     'heures-ref',
     'service-fi',
@@ -60,7 +62,9 @@ $dateExtraction = new \DateTime();
 foreach ($data as $d) {
     $sid = $d['SERVICE_ID'] ? $d['SERVICE_ID'] . '_' . $d['PERIODE_ID'] : $d['ID'];
     $sid .= '_' . $d['MOTIF_NON_PAIEMENT_ID'];
-    $ds  = [
+    $sid .= '_' . $d['TAG_ID'];
+
+    $ds = [
         '__total__'                 => (float)$d['HEURES'] + (float)$d['HEURES_NON_PAYEES'] + (float)$d['HEURES_REF'] + (float)$d['TOTAL'],
         'type-etat'                 => $d['TYPE_ETAT'],
         'date'                      => $dateExtraction,
@@ -99,6 +103,7 @@ foreach ($data as $d) {
 
         'periode-libelle'              => $d['PERIODE_LIBELLE'],
         'heures-non-payees-libelle'    => $d['MOTIF_NON_PAIEMENT'],
+        'tag'                          => $d['TAG'],
 
         // types d'intervention traités en aval
         'heures-ref'                   => (float)$d['HEURES_REF'],
@@ -116,22 +121,18 @@ foreach ($data as $d) {
         'date-cloture-service-realise' => $d['DATE_CLOTURE_REALISE'],
     ];
 
-    if (
-        $ds['heures-service-statutaire'] > 0
-        && $ds['heures-service-statutaire'] + $ds['heures-service-du-modifie'] == 0
-        && empty($ds['etape-code'])
-    ) {
-        $ds['__total__']++; // pour que le cas spécifique des décharges totales soit pris en compte
+    if ($ds['heures-service-du-modifie'] != 0) {
+        $ds['__total__']++; // pour que les modifs de service apparaissent
     }
 
     if ($d['TYPE_INTERVENTION_ID'] != null) {
         $tid = $d['TYPE_INTERVENTION_ID'];
         if (!isset($typesIntervention[$tid])) {
-            $typesIntervention[$tid] = $entityManager->getRepository(\Application\Entity\Db\TypeIntervention::class)->find($tid);
+            $typesIntervention[$tid] = $entityManager->getRepository(TypeIntervention::class)->find($tid);
         }
-        $typeIntervention                                              = $typesIntervention[$tid];
+        $typeIntervention = $typesIntervention[$tid];
         $invertTi['type-intervention-' . $typeIntervention->getCode()] = $typeIntervention->getId();
-        $ds['type-intervention-' . $typeIntervention->getCode()]       = (float)$d['HEURES'];
+        $ds['type-intervention-' . $typeIntervention->getCode()] = (float)$d['HEURES'];
     }
     foreach ($ds as $column => $value) {
         if (!isset($shown[$column])) $shown[$column] = 0;
@@ -204,26 +205,28 @@ $head = [
     'element-source-libelle'        => 'Source enseignement',
     'periode-libelle'               => 'Période',
     'heures-non-payees-libelle'     => 'Motif de non paiement',
+    'tag'                           => 'Tags',
+
 ];
 uasort($typesIntervention, function ($ti1, $ti2) {
     return $ti1->getOrdre() - $ti2->getOrdre();
 });
 foreach ($typesIntervention as $typeIntervention) {
-    /* @var $typeIntervention \Application\Entity\Db\TypeIntervention */
+    /* @var \OffreFormation\Entity\Db\TypeIntervention $typeIntervention */
     $head['type-intervention-' . $typeIntervention->getCode()] = $typeIntervention->getCode();
 }
-$head['heures-ref']                   = 'Référentiel';
-$head['service-fi']                   = 'HETD Service FI';
-$head['service-fa']                   = 'HETD Service FA';
-$head['service-fc']                   = 'HETD Service FC';
-$head['service-referentiel']          = 'HETD Service Référentiel';
-$head['heures-compl-fi']              = 'HETD Compl. FI';
-$head['heures-compl-fa']              = 'HETD Compl. FA';
-$head['heures-compl-fc']              = 'HETD Compl. FC';
-$head['heures-compl-fc-majorees']     = 'HETD Compl. FC D714-60';
-$head['heures-compl-referentiel']     = 'HETD Compl. référentiel';
-$head['total']                        = 'Total HETD';
-$head['solde']                        = 'Solde HETD';
+$head['heures-ref'] = 'Référentiel';
+$head['service-fi'] = 'HETD Service FI';
+$head['service-fa'] = 'HETD Service FA';
+$head['service-fc'] = 'HETD Service FC';
+$head['service-referentiel'] = 'HETD Service Référentiel';
+$head['heures-compl-fi'] = 'HETD Compl. FI';
+$head['heures-compl-fa'] = 'HETD Compl. FA';
+$head['heures-compl-fc'] = 'HETD Compl. FC';
+$head['heures-compl-fc-majorees'] = 'HETD Compl. FC D714-60';
+$head['heures-compl-referentiel'] = 'HETD Compl. référentiel';
+$head['total'] = 'Total HETD';
+$head['solde'] = 'Solde HETD';
 $head['date-cloture-service-realise'] = 'Clôture du service réalisé';
 
 // suppression des informations superflues

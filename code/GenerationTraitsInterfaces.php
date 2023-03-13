@@ -12,7 +12,7 @@ $introspection = \UnicaenCode\Util::introspection();
 
 
 $traits = $introspection->getTraits();
-//$traits = [\Application\Form\OffreFormation\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait::class];
+//$traits = [\OffreFormation\Form\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait::class];
 foreach ($traits as $trait) {
     $params = $introspection->getTraitParams($trait);
     if ($params['aware']) {

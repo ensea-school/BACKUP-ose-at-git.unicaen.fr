@@ -4,22 +4,24 @@ namespace Enseignement\Form;
 
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\TypeIntervention;
-use Enseignement\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
-use Enseignement\Hydrator\ListeFilterHydrator;
 use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenApp\Util;
+use Application\Service\Traits\TagServiceAwareTrait;
+use Enseignement\Entity\VolumeHoraireListe;
+use Enseignement\Hydrator\ListeFilterHydrator;
 use Laminas\Form\Element\Hidden;
 use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Entity\Db\TypeIntervention;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenApp\Util;
 
 class VolumeHoraireSaisieForm extends AbstractForm
 {
     use MotifNonPaiementServiceAwareTrait;
+    use TagServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;
     use PeriodeServiceAwareTrait;
 
@@ -33,6 +35,15 @@ class VolumeHoraireSaisieForm extends AbstractForm
      */
     protected $editMNP = false;
 
+    /**
+     * @var boolean
+     */
+    protected $viewTag = false;
+
+    /**
+     * @var boolean
+     */
+    protected $editTag = false;
 
 
     /**
@@ -44,7 +55,6 @@ class VolumeHoraireSaisieForm extends AbstractForm
 
         return $this->getServiceMotifNonPaiement()->getList($qb);
     }
-
 
 
     /**
@@ -59,7 +69,6 @@ class VolumeHoraireSaisieForm extends AbstractForm
     }
 
 
-
     /**
      * @return Periode[]
      */
@@ -70,7 +79,6 @@ class VolumeHoraireSaisieForm extends AbstractForm
 
         return $this->getServicePeriode()->getList($qb);
     }
-
 
 
     public function build()
@@ -117,11 +125,34 @@ class VolumeHoraireSaisieForm extends AbstractForm
             $this->add(new Hidden('motif-non-paiement'));
         }
 
+        //Gestion des tags
+        if ($this->canEditTag()) {
+            $this->add([
+                'type'       => 'Select',
+                'name'       => 'tag',
+                'options'    => [
+                    'label'         => "Tag :",
+                    'empty_option'  => "Aucun tag",
+                    'value_options' => Util::collectionAsOptions($this->getServiceTag()->getList()),
+                ],
+                'attributes' => [
+                    'value' => "",
+                    'title' => "Tag",
+                    'class' => 'volume-horaire volume-horaire-tag input-sm',
+                ],
+            ]);
+        } else {
+            $this->add(new Hidden('tag'));
+        }
+
+
         $this->add(new Hidden('service'));
         $this->add(new Hidden('periode'));
         $this->add(new Hidden('type-intervention'));
         $this->add(new Hidden('type-volume-horaire'));
         $this->add(new Hidden('ancien-motif-non-paiement'));
+        $this->add(new Hidden('ancien-tag'));
+
 
         $this->add([
             'name'       => 'submit',
@@ -147,7 +178,6 @@ class VolumeHoraireSaisieForm extends AbstractForm
     }
 
 
-
     /**
      * @return bool
      */
@@ -155,7 +185,6 @@ class VolumeHoraireSaisieForm extends AbstractForm
     {
         return $this->viewMNP;
     }
-
 
 
     /**
@@ -171,7 +200,6 @@ class VolumeHoraireSaisieForm extends AbstractForm
     }
 
 
-
     /**
      * @return bool
      */
@@ -179,7 +207,6 @@ class VolumeHoraireSaisieForm extends AbstractForm
     {
         return $this->editMNP;
     }
-
 
 
     /**
@@ -194,6 +221,48 @@ class VolumeHoraireSaisieForm extends AbstractForm
         return $this;
     }
 
+    /**
+     * @return bool
+     */
+    public function canViewTag(): bool
+    {
+        return $this->viewTag;
+    }
+
+
+    /**
+     * @param bool $viewTag
+     *
+     * @return Saisie
+     */
+    public function setViewTag(bool $viewTag): self
+    {
+        $this->viewTag = $viewTag;
+
+        return $this;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function canEditTag(): bool
+    {
+        return $this->editTag;
+    }
+
+
+    /**
+     * @param bool $editTag
+     *
+     * @return Saisie
+     */
+    public function setEditTag(bool $editTag): self
+    {
+        $this->editTag = $editTag;
+
+        return $this;
+    }
 
 
     /**
@@ -211,6 +280,12 @@ class VolumeHoraireSaisieForm extends AbstractForm
             'ancien-motif-non-paiement' => [
                 'required' => false,
             ],
+            'tag'                       => [
+                'required' => false,
+            ],
+            'ancien-tag'                => [
+                'required' => false,
+            ],
             'periode'                   => [
                 'required' => false,
             ],
@@ -223,9 +298,6 @@ class VolumeHoraireSaisieForm extends AbstractForm
         ];
     }
 }
-
-
-
 
 
 /**
@@ -243,7 +315,6 @@ class SaisieHydrator implements HydratorInterface
     private $data;
 
 
-
     private function getVal($key)
     {
         if (isset($this->data[$key])) {
@@ -254,18 +325,17 @@ class SaisieHydrator implements HydratorInterface
     }
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array              $data
+     * @param array $data
      * @param VolumeHoraireListe $object
      *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
-        //$dumper = vhlDump($object);
+
 
         $this->data = $data;
 
@@ -279,17 +349,20 @@ class SaisieHydrator implements HydratorInterface
         $object->setPeriode($periode);
 
         $ancienMotifNonPaiement = $lfh->allToData(VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT, $this->getVal('ancien-motif-non-paiement'));
-        $motifNonPaiement       = $lfh->allToData(VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT, $this->getVal('motif-non-paiement'));
+        $motifNonPaiement = $lfh->allToData(VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT, $this->getVal('motif-non-paiement'));
+
+        $ancienTag = $lfh->allToData(VolumeHoraireListe::FILTRE_TAG, $this->getVal('ancien-tag'));
+        $tag = $lfh->allToData(VolumeHoraireListe::FILTRE_TAG, $this->getVal('tag'));
+  
 
         $heures = (float)$this->getVal('heures');
         $object->setMotifNonPaiement($motifNonPaiement);
-        $object->moveHeuresFromAncienMotifNonPaiement($heures, $ancienMotifNonPaiement);
+        $object->setTag($tag);
+        $object->moveHeuresFromAncienMotifNonPaiementOrTag($heures, $ancienMotifNonPaiement, $ancienTag);
 
-        //$dumper->dumpEndToFile();
 
         return $object;
     }
-
 
 
     /**
@@ -309,9 +382,11 @@ class SaisieHydrator implements HydratorInterface
         /* Ajout des heures */
         $data['heures'] = $object->getHeures();
 
+
         /* Gestion des valeurs anciennes */
         $anciens = [
             'motif-non-paiement',
+            'tag',
         ];
         foreach ($anciens as $ancien) {
             if (isset($data[$ancien])) {

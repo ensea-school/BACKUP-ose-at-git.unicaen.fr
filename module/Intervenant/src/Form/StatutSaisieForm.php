@@ -4,10 +4,11 @@ namespace Intervenant\Form;
 
 use Application\Entity\Db\EtatSortie;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\DossierAutreServiceAwareTrait;
+use Dossier\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
+use Paiement\Entity\Db\TauxRemu;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
@@ -40,6 +41,7 @@ class StatutSaisieForm extends AbstractForm
             'dossierAdresse'                => 'Adresse',
             'dossierBanque'                 => 'Banque',
             'dossierInsee'                  => 'Numéro INSEE',
+            'dossierStatut'                 => 'Statut',
             'dossierEmployeur'              => 'Employeur',
             'pieceJustificative'            => '',
             'conseilRestreint'              => 'Conseil restreint',
@@ -54,7 +56,10 @@ class StatutSaisieForm extends AbstractForm
             'paiementVisualisation'         => 'Visibilité par l\'intervenant des mises en paiement',
             'motifNonPaiement'              => 'Le gestionnaire peut déclarer des heures comme non payables',
             'formuleVisualisation'          => 'Visibilité par l\'intervenant du détail des heures pour le calcul des HETD',
+            'tauxRemu'                      => 'Taux de rémunération',
             'typeIntervenant'               => 'Type d\'intervenant',
+            'mission'                       => 'Visualisation/Modification de mission',
+            'missionRealise'                => 'Saisie du réalisé',
         ];
 
         $dveElements = [
@@ -63,6 +68,7 @@ class StatutSaisieForm extends AbstractForm
             'serviceRealise',
             'referentielPrevu',
             'referentielRealise',
+            'mission',
         ];
 
         $ignored = [
@@ -76,7 +82,7 @@ class StatutSaisieForm extends AbstractForm
             'contratDepot',
             'contratGeneration',
             'modificationServiceDuVisualisation',
-            'modificationServiceDuEdition',
+            'missionRealiseEdition',
         ];
 
         for ($i = 1; $i <= 5; $i++) {
@@ -117,7 +123,7 @@ class StatutSaisieForm extends AbstractForm
             'type'       => 'Text',
             'name'       => 'tauxChargesPatronales',
             'attributes' => [
-                'pattern' => '[0-9]*',
+                'pattern' => '[0-9]+([,.][0-9]+)?',
             ],
             'hydrator'   => [
                 'getter' => function (Statut $statut, string $name) {
@@ -136,7 +142,7 @@ class StatutSaisieForm extends AbstractForm
             'type'       => 'Text',
             'name'       => 'tauxChargesTTC',
             'attributes' => [
-                'pattern' => '[0-9]*',
+                'pattern' => '[0-9]+([,.][0-9]+)?',
             ],
             'hydrator'   => [
                 'getter' => function (Statut $statut, string $name) {
@@ -147,6 +153,29 @@ class StatutSaisieForm extends AbstractForm
                 'setter' => function (Statut $statut, $value, string $name) {
                     $taux = $value / 100;
                     $statut->setTauxChargesTTC($taux);
+                },
+            ],
+        ]]);
+
+        $this->spec(['missionRealise' => [
+            'type'     => 'Select',
+            'name'     => 'missionRealise',
+            'options'  => [
+                'value_options' => [
+                    'desactive' => 'Désactivé',
+                    //'active'        => 'Activé mais non visible par l\'intervenant',
+                    //'visualisation' => 'Activé et visible par l\'intervenant',
+                    'edition'   => 'Activé et modifiable par l\'intervenant',
+                ],
+            ],
+            'hydrator' => [
+                'getter' => function (Statut $statut, string $name) {
+                    $real = $statut->getMissionRealiseEdition() ? 'edition' : 'desactive';
+
+                    return $real;
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $statut->setMissionRealiseEdition($value === 'edition');
                 },
             ],
         ]]);
@@ -366,6 +395,12 @@ class StatutSaisieForm extends AbstractForm
                     },
                 ],
             ],
+            //TODO : Créer un validateur pour le rendre false que quand contrat desactivé
+            'contratEtatSortie'     => [
+                'input' => [
+                    'required' => false,
+                ],
+            ],
             'modificationServiceDu' => [
                 'type'     => 'Select',
                 'name'     => 'modificationServiceDu',
@@ -374,18 +409,14 @@ class StatutSaisieForm extends AbstractForm
                         'desactive'     => 'Désactivé',
                         'active'        => 'Activé mais non visible par l\'intervenant',
                         'visualisation' => 'Activé et visible par l\'intervenant',
-                        'edition'       => 'Activé et modifiable par l\'intervenant',
                     ],
                 ],
                 'hydrator' => [
                     'getter' => function (Statut $statut, string $name) {
-                        $access  = $statut->getModificationServiceDu();
-                        $visu    = $statut->getModificationServiceDuVisualisation();
-                        $edition = $statut->getModificationServiceDuEdition();
+                        $access = $statut->getModificationServiceDu();
+                        $visu   = $statut->getModificationServiceDuVisualisation();
 
-                        if ($edition && $visu && $access) {
-                            return 'edition';
-                        } elseif ($visu && $access) {
+                        if ($visu && $access) {
                             return 'visualisation';
                         } elseif ($access) {
                             return 'active';
@@ -394,13 +425,9 @@ class StatutSaisieForm extends AbstractForm
                         }
                     },
                     'setter' => function (Statut $statut, $value, string $name) {
-                        $access  = false;
-                        $visu    = false;
-                        $edition = false;
+                        $access = false;
+                        $visu   = false;
                         switch ($value) {
-
-                            case 'edition':
-                                $edition = true;
                             case 'visualisation':
                                 $visu = true;
                             case 'active':
@@ -408,9 +435,12 @@ class StatutSaisieForm extends AbstractForm
                         }
                         $statut->setModificationServiceDu($access);
                         $statut->setModificationServiceDuVisualisation($visu);
-                        $statut->setModificationServiceDuEdition($edition);
-
                     },
+                ],
+            ],
+            'tauxRemu'              => [
+                'input' => [
+                    'required' => false,
                 ],
             ],
         ]);
@@ -428,7 +458,10 @@ class StatutSaisieForm extends AbstractForm
 
         $this->setValueOptions('typeIntervenant', $this->getServiceTypeIntervenant()->getList());
         $this->setValueOptions('contratEtatSortie', 'SELECT es FROM ' . EtatSortie::class . ' es ORDER BY es.libelle');
+        $this->setValueOptions('tauxRemu', 'SELECT tr FROM ' . TauxRemu::class . ' tr WHERE tr.histoDestruction is NULL');
+
         $this->get('contratEtatSortie')->setEmptyOption('- Aucun état de sortie n\'est spécifié -');
+        $this->get('tauxRemu')->setEmptyOption('- Utilisation du taux légal standard -');
 
         return $this;
     }

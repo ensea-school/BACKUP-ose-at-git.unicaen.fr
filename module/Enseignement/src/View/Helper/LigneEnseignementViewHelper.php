@@ -24,15 +24,7 @@ class LigneEnseignementViewHelper extends AbstractViewHelper
 
 
 
-    /**
-     * Helper entry point.
-     *
-     * @param Enseignements $enseignements
-     * @param Service       $service
-     *
-     * @return self
-     */
-    final public function __invoke(EnseignementsViewHelper $enseignements, Service $service)
+    final public function __invoke(EnseignementsViewHelper $enseignements, Service $service): self
     {
         $this->enseignements = $enseignements;
         $this->setService($service);
@@ -42,12 +34,7 @@ class LigneEnseignementViewHelper extends AbstractViewHelper
 
 
 
-    /**
-     * Retourne le code HTML généré par cette aide de vue.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }
@@ -109,7 +96,7 @@ class LigneEnseignementViewHelper extends AbstractViewHelper
             if ($liste->getColumnVisibility('formation')) {
                 $out .= '<td>';
                 if ($element && $element->getCheminPedagogique()->count() > 1) {
-                    $out .= '<small class="badge" style="font-size:8pt" title="Enseignement mutualisé entre plusieures formations. Seule la formation principale est présentée ci-dessous">Enseignement mutualisé</small><br />';
+                    $out .= '<small class="badge bg-secondary" style="font-size:8pt" title="Enseignement mutualisé entre plusieures formations. Seule la formation principale est présentée ci-dessous">Enseignement mutualisé</small><br />';
                 }
                 $out .= $this->renderEtape($element ? $element->getEtape() : null) . "</td>\n";
             }
@@ -236,11 +223,11 @@ class LigneEnseignementViewHelper extends AbstractViewHelper
         $display = $this->enseignements->getTypeInterventionVisibility($liste->getTypeIntervention()) ? '' : ';display:none';
 
         $attribs = [
-            'class'                       => 'heures type-intervention ' . $liste->getTypeIntervention()->getCode(),
-            'style'                       => 'text-align:right' . $display,
-            'id'                          => 'service-' . $liste->getService()->getId() . '-ti-' . $liste->getTypeIntervention()->getId(),
-            'data-value'                  => $heures,
-            'data-type-intervention-code' => $liste->getTypeIntervention()->getCode(),
+            'class'                     => 'heures type-intervention ti' . $liste->getTypeIntervention()->getId(),
+            'style'                     => 'text-align:right' . $display,
+            'id'                        => 'service-' . $liste->getService()->getId() . '-ti-' . $liste->getTypeIntervention()->getId(),
+            'data-value'                => $heures,
+            'data-type-intervention-id' => $liste->getTypeIntervention()->getId(),
         ];
         $out     = '<td ' . $this->htmlAttribs($attribs) . '>';
         if ($hasForbiddenPeriodes) $out .= '<abbr class="bg-danger" title="Des heures sont renseignées sur une période non conforme à la période de l\'enseignement">';

@@ -2,6 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_ETAT_PAIEMENT AS
 SELECT
              annee_id,
              type_intervenant_id,
+             statut_id,
              structure_id,
              periode_id,
              intervenant_id,
@@ -14,6 +15,7 @@ SELECT
              date_mise_en_paiement,
              periode,
              statut,
+             statut_libelle,
              intervenant_code,
              intervenant_nom,
              intervenant_numero_insee,
@@ -47,6 +49,7 @@ SELECT
                        periode_id,
                        structure_id,
                        type_intervenant_id,
+                       statut_id,
                        intervenant_id,
                        annee_id,
                        centre_cout_id,
@@ -56,6 +59,7 @@ SELECT
                        date_mise_en_paiement,
                        periode,
                        statut,
+                       statut_libelle,
                        intervenant_code,
                        intervenant_nom,
                        intervenant_numero_insee,
@@ -84,6 +88,7 @@ SELECT
                                 p.id                                                                periode_id,
                                 s.id                                                                structure_id,
                                 i.id                                                                intervenant_id,
+                                si.id                                                               statut_id,
                                 i.annee_id                                                          annee_id,
                                 cc.id                                                               centre_cout_id,
                                 df.id                                                               domaine_fonctionnel_id,
@@ -97,6 +102,7 @@ SELECT
                                 mep.date_mise_en_paiement                                           date_mise_en_paiement,
                                 s.libelle_court                                                     composante,
                                 ti.libelle                                                          statut,
+                                si.libelle                                                          statut_libelle,
                                 i.source_code                                                       intervenant_code,
                                 i.nom_usuel || ' ' || i.prenom                                      intervenant_nom,
                                 i.numero_insee                                                      intervenant_numero_insee,
@@ -110,7 +116,15 @@ SELECT
                                 mis.heures_ac                                                       exercice_ac,
                              --CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END * 4 / 10                                                 exercice_aa,
                              --CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END * 6 / 10                                                 exercice_ac,
-                                OSE_FORMULE.GET_TAUX_HORAIRE_HETD( NVL(mep.date_mise_en_paiement,SYSDATE) )      taux_horaire
+                                OSE_PAIEMENT.GET_TAUX_HORAIRE(
+                                    COALESCE(
+                                        ep.taux_remu_id ,
+                                        si.taux_remu_id ,
+                                        tr.id),
+                                        NVL(mep.date_mise_en_paiement,SYSDATE)
+                                )      taux_horaire
+                             --OSE_FORMULE.GET_TAUX_HORAIRE_HETD( NVL(mep.date_mise_en_paiement,SYSDATE) )      taux_horaire
+
                          FROM
                                      tbl_paiement mis
                                 JOIN mise_en_paiement        mep ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
@@ -124,11 +138,15 @@ SELECT
                            LEFT JOIN validation                v ON   v.id = mep.validation_id       AND v.histo_destruction IS NULL
                            LEFT JOIN domaine_fonctionnel      df ON  df.id = mis.domaine_fonctionnel_id
                            LEFT JOIN periode                   p ON   p.id = mep.periode_paiement_id
+                           LEFT JOIN service                  se ON   mis.service_id = se.id
+                           LEFT JOIN element_pedagogique      ep ON   ep.id = se.element_pedagogique_id
+                           LEFT JOIN taux_remu                tr ON   tr.code = OSE_PAIEMENT.get_code_taux_remu_legal()
                      )
                      SELECT
                             periode_id,
                             structure_id,
                             type_intervenant_id,
+                            statut_id,
                             intervenant_id,
                             annee_id,
                             centre_cout_id,
@@ -138,6 +156,7 @@ SELECT
                             composante,
                             date_mise_en_paiement,
                             statut,
+                            statut_libelle,
                             intervenant_code,
                             intervenant_nom,
                             intervenant_numero_insee,
@@ -156,6 +175,7 @@ SELECT
                               periode_id,
                               structure_id,
                               type_intervenant_id,
+                              statut_id,
                               intervenant_id,
                               annee_id,
                               centre_cout_id,
@@ -165,6 +185,7 @@ SELECT
                               composante,
                               date_mise_en_paiement,
                               statut,
+                              statut_libelle,
                               intervenant_code,
                               intervenant_nom,
                               intervenant_numero_insee,
@@ -183,6 +204,7 @@ SELECT
       ORDER BY
                annee_id,
                type_intervenant_id,
+               statut_id,
                structure_id,
                periode_id,
                intervenant_nom

@@ -176,7 +176,7 @@ class StructureService extends AbstractEntityService
     public function finderByEnseignement(QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
-        $qb->andWhere('(' . $alias . '.enseignement = 1 OR EXISTS (SELECT ep FROM Application\Entity\Db\ElementPedagogique ep WHERE ep.structure = ' . $alias . '))');
+        $qb->andWhere('(' . $alias . '.enseignement = 1 OR EXISTS (SELECT ep FROM OffreFormation\Entity\Db\ElementPedagogique ep WHERE ep.structure = ' . $alias . '))');
 
         return $qb;
     }

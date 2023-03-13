@@ -2,22 +2,22 @@
 
 namespace Enseignement\View\Helper;
 
-use Application\Provider\Privilege\Privileges;
-use Enseignement\Processus\EnseignementProcessusAwareTrait;
-use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\Db\Service;
-use Application\Entity\Db\TypeIntervention;
+use Enseignement\Processus\EnseignementProcessusAwareTrait;
+use OffreFormation\Entity\Db\TypeIntervention;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait as ServiceTypeVolumeHoraireAwareTrait;
 
 /**
@@ -154,7 +154,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
         foreach ($typesIntervention as $ti) {
             $display = $this->getTypeInterventionVisibility($ti) ? '' : ';display:none';
             $colspan++;
-            $out .= "<th class=\"heures type-intervention " . $ti->getCode() . "\" style=\"width:8%$display\"><abbr title=\"" . $ti->getLibelle() . "\">" . $ti->getCode() . "</abbr></th>\n";
+            $out .= "<th class=\"heures type-intervention ti" . $ti->getId() . "\" style=\"width:8%$display\"><abbr title=\"" . $ti->getLibelle() . "\">" . $ti->getCode() . "</abbr></th>\n";
         }
         $out .= "<th>&nbsp;</th>\n";
         $out .= "</tr>\n";
@@ -219,10 +219,10 @@ class EnseignementsViewHelper extends AbstractViewHelper
 
         if ($typeVolumeHoraire = $this->getProcessusEnseignement()->initializePrevu($this->getIntervenant())) {
             $attribs = [
-                'class'       => 'btn btn-warning prevu-to-prevu-show',
-                'data-toggle' => 'modal',
-                'data-target' => '#prevu-to-prevu-modal',
-                'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
+                'class'          => 'btn btn-warning prevu-to-prevu-show',
+                'data-bs-toggle' => 'modal',
+                'data-bs-target' => '#prevu-to-prevu-modal',
+                'title'          => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
             ];
             $source  = $typeVolumeHoraire->getLibelle();
             $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>' . $source . ' ' . $this->getServiceContext()->getAnneePrecedente() . ' <i class="fas fa-arrow-right"></i> Prévisionnel ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
@@ -230,7 +230,6 @@ class EnseignementsViewHelper extends AbstractViewHelper
             $out     .= '<div class="modal-dialog modal-md">';
             $out     .= '<div class="modal-content">';
             $out     .= '<div class="modal-header">';
-            $out     .= '<button type="button" class="close" data-bs-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
             $out     .= '<h4 class="modal-title">Reporter ici le service ' . strtolower($source) . ' validé de l\'année précédente.</h4>';
             $out     .= '</div>';
             $out     .= '<div class="modal-body">';
@@ -260,10 +259,10 @@ class EnseignementsViewHelper extends AbstractViewHelper
 
         if ($this->getProcessusEnseignement()->initializeRealise($this->getIntervenant())) {
             $attribs = [
-                'class'       => 'btn btn-warning prevu-to-realise-show',
-                'data-toggle' => 'modal',
-                'data-target' => '#prevu-to-realise-modal',
-                'title'       => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
+                'class'          => 'btn btn-warning prevu-to-realise-show',
+                'data-bs-toggle' => 'modal',
+                'data-bs-target' => '#prevu-to-realise-modal',
+                'title'          => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
                     . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
             ];
             $out     .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <i class="fas fa-arrow-right"></i> réalisé</button>&nbsp;';
@@ -271,7 +270,6 @@ class EnseignementsViewHelper extends AbstractViewHelper
             $out     .= '<div class="modal-dialog modal-md">';
             $out     .= '<div class="modal-content">';
             $out     .= '<div class="modal-header">';
-            $out     .= '<button type="button" class="close" data-bs-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
             $out     .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
             $out     .= '</div>';
             $out     .= '<div class="modal-body">';
@@ -336,7 +334,8 @@ class EnseignementsViewHelper extends AbstractViewHelper
             $heures += $volumeHoraireListe->getHeures();
             $volumeHoraireListe->setTypeVolumeHoraire($tvhRealise);
             $volumeHoraireListe->setEtatVolumeHoraire($evhSaisi);
-            $heures += $volumeHoraireListe->getHeures();
+            // on met en absolu pour ne pas que des heures réalisées négatives non validées ne viennent s'annuler avec le nombre équivalent en prévisionnel
+            $heures += abs($volumeHoraireListe->getHeures());
         } else {
             $volumeHoraireListe->setTypeVolumeHoraire($tvhPrevu);
             $volumeHoraireListe->setEtatVolumeHoraire($evhSaisi);
@@ -404,6 +403,9 @@ class EnseignementsViewHelper extends AbstractViewHelper
         $volumeHoraireListe = $service->getVolumeHoraireListe();
         $volumeHoraireListe->setTypeVolumeHoraire($typeVolumeHoraire);
         $volumeHoraireListe->setEtatVolumeHoraire($etatVolumeHoraire);
+        $statut = $service->getIntervenant()->getStatut();
+        $code   = $service->getIntervenant()->getStatut()->getCode();
+
 
         if ($this->getServiceContext()->isModaliteServicesSemestriel($typeVolumeHoraire)) {
             $vhlvh = $this->getView()->volumeHoraireListe($volumeHoraireListe);
@@ -444,7 +446,7 @@ class EnseignementsViewHelper extends AbstractViewHelper
             } else {
                 $display = ';display:none';
             }
-            $out .= "<td id=\"" . $ti->getCode() . "\" class=\"type-intervention " . $ti->getCode() . "\" style=\"text-align:right$display\">" . \UnicaenApp\Util::formattedNumber($data[$ti->getCode()]) . "</td>\n";
+            $out .= "<td id=\"" . $ti->getCode() . "\" class=\"type-intervention ti" . $ti->getId() . "\" style=\"text-align:right$display\">" . \UnicaenApp\Util::formattedNumber($data[$ti->getCode()]) . "</td>\n";
         }
         $out .= "<td>&nbsp;</td>\n";
         $out .= "</tr>\n";

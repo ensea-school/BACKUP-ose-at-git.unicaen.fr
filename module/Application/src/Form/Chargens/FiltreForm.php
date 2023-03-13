@@ -2,14 +2,14 @@
 
 namespace Application\Form\Chargens;
 
-use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
+use OffreFormation\Entity\Db\Etape;
 use UnicaenApp\Util;
 
 
@@ -206,6 +206,7 @@ class FiltreForm extends AbstractForm
 
         $sEtapes     = [];
         $eStructures = [];
+        $sScenarios  = [];
         foreach ($dEtapes as $e) {
             $id    = (int)$e['ID'];
             $label = $e['LIBELLE'] . ' (' . $e['CODE'] . ')';

@@ -12,6 +12,7 @@ use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\Csrf;
 use Laminas\Form\Element\Number;
 use Laminas\Form\Element\Select;
+use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Form;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
@@ -464,11 +465,10 @@ trait FormFieldsetTrait
             break;
             case \DateTime::class:
                 $spec = [
-                    'type'       => 'DateTime',
+                    'type'       => 'Date',
                     'name'       => $property,
                     'options'    => [
                         'label'         => ucfirst($property),
-                        'format'        => Constants::DATE_FORMAT,
                         'label_options' => [
                             'disable_html_escape' => true,
                         ],

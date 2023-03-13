@@ -24,74 +24,110 @@ class TypeValidationService extends AbstractEntityService
         return TypeValidation::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'typev';
     }
+
+
 
     /**
      *
      * @param string $code
+     *
      * @return TypeValidation
      */
-    public function getByCode( $code )
+    public function getByCode($code)
     {
         if (null == $code) return null;
+
         return $this->getRepo()->findOneBy(['code' => $code]);
     }
 
 
 
-    public function getDonneesPerso()
+    public function getMission(): TypeValidation
+    {
+        return $this->getByCode(TypeValidation::CODE_MISSION);
+    }
+
+
+
+    public function getMissionRealise(): TypeValidation
+    {
+        return $this->getByCode(TypeValidation::CODE_MISSION_REALISE);
+    }
+
+
+
+    public function getDonneesPerso(): TypeValidation
     {
         return $this->getByCode(TypeValidation::CODE_DONNEES_PERSO);
     }
 
-    public function getEnseignement()
+
+
+    public function getEnseignement(): TypeValidation
     {
         return $this->getByCode(TypeValidation::CODE_ENSEIGNEMENT);
     }
 
-    public function getReferentiel()
+
+
+    public function getReferentiel(): TypeValidation
     {
         return $this->getByCode(TypeValidation::CODE_REFERENTIEL);
     }
 
-    public function getContrat()
+
+
+    public function getContrat(): TypeValidation
     {
         return $this->getByCode(TypeValidation::CODE_CONTRAT);
     }
 
-    public function getFichier()
+
+
+    public function getFichier(): TypeValidation
     {
         return $this->getByCode(TypeValidation::CODE_FICHIER);
     }
 
-    public function getPieceJointe()
+
+
+    public function getPieceJointe(): TypeValidation
     {
         return $this->getByCode(TypeValidation::CODE_PIECE_JOINTE);
     }
 
-    public function getClotureRealise()
+
+
+    public function getClotureRealise(): TypeValidation
     {
         return $this->getByCode(TypeValidation::CODE_CLOTURE_REALISE);
     }
+
 
 
     /**
      * Retourne la liste des types de volumes horaires
      *
      * @param QueryBuilder|null $queryBuilder
+     *
      * @return TypeValidation[]
      */
-    public function orderBy( QueryBuilder $qb=null, $alias=null )
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelle");
+
         return $qb;
     }
 

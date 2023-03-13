@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="OffreFormation\Entity\Db\Effectifs" table="EFFECTIFS">
+        <indexes>
+            <index name="effectifs_element_fk_idx" columns="ELEMENT_PEDAGOGIQUE_ID"/>
+            <index name="effectifs_fk" columns="ANNEE_ID"/>
+            <index name="effectifs_source_fk_idx" columns="SOURCE_ID"/>
+            <index name="effectifs_hcfk_idx" columns="HISTO_CREATEUR_ID"/>
+            <index name="effectifs_hdfk_idx" columns="HISTO_DESTRUCTEUR_ID"/>
+            <index name="effectifs_hmfk_idx" columns="HISTO_MODIFICATEUR_ID"/>
+        </indexes>
+        <unique-constraints>
+            <unique-constraint name="effectifs__un" columns="SOURCE_CODE,ANNEE_ID"/>
+        </unique-constraints>
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+            <sequence-generator sequence-name="EFFECTIFS_ID_SEQ" allocation-size="1" initial-value="1"/>
+        </id>
+        <field name="fa" type="integer" column="FA" nullable="false">
+            <options>
+                <option name="unsigned"/>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="fc" type="integer" column="FC" nullable="false">
+            <options>
+                <option name="unsigned"/>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="fi" type="integer" column="FI" nullable="false">
+            <options>
+                <option name="unsigned"/>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+        <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false">
+            <options>
+                <option name="fixed"/>
+            </options>
+        </field>
+        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur" fetch="LAZY">
+            <join-columns>
+                <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source" fetch="LAZY">
+            <join-columns>
+                <join-column name="SOURCE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur" fetch="LAZY">
+            <join-columns>
+                <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur" fetch="LAZY">
+            <join-columns>
+                <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique">
+            <join-columns>
+                <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

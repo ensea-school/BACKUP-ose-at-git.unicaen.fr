@@ -24,7 +24,6 @@ class FormSaisieViewHelper extends AbstractViewHelper
     protected $form;
 
 
-
     /**
      *
      * @param SaisieForm $form
@@ -41,12 +40,10 @@ class FormSaisieViewHelper extends AbstractViewHelper
     }
 
 
-
     public function __toString()
     {
         return $this->render();
     }
-
 
 
     public function getVolumesHorairesRefreshUrl()
@@ -59,7 +56,6 @@ class FormSaisieViewHelper extends AbstractViewHelper
 
         return $url;
     }
-
 
 
     /**
@@ -76,21 +72,11 @@ class FormSaisieViewHelper extends AbstractViewHelper
 
         $part = $this->getView()->form()->openTag($this->form);
 
-//        if (!$this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
-//            $template = <<<EOS
-//<div>
-//    %s
-//</div>
-//EOS;
-//            $part     .= sprintf(
-//                $template,
-//                $this->getView()->formControlGroup($fservice->get('intervenant')));
-//        }
 
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get($this->form->get('type-volume-horaire')->getValue());
-        $inRealise         = TypeVolumeHoraire::CODE_REALISE === $typeVolumeHoraire->getCode();
-        $rappelPrevu       = null;
-        $buttonMarkup      = null;
+        $inRealise = TypeVolumeHoraire::CODE_REALISE === $typeVolumeHoraire->getCode();
+        $rappelPrevu = null;
+        $buttonMarkup = null;
 
         if ($inRealise) {
             /**
@@ -102,7 +88,7 @@ class FormSaisieViewHelper extends AbstractViewHelper
             $vhl->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide());
             $heures = $vhl->getHeures();
 
-            $template    = <<<EOS
+            $template = <<<EOS
 <div class="float-end" style="opacity: 0.5">
     <strong>Prévu :</strong> <span id="rappel-heures-prevu" data-heures="%s">%s</span>
 </div>
@@ -145,7 +131,7 @@ EOS;
     </div>
 </div>
 EOS;
-        $part     .= sprintf(
+        $part .= sprintf(
             $template,
             $this->getView()->formControlGroup($fservice->get('fonction')),
             $this->getView()->formControlGroup($fservice->get('structure')),
@@ -154,11 +140,27 @@ EOS;
         );
 
         $template = <<<EOS
+<div class="row">
+<div class="col-md-6">
+    %s
+</div>
+<div class="col-md-6">
+    %s
+</div>
+</div>
+EOS;
+        $part .= sprintf(
+            $template,
+            $this->getView()->formControlGroup($fservice->get('tag')),
+            $this->getView()->formControlGroup($fservice->get('motif-non-paiement')));
+
+
+        $template = <<<EOS
 <div>
     %s
 </div>
 EOS;
-        $part     .= sprintf(
+        $part .= sprintf(
             $template,
             $this->getView()->formControlGroup($fservice->get('formation')));
 
@@ -167,6 +169,7 @@ EOS;
             $this->getView()->formControlGroup($fservice->get('commentaires')));
 
         $part .= $this->getView()->formHidden($fservice->get('id'));
+        $part .= $this->getView()->formHidden($fservice->get('idPrev'));
         $part .= '<br />';
         $part .= $this->getView()->formRow($this->form->get('submit'));
         $part .= $this->getView()->formHidden($this->form->get('type-volume-horaire'));

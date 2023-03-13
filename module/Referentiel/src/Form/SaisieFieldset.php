@@ -2,6 +2,13 @@
 
 namespace Referentiel\Form;
 
+use Application\Entity\Db\MotifNonPaiement;
+use Application\Entity\Db\Tag;
+use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
+use Application\Service\Traits\TagServiceAwareTrait;
+use Laminas\Form\Element\Hidden;
+use phpDocumentor\Reflection\Types\Array_;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
 use Referentiel\Entity\Db\ServiceReferentiel;
@@ -20,6 +27,7 @@ use Laminas\Validator\NotEmpty;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Laminas\Hydrator\HydratorInterface;
+use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 
 
 /**
@@ -33,6 +41,10 @@ class SaisieFieldset extends AbstractFieldset
     use LocalContextServiceAwareTrait;
     use StructureServiceAwareTrait;
     use FonctionReferentielServiceAwareTrait;
+    use TagServiceAwareTrait;
+    use MotifNonPaiementServiceAwareTrait;
+    use AuthorizeServiceAwareTrait;
+    use ContextServiceAwareTrait;
 
     /**
      * @var Structure[]
@@ -40,12 +52,10 @@ class SaisieFieldset extends AbstractFieldset
     protected $structures;
 
 
-
     public function __construct($name = null, $options = [])
     {
         parent::__construct('service', $options);
     }
-
 
 
     public function init()
@@ -57,24 +67,25 @@ class SaisieFieldset extends AbstractFieldset
         $this->setHydrator($hydrator)
             ->setAllowedObjectBindingClass(ServiceReferentiel::class);
 
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $canViewMNP = $role->hasPrivilege(Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
+        $canEditMNP = $role->hasPrivilege(Privileges::MOTIF_NON_PAIEMENT_EDITION);
+        $canViewTag = $role->hasPrivilege(Privileges::TAG_VISUALISATION);
+        $canEditTag = $role->hasPrivilege(Privileges::TAG_EDITION);
+
         $this->add([
             'name' => 'id',
             'type' => 'Hidden',
         ]);
 
+        $this->add([
+            'name' => 'idPrev',
+            'type' => 'Hidden',
+        ]);
+
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        /*  if (!($role && $role->getIntervenant())) {
-              $intervenant = new SearchAndSelect('intervenant');
-              $intervenant->setRequired(true)
-                  ->setSelectionRequired(true)
-                  ->setAutocompleteSource(
-                      $this->getUrl('recherche', ['action' => 'intervenantFind'])
-                  )
-                  ->setLabel("Intervenant :")
-                  ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
-              $this->add($intervenant);
-          }*/
 
         $this->add([
             'name'       => 'structure',
@@ -125,6 +136,47 @@ class SaisieFieldset extends AbstractFieldset
             ],
             'type'       => 'Text',
         ]);
+        if ($canEditMNP) {
+            $this->add([
+                'type'       => 'Select',
+                'name'       => 'motif-non-paiement',
+                'options'    => [
+                    'label'         => "Motif de non paiement :",
+                    'empty_option'  => "Aucun motif : paiement prévu",
+                    'value_options' => Util::collectionAsOptions($this->getMotifsNonPaiement()),
+                ],
+                'attributes' => [
+                    'value' => "",
+                    'title' => "Motif de non paiement",
+                    'class' => 'volume-horaire volume-horaire-motif-non-paiement input-sm',
+                ],
+            ]);
+        } else {
+            $this->add(new Hidden('motif-non-paiement'));
+
+        }
+
+
+        //Gestion des tags
+        if ($canEditTag) {
+            $this->add([
+                'type'       => 'Select',
+                'name'       => 'tag',
+                'options'    => [
+                    'label'         => "Tag :",
+                    'empty_option'  => "Aucun tag",
+                    'value_options' => Util::collectionAsOptions($this->getServiceTag()->getList()),
+                ],
+                'attributes' => [
+                    'value' => "",
+                    'title' => "Tag",
+                    'class' => 'volume-horaire volume-horaire-tag input-sm',
+                ],
+            ]);
+        } else {
+            $this->add(new Hidden('tag'));
+        }
+
 
         $this->add([
             'name'       => 'commentaires',
@@ -143,7 +195,6 @@ class SaisieFieldset extends AbstractFieldset
     }
 
 
-
     protected function getStructures()
     {
         if (!$this->structures) {
@@ -159,10 +210,9 @@ class SaisieFieldset extends AbstractFieldset
     }
 
 
-
     public function getFonctions()
     {
-        $fncs      = $this->getServiceFonctionReferentiel()->getList($this->getServiceFonctionReferentiel()->finderByHistorique());
+        $fncs = $this->getServiceFonctionReferentiel()->getList($this->getServiceFonctionReferentiel()->finderByHistorique());
         $fonctions = [];
         foreach ($fncs as $id => $fonction) {
             if ($fonction->getFille()->count() > 0) {
@@ -171,33 +221,26 @@ class SaisieFieldset extends AbstractFieldset
                 foreach ($fonction->getFille() as $fille) {
                     $filles[$fille->getId()] = (string)$fille;
                 }
+                asort($filles);
                 $fonctions[$fonction->getId()] = ['label' => (string)$fonction, 'options' => $filles];
             } elseif (!$fonction->getParent()) {
                 $fonctions[$id] = (string)$fonction;
             }
         }
-
+        asort($fonctions);
         return $fonctions;
     }
-
 
 
     public function initFromContext()
     {
         /* Peuple le formulaire avec les valeurs issues du contexte local */
         $cl = $this->getServiceLocalContext();
-//        if ($this->has('intervenant') && $cl->getIntervenant()) {
-//            $this->get('intervenant')->setValue([
-//                'id'    => $cl->getIntervenant()->getId(),
-//                'label' => (string)$cl->getIntervenant(),
-//            ]);
-//        }
 
         if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure() ?: $cl->getStructure()) {
             $this->get('structure')->setValue($structure->getId());
         }
     }
-
 
 
     public function saveToContext()
@@ -211,6 +254,15 @@ class SaisieFieldset extends AbstractFieldset
         }
     }
 
+    /**
+     * @return MotifNonPaiement[]
+     */
+    protected function getMotifsNonPaiement()
+    {
+        $qb = $this->getServiceMotifNonPaiement()->finderByHistorique();
+
+        return $this->getServiceMotifNonPaiement()->getList($qb);
+    }
 
 
     /**
@@ -220,15 +272,15 @@ class SaisieFieldset extends AbstractFieldset
     protected function getValidatorStructure()
     {
         // recherche de la FonctionReferentiel sélectionnée pour connaître la structure associée éventuelle
-        $value          = $this->get('fonction')->getValue();
+        $value = $this->get('fonction')->getValue();
         $fonctionSaisie = $this->getServiceFonctionReferentiel()->get($value);
         if (!$fonctionSaisie) {
             return null;
         }
 
         // recherche de la Structure sélectionnée
-        $structures      = $this->getStructures();
-        $value           = $this->get('structure')->getValue();
+        $structures = $this->getStructures();
+        $value = $this->get('structure')->getValue();
         $structureSaisie = isset($structures[$value]) ? $structures[$value] : null;
         if (!$structureSaisie) {
             return null;
@@ -242,13 +294,13 @@ class SaisieFieldset extends AbstractFieldset
             $callback = function () use ($structureSaisie) {
                 return true;
             };
-            $message  = "Composante d'enseignement requise";
+            $message = "Composante d'enseignement requise";
         } // si une structure est associée à la fonction, la structure sélectionnée soit être celle-là
         else {
             $callback = function () use ($structureSaisie, $structureFonction) {
                 return $structureSaisie === $structureFonction;
             };
-            $message  = sprintf("Structure obligatoire : '%s'", $structureFonction);
+            $message = sprintf("Structure obligatoire : '%s'", $structureFonction);
         }
 
         $v = new Callback($callback);
@@ -256,7 +308,6 @@ class SaisieFieldset extends AbstractFieldset
 
         return $v;
     }
-
 
 
     /**
@@ -268,8 +319,14 @@ class SaisieFieldset extends AbstractFieldset
     public function getInputFilterSpecification()
     {
         $specs = [
-            'structure'    => [
-                'required'   => true,
+            'motif-non-paiement' => [
+                'required' => false,
+            ],
+            'tag'                => [
+                'required' => false,
+            ],
+            'structure'          => [
+                'required'   => false,
                 'validators' => [
                     [
                         'name'    => 'Laminas\Validator\NotEmpty',
@@ -281,7 +338,7 @@ class SaisieFieldset extends AbstractFieldset
                     ],
                 ],
             ],
-            'fonction'     => [
+            'fonction'           => [
                 'required'   => true,
                 'validators' => [
                     [
@@ -294,20 +351,20 @@ class SaisieFieldset extends AbstractFieldset
                     ],
                 ],
             ],
-            'heures'       => [
+            'heures'             => [
                 'required' => true,
                 'filters'  => [
                     ['name' => 'Laminas\Filter\StringTrim'],
                     new PregReplace(['pattern' => '/,/', 'replacement' => '.']),
                 ],
             ],
-            'commentaires' => [
+            'commentaires'       => [
                 'required' => false,
                 'filters'  => [
                     ['name' => 'Laminas\Filter\StringTrim'],
                 ],
             ],
-            'formation'    => [
+            'formation'          => [
                 'required' => false,
                 'filters'  => [
                     ['name' => 'Laminas\Filter\StringTrim'],
@@ -325,9 +382,6 @@ class SaisieFieldset extends AbstractFieldset
 }
 
 
-
-
-
 /**
  *
  *
@@ -341,7 +395,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array              $data
+     * @param array $data
      * @param ServiceReferentiel $object
      *
      * @return object
@@ -362,6 +416,12 @@ class SaisieFieldsetHydrator implements HydratorInterface
         $heures = isset($data['heures']) ? FloatFromString::run($data['heures']) : 0;
         $object->getVolumeHoraireReferentielListe()->setHeures($heures);
 
+        $tag = isset($data['tag']) ? (int)$data['tag'] : null;
+        $object->setTag($tag ? $em->find(Tag::class, $tag) : null);
+
+        $motifNonPaiement = isset($data['motif-non-paiement']) ? (int)$data['motif-non-paiement'] : null;
+        $object->setMotifNonPaiement($motifNonPaiement ? $em->find(MotifNonPaiement::class, $motifNonPaiement) : null);
+
         $commentaires = isset($data['commentaires']) ? $data['commentaires'] : null;
         $object->setCommentaires($commentaires);
 
@@ -370,7 +430,6 @@ class SaisieFieldsetHydrator implements HydratorInterface
 
         return $object;
     }
-
 
 
     /**
@@ -386,6 +445,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
 
         if ($object) {
             $data['id'] = $object->getId();
+            $data['idPrev'] = $object->getId();
         }
 
 //        if ($object->getIntervenant()) {
@@ -409,10 +469,23 @@ class SaisieFieldsetHydrator implements HydratorInterface
             $data['fonction'] = null;
         }
 
+        if ($object->getTag()) {
+            $data['tag'] = $object->getTag()->getId();
+        } else {
+            $data['tag'] = null;
+        }
+
+        if ($object->getMotifNonPaiement()) {
+            $data['motif-non-paiement'] = $object->getMotifNonPaiement()->getId();
+        } else {
+            $data['motif-non-paiement'] = null;
+        }
+
+
         $data['heures'] = StringFromFloat::run($object->getVolumeHoraireReferentielListe()->getHeures());
 
         $data['commentaires'] = $object->getCommentaires();
-        $data['formation']    = $object->getFormation();
+        $data['formation'] = $object->getFormation();
 
         return $data;
     }

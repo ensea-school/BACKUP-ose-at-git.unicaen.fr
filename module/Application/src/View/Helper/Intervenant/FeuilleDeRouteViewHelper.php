@@ -65,7 +65,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
         $tag = $this->getView()->tag();
         /* @var $tag TagViewHelper */
 
-        $res .= $tag('div', ['class' => 'feuille-de-route row']);
+        $res .= $tag('div', ['class' => 'feuille-de-route row no-intranavigation']);
         $res .= $tag('div', ['class' => 'col-md-9']);
 
         if (!empty($feuilleDeRoute)) {

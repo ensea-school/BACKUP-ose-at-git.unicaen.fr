@@ -15,6 +15,8 @@ class TypeValidation
     const CODE_FICHIER         = 'FICHIER';
     const CODE_PIECE_JOINTE    = 'PIECE_JOINTE';
     const CODE_CLOTURE_REALISE = 'CLOTURE_REALISE';
+    const CODE_MISSION         = 'MISSION';
+    const CODE_MISSION_REALISE = 'MISSION_REALISE';
 
     /**
      * @var string

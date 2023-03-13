@@ -83,14 +83,14 @@ class StatutService extends AbstractEntityService
         [$qb, $alias] = $this->initQuery($qb, $alias);
         // $qb->andWhere("$alias.dossierSelectionnable = 1");
         $qb->andWhere("$alias.annee = " . $this->getServiceContext()->getAnnee()->getId());
+        $qb->addOrderBy("$alias.code");
 
         $statuts = $qb->getQuery()->execute();
-        $qb->addOrderBy("$alias.code");
 
         $result = [];
         foreach ($statuts as $value) {
             if ($value instanceof Statut) {
-                if (($value->estNonHistorise() && $value->getDossierSelectionnable()) ||
+                if (($value->estNonHistorise() && $value->getDossierSelectionnable() && $value->getDossier()) ||
                     $statut->getCode() == $value->getCode()) {
                     $result[] = $value;
                 }

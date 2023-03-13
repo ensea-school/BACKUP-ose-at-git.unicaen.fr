@@ -43,15 +43,26 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
             function printValue($value)
             {
                 if (is_array($value)) {
-                    echo '<ul>';
+                    echo '<td><ul>';
                     foreach ($value as $val) {
                         echo '<li>' . $val . '</li>';
                     }
-                    echo '</ul>';
+                    echo '</ul></td>';
                 } elseif ($value) {
-                    echo $value;
+                    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $value);
+                    if ($dt && $dt->format('Y-m-d H:i:s') === $value) {
+                        // C'est une date
+                        $dtOrder = $dt->format(\Application\Constants::DATE_SORT);
+                        echo '<td data-order="' . $dtOrder . '">';
+                        echo $dt->format(\Application\Constants::DATE_FORMAT);
+                        echo '</td>';
+                    } else {
+                        echo '<td>';
+                        echo $value;
+                        echo '</td>';
+                    }
                 } else {
-                    echo '&nbsp;';
+                    echo '<td>&nbsp;</td>';
                 }
             }
 
@@ -81,8 +92,10 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                                                       class="indic-intervenant"/></th>
                             <?php endif; ?>
                             <td style="text-align: center"><?= $r['prioritaire'] ? '<i class="fas fa-star"></i>' : '' ?></td>
-                            <td><?php printValue($r['structure-libelle']); ?></td>
+                            <?php printValue($r['structure-libelle']); ?>
                             <td>
+
+                              
                                 <a href="<?= $this->url($indicateur->getRoute(), ['intervenant' => $intervenantId]) ?>">
                                     <?php
                                     if (!empty($r['intervenant-code-rh'])) {
@@ -95,21 +108,9 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
                             </td>
 
                             <?php
-                            foreach ($supCols as $supCol):
-                                if (!is_array($r[$supCol])) {
-                                    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $r[$supCol]);
-                                    if ($dt && $dt->format('Y-m-d H:i:s') === $r[$supCol]) {
-                                        $dtOrder = $dt->format(\Application\Constants::DATE_SORT); ?>
-                                        <td data-order=<?php echo $dtOrder ?>><?php printValue($dt->format(\Application\Constants::DATE_FORMAT)); ?></td>
-
-                                    <?php }
-                                } else {
-                                    ?>
-                                    <td><?php printValue($r[$supCol]); ?></td>
-
-                                <?php }
-                                ?>
-                            <?php endforeach; ?>
+                            foreach ($supCols as $supCol) {
+                                printValue($r[$supCol]);
+                            } ?>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

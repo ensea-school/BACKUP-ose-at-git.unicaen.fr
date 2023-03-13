@@ -1,5 +1,4 @@
-CREATE
-OR REPLACE FORCE VIEW V_INTERVENANT_HISTORIQUE AS
+CREATE OR REPLACE FORCE VIEW V_INTERVENANT_HISTORIQUE AS
 WITH historique AS (
 --Initialisation des données personnelles
     SELECT d.intervenant_id                              intervenant_id,
@@ -278,7 +277,6 @@ SELECT C.intervenant_id                                intervenant_id,
        5                                               ordre
 FROM fichier f
          JOIN contrat_fichier cf ON cf.fichier_id = f.id AND histo_destruction IS NULL
-         JOIN fichier f ON f.id = cf.fichier_id AND f.histo_destruction IS NULL
          JOIN contrat C ON C.id = cf.contrat_id
          JOIN type_contrat tc ON tc.id = C.type_contrat_id
          JOIN STRUCTURE s ON s.id = C.structure_id
@@ -344,6 +342,21 @@ FROM volume_horaire vh
          JOIN utilisateur u ON u.id = v.histo_modificateur_id
          LEFT JOIN motif_non_paiement mnp ON mnp.id = vh.motif_non_paiement_id
 GROUP BY s.intervenant_id, ep.structure_id
+
+UNION ALL
+
+--Cloture de service
+SELECT i.id                                                                                 intervenant_id,
+       '6 - Services réalisés'                                                              categorie,
+       'Clôture de service réalisé '													    label,
+       MAX(v.histo_modification)                                                            histo_date,
+       MAX(v.histo_modificateur_id)                                                         KEEP (dense_rank FIRST ORDER BY v.histo_creation  DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY v.histo_creation  DESC)    histo_user, 'glyphicon glyphicon-calendar' icon,
+       5                                                                                    ordre
+FROM validation  v
+         JOIN intervenant i ON i.id = v.intervenant_id
+         JOIN utilisateur u ON u.id = v.histo_createur_id
+WHERE v.histo_destruction IS null
+GROUP BY i.id
 
 UNION ALL
 --Mise en paiement

@@ -22,7 +22,7 @@
         <many-to-one field="grade" target-entity="Application\Entity\Db\Grade">
             <join-column name="GRADE_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="discipline" target-entity="Application\Entity\Db\Discipline">
+        <many-to-one field="discipline" target-entity="OffreFormation\Entity\Db\Discipline">
             <join-column name="DISCIPLINE_ID" referenced-column-name="ID"/>
         </many-to-one>
 
@@ -79,7 +79,7 @@
         <field name="autre4" type="string" column="AUTRE_4" length="1000" nullable="true"/>
         <field name="autre5" type="string" column="AUTRE_5" length="1000" nullable="true"/>
 
-        <many-to-one field="employeur" target-entity="Application\Entity\Db\Employeur">
+        <many-to-one field="employeur" target-entity="Dossier\Entity\Db\Employeur">
             <join-column name="EMPLOYEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
         <field name="montantIndemniteFc" type="float" column="MONTANT_INDEMNITE_FC" nullable="true"/>

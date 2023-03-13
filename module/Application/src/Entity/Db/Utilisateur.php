@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Application\Interfaces\AxiosExtractor;
 use UnicaenApp\Entity\UserInterface;
 use UnicaenAuth\Entity\Db\AbstractUser;
 
@@ -9,7 +10,7 @@ use UnicaenAuth\Entity\Db\AbstractUser;
 /**
  * Utilisateur
  */
-class Utilisateur extends AbstractUser implements UserInterface
+class Utilisateur extends AbstractUser implements UserInterface, AxiosExtractor
 {
     const APP_UTILISATEUR_ID = 1;
 
@@ -31,6 +32,13 @@ class Utilisateur extends AbstractUser implements UserInterface
     public function __construct()
     {
         $this->affectation = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+
+    public function axiosDefinition(): array
+    {
+        return ['email', 'displayName'];
     }
 
 

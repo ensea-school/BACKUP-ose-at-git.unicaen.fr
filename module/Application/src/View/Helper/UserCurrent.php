@@ -43,7 +43,7 @@ class UserCurrent extends UserAbstract
         /* @var $userStatusHelper \UnicaenAuth\View\Helper\UserStatus */
         $status                = $userStatusHelper(false);
         $userProfileSelectable = true;
-
+        $deconnexion ="";
         if ($this->getIdentity()) {
             if ($userProfileSelectable) {
                 // DS : cas où aucun rôle n'est sélectionné, on affiche le rôle "user"
@@ -56,13 +56,16 @@ class UserCurrent extends UserAbstract
             $userProfileHelper->setUserProfileSelectable($userProfileSelectable);
 
             $content = $userProfileHelper;
+            // - Lien de déconnexion.
+            /** @var \UnicaenAuth\View\Helper\UserConnection $userConnectionHelper */
+            $userConnectionHelper = $this->getView()->plugin('userConnection');
+            $deconnexion = "|".$userConnectionHelper->renderDisconnection();
         } else {
             $status = "<span id=\"user-status-icon\" class=\"fa fa-user\"></span> Vous n'êtes pas connecté(e)";
             $content = _("Aucun");
         }
 
         $content = htmlspecialchars(preg_replace('/\r\n|\n|\r/', '', $content));
-
         $title = _("Utilisateur connecté à l'application");
 
         $out = <<<EOS
@@ -73,7 +76,7 @@ class UserCurrent extends UserAbstract
    data-bs-toggle="popover" 
    data-bs-html="true" 
    data-bs-content="$content" 
-   href="#">$status<span class="caret"></span></a>
+   href="#">$status<span class="caret"><div class="text-center">$deconnexion</div></span></a>
 EOS;
         $out .= PHP_EOL;
 

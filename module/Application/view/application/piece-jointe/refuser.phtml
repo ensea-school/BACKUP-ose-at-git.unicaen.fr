@@ -44,8 +44,9 @@ echo $this->form()->closeTag();
      * @param {string} selector
      * @param {object} form
      */
-    function installEditor(selector, form) {
-        WidgetInitializer.includeJs(Url('vendor/tinymce-4.4.1/js/tinymce/tinymce.min.js'));
+    function installEditor(selector, form)
+    {
+        WidgetInitializer.includeJs(Util.url('vendor/tinymce-4.4.1/js/tinymce/tinymce.min.js'));
         tinymce.editors = [];
         tinymce.init({
             selector: selector,

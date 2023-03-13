@@ -2,14 +2,14 @@
 
 namespace Intervenant\Entity\Db;
 
-use Application\Entity\Db\DossierAutre;
+use Dossier\Entity\Db\DossierAutre;
 use Application\Entity\Db\EtatSortie;
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Provider\Privilege\Privileges;
 use Application\Traits\ParametreEntityTrait;
-use Doctrine\Persistence\Mapping\ClassMetadata;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
+use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -65,6 +65,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     private bool        $dossierBanque                      = true;
 
     private bool        $dossierInsee                       = true;
+
+    private bool        $dossierStatut                      = true;
 
     private bool        $dossierEmployeur                   = false;
 
@@ -156,8 +158,6 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool        $modificationServiceDuVisualisation = true;
 
-    private bool        $modificationServiceDuEdition       = false;
-
     private bool        $paiementVisualisation              = true;
 
     private bool        $motifNonPaiement                   = true;
@@ -171,6 +171,16 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     private ?string     $codesCorresp3                      = null;
 
     private ?string     $codesCorresp4                      = null;
+
+    private bool        $mission                            = false;
+
+    private bool        $missionVisualisation               = true;
+
+    private bool        $missionEdition                     = false;
+
+    private bool        $missionRealiseEdition              = false;
+
+    private ?TauxRemu   $tauxRemu                           = null;
 
 
 
@@ -521,6 +531,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setDossierInsee(bool $dossierInsee): Statut
     {
         $this->dossierInsee = $dossierInsee;
+
+        return $this;
+    }
+
+
+
+    public function getDossierStatut(): bool
+    {
+        return $this->dossierStatut;
+    }
+
+
+
+    public function setDossierStatut(bool $dossierStatut): Statut
+    {
+        $this->dossierStatut = $dossierStatut;
 
         return $this;
     }
@@ -1247,22 +1273,6 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getModificationServiceDuEdition(): bool
-    {
-        return $this->modificationServiceDuEdition;
-    }
-
-
-
-    public function setModificationServiceDuEdition(bool $modificationServiceDuEdition): Statut
-    {
-        $this->modificationServiceDuEdition = $modificationServiceDuEdition;
-
-        return $this;
-    }
-
-
-
     public function getPaiementVisualisation(): bool
     {
         return $this->paiementVisualisation;
@@ -1375,6 +1385,91 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
+    public function getMission(): bool
+    {
+        return $this->mission;
+    }
+
+
+
+    public function setMission(bool $mission): Statut
+    {
+        $this->mission = $mission;
+
+        return $this;
+    }
+
+
+
+    public function getMissionVisualisation(): bool
+    {
+        return $this->missionVisualisation;
+    }
+
+
+
+    public function setMissionVisualisation(bool $missionVisualisation): Statut
+    {
+        $this->missionVisualisation = $missionVisualisation;
+
+        return $this;
+    }
+
+
+
+    public function getMissionEdition(): bool
+    {
+        return $this->missionEdition;
+    }
+
+
+
+    public function setMissionEdition(bool $missionEdition): Statut
+    {
+        $this->missionEdition = $missionEdition;
+
+        return $this;
+    }
+
+
+
+    public function getMissionRealiseEdition(): bool
+    {
+        return $this->missionRealiseEdition;
+    }
+
+
+
+    public function setMissionRealiseEdition(bool $missionRealiseEdition): Statut
+    {
+        $this->missionRealiseEdition = $missionRealiseEdition;
+
+        return $this;
+    }
+
+
+
+    public function getTauxRemu(): ?TauxRemu
+    {
+        return $this->tauxRemu;
+    }
+
+
+
+    /**
+     * @param TauxRemu|null $tauxRemu
+     *
+     * @return $this
+     */
+    public function setTauxRemu(?TauxRemu $tauxRemu): Statut
+    {
+        $this->tauxRemu = $tauxRemu;
+
+        return $this;
+    }
+
+
+
     /**
      * Retourne la liste des privilèges associés à un statut sous forme de tableau associatif :
      *
@@ -1391,7 +1486,6 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
             Privileges::INTERVENANT_CALCUL_HETD                    => $this->formuleVisualisation,
             Privileges::MODIF_SERVICE_DU_ASSOCIATION               => $this->modificationServiceDu,
             Privileges::MODIF_SERVICE_DU_VISUALISATION             => $this->modificationServiceDu && $this->modificationServiceDuVisualisation,
-            Privileges::MODIF_SERVICE_DU_EDITION                   => $this->modificationServiceDu && $this->modificationServiceDuEdition,
             Privileges::DOSSIER_VISUALISATION                      => $this->dossier && $this->dossierVisualisation,
             Privileges::DOSSIER_EDITION                            => $this->dossier && $this->dossierEdition,
             Privileges::DOSSIER_ADRESSE_VISUALISATION              => $this->dossier && $this->dossierVisualisation && $this->dossierAdresse,

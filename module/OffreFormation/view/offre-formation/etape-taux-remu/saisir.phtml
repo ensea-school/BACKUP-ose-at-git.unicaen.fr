@@ -1,0 +1,20 @@
+<?php $this->headTitle($title); ?>
+
+<?php
+
+echo $this->etapeTauxRemuForm($form);
+echo $this->formErrors($form);
+if ($errors) {
+    echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);
+}
+
+?>
+<style>
+    div.bootstrap-select.header-select {
+        width: 85% !important;
+    }
+
+    button.form-set-value {
+        width: 10% !important;
+    }
+</style>

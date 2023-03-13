@@ -3,24 +3,23 @@
 namespace Enseignement\Entity\Db;
 
 use Application\Entity\Db\Contrat;
-use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\FormuleResultatVolumeHoraire;
-use Application\Entity\Db\Periode;
 use Application\Entity\Db\Traits\MotifNonPaiementAwareTrait;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
-use Application\Entity\Db\Traits\TypeInterventionAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
-use Application\Entity\Db\TypeIntervention;
+use Application\Entity\Db\Traits\TagAwareTrait;
 use Application\Entity\Db\TypeValidation;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use OffreFormation\Entity\Db\Traits\TypeInterventionAwareTrait;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
 {
@@ -28,6 +27,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     use ImportAwareTrait;
     use ServiceAwareTrait;
     use MotifNonPaiementAwareTrait;
+    use TagAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use TypeInterventionAwareTrait;
     use PeriodeAwareTrait;
@@ -199,9 +199,10 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     {
         if (!$this->etatVolumeHoraire) return null;
 
-        return $this->etatVolumeHoraire->first();
-    }
+        $result = $this->etatVolumeHoraire->first();
 
+        return ($result) ?: null;
+    }
 
 
     /**

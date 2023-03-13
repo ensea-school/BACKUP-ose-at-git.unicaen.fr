@@ -27,9 +27,9 @@ echo $this->form()->openTag($form);
 </div>
 
 <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#sql" aria-controls="sql" role="tab" data-bs-toggle="tab">Requêtage</a></li>
-    <li role="presentation"><a href="#csv" aria-controls="csv" role="tab" data-bs-toggle="tab">Export CSV</a></li>
-    <li role="presentation"><a href="#pdf" aria-controls="pdf" role="tab" data-bs-toggle="tab">Export PDF</a></li>
+    <li role="presentation"><a class="nav-link active" href="#sql" aria-controls="sql" role="tab" data-bs-toggle="tab">Requêtage</a></li>
+    <li role="presentation"><a class="nav-link" href="#csv" aria-controls="csv" role="tab" data-bs-toggle="tab">Export CSV</a></li>
+    <li role="presentation"><a class="nav-link" href="#pdf" aria-controls="pdf" role="tab" data-bs-toggle="tab">Export PDF</a></li>
 </ul>
 
 <div class="tab-content etat-sortie-saisir">
@@ -69,7 +69,11 @@ echo $this->form()->openTag($form);
         </div>
     </div>
     <div role="tabcard" class="tab-pane" id="csv">
-        <?= $this->formControlGroup($form->get('csv-params')) ?>
+        <?= $this->formLabel($form->get('csv-params')) ?>
+        <div class="card bg-default csv-options">
+            <?= $this->formTextarea($form->get('csv-params')) ?>
+        </div>
+
         <?= $this->formLabel($form->get('csv-traitement')) ?>
         <div class="card bg-default variables">
             <div class="card-header">Variables disponibles en entrée</div>
@@ -109,9 +113,9 @@ echo $this->form()->openTag($form);
                     <td>Gestionaire d'entités Doctrine (permet d'accéder à la base de données)</td>
                 </tr>
             </table>
-        </div>
-        <?= $this->formTextarea($form->get('csv-traitement')) ?>
-        <div class="card bg-default variables">
+            <div class="card-body">
+                <?= $this->formTextarea($form->get('csv-traitement')) ?>
+            </div>
             <div class="card-header">Données en sortie</div>
             <div class="card-body">
                 Le traitement doit retourner un tableau de données (array) à publiposter, ou NULL.
@@ -123,7 +127,7 @@ echo $this->form()->openTag($form);
     <div role="tabcard" class="tab-pane" id="pdf">
         <?= $this->formControlGroup($form->get('fichier')) ?>
         <?= $this->formControlGroup($form->get('auto-break')) ?>
-        <?= $this->formLabel($form->get('pdf-traitement')) ?>
+        <h4><?= $this->formLabel($form->get('pdf-traitement')) ?></h4>
         <div class="card bg-default variables">
             <div class="card-header">Variables disponibles en entrée</div>
             <table class="table table-xs">
@@ -162,9 +166,9 @@ echo $this->form()->openTag($form);
                     <td>Gestionaire d'entités Doctrine (permet d'accéder à la base de données)</td>
                 </tr>
             </table>
-        </div>
-        <?= $this->formTextarea($form->get('pdf-traitement')) ?>
-        <div class="card bg-default variables">
+            <div class="card-body">
+                <?= $this->formTextarea($form->get('pdf-traitement')) ?>
+            </div>
             <div class="card-header">Données en sortie</div>
             <div class="card-body">
                 Le traitement doit retourner un tableau de données (array) à publiposter, ou NULL.

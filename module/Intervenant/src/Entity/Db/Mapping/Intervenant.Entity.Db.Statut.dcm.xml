@@ -35,6 +35,7 @@
         <field name="dossierAdresse" type="boolean" column="DOSSIER_ADRESSE" nullable="false"/>
         <field name="dossierBanque" type="boolean" column="DOSSIER_BANQUE" nullable="false"/>
         <field name="dossierInsee" type="boolean" column="DOSSIER_INSEE" nullable="false"/>
+        <field name="dossierStatut" type="boolean" column="DOSSIER_STATUT" nullable="false"/>
         <field name="dossierEmployeur" type="boolean" column="DOSSIER_EMPLOYEUR" nullable="false"/>
         <field name="dossierAutre1" type="boolean" column="DOSSIER_AUTRE_1" nullable="false"/>
         <field name="dossierAutre1Visualisation" type="boolean" column="DOSSIER_AUTRE_1_VISUALISATION" nullable="false"/>
@@ -85,11 +86,13 @@
         <field name="referentielRealiseVisualisation" type="boolean" column="REFERENTIEL_REALISE_VISU" nullable="false"/>
         <field name="referentielRealiseEdition" type="boolean" column="REFERENTIEL_REALISE_EDITION" nullable="false"/>
 
+        <field name="mission" type="boolean" column="MISSION" nullable="false"/>
+        <field name="missionRealiseEdition" type="boolean" column="MISSION_REALISE_EDITION" nullable="false"/>
+
         <field name="cloture" type="boolean" column="CLOTURE" nullable="false"/>
 
         <field name="modificationServiceDu" type="boolean" column="MODIF_SERVICE_DU" nullable="false"/>
         <field name="modificationServiceDuVisualisation" type="boolean" column="MODIF_SERVICE_DU_VISUALISATION" nullable="false"/>
-        <field name="modificationServiceDuEdition" type="boolean" column="MODIF_SERVICE_DU_EDITION" nullable="false"/>
 
         <field name="paiementVisualisation" type="boolean" column="PAIEMENT_VISUALISATION" nullable="false"/>
         <field name="motifNonPaiement" type="boolean" column="MOTIF_NON_PAIEMENT" nullable="false"/>
@@ -110,9 +113,10 @@
         </many-to-one>
         <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
         <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
-            <join-columns>
-                <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
-            </join-columns>
+            <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="tauxRemu" target-entity="Paiement\Entity\Db\TauxRemu">
+            <join-column name="TAUX_REMU_ID" referenced-column-name="ID"/>
         </many-to-one>
     </entity>
 </doctrine-mapping>

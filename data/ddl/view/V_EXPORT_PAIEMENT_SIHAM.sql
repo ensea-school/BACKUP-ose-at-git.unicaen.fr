@@ -3,23 +3,24 @@ SELECT annee_id,
        type_intervenant_id,
        structure_id,
        periode_id,
-       'P'                                                                   TYPE,
-       code_rh                                                               matricule,
-       CASE WHEN type_intervenant_code = 'P' THEN '200204' ELSE '202251' END retenue,
-       ose_paiement.get_format_mois_du()                                     du_mois,
-       '20' || ose_paiement.get_annee_extraction_paie()                      annee_de_paye,
-       ose_paiement.get_mois_extraction_paie()                               mois_de_paye,
-       'N'                                                                   tg_specifique,
-       'A definir'                                                           dossier_de_paye,
+       'P'                                                               type,
+       code_rh                                                           matricule,
+       CASE WHEN type_intervenant_code = 'P' THEN '0204' ELSE '1578' END code_indemnite_retenu,
+       ose_paiement.get_format_mois_du()                                 du_mois,
+       '20' || ose_paiement.get_annee_extraction_paie()                  annee_de_paye,
+       ose_paiement.get_mois_extraction_paie()                           mois_de_paye,
+       '01'                                                              numero_de_remise,
+       'N'                                                               tg_specifique,
+       'A definir'                                                       dossier_de_paye,
        '01/' || ose_paiement.get_mois_extraction_paie() || '/20' ||
-       ose_paiement.get_annee_extraction_paie()                              date_pecuniaire,
-       nbu                                                                   nombre_d_unites,
-       montant                                                               montant,
+       ose_paiement.get_annee_extraction_paie()                          date_pecuniaire,
+       nbu                                                               nombre_d_unites,
+       montant                                                           montant,
        'DN ' || type_intervenant_code || ' '
            || substr(UPPER(structure_libelle), 0, 10)
-           || ' ' || annee_libelle                                           libelle,
-       'B'                                                                   mode_de_calcul,
-       code_origine                                                          code_origine
+           || ' ' || annee_libelle                                       libelle,
+       'B'                                                               mode_de_calcul,
+       code_origine                                                      code_origine
 FROM (SELECT i.annee_id                                                                                        annee_id,
              a.libelle                                                                                         annee_libelle,
              ti.id                                                                                             type_intervenant_id,
@@ -37,9 +38,9 @@ FROM (SELECT i.annee_id                                                         
                  END                                                                                           insee,
              i.nom_usuel || ',' || i.prenom                                                                    nom,
              t2.code_origine                                                                                   code_origine,
-             CASE WHEN ind <> CEIL(t2.nbu / max_nbu) THEN max_nbu ELSE t2.nbu - max_nbu * (ind - 1) END        nbu,
+             CASE WHEN ind <> ceil(t2.nbu / max_nbu) THEN max_nbu ELSE t2.nbu - max_nbu * (ind - 1) END        nbu,
              t2.nbu                                                                                            tnbu,
-             (SELECT taux_hetd FROM annee ann WHERE ann.id = i.annee_id)                         montant,
+             (SELECT taux_hetd FROM annee ann WHERE ann.id = i.annee_id)                                       montant,
              COALESCE(t2.unite_budgetaire, '') || ' ' || to_char(i.annee_id) || ' ' || to_char(i.annee_id + 1) libelle
       FROM (SELECT structure_id,
                    periode_paiement_id,
@@ -97,11 +98,11 @@ FROM (SELECT i.annee_id                                                         
                      unite_budgetaire,
                      date_mise_en_paiement) t2
                JOIN (SELECT level ind, 99 max_nbu FROM dual CONNECT BY 1=1 AND LEVEL <= 11) tnbu
-                    ON CEIL(t2.nbu / max_nbu) >= ind
+                    ON ceil(t2.nbu / max_nbu) >= ind
                JOIN intervenant i ON i.id = t2.intervenant_id
                JOIN annee a ON a.id = i.annee_id
                LEFT JOIN intervenant_dossier d ON i.id = d.intervenant_id AND d.histo_destruction IS NULL
                JOIN statut si ON si.id = i.statut_id
                JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
-               JOIN STRUCTURE s ON s.id = i.structure_id) t3
+               JOIN structure s ON s.id = i.structure_id) t3
 ORDER BY annee_id, type_intervenant_id, structure_id, periode_id, nom, code_origine, nbu DESC

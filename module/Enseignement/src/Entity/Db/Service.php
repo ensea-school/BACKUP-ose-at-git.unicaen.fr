@@ -2,24 +2,24 @@
 
 namespace Enseignement\Entity\Db;
 
-use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etablissement;
-use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\FormuleResultatService;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeIntervention;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Enseignement\Entity\VolumeHoraireListe;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Enseignement\Entity\VolumeHoraireListe;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\TypeIntervention;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
 {

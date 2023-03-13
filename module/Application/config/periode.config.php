@@ -7,7 +7,9 @@ namespace Application;
 
 
 use Application\Provider\Privilege\Privileges;
+use Application\Service\PeriodeService;
 use UnicaenAuth\Guard\PrivilegeController;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return [
     'router' => [
@@ -111,6 +113,12 @@ return [
             'Application\Controller\Periode' => Controller\Factory\PeriodeControllerFactory::class,
         ],
     ],
+    'service_manager' => [
+        'invokables' => [
+            PeriodeService::class => PeriodeService::class,
+        ],
+    ],
+
     'form_elements' => [
         'factories' => [
             Form\Periode\PeriodeSaisieForm::class => Form\Periode\PeriodeSaisieFormFactory::class,

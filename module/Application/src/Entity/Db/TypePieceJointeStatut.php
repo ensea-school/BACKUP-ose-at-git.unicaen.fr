@@ -6,8 +6,6 @@ use Application\Entity\Db\Traits\TypePieceJointeAwareTrait;
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Traits\ParametreEntityTrait;
 use Intervenant\Entity\Db\StatutAwareTrait;
-use UnicaenApp\Entity\HistoriqueAwareInterface;
-use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 
 class TypePieceJointeStatut implements ParametreEntityInterface
@@ -16,21 +14,23 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     use StatutAwareTrait;
     use TypePieceJointeAwareTrait;
 
-    private float $seuilHetd      = 0;
+    private float $seuilHetd            = 0;
 
-    private bool  $typeHeureHetd  = false;
+    private bool  $typeHeureHetd        = false;
 
-    private bool  $fc             = false;
+    private bool  $fc                   = false;
 
-    private bool  $changementRIB  = false;
+    private bool  $changementRIB        = false;
 
-    private int   $dureeVie       = 1;
+    private bool  $nationaliteEtrangere = false;
 
-    private bool  $obligatoireHNP = false;
+    private int   $dureeVie             = 1;
 
-    private bool  $obligatoire    = true;
+    private bool  $obligatoireHNP       = false;
 
-    protected int $numRegle       = 1;
+    private bool  $obligatoire          = true;
+
+    protected int $numRegle             = 1;
 
 
 
@@ -92,6 +92,30 @@ class TypePieceJointeStatut implements ParametreEntityInterface
     public function setChangementRIB(bool $changementRIB): TypePieceJointeStatut
     {
         $this->changementRIB = $changementRIB;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isNationaliteEtrangere(): bool
+    {
+        return $this->nationaliteEtrangere;
+    }
+
+
+
+    /**
+     * @param bool $nationaliteEtrangere
+     *
+     * @return TypePieceJointeStatut $this
+     */
+    public function setNationaliteEtrangere(bool $nationaliteEtrangere): TypePieceJointeStatut
+    {
+        $this->nationaliteEtrangere = $nationaliteEtrangere;
 
         return $this;
     }
@@ -168,6 +192,7 @@ class TypePieceJointeStatut implements ParametreEntityInterface
         if ($this->getSeuilHetd()) $txt .= ' >' . $this->getSeuilHetd();
         if ($this->getFc()) $txt .= ' FC ';
         if ($this->getChangementRIB()) $txt .= ' RIB';
+        if ($this->isNationaliteEtrangere()) $txt .= ' Etr';
         if ($this->getDureeVie() && $this->getDureeVie() > 1) $txt .= ' ' . $this->getDureeVie() . 'ans';
 
 
@@ -186,6 +211,7 @@ class TypePieceJointeStatut implements ParametreEntityInterface
         if ($this->getSeuilHetd()) $t[] = 'À partir de ' . $this->getSeuilHetd() . ' heures';
         if ($this->getFc()) $t[] = 'Uniquement avec des enseignements en Formation Continue';
         if ($this->getChangementRIB()) $t[] = 'Uniquement si le RIB a changé';
+        if ($this->isNationaliteEtrangere()) $t[] = 'Uniquement si nationalité étrangère';
         if ($this->getDureeVie()) $t[] = 'Redemander la pièce tous les ' . $this->getDureeVie() . ' an(s)';
 
         return implode("\n", $t);

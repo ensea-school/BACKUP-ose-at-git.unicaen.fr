@@ -15,7 +15,7 @@ use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
 use Application\Processus\Traits\ContratProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContratServiceAwareTrait;
-use Application\Service\Traits\DossierServiceAwareTrait;
+use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Enseignement\Service\ServiceServiceAwareTrait;
@@ -429,7 +429,13 @@ class ContratController extends AbstractController
                     //Ajout pour transformer les sauts de lignes en html <br/>
                     $html = nl2br($html);
                     //Personnalisation des variables
-                    $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " " . $contrat->getIntervenant()->getNomUsuel();
+                    if ($contrat->getIntervenant()->getCivilite() != null) {
+                        $vIntervenant = $contrat->getIntervenant()->getCivilite()->getLibelleCourt() . " " . $contrat->getIntervenant()->getNomUsuel();
+                    } elseif ($dossierIntervenant != null && $dossierIntervenant->getCivilite() != null) {
+                        $vIntervenant = $dossierIntervenant->getCivilite()->getLibelleCourt() . " " . $contrat->getIntervenant()->getNomUsuel();
+                    } else {
+                        $vIntervenant = $contrat->getIntervenant()->getNomUsuel();
+                    }
                     $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
                     $vAnnee       = $this->getServiceContext()->getAnnee()->getLibelle();
                     $html         = str_replace([':intervenant', ':utilisateur', ':annee'], [$vIntervenant, $vUtilisateur, $vAnnee], $html);

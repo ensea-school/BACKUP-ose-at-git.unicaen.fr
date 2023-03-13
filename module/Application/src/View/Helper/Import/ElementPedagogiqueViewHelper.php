@@ -1,6 +1,6 @@
 <?php
 namespace Application\View\Helper\Import;
-use Application\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use UnicaenImport\View\Helper\DifferentielLigne\DifferentielLigne;
 
 /**

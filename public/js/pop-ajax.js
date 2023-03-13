@@ -218,7 +218,12 @@ $.widget("unicaen.popAjax", {
             this._trigger('error', null, this);
         } else {
             if (this.options.submitEvent) {
-                $("body").trigger(this.options.submitEvent, this);
+                if (this.options.submitEvent instanceof Function) {
+                    this.options.submitEvent(this);
+                    this.hide();
+                } else {
+                    $("body").trigger(this.options.submitEvent, this);
+                }
             }
             if (this.options.submitClose) {
                 this.hide();
@@ -261,7 +266,7 @@ $.widget("unicaen.popAjax", {
 
         var p = popEl[0].getBoundingClientRect();
         var horsZonePop = e.clientX < p.left || e.clientX > p.left + p.width || e.clientY < p.top || e.clientY > p.top + p.height;
-        var horsElementFils = $(e.target).parents('.popover-content,.ui-autocomplete').length == 0;
+        var horsElementFils = $(e.target).parents('.popover-content,.popover-body,.ui-autocomplete').length == 0;
 
         if ($(e.target).hasClass('pop-ajax-hide')) {
             this.hide();
@@ -291,3 +296,74 @@ $.widget("unicaen.popAjax", {
 $(function () {
     WidgetInitializer.add('pop-ajax', 'popAjax');
 });
+
+
+function popConfirm(element, options)
+{
+    var popConfirm = bootstrap.Popover.getInstance(element);
+    if (!popConfirm) {
+        if (typeof options == 'function') {
+            options = {
+                confirm: options
+            };
+        }
+
+        if (!options) {
+            options = {};
+        }
+        if (!options.title) {
+            options.title = $(element).data('title');
+        }
+        if (!options.title) {
+            options.title = "Demande de confirmation";
+        }
+
+        if (!options.content) {
+            options.content = $(element).data('content');
+        }
+        if (!options.content) {
+            options.content = "Confirmez-vous cette action ?";
+        }
+
+        if (!options.confirm) {
+            options.confirm = function () {};
+        }
+        if (!options.url) {
+            options.url = element.href;
+        }
+
+        if (element.nodeName == 'A') {
+            goFunc = function () {
+                axios.get(options.url).then(response => {
+                    options.confirm(response, element);
+                });
+            };
+        } else {
+            goFunc = function () {
+                options.confirm(element);
+            }
+        }
+
+        let popoptions = {
+            html: true,
+            sanitize: false,
+            trigger: "focus",
+            title: options.title,
+            content: options.content + '<div class="btn-goup" style="text-align:right;padding-top: 10px" role="group"><button class="btn btn-secondary" id="nogo">Non</button><button class="btn btn-primary" id="go">Oui</button></div>',
+        };
+        popConfirm = new bootstrap.Popover(element, popoptions);
+        element.addEventListener('shown.bs.popover', (eventShown) => {
+            let popDivId = $(eventShown.target).attr('aria-describedby');
+            $("#" + popDivId).find("button#go").click(() => {
+                popConfirm.hide();
+                goFunc();
+            });
+
+            $("#" + popDivId).find("button#nogo").click(() => {
+                popConfirm.hide();
+            });
+        });
+    }
+
+    popConfirm.show();
+}

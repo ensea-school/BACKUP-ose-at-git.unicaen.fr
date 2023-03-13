@@ -2,18 +2,19 @@
 
 namespace Application\Service;
 
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Application\Service\Traits\EtapeServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
-use UnicaenApp\Traits\SessionContainerTrait;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\Etape;
 use Application\Entity\NiveauEtape;
-use Application\Entity\Db\ElementPedagogique;
+use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
+use OffreFormation\Service\NiveauEtapeService;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
+use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
+use UnicaenApp\Traits\SessionContainerTrait;
 
 
 /**
@@ -198,11 +199,11 @@ class LocalContextService extends AbstractService
 
     /**
      *
-     * @param Etape $etape
+     * @param Etape|null $etape
      *
      * @return self
      */
-    public function setEtape(Etape $etape = null)
+    public function setEtape(?Etape $etape = null)
     {
         $this->etape                        = $etape;
         $this->getSessionContainer()->etape = $etape ? $etape->getId() : null;

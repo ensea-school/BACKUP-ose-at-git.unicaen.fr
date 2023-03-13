@@ -2,21 +2,21 @@
 
 namespace Application\View\Helper\Paiement;
 
+use Application\Entity\Db\DomaineFonctionnel;
+use Application\Entity\Db\FormuleResultatService;
+use Application\Entity\Db\FormuleResultatServiceReferentiel;
+use Application\Entity\Db\MiseEnPaiement;
+use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeRessource;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
-use Application\Service\Traits\TypeHeuresServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
+use OffreFormation\Entity\Db\TypeHeures;
+use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use UnicaenApp\View\Helper\TagViewHelper;
 use UnicaenAuth\Guard\PrivilegeController;
-use Application\Entity\Db\ServiceAPayerInterface;
-use Application\Entity\Db\FormuleResultatService;
-use Application\Entity\Db\FormuleResultatServiceReferentiel;
-use Application\Entity\Db\TypeHeures;
-use Application\Entity\Db\MiseEnPaiement;
-use Application\Entity\Db\DomaineFonctionnel;
 
 /**
  * Description of DemandeMiseEnPaiementViewHelper

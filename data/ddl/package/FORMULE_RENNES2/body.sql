@@ -208,15 +208,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_RENNES2 AS
 
 
 
-      -- AD=IF(ISERROR([.I20]);1;[.I20])
+      -- AD=IF(ISERROR([.I20]);1;[.I20]*[.K20])
       WHEN 'AD' THEN
-        RETURN vh.taux_service_du;
+        RETURN vh.taux_service_du * vh.ponderation_service_du;
 
 
 
-      -- AE=IF(ISERROR([.J20]);1;[.J20])
+      -- AE=IF(ISERROR([.J20]);1;[.J20]*[.L20])
       WHEN 'AE' THEN
-        RETURN vh.taux_service_compl;
+        RETURN vh.taux_service_compl * vh.ponderation_service_compl;
 
 
 

@@ -202,7 +202,47 @@ $.widget("ose.etapeCentreCout", {
 
 });
 
+/**
+ * etapeTauxRemu
+ */
+$.widget("ose.etapeTauxRemu", {
 
+    _create: function ()
+    {
+        var that = this;
+
+        this.element.find("button.form-set-value").click(function (e)
+        {
+            console.log("test");
+
+            var value = that.getElementEtapeSelect('tauxRemu').val();
+            that.setFormValues('tauxRemu', value);
+            e.stopPropagation();
+        });
+    },
+
+    setFormValues: function (type, value)
+    {
+        this.getElementElementSelects(type).each(function ()
+        {
+            var canSetValue = value == "" || $(this).find("option[value=" + value + "]").length > 0;
+            if (canSetValue) {
+                $(this).selectpicker('val', value);
+            }
+        });
+    },
+
+    getElementEtapeSelect: function (type)
+    {
+        return this.element.find('select[name="' + type + '"]');
+    },
+
+    getElementElementSelects: function (type)
+    {
+        return this.element.find('select[name$="\\[' + type + '\\]"]');
+    }
+
+});
 
 
 /**
@@ -291,14 +331,25 @@ $.widget("ose.etapeModulateurs", {
  */
 $.widget("ose.etapeSaisie", {
 
+    updateQueryStringParameter: function (uri, key, value)
+    {
+        var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+        var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+        if (uri.match(re)) {
+            return uri.replace(re, '$1' + key + "=" + value + '$2');
+        } else {
+            return uri + separator + key + "=" + value;
+        }
+    },
+
     onAjouter: function (event)
     {
-        window.location = updateQueryStringParameter(window.location.href, "etape", this.getId());
+        window.location = this.updateQueryStringParameter(window.location.href, "etape", this.getId());
     },
 
     onModifier: function (event)
     {
-        window.location = updateQueryStringParameter(window.location.href, "etape", this.getId());
+        window.location = this.updateQueryStringParameter(window.location.href, "etape", this.getId());
     },
 
     getId: function ()

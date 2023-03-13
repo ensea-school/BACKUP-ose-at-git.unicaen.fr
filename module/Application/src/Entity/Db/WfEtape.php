@@ -14,6 +14,10 @@ class WfEtape
     const CODE_DONNEES_PERSO_VALIDATION       = 'DONNEES_PERSO_VALIDATION';
     const CODE_SERVICE_VALIDATION             = 'SERVICE_VALIDATION';
     const CODE_REFERENTIEL_VALIDATION         = 'REFERENTIEL_VALIDATION';
+    const CODE_MISSION_SAISIE                 = 'MISSION_SAISIE';
+    const CODE_MISSION_VALIDATION             = 'MISSION_VALIDATION';
+    const CODE_MISSION_SAISIE_REALISE         = 'MISSION_SAISIE_REALISE';
+    const CODE_MISSION_VALIDATION_REALISE     = 'MISSION_VALIDATION_REALISE';
     const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT;  // NB: c'est texto le code du type d'agrément
     const CODE_CONSEIL_ACADEMIQUE             = TypeAgrement::CODE_CONSEIL_ACADEMIQUE; // NB: c'est texto le code du type d'agrément
     const CODE_CONTRAT                        = 'CONTRAT';

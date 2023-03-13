@@ -2,9 +2,12 @@
 
 namespace Application\Form\Agrement;
 
+use Application\Constants;
+use Application\Filter\DateTimeFromString;
 use Application\Form\AbstractForm;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\ClassMethodsHydrator;
+use Laminas\Hydrator\HydratorInterface;
 use UnicaenApp\Hydrator\Strategy\DateStrategy;
 
 /**
@@ -16,13 +19,14 @@ class Saisie extends AbstractForm
 
     public function init()
     {
-        $this->setHydrator(new ClassMethodsHydrator(false));
+        $this->setHydrator(new AgreementRetourFormHydrator());
 
         $this->setAttribute('action', $this->getCurrentUrl());
 
+
         $this->add([
             'name'       => 'dateDecision',
-            'type'       => 'UnicaenApp\Form\Element\Date',
+            'type'       => 'Date',
             'options'    => [
                 'label' => "Date de la décision",
             ],
@@ -30,7 +34,7 @@ class Saisie extends AbstractForm
                 'id' => uniqid('dateDecision'),
             ],
         ]);
-        $this->getHydrator()->addStrategy('dateDecision', new DateStrategy($this->get('dateDecision')));
+//        $this->getHydrator()->addStrategy('dateDecision', new DateStrategy($this->get('dateDecision')));
 
         $this->add(new Csrf('security'));
 
@@ -60,5 +64,39 @@ class Saisie extends AbstractForm
                 'required' => true,
             ],
         ];
+    }
+}
+
+
+
+
+
+class AgreementRetourFormHydrator implements HydratorInterface
+{
+
+    /**
+     * @param array $data
+     * @param       $object
+     */
+    public function hydrate(array $data, $object)
+    {
+        $object->setDateDecision(DateTimeFromString::run($data['dateDecision'] ?? null));
+    }
+
+
+
+    /**
+     *
+     * @param $object
+     *
+     * @return array
+     */
+    public function extract($object): array
+    {
+        $data = [
+            'dateDecision' => $object->getDateDecision() ? $object->getDateDecision()->format('Y-m-d') : null,
+        ];
+
+        return $data;
     }
 }

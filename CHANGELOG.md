@@ -1,38 +1,118 @@
 # Version stable
 
-[OSE 19.4](#ose-194-21102022)
+[OSE 20.0](#ose-20--28022023-)
 
 
-# OSE 20 (à venir)
+# OSE 21 (à venir)
+
+## Nouveautés
+
+* Nouvelle notion de mission, permettant de gérer les contrats étudiants
+* Taux HETD personnalisables
+
+
+# OSE 20.1 (A venir)
+
+## Nouveautés
+
+* Ajout de la date de clôture dans la page historique de l'intervenant 
+
+## Corrections de bugs
+
+* Correction d'une régression de la V20 sur le module Export Siham
+
+# OSE 20 (28/02/2023)
 
 ## Nouveautés
 
 * Les modèles de contrats de travail sont maintenant gérés comme n'importe quel autre état de sortie
-* Reconduction de l'offre de formation pour les éléments de OSE porté par un élément synchroniser
+* Reconduction de l'offre de formation pour les éléments de OSE portés par un élément synchronisé
 * Possibilité de rentrer un taux de charge par statut d'intervenant
 * Ajout d'un choix par statut pour "contrat de travail et avenants" pour laisser la possibilité à l'intervenant de télécharger sont contrat en pdf
-* Ajout d'un choix par statut pour "Modifications de service dû" pour laisser la possibilité à l'intervenant de modifier son service dû
 * Migration technnique vers le framework Bootstrap 5 et modernisation de l'identité visuelle
+* Réorganisation du menu "Administration" pour plus de lisibilité
+* Filtrage des caractères interdits lors de l'export RH SIHAM (#47267)
+* Associer des tags aux services afin de flécher certains financements (#42451)
+* Envoyer un email via un indicateur à la fois sur l'email perso et l'email pro de l'intervenant (#48687)
+* Nouveaux indicateurs 500 et 505 listant les permanents sans service ni référentiel
 
 ## Corrections de bugs
 
 * Sur la page "Services", la sélection d'un élément après selection d'une composante et d'une formation est désormais fonctionnel
-* Correction des indicateur 910 et 920 qui étaient non fonctionnels dans le cas d'une autovalidation ou d'une absence de contrat
+* Correction des indicateurs 910 et 920 qui étaient non fonctionnels dans le cas d'une autovalidation ou d'une absence de contrat
 * Correction de la suppression d'un role dans la page d'administration des roles.
-* Correction mineure sur les notes intervenants au niveau de l'historique (#46303)
+* Correction mineure sur les notes des intervenants au niveau de l'historique (#46303)
 * La durée de vie attendue des pièces justificatives est maintenant celle de l'année en cours et plus celle de l'année de dépôt de la pièce
 * Les annulations de mises en paiement sont désormais bien prises en compte dès la première annulation
-* Il est désormais possible de cloturer le service réalisé même si aucune heure n'est saisie
+* Il est désormais possible de clôturer le service réalisé même si aucune heure n'est saisie
 * Les indicateurs 530 et 540 ne renvoient plus de vacataires
-* Les étapes d'ODF complémentaire peuvent de nouveau être modifiées (#46922)
+* Dans les diagrammes du module Charges, la boite de dialogue s'affiche correctement, même avec beaucoup de types d'intervention
+* Le plafond relatif aux charges / services saisis est maintenant opérationnel
+* Lors de la saisie d'enseignement, les elements pedagogique sur lesquels il est impossible de saisir des heures seront surlignés en rouge
+* Il est de nouveau possible de saisir des taux de charge TTC et des taux de charge patronale a virgule
+* Modification du filtre des status séléctionnables dans les données personnelles (#48151)
+* Lors de la demande de mise en paiement, pouvoir choisir un EOTP même si son centre de coût parent n'est pas de l'activité attendue (pilotage / enseignement) (#48286)
+* Utilisation prioritaire de l'email personnel des données personnelles pour l'envoi d'email via les indicateurs (#48393)
+* Meilleure gestion de la casse lors de la recherche d'un employeur (#48543)
+* Ajout d'une contrainte d'unicité sur la colonne code de la table type_intervention (#48727)
+* Correction formule d'UVSQ (#47149)
+* Et beaucoup d'autres ...
 
 ## Notes de mise à jour
 
 * Supprimer la ligne faisant référence à TBL_NOEUD dans Administration/Synchronisation/Tables, table NOEUD, champ "Traitements postérieurs : à exécuter après la synchro".
+* La génération des contrats de travail ayant été remaniée, veuillez vérifier que vous pouvez générer correctement de nouveaux contrats de travail
+
+
+Avec l'ajout de la notion de tag sur les services d'enseignement et référentiel, les champs 'TAG' et 'TAG_ID' ont été ajouté dans la V_EXPORT_SERVICE, si vous avez créé votre propre V_EXPORT_SERVICE, il vous faudra la modifier vous même en vous appuyant sur la V_EXPORT_SERVICE par défaut de OSE (https://git.unicaen.fr/open-source/OSE/-/blob/master/data/ddl/view/V_EXPORT_SERVICE.sql)
+
+Ensuite si vous souhaitez faire apparaître les tags dans l'export des services, il vous faudra modifier vous même l'état de sortie 'Export des services', dans l'onglet 'Export CSV' : 
+
+A la **ligne 56** ajouter TAG_ID à la variable $sid : 
+
+    $sid .= '_' . $d['TAG_ID'];
+
+A la **ligne 102** ajouter la colonne TAG dans le tableau $ds: 
+
+    tag' => $d['TAG'],
+
+A la **ligne 206** Ajouter le titre de colonne TAG dans le tableau $head : 
+  
+    'tag' => 'Tags',
+
+Le système de mise à jour peut - dans certaines circonstances - vous afficher quelques erreurs qui sont sans impact 
+sur le bon fonctionnement de l'application.
+Je vais modifier les scripts de mise à jour pour éviter qu'elles ne se produisent.
+Mais en attendant, si vous y êtes confrontés, vous en trouverez les explications sur le ticket suivant :
+https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_position=1&next_issue_id=48972
 
 
 
-# OSE 19.5 (à venir)
+# OSE 19.7 (16/12/2022)
+
+## Corrections de bugs
+
+* Correction régression 19.5 : le workflow fonctionne à nouveau (#47982)
+* Correction formule de calcul du Havre (#48024)
+
+
+
+# OSE 19.6 (14/12/2022)
+
+### Attention : il est déconseillé d'utiliser les 19.5 et 19.6, des régressions ont été constatées à plusieurs niveaux.
+
+## Corrections de bugs
+
+* Correction régression 19.5 : les indicateurs 910 et 920 fonctionnent de nouveau
+* Correction régression 19.5 : les formules de calcul fonctionnent de nouveau
+* Correction régression 19.5 : la page d'administration des statuts fonctionne de nouveau (#47976)
+* Correction sur l'état de sortie préliquidation SIHAM (#47678)
+* Prise dans compte des modulateurs pour la formule de Rennes 2 (#47753)
+
+
+# OSE 19.5 (12/12/2022)
+
+### Attention : il est déconseillé d'utiliser les 19.5 et 19.6, des régressions ont été constatées à plusieurs niveaux.
 
 ## Corrections de bugs
 
@@ -41,8 +121,20 @@
 * Filtre des pays avec dates de validité périmées dans les listing des données personnelles (#47492)
 * Correction sur le script de mise à jour des employeurs
 * Correction sur les notes de l'intervenant au niveau de l'historique (#46303)
-
-
+* Vue V_IMPORT_DEPUIS_DOSSIERS permettant de réinjecter les données personnelles dans les fiches corrigée (pb de filtre année) (#46769)
+* Formule de calcul du Havre mise à jour
+* Correction de bug dans la formule de Picardie
+* Correction de bug de l'envoi du contrat par email lorsque la civilité est absente
+* Correction du bouton "Prévu->Réalisé" absent pour le service réalisé
+* Lors de la saisie de référentiel, le tri se fait correctement sur les fonction référentielles et sur les types de fonction
+* Les caractères spéciaux sont bien pris en compte dans les types d'intervention (exemple : CM/TD)
+* Le tableau des services d'enseignement n'affiche plus les colonnes inutiles
+* Les étapes d'ODF complémentaire peuvent de nouveau être modifiées (#46922)
+* Ajout du libelle du statut (champ STATUT_LIBELLE) pour affichage dans les états de paiement si nécessaire (#47762)
+* Correction pour prise en compte des départements de naissance dans les DOM TOM dans la PEC Siham.
+* Le workflow se calcule correctement lorsqu'il n'y a qu'un seul contrat par intervenant
+* Correction sur la gestion des pièces jointes demandées uniquement dans le cadre de la formation continue
+* Formule de calcul de ROUEN corrigée (#47876)
 
 # OSE 19.4 (21/10/2022)
 

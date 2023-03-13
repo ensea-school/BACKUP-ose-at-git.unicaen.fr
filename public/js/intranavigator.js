@@ -35,6 +35,8 @@ IntraNavigator = {
 
         if (typeof element === 'string') {
             element = $('<div>' + element + '</div>');
+        } else {
+            element = $('<div></div>');
         }
 
         var extractedTitle = element.find('.title,.modal-title,.popover-title,.page-header');

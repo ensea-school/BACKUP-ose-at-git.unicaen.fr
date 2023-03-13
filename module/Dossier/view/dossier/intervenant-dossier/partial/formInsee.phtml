@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @var $this               \Application\View\Renderer\PhpRenderer
+ * @var $form               \Dossier\Form\IntervenantDossierForm
+ * @var $intervenant        \Application\Entity\Db\Intervenant
+ * @var $intervenantDossier \Dossier\Entity\Db\IntervenantDossier
+ * @var $tblDossier         \Dossier\Entity\Db\TblDossier
+ */
+
+$form->prepare();
+$dossierInsee = $form->get('DossierInsee');
+?>
+
+<style>
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
+</style>
+
+<!-- Fiedlset Insee -->
+<div class="col-md-6">
+    <div class="card bg-default ">
+        <div class="card-header">
+            INSEE
+            <?php if (!empty($tblDossier)): ?>
+                <?php if (!$tblDossier->getCompletudeInsee()): ?>
+                    <span class="badge bg-warning text-dark">A compléter</span>
+                <?php else: ?>
+                    <span class="badge bg-success">Complet</span>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+        <div class="card-body">
+            <?php
+
+            echo $this->formControlGroup($dossierInsee->get('numeroInsee'));
+            echo $this->formControlGroup($dossierInsee->get('numeroInseeEstProvisoire'));
+
+            ?>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

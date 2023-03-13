@@ -66,7 +66,7 @@ class IndicateurService extends AbstractService
             i.code                     \"intervenant-code\",
             i.prenom                   \"intervenant-prenom\",
             i.nom_usuel                \"intervenant-nom\",
-            i.email_perso              \"intervenant-email-perso\",
+            COALESCE(d.email_perso,i.email_perso) \"intervenant-email-perso\",
             i.email_pro                \"intervenant-email-pro\",
             s.libelle_court            \"structure-libelle\",
             indic.*";
@@ -79,6 +79,7 @@ class IndicateurService extends AbstractService
           ($viewDef) indic
           JOIN intervenant    i ON i.id = indic.intervenant_id AND i.histo_destruction IS NULL
           JOIN statut        si ON si.id = i.statut_id AND si.code <> 'NON_AUTORISE'
+          LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id and d.histo_destruction IS NULL
           LEFT JOIN structure s ON s.id = indic.structure_id
         WHERE
           i.annee_id = :annee

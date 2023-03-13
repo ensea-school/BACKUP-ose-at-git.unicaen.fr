@@ -4,7 +4,7 @@ namespace Application\Form\Pays;
 
 use Application\Entity\Db\Pays;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
+use OffreFormation\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 

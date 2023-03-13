@@ -99,6 +99,37 @@ function validiteIntervalle($anneeDebut, $anneeFin): string
 }
 
 
+/**
+ * Pour intégrer dans une requête DQL, permet de créer des conditions AND dans une clause WHERE, en fonction des paramètres donnés
+ * Filters permet de préciser, en fonction du nom du paramètre, quelle propriété de la requête tester.
+ * exemple :
+ * $filters = ['intervenant' => 'm.intervenant'];
+ * Ce qui donnera : AND m.intervenant = :intervenant si et seulement si intervenant est transmis comme paramètre
+ *
+ * $parameters est le tableau qui contient les paramètres à transmettre au QueryBuilder.
+ *
+ * @param array $filters
+ * @param array $parameters
+ *
+ * @return string
+ */
+function dqlAndWhere(array $filters, array $parameters): string
+{
+    $dqlFilters = '';
+    foreach ($parameters as $name => $value) {
+        if (array_key_exists($name, $filters)) {
+            if ($value === null) {
+                $dqlFilters .= "\nAND " . $filters[$name] . ' IS NULL';
+            } else {
+                $dqlFilters .= "\nAND " . $filters[$name] . ' = :' . $name;
+            }
+        }
+    }
+
+    return $dqlFilters;
+}
+
+
 function vhlDump(\Enseignement\Entity\VolumeHoraireListe $volumeHoraireListe): \OSETest\VolumeHoraireListeTest
 {
     include_once getcwd() . '/tests/OSETest/VolumeHoraireListeTest.php';

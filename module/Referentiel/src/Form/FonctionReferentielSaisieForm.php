@@ -2,15 +2,17 @@
 
 namespace Referentiel\Form;
 
+use Application\Provider\Privilege\Privileges;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Referentiel\Service\FonctionReferentielServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Util;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 
 /**
  * Description of FonctionReferentielSaisieForm
@@ -23,6 +25,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
     use DomaineFonctionnelServiceAwareTrait;
     use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use AuthorizeServiceAwareTrait;
 
 
     public function init()
@@ -33,6 +36,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
         $this->setAttribute('action', $this->getCurrentUrl());
 
+        
         $this->add([
             'name'       => 'parent',
             'options'    => [
@@ -130,7 +134,6 @@ class FonctionReferentielSaisieForm extends AbstractForm
     }
 
 
-
     /**
      * @return FonctionReferentiel[]
      */
@@ -145,12 +148,11 @@ class FonctionReferentielSaisieForm extends AbstractForm
     }
 
 
-
     public function getStructures()
     {
-        $role             = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $serviceStructure = $this->getServiceStructure();
-        $qb               = $serviceStructure->finderByHistorique();
+        $qb = $serviceStructure->finderByHistorique();
         if ($role && $role->getStructure()) {
             $serviceStructure->finderById($role->getStructure()->getId(), $qb); // Filtre
         }
@@ -159,7 +161,6 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
         return $structures;
     }
-
 
 
     /**
@@ -195,9 +196,6 @@ class FonctionReferentielSaisieForm extends AbstractForm
 }
 
 
-
-
-
 class FonctionReferentielHydrator implements HydratorInterface
 {
     use FonctionReferentielServiceAwareTrait;
@@ -208,7 +206,7 @@ class FonctionReferentielHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                                      $data
+     * @param array $data
      * @param \Referentiel\Entity\Db\FonctionReferentiel $object
      *
      * @return object
@@ -231,7 +229,6 @@ class FonctionReferentielHydrator implements HydratorInterface
 
         return $object;
     }
-
 
 
     /**

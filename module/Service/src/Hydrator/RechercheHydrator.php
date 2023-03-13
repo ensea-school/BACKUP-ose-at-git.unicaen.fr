@@ -2,17 +2,18 @@
 
 namespace Service\Hydrator;
 
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Etape;
-use Service\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Intervenant\Entity\Db\TypeIntervenant;
+use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
-use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
+use Service\Entity\Recherche;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Laminas\Hydrator\HydratorInterface;
 
 
 /**
@@ -72,7 +73,7 @@ class RechercheHydrator implements EntityManagerAwareInterface, HydratorInterfac
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Db\ElementPedagogique $object
+     * @param \OffreFormation\Entity\Db\ElementPedagogique $object
      *
      * @return array
      */

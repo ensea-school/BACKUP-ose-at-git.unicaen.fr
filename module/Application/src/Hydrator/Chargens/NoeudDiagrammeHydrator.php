@@ -2,11 +2,11 @@
 
 namespace Application\Hydrator\Chargens;
 
-use Application\Entity\Db\TypeHeures;
-use Application\Entity\Db\TypeIntervention;
+use Application\Entity\Chargens\Noeud;
 use Application\Provider\Chargens\ChargensProvider;
 use Laminas\Hydrator\HydratorInterface;
-use Application\Entity\Chargens\Noeud;
+use OffreFormation\Entity\Db\TypeHeures;
+use OffreFormation\Entity\Db\TypeIntervention;
 
 
 /**

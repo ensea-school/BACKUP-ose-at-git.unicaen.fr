@@ -1,0 +1,202 @@
+/**
+* @var $this             \Application\View\Renderer\PhpRenderer
+* @var $form             \Dossier\Form\IntervenantDossierForm
+* @var $canValider       boolean
+* @var $canDevalider     boolean
+* @var $canSupprimer     boolean
+* @var $dossier          Dossier
+*/
+
+$Dossier = $dossier;
+
+$form->prepare();
+$dossier = $form->get('dossier');
+?>
+
+<style>
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
+</style>
+
+<?= $this->form()->openTag($form) ?>
+<div class="row">
+    <div class="col-md-3">
+        <?= $this->formControlGroup($dossier->get('nomUsuel')); ?>
+        <?= $this->formControlGroup($dossier->get('nomPatronymique')); ?>
+        <?= $this->formControlGroup($dossier->get('prenom')); ?>
+        <?= $this->formControlGroup($dossier->get('civilite')); ?>
+        <?= $this->formControlGroup($dossier->get('dateNaissance')); ?>
+        <?= $this->formControlGroup($dossier->get('paysNaissance')); ?>
+        <?= $this->formControlGroup($dossier->get('departementNaissance')); ?>
+        <?= $this->formControlGroup($dossier->get('villeNaissance')); ?>
+    </div>
+    <div class="col-md-4">
+        <?= $this->formControlGroup($dossier->get('numeroInsee')); ?>
+        <?= $this->formControlGroup($dossier->get('numeroInseeEstProvisoire')); ?>
+        <?= $this->formControlGroup($dossier->get('adresse')); ?>
+        <?= $this->formControlGroup($dossier->get('email')); ?>
+        <?php if ($dossier->has('emailPerso')) {
+            echo $this->formControlGroup($dossier->get('emailPerso'));
+        } ?>
+        <?= $this->formControlGroup($dossier->get('telephone')); ?>
+    </div>
+    <div class="col-md-5">
+        <fieldset class="rib">
+            <legend>Coordonnées bancaires</legend>
+            <div class="rib-part"><?= $this->formControlGroup($dossier->get('ribBic')); ?></div>
+            <div class="rib-part"><?= $this->formControlGroup($dossier->get('ribIban')); ?></div>
+            <div class="rib-part"><?= $this->formControlGroup($dossier->get('ribHorsSepa')); ?></div>
+        </fieldset>
+        <?php if ($dossier->has('premierRecrutement')) {
+            echo $this->formControlGroup($dossier->get('premierRecrutement'));
+        } ?>
+        <div class="statut">
+            <?= $this->formControlGroup($dossier->get('statut')); ?>
+        </div>
+
+        <?= $this->formHidden($dossier->get('id')); ?>
+
+        <?= $this->formHidden($this->form->get('security')); ?>
+
+        <hr/>
+        <?php if (!$form->isReadOnly()): ?>
+            <?= $this->formSubmit($this->form->get('enregistrer')->setAttribute('class', 'btn btn-primary')) ?>
+        <?php endif ?>
+
+        <!-- actions de validation du dossier -->
+        <?php if ($canValider): ?>
+            <a class="valider-dossier btn btn-success pop-ajax"
+               href="<?= $this->url('intervenant/dossier/valider', [], [], true) ?>"
+               title="Valider les données personnelles"
+               data-content="Confirmez-vous cette validation ?"
+               data-confirm="true"
+               data-confirm-button="Je confirme"
+               data-cancel-button="Non"
+               data-submit-reload="true"
+            >
+                <i class="fas fa-thumbs-up"></i> Je valide les données
+            </a>
+        <?php endif ?>
+
+        <!-- actions de dévalidation du dossier -->
+        <?php if ($canDevalider): ?>
+            <a class="devalider-dossier btn btn-danger pop-ajax"
+               href="<?= $this->url('intervenant/dossier/devalider', [], [], true) ?>"
+               title="Dévalider les données personnelles"
+               data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
+               data-confirm="true"
+               data-confirm-button="Oui"
+               data-cancel-button="Non"
+               data-submit-reload="true"
+            >
+                <i class="fas fa-thumbs-down"></i> Je dévalide les données
+            </a>
+        <?php endif ?>
+
+        <!-- actions de suppression du dossier -->
+        <?php if ($canSupprimer): ?>
+            <a class="supprimer-dossier btn btn-danger pop-ajax"
+               href="<?= $this->url('intervenant/dossier/supprimer', [], [], true) ?>"
+               title="Suppression des données personnelles"
+               data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous la suppression de toutes les données personnelles ?</p>"
+               data-confirm="true"
+               data-confirm-button="Oui"
+               data-cancel-button="Non"
+               data-submit-reload="true"
+            >
+                <i class="fas fa-thumbs-down"></i> Je supprime les données
+            </a>
+        <?php endif ?>
+    </div>
+</div>
+<?= $this->form()->closeTag() ?>
+
+
+<?php
+if ($Dossier->getId()) {
+    echo $this->historique($Dossier);
+}
+?>
+
+<script type="text/javascript" src="<?= $this->basePath() . '/js/moment-with-locales.min.js' ?>"></script>
+
+<script type="text/javascript">
+    $(function () {
+        var readonly = <?= $form->isReadOnly() ? 'true' : 'false' ?>;
+
+        managePaysNaissance();
+        manageDepartementNaissance();
+
+        function managePaysNaissance()
+        {
+            var tfDate = $("input[name='dossier[dateNaissance]']");
+            var selectPays = $("select[name='dossier[paysNaissance]']");
+
+            moment.locale('fr');
+
+            /**
+             * Fonction chargée de ne faire apparaître dans la liste déroulante
+             * que les pays étant valides à la date d'observation spécifiée.
+             *
+             * @param {object} dateObservation
+             * @returns {void}
+             */
+            function updateSelectPays(dateObservation)
+            {
+                $("option.pays", selectPays).each(function () {
+                    var option = $(this);
+                    var dateDebutValid = moment(option.data("debut"), "D/M/YYYY", true);
+                    var dateFinValid = option.data("fin") ? moment(option.data("fin"), "D/M/YYYY", true) : moment();
+
+                    if (dateObservation.isBetween(dateDebutValid, dateFinValid)) {
+                        option.show();
+                    } else {
+                        option.removeProp('selected');
+                        option.hide();
+                    }
+                });
+            }
+
+            // mise à jour de la liste des pays à chaque modif de la date de naissance
+            tfDate.change(function () {
+                var dateObservation = moment(tfDate.val(), "D/M/YYYY", true);
+                if (!dateObservation.isValid()) {
+                    dateObservation = moment();
+                }
+                updateSelectPays(dateObservation);
+            });
+
+            // init de la liste : pays valides à la date du jour
+            tfDate.change();
+        }
+
+        function manageDepartementNaissance()
+        {
+            if (readonly) {
+                return;
+            }
+
+            var selectPays = $("select[name='dossier[paysNaissance]']");
+            var selectDept = $("select[name='dossier[departementNaissance]']");
+            var emptyDept = $("option[value='']", selectDept);
+
+            selectPays.change(function () {
+                if ($("option:selected", selectPays).hasClass("france")) {
+                    selectDept.removeProp('disabled').parent().show();
+                    emptyDept.html("(Sélectionnez un département...)");
+                } else {
+                    selectDept.prop('disabled', 'disabled').parent().hide();
+                    emptyDept.html("(Aucun)").prop('selected', 'selected');
+                }
+            });
+
+            selectPays.change();
+        }
+    });
+</script>

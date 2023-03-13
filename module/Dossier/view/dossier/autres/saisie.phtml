@@ -1,0 +1,146 @@
+<?php
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form  \Application\Form\TypeRessource\TypeRessourceSaisieForm
+ */
+echo $this->tag('h1', ['class' => 'page-header'])->html($title);
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+$type = $dossierAutre->getType()->getId();
+
+echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/ace-builds-master/src-min/ace.js');
+
+echo $this->form()->openTag($form); ?>
+
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('libelle')); ?>
+    </div>
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('description')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('type')); ?>
+    </div>
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('obligatoire')); ?>
+    </div>
+</div>
+
+
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation"><a class="nav-link <?= ($type != '3') ? 'active' : ''; ?>" href="#json" aria-controls="json"
+                               role="tab" data-bs-toggle="tab">Valeurs manuelles</a></li>
+    <li role="presentation"><a class="nav-link <?= ($type == '3') ? 'active' : ''; ?>" href="#sql" aria-controls="sql"
+                               role="tab" data-bs-toggle="tab">Valeurs via SQL </a></li>
+</ul>
+
+<div class="tab-content">
+    <div role="tabcard" class="tab-pane <?= ($type != '3') ? 'active' : ''; ?>"
+         id="json">
+        <div class="card bg-default json-value">
+            <div class="card-header" role="tab">
+                <label>Valeurs sous forme JSON<br/>
+                    <small style="font-weight:normal">Format : { "0":"VALUE1" , "1":"VALUE2"
+                        ...}</small></label>
+            </div>
+            <div class="card-body">
+                <?= $this->formTextarea($form->get('json-value')) ?>
+            </div>
+        </div>
+    </div>
+    <div role="tabcard" class="tab-pane <?= ($dossierAutre->getType()->getId() == '3') ? 'active' : ''; ?>"
+         id="sql">
+        <div class="card bg-default sql-value">
+            <div class="card-header" role="tab">
+                <label>Valeurs sous forme SQL<br/> <small style="font-weight:normal">Format : SELECT
+                        votre_champs as VALUE_OPTION FROM
+                        votre_table</small></label>
+            </div>
+            <div class="card-body">
+                <?= $this->formTextarea($form->get('sql-value')) ?>
+            </div>
+        </div>
+    </div>
+</div>
+<?= $this->formSubmit($form->get('submit')); ?>
+<?= $this->formControlGroup($form->get('security')); ?>
+<?= $this->form()->closeTag(); ?>
+
+
+<script>
+
+    $(function () {
+
+        WidgetInitializer.add('autres-saisir', {
+            jsonValueEditor: null,
+            sqlValueEditor: null,
+
+            save: function () {
+                var jsonValue = $("<input>")
+                    .attr("type", 'hidden')
+                    .attr("name", 'json-value')
+                    .val(this.jsonValueEditor.getSession().getValue());
+                this.element.append($(jsonValue));
+
+                var sqlValue = $("<input>")
+                    .attr("type", 'hidden')
+                    .attr("name", 'sql-value')
+                    .val(this.sqlValueEditor.getSession().getValue());
+                this.element.append($(sqlValue));
+
+            },
+
+            _create: function () {
+                var that = this;
+
+                that.element.find('#btn-save').click(function () {
+                    that.save();
+                });
+                that.element.find('.nav a').click(function (e) {
+                    e.preventDefault();
+                    $('a[href="' + $(this).attr('href') + '"]').tab('show');
+                    return false;
+                })
+
+                var options = {
+                    minLines: 40, maxLines: 40,
+                };
+                that.jsonValueEditor = ace.edit("json-value");
+                that.jsonValueEditor.setTheme("ace/theme/github");
+                that.jsonValueEditor.getSession().setMode("ace/mode/json");
+                that.jsonValueEditor.setOptions(options);
+
+                that.sqlValueEditor = ace.edit("sql-value");
+                that.sqlValueEditor.setTheme("ace/theme/github");
+                that.sqlValueEditor.getSession().setMode("ace/mode/sql");
+                that.sqlValueEditor.setOptions(options);
+
+
+            }
+        });
+
+    });
+
+
+</script>
+<style>
+
+    .autres-saisir .card-header {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+
+    .autres-saisir .card-body {
+        padding: 0px;
+    }
+
+    .autres-saisir #sql .ace_editor {
+        border: none;
+        border-radius: 0;
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+</style>

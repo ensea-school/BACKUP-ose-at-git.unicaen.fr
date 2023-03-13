@@ -2,6 +2,7 @@
 
 namespace Referentiel\View\Helper;
 
+use Application\Entity\Db\MotifNonPaiement;
 use Application\Provider\Privilege\Privileges;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
@@ -34,12 +35,11 @@ class LigneViewHelper extends AbstractViewHelper
     protected $forcedReadOnly = false;
 
 
-
     /**
      * Helper entry point.
      *
      * @param ReferentielsViewHelper $liste
-     * @param ServiceReferentiel     $service
+     * @param ServiceReferentiel $service
      *
      * @return self
      */
@@ -52,7 +52,6 @@ class LigneViewHelper extends AbstractViewHelper
     }
 
 
-
     /**
      * Retourne le code HTML généré par cette aide de vue.
      *
@@ -62,7 +61,6 @@ class LigneViewHelper extends AbstractViewHelper
     {
         return $this->render();
     }
-
 
 
     /**
@@ -86,7 +84,6 @@ class LigneViewHelper extends AbstractViewHelper
     }
 
 
-
     /**
      * Génère le code HTML.
      *
@@ -96,10 +93,10 @@ class LigneViewHelper extends AbstractViewHelper
      */
     public function render($details = false)
     {
-        $liste         = $this->getListe();
-        $service       = $this->getServiceReferentiel();
-        $vhlListe      = $service->getVolumeHoraireReferentielListe();
-        $heuresTVH     = $vhlListe
+        $liste = $this->getListe();
+        $service = $this->getServiceReferentiel();
+        $vhlListe = $service->getVolumeHoraireReferentielListe();
+        $heuresTVH = $vhlListe
             ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
             ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi())
             ->getHeures();
@@ -107,7 +104,7 @@ class LigneViewHelper extends AbstractViewHelper
             ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
             ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide())
             ->getHeures();
-        $out           = '';
+        $out = '';
         if ($liste->getColumnVisibility('intervenant')) {
             $out .= '<td>' . $this->renderIntervenant($service->getIntervenant()) . '</td>';
         }
@@ -120,6 +117,15 @@ class LigneViewHelper extends AbstractViewHelper
         if ($liste->getColumnVisibility('commentaires')) {
             $out .= '<td>' . $this->renderCommentaires($service->getCommentaires()) . "</td>\n";
         }
+        if ($liste->getColumnVisibility('motif-non-paiement')) {
+
+            $out .= '<td>' . $this->renderMotifNonPaiement($service->getMotifNonPaiement()) . "</td>\n";
+        }
+        if ($liste->getColumnVisibility('tags')) {
+
+            $out .= '<td>' . $this->renderTag($service->getTag()) . "</td>\n";
+        }
+
         if ($liste->getColumnVisibility('heures')) {
             $out .= $this->getView()->tag('td', [
                 'style'        => "text-align:right",
@@ -143,12 +149,10 @@ class LigneViewHelper extends AbstractViewHelper
     }
 
 
-
     protected function renderIntervenant($intervenant)
     {
         return $this->getView()->intervenant($intervenant)->renderLink();
     }
-
 
 
     protected function renderStructure($structure)
@@ -157,7 +161,6 @@ class LigneViewHelper extends AbstractViewHelper
 
         return $this->getView()->structure($structure)->renderLink();
     }
-
 
 
     protected function renderFonction($fonction)
@@ -169,7 +172,6 @@ class LigneViewHelper extends AbstractViewHelper
     }
 
 
-
     protected function renderCommentaires($commentaires)
     {
         if (!$commentaires) return '';
@@ -178,6 +180,25 @@ class LigneViewHelper extends AbstractViewHelper
         return $out;
     }
 
+
+    protected function renderTag($tag)
+    {
+        if (!$tag) return '';
+        $out = $tag->getLibelleLong();
+
+        return $out;
+    }
+
+    protected function renderMotifNonPaiement($motifNonPaiement)
+    {
+        /**
+         * @var $motifNonPaiement MotifNonPaiement
+         */
+        if (!$motifNonPaiement) return '';
+        $out = $motifNonPaiement->getLibelleLong();
+
+        return $out;
+    }
 
 
     protected function renderHeures(ServiceReferentiel $service)
@@ -197,7 +218,7 @@ class LigneViewHelper extends AbstractViewHelper
                 ->setEtatVolumeHoraire($etat = $this->getServiceEtatVolumeHoraire()->getValide());
 
             $out .= sprintf(
-                '<tr style="opacity: 0.5"><td><strong>Prévisionnel %s :</strong></td><td class="heures">' . \UnicaenApp\Util::formattedNumber($vhlListe->getHeures()) . '</td></tr>',
+                '<tr style="opacity: 0.5"><td><strong>Prévisionnel %s :</strong></td><td  class="heures">' . \UnicaenApp\Util::formattedNumber($vhlListe->getHeures()) . '</td></tr>',
                 $etat);
 
             /**
@@ -206,7 +227,7 @@ class LigneViewHelper extends AbstractViewHelper
             $vhlListe
                 ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
                 ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
-            $out .= '<tr><td><strong>Réalisé :</strong></td><td class="heures">' . \UnicaenApp\Util::formattedNumber($vhlListe->getHeures()) . '</td></tr>';
+            $out .= '<tr><td><strong>Réalisé :</strong></td><td id="heures-realises-' . $service->getId() . '" class="heures">' . \UnicaenApp\Util::formattedNumber($vhlListe->getHeures()) . '</td></tr>';
 
             $out .= '</table>';
         } else {
@@ -220,7 +241,6 @@ class LigneViewHelper extends AbstractViewHelper
     }
 
 
-
     protected function renderAnnee($annee)
     {
         $out = $annee->getLibelle();
@@ -229,14 +249,12 @@ class LigneViewHelper extends AbstractViewHelper
     }
 
 
-
     protected function renderModifier()
     {
         $url = $this->getView()->url('referentiel/saisie', ['id' => $this->getServiceReferentiel()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
 
         return '<a class="ajax-modal" data-event="service-referentiel-modify-message" href="' . $url . '" title="Modifier cette ligne de référentiel"><i class="fas fa-pencil"></i></a>';
     }
-
 
 
     protected function renderSupprimer()
@@ -255,7 +273,6 @@ class LigneViewHelper extends AbstractViewHelper
     }
 
 
-
     protected function toQuery($param)
     {
         if (null === $param) {
@@ -265,7 +282,6 @@ class LigneViewHelper extends AbstractViewHelper
         elseif (method_exists($param, 'getId')) return $param->getId();
         else throw new \LogicException('Le paramètre n\'est pas du bon type');
     }
-
 
 
     /**
@@ -279,7 +295,6 @@ class LigneViewHelper extends AbstractViewHelper
     }
 
 
-
     /**
      *
      * @return ReferentielsViewHelper
@@ -288,7 +303,6 @@ class LigneViewHelper extends AbstractViewHelper
     {
         return $this->liste;
     }
-
 
 
     /**
@@ -305,7 +319,6 @@ class LigneViewHelper extends AbstractViewHelper
     }
 
 
-
     /**
      *
      * @return boolean
@@ -316,7 +329,6 @@ class LigneViewHelper extends AbstractViewHelper
     }
 
 
-
     /**
      *
      * @param ServiceReferentiel $serviceReferentiel
@@ -325,8 +337,8 @@ class LigneViewHelper extends AbstractViewHelper
      */
     public function setServiceReferentiel(ServiceReferentiel $serviceReferentiel = null)
     {
-        $typeVolumeHoraire        = $serviceReferentiel->getTypeVolumeHoraire();
-        $this->forcedReadOnly     = !$this->getView()->isAllowed($serviceReferentiel, $typeVolumeHoraire->getPrivilegeReferentielEdition());
+        $typeVolumeHoraire = $serviceReferentiel->getTypeVolumeHoraire();
+        $this->forcedReadOnly = !$this->getView()->isAllowed($serviceReferentiel, $typeVolumeHoraire->getPrivilegeReferentielEdition());
         $this->serviceReferentiel = $serviceReferentiel;
 
         return $this;

@@ -9,6 +9,7 @@ return [
     'columns' => [
         'TYPE_INTERVENTION_ID',
         'STATUT_ID',
+        'HISTO_DESTRUCTION',
     ],
 ];
 

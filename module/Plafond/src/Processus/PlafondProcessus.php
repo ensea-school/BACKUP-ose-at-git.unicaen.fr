@@ -2,16 +2,16 @@
 
 namespace Plafond\Processus;
 
-use Application\Entity\Db\ElementPedagogique;
-use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Enseignement\Entity\Db\VolumeHoraire;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use Plafond\Service\PlafondServiceAwareTrait;
+use Referentiel\Entity\Db\FonctionReferentiel;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 
 
 /**

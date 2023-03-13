@@ -3,9 +3,9 @@
 namespace Service\Service;
 
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeIntervention;
 use Application\Service\AbstractService;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
+use OffreFormation\Entity\Db\TypeIntervention;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use Service\Entity\Recherche;
 
 class ResumeService extends AbstractService

@@ -10,7 +10,7 @@ $.widget("ose.droitsTbl", {
     {
         var that = this;
         td.html("<div class=\"loading\">&nbsp;</div>");
-        td.load(Url('droits/privileges/modifier'), {
+        td.load(Util.url('droits/privileges/modifier'), {
             role: td.data("role"),
             privilege: td.data("privilege"),
             action: action

@@ -263,7 +263,12 @@ $.widget("unicaen.modAjax", {
             this._trigger('error', null, this);
         } else {
             if (this.options.submitEvent) {
-                $("body").trigger(this.options.submitEvent, this);
+                if (this.options.submitEvent instanceof Function) {
+                    this.options.submitEvent(this);
+                    this.hide();
+                } else {
+                    $("body").trigger(this.options.submitEvent, this);
+                }
             }
             if (this.options.submitClose) {
                 this.hide();
@@ -349,3 +354,20 @@ $.widget("unicaen.modAjax", {
 $(function () {
     WidgetInitializer.add('mod-ajax', 'modAjax');
 });
+
+
+function modAjax(element, onSubmit)
+{
+    var widget = $(element).data('unicaenModAjax');
+
+    if (!widget) {
+        $(element).modAjax();
+        widget = $(element).data('unicaenModAjax');
+        if (onSubmit) {
+            widget.options.submitEvent = onSubmit;
+        }
+        widget.show();
+    }
+
+    return widget;
+}

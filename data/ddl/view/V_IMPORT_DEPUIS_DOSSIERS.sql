@@ -101,4 +101,4 @@ FROM
   GROUP BY
     i.annee_id, i.code
   ) t
-  JOIN statut si ON si.ordre = t.z_statut_ordre
+  JOIN statut si ON si.ordre = t.z_statut_ordre AND si.annee_id = t.annee_id

@@ -2,6 +2,17 @@
 
 return [
     [
+        'CODE'           => 'contrat',
+        'LIBELLE'        => 'Contrat de travail',
+        'PDF_TRAITEMENT' => '/data/Etats de sortie/contrat.php',
+        'AUTO_BREAK'     => true,
+        'REQUETE'        => 'SELECT * FROM v_contrat_main',
+        'CLE'            => 'CONTRAT_ID',
+        'BLOC1_NOM'      => 'serviceCode',
+        'BLOC1_ZONE'     => 'table:table-row',
+        'BLOC1_REQUETE'  => 'SELECT * FROM V_CONTRAT_SERVICES',
+    ],
+    [
         'CODE'           => 'preliquidation-siham',
         'LIBELLE'        => 'Préliquidation SIHAM',
         'PDF_TRAITEMENT' => null,
@@ -29,9 +40,9 @@ return [
     "MATRICULE": {
         "libelle": "Matricule"
     },
-     "RETENUE": {
-        "libelle": "Retenue"
-    },
+     "CODE_INDEMNITE_RETENU": {
+        "libelle": "Code indemnité/retenue"
+    }
      "DU_MOIS": {
         "libelle": "Du mois (AAAA-MM)"
     },
@@ -193,7 +204,7 @@ return [
     "AGREE"            : { "visible": false },
     "ANNEE": { "libelle": "Année"},
     "INTERVENANT_CODE": { "libelle": "Code intervenant"},
-    "STRUCTURE_LIBELLE": {"libelle": "Structure hiérarchique"},
+    "STRUCTURE_LIBELLE": {"libelle": "Structure d\'enseignement"},
     "INTERVENANT_STRUCTURE_LIBELLE": {"libelle": "Structure d\'affectation"},
     "INTERVENANT_NOM_USUEL": {"libelle": "Nom usuel"},
     "INTERVENANT_NOM_PATRONYMIQUE": {"libelle": "Nom patronymique"},

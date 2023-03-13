@@ -25,7 +25,7 @@ class NoteSaisieForm extends AbstractForm
 
         $this->build();
 
-        $this->setAttribute('class', 'note');
+        //$this->setAttribute('class', 'note');
         $this->addSecurity();
         $this->addSubmit();
 

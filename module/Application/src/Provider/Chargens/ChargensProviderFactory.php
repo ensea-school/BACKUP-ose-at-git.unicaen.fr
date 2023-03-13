@@ -2,7 +2,7 @@
 
 namespace Application\Provider\Chargens;
 
-use Application\Service\TypeHeuresService;
+use OffreFormation\Service\TypeHeuresService;
 use Psr\Container\ContainerInterface;
 use Unicaen\Console\Console;
 use UnicaenTbl\Service\TableauBordService;

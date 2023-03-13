@@ -3,9 +3,9 @@
 namespace Application\View\Helper\Chargens;
 
 use Application\Form\Chargens\FiltreForm;
-use Application\Service\Traits\TypeHeuresServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
+use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 
 
 /**

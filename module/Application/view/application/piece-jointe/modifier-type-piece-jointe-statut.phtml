@@ -33,6 +33,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 </div>
 <div class="row">
     <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('nationalite-etrangere')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
         <?= $this->formControlGroup($form->get('fc')); ?>
     </div>
 </div>
@@ -91,7 +96,7 @@ echo $this->form()->closeTag();
             var dureeVie = $("input[name='duree-vie']")
             if (this.checked) {
                 dureeVie.val('1');
-                dureeVie.attr('disabled', 'disabled');
+                //dureeVie.attr('type', 'disabled');
             } else {
                 dureeVie.removeAttr('disabled');
             }

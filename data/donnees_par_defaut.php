@@ -67,12 +67,12 @@ return [
         [
             "LIBELLE_COURT" => "ADJ DASEN 1ER DEG.",
             "LIBELLE_LONG" => "ADJOINT AU DASEN CHARGE DU 1ER DEGRE",
-            "SOURCE_CODE" => "097/1",
+            "SOURCE_CODE" => "097",
         ],
         [
             "LIBELLE_COURT" => "ADJ DASEN 1ER DEG.",
             "LIBELLE_LONG" => "ADJOINT AU DASEN CHARGE DU 1ER DEGRE",
-            "SOURCE_CODE" => "097",
+            "SOURCE_CODE" => "097/1",
         ],
         [
             "LIBELLE_COURT" => "ADJ SGA",
@@ -107,12 +107,12 @@ return [
         [
             "LIBELLE_COURT" => "ATEC",
             "LIBELLE_LONG" => "ADJOINT TECHNIQUE DES ETAB.ENS.",
-            "SOURCE_CODE" => "943",
+            "SOURCE_CODE" => "943/3",
         ],
         [
             "LIBELLE_COURT" => "ATEC",
             "LIBELLE_LONG" => "ADJOINT TECHNIQUE DES ETAB.ENS.",
-            "SOURCE_CODE" => "943/3",
+            "SOURCE_CODE" => "943",
         ],
         [
             "LIBELLE_COURT" => "AJT-R EPST",
@@ -125,11 +125,6 @@ return [
             "SOURCE_CODE" => "203",
         ],
         [
-            "LIBELLE_COURT" => "ADM CIVIL",
-            "LIBELLE_LONG" => "ADMINISTRATEUR CIVIL",
-            "SOURCE_CODE" => "203/1",
-        ],
-        [
             "LIBELLE_COURT" => "ADMENESR",
             "LIBELLE_LONG" => "ADMINISTRATEUR EN ES ET RECHERCHE",
             "SOURCE_CODE" => "030/1",
@@ -140,9 +135,9 @@ return [
             "SOURCE_CODE" => "030",
         ],
         [
-            "LIBELLE_COURT" => "ADM. INSEE",
-            "LIBELLE_LONG" => "ADMINISTRATEUR INSEE",
-            "SOURCE_CODE" => "285",
+            "LIBELLE_COURT" => "ADMINISTRAT. ETAT",
+            "LIBELLE_LONG" => "ADMINISTRATEUR ETAT",
+            "SOURCE_CODE" => "228/1",
         ],
         [
             "LIBELLE_COURT" => "ADM INSEE",
@@ -150,9 +145,9 @@ return [
             "SOURCE_CODE" => "285/1",
         ],
         [
-            "LIBELLE_COURT" => "A CNRS",
-            "LIBELLE_LONG" => "ADMINISTRATIF CONTRACTUEL CNRS",
-            "SOURCE_CODE" => "842/1",
+            "LIBELLE_COURT" => "ADM. INSEE",
+            "LIBELLE_LONG" => "ADMINISTRATEUR INSEE",
+            "SOURCE_CODE" => "285",
         ],
         [
             "LIBELLE_COURT" => "A CNRS",
@@ -162,12 +157,17 @@ return [
         [
             "LIBELLE_COURT" => "A CNRS",
             "LIBELLE_LONG" => "ADMINISTRATIF CONTRACTUEL CNRS",
-            "SOURCE_CODE" => "842/2",
+            "SOURCE_CODE" => "842/1",
         ],
         [
             "LIBELLE_COURT" => "A.CNRS",
             "LIBELLE_LONG" => "ADMINISTRATIF CONTRACTUEL CNRS",
             "SOURCE_CODE" => "842",
+        ],
+        [
+            "LIBELLE_COURT" => "A CNRS",
+            "LIBELLE_LONG" => "ADMINISTRATIF CONTRACTUEL CNRS",
+            "SOURCE_CODE" => "842/2",
         ],
         [
             "LIBELLE_COURT" => "AG A C",
@@ -222,7 +222,7 @@ return [
         [
             "LIBELLE_COURT" => "C ADM",
             "LIBELLE_LONG" => "AGENT CONTRACTUEL ADMINISTRATIF",
-            "SOURCE_CODE" => "850/3",
+            "SOURCE_CODE" => "850/2",
         ],
         [
             "LIBELLE_COURT" => "C.ADM.",
@@ -232,7 +232,17 @@ return [
         [
             "LIBELLE_COURT" => "C ADM",
             "LIBELLE_LONG" => "AGENT CONTRACTUEL ADMINISTRATIF",
-            "SOURCE_CODE" => "850/2",
+            "SOURCE_CODE" => "850/3",
+        ],
+        [
+            "LIBELLE_COURT" => "AG CNRS",
+            "LIBELLE_LONG" => "AGENT CONTRACTUEL CNRS",
+            "SOURCE_CODE" => "841/1",
+        ],
+        [
+            "LIBELLE_COURT" => "AG CNRS",
+            "LIBELLE_LONG" => "AGENT CONTRACTUEL CNRS",
+            "SOURCE_CODE" => "841/3",
         ],
         [
             "LIBELLE_COURT" => "AG.CNRS",
@@ -243,16 +253,6 @@ return [
             "LIBELLE_COURT" => "AG CNRS",
             "LIBELLE_LONG" => "AGENT CONTRACTUEL CNRS",
             "SOURCE_CODE" => "841/2",
-        ],
-        [
-            "LIBELLE_COURT" => "AG CNRS",
-            "LIBELLE_LONG" => "AGENT CONTRACTUEL CNRS",
-            "SOURCE_CODE" => "841/3",
-        ],
-        [
-            "LIBELLE_COURT" => "AG CNRS",
-            "LIBELLE_LONG" => "AGENT CONTRACTUEL CNRS",
-            "SOURCE_CODE" => "841/1",
         ],
         [
             "LIBELLE_COURT" => "AG.CONT.BI",
@@ -320,14 +320,14 @@ return [
             "SOURCE_CODE" => "962",
         ],
         [
-            "LIBELLE_COURT" => "AG P SV TC",
-            "LIBELLE_LONG" => "AGENT PRINCIPAL DES SERVICES TECHNIQUES",
-            "SOURCE_CODE" => "233/3",
-        ],
-        [
             "LIBELLE_COURT" => "AG.P.SV.TC",
             "LIBELLE_LONG" => "AGENT PRINCIPAL DES SERVICES TECHNIQUES",
             "SOURCE_CODE" => "233",
+        ],
+        [
+            "LIBELLE_COURT" => "AG P SV TC",
+            "LIBELLE_LONG" => "AGENT PRINCIPAL DES SERVICES TECHNIQUES",
+            "SOURCE_CODE" => "233/3",
         ],
         [
             "LIBELLE_COURT" => "AG SUP AC",
@@ -345,14 +345,14 @@ return [
             "SOURCE_CODE" => "871",
         ],
         [
-            "LIBELLE_COURT" => "AG T LAB",
-            "LIBELLE_LONG" => "AGENT TECHNIQUE DE LABORATOIRE",
-            "SOURCE_CODE" => "087/3",
-        ],
-        [
             "LIBELLE_COURT" => "AG.T.LAB",
             "LIBELLE_LONG" => "AGENT TECHNIQUE DE LABORATOIRE",
             "SOURCE_CODE" => "087",
+        ],
+        [
+            "LIBELLE_COURT" => "AG T LAB",
+            "LIBELLE_LONG" => "AGENT TECHNIQUE DE LABORATOIRE",
+            "SOURCE_CODE" => "087/3",
         ],
         [
             "LIBELLE_COURT" => "AGTRF",
@@ -400,14 +400,14 @@ return [
             "SOURCE_CODE" => "085/3",
         ],
         [
-            "LIBELLE_COURT" => "AIDE-PHYS D-36",
-            "LIBELLE_LONG" => "AIDE-PHYSICIEN (STATUT 1936)",
-            "SOURCE_CODE" => "339/1",
-        ],
-        [
             "LIBELLE_COURT" => "AIDE-PHYS. (ST 1936)",
             "LIBELLE_LONG" => "AIDE-PHYSICIEN (STATUT 1936)",
             "SOURCE_CODE" => "339",
+        ],
+        [
+            "LIBELLE_COURT" => "AIDE-PHYS D-36",
+            "LIBELLE_LONG" => "AIDE-PHYSICIEN (STATUT 1936)",
+            "SOURCE_CODE" => "339/1",
         ],
         [
             "LIBELLE_COURT" => "ARCH.CONT.",
@@ -427,12 +427,12 @@ return [
         [
             "LIBELLE_COURT" => "AS AGREGE",
             "LIBELLE_LONG" => "ASSISTANT AGREGE ET ASSIMILE",
-            "SOURCE_CODE" => "303/1",
+            "SOURCE_CODE" => "303",
         ],
         [
             "LIBELLE_COURT" => "AS AGREGE",
             "LIBELLE_LONG" => "ASSISTANT AGREGE ET ASSIMILE",
-            "SOURCE_CODE" => "303",
+            "SOURCE_CODE" => "303/1",
         ],
         [
             "LIBELLE_COURT" => "ASSIST OBS D-36",
@@ -465,14 +465,14 @@ return [
             "SOURCE_CODE" => "348",
         ],
         [
-            "LIBELLE_COURT" => "ASSIST MED OU ODONTO",
-            "LIBELLE_LONG" => "ASSISTANT DE MEDECINE OU D'ODONTOLOGIE",
-            "SOURCE_CODE" => "472",
-        ],
-        [
             "LIBELLE_COURT" => "ASSIST MED OU ODON",
             "LIBELLE_LONG" => "ASSISTANT DE MEDECINE OU D'ODONTOLOGIE",
             "SOURCE_CODE" => "472/1",
+        ],
+        [
+            "LIBELLE_COURT" => "ASSIST MED OU ODONTO",
+            "LIBELLE_LONG" => "ASSISTANT DE MEDECINE OU D'ODONTOLOGIE",
+            "SOURCE_CODE" => "472",
         ],
         [
             "LIBELLE_COURT" => "ASS DISC MED BIO M",
@@ -537,12 +537,12 @@ return [
         [
             "LIBELLE_COURT" => "ASSAE",
             "LIBELLE_LONG" => "ASSISTANT SERVICE SOCIAL ADMIN DE L'ETAT",
-            "SOURCE_CODE" => "H09",
+            "SOURCE_CODE" => "H09/1",
         ],
         [
             "LIBELLE_COURT" => "ASSAE",
             "LIBELLE_LONG" => "ASSISTANT SERVICE SOCIAL ADMIN DE L'ETAT",
-            "SOURCE_CODE" => "H09/1",
+            "SOURCE_CODE" => "H09",
         ],
         [
             "LIBELLE_COURT" => "A.SOC.CONT",
@@ -627,12 +627,12 @@ return [
         [
             "LIBELLE_COURT" => "AAE",
             "LIBELLE_LONG" => "ATTACHE D'ADMINISTRATION DE L'ETAT",
-            "SOURCE_CODE" => "051/1",
+            "SOURCE_CODE" => "051",
         ],
         [
             "LIBELLE_COURT" => "AAE",
             "LIBELLE_LONG" => "ATTACHE D'ADMINISTRATION DE L'ETAT",
-            "SOURCE_CODE" => "051",
+            "SOURCE_CODE" => "051/1",
         ],
         [
             "LIBELLE_COURT" => "AAR-R EPST",
@@ -640,14 +640,14 @@ return [
             "SOURCE_CODE" => "265",
         ],
         [
-            "LIBELLE_COURT" => "ATT INSEE",
-            "LIBELLE_LONG" => "ATTACHE INSEE",
-            "SOURCE_CODE" => "284/1",
-        ],
-        [
             "LIBELLE_COURT" => "ATT. INSEE",
             "LIBELLE_LONG" => "ATTACHE INSEE",
             "SOURCE_CODE" => "284",
+        ],
+        [
+            "LIBELLE_COURT" => "ATT INSEE",
+            "LIBELLE_LONG" => "ATTACHE INSEE",
+            "SOURCE_CODE" => "284/1",
         ],
         [
             "LIBELLE_COURT" => "AUX.BUREAU",
@@ -670,14 +670,14 @@ return [
             "SOURCE_CODE" => "8HH/2",
         ],
         [
-            "LIBELLE_COURT" => "BIBLIOTH.",
-            "LIBELLE_LONG" => "BIBLIOTHECAIRE",
-            "SOURCE_CODE" => "806",
-        ],
-        [
             "LIBELLE_COURT" => "BIBLIOTHECAIRE",
             "LIBELLE_LONG" => "BIBLIOTHECAIRE",
             "SOURCE_CODE" => "806/1",
+        ],
+        [
+            "LIBELLE_COURT" => "BIBLIOTH.",
+            "LIBELLE_LONG" => "BIBLIOTHECAIRE",
+            "SOURCE_CODE" => "806",
         ],
         [
             "LIBELLE_COURT" => "B ADJ -D-95",
@@ -717,12 +717,12 @@ return [
         [
             "LIBELLE_COURT" => "CHARGE ENS",
             "LIBELLE_LONG" => "CHARGE D'ENSEIGNEMENT HORS EPS",
-            "SOURCE_CODE" => "562/1",
+            "SOURCE_CODE" => "562",
         ],
         [
             "LIBELLE_COURT" => "CHARGE ENS",
             "LIBELLE_LONG" => "CHARGE D'ENSEIGNEMENT HORS EPS",
-            "SOURCE_CODE" => "562",
+            "SOURCE_CODE" => "562/1",
         ],
         [
             "LIBELLE_COURT" => "CHARGE ET.DOC.",
@@ -735,14 +735,14 @@ return [
             "SOURCE_CODE" => "981",
         ],
         [
-            "LIBELLE_COURT" => "CH.MIS.INS",
-            "LIBELLE_LONG" => "CHARGE DE MISSION INSEE",
-            "SOURCE_CODE" => "286",
-        ],
-        [
             "LIBELLE_COURT" => "CH MIS INS",
             "LIBELLE_LONG" => "CHARGE DE MISSION INSEE",
             "SOURCE_CODE" => "286/1",
+        ],
+        [
+            "LIBELLE_COURT" => "CH.MIS.INS",
+            "LIBELLE_LONG" => "CHARGE DE MISSION INSEE",
+            "SOURCE_CODE" => "286",
         ],
         [
             "LIBELLE_COURT" => "CR",
@@ -807,12 +807,12 @@ return [
         [
             "LIBELLE_COURT" => "CDT ART",
             "LIBELLE_LONG" => "CHEF DE TRAVAUX D'ART",
-            "SOURCE_CODE" => "H08",
+            "SOURCE_CODE" => "H08/1",
         ],
         [
             "LIBELLE_COURT" => "CDT ART",
             "LIBELLE_LONG" => "CHEF DE TRAVAUX D'ART",
-            "SOURCE_CODE" => "H08/1",
+            "SOURCE_CODE" => "H08",
         ],
         [
             "LIBELLE_COURT" => "CDT-IHC",
@@ -867,12 +867,12 @@ return [
         [
             "LIBELLE_COURT" => "CHEF TP ENSAM",
             "LIBELLE_LONG" => "CHEF TP ENSAM",
-            "SOURCE_CODE" => "366",
+            "SOURCE_CODE" => "366/1",
         ],
         [
             "LIBELLE_COURT" => "CHEF TP ENSAM",
             "LIBELLE_LONG" => "CHEF TP ENSAM",
-            "SOURCE_CODE" => "366/1",
+            "SOURCE_CODE" => "366",
         ],
         [
             "LIBELLE_COURT" => "CHEF TRAV UNIV-PU",
@@ -883,6 +883,11 @@ return [
             "LIBELLE_COURT" => "CHEF TR UNIV-PR HOSP",
             "LIBELLE_LONG" => "CHEF TR UNIV-PR HOSP",
             "SOURCE_CODE" => "313",
+        ],
+        [
+            "LIBELLE_COURT" => "COMMIS S E",
+            "LIBELLE_LONG" => "COMMIS DES SERVICES EXTERIEURS",
+            "SOURCE_CODE" => "910/3",
         ],
         [
             "LIBELLE_COURT" => "COND AUTO",
@@ -897,12 +902,12 @@ return [
         [
             "LIBELLE_COURT" => "CTSSAE",
             "LIBELLE_LONG" => "CONS TECH DE SERV SOC AE",
-            "SOURCE_CODE" => "H10",
+            "SOURCE_CODE" => "H10/1",
         ],
         [
             "LIBELLE_COURT" => "CTSSAE",
             "LIBELLE_LONG" => "CONS TECH DE SERV SOC AE",
-            "SOURCE_CODE" => "H10/1",
+            "SOURCE_CODE" => "H10",
         ],
         [
             "LIBELLE_COURT" => "C.E.",
@@ -922,12 +927,12 @@ return [
         [
             "LIBELLE_COURT" => "CONSEILLER RECTEUR",
             "LIBELLE_LONG" => "CONSEILLER DE RECTEUR OU DE VICE RECTEUR",
-            "SOURCE_CODE" => "093/1",
+            "SOURCE_CODE" => "093",
         ],
         [
             "LIBELLE_COURT" => "CONSEILLER RECTEUR",
             "LIBELLE_LONG" => "CONSEILLER DE RECTEUR OU DE VICE RECTEUR",
-            "SOURCE_CODE" => "093",
+            "SOURCE_CODE" => "093/1",
         ],
         [
             "LIBELLE_COURT" => "CASAE",
@@ -957,12 +962,12 @@ return [
         [
             "LIBELLE_COURT" => "CONSEIL TCH RECTEU",
             "LIBELLE_LONG" => "CONSEILLER TECH RECTEUR / V-RECTEUR EVS",
-            "SOURCE_CODE" => "096/1",
+            "SOURCE_CODE" => "096",
         ],
         [
             "LIBELLE_COURT" => "CONSEIL TCH RECTEU",
             "LIBELLE_LONG" => "CONSEILLER TECH RECTEUR / V-RECTEUR EVS",
-            "SOURCE_CODE" => "096",
+            "SOURCE_CODE" => "096/1",
         ],
         [
             "LIBELLE_COURT" => "CTP SUP CN",
@@ -990,14 +995,14 @@ return [
             "SOURCE_CODE" => "801",
         ],
         [
-            "LIBELLE_COURT" => "CONS.GN.BI",
-            "LIBELLE_LONG" => "CONSERVATEUR GENERAL DES BIBLIOTHEQUES",
-            "SOURCE_CODE" => "800",
-        ],
-        [
             "LIBELLE_COURT" => "CONS GN BI",
             "LIBELLE_LONG" => "CONSERVATEUR GENERAL DES BIBLIOTHEQUES",
             "SOURCE_CODE" => "800/1",
+        ],
+        [
+            "LIBELLE_COURT" => "CONS.GN.BI",
+            "LIBELLE_LONG" => "CONSERVATEUR GENERAL DES BIBLIOTHEQUES",
+            "SOURCE_CODE" => "800",
         ],
         [
             "LIBELLE_COURT" => "C STAG ELV",
@@ -1067,12 +1072,12 @@ return [
         [
             "LIBELLE_COURT" => "CONS PATRIMOINE",
             "LIBELLE_LONG" => "Conservateur du patrimoine",
-            "SOURCE_CODE" => "AM1/1",
+            "SOURCE_CODE" => "AM1",
         ],
         [
             "LIBELLE_COURT" => "CONS PATRIMOINE",
             "LIBELLE_LONG" => "Conservateur du patrimoine",
-            "SOURCE_CODE" => "AM1",
+            "SOURCE_CODE" => "AM1/1",
         ],
         [
             "LIBELLE_COURT" => "CONS GENE PATRIMOINE",
@@ -1137,12 +1142,12 @@ return [
         [
             "LIBELLE_COURT" => "DAASEN",
             "LIBELLE_LONG" => "DIRECTEUR ACADEMIQUE ADJ. SERVICES E-N.",
-            "SOURCE_CODE" => "094",
+            "SOURCE_CODE" => "094/1",
         ],
         [
             "LIBELLE_COURT" => "DAASEN",
             "LIBELLE_LONG" => "DIRECTEUR ACADEMIQUE ADJ. SERVICES E-N.",
-            "SOURCE_CODE" => "094/1",
+            "SOURCE_CODE" => "094",
         ],
         [
             "LIBELLE_COURT" => "DASEN",
@@ -1242,12 +1247,12 @@ return [
         [
             "LIBELLE_COURT" => "DGS EPSCP",
             "LIBELLE_LONG" => "DIRECTEUR GENERAL DES SERVICES EPSCP",
-            "SOURCE_CODE" => "029/1",
+            "SOURCE_CODE" => "029",
         ],
         [
             "LIBELLE_COURT" => "DGS EPSCP",
             "LIBELLE_LONG" => "DIRECTEUR GENERAL DES SERVICES EPSCP",
-            "SOURCE_CODE" => "029",
+            "SOURCE_CODE" => "029/1",
         ],
         [
             "LIBELLE_COURT" => "ELEVE PROF",
@@ -1325,24 +1330,24 @@ return [
             "SOURCE_CODE" => "CA-D/D",
         ],
         [
-            "LIBELLE_COURT" => "Hist type CNRS cat A",
-            "LIBELLE_LONG" => "Historique contractuel type CNRS cat A",
-            "SOURCE_CODE" => "CC-A",
-        ],
-        [
             "LIBELLE_COURT" => "Hist typ CNRS catA",
             "LIBELLE_LONG" => "Historique contractuel type CNRS cat A",
             "SOURCE_CODE" => "CC-A/1",
         ],
         [
-            "LIBELLE_COURT" => "Hist type CNRS cat B",
-            "LIBELLE_LONG" => "Historique contractuel type CNRS cat B",
-            "SOURCE_CODE" => "CC-B",
+            "LIBELLE_COURT" => "Hist type CNRS cat A",
+            "LIBELLE_LONG" => "Historique contractuel type CNRS cat A",
+            "SOURCE_CODE" => "CC-A",
         ],
         [
             "LIBELLE_COURT" => "Hist typ CNRS catB",
             "LIBELLE_LONG" => "Historique contractuel type CNRS cat B",
             "SOURCE_CODE" => "CC-B/2",
+        ],
+        [
+            "LIBELLE_COURT" => "Hist type CNRS cat B",
+            "LIBELLE_LONG" => "Historique contractuel type CNRS cat B",
+            "SOURCE_CODE" => "CC-B",
         ],
         [
             "LIBELLE_COURT" => "Hist type CNRS cat C",
@@ -1355,14 +1360,14 @@ return [
             "SOURCE_CODE" => "CC-C/3",
         ],
         [
-            "LIBELLE_COURT" => "Hist typ CNRS catD",
-            "LIBELLE_LONG" => "Historique contractuel type CNRS cat D",
-            "SOURCE_CODE" => "CC-D/D",
-        ],
-        [
             "LIBELLE_COURT" => "Hist type CNRS cat D",
             "LIBELLE_LONG" => "Historique contractuel type CNRS cat D",
             "SOURCE_CODE" => "CC-D",
+        ],
+        [
+            "LIBELLE_COURT" => "Hist typ CNRS catD",
+            "LIBELLE_LONG" => "Historique contractuel type CNRS cat D",
+            "SOURCE_CODE" => "CC-D/D",
         ],
         [
             "LIBELLE_COURT" => "Hist ens 1deg catA",
@@ -1375,14 +1380,14 @@ return [
             "SOURCE_CODE" => "DC-A",
         ],
         [
-            "LIBELLE_COURT" => "Hist ens 1 deg cat B",
-            "LIBELLE_LONG" => "Historique enseignant 1er degré de cat B",
-            "SOURCE_CODE" => "DC-B",
-        ],
-        [
             "LIBELLE_COURT" => "Hist ens 1deg catB",
             "LIBELLE_LONG" => "Historique enseignant 1er degré de cat B",
             "SOURCE_CODE" => "DC-B/2",
+        ],
+        [
+            "LIBELLE_COURT" => "Hist ens 1 deg cat B",
+            "LIBELLE_LONG" => "Historique enseignant 1er degré de cat B",
+            "SOURCE_CODE" => "DC-B",
         ],
         [
             "LIBELLE_COURT" => "Hist ens 2 deg cat A",
@@ -1405,19 +1410,14 @@ return [
             "SOURCE_CODE" => "DA-B",
         ],
         [
-            "LIBELLE_COURT" => "Hist ens HU cat A",
-            "LIBELLE_LONG" => "Historique enseignant HU de cat A",
-            "SOURCE_CODE" => "SB-A/1",
-        ],
-        [
             "LIBELLE_COURT" => "Hist ens HU de cat A",
             "LIBELLE_LONG" => "Historique enseignant HU de cat A",
             "SOURCE_CODE" => "SB-A",
         ],
         [
-            "LIBELLE_COURT" => "Hist ens CSERDcatA",
-            "LIBELLE_LONG" => "Historique enseignant HU des CSERD cat A",
-            "SOURCE_CODE" => "SD-A/1",
+            "LIBELLE_COURT" => "Hist ens HU cat A",
+            "LIBELLE_LONG" => "Historique enseignant HU de cat A",
+            "SOURCE_CODE" => "SB-A/1",
         ],
         [
             "LIBELLE_COURT" => "Hist ens HUCSERDcatA",
@@ -1425,14 +1425,19 @@ return [
             "SOURCE_CODE" => "SD-A",
         ],
         [
-            "LIBELLE_COURT" => "Hist pers EC cat A",
-            "LIBELLE_LONG" => "Historique enseignant chercheur de cat A",
-            "SOURCE_CODE" => "SA-A/1",
+            "LIBELLE_COURT" => "Hist ens CSERDcatA",
+            "LIBELLE_LONG" => "Historique enseignant HU des CSERD cat A",
+            "SOURCE_CODE" => "SD-A/1",
         ],
         [
             "LIBELLE_COURT" => "Hist ens cherch catA",
             "LIBELLE_LONG" => "Historique enseignant chercheur de cat A",
             "SOURCE_CODE" => "SA-A",
+        ],
+        [
+            "LIBELLE_COURT" => "Hist pers EC cat A",
+            "LIBELLE_LONG" => "Historique enseignant chercheur de cat A",
+            "SOURCE_CODE" => "SA-A/1",
         ],
         [
             "LIBELLE_COURT" => "Hist pers bib catA",
@@ -1605,24 +1610,24 @@ return [
             "SOURCE_CODE" => "MA-D",
         ],
         [
-            "LIBELLE_COURT" => "Hist persITARFcatA",
-            "LIBELLE_LONG" => "Historique personnel ITARF catégorie A",
-            "SOURCE_CODE" => "IA-A/1",
-        ],
-        [
             "LIBELLE_COURT" => "Hist pers ITARF catA",
             "LIBELLE_LONG" => "Historique personnel ITARF catégorie A",
             "SOURCE_CODE" => "IA-A",
         ],
         [
-            "LIBELLE_COURT" => "Hist pers ITARF catB",
-            "LIBELLE_LONG" => "Historique personnel ITARF catégorie B",
-            "SOURCE_CODE" => "IA-B",
+            "LIBELLE_COURT" => "Hist persITARFcatA",
+            "LIBELLE_LONG" => "Historique personnel ITARF catégorie A",
+            "SOURCE_CODE" => "IA-A/1",
         ],
         [
             "LIBELLE_COURT" => "Hist persITARFcatB",
             "LIBELLE_LONG" => "Historique personnel ITARF catégorie B",
             "SOURCE_CODE" => "IA-B/2",
+        ],
+        [
+            "LIBELLE_COURT" => "Hist pers ITARF catB",
+            "LIBELLE_LONG" => "Historique personnel ITARF catégorie B",
+            "SOURCE_CODE" => "IA-B",
         ],
         [
             "LIBELLE_COURT" => "Hist persITARFcatC",
@@ -1675,14 +1680,14 @@ return [
             "SOURCE_CODE" => "AC-C/3",
         ],
         [
-            "LIBELLE_COURT" => "Hist pers Tos cat D",
-            "LIBELLE_LONG" => "Historique personnel Tos de catégorie D",
-            "SOURCE_CODE" => "AC-D",
-        ],
-        [
             "LIBELLE_COURT" => "Hist pers Tos catD",
             "LIBELLE_LONG" => "Historique personnel Tos de catégorie D",
             "SOURCE_CODE" => "AC-D/D",
+        ],
+        [
+            "LIBELLE_COURT" => "Hist pers Tos cat D",
+            "LIBELLE_LONG" => "Historique personnel Tos de catégorie D",
+            "SOURCE_CODE" => "AC-D",
         ],
         [
             "LIBELLE_COURT" => "Hist pers dir catA",
@@ -1695,24 +1700,24 @@ return [
             "SOURCE_CODE" => "DI-A",
         ],
         [
-            "LIBELLE_COURT" => "Hist pers inspe catA",
-            "LIBELLE_LONG" => "Historique personnel inspection de cat A",
-            "SOURCE_CODE" => "PI-A",
-        ],
-        [
             "LIBELLE_COURT" => "Hist pers ins catA",
             "LIBELLE_LONG" => "Historique personnel inspection de cat A",
             "SOURCE_CODE" => "PI-A/1",
         ],
         [
-            "LIBELLE_COURT" => "IGAENR EF",
-            "LIBELLE_LONG" => "IG DE L'ADM ET DE LA REC EMP FONCT",
-            "SOURCE_CODE" => "121/1",
+            "LIBELLE_COURT" => "Hist pers inspe catA",
+            "LIBELLE_LONG" => "Historique personnel inspection de cat A",
+            "SOURCE_CODE" => "PI-A",
         ],
         [
             "LIBELLE_COURT" => "IGAENR EF",
             "LIBELLE_LONG" => "IG DE L'ADM ET DE LA REC EMP FONCT",
             "SOURCE_CODE" => "121",
+        ],
+        [
+            "LIBELLE_COURT" => "IGAENR EF",
+            "LIBELLE_LONG" => "IG DE L'ADM ET DE LA REC EMP FONCT",
+            "SOURCE_CODE" => "121/1",
         ],
         [
             "LIBELLE_COURT" => "INFIR.AUX.",
@@ -1727,22 +1732,22 @@ return [
         [
             "LIBELLE_COURT" => "INF-ETAT",
             "LIBELLE_LONG" => "INFIRMIERE D'ETAT (EN EXTINCTION)",
-            "SOURCE_CODE" => "289",
+            "SOURCE_CODE" => "289/2",
         ],
         [
             "LIBELLE_COURT" => "INF-ETAT",
             "LIBELLE_LONG" => "INFIRMIERE D'ETAT (EN EXTINCTION)",
-            "SOURCE_CODE" => "289/2",
-        ],
-        [
-            "LIBELLE_COURT" => "INFIRM.-NS",
-            "LIBELLE_LONG" => "INFIRMIERE OU INFIRMIER (EN EXTINCTION)",
-            "SOURCE_CODE" => "989",
+            "SOURCE_CODE" => "289",
         ],
         [
             "LIBELLE_COURT" => "INFIRM -NS",
             "LIBELLE_LONG" => "INFIRMIERE OU INFIRMIER (EN EXTINCTION)",
             "SOURCE_CODE" => "989/2",
+        ],
+        [
+            "LIBELLE_COURT" => "INFIRM.-NS",
+            "LIBELLE_LONG" => "INFIRMIERE OU INFIRMIER (EN EXTINCTION)",
+            "SOURCE_CODE" => "989",
         ],
         [
             "LIBELLE_COURT" => "INF ENES",
@@ -1760,19 +1765,14 @@ return [
             "SOURCE_CODE" => "873",
         ],
         [
-            "LIBELLE_COURT" => "IN CNRS",
-            "LIBELLE_LONG" => "INGENIEUR CONTRACTUEL CNRS",
-            "SOURCE_CODE" => "840/1",
-        ],
-        [
             "LIBELLE_COURT" => "IN.CNRS",
             "LIBELLE_LONG" => "INGENIEUR CONTRACTUEL CNRS",
             "SOURCE_CODE" => "840",
         ],
         [
-            "LIBELLE_COURT" => "IGE",
-            "LIBELLE_LONG" => "INGENIEUR D'ETUDES (RECH ET FORM)",
-            "SOURCE_CODE" => "833",
+            "LIBELLE_COURT" => "IN CNRS",
+            "LIBELLE_LONG" => "INGENIEUR CONTRACTUEL CNRS",
+            "SOURCE_CODE" => "840/1",
         ],
         [
             "LIBELLE_COURT" => "IGE RF",
@@ -1780,14 +1780,19 @@ return [
             "SOURCE_CODE" => "833/1",
         ],
         [
-            "LIBELLE_COURT" => "IE-R EPST",
-            "LIBELLE_LONG" => "INGENIEUR D'ETUDES EPST",
-            "SOURCE_CODE" => "EP1",
+            "LIBELLE_COURT" => "IGE",
+            "LIBELLE_LONG" => "INGENIEUR D'ETUDES (RECH ET FORM)",
+            "SOURCE_CODE" => "833",
         ],
         [
             "LIBELLE_COURT" => "IGE EPST",
             "LIBELLE_LONG" => "INGENIEUR D'ETUDES EPST",
             "SOURCE_CODE" => "EP1/1",
+        ],
+        [
+            "LIBELLE_COURT" => "IE-R EPST",
+            "LIBELLE_LONG" => "INGENIEUR D'ETUDES EPST",
+            "SOURCE_CODE" => "EP1",
         ],
         [
             "LIBELLE_COURT" => "IR-R CNRS",
@@ -1820,14 +1825,14 @@ return [
             "SOURCE_CODE" => "280/1",
         ],
         [
-            "LIBELLE_COURT" => "ING TELEC",
-            "LIBELLE_LONG" => "INGENIEUR DES TELECOMMUNICATIONS",
-            "SOURCE_CODE" => "283/1",
-        ],
-        [
             "LIBELLE_COURT" => "ING.TELEC.",
             "LIBELLE_LONG" => "INGENIEUR DES TELECOMMUNICATIONS",
             "SOURCE_CODE" => "283",
+        ],
+        [
+            "LIBELLE_COURT" => "ING TELEC",
+            "LIBELLE_LONG" => "INGENIEUR DES TELECOMMUNICATIONS",
+            "SOURCE_CODE" => "283/1",
         ],
         [
             "LIBELLE_COURT" => "IN TR PUBL",
@@ -1860,14 +1865,14 @@ return [
             "SOURCE_CODE" => "874",
         ],
         [
-            "LIBELLE_COURT" => "I.A. ADJ",
-            "LIBELLE_LONG" => "INSPECTEUR D'ACADEMIE ADJOINT",
-            "SOURCE_CODE" => "106",
-        ],
-        [
             "LIBELLE_COURT" => "I A ADJ",
             "LIBELLE_LONG" => "INSPECTEUR D'ACADEMIE ADJOINT",
             "SOURCE_CODE" => "106/1",
+        ],
+        [
+            "LIBELLE_COURT" => "I.A. ADJ",
+            "LIBELLE_LONG" => "INSPECTEUR D'ACADEMIE ADJOINT",
+            "SOURCE_CODE" => "106",
         ],
         [
             "LIBELLE_COURT" => "IA-DSDEN",
@@ -1880,19 +1885,14 @@ return [
             "SOURCE_CODE" => "105",
         ],
         [
-            "LIBELLE_COURT" => "I.E.N",
-            "LIBELLE_LONG" => "INSPECTEUR DE L'EDUCATION NATIONALE",
-            "SOURCE_CODE" => "115",
-        ],
-        [
             "LIBELLE_COURT" => "I E N",
             "LIBELLE_LONG" => "INSPECTEUR DE L'EDUCATION NATIONALE",
             "SOURCE_CODE" => "115/1",
         ],
         [
-            "LIBELLE_COURT" => "INSP. J.S.",
-            "LIBELLE_LONG" => "INSPECTEUR DE LA JEUNESSE ET DES SPORTS",
-            "SOURCE_CODE" => "116",
+            "LIBELLE_COURT" => "I.E.N",
+            "LIBELLE_LONG" => "INSPECTEUR DE L'EDUCATION NATIONALE",
+            "SOURCE_CODE" => "115",
         ],
         [
             "LIBELLE_COURT" => "INSP J S",
@@ -1900,9 +1900,9 @@ return [
             "SOURCE_CODE" => "116/1",
         ],
         [
-            "LIBELLE_COURT" => "INSP MAGAS",
-            "LIBELLE_LONG" => "INSPECTEUR DE MAGASINAGE",
-            "SOURCE_CODE" => "815/2",
+            "LIBELLE_COURT" => "INSP. J.S.",
+            "LIBELLE_LONG" => "INSPECTEUR DE LA JEUNESSE ET DES SPORTS",
+            "SOURCE_CODE" => "116",
         ],
         [
             "LIBELLE_COURT" => "INSP.MAGAS",
@@ -1910,14 +1910,19 @@ return [
             "SOURCE_CODE" => "815",
         ],
         [
-            "LIBELLE_COURT" => "I.G.A.E.N.",
-            "LIBELLE_LONG" => "INSPECTEUR GENERAL DE L'ADMINISTRATION",
-            "SOURCE_CODE" => "101",
+            "LIBELLE_COURT" => "INSP MAGAS",
+            "LIBELLE_LONG" => "INSPECTEUR DE MAGASINAGE",
+            "SOURCE_CODE" => "815/2",
         ],
         [
             "LIBELLE_COURT" => "I G A E N",
             "LIBELLE_LONG" => "INSPECTEUR GENERAL DE L'ADMINISTRATION",
             "SOURCE_CODE" => "101/1",
+        ],
+        [
+            "LIBELLE_COURT" => "I.G.A.E.N.",
+            "LIBELLE_LONG" => "INSPECTEUR GENERAL DE L'ADMINISTRATION",
+            "SOURCE_CODE" => "101",
         ],
         [
             "LIBELLE_COURT" => "I G E N",
@@ -1930,14 +1935,14 @@ return [
             "SOURCE_CODE" => "102",
         ],
         [
-            "LIBELLE_COURT" => "I G BIBLIO",
-            "LIBELLE_LONG" => "INSPECTEUR GENERAL DES BIBLIOTHEQUES",
-            "SOURCE_CODE" => "103/1",
-        ],
-        [
             "LIBELLE_COURT" => "I.G.BIBLIO",
             "LIBELLE_LONG" => "INSPECTEUR GENERAL DES BIBLIOTHEQUES",
             "SOURCE_CODE" => "103",
+        ],
+        [
+            "LIBELLE_COURT" => "I G BIBLIO",
+            "LIBELLE_LONG" => "INSPECTEUR GENERAL DES BIBLIOTHEQUES",
+            "SOURCE_CODE" => "103/1",
         ],
         [
             "LIBELLE_COURT" => "INSP TECH A SOC AE",
@@ -1948,6 +1953,11 @@ return [
             "LIBELLE_COURT" => "INSP TECH A SOC AE",
             "LIBELLE_LONG" => "INSPECTEUR TECH D'ACTION SOCIALE AE",
             "SOURCE_CODE" => "H11/1",
+        ],
+        [
+            "LIBELLE_COURT" => "INSTIT",
+            "LIBELLE_LONG" => "INSTITUTEUR",
+            "SOURCE_CODE" => "600/2",
         ],
         [
             "LIBELLE_COURT" => "INST AUXIL",
@@ -1980,19 +1990,14 @@ return [
             "SOURCE_CODE" => "602/2",
         ],
         [
-            "LIBELLE_COURT" => "MAG",
-            "LIBELLE_LONG" => "MAGASINIER DES BIBLIOTHEQUES",
-            "SOURCE_CODE" => "942",
-        ],
-        [
             "LIBELLE_COURT" => "MAGASINIER",
             "LIBELLE_LONG" => "MAGASINIER DES BIBLIOTHEQUES",
             "SOURCE_CODE" => "942/3",
         ],
         [
-            "LIBELLE_COURT" => "MAGAS CHEF",
-            "LIBELLE_LONG" => "MAGASINIER EN CHEF",
-            "SOURCE_CODE" => "813/3",
+            "LIBELLE_COURT" => "MAG",
+            "LIBELLE_LONG" => "MAGASINIER DES BIBLIOTHEQUES",
+            "SOURCE_CODE" => "942",
         ],
         [
             "LIBELLE_COURT" => "MAGAS.CHEF",
@@ -2000,14 +2005,19 @@ return [
             "SOURCE_CODE" => "813",
         ],
         [
-            "LIBELLE_COURT" => "MAGAS.SPEC",
-            "LIBELLE_LONG" => "MAGASINIER SPECIALISE",
-            "SOURCE_CODE" => "814",
+            "LIBELLE_COURT" => "MAGAS CHEF",
+            "LIBELLE_LONG" => "MAGASINIER EN CHEF",
+            "SOURCE_CODE" => "813/3",
         ],
         [
             "LIBELLE_COURT" => "MAGAS SPEC",
             "LIBELLE_LONG" => "MAGASINIER SPECIALISE",
             "SOURCE_CODE" => "814/3",
+        ],
+        [
+            "LIBELLE_COURT" => "MAGAS.SPEC",
+            "LIBELLE_LONG" => "MAGASINIER SPECIALISE",
+            "SOURCE_CODE" => "814",
         ],
         [
             "LIBELLE_COURT" => "MCF MNHN",
@@ -2018,11 +2028,6 @@ return [
             "LIBELLE_COURT" => "MCF EPHE CHARTES",
             "LIBELLE_LONG" => "MAIT CONF EPHE EC NAT DES CHARTES",
             "SOURCE_CODE" => "356/1",
-        ],
-        [
-            "LIBELLE_COURT" => "MCF PH DENT",
-            "LIBELLE_LONG" => "MAIT CONF PRAT HOSP DENTAIRES",
-            "SOURCE_CODE" => "316/1",
         ],
         [
             "LIBELLE_COURT" => "MAIT.CF.MUSEUM.H.NAT",
@@ -2040,14 +2045,14 @@ return [
             "SOURCE_CODE" => "316",
         ],
         [
-            "LIBELLE_COURT" => "MAIT.ASSI.",
-            "LIBELLE_LONG" => "MAITRE ASSISTANT",
-            "SOURCE_CODE" => "302",
-        ],
-        [
             "LIBELLE_COURT" => "MAIT ASSI",
             "LIBELLE_LONG" => "MAITRE ASSISTANT",
             "SOURCE_CODE" => "302/1",
+        ],
+        [
+            "LIBELLE_COURT" => "MAIT.ASSI.",
+            "LIBELLE_LONG" => "MAITRE ASSISTANT",
+            "SOURCE_CODE" => "302",
         ],
         [
             "LIBELLE_COURT" => "M.A.",
@@ -2065,19 +2070,19 @@ return [
             "SOURCE_CODE" => "453/1",
         ],
         [
-            "LIBELLE_COURT" => "MCF PH",
-            "LIBELLE_LONG" => "MAITRE DE CONF UNIV - PRATICIEN HOSP",
-            "SOURCE_CODE" => "311/1",
-        ],
-        [
-            "LIBELLE_COURT" => "MCF MED GENE",
-            "LIBELLE_LONG" => "MAITRE DE CONF UNIV DE MEDECINE GENERALE",
-            "SOURCE_CODE" => "MG1/1",
+            "LIBELLE_COURT" => "MCU PH",
+            "LIBELLE_LONG" => "MAITRE DE CONF UNIV - PRATICIEN HOSPITALIER",
+            "SOURCE_CODE" => "325/1",
         ],
         [
             "LIBELLE_COURT" => "MCF MED GENE",
             "LIBELLE_LONG" => "MAITRE DE CONF UNIV DE MEDECINE GENERALE",
             "SOURCE_CODE" => "MG1",
+        ],
+        [
+            "LIBELLE_COURT" => "MCF MED GENE",
+            "LIBELLE_LONG" => "MAITRE DE CONF UNIV DE MEDECINE GENERALE",
+            "SOURCE_CODE" => "MG1/1",
         ],
         [
             "LIBELLE_COURT" => "MAIT.CONF.PRAT.HOSP.",
@@ -2090,14 +2095,14 @@ return [
             "SOURCE_CODE" => "453",
         ],
         [
-            "LIBELLE_COURT" => "MCF",
-            "LIBELLE_LONG" => "MAITRE DE CONFERENCES",
-            "SOURCE_CODE" => "301/1",
-        ],
-        [
             "LIBELLE_COURT" => "MAIT.CONF.",
             "LIBELLE_LONG" => "MAITRE DE CONFERENCES",
             "SOURCE_CODE" => "301",
+        ],
+        [
+            "LIBELLE_COURT" => "MCF",
+            "LIBELLE_LONG" => "MAITRE DE CONFERENCES",
+            "SOURCE_CODE" => "301/1",
         ],
         [
             "LIBELLE_COURT" => "MC. ASSOCIE",
@@ -2105,14 +2110,14 @@ return [
             "SOURCE_CODE" => "381",
         ],
         [
-            "LIBELLE_COURT" => "MCF EHESS",
-            "LIBELLE_LONG" => "MAITRE DE CONFERENCES DE L'EHESS",
-            "SOURCE_CODE" => "354/1",
-        ],
-        [
             "LIBELLE_COURT" => "MAIT.CONF.DE L'EHESS",
             "LIBELLE_LONG" => "MAITRE DE CONFERENCES DE L'EHESS",
             "SOURCE_CODE" => "354",
+        ],
+        [
+            "LIBELLE_COURT" => "MCF EHESS",
+            "LIBELLE_LONG" => "MAITRE DE CONFERENCES DE L'EHESS",
+            "SOURCE_CODE" => "354/1",
         ],
         [
             "LIBELLE_COURT" => "M.O",
@@ -2138,11 +2143,6 @@ return [
             "LIBELLE_COURT" => "MCUPH PHARMA",
             "LIBELLE_LONG" => "MCUPH DES DISCIPLINES PHARMACEUTIQUES",
             "SOURCE_CODE" => "PH1",
-        ],
-        [
-            "LIBELLE_COURT" => "MCUPH PHARMA",
-            "LIBELLE_LONG" => "MCUPH DES DISCIPLINES PHARMACEUTIQUES",
-            "SOURCE_CODE" => "PH1/1",
         ],
         [
             "LIBELLE_COURT" => "MED.CONTR.",
@@ -2182,12 +2182,12 @@ return [
         [
             "LIBELLE_COURT" => "MINISTRE",
             "LIBELLE_LONG" => "MINISTRE",
-            "SOURCE_CODE" => "201",
+            "SOURCE_CODE" => "201/1",
         ],
         [
             "LIBELLE_COURT" => "MINISTRE",
             "LIBELLE_LONG" => "MINISTRE",
-            "SOURCE_CODE" => "201/1",
+            "SOURCE_CODE" => "201",
         ],
         [
             "LIBELLE_COURT" => "O E A",
@@ -2252,12 +2252,12 @@ return [
         [
             "LIBELLE_COURT" => "PHYSICIEN ADJOINT",
             "LIBELLE_LONG" => "PHYSICIEN ADJOINT",
-            "SOURCE_CODE" => "333",
+            "SOURCE_CODE" => "333/1",
         ],
         [
             "LIBELLE_COURT" => "PHYSICIEN ADJOINT",
             "LIBELLE_LONG" => "PHYSICIEN ADJOINT",
-            "SOURCE_CODE" => "333/1",
+            "SOURCE_CODE" => "333",
         ],
         [
             "LIBELLE_COURT" => "PHYSICIEN ADJ D-36",
@@ -2292,22 +2292,22 @@ return [
         [
             "LIBELLE_COURT" => "PR1G",
             "LIBELLE_LONG" => "PROF DU 1ER GRADE CHIR DENT ODONTO",
-            "SOURCE_CODE" => "317/1",
+            "SOURCE_CODE" => "317",
         ],
         [
             "LIBELLE_COURT" => "PR1G",
             "LIBELLE_LONG" => "PROF DU 1ER GRADE CHIR DENT ODONTO",
-            "SOURCE_CODE" => "317",
-        ],
-        [
-            "LIBELLE_COURT" => "PR2G",
-            "LIBELLE_LONG" => "PROF DU 2EME GRADE CHIR DENT ODONTO",
-            "SOURCE_CODE" => "318",
+            "SOURCE_CODE" => "317/1",
         ],
         [
             "LIBELLE_COURT" => "PR2G",
             "LIBELLE_LONG" => "PROF DU 2EME GRADE CHIR DENT ODONTO",
             "SOURCE_CODE" => "318/1",
+        ],
+        [
+            "LIBELLE_COURT" => "PR2G",
+            "LIBELLE_LONG" => "PROF DU 2EME GRADE CHIR DENT ODONTO",
+            "SOURCE_CODE" => "318",
         ],
         [
             "LIBELLE_COURT" => "PROF EC ARTS&MANUF",
@@ -2322,17 +2322,12 @@ return [
         [
             "LIBELLE_COURT" => "PR TIT TITRE PERSO",
             "LIBELLE_LONG" => "PROF TITULAIRES A TITRE PERSONNEL",
-            "SOURCE_CODE" => "452/1",
+            "SOURCE_CODE" => "H03/1",
         ],
         [
             "LIBELLE_COURT" => "PR TIT TITRE PERSO",
             "LIBELLE_LONG" => "PROF TITULAIRES A TITRE PERSONNEL",
-            "SOURCE_CODE" => "H03/1",
-        ],
-        [
-            "LIBELLE_COURT" => "PROF UNIV PH DENT",
-            "LIBELLE_LONG" => "PROF UNIV PRAT HOSP DENTAIRES",
-            "SOURCE_CODE" => "315/1",
+            "SOURCE_CODE" => "452/1",
         ],
         [
             "LIBELLE_COURT" => "PROF.EC. ARTS&MANUF.",
@@ -2382,12 +2377,12 @@ return [
         [
             "LIBELLE_COURT" => "AGREGE",
             "LIBELLE_LONG" => "PROFESSEUR AGREGE",
-            "SOURCE_CODE" => "551",
+            "SOURCE_CODE" => "551/1",
         ],
         [
             "LIBELLE_COURT" => "AGREGE",
             "LIBELLE_LONG" => "PROFESSEUR AGREGE",
-            "SOURCE_CODE" => "551/1",
+            "SOURCE_CODE" => "551",
         ],
         [
             "LIBELLE_COURT" => "PR.ASSOCIE",
@@ -2420,6 +2415,11 @@ return [
             "SOURCE_CODE" => "779",
         ],
         [
+            "LIBELLE_COURT" => "PEGC",
+            "LIBELLE_LONG" => "PROFESSEUR D'ENS GENERAL DES COLLEGES",
+            "SOURCE_CODE" => "559/1",
+        ],
+        [
             "LIBELLE_COURT" => "PROF EPS",
             "LIBELLE_LONG" => "PROFESSEUR D'EPS",
             "SOURCE_CODE" => "531/1",
@@ -2432,12 +2432,12 @@ return [
         [
             "LIBELLE_COURT" => "CHAIRE SUP",
             "LIBELLE_LONG" => "PROFESSEUR DE CHAIRE SUPERIEURE",
-            "SOURCE_CODE" => "550/1",
+            "SOURCE_CODE" => "550",
         ],
         [
             "LIBELLE_COURT" => "CHAIRE SUP",
             "LIBELLE_LONG" => "PROFESSEUR DE CHAIRE SUPERIEURE",
-            "SOURCE_CODE" => "550",
+            "SOURCE_CODE" => "550/1",
         ],
         [
             "LIBELLE_COURT" => "PROF. DE L'ENSAM",
@@ -2450,14 +2450,14 @@ return [
             "SOURCE_CODE" => "364/1",
         ],
         [
-            "LIBELLE_COURT" => "PROF.ECOLE",
-            "LIBELLE_LONG" => "PROFESSEUR DES ECOLES",
-            "SOURCE_CODE" => "615",
-        ],
-        [
             "LIBELLE_COURT" => "PROF ECOLE",
             "LIBELLE_LONG" => "PROFESSEUR DES ECOLES",
             "SOURCE_CODE" => "615/1",
+        ],
+        [
+            "LIBELLE_COURT" => "PROF.ECOLE",
+            "LIBELLE_LONG" => "PROFESSEUR DES ECOLES",
+            "SOURCE_CODE" => "615",
         ],
         [
             "LIBELLE_COURT" => "P.L.P.",
@@ -2468,11 +2468,6 @@ return [
             "LIBELLE_COURT" => "P L P",
             "LIBELLE_LONG" => "PROFESSEUR DES LYCEES PROFESSIONNELS",
             "SOURCE_CODE" => "575/1",
-        ],
-        [
-            "LIBELLE_COURT" => "PROF UNIV PH",
-            "LIBELLE_LONG" => "PROFESSEUR DES UNIV - PRATICIEN HOSP",
-            "SOURCE_CODE" => "310/1",
         ],
         [
             "LIBELLE_COURT" => "PROF.UNIV.PRAT.HOSP.",
@@ -2522,17 +2517,27 @@ return [
         [
             "LIBELLE_COURT" => "PR MED GENE",
             "LIBELLE_LONG" => "PROFESSEUR UNIVERSITES MEDECINE GENERALE",
-            "SOURCE_CODE" => "MG0",
+            "SOURCE_CODE" => "MG0/1",
         ],
         [
             "LIBELLE_COURT" => "PR MED GENE",
             "LIBELLE_LONG" => "PROFESSEUR UNIVERSITES MEDECINE GENERALE",
-            "SOURCE_CODE" => "MG0/1",
+            "SOURCE_CODE" => "MG0",
+        ],
+        [
+            "LIBELLE_COURT" => "PU PH",
+            "LIBELLE_LONG" => "PROFESSEURS DES UNIV - PRATICIEN HOSPITALIER",
+            "SOURCE_CODE" => "324/1",
         ],
         [
             "LIBELLE_COURT" => "PROF SANS CHAIRE",
             "LIBELLE_LONG" => "PROFESSEURS SANS CHAIRE",
             "SOURCE_CODE" => "450/1",
+        ],
+        [
+            "LIBELLE_COURT" => "PROF SANS CHAIRE",
+            "LIBELLE_LONG" => "PROFESSEURS SANS CHAIRE",
+            "SOURCE_CODE" => "H01/1",
         ],
         [
             "LIBELLE_COURT" => "PROF. SANS CHAIRE",
@@ -2545,9 +2550,9 @@ return [
             "SOURCE_CODE" => "450",
         ],
         [
-            "LIBELLE_COURT" => "PROF SANS CHAIRE",
-            "LIBELLE_LONG" => "PROFESSEURS SANS CHAIRE",
-            "SOURCE_CODE" => "H01/1",
+            "LIBELLE_COURT" => "PROF TITULAIRES",
+            "LIBELLE_LONG" => "PROFESSEURS TITULAIRES",
+            "SOURCE_CODE" => "451/1",
         ],
         [
             "LIBELLE_COURT" => "PROF. TITULAIRES",
@@ -2560,19 +2565,9 @@ return [
             "SOURCE_CODE" => "H02/1",
         ],
         [
-            "LIBELLE_COURT" => "PROF TITULAIRES",
-            "LIBELLE_LONG" => "PROFESSEURS TITULAIRES",
-            "SOURCE_CODE" => "451/1",
-        ],
-        [
             "LIBELLE_COURT" => "PROF. TITULAIRES",
             "LIBELLE_LONG" => "PROFESSEURS TITULAIRES",
             "SOURCE_CODE" => "H02",
-        ],
-        [
-            "LIBELLE_COURT" => "PSY.EN",
-            "LIBELLE_LONG" => "PSYCHOLOGUE EDUCATION NATIONALE",
-            "SOURCE_CODE" => "522",
         ],
         [
             "LIBELLE_COURT" => "PSY EN",
@@ -2580,9 +2575,9 @@ return [
             "SOURCE_CODE" => "522/1",
         ],
         [
-            "LIBELLE_COURT" => "PUPH PHARMA",
-            "LIBELLE_LONG" => "PUPH DES DISCIPLINES PHARMACEUTIQUES",
-            "SOURCE_CODE" => "PH0/1",
+            "LIBELLE_COURT" => "PSY.EN",
+            "LIBELLE_LONG" => "PSYCHOLOGUE EDUCATION NATIONALE",
+            "SOURCE_CODE" => "522",
         ],
         [
             "LIBELLE_COURT" => "PUPH PHARMA",
@@ -2615,6 +2610,11 @@ return [
             "SOURCE_CODE" => "217",
         ],
         [
+            "LIBELLE_COURT" => "SASU NV ST",
+            "LIBELLE_LONG" => "SECRETAIRE ADMINISTRATIF (SASU) NV ST",
+            "SOURCE_CODE" => "033/2",
+        ],
+        [
             "LIBELLE_COURT" => "SASU NV.ST",
             "LIBELLE_LONG" => "SECRETAIRE ADMINISTRATIF (SASU) NV.ST.",
             "SOURCE_CODE" => "033",
@@ -2622,12 +2622,12 @@ return [
         [
             "LIBELLE_COURT" => "SAENES 10",
             "LIBELLE_LONG" => "SECRETAIRE ADMINISTRATIF 2010",
-            "SOURCE_CODE" => "054",
+            "SOURCE_CODE" => "054/2",
         ],
         [
             "LIBELLE_COURT" => "SAENES 10",
             "LIBELLE_LONG" => "SECRETAIRE ADMINISTRATIF 2010",
-            "SOURCE_CODE" => "054/2",
+            "SOURCE_CODE" => "054",
         ],
         [
             "LIBELLE_COURT" => "SAR-R EPST",
@@ -2635,14 +2635,14 @@ return [
             "SOURCE_CODE" => "264",
         ],
         [
-            "LIBELLE_COURT" => "SECR ETAT",
-            "LIBELLE_LONG" => "SECRETAIRE D'ETAT",
-            "SOURCE_CODE" => "202/1",
-        ],
-        [
             "LIBELLE_COURT" => "SECR. ETAT",
             "LIBELLE_LONG" => "SECRETAIRE D'ETAT",
             "SOURCE_CODE" => "202",
+        ],
+        [
+            "LIBELLE_COURT" => "SECR ETAT",
+            "LIBELLE_LONG" => "SECRETAIRE D'ETAT",
+            "SOURCE_CODE" => "202/1",
         ],
         [
             "LIBELLE_COURT" => "SEC DOC-AS",
@@ -2675,11 +2675,6 @@ return [
             "SOURCE_CODE" => "022",
         ],
         [
-            "LIBELLE_COURT" => "S.G.A.",
-            "LIBELLE_LONG" => "SECRETAIRE GENERAL D'ACADEMIE",
-            "SOURCE_CODE" => "021",
-        ],
-        [
             "LIBELLE_COURT" => "SGA",
             "LIBELLE_LONG" => "SECRETAIRE GENERAL D'ACADEMIE",
             "SOURCE_CODE" => "091/1",
@@ -2690,6 +2685,11 @@ return [
             "SOURCE_CODE" => "091",
         ],
         [
+            "LIBELLE_COURT" => "S.G.A.",
+            "LIBELLE_LONG" => "SECRETAIRE GENERAL D'ACADEMIE",
+            "SOURCE_CODE" => "021",
+        ],
+        [
             "LIBELLE_COURT" => "S G A",
             "LIBELLE_LONG" => "SECRETAIRE GENERAL D'ACADEMIE",
             "SOURCE_CODE" => "021/1",
@@ -2697,12 +2697,12 @@ return [
         [
             "LIBELLE_COURT" => "SG DSDEN",
             "LIBELLE_LONG" => "SECRETAIRE GENERAL DE DSDEN / VICE-RECT",
-            "SOURCE_CODE" => "099",
+            "SOURCE_CODE" => "099/1",
         ],
         [
             "LIBELLE_COURT" => "SG DSDEN",
             "LIBELLE_LONG" => "SECRETAIRE GENERAL DE DSDEN / VICE-RECT",
-            "SOURCE_CODE" => "099/1",
+            "SOURCE_CODE" => "099",
         ],
         [
             "LIBELLE_COURT" => "SEC GEN M",
@@ -2785,14 +2785,14 @@ return [
             "SOURCE_CODE" => "9HH/2",
         ],
         [
-            "LIBELLE_COURT" => "TECH",
-            "LIBELLE_LONG" => "TECHNICIEN DE L'EDUCATION NATIONALE",
-            "SOURCE_CODE" => "957/2",
-        ],
-        [
             "LIBELLE_COURT" => "TECH.",
             "LIBELLE_LONG" => "TECHNICIEN DE L'EDUCATION NATIONALE",
             "SOURCE_CODE" => "957",
+        ],
+        [
+            "LIBELLE_COURT" => "TECH",
+            "LIBELLE_LONG" => "TECHNICIEN DE L'EDUCATION NATIONALE",
+            "SOURCE_CODE" => "957/2",
         ],
         [
             "LIBELLE_COURT" => "TECH RF",
@@ -2843,6 +2843,7 @@ return [
     "PAYS" => [
         [
             "CODE" => "212",
+            "CODE_ISO3" => "AFG",
             "LIBELLE" => "Afghanistan",
             "SOURCE_CODE" => "212",
             "TEMOIN_UE" => FALSE,
@@ -2850,6 +2851,7 @@ return [
         ],
         [
             "CODE" => "303",
+            "CODE_ISO3" => "ZAF",
             "LIBELLE" => "Afrique du Sud",
             "SOURCE_CODE" => "303",
             "TEMOIN_UE" => FALSE,
@@ -2857,6 +2859,7 @@ return [
         ],
         [
             "CODE" => "125",
+            "CODE_ISO3" => "ALB",
             "LIBELLE" => "Albanie",
             "SOURCE_CODE" => "125",
             "TEMOIN_UE" => FALSE,
@@ -2864,6 +2867,7 @@ return [
         ],
         [
             "CODE" => "352",
+            "CODE_ISO3" => "DZA",
             "LIBELLE" => "Algérie",
             "SOURCE_CODE" => "352",
             "TEMOIN_UE" => FALSE,
@@ -2871,6 +2875,7 @@ return [
         ],
         [
             "CODE" => "109",
+            "CODE_ISO3" => "DEU",
             "LIBELLE" => "Allemagne",
             "SOURCE_CODE" => "109",
             "TEMOIN_UE" => FALSE,
@@ -2894,6 +2899,7 @@ return [
         ],
         [
             "CODE" => "130",
+            "CODE_ISO3" => "AND",
             "LIBELLE" => "Andorre",
             "SOURCE_CODE" => "130",
             "TEMOIN_UE" => FALSE,
@@ -2901,6 +2907,7 @@ return [
         ],
         [
             "CODE" => "395",
+            "CODE_ISO3" => "AGO",
             "LIBELLE" => "Angola",
             "SOURCE_CODE" => "395",
             "TEMOIN_UE" => FALSE,
@@ -2908,6 +2915,7 @@ return [
         ],
         [
             "CODE" => "441",
+            "CODE_ISO3" => "ATG",
             "LIBELLE" => "Antigua-et-Barbuda",
             "SOURCE_CODE" => "441",
             "TEMOIN_UE" => FALSE,
@@ -2923,6 +2931,7 @@ return [
         ],
         [
             "CODE" => "201",
+            "CODE_ISO3" => "SAU",
             "LIBELLE" => "Arabie saoudite",
             "SOURCE_CODE" => "201",
             "TEMOIN_UE" => FALSE,
@@ -2930,6 +2939,7 @@ return [
         ],
         [
             "CODE" => "415",
+            "CODE_ISO3" => "ARG",
             "LIBELLE" => "Argentine",
             "SOURCE_CODE" => "415",
             "TEMOIN_UE" => FALSE,
@@ -2937,6 +2947,7 @@ return [
         ],
         [
             "CODE" => "252",
+            "CODE_ISO3" => "ARM",
             "LIBELLE" => "Arménie",
             "SOURCE_CODE" => "252",
             "TEMOIN_UE" => FALSE,
@@ -2944,6 +2955,7 @@ return [
         ],
         [
             "CODE" => "501",
+            "CODE_ISO3" => "AUS",
             "LIBELLE" => "Australie",
             "SOURCE_CODE" => "501",
             "TEMOIN_UE" => FALSE,
@@ -2958,6 +2970,7 @@ return [
         ],
         [
             "CODE" => "110",
+            "CODE_ISO3" => "AUT",
             "LIBELLE" => "Autriche",
             "SOURCE_CODE" => "110",
             "TEMOIN_UE" => FALSE,
@@ -2965,6 +2978,7 @@ return [
         ],
         [
             "CODE" => "253",
+            "CODE_ISO3" => "AZE",
             "LIBELLE" => "Azerbaidjan",
             "SOURCE_CODE" => "253",
             "TEMOIN_UE" => FALSE,
@@ -2979,6 +2993,7 @@ return [
         ],
         [
             "CODE" => "436",
+            "CODE_ISO3" => "BHS",
             "LIBELLE" => "Bahamas",
             "SOURCE_CODE" => "436",
             "TEMOIN_UE" => FALSE,
@@ -2986,6 +3001,7 @@ return [
         ],
         [
             "CODE" => "249",
+            "CODE_ISO3" => "BHR",
             "LIBELLE" => "Bahrein",
             "SOURCE_CODE" => "249",
             "TEMOIN_UE" => FALSE,
@@ -2993,6 +3009,7 @@ return [
         ],
         [
             "CODE" => "246",
+            "CODE_ISO3" => "BGD",
             "LIBELLE" => "Bangladesh",
             "SOURCE_CODE" => "246",
             "TEMOIN_UE" => FALSE,
@@ -3000,6 +3017,7 @@ return [
         ],
         [
             "CODE" => "434",
+            "CODE_ISO3" => "BRB",
             "LIBELLE" => "Barbade",
             "SOURCE_CODE" => "434",
             "TEMOIN_UE" => FALSE,
@@ -3007,6 +3025,7 @@ return [
         ],
         [
             "CODE" => "131",
+            "CODE_ISO3" => "BEL",
             "LIBELLE" => "Belgique",
             "SOURCE_CODE" => "131",
             "TEMOIN_UE" => FALSE,
@@ -3014,6 +3033,7 @@ return [
         ],
         [
             "CODE" => "429",
+            "CODE_ISO3" => "BLZ",
             "LIBELLE" => "Belize",
             "SOURCE_CODE" => "429",
             "TEMOIN_UE" => FALSE,
@@ -3021,6 +3041,7 @@ return [
         ],
         [
             "CODE" => "214",
+            "CODE_ISO3" => "BTN",
             "LIBELLE" => "Bhoutan",
             "SOURCE_CODE" => "214",
             "TEMOIN_UE" => FALSE,
@@ -3028,6 +3049,7 @@ return [
         ],
         [
             "CODE" => "224",
+            "CODE_ISO3" => "MMR",
             "LIBELLE" => "Birmanie",
             "SOURCE_CODE" => "224",
             "TEMOIN_UE" => FALSE,
@@ -3035,6 +3057,7 @@ return [
         ],
         [
             "CODE" => "148",
+            "CODE_ISO3" => "BLR",
             "LIBELLE" => "Biélorussie",
             "SOURCE_CODE" => "148",
             "TEMOIN_UE" => FALSE,
@@ -3042,6 +3065,7 @@ return [
         ],
         [
             "CODE" => "418",
+            "CODE_ISO3" => "BOL",
             "LIBELLE" => "Bolivie",
             "SOURCE_CODE" => "418",
             "TEMOIN_UE" => FALSE,
@@ -3049,6 +3073,7 @@ return [
         ],
         [
             "CODE" => "443",
+            "CODE_ISO3" => "BES",
             "LIBELLE" => "Bonaire, Saint Eustache et Saba",
             "SOURCE_CODE" => "443",
             "TEMOIN_UE" => FALSE,
@@ -3056,6 +3081,7 @@ return [
         ],
         [
             "CODE" => "118",
+            "CODE_ISO3" => "BIH",
             "LIBELLE" => "Bosnie-Herzégovine",
             "SOURCE_CODE" => "118",
             "TEMOIN_UE" => FALSE,
@@ -3063,6 +3089,7 @@ return [
         ],
         [
             "CODE" => "347",
+            "CODE_ISO3" => "BWA",
             "LIBELLE" => "Botswana",
             "SOURCE_CODE" => "347",
             "TEMOIN_UE" => FALSE,
@@ -3070,6 +3097,7 @@ return [
         ],
         [
             "CODE" => "225",
+            "CODE_ISO3" => "BRN",
             "LIBELLE" => "Brunei",
             "SOURCE_CODE" => "225",
             "TEMOIN_UE" => FALSE,
@@ -3077,6 +3105,7 @@ return [
         ],
         [
             "CODE" => "416",
+            "CODE_ISO3" => "BRA",
             "LIBELLE" => "Brésil",
             "SOURCE_CODE" => "416",
             "TEMOIN_UE" => FALSE,
@@ -3084,6 +3113,7 @@ return [
         ],
         [
             "CODE" => "111",
+            "CODE_ISO3" => "BGR",
             "LIBELLE" => "Bulgarie",
             "SOURCE_CODE" => "111",
             "TEMOIN_UE" => FALSE,
@@ -3091,6 +3121,7 @@ return [
         ],
         [
             "CODE" => "331",
+            "CODE_ISO3" => "BFA",
             "LIBELLE" => "Burkina Faso",
             "SOURCE_CODE" => "331",
             "TEMOIN_UE" => FALSE,
@@ -3098,6 +3129,7 @@ return [
         ],
         [
             "CODE" => "321",
+            "CODE_ISO3" => "BDI",
             "LIBELLE" => "Burundi",
             "SOURCE_CODE" => "321",
             "TEMOIN_UE" => FALSE,
@@ -3105,6 +3137,7 @@ return [
         ],
         [
             "CODE" => "327",
+            "CODE_ISO3" => "BEN",
             "LIBELLE" => "Bénin",
             "SOURCE_CODE" => "327",
             "TEMOIN_UE" => FALSE,
@@ -3112,6 +3145,7 @@ return [
         ],
         [
             "CODE" => "234",
+            "CODE_ISO3" => "KHM",
             "LIBELLE" => "Cambodge",
             "SOURCE_CODE" => "234",
             "TEMOIN_UE" => FALSE,
@@ -3119,6 +3153,7 @@ return [
         ],
         [
             "CODE" => "322",
+            "CODE_ISO3" => "CMR",
             "LIBELLE" => "Cameroun",
             "SOURCE_CODE" => "322",
             "TEMOIN_UE" => FALSE,
@@ -3134,6 +3169,7 @@ return [
         ],
         [
             "CODE" => "401",
+            "CODE_ISO3" => "CAN",
             "LIBELLE" => "Canada",
             "SOURCE_CODE" => "401",
             "TEMOIN_UE" => FALSE,
@@ -3141,6 +3177,7 @@ return [
         ],
         [
             "CODE" => "396",
+            "CODE_ISO3" => "CPV",
             "LIBELLE" => "Cap-vert",
             "SOURCE_CODE" => "396",
             "TEMOIN_UE" => FALSE,
@@ -3148,6 +3185,7 @@ return [
         ],
         [
             "CODE" => "323",
+            "CODE_ISO3" => "CAF",
             "LIBELLE" => "Centrafrique",
             "SOURCE_CODE" => "323",
             "TEMOIN_UE" => FALSE,
@@ -3155,6 +3193,7 @@ return [
         ],
         [
             "CODE" => "417",
+            "CODE_ISO3" => "CHL",
             "LIBELLE" => "Chili",
             "SOURCE_CODE" => "417",
             "TEMOIN_UE" => FALSE,
@@ -3162,6 +3201,7 @@ return [
         ],
         [
             "CODE" => "216",
+            "CODE_ISO3" => "CHN",
             "LIBELLE" => "Chine",
             "SOURCE_CODE" => "216",
             "TEMOIN_UE" => FALSE,
@@ -3169,6 +3209,7 @@ return [
         ],
         [
             "CODE" => "254",
+            "CODE_ISO3" => "CYP",
             "LIBELLE" => "Chypre",
             "SOURCE_CODE" => "254",
             "TEMOIN_UE" => FALSE,
@@ -3176,6 +3217,7 @@ return [
         ],
         [
             "CODE" => "419",
+            "CODE_ISO3" => "COL",
             "LIBELLE" => "Colombie",
             "SOURCE_CODE" => "419",
             "TEMOIN_UE" => FALSE,
@@ -3183,6 +3225,7 @@ return [
         ],
         [
             "CODE" => "397",
+            "CODE_ISO3" => "COM",
             "LIBELLE" => "Comores",
             "SOURCE_CODE" => "397",
             "TEMOIN_UE" => FALSE,
@@ -3190,6 +3233,7 @@ return [
         ],
         [
             "CODE" => "324",
+            "CODE_ISO3" => "COG",
             "LIBELLE" => "Congo ( République du Congo)",
             "SOURCE_CODE" => "324",
             "TEMOIN_UE" => FALSE,
@@ -3197,6 +3241,7 @@ return [
         ],
         [
             "CODE" => "312",
+            "CODE_ISO3" => "COD",
             "LIBELLE" => "Congo ( République démocratique du Congo)",
             "SOURCE_CODE" => "312",
             "TEMOIN_UE" => FALSE,
@@ -3212,6 +3257,7 @@ return [
         ],
         [
             "CODE" => "238",
+            "CODE_ISO3" => "PRK",
             "LIBELLE" => "Corée du Nord",
             "SOURCE_CODE" => "238",
             "TEMOIN_UE" => FALSE,
@@ -3219,6 +3265,7 @@ return [
         ],
         [
             "CODE" => "239",
+            "CODE_ISO3" => "KOR",
             "LIBELLE" => "Corée du Sud",
             "SOURCE_CODE" => "239",
             "TEMOIN_UE" => FALSE,
@@ -3226,6 +3273,7 @@ return [
         ],
         [
             "CODE" => "406",
+            "CODE_ISO3" => "CRI",
             "LIBELLE" => "Costa Rica",
             "SOURCE_CODE" => "406",
             "TEMOIN_UE" => FALSE,
@@ -3233,6 +3281,7 @@ return [
         ],
         [
             "CODE" => "119",
+            "CODE_ISO3" => "HRV",
             "LIBELLE" => "Croatie",
             "SOURCE_CODE" => "119",
             "TEMOIN_UE" => FALSE,
@@ -3240,6 +3289,7 @@ return [
         ],
         [
             "CODE" => "407",
+            "CODE_ISO3" => "CUB",
             "LIBELLE" => "Cuba",
             "SOURCE_CODE" => "407",
             "TEMOIN_UE" => FALSE,
@@ -3247,6 +3297,7 @@ return [
         ],
         [
             "CODE" => "444",
+            "CODE_ISO3" => "CUW",
             "LIBELLE" => "Curaçao",
             "SOURCE_CODE" => "444",
             "TEMOIN_UE" => FALSE,
@@ -3254,6 +3305,7 @@ return [
         ],
         [
             "CODE" => "326",
+            "CODE_ISO3" => "CIV",
             "LIBELLE" => "Côte d'Ivoire",
             "SOURCE_CODE" => "326",
             "TEMOIN_UE" => FALSE,
@@ -3261,6 +3313,7 @@ return [
         ],
         [
             "CODE" => "101",
+            "CODE_ISO3" => "DNK",
             "LIBELLE" => "Danemark",
             "SOURCE_CODE" => "101",
             "TEMOIN_UE" => FALSE,
@@ -3268,6 +3321,7 @@ return [
         ],
         [
             "CODE" => "399",
+            "CODE_ISO3" => "DJI",
             "LIBELLE" => "Djibouti",
             "SOURCE_CODE" => "399",
             "TEMOIN_UE" => FALSE,
@@ -3275,6 +3329,7 @@ return [
         ],
         [
             "CODE" => "438",
+            "CODE_ISO3" => "DMA",
             "LIBELLE" => "Dominique",
             "SOURCE_CODE" => "438",
             "TEMOIN_UE" => FALSE,
@@ -3282,6 +3337,7 @@ return [
         ],
         [
             "CODE" => "301",
+            "CODE_ISO3" => "EGY",
             "LIBELLE" => "Egypte",
             "SOURCE_CODE" => "301",
             "TEMOIN_UE" => FALSE,
@@ -3289,6 +3345,7 @@ return [
         ],
         [
             "CODE" => "247",
+            "CODE_ISO3" => "ARE",
             "LIBELLE" => "Emirats Arabes Unis",
             "SOURCE_CODE" => "247",
             "TEMOIN_UE" => FALSE,
@@ -3296,6 +3353,7 @@ return [
         ],
         [
             "CODE" => "420",
+            "CODE_ISO3" => "ECU",
             "LIBELLE" => "Equateur",
             "SOURCE_CODE" => "420",
             "TEMOIN_UE" => FALSE,
@@ -3303,6 +3361,7 @@ return [
         ],
         [
             "CODE" => "317",
+            "CODE_ISO3" => "ERI",
             "LIBELLE" => "Erythrée",
             "SOURCE_CODE" => "317",
             "TEMOIN_UE" => FALSE,
@@ -3310,6 +3369,7 @@ return [
         ],
         [
             "CODE" => "134",
+            "CODE_ISO3" => "ESP",
             "LIBELLE" => "Espagne",
             "SOURCE_CODE" => "134",
             "TEMOIN_UE" => FALSE,
@@ -3317,6 +3377,7 @@ return [
         ],
         [
             "CODE" => "106",
+            "CODE_ISO3" => "EST",
             "LIBELLE" => "Estonie",
             "SOURCE_CODE" => "106",
             "TEMOIN_UE" => FALSE,
@@ -3332,6 +3393,7 @@ return [
         ],
         [
             "CODE" => "404",
+            "CODE_ISO3" => "USA",
             "LIBELLE" => "Etats-Unis d'Amérique",
             "SOURCE_CODE" => "404",
             "TEMOIN_UE" => FALSE,
@@ -3339,6 +3401,7 @@ return [
         ],
         [
             "CODE" => "315",
+            "CODE_ISO3" => "ETH",
             "LIBELLE" => "Ethiopie",
             "SOURCE_CODE" => "315",
             "TEMOIN_UE" => FALSE,
@@ -3346,6 +3409,7 @@ return [
         ],
         [
             "CODE" => "508",
+            "CODE_ISO3" => "FJI",
             "LIBELLE" => "Fidji",
             "SOURCE_CODE" => "508",
             "TEMOIN_UE" => FALSE,
@@ -3353,6 +3417,7 @@ return [
         ],
         [
             "CODE" => "105",
+            "CODE_ISO3" => "FIN",
             "LIBELLE" => "Finlande",
             "SOURCE_CODE" => "105",
             "TEMOIN_UE" => FALSE,
@@ -3360,6 +3425,7 @@ return [
         ],
         [
             "CODE" => "100",
+            "CODE_ISO3" => "FRA",
             "LIBELLE" => "France",
             "SOURCE_CODE" => "100",
             "TEMOIN_UE" => FALSE,
@@ -3367,6 +3433,7 @@ return [
         ],
         [
             "CODE" => "328",
+            "CODE_ISO3" => "GAB",
             "LIBELLE" => "Gabon",
             "SOURCE_CODE" => "328",
             "TEMOIN_UE" => FALSE,
@@ -3374,6 +3441,7 @@ return [
         ],
         [
             "CODE" => "304",
+            "CODE_ISO3" => "GMB",
             "LIBELLE" => "Gambie",
             "SOURCE_CODE" => "304",
             "TEMOIN_UE" => FALSE,
@@ -3381,6 +3449,7 @@ return [
         ],
         [
             "CODE" => "329",
+            "CODE_ISO3" => "GHA",
             "LIBELLE" => "Ghana",
             "SOURCE_CODE" => "329",
             "TEMOIN_UE" => FALSE,
@@ -3388,6 +3457,7 @@ return [
         ],
         [
             "CODE" => "133",
+            "CODE_ISO3" => "GIB",
             "LIBELLE" => "Gibraltar",
             "SOURCE_CODE" => "133",
             "TEMOIN_UE" => FALSE,
@@ -3395,6 +3465,7 @@ return [
         ],
         [
             "CODE" => "435",
+            "CODE_ISO3" => "GRD",
             "LIBELLE" => "Grenade",
             "SOURCE_CODE" => "435",
             "TEMOIN_UE" => FALSE,
@@ -3402,6 +3473,7 @@ return [
         ],
         [
             "CODE" => "430",
+            "CODE_ISO3" => "GRL",
             "LIBELLE" => "Groenland",
             "SOURCE_CODE" => "430",
             "TEMOIN_UE" => FALSE,
@@ -3409,6 +3481,7 @@ return [
         ],
         [
             "CODE" => "126",
+            "CODE_ISO3" => "GRC",
             "LIBELLE" => "Grèce",
             "SOURCE_CODE" => "126",
             "TEMOIN_UE" => FALSE,
@@ -3416,6 +3489,7 @@ return [
         ],
         [
             "CODE" => "409",
+            "CODE_ISO3" => "GTM",
             "LIBELLE" => "Guatemala",
             "SOURCE_CODE" => "409",
             "TEMOIN_UE" => FALSE,
@@ -3423,6 +3497,7 @@ return [
         ],
         [
             "CODE" => "392",
+            "CODE_ISO3" => "GNB",
             "LIBELLE" => "Guiné-Bissau",
             "SOURCE_CODE" => "392",
             "TEMOIN_UE" => FALSE,
@@ -3430,6 +3505,7 @@ return [
         ],
         [
             "CODE" => "330",
+            "CODE_ISO3" => "GIN",
             "LIBELLE" => "Guinée",
             "SOURCE_CODE" => "330",
             "TEMOIN_UE" => FALSE,
@@ -3437,6 +3513,7 @@ return [
         ],
         [
             "CODE" => "314",
+            "CODE_ISO3" => "GNQ",
             "LIBELLE" => "Guinée équatoriale",
             "SOURCE_CODE" => "314",
             "TEMOIN_UE" => FALSE,
@@ -3444,6 +3521,7 @@ return [
         ],
         [
             "CODE" => "428",
+            "CODE_ISO3" => "GUY",
             "LIBELLE" => "Guyana",
             "SOURCE_CODE" => "428",
             "TEMOIN_UE" => FALSE,
@@ -3451,6 +3529,7 @@ return [
         ],
         [
             "CODE" => "255",
+            "CODE_ISO3" => "GEO",
             "LIBELLE" => "Géorgie",
             "SOURCE_CODE" => "255",
             "TEMOIN_UE" => FALSE,
@@ -3458,6 +3537,7 @@ return [
         ],
         [
             "CODE" => "410",
+            "CODE_ISO3" => "HTI",
             "LIBELLE" => "Haiti",
             "SOURCE_CODE" => "410",
             "TEMOIN_UE" => FALSE,
@@ -3473,6 +3553,7 @@ return [
         ],
         [
             "CODE" => "411",
+            "CODE_ISO3" => "HND",
             "LIBELLE" => "Honduras",
             "SOURCE_CODE" => "411",
             "TEMOIN_UE" => FALSE,
@@ -3488,6 +3569,7 @@ return [
         ],
         [
             "CODE" => "112",
+            "CODE_ISO3" => "HUN",
             "LIBELLE" => "Hongrie",
             "SOURCE_CODE" => "112",
             "TEMOIN_UE" => FALSE,
@@ -3503,6 +3585,7 @@ return [
         ],
         [
             "CODE" => "223",
+            "CODE_ISO3" => "IND",
             "LIBELLE" => "Inde",
             "SOURCE_CODE" => "223",
             "TEMOIN_UE" => FALSE,
@@ -3510,6 +3593,7 @@ return [
         ],
         [
             "CODE" => "231",
+            "CODE_ISO3" => "IDN",
             "LIBELLE" => "Indonésie",
             "SOURCE_CODE" => "231",
             "TEMOIN_UE" => FALSE,
@@ -3517,6 +3601,7 @@ return [
         ],
         [
             "CODE" => "204",
+            "CODE_ISO3" => "IRN",
             "LIBELLE" => "Iran",
             "SOURCE_CODE" => "204",
             "TEMOIN_UE" => FALSE,
@@ -3524,6 +3609,7 @@ return [
         ],
         [
             "CODE" => "203",
+            "CODE_ISO3" => "IRQ",
             "LIBELLE" => "Iraq",
             "SOURCE_CODE" => "203",
             "TEMOIN_UE" => FALSE,
@@ -3531,6 +3617,7 @@ return [
         ],
         [
             "CODE" => "136",
+            "CODE_ISO3" => "IRL",
             "LIBELLE" => "Irlande",
             "SOURCE_CODE" => "136",
             "TEMOIN_UE" => FALSE,
@@ -3538,6 +3625,7 @@ return [
         ],
         [
             "CODE" => "102",
+            "CODE_ISO3" => "ISL",
             "LIBELLE" => "Islande",
             "SOURCE_CODE" => "102",
             "TEMOIN_UE" => FALSE,
@@ -3545,6 +3633,7 @@ return [
         ],
         [
             "CODE" => "207",
+            "CODE_ISO3" => "ISR",
             "LIBELLE" => "Israel",
             "SOURCE_CODE" => "207",
             "TEMOIN_UE" => FALSE,
@@ -3552,6 +3641,7 @@ return [
         ],
         [
             "CODE" => "127",
+            "CODE_ISO3" => "ITA",
             "LIBELLE" => "Italie",
             "SOURCE_CODE" => "127",
             "TEMOIN_UE" => FALSE,
@@ -3559,6 +3649,7 @@ return [
         ],
         [
             "CODE" => "426",
+            "CODE_ISO3" => "JAM",
             "LIBELLE" => "Jamaïque",
             "SOURCE_CODE" => "426",
             "TEMOIN_UE" => FALSE,
@@ -3566,6 +3657,7 @@ return [
         ],
         [
             "CODE" => "217",
+            "CODE_ISO3" => "JPN",
             "LIBELLE" => "Japon",
             "SOURCE_CODE" => "217",
             "TEMOIN_UE" => FALSE,
@@ -3573,6 +3665,7 @@ return [
         ],
         [
             "CODE" => "222",
+            "CODE_ISO3" => "JOR",
             "LIBELLE" => "Jordanie",
             "SOURCE_CODE" => "222",
             "TEMOIN_UE" => FALSE,
@@ -3588,6 +3681,7 @@ return [
         ],
         [
             "CODE" => "256",
+            "CODE_ISO3" => "KAZ",
             "LIBELLE" => "Kazakhstan",
             "SOURCE_CODE" => "256",
             "TEMOIN_UE" => FALSE,
@@ -3595,6 +3689,7 @@ return [
         ],
         [
             "CODE" => "332",
+            "CODE_ISO3" => "KEN",
             "LIBELLE" => "Kenya",
             "SOURCE_CODE" => "332",
             "TEMOIN_UE" => FALSE,
@@ -3602,6 +3697,7 @@ return [
         ],
         [
             "CODE" => "257",
+            "CODE_ISO3" => "KGZ",
             "LIBELLE" => "Kirghizistan",
             "SOURCE_CODE" => "257",
             "TEMOIN_UE" => FALSE,
@@ -3609,6 +3705,7 @@ return [
         ],
         [
             "CODE" => "513",
+            "CODE_ISO3" => "KIR",
             "LIBELLE" => "Kiribati",
             "SOURCE_CODE" => "513",
             "TEMOIN_UE" => FALSE,
@@ -3623,6 +3720,7 @@ return [
         ],
         [
             "CODE" => "240",
+            "CODE_ISO3" => "KWT",
             "LIBELLE" => "Koweit",
             "SOURCE_CODE" => "240",
             "TEMOIN_UE" => FALSE,
@@ -3638,6 +3736,7 @@ return [
         ],
         [
             "CODE" => "241",
+            "CODE_ISO3" => "LAO",
             "LIBELLE" => "Laos",
             "SOURCE_CODE" => "241",
             "TEMOIN_UE" => FALSE,
@@ -3645,6 +3744,7 @@ return [
         ],
         [
             "CODE" => "348",
+            "CODE_ISO3" => "LSO",
             "LIBELLE" => "Lesotho",
             "SOURCE_CODE" => "348",
             "TEMOIN_UE" => FALSE,
@@ -3652,6 +3752,7 @@ return [
         ],
         [
             "CODE" => "107",
+            "CODE_ISO3" => "LVA",
             "LIBELLE" => "Lettonie",
             "SOURCE_CODE" => "107",
             "TEMOIN_UE" => FALSE,
@@ -3659,6 +3760,7 @@ return [
         ],
         [
             "CODE" => "205",
+            "CODE_ISO3" => "LBN",
             "LIBELLE" => "Liban",
             "SOURCE_CODE" => "205",
             "TEMOIN_UE" => FALSE,
@@ -3666,6 +3768,7 @@ return [
         ],
         [
             "CODE" => "302",
+            "CODE_ISO3" => "LBR",
             "LIBELLE" => "Liberia",
             "SOURCE_CODE" => "302",
             "TEMOIN_UE" => FALSE,
@@ -3673,6 +3776,7 @@ return [
         ],
         [
             "CODE" => "113",
+            "CODE_ISO3" => "LIE",
             "LIBELLE" => "Liechtenstein",
             "SOURCE_CODE" => "113",
             "TEMOIN_UE" => FALSE,
@@ -3680,6 +3784,7 @@ return [
         ],
         [
             "CODE" => "108",
+            "CODE_ISO3" => "LTU",
             "LIBELLE" => "Lituanie",
             "SOURCE_CODE" => "108",
             "TEMOIN_UE" => FALSE,
@@ -3687,6 +3792,7 @@ return [
         ],
         [
             "CODE" => "137",
+            "CODE_ISO3" => "LUX",
             "LIBELLE" => "Luxembourg",
             "SOURCE_CODE" => "137",
             "TEMOIN_UE" => FALSE,
@@ -3694,6 +3800,7 @@ return [
         ],
         [
             "CODE" => "316",
+            "CODE_ISO3" => "LBY",
             "LIBELLE" => "Lybie",
             "SOURCE_CODE" => "316",
             "TEMOIN_UE" => FALSE,
@@ -3709,6 +3816,7 @@ return [
         ],
         [
             "CODE" => "156",
+            "CODE_ISO3" => "MKD",
             "LIBELLE" => "Macédoine",
             "SOURCE_CODE" => "156",
             "TEMOIN_UE" => FALSE,
@@ -3716,6 +3824,7 @@ return [
         ],
         [
             "CODE" => "333",
+            "CODE_ISO3" => "MDG",
             "LIBELLE" => "Madagascar",
             "SOURCE_CODE" => "333",
             "TEMOIN_UE" => FALSE,
@@ -3723,6 +3832,7 @@ return [
         ],
         [
             "CODE" => "227",
+            "CODE_ISO3" => "MYS",
             "LIBELLE" => "Malaisie",
             "SOURCE_CODE" => "227",
             "TEMOIN_UE" => FALSE,
@@ -3730,6 +3840,7 @@ return [
         ],
         [
             "CODE" => "334",
+            "CODE_ISO3" => "MWI",
             "LIBELLE" => "Malawi",
             "SOURCE_CODE" => "334",
             "TEMOIN_UE" => FALSE,
@@ -3737,6 +3848,7 @@ return [
         ],
         [
             "CODE" => "229",
+            "CODE_ISO3" => "MDV",
             "LIBELLE" => "Maldives",
             "SOURCE_CODE" => "229",
             "TEMOIN_UE" => FALSE,
@@ -3744,6 +3856,7 @@ return [
         ],
         [
             "CODE" => "335",
+            "CODE_ISO3" => "MLI",
             "LIBELLE" => "Mali",
             "SOURCE_CODE" => "335",
             "TEMOIN_UE" => FALSE,
@@ -3751,6 +3864,7 @@ return [
         ],
         [
             "CODE" => "144",
+            "CODE_ISO3" => "MLT",
             "LIBELLE" => "Malte",
             "SOURCE_CODE" => "144",
             "TEMOIN_UE" => FALSE,
@@ -3766,6 +3880,7 @@ return [
         ],
         [
             "CODE" => "350",
+            "CODE_ISO3" => "MAR",
             "LIBELLE" => "Maroc",
             "SOURCE_CODE" => "350",
             "TEMOIN_UE" => FALSE,
@@ -3773,6 +3888,7 @@ return [
         ],
         [
             "CODE" => "515",
+            "CODE_ISO3" => "MHL",
             "LIBELLE" => "Marshall",
             "SOURCE_CODE" => "515",
             "TEMOIN_UE" => FALSE,
@@ -3780,6 +3896,7 @@ return [
         ],
         [
             "CODE" => "390",
+            "CODE_ISO3" => "MUS",
             "LIBELLE" => "Maurice",
             "SOURCE_CODE" => "390",
             "TEMOIN_UE" => FALSE,
@@ -3787,6 +3904,7 @@ return [
         ],
         [
             "CODE" => "336",
+            "CODE_ISO3" => "MRT",
             "LIBELLE" => "Mauritanie",
             "SOURCE_CODE" => "336",
             "TEMOIN_UE" => FALSE,
@@ -3802,6 +3920,7 @@ return [
         ],
         [
             "CODE" => "405",
+            "CODE_ISO3" => "MEX",
             "LIBELLE" => "Mexique",
             "SOURCE_CODE" => "405",
             "TEMOIN_UE" => FALSE,
@@ -3809,6 +3928,7 @@ return [
         ],
         [
             "CODE" => "516",
+            "CODE_ISO3" => "FSM",
             "LIBELLE" => "Micronésie",
             "SOURCE_CODE" => "516",
             "TEMOIN_UE" => FALSE,
@@ -3816,6 +3936,7 @@ return [
         ],
         [
             "CODE" => "151",
+            "CODE_ISO3" => "MDA",
             "LIBELLE" => "Moldavie",
             "SOURCE_CODE" => "151",
             "TEMOIN_UE" => FALSE,
@@ -3823,6 +3944,7 @@ return [
         ],
         [
             "CODE" => "138",
+            "CODE_ISO3" => "MCO",
             "LIBELLE" => "Monaco",
             "SOURCE_CODE" => "138",
             "TEMOIN_UE" => FALSE,
@@ -3830,6 +3952,7 @@ return [
         ],
         [
             "CODE" => "242",
+            "CODE_ISO3" => "MNG",
             "LIBELLE" => "Mongolie",
             "SOURCE_CODE" => "242",
             "TEMOIN_UE" => FALSE,
@@ -3837,6 +3960,7 @@ return [
         ],
         [
             "CODE" => "120",
+            "CODE_ISO3" => "MNE",
             "LIBELLE" => "Monténégro",
             "SOURCE_CODE" => "120",
             "TEMOIN_UE" => FALSE,
@@ -3844,6 +3968,7 @@ return [
         ],
         [
             "CODE" => "393",
+            "CODE_ISO3" => "MOZ",
             "LIBELLE" => "Mozambique",
             "SOURCE_CODE" => "393",
             "TEMOIN_UE" => FALSE,
@@ -3851,6 +3976,7 @@ return [
         ],
         [
             "CODE" => "311",
+            "CODE_ISO3" => "NAM",
             "LIBELLE" => "Namibie",
             "SOURCE_CODE" => "311",
             "TEMOIN_UE" => FALSE,
@@ -3858,6 +3984,7 @@ return [
         ],
         [
             "CODE" => "507",
+            "CODE_ISO3" => "NRU",
             "LIBELLE" => "Nauru",
             "SOURCE_CODE" => "507",
             "TEMOIN_UE" => FALSE,
@@ -3865,6 +3992,7 @@ return [
         ],
         [
             "CODE" => "412",
+            "CODE_ISO3" => "NIC",
             "LIBELLE" => "Nicaragua",
             "SOURCE_CODE" => "412",
             "TEMOIN_UE" => FALSE,
@@ -3872,6 +4000,7 @@ return [
         ],
         [
             "CODE" => "337",
+            "CODE_ISO3" => "NER",
             "LIBELLE" => "Niger",
             "SOURCE_CODE" => "337",
             "TEMOIN_UE" => FALSE,
@@ -3879,6 +4008,7 @@ return [
         ],
         [
             "CODE" => "338",
+            "CODE_ISO3" => "NGA",
             "LIBELLE" => "Nigeria",
             "SOURCE_CODE" => "338",
             "TEMOIN_UE" => FALSE,
@@ -3886,6 +4016,7 @@ return [
         ],
         [
             "CODE" => "103",
+            "CODE_ISO3" => "NOR",
             "LIBELLE" => "Norvège",
             "SOURCE_CODE" => "103",
             "TEMOIN_UE" => FALSE,
@@ -3901,6 +4032,7 @@ return [
         ],
         [
             "CODE" => "502",
+            "CODE_ISO3" => "NZL",
             "LIBELLE" => "Nouvelle-Zélande",
             "SOURCE_CODE" => "502",
             "TEMOIN_UE" => FALSE,
@@ -3908,6 +4040,7 @@ return [
         ],
         [
             "CODE" => "215",
+            "CODE_ISO3" => "NPL",
             "LIBELLE" => "Népal",
             "SOURCE_CODE" => "215",
             "TEMOIN_UE" => FALSE,
@@ -3915,6 +4048,7 @@ return [
         ],
         [
             "CODE" => "250",
+            "CODE_ISO3" => "OMN",
             "LIBELLE" => "Oman",
             "SOURCE_CODE" => "250",
             "TEMOIN_UE" => FALSE,
@@ -3922,6 +4056,7 @@ return [
         ],
         [
             "CODE" => "339",
+            "CODE_ISO3" => "UGA",
             "LIBELLE" => "Ouganda",
             "SOURCE_CODE" => "339",
             "TEMOIN_UE" => FALSE,
@@ -3929,6 +4064,7 @@ return [
         ],
         [
             "CODE" => "258",
+            "CODE_ISO3" => "UZB",
             "LIBELLE" => "Ouzbekistan",
             "SOURCE_CODE" => "258",
             "TEMOIN_UE" => FALSE,
@@ -3936,6 +4072,7 @@ return [
         ],
         [
             "CODE" => "213",
+            "CODE_ISO3" => "PAK",
             "LIBELLE" => "Pakistan",
             "SOURCE_CODE" => "213",
             "TEMOIN_UE" => FALSE,
@@ -3943,6 +4080,7 @@ return [
         ],
         [
             "CODE" => "517",
+            "CODE_ISO3" => "PLW",
             "LIBELLE" => "Palaos",
             "SOURCE_CODE" => "517",
             "TEMOIN_UE" => FALSE,
@@ -3950,6 +4088,7 @@ return [
         ],
         [
             "CODE" => "261",
+            "CODE_ISO3" => "PSE",
             "LIBELLE" => "Palestine",
             "SOURCE_CODE" => "261",
             "TEMOIN_UE" => FALSE,
@@ -3957,6 +4096,7 @@ return [
         ],
         [
             "CODE" => "413",
+            "CODE_ISO3" => "PAN",
             "LIBELLE" => "Panama",
             "SOURCE_CODE" => "413",
             "TEMOIN_UE" => FALSE,
@@ -3964,6 +4104,7 @@ return [
         ],
         [
             "CODE" => "510",
+            "CODE_ISO3" => "PNG",
             "LIBELLE" => "Papouasie-Nouvelle-Guinée",
             "SOURCE_CODE" => "510",
             "TEMOIN_UE" => FALSE,
@@ -3971,6 +4112,7 @@ return [
         ],
         [
             "CODE" => "421",
+            "CODE_ISO3" => "PRY",
             "LIBELLE" => "Paraguay",
             "SOURCE_CODE" => "421",
             "TEMOIN_UE" => FALSE,
@@ -3978,6 +4120,7 @@ return [
         ],
         [
             "CODE" => "135",
+            "CODE_ISO3" => "NLD",
             "LIBELLE" => "Pays-Bas",
             "SOURCE_CODE" => "135",
             "TEMOIN_UE" => FALSE,
@@ -3985,6 +4128,7 @@ return [
         ],
         [
             "CODE" => "220",
+            "CODE_ISO3" => "PHL",
             "LIBELLE" => "Philippines",
             "SOURCE_CODE" => "220",
             "TEMOIN_UE" => FALSE,
@@ -3992,6 +4136,7 @@ return [
         ],
         [
             "CODE" => "503",
+            "CODE_ISO3" => "PCN",
             "LIBELLE" => "Pitcairn (Ile de Pitcairn)",
             "SOURCE_CODE" => "503",
             "TEMOIN_UE" => FALSE,
@@ -3999,6 +4144,7 @@ return [
         ],
         [
             "CODE" => "122",
+            "CODE_ISO3" => "POL",
             "LIBELLE" => "Pologne",
             "SOURCE_CODE" => "122",
             "TEMOIN_UE" => FALSE,
@@ -4014,6 +4160,7 @@ return [
         ],
         [
             "CODE" => "139",
+            "CODE_ISO3" => "PRT",
             "LIBELLE" => "Portugal",
             "SOURCE_CODE" => "139",
             "TEMOIN_UE" => FALSE,
@@ -4036,6 +4183,7 @@ return [
         ],
         [
             "CODE" => "422",
+            "CODE_ISO3" => "PER",
             "LIBELLE" => "Pérou",
             "SOURCE_CODE" => "422",
             "TEMOIN_UE" => FALSE,
@@ -4043,6 +4191,7 @@ return [
         ],
         [
             "CODE" => "248",
+            "CODE_ISO3" => "QAT",
             "LIBELLE" => "Qatar",
             "SOURCE_CODE" => "248",
             "TEMOIN_UE" => FALSE,
@@ -4050,6 +4199,7 @@ return [
         ],
         [
             "CODE" => "114",
+            "CODE_ISO3" => "ROU",
             "LIBELLE" => "Roumanie",
             "SOURCE_CODE" => "114",
             "TEMOIN_UE" => FALSE,
@@ -4057,6 +4207,7 @@ return [
         ],
         [
             "CODE" => "132",
+            "CODE_ISO3" => "GBR",
             "LIBELLE" => "Royaume-Uni",
             "SOURCE_CODE" => "132",
             "TEMOIN_UE" => FALSE,
@@ -4064,6 +4215,7 @@ return [
         ],
         [
             "CODE" => "123",
+            "CODE_ISO3" => "RUS",
             "LIBELLE" => "Russie",
             "SOURCE_CODE" => "123",
             "TEMOIN_UE" => FALSE,
@@ -4071,6 +4223,7 @@ return [
         ],
         [
             "CODE" => "340",
+            "CODE_ISO3" => "RWA",
             "LIBELLE" => "Rwanda",
             "SOURCE_CODE" => "340",
             "TEMOIN_UE" => FALSE,
@@ -4078,6 +4231,7 @@ return [
         ],
         [
             "CODE" => "408",
+            "CODE_ISO3" => "DOM",
             "LIBELLE" => "République dominicaine",
             "SOURCE_CODE" => "408",
             "TEMOIN_UE" => FALSE,
@@ -4085,6 +4239,7 @@ return [
         ],
         [
             "CODE" => "389",
+            "CODE_ISO3" => "ESH",
             "LIBELLE" => "Sahara Occidental",
             "SOURCE_CODE" => "389",
             "TEMOIN_UE" => FALSE,
@@ -4092,6 +4247,7 @@ return [
         ],
         [
             "CODE" => "442",
+            "CODE_ISO3" => "KNA",
             "LIBELLE" => "Saint-Christophe-et-Nieves",
             "SOURCE_CODE" => "442",
             "TEMOIN_UE" => FALSE,
@@ -4099,6 +4255,7 @@ return [
         ],
         [
             "CODE" => "128",
+            "CODE_ISO3" => "SMR",
             "LIBELLE" => "Saint-Marin",
             "SOURCE_CODE" => "128",
             "TEMOIN_UE" => FALSE,
@@ -4106,6 +4263,7 @@ return [
         ],
         [
             "CODE" => "445",
+            "CODE_ISO3" => "SXM",
             "LIBELLE" => "Saint-Martin (partie néerlandaise)",
             "SOURCE_CODE" => "445",
             "TEMOIN_UE" => FALSE,
@@ -4121,6 +4279,7 @@ return [
         ],
         [
             "CODE" => "440",
+            "CODE_ISO3" => "VCT",
             "LIBELLE" => "Saint-Vincent-et-Les Grenadines",
             "SOURCE_CODE" => "440",
             "TEMOIN_UE" => FALSE,
@@ -4128,6 +4287,7 @@ return [
         ],
         [
             "CODE" => "306",
+            "CODE_ISO3" => "SHN",
             "LIBELLE" => "Sainte-Hélène",
             "SOURCE_CODE" => "306",
             "TEMOIN_UE" => FALSE,
@@ -4135,6 +4295,7 @@ return [
         ],
         [
             "CODE" => "439",
+            "CODE_ISO3" => "LCA",
             "LIBELLE" => "Sainte-Lucie",
             "SOURCE_CODE" => "439",
             "TEMOIN_UE" => FALSE,
@@ -4142,6 +4303,7 @@ return [
         ],
         [
             "CODE" => "512",
+            "CODE_ISO3" => "SLB",
             "LIBELLE" => "Salomon",
             "SOURCE_CODE" => "512",
             "TEMOIN_UE" => FALSE,
@@ -4149,6 +4311,7 @@ return [
         ],
         [
             "CODE" => "414",
+            "CODE_ISO3" => "SLV",
             "LIBELLE" => "Salvador",
             "SOURCE_CODE" => "414",
             "TEMOIN_UE" => FALSE,
@@ -4156,6 +4319,7 @@ return [
         ],
         [
             "CODE" => "506",
+            "CODE_ISO3" => "WSM",
             "LIBELLE" => "Samoa occidentales",
             "SOURCE_CODE" => "506",
             "TEMOIN_UE" => FALSE,
@@ -4170,6 +4334,7 @@ return [
         ],
         [
             "CODE" => "394",
+            "CODE_ISO3" => "STP",
             "LIBELLE" => "Sao Tomé-et-Principe",
             "SOURCE_CODE" => "394",
             "TEMOIN_UE" => FALSE,
@@ -4177,6 +4342,7 @@ return [
         ],
         [
             "CODE" => "121",
+            "CODE_ISO3" => "SRB",
             "LIBELLE" => "Serbie et Monténégro",
             "SOURCE_CODE" => "121",
             "TEMOIN_UE" => FALSE,
@@ -4184,6 +4350,7 @@ return [
         ],
         [
             "CODE" => "398",
+            "CODE_ISO3" => "SYC",
             "LIBELLE" => "Seychelles",
             "SOURCE_CODE" => "398",
             "TEMOIN_UE" => FALSE,
@@ -4199,6 +4366,7 @@ return [
         ],
         [
             "CODE" => "342",
+            "CODE_ISO3" => "SLE",
             "LIBELLE" => "Sierra Leone",
             "SOURCE_CODE" => "342",
             "TEMOIN_UE" => FALSE,
@@ -4206,6 +4374,7 @@ return [
         ],
         [
             "CODE" => "226",
+            "CODE_ISO3" => "SGP",
             "LIBELLE" => "Singapour",
             "SOURCE_CODE" => "226",
             "TEMOIN_UE" => FALSE,
@@ -4213,6 +4382,7 @@ return [
         ],
         [
             "CODE" => "117",
+            "CODE_ISO3" => "SVK",
             "LIBELLE" => "Slovaquie",
             "SOURCE_CODE" => "117",
             "TEMOIN_UE" => FALSE,
@@ -4220,6 +4390,7 @@ return [
         ],
         [
             "CODE" => "145",
+            "CODE_ISO3" => "SVN",
             "LIBELLE" => "Slovénie",
             "SOURCE_CODE" => "145",
             "TEMOIN_UE" => FALSE,
@@ -4227,6 +4398,7 @@ return [
         ],
         [
             "CODE" => "318",
+            "CODE_ISO3" => "SOM",
             "LIBELLE" => "Somalie",
             "SOURCE_CODE" => "318",
             "TEMOIN_UE" => FALSE,
@@ -4234,6 +4406,7 @@ return [
         ],
         [
             "CODE" => "343",
+            "CODE_ISO3" => "SDN",
             "LIBELLE" => "Soudan",
             "SOURCE_CODE" => "343",
             "TEMOIN_UE" => FALSE,
@@ -4241,6 +4414,7 @@ return [
         ],
         [
             "CODE" => "349",
+            "CODE_ISO3" => "SSD",
             "LIBELLE" => "Soudan du Sud",
             "SOURCE_CODE" => "349",
             "TEMOIN_UE" => FALSE,
@@ -4256,6 +4430,7 @@ return [
         ],
         [
             "CODE" => "235",
+            "CODE_ISO3" => "LKA",
             "LIBELLE" => "Sri Lanka",
             "SOURCE_CODE" => "235",
             "TEMOIN_UE" => FALSE,
@@ -4263,6 +4438,7 @@ return [
         ],
         [
             "CODE" => "140",
+            "CODE_ISO3" => "CHE",
             "LIBELLE" => "Suisse",
             "SOURCE_CODE" => "140",
             "TEMOIN_UE" => FALSE,
@@ -4270,6 +4446,7 @@ return [
         ],
         [
             "CODE" => "437",
+            "CODE_ISO3" => "SUR",
             "LIBELLE" => "Suriname",
             "SOURCE_CODE" => "437",
             "TEMOIN_UE" => FALSE,
@@ -4277,6 +4454,7 @@ return [
         ],
         [
             "CODE" => "104",
+            "CODE_ISO3" => "SWE",
             "LIBELLE" => "Suède",
             "SOURCE_CODE" => "104",
             "TEMOIN_UE" => FALSE,
@@ -4284,6 +4462,7 @@ return [
         ],
         [
             "CODE" => "391",
+            "CODE_ISO3" => "SWZ",
             "LIBELLE" => "Swaziland",
             "SOURCE_CODE" => "391",
             "TEMOIN_UE" => FALSE,
@@ -4291,6 +4470,7 @@ return [
         ],
         [
             "CODE" => "206",
+            "CODE_ISO3" => "SYR",
             "LIBELLE" => "Syrie",
             "SOURCE_CODE" => "206",
             "TEMOIN_UE" => FALSE,
@@ -4298,6 +4478,7 @@ return [
         ],
         [
             "CODE" => "341",
+            "CODE_ISO3" => "SEN",
             "LIBELLE" => "Sénégal",
             "SOURCE_CODE" => "341",
             "TEMOIN_UE" => FALSE,
@@ -4305,6 +4486,7 @@ return [
         ],
         [
             "CODE" => "259",
+            "CODE_ISO3" => "TJK",
             "LIBELLE" => "Tadjikistan",
             "SOURCE_CODE" => "259",
             "TEMOIN_UE" => FALSE,
@@ -4312,6 +4494,7 @@ return [
         ],
         [
             "CODE" => "236",
+            "CODE_ISO3" => "TWN",
             "LIBELLE" => "Taiwan",
             "SOURCE_CODE" => "236",
             "TEMOIN_UE" => FALSE,
@@ -4327,6 +4510,7 @@ return [
         ],
         [
             "CODE" => "309",
+            "CODE_ISO3" => "TZA",
             "LIBELLE" => "Tanzanie",
             "SOURCE_CODE" => "309",
             "TEMOIN_UE" => FALSE,
@@ -4334,6 +4518,7 @@ return [
         ],
         [
             "CODE" => "344",
+            "CODE_ISO3" => "TCD",
             "LIBELLE" => "Tchad",
             "SOURCE_CODE" => "344",
             "TEMOIN_UE" => FALSE,
@@ -4341,6 +4526,7 @@ return [
         ],
         [
             "CODE" => "116",
+            "CODE_ISO3" => "CZE",
             "LIBELLE" => "Tchèque (République tchèque)",
             "SOURCE_CODE" => "116",
             "TEMOIN_UE" => FALSE,
@@ -4399,6 +4585,7 @@ return [
         ],
         [
             "CODE" => "219",
+            "CODE_ISO3" => "THA",
             "LIBELLE" => "Thailande",
             "SOURCE_CODE" => "219",
             "TEMOIN_UE" => FALSE,
@@ -4406,6 +4593,7 @@ return [
         ],
         [
             "CODE" => "262",
+            "CODE_ISO3" => "TLS",
             "LIBELLE" => "Timor oriental",
             "SOURCE_CODE" => "262",
             "TEMOIN_UE" => FALSE,
@@ -4413,6 +4601,7 @@ return [
         ],
         [
             "CODE" => "345",
+            "CODE_ISO3" => "TGO",
             "LIBELLE" => "Togo",
             "SOURCE_CODE" => "345",
             "TEMOIN_UE" => FALSE,
@@ -4420,6 +4609,7 @@ return [
         ],
         [
             "CODE" => "509",
+            "CODE_ISO3" => "TON",
             "LIBELLE" => "Tonga",
             "SOURCE_CODE" => "509",
             "TEMOIN_UE" => FALSE,
@@ -4427,6 +4617,7 @@ return [
         ],
         [
             "CODE" => "433",
+            "CODE_ISO3" => "TTO",
             "LIBELLE" => "Trinité-et-Tobago",
             "SOURCE_CODE" => "433",
             "TEMOIN_UE" => FALSE,
@@ -4434,6 +4625,7 @@ return [
         ],
         [
             "CODE" => "351",
+            "CODE_ISO3" => "TUN",
             "LIBELLE" => "Tunisie",
             "SOURCE_CODE" => "351",
             "TEMOIN_UE" => FALSE,
@@ -4449,6 +4641,7 @@ return [
         ],
         [
             "CODE" => "260",
+            "CODE_ISO3" => "TKM",
             "LIBELLE" => "Turkmenistan",
             "SOURCE_CODE" => "260",
             "TEMOIN_UE" => FALSE,
@@ -4456,6 +4649,7 @@ return [
         ],
         [
             "CODE" => "208",
+            "CODE_ISO3" => "TUR",
             "LIBELLE" => "Turquie",
             "SOURCE_CODE" => "208",
             "TEMOIN_UE" => FALSE,
@@ -4463,6 +4657,7 @@ return [
         ],
         [
             "CODE" => "511",
+            "CODE_ISO3" => "TUV",
             "LIBELLE" => "Tuvalu",
             "SOURCE_CODE" => "511",
             "TEMOIN_UE" => FALSE,
@@ -4470,6 +4665,7 @@ return [
         ],
         [
             "CODE" => "155",
+            "CODE_ISO3" => "UKR",
             "LIBELLE" => "Ukraine",
             "SOURCE_CODE" => "155",
             "TEMOIN_UE" => FALSE,
@@ -4477,6 +4673,7 @@ return [
         ],
         [
             "CODE" => "423",
+            "CODE_ISO3" => "URY",
             "LIBELLE" => "Uruguay",
             "SOURCE_CODE" => "423",
             "TEMOIN_UE" => FALSE,
@@ -4484,6 +4681,7 @@ return [
         ],
         [
             "CODE" => "514",
+            "CODE_ISO3" => "VUT",
             "LIBELLE" => "Vanuatu",
             "SOURCE_CODE" => "514",
             "TEMOIN_UE" => FALSE,
@@ -4491,6 +4689,7 @@ return [
         ],
         [
             "CODE" => "129",
+            "CODE_ISO3" => "VAT",
             "LIBELLE" => "Vatican",
             "SOURCE_CODE" => "129",
             "TEMOIN_UE" => FALSE,
@@ -4498,6 +4697,7 @@ return [
         ],
         [
             "CODE" => "424",
+            "CODE_ISO3" => "VEN",
             "LIBELLE" => "Venezuela",
             "SOURCE_CODE" => "424",
             "TEMOIN_UE" => FALSE,
@@ -4505,6 +4705,7 @@ return [
         ],
         [
             "CODE" => "243",
+            "CODE_ISO3" => "VNM",
             "LIBELLE" => "Viet Nam",
             "SOURCE_CODE" => "243",
             "TEMOIN_UE" => FALSE,
@@ -4536,6 +4737,7 @@ return [
         ],
         [
             "CODE" => "251",
+            "CODE_ISO3" => "YEM",
             "LIBELLE" => "Yémen",
             "SOURCE_CODE" => "251",
             "TEMOIN_UE" => FALSE,
@@ -4559,6 +4761,7 @@ return [
         ],
         [
             "CODE" => "346",
+            "CODE_ISO3" => "ZMB",
             "LIBELLE" => "Zambie",
             "SOURCE_CODE" => "346",
             "TEMOIN_UE" => FALSE,
@@ -4566,6 +4769,7 @@ return [
         ],
         [
             "CODE" => "310",
+            "CODE_ISO3" => "ZWE",
             "LIBELLE" => "Zimbabwe",
             "SOURCE_CODE" => "310",
             "TEMOIN_UE" => FALSE,
@@ -5969,6 +6173,13 @@ return [
             "SOURCE_CODE" => "1202",
         ],
         [
+            "CODES_CORRESP_1" => "14",
+            "CODES_CORRESP_2" => "14",
+            "LIBELLE_COURT" => "LL romanes",
+            "LIBELLE_LONG" => "Langues et littératures romanes",
+            "SOURCE_CODE" => "14",
+        ],
+        [
             "CODES_CORRESP_1" => "1403",
             "CODES_CORRESP_2" => "14",
             "CODES_CORRESP_3" => "003,004",
@@ -6239,10 +6450,6 @@ return [
             "LIBELLE" => "UNICAEN biblio envir docu",
             "SOURCE_CODE" => "D1053",
         ],
-        [
-            "LIBELLE" => "tt",
-            "SOURCE_CODE" => "tt",
-        ],
     ],
     "ETABLISSEMENT" => [
         [
@@ -6250,6 +6457,12 @@ return [
             "LIBELLE" => "Animal Health Trust",
             "LOCALISATION" => "AHT",
             "SOURCE_CODE" => "ETR1099",
+        ],
+        [
+            "DEPARTEMENT" => "093",
+            "LIBELLE" => "Hôpital Avicenne AP-HP",
+            "LOCALISATION" => "Hôpital",
+            "SOURCE_CODE" => "HOAVSH",
         ],
         [
             "DEPARTEMENT" => "062",
@@ -6280,6 +6493,12 @@ return [
             "LIBELLE" => "Istituto Nazionale Fisica Nucleare",
             "LOCALISATION" => "Institut",
             "SOURCE_CODE" => "ETR1439",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Laboratoire national d'Oak Ridge",
+            "LOCALISATION" => "Labo",
+            "SOURCE_CODE" => "ETR1484",
         ],
         [
             "DEPARTEMENT" => "061",
@@ -6442,12 +6661,6 @@ return [
             "LIBELLE" => "AFT IFTIM",
             "LOCALISATION" => "CAEN",
             "SOURCE_CODE" => "0142220M",
-        ],
-        [
-            "DEPARTEMENT" => "014",
-            "LIBELLE" => "AFTEC",
-            "LOCALISATION" => "AFTEC",
-            "SOURCE_CODE" => "0142395C",
         ],
         [
             "DEPARTEMENT" => "037",
@@ -8013,13 +8226,13 @@ return [
             "DEPARTEMENT" => "077",
             "LIBELLE" => "ANTENNE IUFM MELUN IUFM CRETEIL",
             "LOCALISATION" => "MELUN",
-            "SOURCE_CODE" => "0772325J",
+            "SOURCE_CODE" => "0772297D",
         ],
         [
             "DEPARTEMENT" => "077",
             "LIBELLE" => "ANTENNE IUFM MELUN IUFM CRETEIL",
             "LOCALISATION" => "MELUN",
-            "SOURCE_CODE" => "0772297D",
+            "SOURCE_CODE" => "0772325J",
         ],
         [
             "DEPARTEMENT" => "048",
@@ -8067,13 +8280,13 @@ return [
             "DEPARTEMENT" => "006",
             "LIBELLE" => "ANTENNE IUFM NICE IUFM NICE",
             "LOCALISATION" => "NICE",
-            "SOURCE_CODE" => "0061551D",
+            "SOURCE_CODE" => "0060658H",
         ],
         [
             "DEPARTEMENT" => "006",
             "LIBELLE" => "ANTENNE IUFM NICE IUFM NICE",
             "LOCALISATION" => "NICE",
-            "SOURCE_CODE" => "0060658H",
+            "SOURCE_CODE" => "0061551D",
         ],
         [
             "DEPARTEMENT" => "030",
@@ -8442,6 +8655,12 @@ return [
             "SOURCE_CODE" => "0750008B",
         ],
         [
+            "DEPARTEMENT" => "031",
+            "LIBELLE" => "Adonis",
+            "LOCALISATION" => "Adonis",
+            "SOURCE_CODE" => "0312717K",
+        ],
+        [
             "DEPARTEMENT" => "034",
             "LIBELLE" => "Adonis - Ecole du second degré professionnelle privée",
             "LOCALISATION" => "Ecole",
@@ -8502,6 +8721,12 @@ return [
             "SOURCE_CODE" => "0352692L",
         ],
         [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Agroscope",
+            "LOCALISATION" => "Institut",
+            "SOURCE_CODE" => "ETR1467",
+        ],
+        [
             "DEPARTEMENT" => "078",
             "LIBELLE" => "Airbus",
             "LOCALISATION" => "Airbus",
@@ -8560,6 +8785,12 @@ return [
             "LIBELLE" => "Antenne IAE de l’université Lille 1",
             "LOCALISATION" => "DUNKERQUE",
             "SOURCE_CODE" => "0596388Y",
+        ],
+        [
+            "DEPARTEMENT" => "059",
+            "LIBELLE" => "Antenne de l'AFPA de Roubaix",
+            "LOCALISATION" => "AFPA Rouba",
+            "SOURCE_CODE" => "0597063G",
         ],
         [
             "DEPARTEMENT" => "075",
@@ -9186,6 +9417,12 @@ return [
             "SOURCE_CODE" => "CEREMA",
         ],
         [
+            "DEPARTEMENT" => "014",
+            "LIBELLE" => "CERMN - Normandie Université",
+            "LOCALISATION" => "CNRS",
+            "SOURCE_CODE" => "CERMCNRS",
+        ],
+        [
             "DEPARTEMENT" => "031",
             "LIBELLE" => "CERPOP - Centre d'Epidémiologie et de Recherche en Santé des Populations",
             "LOCALISATION" => "CENTRE",
@@ -9327,13 +9564,13 @@ return [
             "DEPARTEMENT" => "076",
             "LIBELLE" => "CFA de Seine-Maritime - NaturaPOLE",
             "LOCALISATION" => "CFA",
-            "SOURCE_CODE" => "0762760M",
+            "SOURCE_CODE" => "0763411V",
         ],
         [
             "DEPARTEMENT" => "076",
             "LIBELLE" => "CFA de Seine-Maritime - NaturaPOLE",
             "LOCALISATION" => "CFA",
-            "SOURCE_CODE" => "0763411V",
+            "SOURCE_CODE" => "0762760M",
         ],
         [
             "DEPARTEMENT" => "092",
@@ -9760,6 +9997,12 @@ return [
             "LIBELLE" => "CNRS ET ORGANISME ASSOCIE",
             "LOCALISATION" => "D.R.CNRS",
             "SOURCE_CODE" => "0332865K",
+        ],
+        [
+            "DEPARTEMENT" => "094",
+            "LIBELLE" => "CNRS UMR 8230",
+            "LOCALISATION" => "CNRS",
+            "SOURCE_CODE" => "CUMR8230",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -10302,6 +10545,12 @@ return [
             "SOURCE_CODE" => "ETR1404",
         ],
         [
+            "DEPARTEMENT" => "078",
+            "LIBELLE" => "Campus Innovation Paris d'Air Liquide",
+            "LOCALISATION" => "Campus",
+            "SOURCE_CODE" => "CAMPARIN",
+        ],
+        [
             "DEPARTEMENT" => "033",
             "LIBELLE" => "Campus du Lac - CCI Bordeaux Gironde",
             "LOCALISATION" => "Campus",
@@ -10324,6 +10573,12 @@ return [
             "LIBELLE" => "CentraleSupélec",
             "LOCALISATION" => "Ecole",
             "SOURCE_CODE" => "0911494E",
+        ],
+        [
+            "DEPARTEMENT" => "035",
+            "LIBELLE" => "CentraleSupélec Rennes Campus",
+            "LOCALISATION" => "SUPELEC CE",
+            "SOURCE_CODE" => "0351781W",
         ],
         [
             "DEPARTEMENT" => "013",
@@ -10386,6 +10641,18 @@ return [
             "SOURCE_CODE" => "CHU-BRES",
         ],
         [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Centre Hospitalier Universitaire Vaudois (CHUV)",
+            "LOCALISATION" => "CHU",
+            "SOURCE_CODE" => "ETR1468",
+        ],
+        [
+            "DEPARTEMENT" => "059",
+            "LIBELLE" => "Centre Hospitalier Universitaire de Lille",
+            "LOCALISATION" => "CHU",
+            "SOURCE_CODE" => "CHU_L",
+        ],
+        [
             "DEPARTEMENT" => "006",
             "LIBELLE" => "Centre Hospitalier Universitaire de Nice",
             "LOCALISATION" => "CHU Nice",
@@ -10396,6 +10663,12 @@ return [
             "LIBELLE" => "Centre Hospitalier Universitaire de Reims",
             "LOCALISATION" => "CHU",
             "SOURCE_CODE" => "CHU-REIM",
+        ],
+        [
+            "DEPARTEMENT" => "035",
+            "LIBELLE" => "Centre Hospitalier Universitaire de Rennes",
+            "LOCALISATION" => "CHU",
+            "SOURCE_CODE" => "CHU_R",
         ],
         [
             "DEPARTEMENT" => "037",
@@ -10498,6 +10771,12 @@ return [
             "LIBELLE" => "Centre Universitaire Roannais",
             "LOCALISATION" => "Centre Uni",
             "SOURCE_CODE" => "0422152L",
+        ],
+        [
+            "DEPARTEMENT" => "064",
+            "LIBELLE" => "Centre d'Analyse Théorique et de Traitement des données économiques (CATT) Université de Pau",
+            "LOCALISATION" => "Centre",
+            "SOURCE_CODE" => "CATTPAU",
         ],
         [
             "DEPARTEMENT" => "031",
@@ -10632,6 +10911,12 @@ return [
             "SOURCE_CODE" => "0311717Y",
         ],
         [
+            "DEPARTEMENT" => "056",
+            "LIBELLE" => "Centre de recherche Saint Cyr Coetquidan",
+            "LOCALISATION" => "Centre",
+            "SOURCE_CODE" => "CRSCYCOE",
+        ],
+        [
             "DEPARTEMENT" => "049",
             "LIBELLE" => "Centre d’Enseignement et de Recherche de l’ENSAM d’Angers",
             "LOCALISATION" => "CER ANGERS",
@@ -10642,6 +10927,12 @@ return [
             "LIBELLE" => "Centre for Computational Chemistry",
             "LOCALISATION" => "CCC",
             "SOURCE_CODE" => "ETR1128",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Centre for Environment, Fisheries & Aquaculture Science",
+            "LOCALISATION" => "Fisheries",
+            "SOURCE_CODE" => "ETR3000",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -10696,6 +10987,12 @@ return [
             "LIBELLE" => "Christian-Albrechts-Universität zu Kiel Allemagne",
             "LOCALISATION" => "Université",
             "SOURCE_CODE" => "ETR959",
+        ],
+        [
+            "DEPARTEMENT" => "075",
+            "LIBELLE" => "CiTCom - CNRS Université Paris Cité",
+            "LOCALISATION" => "CNRS",
+            "SOURCE_CODE" => "CITCCNRS",
         ],
         [
             "DEPARTEMENT" => "091",
@@ -10882,6 +11179,12 @@ return [
             "LIBELLE" => "Cours de cassation",
             "LOCALISATION" => "Etab.",
             "SOURCE_CODE" => "COURCAS",
+        ],
+        [
+            "DEPARTEMENT" => "075",
+            "LIBELLE" => "Cours par correspondance - LEGENDRE",
+            "LOCALISATION" => "LEGENDRE",
+            "SOURCE_CODE" => "0753446N",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -11278,6 +11581,12 @@ return [
             "LIBELLE" => "Dept Ecology & Evolution - Suisse",
             "LOCALISATION" => "Suisse",
             "SOURCE_CODE" => "ETR606",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Deutsches Elektronen-Synchrotron (Deutsches Elektronen-Synchrotron (DESY))",
+            "LOCALISATION" => "DESY",
+            "SOURCE_CODE" => "ETR1459",
         ],
         [
             "DEPARTEMENT" => "018",
@@ -13878,12 +14187,6 @@ return [
             "SOURCE_CODE" => "0380141X",
         ],
         [
-            "DEPARTEMENT" => "013",
-            "LIBELLE" => "ECOLE ARCHITECTURE MARSEILLE LUMINY (DE)",
-            "LOCALISATION" => "AR MARSEIL",
-            "SOURCE_CODE" => "0130236L",
-        ],
-        [
             "DEPARTEMENT" => "092",
             "LIBELLE" => "ECOLE ARCHITECTURE PARIS LA DEFENSE",
             "LOCALISATION" => "AR NANTERR",
@@ -16161,13 +16464,13 @@ return [
             "DEPARTEMENT" => "075",
             "LIBELLE" => "ECOLE SUPERIEURE LIBRE",
             "LOCALISATION" => "ES PARIS",
-            "SOURCE_CODE" => "0755466J",
+            "SOURCE_CODE" => "0755467K",
         ],
         [
             "DEPARTEMENT" => "075",
             "LIBELLE" => "ECOLE SUPERIEURE LIBRE",
             "LOCALISATION" => "ES PARIS",
-            "SOURCE_CODE" => "0755467K",
+            "SOURCE_CODE" => "0755466J",
         ],
         [
             "DEPARTEMENT" => "075",
@@ -18426,6 +18729,12 @@ return [
             "SOURCE_CODE" => "0672969N",
         ],
         [
+            "DEPARTEMENT" => "078",
+            "LIBELLE" => "Early Drug Development - Campus Innovation Air Liquide",
+            "LOCALISATION" => "AIR LIQUID",
+            "SOURCE_CODE" => "078AIRLI",
+        ],
+        [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Eckerd Collège Floride USA",
             "LOCALISATION" => "FLORIDA",
@@ -18540,6 +18849,12 @@ return [
             "SOURCE_CODE" => "0931000X",
         ],
         [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Ecole Mohammadia d'Ingénieurs",
+            "LOCALISATION" => "Ecole",
+            "SOURCE_CODE" => "ETR1479",
+        ],
+        [
             "DEPARTEMENT" => "044",
             "LIBELLE" => "Ecole Nantaise de commerce (ENACOM)",
             "LOCALISATION" => "ENACOM",
@@ -18550,6 +18865,12 @@ return [
             "LIBELLE" => "Ecole Nationale Des Chartes",
             "LOCALISATION" => "Ecole",
             "SOURCE_CODE" => "0753478Y",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Ecole Nationale Supérieure d' Informatique (Ex.INI)",
+            "LOCALISATION" => "Ecole",
+            "SOURCE_CODE" => "ETR1480",
         ],
         [
             "DEPARTEMENT" => "054",
@@ -18912,12 +19233,6 @@ return [
             "SOURCE_CODE" => "9SUPELEC",
         ],
         [
-            "DEPARTEMENT" => "035",
-            "LIBELLE" => "Ecole Supérieure d'Electricité",
-            "LOCALISATION" => "SUPELEC CE",
-            "SOURCE_CODE" => "0351781W",
-        ],
-        [
             "DEPARTEMENT" => "091",
             "LIBELLE" => "Ecole Supérieure d'Electricité",
             "LOCALISATION" => "SUPELEC",
@@ -18988,6 +19303,12 @@ return [
             "LIBELLE" => "Ecole Supérieure de Travail Social (ETSUP)",
             "LOCALISATION" => "Ecole",
             "SOURCE_CODE" => "0753602H",
+        ],
+        [
+            "DEPARTEMENT" => "092",
+            "LIBELLE" => "Ecole Supérieure de la Banque - ESB",
+            "LOCALISATION" => "ESB",
+            "SOURCE_CODE" => "0922791J",
         ],
         [
             "DEPARTEMENT" => "072",
@@ -19134,6 +19455,12 @@ return [
             "SOURCE_CODE" => "0922579D",
         ],
         [
+            "DEPARTEMENT" => "002",
+            "LIBELLE" => "Ecole de formation à distance  STUDI COMPTALIA",
+            "LOCALISATION" => "STUDI",
+            "SOURCE_CODE" => "0022193Y",
+        ],
+        [
             "DEPARTEMENT" => "092",
             "LIBELLE" => "Ecole de la Formation à distance en commerce et web",
             "LOCALISATION" => "Ecole",
@@ -19266,6 +19593,12 @@ return [
             "SOURCE_CODE" => "ENS-P",
         ],
         [
+            "DEPARTEMENT" => "013",
+            "LIBELLE" => "Ecole nationale supérieure d'architecture de Marseille-Luminy (ENSA)",
+            "LOCALISATION" => "AR MARSEIL",
+            "SOURCE_CODE" => "0130236L",
+        ],
+        [
             "DEPARTEMENT" => "091",
             "LIBELLE" => "Ecole nationale supérieure d'informatique pour l'industrie et l'entreprise",
             "LOCALISATION" => "Ecole",
@@ -19366,6 +19699,12 @@ return [
             "LIBELLE" => "Ecole supérieure des beaux-arts - Nantes",
             "LOCALISATION" => "ESBANM",
             "SOURCE_CODE" => "0440106B",
+        ],
+        [
+            "DEPARTEMENT" => "067",
+            "LIBELLE" => "Ecole supérieure en travail éducatif et social : ESTES",
+            "LOCALISATION" => "Ecole",
+            "SOURCE_CODE" => "ESTES",
         ],
         [
             "DEPARTEMENT" => "053",
@@ -19480,6 +19819,12 @@ return [
             "LIBELLE" => "Ethospace",
             "LOCALISATION" => "entreprise",
             "SOURCE_CODE" => "ETHO",
+        ],
+        [
+            "DEPARTEMENT" => "044",
+            "LIBELLE" => "Eureka Formation",
+            "LOCALISATION" => "Institut",
+            "SOURCE_CODE" => "0442530L",
         ],
         [
             "DEPARTEMENT" => "075",
@@ -19857,6 +20202,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "Fukuoka University",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1465",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "Fuzhou University",
             "LOCALISATION" => "Université",
             "SOURCE_CODE" => "ETR1311",
@@ -19950,6 +20301,12 @@ return [
             "LIBELLE" => "GRETA NORD COTENTIN",
             "LOCALISATION" => "CHERBOURG",
             "SOURCE_CODE" => "0501719X",
+        ],
+        [
+            "DEPARTEMENT" => "076",
+            "LIBELLE" => "GRETA Portes Normandes",
+            "LOCALISATION" => "Greta",
+            "SOURCE_CODE" => "0271689P",
         ],
         [
             "DEPARTEMENT" => "050",
@@ -20046,6 +20403,12 @@ return [
             "LIBELLE" => "Groupe Capitole - SEIEL",
             "LOCALISATION" => "Institut",
             "SOURCE_CODE" => "075003X",
+        ],
+        [
+            "DEPARTEMENT" => "033",
+            "LIBELLE" => "Groupe Hospitalier Universitaire Pellegrin - CHU de Bordeaux",
+            "LOCALISATION" => "CHU",
+            "SOURCE_CODE" => "CHU_BORD",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -20211,6 +20574,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "092",
+            "LIBELLE" => "Hôpital Ambroise Paré APHP",
+            "LOCALISATION" => "Hôpital",
+            "SOURCE_CODE" => "HOAP",
+        ],
+        [
+            "DEPARTEMENT" => "092",
             "LIBELLE" => "Hôpital Antoine-Béclère",
             "LOCALISATION" => "Hôpital",
             "SOURCE_CODE" => "BÉCLÈRE",
@@ -20283,6 +20652,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "075",
+            "LIBELLE" => "Hôpital Pitié Salpêtrière APHP",
+            "LOCALISATION" => "Hôpital",
+            "SOURCE_CODE" => "HOPS",
+        ],
+        [
+            "DEPARTEMENT" => "075",
             "LIBELLE" => "Hôpital Pitié-Salpêtrière",
             "LOCALISATION" => "Hôpital",
             "SOURCE_CODE" => "0753021B",
@@ -20310,6 +20685,12 @@ return [
             "LIBELLE" => "Hôpitaux Universitaires de Strasbourg-hautepierre 2",
             "LOCALISATION" => "Hôpital",
             "SOURCE_CODE" => "HOPHS",
+        ],
+        [
+            "DEPARTEMENT" => "075",
+            "LIBELLE" => "Hôpîtal Bichat - Claude Bernard",
+            "LOCALISATION" => "Hôpital",
+            "SOURCE_CODE" => "HBICHAT",
         ],
         [
             "DEPARTEMENT" => "035",
@@ -20346,6 +20727,12 @@ return [
             "LIBELLE" => "I.U.C.T-O",
             "LOCALISATION" => "I.U.C.T-O",
             "SOURCE_CODE" => "IUCTO",
+        ],
+        [
+            "DEPARTEMENT" => "091",
+            "LIBELLE" => "I2BC CEA CNRS Université Paris-Saclay",
+            "LOCALISATION" => "CNRS",
+            "SOURCE_CODE" => "I2BCCNRS",
         ],
         [
             "DEPARTEMENT" => "013",
@@ -20588,6 +20975,12 @@ return [
             "SOURCE_CODE" => "0352714K",
         ],
         [
+            "DEPARTEMENT" => "053",
+            "LIBELLE" => "IFE - Institut de formation en ergothérapie (centre hospitalier de Laval)",
+            "LOCALISATION" => "Institut",
+            "SOURCE_CODE" => "0531040T",
+        ],
+        [
             "DEPARTEMENT" => "027",
             "LIBELLE" => "IFELM - Institut de Formation en Ergothérapie La Musse",
             "LOCALISATION" => "Institut",
@@ -20664,6 +21057,12 @@ return [
             "LIBELLE" => "IFSI - IFAS - Centre hospitalier de Montluçon",
             "LOCALISATION" => "IFSI-IFAS",
             "SOURCE_CODE" => "0030877M",
+        ],
+        [
+            "DEPARTEMENT" => "059",
+            "LIBELLE" => "IFSI - Institut Régional de Formation Sanitaire et Sociale Nord-Pas-de-Calais de la Croix Rouge",
+            "LOCALISATION" => "IFSI Tourc",
+            "SOURCE_CODE" => "0594898D",
         ],
         [
             "DEPARTEMENT" => "094",
@@ -20864,6 +21263,12 @@ return [
             "SOURCE_CODE" => "0492189N",
         ],
         [
+            "DEPARTEMENT" => "033",
+            "LIBELLE" => "INP Ecole Nationale Supérieure de Chimie, de Biologie et de Physique",
+            "LOCALISATION" => "ENSCBP",
+            "SOURCE_CODE" => "0333232J",
+        ],
+        [
             "DEPARTEMENT" => "054",
             "LIBELLE" => "INP LORRAINE",
             "LOCALISATION" => "INP NANCY",
@@ -20984,6 +21389,12 @@ return [
             "SOURCE_CODE" => "0442674T",
         ],
         [
+            "DEPARTEMENT" => "084",
+            "LIBELLE" => "INRAE PACA - AGROCLIM",
+            "LOCALISATION" => "INRAE",
+            "SOURCE_CODE" => "INRAEPAC",
+        ],
+        [
             "DEPARTEMENT" => "078",
             "LIBELLE" => "INRAE Versailles-Grignon",
             "LOCALISATION" => "INRAEV",
@@ -21006,6 +21417,12 @@ return [
             "LIBELLE" => "INRIA Sophia Antipolis",
             "LOCALISATION" => "Institut",
             "SOURCE_CODE" => "INRIA-S",
+        ],
+        [
+            "DEPARTEMENT" => "059",
+            "LIBELLE" => "INRIA de Lille",
+            "LOCALISATION" => "INRIA",
+            "SOURCE_CODE" => "INRIA_LI",
         ],
         [
             "DEPARTEMENT" => "078",
@@ -23318,6 +23735,12 @@ return [
             "SOURCE_CODE" => "0811300Y",
         ],
         [
+            "DEPARTEMENT" => "014",
+            "LIBELLE" => "IPAC BACHELOR FACTORY",
+            "LOCALISATION" => "IPAC",
+            "SOURCE_CODE" => "0142395C",
+        ],
+        [
             "DEPARTEMENT" => "056",
             "LIBELLE" => "IPAC BACHELOR FACTORY VANNES - GROUPE AFTEC",
             "LOCALISATION" => "IPAC VANNE",
@@ -23570,6 +23993,12 @@ return [
             "SOURCE_CODE" => "ETR0071",
         ],
         [
+            "DEPARTEMENT" => "029",
+            "LIBELLE" => "ISFFEL - Institut Supérieur de Formatoion Fruits et Légumes",
+            "LOCALISATION" => "ISFFEL",
+            "SOURCE_CODE" => "0292167Y",
+        ],
+        [
             "DEPARTEMENT" => "087",
             "LIBELLE" => "ISFOGEP - GROUPE ESSEC GESTION DU PERSONNEL GPE-ESSEC",
             "LOCALISATION" => "ISFOGEP LI",
@@ -23592,6 +24021,12 @@ return [
             "LIBELLE" => "ISPAC FORMATIONS",
             "LOCALISATION" => "ISPAC TOUR",
             "SOURCE_CODE" => "0371660D",
+        ],
+        [
+            "DEPARTEMENT" => "014",
+            "LIBELLE" => "ISTCT - CNRS Normandie Université",
+            "LOCALISATION" => "CNRS",
+            "SOURCE_CODE" => "ISTCCNR",
         ],
         [
             "DEPARTEMENT" => "035",
@@ -24947,13 +25382,13 @@ return [
             "DEPARTEMENT" => "091",
             "LIBELLE" => "IUP MANAGT GEST ENTREPRISES UNIVERSITE EVRY VAL D ESSONNE",
             "LOCALISATION" => "EVRY",
-            "SOURCE_CODE" => "0912168M",
+            "SOURCE_CODE" => "0912170P",
         ],
         [
             "DEPARTEMENT" => "091",
             "LIBELLE" => "IUP MANAGT GEST ENTREPRISES UNIVERSITE EVRY VAL D ESSONNE",
             "LOCALISATION" => "EVRY",
-            "SOURCE_CODE" => "0912170P",
+            "SOURCE_CODE" => "0912168M",
         ],
         [
             "DEPARTEMENT" => "026",
@@ -24995,13 +25430,13 @@ return [
             "DEPARTEMENT" => "069",
             "LIBELLE" => "IUP MANAGT GEST ENTREPRISES UNIVERSITE LYON 3",
             "LOCALISATION" => "LYON",
-            "SOURCE_CODE" => "0693580S",
+            "SOURCE_CODE" => "0693978Z",
         ],
         [
             "DEPARTEMENT" => "069",
             "LIBELLE" => "IUP MANAGT GEST ENTREPRISES UNIVERSITE LYON 3",
             "LOCALISATION" => "LYON",
-            "SOURCE_CODE" => "0693978Z",
+            "SOURCE_CODE" => "0693580S",
         ],
         [
             "DEPARTEMENT" => "093",
@@ -25349,13 +25784,13 @@ return [
             "DEPARTEMENT" => "031",
             "LIBELLE" => "IUP METIERS INFO COMMUNICATION UNIVERSITE TOULOUSE 2",
             "LOCALISATION" => "TOULOUSE",
-            "SOURCE_CODE" => "0312703V",
+            "SOURCE_CODE" => "0312546Z",
         ],
         [
             "DEPARTEMENT" => "031",
             "LIBELLE" => "IUP METIERS INFO COMMUNICATION UNIVERSITE TOULOUSE 2",
             "LOCALISATION" => "TOULOUSE",
-            "SOURCE_CODE" => "0312546Z",
+            "SOURCE_CODE" => "0312703V",
         ],
         [
             "DEPARTEMENT" => "025",
@@ -26324,6 +26759,12 @@ return [
             "SOURCE_CODE" => "0763214F",
         ],
         [
+            "DEPARTEMENT" => "076",
+            "LIBELLE" => "IUT Rouen - Site Pasteur",
+            "LOCALISATION" => "IUT",
+            "SOURCE_CODE" => "0763422G",
+        ],
+        [
             "DEPARTEMENT" => "088",
             "LIBELLE" => "IUT SAINT DIE UNIVERSITE NANCY 1",
             "LOCALISATION" => "ST DIE",
@@ -27032,6 +27473,12 @@ return [
             "SOURCE_CODE" => "0692525V",
         ],
         [
+            "DEPARTEMENT" => "049",
+            "LIBELLE" => "Institut Régional du Sport et de la Santé de Cholet",
+            "LOCALISATION" => "IRSS Chole",
+            "SOURCE_CODE" => "0492390G",
+        ],
+        [
             "DEPARTEMENT" => "075",
             "LIBELLE" => "Institut Régional du Travail Social - Ile de France (IRTS)",
             "LOCALISATION" => "IRTS IF",
@@ -27126,6 +27573,12 @@ return [
             "LIBELLE" => "Institut Technologique de Shangaï -Chine",
             "LOCALISATION" => "Shangaï",
             "SOURCE_CODE" => "ETR580",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Institut Universitaire des Sciences - HAITI",
+            "LOCALISATION" => "Institut",
+            "SOURCE_CODE" => "ETR1482",
         ],
         [
             "DEPARTEMENT" => "013",
@@ -27434,6 +27887,12 @@ return [
             "SOURCE_CODE" => "IRIM",
         ],
         [
+            "DEPARTEMENT" => "031",
+            "LIBELLE" => "Institut de Recherche en Informatique de Toulouse - IRIT",
+            "LOCALISATION" => "Institut",
+            "SOURCE_CODE" => "IRITTOUL",
+        ],
+        [
             "DEPARTEMENT" => "075",
             "LIBELLE" => "Institut de Recherche pour le Développement",
             "LOCALISATION" => "PARIS",
@@ -27680,6 +28139,12 @@ return [
             "SOURCE_CODE" => "0370074E",
         ],
         [
+            "DEPARTEMENT" => "064",
+            "LIBELLE" => "Institut du travail social Pierre Bourdieu (ITS)",
+            "LOCALISATION" => "ITS",
+            "SOURCE_CODE" => "0640176U",
+        ],
+        [
             "DEPARTEMENT" => "059",
             "LIBELLE" => "Institut d’Etudes Politiques de Lille",
             "LOCALISATION" => "LILLE",
@@ -27702,6 +28167,12 @@ return [
             "LIBELLE" => "Institut français des sciences et technologies des transports, de l'aménagement et des réseaux",
             "LOCALISATION" => "IFSTTAR",
             "SOURCE_CODE" => "IFSTTAR",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Institut indien de technologie de Delhi (Indian Institute of Technology Delhi)",
+            "LOCALISATION" => "Institut",
+            "SOURCE_CODE" => "ETR1471",
         ],
         [
             "DEPARTEMENT" => "013",
@@ -27812,6 +28283,12 @@ return [
             "SOURCE_CODE" => "0442689J",
         ],
         [
+            "DEPARTEMENT" => "067",
+            "LIBELLE" => "Institut supérieur des arts appliqués - LISAA à Strasbourg",
+            "LOCALISATION" => "LISAA",
+            "SOURCE_CODE" => "0672939F",
+        ],
+        [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Institut technologique Cuernavaca",
             "LOCALISATION" => "Institut",
@@ -27828,6 +28305,12 @@ return [
             "LIBELLE" => "Institute of Mental Health NIMH",
             "LOCALISATION" => "institut",
             "SOURCE_CODE" => "ETR985",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Institute of Neuroscience and Medicine - Brain and Behaviour (INM-7)",
+            "LOCALISATION" => "Institut",
+            "SOURCE_CODE" => "ETR1478",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -27866,6 +28349,12 @@ return [
             "SOURCE_CODE" => "INRS",
         ],
         [
+            "DEPARTEMENT" => "075",
+            "LIBELLE" => "Instiut National des Langues et Civilisations Orientales (INALCO)",
+            "LOCALISATION" => "Institut",
+            "SOURCE_CODE" => "INALCO",
+        ],
+        [
             "DEPARTEMENT" => "050",
             "LIBELLE" => "Intechmer Cherbourg",
             "LOCALISATION" => "CNAM",
@@ -27900,6 +28389,12 @@ return [
             "LIBELLE" => "Istituto di struttura Materia",
             "LOCALISATION" => "Istituto",
             "SOURCE_CODE" => "ETR1154",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Iwate University",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1458",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -35321,13 +35816,13 @@ return [
             "DEPARTEMENT" => "092",
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE JEANNE D ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "SOURCE_CODE" => "0920918Y",
+            "SOURCE_CODE" => "0921663H",
         ],
         [
             "DEPARTEMENT" => "092",
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE JEANNE D ARC",
             "LOCALISATION" => "LY J.D'ARC",
-            "SOURCE_CODE" => "0921663H",
+            "SOURCE_CODE" => "0920918Y",
         ],
         [
             "DEPARTEMENT" => "039",
@@ -35423,12 +35918,6 @@ return [
             "DEPARTEMENT" => "076",
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE LA PROVIDENCE",
             "LOCALISATION" => "LY PROVIDE",
-            "SOURCE_CODE" => "0761707T",
-        ],
-        [
-            "DEPARTEMENT" => "076",
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE LA PROVIDENCE",
-            "LOCALISATION" => "LY PROVIDE",
             "SOURCE_CODE" => "0763112V",
         ],
         [
@@ -35436,6 +35925,12 @@ return [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE LA PROVIDENCE",
             "LOCALISATION" => "LY PROVIDE",
             "SOURCE_CODE" => "0761713Z",
+        ],
+        [
+            "DEPARTEMENT" => "076",
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE LA PROVIDENCE",
+            "LOCALISATION" => "LY PROVIDE",
+            "SOURCE_CODE" => "0761707T",
         ],
         [
             "DEPARTEMENT" => "095",
@@ -35609,6 +36104,12 @@ return [
             "DEPARTEMENT" => "078",
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
+            "SOURCE_CODE" => "0783289B",
+        ],
+        [
+            "DEPARTEMENT" => "078",
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
+            "LOCALISATION" => "LY N-DAME",
             "SOURCE_CODE" => "0783288A",
         ],
         [
@@ -35616,12 +36117,6 @@ return [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
             "SOURCE_CODE" => "0783344L",
-        ],
-        [
-            "DEPARTEMENT" => "078",
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE DAME",
-            "LOCALISATION" => "LY N-DAME",
-            "SOURCE_CODE" => "0783289B",
         ],
         [
             "DEPARTEMENT" => "083",
@@ -35729,13 +36224,13 @@ return [
             "DEPARTEMENT" => "092",
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE-DAME",
             "LOCALISATION" => "LY N-DAME",
-            "SOURCE_CODE" => "0920917X",
+            "SOURCE_CODE" => "0920906K",
         ],
         [
             "DEPARTEMENT" => "092",
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE NOTRE-DAME",
             "LOCALISATION" => "LY N-DAME",
-            "SOURCE_CODE" => "0920906K",
+            "SOURCE_CODE" => "0920917X",
         ],
         [
             "DEPARTEMENT" => "095",
@@ -36257,12 +36752,6 @@ return [
             "DEPARTEMENT" => "044",
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "SOURCE_CODE" => "0440151A",
-        ],
-        [
-            "DEPARTEMENT" => "044",
-            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE ST JOSEPH",
-            "LOCALISATION" => "LY S-JOSEP",
             "SOURCE_CODE" => "0440201E",
         ],
         [
@@ -36270,6 +36759,12 @@ return [
             "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
             "SOURCE_CODE" => "0440149Y",
+        ],
+        [
+            "DEPARTEMENT" => "044",
+            "LIBELLE" => "LYCEE GEN.ET TECHNOL.PRIVE ST JOSEPH",
+            "LOCALISATION" => "LY S-JOSEP",
+            "SOURCE_CODE" => "0440151A",
         ],
         [
             "DEPARTEMENT" => "054",
@@ -38222,12 +38717,6 @@ return [
             "SOURCE_CODE" => "9870026P",
         ],
         [
-            "DEPARTEMENT" => "011",
-            "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE DENIS DIDEROT",
-            "LOCALISATION" => "LY DIDEROT",
-            "SOURCE_CODE" => "0110023R",
-        ],
-        [
             "DEPARTEMENT" => "031",
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE DEODAT DE SEVERAC",
             "LOCALISATION" => "LY DEODAT",
@@ -39581,13 +40070,13 @@ return [
             "DEPARTEMENT" => "034",
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
-            "SOURCE_CODE" => "0340059E",
+            "SOURCE_CODE" => "0340011C",
         ],
         [
             "DEPARTEMENT" => "034",
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE JEAN MOULIN",
             "LOCALISATION" => "LY MOULIN",
-            "SOURCE_CODE" => "0340011C",
+            "SOURCE_CODE" => "0340059E",
         ],
         [
             "DEPARTEMENT" => "057",
@@ -40271,13 +40760,13 @@ return [
             "DEPARTEMENT" => "059",
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PASTEUR",
             "LOCALISATION" => "LY PASTEUR",
-            "SOURCE_CODE" => "0590117G",
+            "SOURCE_CODE" => "0590207E",
         ],
         [
             "DEPARTEMENT" => "059",
             "LIBELLE" => "LYCEE GENERAL ET TECHNOLOGIQUE LOUIS PASTEUR",
             "LOCALISATION" => "LY PASTEUR",
-            "SOURCE_CODE" => "0590207E",
+            "SOURCE_CODE" => "0590117G",
         ],
         [
             "DEPARTEMENT" => "062",
@@ -42981,7 +43470,7 @@ return [
         ],
         [
             "DEPARTEMENT" => "042",
-            "LIBELLE" => "LYCEE GENERAL PRIVE ND DE VALBENOITE LE ROND POINT",
+            "LIBELLE" => "LYCEE GENERAL PRIVE ND DE VALBENOITE",
             "LOCALISATION" => "LY ND-VALB",
             "SOURCE_CODE" => "0421660B",
         ],
@@ -43733,13 +44222,13 @@ return [
             "DEPARTEMENT" => "064",
             "LIBELLE" => "LYCEE GENERAL PRIVE ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "SOURCE_CODE" => "0640125N",
+            "SOURCE_CODE" => "0640126P",
         ],
         [
             "DEPARTEMENT" => "064",
             "LIBELLE" => "LYCEE GENERAL PRIVE ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "SOURCE_CODE" => "0640126P",
+            "SOURCE_CODE" => "0640125N",
         ],
         [
             "DEPARTEMENT" => "084",
@@ -45743,13 +46232,13 @@ return [
             "DEPARTEMENT" => "013",
             "LIBELLE" => "LYCEE POLYVALENT LA FOURRAGERE",
             "LOCALISATION" => "LY FOURRAG",
-            "SOURCE_CODE" => "0134004G",
+            "SOURCE_CODE" => "0134003F",
         ],
         [
             "DEPARTEMENT" => "013",
             "LIBELLE" => "LYCEE POLYVALENT LA FOURRAGERE",
             "LOCALISATION" => "LY FOURRAG",
-            "SOURCE_CODE" => "0134003F",
+            "SOURCE_CODE" => "0134004G",
         ],
         [
             "DEPARTEMENT" => "080",
@@ -45972,6 +46461,12 @@ return [
             "LIBELLE" => "LYCEE POLYVALENT LOUIS MARCHAL",
             "LOCALISATION" => "LY MARSHAL",
             "SOURCE_CODE" => "0672615D",
+        ],
+        [
+            "DEPARTEMENT" => "011",
+            "LIBELLE" => "LYCEE POLYVALENT LOUISE MICHEL",
+            "LOCALISATION" => "LY LMICHEL",
+            "SOURCE_CODE" => "0110023R",
         ],
         [
             "DEPARTEMENT" => "092",
@@ -46638,12 +47133,6 @@ return [
             "LIBELLE" => "LYCEE POLYVALENT PRIVE MARMOUTIER",
             "LOCALISATION" => "LY MARMOUT",
             "SOURCE_CODE" => "0370881G",
-        ],
-        [
-            "DEPARTEMENT" => "066",
-            "LIBELLE" => "LYCEE POLYVALENT PRIVE MASO",
-            "LOCALISATION" => "LY MASO",
-            "SOURCE_CODE" => "0660552S",
         ],
         [
             "DEPARTEMENT" => "031",
@@ -47891,13 +48380,13 @@ return [
             "DEPARTEMENT" => "002",
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS SAINT JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "SOURCE_CODE" => "0022002R",
+            "SOURCE_CODE" => "0021999M",
         ],
         [
             "DEPARTEMENT" => "002",
             "LIBELLE" => "LYCEE PROF PRIVE DES METIERS SAINT JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "SOURCE_CODE" => "0021999M",
+            "SOURCE_CODE" => "0022002R",
         ],
         [
             "DEPARTEMENT" => "029",
@@ -48839,13 +49328,13 @@ return [
             "DEPARTEMENT" => "032",
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE EPLA DE MIRANDE",
             "LOCALISATION" => "LY MIRANDE",
-            "SOURCE_CODE" => "0320646D",
+            "SOURCE_CODE" => "0320557G",
         ],
         [
             "DEPARTEMENT" => "032",
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE EPLA DE MIRANDE",
             "LOCALISATION" => "LY MIRANDE",
-            "SOURCE_CODE" => "0320557G",
+            "SOURCE_CODE" => "0320646D",
         ],
         [
             "DEPARTEMENT" => "082",
@@ -49055,13 +49544,13 @@ return [
             "DEPARTEMENT" => "011",
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE MARTIN LUTHER KING",
             "LOCALISATION" => "LY ML/KING",
-            "SOURCE_CODE" => "0110710M",
+            "SOURCE_CODE" => "0110712P",
         ],
         [
             "DEPARTEMENT" => "011",
             "LIBELLE" => "LYCEE PROFESSIONNEL AGRICOLE MARTIN LUTHER KING",
             "LOCALISATION" => "LY ML/KING",
-            "SOURCE_CODE" => "0110712P",
+            "SOURCE_CODE" => "0110710M",
         ],
         [
             "DEPARTEMENT" => "038",
@@ -52901,13 +53390,13 @@ return [
             "DEPARTEMENT" => "062",
             "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE MENDES-FRANCE",
             "LOCALISATION" => "LY MENDES",
-            "SOURCE_CODE" => "0620167V",
+            "SOURCE_CODE" => "0620192X",
         ],
         [
             "DEPARTEMENT" => "062",
             "LIBELLE" => "LYCEE PROFESSIONNEL PIERRE MENDES-FRANCE",
             "LOCALISATION" => "LY MENDES",
-            "SOURCE_CODE" => "0620192X",
+            "SOURCE_CODE" => "0620167V",
         ],
         [
             "DEPARTEMENT" => "039",
@@ -54107,13 +54596,13 @@ return [
             "DEPARTEMENT" => "028",
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "SOURCE_CODE" => "0280691Z",
+            "SOURCE_CODE" => "0280684S",
         ],
         [
             "DEPARTEMENT" => "028",
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE NOTRE DAME",
             "LOCALISATION" => "LY N-DAME",
-            "SOURCE_CODE" => "0280684S",
+            "SOURCE_CODE" => "0280691Z",
         ],
         [
             "DEPARTEMENT" => "035",
@@ -54527,13 +55016,13 @@ return [
             "DEPARTEMENT" => "057",
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT JOSEPH-LA PROVIDENCE",
             "LOCALISATION" => "LY S-JOSEP",
-            "SOURCE_CODE" => "0570264C",
+            "SOURCE_CODE" => "0572953A",
         ],
         [
             "DEPARTEMENT" => "057",
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT JOSEPH-LA PROVIDENCE",
             "LOCALISATION" => "LY S-JOSEP",
-            "SOURCE_CODE" => "0572953A",
+            "SOURCE_CODE" => "0570264C",
         ],
         [
             "DEPARTEMENT" => "026",
@@ -54653,13 +55142,13 @@ return [
             "DEPARTEMENT" => "012",
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT-JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "SOURCE_CODE" => "0121309H",
+            "SOURCE_CODE" => "0121260E",
         ],
         [
             "DEPARTEMENT" => "012",
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE SAINT-JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "SOURCE_CODE" => "0121260E",
+            "SOURCE_CODE" => "0121309H",
         ],
         [
             "DEPARTEMENT" => "014",
@@ -54953,13 +55442,13 @@ return [
             "DEPARTEMENT" => "040",
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "SOURCE_CODE" => "0400916D",
+            "SOURCE_CODE" => "0400883T",
         ],
         [
             "DEPARTEMENT" => "040",
             "LIBELLE" => "LYCEE PROFESSIONNEL PRIVE ST JOSEPH",
             "LOCALISATION" => "LY S-JOSEP",
-            "SOURCE_CODE" => "0400883T",
+            "SOURCE_CODE" => "0400916D",
         ],
         [
             "DEPARTEMENT" => "051",
@@ -57338,6 +57827,18 @@ return [
             "SOURCE_CODE" => "ETR593",
         ],
         [
+            "DEPARTEMENT" => "035",
+            "LIBELLE" => "Laboratory for Innovative Key Materials and Structures - LINK",
+            "LOCALISATION" => "Laboratoir",
+            "SOURCE_CODE" => "LINK",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Lampung University",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1464",
+        ],
+        [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Laurel University",
             "LOCALISATION" => "University",
@@ -57486,6 +57987,12 @@ return [
             "LIBELLE" => "Lycée Nelson Mandela",
             "LOCALISATION" => "Nelson Man",
             "SOURCE_CODE" => "0442765S",
+        ],
+        [
+            "DEPARTEMENT" => "042",
+            "LIBELLE" => "Lycée Notre-Dame de Valbenoite",
+            "LOCALISATION" => "Lycée",
+            "SOURCE_CODE" => "0420010X",
         ],
         [
             "DEPARTEMENT" => "974",
@@ -57713,13 +58220,13 @@ return [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Lycée polyvalent de Mamoudzou nord",
             "LOCALISATION" => "LPO",
-            "SOURCE_CODE" => "9760370",
+            "SOURCE_CODE" => "9760370Y",
         ],
         [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Lycée polyvalent de Mamoudzou nord",
             "LOCALISATION" => "LPO",
-            "SOURCE_CODE" => "9760370Y",
+            "SOURCE_CODE" => "9760370",
         ],
         [
             "DEPARTEMENT" => "987",
@@ -58094,6 +58601,12 @@ return [
             "SOURCE_CODE" => "0601610Z",
         ],
         [
+            "DEPARTEMENT" => "038",
+            "LIBELLE" => "Maison Familiale Rurale de Vignieu-Morestel",
+            "LOCALISATION" => "MFR",
+            "SOURCE_CODE" => "0382908E",
+        ],
+        [
             "DEPARTEMENT" => "085",
             "LIBELLE" => "Maison Familiale Rurale de l'IREO de St Fulgent",
             "LOCALISATION" => "MFR",
@@ -58158,6 +58671,12 @@ return [
             "LIBELLE" => "Mars Hill Collège N. Caroline USA",
             "LOCALISATION" => "NORTH CARO",
             "SOURCE_CODE" => "ETR313",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Mathematical Institute of the Polish Academy of Sciences",
+            "LOCALISATION" => "Institut",
+            "SOURCE_CODE" => "ETR1461",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -58262,6 +58781,12 @@ return [
             "SOURCE_CODE" => "0753494R",
         ],
         [
+            "DEPARTEMENT" => "075",
+            "LIBELLE" => "Muséd de l'Orangerie des Tuileries",
+            "LOCALISATION" => "Musée",
+            "SOURCE_CODE" => "MUORANG",
+        ],
+        [
             "DEPARTEMENT" => "033",
             "LIBELLE" => "Médecine Mathématiques Pharmacie Paramédical (MMPP)",
             "LOCALISATION" => "MMPP",
@@ -58278,6 +58803,12 @@ return [
             "LIBELLE" => "NEGOCIA PARIS",
             "LOCALISATION" => "NEGOCIA PA",
             "SOURCE_CODE" => "0755441G",
+        ],
+        [
+            "DEPARTEMENT" => "066",
+            "LIBELLE" => "NEOSUP ECOLE SUPERIEURE DES METIERS DE LA SANTE",
+            "LOCALISATION" => "NEOSUP",
+            "SOURCE_CODE" => "0660552S",
         ],
         [
             "DEPARTEMENT" => "075",
@@ -58326,6 +58857,18 @@ return [
             "LIBELLE" => "Nestlé Research Center - Lausanne SUISSE",
             "LOCALISATION" => "SUISSE",
             "SOURCE_CODE" => "ETRO256",
+        ],
+        [
+            "DEPARTEMENT" => "033",
+            "LIBELLE" => "Neurocentre Magendie Bordeaux",
+            "LOCALISATION" => "Centre",
+            "SOURCE_CODE" => "NEUROMAG",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "New York University of Abu Dhabi",
+            "LOCALISATION" => "université",
+            "SOURCE_CODE" => "ETR1455",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -58458,6 +59001,12 @@ return [
             "LIBELLE" => "PARC ZOOLOGIQUE DE PARIS MNHN",
             "LOCALISATION" => "PARIS",
             "SOURCE_CODE" => "0753793R",
+        ],
+        [
+            "DEPARTEMENT" => "092",
+            "LIBELLE" => "PARIS YNOV CAMPUS",
+            "LOCALISATION" => "PARIS YNOV",
+            "SOURCE_CODE" => "0922816L",
         ],
         [
             "DEPARTEMENT" => "038",
@@ -58604,6 +59153,12 @@ return [
             "SOURCE_CODE" => "ETR1142",
         ],
         [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Presidency University",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1477",
+        ],
+        [
             "DEPARTEMENT" => "014",
             "LIBELLE" => "Presto-Engineering Caen",
             "LOCALISATION" => "CAEN",
@@ -58620,6 +59175,12 @@ return [
             "LIBELLE" => "Purdue University",
             "LOCALISATION" => "University",
             "SOURCE_CODE" => "ETR1104",
+        ],
+        [
+            "DEPARTEMENT" => "034",
+            "LIBELLE" => "Purple campus Béziers - CFA CCI Occitanie",
+            "LOCALISATION" => "CFA",
+            "SOURCE_CODE" => "0342156J",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -58800,6 +59361,12 @@ return [
             "LIBELLE" => "SCHOLA NOVA",
             "LOCALISATION" => "CFA",
             "SOURCE_CODE" => "0756002S",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "SCK CEN  Belgian Nuclear Research Centre",
+            "LOCALISATION" => "Centre",
+            "SOURCE_CODE" => "ETR1476",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -59067,6 +59634,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "School of Marine Sciences Cochin University  of Science And Technology",
+            "LOCALISATION" => "Ecole",
+            "SOURCE_CODE" => "ETR1481",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "Science and Tecnology Facilities Council",
             "LOCALISATION" => "Labo",
             "SOURCE_CODE" => "ETR1337",
@@ -59184,6 +59757,12 @@ return [
             "LIBELLE" => "Sté J&J",
             "LOCALISATION" => "VAL REUIL",
             "SOURCE_CODE" => "SJJ",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Sulzer",
+            "LOCALISATION" => "Institut",
+            "SOURCE_CODE" => "ETR1469",
         ],
         [
             "DEPARTEMENT" => "044",
@@ -59310,6 +59889,18 @@ return [
             "LIBELLE" => "Texas A&M university college station",
             "LOCALISATION" => "University",
             "SOURCE_CODE" => "ETR1322",
+        ],
+        [
+            "DEPARTEMENT" => "006",
+            "LIBELLE" => "Thales Alenia Space Cannes",
+            "LOCALISATION" => "Etabl.",
+            "SOURCE_CODE" => "THALESCA",
+        ],
+        [
+            "DEPARTEMENT" => "092",
+            "LIBELLE" => "Thales Digital Identity and Security",
+            "LOCALISATION" => "Société",
+            "SOURCE_CODE" => "TDIAS",
         ],
         [
             "DEPARTEMENT" => "076",
@@ -62096,12 +62687,6 @@ return [
             "SOURCE_CODE" => "0442077U",
         ],
         [
-            "DEPARTEMENT" => "064",
-            "LIBELLE" => "UFR SCIENCES ET TECHNIQUES UNIVERSITE PAU",
-            "LOCALISATION" => "PAU",
-            "SOURCE_CODE" => "0640218P",
-        ],
-        [
             "DEPARTEMENT" => "076",
             "LIBELLE" => "UFR SCIENCES ET TECHNIQUES UNIVERSITE ROUEN",
             "LOCALISATION" => "MONT S AIG",
@@ -62660,6 +63245,12 @@ return [
             "SOURCE_CODE" => "999GMPC",
         ],
         [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "UNICAMP Universidade Estadual de Campinas",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1475",
+        ],
+        [
             "DEPARTEMENT" => "069",
             "LIBELLE" => "UNICANCER Lyon",
             "LOCALISATION" => "UNICANCER",
@@ -62688,6 +63279,12 @@ return [
             "LIBELLE" => "UNITE PEDAGOGIQUE ARCHITECTURE ECOLE ARCHITECTURE",
             "LOCALISATION" => "AR NANTERR",
             "SOURCE_CODE" => "0921770Z",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "UNIVERSIDADE FEDERAL DE UBERLÂNDIA",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1456",
         ],
         [
             "DEPARTEMENT" => "022",
@@ -62931,6 +63528,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "Universiti Putra Malaysia",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1457",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "University College Dublin",
             "LOCALISATION" => "Université",
             "SOURCE_CODE" => "ETR0352",
@@ -63003,6 +63606,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "University of Jyväkylä",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1483",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "University of Kentucky",
             "LOCALISATION" => "University",
             "SOURCE_CODE" => "ETR1068",
@@ -63015,9 +63624,21 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "University of Munster",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1474",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "University of New South Wales",
             "LOCALISATION" => "University",
             "SOURCE_CODE" => "ETR1321",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "University of Oldenburg",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1486",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -63093,6 +63714,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "University of the Western Cape",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1470",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "Università Cattolica di Milano",
             "LOCALISATION" => "Université",
             "SOURCE_CODE" => "ETR1418",
@@ -63147,6 +63774,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "Università degli studi di Napoli \"Federico II\"",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1487",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "Università degli studi di Parma",
             "LOCALISATION" => "Université",
             "SOURCE_CODE" => "ETR1203",
@@ -63192,6 +63825,12 @@ return [
             "LIBELLE" => "Université  Pairis Saclay",
             "LOCALISATION" => "SACLAY",
             "SOURCE_CODE" => "SACLAY",
+        ],
+        [
+            "DEPARTEMENT" => "075",
+            "LIBELLE" => "Université  Paris Cité",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "0755976N",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -63501,8 +64140,8 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
-            "LIBELLE" => "Université Catholique Louvain - Belgique",
-            "LOCALISATION" => "BELGIQUE",
+            "LIBELLE" => "Université Catholique Louvain",
+            "LOCALISATION" => "Université",
             "SOURCE_CODE" => "ETR0086",
         ],
         [
@@ -63873,6 +64512,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "Université Friedrich-Alexander d'Erlangen-Nuremberg",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1485",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "Université Frostburg Maryland USA",
             "LOCALISATION" => "MARYLAND",
             "SOURCE_CODE" => "ETR276",
@@ -64077,6 +64722,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "Université Ibn Zohr",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1453",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "Université Idaho - USA",
             "LOCALISATION" => "IDAHO",
             "SOURCE_CODE" => "ETR0257",
@@ -64179,6 +64830,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "Université Johns-Hopkins",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1473",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "Université Kansai Gaidai Japon",
             "LOCALISATION" => "KANSAI",
             "SOURCE_CODE" => "ETR209",
@@ -64200,6 +64857,12 @@ return [
             "LIBELLE" => "Université Karlova V. Prague -Rep Tchèqu",
             "LOCALISATION" => "PRAZE",
             "SOURCE_CODE" => "ETR162",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Université Kasdi Merbah de Ouargla",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1454",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -64260,6 +64923,12 @@ return [
             "LIBELLE" => "Université Laurentian  Canada",
             "LOCALISATION" => "LAURENTIAN",
             "SOURCE_CODE" => "ETR225",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Université Laval - Canada",
+            "LOCALISATION" => "UNIVERSITE",
+            "SOURCE_CODE" => "ETR577",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -64338,12 +65007,6 @@ return [
             "LIBELLE" => "Université Lodski - Pologne",
             "LOCALISATION" => "POLOGNE",
             "SOURCE_CODE" => "ETR567",
-        ],
-        [
-            "DEPARTEMENT" => "054",
-            "LIBELLE" => "Université Lorraine",
-            "LOCALISATION" => "NANCY",
-            "SOURCE_CODE" => "0542493S",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -64565,13 +65228,13 @@ return [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université Moulay Ismail",
             "LOCALISATION" => "Université",
-            "SOURCE_CODE" => "TER1004",
+            "SOURCE_CODE" => "ETR1004",
         ],
         [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université Moulay Ismail",
             "LOCALISATION" => "Université",
-            "SOURCE_CODE" => "ETR1004",
+            "SOURCE_CODE" => "TER1004",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -64926,12 +65589,6 @@ return [
             "LIBELLE" => "Université Paris-Saclay",
             "LOCALISATION" => "Saclay",
             "SOURCE_CODE" => "0912230N",
-        ],
-        [
-            "DEPARTEMENT" => "064",
-            "LIBELLE" => "Université Pau Pays de l’Adour",
-            "LOCALISATION" => "PAU",
-            "SOURCE_CODE" => "0640251A",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -65333,13 +65990,13 @@ return [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université Syddansk - Danemark",
             "LOCALISATION" => "SYDDANSK",
-            "SOURCE_CODE" => "ETR0168",
+            "SOURCE_CODE" => "ETR168",
         ],
         [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université Syddansk - Danemark",
             "LOCALISATION" => "SYDDANSK",
-            "SOURCE_CODE" => "ETR168",
+            "SOURCE_CODE" => "ETR0168",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -65739,6 +66396,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "Université d'Abomey Calavi",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1462",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "Université d'Adelaide",
             "LOCALISATION" => "Université",
             "SOURCE_CODE" => "ETR1133",
@@ -65861,13 +66524,13 @@ return [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université d'Iowa - USA",
             "LOCALISATION" => "IOWA",
-            "SOURCE_CODE" => "ETR0268",
+            "SOURCE_CODE" => "ETR268",
         ],
         [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université d'Iowa - USA",
             "LOCALISATION" => "IOWA",
-            "SOURCE_CODE" => "ETR268",
+            "SOURCE_CODE" => "ETR0268",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -66113,13 +66776,13 @@ return [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université de Bologne - Italie",
             "LOCALISATION" => "UNIVERSITE",
-            "SOURCE_CODE" => "ETR0020",
+            "SOURCE_CODE" => "ETR0363",
         ],
         [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université de Bologne - Italie",
             "LOCALISATION" => "UNIVERSITE",
-            "SOURCE_CODE" => "ETR0363",
+            "SOURCE_CODE" => "ETR0020",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -66143,13 +66806,13 @@ return [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université de Bremen - Allemagne",
             "LOCALISATION" => "UNIVERSITE",
-            "SOURCE_CODE" => "ETR0022",
+            "SOURCE_CODE" => "ETR00409",
         ],
         [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université de Bremen - Allemagne",
             "LOCALISATION" => "UNIVERSITE",
-            "SOURCE_CODE" => "ETR00409",
+            "SOURCE_CODE" => "ETR0022",
         ],
         [
             "DEPARTEMENT" => "029",
@@ -66657,12 +67320,6 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
-            "LIBELLE" => "Université de Laval - Quebec",
-            "LOCALISATION" => "UNIVERSITE",
-            "SOURCE_CODE" => "ETR577",
-        ],
-        [
-            "DEPARTEMENT" => "099",
             "LIBELLE" => "Université de Lecce - Italie",
             "LOCALISATION" => "LECCE",
             "SOURCE_CODE" => "ETR0076",
@@ -66711,6 +67368,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "Université de Linköping",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1472",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "Université de Lisbonne - Portugal",
             "LOCALISATION" => "UNIVERSITE",
             "SOURCE_CODE" => "ETR0402",
@@ -66738,6 +67401,12 @@ return [
             "LIBELLE" => "Université de Lomé Togo",
             "LOCALISATION" => "TOGO",
             "SOURCE_CODE" => "ETR559",
+        ],
+        [
+            "DEPARTEMENT" => "054",
+            "LIBELLE" => "Université de Lorraine",
+            "LOCALISATION" => "NANCY",
+            "SOURCE_CODE" => "0542493S",
         ],
         [
             "DEPARTEMENT" => "054",
@@ -66809,13 +67478,13 @@ return [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université de Miami Ohio USA",
             "LOCALISATION" => "OHIO",
-            "SOURCE_CODE" => "ETR317",
+            "SOURCE_CODE" => "ETR0317",
         ],
         [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université de Miami Ohio USA",
             "LOCALISATION" => "OHIO",
-            "SOURCE_CODE" => "ETR0317",
+            "SOURCE_CODE" => "ETR317",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -67040,12 +67709,6 @@ return [
             "SOURCE_CODE" => "ETR1186",
         ],
         [
-            "DEPARTEMENT" => "075",
-            "LIBELLE" => "Université de Paris",
-            "LOCALISATION" => "U DE PARIS",
-            "SOURCE_CODE" => "0755976N",
-        ],
-        [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université de Parma",
             "LOCALISATION" => "UNIVERSITE",
@@ -67056,6 +67719,18 @@ return [
             "LIBELLE" => "Université de Passau - Allemagne",
             "LOCALISATION" => "PASSAU",
             "SOURCE_CODE" => "ETR0112",
+        ],
+        [
+            "DEPARTEMENT" => "064",
+            "LIBELLE" => "Université de Pau et des Pays de l'Adour",
+            "LOCALISATION" => "PAU",
+            "SOURCE_CODE" => "0640251A",
+        ],
+        [
+            "DEPARTEMENT" => "064",
+            "LIBELLE" => "Université de Pau et des Pays de l'Adour",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "0640218P",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -67247,13 +67922,13 @@ return [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université de Sciences Iowa - USA",
             "LOCALISATION" => "IOWA",
-            "SOURCE_CODE" => "ETR269",
+            "SOURCE_CODE" => "ETR0269",
         ],
         [
             "DEPARTEMENT" => "099",
             "LIBELLE" => "Université de Sciences Iowa - USA",
             "LOCALISATION" => "IOWA",
-            "SOURCE_CODE" => "ETR0269",
+            "SOURCE_CODE" => "ETR269",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -67803,6 +68478,12 @@ return [
         ],
         [
             "DEPARTEMENT" => "099",
+            "LIBELLE" => "Université hébraïque de Jérusalem (The Hebrew University of Jerusalem)",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1460",
+        ],
+        [
+            "DEPARTEMENT" => "099",
             "LIBELLE" => "Université libre d'Amsterdam",
             "LOCALISATION" => "Université",
             "SOURCE_CODE" => "ETR961",
@@ -67830,6 +68511,12 @@ return [
             "LIBELLE" => "Université of North Dakota - USA",
             "LOCALISATION" => "ETATS UNIS",
             "SOURCE_CODE" => "ETR0101",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "Université of Split - School of Medecine",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1466",
         ],
         [
             "DEPARTEMENT" => "059",
@@ -67926,6 +68613,12 @@ return [
             "LIBELLE" => "VETOPHARMA",
             "LOCALISATION" => "VETOPHARMA",
             "SOURCE_CODE" => "VETOPHAR",
+        ],
+        [
+            "DEPARTEMENT" => "099",
+            "LIBELLE" => "VIETNAM NATIONAL UNIVERSITY - VNU",
+            "LOCALISATION" => "Université",
+            "SOURCE_CODE" => "ETR1463",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -68054,6 +68747,12 @@ return [
             "SOURCE_CODE" => "SYMRISE",
         ],
         [
+            "DEPARTEMENT" => "034",
+            "LIBELLE" => "iRIM -  CNRS Université de Montpellier",
+            "LOCALISATION" => "CNRS",
+            "SOURCE_CODE" => "IRIMCNRS",
+        ],
+        [
             "DEPARTEMENT" => "022",
             "LIBELLE" => "iXFiber",
             "LOCALISATION" => "LANNION",
@@ -68070,6 +68769,12 @@ return [
             "LIBELLE" => "institut de recherche pour le développement (IRD)",
             "LOCALISATION" => "Institut",
             "SOURCE_CODE" => "IRD-MONT",
+        ],
+        [
+            "DEPARTEMENT" => "069",
+            "LIBELLE" => "institut supérieur européen de formation par l'action",
+            "LOCALISATION" => "ISEFAC RH",
+            "SOURCE_CODE" => "0694266M",
         ],
         [
             "DEPARTEMENT" => "099",
@@ -68369,24 +69074,6 @@ return [
             "LIBELLE_COURT" => "ADMENESR",
             "LIBELLE_LONG" => "ADM. DE L'EN. DE L'ENS SUP ET DE LA RECH",
             "SOURCE_CODE" => "0301",
-        ],
-        [
-            "CORPS_ID" => "203",
-            "LIBELLE_COURT" => "ADMIN GENE",
-            "LIBELLE_LONG" => "ADMINISTRAT GENERAL",
-            "SOURCE_CODE" => "2035",
-        ],
-        [
-            "CORPS_ID" => "203",
-            "LIBELLE_COURT" => "ADM CIV",
-            "LIBELLE_LONG" => "ADMINISTRATEUR CIVIL",
-            "SOURCE_CODE" => "2034",
-        ],
-        [
-            "CORPS_ID" => "203",
-            "LIBELLE_COURT" => "ADM CIV HC",
-            "LIBELLE_LONG" => "ADMINISTRATEUR CIVIL HORS CL.",
-            "SOURCE_CODE" => "2033",
         ],
         [
             "CORPS_ID" => "285",
@@ -69338,24 +70025,6 @@ return [
         ],
         [
             "CORPS_ID" => "986",
-            "LIBELLE_COURT" => "INFENES CN",
-            "LIBELLE_LONG" => "INFIRMIERS ENES CN CATEG A",
-            "SOURCE_CODE" => "9861",
-        ],
-        [
-            "CORPS_ID" => "986",
-            "LIBELLE_COURT" => "INFENES CS",
-            "LIBELLE_LONG" => "INFIRMIERS ENES CS CATEG A",
-            "SOURCE_CODE" => "9862",
-        ],
-        [
-            "CORPS_ID" => "986",
-            "LIBELLE_COURT" => "INF PJJ CS",
-            "LIBELLE_LONG" => "INFIRMIERS ENES CS INT PJJ",
-            "SOURCE_CODE" => "9863",
-        ],
-        [
-            "CORPS_ID" => "986",
             "LIBELLE_COURT" => "INFENES HC",
             "LIBELLE_LONG" => "INFIRMIERS ENES HC CATEG A",
             "SOURCE_CODE" => "9864",
@@ -69373,12 +70042,6 @@ return [
             "SOURCE_CODE" => "2803",
         ],
         [
-            "CORPS_ID" => "833",
-            "LIBELLE_COURT" => "IGE CN",
-            "LIBELLE_LONG" => "INGENIEUR D'ETUDES CLASSE NORMALE",
-            "SOURCE_CODE" => "8331",
-        ],
-        [
             "CORPS_ID" => "EP1",
             "LIBELLE_COURT" => "IE CN EPST",
             "LIBELLE_LONG" => "INGENIEUR D'ETUDES CLASSE NORMALE",
@@ -69386,15 +70049,21 @@ return [
         ],
         [
             "CORPS_ID" => "833",
-            "LIBELLE_COURT" => "IGE HC",
-            "LIBELLE_LONG" => "INGENIEUR D'ETUDES HORS CLASSE",
-            "SOURCE_CODE" => "8332",
+            "LIBELLE_COURT" => "IGE CN",
+            "LIBELLE_LONG" => "INGENIEUR D'ETUDES CLASSE NORMALE",
+            "SOURCE_CODE" => "8331",
         ],
         [
             "CORPS_ID" => "EP1",
             "LIBELLE_COURT" => "IE HC EPST",
             "LIBELLE_LONG" => "INGENIEUR D'ETUDES HORS CLASSE",
             "SOURCE_CODE" => "EP11",
+        ],
+        [
+            "CORPS_ID" => "833",
+            "LIBELLE_COURT" => "IGE HC",
+            "LIBELLE_LONG" => "INGENIEUR D'ETUDES HORS CLASSE",
+            "SOURCE_CODE" => "8332",
         ],
         [
             "CORPS_ID" => "277",
@@ -69598,24 +70267,6 @@ return [
             "SOURCE_CODE" => "3021",
         ],
         [
-            "CORPS_ID" => "316",
-            "LIBELLE_COURT" => "MCF PHO 1C",
-            "LIBELLE_LONG" => "MAITRE DE CONF PRAT HOSP CSERD 1E CL",
-            "SOURCE_CODE" => "3162",
-        ],
-        [
-            "CORPS_ID" => "316",
-            "LIBELLE_COURT" => "MCF PHO 2C",
-            "LIBELLE_LONG" => "MAITRE DE CONF PRAT HOSP CSERD 2E CL",
-            "SOURCE_CODE" => "3161",
-        ],
-        [
-            "CORPS_ID" => "316",
-            "LIBELLE_COURT" => "MCF PHO HC",
-            "LIBELLE_LONG" => "MAITRE DE CONF PRAT HOSP CSERD H. CL.",
-            "SOURCE_CODE" => "3163",
-        ],
-        [
             "CORPS_ID" => "MG1",
             "LIBELLE_COURT" => "MCF MED GENE 1C",
             "LIBELLE_LONG" => "MAITRE DE CONF UNIV MED GENERALE 1E CL.",
@@ -69658,24 +70309,6 @@ return [
             "SOURCE_CODE" => "3563",
         ],
         [
-            "CORPS_ID" => "311",
-            "LIBELLE_COURT" => "MCF PH 1CL",
-            "LIBELLE_LONG" => "MAITRE DE CONF.-PRATICIEN HOSP. 1ERE CL",
-            "SOURCE_CODE" => "3112",
-        ],
-        [
-            "CORPS_ID" => "311",
-            "LIBELLE_COURT" => "MCF PH 2CL",
-            "LIBELLE_LONG" => "MAITRE DE CONF.-PRATICIEN HOSP. 2EME CL",
-            "SOURCE_CODE" => "3111",
-        ],
-        [
-            "CORPS_ID" => "311",
-            "LIBELLE_COURT" => "MCF PH HORS CL",
-            "LIBELLE_LONG" => "MAITRE DE CONF.-PRATICIEN HOSP. HORS CL",
-            "SOURCE_CODE" => "3113",
-        ],
-        [
             "CORPS_ID" => "354",
             "LIBELLE_COURT" => "MCF EHESS CN",
             "LIBELLE_LONG" => "MAITRE DE CONF.DE L'EHESS CL. NORMALE",
@@ -69704,24 +70337,6 @@ return [
             "LIBELLE_COURT" => "MCF HC",
             "LIBELLE_LONG" => "MAITRE DE CONFERENCES H. CL.",
             "SOURCE_CODE" => "3013",
-        ],
-        [
-            "CORPS_ID" => "PH1",
-            "LIBELLE_COURT" => "MCUPH PHARMA 1CL",
-            "LIBELLE_LONG" => "MCUPH DISCIPLINES PHARMACEUTIQUES 1E CL",
-            "SOURCE_CODE" => "PH12",
-        ],
-        [
-            "CORPS_ID" => "PH1",
-            "LIBELLE_COURT" => "MCUPH PHARMA 2 CL",
-            "LIBELLE_LONG" => "MCUPH DISCIPLINES PHARMACEUTIQUES 2E CL",
-            "SOURCE_CODE" => "PH11",
-        ],
-        [
-            "CORPS_ID" => "PH1",
-            "LIBELLE_COURT" => "MCUPH PHARMA HC",
-            "LIBELLE_LONG" => "MCUPH DISCIPLINES PHARMACEUTIQUES H CL",
-            "SOURCE_CODE" => "PH13",
         ],
         [
             "CORPS_ID" => "997",
@@ -69848,30 +70463,6 @@ return [
             "LIBELLE_COURT" => "PROF MUSEUM CL EX",
             "LIBELLE_LONG" => "PROF MUSEUM HIST. NATURELLE CL.EX",
             "SOURCE_CODE" => "3505",
-        ],
-        [
-            "CORPS_ID" => "315",
-            "LIBELLE_COURT" => "PUPHO EX1",
-            "LIBELLE_LONG" => "PROF UNIV-PRAT. HOSP CSERD CL.EX 1 ECH",
-            "SOURCE_CODE" => "3153",
-        ],
-        [
-            "CORPS_ID" => "315",
-            "LIBELLE_COURT" => "PUPHO EX2",
-            "LIBELLE_LONG" => "PROF UNIV-PRAT. HOSP CSERD CL.EX 2 ECH",
-            "SOURCE_CODE" => "3154",
-        ],
-        [
-            "CORPS_ID" => "315",
-            "LIBELLE_COURT" => "PUPHO 1C",
-            "LIBELLE_LONG" => "PROF UNIV-PRATICIEN HOSP CSERD 1E CL",
-            "SOURCE_CODE" => "3152",
-        ],
-        [
-            "CORPS_ID" => "315",
-            "LIBELLE_COURT" => "PUPHO 2C",
-            "LIBELLE_LONG" => "PROF UNIV-PRATICIEN HOSP CSERD 2E CL",
-            "SOURCE_CODE" => "3151",
         ],
         [
             "CORPS_ID" => "317",
@@ -70097,18 +70688,6 @@ return [
         ],
         [
             "CORPS_ID" => "310",
-            "LIBELLE_COURT" => "PUPH 1CL",
-            "LIBELLE_LONG" => "PROFESSEUR UNIV.-PRATICIEN HOSP. 1ERE CL",
-            "SOURCE_CODE" => "3102",
-        ],
-        [
-            "CORPS_ID" => "310",
-            "LIBELLE_COURT" => "PUPH 2CL",
-            "LIBELLE_LONG" => "PROFESSEUR UNIV.-PRATICIEN HOSP. 2EME CL",
-            "SOURCE_CODE" => "3101",
-        ],
-        [
-            "CORPS_ID" => "310",
             "LIBELLE_COURT" => "PUPH CL EX",
             "LIBELLE_LONG" => "PROFESSEUR UNIV.-PRATICIEN HOSP. CL EXC.",
             "SOURCE_CODE" => "3105",
@@ -70142,24 +70721,6 @@ return [
             "LIBELLE_COURT" => "PSY.EN.HC",
             "LIBELLE_LONG" => "PSYCHOLOGUE EDUCATION NATIONALE HC",
             "SOURCE_CODE" => "5222",
-        ],
-        [
-            "CORPS_ID" => "PH0",
-            "LIBELLE_COURT" => "PUPH PHARMA 1C",
-            "LIBELLE_LONG" => "PUPH DES DISCIPLINES PHARMACEUTIQUES 1C",
-            "SOURCE_CODE" => "PH02",
-        ],
-        [
-            "CORPS_ID" => "PH0",
-            "LIBELLE_COURT" => "PUPH PHARMA 2C",
-            "LIBELLE_LONG" => "PUPH DES DISCIPLINES PHARMACEUTIQUES 2C",
-            "SOURCE_CODE" => "PH01",
-        ],
-        [
-            "CORPS_ID" => "PH0",
-            "LIBELLE_COURT" => "PUPH PHARMA CE",
-            "LIBELLE_LONG" => "PUPH DES DISCIPLINES PHARMACEUTIQUES CE",
-            "SOURCE_CODE" => "PH03",
         ],
         [
             "CORPS_ID" => "020",
@@ -70709,10 +71270,10 @@ return [
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => FALSE,
             "CONSEIL_ACA_DUREE_VIE" => 5,
-            "CONSEIL_ACA_VISUALISATION" => TRUE,
+            "CONSEIL_ACA_VISUALISATION" => FALSE,
             "CONSEIL_RESTREINT" => FALSE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
-            "CONSEIL_RESTREINT_VISU" => TRUE,
+            "CONSEIL_RESTREINT_VISU" => FALSE,
             "CONTRAT" => FALSE,
             "CONTRAT_DEPOT" => FALSE,
             "CONTRAT_VISUALISATION" => FALSE,
@@ -70780,10 +71341,10 @@ return [
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => FALSE,
             "CONSEIL_ACA_DUREE_VIE" => 5,
-            "CONSEIL_ACA_VISUALISATION" => TRUE,
+            "CONSEIL_ACA_VISUALISATION" => FALSE,
             "CONSEIL_RESTREINT" => FALSE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
-            "CONSEIL_RESTREINT_VISU" => TRUE,
+            "CONSEIL_RESTREINT_VISU" => FALSE,
             "CONTRAT" => FALSE,
             "CONTRAT_DEPOT" => FALSE,
             "CONTRAT_VISUALISATION" => FALSE,
@@ -70828,12 +71389,12 @@ return [
             "PJ_VISUALISATION" => TRUE,
             "PRIORITAIRE_INDICATEURS" => FALSE,
             "REFERENTIEL_PREVU" => FALSE,
-            "REFERENTIEL_PREVU_EDITION" => TRUE,
-            "REFERENTIEL_PREVU_VISU" => TRUE,
+            "REFERENTIEL_PREVU_EDITION" => FALSE,
+            "REFERENTIEL_PREVU_VISU" => FALSE,
             "REFERENTIEL_REALISE" => FALSE,
-            "REFERENTIEL_REALISE_EDITION" => TRUE,
-            "REFERENTIEL_REALISE_VISU" => TRUE,
-            "SERVICE_EXTERIEUR" => TRUE,
+            "REFERENTIEL_REALISE_EDITION" => FALSE,
+            "REFERENTIEL_REALISE_VISU" => FALSE,
+            "SERVICE_EXTERIEUR" => FALSE,
             "SERVICE_PREVU" => TRUE,
             "SERVICE_PREVU_EDITION" => TRUE,
             "SERVICE_PREVU_VISU" => TRUE,
@@ -70851,10 +71412,10 @@ return [
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => FALSE,
             "CONSEIL_ACA_DUREE_VIE" => 5,
-            "CONSEIL_ACA_VISUALISATION" => TRUE,
+            "CONSEIL_ACA_VISUALISATION" => FALSE,
             "CONSEIL_RESTREINT" => FALSE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
-            "CONSEIL_RESTREINT_VISU" => TRUE,
+            "CONSEIL_RESTREINT_VISU" => FALSE,
             "CONTRAT" => FALSE,
             "CONTRAT_DEPOT" => FALSE,
             "CONTRAT_VISUALISATION" => FALSE,
@@ -70904,7 +71465,7 @@ return [
             "REFERENTIEL_REALISE" => TRUE,
             "REFERENTIEL_REALISE_EDITION" => FALSE,
             "REFERENTIEL_REALISE_VISU" => FALSE,
-            "SERVICE_EXTERIEUR" => TRUE,
+            "SERVICE_EXTERIEUR" => FALSE,
             "SERVICE_PREVU" => TRUE,
             "SERVICE_PREVU_EDITION" => TRUE,
             "SERVICE_PREVU_VISU" => TRUE,
@@ -70993,10 +71554,10 @@ return [
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => FALSE,
             "CONSEIL_ACA_DUREE_VIE" => 5,
-            "CONSEIL_ACA_VISUALISATION" => TRUE,
+            "CONSEIL_ACA_VISUALISATION" => FALSE,
             "CONSEIL_RESTREINT" => FALSE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
-            "CONSEIL_RESTREINT_VISU" => TRUE,
+            "CONSEIL_RESTREINT_VISU" => FALSE,
             "CONTRAT" => FALSE,
             "CONTRAT_DEPOT" => FALSE,
             "CONTRAT_VISUALISATION" => FALSE,
@@ -71046,7 +71607,7 @@ return [
             "REFERENTIEL_REALISE" => TRUE,
             "REFERENTIEL_REALISE_EDITION" => TRUE,
             "REFERENTIEL_REALISE_VISU" => TRUE,
-            "SERVICE_EXTERIEUR" => TRUE,
+            "SERVICE_EXTERIEUR" => FALSE,
             "SERVICE_PREVU" => TRUE,
             "SERVICE_PREVU_EDITION" => TRUE,
             "SERVICE_PREVU_VISU" => TRUE,
@@ -71058,7 +71619,7 @@ return [
             "TYPE_INTERVENANT_ID" => "P",
         ],
         [
-            "CLOTURE" => TRUE,
+            "CLOTURE" => FALSE,
             "CODE" => "ATER",
             "CODES_CORRESP_2" => "Non",
             "CODES_CORRESP_3" => "Non",
@@ -71103,9 +71664,9 @@ return [
             "LIBELLE" => "Ater",
             "MODIF_SERVICE_DU" => TRUE,
             "MODIF_SERVICE_DU_VISUALISATION" => TRUE,
-            "MOTIF_NON_PAIEMENT" => TRUE,
+            "MOTIF_NON_PAIEMENT" => FALSE,
             "ORDRE" => 372,
-            "PAIEMENT_VISUALISATION" => TRUE,
+            "PAIEMENT_VISUALISATION" => FALSE,
             "PJ_ARCHIVAGE" => TRUE,
             "PJ_EDITION" => TRUE,
             "PJ_TELECHARGEMENT" => TRUE,
@@ -71117,7 +71678,7 @@ return [
             "REFERENTIEL_REALISE" => TRUE,
             "REFERENTIEL_REALISE_EDITION" => TRUE,
             "REFERENTIEL_REALISE_VISU" => TRUE,
-            "SERVICE_EXTERIEUR" => TRUE,
+            "SERVICE_EXTERIEUR" => FALSE,
             "SERVICE_PREVU" => TRUE,
             "SERVICE_PREVU_EDITION" => TRUE,
             "SERVICE_PREVU_VISU" => TRUE,
@@ -71316,9 +71877,9 @@ return [
             "LIBELLE" => "Ater mi-temps",
             "MODIF_SERVICE_DU" => TRUE,
             "MODIF_SERVICE_DU_VISUALISATION" => TRUE,
-            "MOTIF_NON_PAIEMENT" => TRUE,
+            "MOTIF_NON_PAIEMENT" => FALSE,
             "ORDRE" => 375,
-            "PAIEMENT_VISUALISATION" => TRUE,
+            "PAIEMENT_VISUALISATION" => FALSE,
             "PJ_ARCHIVAGE" => TRUE,
             "PJ_EDITION" => TRUE,
             "PJ_TELECHARGEMENT" => TRUE,
@@ -71330,7 +71891,7 @@ return [
             "REFERENTIEL_REALISE" => TRUE,
             "REFERENTIEL_REALISE_EDITION" => TRUE,
             "REFERENTIEL_REALISE_VISU" => TRUE,
-            "SERVICE_EXTERIEUR" => TRUE,
+            "SERVICE_EXTERIEUR" => FALSE,
             "SERVICE_PREVU" => TRUE,
             "SERVICE_PREVU_EDITION" => TRUE,
             "SERVICE_PREVU_VISU" => TRUE,
@@ -71348,53 +71909,53 @@ return [
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => FALSE,
             "CONSEIL_ACA_DUREE_VIE" => 5,
-            "CONSEIL_ACA_VISUALISATION" => TRUE,
+            "CONSEIL_ACA_VISUALISATION" => FALSE,
             "CONSEIL_RESTREINT" => FALSE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
-            "CONSEIL_RESTREINT_VISU" => TRUE,
+            "CONSEIL_RESTREINT_VISU" => FALSE,
             "CONTRAT" => TRUE,
-            "CONTRAT_DEPOT" => TRUE,
+            "CONTRAT_DEPOT" => FALSE,
             "CONTRAT_VISUALISATION" => TRUE,
             "DEPASSEMENT_SERVICE_DU_SANS_HC" => TRUE,
             "DOSSIER" => FALSE,
             "DOSSIER_ADRESSE" => TRUE,
             "DOSSIER_AUTRE_1" => FALSE,
-            "DOSSIER_AUTRE_1_EDITION" => TRUE,
+            "DOSSIER_AUTRE_1_EDITION" => FALSE,
             "DOSSIER_AUTRE_1_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_2" => FALSE,
-            "DOSSIER_AUTRE_2_EDITION" => TRUE,
-            "DOSSIER_AUTRE_2_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_2_EDITION" => FALSE,
+            "DOSSIER_AUTRE_2_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_3" => FALSE,
-            "DOSSIER_AUTRE_3_EDITION" => TRUE,
-            "DOSSIER_AUTRE_3_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_3_EDITION" => FALSE,
+            "DOSSIER_AUTRE_3_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_4" => FALSE,
-            "DOSSIER_AUTRE_4_EDITION" => TRUE,
-            "DOSSIER_AUTRE_4_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_4_EDITION" => FALSE,
+            "DOSSIER_AUTRE_4_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_5" => FALSE,
-            "DOSSIER_AUTRE_5_EDITION" => TRUE,
-            "DOSSIER_AUTRE_5_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_5_EDITION" => FALSE,
+            "DOSSIER_AUTRE_5_VISUALISATION" => FALSE,
             "DOSSIER_BANQUE" => TRUE,
             "DOSSIER_CONTACT" => TRUE,
-            "DOSSIER_EDITION" => TRUE,
+            "DOSSIER_EDITION" => FALSE,
             "DOSSIER_EMAIL_PERSO" => FALSE,
             "DOSSIER_EMPLOYEUR" => FALSE,
             "DOSSIER_IDENTITE_COMP" => TRUE,
             "DOSSIER_INSEE" => TRUE,
             "DOSSIER_SELECTIONNABLE" => FALSE,
             "DOSSIER_TEL_PERSO" => FALSE,
-            "DOSSIER_VISUALISATION" => TRUE,
+            "DOSSIER_VISUALISATION" => FALSE,
             "FORMULE_VISUALISATION" => FALSE,
             "LIBELLE" => "Doctorant (réforme 2016)",
             "MODIF_SERVICE_DU" => FALSE,
             "MODIF_SERVICE_DU_VISUALISATION" => FALSE,
             "MOTIF_NON_PAIEMENT" => TRUE,
             "ORDRE" => 376,
-            "PAIEMENT_VISUALISATION" => TRUE,
+            "PAIEMENT_VISUALISATION" => FALSE,
             "PJ_ARCHIVAGE" => TRUE,
             "PJ_EDITION" => TRUE,
             "PJ_TELECHARGEMENT" => TRUE,
             "PJ_VISUALISATION" => TRUE,
-            "PRIORITAIRE_INDICATEURS" => FALSE,
+            "PRIORITAIRE_INDICATEURS" => TRUE,
             "REFERENTIEL_PREVU" => FALSE,
             "REFERENTIEL_PREVU_EDITION" => FALSE,
             "REFERENTIEL_PREVU_VISU" => FALSE,
@@ -71419,10 +71980,10 @@ return [
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => FALSE,
             "CONSEIL_ACA_DUREE_VIE" => 5,
-            "CONSEIL_ACA_VISUALISATION" => TRUE,
+            "CONSEIL_ACA_VISUALISATION" => FALSE,
             "CONSEIL_RESTREINT" => FALSE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
-            "CONSEIL_RESTREINT_VISU" => TRUE,
+            "CONSEIL_RESTREINT_VISU" => FALSE,
             "CONTRAT" => FALSE,
             "CONTRAT_DEPOT" => FALSE,
             "CONTRAT_VISUALISATION" => FALSE,
@@ -71472,7 +72033,7 @@ return [
             "REFERENTIEL_REALISE" => TRUE,
             "REFERENTIEL_REALISE_EDITION" => FALSE,
             "REFERENTIEL_REALISE_VISU" => FALSE,
-            "SERVICE_EXTERIEUR" => TRUE,
+            "SERVICE_EXTERIEUR" => FALSE,
             "SERVICE_PREVU" => TRUE,
             "SERVICE_PREVU_EDITION" => TRUE,
             "SERVICE_PREVU_VISU" => TRUE,
@@ -71490,10 +72051,10 @@ return [
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => FALSE,
             "CONSEIL_ACA_DUREE_VIE" => 5,
-            "CONSEIL_ACA_VISUALISATION" => TRUE,
+            "CONSEIL_ACA_VISUALISATION" => FALSE,
             "CONSEIL_RESTREINT" => FALSE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
-            "CONSEIL_RESTREINT_VISU" => TRUE,
+            "CONSEIL_RESTREINT_VISU" => FALSE,
             "CONTRAT" => FALSE,
             "CONTRAT_DEPOT" => FALSE,
             "CONTRAT_VISUALISATION" => FALSE,
@@ -71703,7 +72264,7 @@ return [
             "CODES_CORRESP_2" => "Non",
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => TRUE,
-            "CONSEIL_ACA_DUREE_VIE" => 1,
+            "CONSEIL_ACA_DUREE_VIE" => 99,
             "CONSEIL_ACA_VISUALISATION" => TRUE,
             "CONSEIL_RESTREINT" => TRUE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
@@ -71775,7 +72336,7 @@ return [
             "CODES_CORRESP_2" => "Non",
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => TRUE,
-            "CONSEIL_ACA_DUREE_VIE" => 1,
+            "CONSEIL_ACA_DUREE_VIE" => 99,
             "CONSEIL_ACA_VISUALISATION" => TRUE,
             "CONSEIL_RESTREINT" => TRUE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
@@ -71787,20 +72348,20 @@ return [
             "DOSSIER" => TRUE,
             "DOSSIER_ADRESSE" => TRUE,
             "DOSSIER_AUTRE_1" => FALSE,
-            "DOSSIER_AUTRE_1_EDITION" => TRUE,
+            "DOSSIER_AUTRE_1_EDITION" => FALSE,
             "DOSSIER_AUTRE_1_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_2" => FALSE,
-            "DOSSIER_AUTRE_2_EDITION" => TRUE,
-            "DOSSIER_AUTRE_2_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_2_EDITION" => FALSE,
+            "DOSSIER_AUTRE_2_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_3" => FALSE,
-            "DOSSIER_AUTRE_3_EDITION" => TRUE,
-            "DOSSIER_AUTRE_3_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_3_EDITION" => FALSE,
+            "DOSSIER_AUTRE_3_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_4" => FALSE,
-            "DOSSIER_AUTRE_4_EDITION" => TRUE,
-            "DOSSIER_AUTRE_4_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_4_EDITION" => FALSE,
+            "DOSSIER_AUTRE_4_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_5" => FALSE,
-            "DOSSIER_AUTRE_5_EDITION" => TRUE,
-            "DOSSIER_AUTRE_5_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_5_EDITION" => FALSE,
+            "DOSSIER_AUTRE_5_VISUALISATION" => FALSE,
             "DOSSIER_BANQUE" => TRUE,
             "DOSSIER_CONTACT" => TRUE,
             "DOSSIER_EDITION" => TRUE,
@@ -71846,7 +72407,7 @@ return [
             "CODES_CORRESP_2" => "Non",
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => TRUE,
-            "CONSEIL_ACA_DUREE_VIE" => 1,
+            "CONSEIL_ACA_DUREE_VIE" => 99,
             "CONSEIL_ACA_VISUALISATION" => TRUE,
             "CONSEIL_RESTREINT" => TRUE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
@@ -71858,20 +72419,20 @@ return [
             "DOSSIER" => TRUE,
             "DOSSIER_ADRESSE" => TRUE,
             "DOSSIER_AUTRE_1" => FALSE,
-            "DOSSIER_AUTRE_1_EDITION" => TRUE,
+            "DOSSIER_AUTRE_1_EDITION" => FALSE,
             "DOSSIER_AUTRE_1_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_2" => FALSE,
-            "DOSSIER_AUTRE_2_EDITION" => TRUE,
-            "DOSSIER_AUTRE_2_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_2_EDITION" => FALSE,
+            "DOSSIER_AUTRE_2_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_3" => FALSE,
-            "DOSSIER_AUTRE_3_EDITION" => TRUE,
-            "DOSSIER_AUTRE_3_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_3_EDITION" => FALSE,
+            "DOSSIER_AUTRE_3_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_4" => FALSE,
-            "DOSSIER_AUTRE_4_EDITION" => TRUE,
-            "DOSSIER_AUTRE_4_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_4_EDITION" => FALSE,
+            "DOSSIER_AUTRE_4_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_5" => FALSE,
-            "DOSSIER_AUTRE_5_EDITION" => TRUE,
-            "DOSSIER_AUTRE_5_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_5_EDITION" => FALSE,
+            "DOSSIER_AUTRE_5_VISUALISATION" => FALSE,
             "DOSSIER_BANQUE" => TRUE,
             "DOSSIER_CONTACT" => TRUE,
             "DOSSIER_EDITION" => TRUE,
@@ -71918,7 +72479,7 @@ return [
             "CODES_CORRESP_2" => "Non",
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => TRUE,
-            "CONSEIL_ACA_DUREE_VIE" => 1,
+            "CONSEIL_ACA_DUREE_VIE" => 99,
             "CONSEIL_ACA_VISUALISATION" => TRUE,
             "CONSEIL_RESTREINT" => TRUE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
@@ -71990,7 +72551,7 @@ return [
             "CODES_CORRESP_2" => "Non",
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => TRUE,
-            "CONSEIL_ACA_DUREE_VIE" => 1,
+            "CONSEIL_ACA_DUREE_VIE" => 99,
             "CONSEIL_ACA_VISUALISATION" => TRUE,
             "CONSEIL_RESTREINT" => TRUE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
@@ -72002,20 +72563,20 @@ return [
             "DOSSIER" => TRUE,
             "DOSSIER_ADRESSE" => TRUE,
             "DOSSIER_AUTRE_1" => FALSE,
-            "DOSSIER_AUTRE_1_EDITION" => TRUE,
+            "DOSSIER_AUTRE_1_EDITION" => FALSE,
             "DOSSIER_AUTRE_1_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_2" => FALSE,
-            "DOSSIER_AUTRE_2_EDITION" => TRUE,
-            "DOSSIER_AUTRE_2_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_2_EDITION" => FALSE,
+            "DOSSIER_AUTRE_2_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_3" => FALSE,
-            "DOSSIER_AUTRE_3_EDITION" => TRUE,
-            "DOSSIER_AUTRE_3_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_3_EDITION" => FALSE,
+            "DOSSIER_AUTRE_3_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_4" => FALSE,
-            "DOSSIER_AUTRE_4_EDITION" => TRUE,
-            "DOSSIER_AUTRE_4_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_4_EDITION" => FALSE,
+            "DOSSIER_AUTRE_4_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_5" => FALSE,
-            "DOSSIER_AUTRE_5_EDITION" => TRUE,
-            "DOSSIER_AUTRE_5_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_5_EDITION" => FALSE,
+            "DOSSIER_AUTRE_5_VISUALISATION" => FALSE,
             "DOSSIER_BANQUE" => TRUE,
             "DOSSIER_CONTACT" => TRUE,
             "DOSSIER_EDITION" => TRUE,
@@ -72063,7 +72624,7 @@ return [
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => FALSE,
             "CONSEIL_ACA_DUREE_VIE" => 1,
-            "CONSEIL_ACA_VISUALISATION" => TRUE,
+            "CONSEIL_ACA_VISUALISATION" => FALSE,
             "CONSEIL_RESTREINT" => TRUE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
             "CONSEIL_RESTREINT_VISU" => TRUE,
@@ -72074,20 +72635,20 @@ return [
             "DOSSIER" => TRUE,
             "DOSSIER_ADRESSE" => TRUE,
             "DOSSIER_AUTRE_1" => FALSE,
-            "DOSSIER_AUTRE_1_EDITION" => TRUE,
+            "DOSSIER_AUTRE_1_EDITION" => FALSE,
             "DOSSIER_AUTRE_1_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_2" => FALSE,
-            "DOSSIER_AUTRE_2_EDITION" => TRUE,
-            "DOSSIER_AUTRE_2_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_2_EDITION" => FALSE,
+            "DOSSIER_AUTRE_2_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_3" => FALSE,
-            "DOSSIER_AUTRE_3_EDITION" => TRUE,
-            "DOSSIER_AUTRE_3_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_3_EDITION" => FALSE,
+            "DOSSIER_AUTRE_3_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_4" => FALSE,
-            "DOSSIER_AUTRE_4_EDITION" => TRUE,
-            "DOSSIER_AUTRE_4_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_4_EDITION" => FALSE,
+            "DOSSIER_AUTRE_4_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_5" => FALSE,
-            "DOSSIER_AUTRE_5_EDITION" => TRUE,
-            "DOSSIER_AUTRE_5_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_5_EDITION" => FALSE,
+            "DOSSIER_AUTRE_5_VISUALISATION" => FALSE,
             "DOSSIER_BANQUE" => TRUE,
             "DOSSIER_CONTACT" => TRUE,
             "DOSSIER_EDITION" => TRUE,
@@ -72181,7 +72742,7 @@ return [
             "PJ_EDITION" => TRUE,
             "PJ_TELECHARGEMENT" => TRUE,
             "PJ_VISUALISATION" => TRUE,
-            "PRIORITAIRE_INDICATEURS" => FALSE,
+            "PRIORITAIRE_INDICATEURS" => TRUE,
             "REFERENTIEL_PREVU" => FALSE,
             "REFERENTIEL_PREVU_EDITION" => FALSE,
             "REFERENTIEL_PREVU_VISU" => FALSE,
@@ -72203,77 +72764,6 @@ return [
             "CLOTURE" => FALSE,
             "CODE" => "ETUD_HORS_UCBN",
             "CODES_CORRESP_2" => "Oui",
-            "CODES_CORRESP_3" => "Non",
-            "CONSEIL_ACA" => FALSE,
-            "CONSEIL_ACA_DUREE_VIE" => 1,
-            "CONSEIL_ACA_VISUALISATION" => TRUE,
-            "CONSEIL_RESTREINT" => TRUE,
-            "CONSEIL_RESTREINT_DUREE_VIE" => 1,
-            "CONSEIL_RESTREINT_VISU" => TRUE,
-            "CONTRAT" => TRUE,
-            "CONTRAT_DEPOT" => TRUE,
-            "CONTRAT_VISUALISATION" => TRUE,
-            "DEPASSEMENT_SERVICE_DU_SANS_HC" => FALSE,
-            "DOSSIER" => TRUE,
-            "DOSSIER_ADRESSE" => TRUE,
-            "DOSSIER_AUTRE_1" => FALSE,
-            "DOSSIER_AUTRE_1_EDITION" => TRUE,
-            "DOSSIER_AUTRE_1_VISUALISATION" => FALSE,
-            "DOSSIER_AUTRE_2" => FALSE,
-            "DOSSIER_AUTRE_2_EDITION" => TRUE,
-            "DOSSIER_AUTRE_2_VISUALISATION" => TRUE,
-            "DOSSIER_AUTRE_3" => FALSE,
-            "DOSSIER_AUTRE_3_EDITION" => TRUE,
-            "DOSSIER_AUTRE_3_VISUALISATION" => TRUE,
-            "DOSSIER_AUTRE_4" => FALSE,
-            "DOSSIER_AUTRE_4_EDITION" => TRUE,
-            "DOSSIER_AUTRE_4_VISUALISATION" => TRUE,
-            "DOSSIER_AUTRE_5" => FALSE,
-            "DOSSIER_AUTRE_5_EDITION" => TRUE,
-            "DOSSIER_AUTRE_5_VISUALISATION" => TRUE,
-            "DOSSIER_BANQUE" => TRUE,
-            "DOSSIER_CONTACT" => TRUE,
-            "DOSSIER_EDITION" => TRUE,
-            "DOSSIER_EMAIL_PERSO" => FALSE,
-            "DOSSIER_EMPLOYEUR" => FALSE,
-            "DOSSIER_IDENTITE_COMP" => TRUE,
-            "DOSSIER_INSEE" => TRUE,
-            "DOSSIER_SELECTIONNABLE" => TRUE,
-            "DOSSIER_TEL_PERSO" => FALSE,
-            "DOSSIER_VISUALISATION" => TRUE,
-            "FORMULE_VISUALISATION" => FALSE,
-            "LIBELLE" => "Étudiant hors Université de Caen",
-            "MODIF_SERVICE_DU" => FALSE,
-            "MODIF_SERVICE_DU_VISUALISATION" => FALSE,
-            "MOTIF_NON_PAIEMENT" => FALSE,
-            "ORDRE" => 388,
-            "PAIEMENT_VISUALISATION" => TRUE,
-            "PJ_ARCHIVAGE" => TRUE,
-            "PJ_EDITION" => TRUE,
-            "PJ_TELECHARGEMENT" => TRUE,
-            "PJ_VISUALISATION" => TRUE,
-            "PRIORITAIRE_INDICATEURS" => FALSE,
-            "REFERENTIEL_PREVU" => FALSE,
-            "REFERENTIEL_PREVU_EDITION" => FALSE,
-            "REFERENTIEL_PREVU_VISU" => FALSE,
-            "REFERENTIEL_REALISE" => FALSE,
-            "REFERENTIEL_REALISE_EDITION" => FALSE,
-            "REFERENTIEL_REALISE_VISU" => FALSE,
-            "SERVICE_EXTERIEUR" => FALSE,
-            "SERVICE_PREVU" => TRUE,
-            "SERVICE_PREVU_EDITION" => TRUE,
-            "SERVICE_PREVU_VISU" => TRUE,
-            "SERVICE_REALISE" => TRUE,
-            "SERVICE_REALISE_EDITION" => TRUE,
-            "SERVICE_REALISE_VISU" => TRUE,
-            "SERVICE_STATUTAIRE" => 0.0,
-            "TAUX_CHARGES_PATRONALES" => 1.0,
-            "TYPE_INTERVENANT_ID" => "E",
-        ],
-        [
-            "CLOTURE" => FALSE,
-            "CODE" => "SS_EMPLOI_NON_ETUD",
-            "CODES_CORRESP_2" => "Non",
             "CODES_CORRESP_3" => "Non",
             "CONSEIL_ACA" => FALSE,
             "CONSEIL_ACA_DUREE_VIE" => 1,
@@ -72309,21 +72799,21 @@ return [
             "DOSSIER_EMPLOYEUR" => FALSE,
             "DOSSIER_IDENTITE_COMP" => TRUE,
             "DOSSIER_INSEE" => TRUE,
-            "DOSSIER_SELECTIONNABLE" => FALSE,
+            "DOSSIER_SELECTIONNABLE" => TRUE,
             "DOSSIER_TEL_PERSO" => FALSE,
             "DOSSIER_VISUALISATION" => TRUE,
             "FORMULE_VISUALISATION" => FALSE,
-            "LIBELLE" => "Sans emploi, non étudiant",
+            "LIBELLE" => "Étudiant hors Université de Caen",
             "MODIF_SERVICE_DU" => FALSE,
             "MODIF_SERVICE_DU_VISUALISATION" => FALSE,
             "MOTIF_NON_PAIEMENT" => FALSE,
-            "ORDRE" => 389,
+            "ORDRE" => 388,
             "PAIEMENT_VISUALISATION" => TRUE,
             "PJ_ARCHIVAGE" => TRUE,
             "PJ_EDITION" => TRUE,
             "PJ_TELECHARGEMENT" => TRUE,
             "PJ_VISUALISATION" => TRUE,
-            "PRIORITAIRE_INDICATEURS" => FALSE,
+            "PRIORITAIRE_INDICATEURS" => TRUE,
             "REFERENTIEL_PREVU" => FALSE,
             "REFERENTIEL_PREVU_EDITION" => FALSE,
             "REFERENTIEL_PREVU_VISU" => FALSE,
@@ -72337,6 +72827,77 @@ return [
             "SERVICE_REALISE" => TRUE,
             "SERVICE_REALISE_EDITION" => TRUE,
             "SERVICE_REALISE_VISU" => TRUE,
+            "SERVICE_STATUTAIRE" => 0.0,
+            "TAUX_CHARGES_PATRONALES" => 1.0,
+            "TYPE_INTERVENANT_ID" => "E",
+        ],
+        [
+            "CLOTURE" => FALSE,
+            "CODE" => "SS_EMPLOI_NON_ETUD",
+            "CODES_CORRESP_2" => "Non",
+            "CODES_CORRESP_3" => "Non",
+            "CONSEIL_ACA" => FALSE,
+            "CONSEIL_ACA_DUREE_VIE" => 1,
+            "CONSEIL_ACA_VISUALISATION" => FALSE,
+            "CONSEIL_RESTREINT" => FALSE,
+            "CONSEIL_RESTREINT_DUREE_VIE" => 1,
+            "CONSEIL_RESTREINT_VISU" => FALSE,
+            "CONTRAT" => FALSE,
+            "CONTRAT_DEPOT" => FALSE,
+            "CONTRAT_VISUALISATION" => FALSE,
+            "DEPASSEMENT_SERVICE_DU_SANS_HC" => FALSE,
+            "DOSSIER" => FALSE,
+            "DOSSIER_ADRESSE" => TRUE,
+            "DOSSIER_AUTRE_1" => FALSE,
+            "DOSSIER_AUTRE_1_EDITION" => FALSE,
+            "DOSSIER_AUTRE_1_VISUALISATION" => FALSE,
+            "DOSSIER_AUTRE_2" => FALSE,
+            "DOSSIER_AUTRE_2_EDITION" => FALSE,
+            "DOSSIER_AUTRE_2_VISUALISATION" => FALSE,
+            "DOSSIER_AUTRE_3" => FALSE,
+            "DOSSIER_AUTRE_3_EDITION" => FALSE,
+            "DOSSIER_AUTRE_3_VISUALISATION" => FALSE,
+            "DOSSIER_AUTRE_4" => FALSE,
+            "DOSSIER_AUTRE_4_EDITION" => FALSE,
+            "DOSSIER_AUTRE_4_VISUALISATION" => FALSE,
+            "DOSSIER_AUTRE_5" => FALSE,
+            "DOSSIER_AUTRE_5_EDITION" => FALSE,
+            "DOSSIER_AUTRE_5_VISUALISATION" => FALSE,
+            "DOSSIER_BANQUE" => TRUE,
+            "DOSSIER_CONTACT" => TRUE,
+            "DOSSIER_EDITION" => FALSE,
+            "DOSSIER_EMAIL_PERSO" => FALSE,
+            "DOSSIER_EMPLOYEUR" => FALSE,
+            "DOSSIER_IDENTITE_COMP" => TRUE,
+            "DOSSIER_INSEE" => TRUE,
+            "DOSSIER_SELECTIONNABLE" => FALSE,
+            "DOSSIER_TEL_PERSO" => FALSE,
+            "DOSSIER_VISUALISATION" => FALSE,
+            "FORMULE_VISUALISATION" => FALSE,
+            "LIBELLE" => "Sans emploi, non étudiant",
+            "MODIF_SERVICE_DU" => FALSE,
+            "MODIF_SERVICE_DU_VISUALISATION" => FALSE,
+            "MOTIF_NON_PAIEMENT" => FALSE,
+            "ORDRE" => 389,
+            "PAIEMENT_VISUALISATION" => FALSE,
+            "PJ_ARCHIVAGE" => TRUE,
+            "PJ_EDITION" => FALSE,
+            "PJ_TELECHARGEMENT" => TRUE,
+            "PJ_VISUALISATION" => FALSE,
+            "PRIORITAIRE_INDICATEURS" => FALSE,
+            "REFERENTIEL_PREVU" => FALSE,
+            "REFERENTIEL_PREVU_EDITION" => FALSE,
+            "REFERENTIEL_PREVU_VISU" => FALSE,
+            "REFERENTIEL_REALISE" => FALSE,
+            "REFERENTIEL_REALISE_EDITION" => FALSE,
+            "REFERENTIEL_REALISE_VISU" => FALSE,
+            "SERVICE_EXTERIEUR" => FALSE,
+            "SERVICE_PREVU" => FALSE,
+            "SERVICE_PREVU_EDITION" => FALSE,
+            "SERVICE_PREVU_VISU" => FALSE,
+            "SERVICE_REALISE" => FALSE,
+            "SERVICE_REALISE_EDITION" => FALSE,
+            "SERVICE_REALISE_VISU" => FALSE,
             "SERVICE_STATUTAIRE" => 0.0,
             "TAUX_CHARGES_PATRONALES" => 1.0,
             "TYPE_INTERVENANT_ID" => "E",
@@ -72491,10 +73052,10 @@ return [
             "CODES_CORRESP_3" => "Oui",
             "CONSEIL_ACA" => FALSE,
             "CONSEIL_ACA_DUREE_VIE" => 5,
-            "CONSEIL_ACA_VISUALISATION" => TRUE,
+            "CONSEIL_ACA_VISUALISATION" => FALSE,
             "CONSEIL_RESTREINT" => FALSE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
-            "CONSEIL_RESTREINT_VISU" => TRUE,
+            "CONSEIL_RESTREINT_VISU" => FALSE,
             "CONTRAT" => TRUE,
             "CONTRAT_DEPOT" => TRUE,
             "CONTRAT_VISUALISATION" => TRUE,
@@ -72502,20 +73063,20 @@ return [
             "DOSSIER" => TRUE,
             "DOSSIER_ADRESSE" => TRUE,
             "DOSSIER_AUTRE_1" => FALSE,
-            "DOSSIER_AUTRE_1_EDITION" => TRUE,
+            "DOSSIER_AUTRE_1_EDITION" => FALSE,
             "DOSSIER_AUTRE_1_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_2" => FALSE,
-            "DOSSIER_AUTRE_2_EDITION" => TRUE,
-            "DOSSIER_AUTRE_2_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_2_EDITION" => FALSE,
+            "DOSSIER_AUTRE_2_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_3" => FALSE,
-            "DOSSIER_AUTRE_3_EDITION" => TRUE,
-            "DOSSIER_AUTRE_3_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_3_EDITION" => FALSE,
+            "DOSSIER_AUTRE_3_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_4" => FALSE,
-            "DOSSIER_AUTRE_4_EDITION" => TRUE,
-            "DOSSIER_AUTRE_4_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_4_EDITION" => FALSE,
+            "DOSSIER_AUTRE_4_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_5" => FALSE,
-            "DOSSIER_AUTRE_5_EDITION" => TRUE,
-            "DOSSIER_AUTRE_5_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_5_EDITION" => FALSE,
+            "DOSSIER_AUTRE_5_VISUALISATION" => FALSE,
             "DOSSIER_BANQUE" => TRUE,
             "DOSSIER_CONTACT" => TRUE,
             "DOSSIER_EDITION" => TRUE,
@@ -72523,7 +73084,7 @@ return [
             "DOSSIER_EMPLOYEUR" => FALSE,
             "DOSSIER_IDENTITE_COMP" => TRUE,
             "DOSSIER_INSEE" => TRUE,
-            "DOSSIER_SELECTIONNABLE" => TRUE,
+            "DOSSIER_SELECTIONNABLE" => FALSE,
             "DOSSIER_TEL_PERSO" => FALSE,
             "DOSSIER_VISUALISATION" => TRUE,
             "FORMULE_VISUALISATION" => FALSE,
@@ -72635,10 +73196,10 @@ return [
             "CODES_CORRESP_3" => "Oui",
             "CONSEIL_ACA" => FALSE,
             "CONSEIL_ACA_DUREE_VIE" => 5,
-            "CONSEIL_ACA_VISUALISATION" => TRUE,
+            "CONSEIL_ACA_VISUALISATION" => FALSE,
             "CONSEIL_RESTREINT" => FALSE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
-            "CONSEIL_RESTREINT_VISU" => TRUE,
+            "CONSEIL_RESTREINT_VISU" => FALSE,
             "CONTRAT" => TRUE,
             "CONTRAT_DEPOT" => TRUE,
             "CONTRAT_VISUALISATION" => TRUE,
@@ -72646,20 +73207,20 @@ return [
             "DOSSIER" => TRUE,
             "DOSSIER_ADRESSE" => TRUE,
             "DOSSIER_AUTRE_1" => FALSE,
-            "DOSSIER_AUTRE_1_EDITION" => TRUE,
+            "DOSSIER_AUTRE_1_EDITION" => FALSE,
             "DOSSIER_AUTRE_1_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_2" => FALSE,
-            "DOSSIER_AUTRE_2_EDITION" => TRUE,
-            "DOSSIER_AUTRE_2_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_2_EDITION" => FALSE,
+            "DOSSIER_AUTRE_2_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_3" => FALSE,
-            "DOSSIER_AUTRE_3_EDITION" => TRUE,
-            "DOSSIER_AUTRE_3_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_3_EDITION" => FALSE,
+            "DOSSIER_AUTRE_3_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_4" => FALSE,
-            "DOSSIER_AUTRE_4_EDITION" => TRUE,
-            "DOSSIER_AUTRE_4_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_4_EDITION" => FALSE,
+            "DOSSIER_AUTRE_4_VISUALISATION" => FALSE,
             "DOSSIER_AUTRE_5" => FALSE,
-            "DOSSIER_AUTRE_5_EDITION" => TRUE,
-            "DOSSIER_AUTRE_5_VISUALISATION" => TRUE,
+            "DOSSIER_AUTRE_5_EDITION" => FALSE,
+            "DOSSIER_AUTRE_5_VISUALISATION" => FALSE,
             "DOSSIER_BANQUE" => TRUE,
             "DOSSIER_CONTACT" => TRUE,
             "DOSSIER_EDITION" => TRUE,
@@ -72710,7 +73271,7 @@ return [
             "CONSEIL_RESTREINT" => FALSE,
             "CONSEIL_RESTREINT_DUREE_VIE" => 1,
             "CONSEIL_RESTREINT_VISU" => FALSE,
-            "CONTRAT" => TRUE,
+            "CONTRAT" => FALSE,
             "CONTRAT_DEPOT" => FALSE,
             "CONTRAT_VISUALISATION" => FALSE,
             "DEPASSEMENT_SERVICE_DU_SANS_HC" => TRUE,
@@ -72811,7 +73372,7 @@ return [
             "DOSSIER_INSEE" => FALSE,
             "DOSSIER_SELECTIONNABLE" => TRUE,
             "DOSSIER_TEL_PERSO" => FALSE,
-            "DOSSIER_VISUALISATION" => FALSE,
+            "DOSSIER_VISUALISATION" => TRUE,
             "FORMULE_VISUALISATION" => FALSE,
             "LIBELLE" => "INSPE - Permanent académique du 2nd degré",
             "MODIF_SERVICE_DU" => FALSE,
@@ -72832,8 +73393,8 @@ return [
             "REFERENTIEL_REALISE_VISU" => FALSE,
             "SERVICE_EXTERIEUR" => FALSE,
             "SERVICE_PREVU" => TRUE,
-            "SERVICE_PREVU_EDITION" => FALSE,
-            "SERVICE_PREVU_VISU" => FALSE,
+            "SERVICE_PREVU_EDITION" => TRUE,
+            "SERVICE_PREVU_VISU" => TRUE,
             "SERVICE_REALISE" => TRUE,
             "SERVICE_REALISE_EDITION" => FALSE,
             "SERVICE_REALISE_VISU" => FALSE,
@@ -72882,7 +73443,7 @@ return [
             "DOSSIER_INSEE" => FALSE,
             "DOSSIER_SELECTIONNABLE" => TRUE,
             "DOSSIER_TEL_PERSO" => FALSE,
-            "DOSSIER_VISUALISATION" => FALSE,
+            "DOSSIER_VISUALISATION" => TRUE,
             "FORMULE_VISUALISATION" => FALSE,
             "LIBELLE" => "INSPE - Permanent académique du 1er degré",
             "MODIF_SERVICE_DU" => FALSE,
@@ -72903,85 +73464,14 @@ return [
             "REFERENTIEL_REALISE_VISU" => FALSE,
             "SERVICE_EXTERIEUR" => FALSE,
             "SERVICE_PREVU" => TRUE,
-            "SERVICE_PREVU_EDITION" => FALSE,
-            "SERVICE_PREVU_VISU" => FALSE,
+            "SERVICE_PREVU_EDITION" => TRUE,
+            "SERVICE_PREVU_VISU" => TRUE,
             "SERVICE_REALISE" => TRUE,
             "SERVICE_REALISE_EDITION" => FALSE,
             "SERVICE_REALISE_VISU" => FALSE,
             "SERVICE_STATUTAIRE" => 0.0,
             "TAUX_CHARGES_PATRONALES" => 1.0,
             "TYPE_INTERVENANT_ID" => "P",
-        ],
-        [
-            "CLOTURE" => FALSE,
-            "CODE" => "BIATSS 2",
-            "CODES_CORRESP_2" => "Non",
-            "CODES_CORRESP_3" => "Non",
-            "CONSEIL_ACA" => FALSE,
-            "CONSEIL_ACA_DUREE_VIE" => 1,
-            "CONSEIL_ACA_VISUALISATION" => FALSE,
-            "CONSEIL_RESTREINT" => TRUE,
-            "CONSEIL_RESTREINT_DUREE_VIE" => 1,
-            "CONSEIL_RESTREINT_VISU" => TRUE,
-            "CONTRAT" => TRUE,
-            "CONTRAT_DEPOT" => TRUE,
-            "CONTRAT_VISUALISATION" => TRUE,
-            "DEPASSEMENT_SERVICE_DU_SANS_HC" => FALSE,
-            "DOSSIER" => FALSE,
-            "DOSSIER_ADRESSE" => TRUE,
-            "DOSSIER_AUTRE_1" => FALSE,
-            "DOSSIER_AUTRE_1_EDITION" => FALSE,
-            "DOSSIER_AUTRE_1_VISUALISATION" => FALSE,
-            "DOSSIER_AUTRE_2" => FALSE,
-            "DOSSIER_AUTRE_2_EDITION" => FALSE,
-            "DOSSIER_AUTRE_2_VISUALISATION" => FALSE,
-            "DOSSIER_AUTRE_3" => FALSE,
-            "DOSSIER_AUTRE_3_EDITION" => FALSE,
-            "DOSSIER_AUTRE_3_VISUALISATION" => FALSE,
-            "DOSSIER_AUTRE_4" => FALSE,
-            "DOSSIER_AUTRE_4_EDITION" => FALSE,
-            "DOSSIER_AUTRE_4_VISUALISATION" => FALSE,
-            "DOSSIER_AUTRE_5" => FALSE,
-            "DOSSIER_AUTRE_5_EDITION" => FALSE,
-            "DOSSIER_AUTRE_5_VISUALISATION" => FALSE,
-            "DOSSIER_BANQUE" => TRUE,
-            "DOSSIER_CONTACT" => TRUE,
-            "DOSSIER_EDITION" => FALSE,
-            "DOSSIER_EMAIL_PERSO" => FALSE,
-            "DOSSIER_EMPLOYEUR" => FALSE,
-            "DOSSIER_IDENTITE_COMP" => TRUE,
-            "DOSSIER_INSEE" => TRUE,
-            "DOSSIER_SELECTIONNABLE" => FALSE,
-            "DOSSIER_TEL_PERSO" => FALSE,
-            "DOSSIER_VISUALISATION" => FALSE,
-            "FORMULE_VISUALISATION" => FALSE,
-            "LIBELLE" => "BIATSS 2",
-            "MODIF_SERVICE_DU" => FALSE,
-            "MODIF_SERVICE_DU_VISUALISATION" => FALSE,
-            "MOTIF_NON_PAIEMENT" => TRUE,
-            "ORDRE" => 399,
-            "PAIEMENT_VISUALISATION" => TRUE,
-            "PJ_ARCHIVAGE" => TRUE,
-            "PJ_EDITION" => TRUE,
-            "PJ_TELECHARGEMENT" => TRUE,
-            "PJ_VISUALISATION" => TRUE,
-            "PRIORITAIRE_INDICATEURS" => FALSE,
-            "REFERENTIEL_PREVU" => FALSE,
-            "REFERENTIEL_PREVU_EDITION" => FALSE,
-            "REFERENTIEL_PREVU_VISU" => FALSE,
-            "REFERENTIEL_REALISE" => FALSE,
-            "REFERENTIEL_REALISE_EDITION" => FALSE,
-            "REFERENTIEL_REALISE_VISU" => FALSE,
-            "SERVICE_EXTERIEUR" => FALSE,
-            "SERVICE_PREVU" => TRUE,
-            "SERVICE_PREVU_EDITION" => TRUE,
-            "SERVICE_PREVU_VISU" => TRUE,
-            "SERVICE_REALISE" => TRUE,
-            "SERVICE_REALISE_EDITION" => TRUE,
-            "SERVICE_REALISE_VISU" => TRUE,
-            "SERVICE_STATUTAIRE" => 0.0,
-            "TAUX_CHARGES_PATRONALES" => 1.0,
-            "TYPE_INTERVENANT_ID" => "E",
         ],
     ],
     "ROLE" => [
@@ -73409,6 +73899,54 @@ return [
             "ROLE_ID" => "gestionnaire-composante",
         ],
         [
+            "PRIVILEGE_ID" => "enseignement-prevu-visualisation",
+            "ROLE_ID" => "gestionnaire-composante",
+        ],
+        [
+            "PRIVILEGE_ID" => "enseignement-prevu-edition",
+            "ROLE_ID" => "gestionnaire-composante",
+        ],
+        [
+            "PRIVILEGE_ID" => "enseignement-prevu-validation",
+            "ROLE_ID" => "gestionnaire-composante",
+        ],
+        [
+            "PRIVILEGE_ID" => "enseignement-realise-visualisation",
+            "ROLE_ID" => "gestionnaire-composante",
+        ],
+        [
+            "PRIVILEGE_ID" => "enseignement-realise-edition",
+            "ROLE_ID" => "gestionnaire-composante",
+        ],
+        [
+            "PRIVILEGE_ID" => "enseignement-realise-validation",
+            "ROLE_ID" => "gestionnaire-composante",
+        ],
+        [
+            "PRIVILEGE_ID" => "referentiel-prevu-visualisation",
+            "ROLE_ID" => "gestionnaire-composante",
+        ],
+        [
+            "PRIVILEGE_ID" => "referentiel-prevu-edition",
+            "ROLE_ID" => "gestionnaire-composante",
+        ],
+        [
+            "PRIVILEGE_ID" => "referentiel-prevu-validation",
+            "ROLE_ID" => "gestionnaire-composante",
+        ],
+        [
+            "PRIVILEGE_ID" => "referentiel-realise-visualisation",
+            "ROLE_ID" => "gestionnaire-composante",
+        ],
+        [
+            "PRIVILEGE_ID" => "referentiel-realise-edition",
+            "ROLE_ID" => "gestionnaire-composante",
+        ],
+        [
+            "PRIVILEGE_ID" => "referentiel-realise-validation",
+            "ROLE_ID" => "gestionnaire-composante",
+        ],
+        [
             "PRIVILEGE_ID" => "modif-service-du-visualisation",
             "ROLE_ID" => "superviseur-etablissement",
         ],
@@ -73653,31 +74191,19 @@ return [
             "ROLE_ID" => "superviseur-etablissement",
         ],
         [
-            "PRIVILEGE_ID" => "plafonds-visualisation",
+            "PRIVILEGE_ID" => "enseignement-prevu-visualisation",
             "ROLE_ID" => "superviseur-etablissement",
         ],
         [
-            "PRIVILEGE_ID" => "plafonds-edition",
+            "PRIVILEGE_ID" => "enseignement-realise-visualisation",
             "ROLE_ID" => "superviseur-etablissement",
         ],
         [
-            "PRIVILEGE_ID" => "plafonds-config-structure",
+            "PRIVILEGE_ID" => "referentiel-prevu-visualisation",
             "ROLE_ID" => "superviseur-etablissement",
         ],
         [
-            "PRIVILEGE_ID" => "plafonds-config-referentiel",
-            "ROLE_ID" => "superviseur-etablissement",
-        ],
-        [
-            "PRIVILEGE_ID" => "plafonds-config-statut",
-            "ROLE_ID" => "superviseur-etablissement",
-        ],
-        [
-            "PRIVILEGE_ID" => "plafonds-derogations-visualisation",
-            "ROLE_ID" => "superviseur-etablissement",
-        ],
-        [
-            "PRIVILEGE_ID" => "plafonds-derogations-edition",
+            "PRIVILEGE_ID" => "referentiel-realise-visualisation",
             "ROLE_ID" => "superviseur-etablissement",
         ],
     ],
@@ -73784,14 +74310,6 @@ return [
             "ETAPE_REQUISE" => FALSE,
             "LIBELLE_COURT" => "Validation d'études",
             "LIBELLE_LONG" => "Validation d'études",
-            "SERVICE_STATUTAIRE" => TRUE,
-        ],
-        [
-            "CODE" => "ff",
-            "DOMAINE_FONCTIONNEL_ID" => "D103",
-            "ETAPE_REQUISE" => FALSE,
-            "LIBELLE_COURT" => "ff",
-            "LIBELLE_LONG" => "ff",
             "SERVICE_STATUTAIRE" => TRUE,
         ],
     ],
@@ -73966,8 +74484,8 @@ return [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
             "FC" => FALSE,
-            "NUM_REGLE" => 1,
-            "OBLIGATOIRE" => 1,
+            "NUM_REGLE" => 28,
+            "OBLIGATOIRE" => 0,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 0.0,
             "STATUT_ID" => "PFA",
@@ -73977,7 +74495,7 @@ return [
         [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
-            "FC" => FALSE,
+            "FC" => TRUE,
             "NUM_REGLE" => 1,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
@@ -74060,9 +74578,9 @@ return [
         ],
         [
             "CHANGEMENT_RIB" => FALSE,
-            "DUREE_VIE" => 1,
-            "FC" => TRUE,
-            "NUM_REGLE" => 1,
+            "DUREE_VIE" => 99,
+            "FC" => FALSE,
+            "NUM_REGLE" => 2,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 0.0,
@@ -74132,9 +74650,9 @@ return [
         ],
         [
             "CHANGEMENT_RIB" => FALSE,
-            "DUREE_VIE" => 1,
-            "FC" => TRUE,
-            "NUM_REGLE" => 1,
+            "DUREE_VIE" => 99,
+            "FC" => FALSE,
+            "NUM_REGLE" => 2,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 0.0,
@@ -74229,8 +74747,8 @@ return [
         [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
-            "FC" => FALSE,
-            "NUM_REGLE" => 1,
+            "FC" => TRUE,
+            "NUM_REGLE" => 2,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 0.0,
@@ -74241,7 +74759,7 @@ return [
         [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
-            "FC" => FALSE,
+            "FC" => TRUE,
             "NUM_REGLE" => 1,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
@@ -74254,8 +74772,8 @@ return [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
             "FC" => FALSE,
-            "NUM_REGLE" => 1,
-            "OBLIGATOIRE" => 1,
+            "NUM_REGLE" => 18,
+            "OBLIGATOIRE" => 0,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 0.0,
             "STATUT_ID" => "ASS_MI_TPS",
@@ -74265,7 +74783,7 @@ return [
         [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
-            "FC" => FALSE,
+            "FC" => TRUE,
             "NUM_REGLE" => 1,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
@@ -74277,7 +74795,7 @@ return [
         [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
-            "FC" => FALSE,
+            "FC" => TRUE,
             "NUM_REGLE" => 1,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
@@ -74290,8 +74808,8 @@ return [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
             "FC" => FALSE,
-            "NUM_REGLE" => 1,
-            "OBLIGATOIRE" => 1,
+            "NUM_REGLE" => 24,
+            "OBLIGATOIRE" => 0,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 0.0,
             "STATUT_ID" => "DOCTOR_OLD",
@@ -74301,7 +74819,7 @@ return [
         [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
-            "FC" => FALSE,
+            "FC" => TRUE,
             "NUM_REGLE" => 1,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
@@ -74314,8 +74832,8 @@ return [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
             "FC" => FALSE,
-            "NUM_REGLE" => 1,
-            "OBLIGATOIRE" => 1,
+            "NUM_REGLE" => 8,
+            "OBLIGATOIRE" => 0,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 0.0,
             "STATUT_ID" => "LECTEUR",
@@ -74326,8 +74844,8 @@ return [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
             "FC" => FALSE,
-            "NUM_REGLE" => 1,
-            "OBLIGATOIRE" => 1,
+            "NUM_REGLE" => 16,
+            "OBLIGATOIRE" => 0,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 0.0,
             "STATUT_ID" => "MAITRE_LANG",
@@ -74420,9 +74938,9 @@ return [
         ],
         [
             "CHANGEMENT_RIB" => FALSE,
-            "DUREE_VIE" => 1,
-            "FC" => TRUE,
-            "NUM_REGLE" => 2,
+            "DUREE_VIE" => 99,
+            "FC" => FALSE,
+            "NUM_REGLE" => 1,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 0.0,
@@ -74492,9 +75010,9 @@ return [
         ],
         [
             "CHANGEMENT_RIB" => FALSE,
-            "DUREE_VIE" => 99,
-            "FC" => FALSE,
-            "NUM_REGLE" => 1,
+            "DUREE_VIE" => 1,
+            "FC" => TRUE,
+            "NUM_REGLE" => 2,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 0.0,
@@ -74566,8 +75084,8 @@ return [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
             "FC" => FALSE,
-            "NUM_REGLE" => 1,
-            "OBLIGATOIRE" => 1,
+            "NUM_REGLE" => 12,
+            "OBLIGATOIRE" => 0,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 0.0,
             "STATUT_ID" => "ENS_CH_CONTRAT",
@@ -74769,7 +75287,7 @@ return [
         [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
-            "FC" => FALSE,
+            "FC" => TRUE,
             "NUM_REGLE" => 1,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
@@ -74781,7 +75299,7 @@ return [
         [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
-            "FC" => FALSE,
+            "FC" => TRUE,
             "NUM_REGLE" => 1,
             "OBLIGATOIRE" => 1,
             "OBLIGATOIRE_HNP" => FALSE,
@@ -74794,8 +75312,8 @@ return [
             "CHANGEMENT_RIB" => FALSE,
             "DUREE_VIE" => 1,
             "FC" => FALSE,
-            "NUM_REGLE" => 1,
-            "OBLIGATOIRE" => 1,
+            "NUM_REGLE" => 4,
+            "OBLIGATOIRE" => 0,
             "OBLIGATOIRE_HNP" => FALSE,
             "SEUIL_HETD" => 0.0,
             "STATUT_ID" => "ENS_CONTRACT_CDI",

@@ -14,13 +14,14 @@ WITH t AS ( SELECT
   vh.type_intervention_id           type_intervention_id,
   NULL                              fonction_referentiel_id,
   NULL                              motif_non_paiement_id,
-
+  NULL                              tag_id,
   s.description                     service_description,
 
   vh.heures                         heures,
   0                                 heures_ref,
   0                                 heures_non_payees,
   null                              motif_non_paiement,
+  NULL                              tag,
   frvh.service_fi                   service_fi,
   frvh.service_fa                   service_fa,
   frvh.service_fc                   service_fc,
@@ -37,8 +38,8 @@ WITH t AS ( SELECT
 FROM
   formule_resultat_vh                frvh
   JOIN formule_resultat                fr ON fr.id = frvh.formule_resultat_id
-  JOIN volume_horaire                  vh ON vh.id = frvh.volume_horaire_id AND vh.motif_non_paiement_id IS NULL AND vh.histo_destruction IS NULL
-  JOIN service                          s ON s.id = vh.service_id AND s.intervenant_id = fr.intervenant_id AND s.histo_destruction IS NULL
+  JOIN volume_horaire                  vh ON vh.id = frvh.volume_horaire_id AND vh.motif_non_paiement_id IS NULL AND vh.tag_id IS NULL AND vh.histo_destruction IS NULL
+  JOIN service                         s  ON s.id = vh.service_id AND s.intervenant_id = fr.intervenant_id AND s.histo_destruction IS NULL
 
 UNION ALL
 
@@ -57,13 +58,14 @@ SELECT
   vh.type_intervention_id           type_intervention_id,
   NULL                              fonction_referentiel_id,
   mnp.id                            motif_non_paiement_id,
-
+  NULL                              tag_id,
   s.description                     service_description,
 
   vh.heures                         heures,
   0                                 heures_ref,
   1                                 heures_non_payees,
   mnp.libelle_court                 motif_non_paiement,
+  NULL                              tag,
   0                                 service_fi,
   0                                 service_fa,
   0                                 service_fc,
@@ -86,6 +88,52 @@ FROM
 WHERE
   vh.histo_destruction IS NULL
   AND s.histo_destruction IS NULL
+  AND vh.tag_id IS NULL
+
+UNION ALL
+
+SELECT 'vh_' || vh.id             id,
+    s.id                       service_id,
+    NULL                       service_referentiel_id,
+    s.intervenant_id           intervenant_id,
+    vh.type_volume_horaire_id  type_volume_horaire_id,
+    vhe.etat_volume_horaire_id etat_volume_horaire_id,
+    s.element_pedagogique_id   element_pedagogique_id,
+    s.etablissement_id         etablissement_id,
+    NULL                       structure_aff_id,
+    NULL                       structure_ens_id,
+    vh.periode_id              periode_id,
+    vh.type_intervention_id    type_intervention_id,
+    NULL                       fonction_referentiel_id,
+    NULL                       motif_non_paiement_id,
+    tag.id                     tag_id,
+    s.description              service_description,
+    vh.heures                  heures,
+    0                          heures_ref,
+    1                          heures_non_payees,
+    NULL                       motif_non_paiement,
+    tag.libelle_court          tag,
+    0                          service_fi,
+    0                          service_fa,
+    0                          service_fc,
+    0                          service_referentiel,
+    0                          heures_compl_fi,
+    0                          heures_compl_fa,
+    0                          heures_compl_fc,
+    0                          heures_compl_fc_majorees,
+    0                          heures_compl_referentiel,
+    0                          total,
+    COALESCE(fr.solde, 0)      solde,
+    NULL                       service_ref_formation,
+    NULL                       commentaires
+    FROM volume_horaire vh
+             JOIN service s ON s.id = vh.service_id
+             JOIN v_vol_horaire_etat_multi vhe ON vhe.volume_horaire_id = vh.id
+             JOIN tag ON tag.id = vh.tag_id
+             LEFT JOIN formule_resultat fr ON fr.intervenant_id = s.intervenant_id AND fr.type_volume_horaire_id = vh.type_volume_horaire_id AND fr.etat_volume_horaire_id = vhe.etat_volume_horaire_id
+    WHERE vh.histo_destruction IS NULL
+      AND s.histo_destruction IS NULL
+      AND vh.motif_non_paiement_id IS NULL
 
 UNION ALL
 
@@ -103,14 +151,16 @@ SELECT
   NULL                              periode_id,
   NULL                              type_intervention_id,
   sr.fonction_id                    fonction_referentiel_id,
-  NULL                              motif_non_paiement_id,
+  mnp.id                            motif_non_paiement_id,
+  t.id                              tag_id,
 
   NULL                              service_description,
 
   0                                 heures,
   vhr.heures                        heures_ref,
   0                                 heures_non_payees,
-  null                              motif_non_paiement,
+  mnp.libelle_court                 motif_non_paiement,
+  t.libelle_court                   tag,
   0                                 service_fi,
   0                                 service_fa,
   0                                 service_fc,
@@ -129,6 +179,8 @@ FROM
   JOIN formule_resultat           fr ON fr.id = frvr.formule_resultat_id
   JOIN volume_horaire_ref        vhr ON vhr.id =  frvr.volume_horaire_ref_id AND vhr.histo_destruction IS NULL
   JOIN service_referentiel        sr ON sr.id = vhr.service_referentiel_id AND sr.intervenant_id = fr.intervenant_id AND sr.histo_destruction IS NULL
+  LEFT JOIN motif_non_paiement mnp ON mnp.id = sr.motif_non_paiement_id
+  LEFT JOIN tag t ON t.id = sr.tag_id
 
 UNION ALL
 
@@ -147,13 +199,14 @@ SELECT
   NULL                              type_intervention_id,
   NULL                              fonction_referentiel_id,
   NULL                              motif_non_paiement_id,
-
+  NULL                              tag_id,
   NULL                              service_description,
 
   0                                 heures,
   0                                 heures_ref,
   0                                 heures_non_payees,
-  null                              motif_non_paiement,
+  NULL                              motif_non_paiement,
+  NULL                              tag,
   0                                 service_fi,
   0                                 service_fa,
   0                                 service_fc,
@@ -164,7 +217,7 @@ SELECT
   0                                 heures_compl_fc_majorees,
   NULL                              heures_compl_referentiel,
   0                                 total,
-  0                                 solde,
+  si.service_statutaire + SUM(msd.heures * mms.multiplicateur) solde,
   NULL                              service_ref_formation,
   NULL                              commentaires
 FROM
@@ -172,16 +225,15 @@ FROM
   JOIN statut               si ON si.id = i.statut_id
   JOIN etat_volume_horaire evh ON evh.code IN ('saisi','valide')
   JOIN type_volume_horaire tvh ON tvh.code IN ('PREVU','REALISE')
-  LEFT JOIN modification_service_du msd ON msd.intervenant_id = i.id AND msd.histo_destruction IS NULL
-  LEFT JOIN motif_modification_service mms ON mms.id = msd.motif_id
+  JOIN modification_service_du msd ON msd.intervenant_id = i.id AND msd.histo_destruction IS NULL
+  JOIN motif_modification_service mms ON mms.id = msd.motif_id
+  LEFT JOIN formule_resultat fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
 WHERE
   i.histo_destruction IS NULL
-  AND si.service_statutaire > 0
+  AND COALESCE(fr.total,0) = 0
+  AND msd.heures <> 0
 GROUP BY
   i.id, si.service_statutaire, evh.id, tvh.id
-HAVING
-  si.service_statutaire + SUM(msd.heures * mms.multiplicateur) = 0
-
 
 ), ponds AS (
 SELECT
@@ -224,7 +276,7 @@ SELECT
   di.id                             intervenant_discipline_id,
   de.id                             element_discipline_id,
   t.motif_non_paiement_id           motif_non_paiement_id,
-
+  t.tag_id                          tag_id,
   tvh.libelle || ' ' || evh.libelle type_etat,
   his.histo_modification            service_date_modification,
 
@@ -266,6 +318,7 @@ SELECT
   t.heures_ref                      heures_ref,
   t.heures_non_payees               heures_non_payees,
   t.motif_non_paiement              motif_non_paiement,
+  t.tag                             tag,
   si.service_statutaire             service_statutaire,
   fi.heures_service_modifie         service_du_modifie,
   t.service_fi                      service_fi,

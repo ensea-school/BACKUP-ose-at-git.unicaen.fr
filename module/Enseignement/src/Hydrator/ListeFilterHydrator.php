@@ -18,7 +18,6 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
     private $filters;
 
 
-
     /**
      * Extract values from an object
      *
@@ -31,14 +30,13 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
         $data = [];
         foreach (VolumeHoraireListe::FILTRES_LIST as $filter => $rule) {
             if ($this->hasFilter($filter)) {
-                $method        = 'get' . $rule['accessor'];
+                $method = 'get' . $rule['accessor'];
                 $data[$filter] = $object->$method();
             }
         }
 
         return $data;
     }
-
 
 
     /**
@@ -52,7 +50,7 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
      *
      * @return int
      */
-    public function dataToInt(string $filter, $value): int
+    public function dataToInt(string $filter, $value): ?int
     {
         if (false === $value) return -2;
         if (true === $value) return -1;
@@ -65,11 +63,10 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
     }
 
 
-
     /**
      * @param string $filter
      * @param        $value
-     * @param array  $options
+     * @param array $options
      *
      * @return bool|\DateTime|int|null|object
      * @throws \Doctrine\ORM\ORMException
@@ -78,6 +75,7 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
      */
     public function allToData(string $filter, $value, $options = [])
     {
+
         if (
             is_bool($value) || null === $value || is_object($value)
         ) {
@@ -101,7 +99,7 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
                     $dateTime = new \DateTime;
                     $dateTime->setTimestamp($valInt);
                 } else {
-                    $format   = isset($options['format']) ? $options['format'] : Constants::DATETIME_FORMAT;
+                    $format = isset($options['format']) ? $options['format'] : Constants::DATETIME_FORMAT;
                     $dateTime = \DateTime::createFromFormat($format, $value);
                 }
 
@@ -114,7 +112,6 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
                 return $em->find($class, $valInt);
         }
     }
-
 
 
     /**
@@ -140,26 +137,26 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
     }
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array              $data
+     * @param array $data
      * @param VolumeHoraireListe $object
      *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
+
         foreach ($data as $filter => $value) {
             if ($this->hasFilter($filter)) {
-                $rule          = VolumeHoraireListe::FILTRES_LIST[$filter];
-                $method        = 'set' . $rule['accessor'];
+                $rule = VolumeHoraireListe::FILTRES_LIST[$filter];
+                $method = 'set' . $rule['accessor'];
+                $val = $this->allToData($filter, $value);
                 $data[$filter] = $object->$method($this->allToData($filter, $value));
             }
         }
     }
-
 
 
     /**
@@ -169,7 +166,6 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
     {
         return $this->filters;
     }
-
 
 
     /**
@@ -183,7 +179,6 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
 
         return $this;
     }
-
 
 
     public function hasFilter(string $filter): bool

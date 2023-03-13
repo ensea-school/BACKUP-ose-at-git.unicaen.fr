@@ -3,10 +3,10 @@
 namespace Application\Entity\Db;
 
 use Application\Provider\Privilege\Privileges;
-use Doctrine\ORM\Mapping as ORM;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use OffreFormation\Entity\Db\TypeHeures;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * TypeRessource
@@ -297,7 +297,7 @@ class TypeRessource implements HistoriqueAwareInterface, ResourceInterface
     /**
      * détermine si un type d'heures peut être appliqué à ce type de ressource ou non
      *
-     * @param \Application\Entity\Db\TypeHeures $typeHeures
+     * @param \OffreFormation\Entity\Db\TypeHeures $typeHeures
      *
      * @return boolean
      */

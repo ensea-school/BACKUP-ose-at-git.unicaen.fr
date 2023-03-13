@@ -21,6 +21,18 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
+        'EFFECTIF_CALCULE'      => [
+            'name'        => 'EFFECTIF_CALCULE',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 14,
+            'commentaire' => NULL,
+        ],
         'ETAPE_ID'              => [
             'name'        => 'ETAPE_ID',
             'type'        => 'int',

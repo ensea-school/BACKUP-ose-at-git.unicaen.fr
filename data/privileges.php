@@ -147,8 +147,35 @@ return [
         ],
     ],
 
+    'mission' => [
+        'libelle'    => 'Missions',
+        'privileges' => [
+            'visualisation'          => 'Visualisation',
+            'edition'                => 'Edition',
+            'validation'             => 'Validation',
+            'devalidation'           => 'Dévalidation',
+            'autovalidation'         => 'Autovalidation',
+            'edition-realise'        => 'Edition des heures réalisées',
+            'validation-realise'     => 'Validation des heures réalisées',
+            'devalidation-realise'   => 'Dévalidation des heures réalisées',
+            'autovalidation-realise' => 'Auto-validation des heures réalisées',
+            'visualisation-type'     => 'Visualisation des types de mission',
+            'edition-type'           => 'Edition des types de mission',
+            'suppression-type'       => 'Suppression des types de mission',
+        ],
+    ],
+
     'motif-non-paiement' => [
         'libelle'    => 'Motifs de non paiement (pour enseignements)',
+        'privileges' => [
+            'visualisation'                => 'Visualisation',
+            'edition'                      => 'Édition',
+            'administration-visualisation' => 'Administration - Visualisation',
+            'administration-edition'       => 'Administration - Édition',
+        ],
+    ],
+    'tag'                => [
+        'libelle'    => 'Tag',
         'privileges' => [
             'visualisation'                => 'Visualisation',
             'edition'                      => 'Édition',
@@ -446,6 +473,15 @@ return [
             'grades-edition'       => 'Édition grades',
             'corps-visualisation'  => 'Visualisation corps',
             'corps-edition'        => 'Édition corps',
+        ],
+    ],
+
+    'taux' => [
+        'libelle'    => 'Taux',
+        'privileges' => [
+            'visualisation' => 'Visualisation des taux',
+            'edition'       => 'Edition des taux',
+            'suppression'   => 'Suppression des taux',
         ],
     ],
 

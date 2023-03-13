@@ -1,0 +1,22 @@
+{
+  "name": "ose",
+  "version": "21.0.0",
+  "author": "Université de Caen Normandie",
+  "description": "Organisation des Services d'Enseignement",
+  "license": "ISC",
+  "private": true,
+  "scripts": {
+    "dev": "APP_ENV=development vite dev",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/compiler-sfc": "^3.2.45",
+    "vite": "^4.0.0",
+    "vite-plugin-live-reload": "^3.0.1",
+    "sass": "^1.57.1"
+  }
+}

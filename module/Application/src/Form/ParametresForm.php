@@ -6,7 +6,7 @@ use Application\Entity\Db\Formule;
 use Application\Entity\Db\Parametre;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\FormuleServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;

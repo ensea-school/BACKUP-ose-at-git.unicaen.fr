@@ -1,5 +1,4 @@
 <?php
 
 // Mise à jour
-$dataGen = new DataGen($oa);
-$dataGen->update('FORMULE');
+$oa->getBdd()->dataUpdater()->run('update', 'FORMULE');

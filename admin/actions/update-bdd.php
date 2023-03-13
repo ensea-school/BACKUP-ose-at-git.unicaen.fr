@@ -58,8 +58,7 @@ $bdd->majSequences($ref);
 
 
 // Mise à jour des données
-$dataGen = new DataGen($oa);
-$dataGen->update();
+$bdd->dataUpdater()->run('update');
 
 
 // Reconstruction des TBL

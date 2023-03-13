@@ -549,8 +549,7 @@ class PlafondService extends AbstractEntityService
     public function construire()
     {
         $oseAdmin = oseAdmin();
-        $dataGen  = new \DataGen($oseAdmin);
-        $dataGen->update('INDICATEUR');
+        $oseAdmin->getBdd()->dataUpdater()->run('update', 'INDICATEUR');
         $this->construireVues();
         $this->getServiceQueryGenerator()->updateProcedures();
     }

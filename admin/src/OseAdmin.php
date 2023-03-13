@@ -9,11 +9,13 @@ class OseAdmin
     const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE.git';
     const MIN_VERSION = 14; // version minimum installable
 
-    private static ?OseAdmin $instance = null;
+    private static ?OseAdmin         $instance    = null;
 
-    protected Console        $console;
+    protected Console                $console;
 
-    protected ?\BddAdmin\Bdd $bdd      = null;
+    protected ?\BddAdmin\Bdd         $bdd         = null;
+
+    protected ?\BddAdmin\DataUpdater $dataUpdater = null;
 
     /**
      * @var array
@@ -374,6 +376,16 @@ class OseAdmin
             if (PHP_SAPI == 'cli') {
                 $this->bdd->setLogger($this->console);
             }
+
+            $this->bdd->setOption('source-id', $this->getSourceOseId());
+            $this->bdd->setOption('histo-user-id', $this->getOseAppliId());
+
+            $du = $this->bdd->dataUpdater();
+            $du->setConfig(require $this->getOseDir() . '/data/data_updater_config.php');
+            $du->addSource(new \DataSource($this));
+            $du->addSource($this->getOseDir() . '/data/nomenclatures.php');
+            $du->addSource($this->getOseDir() . '/data/donnees_par_defaut.php');
+            $du->addAction('privileges', 'Mise à jour des privilèges dans la base de données');
         }
 
         return $this->bdd;

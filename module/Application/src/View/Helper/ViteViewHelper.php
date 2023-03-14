@@ -82,7 +82,11 @@ class ViteViewHelper extends AbstractHtmlElement
 
     public function getConfig(string $param)
     {
-        return $this->config[$param] ?: null;
+        if (array_key_exists($param, $this->config)){
+            return $this->config[$param];
+        }else{
+            return null;
+        }
     }
 
 

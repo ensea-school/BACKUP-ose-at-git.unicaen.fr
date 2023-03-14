@@ -1933,6 +1933,7 @@ return [
         'AUTO_VALIDATION',
         'HORAIRE_DEBUT',
         'HORAIRE_FIN',
+        'CONTRAT_ID',
     ],
     'WF_DEP_BLOQUANTE'               => [
         'ID',
@@ -2274,6 +2275,11 @@ return [
         'INTERVENANT_ID',
         'STATUT_CODE',
         'STATUT_DOSSIER_CODE',
+    ],
+    'TYPE_SERVICE'                   => [
+        'ID',
+        'CODE',
+        'LIBELLE',
     ],
 ];
 

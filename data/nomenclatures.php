@@ -899,38 +899,21 @@ return [
         ],
     ],
 
-    'TAUX_REMU' => [
+    'TYPE_SERVICE' => [
         [
             'ID'      => 1,
-            'CODE'    => 'TLD',
-            'LIBELLE' => 'Taux légal par défaut',
-        ],
-    ],
-
-    'TAUX_REMU_VALEUR' => [
-        [
-            'ID'           => 1,
-            'TAUX_REMu_ID' => 1,
-            'DATE_EFFET'   => '27/07/2009',
-            'VALEUR'       => 40.58,
+            'CODE'    => 'ENS',
+            'LIBELLE' => 'Enseignement',
         ],
         [
-            'ID'           => 2,
-            'TAUX_REMu_ID' => 1,
-            'DATE_EFFET'   => '25/06/2014',
-            'VALEUR'       => 40.91,
+            'ID'      => 2,
+            'CODE'    => 'REF',
+            'LIBELLE' => 'Référentiel',
         ],
         [
-            'ID'           => 3,
-            'TAUX_REMu_ID' => 1,
-            'DATE_EFFET'   => '01/02/2017',
-            'VALEUR'       => 41.41,
-        ],
-        [
-            'ID'           => 4,
-            'TAUX_REMu_ID' => 1,
-            'DATE_EFFET'   => '01/07/2022',
-            'VALEUR'       => 42.86,
+            'ID'      => 3,
+            'CODE'    => 'MIS',
+            'LIBELLE' => 'Mission',
         ],
     ],
 

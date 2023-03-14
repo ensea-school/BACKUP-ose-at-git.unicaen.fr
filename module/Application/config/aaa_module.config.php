@@ -160,6 +160,7 @@ $config = [
     ],
     'service_manager'    => [
         'invokables' => [
+            Service\AdresseNumeroComplService::class               => Service\AdresseNumeroComplService::class,
             Service\AnneeService::class                            => Service\AnneeService::class,
             Service\LocalContextService::class                     => Service\LocalContextService::class,
             Service\ParametresService::class                       => Service\ParametresService::class,
@@ -210,6 +211,9 @@ $config = [
             \UnicaenApp\View\Helper\AppLink::class                     => View\Helper\AppLinkFactory::class,
             \UnicaenAuth\View\Helper\UserCurrent::class                => View\Helper\UserCurrentFactory::class,
             \UnicaenAuth\View\Helper\LocalConnectViewHelper::class     => View\Helper\LocalConnectViewHelperFactory::class,
+            'tab'                                                      => View\Helper\TabViewHelperFactory::class,
+            'vite'                                                     => View\Helper\ViteViewHelperFactory::class,
+            'vue'                                                      => View\Helper\VueViewHelperFactory::class,
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,
@@ -217,8 +221,6 @@ $config = [
             'formSupprimer'   => View\Helper\FormSupprimerViewHelper::class,
             'formButtonGroup' => View\Helper\FormButtonGroupViewHelper::class,
             'cartridge'       => View\Helper\CartridgeViewHelper::class,
-            'vite'            => View\Helper\ViteViewHelper::class,
-            'vue'             => View\Helper\VueViewHelper::class,
         ],
     ],
     'controllers'        => [
@@ -238,6 +240,11 @@ $config = [
         ],
         'template_map'        => include __DIR__ . '/../template_map.php',
         'layout'              => 'layout/layout', // e.g., 'layout/layout'
+    ],
+    'vite'               => [
+        'host'        => 'http://localhost:5133',
+        'vue-url'     => '/vendor/vue.js',
+        'hot-loading' => \AppConfig::inDev() ? \AppConfig::get('dev', 'hot-loading') : false,
     ],
 ];
 

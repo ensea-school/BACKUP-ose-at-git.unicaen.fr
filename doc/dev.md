@@ -65,9 +65,13 @@ Enfin, commitez le tout et testez avant de déployer!!!
 
 ## Création de composants Vue
 
+Ose embarque BootstrapVue.
+A privilégier pour utiliser des composants Boottrap.
+
 Sites officiels :
 - https://vuejs.org/
 - https://vitejs.dev/
+- https://bootstrap-vue.org/
 
 Doc Vue de Stéphane : 
 - https://git.unicaen.fr/bouvry/presentation-dev/-/blob/master/src/vuejs.md

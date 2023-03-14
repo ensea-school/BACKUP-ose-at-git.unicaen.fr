@@ -1,6 +1,8 @@
 import {defineConfig, splitVendorChunkPlugin} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import liveReload from 'vite-plugin-live-reload'
+import Components from 'unplugin-vue-components/vite'
+import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers'
 import path from 'path'
 
 /* Directives de configuration */
@@ -29,6 +31,9 @@ for (p in config.liveReloadPaths) {
 export default defineConfig({
     plugins: [
         vue(),
+        Components({
+            resolvers: [BootstrapVueNextResolver()]
+        }),
         liveReload(liveReloadPaths),
         splitVendorChunkPlugin()
     ],

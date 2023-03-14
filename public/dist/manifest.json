@@ -1,20 +1,20 @@
 {
+  "_vendor-b8d6c56c.js": {
+    "file": "assets/vendor-b8d6c56c.js"
+  },
   "main.css": {
-    "file": "assets/main-cd791875.css",
+    "file": "assets/main-053bce68.css",
     "src": "main.css"
   },
   "main.js": {
-    "file": "assets/main-fe799c87.js",
-    "src": "main.js",
-    "isEntry": true,
-    "imports": [
-      "_vendor-f378f3a9.js"
-    ],
     "css": [
-      "assets/main-cd791875.css"
-    ]
-  },
-  "_vendor-f378f3a9.js": {
-    "file": "assets/vendor-f378f3a9.js"
+      "assets/main-053bce68.css"
+    ],
+    "file": "assets/main-6ef1c524.js",
+    "imports": [
+      "_vendor-b8d6c56c.js"
+    ],
+    "isEntry": true,
+    "src": "main.js"
   }
 }

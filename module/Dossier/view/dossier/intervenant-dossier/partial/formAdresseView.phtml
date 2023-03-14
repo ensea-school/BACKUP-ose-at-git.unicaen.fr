@@ -1,0 +1,144 @@
+<?php
+
+/**
+ * @var $this               \Application\View\Renderer\PhpRenderer
+ * @var $form               \Dossier\Form\IntervenantDossierForm
+ * @var $intervenant        \Application\Entity\Db\Intervenant
+ * @var $intervenantDossier \Dossier\Entity\Db\IntervenantDossier
+ * @var $tblDossier         \Dossier\Entity\Db\TblDossier
+ */
+
+use Dossier\Assertion\IntervenantDossierAssertion;
+
+$viewAdresse = $this->isAllowed($intervenant, IntervenantDossierAssertion::PRIV_VIEW_ADRESSE);
+
+$form->prepare();
+$dossierAdresse = $form->get('DossierAdresse');
+?>
+
+<!-- Fiedlset Adresse -->
+<div class="col-md-6">
+    <div class="card bg-default">
+        <div class="card-header">
+            ADRESSE
+            <?php if (!empty($tblDossier)): ?>
+                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeAdresse()): ?>
+                    <span class="badge bg-warning text-dark">A compléter</span>
+                <?php else: ?>
+                    <span class="badge bg-success">Complet</span>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+        <div class="card-body">
+
+            <div class="form-group">
+                <?= $this->formLabel($dossierAdresse->get('precisions')); ?>
+                <div class="input-group cold-md-6 readonly">
+                    <?php
+                    if (!empty($intervenantDossier->getAdressePrecisions())) {
+                        echo ($viewAdresse) ? $intervenantDossier->getAdressePrecisions() : '*******************';
+                    }
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?= $this->formLabel($dossierAdresse->get('lieuDit')); ?>
+                <div class="input-group cold-md-6 readonly">
+                    <?php
+                    if (!empty($intervenantDossier->getAdresseLieuDit())) {
+                        echo ($viewAdresse) ? $intervenantDossier->getAdresseLieuDit() : '*******************';
+                    }
+                    ?>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-2">
+                    <?= $this->formLabel($dossierAdresse->get('numero')); ?>
+
+                    <div class="readonly">
+                        <?php
+                        if (!empty($intervenantDossier->getAdresseNumero())) {
+                            echo ($viewAdresse) ? $intervenantDossier->getAdresseNumero() : '***';
+                        }
+                        ?>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <?= $this->formLabel($dossierAdresse->get('numeroComplement')); ?>
+
+                    <div class="readonly">
+                        <?php
+                        if (!empty($intervenantDossier->getAdresseNumeroCompl())) {
+                            echo ($viewAdresse) ? $intervenantDossier->getAdresseNumeroCompl()->getLibelle() : '***';
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <?= $this->formLabel($dossierAdresse->get('voirie')); ?>
+
+                    <div class="readonly">
+                        <?php
+                        if (!empty($intervenantDossier->getAdresseVoirie())) {
+                            echo ($viewAdresse) ? $intervenantDossier->getAdresseVoirie()->getLibelle() : '***';
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <?= $this->formLabel($dossierAdresse->get('voie')); ?>
+
+                    <div class="readonly">
+                        <?php
+                        if (!empty($intervenantDossier->getAdresseVoie())) {
+                            echo ($viewAdresse) ? $intervenantDossier->getAdresseVoie() : '***';
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <?= $this->formLabel($dossierAdresse->get('codePostal')); ?>
+
+                    <div class="readonly">
+                        <?php
+                        if (!empty($intervenantDossier->getAdresseCodePostal())) {
+                            echo ($viewAdresse) ? $intervenantDossier->getAdresseCodePostal() : '***';
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <?= $this->formLabel($dossierAdresse->get('ville')); ?>
+                    <div class="readonly">
+                        <?php
+                        if (!empty($intervenantDossier->getAdresseCommune())) {
+                            echo ($viewAdresse) ? $intervenantDossier->getAdresseCommune() : '***';
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <?= $this->formLabel($dossierAdresse->get('pays')); ?>
+                <div class="input-group cold-md-6 readonly">
+                    <?php
+                    if (!empty($intervenantDossier->getAdressePays())) {
+                        echo ($viewAdresse) ? $intervenantDossier->getAdressePays()->getLibelle() : '*******************';
+                    }
+                    ?>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+

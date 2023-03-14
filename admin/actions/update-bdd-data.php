@@ -1,8 +1,7 @@
 <?php
 
 // Mise à jour
-$dataGen = new DataGen($oa);
-$dataGen->update();
+$oa->getBdd()->dataUpdater()->run('update');
 
 // Néttoyage des caches
 $oa->run('clear-cache');

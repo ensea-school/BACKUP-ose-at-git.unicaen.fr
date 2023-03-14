@@ -10,7 +10,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 /**
- * Description of tauxController
+ * Description of tauxRemuController
  *
  * @author Florian Joriot <florian.joriot at unicaen.fr>
  */

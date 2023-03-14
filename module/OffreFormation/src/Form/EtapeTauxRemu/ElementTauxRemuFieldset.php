@@ -59,7 +59,7 @@ class ElementTauxRemuFieldset extends AbstractFieldset
         if (!isset($this->tauxRemus['tauxRemu'])) {
 
             $this->tauxRemus['tauxRemu']
-                = $this->getServiceTauxRemu()->getTauxRemus();
+                = $this->getServiceTauxRemu()->getTauxRemusAnneeWithValeur();
         }
 
         return $this->tauxRemus['tauxRemu'];

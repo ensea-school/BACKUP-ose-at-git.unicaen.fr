@@ -2,17 +2,21 @@
 
 namespace Paiement\Entity\Db;
 
+use Application\Entity\Db\Annee;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Util;
 
-class TauxRemu implements HistoriqueAwareInterface
+class TauxRemu implements HistoriqueAwareInterface, ResourceInterface
 {
+
+    const CODE_DEFAUT = 'TLD';
 
     use HistoriqueAwareTrait;
     use TauxRemuServiceAwareTrait;
@@ -30,6 +34,25 @@ class TauxRemu implements HistoriqueAwareInterface
 
     protected Collection $statuts;
 
+    protected Collection $sousTauxRemu;
+
+
+
+
+    public function __construct()
+    {
+        $this->tauxRemuValeurs = new ArrayCollection();
+        $this->sousTauxRemu    = new ArrayCollection();
+    }
+
+
+    /**
+     * @return Collection
+     */
+    public function getSousTauxRemu(): Collection
+    {
+        return $this->sousTauxRemu;
+    }
 
 
 
@@ -72,6 +95,26 @@ class TauxRemu implements HistoriqueAwareInterface
 
 
 
+    /**
+     * @return bool
+     */
+    public function isDefaut(): bool
+    {
+        return self::CODE_DEFAUT == $this->getCode();
+    }
+
+
+
+    public function hasChildren(): bool
+    {
+        return !$this->sousTauxRemu->isEmpty();
+    }
+
+
+
+    /**
+     * @return array|null
+     */
     public function getTauxRemuValeursIndex(): ?array
     {
         $tauxRemuindex = $this->getTauxRemu();
@@ -80,7 +123,7 @@ class TauxRemu implements HistoriqueAwareInterface
         }
         $indexResult  = [];
         $valeur       = [];
-        $annee        = $this->getServiceContext()->getAnnee()->getId();
+        $annee        = $this->getServiceContext()->getAnnee();
         $valeursIndex = $tauxRemuindex->getValeurAnnee($annee);
         $valeurs      = $this->getValeurAnnee($annee);
         $sizeIndex    = sizeof($valeursIndex);
@@ -89,7 +132,7 @@ class TauxRemu implements HistoriqueAwareInterface
         $j            = 0;
 
 
-        while ($i < $sizeIndex || $j < $sizeTaux) {
+        while ($sizeIndex != 0 && $sizeTaux != 0 && ($i < $sizeIndex || $j < $sizeTaux)) {
             if ($valeursIndex[$i]->getDateEffet() == $valeurs[$j]->getDateEffet()) {
                 $valeur['valeur'] = $valeursIndex[$i]->getValeur() * $valeurs[$j]->getValeur();
                 $valeur['date']   = $valeursIndex[$i]->getDateEffet();
@@ -139,16 +182,14 @@ class TauxRemu implements HistoriqueAwareInterface
 
 
 
-    public
-    function getTauxRemu(): ?TauxRemu
+    public function getTauxRemu(): ?TauxRemu
     {
         return $this->tauxRemu;
     }
 
 
 
-    public
-    function setTauxRemu(?TauxRemu $tauxRemu): TauxRemu
+    public function setTauxRemu(?TauxRemu $tauxRemu): TauxRemu
     {
         $this->tauxRemu = $tauxRemu;
 
@@ -160,16 +201,14 @@ class TauxRemu implements HistoriqueAwareInterface
     /**
      * @return Collection|TauxRemuValeur[]
      */
-    public
-    function getTauxRemuValeurs(): Collection
+    public function getTauxRemuValeurs(): Collection
     {
         return $this->tauxRemuValeurs;
     }
 
 
 
-    public
-    function addTauxRemuValeur(TauxRemuValeur $tauxRemuValeur): self
+    public function addTauxRemuValeur(TauxRemuValeur $tauxRemuValeur): self
     {
         $this->tauxRemuValeurs[] = $tauxRemuValeur;
 
@@ -178,8 +217,7 @@ class TauxRemu implements HistoriqueAwareInterface
 
 
 
-    public
-    function removeTauxRemuValeur(TauxRemuValeur $tauxRemuValeur): self
+    public function removeTauxRemuValeur(TauxRemuValeur $tauxRemuValeur): self
     {
         $this->tauxRemuValeurs->removeElement($tauxRemuValeur);
 
@@ -188,8 +226,7 @@ class TauxRemu implements HistoriqueAwareInterface
 
 
 
-    public
-    function getTauxRemuValeur(?\DateTime $date = null): ?TauxRemuValeur
+    public function getTauxRemuValeur(?\DateTime $date = null): ?TauxRemuValeur
     {
         if (empty($date)) {
             $date = new \DateTime();
@@ -208,8 +245,7 @@ class TauxRemu implements HistoriqueAwareInterface
 
 
 
-    public
-    function getValeur(?\DateTime $date = null): ?float
+    public function getValeur(?\DateTime $date = null): ?float
     {
         $tauxRemuValeur = $this->getTauxRemuValeur($date);
         if ($tauxRemuValeur) {
@@ -221,18 +257,9 @@ class TauxRemu implements HistoriqueAwareInterface
 
 
 
-    public
-    function getValeurs(): Collection
+    public function getValeurs(): Collection
     {
         return $this->tauxRemuValeurs;
-    }
-
-
-
-    public
-    function __construct()
-    {
-        $this->tauxRemuValeurs = new ArrayCollection();
     }
 
 
@@ -245,8 +272,7 @@ class TauxRemu implements HistoriqueAwareInterface
 
 
 
-    public
-    function getDerniereValeur()
+    public function getDerniereValeur()
     {
         $valeurRetour     = null;
         $valeurRetourDate = null;
@@ -263,8 +289,7 @@ class TauxRemu implements HistoriqueAwareInterface
 
 
 
-    public
-    function getDerniereValeurDate()
+    public function getDerniereValeurDate()
     {
         $valeurRetourDate = null;
         $valeurs          = $this->tauxRemuValeurs->getValues();
@@ -279,8 +304,7 @@ class TauxRemu implements HistoriqueAwareInterface
 
 
 
-    public
-    function setValeurs($tauxRemuValeurs)
+    public function setValeurs($tauxRemuValeurs)
     {
         $this->tauxRemuValeurs = new ArrayCollection();
         foreach ($tauxRemuValeurs as $tauxRemuValeur) {
@@ -290,21 +314,20 @@ class TauxRemu implements HistoriqueAwareInterface
 
 
 
-    public
-    function getValeurAnnee(int $annee): array
+    public function getValeurAnnee(Annee $annee): array //Entitée Annee
     {
         $valeurs        = [];
-        $dateDebutAnnee = "01-09-" . $annee;
-        $dateFinAnnee   = "01-09-" . $annee + 1;
+        $dateDebutAnnee = $annee->getDateDebut();
+        $dateFinAnnee   = $annee->getDateFin();
         $temp           = null;
         $testValeur     = $this->getValeurs();
         foreach ($testValeur as $valeur) {
             $date = $valeur->getDateEffet();
-            if (($temp == null || $temp > new DateTime($dateDebutAnnee)) && $date < new DateTime($dateDebutAnnee)) {
+            if (($temp == null || $temp > $dateDebutAnnee) && $date < $dateDebutAnnee) {
                 $valeurs[] = $valeur;
                 break;
             }
-            if ($date >= new DateTime($dateDebutAnnee) && new $date < new DateTime($dateFinAnnee)) {
+            if ($date >= $dateDebutAnnee && $date < $dateFinAnnee) {
                 $valeurs[] = $valeur;
                 $temp      = $date;
             }
@@ -315,8 +338,7 @@ class TauxRemu implements HistoriqueAwareInterface
 
 
 
-    public
-    function setValeur(DateTime $date, float $valeur)
+    public function setValeur(DateTime $date, float $valeur)
     {
         $tauxRemuValeurProche = $this->getTauxRemuValeur($date);
         if ($tauxRemuValeurProche != null && $tauxRemuValeurProche->getDateEffet() == $date) {
@@ -328,5 +350,17 @@ class TauxRemu implements HistoriqueAwareInterface
             $newTauxRemu->setDateEffet($date);
             $this->addTauxRemuValeur($newTauxRemu);
         }
+    }
+
+
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return 'TauxRemu';
     }
 }

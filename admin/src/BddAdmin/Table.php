@@ -66,9 +66,25 @@ class Table
     public function hasHistorique(): bool
     {
         $ddl      = $this->getDdl();
-        $hasHisto = isset($ddl['columns']['HISTO_CREATION']) && isset($ddl['columns']['HISTO_MODIFICATION']) && isset($ddl['columns']['HISTO_DESTRUCTION']);
+        $hasHisto = isset($ddl['columns']['HISTO_CREATION'])
+            && isset($ddl['columns']['HISTO_MODIFICATION'])
+            && isset($ddl['columns']['HISTO_DESTRUCTION'])
+            && isset($ddl['columns']['HISTO_CREATEUR_ID'])
+            && isset($ddl['columns']['HISTO_MODIFICATEUR_ID'])
+            && isset($ddl['columns']['HISTO_DESTRUCTEUR_ID']);
 
         return $hasHisto;
+    }
+
+
+
+    public function hasImport(): bool
+    {
+        $ddl       = $this->getDdl();
+        $hasImport = isset($ddl['columns']['SOURCE_ID'])
+            && isset($ddl['columns']['SOURCE_CODE']);
+
+        return $hasImport;
     }
 
 
@@ -280,15 +296,23 @@ class Table
      */
     public function insert(array &$data, array $options = []): bool
     {
+        $bdd = $this->getBdd();
+
         if (!isset($data['ID']) && $this->hasId() && $this->hasSequence()) {
             $data['ID'] = $this->getBdd()->sequenceNextVal($this->ddl['sequence']);
         }
 
-        if (isset($options['histo-user-id']) && $options['histo-user-id'] && $this->hasHistorique()) {
+        $histoUserId = (int)$bdd->getOption('histo-user-id');
+        if ($histoUserId && $this->hasHistorique()) {
             if (!isset($data['HISTO_CREATION'])) $data['HISTO_CREATION'] = new \DateTime();
-            if (!isset($data['HISTO_CREATEUR_ID'])) $data['HISTO_CREATEUR_ID'] = $options['histo-user-id'];
+            if (!isset($data['HISTO_CREATEUR_ID'])) $data['HISTO_CREATEUR_ID'] = $histoUserId;
             if (!isset($data['HISTO_MODIFICATION'])) $data['HISTO_MODIFICATION'] = new \DateTime();
-            if (!isset($data['HISTO_MODIFICATEUR_ID'])) $data['HISTO_MODIFICATEUR_ID'] = $options['histo-user-id'];
+            if (!isset($data['HISTO_MODIFICATEUR_ID'])) $data['HISTO_MODIFICATEUR_ID'] = $histoUserId;
+        }
+
+        $sourceId = (int)$bdd->getOption('source-id');
+        if ($sourceId && $this->hasImport()) {
+            if (!isset($data['SOURCE_ID'])) $data['SOURCE_ID'] = $sourceId;
         }
 
         $cols   = [];
@@ -310,18 +334,21 @@ class Table
         $vals = implode(", ", $vals);
         $sql  = "INSERT INTO \"$this->name\" ($cols) VALUES ($vals)";
 
-        return $this->getBdd()->exec($sql, $params, $this->makeTypesOptions());
+        return $bdd->exec($sql, $params, $this->makeTypesOptions());
     }
 
 
 
     public function update(array $data, $where = null, array $options = []): bool
     {
+        $bdd = $this->getBdd();
+
         $params = [];
 
-        if (isset($options['histo-user-id']) && $options['histo-user-id'] && $this->hasHistorique()) {
+        $histoUserId = (int)$bdd->getOption('histo-user-id');
+        if ($histoUserId && $this->hasHistorique()) {
             if (!isset($data['HISTO_MODIFICATION'])) $data['HISTO_MODIFICATION'] = new \DateTime();
-            if (!isset($data['HISTO_MODIFICATEUR_ID'])) $data['HISTO_MODIFICATEUR_ID'] = $options['histo-user-id'];
+            if (!isset($data['HISTO_MODIFICATEUR_ID'])) $data['HISTO_MODIFICATEUR_ID'] = $histoUserId;
         }
 
         $dataSql = '';
@@ -338,7 +365,7 @@ class Table
 
         $sql = "UPDATE \"$this->name\" SET $dataSql" . $this->makeWhere($where, $options, $params);
 
-        return $this->getBdd()->exec($sql, $params, $this->makeTypesOptions());
+        return $bdd->exec($sql, $params, $this->makeTypesOptions());
     }
 
 
@@ -393,7 +420,11 @@ class Table
         ];
         $options        = array_merge($defaultOptions, $options);
 
-        $ddl  = $this->getDdl();
+        $ddl = $this->getDdl();
+        $bdd = $this->getBdd();
+
+        $histoUserId = (int)$bdd->getOption('histo-user-id');
+
         $diff = [];
 
 
@@ -410,8 +441,15 @@ class Table
         /* Mise en forme des nouvelles données */
         foreach ($data as $d) {
             foreach ($d as $c => $v) {
-                if (isset($options['columns'][$c]['transformer'])) {
-                    $d[$c] = $this->transform($v, $options['columns'][$c]['transformer'], $ddl['columns'][$c]);
+                if (isset($ddl['columns'][$c])) {
+                    if (isset($options['columns'][$c]['transformer'])) {
+                        $d[$c] = $this->transform($v, $options['columns'][$c]['transformer'], $ddl['columns'][$c]);
+                    }
+                    if ($ddl['columns'][$c]['type'] == Bdd::TYPE_DATE && !empty($val) && is_string($val)) {
+                        $d[$c] = \DateTime::createFromFormat('Y-m-d H:i:s', $v);
+                    }
+                } else {
+                    unset($d[$c]);
                 }
             }
             $k = $this->makeKey($d, $key);
@@ -422,28 +460,23 @@ class Table
             $diff[$k]['new'] = $d;
         }
 
-        $traitementOptions = [];
-        if (isset($options['histo-user-id'])) {
-            $traitementOptions['histo-user-id'] = $options['histo-user-id'];
-        }
-
         /* Traitement */
-        $this->getBdd()->beginTransaction();
+        $bdd->beginTransaction();
         foreach ($diff as $dr) {
             $old = $dr['old'];
             $new = $dr['new'];
 
             if (empty($old)) { // INSERT
                 if ($options['insert']) {
-                    $this->insert($new, $traitementOptions);
+                    $this->insert($new);
                     $result['insert']++;
                 }
-            } elseif (empty($new) && $options['soft-delete'] && !empty($options['histo-user-id'])) { // SOFT DELETE
+            } elseif (empty($new) && $options['soft-delete'] && $this->hasHistorique() && $histoUserId) { // SOFT DELETE
                 //On ne delete pas mais on historise
                 $new                         = $old;
-                $new['HISTO_DESTRUCTEUR_ID'] = $traitementOptions['histo-user-id'];
+                $new['HISTO_DESTRUCTEUR_ID'] = $histoUserId;
                 $new['HISTO_DESTRUCTION']    = new \DateTime();
-                $this->update($new, $this->makeKeyArray($old, $key), $traitementOptions);
+                $this->update($new, $this->makeKeyArray($old, $key));
                 $result['soft-delete']++;
             } elseif (empty($new) && !$options['soft-delete']) { // DELETE
                 if ($options['delete']) {
@@ -453,8 +486,8 @@ class Table
             } elseif ($options['update']) { // UPDATE si différent!!
                 $toUpdate = [];
                 foreach ($old as $c => $ov) {
-                    $newc = isset($new[$c]) ? $new[$c] : null;
-                    $oldc = isset($old[$c]) ? $old[$c] : null;
+                    $newc = $new[$c] ?? null;
+                    $oldc = $old[$c] ?? null;
                     if ($newc instanceof \DateTime) $newc = $newc->format('Y-m-d H:i:s');
                     if ($oldc instanceof \DateTime) $oldc = $oldc->format('Y-m-d H:i:s');
                     if ($newc != $oldc && array_key_exists($c, $new) && $c != 'ID') {
@@ -470,12 +503,12 @@ class Table
                     }
                 }
                 if (!empty($toUpdate)) {
-                    $this->update($toUpdate, $this->makeKeyArray($old, $key), $traitementOptions);
+                    $this->update($toUpdate, $this->makeKeyArray($old, $key));
                     $result['update']++;
                 }
             }
         }
-        $this->getBdd()->commitTransaction();
+        $bdd->commitTransaction();
 
         return $result;
     }
@@ -527,14 +560,15 @@ class Table
     private function makeWhere($where, array $options, array &$params): string
     {
         if (is_string($where) && (
-                false !== strpos($where, '=')
-                || false !== strpos($where, ' IN ')
-                || false !== strpos($where, ' IN(')
-                || false !== strpos($where, ' IS ')
-                || false !== strpos($where, ' NOT ')
-                || false !== strpos($where, '<')
-                || false !== strpos($where, '>')
-                || false !== strpos($where, 'LIKE')
+                str_contains($where, '=')
+                || str_contains($where, ' IN ')
+                || str_contains($where, ' IN(')
+                || str_contains($where, ' IS ')
+                || str_contains($where, ' NOT ')
+                || str_contains($where, ' NOT(')
+                || str_contains($where, '<')
+                || str_contains($where, '>')
+                || str_contains($where, 'LIKE')
             )
         ) {
             return ' WHERE ' . $where;

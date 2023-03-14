@@ -1,6 +1,6 @@
 <template>
     <div v-for="taux in listeTaux">
-        <taux v-if="!taux.tauxRemu" @supprimer="supprimer" @refreshListe="refreshListe" :key="taux.id" :taux="taux" :listeTaux="listeTaux" :canEditTaux="canEditTaux" :canDeleteTaux="canDeleteTaux"></taux>
+        <taux v-if="!taux.tauxRemu" @supprimer="supprimer" @refreshListe="refreshListe" :key="taux.id" :taux="taux" :listeTaux="listeTaux"></taux>
     </div>
     <a v-if="canEditTaux" class="btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajout d'un nouveau taux</a>
 </template>
@@ -15,7 +15,6 @@ export default {
     },
     props: {
         canEditTaux: {type: Boolean, required: true},
-        canDeleteTaux: {type: Boolean, required: true},
     },
     data()
     {

@@ -35,6 +35,7 @@
         <field name="dossierAdresse" type="boolean" column="DOSSIER_ADRESSE" nullable="false"/>
         <field name="dossierBanque" type="boolean" column="DOSSIER_BANQUE" nullable="false"/>
         <field name="dossierInsee" type="boolean" column="DOSSIER_INSEE" nullable="false"/>
+        <field name="dossierStatut" type="boolean" column="DOSSIER_STATUT" nullable="false"/>
         <field name="dossierEmployeur" type="boolean" column="DOSSIER_EMPLOYEUR" nullable="false"/>
         <field name="dossierAutre1" type="boolean" column="DOSSIER_AUTRE_1" nullable="false"/>
         <field name="dossierAutre1Visualisation" type="boolean" column="DOSSIER_AUTRE_1_VISUALISATION" nullable="false"/>
@@ -112,7 +113,7 @@
         </many-to-one>
         <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
         <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
-                <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+            <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="tauxRemu" target-entity="Paiement\Entity\Db\TauxRemu">
             <join-column name="TAUX_REMU_ID" referenced-column-name="ID"/>

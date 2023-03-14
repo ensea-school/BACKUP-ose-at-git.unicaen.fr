@@ -158,7 +158,7 @@ class ElementModulateurCentreCoutTauxRemuForm extends AbstractForm
         private
         function createSelectElementTauxRemu(ElementPedagogique $elementPedagogique)
         {
-            $tauxRemus    = $this->getServiceTauxRemu()->getTauxRemus();
+            $tauxRemus    = $this->getServiceTauxRemu()->getTauxRemusAnneeWithValeur();
             $valueOptions = [];
             foreach ($tauxRemus as $tauxRemu) {
                 $valueOptions[$tauxRemu->getId()] = $tauxRemu->getCode() . ' - ' . $tauxRemu->getLibelle();

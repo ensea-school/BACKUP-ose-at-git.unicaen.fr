@@ -14,8 +14,19 @@ class ViteViewHelper extends AbstractHtmlElement
 {
     private $config = [
         'host'   => 'http://localhost:5133',
-        'vueUrl' => '/vendor/vue.js',
+        'vue-url' => '/vendor/vue.js',
+        'hot-loading' => true,
     ];
+
+
+
+    /**
+     * @param string[] $config
+     */
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
 
 
 
@@ -64,18 +75,18 @@ class ViteViewHelper extends AbstractHtmlElement
 
     public function useNode(): bool
     {
-        if (\AppConfig::inDev()) {
-            return \AppConfig::get('dev', 'hot-loading', true);
-        } else {
-            return false;
-        }
+        return $this->getConfig('hot-loading');
     }
 
 
 
     public function getConfig(string $param)
     {
-        return $this->config[$param] ?: null;
+        if (array_key_exists($param, $this->config)){
+            return $this->config[$param];
+        }else{
+            return null;
+        }
     }
 
 
@@ -93,7 +104,7 @@ class ViteViewHelper extends AbstractHtmlElement
     {
         $h = '';
         if ($this->useNode()) {
-            $url = $this->getView()->basePath($this->getConfig('vueUrl'));
+            $url = $this->getView()->basePath($this->getConfig('vue-url'));
             $h   = '<script type="text/javascript" src="' . $url . '"></script>';
         }
         $h .= $this->vite('main.js');

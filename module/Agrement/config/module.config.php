@@ -3,7 +3,6 @@
 namespace Agrement;
 
 use Agrement\Assertion\AgrementAssertion;
-use Agrement\Assertion\AgrementAssertionFactory;
 use Agrement\Controller\AgrementController;
 use Agrement\Controller\Factory\AgrementControllerFactory;
 use Agrement\Entity\Db\TypeAgrement;
@@ -15,6 +14,7 @@ use Agrement\Service\TblAgrementService;
 use Agrement\Service\TblAgrementServiceFactory;
 use Agrement\Service\TypeAgrementService;
 use Agrement\Service\TypeAgrementServiceFactory;
+use Agrement\View\Helper\AgrementVewHelperFactory;
 use Agrement\View\Helper\AgrementViewHelper;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Assertion\AssertionFactory;
@@ -239,7 +239,7 @@ return [
 
     ],
     'view_helpers' => [
-        'agrement' => AgrementViewHelper::class,
+        'agrement' => AgrementVewHelperFactory::class,
     ],
 
     'forms' => [

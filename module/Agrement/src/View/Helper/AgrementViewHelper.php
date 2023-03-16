@@ -2,7 +2,7 @@
 
 namespace Agrement\View\Helper;
 
-use Agrement\Entity\Db\Agrement as Entity;
+use Agrement\Entity\Db\Agrement;
 use Agrement\Entity\Db\TblAgrement;
 use Agrement\Entity\Db\Traits\AgrementAwareTrait;
 use Application\Constants;
@@ -33,11 +33,11 @@ class AgrementViewHelper extends AbstractHtmlElement
 
     /**
      *
-     * @param Entity $agrement
+     * @param Agrement $agrement
      *
      * @return self
      */
-    public function __invoke(Entity $agrement = null, TblAgrement $tblAgrement = null)
+    public function __invoke(Agrement $agrement = null, TblAgrement $tblAgrement = null)
     {
         if ($agrement) $this->setAgrement($agrement);
         if ($tblAgrement) $this->setTblAgrement($tblAgrement);

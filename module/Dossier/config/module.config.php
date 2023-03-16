@@ -144,7 +144,7 @@ return [
 
         'administration' => [
             'pages' => [
-                'intervenants' => [
+                'intervenants'  => [
                     'pages' => [
                         'gestion-champs-autres-dossier-intervenant' => [
                             'label'      => "Champs personnalisés du dossier",
@@ -156,7 +156,7 @@ return [
                         ],
                     ],
                 ],
-                'rh'           => [
+                'nomenclatures' => [
                     'pages' => [
                         'Employeurs' => [
                             'color'    => '#9F491F',

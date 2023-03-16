@@ -6,6 +6,8 @@ use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Mission\Controller\MissionController;
 use Mission\Controller\MissionTypeController;
+use Mission\Controller\OffreEmploiController;
+use Mission\Controller\OffreEmploiControllerFactory;
 use Mission\Service\MissionTypeService;
 use Mission\Service\MissionTypeServiceFactory;
 use UnicaenAuth\Assertion\AssertionFactory;
@@ -117,6 +119,13 @@ return [
                 ],
             ],
         ],
+        'offre-emploi'  => [
+            'route'         => '/offre-emploi',
+            'controller'    => OffreEmploiController::class,
+            'action'        => 'index',
+            'privileges'    => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
+            'may_terminate' => true,
+        ],
         'missions-type' => [
             'route'         => '/missions-type',
             'controller'    => MissionTypeController::class,
@@ -167,6 +176,16 @@ return [
                         ],
                     ],
                 ],
+                'rh'           => [
+                    'pages' => [
+                        'offre-emploi' => [
+                            'label'    => "Offres d'emploi",
+                            'route'    => 'offre-emploi',
+                            'resource' => PrivilegeController::getResourceId(OffreEmploiController::class, 'index'),
+                            'order'    => 80,
+                        ],
+                    ],
+                ],
             ],
         ],
     ],
@@ -196,11 +215,19 @@ return [
                 Privileges::MISSION_SUPPRESSION_TYPE,
             ],
         ],
+        [
+            'controller' => OffreEmploiController::class,
+            'action'     => ['index'],
+            'privileges' => [
+                Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
+            ],
+        ],
     ],
 
     'controllers' => [
         MissionController::class     => Controller\MissionControllerFactory::class,
         MissionTypeController::class => Controller\MissionTypeControllerFactory::class,
+        OffreEmploiController::class => OffreEmploiControllerFactory::class,
     ],
 
     'services' => [

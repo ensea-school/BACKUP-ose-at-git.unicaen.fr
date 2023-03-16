@@ -15,7 +15,6 @@ use Agrement\Service\TblAgrementServiceFactory;
 use Agrement\Service\TypeAgrementService;
 use Agrement\Service\TypeAgrementServiceFactory;
 use Agrement\View\Helper\AgrementVewHelperFactory;
-use Agrement\View\Helper\AgrementViewHelper;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Assertion\AssertionFactory;
 use UnicaenAuth\Guard\PrivilegeController;
@@ -82,19 +81,23 @@ return [
             'child_routes' => [
                 'agrement' => [
                     'route'         => '/agrement',
-                    'controller'    => 'Application\Controller\Agrement',
+                    'controller'    => AgrementController::class,
                     'action'        => 'index',
                     'may_terminate' => true,
                     'child_routes'  => [
                         'conseil-academique' => [
-                            'route'            => '/conseil-academique',
-                            'action'           => 'saisir-lot',
-                            'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_ACADEMIQUE,
+                            'route'    => '/conseil-academique',
+                            'action'   => 'saisir-lot',
+                            'defaults' => [
+                                'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_ACADEMIQUE,
+                            ],
                         ],
                         'conseil-restreint'  => [
-                            'route'            => '/conseil-restreint',
-                            'action'           => 'saisir-lot',
-                            'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_RESTREINT,
+                            'route'    => '/conseil-restreint',
+                            'action'   => 'saisir-lot',
+                            'defaults' => [
+                                'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_RESTREINT,
+                            ],
                         ],
                         'export-csv'         => [
                             'route'  => '/export-csv',
@@ -135,7 +138,8 @@ return [
                 ],
             ],
         ],
-        'gestion'     => [
+
+        'gestion' => [
             'pages' => [
                 'agrement' => [
                     'label'    => "Agréments par lot",
@@ -174,6 +178,7 @@ return [
                 ],
             ],
         ],
+
     ],
 
     'guards' => [

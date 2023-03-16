@@ -1,0 +1,125 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this         \Application\View\Renderer\PhpRenderer
+ * @var $intervenant  \Application\Entity\Db\Intervenant
+ * @var $title        string
+ * @var $demandees    \PieceJointe\Entity\Db\TblPieceJointeDemande[]
+ * @var $fournies     \PieceJointe\Entity\Db\TblPieceJointeFournie[]
+ * @var $synthese     \PieceJointe\Entity\Db\TblPieceJointe[]
+ * @var $messages     array
+ * @var $alertContrat boolean
+ */
+
+$this->headTitle()->append((string)$intervenant)->append("Pièces justificatives");
+
+$canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION));
+$canValider   = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION));
+$canDevalider = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION));
+$canArchiver  = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_ARCHIVAGE));
+
+$infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $intervenant->getId()]);
+
+$menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
+
+?>
+    <h1 class="page-header"><?= $this->intervenant($intervenant)->renderTitle('Pièces justificatives'); ?></h1>
+
+    <div class="piece-jointe">
+        <div class="infos" data-url="<?= $infosUrl ?>">
+            <?= $this->partial('application/piece-jointe/infos', compact('messages')); ?>
+        </div>
+        <?php
+
+        $restantes = $fournies;
+        if (!empty($demandees)) {
+            echo '<div class="well">';
+            echo '<h2>Pièces demandées</h2>';
+            $obligatoire = true;
+            foreach ($demandees as $pj) { // on liste les pièces demandées
+                //Check si piece obligatoire
+                $obligatoire = $pj->isObligatoire();
+                $tpj         = $pj->getTypePieceJointe();
+                if (isset($fournies[$tpj->getId()]) && $synthese[$tpj->getId()]->getFournie() == 1) { // qu'elles soient fournies ou non
+                    $pj = $fournies[$tpj->getId()];
+                    unset($restantes[$tpj->getId()]);
+                } else {
+                    $pj = null;
+                }
+                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'canArchiver', 'obligatoire', 'annee'));
+            }
+            echo '</div>';
+
+            if ($alertContrat) {
+                ?>
+                <div id="alert-contrat" class="alert alert-warning" role="alert" style="display:none">
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <p><strong>Information importante</strong></p>
+                    <p>Votre saisie est terminée.</p>
+                    <p>Votre contrat ne pourra être édité qu'après validation de l'ensemble des pièces justificatives.<br/>
+                        Aucun enseignement ne pourra avoir lieu avant la signature du contrat.</p>
+                </div>
+                <?php
+            }
+        }
+
+
+        if (!empty($restantes)) {
+            $html         = '<div class="well">';
+            $html         .= '<h2>Autres pièces fournies</h2>';
+            $obligatoire  = false;
+            $haveRestante = false;
+            foreach ($restantes as $tpjId => $pj) { // on liste les pièces fournies mais qui ne sont pas demandées...
+                //on affiche la pièce jointe restante uniquement sur l'année où elle a été fourni
+
+                if ($pj->getIntervenant()->getAnnee()->getId() == $annee->getId()) {
+                    $haveRestante = true;
+                    $tpj          = $pj->getType();
+                    $html         .= $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'canArchiver', 'obligatoire', 'annee'));
+                }
+            }
+            $html .= '</div>';
+            if ($haveRestante) {
+                echo $html;
+            }
+        }
+
+        ?>
+    </div>
+    <script>
+
+        $(function () {
+
+            //WidgetInitializer.add('piece-jointe', 'pieceJointe', function(){
+            //    WidgetInitializer.includeJs(Util.url('js/piece_jointe.js'));
+            //    WidgetInitializer.includeCss(Util.url('css/piece_jointe.css'));
+            //});
+
+            $('.piece-jointe').pieceJointe({
+                'validation-change': function ()
+                {
+                    // chargement du menu pour faire apparaître ou disparaitre les liens de validation
+                    $('#sidebar').load('<?= $menuUrl; ?>');
+                },
+            });
+
+        });
+
+        $('[id^="update-pj-"]').click(function (e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+            var splitId = id.split('-');
+            var tpjId = splitId[2];
+            $('#valide-pj-'+tpjId).remove();
+            $('#archive-form-pj-'+tpjId).css('display', 'block');
+            return false;
+        });
+
+
+    </script>
+<?php
+
+echo $this->feuilleDeRoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_PJ_VALIDATION);

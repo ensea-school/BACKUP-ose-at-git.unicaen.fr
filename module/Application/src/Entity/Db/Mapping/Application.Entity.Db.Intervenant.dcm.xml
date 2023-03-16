@@ -111,7 +111,7 @@
         </many-to-one>
 
         <one-to-many field="affectation" target-entity="Application\Entity\Db\AffectationRecherche" mapped-by="intervenant"/>
-        <one-to-many field="agrement" target-entity="Application\Entity\Db\Agrement" mapped-by="intervenant"/>
+        <one-to-many field="agrement" target-entity="Agrement\Entity\Db\Agrement" mapped-by="intervenant"/>
         <one-to-many field="contrat" target-entity="Application\Entity\Db\Contrat" mapped-by="intervenant"/>
         <one-to-many field="formuleResultat" target-entity="Application\Entity\Db\FormuleResultat" mapped-by="intervenant"/>
         <one-to-many field="histoService" target-entity="Service\Entity\Db\HistoIntervenantService"
@@ -124,7 +124,7 @@
                 <cascade-persist/>
             </cascade>
         </one-to-many>
-        <one-to-many field="pieceJointe" target-entity="Application\Entity\Db\PieceJointe" mapped-by="intervenant"
+        <one-to-many field="pieceJointe" target-entity="PieceJointe\Entity\Db\PieceJointe" mapped-by="intervenant"
                      fetch="EXTRA_LAZY"/>
         <one-to-many field="service" target-entity="Enseignement\Entity\Db\Service" mapped-by="intervenant"/>
         <one-to-many field="serviceReferentiel" target-entity="Referentiel\Entity\Db\ServiceReferentiel"

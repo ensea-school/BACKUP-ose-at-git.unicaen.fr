@@ -9,12 +9,12 @@
  */
 
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\PieceJointe;
+use PieceJointe\Entity\Db\PieceJointe;
 use Application\Entity\Db\Validation;
 use Application\Service\FichierService;
 use Application\Service\IntervenantService;
-use Application\Service\PieceJointeService;
-use Application\Service\TypePieceJointeService;
+use PieceJointe\Service\PieceJointeService;
+use PieceJointe\Service\TypePieceJointeService;
 use Application\Service\TypeValidationService;
 use Application\Service\ValidationService;
 

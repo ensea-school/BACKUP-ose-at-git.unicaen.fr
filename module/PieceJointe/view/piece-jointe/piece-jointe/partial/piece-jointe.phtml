@@ -1,0 +1,157 @@
+<?php
+
+/**
+ * @var $this         \Application\View\Renderer\PhpRenderer
+ * @var $tpj          \PieceJointe\Entity\Db\TypePieceJointe
+ * @var $pj           \PieceJointe\Entity\Db\PieceJointe
+ * @var $intervenant  \Application\Entity\Db\Intervenant
+ * @var $canEdit      boolean
+ * @var $canValider   boolean
+ * @var $canArchiver  boolean
+ * @var $canDevalider boolean
+ * @var $obligatoire  boolean
+ * @var $annee        \Application\Entity\Db\Annee
+ */
+
+$hasValidation = $pj && $pj->getValidation();
+
+$linksModelesDocs = null;
+if (($url = $tpj->getUrlModeleDoc())) {
+    if (0 === strpos($url, 'http://') || 0 === strpos($url, 'https://')) {
+//        $target = "_blank";
+        $href = $url;
+    } else {
+//        $target = "_self";
+        $href = $this->basePath($url);
+    }
+    $href             = str_replace(':annee', (string)$intervenant->getAnnee()->getId(), $href);
+    $fileName         = ltrim(strrchr($href, '/'), '/');
+    $linksModelesDocs = $this->tag('a', [
+        'class' => 'modele-doc',
+        //'target' => $target,
+        'title' => 'Cliquez pour télécharger le document à remplir',
+        'href'  => $href,
+    ])->html(
+        $this->tag('span', ['class' => 'fas fa-file'])->openClose() . " " . $fileName
+    );
+}
+
+$type = (string)$tpj;
+if ($tpj->getCode() === \Application\Entity\Db\TypePieceJointe::CARTE_ETUD) {
+    $type .= " " . $intervenant->getAnnee();
+}
+
+$uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichier/televerser', ['typePieceJointe' => $tpj->getId()], [], true));
+
+?>
+    <div
+            class="tpj <?= $obligatoire ? 'tpj-obligatoire ' : '' ?>tpj-<?= $tpj->getId() ?> card bg-<?= $pj && $pj->getValidation() ? 'success' : 'default' ?> upload-container"
+            data-tpj="<?= $tpj->getId() ?>"
+            id="valide-pj-<?= $tpj->getId() ?>"
+    >
+        <div class="card-header card-header-h3">
+            <h5>
+                <?php if ($hasValidation && $canArchiver && $pj && $pj->getIntervenant()->getAnnee()->getId() != $annee->getId()): ?>
+                    <div class="validation-bar float-end">
+                        <a class="archiver-pj btn btn-success"
+                           title="Archiver cette pièce jointe pour en fournir une plus récente ?"
+                           id="update-pj-<?= $tpj->getId() ?>">
+                            <i class="fas fa-arrows-rotate"></i> Modifier (si besoin)
+                        </a>
+
+                    </div>
+                <?php else: ?>
+                    <div class="validation-bar float-end"
+                         data-url="<?= $this->url('piece-jointe/intervenant/validation', ['typePieceJointe' => $tpj->getId()], [], true) ?>">
+                        <?= $this->partial('application/piece-jointe/validation', compact('pj')) ?>
+                    </div>
+                <?php endif; ?>
+
+                <!--Infos sur document fourni sur une autre année-->
+                <?=
+                ($pj && $pj->getIntervenant()->getAnnee()->getId() != $annee->getId()) ? $type . "  <span style=\"font-size:0.6em;\">Fourni(e) en " . $pj->getIntervenant()->getAnnee()->getId() . "</span>" : $type;
+                ?>
+                <!--Info sur document facultatif-->
+                <?=
+                !$obligatoire ? '<span style="font-size:0.6em;"> (Document facultatif)</span>' : ''
+                ?>
+                <br/>
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Modèle de document éventuel -->
+                    <?php if ($linksModelesDocs): ?>
+                        <div>
+                            <label>Documents à télécharger et à remplir :</label><br/>
+                            <?= $this->htmlList((array)$linksModelesDocs, false, false, false) ?>
+                        </div>
+                    <?php endif ?>
+                    <!-- Liste des fichiers déposés -->
+                    <?= $uploader->renderUploadedFiles($this->url('piece-jointe/intervenant/fichier/lister', ['typePieceJointe' => $tpj->getId(), 'pieceJointe' => (!is_null($pj)) ? $pj->getId() : ''], [], true)) ?>
+                </div>
+                <div class="col-md-6">
+                    <!-- formulaire éventuel de dépôt de PJ -->
+                    <?php
+                    $uploader->getForm()->setAttribute('style', 'display:' . (($pj && $pj->getValidation()) ? 'none' : 'block'));
+                    echo $uploader->renderForm();
+                    ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- second bloc pour prévoir la possiblité de mettre à jour une PJ encore valide et antérieure à l'année en cours-->
+<?php if ($hasValidation && $canArchiver && $pj && $pj->getIntervenant()->getAnnee()->getId() != $annee->getId()): ?>
+
+    <div
+            class="tpj <?= $obligatoire ? 'tpj-obligatoire ' : '' ?>tpj-archive-<?= $tpj->getId() ?> card bg-default upload-container"
+            data-tpj="archive-<?= $tpj->getId() ?>"
+            style="display:none;"
+            id="archive-form-pj-<?= $tpj->getId() ?>"
+    >
+        <div class="card-header card-header-h3">
+            <h3>
+                <div class="validation-bar float-end"
+                     data-url="<?= $this->url('piece-jointe/intervenant/validation', ['typePieceJointe' => $tpj->getId()], [], true) ?>">
+                    <?= $this->partial('application/piece-jointe/validation', []) ?>
+                </div>
+
+
+                <!--Infos sur document fourni sur une autre année-->
+                <?=
+                $type;
+                ?>
+                <!--Info sur document facultatif-->
+                <?=
+                !$obligatoire ? '<span style="font-size:0.6em;"> (Document facultatif)</span>' : ''
+                ?>
+                <br/>
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Modèle de document éventuel -->
+                    <?php if ($linksModelesDocs): ?>
+                        <div>
+                            <label>Documents à télécharger et à remplir :</label><br/>
+                            <?= $this->htmlList((array)$linksModelesDocs, false, false, false) ?>
+                        </div>
+                    <?php endif ?>
+                    <!-- Liste des fichiers déposés -->
+                    <?= $uploader->renderUploadedFiles($this->url('piece-jointe/intervenant/fichier/lister', ['typePieceJointe' => $tpj->getId(), 'pieceJointe' => ''], [], true)) ?>
+                </div>
+                <div class="col-md-6">
+                    <!-- formulaire éventuel de dépôt de PJ -->
+                    <?php
+                    $uploader->getForm()->setAttribute('style', 'display:block');
+                    echo $uploader->renderForm();
+                    ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

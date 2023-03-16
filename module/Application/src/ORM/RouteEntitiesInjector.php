@@ -4,7 +4,7 @@ namespace Application\ORM;
 
 
 use Application\Cache\Traits\CacheContainerTrait;
-use Application\Entity\Db\TypeAgrement;
+use Agrement\Entity\Db\TypeAgrement;
 use Application\Interfaces\ParametreEntityInterface;
 use Application\ORM\Event\Listeners\ParametreEntityListener;
 use Application\Service\IntervenantService;

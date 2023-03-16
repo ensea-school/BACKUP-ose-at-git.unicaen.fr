@@ -1,0 +1,201 @@
+<?php
+
+use PieceJointe\Entity\Db\TypePieceJointe;
+use Intervenant\Entity\Db\Statut;
+use PieceJointe\Entity\Db\TypePieceJointeStatut;
+use Application\Provider\Privilege\Privileges;
+use Intervenant\Entity\Db\TypeIntervenant;
+
+/**
+ * @var $typesPiecesJointes        TypePieceJointe[]
+ * @var $statutsIntervenants       Statut[][]
+ * @var $typesPiecesJointesStatuts TypePieceJointeStatut[][][]
+ * @var $codeIntervenant           string
+ * @var $typesIntervenants         TypeIntervenant[]
+ */
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION));
+
+?>
+
+    <style>
+        .triables {
+            align: left;
+        }
+
+        .champ-triable tr {
+            align: left;
+        }
+
+        .tpjs {
+            line-height: 1em;
+            font-size: 8pt;
+        }
+
+        .notpjs {
+
+        }
+
+        .pj-ou {
+            font-weight: bold;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $(".triables").sortable({
+                handle: '.fa-arrows-alt',
+                axis: 'y',
+                update: function (event, ui) {
+                    var champsIds = '';
+                    ui.item.parent().find('tr.champ-triable').each(function () {
+                        if (champsIds != '') champsIds += ',';
+                        champsIds += $(this).data('id');
+                    });
+                    $.ajax({
+                        type: 'POST',
+                        url: Util.url('piece-jointe/type-piece-jointe-trier'),
+                        data: {champsIds: champsIds},
+                        success: function (res) { Util.alert(res.msg, 'success'); },
+                    });
+                }
+            });
+        });
+
+        //        $(".triables").disableSelection();
+
+        /**
+         *
+         * @param i int
+         * @param j int
+         * position dans le tableau <colonne><ligne>
+         *     parcours tout le tableau
+         *     met le fond en blanc partout sauf sur l'intersection gauche/haut de la case de la souris dans la couleur #FCF8E3
+         */
+        function sourisHover(i, j)
+        {
+            var k, l, n, m; // indices dans le tableau
+            var clr;
+            var objCell, objR, objP, objTb;
+            var objDiv;
+            //       ajuste(); // en incluant ajuste donne le width de la table
+            objP = document.getElementById('tblTpjs');
+            objTb = objP.children;
+            objR = objTb[0].children;
+            objCell = objR[0].children;
+            n = objCell.length-1;
+            for (l = 1; l < n; l++) {
+                objDiv = document.getElementById('th'+l);
+                if (l == i) {
+                    clr = "#FCF8E3";
+                } else {
+                    clr = "#FFFFFF";
+                }
+                objDiv.style.backgroundColor = clr;
+            }
+            objR = objTb[1].children;
+            m = objR.length;
+            // la colonne
+            for (k = 0; k < m; k++) {
+                objCell = objR[k].children;
+                n = objCell.length;
+                for (l = 0; l < n; l++) {
+                    if ((k == j) && (l <= i)) {
+                        clr = "#FCF8E3";
+                    } else if ((l == i) && (k <= j)) {
+                        clr = "#FCF8E3";
+                    } else {
+                        clr = "#FFFFFF";
+                    }
+                    objCell[l].style.backgroundColor = clr;
+                }
+            }
+        }
+
+        function ajuste()
+        {
+            var i, n; // indice de ligne et nbe de colonnes
+            var ObjR, objCell, objDiv, objTb;
+            var taille;
+            objP = document.getElementById('tblTpjs');
+            objTb = objP.children;
+            objR = objTb[0].children;
+            objCell = objR[0].children;
+            n = objCell.length-1;
+            taille = n * 10+10+objCell[0].clientWidth; // padd 8+2 pour chaque bord * nbe de colonnnes
+            for (i = 1; i < n; i++) {
+                objDiv = document.getElementById('th'+i);
+                taille += objDiv.clientWidth;
+            }
+            alert(taille);
+        }
+
+    </script>
+
+<?php $this->headTitle()->append($title = "Pièces justificatives attendues par statut d'intervenant") ?>
+    <h1 class="page-header"><?= $title ?></h1>
+
+    <div class="nav-local">
+        <ul>
+            <?php foreach ($typesIntervenants as $intervenant):
+                if ($codeIntervenant == $intervenant->getCode()):?>
+                    <li class="nav-item active">
+                <?php else: ?>
+                    <li class="nav-item">
+                <?php endif; ?>
+                <a class="nav-link"
+                   href="<?= $this->url('piece-jointe/type-piece-jointe-statut', ['codeTypeIntervenant' => $intervenant->getCode()]); ?>"
+                   data-placement="bottom"><i class="fas fa-eye"></i> <?php echo $intervenant->getLibelle() ?></a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <div style="clear:both"></div>
+    </div>
+
+    <table id="tblTpjs" class="table-bordered table-sm table-header table-header-rotated" style="width:1121px">
+        <thead>
+        <tr>
+            <th class="rotate-45 si" data-si=""><span>&nbsp;</span></th>
+            <?php $i = 0;
+            foreach ($statutsIntervenants as $statuts):
+                foreach ($statuts as $statut): $i++; ?>
+                    <th class="rotate-45 si <?= $i == 1 ? 'first' : '' ?>" data-si="<?php $statut->getLibelle() ?>">
+                        <div id="<?= 'th' . $i ?>"><span><?= $statut; ?></span></div>
+                    </th>
+                <?php endforeach;
+            endforeach; ?>
+        </tr>
+        </thead>
+
+        <tbody class="triables">
+        <?php
+        $j = 0;
+        foreach ($typesPiecesJointes as $typePieceJointe) {
+            echo $this->partial('partial/tpjs-ligne', ['canEdit'             => $canEdit,
+                                                       'statutsIntervenants' => $statutsIntervenants,
+                                                       'typePieceJointe'     => $typePieceJointe,
+                                                       'tpjss'               => isset($typesPiecesJointesStatuts[$typePieceJointe->getId()]) ? $typesPiecesJointesStatuts[$typePieceJointe->getId()] : [],
+                                                       'j'                   => $j,
+                                                       'codeIntervenant'     => $codeIntervenant,]);
+            $j++;
+        }
+        ?>
+        </tbody>
+    </table>
+    <br/>
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary pop-ajax" data-submit-reload="true"
+       href="<?= $this->url('piece-jointe/type-piece-jointe-saisie') ?>"
+       title="Ajouter un type de pièce jointe"><i class="fas fa-pen-to-square"></i>
+        Ajouter un type de pièce jointe</a>
+    <script>
+        $(function () {
+
+            $("body").on("event-update-tpjs", function (event, data) {
+                window.location.reload();
+            });
+        });
+    </script>
+<?php endif; ?>

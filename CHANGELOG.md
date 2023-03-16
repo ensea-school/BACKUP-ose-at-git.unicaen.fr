@@ -16,6 +16,7 @@
 ## Nouveautés
 
 * Ajout de la date de clôture dans la page historique de l'intervenant 
+* Possibilité de saisir une modification de service dû avec 0 heure (#49764)
 
 ## Corrections de bugs
 

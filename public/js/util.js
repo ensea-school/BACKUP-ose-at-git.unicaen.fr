@@ -234,6 +234,22 @@ Util = {
 
 
 
+    formCheckSubmit(formElement)
+    {
+        const btnId = 'UtilFormCheckSubmitButtonHidden';
+        let btn = formElement.querySelector('#'+btnId);
+        if (!btn){
+            btn = document.createElement("button");
+            btn.type = 'submit';
+            btn.id = btnId;
+            btn.style='display:none';
+            formElement.appendChild(btn);
+        }
+        btn.click();
+    },
+
+
+
     formattedHeures: function (heures, html)
     {
         heures = parseFloat(heures);
@@ -443,6 +459,11 @@ Util = {
 
         return dateString;
     },
+
+
+    FORMAT_DATE: 0,
+    FORMAT_DATETIME: 1,
+    FORMAT_TIME: 2,
 
 
 

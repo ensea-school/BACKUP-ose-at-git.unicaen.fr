@@ -12,9 +12,11 @@ use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
+use Mission\Entity\MissionSuivi;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 
 /**
@@ -54,12 +56,7 @@ class MissionController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $missions = [];
-        foreach ($intervenant->getMissions() as $mission){
-            $missions[$mission->getId()] = $mission->getLibelle();
-        }
-
-        return compact('intervenant', 'missions');
+        return compact('intervenant');
     }
 
 
@@ -69,24 +66,9 @@ class MissionController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $dql = "
-        SELECT
-            vhm, m
-        FROM
-            ".VolumeHoraireMission::class." vhm
-            JOIN vhm.typeVolumeHoraire tvh WITH tvh.code = :typeVolumeHoraireRealise
-            JOIN vhm.mission m
-        WHERE
-            vhm.histoDestruction IS NULL
-        ";
+        $data = $this->getServiceMission()->suivi($intervenant);
 
-        $parameters = [
-            'typeVolumeHoraireRealise' => TypeVolumeHoraire::CODE_REALISE,
-        ];
-        $query = $this->em()->createQuery($dql)->setParameters($parameters)->execute();
-
-
-        return $this->axios()->send($query);
+        return $this->axios()->send($data);
     }
 
 
@@ -158,34 +140,35 @@ class MissionController extends AbstractController
      *
      * @return ViewModel
      */
-    public function saisieRealiseAction(): ViewModel
+    public function suiviSaisieAction(): ViewModel
     {
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-//        if (!$mission) {
-//            /** @var Mission $mission */
-//            $mission = $this->getEvent()->getParam('mission');
-//
-//            $title = 'Modification d\'un suivi de mission';
-//        } else {
+        $guid = $this->params()->fromRoute('guid', null);
+
+        if ($guid) {
+            $missionSuivi = $this->getServiceMission()->suivi($intervenant, $guid);
+            $title = 'Modification d\'un suivi de mission';
+        } else {
+            $missionSuivi = new MissionSuivi();
             $title = 'Ajout d\'un suivi de mission';
-//        }
+        }
 
         $form = $this->getFormMissionSuivi();
         $form->setIntervenant($intervenant);
         $form->build();
 
-//        $form->bindRequestSave($mission, $this->getRequest(), function ($mission) {
-//            $this->getServiceMission()->save($mission);
-//            $this->updateTableauxBord($mission);
-//            $this->flashMessenger()->addSuccessMessage('Suivi bien enregistré');
-//        });
-        // on passe le data-id pour pouvoir le récupérer dans la vue et mettre à jour la liste
-//        $form->setAttribute('data-id', $mission->getId());
+        $form->bindRequestSave($missionSuivi, $this->getRequest(), function ($missionSuivi) {
+            $this->getServiceMission()->saveSuivi($missionSuivi);
+            $this->updateTableauxBord($missionSuivi->getMission());
+            $this->flashMessenger()->addSuccessMessage('Suivi bien enregistré');
+        });
+        // on passe le data-guid pour pouvoir le récupérer dans la vue et mettre à jour la liste
+        $form->setAttribute('data-guid', $missionSuivi->guid());
 
         $vm = new ViewModel();
-        $vm->setTemplate('mission/saisie-realise');
+        $vm->setTemplate('mission/suivi-saisie');
         $vm->setVariables(compact('form', 'title'));
 
         return $vm;

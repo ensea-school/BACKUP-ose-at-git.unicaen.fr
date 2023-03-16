@@ -4,7 +4,7 @@
             <div class="card-header card-header-h3">
                 <h5>
                     {{ mission.typeMission.libelle }}
-                    <span class="float-end">Du {{ mission.dateDebut }} au {{ mission.dateFin }}</span>
+                    <span class="float-end">Du <u-date :value="mission.dateDebut" /> au <u-date :value="mission.dateFin" /></span>
                 </h5>
             </div>
             <div class="card-body">
@@ -79,7 +79,7 @@
                         </div>
                         <div>
                             <u-icon name="thumbs-up" variant="success"/>
-                            Créé le {{ mission.histoCreation }} par
+                            Créé le <u-date value="mission.histoCreation" /> par
                             <utilisateur :nom="mission.histoCreateur.displayName" :mail="mission.histoCreateur.email"/>
                         </div>
                         <div>

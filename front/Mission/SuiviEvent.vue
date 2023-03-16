@@ -1,5 +1,11 @@
 <template>
-   {{ event.description }}
+    <p>{{ event.mission.libelle }}</p>
+    <p>
+        de {{ event.heureDebut }} à {{ event.heureFin }}, {{ event.heures }} heures
+        <b-badge v-if="event.nocturne">Nocturne</b-badge>
+        <b-badge v-if="event.formation">En formation</b-badge>
+    </p>
+    <p v-if="event.description">{{ event.description }}</p>
 </template>
 
 <script>
@@ -8,12 +14,6 @@ export default {
     props: {
         event: {type: Object, required: true},
     },
-    methods: {
-        editEvent()
-        {
-            console.log(this.event);
-        },
-    }
 }
 </script>
 

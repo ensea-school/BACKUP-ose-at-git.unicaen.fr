@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Agrement\Entity\Db\TypeAgrement;
+
 /**
  * WfEtape
  */

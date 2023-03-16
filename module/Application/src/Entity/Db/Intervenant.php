@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Agrement\Entity\Db\Agrement;
+use Agrement\Entity\Db\TypeAgrement;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\CiviliteAwareTrait;
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;

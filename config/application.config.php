@@ -128,6 +128,7 @@ class AppConfig
             'UnicaenTbl',
             'UnicaenSiham',
             'Application',
+            'Agrement',
             'Intervenant',
             'Service',
             'Enseignement',

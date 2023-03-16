@@ -1,0 +1,88 @@
+<?php
+
+/**
+ * @var $this          \Application\View\Renderer\PhpRenderer
+ * @var $title         string
+ * @var $data          array
+ * @var $needStructure boolean
+ * @var $needAction    boolean
+ * @var $form          \Application\Form\Agrement\Saisie
+ * @var $typeAgrement  \Agrement\Entity\Db\TypeAgrement
+ */
+
+$canEdit = $this->isAllowed($typeAgrement, $typeAgrement->getPrivilegeEdition());
+
+$tid = uniqid('agrements-lot-');
+?>
+    <h1 class="page-header"><?= $title ?></h1>
+<?= $this->messenger()->setCurrentMessagesFromFlashMessenger() ?>
+
+<?php if (!empty($data)): ?>
+    <?= $this->form()->openTag($form->prepare()); ?>
+    <div class="col-sm-8">
+        <div class="alert alert-info">Voici la liste des intervenants dont les agréments sont en attente :</div>
+        <?php if ($needAction): ?>
+            <label>Cochez les intervenants à impacter :</label>
+        <?php endif; ?>
+        <table id="<?= $tid ?>" class="table table-bordered table-hover" style="margin-bottom:1px">
+            <thead>
+            <tr>
+                <?php if ($needStructure): ?>
+                    <th style="width: 100px">Composante</th><?php endif; ?>
+                <th>Intervenant</th>
+                <?php if ($needAction): ?>
+                    <th style="width:1px">Action</th>
+                <?php endif; ?>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($data as $d): extract($d); ?>
+                <tr>
+                    <?php if ($needStructure): ?>
+                        <td class="structure"><?= $wie->getStructure() ?></td>
+                    <?php endif; ?>
+                    <td class="intervenant">
+                        <a target="_blank"
+                           href="<?= $this->url('intervenant/voir', ['intervenant' => 'code:' . $wie->getIntervenant()->getCode()]); ?>">
+                            <?= $wie->getIntervenant() ?>
+                        </a>
+                    </td>
+                    <?php if ($needAction): ?>
+                        <td style="text-align:center">
+                            <?= $checkbox ? $this->formCheckbox($checkbox) : ''; ?>
+                        </td>
+                    <?php endif; ?>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php if ($needAction): ?>
+            <div style="text-align:right">
+                <button class="btn btn-secondary btn-sm" type="button"
+                        onclick="$('#<?= $tid ?> :checkbox').prop('checked', true);">Tout sélectionner
+                </button>
+                <button class="btn btn-secondary btn-sm" type="button"
+                        onclick="$('#<?= $tid ?> :checkbox').prop('checked', false);">Ne rien sélectionner
+                </button>
+            </div>
+        <?php endif; ?>
+    </div>
+    <div class="col-sm-8">
+        <?php
+
+        if ($needAction) {
+            echo '<div style="width:20em">' . $this->formControlGroup($form->get('dateDecision')) . '</div>';
+            echo $this->formHidden($form->get('security'));
+            echo '<br />';
+            echo $this->formSubmit($form->get('submit')->setAttributes([
+                'class' => 'btn btn-primary',
+                'value' => 'Agréer',
+            ]));
+        }
+        echo $this->form()->closeTag();
+        ?>
+    </div>
+<?php endif; ?>
+<?php if (empty($data)): ?>
+    <div class="alert alert-info">Aucun agrément n'est nécessaire</div>
+<?php endif; ?>

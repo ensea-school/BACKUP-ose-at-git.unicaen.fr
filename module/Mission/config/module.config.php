@@ -37,10 +37,10 @@ return [
                     'privileges' => Privileges::MISSION_VISUALISATION,
                     //'assertion'  => Assertion\MissionAssertion::class,
                 ],
-                'missions-saisie-realise'         => [
-                    'route'      => '/:intervenant/missions-saisie-realise',
+                'missions-suivi-saisie' => [
+                    'route'      => '/:intervenant/missions-suivi-saisie[/:guid]',
                     'controller' => MissionController::class,
-                    'action'     => 'saisie-realise',
+                    'action'     => 'suivi-saisie',
                     'privileges' => Privileges::MISSION_EDITION_REALISE,
                     //'assertion'  => Assertion\MissionAssertion::class,
                 ],

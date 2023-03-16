@@ -2,10 +2,12 @@
 
 namespace Mission\Service;
 
+use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
+use Mission\Entity\MissionSuivi;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
@@ -82,6 +84,65 @@ class MissionService extends AbstractEntityService
 
 
 
+    public function suivi(Intervenant $intervenant, ?string $guid=null): array|MissionSuivi|null
+    {
+        $parameters = [
+            'typeVolumeHoraireRealise' => TypeVolumeHoraire::CODE_REALISE,
+            'intervenant' => $intervenant,
+        ];
+
+        if ($guid){
+            $date = VolumeHoraireMission::guidDate($guid);
+            $from = new \DateTime($date->format("Y-m-d")." 00:00:00");
+            $to   = new \DateTime($date->format("Y-m-d")." 23:59:59");
+
+            $dateFilter = "AND vhm.horaireDebut BETWEEN :from AND :to";
+            $dateFilter .= "\nAND vhm.horaireFin BETWEEN :from AND :to";
+
+            $parameters['from'] = $from;
+            $parameters['to'] = $to;
+        }else{
+            $dateFilter = '';
+        }
+
+        $dql = "
+        SELECT
+            vhm, m
+        FROM
+            ".VolumeHoraireMission::class." vhm
+            JOIN vhm.typeVolumeHoraire tvh WITH tvh.code = :typeVolumeHoraireRealise
+            JOIN vhm.mission m
+        WHERE
+            vhm.histoDestruction IS NULL
+            AND m.intervenant = :intervenant
+            $dateFilter
+        ";
+
+        /** @var VolumeHoraireMission[] $vhms */
+        $vhms = $this->getEntityManager()->createQuery($dql)->setParameters($parameters)->execute();
+
+        $suivis = [];
+        foreach( $vhms as $vhm ){
+            $vhmGuid = $vhm->guid();
+            if (!array_key_exists($vhmGuid, $suivis)){
+                $suivis[$vhmGuid] = new MissionSuivi();
+            }
+            $suivis[$vhmGuid]->addVolumeHoraire($vhm);
+        }
+
+        if ($guid){
+            if (array_key_exists($guid, $suivis)){
+                return $suivis[$guid];
+            }else{
+                return null;
+            }
+        }else{
+            return $suivis;
+        }
+    }
+
+
+
     /**
      * @param Mission $entity
      *
@@ -113,6 +174,15 @@ class MissionService extends AbstractEntityService
         $this->getEntityManager()->flush($vhm);
 
         return $this;
+    }
+
+
+
+    public function saveSuivi(MissionSuivi $missionSuivi)
+    {
+        foreach( $missionSuivi->getVolumesHoraires() as $vhm ){
+            $this->saveVolumeHoraire($vhm);
+        }
     }
 
 

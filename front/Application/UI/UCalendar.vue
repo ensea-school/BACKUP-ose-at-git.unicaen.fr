@@ -152,19 +152,19 @@ export default {
             const dateObj = new Date(this.date);
             dateObj.setDate(event.currentTarget.dataset.jour);
 
-            this.$emit('addEvent', dateObj);
+            this.$emit('addEvent', dateObj, event);
         },
 
         editEvent(event)
         {
             const index = event.currentTarget.dataset.index;
-            this.$emit('editEvent', this.events[index]);
+            this.$emit('editEvent', this.events[index], event);
         },
 
         deleteEvent(event)
         {
             const index = event.currentTarget.dataset.index;
-            this.$emit('deleteEvent', this.events[index]);
+            this.$emit('deleteEvent', this.events[index], event);
         },
 
         prevMois()

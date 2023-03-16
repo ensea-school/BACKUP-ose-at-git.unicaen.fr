@@ -34,6 +34,10 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
 
     protected bool       $nocturne       = false;
 
+    protected bool       $formation      = false;
+
+    protected ?string    $description    = null;
+
     private Collection   $validations;
 
 
@@ -164,6 +168,38 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
 
 
 
+    public function isFormation(): bool
+    {
+        return $this->formation;
+    }
+
+
+
+    public function setFormation(bool $formation): VolumeHoraireMission
+    {
+        $this->formation = $formation;
+
+        return $this;
+    }
+
+
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+
+
+    public function setDescription(?string $description): VolumeHoraireMission
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+
+
     /**
      * @return Collection|Validation[]
      */
@@ -241,5 +277,32 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     public function canSupprimer(): bool
     {
         return !$this->isValide() && !$this->getMission()->isValide();
+    }
+
+
+
+    public function guid()
+    {
+        if ($this->getMission() === null || $this->getHoraireDebut() === null || $this->getHoraireFin() === null) {
+            return null;
+        }
+
+        $guid = $this->getMission()->getId()
+            . '-' . $this->getHoraireDebut()->format('Ymd')
+            . '-' . $this->getHoraireDebut()->format('Hi')
+            . '-' . $this->getHoraireFin()->format('Hi')
+            . '-' . ($this->isFormation() ? '1' : '0')
+            . '-' . ($this->isNocturne() ? '1' : '0');
+
+        return $guid;
+    }
+
+
+
+    public static function guidDate(string $guid): \DateTime
+    {
+        $dateStr = explode('-', $guid)[1];
+
+        return \DateTime::createFromFormat('Ymd', $dateStr);
     }
 }

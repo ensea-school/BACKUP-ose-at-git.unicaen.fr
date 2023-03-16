@@ -4,6 +4,7 @@ namespace PieceJointe;
 
 use Application\Provider\Privilege\Privileges;
 use PieceJointe\Assertion\DossierPiecesAssertion;
+use PieceJointe\Controller\Factory\PieceJointeControllerFactory;
 use PieceJointe\Controller\PieceJointeController;
 use PieceJointe\Form\Factory\ModifierTypePieceJointeStatutFormFactory;
 use PieceJointe\Form\Factory\TypePieceJointeSaisieFormFactory;
@@ -283,7 +284,7 @@ return [
 
     ],
     'controllers' => [
-        PieceJointeController::class => Controller\Factory\PieceJointeControllerFactory::class,
+        PieceJointeController::class => PieceJointeControllerFactory::class,
     ],
     'services'    => [
         TblPieceJointeService::class        => TblPieceJointeServiceFactory::class,

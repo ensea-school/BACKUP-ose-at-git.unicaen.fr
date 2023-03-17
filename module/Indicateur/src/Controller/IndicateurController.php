@@ -283,10 +283,11 @@ class IndicateurController extends AbstractController
             if (!in_array($intervenantId, $intervenantsIds)) {
                 continue;
             }
-            $email = $indicRes['intervenant-email-perso'] ?: $indicRes['intervenant-email-pro'];
+            $emailPro = $indicRes['intervenant-email-pro'];
+            $email    = $indicRes['intervenant-email-perso'] ?: $indicRes['intervenant-email-pro'];
             if ($email) {
                 $emails[$email] = $indicRes['intervenant-nom'] . ' ' . $indicRes['intervenant-prenom'];
-                if ($email != $emailPro) {
+                if ($email != $emailPro && !empty($emailPro)) {
                     $emailsPro[$emailPro] = $indicRes['intervenant-nom'] . ' ' . $indicRes['intervenant-prenom'];
                 }
             } else {

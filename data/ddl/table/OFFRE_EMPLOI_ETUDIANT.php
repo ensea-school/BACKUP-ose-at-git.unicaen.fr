@@ -21,7 +21,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'MISSION_ID'     => [
+        'OFFRE_EMPLOI_ID'     => [
             'name'        => 'OFFRE_EMPLOI_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

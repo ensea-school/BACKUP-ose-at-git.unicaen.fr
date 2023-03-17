@@ -56,7 +56,6 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
             'description',
             'histoCreation',
             'histoCreateur',
-            'valide',
             'validation',
 
         ];
@@ -197,7 +196,7 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
     /**
      * @return Validation
      */
-    public function getValidation(): Validation
+    public function getValidation(): ?Validation
     {
         return $this->validation;
     }

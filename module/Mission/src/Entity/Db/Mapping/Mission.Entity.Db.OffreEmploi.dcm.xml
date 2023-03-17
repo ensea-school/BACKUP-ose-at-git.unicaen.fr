@@ -5,9 +5,6 @@
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
-        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
-            <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
-        </many-to-one>
         <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
             <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
         </many-to-one>
@@ -30,7 +27,7 @@
         </many-to-many>
 
         <field name="autoValidation" type="boolean" column="AUTO_VALIDATION" nullable="false"/>
-        <many-to-one field="validation" target-entity="Mission\Entity\Db\Validation">
+        <many-to-one field="validation" target-entity="Application\Entity\Db\Validation">
             <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
         </many-to-one>
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>

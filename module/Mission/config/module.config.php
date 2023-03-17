@@ -10,13 +10,15 @@ use Mission\Controller\OffreEmploiController;
 use Mission\Controller\OffreEmploiControllerFactory;
 use Mission\Service\MissionTypeService;
 use Mission\Service\MissionTypeServiceFactory;
+use Mission\Service\OffreEmploiService;
+use Mission\Service\OffreEmploiServiceFactory;
 use UnicaenAuth\Assertion\AssertionFactory;
 use UnicaenAuth\Guard\PrivilegeController;
 
 
 return [
     'routes' => [
-        'intervenant'   => [
+        'intervenant'  => [
             'child_routes' => [
                 'missions' => [
                     'route'         => '/:intervenant/missions',
@@ -37,7 +39,7 @@ return [
                 ],
             ],
         ],
-        'mission'       => [
+        'mission'      => [
             'route'         => '/mission',
             'may_terminate' => false,
             'child_routes'  => [
@@ -119,13 +121,24 @@ return [
                 ],
             ],
         ],
-        'offre-emploi'  => [
+        'offre-emploi' => [
             'route'         => '/offre-emploi',
             'controller'    => OffreEmploiController::class,
             'action'        => 'index',
             'privileges'    => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             'may_terminate' => true,
+            'child_routes'  => [
+
+                'liste' => [
+                    'route'      => '/liste',
+                    'controller' => OffreEmploiController::class,
+                    'action'     => 'liste',
+                    'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
+                ],
+            ],
+
         ],
+
         'missions-type' => [
             'route'         => '/missions-type',
             'controller'    => MissionTypeController::class,
@@ -217,7 +230,7 @@ return [
         ],
         [
             'controller' => OffreEmploiController::class,
-            'action'     => ['index'],
+            'action'     => ['index', 'liste'],
             'privileges' => [
                 Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             ],
@@ -234,6 +247,7 @@ return [
         MissionTypeService::class         => MissionTypeServiceFactory::class,
         Assertion\MissionAssertion::class => AssertionFactory::class,
         Service\MissionService::class     => Service\MissionServiceFactory::class,
+        OffreEmploiService::class         => OffreEmploiServiceFactory::class,
     ],
 
     'forms' => [

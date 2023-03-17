@@ -1,5 +1,5 @@
 <template>
-    <div v-for="offre in listeOffre">
+    <div v-for="offre in listeOffres">
         <offreEmploi :key="offre.id" :taux="offre"
                      :listeTaux="listeOffreEmploi"></offreEmploi>
     </div>
@@ -20,7 +20,7 @@ export default {
     data()
     {
         return {
-            listeOffre: [],
+            listeOffres: [],
             ajoutUrl: Util.url('taux/saisir')
         };
     },
@@ -39,21 +39,17 @@ export default {
         {
             this.reload();
         },
-        refreshListe()
-        {
-            this.reload();
-        },
+
         refresh(taux)
         {
-            let index = Util.json.indexById(this.listeTaux, taux.id);
-            this.listeTaux[index] = taux;
+
         },
         reload()
         {
             axios.get(
-                Util.url("taux/liste-taux")
+                Util.url("offre-emploi/liste")
             ).then(response => {
-                this.listeTaux = response.data;
+                this.listeOffres = response.data;
             });
         },
     }

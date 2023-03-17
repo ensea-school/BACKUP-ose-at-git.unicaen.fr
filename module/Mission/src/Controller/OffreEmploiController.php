@@ -16,6 +16,7 @@ use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
+use Mission\Service\OffreEmploiServiceAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
 
 
@@ -26,12 +27,27 @@ use Service\Entity\Db\TypeVolumeHoraire;
  */
 class OffreEmploiController extends AbstractController
 {
+    use OffreEmploiServiceAwareTrait;
 
     public function indexAction()
     {
 
 
         return [];
+    }
+
+
+
+    /**
+     * Retourne la liste des offres d'emploi
+     *
+     * @return JsonModel
+     */
+    public function listeAction()
+    {
+        $query = $this->getServiceOffreEmploi()->query([]);
+
+        return $this->axios()->send($query);
     }
 
 }

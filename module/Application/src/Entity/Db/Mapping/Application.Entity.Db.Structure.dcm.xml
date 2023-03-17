@@ -7,7 +7,7 @@
 
     <field name="code" type="string" column="CODE" length="100" nullable="true"/>
     <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="25" nullable="false"/>
-    <field name="libelleLong" type="string" column="LIBELLE_LONG" length="60" nullable="false"/>
+    <field name="libelleLong" type="string" column="LIBELLE_LONG" length="200" nullable="false"/>
     <field name="enseignement" type="boolean" column="ENSEIGNEMENT" nullable="false"/>
     <field name="affAdresseContrat" type="boolean" column="AFF_ADRESSE_CONTRAT" nullable="false"/>
 

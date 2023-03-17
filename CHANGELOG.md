@@ -18,9 +18,17 @@
 * Ajout de la date de clôture dans la page historique de l'intervenant 
 * Possibilité de saisir une modification de service dû avec 0 heure (#49764)
 
+## Améliorations
+
+* Passage à 200 caractères max. pour les libellés longs des structures
+
 ## Corrections de bugs
 
 * Correction d'une régression de la V20 sur le module Export Siham
+
+
+
+
 
 # OSE 20 (28/02/2023)
 

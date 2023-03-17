@@ -135,7 +135,7 @@ class MotifModificationServiceDuFieldset extends AbstractFieldset
                         'name'    => 'Laminas\Validator\GreaterThan',
                         'options' => [
                             'min'       => 0,
-                            'inclusive' => false,
+                            'inclusive' => true,
                             'messages'  => [
                                 \Laminas\Validator\GreaterThan::NOT_GREATER => "Le nombre d'heures doit être strictement supérieur à 0",
                             ],

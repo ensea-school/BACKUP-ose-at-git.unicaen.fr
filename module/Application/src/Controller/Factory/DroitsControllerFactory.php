@@ -3,6 +3,7 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\DroitsController;
+use Application\Service\PrivilegeService;
 use Psr\Container\ContainerInterface;
 
 class DroitsControllerFactory
@@ -19,7 +20,7 @@ class DroitsControllerFactory
         $doctrineCache = $container->get('doctrine.cache.filesystem');
 
         $controller = new DroitsController($doctrineCache);
-        $controller->setServicePrivilege($container->get('UnicaenAuth\Service\Privilege'));
+        $controller->setServicePrivilege($container->get(PrivilegeService::class));
 
         return $controller;
     }

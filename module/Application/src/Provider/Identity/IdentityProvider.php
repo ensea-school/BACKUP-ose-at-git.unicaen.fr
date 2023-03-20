@@ -8,8 +8,8 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenApp\HostLocalization\HostLocalizationAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenAuth\Provider\Identity\ChainableProvider;
-use UnicaenAuth\Provider\Identity\ChainEvent;
+use UnicaenAuthentification\Provider\Identity\ChainableProvider;
+use UnicaenAuthentification\Provider\Identity\ChainEvent;
 use BjyAuthorize\Provider\Identity\ProviderInterface as IdentityProviderInterface;
 use UnicaenApp\Traits\SessionContainerTrait;
 
@@ -74,7 +74,7 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
                     /* @var $affectation Affectation */
                     $role = $affectation->getRole();
                     try {
-                        if ($role->estNonHistorise() && ($inEtablissement || $role->getAccessibleExterieur())) {
+                        if ($role->estNonHistorise() && ($inEtablissement || $role->isAccessibleExterieur())) {
                             $roleId = $role->getCode();
                             if ($structure = $affectation->getStructure()) {
                                 $roleId .= '-' . $structure->getSourceCode();

@@ -6,7 +6,7 @@ use Application\Acl\Role;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeModulateur;
 use Application\Provider\Privilege\Privileges;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 

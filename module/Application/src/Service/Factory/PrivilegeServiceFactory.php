@@ -4,7 +4,7 @@ namespace Application\Service\Factory;
 
 use Application\Constants;
 use Application\Service\PrivilegeService;
-use UnicaenAuth\Entity\Db\Privilege;
+use Application\Entity\Db\Privilege;
 use Psr\Container\ContainerInterface;
 
 
@@ -35,7 +35,7 @@ class PrivilegeServiceFactory
 
         $service = new PrivilegeService($privilegesRolesConfig);
         $service->setEntityManager($container->get(Constants::BDD));
-        $service->setPrivilegeEntityClass(Privilege::class);
+        //$service->setPrivilegeEntityClass(Privilege::class);
 
         return $service;
     }

@@ -28,7 +28,7 @@ $ajoutUrl = $this->url('droits/roles/edition');
             <td><?= $role->getLibelle(); ?></td>
             <td><?= $role->getPerimetre(); ?></td>
             <td style="text-align: center;"><?= $role->getPeutChangerStructure() ? '<i class="fas fa-check text-succes"></i' : '<i class="fas fa-xmark text-danger refuse"></i'; ?></td>
-            <td style="text-align: center;"><?= $role->getAccessibleExterieur() ? '<i class="fas fa-check text-succes"></i' : '<i class="fas fa-xmark text-danger refuse"></i'; ?></td>
+            <td style="text-align: center;"><?= $role->isAccessibleExterieur() ? '<i class="fas fa-check text-succes"></i' : '<i class="fas fa-xmark text-danger refuse"></i'; ?></td>
             <?php if ($canEdit): ?>
                 <td style="width:1%;white-space: nowrap;text-align: center">
                     <a href="<?= $editionUrl; ?>" class="ajax-modal" data-event="role-edition"><i

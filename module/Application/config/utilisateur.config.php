@@ -28,10 +28,8 @@ return [
 
     'controllers'        => [
         'factories' => [
-            'UnicaenAuth\Controller\Utilisateur' => Application\Controller\Factory\UtilisateurControllerFactory::class,
-        ],
-        'invokables' => [
-            'Application\Controller\Utilisateur' => Application\Controller\UtilisateurController::class,
+            'UnicaenAuthentification\Controller\Utilisateur' => Application\Controller\Factory\UtilisateurControllerFactory::class,
+            \Application\Controller\UtilisateurController::class => Application\Controller\Factory\UtilisateurControllerFactory::class,
         ],
     ],
 ];

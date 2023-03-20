@@ -3,8 +3,8 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenAuth\Guard\PrivilegeController;
-use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+use UnicaenPrivilege\Guard\PrivilegeController;
+use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router' => [
@@ -189,7 +189,7 @@ return [
         ],
         'factories'  => [
             Service\WorkflowService::class     => Service\Factory\WorkflowServiceFactory::class,
-            Assertion\WorkflowAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\WorkflowAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         ],
     ],
     'form_elements'   => [

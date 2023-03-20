@@ -7,7 +7,7 @@ use Application\Provider\Privilege\Privileges;
 use Enseignement\Controller\EnseignementController;
 use Enseignement\Controller\VolumeHoraireController;
 use Laminas\ServiceManager\Factory\InvokableFactory;
-use UnicaenAuth\Assertion\AssertionFactory;
+use UnicaenPrivilege\Assertion\AssertionFactory;
 
 
 return [

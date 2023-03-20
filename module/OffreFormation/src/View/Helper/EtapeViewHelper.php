@@ -5,7 +5,7 @@ namespace OffreFormation\View\Helper;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Application\Util;
-use Application\View\Helper\AbstractViewHelper;
+use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Entity\Db\Etape as Entity;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use OffreFormation\Entity\Db\Traits\EtapeAwareTrait;
@@ -15,7 +15,7 @@ use OffreFormation\Entity\Db\Traits\EtapeAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtapeViewHelper extends AbstractViewHelper
+class EtapeViewHelper extends AbstractHtmlElement
 {
     use EtapeAwareTrait;
     use EtapeServiceAwareTrait;

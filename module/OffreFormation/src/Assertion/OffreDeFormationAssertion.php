@@ -15,7 +15,7 @@ use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Entity\Db\VolumeHoraireEns;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use UnicaenImport\Entity\Db\Source;
 
 

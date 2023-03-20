@@ -2,6 +2,7 @@
 
 namespace Application\Provider\Role;
 
+use Application\Provider\Privilege\Privileges;
 use Application\Service\ContextService;
 use Intervenant\Service\StatutService;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -27,8 +28,7 @@ class RoleProviderFactory
         $roleProvider
             ->setEntityManager($em)
             ->setServiceStatut($container->get(StatutService::class))
-            ->setServiceContext($container->get(ContextService::class))
-            ->setPrivilegeProvider($container->get('UnicaenAuth\Privilege\PrivilegeProvider'));
+            ->setServiceContext($container->get(ContextService::class));
 
         return $roleProvider;
     }

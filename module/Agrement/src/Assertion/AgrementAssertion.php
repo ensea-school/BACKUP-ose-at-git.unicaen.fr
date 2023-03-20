@@ -12,7 +12,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Resource\WorkflowResource;
 use Agrement\Service\Traits\TblAgrementServiceAwareTrait;
 use Agrement\Service\Traits\TypeAgrementServiceAwareTrait;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Application\Acl\Role;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
@@ -184,8 +184,6 @@ class AgrementAssertion extends AbstractAssertion
 
     protected function assertTypeAgrementVisualisation(TypeAgrement $typeAgrement, Intervenant $intervenant)
     {
-        $var = $this->isAllowed(WorkflowResource::create($typeAgrement->getCode(), $intervenant));
-
         return $this->isAllowed(WorkflowResource::create($typeAgrement->getCode(), $intervenant));
     }
 

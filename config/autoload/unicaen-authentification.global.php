@@ -25,7 +25,6 @@ $settings = [
      * - 'privilege_entity_class' : 'UnicaenAuth\Entity\Db\Privilege'
      */
     'role_entity_class'            => 'Application\Entity\Db\Role',
-    'privilege_entity_class'       => 'UnicaenAuth\Entity\Db\Privilege',
 
     /**
      * Attribut LDAP utilisé pour le username des utilisateurs
@@ -112,69 +111,6 @@ if (AppConfig::get('cas', 'actif')) {
 
 return [
     'unicaen-auth' => $settings,
-    'bjyauthorize' => [
-        //'identity_provider' => 'UnicaenAuth\Provider\Identity\Chain',
-
-        'role_providers' => [
-            /**
-             * Fournit les rôles issus de la base de données éventuelle de l'appli.
-             * NB: si le rôle par défaut 'guest' est fourni ici, il ne sera pas ajouté en double dans les ACL.
-             * NB: si la connexion à la base échoue, ce n'est pas bloquant!
-             */
-            //'UnicaenAuth\Provider\Role\DbRole'   => [],
-            /**
-             * Fournit le rôle correspondant à l'identifiant de connexion de l'utilisateur.
-             * Cela est utile lorsque l'on veut gérer les habilitations d'un utilisateur unique
-             * sur des ressources.
-             */
-            //'UnicaenAuth\Provider\Role\Username' => [],
-        ],
-
-        'resource_providers' => [
-            /**
-             * Le service Privilèges peut aussi être une source de ressources,
-             * si on souhaite tester directement l'accès à un privilège
-             */
-            'UnicaenAuth\Service\Privilege' => [],
-        ],
-
-        'rule_providers' => [
-            'UnicaenAuth\Provider\Rule\PrivilegeRuleProvider' => [],
-        ],
-
-        'guards' => [
-            'UnicaenAuth\Guard\PrivilegeController' => [
-                [
-                    'controller' => 'UnicaenAuth\Controller\Droits',
-                    'action'     => ['index'],
-                    'privileges' => [
-                        \UnicaenAuth\Provider\Privilege\Privileges::DROIT_ROLE_VISUALISATION,
-                        \UnicaenAuth\Provider\Privilege\Privileges::DROIT_PRIVILEGE_VISUALISATION,
-                    ],
-                ],
-                [
-                    'controller' => 'UnicaenAuth\Controller\Droits',
-                    'action'     => ['roles'],
-                    'privileges' => [\UnicaenAuth\Provider\Privilege\Privileges::DROIT_ROLE_VISUALISATION],
-                ],
-                [
-                    'controller' => 'UnicaenAuth\Controller\Droits',
-                    'action'     => ['privileges'],
-                    'privileges' => [\UnicaenAuth\Provider\Privilege\Privileges::DROIT_PRIVILEGE_VISUALISATION],
-                ],
-                [
-                    'controller' => 'UnicaenAuth\Controller\Droits',
-                    'action'     => ['role-edition', 'role-suppression'],
-                    'privileges' => [\UnicaenAuth\Provider\Privilege\Privileges::DROIT_ROLE_EDITION],
-                ],
-                [
-                    'controller' => 'UnicaenAuth\Controller\Droits',
-                    'action'     => ['privileges-modifier'],
-                    'privileges' => [\UnicaenAuth\Provider\Privilege\Privileges::DROIT_PRIVILEGE_EDITION],
-                ],
-            ],
-        ],
-    ],
 
     'zfcuser' => [
         $k = 'enable_registration' => isset($settings[$k]) ? $settings[$k] : false,

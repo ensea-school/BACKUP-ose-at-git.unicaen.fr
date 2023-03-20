@@ -6,7 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use Intervenant\Assertion\NoteAssertion;
 use Intervenant\Entity\Db\Note;
 use Intervenant\Entity\Db\Statut;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 
 return [
@@ -190,7 +190,7 @@ return [
         Service\StatutService::class          => Service\StatutServiceFactory::class,
         Service\NoteService::class            => Service\NoteServiceFactory::class,
         Service\TypeNoteService::class        => Service\TypeNoteServiceFactory::class,
-        Assertion\NoteAssertion::class        => \UnicaenAuth\Assertion\AssertionFactory::class,
+        Assertion\NoteAssertion::class        => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         Service\MailService::class            => Service\MailServiceFactory::class,
 
         Assertion\StatutAssertion::class => Assertion\StatutAssertionFactory::class,

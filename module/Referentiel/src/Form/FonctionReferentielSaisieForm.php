@@ -2,7 +2,6 @@
 
 namespace Referentiel\Form;
 
-use Application\Provider\Privilege\Privileges;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Form\AbstractForm;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
@@ -12,7 +11,6 @@ use UnicaenApp\Util;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 
 /**
  * Description of FonctionReferentielSaisieForm
@@ -25,7 +23,6 @@ class FonctionReferentielSaisieForm extends AbstractForm
     use DomaineFonctionnelServiceAwareTrait;
     use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
-    use AuthorizeServiceAwareTrait;
 
 
     public function init()

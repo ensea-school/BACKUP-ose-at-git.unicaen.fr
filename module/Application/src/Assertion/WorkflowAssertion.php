@@ -7,7 +7,7 @@ use Application\Entity\WorkflowEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Resource\WorkflowResource;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 

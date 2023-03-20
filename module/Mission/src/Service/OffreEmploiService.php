@@ -60,6 +60,9 @@ class OffreEmploiService extends AbstractEntityService
           JOIN oe.structure str
          WHERE 
           oe.histoDestruction IS NULL 
+       " . dqlAndWhere([
+                'offreEmploi' => 'oe',
+            ], $parameters) . "
         ORDER BY
           oe.dateDebut
         ";

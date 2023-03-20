@@ -4,10 +4,13 @@
  * @var $intervenant       \Application\Entity\Db\Intervenant
  */
 
-use Application\Entity\Db\WfEtape;
+use Application\Provider\Privilege\Privileges;
 
-$title = 'Offres d\'emploi';
+$this->headTitle()->append("Gestion des offres d'emploi");
+$canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_TYPE));
+$canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_SUPPRESSION_TYPE));
+?>
 
+<h1 class="page-header">Gestion des offres d'emploi</h1>
 
-echo $this->vue('mission/liste-offre-emploi', []);
-
+<?= $this->vue('mission/liste-offre-emploi', []); ?>

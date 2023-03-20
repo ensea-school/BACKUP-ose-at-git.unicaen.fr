@@ -128,8 +128,17 @@ return [
             'privileges'    => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             'may_terminate' => true,
             'child_routes'  => [
-
-                'liste' => [
+                'saisir' => [
+                    'route'      => '/saisir[/:offreEmploi]',
+                    'controller' => OffreEmploiController::class,
+                    'action'     => 'saisir',
+                ],
+                'get'    => [
+                    'route'      => '/get/:offreEmploi',
+                    'controller' => OffreEmploiController::class,
+                    'action'     => 'get',
+                ],
+                'liste'  => [
                     'route'      => '/liste',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'liste',
@@ -216,7 +225,7 @@ return [
         ],
         [
             'controller' => MissionTypeController::class,
-            'action'     => ['saisir'],
+            'action'     => ['saisie'],
             'privileges' => [
                 Privileges::MISSION_EDITION_TYPE,
             ],
@@ -230,7 +239,7 @@ return [
         ],
         [
             'controller' => OffreEmploiController::class,
-            'action'     => ['index', 'liste'],
+            'action'     => ['index', 'liste', 'saisir'],
             'privileges' => [
                 Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             ],
@@ -251,7 +260,8 @@ return [
     ],
 
     'forms' => [
-        Form\MissionForm::class => Form\MissionFormFactory::class,
+        Form\MissionForm::class     => Form\MissionFormFactory::class,
+        Form\OffreEmploiForm::class => Form\OffreEmploiFormFactory::class,
     ],
 
     'view_helpers' => [

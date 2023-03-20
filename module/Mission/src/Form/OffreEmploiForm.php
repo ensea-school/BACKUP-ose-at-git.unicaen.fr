@@ -5,6 +5,7 @@ namespace Mission\Form;
 use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Laminas\Form\FormInterface;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\OffreEmploi;
 use Paiement\Entity\Db\TauxRemu;
@@ -22,9 +23,10 @@ class OffreEmploiForm extends AbstractForm
 
     public function init()
     {
-        $this->spec(OffreEmploi::class, ['intervenant', 'autoValidation']);
+        $this->spec(OffreEmploi::class, ['intervenant', 'autoValidation', 'validation']);
 
         $this->spec(['description' => ['type' => 'Textarea']]);
+
 
         $this->build();
 
@@ -37,13 +39,17 @@ class OffreEmploiForm extends AbstractForm
         $this->setValueOptions('structure', $sDql);
 
         $this->setLabels([
-            'structure'   => 'Composante proposant l\'offre',
-            'typeMission' => 'Type de mission',
-            'dateDebut'   => 'Date de début',
-            'dateFin'     => 'Date de fin',
-            'description' => 'Descriptif de l\'offre',
+            'structure'    => 'Composante proposant l\'offre',
+            'typeMission'  => 'Type de mission',
+            'dateDebut'    => 'Date de début',
+            'dateFin'      => 'Date de fin',
+            'nombreHeures' => 'Nombre d\'heure(s)',
+            'nombrePostes' => 'Nombre de poste(s)',
+            'description'  => 'Descriptif de l\'offre',
+            'titre'        => 'Titre de l\'offre',
         ]);
 
         $this->addSubmit();
     }
+
 }

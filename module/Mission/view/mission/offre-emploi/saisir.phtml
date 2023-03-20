@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $title             string
+ * @var $form              \Mission\Form\MissionForm
+ */
+
+echo $this->tag('h1', ['class' => 'page-header'])->html($title);
+echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNoNamespace();
+echo $this->form()->openTag($form);
+
+echo $this->formControlGroup($form->get('titre'));
+echo $this->formControlGroup($form->get('description'));
+
+?>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $this->formControlGroup($form->get('typeMission')) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $this->formControlGroup($form->get('structure')) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $this->formControlGroup($form->get('nombreHeures')) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $this->formControlGroup($form->get('nombrePostes')) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $this->formControlGroup($form->get('dateDebut')) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $this->formControlGroup($form->get('dateFin')) ?>
+        </div>
+    </div>
+<?php
+echo $this->formSubmit($form->get('submit'));
+
+echo $this->form()->closeTag();
+?>

@@ -29,13 +29,19 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
     protected ?\DateTime   $dateFin        = null;
 
+    protected ?string      $titre          = null;
+
     protected ?string      $description    = null;
+
+    protected ?int         $nombreHeures   = null;
+
+    protected ?int         $nombrePostes   = null;
 
     protected bool         $autoValidation = false;
 
     private Collection     $etudiants;
 
-    private Validation     $validation;
+    private ?Validation    $validation     = null;
 
 
 
@@ -53,7 +59,10 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
             'dateDebut',
             'dateFin',
             'structure',
+            'titre',
             'description',
+            'nombreHeures',
+            'nombrePostes',
             'histoCreation',
             'histoCreateur',
             'validation',
@@ -125,6 +134,22 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
+    public function getTitre(): ?string
+    {
+        return $this->titre;
+    }
+
+
+
+    public function setTitre(?string $titre): self
+    {
+        $this->titre = $titre;
+
+        return $this;
+    }
+
+
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -135,6 +160,38 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+
+
+    public function getNombreHeures(): ?int
+    {
+        return $this->nombreHeures;
+    }
+
+
+
+    public function setNombreHeures(?int $nombreHeures): self
+    {
+        $this->nombreHeures = $nombreHeures;
+
+        return $this;
+    }
+
+
+
+    public function getNombrePostes(): ?int
+    {
+        return $this->nombrePostes;
+    }
+
+
+
+    public function setNombrePostes(?int $nombrePostes): self
+    {
+        $this->nombrePostes = $nombrePostes;
 
         return $this;
     }

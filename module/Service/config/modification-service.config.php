@@ -6,8 +6,8 @@ use Application\Provider\Privilege\Privileges;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\ModificationServiceDuController;
 use Service\Controller\MotifModificationServiceController;
-use UnicaenAuth\Assertion\AssertionFactory;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Assertion\AssertionFactory;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 
 return [

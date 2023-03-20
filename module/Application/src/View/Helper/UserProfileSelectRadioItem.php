@@ -3,7 +3,7 @@
 namespace Application\View\Helper;
 
 use UnicaenApp\Traits\SessionContainerTrait;
-use UnicaenAuth\View\Helper\UserProfileSelectRadioItem as UnicaenAuthViewHelper;
+use UnicaenUtilisateur\View\Helper\UserProfileSelectRadioItem as UnicaenAuthViewHelper;
 use Application\Service\Traits\StructureServiceAwareTrait as StructureServiceAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 

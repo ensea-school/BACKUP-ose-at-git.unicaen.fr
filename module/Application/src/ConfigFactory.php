@@ -3,8 +3,8 @@
 namespace Application;
 
 
-use UnicaenAuth\Guard\PrivilegeController;
-use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+use UnicaenPrivilege\Guard\PrivilegeController;
+use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 use Laminas\Config\Factory;
 use Laminas\Stdlib\Glob;
 
@@ -18,8 +18,10 @@ class ConfigFactory
         $config      = Factory::fromFiles($paths);
         $routeGuards = [];
 
-        $finalConfig = [
-            'doctrine' => [
+        $finalConfig = [];
+
+        if (file_exists($dir . '/src/Entity/Db/Mapping')) {
+            $finalConfig['doctrine'] = [
                 'driver' => [
                     'orm_default_driver' => [
                         'paths' => [
@@ -32,14 +34,14 @@ class ConfigFactory
                         ],
                     ],
                 ],
-            ],
+            ];
+        }
 
-            'view_manager' => [
-                'template_path_stack' => [
-                    $namespace => $dir . '/view',
-                ],
-                'template_map'        => include $dir . '/template_map.php',
+        $finalConfig['view_manager'] = [
+            'template_path_stack' => [
+                $namespace => $dir . '/view',
             ],
+            'template_map'        => include $dir . '/template_map.php',
         ];
 
         if (isset($config['console'])) {

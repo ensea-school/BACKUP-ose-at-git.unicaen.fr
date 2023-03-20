@@ -10,7 +10,7 @@ use Application\Service\ContextService;
 $this->headTitle("Accueil");
 echo $this->messenger()
     ->addMessagesFromFlashMessenger() // affichage des messages des namespaces 'info', 'success', 'warning', 'error' comme d'hab
-    ->addMessagesFromFlashMessenger('UnicaenAuth/*'); // namespaces 'UnicaenAuth/info', 'UnicaenAuth/success', 'UnicaenAuth/warning', 'UnicaenAuth/error'
+    ->addMessagesFromFlashMessenger('UnicaenAuth/*');
 
 $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_ABONNEMENT));
 

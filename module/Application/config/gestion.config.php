@@ -3,7 +3,7 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'router'          => [
@@ -64,7 +64,7 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            Assertion\GestionAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\GestionAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         ],
     ],
 ];

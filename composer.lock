@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a24f58724430278ccdfb7e634b4b21f",
+    "content-hash": "f7ede10da70dbc7a940b0203be2d1eb7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2731,16 +2731,16 @@
         },
         {
             "name": "laminas/laminas-hydrator",
-            "version": "4.12.0",
+            "version": "4.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-hydrator.git",
-                "reference": "78fa8f8a29a2866b1fccdf1b0c260557b6bb595e"
+                "reference": "de6da92da20873d569532adec94afa7285f21157"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-hydrator/zipball/78fa8f8a29a2866b1fccdf1b0c260557b6bb595e",
-                "reference": "78fa8f8a29a2866b1fccdf1b0c260557b6bb595e",
+                "url": "https://api.github.com/repos/laminas/laminas-hydrator/zipball/de6da92da20873d569532adec94afa7285f21157",
+                "reference": "de6da92da20873d569532adec94afa7285f21157",
                 "shasum": ""
             },
             "require": {
@@ -2753,15 +2753,15 @@
                 "zendframework/zend-hydrator": "*"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~2.4.0",
-                "laminas/laminas-eventmanager": "^3.6",
+                "laminas/laminas-coding-standard": "~2.5.0",
+                "laminas/laminas-eventmanager": "^3.10",
                 "laminas/laminas-modulemanager": "^2.14.0",
                 "laminas/laminas-serializer": "^2.14.0",
-                "laminas/laminas-servicemanager": "^3.19",
-                "phpbench/phpbench": "^1.2.7",
-                "phpunit/phpunit": "^9.5.26",
-                "psalm/plugin-phpunit": "^0.18.0",
-                "vimeo/psalm": "^5.0"
+                "laminas/laminas-servicemanager": "^3.20",
+                "phpbench/phpbench": "^1.2.8",
+                "phpunit/phpunit": "^9.5.28",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "vimeo/psalm": "^5.6"
             },
             "suggest": {
                 "laminas/laminas-eventmanager": "^3.2, to support aggregate hydrator usage",
@@ -2804,7 +2804,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-12-21T04:00:01+00:00"
+            "time": "2023-03-19T20:05:31+00:00"
         },
         {
             "name": "laminas/laminas-i18n",
@@ -3575,16 +3575,16 @@
         },
         {
             "name": "laminas/laminas-mvc",
-            "version": "3.6.0",
+            "version": "3.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-mvc.git",
-                "reference": "c54eaebe3810feaca834cc38ef0a962c89ff2431"
+                "reference": "f12e801c31c04a4b35017354ff84070f5573879f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-mvc/zipball/c54eaebe3810feaca834cc38ef0a962c89ff2431",
-                "reference": "c54eaebe3810feaca834cc38ef0a962c89ff2431",
+                "url": "https://api.github.com/repos/laminas/laminas-mvc/zipball/f12e801c31c04a4b35017354ff84070f5573879f",
+                "reference": "f12e801c31c04a4b35017354ff84070f5573879f",
                 "shasum": ""
             },
             "require": {
@@ -3592,8 +3592,8 @@
                 "laminas/laminas-eventmanager": "^3.4",
                 "laminas/laminas-http": "^2.15",
                 "laminas/laminas-modulemanager": "^2.8",
-                "laminas/laminas-router": "^3.5",
-                "laminas/laminas-servicemanager": "^3.7",
+                "laminas/laminas-router": "^3.11.1",
+                "laminas/laminas-servicemanager": "^3.20.0",
                 "laminas/laminas-stdlib": "^3.6",
                 "laminas/laminas-view": "^2.14",
                 "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
@@ -3602,14 +3602,12 @@
                 "zendframework/zend-mvc": "*"
             },
             "require-dev": {
-                "http-interop/http-middleware": "^0.4.1",
                 "laminas/laminas-coding-standard": "^2.4.0",
                 "laminas/laminas-json": "^3.3",
-                "laminas/laminas-psr7bridge": "^1.8",
-                "laminas/laminas-stratigility": ">=2.0.1 <2.2",
                 "phpspec/prophecy": "^1.15.0",
                 "phpspec/prophecy-phpunit": "^2.0.1",
-                "phpunit/phpunit": "^9.5.25"
+                "phpunit/phpunit": "^9.5.25",
+                "webmozart/assert": "^1.11"
             },
             "suggest": {
                 "laminas/laminas-json": "(^2.6.1 || ^3.0) To auto-deserialize JSON body content in AbstractRestfulController extensions, when json_decode is unavailable",
@@ -3654,7 +3652,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-12-05T14:02:56+00:00"
+            "time": "2023-03-15T10:21:03+00:00"
         },
         {
             "name": "laminas/laminas-mvc-i18n",
@@ -6974,6 +6972,36 @@
             "time": "2023-01-26T15:43:30+00:00"
         },
         {
+            "name": "unicaen/authentification",
+            "version": "6.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/authentification.git",
+                "reference": "6c2e56cd85b465f553e9cffbb59132de6303995f"
+            },
+            "require": {
+                "jasig/phpcas": "1.5.*",
+                "laminas/laminas-dependency-plugin": "^2.1",
+                "ramsey/uuid": "^3.7",
+                "unicaen/app": ">=6.0",
+                "unicaen/bjy-authorize": "^5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "UnicaenAuthentification": "src/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "description": "Module d'authentification pour les applications Unicaen - Version Laminas",
+            "time": "2023-02-21T16:08:28+00:00"
+        },
+        {
             "name": "unicaen/bjy-authorize",
             "version": "5.0.0",
             "source": {
@@ -7137,6 +7165,29 @@
             "time": "2023-02-03T15:01:18+00:00"
         },
         {
+            "name": "unicaen/mail",
+            "version": "6.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/mail.git",
+                "reference": "2ed8f84a1ee54179a2549c6c0268100f9b7bce95"
+            },
+            "require": {
+                "laminas/laminas-dependency-plugin": "^2.2",
+                "php": "^8.0",
+                "unicaen/privilege": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": [],
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "description": "Module d'envoi de mail",
+            "time": "2023-01-20T19:22:12+00:00"
+        },
+        {
             "name": "unicaen/open-document",
             "version": "6.0.1",
             "source": {
@@ -7155,6 +7206,33 @@
             },
             "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
             "time": "2023-02-08T10:58:46+00:00"
+        },
+        {
+            "name": "unicaen/privilege",
+            "version": "5.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/privilege.git",
+                "reference": "e30bd738d6b5c4bf9c3b337ba8bb74fef8c72059"
+            },
+            "require": {
+                "laminas/laminas-dependency-plugin": "^2.1",
+                "unicaen/app": ">=5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "UnicaenPrivilege": "src/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "description": "Module reprenant la gestion des privileges  - Version laminas",
+            "time": "2023-02-14T13:09:21+00:00"
         },
         {
             "name": "unicaen/siham",
@@ -7211,6 +7289,38 @@
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
             "time": "2023-02-03T14:58:23+00:00"
+        },
+        {
+            "name": "unicaen/utilisateur",
+            "version": "6.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/utilisateur.git",
+                "reference": "ee4c460fbb1f3aee87249da7bda97cd5349d6bfc"
+            },
+            "require": {
+                "laminas/laminas-dependency-plugin": "^2.1",
+                "unicaen/app": ">=6.0",
+                "unicaen/mail": ">=5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "UnicaenUtilisateur": "src/"
+                },
+                "suggested": {
+                    "UnicaenUtilisateurLdapAdaptater": "unicaen/utilisateur-ldap-adapter",
+                    "UnicaenUtilisateurOctopusAdaptater": "unicaen/utilisateur-octopus-adapter"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "description": "Module reprenant la gestion des utilisateurs, privileges et roles - Version laminas",
+            "time": "2023-02-21T15:41:42+00:00"
         },
         {
             "name": "unicaen/zfc-user",
@@ -8051,24 +8161,27 @@
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "1.6.2",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "48f445a408c131e38cab1c235aa6d2bb7a0bb20d"
+                "reference": "1534aea9bde19a5c85c5d1e1f834ab63f4c5dcf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/48f445a408c131e38cab1c235aa6d2bb7a0bb20d",
-                "reference": "48f445a408c131e38cab1c235aa6d2bb7a0bb20d",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/1534aea9bde19a5c85c5d1e1f834ab63f4c5dcf5",
+                "reference": "1534aea9bde19a5c85c5d1e1f834ab63f4c5dcf5",
                 "shasum": ""
             },
             "require": {
+                "doctrine/deprecations": "^1.0",
                 "php": "^7.4 || ^8.0",
-                "phpdocumentor/reflection-common": "^2.0"
+                "phpdocumentor/reflection-common": "^2.0",
+                "phpstan/phpdoc-parser": "^1.13"
             },
             "require-dev": {
                 "ext-tokenizer": "*",
+                "phpbench/phpbench": "^1.2",
                 "phpstan/extension-installer": "^1.1",
                 "phpstan/phpstan": "^1.8",
                 "phpstan/phpstan-phpunit": "^1.1",
@@ -8100,9 +8213,9 @@
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
             "support": {
                 "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
-                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.6.2"
+                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.7.0"
             },
-            "time": "2022-10-14T12:47:21+00:00"
+            "time": "2023-03-12T10:13:29+00:00"
         },
         {
             "name": "phpmd/phpmd",
@@ -8186,6 +8299,51 @@
                 }
             ],
             "time": "2022-09-10T08:44:15+00:00"
+        },
+        {
+            "name": "phpstan/phpdoc-parser",
+            "version": "1.16.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpdoc-parser.git",
+                "reference": "e27e92d939e2e3636f0a1f0afaba59692c0bf571"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/e27e92d939e2e3636f0a1f0afaba59692c0bf571",
+                "reference": "e27e92d939e2e3636f0a1f0afaba59692c0bf571",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^1.5",
+                "phpstan/phpstan-phpunit": "^1.1",
+                "phpstan/phpstan-strict-rules": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "symfony/process": "^5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\PhpDocParser\\": [
+                        "src/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPDoc parser with support for nullable, intersection and generic types",
+            "support": {
+                "issues": "https://github.com/phpstan/phpdoc-parser/issues",
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.16.1"
+            },
+            "time": "2023-02-07T18:11:17+00:00"
         },
         {
             "name": "sabre/event",

@@ -2,17 +2,17 @@
 
 namespace Referentiel\View\Helper;
 
+use Laminas\View\Helper\AbstractHtmlElement;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Referentiel\Entity\VolumeHoraireReferentielListe;
 use Referentiel\Form\SaisieFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Application\View\Helper\AbstractViewHelper;
 use UnicaenApp\Util;
 use Referentiel\Form\Saisie as SaisieForm;
 
-class FormSaisieViewHelper extends AbstractViewHelper
+class FormSaisieViewHelper extends AbstractHtmlElement
 {
     use ContextServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;

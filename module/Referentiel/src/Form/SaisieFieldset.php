@@ -27,7 +27,7 @@ use Laminas\Validator\NotEmpty;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Laminas\Hydrator\HydratorInterface;
-use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
+use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 
 
 /**

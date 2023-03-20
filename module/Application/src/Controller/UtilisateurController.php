@@ -4,10 +4,10 @@ namespace Application\Controller;
 
 use Application\Acl\Role;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
-use UnicaenAuth\Controller\UtilisateurController as BaseController;
+use UnicaenAuthentification\Controller\UtilisateurController as BaseController;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use UnicaenAuth\Service\Traits\UserServiceAwareTrait;
+use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
 
 
 class UtilisateurController extends BaseController
@@ -26,7 +26,7 @@ class UtilisateurController extends BaseController
     {
         parent::selectionnerProfilAction($addFlashMessage = false);
 
-        $role = $this->serviceUserContext->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         /* @var $role Role */
         $structureId = $this->getRequest()->getPost('structure-' . $role->getRoleId());
 

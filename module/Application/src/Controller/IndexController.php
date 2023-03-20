@@ -8,7 +8,7 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
+use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 
 /**

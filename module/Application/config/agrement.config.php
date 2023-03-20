@@ -4,8 +4,8 @@ namespace Application;
 
 use Application\Entity\Db\TypeAgrement;
 use Application\Provider\Privilege\Privileges;
-use UnicaenAuth\Guard\PrivilegeController;
-use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+use UnicaenPrivilege\Guard\PrivilegeController;
+use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router'          => [
@@ -289,8 +289,8 @@ return [
             Service\TypeAgrementService::class => Service\TypeAgrementService::class,
         ],
         'factories'  => [
-            Assertion\InformationAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
-            Assertion\AgrementAssertion::class    => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\InformationAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+            Assertion\AgrementAssertion::class    => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [

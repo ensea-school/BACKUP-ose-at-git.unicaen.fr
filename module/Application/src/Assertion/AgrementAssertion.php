@@ -12,7 +12,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Resource\WorkflowResource;
 use Application\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Service\Traits\TypeAgrementServiceAwareTrait;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Application\Acl\Role;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 

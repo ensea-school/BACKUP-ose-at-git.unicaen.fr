@@ -3,8 +3,8 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenAuth\Guard\PrivilegeController;
-use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+use UnicaenPrivilege\Guard\PrivilegeController;
+use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router'          => [
@@ -217,7 +217,7 @@ return [
             Service\DotationService::class      => Service\DotationService::class,
         ],
         'factories'  => [
-            Assertion\BudgetAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\BudgetAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         ],
     ],
     'controllers'     => [

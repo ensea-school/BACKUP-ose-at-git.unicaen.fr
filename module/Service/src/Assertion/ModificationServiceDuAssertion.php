@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Acl\Role;
 use Service\Controller\ModificationServiceDuController;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 

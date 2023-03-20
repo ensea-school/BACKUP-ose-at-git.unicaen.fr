@@ -4,14 +4,14 @@ namespace OffreFormation\View\Helper;
 
 use Application\Filter\StringFromFloat;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\View\Helper\AbstractViewHelper;
+use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une liste de statuts
  */
-class TypeInterventionAdminViewHelper extends AbstractViewHelper
+class TypeInterventionAdminViewHelper extends AbstractHtmlElement
 {
     use TypeInterventionServiceAwareTrait;
     use ContextServiceAwareTrait;

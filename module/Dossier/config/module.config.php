@@ -23,8 +23,8 @@ use Dossier\Service\DossierServiceFactory;
 use Dossier\Service\EmployeurService;
 use Dossier\Service\EmployeurServiceFactory;
 use Dossier\View\Helper\ValidationViewHelperFactory;
-use UnicaenAuth\Assertion\AssertionFactory;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Assertion\AssertionFactory;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [

@@ -5,10 +5,10 @@ namespace Enseignement\View\Helper\VolumeHoraire;
 use Application\Constants;
 use Application\Entity\Db\Tag;
 use Application\Provider\Privilege\Privileges;
-use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\VolumeHoraireListe;
 use Enseignement\Hydrator\ListeFilterHydrator;
 use Enseignement\Service\ServiceServiceAwareTrait;
+use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 
@@ -18,7 +18,7 @@ use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ListeCalendaireViewHelper extends AbstractViewHelper
+class ListeCalendaireViewHelper extends AbstractHtmlElement
 {
     use ServiceServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;

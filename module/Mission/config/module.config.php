@@ -8,8 +8,8 @@ use Mission\Controller\MissionController;
 use Mission\Controller\MissionTypeController;
 use Mission\Service\MissionTypeService;
 use Mission\Service\MissionTypeServiceFactory;
-use UnicaenAuth\Assertion\AssertionFactory;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Assertion\AssertionFactory;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 
 return [

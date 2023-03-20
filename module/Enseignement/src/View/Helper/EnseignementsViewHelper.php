@@ -9,9 +9,9 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
+use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
@@ -25,7 +25,7 @@ use Service\Service\TypeVolumeHoraireServiceAwareTrait as ServiceTypeVolumeHorai
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EnseignementsViewHelper extends AbstractViewHelper
+class EnseignementsViewHelper extends AbstractHtmlElement
 {
     use TypeVolumeHoraireAwareTrait;
     use ContextServiceAwareTrait;

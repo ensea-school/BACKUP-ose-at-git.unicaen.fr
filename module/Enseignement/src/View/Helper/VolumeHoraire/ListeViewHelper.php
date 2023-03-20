@@ -5,10 +5,10 @@ namespace Enseignement\View\Helper\VolumeHoraire;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Tag;
 use Application\Provider\Privilege\Privileges;
-use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\VolumeHoraireListe;
 use Enseignement\Hydrator\ListeFilterHydrator;
 use Enseignement\Service\ServiceServiceAwareTrait;
+use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 
@@ -18,7 +18,7 @@ use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ListeViewHelper extends AbstractViewHelper
+class ListeViewHelper extends AbstractHtmlElement
 {
     use ServiceServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;

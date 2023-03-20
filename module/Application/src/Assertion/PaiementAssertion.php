@@ -9,7 +9,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Application\Acl\Role;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;

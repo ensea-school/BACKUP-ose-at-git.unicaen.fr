@@ -5,9 +5,9 @@ namespace Application\Controller\Factory;
 use Application\Controller\UtilisateurController;
 use Psr\Container\ContainerInterface;
 use UnicaenApp\Mapper\Ldap\People as LdapPeopleMapper;
-use UnicaenAuth\Options\ModuleOptions;
-use UnicaenAuth\Service\ShibService;
-use UnicaenAuth\Service\UserContext;
+use UnicaenAuthentification\Options\ModuleOptions;
+use UnicaenAuthentification\Service\ShibService;
+use UnicaenAuthentification\Service\UserContext;
 use Laminas\Authentication\AuthenticationService;
 use ZfcUser\Mapper\UserInterface;
 
@@ -35,7 +35,7 @@ class UtilisateurControllerFactory
         $shibService = $container->get(ShibService::class);
 
         /** @var UserContext $userContextService */
-        $userContextService = $container->get(UserContext::class);
+        $userContextService = $container->get('AuthUserContext');
 
         /** @var LdapPeopleMapper $mapper */
         $ldapPeopleMapper = $container->get('ldap_people_mapper');

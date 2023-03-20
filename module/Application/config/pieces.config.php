@@ -3,8 +3,8 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenAuth\Guard\PrivilegeController;
-use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+use UnicaenPrivilege\Guard\PrivilegeController;
+use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router'          => [
@@ -465,7 +465,7 @@ return [
             Service\TypePieceJointeStatutService::class => Service\TypePieceJointeStatutService::class,
         ],
         'factories'  => [
-            Assertion\DossierPiecesAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\DossierPiecesAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [

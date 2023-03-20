@@ -10,7 +10,7 @@ use Application\Provider\Privilege\Privileges;
 // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 

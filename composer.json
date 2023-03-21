@@ -9,7 +9,7 @@
     ],
     "require"          : {
         "php"                                         : ">=8.0",
-        "unicaen/app"                                 : "6.0.1",
+        "unicaen/app"                                 : "6.0.5",
         "unicaen/authentification"                    : "6.0.3",
         "unicaen/privilege"                           : "6.0.1",
         "unicaen/utilisateur"                         : "6.0.4",

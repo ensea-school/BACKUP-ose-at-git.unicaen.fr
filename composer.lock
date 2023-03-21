@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "efcb8e33290f3c376013b83c842ab1f1",
+    "content-hash": "72e67e488af6f39c90ea43e0a848fbf5",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7036,11 +7036,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "6.0.5",
+            "version": "6.0.6",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "86df91b5c75ae57ebdbd8f2dcf8c3c2c1df76adc"
+                "reference": "14803000f2db012e8fafd6d162bd265c8e98e0da"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7057,7 +7057,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2022-12-02T10:15:21+00:00"
+            "time": "2023-03-21T10:49:29+00:00"
         },
         {
             "name": "unicaen/console",

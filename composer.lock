@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "31334270953468b25e1aab57d2d598ab",
+    "content-hash": "2f8f1d69e74788867eeb136144f9a24c",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -6941,37 +6941,6 @@
             "time": "2023-02-08T15:57:37+00:00"
         },
         {
-            "name": "unicaen/auth",
-            "version": "6.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.unicaen.fr/lib/unicaen/auth.git",
-                "reference": "a99fec284c6cb736216e311168263935c3c94469"
-            },
-            "require": {
-                "jasig/phpcas": "1.5.*",
-                "php": "^8.0",
-                "ramsey/uuid": "^3.0",
-                "unicaen/app": "^6.0",
-                "unicaen/bjy-authorize": "^5.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "UnicaenAuth": "src/",
-                    "UnicaenAuthTest": "tests/"
-                },
-                "classmap": [
-                    "./Module.php"
-                ]
-            },
-            "description": "Module d'authentification pour les applications Unicaen",
-            "time": "2023-01-26T15:43:30+00:00"
-        },
-        {
             "name": "unicaen/authentification",
             "version": "6.0.3",
             "source": {
@@ -7140,14 +7109,15 @@
         },
         {
             "name": "unicaen/import",
-            "version": "6.0.0",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "bf75b4c3140056f2fe19085ddc7d6b8abe331b71"
+                "reference": "5676fabb0a5d506a5312714a614443a8d6dc8b10"
             },
             "require": {
-                "unicaen/auth": "^6.0"
+                "unicaen/authentification": "^6.0",
+                "unicaen/privilege": "^6.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7"
@@ -7162,7 +7132,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2023-02-03T15:01:18+00:00"
+            "time": "2023-03-21T10:15:46+00:00"
         },
         {
             "name": "unicaen/mail",

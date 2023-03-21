@@ -15,14 +15,9 @@ use Laminas\Mvc\ModuleRouteListener;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Stdlib\Glob;
 use Laminas\Config\Factory as ConfigFactory;
+use UnicaenAuthentification\Service\UserContext;
 
 include_once(__DIR__ . '/src/functions.php');
-
-
-
-
-
-//include_once(__DIR__ . '/src/PhpVite.php');
 
 
 class Module
@@ -55,8 +50,8 @@ class Module
 
         $eventManager->attach(MvcEvent::EVENT_ROUTE, $container->get(RouteEntitiesInjector::class), -90);
 
-        /** @var $userContext \UnicaenAuth\Service\UserContext */
-        $userContext = $container->get('UnicaenAuth\Service\UserContext');
+        /** @var $userContext UserContext */
+        $userContext = $container->get(UserContext::class);
         $adapter     = $container->get('ZfcUser\Authentication\Adapter\AdapterChain');
 
         $adapter->getEventManager()->attach('logout', function ($e) use ($userContext) {

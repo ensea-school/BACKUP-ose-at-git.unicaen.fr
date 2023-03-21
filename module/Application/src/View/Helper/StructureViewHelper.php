@@ -4,13 +4,14 @@ namespace Application\View\Helper;
 
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\StructureAwareTrait;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * Description of StructureViewHelper
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class StructureViewHelper extends AbstractViewHelper
+class StructureViewHelper extends AbstractHtmlElement
 {
     use StructureAwareTrait;
 

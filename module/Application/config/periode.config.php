@@ -8,7 +8,7 @@ namespace Application;
 
 use Application\Provider\Privilege\Privileges;
 use Application\Service\PeriodeService;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Guard\PrivilegeController;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return [

@@ -2,19 +2,19 @@
 
 namespace Mission\Controller;
 
-use Application\Constants;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
+use Mission\Entity\MissionSuivi;
 use Mission\Form\MissionFormAwareTrait;
+use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
 
@@ -31,6 +31,7 @@ class MissionController extends AbstractController
     use ContextServiceAwareTrait;
     use ValidationServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use MissionSuiviFormAwareTrait;
 
 
     /**
@@ -56,6 +57,18 @@ class MissionController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
 
         return compact('intervenant');
+    }
+
+
+
+    public function suiviDataAction()
+    {
+        /* @var $intervenant Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $data = $this->getServiceMission()->suivi($intervenant);
+
+        return $this->axios()->send($data);
     }
 
 
@@ -116,6 +129,47 @@ class MissionController extends AbstractController
         $vm = new ViewModel();
         $vm->setTemplate('mission/saisie');
         $vm->setVariables(compact('form', 'title', 'mission'));
+
+        return $vm;
+    }
+
+
+
+    /**
+     * Modifie une mission (form)
+     *
+     * @return ViewModel
+     */
+    public function suiviSaisieAction(): ViewModel
+    {
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $guid = $this->params()->fromRoute('guid', null);
+
+        if ($guid) {
+            $missionSuivi = $this->getServiceMission()->suivi($intervenant, $guid);
+            $title = 'Modification d\'un suivi de mission';
+        } else {
+            $missionSuivi = new MissionSuivi();
+            $title = 'Ajout d\'un suivi de mission';
+        }
+
+        $form = $this->getFormMissionSuivi();
+        $form->setIntervenant($intervenant);
+        $form->build();
+
+        $form->bindRequestSave($missionSuivi, $this->getRequest(), function ($missionSuivi) {
+            $this->getServiceMission()->saveSuivi($missionSuivi);
+            $this->updateTableauxBord($missionSuivi->getMission());
+            $this->flashMessenger()->addSuccessMessage('Suivi bien enregistré');
+        });
+        // on passe le data-guid pour pouvoir le récupérer dans la vue et mettre à jour la liste
+        $form->setAttribute('data-guid', $missionSuivi->guid());
+
+        $vm = new ViewModel();
+        $vm->setTemplate('mission/suivi-saisie');
+        $vm->setVariables(compact('form', 'title'));
 
         return $vm;
     }

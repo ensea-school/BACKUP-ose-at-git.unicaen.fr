@@ -18,6 +18,7 @@ use UnicaenApp\Util;
  */
 class Axios extends AbstractPlugin
 {
+    const DATETIME_FORMAT = 'Y-m-d\TH:i:s.u\Z'; // timestamp ISO 8601 pour HTML5
 
     public function fromPost(?string $param = null, $default = null)
     {
@@ -78,7 +79,7 @@ class Axios extends AbstractPlugin
         } elseif (is_array($data)) {
             return self::extractArray($data, $properties);
         } elseif ($data instanceof \DateTime) {
-            return $data->format(Util::DATE_FORMAT);
+            return $data->format(self::DATETIME_FORMAT);
         } elseif (is_object($data)) {
             return self::extractObject($data, $properties);
         } else {

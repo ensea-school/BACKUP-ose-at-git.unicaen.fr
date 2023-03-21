@@ -18,8 +18,8 @@ use PieceJointe\Service\PieceJointeService;
 use PieceJointe\Service\TblPieceJointeService;
 use PieceJointe\Service\TypePieceJointeService;
 use PieceJointe\Service\TypePieceJointeStatutService;
-use UnicaenAuth\Assertion\AssertionFactory;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Assertion\AssertionFactory;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [

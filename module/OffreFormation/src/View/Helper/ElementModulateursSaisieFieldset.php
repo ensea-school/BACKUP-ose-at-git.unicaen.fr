@@ -2,7 +2,7 @@
 
 namespace OffreFormation\View\Helper;
 
-use Application\View\Helper\AbstractViewHelper;
+use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Form\ElementModulateursFieldset;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 
@@ -12,7 +12,7 @@ use Application\Service\Traits\TypeModulateurServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ElementModulateursSaisieFieldset extends AbstractViewHelper
+class ElementModulateursSaisieFieldset extends AbstractHtmlElement
 {
     use TypeModulateurServiceAwareTrait;
 

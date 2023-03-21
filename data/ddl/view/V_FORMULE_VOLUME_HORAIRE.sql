@@ -33,9 +33,9 @@ FROM (
 SELECT
   to_number( 1 || vh.id )                                              id,
   vh.id                                                                volume_horaire_id,
-  null                                                                 volume_horaire_ref_id,
+  NULL                                                                 volume_horaire_ref_id,
   s.id                                                                 service_id,
-  null                                                                 service_referentiel_id,
+  NULL                                                                 service_referentiel_id,
   s.intervenant_id                                                     intervenant_id,
   ti.id                                                                type_intervention_id,
   vh.type_volume_horaire_id                                            type_volume_horaire_id,
@@ -93,7 +93,7 @@ FROM
       ep.taux_fa,
       ep.taux_fc
   )                                   ep ON ep.id = s.element_pedagogique_id
-  LEFT JOIN structure                str ON str.id = ep.structure_id
+  LEFT JOIN STRUCTURE                str ON str.id = ep.structure_id
   LEFT JOIN etape                      e ON e.id = ep.etape_id
   LEFT JOIN type_formation            tf ON tf.id = e.type_formation_id
   LEFT JOIN type_intervention_statut tis ON tis.type_intervention_id = ti.id AND tis.statut_id = i.statut_id
@@ -108,12 +108,12 @@ UNION ALL
 
 SELECT
   to_number( 2 || vhr.id )          id,
-  null                              volume_horaire_id,
+  NULL                              volume_horaire_id,
   vhr.id                            volume_horaire_ref_id,
-  null                              service_id,
+  NULL                              service_id,
   sr.id                             service_referentiel_id,
   sr.intervenant_id                 intervenant_id,
-  null                              type_intervention_id,
+  NULL                              type_intervention_id,
   vhr.type_volume_horaire_id        type_volume_horaire_id,
   evh.id                            etat_volume_horaire_id,
 
@@ -131,10 +131,10 @@ SELECT
   COALESCE(fr.service_statutaire,1) service_statutaire,
 
   vhr.heures                        heures,
-  null                              periode_id,
+  NULL                              periode_id,
   vhr.horaire_debut                 horaire_debut,
   vhr.horaire_fin                   horaire_fin,
-  null                              type_intervention_code,
+  NULL                              type_intervention_code,
   1                                 taux_service_du,
   1                                 taux_service_compl
 FROM
@@ -146,7 +146,7 @@ FROM
        JOIN etat_volume_horaire         evh ON evh.id = vher.etat_volume_horaire_id
        JOIN fonction_referentiel         fr ON fr.id = sr.fonction_id
        JOIN type_volume_horaire         tvh ON tvh.id = vhr.type_volume_horaire_id
-  LEFT JOIN structure                     s ON s.id = sr.structure_id
+  LEFT JOIN STRUCTURE                     s ON s.id = sr.structure_id
 WHERE
   vhr.histo_destruction IS NULL
   AND sr.histo_destruction IS NULL

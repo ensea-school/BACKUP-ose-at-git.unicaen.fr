@@ -3,14 +3,14 @@
 namespace Service\View\Helper;
 
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
-use Application\View\Helper\AbstractViewHelper;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * Aide de vue permettant d'afficher un résumé des services
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ResumeViewHelper extends AbstractViewHelper
+class ResumeViewHelper extends AbstractHtmlElement
 {
     use TypeIntervenantServiceAwareTrait;
 

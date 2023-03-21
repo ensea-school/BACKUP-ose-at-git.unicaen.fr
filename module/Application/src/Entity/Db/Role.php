@@ -2,11 +2,12 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\Common\Collections\Collection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use UnicaenAuth\Entity\Db\Privilege;
-use UnicaenAuth\Entity\Db\RoleInterface;
-use UnicaenAuth\Entity\Db\UserInterface;
+use UnicaenPrivilege\Entity\Db\PrivilegeInterface;
+use UnicaenUtilisateur\Entity\Db\RoleInterface;
+use UnicaenUtilisateur\Entity\Db\UserInterface;
 
 /**
  * Role
@@ -55,7 +56,7 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $privilege;
+    private $privileges;
 
 
 
@@ -65,7 +66,7 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     public function __construct()
     {
         $this->affectation = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->privilege   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->privileges  = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -75,7 +76,7 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return string
      */
-    public function getRoleId()
+    public function getRoleId(): string
     {
         return $this->getCode();
     }
@@ -87,7 +88,7 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getLibelle();
     }
@@ -101,7 +102,7 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return self
      */
-    public function setCode($code)
+    public function setCode($code): self
     {
         $this->code = $code;
 
@@ -115,7 +116,7 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return string
      */
-    public function getCode()
+    public function getCode(): ?string
     {
         return $this->code;
     }
@@ -129,11 +130,9 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return self
      */
-    public function setLibelle($libelle)
+    public function setLibelle($libelle): void
     {
         $this->libelle = $libelle;
-
-        return $this;
     }
 
 
@@ -143,7 +142,7 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return string
      */
-    public function getLibelle()
+    public function getLibelle(): ?string
     {
         return $this->libelle;
     }
@@ -157,7 +156,7 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return self
      */
-    public function setPerimetre($perimetre)
+    public function setPerimetre($perimetre): RoleInterface
     {
         $this->perimetre = $perimetre;
 
@@ -181,7 +180,7 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     /**
      * @return bool
      */
-    public function getAccessibleExterieur(): bool
+    public function isAccessibleExterieur(): bool
     {
         return $this->accessibleExterieur;
     }
@@ -193,11 +192,9 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return self
      */
-    public function setAccessibleExterieur(bool $accessibleExterieur): self
+    public function setAccessibleExterieur(bool $accessibleExterieur): void
     {
         $this->accessibleExterieur = $accessibleExterieur;
-
-        return $this;
     }
 
 
@@ -231,7 +228,7 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -285,11 +282,9 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return self
      */
-    public function addPrivilege(Privilege $privilege)
+    public function addPrivilege(PrivilegeInterface $privilege): void
     {
-        $this->privilege[] = $privilege;
-
-        return $this;
+        $this->privileges[] = $privilege;
     }
 
 
@@ -299,9 +294,9 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @param Privilege $privilege
      */
-    public function removePrivilege(Privilege $privilege)
+    public function removePrivilege(PrivilegeInterface $privilege): void
     {
-        $this->privilege->removeElement($privilege);
+        $this->privileges->removeElement($privilege);
     }
 
 
@@ -311,9 +306,9 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPrivilege()
+    public function getPrivileges()
     {
-        return $this->privilege;
+        return $this->privileges;
     }
 
 
@@ -326,9 +321,9 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     public function hasPrivilege($privilege)
     {
         if ($privilege instanceof Privilege) {
-            return $this->getPrivilege()->contains($privilege);
+            return $this->getPrivileges()->contains($privilege);
         } else {
-            $privileges = $this->getPrivilege();
+            $privileges = $this->getPrivileges();
             /* @var $privileges Privilege[] */
             foreach ($privileges as $priv) {
                 if ($priv->getFullCode() === $privilege) return true;
@@ -340,72 +335,107 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
 
 
-    public function setId($id)
+    public function setId(?int $id): void
     {
         // TODO: Implement setId() method.
     }
 
 
 
-    public function setRoleId($roleId)
+    public function setRoleId(?string $roleId): void
     {
         // TODO: Implement setRoleId() method.
     }
 
 
 
-    public function getIsDefault()
+    public function getDescription(): ?string
     {
-        // TODO: Implement getIsDefault() method.
+        // TODO: Implement getDescription() method.
     }
 
 
 
-    public function setIsDefault($isDefault)
+    public function setDescription(?string $description): void
     {
-        // TODO: Implement setIsDefault() method.
+        // TODO: Implement setDescription() method.
     }
 
 
 
-    public function getParent()
+    public function isDefault(): bool
+    {
+        // TODO: Implement isDefault() method.
+    }
+
+
+
+    public function setDefault(bool $default): void
+    {
+        // TODO: Implement setDefault() method.
+    }
+
+
+
+    public function isAuto(): bool
+    {
+        // TODO: Implement isAuto() method.
+    }
+
+
+
+    public function setAuto(bool $auto): void
+    {
+        // TODO: Implement setAuto() method.
+    }
+
+
+
+    public function getParent(): ?RoleInterface
     {
         // TODO: Implement getParent() method.
     }
 
 
 
-    public function setParent(RoleInterface $parent = null)
+    public function setParent(?RoleInterface $parent = null): void
     {
         // TODO: Implement setParent() method.
     }
 
 
 
-    public function getLdapFilter()
+    public function getLdapFilter(): ?string
     {
         // TODO: Implement getLdapFilter() method.
     }
 
 
 
-    public function setLdapFilter($ldapFilter)
+    public function setLdapFilter(?string $ldapFilter): void
     {
         // TODO: Implement setLdapFilter() method.
     }
 
 
 
-    public function getUsers()
+    public function getUsers(): Collection
     {
         // TODO: Implement getUsers() method.
     }
 
 
 
-    public function addUser(UserInterface $user)
+    public function addUser(UserInterface $user): void
     {
         // TODO: Implement addUser() method.
+    }
+
+
+
+    public function removeUser(UserInterface $user): void
+    {
+        // TODO: Implement removeUser() method.
     }
 
 }

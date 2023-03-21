@@ -9,10 +9,10 @@ use Application\Service\AbstractService;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenApp\Entity\Ldap\AbstractEntity;
 use UnicaenApp\Entity\Ldap\People;
-use UnicaenAuth\Service\UserContext;
+use UnicaenAuthentification\Service\UserContext;
 use UnicaenApp\Mapper\Ldap\Structure as MapperStructure;
 use UnicaenApp\Mapper\Ldap\People as MapperPeople;
-use UnicaenAuth\Service\UserMapper as MapperUser;
+use UnicaenAuthentification\Service\UserMapper as MapperUser;
 
 
 /**

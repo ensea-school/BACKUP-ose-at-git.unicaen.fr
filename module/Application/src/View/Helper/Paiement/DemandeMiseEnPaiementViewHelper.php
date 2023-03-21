@@ -11,19 +11,19 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeRessource;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\View\Helper\AbstractViewHelper;
+use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Entity\Db\TypeHeures;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use UnicaenApp\View\Helper\TagViewHelper;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 /**
  * Description of DemandeMiseEnPaiementViewHelper
  *
  * @author Laurent LECLUSE <laurent.lecluse at unicaen.fr>
  */
-class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
+class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
 {
     use DomaineFonctionnelServiceAwareTrait;
     use TypeHeuresServiceAwareTrait;

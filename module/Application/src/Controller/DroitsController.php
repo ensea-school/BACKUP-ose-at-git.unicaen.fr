@@ -11,15 +11,15 @@ use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Application\Service\Traits\PrivilegeServiceAwareTrait;
 use Doctrine\Common\Cache\FilesystemCache;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Form\Droits\Traits\RoleFormAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
-use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
-use UnicaenAuth\Entity\Db\Privilege;
+use Application\Entity\Db\Privilege;
 
 /**
  * Description of DroitsController

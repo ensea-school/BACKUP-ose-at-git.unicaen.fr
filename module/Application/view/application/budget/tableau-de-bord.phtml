@@ -35,7 +35,7 @@ use UnicaenApp\Util;
         </tr>
     <?php endforeach; ?>
 </table>
-<?php if ($this->isAllowed(\UnicaenAuth\Guard\PrivilegeController::getResourceId('Application\Controller\Budget', 'export'))): ?>
+<?php if ($this->isAllowed(\UnicaenPrivilege\Guard\PrivilegeController::getResourceId('Application\Controller\Budget', 'export'))): ?>
 <div class="budget-export">
     <a href="<?= $this->url('budget/export') ?>">
         <i class="fas fa-download"></i>

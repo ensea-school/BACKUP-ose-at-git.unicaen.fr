@@ -20,7 +20,6 @@ use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
-use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 
 
@@ -32,7 +31,6 @@ class IntervenantDossierController extends AbstractController
     use WorkflowServiceAwareTrait;
     use ValidationServiceAwareTrait;
     use IntervenantDossierFormAwareTrait;
-    use UserContextServiceAwareTrait;
     use DossierServiceAwareTrait;
     use DossierAutreServiceAwareTrait;
     use AutresFormAwareTrait;

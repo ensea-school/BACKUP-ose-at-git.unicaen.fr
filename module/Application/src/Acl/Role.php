@@ -2,11 +2,11 @@
 
 namespace Application\Acl;
 
-use UnicaenAuth\Acl\NamedRole;
+use UnicaenUtilisateur\Acl\NamedRole;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\PerimetreAwareTrait;
-use UnicaenAuth\Entity\Db\Privilege;
+use Application\Entity\Db\Privilege;
 
 /**
  * Rôle

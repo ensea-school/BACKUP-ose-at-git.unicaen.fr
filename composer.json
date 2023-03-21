@@ -10,7 +10,9 @@
     "require"     : {
         "php"                    : ">=8.0",
         "unicaen/app"            : "6.0.1",
-        "unicaen/auth"           : "6.0.0",
+        "unicaen/authentification" : "6.0.3",
+        "unicaen/privilege"      : "6.0.1",
+        "unicaen/utilisateur"    : "6.0.4",
         "laminas/laminas-file"   : "^2.8",
         "unicaen/code"           : "6.0.5",
         "unicaen/import"         : "6.0.0",

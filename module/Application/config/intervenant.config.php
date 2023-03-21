@@ -4,8 +4,8 @@ namespace Application;
 
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use UnicaenAuth\Guard\PrivilegeController;
-use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+use UnicaenPrivilege\Guard\PrivilegeController;
+use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router'          => [
@@ -389,7 +389,7 @@ return [
         'factories'  => [
             Service\IntervenantService::class     => Service\Factory\IntervenantServiceFactory::class,
             Processus\IntervenantProcessus::class => Processus\Factory\IntervenantProcessusFactory::class,
-            Assertion\IntervenantAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\IntervenantAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         ],
         'invokables' => [
             Service\CiviliteService::class => Service\CiviliteService::class,

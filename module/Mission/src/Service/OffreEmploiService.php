@@ -9,6 +9,7 @@ use Mission\Entity\Db\OffreEmploi;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
 
 /**
  * Description of OffreEmploiService
@@ -53,7 +54,7 @@ class OffreEmploiService extends AbstractEntityService
     {
         $dql = "
         SELECT 
-          oe
+          oe, tm, str
         FROM 
           " . OffreEmploi::class . " oe
           JOIN oe.typeMission tm
@@ -67,7 +68,7 @@ class OffreEmploiService extends AbstractEntityService
           oe.dateDebut
         ";
 
-        return $this->getEntityManager()->createQuery($dql);
+        return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
     }
 
 

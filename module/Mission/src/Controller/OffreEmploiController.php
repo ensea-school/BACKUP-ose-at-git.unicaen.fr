@@ -67,6 +67,19 @@ class OffreEmploiController extends AbstractController
 
 
 
+    public function supprimerAction()
+    {
+        /** @var Mission $mission */
+        $offre = $this->getEvent()->getParam('offreEmploi');
+
+        $this->getServiceOffreEmploi()->delete($offre);
+        $this->flashMessenger()->addSuccessMessage("Offre d'emploi supprimée avec succès.");
+
+        return $this->axios()->send([]);
+    }
+
+
+
     /**
      * Retourne la liste des offres d'emploi
      *

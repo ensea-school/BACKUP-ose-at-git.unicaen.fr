@@ -173,6 +173,7 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
     const MISSION_EDITION_REALISE                              = 'mission-edition-realise';
     const MISSION_EDITION_TYPE                                 = 'mission-edition-type';
     const MISSION_OFFRE_EMPLOI_VISUALISATION                   = 'mission-offre-emploi-visualisation';
+    const MISSION_OFFRE_EMPLOI_SUPPRESSION                     = 'mission-offre-emploi-suppression';
     const MISSION_SUPPRESSION_TYPE                             = 'mission-suppression-type';
     const MISSION_VALIDATION                                   = 'mission-validation';
     const MISSION_VALIDATION_REALISE                           = 'mission-validation-realise';

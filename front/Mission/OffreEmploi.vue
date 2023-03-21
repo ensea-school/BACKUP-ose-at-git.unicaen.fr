@@ -18,6 +18,11 @@
                     <a :href="saisirUrl"
                        class="btn btn-primary"
                        @click.prevent="saisir">Modifier</a>
+                    <a :href="supprimerUrl"
+                       class="btn btn-danger"
+                       data-title="Suppression de l'offre"
+                       data-content="Êtes-vous sur de vouloir supprimer l'offre ?"
+                       @click.prevent="supprimer">Supprimer</a>
 
                 </div>
             </div>
@@ -35,16 +40,19 @@ export default {
     data()
     {
         return {
+
             saisirUrl: Util.url('offre-emploi/saisir/:offre', {offre: this.offre.id}),
             supprimerUrl: Util.url("offre-emploi/supprimer/:offre", {offre: this.offre.id}),
+            validerUrl: Util.url('mission/valider/:mission', {offre: this.offre.id}),
+            devaliderUrl: Util.url('mission/devalider/:mission', {offre: this.offre.id}),
         };
     },
     methods: {
         saisir(event)
         {
             console.log(this.saisirUrl);
-            modAjax(event.target, (response) => {
-                this.$emit('refresh');
+            modAjax(event.target, (widget) => {
+                this.refresh();
             });
         },
         refresh()
@@ -55,8 +63,13 @@ export default {
                 console.log(response.data);
                 this.$emit('refresh', response.data);
             });
-        }
-
+        },
+        supprimer(event)
+        {
+            popConfirm(event.target, (response) => {
+                this.$emit('supprimer', this.offre);
+            });
+        },
 
     },
 

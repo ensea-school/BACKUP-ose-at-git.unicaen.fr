@@ -128,20 +128,26 @@ return [
             'privileges'    => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             'may_terminate' => true,
             'child_routes'  => [
-                'saisir' => [
+                'saisir'    => [
                     'route'      => '/saisir[/:offreEmploi]',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'saisir',
                 ],
-                'get'    => [
+                'get'       => [
                     'route'      => '/get/:offreEmploi',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'get',
                 ],
-                'liste'  => [
+                'liste'     => [
                     'route'      => '/liste',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'liste',
+                    'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
+                ],
+                'supprimer' => [
+                    'route'      => '/supprimer/:offreEmploi',
+                    'controller' => OffreEmploiController::class,
+                    'action'     => 'supprimer',
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
                 ],
             ],
@@ -239,9 +245,16 @@ return [
         ],
         [
             'controller' => OffreEmploiController::class,
-            'action'     => ['index', 'liste', 'saisir'],
+            'action'     => ['index', 'liste', 'saisir', 'get'],
             'privileges' => [
                 Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
+            ],
+        ],
+        [
+            'controller' => OffreEmploiController::class,
+            'action'     => ['supprimer'],
+            'privileges' => [
+                Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION,
             ],
         ],
     ],

@@ -163,6 +163,8 @@ return [
             'edition-type'               => 'Edition des types de mission',
             'suppression-type'           => 'Suppression des types de mission',
             'offre-emploi-visualisation' => 'Visualisation des offres d\'emploi',
+            'offre-emploi-suppresion'    => 'Suppresion des offres d\'emploi',
+
         ],
     ],
 

@@ -11,53 +11,51 @@ use ExportRh\Form\Factory\ExportRhFormFactory;
 
 return [
 
-    'router' => [
-        'routes' => [
-            'intervenant' => [
-                'may_terminate' => true,
-                'route'         => '/intervenant',
-                'action'        => 'index',
-                'child_routes'  => [
-                    'exporter'       => [
-                        'may_terminate' => false,
-                        'route'         => '/:intervenant/exporter',
-                        'controller'    => Controller\ExportRhController::class,
-                        'action'        => 'exporter',
-                    ],
-                    'exporter-rh'    => [
-                        'route'  => '/:intervenant/voir?tab=export-rh',
-                        'action' => 'voir',
-                    ],
-                    'pec'            => [
-                        'may_terminate' => false,
-                        'route'         => '/:intervenant/pec',
-                        'controller'    => Controller\ExportRhController::class,
-                        'action'        => 'prise-en-charge',
-                    ],
-                    'ren'            => [
-                        'may_terminate' => false,
-                        'route'         => '/:intervenant/ren',
-                        'controller'    => Controller\ExportRhController::class,
-                        'action'        => 'renouvellement',
-                    ],
-                    'sync'           => [
-                        'may_terminate' => false,
-                        'route'         => '/:intervenant/sync',
-                        'controller'    => Controller\ExportRhController::class,
-                        'action'        => 'synchroniser',
-                    ],
-                    'administration' => [
-                        'may_terminate' => true,
-                        'route'         => '/administration',
-                        'controller'    => Controller\AdministrationController::class,
-                        'action'        => 'index',
-                        'child_routes'  => [
-                            'chercher-intervenant-rh' => [
-                                'may_terminate' => false,
-                                'route'         => '/chercher-intervenant-rh',
-                                'controller'    => Controller\AdministrationController::class,
-                                'action'        => 'chercher-intervenant-rh',
-                            ],
+    'routes' => [
+        'intervenant' => [
+            'may_terminate' => true,
+            'route'         => '/intervenant',
+            'action'        => 'index',
+            'child_routes'  => [
+                'exporter'       => [
+                    'may_terminate' => false,
+                    'route'         => '/:intervenant/exporter',
+                    'controller'    => Controller\ExportRhController::class,
+                    'action'        => 'exporter',
+                ],
+                'exporter-rh'    => [
+                    'route'  => '/:intervenant/voir?tab=export-rh',
+                    'action' => 'voir',
+                ],
+                'pec'            => [
+                    'may_terminate' => false,
+                    'route'         => '/:intervenant/pec',
+                    'controller'    => Controller\ExportRhController::class,
+                    'action'        => 'prise-en-charge',
+                ],
+                'ren'            => [
+                    'may_terminate' => false,
+                    'route'         => '/:intervenant/ren',
+                    'controller'    => Controller\ExportRhController::class,
+                    'action'        => 'renouvellement',
+                ],
+                'sync'           => [
+                    'may_terminate' => false,
+                    'route'         => '/:intervenant/sync',
+                    'controller'    => Controller\ExportRhController::class,
+                    'action'        => 'synchroniser',
+                ],
+                'administration' => [
+                    'may_terminate' => true,
+                    'route'         => '/administration',
+                    'controller'    => Controller\AdministrationController::class,
+                    'action'        => 'index',
+                    'child_routes'  => [
+                        'chercher-intervenant-rh' => [
+                            'may_terminate' => false,
+                            'route'         => '/chercher-intervenant-rh',
+                            'controller'    => Controller\AdministrationController::class,
+                            'action'        => 'chercher-intervenant-rh',
                         ],
                     ],
                 ],
@@ -81,7 +79,7 @@ return [
         ],
     ],
 
-    'rules'  => [
+    'rules' => [
         [
             'privileges' => [
                 Privileges::INTERVENANT_EXPORTER,

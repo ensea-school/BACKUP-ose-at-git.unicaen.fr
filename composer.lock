@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f7ede10da70dbc7a940b0203be2d1eb7",
+    "content-hash": "31334270953468b25e1aab57d2d598ab",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2808,16 +2808,16 @@
         },
         {
             "name": "laminas/laminas-i18n",
-            "version": "2.21.0",
+            "version": "2.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-i18n.git",
-                "reference": "fbd2d0373aaced4769cba2bf3d1425d55f68abb1"
+                "reference": "fc13d1314941bd9acda3861883cd9139d747f98f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-i18n/zipball/fbd2d0373aaced4769cba2bf3d1425d55f68abb1",
-                "reference": "fbd2d0373aaced4769cba2bf3d1425d55f68abb1",
+                "url": "https://api.github.com/repos/laminas/laminas-i18n/zipball/fc13d1314941bd9acda3861883cd9139d747f98f",
+                "reference": "fc13d1314941bd9acda3861883cd9139d747f98f",
                 "shasum": ""
             },
             "require": {
@@ -2835,7 +2835,7 @@
                 "laminas/laminas-cache": "^3.8",
                 "laminas/laminas-cache-storage-adapter-memory": "^2.2.0",
                 "laminas/laminas-cache-storage-deprecated-factory": "^1.0.1",
-                "laminas/laminas-coding-standard": "~2.4.0",
+                "laminas/laminas-coding-standard": "~2.5.0",
                 "laminas/laminas-config": "^3.8.0",
                 "laminas/laminas-eventmanager": "^3.7",
                 "laminas/laminas-filter": "^2.28.1",
@@ -2890,7 +2890,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-12-02T17:15:52+00:00"
+            "time": "2023-03-12T01:03:50+00:00"
         },
         {
             "name": "laminas/laminas-i18n-resources",
@@ -6973,11 +6973,11 @@
         },
         {
             "name": "unicaen/authentification",
-            "version": "6.0.1",
+            "version": "6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/authentification.git",
-                "reference": "6c2e56cd85b465f553e9cffbb59132de6303995f"
+                "reference": "8fecd370043a0364a54f867abed4839b476aa12f"
             },
             "require": {
                 "jasig/phpcas": "1.5.*",
@@ -6999,7 +6999,7 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen - Version Laminas",
-            "time": "2023-02-21T16:08:28+00:00"
+            "time": "2023-03-21T08:19:01+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",
@@ -7166,16 +7166,16 @@
         },
         {
             "name": "unicaen/mail",
-            "version": "6.0.0",
+            "version": "6.0.2",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/mail.git",
-                "reference": "2ed8f84a1ee54179a2549c6c0268100f9b7bce95"
+                "reference": "bee0f5d6ad8376a12f0167ac5baea9979d39530a"
             },
             "require": {
                 "laminas/laminas-dependency-plugin": "^2.2",
                 "php": "^8.0",
-                "unicaen/privilege": "^5.0"
+                "unicaen/privilege": "^6.0"
             },
             "type": "library",
             "autoload": {
@@ -7185,7 +7185,7 @@
                 ]
             },
             "description": "Module d'envoi de mail",
-            "time": "2023-01-20T19:22:12+00:00"
+            "time": "2023-03-20T11:19:54+00:00"
         },
         {
             "name": "unicaen/open-document",
@@ -7209,11 +7209,11 @@
         },
         {
             "name": "unicaen/privilege",
-            "version": "5.0.6",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/privilege.git",
-                "reference": "e30bd738d6b5c4bf9c3b337ba8bb74fef8c72059"
+                "reference": "574471c1763acc4b2ec441fd6dbc0fe6a599a877"
             },
             "require": {
                 "laminas/laminas-dependency-plugin": "^2.1",
@@ -7232,7 +7232,7 @@
                 ]
             },
             "description": "Module reprenant la gestion des privileges  - Version laminas",
-            "time": "2023-02-14T13:09:21+00:00"
+            "time": "2023-03-21T09:16:07+00:00"
         },
         {
             "name": "unicaen/siham",
@@ -7292,11 +7292,11 @@
         },
         {
             "name": "unicaen/utilisateur",
-            "version": "6.0.1",
+            "version": "6.0.4",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/utilisateur.git",
-                "reference": "ee4c460fbb1f3aee87249da7bda97cd5349d6bfc"
+                "reference": "92ce57bf68a4c00dcd113f350af8ad70a70abcde"
             },
             "require": {
                 "laminas/laminas-dependency-plugin": "^2.1",
@@ -7320,7 +7320,7 @@
                 ]
             },
             "description": "Module reprenant la gestion des utilisateurs, privileges et roles - Version laminas",
-            "time": "2023-02-21T15:41:42+00:00"
+            "time": "2023-03-21T08:09:59+00:00"
         },
         {
             "name": "unicaen/zfc-user",

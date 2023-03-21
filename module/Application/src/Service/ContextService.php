@@ -14,7 +14,7 @@ use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
-use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
+use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
 
 /**
  * Service fournissant les différents contextes de fonctionnement de l'application.

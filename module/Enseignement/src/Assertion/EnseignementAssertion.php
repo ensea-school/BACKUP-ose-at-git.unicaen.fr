@@ -22,7 +22,7 @@ use Service\Service\RegleStructureValidationServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 

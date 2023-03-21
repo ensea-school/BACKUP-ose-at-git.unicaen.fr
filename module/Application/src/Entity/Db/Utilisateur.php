@@ -4,7 +4,7 @@ namespace Application\Entity\Db;
 
 use Application\Interfaces\AxiosExtractor;
 use UnicaenApp\Entity\UserInterface;
-use UnicaenAuth\Entity\Db\AbstractUser;
+use UnicaenUtilisateur\Entity\Db\AbstractUser;
 
 
 /**

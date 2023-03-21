@@ -7,7 +7,7 @@ use Application\Entity\Db\Agrement;
 use Application\Provider\Privilege\Privileges;
 use Paiement\Entity\Db\TauxRemu;
 use phpDocumentor\Reflection\Types\Boolean;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 

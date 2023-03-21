@@ -5,7 +5,7 @@
 return [
     'name'    => 'EMPLOYEUR_SOURCE_UN',
     'table'   => 'EMPLOYEUR',
-    'index'   => NULL,
+    'index'   => 'EMPLOYEUR_SOURCE_UN',
     'columns' => [
         'SOURCE_CODE',
         'HISTO_DESTRUCTION',

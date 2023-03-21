@@ -2,6 +2,8 @@
 
 namespace Application\Provider\Privilege;
 
+use UnicaenPrivilege\Entity\Db\PrivilegeInterface;
+
 /**
  * Description of Privileges
  *
@@ -9,8 +11,12 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
+class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
 
+    const DROIT_ROLE_VISUALISATION          = 'droit-role-visualisation';
+    const DROIT_ROLE_EDITION                = 'droit-role-edition';
+    const DROIT_PRIVILEGE_VISUALISATION     = 'droit-privilege-visualisation';
+    const DROIT_PRIVILEGE_EDITION           = 'droit-privilege-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                  = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION              = 'agrement-conseil-academique-suppression';
     const AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION            = 'agrement-conseil-academique-visualisation';

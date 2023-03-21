@@ -2,7 +2,7 @@
 
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
- * @var $privileges UnicaenAuth\Entity\Db\Privilege[]
+ * @var $privileges array
  * @var $roles      Application\Entity\Db\Role[]
  */
 
@@ -22,7 +22,7 @@
     <tbody>
     <tr>
         <th class="categorie" colspan="<?= 2 + count($roles); ?>">
-            <select class="categorie selectpicker" data-live-search="true" data-width="auto">
+            <select class="categorie form-select" data-live-search="true" data-width="auto">
                 <option value="">Veuillez choisir une catégorie de privilèges ...</option>
                 <?php foreach ($privileges as $cat): ?>
                     <option value="<?= $cat['categorie']->getCode() ?>"><?= $cat['categorie'] ?></option>

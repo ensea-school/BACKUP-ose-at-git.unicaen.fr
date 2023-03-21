@@ -2,7 +2,9 @@
 
 namespace Application\View\Helper;
 
+use Doctrine\Common\Collections\Collection;
 use Laminas\View\Helper\AbstractHtmlElement;
+use Application\Controller\Plugin\Axios;
 
 
 /**
@@ -87,7 +89,8 @@ class VueViewHelper extends AbstractHtmlElement
                     $pv = $pv ? 'true' : 'false';
                 break;
                 case 'array':
-                    $pv = json_encode($pv);
+                case 'object':
+                    $pv = json_encode(Axios::extract($pv));
                 default:
                     $pv = (string)$pv;
             }

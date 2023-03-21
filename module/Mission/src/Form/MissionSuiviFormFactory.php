@@ -1,17 +1,17 @@
 <?php
 
-namespace Mission\Assertion;
+namespace Mission\Form;
 
 use Psr\Container\ContainerInterface;
 
 
 
 /**
- * Description of MissionAssertionFactory
+ * Description of MissionSuiviFormFactory
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class MissionAssertionFactory
+class MissionSuiviFormFactory
 {
 
     /**
@@ -19,14 +19,14 @@ class MissionAssertionFactory
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return MissionAssertion
+     * @return MissionSuiviForm
      */
-    public function __invoke(ContainerInterface $container, $requestedName, $options = null): MissionAssertion
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null): MissionSuiviForm
     {
-        $assertion = new MissionAssertion;
+        $form = new MissionSuiviForm;
 
         /* Injectez vos dépendances ICI */
 
-        return $assertion;
+        return $form;
     }
 }

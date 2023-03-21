@@ -26,7 +26,7 @@ use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
+use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 
 
 /**

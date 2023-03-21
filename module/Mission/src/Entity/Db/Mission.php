@@ -2,6 +2,7 @@
 
 namespace Mission\Entity\Db;
 
+use Application\Constants;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
@@ -344,6 +345,16 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
         }
 
         return null;
+    }
+
+
+
+    public function getLibelle(): string
+    {
+        return $this->getTypeMission()->getLibelle()
+            .'(du '.$this->getDateDebut()->format(Constants::DATE_FORMAT)
+            .' au '.$this->getDateFin()->format(Constants::DATE_FORMAT)
+            .')';
     }
 
 

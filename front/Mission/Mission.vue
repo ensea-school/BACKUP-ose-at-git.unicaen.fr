@@ -4,7 +4,7 @@
             <div class="card-header card-header-h3">
                 <h5>
                     {{ mission.typeMission.libelle }}
-                    <span class="float-end">Du {{ mission.dateDebut }} au {{ mission.dateFin }}</span>
+                    <span class="float-end">Du <u-date :value="mission.dateDebut" /> au <u-date :value="mission.dateFin" /></span>
                 </h5>
             </div>
             <div class="card-body">
@@ -27,7 +27,6 @@
                                 <div class="input-group mb-3">
                                     <div class="form-control" v-html="heuresLib"></div>
                                     <button class="input-group-btn btn btn-secondary" data-bs-toggle="modal" :data-bs-target="`#details-${mission.id}`">
-                                        <u-icon name=""/>
                                         Détails
                                     </button>
                                 </div>
@@ -80,7 +79,7 @@
                         </div>
                         <div>
                             <u-icon name="thumbs-up" variant="success"/>
-                            Créé le {{ mission.histoCreation }} par
+                            Créé le <u-date value="mission.histoCreation" /> par
                             <utilisateur :nom="mission.histoCreateur.displayName" :mail="mission.histoCreateur.email"/>
                         </div>
                         <div>
@@ -213,46 +212,46 @@ export default {
         },
         saisie(event)
         {
-            modAjax(event.target, (widget) => {
+            modAjax(event.currentTarget, (widget) => {
                 this.refresh();
             });
         },
         supprimer(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('supprimer', this.mission);
             });
         },
         valider(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         devalider(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         volumeHoraireSupprimer(event)
         {
-            event.target.href = Util.url('mission/volume-horaire/supprimer/:missionVolumeHoraire', {missionVolumeHoraire: event.target.dataset.id});
-            popConfirm(event.target, (response) => {
+            event.currentTarget.href = Util.url('mission/volume-horaire/supprimer/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         volumeHoraireValider(event)
         {
-            event.target.href = Util.url('mission/volume-horaire/valider/:missionVolumeHoraire', {missionVolumeHoraire: event.target.dataset.id});
-            popConfirm(event.target, (response) => {
+            event.currentTarget.href = Util.url('mission/volume-horaire/valider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         volumeHoraireDevalider(event)
         {
-            event.target.href = Util.url('mission/volume-horaire/devalider/:missionVolumeHoraire', {missionVolumeHoraire: event.target.dataset.id});
-            popConfirm(event.target, (response) => {
+            event.currentTarget.href = Util.url('mission/volume-horaire/devalider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },

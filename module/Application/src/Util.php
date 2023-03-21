@@ -3,7 +3,7 @@
 namespace Application;
 
 
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 /**
  * Class Util

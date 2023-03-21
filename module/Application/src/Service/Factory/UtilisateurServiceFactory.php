@@ -4,6 +4,7 @@ namespace Application\Service\Factory;
 
 use Application\Service\UtilisateurService;
 use Psr\Container\ContainerInterface;
+use UnicaenUtilisateur\Service\User\UserService;
 
 
 /**
@@ -24,7 +25,7 @@ class UtilisateurServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $service = new UtilisateurService();
-        $service->setUserService($container->get('UnicaenAuth\Service\User'));
+        $service->setUserService($container->get(UserService::class));
 
         return $service;
     }

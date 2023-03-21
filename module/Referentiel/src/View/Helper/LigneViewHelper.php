@@ -4,9 +4,9 @@ namespace Referentiel\View\Helper;
 
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Provider\Privilege\Privileges;
+use Laminas\View\Helper\AbstractHtmlElement;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Application\View\Helper\AbstractViewHelper;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\ServiceReferentielAwareTrait;
 
@@ -16,7 +16,7 @@ use Referentiel\Entity\Db\ServiceReferentielAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class LigneViewHelper extends AbstractViewHelper
+class LigneViewHelper extends AbstractHtmlElement
 {
     use ServiceReferentielAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;

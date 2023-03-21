@@ -7,7 +7,7 @@ use Application\Entity\Db\Dotation;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeRessource;
 use Application\Provider\Privilege\Privileges;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 

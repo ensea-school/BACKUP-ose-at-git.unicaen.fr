@@ -153,7 +153,6 @@ Formatter = {
 
 
 
-
 Util = {
 
     alerts: function (messages)
@@ -231,6 +230,22 @@ Util = {
 
         // Construction et retour de l'URL
         return baseUrl + route + (getArgs ? '?' + getArgs : '');
+    },
+
+
+
+    formCheckSubmit(formElement)
+    {
+        const btnId = 'UtilFormCheckSubmitButtonHidden';
+        let btn = formElement.querySelector('#'+btnId);
+        if (!btn){
+            btn = document.createElement("button");
+            btn.type = 'submit';
+            btn.id = btnId;
+            btn.style='display:none';
+            formElement.appendChild(btn);
+        }
+        btn.click();
     },
 
 
@@ -321,7 +336,7 @@ Util = {
         roleInput[0].dispatchEvent(event);
     },
 
-    
+
 
     filterSelectPicker: function (select, values)
     {
@@ -428,6 +443,27 @@ Util = {
 
         return value;
     },
+
+
+
+    dateToString: function (date)
+    {
+        if (date === undefined) {
+            return undefined;
+        }
+
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const dateString = `${year}-${month}-${day}`;
+
+        return dateString;
+    },
+
+
+    FORMAT_DATE: 0,
+    FORMAT_DATETIME: 1,
+    FORMAT_TIME: 2,
 
 
 

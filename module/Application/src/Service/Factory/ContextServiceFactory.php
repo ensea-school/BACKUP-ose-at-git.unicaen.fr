@@ -4,6 +4,7 @@ namespace Application\Service\Factory;
 
 use Application\Service\ContextService;
 use Psr\Container\ContainerInterface;
+use UnicaenAuthentification\Service\UserContext;
 
 
 /**
@@ -24,7 +25,7 @@ class ContextServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $service = new ContextService();
-        $service->setServiceUserContext($container->get('UnicaenAuth\Service\UserContext'));
+        $service->setServiceUserContext($container->get(UserContext::class));
 
         return $service;
     }

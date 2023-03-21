@@ -2,7 +2,7 @@
 
 namespace Application;
 
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Guard\PrivilegeController;
 use Application\Provider\Privilege\Privileges;
 
 return [

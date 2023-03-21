@@ -4,8 +4,8 @@ namespace Plafond;
 
 use Application\Provider\Privilege\Privileges;
 use Plafond\View\Helper\PlafondConfigElementViewHelperFactory;
-use UnicaenAuth\Assertion\AssertionFactory;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Assertion\AssertionFactory;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
 

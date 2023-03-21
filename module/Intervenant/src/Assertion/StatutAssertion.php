@@ -5,7 +5,7 @@ namespace Intervenant\Assertion;
 use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
 use Intervenant\Entity\Db\Statut;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
@@ -30,7 +30,7 @@ class StatutAssertion extends AbstractAssertion
         switch (true) {
             case $entity instanceof Statut:
                 switch ($privilege) {
-                    case Privileges::INTERVENANT_STATUT_EDITION: // Attention à bien avoir généré le fournisseur de privilèges si vous utilisez la gestion des privilèges d'UnicaenAuth
+                    case Privileges::INTERVENANT_STATUT_EDITION: // Attention à bien avoir généré le fournisseur de privilèges si vous utilisez la gestion des privilèges d'UnicaenPrivilege
                         return $this->assertStatutEdition($entity);
                 }
             break;

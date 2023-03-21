@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "31334270953468b25e1aab57d2d598ab",
+    "content-hash": "06b6cc2f763b199a6c88082b74da7f30",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7323,6 +7323,26 @@
             "time": "2023-03-21T08:09:59+00:00"
         },
         {
+            "name": "unicaen/vue",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/vue.git",
+                "reference": "7cdfe3d2420947c6cbbc87e18f443d37a1032a2d"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "UnicaenVue\\": "src/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "description": "Module d'intégration de Vue.js avec l'écosystème Unicaen",
+            "time": "2023-03-21T09:54:24+00:00"
+        },
+        {
             "name": "unicaen/zfc-user",
             "version": "5.0.0",
             "source": {
@@ -8842,6 +8862,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "unicaen/vue": 20,
         "laminas/laminas-cache-storage-adapter-memory": 20,
         "laminas/laminas-text": 20
     },

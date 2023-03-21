@@ -1,40 +1,40 @@
 {
-    "name"        : "unicaen/ose",
-    "description" : "Organisation des Services d'Enseignement (OSE)",
-    "repositories": [
+    "name"             : "unicaen/ose",
+    "description"      : "Organisation des Services d'Enseignement (OSE)",
+    "repositories"     : [
         {
             "type": "composer",
             "url" : "https://gest.unicaen.fr/packagist"
         }
     ],
-    "require"     : {
-        "php"                    : ">=8.0",
-        "unicaen/app"            : "6.0.1",
-        "unicaen/authentification" : "6.0.3",
-        "unicaen/privilege"      : "6.0.1",
-        "unicaen/utilisateur"    : "6.0.4",
-        "laminas/laminas-file"   : "^2.8",
-        "unicaen/code"           : "6.0.5",
-        "unicaen/import"         : "6.0.1",
-        "unicaen/tbl"            : "6.0.0",
-        "unicaen/open-document"  : "6.0.1",
-        "unicaen/siham"          : "^2.0",
+    "require"          : {
+        "php"                                         : ">=8.0",
+        "unicaen/app"                                 : "6.0.1",
+        "unicaen/authentification"                    : "6.0.3",
+        "unicaen/privilege"                           : "6.0.1",
+        "unicaen/utilisateur"                         : "6.0.4",
+        "laminas/laminas-file"                        : "^2.8",
+        "unicaen/code"                                : "6.0.5",
+        "unicaen/import"                              : "6.0.1",
+        "unicaen/tbl"                                 : "6.0.0",
+        "unicaen/open-document"                       : "6.0.1",
+        "unicaen/siham"                               : "6.0.0",
         "laminas/laminas-cache-storage-adapter-memory": "2.1.x-dev",
-        "laminas/laminas-text": "2.10.x-dev"
+        "laminas/laminas-text"                        : "2.10.x-dev"
     },
-    "require-dev": {
-        "squizlabs/php_codesniffer" : "*",
+    "require-dev"      : {
+        "squizlabs/php_codesniffer"         : "*",
         "phpcompatibility/php-compatibility": "*",
         "phan/phan"                         : "^5.3",
-        "phpmd/phpmd": "*"
+        "phpmd/phpmd"                       : "*"
     },
     "prefer-stable"    : true,
-    "config": {
+    "config"           : {
         "allow-plugins": {
-            "laminas/laminas-dependency-plugin": true,
-            "composer/package-versions-deprecated": true,
+            "laminas/laminas-dependency-plugin"             : true,
+            "composer/package-versions-deprecated"          : true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "laminas-api-tools/api-tools-asset-manager": true
+            "laminas-api-tools/api-tools-asset-manager"     : true
         }
     },
     "scripts"          : {

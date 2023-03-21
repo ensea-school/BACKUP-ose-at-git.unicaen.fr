@@ -16,7 +16,7 @@
         "laminas/laminas-file"                        : "^2.8",
         "unicaen/code"                                : "6.0.5",
         "unicaen/import"                              : "6.0.1",
-        "unicaen/tbl"                                 : "6.0.0",
+        "unicaen/tbl"                                 : "6.0.1",
         "unicaen/open-document"                       : "6.0.1",
         "unicaen/siham"                               : "6.0.0",
         "laminas/laminas-cache-storage-adapter-memory": "2.1.x-dev",

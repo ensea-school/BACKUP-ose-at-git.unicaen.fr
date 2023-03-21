@@ -15,7 +15,7 @@
         "unicaen/utilisateur"    : "6.0.4",
         "laminas/laminas-file"   : "^2.8",
         "unicaen/code"           : "6.0.5",
-        "unicaen/import"         : "6.0.0",
+        "unicaen/import"         : "6.0.1",
         "unicaen/vue"            : "dev-master",
         "unicaen/tbl"            : "6.0.0",
         "unicaen/open-document"  : "6.0.1",

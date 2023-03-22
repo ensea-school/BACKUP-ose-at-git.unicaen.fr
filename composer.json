@@ -14,7 +14,7 @@
         "unicaen/privilege"                           : "6.0.1",
         "unicaen/utilisateur"                         : "6.0.4",
         "laminas/laminas-file"                        : "^2.8",
-        "unicaen/code"                                : "6.0.6",
+        "unicaen/code"                                : "6.0.7",
         "unicaen/import"                              : "6.0.1",
         "unicaen/tbl"                                 : "6.0.1",
         "unicaen/open-document"                       : "6.0.1",

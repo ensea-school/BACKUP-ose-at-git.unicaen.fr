@@ -131,6 +131,7 @@ class AppConfig
             'UnicaenImport',
             'UnicaenTbl',
             'UnicaenSiham',
+            'UnicaenVue',
             'Application',
             'Agrement',
             'Intervenant',

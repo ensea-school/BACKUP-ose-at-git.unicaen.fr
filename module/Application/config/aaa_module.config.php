@@ -215,8 +215,6 @@ $config = [
 //            \UnicaenApp\View\Helper\AppLink::class                             => View\Helper\AppLinkFactory::class,
 //            \UnicaenUtilisateur\View\Helper\UserCurrent::class                 => View\Helper\UserCurrentFactory::class,
             'tab'                                                              => View\Helper\TabViewHelperFactory::class,
-            'vite'                                                             => View\Helper\ViteViewHelperFactory::class,
-            'vue'                                                              => View\Helper\VueViewHelperFactory::class,
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,
@@ -234,7 +232,6 @@ $config = [
     'controller_plugins' => [
         'factories' => [
             'context' => Controller\Plugin\ContextFactory::class,
-            'axios'   => Controller\Plugin\AxiosFactory::class,
         ],
     ],
     'view_manager'       => [

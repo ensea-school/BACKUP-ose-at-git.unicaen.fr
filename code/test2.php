@@ -9,3 +9,39 @@ use Unicaen\OpenDocument\Calc;
  * @var $viewName   string
  * @var $viewFile   string
  */
+?>
+<script>
+
+
+
+
+
+
+
+    const a = {
+        languages: ["Spanish", "Portuguese"],
+        name: "Todd",
+        adresse: {
+            rue: '1 rue George Sand',
+            cp: 14400,
+            ville: 'Saint Martin des Entrées'
+        },
+        age: 20
+    };
+
+    const b = {
+        languages: ["Français", "Portuguese"],
+        married: true,
+        adresse: {
+            cp: 14400,
+            ville: 'Bayeux',
+            pays: 'France'
+        },
+    };
+
+
+    const c = mergeDeep(a, b);
+
+    console.log(c)
+
+</script>

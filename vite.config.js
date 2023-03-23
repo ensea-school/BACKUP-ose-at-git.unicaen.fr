@@ -1,60 +1,21 @@
-import {defineConfig, splitVendorChunkPlugin} from 'vite'
-import vue from '@vitejs/plugin-vue'
-import liveReload from 'vite-plugin-live-reload'
-import Components from 'unplugin-vue-components/vite'
-import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers'
+import unicaenVue from 'unicaen-vue';
 import path from 'path'
 
-/* Directives de configuration */
-
-const config = {
-    root: 'front',
-    entry: 'front/main.js',
-    outDir: 'public/dist',
-    port: 5133,
-    liveReloadPaths: [
-        'public/js/**/*.js',
-        'public/css/**/*.css'
-    ]
-}
-
-
-/* Configuration de Vite */
-
-// absolute paths for hot-loading
-let liveReloadPaths = [];
-for (p in config.liveReloadPaths) {
-    liveReloadPaths[p] = path.resolve(__dirname, config.liveReloadPaths[p]);
-}
-
 // https://vitejs.dev/config/
-export default defineConfig({
+// unicaenVue.defineConfig surcharge la config avec des paramétrages par défaut,
+// puis retourne vite.defineConfig
+export default unicaenVue.defineConfig({
     plugins: [
-        vue(),
-        Components({
-            resolvers: [BootstrapVueNextResolver()]
-        }),
-        liveReload(liveReloadPaths),
-        splitVendorChunkPlugin()
+        // placez ici des plugins complémentaires à ceux par défaut
     ],
-    root: config.root,
+    root: 'front',
     build: {
         // output dir for production build
-        outDir: path.resolve(__dirname, config.outDir),
+        outDir: path.resolve(__dirname, 'public/dist'),
+        // On vide le répertoire avant de rebuilder
         emptyOutDir: true,
-        manifest: true,
-        rollupOptions: {
-            input: path.resolve(__dirname, config.entry),
-        }
     },
     server: {
-        strictPort: true,
-        port: config.port
+        port: 5133
     },
-    resolve: {
-        alias: {
-            vue: 'vue/dist/vue.esm-bundler.js',
-            '@': path.resolve(__dirname, config.root)
-        }
-    }
 });

@@ -2,15 +2,15 @@
 
 namespace Application\Entity\Db;
 
-use Application\Interfaces\AxiosExtractor;
 use UnicaenApp\Entity\UserInterface;
 use UnicaenUtilisateur\Entity\Db\AbstractUser;
+use UnicaenVue\Axios\AxiosExtractorInterface;
 
 
 /**
  * Utilisateur
  */
-class Utilisateur extends AbstractUser implements UserInterface, AxiosExtractor
+class Utilisateur extends AbstractUser implements UserInterface, AxiosExtractorInterface
 {
     const APP_UTILISATEUR_ID = 1;
 

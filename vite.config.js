@@ -1,21 +1,25 @@
 import unicaenVue from 'unicaen-vue';
-import path from 'path'
+import path from 'path';
 
-// https://vitejs.dev/config/
-// unicaenVue.defineConfig surcharge la config avec des paramétrages par défaut,
-// puis retourne vite.defineConfig
+/**
+ * @see https://vitejs.dev/config/
+ *
+ * la config transmise ci-dessous est surchargée par UnicaenVue.defineConfig, qui ajoute ses propres éléments
+ * puis retourne vite.defineConfig
+ */
 export default unicaenVue.defineConfig({
-    plugins: [
-        // placez ici des plugins complémentaires à ceux par défaut
-    ],
+    // répertoire où seront placés les fichiers *.vue des composants
     root: 'front',
     build: {
-        // output dir for production build
+        // Répertoire où seront placés les fichiers issus du build et à ajouter au GIT
         outDir: path.resolve(__dirname, 'public/dist'),
-        // On vide le répertoire avant de rebuilder
-        emptyOutDir: true,
     },
     server: {
+        // port par défaut utilisé par Node pour communiquer les éléments en "hot-loading"
+        // utile uniquement en mode dev, donc
         port: 5133
     },
+    resolvers: [
+        // Liste de resolvers pour faire de l'auto-import
+    ],
 });

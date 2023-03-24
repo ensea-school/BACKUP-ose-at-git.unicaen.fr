@@ -16,7 +16,8 @@ use Mission\Entity\MissionSuivi;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraire;
+use UnicaenVue\View\Model\AxiosModel;
+use UnicaenVue\View\Model\VueModel;
 
 
 /**
@@ -55,6 +56,15 @@ class MissionController extends AbstractController
     {
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $data = [
+            'nombre' => 10,
+            'chaine' => 'Sal"ut \'co',
+        ];
+
+        $vm = new VueModel($data);
+        $vm->setTemplate('mission/vm-test');
+        return $vm;
 
         return compact('intervenant');
     }

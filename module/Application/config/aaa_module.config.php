@@ -241,11 +241,6 @@ $config = [
         'template_map'        => include __DIR__ . '/../template_map.php',
         'layout'              => 'layout/layout', // e.g., 'layout/layout'
     ],
-    'vite'               => [
-        'host'        => 'http://localhost:5133',
-        'vue-url'     => '/vendor/vue.js',
-        'hot-loading' => \AppConfig::inDev() ? \AppConfig::get('dev', 'hot-loading') : false,
-    ],
 ];
 
 if ($customCss = \AppConfig::get('etablissement', 'css')) {

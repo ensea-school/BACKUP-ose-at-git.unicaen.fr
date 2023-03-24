@@ -5,7 +5,7 @@
             <offreEmploi @supprimer="supprimer" @refresh="refresh" :key="offre.id" :offre="offre"></offreEmploi>
         </div>
     </div>
-    <!-- <a v-if="canEditTaux" class="btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajout d'un nouveau taux</a>-->
+    <a class="btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajouter une nouvelle offre</a>
 </template>
 
 <script>
@@ -16,15 +16,20 @@ export default {
     components: {
         offreEmploi
     },
+    props: {
+        canAddOffreEmploi: {type: Boolean, required: true},
+    },
     data()
     {
         return {
             offres: [],
+            ajoutUrl: Util.url('offre-emploi/saisir'),
         };
     },
     mounted()
     {
         this.reload();
+        console.log(this.offres);
     },
     methods: {
         ajout(event)

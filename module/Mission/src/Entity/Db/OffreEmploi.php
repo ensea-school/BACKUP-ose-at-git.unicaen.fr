@@ -265,7 +265,7 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
      *
      * @return OffreEmploi
      */
-    public function setValidation(Validation $validation): OffreEmploi
+    public function setValidation(?Validation $validation): OffreEmploi
     {
         $this->validation = $validation;
 

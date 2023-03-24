@@ -18,23 +18,23 @@ use Mission\Service\OffreEmploiServiceFactory;
 
 return [
     'routes' => [
-        'intervenant'   => [
+        'intervenant'  => [
             'child_routes' => [
-                'missions'       => [
+                'missions'              => [
                     'route'      => '/:intervenant/missions',
                     'controller' => MissionController::class,
                     'action'     => 'index',
                     'privileges' => Privileges::MISSION_VISUALISATION,
                     //'assertion'  => Assertion\MissionAssertion::class,
                 ],
-                'missions-suivi' => [
+                'missions-suivi'        => [
                     'route'      => '/:intervenant/missions-suivi',
                     'controller' => MissionController::class,
                     'action'     => 'suivi',
                     'privileges' => Privileges::MISSION_EDITION_REALISE,
                     //'assertion'  => Assertion\MissionAssertion::class,
                 ],
-                'missions-suivi-data' => [
+                'missions-suivi-data'   => [
                     'route'      => '/:intervenant/missions-suivi-data',
                     'controller' => MissionController::class,
                     'action'     => 'suivi-data',
@@ -50,7 +50,7 @@ return [
                 ],
             ],
         ],
-        'mission'       => [
+        'mission'      => [
             'route'         => '/mission',
             'may_terminate' => false,
             'child_routes'  => [
@@ -155,6 +155,18 @@ return [
                     'controller' => OffreEmploiController::class,
                     'action'     => 'supprimer',
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
+                ],
+                'valider'   => [
+                    'route'      => '/valider/:offreEmploi',
+                    'controller' => OffreEmploiController::class,
+                    'action'     => 'valider',
+                    'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
+                ],
+                'devalider' => [
+                    'route'      => '/devalider/:offreEmploi',
+                    'controller' => OffreEmploiController::class,
+                    'action'     => 'devalider',
+                    'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
                 ],
             ],
 
@@ -278,6 +290,13 @@ return [
                 Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION,
             ],
         ],
+        [
+            'controller' => OffreEmploiController::class,
+            'action'     => ['valider', 'devalider'],
+            'privileges' => [
+                Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
+            ],
+        ],
     ],
 
     'controllers' => [
@@ -294,9 +313,9 @@ return [
     ],
 
     'forms' => [
-        Form\MissionForm::class => Form\MissionFormFactory::class,
+        Form\MissionForm::class      => Form\MissionFormFactory::class,
         Form\MissionSuiviForm::class => Form\MissionSuiviFormFactory::class,
-        Form\OffreEmploiForm::class => Form\OffreEmploiFormFactory::class,
+        Form\OffreEmploiForm::class  => Form\OffreEmploiFormFactory::class,
     ],
 
     'view_helpers' => [

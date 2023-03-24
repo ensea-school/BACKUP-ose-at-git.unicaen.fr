@@ -31,6 +31,7 @@ class OffreEmploiController extends AbstractController
 {
     use OffreEmploiServiceAwareTrait;
     use OffreEmploiFormAwareTrait;
+    use ValidationServiceAwareTrait;
 
 
     public function indexAction()
@@ -94,12 +95,51 @@ class OffreEmploiController extends AbstractController
 
 
 
+    public function validerAction()
+    {
+        /** @var OffreEmploi $offre */
+        $offre = $this->getEvent()->getParam('offreEmploi');
+
+        if ($offre->isValide()) {
+            $this->flashMessenger()->addInfoMessage('L\'offre est déjà validé');
+        } else {
+            $this->getServiceValidation()->validerOffreEmploi($offre);
+            $this->getServiceOffreEmploi()->save($offre);
+            $this->flashMessenger()->addSuccessMessage("Offre d'emploi validée");
+        }
+
+        return $this->getAction($offre);
+    }
+
+
+
+    public function devaliderAction()
+    {
+        /** @var OffreEmploi $offre */
+        $offre      = $this->getEvent()->getParam('offreEmploi');
+        $validation = $offre->getValidation();
+        if ($validation) {
+            $offre->setAutoValidation(false);
+            $offre->setValidation(null);
+            $this->getServiceOffreEmploi()->save($offre);
+            $this->getServiceValidation()->delete($validation);
+            $this->flashMessenger()->addSuccessMessage("Offre d'emploi dévalidée");
+        } else {
+            $this->flashMessenger()->addInfoMessage("L'offre d'emploi n'était pas validée");
+        }
+
+        return $this->getAction($offre);
+    }
+
+
+
     /**
      * Retourne les données pour une mission
      *
      * @return JsonModel
      */
-    public function getAction(?OffreEmploi $offreEmploi = null)
+    public
+    function getAction(?OffreEmploi $offreEmploi = null)
     {
         if (!$offreEmploi) {
             /** @var OffreEmploi $offreEmploi */
@@ -112,5 +152,4 @@ class OffreEmploiController extends AbstractController
 
         return $this->axios()->send($this->axios()::extract($query)[0]);
     }
-
 }

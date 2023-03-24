@@ -2,8 +2,6 @@
 
 namespace Application\Provider\Privilege;
 
-use UnicaenPrivilege\Entity\Db\PrivilegeInterface;
-
 /**
  * Description of Privileges
  *
@@ -13,10 +11,6 @@ use UnicaenPrivilege\Entity\Db\PrivilegeInterface;
  */
 class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
 
-    const DROIT_ROLE_VISUALISATION          = 'droit-role-visualisation';
-    const DROIT_ROLE_EDITION                = 'droit-role-edition';
-    const DROIT_PRIVILEGE_VISUALISATION     = 'droit-privilege-visualisation';
-    const DROIT_PRIVILEGE_EDITION           = 'droit-privilege-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                  = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION              = 'agrement-conseil-academique-suppression';
     const AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION            = 'agrement-conseil-academique-visualisation';
@@ -105,6 +99,10 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
     const DOSSIER_VISUALISATION                                = 'dossier-visualisation';
     const DROIT_AFFECTATION_EDITION                            = 'droit-affectation-edition';
     const DROIT_AFFECTATION_VISUALISATION                      = 'droit-affectation-visualisation';
+    const DROIT_PRIVILEGE_EDITION                              = 'droit-privilege-edition';
+    const DROIT_PRIVILEGE_VISUALISATION                        = 'droit-privilege-visualisation';
+    const DROIT_ROLE_EDITION                                   = 'droit-role-edition';
+    const DROIT_ROLE_VISUALISATION                             = 'droit-role-visualisation';
     const ENSEIGNEMENT_DEVALIDATION                            = 'enseignement-devalidation';
     const ENSEIGNEMENT_EDITION_MASSE                           = 'enseignement-edition-masse';
     const ENSEIGNEMENT_EXPORT_CSV                              = 'enseignement-export-csv';
@@ -172,8 +170,11 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
     const MISSION_EDITION                                      = 'mission-edition';
     const MISSION_EDITION_REALISE                              = 'mission-edition-realise';
     const MISSION_EDITION_TYPE                                 = 'mission-edition-type';
-    const MISSION_OFFRE_EMPLOI_VISUALISATION                   = 'mission-offre-emploi-visualisation';
+    const MISSION_OFFRE_EMPLOI_AJOUTER                         = 'mission-offre-emploi-ajouter';
+    const MISSION_OFFRE_EMPLOI_MODIFIER                        = 'mission-offre-emploi-modifier';
     const MISSION_OFFRE_EMPLOI_SUPPRESSION                     = 'mission-offre-emploi-suppression';
+    const MISSION_OFFRE_EMPLOI_VALIDER                         = 'mission-offre-emploi-valider';
+    const MISSION_OFFRE_EMPLOI_VISUALISATION                   = 'mission-offre-emploi-visualisation';
     const MISSION_SUPPRESSION_TYPE                             = 'mission-suppression-type';
     const MISSION_VALIDATION                                   = 'mission-validation';
     const MISSION_VALIDATION_REALISE                           = 'mission-validation-realise';

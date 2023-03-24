@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72e67e488af6f39c90ea43e0a848fbf5",
+    "content-hash": "52b3f7e4ada3aa5a5562b9dd2f6b22ce",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -6878,11 +6878,11 @@
         },
         {
             "name": "unicaen/app",
-            "version": "6.0.1",
+            "version": "6.0.5",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "19335523fd529823d959a3c6cc9eccf3b0dc63b8"
+                "reference": "a85de98e91ea41bf97eb0fdb9359f4942e9fe96d"
             },
             "require": {
                 "beberlei/assert": "^3.3",
@@ -6917,7 +6917,7 @@
                 "mpdf/mpdf": "^8.0",
                 "ocramius/proxy-manager": "^2.0",
                 "php": "^8.0",
-                "unicaen/console": "dev-main"
+                "unicaen/console": "^6.0"
             },
             "require-dev": {
                 "laminas/laminas-test": "^3.2",
@@ -6938,7 +6938,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2023-02-08T15:57:37+00:00"
+            "time": "2023-03-21T14:44:06+00:00"
         },
         {
             "name": "unicaen/authentification",
@@ -7036,11 +7036,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "6.0.6",
+            "version": "6.0.8",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "14803000f2db012e8fafd6d162bd265c8e98e0da"
+                "reference": "7af2b00f72a4300d4cb94e9bdd951066a334ef6c"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7057,11 +7057,11 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2023-03-21T10:49:29+00:00"
+            "time": "2023-03-22T16:21:31+00:00"
         },
         {
             "name": "unicaen/console",
-            "version": "dev-main",
+            "version": "6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/console.git",

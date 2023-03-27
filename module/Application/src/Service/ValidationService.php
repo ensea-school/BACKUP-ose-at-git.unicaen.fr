@@ -13,6 +13,7 @@ use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Dossier\Entity\Db\IntervenantDossier;
 use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\OffreEmploi;
 use Mission\Entity\Db\VolumeHoraireMission;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
@@ -96,6 +97,19 @@ class ValidationService extends AbstractEntityService
         $validation->setStructure($volumeHoraireMission->getMission()->getStructure());
         $this->save($validation);
         $volumeHoraireMission->addValidation($validation);
+
+        return $validation;
+    }
+
+
+
+    public function validerOffreEmploi(OffreEmploi $offreEmploi): Validation
+    {
+        $validation = $this->newEntity();
+        $validation->setTypeValidation($this->getServiceTypeValidation()->getOffreEmploi());
+        $validation->setStructure($offreEmploi->getStructure());
+        $this->save($validation);
+        $offreEmploi->setValidation($validation);
 
         return $validation;
     }

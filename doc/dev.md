@@ -197,6 +197,6 @@ Depuis une action de contrôleur Laminas :
         $this->flashMessenger()->addSuccessMessage('Youpi, super!');
 
         // On utilise le plugin axios pour renvoyer $donnees en client qui récupèrera les valeurs dans le response.data
-        return $this->axios()->send($output);
+        return new AxiosModel($output);
     }
 ```

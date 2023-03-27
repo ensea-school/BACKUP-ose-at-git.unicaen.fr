@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72e67e488af6f39c90ea43e0a848fbf5",
+    "content-hash": "02d96e241bc1769ec26b39a9f515fade",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -6878,11 +6878,11 @@
         },
         {
             "name": "unicaen/app",
-            "version": "6.0.1",
+            "version": "6.0.5",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "19335523fd529823d959a3c6cc9eccf3b0dc63b8"
+                "reference": "a85de98e91ea41bf97eb0fdb9359f4942e9fe96d"
             },
             "require": {
                 "beberlei/assert": "^3.3",
@@ -6917,7 +6917,7 @@
                 "mpdf/mpdf": "^8.0",
                 "ocramius/proxy-manager": "^2.0",
                 "php": "^8.0",
-                "unicaen/console": "dev-main"
+                "unicaen/console": "^6.0"
             },
             "require-dev": {
                 "laminas/laminas-test": "^3.2",
@@ -6938,7 +6938,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2023-02-08T15:57:37+00:00"
+            "time": "2023-03-21T14:44:06+00:00"
         },
         {
             "name": "unicaen/authentification",
@@ -7061,7 +7061,7 @@
         },
         {
             "name": "unicaen/console",
-            "version": "dev-main",
+            "version": "6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/console.git",
@@ -7206,11 +7206,11 @@
         },
         {
             "name": "unicaen/siham",
-            "version": "6.0.0",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/siham.git",
-                "reference": "e59fb1672828aed65c0533d76950ab7326d367b4"
+                "reference": "eefc9443c2233d25f4de52a6b614e6f4b0b3568f"
             },
             "require": {
                 "laminas/laminas-mail": "^2.10",
@@ -7235,7 +7235,7 @@
                 }
             ],
             "description": "PHP library for SIHAM webservices",
-            "time": "2023-03-21T10:23:31+00:00"
+            "time": "2023-03-27T15:05:30+00:00"
         },
         {
             "name": "unicaen/tbl",

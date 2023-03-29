@@ -9,39 +9,84 @@ use Unicaen\OpenDocument\Calc;
  * @var $viewName   string
  * @var $viewFile   string
  */
-?>
-<script>
+
+class Adresse implements \UnicaenVue\Axios\AxiosExtractorInterface {
+    protected int $numero = 1;
+    protected string $rue = 'Allée des mésanges';
+    protected int $cp = 14000;
+    protected string $ville = 'Caen';
+
+    public function getNumero(): int
+    {
+        return $this->numero;
+    }
+
+    public function getRue(): string
+    {
+        return $this->rue;
+    }
+
+    public function getCp(): int
+    {
+        return $this->cp;
+    }
+
+    public function getVille(): string
+    {
+        return $this->ville;
+    }
 
 
 
+    public function axiosDefinition(): array
+    {
+        return ['cp', 'ville'];
+    }
+
+}
+
+class Personne
+{
+    protected string $nom = 'Dupont';
+    protected string $prenom = 'Robert';
+    protected int $age = 42;
+    protected Adresse $adresse;
+
+    public function __construct()
+    {
+        $this->adresse = new Adresse();
+    }
+
+    public function getNom(): string
+    {
+        return $this->nom;
+    }
+
+    public function getPrenom(): string
+    {
+        return $this->prenom;
+    }
+
+    public function getAge(): int
+    {
+        return $this->age;
+    }
+
+    public function isMajeur(): bool
+    {
+        return $this->age >= 18;
+    }
+
+    public function getAdresse(): Adresse
+    {
+        return $this->adresse;
+    }
 
 
+}
 
+$personne = new Personne();
 
-    const a = {
-        languages: ["Spanish", "Portuguese"],
-        name: "Todd",
-        adresse: {
-            rue: '1 rue George Sand',
-            cp: 14400,
-            ville: 'Saint Martin des Entrées'
-        },
-        age: 20
-    };
-
-    const b = {
-        languages: ["Français", "Portuguese"],
-        married: true,
-        adresse: {
-            cp: 14400,
-            ville: 'Bayeux',
-            pays: 'France'
-        },
-    };
-
-
-    const c = mergeDeep(a, b);
-
-    console.log(c)
-
-</script>
+$properties = ['nom', 'prenom', 'isMajeur', 'adresse'];
+$extracted = \UnicaenVue\Axios\AxiosExtractor::extract($personne,$properties);
+var_dump($extracted);

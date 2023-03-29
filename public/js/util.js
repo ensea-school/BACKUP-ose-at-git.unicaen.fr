@@ -151,26 +151,6 @@ Util = {
 
 
 
-    url: function (route, params, query)
-    {
-        let baseUrl = $('body').data('base-url');
-
-        // Remplacement des paramètres de routes par leurs valeurs
-        if (params) {
-            for (var p in params) {
-                route = route.replace(':' + p, params[p]);
-            }
-        }
-
-        // traitement de la requête GET
-        let getArgs = query ? $.param(query) : null;
-
-        // Construction et retour de l'URL
-        return baseUrl + route + (getArgs ? '?' + getArgs : '');
-    },
-
-
-
     formCheckSubmit(formElement)
     {
         const btnId = 'UtilFormCheckSubmitButtonHidden';
@@ -250,7 +230,7 @@ Util = {
     changementAnnee: function (annee)
     {
         $.get(
-            Util.url('changement-annee/:annee', {annee: annee}),
+            unicaenVue.url('changement-annee/:annee', {annee: annee}),
             {},
             function ()
             {

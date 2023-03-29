@@ -7,6 +7,7 @@ import path from 'path';
  * la config transmise ci-dessous est surchargée par UnicaenVue.defineConfig, qui ajoute ses propres éléments
  * puis retourne vite.defineConfig
  */
+
 export default unicaenVue.defineConfig({
     // répertoire où seront placés les fichiers *.vue des composants
     root: 'front',

@@ -135,9 +135,9 @@ export default {
     data()
     {
         return {
-            saisieUrl: Util.url('taux/saisir/:tauxRemu', {tauxRemu: this.taux.id}),
-            supprimerUrl: Util.url("taux/supprimer/:tauxRemu", {tauxRemu: this.taux.id}),
-            ajoutValeurUrl: Util.url("taux/saisir-valeur/:tauxRemu", {tauxRemu: this.taux.id}),
+            saisieUrl: unicaenVue.url('taux/saisir/:tauxRemu', {tauxRemu: this.taux.id}),
+            supprimerUrl: unicaenVue.url("taux/supprimer/:tauxRemu", {tauxRemu: this.taux.id}),
+            ajoutValeurUrl: unicaenVue.url("taux/saisir-valeur/:tauxRemu", {tauxRemu: this.taux.id}),
         };
     },
     methods: {
@@ -155,7 +155,7 @@ export default {
         },
         saisieValeur(event)
         {
-            event.currentTarget.href = Util.url("taux/saisir-valeur/:tauxRemu/:tauxRemuValeur",
+            event.currentTarget.href = unicaenVue.url("taux/saisir-valeur/:tauxRemu/:tauxRemuValeur",
                 {tauxRemu: this.taux.id, tauxRemuValeur: event.currentTarget.dataset.id});
             modAjax(event.currentTarget, (response) => {
                 this.$emit('refreshListe');
@@ -173,7 +173,7 @@ export default {
         },
         supprimerValeur(event)
         {
-            event.currentTarget.href = Util.url("taux/supprimer-valeur/:tauxRemuValeur",
+            event.currentTarget.href = unicaenVue.url("taux/supprimer-valeur/:tauxRemuValeur",
                 {tauxRemuValeur: event.currentTarget.dataset.id});
             popConfirm(event.currentTarget, (response) => {
                 this.$emit('refreshListe');
@@ -181,8 +181,8 @@ export default {
         },
         refresh(taux)
         {
-            axios.get(
-                Util.url("taux/get/:tauxRemu", {tauxRemu: taux.id})
+            unicaenVue.axios.get(
+                unicaenVue.url("taux/get/:tauxRemu", {tauxRemu: taux.id})
             ).then(response => {
                 this.$emit('refresh', response.data);
             });

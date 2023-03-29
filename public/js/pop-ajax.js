@@ -334,7 +334,7 @@ function popConfirm(element, options)
 
         if (element.nodeName == 'A') {
             goFunc = function () {
-                axios.get(options.url).then(response => {
+                unicaenVue.axios.get(options.url).then(response => {
                     options.confirm(response, element);
                 });
             };

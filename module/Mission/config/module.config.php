@@ -168,6 +168,11 @@ return [
                     'action'     => 'devalider',
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
                 ],
+                'public'    => [
+                    'route'      => '/public',
+                    'controller' => OffreEmploiController::class,
+                    'action'     => 'public',
+                ],
             ],
 
         ],
@@ -255,6 +260,12 @@ return [
     ],
 
     'guards' => [
+        [
+            'controller' => MissionTypeController::class,
+            'action'     => ['index'],
+            'roles'      => ['guest'],
+
+        ],
         [
             'controller' => MissionTypeController::class,
             'action'     => ['index'],

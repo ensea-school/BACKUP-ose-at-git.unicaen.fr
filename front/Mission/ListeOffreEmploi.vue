@@ -1,10 +1,8 @@
 <template>
     <div class="row row-cols-1 row-cols-md-2 g-4">
-
-        <div v-for="offre in offres">
-            <offreEmploi @supprimer="supprimer" @refresh="refresh" :key="offre.id" :offre="offre"></offreEmploi>
-        </div>
+        <offreEmploi v-for="offre in offres" @supprimer="supprimer" @refresh="refresh" :key="offre.id" :offre="offre" :public="this.public"></offreEmploi>
     </div>
+    <br/>
     <a class="btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajouter une nouvelle offre</a>
 </template>
 
@@ -17,6 +15,7 @@ export default {
         offreEmploi
     },
     props: {
+        public: {type: Boolean, required: true},
         canAddOffreEmploi: {type: Boolean, required: true},
     },
     data()
@@ -26,6 +25,7 @@ export default {
             ajoutUrl: Util.url('offre-emploi/saisir'),
         };
     },
+
     mounted()
     {
         this.reload();

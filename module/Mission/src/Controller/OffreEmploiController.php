@@ -2,6 +2,7 @@
 
 namespace Mission\Controller;
 
+use Application\Acl\Role;
 use Application\Constants;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
@@ -10,6 +11,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Doctrine\ORM\Query;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
@@ -32,6 +34,7 @@ class OffreEmploiController extends AbstractController
     use OffreEmploiServiceAwareTrait;
     use OffreEmploiFormAwareTrait;
     use ValidationServiceAwareTrait;
+    use ContextServiceAwareTrait;
 
 
     public function indexAction()
@@ -88,6 +91,14 @@ class OffreEmploiController extends AbstractController
      */
     public function listeAction()
     {
+        /**
+         * @var Role $role
+         */
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        /**
+         * @var Query $query
+         */
         $query = $this->getServiceOffreEmploi()->query([]);
 
         return $this->axios()->send($query);
@@ -129,6 +140,13 @@ class OffreEmploiController extends AbstractController
         }
 
         return $this->getAction($offre);
+    }
+
+
+
+    public function publicAction()
+    {
+        return [];
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace Mission\Service;
 
+use Application\Acl\Role;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Mission\Entity\Db\Mission;
@@ -50,8 +51,10 @@ class OffreEmploiService extends AbstractEntityService
 
 
 
-    public function query(array $parameters)
+    public function query(array $parameters, ?Role $role = null)
     {
+
+
         $dql = "
         SELECT 
           oe, tm, str
@@ -63,8 +66,9 @@ class OffreEmploiService extends AbstractEntityService
           oe.histoDestruction IS NULL 
        " . dqlAndWhere([
                 'offreEmploi' => 'oe',
-            ], $parameters) . "
-        ORDER BY
+            ], $parameters);
+
+        $dql .= "ORDER BY
           oe.dateDebut
         ";
 

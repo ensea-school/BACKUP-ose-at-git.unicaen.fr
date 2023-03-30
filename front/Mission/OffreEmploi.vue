@@ -1,5 +1,5 @@
 <template>
-    <div class="col">
+    <div class="col" v-if="isPublic">
         <div class="card h-100">
             <div class="card-header">
                 <h4> {{ offre.titre }}</h4>
@@ -58,10 +58,12 @@ export default {
     name: "OffreEmploi.vue",
     props: {
         offre: {required: true},
+        public: {type: Boolean, required: true}
     },
     data()
     {
         console.log(this.offre.histoCreation);
+        console.log(this.public);
         return {
 
             saisirUrl: Util.url('offre-emploi/saisir/:offre', {offre: this.offre.id}),
@@ -71,6 +73,18 @@ export default {
 
         };
     },
+    computed: {
+        isPublic: function () {
+            if (this.public === false) {
+                return true;
+            } else if (this.public === true && this.offre.validation != null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    },
+
     methods: {
         saisir(event)
         {

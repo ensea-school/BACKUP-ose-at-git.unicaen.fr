@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8869b54c5fc7e238333cfa66c9f7d051",
+    "content-hash": "c5826ef138e379b5a7d87071e38868a7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7036,11 +7036,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "6.0.6",
+            "version": "6.0.8",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "14803000f2db012e8fafd6d162bd265c8e98e0da"
+                "reference": "7af2b00f72a4300d4cb94e9bdd951066a334ef6c"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7057,7 +7057,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2023-03-21T10:49:29+00:00"
+            "time": "2023-03-22T16:21:31+00:00"
         },
         {
             "name": "unicaen/console",
@@ -7206,11 +7206,11 @@
         },
         {
             "name": "unicaen/siham",
-            "version": "6.0.0",
+            "version": "6.0.2",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/siham.git",
-                "reference": "e59fb1672828aed65c0533d76950ab7326d367b4"
+                "reference": "3ddc469a93d8028cf4fd6161e6404e0477e6ffcf"
             },
             "require": {
                 "laminas/laminas-mail": "^2.10",
@@ -7235,7 +7235,7 @@
                 }
             ],
             "description": "PHP library for SIHAM webservices",
-            "time": "2023-03-21T10:23:31+00:00"
+            "time": "2023-03-28T14:48:15+00:00"
         },
         {
             "name": "unicaen/tbl",
@@ -7291,26 +7291,6 @@
             },
             "description": "Module reprenant la gestion des utilisateurs, privileges et roles - Version laminas",
             "time": "2023-03-21T08:09:59+00:00"
-        },
-        {
-            "name": "unicaen/vue",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://git.unicaen.fr/lib/unicaen/vue.git",
-                "reference": "1e0c5d524005554e01f987e4418e84b023ff49d7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "UnicaenVue\\": "src/"
-                },
-                "classmap": [
-                    "./Module.php"
-                ]
-            },
-            "description": "Module pour utiliser Vue.js",
-            "time": "2023-03-28T14:07:20+00:00"
         },
         {
             "name": "unicaen/zfc-user",
@@ -8832,7 +8812,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "unicaen/vue": 20,
         "laminas/laminas-cache-storage-adapter-memory": 20,
         "laminas/laminas-text": 20
     },

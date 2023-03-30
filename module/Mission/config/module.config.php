@@ -121,20 +121,6 @@ return [
                         ],
                     ],
                 ],
-
-
-                'test'      => [
-                    'route'      => '/test',
-                    'controller' => MissionController::class,
-                    'action'     => 'test',
-                    'privileges' => Privileges::MISSION_EDITION,
-                ],
-                'test-data'        => [
-                    'route'      => '/test-data/:monId',
-                    'controller' => MissionController::class,
-                    'action'     => 'test-data',
-                    'privileges' => Privileges::MISSION_EDITION,
-                ],
             ],
         ],
         'missions-type' => [

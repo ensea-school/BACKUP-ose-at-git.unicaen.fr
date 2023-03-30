@@ -85,8 +85,8 @@ class Personne
 
 }
 
-$personne = new Personne();
+$personnes = [new Personne(),new Personne()];
 
 $properties = ['nom', 'prenom', 'isMajeur', 'adresse'];
-$extracted = \UnicaenVue\Axios\AxiosExtractor::extract($personne,$properties);
+$extracted = \UnicaenVue\Axios\AxiosExtractor::extract($personnes,$properties);
 var_dump($extracted);

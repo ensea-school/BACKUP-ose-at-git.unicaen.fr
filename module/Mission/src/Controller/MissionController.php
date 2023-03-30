@@ -53,50 +53,6 @@ class MissionController extends AbstractController
 
 
 
-    // Action qui va charger le composant MonTest
-    public function testAction()
-    {
-        $data = [
-            'monId' => 50,
-        ];
-
-        // On crée un VueModel et on lui transmet des données par défaut
-        $vm = new VueModel($data);
-
-        // On lui donne un template, c'est-à-dire le chemin et le nom du composant à utiliser
-        // Le composant s'appelle MonTest se trouvera dans le fichier front/Exemple/MonTest.vue
-        // Notez qu'on utilise par convention une syntaxe kebab-case pour le template et CamelCase pour les répertoires, & noms de composants Vue.
-        $vm->setTemplate('exemple/mon-test');
-
-        // On retourne le VueModel
-        return $vm;
-    }
-
-
-
-    // Action qui envoie des données au composant
-    public function testDataAction()
-    {
-        $monId = $this->params()->fromRoute('monId');
-
-        // on récupère les données sur la base de l'ID récupéré
-        $contacts = [
-            50 => [
-                ['nom' => 'monNom', 'prenom' => 'monPrenom'],
-                ['nom' => 'monNom2', 'prenom' => 'monPrenom2'],
-                ['nom' => 'monNom3', 'prenom' => 'monPrenom3'],
-            ],
-        ];
-
-        // Petit msg d'info
-        $this->flashMessenger()->addSuccessMessage('Tout va bien!');
-
-        // Et on retourne un AxiosModel qui présente le tout au client
-        return new AxiosModel($contacts[$monId]);
-    }
-
-
-
     public function suiviAction()
     {
         /* @var $intervenant Intervenant */

@@ -1,7 +1,5 @@
 <template>
-    <u-calendar :date="date" @changeDate="changeDate" @addEvent="addVolumeHoraire" @editEvent="editVolumeHoraire" @deleteEvent="deleteVolumeHoraire"
-                :can-add-event="true"
-                :events="suivi"/>
+    <u-calendar :date="date" @changeDate="changeDate" @addEvent="addVolumeHoraire" :can-add-event="true" :events="suivi"/>
 </template>
 
 <script>
@@ -25,16 +23,16 @@ export default {
         return {
             date: new Date(),
             suivi: [],
-                    // component: markRaw(SuiviEvent),
-                    // color: 'yellow',
-                    // date: new Date(2023, 1, 5),
-                    // missionId: null,
-                    // horaireDebut: null,
-                    // horaireFin: null,
-                    // heures: null,
-                    // nocturne: false,
-                    // formation: false,
-                    // description: '5',
+            // component: markRaw(SuiviEvent),
+            // color: 'yellow',
+            // date: new Date(2023, 1, 5),
+            // missionId: null,
+            // horaireDebut: null,
+            // horaireFin: null,
+            // heures: null,
+            // nocturne: false,
+            // formation: false,
+            // description: '5',
         };
     },
     methods: {
@@ -43,11 +41,16 @@ export default {
             this.date = dateObj;
         },
 
+        toto()
+        {
+            console.log('prout');
+        },
+
         addVolumeHoraire(dateObj, event)
         {
             const urlParams = {
-                intervenant:this.intervenant,
-                date:dateObj.toISOString().slice(0,10) // date au format Y-m-d
+                intervenant: this.intervenant,
+                date: dateObj.toISOString().slice(0, 10) // date au format Y-m-d
             };
             event.currentTarget.dataset.url = unicaenVue.url('intervenant/:intervenant/missions-suivi-ajout/:date', urlParams);
             modAjax(event.currentTarget, (widget) => {
@@ -58,14 +61,15 @@ export default {
         editVolumeHoraire(calEvent, event)
         {
             const urlParams = {
-                intervenant:this.intervenant,
-                id:calEvent.id
+                intervenant: this.intervenant,
+                id: calEvent.id
             };
             event.currentTarget.dataset.url = unicaenVue.url('intervenant/:intervenant/missions-suivi-modification/:id', urlParams);
             modAjax(event.currentTarget, (widget) => {
                 this.refresh();
             });
         },
+
         saveVolumeHoraire(event)
         {
             console.log('submit!!!');
@@ -91,11 +95,12 @@ export default {
         },
         refresh()
         {
+            //  SuiviEvent.data.suivi = this;
             unicaenVue.axios.get(
                 unicaenVue.url("intervenant/:intervenant/missions-suivi-data", {intervenant: this.intervenant})
             ).then(response => {
                 let newSuivi = [];
-                for (let i in response.data){
+                for (let i in response.data) {
                     let missionSuivi = response.data[i];
 
                     missionSuivi.component = markRaw(SuiviEvent);

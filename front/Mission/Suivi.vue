@@ -45,7 +45,11 @@ export default {
 
         addVolumeHoraire(dateObj, event)
         {
-            event.currentTarget.dataset.url = unicaenVue.url('intervenant/:intervenant/missions-suivi-saisie', {intervenant:this.intervenant});
+            const urlParams = {
+                intervenant:this.intervenant,
+                date:dateObj.toISOString().slice(0,10) // date au format Y-m-d
+            };
+            event.currentTarget.dataset.url = unicaenVue.url('intervenant/:intervenant/missions-suivi-ajout/:date', urlParams);
             modAjax(event.currentTarget, (widget) => {
                 this.refresh();
             });
@@ -53,7 +57,11 @@ export default {
 
         editVolumeHoraire(calEvent, event)
         {
-            event.currentTarget.dataset.url = unicaenVue.url('intervenant/:intervenant/missions-suivi-saisie/:guid', {intervenant:this.intervenant,guid:calEvent.guid});
+            const urlParams = {
+                intervenant:this.intervenant,
+                id:calEvent.id
+            };
+            event.currentTarget.dataset.url = unicaenVue.url('intervenant/:intervenant/missions-suivi-modification/:id', urlParams);
             modAjax(event.currentTarget, (widget) => {
                 this.refresh();
             });

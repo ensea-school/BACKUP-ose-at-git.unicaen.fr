@@ -10,83 +10,9 @@ use Unicaen\OpenDocument\Calc;
  * @var $viewFile   string
  */
 
-class Adresse implements \UnicaenVue\Axios\AxiosExtractorInterface {
-    protected int $numero = 1;
-    protected string $rue = 'Allée des mésanges';
-    protected int $cp = 14000;
-    protected string $ville = 'Caen';
+$date1 = \DateTime::createFromFormat('Y-m-d H:i:s', '2023-03-30 10:00:00');
+$date2 = \DateTime::createFromFormat('Y-m-d H:i:s','2023-03-31 14:30:00');
+$interval = $date1->diff($date2);
+$minutes = ($date2->getTimestamp() - $date1->getTimestamp()) / 60;
 
-    public function getNumero(): int
-    {
-        return $this->numero;
-    }
-
-    public function getRue(): string
-    {
-        return $this->rue;
-    }
-
-    public function getCp(): int
-    {
-        return $this->cp;
-    }
-
-    public function getVille(): string
-    {
-        return $this->ville;
-    }
-
-
-
-    public function axiosDefinition(): array
-    {
-        return ['cp', 'ville'];
-    }
-
-}
-
-class Personne
-{
-    protected string $nom = 'Dupont';
-    protected string $prenom = 'Robert';
-    protected int $age = 42;
-    protected Adresse $adresse;
-
-    public function __construct()
-    {
-        $this->adresse = new Adresse();
-    }
-
-    public function getNom(): string
-    {
-        return $this->nom;
-    }
-
-    public function getPrenom(): string
-    {
-        return $this->prenom;
-    }
-
-    public function getAge(): int
-    {
-        return $this->age;
-    }
-
-    public function isMajeur(): bool
-    {
-        return $this->age >= 18;
-    }
-
-    public function getAdresse(): Adresse
-    {
-        return $this->adresse;
-    }
-
-
-}
-
-$personnes = [new Personne(),new Personne()];
-
-$properties = ['nom', 'prenom', 'isMajeur', 'adresse'];
-$extracted = \UnicaenVue\Axios\AxiosExtractor::extract($personnes,$properties);
-var_dump($extracted);
+echo "Il y a $minutes minutes de différences";

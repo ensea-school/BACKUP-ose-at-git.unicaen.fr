@@ -12,10 +12,10 @@ use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
-use Mission\Entity\MissionSuivi;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\AxiosModel;
 use UnicaenVue\View\Model\VueModel;
@@ -34,6 +34,7 @@ class MissionController extends AbstractController
     use ValidationServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use MissionSuiviFormAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
 
 
     /**
@@ -147,32 +148,59 @@ class MissionController extends AbstractController
      *
      * @return ViewModel
      */
-    public function suiviSaisieAction(): ViewModel
+    public function suiviAjoutAction(): ViewModel
     {
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $guid = $this->params()->fromRoute('guid', null);
+        $date = $this->params()->fromRoute('date');
 
-        if ($guid) {
-            $missionSuivi = $this->getServiceMission()->suivi($intervenant, $guid);
-            $title        = 'Modification d\'un suivi de mission';
+        $volumeHoraireMission = new VolumeHoraireMission();
+        $volumeHoraireMission->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
+        $volumeHoraireMission->setDate($date);
+
+        return $this->suiviSaisieAction($intervenant, $volumeHoraireMission);
+    }
+
+
+
+    /**
+     * Modifie une mission (form)
+     *
+     * @return ViewModel
+     */
+    public function suiviModificationAction(): ViewModel
+    {
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $volumeHoraireMissionId = $this->params()->fromRoute('volumeHoraireMission', null);
+        $volumeHoraireMission   = $this->getServiceMission()->suivi($intervenant, $volumeHoraireMissionId);
+
+        return $this->suiviSaisieAction($intervenant, $volumeHoraireMission);
+    }
+
+
+
+    protected function suiviSaisieAction(Intervenant $intervenant, VolumeHoraireMission $volumeHoraireMission)
+    {
+        if ($volumeHoraireMission->getId()) {
+            $title = 'Modification d\'un suivi de mission';
         } else {
-            $missionSuivi = new MissionSuivi();
-            $title        = 'Ajout d\'un suivi de mission';
+            $title = 'Ajout d\'un suivi de mission';
         }
 
         $form = $this->getFormMissionSuivi();
         $form->setIntervenant($intervenant);
         $form->build();
 
-        $form->bindRequestSave($missionSuivi, $this->getRequest(), function ($missionSuivi) {
-            $this->getServiceMission()->saveSuivi($missionSuivi);
-            $this->updateTableauxBord($missionSuivi->getMission());
+        $form->bindRequestSave($volumeHoraireMission, $this->getRequest(), function ($vhm) {
+            $this->getServiceMission()->saveVolumeHoraire($vhm);
+            $this->updateTableauxBord($vhm->getMission());
             $this->flashMessenger()->addSuccessMessage('Suivi bien enregistré');
         });
-        // on passe le data-guid pour pouvoir le récupérer dans la vue et mettre à jour la liste
-        $form->setAttribute('data-guid', $missionSuivi->guid());
+        // on passe l'id pour pouvoir le récupérer dans la vue et mettre à jour la liste
+        $form->setAttribute('data-id', $volumeHoraireMission->getId());
 
         $vm = new ViewModel();
         $vm->setTemplate('mission/suivi-saisie');

@@ -5,7 +5,7 @@ namespace Mission\Form;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Form\AbstractForm;
 use Laminas\Hydrator\HydratorInterface;
-use Mission\Entity\MissionSuivi;
+use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Service\MissionServiceAwareTrait;
 use UnicaenApp\Util;
 
@@ -63,18 +63,6 @@ class MissionSuiviForm extends AbstractForm
             'options' => [
                 'label'  => 'Horaire de fin',
                 'format' => 'H:i',
-            ],
-        ]);
-
-        $this->add([
-            'name'       => 'heures',
-            'type'       => 'Number',
-            'options'    => [
-                'label' => 'Nombre d\'heures',
-            ],
-            'attributes' => [
-                'min'  => 0,
-                'step' => 0.01,
             ],
         ]);
 
@@ -145,7 +133,7 @@ class MissionSuiviHydrator implements HydratorInterface
      * Hydrate $object with the provided $data.
      *
      * @param array        $data
-     * @param MissionSuivi $object
+     * @param VolumeHoraireMission $object
      *
      * @return object
      */
@@ -155,7 +143,6 @@ class MissionSuiviHydrator implements HydratorInterface
         $object->setDate($data['date']);
         $object->setHeureDebut($data['heureDebut']);
         $object->setHeureFin($data['heureFin']);
-        $object->setHeures($data['heures']);
         $object->setFormation($data['formation']);
         $object->setNocturne($data['nocturne']);
         $object->setDescription($data['description']);
@@ -168,7 +155,7 @@ class MissionSuiviHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param MissionSuivi $object
+     * @param VolumeHoraireMission $object
      *
      * @return array
      */
@@ -179,7 +166,6 @@ class MissionSuiviHydrator implements HydratorInterface
             'date'        => $object->getDate(),
             'heureDebut'  => $object->getHeureDebut(),
             'heureFin'    => $object->getHeureFin(),
-            'heures'      => $object->getHeures(),
             'formation'   => $object->isFormation(),
             'nocturne'    => $object->isNocturne(),
             'description' => $object->getDescription(),

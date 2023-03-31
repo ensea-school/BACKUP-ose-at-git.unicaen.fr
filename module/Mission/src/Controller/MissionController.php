@@ -63,11 +63,6 @@ class MissionController extends AbstractController
             'chaine' => 'Sal"ut \'co',
         ];
 
-        $vm = new VueModel($data);
-        $vm->setTemplate('mission/vm-test');
-
-        return $vm;
-
         return compact('intervenant');
     }
 

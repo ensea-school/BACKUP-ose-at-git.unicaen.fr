@@ -212,7 +212,7 @@ $config = [
         'factories'  => [
             UserProfileSelectRadioItem::class => UserProfileSelectRadioItemFactory::class,
             //            \UnicaenUtilisateur\View\Helper\UserProfileSelectRadioItem::class  => View\Helper\UserProfileSelectRadioItemFactory::class,
-//            \UnicaenApp\View\Helper\AppLink::class                             => View\Helper\AppLinkFactory::class,
+            \UnicaenApp\View\Helper\AppLink::class                             => View\Helper\AppLinkFactory::class,
 //            \UnicaenUtilisateur\View\Helper\UserCurrent::class                 => View\Helper\UserCurrentFactory::class,
             'tab'                                                              => View\Helper\TabViewHelperFactory::class,
         ],

@@ -51,16 +51,32 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
 
     public function axiosDefinition(): array
     {
-        return [
-            'heures',
-            'valide',
-            'validation',
-            'histoCreation',
-            'histoCreateur',
-            'canValider',
-            'canDevalider',
-            'canSupprimer',
-        ];
+        if ($this->getTypeVolumeHoraire()->isPrevu()) {
+            // pour un VH prévu
+            return [
+                'heures',
+                'valide',
+                'validation',
+                'histoCreation',
+                'histoCreateur',
+                'canValider',
+                'canDevalider',
+                'canSupprimer',
+            ];
+        } else {
+            // Pour un VH réalisé
+            return [
+                'guid',
+                ['mission',['id','libelle']],
+                'date',
+                'heureDebut',
+                'heureFin',
+                'heures',
+                'nocturne',
+                'formation',
+                'description',
+            ];
+        }
     }
 
 
@@ -130,6 +146,7 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     public function setHoraireDebut(?\DateTime $horaireDebut): VolumeHoraireMission
     {
         $this->horaireDebut = $horaireDebut;
+        $this->setHeuresFromHoraires();
 
         return $this;
     }
@@ -146,6 +163,105 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     public function setHoraireFin(?\DateTime $horaireFin): VolumeHoraireMission
     {
         $this->horaireFin = $horaireFin;
+        $this->setHeuresFromHoraires();
+
+        return $this;
+    }
+
+
+
+    public function getDate(): ?string
+    {
+        return $this->getHoraireDebut()?->format('Y-m-d');
+    }
+
+
+
+    public function setDate(?string $dateStr): self
+    {
+        if ($this->isValide() && $dateStr !== $this->getDate()) {
+            throw new \Exception('La date ne peut pas être modifiée : des heures ont déjà été validées');
+        }
+
+        if (!$dateStr) {
+            $dateStr = '0000-00-00';
+        }
+        $date = explode('-', $dateStr);
+
+        $horaireDebut = $this->getHoraireDebut() ?: (new \DateTime)->setTime(0,0,0,0);
+        $horaireFin   = $this->getHoraireFin() ?: (new \DateTime)->setTime(0,0,0,0);
+
+        $horaireDebut->setDate($date[0], $date[1], $date[2]);
+        $horaireFin->setDate($date[0], $date[1], $date[2]);
+
+        $this->setHoraireDebut($horaireDebut);
+        $this->setHoraireFin($horaireFin);
+
+        return $this;
+    }
+
+
+
+    public function getHeureDebut(): ?string
+    {
+        return $this->getHoraireDebut()?->format('H:i');
+    }
+
+
+
+    public function setHeureDebut(?string $heureStr): self
+    {
+        if (!$heureStr) {
+            $heureStr = '00:00';
+        }
+        $heure = explode(':', $heureStr);
+
+        $horaireDebut = clone($this->getHoraireDebut()) ?: new \DateTime();
+
+        $horaireDebut->setTime($heure[0], $heure[1], 0);
+
+        $this->setHoraireDebut($horaireDebut);
+
+        return $this;
+    }
+
+
+
+    public function getHeureFin(): ?string
+    {
+        return $this->getHoraireFin()?->format('H:i');
+    }
+
+
+
+    public function setHeureFin(?string $heureStr): self
+    {
+        if (!$heureStr) {
+            $heureStr = '00:00';
+        }
+        $heure = explode(':', $heureStr);
+
+        $horaireFin = clone($this->getHoraireFin()) ?: new \DateTime();
+
+        $horaireFin->setTime($heure[0], $heure[1], 0);
+
+        $this->setHoraireFin($horaireFin);
+
+        return $this;
+    }
+
+
+
+    public function setHeuresFromHoraires(): self
+    {
+        if ($this->horaireDebut instanceof \DateTime && $this->horaireFin instanceof \DateTime) {
+            $ts = abs($this->horaireFin->getTimestamp() - $this->horaireDebut->getTimestamp());
+            $ts = round($ts / 60); // en minutes
+
+            $this->heures = round($ts / 60, 2); // en heures arrondies à 0.01 au cas où
+        } else {
+            $this->heures = 0;
+        }
 
         return $this;
     }
@@ -279,30 +395,4 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
         return !$this->isValide() && !$this->getMission()->isValide();
     }
 
-
-
-    public function guid()
-    {
-        if ($this->getMission() === null || $this->getHoraireDebut() === null || $this->getHoraireFin() === null) {
-            return null;
-        }
-
-        $guid = $this->getMission()->getId()
-            . '-' . $this->getHoraireDebut()->format('Ymd')
-            . '-' . $this->getHoraireDebut()->format('Hi')
-            . '-' . $this->getHoraireFin()->format('Hi')
-            . '-' . ($this->isFormation() ? '1' : '0')
-            . '-' . ($this->isNocturne() ? '1' : '0');
-
-        return $guid;
-    }
-
-
-
-    public static function guidDate(string $guid): \DateTime
-    {
-        $dateStr = explode('-', $guid)[1];
-
-        return \DateTime::createFromFormat('Ymd', $dateStr);
-    }
 }

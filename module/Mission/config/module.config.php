@@ -37,10 +37,17 @@ return [
                     'privileges' => Privileges::MISSION_VISUALISATION,
                     //'assertion'  => Assertion\MissionAssertion::class,
                 ],
-                'missions-suivi-saisie' => [
-                    'route'      => '/:intervenant/missions-suivi-saisie[/:guid]',
+                'missions-suivi-ajout' => [
+                    'route'      => '/:intervenant/missions-suivi-ajout[/:date]',
                     'controller' => MissionController::class,
-                    'action'     => 'suivi-saisie',
+                    'action'     => 'suivi-ajout',
+                    'privileges' => Privileges::MISSION_EDITION_REALISE,
+                    //'assertion'  => Assertion\MissionAssertion::class,
+                ],
+                'missions-suivi-modification' => [
+                    'route'      => '/:intervenant/missions-suivi-modification/:volumeHoraireMission',
+                    'controller' => MissionController::class,
+                    'action'     => 'suivi-modification',
                     'privileges' => Privileges::MISSION_EDITION_REALISE,
                     //'assertion'  => Assertion\MissionAssertion::class,
                 ],

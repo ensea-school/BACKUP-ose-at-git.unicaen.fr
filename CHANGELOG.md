@@ -27,7 +27,7 @@
 * Correction d'une régression de la V20 sur le module Export Siham
 * Suppression d'un message d'erreur sur l'envoi de mail via les indicateurs (#49873)
 * Formule Paris 8 : correction d'un problème de code de composante
-
+* Formule Poitiers : #46805
 
 
 

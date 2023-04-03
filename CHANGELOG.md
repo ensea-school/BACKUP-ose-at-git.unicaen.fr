@@ -28,7 +28,7 @@
 * Suppression d'un message d'erreur sur l'envoi de mail via les indicateurs (#49873)
 * Formule Paris 8 : correction d'un problème de code de composante
 * Formule Poitiers : #46805
-* Formule La Réunion : #24229
+
 
 
 # OSE 20 (28/02/2023)

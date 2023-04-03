@@ -10,6 +10,7 @@ use Mission\Controller\OffreEmploiController;
 use Mission\Controller\OffreEmploiControllerFactory;
 use Mission\Service\MissionTypeService;
 use Mission\Service\MissionTypeServiceFactory;
+use Service\Controller\ModificationServiceDuController;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 use Mission\Service\OffreEmploiService;
@@ -169,10 +170,11 @@ return [
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
                 ],
                 'public'    => [
-                    'route'      => '/public',
+                    'route'      => '/public[/:offreEmploi]',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'public',
                 ],
+
             ],
 
         ],
@@ -242,18 +244,35 @@ return [
                         ],
                     ],
                 ],
-                'rh'           => [
-                    'pages' => [
-                        'offre-emploi' => [
-                            'label'    => "Offres d'emploi",
+
+            ],
+        ],
+        'gestion'        => [
+            'pages' => [
+                'offres-emploi' => [
+                    'label'    => "Offre emplois étudiants",
+                    'icon'     => 'fas fa-duotone fa-pen-to-square',
+                    'title'    => "Offre",
+                    'route'    => 'offre-emploi',
+                    'resource' => PrivilegeController::getResourceId(OffreEmploiController::class, 'index'),
+                    'order'    => 60,
+                    'color'    => '#217DD8',
+                    'pages'    => [
+                        'offre' => [
+                            'label'    => "Consulter la liste des offres",
+                            'icon'     => 'fas fa-duotone fa-pen-to-square',
+                            'title'    => "Consulter la liste des emplois étudiants",
                             'route'    => 'offre-emploi',
                             'resource' => PrivilegeController::getResourceId(OffreEmploiController::class, 'index'),
-                            'order'    => 80,
+                            'order'    => 10,
+                            'color'    => '#217DD8',
                         ],
                     ],
                 ],
             ],
         ],
+
+
     ],
 
     'rules' => [
@@ -289,7 +308,7 @@ return [
         ],
         [
             'controller' => OffreEmploiController::class,
-            'action'     => ['index', 'liste', 'saisir', 'get'],
+            'action'     => ['index', 'saisir',],
             'privileges' => [
                 Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             ],
@@ -307,6 +326,12 @@ return [
             'privileges' => [
                 Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
             ],
+        ],
+        [
+            'controller' => OffreEmploiController::class,
+            'action'     => ['public', 'list', 'get'],
+            'roles'      => ['guest'],
+
         ],
     ],
 

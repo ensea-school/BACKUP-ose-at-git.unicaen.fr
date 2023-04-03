@@ -90,7 +90,7 @@ class PieceJointeService extends AbstractEntityService
         SELECT
           pjd, tpj
         FROM
-          Application\Entity\Db\TblPieceJointeDemande pjd
+          PieceJointe\Entity\Db\TblPieceJointeDemande pjd
           JOIN pjd.typePieceJointe tpj
         WHERE
           pjd.intervenant = :intervenant
@@ -144,7 +144,7 @@ class PieceJointeService extends AbstractEntityService
             SELECT 
               pj
             FROM 
-              Application\Entity\Db\TblPieceJointe pj
+              PieceJointe\Entity\Db\TblPieceJointe pj
             WHERE
               pj.intervenant = :intervenant
         ";
@@ -174,7 +174,7 @@ class PieceJointeService extends AbstractEntityService
         SELECT
           pjf, pj, tpj, v, f        
         FROM
-          Application\Entity\Db\TblPieceJointeFournie pjf
+          PieceJointe\Entity\Db\TblPieceJointeFournie pjf
           JOIN pjf.pieceJointe pj
           JOIN pjf.typePieceJointe tpj
           LEFT JOIN pjf.validation v
@@ -195,7 +195,7 @@ class PieceJointeService extends AbstractEntityService
         ])->getResult();
 
 
-        /* @var $lpjf \Application\Entity\Db\TblPieceJointeFournie[] */
+        /* @var $lpjf \PieceJointe\Entity\Db\TblPieceJointeFournie[] */
 
         $result = [];
         foreach ($lpjf as $pjf) {

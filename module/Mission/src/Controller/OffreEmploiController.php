@@ -40,7 +40,6 @@ class OffreEmploiController extends AbstractController
     public function indexAction()
     {
 
-
         return [];
     }
 
@@ -91,10 +90,6 @@ class OffreEmploiController extends AbstractController
      */
     public function listeAction()
     {
-        /**
-         * @var Role $role
-         */
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         /**
          * @var Query $query
@@ -146,7 +141,10 @@ class OffreEmploiController extends AbstractController
 
     public function publicAction()
     {
-        return [];
+        $offreEmploi = $this->getEvent()->getParam('offreEmploi');
+        $utilisateur = $this->getServiceContext()->getUtilisateur();
+
+        return compact('offreEmploi', 'utilisateur');
     }
 
 
@@ -167,6 +165,8 @@ class OffreEmploiController extends AbstractController
         $this->em()->clear();
 
         $query = $this->getServiceOffreEmploi()->query(['offreEmploi' => $offreEmploi]);
+
+        $data = $this->axios()->send($this->axios()::extract($query)[0]);
 
         return $this->axios()->send($this->axios()::extract($query)[0]);
     }

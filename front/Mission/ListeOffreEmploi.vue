@@ -1,9 +1,16 @@
 <template>
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-        <offreEmploi v-for="offre in offres" @supprimer="supprimer" @refresh="refresh" :key="offre.id" :offre="offre" :public="this.public"></offreEmploi>
+    <div v-if="!extended" class="row row-cols-1 row-cols-md-2 g-4">
+        <offreEmploi v-for="offre in offres" @supprimer="supprimer" @refresh="refresh" :key="offre.id" :offre="offre" :public="this.public"
+                     :canModifier="this.canModifier"
+                     :canValider="this.canValider"
+                     :canSupprimer="this.canSupprimer"></offreEmploi>
+        <a v-if="this.public && this.canModifier" class=" btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajouter une nouvelle offre</a>
+    </div>
+    <div v-if="extended">
+        <offreEmploi v-for="offre in offres" :key="offre.id" :offre="offre" :canPostuler="this.canPostuler" :extended="extended"
+                     :public="this.public"></offreEmploi>
     </div>
     <br/>
-    <a class="btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajouter une nouvelle offre</a>
 </template>
 
 <script>
@@ -16,7 +23,14 @@ export default {
     },
     props: {
         public: {type: Boolean, required: true},
-        canAddOffreEmploi: {type: Boolean, required: true},
+        id: {type: Number, required: false},
+        utilisateur: {required: false},
+        canModifier: {type: Boolean, required: false},
+        canPostuler: {type: Boolean, required: false},
+        canValider: {type: Boolean, required: false},
+        canSupprimer: {type: Boolean, required: false},
+
+
     },
     data()
     {
@@ -25,11 +39,19 @@ export default {
             ajoutUrl: Util.url('offre-emploi/saisir'),
         };
     },
-
     mounted()
     {
         this.reload();
-        console.log(this.offres);
+
+    },
+    computed: {
+        extended: function ()
+        {
+            if (this.id) {
+                return true;
+            }
+            return false
+        }
     },
     methods: {
         ajout(event)
@@ -37,28 +59,43 @@ export default {
             modAjax(event.target, (widget) => {
                 this.reload();
             });
-        },
+        }
+        ,
         supprimer()
         {
             this.reload();
-        },
+        }
+        ,
 
         refresh(offre)
         {
-            console.log(offre);
             let index = Util.json.indexById(this.offres, offre.id);
             this.offres[index] = offre;
-        },
+        }
+        ,
 
         reload()
         {
-            axios.get(
-                Util.url("offre-emploi/liste")
-            ).then(response => {
-                this.offres = response.data;
-                console.log(this.offres);
-            });
-        },
+            if (this.id) {
+                axios.get(
+                    Util.url("offre-emploi/get/:offreEmploi", {offreEmploi: this.id})
+                ).then(response => {
+                    this.offres = [response.data];
+
+                });
+
+            } else {
+                axios.get(
+                    Util.url("offre-emploi/liste")
+                ).then(response => {
+                    this.offres = response.data;
+
+                });
+            }
+
+
+        }
+        ,
     }
 }
 </script>

@@ -68,7 +68,7 @@ class OffreEmploiService extends AbstractEntityService
                 'offreEmploi' => 'oe',
             ], $parameters);
 
-        $dql .= "ORDER BY
+        $dql .= " ORDER BY
           oe.dateDebut
         ";
 

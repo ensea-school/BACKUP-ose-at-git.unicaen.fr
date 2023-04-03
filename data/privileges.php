@@ -167,6 +167,7 @@ return [
             'offre-emploi-ajouter'       => 'Ajouter des offres d\'emploi',
             'offre-emploi-modifier'      => 'Modifier des offres d\'emploi',
             'offre-emploi-valider'       => 'Valider des offres d\'emploi',
+            'offre-emploi-postuler'      => 'Postuler à une offre d\'emploi',
 
 
         ],

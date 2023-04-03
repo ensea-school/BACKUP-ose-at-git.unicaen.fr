@@ -1,6 +1,6 @@
 <?php
 
-namespace PieceJointe\Form\PieceJointe\Traits;
+namespace PieceJointe\Form\Traits;
 
 use PieceJointe\Form\TypePieceJointeSaisieForm;
 

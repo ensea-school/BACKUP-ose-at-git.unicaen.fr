@@ -1,14 +1,13 @@
 <template>
-    <div class="col" v-if="isPublic">
+    <div class="col" v-if="isPublic && !this.extended">
         <div class="card h-100">
             <div class="card-header">
                 <h4> {{ offre.titre }}</h4>
-                <span v-if="offre.validation" class="badge rounded-pill bg-success">Valider le <u-date
-                    :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}&nbsp;</span>
-                <span v-if="!offre.validation" class="badge rounded-pill bg-warning">En attente de validation par la DRH</span>&nbsp;
-                <span class="badge rounded-pill bg-info">{{ offre.nombreHeures }} heure(s)</span>&nbsp;
-                <span class="badge rounded-pill bg-info">{{ offre.nombrePostes }} poste(s)</span>
-
+                <span class="badge rounded-pill bg-info">{{ offre.nombreHeures }} heure(s)</span> &nbsp;
+                <span class="badge rounded-pill bg-info">{{ offre.nombrePostes }} poste(s)</span>&nbsp;
+                <span v-if="offre.validation && !this.public" class="badge rounded-pill bg-success">Valider le <u-date
+                    :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}</span>
+                <span v-if="!offre.validation && !this.public" class="badge rounded-pill bg-warning"> En attente de validation par la DRH</span>&nbsp;
             </div>
 
             <div class="card-body">
@@ -22,34 +21,69 @@
                     <u-date :value="offre.dateFin"/>
                     <br/>
                     <b>Demandé par la composante :</b> {{ offre.structure.libelle }}
+                    <br/>
+                    <b>Type de mission :</b> {{ offre.typeMission.libelle }}
 
                 </p>
-                {{ offre.description }}
+                {{ shortDesc }}
 
             </div>
             <div class="card-footer">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a v-if="offre.validation"
+                    <a v-if="offre.validation && this.canValider"
                        :href="devaliderUrl"
                        class="btn btn-danger"
                        @click.prevent="devalider">Devalider</a>
-                    <a v-if="!offre.validation"
+                    <a v-if="!offre.validation && this.canValider"
                        :href="validerUrl"
                        class="btn btn-success"
                        @click.prevent="valider">Valider</a>
-                    <a :href="saisirUrl"
+                    <a v-if="this.canModifier"
+                       :href="saisirUrl"
                        class="btn btn-primary"
                        @click.prevent="saisir">Modifier</a>
-                    <a :href="supprimerUrl"
+                    <a v-if="this.canSupprimer"
+                       :href="supprimerUrl"
                        class="btn btn-danger"
                        data-title="Suppression de l'offre"
                        data-content="Êtes-vous sur de vouloir supprimer l'offre ?"
                        @click.prevent="supprimer">Supprimer</a>
-
+                    <a v-if="this.public"
+                       :href="consulterUrl"
+                       class="btn btn-primary"
+                    >Consulter</a>
                 </div>
             </div>
         </div>
     </div>
+    <div v-if="this.extended">
+        <p class="bg-light" style="padding:5px;">
+            <b>Crée le : </b>
+            <u-date :value="offre.histoCreation"/>
+            par {{ offre.histoCreateur.displayName }}<br/>
+            <b>Période à pourvoir : </b>du
+            <u-date :value="offre.dateDebut"/>
+            au
+            <u-date :value="offre.dateFin"/>
+            <br/>
+            <b>Demandé par la composante :</b> {{ offre.structure.libelle }}
+            <br/>
+            <b>Type de mission :</b> {{ offre.typeMission.libelle }}
+            <br/>
+            <b>Nombre d'heures pour la mission :</b> {{ offre.nombreHeures }} heure(s)
+            <br/>
+            <b>Nombre de postes à pourvoir :</b> {{ offre.nombrePostes }} poste(s)
+            <br/>
+
+        </p>
+        {{ offre.description }}
+        <div style="margin-top:20px;">
+            <a class="btn btn-primary" href="/offre-emploi/public">Retour aux offres</a>&nbsp;
+            <a :class="isDisabled" href="/offre-emploi/postuler">Postuler</a>
+
+        </div>
+    </div>
+
 </template>
 
 <script>
@@ -58,19 +92,23 @@ export default {
     name: "OffreEmploi.vue",
     props: {
         offre: {required: true},
-        public: {type: Boolean, required: true}
+        public: {type: Boolean, required: false},
+        extended: {type: Boolean, required: false},
+        canModifier: {type: Boolean, required: false},
+        canPostuler: {type: Boolean, required: false},
+        canValider: {type: Boolean, required: false},
+        canSupprimer: {type: Boolean, required: false},
     },
     data()
     {
-        console.log(this.offre.histoCreation);
-        console.log(this.public);
-        return {
 
+        console.log(this.canPostuler);
+        return {
             saisirUrl: Util.url('offre-emploi/saisir/:offre', {offre: this.offre.id}),
             supprimerUrl: Util.url("offre-emploi/supprimer/:offre", {offre: this.offre.id}),
             validerUrl: Util.url('offre-emploi/valider/:offre', {offre: this.offre.id}),
             devaliderUrl: Util.url('offre-emploi/devalider/:offre', {offre: this.offre.id}),
-
+            consulterUrl: Util.url('offre-emploi/public/:offre', {offre: this.offre.id}),
         };
     },
     computed: {
@@ -82,13 +120,25 @@ export default {
             } else {
                 return false;
             }
+        },
+        isDisabled: function () {
+            if (!this.canPostuler) {
+                return 'btn btn-primary disabled';
+            }
+            return 'btn btn-primary';
+        },
+        shortDesc: function () {
+            var shorDesc = this.offre.description.substr(0, 200);
+            if (this.offre.description.length > 200) {
+                shorDesc += '...';
+            }
+            return shorDesc;
         }
     },
 
     methods: {
         saisir(event)
         {
-            console.log(this.saisirUrl);
             modAjax(event.target, (widget) => {
                 this.refresh();
             });

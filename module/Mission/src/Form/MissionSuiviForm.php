@@ -19,6 +19,8 @@ class MissionSuiviForm extends AbstractForm
 {
     use IntervenantAwareTrait;
 
+    public \DateTime $date;
+
     public function build()
     {
 
@@ -107,7 +109,9 @@ class MissionSuiviForm extends AbstractForm
 
         $options = [];
         foreach ($missions as $mission) {
-            $options[$mission->getId()] = $mission->getTypeMission()->getLibelle();
+            if ($mission->getDateDebut() <= $this->date && $mission->getDateFin() >= $this->date) {
+                $options[$mission->getId()] = $mission->getTypeMission()->getLibelle();
+            }
         }
 
         return $options;

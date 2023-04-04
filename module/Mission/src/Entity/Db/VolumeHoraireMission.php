@@ -67,7 +67,7 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
             // Pour un VH réalisé
             return [
                 'guid',
-                ['mission',['id','libelle']],
+                ['mission',['id','libelleCourt']],
                 'date',
                 'heureDebut',
                 'heureFin',

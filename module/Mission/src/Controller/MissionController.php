@@ -18,7 +18,6 @@ use Mission\Service\MissionServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\AxiosModel;
-use UnicaenVue\View\Model\VueModel;
 
 
 /**
@@ -192,6 +191,7 @@ class MissionController extends AbstractController
 
         $form = $this->getFormMissionSuivi();
         $form->setIntervenant($intervenant);
+        $form->date = $volumeHoraireMission->getHoraireDebut();
         $form->build();
 
         $form->bindRequestSave($volumeHoraireMission, $this->getRequest(), function ($vhm) {

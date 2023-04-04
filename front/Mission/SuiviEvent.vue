@@ -1,6 +1,6 @@
 <template>
     <div class="event-content">
-        <p>{{ event.mission.libelle }}</p>
+        <p>{{ event.mission.libelleCourt }}</p>
         <p>
             de {{ event.heureDebut }} à {{ event.heureFin }}, {{ event.heures }} heures
             <b-badge v-if="event.nocturne">Nocturne</b-badge>

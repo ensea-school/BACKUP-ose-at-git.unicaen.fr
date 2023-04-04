@@ -359,9 +359,13 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
 
 
 
-    /**
-     * @return Collection|VolumeHoraireMission[]
-     */
+    public function getLibelleCourt(): string
+    {
+        return $this->getTypeMission()->getLibelle();
+    }
+
+
+
     public function getVolumesHoraires(): Collection
     {
         return $this->volumesHoraires;

@@ -95,6 +95,19 @@ export default {
         },
         refresh()
         {
+            const colors = [
+                '#e74c3c',
+                '#8e44ad',
+                '#3498db',
+                '#1abc9c',
+                '#2ecc71',
+                '#f1c40f',
+                '#e67e22',
+                '#d35400',
+            ];
+            let colorIndex = 0;
+            let missionsColors = [];
+
             //  SuiviEvent.data.suivi = this;
             unicaenVue.axios.get(
                 unicaenVue.url("intervenant/:intervenant/missions-suivi-data", {intervenant: this.intervenant})
@@ -103,6 +116,11 @@ export default {
                 for (let i in response.data) {
                     let missionSuivi = response.data[i];
 
+                    if (undefined === missionsColors[missionSuivi.mission.id]){
+                        missionsColors[missionSuivi.mission.id] = colors[colorIndex];
+                        colorIndex++;
+                    }
+                    missionSuivi.color = missionsColors[missionSuivi.mission.id];
                     missionSuivi.component = markRaw(SuiviEvent);
                     missionSuivi.date = new Date(missionSuivi.date);
                     newSuivi.push(missionSuivi);

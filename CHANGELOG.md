@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 20.0](#ose-20--28022023-)
+[OSE 20.1](#ose-201--04042023-)
 
 
 # OSE 21 (à venir)
@@ -11,7 +11,8 @@
 * Taux HETD personnalisables
 
 
-# OSE 20.1 (A venir)
+
+# OSE 20.1 (04/04/2023)
 
 ## Nouveautés
 
@@ -27,7 +28,9 @@
 * Correction d'une régression de la V20 sur le module Export Siham
 * Suppression d'un message d'erreur sur l'envoi de mail via les indicateurs (#49873)
 * Formule Paris 8 : correction d'un problème de code de composante
-
+* Formule Poitiers : (#46805)
+* Formule La Réunion : (#24229)
+* Formule de Picardie:  (#47224)
 
 
 

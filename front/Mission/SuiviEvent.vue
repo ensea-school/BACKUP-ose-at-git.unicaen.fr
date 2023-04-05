@@ -2,7 +2,7 @@
     <div class="event-content">
         <p class="mission">{{ event.mission.libelleCourt }}</p>
         <p class="horaires">
-            de {{ heureDebut }} à {{ heureFin }}, soient {{ heures }} heures
+            de {{ heureDebut }} à {{ heureFin }}, soi{{ heures < 2 ? '' : 'en'}}t {{ heures }} heure{{ heures < 2 ? '' : 's' }}
             <b-badge v-if="event.nocturne">Nocturne</b-badge>
             <b-badge v-if="event.formation">En formation</b-badge>
         </p>
@@ -10,17 +10,17 @@
     </div>
     <div class="event-actions">
         <div class="btn-group btn-group-sm">
-            <button class="btn btn-light" @click="modifier" title="Modifier le suivi">
+            <button v-if="event.canEdit" class="btn btn-light" @click="modifier" title="Modifier le suivi" :data-url="modifierUrl">
                 <u-icon name="pen-to-square"/>
             </button>
-            <button class="btn btn-light" @click="valider" title="Valider le suivi">
+            <button v-if="event.canValider" class="btn btn-light" @click="valider" title="Valider le suivi" :data-url="validerUrl">
                 <u-icon name="check" class="text-success"/>
             </button>
-            <button class="btn btn-light" @click="devalider" title="Dévalider le suivi"
+            <button v-if="event.canDevalider" class="btn btn-light" @click="devalider" title="Dévalider le suivi" :data-url="devaliderUrl"
                     data-content="Voulez-vous vraiment dévalider ce suivi ?">
                 <u-icon name="xmark" class="text-danger"/>
             </button>
-            <button class="btn btn-light" @click="supprimer" title="Supprimer le suivi"
+            <button v-if="event.canSupprimer" class="btn btn-light" @click="supprimer" title="Supprimer le suivi" :data-url="supprimerUrl"
                     data-content="Voulez-vous vraiment supprimer ce suivi ?">
                 <u-icon name="trash-can" class="text-danger"/>
             </button>
@@ -38,6 +38,10 @@ export default {
     {
         return {
             suivi: this.$parent.$parent,
+            modifierUrl: unicaenVue.url('mission/suivi/modifier/:id', {id: this.event.id}),
+            supprimerUrl: unicaenVue.url('mission/suivi/supprimer/:id', {id: this.event.id}),
+            validerUrl: unicaenVue.url('mission/suivi/valider/:id', {id: this.event.id}),
+            devaliderUrl: unicaenVue.url('mission/suivi/devalider/:id', {id: this.event.id}),
         };
     },
     computed: {
@@ -57,11 +61,6 @@ export default {
     methods: {
         modifier(event)
         {
-            const urlParams = {
-                intervenant: this.event.intervenant,
-                id: this.event.id
-            };
-            event.currentTarget.dataset.url = unicaenVue.url('mission/suivi/modification/:id', urlParams);
             modAjax(event.currentTarget, (widget) => {
                 this.suivi.refresh();
             });
@@ -76,7 +75,9 @@ export default {
 
         valider(event)
         {
-            this.suivi.refresh();
+            unicaenVue.axios.get(this.validerUrl).then(response => {
+                this.suivi.refresh();
+            });
         },
 
         devalider(event)
@@ -94,6 +95,10 @@ export default {
 
 .event-content {
     flex-grow: 1;
+}
+
+.event-content.valide {
+    background-color:yellow;
 }
 
 .event-content p {

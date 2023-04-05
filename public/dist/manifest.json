@@ -3,14 +3,14 @@
     "file": "assets/vendor-d4e44988.js"
   },
   "main.css": {
-    "file": "assets/main-ebd32179.css",
+    "file": "assets/main-ffae2bc1.css",
     "src": "main.css"
   },
   "main.js": {
     "css": [
-      "assets/main-ebd32179.css"
+      "assets/main-ffae2bc1.css"
     ],
-    "file": "assets/main-5166f3c0.js",
+    "file": "assets/main-282bedee.js",
     "imports": [
       "_vendor-d4e44988.js"
     ],

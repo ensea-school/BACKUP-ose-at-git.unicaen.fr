@@ -10,9 +10,21 @@ use Unicaen\OpenDocument\Calc;
  * @var $viewFile   string
  */
 
-$date1 = \DateTime::createFromFormat('Y-m-d H:i:s', '2023-03-30 10:00:00');
-$date2 = \DateTime::createFromFormat('Y-m-d H:i:s','2023-03-31 14:30:00');
-$interval = $date1->diff($date2);
-$minutes = ($date2->getTimestamp() - $date1->getTimestamp()) / 60;
+?>
 
-echo "Il y a $minutes minutes de différences";
+<button onclick="ts()">Suceess</button>
+<button onclick="te()">Error</button>
+
+<script>
+
+    function ts()
+    {
+        unicaenVue.flashMessenger.toast('Mon message uh iuh iuhx iscuh sqidhf zihuf azif rhaoqh foaizuhf oqh foiazer hoiuzhq oiazuh oizhu iqduhf', 'success');
+    }
+
+    function te()
+    {
+        unicaenVue.flashMessenger.toast('Mon erreur', 'error');
+    }
+
+</script>

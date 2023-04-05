@@ -14,7 +14,7 @@ if (1 === count($form->get('mission')->getValueOptions())){
     }
 }
 
-echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNoNamespace();
+//echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNoNamespace();
 echo $this->form()->openTag($form);
 
 echo $this->tag('h1', ['class' => 'page-header'])->html($title);

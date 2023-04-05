@@ -42,7 +42,7 @@ class SuiviController extends AbstractController
 
 
 
-    public function dataAction()
+    public function listeAction()
     {
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -80,10 +80,10 @@ class SuiviController extends AbstractController
      *
      * @return ViewModel
      */
-    public function modificationAction(): ViewModel
+    public function modifierAction(): ViewModel
     {
-        $volumeHoraireMissionId = $this->params()->fromRoute('volumeHoraireMission', null);
-        $volumeHoraireMission   = $this->em()->find(VolumeHoraireMission::class, $volumeHoraireMissionId);
+        /** @var VolumeHoraireMission $volumeHoraireMission */
+        $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
 
         return $this->saisieAction($volumeHoraireMission->getMission()->getIntervenant(), $volumeHoraireMission);
     }
@@ -116,6 +116,63 @@ class SuiviController extends AbstractController
         $vm->setVariables(compact('form', 'title'));
 
         return $vm;
+    }
+
+
+
+    public function supprimerAction()
+    {
+        /** @var VolumeHoraireMission $volumeHoraireMission */
+        $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
+
+        try {
+            $this->getServiceMission()->deleteVolumeHoraire($volumeHoraireMission);
+            $this->flashMessenger()->addSuccessMessage('Le suivi a bien été supprimé');
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage('Une erreur s\'est produite lors de la suppression du suivi : ' . $e->getMessage());
+        }
+
+        return new AxiosModel([]);
+    }
+
+
+
+    public function validerAction()
+    {
+        /** @var VolumeHoraireMission $volumeHoraireMission */
+        $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
+
+        if ($volumeHoraireMission->isValide()) {
+            $this->flashMessenger()->addInfoMessage('Ce suivi a déjà été validé');
+        } else {
+            $this->getServiceValidation()->validerVolumeHoraireMission($volumeHoraireMission);
+            $this->getServiceMission()->saveVolumeHoraire($volumeHoraireMission);
+            $this->updateTableauxBord($volumeHoraireMission->getMission());
+            $this->flashMessenger()->addSuccessMessage('Suivi validé');
+        }
+
+        return new AxiosModel([]);
+    }
+
+
+
+    public function devaliderAction()
+    {
+        /** @var VolumeHoraireMission $volumeHoraireMission */
+        $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
+
+        $validation = $volumeHoraireMission->getValidation();
+        if ($validation) {
+            $volumeHoraireMission->setAutoValidation(false);
+            $volumeHoraireMission->removeValidation($validation);
+            $this->getServiceValidation()->delete($validation);
+            $this->updateTableauxBord($volumeHoraireMission->getMission());
+            $this->flashMessenger()->addSuccessMessage("Validation du suivi <strong>retirée</strong>.");
+        } else {
+            $this->flashMessenger()->addInfoMessage("Ce suivi n'était pas validé");
+        }
+
+        return new AxiosModel([]);
     }
 
 

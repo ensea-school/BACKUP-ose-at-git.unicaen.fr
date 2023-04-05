@@ -21,11 +21,11 @@ use UnicaenVue\View\Model\AxiosModel;
 
 
 /**
- * Description of MissionController
+ * Description of SaisieController
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class MissionController extends AbstractController
+class SaisieController extends AbstractController
 {
     use MissionServiceAwareTrait;
     use MissionFormAwareTrait;
@@ -34,7 +34,6 @@ class MissionController extends AbstractController
     use WorkflowServiceAwareTrait;
     use MissionSuiviFormAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
-
 
     /**
      * Page d'index des missions
@@ -53,29 +52,41 @@ class MissionController extends AbstractController
 
 
 
-    public function suiviAction()
+    /**
+     * Retourne les données pour une mission
+     *
+     * @return JsonModel
+     */
+    public function getAction(?Mission $mission = null)
     {
-        /* @var $intervenant Intervenant */
-        $intervenant = $this->getEvent()->getParam('intervenant');
+        if (!$mission) {
+            /** @var Mission $mission */
+            $mission = $this->getEvent()->getParam('mission');
+        }
 
-        $data = [
-            'nombre' => 10,
-            'chaine' => 'Sal"ut \'co',
-        ];
+        // Vidage du cache d'exécution Doctrine pour être sûr de bien filter les données de la mission
+        $this->em()->clear();
 
-        return compact('intervenant');
+        $query = $this->getServiceMission()->query(['mission' => $mission]);
+
+        return new AxiosModel(AxiosExtractor::extract($query)[0]);
     }
 
 
 
-    public function suiviDataAction()
+    /**
+     * Retourne la liste des missions
+     *
+     * @return JsonModel
+     */
+    public function listeAction()
     {
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $data = $this->getServiceMission()->suivi($intervenant);
+        $query = $this->getServiceMission()->query(['intervenant' => $intervenant]);
 
-        return new AxiosModel($data);
+        return new AxiosModel($query);
     }
 
 
@@ -134,118 +145,10 @@ class MissionController extends AbstractController
         $form->setAttribute('data-id', $mission->getId());
 
         $vm = new ViewModel();
-        $vm->setTemplate('mission/saisie');
+        $vm->setTemplate('mission/saisie/saisie');
         $vm->setVariables(compact('form', 'title', 'mission'));
 
         return $vm;
-    }
-
-
-
-    /**
-     * Modifie une mission (form)
-     *
-     * @return ViewModel
-     */
-    public function suiviAjoutAction(): ViewModel
-    {
-        /** @var Intervenant $intervenant */
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-        $date = $this->params()->fromRoute('date');
-
-        $volumeHoraireMission = new VolumeHoraireMission();
-        $volumeHoraireMission->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
-        $volumeHoraireMission->setDate($date);
-
-        return $this->suiviSaisieAction($intervenant, $volumeHoraireMission);
-    }
-
-
-
-    /**
-     * Modifie une mission (form)
-     *
-     * @return ViewModel
-     */
-    public function suiviModificationAction(): ViewModel
-    {
-        /** @var Intervenant $intervenant */
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-        $volumeHoraireMissionId = $this->params()->fromRoute('volumeHoraireMission', null);
-        $volumeHoraireMission   = $this->getServiceMission()->suivi($intervenant, $volumeHoraireMissionId);
-
-        return $this->suiviSaisieAction($intervenant, $volumeHoraireMission);
-    }
-
-
-
-    protected function suiviSaisieAction(Intervenant $intervenant, VolumeHoraireMission $volumeHoraireMission)
-    {
-        if ($volumeHoraireMission->getId()) {
-            $title = 'Modification d\'un suivi de mission';
-        } else {
-            $title = 'Ajout d\'un suivi de mission';
-        }
-
-        $form = $this->getFormMissionSuivi();
-        $form->setIntervenant($intervenant);
-        $form->date = $volumeHoraireMission->getHoraireDebut();
-        $form->build();
-
-        $form->bindRequestSave($volumeHoraireMission, $this->getRequest(), function ($vhm) {
-            $this->getServiceMission()->saveVolumeHoraire($vhm);
-            $this->updateTableauxBord($vhm->getMission());
-            $this->flashMessenger()->addSuccessMessage('Suivi bien enregistré');
-        });
-        // on passe l'id pour pouvoir le récupérer dans la vue et mettre à jour la liste
-        $form->setAttribute('data-id', $volumeHoraireMission->getId());
-
-        $vm = new ViewModel();
-        $vm->setTemplate('mission/suivi-saisie');
-        $vm->setVariables(compact('form', 'title'));
-
-        return $vm;
-    }
-
-
-
-    /**
-     * Retourne la liste des missions
-     *
-     * @return JsonModel
-     */
-    public function listeAction()
-    {
-        /* @var $intervenant Intervenant */
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-        $query = $this->getServiceMission()->query(['intervenant' => $intervenant]);
-
-        return new AxiosModel($query);
-    }
-
-
-
-    /**
-     * Retourne les données pour une mission
-     *
-     * @return JsonModel
-     */
-    public function getAction(?Mission $mission = null)
-    {
-        if (!$mission) {
-            /** @var Mission $mission */
-            $mission = $this->getEvent()->getParam('mission');
-        }
-
-        // Vidage du cache d'exécution Doctrine pour être sûr de bien filter les données de la mission
-        $this->em()->clear();
-
-        $query = $this->getServiceMission()->query(['mission' => $mission]);
-
-        return new AxiosModel(AxiosExtractor::extract($query)[0]);
     }
 
 

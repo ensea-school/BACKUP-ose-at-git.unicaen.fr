@@ -7,11 +7,11 @@ use Psr\Container\ContainerInterface;
 
 
 /**
- * Description of MissionControllerFactory
+ * Description of SaisieControllerFactory
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class MissionControllerFactory
+class SaisieControllerFactory
 {
 
     /**
@@ -19,11 +19,11 @@ class MissionControllerFactory
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return MissionController
+     * @return SaisieController
      */
-    public function __invoke(ContainerInterface $container, $requestedName, $options = null): MissionController
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null): SaisieController
     {
-        $controller = new MissionController;
+        $controller = new SaisieController;
 
         /* Injectez vos dépendances ICI */
 

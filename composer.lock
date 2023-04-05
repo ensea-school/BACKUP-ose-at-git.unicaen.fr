@@ -1663,16 +1663,16 @@
         },
         {
             "name": "laminas/laminas-cache",
-            "version": "3.10.0",
+            "version": "3.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache.git",
-                "reference": "5807c51b92fd256bbf58eda6df4c1d27148bbfb8"
+                "reference": "7bda6c5b500b916cbb03d0504069865d31b3efa5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache/zipball/5807c51b92fd256bbf58eda6df4c1d27148bbfb8",
-                "reference": "5807c51b92fd256bbf58eda6df4c1d27148bbfb8",
+                "url": "https://api.github.com/repos/laminas/laminas-cache/zipball/7bda6c5b500b916cbb03d0504069865d31b3efa5",
+                "reference": "7bda6c5b500b916cbb03d0504069865d31b3efa5",
                 "shasum": ""
             },
             "require": {
@@ -1759,7 +1759,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-01-10T14:17:43+00:00"
+            "time": "2023-03-31T18:59:17+00:00"
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-memory",
@@ -2808,16 +2808,16 @@
         },
         {
             "name": "laminas/laminas-i18n",
-            "version": "2.22.0",
+            "version": "2.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-i18n.git",
-                "reference": "fc13d1314941bd9acda3861883cd9139d747f98f"
+                "reference": "075bec49f777698c6fc229eecefbe7a2364cd18e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-i18n/zipball/fc13d1314941bd9acda3861883cd9139d747f98f",
-                "reference": "fc13d1314941bd9acda3861883cd9139d747f98f",
+                "url": "https://api.github.com/repos/laminas/laminas-i18n/zipball/075bec49f777698c6fc229eecefbe7a2364cd18e",
+                "reference": "075bec49f777698c6fc229eecefbe7a2364cd18e",
                 "shasum": ""
             },
             "require": {
@@ -2890,7 +2890,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-03-12T01:03:50+00:00"
+            "time": "2023-03-31T12:31:38+00:00"
         },
         {
             "name": "laminas/laminas-i18n-resources",
@@ -2953,16 +2953,16 @@
         },
         {
             "name": "laminas/laminas-inputfilter",
-            "version": "2.24.0",
+            "version": "2.24.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-inputfilter.git",
-                "reference": "01c56c11904565b0f594c9cb745b5457a0e390eb"
+                "reference": "c5a53b1e72a2270b441391728291f7136e9461d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-inputfilter/zipball/01c56c11904565b0f594c9cb745b5457a0e390eb",
-                "reference": "01c56c11904565b0f594c9cb745b5457a0e390eb",
+                "url": "https://api.github.com/repos/laminas/laminas-inputfilter/zipball/c5a53b1e72a2270b441391728291f7136e9461d1",
+                "reference": "c5a53b1e72a2270b441391728291f7136e9461d1",
                 "shasum": ""
             },
             "require": {
@@ -3023,7 +3023,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-02-01T17:22:43+00:00"
+            "time": "2023-04-05T08:44:05+00:00"
         },
         {
             "name": "laminas/laminas-json",
@@ -4906,16 +4906,16 @@
         },
         {
             "name": "mpdf/mpdf",
-            "version": "v8.1.4",
+            "version": "v8.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpdf/mpdf.git",
-                "reference": "add590e93b7502efafd9839a68cff99f3497b318"
+                "reference": "c264ce27af0d794ecd04e201b7e37a06b8a9d720"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/add590e93b7502efafd9839a68cff99f3497b318",
-                "reference": "add590e93b7502efafd9839a68cff99f3497b318",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/c264ce27af0d794ecd04e201b7e37a06b8a9d720",
+                "reference": "c264ce27af0d794ecd04e201b7e37a06b8a9d720",
                 "shasum": ""
             },
             "require": {
@@ -4979,7 +4979,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2022-12-15T11:24:39+00:00"
+            "time": "2023-04-04T15:06:48+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -5428,25 +5428,25 @@
         },
         {
             "name": "psr/http-message",
-            "version": "1.0.1",
+            "version": "1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-message.git",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
+                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": "^7.2 || ^8.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -5475,9 +5475,9 @@
                 "response"
             ],
             "support": {
-                "source": "https://github.com/php-fig/http-message/tree/master"
+                "source": "https://github.com/php-fig/http-message/tree/1.1"
             },
-            "time": "2016-08-06T14:39:51+00:00"
+            "time": "2023-04-04T09:50:52+00:00"
         },
         {
             "name": "psr/log",
@@ -5801,16 +5801,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v5.4.21",
+            "version": "v5.4.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "c77433ddc6cdc689caf48065d9ea22ca0853fbd9"
+                "reference": "3cd51fd2e6c461ca678f84d419461281bd87a0a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/c77433ddc6cdc689caf48065d9ea22ca0853fbd9",
-                "reference": "c77433ddc6cdc689caf48065d9ea22ca0853fbd9",
+                "url": "https://api.github.com/repos/symfony/console/zipball/3cd51fd2e6c461ca678f84d419461281bd87a0a8",
+                "reference": "3cd51fd2e6c461ca678f84d419461281bd87a0a8",
                 "shasum": ""
             },
             "require": {
@@ -5875,12 +5875,12 @@
             "homepage": "https://symfony.com",
             "keywords": [
                 "cli",
-                "command line",
+                "command-line",
                 "console",
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v5.4.21"
+                "source": "https://github.com/symfony/console/tree/v5.4.22"
             },
             "funding": [
                 {
@@ -5896,7 +5896,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-25T16:59:41+00:00"
+            "time": "2023-03-25T09:27:28+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -7298,7 +7298,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/vue.git",
-                "reference": "6dbdd1a9f23c225eb39a04e5f88c70ffacacf3d7"
+                "reference": "c3de98637d9f5654486e9cbb099f40dd0ccbe6fd"
             },
             "type": "library",
             "autoload": {
@@ -7310,7 +7310,7 @@
                 ]
             },
             "description": "Module pour utiliser Vue.js",
-            "time": "2023-03-30T07:44:01+00:00"
+            "time": "2023-04-05T13:52:02+00:00"
         },
         {
             "name": "unicaen/zfc-user",
@@ -8292,16 +8292,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.16.1",
+            "version": "1.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "e27e92d939e2e3636f0a1f0afaba59692c0bf571"
+                "reference": "d3753fcb3abc6f78f5de6f72153d4b9c99c72dee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/e27e92d939e2e3636f0a1f0afaba59692c0bf571",
-                "reference": "e27e92d939e2e3636f0a1f0afaba59692c0bf571",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/d3753fcb3abc6f78f5de6f72153d4b9c99c72dee",
+                "reference": "d3753fcb3abc6f78f5de6f72153d4b9c99c72dee",
                 "shasum": ""
             },
             "require": {
@@ -8331,9 +8331,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.16.1"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.17.1"
             },
-            "time": "2023-02-07T18:11:17+00:00"
+            "time": "2023-04-04T11:11:22+00:00"
         },
         {
             "name": "sabre/event",

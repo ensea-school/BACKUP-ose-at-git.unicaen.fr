@@ -26,25 +26,46 @@ return [
                 'suivi' => [
                     'route'        => '/suivi',
                     'child_routes' => [
-                        'data' => [
-                            'route'      => '/data/:intervenant',
+                        'liste'     => [
+                            'route'      => '/liste/:intervenant',
                             'controller' => Controller\SuiviController::class,
-                            'action'     => 'data',
+                            'action'     => 'liste',
                             'privileges' => Privileges::MISSION_VISUALISATION,
                             //'assertion'  => Assertion\MissionAssertion::class,
                         ],
-                        'ajout' => [
+                        'ajout'   => [
                             'route'      => '/ajout/:intervenant/:date',
                             'controller' => Controller\SuiviController::class,
                             'action'     => 'ajout',
                             'privileges' => Privileges::MISSION_EDITION_REALISE,
                             //'assertion'  => Assertion\MissionAssertion::class,
                         ],
-                        'modification' => [
-                            'route'      => '/modification/:volumeHoraireMission',
+                        'modifier'  => [
+                            'route'      => '/modifier/:volumeHoraireMission',
                             'controller' => Controller\SuiviController::class,
-                            'action'     => 'modification',
+                            'action'     => 'modifier',
                             'privileges' => Privileges::MISSION_EDITION_REALISE,
+                            //'assertion'  => Assertion\MissionAssertion::class,
+                        ],
+                        'supprimer' => [
+                            'route'      => '/supprimer/:volumeHoraireMission',
+                            'controller' => Controller\SuiviController::class,
+                            'action'     => 'supprimer',
+                            'privileges' => Privileges::MISSION_EDITION_REALISE,
+                            //'assertion'  => Assertion\MissionAssertion::class,
+                        ],
+                        'valider'   => [
+                            'route'      => '/valider/:volumeHoraireMission',
+                            'controller' => Controller\SuiviController::class,
+                            'action'     => 'valider',
+                            'privileges' => Privileges::MISSION_VALIDATION_REALISE,
+                            //'assertion'  => Assertion\MissionAssertion::class,
+                        ],
+                        'devalider' => [
+                            'route'      => '/devalider/:volumeHoraireMission',
+                            'controller' => Controller\SuiviController::class,
+                            'action'     => 'devalider',
+                            'privileges' => Privileges::MISSION_DEVALIDATION_REALISE,
                             //'assertion'  => Assertion\MissionAssertion::class,
                         ],
                     ],

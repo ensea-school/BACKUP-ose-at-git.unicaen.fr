@@ -1,5 +1,5 @@
 <template>
-    <u-calendar :date="date" @changeDate="changeDate" @addEvent="ajoutVolumeHoraire" :can-add-event="true" :events="suivi"/>
+    <u-calendar :date="date" @changeDate="changeDate" @addEvent="ajouter" :can-add-event="true" :events="suivi"/>
 </template>
 
 <script>
@@ -22,7 +22,7 @@ export default {
     {
         return {
             date: new Date(),
-            suivi: [],
+            suivi: []
         };
     },
     methods: {
@@ -31,7 +31,7 @@ export default {
             this.date = dateObj;
         },
 
-        ajoutVolumeHoraire(dateObj, event)
+        ajouter(dateObj, event)
         {
             const urlParams = {
                 intervenant: this.intervenant,
@@ -59,7 +59,7 @@ export default {
             let missionsColors = [];
 
             unicaenVue.axios.get(
-                unicaenVue.url("mission/suivi/data/:intervenant", {intervenant: this.intervenant})
+                unicaenVue.url("mission/suivi/liste/:intervenant", {intervenant: this.intervenant})
             ).then(response => {
                 let newSuivi = [];
                 for (let i in response.data) {
@@ -68,6 +68,9 @@ export default {
                     if (undefined === missionsColors[missionSuivi.mission.id]) {
                         missionsColors[missionSuivi.mission.id] = colors[colorIndex];
                         colorIndex++;
+                    }
+                    if (missionSuivi.valide){
+                        missionSuivi.bgcolor = '#d0eddb';
                     }
                     missionSuivi.color = missionsColors[missionSuivi.mission.id];
                     missionSuivi.component = markRaw(SuiviEvent);

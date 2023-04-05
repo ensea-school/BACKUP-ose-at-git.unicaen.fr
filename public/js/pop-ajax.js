@@ -312,14 +312,14 @@ function popConfirm(element, options)
             options = {};
         }
         if (!options.title) {
-            options.title = $(element).data('title');
+            options.title = element.dataset.title;
         }
         if (!options.title) {
             options.title = "Demande de confirmation";
         }
 
         if (!options.content) {
-            options.content = $(element).data('content');
+            options.content = element.dataset.content;
         }
         if (!options.content) {
             options.content = "Confirmez-vous cette action ?";
@@ -331,8 +331,11 @@ function popConfirm(element, options)
         if (!options.url) {
             options.url = element.href;
         }
+        if (!options.url) {
+             options.url = element.dataset.url;
+        }
 
-        if (element.nodeName == 'A') {
+        if (options.url) {
             goFunc = function () {
                 unicaenVue.axios.get(options.url).then(response => {
                     options.confirm(response, element);

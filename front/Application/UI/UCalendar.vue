@@ -29,7 +29,7 @@
                     <div class="num-jour badge bg-secondary rounded-circle">{{ jour < 10 ? '0' + jour.toString() : jour }}</div>
                 </th>
                 <td>
-                    <div class="event" :style="'border-color:'+event.color" v-for="(event, index) in eventsByJour(jour)" :key="index">
+                    <div class="event" :style="'border-color:'+event.color+';background-color:'+event.bgcolor" v-for="(event, index) in eventsByJour(jour)" :key="index">
                         <component :is="event.component" :event="event"></component>
                     </div>
 

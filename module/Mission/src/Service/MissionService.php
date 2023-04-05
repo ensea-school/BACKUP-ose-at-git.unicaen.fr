@@ -54,15 +54,15 @@ class MissionService extends AbstractEntityService
     {
         $dql = "
         SELECT 
-          m, tm, str, tr, valid, vh, vvh, ctr
+          m, tm, str, tr, valid, vh, vvh, ctr, tvh
         FROM 
           " . Mission::class . " m
           JOIN m.typeMission tm
           JOIN m.structure str
           JOIN m.tauxRemu tr
-          JOIN " . TypeVolumeHoraire::class . " tvh WITH tvh.code = :typeVolumeHorairePrevu
           LEFT JOIN m.validations valid WITH valid.histoDestruction IS NULL
-          LEFT JOIN m.volumesHoraires vh WITH vh.histoDestruction IS NULL AND vh.typeVolumeHoraire = tvh
+          LEFT JOIN m.volumesHoraires vh WITH vh.histoDestruction IS NULL
+          LEFT JOIN vh.typeVolumeHoraire tvh
           LEFT JOIN vh.validations vvh WITH vvh.histoDestruction IS NULL
           LEFT JOIN vh.contrat ctr WITH ctr.histoDestruction IS NULL
         WHERE 
@@ -75,8 +75,6 @@ class MissionService extends AbstractEntityService
           m.dateDebut,
           vh.histoCreation
         ";
-
-        $parameters['typeVolumeHorairePrevu'] = TypeVolumeHoraire::CODE_PREVU;
 
         return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
     }
@@ -140,7 +138,7 @@ class MissionService extends AbstractEntityService
      */
     public function save($entity)
     {
-        foreach ($entity->getVolumesHoraires() as $vh) {
+        foreach ($entity->getVolumesHorairesPrevus() as $vh) {
             $this->saveVolumeHoraire($vh);
         }
 

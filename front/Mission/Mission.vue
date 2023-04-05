@@ -93,7 +93,7 @@
                             {{ mission.contrat ? 'Contrat établi' : 'Pas de contrat' }}
                         </div>
                         <div>
-                            Aucune heure réalisée
+                            {{ mission.heuresRealisees}} heure{{ mission.heuresRealisees < 2 ? '' : 's' }} réalisée{{ mission.heuresRealisees < 2 ? '' : 's' }}
                         </div>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="vh in mission.volumesHoraires" :key="vh.id">
+                <tr v-for="vh in mission.volumesHorairesPrevus" :key="vh.id">
                     <td style="text-align: right">
                         <u-heures :valeur="vh.heures"/>
                     </td>

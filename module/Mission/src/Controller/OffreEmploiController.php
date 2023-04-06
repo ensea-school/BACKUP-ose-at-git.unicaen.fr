@@ -2,22 +2,12 @@
 
 namespace Mission\Controller;
 
-use Application\Acl\Role;
-use Application\Constants;
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Intervenant;
-use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Doctrine\ORM\Query;
-use Laminas\View\Model\JsonModel;
-use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\OffreEmploi;
-use Mission\Entity\Db\VolumeHoraireMission;
-use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\OffreEmploiFormAwareTrait;
 use Mission\Service\OffreEmploiServiceAwareTrait;
 use UnicaenVue\Axios\AxiosExtractor;
@@ -86,7 +76,7 @@ class OffreEmploiController extends AbstractController
     /**
      * Retourne la liste des offres d'emploi
      *
-     * @return JsonModel
+     * @return AxiosModel
      */
     public function listeAction()
     {
@@ -157,9 +147,6 @@ class OffreEmploiController extends AbstractController
         $offreEmploi = $this->getEvent()->getParam('offreEmploi');
         $utilisateur = $this->getServiceContext()->getUtilisateur();
         $intervenant = ($this->getServiceContext()->getIntervenant()) ?: false;
-
-        var_dump($intervenant->getOffresEmplois());
-        die;
 
         return compact('offreEmploi', 'utilisateur', 'intervenant');
     }

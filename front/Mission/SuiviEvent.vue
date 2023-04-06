@@ -1,6 +1,6 @@
 <template>
     <div class="event-content">
-        <p class="mission">{{ event.mission.libelleCourt }}</p>
+        <p class="mission">{{ event.mission.libelleCourt }} <b-badge v-if="event.valide" class="bg-success">Validé</b-badge></p>
         <p class="horaires">
             de {{ heureDebut }} à {{ heureFin }}, soi{{ heures < 2 ? '' : 'en'}}t {{ heures }} heure{{ heures < 2 ? '' : 's' }}
             <b-badge v-if="event.nocturne">Nocturne</b-badge>

@@ -2,15 +2,15 @@
 
 namespace Application\Entity\Db;
 
-use Application\Interfaces\AxiosExtractor;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use UnicaenVue\Axios\AxiosExtractorInterface;
 
 /**
  * Validation
  */
-class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosExtractor
+class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosExtractorInterface
 {
     use HistoriqueAwareTrait;
 

@@ -45,7 +45,7 @@ export default {
 
         addVolumeHoraire(dateObj, event)
         {
-            event.currentTarget.dataset.url = Util.url('intervenant/:intervenant/missions-suivi-saisie', {intervenant:this.intervenant});
+            event.currentTarget.dataset.url = unicaenVue.url('intervenant/:intervenant/missions-suivi-saisie', {intervenant:this.intervenant});
             modAjax(event.currentTarget, (widget) => {
                 this.refresh();
             });
@@ -53,7 +53,7 @@ export default {
 
         editVolumeHoraire(calEvent, event)
         {
-            event.currentTarget.dataset.url = Util.url('intervenant/:intervenant/missions-suivi-saisie/:guid', {intervenant:this.intervenant,guid:calEvent.guid});
+            event.currentTarget.dataset.url = unicaenVue.url('intervenant/:intervenant/missions-suivi-saisie/:guid', {intervenant:this.intervenant,guid:calEvent.guid});
             modAjax(event.currentTarget, (widget) => {
                 this.refresh();
             });
@@ -83,8 +83,8 @@ export default {
         },
         refresh()
         {
-            axios.get(
-                Util.url("intervenant/:intervenant/missions-suivi-data", {intervenant: this.intervenant})
+            unicaenVue.axios.get(
+                unicaenVue.url("intervenant/:intervenant/missions-suivi-data", {intervenant: this.intervenant})
             ).then(response => {
                 let newSuivi = [];
                 for (let i in response.data){

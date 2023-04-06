@@ -16,7 +16,9 @@ use Mission\Entity\MissionSuivi;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraire;
+use UnicaenVue\Axios\AxiosExtractor;
+use UnicaenVue\View\Model\AxiosModel;
+use UnicaenVue\View\Model\VueModel;
 
 
 /**
@@ -56,6 +58,16 @@ class MissionController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
+        $data = [
+            'nombre' => 10,
+            'chaine' => 'Sal"ut \'co',
+        ];
+
+        $vm = new VueModel($data);
+        $vm->setTemplate('mission/vm-test');
+
+        return $vm;
+
         return compact('intervenant');
     }
 
@@ -68,7 +80,7 @@ class MissionController extends AbstractController
 
         $data = $this->getServiceMission()->suivi($intervenant);
 
-        return $this->axios()->send($data);
+        return new AxiosModel($data);
     }
 
 
@@ -149,10 +161,10 @@ class MissionController extends AbstractController
 
         if ($guid) {
             $missionSuivi = $this->getServiceMission()->suivi($intervenant, $guid);
-            $title = 'Modification d\'un suivi de mission';
+            $title        = 'Modification d\'un suivi de mission';
         } else {
             $missionSuivi = new MissionSuivi();
-            $title = 'Ajout d\'un suivi de mission';
+            $title        = 'Ajout d\'un suivi de mission';
         }
 
         $form = $this->getFormMissionSuivi();
@@ -188,7 +200,7 @@ class MissionController extends AbstractController
 
         $query = $this->getServiceMission()->query(['intervenant' => $intervenant]);
 
-        return $this->axios()->send($query);
+        return new AxiosModel($query);
     }
 
 
@@ -210,7 +222,7 @@ class MissionController extends AbstractController
 
         $query = $this->getServiceMission()->query(['mission' => $mission]);
 
-        return $this->axios()->send($this->axios()::extract($query)[0]);
+        return new AxiosModel(AxiosExtractor::extract($query)[0]);
     }
 
 
@@ -224,7 +236,7 @@ class MissionController extends AbstractController
         $this->updateTableauxBord($mission);
         $this->flashMessenger()->addSuccessMessage("Mission supprimée avec succès.");
 
-        return $this->axios()->send([]);
+        return new AxiosModel([]);
     }
 
 

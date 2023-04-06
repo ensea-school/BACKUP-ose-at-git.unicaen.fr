@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52b3f7e4ada3aa5a5562b9dd2f6b22ce",
+    "content-hash": "816afa9ec00d3ac8d2edf81cb626e6a6",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7206,11 +7206,11 @@
         },
         {
             "name": "unicaen/siham",
-            "version": "6.0.0",
+            "version": "6.0.2",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/siham.git",
-                "reference": "e59fb1672828aed65c0533d76950ab7326d367b4"
+                "reference": "3ddc469a93d8028cf4fd6161e6404e0477e6ffcf"
             },
             "require": {
                 "laminas/laminas-mail": "^2.10",
@@ -7235,7 +7235,7 @@
                 }
             ],
             "description": "PHP library for SIHAM webservices",
-            "time": "2023-03-21T10:23:31+00:00"
+            "time": "2023-03-28T14:48:15+00:00"
         },
         {
             "name": "unicaen/tbl",
@@ -7291,6 +7291,26 @@
             },
             "description": "Module reprenant la gestion des utilisateurs, privileges et roles - Version laminas",
             "time": "2023-03-21T08:09:59+00:00"
+        },
+        {
+            "name": "unicaen/vue",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/vue.git",
+                "reference": "6dbdd1a9f23c225eb39a04e5f88c70ffacacf3d7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "UnicaenVue\\": "src/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "description": "Module pour utiliser Vue.js",
+            "time": "2023-03-30T07:44:01+00:00"
         },
         {
             "name": "unicaen/zfc-user",
@@ -8812,6 +8832,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "unicaen/vue": 20,
         "laminas/laminas-cache-storage-adapter-memory": 20,
         "laminas/laminas-text": 20
     },

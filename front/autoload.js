@@ -1,12 +1,12 @@
 export default {
     /* UI components */
-    uIcon: 'Application/UI/UIcon',
-    uHeures: 'Application/UI/UHeures',
-    uModal: 'Application/UI/UModal',
-    uDate: 'Application/UI/UDate',
-    uCalendar: 'Application/UI/UCalendar',
+    UIcon: 'Application/UI/UIcon',
+    UHeures: 'Application/UI/UHeures',
+    UModal: 'Application/UI/UModal',
+    UDate: 'Application/UI/UDate',
+    UCalendar: 'Application/UI/UCalendar',
 
     /* App common components */
-    utilisateur: 'Application/Utilisateur',
+    Utilisateur: 'Application/Utilisateur',
 
 };

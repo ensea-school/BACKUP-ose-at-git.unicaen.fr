@@ -66,7 +66,7 @@ Enfin, commitez le tout et testez avant de déployer!!!
 ## Création de composants Vue
 
 Ose embarque BootstrapVue.
-A privilégier pour utiliser des composants Boottrap.
+A privilégier pour utiliser des composants Bootstrap.
 
 Sites officiels :
 - https://vuejs.org/
@@ -157,11 +157,11 @@ let data = {
     'param2' => 'mon deuxième paramètre'
 };
 
-// URL à utiliser. Ici, on la construit à partir d'une route avec Util.url
-let url = Util.url('mission/modifier/:intervenant', {intervenant: 1000000}); 
+// URL à utiliser. Ici, on la construit à partir d'une route avec unicaenVue.url
+let url = unicaenVue.url('mission/modifier/:intervenant', {intervenant: 1000000}); 
 
 // on utilise axios pour poster et récupérer le résultat
-axios.post(
+unicaenVue.axios.post(
     url,
     data
 ).then((response) => {
@@ -197,6 +197,6 @@ Depuis une action de contrôleur Laminas :
         $this->flashMessenger()->addSuccessMessage('Youpi, super!');
 
         // On utilise le plugin axios pour renvoyer $donnees en client qui récupèrera les valeurs dans le response.data
-        return $this->axios()->send($output);
+        return new AxiosModel($output);
     }
 ```

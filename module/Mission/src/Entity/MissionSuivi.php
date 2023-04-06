@@ -2,11 +2,11 @@
 
 namespace Mission\Entity;
 
-use Application\Interfaces\AxiosExtractor;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
+use UnicaenVue\Axios\AxiosExtractorInterface;
 
-class MissionSuivi implements AxiosExtractor
+class MissionSuivi implements AxiosExtractorInterface
 {
 
     /** @var VolumeHoraireMission[] */

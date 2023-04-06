@@ -4,7 +4,6 @@ namespace Mission\Entity\Db;
 
 use Application\Entity\Db\Traits\ContratAwareTrait;
 use Application\Entity\Db\Validation;
-use Application\Interfaces\AxiosExtractor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
@@ -12,8 +11,9 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
+use UnicaenVue\Axios\AxiosExtractorInterface;
 
-class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInterface, AxiosExtractor
+class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInterface, AxiosExtractorInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;

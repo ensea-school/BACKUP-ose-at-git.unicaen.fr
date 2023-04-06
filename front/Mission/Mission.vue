@@ -174,10 +174,10 @@ export default {
         return {
             validationText: this.calcValidation(this.mission.validation),
 
-            saisieUrl: Util.url('mission/saisie/:mission', {mission: this.mission.id}),
-            validerUrl: Util.url('mission/valider/:mission', {mission: this.mission.id}),
-            devaliderUrl: Util.url('mission/devalider/:mission', {mission: this.mission.id}),
-            supprimerUrl: Util.url("mission/supprimer/:mission", {mission: this.mission.id}),
+            saisieUrl: unicaenVue.url('mission/saisie/:mission', {mission: this.mission.id}),
+            validerUrl: unicaenVue.url('mission/valider/:mission', {mission: this.mission.id}),
+            devaliderUrl: unicaenVue.url('mission/devalider/:mission', {mission: this.mission.id}),
+            supprimerUrl: unicaenVue.url("mission/supprimer/:mission", {mission: this.mission.id}),
         };
     },
     watch: {
@@ -236,29 +236,29 @@ export default {
         },
         volumeHoraireSupprimer(event)
         {
-            event.currentTarget.href = Util.url('mission/volume-horaire/supprimer/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            event.currentTarget.href = unicaenVue.url('mission/volume-horaire/supprimer/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
             popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         volumeHoraireValider(event)
         {
-            event.currentTarget.href = Util.url('mission/volume-horaire/valider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            event.currentTarget.href = unicaenVue.url('mission/volume-horaire/valider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
             popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         volumeHoraireDevalider(event)
         {
-            event.currentTarget.href = Util.url('mission/volume-horaire/devalider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            event.currentTarget.href = unicaenVue.url('mission/volume-horaire/devalider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
             popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         refresh()
         {
-            axios.get(
-                Util.url("mission/get/:mission", {mission: this.mission.id})
+            unicaenVue.axios.get(
+                unicaenVue.url("mission/get/:mission", {mission: this.mission.id})
             ).then(response => {
                 this.$emit('refresh', response.data);
             });

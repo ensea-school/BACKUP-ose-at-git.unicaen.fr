@@ -19,7 +19,7 @@ export default {
     {
         return {
             missions: [],
-            ajoutUrl: Util.url('mission/ajout/:intervenant', {intervenant: this.intervenant})
+            ajoutUrl: unicaenVue.url('mission/ajout/:intervenant', {intervenant: this.intervenant})
         };
     },
     mounted()
@@ -44,8 +44,8 @@ export default {
         },
         reload()
         {
-            axios.get(
-                Util.url("mission/liste/:intervenant", {intervenant: this.intervenant})
+            unicaenVue.axios.get(
+                unicaenVue.url("mission/liste/:intervenant", {intervenant: this.intervenant})
             ).then(response => {
                 this.missions = response.data;
             });

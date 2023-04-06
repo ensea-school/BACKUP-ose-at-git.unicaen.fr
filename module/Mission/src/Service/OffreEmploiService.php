@@ -3,14 +3,10 @@
 namespace Mission\Service;
 
 use Application\Acl\Role;
+use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\OffreEmploi;
-use Mission\Entity\Db\VolumeHoraireMission;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use UnicaenApp\Entity\HistoriqueAwareInterface;
 
 /**
  * Description of OffreEmploiService
@@ -57,12 +53,13 @@ class OffreEmploiService extends AbstractEntityService
 
         $dql = "
         SELECT 
-          oe, tm, str
+          oe, tm, str, i
         FROM 
           " . OffreEmploi::class . " oe
           JOIN oe.typeMission tm
           JOIN oe.structure str
-         WHERE 
+          LEFT JOIN oe.etudiants i  
+        WHERE 
           oe.histoDestruction IS NULL 
        " . dqlAndWhere([
                 'offreEmploi' => 'oe',
@@ -73,6 +70,16 @@ class OffreEmploiService extends AbstractEntityService
         ";
 
         return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+    }
+
+
+
+    public function postuler(Intervenant $intervenant, OffreEmploi $offre): OffreEmploi
+    {
+        $offre->addEtudiant($intervenant);
+        $this->save($offre);
+
+        return $offre;
     }
 
 

@@ -51,13 +51,26 @@
                     <a v-if="this.public"
                        :href="consulterUrl"
                        class="btn btn-primary"
-                    >Consulter</a>
+                    >Plus d'information</a>
                 </div>
             </div>
         </div>
     </div>
     <div v-if="this.extended">
-        <p class="bg-light" style="padding:5px;">
+        <div v-if="!this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
+            <i class="fa-solid fa-user"></i>
+            <div class="ms-2">
+                Vous devez <a :href="connectionLink" class="text-decoration-underline alert-link">être identifé</a> en tant qu'étudiant pour pouvoir
+                postuler.
+            </div>
+        </div>
+        <div v-if="!this.canPostuler && this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
+            <i class="fa-solid fa-circle-xmark"></i>
+            <div class="ms-2">
+                Vous n'avez pas les droits pour postuler à cette offre, merci de contacter votre administration de rattachement.
+            </div>
+        </div>
+        <p class="bg-light" style="padding:10px;">
             <b>Crée le : </b>
             <u-date :value="offre.histoCreation"/>
             par {{ offre.histoCreateur.displayName }}<br/>
@@ -76,12 +89,18 @@
             <br/>
 
         </p>
+
         {{ offre.description }}
-        <div style="margin-top:20px;">
+
+
+        <div class="mt-5">
             <a class="btn btn-primary" href="/offre-emploi/public">Retour aux offres</a>&nbsp;
-            <a :class="isDisabled" href="/offre-emploi/postuler">Postuler</a>
+            <a :class="isDisabled" :href="postulerUrl" data-bs-toggle="tooltip" data-bs-placement="top"
+               data-bs-original-title="Vous devez être connecté pour postuler">Postuler</a>
+
 
         </div>
+
     </div>
 
 </template>
@@ -93,6 +112,7 @@ export default {
     props: {
         offre: {required: true},
         public: {type: Boolean, required: false},
+        utilisateur: {required: false},
         extended: {type: Boolean, required: false},
         canModifier: {type: Boolean, required: false},
         canPostuler: {type: Boolean, required: false},
@@ -109,6 +129,7 @@ export default {
             validerUrl: Util.url('offre-emploi/valider/:offre', {offre: this.offre.id}),
             devaliderUrl: Util.url('offre-emploi/devalider/:offre', {offre: this.offre.id}),
             consulterUrl: Util.url('offre-emploi/public/:offre', {offre: this.offre.id}),
+            postulerUrl: Util.url('offre-emploi/postuler/:offre', {offre: this.offre.id})
         };
     },
     computed: {
@@ -133,6 +154,9 @@ export default {
                 shorDesc += '...';
             }
             return shorDesc;
+        },
+        connectionLink: function () {
+            return '/auth/connexion?redirect='+window.location.href;
         }
     },
 
@@ -156,6 +180,12 @@ export default {
         {
             popConfirm(event.target, (response) => {
                 this.$emit('supprimer', this.offre);
+            });
+        },
+        postuler(event)
+        {
+            popConfirm(event.target, (response) => {
+                this.$emit('postuler', this.offre);
             });
         },
         valider(event)

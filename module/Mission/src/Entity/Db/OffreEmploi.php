@@ -66,6 +66,7 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
             'histoCreation',
             'histoCreateur',
             'validation',
+            'etudiants',
 
         ];
     }

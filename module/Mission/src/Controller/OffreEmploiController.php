@@ -139,6 +139,19 @@ class OffreEmploiController extends AbstractController
 
 
 
+    public function postulerAction()
+    {
+        $offreEmploi = $this->getEvent()->getParam('offreEmploi');
+        $intervenant = $this->getServiceContext()->getIntervenant();
+        $offreEmploi = $this->getServiceOffreEmploi()->postuler($intervenant, $offreEmploi);
+
+        $this->flashMessenger()->addSuccessMessage("Votre candidature a bien été prise en compte.");
+
+        return $this->redirect()->toRoute('offre-emploi/public');
+    }
+
+
+
     public function publicAction()
     {
         $offreEmploi = $this->getEvent()->getParam('offreEmploi');
@@ -166,7 +179,6 @@ class OffreEmploiController extends AbstractController
 
         $query = $this->getServiceOffreEmploi()->query(['offreEmploi' => $offreEmploi]);
 
-        $data = $this->axios()->send($this->axios()::extract($query)[0]);
 
         return $this->axios()->send($this->axios()::extract($query)[0]);
     }

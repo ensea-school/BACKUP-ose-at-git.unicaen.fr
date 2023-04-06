@@ -1,14 +1,14 @@
 <template>
-    <div v-if="!extended" class="row row-cols-1 row-cols-md-2 g-4">
+    <div v-if="!extended" class="row row-cols-1 row-cols-md-2 g-4 mb-3">
         <offreEmploi v-for="offre in offres" @supprimer="supprimer" @refresh="refresh" :key="offre.id" :offre="offre" :public="this.public"
                      :canModifier="this.canModifier"
                      :canValider="this.canValider"
                      :canSupprimer="this.canSupprimer"></offreEmploi>
-        <a v-if="this.public && this.canModifier" class=" btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajouter une nouvelle offre</a>
     </div>
+    <a v-if="!this.public && this.canModifier" class=" btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajouter une nouvelle offre</a>
     <div v-if="extended">
         <offreEmploi v-for="offre in offres" :key="offre.id" :offre="offre" :canPostuler="this.canPostuler" :extended="extended"
-                     :public="this.public"></offreEmploi>
+                     :public="this.public" :utilisateur="this.utilisateur"></offreEmploi>
     </div>
     <br/>
 </template>

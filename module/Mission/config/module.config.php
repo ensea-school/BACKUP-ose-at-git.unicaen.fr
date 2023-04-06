@@ -169,6 +169,12 @@ return [
                     'action'     => 'devalider',
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
                 ],
+                'postuler'  => [
+                    'route'      => '/postuler/:offreEmploi',
+                    'controller' => OffreEmploiController::class,
+                    'action'     => 'postuler',
+                    'privileges' => Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
+                ],
                 'public'    => [
                     'route'      => '/public[/:offreEmploi]',
                     'controller' => OffreEmploiController::class,
@@ -325,6 +331,13 @@ return [
             'action'     => ['valider', 'devalider'],
             'privileges' => [
                 Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
+            ],
+        ],
+        [
+            'controller' => OffreEmploiController::class,
+            'action'     => ['postuler'],
+            'privileges' => [
+                Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
             ],
         ],
         [

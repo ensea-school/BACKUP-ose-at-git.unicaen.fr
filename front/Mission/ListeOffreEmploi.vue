@@ -8,7 +8,7 @@
     <a v-if="!this.public && this.canModifier" class=" btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajouter une nouvelle offre</a>
     <div v-if="extended">
         <offreEmploi v-for="offre in offres" :key="offre.id" :offre="offre" :canPostuler="this.canPostuler" :extended="extended"
-                     :public="this.public" :utilisateur="this.utilisateur"></offreEmploi>
+                     :public="this.public" :utilisateur="this.utilisateur" :intervenant="this.intervenant"></offreEmploi>
     </div>
     <br/>
 </template>
@@ -25,6 +25,7 @@ export default {
         public: {type: Boolean, required: true},
         id: {type: Number, required: false},
         utilisateur: {required: false},
+        intervenant: {required: false},
         canModifier: {type: Boolean, required: false},
         canPostuler: {type: Boolean, required: false},
         canValider: {type: Boolean, required: false},
@@ -36,7 +37,7 @@ export default {
     {
         return {
             offres: [],
-            ajoutUrl: Util.url('offre-emploi/saisir'),
+            ajoutUrl: unicaenVue.url('offre-emploi/saisir'),
         };
     },
     mounted()
@@ -77,16 +78,16 @@ export default {
         reload()
         {
             if (this.id) {
-                axios.get(
-                    Util.url("offre-emploi/get/:offreEmploi", {offreEmploi: this.id})
+                unicaenVue.axios.get(
+                    unicaenVue.url("offre-emploi/get/:offreEmploi", {offreEmploi: this.id})
                 ).then(response => {
                     this.offres = [response.data];
 
                 });
 
             } else {
-                axios.get(
-                    Util.url("offre-emploi/liste")
+                unicaenVue.axios.get(
+                    unicaenVue.url("offre-emploi/liste")
                 ).then(response => {
                     this.offres = response.data;
 

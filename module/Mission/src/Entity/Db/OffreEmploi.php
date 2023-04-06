@@ -3,19 +3,18 @@
 namespace Mission\Entity\Db;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Validation;
-use Application\Interfaces\AxiosExtractor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenVue\Axios\AxiosExtractor;
+use UnicaenVue\Axios\AxiosExtractorInterface;
 
-class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosExtractor
+class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosExtractorInterface
 {
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;

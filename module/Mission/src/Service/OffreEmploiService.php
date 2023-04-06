@@ -6,6 +6,7 @@ use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Intervenant\Entity\Db\Statut;
 use Mission\Entity\Db\OffreEmploi;
 
 /**
@@ -60,13 +61,13 @@ class OffreEmploiService extends AbstractEntityService
           JOIN oe.structure str
           LEFT JOIN oe.etudiants i  
         WHERE 
-          oe.histoDestruction IS NULL 
+          oe . histoDestruction IS null
        " . dqlAndWhere([
                 'offreEmploi' => 'oe',
             ], $parameters);
 
         $dql .= " ORDER BY
-          oe.dateDebut
+          oe . dateDebut
         ";
 
         return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);

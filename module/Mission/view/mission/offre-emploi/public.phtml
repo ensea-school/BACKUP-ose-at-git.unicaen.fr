@@ -3,6 +3,7 @@
  * @var $this              \Application\View\Renderer\PhpRenderer
  * @var $offreEmploi       \Mission\Entity\Db\OffreEmploi
  * @var $utilisateur       \Application\Entity\Db\Utilisateur
+ * @var $intervenant       \Application\Entity\Db\Intervenant
  */
 
 use Application\Provider\Privilege\Privileges;
@@ -30,4 +31,5 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     'canSupprimer' => $canSupprimer,
     'canValider'   => $canValider,
     'utilisateur'  => $utilisateur,
+    'intervenant'  => $intervenant,
 ]); ?>

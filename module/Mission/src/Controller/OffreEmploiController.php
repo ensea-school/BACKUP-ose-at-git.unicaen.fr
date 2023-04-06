@@ -19,9 +19,9 @@ use Mission\Entity\Db\OffreEmploi;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\OffreEmploiFormAwareTrait;
-use Mission\Service\MissionServiceAwareTrait;
 use Mission\Service\OffreEmploiServiceAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraire;
+use UnicaenVue\Axios\AxiosExtractor;
+use UnicaenVue\View\Model\AxiosModel;
 
 
 /**
@@ -96,7 +96,7 @@ class OffreEmploiController extends AbstractController
          */
         $query = $this->getServiceOffreEmploi()->query([]);
 
-        return $this->axios()->send($query);
+        return new AxiosModel(AxiosExtractor::extract($query));
     }
 
 
@@ -145,7 +145,7 @@ class OffreEmploiController extends AbstractController
         $intervenant = $this->getServiceContext()->getIntervenant();
         $offreEmploi = $this->getServiceOffreEmploi()->postuler($intervenant, $offreEmploi);
 
-        $this->flashMessenger()->addSuccessMessage("Votre candidature a bien été prise en compte.");
+        $this->flashMessenger()->addSuccessMessage("Votre candidature a bien été prise en compte. Vous pouvez maintenant renseigner vos données personnelles afin d'appuyer votre candidature.");
 
         return $this->redirect()->toRoute('offre-emploi/public');
     }
@@ -156,8 +156,12 @@ class OffreEmploiController extends AbstractController
     {
         $offreEmploi = $this->getEvent()->getParam('offreEmploi');
         $utilisateur = $this->getServiceContext()->getUtilisateur();
+        $intervenant = ($this->getServiceContext()->getIntervenant()) ?: false;
 
-        return compact('offreEmploi', 'utilisateur');
+        var_dump($intervenant->getOffresEmplois());
+        die;
+
+        return compact('offreEmploi', 'utilisateur', 'intervenant');
     }
 
 
@@ -165,7 +169,7 @@ class OffreEmploiController extends AbstractController
     /**
      * Retourne les données pour une mission
      *
-     * @return JsonModel
+     * @return AxiosModel
      */
     public
     function getAction(?OffreEmploi $offreEmploi = null)
@@ -179,7 +183,6 @@ class OffreEmploiController extends AbstractController
 
         $query = $this->getServiceOffreEmploi()->query(['offreEmploi' => $offreEmploi]);
 
-
-        return $this->axios()->send($this->axios()::extract($query)[0]);
+        return new AxiosModel(AxiosExtractor::extract($query)[0]);
     }
 }

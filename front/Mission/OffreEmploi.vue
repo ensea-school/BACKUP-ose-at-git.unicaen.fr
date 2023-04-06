@@ -30,19 +30,19 @@
             </div>
             <div class="card-footer">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a v-if="offre.validation && this.canValider"
+                    <a v-if="offre.validation && this.canValider && !this.public"
                        :href="devaliderUrl"
                        class="btn btn-danger"
                        @click.prevent="devalider">Devalider</a>
-                    <a v-if="!offre.validation && this.canValider"
+                    <a v-if="!offre.validation && this.canValider  && !this.public"
                        :href="validerUrl"
                        class="btn btn-success"
                        @click.prevent="valider">Valider</a>
-                    <a v-if="this.canModifier"
+                    <a v-if="this.canModifier && !this.public"
                        :href="saisirUrl"
                        class="btn btn-primary"
                        @click.prevent="saisir">Modifier</a>
-                    <a v-if="this.canSupprimer"
+                    <a v-if="this.canSupprimer && !this.public"
                        :href="supprimerUrl"
                        class="btn btn-danger"
                        data-title="Suppression de l'offre"
@@ -64,10 +64,17 @@
                 postuler.
             </div>
         </div>
-        <div v-if="!this.canPostuler && this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
+        <div v-if="!this.canPostuler && this.intervenant" class="alert alert-primary d-flex align-items-center" role="alert">
             <i class="fa-solid fa-circle-xmark"></i>
             <div class="ms-2">
                 Vous n'avez pas les droits pour postuler à cette offre, merci de contacter votre administration de rattachement.
+            </div>
+        </div>
+        <div v-if="!this.intervenant" class="alert alert-primary d-flex align-items-center" role="alert">
+            <i class="fa-solid fa-circle-xmark"></i>
+            <div class="ms-2">
+                Vous ne pouvez pas postuler avec ce profil à cette offre, merci de contacter votre administration de rattachement ou de vous connecter en tant
+                qu'étudiant.
             </div>
         </div>
         <p class="bg-light" style="padding:10px;">
@@ -113,6 +120,7 @@ export default {
         offre: {required: true},
         public: {type: Boolean, required: false},
         utilisateur: {required: false},
+        intervenant: {required: false},
         extended: {type: Boolean, required: false},
         canModifier: {type: Boolean, required: false},
         canPostuler: {type: Boolean, required: false},
@@ -122,14 +130,14 @@ export default {
     data()
     {
 
-        console.log(this.canPostuler);
+        console.log(this.intervenant);
         return {
-            saisirUrl: Util.url('offre-emploi/saisir/:offre', {offre: this.offre.id}),
-            supprimerUrl: Util.url("offre-emploi/supprimer/:offre", {offre: this.offre.id}),
-            validerUrl: Util.url('offre-emploi/valider/:offre', {offre: this.offre.id}),
-            devaliderUrl: Util.url('offre-emploi/devalider/:offre', {offre: this.offre.id}),
-            consulterUrl: Util.url('offre-emploi/public/:offre', {offre: this.offre.id}),
-            postulerUrl: Util.url('offre-emploi/postuler/:offre', {offre: this.offre.id})
+            saisirUrl: unicaenVue.url('offre-emploi/saisir/:offre', {offre: this.offre.id}),
+            supprimerUrl: unicaenVue.url("offre-emploi/supprimer/:offre", {offre: this.offre.id}),
+            validerUrl: unicaenVue.url('offre-emploi/valider/:offre', {offre: this.offre.id}),
+            devaliderUrl: unicaenVue.url('offre-emploi/devalider/:offre', {offre: this.offre.id}),
+            consulterUrl: unicaenVue.url('offre-emploi/public/:offre', {offre: this.offre.id}),
+            postulerUrl: unicaenVue.url('offre-emploi/postuler/:offre', {offre: this.offre.id})
         };
     },
     computed: {
@@ -143,7 +151,7 @@ export default {
             }
         },
         isDisabled: function () {
-            if (!this.canPostuler) {
+            if (!this.canPostuler || !this.intervenant) {
                 return 'btn btn-primary disabled';
             }
             return 'btn btn-primary';
@@ -169,8 +177,8 @@ export default {
         },
         refresh()
         {
-            axios.get(
-                Util.url("offre-emploi/get/:offreEmploi", {offreEmploi: this.offre.id})
+            unicaenVue.axios.get(
+                unicaenVue.url("offre-emploi/get/:offreEmploi", {offreEmploi: this.offre.id})
             ).then(response => {
                 console.log(response.data);
                 this.$emit('refresh', response.data);

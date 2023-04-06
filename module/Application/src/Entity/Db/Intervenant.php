@@ -18,6 +18,7 @@ use Intervenant\Entity\Db\Statut;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\OffreEmploi;
 use OffreFormation\Entity\Db\Traits\DisciplineAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\HistoIntervenantService;
@@ -29,12 +30,13 @@ use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
+use UnicaenVue\Axios\AxiosExtractorInterface;
 
 /**
  * Intervenant
  *
  */
-class Intervenant implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, EntityManagerAwareInterface, AdresseInterface
+class Intervenant implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, EntityManagerAwareInterface, AdresseInterface, AxiosExtractorInterface
 {
     use AnneeAwareTrait;
     use StructureAwareTrait;
@@ -283,6 +285,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     protected $missions;
 
     /**
+     * @var Collection
+     */
+    protected $offresEmplois;
+
+    /**
      * Cache
      *
      * @var bool
@@ -344,6 +351,13 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     function __sleep()
     {
         return [];
+    }
+
+
+
+    public function axiosDefinition(): array
+    {
+        return ['nomUsuel', 'prenom', 'emailPro', 'statut', 'code'];
     }
 
 
@@ -1583,11 +1597,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
     /**
-     * Get IndicModifDossier
+     * Get missions
      *
      * @return Collection|Mission[]
      */
-    public function getMissions(): Collection
+    public function getMissions(): ?Collection
     {
         if (null === $this->missions) {
             return null;
@@ -1598,6 +1612,26 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
         };
 
         return $this->missions->filter($filter);
+    }
+
+
+
+    /**
+     * Get missions
+     *
+     * @return Collection|OffreEmploi[]
+     */
+    public function getOffresEmplois(): ?Collection
+    {
+        if (null === $this->offresEmplois) {
+            return null;
+        }
+
+        $filter = function (OffreEmploi $offre) {
+            return ($offre->estHistorise()) ? false : true;
+        };
+
+        return $this->offresEmplois->filter($filter);
     }
 
 

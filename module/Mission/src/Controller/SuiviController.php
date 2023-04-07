@@ -14,6 +14,7 @@ use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\AxiosModel;
 
 
@@ -47,9 +48,9 @@ class SuiviController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $data = $this->getServiceMission()->suivi($intervenant);
+        $query = $this->getServiceMission()->suivi(['intervenant' => $intervenant]);
 
-        return new AxiosModel($data);
+        return new AxiosModel($query);
     }
 
 

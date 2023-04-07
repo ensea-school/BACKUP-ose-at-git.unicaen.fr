@@ -5,6 +5,7 @@ namespace Mission\Service;
 use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Doctrine\ORM\Query;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -50,7 +51,7 @@ class MissionService extends AbstractEntityService
 
 
 
-    public function query(array $parameters)
+    public function query(array $parameters): Query
     {
         $dql = "
         SELECT 
@@ -81,20 +82,9 @@ class MissionService extends AbstractEntityService
 
 
 
-    public function suivi(Intervenant $intervenant, ?int $volumeHoraireMissionId = null): array|VolumeHoraireMission|null
+    public function suivi(array $parameters): Query
     {
-        $parameters = [
-            'typeVolumeHoraireRealise' => TypeVolumeHoraire::CODE_REALISE,
-            'intervenant'              => $intervenant,
-        ];
-
-        if ($volumeHoraireMissionId) {
-            $filter = "AND vhm.id = :volumeHoraireMissionId";
-
-            $parameters['volumeHoraireMissionId'] = $volumeHoraireMissionId;
-        } else {
-            $filter = '';
-        }
+        $parameters['typeVolumeHoraireRealise'] = TypeVolumeHoraire::CODE_REALISE;
 
         $dql = "
         SELECT
@@ -105,28 +95,13 @@ class MissionService extends AbstractEntityService
             JOIN vhm.mission m
         WHERE
             vhm.histoDestruction IS NULL
-            AND m.intervenant = :intervenant
-            $filter
+            " . dqlAndWhere([
+                'intervenant' => 'm.intervenant',
+                'volumeHoraireMission' => 'vhm',
+            ], $parameters) . "
         ";
 
-        /** @var VolumeHoraireMission[] $vhms */
-        $vhms = $this->getEntityManager()->createQuery($dql)->setParameters($parameters)->execute();
-
-        $suivis = [];
-        foreach ($vhms as $vhm) {
-            $id          = $vhm->getId();
-            $suivis[$id] = $vhm;
-        }
-
-        if ($volumeHoraireMissionId) {
-            if (array_key_exists($volumeHoraireMissionId, $suivis)) {
-                return $suivis[$volumeHoraireMissionId];
-            } else {
-                return null;
-            }
-        } else {
-            return $suivis;
-        }
+        return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
     }
 
 

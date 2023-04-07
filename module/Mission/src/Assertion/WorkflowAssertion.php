@@ -14,7 +14,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class MissionAssertion extends AbstractAssertion
+class WorkflowAssertion extends AbstractAssertion
 {
 
     /* ---- Routage général ---- */

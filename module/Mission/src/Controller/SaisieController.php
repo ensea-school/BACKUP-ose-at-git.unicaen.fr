@@ -52,6 +52,27 @@ class SaisieController extends AbstractController
 
 
 
+    protected function missionTriggers(): array
+    {
+        return [
+            '/' => function (Mission $original, array $extracted) {
+                $extracted['canSaisie'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canValider'] = $this->isAllowed($original, Privileges::MISSION_VALIDATION);
+                $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
+
+                return $extracted;
+            },
+            '/volumesHorairesPrevus' => function ($original, $extracted) {
+
+
+                return $extracted;
+            },
+        ];
+    }
+
+
+
     /**
      * Retourne les données pour une mission
      *
@@ -69,7 +90,7 @@ class SaisieController extends AbstractController
 
         $query = $this->getServiceMission()->query(['mission' => $mission]);
 
-        return new AxiosModel(AxiosExtractor::extract($query)[0]);
+        return new AxiosModel(AxiosExtractor::extract($query, [], $this->missionTriggers())[0]);
     }
 
 
@@ -86,7 +107,7 @@ class SaisieController extends AbstractController
 
         $query = $this->getServiceMission()->query(['intervenant' => $intervenant]);
 
-        return new AxiosModel($query);
+        return new AxiosModel($query, [], $this->missionTriggers());
     }
 
 

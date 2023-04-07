@@ -424,6 +424,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
     }
 
 
+
     public function heuresRealisees(): float
     {
         $vhs = $this->getVolumesHorairesRealises();
@@ -467,4 +468,10 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
         return !$this->isValide();
     }
 
+
+
+    public function canAddSuivi(\DateTime $date): bool
+    {
+        return $this->getDateDebut() <= $date && $this->getDateFin() >= $date;
+    }
 }

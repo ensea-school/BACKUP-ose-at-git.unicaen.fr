@@ -7,7 +7,7 @@ use UnicaenPrivilege\Assertion\AssertionFactory;
 
 return [
     'services' => [
-        Assertion\MissionAssertion::class => AssertionFactory::class,
+        Assertion\WorkflowAssertion::class => AssertionFactory::class,
         Service\MissionService::class     => Service\MissionServiceFactory::class,
     ],
 ];

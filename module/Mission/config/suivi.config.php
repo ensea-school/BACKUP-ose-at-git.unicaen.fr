@@ -87,7 +87,7 @@ return [
                     ],
                     'workflow-etape-code' => WfEtape::CODE_MISSION_SAISIE_REALISE,
                     'withtarget'          => true,
-                    'visible'             => Assertion\MissionAssertion::class,
+                    'visible'             => Assertion\WorkflowAssertion::class,
                     'order'               => 10,
                 ],
             ],

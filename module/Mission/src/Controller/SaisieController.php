@@ -64,7 +64,10 @@ class SaisieController extends AbstractController
                 return $extracted;
             },
             '/volumesHorairesPrevus' => function ($original, $extracted) {
-
+                //$extracted['canSaisie'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canValider'] = $this->isAllowed($original, Privileges::MISSION_VALIDATION);
+                $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
 
                 return $extracted;
             },

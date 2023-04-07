@@ -136,6 +136,15 @@ return [
             'resources' => 'Mission',
             'assertion' => Assertion\SaisieAssertion::class,
         ],
+        [
+            'privileges' => [
+                Privileges::MISSION_EDITION,
+                Privileges::MISSION_VALIDATION,
+                Privileges::MISSION_DEVALIDATION
+            ],
+            'resources' => 'VolumeHoraireMission',
+            'assertion' => Assertion\SaisieAssertion::class,
+        ],
     ],
 
     'services' => [

@@ -6,6 +6,7 @@ use Application\Acl\Role;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\VolumeHoraireMission;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
@@ -40,6 +41,17 @@ class SaisieAssertion extends AbstractAssertion
                         return $this->assertMissionDevalidation($role, $entity);
                 }
                 break;
+
+            case $entity instanceof VolumeHoraireMission:
+                switch ($privilege) {
+                    case Privileges::MISSION_EDITION: // Attention à bien avoir généré le fournisseur de privilèges si vous utilisez la gestion des privilèges d'UnicaenAuth
+                        return $this->assertVolumeHoraireEdition($role, $entity);
+                    case Privileges::MISSION_VALIDATION:
+                        return $this->assertVolumeHoraireValidation($role, $entity);
+                    case Privileges::MISSION_DEVALIDATION:
+                        return $this->assertVolumeHoraireDevalidation($role, $entity);
+                }
+                break;
         }
 
         return true;
@@ -72,6 +84,45 @@ class SaisieAssertion extends AbstractAssertion
         return $this->asserts([
             $mission->canDevalider(),
             $this->assertMission($role, $mission),
+        ]);
+    }
+
+
+
+    protected function assertVolumeHoraireEdition(Role $role, VolumeHoraireMission $vhm)
+    {
+        return $this->asserts([
+            $vhm->canEdit(),
+            $this->assertVolumeHoraire($role, $vhm),
+        ]);
+    }
+
+
+
+    protected function assertVolumeHoraireValidation(Role $role, VolumeHoraireMission $vhm)
+    {
+        return $this->asserts([
+            $vhm->canValider(),
+            $this->assertVolumeHoraire($role, $vhm),
+        ]);
+    }
+
+
+
+    protected function assertVolumeHoraireDevalidation(Role $role, VolumeHoraireMission $vhm)
+    {
+        return $this->asserts([
+            $vhm->canDevalider(),
+            $this->assertVolumeHoraire($role, $vhm),
+        ]);
+    }
+
+
+
+    protected function assertVolumeHoraire(Role $role, VolumeHoraireMission $vhm)
+    {
+        return $this->asserts([
+            $this->assertMission($role, $vhm->getMission())
         ]);
     }
 

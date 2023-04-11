@@ -82,30 +82,6 @@ class MissionService extends AbstractEntityService
 
 
 
-    public function suivi(array $parameters): Query
-    {
-        $parameters['typeVolumeHoraireRealise'] = TypeVolumeHoraire::CODE_REALISE;
-
-        $dql = "
-        SELECT
-            vhm, m
-        FROM
-            " . VolumeHoraireMission::class . " vhm
-            JOIN vhm.typeVolumeHoraire tvh WITH tvh.code = :typeVolumeHoraireRealise
-            JOIN vhm.mission m
-        WHERE
-            vhm.histoDestruction IS NULL
-            " . dqlAndWhere([
-                'intervenant' => 'm.intervenant',
-                'volumeHoraireMission' => 'vhm',
-            ], $parameters) . "
-        ";
-
-        return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
-    }
-
-
-
     /**
      * @param Mission $entity
      *

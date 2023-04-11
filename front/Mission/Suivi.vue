@@ -1,5 +1,5 @@
 <template>
-    <u-calendar :date="date" @changeDate="changeDate" @addEvent="ajouter" :can-add-event="true" :events="suivi"/>
+    <u-calendar :date="date" @changeDate="changeDate" @addEvent="ajouter" :can-add-event="canAddMission" :events="suivi"/>
 </template>
 
 <script>
@@ -13,6 +13,7 @@ export default {
     name: 'Suivi',
     props: {
         intervenant: {type: Number, required: true},
+        canAddMission: {type: Boolean, required: true},
     },
     mounted()
     {

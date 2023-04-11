@@ -362,7 +362,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
 
     public function getLibelleCourt(): string
     {
-        return $this->getTypeMission()->getLibelle();
+        return $this->getTypeMission()->getLibelle().' ('.$this->getStructure()->getLibelleCourt().')';
     }
 
 

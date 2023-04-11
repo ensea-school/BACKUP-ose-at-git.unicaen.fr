@@ -110,7 +110,7 @@ class MissionSuiviForm extends AbstractForm
         $options = [];
         foreach ($missions as $mission) {
             if ($mission->canAddSuivi($this->date)) {
-                $options[$mission->getId()] = $mission->getTypeMission()->getLibelle();
+                $options[$mission->getId()] = $mission->getLibelleCourt();
             }
         }
 

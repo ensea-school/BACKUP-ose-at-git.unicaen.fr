@@ -5,7 +5,6 @@ namespace Mission;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use UnicaenPrivilege\Assertion\AssertionFactory;
-use UnicaenPrivilege\Guard\PrivilegeController;
 
 
 return [
@@ -16,7 +15,7 @@ return [
                     'route'      => '/:intervenant/missions-suivi',
                     'controller' => Controller\SuiviController::class,
                     'action'     => 'index',
-                    'privileges' => Privileges::MISSION_EDITION_REALISE,
+                    'privileges' => Privileges::MISSION_VISUALISATION,
                     //'assertion'  => Assertion\MissionAssertion::class,
                 ],
             ],
@@ -31,42 +30,41 @@ return [
                             'controller' => Controller\SuiviController::class,
                             'action'     => 'liste',
                             'privileges' => Privileges::MISSION_VISUALISATION,
-                            //'assertion'  => Assertion\MissionAssertion::class,
                         ],
                         'ajout'   => [
                             'route'      => '/ajout/:intervenant/:date',
                             'controller' => Controller\SuiviController::class,
                             'action'     => 'ajout',
                             'privileges' => Privileges::MISSION_EDITION_REALISE,
-                            //'assertion'  => Assertion\MissionAssertion::class,
+//                            'assertion'  => Assertion\SuiviAssertion::class,
                         ],
                         'modifier'  => [
                             'route'      => '/modifier/:volumeHoraireMission',
                             'controller' => Controller\SuiviController::class,
                             'action'     => 'modifier',
                             'privileges' => Privileges::MISSION_EDITION_REALISE,
-                            //'assertion'  => Assertion\MissionAssertion::class,
+//                            'assertion'  => Assertion\SuiviAssertion::class,
                         ],
                         'supprimer' => [
                             'route'      => '/supprimer/:volumeHoraireMission',
                             'controller' => Controller\SuiviController::class,
                             'action'     => 'supprimer',
                             'privileges' => Privileges::MISSION_EDITION_REALISE,
-                            //'assertion'  => Assertion\MissionAssertion::class,
+//                            'assertion'  => Assertion\SuiviAssertion::class,
                         ],
                         'valider'   => [
                             'route'      => '/valider/:volumeHoraireMission',
                             'controller' => Controller\SuiviController::class,
                             'action'     => 'valider',
                             'privileges' => Privileges::MISSION_VALIDATION_REALISE,
-                            //'assertion'  => Assertion\MissionAssertion::class,
+//                            'assertion'  => Assertion\SuiviAssertion::class,
                         ],
                         'devalider' => [
                             'route'      => '/devalider/:volumeHoraireMission',
                             'controller' => Controller\SuiviController::class,
                             'action'     => 'devalider',
                             'privileges' => Privileges::MISSION_DEVALIDATION_REALISE,
-                            //'assertion'  => Assertion\MissionAssertion::class,
+//                            'assertion'  => Assertion\SuiviAssertion::class,
                         ],
                     ],
                 ],
@@ -94,6 +92,20 @@ return [
         ],
     ],
 
+
+    'rules' => [
+        [
+            'privileges' => [
+                Privileges::MISSION_EDITION_REALISE,
+                Privileges::MISSION_VALIDATION_REALISE,
+                Privileges::MISSION_DEVALIDATION_REALISE
+            ],
+            'resources' => 'VolumeHoraireMission',
+            'assertion' => Assertion\SuiviAssertion::class,
+        ],
+    ],
+
+
     'controllers' => [
         Controller\SuiviController::class => Controller\SuiviControllerFactory::class,
     ],
@@ -102,6 +114,7 @@ return [
         Form\MissionSuiviForm::class => Form\MissionSuiviFormFactory::class,
     ],
 
-    'view_helpers' => [
+    'services' => [
+        Assertion\SuiviAssertion::class => AssertionFactory::class,
     ],
 ];

@@ -4,6 +4,7 @@ namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -13,8 +14,8 @@ use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\AxiosModel;
 
 
@@ -38,7 +39,9 @@ class SuiviController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        return compact('intervenant');
+        $canAddMission = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_REALISE));
+
+        return compact('intervenant', 'canAddMission');
     }
 
 
@@ -48,9 +51,37 @@ class SuiviController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $query = $this->getServiceMission()->suivi(['intervenant' => $intervenant]);
+        $parameters = [
+            'typeVolumeHoraireRealise' => TypeVolumeHoraire::CODE_REALISE,
+            'intervenant' => $intervenant,
+        ];
 
-        return new AxiosModel($query);
+        $dql = "
+        SELECT
+            vhm, m
+        FROM
+            " . VolumeHoraireMission::class . " vhm
+            JOIN vhm.typeVolumeHoraire tvh WITH tvh.code = :typeVolumeHoraireRealise
+            JOIN vhm.mission m
+        WHERE
+            vhm.histoDestruction IS NULL
+            AND m.intervenant = :intervenant
+        ";
+
+        $query = $this->em()->createQuery($dql)->setParameters($parameters);
+
+        $triggers = [
+            '/' => function (VolumeHoraireMission $original, array $extracted) {
+                $extracted['canEdit']      = $this->isAllowed($original, Privileges::MISSION_EDITION_REALISE);
+                $extracted['canValider']   = $this->isAllowed($original, Privileges::MISSION_VALIDATION_REALISE);
+                $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION_REALISE);
+                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION_REALISE);
+
+                return $extracted;
+            },
+        ];
+
+        return new AxiosModel($query, [], $triggers);
     }
 
 

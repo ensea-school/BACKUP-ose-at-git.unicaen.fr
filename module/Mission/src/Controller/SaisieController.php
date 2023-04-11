@@ -45,7 +45,7 @@ class SaisieController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $canAddMission = true;
+        $canAddMission = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION));
 
         return compact('intervenant', 'canAddMission');
     }

@@ -3,6 +3,7 @@
 namespace Mission\Entity\Db;
 
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Validation;
@@ -31,6 +32,8 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
     protected ?string      $titre          = null;
 
     protected ?string      $description    = null;
+
+    protected ?Structure   $structure      = null;
 
     protected ?int         $nombreHeures   = null;
 
@@ -166,6 +169,22 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
+    public function getStructure(): ?Structure
+    {
+        return $this->structure;
+    }
+
+
+
+    public function setStructure(?Structure $structure): self
+    {
+        $this->structure = $structure;
+
+        return $this;
+    }
+
+
+
     public function getNombreHeures(): ?int
     {
         return $this->nombreHeures;
@@ -283,6 +302,29 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
         }
 
         return false;
+    }
+
+
+
+    public function canSaisie(): bool
+    {
+        if ($this->isValide()) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    public function canSupprime(): bool
+    {
+        if ($this->isValide() || !empty($this->etudiants)) {
+            return false;
+        }
+
+
+        return true;
     }
 
 }

@@ -4,9 +4,9 @@ namespace Mission\Service;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Intervenant\Entity\Db\Statut;
 use Mission\Entity\Db\OffreEmploi;
 
 /**
@@ -95,6 +95,25 @@ class OffreEmploiService extends AbstractEntityService
         parent::save($entity);
 
         return $entity;
+    }
+
+
+
+    public function getOffreEmploiPrivileges(): array
+    {
+        return [
+            '/' => function (OffreEmploi $offre, array $extracted) {
+                $extracted['canSaisie'] = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
+                $extracted['canValide'] = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
+
+                /*$extracted['canValider']   = $this->isAllowed($original, Privileges::MISSION_VALIDATION);
+                $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION);*/
+
+                return $extracted;
+            },
+
+        ];
     }
 
 }

@@ -1,0 +1,89 @@
+<?php
+
+namespace Mission\Assertion;
+
+use Application\Acl\Role;
+use Application\Entity\Db\Structure;
+use Application\Provider\Privilege\Privileges;
+use Mission\Entity\Db\OffreEmploi;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use UnicaenPrivilege\View\Privilege\PrivilegeViewHelper;
+
+
+/**
+ * Description of MissionAssertion
+ *
+ * @author Antony Le Courtes <antony.lecourtes at unicaen.fr>
+ */
+class OffreEmploiAssertion extends AbstractAssertion
+{
+
+    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    {
+        /** @var Role $role */
+        $role = $this->getRole();
+
+        if (!$role instanceof Role) return false;
+
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+
+        switch (true) {
+            case $entity instanceof OffreEmploi:
+                switch ($privilege) {
+                    case Privileges::MISSION_OFFRE_EMPLOI_MODIFIER:
+                        return $this->assertOffreEmploiEdition($role, $entity);
+                    case Privileges::MISSION_OFFRE_EMPLOI_VALIDER:
+                        return $this->assertOffreEmploiValidation($role, $entity);
+                }
+            break;
+        }
+
+        return true;
+    }
+
+
+
+    protected function assertOffreEmploiEdition(Role $role, OffreEmploi $offre)
+    {
+        return $this->asserts([
+            $offre->canSaisie(),
+            $this->assertOffreEmploi($role, $offre),
+        ]);
+    }
+
+
+
+    protected function assertOffreEmploiValidation(Role $role, OffreEmploi $offre)
+    {
+        return $this->asserts([
+            $offre->canSaisie(),
+            $this->assertOffreEmploi($role, $offre),
+        ]);
+    }
+
+
+
+    protected function assertOffreEmploi(Role $role, OffreEmploi $offre)
+    {
+        return $this->asserts([
+            $this->assertStructure($role, $offre->getStructure()),
+        ]);
+    }
+
+
+
+    protected function assertStructure(Role $role, ?Structure $structure): bool
+    {
+        if (!$structure) {
+            return true;
+        }
+
+        if (!$role->getStructure()) {
+            return true;
+        }
+
+        return $role->getStructure() === $structure;
+    }
+
+}

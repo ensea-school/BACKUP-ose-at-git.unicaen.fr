@@ -4,9 +4,9 @@
             <div class="card-header">
                 <h4> {{ offre.titre }}</h4>
                 <span class="badge rounded-pill bg-info">{{ offre.nombreHeures }} heure(s)</span> &nbsp;
-                <span class="badge rounded-pill bg-info">{{ offre.nombrePostes }} poste(s)</span>&nbsp;
+                <span class="badge rounded-pill bg-info">{{ offre.nombrePostes }} poste(s) restant(s)</span>&nbsp;
                 <span v-if="offre.validation && !this.public" class="badge rounded-pill bg-success">Valider le <u-date
-                    :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}</span>
+                        :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}</span>
                 <span v-if="!offre.validation && !this.public" class="badge rounded-pill bg-warning"> En attente de validation par la DRH</span>&nbsp;
             </div>
 
@@ -30,19 +30,19 @@
             </div>
             <div class="card-footer">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a v-if="offre.validation && this.canValider && !this.public"
+                    <a v-if="offre.validation && offre.canValide && !this.public"
                        :href="devaliderUrl"
                        class="btn btn-danger"
                        @click.prevent="devalider">Devalider</a>
-                    <a v-if="!offre.validation && this.canValider  && !this.public"
+                    <a v-if="!offre.validation && offre.canValide  && !this.public"
                        :href="validerUrl"
                        class="btn btn-success"
                        @click.prevent="valider">Valider</a>
-                    <a v-if="this.canModifier && !this.public"
+                    <a v-if="offre.canSaisie && !this.public"
                        :href="saisirUrl"
                        class="btn btn-primary"
                        @click.prevent="saisir">Modifier</a>
-                    <a v-if="this.canSupprimer && !this.public"
+                    <a v-if="offre.canSupprime && !this.public"
                        :href="supprimerUrl"
                        class="btn btn-danger"
                        data-title="Suppression de l'offre"
@@ -122,7 +122,6 @@ export default {
         utilisateur: {required: false},
         intervenant: {required: false},
         extended: {type: Boolean, required: false},
-        canModifier: {type: Boolean, required: false},
         canPostuler: {type: Boolean, required: false},
         canValider: {type: Boolean, required: false},
         canSupprimer: {type: Boolean, required: false},

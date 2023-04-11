@@ -86,7 +86,8 @@ class OffreEmploiController extends AbstractController
          */
         $query = $this->getServiceOffreEmploi()->query([]);
 
-        return new AxiosModel(AxiosExtractor::extract($query));
+
+        return new AxiosModel(AxiosExtractor::extract($query, [], $this->getServiceOffreEmploi()->getOffreEmploiPrivileges()));
     }
 
 
@@ -158,8 +159,7 @@ class OffreEmploiController extends AbstractController
      *
      * @return AxiosModel
      */
-    public
-    function getAction(?OffreEmploi $offreEmploi = null)
+    public function getAction(?OffreEmploi $offreEmploi = null)
     {
         if (!$offreEmploi) {
             /** @var OffreEmploi $offreEmploi */
@@ -170,6 +170,7 @@ class OffreEmploiController extends AbstractController
 
         $query = $this->getServiceOffreEmploi()->query(['offreEmploi' => $offreEmploi]);
 
-        return new AxiosModel(AxiosExtractor::extract($query)[0]);
+        return new AxiosModel(AxiosExtractor::extract($query, [], $this->getServiceOffreEmploi()->getOffreEmploiPrivileges())[0]);
     }
+
 }

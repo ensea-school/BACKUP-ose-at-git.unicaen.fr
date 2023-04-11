@@ -32,6 +32,16 @@
 * Formule La Réunion : (#24229)
 * Formule de Picardie:  (#47224)
 
+## Notes de mise à jour
+
+Si vous rencontrez les deux messages d'erreurs suivants, merci de ne pas en tenir compte, ces erreurs n'occasionneront pas de dysfonctionnezmenet de l'application.
+
+1. Suppression de l'index TYPE_INTERVENTION_CODE_UN
+ORA-02429: cannot drop index used for enforcement of unique/primary key (offset 11
+DROP INDEX TYPE_INTERVENTION_CODE_UN
+
+2. Transformation des modèles de contrats en états de sortie ... Convertion des contrats de travail en états de sortie
+Erreur : ORA-00001: unique constraint (OSE.ETAT_SORTIE_CODE_UN) violated
 
 
 # OSE 20 (28/02/2023)

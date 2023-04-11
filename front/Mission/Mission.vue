@@ -79,7 +79,7 @@
                         </div>
                         <div>
                             <u-icon name="thumbs-up" variant="success"/>
-                            Créé le <u-date value="mission.histoCreation" /> par
+                            Créé le <u-date :value="mission.histoCreation" /> par
                             <utilisateur :nom="mission.histoCreateur.displayName" :mail="mission.histoCreateur.email"/>
                         </div>
                         <div>
@@ -93,13 +93,14 @@
                             {{ mission.contrat ? 'Contrat établi' : 'Pas de contrat' }}
                         </div>
                         <div>
-                            Aucune heure réalisée
+                            {{ mission.heuresRealisees}} heure{{ mission.heuresRealisees < 2 ? '' : 's' }} réalisée{{ mission.heuresRealisees < 2 ? '' : 's' }}
                         </div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+
     <u-modal :id="`details-${mission.id}`" title="Détail des heures prévisionnelles">
         <template #body>
             <table class="table table-bordered table-condensed">
@@ -111,7 +112,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="vh in mission.volumesHoraires" :key="vh.id">
+                <tr v-for="vh in mission.volumesHorairesPrevus" :key="vh.id">
                     <td style="text-align: right">
                         <u-heures :valeur="vh.heures"/>
                     </td>
@@ -120,13 +121,13 @@
                         Saisi par
                         <utilisateur :nom="vh.histoCreateur.displayName"
                                      :mail="vh.histoCreateur.email"/>
-                        le {{ vh.histoCreation }}
+                        le <u-date :value="vh.histoCreation" />
                         <br/>
                         <u-icon :name="vh.valide ? 'thumbs-up' : 'thumbs-down'" :variant="vh.valide ? 'success' : 'info'"/>
                         {{ vh.validation && vh.validation.id == null ? 'Autovalidé' : (!vh.validation ? 'à valider' : '') }}
                         <span v-if="vh.validation && vh.validation.histoCreateur">
                             Validé par <utilisateur :nom="vh.validation.histoCreateur.displayName"
-                                                    :mail="vh.validation.histoCreateur.email"/> le {{ vh.validation.histoCreation }}
+                                                    :mail="vh.validation.histoCreateur.email"/> le <u-date :value="vh.validation.histoCreation" />
                         </span>
                     </td>
                     <td>
@@ -207,7 +208,7 @@ export default {
             } else if (validation.id === null) {
                 return 'Autovalidée';
             } else {
-                return 'Validation du ' + validation.histoCreation + ' par ';
+                return 'Validation du ' + Util.dateToString(validation.histoCreation) + ' par ';
             }
         },
         saisie(event)

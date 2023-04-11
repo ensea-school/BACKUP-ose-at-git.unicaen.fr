@@ -29,20 +29,8 @@
                     <div class="num-jour badge bg-secondary rounded-circle">{{ jour < 10 ? '0' + jour.toString() : jour }}</div>
                 </th>
                 <td>
-                    <div class="event" :style="'border-color:'+event.color" v-for="(event,index) in eventsByJour(jour)" :key="index">
-                        <div class="event-content">
-                            <component :is="event.component" :event="event"></component>
-                        </div>
-                        <div class="event-actions">
-                            <div class="btn-group btn-group-sm">
-                                <button class="btn btn-light" @click="editEvent" :data-index="index">
-                                    <u-icon name="pen-to-square"/>
-                                </button>
-                                <button class="btn btn-light" @click="deleteEvent" :data-index="index">
-                                    <u-icon name="trash-can" class="text-danger"/>
-                                </button>
-                            </div>
-                        </div>
+                    <div class="event" :style="'border-color:'+event.color+';background-color:'+event.bgcolor" v-for="(event, index) in eventsByJour(jour)" :key="index">
+                        <component :is="event.component" :event="event"></component>
                     </div>
 
                     <div v-if="canAddEvent">
@@ -155,18 +143,6 @@ export default {
             this.$emit('addEvent', dateObj, event);
         },
 
-        editEvent(event)
-        {
-            const index = event.currentTarget.dataset.index;
-            this.$emit('editEvent', this.events[index], event);
-        },
-
-        deleteEvent(event)
-        {
-            const index = event.currentTarget.dataset.index;
-            this.$emit('deleteEvent', this.events[index], event);
-        },
-
         prevMois()
         {
             const dateObj = new Date(this.date);
@@ -255,14 +231,6 @@ th.numero-jour {
 
 .event:hover {
     background-color: white;
-}
-
-.event-content {
-    flex-grow: 1;
-}
-
-.event-actions {
-    align-self: flex-start;
 }
 
 </style>

@@ -12,21 +12,20 @@ use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
-use Mission\Entity\MissionSuivi;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\AxiosModel;
-use UnicaenVue\View\Model\VueModel;
 
 
 /**
- * Description of MissionController
+ * Description of SaisieController
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class MissionController extends AbstractController
+class SaisieController extends AbstractController
 {
     use MissionServiceAwareTrait;
     use MissionFormAwareTrait;
@@ -34,7 +33,7 @@ class MissionController extends AbstractController
     use ValidationServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use MissionSuiviFormAwareTrait;
-
+    use TypeVolumeHoraireServiceAwareTrait;
 
     /**
      * Page d'index des missions
@@ -46,41 +45,72 @@ class MissionController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $canAddMission = true;
+        $canAddMission = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION));
 
         return compact('intervenant', 'canAddMission');
     }
 
 
 
-    public function suiviAction()
+    protected function missionTriggers(): array
     {
-        /* @var $intervenant Intervenant */
-        $intervenant = $this->getEvent()->getParam('intervenant');
+        return [
+            '/' => function (Mission $original, array $extracted) {
+                $extracted['canSaisie'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canValider'] = $this->isAllowed($original, Privileges::MISSION_VALIDATION);
+                $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
 
-        $data = [
-            'nombre' => 10,
-            'chaine' => 'Sal"ut \'co',
+                return $extracted;
+            },
+            '/volumesHorairesPrevus' => function ($original, $extracted) {
+                //$extracted['canSaisie'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canValider'] = $this->isAllowed($original, Privileges::MISSION_VALIDATION);
+                $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
+
+                return $extracted;
+            },
         ];
-
-        $vm = new VueModel($data);
-        $vm->setTemplate('mission/vm-test');
-
-        return $vm;
-
-        return compact('intervenant');
     }
 
 
 
-    public function suiviDataAction()
+    /**
+     * Retourne les données pour une mission
+     *
+     * @return JsonModel
+     */
+    public function getAction(?Mission $mission = null)
+    {
+        if (!$mission) {
+            /** @var Mission $mission */
+            $mission = $this->getEvent()->getParam('mission');
+        }
+
+        // Vidage du cache d'exécution Doctrine pour être sûr de bien filter les données de la mission
+        $this->em()->clear();
+
+        $query = $this->getServiceMission()->query(['mission' => $mission]);
+
+        return new AxiosModel(AxiosExtractor::extract($query, [], $this->missionTriggers())[0]);
+    }
+
+
+
+    /**
+     * Retourne la liste des missions
+     *
+     * @return JsonModel
+     */
+    public function listeAction()
     {
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $data = $this->getServiceMission()->suivi($intervenant);
+        $query = $this->getServiceMission()->query(['intervenant' => $intervenant]);
 
-        return new AxiosModel($data);
+        return new AxiosModel($query, [], $this->missionTriggers());
     }
 
 
@@ -139,90 +169,10 @@ class MissionController extends AbstractController
         $form->setAttribute('data-id', $mission->getId());
 
         $vm = new ViewModel();
-        $vm->setTemplate('mission/saisie');
+        $vm->setTemplate('mission/saisie/saisie');
         $vm->setVariables(compact('form', 'title', 'mission'));
 
         return $vm;
-    }
-
-
-
-    /**
-     * Modifie une mission (form)
-     *
-     * @return ViewModel
-     */
-    public function suiviSaisieAction(): ViewModel
-    {
-        /** @var Intervenant $intervenant */
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-        $guid = $this->params()->fromRoute('guid', null);
-
-        if ($guid) {
-            $missionSuivi = $this->getServiceMission()->suivi($intervenant, $guid);
-            $title        = 'Modification d\'un suivi de mission';
-        } else {
-            $missionSuivi = new MissionSuivi();
-            $title        = 'Ajout d\'un suivi de mission';
-        }
-
-        $form = $this->getFormMissionSuivi();
-        $form->setIntervenant($intervenant);
-        $form->build();
-
-        $form->bindRequestSave($missionSuivi, $this->getRequest(), function ($missionSuivi) {
-            $this->getServiceMission()->saveSuivi($missionSuivi);
-            $this->updateTableauxBord($missionSuivi->getMission());
-            $this->flashMessenger()->addSuccessMessage('Suivi bien enregistré');
-        });
-        // on passe le data-guid pour pouvoir le récupérer dans la vue et mettre à jour la liste
-        $form->setAttribute('data-guid', $missionSuivi->guid());
-
-        $vm = new ViewModel();
-        $vm->setTemplate('mission/suivi-saisie');
-        $vm->setVariables(compact('form', 'title'));
-
-        return $vm;
-    }
-
-
-
-    /**
-     * Retourne la liste des missions
-     *
-     * @return JsonModel
-     */
-    public function listeAction()
-    {
-        /* @var $intervenant Intervenant */
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-        $query = $this->getServiceMission()->query(['intervenant' => $intervenant]);
-
-        return new AxiosModel($query);
-    }
-
-
-
-    /**
-     * Retourne les données pour une mission
-     *
-     * @return JsonModel
-     */
-    public function getAction(?Mission $mission = null)
-    {
-        if (!$mission) {
-            /** @var Mission $mission */
-            $mission = $this->getEvent()->getParam('mission');
-        }
-
-        // Vidage du cache d'exécution Doctrine pour être sûr de bien filter les données de la mission
-        $this->em()->clear();
-
-        $query = $this->getServiceMission()->query(['mission' => $mission]);
-
-        return new AxiosModel(AxiosExtractor::extract($query)[0]);
     }
 
 

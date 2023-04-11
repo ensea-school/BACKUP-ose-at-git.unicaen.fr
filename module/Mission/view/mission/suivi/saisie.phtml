@@ -6,7 +6,15 @@
  * @var $form              \Mission\Form\MissionSuiviForm
  */
 
-echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNoNamespace();
+// S'il n'y a qu'une seule mission et qu'on en a pas déjà une de sélectionnée, alors on la sélectionne !
+if (1 === count($form->get('mission')->getValueOptions())){
+    if (!$form->get('mission')->getValue()){
+        $firstKey = key($form->get('mission')->getValueOptions());
+        $form->get('mission')->setValue($firstKey);
+    }
+}
+
+//echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNoNamespace();
 echo $this->form()->openTag($form);
 
 echo $this->tag('h1', ['class' => 'page-header'])->html($title);
@@ -30,9 +38,6 @@ echo '</div>';
 
 echo '<div class="row">';
 
-echo '<div class="col-md-4">';
-echo $this->formControlGroup($form->get('heures'));
-echo '</div>';
 echo '<div class="col-md-4"><label>&nbsp;</label>';
 echo $this->formControlGroup($form->get('nocturne'));
 echo '</div>';

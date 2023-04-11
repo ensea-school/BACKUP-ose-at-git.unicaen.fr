@@ -14,7 +14,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class MissionAssertion extends AbstractAssertion
+class WorkflowAssertion extends AbstractAssertion
 {
 
     /* ---- Routage général ---- */
@@ -45,26 +45,6 @@ class MissionAssertion extends AbstractAssertion
         }
 
         return false;
-    }
-
-
-
-    /**
-     * Exemple
-     */
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
-    {
-
-//        switch (true) {
-//            case $entity instanceof VotreEntite:
-//                switch ($privilege) {
-//                    case Privileges::VOTRE_PRIVILEGE: // Attention à bien avoir généré le fournisseur de privilèges si vous utilisez la gestion des privilèges d'UnicaenAuth
-//                        return $this->assertVotreAssertion($role, $entity);
-//                }
-//                break;
-//        }
-
-        return true;
     }
 
 

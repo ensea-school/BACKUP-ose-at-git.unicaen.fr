@@ -65,7 +65,8 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
             'histoCreateur',
             'heures',
             'heuresValidees',
-            'volumesHoraires',
+            'heuresRealisees',
+            'volumesHorairesPrevus',
             'contrat',
             'valide',
             'validation',
@@ -294,7 +295,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
     public function addValidation(Validation $validation): self
     {
         $this->validations[] = $validation;
-        foreach ($this->getVolumesHoraires() as $vh) {
+        foreach ($this->getVolumesHorairesPrevus() as $vh) {
             if (!$vh->isValide()) {
                 $vh->addValidation($validation);
             }
@@ -308,7 +309,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
     public function removeValidation(Validation $validation): self
     {
         $this->validations->removeElement($validation);
-        foreach ($this->getVolumesHoraires() as $vh) {
+        foreach ($this->getVolumesHorairesPrevus() as $vh) {
             $vh->removeValidation($validation);
         }
 
@@ -359,12 +360,33 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
 
 
 
+    public function getLibelleCourt(): string
+    {
+        return $this->getTypeMission()->getLibelle().' ('.$this->getStructure()->getLibelleCourt().')';
+    }
+
+
+
     /**
      * @return Collection|VolumeHoraireMission[]
      */
-    public function getVolumesHoraires(): Collection
+    public function getVolumesHorairesPrevus(): Collection
     {
-        return $this->volumesHoraires;
+        return $this->volumesHoraires->filter(function(VolumeHoraireMission $vhm){
+            return $vhm->getTypeVolumeHoraire()->isPrevu();
+        });
+    }
+
+
+
+    /**
+     * @return Collection|VolumeHoraireMission[]
+     */
+    public function getVolumesHorairesRealises(): Collection
+    {
+        return $this->volumesHoraires->filter(function(VolumeHoraireMission $vhm){
+            return $vhm->getTypeVolumeHoraire()->isRealise();
+        });
     }
 
 
@@ -390,7 +412,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
     public function hasContrat(): bool
     {
         /** @var VolumeHoraireMission[] $vhs */
-        $vhs = $this->getVolumesHoraires();
+        $vhs = $this->getVolumesHorairesPrevus();
 
         foreach ($vhs as $vh) {
             if ($vh->estNonHistorise() && $vh->getContrat() && $vh->getContrat()->estNonHistorise()) {
@@ -399,6 +421,23 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
         }
 
         return false;
+    }
+
+
+
+    public function heuresRealisees(): float
+    {
+        $vhs = $this->getVolumesHorairesRealises();
+
+        $heures = 0;
+
+        foreach ($vhs as $vh) {
+            if ($vh->estNonHistorise()) {
+                $heures += $vh->getHeures();
+            }
+        }
+
+        return $heures;
     }
 
 
@@ -429,4 +468,10 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
         return !$this->isValide();
     }
 
+
+
+    public function canAddSuivi(\DateTime $date): bool
+    {
+        return $this->getDateDebut() <= $date && $this->getDateFin() >= $date;
+    }
 }

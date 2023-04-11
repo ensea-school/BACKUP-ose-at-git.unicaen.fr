@@ -10,83 +10,75 @@ use Unicaen\OpenDocument\Calc;
  * @var $viewFile   string
  */
 
-class Adresse implements \UnicaenVue\Axios\AxiosExtractorInterface {
-    protected int $numero = 1;
-    protected string $rue = 'Allée des mésanges';
-    protected int $cp = 14000;
-    protected string $ville = 'Caen';
+?>
 
-    public function getNumero(): int
-    {
-        return $this->numero;
+<button onclick="ts()">Suceess</button>
+<button onclick="te()">Error</button>
+
+<script>
+
+
+    function toast(message, severity) {
+        const bgClasses = {
+            info: 'bg-info',
+            success: 'bg-success',
+            warning: 'bg-warning',
+            error: 'bg-danger'
+        };
+        const iconClasses = {
+            info: 'info-circle',
+            success: 'check-circle',
+            warning: 'exclamation-circle',
+            error: 'exclamation-triangle'
+        };
+
+        let toastContainer = document.getElementById('unicaen-vue-toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.id = 'unicaen-vue-toast-container';
+            toastContainer.classList.add('toast-container', 'position-fixed', 'top-0', 'end-0', 'p-3');
+            document.body.appendChild(toastContainer);
+        }
+
+        // Création de l'élément HTML pour le toast
+        const toast = document.createElement('div');
+        toast.classList.add('toast', 'show', 'text-white', bgClasses[severity] ? bgClasses[severity] : 'bg-secondary');
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+        toast.setAttribute('aria-atomic', 'true');
+
+        if (severity === 'error'){
+            toast.setAttribute('style', 'width:100%');
+        }
+
+        const toastContent =
+            '<button class="btn-close btn-close-white h5" style="float:right" data-bs-dismiss="toast" aria-label="Close"></button>' +
+            '<i class="icon fas fa-' + iconClasses[severity] + '" style="float: left;font-size: 26pt;padding-left: .4rem;margin-top:.4rem;padding-right: 1rem;"></i>' +
+            '<div class="toast-body">' + message + '  </div>';
+
+
+        toast.innerHTML = toastContent;
+
+        // Ajout du toast à l'élément du conteneur de toasts
+        toastContainer.appendChild(toast);
+
+        // Affichage du toast
+        //const bsToast = new bootstrap.Toast(toast);
+        //bsToast.show();
+
+        // Masquage du toast si ce n'est pas une erreur
+        if (severity !== 'error') {
+            // setTimeout(() => {
+            //     toast.classList.remove('show');
+            // }, 3000);
+        }
     }
 
-    public function getRue(): string
-    {
-        return $this->rue;
-    }
+    $(() => {
+        toast('mon success est phénoménal et j\'ai envie d\'en parler tout le temps mais ce serait bien trop long à expliquer et patati et patatta', 'success');
+        toast('Et voici une info à ne pas rater!!', 'info');
+        toast('Warning', 'warning');
+        toast('Erreur magistrale!!!', 'error');
+    });
 
-    public function getCp(): int
-    {
-        return $this->cp;
-    }
-
-    public function getVille(): string
-    {
-        return $this->ville;
-    }
-
-
-
-    public function axiosDefinition(): array
-    {
-        return ['cp', 'ville'];
-    }
-
-}
-
-class Personne
-{
-    protected string $nom = 'Dupont';
-    protected string $prenom = 'Robert';
-    protected int $age = 42;
-    protected Adresse $adresse;
-
-    public function __construct()
-    {
-        $this->adresse = new Adresse();
-    }
-
-    public function getNom(): string
-    {
-        return $this->nom;
-    }
-
-    public function getPrenom(): string
-    {
-        return $this->prenom;
-    }
-
-    public function getAge(): int
-    {
-        return $this->age;
-    }
-
-    public function isMajeur(): bool
-    {
-        return $this->age >= 18;
-    }
-
-    public function getAdresse(): Adresse
-    {
-        return $this->adresse;
-    }
-
-
-}
-
-$personnes = [new Personne(),new Personne()];
-
-$properties = ['nom', 'prenom', 'isMajeur', 'adresse'];
-$extracted = \UnicaenVue\Axios\AxiosExtractor::extract($personnes,$properties);
-var_dump($extracted);
+</script>

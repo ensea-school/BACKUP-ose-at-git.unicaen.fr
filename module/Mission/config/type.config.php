@@ -38,16 +38,18 @@ return [
                 'intervenants' => [
                     'pages' => [
                         'missions-type' => [
-                            'label'    => "Type de mission",
+                            'label'    => "Types de missions",
                             'route'    => 'missions-type',
-                            'resource' => PrivilegeController::getResourceId(MissionTypeController::class, 'index'),
+                            'resource' => PrivilegeController::getResourceId(Controller\MissionTypeController::class, 'index'),
                             'order'    => 70,
+                            'color'    => '#BBCF55',
                         ],
                     ],
                 ],
             ],
         ],
     ],
+
 
     'controllers' => [
         Controller\MissionTypeController::class => Controller\MissionTypeControllerFactory::class,

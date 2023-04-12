@@ -9,7 +9,19 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'TYPE_MISSION_ID_SEQ',
     'columns'     => [
-        'ANNEE_ID'              => [
+        'ACCOMPAGNEMENT_ETUDIANTS' => [
+            'name'        => 'ACCOMPAGNEMENT_ETUDIANTS',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 12,
+            'commentaire' => NULL,
+        ],
+        'ANNEE_ID'                 => [
             'name'        => 'ANNEE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +33,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'CODE'                  => [
+        'CODE'                     => [
             'name'        => 'CODE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -33,7 +45,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATEUR_ID'     => [
+        'HISTO_CREATEUR_ID'        => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -45,7 +57,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'HISTO_CREATION'        => [
+        'HISTO_CREATION'           => [
             'name'        => 'HISTO_CREATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -57,7 +69,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTEUR_ID'  => [
+        'HISTO_DESTRUCTEUR_ID'     => [
             'name'        => 'HISTO_DESTRUCTEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -69,7 +81,7 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
-        'HISTO_DESTRUCTION'     => [
+        'HISTO_DESTRUCTION'        => [
             'name'        => 'HISTO_DESTRUCTION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -81,7 +93,7 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATEUR_ID' => [
+        'HISTO_MODIFICATEUR_ID'    => [
             'name'        => 'HISTO_MODIFICATEUR_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -93,7 +105,7 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'HISTO_MODIFICATION'    => [
+        'HISTO_MODIFICATION'       => [
             'name'        => 'HISTO_MODIFICATION',
             'type'        => 'date',
             'bdd-type'    => 'DATE',
@@ -105,7 +117,7 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
-        'ID'                    => [
+        'ID'                       => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -117,7 +129,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'LIBELLE'               => [
+        'LIBELLE'                  => [
             'name'        => 'LIBELLE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
@@ -129,7 +141,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'TAUX_REMU_ID'          => [
+        'TAUX_REMU_ID'             => [
             'name'        => 'TAUX_REMU_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

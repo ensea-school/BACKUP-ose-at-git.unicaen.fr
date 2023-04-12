@@ -2155,6 +2155,7 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
         'TAUX_REMU_ID',
+        'ACCOMPAGNEMENT_ETUDIANTS',
     ],
     'MISSION'                        => [
         'ID',

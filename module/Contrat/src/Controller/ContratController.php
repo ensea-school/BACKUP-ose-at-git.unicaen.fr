@@ -9,6 +9,8 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Contrat\Entity\Db\ContratServiceListe;
+use Contrat\Service\ContratServiceListeServiceAwareTrait;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\TauxHoraireHETDServiceAwareTrait;
@@ -29,6 +31,7 @@ use Laminas\Http\Response;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Renderer\PhpRenderer;
 use LogicException;
+use Service\Entity\Db\TypeService;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
@@ -55,6 +58,7 @@ class ContratController extends AbstractController
     use WorkflowServiceAwareTrait;
     use EnvoiMailContratFormAwareTrait;
     use NoteServiceAwareTrait;
+    use ContratServiceListeServiceAwareTrait;
 
     private $renderer;
 
@@ -135,29 +139,42 @@ class ContratController extends AbstractController
 
         $contrats = $sContrat->getList($qb);
 
-        //Récupération email intervenant (Perso puis unicaen)
-        $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
-        $emailPerso         = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
-        $emailIntervenant   = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmailPro();
-
-        /* Récupération des services par contrat et par structure (pour les non contractualisés) */
         $services = [
             'contractualises'     => [],
             'non-contractualises' => [],
         ];
 
         foreach ($contrats as $contrat) {
-            $services['contractualises'][$contrat->getId()] = $this->getProcessusContrat()->getServices($intervenant, $contrat, $role->getStructure());
+            $services['contractualises'][$contrat->getId()] = [];
         }
 
-        $nc = $this->getProcessusContrat()->getServices($intervenant, null, $role->getStructure());
-        foreach ($nc as $service) {
-            $sid = $service->getElementPedagogique()->getStructure()->getId();
-            if (!isset($services['non-contractualises'][$sid])) {
-                $services['non-contractualises'][$sid] = [];
+            $sContratListe   = $this->getServiceContratServiceListe();
+        $needToSeeResult = $sContratListe->getListeServiceContratIntervenant($intervenant);
+
+
+        /** @var ContratServiceListe $serviceTest */
+        foreach ($needToSeeResult as $serviceTest) {
+            if ($serviceTest->getContrat() != null) {
+                if (!isset($services['contractualises'][$serviceTest->getContrat()->getId()][$serviceTest->getTypeService()->getCode()])) {
+                    $services['contractualises'][$serviceTest->getContrat()->getId()][$serviceTest->getTypeService()->getCode()] = [];
+                }
+                $services ['contractualises'][$serviceTest->getContrat()->getId()][$serviceTest->getTypeService()->getCode()][] = $serviceTest;
+            } else {
+                if (!isset($services['non-contractualises'][$serviceTest->getStructure()->getId()])) {
+                    $services['non-contractualises'][$serviceTest->getStructure()->getId()] = [];
+                    foreach (TypeService::CODES as $code) {
+                        $services['non-contractualises'][$serviceTest->getStructure()->getId()][$code]     = [];
+                    }
+                }
+                $services ['non-contractualises'][$serviceTest->getStructure()->getId()][$serviceTest->getTypeService()->getCode()][$serviceTest->getId()] = $serviceTest;
             }
-            $services['non-contractualises'][$sid][] = $service;
         }
+
+
+        //Récupération email intervenant (Perso puis unicaen)
+        $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $emailPerso         = ($dossierIntervenant) ? $dossierIntervenant->getEmailPerso() : '';
+        $emailIntervenant   = (!empty($emailPerso)) ? $emailPerso : $intervenant->getEmailPro();
 
 
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
@@ -196,6 +213,7 @@ class ContratController extends AbstractController
             $this->flashMessenger()->addSuccessMessage("La création de contrat/avenant pour $intervenant n'est pas possible.");
         } else {
             try {
+
                 $this->getProcessusContrat()->enregistrer($contrat);
                 if ($contratDirect) {
                     $this->getProcessusContrat()->valider($contrat);

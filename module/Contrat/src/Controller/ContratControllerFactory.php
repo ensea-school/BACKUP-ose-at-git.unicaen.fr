@@ -2,6 +2,7 @@
 
 namespace Contrat\Controller;
 
+use Contrat\Service\ContratServiceListeService;
 use Psr\Container\ContainerInterface;
 
 class ContratControllerFactory
@@ -19,6 +20,7 @@ class ContratControllerFactory
         $renderer = $container->get('ViewRenderer');
 
         $controller = new ContratController($renderer);
+        $controller->setServiceContratServiceListe($container->get(ContratServiceListeService::class));
 
         return $controller;
     }

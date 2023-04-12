@@ -5,6 +5,7 @@ namespace Contrat;
 use Application\Provider\Privilege\Privileges;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Controller\ContratController;
+use Contrat\Service\ContratServiceListeService;
 
 return [
     'routes' => [
@@ -195,10 +196,11 @@ return [
         ContratController::class => \Contrat\Controller\ContratControllerFactory::class,
     ],
     'services'     => [
-        \Contrat\Assertion\ContratAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
-        \Contrat\Service\ContratService::class     => \Contrat\Service\ContratServiceFactory::class,
-        \Contrat\Service\TypeContratService::class => \Contrat\Service\TypeContratServiceFactory::class,
-        \Contrat\Processus\ContratProcessus::class => \Contrat\Processus\ContratProcessusFactory::class,
+        \Contrat\Assertion\ContratAssertion::class         => \UnicaenAuth\Assertion\AssertionFactory::class,
+        \Contrat\Service\ContratService::class             => \Contrat\Service\ContratServiceFactory::class,
+        \Contrat\Service\TypeContratService::class         => \Contrat\Service\TypeContratServiceFactory::class,
+        \Contrat\Processus\ContratProcessus::class         => \Contrat\Processus\ContratProcessusFactory::class,
+        \Contrat\Service\ContratServiceListeService::class => \Contrat\Service\ContratServiceListeServiceFactory::class,
     ],
     'view_helpers' => [
     ],

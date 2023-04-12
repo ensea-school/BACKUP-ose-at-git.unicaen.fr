@@ -25,7 +25,9 @@ use Laminas\Mime\Message;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part;
 use LogicException;
+use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeService;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
@@ -112,6 +114,61 @@ class ContratProcessus extends AbstractProcessus
         return $services;
     }
 
+
+    public function getServicesRef(Intervenant $intervenant, Contrat $contrat = null, Structure $structure = null, bool $detach = true): array
+    {
+        $services = [];
+
+        $fContrat    = "vhr.contrat = :contrat";
+        $fNonContrat = "vhr.contrat IS NULL "
+            . "AND tvh.code = '" . TypeVolumeHoraire::CODE_PREVU . "' "
+            . "AND evhr.code = '" . EtatVolumeHoraire::CODE_VALIDE . "' ";
+
+        if ($structure) {
+            $fStructure = "AND str = :structure";
+        } else {
+            $fStructure = '';
+        }
+
+        $dql   = "
+        SELECT
+          sr, fr, vhr, str, i, evhr, tvh
+        FROM
+          Referentiel\Entity\Db\ServiceReferentiel sr
+          JOIN sr.volumeHoraireReferentiel      vhr
+          JOIN sr.fonctionReferentiel fr
+          JOIN sr.structure         str
+          JOIN sr.intervenant        i
+          JOIN vhr.etatVolumeHoraireReferentiel evhr
+          JOIN vhr.typeVolumeHoraire tvh
+        WHERE
+          i = :intervenant
+          AND sr.histoDestruction IS NULL
+          AND vhr.histoDestruction IS NULL
+          AND sr.motifNonPaiement IS NULL
+          AND " . ($contrat ? $fContrat : $fNonContrat) . "
+          $fStructure
+        ";
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameter('intervenant', $intervenant);
+        if ($contrat) {
+            $query->setParameter('contrat', $contrat);
+        }
+        if ($structure) {
+            $query->setParameter('structure', $structure);
+        }
+
+        foreach ($query->execute() as $service) {
+            /* @var $service Service */
+            if ($detach) {
+                $this->getEntityManager()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
+            }
+            $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
+            $services[$service->getId()] = $service;
+        }
+
+        return $services;
+    }
 
 
     /**
@@ -205,6 +262,17 @@ class ContratProcessus extends AbstractProcessus
                 /* @var $vh VolumeHoraire */
                 $vh->setContrat($contrat);
                 $this->getEntityManager()->persist($vh);
+            }
+        }
+
+        // on récupère les services non contractualisés et on la place les VH correspondants dans le contrat
+        $servicesRef = $this->getServicesRef($contrat->getIntervenant(), null, $contrat->getStructure(), false);
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
+        foreach ($servicesRef as $serviceRef) {
+            foreach ($serviceRef->getVolumeHoraireReferentiel() as $vhr) {
+                /* @var $vhr VolumeHoraireReferentiel */
+                $vhr->setContrat($contrat);
+                $this->getEntityManager()->persist($vhr);
             }
         }
         $this->getORMEventListenersHistoriqueListener()->setEnabled(true);

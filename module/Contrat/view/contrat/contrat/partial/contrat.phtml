@@ -148,7 +148,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 <small>(cliquez pour afficher/cacher)</small>
             </a>
             <div class="collapse" id="details-enseignements-contrat-<?= $contrat->getId() ?>">
-                <?= $this->enseignements(current($services)->getTypeVolumeHoraire(), current($services)->getIntervenant(), $services)->setReadOnly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
+                <?= $this->partial('contrat/contrat/partial/contrat-heures', ['contrat' => $contrat, 'services' => $services, 'structure' => $contrat->getStructure()]); ?>
             </div>
         </div>
     </div>

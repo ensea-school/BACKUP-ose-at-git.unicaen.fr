@@ -53,7 +53,7 @@ class SuiviController extends AbstractController
 
         $parameters = [
             'typeVolumeHoraireRealise' => TypeVolumeHoraire::CODE_REALISE,
-            'intervenant' => $intervenant,
+            'intervenant'              => $intervenant,
         ];
 
         $dql = "
@@ -70,10 +70,24 @@ class SuiviController extends AbstractController
 
         $query = $this->em()->createQuery($dql)->setParameters($parameters);
 
+        $properties = [
+            'id',
+            ['mission', ['id', 'libelleCourt']],
+            'date',
+            'heureDebut',
+            'heureFin',
+            'heures',
+            'nocturne',
+            'formation',
+            'description',
+            'valide',
+            'validation',
+        ];
+
         $triggers = [
             '/' => function (VolumeHoraireMission $original, array $extracted) {
-                $extracted['canEdit']      = $this->isAllowed($original, Privileges::MISSION_EDITION_REALISE);
-                $extracted['canValider']   = $this->isAllowed($original, Privileges::MISSION_VALIDATION_REALISE);
+                $extracted['canEdit'] = $this->isAllowed($original, Privileges::MISSION_EDITION_REALISE);
+                $extracted['canValider'] = $this->isAllowed($original, Privileges::MISSION_VALIDATION_REALISE);
                 $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION_REALISE);
                 $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION_REALISE);
 
@@ -81,7 +95,7 @@ class SuiviController extends AbstractController
             },
         ];
 
-        return new AxiosModel($query, [], $triggers);
+        return new AxiosModel($query, $properties, $triggers);
     }
 
 

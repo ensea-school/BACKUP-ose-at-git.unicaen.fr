@@ -58,7 +58,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFIC
                         type: 'POST',
                         url: unicaenVue.url('piece-jointe/type-piece-jointe-trier'),
                         data: {champsIds: champsIds},
-                        success: function (res) { Util.alert(res.msg, 'success'); },
+                        success: function (res) { unicaenVue.flashMessenger.toast(res.msg, 'success'); },
                     });
                 }
             });

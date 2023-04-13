@@ -1587,9 +1587,9 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get IndicModifDossier
      *
-     * @return Collection|Mission[]
+     * @return Collection|null
      */
-    public function getMissions(): Collection
+    public function getMissions(): ?Collection
     {
         if (null === $this->missions) {
             return null;

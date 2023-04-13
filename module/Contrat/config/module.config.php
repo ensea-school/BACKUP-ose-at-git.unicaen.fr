@@ -2,7 +2,7 @@
 
 namespace Contrat;
 
-use Application\Provider\Privilege\Privileges;
+use UnicaenPrivilege\Provider\Privilege\Privileges;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Controller\ContratController;
 use Contrat\Service\ContratServiceListeService;
@@ -196,7 +196,7 @@ return [
         ContratController::class => \Contrat\Controller\ContratControllerFactory::class,
     ],
     'services'     => [
-        \Contrat\Assertion\ContratAssertion::class         => \UnicaenAuth\Assertion\AssertionFactory::class,
+        \Contrat\Assertion\ContratAssertion::class         => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         \Contrat\Service\ContratService::class             => \Contrat\Service\ContratServiceFactory::class,
         \Contrat\Service\TypeContratService::class         => \Contrat\Service\TypeContratServiceFactory::class,
         \Contrat\Processus\ContratProcessus::class         => \Contrat\Processus\ContratProcessusFactory::class,

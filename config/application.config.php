@@ -133,7 +133,6 @@ class AppConfig
             'UnicaenSiham',
             'UnicaenVue',
             'Application',
-            'Agrement',
             'Intervenant',
             'Service',
             'Enseignement',
@@ -145,7 +144,6 @@ class AppConfig
             'Plafond',
             'Indicateur',
             'ExportRh',
-            'Contrat',
             'Dossier',
         ];
 

@@ -133,10 +133,10 @@ class AppConfig
             'UnicaenSiham',
             'UnicaenVue',
             'Application',
+            'Agrement',
             'Intervenant',
             'Service',
             'Enseignement',
-            'Agrement',
             'Referentiel',
             'Mission',
             'Paiement',
@@ -145,8 +145,8 @@ class AppConfig
             'Plafond',
             'Indicateur',
             'ExportRh',
-            'Contrat',
             'Dossier',
+            'Contrat',
         ];
 
         if (!self::inConsole()) {

@@ -2,7 +2,7 @@
 
 namespace Contrat;
 
-use UnicaenPrivilege\Provider\Privilege\Privileges;
+use Application\Provider\Privilege\Privileges;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Controller\ContratController;
 use Contrat\Service\ContratServiceListeService;

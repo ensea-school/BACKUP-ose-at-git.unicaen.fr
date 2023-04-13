@@ -5,9 +5,8 @@ namespace Mission\Entity\Db;
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Traits\ParametreEntityTrait;
 use Paiement\Entity\Db\TauxRemu;
-use UnicaenVue\Axios\AxiosExtractorInterface;
 
-class TypeMission implements ParametreEntityInterface, AxiosExtractorInterface
+class TypeMission implements ParametreEntityInterface
 {
     use ParametreEntityTrait;
 
@@ -20,17 +19,6 @@ class TypeMission implements ParametreEntityInterface, AxiosExtractorInterface
     protected ?TauxRemu $tauxRemu = null;
 
     protected bool $accompagnementEtudiants = false;
-
-
-
-    public function axiosDefinition(): array
-    {
-        return [
-            'id',
-            'libelle',
-            'accompagnementEtudiants',
-        ];
-    }
 
 
 

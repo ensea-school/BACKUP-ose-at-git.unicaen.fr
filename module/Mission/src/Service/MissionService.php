@@ -2,14 +2,14 @@
 
 namespace Mission\Service;
 
-use Application\Entity\Db\Intervenant;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\Query;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use UnicaenVue\View\Model\AxiosModel;
 
 /**
  * Description of MissionService
@@ -51,7 +51,7 @@ class MissionService extends AbstractEntityService
 
 
 
-    public function query(array $parameters): Query
+    public function data(array $parameters): AxiosModel
     {
         $dql = "
         SELECT 
@@ -77,7 +77,57 @@ class MissionService extends AbstractEntityService
           vh.histoCreation
         ";
 
-        return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+        $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+
+        $properties = [
+            'id',
+            ['typeMission', ['libelle', 'accompagnementEtudiants']],
+            'dateDebut',
+            'dateFin',
+            ['structure', ['libelle']],
+            ['tauxRemu', ['libelle']],
+            'description',
+            'histoCreation',
+            'histoCreateur',
+            'heures',
+            'heuresValidees',
+            'heuresRealisees',
+            ['volumesHorairesPrevus', [
+                'id',
+                'heures',
+                'valide',
+                'validation',
+                'histoCreation',
+                'histoCreateur',
+            ]],
+            ['etudiants', ['id', 'code', 'nomUsuel', 'prenom', 'dateNaissance']],
+            'contrat',
+            'valide',
+            'validation',
+        ];
+
+        $triggers = [
+            [
+                '/'                      => function (Mission $original, array $extracted) {
+                    $extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                    $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                    $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                    $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+
+                    return $extracted;
+                },
+                '/volumesHorairesPrevus' => function ($original, $extracted) {
+                    //$extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                    $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                    $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                    $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+
+                    return $extracted;
+                },
+            ]
+        ];
+
+        return new AxiosModel($query, $properties, $triggers);
     }
 
 

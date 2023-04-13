@@ -240,6 +240,13 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
+    public function getLibelle(): string
+    {
+        return $this->getLibelleCourt();
+    }
+
+
+
     /**
      * Returns the string identifier of the Resource
      *

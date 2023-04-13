@@ -16,7 +16,6 @@ use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\AxiosModel;
 
 
@@ -52,30 +51,6 @@ class SaisieController extends AbstractController
 
 
 
-    protected function missionTriggers(): array
-    {
-        return [
-            '/' => function (Mission $original, array $extracted) {
-                $extracted['canSaisie'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
-                $extracted['canValider'] = $this->isAllowed($original, Privileges::MISSION_VALIDATION);
-                $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
-
-                return $extracted;
-            },
-            '/volumesHorairesPrevus' => function ($original, $extracted) {
-                //$extracted['canSaisie'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
-                $extracted['canValider'] = $this->isAllowed($original, Privileges::MISSION_VALIDATION);
-                $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
-
-                return $extracted;
-            },
-        ];
-    }
-
-
-
     /**
      * Retourne les données pour une mission
      *
@@ -91,9 +66,10 @@ class SaisieController extends AbstractController
         // Vidage du cache d'exécution Doctrine pour être sûr de bien filter les données de la mission
         $this->em()->clear();
 
-        $query = $this->getServiceMission()->query(['mission' => $mission]);
+        $model = $this->getServiceMission()->data(['mission' => $mission]);
+        $model->returnFirstItem();
 
-        return new AxiosModel(AxiosExtractor::extract($query, [], $this->missionTriggers())[0]);
+        return $model;
     }
 
 
@@ -108,9 +84,9 @@ class SaisieController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $query = $this->getServiceMission()->query(['intervenant' => $intervenant]);
+        $model = $this->getServiceMission()->data(['intervenant' => $intervenant]);
 
-        return new AxiosModel($query, [], $this->missionTriggers());
+        return $model;
     }
 
 

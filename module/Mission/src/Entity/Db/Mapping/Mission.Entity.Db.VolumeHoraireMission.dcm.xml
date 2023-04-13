@@ -22,6 +22,8 @@
         <field name="horaireDebut" type="datetime" column="HORAIRE_DEBUT" nullable="false"/>
         <field name="horaireFin" type="datetime" column="HORAIRE_FIN" nullable="false"/>
         <field name="nocturne" type="boolean" column="NOCTURNE" nullable="false"/>
+        <field name="formation" type="boolean" column="FORMATION" nullable="false"/>
+        <field name="description" type="string" column="DESCRIPTION" length="4000"  nullable="true"/>
 
         <many-to-many field="validations" target-entity="Application\Entity\Db\Validation">
             <join-table name="VALIDATION_VOL_HORAIRE_MISS">

@@ -4,8 +4,8 @@ namespace Application;
 
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use UnicaenAuth\Guard\PrivilegeController;
-use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+use UnicaenPrivilege\Guard\PrivilegeController;
+use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router'          => [
@@ -274,7 +274,7 @@ return [
             Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementService::class,
         ],
         'factories'  => [
-            Assertion\PaiementAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\PaiementAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [

@@ -10,6 +10,7 @@ use Paiement\Form\TauxValeurFormAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenVue\View\Model\AxiosModel;
 
 /**
  * Description of TauxRemuController
@@ -52,7 +53,7 @@ class TauxRemuController extends AbstractController
         }
 
 
-        return $this->axios()->send($liste);
+        return new AxiosModel($liste);
     }
 
 
@@ -130,7 +131,7 @@ class TauxRemuController extends AbstractController
 
         $this->flashMessenger()->addSuccessMessage("Taux supprimée avec succès.");
 
-        return $this->axios()->send([]);
+        return new AxiosModel([]);
     }
 
     /**
@@ -142,7 +143,7 @@ class TauxRemuController extends AbstractController
     {
         $tauxRemu = $this->getEvent()->getParam('tauxRemu');
 
-        return $this->axios()->send($tauxRemu);
+        return new AxiosModel($tauxRemu);
     }
 
     public function supprimerValeurAction(): MessengerViewModel

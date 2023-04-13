@@ -3,7 +3,7 @@
 namespace Application\View\Helper\Chargens;
 
 use Application\Form\Chargens\FiltreForm;
-use Application\View\Helper\AbstractViewHelper;
+use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 
@@ -13,7 +13,7 @@ use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class ChargensViewHelper extends AbstractViewHelper
+class ChargensViewHelper extends AbstractHtmlElement
 {
     use TypeHeuresServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;

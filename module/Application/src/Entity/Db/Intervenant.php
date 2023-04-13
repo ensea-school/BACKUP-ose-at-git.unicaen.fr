@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Agrement\Entity\Db\Agrement;
+use Agrement\Entity\Db\TypeAgrement;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\CiviliteAwareTrait;
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
@@ -9,12 +11,15 @@ use Application\Entity\Db\Traits\GradeAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Traits\AdresseTrait;
 use Application\Interfaces\AdresseInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\TypeContrat;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\Traits\DisciplineAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\HistoIntervenantService;
@@ -215,27 +220,27 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     protected $validiteFin;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     protected $affectation;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     protected $agrement;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     protected $contrat;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     private $formuleResultat;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     protected $histoService;
 
@@ -245,34 +250,39 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     protected $miseEnPaiementIntervenantStructure;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     protected $modificationServiceDu;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     protected $pieceJointe;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     protected $service;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     protected $serviceReferentiel;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     protected $validation;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     protected $indicModifDossier;
+
+    /**
+     * @var Collection
+     */
+    protected $missions;
 
     /**
      * Cache
@@ -305,17 +315,18 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      */
     public function __construct()
     {
-        $this->affectation                        = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->agrement                           = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->contrat                            = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleResultat                    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->histoService                       = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->miseEnPaiementIntervenantStructure = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->modificationServiceDu              = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pieceJointe                        = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->service                            = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->serviceReferentiel                 = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->validation                         = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->affectation                        = new ArrayCollection();
+        $this->agrement                           = new ArrayCollection();
+        $this->contrat                            = new ArrayCollection();
+        $this->formuleResultat                    = new ArrayCollection();
+        $this->histoService                       = new ArrayCollection();
+        $this->miseEnPaiementIntervenantStructure = new ArrayCollection();
+        $this->modificationServiceDu              = new ArrayCollection();
+        $this->pieceJointe                        = new ArrayCollection();
+        $this->service                            = new ArrayCollection();
+        $this->serviceReferentiel                 = new ArrayCollection();
+        $this->validation                         = new ArrayCollection();
+        $this->missions                           = new ArrayCollection();
     }
 
 
@@ -1258,7 +1269,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get affectation
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAffectation()
     {
@@ -1270,7 +1281,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get agrement
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAgrement(TypeAgrement $typeAgrement = null)
     {
@@ -1329,7 +1340,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      * @param \Contrat\Entity\Db\TypeContrat $typeContrat
      * @param \Application\Entity\Db\Structure   $structure
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getContrat(TypeContrat $typeContrat = null, Structure $structure = null)
     {
@@ -1386,7 +1397,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      * @param TypeVolumeHoraire $typeVolumeHoraire
      * @param EtatVolumeHoraire $etatVolumehoraire
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFormuleResultat(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumehoraire = null)
     {
@@ -1461,7 +1472,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get miseEnPaiementIntervenantStructure
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getMiseEnPaiementIntervenantStructure()
     {
@@ -1506,7 +1517,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get modificationServiceDu
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getModificationServiceDu()
     {
@@ -1518,7 +1529,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get pieceJointe
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getPieceJointe()
     {
@@ -1530,7 +1541,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get service
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getService()
     {
@@ -1542,7 +1553,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get service référentiel
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getServiceReferentiel()
     {
@@ -1554,7 +1565,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get IndicModifDossier
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getIndicModifDossier()
     {
@@ -1569,6 +1580,26 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
         // return $this->indicModifDossier;
 
         return $this->indicModifDossier->filter($filter);
+    }
+
+
+
+    /**
+     * Get IndicModifDossier
+     *
+     * @return Collection|Mission[]
+     */
+    public function getMissions(): Collection
+    {
+        if (null === $this->missions) {
+            return null;
+        }
+
+        $filter = function (Mission $mission) {
+            return ($mission->estHistorise()) ? false : true;
+        };
+
+        return $this->missions->filter($filter);
     }
 
 
@@ -1602,7 +1633,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @param \Application\Entity\Db\TypeValidation $type
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getValidation(TypeValidation $type = null)
     {

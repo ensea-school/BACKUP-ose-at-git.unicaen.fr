@@ -7,7 +7,7 @@ use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use UnicaenAuth\Service\Traits\UserServiceAwareTrait;
+use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
 use UnicaenApp\Util;
 
 /**

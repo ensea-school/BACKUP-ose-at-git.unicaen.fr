@@ -16,6 +16,7 @@
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
             <join-column name="ANNEE_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <field name="accompagnementEtudiants" type="boolean" column="ACCOMPAGNEMENT_ETUDIANTS" nullable="false"/>
 
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">

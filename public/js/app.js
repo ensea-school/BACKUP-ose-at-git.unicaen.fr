@@ -1,20 +1,20 @@
 $(function ()
 {
     WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche', function () {
-        WidgetInitializer.includeJs(Util.url('js/intervenant-recherche.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/intervenant-recherche.js'));
     });
 
     WidgetInitializer.add('jstree', 'jstree', function ()
     {
-        WidgetInitializer.includeJs(Util.url('vendor/vakata-jstree-3.3.8/dist/jstree.min.js'));
-        WidgetInitializer.includeCss(Util.url('vendor/vakata-jstree-3.3.8/dist/themes/default/style.min.css'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/vakata-jstree-3.3.8/dist/jstree.min.js'));
+        WidgetInitializer.includeCss(unicaenVue.url('vendor/vakata-jstree-3.3.8/dist/themes/default/style.min.css'));
     });
 
     WidgetInitializer.add('table-sort', 'tableSort', function ()
     {
-        WidgetInitializer.includeJs(Util.url('vendor/DataTables-1.12.1/js/jquery.dataTables.min.js'));
-        WidgetInitializer.includeJs(Util.url('vendor/DataTables-1.12.1/js/dataTables.bootstrap5.min.js'));
-        WidgetInitializer.includeJs(Util.url('js/table-sort.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/DataTables-1.12.1/js/jquery.dataTables.min.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/DataTables-1.12.1/js/dataTables.bootstrap5.min.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/table-sort.js'));
 
         (function () {
 
@@ -60,52 +60,52 @@ $(function ()
 
     /* Service référentiel */
     WidgetInitializer.add('referentiels', 'referentiels', function () {
-        WidgetInitializer.includeJs(Util.url('js/service-referentiel.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/service-referentiel.js'));
     });
     WidgetInitializer.add('service-referentiel-form', 'serviceReferentielForm', function () {
-        WidgetInitializer.includeJs(Util.url('js/service-referentiel.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/service-referentiel.js'));
     });
 
 
     /* Offre de formation */
     WidgetInitializer.add('element-pedagogique-recherche', 'elementPedagogiqueRecherche', function () {
-        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/offre-formation.js'));
     });
     WidgetInitializer.add('etape-centre-cout', 'etapeCentreCout', function () {
-        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/offre-formation.js'));
     });
     WidgetInitializer.add('etape-taux-remu', 'etapeTauxRemu', function () {
-        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/offre-formation.js'));
     });
     WidgetInitializer.add('etape-taux-mixite', 'etapeTauxMixite', function () {
-        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/offre-formation.js'));
     });
     WidgetInitializer.add('etape-modulateurs', 'etapeModulateurs', function () {
-        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/offre-formation.js'));
     });
     WidgetInitializer.add('etape-saisie', 'etapeSaisie', function () {
-        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/offre-formation.js'));
     });
     WidgetInitializer.add('element-pedagogique-saisie', 'elementPedagogiqueSaisie', function () {
-        WidgetInitializer.includeJs(Util.url('js/offre-formation.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/offre-formation.js'));
     });
 
 
     /* Charges d'enseignement */
     WidgetInitializer.add('chargens', 'chargens', function () {
-        WidgetInitializer.includeJs(Util.url('vendor/go.js'));
-        //   WidgetInitializer.includeJs(Util.url('js/chargens.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/go.js'));
+        //   WidgetInitializer.includeJs(unicaenVue.url('js/chargens.js'));
     });
     WidgetInitializer.add('chargens-filtre', 'chargensFiltre', function () {
-        //     WidgetInitializer.includeJs(Util.url('js/chargens.js'));
+        //     WidgetInitializer.includeJs(unicaenVue.url('js/chargens.js'));
     });
 
     /* Droits */
     WidgetInitializer.add('droits-tbl', 'droitsTbl', function () {
-        WidgetInitializer.includeJs(Util.url('js/droits.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/droits.js'));
     });
     WidgetInitializer.add('affectation-form', 'affectationForm', function () {
-        WidgetInitializer.includeJs(Util.url('js/droits.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('js/droits.js'));
     });
 
     // installation de tooltip Bootstrap sur les icônes d'information (i)

@@ -6,9 +6,9 @@ use Application\Entity\Db\Periode;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Form\EnseignementSaisieForm;
+use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
@@ -20,7 +20,7 @@ use Service\Service\TypeVolumeHoraireServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EnseignementSaisieFormViewHelper extends AbstractViewHelper
+class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
 {
     use ContextServiceAwareTrait;
     use LocalContextServiceAwareTrait;

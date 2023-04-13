@@ -156,8 +156,6 @@ class IndicateurService
         $plafondConfigs = $this->getServicePlafond()->getPlafondsConfig();
         foreach ($plafondConfigs as $plafondConfig) {
             $plafond = $plafondConfig->getPlafond();
-
-            varDump($plafond->getNumero());
         }
     }
 }

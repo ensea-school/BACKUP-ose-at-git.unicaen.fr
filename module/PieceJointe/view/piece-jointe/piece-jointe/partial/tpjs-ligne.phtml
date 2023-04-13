@@ -1,0 +1,67 @@
+<?php
+
+use Intervenant\Entity\Db\Statut;
+use PieceJointe\Entity\Db\TypePieceJointe;
+use PieceJointe\Entity\Db\TypePieceJointeStatut;
+
+/**
+ * @var $this                \Application\View\Renderer\PhpRenderer
+ * @var $canEdit             boolean
+ * @var $statutsIntervenants Statut[][]
+ * @var $typePieceJointe     TypePieceJointe
+ * @var $tpjss               TypePieceJointeStatut[][]
+ * @var $j                   int
+ */
+
+if ($canEdit) {
+    $urlEdit   = $this->url('piece-jointe/type-piece-jointe-saisie', ['typePieceJointe' => $typePieceJointe->getId()]);
+    $urlDelete = $this->url('piece-jointe/type-piece-jointe-delete', ['typePieceJointe' => $typePieceJointe->getId()]);
+}
+
+$i = 0;
+
+?>
+<tr class="champ-triable" data-id="<?= $typePieceJointe->getId() ?>">
+    <th>
+        <?= $typePieceJointe ?>
+        <?php if ($canEdit): ?>
+            <span class="float-end">
+                <i class="fas fa-arrows-alt"
+                   title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></i>&nbsp;
+
+                <a class="pop-ajax"
+                   href="<?= $urlEdit ?>"
+                   title="Modifier le type de pièce jointe"
+                   data-submit-reload="true"
+                ><i class="fa float-end fa-pen-to-square"></i></a>
+
+                <a class="pop-ajax"
+                   href="<?= $urlDelete ?>"
+                   title="Supprimer le type de piece jointe"
+                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p><p>Toutes les pièces correspondantes seront alors supprimées de l'application.</p>"
+                   data-confirm="true"
+                   data-confirm-button="Oui"
+                   data-cancel-button="Non"
+                   data-submit-reload="true"
+                ><span style="padding-right: 8px" class="glyphicon float-end glyphicon-trash"></span></a>
+            </span>
+        <?php endif; ?>
+    </th>
+    <?php
+
+    foreach ($statutsIntervenants as $sis) {
+        foreach ($sis as $statut) {
+            $i++;
+            echo $this->partial('partial/tpjs-cell', [
+                'canEdit'         => $canEdit,
+                'typePieceJointe' => $typePieceJointe,
+                'statut'          => $statut,
+                'tpjss'           => isset($tpjss[$statut->getId()]) ? $tpjss[$statut->getId()] : [],
+                'i'               => $i,
+                'j'               => $j,
+            ]);
+        }
+    }
+
+    ?>
+</tr>

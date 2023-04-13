@@ -269,6 +269,48 @@ class DataSource
 
 
 
+    public function TAUX_REMU()
+    {
+        $data = require $this->oseAdmin->getOseDir() . 'data/taux_remu.php';
+
+        $tauxRemu = [];
+
+        foreach ($data as $code => $taux) {
+            $taux       = [
+                'CODE'    => $code,
+                'LIBELLE' => $taux['libelle'],
+
+            ];
+            $tauxRemu[] = $taux;
+        }
+
+        return $tauxRemu;
+    }
+
+
+
+    public function TAUX_REMU_VALEUR()
+    {
+        $data = require $this->oseAdmin->getOseDir() . 'data/taux_remu.php';
+
+        $tauxValeurs = [];
+
+        foreach ($data as $code => $taux) {
+            foreach ($taux['valeurs'] as $dateEffet => $valeur) {
+                $tauxValeur    = [
+                    'TAUX_REMU_ID' => $code,
+                    'DATE_EFFET'   => \DateTime::createFromFormat('d/m/Y', $dateEffet),
+                    'VALEUR'       => $valeur,
+                ];
+                $tauxValeurs[] = $tauxValeur;
+            }
+        }
+
+        return $tauxValeurs;
+    }
+
+
+
     public function TYPE_INDICATEUR()
     {
         $data        = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';

@@ -4,13 +4,14 @@ namespace Application\View\Helper;
 
 
 use Application\Model\TreeNode;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * Description of StructureViewHelper
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class TreeViewHelper extends AbstractViewHelper
+class TreeViewHelper extends AbstractHtmlElement
 {
     /**
      * @var TreeNode

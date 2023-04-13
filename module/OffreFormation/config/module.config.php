@@ -12,7 +12,7 @@ use OffreFormation\Controller\ModulateurController;
 use OffreFormation\Controller\OffreFormationController;
 use OffreFormation\Controller\TypeFormationController;
 use OffreFormation\Controller\TypeInterventionController;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [
@@ -616,7 +616,7 @@ return [
         Service\ElementModulateurService::class         => Service\Factory\ElementModulateurServiceFactory::class,
         Service\DomaineFonctionnelService::class        => Service\Factory\DomaineFonctionnelServiceFactory::class,
         Service\OffreFormationService::class            => Service\Factory\OffreFormationServiceFactory::class,
-        Assertion\OffreDeFormationAssertion::class      => \UnicaenAuth\Assertion\AssertionFactory::class,
+        Assertion\OffreDeFormationAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         Service\VolumeHoraireEnsService::class          => Service\Factory\VolumeHoraireEnsServiceFactory::class,
         Processus\ReconductionProcessus::class          => Processus\Factory\ReconductionProcessusFactory::class,
         Service\TypeInterventionStructureService::class => Service\Factory\TypeInterventionStructureServiceFactory::class,

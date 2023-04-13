@@ -18,7 +18,6 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
-use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use LogicException;
 use Plafond\Processus\PlafondProcessusAwareTrait;
@@ -31,6 +30,7 @@ use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenImport\Entity\Differentiel\Query;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
 use UnicaenImport\Service\Traits\DifferentielServiceAwareTrait;
+use UnicaenVue\View\Model\AxiosModel;
 
 /**
  * Description of IntervenantController
@@ -104,7 +104,7 @@ class  IntervenantController extends AbstractController
             $intervenants = $recherche->rechercher($term, 40);
         }
 
-        return $this->axios()->send($intervenants);
+        return new AxiosModel($intervenants);
     }
 
 

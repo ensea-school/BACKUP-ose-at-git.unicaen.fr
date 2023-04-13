@@ -6,7 +6,8 @@ use Application\Provider\Privilege\Privileges;
 use Paiement\Controller\TauxRemuController;
 use Paiement\Service\TauxRemuService;
 use Paiement\Service\TauxRemuServiceFactory;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Assertion\AssertionFactory;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 
 return [
@@ -115,7 +116,7 @@ return [
 
     'services' => [
         TauxRemuService::class => TauxRemuServiceFactory::class,
-        Assertion\TauxRemuAssertion::class => Assertion\TauxRemuAssertionFactory::class,
+        Assertion\TauxRemuAssertion::class => AssertionFactory::class
     ],
 
     'forms' => [

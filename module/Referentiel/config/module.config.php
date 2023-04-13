@@ -7,8 +7,8 @@ use Referentiel\Controller\FonctionReferentielController;
 use Referentiel\Controller\ServiceReferentielController;
 use Application\Provider\Privilege\Privileges;
 use Laminas\ServiceManager\Factory\InvokableFactory;
-use UnicaenAuth\Assertion\AssertionFactory;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Assertion\AssertionFactory;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 
 return [

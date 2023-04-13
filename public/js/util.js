@@ -1,66 +1,3 @@
-/* Tunning d'Axios pour gérer l'interconnexion avec le serveur avec gestion des alertes */
-axios.interceptors.request.use(config => {
-    if (config.submitter) {
-        let msg = config.msg ? config.msg : 'Action en cours';
-        if (config.popover != undefined) {
-            config.popover.dispose();
-        }
-        config.popover = new bootstrap.Popover(config.submitter, {
-            content: "<div class=\"spinner-border text-primary\" role=\"status\">\n" +
-                "  <span class=\"visually-hidden\">Loading...</span>\n" +
-                "</div> " + msg,
-            html: true,
-            trigger: 'focus'
-        });
-        config.popover.show();
-    }
-    return config;
-});
-
-axios.interceptors.response.use(response => {
-    response.messages = response.data.messages;
-    response.data = response.data.data;
-    response.hasErrors = response.messages && response.messages.error && response.messages.error.length > 0 ? true : false;
-
-    if (response.config.popover) {
-        var popover = response.config.popover;
-
-        let content = '';
-        for (ns in response.messages) {
-            for (mid in response.messages[ns]) {
-                content += '<div class="alert fade show alert-' + (ns == 'error' ? 'danger' : ns) + '" role="alert">' + response.messages[ns][mid] + '</div>';
-            }
-        }
-
-        // S'il y a un truc à afficher
-        if (content) {
-            popover._config.content = content;
-            popover.setContent();
-            setTimeout(() => {
-                popover.dispose();
-            }, 3000)
-        } else {
-            // la popover est masquée si tout est fini
-            popover.dispose();
-        }
-    }
-    if (response.messages) {
-        Util.alerts(response.messages);
-    }
-
-    return response;
-}, (error) => {
-    var text = $("<div>").html(error.response.data);
-
-    text.find('i.fas').hide();
-
-    Util.alert(text.find('.alert').html(), 'error');
-});
-
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-
-
 
 /**
  * Affiche une alerte temporaire.
@@ -153,7 +90,6 @@ Formatter = {
 
 
 
-
 Util = {
 
     alerts: function (messages)
@@ -215,22 +151,18 @@ Util = {
 
 
 
-    url: function (route, params, query)
+    formCheckSubmit(formElement)
     {
-        let baseUrl = $('body').data('base-url');
-
-        // Remplacement des paramètres de routes par leurs valeurs
-        if (params) {
-            for (var p in params) {
-                route = route.replace(':' + p, params[p]);
-            }
+        const btnId = 'UtilFormCheckSubmitButtonHidden';
+        let btn = formElement.querySelector('#'+btnId);
+        if (!btn){
+            btn = document.createElement("button");
+            btn.type = 'submit';
+            btn.id = btnId;
+            btn.style='display:none';
+            formElement.appendChild(btn);
         }
-
-        // traitement de la requête GET
-        let getArgs = query ? $.param(query) : null;
-
-        // Construction et retour de l'URL
-        return baseUrl + route + (getArgs ? '?' + getArgs : '');
+        btn.click();
     },
 
 
@@ -298,7 +230,7 @@ Util = {
     changementAnnee: function (annee)
     {
         $.get(
-            Util.url('changement-annee/:annee', {annee: annee}),
+            unicaenVue.url('changement-annee/:annee', {annee: annee}),
             {},
             function ()
             {
@@ -321,7 +253,7 @@ Util = {
         roleInput[0].dispatchEvent(event);
     },
 
-    
+
 
     filterSelectPicker: function (select, values)
     {
@@ -428,6 +360,30 @@ Util = {
 
         return value;
     },
+
+
+
+    dateToString: function (date)
+    {
+        if (date === undefined) {
+            return undefined;
+        }
+        if (typeof date === 'string'){
+            date = new Date(date);
+        }
+
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const dateString = `${day}/${month}/${year}`;
+
+        return dateString;
+    },
+
+
+    FORMAT_DATE: 0,
+    FORMAT_DATETIME: 1,
+    FORMAT_TIME: 2,
 
 
 

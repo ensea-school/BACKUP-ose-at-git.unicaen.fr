@@ -4,7 +4,7 @@ namespace Application;
 
 use Application\Provider\Privilege\Privileges;
 use Service\Controller\ModificationServiceDuController;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'router'          => [

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="PieceJointe\Entity\Db\PieceJointe" table="PIECE_JOINTE">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+        <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <many-to-one field="type" target-entity="PieceJointe\Entity\Db\TypePieceJointe">
+            <join-columns>
+                <join-column name="TYPE_PIECE_JOINTE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+            <join-columns>
+                <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-many field="fichier" inversed-by="pieceJointe" target-entity="Application\Entity\Db\Fichier">
+            <join-table name="PIECE_JOINTE_FICHIER">
+                <join-columns>
+                    <join-column name="PIECE_JOINTE_ID" referenced-column-name="ID"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="FICHIER_ID" referenced-column-name="ID"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-columns>
+                <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-columns>
+                <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-columns>
+                <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="validation" target-entity="Application\Entity\Db\Validation">
+            <join-columns>
+                <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="dateArchive" target-entity="Application\Entity\Db\Annee">
+            <join-columns>
+                <join-column name="DATE_ARCHIVE" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

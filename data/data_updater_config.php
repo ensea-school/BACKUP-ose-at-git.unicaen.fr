@@ -240,6 +240,24 @@ return [
         'key'     => ['CODE', 'ANNEE_ID'],
         'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s']]],
     ],
+    'TAUX_REMU'                  => [
+        'actions' => ['install', 'update'],
+        'options' => ['update' => true, 'delete' => false],
+        'key'     => 'CODE',
+    ],
+    'TAUX_REMU_VALEUR'           => [
+        'actions' => ['install', 'update'],
+        'options' => [
+            'update'  => true,
+            'delete'  => false,
+            'columns' => [
+                'TAUX_REMU_ID' => [
+                    'transformer' => 'SELECT id FROM taux_remu WHERE code = %s',
+                ],
+            ],
+        ],
+        'key'     => ['TAUX_REMU_ID', 'DATE_EFFET'],
+    ],
     'TYPE_PIECE_JOINTE'          => [
         'actions' => ['install'],
         'key'     => 'CODE',

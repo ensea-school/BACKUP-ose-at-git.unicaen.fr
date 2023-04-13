@@ -20,7 +20,7 @@ export default {
     {
         return {
             listeTaux: [],
-            ajoutUrl: Util.url('taux/saisir')
+            ajoutUrl: unicaenVue.url('taux/saisir')
         };
     },
     mounted()
@@ -30,7 +30,7 @@ export default {
     methods: {
         ajout(event)
         {
-            modAjax(event.target, (widget) => {
+            modAjax(event.currentTarget, (widget) => {
                 this.reload();
             });
         },
@@ -49,8 +49,8 @@ export default {
         },
         reload()
         {
-            axios.get(
-                Util.url("taux/liste-taux")
+            unicaenVue.axios.get(
+                unicaenVue.url("taux/liste-taux")
             ).then(response => {
                 this.listeTaux = response.data;
             });

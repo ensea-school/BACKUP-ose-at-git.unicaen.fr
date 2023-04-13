@@ -43,7 +43,7 @@
             <td>{{ intervenant['prenom'] }}</td>
             <td>{{ intervenant['structure'] }}</td>
             <td>{{ intervenant['statut'] }}</td>
-            <td>{{ intervenant['date-naissance'] }}</td>
+            <td><u-date :value="intervenant['date-naissance']" /></td>
             <td>{{ intervenant['numero-personnel'] }}</td>
         </tr>
 
@@ -88,7 +88,7 @@ export default {
             checkedTypes: ['vacataire', 'permanent', 'etudiant'],
         };
     },
-
+    mixins:[Util],
     methods: {
         rechercher: function (event)
         {
@@ -115,8 +115,8 @@ export default {
             }
             this.timer = setTimeout(() => {
 
-                axios.post(
-                    Util.url("intervenant/recherche-json"), {
+                unicaenVue.axios.post(
+                    unicaenVue.url("intervenant/recherche-json"), {
                         term: this.searchTerm
                     }
                 )

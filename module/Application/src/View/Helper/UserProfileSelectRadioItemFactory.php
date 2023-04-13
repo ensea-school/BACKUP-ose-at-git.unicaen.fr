@@ -6,7 +6,7 @@ use Psr\Container\ContainerInterface;
 use UnicaenApp\View\Helper\UserProfileSelectFactory;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use UnicaenAuth\Service\UserContext;
+use UnicaenAuthentification\Service\UserContext;
 
 /**
  *

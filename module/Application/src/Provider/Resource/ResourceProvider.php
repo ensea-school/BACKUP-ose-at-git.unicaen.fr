@@ -5,7 +5,7 @@ namespace Application\Provider\Resource;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use BjyAuthorize\Provider\Resource\ProviderInterface;
-use UnicaenAuth\Entity\Db\AbstractPrivilege;
+use UnicaenPrivilege\Entity\Db\AbstractPrivilege;
 
 class ResourceProvider implements ProviderInterface
 {
@@ -31,7 +31,9 @@ class ResourceProvider implements ProviderInterface
                     if (!str_starts_with($entityClass, 'Unicaen')) {
                         try {
                             $entity                                    = new $entityClass;
-                            $this->resources[$entity->getResourceId()] = [];
+                            if (!$entity instanceof AbstractPrivilege) {
+                                $this->resources[$entity->getResourceId()] = [];
+                            }
                         } catch (\Exception $e) {
 
                         }

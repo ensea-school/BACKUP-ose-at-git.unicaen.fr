@@ -2,7 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_EXPORT_SERVICE AS
 WITH t AS ( SELECT
   'vh_' || vh.id                    id,
   s.id                              service_id,
-  null                              service_referentiel_id,
+  NULL                              service_referentiel_id,
   s.intervenant_id                  intervenant_id,
   vh.type_volume_horaire_id         type_volume_horaire_id,
   fr.etat_volume_horaire_id         etat_volume_horaire_id,
@@ -20,7 +20,7 @@ WITH t AS ( SELECT
   vh.heures                         heures,
   0                                 heures_ref,
   0                                 heures_non_payees,
-  null                              motif_non_paiement,
+  NULL                              motif_non_paiement,
   NULL                              tag,
   frvh.service_fi                   service_fi,
   frvh.service_fa                   service_fa,
@@ -46,7 +46,7 @@ UNION ALL
 SELECT
   'vh_' || vh.id                    id,
   s.id                              service_id,
-  null                              service_referentiel_id,
+  NULL                              service_referentiel_id,
   s.intervenant_id                  intervenant_id,
   vh.type_volume_horaire_id         type_volume_horaire_id,
   vhe.etat_volume_horaire_id        etat_volume_horaire_id,
@@ -139,7 +139,7 @@ UNION ALL
 
 SELECT
   'vh_ref_' || vhr.id               id,
-  null                              service_id,
+  NULL                              service_id,
   sr.id                             service_referentiel_id,
   sr.intervenant_id                 intervenant_id,
   fr.type_volume_horaire_id         type_volume_horaire_id,
@@ -281,7 +281,7 @@ SELECT
   his.histo_modification            service_date_modification,
 
   i.code                            intervenant_code,
-  i.code_rh							            intervenant_code_rh,
+  i.code_rh                          intervenant_code_rh,
   i.nom_usuel || ' ' || i.prenom    intervenant_nom,
   i.date_naissance                  intervenant_date_naissance,
   si.libelle                        intervenant_statut_libelle,
@@ -345,12 +345,12 @@ FROM
   LEFT JOIN histo_intervenant_service   his ON his.intervenant_id = i.id AND his.type_volume_horaire_id = tvh.id AND his.referentiel = 0
   LEFT JOIN grade                         g ON g.id     = i.grade_id
   LEFT JOIN discipline                   di ON di.id    = i.discipline_id
-  LEFT JOIN structure                  saff ON saff.id  = i.structure_id AND ti.code = 'P'
+  LEFT JOIN STRUCTURE                  saff ON saff.id  = i.structure_id AND ti.code = 'P'
   LEFT JOIN element_pedagogique          ep ON ep.id    = t.element_pedagogique_id
   LEFT JOIN discipline                   de ON de.id    = ep.discipline_id
-  LEFT JOIN structure                  sens ON sens.id  = NVL(t.structure_ens_id, ep.structure_id)
+  LEFT JOIN STRUCTURE                  sens ON sens.id  = NVL(t.structure_ens_id, ep.structure_id)
   LEFT JOIN periode                       p ON p.id     = t.periode_id
-  LEFT JOIN source                      src ON src.id   = ep.source_id OR (ep.source_id IS NULL AND src.code = 'OSE')
+  LEFT JOIN SOURCE                      src ON src.id   = ep.source_id OR (ep.source_id IS NULL AND src.code = 'OSE')
   LEFT JOIN etape                       etp ON etp.id   = ep.etape_id
   LEFT JOIN type_formation               tf ON tf.id    = etp.type_formation_id AND tf.histo_destruction IS NULL
   LEFT JOIN groupe_type_formation       gtf ON gtf.id   = tf.groupe_id AND gtf.histo_destruction IS NULL

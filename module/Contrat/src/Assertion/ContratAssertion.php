@@ -9,15 +9,11 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use UnicaenAuth\Assertion\AbstractAssertion;
-
 // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
-
-
-
+use Application\Service\Traits\WorkflowServiceAwareTrait;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**

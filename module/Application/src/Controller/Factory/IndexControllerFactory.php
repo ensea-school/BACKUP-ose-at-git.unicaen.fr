@@ -4,7 +4,7 @@ namespace Application\Controller\Factory;
 
 use Application\Controller\IndexController;
 use Psr\Container\ContainerInterface;
-use UnicaenAuth\Service\UserContext;
+use UnicaenAuthentification\Service\UserContext;
 
 class IndexControllerFactory
 {

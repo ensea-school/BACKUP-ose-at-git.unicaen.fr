@@ -4,6 +4,7 @@ namespace Application\Entity\Db;
 
 use Application\Service\Traits\FichierServiceAwareTrait;
 use DateTime;
+use PieceJointe\Entity\Db\PieceJointe;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Filter\BytesFormatter;

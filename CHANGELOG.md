@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 20.0](#ose-20--28022023-)
+[OSE 20.1](#ose-201--04042023-)
 
 
 # OSE 21 (à venir)
@@ -11,15 +11,38 @@
 * Taux HETD personnalisables
 
 
-# OSE 20.1 (A venir)
+
+# OSE 20.1 (04/04/2023)
 
 ## Nouveautés
 
 * Ajout de la date de clôture dans la page historique de l'intervenant 
+* Possibilité de saisir une modification de service dû avec 0 heure (#49764)
+
+## Améliorations
+
+* Passage à 200 caractères max. pour les libellés longs des structures
 
 ## Corrections de bugs
 
 * Correction d'une régression de la V20 sur le module Export Siham
+* Suppression d'un message d'erreur sur l'envoi de mail via les indicateurs (#49873)
+* Formule Paris 8 : correction d'un problème de code de composante
+* Formule Poitiers : (#46805)
+* Formule La Réunion : (#24229)
+* Formule de Picardie:  (#47224)
+
+## Notes de mise à jour
+
+Si vous rencontrez les deux messages d'erreurs suivants, merci de ne pas en tenir compte, ces erreurs n'occasionneront pas de dysfonctionnezmenet de l'application.
+
+1. Suppression de l'index TYPE_INTERVENTION_CODE_UN
+ORA-02429: cannot drop index used for enforcement of unique/primary key (offset 11
+DROP INDEX TYPE_INTERVENTION_CODE_UN
+
+2. Transformation des modèles de contrats en états de sortie ... Convertion des contrats de travail en états de sortie
+Erreur : ORA-00001: unique constraint (OSE.ETAT_SORTIE_CODE_UN) violated
+
 
 # OSE 20 (28/02/2023)
 
@@ -28,7 +51,7 @@
 * Les modèles de contrats de travail sont maintenant gérés comme n'importe quel autre état de sortie
 * Reconduction de l'offre de formation pour les éléments de OSE portés par un élément synchronisé
 * Possibilité de rentrer un taux de charge par statut d'intervenant
-* Ajout d'un choix par statut pour "contrat de travail et avenants" pour laisser la possibilité à l'intervenant de télécharger sont contrat en pdf
+* Ajout d'un choix par statut pour "contrat de travail et avenants" pour laisser la possibilité à l'intervenant de télécharger son contrat en pdf
 * Migration technnique vers le framework Bootstrap 5 et modernisation de l'identité visuelle
 * Réorganisation du menu "Administration" pour plus de lisibilité
 * Filtrage des caractères interdits lors de l'export RH SIHAM (#47267)
@@ -192,7 +215,7 @@ https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_posit
 * Ajout d'un paramètre général pour permettre de créer les contrats sans passer par un projet de contrat
 * Ajout de date de dernière modification des données dans les indicateurs notifiant d'une validation en attente
 * Nouvel état de sortie pour l'extraction des paiements dans le cadre de la pré-liquidation SIHAM
-* Ajout d'un bouton de refus de pièce justificative avec envoie d'email à l'intervenant
+* Ajout d'un bouton de refus de pièce justificative avec envoi d'email à l'intervenant
 * Changement du bouton de cloture de service pour un libellé plus parlant et un style de bouton plus prononcé
 * Formules nouvelles ou mises à jour : Rennes 2, Paris Saclay, Guyane, Côte d'Azur, La Réunion, Poitiers, Brest, Rouen
 * Possibilité de créer un nouveau test de formule en téléversant une feuille de calcul au format tableur

@@ -18,6 +18,7 @@
         </many-to-one>
         <one-to-many field="plafondStructure" target-entity="Plafond\Entity\Db\PlafondStructure" mapped-by="plafond"/>
         <one-to-many field="plafondReferentiel" target-entity="Plafond\Entity\Db\PlafondReferentiel" mapped-by="plafond"/>
+        <one-to-many field="plafondMission" target-entity="Plafond\Entity\Db\PlafondMission" mapped-by="plafond"/>
         <one-to-many field="plafondStatut" target-entity="Plafond\Entity\Db\PlafondStatut" mapped-by="plafond"/>
     </entity>
 </doctrine-mapping>

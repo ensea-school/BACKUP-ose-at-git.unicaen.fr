@@ -2,8 +2,6 @@
 
 namespace Application\Provider\Privilege;
 
-use UnicaenPrivilege\Entity\Db\PrivilegeInterface;
-
 /**
  * Description of Privileges
  *
@@ -13,10 +11,6 @@ use UnicaenPrivilege\Entity\Db\PrivilegeInterface;
  */
 class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
 
-    const DROIT_ROLE_VISUALISATION          = 'droit-role-visualisation';
-    const DROIT_ROLE_EDITION                = 'droit-role-edition';
-    const DROIT_PRIVILEGE_VISUALISATION     = 'droit-privilege-visualisation';
-    const DROIT_PRIVILEGE_EDITION           = 'droit-privilege-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                  = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION              = 'agrement-conseil-academique-suppression';
     const AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION            = 'agrement-conseil-academique-visualisation';
@@ -105,6 +99,10 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
     const DOSSIER_VISUALISATION                                = 'dossier-visualisation';
     const DROIT_AFFECTATION_EDITION                            = 'droit-affectation-edition';
     const DROIT_AFFECTATION_VISUALISATION                      = 'droit-affectation-visualisation';
+    const DROIT_PRIVILEGE_EDITION                              = 'droit-privilege-edition';
+    const DROIT_PRIVILEGE_VISUALISATION                        = 'droit-privilege-visualisation';
+    const DROIT_ROLE_EDITION                                   = 'droit-role-edition';
+    const DROIT_ROLE_VISUALISATION                             = 'droit-role-visualisation';
     const ENSEIGNEMENT_DEVALIDATION                            = 'enseignement-devalidation';
     const ENSEIGNEMENT_EDITION_MASSE                           = 'enseignement-edition-masse';
     const ENSEIGNEMENT_EXPORT_CSV                              = 'enseignement-export-csv';
@@ -243,6 +241,7 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
     const PIECE_JUSTIFICATIVE_VISUALISATION                    = 'piece-justificative-visualisation';
     const PILOTAGE_ECARTS_ETATS                                = 'pilotage-ecarts-etats';
     const PILOTAGE_VISUALISATION                               = 'pilotage-visualisation';
+    const PLAFONDS_CONFIG_MISSION                              = 'plafonds-config-mission';
     const PLAFONDS_CONFIG_REFERENTIEL                          = 'plafonds-config-referentiel';
     const PLAFONDS_CONFIG_STATUT                               = 'plafonds-config-statut';
     const PLAFONDS_CONFIG_STRUCTURE                            = 'plafonds-config-structure';

@@ -15,6 +15,7 @@ return [
         'element'        => 'Elément pédagogique',
         'volume_horaire' => 'Volume horaire',
         'referentiel'    => 'Fonction référentielle',
+        'mission'        => 'Type de mission',
     ],
     'plafonds'   => [
         10 => [

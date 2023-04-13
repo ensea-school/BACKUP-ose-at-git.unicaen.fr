@@ -13,9 +13,8 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use UnicaenVue\Axios\AxiosExtractorInterface;
 
-class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtractorInterface
+class Mission implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
@@ -48,34 +47,6 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
         $this->etudiants       = new ArrayCollection();
         $this->validations     = new ArrayCollection();
         $this->volumesHoraires = new ArrayCollection();
-    }
-
-
-
-    public function axiosDefinition(): array
-    {
-        return [
-            'typeMission',
-            'dateDebut',
-            'dateFin',
-            'structure',
-            'tauxRemu',
-            'description',
-            'histoCreation',
-            'histoCreateur',
-            'heures',
-            'heuresValidees',
-            'heuresRealisees',
-            'volumesHorairesPrevus',
-            ['etudiants',['id', 'code', 'nomUsuel', 'prenom', 'dateNaissance']],
-            'contrat',
-            'valide',
-            'validation',
-            'canSaisie',
-            'canValider',
-            'canDevalider',
-            'canSupprimer',
-        ];
     }
 
 

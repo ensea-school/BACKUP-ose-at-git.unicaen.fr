@@ -264,8 +264,7 @@ class TauxRemu implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    public
-    function __toString(): string
+    public function __toString(): string
     {
         return $this->getLibelle();
     }

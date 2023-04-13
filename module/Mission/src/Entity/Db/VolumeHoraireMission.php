@@ -12,9 +12,8 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use UnicaenVue\Axios\AxiosExtractorInterface;
 
-class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInterface, AxiosExtractorInterface, ResourceInterface
+class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
@@ -42,6 +41,7 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     private Collection $validations;
 
 
+
     public function __construct()
     {
         $this->validations = new ArrayCollection();
@@ -56,53 +56,18 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
 
 
 
-    public function axiosDefinition(): array
-    {
-        if ($this->getTypeVolumeHoraire()->isPrevu()) {
-            // pour un VH prévu
-            return [
-                'heures',
-                'valide',
-                'validation',
-                'histoCreation',
-                'histoCreateur',
-                'canValider',
-                'canDevalider',
-                'canSupprimer',
-            ];
-        } else {
-            // Pour un VH réalisé
-            return [
-                'guid',
-                ['mission', ['id', 'libelleCourt']],
-                'date',
-                'heureDebut',
-                'heureFin',
-                'heures',
-                'nocturne',
-                'formation',
-                'description',
-                'valide',
-                'validation',
-                'canEdit',
-                'canValider',
-                'canDevalider',
-                'canSupprimer',
-            ];
-        }
-    }
-
-
     public function getId(): ?int
     {
         return $this->id;
     }
 
 
+
     public function getMission(): ?Mission
     {
         return $this->mission;
     }
+
 
 
     public function setMission(?Mission $mission): VolumeHoraireMission
@@ -113,10 +78,12 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function getHeures(): float
     {
         return $this->heures;
     }
+
 
 
     public function setHeures(float $heures): VolumeHoraireMission
@@ -127,10 +94,12 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function isAutoValidation(): bool
     {
         return $this->autoValidation;
     }
+
 
 
     public function setAutoValidation(bool $autoValidation): VolumeHoraireMission
@@ -141,10 +110,12 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function getHoraireDebut(): ?\DateTime
     {
         return $this->horaireDebut;
     }
+
 
 
     public function setHoraireDebut(?\DateTime $horaireDebut): VolumeHoraireMission
@@ -156,10 +127,12 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function getHoraireFin(): ?\DateTime
     {
         return $this->horaireFin;
     }
+
 
 
     public function setHoraireFin(?\DateTime $horaireFin): VolumeHoraireMission
@@ -171,10 +144,12 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function getDate(): ?string
     {
         return $this->getHoraireDebut()?->format('Y-m-d');
     }
+
 
 
     public function setDate(?string $dateStr): self
@@ -201,10 +176,12 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function getHeureDebut(): ?string
     {
         return $this->getHoraireDebut()?->format('H:i');
     }
+
 
 
     public function setHeureDebut(?string $heureStr): self
@@ -224,10 +201,12 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function getHeureFin(): ?string
     {
         return $this->getHoraireFin()?->format('H:i');
     }
+
 
 
     public function setHeureFin(?string $heureStr): self
@@ -247,6 +226,7 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function setHeuresFromHoraires(): self
     {
         if ($this->horaireDebut instanceof \DateTime && $this->horaireFin instanceof \DateTime) {
@@ -262,10 +242,12 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function isNocturne(): bool
     {
         return $this->nocturne;
     }
+
 
 
     public function setNocturne(bool $nocturne): VolumeHoraireMission
@@ -276,10 +258,12 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function isFormation(): bool
     {
         return $this->formation;
     }
+
 
 
     public function setFormation(bool $formation): VolumeHoraireMission
@@ -290,10 +274,12 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function getDescription(): ?string
     {
         return $this->description;
     }
+
 
 
     public function setDescription(?string $description): VolumeHoraireMission
@@ -302,6 +288,7 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
 
         return $this;
     }
+
 
 
     /**
@@ -313,6 +300,7 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function addValidation(Validation $validation): self
     {
         $this->validations[] = $validation;
@@ -321,12 +309,14 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function removeValidation(Validation $validation): self
     {
         $this->validations->removeElement($validation);
 
         return $this;
     }
+
 
 
     public function isValide(): bool
@@ -341,6 +331,7 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
 
         return false;
     }
+
 
 
     public function getValidation(): ?Validation
@@ -359,16 +350,19 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     }
 
 
+
     public function canEdit(): bool
     {
         return !$this->isValide();
     }
 
 
+
     public function canValider(): bool
     {
         return !$this->isValide();
     }
+
 
 
     public function canDevalider(): bool
@@ -380,6 +374,7 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
         }
 
     }
+
 
 
     public function canSupprimer(): bool

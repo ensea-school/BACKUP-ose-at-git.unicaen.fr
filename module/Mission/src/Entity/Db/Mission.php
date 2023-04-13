@@ -67,6 +67,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, AxiosExtra
             'heuresValidees',
             'heuresRealisees',
             'volumesHorairesPrevus',
+            ['etudiants',['id', 'code', 'nomUsuel', 'prenom', 'dateNaissance']],
             'contrat',
             'valide',
             'validation',

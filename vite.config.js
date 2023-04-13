@@ -13,6 +13,7 @@ export default unicaenVue.defineConfig({
     root: 'front',
     build: {
         // Répertoire où seront placés les fichiers issus du build et à ajouter au GIT
+        // à mettre en cohérence avec la config côté PHP
         outDir: path.resolve(__dirname, 'public/dist'),
     },
     server: {

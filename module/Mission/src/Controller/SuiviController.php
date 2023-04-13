@@ -71,6 +71,7 @@ class SuiviController extends AbstractController
         $query = $this->em()->createQuery($dql)->setParameters($parameters);
 
         $properties = [
+            'id',
             ['mission', ['id', 'libelleCourt']],
             'date',
             'heureDebut',

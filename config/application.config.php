@@ -136,6 +136,7 @@ class AppConfig
             'Intervenant',
             'Service',
             'Enseignement',
+            'Agrement',
             'Referentiel',
             'Mission',
             'Paiement',
@@ -144,6 +145,7 @@ class AppConfig
             'Plafond',
             'Indicateur',
             'ExportRh',
+            'Contrat',
             'Dossier',
         ];
 

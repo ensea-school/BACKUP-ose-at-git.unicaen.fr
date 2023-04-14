@@ -3,7 +3,7 @@
 //@formatter:off
 
 return [
-    'name'    => 'MISSION_ETUDIANT_INTERVENANT_FK',
+    'name'    => 'MISSION_ETU_INTERVENANT_FK',
     'unique'  => FALSE,
     'table'   => 'MISSION_ETUDIANT',
     'columns' => [

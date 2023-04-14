@@ -32,6 +32,15 @@ interface ManagerInterface
 
 
     /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function exists(string $name): bool;
+
+
+
+    /**
      * @param array $data
      */
     public function create(array $data);
@@ -57,7 +66,7 @@ interface ManagerInterface
 
     /**
      * @param string $oldName
-     * @param array  $new
+     * @param array $new
      *
      * @return mixed
      */

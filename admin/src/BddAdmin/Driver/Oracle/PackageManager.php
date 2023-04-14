@@ -2,6 +2,7 @@
 
 namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Bdd;
 use BddAdmin\Manager\AbstractManager;
 use BddAdmin\Manager\PackageManagerInteface;
 use BddAdmin\Ddl\DdlFilter;
@@ -66,6 +67,22 @@ class PackageManager extends AbstractManager implements PackageManagerInteface
         }
 
         return $data;
+    }
+
+
+
+    public function exists(string $name): bool
+    {
+        $sql = "SELECT count(*) NBR FROM all_source WHERE "
+            ."OWNER = sys_context( 'userenv', 'current_schema' )"
+            ."AND (type = 'PACKAGE' OR type = 'PACKAGE BODY') "
+            ."AND ROWNUM = 1 "
+            ."AND name = :name";
+        $params = ['name' => $name];
+
+        $nbr = (int)$this->bdd->select($sql, $params, ['fetch' => Bdd::FETCH_ONE])['NBR'];
+
+        return $nbr > 0;
     }
 
 

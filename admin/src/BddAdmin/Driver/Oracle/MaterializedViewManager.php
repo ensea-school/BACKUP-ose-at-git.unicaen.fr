@@ -2,6 +2,7 @@
 
 namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Bdd;
 use BddAdmin\Manager\AbstractManager;
 use BddAdmin\Manager\MaterializedViewManagerInteface;
 use BddAdmin\Ddl\DdlFilter;
@@ -55,6 +56,18 @@ class MaterializedViewManager extends AbstractManager implements MaterializedVie
         }
 
         return $data;
+    }
+
+
+
+    public function exists(string $name): bool
+    {
+        $sql = "SELECT count(*) NBR FROM ALL_MVIEWS WHERE OWNER = sys_context( 'userenv', 'current_schema' ) AND mview_name = :name";
+        $params = ['name' => $name];
+
+        $nbr = (int)$this->bdd->select($sql, $params, ['fetch' => Bdd::FETCH_ONE])['NBR'];
+
+        return $nbr > 0;
     }
 
 

@@ -28,7 +28,12 @@ class v20Contrats extends AbstractMigration
 
         $c->begin("Convertion des contrats de travail en états de sortie");
 
-        $modeles = $bdd->select("SELECT * FROM modele_contrat");
+        $this->manager->sauvegarderTable('MODELE_CONTRAT', 'SAVE_MODELE_CONTRAT');
+        // On supprime l'ancienne table afin de ne jamais recommencer la migration, puis on travaille sur la sauvegarde
+
+        $bdd->table()->drop('MODELE_CONTRAT');
+
+        $modeles = $bdd->select("SELECT * FROM SAVE_MODELE_CONTRAT");
 
         $etatsSortie = [];
         $statuts     = [];

@@ -1,6 +1,5 @@
 CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
-  decalageLigne NUMERIC DEFAULT 20;
-
+  decalageLigne NUMERIC DEFAULT 19;
 
   /* Stockage des valeurs intermédiaires */
   TYPE t_cell IS RECORD (
@@ -225,12 +224,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- AG=IF([.$H20]="Référentiel";0;IF(AND(MID([.$N20];1;4)="PRIO";MID([.$A20];1;5)<>"15310");[.$M20]*[.$AD20];0))
+      -- AG=IF([.$H20]="Référentiel";0;IF(AND(MID([.$N20];1;4)="PRIO";MID([.$A20];1;5)<>"20595");[.$M20]*[.$AD20];0))
       WHEN 'AG' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          IF SUBSTR(vh.param_1, 1, 4) = 'PRIO' AND SUBSTR(vh.structure_code, 1, 5) <> '15310' THEN
+          IF COALESCE(SUBSTR(vh.param_1, 1, 4),' ') = 'PRIO' AND COALESCE(SUBSTR(vh.structure_code, 1, 5),' ') <> '20595' THEN
             RETURN vh.heures * cell('AD',l);
           ELSE
             RETURN 0;
@@ -293,9 +292,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- AM=IF(AND([.$H20]="Référentiel";[.$A20]=[.$K$10];MID([.$A20];1;5)<>"15310");[.$M20]*[.$AD20];0)
+      -- AM=IF(AND([.$H20]="Référentiel";[.$A20]=[.$K$10];MID([.$A20];1;5)<>"20595");[.$M20]*[.$AD20];0)
       WHEN 'AM' THEN
-        IF vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_univ AND COALESCE(SUBSTR(vh.structure_code, 1, 5),' ') <> '15310' THEN
+        IF vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_univ AND COALESCE(SUBSTR(vh.structure_code, 1, 5),' ') <> '20595' THEN
           RETURN vh.heures * cell('AD',l);
         ELSE
           RETURN 0;
@@ -357,9 +356,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- AS=IF(AND([.$H20]<>"Référentiel";[.$A20]=i_structure_code;MID([.$N20];1;4)<>"PRIO";MID([.$A20];1;5)<>"15310");[.$M20]*[.$AD20];0)
+      -- AS=IF(AND([.$H20]<>"Référentiel";[.$A20]=i_structure_code;MID([.$N20];1;4)<>"PRIO";MID([.$A20];1;5)<>"20595");[.$M20]*[.$AD20];0)
       WHEN 'AS' THEN
-        IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation AND SUBSTR(vh.param_1, 1, 4) <> 'PRIO' AND SUBSTR(vh.structure_code, 1, 5) <> '15310' THEN
+        IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation AND COALESCE(SUBSTR(vh.param_1, 1, 4),' ') <> 'PRIO' AND COALESCE(SUBSTR(vh.structure_code, 1, 5),' ') <> '20595' THEN
           RETURN vh.heures * cell('AD',l);
         ELSE
           RETURN 0;
@@ -421,9 +420,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- AY=IF(AND(AND([.$H20]="Référentiel";[.$A20]=i_structure_code);( MID([.$A20];1;5))<>"15310");[.$M20]*[.$AD20];0)
+      -- AY=IF(AND(AND([.$H20]="Référentiel";[.$A20]=i_structure_code);( MID([.$A20];1;5))<>"20595");[.$M20]*[.$AD20];0)
       WHEN 'AY' THEN
-        IF (vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation) AND (SUBSTR(vh.structure_code, 1, 5)) <> '15310' THEN
+        IF (vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation) AND (COALESCE(SUBSTR(vh.structure_code, 1, 5),' ')) <> '20595' THEN
           RETURN vh.heures * cell('AD',l);
         ELSE
           RETURN 0;
@@ -485,9 +484,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- BE=IF(AND([.$H20]<>"Référentiel";[.$A20]<>i_structure_code;MID([.$N20];1;4)<>"PRIO";MID([.$A20];1;5)<>"15310");[.$M20]*[.$AD20];0)
+      -- BE=IF(AND([.$H20]<>"Référentiel";[.$A20]<>i_structure_code;MID([.$N20];1;4)<>"PRIO";MID([.$A20];1;5)<>"20595");[.$M20]*[.$AD20];0)
       WHEN 'BE' THEN
-        IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation AND SUBSTR(vh.param_1, 1, 4) <> 'PRIO' AND SUBSTR(vh.structure_code, 1, 5) <> '15310' THEN
+        IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation AND COALESCE(SUBSTR(vh.param_1, 1, 4),' ') <> 'PRIO' AND COALESCE(SUBSTR(vh.structure_code, 1, 5),' ') <> '20595' THEN
           RETURN vh.heures * cell('AD',l);
         ELSE
           RETURN 0;
@@ -549,9 +548,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- BK=IF(AND([.$H20]="Référentiel";[.$A20]<>i_structure_code;[.$A20]<>[.$K$10];MID([.$A20];1;5)<>"15310");[.$M20]*[.$AD20];0)
+      -- BK=IF(AND([.$H20]="Référentiel";[.$A20]<>i_structure_code;[.$A20]<>[.$K$10];MID([.$A20];1;5)<>"20595");[.$M20]*[.$AD20];0)
       WHEN 'BK' THEN
-        IF vh.volume_horaire_ref_id IS NOT NULL AND NOT vh.structure_is_affectation AND NOT vh.structure_is_univ AND SUBSTR(vh.structure_code, 1, 5) <> '15310' THEN
+        IF vh.volume_horaire_ref_id IS NOT NULL AND NOT vh.structure_is_affectation AND NOT vh.structure_is_univ AND COALESCE(SUBSTR(vh.structure_code, 1, 5),' ') <> '20595' THEN
           RETURN vh.heures * cell('AD',l);
         ELSE
           RETURN 0;
@@ -613,9 +612,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- BQ=IF(MID([.$A20];1;25)="15310";[.$M20]*[.$AE20];0)
+      -- BQ=IF(MID([.$A20];1;25)="20595";[.$M20]*[.$AE20];0)
       WHEN 'BQ' THEN
-        IF SUBSTR(vh.structure_code, 1, 25) = '15310' THEN
+        IF COALESCE(SUBSTR(vh.structure_code, 1, 25),' ') = '20595' THEN
           RETURN vh.heures * cell('AE',l);
         ELSE
           RETURN 0;
@@ -695,7 +694,8 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
       LEFT JOIN service s ON s.id = fvh.service_id
       LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
     ORDER BY
-      ordre';
+      ordre
+    ';
   END;
 
 END FORMULE_PARIS8;

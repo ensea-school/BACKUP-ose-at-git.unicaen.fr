@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 19.7](#ose-197--16122022-)
+[OSE 20.1](#ose-201--04042023-)
 
 
 # OSE 21 (à venir)
@@ -8,29 +8,40 @@
 ## Nouveautés
 
 * Nouvelle notion de mission, permettant de gérer les contrats étudiants
+* Taux HETD personnalisables
 
 
 
-# OSE 20.1 (à venir)
+# OSE 20.1 (04/04/2023)
 
 ## Nouveautés
 
-* Les jauges des plafonds affichent maintenant tout le temps les heures restantes
+* Ajout de la date de clôture dans la page historique de l'intervenant 
+* Possibilité de saisir une modification de service dû avec 0 heure (#49764)
+
+## Améliorations
+
+* Passage à 200 caractères max. pour les libellés longs des structures
 
 ## Corrections de bugs
 
-* Les données suplémentaires des indicateurs s'affichent de nouveau correctement
+* Correction d'une régression de la V20 sur le module Export Siham
+* Suppression d'un message d'erreur sur l'envoi de mail via les indicateurs (#49873)
+* Formule Paris 8 : correction d'un problème de code de composante
+* Formule Poitiers : (#46805)
+* Formule La Réunion : (#24229)
+* Formule de Picardie:  (#47224)
 
 
 
-# OSE 20 (fin février 2023)
+# OSE 20 (28/02/2023)
 
 ## Nouveautés
 
 * Les modèles de contrats de travail sont maintenant gérés comme n'importe quel autre état de sortie
 * Reconduction de l'offre de formation pour les éléments de OSE portés par un élément synchronisé
 * Possibilité de rentrer un taux de charge par statut d'intervenant
-* Ajout d'un choix par statut pour "contrat de travail et avenants" pour laisser la possibilité à l'intervenant de télécharger sont contrat en pdf
+* Ajout d'un choix par statut pour "contrat de travail et avenants" pour laisser la possibilité à l'intervenant de télécharger son contrat en pdf
 * Migration technnique vers le framework Bootstrap 5 et modernisation de l'identité visuelle
 * Réorganisation du menu "Administration" pour plus de lisibilité
 * Filtrage des caractères interdits lors de l'export RH SIHAM (#47267)
@@ -57,6 +68,7 @@
 * Utilisation prioritaire de l'email personnel des données personnelles pour l'envoi d'email via les indicateurs (#48393)
 * Meilleure gestion de la casse lors de la recherche d'un employeur (#48543)
 * Ajout d'une contrainte d'unicité sur la colonne code de la table type_intervention (#48727)
+* Correction formule d'UVSQ (#47149)
 * Et beaucoup d'autres ...
 
 ## Notes de mise à jour
@@ -80,6 +92,13 @@ A la **ligne 102** ajouter la colonne TAG dans le tableau $ds:
 A la **ligne 206** Ajouter le titre de colonne TAG dans le tableau $head : 
   
     'tag' => 'Tags',
+
+Le système de mise à jour peut - dans certaines circonstances - vous afficher quelques erreurs qui sont sans impact 
+sur le bon fonctionnement de l'application.
+Je vais modifier les scripts de mise à jour pour éviter qu'elles ne se produisent.
+Mais en attendant, si vous y êtes confrontés, vous en trouverez les explications sur le ticket suivant :
+https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_position=1&next_issue_id=48972
+
 
 
 # OSE 19.7 (16/12/2022)
@@ -160,7 +179,7 @@ A la **ligne 206** Ajouter le titre de colonne TAG dans le tableau $head :
 
 # OSE 19.1 (21/07/2022)
 
-## Nouveautés
+## nouveautés
 
 * Formule de calcul de Picardie
 * Nouvel état de sortie pour les écarts des heures complémentaires, maintenant personnalisable (#45807)
@@ -186,7 +205,7 @@ A la **ligne 206** Ajouter le titre de colonne TAG dans le tableau $head :
 * Ajout d'un paramètre général pour permettre de créer les contrats sans passer par un projet de contrat
 * Ajout de date de dernière modification des données dans les indicateurs notifiant d'une validation en attente
 * Nouvel état de sortie pour l'extraction des paiements dans le cadre de la pré-liquidation SIHAM
-* Ajout d'un bouton de refus de pièce justificative avec envoie d'email à l'intervenant
+* Ajout d'un bouton de refus de pièce justificative avec envoi d'email à l'intervenant
 * Changement du bouton de cloture de service pour un libellé plus parlant et un style de bouton plus prononcé
 * Formules nouvelles ou mises à jour : Rennes 2, Paris Saclay, Guyane, Côte d'Azur, La Réunion, Poitiers, Brest, Rouen
 * Possibilité de créer un nouveau test de formule en téléversant une feuille de calcul au format tableur

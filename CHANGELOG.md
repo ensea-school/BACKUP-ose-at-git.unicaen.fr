@@ -16,6 +16,7 @@
 ## Corrections de bugs
 
 * Les motifs de modification de service dû supprimés ne peuvent plus être sélectionnés #50328
+* Messages d'erreur corrigés lors de l'exécution du script de migration de la V20.
 
 # OSE 20.1 (04/04/2023)
 

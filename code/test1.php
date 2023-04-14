@@ -7,3 +7,7 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
+
+$d = new \DateTime();
+
+$d->setTime(0, 0, 0, 0);

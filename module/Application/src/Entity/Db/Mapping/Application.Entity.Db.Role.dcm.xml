@@ -42,7 +42,7 @@
             </join-columns>
         </many-to-one>
         <one-to-many field="affectation" target-entity="Application\Entity\Db\Affectation" mapped-by="role"/>
-        <many-to-many field="privilege" target-entity="UnicaenAuth\Entity\Db\Privilege">
+        <many-to-many field="privileges" target-entity="Application\Entity\Db\Privilege">
             <cascade>
                 <cascade-all/>
             </cascade>

@@ -4,7 +4,7 @@
             <div class="card-header card-header-h3">
                 <h5>
                     {{ mission.typeMission.libelle }}
-                    <span class="float-end">Du {{ mission.dateDebut }} au {{ mission.dateFin }}</span>
+                    <span class="float-end">Du <u-date :value="mission.dateDebut" /> au <u-date :value="mission.dateFin" /></span>
                 </h5>
             </div>
             <div class="card-body">
@@ -27,7 +27,6 @@
                                 <div class="input-group mb-3">
                                     <div class="form-control" v-html="heuresLib"></div>
                                     <button class="input-group-btn btn btn-secondary" data-bs-toggle="modal" :data-bs-target="`#details-${mission.id}`">
-                                        <u-icon name=""/>
                                         Détails
                                     </button>
                                 </div>
@@ -80,7 +79,7 @@
                         </div>
                         <div>
                             <u-icon name="thumbs-up" variant="success"/>
-                            Créé le {{ mission.histoCreation }} par
+                            Créé le <u-date :value="mission.histoCreation" /> par
                             <utilisateur :nom="mission.histoCreateur.displayName" :mail="mission.histoCreateur.email"/>
                         </div>
                         <div>
@@ -94,13 +93,14 @@
                             {{ mission.contrat ? 'Contrat établi' : 'Pas de contrat' }}
                         </div>
                         <div>
-                            Aucune heure réalisée
+                            {{ mission.heuresRealisees}} heure{{ mission.heuresRealisees < 2 ? '' : 's' }} réalisée{{ mission.heuresRealisees < 2 ? '' : 's' }}
                         </div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+
     <u-modal :id="`details-${mission.id}`" title="Détail des heures prévisionnelles">
         <template #body>
             <table class="table table-bordered table-condensed">
@@ -112,7 +112,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="vh in mission.volumesHoraires" :key="vh.id">
+                <tr v-for="vh in mission.volumesHorairesPrevus" :key="vh.id">
                     <td style="text-align: right">
                         <u-heures :valeur="vh.heures"/>
                     </td>
@@ -121,13 +121,13 @@
                         Saisi par
                         <utilisateur :nom="vh.histoCreateur.displayName"
                                      :mail="vh.histoCreateur.email"/>
-                        le {{ vh.histoCreation }}
+                        le <u-date :value="vh.histoCreation" />
                         <br/>
                         <u-icon :name="vh.valide ? 'thumbs-up' : 'thumbs-down'" :variant="vh.valide ? 'success' : 'info'"/>
                         {{ vh.validation && vh.validation.id == null ? 'Autovalidé' : (!vh.validation ? 'à valider' : '') }}
                         <span v-if="vh.validation && vh.validation.histoCreateur">
                             Validé par <utilisateur :nom="vh.validation.histoCreateur.displayName"
-                                                    :mail="vh.validation.histoCreateur.email"/> le {{ vh.validation.histoCreation }}
+                                                    :mail="vh.validation.histoCreateur.email"/> le <u-date :value="vh.validation.histoCreation" />
                         </span>
                     </td>
                     <td>
@@ -175,10 +175,10 @@ export default {
         return {
             validationText: this.calcValidation(this.mission.validation),
 
-            saisieUrl: Util.url('mission/saisie/:mission', {mission: this.mission.id}),
-            validerUrl: Util.url('mission/valider/:mission', {mission: this.mission.id}),
-            devaliderUrl: Util.url('mission/devalider/:mission', {mission: this.mission.id}),
-            supprimerUrl: Util.url("mission/supprimer/:mission", {mission: this.mission.id}),
+            saisieUrl: unicaenVue.url('mission/saisie/:mission', {mission: this.mission.id}),
+            validerUrl: unicaenVue.url('mission/valider/:mission', {mission: this.mission.id}),
+            devaliderUrl: unicaenVue.url('mission/devalider/:mission', {mission: this.mission.id}),
+            supprimerUrl: unicaenVue.url("mission/supprimer/:mission", {mission: this.mission.id}),
         };
     },
     watch: {
@@ -208,58 +208,58 @@ export default {
             } else if (validation.id === null) {
                 return 'Autovalidée';
             } else {
-                return 'Validation du ' + validation.histoCreation + ' par ';
+                return 'Validation du ' + Util.dateToString(validation.histoCreation) + ' par ';
             }
         },
         saisie(event)
         {
-            modAjax(event.target, (widget) => {
+            modAjax(event.currentTarget, (widget) => {
                 this.refresh();
             });
         },
         supprimer(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('supprimer', this.mission);
             });
         },
         valider(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         devalider(event)
         {
-            popConfirm(event.target, (response) => {
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         volumeHoraireSupprimer(event)
         {
-            event.target.href = Util.url('mission/volume-horaire/supprimer/:missionVolumeHoraire', {missionVolumeHoraire: event.target.dataset.id});
-            popConfirm(event.target, (response) => {
+            event.currentTarget.href = unicaenVue.url('mission/volume-horaire/supprimer/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         volumeHoraireValider(event)
         {
-            event.target.href = Util.url('mission/volume-horaire/valider/:missionVolumeHoraire', {missionVolumeHoraire: event.target.dataset.id});
-            popConfirm(event.target, (response) => {
+            event.currentTarget.href = unicaenVue.url('mission/volume-horaire/valider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         volumeHoraireDevalider(event)
         {
-            event.target.href = Util.url('mission/volume-horaire/devalider/:missionVolumeHoraire', {missionVolumeHoraire: event.target.dataset.id});
-            popConfirm(event.target, (response) => {
+            event.currentTarget.href = unicaenVue.url('mission/volume-horaire/devalider/:missionVolumeHoraire', {missionVolumeHoraire: event.currentTarget.dataset.id});
+            popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
         },
         refresh()
         {
-            axios.get(
-                Util.url("mission/get/:mission", {mission: this.mission.id})
+            unicaenVue.axios.get(
+                unicaenVue.url("mission/get/:mission", {mission: this.mission.id})
             ).then(response => {
                 this.$emit('refresh', response.data);
             });

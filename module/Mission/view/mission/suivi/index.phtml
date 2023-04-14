@@ -1,0 +1,21 @@
+<?php
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $intervenant       \Application\Entity\Db\Intervenant
+ * @var $canAddMission     bool
+ */
+
+use Application\Entity\Db\WfEtape;
+
+$title     = 'Suivi de missions';
+$nextEtape = WfEtape::CODE_MISSION_VALIDATION_REALISE;
+
+$this->intervenant($intervenant)->renderTitle($title);
+
+echo $this->vue('mission/suivi', [
+    'intervenant'   => $intervenant->getId(),
+    'canAddMission' => $canAddMission,
+]);
+
+echo '<br />';
+echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);

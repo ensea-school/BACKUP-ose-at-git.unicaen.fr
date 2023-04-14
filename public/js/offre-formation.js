@@ -400,7 +400,6 @@ $.widget("ose.elementPedagogiqueSaisie", {
 
     onSynchronisation: function (event)
     {
-        console.log('test');
         window.location.reload();
     },
 

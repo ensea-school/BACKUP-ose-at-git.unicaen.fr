@@ -2,12 +2,14 @@
 
 namespace Mission\Service;
 
+use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Doctrine\ORM\Query;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use UnicaenVue\View\Model\AxiosModel;
 
 /**
  * Description of MissionService
@@ -49,19 +51,19 @@ class MissionService extends AbstractEntityService
 
 
 
-    public function query(array $parameters)
+    public function data(array $parameters): AxiosModel
     {
         $dql = "
         SELECT 
-          m, tm, str, tr, valid, vh, vvh, ctr
+          m, tm, str, tr, valid, vh, vvh, ctr, tvh
         FROM 
           " . Mission::class . " m
           JOIN m.typeMission tm
           JOIN m.structure str
           JOIN m.tauxRemu tr
-          JOIN " . TypeVolumeHoraire::class . " tvh WITH tvh.code = :typeVolumeHorairePrevu
           LEFT JOIN m.validations valid WITH valid.histoDestruction IS NULL
-          LEFT JOIN m.volumesHoraires vh WITH vh.histoDestruction IS NULL AND vh.typeVolumeHoraire = tvh
+          LEFT JOIN m.volumesHoraires vh WITH vh.histoDestruction IS NULL
+          LEFT JOIN vh.typeVolumeHoraire tvh
           LEFT JOIN vh.validations vvh WITH vvh.histoDestruction IS NULL
           LEFT JOIN vh.contrat ctr WITH ctr.histoDestruction IS NULL
         WHERE 
@@ -75,9 +77,57 @@ class MissionService extends AbstractEntityService
           vh.histoCreation
         ";
 
-        $parameters['typeVolumeHorairePrevu'] = TypeVolumeHoraire::CODE_PREVU;
+        $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
 
-        return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+        $properties = [
+            'id',
+            ['typeMission', ['libelle', 'accompagnementEtudiants']],
+            'dateDebut',
+            'dateFin',
+            ['structure', ['libelle']],
+            ['tauxRemu', ['libelle']],
+            'description',
+            'histoCreation',
+            'histoCreateur',
+            'heures',
+            'heuresValidees',
+            'heuresRealisees',
+            ['volumesHorairesPrevus', [
+                'id',
+                'heures',
+                'valide',
+                'validation',
+                'histoCreation',
+                'histoCreateur',
+            ]],
+            ['etudiants', ['id', 'code', 'nomUsuel', 'prenom', 'dateNaissance']],
+            'contrat',
+            'valide',
+            'validation',
+        ];
+
+        $triggers = [
+            [
+                '/'                      => function (Mission $original, array $extracted) {
+                    $extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                    $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                    $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                    $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+
+                    return $extracted;
+                },
+                '/volumesHorairesPrevus' => function ($original, $extracted) {
+                    //$extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                    $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                    $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                    $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+
+                    return $extracted;
+                },
+            ]
+        ];
+
+        return new AxiosModel($query, $properties, $triggers);
     }
 
 
@@ -89,7 +139,7 @@ class MissionService extends AbstractEntityService
      */
     public function save($entity)
     {
-        foreach ($entity->getVolumesHoraires() as $vh) {
+        foreach ($entity->getVolumesHorairesPrevus() as $vh) {
             $this->saveVolumeHoraire($vh);
         }
 

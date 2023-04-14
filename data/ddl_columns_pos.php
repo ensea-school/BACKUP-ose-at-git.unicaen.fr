@@ -1487,6 +1487,7 @@ return [
         'ID',
         'ANNEE_ID',
         'TYPE_PIECE_JOINTE_ID',
+        'PIECE_JOINTE_ID',
         'INTERVENANT_ID',
         'DEMANDEE',
         'FOURNIE',
@@ -2154,6 +2155,7 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
         'TAUX_REMU_ID',
+        'ACCOMPAGNEMENT_ETUDIANTS',
     ],
     'MISSION'                        => [
         'ID',
@@ -2198,6 +2200,8 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'FORMATION',
+        'DESCRIPTION',
     ],
     'VALIDATION_MISSION'             => [
         'VALIDATION_ID',

@@ -2,18 +2,17 @@
 
 namespace Enseignement\View\Helper;
 
-use Application\Provider\Privilege\Privileges;
-use Application\View\Helper\AbstractViewHelper;
 use Enseignement\Entity\Db\Service;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Enseignement\Entity\Db\ServiceAwareTrait;
+use Laminas\View\Helper\AbstractHtmlElement;
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class LigneEnseignementViewHelper extends AbstractViewHelper
+class LigneEnseignementViewHelper extends AbstractHtmlElement
 {
     use ServiceAwareTrait;
     use ContextServiceAwareTrait;

@@ -3,7 +3,7 @@
 namespace Application;
 
 use Application\Assertion\ChargensAssertion;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Guard\PrivilegeController;
 use Application\Provider\Privilege\Privileges;
 
 return [
@@ -338,7 +338,7 @@ return [
         ],
 
         'rule_providers' => [
-            \UnicaenAuth\Provider\Rule\PrivilegeRuleProvider::class => [
+            \UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
                         'privileges' => ChargensAssertion::SCENARIO_EDITION,
@@ -372,7 +372,7 @@ return [
         'factories'  => [
             Service\SeuilChargeService::class         => Service\Factory\SeuilChargeServiceFactory::class,
             Provider\Chargens\ChargensProvider::class => Provider\Chargens\ChargensProviderFactory::class,
-            Assertion\ChargensAssertion::class        => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\ChargensAssertion::class        => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [

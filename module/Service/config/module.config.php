@@ -8,8 +8,8 @@ use Laminas\ServiceManager\Factory\InvokableFactory;
 use Service\Controller\CampagneSaisieController;
 use Service\Controller\RegleStructureValidationController;
 use Service\Controller\ServiceController;
-use UnicaenAuth\Assertion\AssertionFactory;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Assertion\AssertionFactory;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 
 return [

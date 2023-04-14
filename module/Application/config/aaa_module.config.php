@@ -3,7 +3,9 @@
 namespace Application;
 
 use Application\Mouchard\MouchardCompleterContextFactory;
-use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+use Application\View\Helper\UserProfileSelectRadioItem;
+use Application\View\Helper\UserProfileSelectRadioItemFactory;
+use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 $config = [
     'doctrine'           => [
@@ -175,25 +177,25 @@ $config = [
             Service\CorpsService::class                            => Service\CorpsService::class,
             Service\FichierService::class                          => Service\FichierService::class,
             Service\TauxHoraireHETDService::class                  => Service\TauxHoraireHETDService::class,
-            Assertion\InformationAssertion::class                  => Assertion\InformationAssertion::class,
             Service\TypeValidationService::class                   => Service\TypeValidationService::class,
             Service\ValidationService::class                       => Service\ValidationService::class,
         ],
         'factories'  => [
-            \Laminas\Navigation\Navigation::class         => Navigation\NavigationFactory::class,
-            Provider\Role\RoleProvider::class             => Provider\Role\RoleProviderFactory::class,
-            Provider\Resource\ResourceProvider::class     => Provider\Resource\ResourceProviderFactory::class,
-            Provider\Identity\IdentityProvider::class     => Provider\Identity\IdentityProviderFactory::class,
-            Service\ContextService::class                 => Service\Factory\ContextServiceFactory::class,
-            'MouchardCompleterContext'                    => MouchardCompleterContextFactory::class,
-            'UnicaenAuth\Service\Privilege'               => Service\Factory\PrivilegeServiceFactory::class,
-            Connecteur\LdapConnecteur::class              => Connecteur\Factory\LdapConnecteurFactory::class,
-            Cache\CacheService::class                     => Cache\Factory\CacheServiceFactory::class,
-            Service\UtilisateurService::class             => Service\Factory\UtilisateurServiceFactory::class,
-            Assertion\InformationAssertion::class         => \UnicaenAuth\Assertion\AssertionFactory::class,
-            HostLocalization\HostLocalizationOse::class   => HostLocalization\HostLocalizationOseFactory::class,
-            ORM\RouteEntitiesInjector::class              => ORM\RouteEntitiesInjectorFactory::class,
-            ORM\Event\Listeners\HistoriqueListener::class => ORM\Event\Listeners\HistoriqueListenerFactory::class,
+            \Laminas\Navigation\Navigation::class                       => Navigation\NavigationFactory::class,
+            Provider\Role\RoleProvider::class                           => Provider\Role\RoleProviderFactory::class,
+            Provider\Resource\ResourceProvider::class                   => Provider\Resource\ResourceProviderFactory::class,
+            Provider\Identity\IdentityProvider::class                   => Provider\Identity\IdentityProviderFactory::class,
+            Service\ContextService::class                               => Service\Factory\ContextServiceFactory::class,
+            'MouchardCompleterContext'                                  => MouchardCompleterContextFactory::class,
+            Service\PrivilegeService::class                             => Service\Factory\PrivilegeServiceFactory::class,
+            \UnicaenPrivilege\Service\Privilege\PrivilegeService::class => Service\Factory\PrivilegeServiceFactory::class,
+            Connecteur\LdapConnecteur::class                            => Connecteur\Factory\LdapConnecteurFactory::class,
+            Cache\CacheService::class                                   => Cache\Factory\CacheServiceFactory::class,
+            Service\UtilisateurService::class                           => Service\Factory\UtilisateurServiceFactory::class,
+            Assertion\InformationAssertion::class                       => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+            HostLocalization\HostLocalizationOse::class                 => HostLocalization\HostLocalizationOseFactory::class,
+            ORM\RouteEntitiesInjector::class                            => ORM\RouteEntitiesInjectorFactory::class,
+            ORM\Event\Listeners\HistoriqueListener::class               => ORM\Event\Listeners\HistoriqueListenerFactory::class,
         ],
         'aliases'    => [
             'HostLocalization' => HostLocalization\HostLocalizationOse::class,
@@ -205,15 +207,14 @@ $config = [
             'headLink'     => \Laminas\View\Helper\HeadLink::class,
             'headScript'   => \Laminas\View\Helper\HeadScript::class,
             'inlineScript' => \Laminas\View\Helper\InlineScript::class,
+            'userProfileSelectRadioItem' => UserProfileSelectRadioItem::class,
         ],
         'factories'  => [
-            \UnicaenAuth\View\Helper\UserProfileSelectRadioItem::class => View\Helper\UserProfileSelectRadioItemFactory::class,
-            \UnicaenApp\View\Helper\AppLink::class                     => View\Helper\AppLinkFactory::class,
-            \UnicaenAuth\View\Helper\UserCurrent::class                => View\Helper\UserCurrentFactory::class,
-            \UnicaenAuth\View\Helper\LocalConnectViewHelper::class     => View\Helper\LocalConnectViewHelperFactory::class,
-            'tab'                                                      => View\Helper\TabViewHelperFactory::class,
-            'vite'                                                     => View\Helper\ViteViewHelperFactory::class,
-            'vue'                                                      => View\Helper\VueViewHelperFactory::class,
+            UserProfileSelectRadioItem::class => UserProfileSelectRadioItemFactory::class,
+            //            \UnicaenUtilisateur\View\Helper\UserProfileSelectRadioItem::class  => View\Helper\UserProfileSelectRadioItemFactory::class,
+            \UnicaenApp\View\Helper\AppLink::class                             => View\Helper\AppLinkFactory::class,
+//            \UnicaenUtilisateur\View\Helper\UserCurrent::class                 => View\Helper\UserCurrentFactory::class,
+            'tab'                                                              => View\Helper\TabViewHelperFactory::class,
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,
@@ -231,7 +232,6 @@ $config = [
     'controller_plugins' => [
         'factories' => [
             'context' => Controller\Plugin\ContextFactory::class,
-            'axios'   => Controller\Plugin\AxiosFactory::class,
         ],
     ],
     'view_manager'       => [
@@ -240,11 +240,6 @@ $config = [
         ],
         'template_map'        => include __DIR__ . '/../template_map.php',
         'layout'              => 'layout/layout', // e.g., 'layout/layout'
-    ],
-    'vite'               => [
-        'host'        => 'http://localhost:5133',
-        'vue-url'     => '/vendor/vue.js',
-        'hot-loading' => \AppConfig::inDev() ? \AppConfig::get('dev', 'hot-loading') : false,
     ],
 ];
 

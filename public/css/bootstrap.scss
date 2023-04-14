@@ -246,6 +246,19 @@ dd, dt {
 }
 
 
+/* -------------- Boutons -------------- */
+
+.btn-light {
+  border: 1px #bdbdbd solid;
+}
+
+.btn-light:hover {
+  border: 1px #aaa solid;
+}
+
+.btn-light:focus-within {
+  border: 1px #aaa solid;
+}
 
 /* -------------- Divers -------------- */
 

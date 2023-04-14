@@ -10,7 +10,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use Application\View\Helper\AbstractViewHelper;
+use Laminas\View\Helper\AbstractHtmlElement;
 use UnicaenApp\Util;
 use UnicaenApp\View\Helper\TagViewHelper;
 
@@ -20,7 +20,7 @@ use UnicaenApp\View\Helper\TagViewHelper;
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class FeuilleDeRouteViewHelper extends AbstractViewHelper
+class FeuilleDeRouteViewHelper extends AbstractHtmlElement
 {
     use WorkflowServiceAwareTrait;
     use IntervenantAwareTrait;

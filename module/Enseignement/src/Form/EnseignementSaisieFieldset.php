@@ -19,7 +19,7 @@ use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use UnicaenApp\Form\Element\SearchAndSelect;
-use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
+use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 
 
 /**

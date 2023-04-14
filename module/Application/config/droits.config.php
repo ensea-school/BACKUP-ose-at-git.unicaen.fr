@@ -3,7 +3,7 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'router'          => [
@@ -225,7 +225,7 @@ return [
     ],
     'form_elements'   => [
         'factories'  => [
-            'UnicaenAuth\Form\Droits\Role' => Form\Droits\RoleFormFactory::class,
+            \UnicaenUtilisateur\Form\Role\RoleForm::class => Form\Droits\RoleFormFactory::class,
         ],
         'invokables' => [
             Form\Droits\AffectationForm::class => Form\Droits\AffectationForm::class,

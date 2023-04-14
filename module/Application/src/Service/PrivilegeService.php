@@ -2,23 +2,23 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Annee;
+use Application\Entity\Db\Privilege;
 use Application\Entity\Db\Role;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use BjyAuthorize\Provider\Resource\ProviderInterface;
-use Intervenant\Entity\Db\Statut;
+use Doctrine\ORM\EntityRepository;
 use Intervenant\Service\StatutServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenAuth\Entity\Db\PrivilegeInterface;
-use UnicaenAuth\Provider\Privilege\PrivilegeProviderInterface;
+use UnicaenPrivilege\Entity\Db\PrivilegeInterface;
+use UnicaenPrivilege\Provider\Privilege\PrivilegeProviderInterface;
 
 /**
  * Description of PrivilegeService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
+class PrivilegeService implements PrivilegeProviderInterface, ProviderInterface
 {
     use EntityManagerAwareTrait;
     use ContextServiceAwareTrait;
@@ -44,6 +44,20 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
     public function __construct(array $privilegesRolesConfig)
     {
         $this->privilegesRolesConfig = $privilegesRolesConfig;
+    }
+
+
+
+    public function getRepo(): EntityRepository
+    {
+        return $this->getEntityManager()->getRepository(Privilege::class);
+    }
+
+
+
+    public function get($id): ?Privilege
+    {
+        return $this->getRepo()->find($id);
     }
 
 
@@ -131,5 +145,18 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
         }
 
         return $privilegesRoles;
+    }
+
+
+
+    public function getResources()
+    {
+        $resources = [];
+        $privileges = array_keys($this->getPrivilegesRoles());
+        foreach ($privileges as $privilege) {
+            $resources[] = Privileges::getResourceId($privilege);
+        }
+
+        return $resources;
     }
 }

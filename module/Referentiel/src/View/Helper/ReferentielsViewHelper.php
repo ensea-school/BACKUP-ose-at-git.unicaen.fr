@@ -5,11 +5,11 @@ namespace Referentiel\View\Helper;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Provider\Privilege\Privileges;
+use Laminas\View\Helper\AbstractHtmlElement;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Referentiel\Service\ServiceReferentielServiceAwareTrait;
-use Application\View\Helper\AbstractViewHelper;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
@@ -20,7 +20,7 @@ use Service\Service\TypeVolumeHoraireServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ReferentielsViewHelper extends AbstractViewHelper
+class ReferentielsViewHelper extends AbstractHtmlElement
 {
     use ContextServiceAwareTrait;
     use TypeVolumeHoraireAwareTrait;

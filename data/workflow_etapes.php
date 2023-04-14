@@ -95,7 +95,7 @@ return [
     "MISSION_SAISIE_REALISE"         => [
         "LIBELLE_INTERVENANT" => "Je renseigne mon suivi de mission",
         "LIBELLE_AUTRES"      => "J'accède au suivi de mission",
-        "ROUTE"               => "intervenant/missions",
+        "ROUTE"               => "intervenant/missions-suivi",
         "DESC_NON_FRANCHIE"   => "Aucune heure de mission réalisée n'a été renseignée",
         "OBLIGATOIRE"         => true,
     ],
@@ -116,7 +116,7 @@ return [
     "MISSION_VALIDATION_REALISE"     => [
         "LIBELLE_INTERVENANT" => "Je visualise la validation de mon suivi de mission",
         "LIBELLE_AUTRES"      => "J'accède à la validation du suivi de mission",
-        "ROUTE"               => "intervenant/missions",
+        "ROUTE"               => "intervenant/missions-suivi",
         "DESC_NON_FRANCHIE"   => "Des heures de mission réalisées n'ont pas été validées",
         "OBLIGATOIRE"         => true,
     ],

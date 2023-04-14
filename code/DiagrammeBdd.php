@@ -93,7 +93,7 @@ foreach ($cls as $cl) {
 
     $(function () {
 
-        WidgetInitializer.includeJs(Util.url('vendor/go.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/go.js'));
 
         var $ = go.GraphObject.make;
 

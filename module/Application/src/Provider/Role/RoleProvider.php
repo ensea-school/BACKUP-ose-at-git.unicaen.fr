@@ -5,11 +5,12 @@ namespace Application\Provider\Role;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Structure;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\PrivilegeServiceAwareTrait;
 use BjyAuthorize\Provider\Role\ProviderInterface;
 use Intervenant\Entity\Db\Statut;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenAuth\Provider\Privilege\PrivilegeProviderAwareTrait;
+use UnicaenPrivilege\Provider\Privilege\PrivilegeProviderAwareTrait;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 use Application\Acl\Role;
 use Intervenant\Service\StatutServiceAwareTrait;
@@ -26,7 +27,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     use EntityManagerAwareTrait;
     use StatutServiceAwareTrait;
     use IntervenantServiceAwareTrait;
-    use PrivilegeProviderAwareTrait;
+    use PrivilegeServiceAwareTrait;
     use ContextServiceAwareTrait;
 
 
@@ -66,7 +67,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     protected function getRolesPrivileges()
     {
         if (!$this->rolesPrivileges) {
-            $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
+            $pr = $this->getServicePrivilege()->getPrivilegesRoles();
             foreach ($pr as $priv => $roles) {
                 foreach ($roles as $role) {
                     if (!isset($this->rolesPrivileges[$role])) {

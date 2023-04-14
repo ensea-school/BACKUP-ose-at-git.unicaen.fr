@@ -66,16 +66,16 @@ echo $this->doctype();
     <!-- Scripts globaux -->
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-3.6.0.min.js') ?>"></script>
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js') ?>"></script>
-    <script type="text/javascript" src="<?= $this->basePath('/vendor/axios/axios.min.js') ?>"></script>
     <script type="text/javascript" src="<?= $this->basePath('/js/util.js?v=' . $version) ?>"></script>
-    <?= $this->vite()->head(); ?>
+    <?= $this->vite(); ?>
     <?= $this->headScript(); ?>
+
 </head>
 
 <body class="<?= AppConfig::getEnv() ?> p-0" data-base-url="<?= $this->url('home') ?>">
 
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
     <div class="container">
         <?= $this->appLink($this->appInfos()->nom) ?>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

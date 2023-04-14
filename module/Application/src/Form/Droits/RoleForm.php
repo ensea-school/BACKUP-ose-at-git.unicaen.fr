@@ -154,7 +154,7 @@ class RoleFormHydrator implements HydratorInterface
             'libelle'                => $object->getLibelle(),
             'perimetre'              => $object->getPerimetre() ? $object->getPerimetre()->getId() : null,
             'peut-changer-structure' => $object->getPeutChangerStructure(),
-            'accessible-exterieur'   => $object->getAccessibleExterieur(),
+            'accessible-exterieur'   => $object->isAccessibleExterieur(),
         ];
 
         return $data;

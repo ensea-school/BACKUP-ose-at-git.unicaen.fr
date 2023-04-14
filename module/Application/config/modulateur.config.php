@@ -4,8 +4,8 @@ namespace Application;
 
 use Application\Provider\Privilege\Privileges;
 use Application\Service\TypeModulateurService;
-use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
-use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'router'          => [
@@ -163,7 +163,7 @@ return [
 
         ],
         'factories'  => [
-            Assertion\ModulateurAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\ModulateurAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         ],
     ],
     'controllers'     => [

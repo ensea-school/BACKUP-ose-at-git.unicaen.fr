@@ -5,8 +5,8 @@ namespace Application;
 use Application\Assertion\ContratAssertion;
 use Application\Controller\Factory\ContratControllerFactory;
 use Application\Provider\Privilege\Privileges;
-use UnicaenAuth\Guard\PrivilegeController;
-use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+use UnicaenPrivilege\Guard\PrivilegeController;
+use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router'          => [
@@ -257,7 +257,7 @@ return [
     ],
     'service_manager' => [
         'factories'  => [
-            Assertion\ContratAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\ContratAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         ],
         'invokables' => [
             Service\ContratService::class     => Service\ContratService::class,

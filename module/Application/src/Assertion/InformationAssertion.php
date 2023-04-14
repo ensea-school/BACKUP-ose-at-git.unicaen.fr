@@ -3,7 +3,7 @@
 namespace Application\Assertion;
 
 use Application\Acl\Role;
-use UnicaenAuth\Assertion\AbstractAssertion;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 

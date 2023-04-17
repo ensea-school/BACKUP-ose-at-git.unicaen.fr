@@ -56,18 +56,43 @@ class TypeFormationController extends AbstractController
         ]);
 
         $typeFormation = $this->getEvent()->getParam('typeFormation');
-
-        $form           = $this->getFormTypeFormationTypeFormationSaisie();
+        $form          = $this->getFormTypeFormationTypeFormationSaisie();
 
         if (empty($typeFormation)) {
-            $title          = "Création d'un nouveau type de formation";
+            $title = "Création d'un nouveau type de formation";
             /** @var TypeFormation $typeFormation */
-            $typeFormation = $this->getServiceTypeFormation()->newEntity();
+            $typeFormation       = $this->getServiceTypeFormation()->newEntity();
             $groupeTypeFormation = $this->getEvent()->getParam('groupeTypeFormation');
             $typeFormation->setGroupe($groupeTypeFormation);
         } else {
             $title = "Édition d'un type de formation";
         }
+
+        $form->bindRequestSave($typeFormation, $this->getRequest(), function () use ($typeFormation, $form) {
+
+            $this->getServiceTypeFormation()->save($typeFormation);
+            $this->flashMessenger()->addSuccessMessage(
+                "Ajout réussi"
+            );
+        });
+
+        return compact('form', 'title');
+    }
+
+
+
+    public function ajoutAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            GroupeTypeFormation::class,
+        ]);
+
+        $form  = $this->getFormTypeFormationTypeFormationSaisie();
+        $title = "Création d'un nouveau type de formation";
+        /** @var TypeFormation $typeFormation */
+        $typeFormation       = $this->getServiceTypeFormation()->newEntity();
+        $groupeTypeFormation = $this->getEvent()->getParam('groupeTypeFormation');
+        $typeFormation->setGroupe($groupeTypeFormation);
 
         $form->bindRequestSave($typeFormation, $this->getRequest(), function () use ($typeFormation, $form) {
 

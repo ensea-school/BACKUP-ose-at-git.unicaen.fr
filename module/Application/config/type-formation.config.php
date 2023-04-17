@@ -36,6 +36,19 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'ajout'           => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/ajout/:groupeTypeFormation',
+                            'constraints' => [
+                                'typeFormation' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'ajout',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
                     'supprimer'        => [
                         'type'          => 'Segment',
                         'options'       => [
@@ -126,7 +139,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\TypeFormation',
-                    'action'     => ['saisie', 'supprimer', 'saisieGroupe', 'supprimerGroupe', "trier"],
+                    'action'     => ['saisie', 'supprimer', 'saisieGroupe', 'supprimerGroupe', "trier", 'ajout'],
                     'privileges' => [Privileges::ODF_TYPE_FORMATION_EDITION],
                 ],
             ],
@@ -135,7 +148,6 @@ return [
     'controllers'   => [
         'factories' => [
             'Application\Controller\TypeFormation'       => Controller\Factory\TypeFormationControllerFactory::class,
-            'Application\Controller\GroupeTypeFormation' => Controller\Factory\GroupeTypeFormationControllerFactory::class,
         ],
     ],
     'form_elements' => [

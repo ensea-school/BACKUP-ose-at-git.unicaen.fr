@@ -308,6 +308,13 @@ return [
                     ],
                     'action'      => 'saisie',
                 ],
+                'ajout'           => [
+                    'route'       => '/ajout/:groupeTypeFormation',
+                    'constraints' => [
+                        'typeFormation' => '[0-9]*',
+                    ],
+                    'action'      => 'ajout',
+                ],
                 'supprimer'        => [
                     'route'       => '/supprimer/:typeFormation',
                     'constraints' => [
@@ -550,7 +557,7 @@ return [
         ],
         [
             'controller' => TypeFormationController::class,
-            'action'     => ['saisie', 'supprimer', 'saisieGroupe', 'supprimerGroupe', "trier"],
+            'action'     => ['saisie', 'ajout', 'supprimer', 'saisieGroupe', 'supprimerGroupe', "trier"],
             'privileges' => [Privileges::ODF_TYPE_FORMATION_EDITION],
         ],
     ],

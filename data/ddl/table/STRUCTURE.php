@@ -253,7 +253,7 @@ return [
             'name'        => 'LIBELLE_LONG',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
-            'length'      => 100,
+            'length'      => 200,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,

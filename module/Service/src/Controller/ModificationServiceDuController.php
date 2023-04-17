@@ -10,6 +10,7 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Doctrine\DBAL\Exception;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use RuntimeException;
+use Service\Entity\Db\MotifModificationServiceDu;
 use Service\Form\ModificationServiceDuFormAwareTrait;
 use Service\Service\ModificationServiceDuServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
@@ -26,6 +27,7 @@ class ModificationServiceDuController extends AbstractController
     {
         $this->em()->getFilters()->enable('historique')->init([
             ModificationServiceDu::class,
+            MotifModificationServiceDu::class,
         ]);
 
 

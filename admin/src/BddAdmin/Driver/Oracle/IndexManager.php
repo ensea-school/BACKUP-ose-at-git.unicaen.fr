@@ -2,6 +2,7 @@
 
 namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Bdd;
 use BddAdmin\Manager\AbstractManager;
 use BddAdmin\Manager\IndexManagerInterface;
 use BddAdmin\Ddl\DdlFilter;
@@ -71,6 +72,18 @@ class IndexManager extends AbstractManager implements IndexManagerInterface
         }
 
         return $data;
+    }
+
+
+
+    public function exists(string $name): bool
+    {
+        $sql = "SELECT count(*) NBR FROM all_indexes WHERE index_name = :name";
+        $params = ['name' => $name];
+
+        $nbr = (int)$this->bdd->select($sql, $params, ['fetch' => Bdd::FETCH_ONE])['NBR'];
+
+        return $nbr > 0;
     }
 
 

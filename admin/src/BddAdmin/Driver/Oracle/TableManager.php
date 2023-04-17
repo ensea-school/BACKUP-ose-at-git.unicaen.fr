@@ -194,6 +194,24 @@ class TableManager extends AbstractManager implements TableManagerInterface
 
 
 
+    public function exists(string $name): bool
+    {
+        $sql = "SELECT count(*) NBR 
+          FROM ALL_OBJECTS O 
+            LEFT JOIN ALL_OBJECTS O2 ON O2.OBJECT_NAME = O.OBJECT_NAME AND O2.OBJECT_TYPE = 'MATERIALIZED VIEW'
+          WHERE 
+            O.OWNER = sys_context( 'userenv', 'current_schema' )
+            AND O.OBJECT_TYPE = 'TABLE' AND O.GENERATED = 'N' AND O2.OBJECT_NAME IS NULL
+            AND O.OBJECT_NAME = :name";
+        $params = ['name' => $name];
+
+        $nbr = (int)$this->bdd->select($sql, $params, ['fetch' => Bdd::FETCH_ONE])['NBR'];
+
+        return $nbr > 0;
+    }
+
+
+
     protected function makeCreate(array $data)
     {
         $sql = "CREATE ";

@@ -353,6 +353,17 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
+    public function haveCandidats(): bool
+    {
+        if (!empty($this->candidatures)) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+
     public function getCandidaturesValides(): Collection
     {
         return $this->candidatures->filter(function (Candidature $c) {

@@ -49,9 +49,14 @@ class OffreEmploiAssertion extends AbstractAssertion
 
     protected function assertOffreEmploiEdition(Role $role, OffreEmploi $offre)
     {
+
+        $have = $offre->haveCandidats();
+
+
         return $this->asserts([
             $this->haveRole(),
             $offre->canSaisie(),
+            !$offre->haveCandidats(),
             $this->assertOffreEmploi($role, $offre),
         ]);
     }
@@ -89,7 +94,6 @@ class OffreEmploiAssertion extends AbstractAssertion
     {
         return $this->asserts([
             $this->haveRole(),
-            $offre->canSaisie(),
             $this->assertOffreEmploi($role, $offre),
         ]);
     }
@@ -143,6 +147,13 @@ class OffreEmploiAssertion extends AbstractAssertion
         }
 
         return false;
+    }
+
+
+
+    protected function haveCandidature()
+    {
+
     }
 
 }

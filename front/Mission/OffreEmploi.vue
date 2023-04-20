@@ -49,6 +49,9 @@
                        data-title="Suppression de l'offre"
                        data-content="Êtes-vous sur de vouloir supprimer l'offre ?"
                        @click.prevent="supprimer">Supprimer</a>
+                    <a :href="consulterUrl"
+                       class="btn btn-primary"
+                    >Plus d'information</a>
                     <a v-if="this.public"
                        :href="consulterUrl"
                        class="btn btn-primary"
@@ -104,6 +107,19 @@
         </p>
 
         {{ offre.description }}
+        <br/><br/>
+
+        <h2>Candidats en cours</h2>
+
+        <div>
+            <ul>
+                <li v-for="candidature in offre.candidatures">
+                    {{ candidature.intervenant.prenom+' '+candidature.intervenant.nomUsuel }}
+                    <a :href="'/intervenant/code:' + candidature.intervenant.code + '/voir'">Voir</a>
+                </li>
+
+            </ul>
+        </div>
 
 
         <div class="mt-5">

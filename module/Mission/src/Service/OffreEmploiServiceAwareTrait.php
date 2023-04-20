@@ -12,7 +12,7 @@ use Mission\Entity\Db\OffreEmploi;
  */
 trait OffreEmploiServiceAwareTrait
 {
-    protected ?OffreEmploiService $serviceMission = null;
+    protected ?OffreEmploiService $serviceOffreEmploi = null;
 
 
 

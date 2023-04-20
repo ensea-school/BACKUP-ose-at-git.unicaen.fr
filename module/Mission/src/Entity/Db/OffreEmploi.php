@@ -41,15 +41,14 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
     protected bool         $autoValidation = false;
 
-    private Collection     $etudiants;
+    protected Collection   $candidatures;
 
-    private ?Validation    $validation     = null;
+    protected ?Validation  $validation     = null;
 
 
 
     public function __construct()
     {
-        $this->etudiants = new ArrayCollection();
     }
 
 
@@ -68,7 +67,7 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
             'histoCreation',
             'histoCreateur',
             'validation',
-            'etudiants',
+            ['candidatures', ['intervenant']],
 
         ];
     }
@@ -78,6 +77,18 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
     public function getResourceId()
     {
         return 'OffreEmploi';
+    }
+
+
+
+    /**
+     * Retourne la représentation littérale de cet objet.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return 'Offre emploi ' . $this->getId();
     }
 
 
@@ -242,27 +253,27 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
     /**
-     * @return Collection|Intervenant[]
+     * @return Collection|Candidature[]
      */
-    public function getEtudiants(): Collection
+    public function getCandidatures(): Collection
     {
-        return $this->etudiants;
+        return $this->candidatures;
     }
 
 
 
-    public function addEtudiant(Intervenant $intervenant): self
+    public function addCandidature(Candidature $candidature): self
     {
-        $this->etudiants[] = $intervenant;
+        $this->candidatures[] = $candidature;
 
         return $this;
     }
 
 
 
-    public function removeEtudiant(Intervenant $intervenant): self
+    public function removeCandidature(Candidature $candidature): self
     {
-        $this->etudiants->removeElement($intervenant);
+        $this->candidatures->removeElement($candidature);
 
         return $this;
     }
@@ -319,12 +330,51 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
     public function canSupprime(): bool
     {
-        if ($this->isValide() || !empty($this->etudiants)) {
+        if ($this->isValide() || !empty($this->candidatures)) {
             return false;
         }
 
 
         return true;
+    }
+
+
+
+    public function isCandidat(Intervenant $intervenant): bool
+    {
+        foreach ($this->candidatures as $candidature) {
+            if ($candidature->getIntervenant() == $intervenant) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+    public function getCandidaturesValides(): Collection
+    {
+        return $this->candidatures->filter(function (Candidature $c) {
+            return $c->isValide();
+        });
+    }
+
+
+
+    public function getCandidats(): array
+    {
+        $idsIntervenant = [];
+        /**
+         * @var Candidature $candidature
+         */
+        foreach ($this->candidatures as $candidature) {
+            if ($candidature->estNonHistorise()) {
+                $idsIntervenant[] = $candidature->getIntervenant()->getId();
+            }
+        }
+
+        return $idsIntervenant;
     }
 
 }

@@ -2,15 +2,12 @@
 
 namespace Mission;
 
-use Application\Entity\Db\WfEtape;
+
 use Application\Provider\Privilege\Privileges;
-use Mission\Controller\MissionController;
-use Mission\Controller\MissionTypeController;
 use Mission\Controller\OffreEmploiController;
 use Mission\Controller\OffreEmploiControllerFactory;
-use Mission\Service\MissionTypeService;
-use Mission\Service\MissionTypeServiceFactory;
-use Service\Controller\ModificationServiceDuController;
+use Mission\Service\CandidatureService;
+use Mission\Service\CandidatureServiceFactory;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 use Mission\Service\OffreEmploiService;
@@ -115,6 +112,7 @@ return [
             'privileges' => [
                 Privileges::MISSION_OFFRE_EMPLOI_MODIFIER,
                 Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
+                Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
 
             ],
             'resources'  => 'OffreEmploi',
@@ -167,6 +165,7 @@ return [
 
     'services' => [
         OffreEmploiService::class             => OffreEmploiServiceFactory::class,
+        CandidatureService::class             => CandidatureServiceFactory::class,
         Assertion\OffreEmploiAssertion::class => AssertionFactory::class,
 
     ],

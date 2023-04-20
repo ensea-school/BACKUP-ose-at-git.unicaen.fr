@@ -4,7 +4,8 @@
             <div class="card-header">
                 <h4> {{ offre.titre }}</h4>
                 <span class="badge rounded-pill bg-info">{{ offre.nombreHeures }} heure(s)</span> &nbsp;
-                <span class="badge rounded-pill bg-info">{{ offre.nombrePostes }} poste(s) restant(s)</span>&nbsp;
+                <span v-if="nbPostesRestants > 0" class="badge rounded-pill bg-success">{{ nbPostesRestants }} poste(s) restant(s)</span>&nbsp;
+                <span v-if="nbPostesRestants <= 0" class="badge rounded-pill bg-danger">Tous les postes sont pourvus</span>&nbsp;
                 <span v-if="offre.validation && !this.public" class="badge rounded-pill bg-success">Valider le <u-date
                         :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}</span>
                 <span v-if="!offre.validation && !this.public" class="badge rounded-pill bg-warning"> En attente de validation par la DRH</span>&nbsp;
@@ -60,21 +61,26 @@
         <div v-if="!this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
             <i class="fa-solid fa-user"></i>
             <div class="ms-2">
-                Vous devez <a :href="connectionLink" class="text-decoration-underline alert-link">être identifé</a> en tant qu'étudiant pour pouvoir
+                Vous devez <a :href="connectionLink" class="text-decoration-underline alert-link">être identifé</a> pour pouvoir
                 postuler.
             </div>
         </div>
-        <div v-if="!this.canPostuler && this.intervenant" class="alert alert-primary d-flex align-items-center" role="alert">
+        <div v-if="!offre.canPostuler" class="alert alert-primary d-flex align-items-center" role="alert">
             <i class="fa-solid fa-circle-xmark"></i>
             <div class="ms-2">
                 Vous n'avez pas les droits pour postuler à cette offre, merci de contacter votre administration de rattachement.
             </div>
         </div>
-        <div v-if="!this.intervenant" class="alert alert-primary d-flex align-items-center" role="alert">
+        <div v-if="isCandidat" class="alert alert-primary d-flex align-items-center" role="alert">
             <i class="fa-solid fa-circle-xmark"></i>
             <div class="ms-2">
-                Vous ne pouvez pas postuler avec ce profil à cette offre, merci de contacter votre administration de rattachement ou de vous connecter en tant
-                qu'étudiant.
+                Vous avez déjà postulé à cette offre.
+            </div>
+        </div>
+        <div v-if="!isCandidat && nbPostesRestants <= 0" class="alert alert-primary d-flex align-items-center" role="alert">
+            <i class="fa-solid fa-circle-xmark"></i>
+            <div class="ms-2">
+                Tous les postes pour cette offre ont été pourvu.
             </div>
         </div>
         <p class="bg-light" style="padding:10px;">
@@ -129,7 +135,6 @@ export default {
     data()
     {
 
-        console.log(this.intervenant);
         return {
             saisirUrl: unicaenVue.url('offre-emploi/saisir/:offre', {offre: this.offre.id}),
             supprimerUrl: unicaenVue.url("offre-emploi/supprimer/:offre", {offre: this.offre.id}),
@@ -150,10 +155,16 @@ export default {
             }
         },
         isDisabled: function () {
-            if (!this.canPostuler || !this.intervenant) {
+            if (!this.offre.canPostuler || this.offre.candidats.indexOf(this.intervenant.id) !== -1) {
                 return 'btn btn-primary disabled';
             }
             return 'btn btn-primary';
+        },
+        isCandidat: function () {
+            if (this.offre.candidats.indexOf(this.intervenant.id) !== -1) {
+                return true;
+            }
+            return false;
         },
         shortDesc: function () {
             var shorDesc = this.offre.description.substr(0, 200);
@@ -164,6 +175,9 @@ export default {
         },
         connectionLink: function () {
             return '/auth/connexion?redirect='+window.location.href;
+        },
+        nbPostesRestants: function () {
+            return this.offre.nombrePostes-this.offre.candidaturesValides.length;
         }
     },
 
@@ -179,7 +193,6 @@ export default {
             unicaenVue.axios.get(
                 unicaenVue.url("offre-emploi/get/:offreEmploi", {offreEmploi: this.offre.id})
             ).then(response => {
-                console.log(response.data);
                 this.$emit('refresh', response.data);
             });
         },

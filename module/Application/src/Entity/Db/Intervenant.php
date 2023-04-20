@@ -227,6 +227,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @var Collection
      */
+    protected $candidatures;
+
+    /**
+     * @var Collection
+     */
     protected $agrement;
 
     /**
@@ -1286,6 +1291,18 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     public function getAffectation()
     {
         return $this->affectation;
+    }
+
+
+
+    /**
+     * Get candidatures
+     *
+     * @return Collection
+     */
+    public function getCandidatures()
+    {
+        return $this->candidatures;
     }
 
 

@@ -9,6 +9,7 @@ use Doctrine\ORM\Query;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\OffreEmploi;
 use Mission\Form\OffreEmploiFormAwareTrait;
+use Mission\Service\CandidatureServiceAwareTrait;
 use Mission\Service\OffreEmploiServiceAwareTrait;
 use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\AxiosModel;
@@ -22,6 +23,7 @@ use UnicaenVue\View\Model\AxiosModel;
 class OffreEmploiController extends AbstractController
 {
     use OffreEmploiServiceAwareTrait;
+    use CandidatureServiceAwareTrait;
     use OffreEmploiFormAwareTrait;
     use ValidationServiceAwareTrait;
     use ContextServiceAwareTrait;
@@ -86,8 +88,24 @@ class OffreEmploiController extends AbstractController
          */
         $query = $this->getServiceOffreEmploi()->query([]);
 
+        $properties = ['typeMission',
+                       'dateDebut',
+                       'dateFin',
+                       'structure',
+                       'titre',
+                       'description',
+                       'nombreHeures',
+                       'nombrePostes',
+                       'histoCreation',
+                       'histoCreateur',
+                       'validation',
+                       'candidats',
+                       'candidaturesValides',
+                       ['candidatures', ['intervenant', 'validation']],
+        ];
 
-        return new AxiosModel(AxiosExtractor::extract($query, [], $this->getServiceOffreEmploi()->getOffreEmploiPrivileges()));
+
+        return new AxiosModel($query, $properties, $this->getServiceOffreEmploi()->getOffreEmploiPrivileges());
     }
 
 
@@ -132,11 +150,19 @@ class OffreEmploiController extends AbstractController
 
     public function postulerAction()
     {
+        /**
+         * @var OffreEmploi $offreEmploi
+         */
         $offreEmploi = $this->getEvent()->getParam('offreEmploi');
-        $intervenant = $this->getServiceContext()->getIntervenant();
-        $offreEmploi = $this->getServiceOffreEmploi()->postuler($intervenant, $offreEmploi);
 
-        $this->flashMessenger()->addSuccessMessage("Votre candidature a bien été prise en compte. Vous pouvez maintenant renseigner vos données personnelles afin d'appuyer votre candidature.");
+        $intervenant = $this->getServiceContext()->getIntervenant();
+        if (!$offreEmploi->isCandidat($intervenant)) {
+            $this->getServiceCandidature()->postuler($intervenant, $offreEmploi);
+            $this->flashMessenger()->addSuccessMessage("Votre candidature a bien été prise en compte. Vous pouvez maintenant renseigner vos données personnelles afin d'appuyer votre candidature.");
+        } else {
+            $this->flashMessenger()->addErrorMessage("Vous avez déjà postulé à cette offre d'emploi");
+        }
+
 
         return $this->redirect()->toRoute('offre-emploi/public');
     }
@@ -145,6 +171,9 @@ class OffreEmploiController extends AbstractController
 
     public function publicAction()
     {
+        /**
+         * @var OffreEmploi $offreEmploi
+         */
         $offreEmploi = $this->getEvent()->getParam('offreEmploi');
         $utilisateur = $this->getServiceContext()->getUtilisateur();
         $intervenant = ($this->getServiceContext()->getIntervenant()) ?: false;
@@ -168,9 +197,25 @@ class OffreEmploiController extends AbstractController
 
         $this->em()->clear();
 
+        $properties = ['typeMission',
+                       'dateDebut',
+                       'dateFin',
+                       'structure',
+                       'titre',
+                       'description',
+                       'nombreHeures',
+                       'nombrePostes',
+                       'histoCreation',
+                       'histoCreateur',
+                       'validation',
+                       'candidats',
+                       'candidaturesValides',
+                       ['candidatures', ['intervenant', 'validation']],
+        ];
+
         $query = $this->getServiceOffreEmploi()->query(['offreEmploi' => $offreEmploi]);
 
-        return new AxiosModel(AxiosExtractor::extract($query, [], $this->getServiceOffreEmploi()->getOffreEmploiPrivileges())[0]);
+        return new AxiosModel(AxiosExtractor::extract($query, $properties, $this->getServiceOffreEmploi()->getOffreEmploiPrivileges())[0]);
     }
 
 }

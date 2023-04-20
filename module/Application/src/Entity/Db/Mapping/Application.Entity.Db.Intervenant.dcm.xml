@@ -109,7 +109,7 @@
         <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
             <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
         </many-to-one>
-
+        <one-to-many field="candidatures" target-entity="Mission\Entity\Db\Candidature" mapped-by="offre" fetch="EXTRA_LAZY"/>
         <one-to-many field="affectation" target-entity="Application\Entity\Db\AffectationRecherche" mapped-by="intervenant"/>
         <one-to-many field="agrement" target-entity="Agrement\Entity\Db\Agrement" mapped-by="intervenant"/>
         <one-to-many field="contrat" target-entity="Application\Entity\Db\Contrat" mapped-by="intervenant"/>

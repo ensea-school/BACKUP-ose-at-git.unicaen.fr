@@ -11,16 +11,16 @@ use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
 
 /**
- * Description of OffreEmploiService
+ * Description of CandidatureService
  *
  * @author Antony Le Courtes <antony.lecourtes at unicaen.fr>
  *
- * @method OffreEmploi get($id)
- * @method OffreEmploi[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
- * @method OffreEmploi newEntity()
+ * @method Candidature get($id)
+ * @method Candidature[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method Candidature newEntity()
  *
  */
-class OffreEmploiService extends AbstractEntityService
+class CandidatureService extends AbstractEntityService
 {
     use SourceServiceAwareTrait;
 
@@ -32,7 +32,7 @@ class OffreEmploiService extends AbstractEntityService
      */
     public function getEntityClass(): string
     {
-        return OffreEmploi::class;
+        return Candidature::class;
     }
 
 
@@ -44,12 +44,24 @@ class OffreEmploiService extends AbstractEntityService
      */
     public function getAlias(): string
     {
-        return 'oe';
+        return 'ca';
     }
 
 
 
-    public function query(array $parameters, ?Role $role = null)
+    public function postuler(Intervenant $intervenant, OffreEmploi $offre): Candidature
+    {
+
+        $candidature = $this->newEntity();
+        $candidature->setIntervenant($intervenant);
+        $candidature->setOffre($offre);
+
+        return $this->save($candidature);
+    }
+
+
+
+    /*public function query(array $parameters, ?Role $role = null)
     {
 
 
@@ -72,41 +84,19 @@ class OffreEmploiService extends AbstractEntityService
         ";
 
         return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
-    }
-
+    }*/
 
 
     /**
-     * @param OffreEmploi $entity
+     * @param Candidature $entity
      *
-     * @return OffreEmploi
+     * @return Candidature
      */
     public function save($entity)
     {
         parent::save($entity);
 
         return $entity;
-    }
-
-
-
-    public function getOffreEmploiPrivileges(): array
-    {
-        return [
-            '/' => function (OffreEmploi $offre, array $extracted) {
-                $extracted['canSaisie']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
-                $extracted['canValide']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
-                $extracted['canPostuler'] = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
-
-
-                /*$extracted['canValider']   = $this->isAllowed($original, Privileges::MISSION_VALIDATION);
-                $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION);*/
-
-                return $extracted;
-            },
-
-        ];
     }
 
 }

@@ -3,8 +3,10 @@
 namespace Mission\Assertion;
 
 use Application\Acl\Role;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
+use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
@@ -24,7 +26,6 @@ class OffreEmploiAssertion extends AbstractAssertion
         /** @var Role $role */
         $role = $this->getRole();
 
-        if (!$role instanceof Role) return false;
 
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
@@ -35,6 +36,8 @@ class OffreEmploiAssertion extends AbstractAssertion
                         return $this->assertOffreEmploiEdition($role, $entity);
                     case Privileges::MISSION_OFFRE_EMPLOI_VALIDER:
                         return $this->assertOffreEmploiValidation($role, $entity);
+                    case Privileges::MISSION_OFFRE_EMPLOI_POSTULER:
+                        return $this->assertOffreEmploiPostuler($role, $entity);
                 }
             break;
         }
@@ -47,6 +50,7 @@ class OffreEmploiAssertion extends AbstractAssertion
     protected function assertOffreEmploiEdition(Role $role, OffreEmploi $offre)
     {
         return $this->asserts([
+            $this->haveRole(),
             $offre->canSaisie(),
             $this->assertOffreEmploi($role, $offre),
         ]);
@@ -54,9 +58,37 @@ class OffreEmploiAssertion extends AbstractAssertion
 
 
 
+    protected function assertOffreEmploiPostuler(Role $role, OffreEmploi $offre)
+    {
+        //On vérifier que l'on a bien un contexte avec un intervenant
+        if (!$this->haveIntervenant()) {
+            return false;
+        }
+        //On vérifie qu'il reste encore des postes disponibles sur cette offre
+        $nbPostes = $offre->getNombrePostes();
+
+        $nbCandidatures = $offre->getCandidatures()->filter(
+            function ($candidature) {
+                /**
+                 * @var Candidature $candidature
+                 */
+                return ($candidature->estNonHistorise() && $candidature->isValide()) ? true : false;
+            }
+        )->count();
+
+        if ($nbPostes > $nbCandidatures) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+
     protected function assertOffreEmploiValidation(Role $role, OffreEmploi $offre)
     {
         return $this->asserts([
+            $this->haveRole(),
             $offre->canSaisie(),
             $this->assertOffreEmploi($role, $offre),
         ]);
@@ -84,6 +116,33 @@ class OffreEmploiAssertion extends AbstractAssertion
         }
 
         return $role->getStructure() === $structure;
+    }
+
+
+
+    protected function haveRole()
+    {
+        $role = $this->getRole();
+
+        if ($role instanceof Role) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+    protected function haveIntervenant()
+    {
+        $role = $this->getRole();
+        if ($role instanceof Role) {
+            if ($role->getIntervenant() instanceof Intervenant) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

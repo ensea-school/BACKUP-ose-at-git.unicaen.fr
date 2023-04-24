@@ -471,11 +471,6 @@ class EnseignementController extends AbstractController
         $vm->setVariables(compact('title', 'typeVolumeHoraire', 'intervenant', 'validations', 'services'));
         $vm->setTemplate('enseignement/validation');
 
-        //Cette update est nécéssaire pour résoudre un bug de bouton prévu->réaliser pour les personne qui n'ont pas l'étape contrat obligatoire pour accèder au service réaliser.
-        //Sinon après validation lorsque l'on va dans le service réalisé le bouton prévu->réalisé n'est pas présent
-        $this->updateTableauxBord($intervenant);
-
-
         return $vm;
     }
 

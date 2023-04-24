@@ -102,6 +102,7 @@ class SaisieController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
 
         $mission = $this->getServiceMission()->newEntity();
+        $mission->setEntityManager($this->em());
         $mission->setIntervenant($intervenant);
 
         $canAutoValidate = $this->isAllowed($mission, Privileges::MISSION_AUTOVALIDATION);

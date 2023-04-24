@@ -25,7 +25,9 @@ use Laminas\Mime\Message;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part;
 use LogicException;
+use Mission\Entity\Db\VolumeHoraireMission;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
+use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeService;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -265,7 +267,7 @@ class ContratProcessus extends AbstractProcessus
             }
         }
 
-        // on récupère les services non contractualisés et on la place les VH correspondants dans le contrat
+        // on récupère les services referentiel non contractualisés et on la place les VHR correspondants dans le contrat
         $servicesRef = $this->getServicesRef($contrat->getIntervenant(), null, $contrat->getStructure(), false);
         $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
         foreach ($servicesRef as $serviceRef) {
@@ -275,6 +277,18 @@ class ContratProcessus extends AbstractProcessus
                 $this->getEntityManager()->persist($vhr);
             }
         }
+
+        // on récupère les services referentiel non contractualisés et on la place les VHR correspondants dans le contrat
+        $servicesMissions = $this->getServicesMission($contrat->getIntervenant(), null, $contrat->getStructure(), false);
+        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
+        foreach ($servicesMissions as $servicesMission) {
+            foreach ($servicesMission->getVolumesHorairesPrevus() as $vhm) {
+                /* @var $vhm VolumeHoraireMission */
+                $vhm->setContrat($contrat);
+                $this->getEntityManager()->persist($vhm);
+            }
+        }
+
         $this->getORMEventListenersHistoriqueListener()->setEnabled(true);
         $this->getEntityManager()->flush();
 
@@ -300,6 +314,8 @@ class ContratProcessus extends AbstractProcessus
 
         // recherche des VH liés au contrat
         $vhs = $sVH->getList($sVH->finderByContrat($contrat));
+        $vhr = $this->getEntityManager()->getRepository(VolumeHoraireReferentiel::class)->findBy(['contrat'=>$contrat->getId()]);
+        $vhm = $this->getEntityManager()->getRepository(VolumeHoraireMission::class)->findBy(['contrat'=>$contrat->getId()]);
 
         // détachement du contrat et des VH
         $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
@@ -307,6 +323,18 @@ class ContratProcessus extends AbstractProcessus
             /* @var $vh VolumeHoraire */
             $vh->setContrat();
             $sVH->save($vh);
+        }
+        foreach ($vhr as $vh) {
+            /* @var $vh VolumeHoraireReferentiel */
+            $vh->setContrat();
+            $this->getEntityManager()->persist($vh);
+            $this->getEntityManager()->flush($vh);
+        }
+        foreach ($vhm as $vh) {
+            /* @var $vh VolumeHoraireMission */
+            $vh->setContrat();
+            $this->getEntityManager()->persist($vh);
+            $this->getEntityManager()->flush($vh);
         }
         $this->getORMEventListenersHistoriqueListener()->setEnabled(true);
         $this->getServiceContrat()->delete($contrat);
@@ -528,5 +556,60 @@ class ContratProcessus extends AbstractProcessus
             ->getHeaders()->get('content-type')->setType($messageType);
 
         return $message;
+    }
+
+
+
+    private function getServicesMission(Intervenant $intervenant, Contrat $contrat = null, Structure $structure = null, bool $detach = true)
+    {
+        $services = [];
+
+        $fContrat    = "vhm.contrat = :contrat";
+        $fNonContrat = "vhm.contrat IS NULL "
+            . "AND tvm.code = '" . TypeVolumeHoraire::CODE_PREVU . "' "
+            . "AND evm.code = '" . EtatVolumeHoraire::CODE_VALIDE . "' ";
+
+        if ($structure) {
+            $fStructure = "AND str = :structure";
+        } else {
+            $fStructure = '';
+        }
+
+        $dql   = "
+        SELECT
+          m, tm, str, i, vhm, evm, tvm
+        FROM
+          Mission\Entity\Db\Mission m
+          JOIN m.volumesHoraires      vhm
+          JOIN m.typeMission tm
+          JOIN m.structure         str
+          JOIN m.intervenant        i
+          JOIN vhm.etatVolumeHoraire evm
+          JOIN vhm.typeVolumeHoraire tvm
+        WHERE
+          i = :intervenant
+          AND m.histoDestruction IS NULL
+          AND vhm.histoDestruction IS NULL
+          AND " . ($contrat ? $fContrat : $fNonContrat) . "
+          $fStructure
+        ";
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameter('intervenant', $intervenant);
+        if ($contrat) {
+            $query->setParameter('contrat', $contrat);
+        }
+        if ($structure) {
+            $query->setParameter('structure', $structure);
+        }
+
+        foreach ($query->execute() as $service) {
+            /* @var $service Service */
+            if ($detach) {
+                $this->getEntityManager()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
+            }
+            $services[$service->getId()] = $service;
+        }
+
+        return $services;
     }
 }

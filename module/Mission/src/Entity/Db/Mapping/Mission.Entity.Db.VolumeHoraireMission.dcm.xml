@@ -55,5 +55,15 @@
                 <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
+        <many-to-many field="etatVolumeHoraire" target-entity="Service\Entity\Db\EtatVolumeHoraire">
+            <join-table name="V_VOLUME_HORAIRE_MISSION_ETAT">
+                <join-columns>
+                    <join-column name="VOLUME_HORAIRE_MISSION_ID" referenced-column-name="ID" unique="true" on-delete="CASCADE"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID" on-delete="CASCADE"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
     </entity>
 </doctrine-mapping>

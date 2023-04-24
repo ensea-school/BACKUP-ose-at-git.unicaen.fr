@@ -4,6 +4,7 @@ namespace Mission\Entity\Db;
 
 use Application\Entity\Db\Validation;
 use Application\Interfaces\AxiosExtractor;
+use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\ContratAwareTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -40,6 +41,30 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
     protected ?string $description = null;
 
     private Collection $validations;
+
+    private Collection $etatVolumeHoraire;
+
+    protected ?Contrat $contrat = null;
+
+
+
+    /**
+     * @return Contrat|null
+     */
+    public function getContrat(): ?Contrat
+    {
+        return $this->contrat;
+    }
+
+
+
+    /**
+     * @param Contrat|null $contrat
+     */
+    public function setContrat(?Contrat $contrat = null): void
+    {
+        $this->contrat = $contrat;
+    }
 
 
 

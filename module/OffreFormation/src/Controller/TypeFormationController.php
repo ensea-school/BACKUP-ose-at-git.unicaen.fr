@@ -60,10 +60,7 @@ class TypeFormationController extends AbstractController
 
         if (empty($typeFormation)) {
             $title = "Création d'un nouveau type de formation";
-            /** @var TypeFormation $typeFormation */
             $typeFormation       = $this->getServiceTypeFormation()->newEntity();
-            $groupeTypeFormation = $this->getEvent()->getParam('groupeTypeFormation');
-            $typeFormation->setGroupe($groupeTypeFormation);
         } else {
             $title = "Édition d'un type de formation";
         }

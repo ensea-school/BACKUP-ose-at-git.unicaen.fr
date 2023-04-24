@@ -558,10 +558,11 @@ class EnseignementController extends AbstractController
             'formule',
             'validation_enseignement',
             'contrat',
+            'service',
         ], $intervenant);
 
         if (!$validation) {
-            $this->getServiceWorkflow()->calculerTableauxBord(['service', 'piece_jointe_demande', 'piece_jointe_fournie'], $intervenant);
+            $this->getServiceWorkflow()->calculerTableauxBord(['piece_jointe_demande', 'piece_jointe_fournie'], $intervenant);
         }
     }
 }

@@ -11,41 +11,45 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Paiement\Entity\Db\TauxRemu;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareInterface;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 
-class Mission implements HistoriqueAwareInterface, ResourceInterface
+class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityManagerAwareInterface
 {
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
     use StructureAwareTrait;
+    use EntityManagerAwareTrait;
 
-    protected ?int         $id             = null;
+    protected ?int $id = null;
 
-    protected ?TypeMission $typeMission    = null;
+    protected ?TypeMission $typeMission = null;
 
-    protected ?TauxRemu    $tauxRemu       = null;
+    protected ?TauxRemu $tauxRemu = null;
 
-    protected ?\DateTime   $dateDebut      = null;
+    protected ?\DateTime $dateDebut = null;
 
-    protected ?\DateTime   $dateFin        = null;
+    protected ?\DateTime $dateFin = null;
 
-    protected ?string      $description    = null;
+    protected ?string $description = null;
 
-    protected bool         $autoValidation = false;
+    protected bool $autoValidation = false;
 
-    private Collection     $etudiants;
+    private Collection $etudiants;
 
-    private Collection     $validations;
+    private Collection $validations;
 
-    private Collection     $volumesHoraires;
+    private Collection $volumesHoraires;
 
 
 
     public function __construct()
     {
-        $this->etudiants       = new ArrayCollection();
-        $this->validations     = new ArrayCollection();
+        $this->etudiants = new ArrayCollection();
+        $this->validations = new ArrayCollection();
         $this->volumesHoraires = new ArrayCollection();
     }
 
@@ -145,9 +149,6 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * @return bool
-     */
     public function isAutoValidation(): bool
     {
         return $this->autoValidation;
@@ -155,11 +156,6 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * @param bool $autoValidation
-     *
-     * @return Mission
-     */
     public function setAutoValidation(bool $autoValidation): Mission
     {
         $this->autoValidation = $autoValidation;
@@ -214,8 +210,13 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
         $oldHeures = $this->getHeures() ?: 0;
         $newHeures = $heures - $oldHeures;
 
+        $prevu = $this->getEntityManager()
+            ->getRepository(TypeVolumeHoraire::class)
+            ->findOneBy(['code' => TypeVolumeHoraire::CODE_PREVU]);
+
         if ($newHeures != 0) {
             $nvh = new VolumeHoraireMission();
+            $nvh->setTypeVolumeHoraire($prevu);
             $nvh->setMission($this);
             $this->addVolumeHoraire($nvh);
             $nvh->setHeures($newHeures);
@@ -325,16 +326,16 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
     public function getLibelle(): string
     {
         return $this->getTypeMission()->getLibelle()
-            .'(du '.$this->getDateDebut()->format(Constants::DATE_FORMAT)
-            .' au '.$this->getDateFin()->format(Constants::DATE_FORMAT)
-            .')';
+            . '(du ' . $this->getDateDebut()->format(Constants::DATE_FORMAT)
+            . ' au ' . $this->getDateFin()->format(Constants::DATE_FORMAT)
+            . ')';
     }
 
 
 
     public function getLibelleCourt(): string
     {
-        return $this->getTypeMission()->getLibelle().' ('.$this->getStructure()->getLibelleCourt().')';
+        return $this->getTypeMission()->getLibelle() . ' (' . $this->getStructure()->getLibelleCourt() . ')';
     }
 
 
@@ -344,7 +345,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getVolumesHorairesPrevus(): Collection
     {
-        return $this->volumesHoraires->filter(function(VolumeHoraireMission $vhm){
+        return $this->volumesHoraires->filter(function (VolumeHoraireMission $vhm) {
             return $vhm->getTypeVolumeHoraire()->isPrevu();
         });
     }
@@ -356,7 +357,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getVolumesHorairesRealises(): Collection
     {
-        return $this->volumesHoraires->filter(function(VolumeHoraireMission $vhm){
+        return $this->volumesHoraires->filter(function (VolumeHoraireMission $vhm) {
             return $vhm->getTypeVolumeHoraire()->isRealise();
         });
     }

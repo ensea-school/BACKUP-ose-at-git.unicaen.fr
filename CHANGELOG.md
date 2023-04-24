@@ -11,6 +11,18 @@
 * Taux HETD personnalisables
 
 
+# OSE 20.2 (à venir)
+
+## Nouveautés
+
+* Nouvelle formule de calcul de Rouen
+
+## Corrections de bugs
+
+* Les motifs de modification de service dû supprimés ne peuvent plus être sélectionnés #50328
+* Messages d'erreur corrigés lors de l'exécution du script de migration de la V20.
+* Le bouton prévu=>réalisé s'affiche de nouveau lorsqu'il n'y a pas de contrat (#45643)
+* Formule de Poitiers : rétablissement du test pour appliquer l'ancienne formule avant 2022.
 
 # OSE 20.1 (04/04/2023)
 
@@ -32,6 +44,16 @@
 * Formule La Réunion : (#24229)
 * Formule de Picardie:  (#47224)
 
+## Notes de mise à jour
+
+Si vous rencontrez les deux messages d'erreurs suivants, merci de ne pas en tenir compte, ces erreurs n'occasionneront pas de dysfonctionnezmenet de l'application.
+
+1. Suppression de l'index TYPE_INTERVENTION_CODE_UN
+ORA-02429: cannot drop index used for enforcement of unique/primary key (offset 11
+DROP INDEX TYPE_INTERVENTION_CODE_UN
+
+2. Transformation des modèles de contrats en états de sortie ... Convertion des contrats de travail en états de sortie
+Erreur : ORA-00001: unique constraint (OSE.ETAT_SORTIE_CODE_UN) violated
 
 
 # OSE 20 (28/02/2023)

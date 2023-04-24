@@ -307,6 +307,11 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
   BEGIN
     feuille.delete;
 
+    IF ose_formule.intervenant.annee_id < 2022 THEN
+      FORMULE_POITIERS_2021.CALCUL_RESULTAT;
+      RETURN;
+    END IF;
+
     IF ose_formule.intervenant.depassement_service_du_sans_hc THEN -- HC traitées comme du service
       ose_formule.intervenant.service_du := ose_formule.intervenant.heures_service_statutaire + ose_formule.intervenant.heures_service_modifie;
     END IF;

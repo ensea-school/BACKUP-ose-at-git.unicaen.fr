@@ -86,7 +86,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     <?php if ($canEdit): ?>
                         <tr class="champ-triable">
                             <a class="btn btn-primary ajax-modal " data-event="type-formation-edition"
-                               href="<?= $this->url('type-formation/saisie', ['typeFormation' => '', 'groupeTypeFormation' => $groupeTypeFormation->getId()]); ?>"><i
+                               href="<?= $this->url('type-formation/ajout', ['groupeTypeFormation' => $groupeTypeFormation->getId()]); ?>"><i
                                         class="fas fa-plus"></i>
                                 Ajout d'un nouveau type de formation</a>
                         </tr>

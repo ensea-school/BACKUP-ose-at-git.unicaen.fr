@@ -302,7 +302,7 @@ return [
             'may_terminate' => true,
             'child_routes'  => [
                 'saisie'           => [
-                    'route'       => '/saisie[/:typeFormation][/:groupeTypeFormation]',
+                    'route'       => '/saisie/:typeFormation',
                     'constraints' => [
                         'typeFormation' => '[0-9]*',
                     ],

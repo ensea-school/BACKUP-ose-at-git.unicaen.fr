@@ -8,6 +8,7 @@ import path from 'path';
  * puis retourne vite.defineConfig
  */
 
+/** @type {import('vite').UserConfig} */
 export default unicaenVue.defineConfig({
     // répertoire où seront placés les fichiers *.vue des composants
     root: 'front',

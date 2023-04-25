@@ -123,11 +123,9 @@
 </template>
 
 <script>
-import UIcon from "@/Application/UI/UIcon.vue";
 
 export default {
     name: "Taux",
-    components: {UIcon},
     props: {
         taux: {required: true},
         listeTaux: {required: true},

@@ -11,74 +11,41 @@ use Unicaen\OpenDocument\Calc;
  */
 
 ?>
+<select class="form-select">
+    <option selected>Open this select menu</option>
+    <option value="1">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+</select>
 
-<button onclick="ts()">Suceess</button>
-<button onclick="te()">Error</button>
+<h2>bootstrap-select</h2>
+<select id="test">
+    <option selected>Open this select menu</option>
+    <option value="1">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+</select>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown button
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+    </div>
 
 <script>
 
-
-    function toast(message, severity) {
-        const bgClasses = {
-            info: 'bg-info',
-            success: 'bg-success',
-            warning: 'bg-warning',
-            error: 'bg-danger'
-        };
-        const iconClasses = {
-            info: 'info-circle',
-            success: 'check-circle',
-            warning: 'exclamation-circle',
-            error: 'exclamation-triangle'
-        };
-
-        let toastContainer = document.getElementById('unicaen-vue-toast-container');
-        if (!toastContainer) {
-            toastContainer = document.createElement('div');
-            toastContainer.id = 'unicaen-vue-toast-container';
-            toastContainer.classList.add('toast-container', 'position-fixed', 'top-0', 'end-0', 'p-3');
-            document.body.appendChild(toastContainer);
-        }
-
-        // Création de l'élément HTML pour le toast
-        const toast = document.createElement('div');
-        toast.classList.add('toast', 'show', 'text-white', bgClasses[severity] ? bgClasses[severity] : 'bg-secondary');
-        toast.setAttribute('role', 'alert');
-        toast.setAttribute('aria-live', 'assertive');
-        toast.setAttribute('aria-atomic', 'true');
-
-        if (severity === 'error'){
-            toast.setAttribute('style', 'width:100%');
-        }
-
-        const toastContent =
-            '<button class="btn-close btn-close-white h5" style="float:right" data-bs-dismiss="toast" aria-label="Close"></button>' +
-            '<i class="icon fas fa-' + iconClasses[severity] + '" style="float: left;font-size: 26pt;padding-left: .4rem;margin-top:.4rem;padding-right: 1rem;"></i>' +
-            '<div class="toast-body">' + message + '  </div>';
-
-
-        toast.innerHTML = toastContent;
-
-        // Ajout du toast à l'élément du conteneur de toasts
-        toastContainer.appendChild(toast);
-
-        // Affichage du toast
-        //const bsToast = new bootstrap.Toast(toast);
-        //bsToast.show();
-
-        // Masquage du toast si ce n'est pas une erreur
-        if (severity !== 'error') {
-            // setTimeout(() => {
-            //     toast.classList.remove('show');
-            // }, 3000);
-        }
-    }
-
-    $(() => {
-        toast('mon success est phénoménal et j\'ai envie d\'en parler tout le temps mais ce serait bien trop long à expliquer et patati et patatta', 'success');
-        toast('Et voici une info à ne pas rater!!', 'info');
-        toast('Warning', 'warning');
-        toast('Erreur magistrale!!!', 'error');
+    $(function () {
+        $('#test').selectpicker();
     });
 
 </script>
+
+<?php
+
+echo $this->vue('exemple/mon-test');
+echo $this->vue('application/utilisateur', ['valeur' => 12.0]);

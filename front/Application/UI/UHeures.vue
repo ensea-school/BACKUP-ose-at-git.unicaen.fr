@@ -4,7 +4,6 @@
 
 <script>
 export default {
-    name: "UIcon",
     props: {
         valeur: {required: true, type: Float64Array},
     },

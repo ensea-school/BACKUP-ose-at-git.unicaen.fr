@@ -104,6 +104,10 @@ class MissionService extends AbstractEntityService
             'contrat',
             'valide',
             'validation',
+            'canSaisie',
+            'canValider',
+            'canDevalider',
+            'canSupprimer',
         ];
 
         $triggers = [

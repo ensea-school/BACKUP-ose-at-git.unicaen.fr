@@ -38,16 +38,6 @@ class Module
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
-        /* Utilise un layout spécial si on est en AJAX. Valable pour TOUS les modules de l'application */
-        $eventManager->getSharedManager()->attach(AbstractActionController::class, MvcEvent::EVENT_DISPATCH,
-            function (MvcEvent $e) {
-                $request = $e->getRequest();
-                if ($request instanceof \Laminas\Http\Request && $request->isXmlHttpRequest()) {
-                    $e->getTarget()->layout('layout/ajax.phtml');
-                }
-            }
-        );
-
         $eventManager->attach(MvcEvent::EVENT_ROUTE, $container->get(RouteEntitiesInjector::class), -90);
 
         /** @var $userContext UserContext */

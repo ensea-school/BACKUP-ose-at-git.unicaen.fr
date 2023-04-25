@@ -5,9 +5,7 @@ namespace Application\Controller;
 use Application\Form\Supprimer;
 use Application\Traits\TranslatorTrait;
 use Doctrine\ORM\EntityManager;
-use Laminas\Http\Request;
 use Laminas\Mvc\Controller\AbstractActionController;
-use Laminas\Mvc\MvcEvent;
 
 /**
  * Description of AbstractController

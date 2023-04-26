@@ -21,6 +21,18 @@ return [
             'position'    => 13,
             'commentaire' => NULL,
         ],
+        'CONTRAT_ID'             => [
+            'name'        => 'CONTRAT_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 16,
+            'commentaire' => NULL,
+        ],
         'HEURES'                 => [
             'name'        => 'HEURES',
             'type'        => 'float',

@@ -57,5 +57,8 @@
         <field name="autoValidation" type="boolean" column="AUTO_VALIDATION" nullable="false"/>
         <field name="horaireDebut" type="datetime" column="HORAIRE_DEBUT" nullable="true"/>
         <field name="horaireFin" type="datetime" column="HORAIRE_FIN" nullable="true"/>
+        <many-to-one field="contrat" target-entity="Contrat\Entity\Db\Contrat">
+            <join-column name="CONTRAT_ID" referenced-column-name="ID"/>
+        </many-to-one>
     </entity>
 </doctrine-mapping>

@@ -541,6 +541,7 @@ class EnseignementController extends AbstractController
             $this->flashMessenger()->addErrorMessage('Vous n\'avez pas le droit de dévalider ces enseignements.');
         }
 
+
         return new MessengerViewModel();
     }
 

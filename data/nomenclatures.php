@@ -899,6 +899,24 @@ return [
         ],
     ],
 
+    'TYPE_SERVICE' => [
+        [
+            'ID'      => 1,
+            'CODE'    => 'ENS',
+            'LIBELLE' => 'Enseignement',
+        ],
+        [
+            'ID'      => 2,
+            'CODE'    => 'REF',
+            'LIBELLE' => 'Référentiel',
+        ],
+        [
+            'ID'      => 3,
+            'CODE'    => 'MIS',
+            'LIBELLE' => 'Mission',
+        ],
+    ],
+
     'UTILISATEUR' => [
         [
             'USERNAME'             => 'oseappli',

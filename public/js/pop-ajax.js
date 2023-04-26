@@ -14,7 +14,7 @@ $.widget("unicaen.popAjax", {
         submitEvent: undefined,
         submitClose: false,
         submitReload: false,
-        forced: false,
+        forced: true,
         loadingTitle: 'Chargement...',
         loadingContent: '<div class="loading"></div>',
     },
@@ -102,7 +102,7 @@ $.widget("unicaen.popAjax", {
 
         if ('A' === this.element.prop("tagName")) {
             this.options.url = this.element.attr('href');
-        }
+        }console.log(this.options);
     },
 
 

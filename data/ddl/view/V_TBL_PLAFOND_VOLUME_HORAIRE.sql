@@ -13,7 +13,7 @@ SELECT
   CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
 FROM
   (
-  SELECT 5 PLAFOND_ID, p.* FROM (
+  SELECT 5 PLAFOND_ID, NULL PLAFOND_ETAT_ID, p.* FROM (
     WITH c AS (
         SELECT
           vhe.element_pedagogique_id,
@@ -61,8 +61,7 @@ FROM
         s.element_pedagogique_id                    element_pedagogique_id,
         s.type_intervention_id                      type_intervention_id,
         s.heures                                    heures,
-        COALESCE(c.heures * c.groupes,0)            plafond,
-            2 plafond_etat_id
+        COALESCE(c.heures * c.groupes,0)            plafond
       FROM
                   s
              JOIN type_intervention ti ON ti.id = s.type_intervention_id

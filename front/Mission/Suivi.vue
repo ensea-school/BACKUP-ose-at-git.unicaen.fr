@@ -1,5 +1,5 @@
 <template>
-    <u-calendar :date="date" @changeDate="changeDate" @addEvent="ajouter" :can-add-event="canAddMission" :events="suivi"/>
+    <u-calendar :date="date" @changeDate="changeDate" @addEvent="ajouter" :can-add-event="canAddMission" addDateFin="now" :events="suivi"/>
 </template>
 
 <script>

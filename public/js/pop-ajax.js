@@ -102,7 +102,7 @@ $.widget("unicaen.popAjax", {
 
         if ('A' === this.element.prop("tagName")) {
             this.options.url = this.element.attr('href');
-        }console.log(this.options);
+        }
     },
 
 

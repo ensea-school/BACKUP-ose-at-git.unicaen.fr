@@ -107,25 +107,43 @@ class PlafondService extends AbstractEntityService
 
 
 
-    /**
-     * @param TypeVolumeHoraire                                                          $typeVolumeHoraire
-     * @param Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity
-     *
-     * @return PlafondControle[]
-     */
     public function derogations(TypeVolumeHoraire $typeVolumeHoraire, Intervenant $intervenant): array
     {
-        $sqls = [];
+        $sql = "
+        SELECT
+          p.id id,
+          p.numero numero,
+          p.libelle libelle,
+          p.message message,
+          pp.code perimetre,
+          pe.code etat,
+          CASE pe.code WHEN 'bloquant' THEN 1 ELSE 0 END bloquant,
+          CASE WHEN COALESCE(tpi.heures,0) - ps.heures > 0 THEN 1 ELSE 0 END depassement,
+          COALESCE(tpi.heures,0) heures,
+          ps.heures plafond,
+          COALESCE(pd.heures,0) derogation
+        FROM
+          intervenant i
+          JOIN type_volume_horaire tvh ON 1=1
+          JOIN statut s ON s.id = i.statut_id
+          JOIN plafond_statut ps ON ps.statut_id = s.id AND ps.histo_destruction IS NULL
+          JOIN plafond p ON p.id = ps.plafond_id
+          JOIN plafond_perimetre pp ON pp.id = p.plafond_perimetre_id
+          JOIN plafond_etat pe ON pe.id = CASE tvh.code WHEN 'PREVU' THEN ps.plafond_etat_prevu_id WHEN 'REALISE' THEN ps.plafond_etat_realise_id ELSE 0 END
+          LEFT JOIN tbl_plafond_intervenant tpi ON tpi.intervenant_id = i.id AND tpi.plafond_id = p.id AND tpi.type_volume_horaire_id = tvh.id
+          LEFT JOIN plafond_derogation pd ON pd.histo_destruction IS NULL AND pd.intervenant_id = i.id AND pd.plafond_id = p.id
+        WHERE
+          i.id = :intervenant
+          AND tvh.id = :typeVolumeHoraire
+          AND pe.code NOT IN ('desactive', 'indicateur')
+        ";
 
-        $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $intervenant, null, false, false, false);
-        //$sqls[] = $this->makeControleQuery($typeVolumeHoraire, $intervenant, PlafondPerimetre::STRUCTURE, false, false, false);
-        //$sqls[] = $this->makeControleQuery($typeVolumeHoraire, $intervenant, PlafondPerimetre::ELEMENT, false, false, false);
-        //$sqls[] = $this->makeControleQuery($typeVolumeHoraire, $intervenant, PlafondPerimetre::REFERENTIEL, false, false, false);
-        //$sqls[] = $this->makeControleQuery($typeVolumeHoraire, $intervenant, PlafondPerimetre::VOLUME_HORAIRE, false, false, false);
+        $params = [
+            'intervenant' => $intervenant->getId(),
+            'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
+        ];
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
 
-        $sql = implode("\n\nUNION ALL\n\n", $sqls);
-
-        $res          = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         $depassements = [];
         foreach ($res as $r) {
             $depassements[] = PlafondControle::fromArray($r);

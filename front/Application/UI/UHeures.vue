@@ -5,7 +5,7 @@
 <script>
 export default {
     props: {
-        valeur: {required: true, type: Float64Array},
+        valeur: {required: true, type: Number},
     },
     computed: {
         affichage: function () {

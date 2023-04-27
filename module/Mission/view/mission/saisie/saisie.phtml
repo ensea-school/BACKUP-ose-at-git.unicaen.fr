@@ -6,6 +6,8 @@
  * @var $form              \Mission\Form\MissionForm
  */
 
+echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNamespace('error');
+
 echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 echo $this->form()->openTag($form);
 

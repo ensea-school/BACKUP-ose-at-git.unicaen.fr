@@ -3,6 +3,7 @@
  * @var $this              \Application\View\Renderer\PhpRenderer
  * @var $intervenant       \Application\Entity\Db\Intervenant
  * @var $canAddMission     bool
+ * @var $typeVolumeHoraire \Service\Entity\Db\TypeVolumeHoraire
  */
 
 use Application\Entity\Db\WfEtape;
@@ -12,7 +13,7 @@ $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
 
 $this->intervenant($intervenant)->renderTitle($title);
 
-echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->plafonds($intervenant, $typeVolumeHoraire);
 
 echo $this->vue('mission/liste', [
     'intervenant'   => $intervenant->getId(),

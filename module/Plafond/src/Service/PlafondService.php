@@ -80,7 +80,7 @@ class PlafondService extends AbstractEntityService
         if ($entity instanceof Structure) {
             $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage, false, true);
         } elseif ($entity instanceof Intervenant) {
-            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage);
+            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage, false, true);
             $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, PlafondPerimetre::STRUCTURE, $pourBlocage);
             if (!$pourBlocage) {
                 $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, PlafondPerimetre::ELEMENT, $pourBlocage, false, true);

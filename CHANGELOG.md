@@ -17,6 +17,10 @@
 
 * Nouvelle formule de calcul de Rouen
 
+## Améliorations
+
+* Possibilité d'entrer des dérogations aux plafonds avant d'avoir des heures à plafonner (#46387) 
+
 ## Corrections de bugs
 
 * Les motifs de modification de service dû supprimés ne peuvent plus être sélectionnés #50328

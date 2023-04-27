@@ -42,16 +42,31 @@ class TauxRemuController extends AbstractController
 
         $tauxListe = $this->getServiceTauxRemu()->getTauxRemusAnnee();
 
-        $liste = [];
-        /** @var TauxRemu $taux */
-        foreach ($tauxListe as $taux) {
-            //Calcul de la liste des taux
-            $liste[$taux->getId()] = $this->getServiceTauxRemu()->tauxWs($taux);
-            $liste[$taux->getId()]['canEdit'] = $this->isAllowed($taux,Privileges::TAUX_EDITION);
-            $liste[$taux->getId()]['canDeleteValeur'] = $this->isAllowed($taux,Privileges::TAUX_SUPPRESSION);
-            $liste[$taux->getId()]['canDelete'] = $liste[$taux->getId()]['canDeleteValeur'] && !$taux->hasChildren();
-        }
 
+        $properties = ['code',
+                       'libelle',
+                       'tauxRemu',
+                       ['tauxRemuValeurs', ['dateEffet', 'valeur']],
+                       'tauxRemuValeursIndex',
+        ];
+
+        $triggers = [
+            // '/' signifie que nous agirons sur les données de premier niveau, qui sont ici des Personne. Le trigger agira pour chaque personne
+            '/' => function ($original, $extracted) {
+                // $original contiendra l'objet correspondant à l'entité Personne
+                // $extracted contiendra le tableau de données déjà extrait
+                $extracted['canEdit']         = $this->isAllowed($original, Privileges::TAUX_EDITION); // On ajoute ici une propriété en extraction qui n'a pas été générée avant.
+                $extracted['canDeleteValeur'] = $this->isAllowed($original, Privileges::TAUX_SUPPRESSION);
+                $extracted['canDelete']       = $extracted['canDeleteValeur'] && !$original->hasChildren();
+
+                // Nous pourrions tout aussi bien retirer une donnée, ou bien en changer le type ou la valeur.
+
+                return $extracted;
+            },
+        ];
+
+
+        $liste = \UnicaenVue\Axios\AxiosExtractor::extract($tauxListe, $properties, $triggers);
 
         return new AxiosModel($liste);
     }
@@ -134,6 +149,8 @@ class TauxRemuController extends AbstractController
         return new AxiosModel([]);
     }
 
+
+
     /**
      * Retourne les données pour un taux
      *
@@ -145,6 +162,8 @@ class TauxRemuController extends AbstractController
 
         return new AxiosModel($tauxRemu);
     }
+
+
 
     public function supprimerValeurAction(): MessengerViewModel
     {

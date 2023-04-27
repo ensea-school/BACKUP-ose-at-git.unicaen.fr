@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Contrat\Entity\Db\ContratServiceListe" table="V_CONTRAT_SERVICES">
+        <id name="id" type="integer" column="ID"/>
+        <field name="serviceLibelle" type="string" column="service_libelle" nullable="false"/>
+
+        <many-to-one field="contrat" target-entity="Contrat\Entity\Db\Contrat">
+                <join-column name="CONTRAT_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <field name="serviceCode" type="string" column="service_code" precision="126" scale="0" nullable="true"/>
+        <field name="cm" type="string" column="cm" nullable="false"/>
+        <field name="td" type="string" column="td" nullable="false"/>
+        <field name="tp" type="string" column="tp" nullable="false"/>
+        <field name="autres" type="string" column="autres" nullable="false"/>
+        <field name="heuresTotales" type="string" column="HEURES" nullable="false"/>
+
+        <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+            <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique">
+            <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <many-to-one field="fonctionReferentiel" target-entity="Referentiel\Entity\Db\FonctionReferentiel">
+            <join-column name="FONCTION_REFERENTIEL_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <many-to-one field="typeMission" target-entity="Mission\Entity\Db\TypeMission">
+            <join-column name="TYPE_MISSION_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <many-to-one field="typeService" target-entity="Service\Entity\Db\TypeService">
+            <join-column name="TYPE_SERVICE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+            <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+        </many-to-one>
+    </entity>
+
+
+</doctrine-mapping>

@@ -3,6 +3,7 @@
 namespace Referentiel\Entity\Db;
 
 use Application\Entity\Db\FormuleResultatVolumeHoraireReferentiel;
+use Contrat\Entity\Db\Contrat;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -42,6 +43,8 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
     private Collection $formuleResultatVolumeHoraireReferentiel;
 
     private bool       $remove         = false;
+
+    private ?Contrat   $contrat        = null;
 
 
 
@@ -222,4 +225,21 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
     {
         return 'VolumeHoraireReferentiel';
     }
+
+
+
+    public function setContrat(?Contrat $contrat = null): VolumeHoraireReferentiel
+    {
+        $this->contrat = $contrat;
+
+        return $this;
+    }
+
+
+
+    public function getContrat(): ?Contrat
+    {
+        return $this->contrat;
+    }
+
 }

@@ -2,17 +2,16 @@
 
 namespace Enseignement\Service;
 
-use Application\Entity\Db\Contrat;
-use Application\Provider\Privilege\Privileges;
-use Application\Service\AbstractEntityService;
-use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Service\Service\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\SourceServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Intervenant;
-use Service\Entity\Db\EtatVolumeHoraire;
+use Application\Service\AbstractEntityService;
+use Application\Service\Traits\SourceServiceAwareTrait;
+use Contrat\Entity\Db\Contrat;
+use Doctrine\ORM\QueryBuilder;
 use Enseignement\Entity\Db\VolumeHoraire;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 /**
  * Description of VolumeHoraire

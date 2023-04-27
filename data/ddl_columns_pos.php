@@ -1934,6 +1934,7 @@ return [
         'AUTO_VALIDATION',
         'HORAIRE_DEBUT',
         'HORAIRE_FIN',
+        'CONTRAT_ID',
     ],
     'WF_DEP_BLOQUANTE'               => [
         'ID',
@@ -2306,6 +2307,11 @@ return [
         'PLAFOND_ETAT_ID',
         'DEROGATION',
         'DEPASSEMENT',
+    ],
+    'TYPE_SERVICE'                   => [
+        'ID',
+        'CODE',
+        'LIBELLE',
     ],
 ];
 

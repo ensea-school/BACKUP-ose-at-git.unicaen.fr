@@ -541,6 +541,7 @@ class EnseignementController extends AbstractController
             $this->flashMessenger()->addErrorMessage('Vous n\'avez pas le droit de dévalider ces enseignements.');
         }
 
+
         return new MessengerViewModel();
     }
 
@@ -552,10 +553,11 @@ class EnseignementController extends AbstractController
             'formule',
             'validation_enseignement',
             'contrat',
+            'service',
         ], $intervenant);
 
         if (!$validation) {
-            $this->getServiceWorkflow()->calculerTableauxBord(['service', 'piece_jointe_demande', 'piece_jointe_fournie'], $intervenant);
+            $this->getServiceWorkflow()->calculerTableauxBord(['piece_jointe_demande', 'piece_jointe_fournie'], $intervenant);
         }
     }
 }

@@ -107,28 +107,6 @@ class TauxRemuService extends AbstractEntityService
 
 
     /**
-     * Retourne un JSON du tauxRemu
-     *
-     * @param TauxRemu $tauxRemu
-     *
-     * @return array|null
-     */
-    public function tauxWs(TauxRemu $tauxRemu): ?array
-    {
-        $json = Axios::extract($tauxRemu, [
-            'code',
-            'libelle',
-            'tauxRemu',
-            ['tauxRemuValeurs', ['dateEffet', 'valeur']],
-            'tauxRemuValeursIndex',
-        ]);
-
-        return $json;
-    }
-
-
-
-    /**
      * Renvoie tous les tauxRemu non historisé et les valeurs concernant l'année en cours
      *
      * @return array|null
@@ -164,6 +142,7 @@ class TauxRemuService extends AbstractEntityService
 
     /**
      * Retourne les taux Remu qui possèdent une valeurs sur l'année
+     *
      * @return array|null
      */
     public function getTauxRemusAnneeWithValeur(): ?array
@@ -186,7 +165,7 @@ class TauxRemuService extends AbstractEntityService
         foreach ($tauxRemus as $tauxRemu) {
             /** @var TauxRemuValeur[] $valeurs */
             $valeurs = $tauxRemu->getValeurAnnee($annee);
-            if($valeurs){
+            if ($valeurs) {
                 $tauxRemu->setValeurs($valeurs);
                 $result[$tauxRemu->getId()] = $tauxRemu;
             }

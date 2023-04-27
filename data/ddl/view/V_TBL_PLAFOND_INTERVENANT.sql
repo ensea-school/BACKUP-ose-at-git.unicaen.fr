@@ -117,7 +117,7 @@ FROM
         i.annee_id                          annee_id,
         fr.type_volume_horaire_id           type_volume_horaire_id,
         i.id                                intervenant_id,
-        fr.heures_compl_fc_majorees         heures
+        fr.heures_compl_fc_majorees * a.taux_hetd         heures
         /*ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond*/
 
       FROM

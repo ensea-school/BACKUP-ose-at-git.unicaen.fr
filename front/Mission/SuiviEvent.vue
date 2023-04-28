@@ -1,10 +1,10 @@
 <template>
     <div class="event-content">
-        <p class="mission">{{ event.mission.libelleCourt }} <b-badge v-if="event.valide" class="bg-success">Validé</b-badge></p>
+        <p class="mission">{{ event.mission.libelleCourt }} <span class="badge bg-success" v-if="event.valide">Validé</span></p>
         <p class="horaires">
             de {{ heureDebut }} à {{ heureFin }}, soi{{ heures < 2 ? '' : 'en'}}t {{ heures }} heure{{ heures < 2 ? '' : 's' }}
-            <b-badge v-if="event.nocturne">Nocturne</b-badge>
-            <b-badge v-if="event.formation">En formation</b-badge>
+            <span class="badge bg-secondary" v-if="event.nocturne">Nocturne</span>
+                <span class="badge bg-secondary" v-if="event.formation">En formation</span>
         </p>
         <p class="description" v-if="event.description">{{ event.description }}</p>
     </div>

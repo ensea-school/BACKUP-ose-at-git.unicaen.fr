@@ -2182,6 +2182,103 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
 
 
+  PROCEDURE C_PLAFOND_MISSION(useParams BOOLEAN DEFAULT FALSE) IS
+  TYPE r_cursor IS REF CURSOR;
+  c r_cursor;
+  d TBL_PLAFOND_MISSION%rowtype;
+  viewQuery CLOB;
+  BEGIN
+    viewQuery := 'SELECT
+          p.PLAFOND_ID,
+          p.ANNEE_ID,
+          p.TYPE_VOLUME_HORAIRE_ID,
+          p.INTERVENANT_ID,
+          p.TYPE_MISSION_ID,
+          p.HEURES,
+          COALESCE(p.PLAFOND,ps.heures,0) PLAFOND,
+          CASE
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+            ELSE COALESCE(p.plafond_etat_id,1)
+          END plafond_etat_id,
+          COALESCE(pd.heures, 0) derogation,
+          CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
+        FROM
+          (
+            SELECT NULL PLAFOND_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL TYPE_MISSION_ID,NULL HEURES,NULL PLAFOND,NULL PLAFOND_ETAT_ID,NULL DEROGATION FROM dual WHERE 0 = 1
+          ) p
+          JOIN intervenant i ON i.id = p.intervenant_id
+          LEFT JOIN plafond_mission ps ON ps.plafond_id = p.plafond_id AND ps.type_mission_id = p.type_mission_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL
+          LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL
+        WHERE
+          CASE
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+          END IS NOT NULL
+          /*@PLAFOND_ID=p.PLAFOND_ID*/
+          /*@ANNEE_ID=p.ANNEE_ID*/
+          /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
+          /*@INTERVENANT_ID=p.INTERVENANT_ID*/
+          /*@TYPE_MISSION_ID=p.TYPE_MISSION_ID*/
+          /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/';
+
+    OPEN c FOR '
+    SELECT
+      CASE WHEN
+            COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.ANNEE_ID                           = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.TYPE_MISSION_ID                    = v.TYPE_MISSION_ID
+        AND t.HEURES                             = v.HEURES
+        AND t.PLAFOND                            = v.PLAFOND
+        AND t.PLAFOND_ETAT_ID                    = v.PLAFOND_ETAT_ID
+        AND t.DEROGATION                         = v.DEROGATION
+        AND t.DEPASSEMENT                        = v.DEPASSEMENT
+      THEN -1 ELSE t.ID END ID,
+      v.PLAFOND_ID,
+      v.ANNEE_ID,
+      v.TYPE_VOLUME_HORAIRE_ID,
+      v.INTERVENANT_ID,
+      v.TYPE_MISSION_ID,
+      v.HEURES,
+      v.PLAFOND,
+      v.PLAFOND_ETAT_ID,
+      v.DEROGATION,
+      v.DEPASSEMENT
+    FROM
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      FULL JOIN TBL_PLAFOND_MISSION t ON
+            COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.ANNEE_ID                           = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.TYPE_MISSION_ID                    = v.TYPE_MISSION_ID
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    LOOP
+      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+
+      IF d.id IS NULL THEN
+        d.id := TBL_PLAFOND_MISSION_ID_SEQ.NEXTVAL;
+        INSERT INTO TBL_PLAFOND_MISSION values d;
+      ELSIF
+            d.PLAFOND_ID IS NULL
+        AND d.ANNEE_ID IS NULL
+        AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+        AND d.INTERVENANT_ID IS NULL
+        AND d.TYPE_MISSION_ID IS NULL
+      THEN
+        DELETE FROM TBL_PLAFOND_MISSION WHERE id = d.id;
+      ELSIF d.id <> -1 THEN
+        UPDATE TBL_PLAFOND_MISSION SET row = d WHERE id = d.id;
+      END IF;
+    END LOOP;
+    CLOSE c;
+  END;
+
+
+
+
   PROCEDURE C_PLAFOND_REFERENTIEL(useParams BOOLEAN DEFAULT FALSE) IS
   TYPE r_cursor IS REF CURSOR;
   c r_cursor;

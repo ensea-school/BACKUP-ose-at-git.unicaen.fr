@@ -41,7 +41,9 @@ class SuiviController extends AbstractController
 
         $canAddMission = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_REALISE));
 
-        return compact('intervenant', 'canAddMission');
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
+
+        return compact('intervenant', 'canAddMission', 'typeVolumeHoraire');
     }
 
 

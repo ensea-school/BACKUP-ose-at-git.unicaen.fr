@@ -19,6 +19,7 @@ export default {
     {
         return {
             missions: [],
+            isMounted: false,
             ajoutUrl: unicaenVue.url('mission/ajout/:intervenant', {intervenant: this.intervenant})
         };
     },
@@ -38,9 +39,10 @@ export default {
             this.reload();
         },
         refresh(mission)
-        {console.log(mission);
+        {
             let index = Util.json.indexById(this.missions, mission.id);
             this.missions[index] = mission;
+            this.refreshPlafonds();
         },
         reload()
         {
@@ -48,7 +50,17 @@ export default {
                 unicaenVue.url("mission/liste/:intervenant", {intervenant: this.intervenant})
             ).then(response => {
                 this.missions = response.data;
+                this.refreshPlafonds();
             });
+        },
+        refreshPlafonds()
+        {
+            if (this.isMounted) {
+                // Mise à jour des plafonds
+                $(".plafonds").refresh();
+            }else{
+                this.isMounted = true;
+            }
         },
     }
 }

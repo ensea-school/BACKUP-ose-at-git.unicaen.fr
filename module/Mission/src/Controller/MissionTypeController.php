@@ -39,9 +39,10 @@ class MissionTypeController extends AbstractController
     {
 
         $typeMission = $this->getEvent()->getParam('typeMission');
-        $form        = $this->getFormMissionType();
+        $tab = $this->params()->fromQuery('tab', 'fiche');
+        $form = $this->getFormMissionType();
         if (empty($typeMission)) {
-            $title       = "Création d'un nouveau type";
+            $title = "Création d'un nouveau type";
             $typeMission = $this->getServiceMissionType()->newEntity();
         } else {
             $title = "Édition d'un type";
@@ -54,7 +55,7 @@ class MissionTypeController extends AbstractController
             );
         });
 
-        return compact('form', 'title');
+        return compact('form', 'title', 'tab');
     }
 
 

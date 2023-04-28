@@ -10,8 +10,6 @@
 namespace Application;
 
 use Application\ORM\RouteEntitiesInjector;
-use Laminas\Mvc\Controller\AbstractActionController;
-use Laminas\Mvc\ModuleRouteListener;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Stdlib\Glob;
 use Laminas\Config\Factory as ConfigFactory;
@@ -28,31 +26,19 @@ class Module
 
     public function onBootstrap(MvcEvent $e)
     {
+        // Récupération du container, ici le serviceManager de l'application
         $container = $e->getApplication()->getServiceManager();
 
-        if (empty(\Application::$container)) {
-            \Application::$container = $container;
-        }
-
-        $eventManager        = $e->getApplication()->getEventManager();
-        $moduleRouteListener = new ModuleRouteListener();
-        $moduleRouteListener->attach($eventManager);
-
-        /* Utilise un layout spécial si on est en AJAX. Valable pour TOUS les modules de l'application */
-        $eventManager->getSharedManager()->attach(AbstractActionController::class, MvcEvent::EVENT_DISPATCH,
-            function (MvcEvent $e) {
-                $request = $e->getRequest();
-                if ($request instanceof \Laminas\Http\Request && $request->isXmlHttpRequest()) {
-                    $e->getTarget()->layout('layout/ajax.phtml');
-                }
-            }
-        );
-
+        // Injection des entités à partir ID transmis dans les routes
+        $eventManager = $e->getApplication()->getEventManager();
         $eventManager->attach(MvcEvent::EVENT_ROUTE, $container->get(RouteEntitiesInjector::class), -90);
 
+        // On force le rôle courant à NULL si on se déconnecte
+        // Cela permet, si on a le choix de plusieurs rôles et qu'on en prend un qui n'est pas celui par défaut,
+        // de se reconnecter avec le rôle par défaut et non le rôle précédemment sélectionné
         /** @var $userContext UserContext */
         $userContext = $container->get(UserContext::class);
-        $adapter     = $container->get('ZfcUser\Authentication\Adapter\AdapterChain');
+        $adapter = $container->get('ZfcUser\Authentication\Adapter\AdapterChain');
 
         $adapter->getEventManager()->attach('logout', function ($e) use ($userContext) {
             $userContext->setSelectedIdentityRole(null);
@@ -93,16 +79,16 @@ class Module
             'notifier indicateurs [--force]' => "Notification par mail des personnes abonnées à des indicateurs",
             ['--force', "Facultatif", "Envoie les mails sytématiquement, sans tenir compte de la fréquence de notification."],
             "Charges d'enseignement",
-            'chargens-calc-effectifs'        => "Calcul des effectifs du module Charges",
+            'chargens-calc-effectifs' => "Calcul des effectifs du module Charges",
             "Tableaux de bord",
-            'calcul-tableaux-bord'           => "Calcul de tous les tableaux de bord (sauf la formule qui est à part)",
+            'calcul-tableaux-bord' => "Calcul de tous les tableaux de bord (sauf la formule qui est à part)",
             "Formule de calcul",
-            'formule-calcul'                 => "Calcul de toutes les heures complémentaires à l'aide de la formule",
+            'formule-calcul' => "Calcul de toutes les heures complémentaires à l'aide de la formule",
 
             "Administration : Changement de mot de passe",
-            'changement-mot-de-passe'        => "Paramètres : --utilisateur, --mot-de-passe",
+            'changement-mot-de-passe' => "Paramètres : --utilisateur, --mot-de-passe",
             "Administration : Recalcul de la complétude des dossiers",
-            'calcul-completude-dossier'      => "Paramètres : --annee, --intervenant",
+            'calcul-completude-dossier' => "Paramètres : --annee, --intervenant",
         ];
     }
 

@@ -11,7 +11,7 @@
  */
 function alertFlash(message, severity, duration)
 {
-    Util.alert(message, severity);
+    unicaenVue.flashMessenger.toast(message, severity);
 }
 
 /**
@@ -91,65 +91,6 @@ Formatter = {
 
 
 Util = {
-
-    alerts: function (messages)
-    {
-        for (s in messages) {
-            for (m in messages[s]) {
-                Util.alert(messages[s][m], s);
-            }
-        }
-    },
-
-
-
-    alert: function (message, severity)
-    {
-        var alertClasses = {
-            info: 'info',
-            success: 'success',
-            warning: 'warning',
-            error: 'danger'
-        };
-        var iconClasses = {
-            info: 'info-circle',
-            success: 'check-circle',
-            warning: 'exclamation-circle',
-            error: 'exclamation-triangle'
-        };
-        var alertClass = 'alert-' + alertClasses[severity];
-        var divId = "alert-div-" + Math.floor((Math.random() * 100000) + 1);
-
-        var alertDiv = $(
-            '<div id="' + divId + '" class="alert navbar-fixed-bottom" role="alert" style="display: none">' +
-            '    <button type="button" class="btn-close float-md-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
-            '    <div class="container">' +
-            '        <p class="text-center"><span class="icon fas fa-' + iconClasses[severity] + '"></span> <span class="message"></span></p>' +
-            '    </div>' +
-            '</div>'
-        );
-
-
-
-        alertDiv.addClass(alertClass);
-        $("p .message", alertDiv).html(message);
-
-        $('body').append(alertDiv);
-        alertDiv.slideToggle(500, function ()
-        {
-            if ('error' != severity) {
-                window.setTimeout(function ()
-                {
-                    alertDiv.slideToggle(500, function ()
-                    {
-                        $(this).removeClass(alertClass)
-                    });
-                }, 3000);
-            }
-        });
-    },
-
-
 
     formCheckSubmit(formElement)
     {

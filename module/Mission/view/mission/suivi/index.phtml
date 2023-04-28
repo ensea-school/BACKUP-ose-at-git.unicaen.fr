@@ -3,6 +3,7 @@
  * @var $this              \Application\View\Renderer\PhpRenderer
  * @var $intervenant       \Application\Entity\Db\Intervenant
  * @var $canAddMission     bool
+ * @var $typeVolumeHoraire \Service\Entity\Db\TypeVolumeHoraire
  */
 
 use Application\Entity\Db\WfEtape;
@@ -11,6 +12,8 @@ $title     = 'Suivi de missions';
 $nextEtape = WfEtape::CODE_MISSION_VALIDATION_REALISE;
 
 $this->intervenant($intervenant)->renderTitle($title);
+
+echo $this->plafonds($intervenant, $typeVolumeHoraire);
 
 echo $this->vue('mission/suivi', [
     'intervenant'   => $intervenant->getId(),

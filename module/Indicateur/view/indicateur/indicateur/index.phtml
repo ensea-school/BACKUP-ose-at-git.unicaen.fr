@@ -124,7 +124,7 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
                     },
                     error: function (jqXHR) {
                         if (jqXHR.responseText != null && jqXHR.responseText.toString() !== "") {
-                            Util.alert(jqXHR.responseText, 'error');
+                            unicaenVue.flashMessenger.toast(jqXHR.responseText, 'error');
                             console.log(jqXHR);
                         }
                         that.calculerNextType();
@@ -179,7 +179,7 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
                         notif.removeClass("loading");
                         var infos = $(".indicateur-info", notif.parent()).attr('title', data.infos).tooltip('destroy').tooltip();
                         notif.val() ? infos.show() : infos.hide();
-                        Util.alert(data.message, data.status);
+                        unicaenVue.flashMessenger.toast(data.message, data.status);
                     }
                 });
             },

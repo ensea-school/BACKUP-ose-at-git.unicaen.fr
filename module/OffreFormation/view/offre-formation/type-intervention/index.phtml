@@ -147,7 +147,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                         url: unicaenVue.url('type-intervention/type-intervention-trier'),
                         data: {champsIds: champsIds},
                         success: function (res) {
-                            Util.alert('Tri des champs effectué', 'success');
+                            unicaenVue.flashMessenger.toast('Tri des champs effectué', 'success');
                         },
                     });
                 }

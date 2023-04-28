@@ -14,7 +14,7 @@ $.widget("unicaen.popAjax", {
         submitEvent: undefined,
         submitClose: false,
         submitReload: false,
-        forced: false,
+        forced: true,
         loadingTitle: 'Chargement...',
         loadingContent: '<div class="loading"></div>',
     },

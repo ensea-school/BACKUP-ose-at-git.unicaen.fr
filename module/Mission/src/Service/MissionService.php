@@ -97,6 +97,9 @@ class MissionService extends AbstractEntityService
                 'heures',
                 'valide',
                 'validation',
+                'canValider',
+                'canDevalider',
+                'canSupprimer',
                 'histoCreation',
                 'histoCreateur',
             ]],
@@ -104,6 +107,10 @@ class MissionService extends AbstractEntityService
             'contrat',
             'valide',
             'validation',
+            'canSaisie',
+            'canValider',
+            'canDevalider',
+            'canSupprimer',
         ];
 
         $triggers = [

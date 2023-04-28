@@ -398,6 +398,13 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
+    public function hasSuivi(): bool
+    {
+        return $this->heuresRealisees() > 0;
+    }
+
+
+
     public function heuresRealisees(): float
     {
         $vhs = $this->getVolumesHorairesRealises();
@@ -431,7 +438,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
     public function canDevalider(): bool
     {
-        return $this->isValide();
+        return $this->isValide() && !$this->hasSuivi();
     }
 
 
@@ -445,6 +452,8 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
     public function canAddSuivi(\DateTime $date): bool
     {
-        return $this->getDateDebut() <= $date && $this->getDateFin() >= $date;
+        $dateOk = $this->getDateDebut() <= $date && $this->getDateFin() >= $date;
+
+        return $this->isValide() && $dateOk;
     }
 }

@@ -41,7 +41,7 @@ $actionsDev = [
     "build-tableaux-bord"   => "Reconstruction des tableaux de bord",
 ];
 
-if ($oa->inDev()) {
+if ($this->inDev()) {
     $actions = array_merge($actions, $actionsDev);
 }
 

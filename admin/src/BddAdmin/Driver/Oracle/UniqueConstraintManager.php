@@ -2,6 +2,7 @@
 
 namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Bdd;
 use BddAdmin\Manager\UniqueConstraintManagerInterface;
 use BddAdmin\Ddl\DdlFilter;
 
@@ -14,7 +15,7 @@ class UniqueConstraintManager extends AbstractManagerDdlConstraint implements Un
     public function getList(): array
     {
         $list = [];
-        $sql  = "
+        $sql = "
           SELECT CONSTRAINT_NAME
           FROM ALL_CONSTRAINTS 
           WHERE OWNER = sys_context( 'userenv', 'current_schema' ) 
@@ -22,7 +23,7 @@ class UniqueConstraintManager extends AbstractManagerDdlConstraint implements Un
           AND CONSTRAINT_NAME NOT LIKE 'BIN" . "$%'
           ORDER BY CONSTRAINT_NAME
         ";
-        $r    = $this->bdd->select($sql);
+        $r = $this->bdd->select($sql);
 
         foreach ($r as $l) {
             $list[] = $l['CONSTRAINT_NAME'];
@@ -73,10 +74,26 @@ class UniqueConstraintManager extends AbstractManagerDdlConstraint implements Un
 
 
 
+    public function exists(string $name): bool
+    {
+        $sql = "SELECT count(*) NBR FROM ALL_CONSTRAINTS WHERE "
+            . "OWNER = sys_context( 'userenv', 'current_schema' )"
+            . "AND CONSTRAINT_TYPE = 'U'"
+            . "AND CONSTRAINT_NAME NOT LIKE 'BIN" . "$%' "
+            . "AND CONSTRAINT_NAME = :name";
+        $params = ['name' => $name];
+
+        $nbr = (int)$this->bdd->select($sql, $params, ['fetch' => Bdd::FETCH_ONE])['NBR'];
+
+        return $nbr > 0;
+    }
+
+
+
     public function makeCreate(array $data)
     {
         $cols = implode(', ', $data['columns']);
-        $sql  = "ALTER TABLE " . $data['table'] . " ADD CONSTRAINT " . $data['name'] . " UNIQUE ($cols) ";
+        $sql = "ALTER TABLE " . $data['table'] . " ADD CONSTRAINT " . $data['name'] . " UNIQUE ($cols) ";
         if ($data['index']) {
             if ($this->indexExists($data['index'])) {
                 $sql .= 'USING INDEX ' . $data['index'] . ' ';

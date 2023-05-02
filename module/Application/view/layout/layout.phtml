@@ -6,6 +6,11 @@
 
 use Laminas\View\Helper\Navigation as NavigationHelper;
 
+if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    echo $this->content;
+    return;
+}
+
 /** @var NavigationHelper $navigationHelper */
 $navigationHelper = $this->navigation('navigation');
 $pages            = $navigationHelper->getContainer();

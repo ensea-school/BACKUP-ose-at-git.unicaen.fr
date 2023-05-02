@@ -1,7 +1,26 @@
 CREATE OR REPLACE FORCE VIEW V_CONTRAT_MAIN AS
 WITH hs AS (
-  SELECT contrat_id, SUM(heures) "serviceTotal", MAX("libelleAutres") "libelleAutres" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
-)
+  SELECT contrat_id, SUM(heures) "serviceTotal" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
+),
+la AS(
+        SELECT
+                contrat_id,
+                LISTAGG( libelle, ',')  WITHIN GROUP (ORDER BY libelle)            autre_libelles
+        FROM
+        (
+            SELECT DISTINCT
+                c.contrat_id,
+                ti.libelle                                                         libelle
+            FROM
+                contrat c
+                JOIN volume_horaire vh ON c.id = vh.contrat_id
+                JOIN type_intervention ti ON ti.id = vh.type_intervention_id
+                LEFT JOIN                      hs ON hs.contrat_id = c.id
+            WHERE
+                ti.code NOT IN ('CM','TD','TP')
+        )
+        GROUP BY contrat_id
+    )
 SELECT ct.annee_id,
        ct.structure_id,
        ct.intervenant_id,
@@ -52,7 +71,7 @@ SELECT ct.annee_id,
            WHEN ct.est_projet = 1 AND ct.est_contrat = 0 THEN 'Projet d''avenant'
            WHEN ct.est_projet = 0 AND ct.est_contrat = 0 THEN 'Avenant n°' || ct.contrat_id || '.' || ct.numero_avenant
            END                                            "titreCourt"
-FROM (SELECT c.*,
+        FROM (SELECT c.*,
              i.annee_id                                                                          annee_id,
              fr.id                                                                               formule_resultat_id,
              s.libelle_court                                                                     "composante",
@@ -96,10 +115,10 @@ FROM (SELECT c.*,
                  ELSE '' END                                                                     "exemplaire2",
              REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal", 0), '999999.00')), '.', ',')      "serviceTotal",
              CASE
-                 WHEN hs."libelleAutres" IS NOT NULL
-                     THEN '*Dont type(s) intervention(s) : ' || hs."libelleAutres" END           "legendeAutresHeures",
+                 WHEN la.autre_libelles IS NOT NULL
+                     THEN '*Dont type(s) intervention(s) : ' || la.autre_libelles END           "legendeAutresHeures",
              CASE
-                 WHEN hs."libelleAutres" IS NOT NULL THEN 'Autres heures*'
+                 WHEN la.autre_libelles IS NOT NULL THEN 'Autres heures*'
                  ELSE 'Autres heures' END                                                        "enteteAutresHeures",
              CASE WHEN c.contrat_id IS NULL THEN 1 ELSE 0 END                                    est_contrat,
              CASE WHEN v.id IS NULL THEN 1 ELSE 0 END                                            est_projet,
@@ -120,6 +139,7 @@ FROM (SELECT c.*,
     LEFT JOIN formule_resultat     fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
     LEFT JOIN taux_remu            tr ON tr.code = OSE_PAIEMENT.get_code_taux_remu_legal()
     LEFT JOIN                      hs ON hs.contrat_id = c.id
+    LEFT JOIN                      la ON la.contrat_id = c.id
     LEFT JOIN contrat              cp ON cp.id = c.contrat_id
   WHERE
     c.histo_destruction IS NULL

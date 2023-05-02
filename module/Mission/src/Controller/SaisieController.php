@@ -15,8 +15,8 @@ use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
+use Plafond\Processus\PlafondProcessusAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\AxiosModel;
 
 
@@ -34,6 +34,7 @@ class SaisieController extends AbstractController
     use WorkflowServiceAwareTrait;
     use MissionSuiviFormAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
+    use PlafondProcessusAwareTrait;
 
     /**
      * Page d'index des missions
@@ -47,31 +48,9 @@ class SaisieController extends AbstractController
 
         $canAddMission = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION));
 
-        return compact('intervenant', 'canAddMission');
-    }
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
 
-
-
-    protected function missionTriggers(): array
-    {
-        return [
-            '/' => function (Mission $original, array $extracted) {
-                $extracted['canSaisie'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
-                $extracted['canValider'] = $this->isAllowed($original, Privileges::MISSION_VALIDATION);
-                $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
-
-                return $extracted;
-            },
-            '/volumesHorairesPrevus' => function ($original, $extracted) {
-                //$extracted['canSaisie'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
-                $extracted['canValider'] = $this->isAllowed($original, Privileges::MISSION_VALIDATION);
-                $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION);
-
-                return $extracted;
-            },
-        ];
+        return compact('intervenant', 'canAddMission', 'typeVolumeHoraire');
     }
 
 
@@ -91,9 +70,10 @@ class SaisieController extends AbstractController
         // Vidage du cache d'exécution Doctrine pour être sûr de bien filter les données de la mission
         $this->em()->clear();
 
-        $query = $this->getServiceMission()->query(['mission' => $mission]);
+        $model = $this->getServiceMission()->data(['mission' => $mission]);
+        $model->returnFirstItem();
 
-        return new AxiosModel(AxiosExtractor::extract($query, [], $this->missionTriggers())[0]);
+        return $model;
     }
 
 
@@ -108,9 +88,9 @@ class SaisieController extends AbstractController
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        $query = $this->getServiceMission()->query(['intervenant' => $intervenant]);
+        $model = $this->getServiceMission()->data(['intervenant' => $intervenant]);
 
-        return new AxiosModel($query, [], $this->missionTriggers());
+        return $model;
     }
 
 
@@ -126,6 +106,7 @@ class SaisieController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
 
         $mission = $this->getServiceMission()->newEntity();
+        $mission->setEntityManager($this->em());
         $mission->setIntervenant($intervenant);
 
         $canAutoValidate = $this->isAllowed($mission, Privileges::MISSION_AUTOVALIDATION);
@@ -160,10 +141,24 @@ class SaisieController extends AbstractController
         if ($this->getServiceContext()->getStructure()) {
             $form->remove('structure');
         }
-        $form->bindRequestSave($mission, $this->getRequest(), function ($mission) {
-            $this->getServiceMission()->save($mission);
-            $this->updateTableauxBord($mission);
-            $this->flashMessenger()->addSuccessMessage('Mission bien enregistrée');
+
+        $hDeb = $mission->getHeures();
+        $form->bindRequestSave($mission, $this->getRequest(), function ($mission) use($hDeb) {
+            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+            $this->getProcessusPlafond()->beginTransaction();
+            try {
+                $this->getServiceMission()->save($mission);
+                $hFin = $mission->getHeures();
+                $this->updateTableauxBord($mission);
+                if (!$this->getProcessusPlafond()->endTransaction($mission->getIntervenant(), $typeVolumeHoraire, $hFin < $hDeb)) {
+                    $this->updateTableauxBord($mission);
+                }else{
+                    $this->flashMessenger()->addSuccessMessage('Mission bien enregistrée');
+                }
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+                $this->em()->rollback();
+            }
         });
         // on passe le data-id pour pouvoir le récupérer dans la vue et mettre à jour la liste
         $form->setAttribute('data-id', $mission->getId());
@@ -179,12 +174,20 @@ class SaisieController extends AbstractController
 
     public function supprimerAction()
     {
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+
         /** @var Mission $mission */
         $mission = $this->getEvent()->getParam('mission');
 
-        $this->getServiceMission()->delete($mission);
-        $this->updateTableauxBord($mission);
-        $this->flashMessenger()->addSuccessMessage("Mission supprimée avec succès.");
+        $this->getProcessusPlafond()->beginTransaction();
+        try {
+            $this->getServiceMission()->delete($mission);
+            $this->updateTableauxBord($mission);
+            $this->flashMessenger()->addSuccessMessage("Mission supprimée avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        }
+        $this->getProcessusPlafond()->endTransaction($mission->getIntervenant(), $typeVolumeHoraire, true);
 
         return new AxiosModel([]);
     }
@@ -236,9 +239,17 @@ class SaisieController extends AbstractController
         /** @var VolumeHoraireMission $volumeHoraireMission */
         $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
 
-        $this->getServiceMission()->deleteVolumeHoraire($volumeHoraireMission);
-        $this->updateTableauxBord($volumeHoraireMission->getMission());
-        $this->flashMessenger()->addSuccessMessage("Volume horaire supprimé avec succès.");
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+
+        $this->getProcessusPlafond()->beginTransaction();
+        try {
+            $this->getServiceMission()->deleteVolumeHoraire($volumeHoraireMission);
+            $this->updateTableauxBord($volumeHoraireMission->getMission());
+            $this->flashMessenger()->addSuccessMessage("Volume horaire supprimé avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        }
+        $this->getProcessusPlafond()->endTransaction($volumeHoraireMission->getMission()->getIntervenant(), $typeVolumeHoraire, true);
 
         return $this->getAction($volumeHoraireMission->getMission());
     }

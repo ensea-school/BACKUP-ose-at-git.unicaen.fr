@@ -64,6 +64,11 @@ return [
                     'action' => 'config-referentiel',
                 ],
 
+                'config-mission' => [
+                    'route'  => '/config/mission',
+                    'action' => 'config-mission',
+                ],
+
                 'construire-calculer' => [
                     'route'  => '/construire-calculer',
                     'action' => 'construire-calculer',
@@ -85,6 +90,16 @@ return [
                     'action'        => 'index-referentiel',
                     'constraints'   => [
                         'fonctionReferentiel' => '[0-9]*',
+                    ],
+                    'may_terminate' => true,
+                ],
+
+                'mission' => [
+                    'route'         => '/mission/:typeMission',
+                    'controller'    => 'Plafond\Controller\Plafond',
+                    'action'        => 'index-mission',
+                    'constraints'   => [
+                        'typeMission' => '[0-9]*',
                     ],
                     'may_terminate' => true,
                 ],
@@ -175,6 +190,12 @@ return [
         ],
         [
             'controller' => 'Plafond\Controller\Plafond',
+            'action'     => ['config-mission'],
+            'privileges' => Privileges::PLAFONDS_CONFIG_MISSION,
+            'assertion'  => Assertion\PlafondAssertion::class,
+        ],
+        [
+            'controller' => 'Plafond\Controller\Plafond',
             'action'     => ['index-structure'],
             'privileges' => Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION,
             'assertion'  => Assertion\PlafondAssertion::class,
@@ -183,6 +204,12 @@ return [
             'controller' => 'Plafond\Controller\Plafond',
             'action'     => ['index-referentiel'],
             'privileges' => Privileges::REFERENTIEL_ADMIN_VISUALISATION,
+            'assertion'  => Assertion\PlafondAssertion::class,
+        ],
+        [
+            'controller' => 'Plafond\Controller\Plafond',
+            'action'     => ['index-mission'],
+            'privileges' => Privileges::MISSION_VISUALISATION_TYPE,
             'assertion'  => Assertion\PlafondAssertion::class,
         ],
         [

@@ -35,6 +35,26 @@ WITH t AS (
     /*@INTERVENANT_ID=i.id*/
     /*@ANNEE_ID=i.annee_id*/
     AND NOT (si.contrat = 0 AND evh.code = 'valide')
+
+  UNION
+
+  SELECT
+    m.annee_id        annee_id,
+    m.intervenant_id  intervenant_id,
+    1                 actif,
+    m.structure_id    structure_id,
+    CASE WHEN evh.code IN ('contrat-edite','contrat-signe') THEN 1 ELSE 0 END edite,
+    CASE WHEN evh.code IN ('contrat-signe')                 THEN 1 ELSE 0 END signe
+  FROM
+    tbl_mission m
+    LEFT JOIN volume_horaire_mission vhm ON vhm.mission_id = m.mission_id AND vhm.histo_destruction IS NULL
+    JOIN V_VOLUME_HORAIRE_MISSION_ETAT vvhme ON vvhme.volume_horaire_mission_id = vhm.id
+    JOIN etat_volume_horaire       evh ON evh.id = vvhme.etat_volume_horaire_id
+                                      AND evh.code IN ('valide', 'contrat-edite', 'contrat-signe')
+  WHERE
+    1=1
+    /*@INTERVENANT_ID=m.intervenant_id*/
+    /*@ANNEE_ID=m.annee_id*/
 )
 SELECT
   annee_id,

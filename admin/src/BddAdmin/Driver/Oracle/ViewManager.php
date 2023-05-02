@@ -2,6 +2,7 @@
 
 namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Bdd;
 use BddAdmin\Manager\AbstractManager;
 use BddAdmin\Manager\DdlCompilationInterface;
 use BddAdmin\Manager\ViewManagerInterface;
@@ -57,6 +58,22 @@ class ViewManager extends AbstractManager implements ViewManagerInterface
         }
 
         return $data;
+    }
+
+
+
+    public function exists(string $name): bool
+    {
+        $sql = "
+            SELECT count(*) NBR FROM ALL_OBJECTS 
+            WHERE 
+              OWNER = sys_context( 'userenv', 'current_schema' )
+              AND OBJECT_TYPE = 'VIEW' AND GENERATED = 'N' AND OBJECT_NAME = :name";
+        $params = ['name' => $name];
+
+        $nbr = (int)$this->bdd->select($sql, $params, ['fetch' => Bdd::FETCH_ONE])['NBR'];
+
+        return $nbr > 0;
     }
 
 

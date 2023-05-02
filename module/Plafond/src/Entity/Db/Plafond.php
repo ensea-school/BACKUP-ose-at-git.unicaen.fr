@@ -27,6 +27,8 @@ class Plafond
 
     protected Collection $plafondReferentiel;
 
+    protected Collection $plafondMission;
+
     protected Collection $plafondStatut;
 
 
@@ -35,6 +37,7 @@ class Plafond
     {
         $this->plafondStructure   = new ArrayCollection();
         $this->plafondReferentiel = new ArrayCollection();
+        $this->plafondMission     = new ArrayCollection();
         $this->plafondStatut      = new ArrayCollection();
     }
 
@@ -144,6 +147,18 @@ class Plafond
 
 
     /**
+     * Get PlafondMission
+     *
+     * @return PlafondMission[]
+     */
+    public function getPlafondMission(): Collection
+    {
+        return $this->plafondMission;
+    }
+
+
+
+    /**
      * Get PlafondStatut
      *
      * @return PlafondStatut[]
@@ -167,6 +182,8 @@ class Plafond
             $this->plafondStructure->add($plafondConfig);
         } elseif ($plafondConfig instanceof PlafondReferentiel) {
             $this->plafondReferentiel->add($plafondConfig);
+        } elseif ($plafondConfig instanceof PlafondMission) {
+            $this->plafondMission->add($plafondConfig);
         }
 
         return $this;

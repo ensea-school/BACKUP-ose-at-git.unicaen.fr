@@ -1,6 +1,7 @@
 <?php
 /**
  * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $missionsType \Mission\Entity\Db\TypeMission[]
  */
 
 use Application\Provider\Privilege\Privileges;
@@ -15,11 +16,12 @@ $canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_S
 <table class="table table-bordered table-sm">
     <thead>
     <tr>
-        <th style="text-align: center">Libelle</th>
-        <th style="text-align: center">Code</th>
-        <th style="text-align: center">Type de rémunération</th>
+        <th>Libellé</th>
+        <th>Code</th>
+        <th>Accomp. Etudiants</th>
+        <th>Type de rémunération</th>
         <?php if ($canSupprimer || $canEdit): ?>
-            <th style="text-align: center">Action</th>
+            <th>Action</th>
         <?php endif; ?>
     </tr>
     </thead>
@@ -27,10 +29,10 @@ $canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_S
     <?php foreach ($missionsType as $missionType) : ?>
 
         <tr>
-            <td style="text-align: center"><?php echo $missionType->getLibelle(); ?></td>
-            <td style="text-align: center"><?php echo $missionType->getCode() ?></td>
-            <td style="text-align: center">
-                <?php if ($missionType->getTauxRemu()):
+            <td><?= $missionType->getLibelle(); ?></td>
+            <td class="text-center"><?= $missionType->getCode() ?></td>
+            <td class="text-center"><i class="fas fa-<?= $missionType->isAccompagnementEtudiants() ? 'check text-success' : 'xmark text-danger' ?>"></i></td>
+            <td><?php if ($missionType->getTauxRemu()):
                     echo $missionType->getTauxRemu()->getLibelle();
                 endif; ?></td>
             <?php if ($canSupprimer || $canEdit): ?>

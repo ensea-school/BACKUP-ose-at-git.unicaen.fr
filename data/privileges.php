@@ -451,6 +451,7 @@ return [
             'edition'                   => 'Édition',
             'config-structure'          => 'Configuration par composante',
             'config-referentiel'        => 'Configuration par fonction référentielle',
+            'config-mission'            => 'Configuration par type de mission',
             'config-statut'             => 'Configuration par statut d\'intervenant',
             'derogations-visualisation' => 'Dérogations (visualisation)',
             'derogations-edition'       => 'Dérogations (édition)',

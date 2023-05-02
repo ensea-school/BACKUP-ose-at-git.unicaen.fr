@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 20.1](#ose-201--04042023-)
+[OSE 20.2](#ose-202-28042023)
 
 
 # OSE 21 (à venir)
@@ -9,6 +9,26 @@
 
 * Nouvelle notion de mission, permettant de gérer les contrats étudiants
 * Taux HETD personnalisables
+
+
+# OSE 20.2 (28/04/2023)
+
+## Nouveautés
+
+* Nouvelle formule de calcul de Rouen
+
+## Améliorations
+
+* Possibilité d'entrer des dérogations aux plafonds avant d'avoir des heures à plafonner (#46387) 
+
+## Corrections de bugs
+
+* Les motifs de modification de service dû supprimés ne peuvent plus être sélectionnés (#50328)
+* Messages d'erreur corrigés lors de l'exécution du script de migration de la V20.
+* Le bouton prévu=>réalisé s'affiche de nouveau lorsqu'il n'y a pas de contrat (#45643)
+* Formule de Poitiers : rétablissement du test pour appliquer l'ancienne formule avant 2022.
+* Formule de Picardie : prise en compte des heures négatives (#50471)
+* L'interface d'administration des types de formation est de nouveau opérationnelle (#50360)
 
 
 

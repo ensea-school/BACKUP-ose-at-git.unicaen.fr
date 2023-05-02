@@ -1,0 +1,123 @@
+<?php
+
+/**
+ * @var $this           \Application\View\Renderer\PhpRenderer
+ * @var $services
+ * @var $structure      \Application\Entity\Db\Structure
+ * @var $avenant_param  int
+ */
+
+?>
+
+<?php if (isset($services[\Service\Entity\Db\TypeService::CODE_ENSEIGNEMENT]) && $services[\Service\Entity\Db\TypeService::CODE_ENSEIGNEMENT]): ?>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Formation</th>
+            <th>Période</th>
+            <th>Enseignement</th>
+            <th>CM</th>
+            <th>TD</th>
+            <th>TP</th>
+            <th>Autre</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($services[\Service\Entity\Db\TypeService::CODE_ENSEIGNEMENT] as $element):
+            if ($element->getStructure() != $structure && $element->getStructure() != null) {
+                continue;
+            }
+            ?>
+            <tr>
+                <td>
+                    <?php if ($element->getElementPedagogique() && $element->getElementPedagogique()->getCheminPedagogique()->count() > 1): ?>
+                        <small class="badge bg-secondary" style="font-size:8pt"
+                               title="Enseignement mutualisé entre plusieures formations. Seule la formation principale est présentée ci-dessous">Enseignement
+                            mutualisé</small><br/>
+                    <?php endif; ?>
+                    <?php $url = $this->url('of/etape/voir', ['etape' => $element->getElementPedagogique()->getEtape()->getId()]); ?>
+                    <a href="<?php echo $url ?>" class="ajax-modal"><?php echo $element->getElementPedagogique()->getEtape() ?>
+                        (<?php echo $element->getElementPedagogique()->getEtape()->getCode() ?>)</td>
+                </a>
+
+                <td><?php if ($element->getElementPedagogique()->getPeriode()) {
+                        echo $element->getElementPedagogique()->getPeriode()->getCode();
+                    } ?></td>
+                <td>
+                    <?php $url = $this->url('of/element/voir', ['elementPedagogique' => $element->getElementPedagogique()->getId()]); ?>
+                    <a href="<?php echo $url ?>" class="ajax-modal"><?php echo $element->getElementPedagogique()->getLibelle() ?>
+                        (<?php echo $element->getElementPedagogique()->getCode() ?>)</td>
+                </a>
+
+                </td>
+                <td>
+                    <?php echo $element->getCm() ?>
+                </td>
+                <td>
+                    <?php echo $element->getTd() ?>
+                </td>
+                <td>
+                    <?php echo $element->getTp() ?>
+                </td>
+                <td>
+                    <?php echo $element->getAutres() ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
+<?php if (isset($services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL]) && $services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL]): ?>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Fonction</th>
+            <th>Heures</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL] as $element):
+            if ($element->getStructure() != $structure && $element->getStructure() != null) {
+                continue;
+            }
+            ?>
+            <tr>
+                <td>
+                    <?php echo $element->getFonctionReferentiel()->getLibelleLong() ?>(<?php echo $element->getFonctionReferentiel()->getCode() ?>)
+                </td>
+                <td>
+                    <?php echo $element->getAutres() ?>
+                </td>
+
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
+<?php if (isset($services[\Service\Entity\Db\TypeService::CODE_MISSION]) && $services[\Service\Entity\Db\TypeService::CODE_MISSION]): ?>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Type de mission</th>
+            <th>Heures</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($services[\Service\Entity\Db\TypeService::CODE_MISSION] as $element):
+            if ($element->getStructure() != $structure && $element->getStructure() != null) {
+                continue;
+            }
+            ?>
+            <tr>
+                <td>
+                    <?php echo $element->getTypeMission()->getLibelle() ?> (<?php echo $element->getTypeMission()->getCode() ?>)
+                </td>
+                <td>
+                    <?php echo $element->getAutres() ?>
+                </td>
+
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>

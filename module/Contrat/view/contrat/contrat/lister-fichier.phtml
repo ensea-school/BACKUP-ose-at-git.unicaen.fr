@@ -1,0 +1,52 @@
+<?php
+
+use Contrat\Assertion\ContratAssertion;
+
+$contrat = $this->contrat;
+/* @var $contrat       \Contrat\Entity\Db\Contrat */
+$fichiers = $contrat ? $contrat->getFichier() : [];
+/* @var $fichiers \Application\Entity\Db\Fichier[] */
+
+$canDelete = $this->isAllowed($contrat, ContratAssertion::PRIV_SUPPRIMER_FICHIER);
+?>
+
+<?php if (count($fichiers)): ?>
+
+    <style>
+        .delete-file {
+            float: right;
+        }
+
+        .upload-date {
+            font-size: 90%;
+        }
+
+        li.fichier-contrat {
+            margin-top: 5px;
+        }
+    </style>
+
+    <ul>
+        <?php foreach ($fichiers as $fichier): ?>
+            <li class="fichier-contrat">
+                <?php
+                $paramsTelecharger = ['contrat' => $contrat->getId(), 'fichier' => $fichier->getId(), 'nomFichier' => $fichier->getNom()];
+                $urlTelecharger    = $this->url('contrat/telecharger-fichier', $paramsTelecharger, [], true);
+                echo $this->uploader()->renderUploadedFile($fichier, $urlTelecharger);
+
+                $urlSupprimer = null;
+                if ($canDelete) {
+                    $paramsSupprimer = ['contrat' => $contrat->getId(), 'fichier' => $fichier->getId()];
+                    $urlSupprimer    = $this->url('contrat/supprimer-fichier', $paramsSupprimer, [], true);
+                }
+                echo $this->uploader()->renderDeleteFile($fichier, $urlSupprimer);
+                ?>
+            </li>
+        <?php endforeach ?>
+    </ul>
+
+<?php else: ?>
+
+    <p>Aucun.</p>
+
+<?php endif;

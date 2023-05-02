@@ -2,6 +2,7 @@
 
 namespace BddAdmin\Driver\Oracle;
 
+use BddAdmin\Bdd;
 use BddAdmin\Manager\RefConstraintManagerInterface;
 use BddAdmin\Ddl\DdlFilter;
 
@@ -75,6 +76,22 @@ class RefConstraintManager extends AbstractManagerDdlConstraint implements RefCo
         }
 
         return $data;
+    }
+
+
+
+    public function exists(string $name): bool
+    {
+        $sql = "SELECT count(*) NBR FROM ALL_CONSTRAINTS WHERE "
+            . "OWNER = sys_context( 'userenv', 'current_schema' )"
+            . "AND CONSTRAINT_TYPE = 'R'"
+            . "AND CONSTRAINT_NAME NOT LIKE 'BIN" . "$%' "
+            . "AND CONSTRAINT_NAME = :name";
+        $params = ['name' => $name];
+
+        $nbr = (int)$this->bdd->select($sql, $params, ['fetch' => Bdd::FETCH_ONE])['NBR'];
+
+        return $nbr > 0;
     }
 
 

@@ -302,11 +302,18 @@ return [
             'may_terminate' => true,
             'child_routes'  => [
                 'saisie'           => [
-                    'route'       => '/saisie[/:typeFormation][/:groupeTypeFormation]',
+                    'route'       => '/saisie/:typeFormation',
                     'constraints' => [
                         'typeFormation' => '[0-9]*',
                     ],
                     'action'      => 'saisie',
+                ],
+                'ajout'           => [
+                    'route'       => '/ajout/:groupeTypeFormation',
+                    'constraints' => [
+                        'typeFormation' => '[0-9]*',
+                    ],
+                    'action'      => 'ajout',
                 ],
                 'supprimer'        => [
                     'route'       => '/supprimer/:typeFormation',
@@ -550,7 +557,7 @@ return [
         ],
         [
             'controller' => TypeFormationController::class,
-            'action'     => ['saisie', 'supprimer', 'saisieGroupe', 'supprimerGroupe', "trier"],
+            'action'     => ['saisie', 'ajout', 'supprimer', 'saisieGroupe', 'supprimerGroupe', "trier"],
             'privileges' => [Privileges::ODF_TYPE_FORMATION_EDITION],
         ],
     ],

@@ -10,13 +10,15 @@ class TypeMission implements ParametreEntityInterface
 {
     use ParametreEntityTrait;
 
-    protected ?int      $id       = null;
+    protected ?int $id = null;
 
-    protected ?string   $code     = null;
+    protected ?string $code = null;
 
-    protected ?string   $libelle  = null;
+    protected ?string $libelle = null;
 
     protected ?TauxRemu $tauxRemu = null;
+
+    protected bool $accompagnementEtudiants = false;
 
 
 
@@ -69,6 +71,22 @@ class TypeMission implements ParametreEntityInterface
     public function setTauxRemu(?TauxRemu $tauxRemu): TypeMission
     {
         $this->tauxRemu = $tauxRemu;
+
+        return $this;
+    }
+
+
+
+    public function isAccompagnementEtudiants(): bool
+    {
+        return $this->accompagnementEtudiants;
+    }
+
+
+
+    public function setAccompagnementEtudiants(bool $accompagnementEtudiants): TypeMission
+    {
+        $this->accompagnementEtudiants = $accompagnementEtudiants;
 
         return $this;
     }

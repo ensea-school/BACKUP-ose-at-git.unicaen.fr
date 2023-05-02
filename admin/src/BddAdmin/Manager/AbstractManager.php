@@ -68,6 +68,15 @@ abstract class AbstractManager implements ManagerInterface
 
 
     /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    abstract public function exists(string $name): bool;
+
+
+
+    /**
      * @param array $data
      */
     abstract public function create(array $data);

@@ -270,6 +270,10 @@ return [
             'TYPE_PIECE_JOINTE_ID' => ['transformer' => 'SELECT id FROM type_piece_jointe WHERE histo_destruction IS NULL AND code = %s'],
         ],],
     ],
+    'TYPE_SERVICE'          => [
+        'actions' => ['install', 'update'],
+        'key'     => 'CODE',
+    ],
     'WF_ETAPE_DEP'               => [
         'actions' => ['install'],
         'key'     => ['ETAPE_SUIV_ID', 'ETAPE_PREC_ID'],

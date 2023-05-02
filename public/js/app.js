@@ -121,7 +121,7 @@ $(function ()
             let messages = xhr.responseJSON.messages;
             xhr.responseJSON = xhr.responseJSON.data;
 
-            Util.alerts(messages);
+            unicaenVue.flashMessenger.toasts(messages);
         }
 
         // correction d'un bug de bootstrap-select à la MAJ AJAX d'une page
@@ -130,7 +130,7 @@ $(function ()
 
     $(document).ajaxError((event, xhr, settings) => {
         if (!(typeof settings.error === 'function')) {
-            Util.alert(xhr.responseText, 'error');
+            unicaenVue.flashMessenger.toast(xhr.responseText, 'error');
         }
     });
 

@@ -1,0 +1,24 @@
+<?php
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $intervenant       \Application\Entity\Db\Intervenant
+ * @var $canAddMission     bool
+ * @var $typeVolumeHoraire \Service\Entity\Db\TypeVolumeHoraire
+ */
+
+use Application\Entity\Db\WfEtape;
+
+$title     = 'Missions';
+$nextEtape = WfEtape::CODE_SERVICE_SAISIE;
+
+$this->intervenant($intervenant)->renderTitle($title);
+
+echo $this->plafonds($intervenant, $typeVolumeHoraire);
+
+echo $this->vue('mission/liste', [
+    'intervenant'   => $intervenant->getId(),
+    'canAddMission' => $canAddMission,
+]);
+
+echo '<br />';
+echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);

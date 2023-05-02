@@ -1,5 +1,4 @@
 <template>
-
     <div class="card" :class="{ 'ms-5':taux.tauxRemu}">
         <div class="card-header">
             <h3 style="display:inline">{{ taux.libelle }} ({{ taux.code }})</h3>
@@ -28,7 +27,8 @@
                         <li class="">
                             <div class="row align-items-start">
                                 <div class="col-md-4">
-                                    {{ tauxValeur.valeur }}€/h à partir du {{ tauxValeur.dateEffet }}
+                                    {{ tauxValeur.valeur }}€/h à partir du
+                                    <u-date :value="tauxValeur.dateEffet"/>
                                 </div>
                                 <div class="col">
                                     <a v-if="taux.canEdit"
@@ -67,7 +67,8 @@
                             <li>
                                 <div class="row align-items-start">
                                     <div class="col-md-8">
-                                        Coéfficient de {{ tauxValeur.valeur }} à partir du {{ tauxValeur.dateEffet }}
+                                        Coéfficient de {{ tauxValeur.valeur }} à partir du
+                                        <u-date :value="tauxValeur.dateEffet"/>
                                     </div>
                                     <div class="col-md-auto">
 
@@ -101,7 +102,9 @@
                     Valeurs calculées (indexées sur le taux {{ taux.tauxRemu.libelle }}) :
                     <ul>
                         <div v-for="indexResult in taux.tauxRemuValeursIndex">
-                            <li>{{ indexResult.valeur }}€/h à partir du {{ indexResult.date }}</li>
+                            <li>{{ indexResult.valeur }}€/h à partir du
+                                <u-date :value="indexResult.date"/>
+                            </li>
                         </div>
                     </ul>
                     <br>
@@ -123,11 +126,9 @@
 </template>
 
 <script>
-import UIcon from "@/Application/UI/UIcon.vue";
 
 export default {
     name: "Taux",
-    components: {UIcon},
     props: {
         taux: {required: true},
         listeTaux: {required: true},
@@ -135,9 +136,9 @@ export default {
     data()
     {
         return {
-            saisieUrl: Util.url('taux/saisir/:tauxRemu', {tauxRemu: this.taux.id}),
-            supprimerUrl: Util.url("taux/supprimer/:tauxRemu", {tauxRemu: this.taux.id}),
-            ajoutValeurUrl: Util.url("taux/saisir-valeur/:tauxRemu", {tauxRemu: this.taux.id}),
+            saisieUrl: unicaenVue.url('taux/saisir/:tauxRemu', {tauxRemu: this.taux.id}),
+            supprimerUrl: unicaenVue.url("taux/supprimer/:tauxRemu", {tauxRemu: this.taux.id}),
+            ajoutValeurUrl: unicaenVue.url("taux/saisir-valeur/:tauxRemu", {tauxRemu: this.taux.id}),
         };
     },
     methods: {
@@ -155,7 +156,7 @@ export default {
         },
         saisieValeur(event)
         {
-            event.currentTarget.href = Util.url("taux/saisir-valeur/:tauxRemu/:tauxRemuValeur",
+            event.currentTarget.href = unicaenVue.url("taux/saisir-valeur/:tauxRemu/:tauxRemuValeur",
                 {tauxRemu: this.taux.id, tauxRemuValeur: event.currentTarget.dataset.id});
             modAjax(event.currentTarget, (response) => {
                 this.$emit('refreshListe');
@@ -173,7 +174,7 @@ export default {
         },
         supprimerValeur(event)
         {
-            event.currentTarget.href = Util.url("taux/supprimer-valeur/:tauxRemuValeur",
+            event.currentTarget.href = unicaenVue.url("taux/supprimer-valeur/:tauxRemuValeur",
                 {tauxRemuValeur: event.currentTarget.dataset.id});
             popConfirm(event.currentTarget, (response) => {
                 this.$emit('refreshListe');
@@ -181,8 +182,8 @@ export default {
         },
         refresh(taux)
         {
-            axios.get(
-                Util.url("taux/get/:tauxRemu", {tauxRemu: taux.id})
+            unicaenVue.axios.get(
+                unicaenVue.url("taux/get/:tauxRemu", {tauxRemu: taux.id})
             ).then(response => {
                 this.$emit('refresh', response.data);
             });

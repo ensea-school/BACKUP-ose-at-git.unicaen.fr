@@ -1,7 +1,37 @@
 <?php
 /**
  * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form \Mission\Form\MissionTypeForm
+ * @var $tab  string
  */
 
-echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
-echo $this->form($form);
+use Application\Provider\Privilege\Privileges;
+
+$typeMission = $form->getObject();
+
+$visu = $this->messenger()->addCurrentMessagesFromFlashMessenger() . $this->form($form);
+
+$tabs = [
+    [
+        'id'      => 'fiche',
+        'label'   => 'Fiche',
+        'content' => $visu,
+    ],
+];
+
+$id = $typeMission->getId();
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CONFIG_MISSION));
+
+
+if ($id && $canEdit) {
+
+    $tabs[] = [
+        'id'    => 'plafonds',
+        'label' => '<i class="fas fa-signal"></i> Plafonds',
+        'url'   => $this->url('plafond/mission', ['typeMission' => $id]),
+    ];
+
+    echo $this->tabajax($tabs, $tab);
+} else {
+    echo $visu;
+}

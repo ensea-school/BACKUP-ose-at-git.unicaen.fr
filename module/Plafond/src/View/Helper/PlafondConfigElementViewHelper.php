@@ -2,6 +2,7 @@
 
 namespace Plafond\View\Helper;
 
+use Mission\Entity\Db\TypeMission;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Intervenant\Entity\Db\Statut;
 use Application\Entity\Db\Structure;
@@ -77,7 +78,7 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
      */
     public function afficher($entity, bool $canEdit = true, bool $autoSave = false): string
     {
-        if (!($entity instanceof FonctionReferentiel || $entity instanceof Structure || $entity instanceof Statut)) {
+        if (!($entity instanceof FonctionReferentiel || $entity instanceof Structure || $entity instanceof Statut || $entity instanceof TypeMission)) {
             throw new \Exception(get_class($entity) . ' non gérée pour l\'affichage des statuts');
         }
 
@@ -103,6 +104,7 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
             FonctionReferentiel::class => 'plafond/config-referentiel',
             Structure::class           => 'plafond/config-structure',
             Statut::class              => 'plafond/config-statut',
+            TypeMission::class         => 'plafond/config-mission',
         ];
         if (is_object($entity)) {
             $url      = $this->getView()->url($urls[get_class($entity)]);
@@ -129,10 +131,10 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
                                 entityId: <?= $entityId ?: 'null' ?>
                             },
                             success: function () {
-                                Util.alert('Votre modification a bien été prise en compte', 'success');
+                                unicaenVue.flashMessenger.toast('Votre modification a bien été prise en compte', 'success');
                             },
                             error: function (jqXHR) {
-                                Util.alert(jqXHR.responseText, 'error');
+                                unicaenVue.flashMessenger.toast(jqXHR.responseText, 'error');
                             }
                         });
                     },

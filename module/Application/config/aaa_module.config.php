@@ -212,11 +212,9 @@ $config = [
         'factories'  => [
             UserProfileSelectRadioItem::class => UserProfileSelectRadioItemFactory::class,
             //            \UnicaenUtilisateur\View\Helper\UserProfileSelectRadioItem::class  => View\Helper\UserProfileSelectRadioItemFactory::class,
-//            \UnicaenApp\View\Helper\AppLink::class                             => View\Helper\AppLinkFactory::class,
+            \UnicaenApp\View\Helper\AppLink::class                             => View\Helper\AppLinkFactory::class,
 //            \UnicaenUtilisateur\View\Helper\UserCurrent::class                 => View\Helper\UserCurrentFactory::class,
             'tab'                                                              => View\Helper\TabViewHelperFactory::class,
-            'vite'                                                             => View\Helper\ViteViewHelperFactory::class,
-            'vue'                                                              => View\Helper\VueViewHelperFactory::class,
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,
@@ -234,7 +232,6 @@ $config = [
     'controller_plugins' => [
         'factories' => [
             'context' => Controller\Plugin\ContextFactory::class,
-            'axios'   => Controller\Plugin\AxiosFactory::class,
         ],
     ],
     'view_manager'       => [
@@ -243,11 +240,6 @@ $config = [
         ],
         'template_map'        => include __DIR__ . '/../template_map.php',
         'layout'              => 'layout/layout', // e.g., 'layout/layout'
-    ],
-    'vite'               => [
-        'host'        => 'http://localhost:5133',
-        'vue-url'     => '/vendor/vue.js',
-        'hot-loading' => \AppConfig::inDev() ? \AppConfig::get('dev', 'hot-loading') : false,
     ],
 ];
 

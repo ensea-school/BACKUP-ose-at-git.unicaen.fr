@@ -2,14 +2,14 @@
 
 namespace Mission\Service;
 
-use Application\Entity\Db\Intervenant;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Doctrine\ORM\Query;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
-use Mission\Entity\MissionSuivi;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use UnicaenVue\View\Model\AxiosModel;
 
 /**
  * Description of MissionService
@@ -51,19 +51,19 @@ class MissionService extends AbstractEntityService
 
 
 
-    public function query(array $parameters)
+    public function data(array $parameters): AxiosModel
     {
         $dql = "
         SELECT 
-          m, tm, str, tr, valid, vh, vvh, ctr
+          m, tm, str, tr, valid, vh, vvh, ctr, tvh
         FROM 
           " . Mission::class . " m
           JOIN m.typeMission tm
           JOIN m.structure str
           JOIN m.tauxRemu tr
-          JOIN " . TypeVolumeHoraire::class . " tvh WITH tvh.code = :typeVolumeHorairePrevu
           LEFT JOIN m.validations valid WITH valid.histoDestruction IS NULL
-          LEFT JOIN m.volumesHoraires vh WITH vh.histoDestruction IS NULL AND vh.typeVolumeHoraire = tvh
+          LEFT JOIN m.volumesHoraires vh WITH vh.histoDestruction IS NULL
+          LEFT JOIN vh.typeVolumeHoraire tvh
           LEFT JOIN vh.validations vvh WITH vvh.histoDestruction IS NULL
           LEFT JOIN vh.contrat ctr WITH ctr.histoDestruction IS NULL
         WHERE 
@@ -77,68 +77,64 @@ class MissionService extends AbstractEntityService
           vh.histoCreation
         ";
 
-        $parameters['typeVolumeHorairePrevu'] = TypeVolumeHoraire::CODE_PREVU;
+        $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
 
-        return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
-    }
-
-
-
-    public function suivi(Intervenant $intervenant, ?string $guid=null): array|MissionSuivi|null
-    {
-        $parameters = [
-            'typeVolumeHoraireRealise' => TypeVolumeHoraire::CODE_REALISE,
-            'intervenant' => $intervenant,
+        $properties = [
+            'id',
+            ['typeMission', ['libelle', 'accompagnementEtudiants']],
+            'dateDebut',
+            'dateFin',
+            ['structure', ['libelle']],
+            ['tauxRemu', ['libelle']],
+            'description',
+            'histoCreation',
+            'histoCreateur',
+            'heures',
+            'heuresValidees',
+            'heuresRealisees',
+            ['volumesHorairesPrevus', [
+                'id',
+                'heures',
+                'valide',
+                'validation',
+                'canValider',
+                'canDevalider',
+                'canSupprimer',
+                'histoCreation',
+                'histoCreateur',
+            ]],
+            ['etudiants', ['id', 'code', 'nomUsuel', 'prenom', 'dateNaissance']],
+            'contrat',
+            'valide',
+            'validation',
+            'canSaisie',
+            'canValider',
+            'canDevalider',
+            'canSupprimer',
         ];
 
-        if ($guid){
-            $date = VolumeHoraireMission::guidDate($guid);
-            $from = new \DateTime($date->format("Y-m-d")." 00:00:00");
-            $to   = new \DateTime($date->format("Y-m-d")." 23:59:59");
+        $triggers = [
+            [
+                '/'                      => function (Mission $original, array $extracted) {
+                    $extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                    $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                    $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                    $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
 
-            $dateFilter = "AND vhm.horaireDebut BETWEEN :from AND :to";
-            $dateFilter .= "\nAND vhm.horaireFin BETWEEN :from AND :to";
+                    return $extracted;
+                },
+                '/volumesHorairesPrevus' => function ($original, $extracted) {
+                    //$extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                    $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                    $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                    $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
 
-            $parameters['from'] = $from;
-            $parameters['to'] = $to;
-        }else{
-            $dateFilter = '';
-        }
+                    return $extracted;
+                },
+            ]
+        ];
 
-        $dql = "
-        SELECT
-            vhm, m
-        FROM
-            ".VolumeHoraireMission::class." vhm
-            JOIN vhm.typeVolumeHoraire tvh WITH tvh.code = :typeVolumeHoraireRealise
-            JOIN vhm.mission m
-        WHERE
-            vhm.histoDestruction IS NULL
-            AND m.intervenant = :intervenant
-            $dateFilter
-        ";
-
-        /** @var VolumeHoraireMission[] $vhms */
-        $vhms = $this->getEntityManager()->createQuery($dql)->setParameters($parameters)->execute();
-
-        $suivis = [];
-        foreach( $vhms as $vhm ){
-            $vhmGuid = $vhm->guid();
-            if (!array_key_exists($vhmGuid, $suivis)){
-                $suivis[$vhmGuid] = new MissionSuivi();
-            }
-            $suivis[$vhmGuid]->addVolumeHoraire($vhm);
-        }
-
-        if ($guid){
-            if (array_key_exists($guid, $suivis)){
-                return $suivis[$guid];
-            }else{
-                return null;
-            }
-        }else{
-            return $suivis;
-        }
+        return new AxiosModel($query, $properties, $triggers);
     }
 
 
@@ -150,7 +146,7 @@ class MissionService extends AbstractEntityService
      */
     public function save($entity)
     {
-        foreach ($entity->getVolumesHoraires() as $vh) {
+        foreach ($entity->getVolumesHorairesPrevus() as $vh) {
             $this->saveVolumeHoraire($vh);
         }
 
@@ -174,15 +170,6 @@ class MissionService extends AbstractEntityService
         $this->getEntityManager()->flush($vhm);
 
         return $this;
-    }
-
-
-
-    public function saveSuivi(MissionSuivi $missionSuivi)
-    {
-        foreach( $missionSuivi->getVolumesHoraires() as $vhm ){
-            $this->saveVolumeHoraire($vhm);
-        }
     }
 
 

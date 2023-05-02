@@ -3,6 +3,7 @@ WITH t AS (
   SELECT
     pjd.annee_id                                                annee_id,
     pjd.type_piece_jointe_id                                    type_piece_jointe_id,
+    MAX(pjf.piece_jointe_id)                                    piece_jointe_id,
     pjd.intervenant_id                                          intervenant_id,
     CASE WHEN pjd.intervenant_id IS NULL THEN 0 ELSE 1 END      demandee,
     SUM(CASE WHEN pjf.id IS NOT NULL THEN 1 ELSE 0 END)             fournie,
@@ -26,6 +27,7 @@ WITH t AS (
   SELECT
     pjf.annee_id                                                annee_id,
     pjf.type_piece_jointe_id                                    type_piece_jointe_id,
+    MAX(pjf.piece_jointe_id)                                    piece_jointe_id,
     pjf.intervenant_id                                          intervenant_id,
     0                                                           demandee,
     1                                                           fournie,
@@ -45,6 +47,7 @@ WITH t AS (
 )
 SELECT annee_id,
        type_piece_jointe_id,
+       piece_jointe_id,
        intervenant_id,
        demandee,
        CASE WHEN fournie <> 0 THEN 1 ELSE 0 END    fournie,

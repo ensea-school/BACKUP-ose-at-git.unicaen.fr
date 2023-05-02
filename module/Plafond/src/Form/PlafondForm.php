@@ -40,10 +40,6 @@ class PlafondForm extends AbstractForm implements InputFilterProviderInterface
                 'value_options' => \UnicaenApp\Util::collectionAsOptions($this->getServicePlafond()->getPerimetres()),
                 'empty_option'  => 'Sélectionner un périmètre...',
             ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
-            ],
             'type'       => 'Select',
         ]);
 

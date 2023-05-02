@@ -131,6 +131,7 @@ class AppConfig
             'UnicaenImport',
             'UnicaenTbl',
             'UnicaenSiham',
+            'UnicaenVue',
             'Application',
             'Agrement',
             'Intervenant',
@@ -145,6 +146,7 @@ class AppConfig
             'Indicateur',
             'ExportRh',
             'Dossier',
+            'Contrat',
         ];
 
         if (!self::inConsole()) {

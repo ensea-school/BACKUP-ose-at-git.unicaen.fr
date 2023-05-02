@@ -69,7 +69,7 @@ $.widget("ose.referentiels", {
             });
             that.element.find("#referentiel-" + serviceId + "-volume-horaire-td").refresh();
         } else { // nouveau service
-            var url = Util.url("referentiel/rafraichir-ligne/:service", {service: serviceId}, {
+            var url = unicaenVue.url("referentiel/rafraichir-ligne/:service", {service: serviceId}, {
                 'only-content': 0,
                 'details': 1,
                 params: that.params
@@ -106,7 +106,7 @@ $.widget("ose.referentiels", {
             services += $(this).data('id');
         });
         $.get(
-            Util.url("referentiel/constatation"),
+            unicaenVue.url("referentiel/constatation"),
             {services: services},
             function (data) {
                 if (data != 'OK') {
@@ -123,7 +123,7 @@ $.widget("ose.referentiels", {
     setPrevusFromPrevus: function () {
         var that = this;
         $.get(
-            Util.url("referentiel/initialisation/" + this.getElementPrevuToPrevu().data('intervenant')),
+            unicaenVue.url("referentiel/initialisation/" + this.getElementPrevuToPrevu().data('intervenant')),
             {},
             function (data) {
                 if (data != 'OK') {

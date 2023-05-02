@@ -1,32 +1,36 @@
-import {createApp} from 'vue';
+/*
+//exemple de loading manuel des composants...
+const components = [
+    'Application/Utilisateur',
+    'Application/UI/UHeures',
+    'Exemple/MonTest',
+    'Intervenant/Recherche',
+    'Mission/Liste',
+    'Mission/Mission',
+    'Mission/Suivi',
+    'Mission/SuiviEvent',
+    'Paiement/ListeTaux',
+    'Paiement/Taux',
+];
+
+let vues = {};
+for(const c in components){
+    let file = './' + components[c] + '.vue';
+    vues[file] = await import(file);
+}
+*/
 
 const vues = import.meta.glob('./**/*.vue', {eager: true});
 
 import autoloadComponents from './autoload.js';
+import vueApp from 'unicaen-vue/js/Client/main'
 
-/* Chargement de tous les composants */
-let componentsPath = "./";
+const options = {
+    autoloads: autoloadComponents,
+    // beforeMount: (app) => {
+    //     console.log('coucou');
+    //     console.log(app);
+    // }
+};
 
-const components = {}
-for (const path in vues) {
-    let compPath = path.slice(componentsPath.length, -4);
-    let compName = compPath.replace('/', '');
-
-    components[compName] = vues[path].default;
-}
-
-// instantiate the Vue apps
-// Note our lookup is a wrapping div with .vue-app class
-for (const el of document.getElementsByClassName('vue-app')) {
-    let app = createApp({
-        template: el.innerHTML,
-        components: components
-    });
-
-    // autoload de tous les composants déclarés
-    for (const alias in autoloadComponents) {
-        let compName = autoloadComponents[alias].replace('/', '');
-        app.component(alias, components[compName]);
-    }
-    app.mount(el);
-}
+vueApp.init(vues, options);

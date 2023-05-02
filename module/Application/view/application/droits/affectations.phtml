@@ -75,7 +75,7 @@ $ajoutUrl = $this->url('droits/affectations/edition');
 <script type="text/javascript">
     $(function () {
         $("body").on("affectation-edition", function (event, data) {
-            Util.alert("L'action a bien été prise en compte", 'success');
+            unicaenVue.flashMessenger.toast("L'action a bien été prise en compte", 'success');
             window.location.reload();
         });
 

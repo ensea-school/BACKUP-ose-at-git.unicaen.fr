@@ -325,9 +325,9 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                 a.id                  agrement_id,
                 a.structure_id        structure_id
             FROM intervenant i
-              JOIN agrement a ON a.intervenant_id = i.id
+            	JOIN agrement a ON a.intervenant_id = i.id
             WHERE
-              a.histo_destruction IS NULL
+            	a.histo_destruction IS NULL
         )
         SELECT DISTINCT "ANNEE_ID","ANNEE_AGREMENT","TYPE_AGREMENT_ID","INTERVENANT_ID","CODE_INTERVENANT","STRUCTURE_ID","AGREMENT_ID","DUREE_VIE" FROM (
             SELECT
@@ -340,7 +340,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
               i.id                                       intervenant_id,
               i.code                                     code_intervenant,
               null                                       structure_id,
-              avi.agrement_id                             agrement_id,
+              avi.agrement_id			                       agrement_id,
               si.conseil_aca_duree_vie                   duree_vie,
               RANK() OVER(
                 PARTITION BY i.code,i.annee_id ORDER BY
@@ -357,7 +357,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
               JOIN                           i_s ON i_s.intervenant_id = i.id
 
               LEFT JOIN                      avi ON i.code = avi.intervenant_code
-                                                AND avi.type_agrement_id = ta.id
+              							                		AND avi.type_agrement_id = ta.id
                                                 AND i.annee_id < avi.annee_id + si.conseil_aca_duree_vie
                                                 AND i.annee_id >= avi.annee_id
 
@@ -382,8 +382,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
               ta.id                                       type_agrement_id,
               i.id                                        intervenant_id,
               i.code                                      code_intervenant,
-              i_s.structure_id                            structure_id,
-              avi.agrement_id                             agrement_id,
+              i_s.structure_id		            					  structure_id,
+              avi.agrement_id 			                      agrement_id,
               si.conseil_restreint_duree_vie              duree_vie,
               RANK() OVER(
                 PARTITION BY i.code,i.annee_id,i_s.structure_id ORDER BY
@@ -399,8 +399,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
               JOIN                           i_s ON i_s.intervenant_id = i.id
 
               LEFT JOIN                      avi ON i.code = avi.intervenant_code
-                                                AND avi.type_agrement_id = ta.id
-                                                AND COALESCE(avi.structure_id,0) = COALESCE(i_s.structure_id,0)
+                							                	AND avi.type_agrement_id = ta.id
+        										                    AND COALESCE(avi.structure_id,0) = COALESCE(i_s.structure_id,0)
                                                 AND i.annee_id < avi.annee_id + si.conseil_restreint_duree_vie
                                                 AND i.annee_id >= avi.annee_id
 
@@ -447,7 +447,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_AGREMENT_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_AGREMENT VALUES d;
+        INSERT INTO TBL_AGREMENT values d;
       ELSIF
             d.ANNEE_AGREMENT IS NULL
         AND d.TYPE_AGREMENT_ID IS NULL
@@ -456,7 +456,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_AGREMENT WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_AGREMENT SET ROW = d WHERE id = d.id;
+        UPDATE TBL_AGREMENT SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -645,7 +645,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_CHARGENS_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_CHARGENS VALUES d;
+        INSERT INTO TBL_CHARGENS values d;
       ELSIF
             d.ANNEE_ID IS NULL
         AND d.NOEUD_ID IS NULL
@@ -660,7 +660,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_CHARGENS WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_CHARGENS SET ROW = d WHERE id = d.id;
+        UPDATE TBL_CHARGENS SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -751,7 +751,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_CHARGENS_SEUILS_DEF_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_CHARGENS_SEUILS_DEF VALUES d;
+        INSERT INTO TBL_CHARGENS_SEUILS_DEF values d;
       ELSIF
             d.ANNEE_ID IS NULL
         AND d.SCENARIO_ID IS NULL
@@ -761,7 +761,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_CHARGENS_SEUILS_DEF WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_CHARGENS_SEUILS_DEF SET ROW = d WHERE id = d.id;
+        UPDATE TBL_CHARGENS_SEUILS_DEF SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -830,13 +830,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_CLOTURE_REALISE_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_CLOTURE_REALISE VALUES d;
+        INSERT INTO TBL_CLOTURE_REALISE values d;
       ELSIF
             d.INTERVENANT_ID IS NULL
       THEN
         DELETE FROM TBL_CLOTURE_REALISE WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_CLOTURE_REALISE SET ROW = d WHERE id = d.id;
+        UPDATE TBL_CLOTURE_REALISE SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -933,14 +933,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_CONTRAT_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_CONTRAT VALUES d;
+        INSERT INTO TBL_CONTRAT values d;
       ELSIF
             d.INTERVENANT_ID IS NULL
         AND d.STRUCTURE_ID IS NULL
       THEN
         DELETE FROM TBL_CONTRAT WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_CONTRAT SET ROW = d WHERE id = d.id;
+        UPDATE TBL_CONTRAT SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -1026,7 +1026,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_DMEP_LIQUIDATION_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_DMEP_LIQUIDATION VALUES d;
+        INSERT INTO TBL_DMEP_LIQUIDATION values d;
       ELSIF
             d.ANNEE_ID IS NULL
         AND d.TYPE_RESSOURCE_ID IS NULL
@@ -1034,7 +1034,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_DMEP_LIQUIDATION WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_DMEP_LIQUIDATION SET ROW = d WHERE id = d.id;
+        UPDATE TBL_DMEP_LIQUIDATION SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -1208,13 +1208,13 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_DOSSIER_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_DOSSIER VALUES d;
+        INSERT INTO TBL_DOSSIER values d;
       ELSIF
             d.INTERVENANT_ID IS NULL
       THEN
         DELETE FROM TBL_DOSSIER WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_DOSSIER SET ROW = d WHERE id = d.id;
+        UPDATE TBL_DOSSIER SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -1295,14 +1295,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_MISSION_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_MISSION VALUES d;
+        INSERT INTO TBL_MISSION values d;
       ELSIF
             d.INTERVENANT_ID IS NULL
         AND d.MISSION_ID IS NULL
       THEN
         DELETE FROM TBL_MISSION WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_MISSION SET ROW = d WHERE id = d.id;
+        UPDATE TBL_MISSION SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -1512,7 +1512,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_PAIEMENT_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PAIEMENT VALUES d;
+        INSERT INTO TBL_PAIEMENT values d;
       ELSIF
             d.FORMULE_RES_SERVICE_ID IS NULL
         AND d.FORMULE_RES_SERVICE_REF_ID IS NULL
@@ -1521,7 +1521,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_PAIEMENT WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_PAIEMENT SET ROW = d WHERE id = d.id;
+        UPDATE TBL_PAIEMENT SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -1540,6 +1540,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           SELECT
             pjd.annee_id                                                annee_id,
             pjd.type_piece_jointe_id                                    type_piece_jointe_id,
+            MAX(pjf.piece_jointe_id)                                    piece_jointe_id,
             pjd.intervenant_id                                          intervenant_id,
             CASE WHEN pjd.intervenant_id IS NULL THEN 0 ELSE 1 END      demandee,
             SUM(CASE WHEN pjf.id IS NOT NULL THEN 1 ELSE 0 END)             fournie,
@@ -1563,6 +1564,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           SELECT
             pjf.annee_id                                                annee_id,
             pjf.type_piece_jointe_id                                    type_piece_jointe_id,
+            MAX(pjf.piece_jointe_id)                                    piece_jointe_id,
             pjf.intervenant_id                                          intervenant_id,
             0                                                           demandee,
             1                                                           fournie,
@@ -1582,6 +1584,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         )
         SELECT annee_id,
                type_piece_jointe_id,
+               piece_jointe_id,
                intervenant_id,
                demandee,
                CASE WHEN fournie <> 0 THEN 1 ELSE 0 END    fournie,
@@ -1601,6 +1604,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.VALIDEE                          = v.VALIDEE
         AND t.HEURES_POUR_SEUIL                = v.HEURES_POUR_SEUIL
         AND t.OBLIGATOIRE                      = v.OBLIGATOIRE
+        AND COALESCE(t.PIECE_JOINTE_ID,0)      = COALESCE(v.PIECE_JOINTE_ID,0)
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.TYPE_PIECE_JOINTE_ID,
@@ -1609,7 +1613,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.FOURNIE,
       v.VALIDEE,
       v.HEURES_POUR_SEUIL,
-      v.OBLIGATOIRE
+      v.OBLIGATOIRE,
+      v.PIECE_JOINTE_ID
     FROM
       (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PIECE_JOINTE t ON
@@ -1621,14 +1626,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_PIECE_JOINTE_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PIECE_JOINTE VALUES d;
+        INSERT INTO TBL_PIECE_JOINTE values d;
       ELSIF
             d.TYPE_PIECE_JOINTE_ID IS NULL
         AND d.INTERVENANT_ID IS NULL
       THEN
         DELETE FROM TBL_PIECE_JOINTE WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_PIECE_JOINTE SET ROW = d WHERE id = d.id;
+        UPDATE TBL_PIECE_JOINTE SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -1709,12 +1714,21 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                       THEN 1
                   ELSE CASE
                            WHEN
-                                       replace(i.bic, '' '', '''') = replace(d.bic, '' '', '''')
-                                   AND replace(i.iban, '' '', '''') = replace(d.iban, '' '', '''')
+                                       REPLACE(i.bic, '' '', '''') = REPLACE(d.bic, '' '', '''')
+                                   AND REPLACE(i.iban, '' '', '''') = REPLACE(d.iban, '' '', '''')
                                THEN 0
                            ELSE 1 END
                   END = 1
-
+           -- Demandé uniquement si nationalité étrangère
+           AND CASE
+              WHEN tpjs.nationalite_etrangere = 0 OR d.id IS NULL
+              THEN 1
+            ELSE CASE
+                WHEN
+                  d.pays_nationalite_id = (SELECT MAX(id) FROM pays p WHERE libelle IN (''France'',''FRANCE'') AND histo_destruction IS NULL GROUP BY id)
+                THEN 0
+                ELSE 1 END
+              END = 1
           -- Filtre FC
           AND (tpjs.fc = 0 OR i_h.fc > 0)
         GROUP BY i.annee_id,
@@ -1753,14 +1767,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_PIECE_JOINTE_DEMAND_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PIECE_JOINTE_DEMANDE VALUES d;
+        INSERT INTO TBL_PIECE_JOINTE_DEMANDE values d;
       ELSIF
             d.INTERVENANT_ID IS NULL
         AND d.TYPE_PIECE_JOINTE_ID IS NULL
       THEN
         DELETE FROM TBL_PIECE_JOINTE_DEMANDE WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_PIECE_JOINTE_DEMANDE SET ROW = d WHERE id = d.id;
+        UPDATE TBL_PIECE_JOINTE_DEMANDE SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -1851,7 +1865,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_PIECE_JOINTE_FOURNI_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PIECE_JOINTE_FOURNIE VALUES d;
+        INSERT INTO TBL_PIECE_JOINTE_FOURNIE values d;
       ELSIF
             d.TYPE_PIECE_JOINTE_ID IS NULL
         AND d.INTERVENANT_ID IS NULL
@@ -1860,7 +1874,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_PIECE_JOINTE_FOURNIE WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_PIECE_JOINTE_FOURNIE SET ROW = d WHERE id = d.id;
+        UPDATE TBL_PIECE_JOINTE_FOURNIE SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -1947,7 +1961,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_PLAFOND_ELEMENT_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PLAFOND_ELEMENT VALUES d;
+        INSERT INTO TBL_PLAFOND_ELEMENT values d;
       ELSIF
             d.PLAFOND_ID IS NULL
         AND d.ANNEE_ID IS NULL
@@ -1957,7 +1971,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_PLAFOND_ELEMENT WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_PLAFOND_ELEMENT SET ROW = d WHERE id = d.id;
+        UPDATE TBL_PLAFOND_ELEMENT SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -1988,6 +2002,33 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
+          SELECT 9 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                annee_id,
+                vh.type_volume_horaire_id type_volume_horaire_id,
+                i.id                      intervenant_id,
+                SUM(vh.heures)            heures
+              FROM
+                volume_horaire vh
+                JOIN service s ON s.id = vh.service_id
+                JOIN intervenant i ON i.id = s.intervenant_id
+                JOIN statut si ON si.id = i.statut_id
+              WHERE
+                vh.histo_destruction IS NULL
+                AND i.histo_destruction IS NULL
+                AND vh.motif_non_paiement_id IS NULL
+                AND si.code IN (''IMP'')
+              GROUP BY
+                i.annee_id,
+                vh.type_volume_horaire_id,
+                i.id,
+                i.statut_id
+              HAVING
+                SUM(vh.heures) >= 0
+            ) p
+
+            UNION ALL
+
           SELECT 1 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                          annee_id,
@@ -2018,24 +2059,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
             UNION ALL
 
-          SELECT 3 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
-            SELECT
-                i.annee_id                          annee_id,
-                fr.type_volume_horaire_id           type_volume_horaire_id,
-                i.id                                intervenant_id,
-                fr.heures_compl_fc_majorees * a.taux_hetd         heures
-                /*ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond*/
-
-              FROM
-                     intervenant                i
-                JOIN annee                      a ON a.id = i.annee_id
-                JOIN statut                    si ON si.id = i.statut_id
-                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
-                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-            ) p
-
-            UNION ALL
-
           SELECT 4 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                annee_id,
@@ -2061,33 +2084,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
             UNION ALL
 
-          SELECT 9 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
-            SELECT
-                i.annee_id                annee_id,
-                vh.type_volume_horaire_id type_volume_horaire_id,
-                i.id                      intervenant_id,
-                SUM(vh.heures)            heures
-              FROM
-                volume_horaire vh
-                JOIN service s ON s.id = vh.service_id
-                JOIN intervenant i ON i.id = s.intervenant_id
-                JOIN statut si ON si.id = i.statut_id
-              WHERE
-                vh.histo_destruction IS NULL
-                AND i.histo_destruction IS NULL
-                AND vh.motif_non_paiement_id IS NULL
-                AND si.code IN (''IMP'')
-              GROUP BY
-                i.annee_id,
-                vh.type_volume_horaire_id,
-                i.id,
-                i.statut_id
-              HAVING
-                SUM(vh.heures) >= 0
-            ) p
-
-            UNION ALL
-
           SELECT 8 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                             annee_id,
@@ -2099,6 +2095,24 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                 JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
                 JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
                 JOIN statut                    si ON si.id = i.statut_id
+            ) p
+
+            UNION ALL
+
+          SELECT 3 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                          annee_id,
+                fr.type_volume_horaire_id           type_volume_horaire_id,
+                i.id                                intervenant_id,
+                fr.heures_compl_fc_majorees         heures
+                /*ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond*/
+
+              FROM
+                     intervenant                i
+                JOIN annee                      a ON a.id = i.annee_id
+                JOIN statut                    si ON si.id = i.statut_id
+                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
             ) p
           ) p
           JOIN intervenant i ON i.id = p.intervenant_id
@@ -2150,7 +2164,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_PLAFOND_INTERVENANT_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PLAFOND_INTERVENANT VALUES d;
+        INSERT INTO TBL_PLAFOND_INTERVENANT values d;
       ELSIF
             d.PLAFOND_ID IS NULL
         AND d.ANNEE_ID IS NULL
@@ -2159,7 +2173,104 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_PLAFOND_INTERVENANT WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_PLAFOND_INTERVENANT SET ROW = d WHERE id = d.id;
+        UPDATE TBL_PLAFOND_INTERVENANT SET row = d WHERE id = d.id;
+      END IF;
+    END LOOP;
+    CLOSE c;
+  END;
+
+
+
+
+  PROCEDURE C_PLAFOND_MISSION(useParams BOOLEAN DEFAULT FALSE) IS
+  TYPE r_cursor IS REF CURSOR;
+  c r_cursor;
+  d TBL_PLAFOND_MISSION%rowtype;
+  viewQuery CLOB;
+  BEGIN
+    viewQuery := 'SELECT
+          p.PLAFOND_ID,
+          p.ANNEE_ID,
+          p.TYPE_VOLUME_HORAIRE_ID,
+          p.INTERVENANT_ID,
+          p.TYPE_MISSION_ID,
+          p.HEURES,
+          COALESCE(p.PLAFOND,ps.heures,0) PLAFOND,
+          CASE
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+            ELSE COALESCE(p.plafond_etat_id,1)
+          END plafond_etat_id,
+          COALESCE(pd.heures, 0) derogation,
+          CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
+        FROM
+          (
+            SELECT NULL PLAFOND_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL TYPE_MISSION_ID,NULL HEURES,NULL PLAFOND,NULL PLAFOND_ETAT_ID,NULL DEROGATION FROM dual WHERE 0 = 1
+          ) p
+          JOIN intervenant i ON i.id = p.intervenant_id
+          LEFT JOIN plafond_mission ps ON ps.plafond_id = p.plafond_id AND ps.type_mission_id = p.type_mission_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL
+          LEFT JOIN plafond_derogation pd ON pd.plafond_id = p.plafond_id AND pd.intervenant_id = p.intervenant_id AND pd.histo_destruction IS NULL
+        WHERE
+          CASE
+            WHEN p.type_volume_horaire_id = 1 THEN ps.plafond_etat_prevu_id
+            WHEN p.type_volume_horaire_id = 2 THEN ps.plafond_etat_realise_id
+          END IS NOT NULL
+          /*@PLAFOND_ID=p.PLAFOND_ID*/
+          /*@ANNEE_ID=p.ANNEE_ID*/
+          /*@TYPE_VOLUME_HORAIRE_ID=p.TYPE_VOLUME_HORAIRE_ID*/
+          /*@INTERVENANT_ID=p.INTERVENANT_ID*/
+          /*@TYPE_MISSION_ID=p.TYPE_MISSION_ID*/
+          /*@PLAFOND_ETAT_ID=p.PLAFOND_ETAT_ID*/';
+
+    OPEN c FOR '
+    SELECT
+      CASE WHEN
+            COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.ANNEE_ID                           = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.TYPE_MISSION_ID                    = v.TYPE_MISSION_ID
+        AND t.HEURES                             = v.HEURES
+        AND t.PLAFOND                            = v.PLAFOND
+        AND t.PLAFOND_ETAT_ID                    = v.PLAFOND_ETAT_ID
+        AND t.DEROGATION                         = v.DEROGATION
+        AND t.DEPASSEMENT                        = v.DEPASSEMENT
+      THEN -1 ELSE t.ID END ID,
+      v.PLAFOND_ID,
+      v.ANNEE_ID,
+      v.TYPE_VOLUME_HORAIRE_ID,
+      v.INTERVENANT_ID,
+      v.TYPE_MISSION_ID,
+      v.HEURES,
+      v.PLAFOND,
+      v.PLAFOND_ETAT_ID,
+      v.DEROGATION,
+      v.DEPASSEMENT
+    FROM
+      (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
+      FULL JOIN TBL_PLAFOND_MISSION t ON
+            COALESCE(t.PLAFOND_ID,0)             = COALESCE(v.PLAFOND_ID,0)
+        AND t.ANNEE_ID                           = v.ANNEE_ID
+        AND COALESCE(t.TYPE_VOLUME_HORAIRE_ID,0) = COALESCE(v.TYPE_VOLUME_HORAIRE_ID,0)
+        AND t.INTERVENANT_ID                     = v.INTERVENANT_ID
+        AND t.TYPE_MISSION_ID                    = v.TYPE_MISSION_ID
+    WHERE ' || PARAMS_MAKE_FILTER(useParams);
+    LOOP
+      FETCH c INTO d; EXIT WHEN c%NOTFOUND;
+
+      IF d.id IS NULL THEN
+        d.id := TBL_PLAFOND_MISSION_ID_SEQ.NEXTVAL;
+        INSERT INTO TBL_PLAFOND_MISSION values d;
+      ELSIF
+            d.PLAFOND_ID IS NULL
+        AND d.ANNEE_ID IS NULL
+        AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
+        AND d.INTERVENANT_ID IS NULL
+        AND d.TYPE_MISSION_ID IS NULL
+      THEN
+        DELETE FROM TBL_PLAFOND_MISSION WHERE id = d.id;
+      ELSIF d.id <> -1 THEN
+        UPDATE TBL_PLAFOND_MISSION SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -2281,7 +2392,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_PLAFOND_REFERENTIEL_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PLAFOND_REFERENTIEL VALUES d;
+        INSERT INTO TBL_PLAFOND_REFERENTIEL values d;
       ELSIF
             d.PLAFOND_ID IS NULL
         AND d.ANNEE_ID IS NULL
@@ -2291,7 +2402,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_PLAFOND_REFERENTIEL WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_PLAFOND_REFERENTIEL SET ROW = d WHERE id = d.id;
+        UPDATE TBL_PLAFOND_REFERENTIEL SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -2394,7 +2505,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_PLAFOND_STRUCTURE_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PLAFOND_STRUCTURE VALUES d;
+        INSERT INTO TBL_PLAFOND_STRUCTURE values d;
       ELSIF
             d.PLAFOND_ID IS NULL
         AND d.ANNEE_ID IS NULL
@@ -2404,7 +2515,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_PLAFOND_STRUCTURE WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_PLAFOND_STRUCTURE SET ROW = d WHERE id = d.id;
+        UPDATE TBL_PLAFOND_STRUCTURE SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -2547,7 +2658,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_PLAFOND_VOLUME_HORA_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_PLAFOND_VOLUME_HORAIRE VALUES d;
+        INSERT INTO TBL_PLAFOND_VOLUME_HORAIRE values d;
       ELSIF
             d.PLAFOND_ID IS NULL
         AND d.ANNEE_ID IS NULL
@@ -2558,7 +2669,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_PLAFOND_VOLUME_HORAIRE WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_PLAFOND_VOLUME_HORAIRE SET ROW = d WHERE id = d.id;
+        UPDATE TBL_PLAFOND_VOLUME_HORAIRE SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -2691,7 +2802,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_REFERENTIEL_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_REFERENTIEL VALUES d;
+        INSERT INTO TBL_REFERENTIEL values d;
       ELSIF
             d.INTERVENANT_ID IS NULL
         AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
@@ -2700,7 +2811,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_REFERENTIEL WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_REFERENTIEL SET ROW = d WHERE id = d.id;
+        UPDATE TBL_REFERENTIEL SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -2861,14 +2972,14 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_SERVICE_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_SERVICE VALUES d;
+        INSERT INTO TBL_SERVICE values d;
       ELSIF
             d.SERVICE_ID IS NULL
         AND d.TYPE_VOLUME_HORAIRE_ID IS NULL
       THEN
         DELETE FROM TBL_SERVICE WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_SERVICE SET ROW = d WHERE id = d.id;
+        UPDATE TBL_SERVICE SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -2946,7 +3057,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_VALIDATION_ENSEIGNE_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_VALIDATION_ENSEIGNEMENT VALUES d;
+        INSERT INTO TBL_VALIDATION_ENSEIGNEMENT values d;
       ELSIF
             d.INTERVENANT_ID IS NULL
         AND d.STRUCTURE_ID IS NULL
@@ -2957,7 +3068,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_VALIDATION_ENSEIGNEMENT WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_VALIDATION_ENSEIGNEMENT SET ROW = d WHERE id = d.id;
+        UPDATE TBL_VALIDATION_ENSEIGNEMENT SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;
@@ -3033,7 +3144,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
       IF d.id IS NULL THEN
         d.id := TBL_VALIDATION_REFERENT_ID_SEQ.NEXTVAL;
-        INSERT INTO TBL_VALIDATION_REFERENTIEL VALUES d;
+        INSERT INTO TBL_VALIDATION_REFERENTIEL values d;
       ELSIF
             d.INTERVENANT_ID IS NULL
         AND d.STRUCTURE_ID IS NULL
@@ -3044,7 +3155,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       THEN
         DELETE FROM TBL_VALIDATION_REFERENTIEL WHERE id = d.id;
       ELSIF d.id <> -1 THEN
-        UPDATE TBL_VALIDATION_REFERENTIEL SET ROW = d WHERE id = d.id;
+        UPDATE TBL_VALIDATION_REFERENTIEL SET row = d WHERE id = d.id;
       END IF;
     END LOOP;
     CLOSE c;

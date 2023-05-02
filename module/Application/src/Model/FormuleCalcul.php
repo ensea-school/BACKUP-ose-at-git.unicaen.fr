@@ -641,9 +641,11 @@ END FORMULE_" . $this->getName() . ";";
         if ($expr[$i]['name'] === 'IF') {
             $tfi = $expr[$i]['exprs'][0][0];
             if ($tfi['type'] === 'function' && $tfi['name'] === 'ISERROR') {
-                $expr[$i] = $expr[$i]['exprs'][2][0];
-                //$expr = array_splice($expr, $i, 1, $expr[$i]['exprs'][2]);
-                //$expr[$i] = $expr[$i]['exprs'][2];
+                if (1 === count($expr[$i]['exprs'][2])){
+                    $expr[$i] = $expr[$i]['exprs'][2][0];
+                }else{
+                    $expr[$i] = ['type' => 'expr', 'expr' => $expr[$i]['exprs'][2]];
+                }
 
                 return;
             }

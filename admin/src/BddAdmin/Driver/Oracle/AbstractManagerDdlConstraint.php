@@ -13,10 +13,7 @@ abstract class AbstractManagerDdlConstraint extends AbstractManager
 
     protected function indexExists($indexName)
     {
-        $sql = "SELECT count(*) RES FROM ALL_INDEXES WHERE INDEX_NAME = :indexName AND ROWNUM = 1";
-        $res = $this->bdd->select($sql, compact('indexName'), ['fetch' => Bdd::FETCH_ONE]);
-
-        return $res['RES'] == '1';
+        return $this->bdd->index()->exists($indexName);
     }
 
 

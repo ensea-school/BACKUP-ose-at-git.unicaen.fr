@@ -1,4 +1,4 @@
-CREATE OR REPLACE TRIGGER "VOLUME_HORAIRE_REF_CK" BEFORE UPDATE ON volume_horaire_REF FOR EACH ROW
+CREATE OR REPLACE TRIGGER "VOLUME_HORAIRE_REF_CK" BEFORE UPDATE OF id,type_volume_horaire_id,service_referentiel_id,heures,histo_creation,histo_createur_id,source_id,source_code,horaire_debut,horaire_fin ON volume_horaire_REF FOR EACH ROW
   DECLARE
     has_validation NUMERIC;
   BEGIN

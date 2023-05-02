@@ -653,6 +653,16 @@ return [
             'ORDRE'              => 21,
             'FEUILLE_DE_ROUTE'   => true,
         ],
+        [
+            'TBL_NAME'           => 'plafond_mission',
+            'TABLE_NAME'         => 'TBL_PLAFOND_MISSION',
+            'VIEW_NAME'          => 'V_TBL_PLAFOND_MISSION',
+            'SEQUENCE_NAME'      => null,
+            'CONSTRAINT_NAME'    => 'TBL_PLAFOND_MISSION_UN',
+            'CUSTOM_CALCUL_PROC' => null,
+            'ORDRE'              => 22,
+            'FEUILLE_DE_ROUTE'   => true,
+        ],
     ],
 
     'TYPE_AGREMENT' => [
@@ -896,6 +906,24 @@ return [
             'CODE'    => 'REALISE',
             'LIBELLE' => 'Réalisé',
             'ORDRE'   => 2,
+        ],
+    ],
+
+    'TYPE_SERVICE' => [
+        [
+            'ID'      => 1,
+            'CODE'    => 'ENS',
+            'LIBELLE' => 'Enseignement',
+        ],
+        [
+            'ID'      => 2,
+            'CODE'    => 'REF',
+            'LIBELLE' => 'Référentiel',
+        ],
+        [
+            'ID'      => 3,
+            'CODE'    => 'MIS',
+            'LIBELLE' => 'Mission',
         ],
     ],
 

@@ -15,6 +15,7 @@ class PlafondPerimetre
     const ELEMENT        = 'element';
     const VOLUME_HORAIRE = 'volume_horaire';
     const REFERENTIEL    = 'referentiel';
+    const MISSION        = 'mission';
 
     /**
      * @var integer

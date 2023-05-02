@@ -14,8 +14,8 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use ExportRh\Form\Traits\ExportRhFormAwareTrait;
 use ExportRh\Service\ExportRhService;
 use ExportRh\Service\ExportRhServiceAwareTrait;
-use UnicaenSiham\Exception\SihamException;
 use Laminas\View\Model\ViewModel;
+use UnicaenSiham\Exception\SihamException;
 
 class ExportRhController extends AbstractController
 {

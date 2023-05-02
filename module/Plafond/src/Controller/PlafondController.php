@@ -3,6 +3,7 @@
 namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
+use Mission\Entity\Db\TypeMission;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Intervenant\Entity\Db\Statut;
@@ -128,6 +129,22 @@ class PlafondController extends AbstractController
 
 
 
+    public function indexMissionAction()
+    {
+        $title   = 'Gestion des plafonds';
+        $entity  = $this->getEvent()->getParam('typeMission');
+        $configs = $this->getServicePlafond()->getPlafondsConfig($entity);
+        $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CONFIG_MISSION));
+
+        $vh = new ViewModel();
+        $vh->setTemplate('plafond/plafond/config');
+        $vh->setVariables(compact('title', 'configs', 'canEdit', 'entity'));
+
+        return $vh;
+    }
+
+
+
     public function configStructureAction()
     {
         $entityId  = (int)$this->params()->fromPost('entityId');
@@ -164,6 +181,21 @@ class PlafondController extends AbstractController
         $plafondId = (int)$this->params()->fromPost('plafond');
 
         $entity        = $this->em()->find(FonctionReferentiel::class, $entityId);
+        $plafondConfig = $this->getServicePlafond()->getPlafondConfig($plafondId, $entity);
+
+        $this->getFormPlafondConfig()->requestSaveConfig($plafondConfig, $this->getRequest());
+
+        return new JsonModel([]);
+    }
+
+
+
+    public function configMissionAction()
+    {
+        $entityId  = (int)$this->params()->fromPost('entityId');
+        $plafondId = (int)$this->params()->fromPost('plafond');
+
+        $entity        = $this->em()->find(TypeMission::class, $entityId);
         $plafondConfig = $this->getServicePlafond()->getPlafondConfig($plafondId, $entity);
 
         $this->getFormPlafondConfig()->requestSaveConfig($plafondConfig, $this->getRequest());

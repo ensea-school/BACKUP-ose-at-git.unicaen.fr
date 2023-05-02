@@ -115,8 +115,8 @@ export default {
             }
             this.timer = setTimeout(() => {
 
-                axios.post(
-                    Util.url("intervenant/recherche-json"), {
+                unicaenVue.axios.post(
+                    unicaenVue.url("intervenant/recherche-json"), {
                         term: this.searchTerm
                     }
                 )

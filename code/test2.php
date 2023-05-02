@@ -1,7 +1,5 @@
 <?php
 
-use Unicaen\OpenDocument\Calc;
-
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Laminas\Mvc\Controller\AbstractController
@@ -9,3 +7,16 @@ use Unicaen\OpenDocument\Calc;
  * @var $viewName   string
  * @var $viewFile   string
  */
+
+$controller->flashMessenger()->addSuccessMessage('addSuccessMessage');
+$controller->flashMessenger()->addInfoMessage('addInfoMessage');
+$controller->flashMessenger()->addWarningMessage('addWarningMessage');
+$controller->flashMessenger()->addErrorMessage('addErrorMessage');
+
+$messenger = $this->messenger();
+
+$messenger->addCurrentMessagesFromFlashMessengerWithNamespace('error');
+
+echo $messenger;
+
+?>

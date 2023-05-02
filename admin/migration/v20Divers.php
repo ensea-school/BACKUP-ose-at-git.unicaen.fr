@@ -28,8 +28,19 @@ class v20Divers extends AbstractMigration
 
         $c->begin("Préparation de la migration vers la version 20");
 
-        $bdd->exec("ALTER TABLE TYPE_INTERVENTION DROP CONSTRAINT TYPE_INTERVENTION_CODE_UN");
-        $bdd->exec("DROP INDEX TYPE_INTERVENTION_CODE_UN");
+        if ($bdd->uniqueConstraint()->exists('TYPE_INTERVENTION_CODE_UN')) {
+            $bdd->uniqueConstraint()->drop('TYPE_INTERVENTION_CODE_UN');
+        }
+        if ($bdd->index()->exists('TYPE_INTERVENTION_CODE_UN')){
+            $bdd->index()->drop('TYPE_INTERVENTION_CODE_UN');
+        }
+
+        if ($bdd->uniqueConstraint()->exists('TI_STATUT_STATUT_UN')) {
+            $bdd->uniqueConstraint()->drop('TI_STATUT_STATUT_UN');
+        }
+        if ($bdd->index()->exists('TI_STATUT_STATUT_UN')){
+            $bdd->index()->drop('TI_STATUT_STATUT_UN');
+        }
 
         $oseAppliId = $this->manager->getOseAdmin()->getOseAppliId();
         $bdd->exec("UPDATE TYPE_INTERVENTION_STATUT SET HISTO_CREATEUR_ID = $oseAppliId WHERE HISTO_CREATEUR_ID IS NULL");

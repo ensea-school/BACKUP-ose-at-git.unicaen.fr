@@ -2,13 +2,13 @@
 
 namespace Enseignement\Entity;
 
-use Application\Entity\Db\Contrat;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Tag;
 use Application\Entity\Db\Validation;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Contrat\Entity\Db\Contrat;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Enseignement\Hydrator\ListeFilterHydrator;

@@ -1,66 +1,3 @@
-/* Tunning d'Axios pour gérer l'interconnexion avec le serveur avec gestion des alertes */
-axios.interceptors.request.use(config => {
-    if (config.submitter) {
-        let msg = config.msg ? config.msg : 'Action en cours';
-        if (config.popover != undefined) {
-            config.popover.dispose();
-        }
-        config.popover = new bootstrap.Popover(config.submitter, {
-            content: "<div class=\"spinner-border text-primary\" role=\"status\">\n" +
-                "  <span class=\"visually-hidden\">Loading...</span>\n" +
-                "</div> " + msg,
-            html: true,
-            trigger: 'focus'
-        });
-        config.popover.show();
-    }
-    return config;
-});
-
-axios.interceptors.response.use(response => {
-    response.messages = response.data.messages;
-    response.data = response.data.data;
-    response.hasErrors = response.messages && response.messages.error && response.messages.error.length > 0 ? true : false;
-
-    if (response.config.popover) {
-        var popover = response.config.popover;
-
-        let content = '';
-        for (ns in response.messages) {
-            for (mid in response.messages[ns]) {
-                content += '<div class="alert fade show alert-' + (ns == 'error' ? 'danger' : ns) + '" role="alert">' + response.messages[ns][mid] + '</div>';
-            }
-        }
-
-        // S'il y a un truc à afficher
-        if (content) {
-            popover._config.content = content;
-            popover.setContent();
-            setTimeout(() => {
-                popover.dispose();
-            }, 3000)
-        } else {
-            // la popover est masquée si tout est fini
-            popover.dispose();
-        }
-    }
-    if (response.messages) {
-        Util.alerts(response.messages);
-    }
-
-    return response;
-}, (error) => {
-    var text = $("<div>").html(error.response.data);
-
-    text.find('i.fas').hide();
-
-    Util.alert(text.find('.alert').html(), 'error');
-});
-
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-
-
 
 /**
  * Affiche une alerte temporaire.
@@ -74,7 +11,7 @@ axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  */
 function alertFlash(message, severity, duration)
 {
-    Util.alert(message, severity);
+    unicaenVue.flashMessenger.toast(message, severity);
 }
 
 /**
@@ -155,85 +92,6 @@ Formatter = {
 
 Util = {
 
-    alerts: function (messages)
-    {
-        for (s in messages) {
-            for (m in messages[s]) {
-                Util.alert(messages[s][m], s);
-            }
-        }
-    },
-
-
-
-    alert: function (message, severity)
-    {
-        var alertClasses = {
-            info: 'info',
-            success: 'success',
-            warning: 'warning',
-            error: 'danger'
-        };
-        var iconClasses = {
-            info: 'info-circle',
-            success: 'check-circle',
-            warning: 'exclamation-circle',
-            error: 'exclamation-triangle'
-        };
-        var alertClass = 'alert-' + alertClasses[severity];
-        var divId = "alert-div-" + Math.floor((Math.random() * 100000) + 1);
-
-        var alertDiv = $(
-            '<div id="' + divId + '" class="alert navbar-fixed-bottom" role="alert" style="display: none">' +
-            '    <button type="button" class="btn-close float-md-end" data-bs-dismiss="alert" aria-label="Close"></button>' +
-            '    <div class="container">' +
-            '        <p class="text-center"><span class="icon fas fa-' + iconClasses[severity] + '"></span> <span class="message"></span></p>' +
-            '    </div>' +
-            '</div>'
-        );
-
-
-
-        alertDiv.addClass(alertClass);
-        $("p .message", alertDiv).html(message);
-
-        $('body').append(alertDiv);
-        alertDiv.slideToggle(500, function ()
-        {
-            if ('error' != severity) {
-                window.setTimeout(function ()
-                {
-                    alertDiv.slideToggle(500, function ()
-                    {
-                        $(this).removeClass(alertClass)
-                    });
-                }, 3000);
-            }
-        });
-    },
-
-
-
-    url: function (route, params, query)
-    {
-        let baseUrl = $('body').data('base-url');
-
-        // Remplacement des paramètres de routes par leurs valeurs
-        if (params) {
-            for (var p in params) {
-                route = route.replace(':' + p, params[p]);
-            }
-        }
-
-        // traitement de la requête GET
-        let getArgs = query ? $.param(query) : null;
-
-        // Construction et retour de l'URL
-        return baseUrl + route + (getArgs ? '?' + getArgs : '');
-    },
-
-
-
     formCheckSubmit(formElement)
     {
         const btnId = 'UtilFormCheckSubmitButtonHidden';
@@ -313,7 +171,7 @@ Util = {
     changementAnnee: function (annee)
     {
         $.get(
-            Util.url('changement-annee/:annee', {annee: annee}),
+            unicaenVue.url('changement-annee/:annee', {annee: annee}),
             {},
             function ()
             {
@@ -451,11 +309,14 @@ Util = {
         if (date === undefined) {
             return undefined;
         }
+        if (typeof date === 'string'){
+            date = new Date(date);
+        }
 
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
-        const dateString = `${year}-${month}-${day}`;
+        const dateString = `${day}/${month}/${year}`;
 
         return dateString;
     },

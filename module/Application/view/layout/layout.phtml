@@ -6,6 +6,11 @@
 
 use Laminas\View\Helper\Navigation as NavigationHelper;
 
+if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    echo $this->content;
+    return;
+}
+
 /** @var NavigationHelper $navigationHelper */
 $navigationHelper = $this->navigation('navigation');
 $pages            = $navigationHelper->getContainer();
@@ -66,10 +71,10 @@ echo $this->doctype();
     <!-- Scripts globaux -->
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-3.6.0.min.js') ?>"></script>
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js') ?>"></script>
-    <script type="text/javascript" src="<?= $this->basePath('/vendor/axios/axios.min.js') ?>"></script>
     <script type="text/javascript" src="<?= $this->basePath('/js/util.js?v=' . $version) ?>"></script>
-    <?= $this->vite()->head(); ?>
+    <?= $this->vite(); ?>
     <?= $this->headScript(); ?>
+
 </head>
 
 <body class="<?= AppConfig::getEnv() ?> p-0" data-base-url="<?= $this->url('home') ?>">

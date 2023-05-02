@@ -1,7 +1,5 @@
 <template>
-    <u-calendar :date="date" @changeDate="changeDate" @addEvent="addVolumeHoraire" @editEvent="editVolumeHoraire" @deleteEvent="deleteVolumeHoraire"
-                :can-add-event="true"
-                :events="suivi"/>
+    <u-calendar :date="date" @changeDate="changeDate" @addEvent="ajouter" :can-add-event="canAddMission" addDateFin="now" :events="suivi"/>
 </template>
 
 <script>
@@ -15,6 +13,7 @@ export default {
     name: 'Suivi',
     props: {
         intervenant: {type: Number, required: true},
+        canAddMission: {type: Boolean, required: true},
     },
     mounted()
     {
@@ -24,17 +23,7 @@ export default {
     {
         return {
             date: new Date(),
-            suivi: [],
-                    // component: markRaw(SuiviEvent),
-                    // color: 'yellow',
-                    // date: new Date(2023, 1, 5),
-                    // missionId: null,
-                    // horaireDebut: null,
-                    // horaireFin: null,
-                    // heures: null,
-                    // nocturne: false,
-                    // formation: false,
-                    // description: '5',
+            suivi: []
         };
     },
     methods: {
@@ -43,55 +32,51 @@ export default {
             this.date = dateObj;
         },
 
-        addVolumeHoraire(dateObj, event)
+        ajouter(dateObj, event)
         {
-            event.currentTarget.dataset.url = Util.url('intervenant/:intervenant/missions-suivi-saisie', {intervenant:this.intervenant});
+            const urlParams = {
+                intervenant: this.intervenant,
+                date: dateObj.toISOString().slice(0, 10) // date au format Y-m-d
+            };
+            event.currentTarget.dataset.url = unicaenVue.url('mission/suivi/ajout/:intervenant/:date', urlParams);
             modAjax(event.currentTarget, (widget) => {
                 this.refresh();
             });
         },
 
-        editVolumeHoraire(calEvent, event)
-        {
-            event.currentTarget.dataset.url = Util.url('intervenant/:intervenant/missions-suivi-saisie/:guid', {intervenant:this.intervenant,guid:calEvent.guid});
-            modAjax(event.currentTarget, (widget) => {
-                this.refresh();
-            });
-        },
-        saveVolumeHoraire(event)
-        {
-            console.log('submit!!!');
-            event.preventDefault();
-
-            this.modal.hide();
-            this.vhr.date = new Date(this.vhr.date);
-            if (this.vhrIndex === undefined) {
-                this.realise.push(this.vhr);
-            } else {
-                this.realise[this.vhrIndex] = this.vhr;
-            }
-
-            // reste le passage et le retour du serveur...
-        },
-
-        deleteVolumeHoraire(calEvent, event)
-        {
-            const index = this.realise.indexOf(calEvent);
-            this.realise.splice(index, 1);
-            console.log(index);
-            console.log(this.realise);
-        },
         refresh()
         {
-            axios.get(
-                Util.url("intervenant/:intervenant/missions-suivi-data", {intervenant: this.intervenant})
+            const colors = [
+                '#e74c3c',
+                '#8e44ad',
+                '#3498db',
+                '#1abc9c',
+                '#2ecc71',
+                '#f1c40f',
+                '#e67e22',
+                '#d35400',
+            ];
+            let colorIndex = 0;
+            let missionsColors = [];
+
+            unicaenVue.axios.get(
+                unicaenVue.url("mission/suivi/liste/:intervenant", {intervenant: this.intervenant})
             ).then(response => {
                 let newSuivi = [];
-                for (let i in response.data){
+                for (let i in response.data) {
                     let missionSuivi = response.data[i];
 
+                    if (undefined === missionsColors[missionSuivi.mission.id]) {
+                        missionsColors[missionSuivi.mission.id] = colors[colorIndex];
+                        colorIndex++;
+                    }
+                    if (missionSuivi.valide){
+                        missionSuivi.bgcolor = '#d0eddb';
+                    }
+                    missionSuivi.color = missionsColors[missionSuivi.mission.id];
                     missionSuivi.component = markRaw(SuiviEvent);
                     missionSuivi.date = new Date(missionSuivi.date);
+                    missionSuivi.intervenant = this.intervenant;
                     newSuivi.push(missionSuivi);
                 }
                 this.suivi = newSuivi;

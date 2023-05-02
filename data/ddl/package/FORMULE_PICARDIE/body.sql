@@ -218,10 +218,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AB=IF([.$H20]="Référentiel";[.$AQ20]+[.$BC20]+[.$BQ20];0)
+      -- AB=IF([.$H20]="Référentiel";[.$BQ20]+[.$BS20];0)
       WHEN 'AB' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('AQ',l) + cell('BC',l) + cell('BQ',l);
+          RETURN cell('BQ',l) + cell('BS',l);
         ELSE
           RETURN 0;
         END IF;
@@ -284,12 +284,16 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AJ=IF([.AH$17]=0;([.AG20]-[.AI20])/[.$AD20];0)
+      -- AJ=IF([.AI20]<[.AG20];([.AG20]-[.AI20])/[.$AD20];IF([.AG20]<0;[.AG20]/[.$AD20];0))
       WHEN 'AJ' THEN
-        IF cell('AH17') = 0 THEN
+        IF cell('AI',l) < cell('AG',l) THEN
           RETURN (cell('AG',l) - cell('AI',l)) / cell('AD',l);
         ELSE
-          RETURN 0;
+          IF cell('AG',l) < 0 THEN
+            RETURN cell('AG',l) / cell('AD',l);
+          ELSE
+            RETURN 0;
+          END IF;
         END IF;
 
 
@@ -314,9 +318,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AN15=SUM([.AM$1:.AM$1048576])
-      WHEN 'AN15' THEN
+      -- AN14=SUM([.AM$1:.AM$1048576])
+      WHEN 'AN14' THEN
         RETURN calcFnc('somme','AM');
+
+
+
+      -- AN15=MIN([.AN14];i_service_du/3)
+      WHEN 'AN15' THEN
+        RETURN LEAST(cell('AN14'), i.service_du / 3);
 
 
 
@@ -332,10 +342,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AN=IF([.AN$15]>0;[.AM20]/[.AN$15];0)
+      -- AN=IF([.AN$14]>0;[.AM20]/[.AN$14];0)
       WHEN 'AN' THEN
-        IF cell('AN15') > 0 THEN
-          RETURN cell('AM',l) / cell('AN15');
+        IF cell('AN14') > 0 THEN
+          RETURN cell('AM',l) / cell('AN14');
         ELSE
           RETURN 0;
         END IF;
@@ -348,12 +358,16 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AP=IF([.AN$17]=0;([.AM20]-[.AO20])/[.$AD20];0)
+      -- AP=IF([.AO20]<[.AM20];([.AM20]-[.AO20])/[.$AD20];IF([.AM20]<0;[.AM20]/[.$AD20];0))
       WHEN 'AP' THEN
-        IF cell('AN17') = 0 THEN
+        IF cell('AO',l) < cell('AM',l) THEN
           RETURN (cell('AM',l) - cell('AO',l)) / cell('AD',l);
         ELSE
-          RETURN 0;
+          IF cell('AM',l) < 0 THEN
+            RETURN cell('AM',l) / cell('AD',l);
+          ELSE
+            RETURN 0;
+          END IF;
         END IF;
 
 
@@ -412,12 +426,16 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AV=IF([.AT$17]=0;([.AS20]-[.AU20])/[.$AD20];0)
+      -- AV=IF([.AU20]<[.AS20];([.AS20]-[.AU20])/[.$AD20];IF([.AS20]<20;[.AS20]/[.$AD20];0))
       WHEN 'AV' THEN
-        IF cell('AT17') = 0 THEN
+        IF cell('AU',l) < cell('AS',l) THEN
           RETURN (cell('AS',l) - cell('AU',l)) / cell('AD',l);
         ELSE
-          RETURN 0;
+          IF cell('AS',l) < 20 THEN
+            RETURN cell('AS',l) / cell('AD',l);
+          ELSE
+            RETURN 0;
+          END IF;
         END IF;
 
 
@@ -442,9 +460,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AZ15=SUM([.AY$1:.AY$1048576])
-      WHEN 'AZ15' THEN
+      -- AZ14=SUM([.AY$1:.AY$1048576])
+      WHEN 'AZ14' THEN
         RETURN calcFnc('somme','AY');
+
+
+
+      -- AZ15=MIN([.AZ14];(i_service_du/3)-[.AN16])
+      WHEN 'AZ15' THEN
+        RETURN LEAST(cell('AZ14'), (i.service_du / 3) - cell('AN16'));
 
 
 
@@ -460,10 +484,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AZ=IF([.AZ$15]>0;[.AY20]/[.AZ$15];0)
+      -- AZ=IF([.AZ$14]>0;[.AY20]/[.AZ$14];0)
       WHEN 'AZ' THEN
-        IF cell('AZ15') > 0 THEN
-          RETURN cell('AY',l) / cell('AZ15');
+        IF cell('AZ14') > 0 THEN
+          RETURN cell('AY',l) / cell('AZ14');
         ELSE
           RETURN 0;
         END IF;
@@ -476,12 +500,16 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- BB=IF([.AZ$17]=0;([.AY20]-[.BA20])/[.$AD20];0)
+      -- BB=IF([.BA20]<[.AY20];([.AY20]-[.BA20])/[.$AD20];IF([.AY20]<0;[.AY20]/[.$AD20];0))
       WHEN 'BB' THEN
-        IF cell('AZ17') = 0 THEN
+        IF cell('BA',l) < cell('AY',l) THEN
           RETURN (cell('AY',l) - cell('BA',l)) / cell('AD',l);
         ELSE
-          RETURN 0;
+          IF cell('AY',l) < 0 THEN
+            RETURN cell('AY',l) / cell('AD',l);
+          ELSE
+            RETURN 0;
+          END IF;
         END IF;
 
 
@@ -540,12 +568,16 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- BH=IF([.BF$17]=0;([.BE20]-[.BG20])/[.$AD20];0)
+      -- BH=IF([.BG20]<[.BE20];([.BE20]-[.BG20])/[.$AD20];IF([.BE20]<0;[.BE20]/[.$AD20];0))
       WHEN 'BH' THEN
-        IF cell('BF17') = 0 THEN
+        IF cell('BG',l) < cell('BE',l) THEN
           RETURN (cell('BE',l) - cell('BG',l)) / cell('AD',l);
         ELSE
-          RETURN 0;
+          IF cell('BE',l) < 0 THEN
+            RETURN cell('BE',l) / cell('AD',l);
+          ELSE
+            RETURN 0;
+          END IF;
         END IF;
 
 
@@ -604,12 +636,16 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- BN=IF([.BL$17]=0;([.BK20]-[.BM20])/[.$AD20];0)
+      -- BN=IF([.BM20]<[.BK20];([.BK20]-[.BM20])/[.$AD20];IF([.BK20]<0;[.BK20]/[.$AD20];0))
       WHEN 'BN' THEN
-        IF cell('BL17') = 0 THEN
+        IF cell('BM',l) < cell('BK',l) THEN
           RETURN (cell('BK',l) - cell('BM',l)) / cell('AD',l);
         ELSE
-          RETURN 0;
+          IF cell('BK',l) < 0 THEN
+            RETURN cell('BK',l) / cell('AD',l);
+          ELSE
+            RETURN 0;
+          END IF;
         END IF;
 
 
@@ -628,6 +664,16 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
       WHEN 'BQ' THEN
         IF NOT vh.service_statutaire AND cell('BL17') = 0 AND vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN vh.heures * cell('AE',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- BS=IF(AND([.$D20]="Oui";[.$BL$17]=0;[.$H20]="Référentiel");([.AQ20]+[.BC20])*[.$AE20];0)
+      WHEN 'BS' THEN
+        IF vh.service_statutaire AND cell('BL17') = 0 AND vh.volume_horaire_ref_id IS NOT NULL THEN
+          RETURN (cell('AQ',l) + cell('BC',l)) * cell('AE',l);
         ELSE
           RETURN 0;
         END IF;

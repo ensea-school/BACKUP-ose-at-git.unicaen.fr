@@ -2,13 +2,13 @@
 
 namespace Enseignement\Entity\Db;
 
-use Application\Entity\Db\Contrat;
 use Application\Entity\Db\FormuleResultatVolumeHoraire;
 use Application\Entity\Db\Traits\MotifNonPaiementAwareTrait;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
 use Application\Entity\Db\Traits\TagAwareTrait;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
+use Contrat\Entity\Db\Contrat;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;

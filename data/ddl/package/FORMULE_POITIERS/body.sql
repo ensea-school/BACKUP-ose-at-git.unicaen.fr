@@ -126,32 +126,32 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
 
-      -- U=IF([.$I20]="Référentiel";0;([.$AJ20])*[.F20])
+      -- U=IF([.$I20]="Référentiel";0;[.$AJ20]*[.F20])
       WHEN 'U' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AJ',l)) * vh.taux_fi;
+          RETURN cell('AJ',l) * vh.taux_fi;
         END IF;
 
 
 
-      -- V=IF([.$I20]="Référentiel";0;([.$AJ20])*[.G20])
+      -- V=IF([.$I20]="Référentiel";0;[.$AJ20]*[.G20])
       WHEN 'V' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AJ',l)) * vh.taux_fa;
+          RETURN cell('AJ',l) * vh.taux_fa;
         END IF;
 
 
 
-      -- W=IF([.$I20]="Référentiel";0;([.$AJ20])*[.H20])
+      -- W=IF([.$I20]="Référentiel";0;[.$AJ20]*[.H20])
       WHEN 'W' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AJ',l)) * vh.taux_fc;
+          RETURN cell('AJ',l) * vh.taux_fc;
         END IF;
 
 
@@ -166,32 +166,32 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
 
-      -- Y=IF([.$I20]="Référentiel";0;([.$AL20])*[.F20])
+      -- Y=IF([.$I20]="Référentiel";0;[.$AL20]*[.F20])
       WHEN 'Y' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AL',l)) * vh.taux_fi;
+          RETURN cell('AL',l) * vh.taux_fi;
         END IF;
 
 
 
-      -- Z=IF([.$I20]="Référentiel";0;([.$AL20])*[.G20])
+      -- Z=IF([.$I20]="Référentiel";0;[.$AL20]*[.G20])
       WHEN 'Z' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AL',l)) * vh.taux_fa;
+          RETURN cell('AL',l) * vh.taux_fa;
         END IF;
 
 
 
-      -- AA=IF([.$I20]="Référentiel";0;([.$AL20])*[.H20])
+      -- AA=IF([.$I20]="Référentiel";0;[.$AL20]*[.H20])
       WHEN 'AA' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AL',l)) * vh.taux_fc;
+          RETURN cell('AL',l) * vh.taux_fc;
         END IF;
 
 
@@ -212,7 +212,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
 
-      -- AE=IF(ISERROR([.J20]);1;[.J20]*IF(ISERROR([.L20]);1;[.L20]))
+      -- AE=IF(ISERROR([.J20]);1;[.J20])
       WHEN 'AE' THEN
         RETURN vh.taux_service_du;
 
@@ -220,7 +220,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
       -- AF=IF(ISERROR([.K20]);1;[.K20]*IF(ISERROR([.M20]);1;[.M20]))
       WHEN 'AF' THEN
-        RETURN vh.taux_service_compl;
+        RETURN (vh.taux_service_compl * vh.ponderation_service_compl);
 
 
 
@@ -268,10 +268,14 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
 
 
 
-      -- AK=IF([.AI$17]=0;([.AH20]-[.AJ20])/[.$AE20];0)
+      -- AK=IF([.AI$17]=0;IF([.AE20]=0;0;([.AH20]-[.AJ20])/[.$AE20]);0)
       WHEN 'AK' THEN
         IF cell('AI17') = 0 THEN
-          RETURN (cell('AH',l) - cell('AJ',l)) / cell('AE',l);
+          IF cell('AE',l) = 0 THEN
+            RETURN 0;
+          ELSE
+            RETURN (cell('AH',l) - cell('AJ',l)) / cell('AE',l);
+          END IF;
         ELSE
           RETURN 0;
         END IF;

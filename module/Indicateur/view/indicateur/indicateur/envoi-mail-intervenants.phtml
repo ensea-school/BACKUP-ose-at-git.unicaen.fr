@@ -71,7 +71,7 @@ echo $this->form()->openTag($this->form->setAttribute('id', 'mail-form'));
      */
     function installEditor(selector, form)
     {
-        WidgetInitializer.includeJs(Util.url('vendor/tinymce-4.4.1/js/tinymce/tinymce.min.js'));
+        WidgetInitializer.includeJs(unicaenVue.url('vendor/tinymce-4.4.1/js/tinymce/tinymce.min.js'));
         tinymce.editors = [];
         tinymce.init({
             selector: selector,

@@ -6,6 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use Plafond\Service\PlafondServiceAwareTrait;
 use Referentiel\Entity\Db\FonctionReferentiel;
@@ -87,7 +88,7 @@ class PlafondProcessus implements EntityManagerAwareInterface
      *
      * @return bool
      */
-    public function controle(Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $pourBlocage = false): bool
+    public function controle(Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel|Mission $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $pourBlocage = false): bool
     {
         $blocage = false;
         $reponse = $this->getServicePlafond()->controle($entity, $typeVolumeHoraire, $pourBlocage);

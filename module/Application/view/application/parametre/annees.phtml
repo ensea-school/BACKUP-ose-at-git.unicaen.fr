@@ -51,7 +51,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ANN
             url: "<?= $this->url('parametres/annees') ?>",
             data: {annee: anneeId},
             success: function (data) {
-                Util.alert(data.message, data.status);
+                unicaenVue.flashMessenger.toast(data.message, data.status);
             },
         });
 

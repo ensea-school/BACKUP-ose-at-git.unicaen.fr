@@ -11,6 +11,13 @@
 * Taux HETD personnalisables
 
 
+# OSE 20.3 (à venir)
+
+## Corrections de bugs
+
+* Meilleure gestion dans l'expérience utilisateur de la saisie des dates de début et de fin dans la saisie de service en mode calendaire (#50508)
+* Masquer de la liste de choix d'une étape, les formations historisées lors de l'ajout d'un élément pédagogique à une formation (#48878)
+
 # OSE 20.2 (28/04/2023)
 
 ## Nouveautés

@@ -416,4 +416,4 @@ SELECT rownum id,
        histo_user,
        icon
 FROM historique
-ORDER BY intervenant_id, ordre ASC, histo_date ASC;
+ORDER BY intervenant_id, ordre ASC, histo_date ASC

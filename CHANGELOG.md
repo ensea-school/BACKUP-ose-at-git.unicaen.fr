@@ -9,12 +9,16 @@
 
 * Nouvelle notion de mission, permettant de gérer les contrats étudiants
 * Taux HETD personnalisables
+* Possibilité de contractualiser des heures de service référentiel et de mission
 
 ## Améliorations
-* 
+
 * Modification de libellé dans l'affichage de l'offre de formation (#49763)
 
+## Corrections de bugs
 
+* Il est possible de rentrer une date de retour sur un contrat après avoir téléversé le contrat sans avoir besoin de recharger la page
+* 
 
 # OSE 20.3 (à venir)
 

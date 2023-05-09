@@ -17,6 +17,8 @@
 
 * Meilleure gestion dans l'expérience utilisateur de la saisie des dates de début et de fin dans la saisie de service en mode calendaire (#50508)
 * Masquer de la liste de choix d'une étape, les formations historisées lors de l'ajout d'un élément pédagogique à une formation (#48878)
+* Possiblité de choisir quelle type d'affectation (HIE ou FUN) est remontée/testée lors d'une PEC ou REN (#49954)
+* Dans la partie notes intervenant, différenciation entre les demandes de mise en paiement et les mises en paiement (#50081)
 
 # OSE 20.2 (28/04/2023)
 

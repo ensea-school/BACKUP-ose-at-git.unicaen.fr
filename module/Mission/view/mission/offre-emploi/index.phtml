@@ -1,0 +1,26 @@
+<?php
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $intervenant       \Application\Entity\Db\Intervenant
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+$this->headTitle()->append("Gestion des offres d'emploi");
+$canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_MODIFIER));
+$canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION));
+$canPostuler  = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_POSTULER));
+$canValider   = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_VALIDER));
+
+
+?>
+
+<h1 class="page-header">Gestion des offres d'emploi</h1>
+
+<?= $this->vue('mission/liste-offre-emploi', [
+    'id'           => null,
+    'canModifier'  => $canEdit,
+    'canPostuler'  => $canPostuler,
+    'canSupprimer' => $canSupprimer,
+    'canValider'   => $canValider,
+]); ?>

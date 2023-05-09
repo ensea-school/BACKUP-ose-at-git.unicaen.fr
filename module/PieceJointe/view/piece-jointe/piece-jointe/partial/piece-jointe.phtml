@@ -37,7 +37,7 @@ if (($url = $tpj->getUrlModeleDoc())) {
 }
 
 $type = (string)$tpj;
-if ($tpj->getCode() === \Application\Entity\Db\TypePieceJointe::CARTE_ETUD) {
+if ($tpj->getCode() === \PieceJointe\Entity\Db\TypePieceJointe::CARTE_ETUD) {
     $type .= " " . $intervenant->getAnnee();
 }
 
@@ -63,7 +63,7 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
                 <?php else: ?>
                     <div class="validation-bar float-end"
                          data-url="<?= $this->url('piece-jointe/intervenant/validation', ['typePieceJointe' => $tpj->getId()], [], true) ?>">
-                        <?= $this->partial('application/piece-jointe/validation', compact('pj')) ?>
+                        <?= $this->partial('piece-jointe/piece-jointe/validation', compact('pj')) ?>
                     </div>
                 <?php endif; ?>
 
@@ -115,7 +115,7 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
             <h3>
                 <div class="validation-bar float-end"
                      data-url="<?= $this->url('piece-jointe/intervenant/validation', ['typePieceJointe' => $tpj->getId()], [], true) ?>">
-                    <?= $this->partial('application/piece-jointe/validation', []) ?>
+                    <?= $this->partial('piece-jointe/piece-jointe/validation', []) ?>
                 </div>
 
 

@@ -15,7 +15,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 $navigationHelper = $this->navigation('navigation');
 $pages            = $navigationHelper->getContainer();
 
-$version = $this->appInfos()->getConfig()->get('version');
+$version = '889889';//$this->appInfos()->getConfig()->get('version');
 
 echo $this->doctype();
 ?>
@@ -71,7 +71,7 @@ echo $this->doctype();
     <!-- Scripts globaux -->
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-3.6.0.min.js') ?>"></script>
     <script type="text/javascript" src="<?= $this->basePath('/vendor/jquery-ui-1.12.1/jquery-ui.min.js') ?>"></script>
-    <script type="text/javascript" src="<?= $this->basePath('/js/util.js?v=' . $version) ?>"></script>
+    <script type="text/javascript" src="<?= $this->basePath('/js/util.js?v=sss' . $version) ?>"></script>
     <?= $this->vite(); ?>
     <?= $this->headScript(); ?>
 

@@ -120,11 +120,14 @@ function dqlAndWhere(array $filters, array $parameters): string
         if (array_key_exists($name, $filters)) {
             if ($value === null) {
                 $dqlFilters .= "\nAND " . $filters[$name] . ' IS NULL';
+            } elseif ($value == 'IS NOT NULL') {
+                $dqlFilters .= "\nAND " . $filters[$name] . ' IS NOT NULL';
             } else {
                 $dqlFilters .= "\nAND " . $filters[$name] . ' = :' . $name;
             }
         }
     }
+
 
     return $dqlFilters;
 }

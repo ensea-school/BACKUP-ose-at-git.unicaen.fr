@@ -60,6 +60,7 @@ class StatutSaisieForm extends AbstractForm
             'typeIntervenant'               => 'Type d\'intervenant',
             'mission'                       => 'Visualisation/Modification de mission',
             'missionRealise'                => 'Saisie du réalisé',
+            'offreEmploiPostuler'           => 'Postuler à une offre d\'emploi',
         ];
 
         $dveElements = [
@@ -83,6 +84,7 @@ class StatutSaisieForm extends AbstractForm
             'contratGeneration',
             'modificationServiceDuVisualisation',
             'missionRealiseEdition',
+            'offreEmploiPostuler',
         ];
 
         for ($i = 1; $i <= 5; $i++) {
@@ -179,6 +181,7 @@ class StatutSaisieForm extends AbstractForm
                 },
             ],
         ]]);
+
 
         foreach ($dveElements as $dveElement) {
             $this->spec([$dveElement => [
@@ -441,6 +444,39 @@ class StatutSaisieForm extends AbstractForm
             'tauxRemu'              => [
                 'input' => [
                     'required' => false,
+                ],
+            ],
+            'offreEmploiPostuler'   => [
+                'type'     => 'Select',
+                'name'     => 'offreEmploiPostuler',
+                'options'  => [
+                    'value_options' => [
+                        'desactive' => 'Désactivé',
+                        'edition'   => 'Activé pour l\'intervenant',
+                    ],
+                ],
+                'hydrator' => [
+                    'getter' => function (Statut $statut, string $name) {
+                        $postuler = $statut->getOffreEmploiPostuler();
+
+                        if ($postuler) {
+                            return 'edition';
+                        } else {
+                            return 'desactive';
+                        }
+                    },
+                    'setter' => function (Statut $statut, $value, string $name) {
+                        $postuler = false;
+                        switch ($value) {
+                            case 'edition':
+                                $postuler = true;
+                            break;
+                            case 'desactive':
+                                $postuler = false;
+                            break;
+                        }
+                        $statut->setOffreEmploiPostuler($postuler);
+                    },
                 ],
             ],
         ]);

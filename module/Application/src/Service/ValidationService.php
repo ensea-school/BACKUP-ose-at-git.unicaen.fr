@@ -14,6 +14,7 @@ use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\OffreEmploi;
 use Mission\Entity\Db\VolumeHoraireMission;
 use RuntimeException;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -102,6 +103,19 @@ class ValidationService extends AbstractEntityService
         $validation->setStructure($volumeHoraireMission->getMission()->getStructure());
         $this->save($validation);
         $volumeHoraireMission->addValidation($validation);
+
+        return $validation;
+    }
+
+
+
+    public function validerOffreEmploi(OffreEmploi $offreEmploi): Validation
+    {
+        $validation = $this->newEntity();
+        $validation->setTypeValidation($this->getServiceTypeValidation()->getOffreEmploi());
+        $validation->setStructure($offreEmploi->getStructure());
+        $this->save($validation);
+        $offreEmploi->setValidation($validation);
 
         return $validation;
     }

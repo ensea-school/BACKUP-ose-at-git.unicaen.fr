@@ -182,6 +182,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool        $missionRealiseEdition              = false;
 
+    private bool        $offreEmploiPostuler                = false;
+
     private ?TauxRemu   $tauxRemu                           = null;
 
 
@@ -1451,6 +1453,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
+    public function getOffreEmploiPostuler(): bool
+    {
+        return $this->offreEmploiPostuler;
+    }
+
+
+
+    public function setOffreEmploiPostuler(bool $offreEmploiPostuler): Statut
+    {
+        $this->offreEmploiPostuler = $offreEmploiPostuler;
+
+        return $this;
+    }
+
+
+
     public function getTauxRemu(): ?TauxRemu
     {
         return $this->tauxRemu;
@@ -1532,6 +1550,7 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
             Privileges::MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT => $this->paiementVisualisation,
             Privileges::CLOTURE_CLOTURE                            => $this->cloture && ($this->serviceRealiseEdition || $this->referentielRealiseEdition),
             Privileges::CONTRAT_CONTRAT_GENERATION                 => $this->contrat && $this->contratGeneration,
+            Privileges::MISSION_OFFRE_EMPLOI_POSTULER              => $this->offreEmploiPostuler,
         ];
 
         return $privileges;

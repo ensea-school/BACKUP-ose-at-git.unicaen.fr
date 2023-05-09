@@ -90,9 +90,15 @@ class ValidationService extends AbstractEntityService
 
     public function validerVolumeHoraireMission(VolumeHoraireMission $volumeHoraireMission): Validation
     {
+        if ($volumeHoraireMission->getTypeVolumeHoraire()->isPrevu()){
+            $typeValidation = $this->getServiceTypeValidation()->getMission();
+        }else{
+            $typeValidation = $this->getServiceTypeValidation()->getMissionRealise();
+        }
+
         $validation = $this->newEntity();
         $validation->setIntervenant($volumeHoraireMission->getMission()->getIntervenant());
-        $validation->setTypeValidation($this->getServiceTypeValidation()->getMission());
+        $validation->setTypeValidation($typeValidation);
         $validation->setStructure($volumeHoraireMission->getMission()->getStructure());
         $this->save($validation);
         $volumeHoraireMission->addValidation($validation);

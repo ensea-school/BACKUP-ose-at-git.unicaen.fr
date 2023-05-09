@@ -176,6 +176,7 @@ class PlafondService extends AbstractEntityService
         $pqr->entity = $entity;
         $pqr->typeVolumeHoraire = $typeVolumeHoraire;
         $pqr->useView = true;
+        $pqr->depassementsUniquement = true;
 
         $sqls[] = $this->makeQuery($pqr);
 

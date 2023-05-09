@@ -16,7 +16,7 @@ use Service\Entity\Db\TypeService;
 
 $structList = [];
 foreach ($contrats as $contrat) {
-    $structList[] = $contrat->getStructure();
+    $structList[] = $contrat->getStructure()->getId();
 }
 
 $serviceNonContractToShow = [];

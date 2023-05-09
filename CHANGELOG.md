@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 20.1](#ose-201--04042023-)
+[OSE 20.2](#ose-202-28042023)
 
 
 # OSE 21 (à venir)
@@ -10,8 +10,22 @@
 * Nouvelle notion de mission, permettant de gérer les contrats étudiants
 * Taux HETD personnalisables
 
+## Améliorations
+* 
+* Modification de libellé dans l'affichage de l'offre de formation (#49763)
 
-# OSE 20.2 (à venir)
+
+
+# OSE 20.3 (à venir)
+
+## Corrections de bugs
+
+* Meilleure gestion dans l'expérience utilisateur de la saisie des dates de début et de fin dans la saisie de service en mode calendaire (#50508)
+* Masquer de la liste de choix d'une étape, les formations historisées lors de l'ajout d'un élément pédagogique à une formation (#48878)
+* Possiblité de choisir quelle type d'affectation (HIE ou FUN) est remontée/testée lors d'une PEC ou REN (#49954)
+* Dans la partie notes intervenant, différenciation entre les demandes de mise en paiement et les mises en paiement (#50081)
+
+# OSE 20.2 (28/04/2023)
 
 ## Nouveautés
 
@@ -23,10 +37,14 @@
 
 ## Corrections de bugs
 
-* Les motifs de modification de service dû supprimés ne peuvent plus être sélectionnés #50328
+* Les motifs de modification de service dû supprimés ne peuvent plus être sélectionnés (#50328)
 * Messages d'erreur corrigés lors de l'exécution du script de migration de la V20.
 * Le bouton prévu=>réalisé s'affiche de nouveau lorsqu'il n'y a pas de contrat (#45643)
 * Formule de Poitiers : rétablissement du test pour appliquer l'ancienne formule avant 2022.
+* Formule de Picardie : prise en compte des heures négatives (#50471)
+* L'interface d'administration des types de formation est de nouveau opérationnelle (#50360)
+
+
 
 # OSE 20.1 (04/04/2023)
 

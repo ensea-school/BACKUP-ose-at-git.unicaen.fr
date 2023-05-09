@@ -1,5 +1,7 @@
 CREATE OR REPLACE FORCE VIEW V_INTERVENANT_HISTORIQUE AS
-WITH historique AS (
+-- OSE.V_INTERVENANT_HISTORIQUE source
+
+  WITH historique AS (
 --Initialisation des données personnelles
     SELECT d.intervenant_id                              intervenant_id,
            '1 - Données personnelles'                    categorie,
@@ -359,16 +361,16 @@ WHERE v.histo_destruction IS null
 GROUP BY i.id
 
 UNION ALL
---Mise en paiement
+--Demande de mise en paiement
 SELECT
    s.intervenant_id                                                                     intervenant_id,
-       '7 - Mise en paiement'                                 categorie,
-       mep.heures || 'h ' || th.libelle_court || CASE WHEN p.id IS NULL THEN '' ELSE ' (paiement en ' || p.libelle_court || ')' END                      label,
+       '7 - Demande de mise en paiement'		                                        categorie,
+       mep.heures || 'h ' || th.libelle_court                                           label,
        mep.histo_modification                                                                histo_date,
        mep.histo_modificateur_id                                                             histo_createur_id,
        u.display_name                                                        histo_user,
        'glyphicon glyphicon-ok'                                              icon,
-       6                                ordre
+       7                                ordre
 FROM
   mise_en_paiement mep
   JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id
@@ -377,7 +379,29 @@ FROM
   JOIN utilisateur u ON u.id = mep.histo_modificateur_id
   LEFT JOIN periode p ON p.id = mep.periode_paiement_id
   WHERE
-  mep.histo_destruction IS NULL
+  mep.histo_destruction IS NULL AND mep.date_mise_en_paiement IS NULL
+
+
+UNION ALL
+--Mise en paiement
+SELECT
+   s.intervenant_id                                                                     intervenant_id,
+       '8 - Mise en paiement'                                 categorie,
+       mep.heures || 'h ' || th.libelle_court || CASE WHEN p.id IS NULL THEN '' ELSE ' (paiement en ' || p.libelle_court || ')' END                      label,
+       mep.histo_modification                                                                histo_date,
+       mep.histo_modificateur_id                                                             histo_createur_id,
+       u.display_name                                                        histo_user,
+       'glyphicon glyphicon-ok'                                              icon,
+       8                                ordre
+FROM
+  mise_en_paiement mep
+  JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id
+  JOIN service s ON s.id = frs.service_id
+  JOIN type_heures th ON th.id = mep.type_heures_id
+  JOIN utilisateur u ON u.id = mep.histo_modificateur_id
+  LEFT JOIN periode p ON p.id = mep.periode_paiement_id
+  WHERE
+  mep.histo_destruction IS NULL AND mep.date_mise_en_paiement IS NOT NULL
 
 
 

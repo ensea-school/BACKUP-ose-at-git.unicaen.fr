@@ -43,12 +43,14 @@ class TauxRemuController extends AbstractController
         $tauxListe = $this->getServiceTauxRemu()->getTauxRemusAnnee();
 
 
-        $properties = ['code',
+        $tauxRemuProp = ['id',
+                       'code',
                        'libelle',
-                       'tauxRemu',
-                       ['tauxRemuValeurs', ['dateEffet', 'valeur']],
+                       ['tauxRemuValeurs', ['id', 'dateEffet', 'valeur']],
                        'tauxRemuValeursIndex',
         ];
+        $properties = $tauxRemuProp;
+        $properties[] = ['tauxRemu', $tauxRemuProp];
 
         $triggers = [
             // '/' signifie que nous agirons sur les données de premier niveau, qui sont ici des Personne. Le trigger agira pour chaque personne
@@ -60,15 +62,11 @@ class TauxRemuController extends AbstractController
                 $extracted['canDelete']       = $extracted['canDeleteValeur'] && !$original->hasChildren();
 
                 // Nous pourrions tout aussi bien retirer une donnée, ou bien en changer le type ou la valeur.
-
                 return $extracted;
             },
         ];
 
-
-        $liste = \UnicaenVue\Axios\AxiosExtractor::extract($tauxListe, $properties, $triggers);
-
-        return new AxiosModel($liste);
+        return new AxiosModel($tauxListe, $properties, $triggers);
     }
 
 
@@ -139,7 +137,7 @@ class TauxRemuController extends AbstractController
 
 
 
-    public function supprimerAction(): \Laminas\View\Model\JsonModel
+    public function supprimerAction(): AxiosModel
     {
         $tauxRemu = $this->getEvent()->getParam('tauxRemu');
         $this->getServiceTauxRemu()->delete($tauxRemu, true);
@@ -154,7 +152,7 @@ class TauxRemuController extends AbstractController
     /**
      * Retourne les données pour un taux
      *
-     * @return \Laminas\View\Model\JsonModel
+     * @return AxiosModel
      */
     public function getAction()
     {

@@ -210,6 +210,8 @@ class EtapeService extends AbstractEntityService
         if ($cStructure = $this->getServiceContext()->getStructure()) {
             $this->finderByStructure($cStructure, $qb, $alias);
         }
+        //On filtre les étapes hsitorisées
+        $this->finderByHistorique($qb);
 
         return $qb;
     }

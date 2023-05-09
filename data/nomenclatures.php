@@ -892,6 +892,11 @@ return [
             "CODE"    => "MISSION_REALISE",
             "LIBELLE" => "Validation d'heures de mission réalisées",
         ],
+        [
+            'ID'      => 10,
+            "CODE"    => "OFFRE_EMPLOI",
+            "LIBELLE" => "Validation d'une offre d'emploi par la DRH",
+        ],
     ],
 
     'TYPE_VOLUME_HORAIRE' => [

@@ -29,7 +29,7 @@ $menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant
 
     <div class="piece-jointe">
         <div class="infos" data-url="<?= $infosUrl ?>">
-            <?= $this->partial('application/piece-jointe/infos', compact('messages')); ?>
+            <?= $this->partial('piece-jointe/piece-jointe/infos', compact('messages')); ?>
         </div>
         <?php
 
@@ -48,7 +48,7 @@ $menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant
                 } else {
                     $pj = null;
                 }
-                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'canArchiver', 'obligatoire', 'annee'));
+                echo $this->partial('piece-jointe/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'canArchiver', 'obligatoire', 'annee'));
             }
             echo '</div>';
 
@@ -78,7 +78,7 @@ $menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant
                 if ($pj->getIntervenant()->getAnnee()->getId() == $annee->getId()) {
                     $haveRestante = true;
                     $tpj          = $pj->getType();
-                    $html         .= $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'canArchiver', 'obligatoire', 'annee'));
+                    $html         .= $this->partial('piece-jointe/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'canArchiver', 'obligatoire', 'annee'));
                 }
             }
             $html .= '</div>';

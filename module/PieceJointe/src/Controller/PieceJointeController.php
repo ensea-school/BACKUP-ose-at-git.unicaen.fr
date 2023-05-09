@@ -7,8 +7,8 @@ use Application\Entity\Db\Intervenant;
 use PieceJointe\Entity\Db\PieceJointe;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\WfEtape;
-use PieceJointe\Form\PieceJointe\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
-use PieceJointe\Form\PieceJointe\Traits\TypePieceJointeSaisieFormAwareTrait;
+use PieceJointe\Form\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
+use PieceJointe\Form\Traits\TypePieceJointeSaisieFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use PieceJointe\Service\Traits\PieceJointeServiceAwareTrait;
@@ -176,7 +176,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
         $this->updateTableauxBord($pj->getIntervenant(), true);
 
         $viewModel = new ViewModel();
-        $viewModel->setTemplate('application/piece-jointe/validation');
+        $viewModel->setTemplate('piece-jointe/piece-jointe/validation');
         $viewModel->setVariable('pj', $pj);
 
         return $viewModel;
@@ -216,7 +216,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
         $this->updateTableauxBord($pj->getIntervenant(), true);
 
         $viewModel = new ViewModel();
-        $viewModel->setTemplate('application/piece-jointe/validation');
+        $viewModel->setTemplate('piece-jointe/piece-jointe/validation');
         $viewModel->setVariable('pj', $pj);
 
         return $viewModel;

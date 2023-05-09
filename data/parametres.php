@@ -138,16 +138,16 @@ return [
 
 
     /* Statuts */
-    "statut_intervenant_codes_corresp_2_libelle" => [
-        "VALEUR"      => "ATV ? (saisir oui ou non)",
-        "DESCRIPTION" => "Témoin précisant si le statut correspond à des intervenants ATV (saisir oui ou non)",
-    ],
     "statut_intervenant_codes_corresp_1_libelle" => [
-        "VALEUR"      => null,
+        "VALEUR"      => "Est ATV (oui ou non)",
         "DESCRIPTION" => "Libellé de la liste 2 des correspondances de codes des statuts (en majuscules séparés par des virgules)",
     ],
+    "statut_intervenant_codes_corresp_2_libelle" => [
+        "VALEUR"      => "Code Siham",
+        "DESCRIPTION" => "Témoin précisant si le statut correspond à des intervenants ATV (saisir oui ou non)",
+    ],
     "statut_intervenant_codes_corresp_3_libelle" => [
-        "VALEUR"      => null,
+        "VALEUR"      => "Est VA (oui ou non)",
         "DESCRIPTION" => "Libellé de la liste 3 des correspondances de codes des statuts (en majuscules séparés par des virgules)",
     ],
     "statut_intervenant_codes_corresp_4_libelle" => [

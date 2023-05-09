@@ -10,11 +10,12 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
+use UnicaenVue\Axios\AxiosExtractorInterface;
 
 /**
  * Structure
  */
-class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
+class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, AxiosExtractorInterface
 {
     use AdresseTrait;
     use ImportAwareTrait;
@@ -45,6 +46,13 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
         $this->elementPedagogique                 = new ArrayCollection;
         $this->centreCout                         = new ArrayCollection;
         $this->miseEnPaiementIntervenantStructure = new ArrayCollection;
+    }
+
+
+
+    public function axiosDefinition(): array
+    {
+        return ['libelleLong', 'libelleCourt', 'code', 'id'];
     }
 
 

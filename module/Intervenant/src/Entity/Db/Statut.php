@@ -12,13 +12,14 @@ use Laminas\Permissions\Acl\Role\RoleInterface;
 use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenVue\Axios\AxiosExtractorInterface;
 
 /**
  * Description of Statut
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterface, EntityManagerAwareInterface
+class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterface, EntityManagerAwareInterface, AxiosExtractorInterface
 {
     const CODE_AUTRES       = 'AUTRES';
     const CODE_NON_AUTORISE = 'NON_AUTORISE';
@@ -180,6 +181,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool        $missionRealiseEdition              = false;
 
+    private bool        $offreEmploiPostuler                = false;
+
     private ?TauxRemu   $tauxRemu                           = null;
 
 
@@ -201,6 +204,13 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function getRoleId(): string
     {
         return 'statut/' . $this->getCode();
+    }
+
+
+
+    public function axiosDefinition(): array
+    {
+        return ['libelle', 'code'];
     }
 
 
@@ -1449,6 +1459,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
+    public function getOffreEmploiPostuler(): bool
+    {
+        return $this->offreEmploiPostuler;
+    }
+
+
+
+    public function setOffreEmploiPostuler(bool $offreEmploiPostuler): Statut
+    {
+        $this->offreEmploiPostuler = $offreEmploiPostuler;
+
+        return $this;
+    }
+
+
+
     public function getTauxRemu(): ?TauxRemu
     {
         return $this->tauxRemu;
@@ -1530,6 +1556,7 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
             Privileges::MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT => $this->paiementVisualisation,
             Privileges::CLOTURE_CLOTURE                            => $this->cloture && ($this->serviceRealiseEdition || $this->referentielRealiseEdition),
             Privileges::CONTRAT_CONTRAT_GENERATION                 => $this->contrat && $this->contratGeneration,
+            Privileges::MISSION_OFFRE_EMPLOI_POSTULER              => $this->offreEmploiPostuler,
         ];
 
         return $privileges;

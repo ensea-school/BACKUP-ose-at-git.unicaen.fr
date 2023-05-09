@@ -1,0 +1,18 @@
+<?php
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $intervenant       \Application\Entity\Db\Intervenant
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+$this->headTitle()->append("Gestion des offres d'emploi");
+$canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_TYPE));
+$canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_SUPPRESSION_TYPE));
+?>
+
+<h1 class="page-header">Gestion des offres d'emploi</h1>
+
+<?= $this->vue('mission/liste-offre-emploi', [
+    'public' => true,
+]); ?>

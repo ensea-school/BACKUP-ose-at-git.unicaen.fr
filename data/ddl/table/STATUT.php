@@ -705,6 +705,18 @@ return [
             'position'    => 84,
             'commentaire' => NULL,
         ],
+        'OFFRE_EMPLOI_POSTULER'        => [
+            'name'        => 'OFFRE_EMPLOI_POSTULER',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 86,
+            'commentaire' => NULL,
+        ],
         'MODIF_SERVICE_DU'               => [
             'name'        => 'MODIF_SERVICE_DU',
             'type'        => 'bool',

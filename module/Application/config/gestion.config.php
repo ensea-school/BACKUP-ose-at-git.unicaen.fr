@@ -13,8 +13,8 @@ return [
                 'options'       => [
                     'route'    => '/gestion',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Gestion',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Gestion',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -51,6 +51,7 @@ return [
                         Privileges::PILOTAGE_VISUALISATION,
                         Privileges::BUDGET_VISUALISATION,
                         Privileges::INDICATEUR_VISUALISATION,
+                        Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
                     ],
                     'assertion'  => Assertion\GestionAssertion::class,
                 ],

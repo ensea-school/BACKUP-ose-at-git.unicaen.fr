@@ -241,7 +241,7 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                             'data-event' => 'element-pedagogique-ajouter',
                             'title'      => 'Ajouter un enseignement',
                         ];
-                        echo $this->tag('a', $attrs)->html('<i class="fas fa-plus"></i> Nouvel enseignement');
+                        echo $this->tag('a', $attrs)->html('<i class="fas fa-plus"></i> Nouvel élément pédagogique');
                     }
                     if ($canExport) {
                         $params = [
@@ -267,8 +267,8 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
                 <table class="table table-bordered table-sm table-hover table-sort">
                     <thead>
                     <tr>
-                        <th colspan="3">Formation</th>
-                        <th colspan="5">Enseignement</th>
+                        <th colspan="3">Formations</th>
+                        <th colspan="5">Eléments pédagogiquess</th>
                     </tr>
                     <tr>
                         <th>Niveau</th>

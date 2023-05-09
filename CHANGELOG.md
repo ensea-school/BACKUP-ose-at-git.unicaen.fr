@@ -10,6 +10,11 @@
 * Nouvelle notion de mission, permettant de gérer les contrats étudiants
 * Taux HETD personnalisables
 
+## Améliorations
+* 
+* Modification de libellé dans l'affichage de l'offre de formation (#49763)
+
+
 
 # OSE 20.3 (à venir)
 

@@ -38,6 +38,10 @@ class OffreEmploiAssertion extends AbstractAssertion
                         return $this->assertOffreEmploiValidation($role, $entity);
                     case Privileges::MISSION_OFFRE_EMPLOI_POSTULER:
                         return $this->assertOffreEmploiPostuler($role, $entity);
+                    case Privileges::MISSION_CANDIDATURE_VISUALISATION:
+                        return $this->assertCandidatureVisualisation($role, $entity);
+                    case Privileges::MISSION_CANDIDATURE_VALIDER:
+                        return $this->assertCandidatureValider($role, $entity);
                 }
             break;
         }
@@ -95,6 +99,24 @@ class OffreEmploiAssertion extends AbstractAssertion
         return $this->asserts([
             $this->haveRole(),
             $this->assertOffreEmploi($role, $offre),
+        ]);
+    }
+
+
+
+    protected function assertCandidatureVisualisation(Role $role, OffreEmploi $offre)
+    {
+        return $this->asserts([
+            $this->haveRole(),
+        ]);
+    }
+
+
+
+    protected function assertCandidatureValider(Role $role, OffreEmploi $offre)
+    {
+        return $this->asserts([
+            $this->haveRole(),
         ]);
     }
 

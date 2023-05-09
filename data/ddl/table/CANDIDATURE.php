@@ -45,7 +45,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'VALIDATION_iD'     => [
+        'VALIDATION_ID'     => [
             'name'        => 'VALIDATION_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',

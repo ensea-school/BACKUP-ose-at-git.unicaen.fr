@@ -1,16 +1,27 @@
 <template>
+    <!--On affiche une synthèse de la liste des offres-->
     <div v-if="!extended" class="row row-cols-1 row-cols-md-2 g-4 mb-3">
-        <offreEmploi v-for="offre in offres" @supprimer="supprimer" @refresh="refresh" :key="offre.id" :offre="offre" :public="this.public"
+        <offreEmploi v-for="offre in offres" @supprimer="supprimer" @refresh="refresh" :key="offre.id" :offre="offre"
                      :canModifier="this.canModifier"
                      :canValider="this.canValider"
-                     :canSupprimer="this.canSupprimer"></offreEmploi>
+                     :canSupprimer="this.canSupprimer"
+                     :canVoirCandidature="this.canVoirCandidature"></offreEmploi>
     </div>
-    <a v-if="!this.public && this.canModifier" class=" btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajouter une nouvelle offre</a>
+    <div v-if="!extended">
+        <a v-if="this.canModifier" class=" btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajouter une nouvelle offre</a>
+    </div>
+
+    <!--On affiche une synthèse de la liste des offres-->
     <div v-if="extended">
-        <offreEmploi v-for="offre in offres" :key="offre.id" :offre="offre" :canPostuler="this.canPostuler" :extended="extended"
-                     :public="this.public" :utilisateur="this.utilisateur" :intervenant="this.intervenant"></offreEmploi>
+        <offreEmploi v-for="offre in offres" :key="offre.id" :offre="offre"
+                     :canPostuler="this.canPostuler"
+                     :canVoirCandidature="this.canVoirCandidature"
+                     :canValiderCandidature="this.canValiderCandidature"
+                     :extended="extended"
+                     :utilisateur="this.utilisateur"
+                     :intervenant="this.intervenant"></offreEmploi>
     </div>
-    <br/>
+
 </template>
 
 <script>
@@ -22,13 +33,15 @@ export default {
         offreEmploi
     },
     props: {
-        public: {type: Boolean, required: true},
+
         id: {type: Number, required: false},
         utilisateur: {required: false},
         intervenant: {required: false},
         canModifier: {type: Boolean, required: false},
         canPostuler: {type: Boolean, required: false},
         canValider: {type: Boolean, required: false},
+        canVoirCandidature: {type: Boolean, required: false},
+        canValiderCandidature: {type: Boolean, required: false},
         canSupprimer: {type: Boolean, required: false},
 
 

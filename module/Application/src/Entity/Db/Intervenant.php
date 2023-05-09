@@ -364,7 +364,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
     public function axiosDefinition(): array
     {
-        return ['nomUsuel', 'prenom', 'emailPro', 'statut', 'code'];
+        return ['id', 'nomUsuel', 'prenom', 'emailPro', 'statut', 'code', 'structure'];
     }
 
 
@@ -1368,8 +1368,8 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get contrat
      *
-     * @param \Contrat\Entity\Db\TypeContrat $typeContrat
-     * @param \Application\Entity\Db\Structure   $structure
+     * @param \Contrat\Entity\Db\TypeContrat   $typeContrat
+     * @param \Application\Entity\Db\Structure $structure
      *
      * @return Collection
      */

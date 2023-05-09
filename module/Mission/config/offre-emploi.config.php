@@ -29,6 +29,11 @@ return [
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_MODIFIER,
                     'action'     => 'saisir',
                 ],
+                'detail'    => [
+                    'route'      => '/detail[/:offreEmploi]',
+                    'controller' => OffreEmploiController::class,
+                    'action'     => 'detail',
+                ],
                 'get'       => [
                     'route'      => '/get/:offreEmploi',
                     'controller' => OffreEmploiController::class,
@@ -64,11 +69,7 @@ return [
                     'action'     => 'postuler',
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
                 ],
-                'public'    => [
-                    'route'      => '/public[/:offreEmploi]',
-                    'controller' => OffreEmploiController::class,
-                    'action'     => 'public',
-                ],
+
 
             ],
 
@@ -113,6 +114,8 @@ return [
                 Privileges::MISSION_OFFRE_EMPLOI_MODIFIER,
                 Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
                 Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
+                Privileges::MISSION_CANDIDATURE_VISUALISATION,
+                Privileges::MISSION_CANDIDATURE_VALIDER,
 
             ],
             'resources'  => 'OffreEmploi',
@@ -125,7 +128,7 @@ return [
     'guards' => [
         [
             'controller' => OffreEmploiController::class,
-            'action'     => ['index', 'saisir',],
+            'action'     => ['saisir'],
             'privileges' => [
                 Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             ],
@@ -153,7 +156,7 @@ return [
         ],
         [
             'controller' => OffreEmploiController::class,
-            'action'     => ['public', 'list', 'get'],
+            'action'     => ['index', 'detail', 'list', 'get'],
             'roles'      => ['guest'],
 
         ],

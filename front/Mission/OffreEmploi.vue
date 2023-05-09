@@ -1,14 +1,14 @@
 <template>
-    <div class="col" v-if="isPublic && !this.extended">
+    <div class="col" v-if="!this.extended">
         <div class="card h-100">
             <div class="card-header">
                 <h4> {{ offre.titre }}</h4>
                 <span class="badge rounded-pill bg-info">{{ offre.nombreHeures }} heure(s)</span> &nbsp;
                 <span v-if="nbPostesRestants > 0" class="badge rounded-pill bg-success">{{ nbPostesRestants }} poste(s) restant(s)</span>&nbsp;
                 <span v-if="nbPostesRestants <= 0" class="badge rounded-pill bg-danger">Tous les postes sont pourvus</span>&nbsp;
-                <span v-if="offre.validation && !this.public" class="badge rounded-pill bg-success">Valider le <u-date
+                <span v-if="offre.validation" class="badge rounded-pill bg-success">Valider le <u-date
                         :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}</span>
-                <span v-if="!offre.validation && !this.public" class="badge rounded-pill bg-warning"> En attente de validation par la DRH</span>&nbsp;
+                <span v-if="!offre.validation" class="badge rounded-pill bg-warning"> En attente de validation par la DRH</span>&nbsp;
             </div>
 
             <div class="card-body">
@@ -31,19 +31,19 @@
             </div>
             <div class="card-footer">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a v-if="offre.validation && offre.canValide && !this.public"
+                    <a v-if="offre.validation && offre.canValide"
                        :href="devaliderUrl"
                        class="btn btn-danger"
                        @click.prevent="devalider">Devalider</a>
-                    <a v-if="!offre.validation && offre.canValide  && !this.public"
+                    <a v-if="!offre.validation && offre.canValide"
                        :href="validerUrl"
                        class="btn btn-success"
                        @click.prevent="valider">Valider</a>
-                    <a v-if="offre.canSaisie && !this.public"
+                    <a v-if="offre.canModifier"
                        :href="saisirUrl"
                        class="btn btn-primary"
                        @click.prevent="saisir">Modifier</a>
-                    <a v-if="offre.canSupprime && !this.public"
+                    <a v-if="offre.canSupprime"
                        :href="supprimerUrl"
                        class="btn btn-danger"
                        data-title="Suppression de l'offre"
@@ -52,10 +52,7 @@
                     <a :href="consulterUrl"
                        class="btn btn-primary"
                     >Plus d'information</a>
-                    <a v-if="this.public"
-                       :href="consulterUrl"
-                       class="btn btn-primary"
-                    >Plus d'information</a>
+
                 </div>
             </div>
         </div>
@@ -68,13 +65,13 @@
                 postuler.
             </div>
         </div>
-        <div v-if="!offre.canPostuler" class="alert alert-primary d-flex align-items-center" role="alert">
+        <div v-if="!offre.canPostuler && this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
             <i class="fa-solid fa-circle-xmark"></i>
             <div class="ms-2">
                 Vous n'avez pas les droits pour postuler à cette offre, merci de contacter votre administration de rattachement.
             </div>
         </div>
-        <div v-if="isCandidat" class="alert alert-primary d-flex align-items-center" role="alert">
+        <div v-if="isCandidat && this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
             <i class="fa-solid fa-circle-xmark"></i>
             <div class="ms-2">
                 Vous avez déjà postulé à cette offre.
@@ -108,23 +105,46 @@
 
         {{ offre.description }}
         <br/><br/>
+        <div v-if="this.canVoirCandidature">
+            <h5><strong>Liste des candidats :</strong></h5>
 
-        <h2>Candidats en cours</h2>
+            <table class="table table-bordered ">
+                <thead>
+                <tr>
+                    <th>Intervenant</th>
+                    <th>Composante</th>
+                    <th>Etat</th>
+                    <th v-if="canValiderCandidature">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-if="offre.candidatures.length == 0">
+                    <td v-if="canValiderCandidature" colspan="4" style="text-align:center;">Aucune candidature</td>
+                    <td v-if="!canValiderCandidature" colspan="3" style="text-align:center;">Aucune candidature</td>
+                </tr>
+                <tr v-for="candidature in offre.candidatures">
+                    <td><a :href="'/intervenant/code:' + candidature.intervenant.code + '/voir'">
+                        {{ candidature.intervenant.prenom+' '+candidature.intervenant.nomUsuel }}</a></td>
+                    <td>{{ candidature.intervenant.structure.libelleLong }}</td>
+                    <th> <span v-if="candidature.intervenant.validation" class="badge rounded-pill bg-success">Valider le <u-date
+                            :value="candidature.intervenant.validation.histoCreation"/> par {{
+                            candidature.intervenant.validation.histoCreateur.displayName
+                        }}</span>
+                        <span v-if="!candidature.intervenant.validation" class="badge rounded-pill bg-warning">En attente de validation</span>
+                    </th>
+                    <td v-if="this.canValiderCandidature">
+                        <a :href="'/intervenant/code:' + candidature.intervenant.code + '/voir'" v-if="!candidature.intervenant.validation">Valider </a>
+                    </td>
+                </tr>
+                </tbody>
 
-        <div>
-            <ul>
-                <li v-for="candidature in offre.candidatures">
-                    {{ candidature.intervenant.prenom+' '+candidature.intervenant.nomUsuel }}
-                    <a :href="'/intervenant/code:' + candidature.intervenant.code + '/voir'">Voir</a>
-                </li>
-
-            </ul>
+            </table>
         </div>
 
 
         <div class="mt-5">
-            <a class="btn btn-primary" href="/offre-emploi/public">Retour aux offres</a>&nbsp;
-            <a :class="isDisabled" :href="postulerUrl" data-bs-toggle="tooltip" data-bs-placement="top"
+            <a class="btn btn-primary" href="/offre-emploi">Retour aux offres</a>&nbsp;
+            <a :class="isDisabled" :href="'/offre-emploi/postuler/' + offre.id" data-bs-toggle="tooltip" data-bs-placement="top"
                data-bs-original-title="Vous devez être connecté pour postuler">Postuler</a>
 
 
@@ -140,13 +160,15 @@ export default {
     name: "OffreEmploi.vue",
     props: {
         offre: {required: true},
-        public: {type: Boolean, required: false},
         utilisateur: {required: false},
         intervenant: {required: false},
         extended: {type: Boolean, required: false},
+        canModifier: {type: Boolean, required: false},
         canPostuler: {type: Boolean, required: false},
         canValider: {type: Boolean, required: false},
         canSupprimer: {type: Boolean, required: false},
+        canVoirCandidature: {type: Boolean, required: false},
+        canValiderCandidature: {type: Boolean, required: false},
     },
     data()
     {
@@ -156,22 +178,12 @@ export default {
             supprimerUrl: unicaenVue.url("offre-emploi/supprimer/:offre", {offre: this.offre.id}),
             validerUrl: unicaenVue.url('offre-emploi/valider/:offre', {offre: this.offre.id}),
             devaliderUrl: unicaenVue.url('offre-emploi/devalider/:offre', {offre: this.offre.id}),
-            consulterUrl: unicaenVue.url('offre-emploi/public/:offre', {offre: this.offre.id}),
-            postulerUrl: unicaenVue.url('offre-emploi/postuler/:offre', {offre: this.offre.id})
+            consulterUrl: unicaenVue.url('offre-emploi/detail/:offre', {offre: this.offre.id}),
         };
     },
     computed: {
-        isPublic: function () {
-            if (this.public === false) {
-                return true;
-            } else if (this.public === true && this.offre.validation != null) {
-                return true;
-            } else {
-                return false;
-            }
-        },
         isDisabled: function () {
-            if (!this.offre.canPostuler || this.offre.candidats.indexOf(this.intervenant.id) !== -1) {
+            if (!this.offre.canPostuler || this.offre.candidats.indexOf(this.intervenant.id) == -1) {
                 return 'btn btn-primary disabled';
             }
             return 'btn btn-primary';

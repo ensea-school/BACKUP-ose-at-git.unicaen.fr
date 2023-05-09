@@ -88,7 +88,8 @@ class OffreEmploiController extends AbstractController
          */
         $query = $this->getServiceOffreEmploi()->query([]);
 
-        $properties = ['typeMission',
+        $properties = ['id',
+                       ['typeMission', ['libelle']],
                        'dateDebut',
                        'dateFin',
                        'structure',
@@ -101,8 +102,8 @@ class OffreEmploiController extends AbstractController
                        'validation',
                        'candidats',
                        'candidaturesValides',
-                       ['candidatures', ['intervenant', 'validation']],
-        ];
+                       ['candidatures', ['intervenant', ['statut', 'structure'], 'validation'],
+                       ]];
 
 
         return new AxiosModel($query, $properties, $this->getServiceOffreEmploi()->getOffreEmploiPrivileges());
@@ -124,6 +125,13 @@ class OffreEmploiController extends AbstractController
         }
 
         return $this->getAction($offre);
+    }
+
+
+
+    public function validerCandidatureAction()
+    {
+
     }
 
 
@@ -169,7 +177,7 @@ class OffreEmploiController extends AbstractController
 
 
 
-    public function publicAction()
+    public function detailAction()
     {
         /**
          * @var OffreEmploi $offreEmploi
@@ -197,21 +205,23 @@ class OffreEmploiController extends AbstractController
 
         $this->em()->clear();
 
-        $properties = ['typeMission',
-                       'dateDebut',
-                       'dateFin',
-                       'structure',
-                       'titre',
-                       'description',
-                       'nombreHeures',
-                       'nombrePostes',
-                       'histoCreation',
-                       'histoCreateur',
-                       'validation',
-                       'candidats',
-                       'candidaturesValides',
-                       ['candidatures', ['intervenant', 'validation']],
-        ];
+        $properties = [
+            'id',
+            ['typeMission', ['libelle']],
+            'dateDebut',
+            'dateFin',
+            'structure',
+            'titre',
+            'description',
+            'nombreHeures',
+            'nombrePostes',
+            'histoCreation',
+            'histoCreateur',
+            'validation',
+            'candidats',
+            'candidaturesValides',
+            ['candidatures', ['intervenant', ['statut', 'structure'], 'validation'],
+            ]];
 
         $query = $this->getServiceOffreEmploi()->query(['offreEmploi' => $offreEmploi]);
 

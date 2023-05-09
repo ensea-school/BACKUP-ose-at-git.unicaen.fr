@@ -12,13 +12,14 @@ use Laminas\Permissions\Acl\Role\RoleInterface;
 use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenVue\Axios\AxiosExtractorInterface;
 
 /**
  * Description of Statut
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterface, EntityManagerAwareInterface
+class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterface, EntityManagerAwareInterface, AxiosExtractorInterface
 {
     const CODE_AUTRES       = 'AUTRES';
     const CODE_NON_AUTORISE = 'NON_AUTORISE';
@@ -203,6 +204,13 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function getRoleId(): string
     {
         return 'statut/' . $this->getCode();
+    }
+
+
+
+    public function axiosDefinition(): array
+    {
+        return ['libelle', 'code'];
     }
 
 

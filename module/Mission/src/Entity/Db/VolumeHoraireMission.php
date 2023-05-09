@@ -9,13 +9,14 @@ use Contrat\Entity\Db\ContratAwareTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Plafond\Interfaces\PlafondDataInterface;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
-class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInterface, ResourceInterface
+class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInterface, ResourceInterface, PlafondDataInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;

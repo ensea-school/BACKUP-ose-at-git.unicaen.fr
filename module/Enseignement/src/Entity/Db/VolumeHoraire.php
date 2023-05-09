@@ -13,6 +13,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\Traits\TypeInterventionAwareTrait;
+use Plafond\Interfaces\PlafondDataInterface;
+use Plafond\Interfaces\PlafondPerimetreInterface;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
@@ -21,7 +23,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
-class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
+class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, PlafondDataInterface, PlafondPerimetreInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;

@@ -65,16 +65,19 @@ class VolumeHoraireController extends AbstractController
     }
 
 
+
     public function saisieAction()
     {
         return $this->saisieMixte($this->getFormVolumeHoraireSaisie());
     }
 
 
+
     public function saisieCalendaireAction()
     {
         return $this->saisieMixte($this->getFormVolumeHoraireSaisieCalendaire());
     }
+
 
 
     private function saisieMixte(AbstractForm $form)
@@ -124,7 +127,7 @@ class VolumeHoraireController extends AbstractController
                 $this->getServiceService()->save($service);
                 $hFin = $volumeHoraireListe->getHeures();
                 $this->updateTableauxBord($service->getIntervenant());
-                if (!$this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $vhl->getTypeVolumeHoraire(), $hFin < $hDeb)) {
+                if (!$this->getProcessusPlafond()->endTransaction($service, $vhl->getTypeVolumeHoraire(), $hFin < $hDeb)) {
                     $this->updateTableauxBord($service->getIntervenant());
                 } else {
                     $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
@@ -136,6 +139,7 @@ class VolumeHoraireController extends AbstractController
 
         return compact('form');
     }
+
 
 
     public function suppressionCalendaireAction()
@@ -159,7 +163,7 @@ class VolumeHoraireController extends AbstractController
             $this->getProcessusPlafond()->beginTransaction();
             $this->getServiceService()->save($service);
             $this->updateTableauxBord($service->getIntervenant());
-            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $volumeHoraireListe->getTypeVolumeHoraire(), true);
+            $this->getProcessusPlafond()->endTransaction($service, $volumeHoraireListe->getTypeVolumeHoraire(), true);
             $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -167,6 +171,7 @@ class VolumeHoraireController extends AbstractController
 
         return new MessengerViewModel();
     }
+
 
 
     private function updateTableauxBord(Intervenant $intervenant)

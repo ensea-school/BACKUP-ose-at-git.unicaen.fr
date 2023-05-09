@@ -2,17 +2,11 @@
 
 namespace Plafond\Processus;
 
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
-use Enseignement\Entity\Db\VolumeHoraire;
+use Application\Processus\AbstractProcessus;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Mission\Entity\Db\Mission;
-use OffreFormation\Entity\Db\ElementPedagogique;
+use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Service\PlafondServiceAwareTrait;
-use Referentiel\Entity\Db\FonctionReferentiel;
 use Service\Entity\Db\TypeVolumeHoraire;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 
 
 /**
@@ -20,9 +14,8 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class PlafondProcessus implements EntityManagerAwareInterface
+class PlafondProcessus extends AbstractProcessus
 {
-    use EntityManagerAwareTrait;
     use PlafondServiceAwareTrait;
 
     /**
@@ -55,12 +48,12 @@ class PlafondProcessus implements EntityManagerAwareInterface
 
 
     /**
-     * @param Intervenant       $entity
+     * @param PlafondDataInterface $entity
      * @param TypeVolumeHoraire $typeVolumeHoraire
      *
      * @return bool
      */
-    public function endTransaction(Intervenant $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $isDiminution = false): bool
+    public function endTransaction(PlafondDataInterface $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $isDiminution = false): bool
     {
         //$this->getEntityManager()->flush();
 
@@ -83,12 +76,12 @@ class PlafondProcessus implements EntityManagerAwareInterface
 
 
     /**
-     * @param Intervenant       $entity
+     * @param PlafondDataInterface $entity
      * @param TypeVolumeHoraire $typeVolumeHoraire
      *
      * @return bool
      */
-    public function controle(Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel|Mission $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $pourBlocage = false): bool
+    public function controle(PlafondDataInterface $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $pourBlocage = false): bool
     {
         $blocage = false;
         $reponse = $this->getServicePlafond()->controle($entity, $typeVolumeHoraire, $pourBlocage);

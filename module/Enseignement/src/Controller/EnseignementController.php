@@ -190,7 +190,7 @@ class EnseignementController extends AbstractController
                         $form->get('service')->get('id')->setValue($service->getId()); // transmet le nouvel ID
                         $hFin = $service->getVolumeHoraireListe()->getHeures();
                         $this->updateTableauxBord($service->getIntervenant());
-                        if (!$this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire, $hFin < $hDeb)) {
+                        if (!$this->getProcessusPlafond()->endTransaction($service, $typeVolumeHoraire, $hFin < $hDeb)) {
                             $this->updateTableauxBord($service->getIntervenant());
                         }
                     } catch (\Exception $e) {
@@ -302,7 +302,7 @@ class EnseignementController extends AbstractController
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
-            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire, true);
+            $this->getProcessusPlafond()->endTransaction($service, $typeVolumeHoraire, true);
         }
 
         return new MessengerViewModel;

@@ -10,6 +10,8 @@ use Application\Traits\ParametreEntityTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
 use Paiement\Entity\Db\TauxRemu;
+use Plafond\Interfaces\PlafondDataInterface;
+use Plafond\Interfaces\PlafondPerimetreInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -18,7 +20,7 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterface, EntityManagerAwareInterface
+class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterface, EntityManagerAwareInterface, PlafondPerimetreInterface, PlafondDataInterface
 {
     const CODE_AUTRES       = 'AUTRES';
     const CODE_NON_AUTORISE = 'NON_AUTORISE';

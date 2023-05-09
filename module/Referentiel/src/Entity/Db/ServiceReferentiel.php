@@ -7,6 +7,7 @@ use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\MotifNonPaiementAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\TagAwareTrait;
+use Plafond\Interfaces\PlafondDataInterface;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
@@ -23,7 +24,7 @@ use Referentiel\Entity\VolumeHoraireReferentielListe;
 /**
  * ServiceReferentiel
  */
-class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
+class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, PlafondDataInterface
 {
     use FonctionReferentielAwareTrait;
     use HistoriqueAwareTrait;

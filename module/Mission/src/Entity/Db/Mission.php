@@ -11,13 +11,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Paiement\Entity\Db\TauxRemu;
+use Plafond\Interfaces\PlafondDataInterface;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
-class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityManagerAwareInterface
+class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityManagerAwareInterface, PlafondDataInterface
 {
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;

@@ -14,6 +14,7 @@ use Enseignement\Entity\VolumeHoraireListe;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\TypeIntervention;
+use Plafond\Interfaces\PlafondDataInterface;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -21,7 +22,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
-class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
+class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, PlafondDataInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;

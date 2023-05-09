@@ -121,7 +121,7 @@ class DerogationController extends AbstractController
         if ($changed) {
             $this->flashMessenger()->addSuccessMessage('Les modifications ont bien été prises en compte');
         }
-        $this->getServicePlafond()->calculerPourIntervenant($intervenant);
+        $this->getServicePlafond()->calculerDepuisEntite($intervenant);
     }
 
 }

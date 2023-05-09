@@ -2,14 +2,10 @@
 
 namespace Plafond\View\Helper;
 
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
-use Enseignement\Entity\Db\VolumeHoraire;
 use Laminas\View\Helper\AbstractHtmlElement;
-use OffreFormation\Entity\Db\ElementPedagogique;
 use Plafond\Entity\PlafondControle;
+use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Service\PlafondServiceAwareTrait;
-use Referentiel\Entity\Db\FonctionReferentiel;
 use Service\Entity\Db\TypeVolumeHoraire;
 
 
@@ -22,9 +18,9 @@ class PlafondsViewHelper extends AbstractHtmlElement
 {
     use PlafondServiceAwareTrait;
 
-    private Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity;
+    private PlafondDataInterface $entity;
 
-    private TypeVolumeHoraire                                                          $typeVolumeHoraire;
+    private TypeVolumeHoraire $typeVolumeHoraire;
 
     /**
      * @var PlafondControle[]
@@ -37,11 +33,11 @@ class PlafondsViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    public function __invoke(Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity, TypeVolumeHoraire $typeVolumeHoraire)
+    public function __invoke(PlafondDataInterface $entity, TypeVolumeHoraire $typeVolumeHoraire)
     {
-        $this->entity            = $entity;
+        $this->entity = $entity;
         $this->typeVolumeHoraire = $typeVolumeHoraire;
-        $this->plafonds          = $this->getServicePlafond()->controle($entity, $typeVolumeHoraire);
+        $this->plafonds = $this->getServicePlafond()->data($entity, $typeVolumeHoraire);
 
         return $this;
     }
@@ -65,13 +61,13 @@ class PlafondsViewHelper extends AbstractHtmlElement
         $contenu = $this->affichage();
         if (!empty($contenu)) {
             $params = [
-                'perimetre'         => $this->getServicePlafond()->entityToPerimetreCode($this->entity),
-                'id'                => $this->entity->getId(),
+                'id' => $this->entity->getId(),
+                'class' => str_replace('\\', '_', get_class($this->entity)),
                 'typeVolumeHoraire' => $this->typeVolumeHoraire->getId(),
             ];
 
             $attrs = [
-                'class'    => 'plafonds',
+                'class' => 'plafonds',
                 'data-url' => $this->getView()->url('plafond/plafonds', $params),
             ];
 
@@ -91,7 +87,7 @@ class PlafondsViewHelper extends AbstractHtmlElement
         foreach ($this->plafonds as $plafond) {
             if ($plafond->getHeures() > 0) {
                 $html .= $this->affichagePlafond($plafond);
-                $aff  = true;
+                $aff = true;
             }
         }
 
@@ -109,10 +105,10 @@ class PlafondsViewHelper extends AbstractHtmlElement
         $labAttrs = ['class' => ['badge']];
         if ($plafond->isBloquant()) {
             $labAttrs['class'][] = 'bg-danger';
-            $labAttrs['title']   = 'Plafond bloquant';
+            $labAttrs['title'] = 'Plafond bloquant';
         } else {
             $labAttrs['class'][] = 'bg-info';
-            $labAttrs['title']   = 'Plafond informatif';
+            $labAttrs['title'] = 'Plafond informatif';
         }
 
 
@@ -168,12 +164,12 @@ class PlafondsViewHelper extends AbstractHtmlElement
                 'class' => 'progress',
             ])->html(
                 $t('div', [
-                    'class'         => 'progress-bar progress-bar-striped progress-bar-' . $color,
-                    'role'          => 'progressbar',
+                    'class' => 'progress-bar progress-bar-striped progress-bar-' . $color,
+                    'role' => 'progressbar',
                     'aria-valuenow' => $progression,
                     'aria-valuemin' => 0,
                     'aria-valuemax' => 100,
-                    'style'         => 'width:' . $progression . '%',
+                    'style' => 'width:' . $progression . '%',
                 ])->text($text1) . $text2
             )
         );

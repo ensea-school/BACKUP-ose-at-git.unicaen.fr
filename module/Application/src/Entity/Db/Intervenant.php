@@ -21,6 +21,7 @@ use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\Traits\DisciplineAwareTrait;
+use Plafond\Interfaces\PlafondDataInterface;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\HistoIntervenantService;
 use Service\Entity\Db\ModificationServiceDu;
@@ -36,7 +37,7 @@ use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
  * Intervenant
  *
  */
-class Intervenant implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, EntityManagerAwareInterface, AdresseInterface
+class Intervenant implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, EntityManagerAwareInterface, AdresseInterface, PlafondDataInterface
 {
     use AnneeAwareTrait;
     use StructureAwareTrait;

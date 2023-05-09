@@ -66,11 +66,9 @@ class PlafondController extends AbstractController
 
     public function plafondsAction()
     {
-        $perimetre           = $this->params()->fromRoute('perimetre');
         $id                  = (int)$this->params()->fromRoute('id');
+        $class               = str_replace( '_', '\\', $this->params()->fromRoute('class'));
         $typeVolumeHoraireId = (int)$this->params()->fromRoute('typeVolumeHoraire');
-
-        $class = $this->getServicePlafond()->perimetreCodeToEntityClass($perimetre);
 
         $entity            = $this->em()->find($class, $id);
         $typeVolumeHoraire = $this->em()->find(TypeVolumeHoraire::class, $typeVolumeHoraireId);

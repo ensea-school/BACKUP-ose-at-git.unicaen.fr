@@ -150,7 +150,7 @@ class ServiceReferentielController extends AbstractController
                 }
                 $hFin = $entity->getVolumeHoraireReferentielListe()->getHeures();
                 $this->updateTableauxBord($intervenant);
-                if (!$this->getProcessusPlafond()->endTransaction($intervenant, $typeVolumeHoraire, $hFin < $hDeb)) {
+                if (!$this->getProcessusPlafond()->endTransaction($service, $typeVolumeHoraire, $hFin < $hDeb)) {
                     $this->updateTableauxBord($intervenant);
                 }
             } else {
@@ -217,7 +217,7 @@ class ServiceReferentielController extends AbstractController
                     $this->getProcessusPlafond()->beginTransaction();
                     $this->getServiceServiceReferentiel()->setRealisesFromPrevus($service);
                     $this->updateTableauxBord($service->getIntervenant());
-                    $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire);
+                    $this->getProcessusPlafond()->endTransaction($service, $typeVolumeHoraire);
                 }
             }
         }
@@ -257,7 +257,7 @@ class ServiceReferentielController extends AbstractController
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
-            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire, true);
+            $this->getProcessusPlafond()->endTransaction($service, $typeVolumeHoraire, true);
         }
 
         return new MessengerViewModel;

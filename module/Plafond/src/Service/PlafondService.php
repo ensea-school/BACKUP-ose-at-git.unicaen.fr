@@ -8,7 +8,9 @@ use Application\Service\AbstractEntityService;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Intervenant\Entity\Db\Statut;
+use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\TypeMission;
+use Mission\Entity\Db\VolumeHoraireMission;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use Plafond\Entity\Db\Plafond;
 use Plafond\Entity\Db\PlafondEtat;
@@ -18,9 +20,13 @@ use Plafond\Entity\Db\PlafondReferentiel;
 use Plafond\Entity\Db\PlafondStatut;
 use Plafond\Entity\Db\PlafondStructure;
 use Plafond\Entity\PlafondControle;
+use Plafond\Entity\PlafondQueryParams;
 use Plafond\Interfaces\PlafondConfigInterface;
+use Plafond\Interfaces\PlafondDataInterface;
+use Plafond\Interfaces\PlafondPerimetreInterface;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Referentiel\Entity\Db\ServiceReferentiel;
+use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenTbl\Service\Traits\QueryGeneratorServiceAwareTrait;
@@ -68,36 +74,16 @@ class PlafondService extends AbstractEntityService
 
 
     /**
-     * @param Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity
+     * @param PlafondDataInterface $entity
      * @param TypeVolumeHoraire $typeVolumeHoraire
-     * @param bool $pourBlocage
      *
      * @return PlafondControle[]
      */
-    public function controle(Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel $entity, TypeVolumeHoraire $typeVolumeHoraire, bool $pourBlocage = false): array
+    public function data(PlafondDataInterface $entity, TypeVolumeHoraire $typeVolumeHoraire): array
     {
         $sqls = [];
-        if ($entity instanceof Structure) {
-            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage, false, true);
-        } elseif ($entity instanceof Intervenant) {
-            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage, false, true);
-            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, PlafondPerimetre::STRUCTURE, $pourBlocage);
-            if (!$pourBlocage) {
-                $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, PlafondPerimetre::ELEMENT, $pourBlocage, false, true);
-                $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, PlafondPerimetre::REFERENTIEL, $pourBlocage, false, true);
-                $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, PlafondPerimetre::VOLUME_HORAIRE, $pourBlocage, false, true);
-            }
-        } elseif ($entity instanceof ElementPedagogique) {
-            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage, false, true);
-        } elseif ($entity instanceof VolumeHoraire) {
-            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage);
-        } elseif ($entity instanceof FonctionReferentiel) {
-            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage, false, true);
-        } elseif ($entity instanceof TypeMission) {
-            $sqls[] = $this->makeControleQuery($typeVolumeHoraire, $entity, null, $pourBlocage, false, true);
-        } else {
-            throw new \Exception('Entité non gérée pour les contrôles de plafonds');
-        }
+
+        $this->dataMakeQueries($entity, $typeVolumeHoraire, $sqls);
 
         $sql = implode("\n\nUNION ALL\n\n", $sqls);
         $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
@@ -107,6 +93,147 @@ class PlafondService extends AbstractEntityService
         }
 
         return $depassements;
+
+    }
+
+
+
+    protected function dataMakeQueries(PlafondDataInterface $entity, TypeVolumeHoraire $typeVolumeHoraire, array &$sqls)
+    {
+        $pqr = new PlafondQueryParams();
+        $pqr->entity = $entity;
+        $pqr->typeVolumeHoraire = $typeVolumeHoraire;
+        $pqr->useView = true;
+
+        $sqls[] = $this->makeQuery($pqr);
+
+        if ($entity instanceof Intervenant && $entity->getStructure()) {
+            $this->controleMakeQueries($entity->getStructure(), $typeVolumeHoraire, $sqls);
+        }
+
+        if ($entity instanceof Service) {
+            if ($entity->getElementPedagogique()){
+                $this->controleMakeQueries($entity->getElementPedagogique(), $typeVolumeHoraire, $sqls);
+            }
+        }
+
+        if ($entity instanceof VolumeHoraire && $entity->getService()) {
+            $this->controleMakeQueries($entity->getService(), $typeVolumeHoraire, $sqls);
+        }
+
+        if ($entity instanceof ServiceReferentiel) {
+            if ($entity->getFonctionReferentiel()){
+                $this->controleMakeQueries($entity->getFonctionReferentiel(), $typeVolumeHoraire, $sqls);
+            }
+        }
+
+        if ($entity instanceof VolumeHoraireReferentiel && $entity->getServiceReferentiel()) {
+            $this->controleMakeQueries($entity->getServiceReferentiel(), $typeVolumeHoraire, $sqls);
+        }
+
+        if ($entity instanceof Mission) {
+            if ($entity->getTypeMission()){
+                $this->controleMakeQueries($entity->getTypeMission(), $typeVolumeHoraire, $sqls);
+            }
+        }
+
+        if ($entity instanceof VolumeHoraireMission && $entity->getMission()) {
+            $this->controleMakeQueries($entity->getMission(), $typeVolumeHoraire, $sqls);
+        }
+    }
+
+
+
+
+    /**
+     * @param PlafondPerimetreInterface $entity
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param bool $pourBlocage
+     *
+     * @return PlafondControle[]
+     */
+    public function controle(PlafondDataInterface $entity, TypeVolumeHoraire $typeVolumeHoraire): array
+    {
+        $sqls = [];
+
+        $this->controleMakeQueries($entity, $typeVolumeHoraire, $sqls);
+
+        $sql = implode("\n\nUNION ALL\n\n", $sqls);
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
+        $depassements = [];
+        foreach ($res as $r) {
+            $depassements[] = PlafondControle::fromArray($r);
+        }
+
+        return $depassements;
+    }
+
+
+
+    protected function controleMakeQueries(PlafondDataInterface $entity, TypeVolumeHoraire $typeVolumeHoraire, array &$sqls)
+    {
+        $pqr = new PlafondQueryParams();
+        $pqr->entity = $entity;
+        $pqr->typeVolumeHoraire = $typeVolumeHoraire;
+        $pqr->useView = true;
+
+        $sqls[] = $this->makeQuery($pqr);
+
+        if ($entity instanceof Intervenant && $entity->getStructure()) {
+            $this->controleMakeQueries($entity->getStructure(), $typeVolumeHoraire, $sqls);
+        }
+
+        if ($entity instanceof ElementPedagogique && $entity->getStructure()) {
+            $this->controleMakeQueries($entity->getStructure(), $typeVolumeHoraire, $sqls);
+        }
+
+        if ($entity instanceof Service) {
+            if ($entity->getElementPedagogique()){
+                $this->controleMakeQueries($entity->getElementPedagogique(), $typeVolumeHoraire, $sqls);
+            }
+            if ($entity->getIntervenant()){
+                $this->controleMakeQueries($entity->getIntervenant(), $typeVolumeHoraire, $sqls);
+            }
+            if ($entity->getStructure()){
+                $this->controleMakeQueries($entity->getStructure(), $typeVolumeHoraire, $sqls);
+            }
+        }
+
+        if ($entity instanceof VolumeHoraire && $entity->getService()) {
+            $this->controleMakeQueries($entity->getService(), $typeVolumeHoraire, $sqls);
+        }
+
+        if ($entity instanceof ServiceReferentiel) {
+            if ($entity->getFonctionReferentiel()){
+                $this->controleMakeQueries($entity->getFonctionReferentiel(), $typeVolumeHoraire, $sqls);
+            }
+            if ($entity->getIntervenant()){
+                $this->controleMakeQueries($entity->getIntervenant(), $typeVolumeHoraire, $sqls);
+            }
+            if ($entity->getStructure()){
+                $this->controleMakeQueries($entity->getStructure(), $typeVolumeHoraire, $sqls);
+            }
+        }
+
+        if ($entity instanceof VolumeHoraireReferentiel && $entity->getServiceReferentiel()) {
+            $this->controleMakeQueries($entity->getServiceReferentiel(), $typeVolumeHoraire, $sqls);
+        }
+
+        if ($entity instanceof Mission) {
+            if ($entity->getTypeMission()){
+                $this->controleMakeQueries($entity->getTypeMission(), $typeVolumeHoraire, $sqls);
+            }
+            if ($entity->getIntervenant()){
+                $this->controleMakeQueries($entity->getIntervenant(), $typeVolumeHoraire, $sqls);
+            }
+            if ($entity->getStructure()){
+                $this->controleMakeQueries($entity->getStructure(), $typeVolumeHoraire, $sqls);
+            }
+        }
+
+        if ($entity instanceof VolumeHoraireMission && $entity->getMission()) {
+            $this->controleMakeQueries($entity->getMission(), $typeVolumeHoraire, $sqls);
+        }
     }
 
 
@@ -164,143 +291,81 @@ class PlafondService extends AbstractEntityService
 
 
 
-    /**
-     * Prend en entrée une entité ou bien sa classe
-     * Retourne le code du périmètre correspondant
-     *
-     * @param Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel|TypeMission|string $entity
-     *
-     * @return string
-     */
-    public function entityToPerimetreCode(Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel|TypeMission|string $entity): string
-    {
-        if (is_object($entity)) {
-            $class = get_class($entity);
-        } else {
-            $class = $entity;
-        }
-        switch ($class) {
-            case Structure::class:
-                return PlafondPerimetre::STRUCTURE;
-            case Intervenant::class:
-                return PlafondPerimetre::INTERVENANT;
-            case ElementPedagogique::class:
-                return PlafondPerimetre::ELEMENT;
-            case VolumeHoraire::class:
-                return PlafondPerimetre::VOLUME_HORAIRE;
-            case FonctionReferentiel::class:
-                return PlafondPerimetre::REFERENTIEL;
-            case TTypeMission::class:
-                return PlafondPerimetre::MISSION;
-        }
-    }
-
-
-
-    /**
-     * Prend entrée le code d'un périmè_tre de plafond
-     *
-     * Retourne la classe d'objet correspondante
-     *
-     * @param string $perimetreCode
-     *
-     * @return string
-     */
-    public function perimetreCodeToEntityClass(string $perimetreCode): string
-    {
-        switch ($perimetreCode) {
-            case PlafondPerimetre::REFERENTIEL:
-                return FonctionReferentiel::class;
-            case PlafondPerimetre::MISSION:
-                return TypeMission::class;
-            case PlafondPerimetre::VOLUME_HORAIRE:
-                return VolumeHoraire::class;
-            case PlafondPerimetre::ELEMENT:
-                return ElementPedagogique::class;
-            case PlafondPerimetre::INTERVENANT:
-                return Intervenant::class;
-            case PlafondPerimetre::STRUCTURE:
-                return Structure::class;
-        }
-    }
-
-
-
-    protected function makeControleQuery(
-        TypeVolumeHoraire                                                                      $typeVolumeHoraire,
-        Structure|Intervenant|ElementPedagogique|VolumeHoraire|FonctionReferentiel|TypeMission $entity,
-        string|PlafondPerimetre|null                                                           $perimetre = null,
-        bool                                                                                   $pourBlocage = false,
-        bool                                                                                   $bloquantUniquement = false,
-        bool                                                                                   $depassementsUniquement = false): string
+    protected function makeQuery(PlafondQueryParams $pqr): string
     {
         $filters = [];
 
-        if ($perimetre instanceof PlafondPerimetre) $perimetre = $perimetre->getCode();
+        if ($pqr->entity instanceof Structure) {
+            $perimetre = PlafondPerimetre::STRUCTURE;
+            $join = "JOIN STRUCTURE entity ON entity.id = pd.STRUCTURE_ID";
+            $libVal = 'entity.libelle_court';
+            $filters['pd.STRUCTURE_ID'] = (int)$pqr->entity->getId();
+            $filters['pd.ANNEE_ID'] = (int)$this->getServiceContext()->getAnnee()->getId();
 
-        if ($entity instanceof Structure) {
-            if (!$perimetre) $perimetre = PlafondPerimetre::STRUCTURE;
-            $filters['pd.STRUCTURE_ID'] = (int)$entity->getId();
+        } elseif ($pqr->entity instanceof Statut) {
+            $perimetre = PlafondPerimetre::INTERVENANT;
+            $join = "JOIN INTERVENANT entity ON entity.id = pd.INTERVENANT_ID";
+            $libVal = "entity.prenom || ' ' || entity.nom_usuel";
+            $filters['pd.ANNEE_ID'] = (int)$pqr->entity->getAnnee()->getId();
+
+        } elseif ($pqr->entity instanceof Intervenant) {
+            $perimetre = PlafondPerimetre::INTERVENANT;
+            $join = "JOIN INTERVENANT entity ON entity.id = pd.INTERVENANT_ID";
+            $libVal = "entity.prenom || ' ' || entity.nom_usuel";
+            $filters['pd.INTERVENANT_ID'] = (int)$pqr->entity->getId();
+
+        } elseif ($pqr->entity instanceof ElementPedagogique) {
+            $perimetre = PlafondPerimetre::ELEMENT;
+            $join = "JOIN ELEMENT_PEDAGOGIQUE entity ON entity.id = pd.ELEMENT_PEDAGOGIQUE_ID";
+            $libVal = 'entity.libelle';
+            $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$pqr->entity->getId();
+
+        } elseif ($pqr->entity instanceof Service) {
+            return $this->makeQuery($pqr->sub($pqr->entity->getElementPedagogique()));
+
+        } elseif ($pqr->entity instanceof VolumeHoraire) {
+            $perimetre = PlafondPerimetre::VOLUME_HORAIRE;
+            $join = "JOIN ELEMENT_PEDAGOGIQUE entity1 ON entity1.id = pd.ELEMENT_PEDAGOGIQUE_ID\n";
+            $join .= "JOIN TYPE_INTERVENTION entity2 ON entity2.id = pd.TYPE_INTERVENTION_ID";
+            $libVal = "entity1.code || ' ' || entity2.code ";
+            $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$pqr->entity->getService()->getElementPedagogique()->getId();
+            $filters['pd.TYPE_INTERVENTION_ID'] = (int)$pqr->entity->getTypeIntervention()->getId();
+
+        } elseif ($pqr->entity instanceof FonctionReferentiel) {
+            $perimetre = PlafondPerimetre::REFERENTIEL;
+            $join = "JOIN FONCTION_REFERENTIEL entity ON entity.id = pd.FONCTION_REFERENTIEL_ID";
+            $libVal = 'entity.libelle_court';
+            $filters['pd.FONCTION_REFERENTIEL_ID'] = (int)$pqr->entity->getId();
             $filters['pd.ANNEE_ID'] = (int)$this->getServiceContext()->getAnnee()->getId();
-        } elseif ($entity instanceof Intervenant) {
-            if (!$perimetre) $perimetre = PlafondPerimetre::INTERVENANT;
-            $filters['pd.INTERVENANT_ID'] = (int)$entity->getId();
-        } elseif ($entity instanceof ElementPedagogique) {
-            if (!$perimetre) $perimetre = PlafondPerimetre::ELEMENT;
-            $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$entity->getId();
-        } elseif ($entity instanceof VolumeHoraire) {
-            if (!$perimetre) $perimetre = PlafondPerimetre::VOLUME_HORAIRE;
-            $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$entity->getService()->getElementPedagogique()->getId();
-            $filters['pd.TYPE_INTERVENTION_ID'] = (int)$entity->getTypeIntervention()->getId();
-        } elseif ($entity instanceof FonctionReferentiel) {
-            if (!$perimetre) $perimetre = PlafondPerimetre::REFERENTIEL;
-            $filters['pd.FONCTION_REFERENTIEL_ID'] = (int)$entity->getId();
+
+        } elseif ($pqr->entity instanceof ServiceReferentiel) {
+            return $this->makeQuery($pqr->sub($pqr->entity->getFonctionReferentiel()));
+
+        } elseif ($pqr->entity instanceof VolumeHoraireReferentiel) {
+            return $this->makeQuery($pqr->sub($pqr->entity->getServiceReferentiel()));
+
+        } elseif ($pqr->entity instanceof TypeMission) {
+            $perimetre = PlafondPerimetre::MISSION;
+            $join = "JOIN TYPE_MISSION entity ON entity.id = pd.TYPE_MISSION_ID";
+            $libVal = 'entity.libelle';
+            $filters['pd.TYPE_MISSION_ID'] = (int)$pqr->entity->getId();
             $filters['pd.ANNEE_ID'] = (int)$this->getServiceContext()->getAnnee()->getId();
-        } elseif ($entity instanceof TypeMission) {
-            if (!$perimetre) $perimetre = PlafondPerimetre::MISSION;
-            $filters['pd.TYPE_MISSION_ID'] = (int)$entity->getId();
-            $filters['pd.ANNEE_ID'] = (int)$this->getServiceContext()->getAnnee()->getId();
+
+        } elseif ($pqr->entity instanceof Mission) {
+            return $this->makeQuery($pqr->sub($pqr->entity->getTypeMission()));
+
+        } elseif ($pqr->entity instanceof VolumeHoraireMission) {
+            return $this->makeQuery($pqr->sub($pqr->entity->getMission()));
+
         } else {
             throw new \Exception('Entité non reconnue pour la création de la requête de contrôle');
         }
 
-        if ($pourBlocage) {
-            $bloquantUniquement = true;
-        }
-        if ($bloquantUniquement) {
-            $depassementsUniquement = true;
+        if ($pqr->bloquantUniquement) {
             $filters['pe.bloquant'] = 1;
         }
-        if ($depassementsUniquement) {
+        if ($pqr->depassementsUniquement) {
             $filters['pd.depassement'] = 1;
-        }
-
-        switch ($perimetre) {
-            case PlafondPerimetre::STRUCTURE:
-                $join = "JOIN STRUCTURE entity ON entity.id = pd.STRUCTURE_ID";
-                $libVal = 'entity.libelle_court';
-                break;
-            case PlafondPerimetre::INTERVENANT:
-                $join = "JOIN INTERVENANT entity ON entity.id = pd.INTERVENANT_ID";
-                $libVal = "entity.prenom || ' ' || entity.nom_usuel";
-                break;
-            case PlafondPerimetre::ELEMENT:
-                $join = "JOIN ELEMENT_PEDAGOGIQUE entity ON entity.id = pd.ELEMENT_PEDAGOGIQUE_ID";
-                $libVal = 'entity.libelle';
-                break;
-            case PlafondPerimetre::VOLUME_HORAIRE:
-                $join = "JOIN ELEMENT_PEDAGOGIQUE entity1 ON entity1.id = pd.ELEMENT_PEDAGOGIQUE_ID\n";
-                $join .= "JOIN TYPE_INTERVENTION entity2 ON entity2.id = pd.TYPE_INTERVENTION_ID";
-                $libVal = "entity1.code || ' ' || entity2.code ";
-                break;
-            case PlafondPerimetre::REFERENTIEL:
-                $join = "JOIN FONCTION_REFERENTIEL entity ON entity.id = pd.FONCTION_REFERENTIEL_ID";
-                $libVal = 'entity.libelle_court';
-                break;
-            case PlafondPerimetre::MISSION:
-                $join = "JOIN TYPE_MISSION entity ON entity.id = pd.TYPE_MISSION_ID";
-                $libVal = 'entity.libelle';
-                break;
         }
 
         /*
@@ -322,14 +387,14 @@ class PlafondService extends AbstractEntityService
               pd.plafond     plafond,
               pd.derogation  derogation
             FROM 
-              " . ($pourBlocage ? 'v_' : '') . "tbl_plafond_" . $perimetre . " pd
+              " . ($pqr->useView ? 'v_' : '') . "tbl_plafond_" . $perimetre . " pd
               JOIN plafond               p ON p.id = pd.plafond_id
               JOIN plafond_etat         pe ON pe.id = pd.plafond_etat_id
               JOIN plafond_perimetre    pp ON pp.id = p.plafond_perimetre_id
               $join
             WHERE
               pe.code NOT IN ('desactive', 'indicateur')
-              AND pd.type_volume_horaire_id = " . ((int)$typeVolumeHoraire->getId());
+              AND pd.type_volume_horaire_id = " . ((int)$pqr->typeVolumeHoraire->getId());
 
         foreach ($filters as $v => $c) {
             $sql .= "\n  AND $v = $c";
@@ -495,10 +560,15 @@ class PlafondService extends AbstractEntityService
      * @param array $tableauxBords
      * @param Intervenant|int $intervenant
      */
-    public function calculerDepuisEntite($entity)
+    public function calculerDepuisEntite(PlafondDataInterface $entity)
     {
         if ($entity instanceof Structure) {
             $this->calculer(PlafondPerimetre::STRUCTURE, 'STRUCTURE_ID', $entity->getId());
+        }
+
+        if ($entity instanceof Statut) {
+            // on calcule pout toute l'année, car on ne dispose pas du filtre par statut
+            $this->calculer(PlafondPerimetre::INTERVENANT, 'ANNEE_ID', $entity->getAnnee()->getId());
         }
 
         if ($entity instanceof Intervenant) {
@@ -510,6 +580,7 @@ class PlafondService extends AbstractEntityService
 
         if ($entity instanceof ElementPedagogique) {
             $this->calculer(PlafondPerimetre::ELEMENT, 'ELEMENT_PEDAGOGIQUE_ID', $entity->getId());
+            $this->calculer(PlafondPerimetre::VOLUME_HORAIRE, 'ELEMENT_PEDAGOGIQUE_ID', $entity->getId());
             if ($entity->getStructure()) {
                 $this->calculerDepuisEntite($entity->getStructure());
             }
@@ -517,16 +588,16 @@ class PlafondService extends AbstractEntityService
 
         if ($entity instanceof FonctionReferentiel) {
             $this->calculer(PlafondPerimetre::REFERENTIEL, 'FONCTION_REFERENTIEL_ID', $entity->getId());
-            if ($entity->getStructure()) {
-                $this->calculerDepuisEntite($entity->getStructure());
-            }
         }
 
-        if ($entity instanceof TypeMission) {
-            $this->calculer(PlafondPerimetre::MISSION, 'TYPE_MISSION_ID', $entity->getId());
-//            if ($entity->getStructure()) {
-//                $this->calculerDepuisEntite($entity->getStructure());
-//            }
+        if ($entity instanceof VolumeHoraire) {
+            if ($entity->getService()) {
+                if ($entity->getService()->getElementPedagogique()) {
+                    $this->calculer(PlafondPerimetre::VOLUME_HORAIRE, 'ELEMENT_PEDAGOGIQUE_ID', $entity->getService()->getElementPedagogique());
+                }
+
+                $this->calculerDepuisEntite($entity->getService());
+            }
         }
 
         if ($entity instanceof Service) {
@@ -535,9 +606,6 @@ class PlafondService extends AbstractEntityService
             }
             if ($entity->getIntervenant()) {
                 $this->calculerDepuisEntite($entity->getIntervenant());
-            }
-            if ($entity->getStructure()) {
-                $this->calculerDepuisEntite($entity->getStructure());
             }
         }
 
@@ -553,29 +621,33 @@ class PlafondService extends AbstractEntityService
             }
         }
 
-        if ($entity instanceof VolumeHoraire) {
-            if ($entity->getService()) {
-                if ($entity->getService()->getElementPedagogique()) {
-                    $this->calculer('volume_horaire', 'ELEMENT_PEDAGOGIQUE_ID', $entity->getService()->getElementPedagogique());
-                }
-
-                $this->calculerDepuisEntite($entity->getService());
+        if ($entity instanceof VolumeHoraireReferentiel) {
+            if ($entity->getServiceReferentiel()) {
+                $this->calculerDepuisEntite($entity->getServiceReferentiel());
             }
         }
-    }
 
-
-
-    public function calculerPourIntervenant(Intervenant $intervenant): self
-    {
-        $perimetres = [
-            'structure', 'intervenant', 'element', 'volume_horaire', 'referentiel', 'mission'
-        ];
-        foreach ($perimetres as $perimetre) {
-            $this->getServiceTableauBord()->calculer('plafond_' . $perimetre, 'INTERVENANT_ID', $intervenant->getId());
+        if ($entity instanceof TypeMission) {
+            $this->calculer(PlafondPerimetre::MISSION, 'TYPE_MISSION_ID', $entity->getId());
         }
 
-        return $this;
+        if ($entity instanceof Mission) {
+            if ($entity->getTypeMission()) {
+                $this->calculerDepuisEntite($entity->getTypeMission());
+            }
+            if ($entity->getIntervenant()) {
+                $this->calculerDepuisEntite($entity->getIntervenant());
+            }
+            if ($entity->getStructure()) {
+                $this->calculerDepuisEntite($entity->getStructure());
+            }
+        }
+
+        if ($entity instanceof VolumeHoraireMission) {
+            if ($entity->getMission()) {
+                $this->calculerDepuisEntite($entity->getMission());
+            }
+        }
     }
 
 

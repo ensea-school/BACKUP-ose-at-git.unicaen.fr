@@ -5,8 +5,10 @@ namespace Mission\Entity\Db;
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Traits\ParametreEntityTrait;
 use Paiement\Entity\Db\TauxRemu;
+use Plafond\Interfaces\PlafondDataInterface;
+use Plafond\Interfaces\PlafondPerimetreInterface;
 
-class TypeMission implements ParametreEntityInterface
+class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface, PlafondDataInterface
 {
     use ParametreEntityTrait;
 

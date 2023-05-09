@@ -6,6 +6,8 @@ use Application\Entity\Traits\AdresseTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Plafond\Interfaces\PlafondDataInterface;
+use Plafond\Interfaces\PlafondPerimetreInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -14,7 +16,7 @@ use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 /**
  * Structure
  */
-class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
+class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, PlafondPerimetreInterface, PlafondDataInterface
 {
     use AdresseTrait;
     use ImportAwareTrait;

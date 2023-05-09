@@ -150,7 +150,7 @@ class SaisieController extends AbstractController
                 $this->getServiceMission()->save($mission);
                 $hFin = $mission->getHeures();
                 $this->updateTableauxBord($mission);
-                if (!$this->getProcessusPlafond()->endTransaction($mission->getIntervenant(), $typeVolumeHoraire, $hFin < $hDeb)) {
+                if (!$this->getProcessusPlafond()->endTransaction($mission, $typeVolumeHoraire, $hFin < $hDeb)) {
                     $this->updateTableauxBord($mission);
                 }else{
                     $this->flashMessenger()->addSuccessMessage('Mission bien enregistrée');
@@ -187,7 +187,7 @@ class SaisieController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
-        $this->getProcessusPlafond()->endTransaction($mission->getIntervenant(), $typeVolumeHoraire, true);
+        $this->getProcessusPlafond()->endTransaction($mission, $typeVolumeHoraire, true);
 
         return new AxiosModel([]);
     }
@@ -249,7 +249,7 @@ class SaisieController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
-        $this->getProcessusPlafond()->endTransaction($volumeHoraireMission->getMission()->getIntervenant(), $typeVolumeHoraire, true);
+        $this->getProcessusPlafond()->endTransaction($volumeHoraireMission, $typeVolumeHoraire, true);
 
         return $this->getAction($volumeHoraireMission->getMission());
     }

@@ -4,6 +4,7 @@ namespace Referentiel\Entity\Db;
 
 use Application\Entity\Db\FormuleResultatVolumeHoraireReferentiel;
 use Contrat\Entity\Db\Contrat;
+use Plafond\Interfaces\PlafondDataInterface;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,7 +20,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 /**
  * VolumeHoraireReferentiel
  */
-class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareInterface, ResourceInterface
+class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareInterface, ResourceInterface, PlafondDataInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;

@@ -35,10 +35,9 @@ return [
                     ],
                 ],
                 'plafonds'  => [
-                    'route'       => '/plafonds/:perimetre/:id/:typeVolumeHoraire',
+                    'route'       => '/plafonds/:id/:class/:typeVolumeHoraire',
                     'action'      => 'plafonds',
                     'constraints' => [
-                        'perimetre'         => '[a-z_]*',
                         'id'                => '[0-9]*',
                         'typeVolumeHoraire' => '[0-9]*',
                     ],

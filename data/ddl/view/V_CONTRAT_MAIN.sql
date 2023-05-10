@@ -130,7 +130,7 @@ SELECT ct.annee_id,
          JOIN intervenant           i ON i.id = c.intervenant_id
          JOIN annee                 a ON a.id = i.annee_id
          JOIN statut               si ON si.id = i.statut_id
-         JOIN structure             s ON s.id = c.structure_id
+         JOIN STRUCTURE             s ON s.id = c.structure_id
     LEFT JOIN intervenant_dossier   d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
          JOIN civilite            civ ON civ.id = COALESCE(d.civilite_id,i.civilite_id)
     LEFT JOIN validation            v ON v.id = c.validation_id AND v.histo_destruction IS NULL

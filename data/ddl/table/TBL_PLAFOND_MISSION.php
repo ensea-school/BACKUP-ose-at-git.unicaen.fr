@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => 'Plafonds des missions',
-    'sequence'    => NULL,
+    'sequence'    => 'TBL_PLAFOND_MISSION_ID_SEQ',
     'columns'     => [
         'ANNEE_ID'               => [
             'name'        => 'ANNEE_ID',

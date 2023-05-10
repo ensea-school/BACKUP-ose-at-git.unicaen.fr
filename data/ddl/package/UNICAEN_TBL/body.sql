@@ -887,6 +887,26 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             /*@INTERVENANT_ID=i.id*/
             /*@ANNEE_ID=i.annee_id*/
             AND NOT (si.contrat = 0 AND evh.code = ''valide'')
+
+          UNION
+
+          SELECT
+            m.annee_id        annee_id,
+            m.intervenant_id  intervenant_id,
+            1                 actif,
+            m.structure_id    structure_id,
+            CASE WHEN evh.code IN (''contrat-edite'',''contrat-signe'') THEN 1 ELSE 0 END edite,
+            CASE WHEN evh.code IN (''contrat-signe'')                 THEN 1 ELSE 0 END signe
+          FROM
+            tbl_mission m
+            LEFT JOIN volume_horaire_mission vhm ON vhm.mission_id = m.mission_id AND vhm.histo_destruction IS NULL
+            JOIN V_VOLUME_HORAIRE_MISSION_ETAT vvhme ON vvhme.volume_horaire_mission_id = vhm.id
+            JOIN etat_volume_horaire       evh ON evh.id = vvhme.etat_volume_horaire_id
+                                              AND evh.code IN (''valide'', ''contrat-edite'', ''contrat-signe'')
+          WHERE
+            1=1
+            /*@INTERVENANT_ID=m.intervenant_id*/
+            /*@ANNEE_ID=m.annee_id*/
         )
         SELECT
           annee_id,
@@ -2002,6 +2022,21 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
+          SELECT 8 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                             annee_id,
+                fr.type_volume_horaire_id              type_volume_horaire_id,
+                i.id                                   intervenant_id,
+                fr.service_referentiel + fr.heures_compl_referentiel heures
+              FROM
+                intervenant                     i
+                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+                JOIN statut                    si ON si.id = i.statut_id
+            ) p
+
+            UNION ALL
+
           SELECT 9 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                annee_id,
@@ -2025,6 +2060,24 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                 i.statut_id
               HAVING
                 SUM(vh.heures) >= 0
+            ) p
+
+            UNION ALL
+
+          SELECT 10 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                  annee_id,
+                vhm.type_volume_horaire_id  type_volume_horaire_id,
+                i.id                        intervenant_id,
+                SUM(vhm.heures)             heures
+              FROM
+                volume_horaire_mission vhm
+                JOIN mission m ON m.histo_destruction IS NULL AND m.id = vhm.mission_id
+                JOIN intervenant i ON i.id = m.intervenant_id
+              WHERE
+                vhm.histo_destruction IS NULL
+              GROUP BY
+                i.annee_id, vhm.type_volume_horaire_id, i.id
             ) p
 
             UNION ALL
@@ -2059,6 +2112,24 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
             UNION ALL
 
+          SELECT 3 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                          annee_id,
+                fr.type_volume_horaire_id           type_volume_horaire_id,
+                i.id                                intervenant_id,
+                fr.heures_compl_fc_majorees         heures
+                /*ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond*/
+
+              FROM
+                     intervenant                i
+                JOIN annee                      a ON a.id = i.annee_id
+                JOIN statut                    si ON si.id = i.statut_id
+                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
+                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+            ) p
+
+            UNION ALL
+
           SELECT 4 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                annee_id,
@@ -2080,39 +2151,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                 i.annee_id,
                 i.id,
                 i.statut_id
-            ) p
-
-            UNION ALL
-
-          SELECT 8 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
-            SELECT
-                i.annee_id                             annee_id,
-                fr.type_volume_horaire_id              type_volume_horaire_id,
-                i.id                                   intervenant_id,
-                fr.service_referentiel + fr.heures_compl_referentiel heures
-              FROM
-                intervenant                     i
-                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
-                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
-                JOIN statut                    si ON si.id = i.statut_id
-            ) p
-
-            UNION ALL
-
-          SELECT 3 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
-            SELECT
-                i.annee_id                          annee_id,
-                fr.type_volume_horaire_id           type_volume_horaire_id,
-                i.id                                intervenant_id,
-                fr.heures_compl_fc_majorees         heures
-                /*ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 ) plafond*/
-
-              FROM
-                     intervenant                i
-                JOIN annee                      a ON a.id = i.annee_id
-                JOIN statut                    si ON si.id = i.statut_id
-                JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
-                JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
             ) p
           ) p
           JOIN intervenant i ON i.id = p.intervenant_id

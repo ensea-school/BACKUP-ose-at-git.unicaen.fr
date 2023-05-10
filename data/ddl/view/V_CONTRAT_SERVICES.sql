@@ -25,7 +25,7 @@ WITH services AS (
             JOIN type_volume_horaire tvh ON tvh.id = vh.type_volume_horaire_id
             LEFT JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
             JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
-            JOIN structure str ON ep.structure_id = str.id
+            JOIN STRUCTURE str ON ep.structure_id = str.id
             LEFT JOIN contrat c ON c.id = vh.contrat_id
         WHERE
             vh.histo_destruction IS NULL
@@ -68,7 +68,7 @@ WITH services AS (
             LEFT JOIN validation_vol_horaire_ref vvhr ON vvhr.volume_horaire_ref_id = vhr.id
             JOIN validation v ON v.id = vvhr.validation_id AND v.histo_destruction IS NULL
             LEFT JOIN contrat c ON c.id = vhr.contrat_id
-            LEFT JOIN structure str ON sr.structure_id = str.id
+            LEFT JOIN STRUCTURE str ON sr.structure_id = str.id
         WHERE
             vhr.histo_destruction IS NULL
             AND tvh.code = 'PREVU'
@@ -108,7 +108,7 @@ WITH services AS (
             JOIN mission m ON m.id = vhm.mission_id
             JOIN type_mission tm ON m.type_mission_id = tm.id
             LEFT JOIN contrat c ON c.id = vhm.contrat_id
-            JOIN structure str ON m.structure_id = str.id
+            JOIN STRUCTURE str ON m.structure_id = str.id
             LEFT JOIN validation_vol_horaire_miss vvhm ON vvhm.volume_horaire_mission_id = vhm.id
             JOIN validation v ON v.id = vvhm.validation_id AND v.histo_destruction IS NULL
             JOIN type_volume_horaire tvh ON tvh.id = vhm.type_volume_horaire_id

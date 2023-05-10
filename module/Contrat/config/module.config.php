@@ -5,7 +5,7 @@ namespace Contrat;
 use Application\Provider\Privilege\Privileges;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Controller\ContratController;
-use Contrat\Service\ContratServiceListeService;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [
@@ -169,7 +169,28 @@ return [
         ],
 
     ],
-    'rules'  => [
+
+    'navigation' => [
+
+        'intervenant' => [
+            'pages' => [
+                'contrat' => [
+                    'label' => "Contrat / avenant",
+                    'title' => "Contrat et avenants de l'intervenant",
+                    'route' => 'intervenant/contrat',
+                    'paramsInject' => [
+                        'intervenant',
+                    ],
+                    'withtarget' => true,
+                    'resource' => PrivilegeController::getResourceId(ContratController::class, 'index'),
+                    'order' => 12,
+                ],
+            ],
+        ],
+
+    ],
+
+    'rules' => [
         [
             'privileges' => [
                 Privileges::CONTRAT_CREATION,

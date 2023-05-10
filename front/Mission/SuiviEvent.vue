@@ -2,7 +2,7 @@
     <div class="event-content">
         <p class="mission">{{ event.mission.libelleCourt }} <span class="badge bg-success" v-if="event.valide">Validé</span></p>
         <p class="horaires">
-            de {{ heureDebut }} à {{ heureFin }}, soi{{ heures < 2 ? '' : 'en'}}t {{ heures }} heure{{ heures < 2 ? '' : 's' }}
+            de {{ heureDebut }} à {{ heureFin }}, soit {{ heures }} heure{{ heures < 2 ? '' : 's' }}
             <span class="badge bg-secondary" v-if="event.nocturne">Nocturne</span>
                 <span class="badge bg-secondary" v-if="event.formation">En formation</span>
         </p>

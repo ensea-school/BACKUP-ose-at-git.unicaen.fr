@@ -152,11 +152,18 @@
                         <span v-if="!candidature.validation" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
                     </th>
                     <td v-if="this.canValiderCandidature">
-                        <a :href="'/offre-emploi/validation-candidature/' + candidature.id" v-if="!candidature.intervenant.validation"
-                           title="Valider la candidature"
+                        <a :href="'/offre-emploi/accepter-candidature/' + candidature.id" v-if="!candidature.validation"
+                           title="Accepter la candidature"
+                           class="btn btn-success"
                            data-title="Accepter la candidature"
                            data-content="Etes vous sûre de vouloir accepter cette candidature ?"
-                           @click.prevent="validerCandidature">Accepter </a>
+                           @click.prevent="validerCandidature">Accepter </a>&nbsp;
+                        <a :href="'/offre-emploi/refuser-candidature/' + candidature.id"
+                           title="Refuser la candidature"
+                           class="btn btn-danger"
+                           data-title="Refuser la candidature"
+                           data-content="Etes vous sûre de vouloir refuser cette candidature ?"
+                           @click.prevent="refuserCandidature">Refuser </a>
                     </td>
                 </tr>
                 </tbody>

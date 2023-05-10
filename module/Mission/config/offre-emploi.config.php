@@ -23,56 +23,62 @@ return [
             'privileges'    => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             'may_terminate' => true,
             'child_routes'  => [
-                'saisir'              => [
+                'saisir'               => [
                     'route'      => '/saisir[/:offreEmploi]',
                     'controller' => OffreEmploiController::class,
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_MODIFIER,
                     'action'     => 'saisir',
                 ],
-                'detail'              => [
+                'detail'               => [
                     'route'      => '/detail[/:offreEmploi]',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'detail',
                 ],
-                'get'                 => [
+                'get'                  => [
                     'route'      => '/get/:offreEmploi',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'get',
                 ],
-                'liste'               => [
+                'liste'                => [
                     'route'      => '/liste',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'liste',
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
                 ],
-                'supprimer'           => [
+                'supprimer'            => [
                     'route'      => '/supprimer/:offreEmploi',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'supprimer',
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION,
                 ],
-                'valider'             => [
+                'valider'              => [
                     'route'      => '/valider/:offreEmploi',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'valider',
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
                 ],
-                'devalider'           => [
+                'devalider'            => [
                     'route'      => '/devalider/:offreEmploi',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'devalider',
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
                 ],
-                'postuler'            => [
+                'postuler'             => [
                     'route'      => '/postuler/:offreEmploi',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'postuler',
                     'privileges' => Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
                 ],
-                'valider-candidature' => [
-                    'route'      => '/validation-candidature/:candidature',
+                'accepter-candidature' => [
+                    'route'      => '/accepter-candidature/:candidature',
                     'controller' => OffreEmploiController::class,
-                    'action'     => 'valider-candidature',
+                    'action'     => 'accepter-candidature',
+                    'privileges' => Privileges::MISSION_CANDIDATURE_VALIDER,
+                ],
+                'refuser-candidature'  => [
+                    'route'      => '/refuser-candidature/:candidature',
+                    'controller' => OffreEmploiController::class,
+                    'action'     => 'refuser-candidature',
                     'privileges' => Privileges::MISSION_CANDIDATURE_VALIDER,
                 ],
 
@@ -155,7 +161,7 @@ return [
         ],
         [
             'controller' => OffreEmploiController::class,
-            'action'     => ['valider-candidature'],
+            'action'     => ['accepter-candidature', 'refuser-candidature'],
             'privileges' => [
                 Privileges::MISSION_CANDIDATURE_VALIDER,
             ],

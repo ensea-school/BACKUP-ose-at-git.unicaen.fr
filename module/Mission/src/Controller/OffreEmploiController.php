@@ -134,26 +134,6 @@ class OffreEmploiController extends AbstractController
 
 
 
-    public function validerCandidatureAction()
-    {
-        /** @var Candidature $candidature */
-        $candidature = $this->getEvent()->getParam('candidature');
-
-        if ($candidature->isValide()) {
-            $this->flashMessenger()->addInfoMessage('La candidature est déjà validé');
-        } else {
-            $this->getServiceValidation()->validerCandidature($candidature);
-            $this->getServiceCandidature()->save($candidature);
-            $this->flashMessenger()->addSuccessMessage("La candidature est bien validée");
-            $this->getServiceMission()->createMissionFromCandidature($candidature);
-        }
-
-
-        return $this->getAction($candidature->getOffre());
-    }
-
-
-
     public function devaliderAction()
     {
         /** @var OffreEmploi $offre */
@@ -170,6 +150,45 @@ class OffreEmploiController extends AbstractController
         }
 
         return $this->getAction($offre);
+    }
+
+
+
+    public function accepterCandidatureAction()
+    {
+        /** @var Candidature $candidature */
+        $candidature = $this->getEvent()->getParam('candidature');
+
+        if ($candidature->isValide()) {
+            $this->flashMessenger()->addInfoMessage('La candidature est déjà acceptée');
+        } else {
+            $this->getServiceValidation()->validerCandidature($candidature);
+            $this->getServiceCandidature()->save($candidature);
+            $this->flashMessenger()->addSuccessMessage("La candidature est bien acceptée");
+            $this->getServiceMission()->createMissionFromCandidature($candidature);
+        }
+
+
+        return $this->getAction($candidature->getOffre());
+    }
+
+
+
+    public function refuserCandidatureAction()
+    {
+        /** @var Candidature $candidature */
+        $candidature = $this->getEvent()->getParam('candidature');
+
+        if ($candidature->isValide()) {
+            $this->flashMessenger()->addInfoMessage('La candidature est déjà refusée');
+        } else {
+            $this->getServiceValidation()->validerCandidature($candidature);
+            $this->getServiceCandidature()->save($candidature);
+            $this->flashMessenger()->addSuccessMessage("La candidature est bien refusée");
+        }
+
+
+        return $this->getAction($candidature->getOffre());
     }
 
 

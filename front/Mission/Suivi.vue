@@ -23,6 +23,7 @@ export default {
     {
         return {
             date: new Date(),
+            isMounted: false,
             suivi: []
         };
     },
@@ -80,8 +81,18 @@ export default {
                     newSuivi.push(missionSuivi);
                 }
                 this.suivi = newSuivi;
+                this.refreshPlafonds();
             });
-        }
+        },
+        refreshPlafonds()
+        {
+            if (this.isMounted) {
+                // Mise à jour des plafonds
+                $(".plafonds").refresh();
+            }else{
+                this.isMounted = true;
+            }
+        },
     }
 }
 </script>

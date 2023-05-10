@@ -14,6 +14,7 @@ use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Form\MissionFormAwareTrait;
 use Mission\Form\MissionSuiviFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
+use Plafond\Processus\PlafondProcessusAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
@@ -33,6 +34,7 @@ class SuiviController extends AbstractController
     use WorkflowServiceAwareTrait;
     use MissionSuiviFormAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
+    use PlafondProcessusAwareTrait;
 
     public function indexAction()
     {
@@ -151,10 +153,24 @@ class SuiviController extends AbstractController
         $form->date = $volumeHoraireMission->getHoraireDebut();
         $form->build();
 
-        $form->bindRequestSave($volumeHoraireMission, $this->getRequest(), function ($vhm) {
-            $this->getServiceMission()->saveVolumeHoraire($vhm);
-            $this->updateTableauxBord($vhm->getMission());
-            $this->flashMessenger()->addSuccessMessage('Suivi bien enregistré');
+        $hDeb = $volumeHoraireMission->getHeures();
+
+        $form->bindRequestSave($volumeHoraireMission, $this->getRequest(), function (VolumeHoraireMission $vhm) use ($hDeb) {
+            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
+            $this->getProcessusPlafond()->beginTransaction();
+            try {
+                $this->getServiceMission()->saveVolumeHoraire($vhm);
+                $hFin = $vhm->getHeures();
+                $this->updateTableauxBord($vhm->getMission());
+                if (!$this->getProcessusPlafond()->endTransaction($vhm, $typeVolumeHoraire, $hFin < $hDeb)) {
+                    $this->updateTableauxBord($vhm->getMission());
+                }else{
+                    $this->flashMessenger()->addSuccessMessage('Suivi bien enregistré');
+                }
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+                $this->em()->rollback();
+            }
         });
         // on passe l'id pour pouvoir le récupérer dans la vue et mettre à jour la liste
         $form->setAttribute('data-id', $volumeHoraireMission->getId());
@@ -170,15 +186,20 @@ class SuiviController extends AbstractController
 
     public function supprimerAction()
     {
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
+
         /** @var VolumeHoraireMission $volumeHoraireMission */
         $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
 
+        $this->getProcessusPlafond()->beginTransaction();
         try {
             $this->getServiceMission()->deleteVolumeHoraire($volumeHoraireMission);
+            $this->updateTableauxBord($volumeHoraireMission->getMission());
             $this->flashMessenger()->addSuccessMessage('Le suivi a bien été supprimé');
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage('Une erreur s\'est produite lors de la suppression du suivi : ' . $e->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
+        $this->getProcessusPlafond()->endTransaction($volumeHoraireMission->getMission(), $typeVolumeHoraire, true);
 
         return new AxiosModel([]);
     }

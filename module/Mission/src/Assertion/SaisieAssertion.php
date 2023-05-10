@@ -3,8 +3,11 @@
 namespace Mission\Assertion;
 
 use Application\Acl\Role;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
+use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
@@ -18,6 +21,85 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
  */
 class SaisieAssertion extends AbstractAssertion
 {
+    use WorkflowServiceAwareTrait;
+
+
+    /* ---- Routage général ---- */
+    public function __invoke(array $page) // gestion des visibilités de menus
+    {
+        return $this->assertPage($page);
+    }
+
+
+
+    protected function assertPage(array $page)
+    {
+        /* @var $role Role */
+        $role = $this->getRole();
+
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getMvcEvent()->getParam('intervenant');
+
+        if (!$role || !$intervenant) return false;
+
+        return $this->assertWorkflow($intervenant,);
+    }
+
+
+
+    protected function assertController($controller, $action = null, $privilege = null)
+    {
+        /* @var $role Role */
+        $role = $this->getRole();
+
+        // Si le rôle n'est pas renseigné alors on s'en va...
+        if (!$role instanceof Role) return false;
+        // pareil si le rôle ne possède pas le privilège adéquat
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+
+        // Si c'est bon alors on affine...
+        $entity = $this->getMvcEvent()->getParam('intervenant');
+        if (!$entity) {
+            $entity = $this->getMvcEvent()->getParam('mission');
+        }
+        if (!$entity) {
+            $entity = $this->getMvcEvent()->getParam('volumeHoraireMission');
+        }
+        if (!$entity) {
+            return false;
+        }
+        return $this->assertWorkflow($entity);
+    }
+
+
+
+    protected function assertWorkflow(Mission|Intervenant|VolumeHoraireMission $entity)
+    {
+        $codeEtape = WfEtape::CODE_MISSION_SAISIE;
+
+        $structure = null;
+        if ($entity instanceof Intervenant) {
+            /** @var Role $role */
+            $role = $this->getRole();
+
+            $structure = $role->getStructure();
+        }
+        if ($entity instanceof VolumeHoraireMission) {
+            $entity = $entity->getMission();
+        }
+        if ($entity instanceof Mission) {
+            $structure = $entity->getStructure();
+            $entity = $entity->getIntervenant();
+        }
+
+        $wfEtape = $this->getServiceWorkflow()->getEtape($codeEtape, $entity, $structure);
+
+        if (!$wfEtape) return false;
+
+        return $wfEtape->isAtteignable();
+    }
+
+
 
     protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
     {

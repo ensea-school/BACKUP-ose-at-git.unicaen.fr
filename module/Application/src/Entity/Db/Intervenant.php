@@ -292,11 +292,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     protected $missions;
 
     /**
-     * @var Collection
-     */
-    protected $offresEmplois;
-
-    /**
      * Cache
      *
      * @var bool
@@ -1624,26 +1619,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
         };
 
         return $this->missions->filter($filter);
-    }
-
-
-
-    /**
-     * Get missions
-     *
-     * @return Collection|OffreEmploi[]
-     */
-    public function getOffresEmplois(): ?Collection
-    {
-        if (null === $this->offresEmplois) {
-            return null;
-        }
-
-        $filter = function (OffreEmploi $offre) {
-            return ($offre->estHistorise()) ? false : true;
-        };
-
-        return $this->offresEmplois->filter($filter);
     }
 
 

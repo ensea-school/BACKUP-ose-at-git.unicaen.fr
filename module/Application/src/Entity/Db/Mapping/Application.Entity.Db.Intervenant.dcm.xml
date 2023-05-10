@@ -137,6 +137,5 @@
         <one-to-many field="indicModifDossier" target-entity="Indicateur\Entity\Db\IndicModifDossier"
                      mapped-by="intervenant"/>
         <one-to-many field="missions" target-entity="Mission\Entity\Db\Mission" mapped-by="intervenant"/>
-        <many-to-many field="offresEmplois" target-entity="Mission\Entity\Db\OffreEmploi" mapped-by="etudiants"/>
     </entity>
 </doctrine-mapping>

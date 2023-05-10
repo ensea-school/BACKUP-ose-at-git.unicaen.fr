@@ -19,6 +19,7 @@ return [
         'offre-emploi' => [
             'route'         => '/offre-emploi',
             'controller'    => OffreEmploiController::class,
+            'action'        => 'index',
             'privileges'    => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             'may_terminate' => true,
             'child_routes'  => [

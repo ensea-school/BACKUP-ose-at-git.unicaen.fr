@@ -51,6 +51,7 @@ return [
                                 'pieceJointe' => '[0-9]*',
                                 'fichier'     => '[0-9]*',
                             ],
+                            'action'      => 'valider',
                         ],
                         'devalider'  => [
                             'route'       => '/devalider/:pieceJointe',
@@ -192,7 +193,7 @@ return [
                 ],
             ],
         ],
-        
+
     ],
     'guards'      => [
 

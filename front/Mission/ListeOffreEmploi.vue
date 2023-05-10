@@ -13,7 +13,7 @@
 
     <!--On affiche une synthèse de la liste des offres-->
     <div v-if="extended">
-        <offreEmploi v-for="offre in offres" :key="offre.id" :offre="offre"
+        <offreEmploi v-for="offre in offres" :key="offre.id" :offre="offre" @refresh="refresh"
                      :canPostuler="this.canPostuler"
                      :canVoirCandidature="this.canVoirCandidature"
                      :canValiderCandidature="this.canValiderCandidature"
@@ -107,6 +107,7 @@ export default {
 
                 });
             }
+            console.log(this.offres);
 
 
         }

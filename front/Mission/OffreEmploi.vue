@@ -21,7 +21,7 @@
                     au
                     <u-date :value="offre.dateFin"/>
                     <br/>
-                    <b>Demandé par la composante :</b> {{ offre.structure.libelle }}
+                    <b>Demandé par la composante :</b> {{ offre.structure.libelleCourt }}
                     <br/>
                     <b>Type de mission :</b> {{ offre.typeMission.libelle }}
 
@@ -111,7 +111,7 @@
             au
             <u-date :value="offre.dateFin"/>
             <br/>
-            <b>Demandé par la composante :</b> {{ offre.structure.libelle }}
+            <b>Demandé par la composante :</b> {{ offre.structure.libelleCourt }}
             <br/>
             <b>Type de mission :</b> {{ offre.typeMission.libelle }}
             <br/>
@@ -145,14 +145,18 @@
                     <td><a :href="'/intervenant/code:' + candidature.intervenant.code + '/voir'">
                         {{ candidature.intervenant.prenom+' '+candidature.intervenant.nomUsuel }}</a></td>
                     <td>{{ candidature.intervenant.structure.libelleLong }}</td>
-                    <th> <span v-if="candidature.intervenant.validation" class="badge rounded-pill bg-success">Valider le <u-date
-                            :value="candidature.intervenant.validation.histoCreation"/> par {{
-                            candidature.intervenant.validation.histoCreateur.displayName
+                    <th> <span v-if="candidature.validation" class="badge rounded-pill bg-success">Accepter le <u-date
+                            :value="candidature.validation.histoCreation"/> par {{
+                            candidature.validation.histoCreateur.displayName
                         }}</span>
-                        <span v-if="!candidature.intervenant.validation" class="badge rounded-pill bg-warning">En attente de validation</span>
+                        <span v-if="!candidature.validation" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
                     </th>
                     <td v-if="this.canValiderCandidature">
-                        <a :href="'/intervenant/code:' + candidature.intervenant.code + '/voir'" v-if="!candidature.intervenant.validation">Valider </a>
+                        <a :href="'/offre-emploi/validation-candidature/' + candidature.id" v-if="!candidature.intervenant.validation"
+                           title="Valider la candidature"
+                           data-title="Accepter la candidature"
+                           data-content="Etes vous sûre de vouloir accepter cette candidature ?"
+                           @click.prevent="validerCandidature">Accepter </a>
                     </td>
                 </tr>
                 </tbody>
@@ -199,6 +203,7 @@ export default {
             validerUrl: unicaenVue.url('offre-emploi/valider/:offre', {offre: this.offre.id}),
             devaliderUrl: unicaenVue.url('offre-emploi/devalider/:offre', {offre: this.offre.id}),
             consulterUrl: unicaenVue.url('offre-emploi/detail/:offre', {offre: this.offre.id}),
+
         };
     },
     computed: {
@@ -266,6 +271,12 @@ export default {
                 this.$emit('refresh', response.data);
             });
         },
+        validerCandidature(event)
+        {
+            popConfirm(event.currentTarget, (response) => {
+                this.$emit('refresh', response.data);
+            });
+        }
 
     },
 

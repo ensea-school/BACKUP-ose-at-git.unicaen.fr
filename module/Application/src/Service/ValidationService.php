@@ -13,6 +13,7 @@ use Dossier\Entity\Db\IntervenantDossier;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\OffreEmploi;
 use Mission\Entity\Db\VolumeHoraireMission;
@@ -91,9 +92,9 @@ class ValidationService extends AbstractEntityService
 
     public function validerVolumeHoraireMission(VolumeHoraireMission $volumeHoraireMission): Validation
     {
-        if ($volumeHoraireMission->getTypeVolumeHoraire()->isPrevu()){
+        if ($volumeHoraireMission->getTypeVolumeHoraire()->isPrevu()) {
             $typeValidation = $this->getServiceTypeValidation()->getMission();
-        }else{
+        } else {
             $typeValidation = $this->getServiceTypeValidation()->getMissionRealise();
         }
 
@@ -116,6 +117,19 @@ class ValidationService extends AbstractEntityService
         $validation->setStructure($offreEmploi->getStructure());
         $this->save($validation);
         $offreEmploi->setValidation($validation);
+
+        return $validation;
+    }
+
+
+
+    public function validerCandidature(Candidature $candidature): Validation
+    {
+        $validation = $this->newEntity();
+        $validation->setTypeValidation($this->getServiceTypeValidation()->getCandidature());
+        $validation->setStructure($candidature->getIntervenant()->getStructure());
+        $this->save($validation);
+        $candidature->setValidation($validation);
 
         return $validation;
     }

@@ -67,6 +67,13 @@ class TypeValidationService extends AbstractEntityService
 
 
 
+    public function getCandidature(): TypeValidation
+    {
+        return $this->getByCode(TypeValidation::CODE_CANDIDATURE);
+    }
+
+
+
     public function getMissionRealise(): TypeValidation
     {
         return $this->getByCode(TypeValidation::CODE_MISSION_REALISE);

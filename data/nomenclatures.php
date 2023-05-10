@@ -897,6 +897,11 @@ return [
             "CODE"    => "OFFRE_EMPLOI",
             "LIBELLE" => "Validation d'une offre d'emploi par la DRH",
         ],
+        [
+            'ID'      => 11,
+            "CODE"    => "CANDIDATURE",
+            "LIBELLE" => "Validation d'une candidature par la DRH",
+        ],
     ],
 
     'TYPE_VOLUME_HORAIRE' => [

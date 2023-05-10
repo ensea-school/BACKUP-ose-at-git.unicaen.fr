@@ -6,6 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\Query;
+use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
@@ -116,8 +117,8 @@ class MissionService extends AbstractEntityService
         $triggers = [
             [
                 '/'                      => function (Mission $original, array $extracted) {
-                    $extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
-                    $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                    $extracted['canSaisie']    = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                    $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
                     $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
                     $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
 
@@ -125,13 +126,13 @@ class MissionService extends AbstractEntityService
                 },
                 '/volumesHorairesPrevus' => function ($original, $extracted) {
                     //$extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
-                    $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                    $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
                     $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
                     $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
 
                     return $extracted;
                 },
-            ]
+            ],
         ];
 
         return new AxiosModel($query, $properties, $triggers);
@@ -180,6 +181,22 @@ class MissionService extends AbstractEntityService
         $this->saveVolumeHoraire($volumeHoraireMission);
 
         return $this;
+    }
+
+
+
+    public function createMissionFromCandidature(Candidature $candidature): ?Mission
+    {
+        $mission = $this->newEntity();
+        $mission->setIntervenant($candidature->getIntervenant());
+        $mission->setTypeMission($candidature->getOffre()->getTypeMission());
+        $mission->setDateDebut($candidature->getOffre()->getDateDebut());
+        $mission->setDateFin($candidature->getOffre()->getDateFin());
+        $mission->setDescription($candidature->getOffre()->getDescription());
+        $mission->setStructure($candidature->getOffre()->getStructure());
+        $this->save($mission);
+
+        return $mission;
     }
 
 }

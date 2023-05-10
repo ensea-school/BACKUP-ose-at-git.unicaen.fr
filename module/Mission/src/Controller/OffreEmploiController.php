@@ -7,10 +7,12 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Doctrine\ORM\Query;
+use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\OffreEmploi;
 use Mission\Form\OffreEmploiFormAwareTrait;
 use Mission\Service\CandidatureServiceAwareTrait;
+use Mission\Service\MissionServiceAwareTrait;
 use Mission\Service\OffreEmploiServiceAwareTrait;
 use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\AxiosModel;
@@ -28,6 +30,7 @@ class OffreEmploiController extends AbstractController
     use OffreEmploiFormAwareTrait;
     use ValidationServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use MissionServiceAwareTrait;
 
 
     public function indexAction()
@@ -89,22 +92,23 @@ class OffreEmploiController extends AbstractController
          */
         $query = $this->getServiceOffreEmploi()->query([]);
 
-        $properties = ['id',
-                       ['typeMission', ['libelle']],
-                       'dateDebut',
-                       'dateFin',
-                       'structure',
-                       'titre',
-                       'description',
-                       'nombreHeures',
-                       'nombrePostes',
-                       'histoCreation',
-                       'histoCreateur',
-                       'validation',
-                       'candidats',
-                       'candidaturesValides',
-                       ['candidatures', ['intervenant', ['statut', 'structure'], 'validation'],
-                       ]];
+        $properties = [
+            'id',
+            ['typeMission', ['libelle']],
+            'dateDebut',
+            'dateFin',
+            ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']],
+            'titre',
+            'description',
+            'nombreHeures',
+            'nombrePostes',
+            'histoCreation',
+            'histoCreateur',
+            'validation',
+            'candidats',
+            'candidaturesValides',
+            ['candidatures', ['id', ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]], 'histoCreation', 'validation']],
+        ];
 
 
         return new AxiosModel($query, $properties, $this->getServiceOffreEmploi()->getOffreEmploiPrivileges());
@@ -132,7 +136,20 @@ class OffreEmploiController extends AbstractController
 
     public function validerCandidatureAction()
     {
+        /** @var Candidature $candidature */
+        $candidature = $this->getEvent()->getParam('candidature');
 
+        if ($candidature->isValide()) {
+            $this->flashMessenger()->addInfoMessage('La candidature est déjà validé');
+        } else {
+            $this->getServiceValidation()->validerCandidature($candidature);
+            $this->getServiceCandidature()->save($candidature);
+            $this->flashMessenger()->addSuccessMessage("La candidature est bien validée");
+            $this->getServiceMission()->createMissionFromCandidature($candidature);
+        }
+
+
+        return $this->getAction($candidature->getOffre());
     }
 
 
@@ -178,12 +195,14 @@ class OffreEmploiController extends AbstractController
 
 
 
-    public function detailAction()
+    public function detailAction(?OffreEmploi $offreEmploi = null)
     {
-        /**
-         * @var OffreEmploi $offreEmploi
-         */
-        $offreEmploi = $this->getEvent()->getParam('offreEmploi');
+
+        if (!$offreEmploi) {
+            /** @var OffreEmploi $offreEmploi */
+            $offreEmploi = $this->getEvent()->getParam('offreEmploi');
+        }
+
         $utilisateur = $this->getServiceContext()->getUtilisateur();
         $intervenant = $this->getServiceContext()->getIntervenant();
         $canPostuler = $this->isAllowed($offreEmploi, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
@@ -194,7 +213,7 @@ class OffreEmploiController extends AbstractController
 
 
     /**
-     * Retourne les données pour une mission
+     * Retourne les données pour une offre d'emploi
      *
      * @return AxiosModel
      */
@@ -212,7 +231,7 @@ class OffreEmploiController extends AbstractController
             ['typeMission', ['libelle']],
             'dateDebut',
             'dateFin',
-            'structure',
+            ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']],
             'titre',
             'description',
             'nombreHeures',
@@ -222,12 +241,14 @@ class OffreEmploiController extends AbstractController
             'validation',
             'candidats',
             'candidaturesValides',
-            ['candidatures', ['intervenant', ['id']], 'histoCreation', 'validation'],
+            ['candidatures', ['id', ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]], 'histoCreation', 'validation']],
         ];
 
         $query = $this->getServiceOffreEmploi()->query(['offreEmploi' => $offreEmploi]);
+        $model = new AxiosModel($query, $properties, $this->getServiceOffreEmploi()->getOffreEmploiPrivileges());
+        $model->returnFirstItem();
 
-        return new AxiosModel($query, $properties, $this->getServiceOffreEmploi()->getOffreEmploiPrivileges());
+        return $model;
     }
 
 }

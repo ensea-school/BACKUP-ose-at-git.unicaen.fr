@@ -18,6 +18,7 @@ class TypeValidation
     const CODE_MISSION         = 'MISSION';
     const CODE_MISSION_REALISE = 'MISSION_REALISE';
     const CODE_OFFRE_EMPLOI    = 'OFFRE_EMPLOI';
+    const CODE_CANDIDATURE     = 'CANDIDATURE';
 
     /**
      * @var string

@@ -5,9 +5,11 @@ namespace Mission\Form;
 use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\Form\FormInterface;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\OffreEmploi;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use Paiement\Entity\Db\TauxRemu;
 use Mission\Entity\Db\TypeMission;
 
@@ -20,6 +22,7 @@ use Mission\Entity\Db\TypeMission;
 class OffreEmploiForm extends AbstractForm
 {
     use ContextServiceAwareTrait;
+    use StructureServiceAwareTrait;
 
     public function init()
     {
@@ -35,7 +38,8 @@ class OffreEmploiForm extends AbstractForm
         $this->setValueOptions('typeMission', $tmDql, $tmDqlParams);
 
 
-        $sDql = "SELECT s FROM " . Structure::class . " s WHERE s.histoDestruction IS NULL";
+        $sDql = $this->getServiceStructure()->finderByEnseignement();
+
         $this->setValueOptions('structure', $sDql);
 
         $this->setLabels([

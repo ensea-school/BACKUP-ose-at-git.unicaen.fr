@@ -51,6 +51,13 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
+    public function axiosDefinition(): array
+    {
+        return ['libelleLong', 'libelleCourt', 'code', 'id'];
+    }
+
+
+
     public function getId(): int
     {
         return $this->id;

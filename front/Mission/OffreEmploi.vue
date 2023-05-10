@@ -31,27 +31,46 @@
             </div>
             <div class="card-footer">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a v-if="offre.validation && offre.canValide"
+                    <a v-if="offre.validation && this.canValider"
                        :href="devaliderUrl"
                        class="btn btn-danger"
-                       @click.prevent="devalider">Devalider</a>
-                    <a v-if="!offre.validation && offre.canValide"
+                       title="Devalider"
+                       @click.prevent="devalider">
+                        <u-icon name="thumbs-down"/>
+                        Devalider
+                    </a>
+                    <a v-if="!offre.validation && this.canValider"
                        :href="validerUrl"
                        class="btn btn-success"
-                       @click.prevent="valider">Valider</a>
-                    <a v-if="offre.canModifier"
+                       title="Valider"
+                       @click.prevent="valider">
+                        <u-icon name="thumbs-up"/>
+                        Valider
+                    </a>
+                    <a :href="consulterUrl"
+                       title="Consulter "
+                       class="btn btn-primary"
+                    >
+                        <u-icon name="eye"/>
+                        Voir
+                    </a>
+                    <a v-if="this.canModifier"
                        :href="saisirUrl"
                        class="btn btn-primary"
-                       @click.prevent="saisir">Modifier</a>
-                    <a v-if="offre.canSupprime"
+                       @click.prevent="saisir"
+                       title="Modifier">
+                        <u-icon name="pen-to-square"/>
+                        Modifier
+                    </a>
+                    <a v-if="this.canSupprimer"
                        :href="supprimerUrl"
                        class="btn btn-danger"
+                       title="Supprimer"
                        data-title="Suppression de l'offre"
                        data-content="Êtes-vous sur de vouloir supprimer l'offre ?"
-                       @click.prevent="supprimer">Supprimer</a>
-                    <a :href="consulterUrl"
-                       class="btn btn-primary"
-                    >Plus d'information</a>
+                       @click.prevent="supprimer">
+                        <u-icon name="trash"/>
+                    </a>
 
                 </div>
             </div>
@@ -161,7 +180,6 @@ export default {
     props: {
         offre: {required: true},
         utilisateur: {required: false},
-        intervenant: {required: false},
         extended: {type: Boolean, required: false},
         canModifier: {type: Boolean, required: false},
         canPostuler: {type: Boolean, required: false},
@@ -173,6 +191,8 @@ export default {
     data()
     {
 
+        console.log(this)
+
         return {
             saisirUrl: unicaenVue.url('offre-emploi/saisir/:offre', {offre: this.offre.id}),
             supprimerUrl: unicaenVue.url("offre-emploi/supprimer/:offre", {offre: this.offre.id}),
@@ -183,15 +203,13 @@ export default {
     },
     computed: {
         isDisabled: function () {
-            if (!this.offre.canPostuler || this.offre.candidats.indexOf(this.intervenant.id) == -1) {
+
+            if (!this.canPostuler) {
                 return 'btn btn-primary disabled';
             }
             return 'btn btn-primary';
         },
         isCandidat: function () {
-            if (this.offre.candidats.indexOf(this.intervenant.id) !== -1) {
-                return true;
-            }
             return false;
         },
         shortDesc: function () {

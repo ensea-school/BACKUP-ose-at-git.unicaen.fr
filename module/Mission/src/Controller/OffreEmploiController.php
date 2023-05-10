@@ -3,6 +3,7 @@
 namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Doctrine\ORM\Query;
@@ -172,7 +173,7 @@ class OffreEmploiController extends AbstractController
         }
 
 
-        return $this->redirect()->toRoute('offre-emploi/public');
+        return $this->redirect()->toRoute('offre-emploi/detail');
     }
 
 
@@ -184,9 +185,10 @@ class OffreEmploiController extends AbstractController
          */
         $offreEmploi = $this->getEvent()->getParam('offreEmploi');
         $utilisateur = $this->getServiceContext()->getUtilisateur();
-        $intervenant = ($this->getServiceContext()->getIntervenant()) ?: false;
+        $intervenant = $this->getServiceContext()->getIntervenant();
+        $canPostuler = $this->isAllowed($offreEmploi, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
 
-        return compact('offreEmploi', 'utilisateur', 'intervenant');
+        return compact('offreEmploi', 'utilisateur', 'canPostuler');
     }
 
 
@@ -220,12 +222,12 @@ class OffreEmploiController extends AbstractController
             'validation',
             'candidats',
             'candidaturesValides',
-            ['candidatures', ['intervenant', ['statut', 'structure'], 'validation'],
-            ]];
+            ['candidatures', ['intervenant', ['id']], 'histoCreation', 'validation'],
+        ];
 
         $query = $this->getServiceOffreEmploi()->query(['offreEmploi' => $offreEmploi]);
 
-        return new AxiosModel(AxiosExtractor::extract($query, $properties, $this->getServiceOffreEmploi()->getOffreEmploiPrivileges())[0]);
+        return new AxiosModel($query, $properties, $this->getServiceOffreEmploi()->getOffreEmploiPrivileges());
     }
 
 }

@@ -202,6 +202,13 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
+    public function axiosDefinition(): array
+    {
+        return ['libelle', 'code'];
+    }
+
+
+
     public function getRoleId(): string
     {
         return 'statut/' . $this->getCode();

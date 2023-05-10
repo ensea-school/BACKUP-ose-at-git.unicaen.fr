@@ -11,7 +11,7 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenVue\Axios\AxiosExtractorInterface;
 
-class Candidature implements HistoriqueAwareInterface, ResourceInterface
+class Candidature implements HistoriqueAwareInterface, ResourceInterface, AxiosExtractorInterface
 {
     use HistoriqueAwareTrait;
     use StructureAwareTrait;
@@ -50,6 +50,13 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+
+
+    public function axiosDefinition(): array
+    {
+        return ['intervenant', 'validation'];
     }
 
 

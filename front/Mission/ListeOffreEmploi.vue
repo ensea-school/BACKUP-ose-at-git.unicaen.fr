@@ -18,8 +18,7 @@
                      :canVoirCandidature="this.canVoirCandidature"
                      :canValiderCandidature="this.canValiderCandidature"
                      :extended="extended"
-                     :utilisateur="this.utilisateur"
-                     :intervenant="this.intervenant"></offreEmploi>
+                     :utilisateur="this.utilisateur"></offreEmploi>
     </div>
 
 </template>
@@ -36,7 +35,6 @@ export default {
 
         id: {type: Number, required: false},
         utilisateur: {required: false},
-        intervenant: {required: false},
         canModifier: {type: Boolean, required: false},
         canPostuler: {type: Boolean, required: false},
         canValider: {type: Boolean, required: false},
@@ -46,8 +44,11 @@ export default {
 
 
     },
+
     data()
     {
+
+
         return {
             offres: [],
             ajoutUrl: unicaenVue.url('offre-emploi/saisir'),

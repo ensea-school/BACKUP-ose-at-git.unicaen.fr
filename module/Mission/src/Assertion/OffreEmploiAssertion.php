@@ -32,6 +32,8 @@ class OffreEmploiAssertion extends AbstractAssertion
         switch (true) {
             case $entity instanceof OffreEmploi:
                 switch ($privilege) {
+                    case Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION:
+                        return $this->assertOffreEmploiVisualisation($role, $entity);
                     case Privileges::MISSION_OFFRE_EMPLOI_MODIFIER:
                         return $this->assertOffreEmploiEdition($role, $entity);
                     case Privileges::MISSION_OFFRE_EMPLOI_VALIDER:
@@ -47,6 +49,15 @@ class OffreEmploiAssertion extends AbstractAssertion
         }
 
         return true;
+    }
+
+
+
+    protected function assertOffreEmploiVisualisation(Role $role, OffreEmploi $offre)
+    {
+        if ($offre->isValide()) {
+            return true;
+        }
     }
 
 

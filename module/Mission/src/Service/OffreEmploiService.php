@@ -94,9 +94,10 @@ class OffreEmploiService extends AbstractEntityService
     {
         return [
             '/' => function (OffreEmploi $offre, array $extracted) {
-                $extracted['canSaisie']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
-                $extracted['canValide']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
-                $extracted['canPostuler'] = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
+                $extracted['canSaisie']     = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
+                $extracted['canValide']     = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
+                $extracted['canPostuler']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
+                $extracted['canVisualiser'] = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION);
 
 
                 /*$extracted['canValider']   = $this->isAllowed($original, Privileges::MISSION_VALIDATION);

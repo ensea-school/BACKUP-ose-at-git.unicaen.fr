@@ -2,6 +2,7 @@
 
 namespace PieceJointe\Service;
 
+use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use PieceJointe\Entity\Db\TypePieceJointeStatut;

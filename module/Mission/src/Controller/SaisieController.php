@@ -229,6 +229,7 @@ class SaisieController extends AbstractController
             $this->flashMessenger()->addInfoMessage("La mission n'était pas validée");
         }
 
+
         return $this->getAction($mission);
     }
 
@@ -300,6 +301,7 @@ class SaisieController extends AbstractController
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'mission',
+            'contrat',
         ], $mission->getIntervenant());
     }
 }

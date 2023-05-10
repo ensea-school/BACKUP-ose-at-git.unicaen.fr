@@ -1618,23 +1618,23 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       CASE WHEN
             t.ANNEE_ID                         = v.ANNEE_ID
         AND t.TYPE_PIECE_JOINTE_ID             = v.TYPE_PIECE_JOINTE_ID
+        AND COALESCE(t.PIECE_JOINTE_ID,0)      = COALESCE(v.PIECE_JOINTE_ID,0)
         AND t.INTERVENANT_ID                   = v.INTERVENANT_ID
         AND t.DEMANDEE                         = v.DEMANDEE
         AND t.FOURNIE                          = v.FOURNIE
         AND t.VALIDEE                          = v.VALIDEE
         AND t.HEURES_POUR_SEUIL                = v.HEURES_POUR_SEUIL
         AND t.OBLIGATOIRE                      = v.OBLIGATOIRE
-        AND COALESCE(t.PIECE_JOINTE_ID,0)      = COALESCE(v.PIECE_JOINTE_ID,0)
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.TYPE_PIECE_JOINTE_ID,
+      v.PIECE_JOINTE_ID,
       v.INTERVENANT_ID,
       v.DEMANDEE,
       v.FOURNIE,
       v.VALIDEE,
       v.HEURES_POUR_SEUIL,
-      v.OBLIGATOIRE,
-      v.PIECE_JOINTE_ID
+      v.OBLIGATOIRE
     FROM
       (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PIECE_JOINTE t ON

@@ -290,17 +290,6 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'voir-heures-comp'),
                                 'order'        => 3,
                             ],
-                            'contrat'          => [
-                                'label'        => "Contrat / avenant",
-                                'title'        => "Contrat et avenants de l'intervenant",
-                                'route'        => 'intervenant/contrat',
-                                'paramsInject' => [
-                                    'intervenant',
-                                ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId(ContratController::class, 'index'),
-                                'order'        => 12,
-                            ],
                         ],
                     ],
                 ],

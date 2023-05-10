@@ -456,12 +456,15 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           ''MISSION_SAISIE_REALISE''                           etape_code,
           m.intervenant_id                                     intervenant_id,
           m.structure_id                                       structure_id,
-          1                                                    objectif,
-          CASE WHEN m.heures_realisees > 0 THEN 1 ELSE 0 END   realisation
+          SUM(GREATEST(m.heures_prevues_validees,m.heures_realisees_saisies)) objectif,
+          SUM(m.heures_realisees_saisies)                      realisation
         FROM
           tbl_mission m
         WHERE
           m.actif = 1
+        GROUP BY
+          m.intervenant_id,
+          m.structure_id
 
         UNION ALL
 
@@ -469,12 +472,15 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           ''MISSION_VALIDATION_REALISE''                       etape_code,
           m.intervenant_id                                     intervenant_id,
           m.structure_id                                       structure_id,
-          m.heures_realisees                                   objectif,
-          m.heures_validees                                    realisation
+          SUM(m.heures_realisees_saisies)                      objectif,
+          SUM(m.heures_realisees_validees)                     realisation
         FROM
           tbl_mission m
         WHERE
           m.actif = 1
+        GROUP BY
+          m.intervenant_id,
+          m.structure_id
     ';
 
 

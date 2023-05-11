@@ -103,6 +103,47 @@ class MissionSuiviForm extends AbstractForm
 
 
 
+    /**
+     * Should return an array specification compatible with
+     * {@link Laminas\InputFilter\Factory::createInputFilter()}.
+     *
+     * @return array
+     */
+    public function getInputFilterSpecification()
+    {
+        return [
+            'mission'                => [
+                'required' => true,
+            ],
+            'date'             => [
+                'required' => true,
+            ],
+            'heureDebut'      => [
+                'required' => true,
+            ],
+            'heureFin'              => [
+                'required'   => true,
+                'validators' => [
+                    new \Laminas\Validator\Callback([
+                        'messages' => [\Laminas\Validator\Callback::INVALID_VALUE => 'L\'heure de fin doit être postérieure à l\'heure de début'],
+                        'callback' => function ($value, array $options) {
+                            return $value >= $options['heureDebut'];
+                        }]),
+                ],
+            ],
+            'formation'           => [
+                'required' => true,
+            ],
+            'nocturne'           => [
+                'required' => true,
+            ],
+            'description'           => [
+                'required' => false,
+            ],
+        ];
+    }
+
+
     private function getMissionsOptions()
     {
         $missions = $this->getIntervenant()->getMissions();

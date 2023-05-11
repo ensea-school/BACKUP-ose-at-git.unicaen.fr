@@ -61,7 +61,7 @@ class MissionService extends AbstractEntityService
           " . Mission::class . " m
           JOIN m.typeMission tm
           JOIN m.structure str
-          JOIN m.tauxRemu tr
+          LEFT JOIN m.tauxRemu tr
           LEFT JOIN m.validations valid WITH valid.histoDestruction IS NULL
           LEFT JOIN m.volumesHoraires vh WITH vh.histoDestruction IS NULL
           LEFT JOIN vh.typeVolumeHoraire tvh

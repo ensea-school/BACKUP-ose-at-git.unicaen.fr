@@ -7,6 +7,7 @@ use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Laminas\Crypt\Password\Bcrypt;
 use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
 use UnicaenApp\Util;
 
@@ -151,9 +152,8 @@ class UtilisateurService extends AbstractEntityService
             $this->getServiceIntervenant()->save($intervenant);
             $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
         }
-        $utilisateur->setPassword($motDePasse);
+        $utilisateur->setPassword($motDePasse, true);
         $this->save($utilisateur);
-        $this->changerMotDePasse($utilisateur, $motDePasse);
 
         return $utilisateur;
     }
@@ -163,10 +163,11 @@ class UtilisateurService extends AbstractEntityService
     public function changerMotDePasse(Utilisateur $utilisateur, string $motDePasse)
     {
         if (strlen($motDePasse) < 6) {
-            throw new \Exception("Mot de passe trop court : il doit faire au moint 6 caractères");
+            throw new \Exception("Mot de passe trop court : il doit faire au moins 6 caractères");
         }
 
-        $this->userService->updateUserPassword($utilisateur, $motDePasse);
+        $utilisateur->setPassword($motDePasse, true);
+        $this->save($utilisateur);
     }
 
 }

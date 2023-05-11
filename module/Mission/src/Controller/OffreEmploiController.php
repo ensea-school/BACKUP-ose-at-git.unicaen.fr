@@ -86,11 +86,14 @@ class OffreEmploiController extends AbstractController
      */
     public function listeAction()
     {
+        $parameters = [];
+        $role       = $this->getServiceContext()->getSelectedIdentityRole();
 
         /**
          * @var Query $query
          */
-        $query = $this->getServiceOffreEmploi()->query([]);
+        $query = $this->getServiceOffreEmploi()->query([], $role);
+
 
         $properties = [
             'id',
@@ -107,6 +110,7 @@ class OffreEmploiController extends AbstractController
             'validation',
             'candidats',
             'candidaturesValides',
+            'valide',
             ['candidatures', ['id', ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]], 'histoCreation', 'validation']],
         ];
 

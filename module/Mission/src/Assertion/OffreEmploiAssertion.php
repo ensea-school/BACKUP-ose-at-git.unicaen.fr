@@ -26,7 +26,6 @@ class OffreEmploiAssertion extends AbstractAssertion
         /** @var Role $role */
         $role = $this->getRole();
 
-
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         switch (true) {
@@ -44,6 +43,8 @@ class OffreEmploiAssertion extends AbstractAssertion
                         return $this->assertCandidatureVisualisation($role, $entity);
                     case Privileges::MISSION_CANDIDATURE_VALIDER:
                         return $this->assertCandidatureValider($role, $entity);
+                    case Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION:
+                        return $this->assertOffreEmploiSupprimer($role, $entity);
                 }
             break;
         }
@@ -55,23 +56,34 @@ class OffreEmploiAssertion extends AbstractAssertion
 
     protected function assertOffreEmploiVisualisation(Role $role, OffreEmploi $offre)
     {
+
         if ($offre->isValide()) {
             return true;
         }
+
+        return true;
     }
 
 
 
     protected function assertOffreEmploiEdition(Role $role, OffreEmploi $offre)
     {
-
-        $have = $offre->haveCandidats();
-
+        $haveRole = $this->haveRole();
 
         return $this->asserts([
             $this->haveRole(),
             $offre->canSaisie(),
-            !$offre->haveCandidats(),
+            $offre->haveCandidats(),
+            $this->assertOffreEmploi($role, $offre),
+        ]);
+    }
+
+
+
+    protected function assertOffreEmploiSupprimer(Role $role, OffreEmploi $offre)
+    {
+        return $this->asserts([
+            $this->haveRole(),
             $this->assertOffreEmploi($role, $offre),
         ]);
     }
@@ -107,6 +119,7 @@ class OffreEmploiAssertion extends AbstractAssertion
 
     protected function assertOffreEmploiValidation(Role $role, OffreEmploi $offre)
     {
+
         return $this->asserts([
             $this->haveRole(),
             $this->assertOffreEmploi($role, $offre),

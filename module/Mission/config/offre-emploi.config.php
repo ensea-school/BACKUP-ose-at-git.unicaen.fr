@@ -120,6 +120,7 @@ return [
 
     ],
 
+
     'rules' => [
         [
             'privileges' => [
@@ -128,6 +129,7 @@ return [
                 Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
                 Privileges::MISSION_CANDIDATURE_VISUALISATION,
                 Privileges::MISSION_CANDIDATURE_VALIDER,
+                Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION,
 
             ],
             'resources'  => 'OffreEmploi',

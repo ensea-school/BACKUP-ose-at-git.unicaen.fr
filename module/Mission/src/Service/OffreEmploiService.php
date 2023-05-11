@@ -63,9 +63,16 @@ class OffreEmploiService extends AbstractEntityService
           LEFT JOIN oe.candidatures c  
         WHERE 
           oe . histoDestruction IS null
-       " . dqlAndWhere([
-                'offreEmploi' => 'oe',
-            ], $parameters);
+       ";
+
+        if (empty($role)) {
+            $dql .= " AND oe.validation IS NOT NULL";
+        }
+
+
+        $dql .= dqlAndWhere([
+            'offreEmploi' => 'oe',
+        ], $parameters);
 
         $dql .= " ORDER BY
           oe . dateDebut
@@ -92,12 +99,15 @@ class OffreEmploiService extends AbstractEntityService
 
     public function getOffreEmploiPrivileges(): array
     {
+
+
         return [
             '/' => function (OffreEmploi $offre, array $extracted) {
-                $extracted['canSaisie']     = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
-                $extracted['canValide']     = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
+                $extracted['canModifier']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
+                $extracted['canValider']    = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
                 $extracted['canPostuler']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
                 $extracted['canVisualiser'] = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION);
+                $extracted['canSupprimer']  = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION);
 
 
                 /*$extracted['canValider']   = $this->isAllowed($original, Privileges::MISSION_VALIDATION);

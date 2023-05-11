@@ -1,4 +1,5 @@
 <template>
+
     <div class="col" v-if="!this.extended">
         <div class="card h-100">
             <div class="card-header">
@@ -31,22 +32,7 @@
             </div>
             <div class="card-footer">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a v-if="offre.validation && this.canValider"
-                       :href="devaliderUrl"
-                       class="btn btn-danger"
-                       title="Devalider"
-                       @click.prevent="devalider">
-                        <u-icon name="thumbs-down"/>
-                        Devalider
-                    </a>
-                    <a v-if="!offre.validation && this.canValider"
-                       :href="validerUrl"
-                       class="btn btn-success"
-                       title="Valider"
-                       @click.prevent="valider">
-                        <u-icon name="thumbs-up"/>
-                        Valider
-                    </a>
+
                     <a :href="consulterUrl"
                        title="Consulter "
                        class="btn btn-primary"
@@ -54,29 +40,12 @@
                         <u-icon name="eye"/>
                         Voir
                     </a>
-                    <a v-if="this.canModifier"
-                       :href="saisirUrl"
-                       class="btn btn-primary"
-                       @click.prevent="saisir"
-                       title="Modifier">
-                        <u-icon name="pen-to-square"/>
-                        Modifier
-                    </a>
-                    <a v-if="this.canSupprimer"
-                       :href="supprimerUrl"
-                       class="btn btn-danger"
-                       title="Supprimer"
-                       data-title="Suppression de l'offre"
-                       data-content="Êtes-vous sur de vouloir supprimer l'offre ?"
-                       @click.prevent="supprimer">
-                        <u-icon name="trash"/>
-                    </a>
-
                 </div>
             </div>
         </div>
     </div>
     <div v-if="this.extended">
+        <h1 class="page-header">{{ offre.titre }}</h1>
         <div v-if="!this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
             <i class="fa-solid fa-user"></i>
             <div class="ms-2">
@@ -174,8 +143,42 @@
 
         <div class="mt-5">
             <a class="btn btn-primary" href="/offre-emploi">Retour aux offres</a>&nbsp;
-            <a :class="isDisabled" :href="'/offre-emploi/postuler/' + offre.id" data-bs-toggle="tooltip" data-bs-placement="top"
-               data-bs-original-title="Vous devez être connecté pour postuler">Postuler</a>
+            <a v-if="this.canPostuler" :href="'/offre-emploi/postuler/' + offre.id" data-bs-toggle="tooltip" data-bs-placement="top"
+               data-bs-original-title="Vous devez être connecté pour postuler">Postuler</a>&nbsp;
+            <a v-if="offre.canModifier"
+               :href="saisirUrl"
+               class="btn btn-primary"
+               @click.prevent="saisir"
+               title="Modifier">
+                <u-icon name="pen-to-square"/>
+                Modifier
+            </a>&nbsp;
+            <a v-if="offre.validation && offre.canValider"
+               :href="devaliderUrl"
+               class="btn btn-danger"
+               title="Devalider"
+               @click.prevent="devalider">
+                <u-icon name="thumbs-down"/>
+                Devalider
+            </a>&nbsp;
+            <a v-if="!offre.validation && offre.canValider"
+               :href="validerUrl"
+               class="btn btn-success"
+               title="Valider"
+               @click.prevent="valider">
+                <u-icon name="thumbs-up"/>
+                Valider
+            </a>&nbsp;
+            <a v-if="offre.canSupprimer"
+               :href="supprimerUrl"
+               class="btn btn-danger"
+               title="Supprimer"
+               data-title="Suppression de l'offre"
+               data-content="Êtes-vous sur de vouloir supprimer l'offre ?"
+               @click.prevent="supprimer">
+                <u-icon name="trash"/>
+                Supprimer
+            </a>
 
 
         </div>
@@ -202,8 +205,6 @@ export default {
     data()
     {
 
-        console.log(this)
-
         return {
             saisirUrl: unicaenVue.url('offre-emploi/saisir/:offre', {offre: this.offre.id}),
             supprimerUrl: unicaenVue.url("offre-emploi/supprimer/:offre", {offre: this.offre.id}),
@@ -214,13 +215,6 @@ export default {
         };
     },
     computed: {
-        isDisabled: function () {
-
-            if (!this.canPostuler) {
-                return 'btn btn-primary disabled';
-            }
-            return 'btn btn-primary';
-        },
         isCandidat: function () {
             return false;
         },

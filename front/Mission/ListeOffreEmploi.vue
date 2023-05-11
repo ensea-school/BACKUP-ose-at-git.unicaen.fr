@@ -13,8 +13,11 @@
 
     <!--On affiche une synthèse de la liste des offres-->
     <div v-if="extended">
-        <offreEmploi v-for="offre in offres" :key="offre.id" :offre="offre" @refresh="refresh"
+        <offreEmploi v-for="offre in offres" :key="offre.id" :offre="offre" @refresh="refresh" @supprimer="supprimer"
                      :canPostuler="this.canPostuler"
+                     :canModifier="this.canModifier"
+                     :canValider="this.canValider"
+                     :canSupprimer="this.canSupprimer"
                      :canVoirCandidature="this.canVoirCandidature"
                      :canValiderCandidature="this.canValiderCandidature"
                      :extended="extended"

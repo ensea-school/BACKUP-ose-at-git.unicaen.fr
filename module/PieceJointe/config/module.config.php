@@ -3,7 +3,7 @@
 namespace PieceJointe;
 
 use Application\Provider\Privilege\Privileges;
-use PieceJointe\Assertion\DossierPiecesAssertion;
+use PieceJointe\Assertion\PiecesJointesAssertion;
 use PieceJointe\Controller\Factory\PieceJointeControllerFactory;
 use PieceJointe\Controller\PieceJointeController;
 use PieceJointe\Form\Factory\ModifierTypePieceJointeStatutFormFactory;
@@ -232,7 +232,7 @@ return [
             'controller' => PieceJointeController::class,
             'action'     => ['index'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
-            'assertion'  => Assertion\DossierPiecesAssertion::class,
+            'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
         [
             'controller' => PieceJointeController::class,
@@ -248,25 +248,25 @@ return [
             'controller' => PieceJointeController::class,
             'action'     => ['televerser', 'supprimer', 'archiver'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_EDITION,
-            'assertion'  => Assertion\DossierPiecesAssertion::class,
+            'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
         [
             'controller' => PieceJointeController::class,
             'action'     => ['archiver'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_ARCHIVAGE,
-            'assertion'  => Assertion\DossierPiecesAssertion::class,
+            'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
         [
             'controller' => PieceJointeController::class,
             'action'     => ['valider'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_VALIDATION,
-            'assertion'  => Assertion\DossierPiecesAssertion::class,
+            'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
         [
             'controller' => PieceJointeController::class,
             'action'     => ['devalider'],
             'privileges' => Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION,
-            'assertion'  => Assertion\DossierPiecesAssertion::class,
+            'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
     ],
     'rules'       => [
@@ -280,7 +280,7 @@ return [
 
             ],
             'resources'  => ['PieceJointe', 'Intervenant'],
-            'assertion'  => Assertion\DossierPiecesAssertion::class,
+            'assertion'  => Assertion\PiecesJointesAssertion::class,
         ],
 
 
@@ -293,7 +293,7 @@ return [
         PieceJointeService::class           => PieceJointeServiceFactory::class,
         TypePieceJointeService::class       => TypePieceJointeServiceFactory::class,
         TypePieceJointeStatutService::class => TypePieceJointeStatutServiceFactory::class,
-        DossierPiecesAssertion::class       => AssertionFactory::class,
+        PiecesJointesAssertion::class       => AssertionFactory::class,
 
     ],
 

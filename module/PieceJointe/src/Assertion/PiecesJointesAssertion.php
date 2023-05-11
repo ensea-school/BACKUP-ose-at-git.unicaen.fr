@@ -9,16 +9,17 @@ use Application\Provider\Privilege\Privileges;
 
 // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use PieceJointe\Controller\PieceJointeController;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**
- * Description of DossierPiecesAssertion
+ * Description of PiecesJointesAssertion
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class DossierPiecesAssertion extends AbstractAssertion
+class PiecesJointesAssertion extends AbstractAssertion
 {
     use WorkflowServiceAwareTrait;
 
@@ -35,16 +36,7 @@ class DossierPiecesAssertion extends AbstractAssertion
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
         switch ($controller) {
-            case "Dossier\Controller\IntervenantDossier":
-                switch ($action) {
-                    case 'index':
-                        if (!$this->assertPriv(Privileges::DOSSIER_VISUALISATION)) return false;
-
-                        return $this->assertDossierEdition($intervenant);
-                    break;
-                }
-            break;
-            case 'PieceJointe\Controller\PieceJointe':
+            case PieceJointeController::class:
                 switch ($action) {
                     case 'index':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_VISUALISATION)) return false;
@@ -118,13 +110,6 @@ class DossierPiecesAssertion extends AbstractAssertion
         }
 
         return true;
-    }
-
-
-
-    protected function assertDossierIdentiteEdition(Intervenant $intervenant = null)
-    {
-
     }
 
 

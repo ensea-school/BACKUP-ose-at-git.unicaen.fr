@@ -152,6 +152,18 @@ class IntervenantViewHelper extends AbstractHtmlElement
 
 
 
+    public function menuUrl(): string
+    {
+        $intervenant = $this->getIntervenant();
+
+        if (!$intervenant) return '';
+
+        return (string)$this->getView()->url(null, ['intervenant' => $intervenant->getId()], ['query' => ['menu' => 1]]);
+
+    }
+
+
+
     public function renderTitle(?string $title)
     {
         $title       = $title;

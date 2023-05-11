@@ -43,6 +43,13 @@ class SaisieController extends AbstractController
      */
     public function indexAction()
     {
+        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
+            $menu = new ViewModel();
+            $menu->setTemplate('application/intervenant/menu');
+
+            return $menu;
+        }
+
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 

@@ -58,6 +58,7 @@ export default {
             if (this.isMounted) {
                 // Mise à jour des plafonds
                 $(".plafonds").refresh();
+                $("#sidebar").refresh();
             }else{
                 this.isMounted = true;
             }

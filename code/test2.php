@@ -8,15 +8,7 @@
  * @var $viewFile   string
  */
 
-$controller->flashMessenger()->addSuccessMessage('addSuccessMessage');
-$controller->flashMessenger()->addInfoMessage('addInfoMessage');
-$controller->flashMessenger()->addWarningMessage('addWarningMessage');
-$controller->flashMessenger()->addErrorMessage('addErrorMessage');
-
-$messenger = $this->messenger();
-
-$messenger->addCurrentMessagesFromFlashMessengerWithNamespace('error');
-
-echo $messenger;
+/** @var \Application\Connecteur\LdapConnecteur $c */
+$c = $container->get(\Application\Connecteur\LdapConnecteur::class);
 
 ?>

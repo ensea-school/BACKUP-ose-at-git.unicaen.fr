@@ -31,6 +31,8 @@ class IndicateurService
                 return $this->makeQueryElement($indicateur);
             case PlafondPerimetre::VOLUME_HORAIRE:
                 return $this->makeQueryVolumeHoraire($indicateur);
+            case PlafondPerimetre::MISSION:
+                return $this->makeQueryMission($indicateur);
         }
 
         throw new \Exception('La requête n\'a pas pu être construite : le périmètre de plafond n\'a pas été identifié');
@@ -140,6 +142,28 @@ class IndicateurService
           replace(to_char(v.derogation),'.',',') \"Derogation\"
         FROM
           V_INDICATEUR_P_VOLUME_HORAIRE v
+        WHERE
+          v.numero = $numero
+        ";
+    }
+
+
+
+    protected function makeQueryMission(Indicateur $indicateur): string
+    {
+        $numero = $indicateur->getNumero();
+
+        return "
+        SELECT
+          v.intervenant_id,
+          v.structure_id,
+          v.etat \"État\",
+          v.type_mission \"Type de mission\",
+          replace(to_char(v.heures),'.',',') \"Heures\",
+          replace(to_char(v.plafond),'.',',') \"Plafond\",
+          replace(to_char(v.derogation),'.',',') \"Derogation\"
+        FROM
+          V_INDICATEUR_P_MISSION v
         WHERE
           v.numero = $numero
         ";

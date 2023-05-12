@@ -588,8 +588,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                         that.saving = false;
                     },
                     error: function (jqXHR) {
-                        alertFlash(jqXHR.responseText, 'error', 5000);
-                        console.log(jqXHR);
+                        UnicaenVue.flashMessenger.toast(jqXHR.responseText, 'error', 5000);
                         that.saving = false;
                     }
                 });

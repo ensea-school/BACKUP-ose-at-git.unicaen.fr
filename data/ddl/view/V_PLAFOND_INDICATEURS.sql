@@ -12,6 +12,7 @@ SELECT
     WHEN 'referentiel'    THEN 14
     WHEN 'element'        THEN 15
     WHEN 'volume_horaire' THEN 16
+    WHEN 'mission'        THEN 17
   END type_indicateur_id,
   0 irrecevables
 FROM

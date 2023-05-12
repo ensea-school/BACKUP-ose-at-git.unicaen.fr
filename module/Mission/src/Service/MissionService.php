@@ -71,7 +71,7 @@ class MissionService extends AbstractEntityService
           m.histoDestruction IS NULL 
           " . dqlAndWhere([
                 'intervenant' => 'm.intervenant',
-                'mission'     => 'm',
+                'mission' => 'm',
             ], $parameters) . "
         ORDER BY
           m.dateDebut,
@@ -115,24 +115,22 @@ class MissionService extends AbstractEntityService
         ];
 
         $triggers = [
-            [
-                '/'                      => function (Mission $original, array $extracted) {
-                    $extracted['canSaisie']    = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
-                    $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
-                    $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                    $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+            '/' => function (Mission $original, array $extracted) {
+                $extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
 
-                    return $extracted;
-                },
-                '/volumesHorairesPrevus' => function ($original, $extracted) {
-                    //$extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
-                    $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
-                    $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                    $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                return $extracted;
+            },
+            '/volumesHorairesPrevus' => function ($original, $extracted) {
+                //$extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
 
-                    return $extracted;
-                },
-            ],
+                return $extracted;
+            },
         ];
 
         return new AxiosModel($query, $properties, $triggers);

@@ -397,4 +397,11 @@ return [
         'indicateurs' => [
         ],
     ],
+
+
+    'Plafonds par types de missions' => [
+        'id'          => 17,
+        'indicateurs' => [
+        ],
+    ],
 ];

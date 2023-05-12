@@ -2267,7 +2267,100 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
         FROM
           (
-            SELECT NULL PLAFOND_ID,NULL ANNEE_ID,NULL TYPE_VOLUME_HORAIRE_ID,NULL INTERVENANT_ID,NULL TYPE_MISSION_ID,NULL HEURES,NULL PLAFOND,NULL PLAFOND_ETAT_ID,NULL DEROGATION FROM dual WHERE 0 = 1
+          SELECT 14 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                        annee_id,
+                vhm.type_volume_horaire_id        type_volume_horaire_id,
+                i.id                              intervenant_id,
+                tm.id                             type_mission_id,
+                SUM(vhm.heures)                   heures
+              FROM
+                     mission       m
+                JOIN intervenant                i ON i.id = m.intervenant_id
+                JOIN type_mission     tm ON tm.id = m.type_mission_id
+                JOIN volume_horaire_mission       vhm ON vhm.mission_id = m.id AND vhm.histo_destruction IS NULL
+              WHERE
+                m.histo_destruction IS NULL
+              GROUP BY
+                i.annee_id, vhm.type_volume_horaire_id, i.id, tm.id
+            ) p
+          SELECT 12 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                        annee_id,
+                vhm.type_volume_horaire_id        type_volume_horaire_id,
+                i.id                              intervenant_id,
+                tm.id                             type_mission_id,
+                SUM(vhm.heures)                   heures
+              FROM
+                     mission       m
+                JOIN intervenant                i ON i.id = m.intervenant_id
+                JOIN type_mission     tm ON tm.id = m.type_mission_id
+                JOIN volume_horaire_mission       vhm ON vhm.mission_id = m.id AND vhm.histo_destruction IS NULL
+              WHERE
+                m.histo_destruction IS NULL
+              GROUP BY
+                i.annee_id, vhm.type_volume_horaire_id, i.id, tm.id
+            ) p
+
+            UNION ALL
+
+          SELECT 11 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                        annee_id,
+                vhm.type_volume_horaire_id        type_volume_horaire_id,
+                i.id                              intervenant_id,
+                tm.id                             type_mission_id,
+                SUM(vhm.heures)                   heures
+              FROM
+                     mission       m
+                JOIN intervenant                i ON i.id = m.intervenant_id
+                JOIN type_mission     tm ON tm.id = m.type_mission_id
+                JOIN volume_horaire_mission       vhm ON vhm.mission_id = m.id AND vhm.histo_destruction IS NULL
+              WHERE
+                m.histo_destruction IS NULL
+              GROUP BY
+                i.annee_id, vhm.type_volume_horaire_id, i.id, tm.id
+            ) p
+
+            UNION ALL
+
+          SELECT 13 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                        annee_id,
+                vhm.type_volume_horaire_id        type_volume_horaire_id,
+                i.id                              intervenant_id,
+                tm.id                             type_mission_id,
+                SUM(vhm.heures)                   heures
+              FROM
+                     mission       m
+                JOIN intervenant                i ON i.id = m.intervenant_id
+                JOIN type_mission     tm ON tm.id = m.type_mission_id
+                JOIN volume_horaire_mission       vhm ON vhm.mission_id = m.id AND vhm.histo_destruction IS NULL
+              WHERE
+                m.histo_destruction IS NULL
+              GROUP BY
+                i.annee_id, vhm.type_volume_horaire_id, i.id, tm.id
+            ) p
+
+            UNION ALL
+
+          SELECT 14 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                        annee_id,
+                vhm.type_volume_horaire_id        type_volume_horaire_id,
+                i.id                              intervenant_id,
+                tm.id                             type_mission_id,
+                SUM(vhm.heures)                   heures
+              FROM
+                     mission       m
+                JOIN intervenant                i ON i.id = m.intervenant_id
+                JOIN type_mission     tm ON tm.id = m.type_mission_id
+                JOIN volume_horaire_mission       vhm ON vhm.mission_id = m.id AND vhm.histo_destruction IS NULL
+              WHERE
+                m.histo_destruction IS NULL
+              GROUP BY
+                i.annee_id, vhm.type_volume_horaire_id, i.id, tm.id
+            ) p
           ) p
           JOIN intervenant i ON i.id = p.intervenant_id
           LEFT JOIN plafond_mission ps ON ps.plafond_id = p.plafond_id AND ps.type_mission_id = p.type_mission_id AND ps.annee_id = i.annee_id AND ps.histo_destruction IS NULL

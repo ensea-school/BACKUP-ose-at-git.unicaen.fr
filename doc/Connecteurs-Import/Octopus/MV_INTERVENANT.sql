@@ -206,8 +206,9 @@ SELECT DISTINCT
     str2.code                                                                          z_structure_id,
     i.z_statut_id                                                                      z_statut_id,
     grade.c_grade                                                                      z_grade_id,
-    COALESCE(cnua.code_cnu_arrange, '00')                                              z_discipline_id,
-    /* Données identifiantes de base */
+    CASE WHEN COALESCE(cnua.code_cnu_arrange, '00') = '12'
+    	THEN '1201'
+    	ELSE COALESCE(cnua.code_cnu_arrange, '00') END                                 z_discipline_id,    /* Données identifiantes de base */
     CASE COALESCE(ind.sexe_ow, ind.sexe)
         WHEN 'M' THEN 'M.'
         ELSE 'Mme'

@@ -5,6 +5,7 @@ namespace Mission;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use UnicaenPrivilege\Assertion\AssertionFactory;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 
 return [
@@ -116,7 +117,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget' => true,
-                    'visible' => Assertion\SaisieAssertion::class,
+                    'resource' => PrivilegeController::getResourceId(Controller\SaisieController::class, 'index'),
                     'order' => 8,
                 ],
             ],

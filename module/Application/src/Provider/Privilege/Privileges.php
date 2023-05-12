@@ -166,6 +166,8 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT           = 'mise-en-paiement-visualisation-intervenant';
     const MISSION_AUTOVALIDATION                               = 'mission-autovalidation';
     const MISSION_AUTOVALIDATION_REALISE                       = 'mission-autovalidation-realise';
+    const MISSION_CANDIDATURE_VALIDER                          = 'mission-candidature-valider';
+    const MISSION_CANDIDATURE_VISUALISATION                    = 'mission-candidature-visualisation';
     const MISSION_DEVALIDATION                                 = 'mission-devalidation';
     const MISSION_DEVALIDATION_REALISE                         = 'mission-devalidation-realise';
     const MISSION_EDITION                                      = 'mission-edition';
@@ -177,12 +179,11 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const MISSION_OFFRE_EMPLOI_SUPPRESSION                     = 'mission-offre-emploi-suppression';
     const MISSION_OFFRE_EMPLOI_VALIDER                         = 'mission-offre-emploi-valider';
     const MISSION_OFFRE_EMPLOI_VISUALISATION                   = 'mission-offre-emploi-visualisation';
-    const MISSION_CANDIDATURE_VALIDER                          = 'mission-candidature-valider';
-    const MISSION_CANDIDATURE_VISUALISATION                    = 'mission-candidature-visualisation';
     const MISSION_SUPPRESSION_TYPE                             = 'mission-suppression-type';
     const MISSION_VALIDATION                                   = 'mission-validation';
     const MISSION_VALIDATION_REALISE                           = 'mission-validation-realise';
     const MISSION_VISUALISATION                                = 'mission-visualisation';
+    const MISSION_VISUALISATION_REALISE                        = 'mission-visualisation-realise';
     const MISSION_VISUALISATION_TYPE                           = 'mission-visualisation-type';
     const MODIF_SERVICE_DU_ASSOCIATION                         = 'modif-service-du-association';
     const MODIF_SERVICE_DU_EDITION                             = 'modif-service-du-edition';

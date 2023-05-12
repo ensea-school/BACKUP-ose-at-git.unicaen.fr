@@ -5,6 +5,7 @@ namespace Mission;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use UnicaenPrivilege\Assertion\AssertionFactory;
+use UnicaenPrivilege\Guard\PrivilegeController;
 
 
 return [
@@ -15,7 +16,7 @@ return [
                     'route'      => '/:intervenant/missions-suivi',
                     'controller' => Controller\SuiviController::class,
                     'action'     => 'index',
-                    'privileges' => Privileges::MISSION_VISUALISATION,
+                    'privileges' => Privileges::MISSION_VISUALISATION_REALISE,
                     'assertion'  => Assertion\SuiviAssertion::class,
                 ],
             ],
@@ -29,7 +30,7 @@ return [
                             'route'      => '/liste/:intervenant',
                             'controller' => Controller\SuiviController::class,
                             'action'     => 'liste',
-                            'privileges' => Privileges::MISSION_VISUALISATION,
+                            'privileges' => Privileges::MISSION_VISUALISATION_REALISE,
                             'assertion'  => Assertion\SuiviAssertion::class,
                         ],
                         'ajout'   => [
@@ -85,7 +86,7 @@ return [
                         'intervenant',
                     ],
                     'withtarget'          => true,
-                    'visible'             => Assertion\SuiviAssertion::class,
+                    'resource' => PrivilegeController::getResourceId(Controller\SuiviController::class, 'index'),
                     'order'               => 13,
                 ],
             ],

@@ -151,6 +151,7 @@ return [
         'libelle'    => 'Missions',
         'privileges' => [
             'visualisation'              => 'Visualisation',
+            'visualisation-realise'      => 'Visualisation des heures réalisées',
             'edition'                    => 'Edition',
             'validation'                 => 'Validation',
             'devalidation'               => 'Dévalidation',

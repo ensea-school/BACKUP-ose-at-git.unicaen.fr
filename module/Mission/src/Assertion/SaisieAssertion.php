@@ -24,28 +24,6 @@ class SaisieAssertion extends AbstractAssertion
     use WorkflowServiceAwareTrait;
 
 
-    /* ---- Routage général ---- */
-    public function __invoke(array $page) // gestion des visibilités de menus
-    {
-        return $this->assertPage($page);
-    }
-
-
-
-    protected function assertPage(array $page)
-    {
-        /* @var $role Role */
-        $role = $this->getRole();
-
-        /** @var Intervenant $intervenant */
-        $intervenant = $this->getMvcEvent()->getParam('intervenant');
-
-        if (!$role || !$intervenant) return false;
-
-        return $this->assertWorkflow($intervenant,);
-    }
-
-
 
     protected function assertController($controller, $action = null, $privilege = null)
     {
@@ -58,7 +36,10 @@ class SaisieAssertion extends AbstractAssertion
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         // Si c'est bon alors on affine...
-        $entity = $this->getMvcEvent()->getParam('intervenant');
+        $entity = $role->getIntervenant();
+        if (!$entity) {
+            $entity = $this->getMvcEvent()->getParam('intervenant');
+        }
         if (!$entity) {
             $entity = $this->getMvcEvent()->getParam('mission');
         }

@@ -158,7 +158,7 @@ class PlafondService extends AbstractEntityService
 
         $this->controleMakeQueries($entity, $typeVolumeHoraire, $sqls);
 
-        $sql = implode("\n\nUNION ALL\n\n", $sqls);
+        $sql = implode("\n\nUNION\n\n", $sqls);
         $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
         $depassements = [];
         foreach ($res as $r) {
@@ -220,7 +220,7 @@ class PlafondService extends AbstractEntityService
             $this->controleMakeQueries($entity->getServiceReferentiel(), $typeVolumeHoraire, $sqls);
         }
 
-        if ($entity instanceof Mission) {
+        if ($entity instanceof Mission && $entity->getTypeMission()) {
             if ($entity->getTypeMission()){
                 $this->controleMakeQueries($entity->getTypeMission(), $typeVolumeHoraire, $sqls);
             }

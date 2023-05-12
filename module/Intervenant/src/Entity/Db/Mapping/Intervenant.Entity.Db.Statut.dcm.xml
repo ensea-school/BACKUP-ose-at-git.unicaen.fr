@@ -87,6 +87,8 @@
         <field name="referentielRealiseEdition" type="boolean" column="REFERENTIEL_REALISE_EDITION" nullable="false"/>
 
         <field name="mission" type="boolean" column="MISSION" nullable="false"/>
+        <field name="missionVisualisation" type="boolean" column="MISSION_VISUALISATION" nullable="false"/>
+        <field name="missionEdition" type="boolean" column="MISSION_EDITION" nullable="false"/>
         <field name="missionRealiseEdition" type="boolean" column="MISSION_REALISE_EDITION" nullable="false"/>
         <field name="offreEmploiPostuler" type="boolean" column="OFFRE_EMPLOI_POSTULER" nullable="false"/>
 

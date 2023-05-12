@@ -59,7 +59,7 @@ class StatutSaisieForm extends AbstractForm
             'tauxRemu'                      => 'Taux de rémunération',
             'typeIntervenant'               => 'Type d\'intervenant',
             'mission'                       => 'Visualisation/Modification de mission',
-            'missionRealise'                => 'Saisie du réalisé',
+            'missionRealise'                => 'Suivi de mission',
             'offreEmploiPostuler'           => 'Postuler à une offre d\'emploi',
         ];
 
@@ -164,15 +164,13 @@ class StatutSaisieForm extends AbstractForm
             'name'     => 'missionRealise',
             'options'  => [
                 'value_options' => [
-                    'desactive' => 'Désactivé',
-                    //'active'        => 'Activé mais non visible par l\'intervenant',
-                    //'visualisation' => 'Activé et visible par l\'intervenant',
-                    'edition'   => 'Activé et modifiable par l\'intervenant',
+                    'visualisation' => 'Visible par l\'intervenant',
+                    'edition'       => 'Modifiable par l\'intervenant',
                 ],
             ],
             'hydrator' => [
                 'getter' => function (Statut $statut, string $name) {
-                    $real = $statut->getMissionRealiseEdition() ? 'edition' : 'desactive';
+                    $real = $statut->getMissionRealiseEdition() ? 'edition' : 'visualisation';
 
                     return $real;
                 },

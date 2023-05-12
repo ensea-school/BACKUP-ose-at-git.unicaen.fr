@@ -1311,6 +1311,8 @@ return [
         'TAUX_REMU_ID',
         'DOSSIER_STATUT',
         'OFFRE_EMPLOI_POSTULER',
+        'MISSION_VISUALISATION',
+        'MISSION_EDITION',
     ],
     'STRUCTURE'                      => [
         'ID',

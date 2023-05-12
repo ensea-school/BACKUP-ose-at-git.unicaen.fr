@@ -224,15 +224,17 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('mission')); ?>
                     </div>
+
+                </div>
+                <div class="row missionDetails">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('offreEmploiPostuler')); ?>
+                    </div>
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('missionRealise')); ?>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('offreEmploiPostuler')); ?>
-                    </div>
-                </div>
+
             </div>
         </div>
 
@@ -398,6 +400,12 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 this.element.find('.contratDetails').toggle(visible);
             },
 
+            missionVisu: function(){
+                var visible = this.el('mission').val() != 'desactive';
+console.log(visible);
+                this.element.find('.missionDetails').toggle(visible);
+            },
+
             _create: function () {
                 var that = this;
 
@@ -407,6 +415,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 that.agrementCRVisu();
                 that.agrementCAVisu();
                 that.contratVisu();
+                that.missionVisu();
 
                 that.el('dossier').change(function () {
                     that.donneesVisu()
@@ -428,6 +437,9 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 });
                 that.el('contrat').change(function () {
                     that.contratVisu()
+                });
+                that.el('mission').change(function () {
+                    that.missionVisu()
                 });
             },
 

@@ -167,6 +167,8 @@ return [
                 Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
                 Privileges::REFERENTIEL_PREVU_VISUALISATION,
                 Privileges::REFERENTIEL_REALISE_VISUALISATION,
+                Privileges::MISSION_EDITION_REALISE,
+                Privileges::MISSION_EDITION,
             ],
         ],
         [

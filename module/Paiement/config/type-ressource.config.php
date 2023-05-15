@@ -63,20 +63,14 @@ return [
     ],
 
     'services' => [
-        'invokables' => [
-            Service\TypeRessourceService::class => Service\TypeRessourceService::class,
-        ],
+        Service\TypeRessourceService::class => Service\TypeRessourceServiceFactory::class,
     ],
 
     'controllers' => [
-        'invokables' => [
-            Controller\TypeRessourceController::class => Controller\TypeRessourceController::class,
-        ],
+        Controller\TypeRessourceController::class => Controller\TypeRessourceControllerFactory::class,
     ],
 
     'forms' => [
-        'invokables' => [
-            Form\TypeRessource\TypeRessourceSaisieForm::class => Form\TypeRessource\TypeRessourceSaisieForm::class,
-        ],
+        Form\TypeRessource\TypeRessourceSaisieForm::class => Form\TypeRessource\TypeRessourceSaisieFormFactory::class,
     ],
 ];

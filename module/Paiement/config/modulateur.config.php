@@ -3,7 +3,6 @@
 namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
-use Paiement\Service\TypeModulateurService;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
@@ -102,13 +101,10 @@ return [
     ],
 
     'services' => [
-        'invokables'                         => [
-            \Paiement\Service\TypeModulateurStructureService::class => \Paiement\Service\TypeModulateurStructureService::class,
-            \Paiement\Service\ModulateurService::class              => \Paiement\Service\ModulateurService::class,
-            TypeModulateurService::class                            => TypeModulateurService::class,
-
-        ],
-        Assertion\ModulateurAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Service\TypeModulateurStructureService::class => Service\TypeModulateurStructureServiceFactory::class,
+        Service\ModulateurService::class              => Service\ModulateurServiceFactory::class,
+        Service\TypeModulateurService::class          => Service\TypeModulateurServiceFactory::class,
+        Assertion\ModulateurAssertion::class          => \UnicaenPrivilege\Assertion\AssertionFactory::class,
     ],
 
     'controllers' => [

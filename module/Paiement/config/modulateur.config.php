@@ -112,16 +112,12 @@ return [
     ],
 
     'controllers' => [
-        'invokables' => [
-            Controller\ModulateurController::class => Controller\ModulateurController::class,
-        ],
+        Controller\ModulateurController::class => Controller\ModulateurControllerFactory::class,
     ],
 
     'forms' => [
-        'invokables' => [
-            \Paiement\Form\Modulateur\ModulateurSaisieForm::class              => \Paiement\Form\Modulateur\ModulateurSaisieForm::class,
-            Form\Modulateur\TypeModulateurSaisieForm::class                    => Form\Modulateur\TypeModulateurSaisieForm::class,
-            \Paiement\Form\Modulateur\TypeModulateurStructureSaisieForm::class => \Paiement\Form\Modulateur\TypeModulateurStructureSaisieForm::class,
-        ],
+        Form\Modulateur\ModulateurSaisieForm::class              => Form\Modulateur\ModulateurSaisieFormFactory::class,
+        Form\Modulateur\TypeModulateurSaisieForm::class          => Form\Modulateur\TypeModulateurSaisieFormFactory::class,
+        Form\Modulateur\TypeModulateurStructureSaisieForm::class => Form\Modulateur\TypeModulateurStructureSaisieFormFactory::class,
     ],
 ];

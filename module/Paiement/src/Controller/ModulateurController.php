@@ -1,7 +1,8 @@
 <?php
 
-namespace Application\Controller;
+namespace Paiement\Controller;
 
+use Application\Controller\AbstractController;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Paiement\Entity\Db\Modulateur;
 use Paiement\Entity\Db\TypeModulateur;
@@ -14,7 +15,7 @@ use Paiement\Service\TypeModulateurServiceAwareTrait;
 use Paiement\Service\TypeModulateurStructureServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
-class modulateurController extends AbstractController
+class ModulateurController extends AbstractController
 {
     use ModulateurServiceAwareTrait;
     use TypeModulateurServiceAwareTrait;

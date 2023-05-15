@@ -12,6 +12,7 @@ use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Entity\Db\TypeHeures;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
+use Paiement\Controller\BudgetController;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\TypeRessource;
@@ -192,7 +193,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
         foreach ($structures as $structure) {
             $sid = $structure->getId();
             $h   .= $t('tr');
-            if ($this->getView()->isAllowed(PrivilegeController::getResourceId('Application\Controller\Budget', 'engagement'))) {
+            if ($this->getView()->isAllowed(PrivilegeController::getResourceId(BudgetController::class, 'engagement'))) {
                 $h .= $t('th')->html($t('a', ['href' => $this->getView()->url('budget/engagement', ['structure' => $structure->getId()])])->text($structure));
             } else {
                 $h .= $t('th')->text($structure);

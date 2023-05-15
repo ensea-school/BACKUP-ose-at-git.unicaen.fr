@@ -1,106 +1,82 @@
 <?php
 
-namespace Application;
+namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
-    'router'          => [
-        'routes' => [
-            'type-ressource' => [
-                'type'          => 'Segment',
-                'options'       => [
-                    'route'    => '/type-ressource',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\TypeRessource',
-                        'action'     => 'index',
+    'routes' => [
+        'type-ressource' => [
+            'route'         => '/type-ressource',
+            'controller'    => Controller\TypeRessourceController::class,
+            'action'        => 'index',
+            'may_terminate' => true,
+            'child_routes'  => [
+                'saisie' => [
+                    'route'       => '/saisie[/:typeRessource]',
+                    'constraints' => [
+                        'typeRessource' => '[0-9]*',
                     ],
+                    'action'      => 'saisie',
                 ],
-                'may_terminate' => true,
-                'child_routes'  => [
-                    'saisie' => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/saisie[/:typeRessource]',
-                            'constraints' => [
-                                'typeRessource' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'saisie',
-                            ],
-                        ],
-                        'may_terminate' => true,
+                'delete' => [
+                    'route'       => '/delete[/:typeRessource]',
+                    'constraints' => [
+                        'typeRessource' => '[0-9]*',
                     ],
-                    'delete' => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/delete[/:typeRessource]',
-                            'constraints' => [
-                                'typeRessource' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'delete',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                    ],
+                    'action'      => 'delete',
                 ],
             ],
         ],
     ],
-    'navigation'      => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'administration' => [
-                        'pages' => [
-                            'finances' => [
-                                'pages' => [
-                                    'type-ressource' => [
-                                        'label'        => 'Types de ressources',
-                                        'route'        => 'type-ressource',
-                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeRessource', 'index'),
-                                        'order'        => 50,
-                                        'color' => '#71DFD7',
-                                    ],
-                                ],
-                            ],
+
+    'navigation' => [
+        'administration' => [
+            'pages' => [
+                'finances' => [
+                    'pages' => [
+                        'type-ressource' => [
+                            'label'    => 'Types de ressources',
+                            'route'    => 'type-ressource',
+                            'resource' => PrivilegeController::getResourceId(Controller\TypeRessourceController::class, 'index'),
+                            'order'    => 50,
+                            'color'    => '#71DFD7',
                         ],
                     ],
                 ],
             ],
         ],
     ],
-    'bjyauthorize'    => [
-        'guards' => [
-            PrivilegeController::class => [
-                [
-                    'controller' => 'Application\Controller\TypeRessource',
-                    'action'     => ['index'],
-                    'privileges' => [Privileges::TYPE_RESSOURCE_VISUALISATION],
-                ],
-                [
-                    'controller' => 'Application\Controller\TypeRessource',
-                    'action'     => ['saisie', 'delete'],
-                    'privileges' => [Privileges::TYPE_RESSOURCE_EDITION],
-                ],
-            ],
+
+    'guards' => [
+        [
+            'controller' => Controller\TypeRessourceController::class,
+            'action'     => ['index'],
+            'privileges' => [Privileges::TYPE_RESSOURCE_VISUALISATION],
+        ],
+        [
+            'controller' => Controller\TypeRessourceController::class,
+            'action'     => ['saisie', 'delete'],
+            'privileges' => [Privileges::TYPE_RESSOURCE_EDITION],
         ],
     ],
-    'service_manager' => [
+
+    'services' => [
         'invokables' => [
-            \Paiement\Service\TypeRessourceService::class => \Paiement\Service\TypeRessourceService::class,
+            Service\TypeRessourceService::class => Service\TypeRessourceService::class,
         ],
     ],
-    'controllers'     => [
+
+    'controllers' => [
         'invokables' => [
-            'Application\Controller\TypeRessource' => \Paiement\Controller\TypeRessourceController::class,
+            Controller\TypeRessourceController::class => Controller\TypeRessourceController::class,
         ],
     ],
-    'form_elements'   => [
+
+    'forms' => [
         'invokables' => [
-            \Paiement\Form\TypeRessource\TypeRessourceSaisieForm::class => \Paiement\Form\TypeRessource\TypeRessourceSaisieForm::class,
+            Form\TypeRessource\TypeRessourceSaisieForm::class => Form\TypeRessource\TypeRessourceSaisieForm::class,
         ],
     ],
 ];

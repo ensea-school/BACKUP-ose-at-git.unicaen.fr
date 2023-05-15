@@ -1,177 +1,125 @@
 <?php
 
-namespace Application;
+namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
 use Paiement\Service\TypeModulateurService;
 use UnicaenPrivilege\Guard\PrivilegeController;
-use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 return [
-    'router'          => [
-        'routes' => [
-            'modulateur' => [
-                'type'          => 'Segment',
-                'options'       => [
-                    'route'    => '/modulateur',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\Modulateur',
-                        'action'     => 'index',
+    'routes' => [
+        'modulateur' => [
+            'route'         => '/modulateur',
+            'controller'    => Controller\ModulateurController::class,
+            'action'        => 'index',
+            'may_terminate' => true,
+            'child_routes'  => [
+                'saisie'                           => [
+                    'route'       => '/saisie/:typeModulateur[/:modulateur]',
+                    'action'      => 'saisie',
+                    'constraints' => [
+                        'modulateur'     => '[0-9]*',
+                        'typeModulateur' => '[0-9]*',
                     ],
                 ],
-                'may_terminate' => true,
-                'child_routes'  => [
-                    'saisie'                           => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/saisie/:typeModulateur[/:modulateur]',
-                            'constraints' => [
-                                'modulateur'     => '[0-9]*',
-                                'typeModulateur' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'saisie',
-                            ],
-                        ],
-                        'may_terminate' => true,
+                'delete'                           => [
+                    'route'       => '/delete/:modulateur',
+                    'action'      => 'delete',
+                    'constraints' => [
+                        'modulateur' => '[0-9]*',
                     ],
-                    'delete'                           => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/delete/:modulateur',
-                            'constraints' => [
-                                'modulateur' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'delete',
-                            ],
-                        ],
-                        'may_terminate' => true,
+                ],
+                'type-modulateur-saisie'           => [
+                    'route'       => '/type-modulateur-saisie[/:typeModulateur]',
+                    'constraints' => [
+                        'typeModulateur' => '[0-9]*',
                     ],
-                    'type-modulateur-saisie'           => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/type-modulateur-saisie[/:typeModulateur]',
-                            'constraints' => [
-                                'typeModulateur' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'type-modulateur-saisie',
-                            ],
-                        ],
-                        'may_terminate' => true,
+                    'action'      => 'type-modulateur-saisie',
+                ],
+                'type-modulateur-delete'           => [
+                    'route'       => '/type-modulateur-delete/:typeModulateur',
+                    'constraints' => [
+                        'typeModulateur' => '[0-9]*',
                     ],
-                    'type-modulateur-delete'           => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/type-modulateur-delete/:typeModulateur',
-                            'constraints' => [
-                                'typeModulateur' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'type-modulateur-delete',
-                            ],
-                        ],
-                        'may_terminate' => true,
+                    'action'      => 'type-modulateur-delete',
+                ],
+                'type-modulateur-structure-saisie' => [
+                    'route'       => '/type-modulateur-structure-saisie/:typeModulateur[/:typeModulateurStructure]',
+                    'constraints' => [
+                        'typeModulateur'          => '[0-9]*',
+                        'typeModulateurStructure' => '[0-9]*',
                     ],
-                    'type-modulateur-structure-saisie' => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/type-modulateur-structure-saisie/:typeModulateur[/:typeModulateurStructure]',
-                            'constraints' => [
-                                'typeModulateur'          => '[0-9]*',
-                                'typeModulateurStructure' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'type-modulateur-structure-saisie',
-                            ],
-                        ],
-                        'may_terminate' => true,
+                    'action'      => 'type-modulateur-structure-saisie',
+                ],
+                'type-modulateur-structure-delete' => [
+                    'route'       => '/type-modulateur-structure-delete/:typeModulateurStructure',
+                    'constraints' => [
+                        'typeModulateurStructure' => '[0-9]*',
                     ],
-                    'type-modulateur-structure-delete' => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/type-modulateur-structure-delete/:typeModulateurStructure',
-                            'constraints' => [
-                                'typeModulateurStructure' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'type-modulateur-structure-delete',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                    ],
+                    'action'      => 'type-modulateur-structure-delete',
                 ],
             ],
         ],
     ],
-    'navigation'      => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'administration' => [
-                        'pages' => [
-                            'odf' => [
-                                'pages' => [
-                                    'modulateur' => [
-                                        'label'    => 'Modulateurs des taux horaires',
-                                        'route'    => 'modulateur',
-                                        'order'    => 10,
-                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Modulateur', 'index'),
-                                    ],
-                                ],
-                            ],
+
+    'navigation' => [
+        'administration' => [
+            'pages' => [
+                'odf' => [
+                    'pages' => [
+                        'modulateur' => [
+                            'label'    => 'Modulateurs des taux horaires',
+                            'route'    => 'modulateur',
+                            'order'    => 10,
+                            'resource' => PrivilegeController::getResourceId(Controller\ModulateurController::class, 'index'),
                         ],
                     ],
                 ],
             ],
         ],
     ],
-    'bjyauthorize'    => [
-        'guards'         => [
-            PrivilegeController::class => [
-                [
-                    'controller' => 'Application\Controller\Modulateur',
-                    'action'     => ['index'],
-                    'privileges' => [Privileges::MODULATEUR_VISUALISATION],
-                    'assertion'  => Assertion\ModulateurAssertion::class,
-                ],
-                [
-                    'controller' => 'Application\Controller\Modulateur',
-                    'action'     => ['saisie', 'delete', 'type-modulateur-saisie', 'type-modulateur-delete', 'type-modulateur-structure-saisie', 'type-modulateur-structure-delete'],
-                    'privileges' => [Privileges::MODULATEUR_EDITION],
-                ],
+
+    'guards' => [
+        PrivilegeController::class => [
+            [
+                'controller' => Controller\ModulateurController::class,
+                'action'     => ['index'],
+                'privileges' => [Privileges::MODULATEUR_VISUALISATION],
+                'assertion'  => Assertion\ModulateurAssertion::class,
             ],
-        ],
-        'rule_providers' => [
-            PrivilegeRuleProvider::class => [
-                'allow' => [
-                    [
-                        'privileges' => Privileges::MODULATEUR_VISUALISATION,
-                        'resources'  => ['TypeModulateur', 'Structure'],
-                        'assertion'  => Assertion\ModulateurAssertion::class,
-                    ],
-                ],
+            [
+                'controller' => Controller\ModulateurController::class,
+                'action'     => ['saisie', 'delete', 'type-modulateur-saisie', 'type-modulateur-delete', 'type-modulateur-structure-saisie', 'type-modulateur-structure-delete'],
+                'privileges' => [Privileges::MODULATEUR_EDITION],
             ],
         ],
     ],
-    'service_manager' => [
-        'invokables' => [
+
+    'rules' => [
+        [
+            'privileges' => Privileges::MODULATEUR_VISUALISATION,
+            'resources'  => ['TypeModulateur', 'Structure'],
+            'assertion'  => Assertion\ModulateurAssertion::class,
+        ],
+    ],
+
+    'services' => [
+        'invokables'                         => [
             \Paiement\Service\TypeModulateurStructureService::class => \Paiement\Service\TypeModulateurStructureService::class,
             \Paiement\Service\ModulateurService::class              => \Paiement\Service\ModulateurService::class,
             TypeModulateurService::class                            => TypeModulateurService::class,
 
         ],
-        'factories'  => [
-            Assertion\ModulateurAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
-        ],
+        Assertion\ModulateurAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
     ],
-    'controllers'     => [
+
+    'controllers' => [
         'invokables' => [
-            'Application\Controller\Modulateur' => Controller\ModulateurController::class,
+            Controller\ModulateurController::class => Controller\ModulateurController::class,
         ],
     ],
-    'form_elements'   => [
+
+    'forms' => [
         'invokables' => [
             \Paiement\Form\Modulateur\ModulateurSaisieForm::class              => \Paiement\Form\Modulateur\ModulateurSaisieForm::class,
             Form\Modulateur\TypeModulateurSaisieForm::class                    => Form\Modulateur\TypeModulateurSaisieForm::class,

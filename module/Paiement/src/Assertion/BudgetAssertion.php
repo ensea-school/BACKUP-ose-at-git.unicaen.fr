@@ -5,6 +5,7 @@ namespace Paiement\Assertion;
 use Application\Acl\Role;
 use Application\Entity\Db\Structure;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Paiement\Controller\BudgetController;
 use Paiement\Entity\Db\Dotation;
 use Paiement\Entity\Db\TypeRessource;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
@@ -63,7 +64,7 @@ class BudgetAssertion extends AbstractAssertion
         // pareil si le rôle ne possède pas le privilège adéquat
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
-        if ($controller == 'Application\Controller\Budget' && $action == 'tableau-de-bord') {
+        if ($controller == BudgetController::class && $action == 'tableau-de-bord') {
             return !$role->getStructure(); // on n'a accès que si on n'est pas dans une structure spécifique!!
         }
 

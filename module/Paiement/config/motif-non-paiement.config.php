@@ -1,104 +1,83 @@
 <?php
 
-namespace Application;
+namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
-    'router'          => [
-        'routes' => [
-            'motif-non-paiement' => [
-                'type'          => 'Literal',
-                'options'       => [
-                    'route'    => '/motif-non-paiement',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\MotifNonPaiement',
-                        'action'     => 'index',
+    'routes' => [
+        'motif-non-paiement' => [
+            'route'         => '/motif-non-paiement',
+            'controller'    => Controller\MotifNonPaiementController::class,
+            'action'        => 'index',
+            'may_terminate' => true,
+            'child_routes'  => [
+                'supprimer' => [
+                    'route'       => '/supprimer/:motifNonPaiement',
+                    'action'      => 'supprimer',
+                    'constraints' => [
+                        'motifNonPaiement' => '[0-9]*',
                     ],
                 ],
-                'may_terminate' => true,
-                'child_routes'  => [
-                    'supprimer' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/supprimer/:motifNonPaiement',
-                            'constraints' => [
-                                'motifNonPaiement' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'supprimer',
-                            ],
-                        ],
-                    ],
-                    'saisir'    => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/saisir/[:motifNonPaiement]',
-                            'constraints' => [
-                                'motifNonPaiement' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'saisir',
-                            ],
-                        ],
+                'saisir'    => [
+                    'route'       => '/saisir/[:motifNonPaiement]',
+                    'action'      => 'saisir',
+                    'constraints' => [
+                        'motifNonPaiement' => '[0-9]*',
                     ],
                 ],
             ],
         ],
     ],
-    'navigation'      => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'administration' => [
-                        'pages' => [
-                            'rh' => [
-                                'pages' => [
-                                    'motif-non-paiement' => [
-                                        'label'        => 'Motifs de non paiement',
-                                        'route'        => 'motif-non-paiement',
-                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\MotifNonPaiement', 'index'),
-                                        'order'        => 50,
-                                        'color' => '#BBCF55',
-                                    ],
-                                ],
-                            ],
+
+    'navigation' => [
+        'administration' => [
+            'pages' => [
+                'rh' => [
+                    'pages' => [
+                        'motif-non-paiement' => [
+                            'label'    => 'Motifs de non paiement',
+                            'route'    => 'motif-non-paiement',
+                            'resource' => PrivilegeController::getResourceId(Controller\MotifNonPaiementController::class, 'index'),
+                            'order'    => 50,
+                            'color'    => '#BBCF55',
                         ],
                     ],
                 ],
             ],
         ],
     ],
-    'bjyauthorize'    => [
-        'guards' => [
-            PrivilegeController::class => [
-                [
-                    'controller' => 'Application\Controller\MotifNonPaiement',
-                    'action'     => ['index'],
-                    'privileges' => Privileges::MOTIF_NON_PAIEMENT_ADMINISTRATION_VISUALISATION,
-                ],
-                [
-                    'controller' => 'Application\Controller\MotifNonPaiement',
-                    'action'     => ['saisir', 'supprimer'],
-                    'privileges' => Privileges::MOTIF_NON_PAIEMENT_ADMINISTRATION_EDITION,
-                ],
-            ],
+
+    'guards' => [
+        [
+            'controller' => Controller\MotifNonPaiementController::class,
+            'action'     => ['index'],
+            'privileges' => Privileges::MOTIF_NON_PAIEMENT_ADMINISTRATION_VISUALISATION,
+        ],
+        [
+            'controller' => Controller\MotifNonPaiementController::class,
+            'action'     => ['saisir', 'supprimer'],
+            'privileges' => Privileges::MOTIF_NON_PAIEMENT_ADMINISTRATION_EDITION,
         ],
     ],
-    'controllers'     => [
+
+    'controllers' => [
         'invokables' => [
-            'Application\Controller\MotifNonPaiement' => \Paiement\Controller\MotifNonPaiementController::class,
+            Controller\MotifNonPaiementController::class => Controller\MotifNonPaiementController::class,
         ],
     ],
-    'service_manager' => [
+
+    'services' => [
         'invokables' => [
             \Paiement\Service\MotifNonPaiementService::class => \Paiement\Service\MotifNonPaiementService::class,
         ],
     ],
-    'view_helpers'    => [
+
+    'view_helpers' => [
     ],
-    'form_elements'   => [
+
+    'forms' => [
         'invokables' => [
             Form\MotifNonPaiement\Saisie::class => \Paiement\Form\MotifNonPaiement\MotifNonPaiementSaisieForm::class,
         ],

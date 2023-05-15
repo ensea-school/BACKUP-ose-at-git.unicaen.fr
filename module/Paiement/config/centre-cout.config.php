@@ -1,110 +1,70 @@
 <?php
 
-namespace Application;
+namespace Paiement;
 
 use Application\Provider\Privilege\Privileges;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
-    'router' => [
-        'routes' => [
-            'centre-cout-activite' => [
-                'type'          => 'Literal',
-                'options'       => [
-                    'route'    => '/centre-cout-activite',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\CentreCout',
-                        'action'     => 'centre-cout-activite',
-                    ],
+    'routes' => [
+        'centre-cout-activite' => [
+            'route'      => '/centre-cout-activite',
+            'controller' => Controller\CentreCoutController::class,
+            'action'     => 'centre-cout-activite',
+        ],
+        'may_terminate'        => true,
+        'child_routes'         => [
+            'delete' => [
+                'route'       => '/delete/:ccActivite',
+                'action'      => 'centre-cout-activite-delete',
+                'constraints' => [
+                    'ccActivite' => '[0-9]*',
                 ],
-                'may_terminate' => true,
-                'child_routes'  => [
-                    'delete' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/delete/:ccActivite',
-                            'constraints' => [
-                                'ccActivite' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'centre-cout-activite-delete',
-                            ],
-                        ],
-                    ],
-                    'saisie' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/saisie/[:ccActivite]',
-                            'constraints' => [
-                                'ccActivite' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'centre-cout-activite-saisie',
-                            ],
-                        ],
+            ],
+            'saisie' => [
+                'options' => [
+                    'route'       => '/saisie/[:ccActivite]',
+                    'action'      => 'centre-cout-activite-saisie',
+                    'constraints' => [
+                        'ccActivite' => '[0-9]*',
                     ],
                 ],
             ],
+        ],
 
-            'centre-cout' => [
-                'type'          => 'Literal',
-                'options'       => [
-                    'route'    => '/centre-cout',
-                    'defaults' => [
-                        'controller' => 'Application\Controller\CentreCout',
-                        'action'     => 'index',
+        'centre-cout' => [
+            'route'         => '/centre-cout',
+            'controller'    => Controller\CentreCoutController::class,
+            'action'        => 'index',
+            'may_terminate' => true,
+            'child_routes'  => [
+                'delete'           => [
+                    'route'       => '/delete/:centreCout',
+                    'action'      => 'delete',
+                    'constraints' => [
+                        'centreCout' => '[0-9]*',
                     ],
                 ],
-                'may_terminate' => true,
-                'child_routes'  => [
-                    'delete'           => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/delete/:centreCout',
-                            'constraints' => [
-                                'centreCout' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'delete',
-                            ],
-                        ],
+                'saisie'           => [
+                    'route'       => '/saisie/[:centreCout]',
+                    'action'      => 'saisie',
+                    'constraints' => [
+                        'centreCout' => '[0-9]*',
                     ],
-                    'saisie'           => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/saisie/[:centreCout]',
-                            'constraints' => [
-                                'centreCout' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'saisie',
-                            ],
-                        ],
+                ],
+                'delete-structure' => [
+                    'route'       => '/delete-structure/:centreCoutStructure',
+                    'action'      => 'delete-structure',
+                    'constraints' => [
+                        'centreCoutStructure' => '[0-9]*',
                     ],
-                    'delete-structure' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/delete-structure/:centreCoutStructure',
-                            'constraints' => [
-                                'centreCoutStructure' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'delete-structure',
-                            ],
-                        ],
-                    ],
-                    'saisie-structure' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/saisie-structure/:centreCout/[:centreCoutStructure]',
-                            'constraints' => [
-                                'centreCout'          => '[0-9]*',
-                                'centreCoutStructure' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'saisie-structure',
-                            ],
-                        ],
+                ],
+                'saisie-structure' => [
+                    'route'       => '/saisie-structure/:centreCout/[:centreCoutStructure]',
+                    'action'      => 'saisie-structure',
+                    'constraints' => [
+                        'centreCout'          => '[0-9]*',
+                        'centreCoutStructure' => '[0-9]*',
                     ],
                 ],
             ],
@@ -112,29 +72,23 @@ return [
     ],
 
     'navigation' => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'administration' => [
-                        'pages' => [
-                            'finances' => [
-                                'pages' => [
-                                    'centre-cout'          => [
-                                        'label'        => 'Centres de coûts',
-                                        'route'        => 'centre-cout',
-                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
-                                        'order'        => 10,
-                                        'color' => '#BBCF55',
-                                    ],
-                                    'centre-cout-activite' => [
-                                        'label'        => 'Types d\'activités des centres de coûts',
-                                        'route'        => 'centre-cout-activite',
-                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),
-                                        'order'        => 40,
-                                        'color' => '#BBCF55',
-                                    ],
-                                ],
-                            ],
+        'administration' => [
+            'pages' => [
+                'finances' => [
+                    'pages' => [
+                        'centre-cout'          => [
+                            'label'    => 'Centres de coûts',
+                            'route'    => 'centre-cout',
+                            'resource' => PrivilegeController::getResourceId(Controller\CentreCoutController::class, 'index'),
+                            'order'    => 10,
+                            'color'    => '#BBCF55',
+                        ],
+                        'centre-cout-activite' => [
+                            'label'    => 'Types d\'activités des centres de coûts',
+                            'route'    => 'centre-cout-activite',
+                            'resource' => PrivilegeController::getResourceId(Controller\CentreCoutController::class, 'index'),
+                            'order'    => 40,
+                            'color'    => '#BBCF55',
                         ],
                     ],
                 ],
@@ -142,35 +96,34 @@ return [
         ],
     ],
 
-    'bjyauthorize'    => [
-        'guards' => [
-            PrivilegeController::class => [
-                [
-                    'controller' => 'Application\Controller\CentreCout',
-                    'action'     => ['index', 'centre-cout-activite'],
-                    'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_VISUALISATION,
-                ],
-                [
-                    'controller' => 'Application\Controller\CentreCout',
-                    'action'     => ['saisie', 'delete', 'saisie-structure', 'delete-structure', 'centre-cout-activite-delete', 'centre-cout-activite-saisie'],
-                    'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION,
-                ],
-            ],
+    'guards' => [
+        [
+            'controller' => Controller\CentreCoutController::class,
+            'action'     => ['index', 'centre-cout-activite'],
+            'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_VISUALISATION,
+        ],
+        [
+            'controller' => Controller\CentreCoutController::class,
+            'action'     => ['saisie', 'delete', 'saisie-structure', 'delete-structure', 'centre-cout-activite-delete', 'centre-cout-activite-saisie'],
+            'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION,
         ],
     ],
-    'controllers'     => [
+
+    'controllers' => [
         'invokables' => [
-            'Application\Controller\CentreCout' => \Paiement\Controller\CentreCoutController::class,
+            Controller\CentreCoutController::class => Controller\CentreCoutController::class,
         ],
     ],
-    'service_manager' => [
+
+    'services' => [
         'invokables' => [
             \Paiement\Service\CentreCoutService::class          => \Paiement\Service\CentreCoutService::class,
             \Paiement\Service\CentreCoutStructureService::class => \Paiement\Service\CentreCoutStructureService::class,
             \Paiement\Service\CcActiviteService::class          => \Paiement\Service\CcActiviteService::class,
         ],
     ],
-    'form_elements'   => [
+
+    'forms' => [
         'invokables' => [
             \Paiement\Form\CentreCout\CentreCoutSaisieForm::class         => \Paiement\Form\CentreCout\CentreCoutSaisieForm::class,
             Form\CentreCout\CentreCoutStructureSaisieForm::class          => Form\CentreCout\CentreCoutStructureSaisieForm::class,

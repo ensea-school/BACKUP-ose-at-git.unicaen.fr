@@ -8,9 +8,9 @@ use UnicaenPrivilege\Guard\PrivilegeController;
 return [
     'routes' => [
         'centre-cout-activite' => [
-            'route'      => '/centre-cout-activite',
-            'controller' => Controller\CentreCoutController::class,
-            'action'     => 'centre-cout-activite',
+            'route'         => '/centre-cout-activite',
+            'controller'    => Controller\CentreCoutController::class,
+            'action'        => 'centre-cout-activite',
             'may_terminate' => true,
             'child_routes'  => [
                 'delete' => [
@@ -110,24 +110,18 @@ return [
     ],
 
     'controllers' => [
-        'invokables' => [
-            Controller\CentreCoutController::class => Controller\CentreCoutController::class,
-        ],
+        Controller\CentreCoutController::class => Controller\CentreCoutControllerFactory::class,
     ],
 
     'services' => [
-        'invokables' => [
-            \Paiement\Service\CentreCoutService::class          => \Paiement\Service\CentreCoutService::class,
-            \Paiement\Service\CentreCoutStructureService::class => \Paiement\Service\CentreCoutStructureService::class,
-            \Paiement\Service\CcActiviteService::class          => \Paiement\Service\CcActiviteService::class,
-        ],
+        Service\CentreCoutService::class          => Service\CentreCoutServiceFactory::class,
+        Service\CentreCoutStructureService::class => Service\CentreCoutStructureServiceFactory::class,
+        Service\CcActiviteService::class          => Service\CcActiviteServiceFactory::class,
     ],
 
     'forms' => [
-        'invokables' => [
-            \Paiement\Form\CentreCout\CentreCoutSaisieForm::class         => \Paiement\Form\CentreCout\CentreCoutSaisieForm::class,
-            Form\CentreCout\CentreCoutStructureSaisieForm::class          => Form\CentreCout\CentreCoutStructureSaisieForm::class,
-            \Paiement\Form\CentreCout\CentreCoutActiviteSaisieForm::class => \Paiement\Form\CentreCout\CentreCoutActiviteSaisieForm::class,
-        ],
+        Form\CentreCout\CentreCoutSaisieForm::class          => Form\CentreCout\CentreCoutSaisieFormFactory::class,
+        Form\CentreCout\CentreCoutStructureSaisieForm::class => Form\CentreCout\CentreCoutStructureSaisieFormFactory::class,
+        Form\CentreCout\CentreCoutActiviteSaisieForm::class  => Form\CentreCout\CentreCoutActiviteSaisieFormFactory::class,
     ],
 ];

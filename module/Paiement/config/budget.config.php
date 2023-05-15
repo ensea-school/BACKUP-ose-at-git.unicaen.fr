@@ -135,22 +135,16 @@ return [
     ],
 
     'forms' => [
-        'invokables' => [
-            \Paiement\Form\Budget\DotationSaisieForm::class => \Paiement\Form\Budget\DotationSaisieForm::class,
-        ],
+        Form\Budget\DotationSaisieForm::class => Form\Budget\DotationSaisieFormFactory::class,
     ],
 
     'services' => [
-        'invokables'                               => [
-            \Paiement\Service\TypeRessourceService::class => \Paiement\Service\TypeRessourceService::class,
-            \Paiement\Service\DotationService::class      => \Paiement\Service\DotationService::class,
-        ],
-        \Paiement\Assertion\BudgetAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Service\TypeRessourceService::class => Service\TypeRessourceServiceFactory::class,
+        Service\DotationService::class      => Service\DotationServiceFactory::class,
+        Assertion\BudgetAssertion::class    => \UnicaenPrivilege\Assertion\AssertionFactory::class,
     ],
 
     'controllers' => [
-        'invokables' => [
-            Controller\BudgetController::class => Controller\BudgetController::class,
-        ],
+        Controller\BudgetController::class => Controller\BudgetControllerFactory::class,
     ],
 ];

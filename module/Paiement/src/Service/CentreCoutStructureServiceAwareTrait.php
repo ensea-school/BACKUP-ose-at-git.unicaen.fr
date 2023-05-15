@@ -2,6 +2,7 @@
 
 namespace Paiement\Service;
 
+
 /**
  * Description of CentreCoutStructureServiceAwareTrait
  *

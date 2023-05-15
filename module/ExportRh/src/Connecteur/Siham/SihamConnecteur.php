@@ -163,24 +163,35 @@ class SihamConnecteur implements ConnecteurRhInterface
 
     public function recupererAffectationEnCoursIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?array
     {
+        $typeAffectation = (isset($this->siham->getConfig()['type-affectation'])) ? $this->siham->getConfig()['type-affectation'] : ['FUN'];
         $affectations           = [];
         $donneesAdministratives = $this->recupererDonneesAdministrativesIntervenantRh($intervenant);
 
 
         if (!empty($donneesAdministratives['listeAffectations']) || !empty($donneesAdministratives->listeAffectations)) {
-            $listeAffectations = (isset($donneesAdministratives['listeAffectations'])) ? $donneesAdministratives['listeAffectations'] : $donneesAdministratives->listeAffectations;
-
-            foreach ($listeAffectations as $affectation) {
-                //On prend uniquement les affectations fonctionnelles
-                if ($affectation->codeTypeRattachement == 'FUN') {
-                    $dateDebutAffectation = new \DateTime($affectation->dateDebutAffectation);
-                    $dateFinAffectation   = new \DateTime($affectation->dateFinAffectation);
-                    $currentDate          = new \DateTime();
-                    if ($currentDate > $dateDebutAffectation and $currentDate < $dateFinAffectation) {
-                        $affectations[] = $affectation;
+            $listeAffectations = $donneesAdministratives['listeAffectations'];
+            if (is_array($listeAffectations)) {
+                foreach ($listeAffectations as $affectation) {
+                    if (in_array($affectation->codeTypeRattachement, $typeAffectation)) {
+                        $dateDebutAffectation = new \DateTime($affectation->dateDebutAffectation);
+                        $dateFinAffectation   = new \DateTime($affectation->dateFinAffectation);
+                        $currentDate          = new \DateTime();
+                        if ($currentDate > $dateDebutAffectation and $currentDate < $dateFinAffectation) {
+                            $affectations[] = $affectation;
+                        }
                     }
                 }
-            };
+            } else {
+                //Todo relecture de code, rendre paramètrable le codeTypeRattachement en FUN ou HIE et refaire des tests.
+                if (in_array($listeAffectations->codeTypeRattachement, $typeAffectation)) {
+                    $dateDebutAffectation = new \DateTime($listeAffectations->dateDebutAffectation);
+                    $dateFinAffectation   = new \DateTime($listeAffectations->dateFinAffectation);
+                    $currentDate          = new \DateTime();
+                    if ($currentDate > $dateDebutAffectation and $currentDate < $dateFinAffectation) {
+                        $affectations[] = $listeAffectations;
+                    }
+                }
+            }
         }
 
         return $affectations;

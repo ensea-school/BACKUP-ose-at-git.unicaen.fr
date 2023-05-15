@@ -308,7 +308,7 @@ return [
                     ],
                     'action'      => 'saisie',
                 ],
-                'ajout'           => [
+                'ajout'            => [
                     'route'       => '/ajout/:groupeTypeFormation',
                     'constraints' => [
                         'typeFormation' => '[0-9]*',
@@ -545,7 +545,7 @@ return [
         [
             'controller' => TypeInterventionController::class,
             'action'     => ['saisie', 'delete', 'type-intervention-structure-saisie', 'type-intervention-structure-delete',
-                             'type-intervention-trier', 'statut-saisie', 'statut-delete'],
+                'type-intervention-trier', 'statut-saisie', 'statut-delete'],
             'privileges' => [Privileges::TYPE_INTERVENTION_EDITION],
         ],
 
@@ -628,6 +628,8 @@ return [
         Processus\ReconductionProcessus::class          => Processus\Factory\ReconductionProcessusFactory::class,
         Service\TypeInterventionStructureService::class => Service\Factory\TypeInterventionStructureServiceFactory::class,
         Service\TypeInterventionStatutService::class    => Service\Factory\TypeInterventionStatutServiceFactory::class,
+        Service\TypeHeuresService::class                => Service\TypeHeuresServiceFactory::class,
+        Service\CentreCoutEpService::class              => Service\CentreCoutEpServiceFactory::class,
     ],
     'forms'        => [
         Form\DisciplineForm::class                                       => Form\Factory\DisciplineFormFactory::class,

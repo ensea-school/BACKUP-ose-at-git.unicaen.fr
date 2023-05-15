@@ -15,20 +15,18 @@ return [
             'child_routes'  => [
                 'delete' => [
                     'route'       => '/delete/:ccActivite',
-                    'controller'    => Controller\CentreCoutController::class,
+                    'controller'  => Controller\CentreCoutController::class,
                     'action'      => 'centre-cout-activite-delete',
                     'constraints' => [
                         'ccActivite' => '[0-9]*',
                     ],
                 ],
                 'saisie' => [
-                    'options' => [
-                        'route'       => '/saisie/[:ccActivite]',
-                        'controller'    => Controller\CentreCoutController::class,
-                        'action'      => 'centre-cout-activite-saisie',
-                        'constraints' => [
-                            'ccActivite' => '[0-9]*',
-                        ],
+                    'route'       => '/saisie/[:ccActivite]',
+                    'controller'  => Controller\CentreCoutController::class,
+                    'action'      => 'centre-cout-activite-saisie',
+                    'constraints' => [
+                        'ccActivite' => '[0-9]*',
                     ],
                 ],
             ],
@@ -42,7 +40,7 @@ return [
             'child_routes'  => [
                 'delete'           => [
                     'route'       => '/delete/:centreCout',
-                    'controller'    => Controller\CentreCoutController::class,
+                    'controller'  => Controller\CentreCoutController::class,
                     'action'      => 'delete',
                     'constraints' => [
                         'centreCout' => '[0-9]*',
@@ -50,7 +48,7 @@ return [
                 ],
                 'saisie'           => [
                     'route'       => '/saisie/[:centreCout]',
-                    'controller'    => Controller\CentreCoutController::class,
+                    'controller'  => Controller\CentreCoutController::class,
                     'action'      => 'saisie',
                     'constraints' => [
                         'centreCout' => '[0-9]*',
@@ -58,7 +56,7 @@ return [
                 ],
                 'delete-structure' => [
                     'route'       => '/delete-structure/:centreCoutStructure',
-                    'controller'    => Controller\CentreCoutController::class,
+                    'controller'  => Controller\CentreCoutController::class,
                     'action'      => 'delete-structure',
                     'constraints' => [
                         'centreCoutStructure' => '[0-9]*',
@@ -66,7 +64,7 @@ return [
                 ],
                 'saisie-structure' => [
                     'route'       => '/saisie-structure/:centreCout/[:centreCoutStructure]',
-                    'controller'    => Controller\CentreCoutController::class,
+                    'controller'  => Controller\CentreCoutController::class,
                     'action'      => 'saisie-structure',
                     'constraints' => [
                         'centreCout'          => '[0-9]*',

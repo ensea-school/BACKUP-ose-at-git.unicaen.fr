@@ -19,7 +19,7 @@ class modulateurSaisieForm extends AbstractForm
 
     public function init()
     {
-        $hydrator = new \Application\Form\modulateur\modulateurHydrator();
+        $hydrator = new ModulateurHydrator();
         //** $hydrator->setServiceDomaineFonctionnel($this->getServiceDomaineFonctionnel());
         /**
          * @var $typesModu \Paiement\Entity\Db\typeModulateur[]
@@ -127,7 +127,7 @@ class modulateurSaisieForm extends AbstractForm
 
 
 
-class modulateurHydrator implements HydratorInterface
+class ModulateurHydrator implements HydratorInterface
 {
     use TypeModulateurServiceAwareTrait;
 

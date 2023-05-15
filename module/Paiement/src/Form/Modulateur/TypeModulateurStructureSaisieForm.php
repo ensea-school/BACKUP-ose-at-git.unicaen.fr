@@ -18,7 +18,7 @@ use UnicaenApp\Util;
  *
  * @author ZVENIGOROSKY Alexandre <alexandre.zvenigorosky at unicaen.fr>
  */
-class typeModulateurStructureSaisieForm extends AbstractForm
+class TypeModulateurStructureSaisieForm extends AbstractForm
 {
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
@@ -28,7 +28,7 @@ class typeModulateurStructureSaisieForm extends AbstractForm
 
     public function init()
     {
-        $hydrator = new \Application\Form\modulateur\typeModulateurStructureHydrator();
+        $hydrator = new TypeModulateurStructureHydrator();
         /**
          * @var $typesModu \Paiement\Entity\Db\typeModulateurStructure[]
          */
@@ -129,7 +129,7 @@ class typeModulateurStructureSaisieForm extends AbstractForm
 
 
 
-class typeModulateurStructureHydrator implements HydratorInterface
+class TypeModulateurStructureHydrator implements HydratorInterface
 {
     use TypeModulateurStructureServiceAwareTrait;
     use StructureServiceAwareTrait;

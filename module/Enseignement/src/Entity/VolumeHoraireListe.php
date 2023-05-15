@@ -2,7 +2,6 @@
 
 namespace Enseignement\Entity;
 
-use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Tag;
 use Application\Entity\Db\Validation;
@@ -14,6 +13,7 @@ use Enseignement\Entity\Db\VolumeHoraire;
 use Enseignement\Hydrator\ListeFilterHydrator;
 use LogicException;
 use OffreFormation\Entity\Db\TypeIntervention;
+use Paiement\Entity\Db\MotifNonPaiement;
 use RuntimeException;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;

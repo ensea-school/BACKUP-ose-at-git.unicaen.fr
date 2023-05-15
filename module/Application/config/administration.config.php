@@ -18,42 +18,42 @@ $rubriques = [
         'icon'         => 'fas fa-gear',
         'label'        => "Configuration",
         'title'        => "Paramétrages de base de l'application",
-        'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+        'resource'     => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
         'color' => '#f5e79e',
     ],
     'nomenclatures'   => [
         'icon'         => 'fas fa-folder-open',
         'label'        => "Nomenclatures",
         'title'        => "Diverses nomenclatures en usage",
-        'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+        'resource'     => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
         'color' => '#217dd8',
     ],
     'intervenants'    => [
         'icon'         => 'fas fa-user',
         'label'        => "Intervenants",
         'title'        => "Paramétrages liés aux intervenants",
-        'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+        'resource'     => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
         'color' => '#E5272E',
     ],
     'odf'             => [
         'icon'         => 'fas fa-user-graduate',
         'label'        => "Offre de formation",
         'title'        => "Administration du fonctionnement de l'offre de formation",
-        'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+        'resource'     => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
         'color' => '#71dfd7',
     ],
     'rh'              => [
         'icon'         => 'fas fa-paperclip',
         'label'        => "RH",
         'title'        => "Nomenclatures et paramétrages relatifs aux ressources humaines",
-        'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+        'resource'     => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
         'color' => '#9e9e9e',
     ],
     'finances'        => [
         'icon'         => 'fas fa-chart-line',
         'label'        => "Finances",
         'title'        => "Nomenclatures et paramétrages liés aux aspects financiers",
-        'resource'     => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+        'resource'     => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
         'color' => '#eb4995',
     ],
     'synchronisation' => [
@@ -74,7 +74,7 @@ $config = [
                 'options'       => [
                     'route'    => '/administration',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Administration',
+                        'controller' => Controller\AdministrationController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -90,7 +90,7 @@ $config = [
                 'options'       => [
                     'route'    => '/administration-type',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Administration',
+                        'controller' => Controller\AdministrationController::class,
                         'action'     => 'administration-types',
                     ],
                 ],
@@ -101,7 +101,7 @@ $config = [
                 'options'       => [
                     'route'    => '/administration-referentiel-commun',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Administration',
+                        'controller' => Controller\AdministrationController::class,
                         'action'     => 'administration-referentiel-commun',
                     ],
                 ],
@@ -112,7 +112,7 @@ $config = [
                 'options'       => [
                     'route'    => '/administration-financiere',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Administration',
+                        'controller' => Controller\AdministrationController::class,
                         'action'     => 'administration-financiere',
                     ],
                 ],
@@ -123,7 +123,7 @@ $config = [
                 'options'       => [
                     'route'    => '/administration-intervenant',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Administration',
+                        'controller' => Controller\AdministrationController::class,
                         'action'     => 'administration-intervenant',
                     ],
                 ],
@@ -134,7 +134,7 @@ $config = [
                 'options'       => [
                     'route'    => '/administration-nomenclature-rh',
                     'defaults' => [
-                        'controller' => 'Application\Controller\Administration',
+                        'controller' => Controller\AdministrationController::class,
                         'action'     => 'administration-nomenclature-rh',
                     ],
                 ],
@@ -150,7 +150,7 @@ $config = [
                     'administration' => [
                         'label'    => "Administration",
                         'route'    => 'administration',
-                        'resource' => PrivilegeController::getResourceId('Application\Controller\Administration', 'index'),
+                        'resource' => PrivilegeController::getResourceId(Controller\AdministrationController::class, 'index'),
                         'order'    => 7,
                         'pages'    => [
                             // remplies automatiquement
@@ -165,7 +165,7 @@ $config = [
         'guards' => [
             PrivilegeController::class => [
                 [
-                    'controller' => 'Application\Controller\Administration',
+                    'controller' => Controller\AdministrationController::class,
                     'action'     => ['index'],
                     'privileges' => [
                         Privileges::IMPORT_ECARTS,
@@ -207,7 +207,7 @@ $config = [
                     'assertion'  => Assertion\GestionAssertion::class,
                 ],
                 [
-                    'controller' => 'Application\Controller\Administration',
+                    'controller' => Controller\AdministrationController::class,
                     'action'     => ['rubrique'],
                     'roles'      => 'user',
                 ],
@@ -216,7 +216,7 @@ $config = [
     ],
     'controllers'  => [
         'factories' => [
-            'Application\Controller\Administration' => Controller\Factory\AdministrationControllerFactory::class,
+            Controller\AdministrationController::class => Controller\Factory\AdministrationControllerFactory::class,
         ],
     ],
 ];
@@ -237,7 +237,7 @@ foreach ($rubriques as $route => $rubrique) {
             'options'       => [
                 'route'    => '/' . $route,
                 'defaults' => [
-                    'controller' => 'Application\Controller\Administration',
+                    'controller' => Controller\AdministrationController::class,
                     'action'     => 'rubrique',
                 ],
             ],

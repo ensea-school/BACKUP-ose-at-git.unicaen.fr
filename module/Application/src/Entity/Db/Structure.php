@@ -156,11 +156,11 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     /**
      * Add centreCout
      *
-     * @param \Application\Entity\Db\CentreCout $centreCout
+     * @param \Paiement\Entity\Db\CentreCout $centreCout
      *
      * @return Intervenant
      */
-    public function addCentreCout(\Application\Entity\Db\CentreCout $centreCout)
+    public function addCentreCout(\Paiement\Entity\Db\CentreCout $centreCout)
     {
         $this->centreCout[] = $centreCout;
 
@@ -172,9 +172,9 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     /**
      * Remove centreCout
      *
-     * @param \Application\Entity\Db\CentreCout $centreCout
+     * @param \Paiement\Entity\Db\CentreCout $centreCout
      */
-    public function removeCentreCout(\Application\Entity\Db\CentreCout $centreCout)
+    public function removeCentreCout(\Paiement\Entity\Db\CentreCout $centreCout)
     {
         $this->service->removeElement($centreCout);
     }

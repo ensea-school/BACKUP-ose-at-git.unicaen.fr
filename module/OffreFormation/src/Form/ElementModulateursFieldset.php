@@ -3,13 +3,13 @@
 namespace OffreFormation\Form;
 
 use Application\Form\AbstractFieldset;
-use Application\Service\Traits\ModulateurServiceAwareTrait;
-use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Laminas\Form\Element\Select;
 use Laminas\Hydrator\HydratorInterface;
 use OffreFormation\Entity\Db\ElementPedagogique;
-use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use OffreFormation\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
+use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
+use Paiement\Service\ModulateurServiceAwareTrait;
+use Paiement\Service\TypeModulateurServiceAwareTrait;
 
 /**
  * Description of ElementModulateursFieldset
@@ -62,7 +62,7 @@ class ElementModulateursFieldset extends AbstractFieldset
     /**
      * Retourne la liste des types de modulateurs
      *
-     * @return \Application\Entity\Db\Modulateur[]
+     * @return \Paiement\Entity\Db\Modulateur[]
      */
     public function getTypesModulateurs()
     {

@@ -19,7 +19,7 @@ class ElementModulateur implements HistoriqueAwareInterface, ResourceInterface
     protected $id;
 
     /**
-     * @var \Application\Entity\Db\Modulateur
+     * @var \Paiement\Entity\Db\Modulateur
      */
     protected $modulateur;
 
@@ -71,11 +71,11 @@ class ElementModulateur implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set modulateur
      *
-     * @param \Application\Entity\Db\Modulateur $modulateur
+     * @param \Paiement\Entity\Db\Modulateur $modulateur
      *
      * @return ElementModulateur
      */
-    public function setModulateur(\Application\Entity\Db\Modulateur $modulateur = null)
+    public function setModulateur(\Paiement\Entity\Db\Modulateur $modulateur = null)
     {
         $this->modulateur = $modulateur;
 
@@ -87,7 +87,7 @@ class ElementModulateur implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get modulateur
      *
-     * @return \Application\Entity\Db\Modulateur
+     * @return \Paiement\Entity\Db\Modulateur
      */
     public function getModulateur()
     {

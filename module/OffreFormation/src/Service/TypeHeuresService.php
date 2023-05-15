@@ -2,11 +2,11 @@
 
 namespace OffreFormation\Service;
 
-use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Service\AbstractEntityService;
 use Application\Service\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use OffreFormation\Entity\Db\TypeHeures;
+use Paiement\Entity\Db\ServiceAPayerInterface;
 
 /**
  * Description of TypeHeures
@@ -64,7 +64,7 @@ class TypeHeuresService extends AbstractEntityService
 
         $misesEnPaiement = $serviceAPayer->getMiseEnPaiement();
         foreach ($misesEnPaiement as $miseEnPaiement) {
-            /* @var $miseEnPaiement \Application\Entity\Db\MiseEnPaiement */
+            /* @var $miseEnPaiement \Paiement\Entity\Db\MiseEnPaiement */
             $th                    = $miseEnPaiement->getTypeHeures();
             $codes[$th->getCode()] = $th->getCode();
         }

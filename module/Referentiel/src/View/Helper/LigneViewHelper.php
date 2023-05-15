@@ -2,13 +2,12 @@
 
 namespace Referentiel\View\Helper;
 
-use Application\Entity\Db\MotifNonPaiement;
-use Application\Provider\Privilege\Privileges;
 use Laminas\View\Helper\AbstractHtmlElement;
-use Service\Service\EtatVolumeHoraireServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Paiement\Entity\Db\MotifNonPaiement;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\ServiceReferentielAwareTrait;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 
 /**

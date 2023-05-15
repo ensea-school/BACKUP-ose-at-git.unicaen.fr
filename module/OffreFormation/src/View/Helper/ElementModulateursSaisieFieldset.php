@@ -4,7 +4,7 @@ namespace OffreFormation\View\Helper;
 
 use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Form\ElementModulateursFieldset;
-use Application\Service\Traits\TypeModulateurServiceAwareTrait;
+use Paiement\Service\TypeModulateurServiceAwareTrait;
 
 
 /**

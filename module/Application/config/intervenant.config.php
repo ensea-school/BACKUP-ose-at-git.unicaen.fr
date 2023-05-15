@@ -5,6 +5,7 @@ namespace Application;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Contrat\Controller\ContratController;
+use Paiement\Controller\PaiementController;
 use UnicaenPrivilege\Guard\PrivilegeController;
 use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
@@ -197,7 +198,7 @@ return [
                         'options'       => [
                             'route'    => '/:intervenant/mise-en-paiement',
                             'defaults' => [
-                                'controller' => 'Application\Controller\Paiement',
+                                'controller' =>     PaiementController::class,
                             ],
                         ],
                         'child_routes'  => [

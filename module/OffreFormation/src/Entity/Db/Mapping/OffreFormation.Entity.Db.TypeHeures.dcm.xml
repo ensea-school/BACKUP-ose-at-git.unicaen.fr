@@ -41,7 +41,7 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-many field="centreCout" target-entity="Application\Entity\Db\CentreCout" mapped-by="typeHeures" />
+    <many-to-many field="centreCout" target-entity="Paiement\Entity\Db\CentreCout" mapped-by="typeHeures" />
     <many-to-many field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique" mapped-by="typeHeures" />
   </entity>
 </doctrine-mapping>

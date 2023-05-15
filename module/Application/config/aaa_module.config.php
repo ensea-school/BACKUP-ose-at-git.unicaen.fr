@@ -32,7 +32,6 @@ $config = [
             'orm_default' => [
                 'string_functions' => [
                     'CONVERT' => ORM\Query\Functions\Convert::class,
-                    'REPLACE' => ORM\Query\Functions\Replace::class,
                 ],
                 'filters'          => [
                     'historique' => ORM\Filter\HistoriqueFilter::class,

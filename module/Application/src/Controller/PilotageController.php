@@ -5,7 +5,6 @@ namespace Application\Controller;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\PilotageServiceAwareTrait;
-use UnicaenApp\View\Model\CsvModel;
 
 
 /**

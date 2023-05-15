@@ -3,9 +3,9 @@
 namespace OffreFormation\Service;
 
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\ModulateurServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use OffreFormation\Entity\Db\ElementPedagogique;
+use Paiement\Service\ModulateurServiceAwareTrait;
 use RuntimeException;
 
 /**

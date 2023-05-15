@@ -35,6 +35,6 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="periode" />
+    <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Paiement\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="periode" />
   </entity>
 </doctrine-mapping>

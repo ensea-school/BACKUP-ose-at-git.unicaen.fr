@@ -16,7 +16,7 @@
         <join-column name="SERVICE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <one-to-many field="miseEnPaiement" target-entity="Application\Entity\Db\MiseEnPaiement" mapped-by="formuleResultatService" />
+    <one-to-many field="miseEnPaiement" target-entity="Paiement\Entity\Db\MiseEnPaiement" mapped-by="formuleResultatService" />
 
     <field name="heuresServiceFi" type="float" column="SERVICE_FI" precision="126" scale="0" nullable="false"/>
     <field name="heuresServiceFa" type="float" column="SERVICE_FA" precision="126" scale="0" nullable="false"/>
@@ -27,7 +27,7 @@
     <field name="heuresComplFcMajorees" type="float" column="HEURES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="false"/>
     <field name="total" type="float" column="TOTAL" precision="126" scale="0" nullable="false"/>
 
-    <many-to-many field="centreCout" target-entity="Application\Entity\Db\CentreCout">
+    <many-to-many field="centreCout" target-entity="Paiement\Entity\Db\CentreCout">
         <join-table name="V_FR_SERVICE_CENTRE_COUT">
             <join-columns>
                 <join-column name="FORMULE_RESULTAT_SERVICE_ID" referenced-column-name="ID" unique="true"/>

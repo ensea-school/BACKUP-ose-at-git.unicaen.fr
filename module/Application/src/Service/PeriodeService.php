@@ -2,13 +2,12 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode;
-
+use Application\Entity\Db\Structure;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
-use Application\Service\Traits\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use Paiement\Service\MiseEnPaiementIntervenantStructureServiceAwareTrait;
+use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 
 
 /**

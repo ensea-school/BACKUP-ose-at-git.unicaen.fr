@@ -17,7 +17,7 @@
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <many-to-one field="modulateur" target-entity="Application\Entity\Db\Modulateur">
+    <many-to-one field="modulateur" target-entity="Paiement\Entity\Db\Modulateur">
       <join-columns>
         <join-column name="MODULATEUR_ID" referenced-column-name="ID"/>
       </join-columns>

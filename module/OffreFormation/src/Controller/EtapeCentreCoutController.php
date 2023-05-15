@@ -29,7 +29,7 @@ class EtapeCentreCoutController extends AbstractController
     {
         $this->em()->getFilters()->enable('historique')->init([
             \OffreFormation\Entity\Db\ElementPedagogique::class,
-            \Application\Entity\Db\CentreCout::class,
+            \Paiement\Entity\Db\CentreCout::class,
             \OffreFormation\Entity\Db\CentreCoutEp::class
         ]);
         $this->em()->getFilters()->enable('annee')->init([

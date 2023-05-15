@@ -16,8 +16,8 @@
         <join-column name="SERVICE_REFERENTIEL_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <one-to-many field="miseEnPaiement" target-entity="Application\Entity\Db\MiseEnPaiement" mapped-by="formuleResultatServiceReferentiel" />
-    <many-to-many field="centreCout" target-entity="Application\Entity\Db\CentreCout">
+    <one-to-many field="miseEnPaiement" target-entity="Paiement\Entity\Db\MiseEnPaiement" mapped-by="formuleResultatServiceReferentiel" />
+    <many-to-many field="centreCout" target-entity="Paiement\Entity\Db\CentreCout">
         <join-table name="V_FR_SERVICE_REF_CENTRE_COUT">
             <join-columns>
                 <join-column name="FORMULE_RESULTAT_SERV_REF_ID" referenced-column-name="ID" unique="true"/>

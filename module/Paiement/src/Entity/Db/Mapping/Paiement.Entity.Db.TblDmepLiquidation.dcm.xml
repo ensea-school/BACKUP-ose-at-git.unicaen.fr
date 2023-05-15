@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Paiement\Entity\Db\TblDmepLiquidation" table="TBL_DMEP_LIQUIDATION">
+    <unique-constraints>
+      <unique-constraint name="tbl_dmep_liquidation__un" columns="ANNEE_ID,TYPE_RESSOURCE_ID,STRUCTURE_ID"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+      <sequence-generator sequence-name="TBL_DMEP_LIQUIDATION_ID_seq" allocation-size="1" initial-value="1"/>
+    </id>
+    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false">
+      <options>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <many-to-one field="typeRessource" target-entity="Paiement\Entity\Db\TypeRessource" fetch="LAZY">
+      <join-columns>
+        <join-column name="TYPE_RESSOURCE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure" fetch="LAZY">
+      <join-columns>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee" fetch="LAZY">
+      <join-columns>
+        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

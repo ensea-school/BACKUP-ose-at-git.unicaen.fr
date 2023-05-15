@@ -1,0 +1,29 @@
+<?php
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form  \Paiement\Form\Modulateur\TypeModulateurStructureSaisieForm
+ */
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->form()->openTag($form); ?>
+<?= $this->formControlGroup($form->get('type-modulateur')) ?>
+
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('structure')) ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('annee-debut')) ?>
+    </div>
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('annee-fin')) ?>
+    </div>
+</div>
+
+<?php
+echo $this->formSubmit($form->get('submit'));
+echo $this->formControlGroup($form->get('security'));
+echo $this->form()->closeTag();
+?>

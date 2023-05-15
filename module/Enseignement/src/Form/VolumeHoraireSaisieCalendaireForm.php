@@ -2,12 +2,10 @@
 
 namespace Enseignement\Form;
 
-use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
 use Application\Filter\DateTimeFromString;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\TagServiceAwareTrait;
 use Enseignement\Entity\VolumeHoraireListe;
@@ -17,6 +15,8 @@ use Laminas\Form\Element\Hidden;
 use Laminas\Hydrator\HydratorInterface;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
+use Paiement\Entity\Db\MotifNonPaiement;
+use Paiement\Service\MotifNonPaiementServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
 

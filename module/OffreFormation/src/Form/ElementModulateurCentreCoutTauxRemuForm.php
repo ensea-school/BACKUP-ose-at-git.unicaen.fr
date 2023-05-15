@@ -2,15 +2,15 @@
 
 namespace OffreFormation\Form;
 
-use Application\Entity\Db\CentreCout;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\CentreCoutServiceAwareTrait;
-use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Laminas\Form\Element\Select;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Form\Traits\ElementModulateursFieldsetAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use OffreFormation\Entity\Db\ElementPedagogique;
+use Paiement\Entity\Db\CentreCout;
+use Paiement\Service\CentreCoutServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
+use Paiement\Service\TypeModulateurServiceAwareTrait;
 
 /**
  * Description of ElementModulateurSaisie
@@ -177,7 +177,7 @@ class ElementModulateurCentreCoutTauxRemuForm extends AbstractForm
         /**
          * Retourne la liste des types de modulateurs de l'element
          *
-         * @return \Application\Entity\Db\Modulateur[]
+         * @return \Paiement\Entity\Db\Modulateur[]
          */
         public
         function getTypesModulateurs()

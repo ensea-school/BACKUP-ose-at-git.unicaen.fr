@@ -2,24 +2,23 @@
 
 namespace Referentiel\Service;
 
-use Application\Entity\Db\MotifNonPaiement;
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\Tag;
 use Application\Service\AbstractEntityService;
 use Application\Service\StructureService;
-use Application\Service\Traits\TagServiceAwareTrait;
-use Referentiel\Entity\Db\FonctionReferentiel;
-use Application\Provider\Privilege\Privileges;
-use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\TagServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Intervenant;
+use Paiement\Entity\Db\MotifNonPaiement;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Referentiel\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\Structure;
 use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 
 /**

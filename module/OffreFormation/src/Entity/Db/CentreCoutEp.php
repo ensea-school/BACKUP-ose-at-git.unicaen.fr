@@ -33,7 +33,7 @@ class CentreCoutEp implements HistoriqueAwareInterface, ResourceInterface, Impor
     private $typeHeures;
 
     /**
-     * @var \Application\Entity\Db\CentreCout
+     * @var \Paiement\Entity\Db\CentreCout
      */
     private $centreCout;
 
@@ -110,11 +110,11 @@ class CentreCoutEp implements HistoriqueAwareInterface, ResourceInterface, Impor
     /**
      * Set centreCout
      *
-     * @param \Application\Entity\Db\CentreCout $centreCout
+     * @param \Paiement\Entity\Db\CentreCout $centreCout
      *
      * @return CentreCoutEp
      */
-    public function setCentreCout(\Application\Entity\Db\CentreCout $centreCout = null)
+    public function setCentreCout(\Paiement\Entity\Db\CentreCout $centreCout = null)
     {
         $this->centreCout = $centreCout;
 
@@ -126,7 +126,7 @@ class CentreCoutEp implements HistoriqueAwareInterface, ResourceInterface, Impor
     /**
      * Get centreCout
      *
-     * @return \Application\Entity\Db\CentreCout
+     * @return \Paiement\Entity\Db\CentreCout
      */
     public function getCentreCout()
     {

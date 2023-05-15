@@ -3,11 +3,11 @@
 namespace OffreFormation\Form;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Form\Traits\ElementModulateursFieldsetAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use OffreFormation\Entity\Db\Etape;
+use Paiement\Service\TypeModulateurServiceAwareTrait;
 
 /**
  * Description of ElementModulateursSaisie
@@ -52,7 +52,7 @@ class EtapeModulateursSaisie extends AbstractForm
     /**
      * Retourne la liste des types de modulateurs
      *
-     * @return \Application\Entity\Db\Modulateur[]
+     * @return \Paiement\Entity\Db\Modulateur[]
      */
     public function getTypesModulateurs()
     {

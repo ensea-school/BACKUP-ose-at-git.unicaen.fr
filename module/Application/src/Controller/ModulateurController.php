@@ -2,17 +2,17 @@
 
 namespace Application\Controller;
 
-use Application\Entity\Db\Modulateur;
-use Application\Service\Traits\ModulateurServiceAwareTrait;
-use Application\Entity\Db\TypeModulateurStructure;
-use Application\Service\Traits\TypeModulateurStructureServiceAwareTrait;
-use Application\Entity\Db\TypeModulateur;
-use Application\Form\Modulateur\Traits\ModulateurSaisieFormAwareTrait;
-use UnicaenApp\View\Model\MessengerViewModel;
-use Application\Service\Traits\TypeModulateurServiceAwareTrait;
-use Application\Form\Modulateur\Traits\TypeModulateurSaisieFormAwareTrait;
-use Application\Form\Modulateur\Traits\TypeModulateurStructureSaisieFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Paiement\Entity\Db\Modulateur;
+use Paiement\Entity\Db\TypeModulateur;
+use Paiement\Entity\Db\TypeModulateurStructure;
+use Paiement\Form\Modulateur\Traits\ModulateurSaisieFormAwareTrait;
+use Paiement\Form\Modulateur\Traits\TypeModulateurSaisieFormAwareTrait;
+use Paiement\Form\Modulateur\Traits\TypeModulateurStructureSaisieFormAwareTrait;
+use Paiement\Service\ModulateurServiceAwareTrait;
+use Paiement\Service\TypeModulateurServiceAwareTrait;
+use Paiement\Service\TypeModulateurStructureServiceAwareTrait;
+use UnicaenApp\View\Model\MessengerViewModel;
 
 class modulateurController extends AbstractController
 {

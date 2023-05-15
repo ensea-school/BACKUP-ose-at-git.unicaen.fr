@@ -1,0 +1,45 @@
+<?php
+
+use UnicaenApp\Util;
+
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $annee \Application\Entity\Db\Annee
+ * @var $structures \Application\Entity\Db\Structure[]
+ * @var $typesRessources \Paiement\Entity\Db\TypeRessource[]
+ * @var $data  array
+ */
+
+?>
+<h1 class="page-header">Budget <?= $annee ?> - Tableau de bord</h1>
+
+<table class="table table-bordered budget-tbl">
+    <tr>
+        <th rowspan="2">Structure</th>
+        <th rowspan="2">Prévisionnel</th>
+        <th colspan="<?= count($typesRessources) ?>">Demandes de mise en paiement</th>
+    </tr>
+    <tr>
+        <?php foreach( $typesRessources as $trid => $typeRessource ): ?>
+            <th><?= $typeRessource ?></th>
+        <?php endforeach; ?>
+    </tr>
+    <?php foreach( $structures as $sid => $structure ): ?>
+        <tr>
+            <th><a href="<?= $this->url('budget/engagements-liquidation',['structure'=>$structure->getId()]) ?>" title="Afficher le détail pour la structure"><?= $structure ?></a></th>
+            <td class="hetd"><?= Util::formattedNumber($data[$sid]['prev']) ?> <span class="label">HETD</span></td>
+
+        <?php foreach( $typesRessources as $trid => $typeRessource ): ?>
+            <td class="hetd"><?= Util::formattedNumber($data[$sid]['dmep'][$trid]) ?> <span class="label">HETD</span></td>
+        <?php endforeach; ?>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<?php if ($this->isAllowed(\UnicaenPrivilege\Guard\PrivilegeController::getResourceId('Application\Controller\Budget', 'export'))): ?>
+<div class="budget-export">
+    <a href="<?= $this->url('budget/export') ?>">
+        <i class="fas fa-download"></i>
+        Export des données de paiement au format CSV
+    </a>
+</div>
+<?php endif; ?>

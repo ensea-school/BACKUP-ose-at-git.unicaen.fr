@@ -2,7 +2,6 @@
 
 namespace Enseignement\View\Helper\VolumeHoraire;
 
-use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Tag;
 use Application\Provider\Privilege\Privileges;
 use Enseignement\Entity\VolumeHoraireListe;
@@ -11,6 +10,7 @@ use Enseignement\Service\ServiceServiceAwareTrait;
 use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
+use Paiement\Entity\Db\MotifNonPaiement;
 
 
 /**

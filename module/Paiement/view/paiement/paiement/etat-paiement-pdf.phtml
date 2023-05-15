@@ -1,0 +1,34 @@
+<?php
+
+/* @var $etatPaiement array */
+/* @var $structure Application\Entity\Db\Structure */
+/* @var $periode Application\Entity\Db\Periode */
+/* @var $drh \Application\Entity\Db\Utilisateur */
+/* @var $etat string */
+
+?>
+<style>
+    body { font-family: ubuntu,arial,sans-serif; }
+    h1{ text-align: center;}
+    table.etat-paiement { border-collapse: true; border-style: solid; border-width: 1px; width: 100%; }
+    table.etat-paiement th, table.etat-paiement td { border-style: solid; border-width: 1px; }
+    .nombre { text-align:right; white-space: nowrap; }
+    .signature{ margin-left: 60%; text-align:center; }
+    .tfoot td { font-weight: bold; font-size: 120%; }
+</style>
+
+<?= $this->partial('application/paiement/etat-paiement-tableau', ['etatPaiement' => $etatPaiement, 'hasFoot' => true]); ?>
+
+<?php if (\Paiement\Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT == $etat): ?>
+<p>La rémunération versée sous forme de forfait au titre d'une opération de formation continue identifiée
+(article D714-60 du code de l’Éducation) est exclusive de la rémunération des heures complémentaires réalisées dans le cadre
+de cette même opération.</p>
+
+<div class="signature">
+<p style="margin: none;margin-top:1em">Pour le président et par délégation</p>
+<p style="margin: none">Le Directeur des ressources humaines</p>
+<?php if ($drh): ?>
+<p style="margin-top:4em"><?= $drh->getPrenom().' '.$drh->getNomUsuel() ?></p>
+<?php endif; ?>
+</div>
+<?php endif; ?>

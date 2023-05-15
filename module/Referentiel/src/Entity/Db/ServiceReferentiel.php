@@ -4,22 +4,22 @@ namespace Referentiel\Entity\Db;
 
 use Application\Entity\Db\FormuleResultatServiceReferentiel;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Application\Entity\Db\Traits\MotifNonPaiementAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\TagAwareTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Paiement\Entity\Db\MotifNonPaiementAwareTrait;
 use Plafond\Interfaces\PlafondDataInterface;
+use Referentiel\Entity\VolumeHoraireReferentielListe;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Util;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use Referentiel\Entity\VolumeHoraireReferentielListe;
 
 /**
  * ServiceReferentiel

@@ -2,31 +2,28 @@
 
 namespace Referentiel\Form;
 
-use Application\Entity\Db\MotifNonPaiement;
-use Application\Entity\Db\Tag;
-use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
-use Application\Service\Traits\TagServiceAwareTrait;
-use Laminas\Form\Element\Hidden;
-use phpDocumentor\Reflection\Types\Array_;
-use Referentiel\Entity\Db\FonctionReferentiel;
-use Application\Entity\Db\Intervenant;
-use Referentiel\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
-use Application\Form\AbstractFieldset;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Referentiel\Service\FonctionReferentielServiceAwareTrait;
-use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
-use UnicaenApp\Form\Element\SearchAndSelect;
-use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenApp\Util;
-use Laminas\Filter\PregReplace;
-use Laminas\Validator\Callback;
-use Laminas\Validator\NotEmpty;
+use Application\Entity\Db\Tag;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
+use Application\Form\AbstractFieldset;
+use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
+use Application\Service\Traits\TagServiceAwareTrait;
+use Laminas\Filter\PregReplace;
+use Laminas\Form\Element\Hidden;
 use Laminas\Hydrator\HydratorInterface;
+use Laminas\Validator\Callback;
+use Laminas\Validator\NotEmpty;
+use Paiement\Entity\Db\MotifNonPaiement;
+use Paiement\Service\MotifNonPaiementServiceAwareTrait;
+use Referentiel\Entity\Db\FonctionReferentiel;
+use Referentiel\Entity\Db\ServiceReferentiel;
+use Referentiel\Service\FonctionReferentielServiceAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenApp\Util;
 use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 
 

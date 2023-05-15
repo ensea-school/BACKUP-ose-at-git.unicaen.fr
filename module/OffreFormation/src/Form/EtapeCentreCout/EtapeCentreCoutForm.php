@@ -2,15 +2,15 @@
 
 namespace OffreFormation\Form\EtapeCentreCout;
 
-use Application\Entity\Db\CentreCout;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Laminas\Form\Element\Select;
 use Laminas\Hydrator\HydratorInterface;
-use OffreFormation\Form\EtapeCentreCout\Traits\ElementCentreCoutFieldsetAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Entity\Db\TypeHeures;
+use OffreFormation\Form\EtapeCentreCout\Traits\ElementCentreCoutFieldsetAwareTrait;
+use Paiement\Entity\Db\CentreCout;
+use Paiement\Service\CentreCoutServiceAwareTrait;
 use RuntimeException;
 
 

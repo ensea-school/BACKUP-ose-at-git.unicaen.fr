@@ -3,7 +3,6 @@
 namespace Enseignement\Entity\Db;
 
 use Application\Entity\Db\FormuleResultatVolumeHoraire;
-use Application\Entity\Db\Traits\MotifNonPaiementAwareTrait;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
 use Application\Entity\Db\Traits\TagAwareTrait;
 use Application\Entity\Db\TypeValidation;
@@ -13,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\Traits\TypeInterventionAwareTrait;
+use Paiement\Entity\Db\MotifNonPaiementAwareTrait;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
 use Service\Entity\Db\EtatVolumeHoraire;

@@ -4,11 +4,9 @@ namespace Application\Assertion;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeModulateur;
-use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-
+use Paiement\Entity\Db\TypeModulateur;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 
 
 class ModulateurAssertion extends AbstractAssertion

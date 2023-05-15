@@ -1,0 +1,106 @@
+<?php
+
+namespace Application;
+
+use Application\Provider\Privilege\Privileges;
+use UnicaenPrivilege\Guard\PrivilegeController;
+
+return [
+    'router'          => [
+        'routes' => [
+            'motif-non-paiement' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/motif-non-paiement',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\MotifNonPaiement',
+                        'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'supprimer' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/supprimer/:motifNonPaiement',
+                            'constraints' => [
+                                'motifNonPaiement' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'supprimer',
+                            ],
+                        ],
+                    ],
+                    'saisir'    => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/saisir/[:motifNonPaiement]',
+                            'constraints' => [
+                                'motifNonPaiement' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'saisir',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'navigation'      => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'rh' => [
+                                'pages' => [
+                                    'motif-non-paiement' => [
+                                        'label'        => 'Motifs de non paiement',
+                                        'route'        => 'motif-non-paiement',
+                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\MotifNonPaiement', 'index'),
+                                        'order'        => 50,
+                                        'color' => '#BBCF55',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize'    => [
+        'guards' => [
+            PrivilegeController::class => [
+                [
+                    'controller' => 'Application\Controller\MotifNonPaiement',
+                    'action'     => ['index'],
+                    'privileges' => Privileges::MOTIF_NON_PAIEMENT_ADMINISTRATION_VISUALISATION,
+                ],
+                [
+                    'controller' => 'Application\Controller\MotifNonPaiement',
+                    'action'     => ['saisir', 'supprimer'],
+                    'privileges' => Privileges::MOTIF_NON_PAIEMENT_ADMINISTRATION_EDITION,
+                ],
+            ],
+        ],
+    ],
+    'controllers'     => [
+        'invokables' => [
+            'Application\Controller\MotifNonPaiement' => \Paiement\Controller\MotifNonPaiementController::class,
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
+            \Paiement\Service\MotifNonPaiementService::class => \Paiement\Service\MotifNonPaiementService::class,
+        ],
+    ],
+    'view_helpers'    => [
+    ],
+    'form_elements'   => [
+        'invokables' => [
+            Form\MotifNonPaiement\Saisie::class => \Paiement\Form\MotifNonPaiement\MotifNonPaiementSaisieForm::class,
+        ],
+    ],
+];

@@ -1,0 +1,40 @@
+<?php
+
+namespace Paiement\Form\Modulateur\Traits;
+
+use Paiement\Form\Modulateur\TypeModulateurStructureSaisieForm;
+
+/**
+ * Description of TypeModulateurStructureSaisieFormAwareTrait
+ *
+ * @author UnicaenCode
+ */
+trait TypeModulateurStructureSaisieFormAwareTrait
+{
+    protected ?TypeModulateurStructureSaisieForm $formModulateurTypeModulateurStructureSaisie = null;
+
+
+
+    /**
+     * @param TypeModulateurStructureSaisieForm $formModulateurTypeModulateurStructureSaisie
+     *
+     * @return self
+     */
+    public function setFormModulateurTypeModulateurStructureSaisie(?TypeModulateurStructureSaisieForm $formModulateurTypeModulateurStructureSaisie)
+    {
+        $this->formModulateurTypeModulateurStructureSaisie = $formModulateurTypeModulateurStructureSaisie;
+
+        return $this;
+    }
+
+
+
+    public function getFormModulateurTypeModulateurStructureSaisie(): ?TypeModulateurStructureSaisieForm
+    {
+        if (!empty($this->formModulateurTypeModulateurStructureSaisie)) {
+            return $this->formModulateurTypeModulateurStructureSaisie;
+        }
+
+        return \Application::$container->get('FormElementManager')->get(TypeModulateurStructureSaisieForm::class);
+    }
+}

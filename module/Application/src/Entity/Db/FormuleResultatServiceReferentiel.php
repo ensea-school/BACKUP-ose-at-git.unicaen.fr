@@ -4,6 +4,9 @@ namespace Application\Entity\Db;
 
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\TypeHeures;
+use Paiement\Entity\Db\CentreCout;
+use Paiement\Entity\Db\ServiceAPayerInterface;
+use Paiement\Entity\Db\ServiceAPayerTrait;
 
 /**
  * FormuleResultatServiceReferentiel

@@ -4,24 +4,23 @@ namespace Enseignement\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\MotifNonPaiement;
+use Application\Form\AbstractForm;
+use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Enseignement\Entity\VolumeHoraireListe;
-use Application\Form\AbstractForm;
-use Enseignement\Form\VolumeHoraireSaisieCalendaireForm;
 use Enseignement\Form\VolumeHoraireSaisieCalendaireFormAwareTrait;
 use Enseignement\Form\VolumeHoraireSaisieForm;
 use Enseignement\Form\VolumeHoraireSaisieFormAwareTrait;
 use Enseignement\Hydrator\ListeFilterHydrator;
-use Plafond\Processus\PlafondProcessusAwareTrait;
-use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Enseignement\Service\ServiceServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use Paiement\Entity\Db\MotifNonPaiement;
+use Plafond\Processus\PlafondProcessusAwareTrait;
 use RuntimeException;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 /**

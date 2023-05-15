@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Assertion;
+namespace Paiement\Assertion;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Structure;

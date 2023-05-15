@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\TypeCentreCout" table="TYPE_CENTRE_COUT">
-    <indexes>
-      <index name="IDX_394ABC9959860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_394ABC997E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_394ABC9963F06898" columns="HISTO_MODIFICATEUR_ID"/>
-    </indexes>
+  <entity name="Paiement\Entity\Db\Modulateur" table="MODULATEUR">
+    <unique-constraints>
+      <unique-constraint name="modulateur__un" columns="CODE"/>
+    </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="code" type="string" column="CODE" length="50" nullable="false"/>
+    <field name="code" type="string" column="CODE" length="6" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <field name="libelle" type="string" column="LIBELLE" length="200" nullable="false"/>
+    <field name="libelle" type="string" column="LIBELLE" length="40" nullable="false"/>
+    <field name="ponderationServiceCompl" type="float" column="PONDERATION_SERVICE_COMPL" precision="126" scale="0" nullable="false"/>
+    <field name="ponderationServiceDu" type="float" column="PONDERATION_SERVICE_DU" precision="126" scale="0" nullable="false"/>
+    <many-to-one field="typeModulateur" target-entity="Paiement\Entity\Db\TypeModulateur">
+      <join-columns>
+        <join-column name="TYPE_MODULATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
@@ -29,5 +34,6 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="elementModulateur" target-entity="OffreFormation\Entity\Db\ElementModulateur" mapped-by="modulateur" />
   </entity>
 </doctrine-mapping>

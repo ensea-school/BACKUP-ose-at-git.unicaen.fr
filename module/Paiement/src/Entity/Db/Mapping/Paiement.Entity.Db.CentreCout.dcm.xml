@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\CentreCout" table="CENTRE_COUT">
-    <indexes>
-      <index name="IDX_93B31DC62E415CB9" columns="ACTIVITE_ID"/>
-      <index name="IDX_93B31DC659860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_93B31DC67E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_93B31DC663F06898" columns="HISTO_MODIFICATEUR_ID"/>
-      <index name="IDX_93B31DC6E9B3446E" columns="SOURCE_ID"/>
-      <index name="IDX_93B31DC6884B0F7B" columns="STRUCTURE_ID"/>
-      <index name="IDX_93B31DC6AA6D6F1E" columns="TYPE_RESSOURCE_ID"/>
-    </indexes>
+  <entity name="Paiement\Entity\Db\CentreCout" table="CENTRE_COUT">
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
@@ -20,7 +11,7 @@
     <field name="libelle" type="string" column="LIBELLE" length="200" nullable="false"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
     <field name="uniteBudgetaire" type="string" column="UNITE_BUDGETAIRE" length="15" nullable="true"/>
-    <many-to-one field="parent" target-entity="Application\Entity\Db\CentreCout">
+    <many-to-one field="parent" target-entity="Paiement\Entity\Db\CentreCout">
       <join-columns>
         <join-column name="PARENT_ID" referenced-column-name="ID"/>
       </join-columns>
@@ -35,7 +26,7 @@
         </inverse-join-columns>
       </join-table>
     </many-to-many>
-    <many-to-one field="typeRessource" target-entity="Application\Entity\Db\TypeRessource">
+    <many-to-one field="typeRessource" target-entity="Paiement\Entity\Db\TypeRessource">
       <join-columns>
         <join-column name="TYPE_RESSOURCE_ID" referenced-column-name="ID"/>
       </join-columns>
@@ -60,7 +51,7 @@
         <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="activite" target-entity="Application\Entity\Db\CcActivite">
+    <many-to-one field="activite" target-entity="Paiement\Entity\Db\CcActivite">
       <join-columns>
         <join-column name="ACTIVITE_ID" referenced-column-name="ID"/>
       </join-columns>
@@ -75,6 +66,6 @@
             </inverse-join-columns>
         </join-table>
     </many-to-many>
-    <one-to-many field="miseEnPaiement" target-entity="Application\Entity\Db\MiseEnPaiement" mapped-by="centreCout" />
+    <one-to-many field="miseEnPaiement" target-entity="Paiement\Entity\Db\MiseEnPaiement" mapped-by="centreCout" />
   </entity>
 </doctrine-mapping>

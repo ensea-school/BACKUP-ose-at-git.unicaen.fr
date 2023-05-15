@@ -117,7 +117,7 @@
         <one-to-many field="histoService" target-entity="Service\Entity\Db\HistoIntervenantService"
                      mapped-by="intervenant"/>
         <one-to-many field="miseEnPaiementIntervenantStructure"
-                     target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="intervenant"/>
+                     target-entity="Paiement\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="intervenant"/>
         <one-to-many field="modificationServiceDu" target-entity="Service\Entity\Db\ModificationServiceDu"
                      mapped-by="intervenant">
             <cascade>

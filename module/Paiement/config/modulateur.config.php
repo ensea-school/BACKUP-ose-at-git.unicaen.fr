@@ -80,18 +80,16 @@ return [
     ],
 
     'guards' => [
-        PrivilegeController::class => [
-            [
-                'controller' => Controller\ModulateurController::class,
-                'action'     => ['index'],
-                'privileges' => [Privileges::MODULATEUR_VISUALISATION],
-                'assertion'  => Assertion\ModulateurAssertion::class,
-            ],
-            [
-                'controller' => Controller\ModulateurController::class,
-                'action'     => ['saisie', 'delete', 'type-modulateur-saisie', 'type-modulateur-delete', 'type-modulateur-structure-saisie', 'type-modulateur-structure-delete'],
-                'privileges' => [Privileges::MODULATEUR_EDITION],
-            ],
+        [
+            'controller' => Controller\ModulateurController::class,
+            'action'     => ['index'],
+            'privileges' => [Privileges::MODULATEUR_VISUALISATION],
+            'assertion'  => Assertion\ModulateurAssertion::class,
+        ],
+        [
+            'controller' => Controller\ModulateurController::class,
+            'action'     => ['saisie', 'delete', 'type-modulateur-saisie', 'type-modulateur-delete', 'type-modulateur-structure-saisie', 'type-modulateur-structure-delete'],
+            'privileges' => [Privileges::MODULATEUR_EDITION],
         ],
     ],
 

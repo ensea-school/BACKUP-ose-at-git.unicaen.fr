@@ -46,7 +46,7 @@
         <join-column name="TYPE_HEURES_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="centreCout" target-entity="Application\Entity\Db\CentreCout">
+    <many-to-one field="centreCout" target-entity="Paiement\Entity\Db\CentreCout">
       <join-columns>
         <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
       </join-columns>

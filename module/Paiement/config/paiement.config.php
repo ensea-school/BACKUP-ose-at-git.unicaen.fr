@@ -9,82 +9,47 @@ use UnicaenPrivilege\Guard\PrivilegeController;
 return [
     'routes' => [
         'paiement' => [
-            'type'          => 'Literal',
+            'route'         => '/paiement',
+            'controller'    => Controller\PaiementController::class,
+            'action'        => 'index',
+            'privileges'    => Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION,
             'may_terminate' => true,
-            'options'       => [
-                'route'    => '/paiement',
-                'defaults' => [
-                    'controller' => Controller\PaiementController::class,
-                    'action'     => 'index',
-                ],
-            ],
             'child_routes'  => [
                 'etat-demande-paiement' => [
-                    'type'          => 'Literal',
-                    'may_terminate' => true,
-                    'options'       => [
-                        'route'    => '/etat-demande-paiement',
-                        'defaults' => [
-                            'action' => 'etatPaiement',
-                            'etat'   => \Paiement\Entity\Db\MiseEnPaiement::A_METTRE_EN_PAIEMENT,
-                        ],
-                    ],
+                    'route'  => '/etat-demande-paiement',
+                    'controller'    => Controller\PaiementController::class,
+                    'action' => 'etatPaiement',
+                    'etat'   => \Paiement\Entity\Db\MiseEnPaiement::A_METTRE_EN_PAIEMENT,
                 ],
                 'mise-en-paiement'      => [
-                    'type'          => 'Segment',
-                    'may_terminate' => true,
-                    'options'       => [
-                        'route'       => '/mise-en-paiement/:structure/:intervenants',
-                        'constraints' => [
-                            'structure' => '[0-9]*',
-                        ],
-                        'defaults'    => [
-                            'action' => 'MiseEnPaiement',
-                        ],
+                    'route'       => '/mise-en-paiement/:structure/:intervenants',
+                    'controller'    => Controller\PaiementController::class,
+                    'action'      => 'MiseEnPaiement',
+                    'constraints' => [
+                        'structure' => '[0-9]*',
                     ],
                 ],
                 'etat-paiement'         => [
-                    'type'          => 'Literal',
-                    'may_terminate' => true,
-                    'options'       => [
-                        'route'    => '/etat-paiement',
-                        'defaults' => [
-                            'action' => 'etatPaiement',
-                            'etat'   => \Paiement\Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
-                        ],
-                    ],
+                    'route'  => '/etat-paiement',
+                    'controller'    => Controller\PaiementController::class,
+                    'action' => 'etatPaiement',
+                    'etat'   => \Paiement\Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
                 ],
                 'mises-en-paiement-csv' => [
-                    'type'          => 'Literal',
-                    'may_terminate' => true,
-                    'options'       => [
-                        'route'    => '/mises-en-paiement-csv',
-                        'defaults' => [
-                            'action' => 'misesEnPaiementCsv',
-                        ],
-                    ],
+                    'route'  => '/mises-en-paiement-csv',
+                    'controller'    => Controller\PaiementController::class,
+                    'action' => 'misesEnPaiementCsv',
                 ],
                 'extraction-paie'       => [
-                    'type'          => 'Segment',
-                    'may_terminate' => true,
-                    'options'       => [
-                        'route'    => '/extraction-paie[/:type][/:periode]',
-                        'defaults' => [
-                            'action' => 'extractionPaie',
-                        ],
-                    ],
+                    'route'  => '/extraction-paie[/:type][/:periode]',
+                    'controller'    => Controller\PaiementController::class,
+                    'action' => 'extractionPaie',
                 ],
                 'imputation-siham'      => [
-                    'type'          => 'Literal',
-                    'may_terminate' => true,
-                    'options'       => [
-                        'route'    => '/imputation-siham',
-                        'defaults' => [
-                            'action' => 'imputationSiham',
-                            'etat'   => \Paiement\Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
-
-                        ],
-                    ],
+                    'route'  => '/imputation-siham',
+                    'controller'    => Controller\PaiementController::class,
+                    'action' => 'imputationSiham',
+                    'etat'   => \Paiement\Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
                 ],
             ],
         ],
@@ -182,13 +147,6 @@ return [
     ],
 
     'guards' => [
-        [
-            'controller' => Controller\PaiementController::class,
-            'action'     => ['index'],
-            'privileges' => [
-                Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION,
-            ],
-        ],
         [
             'controller' => Controller\PaiementController::class,
             'action'     => ['demandeMiseEnPaiement'],

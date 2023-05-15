@@ -11,22 +11,22 @@ return [
             'route'      => '/centre-cout-activite',
             'controller' => Controller\CentreCoutController::class,
             'action'     => 'centre-cout-activite',
-        ],
-        'may_terminate'        => true,
-        'child_routes'         => [
-            'delete' => [
-                'route'       => '/delete/:ccActivite',
-                'action'      => 'centre-cout-activite-delete',
-                'constraints' => [
-                    'ccActivite' => '[0-9]*',
-                ],
-            ],
-            'saisie' => [
-                'options' => [
-                    'route'       => '/saisie/[:ccActivite]',
-                    'action'      => 'centre-cout-activite-saisie',
+            'may_terminate' => true,
+            'child_routes'  => [
+                'delete' => [
+                    'route'       => '/delete/:ccActivite',
+                    'action'      => 'centre-cout-activite-delete',
                     'constraints' => [
                         'ccActivite' => '[0-9]*',
+                    ],
+                ],
+                'saisie' => [
+                    'options' => [
+                        'route'       => '/saisie/[:ccActivite]',
+                        'action'      => 'centre-cout-activite-saisie',
+                        'constraints' => [
+                            'ccActivite' => '[0-9]*',
+                        ],
                     ],
                 ],
             ],

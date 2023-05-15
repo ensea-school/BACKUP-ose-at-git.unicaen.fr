@@ -15,17 +15,17 @@ return [
             'child_routes'  => [
                 'saisie' => [
                     'route'       => '/saisie[/:typeRessource]',
+                    'action'      => 'saisie',
                     'constraints' => [
                         'typeRessource' => '[0-9]*',
                     ],
-                    'action'      => 'saisie',
                 ],
                 'delete' => [
                     'route'       => '/delete[/:typeRessource]',
+                    'action'      => 'delete',
                     'constraints' => [
                         'typeRessource' => '[0-9]*',
                     ],
-                    'action'      => 'delete',
                 ],
             ],
         ],

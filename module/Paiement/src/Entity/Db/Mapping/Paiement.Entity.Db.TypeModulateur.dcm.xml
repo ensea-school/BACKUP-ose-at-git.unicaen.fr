@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\TypeModulateur" table="TYPE_MODULATEUR">
-    <indexes>
-      <index name="IDX_CBACD72059860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_CBACD7207E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_CBACD72063F06898" columns="HISTO_MODIFICATEUR_ID"/>
-    </indexes>
+  <entity name="Paiement\Entity\Db\TypeModulateur" table="TYPE_MODULATEUR">
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
@@ -30,7 +25,7 @@
       </join-columns>
     </many-to-one>
     <!-- NB: Ajout de relations à la main -->
-    <one-to-many field="modulateur" target-entity="Application\Entity\Db\Modulateur" mapped-by="typeModulateur" />
+    <one-to-many field="modulateur" target-entity="Paiement\Entity\Db\Modulateur" mapped-by="typeModulateur" />
     <many-to-many field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique">
         <join-table name="V_ELEMENT_TYPE_MODULATEUR">
             <join-columns>

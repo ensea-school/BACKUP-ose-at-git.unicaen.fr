@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\MiseEnPaiement" table="MISE_EN_PAIEMENT">
-    <indexes>
-      <index name="IDX_5A6BAF452AB2EAAC" columns="FORMULE_RES_SERVICE_REF_ID"/>
-      <index name="IDX_5A6BAF456D5170" columns="FORMULE_RES_SERVICE_ID"/>
-      <index name="IDX_5A6BAF4559860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_5A6BAF457E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_5A6BAF4563F06898" columns="HISTO_MODIFICATEUR_ID"/>
-      <index name="IDX_5A6BAF456BB59DF3" columns="PERIODE_PAIEMENT_ID"/>
-      <index name="IDX_5A6BAF45BC260C55" columns="VALIDATION_ID"/>
-    </indexes>
+  <entity name="Paiement\Entity\Db\MiseEnPaiement" table="MISE_EN_PAIEMENT">
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
@@ -29,7 +20,7 @@
         <join-column name="PERIODE_PAIEMENT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="centreCout" target-entity="Application\Entity\Db\CentreCout">
+    <many-to-one field="centreCout" target-entity="Paiement\Entity\Db\CentreCout">
       <join-columns>
         <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
       </join-columns>
@@ -69,6 +60,6 @@
         <join-column name="FORMULE_RES_SERVICE_REF_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="miseEnPaiement" />
+    <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Paiement\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="miseEnPaiement" />
   </entity>
 </doctrine-mapping>

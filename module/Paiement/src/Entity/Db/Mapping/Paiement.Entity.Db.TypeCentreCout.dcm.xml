@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\MotifNonPaiement" table="MOTIF_NON_PAIEMENT">
-    <indexes>
-      <index name="IDX_212E995D59860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_212E995D7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_212E995D63F06898" columns="HISTO_MODIFICATEUR_ID"/>
-    </indexes>
+  <entity name="Paiement\Entity\Db\TypeCentreCout" table="TYPE_CENTRE_COUT">
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="code" type="string" column="CODE" length="3" nullable="false"/>
+    <field name="code" type="string" column="CODE" length="50" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="50" nullable="false"/>
-    <field name="libelleLong" type="string" column="LIBELLE_LONG" length="200" nullable="false"/>
+    <field name="libelle" type="string" column="LIBELLE" length="200" nullable="false"/>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

@@ -224,7 +224,7 @@ class PaiementController extends AbstractController
         SELECT
           p
         FROM
-          Application\Entity\Db\TblPaiement p
+          Paiement\Entity\Db\TblPaiement p
         WHERE
           p.intervenant = :intervenant";
 
@@ -252,7 +252,7 @@ class PaiementController extends AbstractController
             SELECT
               mep, frs, fr, pp, s, cc, df, ep, str
             FROM
-              Application\Entity\Db\MiseEnPaiement mep
+              Paiement\Entity\Db\MiseEnPaiement mep
               JOIN mep.formuleResultatService frs
               JOIN frs.formuleResultat fr
               LEFT JOIN mep.periodePaiement pp
@@ -273,7 +273,7 @@ class PaiementController extends AbstractController
             SELECT
               mep, frsr, fr, pp, sr, cc, df, f, str
             FROM
-              Application\Entity\Db\MiseEnPaiement mep
+              Paiement\Entity\Db\MiseEnPaiement mep
               JOIN mep.formuleResultatServiceReferentiel frsr
               JOIN frsr.formuleResultat fr
               LEFT JOIN mep.periodePaiement pp

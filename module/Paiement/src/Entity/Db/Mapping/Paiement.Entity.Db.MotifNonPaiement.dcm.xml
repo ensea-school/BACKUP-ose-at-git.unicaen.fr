@@ -1,32 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\Dotation" table="DOTATION">
-    <indexes>
-      <index name="IDX_559B3C11AA401F5C" columns="ANNEE_ID"/>
-      <index name="IDX_559B3C1159860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_559B3C117E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_559B3C1163F06898" columns="HISTO_MODIFICATEUR_ID"/>
-      <index name="IDX_559B3C11884B0F7B" columns="STRUCTURE_ID"/>
-    </indexes>
+  <entity name="Paiement\Entity\Db\MotifNonPaiement" table="MOTIF_NON_PAIEMENT">
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
-    <field name="anneeCivile" type="integer" column="ANNEE_CIVILE" nullable="false"/>
-    <field name="libelle" type="string" column="LIBELLE" length="100" nullable="false"/>
+    <field name="code" type="string" column="CODE" length="3" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="typeRessource" target-entity="Application\Entity\Db\TypeRessource">
-      <join-columns>
-        <join-column name="TYPE_RESSOURCE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
+    <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="50" nullable="false"/>
+    <field name="libelleLong" type="string" column="LIBELLE_LONG" length="200" nullable="false"/>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
@@ -40,11 +23,6 @@
     <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
-      <join-columns>
-        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

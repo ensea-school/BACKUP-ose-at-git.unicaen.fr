@@ -2,7 +2,7 @@
 
 namespace Paiement\Entity\Db;
 
-use Application\Entity\Db\MiseEnPaiementListe;
+use Paiement\Entity\Db\MiseEnPaiementListe;
 use Application\Entity\Db\Periode;
 use OffreFormation\Entity\Db\TypeHeures;
 use Service\Entity\Db\EtatVolumeHoraire;

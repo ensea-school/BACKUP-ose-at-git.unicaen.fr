@@ -5,7 +5,7 @@ namespace Paiement\Entity\Db;
 use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\FormuleResultatService;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\MiseEnPaiementListe;
+use Paiement\Entity\Db\MiseEnPaiementListe;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Structure;
 use OffreFormation\Entity\Db\TypeHeures;

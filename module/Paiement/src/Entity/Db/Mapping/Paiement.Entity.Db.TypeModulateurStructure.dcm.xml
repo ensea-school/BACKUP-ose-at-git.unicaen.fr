@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\TypeModulateurStructure" table="TYPE_MODULATEUR_STRUCTURE">
-    <indexes>
-      <index name="IDX_6A9C9E8A884B0F7B" columns="STRUCTURE_ID"/>
-      <index name="IDX_6A9C9E8AE1FF3B6A" columns="TYPE_MODULATEUR_ID"/>
-      <index name="IDX_6A9C9E8A59860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_6A9C9E8A7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_6A9C9E8A63F06898" columns="HISTO_MODIFICATEUR_ID"/>
-    </indexes>
+  <entity name="Paiement\Entity\Db\TypeModulateurStructure" table="TYPE_MODULATEUR_STRUCTURE">
     <unique-constraints>
       <unique-constraint name="type_modulateur_structure_un" columns="TYPE_MODULATEUR_ID,STRUCTURE_ID"/>
     </unique-constraints>
@@ -39,7 +32,7 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="typeModulateur" target-entity="Application\Entity\Db\TypeModulateur">
+    <many-to-one field="typeModulateur" target-entity="Paiement\Entity\Db\TypeModulateur">
       <join-columns>
         <join-column name="TYPE_MODULATEUR_ID" referenced-column-name="ID"/>
       </join-columns>

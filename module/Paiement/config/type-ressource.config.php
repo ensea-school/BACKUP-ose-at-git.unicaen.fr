@@ -15,6 +15,7 @@ return [
             'child_routes'  => [
                 'saisie' => [
                     'route'       => '/saisie[/:typeRessource]',
+                    'controller'    => Controller\TypeRessourceController::class,
                     'action'      => 'saisie',
                     'constraints' => [
                         'typeRessource' => '[0-9]*',
@@ -22,6 +23,7 @@ return [
                 ],
                 'delete' => [
                     'route'       => '/delete[/:typeRessource]',
+                    'controller'    => Controller\TypeRessourceController::class,
                     'action'      => 'delete',
                     'constraints' => [
                         'typeRessource' => '[0-9]*',

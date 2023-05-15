@@ -12,7 +12,7 @@ use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\Form\Element\Select;
 use Paiement\Entity\Db\Dotation;
 use Paiement\Entity\Db\TypeRessource;
-use Paiement\Form\Budget\Traits\DotationSaisieFormAwareTrait;
+use Paiement\Form\Budget\DotationSaisieFormAwareTrait;
 use Paiement\Service\DotationServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\TypeRessourceServiceAwareTrait;

@@ -5,7 +5,7 @@ namespace Paiement\Controller;
 
 use Application\Controller\AbstractController;
 use Paiement\Entity\Db\TypeRessource;
-use Paiement\Form\TypeRessource\Traits\TypeRessourceSaisieFormAwareTrait;
+use Paiement\Form\TypeRessource\TypeRessourceSaisieFormAwareTrait;
 use Paiement\Service\TypeRessourceServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 

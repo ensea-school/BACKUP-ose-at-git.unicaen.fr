@@ -17,7 +17,7 @@
     .tfoot td { font-weight: bold; font-size: 120%; }
 </style>
 
-<?= $this->partial('application/paiement/etat-paiement-tableau', ['etatPaiement' => $etatPaiement, 'hasFoot' => true]); ?>
+<?= $this->partial('paiement/paiement/etat-paiement-tableau', ['etatPaiement' => $etatPaiement, 'hasFoot' => true]); ?>
 
 <?php if (\Paiement\Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT == $etat): ?>
 <p>La rémunération versée sous forme de forfait au titre d'une opération de formation continue identifiée

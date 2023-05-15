@@ -15,6 +15,7 @@ return [
             'child_routes'  => [
                 'saisie'                           => [
                     'route'       => '/saisie/:typeModulateur[/:modulateur]',
+                    'controller'    => Controller\ModulateurController::class,
                     'action'      => 'saisie',
                     'constraints' => [
                         'modulateur'     => '[0-9]*',
@@ -23,6 +24,7 @@ return [
                 ],
                 'delete'                           => [
                     'route'       => '/delete/:modulateur',
+                    'controller'    => Controller\ModulateurController::class,
                     'action'      => 'delete',
                     'constraints' => [
                         'modulateur' => '[0-9]*',
@@ -30,32 +32,36 @@ return [
                 ],
                 'type-modulateur-saisie'           => [
                     'route'       => '/type-modulateur-saisie[/:typeModulateur]',
+                    'controller'    => Controller\ModulateurController::class,
+                    'action'      => 'type-modulateur-saisie',
                     'constraints' => [
                         'typeModulateur' => '[0-9]*',
                     ],
-                    'action'      => 'type-modulateur-saisie',
                 ],
                 'type-modulateur-delete'           => [
                     'route'       => '/type-modulateur-delete/:typeModulateur',
+                    'controller'    => Controller\ModulateurController::class,
+                    'action'      => 'type-modulateur-delete',
                     'constraints' => [
                         'typeModulateur' => '[0-9]*',
                     ],
-                    'action'      => 'type-modulateur-delete',
                 ],
                 'type-modulateur-structure-saisie' => [
                     'route'       => '/type-modulateur-structure-saisie/:typeModulateur[/:typeModulateurStructure]',
+                    'controller'    => Controller\ModulateurController::class,
+                    'action'      => 'type-modulateur-structure-saisie',
                     'constraints' => [
                         'typeModulateur'          => '[0-9]*',
                         'typeModulateurStructure' => '[0-9]*',
                     ],
-                    'action'      => 'type-modulateur-structure-saisie',
                 ],
                 'type-modulateur-structure-delete' => [
                     'route'       => '/type-modulateur-structure-delete/:typeModulateurStructure',
+                    'controller'    => Controller\ModulateurController::class,
+                    'action'      => 'type-modulateur-structure-delete',
                     'constraints' => [
                         'typeModulateurStructure' => '[0-9]*',
                     ],
-                    'action'      => 'type-modulateur-structure-delete',
                 ],
             ],
         ],

@@ -3,9 +3,8 @@
 namespace Paiement\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Exception\DbException;
 use Paiement\Entity\Db\MotifNonPaiement;
-use Paiement\Form\MotifNonPaiement\Traits\MotifNonPaiementSaisieFormAwareTrait;
+use Paiement\Form\MotifNonPaiement\MotifNonPaiementSaisieFormAwareTrait;
 use Paiement\Service\MotifNonPaiementServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 

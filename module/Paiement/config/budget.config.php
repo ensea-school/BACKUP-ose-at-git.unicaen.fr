@@ -18,6 +18,7 @@ return [
             'child_routes'  => [
                 'engagements-liquidation' => [
                     'route'       => '/engagements-liquidation[/:structure]',
+                    'controller'  => Controller\BudgetController::class,
                     'action'      => 'engagements-liquidation',
                     'constraints' => [
                         'structure' => '[0-9]*',
@@ -28,6 +29,7 @@ return [
                 ],
                 'tableau-de-bord'         => [
                     'route'      => '/tableau-de-bord',
+                    'controller' => Controller\BudgetController::class,
                     'action'     => 'tableau-de-bord',
                     'privileges' => [
                         Privileges::BUDGET_VISUALISATION,
@@ -36,6 +38,7 @@ return [
                 ],
                 'export'                  => [
                     'route'       => '/export[/:structure]',
+                    'controller'  => Controller\BudgetController::class,
                     'action'      => 'export',
                     'constraints' => [
                         'structure' => '[0-9]*',
@@ -46,6 +49,7 @@ return [
                 ],
                 'get-json'                => [
                     'route'       => '/get-json[/:structure]',
+                    'controller'  => Controller\BudgetController::class,
                     'action'      => 'get-json',
                     'constraints' => [
                         'structure' => '[0-9]*',
@@ -57,6 +61,7 @@ return [
                 ],
                 'saisie-dotation'         => [
                     'route'       => '/saisie-dotation/:annee/:structure/:typeRessource/[:dotation1]/[:dotation2]',
+                    'controller'  => Controller\BudgetController::class,
                     'action'      => 'saisie-dotation',
                     'constraints' => [
                         'annee'         => '[0-9]*',

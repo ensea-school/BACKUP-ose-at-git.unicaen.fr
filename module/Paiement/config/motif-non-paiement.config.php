@@ -15,6 +15,7 @@ return [
             'child_routes'  => [
                 'supprimer' => [
                     'route'       => '/supprimer/:motifNonPaiement',
+                    'controller'  => Controller\MotifNonPaiementController::class,
                     'action'      => 'supprimer',
                     'constraints' => [
                         'motifNonPaiement' => '[0-9]*',
@@ -22,6 +23,7 @@ return [
                 ],
                 'saisir'    => [
                     'route'       => '/saisir/[:motifNonPaiement]',
+                    'controller'  => Controller\MotifNonPaiementController::class,
                     'action'      => 'saisir',
                     'constraints' => [
                         'motifNonPaiement' => '[0-9]*',

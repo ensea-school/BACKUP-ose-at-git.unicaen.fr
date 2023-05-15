@@ -63,23 +63,17 @@ return [
     ],
 
     'controllers' => [
-        'invokables' => [
-            Controller\MotifNonPaiementController::class => Controller\MotifNonPaiementController::class,
-        ],
+        Controller\MotifNonPaiementController::class => Controller\MotifNonPaiementControllerFactory::class,
     ],
 
     'services' => [
-        'invokables' => [
-            \Paiement\Service\MotifNonPaiementService::class => \Paiement\Service\MotifNonPaiementService::class,
-        ],
+        Service\MotifNonPaiementService::class => Service\MotifNonPaiementServiceFactory::class,
     ],
 
     'view_helpers' => [
     ],
 
     'forms' => [
-        'invokables' => [
-            Form\MotifNonPaiement\Saisie::class => \Paiement\Form\MotifNonPaiement\MotifNonPaiementSaisieForm::class,
-        ],
+        Form\MotifNonPaiement\MotifNonPaiementSaisieForm::class => Form\MotifNonPaiement\MotifNonPaiementSaisieFormFactory::class,
     ],
 ];

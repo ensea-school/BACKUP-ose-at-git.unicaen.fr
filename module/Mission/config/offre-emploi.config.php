@@ -20,7 +20,7 @@ return [
             'route'         => '/offre-emploi',
             'controller'    => OffreEmploiController::class,
             'action'        => 'index',
-            'privileges'    => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
+            //   'privileges'    => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             'may_terminate' => true,
             'child_routes'  => [
                 'saisir'               => [
@@ -32,6 +32,7 @@ return [
                 'detail'               => [
                     'route'      => '/detail[/:offreEmploi]',
                     'controller' => OffreEmploiController::class,
+                    'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
                     'action'     => 'detail',
                 ],
                 'get'                  => [
@@ -43,7 +44,6 @@ return [
                     'route'      => '/liste',
                     'controller' => OffreEmploiController::class,
                     'action'     => 'liste',
-                    'privileges' => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
                 ],
                 'supprimer'            => [
                     'route'      => '/supprimer/:offreEmploi',
@@ -125,6 +125,7 @@ return [
         [
             'privileges' => [
                 Privileges::MISSION_OFFRE_EMPLOI_MODIFIER,
+                Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
                 Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
                 Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
                 Privileges::MISSION_CANDIDATURE_VISUALISATION,

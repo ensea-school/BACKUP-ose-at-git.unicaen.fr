@@ -56,12 +56,9 @@ class OffreEmploiAssertion extends AbstractAssertion
 
     protected function assertOffreEmploiVisualisation(Role $role, OffreEmploi $offre)
     {
-
-        if ($offre->isValide()) {
-            return true;
-        }
-
-        return true;
+        return $this->asserts(
+            $this->assertStructure($role, $offre->getStructure()),
+        );
     }
 
 
@@ -165,7 +162,9 @@ class OffreEmploiAssertion extends AbstractAssertion
             return true;
         }
 
-        return $role->getStructure() === $structure;
+        $test = ($role->getStructure() == $structure);
+
+        return $role->getStructure() == $structure;
     }
 
 

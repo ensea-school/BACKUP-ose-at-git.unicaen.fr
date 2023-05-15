@@ -1,6 +1,6 @@
 <template>
 
-    <div class="col" v-if="!this.extended">
+    <div class="col" v-if="!this.extended && offre.canVisualiser">
         <div class="card h-100">
             <div class="card-header">
                 <h4> {{ offre.titre }}</h4>
@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-    <div v-if="this.extended">
+    <div v-if="this.extended && offre.canVisualiser">
         <h1 class="page-header">{{ offre.titre }}</h1>
         <div v-if="!this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
             <i class="fa-solid fa-user"></i>

@@ -9,6 +9,7 @@ use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
+use UnicaenVue\View\Model\AxiosModel;
 
 /**
  * Description of OffreEmploiService
@@ -49,7 +50,7 @@ class OffreEmploiService extends AbstractEntityService
 
 
 
-    public function query(array $parameters, ?Role $role = null)
+    public function data(array $parameters, ?Role $role = null)
     {
 
 
@@ -78,7 +79,31 @@ class OffreEmploiService extends AbstractEntityService
           oe . dateDebut
         ";
 
-        return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+        $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+
+        $triggers = $this->getOffreEmploiPrivileges();
+
+        $properties = [
+            'id',
+            ['typeMission', ['libelle']],
+            'dateDebut',
+            'dateFin',
+            ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']],
+            'titre',
+            'description',
+            'nombreHeures',
+            'nombrePostes',
+            'histoCreation',
+            'histoCreateur',
+            'validation',
+            'candidats',
+            'candidaturesValides',
+            'valide',
+            ['candidatures', ['id', ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]], 'histoCreation', 'validation']],
+        ];
+
+
+        return new AxiosModel($query, $properties, $triggers);
     }
 
 
@@ -103,16 +128,12 @@ class OffreEmploiService extends AbstractEntityService
 
         return [
             '/' => function (OffreEmploi $offre, array $extracted) {
+
                 $extracted['canModifier']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
                 $extracted['canValider']    = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
                 $extracted['canPostuler']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
                 $extracted['canVisualiser'] = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION);
                 $extracted['canSupprimer']  = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION);
-
-
-                /*$extracted['canValider']   = $this->isAllowed($original, Privileges::MISSION_VALIDATION);
-                $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION);*/
 
                 return $extracted;
             },

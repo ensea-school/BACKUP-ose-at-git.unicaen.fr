@@ -86,36 +86,9 @@ class OffreEmploiController extends AbstractController
      */
     public function listeAction()
     {
-        $parameters = [];
-        $role       = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        /**
-         * @var Query $query
-         */
-        $query = $this->getServiceOffreEmploi()->query([], $role);
-
-
-        $properties = [
-            'id',
-            ['typeMission', ['libelle']],
-            'dateDebut',
-            'dateFin',
-            ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']],
-            'titre',
-            'description',
-            'nombreHeures',
-            'nombrePostes',
-            'histoCreation',
-            'histoCreateur',
-            'validation',
-            'candidats',
-            'candidaturesValides',
-            'valide',
-            ['candidatures', ['id', ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]], 'histoCreation', 'validation']],
-        ];
-
-
-        return new AxiosModel($query, $properties, $this->getServiceOffreEmploi()->getOffreEmploiPrivileges());
+        return $this->getServiceOffreEmploi()->data([], $role);
     }
 
 
@@ -249,26 +222,8 @@ class OffreEmploiController extends AbstractController
 
         $this->em()->clear();
 
-        $properties = [
-            'id',
-            ['typeMission', ['libelle']],
-            'dateDebut',
-            'dateFin',
-            ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']],
-            'titre',
-            'description',
-            'nombreHeures',
-            'nombrePostes',
-            'histoCreation',
-            'histoCreateur',
-            'validation',
-            'candidats',
-            'candidaturesValides',
-            ['candidatures', ['id', ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]], 'histoCreation', 'validation']],
-        ];
-
-        $query = $this->getServiceOffreEmploi()->query(['offreEmploi' => $offreEmploi]);
-        $model = new AxiosModel($query, $properties, $this->getServiceOffreEmploi()->getOffreEmploiPrivileges());
+        $role  = $this->getServiceContext()->getSelectedIdentityRole();
+        $model = $this->getServiceOffreEmploi()->data(['offreEmploi' => $offreEmploi], $role);
         $model->returnFirstItem();
 
         return $model;

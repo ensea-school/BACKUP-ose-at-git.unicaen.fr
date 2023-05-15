@@ -173,10 +173,7 @@ $config = [
             Service\PaysService::class                             => Service\PaysService::class,
             Service\DepartementService::class                      => Service\DepartementService::class,
             Service\VoirieService::class                           => Service\VoirieService::class,
-            Service\GradeService::class                            => Service\GradeService::class,
-            Service\CorpsService::class                            => Service\CorpsService::class,
             Service\FichierService::class                          => Service\FichierService::class,
-            Service\TauxHoraireHETDService::class                  => Service\TauxHoraireHETDService::class,
             Service\TypeValidationService::class                   => Service\TypeValidationService::class,
             Service\ValidationService::class                       => Service\ValidationService::class,
         ],
@@ -204,17 +201,15 @@ $config = [
     'view_helpers'       => [
         'aliases'    => [
             // on utilise les objets standards de Laminas, et plus ceux d'Unicaen
-            'headLink'     => \Laminas\View\Helper\HeadLink::class,
-            'headScript'   => \Laminas\View\Helper\HeadScript::class,
-            'inlineScript' => \Laminas\View\Helper\InlineScript::class,
+            'headLink'                   => \Laminas\View\Helper\HeadLink::class,
+            'headScript'                 => \Laminas\View\Helper\HeadScript::class,
+            'inlineScript'               => \Laminas\View\Helper\InlineScript::class,
             'userProfileSelectRadioItem' => UserProfileSelectRadioItem::class,
         ],
         'factories'  => [
-            UserProfileSelectRadioItem::class => UserProfileSelectRadioItemFactory::class,
-            //            \UnicaenUtilisateur\View\Helper\UserProfileSelectRadioItem::class  => View\Helper\UserProfileSelectRadioItemFactory::class,
-            \UnicaenApp\View\Helper\AppLink::class                             => View\Helper\AppLinkFactory::class,
-//            \UnicaenUtilisateur\View\Helper\UserCurrent::class                 => View\Helper\UserCurrentFactory::class,
-            'tab'                                                              => View\Helper\TabViewHelperFactory::class,
+            UserProfileSelectRadioItem::class      => UserProfileSelectRadioItemFactory::class,
+            \UnicaenApp\View\Helper\AppLink::class => View\Helper\AppLinkFactory::class,
+            'tab'                                  => View\Helper\TabViewHelperFactory::class,
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,

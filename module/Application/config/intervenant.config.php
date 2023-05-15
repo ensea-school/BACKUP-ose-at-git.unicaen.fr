@@ -384,6 +384,7 @@ return [
         'invokables' => [
             Service\CiviliteService::class => Service\CiviliteService::class,
             Service\GradeService::class    => Service\GradeService::class,
+            Service\CorpsService::class    => Service\CorpsService::class,
         ],
     ],
     'view_helpers'    => [

@@ -13,7 +13,6 @@ use Contrat\Entity\Db\ContratServiceListe;
 use Contrat\Service\ContratServiceListeServiceAwareTrait;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Application\Service\Traits\TauxHoraireHETDServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Contrat\Assertion\ContratAssertion;
@@ -53,7 +52,6 @@ class ContratController extends AbstractController
     use ContratRetourFormAwareTrait;
     use ParametresServiceAwareTrait;
     use ContratProcessusAwareTrait;
-    use TauxHoraireHETDServiceAwareTrait;
     use DossierServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use EnvoiMailContratFormAwareTrait;

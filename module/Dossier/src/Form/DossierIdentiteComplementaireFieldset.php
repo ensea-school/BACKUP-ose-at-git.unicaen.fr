@@ -164,8 +164,9 @@ class DossierIdentiteComplementaireFieldset extends AbstractFieldset
                 'allow_empty' => true,
             ],
             'departementNaissance' => [
-                'required'   => false,//$departementRequired,
-                'validators' => [
+                'required'    => false,
+                'allow_empty' => true,
+                'validators'  => [
                     new DepartementNaissanceValidator(),
                 ],
             ],

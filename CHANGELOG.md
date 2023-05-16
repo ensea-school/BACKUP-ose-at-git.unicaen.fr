@@ -20,17 +20,18 @@
 * Il est possible de rentrer une date de retour sur un contrat après avoir téléversé le contrat sans avoir besoin de recharger la page
 * 
 
-# OSE 20.3 (à venir)
+# OSE 20.3 (23/05/2023)
 
 ## Nouveautés
 
 * Possibilité de spécifier le mode de saisie des heures (calendaire ou semestriel) par statut d'intervenant
+* La Réunion : nouvelle formule appliquée à partir de 2023/2024 uniquement
 
 ## Corrections de bugs
 
 * Meilleure gestion dans l'expérience utilisateur de la saisie des dates de début et de fin dans la saisie de service en mode calendaire (#50508)
 * Masquer de la liste de choix d'une étape, les formations historisées lors de l'ajout d'un élément pédagogique à une formation (#48878)
-* Possiblité de choisir quelle type d'affectation (HIE ou FUN) est remontée/testée lors d'une PEC ou REN (#49954)
+* Possiblité de choisir quel type d'affectation (HIE ou FUN) est remontée/testée lors d'une PEC ou REN (#49954)
 * Dans la partie notes intervenant, différenciation entre les demandes de mise en paiement et les mises en paiement (#50081)
 * Affichage de la fiche intervenant lorsque la civilité n'est pas renseignée (#50813)
 

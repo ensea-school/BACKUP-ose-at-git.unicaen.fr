@@ -22,6 +22,10 @@
 
 # OSE 20.3 (à venir)
 
+## Nouveautés
+
+* Possibilité de spécifier le mode de saisie des heures (calendaire ou semestriel) par statut d'intervenant
+
 ## Corrections de bugs
 
 * Meilleure gestion dans l'expérience utilisateur de la saisie des dates de début et de fin dans la saisie de service en mode calendaire (#50508)

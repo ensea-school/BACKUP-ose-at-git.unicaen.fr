@@ -99,6 +99,11 @@
         <field name="codesCorresp3" type="string" column="CODES_CORRESP_3" length="1000" nullable="true"/>
         <field name="codesCorresp4" type="string" column="CODES_CORRESP_4" length="1000" nullable="true"/>
 
+        <field name="modeServicePrevisionnel" type="string" column="MODE_SERVICE_PREVISIONNEL" length="1000" nullable="true"/>
+        <field name="modeServiceRealise" type="string" column="MODE_SERVICE_REALISE" length="1000" nullable="true"/>
+        <field name="modeReferentielPrevisionnel" type="string" column="MODE_REFERENTIEL_PREVISIONNEL" length="1000" nullable="true"/>
+        <field name="modeReferentielRealise" type="string" column="MODE_REFERENTIEL_REALISE" length="1000" nullable="true"/>
+
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
             <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>

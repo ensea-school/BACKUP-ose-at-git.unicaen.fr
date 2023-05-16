@@ -1305,6 +1305,10 @@ return [
         'CONTRAT_ETAT_SORTIE_ID',
         'TAUX_CHARGES_TTC',
         'CONTRAT_GENERATION',
+        'MODE_SERVICE_PREVISIONNEL',
+        'MODE_SERVICE_REALISE',
+        'MODE_REFERENTIEL_PREVISIONNEL',
+        'MODE_REFERENTIEL_REALISE',
     ],
     'STRUCTURE'                      => [
         'ID',

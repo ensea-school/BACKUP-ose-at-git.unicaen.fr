@@ -443,6 +443,7 @@ class SaisieCalendaireHydrator implements HydratorInterface
 
         $ancienHoraireDebut = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('ancien-horaire-debut'));
         $horaireDebut = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_DEBUT, $this->getVal('horaire-debut'));
+
         $object->setHoraireDebut($ancienHoraireDebut != $horaireDebut ? $ancienHoraireDebut : $horaireDebut);
 
         $ancienHoraireFin = $lfh->allToData(VolumeHoraireListe::FILTRE_HORAIRE_FIN, $this->getVal('ancien-horaire-fin'));
@@ -510,8 +511,22 @@ class SaisieCalendaireHydrator implements HydratorInterface
         if (isset($data['horaire-debut']) && $data['horaire-debut'] > 0) {
             $data['horaire-debut'] = (new \DateTime)->setTimestamp($data['horaire-debut']);
         }
+        else{
+            //Pour une meilleure gestion du datetime local, si pas d'horaire de début on set à la date du jour 00:00
+            $now = new \DateTime();
+            $now->setTime(0,0);
+            $data['horaire-debut'] = $now;
+
+        }
         if (isset($data['horaire-fin']) && $data['horaire-fin'] > 0) {
             $data['horaire-fin'] = (new \DateTime)->setTimestamp($data['horaire-fin']);
+        }
+        else{
+            //Pour une meilleure gestion du datetime local, si pas d'horaire de début on set à la date du jour 00:00
+            $now = new \DateTime();
+            $now->setTime(0,0);
+            $data['horaire-fin'] = $now;
+
         }
 
         return $data;

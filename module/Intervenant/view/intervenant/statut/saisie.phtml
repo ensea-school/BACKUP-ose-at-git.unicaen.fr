@@ -31,7 +31,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
             echo $this->tag('div', ['class' => 'list-group']);
             foreach ($statuts as $s) {
                 if ($s->getTypeIntervenant() == $typeIntervenant) {
-                    $url = $this->url('statut/saisie', ['statut' => $s->getId()]);
+                    $url    = $this->url('statut/saisie', ['statut' => $s->getId()]);
                     $active = $s == $statut ? ' active' : '';
                     echo $this->tag('a', ['class' => 'list-group-item' . $active, 'href' => $url])->html($s) . "\n";
                 }
@@ -183,11 +183,28 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                         <?= $this->formControlGroup($form->get('serviceRealise')); ?>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modeServicePrevisionnel')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modeServiceRealise')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modeReferentielPrevisionnel')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modeReferentielRealise')); ?>
+                    </div>
+                </div>
                 <div class="row servicesDetails">
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('serviceExterieur')); ?>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -398,7 +415,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
             el: function (name) {
-                return this.element.find('[name=' + name + ']');
+                return this.element.find('[name='+name+']');
             }
         });
     });

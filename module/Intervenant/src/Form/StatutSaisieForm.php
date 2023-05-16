@@ -3,11 +3,13 @@
 namespace Intervenant\Form;
 
 use Application\Entity\Db\EtatSortie;
+use Application\Entity\Db\Parametre;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
+use PhpParser\Node\Param;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
@@ -55,6 +57,10 @@ class StatutSaisieForm extends AbstractForm
             'motifNonPaiement'              => 'Le gestionnaire peut déclarer des heures comme non payables',
             'formuleVisualisation'          => 'Visibilité par l\'intervenant du détail des heures pour le calcul des HETD',
             'typeIntervenant'               => 'Type d\'intervenant',
+            'modeServicePrevisionnel'       => 'Mode de saisi pour le service prévisionnel',
+            'modeServiceRealise'            => 'Mode de saisi pour le service réalisé',
+            'modeReferentielPrevisionnel'   => 'Mode de saisi pour le référentiel prévisionnel',
+            'modeReferentielRealise'        => 'Mode de saisi pour le référentiel réalisé',
         ];
 
         $dveElements = [
@@ -63,6 +69,7 @@ class StatutSaisieForm extends AbstractForm
             'serviceRealise',
             'referentielPrevu',
             'referentielRealise',
+
         ];
 
         $ignored = [
@@ -76,6 +83,11 @@ class StatutSaisieForm extends AbstractForm
             'contratDepot',
             'contratGeneration',
             'modificationServiceDuVisualisation',
+            'modeReferentielPrevisionnel',
+            'modeReferentielRealise',
+            'modeServicePrevisionnel',
+            'modeServiceRealise',
+
         ];
 
         for ($i = 1; $i <= 5; $i++) {
@@ -108,6 +120,91 @@ class StatutSaisieForm extends AbstractForm
                 $ignored[] = 'codesCorresp' . $i;
             }
         }
+
+        $this->spec(['modeServicePrevisionnel' => [
+            'type'     => 'Select',
+            'name'     => 'modeServicePrevisionnel',
+            'options'  => [
+                'value_options' => [
+                    ''           => 'Par défaut',
+                    'calendaire' => Parametre::SERVICES_MODALITE_CALENDAIRE,
+                    'semestriel' => Parametre::SERVICES_MODALITE_SEMESTRIEL,
+                ],
+            ],
+            'hydrator' => [
+                'getter' => function (Statut $statut, string $name) {
+                    return $statut->getModeServicePrevisionnel();
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $statut->setModeServicePrevisionnel($value);
+                },
+            ],
+
+
+        ]]);
+
+        $this->spec(['modeServiceRealise' => [
+            'type'     => 'Select',
+            'name'     => 'modeServiceRealise',
+            'options'  => [
+                'value_options' => [
+                    ''           => 'Par défaut',
+                    'calendaire' => Parametre::SERVICES_MODALITE_CALENDAIRE,
+                    'semestriel' => Parametre::SERVICES_MODALITE_SEMESTRIEL,
+                ],
+            ],
+            'hydrator' => [
+                'getter' => function (Statut $statut, string $name) {
+                    return $statut->getModeServiceRealise();
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $statut->setModeServiceRealise($value);
+                },
+            ],
+
+        ]]);
+
+        $this->spec(['modeReferentielPrevisionnel' => [
+            'type'     => 'Select',
+            'name'     => 'modeReferentielPrevisionnel',
+            'options'  => [
+                'value_options' => [
+                    ''           => 'Par défaut',
+                    'calendaire' => Parametre::SERVICES_MODALITE_CALENDAIRE,
+                    'semestriel' => Parametre::SERVICES_MODALITE_SEMESTRIEL,
+                ],
+            ],
+            'hydrator' => [
+                'getter' => function (Statut $statut, string $name) {
+                    return $statut->getModeReferentielPrevisionnel();
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $statut->setModeReferentielPrevisionnel($value);
+                },
+            ],
+
+        ]]);
+
+        $this->spec(['modeReferentielRealise' => [
+            'type'     => 'Select',
+            'name'     => 'modeReferentielRealise',
+            'options'  => [
+                'value_options' => [
+                    ''           => 'Par défaut',
+                    'calendaire' => Parametre::SERVICES_MODALITE_CALENDAIRE,
+                    'semestriel' => Parametre::SERVICES_MODALITE_SEMESTRIEL,
+                ],
+            ],
+            'hydrator' => [
+                'getter' => function (Statut $statut, string $name) {
+                    return $statut->getModeReferentielRealise();
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $statut->setModeReferentielRealise($value);
+                },
+            ],
+
+        ]]);
 
 
         $this->spec(Statut::class, $ignored);
@@ -383,8 +480,8 @@ class StatutSaisieForm extends AbstractForm
                 ],
                 'hydrator' => [
                     'getter' => function (Statut $statut, string $name) {
-                        $access  = $statut->getModificationServiceDu();
-                        $visu    = $statut->getModificationServiceDuVisualisation();
+                        $access = $statut->getModificationServiceDu();
+                        $visu   = $statut->getModificationServiceDuVisualisation();
 
                         if ($visu && $access) {
                             return 'visualisation';
@@ -395,8 +492,8 @@ class StatutSaisieForm extends AbstractForm
                         }
                     },
                     'setter' => function (Statut $statut, $value, string $name) {
-                        $access  = false;
-                        $visu    = false;
+                        $access = false;
+                        $visu   = false;
                         switch ($value) {
                             case 'visualisation':
                                 $visu = true;
@@ -426,6 +523,30 @@ class StatutSaisieForm extends AbstractForm
         $this->get('contratEtatSortie')->setEmptyOption('- Aucun état de sortie n\'est spécifié -');
 
         return $this;
+    }
+
+
+
+    public function getInputFilterSpecification()
+    {
+        $spec = [
+            'modeReferentielPrevisionnel' => [
+                'required' => false,
+            ],
+            'modeReferentielRealise'      => [
+                'required' => false,
+            ],
+            'modeServicePrevisionnel'     => [
+                'required' => false,
+            ],
+            'modeServiceRealise'          => [
+                'required' => false,
+            ],
+
+
+        ];
+
+        return $spec;
     }
 
 }

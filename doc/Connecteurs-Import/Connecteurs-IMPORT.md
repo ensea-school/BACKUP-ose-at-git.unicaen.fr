@@ -30,7 +30,8 @@ et SOURCE_CODE qui permettent respectivement de
 
 Les données à importer devront être listées dans des vues écrites au format attendu par OSE. Le format est disponible
 directement dans l'application, page Administration / Synchronisation / Tableau de bord principal. Généralement, les vues
-accèdent aux données en passant par des DBLinks, mais rien n'empêche de faire autrement.
+accèdent aux données en passant par des DBLinks, mais rien n'empêche de faire autrement, par exemple en créant des tables tampon remplies par des scripts et qui seront exploitées par les vues sources.
+C'est d'ailleurs comme cela que fonctionne le connecteur [Actul](Actul/Connecteur.md).
 
 OSE permet de faire quatre opérations d'importation :
 

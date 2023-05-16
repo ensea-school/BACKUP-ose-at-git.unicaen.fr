@@ -5,7 +5,7 @@ Pour pouvoir fonctionner, il faut pouvoir gérer simultanément:
  - l'annualisation des fiches (en se basant sur les informations de validité fournies par la MV_INTERVENANT)
  - La synchronisation partielle dans certains cas
 
-SRC_INTERVENANT se base sur MV_INTERVENANT, puis confronte les données à la table INTERVENANT pour présenter à la vue différentielle
+[SRC_INTERVENANT](SRC_INTERVENANT.sql) se base sur MV_INTERVENANT, puis confronte les données à la table INTERVENANT pour présenter à la vue différentielle
 un ensemble de données prêt à synchroniser.
 
 Concrètement, on part de MV_INTERVENANT, on fait une jointure sur la table des années et on confronte les dates de validité de début et de fin

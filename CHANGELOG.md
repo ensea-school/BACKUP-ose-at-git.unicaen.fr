@@ -22,12 +22,24 @@
 
 # OSE 20.3 (à venir)
 
+## Nouveautés
+
+* Possibilité de spécifier le mode de saisie des heures (calendaire ou semestriel) par statut d'intervenant
+
 ## Corrections de bugs
 
 * Meilleure gestion dans l'expérience utilisateur de la saisie des dates de début et de fin dans la saisie de service en mode calendaire (#50508)
 * Masquer de la liste de choix d'une étape, les formations historisées lors de l'ajout d'un élément pédagogique à une formation (#48878)
 * Possiblité de choisir quelle type d'affectation (HIE ou FUN) est remontée/testée lors d'une PEC ou REN (#49954)
 * Dans la partie notes intervenant, différenciation entre les demandes de mise en paiement et les mises en paiement (#50081)
+* Affichage de la fiche intervenant lorsque la civilité n'est pas renseignée (#50813)
+
+## Notes de migration
+
+Si vous créez des intervenants locaux sans leur remplor de données personnelles, de services ou de PJ, OSe les historise. Afin d'évoter cela, il vous faut modifier le filtre de synchronisation des intervenants.
+Vous trouverez plus d'indications ainsi que le filtre en question ici :
+https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Connecteurs-Import/Connecteurs-IMPORT.md#utilisation-pour-contr%C3%B4ler-la-synchronisation-des-intervenants
+
 
 # OSE 20.2 (28/04/2023)
 

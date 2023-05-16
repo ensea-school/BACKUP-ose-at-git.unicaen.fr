@@ -30,7 +30,8 @@ et SOURCE_CODE qui permettent respectivement de
 
 Les données à importer devront être listées dans des vues écrites au format attendu par OSE. Le format est disponible
 directement dans l'application, page Administration / Synchronisation / Tableau de bord principal. Généralement, les vues
-accèdent aux données en passant par des DBLinks, mais rien n'empêche de faire autrement.
+accèdent aux données en passant par des DBLinks, mais rien n'empêche de faire autrement, par exemple en créant des tables tampon remplies par des scripts et qui seront exploitées par les vues sources.
+C'est d'ailleurs comme cela que fonctionne le connecteur [Actul](Actul/Connecteur.md).
 
 OSE permet de faire quatre opérations d'importation :
 
@@ -661,6 +662,25 @@ SELECT * FROM v_diff_etape WHERE annee_id > 2019;
 ```
 
 Le filtre est ici `WHERE annee_id > 2019`.
+
+### Utilisation pour contrôler la synchronisation des intervenants.
+
+La synchronisation des intervenants est alimentée par la [src_intervenant](Générique/SRC_INTERVENANT.md).
+
+Il est nécessaire de mettre en place un filtre portant sur la table INTERVENANT afin de ne pas historiser de fiches si :
+ - elles ont été créées localement
+ - si des données ont déjà été saisies dessus
+
+Voici le filtre, à copier/coller :
+
+```sql
+WHERE (import_action <> 'delete' OR (
+  source_id <> ose_divers.get_ose_source_id 
+  AND (NOT exists(SELECT intervenant_id FROM intervenant_dossier WHERE histo_destruction IS NULL AND intervenant_id = v_diff_intervenant.id))
+  AND (NOT exists(SELECT intervenant_id FROM piece_jointe WHERE histo_destruction IS NULL AND intervenant_id = v_diff_intervenant.id))
+  AND (NOT exists(SELECT intervenant_id FROM service WHERE histo_destruction IS NULL AND intervenant_id = v_diff_intervenant.id))
+))
+```
 
 ### Utilisation pour contrôler la synchronisation de l'offre de formation
 

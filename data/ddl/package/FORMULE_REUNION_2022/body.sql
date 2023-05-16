@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
+CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION_2022 AS
   decalageLigne NUMERIC DEFAULT 19;
 
   /* Stockage des valeurs intermédiaires */
@@ -126,32 +126,32 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- T=IF([.$H20]="Référentiel";0;[.AI20]+[.AO20]+[.AU20]+[.BA20])
+      -- T=IF([.$H20]="Référentiel";0;[.AI20]+[.AO20]+[.BS20]+[.BY20])
       WHEN 'T' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN cell('AI',l) + cell('AO',l) + cell('AU',l) + cell('BA',l);
+          RETURN cell('AI',l) + cell('AO',l) + cell('BS',l) + cell('BY',l);
         END IF;
 
 
 
-      -- U=IF([.$H20]="Référentiel";0;[.BG20]+[.BM20]+[.BS20]+[.BY20])
+      -- U=IF([.$H20]="Référentiel";0;[.AU20]+[.BA20]+[.CE20]+[.CK20])
       WHEN 'U' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN cell('BG',l) + cell('BM',l) + cell('BS',l) + cell('BY',l);
+          RETURN cell('AU',l) + cell('BA',l) + cell('CE',l) + cell('CK',l);
         END IF;
 
 
 
-      -- V=IF([.$H20]="Référentiel";0;[.CE20]+[.CK20]+[.CQ20]+[.CW20])
+      -- V=IF([.$H20]="Référentiel";0;[.BG20]+[.BM20]+[.CQ20]+[.CW20])
       WHEN 'V' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN cell('CE',l) + cell('CK',l) + cell('CQ',l) + cell('CW',l);
+          RETURN cell('BG',l) + cell('BM',l) + cell('CQ',l) + cell('CW',l);
         END IF;
 
 
@@ -166,32 +166,32 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- X=IF([.$H20]="Référentiel";0;[.AK20]+[.AQ20]+[.AW20]+[.BC20])
+      -- X=IF([.$H20]="Référentiel";0;[.AK20]+[.AQ20]+[.BU20]+[.CA20])
       WHEN 'X' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN cell('AK',l) + cell('AQ',l) + cell('AW',l) + cell('BC',l);
+          RETURN cell('AK',l) + cell('AQ',l) + cell('BU',l) + cell('CA',l);
         END IF;
 
 
 
-      -- Y=IF([.$H20]="Référentiel";0;[.BI20]+[.BO20]+[.BU20]+[.CA20])
+      -- Y=IF([.$H20]="Référentiel";0;[.AW20]+[.BC20]+[.CG20]+[.CM20])
       WHEN 'Y' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN cell('BI',l) + cell('BO',l) + cell('BU',l) + cell('CA',l);
+          RETURN cell('AW',l) + cell('BC',l) + cell('CG',l) + cell('CM',l);
         END IF;
 
 
 
-      -- Z=IF([.$H20]="Référentiel";0;[.CG20]+[.CM20]+[.CS20]+[.CY20])
+      -- Z=IF([.$H20]="Référentiel";0;[.BI20]+[.BO20]+[.CS20]+[.CY20])
       WHEN 'Z' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN cell('CG',l) + cell('CM',l) + cell('CS',l) + cell('CY',l);
+          RETURN cell('BI',l) + cell('BO',l) + cell('CS',l) + cell('CY',l);
         END IF;
 
 
@@ -352,10 +352,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- AS=IF(AND([.$D20]="Oui";[.$H20]="TP";[.$A20]<>i_structure_code);[.$M20]*[.$E20]*[.$AD20];0)
+      -- AS=IF(AND([.$D20]="Oui";[.$H20]="TP";[.$A20]=i_structure_code);[.$M20]*[.$F20]*[.$AD20];0)
       WHEN 'AS' THEN
-        IF vh.service_statutaire AND vh.type_intervention_code = 'TP' AND NOT vh.structure_is_affectation THEN
-          RETURN vh.heures * vh.taux_fi * cell('AD',l);
+        IF vh.service_statutaire AND vh.type_intervention_code = 'TP' AND vh.structure_is_affectation THEN
+          RETURN vh.heures * vh.taux_fa * cell('AD',l);
         ELSE
           RETURN 0;
         END IF;
@@ -368,15 +368,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- AT16=MIN([.AT15];[.CJ17])
+      -- AT16=MIN([.AT15];[.AN17])
       WHEN 'AT16' THEN
-        RETURN LEAST(cell('AT15'), cell('CJ17'));
+        RETURN LEAST(cell('AT15'), cell('AN17'));
 
 
 
-      -- AT17=[.CJ17]-[.AT16]
+      -- AT17=[.AN17]-[.AT16]
       WHEN 'AT17' THEN
-        RETURN cell('CJ17') - cell('AT16');
+        RETURN cell('AN17') - cell('AT16');
 
 
 
@@ -416,10 +416,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- AY=IF(AND([.$D20]="Oui";[.$H20]<>"TP";[.$H20]<>"Référentiel";[.$A20]<>i_structure_code);[.$M20]*[.$E20]*[.$AD20];0)
+      -- AY=IF(AND([.$D20]="Oui";[.$H20]<>"TP";[.$H20]<>"Référentiel";[.$A20]=i_structure_code);[.$M20]*[.$F20]*[.$AD20];0)
       WHEN 'AY' THEN
-        IF vh.service_statutaire AND vh.type_intervention_code <> 'TP' AND vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
-          RETURN vh.heures * vh.taux_fi * cell('AD',l);
+        IF vh.service_statutaire AND vh.type_intervention_code <> 'TP' AND vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation THEN
+          RETURN vh.heures * vh.taux_fa * cell('AD',l);
         ELSE
           RETURN 0;
         END IF;
@@ -480,10 +480,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- BE=IF(AND([.$D20]="Oui";[.$H20]="TP";[.$A20]=i_structure_code);[.$M20]*[.$F20]*[.$AD20];0)
+      -- BE=IF(AND([.$D20]="Oui";[.$H20]="TP";[.$A20]=i_structure_code);[.$M20]*[.$G20]*[.$AD20];0)
       WHEN 'BE' THEN
         IF vh.service_statutaire AND vh.type_intervention_code = 'TP' AND vh.structure_is_affectation THEN
-          RETURN vh.heures * vh.taux_fa * cell('AD',l);
+          RETURN vh.heures * vh.taux_fc * cell('AD',l);
         ELSE
           RETURN 0;
         END IF;
@@ -496,15 +496,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- BF16=MIN([.BF15];[.AN17])
+      -- BF16=MIN([.BF15];[.AZ17])
       WHEN 'BF16' THEN
-        RETURN LEAST(cell('BF15'), cell('AN17'));
+        RETURN LEAST(cell('BF15'), cell('AZ17'));
 
 
 
-      -- BF17=[.AN17]-[.BF16]
+      -- BF17=[.AZ17]-[.BF16]
       WHEN 'BF17' THEN
-        RETURN cell('AN17') - cell('BF16');
+        RETURN cell('AZ17') - cell('BF16');
 
 
 
@@ -544,10 +544,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- BK=IF(AND([.$D20]="Oui";[.$H20]<>"TP";[.$H20]<>"Référentiel";[.$A20]=i_structure_code);[.$M20]*[.$F20]*[.$AD20];0)
+      -- BK=IF(AND([.$D20]="Oui";[.$H20]<>"TP";[.$H20]<>"Référentiel";[.$A20]=i_structure_code);[.$M20]*[.$G20]*[.$AD20];0)
       WHEN 'BK' THEN
         IF vh.service_statutaire AND vh.type_intervention_code <> 'TP' AND vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation THEN
-          RETURN vh.heures * vh.taux_fa * cell('AD',l);
+          RETURN vh.heures * vh.taux_fc * cell('AD',l);
         ELSE
           RETURN 0;
         END IF;
@@ -608,10 +608,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- BQ=IF(AND([.$D20]="Oui";[.$H20]="TP";[.$A20]<>i_structure_code);[.$M20]*[.$F20]*[.$AD20];0)
+      -- BQ=IF(AND([.$D20]="Oui";[.$H20]="TP";[.$A20]<>i_structure_code);[.$M20]*[.$E20]*[.$AD20];0)
       WHEN 'BQ' THEN
         IF vh.service_statutaire AND vh.type_intervention_code = 'TP' AND NOT vh.structure_is_affectation THEN
-          RETURN vh.heures * vh.taux_fa * cell('AD',l);
+          RETURN vh.heures * vh.taux_fi * cell('AD',l);
         ELSE
           RETURN 0;
         END IF;
@@ -624,15 +624,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- BR16=MIN([.BR15];[.AZ17])
+      -- BR16=MIN([.BR15];[.BL17])
       WHEN 'BR16' THEN
-        RETURN LEAST(cell('BR15'), cell('AZ17'));
+        RETURN LEAST(cell('BR15'), cell('BL17'));
 
 
 
-      -- BR17=[.AZ17]-[.BR16]
+      -- BR17=[.BL17]-[.BR16]
       WHEN 'BR17' THEN
-        RETURN cell('AZ17') - cell('BR16');
+        RETURN cell('BL17') - cell('BR16');
 
 
 
@@ -672,10 +672,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- BW=IF(AND([.$D20]="Oui";[.$H20]<>"TP";[.$H20]<>"Référentiel";[.$A20]<>i_structure_code);[.$M20]*[.$F20]*[.$AD20];0)
+      -- BW=IF(AND([.$D20]="Oui";[.$H20]<>"TP";[.$H20]<>"Référentiel";[.$A20]<>i_structure_code);[.$M20]*[.$E20]*[.$AD20];0)
       WHEN 'BW' THEN
         IF vh.service_statutaire AND vh.type_intervention_code <> 'TP' AND vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
-          RETURN vh.heures * vh.taux_fa * cell('AD',l);
+          RETURN vh.heures * vh.taux_fi * cell('AD',l);
         ELSE
           RETURN 0;
         END IF;
@@ -736,10 +736,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- CC=IF(AND([.$D20]="Oui";[.$H20]="TP";[.$A20]=i_structure_code);[.$M20]*[.$G20]*[.$AD20];0)
+      -- CC=IF(AND([.$D20]="Oui";[.$H20]="TP";[.$A20]<>i_structure_code);[.$M20]*[.$F20]*[.$AD20];0)
       WHEN 'CC' THEN
-        IF vh.service_statutaire AND vh.type_intervention_code = 'TP' AND vh.structure_is_affectation THEN
-          RETURN vh.heures * vh.taux_fc * cell('AD',l);
+        IF vh.service_statutaire AND vh.type_intervention_code = 'TP' AND NOT vh.structure_is_affectation THEN
+          RETURN vh.heures * vh.taux_fa * cell('AD',l);
         ELSE
           RETURN 0;
         END IF;
@@ -752,15 +752,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- CD16=MIN([.CD15];[.BL17])
+      -- CD16=MIN([.CD15];[.BX17])
       WHEN 'CD16' THEN
-        RETURN LEAST(cell('CD15'), cell('BL17'));
+        RETURN LEAST(cell('CD15'), cell('BX17'));
 
 
 
-      -- CD17=[.BL17]-[.CD16]
+      -- CD17=[.BX17]-[.CD16]
       WHEN 'CD17' THEN
-        RETURN cell('BL17') - cell('CD16');
+        RETURN cell('BX17') - cell('CD16');
 
 
 
@@ -800,10 +800,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- CI=IF(AND([.$D20]="Oui";[.$H20]<>"TP";[.$H20]<>"Référentiel";[.$A20]=i_structure_code);[.$M20]*[.$G20]*[.$AD20];0)
+      -- CI=IF(AND([.$D20]="Oui";[.$H20]<>"TP";[.$H20]<>"Référentiel";[.$A20]<>i_structure_code);[.$M20]*[.$F20]*[.$AD20];0)
       WHEN 'CI' THEN
-        IF vh.service_statutaire AND vh.type_intervention_code <> 'TP' AND vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation THEN
-          RETURN vh.heures * vh.taux_fc * cell('AD',l);
+        IF vh.service_statutaire AND vh.type_intervention_code <> 'TP' AND vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
+          RETURN vh.heures * vh.taux_fa * cell('AD',l);
         ELSE
           RETURN 0;
         END IF;
@@ -880,15 +880,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
 
 
 
-      -- CP16=MIN([.CP15];[.BX17])
+      -- CP16=MIN([.CP15];[.CJ17])
       WHEN 'CP16' THEN
-        RETURN LEAST(cell('CP15'), cell('BX17'));
+        RETURN LEAST(cell('CP15'), cell('CJ17'));
 
 
 
-      -- CP17=[.BX17]-[.CP16]
+      -- CP17=[.CJ17]-[.CP16]
       WHEN 'CP17' THEN
-        RETURN cell('BX17') - cell('CP16');
+        RETURN cell('CJ17') - cell('CP16');
 
 
 
@@ -1199,11 +1199,6 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
   BEGIN
     feuille.delete;
 
-    IF ose_formule.intervenant.annee_id < 2023 THEN
-      FORMULE_REUNION_2022.CALCUL_RESULTAT;
-      RETURN;
-    END IF;
-
     IF ose_formule.intervenant.depassement_service_du_sans_hc THEN -- HC traitées comme du service
       ose_formule.intervenant.service_du := ose_formule.intervenant.heures_service_statutaire + ose_formule.intervenant.heures_service_modifie;
     END IF;
@@ -1258,4 +1253,4 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_REUNION AS
     ';
   END;
 
-END FORMULE_REUNION;
+END FORMULE_REUNION_2022;

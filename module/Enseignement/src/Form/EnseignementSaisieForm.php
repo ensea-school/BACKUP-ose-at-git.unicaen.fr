@@ -40,13 +40,14 @@ class EnseignementSaisieForm extends AbstractForm
     }
 
 
+
     /**
      * Bind an object to the form
      *
      * Ensures the object is populated with validated values.
      *
      * @param object $object
-     * @param int $flags
+     * @param int    $flags
      *
      * @return mixed|void
      */
@@ -58,6 +59,7 @@ class EnseignementSaisieForm extends AbstractForm
 
         return parent::bind($object, $flags);
     }
+
 
 
     public function init()
@@ -72,8 +74,7 @@ class EnseignementSaisieForm extends AbstractForm
         $this->add($this->getFieldsetEnseignementSaisie());
 
         // Product Fieldset
-        $intervenant = $this->getServiceLocalContext()->getIntervenant();
-        if ($this->getServiceContext()->isModaliteServicesSemestriel($intervenant)) {
+        if ($this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())) {
             foreach ($this->getPeriodes() as $periode) {
                 $pf = $this->getFieldsetVolumeHoraireSaisieMultiple();
                 $pf->setName($periode->getCode());
@@ -95,10 +96,12 @@ class EnseignementSaisieForm extends AbstractForm
     }
 
 
+
     public function initFromContext()
     {
         $this->get('service')->initFromContext();
     }
+
 
 
     public function saveToContext()
@@ -107,11 +110,15 @@ class EnseignementSaisieForm extends AbstractForm
     }
 
 
+
     public function getInputFilterSpecification()
     {
         return [];
     }
 }
+
+
+
 
 
 /**
@@ -137,10 +144,11 @@ class EnseignementSaisieFormHydrator implements HydratorInterface
     }
 
 
+
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array $data
+     * @param array   $data
      * @param Service $object
      *
      * @return object
@@ -153,6 +161,7 @@ class EnseignementSaisieFormHydrator implements HydratorInterface
     }
 
 
+
     /**
      * Extract values from an object
      *
@@ -162,7 +171,7 @@ class EnseignementSaisieFormHydrator implements HydratorInterface
      */
     public function extract($object): array
     {
-        $data = [];
+        $data            = [];
         $data['service'] = $object;
         foreach ($this->getPeriodes() as $periode) {
             $data[$periode->getCode()] = $object->getVolumeHoraireListe($periode);

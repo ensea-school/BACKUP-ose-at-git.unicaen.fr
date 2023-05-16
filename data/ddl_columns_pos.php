@@ -2353,6 +2353,25 @@ return [
         'NOMBRE_HEURES',
         'NOMBRE_POSTES',
     ],
+    'MISSION_TAUX_REMU'              => [
+        'ID',
+        'CODE',
+        'LIBELLE',
+        'HISTO_CREATEUR_ID',
+        'HISTO_CREATION',
+        'HISTO_DESTRUCTEUR_ID',
+        'HISTO_DESTRUCTION',
+        'HISTO_MODIFICATEUR_ID',
+        'HISTO_MODIFICATION',
+        'MISSION_TAUX_REMU_ID',
+    ],
+    'MISSION_TAUX_REMU_VALEUR'       => [
+        'ID',
+        'MISSION_TAUX_REMU_ID',
+        'DATE_EFFET',
+        'VALEUR',
+    ],
+
 ];
 
 //@formatter:on

@@ -191,6 +191,22 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                         <?= $this->formControlGroup($form->get('serviceRealise')); ?>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modeServicePrevisionnel')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modeServiceRealise')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modeReferentielPrevisionnel')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modeReferentielRealise')); ?>
+                    </div>
+                </div>
                 <div class="row servicesDetails">
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('serviceExterieur')); ?>
@@ -400,9 +416,9 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 this.element.find('.contratDetails').toggle(visible);
             },
 
-            missionVisu: function(){
+            missionVisu: function () {
                 var visible = this.el('mission').val() != 'desactive';
-console.log(visible);
+                console.log(visible);
                 this.element.find('.missionDetails').toggle(visible);
             },
 

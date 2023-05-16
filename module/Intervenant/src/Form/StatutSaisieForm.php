@@ -3,6 +3,7 @@
 namespace Intervenant\Form;
 
 use Application\Entity\Db\EtatSortie;
+use Application\Entity\Db\Parametre;
 use Application\Form\AbstractForm;
 use Dossier\Service\Traits\DossierAutreServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
@@ -61,6 +62,11 @@ class StatutSaisieForm extends AbstractForm
             'mission'                       => 'Visualisation/Modification de mission',
             'missionRealise'                => 'Suivi de mission',
             'offreEmploiPostuler'           => 'Postuler à une offre d\'emploi',
+            'modeServicePrevisionnel'       => 'Mode de saisi pour le service prévisionnel',
+            'modeServiceRealise'            => 'Mode de saisi pour le service réalisé',
+            'modeReferentielPrevisionnel'   => 'Mode de saisi pour le référentiel prévisionnel',
+            'modeReferentielRealise'        => 'Mode de saisi pour le référentiel réalisé',
+
         ];
 
         $dveElements = [
@@ -85,6 +91,10 @@ class StatutSaisieForm extends AbstractForm
             'modificationServiceDuVisualisation',
             'missionRealiseEdition',
             'offreEmploiPostuler',
+            'modeReferentielPrevisionnel',
+            'modeReferentielRealise',
+            'modeServicePrevisionnel',
+            'modeServiceRealise',
         ];
 
         for ($i = 1; $i <= 5; $i++) {
@@ -120,6 +130,91 @@ class StatutSaisieForm extends AbstractForm
 
 
         $this->spec(Statut::class, $ignored);
+
+        $this->spec(['modeServicePrevisionnel' => [
+            'type'     => 'Select',
+            'name'     => 'modeServicePrevisionnel',
+            'options'  => [
+                'value_options' => [
+                    ''           => 'Par défaut',
+                    'calendaire' => Parametre::SERVICES_MODALITE_CALENDAIRE,
+                    'semestriel' => Parametre::SERVICES_MODALITE_SEMESTRIEL,
+                ],
+            ],
+            'hydrator' => [
+                'getter' => function (Statut $statut, string $name) {
+                    return $statut->getModeServicePrevisionnel();
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $statut->setModeServicePrevisionnel($value);
+                },
+            ],
+
+
+        ]]);
+
+        $this->spec(['modeServiceRealise' => [
+            'type'     => 'Select',
+            'name'     => 'modeServiceRealise',
+            'options'  => [
+                'value_options' => [
+                    ''           => 'Par défaut',
+                    'calendaire' => Parametre::SERVICES_MODALITE_CALENDAIRE,
+                    'semestriel' => Parametre::SERVICES_MODALITE_SEMESTRIEL,
+                ],
+            ],
+            'hydrator' => [
+                'getter' => function (Statut $statut, string $name) {
+                    return $statut->getModeServiceRealise();
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $statut->setModeServiceRealise($value);
+                },
+            ],
+
+        ]]);
+
+        $this->spec(['modeReferentielPrevisionnel' => [
+            'type'     => 'Select',
+            'name'     => 'modeReferentielPrevisionnel',
+            'options'  => [
+                'value_options' => [
+                    ''           => 'Par défaut',
+                    'calendaire' => Parametre::SERVICES_MODALITE_CALENDAIRE,
+                    'semestriel' => Parametre::SERVICES_MODALITE_SEMESTRIEL,
+                ],
+            ],
+            'hydrator' => [
+                'getter' => function (Statut $statut, string $name) {
+                    return $statut->getModeReferentielPrevisionnel();
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $statut->setModeReferentielPrevisionnel($value);
+                },
+            ],
+
+        ]]);
+
+        $this->spec(['modeReferentielRealise' => [
+            'type'     => 'Select',
+            'name'     => 'modeReferentielRealise',
+            'options'  => [
+                'value_options' => [
+                    ''           => 'Par défaut',
+                    'calendaire' => Parametre::SERVICES_MODALITE_CALENDAIRE,
+                    'semestriel' => Parametre::SERVICES_MODALITE_SEMESTRIEL,
+                ],
+            ],
+            'hydrator' => [
+                'getter' => function (Statut $statut, string $name) {
+                    return $statut->getModeReferentielRealise();
+                },
+                'setter' => function (Statut $statut, $value, string $name) {
+                    $statut->setModeReferentielRealise($value);
+                },
+            ],
+
+        ]]);
 
         $this->spec(['tauxChargesPatronales' => [
             'type'       => 'Text',
@@ -498,6 +593,33 @@ class StatutSaisieForm extends AbstractForm
         $this->get('tauxRemu')->setEmptyOption('- Utilisation du taux légal standard -');
 
         return $this;
+    }
+
+
+
+    public function getInputFilterSpecification()
+    {
+        $spec = [
+            'modeReferentielPrevisionnel' => [
+                'required' => false,
+            ],
+            'modeReferentielRealise'      => [
+                'required' => false,
+            ],
+            'modeServicePrevisionnel'     => [
+                'required' => false,
+            ],
+            'modeServiceRealise'          => [
+                'required' => false,
+            ],
+            'tauxRemu'                    => [
+                'required' => false,
+            ],
+
+
+        ];
+
+        return $spec;
     }
 
 }

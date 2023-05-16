@@ -16,66 +16,6 @@ SELECT
   CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
 FROM
   (
-  SELECT 12 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
-    SELECT
-        i.annee_id                        annee_id,
-        vhm.type_volume_horaire_id        type_volume_horaire_id,
-        i.id                              intervenant_id,
-        tm.id                             type_mission_id,
-        SUM(vhm.heures)                   heures
-      FROM
-             mission       m
-        JOIN intervenant                i ON i.id = m.intervenant_id
-        JOIN type_mission     tm ON tm.id = m.type_mission_id
-        JOIN volume_horaire_mission       vhm ON vhm.mission_id = m.id AND vhm.histo_destruction IS NULL
-      WHERE
-        m.histo_destruction IS NULL
-      GROUP BY
-        i.annee_id, vhm.type_volume_horaire_id, i.id, tm.id
-    ) p
-
-    UNION ALL
-
-  SELECT 11 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
-    SELECT
-        i.annee_id                        annee_id,
-        vhm.type_volume_horaire_id        type_volume_horaire_id,
-        i.id                              intervenant_id,
-        tm.id                             type_mission_id,
-        SUM(vhm.heures)                   heures
-      FROM
-             mission       m
-        JOIN intervenant                i ON i.id = m.intervenant_id
-        JOIN type_mission     tm ON tm.id = m.type_mission_id
-        JOIN volume_horaire_mission       vhm ON vhm.mission_id = m.id AND vhm.histo_destruction IS NULL
-      WHERE
-        m.histo_destruction IS NULL
-      GROUP BY
-        i.annee_id, vhm.type_volume_horaire_id, i.id, tm.id
-    ) p
-
-    UNION ALL
-
-  SELECT 13 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
-    SELECT
-        i.annee_id                        annee_id,
-        vhm.type_volume_horaire_id        type_volume_horaire_id,
-        i.id                              intervenant_id,
-        tm.id                             type_mission_id,
-        SUM(vhm.heures)                   heures
-      FROM
-             mission       m
-        JOIN intervenant                i ON i.id = m.intervenant_id
-        JOIN type_mission     tm ON tm.id = m.type_mission_id
-        JOIN volume_horaire_mission       vhm ON vhm.mission_id = m.id AND vhm.histo_destruction IS NULL
-      WHERE
-        m.histo_destruction IS NULL
-      GROUP BY
-        i.annee_id, vhm.type_volume_horaire_id, i.id, tm.id
-    ) p
-
-    UNION ALL
-
   SELECT 14 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
     SELECT
         i.annee_id                        annee_id,

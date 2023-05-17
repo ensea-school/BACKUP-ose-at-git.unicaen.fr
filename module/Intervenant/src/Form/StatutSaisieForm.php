@@ -57,10 +57,10 @@ class StatutSaisieForm extends AbstractForm
             'motifNonPaiement'              => 'Le gestionnaire peut déclarer des heures comme non payables',
             'formuleVisualisation'          => 'Visibilité par l\'intervenant du détail des heures pour le calcul des HETD',
             'typeIntervenant'               => 'Type d\'intervenant',
-            'modeServicePrevisionnel'       => 'Mode de saisi pour le service prévisionnel',
-            'modeServiceRealise'            => 'Mode de saisi pour le service réalisé',
-            'modeReferentielPrevisionnel'   => 'Mode de saisi pour le référentiel prévisionnel',
-            'modeReferentielRealise'        => 'Mode de saisi pour le référentiel réalisé',
+            'modeServicePrevisionnel'       => 'Mode de saisie pour les enseignements prévisionnel',
+            'modeServiceRealise'            => 'Mode de saisie pour les enseignements réalisé',
+            'modeReferentielPrevisionnel'   => 'Mode de saisie pour le référentiel prévisionnel',
+            'modeReferentielRealise'        => 'Mode de saisie pour le référentiel réalisé',
         ];
 
         $dveElements = [

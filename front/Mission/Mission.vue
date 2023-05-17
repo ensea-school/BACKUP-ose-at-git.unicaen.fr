@@ -38,6 +38,12 @@
                                 <div class="form-control">{{ mission.description }}</div>
                             </div>
                         </div>
+                        <div class="row" v-if="mission.typeMission.accompagnementEtudiants">
+                            <div class="col-md-12">
+                                <label class=" form-label">Etudiants suivis</label>
+                                <div class="form-control"><pre>{{ mission.etudiantsSuivis }}</pre></div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-12">&nbsp;</div>
                         </div>

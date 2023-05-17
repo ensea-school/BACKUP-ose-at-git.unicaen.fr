@@ -2177,6 +2177,7 @@ return [
         'STRUCTURE_ID',
         'AUTO_VALIDATION',
         'TAUX_REMU_ID',
+        'ETUDIANTS_SUIVIS',
     ],
     'MISSION_ETUDIANT'               => [
         'MISSION_ID',
@@ -2371,7 +2372,6 @@ return [
         'DATE_EFFET',
         'VALEUR',
     ],
-
 ];
 
 //@formatter:on

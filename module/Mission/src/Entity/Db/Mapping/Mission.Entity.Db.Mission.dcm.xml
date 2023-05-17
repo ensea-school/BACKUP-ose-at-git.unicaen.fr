@@ -20,6 +20,7 @@
         <field name="dateDebut" type="datetime" column="DATE_DEBUT" nullable="false"/>
         <field name="dateFin" type="datetime" column="DATE_FIN" nullable="false"/>
         <field name="description" type="string" column="DESCRIPTION" length="4000" nullable="true"/>
+        <field name="etudiantsSuivis" type="string" column="ETUDIANTS_SUIVIS" length="4000" nullable="true"/>
 
         <many-to-many field="etudiants" target-entity="Application\Entity\Db\Intervenant">
             <join-table name="MISSION_ETUDIANT">

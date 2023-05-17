@@ -37,6 +37,8 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
     protected ?string $description = null;
 
+    protected ?string $etudiantsSuivis = null;
+
     protected bool $autoValidation = false;
 
     private Collection $etudiants;
@@ -150,6 +152,22 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
+    public function getEtudiantsSuivis(): ?string
+    {
+        return $this->etudiantsSuivis;
+    }
+
+
+
+    public function setEtudiantsSuivis(?string $etudiantsSuivis): self
+    {
+        $this->etudiantsSuivis = $etudiantsSuivis;
+        return $this;
+    }
+
+
+
+
     public function isAutoValidation(): bool
     {
         return $this->autoValidation;
@@ -157,7 +175,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function setAutoValidation(bool $autoValidation): Mission
+    public function setAutoValidation(bool $autoValidation): self
     {
         $this->autoValidation = $autoValidation;
 

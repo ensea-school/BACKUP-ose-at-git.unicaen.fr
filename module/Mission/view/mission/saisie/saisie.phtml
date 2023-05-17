@@ -36,6 +36,37 @@ echo '</div>';
 
 echo $this->formControlGroup($form->get('description'));
 
+echo '<div class="etudiants-suivis">';
+echo $this->formControlGroup($form->get('etudiantsSuivis'));
+echo '</div>';
+
 echo $this->formSubmit($form->get('submit'));
 
 echo $this->form()->closeTag();
+?>
+<script>
+
+    function typeMissionSelect()
+    {
+        return $('[name=typeMission]');
+    }
+
+    function toggleEtudiantsSuivis()
+    {
+        var tmId = typeMissionSelect().val();
+
+        var tmAcc = typeMissionSelect().data('accompagnement-etudiants');
+
+        if (tmAcc[tmId]){
+            $('.etudiants-suivis').show();
+        }else{
+            $('.etudiants-suivis').hide();
+        }
+    }
+
+    $(function(){
+        typeMissionSelect().on('change', toggleEtudiantsSuivis);
+        toggleEtudiantsSuivis();
+    });
+
+</script>

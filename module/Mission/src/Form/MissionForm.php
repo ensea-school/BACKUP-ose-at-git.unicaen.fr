@@ -8,6 +8,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Mission\Entity\Db\Mission;
 use Paiement\Entity\Db\TauxRemu;
 use Mission\Entity\Db\TypeMission;
+use UnicaenApp\Util;
 
 
 /**
@@ -21,15 +22,23 @@ class MissionForm extends AbstractForm
 
     public function init()
     {
-        $this->spec(Mission::class, ['intervenant', 'autoValidation']);
-
-        $this->spec(['description' => ['type' => 'Textarea']]);
-
-        $this->build();
-
         $tmDql       = "SELECT tm FROM " . TypeMission::class . " tm WHERE tm.histoDestruction IS NULL AND tm.annee = :annee";
         $tmDqlParams = ['annee' => $this->getServiceContext()->getAnnee()];
-        $this->setValueOptions('typeMission', $tmDql, $tmDqlParams);
+        /** @var TypeMission[] $typesMissions */
+        $typesMissions = $this->getEntityManager()->createQuery($tmDql)->setParameters($tmDqlParams)->getResult();
+
+        $tmAccEtu = [];
+        foreach ($typesMissions as $typeMission)
+        {
+            $tmAccEtu[$typeMission->getId()] = $typeMission->isAccompagnementEtudiants();
+        }
+
+        $this->spec(Mission::class, ['intervenant', 'autoValidation']);
+        $this->spec(['description' => ['type' => 'Textarea'], 'etudiantsSuivis' => ['type' => 'Textarea']]);
+        $this->build();
+
+        $this->setValueOptions('typeMission', Util::collectionAsOptions($typesMissions));
+        $this->get('typeMission')->setAttribute('data-accompagnement-etudiants', json_encode($tmAccEtu));
 
         $trDql = "SELECT mtr FROM " . TauxRemu::class . " mtr";
         $this->setValueOptions('tauxRemu', $trDql);
@@ -44,6 +53,7 @@ class MissionForm extends AbstractForm
             'dateDebut'       => 'Date de début',
             'dateFin'         => 'Date de fin',
             'description'     => 'Descriptif de la mission',
+            'etudiantsSuivis' => 'Noms des étudiants suivis',
         ]);
 
         $this->addSubmit();

@@ -57,6 +57,18 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
+        'ETUDIANTS_SUIVIS'      => [
+            'name'        => 'ETUDIANTS_SUIVIS',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 4000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 16,
+            'commentaire' => NULL,
+        ],
         'HISTO_CREATEUR_ID'     => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',

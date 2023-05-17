@@ -62,10 +62,10 @@ class StatutSaisieForm extends AbstractForm
             'mission'                       => 'Visualisation/Modification de mission',
             'missionRealise'                => 'Suivi de mission',
             'offreEmploiPostuler'           => 'Postuler à une offre d\'emploi',
-            'modeServicePrevisionnel'       => 'Mode de saisi pour le service prévisionnel',
-            'modeServiceRealise'            => 'Mode de saisi pour le service réalisé',
-            'modeReferentielPrevisionnel'   => 'Mode de saisi pour le référentiel prévisionnel',
-            'modeReferentielRealise'        => 'Mode de saisi pour le référentiel réalisé',
+            'modeServicePrevisionnel'       => 'Mode de saisie pour les enseignements prévisionnel',
+            'modeServiceRealise'            => 'Mode de saisie pour les enseignements réalisé',
+            'modeReferentielPrevisionnel'   => 'Mode de saisie pour le référentiel prévisionnel',
+            'modeReferentielRealise'        => 'Mode de saisie pour le référentiel réalisé',
 
         ];
 

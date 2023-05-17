@@ -170,6 +170,10 @@ class EnseignementSaisieFormViewHelper extends AbstractViewHelper
         $res .= '</div>';
         $res .= '<br />';
         $res .= $this->getView()->formRow($this->form->get('submit'));
+        $res .= '<button id="waiting-save-volume-horaire" style="display:none;" class="btn btn-primary" type="button" disabled>';
+        $res .= '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+        $res .= 'Veuillez patienter...';
+        $res .= '</button>';
         $res .= $this->getView()->formHidden($fservice->get('id'));
         $res .= $this->getView()->form()->closeTag() . '<br />';
 

@@ -132,7 +132,7 @@ $.widget("ose.enseignements", {
             });
             that.element.find("#service-"+serviceId+"-volume-horaire-td div#vhl").refresh();
         } else { // nouveau service
-            var url = Url("enseignement/rafraichir-ligne/"+serviceId, {
+            var url = unicaenVue.url("enseignement/rafraichir-ligne/:service", {service: serviceId}, {
                 'only-content': 0,
                 'details': 1,
                 params: that.params
@@ -164,7 +164,7 @@ $.widget("ose.enseignements", {
             services += $(this).data('id');
         });
         $.get(
-            Url("enseignement/constatation"),
+            unicaenVue.url("enseignement/constatation"),
             {services: services},
             function (data) {
                 if (data != 'OK') {
@@ -182,7 +182,7 @@ $.widget("ose.enseignements", {
         var that = this;
         that.element.find('#prevu-to-prevu-attente').show();
         $.get(
-            Url("enseignement/initialisation/"+this.getElementPrevuToPrevu().data('intervenant')),
+            unicaenVue.url("enseignement/initialisation/:intervenant", {intervenant: this.getElementPrevuToPrevu().data('intervenant')}),
             {},
             function (data) {
                 if (data != 'OK') {
@@ -430,6 +430,9 @@ $.widget("ose.serviceForm", {
     },
     getElementEtablissementId: function () {
         return this.element.find("input[name='service\\[etablissement\\]\\[id\\]']");
+    },
+    getElementEtablissementLabel: function () {
+        return this.element.find("input[name='service\\[etablissement\\]\\[label\\]']");
     },
     getElementTypeVolumeHoraire: function () {
         return this.element.find("input[name='type-volume-horaire']");

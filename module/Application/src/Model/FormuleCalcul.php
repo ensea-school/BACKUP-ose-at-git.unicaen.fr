@@ -875,6 +875,7 @@ END FORMULE_" . $this->getName() . ";";
 
         $trads = [
             '&' => '||',
+            '%' => '/ 100',
         ];
 
         $op = $term['name'];
@@ -975,6 +976,7 @@ END FORMULE_" . $this->getName() . ";";
             'SUMIF'             => 'traductionFunctionSumIf',
             'MID'               => 'traductionFunctionMid',
             'COM.MICROSOFT.IFS' => 'traductionFunctionIfs',
+            'LEFT'              => 'traductionFunctionLeft',
         ];
 
         if (array_key_exists($term['name'], $functions)) {
@@ -1221,6 +1223,20 @@ END FORMULE_" . $this->getName() . ";";
         $plsql .= implode(', ', $plExprs);
 
         $plsql .= '),\' \')';
+
+        return $plsql;
+    }
+
+
+
+    private function traductionFunctionLeft(array &$expr, int $i): string
+    {
+        $term = $expr[$i];
+
+        $string = $this->traductionExpr($term['exprs'][0]);
+        $length = $this->traductionExpr($term['exprs'][1]);
+
+        $plsql = "SUBSTR($string, 1, $length)";
 
         return $plsql;
     }

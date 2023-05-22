@@ -95,7 +95,7 @@ $fieldsets = $form->getFieldsets();
                 <?php if ($tblDossier->getCompletude() && $intervenantDossierValidation): ?>
                     Vos données personnelles sont maintenant <span style="font-size:1em;" class="badge bg-success">Complètes</span> et
                     <span
-                            style="font-size:1em;" class="badge bg-success">Validées</span>
+                        style="font-size:1em;" class="badge bg-success">Validées</span>
                 <?php elseif ($tblDossier->getCompletude() && !$intervenantDossierValidation): ?>
                     Vos données personnelles sont maintenant <span style="font-size:1em;"
                                                                    class="badge bg-success">complètes</span> et en attente de validation par nos services
@@ -278,6 +278,7 @@ $fieldsets = $form->getFieldsets();
         $(function () {
             var dataModificated = 0;
             var messageDataModificated = "Vous souhaitez changer de statut, mais vos données personnelles ont été modifié, si vous n'enregistrez pas au préalable, elles seront perdues. Souhaitez vous continuer ?"
+
             manageDepartementNaissance();
 
 
@@ -290,12 +291,14 @@ $fieldsets = $form->getFieldsets();
                     var pays = $("option:selected", selectPays).html();
                     var paysToLower = pays.toLowerCase();
                     if (paysToLower == 'france') {
-                        selectDept.removeProp('disabled')
+                        selectDept.removeAttr('disabled')
                         selectDept.siblings('button').removeClass('disabled')
+                        emptyDept.removeAttr('selected')
+
                     } else {
                         selectDept.prop('disabled', 'disabled')
                         selectDept.siblings('button').addClass('disabled')
-                        emptyDept.html("(Sélectionnez un département)").prop('selected', 'selected')
+                        emptyDept.html("(Sélectionnez un département)").prop("selected", "selected");
                     }
                 });
 

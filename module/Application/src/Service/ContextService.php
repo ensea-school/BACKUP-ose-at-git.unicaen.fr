@@ -10,6 +10,8 @@ use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Parametre;
 use Application\Entity\Db\Structure;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
+use MongoDB\BSON\Type;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
@@ -29,6 +31,7 @@ class ContextService extends AbstractService
     use Traits\StructureServiceAwareTrait;
     use SessionContainerTrait;
     use UserContextServiceAwareTrait;
+    use LocalContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use LdapConnecteurAwareTrait;
 
@@ -150,24 +153,40 @@ class ContextService extends AbstractService
      *
      * @return string
      */
-    public function getModaliteServices($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): string
+    public function getModaliteServices(?TypeVolumeHoraire $typeVolumeHoraire): string
     {
+        //On récupère le statut de l'intervenant en cours
+        $intervenant = $this->getServiceLocalContext()->getIntervenant();
+        $statut      = ($intervenant) ? $intervenant->getStatut() : null;
+
+        //On récupère le type de volume horaire
         if ($typeVolumeHoraire instanceof TypeVolumeHoraire) {
-            $typeVolumeHoraire = $typeVolumeHoraire->getCode();
+            $codeTypeVolumeHoraire = $typeVolumeHoraire->getCode();
+        } else {
+            $codeTypeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU;
         }
 
-        if ($typeVolumeHoraire == TypeVolumeHoraire::CODE_REALISE) {
+        if ($codeTypeVolumeHoraire == TypeVolumeHoraire::CODE_REALISE) {
+            //Si l'intervenant en cours à un statut valide on retourne le mode paramétré du statut, et si null le mode par défaut
+            if (!empty($statut)) {
+                return ($statut->getModeServiceRealise()) ?: $this->getServiceParametres()->get('modalite_services_real_ens');
+            }
             $prevReal = 'real';
         } else {
+            //Si l'intervenant en cours à un statut valide on retourne le mode paramétré du statut, et si null le mode par défaut
+            if (!empty($statut)) {
+                return ($statut->getModeServicePrevisionnel()) ?: $this->getServiceParametres()->get('modalite_services_prev_ens');
+            }
             $prevReal = 'prev';
         }
 
+        //Sinon on retourne le mode paramètré par défault
         return $this->getServiceParametres()->get('modalite_services_' . $prevReal . '_ens');
     }
 
 
 
-    public function isModaliteServicesSemestriel($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): bool
+    public function isModaliteServicesSemestriel(?TypeVolumeHoraire $typeVolumeHoraire): bool
     {
         return $this->getModaliteServices($typeVolumeHoraire) == Parametre::SERVICES_MODALITE_SEMESTRIEL;
     }
@@ -179,26 +198,43 @@ class ContextService extends AbstractService
      *
      * @return string
      */
-    public function getModaliteReferentiel($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): string
+    public function getModaliteReferentiel(?TypeVolumeHoraire $typeVolumeHoraire): string
     {
+        //On récupère le statut de l'intervenant en cours
+        $intervenant = $this->getServiceLocalContext()->getIntervenant();
+        $statut      = ($intervenant) ? $intervenant->getStatut() : null;
+
+
+        //On récupère le type de volume horaire
         if ($typeVolumeHoraire instanceof TypeVolumeHoraire) {
-            $typeVolumeHoraire = $typeVolumeHoraire->getCode();
+            $codeTypeVolumeHoraire = $typeVolumeHoraire->getCode();
+        } else {
+            $codeTypeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU;
         }
 
-        if ($typeVolumeHoraire == TypeVolumeHoraire::CODE_REALISE) {
+        if ($codeTypeVolumeHoraire == TypeVolumeHoraire::CODE_REALISE) {
+            //Si l'intervenant en cours à un statut valide on retourne le mode paramétré du statut, et si null le mode par défaut
+            if (!empty($statut)) {
+                return ($statut->getModeReferentielRealise()) ?: $this->getServiceParametres()->get('modalite_services_real_ref');
+            }
             $prevReal = 'real';
         } else {
+            //Si l'intervenant en cours à un statut valide on retourne le mode paramétré du statut, et si null le mode par défaut
+            if (!empty($statut)) {
+                return ($statut->getModeReferentielPrevisionnel()) ?: $this->getServiceParametres()->get('modalite_services_prev_ref');
+            }
             $prevReal = 'prev';
         }
 
+        //Sinon on retourne le mode paramètré par défault
         return $this->getServiceParametres()->get('modalite_services_' . $prevReal . '_ref');
     }
 
 
 
-    public function isModaliteReferentielSemestriel($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): bool
+    public function isModaliteReferentielSemestriel(?TypeVolumeHoraire $typeVolumeHoraire): bool
     {
-        return $this->getModaliteReferentiel() == Parametre::SERVICES_MODALITE_SEMESTRIEL;
+        return $this->getModaliteReferentiel($typeVolumeHoraire) == Parametre::SERVICES_MODALITE_SEMESTRIEL;
     }
 
 

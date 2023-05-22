@@ -170,6 +170,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private ?string     $codesCorresp4                      = null;
 
+    private ?string     $modeServicePrevisionnel            = null;
+
+    private ?string     $modeServiceRealise                 = null;
+
+    private ?string     $modeReferentielPrevisionnel        = null;
+
+    private ?string     $modeReferentielRealise             = null;
+
 
 
     public function __toString(): string
@@ -1351,6 +1359,70 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setCodesCorresp4(?string $codesCorresp4): Statut
     {
         $this->codesCorresp4 = $codesCorresp4;
+
+        return $this;
+    }
+
+
+
+    public function getModeServicePrevisionnel(): ?string
+    {
+        return $this->modeServicePrevisionnel;
+    }
+
+
+
+    public function setModeServicePrevisionnel(?string $mode): Statut
+    {
+        $this->modeServicePrevisionnel = $mode;
+
+        return $this;
+    }
+
+
+
+    public function getModeServiceRealise(): ?string
+    {
+        return $this->modeServiceRealise;
+    }
+
+
+
+    public function setModeServiceRealise(?string $mode): Statut
+    {
+        $this->modeServiceRealise = $mode;
+
+        return $this;
+    }
+
+
+
+    public function getModeReferentielPrevisionnel(): ?string
+    {
+        return $this->modeReferentielPrevisionnel;
+    }
+
+
+
+    public function setModeReferentielPrevisionnel(?string $mode): Statut
+    {
+        $this->modeReferentielPrevisionnel = $mode;
+
+        return $this;
+    }
+
+
+
+    public function getModeReferentielRealise(): ?string
+    {
+        return $this->modeReferentielRealise;
+    }
+
+
+
+    public function setModeReferentielRealise(?string $mode): Statut
+    {
+        $this->modeReferentielRealise = $mode;
 
         return $this;
     }

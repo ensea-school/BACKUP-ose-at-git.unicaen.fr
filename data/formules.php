@@ -111,4 +111,11 @@ return [
         'LIBELLE'            => 'Université de Picardie Jules Verne',
         'PACKAGE_NAME'       => 'FORMULE_PICARDIE',
     ],
+    /*27 => [
+        'LIBELLE'            => 'Université de Paris 1 Panthéon-Sorbonne',
+        'PACKAGE_NAME'       => 'FORMULE_PARIS1',
+        'I_PARAM_1_LIBELLE'  => 'Statut',
+        'VH_PARAM_1_LIBELLE' => 'Heures DU',
+        'VH_PARAM_2_LIBELLE' => 'Code référentiel',
+    ],*/
 ];

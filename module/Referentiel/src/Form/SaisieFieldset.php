@@ -323,7 +323,7 @@ class SaisieFieldset extends AbstractFieldset
                 'required' => false,
             ],
             'structure'          => [
-                'required'   => false,
+                'required'   => true,
                 'validators' => [
                     [
                         'name'    => 'Laminas\Validator\NotEmpty',

@@ -173,6 +173,8 @@ class EnseignementController extends AbstractController
             $title = "Ajout d'enseignement";
         }
 
+        $saved = null;
+
         $form->get('service')->setIntervenant($intervenant);
         $form->get('service')->removeUnusedElements();
         $hDeb    = $service->getVolumeHoraireListe()->getHeures();
@@ -186,7 +188,8 @@ class EnseignementController extends AbstractController
                     $form->saveToContext();
                     $this->getProcessusPlafond()->beginTransaction();
                     try {
-                        $this->getServiceService()->save($service);
+                        $service = $this->getServiceService()->save($service);
+                        $saved = $service;
                         $form->get('service')->get('id')->setValue($service->getId()); // transmet le nouvel ID
                         $hFin = $service->getVolumeHoraireListe()->getHeures();
                         $this->updateTableauxBord($service->getIntervenant());
@@ -205,7 +208,7 @@ class EnseignementController extends AbstractController
 
         $vm = new ViewModel();
         $vm->setTemplate('enseignement/saisie');
-        $vm->setVariables(compact('form', 'title'));
+        $vm->setVariables(compact('form', 'title', 'saved'));
 
         return $vm;
     }

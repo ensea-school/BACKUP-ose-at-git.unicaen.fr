@@ -176,9 +176,9 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
     public function renderVolumesHoraires()
     {
         $intervenant = $this->getServiceLocalContext()->getIntervenant();
-        if (!$this->getServiceContext()->isModaliteServicesSemestriel($intervenant)) {
-            return null;
-        }
+//        if (!$this->getServiceContext()->isModaliteServicesSemestriel($intervenant)) {
+//            return null;
+//        }
 
         $res = '';
         if ($this->isEnseignementChoisi()) {

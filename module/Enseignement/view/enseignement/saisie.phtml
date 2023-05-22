@@ -2,10 +2,19 @@
 
 /**
  * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $saved \Enseignement\Entity\Db\Service|null
  */
 
 echo $this->enseignementSaisieForm($form)->render();
 
 echo $this->formErrors($form);
+
+if ($saved && $saved->getId()){
+    ?>
+    <script>
+        $("body").trigger('enseignement-after-saisie', <?= $saved->getId() ?>);
+    </script>
+    <?php
+}
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();

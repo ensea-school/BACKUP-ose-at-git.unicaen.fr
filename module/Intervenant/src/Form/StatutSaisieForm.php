@@ -51,6 +51,7 @@ class StatutSaisieForm extends AbstractForm
             'conseilAcademiqueDureeVie'     => 'Durée de vie du CAC',
             'contrat'                       => '',
             'contratEtatSortie'             => 'État de sortie à utiliser pour générer le contrat',
+            'avenantEtatSortie'             => 'État de sortie à utiliser pour générer d\'éventuels avenants aux contrats',
             'serviceExterieur'              => 'L\'intervenant pourra assurer des services dans d\'autres établissements',
             'cloture'                       => 'Le service réalisé devra être clôturé avant d\'accéder aux demandes de mise en paiement',
             'modificationServiceDu'         => 'Modifications de service dû',
@@ -497,6 +498,11 @@ class StatutSaisieForm extends AbstractForm
                     'required' => false,
                 ],
             ],
+            'avenantEtatSortie'     => [
+                'input' => [
+                    'required' => false,
+                ],
+            ],
             'modificationServiceDu' => [
                 'type'     => 'Select',
                 'name'     => 'modificationServiceDu',
@@ -587,9 +593,11 @@ class StatutSaisieForm extends AbstractForm
 
         $this->setValueOptions('typeIntervenant', $this->getServiceTypeIntervenant()->getList());
         $this->setValueOptions('contratEtatSortie', 'SELECT es FROM ' . EtatSortie::class . ' es ORDER BY es.libelle');
+        $this->setValueOptions('avenantEtatSortie', 'SELECT es FROM ' . EtatSortie::class . ' es ORDER BY es.libelle');
         $this->setValueOptions('tauxRemu', 'SELECT tr FROM ' . TauxRemu::class . ' tr WHERE tr.histoDestruction is NULL');
 
         $this->get('contratEtatSortie')->setEmptyOption('- Aucun état de sortie n\'est spécifié -');
+        $this->get('avenantEtatSortie')->setEmptyOption('- Utiliser le même modèle que pour les contrats -');
         $this->get('tauxRemu')->setEmptyOption('- Utilisation du taux légal standard -');
 
         return $this;

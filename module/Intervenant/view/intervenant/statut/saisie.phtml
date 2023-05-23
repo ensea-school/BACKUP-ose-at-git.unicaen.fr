@@ -288,6 +288,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                         <?= $this->formControlGroup($form->get('contrat')); ?>
                         <div class="contratDetails">
                             <?= $this->formControlGroup($form->get('contratEtatSortie')); ?>
+                            <?= $this->formControlGroup($form->get('avenantEtatSortie')); ?>
                             <?php if ($this->isAllowed(Privileges::getResourceId(Privileges::ETAT_SORTIE_ADMINISTRATION_VISUALISATION))): ?>
                                 <a target="_blank" href="<?= $this->url('etat-sortie'); ?>">Page d'administration des
                                     états de sortie</a>

@@ -16,7 +16,7 @@ class v20ModeEnseignement extends AbstractMigration
 
     public function utile(): bool
     {
-        return $this->manager->hasNewColumn('STATUT', 'MODE_REFERENTIEL_REALISE');
+        return $this->manager->hasNewColumn('STATUT', 'MODE_ENSEIGNEMENT_REALISE');
     }
 
 

@@ -282,10 +282,12 @@ $.widget("ose.enseignements", {
                     serviceId = data[i].value;
                 }
             }
-            // if (serviceId) {
-            that.onAfterSaisie(serviceId);
-            // }
 
+            //that.onAfterSaisie(serviceId);
+        });
+
+        $("body").on('enseignement-after-saisie', function(event, serviceId){
+            that.onAfterSaisie(serviceId);
         });
 
         /* this.element.find('a.volume-horaire').tooltip({

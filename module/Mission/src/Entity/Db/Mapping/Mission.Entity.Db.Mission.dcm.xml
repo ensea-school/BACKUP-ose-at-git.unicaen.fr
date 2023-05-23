@@ -17,6 +17,9 @@
         <many-to-one field="tauxRemu" target-entity="Paiement\Entity\Db\TauxRemu">
             <join-column name="TAUX_REMU_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <many-to-one field="tauxRemuMajore" target-entity="Paiement\Entity\Db\TauxRemu">
+            <join-column name="TAUX_REMU_MAJORE_ID" referenced-column-name="ID"/>
+        </many-to-one>
         <field name="dateDebut" type="datetime" column="DATE_DEBUT" nullable="false"/>
         <field name="dateFin" type="datetime" column="DATE_FIN" nullable="false"/>
         <field name="description" type="string" column="DESCRIPTION" length="4000" nullable="true"/>

@@ -122,6 +122,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private ?EtatSortie $contratEtatSortie                  = null;
 
+    private ?EtatSortie $avenantEtatSortie                  = null;
+
     private bool        $contratVisualisation               = true;
 
     private bool        $contratDepot                       = true;
@@ -982,6 +984,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setContratEtatSortie(?EtatSortie $contratEtatSortie): Statut
     {
         $this->contratEtatSortie = $contratEtatSortie;
+
+        return $this;
+    }
+
+
+
+    public function getAvenantEtatSortie(): ?EtatSortie
+    {
+        return $this->avenantEtatSortie;
+    }
+
+
+
+    public function setAvenantEtatSortie(?EtatSortie $avenantEtatSortie): Statut
+    {
+        $this->avenantEtatSortie = $avenantEtatSortie;
 
         return $this;
     }

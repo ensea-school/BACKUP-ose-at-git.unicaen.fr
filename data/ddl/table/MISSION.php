@@ -189,6 +189,18 @@ return [
             'position'    => 15,
             'commentaire' => NULL,
         ],
+        'TAUX_REMU_MAJORE_ID'   => [
+            'name'        => 'TAUX_REMU_MAJORE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 17,
+            'commentaire' => NULL,
+        ],
         'TYPE_MISSION_ID'       => [
             'name'        => 'TYPE_MISSION_ID',
             'type'        => 'int',

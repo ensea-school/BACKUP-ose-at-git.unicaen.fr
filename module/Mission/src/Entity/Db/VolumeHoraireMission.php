@@ -35,8 +35,6 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
 
     protected ?\DateTime $horaireFin = null;
 
-    protected bool $nocturne = false;
-
     protected bool $formation = false;
 
     protected ?string $description = null;
@@ -264,22 +262,6 @@ class VolumeHoraireMission implements HistoriqueAwareInterface, ImportAwareInter
         } else {
             $this->heures = 0;
         }
-
-        return $this;
-    }
-
-
-
-    public function isNocturne(): bool
-    {
-        return $this->nocturne;
-    }
-
-
-
-    public function setNocturne(bool $nocturne): VolumeHoraireMission
-    {
-        $this->nocturne = $nocturne;
 
         return $this;
     }

@@ -21,7 +21,6 @@
         <field name="autoValidation" type="boolean" column="AUTO_VALIDATION" nullable="false"/>
         <field name="horaireDebut" type="datetime" column="HORAIRE_DEBUT" nullable="false"/>
         <field name="horaireFin" type="datetime" column="HORAIRE_FIN" nullable="false"/>
-        <field name="nocturne" type="boolean" column="NOCTURNE" nullable="false"/>
         <field name="formation" type="boolean" column="FORMATION" nullable="false"/>
         <field name="description" type="string" column="DESCRIPTION" length="4000"  nullable="true"/>
 

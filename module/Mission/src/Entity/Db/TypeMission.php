@@ -20,6 +20,8 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
 
     protected ?TauxRemu $tauxRemu = null;
 
+    protected ?TauxRemu $tauxRemuMajore = null;
+
     protected bool $accompagnementEtudiants = false;
 
 
@@ -73,6 +75,22 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
     public function setTauxRemu(?TauxRemu $tauxRemu): TypeMission
     {
         $this->tauxRemu = $tauxRemu;
+
+        return $this;
+    }
+
+
+
+    public function getTauxRemuMajore(): ?TauxRemu
+    {
+        return $this->tauxRemuMajore;
+    }
+
+
+
+    public function setTauxRemuMajore(?TauxRemu $tauxRemuMajore): self
+    {
+        $this->tauxRemuMajore = $tauxRemuMajore;
 
         return $this;
     }

@@ -1313,6 +1313,11 @@ return [
         'OFFRE_EMPLOI_POSTULER',
         'MISSION_VISUALISATION',
         'MISSION_EDITION',
+        'MODE_REFERENTIEL_PREVISIONNEL',
+        'MODE_REFERENTIEL_REALISE',
+        'MODE_SERVICE_PREVISIONNEL',
+        'MODE_SERVICE_REALISE',
+        'AVENANT_ETAT_SORTIE_ID',
     ],
     'STRUCTURE'                      => [
         'ID',
@@ -2160,6 +2165,7 @@ return [
         'HISTO_DESTRUCTEUR_ID',
         'TAUX_REMU_ID',
         'ACCOMPAGNEMENT_ETUDIANTS',
+        'TAUX_REMU_MAJORE_ID',
     ],
     'MISSION'                        => [
         'ID',
@@ -2178,6 +2184,7 @@ return [
         'AUTO_VALIDATION',
         'TAUX_REMU_ID',
         'ETUDIANTS_SUIVIS',
+        'TAUX_REMU_MAJORE_ID',
     ],
     'MISSION_ETUDIANT'               => [
         'MISSION_ID',
@@ -2196,7 +2203,6 @@ return [
         'AUTO_VALIDATION',
         'HORAIRE_DEBUT',
         'HORAIRE_FIN',
-        'NOCTURNE',
         'SOURCE_CODE',
         'SOURCE_ID',
         'HISTO_CREATION',
@@ -2371,6 +2377,17 @@ return [
         'MISSION_TAUX_REMU_ID',
         'DATE_EFFET',
         'VALEUR',
+    ],
+    'CENTRE_COUT_TYPE_MISSION'       => [
+        'ID',
+        'CENTRE_COUT_ID',
+        'TYPE_MISSION_ID',
+        'HISTO_CREATION',
+        'HISTO_CREATEUR_ID',
+        'HISTO_MODIFICATION',
+        'HISTO_MODIFICATEUR_ID',
+        'HISTO_DESTRUCTION',
+        'HISTO_DESTRUCTEUR_ID',
     ],
 ];
 

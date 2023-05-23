@@ -31,6 +31,8 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
     protected ?TauxRemu $tauxRemu = null;
 
+    protected ?TauxRemu $tauxRemuMajore = null;
+
     protected ?\DateTime $dateDebut = null;
 
     protected ?\DateTime $dateFin = null;
@@ -98,6 +100,22 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
     public function setTauxRemu(?TauxRemu $tauxRemu): self
     {
         $this->tauxRemu = $tauxRemu;
+
+        return $this;
+    }
+
+
+
+    public function getTauxRemuMajore(): ?TauxRemu
+    {
+        return $this->tauxRemuMajore;
+    }
+
+
+
+    public function setTauxRemuMajore(?TauxRemu $tauxRemuMajore): self
+    {
+        $this->tauxRemuMajore = $tauxRemuMajore;
 
         return $this;
     }
@@ -444,6 +462,13 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
     public function canSaisie(): bool
     {
         return !$this->isValide();
+    }
+
+
+
+    public function canAddHeures(): bool
+    {
+        return true;
     }
 
 

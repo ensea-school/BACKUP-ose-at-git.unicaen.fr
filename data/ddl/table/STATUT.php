@@ -21,6 +21,18 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
+        'AVENANT_ETAT_SORTIE_ID'         => [
+            'name'        => 'AVENANT_ETAT_SORTIE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 94,
+            'commentaire' => NULL,
+        ],
         'CLOTURE'                        => [
             'name'        => 'CLOTURE',
             'type'        => 'bool',

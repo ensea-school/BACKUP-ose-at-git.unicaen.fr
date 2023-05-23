@@ -81,7 +81,6 @@ class SuiviController extends AbstractController
             'heureDebut',
             'heureFin',
             'heures',
-            'nocturne',
             'formation',
             'description',
             'valide',

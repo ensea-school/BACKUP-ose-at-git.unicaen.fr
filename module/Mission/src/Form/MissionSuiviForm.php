@@ -77,14 +77,6 @@ class MissionSuiviForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'    => 'nocturne',
-            'options' => [
-                'label' => 'Horaire nocturne',
-            ],
-            'type'    => 'Checkbox',
-        ]);
-
-        $this->add([
             'name'       => 'description',
             'type'       => 'Textarea',
             'options'    => [
@@ -132,9 +124,6 @@ class MissionSuiviForm extends AbstractForm
                 ],
             ],
             'formation'           => [
-                'required' => true,
-            ],
-            'nocturne'           => [
                 'required' => true,
             ],
             'description'           => [
@@ -189,7 +178,6 @@ class MissionSuiviHydrator implements HydratorInterface
         $object->setHeureDebut($data['heureDebut']);
         $object->setHeureFin($data['heureFin']);
         $object->setFormation($data['formation']);
-        $object->setNocturne($data['nocturne']);
         $object->setDescription($data['description']);
 
         return $object;
@@ -212,7 +200,6 @@ class MissionSuiviHydrator implements HydratorInterface
             'heureDebut'  => $object->getHeureDebut(),
             'heureFin'    => $object->getHeureFin(),
             'formation'   => $object->isFormation(),
-            'nocturne'    => $object->isNocturne(),
             'description' => $object->getDescription(),
         ];
 

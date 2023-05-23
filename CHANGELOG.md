@@ -38,6 +38,7 @@
 * Affichage de la fiche intervenant lorsque la civilité n'est pas renseignée (#50813)
 * La saisie de nouvelles heures sur des services existants en passant par le bouton "ajout" fonctionne de nouveau (#50814)
 * La structure est obligatoire dans le formulaire de saisie du service référentiel et ne fait plus planter l'application lorsqu'elle n'est pas saisie
+* Mauvais affichage des HETD dans l'export des services pour une ligne comportant un Tag (#50091)
 
 ## Notes de migration
 

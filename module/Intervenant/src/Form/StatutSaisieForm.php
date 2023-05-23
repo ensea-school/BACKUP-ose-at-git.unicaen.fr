@@ -126,17 +126,17 @@ class StatutSaisieForm extends AbstractForm
             'name'     => 'modeServicePrevisionnel',
             'options'  => [
                 'value_options' => [
-                    ''           => 'Par défaut',
-                    'calendaire' => Parametre::SERVICES_MODALITE_CALENDAIRE,
-                    'semestriel' => Parametre::SERVICES_MODALITE_SEMESTRIEL,
+                    ''           => 'Non renseigné',
+                    'calendaire' => Statut::ENSEIGNEMENT_MODALITE_CALENDAIRE,
+                    'semestriel' => Statut::ENSEIGNEMENT_MODALITE_SEMESTRIEL,
                 ],
             ],
             'hydrator' => [
                 'getter' => function (Statut $statut, string $name) {
-                    return $statut->getModeServicePrevisionnel();
+                    return $statut->getModeEnseignementPrevisionnel();
                 },
                 'setter' => function (Statut $statut, $value, string $name) {
-                    $statut->setModeServicePrevisionnel($value);
+                    $statut->setModeEnseignementPrevisionnel($value);
                 },
             ],
 
@@ -148,59 +148,17 @@ class StatutSaisieForm extends AbstractForm
             'name'     => 'modeServiceRealise',
             'options'  => [
                 'value_options' => [
-                    ''           => 'Par défaut',
-                    'calendaire' => Parametre::SERVICES_MODALITE_CALENDAIRE,
-                    'semestriel' => Parametre::SERVICES_MODALITE_SEMESTRIEL,
+                    ''           => 'Non renseigné',
+                    'calendaire' => Statut::ENSEIGNEMENT_MODALITE_CALENDAIRE,
+                    'semestriel' => Statut::ENSEIGNEMENT_MODALITE_SEMESTRIEL,
                 ],
             ],
             'hydrator' => [
                 'getter' => function (Statut $statut, string $name) {
-                    return $statut->getModeServiceRealise();
+                    return $statut->getModeEnseignementRealise();
                 },
                 'setter' => function (Statut $statut, $value, string $name) {
-                    $statut->setModeServiceRealise($value);
-                },
-            ],
-
-        ]]);
-
-        $this->spec(['modeReferentielPrevisionnel' => [
-            'type'     => 'Select',
-            'name'     => 'modeReferentielPrevisionnel',
-            'options'  => [
-                'value_options' => [
-                    ''           => 'Par défaut',
-                    'calendaire' => Parametre::SERVICES_MODALITE_CALENDAIRE,
-                    'semestriel' => Parametre::SERVICES_MODALITE_SEMESTRIEL,
-                ],
-            ],
-            'hydrator' => [
-                'getter' => function (Statut $statut, string $name) {
-                    return $statut->getModeReferentielPrevisionnel();
-                },
-                'setter' => function (Statut $statut, $value, string $name) {
-                    $statut->setModeReferentielPrevisionnel($value);
-                },
-            ],
-
-        ]]);
-
-        $this->spec(['modeReferentielRealise' => [
-            'type'     => 'Select',
-            'name'     => 'modeReferentielRealise',
-            'options'  => [
-                'value_options' => [
-                    ''           => 'Par défaut',
-                    'calendaire' => Parametre::SERVICES_MODALITE_CALENDAIRE,
-                    'semestriel' => Parametre::SERVICES_MODALITE_SEMESTRIEL,
-                ],
-            ],
-            'hydrator' => [
-                'getter' => function (Statut $statut, string $name) {
-                    return $statut->getModeReferentielRealise();
-                },
-                'setter' => function (Statut $statut, $value, string $name) {
-                    $statut->setModeReferentielRealise($value);
+                    $statut->setModeEnseignementRealise($value);
                 },
             ],
 
@@ -530,18 +488,6 @@ class StatutSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         $spec = [
-            'modeReferentielPrevisionnel' => [
-                'required' => false,
-            ],
-            'modeReferentielRealise'      => [
-                'required' => false,
-            ],
-            'modeServicePrevisionnel'     => [
-                'required' => false,
-            ],
-            'modeServiceRealise'          => [
-                'required' => false,
-            ],
 
 
         ];

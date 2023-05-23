@@ -4,6 +4,7 @@ namespace Application\Form;
 
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\Parametre;
+use Intervenant\Entity\Db\Statut;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
@@ -332,65 +333,6 @@ class ParametresForm extends AbstractForm
             ],
         ]);
 
-        $this->add([
-            'type'       => 'Select',
-            'name'       => 'modalite_services_prev_ens',
-            'options'    => [
-                'value_options' => [
-                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
-                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)',
-                ],
-            ],
-            'attributes' => [
-                'class'     => 'selectpicker',
-                'data-size' => 20,
-            ],
-        ]);
-
-        $this->add([
-            'type'       => 'Select',
-            'name'       => 'modalite_services_prev_ref',
-            'options'    => [
-                'value_options' => [
-                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
-                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)',
-                ],
-            ],
-            'attributes' => [
-                'class'     => 'selectpicker',
-                'data-size' => 20,
-            ],
-        ]);
-
-        $this->add([
-            'type'       => 'Select',
-            'name'       => 'modalite_services_real_ens',
-            'options'    => [
-                'value_options' => [
-                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
-                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)',
-                ],
-            ],
-            'attributes' => [
-                'class'     => 'selectpicker',
-                'data-size' => 20,
-            ],
-        ]);
-
-        $this->add([
-            'type'       => 'Select',
-            'name'       => 'modalite_services_real_ref',
-            'options'    => [
-                'value_options' => [
-                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
-                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)',
-                ],
-            ],
-            'attributes' => [
-                'class'     => 'selectpicker',
-                'data-size' => 20,
-            ],
-        ]);
 
         $this->add([
             'type'       => 'Select',

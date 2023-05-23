@@ -10,6 +10,7 @@ use Application\Traits\ParametreEntityTrait;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Laminas\Permissions\Acl\Role\RoleInterface;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -22,6 +23,10 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 {
     const CODE_AUTRES       = 'AUTRES';
     const CODE_NON_AUTORISE = 'NON_AUTORISE';
+
+    const ENSEIGNEMENT_MODALITE_SEMESTRIEL = 'semestriel';
+
+    const ENSEIGNEMENT_MODALITE_CALENDAIRE = 'calendaire';
 
     use ParametreEntityTrait;
     use TypeIntervenantAwareTrait;
@@ -138,11 +143,11 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool        $serviceExterieur                   = true;
 
+    private bool        $referentielPrevuEdition            = true;
+
     private bool        $referentielPrevu                   = true;
 
     private bool        $referentielPrevuVisualisation      = true;
-
-    private bool        $referentielPrevuEdition            = true;
 
     private bool        $referentielRealise                 = true;
 
@@ -170,13 +175,9 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private ?string     $codesCorresp4                      = null;
 
-    private ?string     $modeServicePrevisionnel            = null;
+    private ?string     $modeEnseignementPrevisionnel       = null;
 
-    private ?string     $modeServiceRealise                 = null;
-
-    private ?string     $modeReferentielPrevisionnel        = null;
-
-    private ?string     $modeReferentielRealise             = null;
+    private ?string     $modeEnseignementRealise            = null;
 
 
 
@@ -1365,66 +1366,63 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getModeServicePrevisionnel(): ?string
+    public function getModeEnseignementPrevisionnel(): ?string
     {
-        return $this->modeServicePrevisionnel;
+        return $this->modeEnseignementPrevisionnel;
     }
 
 
 
-    public function setModeServicePrevisionnel(?string $mode): Statut
+    public function setModeEnseignementPrevisionnel(?string $mode): Statut
     {
-        $this->modeServicePrevisionnel = $mode;
+        $this->modeEnseignementPrevisionnel = $mode;
 
         return $this;
     }
 
 
 
-    public function getModeServiceRealise(): ?string
+    public function getModeEnseignementRealise(): ?string
     {
-        return $this->modeServiceRealise;
+        return $this->modeEnseignementRealise;
     }
 
 
 
-    public function setModeServiceRealise(?string $mode): Statut
+    public function setModeEnseignementRealise(?string $mode): Statut
     {
-        $this->modeServiceRealise = $mode;
+        $this->modeEnseignementRealise = $mode;
 
         return $this;
     }
 
 
 
-    public function getModeReferentielPrevisionnel(): ?string
+    public function isModeEnseignementSemestriel(?TypeVolumeHoraire $typeVolumeHoraire = null): bool
     {
-        return $this->modeReferentielPrevisionnel;
-    }
+        if ($typeVolumeHoraire instanceof TypeVolumeHoraire) {
+            $codeTypeVolumeHoraire = $typeVolumeHoraire->getCode();
+        } else {
+            $codeTypeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU;
+        }
 
+        if ($codeTypeVolumeHoraire == TypeVolumeHoraire::CODE_REALISE) {
+            $modeRealise = $this->getModeEnseignementRealise();
+            if ($modeRealise == self::ENSEIGNEMENT_MODALITE_SEMESTRIEL || is_null($modeRealise)) {
+                return true;
+            }
 
+            return false;
+        } else {
+            $modePrevisionnel = $this->getModeEnseignementPrevisionnel();
+            if ($modePrevisionnel == self::ENSEIGNEMENT_MODALITE_SEMESTRIEL || is_null($modePrevisionnel)) {
+                return true;
+            }
 
-    public function setModeReferentielPrevisionnel(?string $mode): Statut
-    {
-        $this->modeReferentielPrevisionnel = $mode;
+            return false;
+        }
 
-        return $this;
-    }
-
-
-
-    public function getModeReferentielRealise(): ?string
-    {
-        return $this->modeReferentielRealise;
-    }
-
-
-
-    public function setModeReferentielRealise(?string $mode): Statut
-    {
-        $this->modeReferentielRealise = $mode;
-
-        return $this;
+        return true;
     }
 
 

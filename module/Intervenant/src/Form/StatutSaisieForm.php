@@ -59,8 +59,7 @@ class StatutSaisieForm extends AbstractForm
             'typeIntervenant'               => 'Type d\'intervenant',
             'modeServicePrevisionnel'       => 'Mode de saisie pour les enseignements prévisionnels',
             'modeServiceRealise'            => 'Mode de saisie pour les enseignements réalisés',
-            'modeReferentielPrevisionnel'   => 'Mode de saisie pour le référentiel prévisionnel',
-            'modeReferentielRealise'        => 'Mode de saisie pour le référentiel réalisé',
+
         ];
 
         $dveElements = [
@@ -83,8 +82,6 @@ class StatutSaisieForm extends AbstractForm
             'contratDepot',
             'contratGeneration',
             'modificationServiceDuVisualisation',
-            'modeReferentielPrevisionnel',
-            'modeReferentielRealise',
             'modeServicePrevisionnel',
             'modeServiceRealise',
 
@@ -126,9 +123,8 @@ class StatutSaisieForm extends AbstractForm
             'name'     => 'modeServicePrevisionnel',
             'options'  => [
                 'value_options' => [
-                    ''           => 'Non renseigné',
-                    'calendaire' => Statut::ENSEIGNEMENT_MODALITE_CALENDAIRE,
                     'semestriel' => Statut::ENSEIGNEMENT_MODALITE_SEMESTRIEL,
+                    'calendaire' => Statut::ENSEIGNEMENT_MODALITE_CALENDAIRE,
                 ],
             ],
             'hydrator' => [
@@ -148,9 +144,8 @@ class StatutSaisieForm extends AbstractForm
             'name'     => 'modeServiceRealise',
             'options'  => [
                 'value_options' => [
-                    ''           => 'Non renseigné',
-                    'calendaire' => Statut::ENSEIGNEMENT_MODALITE_CALENDAIRE,
                     'semestriel' => Statut::ENSEIGNEMENT_MODALITE_SEMESTRIEL,
+                    'calendaire' => Statut::ENSEIGNEMENT_MODALITE_CALENDAIRE,
                 ],
             ],
             'hydrator' => [

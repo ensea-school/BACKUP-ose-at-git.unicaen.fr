@@ -438,6 +438,19 @@ class ParametresForm extends AbstractForm
             ],
         ]);
 
+
+        $this->add([
+            'type'       => 'Time',
+            'name'       => 'horaire_nocturne',
+            'options' => [
+                'label' => "Horaire nocturne",
+            ],
+            'attributes' => [
+                'title' => "Horaire à partir duquel les heures faites sont considérées comme nocturnes",
+            ],
+        ]);
+
+
         $this->add([
             'name'    => 'indicateur_email_expediteur',
             'type'    => 'Text',

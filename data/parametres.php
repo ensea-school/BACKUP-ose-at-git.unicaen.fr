@@ -108,6 +108,10 @@ return [
         "VALEUR"      => "0.67",
         "DESCRIPTION" => "Taux de répartition en année civile pour les heures du premire semestre",
     ],
+    "horaire_nocturne"                 => [
+        "VALEUR"      => "22:00",
+        "DESCRIPTION" => "Horaire à partir duquel les heures faites sont considérées comme nocturnes",
+    ],
 
     /* Documentations */
     "doc-intervenant-vacataires"                 => [

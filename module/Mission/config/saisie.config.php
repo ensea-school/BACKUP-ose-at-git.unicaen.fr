@@ -2,7 +2,6 @@
 
 namespace Mission;
 
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
@@ -135,6 +134,7 @@ return [
     'rules' => [
         [
             'privileges' => [
+                Assertion\SaisieAssertion::CAN_ADD_HEURES,
                 Privileges::MISSION_EDITION,
                 Privileges::MISSION_VALIDATION,
                 Privileges::MISSION_DEVALIDATION

@@ -5,7 +5,7 @@ namespace Mission\Service;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Doctrine\ORM\Query;
+use Mission\Assertion\SaisieAssertion;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
@@ -110,6 +110,7 @@ class MissionService extends AbstractEntityService
             'valide',
             'validation',
             'canSaisie',
+            'canAddHeures',
             'canValider',
             'canDevalider',
             'canSupprimer',
@@ -118,6 +119,7 @@ class MissionService extends AbstractEntityService
         $triggers = [
             '/' => function (Mission $original, array $extracted) {
                 $extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canAddHeures'] = $this->getAuthorize()->isAllowed($original, SaisieAssertion::CAN_ADD_HEURES);
                 $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
                 $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
                 $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);

@@ -21,8 +21,9 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
  */
 class SaisieAssertion extends AbstractAssertion
 {
-    use WorkflowServiceAwareTrait;
+    const CAN_ADD_HEURES = 'can-add-heures';
 
+    use WorkflowServiceAwareTrait;
 
 
     protected function assertController($controller, $action = null, $privilege = null)
@@ -90,12 +91,11 @@ class SaisieAssertion extends AbstractAssertion
         // Si le rôle n'est pas renseigné alors on s'en va...
         if (!$role instanceof Role) return false;
 
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
-
         switch (true) {
             case $entity instanceof Mission:
                 switch ($privilege) {
+                    case self::CAN_ADD_HEURES: // Attention à bien avoir généré le fournisseur de privilèges si vous utilisez la gestion des privilèges d'UnicaenAuth
+                        return $this->assertMissionAddHeures($role, $entity);
                     case Privileges::MISSION_EDITION: // Attention à bien avoir généré le fournisseur de privilèges si vous utilisez la gestion des privilèges d'UnicaenAuth
                         return $this->assertMissionEdition($role, $entity);
                     case Privileges::MISSION_VALIDATION:
@@ -118,6 +118,16 @@ class SaisieAssertion extends AbstractAssertion
         }
 
         return true;
+    }
+
+
+
+    protected function assertMissionAddHeures(Role $role, Mission $mission)
+    {
+        return $this->asserts([
+            $mission->canAddHeures(),
+            $this->assertMission($role, $mission),
+        ]);
     }
 
 

@@ -184,8 +184,8 @@ class EnseignementSaisieFormViewHelper extends AbstractViewHelper
 
     public function renderVolumesHoraires()
     {
-
-        if (!$this->getServiceContext()->isModaliteServicesSemestriel($this->form->getTypeVolumeHoraire())) {
+        $intervenant = $this->form->getIntervenant();
+        if (!$intervenant->getStatut()->isModeEnseignementSemestriel($this->form->getTypeVolumeHoraire())) {
             return null;
         }
 

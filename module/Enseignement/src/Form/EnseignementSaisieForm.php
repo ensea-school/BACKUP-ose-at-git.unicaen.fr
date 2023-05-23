@@ -3,6 +3,7 @@
 namespace Enseignement\Form;
 
 use Application\Entity\Db\Periode;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Laminas\Form\FormInterface;
@@ -29,6 +30,7 @@ class EnseignementSaisieForm extends AbstractForm
     use LocalContextServiceAwareTrait;
     use EnseignementSaisieFieldsetAwareTrait;
     use VolumeHoraireSaisieMultipleFieldsetAwareTrait;
+    use IntervenantAwareTrait;
 
 
     /**
@@ -75,14 +77,7 @@ class EnseignementSaisieForm extends AbstractForm
 
         $this->add($this->getFieldsetEnseignementSaisie());
 
-        // Product Fieldset
-        if ($this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())) {
-            foreach ($this->getPeriodes() as $periode) {
-                $pf = $this->getFieldsetVolumeHoraireSaisieMultiple();
-                $pf->setName($periode->getCode());
-                $this->add($pf);
-            }
-        }
+
         $this->add(new Hidden('intervenant'));
 
         $this->add([
@@ -116,6 +111,20 @@ class EnseignementSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [];
+    }
+
+
+
+    public function initPeriodes()
+    {
+        // Product Fieldset
+        if ($this->getIntervenant()->getStatut()->isModeEnseignementSemestriel($this->getTypeVolumeHoraire())) {
+            foreach ($this->getPeriodes() as $periode) {
+                $pf = $this->getFieldsetVolumeHoraireSaisieMultiple();
+                $pf->setName($periode->getCode());
+                $this->add($pf);
+            }
+        }
     }
 }
 

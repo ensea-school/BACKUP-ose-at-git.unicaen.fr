@@ -34,7 +34,11 @@ class MissionForm extends AbstractForm
         }
 
         $this->spec(Mission::class, ['intervenant', 'autoValidation']);
-        $this->spec(['description' => ['type' => 'Textarea'], 'etudiantsSuivis' => ['type' => 'Textarea']]);
+        $this->spec([
+            'description' => ['type' => 'Textarea'],
+            'etudiantsSuivis' => ['type' => 'Textarea'],
+            'tauxRemuMajore' => ['input' => ['required' => false]],
+        ]);
         $this->build();
 
         $this->setValueOptions('typeMission', Util::collectionAsOptions($typesMissions));
@@ -42,6 +46,8 @@ class MissionForm extends AbstractForm
 
         $trDql = "SELECT mtr FROM " . TauxRemu::class . " mtr";
         $this->setValueOptions('tauxRemu', $trDql);
+        $this->setValueOptions('tauxRemuMajore', $trDql);
+        $this->get('tauxRemuMajore')->setEmptyOption('- Aucune majoration -');
 
         $sDql = "SELECT s FROM " . Structure::class . " s WHERE s.histoDestruction IS NULL";
         $this->setValueOptions('structure', $sDql);
@@ -49,7 +55,8 @@ class MissionForm extends AbstractForm
         $this->setLabels([
             'structure'       => 'Composante en charge du suivi de mission',
             'typeMission'     => 'Type de mission',
-            'tauxRemu' => 'Taux de rémunération',
+            'tauxRemu'        => 'Taux de rémunération',
+            'tauxRemuMajore'  => 'Taux majoré (heures nocturnes et dimanches/jf)',
             'dateDebut'       => 'Date de début',
             'dateFin'         => 'Date de fin',
             'description'     => 'Descriptif de la mission',

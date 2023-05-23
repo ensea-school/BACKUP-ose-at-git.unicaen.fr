@@ -4,7 +4,8 @@
             <div class="card-header card-header-h3">
                 <h5>
                     {{ mission.typeMission.libelle }}
-                    <span class="float-end">Du <u-date :value="mission.dateDebut" /> au <u-date :value="mission.dateFin" /></span>
+                    <span class="float-end">Du <u-date :value="mission.dateDebut"/> au <u-date
+                        :value="mission.dateFin"/></span>
                 </h5>
             </div>
             <div class="card-body">
@@ -18,15 +19,22 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <label class=" form-label">Taux de rémunération</label>
                                 <div class="form-control">{{ mission.tauxRemu ? mission.tauxRemu.libelle : null }}</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class=" form-label">Taux majoré (dimanches/jf)</label>
+                                <div class="form-control">
+                                    {{ mission.tauxRemuMajore ? mission.tauxRemuMajore.libelle : mission.tauxRemu ? 'Idem (' +mission.tauxRemu.libelle+')' : null }}
+                                </div>
                             </div>
                             <div class="col-md-7">
                                 <label class=" form-label">Nombre d'heures prévisionnelles</label>
                                 <div class="input-group mb-3">
                                     <div class="form-control" v-html="heuresLib"></div>
-                                    <button class="input-group-btn btn btn-secondary" data-bs-toggle="modal" :data-bs-target="`#details-${mission.id}`">
+                                    <button class="input-group-btn btn btn-secondary" data-bs-toggle="modal"
+                                            :data-bs-target="`#details-${mission.id}`">
                                         Détails
                                     </button>
                                 </div>
@@ -41,7 +49,9 @@
                         <div class="row" v-if="mission.typeMission.accompagnementEtudiants">
                             <div class="col-md-12">
                                 <label class=" form-label">Etudiants suivis</label>
-                                <div class="form-control"><pre>{{ mission.etudiantsSuivis }}</pre></div>
+                                <div class="form-control">
+                                    <pre>{{ mission.etudiantsSuivis }}</pre>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -85,21 +95,27 @@
                         </div>
                         <div>
                             <u-icon name="thumbs-up" variant="success"/>
-                            Créé le <u-date :value="mission.histoCreation" /> par
+                            Créé le
+                            <u-date :value="mission.histoCreation"/>
+                            par
                             <utilisateur :nom="mission.histoCreateur.displayName" :mail="mission.histoCreateur.email"/>
                         </div>
                         <div>
-                            <u-icon :name="mission.valide ? 'thumbs-up' : 'thumbs-down'" :variant="mission.valide ? 'success' : 'info'"/>
+                            <u-icon :name="mission.valide ? 'thumbs-up' : 'thumbs-down'"
+                                    :variant="mission.valide ? 'success' : 'info'"/>
                             {{ validationText }}
-                            <utilisateur v-if="mission.validation && mission.validation.histoCreateur" :nom="mission.validation.histoCreateur.displayName"
+                            <utilisateur v-if="mission.validation && mission.validation.histoCreateur"
+                                         :nom="mission.validation.histoCreateur.displayName"
                                          :mail="mission.validation.histoCreateur.email"/>
                         </div>
                         <div>
-                            <u-icon :name="mission.contrat ? 'thumbs-up' : 'thumbs-down'" :variant="mission.contrat ? 'success' : 'info'"/>
+                            <u-icon :name="mission.contrat ? 'thumbs-up' : 'thumbs-down'"
+                                    :variant="mission.contrat ? 'success' : 'info'"/>
                             {{ mission.contrat ? 'Contrat établi' : 'Pas de contrat' }}
                         </div>
                         <div>
-                            {{ mission.heuresRealisees}} heure{{ mission.heuresRealisees < 2 ? '' : 's' }} réalisée{{ mission.heuresRealisees < 2 ? '' : 's' }}
+                            {{ mission.heuresRealisees }} heure{{ mission.heuresRealisees < 2 ? '' : 's' }}
+                            réalisée{{ mission.heuresRealisees < 2 ? '' : 's' }}
                         </div>
                     </div>
                 </div>
@@ -127,13 +143,18 @@
                         Saisi par
                         <utilisateur :nom="vh.histoCreateur.displayName"
                                      :mail="vh.histoCreateur.email"/>
-                        le <u-date :value="vh.histoCreation" />
+                        le
+                        <u-date :value="vh.histoCreation"/>
                         <br/>
-                        <u-icon :name="vh.valide ? 'thumbs-up' : 'thumbs-down'" :variant="vh.valide ? 'success' : 'info'"/>
-                        {{ vh.validation && vh.validation.id == null ? 'Autovalidé' : (!vh.validation ? 'à valider' : '') }}
+                        <u-icon :name="vh.valide ? 'thumbs-up' : 'thumbs-down'"
+                                :variant="vh.valide ? 'success' : 'info'"/>
+                        {{
+                            vh.validation && vh.validation.id == null ? 'Autovalidé' : (!vh.validation ? 'à valider' : '')
+                        }}
                         <span v-if="vh.validation && vh.validation.histoCreateur">
                             Validé par <utilisateur :nom="vh.validation.histoCreateur.displayName"
-                                                    :mail="vh.validation.histoCreateur.email"/> le <u-date :value="vh.validation.histoCreation" />
+                                                    :mail="vh.validation.histoCreateur.email"/> le <u-date
+                            :value="vh.validation.histoCreation"/>
                         </span>
                     </td>
                     <td>

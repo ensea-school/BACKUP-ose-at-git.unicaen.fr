@@ -87,6 +87,7 @@ class MissionService extends AbstractEntityService
             'dateFin',
             ['structure', ['libelle']],
             ['tauxRemu', ['libelle']],
+            ['tauxRemuMajore', ['libelle']],
             'description',
             'histoCreation',
             'histoCreateur',

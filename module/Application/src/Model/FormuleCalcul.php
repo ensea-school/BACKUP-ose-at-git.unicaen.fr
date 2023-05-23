@@ -1279,6 +1279,7 @@ END FORMULE_" . $this->getName() . ";";
             "i.structure_code = vh.structure_code"       => 'vh.structure_is_affectation',
             "vh.structure_code <> i.structure_code"      => 'NOT vh.structure_is_affectation',
             "i.structure_code <> vh.structure_code"      => 'NOT vh.structure_is_affectation',
+            "cell('D9')"                                 => 'i.param_1',
         ];
 
         foreach ($boolSar as $variable) {

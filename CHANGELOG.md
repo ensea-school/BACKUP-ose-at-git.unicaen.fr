@@ -14,6 +14,7 @@
 ## Améliorations
 
 * Modification de libellé dans l'affichage de l'offre de formation (#49763)
+* Possibilité de modifier manuellement l'email expéditeur pour l'envoi d'email via les indicateurs (#50725)
 
 ## Corrections de bugs
 

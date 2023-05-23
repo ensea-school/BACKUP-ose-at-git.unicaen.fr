@@ -15,7 +15,7 @@ echo $this->form()->openTag($this->form->setAttribute('id', 'mail-form'));
 
 <div class="row">
     <div class="col-md-8">
-        <?= $this->formControlGroup($this->form->get('from')->setLabel("Expéditeur du mail")->setAttribute('disabled', 'disabled')) ?>
+        <?= $this->formControlGroup($this->form->get('from')->setLabel("Expéditeur du mail")) ?>
     </div>
     <div class="col-md-4">
         <?= $this->formControlGroup($this->form->get('nombre')->setLabel("Nombre de mails à envoyer")->setAttribute('disabled', 'disabled')) ?>

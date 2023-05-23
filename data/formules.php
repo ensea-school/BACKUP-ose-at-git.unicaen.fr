@@ -39,8 +39,8 @@ return [
     10 => [
         'LIBELLE'            => 'Université Rennes 2',
         'PACKAGE_NAME'       => 'FORMULE_RENNES2',
-        'VH_PARAM_1_LIBELLE' => 'Autre établissement',
-        'VH_PARAM_2_LIBELLE' => 'Maquettes Apogée',
+        'VH_PARAM_1_LIBELLE' => 'Maquettes Apogée',
+        'VH_PARAM_2_LIBELLE' => 'Nbre etudiants',
     ],
     11 => [
         'LIBELLE'      => 'INSA de Lyon',

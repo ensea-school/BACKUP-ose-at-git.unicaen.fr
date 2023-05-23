@@ -146,9 +146,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- W=IF([.$H20]="Référentiel";0;([.$AK20]+[.$CA20]+[.$CG20]+[.$BO20]+[.$BU20])*[.H20])
+      -- W=IF([.$I20]="Référentiel";0;([.$AK20]+[.$CA20]+[.$CG20]+[.$BO20]+[.$BU20])*[.H20])
       WHEN 'W' THEN
-        IF vh.taux_fc = 'Référentiel' THEN
+        IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
           RETURN (cell('AK',l) + cell('CA',l) + cell('CG',l) + cell('BO',l) + cell('BU',l)) * vh.taux_fc;
@@ -240,9 +240,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- AI=IF(AND([.$E20]="Oui";[.$D20]="Oui";[.$H20]<>"Référentiel");[.$N20]*[.$AF20];0)
+      -- AI=IF(AND([.$E20]="Oui";[.$D20]="Oui";[.$I20]<>"Référentiel");[.$N20]*[.$AF20];0)
       WHEN 'AI' THEN
-        IF vh.service_statutaire AND vh.structure_is_exterieur AND vh.taux_fc <> 'Référentiel' THEN
+        IF vh.service_statutaire AND vh.structure_is_exterieur AND vh.volume_horaire_ref_id IS NULL THEN
           RETURN vh.heures * cell('AF',l);
         ELSE
           RETURN 0;
@@ -306,7 +306,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
       -- AO=IF(AND([.$E20]="Oui";[.$B20]="Oui";[.$A20]=i_structure_code;[.$I20]<>"Référentiel";[.$O20]<>"Oui");[.$N20]*[.$F20]*[.$AF20];0)
       WHEN 'AO' THEN
-        IF vh.service_statutaire AND vh.structure_is_affectation AND vh.structure_is_affectation AND vh.volume_horaire_ref_id IS NULL AND vh.param_1 <> 'Oui' THEN
+        IF vh.service_statutaire AND vh.structure_is_affectation AND vh.structure_is_affectation AND vh.volume_horaire_ref_id IS NULL AND COALESCE(vh.param_1,' ') <> 'Oui' THEN
           RETURN vh.heures * vh.taux_fi * cell('AF',l);
         ELSE
           RETURN 0;
@@ -906,7 +906,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
       -- CR16=IF([.$D9]<>"Autre";MIN([.CR15];[.CL17]);[.CR15])
       WHEN 'CR16' THEN
-        IF cell('D9') <> 'Autre' THEN
+        IF i.param_1 <> 'Autre' THEN
           RETURN LEAST(cell('CR15'), cell('CL17'));
         ELSE
           RETURN cell('CR15');
@@ -932,7 +932,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
       -- CS=IF([.$D$9]<>"AUTRE";MIN(100;[.CR$16]*[.CR20]);0)
       WHEN 'CS' THEN
-        IF cell('D9') <> 'AUTRE' THEN
+        IF i.param_1 <> 'AUTRE' THEN
           RETURN LEAST(100, cell('CR16') * cell('CR',l));
         ELSE
           RETURN 0;
@@ -942,7 +942,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
       -- CT=IF([.$D$9]<>"AUTRE";([.CQ20]-[.CS20])/[.$AF20];[.$CQ20])
       WHEN 'CT' THEN
-        IF cell('D9') <> 'AUTRE' THEN
+        IF i.param_1 <> 'AUTRE' THEN
           RETURN (cell('CQ',l) - cell('CS',l)) / cell('AF',l);
         ELSE
           RETURN cell('CQ',l);

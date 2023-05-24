@@ -44,7 +44,7 @@ class DataUpdater
             $actions = (array)$config['actions'];
             unset($config['actions']);
             if (in_array($action, $actions)) {
-                $this->syncTable($table, $config);
+                $this->syncTable($table, $action, $config);
             }
         }
 
@@ -53,7 +53,7 @@ class DataUpdater
 
 
 
-    private function syncTable(string $table, array $config)
+    private function syncTable(string $table, string $action, array $config)
     {
         $tableObject = $this->getBdd()->getTable($table);
         $ddl         = $tableObject->getDdl();
@@ -61,7 +61,7 @@ class DataUpdater
         $data = null;
         foreach ($this->sources as $i => $source) {
             if (is_object($source) && method_exists($source, $table)) {
-                $data = $source->$table();
+                $data = $source->$table($action);
                 break;
             }
             if (is_array($source) && isset($source[$table])) {

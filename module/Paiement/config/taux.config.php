@@ -56,7 +56,7 @@ return [
     'navigation' => [
         'administration' => [
             'pages' => [
-                'intervenants' => [
+                'finances' => [
                     'pages' => [
                         'taux' => [
                             'label'    => "Taux de rémunération",

@@ -103,9 +103,6 @@ return [
         'key'     => 'CODE',
         'options' => ['delete' => false],
     ],
-    'TAUX_HORAIRE_HETD'          => [
-        'actions' => ['install', 'update'],
-    ],
     'TYPE_RESSOURCE'             => [
         'actions' => ['install'],
         'key'     => 'CODE',
@@ -151,6 +148,48 @@ return [
     'TYPE_INTERVENTION'          => [
         'actions' => ['install'],
         'key'     => 'CODE',
+    ],
+    'TAUX_REMU'                  => [
+        'actions' => ['install', 'update'],
+        'options' => [
+            'update'  => true,
+            'delete'  => false,
+            'columns' => [
+                'TAUX_REMU_ID' => [
+                    'transformer' => 'SELECT id FROM taux_remu WHERE histo_destruction IS NULL AND code = %s',
+                ],
+            ],
+        ],
+        'key'     => 'CODE',
+    ],
+    'TAUX_REMU_VALEUR'           => [
+        'actions' => ['install', 'update'],
+        'options' => [
+            'update'  => true,
+            'delete'  => false,
+            'columns' => [
+                'TAUX_REMU_ID' => [
+                    'transformer' => 'SELECT id FROM taux_remu WHERE histo_destruction IS NULL AND code = %s',
+                ],
+            ],
+        ],
+        'key'     => ['TAUX_REMU_ID', 'DATE_EFFET'],
+    ],
+    'TYPE_MISSION'               => [
+        'actions' => ['install'],
+        'key'     => ['CODE','ANNEE_ID'],
+        'options' => [
+            'update'  => false,
+            'delete'  => false,
+            'columns' => [
+                'TAUX_REMU_ID' => [
+                    'transformer' => 'SELECT id FROM taux_remu WHERE histo_destruction IS NULL AND code = %s',
+                ],
+                'TAUX_REMU_MAJORE_ID' => [
+                    'transformer' => 'SELECT id FROM taux_remu WHERE histo_destruction IS NULL AND code = %s',
+                ],
+            ],
+        ],
     ],
     'SCENARIO'                   => [
         'actions' => ['install'],
@@ -240,24 +279,6 @@ return [
         'key'     => ['CODE', 'ANNEE_ID'],
         'options' => ['columns' => ['TYPE_INTERVENANT_ID' => ['transformer' => 'SELECT id FROM type_intervenant WHERE code = %s']]],
     ],
-    'TAUX_REMU'                  => [
-        'actions' => ['install', 'update'],
-        'options' => ['update' => true, 'delete' => false],
-        'key'     => 'CODE',
-    ],
-    'TAUX_REMU_VALEUR'           => [
-        'actions' => ['install', 'update'],
-        'options' => [
-            'update'  => true,
-            'delete'  => false,
-            'columns' => [
-                'TAUX_REMU_ID' => [
-                    'transformer' => 'SELECT id FROM taux_remu WHERE code = %s',
-                ],
-            ],
-        ],
-        'key'     => ['TAUX_REMU_ID', 'DATE_EFFET'],
-    ],
     'TYPE_PIECE_JOINTE'          => [
         'actions' => ['install'],
         'key'     => 'CODE',
@@ -270,7 +291,7 @@ return [
             'TYPE_PIECE_JOINTE_ID' => ['transformer' => 'SELECT id FROM type_piece_jointe WHERE histo_destruction IS NULL AND code = %s'],
         ],],
     ],
-    'TYPE_SERVICE'          => [
+    'TYPE_SERVICE'               => [
         'actions' => ['install', 'update'],
         'key'     => 'CODE',
     ],

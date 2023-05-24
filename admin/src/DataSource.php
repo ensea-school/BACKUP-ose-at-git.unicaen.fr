@@ -1,9 +1,6 @@
 <?php
 
 
-
-
-
 class DataSource
 {
     private OseAdmin $oseAdmin;
@@ -22,9 +19,9 @@ class DataSource
 
     private function getAnneeCourante(): int
     {
-        $now      = new \DateTime();
-        $year     = (int)$now->format('Y');
-        $mois     = (int)$now->format('m');
+        $now = new \DateTime();
+        $year = (int)$now->format('Y');
+        $mois = (int)$now->format('m');
         $anneeRef = $year;
         if ($mois < 9) $anneeRef--;
 
@@ -38,10 +35,10 @@ class DataSource
         $annees = [];
         for ($a = 1950; $a < 2100; $a++) {
             $dateDebut = \DateTime::createFromFormat('Y-m-d H:i:s', $a . '-09-01 00:00:00');
-            $dateFin   = \DateTime::createFromFormat('Y-m-d H:i:s', ($a + 1) . '-08-31 00:00:00');
+            $dateFin = \DateTime::createFromFormat('Y-m-d H:i:s', ($a + 1) . '-08-31 00:00:00');
 
             $anneeRef = $this->getAnneeCourante();
-            $active   = ($a >= $anneeRef && $a < $anneeRef + 3);
+            $active = ($a >= $anneeRef && $a < $anneeRef + 3);
 
             $annees[$a] = [
                 'ID'         => $a,
@@ -91,12 +88,12 @@ class DataSource
         $data = require $this->oseAdmin->getOseDir() . 'data/import_tables.php';
 
         $ordre = 0;
-        $d     = [];
+        $d = [];
         foreach ($data as $table => $td) {
             $ordre++;
             $td['TABLE_NAME'] = $table;
-            $td['ORDRE']      = $ordre;
-            $d[]              = $td;
+            $td['ORDRE'] = $ordre;
+            $d[] = $td;
         }
 
         return $d;
@@ -113,7 +110,7 @@ class DataSource
 
     public function CATEGORIE_PRIVILEGE()
     {
-        $data       = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
         $categories = [];
         foreach ($data as $code => $record) {
             $categories[] = [
@@ -130,7 +127,7 @@ class DataSource
 
     public function PRIVILEGE()
     {
-        $data       = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
         $privileges = [];
         foreach ($data as $code => $record) {
             $io = 0;
@@ -176,9 +173,9 @@ class DataSource
         $statuts = [];
         for ($a = 2010; $a <= 2099; $a++) {
             foreach ($data as $d) {
-                $d['ANNEE_ID']              = $a;
+                $d['ANNEE_ID'] = $a;
                 $d['HISTO_MODIFICATEUR_ID'] = null;
-                $statuts[]                  = $d;
+                $statuts[] = $d;
             }
         }
 
@@ -194,9 +191,9 @@ class DataSource
         $statuts = [];
         for ($a = 2010; $a <= 2099; $a++) {
             foreach ($data as $d) {
-                $d['ANNEE_ID']              = $a;
+                $d['ANNEE_ID'] = $a;
                 $d['HISTO_MODIFICATEUR_ID'] = null;
-                $statuts[]                  = $d;
+                $statuts[] = $d;
             }
         }
 
@@ -207,20 +204,20 @@ class DataSource
 
     public function PLAFOND()
     {
-        $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
 
         foreach ($data['plafonds'] as $numero => $p) {
-            $psql        = 'SELECT id FROM plafond_perimetre WHERE code = :code';
+            $psql = 'SELECT id FROM plafond_perimetre WHERE code = :code';
             $perimetreId = $this->oseAdmin->getBdd()->select($psql, ['code' => $p['perimetre']], ['fetch' => \BddAdmin\Bdd::FETCH_ONE])['ID'];
-            $plafond     = [
+            $plafond = [
                 'NUMERO'               => $numero,
                 'LIBELLE'              => $p['libelle'],
                 'MESSAGE'              => $p['message'] ?? null,
                 'PLAFOND_PERIMETRE_ID' => $perimetreId,
                 'REQUETE'              => $p['requete'],
             ];
-            $plafonds[]  = $plafond;
+            $plafonds[] = $plafond;
         }
 
         return $plafonds;
@@ -230,11 +227,11 @@ class DataSource
 
     public function PLAFOND_ETAT()
     {
-        $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
-        $id       = 1;
+        $id = 1;
         foreach ($data['etats'] as $code => $pe) {
-            $plafond    = [
+            $plafond = [
                 'ID'       => $id,
                 'CODE'     => $code,
                 'LIBELLE'  => $pe['libelle'],
@@ -251,12 +248,12 @@ class DataSource
 
     public function PLAFOND_PERIMETRE()
     {
-        $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
-        $id       = 0;
+        $id = 0;
         foreach ($data['perimetres'] as $code => $libelle) {
             $id++;
-            $plafond    = [
+            $plafond = [
                 'ID'      => $id,
                 'CODE'    => $code,
                 'LIBELLE' => $libelle,
@@ -269,19 +266,23 @@ class DataSource
 
 
 
-    public function TAUX_REMU()
+    public function TAUX_REMU(string $action)
     {
         $data = require $this->oseAdmin->getOseDir() . 'data/taux_remu.php';
 
         $tauxRemu = [];
 
         foreach ($data as $code => $taux) {
-            $taux       = [
-                'CODE'    => $code,
-                'LIBELLE' => $taux['libelle'],
-
+            $taux = [
+                'CODE'         => $code,
+                'LIBELLE'      => $taux['libelle'],
+                'TAUX_REMU_ID' => $taux['parent'] ?? null,
             ];
-            $tauxRemu[] = $taux;
+
+            if (!($action === 'update' && !in_array($code, ['TLD', 'SMIC']))) {
+                $tauxRemu[] = $taux;
+            }
+
         }
 
         return $tauxRemu;
@@ -289,7 +290,7 @@ class DataSource
 
 
 
-    public function TAUX_REMU_VALEUR()
+    public function TAUX_REMU_VALEUR(string $action)
     {
         $data = require $this->oseAdmin->getOseDir() . 'data/taux_remu.php';
 
@@ -297,12 +298,16 @@ class DataSource
 
         foreach ($data as $code => $taux) {
             foreach ($taux['valeurs'] as $dateEffet => $valeur) {
-                $tauxValeur    = [
+                $dateEffet = \DateTime::createFromFormat('d/m/Y', $dateEffet);
+                $dateEffet->setTime(0, 0, 0);
+                $tauxValeur = [
                     'TAUX_REMU_ID' => $code,
-                    'DATE_EFFET'   => \DateTime::createFromFormat('d/m/Y', $dateEffet),
+                    'DATE_EFFET'   => $dateEffet,
                     'VALEUR'       => $valeur,
                 ];
-                $tauxValeurs[] = $tauxValeur;
+                if (!($action === 'update' && !in_array($code, ['TLD', 'SMIC']))) {
+                    $tauxValeurs[] = $tauxValeur;
+                }
             }
         }
 
@@ -311,13 +316,38 @@ class DataSource
 
 
 
+    public function TYPE_MISSION()
+    {
+        $data = require $this->oseAdmin->getOseDir() . 'data/type_mission.php';
+
+        $tms = [];
+
+        for ($a = 2010; $a <= 2099; $a++) {
+            foreach ($data as $code => $tm) {
+                $tms[] = [
+                    'CODE'                     => $code,
+                    'LIBELLE'                  => $tm['libelle'],
+                    'TAUX_REMU_ID'             => $tm['taux-remu'] ?? null,
+                    'TAUX_REMU_MAJORE_ID'      => $tm['taux-remu-majore'] ?? null,
+                    'ACCOMPAGNEMENT_ETUDIANTS' => (bool)$tm['accompagnement-etudiants'],
+                    'ANNEE_ID'                 => $a,
+                    'HISTO_MODIFICATEUR_ID'    => null,
+                ];
+            }
+        }
+
+        return $tms;
+    }
+
+
+
     public function TYPE_INDICATEUR()
     {
-        $data        = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
         $indicateurs = [];
-        $ordre       = 0;
+        $ordre = 0;
         foreach ($data as $libelle => $indicateur) {
-            $idata         = [
+            $idata = [
                 'ID'      => $indicateur['id'],
                 'LIBELLE' => $libelle,
                 'ORDRE'   => $ordre++,
@@ -332,9 +362,9 @@ class DataSource
 
     public function INDICATEUR()
     {
-        $data        = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
         $indicateurs = [];
-        $ordre       = 0;
+        $ordre = 0;
         foreach ($data as $typeIndicateur) {
             foreach ($typeIndicateur['indicateurs'] as $numero => $idata) {
                 $indicateur = [
@@ -361,13 +391,13 @@ class DataSource
 
     public function WF_ETAPE()
     {
-        $data   = require $this->oseAdmin->getOseDir() . 'data/workflow_etapes.php';
+        $data = require $this->oseAdmin->getOseDir() . 'data/workflow_etapes.php';
         $etapes = [];
-        $ordre  = 1;
+        $ordre = 1;
         foreach ($data as $code => $etape) {
-            $etape['CODE']  = $code;
+            $etape['CODE'] = $code;
             $etape['ORDRE'] = $ordre++ * 10;
-            $etapes[]       = $etape;
+            $etapes[] = $etape;
         }
 
         return $etapes;
@@ -394,14 +424,14 @@ class DataSource
             }
         }
 
-        $data['annee']['VALEUR']        = (string)$this->getAnneeCourante();
+        $data['annee']['VALEUR'] = (string)$this->getAnneeCourante();
         $data['annee_import']['VALEUR'] = (string)$this->getAnneeCourante();
-        $data['oseuser']['VALEUR']      = (string)$this->oseAdmin->getOseAppliId();
+        $data['oseuser']['VALEUR'] = (string)$this->oseAdmin->getOseAppliId();
 
         $parametres = [];
         foreach ($data as $nom => $params) {
             $params['NOM'] = $nom;
-            $parametres[]  = $params;
+            $parametres[] = $params;
         }
 
         return $parametres;

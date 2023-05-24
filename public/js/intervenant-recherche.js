@@ -8,19 +8,19 @@ $.widget("ose.intervenantRecherche", {
     rechercher: function (critere, stopFunc)
     {
         var that = this;
-        var disabled = that.getElementCritere().autocomplete( "option", "disabled" );
+        var disabled = that.getElementCritere().autocomplete("option", "disabled");
         if (critere.length > 1 && !disabled) {
             that.getElementCritere().autocomplete("disable");
             that.getElementRecherche().refresh({critere: critere}, function (response, status, xhr)
             {
                 if (status == "error") {
                     var msg = "Désolé mais une erreur est survenue: ";
-                    that.getElementRecherche().html(msg + xhr.status + " " + xhr.statusText + xhr.responseText);
+                    that.getElementRecherche().html(msg+xhr.status+" "+xhr.statusText+xhr.responseText);
                 }
                 that.getElementCritere().autocomplete("enable");
                 stopFunc();
             });
-        }else{
+        } else {
             stopFunc();
         }
     },
@@ -34,7 +34,8 @@ $.widget("ose.intervenantRecherche", {
             {
                 that.rechercher(event.term, stopFunc);
             },
-			minLength: 2
+            minLength: 2,
+            delay: 1000,
         });
 
         this.getElementCritere().focus();

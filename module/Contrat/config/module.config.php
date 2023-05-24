@@ -23,6 +23,14 @@ return [
                     'action'      => 'creer',
                     'controller'  => ContratController::class,
                 ],
+                'creer-mission'               => [
+                    'route'       => '/:intervenant/creer-mission/:mission',
+                    'constraints' => [
+                        'mission' => '[0-9]*',
+                    ],
+                    'action'      => 'creer-mission',
+                    'controller'  => ContratController::class,
+                ],
                 'supprimer'           => [
                     'route'       => '/:contrat/supprimer',
                     'constraints' => [
@@ -134,6 +142,12 @@ return [
         [
             'controller' => ContratController::class,
             'action'     => ['creer'],
+            'privileges' => Privileges::CONTRAT_CREATION,
+            'assertion'  => \Contrat\Assertion\ContratAssertion::class,
+        ],
+        [
+            'controller' => ContratController::class,
+            'action'     => ['creer-mission'],
             'privileges' => Privileges::CONTRAT_CREATION,
             'assertion'  => \Contrat\Assertion\ContratAssertion::class,
         ],

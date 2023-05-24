@@ -24,6 +24,13 @@ class MissionTypeForm extends AbstractForm
                 ],
             ],
         ]);
+        $this->spec([
+            'tauxRemuMajore' => [
+                'input' => [
+                    'required' => false,
+                ],
+            ],
+        ]);
         $this->build();
         $this->setValueOptions('tauxRemu', $this->getServiceTauxRemu()->getTauxRemusAnneeWithValeur());
         $this->get('tauxRemu')->setEmptyOption("");

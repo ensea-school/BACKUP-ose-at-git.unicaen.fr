@@ -17,7 +17,7 @@
         <field name="autres" type="string" column="autres" nullable="false"/>
         <field name="heuresTotales" type="string" column="HEURES" nullable="false"/>
 
-        <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+        <many-to-one field="structure" target-entity="Application\Entity\Db\Structure" fetch="EAGER">
             <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique">
@@ -30,6 +30,10 @@
 
         <many-to-one field="typeMission" target-entity="Mission\Entity\Db\TypeMission">
             <join-column name="TYPE_MISSION_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <many-to-one field="mission" target-entity="Mission\Entity\Db\Mission">
+            <join-column name="MISSION_ID" referenced-column-name="ID"/>
         </many-to-one>
 
         <many-to-one field="typeService" target-entity="Service\Entity\Db\TypeService">

@@ -12,6 +12,7 @@ use Application\Service\Traits\ValidationServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Doctrine\ORM\QueryBuilder;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use Mission\Entity\Db\Mission;
 use RuntimeException;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 
@@ -233,4 +234,51 @@ class ContratService extends AbstractEntityService
         }
     }
 
+
+
+    public function hasAvenant(Contrat $contrat)
+    {
+        $dql   = '
+        SELECT
+          c
+        FROM
+          Contrat\Entity\Db\Contrat c
+        WHERE
+          c.histoDestruction IS NULL
+          AND c.contrat = :contrat';
+
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameter('contrat', $contrat->getId());
+
+        $res = $query->getResult();
+        if($res){
+            return true;
+        }
+        return false;
+    }
+
+    public function getContratInitialMission(?Mission $mission)
+    {
+        $dql   = '
+        SELECT
+          c
+        FROM
+        Contrat\Entity\Db\Contrat c
+        JOIN c.mission m
+        JOIN m.volumesHoraires      vhm
+        WHERE
+          m.histoDestruction IS NULL
+          AND vhm.histoDestruction IS NULL
+          AND  m.id = :mission
+          AND c.contrat IS NULL';
+
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameter('mission', $mission->getId());
+
+        $res = $query->getResult();
+        if($res){
+            return $res[0];
+        }
+        return null;
+    }
 }

@@ -6,7 +6,7 @@ use Contrat\Assertion\ContratAssertion;
 /**
  * @var $this          \Application\View\Renderer\PhpRenderer
  * @var $contrat       \Contrat\Entity\Db\Contrat
- * @var $services      \Enseignement\Entity\Db\Service[]
+ * @var $services      array
  * @var $avenant_param int
  */
 
@@ -57,6 +57,7 @@ if ($urlAjouter) {
 $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default');
 
 ?>
+
 <div class="contrat card bg-<?= $card ?>" id="contrat-<?= $contrat->getId() ?>">
     <div class="card-header card-header-h3">
         <?php if ($urlExport && $urlEmail): ?>
@@ -148,7 +149,7 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 <small>(cliquez pour afficher/cacher)</small>
             </a>
             <div class="collapse" id="details-enseignements-contrat-<?= $contrat->getId() ?>">
-                <?= $this->partial('contrat/contrat/partial/contrat-heures', ['contrat' => $contrat, 'services' => $services, 'structure' => $contrat->getStructure()]); ?>
+                <?= $this->partial('contrat/contrat/partial/contrat-heures', ['contrat' => $contrat, 'services' => $services, 'structure' => $contrat->getStructure(), 'mission' => null, 'contractualiser' => true ]); ?>
             </div>
         </div>
     </div>
@@ -158,14 +159,14 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
             <!-- Actions -->
             <?php if ($urlValidation): ?>
                 <a
-                        href="<?= $urlValidation ?>"
-                        class="btn btn-primary pop-ajax"
-                        title="Valider le contrat"
-                        data-content="Confirmez-vous cette validation ?"
-                        data-confirm="true"
-                        data-confirm-button="Je confirme"
-                        data-cancel-button="Non"
-                        data-submit-reload="true"
+                    href="<?= $urlValidation ?>"
+                    class="btn btn-primary pop-ajax"
+                    title="Valider le contrat"
+                    data-content="Confirmez-vous cette validation ?"
+                    data-confirm="true"
+                    data-confirm-button="Je confirme"
+                    data-cancel-button="Non"
+                    data-submit-reload="true"
                 >
                     <i class="fas fa-thumbs-up"></i> Valider
                 </a>
@@ -180,13 +181,13 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
 
             <?php if ($urlDevalidation): ?>
                 <a
-                        href="<?= $urlDevalidation ?>"
-                        class="btn btn-danger pop-ajax"
-                        data-submit-reload="true"
-                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
-                        data-confirm="true"
-                        data-confirm-button="Oui"
-                        data-cancel-button="Non"
+                    href="<?= $urlDevalidation ?>"
+                    class="btn btn-danger pop-ajax"
+                    data-submit-reload="true"
+                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
+                    data-confirm="true"
+                    data-confirm-button="Oui"
+                    data-cancel-button="Non"
                 >
                     <i class="fas fa-thumbs-down"></i> Dévalider
                 </a>
@@ -194,13 +195,13 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
 
             <?php if ($urlSuppression): ?>
                 <a
-                        href="<?= $urlSuppression ?>"
-                        class="btn btn-danger pop-ajax"
-                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous la suppression <?= lcfirst($contrat->toString(true, true)) ?> ?</p>"
-                        data-confirm="true"
-                        data-confirm-button="Oui"
-                        data-cancel-button="Non"
-                        data-submit-reload="true"
+                    href="<?= $urlSuppression ?>"
+                    class="btn btn-danger pop-ajax"
+                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous la suppression <?= lcfirst($contrat->toString(true, true)) ?> ?</p>"
+                    data-confirm="true"
+                    data-confirm-button="Oui"
+                    data-cancel-button="Non"
+                    data-submit-reload="true"
                 >
                     <i class="fas fa-trash-can"></i> Supprimer
                 </a>

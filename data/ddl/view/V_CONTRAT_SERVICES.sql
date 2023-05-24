@@ -11,6 +11,7 @@ WITH services AS (
             ep.id                                                                       element_pedagogique_id,
             NULL                                                                        fonction_referentiel_id,
             NULL                                                                        type_mission_id,
+            NULL                                                                        mission_id,
             SUM(CASE WHEN ti.code = 'CM' THEN vh.heures ELSE 0 END)                     heures_cm,
             SUM(CASE WHEN ti.code = 'TD' THEN vh.heures ELSE 0 END)                     heures_td,
             SUM(CASE WHEN ti.code = 'TP' THEN vh.heures ELSE 0 END)                     heures_tp,
@@ -54,6 +55,7 @@ WITH services AS (
             NULL                    element_pedagogique_id,
             fr.id                   fonction_referentiel_id,
             NULL                    type_mission_id,
+            NULL                    mission_id,
             0                       heures_cm,
             0                       heures_td,
             0                       heures_tp,
@@ -97,6 +99,7 @@ WITH services AS (
             NULL                    element_pedagogique_id,
             NULL                    fonction_referentiel_id,
             tm.id                   type_mission_id,
+            m.id                    mission_id,
             0                       heures_cm,
             0                       heures_td,
             0                       heures_tp,
@@ -123,7 +126,8 @@ WITH services AS (
             tm.code,
             tm.libelle,
             str.id,
-            tm.id
+            tm.id,
+            m.id
         )
 
         SELECT
@@ -137,6 +141,7 @@ WITH services AS (
             res.element_pedagogique_id,
             res.fonction_referentiel_id,
             res.type_mission_id,
+            res.mission_id,
             res."cm" cm,
             res."td" td,
             res."tp" tp,
@@ -165,6 +170,7 @@ WITH services AS (
                 s.element_pedagogique_id                                                                                                         element_pedagogique_id,
                 s.fonction_referentiel_id                                                                                                        fonction_referentiel_id,
                 s.type_mission_id                                                                                                                type_mission_id,
+                s.mission_id                                                                                                                     mission_id,
                 CASE WHEN SUM(s.heures_cm) = 0     THEN to_char(0) ELSE REPLACE(ltrim(to_char(SUM(s.heures_cm), '999999.00')),'.',',')     END   "cm",
                 CASE WHEN SUM(s.heures_td) = 0     THEN to_char(0) ELSE REPLACE(ltrim(to_char(SUM(s.heures_td), '999999.00')),'.',',')     END   "td",
                 CASE WHEN SUM(s.heures_tp) = 0     THEN to_char(0) ELSE REPLACE(ltrim(to_char(SUM(s.heures_tp), '999999.00')),'.',',')     END   "tp",
@@ -186,5 +192,6 @@ WITH services AS (
                 ts.id,
                 element_pedagogique_id,
                 fonction_referentiel_id,
-                type_mission_id
+                type_mission_id,
+                mission_id
         ) res

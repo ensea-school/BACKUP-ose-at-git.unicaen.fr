@@ -12,6 +12,7 @@ return [
         'NUMERO_AVENANT',
         'VALIDATION_ID',
         'HISTO_DESTRUCTION',
+        'MISSION_ID',
     ],
 ];
 

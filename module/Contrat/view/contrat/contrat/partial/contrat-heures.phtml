@@ -5,11 +5,13 @@
  * @var $services
  * @var $structure      \Application\Entity\Db\Structure
  * @var $avenant_param  int
+ * @var $mission        int
+ * @var $contractualiser  bool
+ *
  */
 
 ?>
-
-<?php if (isset($services[\Service\Entity\Db\TypeService::CODE_ENSEIGNEMENT]) && $services[\Service\Entity\Db\TypeService::CODE_ENSEIGNEMENT]): ?>
+<?php if (($mission == null || $contractualiser) && isset($services[\Service\Entity\Db\TypeService::CODE_ENSEIGNEMENT]) && count($services[\Service\Entity\Db\TypeService::CODE_ENSEIGNEMENT])>0): ?>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -24,6 +26,8 @@
         </thead>
         <tbody>
         <?php foreach ($services[\Service\Entity\Db\TypeService::CODE_ENSEIGNEMENT] as $element):
+
+
             if ($element->getStructure() != $structure && $element->getStructure() != null) {
                 continue;
             }
@@ -67,7 +71,7 @@
         </tbody>
     </table>
 <?php endif; ?>
-<?php if (isset($services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL]) && $services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL]): ?>
+<?php if (($mission == null || $contractualiser) && isset($services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL]) && count($services[\Service\Entity\Db\TypeService::CODE_REFERENTIEL])>0): ?>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -94,7 +98,7 @@
         </tbody>
     </table>
 <?php endif; ?>
-<?php if (isset($services[\Service\Entity\Db\TypeService::CODE_MISSION]) && $services[\Service\Entity\Db\TypeService::CODE_MISSION]): ?>
+<?php if (($mission != null||$contractualiser) && isset($services[\Service\Entity\Db\TypeService::CODE_MISSION]) && count($services[\Service\Entity\Db\TypeService::CODE_MISSION])>0): ?>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -104,7 +108,7 @@
         </thead>
         <tbody>
         <?php foreach ($services[\Service\Entity\Db\TypeService::CODE_MISSION] as $element):
-            if ($element->getStructure() != $structure && $element->getStructure() != null) {
+            if (($element->getStructure() != $structure && $element->getStructure() != null) || ($element->getMission()->getId() != $mission && $contractualiser ==false)) {
                 continue;
             }
             ?>

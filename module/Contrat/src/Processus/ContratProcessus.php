@@ -25,6 +25,7 @@ use Laminas\Mime\Message;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part;
 use LogicException;
+use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
@@ -117,6 +118,7 @@ class ContratProcessus extends AbstractProcessus
     }
 
 
+
     public function getServicesRef(Intervenant $intervenant, Contrat $contrat = null, Structure $structure = null, bool $detach = true): array
     {
         $services = [];
@@ -173,6 +175,7 @@ class ContratProcessus extends AbstractProcessus
     }
 
 
+
     /**
      * @throws MappingException
      */
@@ -223,7 +226,7 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return Contrat
      */
-    public function creer(Intervenant $intervenant, Structure $structure = null): Contrat
+    public function creer(Intervenant $intervenant, Structure $structure = null, Mission $mission = null): Contrat
     {
         $contrat = $this->getServiceContrat()->newEntity();
         /* @var $contrat Contrat */
@@ -231,7 +234,10 @@ class ContratProcessus extends AbstractProcessus
         $contrat->setIntervenant($intervenant);
         $contrat->setStructure($structure);
         $contrat->setTotalHetd($this->getIntervenantTotalHetd($intervenant));
-        $this->qualification($contrat); // init contrat/avenant
+        if($mission != null){
+            $contrat->setMission($mission);
+        }
+        $this->qualification($contrat, $mission); // init contrat/avenant
 
         return $contrat;
     }
@@ -247,7 +253,7 @@ class ContratProcessus extends AbstractProcessus
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function enregistrer(Contrat $contrat): self
+    public function enregistrer(Contrat $contrat, Mission $mission = null): self
     {
         if ($contrat->getId()) {
             throw new LogicException('Le contrat existe déjà. Il ne peut pas être recréé');
@@ -256,38 +262,42 @@ class ContratProcessus extends AbstractProcessus
         // on sauvegarde le contrat
         $this->getServiceContrat()->save($contrat);
 
-        // on récupère les services non contractualisés et on la place les VH correspondants dans le contrat
-        $services = $this->getServices($contrat->getIntervenant(), null, $contrat->getStructure(), false);
-        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
-        foreach ($services as $service) {
-            foreach ($service->getVolumeHoraire() as $vh) {
-                /* @var $vh VolumeHoraire */
-                $vh->setContrat($contrat);
-                $this->getEntityManager()->persist($vh);
+        if ($mission == null) {
+            // on récupère les services non contractualisés et on la place les VH correspondants dans le contrat
+            $services = $this->getServices($contrat->getIntervenant(), null, $contrat->getStructure(), false);
+            $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
+            foreach ($services as $service) {
+                foreach ($service->getVolumeHoraire() as $vh) {
+                    /* @var $vh VolumeHoraire */
+                    $vh->setContrat($contrat);
+                    $this->getEntityManager()->persist($vh);
+                }
+            }
+
+            // on récupère les services referentiel non contractualisés et on la place les VHR correspondants dans le contrat
+            $servicesRef = $this->getServicesRef($contrat->getIntervenant(), null, $contrat->getStructure(), false);
+            $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
+            foreach ($servicesRef as $serviceRef) {
+                foreach ($serviceRef->getVolumeHoraireReferentiel() as $vhr) {
+                    /* @var $vhr VolumeHoraireReferentiel */
+                    $vhr->setContrat($contrat);
+                    $this->getEntityManager()->persist($vhr);
+                }
+            }
+        } else {
+
+            // on récupère les heures lié a la mission et on les places dans le contrat
+            $servicesMissions = $this->getServicesMission($contrat->getIntervenant(), null, $mission, false);
+            $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
+            foreach ($servicesMissions as $servicesMission) {
+                foreach ($servicesMission->getVolumesHorairesPrevus() as $vhm) {
+                    /* @var $vhm VolumeHoraireMission */
+                    $vhm->setContrat($contrat);
+                    $this->getEntityManager()->persist($vhm);
+                }
             }
         }
 
-        // on récupère les services referentiel non contractualisés et on la place les VHR correspondants dans le contrat
-        $servicesRef = $this->getServicesRef($contrat->getIntervenant(), null, $contrat->getStructure(), false);
-        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
-        foreach ($servicesRef as $serviceRef) {
-            foreach ($serviceRef->getVolumeHoraireReferentiel() as $vhr) {
-                /* @var $vhr VolumeHoraireReferentiel */
-                $vhr->setContrat($contrat);
-                $this->getEntityManager()->persist($vhr);
-            }
-        }
-
-        // on récupère les services referentiel non contractualisés et on la place les VHR correspondants dans le contrat
-        $servicesMissions = $this->getServicesMission($contrat->getIntervenant(), null, $contrat->getStructure(), false);
-        $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
-        foreach ($servicesMissions as $servicesMission) {
-            foreach ($servicesMission->getVolumesHorairesPrevus() as $vhm) {
-                /* @var $vhm VolumeHoraireMission */
-                $vhm->setContrat($contrat);
-                $this->getEntityManager()->persist($vhm);
-            }
-        }
 
         $this->getORMEventListenersHistoriqueListener()->setEnabled(true);
         $this->getEntityManager()->flush();
@@ -314,8 +324,8 @@ class ContratProcessus extends AbstractProcessus
 
         // recherche des VH liés au contrat
         $vhs = $sVH->getList($sVH->finderByContrat($contrat));
-        $vhr = $this->getEntityManager()->getRepository(VolumeHoraireReferentiel::class)->findBy(['contrat'=>$contrat->getId()]);
-        $vhm = $this->getEntityManager()->getRepository(VolumeHoraireMission::class)->findBy(['contrat'=>$contrat->getId()]);
+        $vhr = $this->getEntityManager()->getRepository(VolumeHoraireReferentiel::class)->findBy(['contrat' => $contrat->getId()]);
+        $vhm = $this->getEntityManager()->getRepository(VolumeHoraireMission::class)->findBy(['contrat' => $contrat->getId()]);
 
         // détachement du contrat et des VH
         $this->getORMEventListenersHistoriqueListener()->setEnabled(false);
@@ -399,11 +409,15 @@ class ContratProcessus extends AbstractProcessus
     {
         if (!$contrat->getTypeContrat()) return true; // pas de type alors oui, on qualifie!!
 
-        $contratInitial = $contrat->getIntervenant()->getContratInitial();
-        if (($contratInitial && !$contratInitial->getValidation()) || $contrat === $contratInitial) {
-            $contratInitial = null; //projet ou lui-même seulement donc on oublie
+        if($contrat->getMission() == null){
+            $contratInitial = $contrat->getIntervenant()->getContratInitial();
+        }else{
+            $contratInitial = $this->getServiceContrat()->getContratInitialMission($contrat->getMission());
         }
 
+        if($contratInitial && (!$contratInitial->getValidation()) || $contratInitial === $contrat){
+            $contratInitial = null; //projet ou lui-même seulement donc on oublie
+        }
         return $contrat->estUnAvenant() === !$contratInitial;
     }
 
@@ -416,17 +430,29 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return $this
      */
-    public function qualification(Contrat $contrat): self
+    public function qualification(Contrat $contrat, Mission $mission = null): self
     {
         if (null !== $contrat->getTypeContrat()) return $this;
 
-        $contratInitial = $contrat->getIntervenant()->getContratInitial();
-        if (($contratInitial && !$contratInitial->getValidation()) || $contrat === $contratInitial) {
-            $contratInitial = null; //projet ou lui-même seulement donc on oublie
+        if ($mission == null) {
+            $contratInitial = $contrat->getIntervenant()->getContratInitial();
+
+            if (($contratInitial && !$contratInitial->getValidation()) || $contrat === $contratInitial) {
+                $contratInitial = null; //projet ou lui-même seulement donc on oublie
+            }
+        }else{
+            $contratInitial = $this->getServiceContrat()->getContratInitialMission($mission);
+            if($contratInitial && (!$contratInitial->getValidation()) || $contratInitial === $contrat){
+                $contratInitial = null; //projet ou lui-même seulement donc on oublie
+            }
         }
 
         if ($contratInitial) {
-            $this->qualificationEnAvenant($contrat);
+            if($mission == null){
+                $this->qualificationEnAvenant($contrat);
+            }else{
+                $this->qualificationEnAvenant($contrat, $mission);
+            }
         } else {
             $this->qualificationEnContrat($contrat);
         }
@@ -458,9 +484,15 @@ class ContratProcessus extends AbstractProcessus
 
 
 
-    protected function qualificationEnAvenant(Contrat $contrat): self
+    protected function qualificationEnAvenant(Contrat $contrat, Mission $mission = null): self
     {
-        $contratInitial = $contrat->getIntervenant()->getContratInitial();
+        if($mission == null){
+            $contratInitial = $contrat->getIntervenant()->getContratInitial();
+
+        }else{
+            $contratInitial = $this->getServiceContrat()->getContratInitialMission($mission);
+            $contrat->setMission($mission);
+        }
 
         $contrat->setContrat($contratInitial);
         $contrat->setTypeContrat($this->getServiceTypeContrat()->getAvenant());
@@ -471,8 +503,11 @@ class ContratProcessus extends AbstractProcessus
 
 
 
-    protected function qualificationEnContrat(Contrat $contrat): self
+    protected function qualificationEnContrat(Contrat $contrat, Mission $mission = null): self
     {
+        if($mission != null){
+            $contrat->setMission($mission);
+        }
         $contrat->setContrat();
         $contrat->setTypeContrat($this->getServiceTypeContrat()->getContrat());
         $contrat->setNumeroAvenant(0);
@@ -560,7 +595,7 @@ class ContratProcessus extends AbstractProcessus
 
 
 
-    private function getServicesMission(Intervenant $intervenant, Contrat $contrat = null, Structure $structure = null, bool $detach = true)
+    private function getServicesMission(Intervenant $intervenant, Contrat $contrat = null, Mission $mission = null, bool $detach = true)
     {
         $services = [];
 
@@ -569,10 +604,10 @@ class ContratProcessus extends AbstractProcessus
             . "AND tvm.code = '" . TypeVolumeHoraire::CODE_PREVU . "' "
             . "AND evm.code = '" . EtatVolumeHoraire::CODE_VALIDE . "' ";
 
-        if ($structure) {
-            $fStructure = "AND str = :structure";
+        if ($mission) {
+            $fMission = "AND m.id = :mission";
         } else {
-            $fStructure = '';
+            $fMission = '';
         }
 
         $dql   = "
@@ -591,15 +626,15 @@ class ContratProcessus extends AbstractProcessus
           AND m.histoDestruction IS NULL
           AND vhm.histoDestruction IS NULL
           AND " . ($contrat ? $fContrat : $fNonContrat) . "
-          $fStructure
+          $fMission
         ";
         $query = $this->getEntityManager()->createQuery($dql);
         $query->setParameter('intervenant', $intervenant);
         if ($contrat) {
             $query->setParameter('contrat', $contrat);
         }
-        if ($structure) {
-            $query->setParameter('structure', $structure);
+        if ($fMission) {
+            $query->setParameter('mission', $mission->getId());
         }
 
         foreach ($query->execute() as $service) {
@@ -612,4 +647,11 @@ class ContratProcessus extends AbstractProcessus
 
         return $services;
     }
+
+
+
+
+
+
+
 }

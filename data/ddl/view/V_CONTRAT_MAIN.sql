@@ -39,6 +39,7 @@ SELECT ct.annee_id,
        ct."totalHETD",
        ct."tauxHoraireValeur",
        ct."tauxHoraireDate",
+       ct."tauxId",
        ct."dateSignature",
        ct."modifieComplete",
        CASE WHEN ct.est_contrat = 1 THEN 1 ELSE NULL END  "contrat1",
@@ -96,8 +97,9 @@ SELECT ct.annee_id,
              COALESCE(d.numero_insee, i.numero_insee)                                            "numInsee",
              si.libelle                                                                          "statut",
              REPLACE(ltrim(to_char(COALESCE(c.total_hetd, fr.total, 0), '999999.00')), '.', ',') "totalHETD",
-             REPLACE(ltrim(to_char(COALESCE(OSE_PAIEMENT.get_taux_horaire(COALESCE(si.taux_remu_id,tr.id), a.date_debut), 0), '999999.00')), '.', ',')              "tauxHoraireValeur",
-             COALESCE(to_char(OSE_PAIEMENT.get_taux_horaire_date(COALESCE(si.taux_remu_id,tr.id), a.date_debut), 'dd/mm/YYYY'), 'TAUX INTROUVABLE')              "tauxHoraireDate",
+             REPLACE(ltrim(to_char(COALESCE(OSE_PAIEMENT.get_taux_horaire(COALESCE(tm.taux_remu_id, si.taux_remu_id,tr.id), a.date_debut), 0), '999999.00')), '.', ',')          "tauxHoraireValeur",
+             COALESCE(to_char(OSE_PAIEMENT.get_taux_horaire_date(COALESCE(tm.taux_remu_id,si.taux_remu_id,tr.id), a.date_debut), 'dd/mm/YYYY'), 'TAUX INTROUVABLE')              "tauxHoraireDate",
+             COALESCE(tm.taux_remu_id, si.taux_remu_id,tr.id)                                "tauxId",
              to_char(COALESCE(v.histo_creation, a.date_debut), 'dd/mm/YYYY')                 "dateSignature",
              CASE
                  WHEN c.structure_id <> COALESCE(cp.structure_id, 0) THEN 'modifié'
@@ -141,6 +143,8 @@ SELECT ct.annee_id,
     LEFT JOIN                      hs ON hs.contrat_id = c.id
     LEFT JOIN                      la ON la.contrat_id = c.id
     LEFT JOIN contrat              cp ON cp.id = c.contrat_id
+    LEFT JOIN mission m on c.mission_id = m.id
+    LEFT JOIN type_mission tm ON m.type_mission_id = tm.id
   WHERE
     c.histo_destruction IS NULL
 ) ct

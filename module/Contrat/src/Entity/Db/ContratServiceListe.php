@@ -5,6 +5,7 @@ namespace Contrat\Entity\Db;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
+use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\TypeMission;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use Referentiel\Entity\Db\FonctionReferentiel;
@@ -48,6 +49,8 @@ class ContratServiceListe
     private ?FonctionReferentiel $fonctionReferentiel;
 
     private ?TypeMission $typeMission;
+
+    private ?Mission $mission;
 
 
 
@@ -207,6 +210,26 @@ class ContratServiceListe
     public function getServiceComposante()
     {
         return $this->serviceComposante;
+    }
+
+
+
+    /**
+     * @return Mission|null
+     */
+    public function getMission(): ?Mission
+    {
+        return $this->mission;
+    }
+
+
+
+    /**
+     * @param Mission|null $mission
+     */
+    public function setMission(?Mission $mission): void
+    {
+        $this->mission = $mission;
     }
 }
 

@@ -4,14 +4,15 @@ use Application\Provider\Privilege\Privileges;
 use Service\Entity\Db\TypeService;
 
 /**
- * @var $this                       \Application\View\Renderer\PhpRenderer
- * @var $title                      string
- * @var $intervenant                \Application\Entity\Db\Intervenant
- * @var $contrats                   \Contrat\Entity\Db\Contrat[]
- * @var $avenant_param              boolean
- * @var $contratDirect              boolean
- * @var $hasContrat                 boolean
+ * @var $this                           \Application\View\Renderer\PhpRenderer
+ * @var $title                          string
+ * @var $intervenant                    \Application\Entity\Db\Intervenant
+ * @var $contrats                       \Contrat\Entity\Db\Contrat[]
+ * @var $avenant_param                  boolean
+ * @var $contratDirect                  boolean
+ * @var $hasContrat                     boolean
  * @var $services
+ * @var $missionNotContrat              bool[]
  */
 
 $structList = [];
@@ -21,9 +22,9 @@ foreach ($contrats as $contrat) {
 
 $serviceNonContractToShow = [];
 foreach ($services['non-contractualises'] as $structure => $servicesNCTypes) {
-        if ($avenant_param == 1 || (!in_array($structure, $structList) && !in_array(null, $structList) && !($avenant_param < 0 && $hasContrat))) {
-            $serviceNonContractToShow[] = $structure;
-        }
+    if ($avenant_param == 1 || (!in_array($structure, $structList) && !in_array(null, $structList) && !($avenant_param < 0 && $hasContrat))) {
+        $serviceNonContractToShow[] = $structure;
+    }
 }
 
 
@@ -36,6 +37,7 @@ if (empty($serviceNonContractToShow)) {
     $this->messenger()->addMessage('Tous les enseignements prévisionnels validés ont fait l\'objet d\'un contrat ou d\'un avenant.', 'success');
 }
 
+$showEnseignement = (!$hasContrat && !empty($serviceNonContractToShow) || $avenant_param > 0 || $avenant_param == 0) && !empty($serviceNonContractToShow);
 $this->messenger() ?>
 
 <style>
@@ -54,50 +56,66 @@ $this->messenger() ?>
 </style>
 
 <?php if ($contrats || !empty($serviceNonContractToShow)):
-    if ((!$hasContrat && !empty($serviceNonContractToShow)|| $avenant_param > 0 || $avenant_param == 0) && !empty($serviceNonContractToShow)): ?>
+    if ($showEnseignement || !empty($missionNotContrat)): ?>
         <table class="table table-bordered table-hover">
             <tr>
                 <th class="structure">Composante</th>
-                <th>Service(s) non contractualisé(s)</th>
+                <th>heure(s) non contractualisé(s)</th>
             </tr>
             <?php $contratPrevu = []; ?>
             <?php foreach ($services['non-contractualises'] as $structure => $serviceNonContract): ?>
                 <?php foreach (TypeService::CODES as $typeServiceCode):
-                    foreach ($serviceNonContract[$typeServiceCode] as $sid =>$servicesNC):
+                    foreach ($serviceNonContract[$typeServiceCode] as $sid => $servicesNC):
                         $typeService = $servicesNC->getTypeService();
                         $structure = $servicesNC->getStructure();
-                        if (in_array($structure, $contratPrevu)) {
+                        if (in_array($structure, $contratPrevu) && $typeServiceCode != TypeService::CODE_MISSION) {
+                            continue;
+                        }
+                        if (!in_array($structure->getId(), $serviceNonContractToShow) && $typeServiceCode != TypeService::CODE_MISSION) {
                             continue;
                         }
                         $contratPrevu[] = $structure;
                         $contrat        = new \Contrat\Entity\Db\Contrat();
                         $contrat->setIntervenant($intervenant);
                         $contrat->setStructure($structure);
-                        if (!in_array($structure->getId(), $serviceNonContractToShow)) {
-                            continue;
-                        }
+
                         $canCreer = $this->isAllowed($contrat, Privileges::CONTRAT_CREATION);
                         ?>
+
+                        <?php if ($typeServiceCode != TypeService::CODE_MISSION || isset($missionNotContrat[$servicesNC->getMission()->getId()]) || (!isset($missionNotContrat[$servicesNC->getMission()->getId()]) && $avenant_param > 0)): ?>
                         <tr>
                             <td><?= $structure ?></td>
                             <td>
                                 <?php if ($canCreer):
-                                    if ($contratDirect):?>
-                                        <a class="btn btn-primary"
-                                           href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
-                                            <i class="fas fa-file"></i> Créer un <?= $hasContrat ? 'avenant' : 'contrat' ?>
-                                        </a>
-                                    <?php else: ?>
-                                        <a class="btn btn-primary"
-                                           href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId()]); ?>">
-                                            <i class="fas fa-file"></i> Créer un projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
-                                        </a>
+                                    if ($typeServiceCode != TypeService::CODE_MISSION && $showEnseignement):
+                                        if ($contratDirect):?>
+                                            <a class="btn btn-primary"
+                                               href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId(), 'mission' => null]); ?>">
+                                                <i class="fas fa-file"></i> Créer un <?= $hasContrat ? 'avenant' : 'contrat' ?>
+                                            </a>
+                                        <?php else: ?>
+                                            <a class="btn btn-primary"
+                                               href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getId(), 'structure' => $structure->getId(), 'mission' => null]); ?>">
+                                                <i class="fas fa-file"></i> Créer un projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
+                                            </a>
+                                        <?php endif;
+                                    else: ?>
+                                        <?php if ($contratDirect): ?>
+                                            <a class="btn btn-primary"
+                                               href="<?= $this->url('contrat/creer-mission', ['intervenant' => $intervenant->getId(), 'mission' => $servicesNC->getMission()->getId()]); ?>">
+                                                <i class="fas fa-file"></i> Créer un <?= !isset($missionNotContrat[$servicesNC->getMission()->getId()]) ? 'avenant' : 'contrat' ?>
+                                            </a>
+                                        <?php else: ?>
+                                            <a class="btn btn-primary"
+                                               href="<?= $this->url('contrat/creer-mission', ['intervenant' => $intervenant->getId(), 'mission' => $servicesNC->getMission()->getId()]); ?>">
+                                                <i class="fas fa-file"></i> Créer un projet <?= !isset($missionNotContrat[$servicesNC->getMission()->getId()]) ? 'd\'avenant' : 'de contrat' ?>
+                                            </a>
+                                        <?php endif; ?>
                                     <?php endif;
                                 else:
-//                                    echo "need to repair the workflow here";
                                     try {
                                         echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
-                                    } catch(\Exception $e){
+                                    } catch (\Exception $e) {
                                         //TODO Le referentiel ne possède pas d'agréement et ne peut donc etre contractualisé sans service lorsque l'agréement est obligatoire
                                         echo "Ces heures ne peuvent pas être contractualisées";
                                     }
@@ -113,10 +131,15 @@ $this->messenger() ?>
                                 </p>
                                 <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>"
                                      id="details-enseignements-structure-<?= $structure->getId() ?>">
-                                    <?= $this->partial('contrat/contrat/partial/contrat-heures', ['contrat' => $contrat, 'services' => $services['non-contractualises'][$structure->getId()], 'structure' => $structure]); ?>
+                                    <?php if ($servicesNC->getMission()): ?>
+                                        <?= $this->partial('contrat/contrat/partial/contrat-heures', ['contrat' => $contrat, 'services' => $services['non-contractualises'][$structure->getId()], 'structure' => $structure, 'mission' => $servicesNC->getMission()->getId(), 'contractualiser' => false]); ?>
+                                    <?php else: ?>
+                                        <?= $this->partial('contrat/contrat/partial/contrat-heures', ['contrat' => $contrat, 'services' => $services['non-contractualises'][$structure->getId()], 'structure' => $structure, 'mission' => null, 'contractualiser' => false]); ?>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
+                    <?php endif; ?>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
             <?php endforeach; ?>
@@ -125,7 +148,7 @@ $this->messenger() ?>
     <div class="well">
         <h2>Contrats et avenants</h2>
         <?php foreach ($contrats as $contrat): ?>
-            <?= $this->partial('contrat/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param]);
+            <?php echo $this->partial('contrat/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()], 'emailIntervenant' => $emailIntervenant, 'contratDirect' => $contratDirect, 'avenant_param' => $avenant_param]);
             ?>
 
         <?php endforeach; ?>

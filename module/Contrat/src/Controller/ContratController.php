@@ -146,9 +146,9 @@ class ContratController extends AbstractController
             $services['contractualises'][$contrat->getId()] = [];
         }
 
-            $sContratListe   = $this->getServiceContratServiceListe();
+        $sContratListe   = $this->getServiceContratServiceListe();
         $needToSeeResult = $sContratListe->getListeServiceContratIntervenant($intervenant);
-
+        $missionNotContrat=[];
 
         /** @var ContratServiceListe $serviceTest */
         foreach ($needToSeeResult as $serviceTest) {
@@ -165,6 +165,12 @@ class ContratController extends AbstractController
                     }
                 }
                 $services ['non-contractualises'][$serviceTest->getStructure()->getId()][$serviceTest->getTypeService()->getCode()][$serviceTest->getId()] = $serviceTest;
+                if($serviceTest->getTypeService()->getCode() == TypeService::CODE_MISSION){
+                    $mission = $this->getServiceContrat()->getContratInitialMission($serviceTest->getMission());
+                    if($mission == null){
+                        $missionNotContrat[$serviceTest->getMission()->getId()] = true;
+                    }
+                }
             }
         }
 
@@ -179,7 +185,7 @@ class ContratController extends AbstractController
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
 
-        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'hasContrat', 'avenant_param', 'contratDirect');
+        return compact('title', 'intervenant', 'contrats', 'services', 'emailIntervenant', 'hasContrat', 'avenant_param', 'contratDirect', 'missionNotContrat');
     }
 
 
@@ -190,10 +196,10 @@ class ContratController extends AbstractController
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
+        $serviceNC = $this->getEvent()->getParam('serviceNC');
         $structure = $this->getEvent()->getParam('structure');
         /* @var $structure Structure */
 
-        $avenantResult       = $this->getServiceParametres()->get('avenant');
         $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
         $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
 
@@ -206,6 +212,7 @@ class ContratController extends AbstractController
 //        }
 
         $contrat = $this->getProcessusContrat()->creer($intervenant, $structure);
+
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {
             $this->flashMessenger()->addSuccessMessage("La création de contrat/avenant pour $intervenant n'est pas possible.");
@@ -231,7 +238,52 @@ class ContratController extends AbstractController
         return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()]);
     }
 
+    public function creerMissionAction()
+    {
+        $this->initFilters();
 
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+        $mission = $this->getEvent()->getParam('mission');
+        $structure = $mission->getStructure();
+        /* @var $structure Structure */
+
+        $contratDirectResult = $this->getServiceParametres()->get('contrat_direct');
+        $contratDirect       = ($contratDirectResult == Parametre::CONTRAT_DIRECT);
+
+        if (!$intervenant) {
+            throw new LogicException('L\'intervenant n\'est pas précisé');
+        }
+
+//        if (!$structure) {
+//            throw new LogicException('La structure n\'est pas précisée');
+//        }
+
+        $contrat = $this->getProcessusContrat()->creer($intervenant, $structure, $mission);
+
+        if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {
+            $this->flashMessenger()->addSuccessMessage("La création de contrat/avenant pour $intervenant n'est pas possible.");
+        } else {
+            try {
+
+                $this->getProcessusContrat()->enregistrer($contrat, $mission);
+                if ($contratDirect) {
+                    $this->getProcessusContrat()->valider($contrat);
+                }
+
+                $this->updateTableauxBord($contrat->getIntervenant());
+                if ($contratDirect) {
+                    $this->flashMessenger()->addSuccessMessage(($contrat->estUnAvenant() ? 'L\'avenant' : 'Le contrat') . ' a bien été créé.');
+                } else {
+                    $this->flashMessenger()->addSuccessMessage('Le projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat') . ' a bien été créé.');
+                }
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
+        }
+
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getId()]);
+    }
 
     /**
      * Suppression d'un projet de contrat/avenant par la composante d'intervention.

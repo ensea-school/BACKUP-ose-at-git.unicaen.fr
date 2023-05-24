@@ -12,6 +12,7 @@ use Application\Service\Traits\ParametresServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Contrat\Service\ContratServiceAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
@@ -24,6 +25,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 class ContratAssertion extends AbstractAssertion
 {
     use ParametresServiceAwareTrait;
+    use ContratServiceAwareTrait;
 
     const PRIV_LISTER_FICHIERS   = 'contrat-lister-fichiers';
     const PRIV_SUPPRIMER_FICHIER = 'contrat-supprimer-fichier';
@@ -179,7 +181,9 @@ class ContratAssertion extends AbstractAssertion
     protected function assertDevalidation(Contrat $contrat)
     {
         if (!$contrat->estUnAvenant()) {
-            $devalid = $contrat->getIntervenant()->getContrat()->count() == 1; // on ne peut dévalider un contrat que si aucun avenant n'existe
+            $contratService = $this->getServiceContrat();
+            $devalid = !$contratService->hasAvenant($contrat);
+//            $devalid = $contrat->getIntervenant()->getContrat()->count() == 1; // on ne peut dévalider un contrat que si aucun avenant n'existe
         } else {
             $devalid = true;
         }

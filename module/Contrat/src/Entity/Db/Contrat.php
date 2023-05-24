@@ -4,6 +4,7 @@ namespace Contrat\Entity\Db;
 
 use Application\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Mission\Entity\Db\Mission;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -68,6 +69,10 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      * @var float
      */
     private $totalHetd;
+    /**
+     * @var Mission
+     */
+    private $mission;
 
 
 
@@ -473,5 +478,22 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     public function getResourceId()
     {
         return 'Contrat';
+    }
+
+
+
+    public function setMission(Mission $mission)
+    {
+        $this->mission = $mission;
+    }
+
+
+
+    /**
+     * @return Mission
+     */
+    public function getMission(): Mission
+    {
+        return $this->mission;
     }
 }

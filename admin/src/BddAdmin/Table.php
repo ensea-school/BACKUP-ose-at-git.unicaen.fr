@@ -424,9 +424,13 @@ class Table
         $bdd = $this->getBdd();
 
         $histoUserId = (int)$bdd->getOption('histo-user-id');
+        $hasHistorique = $this->hasHistorique();
+
+        if (empty($options['where']) && $hasHistorique){
+            $options['where'] = 'HISTO_DESTRUCTION IS NULL';
+        }
 
         $diff = [];
-
 
         /* Chargement des données actuelles, à mettre à jour */
         $oldData = $this->select($options['where'], $options);
@@ -434,7 +438,9 @@ class Table
             if (!isset($diff[$k])) {
                 $diff[$k] = ['old' => [], 'new' => []];
             }
-            $diff[$k]['old'] = $d;
+            if (!($hasHistorique && $d['HISTO_DESTRUCTION'])){
+                $diff[$k]['old'] = $d;
+            }
         }
 
 
@@ -471,7 +477,7 @@ class Table
                     $this->insert($new);
                     $result['insert']++;
                 }
-            } elseif (empty($new) && $options['soft-delete'] && $this->hasHistorique() && $histoUserId) { // SOFT DELETE
+            } elseif (empty($new) && $options['soft-delete'] && $hasHistorique && $histoUserId) { // SOFT DELETE
                 //On ne delete pas mais on historise
                 $new                         = $old;
                 $new['HISTO_DESTRUCTEUR_ID'] = $histoUserId;

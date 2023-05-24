@@ -3,13 +3,33 @@
 [OSE 20.3](#ose-203-23052023)
 
 
-# OSE 21 (à venir)
+# OSE 21 (juin 2023)
 
 ## Nouveautés
 
-* Nouvelle notion de mission, permettant de gérer les contrats étudiants
-* Taux HETD personnalisables
-* Possibilité de contractualiser des heures de service référentiel et de mission
+* Nouvelle notion de mission, permettant de [gérer les contrats étudiants](https://redmine.unicaen.fr/Etablissement/dmsf/files/71233/view)
+  * Référentiel de missions avec par défaut 8 types de mission proposés et personnalisables via une interface d'administration
+  * Gestion des offres d'emploi & des candidatures
+  * Nouvelle interface de gestion des missions
+  * Nouvelle interface de saisie des suivis de missions
+  * Adaptation de la partie paiement pour gérer les heures nocturnes/dimanches/jours fériés
+  * Plafonds applicables aux missions avec un nouveau périmètre par type de mission
+  
+  
+* Gestion renforcée des taux de paiement
+  * Possibilité de gérer de nouveaux taux différents du taux légal de 42,86€
+  * Nouvelle interface d'administration des taux de paiement
+  * Les taux peuvent être indexés sur d'autres taux (le SMIC par exemple)
+  * Les taux peuvent être appliqués globalement, par mission, par statut, par élément pédagogique, selon le contexte
+ 
+* Pièces justificatives
+  * Nouveau filtre permettant de ne demander des pièces que pour les étrangers 
+
+* Contrats de travail
+  * Possibilité de contractualiser des heures de référentiel
+  * Possibilité de contractualiser des heures de mission
+  * Possibilité d'avoir des états de sortie distincts pour les contrats et pour les avenants, par statut
+
 
 ## Améliorations
 
@@ -19,7 +39,9 @@
 ## Corrections de bugs
 
 * Il est possible de rentrer une date de retour sur un contrat après avoir téléversé le contrat sans avoir besoin de recharger la page
-* 
+ 
+
+
 
 # OSE 20.3 (23/05/2023)
 
@@ -47,6 +69,7 @@ Si vous créez des intervenants locaux sans leur remplir de données personnelle
 
 Vous trouverez plus d'indications ainsi que le filtre en question ici :
 https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Connecteurs-Import/Connecteurs-IMPORT.md#utilisation-pour-contr%C3%B4ler-la-synchronisation-des-intervenants
+
 
 
 # OSE 20.2 (28/04/2023)
@@ -646,261 +669,6 @@ Objectif : Connecteur Export OSE => Logiciel RH
     * [côté utilisateur](doc/Export-Rh/fonctionnalite.md)
     * [pour la configuration du connecteur](doc/Export-Rh/configuration.md)
 
-# OSE 16 (14/09/2021)
-
-Objectif : Connecteur import Actul+ & système différentiel pour comparer des charges d'enseignement
-
-## Correction de bug
-
-* Fiabilisation du calcul des charges d'enseignement (pb réglé au niveau des seuils qui n'étaient pas toujours les bons
-  utilisés)
-
-## Nouveautés
-
-* [Connecteur en import avec Actul+](doc/Connecteurs-Import/Actul/Connecteur.md)
-* Outil différentiel d'export des charges d'enseignement
-
-# OSE 15.7 (14/09/2021)
-
-## Correction de bugs
-
-* Correction de la validation du numéro INSEE dans le dossier de l'intervenant dans le cas d'un département de naissance
-  en Outre Mer (le numéro de département de naissance de l'INSEE dans ce cas peut être sur 2 ou 3 chiffres)
-* Bug sur la prise en compte de règles multiples sur les pièces jointes par statut d'intervenant (date de début et date
-  de fin)
-* Bug [#39644](https://redmine.unicaen.fr/Etablissement/issues/39644) corrigé au niveau de la formule de calcul de
-  l'Université d'Artois
-* Au niveau des formules et en mode test uniquement, si le vacataire n'avait pas de composante d'affectation, les
-  calculs pouvaient être faussés
-
-# OSE 15.6 (14/09/2021)
-
-## Correction de bugs
-
-* Dans ODF, la liste des éléments dont on peut forcer la synchronisation tient maintenant compte des données à restaurer
-  en plus de celles à insérer
-* Correction sur le rafraichissement du rôle de l'intervenant lors d'un changement d'année universitaire (#39020)
-* Correction sur la gestion des pièces jointes lors de l'archivage de celles-ci afin que cela impacte correctement la
-  feuille de route et les indicateurs notamment pour les nouvelles pièces jointes à valider (#39195)
-* Niveau Charges, lors de la duplication d'un scénario, le périmètre est pris en compte lors de la duplication pour ne
-  pas écraser des données d'autres composantes à tort
-
-# OSE 15.5 (01/07/2021)
-
-## Correction de bugs
-
-* Retour de la vua matérialisée MV_EXT_SERVICE qui avait disparu de OSE par erreur depuis la V15
-* Correction d'un problème de MAJ de MV_EXT_SERVICE depuis la 15.4 qui provoquait une erreur suite à la l'ajout d'une
-  colonne sur l'export des services.
-
-# OSE 15.4 (30/06/2021)
-
-## Nouveautés
-
-* L'année minimale d'import de l'offre de formation est maintenant paramétrable dans les paramètres généraux
-* On peut maintenant modifier les charges d'un élément pédagogique dans l'ODF s'il n'est plus synchronisé (cf. année
-  minimale d'import de l'offre de formation).
-* Formules de calcul de Sorbonne Nouvelle et de La Réunion
-* Ajout de la colonne "code RH" à l'export CSV des services
-
-## Correction de bugs
-
-* Inversion d'affichage Fi et Fa dans administration > type de ressources (#38510)
-* Meilleur rafraichissement de la feuille de route suite à la completion des données personnelles
-* Le dossier intervenant ne se crée en base maintenant uniquement si l'utilisateur appuie sur le bouton 'enregistrer',
-  afin d'éviter de créer des dossiers inutilement lors de la visualisation de la page données perso (#38835)
-
-# OSE 15.3 (09/06/2021)
-
-## Correction de bug
-
-* Formule de Poitiers modifiée (pb de division par zéro relatif au plafond réf. corrigé) (#37741)
-
-# OSE 15.2 (08/06/2021)
-
-## Nouveautés
-
-* Au niveau des types d'intervention, il est désormais possible de saisir des fractions (2/3 TP par exemple)
-* Lorsqu'on sélectionne une formation dans la page Offre de formation, les éléments pédagogiques dont ce n'est pas l'
-  étape principale sont listés tout de même #35881
-* Formule de calcul de l'Université de Strasbourg, en remplacement celle de l'Ensicaen (règles identiques).
-* Ajout d'un privilège 'Enseignement - Edition en masse' pour pouvoir différencier l'affichage du bouton 'Saisi d'un
-  nouvel enseignement' dans la partie gestion service, de la partie feuille de route de l'intervenant (#36390)
-
-## Corrections de bugs
-
-* Vérification que le champs 'numéro de rue' contient uniquement des chiffres lors de l'enregistrement des données
-  personnelles (#37492)
-* Il n'est désormais plus possible de saisir un horaire de fin antérieur à celui de début en mode de saisie de service
-  calendaire (#36319)
-* Les plafonds sont de nouveau bloquants si trop d'heures prévisionnelles sont reportées en réalisé
-* Suppression de la colonne 'Premier recrutement' de l'export CSV des agréments. (#38075)
-* Correction du lien de 'Demande de mise en paiement' sur la feuille de route (#33025)
-* Correction du lien vers la fiche intervenant dans le menu gestion service (#38166)
-* Correction apparition d'un message de re-soumission du formulaire des données personnelles sur diverses actions (
-  valider, devalider, supprimer etc...) (#38248)
-* Redirection vers la fiche individuelle de l'intervenant lors de la suppression des données personnelles pour éviter de
-  réinitialiser automatiquement le dossier (#37466)
-
-# OSE 15.1 (06/05/2021)
-
-## Nouveautés
-
-* Ajout d'un privilège pour afficher / masquer l'adresse, email pro, email perso, téléphone (RGPD) sur la fiche
-  intervenant
-* Ajout d'un nouveau privilège pour dissocier le droit d'exporter en PDF les états de paiement et les mises en
-  paiement (#35845)
-* Ajout des volumes horaires par type d'intervention (CM,TP,TD) et du nombre de groupes par élément pédagogique dans
-  l'extraction de l'offre de formation (#36625)
-* Amélioration ergonomique dans l'écran de gestion des agréments par lot: visualisation de la fiche intervenant dans un
-  nouvel onglet au lieu d'une fenêtre modale trop petite qui provoquait notamment un dysfonctionnement de l'affichage
-  des PJ (#37269)
-* Les heures payées en année antérieure / année en cours (AA/AC) peuvent être réparties de manière personnalisée,
-  autrement qu'en 4/6 - 6/10. Pour en savoir plus, vous pouvez consulter la documentation administrateur.
-* Formules de calcul de Paris, Artois, Lille
-* Formule de calcul de Poitiers mise à jour
-* Augmentation de la taille des libellés pour les fonctions référentielles
-
-## Corrections de bugs
-
-* Correction d'un bug de rafraichissement des pièces jointes dans le scénario suivant : dévalidation de la pièce jointe,
-  suppression du fichier, téléversement du nouveau fichier.
-* La constatation des services réalisés par un gestionnaire ne se fait désormais que dans le périmètre de sa composante.
-
-## Notes de mise à jour
-
-Si vous voulez activer le filtrage dans/hors établissement (recommandé), une nouvelle documentation est
-disponible : [Documentation](doc/detection-etablissement-ou-extérieur.md)
-
-# OSE 15 (12/03/21)
-
-Objectif : Doubles statuts et refonte des données personnelles
-
-## Nouveautés
-
-* Refonte complète de la gestion des données personnelles
-    * Gestion des employeurs (avec utilisation possible de la base SIRENE)
-    * Possibilité d'enregistrer un dossier incomplet, avec gestion du taux de complétude
-    * Masquage des données sensibles (mise en conformité RGPD) par rôle (gestionnaire etc...)
-    * Possibilité d'ajouter des champs supplémentaires (5 maximum)
-    * Nouveau format pour les adresses
-    * Paramétrage des conditions de remplissage des mails et téléphones personnels (obligatoires si pas de mail/tél pro
-      ou bien tout le temps)
-* Possibilité pour un intervenant d'avoir simultanément plusieurs statuts
-    * Le nouveau statut peut être ajouté dans l'application ou bien être fourni via le connecteur IMPORT
-    * La bascule d'un statut à un autre se fait en cliquant sur le statut désiré directement sur la fiche de l'
-      intervenant
-    * Pour chaque statut, l'intervenant a une fiche distincte, avec des services distincts, etc. Les pièces
-      justificatives et les agréments sont communs.
-* Refonte de la gestion des intervenants
-    * Possibilité de créer un nouvel intervenant local au moyen d'une IHM
-    * Possibilité de pouvoir rechercher et visualiser des intervenants historisés
-    * Possibilité d'historiser et de restaurer des intervenants
-    * Possibilité de synchroniser un intervenant directement depuis sa fiche
-    * Possibilité d'associer un utilisateur LDAP à un intervenant nouvellement créé
-    * Possibilité de créer directement dans le formulaire INTERVENANT un nouvel utilisateur avec saisie de login/MDP.
-* Possibilité de forcer la composante d'affectation d'un intervenant et d'ignorer celle fournie par le connecteur
-* Possibilité de forcer le statut d'un intervenant dans OSE et d'ignorer celui fourni par le connecteur (même pour un
-  permanent)
-* Les vues matérialisées sont recalculées à chaque mise à jour
-* Amélioration importante des performances pour le calcul des tableaux de bord intermédiaires
-* Adaptations du connecteur Harpège
-* Possibilité d'importer uniquement un élément pédagogique depuis la page "Offre de formation"
-* Possibilité de mettre à jour par synchronisation et manuellement un élément pédagogique spécifique par déclenchement
-  d'import
-* Ajout d'un nouveau privilège 'Archivage' pour donner la possiblité à un statut d'intervenant de mettre à jour une
-  pièce jointe lorsque celle ci a été fourni une année antérieure à l'année en cours (Bouton "Modifier si besoin")
-* Avenants aux contrats de travail : les heures s'affichant sur les avenants ne reprennent plus les heures du contrat,
-  mais n'affichent que le différentiel
-
-## Corrections de bugs
-
-* La suppression d'intervenants est maintenant pleinement opérationnelle et les erreurs sont mieux affichées
-* Formule de Poitiers modifiée
-
-## Notes de mise à jour
-
-Merci de lire ceci **AVANT** d'entamer la mise à jour!!
-
-La mise à jour n'est en effet pas réversible.
-
-Nous vous recommandons en outre de vous entrainer au préalable sur une instance de préproduction avant de passer en
-production.
-
-### 1. PHP7.4
-
-PHP 7.4 est maintenant requis : attention à bien mettre à jour vos serveurs
-
-### 2. OSE 14.17 minimum
-
-Pour cette version, il n'est pas possible de migrer depuis de trop anciennes instances de OSE.
-Avant la V15, vous devrez préalablement migrer en version 14.17.
-Et ce n'est qu'à partir de la 14.17 que vous pourrez migrer vers la 15.
-
-### 3. Connecteurs
-
-La structure de la base de données OSE a évolué.
-Voici pour information la liste des changements opérés au niveau des structures de
-données : ([Changements de structures BDD 14->15](doc/Divers/migration-bdd-14-vers-15.sql)).
-Ce script ne doit pas être exécuté, la procédure de migration se chargera de cela toute seule.
-
-Certains de vos connecteurs devront être adaptés, en particulier au niveau RH.
-De même, si vous avez créé des requêtes personnalisées, des états de sortie, attention à bien tenir compte de ces
-changmements!
-
-Au niveau des connecteurs, les changements à faire sont les suivants :
-
-* Vue source [SRC_PAYS](doc/Connecteurs-Import/Création-tables/PAYS.md) :
-    * LIBELLE_COURT et LIBELLE_LONG disparaissent au profit de LIBELLE
-    * nouvelle colonne CODE
-* Vue source [SRC_DEPARTEMENT](doc/Connecteurs-Import/Création-tables/DEPARTEMENT.md) :
-    * LIBELLE_COURT et LIBELLE_LONG disparaissent au profit de LIBELLE
-    * nouvelle colonne CODE
-* Nouvelle table [VOIRIE](doc/Connecteurs-Import/Création-tables/VOIRIE.md) :
-    * Possibilité d'importer les voiries en provenance de votre système d'information.
-* Vue source [SRC_STRUCTURE](doc/Connecteurs-Import/Création-tables/STRUCTURE.md) :
-    * Changement du format des adresses. Vouc pourrez vous inspirer des différents connecteurs existants pour adapter le
-      votre.
-* Vue source [SRC_INTERVENANT](doc/Connecteurs-Import/Générique/SRC_INTERVENANT.sql) :
-    * Il y a ici de nombreux changements.
-    * La vue matérialisée [MV_INTERVENANT](doc/Connecteurs-Import/Création-tables/INTERVENANT.md) devra être adaptée
-      pour fournir toutes les colonnes nécessaires.
-    * La vue [SRC_INTERVENANT](doc/Connecteurs-Import/Générique/SRC_INTERVENANT.sql) doit être utilisée telle quelle,
-      sans adaptation de votre part
-* Suppression d'anciennes tables, dont les vues sources correspondantes doivent être supprimées par vos soins :
-    * DROP VIEW V_DIFF_ADRESSE_INTERVENANT
-    * DROP VIEW SRC_ADRESSE_INTERVENANT
-    * DROP VIEW V_DIFF_ADRESSE_STRUCTURE
-    * DROP VIEW SRC_ADRESSE_STRUCTURE
-    * Ces vues devront être supprimées AVANT la mise à jour. Le script de migration ne le fait pas automatiquement afin
-      de vous laisser le temps de les sauvegarder le cas échéant.
-
-Plus
-généralement, [une nouvelle documentation sur les connecteurs est disponible](doc/Connecteurs-Import/Connecteurs-IMPORT.md)
-.
-
-### 4. Activation du stockage des fichiers dans le filesystem
-
-Pas obligatoire, mais recommandé (sur votre instance de production).
-
-* [Activer le stockage des fichiers dans le système de fichiers plutôt qu'en base de données (recommandé pour la production)](doc/Stockage-fichiers.md)
-
-### 5. Gestion des employeurs
-
-OSE peut maintenant gérer un référentiel des employeurs, permettant ainsi d'activer au niveau des données personnelles
-la partie "Employeur" (non activée par défaut et à paramétrer pour chacun des statuts intervenant de votre instance OSE)
-
-Pour alimenter la table employeur de OSE, vous avez deux possiblités :
-
-* soit importer votre propre liste d'employeurs via une vue
-  source [SRC_EMPLOYEUR](doc/Connecteurs-Import/Création-tables/EMPLOYEUR.md) dédiée, à l'instar des autres connecteurs
-  et ainsi alimenter la table employeur en la synchronisant avec votre vue source.
-* soit utiliser le référentiel sirene officiel
-  de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/)
-  que nous vous préparons et mettons à disposition avec une mise à jour régulière. Pour cela vous devez utiliser la
-  commande `./bin/ose update-employeur` qui se chargera de remplir la table employeur avec ces données. Cette commande
-  devra être exécutée de manière régulière, une fois par mois environ si vous voulez que votre référentiel d'employeurs
-  soit à jour.
 
 # Anciennes versions de OSE
 

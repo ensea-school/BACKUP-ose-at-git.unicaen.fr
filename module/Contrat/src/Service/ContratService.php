@@ -211,7 +211,11 @@ class ContratService extends AbstractEntityService
             $contrat->getIntervenant()->getNomUsuel(),
             $contrat->getIntervenant()->getCode());
 
-        $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
+        if($contrat->estUnAvenant()){
+            $modele = $contrat->getIntervenant()->getStatut()->getAvenantEtatSortie();
+        }else{
+            $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
+        }
 
         if (!$modele) {
             throw new \Exception('Aucun modèle ne correspond à ce contrat');

@@ -134,8 +134,8 @@ FROM (  SELECT c.*,
              CASE WHEN v.id IS NULL THEN 1 ELSE 0 END                                                                                                       est_projet,
              CASE WHEN LOWER(si.codes_corresp_2) = 'oui' THEN 1 ELSE 0 END                                                                                  est_atv,
              tm.libelle                                                                                                                                     "missionNom",
-             c.debut_validite                                                                                                                               "debutValidite",
-             c.fin_validite                                                                                                                                 "finValidite"
+             to_char(c.debut_validite, 'dd/mm/YYYY')                                                                                                        "debutValidite",
+             to_char(c.fin_validite, 'dd/mm/YYYY')                                                                                                          "finValidite"
         FROM
             contrat               c
             JOIN type_contrat         tc ON tc.id = c.type_contrat_id

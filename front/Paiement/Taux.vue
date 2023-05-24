@@ -27,7 +27,7 @@
                         <li class="">
                             <div class="row align-items-start">
                                 <div class="col-md-4">
-                                    {{ tauxValeur.valeur }}€/h à partir du
+                                    <u-heures :valeur="tauxValeur.valeur"/>€/h à partir du
                                     <u-date :value="tauxValeur.dateEffet"/>
                                 </div>
                                 <div class="col">
@@ -67,7 +67,7 @@
                             <li>
                                 <div class="row align-items-start">
                                     <div class="col-md-8">
-                                        Coéfficient de {{ tauxValeur.valeur }} à partir du
+                                        Coéfficient de <u-heures :valeur="tauxValeur.valeur"/> à partir du
                                         <u-date :value="tauxValeur.dateEffet"/>
                                     </div>
                                     <div class="col-md-auto">
@@ -102,7 +102,7 @@
                     Valeurs calculées (indexées sur le taux {{ taux.tauxRemu.libelle }}) :
                     <ul>
                         <div v-for="indexResult in taux.tauxRemuValeursIndex">
-                            <li>{{ indexResult.valeur }}€/h à partir du
+                            <li><u-heures :valeur="indexResult.valeur"/>€/h à partir du
                                 <u-date :value="indexResult.date"/>
                             </li>
                         </div>

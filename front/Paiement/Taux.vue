@@ -26,7 +26,7 @@
                     <div v-for="tauxValeur in taux.tauxRemuValeurs" :key="tauxValeur.id">
                         <li class="">
                             <div class="row align-items-start">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <u-heures :valeur="tauxValeur.valeur"/>€/h à partir du
                                     <u-date :value="tauxValeur.dateEffet"/>
                                 </div>

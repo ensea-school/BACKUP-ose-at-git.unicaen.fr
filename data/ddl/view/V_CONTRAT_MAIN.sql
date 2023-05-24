@@ -57,6 +57,8 @@ SELECT ct.annee_id,
        ct."enteteAutresHeures",
        ct."missionNom",
        ct."tauxNom",
+       ct."debutValidite",
+       ct."finValidite",
        CASE ct.est_contrat
            WHEN 1 THEN -- contrat
                'Contrat de travail'
@@ -131,7 +133,9 @@ FROM (  SELECT c.*,
              CASE WHEN c.contrat_id IS NULL THEN 1 ELSE 0 END                                                                                               est_contrat,
              CASE WHEN v.id IS NULL THEN 1 ELSE 0 END                                                                                                       est_projet,
              CASE WHEN LOWER(si.codes_corresp_2) = 'oui' THEN 1 ELSE 0 END                                                                                  est_atv,
-             tm.libelle                                                                                                                                     "missionNom"
+             tm.libelle                                                                                                                                     "missionNom",
+             c.debut_validite                                                                                                                               "debutValidite",
+             c.fin_validite                                                                                                                                 "finValidite"
         FROM
             contrat               c
             JOIN type_contrat         tc ON tc.id = c.type_contrat_id

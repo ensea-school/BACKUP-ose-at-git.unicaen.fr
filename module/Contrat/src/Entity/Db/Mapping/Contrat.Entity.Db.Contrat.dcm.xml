@@ -14,6 +14,8 @@
         </id>
         <field name="numeroAvenant" type="integer" column="NUMERO_AVENANT" nullable="false"/>
         <field name="dateRetourSigne" type="datetime" column="DATE_RETOUR_SIGNE" nullable="true"/>
+        <field name="debutValidite" type="datetime" column="DEBUT_VALIDITE" nullable="true"/>
+        <field name="finValidite" type="datetime" column="FIN_VALIDITE" nullable="true"/>
         <field name="dateEnvoiEmail" type="datetime" column="DATE_ENVOI_EMAIL" nullable="true"/>
         <field name="totalHetd" type="float" column="TOTAL_HETD" precision="126" scale="0" nullable="true"/>
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>

@@ -236,6 +236,8 @@ class ContratProcessus extends AbstractProcessus
         $contrat->setTotalHetd($this->getIntervenantTotalHetd($intervenant));
         if($mission != null){
             $contrat->setMission($mission);
+            $contrat->setDebutValidite($mission->getDateDebut());
+            $contrat->setFinValidite($mission->getDateFin());
         }
         $this->qualification($contrat, $mission); // init contrat/avenant
 

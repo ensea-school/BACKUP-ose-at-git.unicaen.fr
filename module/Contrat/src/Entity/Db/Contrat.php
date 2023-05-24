@@ -55,6 +55,56 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      */
     private $dateRetourSigne;
 
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getDebutValidite(): \DateTime
+    {
+        return $this->debutValidite;
+    }
+
+
+
+    /**
+     * @param \DateTime $debutValidite
+     */
+    public function setDebutValidite(\DateTime $debutValidite): void
+    {
+        $this->debutValidite = $debutValidite;
+    }
+
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getFinValidite(): \DateTime
+    {
+        return $this->finValidite;
+    }
+
+
+
+    /**
+     * @param \DateTime $finValidite
+     */
+    public function setFinValidite(\DateTime $finValidite): void
+    {
+        $this->finValidite = $finValidite;
+    }
+
+    /**
+     * @var \DateTime
+     */
+    private $debutValidite;
+
+    /**
+     * @var \DateTime
+     */
+    private $finValidite;
+
     /**
      * @var \DateTime
      */

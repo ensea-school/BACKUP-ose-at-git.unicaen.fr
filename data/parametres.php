@@ -92,6 +92,8 @@ return [
         "VALEUR"      => "PREVU",
         "DESCRIPTION" => "Constatation du service fait",
     ],
+
+    /* Paiepment */
     "centres_couts_paye"                         => [
         "VALEUR"      => "enseignement",
         "DESCRIPTION" => "Centres de coûts utilisés pour la paye",
@@ -111,6 +113,10 @@ return [
     "horaire_nocturne"                 => [
         "VALEUR"      => "22:00",
         "DESCRIPTION" => "Horaire à partir duquel les heures faites sont considérées comme nocturnes",
+    ],
+    "taux_conges_payes" => [
+        "VALEUR"      => 0.1,
+        "DESCRIPTION" => "Taux de majoration des heures pour prise en compte des congés payés",
     ],
 
     /* Documentations */

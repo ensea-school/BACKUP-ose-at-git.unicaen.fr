@@ -450,6 +450,20 @@ class ParametresForm extends AbstractForm
             ],
         ]);
 
+        $this->add([
+            'type'       => 'Text',
+            'name'       => 'taux_conges_payes',
+            'options'    => [
+                'label' => "Taux pour prise en compte des congés payés",
+                'suffix' => '%',
+            ],
+            'attributes' => [
+                'class' => 'input-sm',
+                'step'  => 'any',
+                'min'   => 0,
+                'max'   => 1,
+            ],
+        ]);
 
         $this->add([
             'name'    => 'indicateur_email_expediteur',

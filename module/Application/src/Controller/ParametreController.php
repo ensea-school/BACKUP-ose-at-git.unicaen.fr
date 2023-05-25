@@ -63,6 +63,9 @@ class ParametreController extends AbstractController
             if (isset($posted['pourc_s1_pour_annee_civile'])) {
                 $posted['pourc_s1_pour_annee_civile'] = floatToString(FloatFromString::run($posted['pourc_s1_pour_annee_civile']) / 100);
             }
+            if (isset($posted['taux_conges_payes'])) {
+                $posted['taux_conges_payes'] = floatToString(FloatFromString::run($posted['taux_conges_payes']) / 100);
+            }
         } else {
             $posted = [];// rien ne peut être modifié!!
         }
@@ -96,6 +99,9 @@ class ParametreController extends AbstractController
 
             if ($form->has($parametre)) {
                 if ($parametre == 'pourc_s1_pour_annee_civile') {
+                    $value = StringFromFloat::run(stringToFloat($value) * 100);
+                }
+                if ($parametre == 'taux_conges_payes') {
                     $value = StringFromFloat::run(stringToFloat($value) * 100);
                 }
                 $element = $form->get($parametre);

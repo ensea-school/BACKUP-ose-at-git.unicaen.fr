@@ -39,6 +39,10 @@
                                     </button>
                                 </div>
                             </div>
+                            <div class="col-md-5" v-if="mission.typeMission.besoinFormation">
+                                <label class=" form-label">Heures de formation prévues</label>
+                                <div class="form-control">{{ mission.heuresFormation }}</div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">

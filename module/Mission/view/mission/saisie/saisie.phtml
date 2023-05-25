@@ -33,7 +33,9 @@ echo $this->formControlGroup($form->get('tauxRemuMajore'));
 echo '</div>';
 echo '<div class="col-md-6">';
 echo $this->formControlGroup($form->get('heures'));
-
+echo '</div>';
+echo '<div class="col-md-6 heures-formation">';
+echo $this->formControlGroup($form->get('heuresFormation'));
 echo '</div>';
 echo '</div>';
 
@@ -54,7 +56,7 @@ echo $this->form()->closeTag();
         return $('[name=typeMission]');
     }
 
-    function toggleEtudiantsSuivis()
+    function toggleViewElements()
     {
         var tmId = typeMissionSelect().val();
 
@@ -65,10 +67,19 @@ echo $this->form()->closeTag();
         }else{
             $('.etudiants-suivis').hide();
         }
+
+        var tmBF = typeMissionSelect().data('besoin-formation');
+
+        if (tmBF[tmId]){
+            $('.heures-formation').show();
+        }else{
+            $('.heures-formation').hide();
+        }
+
     }
 
     $(function(){
-        typeMissionSelect().on('change', toggleEtudiantsSuivis);
+        typeMissionSelect().on('change', toggleViewElements);
         toggleEtudiantsSuivis();
     });
 

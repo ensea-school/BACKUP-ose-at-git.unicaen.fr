@@ -28,9 +28,11 @@ class MissionForm extends AbstractForm
         $typesMissions = $this->getEntityManager()->createQuery($tmDql)->setParameters($tmDqlParams)->getResult();
 
         $tmAccEtu = [];
+        $besoinFormation = [];
         foreach ($typesMissions as $typeMission)
         {
             $tmAccEtu[$typeMission->getId()] = $typeMission->isAccompagnementEtudiants();
+            $besoinFormation[$typeMission->getId()] = $typeMission->isBesoinFormation();
         }
 
         $this->spec(Mission::class, ['intervenant', 'autoValidation']);
@@ -38,11 +40,13 @@ class MissionForm extends AbstractForm
             'description' => ['type' => 'Textarea'],
             'etudiantsSuivis' => ['type' => 'Textarea'],
             'tauxRemuMajore' => ['input' => ['required' => false]],
+            'heuresFormation' => ['input' => ['required' => false]],
         ]);
         $this->build();
 
         $this->setValueOptions('typeMission', Util::collectionAsOptions($typesMissions));
         $this->get('typeMission')->setAttribute('data-accompagnement-etudiants', json_encode($tmAccEtu));
+        $this->get('typeMission')->setAttribute('data-besoin-formation', json_encode($besoinFormation));
 
         $trDql = "SELECT mtr FROM " . TauxRemu::class . " mtr";
         $this->setValueOptions('tauxRemu', $trDql);
@@ -61,6 +65,7 @@ class MissionForm extends AbstractForm
             'dateFin'         => 'Date de fin',
             'description'     => 'Descriptif de la mission',
             'etudiantsSuivis' => 'Noms des étudiants suivis',
+            'heuresFormation' => 'Heures de formation prévues',
         ]);
 
         $this->addSubmit();

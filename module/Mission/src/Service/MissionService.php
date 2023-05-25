@@ -82,12 +82,13 @@ class MissionService extends AbstractEntityService
 
         $properties = [
             'id',
-            ['typeMission', ['libelle', 'accompagnementEtudiants']],
+            ['typeMission', ['libelle', 'accompagnementEtudiants','besoinFormation']],
             'dateDebut',
             'dateFin',
             ['structure', ['libelle']],
             ['tauxRemu', ['libelle']],
             ['tauxRemuMajore', ['libelle']],
+            'heuresFormation',
             'description',
             'histoCreation',
             'histoCreateur',

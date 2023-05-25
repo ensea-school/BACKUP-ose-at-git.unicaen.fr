@@ -503,6 +503,12 @@ class StatutSaisieForm extends AbstractForm
                     'required' => false,
                 ],
             ],
+            'tauxRemu'                    => [
+                'input' => [
+                    'required' => false,
+                ],
+            ],
+
             'modificationServiceDu' => [
                 'type'     => 'Select',
                 'name'     => 'modificationServiceDu',
@@ -601,33 +607,6 @@ class StatutSaisieForm extends AbstractForm
         $this->get('tauxRemu')->setEmptyOption('- Utilisation du taux légal standard -');
 
         return $this;
-    }
-
-
-
-    public function getInputFilterSpecification()
-    {
-        $spec = [
-            'modeReferentielPrevisionnel' => [
-                'required' => false,
-            ],
-            'modeReferentielRealise'      => [
-                'required' => false,
-            ],
-            'modeServicePrevisionnel'     => [
-                'required' => false,
-            ],
-            'modeServiceRealise'          => [
-                'required' => false,
-            ],
-            'tauxRemu'                    => [
-                'required' => false,
-            ],
-
-
-        ];
-
-        return $spec;
     }
 
 }

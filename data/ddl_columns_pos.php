@@ -2169,6 +2169,7 @@ return [
         'TAUX_REMU_ID',
         'ACCOMPAGNEMENT_ETUDIANTS',
         'TAUX_REMU_MAJORE_ID',
+        'BESOIN_FORMATION',
     ],
     'MISSION'                        => [
         'ID',
@@ -2188,6 +2189,7 @@ return [
         'TAUX_REMU_ID',
         'ETUDIANTS_SUIVIS',
         'TAUX_REMU_MAJORE_ID',
+        'HEURES_FORMATION',
     ],
     'MISSION_ETUDIANT'               => [
         'MISSION_ID',

@@ -33,6 +33,18 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
+        'BESOIN_FORMATION'         => [
+            'name'        => 'BESOIN_FORMATION',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 14,
+            'commentaire' => NULL,
+        ],
         'CODE'                     => [
             'name'        => 'CODE',
             'type'        => 'string',

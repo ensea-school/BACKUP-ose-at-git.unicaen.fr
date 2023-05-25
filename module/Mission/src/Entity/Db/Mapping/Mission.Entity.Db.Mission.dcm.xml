@@ -22,6 +22,7 @@
         </many-to-one>
         <field name="dateDebut" type="datetime" column="DATE_DEBUT" nullable="false"/>
         <field name="dateFin" type="datetime" column="DATE_FIN" nullable="false"/>
+        <field name="heuresFormation" type="float" column="HEURES_FORMATION" precision="126" scale="0" nullable="true"/>
         <field name="description" type="string" column="DESCRIPTION" length="4000" nullable="true"/>
         <field name="etudiantsSuivis" type="string" column="ETUDIANTS_SUIVIS" length="4000" nullable="true"/>
 

@@ -24,6 +24,7 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
 
     protected bool $accompagnementEtudiants = false;
 
+    protected bool $besoinFormation = false;
 
 
     public function getId(): ?int
@@ -108,6 +109,21 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
     {
         $this->accompagnementEtudiants = $accompagnementEtudiants;
 
+        return $this;
+    }
+
+
+
+    public function isBesoinFormation(): bool
+    {
+        return $this->besoinFormation;
+    }
+
+
+
+    public function setBesoinFormation(bool $besoinFormation): TypeMission
+    {
+        $this->besoinFormation = $besoinFormation;
         return $this;
     }
 

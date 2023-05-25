@@ -37,6 +37,8 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
     protected ?\DateTime $dateFin = null;
 
+    protected ?float $heuresFormation = null;
+
     protected ?string $description = null;
 
     protected ?string $etudiantsSuivis = null;
@@ -148,6 +150,22 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
     public function setDateFin(?\DateTime $dateFin): self
     {
         $this->dateFin = $dateFin;
+
+        return $this;
+    }
+
+
+
+    public function getHeuresFormation(): ?float
+    {
+        return $this->heuresFormation;
+    }
+
+
+
+    public function setHeuresFormation(?float $heuresFormation): self
+    {
+        $this->heuresFormation = $heuresFormation;
 
         return $this;
     }

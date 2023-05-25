@@ -69,6 +69,18 @@ return [
             'position'    => 16,
             'commentaire' => NULL,
         ],
+        'HEURES_FORMATION'      => [
+            'name'        => 'HEURES_FORMATION',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 18,
+            'commentaire' => NULL,
+        ],
         'HISTO_CREATEUR_ID'     => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',

@@ -42,13 +42,4 @@ class MissionTypeForm extends AbstractForm
         return $this;
     }
 
-
-
-    public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
-    {
-        /* @var $object TypeMission */
-        parent::bind($object, $flags);
-
-        return $this;
-    }
 }

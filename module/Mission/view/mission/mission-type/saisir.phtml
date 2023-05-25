@@ -3,11 +3,10 @@
  * @var $this  \Application\View\Renderer\PhpRenderer
  * @var $form \Mission\Form\MissionTypeForm
  * @var $tab  string
+ * @var $typeMission \Mission\Entity\Db\TypeMission
  */
 
 use Application\Provider\Privilege\Privileges;
-
-$typeMission = $form->getObject();
 
 $visu = $this->messenger()->addCurrentMessagesFromFlashMessenger() . $this->form($form);
 

@@ -55,7 +55,7 @@ class MissionTypeController extends AbstractController
             );
         });
 
-        return compact('form', 'title', 'tab');
+        return compact('form', 'title', 'tab', 'typeMission');
     }
 
 

@@ -167,9 +167,9 @@ return [
         ],
         'MISSION_ID'            => [
             'name'        => 'MISSION_ID',
-            'type'        => 'string',
-            'bdd-type'    => 'VARCHAR2',
-            'length'      => 20,
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => TRUE,

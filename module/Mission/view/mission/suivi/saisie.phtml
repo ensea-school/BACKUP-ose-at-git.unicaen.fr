@@ -55,7 +55,7 @@ echo $this->form()->closeTag();
 
     function missionSelect()
     {
-        return $('[name=mission]');
+        return $('#<?= $form->getAttribute('id') ?> [name=mission]');
     }
 
     function toggleViewElements()
@@ -63,6 +63,10 @@ echo $this->form()->closeTag();
         var mId = missionSelect().val();
 
         var mBF = missionSelect().data('besoin-formation');
+
+        if (!mBF) {
+            mBF = {};
+        }
 
         if (mBF[mId]){
             $('.heures-formation').show();

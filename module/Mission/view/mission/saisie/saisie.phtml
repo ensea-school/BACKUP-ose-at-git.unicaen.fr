@@ -53,7 +53,7 @@ echo $this->form()->closeTag();
 
     function typeMissionSelect()
     {
-        return $('[name=typeMission]');
+        return $('#<?= $form->getAttribute('id') ?> [name=typeMission]');
     }
 
     function toggleViewElements()

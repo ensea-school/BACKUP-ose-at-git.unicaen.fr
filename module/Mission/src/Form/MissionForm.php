@@ -35,6 +35,8 @@ class MissionForm extends AbstractForm
             $besoinFormation[$typeMission->getId()] = $typeMission->isBesoinFormation();
         }
 
+        $this->setAttribute('id', uniqid('fm'));
+
         $this->spec(Mission::class, ['intervenant', 'autoValidation']);
         $this->spec([
             'description' => ['type' => 'Textarea'],

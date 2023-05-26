@@ -4,7 +4,9 @@ namespace Mission\Form;
 
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Form\AbstractForm;
+use Doctrine\Common\Collections\ArrayCollection;
 use Laminas\Hydrator\HydratorInterface;
+use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Service\MissionServiceAwareTrait;
 use UnicaenApp\Util;
@@ -32,13 +34,24 @@ class MissionSuiviForm extends AbstractForm
             'type' => 'Hidden',
         ]);
 
+
+
+        $missions = $this->getMissions();
+        $besoinFormation = [];
+        foreach ($missions as $mission)
+        {
+            $besoinFormation[$mission->getId()] = ($mission->getHeuresFormation() && $mission->getHeuresFormation() > 0);
+        }
         $this->add([
             'name'    => 'mission',
             'type'    => 'Select',
             'options' => [
                 'label'         => 'Mission',
                 'empty_option'  => '- Non renseignée -',
-                'value_options' => Util::collectionAsOptions($this->getMissionsOptions()),
+                'value_options' => Util::collectionAsOptions($missions),
+            ],
+            'attributes' => [
+                'data-besoin-formation' => json_encode($besoinFormation),
             ],
         ]);
 
@@ -133,18 +146,21 @@ class MissionSuiviForm extends AbstractForm
     }
 
 
-    private function getMissionsOptions()
+
+    /**
+     * @return array|Mission[]
+     */
+    private function getMissions(): ArrayCollection
     {
         $missions = $this->getIntervenant()->getMissions();
 
-        $options = [];
-        foreach ($missions as $mission) {
-            if ($mission->canAddSuivi($this->date)) {
-                $options[$mission->getId()] = $mission->getLibelleCourt();
+        foreach ($missions as $i => $mission) {
+            if (!$mission->canAddSuivi($this->date)) {
+                unset($missions[$i]);
             }
         }
 
-        return $options;
+        return $missions;
     }
 
 }

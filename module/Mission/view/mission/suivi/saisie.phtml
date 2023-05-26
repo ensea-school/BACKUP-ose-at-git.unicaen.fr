@@ -38,7 +38,7 @@ echo '</div>';
 
 echo '<div class="row">';
 
-echo '<div class="col-md-4"><label>&nbsp;</label>';
+echo '<div class="col-md-4 heures-formation"><label>&nbsp;</label>';
 echo $this->formControlGroup($form->get('formation'));
 echo '</div>';
 
@@ -50,3 +50,31 @@ echo $this->formControlGroup($form->get('description'));
 echo $this->formSubmit($form->get('submit'));
 
 echo $this->form()->closeTag();
+?>
+<script>
+
+    function missionSelect()
+    {
+        return $('[name=mission]');
+    }
+
+    function toggleViewElements()
+    {
+        var mId = missionSelect().val();
+
+        var mBF = missionSelect().data('besoin-formation');
+
+        if (mBF[mId]){
+            $('.heures-formation').show();
+        }else{
+            $('.heures-formation').hide();
+        }
+
+    }
+
+    $(function(){
+        missionSelect().on('change', toggleViewElements);
+        toggleViewElements();
+    });
+
+</script>

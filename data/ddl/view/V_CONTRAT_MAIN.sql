@@ -154,7 +154,7 @@ FROM (  SELECT c.*,
             LEFT JOIN                      hs ON hs.contrat_id = c.id
             LEFT JOIN                      la ON la.contrat_id = c.id
             LEFT JOIN contrat              cp ON cp.id = c.contrat_id
-            LEFT JOIN mission m on c.mission_id = m.id
+            LEFT JOIN mission m ON c.mission_id = m.id
             LEFT JOIN type_mission tm ON m.type_mission_id = tm.id
             LEFT JOIN taux_remu trm ON tm.taux_remu_id = trm.id
         WHERE

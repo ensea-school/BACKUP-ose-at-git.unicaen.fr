@@ -93,6 +93,7 @@ class TypeIndicateur
             14 => PlafondPerimetre::REFERENTIEL,
             15 => PlafondPerimetre::ELEMENT,
             16 => PlafondPerimetre::VOLUME_HORAIRE,
+            17 => PlafondPerimetre::MISSION,
         ];
         if (array_key_exists($this->getId(), $corresp)) {
             return $corresp[$this->getId()];

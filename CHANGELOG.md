@@ -40,7 +40,11 @@
 
 * Il est possible de rentrer une date de retour sur un contrat après avoir téléversé le contrat sans avoir besoin de recharger la page
  
+# OSE 20.4 (A venir)
 
+## Corrections de bugs
+
+* Erreur d'affichage du contrat unique avec des heures multi-composantes (#50889 et #50980)
 
 
 # OSE 20.3 (23/05/2023)

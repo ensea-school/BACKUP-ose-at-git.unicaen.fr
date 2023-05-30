@@ -284,16 +284,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AJ=IF([.AI20]<[.AG20];([.AG20]-[.AI20])/[.$AD20];IF([.AG20]<0;[.AG20]/[.$AD20];0))
+      -- AJ=IF(ABS([.AI20])<ABS([.AG20]);([.AG20]-[.AI20])/[.$AD20];0)
       WHEN 'AJ' THEN
-        IF cell('AI',l) < cell('AG',l) THEN
+        IF ABS(cell('AI',l)) < ABS(cell('AG',l)) THEN
           RETURN (cell('AG',l) - cell('AI',l)) / cell('AD',l);
         ELSE
-          IF cell('AG',l) < 0 THEN
-            RETURN cell('AG',l) / cell('AD',l);
-          ELSE
-            RETURN 0;
-          END IF;
+          RETURN 0;
         END IF;
 
 
@@ -358,16 +354,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AP=IF([.AO20]<[.AM20];([.AM20]-[.AO20])/[.$AD20];IF([.AM20]<0;[.AM20]/[.$AD20];0))
+      -- AP=IF(ABS([.AO20])<ABS([.AM20]);([.AM20]-[.AO20])/[.$AD20];0)
       WHEN 'AP' THEN
-        IF cell('AO',l) < cell('AM',l) THEN
+        IF ABS(cell('AO',l)) < ABS(cell('AM',l)) THEN
           RETURN (cell('AM',l) - cell('AO',l)) / cell('AD',l);
         ELSE
-          IF cell('AM',l) < 0 THEN
-            RETURN cell('AM',l) / cell('AD',l);
-          ELSE
-            RETURN 0;
-          END IF;
+          RETURN 0;
         END IF;
 
 
@@ -426,16 +418,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AV=IF([.AU20]<[.AS20];([.AS20]-[.AU20])/[.$AD20];IF([.AS20]<20;[.AS20]/[.$AD20];0))
+      -- AV=IF(ABS([.AU20])<ABS([.AS20]);([.AS20]-[.AU20])/[.$AD20];0)
       WHEN 'AV' THEN
-        IF cell('AU',l) < cell('AS',l) THEN
+        IF ABS(cell('AU',l)) < ABS(cell('AS',l)) THEN
           RETURN (cell('AS',l) - cell('AU',l)) / cell('AD',l);
         ELSE
-          IF cell('AS',l) < 20 THEN
-            RETURN cell('AS',l) / cell('AD',l);
-          ELSE
-            RETURN 0;
-          END IF;
+          RETURN 0;
         END IF;
 
 
@@ -500,16 +488,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- BB=IF([.BA20]<[.AY20];([.AY20]-[.BA20])/[.$AD20];IF([.AY20]<0;[.AY20]/[.$AD20];0))
+      -- BB=IF(ABS([.BA20])<ABS([.AY20]);([.AY20]-[.BA20])/[.$AD20];0)
       WHEN 'BB' THEN
-        IF cell('BA',l) < cell('AY',l) THEN
+        IF ABS(cell('BA',l)) < ABS(cell('AY',l)) THEN
           RETURN (cell('AY',l) - cell('BA',l)) / cell('AD',l);
         ELSE
-          IF cell('AY',l) < 0 THEN
-            RETURN cell('AY',l) / cell('AD',l);
-          ELSE
-            RETURN 0;
-          END IF;
+          RETURN 0;
         END IF;
 
 
@@ -568,16 +552,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- BH=IF([.BG20]<[.BE20];([.BE20]-[.BG20])/[.$AD20];IF([.BE20]<0;[.BE20]/[.$AD20];0))
+      -- BH=IF(ABS([.BG20])<ABS([.BE20]);([.BE20]-[.BG20])/[.$AD20];0)
       WHEN 'BH' THEN
-        IF cell('BG',l) < cell('BE',l) THEN
+        IF ABS(cell('BG',l)) < ABS(cell('BE',l)) THEN
           RETURN (cell('BE',l) - cell('BG',l)) / cell('AD',l);
         ELSE
-          IF cell('BE',l) < 0 THEN
-            RETURN cell('BE',l) / cell('AD',l);
-          ELSE
-            RETURN 0;
-          END IF;
+          RETURN 0;
         END IF;
 
 
@@ -636,16 +616,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- BN=IF([.BM20]<[.BK20];([.BK20]-[.BM20])/[.$AD20];IF([.BK20]<0;[.BK20]/[.$AD20];0))
+      -- BN=IF(ABS([.BM20])<ABS([.BK20]);([.BK20]-[.BM20])/[.$AD20];0)
       WHEN 'BN' THEN
-        IF cell('BM',l) < cell('BK',l) THEN
+        IF ABS(cell('BM',l)) < ABS(cell('BK',l)) THEN
           RETURN (cell('BK',l) - cell('BM',l)) / cell('AD',l);
         ELSE
-          IF cell('BK',l) < 0 THEN
-            RETURN cell('BK',l) / cell('AD',l);
-          ELSE
-            RETURN 0;
-          END IF;
+          RETURN 0;
         END IF;
 
 

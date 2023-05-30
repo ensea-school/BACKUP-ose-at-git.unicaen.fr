@@ -540,9 +540,9 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
-     * @return Mission
+     * @return Mission|null
      */
-    public function getMission(): Mission
+    public function getMission(): ?Mission
     {
         return $this->mission;
     }

@@ -39,7 +39,20 @@
 ## Corrections de bugs
 
 * Il est possible de rentrer une date de retour sur un contrat après avoir téléversé le contrat sans avoir besoin de recharger la page
- 
+* Correction de la formule de calcul de Lyon 2 
+
+
+
+# OSE 20.4 (début juin 2023)
+
+## Améliorations
+
+* Modification de la formule de Picardie
+
+## Corrections de bugs
+
+* Formulaire d'édition des états de sortie réparé au niveau de l'affichage des sous-requêtes
+* Formule de Lyon 2 corrigée
 
 
 

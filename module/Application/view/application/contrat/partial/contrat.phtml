@@ -148,7 +148,13 @@ $card = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default')
                 <small>(cliquez pour afficher/cacher)</small>
             </a>
             <div class="collapse" id="details-enseignements-contrat-<?= $contrat->getId() ?>">
-                <?= $this->enseignements(current($services)->getTypeVolumeHoraire(), current($services)->getIntervenant(), $services)->setReadOnly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
+                <?php
+                $currentService = current($services);
+                if ($currentService instanceof \Enseignement\Entity\Db\Service) {
+                    echo $this->enseignements($currentService->getTypeVolumeHoraire(), $currentService->getIntervenant(), $services)->setReadOnly(true)->setColumnVisibility('structure-ens', false)->render();
+                }
+                ?>
+
             </div>
         </div>
     </div>

@@ -110,11 +110,11 @@ return [
         "VALEUR"      => "0.67",
         "DESCRIPTION" => "Taux de répartition en année civile pour les heures du premire semestre",
     ],
-    "horaire_nocturne"                 => [
+    "horaire_nocturne"                           => [
         "VALEUR"      => "22:00",
         "DESCRIPTION" => "Horaire à partir duquel les heures faites sont considérées comme nocturnes",
     ],
-    "taux_conges_payes" => [
+    "taux_conges_payes"                          => [
         "VALEUR"      => 0.1,
         "DESCRIPTION" => "Taux de majoration des heures pour prise en compte des congés payés",
     ],
@@ -149,11 +149,11 @@ return [
 
     /* Statuts */
     "statut_intervenant_codes_corresp_1_libelle" => [
-        "VALEUR"      => "Est ATV (oui ou non)",
-        "DESCRIPTION" => "Libellé de la liste 2 des correspondances de codes des statuts (en majuscules séparés par des virgules)",
+        "VALEUR"      => "Code Siham",
+        "DESCRIPTION" => "Code équivalent au statut SIHAM",
     ],
     "statut_intervenant_codes_corresp_2_libelle" => [
-        "VALEUR"      => "Code Siham",
+        "VALEUR"      => "Est ATV (oui ou non)",
         "DESCRIPTION" => "Témoin précisant si le statut correspond à des intervenants ATV (saisir oui ou non)",
     ],
     "statut_intervenant_codes_corresp_3_libelle" => [

@@ -55,6 +55,16 @@
 * Formule de Lyon 2 corrigée
 
 
+# OSE 20.4 (début juin 2023)
+
+## Corrections de bugs
+
+* Erreur d'affichage du contrat unique avec des heures multi-composantes (#50889 et #50980)
+* Formulaire d'édition des états de sortie réparé au niveau de l'affichage des sous-requêtes
+* Correction de la formule de Picardie
+* Correction de la formule de calcul de Lyon 2
+
+
 
 # OSE 20.3 (23/05/2023)
 

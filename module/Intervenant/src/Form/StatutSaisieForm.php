@@ -63,8 +63,8 @@ class StatutSaisieForm extends AbstractForm
             'mission'                       => 'Visualisation/Modification de mission',
             'missionRealise'                => 'Suivi de mission',
             'offreEmploiPostuler'           => 'Postuler à une offre d\'emploi',
-            'modeServicePrevisionnel'       => 'Mode de saisie pour les enseignements prévisionnels',
-            'modeServiceRealise'            => 'Mode de saisie pour les enseignements réalisés',
+            'modeEnseignementPrevisionnel'  => 'Mode de saisie pour les enseignements prévisionnels',
+            'modeEnseignementRealise'       => 'Mode de saisie pour les enseignements réalisés',
 
         ];
 
@@ -90,8 +90,8 @@ class StatutSaisieForm extends AbstractForm
             'modificationServiceDuVisualisation',
             'missionRealiseEdition',
             'offreEmploiPostuler',
-            'modeServicePrevisionnel',
-            'modeServiceRealise',
+            'modeEnseignementPrevisionnel',
+            'modeEnseignementRealise',
         ];
 
         for ($i = 1; $i <= 5; $i++) {

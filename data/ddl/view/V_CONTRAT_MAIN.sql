@@ -137,26 +137,27 @@ FROM (  SELECT c.*,
              to_char(c.debut_validite, 'dd/mm/YYYY')                                                                                                        "debutValidite",
              to_char(c.fin_validite, 'dd/mm/YYYY')                                                                                                          "finValidite"
         FROM
-            contrat               c
-            JOIN type_contrat         tc ON tc.id = c.type_contrat_id
-            JOIN intervenant           i ON i.id = c.intervenant_id
-            JOIN annee                 a ON a.id = i.annee_id
-            JOIN statut               si ON si.id = i.statut_id
-            LEFT JOIN taux_remu trs ON si.taux_remu_id = trs.id
-            JOIN STRUCTURE             s ON s.id = c.structure_id
+            contrat                         c
+            JOIN type_contrat               tc ON tc.id = c.type_contrat_id
+            JOIN intervenant                i ON i.id = c.intervenant_id
+            JOIN annee                      a ON a.id = i.annee_id
+            JOIN statut                     si ON si.id = i.statut_id
+            LEFT JOIN taux_remu             trs ON si.taux_remu_id = trs.id
+            JOIN STRUCTURE                  s ON s.id = c.structure_id
             LEFT JOIN intervenant_dossier   d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
-            JOIN civilite            civ ON civ.id = COALESCE(d.civilite_id,i.civilite_id)
+            JOIN civilite                   civ ON civ.id = COALESCE(d.civilite_id,i.civilite_id)
             LEFT JOIN validation            v ON v.id = c.validation_id AND v.histo_destruction IS NULL
-            JOIN type_volume_horaire tvh ON tvh.code = 'PREVU'
-            JOIN etat_volume_horaire evh ON evh.code = 'valide'
-            LEFT JOIN formule_resultat     fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
-            LEFT JOIN taux_remu            tr ON tr.code = OSE_PAIEMENT.get_code_taux_remu_legal()
-            LEFT JOIN                      hs ON hs.contrat_id = c.id
-            LEFT JOIN                      la ON la.contrat_id = c.id
-            LEFT JOIN contrat              cp ON cp.id = c.contrat_id
-            LEFT JOIN mission m on c.mission_id = m.id
-            LEFT JOIN type_mission tm ON m.type_mission_id = tm.id
-            LEFT JOIN taux_remu trm ON tm.taux_remu_id = trm.id
+            JOIN type_volume_horaire        tvh ON tvh.code = 'PREVU'
+            JOIN etat_volume_horaire        evh ON evh.code = 'valide'
+            LEFT JOIN formule_resultat      fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
+            JOIN parametre                  p ON p.nom = 'taux-remu'
+            LEFT JOIN taux_remu             tr ON tr.id = p.valeur
+            LEFT JOIN                       hs ON hs.contrat_id = c.id
+            LEFT JOIN                       la ON la.contrat_id = c.id
+            LEFT JOIN contrat               cp ON cp.id = c.contrat_id
+            LEFT JOIN mission               m on c.mission_id = m.id
+            LEFT JOIN type_mission          tm ON m.type_mission_id = tm.id
+            LEFT JOIN taux_remu             trm ON tm.taux_remu_id = trm.id
         WHERE
             c.histo_destruction IS NULL
 ) ct

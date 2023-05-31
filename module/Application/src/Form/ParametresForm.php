@@ -4,6 +4,7 @@ namespace Application\Form;
 
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\Parametre;
+use Paiement\Entity\Db\TauxRemu;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
@@ -389,6 +390,19 @@ class ParametresForm extends AbstractForm
                 'title' => "Horaire à partir duquel les heures faites sont considérées comme nocturnes",
             ],
         ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'taux-remu',
+            'options'    => [
+                'label' => "Taux de rémunération par défaut",
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+        ]);
+        $this->setValueOptions('taux-remu', 'SELECT t FROM ' . TauxRemu::class . ' t WHERE t.histoDestruction IS NULL ORDER BY t.libelle');
 
         $this->add([
             'type'       => 'Text',

@@ -114,6 +114,10 @@ return [
         "VALEUR"      => "22:00",
         "DESCRIPTION" => "Horaire à partir duquel les heures faites sont considérées comme nocturnes",
     ],
+    "taux-remu"                           => [
+        "VALEUR"      => "TLD",
+        "DESCRIPTION" => "taux de rémuneration utilisé par défaut",
+    ],
     "taux_conges_payes"                          => [
         "VALEUR"      => 0.1,
         "DESCRIPTION" => "Taux de majoration des heures pour prise en compte des congés payés",

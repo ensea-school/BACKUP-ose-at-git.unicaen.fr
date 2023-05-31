@@ -1367,6 +1367,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           service_referentiel_id,
           formule_res_service_id,
           formule_res_service_ref_id,
+          NULL mission_id,
           intervenant_id,
           structure_id,
           mise_en_paiement_id,
@@ -1501,7 +1502,36 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                JOIN fonction_referentiel           fncr ON fncr.id = sr.fonction_id
           LEFT JOIN mise_en_paiement                mep ON mep.formule_res_service_ref_id = frs.id
                                                        AND mep.histo_destruction IS NULL
-        ) t';
+        ) t
+
+        UNION ALL
+
+        SELECT
+          tm.annee_id                                 annee_id,
+          NULL                                        service_id,
+          NULL                                        service_referentiel_id,
+          NULL                                        formule_res_service_id,
+          NULL                                        formule_res_service_ref_id,
+          tm.mission_id                               mission_id,
+          tm.intervenant_id                           intervenant_id,
+          tm.structure_id                             structure_id,
+          mep.id                                      mise_en_paiement_id,
+          mep.periode_paiement_id                     periode_paiement_id,
+          mep.domaine_fonctionnel_id                  domaine_fonctionnel_id,
+          tm.heures_realisees_validees                heures_a_payer,
+          COUNT(*) OVER(PARTITION BY tm.id)           heures_a_payer_pond,
+          COALESCE(mep.heures,0)                      heures_demandees,
+          CASE WHEN mep.periode_paiement_id IS NULL THEN 0 ELSE mep.heures END heures_payees,
+          0.4                                         pourc_exercice_aa,
+          0.6                                         pourc_exercice_ac,
+          COALESCE(mep.heures,0) * 0.4                heures_aa,
+          COALESCE(mep.heures,0) * 0.6                heures_ac
+        FROM
+          tbl_mission tm
+          LEFT JOIN mise_en_paiement                mep ON mep.mission_id = tm.mission_id
+                                                       AND mep.histo_destruction IS NULL
+        WHERE
+          tm.heures_realisees_validees > 0';
 
     OPEN c FOR '
     SELECT
@@ -1524,6 +1554,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.POURC_EXERCICE_AC                      = v.POURC_EXERCICE_AC
         AND t.HEURES_AA                              = v.HEURES_AA
         AND t.HEURES_AC                              = v.HEURES_AC
+        AND COALESCE(t.MISSION_ID,0)                 = COALESCE(v.MISSION_ID,0)
       THEN -1 ELSE t.ID END ID,
       v.ANNEE_ID,
       v.SERVICE_ID,
@@ -1542,7 +1573,8 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.POURC_EXERCICE_AA,
       v.POURC_EXERCICE_AC,
       v.HEURES_AA,
-      v.HEURES_AC
+      v.HEURES_AC,
+      v.MISSION_ID
     FROM
       (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PAIEMENT t ON
@@ -1550,6 +1582,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND COALESCE(t.FORMULE_RES_SERVICE_REF_ID,0) = COALESCE(v.FORMULE_RES_SERVICE_REF_ID,0)
         AND t.INTERVENANT_ID                         = v.INTERVENANT_ID
         AND COALESCE(t.MISE_EN_PAIEMENT_ID,0)        = COALESCE(v.MISE_EN_PAIEMENT_ID,0)
+        AND COALESCE(t.MISSION_ID,0)                 = COALESCE(v.MISSION_ID,0)
     WHERE ' || PARAMS_MAKE_FILTER(useParams);
     LOOP
       FETCH c INTO d; EXIT WHEN c%NOTFOUND;
@@ -1562,6 +1595,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND d.FORMULE_RES_SERVICE_REF_ID IS NULL
         AND d.INTERVENANT_ID IS NULL
         AND d.MISE_EN_PAIEMENT_ID IS NULL
+        AND d.MISSION_ID IS NULL
       THEN
         DELETE FROM TBL_PAIEMENT WHERE id = d.id;
       ELSIF d.id <> -1 THEN

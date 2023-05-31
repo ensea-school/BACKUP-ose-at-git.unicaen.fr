@@ -12,10 +12,19 @@ class CentreCoutTypeMission implements HistoriqueAwareInterface
 
     protected ?int $id = null;
 
-
-    protected ?CentreCout $centreCout = null;
-
     protected ?TypeMission $typeMission = null;
+
+    protected ?CentreCout  $centreCouts = null;
+
+
+
+    /**
+     * @param CentreCout|null $centreCouts
+     */
+    public function setCentreCouts(?CentreCout $centreCouts): void
+    {
+        $this->centreCouts = $centreCouts;
+    }
 
 
 
@@ -26,19 +35,11 @@ class CentreCoutTypeMission implements HistoriqueAwareInterface
 
 
 
-    public function getCentreCout(): ?CentreCout
+    public function getCentreCouts(): CentreCout
     {
-        return $this->centreCout;
+        return $this->centreCouts;
     }
 
-
-
-    public function setCentreCout(?CentreCout $centreCout): self
-    {
-        $this->centreCout = $centreCout;
-
-        return $this;
-    }
 
 
 

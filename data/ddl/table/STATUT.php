@@ -798,7 +798,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 83,
+            'position'    => 92,
             'commentaire' => NULL,
         ],
         'MODE_ENSEIGNEMENT_REALISE'           => [
@@ -810,7 +810,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 84,
+            'position'    => 93,
             'commentaire' => NULL,
         ],
         'MODIF_SERVICE_DU'               => [
@@ -871,6 +871,18 @@ return [
             'nullable'    => FALSE,
             'default'     => '9999',
             'position'    => 6,
+            'commentaire' => NULL,
+        ],
+        'PAIEMENT'                       => [
+            'name'        => 'PAIEMENT',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 95,
             'commentaire' => NULL,
         ],
         'PAIEMENT_VISUALISATION'         => [

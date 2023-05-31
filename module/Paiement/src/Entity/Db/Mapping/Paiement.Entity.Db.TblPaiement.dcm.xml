@@ -18,34 +18,25 @@
       </join-columns>
     </many-to-one>
     <many-to-one field="formuleResultatServiceReferentiel" target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel">
-      <join-columns>
         <join-column name="FORMULE_RES_SERVICE_REF_ID" referenced-column-name="ID"/>
-      </join-columns>
+    </many-to-one>
+    <many-to-one field="mission" target-entity="Mission\Entity\Db\Mission">
+      <join-column name="MISSIOn_ID" referenced-column-name="ID"/>
     </many-to-one>
     <many-to-one field="structure" target-entity="Application\Entity\Db\Structure" fetch="LAZY">
-      <join-columns>
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-      </join-columns>
     </many-to-one>
     <many-to-one field="periodePaiement" target-entity="Application\Entity\Db\Periode" fetch="LAZY">
-      <join-columns>
         <join-column name="PERIODE_PAIEMENT_ID" referenced-column-name="ID"/>
-      </join-columns>
     </many-to-one>
     <many-to-one field="miseEnPaiement" target-entity="Paiement\Entity\Db\MiseEnPaiement" fetch="LAZY">
-      <join-columns>
         <join-column name="MISE_EN_PAIEMENT_ID" referenced-column-name="ID"/>
-      </join-columns>
     </many-to-one>
     <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" fetch="LAZY">
-      <join-columns>
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
-      </join-columns>
     </many-to-one>
     <many-to-one field="annee" target-entity="Application\Entity\Db\Annee" fetch="LAZY">
-      <join-columns>
         <join-column name="ANNEE_ID" referenced-column-name="ID"/>
-      </join-columns>
     </many-to-one>
   </entity>
 </doctrine-mapping>

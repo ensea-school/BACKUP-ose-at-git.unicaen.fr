@@ -54,10 +54,11 @@ class VolumeHoraireController extends AbstractController
 
 
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
-        $readOnly = 1 == (int)$this->params()->fromQuery('read-only', 0);
+        $intervenant = $service->getIntervenant();
+        $readOnly    = 1 == (int)$this->params()->fromQuery('read-only', 0);
 
         $volumeHoraireListe = $service->getVolumeHoraireListe()->setTypeVolumehoraire($typeVolumeHoraire);
-        $semestriel         = $this->getServiceContext()->isModaliteServicesSemestriel($typeVolumeHoraire);
+        $semestriel         = $intervenant->getStatut()->isModeEnseignementSemestriel($typeVolumeHoraire);
 
 
         return compact('volumeHoraireListe', 'readOnly', 'semestriel');

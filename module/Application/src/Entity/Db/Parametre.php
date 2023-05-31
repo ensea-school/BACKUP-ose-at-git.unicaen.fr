@@ -10,9 +10,6 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
  */
 class Parametre implements HistoriqueAwareInterface
 {
-    const SERVICES_MODALITE_SEMESTRIEL = 'semestriel';
-    const SERVICES_MODALITE_CALENDAIRE = 'calendaire';
-
     const CONTRAT_FRANCHI_VALIDATION  = 'validation';
     const CONTRAT_FRANCHI_DATE_RETOUR = 'date-retour';
 
@@ -20,8 +17,8 @@ class Parametre implements HistoriqueAwareInterface
     const AVENANT_STRUCT    = 'avenant_struct';
     const AVENANT_DESACTIVE = 'avenant_desactive';
 
-    const CONTRAT_DIRECT    = 'contrat_direct';
-    const CONTRAT_DATE      = 'contrat_date';
+    const CONTRAT_DIRECT = 'contrat_direct';
+    const CONTRAT_DATE   = 'contrat_date';
 
     use HistoriqueAwareTrait;
 

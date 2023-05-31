@@ -164,6 +164,8 @@ class EnseignementController extends AbstractController
 
         $form = $this->getFormServiceEnseignementSaisie();
         $form->setTypeVolumeHoraire($typeVolumeHoraire);
+        $form->setIntervenant($intervenant);
+        $form->initPeriodes();
         $form->bind($service);
 
         if ($service->getId()) {
@@ -189,7 +191,7 @@ class EnseignementController extends AbstractController
                     $this->getProcessusPlafond()->beginTransaction();
                     try {
                         $service = $this->getServiceService()->save($service);
-                        $saved = $service;
+                        $saved   = $service;
                         $form->get('service')->get('id')->setValue($service->getId()); // transmet le nouvel ID
                         $hFin = $service->getVolumeHoraireListe()->getHeures();
                         $this->updateTableauxBord($service->getIntervenant());
@@ -261,6 +263,13 @@ class EnseignementController extends AbstractController
         $entity->setTypeVolumeHoraire($typeVolumeHoraire);
         $entity->setEtablissement($etablissement);
         $entity->setElementPedagogique($element);
+        //Lorsque le service n'existe pas encore on est obligé de récupérer l'intervenant via le localContext...
+        $intervenant = $this->getServiceLocalContext()->getIntervenant();
+
+        $form = $this->getFormServiceEnseignementSaisie();
+        $form->setIntervenant($intervenant);
+        $form->setTypeVolumeHoraire($typeVolumeHoraire);
+        $form->initPeriodes();
         $form->bind($entity);
 
         if (!$serviceId) $form->initFromContext();

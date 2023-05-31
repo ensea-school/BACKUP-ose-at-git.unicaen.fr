@@ -297,6 +297,9 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
         <div class="card bg-default">
             <div class="card-header">Calcul des heures complémentaires et mises en paiement</div>
             <div class="card-body">
+
+                <?= $this->formControlGroup($form->get('paiement')); ?>
+
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('serviceStatutaire')); ?>
@@ -315,7 +318,6 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 <?= $this->formControlGroup($form->get('cloture')); ?>
                 <?= $this->formControlGroup($form->get('motifNonPaiement')); ?>
                 <?= $this->formControlGroup($form->get('formuleVisualisation')); ?>
-                <?= $this->formControlGroup($form->get('paiementVisualisation')); ?>
             </div>
         </div>
 

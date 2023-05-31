@@ -5,82 +5,47 @@ namespace Paiement\Entity\Db;
 use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\FormuleResultatService;
 use Application\Entity\Db\FormuleResultatServiceReferentiel;
+use Application\Entity\Db\Periode;
+use Application\Entity\Db\Validation;
+use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\TypeHeures;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-/**
- * MiseEnPaiement
- */
 class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
 
     const A_METTRE_EN_PAIEMENT = 'a-mettre-en-paiement';
     const MIS_EN_PAIEMENT      = 'mis-en-paiement';
-    
-    /**
-     * @var \DateTime
-     */
-    private $dateMiseEnPaiement;
 
-    /**
-     * @var \DateTime
-     */
-    private $dateValidation;
+    private ?\DateTime $dateMiseEnPaiement = null;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private ?\DateTime $dateValidation = null;
 
-    /**
-     * @var \Application\Entity\Db\Periode
-     */
-    private $periodePaiement;
+    private ?int $id = null;
 
-    /**
-     * @var float
-     */
-    private $heures;
+    private ?Periode $periodePaiement = null;
 
-    /**
-     * @var TypeHeures
-     */
-    private $typeHeures;
+    private float $heures = 0;
 
-    /**
-     * @var \Paiement\Entity\Db\CentreCout
-     */
-    private $centreCout;
+    private ?TypeHeures $typeHeures = null;
 
-    /**
-     * @var DomaineFonctionnel
-     */
-    protected $domaineFonctionnel;
+    private ?CentreCout $centreCout = null;
 
-    /**
-     * @var \Application\Entity\Db\Validation
-     */
-    private $validation;
+    private ?DomaineFonctionnel $domaineFonctionnel = null;
 
-    /**
-     * @var \Application\Entity\Db\FormuleResultatService
-     */
-    private $formuleResultatService;
+    private ?Validation $validation = null;
 
-    /**
-     * @var \Application\Entity\Db\FormuleResultatServiceReferentiel
-     */
-    private $formuleResultatServiceReferentiel;
+    private ?FormuleResultatService $formuleResultatService = null;
 
-    /**
-     * miseEnPaiementIntervenantStructure
-     *
-     * @var MiseEnPaiementIntervenantStructure
-     */
-    protected $miseEnPaiementIntervenantStructure;
+    private ?FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null;
+
+    private ?Mission $mission = null;
+
+    private Collection $miseEnPaiementIntervenantStructure;
 
 
 
@@ -91,14 +56,7 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Set dateMiseEnPaiement
-     *
-     * @param \DateTime $dateMiseEnPaiement
-     *
-     * @return MiseEnPaiement
-     */
-    public function setDateMiseEnPaiement($dateMiseEnPaiement)
+    public function setDateMiseEnPaiement(?\DateTime $dateMiseEnPaiement): self
     {
         $this->dateMiseEnPaiement = $dateMiseEnPaiement;
 
@@ -107,26 +65,14 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Get dateMiseEnPaiement
-     *
-     * @return \DateTime
-     */
-    public function getDateMiseEnPaiement()
+    public function getDateMiseEnPaiement(): ?\DateTime
     {
         return $this->dateMiseEnPaiement;
     }
 
 
 
-    /**
-     * Set dateValidation
-     *
-     * @param \DateTime $dateValidation
-     *
-     * @return MiseEnPaiement
-     */
-    public function setDateValidation($dateValidation)
+    public function setDateValidation(?\DateTime $dateValidation): self
     {
         $this->dateValidation = $dateValidation;
 
@@ -135,38 +81,21 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Get dateValidation
-     *
-     * @return \DateTime
-     */
-    public function getDateValidation()
+    public function getDateValidation(): ?\DateTime
     {
         return $this->dateValidation;
     }
 
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * Set periodePaiement
-     *
-     * @param \Application\Entity\Db\Periode $periodePaiement
-     *
-     * @return MiseEnPaiement
-     */
-    public function setPeriodePaiement(\Application\Entity\Db\Periode $periodePaiement = null)
+    public function setPeriodePaiement(?Periode $periodePaiement = null): self
     {
         $this->periodePaiement = $periodePaiement;
 
@@ -175,26 +104,14 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Get periodePaiement
-     *
-     * @return \Application\Entity\Db\Periode
-     */
-    public function getPeriodePaiement()
+    public function getPeriodePaiement(): ?Periode
     {
         return $this->periodePaiement;
     }
 
 
 
-    /**
-     * Set heures
-     *
-     * @param float $heures
-     *
-     * @return MiseEnPaiement
-     */
-    public function setHeures($heures)
+    public function setHeures(float $heures): self
     {
         $this->heures = $heures;
 
@@ -203,26 +120,14 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Get heures
-     *
-     * @return float
-     */
-    public function getHeures()
+    public function getHeures(): float
     {
         return $this->heures;
     }
 
 
 
-    /**
-     * Set typeHeures
-     *
-     * @param \OffreFormation\Entity\Db\TypeHeures $typeHeures
-     *
-     * @return self
-     */
-    public function setTypeHeures(\OffreFormation\Entity\Db\TypeHeures $typeHeures = null)
+    public function setTypeHeures(?TypeHeures $typeHeures = null): self
     {
         $this->typeHeures = $typeHeures;
 
@@ -231,26 +136,14 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Get typeHeures
-     *
-     * @return \OffreFormation\Entity\Db\TypeHeures
-     */
-    public function getTypeHeures()
+    public function getTypeHeures(): ?TypeHeures
     {
         return $this->typeHeures;
     }
 
 
 
-    /**
-     * Set centreCout
-     *
-     * @param \Paiement\Entity\Db\CentreCout $centreCout
-     *
-     * @return MiseEnPaiement
-     */
-    public function setCentreCout(\Paiement\Entity\Db\CentreCout $centreCout = null)
+    public function setCentreCout(?CentreCout $centreCout = null): self
     {
         $this->centreCout = $centreCout;
 
@@ -259,36 +152,21 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Get centreCout
-     *
-     * @return \Paiement\Entity\Db\CentreCout
-     */
-    public function getCentreCout()
+    public function getCentreCout(): ?CentreCout
     {
         return $this->centreCout;
     }
 
 
 
-    /**
-     *
-     * @return DomaineFonctionnel
-     */
-    function getDomaineFonctionnel()
+    function getDomaineFonctionnel(): ?DomaineFonctionnel
     {
         return $this->domaineFonctionnel;
     }
 
 
 
-    /**
-     *
-     * @param DomaineFonctionnel $domaineFonctionnel
-     *
-     * @return self
-     */
-    function setDomaineFonctionnel(DomaineFonctionnel $domaineFonctionnel)
+    function setDomaineFonctionnel(?DomaineFonctionnel $domaineFonctionnel): self
     {
         $this->domaineFonctionnel = $domaineFonctionnel;
 
@@ -297,14 +175,7 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Set validation
-     *
-     * @param \Application\Entity\Db\Validation $validation
-     *
-     * @return MiseEnPaiement
-     */
-    public function setValidation(\Application\Entity\Db\Validation $validation = null)
+    public function setValidation(?Validation $validation = null): self
     {
         $this->validation = $validation;
 
@@ -313,26 +184,14 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Get validation
-     *
-     * @return \Application\Entity\Db\Validation
-     */
-    public function getValidation()
+    public function getValidation(): ?Validation
     {
         return $this->validation;
     }
 
 
 
-    /**
-     * Set formuleResultatService
-     *
-     * @param \Application\Entity\Db\FormuleResultatService $formuleResultatService
-     *
-     * @return MiseEnPaiement
-     */
-    public function setFormuleResultatService(\Application\Entity\Db\FormuleResultatService $formuleResultatService = null)
+    public function setFormuleResultatService(?FormuleResultatService $formuleResultatService = null): self
     {
         $this->formuleResultatService = $formuleResultatService;
 
@@ -341,49 +200,42 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Get formuleResultatService
-     *
-     * @return \Application\Entity\Db\FormuleResultatService
-     */
-    public function getFormuleResultatService()
+    public function getFormuleResultatService(): ?FormuleResultatService
     {
         return $this->formuleResultatService;
     }
 
 
 
-    /**
-     *
-     * @return ServiceAPayerInterface
-     */
-    public function getServiceAPayer()
+    public function getServiceAPayer(): ?ServiceAPayerInterface
     {
         if ($this->formuleResultatService) return $this->formuleResultatService;
         if ($this->formuleResultatServiceReferentiel) return $this->formuleResultatServiceReferentiel;
+        if ($this->mission) return $this->mission;
 
         return null;
     }
 
 
 
-    /**
-     *
-     * @param ServiceAPayerInterface $serviceAPayer
-     *
-     * @return self
-     */
-    public function setServiceAPayer(ServiceAPayerInterface $serviceAPayer = null)
+    public function setServiceAPayer(ServiceAPayerInterface $serviceAPayer = null): self
     {
         if ($serviceAPayer instanceof FormuleResultatService) {
             $this->setFormuleResultatService($serviceAPayer);
             $this->setFormuleResultatServiceReferentiel();
+            $this->setMission();
         } elseif ($serviceAPayer instanceof FormuleResultatServiceReferentiel) {
             $this->setFormuleResultatService();
             $this->setFormuleResultatServiceReferentiel($serviceAPayer);
+            $this->setMission();
+        } elseif ($serviceAPayer instanceof Mission) {
+            $this->setFormuleResultatService();
+            $this->setFormuleResultatServiceReferentiel();
+            $this->setMission($serviceAPayer);
         } else {
             $this->setFormuleResultatService();
             $this->setFormuleResultatServiceReferentiel();
+            $this->setMission();
         }
 
         return $this;
@@ -391,14 +243,7 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Set formuleResultatServiceReferentiel
-     *
-     * @param \Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel
-     *
-     * @return MiseEnPaiement
-     */
-    public function setFormuleResultatServiceReferentiel(\Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null)
+    public function setFormuleResultatServiceReferentiel(?FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null): self
     {
         $this->formuleResultatServiceReferentiel = $formuleResultatServiceReferentiel;
 
@@ -407,35 +252,39 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Get formuleResultatServiceReferentiel
-     *
-     * @return \Application\Entity\Db\FormuleResultatServiceReferentiel
-     */
-    public function getFormuleResultatServiceReferentiel()
+    public function getFormuleResultatServiceReferentiel(): ?FormuleResultatServiceReferentiel
     {
         return $this->formuleResultatServiceReferentiel;
     }
 
 
 
+    public function getMission(): ?Mission
+    {
+        return $this->mission;
+    }
+
+
+
+    public function setMission(?Mission $mission = null): MiseEnPaiement
+    {
+        $this->mission = $mission;
+        return $this;
+    }
+
+
+
     /**
-     * Get miseEnPaiementIntervenantStructure
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection|MiseEnPaiementIntervenantStructure[]
      */
-    public function getMiseEnPaiementIntervenantStructure()
+    public function getMiseEnPaiementIntervenantStructure(): Collection
     {
         return $this->miseEnPaiementIntervenantStructure;
     }
 
 
 
-    /**
-     *
-     * @return string
-     */
-    public function getEtat()
+    public function getEtat(): string
     {
         if (!$this->getDateMiseEnPaiement()) return self::A_METTRE_EN_PAIEMENT;
 

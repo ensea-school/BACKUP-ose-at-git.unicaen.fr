@@ -75,7 +75,7 @@ return [
             'bdd-type'    => 'FLOAT',
             'length'      => 0,
             'scale'       => NULL,
-            'precision'   => NULL,
+            'precision'   => 126,
             'nullable'    => TRUE,
             'default'     => NULL,
             'position'    => 18,

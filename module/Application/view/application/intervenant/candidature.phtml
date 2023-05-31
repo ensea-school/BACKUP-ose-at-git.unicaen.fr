@@ -1,0 +1,8 @@
+<?= $this->intervenant($intervenant)->renderTitle('Candidature'); ?>
+
+
+
+<?= $this->vue('mission/liste-candidatures', [
+    'intervenant' => $intervenant->getId(),
+]); ?>
+

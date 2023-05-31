@@ -2,9 +2,13 @@
 
 namespace Application;
 
+use Application\Assertion\IntervenantAssertion;
+use Application\Controller\IntervenantController;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Contrat\Controller\ContratController;
+use Dossier\Assertion\IntervenantDossierAssertion;
+use Dossier\Controller\IntervenantDossierController;
 use Paiement\Controller\PaiementController;
 use UnicaenPrivilege\Guard\PrivilegeController;
 use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
@@ -56,6 +60,24 @@ return [
                             'route'    => '/recherche',
                             'defaults' => [
                                 'action' => 'recherche',
+                            ],
+                        ],
+                    ],
+                    'candidature'           => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/candidature',
+                            'defaults' => [
+                                'action' => 'candidature',
+                            ],
+                        ],
+                    ],
+                    'get-candidatures'      => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/get-candidatures',
+                            'defaults' => [
+                                'action' => 'get-candidatures',
                             ],
                         ],
                     ],
@@ -198,7 +220,7 @@ return [
                         'options'       => [
                             'route'    => '/:intervenant/mise-en-paiement',
                             'defaults' => [
-                                'controller' =>     PaiementController::class,
+                                'controller' => PaiementController::class,
                             ],
                         ],
                         'child_routes'  => [
@@ -256,6 +278,17 @@ return [
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'index'),
                         'order'    => 1,
                         'pages'    => [
+                            'candidature'      => [
+                                'label'        => "Candidatures",
+                                'title'        => "Liste de vos candidatures en cours",
+                                'route'        => 'intervenant/candidature',
+                                'paramsInject' => [
+                                    'intervenant',
+                                ],
+                                'withtarget'   => true,
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'candidature'),
+                                'order'        => 5,
+                            ],
                             'rechercher'       => [
                                 'label'        => " Rechercher",
                                 'title'        => "Rechercher un intervenant",
@@ -316,6 +349,12 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['candidature', 'get-candidatures'],
+                    'privileges' => [Privileges::MISSION_OFFRE_EMPLOI_POSTULER],
+                    'assertion'  => IntervenantAssertion::class,
+                ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['saisir', 'definir-par-defaut', 'synchronisation', 'synchroniser'],
                     'privileges' => [
                         Privileges::INTERVENANT_EDITION,
@@ -363,6 +402,7 @@ return [
                         'privileges' => [
                             Privileges::INTERVENANT_EDITION,
                             Privileges::INTERVENANT_EDITION_AVANCEE,
+                            Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
                         ],
                         'resources'  => ['Intervenant'],
                         'assertion'  => Assertion\IntervenantAssertion::class,

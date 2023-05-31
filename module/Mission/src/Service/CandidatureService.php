@@ -9,6 +9,7 @@ use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
+use UnicaenVue\View\Model\AxiosModel;
 
 /**
  * Description of CandidatureService
@@ -57,6 +58,48 @@ class CandidatureService extends AbstractEntityService
         $candidature->setOffre($offre);
 
         return $this->save($candidature);
+    }
+
+
+
+    public function data(array $parameters, ?Role $role = null)
+    {
+        $dql = "
+        SELECT 
+         c, i, o, v, str
+        FROM 
+          " . Candidature::class . " c
+          JOIN c.intervenant i
+          JOIN c.offre o
+          JOIN o.structure str
+          LEFT JOIN c.validation v
+        WHERE 
+          c . histoDestruction IS null
+          AND v.histoDestruction IS NULL
+       ";
+
+
+        $dql .= dqlAndWhere([
+            'intervenant' => 'i',
+        ], $parameters);
+
+
+        $query  = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+        $result = $query->getResult();
+
+        /*$triggers = $this->getOffreEmploiPrivileges();*/
+        $triggers = [];
+
+        $properties = [
+            'id',
+            ['validation', ['histoCreation']],
+            'motif',
+            ['offre', ['typeMission', 'titre', ['structure', ['libelleLong']]]],
+            ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]],
+        ];
+
+
+        return new AxiosModel($query, $properties, $triggers);
     }
 
 

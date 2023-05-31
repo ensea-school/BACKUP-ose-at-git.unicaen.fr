@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'FORMULE_RES_SERVICE_ID'     => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 18,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'HEURES_AC'                  => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 19,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'HEURES_A_PAYER'             => [
@@ -90,7 +90,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 12,
+            'position'    => 13,
             'commentaire' => 'HETD à payer',
         ],
         'HEURES_A_PAYER_POND'        => [
@@ -102,7 +102,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 13,
+            'position'    => 14,
             'commentaire' => 'HETD à payer (en %)',
         ],
         'HEURES_DEMANDEES'           => [
@@ -114,7 +114,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 14,
+            'position'    => 15,
             'commentaire' => 'HETD demandées',
         ],
         'HEURES_PAYEES'              => [
@@ -126,7 +126,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 15,
+            'position'    => 16,
             'commentaire' => 'HETD payées',
         ],
         'ID'                         => [
@@ -150,7 +150,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'MISE_EN_PAIEMENT_ID'        => [
@@ -162,7 +162,19 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 10,
+            'commentaire' => NULL,
+        ],
+        'MISSION_ID'                 => [
+            'name'        => 'MISSION_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'PERIODE_PAIEMENT_ID'        => [
@@ -174,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'POURC_EXERCICE_AA'          => [
@@ -186,7 +198,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '4/10',
-            'position'    => 16,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'POURC_EXERCICE_AC'          => [
@@ -198,7 +210,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '6/10',
-            'position'    => 17,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'SERVICE_ID'                 => [
@@ -234,7 +246,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
     ],

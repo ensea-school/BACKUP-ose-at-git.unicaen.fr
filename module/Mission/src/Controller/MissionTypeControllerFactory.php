@@ -4,6 +4,7 @@ namespace Mission\Controller;
 
 use Application\Service\ContextService;
 use Mission\Service\MissionTypeService;
+use Paiement\Service\CentreCoutService;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -24,6 +25,7 @@ class MissionTypeControllerFactory
     {
         $controller = new MissionTypeController;
         $controller->setServiceMissionType($container->get(MissionTypeService::class));
+        $controller->setServiceCentreCout($container->get(CentreCoutService::class));
         $controller->setServiceContext($container->get(ContextService::class));
         return $controller;
     }

@@ -33,9 +33,12 @@ class MissionTypeForm extends AbstractForm
         ]);
         $this->build();
         $this->setValueOptions('tauxRemu', $this->getServiceTauxRemu()->getTauxRemusAnneeWithValeur());
+        $this->setValueOptions('tauxRemuMajore', $this->getServiceTauxRemu()->getTauxRemusAnneeWithValeur());
         $this->get('tauxRemu')->setEmptyOption("");
         $this->get('tauxRemu')->setLabel('Taux par défaut');
-
+        $this->get('tauxRemuMajore')->setLabel('Taux majoré');
+        $this->get('accompagnementEtudiants')->setLabel('Accompagnement d\'étudiants');
+        $this->get('besoinFormation')->setLabel('Heures de formation disponibles');
         $this->addSecurity();
         $this->addSubmit();
 

@@ -65,7 +65,7 @@ return [
     ],
 
 
-    /* Semestriel / calendaire */
+    /* Semestriel / calendaire
     "modalite_services_prev_ens"                 => [
         "VALEUR"      => "semestriel",
         "DESCRIPTION" => "Modalité de gestion des services (prévisionnel, enseignements)",
@@ -81,7 +81,7 @@ return [
     "modalite_services_real_ref"                 => [
         "VALEUR"      => "semestriel",
         "DESCRIPTION" => "Modalité de gestion des services (réalisé, référentiel)",
-    ],
+    ],*/
 
     /* Divers */
     "report_service"                             => [

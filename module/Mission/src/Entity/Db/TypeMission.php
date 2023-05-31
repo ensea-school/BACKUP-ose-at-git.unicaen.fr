@@ -4,6 +4,7 @@ namespace Mission\Entity\Db;
 
 use Application\Interfaces\ParametreEntityInterface;
 use Application\Traits\ParametreEntityTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Paiement\Entity\Db\TauxRemu;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
@@ -12,19 +13,22 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
 {
     use ParametreEntityTrait;
 
-    protected ?int $id = null;
+    protected ?int      $id                      = null;
 
-    protected ?string $code = null;
+    protected ?string   $code                    = null;
 
-    protected ?string $libelle = null;
+    protected ?string   $libelle                 = null;
 
-    protected ?TauxRemu $tauxRemu = null;
+    protected ?TauxRemu $tauxRemu                = null;
 
-    protected ?TauxRemu $tauxRemuMajore = null;
+    protected ?TauxRemu $tauxRemuMajore          = null;
 
-    protected bool $accompagnementEtudiants = false;
+    protected bool      $accompagnementEtudiants = false;
 
-    protected bool $besoinFormation = false;
+    protected bool      $besoinFormation         = false;
+
+    protected           $centreCoutsLinkers      = null;
+
 
 
     public function getId(): ?int
@@ -37,6 +41,51 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
     public function getCode(): ?string
     {
         return $this->code;
+    }
+
+
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->centreCoutsLinkers = new ArrayCollection();
+    }
+
+
+
+    /**
+     * @return null
+     */
+    public function getCentreCoutsLinkers()
+    {
+        return $this->centreCoutsLinkers->filter(function ($centreCoutLinker) {
+            return !$centreCoutLinker->estHistorise();
+        });
+    }
+
+
+
+    /**
+     * @param null $centreCoutsLinker
+     *
+     * @return TypeMission
+     */
+    public function addCentreCoutsLinker($centreCoutsLinker): TypeMission
+    {
+        $this->centreCoutsLinkers[] = $centreCoutsLinker;
+
+        return $this;
+    }
+
+
+
+    public function removeCentreCoutsLinker($centreCoutsLinker): TypeMission
+    {
+
+        $this->centreCoutsLinkers->removeElement($centreCoutsLinker);
+        return $this;
     }
 
 
@@ -132,5 +181,23 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
     public function __toString(): string
     {
         return $this->getLibelle();
+    }
+
+
+
+    /**
+     * @return array
+     */
+    public function getCentreCoutsIds(): array
+    {
+        $centreCoutsIds = [];
+        /**
+         * @var $centreCoutsLinker CentreCoutTypeMission
+         */
+        foreach ($this->centreCoutsLinkers as $centreCoutsLinker) {
+            $centreCoutsIds[] = $centreCoutsLinker->getCentreCouts()->getId();
+        }
+
+        return $centreCoutsIds;
     }
 }

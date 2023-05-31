@@ -7,7 +7,7 @@
             <sequence-generator sequence-name="CENTRE_COUT_TYPE_MISS_ID_SEQ" allocation-size="1" initial-value="1"/>
         </id>
 
-        <many-to-one field="centreCout" target-entity="Paiement\Entity\Db\CentreCout">
+        <many-to-one field="centreCouts" target-entity="Paiement\Entity\Db\CentreCout">
             <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="typeMission" target-entity="Mission\Entity\Db\TypeMission">

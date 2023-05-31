@@ -36,5 +36,6 @@
                 <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
+        <one-to-many field="centreCoutsLinkers" target-entity="Mission\Entity\Db\CentreCoutTypeMission" mapped-by="typeMission"/>
     </entity>
 </doctrine-mapping>

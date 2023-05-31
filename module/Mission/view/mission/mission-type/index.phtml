@@ -21,6 +21,7 @@ $canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_S
         <th>Accomp. Etudiants</th>
         <th>Besoin de formation</th>
         <th>Type de rémunération</th>
+        <th>Type de rémunération majoré</th>
         <?php if ($canSupprimer || $canEdit): ?>
             <th>Action</th>
         <?php endif; ?>
@@ -36,6 +37,9 @@ $canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_S
             <td class="text-center"><i class="fas fa-<?= $missionType->isBesoinFormation() ? 'check text-success' : 'xmark text-danger' ?>"></i></td>
             <td><?php if ($missionType->getTauxRemu()):
                     echo $missionType->getTauxRemu()->getLibelle();
+                endif; ?></td>
+            <td><?php if ($missionType->getTauxRemuMajore()):
+                    echo $missionType->getTauxRemuMajore()->getLibelle();
                 endif; ?></td>
             <?php if ($canSupprimer || $canEdit): ?>
                 <td style="text-align: center">

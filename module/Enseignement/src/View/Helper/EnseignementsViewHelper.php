@@ -321,7 +321,9 @@ class EnseignementsViewHelper extends AbstractHtmlElement
 
         $heures         = 0;
         $modeCalendaire = false;
-        if (!$this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())) {
+        $intervenant    = $service->getIntervenant();
+        if (!$intervenant->getStatut()->isModeEnseignementSemestriel($this->getTypeVolumeHoraire())) {
+
             // Si on n'est pas en semestriel, donc en calendaire, alors on ajoute une heure fictive afin d'afficher
             // tout le temps la ligne
             $modeCalendaire = true;
@@ -407,7 +409,7 @@ class EnseignementsViewHelper extends AbstractHtmlElement
         $code   = $service->getIntervenant()->getStatut()->getCode();
 
 
-        if ($this->getServiceContext()->isModaliteServicesSemestriel($typeVolumeHoraire)) {
+        if ($statut->isModeEnseignementSemestriel($typeVolumeHoraire)) {
             $vhlvh = $this->getView()->volumeHoraireListe($volumeHoraireListe);
             /* @var $vhlvh \Application\View\Helper\VolumeHoraire\Liste */
         } else {

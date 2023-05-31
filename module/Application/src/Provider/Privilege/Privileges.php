@@ -9,8 +9,7 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
-{
+class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
 
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                  = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION              = 'agrement-conseil-academique-suppression';
@@ -171,6 +170,7 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const MISSION_DEVALIDATION                                 = 'mission-devalidation';
     const MISSION_DEVALIDATION_REALISE                         = 'mission-devalidation-realise';
     const MISSION_EDITION                                      = 'mission-edition';
+    const MISSION_EDITION_CENTRE_COUT_TYPE                     = 'mission-edition-centre-cout-type';
     const MISSION_EDITION_REALISE                              = 'mission-edition-realise';
     const MISSION_EDITION_TYPE                                 = 'mission-edition-type';
     const MISSION_OFFRE_EMPLOI_AJOUTER                         = 'mission-offre-emploi-ajouter';

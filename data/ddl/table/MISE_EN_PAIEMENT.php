@@ -177,6 +177,18 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
+        'MISSION_ID'                 => [
+            'name'        => 'MISSION_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 18,
+            'commentaire' => NULL,
+        ],
         'PERIODE_PAIEMENT_ID'        => [
             'name'        => 'PERIODE_PAIEMENT_ID',
             'type'        => 'int',

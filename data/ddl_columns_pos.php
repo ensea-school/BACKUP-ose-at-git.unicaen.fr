@@ -911,6 +911,7 @@ return [
         'HEURES',
         'TYPE_HEURES_ID',
         'DOMAINE_FONCTIONNEL_ID',
+        'MISSION_ID',
     ],
     'MODIFICATION_SERVICE_DU'        => [
         'ID',

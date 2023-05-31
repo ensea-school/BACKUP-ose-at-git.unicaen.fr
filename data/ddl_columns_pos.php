@@ -1322,6 +1322,7 @@ return [
         'MODE_SERVICE_PREVISIONNEL',
         'MODE_SERVICE_REALISE',
         'AVENANT_ETAT_SORTIE_ID',
+        'PAIEMENT',
     ],
     'STRUCTURE'                      => [
         'ID',
@@ -1481,6 +1482,7 @@ return [
         'SERVICE_REFERENTIEL_ID',
         'FORMULE_RES_SERVICE_ID',
         'FORMULE_RES_SERVICE_REF_ID',
+        'MISSION_ID',
         'INTERVENANT_ID',
         'STRUCTURE_ID',
         'MISE_EN_PAIEMENT_ID',

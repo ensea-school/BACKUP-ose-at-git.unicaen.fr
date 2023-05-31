@@ -748,6 +748,17 @@ return [
             "ELIGIBLE_EXTRACTION_PAIE" => true,
             "ENSEIGNEMENT"             => false,
         ],
+        [
+            'ID'                       => 6,
+            "CODE"                     => "mission",
+            "LIBELLE_COURT"            => "Mission",
+            "LIBELLE_LONG"             => "Mission",
+            "ORDRE"                    => 6,
+            "TYPE_HEURES_ELEMENT_ID"   => 6,
+            "ELIGIBLE_CENTRE_COUT_EP"  => false,
+            "ELIGIBLE_EXTRACTION_PAIE" => true,
+            "ENSEIGNEMENT"             => false,
+        ],
     ],
 
     'TYPE_INTERVENANT' => [

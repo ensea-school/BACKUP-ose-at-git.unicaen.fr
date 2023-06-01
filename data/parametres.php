@@ -117,6 +117,8 @@ return [
     "taux-remu"                           => [
         "VALEUR"      => "TLD",
         "DESCRIPTION" => "taux de rémuneration utilisé par défaut",
+        "QUERY"       => 'SELECT id valeur FROM taux_remu WHERE code = :valeur AND histo_destruction IS NULL',
+
     ],
     "taux_conges_payes"                          => [
         "VALEUR"      => 0.1,

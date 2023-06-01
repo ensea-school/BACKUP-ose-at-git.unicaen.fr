@@ -9,7 +9,8 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
+class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
+{
 
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                  = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION              = 'agrement-conseil-academique-suppression';
@@ -290,5 +291,9 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
     const TYPE_RESSOURCE_VISUALISATION                         = 'type-ressource-visualisation';
     const WORKFLOW_DEPENDANCES_EDITION                         = 'workflow-dependances-edition';
     const WORKFLOW_DEPENDANCES_VISUALISATION                   = 'workflow-dependances-visualisation';
+    const MAIL_MAIL_INDEX                                      = "mail-mail_index";
+    const MAIL_MAIL_AFFICHER                                   = "mail-mail_afficher";
+    const MAIL_MAIL_SUPPRIMER                                  = "mail-mail_supprimer";
+    const MAIL_MAIL_TEST                                       = "mail-mail_test";
 
 }

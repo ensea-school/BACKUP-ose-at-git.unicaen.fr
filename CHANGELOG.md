@@ -47,6 +47,7 @@
 ## Corrections de bugs
 
 * Erreur d'affichage du contrat unique avec des heures multi-composantes (#50889 et #50980)
+* Problème de saisie de services hors établissement (#50990)
 * Formulaire d'édition des états de sortie réparé au niveau de l'affichage des sous-requêtes
 * Correction de la formule de Picardie
 * Correction de la formule de calcul de Lyon 2

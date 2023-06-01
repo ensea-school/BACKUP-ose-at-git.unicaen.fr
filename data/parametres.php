@@ -65,7 +65,7 @@ return [
     ],
 
 
-    /* Semestriel / calendaire */
+    /* Semestriel / calendaire
     "modalite_services_prev_ens"                 => [
         "VALEUR"      => "semestriel",
         "DESCRIPTION" => "Modalité de gestion des services (prévisionnel, enseignements)",
@@ -81,7 +81,7 @@ return [
     "modalite_services_real_ref"                 => [
         "VALEUR"      => "semestriel",
         "DESCRIPTION" => "Modalité de gestion des services (réalisé, référentiel)",
-    ],
+    ],*/
 
     /* Divers */
     "report_service"                             => [
@@ -113,6 +113,12 @@ return [
     "horaire_nocturne"                           => [
         "VALEUR"      => "22:00",
         "DESCRIPTION" => "Horaire à partir duquel les heures faites sont considérées comme nocturnes",
+    ],
+    "taux-remu"                           => [
+        "VALEUR"      => "TLD",
+        "DESCRIPTION" => "taux de rémuneration utilisé par défaut",
+        "QUERY"       => 'SELECT id valeur FROM taux_remu WHERE code = :valeur AND histo_destruction IS NULL',
+
     ],
     "taux_conges_payes"                          => [
         "VALEUR"      => 0.1,

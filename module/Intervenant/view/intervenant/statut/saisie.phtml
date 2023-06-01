@@ -193,20 +193,13 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('modeServicePrevisionnel')); ?>
+                        <?= $this->formControlGroup($form->get('modeEnseignementPrevisionnel')); ?>
                     </div>
                     <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('modeServiceRealise')); ?>
+                        <?= $this->formControlGroup($form->get('modeEnseignementRealise')); ?>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('modeReferentielPrevisionnel')); ?>
-                    </div>
-                    <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('modeReferentielRealise')); ?>
-                    </div>
-                </div>
+
                 <div class="row servicesDetails">
                     <div class="col-md-12">
                         <?= $this->formControlGroup($form->get('serviceExterieur')); ?>

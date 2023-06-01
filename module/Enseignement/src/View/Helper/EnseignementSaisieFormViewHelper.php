@@ -32,6 +32,7 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
     protected EnseignementSaisieForm $form;
 
 
+
     /**
      * @return \OffreFormation\Entity\Db\ElementPedagogique|null
      */
@@ -42,6 +43,7 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
         /* @var $service Service */
         return $service->getElementPedagogique();
     }
+
 
 
     /**
@@ -56,12 +58,13 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
     }
 
 
+
     /**
      * @return bool
      */
     protected function isEnseignementChoisi(): bool
     {
-        $etablissement = $this->getEtablissement();
+        $etablissement      = $this->getEtablissement();
         $elementPedagogique = $this->getElementPedagogique();
 
         if ($elementPedagogique) {
@@ -76,6 +79,7 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
 
         return false;
     }
+
 
 
     /**
@@ -93,6 +97,7 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
     }
 
 
+
     /**
      *
      * @param Saisie $form
@@ -108,10 +113,12 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
     }
 
 
+
     public function __toString()
     {
         return $this->render();
     }
+
 
 
     public function getVolumesHorairesRefreshUrl()
@@ -124,6 +131,7 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
 
         return $url;
     }
+
 
 
     /**
@@ -148,9 +156,9 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
         }
         if ($fservice->has('interne-externe')) {
             $interne = $fservice->get('interne-externe')->getValue() == 'service-interne';
-            $res .= $this->getView()->formControlGroup($fservice->get('interne-externe'), 'formButtonGroup');
-            $res .= '<div id="element-interne" ' . (($interne) ? '' : 'style="display:none"') . '>' . $this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique')) . '</div>';
-            $res .= '<div id="element-externe" ' . (($interne) ? 'style="display:none"' : '') . '>'
+            $res     .= $this->getView()->formControlGroup($fservice->get('interne-externe'), 'formButtonGroup');
+            $res     .= '<div id="element-interne" ' . (($interne) ? '' : 'style="display:none"') . '>' . $this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique')) . '</div>';
+            $res     .= '<div id="element-externe" ' . (($interne) ? 'style="display:none"' : '') . '>'
                 . $this->getView()->formControlGroup($fservice->get('etablissement'))
                 . $this->getView()->formControlGroup($fservice->get('description'))
                 . '</div>';
@@ -173,13 +181,13 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
     }
 
 
+
     public function renderVolumesHoraires()
     {
-        $intervenant = $this->getServiceLocalContext()->getIntervenant();
-//        if (!$this->getServiceContext()->isModaliteServicesSemestriel($intervenant)) {
-//            return null;
-//        }
-
+        $intervenant = $this->form->getIntervenant();
+        if (!$intervenant->getStatut()->isModeEnseignementSemestriel($this->form->getTypeVolumeHoraire())) {
+            return null;
+        }
         $res = '';
         if ($this->isEnseignementChoisi()) {
             foreach ($this->getPeriodes() as $periode) {
@@ -192,6 +200,7 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
 
         return $res;
     }
+
 
 
     public function renderVolumeHoraire($fieldset)
@@ -231,9 +240,9 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
                 $res .= $this->getView()->formLabel($element);
                 if ($inRealise) {
                     $heures = $vhl->setTypeIntervention($typeIntervention)->getHeures();
-                    $res .= '<br />Prévues : <span id="prev-' . $typeIntervention->getCode() . '" data-heures="' . $heures . '">';
-                    $res .= \UnicaenApp\Util::formattedNumber($heures);
-                    $res .= '</span>';
+                    $res    .= '<br />Prévues : <span id="prev-' . $typeIntervention->getCode() . '" data-heures="' . $heures . '">';
+                    $res    .= \UnicaenApp\Util::formattedNumber($heures);
+                    $res    .= '</span>';
                 }
                 $res .= '<br />';
                 $res .= $this->getView()->formText($element);

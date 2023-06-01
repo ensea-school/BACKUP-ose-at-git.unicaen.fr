@@ -1321,6 +1321,8 @@ return [
         'MODE_SERVICE_PREVISIONNEL',
         'MODE_SERVICE_REALISE',
         'AVENANT_ETAT_SORTIE_ID',
+        'MODE_ENSEIGNEMENT_PREVISIONNEL',
+        'MODE_ENSEIGNEMENT_REALISE',
     ],
     'STRUCTURE'                      => [
         'ID',

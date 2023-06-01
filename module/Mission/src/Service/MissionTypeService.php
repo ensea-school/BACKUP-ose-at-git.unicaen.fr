@@ -4,7 +4,9 @@ namespace Mission\Service;
 
 
 use Application\Service\AbstractEntityService;
+use Mission\Entity\Db\CentreCoutTypeMission;
 use Mission\Entity\Db\TypeMission;
+use Paiement\Entity\Db\CentreCout;
 use UnicaenApp\Traits\SessionContainerTrait;
 
 /**
@@ -50,6 +52,34 @@ class MissionTypeService extends AbstractEntityService
 
         return $query->getResult();
     }
+
+    public function getCentreCouts(): array
+    {
+        $dql   = "SELECT cm FROM " . CentreCout::class." cm WHERE cm.histoDestruction IS NULL";
+        $query = $this->getEntityManager()->createQuery($dql);
+
+        return $query->getResult();
+    }
+
+    public function saveCentreCoutTypeLinker($centreCoutTypeLinker){
+        $this->getEntityManager()->persist($centreCoutTypeLinker);
+    }
+
+
+
+    public function removeCentreCoutLinker(CentreCoutTypeMission $centreCoutsLinker, $softDelete = true)
+    {
+        if($softDelete){
+            $centreCoutsLinker->historiser($this->getServiceContext()->getUtilisateur());
+            $this->getEntityManager()->persist($centreCoutsLinker);
+        }else{
+            $this->getEntityManager()->remove($centreCoutsLinker);
+
+        }
+        $this->getEntityManager()->flush($centreCoutsLinker);
+
+    }
+
 }
 
 

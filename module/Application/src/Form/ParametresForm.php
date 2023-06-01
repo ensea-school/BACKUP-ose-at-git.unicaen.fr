@@ -4,6 +4,7 @@ namespace Application\Form;
 
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\Parametre;
+use Paiement\Entity\Db\TauxRemu;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
@@ -334,66 +335,6 @@ class ParametresForm extends AbstractForm
 
         $this->add([
             'type'       => 'Select',
-            'name'       => 'modalite_services_prev_ens',
-            'options'    => [
-                'value_options' => [
-                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
-                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)',
-                ],
-            ],
-            'attributes' => [
-                'class'     => 'selectpicker',
-                'data-size' => 20,
-            ],
-        ]);
-
-        $this->add([
-            'type'       => 'Select',
-            'name'       => 'modalite_services_prev_ref',
-            'options'    => [
-                'value_options' => [
-                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
-                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)',
-                ],
-            ],
-            'attributes' => [
-                'class'     => 'selectpicker',
-                'data-size' => 20,
-            ],
-        ]);
-
-        $this->add([
-            'type'       => 'Select',
-            'name'       => 'modalite_services_real_ens',
-            'options'    => [
-                'value_options' => [
-                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
-                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)',
-                ],
-            ],
-            'attributes' => [
-                'class'     => 'selectpicker',
-                'data-size' => 20,
-            ],
-        ]);
-
-        $this->add([
-            'type'       => 'Select',
-            'name'       => 'modalite_services_real_ref',
-            'options'    => [
-                'value_options' => [
-                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
-                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)',
-                ],
-            ],
-            'attributes' => [
-                'class'     => 'selectpicker',
-                'data-size' => 20,
-            ],
-        ]);
-
-        $this->add([
-            'type'       => 'Select',
             'name'       => 'report_service',
             'options'    => [
                 'value_options' => [
@@ -442,7 +383,7 @@ class ParametresForm extends AbstractForm
         $this->add([
             'type'       => 'Time',
             'name'       => 'horaire_nocturne',
-            'options' => [
+            'options'    => [
                 'label' => "Horaire nocturne",
             ],
             'attributes' => [
@@ -451,10 +392,23 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'type'       => 'Select',
+            'name'       => 'taux-remu',
+            'options'    => [
+                'label' => "Taux de rémunération par défaut",
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+        ]);
+        $this->setValueOptions('taux-remu', 'SELECT t FROM ' . TauxRemu::class . ' t WHERE t.histoDestruction IS NULL ORDER BY t.libelle');
+
+        $this->add([
             'type'       => 'Text',
             'name'       => 'taux_conges_payes',
             'options'    => [
-                'label' => "Taux pour prise en compte des congés payés",
+                'label'  => "Taux pour prise en compte des congés payés",
                 'suffix' => '%',
             ],
             'attributes' => [

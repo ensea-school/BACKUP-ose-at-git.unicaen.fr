@@ -44,22 +44,8 @@
                 <h3 class="card-title">Services et référentiel</h3>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('modalite_services_prev_ens')); ?>
-                    </div>
-                    <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('modalite_services_prev_ref')); ?>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('modalite_services_real_ens')); ?>
-                    </div>
-                    <div class="col-md-6">
-                        <?= $this->formControlGroup($form->get('modalite_services_real_ref')); ?>
-                    </div>
-                </div>
+
+                
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('report_service')); ?>
@@ -244,6 +230,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('taux_conges_payes')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('taux-remu')); ?>
                     </div>
                 </div>
             </div>

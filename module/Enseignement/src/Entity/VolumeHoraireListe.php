@@ -241,6 +241,8 @@ class VolumeHoraireListe
      */
     public function match(VolumeHoraire $volumeHoraire): bool
     {
+        $intervenant = $volumeHoraire->getService()->getIntervenant();
+
         if ($volumeHoraire->getRemove()) { // Si le volume horaire est en cours de suppression
             return false;
         }
@@ -284,7 +286,7 @@ class VolumeHoraireListe
             }
         }
         //Uniquement en mode semestriel car en mode calendaire on ne doit pas être sur des mêmes horaires de début et de fin
-        if (false !== $this->motifNonPaiement && $this->getServiceContext()->isModaliteServicesSemestriel($volumeHoraire->getTypeVolumeHoraire())) {
+        if (false !== $this->motifNonPaiement && $intervenant->getStatut()->isModeEnseignementSemestriel($volumeHoraire->getTypeVolumeHoraire())) {
             $motifNonPaiement = $volumeHoraire->getMotifNonPaiement();
             if (true === $this->motifNonPaiement) {
                 if (null === $motifNonPaiement) return false;
@@ -293,7 +295,7 @@ class VolumeHoraireListe
             }
         }
         //Uniquement en mode semestriel car en mode calendaire on ne doit pas être sur des mêmes horaires de début et de fin
-        if (false !== $this->tag && $this->getServiceContext()->isModaliteServicesSemestriel($volumeHoraire->getTypeVolumeHoraire())) {
+        if (false !== $this->tag && $intervenant->getStatut()->isModeEnseignementSemestriel($volumeHoraire->getTypeVolumeHoraire())) {
             $tag = $volumeHoraire->getTag();
             if (true === $this->tag) {
                 if (null === $tag) return false;

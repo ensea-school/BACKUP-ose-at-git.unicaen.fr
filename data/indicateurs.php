@@ -1,6 +1,18 @@
 <?php
 
 return [
+    'Missions'             => [
+        'id'          => 18,
+        'indicateurs' => [
+            2010 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant sont en attente de validation d\'une candidature',
+                'libelle_pluriel'   => '%s étudiants sont en attente de validation d\'une candidature',
+                'route'             => 'intervenant/candidature',
+                'irrecevables'      => false,
+            ],
+        ],
+    ],
     'Données personnelles' => [
         'id'          => 1,
         'indicateurs' => [

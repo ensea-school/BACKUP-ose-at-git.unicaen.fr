@@ -344,13 +344,21 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         CASE ftvh.type_intervention_code
           WHEN 'CM' THEN COALESCE(fti.taux_cm_service_du,1.5)
           WHEN 'TP' THEN COALESCE(fti.taux_tp_service_du,1)
-          WHEN 'AUTRE' THEN COALESCE(fti.taux_autre_service_du,1)
+          WHEN fti.taux_autre_1_code THEN COALESCE(fti.taux_autre_1_service_du,1)
+          WHEN fti.taux_autre_2_code THEN COALESCE(fti.taux_autre_2_service_du,1)
+          WHEN fti.taux_autre_3_code THEN COALESCE(fti.taux_autre_3_service_du,1)
+          WHEN fti.taux_autre_4_code THEN COALESCE(fti.taux_autre_4_service_du,1)
+          WHEN fti.taux_autre_5_code THEN COALESCE(fti.taux_autre_5_service_du,1)
           ELSE 1
         END taux_service_du,
         CASE ftvh.type_intervention_code
           WHEN 'CM' THEN COALESCE(fti.taux_cm_service_compl,1.5)
           WHEN 'TP' THEN COALESCE(fti.taux_tp_service_compl,2/3)
-          WHEN 'AUTRE' THEN COALESCE(fti.taux_autre_service_compl,1)
+          WHEN fti.taux_autre_1_code THEN COALESCE(fti.taux_autre_1_service_compl,1)
+          WHEN fti.taux_autre_2_code THEN COALESCE(fti.taux_autre_2_service_compl,1)
+          WHEN fti.taux_autre_3_code THEN COALESCE(fti.taux_autre_3_service_compl,1)
+          WHEN fti.taux_autre_4_code THEN COALESCE(fti.taux_autre_4_service_compl,1)
+          WHEN fti.taux_autre_5_code THEN COALESCE(fti.taux_autre_5_service_compl,1)
           ELSE 1
         END taux_service_compl,
         tvh.code type_volume_horaire_code

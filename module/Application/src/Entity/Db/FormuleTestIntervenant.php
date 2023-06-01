@@ -17,137 +17,94 @@ class FormuleTestIntervenant
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private ?int $id = null;
 
-    /**
-     * @var string
-     */
-    private $libelle;
+    private ?string $libelle = null;
 
-    /**
-     * @var string|null
-     */
-    private $structureCode;
+    private ?string $structureCode = null;
 
-    /**
-     * @var float
-     */
-    private $heuresServiceStatutaire = 0;
+    private float $heuresServiceStatutaire = 0;
 
-    /**
-     * @var float
-     */
-    private $heuresServiceModifie = 0;
+    private float $heuresServiceModifie = 0;
 
-    /**
-     * @var bool
-     */
-    private $depassementServiceDuSansHC = false;
+    private bool $depassementServiceDuSansHC = false;
 
-    /**
-     * @var float
-     */
-    private $tauxCmServiceDu = 1.5;
+    private float $tauxCmServiceDu = 1.5;
 
-    /**
-     * @var float
-     */
-    private $tauxCmServiceCompl = 1.5;
+    private float $tauxCmServiceCompl = 1.5;
 
-    /**
-     * @var float
-     */
-    private $tauxTpServiceDu = 1;
+    private float $tauxTpServiceDu = 1;
 
-    /**
-     * @var float
-     */
-    private $tauxTpServiceCompl = 2 / 3;
+    private float $tauxTpServiceCompl = 2 / 3;
 
-    /**
-     * @var float
-     */
-    private $tauxAutreServiceDu = 1;
+    private float $tauxAutre1ServiceDu = 1;
 
-    /**
-     * @var float
-     */
-    private $tauxAutreServiceCompl = 1;
+    private float $tauxAutre1ServiceCompl = 1;
 
-    /**
-     * @var string
-     */
-    private $param1;
+    private ?string $tauxAutre1Code = null;
 
-    /**
-     * @var string
-     */
-    private $param2;
+    private float $tauxAutre2ServiceDu = 1;
 
-    /**
-     * @var string
-     */
-    private $param3;
+    private float $tauxAutre2ServiceCompl = 1;
 
-    /**
-     * @var string
-     */
-    private $param4;
+    private ?string $tauxAutre2Code = null;
 
-    /**
-     * @var string
-     */
-    private $param5;
+    private float $tauxAutre3ServiceDu = 1;
 
-    /**
-     * @var float
-     */
-    private $aServiceDu = 0;
+    private float $tauxAutre3ServiceCompl = 1;
 
-    /**
-     * @var float
-     */
-    private $cServiceDu;
+    private ?string $tauxAutre3Code = null;
+
+    private float $tauxAutre4ServiceDu = 1;
+
+    private float $tauxAutre4ServiceCompl = 1;
+
+    private ?string $tauxAutre4Code = null;
+
+    private float $tauxAutre5ServiceDu = 1;
+
+    private float $tauxAutre5ServiceCompl = 1;
+
+    private ?string $tauxAutre5Code = null;
+
+    private ?string $param1 = null;
+
+    private ?string $param2 = null;
+
+    private ?string $param3 = null;
+
+    private ?string $param4 = null;
+
+    private ?string $param5 = null;
+
+    private float $aServiceDu = 0;
+
+    private ?float $cServiceDu = null;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $volumeHoraireTest;
 
-    /**
-     * @var string
-     */
-    private $debugInfo;
+    private ?string $debugInfo = null;
 
 
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * @return string
-     */
-    public function getLibelle()
+    public function getLibelle(): ?string
     {
         return $this->libelle;
     }
 
 
 
-    /**
-     * @param string $libelle
-     */
-    public function setLibelle(string $libelle): FormuleTestIntervenant
+    public function setLibelle(?string $libelle): FormuleTestIntervenant
     {
         $this->libelle = $libelle;
 
@@ -156,9 +113,6 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return string|null
-     */
     public function getStructureCode(): ?string
     {
         return $this->structureCode;
@@ -166,11 +120,6 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @param string|null $structureCode
-     *
-     * @return FormuleTestIntervenant
-     */
     public function setStructureCode(?string $structureCode): FormuleTestIntervenant
     {
         $this->structureCode = $structureCode;
@@ -181,7 +130,7 @@ class FormuleTestIntervenant
 
 
     /**
-     * @return string[]
+     * @return array|string[]
      */
     public function getStructures(): array
     {
@@ -201,19 +150,13 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return float
-     */
-    public function getHeuresServiceStatutaire()
+    public function getHeuresServiceStatutaire(): float
     {
         return $this->heuresServiceStatutaire;
     }
 
 
 
-    /**
-     * @param float $heuresServiceStatutaire
-     */
     public function setHeuresServiceStatutaire(float $heuresServiceStatutaire): FormuleTestIntervenant
     {
         $this->heuresServiceStatutaire = $heuresServiceStatutaire;
@@ -223,19 +166,13 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return float
-     */
-    public function getHeuresServiceModifie()
+    public function getHeuresServiceModifie(): float
     {
         return $this->heuresServiceModifie;
     }
 
 
 
-    /**
-     * @param float $heuresServiceModifie
-     */
     public function setHeuresServiceModifie(float $heuresServiceModifie): FormuleTestIntervenant
     {
         $this->heuresServiceModifie = $heuresServiceModifie;
@@ -245,9 +182,6 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return bool
-     */
     public function getDepassementServiceDuSansHC(): bool
     {
         return $this->depassementServiceDuSansHC;
@@ -255,9 +189,6 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @param bool $depassementServiceDuSansHC
-     */
     public function setDepassementServiceDuSansHC(bool $depassementServiceDuSansHC): FormuleTestIntervenant
     {
         $this->depassementServiceDuSansHC = $depassementServiceDuSansHC;
@@ -267,9 +198,6 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return float
-     */
     public function getTauxCmServiceDu(): float
     {
         return $this->tauxCmServiceDu;
@@ -277,11 +205,6 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @param float $tauxCmServiceDu
-     *
-     * @return FormuleTestIntervenant
-     */
     public function setTauxCmServiceDu(float $tauxCmServiceDu): FormuleTestIntervenant
     {
         $this->tauxCmServiceDu = $tauxCmServiceDu;
@@ -291,9 +214,6 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return float
-     */
     public function getTauxCmServiceCompl(): float
     {
         return $this->tauxCmServiceCompl;
@@ -301,11 +221,6 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @param float $tauxCmServiceCompl
-     *
-     * @return FormuleTestIntervenant
-     */
     public function setTauxCmServiceCompl(float $tauxCmServiceCompl): FormuleTestIntervenant
     {
         $this->tauxCmServiceCompl = $tauxCmServiceCompl;
@@ -315,9 +230,6 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return float
-     */
     public function getTauxTpServiceDu(): float
     {
         return $this->tauxTpServiceDu;
@@ -325,11 +237,6 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @param float $tauxTpServiceDu
-     *
-     * @return FormuleTestIntervenant
-     */
     public function setTauxTpServiceDu(float $tauxTpServiceDu): FormuleTestIntervenant
     {
         $this->tauxTpServiceDu = $tauxTpServiceDu;
@@ -339,9 +246,6 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return float
-     */
     public function getTauxTpServiceCompl(): float
     {
         return $this->tauxTpServiceCompl;
@@ -349,11 +253,6 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @param float $tauxTpServiceCompl
-     *
-     * @return FormuleTestIntervenant
-     */
     public function setTauxTpServiceCompl(float $tauxTpServiceCompl): FormuleTestIntervenant
     {
         $this->tauxTpServiceCompl = $tauxTpServiceCompl;
@@ -363,68 +262,296 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return float
-     */
-    public function getTauxAutreServiceDu(): float
+    public function getTauxAutre1ServiceDu(): float
     {
-        return $this->tauxAutreServiceDu;
+        return $this->tauxAutre1ServiceDu;
     }
 
 
 
-    /**
-     * @param float $tauxAutreServiceDu
-     *
-     * @return FormuleTestIntervenant
-     */
-    public function setTauxAutreServiceDu(float $tauxAutreServiceDu): FormuleTestIntervenant
+    public function setTauxAutre1ServiceDu(float $tauxAutre1ServiceDu): FormuleTestIntervenant
     {
-        $this->tauxAutreServiceDu = $tauxAutreServiceDu;
+        $this->tauxAutre1ServiceDu = $tauxAutre1ServiceDu;
 
         return $this;
     }
 
 
 
-    /**
-     * @return float
-     */
-    public function getTauxAutreServiceCompl(): float
+    public function getTauxAutre1ServiceCompl(): float
     {
-        return $this->tauxAutreServiceCompl;
+        return $this->tauxAutre1ServiceCompl;
     }
 
 
 
-    /**
-     * @param float $tauxAutreServiceCompl
-     *
-     * @return FormuleTestIntervenant
-     */
-    public function setTauxAutreServiceCompl(float $tauxAutreServiceCompl): FormuleTestIntervenant
+    public function setTauxAutre1ServiceCompl(float $tauxAutre1ServiceCompl): FormuleTestIntervenant
     {
-        $this->tauxAutreServiceCompl = $tauxAutreServiceCompl;
+        $this->tauxAutre1ServiceCompl = $tauxAutre1ServiceCompl;
 
         return $this;
     }
 
 
 
-    /**
-     * @return string
-     */
-    public function getParam1()
+    public function getTauxAutre1Code(): ?string
+    {
+        return $this->tauxAutre1Code;
+    }
+
+
+
+    public function setTauxAutre1Code(?string $tauxAutre1Code): FormuleTestIntervenant
+    {
+        $this->tauxAutre1Code = $tauxAutre1Code;
+        return $this;
+    }
+
+
+
+    public function getTauxAutre2ServiceDu(): float
+    {
+        return $this->tauxAutre2ServiceDu;
+    }
+
+
+
+    public function setTauxAutre2ServiceDu(float $tauxAutre2ServiceDu): FormuleTestIntervenant
+    {
+        $this->tauxAutre2ServiceDu = $tauxAutre2ServiceDu;
+
+        return $this;
+    }
+
+
+
+    public function getTauxAutre2ServiceCompl(): float
+    {
+        return $this->tauxAutre2ServiceCompl;
+    }
+
+
+
+    public function setTauxAutre2ServiceCompl(float $tauxAutre2ServiceCompl): FormuleTestIntervenant
+    {
+        $this->tauxAutre2ServiceCompl = $tauxAutre2ServiceCompl;
+
+        return $this;
+    }
+
+
+
+    public function getTauxAutre2Code(): ?string
+    {
+        return $this->tauxAutre2Code;
+    }
+
+
+
+    public function setTauxAutre2Code(?string $tauxAutre2Code): FormuleTestIntervenant
+    {
+        $this->tauxAutre2Code = $tauxAutre2Code;
+        return $this;
+    }
+
+
+
+    public function getTauxAutre3ServiceDu(): float
+    {
+        return $this->tauxAutre3ServiceDu;
+    }
+
+
+
+    public function setTauxAutre3ServiceDu(float $tauxAutre3ServiceDu): FormuleTestIntervenant
+    {
+        $this->tauxAutre3ServiceDu = $tauxAutre3ServiceDu;
+
+        return $this;
+    }
+
+
+
+    public function getTauxAutre3ServiceCompl(): float
+    {
+        return $this->tauxAutre3ServiceCompl;
+    }
+
+
+
+    public function setTauxAutre3ServiceCompl(float $tauxAutre3ServiceCompl): FormuleTestIntervenant
+    {
+        $this->tauxAutre3ServiceCompl = $tauxAutre3ServiceCompl;
+
+        return $this;
+    }
+
+
+
+    public function getTauxAutre3Code(): ?string
+    {
+        return $this->tauxAutre3Code;
+    }
+
+
+
+    public function setTauxAutre3Code(?string $tauxAutre3Code): FormuleTestIntervenant
+    {
+        $this->tauxAutre3Code = $tauxAutre3Code;
+        return $this;
+    }
+
+
+
+    public function getTauxAutre4ServiceDu(): float
+    {
+        return $this->tauxAutre4ServiceDu;
+    }
+
+
+
+    public function setTauxAutre4ServiceDu(float $tauxAutre4ServiceDu): FormuleTestIntervenant
+    {
+        $this->tauxAutre4ServiceDu = $tauxAutre4ServiceDu;
+
+        return $this;
+    }
+
+
+
+    public function getTauxAutre4ServiceCompl(): float
+    {
+        return $this->tauxAutre4ServiceCompl;
+    }
+
+
+
+    public function setTauxAutre4ServiceCompl(float $tauxAutre4ServiceCompl): FormuleTestIntervenant
+    {
+        $this->tauxAutre4ServiceCompl = $tauxAutre4ServiceCompl;
+
+        return $this;
+    }
+
+
+
+    public function getTauxAutre4Code(): ?string
+    {
+        return $this->tauxAutre4Code;
+    }
+
+
+
+    public function setTauxAutre4Code(?string $tauxAutre4Code): FormuleTestIntervenant
+    {
+        $this->tauxAutre4Code = $tauxAutre4Code;
+        return $this;
+    }
+
+
+
+    public function getTauxAutre5ServiceDu(): float
+    {
+        return $this->tauxAutre5ServiceDu;
+    }
+
+
+
+    public function setTauxAutre5ServiceDu(float $tauxAutre5ServiceDu): FormuleTestIntervenant
+    {
+        $this->tauxAutre5ServiceDu = $tauxAutre5ServiceDu;
+
+        return $this;
+    }
+
+
+
+    public function getTauxAutre5ServiceCompl(): float
+    {
+        return $this->tauxAutre5ServiceCompl;
+    }
+
+
+
+    public function setTauxAutre5ServiceCompl(float $tauxAutre5ServiceCompl): FormuleTestIntervenant
+    {
+        $this->tauxAutre5ServiceCompl = $tauxAutre5ServiceCompl;
+
+        return $this;
+    }
+
+
+
+    public function getTauxAutre5Code(): ?string
+    {
+        return $this->tauxAutre5Code;
+    }
+
+
+
+    public function setTauxAutre5Code(?string $tauxAutre5Code): FormuleTestIntervenant
+    {
+        $this->tauxAutre5Code = $tauxAutre5Code;
+        return $this;
+    }
+
+
+
+    public function getTauxAutreServiceDu(int $index): float
+    {
+        return $this->{"tauxAutre" . $index . "ServiceDu"};
+    }
+
+
+
+    public function setTauxAutreServiceDu(int $index, float $tauxAutreServiceDu): FormuleTestIntervenant
+    {
+        $this->{"tauxAutre" . $index . "ServiceDu"} = $tauxAutreServiceDu;
+
+        return $this;
+    }
+
+
+
+    public function getTauxAutreServiceCompl(int $index): float
+    {
+        return $this->{"tauxAutre" . $index . "ServiceCompl"};
+    }
+
+
+
+    public function setTauxAutreServiceCompl(int $index, float $tauxAutreServiceCompl): FormuleTestIntervenant
+    {
+        $this->{"tauxAutre" . $index . "ServiceCompl"} = $tauxAutreServiceCompl;
+
+        return $this;
+    }
+
+
+
+    public function getTauxAutreCode(int $index): ?string
+    {
+        return $this->{"tauxAutre" . $index . "Code"};
+    }
+
+
+
+    public function setTauxAutreCode(int $index, ?string $tauxAutreCode): FormuleTestIntervenant
+    {
+        $this->{"tauxAutre" . $index . "Code"} = $tauxAutreCode;
+        return $this;
+    }
+
+
+
+    public function getParam1(): ?string
     {
         return $this->param1;
     }
 
 
 
-    /**
-     * @param string $param1
-     */
-    public function setParam1($param1): FormuleTestIntervenant
+    public function setParam1(?string $param1): FormuleTestIntervenant
     {
         $this->param1 = $param1;
 
@@ -433,20 +560,14 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return string
-     */
-    public function getParam2()
+    public function getParam2(): ?string
     {
         return $this->param2;
     }
 
 
 
-    /**
-     * @param string $param2
-     */
-    public function setParam2($param2): FormuleTestIntervenant
+    public function setParam2(?string $param2): FormuleTestIntervenant
     {
         $this->param2 = $param2;
 
@@ -455,20 +576,14 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return string
-     */
-    public function getParam3()
+    public function getParam3(): ?string
     {
         return $this->param3;
     }
 
 
 
-    /**
-     * @param string $param3
-     */
-    public function setParam3($param3): FormuleTestIntervenant
+    public function setParam3(?string $param3): FormuleTestIntervenant
     {
         $this->param3 = $param3;
 
@@ -477,20 +592,14 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return string
-     */
-    public function getParam4()
+    public function getParam4(): ?string
     {
         return $this->param4;
     }
 
 
 
-    /**
-     * @param string $param4
-     */
-    public function setParam4($param4): FormuleTestIntervenant
+    public function setParam4(?string $param4): FormuleTestIntervenant
     {
         $this->param4 = $param4;
 
@@ -499,20 +608,14 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return string
-     */
-    public function getParam5()
+    public function getParam5(): ?string
     {
         return $this->param5;
     }
 
 
 
-    /**
-     * @param string $param5
-     */
-    public function setParam5($param5): FormuleTestIntervenant
+    public function setParam5(?string $param5): FormuleTestIntervenant
     {
         $this->param5 = $param5;
 
@@ -521,20 +624,14 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return float
-     */
-    public function getAServiceDu()
+    public function getAServiceDu(): ?float
     {
         return $this->aServiceDu;
     }
 
 
 
-    /**
-     * @param float $aServiceDu
-     */
-    public function setAServiceDu(float $aServiceDu): FormuleTestIntervenant
+    public function setAServiceDu(?float $aServiceDu): FormuleTestIntervenant
     {
         $this->aServiceDu = $aServiceDu;
 
@@ -543,20 +640,14 @@ class FormuleTestIntervenant
 
 
 
-    /**
-     * @return float
-     */
-    public function getCServiceDu()
+    public function getCServiceDu(): ?float
     {
         return $this->cServiceDu;
     }
 
 
 
-    /**
-     * @param float $cServiceDu
-     */
-    public function setCServiceDu(float $cServiceDu): FormuleTestIntervenant
+    public function setCServiceDu(?float $cServiceDu): FormuleTestIntervenant
     {
         $this->cServiceDu = $cServiceDu;
 
@@ -958,7 +1049,7 @@ class FormuleTestIntervenant
      */
     public function getDebugInfo()
     {
-        $data  = ['lines' => [], 'cols' => [], 'cells' => [], 'inds' => []];
+        $data = ['lines' => [], 'cols' => [], 'cells' => [], 'inds' => []];
         $calcs = [];
 
         $a = explode('[', $this->debugInfo);
@@ -966,27 +1057,27 @@ class FormuleTestIntervenant
             $d = explode('|', $d);
             switch ($d[0]) {
                 case 'cell':
-                    $c   = $d[1];
-                    $l   = (int)$d[2];
+                    $c = $d[1];
+                    $l = (int)$d[2];
                     $val = (float)$d[3];
 
                     if ($l > 0) {
                         $data['cells'][$c][$l] = $val;
-                        $data['lines'][$l]     = $l;
-                        $data['cols'][$c]      = $c;
+                        $data['lines'][$l] = $l;
+                        $data['cols'][$c] = $c;
                     } else {
                         $data['inds'][$c] = $val;
                     }
 
-                break;
+                    break;
                 case 'calc':
-                    $fnc                     = $d[1];
-                    $c                       = $d[2];
-                    $res                     = $d[3];
+                    $fnc = $d[1];
+                    $c = $d[2];
+                    $res = $d[3];
                     $data['cells'][$c][$fnc] = $res;
-                    $calcs[$fnc]             = $fnc;
-                    $data['cols'][$c]        = $c;
-                break;
+                    $calcs[$fnc] = $fnc;
+                    $data['cols'][$c] = $c;
+                    break;
             }
         }
 

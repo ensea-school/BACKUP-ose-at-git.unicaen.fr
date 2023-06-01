@@ -94,8 +94,8 @@ class FormuleTestIntervenantService extends AbstractEntityService
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        $formule            = $this->getServiceFormule()->getCurrent();
-        $intervenantQuery   = trim($conn->executeQuery('SELECT ' . $formule->getPackageName() . '.INTERVENANT_QUERY Q FROM DUAL')->fetchOne());
+        $formule = $this->getServiceFormule()->getCurrent();
+        $intervenantQuery = trim($conn->executeQuery('SELECT ' . $formule->getPackageName() . '.INTERVENANT_QUERY Q FROM DUAL')->fetchOne());
         $volumeHoraireQuery = trim($conn->executeQuery('SELECT ' . $formule->getPackageName() . '.VOLUME_HORAIRE_QUERY Q FROM DUAL')->fetchOne());
 
         $sql = "BEGIN ose_formule.intervenant.id := " . $intervenant->getId() . "; END;";
@@ -103,10 +103,10 @@ class FormuleTestIntervenantService extends AbstractEntityService
 
         $params = ['intervenant' => $intervenant->getId()];
 
-        $idata                       = $conn->fetchAllAssociative('SELECT * FROM (' . $intervenantQuery . ') q WHERE intervenant_id = :intervenant', $params)[0];
+        $idata = $conn->fetchAllAssociative('SELECT * FROM (' . $intervenantQuery . ') q WHERE intervenant_id = :intervenant', $params)[0];
         $params['typeVolumeHoraire'] = $typeVolumeHoraire->getId();
         $params['etatVolumeHoraire'] = $etatVolumeHoraire->getId();
-        $vhdata                      = $conn->fetchAllAssociative('SELECT * FROM (' . $volumeHoraireQuery . ') q WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :typeVolumeHoraire AND etat_volume_horaire_id >= :etatVolumeHoraire', $params);
+        $vhdata = $conn->fetchAllAssociative('SELECT * FROM (' . $volumeHoraireQuery . ') q WHERE intervenant_id = :intervenant AND type_volume_horaire_id = :typeVolumeHoraire AND etat_volume_horaire_id >= :etatVolumeHoraire', $params);
 
         $fti = new FormuleTestIntervenant();
         $fti->setLibelle((string)$intervenant);
@@ -131,76 +131,40 @@ class FormuleTestIntervenantService extends AbstractEntityService
             'TD' => [1, 1],
             'TP' => [1, 2 / 3],
         ];
-        $nbAutres          = 0;
+        $nbAutres = 0;
         foreach ($vhdata as $vhd) {
             if ($vhd['TYPE_INTERVENTION_CODE']) {
+                if (!array_key_exists($vhd['TYPE_INTERVENTION_CODE'], $typesIntervention) && count($typesIntervention == 8)){
+                    throw new \Exception('Il est impossible de transférer cette fiche : il y a plus de 5 types d\'intervention spécifiques, différents de CM/TD/TP');
+                }
+
                 $typesIntervention[$vhd['TYPE_INTERVENTION_CODE']] = [
                     (float)$vhd['TAUX_SERVICE_DU'],
                     (float)$vhd['TAUX_SERVICE_COMPL'],
                 ];
             }
         }
-        foreach ($typesIntervention as $tic => $tit) {
-            if (!in_array($tic, ['CM', 'TD', 'TP'])) {
-                $nbAutres++;
-            } else {
-                $typesIntervention[$tic][2] = $tic;
-            }
-        }
-        if ($nbAutres == 1) {
-            foreach ($typesIntervention as $tic => $tit) {
-                if (!in_array($tic, ['CM', 'TD', 'TP'])) {
-                    $typesIntervention[$tic][2] = 'AUTRE';
-                    $nbAutres--;
-                }
-            }
-        } else {
-            if ($nbAutres > 1) {
-                foreach ($typesIntervention as $tic => $tit) {
-                    if (!in_array($tic, ['CM', 'TD', 'TP'])) {
-                        if ($tit[0] == $typesIntervention['CM'][0] && $tit[1] == $typesIntervention['CM'][1]) {
-                            $typesIntervention[$tic][2] = 'CM';
-                            $nbAutres--;
-                        }
-                        if ($tit[0] == $typesIntervention['TD'][0] && $tit[1] == $typesIntervention['TD'][1]) {
-                            $typesIntervention[$tic][2] = 'TD';
-                            $nbAutres--;
-                        }
-                        if ($tit[0] == $typesIntervention['TP'][0] && $tit[1] == $typesIntervention['TP'][1]) {
-                            $typesIntervention[$tic][2] = 'TP';
-                            $nbAutres--;
-                        }
-                    }
-                }
-            }
-        }
-        if ($nbAutres == 1) {
-            foreach ($typesIntervention as $tic => $tit) {
-                if (!isset($tit[2])) {
-                    $typesIntervention[$tic][2] = 'AUTRE';
-                }
-            }
-        }
-
-        if ($nbAutres > 1) {
-            throw new \Exception('La fiche de service de cet intervenant ne peut pas être transformée en test de formule : elle comporte de trop nombreux types d\'intervention différents des CM/TP/TP');
-        }
 
         /* On applique les taux au test de formule */
+        $autresIndex = 0;
         foreach ($typesIntervention as $tic => $tit) {
-            switch ($tit[2]) {
+            switch ($tic) {
+                case 'TD':
+                    break;
                 case 'CM':
                     $fti->setTauxCmServiceDu($tit[0]);
                     $fti->setTauxCmServiceCompl($tit[1]);
-                break;
+                    break;
                 case 'TP':
                     $fti->setTauxTpServiceDu($tit[0]);
                     $fti->setTauxTpServiceCompl($tit[1]);
-                break;
-                case 'AUTRE':
-                    $fti->setTauxAutreServiceDu($tit[0]);
-                    $fti->setTauxAutreServiceCompl($tit[1]);
-                break;
+                    break;
+                default:
+                    $autresIndex++;
+                    $fti->setTauxAutreCode($autresIndex, $tic);
+                    $fti->setTauxAutreServiceDu($autresIndex, $tit[0]);
+                    $fti->setTauxAutreServiceCompl($autresIndex, $tit[1]);
+                    break;
             }
         }
 
@@ -236,9 +200,9 @@ class FormuleTestIntervenantService extends AbstractEntityService
         $em = $this->getEntityManager();
 
         $data = $formuleCalcul->getData();
-        $vhs  = $data['volumes-horaires'];
+        $vhs = $data['volumes-horaires'];
 
-        $typeInterveant    = $em->getRepository(TypeIntervenant::class)->findOneBy(['code' => $data['i.type_intervenant_code'] ?? TypeIntervenant::CODE_PERMANENT]);
+        $typeInterveant = $em->getRepository(TypeIntervenant::class)->findOneBy(['code' => $data['i.type_intervenant_code'] ?? TypeIntervenant::CODE_PERMANENT]);
         $typeVolumeHoraire = $em->getRepository(TypeVolumeHoraire::class)->findOneBy(['code' => $data['i.type_volume_horaire_code'] ?? TypeVolumeHoraire::CODE_REALISE]);
         $etatVolumeHoraire = $em->getRepository(EtatVolumeHoraire::class)->findOneBy(['code' => EtatVolumeHoraire::CODE_SAISI]);
 
@@ -265,7 +229,7 @@ class FormuleTestIntervenantService extends AbstractEntityService
             'TD' => [1, 1],
             'TP' => [1, 2 / 3],
         ];
-        $nbAutres          = 0;
+        $nbAutres = 0;
 
         foreach ($vhs as $vh) {
             if ($vh['vh.type_intervention_code']) {
@@ -327,15 +291,31 @@ class FormuleTestIntervenantService extends AbstractEntityService
                 case 'CM':
                     $fti->setTauxCmServiceDu($tit[0]);
                     $fti->setTauxCmServiceCompl($tit[1]);
-                break;
+                    break;
                 case 'TP':
                     $fti->setTauxTpServiceDu($tit[0]);
                     $fti->setTauxTpServiceCompl($tit[1]);
-                break;
-                case 'AUTRE':
-                    $fti->setTauxAutreServiceDu($tit[0]);
-                    $fti->setTauxAutreServiceCompl($tit[1]);
-                break;
+                    break;
+                case 'AUTRE1':
+                    $fti->setTauxAutre1ServiceDu($tit[0]);
+                    $fti->setTauxAutre1ServiceCompl($tit[1]);
+                    break;
+                case 'AUTRE2':
+                    $fti->setTauxAutre2ServiceDu($tit[0]);
+                    $fti->setTauxAutre2ServiceCompl($tit[1]);
+                    break;
+                case 'AUTRE3':
+                    $fti->setTauxAutre3ServiceDu($tit[0]);
+                    $fti->setTauxAutre3ServiceCompl($tit[1]);
+                    break;
+                case 'AUTRE4':
+                    $fti->setTauxAutre4ServiceDu($tit[0]);
+                    $fti->setTauxAutre4ServiceCompl($tit[1]);
+                    break;
+                case 'AUTRE5':
+                    $fti->setTauxAutre5ServiceDu($tit[0]);
+                    $fti->setTauxAutre5ServiceCompl($tit[1]);
+                    break;
             }
         }
 

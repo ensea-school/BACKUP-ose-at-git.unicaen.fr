@@ -128,7 +128,9 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
                         $data[$property] = $dep ? $dep->getId() : null;
                     break;
                     default:
-                        $data[$property] = $object->$method();
+                        if ($method != 'getTauxAutreServiceDu' && $method != 'getTauxAutreServiceCompl' && $method != 'getTauxAutreCode') {
+                            $data[$property] = $object->$method();
+                        }
                 }
             }
         }

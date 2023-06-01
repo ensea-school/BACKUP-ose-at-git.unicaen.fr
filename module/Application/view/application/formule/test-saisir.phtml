@@ -102,17 +102,20 @@ class LocalFormater
 }
 
 
-
-
-
-$lf       = new LocalFormater();
+$lf = new LocalFormater();
 $lf->view = $this;
 
 $maxLignes = 30;
 if ($formuleTestIntervenant->getVolumeHoraireTest()->count() > 30) {
     $maxLignes = $formuleTestIntervenant->getVolumeHoraireTest()->count();
 }
-$typesInterventions = ['CM' => 'CM', 'TD' => 'TD', 'TP' => 'TP', 'AUTRE' => 'Autre', 'REFERENTIEL' => 'Référentiel'];
+$typesInterventions = ['CM' => 'CM', 'TD' => 'TD', 'TP' => 'TP'];
+$typesInterventions['AUTRE1'] = $formuleTestIntervenant->getTauxAutre1Code();
+$typesInterventions['AUTRE2'] = $formuleTestIntervenant->getTauxAutre2Code();
+$typesInterventions['AUTRE3'] = $formuleTestIntervenant->getTauxAutre3Code();
+$typesInterventions['AUTRE4'] = $formuleTestIntervenant->getTauxAutre4Code();
+$typesInterventions['AUTRE5'] = $formuleTestIntervenant->getTauxAutre5Code();
+$typesInterventions['REFERENTIEL'] = 'Référentiel';
 
 $fLibelles = [];
 foreach ($formules as $formule) {
@@ -178,32 +181,55 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     </tr>
                 <?php endfor; ?>
             </table>
+
+            <button class="enregistrer btn btn-primary">Enregistrer et recalculer les HETD</button>
+            <button class="exporter btn btn-secondary">Télécharger</button>
+            <input type="file" id="importbtn" class="importer">
         </div>
         <div class="col-md-5">
             <h2>Types d'intervention (HETD)</h2>
-            <table class="table table-xs table-bordered">
-                <tr>
-                    <th style="width:20%"></th>
-                    <th style="width:20%">CM</th>
-                    <th style="width:20%">TD</th>
-                    <th style="width:20%">TP</th>
-                    <th style="width:20%">Autre</th>
-                </tr>
-                <tr>
-                    <th>En service</th>
-                    <td class="saisie"><?= $lf->input('tauxCmServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
-                    <td>1</td>
-                    <td class="saisie"><?= $lf->input('tauxTpServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
-                    <td class="saisie"><?= $lf->input('tauxAutreServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
-                </tr>
-                <tr>
-                    <th>Au-delà du service</th>
-                    <td class="saisie"><?= $lf->input('tauxCmServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
-                    <td>1</td>
-                    <td class="saisie"><?= $lf->input('tauxTpServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
-                    <td class="saisie"><?= $lf->input('tauxAutreServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
-                </tr>
-            </table>
+            <div style="overflow:scroll">
+                <table class="table table-xs table-bordered" style="width: 800px">
+                    <tr>
+                        <th></th>
+                        <th colspan="3">Standards</th>
+                        <th colspan="5">Personnalisés</th>
+                    </tr>
+                    <tr>
+                        <th style="width:20%"></th>
+                        <th style="width:5%">CM</th>
+                        <th style="width:5%">TD</th>
+                        <th style="width:5%">TP</th>
+                        <th style="width:10%"><?= $lf->input('tauxAutre1Code', ['maxlength' => "30", 'data-type' => 'string', 'class' => 'type-intervention-autre', 'data-index' => 1]) ?></th>
+                        <th style="width:10%"><?= $lf->input('tauxAutre2Code', ['maxlength' => "30", 'data-type' => 'string', 'class' => 'type-intervention-autre', 'data-index' => 2]) ?></th>
+                        <th style="width:10%"><?= $lf->input('tauxAutre3Code', ['maxlength' => "30", 'data-type' => 'string', 'class' => 'type-intervention-autre', 'data-index' => 3]) ?></th>
+                        <th style="width:10%"><?= $lf->input('tauxAutre4Code', ['maxlength' => "30", 'data-type' => 'string', 'class' => 'type-intervention-autre', 'data-index' => 4]) ?></th>
+                        <th style="width:10%"><?= $lf->input('tauxAutre5Code', ['maxlength' => "30", 'data-type' => 'string', 'class' => 'type-intervention-autre', 'data-index' => 5]) ?></th>
+                    </tr>
+                    <tr>
+                        <th>En service</th>
+                        <td class="saisie"><?= $lf->input('tauxCmServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                        <td>1</td>
+                        <td class="saisie"><?= $lf->input('tauxTpServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                        <td class="saisie"><?= $lf->input('tauxAutre1ServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                        <td class="saisie"><?= $lf->input('tauxAutre2ServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                        <td class="saisie"><?= $lf->input('tauxAutre3ServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                        <td class="saisie"><?= $lf->input('tauxAutre4ServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                        <td class="saisie"><?= $lf->input('tauxAutre5ServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                    </tr>
+                    <tr>
+                        <th>Au-delà du service</th>
+                        <td class="saisie"><?= $lf->input('tauxCmServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                        <td>1</td>
+                        <td class="saisie"><?= $lf->input('tauxTpServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                        <td class="saisie"><?= $lf->input('tauxAutre1ServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                        <td class="saisie"><?= $lf->input('tauxAutre2ServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                        <td class="saisie"><?= $lf->input('tauxAutre3ServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                        <td class="saisie"><?= $lf->input('tauxAutre4ServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                        <td class="saisie"><?= $lf->input('tauxAutre5ServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                    </tr>
+                </table>
+            </div>
             <h2>Résultat</h2>
             <table class="table table-xs">
                 <tr>
@@ -258,9 +284,6 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     <?= $lf->output('cHeuresComplAPayer') ?>
                 </tr>
             </table>
-            <button class="enregistrer btn btn-primary">Enregistrer et recalculer les HETD</button>
-            <button class="exporter btn btn-secondary">Télécharger</button>
-            <input type="file" id="importbtn" class="importer">
         </div>
     </div>
 
@@ -392,7 +415,8 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     </table>
     <div>
         <h2>Informations de débogage
-            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#debug-info"
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#debug-info"
                     aria-expanded="false" aria-controls="debug-info">
                 Afficher/masquer
             </button>
@@ -400,7 +424,8 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
         <div class="collapse debug-info" id="debug-info"></div>
     </div>
 
-    <a class="btn btn-secondary" href="<?= $this->url('formule-calcul/test') ?>"><i class="fas fa-rotate-left" aria-hidden="true"></i>
+    <a class="btn btn-secondary" href="<?= $this->url('formule-calcul/test') ?>"><i class="fas fa-rotate-left"
+                                                                                    aria-hidden="true"></i>
         Retour à la liste des formules</a>
 
 </div>
@@ -491,9 +516,9 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             id: null,
             saving: false,
             structures: [],
+            typesIntervention: [],
 
-            valueToVariable: function (value, type)
-            {
+            valueToVariable: function (value, type) {
                 if (value === '' || value === null || value === undefined) {
                     return null;
                 }
@@ -521,20 +546,11 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 return value;
             },
 
-            affErreur: function (erreur)
-            {
-                var errStr = "<div class=\"messenger alert alert-danger \">\n" +
-                    "<button type=\"button\" class=\"close\" title=\"Fermer cette alerte\" data-bs-dismiss=\"alert\">×</button>\n" +
-                    "<span class=\"fas fa-triangle-exclamation\"></span>\n" +
-                    Util.nl2br(erreur, true) +
-                    "</div>";
-
-                this.element.find('.errors').html(this.element.find('.errors').html() + errStr);
-
+            affErreur: function (erreur) {
+                UnicaenVue.flashMessenger.toast(erreur, 'error');
             },
 
-            variableToValue: function (variable, type)
-            {
+            variableToValue: function (variable, type) {
                 if (variable === '' || variable === null || variable === undefined) {
                     return null;
                 }
@@ -558,8 +574,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 return variable;
             },
 
-            save: function (autoReload)
-            {
+            save: function (autoReload) {
                 var lastId = this.id;
                 var that = this;
                 var url = '<?= $this->url('formule-calcul/test/enregistrement') ?>';
@@ -573,8 +588,6 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     url: url,
                     data: {data: JSON.stringify(that.getData())},
                     success: function (data) {
-                        that.element.find('.errors').html('');
-                        console.log(data.data);
                         that.setData(data.data);
                         if (data.errors) {
                             for (e in data.errors) {
@@ -596,8 +609,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 return result;
             },
 
-            autoSave: function ()
-            {
+            autoSave: function () {
                 if (this.id != null && !this.saving) {
                     this.save(0);
                 }
@@ -621,6 +633,25 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                         if (data['volumeHoraireTest'][index] == undefined) {
                             data['volumeHoraireTest'][index] = {};
                         }
+
+                        if (name == 'typeInterventionCode'){
+                            if (variable == 'AUTRE1'){
+                                variable = that.element.find('.dinput[data-name=tauxAutre1Code]').val();
+                            }
+                            if (variable == 'AUTRE2'){
+                                variable = that.element.find('.dinput[data-name=tauxAutre2Code]').val();
+                            }
+                            if (variable == 'AUTRE3'){
+                                variable = that.element.find('.dinput[data-name=tauxAutre3Code]').val();
+                            }
+                            if (variable == 'AUTRE4'){
+                                variable = that.element.find('.dinput[data-name=tauxAutre4Code]').val();
+                            }
+                            if (variable == 'AUTRE5'){
+                                variable = that.element.find('.dinput[data-name=tauxAutre5Code]').val();
+                            }
+                        }
+
                         data['volumeHoraireTest'][index][name] = variable;
                     }
                 });
@@ -656,6 +687,25 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                         if (value) that.ajoutStructure($(this), value);
                     }
 
+                    if ('typeInterventionCode' == name) {
+                        if (value && value != 'CM' && value != 'TD' && value != 'TP' && value != 'REFERENTIEL'){
+                            if (that.element.find('.dinput[data-name=tauxAutre1Code]').val() == value){
+                                value = 'AUTRE1';
+                            }
+                            if (that.element.find('.dinput[data-name=tauxAutre2Code]').val() == value){
+                                value = 'AUTRE2';
+                            }
+                            if (that.element.find('.dinput[data-name=tauxAutre3Code]').val() == value){
+                                value = 'AUTRE3';
+                            }
+                            if (that.element.find('.dinput[data-name=tauxAutre4Code]').val() == value){
+                                value = 'AUTRE4';
+                            }
+                            if (that.element.find('.dinput[data-name=tauxAutre5Code]').val() == value){
+                                value = 'AUTRE5';
+                            }
+                        }
+                    }
                     $(this).val(value);
 
                     if ('typeInterventionCode' == name) {
@@ -712,9 +762,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             },
 
 
-
-            exporter: function ()
-            {
+            exporter: function () {
                 content = this.getData();
                 filename = content.libelle;
                 content = JSON.stringify(content);
@@ -727,9 +775,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             },
 
 
-
-            importer: function ()
-            {
+            importer: function () {
                 var that = this;
                 var input = document.getElementById('importbtn');
                 var file = input.files[0];
@@ -749,9 +795,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             },
 
 
-
-            changementFormule: function (formuleId)
-            {
+            changementFormule: function (formuleId) {
                 var formules = this.element.data('formules');
                 var vhPCount = 0;
 
@@ -785,9 +829,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             },
 
 
-
-            changementTypeIntervention: function (select)
-            {
+            changementTypeIntervention: function (select) {
                 var tr = select.parent().parent();
                 var value = select.val();
                 if (value == 'REFERENTIEL' || !value) {
@@ -812,16 +854,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             },
 
 
-
-            initStructures: function ()
-            {
-                this.structures = [];
-            },
-
-
-
-            changementStructure: function (select)
-            {
+            changementStructure: function (select) {
                 var tr = select.parent().parent();
                 var value = select.val();
 
@@ -841,9 +874,31 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             },
 
 
-
-            ajoutStructure: function (element, structure)
+            changementTypeInterventionAutre(element)
             {
+                var index = element.data('index');
+
+                this.element.find(".dinput[data-name='typeInterventionCode'] option[value='AUTRE"+index+"']").html(element.val());
+
+                this.typesInterventionUpdateVisibility();
+            },
+
+
+            typesInterventionUpdateVisibility()
+            {
+                this.element.find(".dinput[data-name='typeInterventionCode'] option").each(function(){
+                    var value = $(this).attr('value');
+                    var label = $(this).html();
+                    if (value.substr(0,5) == 'AUTRE' && label == ''){
+                        $(this).hide();
+                    }else{
+                        $(this).show();
+                    }
+                });
+            },
+
+
+            ajoutStructure: function (element, structure) {
                 if (!structure) {
                     structure = prompt("Ajout d'une nouvelle structure");
                 }
@@ -866,16 +921,12 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             },
 
 
-
-            affLignes: function ()
-            {
+            affLignes: function () {
                 // TODO : cacher les lignes en trop
             },
 
 
-
-            affDebugInfo: function (data)
-            {
+            affDebugInfo: function (data) {
                 if (!data) return;
 
                 var h = '';
@@ -923,9 +974,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             },
 
 
-
-            calculTauxFi: function (index)
-            {
+            calculTauxFi: function (index) {
                 var tauxFa = Util.stringToFloat(this.findElement('tauxFa', index).val());
                 var tauxFc = Util.stringToFloat(this.findElement('tauxFc', index).val());
 
@@ -933,9 +982,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             },
 
 
-
-            _create: function ()
-            {
+            _create: function () {
                 var that = this;
 
                 this.element.find(".fvh [data-name='tauxFa']").change(function () {
@@ -952,6 +999,10 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                         var variable = that.valueToVariable($(this).val(), type);
                         $(this).val(that.variableToValue(variable, type));
                     }
+                });
+
+                this.element.find("input.type-intervention-autre").change(function () {
+                    that.changementTypeInterventionAutre($(this));
                 });
 
                 this.element.find(".dinput[data-name='formule']").change(function () {
@@ -1002,10 +1053,10 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 });
 
                 this.setData(this.element.data('data'));
+                this.typesInterventionUpdateVisibility();
             },
 
-            findElement: function (name, index)
-            {
+            findElement: function (name, index) {
                 if (index === 0 || index > 0) {
                     return this.element.find(".fvh [data-name='" + name + "'][data-index='" + index + "']");
                 } else {

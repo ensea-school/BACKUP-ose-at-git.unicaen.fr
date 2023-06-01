@@ -1,8 +1,15 @@
-<?= $this->intervenant($intervenant)->renderTitle('Candidature'); ?>
+<?php
 
+use Application\Provider\Privilege\Privileges;
 
+$this->intervenant($intervenant)->renderTitle('Candidature');
+$canValiderCandidature = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_CANDIDATURE_VALIDER));
+
+?>
 
 <?= $this->vue('mission/liste-candidatures', [
-    'intervenant' => $intervenant->getId(),
+
+    'intervenant'           => $intervenant->getId(),
+    'canValiderCandidature' => $canValiderCandidature,
 ]); ?>
 

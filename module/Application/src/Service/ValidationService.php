@@ -130,6 +130,7 @@ class ValidationService extends AbstractEntityService
         $validation->setStructure($candidature->getIntervenant()->getStructure());
         $this->save($validation);
         $candidature->setValidation($validation);
+        $candidature->setMotif(null);
 
         return $validation;
     }

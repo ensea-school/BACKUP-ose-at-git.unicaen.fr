@@ -110,7 +110,6 @@ export default {
 
                 });
             }
-            console.log(this.offres);
 
 
         }

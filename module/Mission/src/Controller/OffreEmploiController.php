@@ -155,11 +155,21 @@ class OffreEmploiController extends AbstractController
     {
         /** @var Candidature $candidature */
         $candidature = $this->getEvent()->getParam('candidature');
+        $utilisateur = $this->getServiceContext()->getUtilisateur();
 
-        if ($candidature->isValide()) {
+
+        if ($candidature->getMotif()) {
             $this->flashMessenger()->addInfoMessage('La candidature est déjà refusée');
         } else {
-            $this->getServiceValidation()->validerCandidature($candidature);
+            $motif = "Refusée par " . $utilisateur->getDisplayName();
+            $candidature->setMotif($motif);
+
+            if ($candidature->isValide()) {
+                $validation = $candidature->getValidation();
+                $candidature->setValidation(null);
+                $this->getServiceValidation()->delete($validation);
+            }
+
             $this->getServiceCandidature()->save($candidature);
             $this->flashMessenger()->addSuccessMessage("La candidature est bien refusée");
         }

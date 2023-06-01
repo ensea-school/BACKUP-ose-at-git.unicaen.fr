@@ -99,7 +99,7 @@ class OffreEmploiService extends AbstractEntityService
             'candidats',
             'candidaturesValides',
             'valide',
-            ['candidatures', ['id', ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]], 'histoCreation', 'validation']],
+            ['candidatures', ['id', 'motif', ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]], 'histoCreation', 'validation']],
         ];
 
 

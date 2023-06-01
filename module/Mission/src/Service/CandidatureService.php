@@ -92,9 +92,9 @@ class CandidatureService extends AbstractEntityService
 
         $properties = [
             'id',
-            ['validation', ['histoCreation']],
             'motif',
-            ['offre', ['typeMission', 'titre', ['structure', ['libelleLong']]]],
+            'validation',
+            ['offre', ['id', 'typeMission', 'titre', ['structure', ['libelleLong']]]],
             ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]],
         ];
 
@@ -102,32 +102,6 @@ class CandidatureService extends AbstractEntityService
         return new AxiosModel($query, $properties, $triggers);
     }
 
-
-
-    /*public function query(array $parameters, ?Role $role = null)
-    {
-
-
-        $dql = "
-        SELECT 
-          oe, tm, str, c
-        FROM 
-          " . OffreEmploi::class . " oe
-          JOIN oe.typeMission tm
-          JOIN oe.structure str
-          LEFT JOIN oe.candidatures c  
-        WHERE 
-          oe . histoDestruction IS null
-       " . dqlAndWhere([
-                'offreEmploi' => 'oe',
-            ], $parameters);
-
-        $dql .= " ORDER BY
-          oe . dateDebut
-        ";
-
-        return $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
-    }*/
 
 
     /**

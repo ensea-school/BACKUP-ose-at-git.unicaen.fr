@@ -8,7 +8,7 @@
                 <span v-if="nbPostesRestants > 0" class="badge rounded-pill bg-success">{{ nbPostesRestants }} poste(s) restant(s)</span>&nbsp;
                 <span v-if="nbPostesRestants <= 0" class="badge rounded-pill bg-danger">Tous les postes sont pourvus</span>&nbsp;
                 <span v-if="offre.validation" class="badge rounded-pill bg-success">Valider le <u-date
-                        :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}</span>
+                    :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}</span>
                 <span v-if="!offre.validation" class="badge rounded-pill bg-warning"> En attente de validation par la DRH</span>&nbsp;
             </div>
 
@@ -115,10 +115,11 @@
                         {{ candidature.intervenant.prenom+' '+candidature.intervenant.nomUsuel }}</a></td>
                     <td>{{ candidature.intervenant.structure.libelleLong }}</td>
                     <th> <span v-if="candidature.validation" class="badge rounded-pill bg-success">Accepter le <u-date
-                            :value="candidature.validation.histoCreation"/> par {{
+                        :value="candidature.validation.histoCreation"/> par {{
                             candidature.validation.histoCreateur.displayName
                         }}</span>
-                        <span v-if="!candidature.validation" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
+                        <span v-if="!candidature.validation && candidature.motif !== null" class="badge rounded-pill bg-danger">{{ candidature.motif }}</span>
+                        <span v-if="!candidature.validation && candidature.motif === null" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
                     </th>
                     <td v-if="this.canValiderCandidature">
                         <a :href="'/offre-emploi/accepter-candidature/' + candidature.id" v-if="!candidature.validation"
@@ -273,6 +274,12 @@ export default {
             });
         },
         validerCandidature(event)
+        {
+            popConfirm(event.currentTarget, (response) => {
+                this.$emit('refresh', response.data);
+            });
+        },
+        refuserCandidature(event)
         {
             popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);

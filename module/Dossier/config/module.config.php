@@ -178,6 +178,7 @@ return [
             'privileges' => [Privileges::DOSSIER_VISUALISATION],
             'assertion'  => IntervenantDossierAssertion::class,
         ],
+
         [
             'controller' => IntervenantDossierController::class,
             'action'     => ['differences'],

@@ -4,6 +4,7 @@ namespace Application\View\Helper\Chargens;
 
 use Application\Form\Chargens\FiltreForm;
 use Laminas\View\Helper\AbstractHtmlElement;
+use OffreFormation\Entity\Db\TypeHeures;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 
@@ -82,10 +83,21 @@ class ChargensViewHelper extends AbstractHtmlElement
     private function getTypeHeuresArray()
     {
         if (!isset($this->buffer[__METHOD__])) {
-            $qb = $this->getServiceTypeHeures()->finderByHistorique();
-            $this->getServiceTypeHeures()->finderByEnseignement(true, $qb);
+            $dql = "
+            SELECT
+                th
+            FROM
+                ".TypeHeures::class." th
+            WHERE
+                th.enseignement = true
+            ORDER BY
+                th.ordre
+            ";
 
-            $typesHeures = $this->getServiceTypeHeures()->getList($qb);
+            /** @todo fournir l'EntityManager via la factory */
+            $em = $this->getServiceTypeIntervention()->getEntityManager();
+
+            $typesHeures = $em->createQuery($dql)->getResult();
             $data        = [];
             foreach ($typesHeures as $th) {
                 $data[$th->getId()] = $th->getLibelleCourt();

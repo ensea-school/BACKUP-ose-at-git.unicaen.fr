@@ -156,7 +156,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
 
     EXCEPTION
     WHEN OTHERS THEN
-       RETURN to_date('00/00/0000', 'dd/mm/YYYY');
+       RETURN to_date('01/01/0001', 'dd/mm/YYYY');
   END get_taux_horaire_date;
 
 END ose_paiement;

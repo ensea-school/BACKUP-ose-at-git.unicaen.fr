@@ -347,7 +347,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
         <tbody>
         <?php for ($i = 0; $i < $maxLignes; $i++): $lf->index = $i; ?>
             <tr>
-                <th><?= $i + 1 ?></th>
+                <th><?= $i + 20 ?></th>
                 <td class="saisie"><?= $lf->select('structureCode', ['data-type' => 'string'], $structures) ?></td>
                 <td class="saisie"><?= $lf->select('serviceStatutaire', ['data-type' => 'bool', 'data-default' => true]) ?></td>
                 <td class="saisie"><?= $lf->select('typeInterventionCode', ['data-type' => 'string'], $typesInterventions) ?></td>

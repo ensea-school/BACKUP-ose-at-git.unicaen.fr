@@ -1305,6 +1305,8 @@ return [
         'CONTRAT_ETAT_SORTIE_ID',
         'TAUX_CHARGES_TTC',
         'CONTRAT_GENERATION',
+        'MODE_ENSEIGNEMENT_PREVISIONNEL',
+        'MODE_ENSEIGNEMENT_REALISE',
     ],
     'STRUCTURE'                      => [
         'ID',
@@ -2156,16 +2158,6 @@ return [
         'BLOC10_ZONE',
         'BLOC10_REQUETE',
     ],
-    'SAVE_V17_STATUT'                => [
-        'ANNEE_ID',
-        'INTERVENANT_ID',
-        'STATUT_CODE',
-    ],
-    'TEST_INTERVENANT'               => [
-        'INTERVENANT_ID',
-        'STATUT_CODE',
-        'STATUT_DOSSIER_CODE',
-    ],
     'TAG'                            => [
         'ID',
         'CODE',
@@ -2178,6 +2170,7 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
     ],
+
 ];
 
 //@formatter:on

@@ -3,6 +3,7 @@
 namespace Enseignement\Form;
 
 use Application\Entity\Db\Periode;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Laminas\Form\FormInterface;
@@ -29,6 +30,7 @@ class EnseignementSaisieForm extends AbstractForm
     use LocalContextServiceAwareTrait;
     use EnseignementSaisieFieldsetAwareTrait;
     use VolumeHoraireSaisieMultipleFieldsetAwareTrait;
+    use IntervenantAwareTrait;
 
 
     /**
@@ -42,13 +44,14 @@ class EnseignementSaisieForm extends AbstractForm
     }
 
 
+
     /**
      * Bind an object to the form
      *
      * Ensures the object is populated with validated values.
      *
      * @param object $object
-     * @param int $flags
+     * @param int    $flags
      *
      * @return mixed|void
      */
@@ -62,6 +65,7 @@ class EnseignementSaisieForm extends AbstractForm
     }
 
 
+
     public function init()
     {
         $this->setName('service')
@@ -73,15 +77,7 @@ class EnseignementSaisieForm extends AbstractForm
 
         $this->add($this->getFieldsetEnseignementSaisie());
 
-        // Product Fieldset
-        $intervenant = $this->getServiceLocalContext()->getIntervenant();
-        if ($this->getServiceContext()->isModaliteServicesSemestriel($intervenant)) {
-            foreach ($this->getPeriodes() as $periode) {
-                $pf = $this->getFieldsetVolumeHoraireSaisieMultiple();
-                $pf->setName($periode->getCode());
-                $this->add($pf);
-            }
-        }
+
         $this->add(new Hidden('intervenant'));
 
         $this->add([
@@ -97,10 +93,12 @@ class EnseignementSaisieForm extends AbstractForm
     }
 
 
+
     public function initFromContext()
     {
         $this->get('service')->initFromContext();
     }
+
 
 
     public function saveToContext()
@@ -109,11 +107,29 @@ class EnseignementSaisieForm extends AbstractForm
     }
 
 
+
     public function getInputFilterSpecification()
     {
         return [];
     }
+
+
+
+    public function initPeriodes()
+    {
+        // Product Fieldset
+        if ($this->getIntervenant()->getStatut()->isModeEnseignementSemestriel($this->getTypeVolumeHoraire())) {
+            foreach ($this->getPeriodes() as $periode) {
+                $pf = $this->getFieldsetVolumeHoraireSaisieMultiple();
+                $pf->setName($periode->getCode());
+                $this->add($pf);
+            }
+        }
+    }
 }
+
+
+
 
 
 /**
@@ -139,10 +155,11 @@ class EnseignementSaisieFormHydrator implements HydratorInterface
     }
 
 
+
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array $data
+     * @param array   $data
      * @param Service $object
      *
      * @return object
@@ -155,6 +172,7 @@ class EnseignementSaisieFormHydrator implements HydratorInterface
     }
 
 
+
     /**
      * Extract values from an object
      *
@@ -164,7 +182,7 @@ class EnseignementSaisieFormHydrator implements HydratorInterface
      */
     public function extract($object): array
     {
-        $data = [];
+        $data            = [];
         $data['service'] = $object;
         foreach ($this->getPeriodes() as $periode) {
             $data[$periode->getCode()] = $object->getVolumeHoraireListe($periode);

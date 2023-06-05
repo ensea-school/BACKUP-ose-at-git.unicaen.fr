@@ -10,6 +10,8 @@ use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Parametre;
 use Application\Entity\Db\Structure;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
+use MongoDB\BSON\Type;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
@@ -29,6 +31,7 @@ class ContextService extends AbstractService
     use Traits\StructureServiceAwareTrait;
     use SessionContainerTrait;
     use UserContextServiceAwareTrait;
+    use LocalContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use LdapConnecteurAwareTrait;
 
@@ -141,64 +144,6 @@ class ContextService extends AbstractService
         }
 
         return $this->etablissement;
-    }
-
-
-
-    /**
-     * @param string|TypeVolumeHoraire $typeVolumeHoraire
-     *
-     * @return string
-     */
-    public function getModaliteServices($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): string
-    {
-        if ($typeVolumeHoraire instanceof TypeVolumeHoraire) {
-            $typeVolumeHoraire = $typeVolumeHoraire->getCode();
-        }
-
-        if ($typeVolumeHoraire == TypeVolumeHoraire::CODE_REALISE) {
-            $prevReal = 'real';
-        } else {
-            $prevReal = 'prev';
-        }
-
-        return $this->getServiceParametres()->get('modalite_services_' . $prevReal . '_ens');
-    }
-
-
-
-    public function isModaliteServicesSemestriel($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): bool
-    {
-        return $this->getModaliteServices($typeVolumeHoraire) == Parametre::SERVICES_MODALITE_SEMESTRIEL;
-    }
-
-
-
-    /**
-     * @param string|TypeVolumeHoraire $typeVolumeHoraire
-     *
-     * @return string
-     */
-    public function getModaliteReferentiel($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): string
-    {
-        if ($typeVolumeHoraire instanceof TypeVolumeHoraire) {
-            $typeVolumeHoraire = $typeVolumeHoraire->getCode();
-        }
-
-        if ($typeVolumeHoraire == TypeVolumeHoraire::CODE_REALISE) {
-            $prevReal = 'real';
-        } else {
-            $prevReal = 'prev';
-        }
-
-        return $this->getServiceParametres()->get('modalite_services_' . $prevReal . '_ref');
-    }
-
-
-
-    public function isModaliteReferentielSemestriel($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): bool
-    {
-        return $this->getModaliteReferentiel() == Parametre::SERVICES_MODALITE_SEMESTRIEL;
     }
 
 

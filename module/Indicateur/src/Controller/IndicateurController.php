@@ -495,6 +495,7 @@ class IndicateurIntervenantsMailer
             $message = $this->createMessage($data);
             $message->setTo($email, $name);
 
+
             $this->controller->mail()->send($message);
         }
     }
@@ -521,9 +522,11 @@ class IndicateurIntervenantsMailer
         $body          = new MimeMessage();
         $body->addPart($part);
 
+        $from = (isset($data['from'])) ? $data['from'] : $this->getFrom();
+
         return (new MailMessage())
             ->setEncoding('UTF-8')
-            ->setFrom($this->getFrom(), "Contact Application " . ($app = $this->controller->appInfos()->getNom()))
+            ->setFrom($from, "Contact Application " . ($app = $this->controller->appInfos()->getNom()))
             ->setSubject($data['subject'])
             ->setBody($body);
     }

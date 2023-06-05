@@ -51,18 +51,19 @@ class VolumeHoraireController extends AbstractController
         if (!$service) throw new RuntimeException("Service non spécifié ou introuvable.");
 
         $typeVolumeHoraireId = $this->params()->fromPost('type-volume-horaire', $this->params()->fromQuery('type-volume-horaire'));
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraireId);
+        $typeVolumeHoraire   = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraireId);
 
 
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
-        $readOnly = 1 == (int)$this->params()->fromQuery('read-only', 0);
+        $intervenant = $service->getIntervenant();
+        $readOnly    = 1 == (int)$this->params()->fromQuery('read-only', 0);
 
         $volumeHoraireListe = $service->getVolumeHoraireListe()->setTypeVolumehoraire($typeVolumeHoraire);
-        $semestriel = $this->getServiceContext()->isModaliteServicesSemestriel($typeVolumeHoraire);
-
+        $semestriel         = $intervenant->getStatut()->isModeEnseignementSemestriel($typeVolumeHoraire);
 
         return compact('volumeHoraireListe', 'readOnly', 'semestriel');
     }
+
 
 
     public function saisieAction()
@@ -71,14 +72,17 @@ class VolumeHoraireController extends AbstractController
     }
 
 
+
     public function saisieCalendaireAction()
     {
         return $this->saisieMixte($this->getFormVolumeHoraireSaisieCalendaire());
     }
 
 
+
     private function saisieMixte(AbstractForm $form)
     {
+
         $this->em()->getFilters()->enable('historique')->init([
             VolumeHoraire::class,
             MotifNonPaiement::class,
@@ -138,6 +142,7 @@ class VolumeHoraireController extends AbstractController
     }
 
 
+
     public function suppressionCalendaireAction()
     {
         /** @var Service $service */
@@ -148,7 +153,7 @@ class VolumeHoraireController extends AbstractController
         }
 
         $volumeHoraireListe = new VolumeHoraireListe($service);
-        $vhlph = new ListeFilterHydrator();
+        $vhlph              = new ListeFilterHydrator();
         $vhlph->setEntityManager($this->em());
         $vhlph->hydrate($this->params()->fromQuery(), $volumeHoraireListe);
 
@@ -167,6 +172,7 @@ class VolumeHoraireController extends AbstractController
 
         return new MessengerViewModel();
     }
+
 
 
     private function updateTableauxBord(Intervenant $intervenant)

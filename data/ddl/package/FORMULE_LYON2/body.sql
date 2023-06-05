@@ -594,10 +594,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_LYON2 AS
 
 
 
-      -- BQ=IF(AND([.$D20]="Oui";[.$I20]<>"Référentiel");[.$N20]*[.$AE20];0)
+      -- BQ=IF(AND([.$D20]="Oui";[.$I20]<>"Référentiel");[.$N20];0)
       WHEN 'BQ' THEN
         IF vh.structure_is_exterieur AND vh.volume_horaire_ref_id IS NULL THEN
-          RETURN vh.heures * cell('AE',l);
+          RETURN vh.heures;
         ELSE
           RETURN 0;
         END IF;

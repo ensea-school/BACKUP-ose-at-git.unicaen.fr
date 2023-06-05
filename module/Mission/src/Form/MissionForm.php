@@ -50,7 +50,7 @@ class MissionForm extends AbstractForm
         $this->get('typeMission')->setAttribute('data-accompagnement-etudiants', json_encode($tmAccEtu));
         $this->get('typeMission')->setAttribute('data-besoin-formation', json_encode($besoinFormation));
 
-        $trDql = "SELECT mtr FROM " . TauxRemu::class . " mtr";
+        $trDql = "SELECT mtr FROM " . TauxRemu::class . " mtr WHERE mtr.histo_destruction IS NULL";
         $this->setValueOptions('tauxRemu', $trDql);
         $this->setValueOptions('tauxRemuMajore', $trDql);
         $this->get('tauxRemuMajore')->setEmptyOption('- Aucune majoration -');

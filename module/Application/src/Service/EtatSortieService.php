@@ -108,11 +108,7 @@ class EtatSortieService extends AbstractEntityService
                 if (\AppConfig::inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')){
                     $filename = getcwd().'/code/'.substr($__PHP__CODE__TRAITEMENT__,strlen('UnicaenCode:')).'.php';
                     if (file_exists($filename)){
-                        $content = file_get_contents($filename);
-                        if (str_starts_with($content, '<?php')){
-                            $content = substr($content, 5);
-                        }
-                        eval($content);
+                        require $filename;
                     }else{
                         die('Fichier "'.$filename.'" introuvable');
                     }

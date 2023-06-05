@@ -10,12 +10,17 @@ return [
                 'pages' => [
                     'administration' => [
                         'pages' => [
-                            'intervenants' => [
-                                'label'    => 'Courriers électroniques',
-                                'route'    => 'mail',
-                                'resource' => PrivilegeController::getResourceId(MailController::class, 'index'),
-                                'order'    => 9003,
-                                'icon'     => 'fas fa-angle-right',
+                            'configuration' => [
+                                'pages' => [
+                                    'email' => [
+
+                                        'label'    => 'Courriers électroniques',
+                                        'route'    => 'mail',
+                                        'resource' => PrivilegeController::getResourceId(MailController::class, 'index'),
+                                        'order'    => 9003,
+                                        'icon'     => 'fas fa-angle-right',
+                                    ],
+                                ],
                             ],
                         ],
                     ],

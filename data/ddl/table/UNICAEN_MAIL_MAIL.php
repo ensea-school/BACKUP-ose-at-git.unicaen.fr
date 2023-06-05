@@ -14,7 +14,7 @@ return [
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
-            'scale'       => NULL,
+            'scale'       => '0',
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
@@ -57,8 +57,8 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'DESTINATAIRES_INITIALES' => [
-            'name'        => 'DESTINATAIRES_INITIALES',
+        'DESTINATAIRES_INITIALS' => [
+            'name'        => 'DESTINATAIRES_INITIALS',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
             'length'      => 500,

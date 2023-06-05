@@ -25,6 +25,7 @@
         <field name="heuresFormation" type="float" column="HEURES_FORMATION" precision="126" scale="0" nullable="true"/>
         <field name="description" type="string" column="DESCRIPTION" length="4000" nullable="true"/>
         <field name="etudiantsSuivis" type="string" column="ETUDIANTS_SUIVIS" length="4000" nullable="true"/>
+        <one-to-many field="miseEnPaiement" target-entity="Paiement\Entity\Db\MiseEnPaiement" mapped-by="mission" />
 
         <many-to-many field="etudiants" target-entity="Application\Entity\Db\Intervenant">
             <join-table name="MISSION_ETUDIANT">

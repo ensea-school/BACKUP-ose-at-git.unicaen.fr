@@ -2,68 +2,30 @@
 
 namespace Paiement\Entity\Db;
 
-use Paiement\Entity\Db\MiseEnPaiementListe;
+use Doctrine\Common\Collections\Collection;
+use Paiement\Entity\MiseEnPaiementListe;
 use Application\Entity\Db\Periode;
 use OffreFormation\Entity\Db\TypeHeures;
-use Service\Entity\Db\EtatVolumeHoraire;
-use Service\Entity\Db\TypeVolumeHoraire;
 
 trait ServiceAPayerTrait
 {
 
-    /**
-     * @var integer
-     */
-    private $id;
+    private ?int $id = null;
 
-    /**
-     * @var \Application\Entity\Db\FormuleResultat
-     */
-    private $formuleResultat;
+    private Collection $miseEnPaiement;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $miseEnPaiement;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $centreCout;
+    protected Collection $centreCout;
 
 
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->miseEnPaiement = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->centreCout     = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * Add miseEnPaiement
-     *
-     * @param MiseEnPaiement $miseEnPaiement
-     *
-     * @return ServiceAPayerInterface
-     */
-    public function addMiseEnPaiement(\Paiement\Entity\Db\MiseEnPaiement $miseEnPaiement)
+    public function addMiseEnPaiement(MiseEnPaiement $miseEnPaiement): self
     {
         $this->miseEnPaiement[] = $miseEnPaiement;
 
@@ -72,14 +34,7 @@ trait ServiceAPayerTrait
 
 
 
-    /**
-     * Remove miseEnPaiement
-     *
-     * @param \Paiement\Entity\Db\MiseEnPaiement $miseEnPaiement
-     *
-     * @return ServiceAPayerInterface
-     */
-    public function removeMiseEnPaiement(\Paiement\Entity\Db\MiseEnPaiement $miseEnPaiement)
+    public function removeMiseEnPaiement(MiseEnPaiement $miseEnPaiement): self
     {
         $this->miseEnPaiement->removeElement($miseEnPaiement);
 
@@ -89,11 +44,9 @@ trait ServiceAPayerTrait
 
 
     /**
-     * Get miseEnPaiement
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection|MiseEnPaiement[]
      */
-    public function getMiseEnPaiement()
+    public function getMiseEnPaiement(): Collection
     {
         return $this->miseEnPaiement;
     }
@@ -101,13 +54,10 @@ trait ServiceAPayerTrait
 
 
     /**
-     * Get centreCout
-     *
-     * @param TypeHeures $typeHeures
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param TypeHeures|null $typeHeures
+     * @return Collection|CentreCout[]
      */
-    public function getCentreCout(TypeHeures $typeHeures = null)
+    public function getCentreCout(TypeHeures $typeHeures = null): Collection
     {
         $filter = function (CentreCout $centreCout) use ($typeHeures) {
             if ($typeHeures) {
@@ -122,10 +72,7 @@ trait ServiceAPayerTrait
 
 
 
-    /**
-     * @return MiseEnPaiementListe
-     */
-    public function getMiseEnPaiementListe(\DateTime $dateMiseEnPaiement = null, Periode $periodePaiement = null)
+    public function getMiseEnPaiementListe(\DateTime $dateMiseEnPaiement = null, Periode $periodePaiement = null): MiseEnPaiementListe
     {
         $liste = new MiseEnPaiementListe($this);
         if ($dateMiseEnPaiement) $liste->setDateMiseEnPaiement($dateMiseEnPaiement);
@@ -135,27 +82,4 @@ trait ServiceAPayerTrait
     }
 
 
-
-    /**
-     * Get formuleResultat
-     *
-     * @return \Application\Entity\Db\FormuleResultat
-     */
-    public function getFormuleResultat()
-    {
-        return $this->formuleResultat;
-    }
-
-
-
-    /**
-     * @retun boolean
-     */
-    public function isPayable()
-    {
-        $fr = $this->getFormuleResultat();
-
-        return $fr->getTypeVolumeHoraire()->getCode() === TypeVolumeHoraire::CODE_REALISE
-            && $fr->getEtatVolumeHoraire()->getCode() === EtatVolumeHoraire::CODE_VALIDE;
-    }
 }

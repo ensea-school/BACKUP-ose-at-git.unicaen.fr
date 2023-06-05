@@ -6,187 +6,99 @@ use OffreFormation\Entity\Db\TypeHeures;
 
 trait FormuleResultatTypesHeuresTrait
 {
-    /**
-     * @var float
-     */
-    private $heuresServiceFi = 0.0;
+    private float $heuresServiceFi = 0.0;
 
-    /**
-     * @var float
-     */
-    private $heuresServiceFa = 0.0;
+    private float $heuresServiceFa = 0.0;
 
-    /**
-     * @var float
-     */
-    private $heuresServiceFc = 0.0;
+    private float $heuresServiceFc = 0.0;
 
-    /**
-     * @var float
-     */
-    private $heuresServiceReferentiel = 0.0;
+    private float $heuresServiceReferentiel = 0.0;
 
-    /**
-     * @var float
-     */
-    private $heuresComplFi = 0.0;
+    private float $heuresComplFi = 0.0;
 
-    /**
-     * @var float
-     */
-    private $heuresComplFa = 0.0;
+    private float $heuresComplFa = 0.0;
 
-    /**
-     * @var float
-     */
-    private $heuresComplFc = 0.0;
+    private float $heuresComplFc = 0.0;
 
-    /**
-     * @var float
-     */
-    private $heuresComplFcMajorees = 0.0;
+    private float $heuresComplFcMajorees = 0.0;
 
-    /**
-     * @var float
-     */
-    private $heuresComplReferentiel = 0.0;
+    private float $heuresComplReferentiel = 0.0;
 
-    /**
-     *
-     * @var float
-     */
-    private $total = 0.0;
+    private float $total = 0.0;
 
 
 
-    /**
-     * Get heuresServiceFi
-     *
-     * @return float
-     */
-    public function getHeuresServiceFi()
+    public function getHeuresServiceFi(): float
     {
         return $this->heuresServiceFi;
     }
 
 
 
-    /**
-     * Get heuresServiceFa
-     *
-     * @return float
-     */
-    public function getHeuresServiceFa()
+    public function getHeuresServiceFa(): float
     {
         return $this->heuresServiceFa;
     }
 
 
 
-    /**
-     * Get heuresServiceFc
-     *
-     * @return float
-     */
-    public function getHeuresServiceFc()
+    public function getHeuresServiceFc(): float
     {
         return $this->heuresServiceFc;
     }
 
 
 
-    /**
-     * Get heuresServiceReferentiel
-     *
-     * @return float
-     */
-    public function getHeuresServiceReferentiel()
+    public function getHeuresServiceReferentiel(): float
     {
         return $this->heuresServiceReferentiel;
     }
 
 
 
-    /**
-     * Get heuresComplFi
-     *
-     * @return float
-     */
-    public function getHeuresComplFi()
+    public function getHeuresComplFi(): float
     {
         return $this->heuresComplFi;
     }
 
 
 
-    /**
-     * Get heuresComplFa
-     *
-     * @return float
-     */
-    public function getHeuresComplFa()
+    public function getHeuresComplFa(): float
     {
         return $this->heuresComplFa;
     }
 
 
 
-    /**
-     * Get heuresComplFc
-     *
-     * @return float
-     */
-    public function getHeuresComplFc()
+    public function getHeuresComplFc(): float
     {
         return $this->heuresComplFc;
     }
 
 
 
-    /**
-     * Get heuresComplFcMajorees
-     *
-     * @return float
-     */
-    public function getHeuresComplFcMajorees()
+    public function getHeuresComplFcMajorees(): float
     {
         return $this->heuresComplFcMajorees;
     }
 
 
 
-    /**
-     * Get heuresComplReferentiel
-     *
-     * @return float
-     */
-    public function getHeuresComplReferentiel()
+    public function getHeuresComplReferentiel(): float
     {
         return $this->heuresComplReferentiel;
     }
 
 
 
-    /**
-     * Get total
-     *
-     * @return float
-     */
-    public function getTotal()
+    public function getTotal(): float
     {
         return $this->total;
     }
 
 
 
-    /**
-     *
-     * @param TypeHeures|null $typeHeures
-     *
-     * @return float
-     * @throws \RuntimeException
-     */
-    public function getHeuresService(TypeHeures $typeHeures = null)
+    public function getHeuresService(TypeHeures $typeHeures = null): float
     {
         if (null === $typeHeures) {
             return $this->getHeuresServiceFi()
@@ -210,14 +122,7 @@ trait FormuleResultatTypesHeuresTrait
 
 
 
-    /**
-     *
-     * @param TypeHeures $typeHeures
-     *
-     * @return float
-     * @throws \RuntimeException
-     */
-    public function getHeuresCompl(TypeHeures $typeHeures)
+    public function getHeuresCompl(TypeHeures $typeHeures): float
     {
         switch ($typeHeures->getCode()) {
             case TypeHeures::FI:

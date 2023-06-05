@@ -5,6 +5,7 @@ namespace OffreFormation\Service;
 use Application\Service\AbstractEntityService;
 use Application\Service\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
+use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\TypeHeures;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 
@@ -74,6 +75,7 @@ class TypeHeuresService extends AbstractEntityService
         if ($serviceAPayer->getHeuresComplFc() != 0) $codes[TypeHeures::FC] = TypeHeures::FC;
         if ($serviceAPayer->getHeuresComplFcMajorees() != 0) $codes[TypeHeures::FC_MAJOREES] = TypeHeures::FC_MAJOREES;
         if ($serviceAPayer->getHeuresComplReferentiel() != 0) $codes[TypeHeures::REFERENTIEL] = TypeHeures::REFERENTIEL;
+        if ($serviceAPayer->getHeuresMission() != 0) $codes[TypeHeures::MISSION] = TypeHeures::MISSION;
         $this->finderByCode($codes, $qb, $alias);
 
         return $qb;

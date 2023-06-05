@@ -5,6 +5,7 @@ namespace Paiement\Entity\Db;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\FormuleResultatService;
 use Application\Entity\Db\FormuleResultatServiceReferentiel;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
@@ -20,9 +21,9 @@ class TblPaiement
 
     private Structure $structure;
 
-    private FormuleResultatService $formuleResultatService;
+    private ?FormuleResultatService $formuleResultatService = null;
 
-    private FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel;
+    private ?FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null;
 
     private ?Mission $mission = null;
 

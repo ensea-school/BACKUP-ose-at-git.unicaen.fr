@@ -694,7 +694,6 @@ return [
 
     'TYPE_HEURES' => [
         [
-            'ID'                       => 1,
             "CODE"                     => "fi",
             "LIBELLE_COURT"            => "Fi",
             "LIBELLE_LONG"             => "Formation initiale",
@@ -705,7 +704,6 @@ return [
             "ENSEIGNEMENT"             => true,
         ],
         [
-            'ID'                       => 2,
             "CODE"                     => "fa",
             "LIBELLE_COURT"            => "Fa",
             "LIBELLE_LONG"             => "Formation en apprentissage",
@@ -716,7 +714,6 @@ return [
             "ENSEIGNEMENT"             => true,
         ],
         [
-            'ID'                       => 3,
             "CODE"                     => "fc",
             "LIBELLE_COURT"            => "Fc",
             "LIBELLE_LONG"             => "Formation continue",
@@ -727,7 +724,6 @@ return [
             "ENSEIGNEMENT"             => true,
         ],
         [
-            'ID'                       => 4,
             "CODE"                     => "fc_majorees",
             "LIBELLE_COURT"            => "Rém. FC D714-60",
             "LIBELLE_LONG"             => "Rémunération de la formation continue au titre de l'article D714-60",
@@ -738,7 +734,6 @@ return [
             "ENSEIGNEMENT"             => false,
         ],
         [
-            'ID'                       => 5,
             "CODE"                     => "referentiel",
             "LIBELLE_COURT"            => "Référentiel",
             "LIBELLE_LONG"             => "Référentiel",
@@ -749,7 +744,6 @@ return [
             "ENSEIGNEMENT"             => false,
         ],
         [
-            'ID'                       => 6,
             "CODE"                     => "mission",
             "LIBELLE_COURT"            => "Mission",
             "LIBELLE_LONG"             => "Mission",

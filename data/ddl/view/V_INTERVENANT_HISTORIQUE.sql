@@ -355,7 +355,8 @@ SELECT i.id                                                                     
 FROM validation  v
          JOIN intervenant i ON i.id = v.intervenant_id
          JOIN utilisateur u ON u.id = v.histo_createur_id
-WHERE v.histo_destruction IS NULL
+          JOIN type_validation tv ON tv.id = v.type_validation_id
+WHERE v.histo_destruction IS NULL AND tv.code = 'CLOTURE_REALISE'
 GROUP BY i.id
 
 UNION ALL

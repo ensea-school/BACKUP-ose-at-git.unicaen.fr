@@ -51,6 +51,7 @@
 * Formulaire d'édition des états de sortie réparé au niveau de l'affichage des sous-requêtes
 * Correction de la formule de Picardie
 * Correction de la formule de calcul de Lyon 2
+* Correction de la formule de Paris 1
 
 
 

@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 20.3](#ose-203-23052023)
+[OSE 20.3](#ose-204-05062023)
 
 
 # OSE 21 (juin 2023)
@@ -42,7 +42,7 @@
  
 
 
-# OSE 20.4 (début juin 2023)
+# OSE 20.4 (05/06/2023)
 
 ## Corrections de bugs
 

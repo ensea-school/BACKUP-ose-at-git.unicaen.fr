@@ -1019,7 +1019,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
     RETURN '
     SELECT
       fvh.*,
-      CASE WHEN COALESCE(gtf.libelle_court,'') = ''DU'' THEN ''Oui'' ELSE ''Non'' END param_1,
+      CASE WHEN COALESCE(gtf.libelle_court,'''') = ''DU'' THEN ''Oui'' ELSE ''Non'' END param_1,
       COALESCE(tfr.code,fr.code) param_2,
       NULL param_3,
       NULL param_4,

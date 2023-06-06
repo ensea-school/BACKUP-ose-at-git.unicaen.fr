@@ -21,7 +21,7 @@ use UnicaenPrivilege\View\Privilege\PrivilegeViewHelper;
 class OffreEmploiAssertion extends AbstractAssertion
 {
 
-    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity (ResourceInterface $entity = null, $privilege = null)
     {
         /** @var Role $role */
         $role = $this->getRole();
@@ -54,7 +54,7 @@ class OffreEmploiAssertion extends AbstractAssertion
 
 
 
-    protected function assertOffreEmploiVisualisation(Role $role, OffreEmploi $offre)
+    protected function assertOffreEmploiVisualisation (Role $role, OffreEmploi $offre)
     {
         return $this->asserts(
             $this->assertStructure($role, $offre->getStructure()),
@@ -63,7 +63,22 @@ class OffreEmploiAssertion extends AbstractAssertion
 
 
 
-    protected function assertOffreEmploiEdition(Role $role, OffreEmploi $offre)
+    protected function assertStructure (Role $role, ?Structure $structure): bool
+    {
+        if (!$structure) {
+            return true;
+        }
+
+        if (!$role->getStructure()) {
+            return true;
+        }
+
+        return $role->getStructure() == $structure;
+    }
+
+
+
+    protected function assertOffreEmploiEdition (Role $role, OffreEmploi $offre)
     {
         $haveRole = $this->haveRole();
 
@@ -77,8 +92,31 @@ class OffreEmploiAssertion extends AbstractAssertion
 
 
 
-    protected function assertOffreEmploiSupprimer(Role $role, OffreEmploi $offre)
+    protected function haveRole ()
     {
+        $role = $this->getRole();
+
+        if ($role instanceof Role) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+    protected function assertOffreEmploi (Role $role, OffreEmploi $offre)
+    {
+        return $this->asserts([
+            $this->assertStructure($role, $offre->getStructure()),
+        ]);
+    }
+
+
+
+    protected function assertOffreEmploiValidation (Role $role, OffreEmploi $offre)
+    {
+
         return $this->asserts([
             $this->haveRole(),
             $this->assertOffreEmploi($role, $offre),
@@ -87,7 +125,7 @@ class OffreEmploiAssertion extends AbstractAssertion
 
 
 
-    protected function assertOffreEmploiPostuler(Role $role, OffreEmploi $offre)
+    protected function assertOffreEmploiPostuler (Role $role, OffreEmploi $offre)
     {
         //On vérifier que l'on a bien un contexte avec un intervenant
         if (!$this->haveIntervenant()) {
@@ -114,75 +152,7 @@ class OffreEmploiAssertion extends AbstractAssertion
 
 
 
-    protected function assertOffreEmploiValidation(Role $role, OffreEmploi $offre)
-    {
-
-        return $this->asserts([
-            $this->haveRole(),
-            $this->assertOffreEmploi($role, $offre),
-        ]);
-    }
-
-
-
-    protected function assertCandidatureVisualisation(Role $role, OffreEmploi $offre)
-    {
-        return $this->asserts([
-            $this->haveRole(),
-        ]);
-    }
-
-
-
-    protected function assertCandidatureValider(Role $role, OffreEmploi $offre)
-    {
-        return $this->asserts([
-            $this->haveRole(),
-        ]);
-    }
-
-
-
-    protected function assertOffreEmploi(Role $role, OffreEmploi $offre)
-    {
-        return $this->asserts([
-            $this->assertStructure($role, $offre->getStructure()),
-        ]);
-    }
-
-
-
-    protected function assertStructure(Role $role, ?Structure $structure): bool
-    {
-        if (!$structure) {
-            return true;
-        }
-
-        if (!$role->getStructure()) {
-            return true;
-        }
-
-        $test = ($role->getStructure() == $structure);
-
-        return $role->getStructure() == $structure;
-    }
-
-
-
-    protected function haveRole()
-    {
-        $role = $this->getRole();
-
-        if ($role instanceof Role) {
-            return true;
-        }
-
-        return false;
-    }
-
-
-
-    protected function haveIntervenant()
+    protected function haveIntervenant ()
     {
         $role = $this->getRole();
         if ($role instanceof Role) {
@@ -196,7 +166,35 @@ class OffreEmploiAssertion extends AbstractAssertion
 
 
 
-    protected function haveCandidature()
+    protected function assertCandidatureVisualisation (Role $role, OffreEmploi $offre)
+    {
+        return $this->asserts([
+            $this->haveRole(),
+        ]);
+    }
+
+
+
+    protected function assertCandidatureValider (Role $role, OffreEmploi $offre)
+    {
+        return $this->asserts([
+            $this->haveRole(),
+        ]);
+    }
+
+
+
+    protected function assertOffreEmploiSupprimer (Role $role, OffreEmploi $offre)
+    {
+        return $this->asserts([
+            $this->haveRole(),
+            $this->assertOffreEmploi($role, $offre),
+        ]);
+    }
+
+
+
+    protected function haveCandidature ()
     {
 
     }

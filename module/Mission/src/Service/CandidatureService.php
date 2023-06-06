@@ -144,12 +144,13 @@ class CandidatureService extends AbstractEntityService
         $subject      = $this->getServiceParametres()->get($sujet);
         $subject      = str_replace(':intervenant', $vIntervenant, $subject);
         $to           = (!empty($intervenant->getEmailPerso())) ? : $intervenant->getEmailPro();
-        if (empty($to)) {
-            $this->flashMessenger()->addErrorMessage('Le candidat n\'a pas d\'email de renseigné');
-        } else {
+        if (!empty($to)) {
             $this->getMailService()->sendMail($to, $subject, $html);
-            $this->flashMessenger()->addSuccessMessage('Un mail d\'information a été envoyé au candidat');
+
+            return true;
         }
+
+        return false;
     }
 
 }

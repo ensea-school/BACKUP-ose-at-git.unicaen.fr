@@ -8,7 +8,7 @@ return [
                     'options' => [
                         'route'    => 'changement-mot-de-passe [--utilisateur=] [--mot-de-passe=]',
                         'defaults' => [
-                            'controller' => 'Application\Controller\Utilisateur',
+                            'controller' => \Application\Controller\UtilisateurController::class,
                             'action'     => 'changement-mot-de-passe',
                         ],
                     ],
@@ -17,7 +17,7 @@ return [
                     'options' => [
                         'route'    => 'creer-utilisateur [--data=]',
                         'defaults' => [
-                            'controller' => 'Application\Controller\Utilisateur',
+                            'controller' => \Application\Controller\UtilisateurController::class,
                             'action'     => 'creation',
                         ],
                     ],

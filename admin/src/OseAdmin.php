@@ -377,8 +377,12 @@ class OseAdmin
                 $this->bdd->setLogger($this->console);
             }
 
-            $this->bdd->setOption('source-id', $this->getSourceOseId());
-            $this->bdd->setOption('histo-user-id', $this->getOseAppliId());
+            try{
+                $this->bdd->setOption('source-id', $this->getSourceOseId());
+                $this->bdd->setOption('histo-user-id', $this->getOseAppliId());
+            }catch(\Exception $e){
+
+            }
 
             $du = $this->bdd->dataUpdater();
             $du->setConfig(require $this->getOseDir() . '/data/data_updater_config.php');

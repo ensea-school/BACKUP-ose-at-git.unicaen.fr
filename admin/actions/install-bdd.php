@@ -10,7 +10,15 @@ $ref->loadFromDir($oa->getOseDir() . 'data/ddl');
 $bdd->create($ref);
 
 /* Insertion des données */
-$oa->getBdd()->dataUpdater()->run('install');
+
+// On s'occupe d'abord de créer puis d'initialiser l'utilisateur OSE et la source OSE
+$bdd->dataUpdater()->run('install', 'UTILISATEUR');
+$bdd->dataUpdater()->run('install', 'SOURCE');
+$bdd->setOption('source-id', $oa->getSourceOseId());
+$bdd->setOption('histo-user-id', $oa->getOseAppliId());
+
+// On installe ensuite toutes les données
+$bdd->dataUpdater()->run('install');
 
 /* On construit les plafonds et les tableaux de bord */
 $oa->exec('plafonds construire');

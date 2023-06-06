@@ -168,7 +168,8 @@ class DataSource
 
     public function STATUT()
     {
-        $data = $this->donneesDefaut['STATUT'];
+        $donneesParDefaut = require $this->oseAdmin->getOseDir() . '/data/donnees_par_defaut.php';
+        $data = $donneesParDefaut['STATUT'];
 
         $statuts = [];
         for ($a = 2010; $a <= 2099; $a++) {
@@ -186,7 +187,8 @@ class DataSource
 
     public function TYPE_PIECE_JOINTE_STATUT()
     {
-        $data = $this->donneesDefaut['TYPE_PIECE_JOINTE_STATUT'];
+        $donneesParDefaut = require $this->oseAdmin->getOseDir() . '/data/donnees_par_defaut.php';
+        $data = $donneesParDefaut['TYPE_PIECE_JOINTE_STATUT'];
 
         $statuts = [];
         for ($a = 2010; $a <= 2099; $a++) {

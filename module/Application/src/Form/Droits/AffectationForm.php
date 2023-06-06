@@ -54,7 +54,7 @@ class AffectationForm extends AbstractForm
         $this->setAttribute('data-roles-must-have-structure', json_encode($rolesMustHaveStructure));
         $this->setAttribute('class', 'affectation-form');
 
-        $qb = $this->getServiceStructure()->finderByEnseignement();
+        $qb = $this->getServiceStructure()->finderByHistorique();
         if ($structure) {
             $this->getServiceStructure()->finderById($structure->getId(), $qb);
         }

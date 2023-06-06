@@ -7,14 +7,14 @@
                 <span class="badge rounded-pill bg-info">{{ offre.nombreHeures }} heure(s)</span> &nbsp;
                 <span v-if="nbPostesRestants > 0" class="badge rounded-pill bg-success">{{ nbPostesRestants }} poste(s) restant(s)</span>&nbsp;
                 <span v-if="nbPostesRestants <= 0" class="badge rounded-pill bg-danger">Tous les postes sont pourvus</span>&nbsp;
-                <span v-if="offre.validation" class="badge rounded-pill bg-success">Valider le <u-date
+                <span v-if="offre.validation" class="badge rounded-pill bg-success">Validée le <u-date
                     :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}</span>
                 <span v-if="!offre.validation" class="badge rounded-pill bg-warning"> En attente de validation par la DRH</span>&nbsp;
             </div>
 
             <div class="card-body">
                 <p class="bg-light" style="padding:5px;">
-                    <b>Crée le : </b>
+                    <b>Créée le : </b>
                     <u-date :value="offre.histoCreation"/>
                     par {{ offre.histoCreateur.displayName }}<br/>
                     <b>Période à pourvoir : </b>du
@@ -22,7 +22,7 @@
                     au
                     <u-date :value="offre.dateFin"/>
                     <br/>
-                    <b>Demandé par la composante :</b> {{ offre.structure.libelleCourt }}
+                    <b>Demandée par la composante :</b> {{ offre.structure.libelleCourt }}
                     <br/>
                     <b>Type de mission :</b> {{ offre.typeMission.libelle }}
 
@@ -72,7 +72,7 @@
             </div>
         </div>
         <p class="bg-light" style="padding:10px;">
-            <b>Crée le : </b>
+            <b>Créée le : </b>
             <u-date :value="offre.histoCreation"/>
             par {{ offre.histoCreateur.displayName }}<br/>
             <b>Période à pourvoir : </b>du
@@ -114,7 +114,7 @@
                     <td><a :href="'/intervenant/code:' + candidature.intervenant.code + '/voir'">
                         {{ candidature.intervenant.prenom+' '+candidature.intervenant.nomUsuel }}</a></td>
                     <td>{{ candidature.intervenant.structure.libelleLong }}</td>
-                    <th> <span v-if="candidature.validation" class="badge rounded-pill bg-success">Accepter le <u-date
+                    <th> <span v-if="candidature.validation" class="badge rounded-pill bg-success">Acceptée le <u-date
                         :value="candidature.validation.histoCreation"/> par {{
                             candidature.validation.histoCreateur.displayName
                         }}</span>

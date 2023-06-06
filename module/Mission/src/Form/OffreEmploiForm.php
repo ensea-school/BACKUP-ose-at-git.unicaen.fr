@@ -30,7 +30,6 @@ class OffreEmploiForm extends AbstractForm
 
         $this->spec(['description' => ['type' => 'Textarea']]);
 
-
         $this->build();
 
         $tmDql       = "SELECT tm FROM " . TypeMission::class . " tm WHERE tm.histoDestruction IS NULL AND tm.annee = :annee";
@@ -38,9 +37,9 @@ class OffreEmploiForm extends AbstractForm
         $this->setValueOptions('typeMission', $tmDql, $tmDqlParams);
 
 
-        $sDql = $this->getServiceStructure()->finderByEnseignement();
-
+        $sDql = $this->getServiceStructure()->finderByHistorique();
         $this->setValueOptions('structure', $sDql);
+        $this->get('structure')->setAttributes(['class' => 'selectpicker', 'data-live-search' => true]);
 
         $this->setLabels([
             'structure'    => 'Composante proposant l\'offre',

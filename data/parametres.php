@@ -114,7 +114,7 @@ return [
         "VALEUR"      => "22:00",
         "DESCRIPTION" => "Horaire à partir duquel les heures faites sont considérées comme nocturnes",
     ],
-    "taux-remu"                           => [
+    "taux-remu"                                  => [
         "VALEUR"      => "TLD",
         "DESCRIPTION" => "taux de rémuneration utilisé par défaut",
         "QUERY"       => 'SELECT id valeur FROM taux_remu WHERE code = :valeur AND histo_destruction IS NULL',
@@ -195,15 +195,49 @@ Cordialement,
         "DESCRIPTION" => "Email souhaité pour l'expéditeur du contrat",
     ],
 
+    /* Candidature mission */
+
+    "candidature_modele_acceptation_mail"       => [
+        "VALEUR"      => "Bonjour :intervenant
+
+Vous avez récement postulé à une offre d'emploi étudiant. c'est acceptée
+
+Cordialement,
+:utilisateur",
+        "DESCRIPTION" => "Modèle de mail acceptation d'une candidature",
+    ],
+    "candidature_modele_acceptation_mail_objet" => [
+        "VALEUR"      => "Acceptation candidature :intervenant",
+        "DESCRIPTION" => "Sujet pour le mail d'acceptation de candidature",
+    ],
+    "candidature_modele_refus_mail"             => [
+        "VALEUR"      => "Bonjour :intervenant
+
+Vous avez récement postulé à une offre d'emploi étudiant. Mais c'est refusé
+
+Cordialement,
+:utilisateur",
+        "DESCRIPTION" => "Modèle de mail de refus d'une candidature",
+    ],
+    "candidature_modele_refus_mail_objet"       => [
+        "VALEUR"      => "Refus candidature :intervenant",
+        "DESCRIPTION" => "Sujet pour le mail de refus de candidature",
+    ],
+    "candidature_mail_expediteur"               => [
+        "VALEUR"      => "",
+        "DESCRIPTION" => "Email souhaité pour l'expéditeur du mail candidature",
+    ],
+
+
     /* Export RH*/
-    "export_rh_franchissement"                   => [
+    "export_rh_franchissement"                  => [
         "VALEUR"      => "",
         "DESCRIPTION" => "Etape de la feuille de route à franchir pour autoriser un export vers le SIRH",
     ],
 
 
     /* Messages informatifs */
-    "page_contact"                               => [
+    "page_contact"                              => [
         "VALEUR"      => "<h3>Intervenants</h3>
     Contactez votre composante ou bien écrivez à :
         <ul>

@@ -6,9 +6,12 @@ use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
+use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
+use UnicaenMail\Service\Mail\MailServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
 
 /**
@@ -23,7 +26,12 @@ use UnicaenVue\View\Model\AxiosModel;
  */
 class CandidatureService extends AbstractEntityService
 {
+
     use SourceServiceAwareTrait;
+    use ContextServiceAwareTrait;
+    use ParametresServiceAwareTrait;
+    use MailServiceAwareTrait;
+
 
     /**
      * Retourne la classe des entités
@@ -31,7 +39,7 @@ class CandidatureService extends AbstractEntityService
      * @return string
      * @throws \RuntimeException
      */
-    public function getEntityClass(): string
+    public function getEntityClass (): string
     {
         return Candidature::class;
     }
@@ -43,14 +51,14 @@ class CandidatureService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias(): string
+    public function getAlias (): string
     {
         return 'ca';
     }
 
 
 
-    public function postuler(Intervenant $intervenant, OffreEmploi $offre): Candidature
+    public function postuler (Intervenant $intervenant, OffreEmploi $offre): Candidature
     {
 
         $candidature = $this->newEntity();
@@ -62,7 +70,21 @@ class CandidatureService extends AbstractEntityService
 
 
 
-    public function data(array $parameters, ?Role $role = null)
+    /**
+     * @param Candidature $entity
+     *
+     * @return Candidature
+     */
+    public function save ($entity)
+    {
+        parent::save($entity);
+
+        return $entity;
+    }
+
+
+
+    public function data (array $parameters, ?Role $role = null)
     {
         $dql = "
         SELECT 
@@ -104,16 +126,30 @@ class CandidatureService extends AbstractEntityService
 
 
 
-    /**
-     * @param Candidature $entity
-     *
-     * @return Candidature
-     */
-    public function save($entity)
+    public function envoyerMail (Candidature $candidature, string $modele, string $sujet): bool
     {
-        parent::save($entity);
-
-        return $entity;
+        //Récupération du modèle de mail
+        $html = $this->getServiceParametres()->get($modele);
+        //Ajout pour transformer les sauts de lignes en html <br/>
+        $html = nl2br($html);
+        //Personnalisation des variables
+        $intervenant = $candidature->getIntervenant();
+        if ($intervenant->getCivilite() != null) {
+            $vIntervenant = $intervenant->getCivilite()->getLibelleCourt() . " " . $intervenant->getNomUsuel();
+        } else {
+            $vIntervenant = $intervenant->getNomUsuel();
+        }
+        $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
+        $html         = str_replace([':intervenant', ':utilisateur'], [$vIntervenant, $vUtilisateur], $html);
+        $subject      = $this->getServiceParametres()->get($sujet);
+        $subject      = str_replace(':intervenant', $vIntervenant, $subject);
+        $to           = (!empty($intervenant->getEmailPerso())) ? : $intervenant->getEmailPro();
+        if (empty($to)) {
+            $this->flashMessenger()->addErrorMessage('Le candidat n\'a pas d\'email de renseigné');
+        } else {
+            $this->getMailService()->sendMail($to, $subject, $html);
+            $this->flashMessenger()->addSuccessMessage('Un mail d\'information a été envoyé au candidat');
+        }
     }
 
 }

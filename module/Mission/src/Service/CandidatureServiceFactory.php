@@ -4,6 +4,7 @@ namespace Mission\Service;
 
 use Application\Constants;
 use Psr\Container\ContainerInterface;
+use UnicaenMail\Service\Mail\MailService;
 
 
 /**
@@ -21,9 +22,12 @@ class CandidatureServiceFactory
      *
      * @return CandidatureService
      */
-    public function __invoke(ContainerInterface $container, $requestedName, $options = null): CandidatureService
+    public function __invoke (ContainerInterface $container, $requestedName, $options = null): CandidatureService
     {
-        $service = new CandidatureService();
+
+        $mailService = $container->get(MailService::class);
+        $service     = new CandidatureService();
+        $service->setMailService($mailService);
         $service->setEntityManager($container->get(Constants::BDD));
 
         /* Injectez vos dépendances ICI */

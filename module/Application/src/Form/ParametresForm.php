@@ -475,6 +475,61 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'    => 'candidature_modele_acceptation_mail_objet',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Objet du mail d\'acceptation',
+
+            ],
+
+        ]);
+
+        $this->add([
+            'name'    => 'candidature_modele_refus_mail_objet',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Objet du mail de refus',
+
+            ],
+
+        ]);
+
+        $this->add([
+            'name'    => 'candidature_mail_expediteur',
+            'type'    => Element\Email::class,
+            'options' => [
+                'label' => 'Expéditeur du mail (si vide, l\'email de l\'utilisateur sera utilisé)',
+
+            ],
+
+        ]);
+
+        $this->add([
+            'name'       => 'candidature_modele_acceptation_mail',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Corps du mail envoyé aux candidats dont la candidature est acceptée',
+
+            ],
+            'attributes' => [
+                'rows' => 12,
+            ],
+        ]);
+
+
+        $this->add([
+            'name'       => 'candidature_modele_refus_mail',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Corps du mail envoyé aux candidats dont la candidature est refusée',
+
+            ],
+            'attributes' => [
+                'rows' => 12,
+            ],
+        ]);
+
+        $this->add([
             'type'       => 'Select',
             'name'       => 'export_rh_franchissement',
             'options'    => [

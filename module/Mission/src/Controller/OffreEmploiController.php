@@ -23,7 +23,7 @@ use UnicaenVue\View\Model\AxiosModel;
  *
  * @author Antony Le Courtes <antony.lecourtes at unicaen.fr>
  */
-class OffreEmploiController extends AbstractController
+class  OffreEmploiController extends AbstractController
 {
     use OffreEmploiServiceAwareTrait;
     use CandidatureServiceAwareTrait;
@@ -33,7 +33,7 @@ class OffreEmploiController extends AbstractController
     use MissionServiceAwareTrait;
 
 
-    public function indexAction()
+    public function indexAction ()
     {
 
         return [];
@@ -41,7 +41,7 @@ class OffreEmploiController extends AbstractController
 
 
 
-    public function saisirAction()
+    public function saisirAction ()
     {
 
         $offreEmploi = $this->getEvent()->getParam('offreEmploi');
@@ -66,7 +66,7 @@ class OffreEmploiController extends AbstractController
 
 
 
-    public function supprimerAction()
+    public function supprimerAction ()
     {
         /** @var Mission $mission */
         $offre = $this->getEvent()->getParam('offreEmploi');
@@ -84,7 +84,7 @@ class OffreEmploiController extends AbstractController
      *
      * @return AxiosModel
      */
-    public function listeAction()
+    public function listeAction ()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -93,7 +93,7 @@ class OffreEmploiController extends AbstractController
 
 
 
-    public function validerAction()
+    public function validerAction ()
     {
         /** @var OffreEmploi $offre */
         $offre = $this->getEvent()->getParam('offreEmploi');
@@ -111,7 +111,30 @@ class OffreEmploiController extends AbstractController
 
 
 
-    public function devaliderAction()
+    /**
+     * Retourne les données pour une offre d'emploi
+     *
+     * @return AxiosModel
+     */
+    public function getAction (?OffreEmploi $offreEmploi = null)
+    {
+        if (!$offreEmploi) {
+            /** @var OffreEmploi $offreEmploi */
+            $offreEmploi = $this->getEvent()->getParam('offreEmploi');
+        }
+
+        $this->em()->clear();
+
+        $role  = $this->getServiceContext()->getSelectedIdentityRole();
+        $model = $this->getServiceOffreEmploi()->data(['offreEmploi' => $offreEmploi], $role);
+        $model->returnFirstItem();
+
+        return $model;
+    }
+
+
+
+    public function devaliderAction ()
     {
         /** @var OffreEmploi $offre */
         $offre      = $this->getEvent()->getParam('offreEmploi');
@@ -131,7 +154,7 @@ class OffreEmploiController extends AbstractController
 
 
 
-    public function accepterCandidatureAction()
+    public function accepterCandidatureAction ()
     {
         /** @var Candidature $candidature */
         $candidature = $this->getEvent()->getParam('candidature');
@@ -141,6 +164,8 @@ class OffreEmploiController extends AbstractController
         } else {
             $this->getServiceValidation()->validerCandidature($candidature);
             $this->getServiceCandidature()->save($candidature);
+            //Envoyer mail de confirmation d'acceptation de candidature
+            $this->getServiceCandidature()->envoyerMail($candidature, Candidature::MODELE_MAIL_ACCEPTATION, Candidature::OBJET_MAIL_ACCEPTATION);
             $this->flashMessenger()->addSuccessMessage("La candidature est bien acceptée");
             $this->getServiceMission()->createMissionFromCandidature($candidature);
         }
@@ -151,7 +176,7 @@ class OffreEmploiController extends AbstractController
 
 
 
-    public function refuserCandidatureAction()
+    public function refuserCandidatureAction ()
     {
         /** @var Candidature $candidature */
         $candidature = $this->getEvent()->getParam('candidature');
@@ -171,6 +196,7 @@ class OffreEmploiController extends AbstractController
             }
 
             $this->getServiceCandidature()->save($candidature);
+            $this->getServiceCandidature()->envoyerMail($candidature, Candidature::MODELE_MAIL_REFUS, Candidature::OBJET_MAIL_REFUS);
             $this->flashMessenger()->addSuccessMessage("La candidature est bien refusée");
         }
 
@@ -180,7 +206,7 @@ class OffreEmploiController extends AbstractController
 
 
 
-    public function postulerAction()
+    public function postulerAction ()
     {
         /**
          * @var OffreEmploi $offreEmploi
@@ -201,7 +227,7 @@ class OffreEmploiController extends AbstractController
 
 
 
-    public function detailAction(?OffreEmploi $offreEmploi = null)
+    public function detailAction (?OffreEmploi $offreEmploi = null)
     {
 
         if (!$offreEmploi) {
@@ -214,29 +240,6 @@ class OffreEmploiController extends AbstractController
         $canPostuler = $this->isAllowed($offreEmploi, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
 
         return compact('offreEmploi', 'utilisateur', 'canPostuler');
-    }
-
-
-
-    /**
-     * Retourne les données pour une offre d'emploi
-     *
-     * @return AxiosModel
-     */
-    public function getAction(?OffreEmploi $offreEmploi = null)
-    {
-        if (!$offreEmploi) {
-            /** @var OffreEmploi $offreEmploi */
-            $offreEmploi = $this->getEvent()->getParam('offreEmploi');
-        }
-
-        $this->em()->clear();
-
-        $role  = $this->getServiceContext()->getSelectedIdentityRole();
-        $model = $this->getServiceOffreEmploi()->data(['offreEmploi' => $offreEmploi], $role);
-        $model->returnFirstItem();
-
-        return $model;
     }
 
 }

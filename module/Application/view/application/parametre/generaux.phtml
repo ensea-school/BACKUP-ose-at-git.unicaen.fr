@@ -45,7 +45,7 @@
             </div>
             <div class="card-body">
 
-                
+
                 <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('report_service')); ?>
@@ -132,6 +132,32 @@
                     </div>
                     <div class="row">
 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card bg-default">
+            <div class="card-header">
+                <h3 class="card-title">Gestion des mails de candidatures</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?= $this->formControlGroup($form->get('candidature_mail_expediteur')); ?>
+
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('candidature_modele_acceptation_mail_objet')); ?>
+
+                        <?= $this->formControlGroup($form->get('candidature_modele_acceptation_mail')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('candidature_modele_refus_mail_objet')); ?>
+
+                        <?= $this->formControlGroup($form->get('candidature_modele_refus_mail')); ?>
                     </div>
                 </div>
             </div>

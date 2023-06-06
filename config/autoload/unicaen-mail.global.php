@@ -33,7 +33,7 @@ return [
         'module' => [
             'default' => [
                 'redirect_to'    => AppConfig::get('mail', 'redirection'),
-                'do_not_send'    => true,
+                'do_not_send'    => AppConfig::get('mail', 'envoiDesactive'),
                 'subject_prefix' => 'DEV',
                 'from_name'      => 'OSE | Application',
                 'from_email'     => AppConfig::get('mail', 'from'),
@@ -43,7 +43,7 @@ return [
         ],
     ],
 
-    'server_url' => AppConfig::get('mail', 'scheme') . '://' . AppConfig::get('mail', 'domain'),
+    'server_url' => AppConfig::get('global', 'scheme') . '://' . AppConfig::get('global', 'domain'),
 
     'navigation' => [
         'default' => [

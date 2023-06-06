@@ -143,7 +143,7 @@ class CandidatureService extends AbstractEntityService
         $html         = str_replace([':intervenant', ':utilisateur'], [$vIntervenant, $vUtilisateur], $html);
         $subject      = $this->getServiceParametres()->get($sujet);
         $subject      = str_replace(':intervenant', $vIntervenant, $subject);
-        $to           = (!empty($intervenant->getEmailPerso())) ? : $intervenant->getEmailPro();
+        $to           = (!empty($intervenant->getEmailPerso())) ? $intervenant->getEmailPerso() : $intervenant->getEmailPro();
         if (!empty($to)) {
             $this->getMailService()->sendMail($to, $subject, $html);
 

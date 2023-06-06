@@ -64,7 +64,7 @@ return [
             'length'      => 500,
             'scale'       => NULL,
             'precision'   => NULL,
-            'nullable'    => FALSE,
+            'nullable'    => TRUE,
             'default'     => NULL,
             'position'    => 5,
             'commentaire' => NULL,

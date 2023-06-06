@@ -39,8 +39,8 @@ return [
         'indicateurs' => [
             110 => [
                 'enabled'           => true,
-                'libelle_singulier' => '%s vacataire est en attente de validation de ses données personnelles',
-                'libelle_pluriel'   => '%s vacataires sont en attente de validation de leurs données personnelles',
+                'libelle_singulier' => '%s intervenant est en attente de validation de ses données personnelles',
+                'libelle_pluriel'   => '%s intervenants sont en attente de validation de leurs données personnelles',
                 'route'             => 'intervenant/dossier',
                 'irrecevables'      => false,
             ],

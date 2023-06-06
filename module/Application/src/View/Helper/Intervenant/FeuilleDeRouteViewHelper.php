@@ -250,6 +250,7 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement
             case $franchissement == 0:
                 if ($objectif === .0) {
                     $attrs   = [
+                        'title' => 'À faire',
                         'class' => 'text-danger float-end',
                     ];
                     $content = $tag('span', ['class' => 'fas fa-xmark text-danger']);

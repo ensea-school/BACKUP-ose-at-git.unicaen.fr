@@ -59,6 +59,9 @@ SELECT ct.annee_id,
        ct."tauxNom",
        ct."debutValidite",
        ct."finValidite",
+       ct."pays_nationalite",
+       ct."date_creation",
+       ct."date_contrat_lie",
        CASE ct.est_contrat
            WHEN 1 THEN -- contrat
                'Contrat de travail'
@@ -135,7 +138,10 @@ FROM (  SELECT c.*,
              CASE WHEN LOWER(si.codes_corresp_2) = 'oui' THEN 1 ELSE 0 END                                                                                  est_atv,
              tm.libelle                                                                                                                                     "missionNom",
              to_char(c.debut_validite, 'dd/mm/YYYY')                                                                                                        "debutValidite",
-             to_char(c.fin_validite, 'dd/mm/YYYY')                                                                                                          "finValidite"
+             to_char(c.fin_validite, 'dd/mm/YYYY')                                                                                                          "finValidite",
+             p.libelle                                                                                                                                      "pays_nationalite",
+             COALESCE(v.histo_creation,c.histo_creation)                                                                                                    "date_creation",
+             cp.date_retour_signe                                                                                                                           "date_contrat_lie"
         FROM
             contrat                         c
             JOIN type_contrat               tc ON tc.id = c.type_contrat_id
@@ -145,6 +151,7 @@ FROM (  SELECT c.*,
             LEFT JOIN taux_remu             trs ON si.taux_remu_id = trs.id
             JOIN STRUCTURE                  s ON s.id = c.structure_id
             LEFT JOIN intervenant_dossier   d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
+            LEFT JOIN pays                  p ON d.pays_nationalite_id = p.id
             JOIN civilite                   civ ON civ.id = COALESCE(d.civilite_id,i.civilite_id)
             LEFT JOIN validation            v ON v.id = c.validation_id AND v.histo_destruction IS NULL
             JOIN type_volume_horaire        tvh ON tvh.code = 'PREVU'

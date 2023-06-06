@@ -65,6 +65,20 @@ abstract class  AbstractForm extends Form implements InputFilterProviderInterfac
                 $request->getFiles()->toArray()
             );
 
+            // Protection : Pour les éléments en lecture seule, on utilise les données extraites de l'entité et non celles en entrée
+            $roData = [];
+            foreach( $this->getElements() as $element){
+                if (true === $element->getAttribute('readonly') || true === $element->getAttribute('disabled')){
+                    if (empty($roData)){
+                        $roData = $this->extract();
+                    }
+                    $elementName = $element->getName();
+                    if (isset($roData[$elementName])) {
+                        $data[$elementName] = $roData[$elementName];
+                    }
+                }
+            }
+
             $this->setData($data);
             if ($this->isValid()) {
                 try {

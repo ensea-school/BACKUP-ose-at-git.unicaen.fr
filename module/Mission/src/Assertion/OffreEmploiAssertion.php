@@ -26,7 +26,7 @@ class OffreEmploiAssertion extends AbstractAssertion
         /** @var Role $role */
         $role = $this->getRole();
 
-        //if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         switch (true) {
             case $entity instanceof OffreEmploi:

@@ -18,6 +18,8 @@ use UnicaenApp\Util;
  */
 class MissionForm extends AbstractForm
 {
+    protected bool $valide = false;
+
     use ContextServiceAwareTrait;
 
     public function init()
@@ -50,7 +52,7 @@ class MissionForm extends AbstractForm
         $this->get('typeMission')->setAttribute('data-accompagnement-etudiants', json_encode($tmAccEtu));
         $this->get('typeMission')->setAttribute('data-besoin-formation', json_encode($besoinFormation));
 
-        $trDql = "SELECT mtr FROM " . TauxRemu::class . " mtr";
+        $trDql = "SELECT mtr FROM " . TauxRemu::class . " mtr WHERE mtr.histoDestruction IS NULL";
         $this->setValueOptions('tauxRemu', $trDql);
         $this->setValueOptions('tauxRemuMajore', $trDql);
         $this->get('tauxRemuMajore')->setEmptyOption('- Aucune majoration -');
@@ -71,5 +73,30 @@ class MissionForm extends AbstractForm
         ]);
 
         $this->addSubmit();
+    }
+
+
+
+    public function editValide(): self
+    {
+        $this->valide = true;
+
+        $elements = $this->getElements();
+        unset($elements['heures']);
+        unset($elements['dateFin']);
+
+        // On met en lecture seule tout le formulaire, sauf le nombre d'heures & la date de fin
+        // ces deux données uniquement sont modifiables après validation
+        $elements = array_keys($elements);
+        $this->readOnly(true, $elements);
+
+        return $this;
+    }
+
+
+
+    public function isValide(): bool
+    {
+        return $this->valide;
     }
 }

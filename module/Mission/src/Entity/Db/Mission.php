@@ -486,7 +486,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
     public function canSaisie(): bool
     {
-        return !$this->isValide();
+        return true;
     }
 
 

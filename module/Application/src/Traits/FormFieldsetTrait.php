@@ -4,17 +4,11 @@ namespace Application\Traits;
 
 use Application\Constants;
 use Application\Filter\FloatFromString;
-use Application\Form\AbstractForm;
 use Application\Hydrator\GenericHydrator;
 use Application\Interfaces\ParametreEntityInterface;
 use Doctrine\ORM\EntityManager;
 use Laminas\Form\Element\Checkbox;
-use Laminas\Form\Element\Csrf;
-use Laminas\Form\Element\Number;
 use Laminas\Form\Element\Select;
-use Laminas\Form\Element\Submit;
-use Laminas\Form\Element\Text;
-use Laminas\Form\Form;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Stdlib\ArrayUtils;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -59,11 +53,11 @@ trait FormFieldsetTrait
      *
      * @param string            $name               Name of the route
      * @param array             $params             Parameters for the link
-     * @param array|Traversable $options            Options for the route
+     * @param array|\Traversable $options            Options for the route
      * @param bool              $reuseMatchedParams Whether to reuse matched parameters
      *
      * @return string                         For the link href attribute
-     * @see    \Laminas\Mvc\Router\RouteInterface::assemble()
+     * @see    \Laminas\Mvc\I18n\Router\RouteInterface::assemble()
      *
      */
     protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false): string
@@ -86,19 +80,23 @@ trait FormFieldsetTrait
 
 
 
-    public function readOnly(bool $readOnly = true)
+    public function readOnly(bool $readOnly = true, array $elements = [])
     {
+        if (empty($elements)){
+            $elements = $this->getElements();
+        }
+
         /** @var $element \Laminas\Form\Element */
-        foreach ($this->getElements() as $element) {
-            switch (get_class($element)) {
-                case Number::class:
-                case Text::class:
-                    $element->setAttribute('readonly', $readOnly);
-                break;
-                case Select::class:
-                case Checkbox::class:
-                    $element->setAttribute('disabled', $readOnly);
-                break;
+        foreach ($elements as $elementName) {
+            if ($element = $this->get($elementName)) {
+                switch (get_class($element)) {
+                    case Select::class:
+                    case Checkbox::class:
+                        $element->setAttribute('disabled', $readOnly);
+                        break;
+                    default:
+                        $element->setAttribute('readonly', $readOnly);
+                }
             }
         }
     }

@@ -4,11 +4,32 @@ return [
     'Missions'             => [
         'id'          => 18,
         'indicateurs' => [
-            2010 => [
+            280 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s étudiant sont en attente de validation d\'une candidature',
                 'libelle_pluriel'   => '%s étudiants sont en attente de validation d\'une candidature',
                 'route'             => 'intervenant/candidature',
+                'irrecevables'      => false,
+            ],
+            350 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant sont en attente de validation d\'une mission',
+                'libelle_pluriel'   => '%s étudiants sont en attente de validation d\'une mission',
+                'route'             => 'intervenant/missions',
+                'irrecevables'      => false,
+            ],
+            360 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant n\'a saisi aucune heure de suivi de mission',
+                'libelle_pluriel'   => '%s étudiants n\'ont saisi aucune heure de suivi de mission',
+                'route'             => 'intervenant/missions-suivi',
+                'irrecevables'      => false,
+            ],
+            370 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant sont en attente de validation d\'heures de suivi de mission',
+                'libelle_pluriel'   => '%s étudiants sont en attente de validation d\'heures de suivi de mission',
+                'route'             => 'intervenant/missions-suivi',
                 'irrecevables'      => false,
             ],
         ],
@@ -62,6 +83,20 @@ return [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent est en attente de validation de ses pièces justificatives obligatoires',
                 'libelle_pluriel'   => '%s permanents sont en attente de validation de leurs pièces justificatives obligatoires',
+                'route'             => 'piece-jointe/intervenant',
+                'irrecevables'      => false,
+            ],
+            250 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant n\'a pas fourni toutes les pièces justificatives obligatoires',
+                'libelle_pluriel'   => '%s étudiants n\'ont pas fourni toutes les pièces justificatives obligatoires',
+                'route'             => 'piece-jointe/intervenant',
+                'irrecevables'      => false,
+            ],
+            260 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant est en attente de validation de ses pièces justificatives obligatoires',
+                'libelle_pluriel'   => '%s étudiants sont en attente de validation de leurs pièces justificatives obligatoires',
                 'route'             => 'piece-jointe/intervenant',
                 'irrecevables'      => false,
             ],
@@ -372,6 +407,20 @@ return [
                 'route'             => 'paiement/etat-demande-paiement',
                 'irrecevables'      => false,
             ],
+//            950 => [
+//                'enabled'           => true,
+//                'libelle_singulier' => '%s étudiant peut faire l\'objet d\'une demande de mise en paiement',
+//                'libelle_pluriel'   => '%s étudiants peuvent faire l\'objet d\'une demande de mise en paiement',
+//                'route'             => 'intervenant/mise-en-paiement/demande',
+//                'irrecevables'      => false,
+//            ],
+//            960 => [
+//                'enabled'           => true,
+//                'libelle_singulier' => '%s étudiant peut faire l\'objet d\'une mise en paiement',
+//                'libelle_pluriel'   => '%s étudiants peuvent faire l\'objet d\'une mise en paiement',
+//                'route'             => 'paiement/etat-demande-paiement',
+//                'irrecevables'      => false,
+//            ],
         ],
     ],
 

@@ -46,8 +46,8 @@ return [
             ],
             120 => [
                 'enabled'           => true,
-                'libelle_singulier' => '%s vacataire a saisi des données personnelles qui diffèrent de celles importées',
-                'libelle_pluriel'   => '%s vacataires ont saisi des données personnelles qui diffèrent de celles importées',
+                'libelle_singulier' => '%s intervenant a saisi des données personnelles qui diffèrent de celles importées',
+                'libelle_pluriel'   => '%s intervenants ont saisi des données personnelles qui diffèrent de celles importées',
                 'route'             => 'intervenant/dossier/differences',
                 'irrecevables'      => false,
             ],

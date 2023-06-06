@@ -145,6 +145,10 @@ class SaisieController extends AbstractController
 
         $form = $this->getFormMission();
 
+        if ($mission->isValide()){
+            $form->editValide();
+        }
+
         if ($this->getServiceContext()->getStructure()) {
             $form->remove('structure');
         }

@@ -18,6 +18,8 @@ use UnicaenApp\Util;
  */
 class MissionForm extends AbstractForm
 {
+    protected bool $valide = false;
+
     use ContextServiceAwareTrait;
 
     public function init()
@@ -71,5 +73,30 @@ class MissionForm extends AbstractForm
         ]);
 
         $this->addSubmit();
+    }
+
+
+
+    public function editValide(): self
+    {
+        $this->valide = true;
+
+        $elements = $this->getElements();
+        unset($elements['heures']);
+        unset($elements['dateFin']);
+
+        // On met en lecture seule tout le formulaire, sauf le nombre d'heures & la date de fin
+        // ces deux données uniquement sont modifiables après validation
+        $elements = array_keys($elements);
+        $this->readOnly(true, $elements);
+
+        return $this;
+    }
+
+
+
+    public function isValide(): bool
+    {
+        return $this->valide;
     }
 }

@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 20.3](#ose-204-05062023)
+[OSE 20.5](#ose-205-07062023)
 
 
 # OSE 21 (juin 2023)
@@ -39,7 +39,17 @@
 ## Corrections de bugs
 
 * Il est possible de rentrer une date de retour sur un contrat après avoir téléversé le contrat sans avoir besoin de recharger la page
- 
+
+
+
+
+# OSE 20.5 (07/06/2023)
+
+## Correction de bug
+
+* Correction d'une régression introduite en 20.4 empêchant de saisir ou modifier du référentiel
+
+
 
 
 # OSE 20.4 (05/06/2023)

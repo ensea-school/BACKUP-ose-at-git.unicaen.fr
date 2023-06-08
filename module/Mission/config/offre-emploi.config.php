@@ -116,8 +116,15 @@ return [
                 ],
             ],
         ],
-
-
+        'offres-emploi' => [
+            'label'    => "Offres d'emploi",
+            'icon'     => 'fas fa-duotone fa-pen-to-square',
+            'title'    => "Consulter la liste des emplois étudiants",
+            'route'    => 'offre-emploi',
+            'visible'  => Assertion\OffreEmploiAssertion::class,
+            'order'    => 10,
+            'color'    => '#217DD8',
+        ],
     ],
 
 

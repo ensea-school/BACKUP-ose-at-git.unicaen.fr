@@ -8,6 +8,8 @@ use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
+use UnicaenApp\Service\EntityManagerAwareInterface;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
@@ -17,8 +19,49 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
  *
  * @author Antony Le Courtes <antony.lecourtes at unicaen.fr>
  */
-class OffreEmploiAssertion extends AbstractAssertion
+class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwareInterface
 {
+    use EntityManagerAwareTrait;
+
+    /* ---- Routage général ---- */
+    public function __invoke(array $page) // gestion des visibilités de menus
+    {
+        return $this->assertPage($page);
+    }
+
+
+
+    protected function assertPage(array $page)
+    {
+        switch($page['route']){
+            case 'offre-emploi':
+                $role = $this->getRole();
+                if (!$role){
+                    $query = 'SELECT id FROM offre_emploi WHERE histo_destruction IS NULL';
+                    $conn = $this->getEntityManager()->getConnection();
+
+                    if (false === $conn->executeQuery($query)->fetchOne()){
+                        // Aucune offre => pas de lien public
+                        return false;
+                    }else{
+                        // Liste des offres d'emploi visible par tous
+                        return true;
+                    }
+
+
+                    return true;
+                }
+                if (!$role->getIntervenant()){
+                    //Pas visible par les gestionnaires
+                    return false;
+                }
+                return true;
+        }
+
+        return true;
+    }
+
+
 
     protected function assertEntity (ResourceInterface $entity = null, $privilege = null)
     {

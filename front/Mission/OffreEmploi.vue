@@ -110,23 +110,24 @@
                     <td v-if="!canValiderCandidature" colspan="3" style="text-align:center;">Aucune candidature</td>
                 </tr>
                 <tr v-for="candidature in offre.candidatures">
-                    <td><a :href="'/intervenant/code:' + candidature.intervenant.code + '/voir'">
+                    <td><a :href="urlVoir(candidature)">
                         {{ candidature.intervenant.prenom+' '+candidature.intervenant.nomUsuel }}</a></td>
-                    <th> <span v-if="candidature.validation" class="badge rounded-pill bg-success">Acceptée le <u-date
+                    <td> <span v-if="candidature.validation" class="badge rounded-pill bg-success">Acceptée le <u-date
                         :value="candidature.validation.histoCreation"/> par {{
                             candidature.validation.histoCreateur.displayName
                         }}</span>
                         <span v-if="!candidature.validation && candidature.motif !== null" class="badge rounded-pill bg-danger">{{ candidature.motif }}</span>
                         <span v-if="!candidature.validation && candidature.motif === null" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
-                    </th>
+                    </td>
                     <td v-if="this.canValiderCandidature">
-                        <a v-if="!candidature.validation" :href="'/offre-emploi/accepter-candidature/' + candidature.id"
+                        <a v-if="!candidature.validation" :href="urlAccepterCandidature(candidature)"
                            class="btn btn-success"
                            data-content="Etes vous sûre de vouloir accepter cette candidature ?"
                            data-title="Accepter la candidature"
                            title="Accepter la candidature"
                            @click.prevent="validerCandidature">Accepter </a>&nbsp;
-                        <a v-if="!candidature.motif && candidature.validation" :href="'/offre-emploi/refuser-candidature/' + candidature.id"
+                        <a v-if="!candidature.motif && candidature.validation"
+                           :href="urlRefuserCandidature(candidature)"
                            class="btn btn-danger"
                            data-content="Etes vous sûre de vouloir refuser cette candidature ?"
                            data-title="Refuser la candidature"
@@ -141,8 +142,8 @@
 
 
         <div class="mt-5">
-            <a class="btn btn-secondary" href="/offre-emploi">Retour aux offres</a>&nbsp;
-            <a v-if="this.canPostuler" :href="'/offre-emploi/postuler/' + offre.id" class="btn btn-primary"
+            <a :href="offreEmploiUrl" class="btn btn-secondary">Retour aux offres</a>&nbsp;
+            <a v-if="this.canPostuler" :href="postulerUrl" class="btn btn-primary"
                data-bs-original-title="Vous devez être connecté pour postuler"
                data-bs-placement="top"
                data-bs-toggle="tooltip">Postuler</a>&nbsp;
@@ -212,6 +213,9 @@ export default {
             validerUrl: unicaenVue.url('offre-emploi/valider/:offre', {offre: this.offre.id}),
             devaliderUrl: unicaenVue.url('offre-emploi/devalider/:offre', {offre: this.offre.id}),
             consulterUrl: unicaenVue.url('offre-emploi/detail/:offre', {offre: this.offre.id}),
+            offreEmploiUrl: unicaenVue.url('offre-emploi'),
+            postulerUrl: unicaenVue.url('offre-emploi/postuler/:id', {id: this.offre.id})
+
 
         };
     },
@@ -227,11 +231,14 @@ export default {
             return shorDesc;
         },
         connectionLink: function () {
-            return '/auth/connexion?redirect='+window.location.href;
+            var url = 'auth/connexion?redirect='+window.location.href;
+            return unicaenVue.url(url);
+            
         },
         nbPostesRestants: function () {
             return this.offre.nombrePostes-this.offre.candidaturesValides.length;
         },
+
 
     },
 
@@ -241,6 +248,15 @@ export default {
             modAjax(event.target, (widget) => {
                 this.refresh();
             });
+        },
+        urlVoir: function (candidature) {
+            return unicaenVue.url('intervenant/:code/voir', {code: 'code:'+candidature.intervenant.code})
+        },
+        urlAccepterCandidature: function (candidature) {
+            return unicaenVue.url('offre-emploi/accepter-candidature/:id', {id: candidature.id})
+        },
+        urlRefuserCandidature: function (candidature) {
+            return unicaenVue.url('offre-emploi/refuser-candidature/:id', {id: candidature.id})
         },
         refresh()
         {

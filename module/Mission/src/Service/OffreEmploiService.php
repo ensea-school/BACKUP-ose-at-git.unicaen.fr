@@ -81,7 +81,7 @@ class OffreEmploiService extends AbstractEntityService
 
         $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
 
-        $triggers = $this->getOffreEmploiPrivileges();
+        $triggers = $this->getOffreEmploiPrivileges(true);
 
         $properties = [
             'id',
@@ -108,8 +108,24 @@ class OffreEmploiService extends AbstractEntityService
 
 
 
-    public function getOffreEmploiPrivileges (): array
+    public function getOffreEmploiPrivileges (bool $public = false): array
     {
+
+        if ($public) {
+            return [
+                '/' => function (OffreEmploi $offre, array $extracted) {
+
+                    $extracted['canModifier']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
+                    $extracted['canValider']    = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
+                    $extracted['canPostuler']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
+                    $extracted['canVisualiser'] = true;
+                    $extracted['canSupprimer']  = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION);
+
+                    return $extracted;
+                },
+
+            ];
+        }
 
 
         return [
@@ -118,7 +134,7 @@ class OffreEmploiService extends AbstractEntityService
                 $extracted['canModifier']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
                 $extracted['canValider']    = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
                 $extracted['canPostuler']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
-                $extracted['canVisualiser'] = true;
+                $extracted['canVisualiser'] = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
                 $extracted['canSupprimer']  = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION);
 
                 return $extracted;

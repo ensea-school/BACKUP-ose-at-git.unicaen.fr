@@ -24,26 +24,26 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
     use EntityManagerAwareTrait;
 
     /* ---- Routage général ---- */
-    public function __invoke(array $page) // gestion des visibilités de menus
+    public function __invoke (array $page) // gestion des visibilités de menus
     {
         return $this->assertPage($page);
     }
 
 
 
-    protected function assertPage(array $page)
+    protected function assertPage (array $page)
     {
-        switch($page['route']){
+        switch ($page['route']) {
             case 'offre-emploi':
                 $role = $this->getRole();
-                if (!$role){
+                if (!$role) {
                     $query = 'SELECT id FROM offre_emploi WHERE histo_destruction IS NULL';
-                    $conn = $this->getEntityManager()->getConnection();
+                    $conn  = $this->getEntityManager()->getConnection();
 
-                    if (false === $conn->executeQuery($query)->fetchOne()){
+                    if (false === $conn->executeQuery($query)->fetchOne()) {
                         // Aucune offre => pas de lien public
                         return false;
-                    }else{
+                    } else {
                         // Liste des offres d'emploi visible par tous
                         return true;
                     }
@@ -51,10 +51,11 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
                     return true;
                 }
-                if (!$role->getIntervenant()){
+                if (!$role->getIntervenant()) {
                     //Pas visible par les gestionnaires
                     return false;
                 }
+
                 return true;
         }
 
@@ -107,6 +108,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
     protected function assertStructure (Role $role, ?Structure $structure): bool
     {
+        $test = '';
         if (!$structure) {
             return true;
         }

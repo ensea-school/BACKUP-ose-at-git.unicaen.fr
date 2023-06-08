@@ -351,7 +351,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
         }
 
 
-        $statutsIntervenants = null;
+        $statutsIntervenants = [];
         foreach ($statuts as $statut) {
             if ($statut->getTypeIntervenant()->getCode() == $codeIntervenant) {
                 $statutsIntervenants[$statut->getTypeIntervenant()->getId()][] = $statut;

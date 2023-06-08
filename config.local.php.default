@@ -50,6 +50,9 @@ return [
 
     /* Personnalisation de OSE pour votre établissement */
     'etablissement' => [
+        /* Nom de l'application */
+        'ose' => 'Organisation des Services d\'Enseignement',
+
         /* Nom de l'établissement */
         'nom'                    => 'Université de [votre établissement]',
 

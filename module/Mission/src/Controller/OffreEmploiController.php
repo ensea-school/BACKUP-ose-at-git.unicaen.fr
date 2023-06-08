@@ -88,7 +88,13 @@ class  OffreEmploiController extends AbstractController
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        return $this->getServiceOffreEmploi()->data([], $role);
+        $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_MODIFIER));
+        
+        if ($canEdit) {
+            return $this->getServiceOffreEmploi()->data([], $role);
+        }
+
+        return $this->getServiceOffreEmploi()->dataPublic([], $role);
     }
 
 

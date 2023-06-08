@@ -150,8 +150,37 @@ return [
         ],
         [
             'controller' => OffreEmploiController::class,
-            'action'     => ['index', 'detail', 'list', 'get'],
+            'action'     => ['supprimer'],
+            'privileges' => [
+                Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION,
+            ],
+        ],
+        [
+            'controller' => OffreEmploiController::class,
+            'action'     => ['valider', 'devalider'],
+            'privileges' => [
+                Privileges::MISSION_OFFRE_EMPLOI_VALIDER,
+            ],
+        ],
+        [
+            'controller' => OffreEmploiController::class,
+            'action'     => ['accepter-candidature', 'refuser-candidature'],
+            'privileges' => [
+                Privileges::MISSION_CANDIDATURE_VALIDER,
+            ],
+        ],
+        [
+            'controller' => OffreEmploiController::class,
+            'action'     => ['postuler'],
+            'privileges' => [
+                Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
+            ],
+        ],
+        [
+            'controller' => OffreEmploiController::class,
+            'action'     => ['index', 'detail', 'liste', 'get'],
             'roles'      => ['guest'],
+
         ],
     ],
 

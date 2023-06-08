@@ -10,7 +10,6 @@ use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
-use UnicaenPrivilege\View\Privilege\PrivilegeViewHelper;
 
 
 /**

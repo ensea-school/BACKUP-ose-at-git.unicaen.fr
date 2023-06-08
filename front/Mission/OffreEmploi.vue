@@ -1,6 +1,6 @@
 <template>
 
-    <div class="col" v-if="!this.extended && offre.canVisualiser">
+    <div v-if="!this.extended" class="col">
         <div class="card h-100">
             <div class="card-header">
                 <h4> {{ offre.titre }}</h4>
@@ -34,8 +34,8 @@
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
 
                     <a :href="consulterUrl"
-                       title="Consulter "
                        class="btn btn-primary"
+                       title="Consulter "
                     >
                         <u-icon name="eye"/>
                         Voir
@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-    <div v-if="this.extended && offre.canVisualiser">
+    <div v-if="this.extended">
         <h1 class="page-header">{{ offre.titre }}</h1>
         <div v-if="!this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
             <i class="fa-solid fa-user"></i>
@@ -122,17 +122,17 @@
                         <span v-if="!candidature.validation && candidature.motif === null" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
                     </th>
                     <td v-if="this.canValiderCandidature">
-                        <a :href="'/offre-emploi/accepter-candidature/' + candidature.id" v-if="!candidature.validation"
-                           title="Accepter la candidature"
+                        <a v-if="!candidature.validation" :href="'/offre-emploi/accepter-candidature/' + candidature.id"
                            class="btn btn-success"
-                           data-title="Accepter la candidature"
                            data-content="Etes vous sûre de vouloir accepter cette candidature ?"
+                           data-title="Accepter la candidature"
+                           title="Accepter la candidature"
                            @click.prevent="validerCandidature">Accepter </a>&nbsp;
                         <a :href="'/offre-emploi/refuser-candidature/' + candidature.id"
-                           title="Refuser la candidature"
                            class="btn btn-danger"
-                           data-title="Refuser la candidature"
                            data-content="Etes vous sûre de vouloir refuser cette candidature ?"
+                           data-title="Refuser la candidature"
+                           title="Refuser la candidature"
                            @click.prevent="refuserCandidature">Refuser </a>
                     </td>
                 </tr>
@@ -144,13 +144,14 @@
 
         <div class="mt-5">
             <a class="btn btn-primary" href="/offre-emploi">Retour aux offres</a>&nbsp;
-            <a v-if="this.canPostuler" :href="'/offre-emploi/postuler/' + offre.id" data-bs-toggle="tooltip" data-bs-placement="top"
-               data-bs-original-title="Vous devez être connecté pour postuler">Postuler</a>&nbsp;
+            <a v-if="this.canPostuler" :href="'/offre-emploi/postuler/' + offre.id" data-bs-original-title="Vous devez être connecté pour postuler"
+               data-bs-placement="top"
+               data-bs-toggle="tooltip">Postuler</a>&nbsp;
             <a v-if="offre.canModifier"
                :href="saisirUrl"
                class="btn btn-primary"
-               @click.prevent="saisir"
-               title="Modifier">
+               title="Modifier"
+               @click.prevent="saisir">
                 <u-icon name="pen-to-square"/>
                 Modifier
             </a>&nbsp;
@@ -173,9 +174,9 @@
             <a v-if="offre.canSupprimer"
                :href="supprimerUrl"
                class="btn btn-danger"
-               title="Supprimer"
-               data-title="Suppression de l'offre"
                data-content="Êtes-vous sur de vouloir supprimer l'offre ?"
+               data-title="Suppression de l'offre"
+               title="Supprimer"
                @click.prevent="supprimer">
                 <u-icon name="trash"/>
                 Supprimer
@@ -231,7 +232,8 @@ export default {
         },
         nbPostesRestants: function () {
             return this.offre.nombrePostes-this.offre.candidaturesValides.length;
-        }
+        },
+
     },
 
     methods: {

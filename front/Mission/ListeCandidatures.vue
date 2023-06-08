@@ -15,7 +15,7 @@
                 <td v-if="!canValiderCandidature" colspan="3" style="text-align:center;">Aucune candidature</td>
             </tr>
             <tr v-for="candidature in candidatures" :key="candidature.id">
-                <td style="text-align:center;"><a :href="'/offre-emploi/detail/' + candidature.offre.id">{{ candidature.offre.titre }}</a></td>
+                <td style="text-align:center;"><a :href="urlOffre(candidature)">{{ candidature.offre.titre }}</a></td>
                 <td style="text-align:center;">{{ candidature.offre.structure.libelleLong }}</td>
                 <td style="text-align:center;">
                     <span v-if="candidature.validation" class="badge rounded-pill bg-success">Acceptée par {{
@@ -25,17 +25,17 @@
                     <span v-if="!candidature.validation && candidature.motif === null" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
                 </td>
                 <td v-if="this.canValiderCandidature" style="text-align:center;">
-                    <a :href="'/offre-emploi/accepter-candidature/' + candidature.id" v-if="!candidature.validation"
-                       title="Accepter la candidature"
+                    <a v-if="!candidature.validation" :href="urlAccepterCandidature(candidature)"
                        class="btn btn-success"
-                       data-title="Accepter la candidature"
                        data-content="Etes vous sûre de vouloir accepter cette candidature ?"
+                       data-title="Accepter la candidature"
+                       title="Accepter la candidature"
                        @click.prevent="validerCandidature">Accepter </a>&nbsp;
-                    <a :href="'/offre-emploi/refuser-candidature/' + candidature.id"
-                       title="Refuser la candidature"
+                    <a :href="urlRefuserCandidature(candidature)"
                        class="btn btn-danger"
-                       data-title="Refuser la candidature"
                        data-content="Etes vous sûre de vouloir refuser cette candidature ?"
+                       data-title="Refuser la candidature"
+                       title="Refuser la candidature"
                        @click.prevent="refuserCandidature">Refuser </a>
                 </td>
             </tr>
@@ -43,7 +43,7 @@
             </tbody>
 
         </table>
-        <a href="/offre-emploi"
+        <a :href="urlListeOffre"
            class="btn btn-primary"
            title="Voir les offres d'emploi"
         >
@@ -68,7 +68,8 @@ export default {
     {
 
         return {
-            candidatures: []
+            candidatures: [],
+            urlListeOffre: unicaenVue.url('offre-emploi')
         }
 
     },
@@ -99,7 +100,19 @@ export default {
             popConfirm(event.target, (response) => {
                 this.reload();
             });
+        },
+        urlOffre(candidature)
+        {
+            return unicaenVue.url('offre-emploi/detail/:offre', {offre: candidature.offre.id});
+        },
+        urlAccepterCandidature: function (candidature) {
+            return unicaenVue.url('offre-emploi/accepter-candidature/:id', {id: candidature.id})
+        },
+        urlRefuserCandidature: function (candidature) {
+            return unicaenVue.url('offre-emploi/refuser-candidature/:id', {id: candidature.id})
         }
+
+
     }
 
 }

@@ -500,7 +500,10 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
     public function canValider(): bool
     {
-        return !$this->isValide();
+        return
+            !$this->isValide()
+            && $this->tauxRemu != null
+            && $this->getHeures() > 0;
     }
 
 

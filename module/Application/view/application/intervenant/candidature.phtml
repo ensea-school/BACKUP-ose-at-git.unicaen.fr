@@ -5,11 +5,17 @@ use Application\Provider\Privilege\Privileges;
 $this->intervenant($intervenant)->renderTitle('Candidature');
 $canValiderCandidature = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_CANDIDATURE_VALIDER));
 
-?>
 
-<?= $this->vue('mission/liste-candidatures', [
+echo $this->vue('mission/liste-candidatures', [
 
     'intervenant'           => $intervenant->getId(),
     'canValiderCandidature' => $canValiderCandidature,
-]); ?>
+]);
 
+// @todo à remplacer par \Application\Entity\Db\WfEtape::CODE_CANDIDATURE
+// une fois le workflow adapté
+$nextEtape = 'candidatures';
+
+echo '<hr />';
+
+echo $this->feuilleDeRoute($intervenant)->renderNav($nextEtape);

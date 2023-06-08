@@ -126,7 +126,7 @@
                            data-title="Accepter la candidature"
                            title="Accepter la candidature"
                            @click.prevent="validerCandidature">Accepter </a>&nbsp;
-                        <a :href="'/offre-emploi/refuser-candidature/' + candidature.id"
+                        <a v-if="!candidature.motif && candidature.validation" :href="'/offre-emploi/refuser-candidature/' + candidature.id"
                            class="btn btn-danger"
                            data-content="Etes vous sûre de vouloir refuser cette candidature ?"
                            data-title="Refuser la candidature"
@@ -141,7 +141,7 @@
 
 
         <div class="mt-5">
-            <a class="btn btn-primary" href="/offre-emploi">Retour aux offres</a>&nbsp;
+            <a class="btn btn-secondary" href="/offre-emploi">Retour aux offres</a>&nbsp;
             <a v-if="this.canPostuler" :href="'/offre-emploi/postuler/' + offre.id" class="btn btn-primary"
                data-bs-original-title="Vous devez être connecté pour postuler"
                data-bs-placement="top"

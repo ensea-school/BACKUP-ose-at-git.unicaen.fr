@@ -6,6 +6,7 @@ use Application\Controller\AbstractController;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Doctrine\ORM\Query;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
@@ -31,6 +32,7 @@ class  OffreEmploiController extends AbstractController
     use ValidationServiceAwareTrait;
     use ContextServiceAwareTrait;
     use MissionServiceAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
     public function indexAction ()
@@ -173,11 +175,22 @@ class  OffreEmploiController extends AbstractController
             //Envoyer mail de confirmation d'acceptation de candidature
             $this->getServiceCandidature()->envoyerMail($candidature, Candidature::MODELE_MAIL_ACCEPTATION, Candidature::OBJET_MAIL_ACCEPTATION);
             $this->flashMessenger()->addSuccessMessage("La candidature est bien acceptée");
-            $this->getServiceMission()->createMissionFromCandidature($candidature);
+            $mission = $this->getServiceMission()->createMissionFromCandidature($candidature);
+            $this->updateTableauxBord($mission);
         }
 
 
         return $this->getAction($candidature->getOffre());
+    }
+
+
+
+    private function updateTableauxBord (Mission $mission)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'mission',
+            'contrat',
+        ], $mission->getIntervenant());
     }
 
 

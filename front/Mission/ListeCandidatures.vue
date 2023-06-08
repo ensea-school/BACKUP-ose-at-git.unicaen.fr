@@ -18,7 +18,7 @@
                 <td style="text-align:center;"><a :href="'/offre-emploi/detail/' + candidature.offre.id">{{ candidature.offre.titre }}</a></td>
                 <td style="text-align:center;">{{ candidature.offre.structure.libelleLong }}</td>
                 <td style="text-align:center;">
-                    <span v-if="candidature.validation" class="badge rounded-pill bg-success">Accepter par {{
+                    <span v-if="candidature.validation" class="badge rounded-pill bg-success">Acceptée par {{
                             candidature.validation.histoCreateur.displayName
                         }}</span>
                     <span v-if="!candidature.validation && candidature.motif !== null" class="badge rounded-pill bg-danger">{{ candidature.motif }}</span>

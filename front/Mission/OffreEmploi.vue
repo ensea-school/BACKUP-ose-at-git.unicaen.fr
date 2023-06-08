@@ -100,7 +100,6 @@
                 <thead>
                 <tr>
                     <th>Intervenant</th>
-                    <th>Composante</th>
                     <th>Etat</th>
                     <th v-if="canValiderCandidature">Action</th>
                 </tr>
@@ -113,7 +112,6 @@
                 <tr v-for="candidature in offre.candidatures">
                     <td><a :href="'/intervenant/code:' + candidature.intervenant.code + '/voir'">
                         {{ candidature.intervenant.prenom+' '+candidature.intervenant.nomUsuel }}</a></td>
-                    <td>{{ candidature.intervenant.structure.libelleLong }}</td>
                     <th> <span v-if="candidature.validation" class="badge rounded-pill bg-success">Acceptée le <u-date
                         :value="candidature.validation.histoCreation"/> par {{
                             candidature.validation.histoCreateur.displayName
@@ -144,7 +142,8 @@
 
         <div class="mt-5">
             <a class="btn btn-primary" href="/offre-emploi">Retour aux offres</a>&nbsp;
-            <a v-if="this.canPostuler" :href="'/offre-emploi/postuler/' + offre.id" data-bs-original-title="Vous devez être connecté pour postuler"
+            <a v-if="this.canPostuler" :href="'/offre-emploi/postuler/' + offre.id" class="btn btn-primary"
+               data-bs-original-title="Vous devez être connecté pour postuler"
                data-bs-placement="top"
                data-bs-toggle="tooltip">Postuler</a>&nbsp;
             <a v-if="offre.canModifier"

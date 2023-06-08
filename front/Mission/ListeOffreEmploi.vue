@@ -65,6 +65,7 @@ export default {
     computed: {
         extended: function ()
         {
+            console.log('extended');
             if (this.id) {
                 return true;
             }

@@ -105,7 +105,7 @@ export default {
 
         urlFiche(code)
         {
-            return unicaenVue.url('/intervenant/code:'+code+'/voir');
+            return unicaenVue.url('intervenant/code:'+code+'/voir');
         },
 
         reload()

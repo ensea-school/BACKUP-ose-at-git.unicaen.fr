@@ -34,7 +34,7 @@ return [
             'default' => [
                 'redirect_to'    => AppConfig::get('mail', 'redirection'),
                 'do_not_send'    => AppConfig::get('mail', 'envoiDesactive'),
-                'subject_prefix' => 'DEV',
+                'subject_prefix' => 'OSE',
                 'from_name'      => 'OSE | Application',
                 'from_email'     => AppConfig::get('mail', 'from'),
 

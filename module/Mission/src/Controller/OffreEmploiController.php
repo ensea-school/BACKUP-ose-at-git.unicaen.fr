@@ -89,7 +89,7 @@ class  OffreEmploiController extends AbstractController
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_MODIFIER));
-        
+
         if ($canEdit) {
             return $this->getServiceOffreEmploi()->data([], $role);
         }
@@ -227,8 +227,7 @@ class  OffreEmploiController extends AbstractController
             $this->flashMessenger()->addErrorMessage("Vous avez déjà postulé à cette offre d'emploi");
         }
 
-
-        return $this->redirect()->toRoute('offre-emploi/detail');
+        return $this->redirect()->toRoute('intervenant/candidature', ['intervenant' => $intervenant->getId()]);
     }
 
 

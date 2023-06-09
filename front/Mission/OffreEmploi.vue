@@ -90,9 +90,8 @@
             <br/>
 
         </p>
-
-        {{ offre.description }}
-        <br/><br/>
+        <p v-html="descriptionHtml"></p>
+        <br/>
         <div v-if="this.canVoirCandidature">
             <h5><strong>Liste des candidats :</strong></h5>
 
@@ -224,14 +223,17 @@ export default {
             return false;
         },
         shortDesc: function () {
-            var shorDesc = this.offre.description.substr(0, 200);
+            let shorDesc = this.offre.description.substr(0, 200);
             if (this.offre.description.length > 200) {
                 shorDesc += '...';
             }
             return shorDesc;
         },
+        descriptionHtml: function() {
+            return this.offre.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        },
         connectionLink: function () {
-            var url = 'auth/connexion?redirect='+window.location.href;
+            let url = 'auth/connexion?redirect='+window.location.href;
             return unicaenVue.url(url);
             
         },

@@ -446,7 +446,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           c.intervenant_id                                     intervenant_id,
           c.structure_id                                       structure_id,
           SUM(CASE WHEN c.candidature_id IS NULL THEN 0 ELSE 1 END) objectif,
-          SUM(c.reponse)                                       realisation
+          SUM(c.acceptee)                                      realisation
         FROM
           tbl_candidature c
         WHERE

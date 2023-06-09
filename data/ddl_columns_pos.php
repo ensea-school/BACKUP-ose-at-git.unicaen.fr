@@ -2434,6 +2434,19 @@ return [
         'BLOC10_ZONE',
         'BLOC10_REQUETE',
     ],
+    'TBL_CANDIDATURE'                => [
+        'ID',
+        'ANNEE_ID',
+        'INTERVENANT_ID',
+        'STRUCTURE_ID',
+        'OFFRE_EMPLOI_ID',
+        'CANDIDATURE_ID',
+        'VALIDATION_ID',
+        'ACTIF',
+        'REPONSE',
+        'ACCEPTEE',
+        'REFUSEE',
+    ],
 ];
 
 //@formatter:on

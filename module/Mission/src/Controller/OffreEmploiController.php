@@ -3,6 +3,7 @@
 namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
@@ -176,7 +177,7 @@ class  OffreEmploiController extends AbstractController
             $this->getServiceCandidature()->envoyerMail($candidature, Candidature::MODELE_MAIL_ACCEPTATION, Candidature::OBJET_MAIL_ACCEPTATION);
             $this->flashMessenger()->addSuccessMessage("La candidature est bien acceptée");
             $mission = $this->getServiceMission()->createMissionFromCandidature($candidature);
-            $this->updateTableauxBord($mission);
+            $this->updateTableauxBord($candidature->getIntervenant());
         }
 
 
@@ -185,12 +186,12 @@ class  OffreEmploiController extends AbstractController
 
 
 
-    private function updateTableauxBord (Mission $mission)
+    private function updateTableauxBord (Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
+            'candidature',
             'mission',
-            'contrat',
-        ], $mission->getIntervenant());
+        ], $intervenant);
     }
 
 
@@ -216,6 +217,7 @@ class  OffreEmploiController extends AbstractController
 
             $this->getServiceCandidature()->save($candidature);
             $this->getServiceCandidature()->envoyerMail($candidature, Candidature::MODELE_MAIL_REFUS, Candidature::OBJET_MAIL_REFUS);
+            $this->updateTableauxBord($candidature->getIntervenant());
             $this->flashMessenger()->addSuccessMessage("La candidature est bien refusée");
         }
 
@@ -235,6 +237,7 @@ class  OffreEmploiController extends AbstractController
         $intervenant = $this->getServiceContext()->getIntervenant();
         if (!$offreEmploi->isCandidat($intervenant)) {
             $this->getServiceCandidature()->postuler($intervenant, $offreEmploi);
+            $this->updateTableauxBord($intervenant);
             $this->flashMessenger()->addSuccessMessage("Votre candidature a bien été prise en compte. Vous pouvez maintenant renseigner vos données personnelles afin d'appuyer votre candidature.");
         } else {
             $this->flashMessenger()->addErrorMessage("Vous avez déjà postulé à cette offre d'emploi");

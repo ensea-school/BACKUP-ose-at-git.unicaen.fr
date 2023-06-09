@@ -12,9 +12,7 @@ echo $this->vue('mission/liste-candidatures', [
     'canValiderCandidature' => $canValiderCandidature,
 ]);
 
-// @todo à remplacer par \Application\Entity\Db\WfEtape::CODE_CANDIDATURE
-// une fois le workflow adapté
-$nextEtape = 'candidatures';
+$nextEtape = \Application\Entity\Db\WfEtape::CANDIDATURE_SAISIE;
 
 echo '<hr />';
 

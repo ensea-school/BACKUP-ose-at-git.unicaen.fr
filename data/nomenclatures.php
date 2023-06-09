@@ -422,6 +422,16 @@ return [
 
     'TBL' => [
         [
+            'TBL_NAME'           => 'candidature',
+            'TABLE_NAME'         => 'TBL_CANDIDATURE',
+            'VIEW_NAME'          => 'V_TBL_CANDIDATURE',
+            'SEQUENCE_NAME'      => null,
+            'CONSTRAINT_NAME'    => 'TBL_CANDIDATURE_UN',
+            'CUSTOM_CALCUL_PROC' => null,
+            'ORDRE'              => 1,
+            'FEUILLE_DE_ROUTE'   => false,
+        ],
+        [
             'TBL_NAME'           => 'chargens_seuils_def',
             'TABLE_NAME'         => 'TBL_CHARGENS_SEUILS_DEF',
             'VIEW_NAME'          => 'V_TBL_CHARGENS_SEUILS_DEF',

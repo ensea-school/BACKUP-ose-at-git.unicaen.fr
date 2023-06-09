@@ -342,6 +342,7 @@ class WorkflowService extends AbstractService
             'formule'                 => ['agrement', 'paiement'],
             'piece_jointe_demande'    => ['piece_jointe'],
             'piece_jointe_fournie'    => ['piece_jointe'],
+            'candidature'             => ['workflow'],
             'agrement'                => ['workflow'],
             'cloture_realise'         => ['workflow'],
             'contrat'                 => ['workflow'],

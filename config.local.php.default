@@ -32,10 +32,10 @@ return [
 
     /* Configuration du mode maintenance */
     'maintenance' => [
-        /* Détermine si le mode maintenante est activé ou non */
+        /* Détermine si le mode maintenance est activé ou non */
         'modeMaintenance' => false,
 
-        /* Désacive la synchronisation des données via le CRON */
+        /* Désactive la synchronisation des données via le CRON */
         'desactivationSynchronisation' => false,
 
         /* Message précisant pourquoi l'application est en maintenance */
@@ -149,11 +149,11 @@ return [
         'loginObjectClass'             => 'posixAccount',
 
         /* Code de l'utilisateur.
-         * à rappchcher ensuite de intervenant.utilisateurCode pour faire la correspondance utilisateur => intervenant */
+         * à rapprocher ensuite de intervenant.utilisateurCode pour faire la correspondance utilisateur => intervenant */
         'utilisateurCode'              => 'supannEmpId',
 
         /* Filtre de code utilisateur.
-         * Expression régulière permettant de selectionner une valeur spécifique d'un atttribut utilisateurCode multivalué (par exemple
+         * Expression régulière permettant de sélectionner une valeur spécifique d'un attribut utilisateurCode multivalué (par exemple
          * supannRefId). Laisser commenté pour ne pas effectuer de filtrage. */
         //'utilisateurCodeFiltre'        => '/^{OSE}(.*)$/',
 
@@ -269,7 +269,7 @@ return [
         /* Répertoire où seront stockés les fichiers (pièces justificatives, contrats déposés, etc.
          * A savoir : le répertoire par défaut data/fichiers est ignoré par GIT.
          * Il est nécessaire de prévoir une sauvegarde de ce répertoire.
-         * IMPORTANT : ce répertoire doit être accéssible en lecture/écriture par l'utilisateur www-data d'Apache.
+         * IMPORTANT : ce répertoire doit être accessible en lecture/écriture par l'utilisateur www-data d'Apache.
          */
         'dir'      => __DIR__ . '/data/fichiers',
     ],

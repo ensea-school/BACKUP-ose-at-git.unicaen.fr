@@ -63,7 +63,7 @@ class OffreEmploiService extends AbstractEntityService
           JOIN oe.structure str
           LEFT JOIN oe.candidatures c  
         WHERE 
-          oe . histoDestruction IS null
+          oe . histoDestruction IS null        
        ";
 
         if (empty($role)) {
@@ -73,6 +73,8 @@ class OffreEmploiService extends AbstractEntityService
 
         $dql .= dqlAndWhere([
             'offreEmploi' => 'oe',
+            'annee'       => 'tm.annee',
+
         ], $parameters);
 
         $dql .= " ORDER BY
@@ -165,13 +167,15 @@ class OffreEmploiService extends AbstractEntityService
 
         $dql .= dqlAndWhere([
             'offreEmploi' => 'oe',
+            'annee'       => 'tm.annee',
         ], $parameters);
 
         $dql .= " ORDER BY
           oe . dateDebut
         ";
 
-        $query    = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+        $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+
         $triggers = $this->getOffreEmploiPrivileges();
 
 

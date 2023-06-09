@@ -1,6 +1,6 @@
 {
-  "_vendor-aed55673.js": {
-    "file": "assets/vendor-aed55673.js"
+  "_vendor-ca14e5c5.js": {
+    "file": "assets/vendor-ca14e5c5.js"
   },
   "main.css": {
     "file": "assets/main-3a7ae60a.css",
@@ -10,9 +10,9 @@
     "css": [
       "assets/main-3a7ae60a.css"
     ],
-    "file": "assets/main-3dfee6fc.js",
+    "file": "assets/main-348a3fc7.js",
     "imports": [
-      "_vendor-aed55673.js"
+      "_vendor-ca14e5c5.js"
     ],
     "isEntry": true,
     "src": "main.js"

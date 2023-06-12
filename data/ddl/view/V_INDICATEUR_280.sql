@@ -1,16 +1,13 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_280 AS
 SELECT
-    c.intervenant_id,
-    i.structure_id
+    tc.intervenant_id,
+    tc.structure_id
 FROM
-    candidature c
-    JOIN intervenant i ON i.id = c.intervenant_id
-    LEFT JOIN validation v ON v.id = c.validation_id AND v.histo_destruction IS NULL
+    tbl_candidature tc
 WHERE
-  c.histo_destruction IS null
-  AND c.motif IS null
-  AND v.id IS NULL
+	tc.candidature_id IS NOT null
+	AND tc.validation_id IS NULL
 GROUP BY
-  c.intervenant_id,
-  i.annee_id,
-  i.structure_id
+  tc.intervenant_id,
+  tc.annee_id,
+  tc.structure_id

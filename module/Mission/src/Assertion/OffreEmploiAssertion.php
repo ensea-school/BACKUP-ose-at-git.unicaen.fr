@@ -108,7 +108,6 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
     protected function assertStructure (Role $role, ?Structure $structure): bool
     {
-        $test = '';
         if (!$structure) {
             return true;
         }

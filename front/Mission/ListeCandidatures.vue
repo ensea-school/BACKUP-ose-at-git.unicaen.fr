@@ -27,13 +27,13 @@
                 <td v-if="this.canValiderCandidature" style="text-align:center;">
                     <a v-if="!candidature.validation" :href="urlAccepterCandidature(candidature)"
                        class="btn btn-success"
-                       data-content="Etes vous sûre de vouloir accepter cette candidature ?"
+                       data-content="Êtes vous sûr de vouloir accepter cette candidature ?"
                        data-title="Accepter la candidature"
                        title="Accepter la candidature"
                        @click.prevent="validerCandidature">Accepter </a>&nbsp;
                     <a :href="urlRefuserCandidature(candidature)"
                        class="btn btn-danger"
-                       data-content="Etes vous sûre de vouloir refuser cette candidature ?"
+                       data-content="Êtes vous sûr de vouloir refuser cette candidature ?"
                        data-title="Refuser la candidature"
                        title="Refuser la candidature"
                        @click.prevent="refuserCandidature">Refuser </a>

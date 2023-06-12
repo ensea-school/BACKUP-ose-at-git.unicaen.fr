@@ -6,14 +6,14 @@ return [
         'indicateurs' => [
             280 => [
                 'enabled'           => true,
-                'libelle_singulier' => '%s étudiant sont en attente de validation d\'une candidature',
+                'libelle_singulier' => '%s étudiant est en attente de validation d\'une candidature',
                 'libelle_pluriel'   => '%s étudiants sont en attente de validation d\'une candidature',
                 'route'             => 'intervenant/candidature',
                 'irrecevables'      => false,
             ],
             350 => [
                 'enabled'           => true,
-                'libelle_singulier' => '%s étudiant sont en attente de validation d\'une mission',
+                'libelle_singulier' => '%s étudiant est en attente de validation d\'une mission',
                 'libelle_pluriel'   => '%s étudiants sont en attente de validation d\'une mission',
                 'route'             => 'intervenant/missions',
                 'irrecevables'      => false,
@@ -27,7 +27,7 @@ return [
             ],
             370 => [
                 'enabled'           => true,
-                'libelle_singulier' => '%s étudiant sont en attente de validation d\'heures de suivi de mission',
+                'libelle_singulier' => '%s étudiant est en attente de validation d\'heures de suivi de mission',
                 'libelle_pluriel'   => '%s étudiants sont en attente de validation d\'heures de suivi de mission',
                 'route'             => 'intervenant/missions-suivi',
                 'irrecevables'      => false,

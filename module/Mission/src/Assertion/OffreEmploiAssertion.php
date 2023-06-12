@@ -117,7 +117,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
             return true;
         }
 
-        return $role->getStructure() == $structure;
+        return $role->getStructure() === $structure;
     }
 
 

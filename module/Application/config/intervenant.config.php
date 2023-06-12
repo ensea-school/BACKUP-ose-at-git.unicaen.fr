@@ -350,7 +350,7 @@ return [
                 [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['candidature', 'get-candidatures'],
-                    'privileges' => [Privileges::MISSION_OFFRE_EMPLOI_POSTULER],
+                    'privileges' => [Privileges::MISSION_CANDIDATURE_VISUALISATION],
                     'assertion'  => IntervenantAssertion::class,
                 ],
                 [

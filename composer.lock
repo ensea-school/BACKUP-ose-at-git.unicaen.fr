@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "03db1ddbf5503b67cd28dce4da67f0bf",
+    "content-hash": "c70ab234d57dd3dc50210776e9d2f703",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7130,11 +7130,11 @@
         },
         {
             "name": "unicaen/mail",
-            "version": "6.0.5",
+            "version": "6.0.6",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/mail.git",
-                "reference": "9c3d8829a410b71c457654713051b780320f3589"
+                "reference": "bf3b52712f143f9058c10b5522f4d362550c7dcc"
             },
             "require": {
                 "laminas/laminas-dependency-plugin": "^2.2",
@@ -7149,7 +7149,7 @@
                 ]
             },
             "description": "Module d'envoi de mail",
-            "time": "2023-06-05T14:34:53+00:00"
+            "time": "2023-06-12T15:18:56+00:00"
         },
         {
             "name": "unicaen/open-document",

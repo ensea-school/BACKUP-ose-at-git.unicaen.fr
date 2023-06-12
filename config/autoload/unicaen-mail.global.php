@@ -21,6 +21,7 @@ return [
 
         'redirect_to' => AppConfig::get('mail', 'redirection'),
         'do_not_send' => AppConfig::get('mail', 'envoiDesactive'),
+        'redirect'       => !empty(AppConfig::get('mail', 'redirection')),
 
         'subject_prefix' => 'OSE',
         'from_name'      => 'Application',
@@ -34,6 +35,7 @@ return [
             'default' => [
                 'redirect_to'    => AppConfig::get('mail', 'redirection'),
                 'do_not_send'    => AppConfig::get('mail', 'envoiDesactive'),
+                'redirect'       => !empty(AppConfig::get('mail', 'redirection')),
                 'subject_prefix' => 'OSE',
                 'from_name'      => 'OSE | Application',
                 'from_email'     => AppConfig::get('mail', 'from'),

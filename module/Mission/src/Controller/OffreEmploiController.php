@@ -179,21 +179,11 @@ class  OffreEmploiController extends AbstractController
             $this->getServiceCandidature()->envoyerMail($candidature, Candidature::MODELE_MAIL_ACCEPTATION, Candidature::OBJET_MAIL_ACCEPTATION);
             $this->flashMessenger()->addSuccessMessage("La candidature est bien acceptée");
             $mission = $this->getServiceMission()->createMissionFromCandidature($candidature);
-            $this->updateTableauxBord($candidature->getIntervenant());
+            $this->getServiceWorkflow()->calculerTableauxBord([], $candidature->getIntervenant());
         }
 
 
         return $this->getAction($candidature->getOffre());
-    }
-
-
-
-    private function updateTableauxBord (Intervenant $intervenant)
-    {
-        $this->getServiceWorkflow()->calculerTableauxBord([
-            'candidature',
-            'mission',
-        ], $intervenant);
     }
 
 
@@ -219,7 +209,7 @@ class  OffreEmploiController extends AbstractController
 
             $this->getServiceCandidature()->save($candidature);
             $this->getServiceCandidature()->envoyerMail($candidature, Candidature::MODELE_MAIL_REFUS, Candidature::OBJET_MAIL_REFUS);
-            $this->updateTableauxBord($candidature->getIntervenant());
+            $this->getServiceWorkflow()->calculerTableauxBord([], $candidature->getIntervenant());
             $this->flashMessenger()->addSuccessMessage("La candidature est bien refusée");
         }
 
@@ -246,6 +236,16 @@ class  OffreEmploiController extends AbstractController
         }
 
         return $this->redirect()->toRoute('intervenant/candidature', ['intervenant' => $intervenant->getId()]);
+    }
+
+
+
+    private function updateTableauxBord (Intervenant $intervenant)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'candidature',
+            'mission',
+        ], $intervenant);
     }
 
 

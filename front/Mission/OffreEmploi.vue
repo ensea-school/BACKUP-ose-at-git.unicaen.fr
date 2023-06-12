@@ -5,8 +5,8 @@
             <div class="card-header">
                 <h4> {{ offre.titre }}</h4>
                 <span class="badge rounded-pill bg-info">{{ offre.nombreHeures }} heure(s)</span> &nbsp;
-                <span v-if="nbPostesRestants > 0" class="badge rounded-pill bg-success">{{ nbPostesRestants }} poste(s) restant(s)</span>&nbsp;
-                <span v-if="nbPostesRestants <= 0" class="badge rounded-pill bg-danger">Tous les postes sont pourvus</span>&nbsp;
+                <!--                <span v-if="nbPostesRestants > 0" class="badge rounded-pill bg-success">{{ nbPostesRestants }} poste(s) restant(s)</span>&nbsp;
+                                <span v-if="nbPostesRestants <= 0" class="badge rounded-pill bg-danger">Tous les postes sont pourvus</span>&nbsp;-->
                 <span v-if="offre.validation" class="badge rounded-pill bg-success">Validée le <u-date
                     :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}</span>
                 <span v-if="!offre.validation" class="badge rounded-pill bg-warning"> En attente de validation par la DRH</span>&nbsp;
@@ -65,12 +65,7 @@
                 Vous avez déjà postulé à cette offre.
             </div>
         </div>
-        <div v-if="!isCandidat && nbPostesRestants <= 0" class="alert alert-primary d-flex align-items-center" role="alert">
-            <i class="fa-solid fa-circle-xmark"></i>
-            <div class="ms-2">
-                Tous les postes pour cette offre ont été pourvu.
-            </div>
-        </div>
+
         <p class="bg-light" style="padding:10px;">
             <b>Créée le : </b>
             <u-date :value="offre.histoCreation"/>
@@ -92,7 +87,7 @@
         </p>
         <p v-html="descriptionHtml"></p>
         <br/>
-        <div v-if="this.canVoirCandidature">
+        <div v-if="this.canValiderCandidature">
             <h5><strong>Liste des candidats :</strong></h5>
 
             <table class="table table-bordered ">
@@ -229,16 +224,13 @@ export default {
             }
             return shorDesc;
         },
-        descriptionHtml: function() {
+        descriptionHtml: function () {
             return this.offre.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
         },
         connectionLink: function () {
             let url = 'auth/connexion?redirect='+window.location.href;
             return unicaenVue.url(url);
-            
-        },
-        nbPostesRestants: function () {
-            return this.offre.nombrePostes-this.offre.candidaturesValides.length;
+
         },
 
 

@@ -1659,6 +1659,7 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
             Privileges::MISSION_EDITION_REALISE                    => $this->mission && $this->missionRealiseEdition,
             Privileges::MISSION_OFFRE_EMPLOI_POSTULER              => $this->offreEmploiPostuler,
             Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION         => $this->offreEmploiPostuler,
+            Privileges::MISSION_CANDIDATURE_VISUALISATION          => $this->offreEmploiPostuler,
 
         ];
 

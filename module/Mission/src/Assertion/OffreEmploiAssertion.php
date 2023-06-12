@@ -170,27 +170,14 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
     protected function assertOffreEmploiPostuler (Role $role, OffreEmploi $offre)
     {
+        
         //On vérifier que l'on a bien un contexte avec un intervenant
         if (!$this->haveIntervenant()) {
             return false;
         }
-        //On vérifie qu'il reste encore des postes disponibles sur cette offre
-        $nbPostes = $offre->getNombrePostes();
 
-        $nbCandidatures = $offre->getCandidatures()->filter(
-            function ($candidature) {
-                /**
-                 * @var Candidature $candidature
-                 */
-                return ($candidature->estNonHistorise() && $candidature->isValide()) ? true : false;
-            }
-        )->count();
 
-        if ($nbPostes > $nbCandidatures) {
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
 

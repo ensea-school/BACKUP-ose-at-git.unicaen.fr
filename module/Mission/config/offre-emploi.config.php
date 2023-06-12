@@ -92,7 +92,7 @@ return [
 
 
     'navigation' => [
-        'gestion' => [
+        'gestion'       => [
             'pages' => [
                 'offres-emploi' => [
                     'label'    => "Offre emplois étudiants",
@@ -105,7 +105,6 @@ return [
                     'pages'    => [
                         'offre' => [
                             'label'    => "Consulter la liste des offres",
-                            'icon'     => 'fas fa-duotone fa-pen-to-square',
                             'title'    => "Consulter la liste des emplois étudiants",
                             'route'    => 'offre-emploi',
                             'resource' => PrivilegeController::getResourceId(OffreEmploiController::class, 'index'),
@@ -117,13 +116,13 @@ return [
             ],
         ],
         'offres-emploi' => [
-            'label'    => "Offres d'emploi",
-            'icon'     => 'fas fa-duotone fa-pen-to-square',
-            'title'    => "Consulter la liste des emplois étudiants",
-            'route'    => 'offre-emploi',
-            'visible'  => Assertion\OffreEmploiAssertion::class,
-            'order'    => 10,
-            'color'    => '#217DD8',
+            'label'   => "Offres d'emploi",
+            'icon'    => 'fas fa-duotone fa-pen-to-square',
+            'title'   => "Consulter la liste des emplois étudiants",
+            'route'   => 'offre-emploi',
+            'visible' => Assertion\OffreEmploiAssertion::class,
+            'order'   => 10,
+            'color'   => '#217DD8',
         ],
     ],
 

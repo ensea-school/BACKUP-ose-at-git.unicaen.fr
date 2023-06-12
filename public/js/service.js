@@ -286,7 +286,7 @@ $.widget("ose.enseignements", {
             //that.onAfterSaisie(serviceId);
         });
 
-        $("body").on('enseignement-after-saisie', function(event, serviceId){
+        $("body").on('enseignement-after-saisie', function (event, serviceId) {
             that.onAfterSaisie(serviceId);
         });
 
@@ -432,6 +432,9 @@ $.widget("ose.serviceForm", {
     },
     getElementEtablissementId: function () {
         return this.element.find("input[name='service\\[etablissement\\]\\[id\\]']");
+    },
+    getElementEtablissementLabel: function () {
+        return this.element.find("input[name='service\\[etablissement\\]\\[label\\]']");
     },
     getElementTypeVolumeHoraire: function () {
         return this.element.find("input[name='type-volume-horaire']");

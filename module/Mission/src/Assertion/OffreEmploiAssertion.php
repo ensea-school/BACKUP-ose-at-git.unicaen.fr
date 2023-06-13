@@ -108,6 +108,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
     protected function assertStructure (Role $role, ?Structure $structure): bool
     {
+
         if (!$structure) {
             return true;
         }
@@ -116,19 +117,19 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
             return true;
         }
 
-        return $role->getStructure() === $structure;
+        return $role->getStructure()->getCode() == $structure->getCode();
     }
 
 
 
     protected function assertOffreEmploiEdition (Role $role, OffreEmploi $offre)
     {
-        $haveRole = $this->haveRole();
+
 
         return $this->asserts([
             $this->haveRole(),
             $offre->canSaisie(),
-            $offre->haveCandidats(),
+            //$offre->haveCandidats(),
             $this->assertOffreEmploi($role, $offre),
         ]);
     }
@@ -170,7 +171,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
     protected function assertOffreEmploiPostuler (Role $role, OffreEmploi $offre)
     {
-        
+
         //On vérifier que l'on a bien un contexte avec un intervenant
         if (!$this->haveIntervenant()) {
             return false;

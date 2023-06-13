@@ -75,6 +75,9 @@
             au
             <u-date :value="offre.dateFin"/>
             <br/>
+            <b>Date limite de candidature :</b>
+            <u-date :value="offre.dateLimite"/>
+            <br/>
             <b>Demandé par la composante :</b> {{ offre.structure.libelleCourt }}
             <br/>
             <b>Type de mission :</b> {{ offre.typeMission.libelle }}

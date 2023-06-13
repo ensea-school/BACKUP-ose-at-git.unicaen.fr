@@ -29,6 +29,8 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
     protected ?\DateTime   $dateFin        = null;
 
+    protected ?\DateTime   $dateLimite     = null;
+
     protected ?string      $titre          = null;
 
     protected ?string      $description    = null;
@@ -47,18 +49,19 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function __construct()
+    public function __construct ()
     {
     }
 
 
 
-    public function axiosDefinition(): array
+    public function axiosDefinition (): array
     {
         return [
             'typeMission',
             'dateDebut',
             'dateFin',
+            'dateLimite',
             'structure',
             'titre',
             'description',
@@ -74,7 +77,7 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function getResourceId()
+    public function getResourceId ()
     {
         return 'OffreEmploi';
     }
@@ -86,28 +89,28 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return 'Offre emploi ' . $this->getId();
     }
 
 
 
-    public function getId(): ?int
+    public function getId (): ?int
     {
         return $this->id;
     }
 
 
 
-    public function getTypeMission(): ?TypeMission
+    public function getTypeMission (): ?TypeMission
     {
         return $this->typeMission;
     }
 
 
 
-    public function setTypeMission(?TypeMission $typeMission): self
+    public function setTypeMission (?TypeMission $typeMission): self
     {
         $this->typeMission = $typeMission;
 
@@ -116,14 +119,14 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function getDateDebut(): ?\DateTime
+    public function getDateDebut (): ?\DateTime
     {
         return $this->dateDebut;
     }
 
 
 
-    public function setDateDebut(?\DateTime $dateDebut): self
+    public function setDateDebut (?\DateTime $dateDebut): self
     {
         $this->dateDebut = $dateDebut;
 
@@ -132,14 +135,14 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function getDateFin(): ?\DateTime
+    public function getDateFin (): ?\DateTime
     {
         return $this->dateFin;
     }
 
 
 
-    public function setDateFin(?\DateTime $dateFin): self
+    public function setDateFin (?\DateTime $dateFin): self
     {
         $this->dateFin = $dateFin;
 
@@ -148,14 +151,30 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function getTitre(): ?string
+    public function getDateLimite (): ?\DateTime
+    {
+        return $this->dateLimite;
+    }
+
+
+
+    public function setDateLimite (?\DateTime $dateLimite): self
+    {
+        $this->dateLimite = $dateLimite;
+
+        return $this;
+    }
+
+
+
+    public function getTitre (): ?string
     {
         return $this->titre;
     }
 
 
 
-    public function setTitre(?string $titre): self
+    public function setTitre (?string $titre): self
     {
         $this->titre = $titre;
 
@@ -164,14 +183,14 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function getDescription(): ?string
+    public function getDescription (): ?string
     {
         return $this->description;
     }
 
 
 
-    public function setDescription(?string $description): self
+    public function setDescription (?string $description): self
     {
         $this->description = $description;
 
@@ -180,14 +199,14 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function getStructure(): ?Structure
+    public function getStructure (): ?Structure
     {
         return $this->structure;
     }
 
 
 
-    public function setStructure(?Structure $structure): self
+    public function setStructure (?Structure $structure): self
     {
         $this->structure = $structure;
 
@@ -196,14 +215,14 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function getNombreHeures(): ?int
+    public function getNombreHeures (): ?int
     {
         return $this->nombreHeures;
     }
 
 
 
-    public function setNombreHeures(?int $nombreHeures): self
+    public function setNombreHeures (?int $nombreHeures): self
     {
         $this->nombreHeures = $nombreHeures;
 
@@ -212,14 +231,14 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function getNombrePostes(): ?int
+    public function getNombrePostes (): ?int
     {
         return $this->nombrePostes;
     }
 
 
 
-    public function setNombrePostes(?int $nombrePostes): self
+    public function setNombrePostes (?int $nombrePostes): self
     {
         $this->nombrePostes = $nombrePostes;
 
@@ -229,40 +248,16 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
     /**
-     * @return bool
-     */
-    public function isAutoValidation(): bool
-    {
-        return $this->autoValidation;
-    }
-
-
-
-    /**
-     * @param bool $autoValidation
-     *
-     * @return Mission
-     */
-    public function setAutoValidation(bool $autoValidation): OffreEmploi
-    {
-        $this->autoValidation = $autoValidation;
-
-        return $this;
-    }
-
-
-
-    /**
      * @return Collection|Candidature[]
      */
-    public function getCandidatures(): Collection
+    public function getCandidatures (): Collection
     {
         return $this->candidatures;
     }
 
 
 
-    public function addCandidature(Candidature $candidature): self
+    public function addCandidature (Candidature $candidature): self
     {
         $this->candidatures[] = $candidature;
 
@@ -271,7 +266,7 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function removeCandidature(Candidature $candidature): self
+    public function removeCandidature (Candidature $candidature): self
     {
         $this->candidatures->removeElement($candidature);
 
@@ -280,31 +275,18 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    /**
-     * @return Validation
-     */
-    public function getValidation(): ?Validation
+    public function canSaisie (): bool
     {
-        return $this->validation;
+        if ($this->isValide()) {
+            return false;
+        }
+
+        return true;
     }
 
 
 
-    /**
-     * @param Validation $validation
-     *
-     * @return OffreEmploi
-     */
-    public function setValidation(?Validation $validation): OffreEmploi
-    {
-        $this->validation = $validation;
-
-        return $this;
-    }
-
-
-
-    public function isValide(): bool
+    public function isValide (): bool
     {
         if ($this->isAutoValidation()) return true;
 
@@ -317,18 +299,55 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function canSaisie(): bool
+    /**
+     * @return bool
+     */
+    public function isAutoValidation (): bool
     {
-        if ($this->isValide()) {
-            return false;
-        }
-
-        return true;
+        return $this->autoValidation;
     }
 
 
 
-    public function canSupprime(): bool
+    /**
+     * @param bool $autoValidation
+     *
+     * @return Mission
+     */
+    public function setAutoValidation (bool $autoValidation): OffreEmploi
+    {
+        $this->autoValidation = $autoValidation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return Validation
+     */
+    public function getValidation (): ?Validation
+    {
+        return $this->validation;
+    }
+
+
+
+    /**
+     * @param Validation $validation
+     *
+     * @return OffreEmploi
+     */
+    public function setValidation (?Validation $validation): OffreEmploi
+    {
+        $this->validation = $validation;
+
+        return $this;
+    }
+
+
+
+    public function canSupprime (): bool
     {
         if ($this->isValide() || !empty($this->candidatures)) {
             return false;
@@ -340,7 +359,7 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function isCandidat(Intervenant $intervenant): bool
+    public function isCandidat (Intervenant $intervenant): bool
     {
         foreach ($this->candidatures as $candidature) {
             if ($candidature->getIntervenant() == $intervenant) {
@@ -353,9 +372,9 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function haveCandidats(): bool
+    public function haveCandidats (): bool
     {
-        
+
         if (!empty($this->candidatures)) {
             return true;
         }
@@ -365,7 +384,7 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function getCandidaturesValides(): Collection
+    public function getCandidaturesValides (): Collection
     {
         return $this->candidatures->filter(function (Candidature $c) {
             return $c->isValide();
@@ -374,7 +393,7 @@ class OffreEmploi implements HistoriqueAwareInterface, ResourceInterface, AxiosE
 
 
 
-    public function getCandidats(): array
+    public function getCandidats (): array
     {
         $idsIntervenant = [];
         /**

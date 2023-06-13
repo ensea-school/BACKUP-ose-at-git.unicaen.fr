@@ -31,11 +31,14 @@ echo $this->formControlGroup($form->get('description'));
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <?= $this->formControlGroup($form->get('dateDebut')) ?>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <?= $this->formControlGroup($form->get('dateFin')) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $this->formControlGroup($form->get('dateLimite')) ?>
         </div>
     </div>
 <?php

@@ -68,12 +68,14 @@ class OffreEmploiService extends AbstractEntityService
 
         if (empty($role)) {
             $dql .= " AND oe.validation IS NOT NULL";
+            $dql .= " AND oe.dateLimite >= CURRENT_DATE()";
         }
 
 
         $dql .= dqlAndWhere([
             'offreEmploi' => 'oe',
             'annee'       => 'tm.annee',
+            'structure'   => 'str',
 
         ], $parameters);
 
@@ -90,6 +92,7 @@ class OffreEmploiService extends AbstractEntityService
             ['typeMission', ['libelle']],
             'dateDebut',
             'dateFin',
+            'dateLimite',
             ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']],
             'titre',
             'description',
@@ -163,6 +166,7 @@ class OffreEmploiService extends AbstractEntityService
         WHERE 
           oe . histoDestruction IS null
         AND v.histoDestruction IS NULL
+        AND oe.dateLimite >= CURRENT_DATE()
        ";
 
         $dql .= dqlAndWhere([
@@ -174,7 +178,9 @@ class OffreEmploiService extends AbstractEntityService
           oe . dateDebut
         ";
 
+
         $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+
 
         $triggers = $this->getOffreEmploiPrivileges();
 
@@ -184,6 +190,7 @@ class OffreEmploiService extends AbstractEntityService
             ['typeMission', ['libelle']],
             'dateDebut',
             'dateFin',
+            'dateLimite',
             ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']],
             'titre',
             'description',

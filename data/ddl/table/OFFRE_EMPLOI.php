@@ -45,6 +45,18 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
+        'DATE_LIMITE'              => [
+            'name'        => 'DATE_LIMITE',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 18,
+            'commentaire' => NULL,
+        ],
         'DESCRIPTION'           => [
             'name'        => 'DESCRIPTION',
             'type'        => 'string',

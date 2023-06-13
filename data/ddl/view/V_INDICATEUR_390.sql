@@ -12,6 +12,7 @@ SELECT DISTINCT
   JOIN volume_horaire_mission vhm ON vhm.mission_id = mi.id
   JOIN statut      si ON si.id = i.statut_id
   LEFT JOIN contrat c ON c.mission_id = vhm.mission_id
+  JOIN TYPE_VOLUME_HORAIRE tvh ON tvh.CODE = 'PREVU'
 WHERE
   w.atteignable = 1
   AND w.type_intervenant_code = 'S'
@@ -21,4 +22,6 @@ WHERE
   AND si.histo_destruction IS NULL
   AND si.contrat = 1
   AND vhm.contrat_id IS NULL
+  AND vhm.histo_destruction IS NULL
+  AND vhm.type_volume_horaire_id = tvh.ID
   AND c.id IS NOT NULL

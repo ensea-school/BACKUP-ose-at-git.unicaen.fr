@@ -2366,6 +2366,7 @@ return [
         'TITRE',
         'NOMBRE_HEURES',
         'NOMBRE_POSTES',
+        'DATE_LIMITE',
     ],
     'MISSION_TAUX_REMU'              => [
         'ID',

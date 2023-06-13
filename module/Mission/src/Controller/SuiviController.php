@@ -85,6 +85,10 @@ class SuiviController extends AbstractController
             'description',
             'valide',
             'validation',
+            'canEdit',
+            'canValider',
+            'canDevalider',
+            'canSupprimer',
         ];
 
         $triggers = [

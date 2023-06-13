@@ -19,10 +19,9 @@ FROM
       c.type_contrat_id = 1 --a déjà un contrat de type 'CONTRAT'
       AND c.histo_destruction IS NULL
   ) hc ON hc.intervenant_id = i.id
-  LEFT JOIN contrat c ON c.intervenant_id = i.id AND (w.structure_id = c.structure_id OR w.structure_id is NULL) AND c.histo_destruction IS NULL
 WHERE
   w.atteignable = 1
+  AND w.type_intervenant_code = 'E'
   AND w.etape_code = 'CONTRAT'
   AND w.objectif > 0
   AND w.realisation < w.objectif
-  AND c.id IS NULL

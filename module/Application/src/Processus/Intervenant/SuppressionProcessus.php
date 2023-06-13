@@ -145,7 +145,7 @@ WHERE
 SELECT
   CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
   m.id                     parent_id,
-  '[MISSION_ID:' || vm.MISSION_ID || ',VALIDATION_ID:' || vm.validation_id || ']' id,
+  vm.validation_id         id,
   null                     categorie,
   'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
   'fas fa-check' icon
@@ -507,10 +507,7 @@ WHERE
         ]],
         '.PIECE_JOINTE'                => [],
         '.CANDIDATURE'                 => [],
-        '.MISSION'                     => ['queries' => [
-            'DELETE FROM mission_etudiant WHERE mission_id = :ID',
-        ]],
-        'MISSION.VALIDATION'           => ['key' => ['VALIDATION_ID', 'MISSION_ID']],
+        'MISSION.VALIDATION'           => [],
         '.VOLUME_HORAIRE'              => [],
         '.VOLUME_HORAIRE_REF'          => [],
         '.VOLUME_HORAIRE_MISSION'      => [],
@@ -519,6 +516,9 @@ WHERE
         ]],
         '.SERVICE_REFERENTIEL'         => ['queries' => [
             'DELETE FROM formule_resultat_service_ref WHERE service_referentiel_id = :ID',
+        ]],
+        '.MISSION'                     => ['queries' => [
+            'DELETE FROM mission_etudiant WHERE mission_id = :ID',
         ]],
         '.MODIFICATION_SERVICE_DU'     => [],
         '.INTERVENANT_DOSSIER'         => [],
@@ -547,6 +547,23 @@ WHERE
         }
 
         return $this->data;
+    }
+
+
+
+    public function idsFromPost(?array $post): array
+    {
+        if (empty($post)) return [];
+
+        $ids = $post;
+
+        foreach ($ids as $i => $val) {
+            if (str_starts_with($val, 'b64-')) {
+                $ids[$i] = base64_decode(substr($val, 4));
+            }
+        }
+
+        return $ids;
     }
 
 
@@ -618,7 +635,8 @@ WHERE
 
     protected function makeNode(array $data): TreeNode
     {
-        $node = new TreeNode($data['TABLE'] . '#' . $data['ID']);
+        $id = 'b64-' . base64_encode($data['TABLE'] . '#' . $data['ID']);
+        $node = new TreeNode($id);
         $node->setIcon($data['ICON']);
         if (isset($data['ERROR'])) {
             $node->setLabel($data['LABEL'] . ' <span style="font-weight:bold;color:red" title="' . htmlentities($data['ERROR']) . '">Erreur rencontrée</span>');
@@ -748,7 +766,7 @@ WHERE
                 }
             }
         }
-        /* DEBUG */
+        /* DEBUG *
         $delIds = [];
         foreach ($this->data as $table => $ds) {
             foreach ($ds as $i => $d) {

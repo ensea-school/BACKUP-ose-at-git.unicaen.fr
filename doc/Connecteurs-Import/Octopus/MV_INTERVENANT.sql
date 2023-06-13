@@ -83,6 +83,7 @@ WITH i AS (
    					  LEFT JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
              WHERE inds.d_debut - 184 <= SYSDATE
                AND inds.t_etudiant = 'O'
+               AND inds.t_doctorant ='N'
                AND inds.c_source IN ('APO', 'OCTO')
          ) t
 

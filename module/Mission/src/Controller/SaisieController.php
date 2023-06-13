@@ -151,6 +151,9 @@ class SaisieController extends AbstractController
 
         if ($this->getServiceContext()->getStructure()) {
             $form->remove('structure');
+            if (!$mission->getStructure()){
+                $mission->setStructure($this->getServiceContext()->getStructure());
+            }
         }
 
         $hDeb = $mission->getHeures();

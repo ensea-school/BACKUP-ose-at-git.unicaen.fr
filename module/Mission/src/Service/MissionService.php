@@ -119,19 +119,19 @@ class MissionService extends AbstractEntityService
 
         $triggers = [
             '/'                      => function (Mission $original, array $extracted) {
-                $extracted['canSaisie']    &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
-                $extracted['canAddHeures'] &= $this->getAuthorize()->isAllowed($original, SaisieAssertion::CAN_ADD_HEURES);
-                $extracted['canValider']   &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
-                $extracted['canDevalider'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                $extracted['canSupprimer'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canSaisie']    = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canAddHeures'] = $this->getAuthorize()->isAllowed($original, SaisieAssertion::CAN_ADD_HEURES);
+                $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                $extracted['canSupprimer'] = $extracted['canSupprimer'] && $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
 
                 return $extracted;
             },
             '/volumesHorairesPrevus' => function ($original, $extracted) {
                 //$extracted['canSaisie'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
-                $extracted['canValider']   &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
-                $extracted['canDevalider'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                $extracted['canSupprimer'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                $extracted['canSupprimer'] = $extracted['canSupprimer'] && $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
 
                 return $extracted;
             },
@@ -161,7 +161,7 @@ class MissionService extends AbstractEntityService
             $vhm->setSource($this->getServiceSource()->getOse());
         }
 
-        if ($vhm->getTypeVolumeHoraire()->isRealise()) {
+        if ($vhm->getTypeVolumeHoraire()->isRealise() && $vhm->estNonHistorise()) {
             if ($vhm->getHoraireFin() < $vhm->getMission()->getDateDebut()) {
                 throw new \Exception('La date renseignée est antérieure au début de la mission');
             }

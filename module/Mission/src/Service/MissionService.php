@@ -161,6 +161,22 @@ class MissionService extends AbstractEntityService
             $vhm->setSource($this->getServiceSource()->getOse());
         }
 
+        if ($vhm->getTypeVolumeHoraire()->isRealise()) {
+            if ($vhm->getHoraireFin() < $vhm->getMission()->getDateDebut()) {
+                throw new \Exception('La date renseignée est antérieure au début de la mission');
+            }
+            $dateFin = $vhm->getMission()->getDateFin()->modify('+1 day'); // jour de fin révolu
+            if ($vhm->getHoraireDebut() > $dateFin) {
+                throw new \Exception('La date renseignée est postérieure à la fin de la mission');
+            }
+
+            $now = new \DateTime();
+            $now->modify('+10 minutes'); // tolérance de 10 minutes
+            if ($vhm->getHoraireFin() > $now){
+                throw new \Exception('Vous ne pouvez saisir de suivi avant qu\'il ne soit terminé');
+            }
+        }
+
         $this->getEntityManager()->persist($vhm);
         $this->getEntityManager()->flush($vhm);
 

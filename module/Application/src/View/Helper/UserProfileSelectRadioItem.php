@@ -82,7 +82,7 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
     {
         $session = $this->getSessionContainer();
         if (!isset($session->structures)) {
-            $qb                  = $this->getServiceStructure()->finderByEnseignement();
+            $qb                  = $this->getServiceStructure()->finderByHistorique();
             $s                   = $this->getServiceStructure()->getList($qb);
             $session->structures = [];
             foreach ($s as $structure) {

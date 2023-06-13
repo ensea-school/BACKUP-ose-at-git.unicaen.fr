@@ -67,7 +67,6 @@ class CentreCoutStructureSaisieForm extends AbstractForm
     {
         $serviceStructure = $this->getServiceStructure();
         $qb               = $serviceStructure->finderByHistorique();
-        $qb               = $serviceStructure->finderByEnseignement($qb);
         $structures       = $serviceStructure->getList($qb);
 
         return $structures;

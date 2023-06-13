@@ -38,7 +38,6 @@ class OffreEmploiForm extends AbstractForm
         $this->setValueOptions('typeMission', $tmDql, $tmDqlParams);
 
         $sDql = $this->getServiceStructure()->finderByHistorique();
-        $this->getServiceStructure()->finderByEnseignement($sDql);
         if ($this->getServiceContext()->getSelectedIdentityRole()->getStructure()) {
             $this->getServiceStructure()->finderByRole($this->getServiceContext()->getSelectedIdentityRole(), $sDql);
         }

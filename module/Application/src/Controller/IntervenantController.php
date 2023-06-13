@@ -387,7 +387,8 @@ class  IntervenantController extends AbstractController
 
         $intSuppr = $this->getProcessusIntervenant()->suppression($intervenant);
 
-        if ($ids = $this->params()->fromPost('ids')) {
+        $ids = $intSuppr->idsFromPost($this->params()->fromPost('ids'));
+        if ($ids) {
             try {
                 if (!empty($ids)) {
                     $res = $intSuppr->delete($ids);

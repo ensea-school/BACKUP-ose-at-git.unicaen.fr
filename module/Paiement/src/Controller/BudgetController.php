@@ -60,7 +60,7 @@ class BudgetController extends AbstractController
 
         $typesRessources = $this->getServiceTypeRessource()->getList();
         /* @var $typesRessources TypeRessource[] */
-        $qb = $this->getServiceStructure()->finderByEnseignement();
+        $qb = $this->getServiceStructure()->finderByHistorique();
         if ($structure) $this->getServiceStructure()->finderById($structure->getId(), $qb);
         $structures = $this->getServiceStructure()->getList($qb);
         /* @var $structures Structure[] */
@@ -102,7 +102,7 @@ class BudgetController extends AbstractController
 
         $typesRessources = $this->getServiceTypeRessource()->getList();
         /* @var $typesRessources TypeRessource[] */
-        $qb = $this->getServiceStructure()->finderByEnseignement();
+        $qb = $this->getServiceStructure()->finderByHistorique();
         if ($structure) $this->getServiceStructure()->finderById($structure->getId(), $qb);
         $structures = $this->getServiceStructure()->getList($qb);
         /* @var $structures Structure[] */
@@ -322,7 +322,7 @@ class BudgetController extends AbstractController
             ]);
 
             $serviceStructure = $this->getServiceStructure();
-            $qb = $serviceStructure->finderByEnseignement();
+            $qb = $serviceStructure->finderByHistorique();
             $structureElement->setValueOptions(\UnicaenApp\Util::collectionAsOptions($serviceStructure->getList($qb)));
         }
 

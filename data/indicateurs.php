@@ -32,6 +32,20 @@ return [
                 'route'             => 'intervenant/missions-suivi',
                 'irrecevables'      => false,
             ],
+            380 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant est en attente de son contrat',
+                'libelle_pluriel'   => '%s étudiants sont en attente de leur contrat',
+                'route'             => 'intervenant/contrat',
+                'irrecevables'      => false,
+            ],
+            390 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant est en attente de son avenant',
+                'libelle_pluriel'   => '%s étudiants sont en attente de leur avenant',
+                'route'             => 'intervenant/contrat',
+                'irrecevables'      => false,
+            ],
         ],
     ],
     'Données personnelles' => [

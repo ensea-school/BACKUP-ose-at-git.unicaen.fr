@@ -106,7 +106,6 @@ class MissionService extends AbstractEntityService
                 'histoCreation',
                 'histoCreateur',
             ]],
-            //['etudiants', ['id', 'code', 'nomUsuel', 'prenom', 'dateNaissance']],
             'etudiantsSuivis',
             'contrat',
             'valide',
@@ -120,19 +119,19 @@ class MissionService extends AbstractEntityService
 
         $triggers = [
             '/'                      => function (Mission $original, array $extracted) {
-                $extracted['canSaisie']    = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
-                $extracted['canAddHeures'] = $this->getAuthorize()->isAllowed($original, SaisieAssertion::CAN_ADD_HEURES);
-                $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
-                $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canSaisie']    &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canAddHeures'] &= $this->getAuthorize()->isAllowed($original, SaisieAssertion::CAN_ADD_HEURES);
+                $extracted['canValider']   &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                $extracted['canDevalider'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                $extracted['canSupprimer'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
 
                 return $extracted;
             },
             '/volumesHorairesPrevus' => function ($original, $extracted) {
-                //$extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
-                $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
-                $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                //$extracted['canSaisie'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canValider']   &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                $extracted['canDevalider'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
+                $extracted['canSupprimer'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
 
                 return $extracted;
             },

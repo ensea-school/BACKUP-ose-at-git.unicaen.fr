@@ -6,7 +6,7 @@ return [
     'name'        => 'VHM_CONTRAT_FK',
     'table'       => 'VOLUME_HORAIRE_MISSION',
     'rtable'      => 'CONTRAT',
-    'delete_rule' => NULL,
+    'delete_rule' => 'SET NULL',
     'index'       => NULL,
     'columns'     => [
         'CONTRAT_ID' => 'ID',

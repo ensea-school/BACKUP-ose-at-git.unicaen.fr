@@ -2447,6 +2447,17 @@ return [
         'ACCEPTEE',
         'REFUSEE',
     ],
+    'UNICAEN_MAIL_MAIL'              => [
+        'ID',
+        'DATE_ENVOI',
+        'STATUS_ENVOI',
+        'DESTINATAIRES',
+        'DESTINATAIRES_INITIALS',
+        'SUJET',
+        'CORPS',
+        'MOTS_CLEFS',
+        'LOG',
+    ],
 ];
 
 //@formatter:on

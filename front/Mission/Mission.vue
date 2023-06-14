@@ -24,7 +24,7 @@
                                 <div class="form-control">{{ mission.tauxRemu ? mission.tauxRemu.libelle : null }}</div>
                             </div>
                             <div class="col-md-6">
-                                <label class=" form-label">Taux majoré (dimanches/jf)</label>
+                                <label class=" form-label">Taux majoré (dimanches/jours fériés)</label>
                                 <div class="form-control">
                                     {{ mission.tauxRemuMajore ? mission.tauxRemuMajore.libelle : mission.tauxRemu ? 'Idem (' +mission.tauxRemu.libelle+')' : null }}
                                 </div>

@@ -4,6 +4,14 @@ return [
     'Missions'             => [
         'id'          => 18,
         'indicateurs' => [
+            270 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s offre d\'emploi est en attente de validation pour publication',
+                'libelle_pluriel'   => '%s offres d\'emploi sont en attente de validation pour publication',
+                'route'             => 'offre-emploi',
+                'irrecevables'      => false,
+                'special'           => true,
+            ],
             280 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s étudiant est en attente de validation d\'une candidature',

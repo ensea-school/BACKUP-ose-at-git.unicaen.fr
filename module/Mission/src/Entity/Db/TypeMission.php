@@ -56,7 +56,7 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
 
 
     /**
-     * @return null
+     * @return ArrayCollection
      */
     public function getCentreCoutsLinkers()
     {
@@ -104,6 +104,15 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
         return $this->libelle;
     }
 
+    public function getAccompagnementEtudiants(): ?string
+    {
+        return $this->accompagnementEtudiants;
+    }
+
+    public function getBesoinFormation(): ?string
+    {
+        return $this->besoinFormation;
+    }
 
 
     public function setLibelle(?string $libelle): TypeMission

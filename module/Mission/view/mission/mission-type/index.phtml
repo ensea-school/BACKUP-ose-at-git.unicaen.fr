@@ -9,6 +9,8 @@ use Application\Provider\Privilege\Privileges;
 $this->headTitle()->append("Gestion des types de missions");
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 $canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_TYPE));
+$canEditPlafond = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CONFIG_MISSION));
+$canEditCC = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_CENTRE_COUT_TYPE));
 $canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_SUPPRESSION_TYPE));
 ?>
 <h1 class="page-header">Gestion des types de missions</h1>
@@ -22,7 +24,7 @@ $canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_S
         <th>Besoin de formation</th>
         <th>Type de rémunération</th>
         <th>Type de rémunération majoré</th>
-        <?php if ($canSupprimer || $canEdit): ?>
+        <?php if ($canSupprimer || $canEdit || $canEditCC || $canEditPlafond): ?>
             <th>Action</th>
         <?php endif; ?>
     </tr>
@@ -41,14 +43,22 @@ $canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_S
             <td><?php if ($missionType->getTauxRemuMajore()):
                     echo $missionType->getTauxRemuMajore()->getLibelle();
                 endif; ?></td>
-            <?php if ($canSupprimer || $canEdit): ?>
+            <?php if ($canSupprimer || $canEdit || $canEditCC || $canEditPlafond): ?>
                 <td style="text-align: center">
-                    <?php if ($canEdit): ?>
-                        <a class="ajax-modal " data-event="type-edition"
-                           href="<?= $this->url("missions-type/saisir", ['typeMission' => $missionType->getId()]) ?>"
-                           title="Modifier le type">
-                            <i class="fas fa-pen-to-square"></i>
-                        </a>
+                    <?php if ($canEdit ||$canEditCC || $canEditPlafond):
+                        if($canEdit): ?>
+                            <a class="ajax-modal " data-event="type-edition"
+                               href="<?= $this->url("missions-type/saisir", ['typeMission' => $missionType->getId()]) ?>"
+                               title="Modifier le type">
+                                <i class="fas fa-pen-to-square"></i>
+                            </a>
+                        <?php else:?>
+                            <a class="ajax-modal " data-event="type-edition"
+                               href="<?= $this->url("missions-type/visualiser", ['typeMission' => $missionType->getId()]) ?>"
+                               title="Modifier le type">
+                                <i class="fas fa-pen-to-square"></i>
+                            </a>
+                        <?php endif; ?>
                     <?php endif; ?>
                     <?php if ($canSupprimer): ?>
                         <a class="pop-ajax" data-event="type-suppression" data-content="Êtes-vous sur de vouloir supprimer"

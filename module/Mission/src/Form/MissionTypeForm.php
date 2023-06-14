@@ -35,7 +35,7 @@ class MissionTypeForm extends AbstractForm
         $this->setValueOptions('tauxRemu', $this->getServiceTauxRemu()->getTauxRemusAnneeWithValeur());
         $this->setValueOptions('tauxRemuMajore', $this->getServiceTauxRemu()->getTauxRemusAnneeWithValeur());
         $this->get('tauxRemu')->setEmptyOption("- Aucun taux par défaut -");
-        $this->get('tauxRemuMajore')->setEmptyOption("- Utilisation du taux normal -");
+        $this->get('tauxRemuMajore')->setEmptyOption("- Utilisation du taux par défaut -");
 
         $this->addSecurity();
         $this->addSubmit();

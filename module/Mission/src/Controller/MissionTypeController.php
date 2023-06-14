@@ -15,7 +15,7 @@ use Paiement\Service\CentreCoutServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 /**
- * Description of tauxRemuController
+ * Description of MissionTypeController
  *
  * @author Florian Joriot <florian.joriot at unicaen.fr>
  */
@@ -41,12 +41,22 @@ class MissionTypeController extends AbstractController
     }
 
 
+    public function visualiserAction()
+    {
+
+        $typeMission = $this->getEvent()->getParam('typeMission');
+        $tab         = $this->params()->fromQuery('tab', 'fiche');
+
+
+        return compact( 'typeMission', 'tab');
+    }
+
 
     public function saisirAction()
     {
 
         $typeMission = $this->getEvent()->getParam('typeMission');
-        $tab         = $this->params()->fromQuery('tab', 'fiche');
+        $tab         = $this->params()->fromQuery('tab', 'edition');
         $form        = $this->getFormMissionType();
         if (empty($typeMission)) {
             $title       = "Création d'un nouveau type";

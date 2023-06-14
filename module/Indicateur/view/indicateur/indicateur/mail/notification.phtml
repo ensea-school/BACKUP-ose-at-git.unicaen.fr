@@ -30,7 +30,7 @@ if (!function_exists('printValue')) {
 
 <h1><?= $notification->getIndicateur()->getLibelle(count($result)) ?></h1>
 <?php
-if (count($result) > 0):
+if (!$notification->getIndicateur()->isSpecial() && count($result) > 0):
     $supCols = current($result);
     unset($supCols['annee-id']);
     unset($supCols['statut-libelle']);
@@ -72,6 +72,8 @@ if (count($result) > 0):
         <?php endforeach; ?>
         </tbody>
     </table>
+<?php else: ?>
+<a href="<?= $this->url($notification->getIndicateur()->getRoute(), [], ['force_canonical' => true]); ?>">Pour vous rendre sur OSE, veuillez cliquer sur ce lien.</a>
 <?php endif; ?>
 <p>
     Vous vous êtes abonné(e) à cet indicateur

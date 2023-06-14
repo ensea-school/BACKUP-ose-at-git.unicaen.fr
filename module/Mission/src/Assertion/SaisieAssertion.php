@@ -225,6 +225,6 @@ class SaisieAssertion extends AbstractAssertion
         }
 
         // OK si =
-        return $role->getStructure() === $structure;
+        return $role->getStructure()->getId() == $structure->getId();
     }
 }

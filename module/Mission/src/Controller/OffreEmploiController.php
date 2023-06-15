@@ -77,7 +77,7 @@ class  OffreEmploiController extends AbstractController
         $this->getServiceOffreEmploi()->delete($offre);
         $this->flashMessenger()->addSuccessMessage("Offre d'emploi supprimée avec succès.");
 
-        return $this->axios()->send([]);
+        return true;
     }
 
 

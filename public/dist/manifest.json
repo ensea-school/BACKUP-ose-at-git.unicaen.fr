@@ -3,14 +3,14 @@
     "file": "assets/vendor-aed55673.js"
   },
   "main.css": {
-    "file": "assets/main-3a7ae60a.css",
+    "file": "assets/main-60550d9c.css",
     "src": "main.css"
   },
   "main.js": {
     "css": [
-      "assets/main-3a7ae60a.css"
+      "assets/main-60550d9c.css"
     ],
-    "file": "assets/main-dffba016.js",
+    "file": "assets/main-217768f9.js",
     "imports": [
       "_vendor-aed55673.js"
     ],

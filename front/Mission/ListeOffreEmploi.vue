@@ -65,7 +65,6 @@ export default {
     computed: {
         extended: function ()
         {
-            console.log('extended');
             if (this.id) {
                 return true;
             }
@@ -81,7 +80,8 @@ export default {
         },
         supprimer()
         {
-            this.reload();
+            window.location.href = unicaenVue.url("offre-emploi");
+
         },
 
         refresh(offre)

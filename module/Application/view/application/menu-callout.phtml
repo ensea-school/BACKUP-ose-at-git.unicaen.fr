@@ -42,6 +42,7 @@ foreach ($container as $page) {
 
 
 echo $this->tag('div', ['class' => 'callout-menu']);
+$i = 0;
 foreach ($rubriques as $rubrique) {
     if (!empty($rubrique['items'])) {
         $attrs = [
@@ -52,6 +53,10 @@ foreach ($rubriques as $rubrique) {
         }
         if ($description = $rubrique['description']) {
             $attrs['title'] = $description;
+        }
+
+        if ($i % 2 != 1) {
+            echo '<div style="clear: both"></div>';
         }
 
         echo $this->tag('div', $attrs);
@@ -68,6 +73,7 @@ foreach ($rubriques as $rubrique) {
         echo '</div>';
         echo '</div>';
     }
+    $i++;
 }
 echo '<div style="clear: both"></div>';
 echo '</div>';

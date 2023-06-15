@@ -21,7 +21,7 @@ return [
 
         'redirect_to' => AppConfig::get('mail', 'redirection'),
         'do_not_send' => AppConfig::get('mail', 'envoiDesactive'),
-        'redirect'       => !empty(AppConfig::get('mail', 'redirection')),
+        'redirect'    => !empty(AppConfig::get('mail', 'redirection')),
 
         'subject_prefix' => 'OSE',
         'from_name'      => 'Application',
@@ -47,7 +47,7 @@ return [
 
     'server_url' => AppConfig::get('global', 'scheme') . '://' . AppConfig::get('global', 'domain'),
 
-    'navigation' => [
+    /*'navigation' => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -70,5 +70,5 @@ return [
                 ],
             ],
         ],
-    ],
+    ],*/
 ];

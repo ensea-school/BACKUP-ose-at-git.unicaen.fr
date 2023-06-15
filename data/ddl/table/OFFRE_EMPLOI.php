@@ -45,7 +45,7 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'DATE_LIMITE'              => [
+        'DATE_LIMITE'           => [
             'name'        => 'DATE_LIMITE',
             'type'        => 'date',
             'bdd-type'    => 'DATE',

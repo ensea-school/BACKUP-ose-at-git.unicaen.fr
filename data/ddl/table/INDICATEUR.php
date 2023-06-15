@@ -105,6 +105,18 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
+        'SPECIAL'            => [
+            'name'        => 'SPECIAL',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 10,
+            'commentaire' => NULL,
+        ],
         'TYPE_INDICATEUR_ID' => [
             'name'        => 'TYPE_INDICATEUR_ID',
             'type'        => 'int',

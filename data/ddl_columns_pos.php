@@ -747,6 +747,7 @@ return [
         'ROUTE',
         'TYPE_INDICATEUR_ID',
         'IRRECEVABLES',
+        'SPECIAL',
     ],
     'INDIC_MODIF_DOSSIER'            => [
         'ID',

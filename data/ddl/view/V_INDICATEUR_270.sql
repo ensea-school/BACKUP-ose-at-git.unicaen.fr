@@ -7,3 +7,4 @@ FROM
   LEFT JOIN validation v ON v.id = oe.validation_id AND v.histo_destruction IS NULL
 WHERE
   v.id IS NULL
+  AND oe.histo_destruction IS NULL

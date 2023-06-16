@@ -439,6 +439,14 @@ return [
         ],
     ],
 
+    'jour-ferie' => [
+        'libelle'    => 'Paramétrage des jours fériés',
+        'privileges' => [
+            'visualisation' => 'Administration (visualisation)',
+            'edition'       => 'Administration (édition)',
+        ],
+    ],
+
     'workflow' => [
         'libelle'    => 'Gestion du Workflow',
         'privileges' => [

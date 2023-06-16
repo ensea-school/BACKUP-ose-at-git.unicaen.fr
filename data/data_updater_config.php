@@ -177,12 +177,12 @@ return [
     ],
     'TYPE_MISSION'               => [
         'actions' => ['install'],
-        'key'     => ['CODE','ANNEE_ID'],
+        'key'     => ['CODE', 'ANNEE_ID'],
         'options' => [
             'update'  => false,
             'delete'  => false,
             'columns' => [
-                'TAUX_REMU_ID' => [
+                'TAUX_REMU_ID'        => [
                     'transformer' => 'SELECT id FROM taux_remu WHERE histo_destruction IS NULL AND code = %s',
                 ],
                 'TAUX_REMU_MAJORE_ID' => [
@@ -224,6 +224,11 @@ return [
             'ROLE_ID'        => ['transformer' => 'SELECT id FROM role WHERE histo_destruction IS NULL AND code = %s'],
             'UTILISATEUR_ID' => ['transformer' => 'SELECT id FROM utilisateur WHERE username = %s'],
         ],],
+    ],
+    'JOUR_FERIE'                 => [
+        'actions' => ['install', 'update'],
+        'key'     => ['DATE_JOUR'],
+        'options' => ['update' => false, 'delete' => false],
     ],
 
 

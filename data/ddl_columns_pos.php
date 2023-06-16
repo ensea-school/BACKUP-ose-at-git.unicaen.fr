@@ -2474,6 +2474,11 @@ return [
         'MOTS_CLEFS',
         'LOG',
     ],
+    'JOUR_FERIE'                     => [
+        'ID',
+        'DATE_JOUR',
+        'LIBELLE',
+    ],
 ];
 
 //@formatter:on

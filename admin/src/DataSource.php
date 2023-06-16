@@ -101,6 +101,35 @@ class DataSource
 
 
 
+    public function JOUR_FERIE()
+    {
+        $joursFeries = require $this->oseAdmin->getOseDir() . 'data/jours_feries.php';
+
+        $jfs = [];
+        for ($a = 1950; $a < 2100; $a++) {
+            foreach( $joursFeries as $date => $libelle ){
+                if (strlen($date) == 5){
+                    $jfs[] = [
+                        'LIBELLE'    => $libelle,
+                        'DATE_JOUR' => \DateTime::createFromFormat('Y-m-d H:i:s', $a . '-'.$date.' 00:00:00'),
+                    ];
+                }
+            }
+        }
+        foreach( $joursFeries as $date => $libelle ){
+            if (strlen($date) == 10){
+                $jfs[] = [
+                    'LIBELLE'    => $libelle,
+                    'DATE_JOUR' => \DateTime::createFromFormat('Y-m-d H:i:s', $date.' 00:00:00'),
+                ];
+            }
+        }
+
+        return $jfs;
+    }
+
+
+
     public function ETAT_SORTIE()
     {
         return require $this->oseAdmin->getOseDir() . 'data/etats_sortie.php';

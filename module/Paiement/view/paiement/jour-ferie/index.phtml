@@ -1,0 +1,27 @@
+<?php
+/**
+ * @var $this        \Application\View\Renderer\PhpRenderer
+ * @var $annee       \Application\Entity\Db\Annee
+ * @var $joursFeries \Paiement\Entity\Db\JourFerie[]
+ */
+
+$this->headTitle("Jours fériés $annee");
+
+setlocale(LC_TIME, 'fr_FR'); // Définit la locale en français
+
+?>
+<h1>Jours fériés <?= $annee ?></h1>
+<table class="table table-bordered">
+    <tr>
+        <th>Date</th>
+        <th>Libellé</th>
+        <th>Actions</th>
+    </tr>
+    <?php foreach ($joursFeries as $jourFerie): ?>
+        <tr>
+            <td><?= $jourFerie->getDateJour()->format('l j F Y') ?></td>
+            <td><?= $jourFerie->getLibelle() ?></td>
+            <td></td>
+        </tr>
+    <?php endforeach; ?>
+</table>

@@ -397,8 +397,11 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
         WHEN e.code = ''CONTRAT'' THEN
           si.contrat
 
-        WHEN e.code = ''SERVICE_SAISIE_REALISE'' OR e.code = ''DEMANDE_MEP'' OR e.code = ''SAISIE_MEP'' THEN
+        WHEN e.code = ''SERVICE_SAISIE_REALISE'' THEN
           CASE WHEN si.service_realise + si.referentiel_realise = 0 THEN 0 ELSE 1 END
+
+        WHEN e.code = ''DEMANDE_MEP'' OR e.code = ''SAISIE_MEP'' THEN
+          si.paiement
 
         WHEN e.code = ''CLOTURE_REALISE'' THEN
           si.cloture

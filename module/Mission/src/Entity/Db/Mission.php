@@ -3,13 +3,21 @@
 namespace Mission\Entity\Db;
 
 use Application\Constants;
+use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Periode;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use OffreFormation\Entity\Db\TypeHeures;
+use Paiement\Entity\Db\CentreCout;
+use Paiement\Entity\Db\MiseEnPaiement;
+use Paiement\Entity\Db\MiseEnPaiementListe;
+use Paiement\Entity\Db\ServiceAPayerInterface;
+use Paiement\Entity\Db\ServiceAPayerTrait;
 use Paiement\Entity\Db\TauxRemu;
 use Plafond\Interfaces\PlafondDataInterface;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -18,14 +26,13 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
-class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityManagerAwareInterface, PlafondDataInterface
+class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityManagerAwareInterface, PlafondDataInterface, ServiceAPayerInterface
 {
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
     use StructureAwareTrait;
     use EntityManagerAwareTrait;
-
-    protected ?int $id = null;
+    use ServiceAPayerTrait;
 
     protected ?TypeMission $typeMission = null;
 
@@ -58,6 +65,8 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
         $this->etudiants = new ArrayCollection();
         $this->validations = new ArrayCollection();
         $this->volumesHoraires = new ArrayCollection();
+        $this->miseEnPaiement = new ArrayCollection();
+        $this->centreCout = new ArrayCollection();
     }
 
 
@@ -72,13 +81,6 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
     public function getResourceId()
     {
         return 'Mission';
-    }
-
-
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
 
@@ -207,7 +209,6 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
         $this->etudiantsSuivis = $etudiantsSuivis;
         return $this;
     }
-
 
 
 
@@ -467,7 +468,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function heuresRealisees(): float
+    public function heuresRealisees(?bool $validees = null): float
     {
         $vhs = $this->getVolumesHorairesRealises();
 
@@ -475,7 +476,14 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
         foreach ($vhs as $vh) {
             if ($vh->estNonHistorise()) {
-                $heures += $vh->getHeures();
+                if ($validees === true) {
+                    if ($vh->isValide()) {
+                        $heures += $vh->getHeures();
+                    }
+                } else {
+                    $heures += $vh->getHeures();
+                }
+
             }
         }
 
@@ -528,4 +536,82 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
         return $this->isValide() && $dateOk;
     }
+
+
+
+    public function getHeuresComplFi(): float
+    {
+        return 0;
+    }
+
+
+
+    public function getHeuresComplFc(): float
+    {
+        return 0;
+    }
+
+
+
+    public function getHeuresComplFcMajorees(): float
+    {
+        return 0;
+    }
+
+
+
+    public function getHeuresComplFa(): float
+    {
+        return 0;
+    }
+
+
+
+    public function getHeuresComplReferentiel(): float
+    {
+        return 0;
+    }
+
+
+
+    public function getHeuresCompl(TypeHeures $typeHeures): float
+    {
+        return $this->heuresRealisees(true);
+    }
+
+
+
+    public function getHeuresMission(): float
+    {
+        return $this->heuresRealisees(true);
+    }
+
+
+
+    public function getDefaultCentreCout(TypeHeures $typeHeures): ?CentreCout
+    {
+        return null;
+    }
+
+
+
+    public function getDefaultDomaineFonctionnel(): ?DomaineFonctionnel
+    {
+        return null;
+    }
+
+
+
+    public function isDomaineFonctionnelModifiable(): bool
+    {
+        return true;
+    }
+
+
+
+    public function isPayable(): bool
+    {
+        return $this->isValide();
+    }
+
 }

@@ -27,9 +27,12 @@ echo $this->form()->openTag($form);
 </div>
 
 <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation"><a class="nav-link active" href="#sql" aria-controls="sql" role="tab" data-bs-toggle="tab">Requêtage</a></li>
-    <li role="presentation"><a class="nav-link" href="#csv" aria-controls="csv" role="tab" data-bs-toggle="tab">Export CSV</a></li>
-    <li role="presentation"><a class="nav-link" href="#pdf" aria-controls="pdf" role="tab" data-bs-toggle="tab">Export PDF</a></li>
+    <li role="presentation"><a class="nav-link active" href="#sql" aria-controls="sql" role="tab" data-bs-toggle="tab">Requêtage</a>
+    </li>
+    <li role="presentation"><a class="nav-link" href="#csv" aria-controls="csv" role="tab" data-bs-toggle="tab">Export
+            CSV</a></li>
+    <li role="presentation"><a class="nav-link" href="#pdf" aria-controls="pdf" role="tab" data-bs-toggle="tab">Export
+            PDF</a></li>
 </ul>
 
 <div class="tab-content etat-sortie-saisir">
@@ -46,7 +49,7 @@ echo $this->form()->openTag($form);
             </div>
         </div>
         <h2>Requêtes SQL par zones</h2>
-        <div class="card-group" id="blocs" role="tablist" aria-multiselectable="true">
+        <div class="list-group" id="blocs" role="tablist" aria-multiselectable="true">
 
             <?php for ($i = 1; $i <= 10; $i++): ?>
                 <div class="card bg-default etat-sortie-bloc" id="bloc<?= $i ?>">
@@ -56,17 +59,15 @@ echo $this->form()->openTag($form);
                         &nbsp;<label>Zone : </label>
                         <?= $this->formSelect($form->get("bloc-$i-zone")) ?>
                     </div>
-                    <div id="collapseOne" class="card-collapse collapse in" role="tabcard" aria-labelledby="headingOne">
-                        <div class="card-body">
-                            <?= $this->formTextarea($form->get("bloc-$i-requete")) ?>
-                        </div>
+                    <div class="card-body">
+                        <?= $this->formTextarea($form->get("bloc-$i-requete")) ?>
                     </div>
                 </div>
             <?php endfor; ?>
-            <button type="button" class="btn btn-secondary btn-sm ajout-bloc">
-                <i class="fas fa-plus"></i> Ajouter une requête
-            </button>
         </div>
+        <button type="button" class="btn btn-secondary btn-sm ajout-bloc">
+            <i class="fas fa-plus"></i> Ajouter une requête
+        </button>
     </div>
     <div role="tabcard" class="tab-pane" id="csv">
         <?= $this->formLabel($form->get('csv-params')) ?>
@@ -185,8 +186,7 @@ echo $this->form()->closeTag();
 ?>
 <script>
 
-    $(function ()
-    {
+    $(function () {
 
         WidgetInitializer.add('etat-sortie-saisir', {
             requeteEditor: null,
@@ -195,43 +195,26 @@ echo $this->form()->closeTag();
             traitementCsvEditor: null,
             blocs: {},
 
-            save: function ()
-            {
-                var csvParams = $("<input>")
-                    .attr("type", 'hidden')
-                    .attr("name", 'csv-params')
-                    .val(this.paramsEditor.getSession().getValue());
+            save: function () {
+                var csvParams = $("<input>").attr("type", 'hidden').attr("name", 'csv-params').val(this.paramsEditor.getSession().getValue());
                 this.element.append($(csvParams));
 
-                var pdfTraitement = $("<input>")
-                    .attr("type", 'hidden')
-                    .attr("name", 'pdf-traitement')
-                    .val(this.traitementPdfEditor.getSession().getValue());
+                var pdfTraitement = $("<input>").attr("type", 'hidden').attr("name", 'pdf-traitement').val(this.traitementPdfEditor.getSession().getValue());
                 this.element.append($(pdfTraitement));
 
-                var csvTraitement = $("<input>")
-                    .attr("type", 'hidden')
-                    .attr("name", 'csv-traitement')
-                    .val(this.traitementCsvEditor.getSession().getValue());
+                var csvTraitement = $("<input>").attr("type", 'hidden').attr("name", 'csv-traitement').val(this.traitementCsvEditor.getSession().getValue());
                 this.element.append($(csvTraitement));
 
-                var requete = $("<input>")
-                    .attr("type", "hidden")
-                    .attr("name", "requete")
-                    .val(this.requeteEditor.getSession().getValue());
+                var requete = $("<input>").attr("type", "hidden").attr("name", "requete").val(this.requeteEditor.getSession().getValue());
                 this.element.append($(requete));
 
                 for (var i = 1; i <= 10; i++) {
-                    var binput = $("<input>")
-                        .attr("type", "hidden")
-                        .attr("name", "bloc-" + i + "-requete")
-                        .val(this.blocs[i].getSession().getValue());
+                    var binput = $("<input>").attr("type", "hidden").attr("name", "bloc-" + i + "-requete").val(this.blocs[i].getSession().getValue());
                     this.element.append($(binput));
                 }
             },
 
-            ajoutBloc: function ()
-            {
+            ajoutBloc: function () {
                 for (var i = 1; i <= 10; i++) {
                     if (!this.isBlocRempli(i)) {
                         this.showBloc(i);
@@ -240,30 +223,30 @@ echo $this->form()->closeTag();
                 }
             },
 
-            isBlocRempli: function (bloc)
-            {
+            isBlocRempli: function (bloc) {
                 var res = this.element.find('bloc-' + bloc + '-nom').val() != ''
                     && this.blocs[bloc].getSession().getValue() != '';
 
                 return res;
             },
 
-            showBloc: function (bloc)
-            {
+            showBloc: function (bloc) {
                 this.element.find(".etat-sortie-bloc#bloc" + bloc).show();
             },
 
-            hideBloc: function (bloc)
-            {
+            hideBloc: function (bloc) {
                 this.element.find(".etat-sortie-bloc#bloc" + bloc).hide();
             },
 
-            _create: function ()
-            {
+            _create: function () {
                 var that = this;
 
-                that.element.find('.btn-save').click(function () { that.save();});
-                that.element.find('.ajout-bloc').click(function () {that.ajoutBloc()});
+                that.element.find('.btn-save').click(function () {
+                    that.save();
+                });
+                that.element.find('.ajout-bloc').click(function () {
+                    that.ajoutBloc()
+                });
 
                 var options = {
                     minLines: 15, maxLines: 40,

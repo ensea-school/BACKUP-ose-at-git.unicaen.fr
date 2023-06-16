@@ -165,6 +165,18 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
+        'MISSION'               => [
+            'name'        => 'MISSION',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 15,
+            'commentaire' => NULL,
+        ],
         'REFERENTIEL'           => [
             'name'        => 'REFERENTIEL',
             'type'        => 'bool',

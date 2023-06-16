@@ -166,6 +166,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool        $modificationServiceDuVisualisation = true;
 
+    private bool        $paiement                           = true;
+
     private bool        $paiementVisualisation              = true;
 
     private bool        $motifNonPaiement                   = true;
@@ -1320,6 +1322,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setPaiementVisualisation (bool $paiementVisualisation): Statut
     {
         $this->paiementVisualisation = $paiementVisualisation;
+
+        return $this;
+    }
+
+
+
+    public function getPaiement(): bool
+    {
+        return $this->paiement;
+    }
+
+
+
+    public function setPaiement(bool $paiement): Statut
+    {
+        $this->paiement = $paiement;
 
         return $this;
     }

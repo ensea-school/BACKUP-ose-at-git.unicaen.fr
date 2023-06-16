@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var $listTypesRessources \Paiement\Entity\Db\TypeRessource[]
+ */
+
 use Application\Provider\Privilege\Privileges;
 
 $this->headTitle()->append($title);
@@ -19,7 +23,8 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_RESSOURCE
         <th>FC</th>
         <th>FC Majorée</th>
         <th>Référentiel</th>
-        <th>Etablissement</th>
+        <th>Mission</th>
+        <th>Établissement</th>
         <?php if ($canEdit): ?>
             <th>Actions</th>
         <?php endif; ?>
@@ -37,6 +42,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_RESSOURCE
             <td><?= ($type->getFc()) ? 'OUI' : 'NON'; ?></td>
             <td><?= ($type->getFcMajorees()) ? 'OUI' : 'NON'; ?></td>
             <td><?= ($type->getReferentiel()) ? 'OUI' : 'NON'; ?></td>
+            <td><?= ($type->getMission()) ? 'OUI' : 'NON'; ?></td>
             <td><?= ($type->getEtablissement()) ? 'OUI' : 'NON'; ?></td>
             <?php if ($canEdit): ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">

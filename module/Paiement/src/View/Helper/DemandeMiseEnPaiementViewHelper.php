@@ -9,6 +9,7 @@ use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\View\Helper\AbstractHtmlElement;
+use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\TypeHeures;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
@@ -36,7 +37,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
      *
      * @var \Laminas\Form\Form
      */
-    private        $form;
+    private $form;
 
     private static $miseEnPaiementListeIdSequence = 1;
 
@@ -128,12 +129,12 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
         $canDemande = $this->getView()->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_DEMANDE));
 
         $servicesAPayer = $this->getServicesAPayer();
-        $attrs          = [
+        $attrs = [
             'id'          => $this->getId(),
             'class'       => 'demande-mise-en-paiement',
             'data-params' => json_encode($this->getParams()),
         ];
-        $out            = '';
+        $out = '';
         if ($canDemande && !empty($this->budget)) {
             $out .= $this->renderBudget();
         }
@@ -192,7 +193,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
         $h .= $t('tr')->close();
         foreach ($structures as $structure) {
             $sid = $structure->getId();
-            $h   .= $t('tr');
+            $h .= $t('tr');
             if ($this->getView()->isAllowed(PrivilegeController::getResourceId(BudgetController::class, 'engagement'))) {
                 $h .= $t('th')->html($t('a', ['href' => $this->getView()->url('budget/engagement', ['structure' => $structure->getId()])])->text($structure));
             } else {
@@ -235,10 +236,10 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
 
     public function renderServiceAPayer(ServiceAPayerInterface $serviceAPayer)
     {
-        $out         = '<div class="service-a-payer" id="' . $this->getServiceAPayerId($serviceAPayer) . '">';
-        $out         .= $this->renderHead($serviceAPayer);
+        $out = '<div class="service-a-payer" id="' . $this->getServiceAPayerId($serviceAPayer) . '">';
+        $out .= $this->renderHead($serviceAPayer);
         $typesHeures = $this->getServiceTypeHeures()->getList($this->getServiceTypeHeures()->finderByServiceaPayer($serviceAPayer));
-        $colSpan     = 12 / count($typesHeures);
+        $colSpan = 12 / count($typesHeures);
         if ($colSpan > 6) $colSpan = 6;
         $out .= '<div class="row">';
         foreach ($typesHeures as $typeHeures) {
@@ -284,8 +285,8 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
 
         $miseEnPaiement = new MiseEnPaiement;
         $miseEnPaiement->setServiceAPayer($serviceAPayer);
-        $notAllowed     = !$this->getView()->isAllowed($miseEnPaiement, Privileges::MISE_EN_PAIEMENT_DEMANDE);
-        $readOnly       = $this->getReadOnly() || $notAllowed;
+        $notAllowed = !$this->getView()->isAllowed($miseEnPaiement, Privileges::MISE_EN_PAIEMENT_DEMANDE);
+        $readOnly = $this->getReadOnly() || $notAllowed;
         $saisieTerminee = ($params['heures-dmep'] + $params['heures-non-dmep']) == 0; // s'il reste des heures à positionner ou déjà positionnées
 
         $attrs = [
@@ -296,7 +297,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
         if ($notAllowed) $attrs['class'][] = 'not-allowed';
         $out = '<div ' . $this->htmlAttribs($attrs) . '>';
 
-        $attrs  = [
+        $attrs = [
             'class'       => ['table', 'table-sm', 'table-xs', 'table-bordered', 'mise-en-paiement-liste'],
             'id'          => (string)self::$miseEnPaiementListeIdSequence++,
             'data-params' => json_encode($params),
@@ -311,7 +312,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
             $out .= '<div class="alert alert-danger" role="alert">Des heures à payer ont été positionnées sur ce service alors que c\'est normalement impossible.</div>';
         }
         $out .= '<table ' . $this->htmlAttribs($attrs) . '>';
-        $out .= '<thead ' . $this->htmlAttribs($hattrs) . '><tr><th colspan="3">' . $typeHeures->getLibelleLong() . '</th></tr><tr>';
+        $out .= '<thead ' . $this->htmlAttribs($hattrs) . '><tr><th colspan="' . ($serviceAPayer->isDomaineFonctionnelModifiable() ? 4 : 3) . '">' . $typeHeures->getLibelleLong() . '</th></tr><tr>';
         $out .= '<th style="width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
         $out .= '<th>Centre de coûts</th>';
         if ($serviceAPayer->isDomaineFonctionnelModifiable()) {
@@ -326,7 +327,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
                 $title[] = $periode . ' : ' . strip_tags(\UnicaenApp\Util::formattedNumber($heures)) . ' hetd mis en paiement';
             }
             $title = implode('&#13;', $title);
-            $out   .= '<tr><td class="nombre"><abbr title="' . $title . '">' . \UnicaenApp\Util::formattedNumber($params['heures-mep']) . '</td><td>HETD déjà mises en paiement</td><td></td></tr>';
+            $out .= '<tr><td class="nombre"><abbr title="' . $title . '">' . \UnicaenApp\Util::formattedNumber($params['heures-mep']) . '</td><td>HETD déjà mises en paiement</td><td></td></tr>';
         }
         $out .= '<tfoot>';
 
@@ -383,11 +384,11 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
 
     protected function getServiceAPayerParams(ServiceAPayerInterface $serviceAPayer, TypeHeures $typeHeures)
     {
-        $defaultCentreCout         = $serviceAPayer->getDefaultCentreCout($typeHeures);
+        $defaultCentreCout = $serviceAPayer->getDefaultCentreCout($typeHeures);
         $defaultDomaineFonctionnel = $serviceAPayer->getDefaultDomaineFonctionnel($this->getServiceDomaineFonctionnel());
 
 
-        $params    = [
+        $params = [
             'centres-cout'                => [],
             'structure-id'                => $serviceAPayer->getStructure()->getId(),
             'domaines-fonctionnels'       => $serviceAPayer->isDomaineFonctionnelModifiable() ? $this->getDomainesFonctionnels() : null,
@@ -402,17 +403,18 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
             'mep-defaults'                => [
                 'formule-resultat-service-id'             => $serviceAPayer instanceof FormuleResultatService ? $serviceAPayer->getId() : null,
                 'formule-resultat-service-referentiel-id' => $serviceAPayer instanceof FormuleResultatServiceReferentiel ? $serviceAPayer->getId() : null,
+                'mission-id'                              => $serviceAPayer instanceof Mission ? $serviceAPayer->getId() : null,
                 'type-heures-id'                          => $typeHeures->getId(),
             ],
         ];
         $mepBuffer = [];
 
         $ccCount = 0;
-        $ccLast  = null;
+        $ccLast = null;
         foreach ($serviceAPayer->getCentreCout() as $centreCout) {
             if ($centreCout->typeHeuresMatches($typeHeures)) {
                 $ccCount++;
-                $ccLast                          = $centreCout->getId();
+                $ccLast = $centreCout->getId();
                 $params['centres-cout'][$ccLast] = [
                     'libelle'           => (string)$centreCout,
                     'type-ressource-id' => $centreCout->getTypeRessource()->getId(),
@@ -446,7 +448,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
                     ];
                 }
                 $mepBuffer[$pp->getId()]['heures'] += $miseEnPaiement->getHeures(); // mise en buffer pour tri...
-                $params['heures-mep']              += $miseEnPaiement->getHeures();
+                $params['heures-mep'] += $miseEnPaiement->getHeures();
             } else {
                 $domaineFonctionnel = $miseEnPaiement->getDomaineFonctionnel();
 
@@ -463,7 +465,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
                     ];
                 }
                 $params['demandes-mep'][$miseEnPaiement->getId()] = $dmepParams;
-                $params['heures-dmep']                            += $miseEnPaiement->getHeures();
+                $params['heures-dmep'] += $miseEnPaiement->getHeures();
             }
         }
         $params['heures-non-dmep'] = (float)$params['heures-total'] - (float)$params['heures-mep'] - (float)$params['heures-dmep'];

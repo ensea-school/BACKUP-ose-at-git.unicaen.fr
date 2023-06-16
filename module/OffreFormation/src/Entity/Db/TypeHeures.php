@@ -17,6 +17,7 @@ class TypeHeures implements HistoriqueAwareInterface
     const FC          = 'fc';
     const FC_MAJOREES = 'fc_majorees';
     const REFERENTIEL = 'referentiel';
+    const MISSION     = 'mission';
 
     /**
      * @var string

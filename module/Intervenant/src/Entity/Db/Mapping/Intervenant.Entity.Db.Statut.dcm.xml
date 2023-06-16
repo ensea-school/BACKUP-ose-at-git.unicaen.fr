@@ -101,6 +101,7 @@
         <field name="modificationServiceDu" type="boolean" column="MODIF_SERVICE_DU" nullable="false"/>
         <field name="modificationServiceDuVisualisation" type="boolean" column="MODIF_SERVICE_DU_VISUALISATION" nullable="false"/>
 
+        <field name="paiement" type="boolean" column="PAIEMENT" nullable="false"/>
         <field name="paiementVisualisation" type="boolean" column="PAIEMENT_VISUALISATION" nullable="false"/>
         <field name="motifNonPaiement" type="boolean" column="MOTIF_NON_PAIEMENT" nullable="false"/>
         <field name="formuleVisualisation" type="boolean" column="FORMULE_VISUALISATION" nullable="false"/>

@@ -2,216 +2,141 @@
 
 namespace Paiement\Entity\Db;
 
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\FormuleResultatService;
 use Application\Entity\Db\FormuleResultatServiceReferentiel;
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Periode;
+use Application\Entity\Db\Structure;
+use Mission\Entity\Db\Mission;
 
-/**
- * TblPaiement
- */
+
 class TblPaiement
 {
-    /**
-     * @var integer
-     */
-    private $id;
+    private int $id;
 
-    /**
-     * @var FormuleResultatService
-     */
-    private $formuleResultatService;
+    private Annee $annee;
 
-    /**
-     * @var FormuleResultatServiceReferentiel
-     */
-    private $formuleResultatServiceReferentiel;
+    private Intervenant $intervenant;
 
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
+    private Structure $structure;
 
-    /**
-     * @var \Application\Entity\Db\Periode
-     */
-    private $periodePaiement;
+    private ?FormuleResultatService $formuleResultatService = null;
 
-    /**
-     * @var \Paiement\Entity\Db\MiseEnPaiement
-     */
-    private $miseEnPaiement;
+    private ?FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null;
 
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    private $intervenant;
+    private ?Mission $mission = null;
 
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
+    private ?Periode $periodePaiement = null;
 
-    /**
-     * @var float
-     */
-    private $heuresAPayer;
+    private ?MiseEnPaiement $miseEnPaiement = null;
 
-    /**
-     * @var float
-     */
-    private $heuresAPayerPond;
+    private float $heuresAPayer = 0;
 
-    /**
-     * @var float
-     */
-    private $heuresDemandees;
+    private float $heuresAPayerPond = 0;
 
-    /**
-     * @var float
-     */
-    private $heuresPayees;
+    private float $heuresDemandees = 0;
+
+    private float $heuresPayees = 0;
 
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
 
 
-    /**
-     * @return FormuleResultatService
-     */
-    public function getFormuleResultatService()
+    public function getFormuleResultatService(): ?FormuleResultatService
     {
         return $this->formuleResultatService;
     }
 
 
 
-    /**
-     * @return FormuleResultatServiceReferentiel
-     */
-    public function getFormuleResultatServiceReferentiel()
+    public function getFormuleResultatServiceReferentiel(): ?FormuleResultatServiceReferentiel
     {
         return $this->formuleResultatServiceReferentiel;
     }
 
 
 
-    /**
-     *
-     * @return ServiceAPayerInterface
-     */
-    public function getServiceAPayer()
+    public function getMission(): ?Mission
+    {
+        return $this->mission;
+    }
+
+
+
+    public function getServiceAPayer(): ServiceAPayerInterface
     {
         if ($this->formuleResultatService) return $this->formuleResultatService;
         if ($this->formuleResultatServiceReferentiel) return $this->formuleResultatServiceReferentiel;
+        if ($this->mission) return $this->mission;
 
         return null;
     }
 
 
 
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure
-     */
-    public function getStructure()
+    public function getStructure(): Structure
     {
         return $this->structure;
     }
 
 
 
-    /**
-     * Get periodePaiement
-     *
-     * @return \Application\Entity\Db\Periode
-     */
-    public function getPeriodePaiement()
+    public function getPeriodePaiement(): ?Periode
     {
         return $this->periodePaiement;
     }
 
 
 
-    /**
-     * Get miseEnPaiement
-     *
-     * @return \Paiement\Entity\Db\MiseEnPaiement
-     */
-    public function getMiseEnPaiement()
+    public function getMiseEnPaiement(): ?MiseEnPaiement
     {
         return $this->miseEnPaiement;
     }
 
 
 
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\Intervenant
-     */
-    public function getIntervenant()
+    public function getIntervenant(): Intervenant
     {
         return $this->intervenant;
     }
 
 
 
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee
-     */
-    public function getAnnee()
+    public function getAnnee(): Annee
     {
         return $this->annee;
     }
 
 
 
-    /**
-     * @return float
-     */
-    public function getHeuresAPayer()
+    public function getHeuresAPayer(): float
     {
         return $this->heuresAPayer;
     }
 
 
 
-    /**
-     * @return float
-     */
-    public function getHeuresAPayerPond()
+    public function getHeuresAPayerPond(): float
     {
         return $this->heuresAPayerPond;
     }
 
 
 
-    /**
-     * @return float
-     */
-    public function getHeuresDemandees()
+    public function getHeuresDemandees(): float
     {
         return $this->heuresDemandees;
     }
 
 
 
-    /**
-     * @return float
-     */
-    public function getHeuresPayees()
+    public function getHeuresPayees(): float
     {
         return $this->heuresPayees;
     }

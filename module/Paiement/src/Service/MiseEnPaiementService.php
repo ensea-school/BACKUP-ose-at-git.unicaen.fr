@@ -12,6 +12,7 @@ use Application\Service\Traits\FormuleResultatServiceServiceAwareTrait;
 use Application\Util;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Entity\Db\TypeIntervenant;
+use Mission\Service\MissionServiceAwareTrait;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiement;
@@ -33,6 +34,7 @@ class MiseEnPaiementService extends AbstractEntityService
     use TypeHeuresServiceAwareTrait;
     use FormuleResultatServiceServiceAwareTrait;
     use FormuleResultatServiceReferentielServiceAwareTrait;
+    use MissionServiceAwareTrait;
 
 
     /**
@@ -565,23 +567,27 @@ class MiseEnPaiementService extends AbstractEntityService
         }
 
         if (isset($data['centre-cout-id'])) {
-            $object->setCentreCout($this->getServiceCentreCout()->get((integer)$data['centre-cout-id']));
+            $object->setCentreCout($this->getServiceCentreCout()->get((int)$data['centre-cout-id']));
         }
 
         if (isset($data['domaine-fonctionnel-id'])) {
-            $object->setDomaineFonctionnel($this->getServiceDomaineFonctionnel()->get((integer)$data['domaine-fonctionnel-id']));
+            $object->setDomaineFonctionnel($this->getServiceDomaineFonctionnel()->get((int)$data['domaine-fonctionnel-id']));
         }
 
         if (isset($data['formule-resultat-service-id'])) {
-            $object->setFormuleResultatService($this->getServiceFormuleResultatService()->get((integer)$data['formule-resultat-service-id']));
+            $object->setFormuleResultatService($this->getServiceFormuleResultatService()->get((int)$data['formule-resultat-service-id']));
         }
 
         if (isset($data['formule-resultat-service-referentiel-id'])) {
-            $object->setFormuleResultatServiceReferentiel($this->getServiceFormuleResultatServiceReferentiel()->get((integer)$data['formule-resultat-service-referentiel-id']));
+            $object->setFormuleResultatServiceReferentiel($this->getServiceFormuleResultatServiceReferentiel()->get((int)$data['formule-resultat-service-referentiel-id']));
+        }
+
+        if (isset($data['mission-id'])) {
+            $object->setMission($this->getServiceMission()->get((int)$data['mission-id']));
         }
 
         if (isset($data['type-heures-id'])) {
-            $object->setTypeHeures($this->getServiceTypeHeures()->get((integer)$data['type-heures-id']));
+            $object->setTypeHeures($this->getServiceTypeHeures()->get((int)$data['type-heures-id']));
         }
     }
 

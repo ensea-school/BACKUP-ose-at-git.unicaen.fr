@@ -103,7 +103,18 @@ class EtatSortieService extends AbstractEntityService
             $__PHP__CODE__TRAITEMENT__ = $etatSortie->getPdfTraitement();
             // Isolation de traitement pour éviter tout débordement...
             $traitement = function () use ($document, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {
-                eval($__PHP__CODE__TRAITEMENT__);
+                $dir = getcwd();
+
+                if (\AppConfig::inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')){
+                    $filename = getcwd().'/code/'.substr($__PHP__CODE__TRAITEMENT__,strlen('UnicaenCode:')).'.php';
+                    if (file_exists($filename)){
+                        require $filename;
+                    }else{
+                        die('Fichier "'.$filename.'" introuvable');
+                    }
+                }else{
+                    eval($__PHP__CODE__TRAITEMENT__);
+                }
 
                 return $data;
             };

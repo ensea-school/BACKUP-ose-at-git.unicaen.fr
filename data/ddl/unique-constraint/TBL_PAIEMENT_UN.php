@@ -11,6 +11,7 @@ return [
         'MISE_EN_PAIEMENT_ID',
         'FORMULE_RES_SERVICE_ID',
         'FORMULE_RES_SERVICE_REF_ID',
+        'MISSION_ID',
     ],
 ];
 

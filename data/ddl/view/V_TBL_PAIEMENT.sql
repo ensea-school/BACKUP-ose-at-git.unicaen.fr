@@ -5,6 +5,7 @@ SELECT
   service_referentiel_id,
   formule_res_service_id,
   formule_res_service_ref_id,
+  NULL mission_id,
   intervenant_id,
   structure_id,
   mise_en_paiement_id,
@@ -140,3 +141,32 @@ FROM
   LEFT JOIN mise_en_paiement                mep ON mep.formule_res_service_ref_id = frs.id
                                                AND mep.histo_destruction IS NULL
 ) t
+
+UNION ALL
+
+SELECT
+  tm.annee_id                                 annee_id,
+  NULL                                        service_id,
+  NULL                                        service_referentiel_id,
+  NULL                                        formule_res_service_id,
+  NULL                                        formule_res_service_ref_id,
+  tm.mission_id                               mission_id,
+  tm.intervenant_id                           intervenant_id,
+  tm.structure_id                             structure_id,
+  mep.id                                      mise_en_paiement_id,
+  mep.periode_paiement_id                     periode_paiement_id,
+  mep.domaine_fonctionnel_id                  domaine_fonctionnel_id,
+  tm.heures_realisees_validees                heures_a_payer,
+  COUNT(*) OVER(PARTITION BY tm.id)           heures_a_payer_pond,
+  COALESCE(mep.heures,0)                      heures_demandees,
+  CASE WHEN mep.periode_paiement_id IS NULL THEN 0 ELSE mep.heures END heures_payees,
+  0.4                                         pourc_exercice_aa,
+  0.6                                         pourc_exercice_ac,
+  COALESCE(mep.heures,0) * 0.4                heures_aa,
+  COALESCE(mep.heures,0) * 0.6                heures_ac
+FROM
+  tbl_mission tm
+  LEFT JOIN mise_en_paiement                mep ON mep.mission_id = tm.mission_id
+                                               AND mep.histo_destruction IS NULL
+WHERE
+  tm.heures_realisees_validees > 0

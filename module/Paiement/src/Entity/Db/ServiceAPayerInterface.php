@@ -3,142 +3,108 @@
 namespace Paiement\Entity\Db;
 
 use Application\Entity\Db\DomaineFonctionnel;
-use Application\Entity\Db\FormuleResultatService;
 use Application\Entity\Db\Intervenant;
-use Paiement\Entity\Db\MiseEnPaiementListe;
+use Doctrine\Common\Collections\Collection;
+use Paiement\Entity\MiseEnPaiementListe;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Structure;
 use OffreFormation\Entity\Db\TypeHeures;
 
 /**
- * Interface des entités possédant une gestion d'historique.
- *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 interface ServiceAPayerInterface
 {
-    /**
-     * Get Id
-     * 
-     * @return integer
-     */
-    public function getId();
+    /* Méthodes communes */
+
+    public function getId(): ?int;
+
+
+
+    public function getStructure(): ?Structure;
+
+
+
+    public function getIntervenant(): ?Intervenant;
+
+
+
+    /* Récupération des heures */
+
+    public function getHeuresComplFi(): float;
+
+
+
+    public function getHeuresComplFa(): float;
+
+
+
+    public function getHeuresComplFc(): float;
+
+
+
+    public function getHeuresComplFcMajorees(): float;
+
+
+
+    public function getHeuresComplReferentiel(): float;
+
+
+
+    public function getHeuresMission(): float;
+
+
+
+    public function getHeuresCompl(TypeHeures $typeHeures): float;
+
+
+
+    /* Gestion des mises en paiement*/
+
+    public function addMiseEnPaiement(MiseEnPaiement $miseEnPaiement): self;
+
+
+
+    public function removeMiseEnPaiement(MiseEnPaiement $miseEnPaiement): self;
+
+
 
     /**
-     * Get heuresComplFi
-     *
-     * @return float 
+     * @return Collection|MiseEnPaiement[]
      */
-    public function getHeuresComplFi();
+    public function getMiseEnPaiement(): Collection;
+
+
+
+    public function getMiseEnPaiementListe(\DateTime $dateMiseEnPaiement = null, Periode $periodePaiement = null): MiseEnPaiementListe;
+
+
+
+    /* Gestion des centres de coûts */
 
     /**
-     * Get heuresComplFc
-     *
-     * @return float
+     * @param TypeHeures|null $typeHeures
+     * @return Collection|CentreCout[]
      */
-    public function getHeuresComplFc();
+    public function getCentreCout(TypeHeures $typeHeures = null): Collection;
 
-    /**
-     * Get heuresComplFcMajorees
-     *
-     * @return float
-     */
-    public function getHeuresComplFcMajorees();
 
-    /**
-     * Get heuresComplFa
-     *
-     * @return float
-     */
-    public function getHeuresComplFa();
 
-    /**
-     * Get heuresComplReferentiel
-     *
-     * @return float
-     */
-    public function getHeuresComplReferentiel();
+    public function getDefaultCentreCout(TypeHeures $typeHeures): ?CentreCout;
 
-    /**
-     *
-     * @param TypeHeures $typeHeures
-     * @return float
-     * @throws \RuntimeException
-     */
-    public function getHeuresCompl( TypeHeures $typeHeures );
 
-    /**
-     * Add miseEnPaiement
-     *
-     * @param MiseEnPaiement $miseEnPaiement
-     * @return FormuleResultatService
-     */
-    public function addMiseEnPaiement(MiseEnPaiement $miseEnPaiement);
 
-    /**
-     * Remove miseEnPaiement
-     *
-     * @param MiseEnPaiement $miseEnPaiement
-     */
-    public function removeMiseEnPaiement(MiseEnPaiement $miseEnPaiement);
+    /* Gestion des domaines fonctionnels */
 
-    /**
-     * Get miseEnPaiement
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMiseEnPaiement();
+    public function getDefaultDomaineFonctionnel(): ?DomaineFonctionnel;
 
-    /**
-     * @return MiseEnPaiementListe
-     */
-    public function getMiseEnPaiementListe( \DateTime $dateMiseEnPaiement=null, Periode $periodePaiement=null );
 
-    /**
-     * Get centreCout
-     *
-     * @param TypeHeures $typeHeures
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCentreCout( TypeHeures $typeHeures=null );
 
-    /**
-     *
-     * @param TypeHeures $typeHeures
-     * @return CentreCout|null
-     */
-    public function getDefaultCentreCout( TypeHeures $typeHeures );
+    public function isDomaineFonctionnelModifiable(): bool;
 
-    /**
-     *
-     * @return DomaineFonctionnel|null
-     */
-    public function getDefaultDomaineFonctionnel();
 
-    /**
-     * @return boolean
-     */
-    public function isDomaineFonctionnelModifiable();
 
-    /**
-     * @return Structure
-     */
-    public function getStructure();
+    /* Détermine si c'est payable ou non */
 
-    /**
-     * @return Intervenant
-     */
-    public function getIntervenant();
-
-    /**
-     * Get formuleResultat
-     *
-     * @return \Application\Entity\Db\FormuleResultat
-     */
-    public function getFormuleResultat();
-
-    /**
-     * @return boolean
-     */
-    public function isPayable();
+    public function isPayable(): bool;
 }

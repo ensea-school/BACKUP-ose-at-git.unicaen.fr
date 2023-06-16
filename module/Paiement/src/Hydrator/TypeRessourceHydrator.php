@@ -25,6 +25,7 @@ class TypeRessourceHydrator implements HydratorInterface
         $object->setFc($data['fc']);
         $object->setFcMajorees($data['fc_majore']);
         $object->setReferentiel($data['referentiel']);
+        $object->setMission($data['mission']);
         $object->setEtablissement($data['etablissement']);
 
         return $object;
@@ -50,6 +51,7 @@ class TypeRessourceHydrator implements HydratorInterface
             'fc'            => $object->getFc(),
             'fc_majore'     => $object->getFcMajorees(),
             'referentiel'   => $object->getReferentiel(),
+            'mission'       => $object->getMission(),
             'etablissement' => $object->getEtablissement(),
         ];
 

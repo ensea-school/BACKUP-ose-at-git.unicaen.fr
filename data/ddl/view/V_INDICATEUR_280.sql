@@ -5,8 +5,8 @@ SELECT
 FROM
     tbl_candidature tc
 WHERE
-	tc.candidature_id IS NOT null
-	AND tc.validation_id IS NULL
+  tc.candidature_id IS NOT NULL
+  AND tc.validation_id IS NULL
 GROUP BY
   tc.intervenant_id,
   tc.annee_id,

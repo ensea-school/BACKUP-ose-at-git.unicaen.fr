@@ -5,6 +5,7 @@ namespace Paiement\Service;
 use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractService;
 use Paiement\Entity\Db\ServiceAPayerInterface;
+use Paiement\Entity\Db\TblPaiement;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
@@ -30,6 +31,25 @@ class ServiceAPayerService extends AbstractService
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
+
+        $dql = "
+        SELECT
+            tp
+        FROM
+            ".TblPaiement::class." tp
+        WHERE
+            tp. intervenant = :intervenant
+        ";
+        /** @var TblPaiement[] $meps */
+        $meps = $this->getEntityManager()->createQuery($dql)->setParameters(['intervenant' => $intervenant])->getResult();
+
+        $saps = [];
+        foreach( $meps as $mep ){
+            $sap = $mep->getServiceAPayer();
+            $sapId = get_class($sap).'@'.$sap->getId();
+            $saps[$sapId] = $sap;
+        }
+        return $saps;
 
         $frsList = $intervenant
             ->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire)

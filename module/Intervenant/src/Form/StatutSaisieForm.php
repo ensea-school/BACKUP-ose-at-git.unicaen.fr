@@ -55,7 +55,7 @@ class StatutSaisieForm extends AbstractForm
             'serviceExterieur'              => 'L\'intervenant pourra assurer des services dans d\'autres établissements',
             'cloture'                       => 'Le service réalisé devra être clôturé avant d\'accéder aux demandes de mise en paiement',
             'modificationServiceDu'         => 'Modifications de service dû',
-            'paiementVisualisation'         => 'Visibilité par l\'intervenant des mises en paiement',
+            'paiement'                      => '',
             'motifNonPaiement'              => 'Le gestionnaire peut déclarer des heures comme non payables',
             'formuleVisualisation'          => 'Visibilité par l\'intervenant du détail des heures pour le calcul des HETD',
             'tauxRemu'                      => 'Taux de rémunération',
@@ -75,6 +75,7 @@ class StatutSaisieForm extends AbstractForm
             'referentielPrevu',
             'referentielRealise',
             'mission',
+            'paiement',
         ];
 
         $ignored = [
@@ -231,16 +232,21 @@ class StatutSaisieForm extends AbstractForm
 
 
         foreach ($dveElements as $dveElement) {
+            $valueOptions = [
+                'desactive'     => 'Désactivé',
+                'active'        => 'Activé mais non visible par l\'intervenant',
+                'visualisation' => 'Activé et visible par l\'intervenant',
+                'edition'       => 'Activé et modifiable par l\'intervenant',
+            ];
+            if ($dveElement == 'paiement'){
+                unset($valueOptions['edition']);
+            }
+
             $this->spec([$dveElement => [
                 'type'     => 'Select',
                 'name'     => $dveElement,
                 'options'  => [
-                    'value_options' => [
-                        'desactive'     => 'Désactivé',
-                        'active'        => 'Activé mais non visible par l\'intervenant',
-                        'visualisation' => 'Activé et visible par l\'intervenant',
-                        'edition'       => 'Activé et modifiable par l\'intervenant',
-                    ],
+                    'value_options' => $valueOptions,
                 ],
                 'hydrator' => [
                     'getter' => function (Statut $statut, string $name) {
@@ -248,7 +254,7 @@ class StatutSaisieForm extends AbstractForm
 
                         $access = $statut->{$getter}();
                         $visu   = $statut->{$getter . 'Visualisation'}();
-                        $edit   = $statut->{$getter . 'Edition'}();
+                        $edit   = method_exists($statut, $getter . 'Edition') ?$statut->{$getter . 'Edition'}() : false;
 
                         if ($edit && $visu && $access) {
                             return 'edition';
@@ -275,7 +281,9 @@ class StatutSaisieForm extends AbstractForm
                         $setter = 'set' . ucfirst($name);
                         $statut->{$setter}($access);
                         $statut->{$setter . 'Visualisation'}($visu);
-                        $statut->{$setter . 'Edition'}($edit);
+                        if (method_exists($statut,$setter . 'Edition')) {
+                            $statut->{$setter . 'Edition'}($edit);
+                        }
                     },
                 ],
             ]]);

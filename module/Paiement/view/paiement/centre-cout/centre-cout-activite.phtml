@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var $listeActivites \Paiement\Entity\Db\CcActivite[]
+ */
+
 use Application\Provider\Privilege\Privileges;
 
 $this->headTitle()->append("Types d'activité des centres de coûts");
@@ -19,6 +23,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::BUDGET_CC_ACTI
         <th>FC</th>
         <th>FC Majorée</th>
         <th>Référentiel</th>
+        <th>Mission</th>
         <?php if ($canEdit): ?>
             <th>Actions</th>
         <?php endif; ?>
@@ -36,6 +41,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::BUDGET_CC_ACTI
             <td><?= ($activite->getFc()) ? 'OUI' : 'NON'; ?></td>
             <td><?= ($activite->getFcMajorees()) ? 'OUI' : 'NON'; ?></td>
             <td><?= ($activite->getReferentiel()) ? 'OUI' : 'NON'; ?></td>
+            <td><?= ($activite->getMission()) ? 'OUI' : 'NON'; ?></td>
             <?php if ($canEdit): ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">
                     <a class="ajax-modal"

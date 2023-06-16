@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Enseignement\Entity\Db\Service;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\CentreCoutEp;
 use OffreFormation\Entity\Db\TypeHeures;
@@ -9,29 +11,32 @@ use OffreFormation\Service\DomaineFonctionnelService;
 use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\ServiceAPayerTrait;
+use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 /**
- * FormuleResultatService
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class FormuleResultatService implements ServiceAPayerInterface, ResourceInterface
 {
     use FormuleResultatTypesHeuresTrait;
     use ServiceAPayerTrait;
 
-    /**
-     * @var \Enseignement\Entity\Db\Service
-     */
-    private $service;
+    private FormuleResultat $formuleResultat;
+
+    private Service $service;
 
 
 
-    /**
-     *
-     * @param TypeHeures $typeHeures
-     *
-     * @return CentreCout|null
-     */
-    public function getDefaultCentreCout(TypeHeures $typeHeures)
+    public function __construct()
+    {
+        $this->miseEnPaiement = new ArrayCollection();
+        $this->centreCout = new ArrayCollection();
+    }
+
+
+
+    public function getDefaultCentreCout(TypeHeures $typeHeures): ?CentreCout
     {
         $element = $this->getService()->getElementPedagogique();
         if (!$element) return null;
@@ -47,11 +52,7 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
 
 
 
-    /**
-     *
-     * @return DomaineFonctionnel|null
-     */
-    public function getDefaultDomaineFonctionnel(DomaineFonctionnelService $serviceDomaineFonctionnel = null)
+    public function getDefaultDomaineFonctionnel(DomaineFonctionnelService $serviceDomaineFonctionnel = null): ?DomaineFonctionnel
     {
         $element = $this->getService()->getElementPedagogique();
         if (!$element) {
@@ -67,32 +68,21 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
 
 
 
-    /**
-     * @return boolean
-     */
-    public function isDomaineFonctionnelModifiable()
+    public function isDomaineFonctionnelModifiable(): bool
     {
         return $this->getService()->getElementPedagogique() === null;
     }
 
 
 
-    /**
-     * Get Service
-     *
-     * @return \Enseignement\Entity\Db\Service
-     */
-    public function getService()
+    public function getService(): Service
     {
         return $this->service;
     }
 
 
 
-    /**
-     * @return Structure
-     */
-    public function getStructure()
+    public function getStructure(): ?Structure
     {
         $service = $this->getService();
         if ($service->getElementPedagogique()) {
@@ -104,12 +94,33 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
 
 
 
-    /**
-     * @return Intervenant
-     */
-    public function getIntervenant()
+    public function getIntervenant(): ?Intervenant
     {
         return $this->getService()->getIntervenant();
+    }
+
+
+
+    public function getFormuleResultat(): FormuleResultat
+    {
+        return $this->formuleResultat;
+    }
+
+
+
+    public function isPayable(): bool
+    {
+        $fr = $this->getFormuleResultat();
+
+        return $fr->getTypeVolumeHoraire()->getCode() === TypeVolumeHoraire::CODE_REALISE
+            && $fr->getEtatVolumeHoraire()->getCode() === EtatVolumeHoraire::CODE_VALIDE;
+    }
+
+
+
+    public function getHeuresMission(): float
+    {
+        return 0;
     }
 
 

@@ -25,6 +25,7 @@
         <field name="heuresFormation" type="float" column="HEURES_FORMATION" precision="126" scale="0" nullable="true"/>
         <field name="description" type="string" column="DESCRIPTION" length="4000" nullable="true"/>
         <field name="etudiantsSuivis" type="string" column="ETUDIANTS_SUIVIS" length="4000" nullable="true"/>
+        <one-to-many field="miseEnPaiement" target-entity="Paiement\Entity\Db\MiseEnPaiement" mapped-by="mission" />
 
         <many-to-many field="etudiants" target-entity="Application\Entity\Db\Intervenant">
             <join-table name="MISSION_ETUDIANT">
@@ -50,6 +51,17 @@
         </many-to-many>
         <one-to-many field="volumesHoraires" target-entity="Mission\Entity\Db\VolumeHoraireMission" mapped-by="mission">
         </one-to-many>
+
+        <many-to-many field="centreCout" target-entity="Paiement\Entity\Db\CentreCout">
+            <join-table name="V_MISSION_CENTRE_COUT">
+                <join-columns>
+                    <join-column name="MISSION_ID" referenced-column-name="ID" unique="true"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
 
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">

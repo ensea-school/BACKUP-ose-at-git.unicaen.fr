@@ -60,12 +60,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
     RETURN '20' || ose_paiement.annee_extraction_paie || '-' || ose_paiement.mois_extraction_paie;
   END;
 
-  Function get_taux_horaire (id_in IN NUMBER, date_val IN DATE) RETURN float IS
-    valeur float;
-    valeur_parent float;
+  FUNCTION get_taux_horaire (id_in IN NUMBER, date_val IN DATE) RETURN FLOAT IS
+    valeur FLOAT;
+    valeur_parent FLOAT;
   BEGIN
 
-    SELECT valeur into valeur FROM
+    SELECT valeur INTO valeur FROM
     (
         SELECT trv.valeur
         FROM taux_remu tr
@@ -94,10 +94,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
             ORDER BY trv.date_effet DESC
         )
         WHERE rownum = 1
-    ) into valeur_parent
+    ) INTO valeur_parent
     FROM dual;
 
-    IF valeur_parent is NULL
+    IF valeur_parent IS NULL
     THEN
         RETURN valeur;
     ELSE
@@ -111,11 +111,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
 
 
 
-  Function get_taux_horaire_date (id_in IN NUMBER, date_val IN DATE) RETURN DATE IS
+  FUNCTION get_taux_horaire_date (id_in IN NUMBER, date_val IN DATE) RETURN DATE IS
     date_valeur DATE;
     date_parent DATE;
   BEGIN
-    SELECT date_effet into date_valeur FROM
+    SELECT date_effet INTO date_valeur FROM
     (
         SELECT trv.date_effet
         FROM taux_remu tr
@@ -144,10 +144,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
             ORDER BY trv.date_effet DESC
         )
         WHERE rownum = 1
-    ) into date_parent
+    ) INTO date_parent
     FROM dual;
 
-        IF date_parent is NULL
+        IF date_parent IS NULL
     THEN
         RETURN date_valeur;
     ELSE

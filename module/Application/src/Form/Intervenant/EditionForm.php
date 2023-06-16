@@ -368,8 +368,7 @@ class EditionForm extends AbstractForm
     public function getStructures(): array
     {
         $serviceStructure = $this->getServiceStructure();
-        $qb               = $serviceStructure->finderByEnseignement();
-        $serviceStructure->finderByHistorique($qb);
+        $qb = $serviceStructure->finderByHistorique();
 
         return $serviceStructure->getList($qb);
     }

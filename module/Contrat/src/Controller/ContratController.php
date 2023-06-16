@@ -639,6 +639,7 @@ class ContratController extends AbstractController
         $this->getServiceWorkflow()->calculerTableauxBord([
             'formule',
             'contrat',
+            'mission',
         ], $intervenant);
     }
 }

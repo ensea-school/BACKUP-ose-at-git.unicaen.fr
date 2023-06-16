@@ -25,7 +25,14 @@ $dossierAdresse = $form->get('DossierAdresse');
             <?php endif; ?>
         </div>
         <div class="card-body">
-
+            <?php if (!empty($tblDossier)): ?>
+                <?php if (!$tblDossier->getCompletudeAdresse()): ?>
+                    <div class="messenger alert alert-secondary ">
+                        Pour compléter votre adresse vous devez renseigner au minimum le champs complément d'adresse ou renseigner votre numéro de rue pour
+                        avoir une adresse valide.
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
             <?= $this->formControlGroup($dossierAdresse->get('lieuDit')); ?>
             <div class="row">
                 <div class="col-md-2">

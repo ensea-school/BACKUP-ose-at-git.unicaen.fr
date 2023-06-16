@@ -494,7 +494,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
     public function canSaisie(): bool
     {
-        return !$this->isValide();
+        return true;
     }
 
 
@@ -508,7 +508,10 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
     public function canValider(): bool
     {
-        return !$this->isValide();
+        return
+            !$this->isValide()
+            && $this->tauxRemu != null
+            && $this->getHeures() > 0;
     }
 
 

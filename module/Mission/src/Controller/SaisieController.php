@@ -145,8 +145,15 @@ class SaisieController extends AbstractController
 
         $form = $this->getFormMission();
 
+        if ($mission->isValide()){
+            $form->editValide();
+        }
+
         if ($this->getServiceContext()->getStructure()) {
             $form->remove('structure');
+            if (!$mission->getStructure()){
+                $mission->setStructure($this->getServiceContext()->getStructure());
+            }
         }
 
         $hDeb = $mission->getHeures();
@@ -186,15 +193,19 @@ class SaisieController extends AbstractController
         /** @var Mission $mission */
         $mission = $this->getEvent()->getParam('mission');
 
-        $this->getProcessusPlafond()->beginTransaction();
-        try {
-            $this->getServiceMission()->delete($mission);
-            $this->updateTableauxBord($mission);
-            $this->flashMessenger()->addSuccessMessage("Mission supprimée avec succès.");
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translate($e));
+        if ($mission->canSupprimer()){
+            $this->getProcessusPlafond()->beginTransaction();
+            try {
+                $this->getServiceMission()->delete($mission);
+                $this->updateTableauxBord($mission);
+                $this->flashMessenger()->addSuccessMessage("Mission supprimée avec succès.");
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
+            $this->getProcessusPlafond()->endTransaction($mission, $typeVolumeHoraire, true);
+        }else{
+            $this->flashMessenger()->addErrorMessage('Vous n\'avez pas la possibilité de supprimer cette mission : elle a déjà été validée ou a fait l\'objet d\'un contrat');
         }
-        $this->getProcessusPlafond()->endTransaction($mission, $typeVolumeHoraire, true);
 
         return new AxiosModel([]);
     }

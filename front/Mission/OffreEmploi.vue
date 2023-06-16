@@ -1,20 +1,20 @@
 <template>
 
-    <div class="col" v-if="!this.extended && offre.canVisualiser">
+    <div v-if="!this.extended" class="col">
         <div class="card h-100">
             <div class="card-header">
                 <h4> {{ offre.titre }}</h4>
                 <span class="badge rounded-pill bg-info">{{ offre.nombreHeures }} heure(s)</span> &nbsp;
-                <span v-if="nbPostesRestants > 0" class="badge rounded-pill bg-success">{{ nbPostesRestants }} poste(s) restant(s)</span>&nbsp;
-                <span v-if="nbPostesRestants <= 0" class="badge rounded-pill bg-danger">Tous les postes sont pourvus</span>&nbsp;
-                <span v-if="offre.validation" class="badge rounded-pill bg-success">Valider le <u-date
-                        :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}</span>
+                <!--                <span v-if="nbPostesRestants > 0" class="badge rounded-pill bg-success">{{ nbPostesRestants }} poste(s) restant(s)</span>&nbsp;
+                                <span v-if="nbPostesRestants <= 0" class="badge rounded-pill bg-danger">Tous les postes sont pourvus</span>&nbsp;-->
+                <span v-if="offre.validation" class="badge rounded-pill bg-success">Validée le <u-date
+                    :value="offre.validation.histoCreation"/> par {{ offre.validation.histoCreateur.displayName }}</span>
                 <span v-if="!offre.validation" class="badge rounded-pill bg-warning"> En attente de validation par la DRH</span>&nbsp;
             </div>
 
             <div class="card-body">
                 <p class="bg-light" style="padding:5px;">
-                    <b>Crée le : </b>
+                    <b>Créée le : </b>
                     <u-date :value="offre.histoCreation"/>
                     par {{ offre.histoCreateur.displayName }}<br/>
                     <b>Période à pourvoir : </b>du
@@ -22,7 +22,7 @@
                     au
                     <u-date :value="offre.dateFin"/>
                     <br/>
-                    <b>Demandé par la composante :</b> {{ offre.structure.libelleCourt }}
+                    <b>Demandée par la composante :</b> {{ offre.structure.libelleCourt }}
                     <br/>
                     <b>Type de mission :</b> {{ offre.typeMission.libelle }}
 
@@ -34,8 +34,8 @@
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
 
                     <a :href="consulterUrl"
-                       title="Consulter "
                        class="btn btn-primary"
+                       title="Consulter "
                     >
                         <u-icon name="eye"/>
                         Voir
@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-    <div v-if="this.extended && offre.canVisualiser">
+    <div v-if="this.extended">
         <h1 class="page-header">{{ offre.titre }}</h1>
         <div v-if="!this.utilisateur" class="alert alert-primary d-flex align-items-center" role="alert">
             <i class="fa-solid fa-user"></i>
@@ -65,20 +65,18 @@
                 Vous avez déjà postulé à cette offre.
             </div>
         </div>
-        <div v-if="!isCandidat && nbPostesRestants <= 0" class="alert alert-primary d-flex align-items-center" role="alert">
-            <i class="fa-solid fa-circle-xmark"></i>
-            <div class="ms-2">
-                Tous les postes pour cette offre ont été pourvu.
-            </div>
-        </div>
+
         <p class="bg-light" style="padding:10px;">
-            <b>Crée le : </b>
+            <b>Créée le : </b>
             <u-date :value="offre.histoCreation"/>
             par {{ offre.histoCreateur.displayName }}<br/>
             <b>Période à pourvoir : </b>du
             <u-date :value="offre.dateDebut"/>
             au
             <u-date :value="offre.dateFin"/>
+            <br/>
+            <b>Date limite de candidature :</b>
+            <u-date :value="offre.dateLimite"/>
             <br/>
             <b>Demandé par la composante :</b> {{ offre.structure.libelleCourt }}
             <br/>
@@ -90,17 +88,15 @@
             <br/>
 
         </p>
-
-        {{ offre.description }}
-        <br/><br/>
-        <div v-if="this.canVoirCandidature">
+        <p v-html="descriptionHtml"></p>
+        <br/>
+        <div v-if="this.canValiderCandidature">
             <h5><strong>Liste des candidats :</strong></h5>
 
             <table class="table table-bordered ">
                 <thead>
                 <tr>
                     <th>Intervenant</th>
-                    <th>Composante</th>
                     <th>Etat</th>
                     <th v-if="canValiderCandidature">Action</th>
                 </tr>
@@ -111,27 +107,28 @@
                     <td v-if="!canValiderCandidature" colspan="3" style="text-align:center;">Aucune candidature</td>
                 </tr>
                 <tr v-for="candidature in offre.candidatures">
-                    <td><a :href="'/intervenant/code:' + candidature.intervenant.code + '/voir'">
+                    <td><a :href="urlVoir(candidature)">
                         {{ candidature.intervenant.prenom+' '+candidature.intervenant.nomUsuel }}</a></td>
-                    <td>{{ candidature.intervenant.structure.libelleLong }}</td>
-                    <th> <span v-if="candidature.validation" class="badge rounded-pill bg-success">Accepter le <u-date
-                            :value="candidature.validation.histoCreation"/> par {{
+                    <td> <span v-if="candidature.validation" class="badge rounded-pill bg-success">Acceptée le <u-date
+                        :value="candidature.validation.histoCreation"/> par {{
                             candidature.validation.histoCreateur.displayName
                         }}</span>
-                        <span v-if="!candidature.validation" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
-                    </th>
+                        <span v-if="!candidature.validation && candidature.motif !== null" class="badge rounded-pill bg-danger">{{ candidature.motif }}</span>
+                        <span v-if="!candidature.validation && candidature.motif === null" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
+                    </td>
                     <td v-if="this.canValiderCandidature">
-                        <a :href="'/offre-emploi/accepter-candidature/' + candidature.id" v-if="!candidature.validation"
-                           title="Accepter la candidature"
+                        <a v-if="!candidature.validation" :href="urlAccepterCandidature(candidature)"
                            class="btn btn-success"
+                           data-content="Êtes vous sûr de vouloir accepter cette candidature ?"
                            data-title="Accepter la candidature"
-                           data-content="Etes vous sûre de vouloir accepter cette candidature ?"
+                           title="Accepter la candidature"
                            @click.prevent="validerCandidature">Accepter </a>&nbsp;
-                        <a :href="'/offre-emploi/refuser-candidature/' + candidature.id"
-                           title="Refuser la candidature"
+                        <a v-if="!candidature.motif && candidature.validation"
+                           :href="urlRefuserCandidature(candidature)"
                            class="btn btn-danger"
+                           data-content="Êtes vous sûr de vouloir refuser cette candidature ?"
                            data-title="Refuser la candidature"
-                           data-content="Etes vous sûre de vouloir refuser cette candidature ?"
+                           title="Refuser la candidature"
                            @click.prevent="refuserCandidature">Refuser </a>
                     </td>
                 </tr>
@@ -142,14 +139,16 @@
 
 
         <div class="mt-5">
-            <a class="btn btn-primary" href="/offre-emploi">Retour aux offres</a>&nbsp;
-            <a v-if="this.canPostuler" :href="'/offre-emploi/postuler/' + offre.id" data-bs-toggle="tooltip" data-bs-placement="top"
-               data-bs-original-title="Vous devez être connecté pour postuler">Postuler</a>&nbsp;
+            <a :href="offreEmploiUrl" class="btn btn-secondary">Retour aux offres</a>&nbsp;
+            <a v-if="this.canPostuler" :href="postulerUrl" class="btn btn-primary"
+               data-bs-original-title="Vous devez être connecté pour postuler"
+               data-bs-placement="top"
+               data-bs-toggle="tooltip">Postuler</a>&nbsp;
             <a v-if="offre.canModifier"
                :href="saisirUrl"
                class="btn btn-primary"
-               @click.prevent="saisir"
-               title="Modifier">
+               title="Modifier"
+               @click.prevent="saisir">
                 <u-icon name="pen-to-square"/>
                 Modifier
             </a>&nbsp;
@@ -172,9 +171,9 @@
             <a v-if="offre.canSupprimer"
                :href="supprimerUrl"
                class="btn btn-danger"
-               title="Supprimer"
-               data-title="Suppression de l'offre"
                data-content="Êtes-vous sur de vouloir supprimer l'offre ?"
+               data-title="Suppression de l'offre"
+               title="Supprimer"
                @click.prevent="supprimer">
                 <u-icon name="trash"/>
                 Supprimer
@@ -211,6 +210,9 @@ export default {
             validerUrl: unicaenVue.url('offre-emploi/valider/:offre', {offre: this.offre.id}),
             devaliderUrl: unicaenVue.url('offre-emploi/devalider/:offre', {offre: this.offre.id}),
             consulterUrl: unicaenVue.url('offre-emploi/detail/:offre', {offre: this.offre.id}),
+            offreEmploiUrl: unicaenVue.url('offre-emploi'),
+            postulerUrl: unicaenVue.url('offre-emploi/postuler/:id', {id: this.offre.id})
+
 
         };
     },
@@ -219,18 +221,22 @@ export default {
             return false;
         },
         shortDesc: function () {
-            var shorDesc = this.offre.description.substr(0, 200);
+            let shorDesc = this.offre.description.substr(0, 200);
             if (this.offre.description.length > 200) {
                 shorDesc += '...';
             }
             return shorDesc;
         },
-        connectionLink: function () {
-            return '/auth/connexion?redirect='+window.location.href;
+        descriptionHtml: function () {
+            return this.offre.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
         },
-        nbPostesRestants: function () {
-            return this.offre.nombrePostes-this.offre.candidaturesValides.length;
-        }
+        connectionLink: function () {
+            let url = 'auth/connexion?redirect='+window.location.href;
+            return unicaenVue.url(url);
+
+        },
+
+
     },
 
     methods: {
@@ -239,6 +245,15 @@ export default {
             modAjax(event.target, (widget) => {
                 this.refresh();
             });
+        },
+        urlVoir: function (candidature) {
+            return unicaenVue.url('intervenant/:code/voir', {code: 'code:'+candidature.intervenant.code})
+        },
+        urlAccepterCandidature: function (candidature) {
+            return unicaenVue.url('offre-emploi/accepter-candidature/:id', {id: candidature.id})
+        },
+        urlRefuserCandidature: function (candidature) {
+            return unicaenVue.url('offre-emploi/refuser-candidature/:id', {id: candidature.id})
         },
         refresh()
         {
@@ -273,6 +288,12 @@ export default {
             });
         },
         validerCandidature(event)
+        {
+            popConfirm(event.currentTarget, (response) => {
+                this.$emit('refresh', response.data);
+            });
+        },
+        refuserCandidature(event)
         {
             popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);

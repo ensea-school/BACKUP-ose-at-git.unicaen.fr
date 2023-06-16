@@ -13,6 +13,14 @@ use UnicaenVue\Axios\AxiosExtractorInterface;
 
 class Candidature implements HistoriqueAwareInterface, ResourceInterface
 {
+    const MODELE_MAIL_ACCEPTATION = 'candidature_modele_acceptation_mail';
+
+    const MODELE_MAIL_REFUS = 'candidature_modele_refus_mail';
+
+    const OBJET_MAIL_ACCEPTATION = 'candidature_modele_acceptation_mail_objet';
+
+    const OBJET_MAIL_REFUS = 'candidature_modele_refus_mail_objet';
+
     use HistoriqueAwareTrait;
     use StructureAwareTrait;
 
@@ -28,7 +36,7 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    public function getResourceId()
+    public function getResourceId ()
     {
         return 'Candidature';
     }
@@ -40,14 +48,14 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return 'Candidature ' . $this->getId();
     }
 
 
 
-    public function getId(): ?int
+    public function getId (): ?int
     {
         return $this->id;
     }
@@ -57,7 +65,7 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @return Intervenant
      */
-    public function getIntervenant(): Intervenant
+    public function getIntervenant (): Intervenant
     {
         return $this->intervenant;
     }
@@ -67,7 +75,7 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @param Intervenant $intervenant
      */
-    public function setIntervenant(Intervenant $intervenant): self
+    public function setIntervenant (Intervenant $intervenant): self
     {
         $this->intervenant = $intervenant;
 
@@ -79,7 +87,7 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @return OffreEmploi
      */
-    public function getOffre(): OffreEmploi
+    public function getOffre (): OffreEmploi
     {
         return $this->offre;
     }
@@ -89,7 +97,7 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @param OffreEmploi $offre
      */
-    public function setOffre(OffreEmploi $offre): self
+    public function setOffre (OffreEmploi $offre): self
     {
         $this->offre = $offre;
 
@@ -98,29 +106,7 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * @return ?Validation
-     */
-    public function getValidation(): ?Validation
-    {
-        return $this->validation;
-    }
-
-
-
-    /**
-     * @param Validation $validation
-     */
-    public function setValidation(Validation $validation): self
-    {
-        $this->validation = $validation;
-
-        return $this;
-    }
-
-
-
-    public function isValide(): bool
+    public function isValide (): bool
     {
 
         if ($validation = $this->getValidation()) {
@@ -133,9 +119,31 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
+     * @return ?Validation
+     */
+    public function getValidation (): ?Validation
+    {
+        return $this->validation;
+    }
+
+
+
+    /**
+     * @param ?Validation $validation
+     */
+    public function setValidation (?Validation $validation): self
+    {
+        $this->validation = $validation;
+
+        return $this;
+    }
+
+
+
+    /**
      * @return string|null
      */
-    public function getMotif(): ?string
+    public function getMotif (): ?string
     {
         return $this->motif;
     }
@@ -145,7 +153,7 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @param string|null $motif
      */
-    public function setMotif(?string $motif): self
+    public function setMotif (?string $motif): self
     {
         $this->motif = $motif;
 

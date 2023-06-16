@@ -85,6 +85,10 @@ class SuiviController extends AbstractController
             'description',
             'valide',
             'validation',
+            'canEdit',
+            'canValider',
+            'canDevalider',
+            'canSupprimer',
         ];
 
         $triggers = [
@@ -92,7 +96,7 @@ class SuiviController extends AbstractController
                 $extracted['canEdit'] = $this->isAllowed($original, Privileges::MISSION_EDITION_REALISE);
                 $extracted['canValider'] = $this->isAllowed($original, Privileges::MISSION_VALIDATION_REALISE);
                 $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION_REALISE);
-                $extracted['canSupprimer'] = $this->isAllowed($original, Privileges::MISSION_EDITION_REALISE);
+                $extracted['canSupprimer'] = $extracted['canSupprimer'] && $this->isAllowed($original, Privileges::MISSION_EDITION_REALISE);
 
                 return $extracted;
             },

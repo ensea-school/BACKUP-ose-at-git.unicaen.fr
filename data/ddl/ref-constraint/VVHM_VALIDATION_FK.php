@@ -6,7 +6,7 @@ return [
     'name'        => 'VVHM_VALIDATION_FK',
     'table'       => 'VALIDATION_VOL_HORAIRE_MISS',
     'rtable'      => 'VALIDATION',
-    'delete_rule' => NULL,
+    'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [
         'VALIDATION_ID' => 'ID',

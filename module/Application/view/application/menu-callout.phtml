@@ -10,6 +10,7 @@ use Laminas\Navigation\Page\Mvc;
 
 $rubriques = [];
 
+
 foreach ($container as $page) {
     if ($this->navigation()->accept($page)) {
         $rubrique = [
@@ -35,6 +36,7 @@ foreach ($container as $page) {
         $rubriques[] = $rubrique;
     }
 }
+
 
 //var_dump($rubriques);
 

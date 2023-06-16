@@ -1,27 +1,27 @@
 <template>
     <!--On affiche une synthèse de la liste des offres-->
     <div v-if="!extended" class="row row-cols-1 row-cols-md-2 g-4 mb-3">
-        <offreEmploi v-for="offre in offres" @supprimer="supprimer" @refresh="refresh" :key="offre.id" :offre="offre"
-                     :canModifier="this.canModifier"
-                     :canValider="this.canValider"
-                     :canSupprimer="this.canSupprimer"
-                     :canVoirCandidature="this.canVoirCandidature"></offreEmploi>
+        <offreEmploi v-for="offre in offres" :key="offre.id" :canModifier="this.canModifier" :canSupprimer="this.canSupprimer" :canValider="this.canValider"
+                     :canVoirCandidature="this.canVoirCandidature"
+                     :offre="offre"
+                     @refresh="refresh"
+                     @supprimer="supprimer"></offreEmploi>
     </div>
     <div v-if="!extended">
-        <a v-if="this.canModifier" class=" btn btn-primary" :href="ajoutUrl" @click.prevent="ajout">Ajouter une nouvelle offre</a>
+        <a v-if="this.canModifier" :href="ajoutUrl" class=" btn btn-primary" @click.prevent="ajout">Ajouter une nouvelle offre</a>
     </div>
 
     <!--On affiche une synthèse de la liste des offres-->
     <div v-if="extended">
-        <offreEmploi v-for="offre in offres" :key="offre.id" :offre="offre" @refresh="refresh" @supprimer="supprimer"
-                     :canPostuler="this.canPostuler"
-                     :canModifier="this.canModifier"
+        <offreEmploi v-for="offre in offres" :key="offre.id" :canModifier="this.canModifier" :canPostuler="this.canPostuler" :canSupprimer="this.canSupprimer"
                      :canValider="this.canValider"
-                     :canSupprimer="this.canSupprimer"
-                     :canVoirCandidature="this.canVoirCandidature"
                      :canValiderCandidature="this.canValiderCandidature"
+                     :canVoirCandidature="this.canVoirCandidature"
                      :extended="extended"
-                     :utilisateur="this.utilisateur"></offreEmploi>
+                     :offre="offre"
+                     :utilisateur="this.utilisateur"
+                     @refresh="refresh"
+                     @supprimer="supprimer"></offreEmploi>
     </div>
 
 </template>
@@ -77,20 +77,18 @@ export default {
             modAjax(event.target, (widget) => {
                 this.reload();
             });
-        }
-        ,
+        },
         supprimer()
         {
-            this.reload();
-        }
-        ,
+            window.location.href = unicaenVue.url("offre-emploi");
+
+        },
 
         refresh(offre)
         {
             let index = Util.json.indexById(this.offres, offre.id);
             this.offres[index] = offre;
-        }
-        ,
+        },
 
         reload()
         {
@@ -110,11 +108,10 @@ export default {
 
                 });
             }
-            console.log(this.offres);
 
 
         }
-        ,
+
     }
 }
 </script>

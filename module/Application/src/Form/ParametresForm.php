@@ -4,6 +4,7 @@ namespace Application\Form;
 
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\Parametre;
+use Paiement\Entity\Db\TauxRemu;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
@@ -382,7 +383,7 @@ class ParametresForm extends AbstractForm
         $this->add([
             'type'       => 'Time',
             'name'       => 'horaire_nocturne',
-            'options' => [
+            'options'    => [
                 'label' => "Horaire nocturne",
             ],
             'attributes' => [
@@ -391,10 +392,23 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'type'       => 'Select',
+            'name'       => 'taux-remu',
+            'options'    => [
+                'label' => "Taux de rémunération par défaut",
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+        ]);
+        $this->setValueOptions('taux-remu', 'SELECT t FROM ' . TauxRemu::class . ' t WHERE t.histoDestruction IS NULL ORDER BY t.libelle');
+
+        $this->add([
             'type'       => 'Text',
             'name'       => 'taux_conges_payes',
             'options'    => [
-                'label' => "Taux pour prise en compte des congés payés",
+                'label'  => "Taux pour prise en compte des congés payés",
                 'suffix' => '%',
             ],
             'attributes' => [
@@ -453,6 +467,61 @@ class ParametresForm extends AbstractForm
             'type'       => 'Textarea',
             'options'    => [
                 'label' => 'Corps du mail envoyé aux intervenants lorsqu\'on leur transmet leur contrat',
+
+            ],
+            'attributes' => [
+                'rows' => 12,
+            ],
+        ]);
+
+        $this->add([
+            'name'    => 'candidature_modele_acceptation_mail_objet',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Objet du mail d\'acceptation',
+
+            ],
+
+        ]);
+
+        $this->add([
+            'name'    => 'candidature_modele_refus_mail_objet',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Objet du mail de refus',
+
+            ],
+
+        ]);
+
+        $this->add([
+            'name'    => 'candidature_mail_expediteur',
+            'type'    => Element\Email::class,
+            'options' => [
+                'label' => 'Expéditeur du mail (si vide, l\'email de l\'utilisateur sera utilisé)',
+
+            ],
+
+        ]);
+
+        $this->add([
+            'name'       => 'candidature_modele_acceptation_mail',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Corps du mail envoyé aux candidats dont la candidature est acceptée',
+
+            ],
+            'attributes' => [
+                'rows' => 12,
+            ],
+        ]);
+
+
+        $this->add([
+            'name'       => 'candidature_modele_refus_mail',
+            'type'       => 'Textarea',
+            'options'    => [
+                'label' => 'Corps du mail envoyé aux candidats dont la candidature est refusée',
 
             ],
             'attributes' => [

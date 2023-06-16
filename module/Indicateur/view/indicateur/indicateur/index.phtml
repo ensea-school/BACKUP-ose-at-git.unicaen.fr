@@ -47,7 +47,11 @@ $noAbo = new \Indicateur\Entity\Db\NotificationIndicateur();
                     /* @var $indicateur Indicateur */
                     $abonnement = $indicateur->getNotification()->first() ?: $noAbo;
                     $urlAbonner = $this->url('indicateur/abonner', ['indicateur' => $indicateur->getId()]);
-                    $urlResult = $this->url('indicateur/result', ['indicateur' => $indicateur->getId()]);
+                    if ($indicateur->isSpecial()){
+                        $urlResult = $this->url($indicateur->getRoute());
+                    }else{
+                        $urlResult = $this->url('indicateur/result', ['indicateur' => $indicateur->getId()]);
+                    }
 
                     ?>
                     <tr class="indicateur" id="<?= $indicateur->getId() ?>"

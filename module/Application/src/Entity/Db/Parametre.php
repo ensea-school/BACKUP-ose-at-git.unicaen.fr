@@ -20,6 +20,10 @@ class Parametre implements HistoriqueAwareInterface
     const CONTRAT_DIRECT = 'contrat_direct';
     const CONTRAT_DATE   = 'contrat_date';
 
+
+    const SERVICES_MODALITE_SEMESTRIEL = 'semestriel';
+    const SERVICES_MODALITE_CALENDAIRE = 'calendaire';
+
     use HistoriqueAwareTrait;
 
     /**

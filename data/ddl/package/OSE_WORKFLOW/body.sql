@@ -350,6 +350,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     p VARCHAR2(30);
     dems CLOB;
     intervenant CLOB;
+    candidature CLOB;
     mission CLOB;
     dossier CLOB;
     service_saisie CLOB;
@@ -363,6 +364,9 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     contrat CLOB;
   BEGIN
     dems := '
+        WHEN e.code = ''CANDIDATURE_SAISIE'' OR e.code = ''CANDIDATURE_VALIDATION'' THEN
+          si.offre_emploi_postuler
+
         WHEN e.code = ''MISSION_SAISIE'' OR e.code = ''MISSION_VALIDATION'' OR e.code = ''MISSION_SAISIE_REALISE'' OR e.code = ''MISSION_VALIDATION_REALISE'' THEN
           si.mission
 
@@ -422,6 +426,38 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
         ' || unicaen_tbl.MAKE_WHERE(CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, VALUE) || '
     ';
 
+
+
+    candidature := '
+        SELECT
+          ''CANDIDATURE_SAISIE''                               etape_code,
+          c.intervenant_id                                     intervenant_id,
+          c.structure_id                                       structure_id,
+          SUM(1)                                               objectif,
+          SUM(CASE WHEN c.candidature_id IS NULL THEN 0 ELSE 1 END) realisation
+        FROM
+          tbl_candidature c
+        WHERE
+          c.actif = 1
+        GROUP BY
+          c.intervenant_id, c.structure_id
+
+        UNION ALL
+
+        SELECT
+          ''CANDIDATURE_VALIDATION''                           etape_code,
+          c.intervenant_id                                     intervenant_id,
+          c.structure_id                                       structure_id,
+          SUM(CASE WHEN c.candidature_id IS NULL THEN 0 ELSE 1 END) objectif,
+          SUM(c.acceptee)                                      realisation
+        FROM
+          tbl_candidature c
+        WHERE
+          c.actif = 1
+        GROUP BY
+          c.intervenant_id, c.structure_id
+
+    ';
 
 
     mission := '
@@ -792,7 +828,8 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       JOIN statut                  si ON si.id = i.statut_id
       JOIN type_intervenant        ti ON ti.id = si.type_intervenant_id
       JOIN wf_etape                 e ON 1 = CASE ' || dems || ' END
-      LEFT JOIN ( ' || dossier || '
+      LEFT JOIN ( ' || candidature || '
+        UNION ALL ' || dossier || '
         UNION ALL ' || mission || '
         UNION ALL ' || service_saisie || '
         UNION ALL ' || service_saisie_realise || '

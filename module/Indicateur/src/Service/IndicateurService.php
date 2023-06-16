@@ -9,7 +9,6 @@ use Application\Service\AbstractService;
 use DateTime;
 use Indicateur\Entity\Db\Indicateur;
 use Indicateur\Entity\Db\NotificationIndicateur;
-use phpDocumentor\Reflection\Types\Array_;
 use Plafond\Service\IndicateurServiceAwareTrait as PlafondIndicateurServiceAwareTrait;
 
 

@@ -111,6 +111,60 @@ FROM volume_horaire vh
 GROUP BY s.intervenant_id, ep.structure_id
 
 UNION ALL
+
+--Ajout mission par composante
+SELECT m.intervenant_id                                                                          intervenant_id,
+       '3 - Mission'                                                              categorie,
+       'Modification/Ajout mission pour la composante ' || st.libelle_court || ' : ' || tm.libelle                   label,
+       m.histo_creation                                                                histo_date,
+       m.histo_createur_id                                                             histo_createur_id,
+       u.display_name																		histo_user,
+       'glyphicon glyphicon-ok'                           icon,
+       3                                                                                         ordre
+FROM mission m
+JOIN type_mission tm ON tm.id = m.type_mission_id
+JOIN STRUCTURE st ON st.id = m.structure_id
+JOIN utilisateur u ON u.id = m.histo_modificateur_id
+WHERE m.histo_destructeur_id IS NULL
+
+
+UNION ALL
+
+--Suppression mission par composante
+SELECT m.intervenant_id                                                                  intervenant_id,
+       '3 - Mission'                                                                     categorie,
+       'Suppression mission pour la composante ' || st.libelle_court || ' : ' || tm.libelle                      label,
+       m.histo_destruction                                                               histo_date,
+       m.histo_destructeur_id											 			     histo_createur_id,
+       u.display_name 													   			     histo_user,
+       'glyphicon glyphicon-ok'                                                          icon,
+       3                                                                                 ordre
+FROM mission m
+JOIN type_mission tm ON tm.id = m.type_mission_id
+JOIN STRUCTURE st ON st.id = m.structure_id
+JOIN utilisateur u ON u.id = m.histo_modificateur_id
+WHERE m.histo_destruction IS NOT NULL
+
+UNION ALL
+
+--Validation mission par composante
+SELECT m.intervenant_id                                                                  intervenant_id,
+       '3 - Mission'                                                                     categorie,
+       'Validation mission pour la composante ' || st.libelle_court || ' : ' || tm.libelle                      label,
+       v.histo_modification 															 histo_date,
+       v.histo_modificateur_id 											 			     histo_createur_id,
+       u.display_name 													   			     histo_user,
+       'glyphicon glyphicon-ok'                                                          icon,
+       3                                                                                 ordre
+FROM mission m
+JOIN type_mission tm ON tm.id = m.type_mission_id
+JOIN validation_mission vm ON vm.mission_id = m.id
+JOIN validation v ON v.id = vm.validation_id
+JOIN STRUCTURE st ON st.id = m.structure_id
+JOIN utilisateur u ON u.id = v.histo_modificateur_id
+WHERE v.histo_destruction IS NULL
+
+UNION ALL
 --Service référentiel uniquement pour les permanents
 SELECT  s.intervenant_id                                                                     intervenant_id,
        '3 - Service prévisionnel et/ou service référentiel'                                 categorie,
@@ -355,7 +409,8 @@ SELECT i.id                                                                     
 FROM validation  v
          JOIN intervenant i ON i.id = v.intervenant_id
          JOIN utilisateur u ON u.id = v.histo_createur_id
-WHERE v.histo_destruction IS NULL
+          JOIN type_validation tv ON tv.id = v.type_validation_id
+WHERE v.histo_destruction IS NULL AND tv.code = 'CLOTURE_REALISE'
 GROUP BY i.id
 
 UNION ALL

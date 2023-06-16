@@ -4,11 +4,11 @@ $dirname    = $oa->getOseDir() . 'data/ddl';
 $colPosFile = $oa->getOseDir() . 'data/ddl_columns_pos.php';
 
 $filters = [
-    'table'              => ['excludes' => ['UNICAEN_%', 'SYS_EXPORT_SCHEMA_%', 'ACT_%']],
-    'sequence'           => ['excludes' => ['UNICAEN_%']],
-    'primary-constraint' => ['excludes' => ['UNICAEN_%', 'ACT_%']],
-    'index'              => ['excludes' => ['UNICAEN_%', 'ACT_%']],
-    'view'               => ['excludes' => ['SRC_%', 'V_DIFF_%', 'V_SYMPA_%', 'V_UNICAEN_%']],
+    'table'              => ['excludes' => ['UNICAEN_ELEMENT_DISCIPLINE', 'UNICAEN_CORRESP_STRUCTURE_CC', 'SYS_EXPORT_SCHEMA_%', 'ACT_%']],
+    'sequence'           => ['excludes' => []],
+    'primary-constraint' => ['excludes' => ['UNICAEN_CORRESP_STR_CC_PK', 'ACT_%']],
+    'index'              => ['excludes' => ['UNICAEN_CORRESP_STR_CC_PK', 'ACT_%']],
+    'view'               => ['excludes' => ['SRC_%', 'V_DIFF_%', 'V_SYMPA_%', 'zV_UNICAEN_%']],
     'materialized-view'  => ['includes' => [
         'MV_EXT_SERVICE',
         'MV_EXT_DOTATION_LIQUIDATION',

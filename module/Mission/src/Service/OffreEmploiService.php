@@ -31,7 +31,7 @@ class OffreEmploiService extends AbstractEntityService
      * @return string
      * @throws \RuntimeException
      */
-    public function getEntityClass(): string
+    public function getEntityClass (): string
     {
         return OffreEmploi::class;
     }
@@ -43,14 +43,14 @@ class OffreEmploiService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias(): string
+    public function getAlias (): string
     {
         return 'oe';
     }
 
 
 
-    public function data(array $parameters, ?Role $role = null)
+    public function data (array $parameters, ?Role $role = null)
     {
 
 
@@ -63,16 +63,20 @@ class OffreEmploiService extends AbstractEntityService
           JOIN oe.structure str
           LEFT JOIN oe.candidatures c  
         WHERE 
-          oe . histoDestruction IS null
+          oe . histoDestruction IS null        
        ";
 
         if (empty($role)) {
             $dql .= " AND oe.validation IS NOT NULL";
+            $dql .= " AND oe.dateLimite >= CURRENT_DATE()";
         }
 
 
         $dql .= dqlAndWhere([
             'offreEmploi' => 'oe',
+            'annee'       => 'tm.annee',
+            'structure'   => 'str',
+
         ], $parameters);
 
         $dql .= " ORDER BY
@@ -81,13 +85,14 @@ class OffreEmploiService extends AbstractEntityService
 
         $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
 
-        $triggers = $this->getOffreEmploiPrivileges();
+        $triggers = $this->getOffreEmploiPrivileges(true);
 
         $properties = [
             'id',
             ['typeMission', ['libelle']],
             'dateDebut',
             'dateFin',
+            'dateLimite',
             ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']],
             'titre',
             'description',
@@ -99,7 +104,103 @@ class OffreEmploiService extends AbstractEntityService
             'candidats',
             'candidaturesValides',
             'valide',
-            ['candidatures', ['id', ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]], 'histoCreation', 'validation']],
+            ['candidatures', ['id', 'motif', ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]], 'histoCreation', 'validation']],
+        ];
+
+
+        return new AxiosModel($query, $properties, $triggers);
+    }
+
+
+
+    public function getOffreEmploiPrivileges (bool $public = false): array
+    {
+
+        if ($public) {
+            return [
+                '/' => function (OffreEmploi $offre, array $extracted) {
+
+                    $extracted['canModifier']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
+                    $extracted['canValider']    = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
+                    $extracted['canPostuler']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
+                    $extracted['canVisualiser'] = true;
+                    $extracted['canSupprimer']  = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION);
+
+                    return $extracted;
+                },
+
+            ];
+        }
+
+
+        return [
+            '/' => function (OffreEmploi $offre, array $extracted) {
+
+                $extracted['canModifier']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
+                $extracted['canValider']    = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
+                $extracted['canPostuler']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
+                $extracted['canVisualiser'] = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
+                $extracted['canSupprimer']  = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION);
+
+                return $extracted;
+            },
+
+        ];
+    }
+
+
+
+    public function dataPublic (array $parameters, ?Role $role = null)
+    {
+
+
+        $dql = "
+        SELECT 
+          oe, tm, str, c
+        FROM 
+          " . OffreEmploi::class . " oe
+          JOIN oe.typeMission tm
+          JOIN oe.structure str
+          JOIN oe.validation v
+          LEFT JOIN oe.candidatures c  
+        WHERE 
+          oe . histoDestruction IS null
+        AND v.histoDestruction IS NULL
+        AND oe.dateLimite >= CURRENT_DATE()
+       ";
+
+        $dql .= dqlAndWhere([
+            'offreEmploi' => 'oe',
+            'annee'       => 'tm.annee',
+        ], $parameters);
+
+        $dql .= " ORDER BY
+          oe . dateDebut
+        ";
+
+
+        $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+
+
+        $triggers = $this->getOffreEmploiPrivileges();
+
+
+        $properties = [
+            'id',
+            ['typeMission', ['libelle']],
+            'dateDebut',
+            'dateFin',
+            'dateLimite',
+            ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']],
+            'titre',
+            'description',
+            'nombreHeures',
+            'nombrePostes',
+            'histoCreation',
+            'histoCreateur',
+            'validation',
+            'valide',
+            'candidaturesValides',
         ];
 
 
@@ -113,32 +214,11 @@ class OffreEmploiService extends AbstractEntityService
      *
      * @return OffreEmploi
      */
-    public function save($entity)
+    public function save ($entity)
     {
         parent::save($entity);
 
         return $entity;
-    }
-
-
-
-    public function getOffreEmploiPrivileges(): array
-    {
-
-
-        return [
-            '/' => function (OffreEmploi $offre, array $extracted) {
-
-                $extracted['canModifier']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
-                $extracted['canValider']    = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
-                $extracted['canPostuler']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
-                $extracted['canVisualiser'] = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION);
-                $extracted['canSupprimer']  = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION);
-
-                return $extracted;
-            },
-
-        ];
     }
 
 }

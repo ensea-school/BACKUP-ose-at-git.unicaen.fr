@@ -4,14 +4,14 @@
     <div class="intervenant-recherche">
         <div class="critere">
             <div>
-                <input id="term" v-on:keyup="rechercher" class="form-control input" type="text"
-                       placeholder="votre recherche..."/><br/>
+                <input id="term" class="form-control input" placeholder="votre recherche..." type="text"
+                       v-on:keyup="rechercher"/><br/>
             </div>
             <div>
                 <span class="fw-bold">Types d'intervenant : </span>
-                <input v-on:change="reload()" type="checkbox" name="type[]" value="permanent" checked="checked" v-model="checkedTypes"> Permanent
-                <input v-on:change="reload()" type="checkbox" name="type[]" value="vacataire" checked="checked" v-model="checkedTypes"> Vacataire
-                <input v-on:change="reload()" type="checkbox" name="type[]" value="etudiant" checked="checked" v-model="checkedTypes"> Etudiant
+                <input v-model="checkedTypes" checked="checked" name="type[]" type="checkbox" value="permanent" v-on:change="reload()"> Permanent
+                <input v-model="checkedTypes" checked="checked" name="type[]" type="checkbox" value="vacataire" v-on:change="reload()"> Vacataire
+                <input v-model="checkedTypes" checked="checked" name="type[]" type="checkbox" value="etudiant" v-on:change="reload()"> Etudiant
 
             </div>
             <br/>
@@ -33,8 +33,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr :class="{'bg-danger': intervenant.destruction!==null}" :title="(intervenant.destruction!==null) ? 'Fiche historisé' : ''"
-            v-for="(intervenant,code) in intervenants">
+        <tr v-for="(intervenant,code) in intervenants" :class="{'bg-danger': intervenant.destruction!==null}"
+            :title="(intervenant.destruction!==null) ? 'Fiche historisé' : ''">
             <td style="">
                 <a :href="urlFiche(intervenant['code'])"><i class="fas fa-eye"></i> Fiche</a>
             </td>
@@ -43,7 +43,9 @@
             <td>{{ intervenant['prenom'] }}</td>
             <td>{{ intervenant['structure'] }}</td>
             <td>{{ intervenant['statut'] }}</td>
-            <td><u-date :value="intervenant['date-naissance']" /></td>
+            <td>
+                <u-date :value="intervenant['date-naissance']"/>
+            </td>
             <td>{{ intervenant['numero-personnel'] }}</td>
         </tr>
 
@@ -65,7 +67,7 @@
         </thead>
         <tbody>
         <tr>
-            <td style="text-align:center" colspan="8">Aucun intervenant trouvé</td>
+            <td colspan="8" style="text-align:center">Aucun intervenant trouvé</td>
         </tr>
 
         </tbody>
@@ -88,7 +90,7 @@ export default {
             checkedTypes: ['vacataire', 'permanent', 'etudiant'],
         };
     },
-    mixins:[Util],
+    mixins: [Util],
     methods: {
         rechercher: function (event)
         {
@@ -103,7 +105,7 @@ export default {
 
         urlFiche(code)
         {
-            return '/intervenant/code:'+code+'/voir';
+            return unicaenVue.url('intervenant/code:'+code+'/voir');
         },
 
         reload()

@@ -1,6 +1,20 @@
 <?php
 
 return [
+    "CANDIDATURE_SAISIE"           => [
+        "LIBELLE_INTERVENANT" => "Je postule à une ou plusieurs offres d'emploi",
+        "LIBELLE_AUTRES"      => "J'accède aux candidatures",
+        "ROUTE"               => "intervenant/candidature",
+        "DESC_NON_FRANCHIE"   => "Aucune candidature n'a été faite",
+        "OBLIGATOIRE"         => true,
+    ],
+    "CANDIDATURE_VALIDATION"                 => [
+        "LIBELLE_INTERVENANT" => "Je visualise la validation de mes candidatures",
+        "LIBELLE_AUTRES"      => "J'accède à la validation des candidatures",
+        "ROUTE"               => "intervenant/candidature",
+        "DESC_NON_FRANCHIE"   => "Certaines candidatures attendent une réponse",
+        "OBLIGATOIRE"         => true,
+    ],
     "DONNEES_PERSO_SAISIE"           => [
         "LIBELLE_INTERVENANT" => "Je saisis mes données personnelles",
         "LIBELLE_AUTRES"      => "J'accède aux données personnelles",

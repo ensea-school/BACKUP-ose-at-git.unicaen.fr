@@ -1,7 +1,5 @@
 CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
 
-  code_taux_remu_legal 	CONSTANT VARCHAR2(3) := 'TLD';
-
   mois_extraction_paie VARCHAR2(50) := '01';
   annee_extraction_paie VARCHAR2(50) := '22';
 
@@ -158,14 +156,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
 
     EXCEPTION
     WHEN OTHERS THEN
-       RETURN to_date('00/00/0000', 'dd/mm/YYYY');
+       RETURN to_date('01/01/0001', 'dd/mm/YYYY');
   END get_taux_horaire_date;
-
-
-
-  FUNCTION get_code_taux_remu_legal RETURN VARCHAR2 IS
-  BEGIN
-    RETURN code_taux_remu_legal;
-  END;
 
 END ose_paiement;

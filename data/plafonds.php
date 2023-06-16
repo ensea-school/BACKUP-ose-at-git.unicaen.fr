@@ -61,6 +61,11 @@ return [
             'perimetre' => 'intervenant',
             'requete'   => file_get_contents($sqlDir . '18.sql'),
         ],
-
+        19 => [
+            'libelle'   => 'Dépassement du seuil des 670 heures d\'emploi étudiant (a. D811-3)',
+            'perimetre' => 'intervenant',
+            'message'   => 'Durée du travail dépassant le maximum autorisé (a. D811-3) pour :sujet',
+            'requete'   => file_get_contents($sqlDir . '19.sql'),
+        ],
     ],
 ];

@@ -114,6 +114,7 @@
         <field name="modeEnseignementPrevisionnel" type="string" column="MODE_ENSEIGNEMENT_PREVISIONNEL" length="1000" nullable="true"/>
         <field name="modeEnseignementRealise" type="string" column="MODE_ENSEIGNEMENT_REALISE" length="1000" nullable="true"/>
 
+
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
             <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>

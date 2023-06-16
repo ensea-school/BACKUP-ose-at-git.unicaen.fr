@@ -10,25 +10,27 @@ use Doctrine\Common\Collections\Collection;
  */
 class Indicateur
 {
-    private int            $id;
+    private int $id;
 
     private TypeIndicateur $typeIndicateur;
 
-    private int            $numero           = 0;
+    private int $numero = 0;
 
-    private bool           $enabled          = true;
+    private bool $enabled = true;
 
-    private int            $ordre            = 0;
+    private int $ordre = 0;
 
-    private string         $libelleSingulier = 'Nouvel indicateur';
+    private string $libelleSingulier = 'Nouvel indicateur';
 
-    private string         $libellePluriel   = 'Nouvel indicateur';
+    private string $libellePluriel = 'Nouvel indicateur';
 
-    private string         $route            = 'intervenant/voir';
+    private string $route = 'intervenant/voir';
 
-    private bool           $irrecevables     = false;
+    private bool $irrecevables = false;
 
-    private Collection     $notification;
+    private Collection $notification;
+
+    private bool $special = false;
 
 
 
@@ -261,6 +263,28 @@ class Indicateur
     public function getNotification()
     {
         return $this->notification;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isSpecial(): bool
+    {
+        return $this->special;
+    }
+
+
+
+    /**
+     * @param bool $special
+     * @return Indicateur
+     */
+    public function setSpecial(bool $special): Indicateur
+    {
+        $this->special = $special;
+        return $this;
     }
 
 

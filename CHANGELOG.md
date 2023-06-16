@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 20.3](#ose-203-23052023)
+[OSE 20.5](#ose-205-07062023)
 
 
 # OSE 21 (juin 2023)
@@ -39,23 +39,20 @@
 ## Corrections de bugs
 
 * Il est possible de rentrer une date de retour sur un contrat après avoir téléversé le contrat sans avoir besoin de recharger la page
-* Correction de la formule de calcul de Lyon 2 
 
 
 
-# OSE 20.4 (début juin 2023)
 
-## Améliorations
+# OSE 20.5 (07/06/2023)
 
-* Modification de la formule de Picardie
+## Correction de bug
 
-## Corrections de bugs
-
-* Formulaire d'édition des états de sortie réparé au niveau de l'affichage des sous-requêtes
-* Formule de Lyon 2 corrigée
+* Correction d'une régression introduite en 20.4 empêchant de saisir ou modifier du référentiel
 
 
-# OSE 20.4 (début juin 2023)
+
+
+# OSE 20.4 (05/06/2023)
 
 ## Corrections de bugs
 
@@ -64,6 +61,7 @@
 * Formulaire d'édition des états de sortie réparé au niveau de l'affichage des sous-requêtes
 * Correction de la formule de Picardie
 * Correction de la formule de calcul de Lyon 2
+* Correction de la formule de Paris 1
 
 
 

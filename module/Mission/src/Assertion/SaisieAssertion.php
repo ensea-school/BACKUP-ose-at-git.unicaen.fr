@@ -91,6 +91,8 @@ class SaisieAssertion extends AbstractAssertion
         // Si le rôle n'est pas renseigné alors on s'en va...
         if (!$role instanceof Role) return false;
 
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+
         switch (true) {
             case $entity instanceof Mission:
                 switch ($privilege) {
@@ -223,6 +225,6 @@ class SaisieAssertion extends AbstractAssertion
         }
 
         // OK si =
-        return $role->getStructure() === $structure;
+        return $role->getStructure()->getId() == $structure->getId();
     }
 }

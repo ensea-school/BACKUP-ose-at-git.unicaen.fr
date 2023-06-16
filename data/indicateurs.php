@@ -1,20 +1,75 @@
 <?php
 
 return [
+    'Missions'             => [
+        'id'          => 18,
+        'indicateurs' => [
+            270 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s offre d\'emploi est en attente de validation pour publication',
+                'libelle_pluriel'   => '%s offres d\'emploi sont en attente de validation pour publication',
+                'route'             => 'offre-emploi',
+                'irrecevables'      => false,
+                'special'           => true,
+            ],
+            280 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant est en attente de validation d\'une candidature',
+                'libelle_pluriel'   => '%s étudiants sont en attente de validation d\'une candidature',
+                'route'             => 'intervenant/candidature',
+                'irrecevables'      => false,
+            ],
+            350 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant est en attente de validation d\'une mission',
+                'libelle_pluriel'   => '%s étudiants sont en attente de validation d\'une mission',
+                'route'             => 'intervenant/missions',
+                'irrecevables'      => false,
+            ],
+            360 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant n\'a saisi aucune heure de suivi de mission',
+                'libelle_pluriel'   => '%s étudiants n\'ont saisi aucune heure de suivi de mission',
+                'route'             => 'intervenant/missions-suivi',
+                'irrecevables'      => false,
+            ],
+            370 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant est en attente de validation d\'heures de suivi de mission',
+                'libelle_pluriel'   => '%s étudiants sont en attente de validation d\'heures de suivi de mission',
+                'route'             => 'intervenant/missions-suivi',
+                'irrecevables'      => false,
+            ],
+            380 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant est en attente de son contrat',
+                'libelle_pluriel'   => '%s étudiants sont en attente de leur contrat',
+                'route'             => 'intervenant/contrat',
+                'irrecevables'      => false,
+            ],
+            390 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant est en attente de son avenant',
+                'libelle_pluriel'   => '%s étudiants sont en attente de leur avenant',
+                'route'             => 'intervenant/contrat',
+                'irrecevables'      => false,
+            ],
+        ],
+    ],
     'Données personnelles' => [
         'id'          => 1,
         'indicateurs' => [
             110 => [
                 'enabled'           => true,
-                'libelle_singulier' => '%s vacataire est en attente de validation de ses données personnelles',
-                'libelle_pluriel'   => '%s vacataires sont en attente de validation de leurs données personnelles',
+                'libelle_singulier' => '%s intervenant est en attente de validation de ses données personnelles',
+                'libelle_pluriel'   => '%s intervenants sont en attente de validation de leurs données personnelles',
                 'route'             => 'intervenant/dossier',
                 'irrecevables'      => false,
             ],
             120 => [
                 'enabled'           => true,
-                'libelle_singulier' => '%s vacataire a saisi des données personnelles qui diffèrent de celles importées',
-                'libelle_pluriel'   => '%s vacataires ont saisi des données personnelles qui diffèrent de celles importées',
+                'libelle_singulier' => '%s intervenant a saisi des données personnelles qui diffèrent de celles importées',
+                'libelle_pluriel'   => '%s intervenants ont saisi des données personnelles qui diffèrent de celles importées',
                 'route'             => 'intervenant/dossier/differences',
                 'irrecevables'      => false,
             ],
@@ -50,6 +105,20 @@ return [
                 'enabled'           => true,
                 'libelle_singulier' => '%s permanent est en attente de validation de ses pièces justificatives obligatoires',
                 'libelle_pluriel'   => '%s permanents sont en attente de validation de leurs pièces justificatives obligatoires',
+                'route'             => 'piece-jointe/intervenant',
+                'irrecevables'      => false,
+            ],
+            250 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant n\'a pas fourni toutes les pièces justificatives obligatoires',
+                'libelle_pluriel'   => '%s étudiants n\'ont pas fourni toutes les pièces justificatives obligatoires',
+                'route'             => 'piece-jointe/intervenant',
+                'irrecevables'      => false,
+            ],
+            260 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant est en attente de validation de ses pièces justificatives obligatoires',
+                'libelle_pluriel'   => '%s étudiants sont en attente de validation de leurs pièces justificatives obligatoires',
                 'route'             => 'piece-jointe/intervenant',
                 'irrecevables'      => false,
             ],
@@ -360,6 +429,20 @@ return [
                 'route'             => 'paiement/etat-demande-paiement',
                 'irrecevables'      => false,
             ],
+//            950 => [
+//                'enabled'           => true,
+//                'libelle_singulier' => '%s étudiant peut faire l\'objet d\'une demande de mise en paiement',
+//                'libelle_pluriel'   => '%s étudiants peuvent faire l\'objet d\'une demande de mise en paiement',
+//                'route'             => 'intervenant/mise-en-paiement/demande',
+//                'irrecevables'      => false,
+//            ],
+//            960 => [
+//                'enabled'           => true,
+//                'libelle_singulier' => '%s étudiant peut faire l\'objet d\'une mise en paiement',
+//                'libelle_pluriel'   => '%s étudiants peuvent faire l\'objet d\'une mise en paiement',
+//                'route'             => 'paiement/etat-demande-paiement',
+//                'irrecevables'      => false,
+//            ],
         ],
     ],
 

@@ -19,7 +19,7 @@
                 <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="offre" target-entity="Mission\Entity\Db\OffreEmploi" fetch="EAGER">
+        <many-to-one field="offre" target-entity="Mission\Entity\Db\OffreEmploi" inversed-by="candidatures">
             <join-columns>
                 <join-column name="OFFRE_EMPLOI_ID" referenced-column-name="ID"/>
             </join-columns>

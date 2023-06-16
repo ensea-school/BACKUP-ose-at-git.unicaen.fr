@@ -24,7 +24,7 @@
                                 <div class="form-control">{{ mission.tauxRemu ? mission.tauxRemu.libelle : null }}</div>
                             </div>
                             <div class="col-md-6">
-                                <label class=" form-label">Taux majoré (dimanches/jf)</label>
+                                <label class=" form-label">Taux majoré (dimanches/jours fériés)</label>
                                 <div class="form-control">
                                     {{ mission.tauxRemuMajore ? mission.tauxRemuMajore.libelle : mission.tauxRemu ? 'Idem (' +mission.tauxRemu.libelle+')' : null }}
                                 </div>
@@ -227,7 +227,7 @@ export default {
             } else if (this.mission.heuresValidees == 0) {
                 return Util.formattedHeures(this.mission.heures) + ' heures (non validées)';
             } else {
-                return Util.formattedHeures(this.mission.heures) + ' heures (' + Util.formattedHeures(this.mission.heuresValidees) + ' validées)';
+                return '<span class="bg-info">'+Util.formattedHeures(this.mission.heures) + '</span> heures (' + Util.formattedHeures(this.mission.heuresValidees) + ' validées)';
             }
         }
     },

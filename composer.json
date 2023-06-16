@@ -19,7 +19,8 @@
         "unicaen/tbl"                                 : "6.0.1",
         "unicaen/open-document"                       : "6.0.2",
         "unicaen/siham"                               : "6.0.2",
-        "unicaen/vue"                                 : "dev-master",
+        "unicaen/mail"                                : "6.0.6",
+        "unicaen/vue"                                 : "6.0.0",
         "laminas/laminas-cache-storage-adapter-memory": "2.1.x-dev",
         "laminas/laminas-text"                        : "2.10.x-dev"
     },

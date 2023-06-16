@@ -15,6 +15,12 @@ return [
             'privileges'    => Privileges::MISSION_VISUALISATION_TYPE,
             'may_terminate' => true,
             'child_routes'  => [
+                'visualiser'    => [
+                    'route'      => '/visualiser[/:typeMission]',
+                    'controller' => Controller\MissionTypeController::class,
+                    'action'     => 'visualiser',
+                    'privileges' => Privileges::MISSION_VISUALISATION_TYPE,
+                ],
                 'saisir'    => [
                     'route'      => '/saisir[/:typeMission]',
                     'controller' => Controller\MissionTypeController::class,

@@ -20,6 +20,8 @@ use Intervenant\Service\NoteServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 use LogicException;
+use Mission\Entity\Db\Candidature;
+use Mission\Service\CandidatureServiceAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
@@ -60,6 +62,7 @@ class  IntervenantController extends AbstractController
     use DifferentielServiceAwareTrait;
     use NoteServiceAwareTrait;
     use DossierServiceAwareTrait;
+    use CandidatureServiceAwareTrait;
 
 
     public function indexAction()
@@ -130,6 +133,37 @@ class  IntervenantController extends AbstractController
         $this->addIntervenantRecent($intervenant);
 
         return compact('intervenant', 'tab', 'notificationNote');
+    }
+
+
+
+    public function candidatureAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant introuvable');
+        }
+
+
+        return compact('intervenant');
+    }
+
+
+
+    public function getCandidaturesAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant introuvable');
+        }
+        /**
+         * @var Intervenant $intervenant
+         */
+        $candidatures = $this->getServiceCandidature()->data(['intervenant' => $intervenant]);
+
+
+        return $candidatures;
     }
 
 
@@ -353,7 +387,8 @@ class  IntervenantController extends AbstractController
 
         $intSuppr = $this->getProcessusIntervenant()->suppression($intervenant);
 
-        if ($ids = $this->params()->fromPost('ids')) {
+        $ids = $intSuppr->idsFromPost($this->params()->fromPost('ids'));
+        if ($ids) {
             try {
                 if (!empty($ids)) {
                     $res = $intSuppr->delete($ids);

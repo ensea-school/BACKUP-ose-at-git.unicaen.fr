@@ -33,7 +33,7 @@ class MissionService extends AbstractEntityService
      * @return string
      * @throws \RuntimeException
      */
-    public function getEntityClass(): string
+    public function getEntityClass (): string
     {
         return Mission::class;
     }
@@ -45,14 +45,14 @@ class MissionService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias(): string
+    public function getAlias (): string
     {
         return 'm';
     }
 
 
 
-    public function data(array $parameters): AxiosModel
+    public function data (array $parameters): AxiosModel
     {
         $dql = "
         SELECT 
@@ -71,7 +71,7 @@ class MissionService extends AbstractEntityService
           m.histoDestruction IS NULL 
           " . dqlAndWhere([
                 'intervenant' => 'm.intervenant',
-                'mission' => 'm',
+                'mission'     => 'm',
             ], $parameters) . "
         ORDER BY
           m.dateDebut,
@@ -82,7 +82,7 @@ class MissionService extends AbstractEntityService
 
         $properties = [
             'id',
-            ['typeMission', ['libelle', 'accompagnementEtudiants','besoinFormation']],
+            ['typeMission', ['libelle', 'accompagnementEtudiants', 'besoinFormation']],
             'dateDebut',
             'dateFin',
             ['structure', ['libelle']],
@@ -106,7 +106,6 @@ class MissionService extends AbstractEntityService
                 'histoCreation',
                 'histoCreateur',
             ]],
-            //['etudiants', ['id', 'code', 'nomUsuel', 'prenom', 'dateNaissance']],
             'etudiantsSuivis',
             'contrat',
             'valide',
@@ -119,20 +118,20 @@ class MissionService extends AbstractEntityService
         ];
 
         $triggers = [
-            '/' => function (Mission $original, array $extracted) {
-                $extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+            '/'                      => function (Mission $original, array $extracted) {
+                $extracted['canSaisie']    = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
                 $extracted['canAddHeures'] = $this->getAuthorize()->isAllowed($original, SaisieAssertion::CAN_ADD_HEURES);
-                $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
                 $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canSupprimer'] = $extracted['canSupprimer'] && $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
 
                 return $extracted;
             },
             '/volumesHorairesPrevus' => function ($original, $extracted) {
-                //$extracted['canSaisie'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
-                $extracted['canValider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
+                //$extracted['canSaisie'] &= $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canValider']   = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_VALIDATION);
                 $extracted['canDevalider'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_DEVALIDATION);
-                $extracted['canSupprimer'] = $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
+                $extracted['canSupprimer'] = $extracted['canSupprimer'] && $this->getAuthorize()->isAllowed($original, Privileges::MISSION_EDITION);
 
                 return $extracted;
             },
@@ -143,31 +142,39 @@ class MissionService extends AbstractEntityService
 
 
 
-    /**
-     * @param Mission $entity
-     *
-     * @return Mission
-     */
-    public function save($entity)
+    public function deleteVolumeHoraire (VolumeHoraireMission $volumeHoraireMission): self
     {
-        foreach ($entity->getVolumesHorairesPrevus() as $vh) {
-            $this->saveVolumeHoraire($vh);
-        }
+        $volumeHoraireMission->historiser();
+        $this->saveVolumeHoraire($volumeHoraireMission);
 
-        parent::save($entity);
-
-        return $entity;
+        return $this;
     }
 
 
 
-    public function saveVolumeHoraire(VolumeHoraireMission $vhm): self
+    public function saveVolumeHoraire (VolumeHoraireMission $vhm): self
     {
         if (!$vhm->getTypeVolumeHoraire()) {
             $vhm->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
         }
         if (!$vhm->getSource()) {
             $vhm->setSource($this->getServiceSource()->getOse());
+        }
+
+        if ($vhm->getTypeVolumeHoraire()->isRealise() && $vhm->estNonHistorise()) {
+            if ($vhm->getHoraireFin() < $vhm->getMission()->getDateDebut()) {
+                throw new \Exception('La date renseignée est antérieure au début de la mission');
+            }
+            $dateFin = $vhm->getMission()->getDateFin()->modify('+1 day'); // jour de fin révolu
+            if ($vhm->getHoraireDebut() > $dateFin) {
+                throw new \Exception('La date renseignée est postérieure à la fin de la mission');
+            }
+
+            $now = new \DateTime();
+            $now->modify('+10 minutes'); // tolérance de 10 minutes
+            if ($vhm->getHoraireFin() > $now){
+                throw new \Exception('Vous ne pouvez saisir de suivi avant qu\'il ne soit terminé');
+            }
         }
 
         $this->getEntityManager()->persist($vhm);
@@ -178,28 +185,41 @@ class MissionService extends AbstractEntityService
 
 
 
-    public function deleteVolumeHoraire(VolumeHoraireMission $volumeHoraireMission): self
-    {
-        $volumeHoraireMission->historiser();
-        $this->saveVolumeHoraire($volumeHoraireMission);
-
-        return $this;
-    }
-
-
-
-    public function createMissionFromCandidature(Candidature $candidature): ?Mission
+    public function createMissionFromCandidature (Candidature $candidature): ?Mission
     {
         $mission = $this->newEntity();
+        $mission->setEntityManager($this->getEntityManager());
         $mission->setIntervenant($candidature->getIntervenant());
         $mission->setTypeMission($candidature->getOffre()->getTypeMission());
+        $mission->setTauxRemu($candidature->getOffre()->getTypeMission()->getTauxRemu());
+        $mission->setTauxRemuMajore($candidature->getOffre()->getTypeMission()->getTauxRemuMajore());
         $mission->setDateDebut($candidature->getOffre()->getDateDebut());
         $mission->setDateFin($candidature->getOffre()->getDateFin());
         $mission->setDescription($candidature->getOffre()->getDescription());
         $mission->setStructure($candidature->getOffre()->getStructure());
+        $mission->setHeures($candidature->getOffre()->getNombreHeures());
+
         $this->save($mission);
 
         return $mission;
+    }
+
+
+
+    /**
+     * @param Mission $entity
+     *
+     * @return Mission
+     */
+    public function save ($entity)
+    {
+        foreach ($entity->getVolumesHorairesPrevus() as $vh) {
+            $this->saveVolumeHoraire($vh);
+        }
+
+        parent::save($entity);
+
+        return $entity;
     }
 
 }

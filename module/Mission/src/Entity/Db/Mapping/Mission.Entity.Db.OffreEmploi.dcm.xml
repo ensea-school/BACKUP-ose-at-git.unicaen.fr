@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Mission\Entity\Db\OffreEmploi" table="OFFRE_EMPLOI">
         <id name="id" type="integer" column="ID">
@@ -13,6 +13,7 @@
         </many-to-one>
         <field name="dateDebut" type="datetime" column="DATE_DEBUT" nullable="false"/>
         <field name="dateFin" type="datetime" column="DATE_FIN" nullable="false"/>
+        <field name="dateLimite" type="datetime" column="DATE_LIMITE" nullable="false"/>
         <field name="titre" type="string" column="TITRE" length="200" nullable="false"/>
         <field name="description" type="string" column="DESCRIPTION" length="4000" nullable="true"/>
         <field name="nombreHeures" type="integer" column="NOMBRE_HEURES" nullable="false"/>

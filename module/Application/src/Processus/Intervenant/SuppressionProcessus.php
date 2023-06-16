@@ -124,6 +124,57 @@ ORDER BY
         ",
 
 
+        'INTERVENANT.MISSION' => "
+SELECT
+  CASE WHEN m.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  m.intervenant_id               parent_id,
+  m.id                           id,
+  null                           categorie,
+  'Mission ' || tm.libelle || ', ' || str.libelle_court || ', du ' || to_char( m.date_debut, 'dd/mm/YYYY' ) || ' au ' || to_char( m.date_fin, 'dd/mm/YYYY' ) label,
+  'fas fa-briefcase' icon
+FROM
+  mission m
+  JOIN type_mission tm ON tm.id = m.type_mission_id
+  JOIN structure str ON str.id = m.structure_id
+WHERE 
+  m.intervenant_id IN (:id)
+        ",
+
+
+        'MISSION.VALIDATION' => "
+SELECT
+  CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  m.id                     parent_id,
+  vm.validation_id         id,
+  null                     categorie,
+  'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
+  'fas fa-check' icon
+FROM
+  validation_mission vm
+  JOIN validation v ON v.id = vm.validation_id
+  JOIN utilisateur u ON u.id = v.histo_createur_id
+  JOIN mission m ON m.id = vm.mission_id
+WHERE
+  vm.mission_id IN (:id)
+        ",
+
+
+        'INTERVENANT.CANDIDATURE' => "
+SELECT
+  CASE WHEN c.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  c.intervenant_id               parent_id,
+  c.id                           id,
+  null                           categorie,
+  'Candidature à ' || oe.titre   label,
+  'fas fa-paperclip' icon
+FROM
+  candidature c
+  JOIN offre_emploi oe ON oe.id = c.offre_emploi_id
+WHERE 
+  c.intervenant_id IN (:id)
+        ",
+
+
         'INTERVENANT.VALIDATION' => "
 SELECT
   CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
@@ -194,6 +245,24 @@ FROM
   JOIN intervenant_dossier d ON d.histo_destruction IS NULL AND d.intervenant_id = v.intervenant_id
 WHERE
   d.id IN (:id)
+        ",
+
+
+        'MISSION.VOLUME_HORAIRE_MISSION' => "
+SELECT
+  CASE WHEN vhm.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  vhm.mission_id            parent_id,
+  vhm.id                    id,
+  tvh.libelle               categorie,
+  vhm.heures || ' heures ' label,
+  'fas fa-calendar-days' icon
+FROM
+  volume_horaire_mission vhm
+  JOIN type_volume_horaire tvh ON tvh.id = vhm.type_volume_horaire_id 
+WHERE
+  vhm.mission_id IN (:id)
+ORDER BY
+  tvh.code
         ",
 
 
@@ -382,6 +451,25 @@ WHERE
         ",
 
 
+        'VOLUME_HORAIRE_MISSION.VALIDATION_VOL_HORAIRE_MISS' => "
+SELECT
+  CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
+  vvhm.volume_horaire_mission_id parent_id,
+  vvhm.volume_horaire_mission_id volume_horaire_mission_id,
+  vvhm.validation_id             validation_id,
+  '[VOLUME_HORAIRE_MISSION_ID:' || vvhm.VOLUME_HORAIRE_MISSION_ID || ',VALIDATION_ID:' || vvhm.validation_id || ']' id,
+  null                      categorie,
+  'Validation du ' || to_char( v.histo_creation, 'dd/mm/YYYY \"à\" HH24:MI' ) || ' par ' || u.display_name label,
+  'fas fa-check'  icon
+FROM
+  validation v
+  JOIN utilisateur u ON u.id = v.histo_createur_id
+  JOIN validation_vol_horaire_miss vvhm ON vvhm.validation_id = v.id
+WHERE
+ vvhm.volume_horaire_mission_id IN (:id)
+        ",
+
+
         'FICHIER.VALIDATION' => "
 SELECT
   CASE WHEN v.histo_destruction IS NULL THEN 1 ELSE 0 END visible,
@@ -399,26 +487,44 @@ WHERE
         ",
     ];
 
-    protected $delete  = [
-        '.MISE_EN_PAIEMENT'           => [],
-        'CONTRAT.VALIDATION'          => ['queries' => ['UPDATE CONTRAT SET VALIDATION_ID = NULL WHERE validation_id = :ID']],
-        'CONTRAT.FICHIER'             => [],
-        '.CONTRAT'                    => ['queries' => ['UPDATE VOLUME_HORAIRE SET contrat_id = null WHERE contrat_id = :ID', 'UPDATE contrat SET CONTRAT_ID = NULL WHERE contrat_id = :ID']],
-        '.AGREMENT'                   => [],
-        '.VALIDATION'                 => [],
-        '.VALIDATION_VOL_HORAIRE'     => ['key' => ['VALIDATION_ID', 'VOLUME_HORAIRE_ID']],
-        '.VALIDATION_VOL_HORAIRE_REF' => ['key' => ['VALIDATION_ID', 'VOLUME_HORAIRE_REF_ID']],
-        'PIECE_JOINTE.FICHIER'        => ['queries' => ['DELETE FROM piece_jointe_fichier WHERE fichier_id = :ID']],
-        '.PIECE_JOINTE'               => [],
-        '.VOLUME_HORAIRE'             => [],
-        '.VOLUME_HORAIRE_REF'         => [],
-        '.SERVICE'                    => ['queries' => ['DELETE FROM formule_resultat_service WHERE service_id = :ID']],
-        '.SERVICE_REFERENTIEL'        => ['queries' => ['DELETE FROM formule_resultat_service_ref WHERE service_referentiel_id = :ID']],
-        '.MODIFICATION_SERVICE_DU'    => [],
-        '.INTERVENANT_DOSSIER'        => [],
-        '.INTERVENANT'                => ['queries' => [
+    protected $delete = [
+        '.MISE_EN_PAIEMENT'            => [],
+        'CONTRAT.VALIDATION'           => ['queries' => [
+            'UPDATE CONTRAT SET VALIDATION_ID = NULL WHERE validation_id = :ID',
+        ]],
+        'CONTRAT.FICHIER'              => [],
+        '.CONTRAT'                     => ['queries' => [
+            'UPDATE VOLUME_HORAIRE SET contrat_id = null WHERE contrat_id = :ID',
+            'UPDATE contrat SET CONTRAT_ID = NULL WHERE contrat_id = :ID',
+        ]],
+        '.AGREMENT'                    => [],
+        '.VALIDATION'                  => [],
+        '.VALIDATION_VOL_HORAIRE'      => ['key' => ['VALIDATION_ID', 'VOLUME_HORAIRE_ID']],
+        '.VALIDATION_VOL_HORAIRE_REF'  => ['key' => ['VALIDATION_ID', 'VOLUME_HORAIRE_REF_ID']],
+        '.VALIDATION_VOL_HORAIRE_MISS' => ['key' => ['VALIDATION_ID', 'VOLUME_HORAIRE_MISSION_ID']],
+        'PIECE_JOINTE.FICHIER'         => ['queries' => [
+            'DELETE FROM piece_jointe_fichier WHERE fichier_id = :ID',
+        ]],
+        '.PIECE_JOINTE'                => [],
+        '.CANDIDATURE'                 => [],
+        'MISSION.VALIDATION'           => [],
+        '.VOLUME_HORAIRE'              => [],
+        '.VOLUME_HORAIRE_REF'          => [],
+        '.VOLUME_HORAIRE_MISSION'      => [],
+        '.SERVICE'                     => ['queries' => [
+            'DELETE FROM formule_resultat_service WHERE service_id = :ID',
+        ]],
+        '.SERVICE_REFERENTIEL'         => ['queries' => [
+            'DELETE FROM formule_resultat_service_ref WHERE service_referentiel_id = :ID',
+        ]],
+        '.MISSION'                     => ['queries' => [
+            'DELETE FROM mission_etudiant WHERE mission_id = :ID',
+        ]],
+        '.MODIFICATION_SERVICE_DU'     => [],
+        '.INTERVENANT_DOSSIER'         => [],
+        '.INTERVENANT'                 => ['queries' => [
             'DELETE FROM validation WHERE intervenant_id = :ID',// Suppression de toutes les validations orphelines restantes
-            'DELETE FROM formule_resultat WHERE intervenant_id = :ID' // Suppression de tous les restes de formules de calcul
+            'DELETE FROM formule_resultat WHERE intervenant_id = :ID', // Suppression de tous les restes de formules de calcul
         ]],
     ];
 
@@ -441,6 +547,23 @@ WHERE
         }
 
         return $this->data;
+    }
+
+
+
+    public function idsFromPost(?array $post): array
+    {
+        if (empty($post)) return [];
+
+        $ids = $post;
+
+        foreach ($ids as $i => $val) {
+            if (str_starts_with($val, 'b64-')) {
+                $ids[$i] = base64_decode(substr($val, 4));
+            }
+        }
+
+        return $ids;
     }
 
 
@@ -474,15 +597,15 @@ WHERE
                     if (is_string($id)) $ids[$i] = "'$id'";
                 }
                 $idList = implode(',', $ids);
-                $sql    = str_replace(':id', $idList, $sql);
-                $ds     = $bdd->fetchAllAssociative($sql);
+                $sql = str_replace(':id', $idList, $sql);
+                $ds = $bdd->fetchAllAssociative($sql);
                 foreach ($ds as $d) {
                     if (!isset($this->data[$dest])) {
                         $this->data[$dest] = [];
                     }
-                    $d['TABLE']                  = $dest;
-                    $d['PARENT_TABLE']           = $ref;
-                    $d['DELETE']                 = false;
+                    $d['TABLE'] = $dest;
+                    $d['PARENT_TABLE'] = $ref;
+                    $d['DELETE'] = false;
                     $this->data[$dest][$d['ID']] = $d;
                 }
                 if (isset($this->data[$dest])) {
@@ -512,7 +635,8 @@ WHERE
 
     protected function makeNode(array $data): TreeNode
     {
-        $node = new TreeNode($data['TABLE'] . '#' . $data['ID']);
+        $id = 'b64-' . base64_encode($data['TABLE'] . '#' . $data['ID']);
+        $node = new TreeNode($id);
         $node->setIcon($data['ICON']);
         if (isset($data['ERROR'])) {
             $node->setLabel($data['LABEL'] . ' <span style="font-weight:bold;color:red" title="' . htmlentities($data['ERROR']) . '">Erreur rencontrée</span>');
@@ -537,7 +661,7 @@ WHERE
 
                     if ($d['CATEGORIE']) {
                         $cats = explode('|', $d['CATEGORIE']);
-                        $cp   = $parent;
+                        $cp = $parent;
                         foreach ($cats as $categorie) {
                             if ($cp->has($categorie)) {
                                 $cp = $cp->get($categorie);
@@ -601,8 +725,8 @@ WHERE
                     $dp = $d;
                     while ($dp['PARENT_ID']) {
                         $pTable = $dp['PARENT_TABLE'];
-                        $pId    = $dp['PARENT_ID'];
-                        $dp     = $this->data[$pTable][$pId];
+                        $pId = $dp['PARENT_ID'];
+                        $dp = $this->data[$pTable][$pId];
                         if ($this->data[$pTable][$pId]['DELETE']) {
                             $this->data[$pTable][$pId]['DELETE'] = false;
                         }
@@ -667,7 +791,7 @@ WHERE
             [$ruleParent, $ruleTable] = explode('.', $rule);
             $keyCols = isset($config['key']) ? $config['key'] : ['ID'];
             $queries = isset($config['queries']) ? $config['queries'] : [];
-            $delSql  = '';
+            $delSql = '';
             foreach ($keyCols as $k) {
                 if ($delSql == '') {
                     $delSql .= 'DELETE FROM ' . $ruleTable . ' WHERE ';
@@ -731,7 +855,7 @@ WHERE
             $res = true;
         } catch (\Exception $e) {
             $data['ERROR'] = $this->translate($e->getMessage());
-            $res           = false;
+            $res = false;
         }
 
         return $res;

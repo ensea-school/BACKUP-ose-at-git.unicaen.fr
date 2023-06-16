@@ -15,10 +15,9 @@ $canValider   = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_O
 
 ?>
 
-<h1 class="page-header">Gestion des offres d'emploi</h1>
+<h1 class="page-header">Offres d'emploi</h1>
 
 <?= $this->vue('mission/liste-offre-emploi', [
-    'id'           => null,
     'canModifier'  => $canEdit,
     'canPostuler'  => $canPostuler,
     'canSupprimer' => $canSupprimer,

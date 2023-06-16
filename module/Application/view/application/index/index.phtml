@@ -20,7 +20,7 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
 ?>
     <div class="container-fluid text-sm p-5 jumbotron">
         <h1><span class="appname"><span class="c1">O</span><span class="c2">S</span><span class="c3">E</span></span>
-            <small>Organisation des Services d'Enseignement</small>
+            <small><?= AppConfig::get('etablissement', 'ose', 'Organisation des Services d\'Enseignement') ?></small>
         </h1>
         <p class="lead"><?= $pageAccueil ?></p>
         <p class="lead">Année <?= $annee ?>.</p>

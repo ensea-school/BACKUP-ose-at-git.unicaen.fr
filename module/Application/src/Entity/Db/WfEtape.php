@@ -9,6 +9,8 @@ use Agrement\Entity\Db\TypeAgrement;
  */
 class WfEtape
 {
+    const CANDIDATURE_SAISIE                  = 'CANDIDATURE_SAISIE';
+    const CANDIDATURE_VALIDATION              = 'CANDIDATURE_VALIDATION';
     const CODE_DONNEES_PERSO_SAISIE           = 'DONNEES_PERSO_SAISIE';
     const CODE_SERVICE_SAISIE                 = 'SERVICE_SAISIE';
     const CODE_PJ_SAISIE                      = 'PJ_SAISIE';

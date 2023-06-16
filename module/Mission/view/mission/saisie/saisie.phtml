@@ -7,6 +7,9 @@
  */
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessengerWithNamespace('error');
+if ($form->isValide()) {
+    echo $this->messenger()->renderMessage("Cette mission est déjà validée. Il n'est possible de ne modifier que son nombre d'heures et sa date de fin.", 'info');
+}
 
 echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 echo $this->form()->openTag($form);
@@ -51,34 +54,38 @@ echo $this->form()->closeTag();
 ?>
 <script>
 
+    function formElement()
+    {
+        return $('#<?= $form->getAttribute('id') ?>');
+    }
+
     function typeMissionSelect()
     {
-        return $('#<?= $form->getAttribute('id') ?> [name=typeMission]');
+        return formElement().find('[name=typeMission]');
     }
 
     function toggleViewElements()
     {
         var tmId = typeMissionSelect().val();
+        var tmData = typeMissionSelect().data('tm');
 
-        var tmAcc = typeMissionSelect().data('accompagnement-etudiants');
-
-        if (tmAcc[tmId]){
+        if (tmData[tmId]['accompagnementEtudiant']) {
             $('.etudiants-suivis').show();
-        }else{
+        } else {
             $('.etudiants-suivis').hide();
         }
 
-        var tmBF = typeMissionSelect().data('besoin-formation');
-
-        if (tmBF[tmId]){
+        if (tmData[tmId]['besoinFormation']) {
             $('.heures-formation').show();
-        }else{
+        } else {
             $('.heures-formation').hide();
         }
 
+        formElement().find('[name=tauxRemu]').val(tmData[tmId]['tauxRemu']);
+        formElement().find('[name=tauxRemuMajore]').val(tmData[tmId]['tauxRemuMajore']);
     }
 
-    $(function(){
+    $(function () {
         typeMissionSelect().on('change', toggleViewElements);
         toggleViewElements();
     });

@@ -175,8 +175,6 @@ class IndicateurService
     {
         $typesVolumesHoraires = $this->getServiceTypeVolumeHoraire()->getList();
 
-        var_dump($typesVolumesHoraires);
-
         $plafondConfigs = $this->getServicePlafond()->getPlafondsConfig();
         foreach ($plafondConfigs as $plafondConfig) {
             $plafond = $plafondConfig->getPlafond();

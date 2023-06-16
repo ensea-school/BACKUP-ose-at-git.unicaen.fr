@@ -8,6 +8,7 @@
     <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
     <field name="enabled" type="boolean" column="ENABLED" nullable="false"/>
     <field name="irrecevables" type="boolean" column="IRRECEVABLES" nullable="false"/>
+    <field name="special" type="boolean" column="SPECIAL" nullable="false"/>
     <field name="libelleSingulier" type="string" column="LIBELLE_SINGULIER" length="255" nullable="false"/>
     <field name="libellePluriel" type="string" column="LIBELLE_PLURIEL" length="255" nullable="false"/>
     <field name="route" type="string" column="ROUTE" length="250" nullable="false"/>

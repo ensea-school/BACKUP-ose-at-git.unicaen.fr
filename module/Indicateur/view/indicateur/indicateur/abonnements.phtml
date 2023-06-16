@@ -23,7 +23,11 @@ if (empty($indicateurs)): ?>
         </thead>
         <tbody>
         <?php foreach ($indicateurs as $indicateur):
-            $urlResult = $this->url('indicateur/result', ['indicateur' => $indicateur->getId()]);
+            if ($indicateur->isSpecial()){
+                $urlResult = $this->url($indicateur->getRoute());
+            }else{
+                $urlResult = $this->url('indicateur/result', ['indicateur' => $indicateur->getId()]);
+            }
             $count = $counts[$indicateur->getId()];
             ?>
             <tr class="indicateur" id="<?= $indicateur->getId() ?>">

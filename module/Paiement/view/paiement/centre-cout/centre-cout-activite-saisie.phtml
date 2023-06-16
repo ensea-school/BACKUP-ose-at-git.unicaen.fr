@@ -17,13 +17,14 @@ echo $this->form()->openTag($form); ?>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-3"><?= $this->formControlGroup($form->get('fi')); ?></div>
-    <div class="col-md-3"><?= $this->formControlGroup($form->get('fa')); ?></div>
-    <div class="col-md-3"><?= $this->formControlGroup($form->get('fc')); ?></div>
+    <div class="col-md-4"><?= $this->formControlGroup($form->get('fi')); ?></div>
+    <div class="col-md-4"><?= $this->formControlGroup($form->get('fa')); ?></div>
+    <div class="col-md-4"><?= $this->formControlGroup($form->get('fc')); ?></div>
 </div>
 <div class="row">
-    <div class="col-md-3"><?= $this->formControlGroup($form->get('fc_majore')); ?></div>
-    <div class="col-md-3"><?= $this->formControlGroup($form->get('referentiel')); ?></div>
+    <div class="col-md-4"><?= $this->formControlGroup($form->get('fc_majore')); ?></div>
+    <div class="col-md-4"><?= $this->formControlGroup($form->get('referentiel')); ?></div>
+    <div class="col-md-4"><?= $this->formControlGroup($form->get('mission')); ?></div>
 </div>
 <?= $this->formControlGroup($form->get('security')); ?>
 <?= $this->formSubmit($form->get('submit')); ?>

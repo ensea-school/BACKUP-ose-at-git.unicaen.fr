@@ -49,6 +49,11 @@ class CcActivite implements HistoriqueAwareInterface
     private $referentiel;
 
     /**
+     * @var boolean
+     */
+    private $mission;
+
+    /**
      * @var integer
      */
     private $id;
@@ -262,6 +267,31 @@ class CcActivite implements HistoriqueAwareInterface
 
 
     /**
+     * Get mission
+     *
+     * @return boolean
+     */
+    public function getMission()
+    {
+        return $this->mission;
+    }
+
+
+    /**
+     * Set mission
+     *
+     * @param boolean $mission
+     *
+     * @return CcActivite
+     */
+    public function setMission($mission)
+    {
+        $this->mission = $mission;
+
+        return $this;
+    }
+
+    /**
      * Get id
      *
      * @return integer
@@ -294,6 +324,8 @@ class CcActivite implements HistoriqueAwareInterface
                 return $this->getFcMajorees();
             case TypeHeures::REFERENTIEL:
                 return $this->getReferentiel();
+            case TypeHeures::MISSION:
+                return $this->getMission();
         }
 
         return false;

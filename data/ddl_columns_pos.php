@@ -139,6 +139,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'MISSION',
     ],
     'CENTRE_COUT'                    => [
         'ID',

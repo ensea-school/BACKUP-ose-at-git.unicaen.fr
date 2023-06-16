@@ -11,7 +11,7 @@ class CentreCoutActiviteHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                             $data
+     * @param array $data
      * @param \Paiement\Entity\Db\CcActivite $object
      *
      * @return object
@@ -25,6 +25,7 @@ class CentreCoutActiviteHydrator implements HydratorInterface
         $object->setFc($data['fc']);
         $object->setFcMajorees($data['fc_majore']);
         $object->setReferentiel($data['referentiel']);
+        $object->setMission($data['mission']);
 
         return $object;
     }
@@ -49,6 +50,7 @@ class CentreCoutActiviteHydrator implements HydratorInterface
             'fc'          => $object->getFc(),
             'fc_majore'   => $object->getFcMajorees(),
             'referentiel' => $object->getReferentiel(),
+            'mission'     => $object->getMission(),
         ];
 
         return $data;

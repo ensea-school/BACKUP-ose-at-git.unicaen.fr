@@ -72,6 +72,14 @@ class CentreCoutActiviteSaisieForm extends AbstractForm
             'type' => 'Checkbox',
         ]);
 
+        $this->add([
+            'name' => 'mission',
+            'options' => [
+                'label' => 'Mission',
+            ],
+            'type' => 'Checkbox',
+        ]);
+
         $this->add(new Csrf('security'));
         $this->add([
             'name' => 'submit',

@@ -42,6 +42,7 @@ return [
             "FC"          => false,
             "FC_MAJOREES" => false,
             "REFERENTIEL" => true,
+            "MISSION"     => false,
         ],
         [
             'ID'          => 2,
@@ -52,6 +53,7 @@ return [
             "FC"          => true,
             "FC_MAJOREES" => true,
             "REFERENTIEL" => false,
+            "MISSION"     => false,
         ],
         [
             'ID'          => 3,
@@ -62,6 +64,7 @@ return [
             "FC"          => true,
             "FC_MAJOREES" => true,
             "REFERENTIEL" => false,
+            "MISSION"     => true,
         ],
     ],
 

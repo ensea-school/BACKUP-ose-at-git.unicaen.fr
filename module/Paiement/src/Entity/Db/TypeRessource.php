@@ -51,6 +51,11 @@ class TypeRessource implements HistoriqueAwareInterface, ResourceInterface
     private $referentiel;
 
     /**
+     * @var boolean
+     */
+    private $mission;
+
+    /**
      * @var integer
      */
     private $id;
@@ -259,6 +264,33 @@ class TypeRessource implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
+     * Set mission
+     *
+     * @param boolean $mission
+     *
+     * @return TypeRessource
+     */
+    public function setMission($mission)
+    {
+        $this->mission = $mission;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get mission
+     *
+     * @return boolean
+     */
+    public function getMission()
+    {
+        return $this->mission;
+    }
+
+
+    /**
      * Get id
      *
      * @return integer
@@ -315,6 +347,8 @@ class TypeRessource implements HistoriqueAwareInterface, ResourceInterface
                 return $this->getFcMajorees();
             case TypeHeures::REFERENTIEL:
                 return $this->getReferentiel();
+            case TypeHeures::MISSION:
+                return $this->getMission();
         }
 
         return false;

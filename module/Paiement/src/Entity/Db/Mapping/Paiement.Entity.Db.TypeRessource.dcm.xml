@@ -14,6 +14,7 @@
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="200" nullable="false"/>
     <field name="referentiel" type="boolean" column="REFERENTIEL" nullable="false"/>
+    <field name="mission" type="boolean" column="MISSION" nullable="false"/>
     <field name="etablissement" type="boolean" column="ETABLISSEMENT" nullable="false"/>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>

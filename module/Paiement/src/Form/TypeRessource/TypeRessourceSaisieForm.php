@@ -74,6 +74,14 @@ class TypeRessourceSaisieForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'    => 'mission',
+            'options' => [
+                'label' => 'Mission',
+            ],
+            'type'    => 'Checkbox',
+        ]);
+
+        $this->add([
             'name'    => 'etablissement',
             'options' => [
                 'label' => 'Etablissement',

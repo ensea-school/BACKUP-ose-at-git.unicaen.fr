@@ -2,6 +2,7 @@
 
 namespace Paiement\Entity\Db;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Paiement\Entity\MiseEnPaiementListe;
 use Application\Entity\Db\Periode;
@@ -14,7 +15,7 @@ trait ServiceAPayerTrait
 
     private Collection $miseEnPaiement;
 
-    protected Collection $centreCout;
+    protected ?Collection $centreCout = null;
 
 
 
@@ -66,6 +67,11 @@ trait ServiceAPayerTrait
                 return true;
             }
         };
+
+        // Hack pour éviter un problème d'initialisation
+        if (null === $this->centreCout){
+            $this->centreCout = new ArrayCollection();
+        }
 
         return $this->centreCout->filter($filter);
     }

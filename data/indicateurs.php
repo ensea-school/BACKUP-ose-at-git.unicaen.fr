@@ -429,13 +429,13 @@ return [
                 'route'             => 'paiement/etat-demande-paiement',
                 'irrecevables'      => false,
             ],
-//            950 => [
-//                'enabled'           => true,
-//                'libelle_singulier' => '%s étudiant peut faire l\'objet d\'une demande de mise en paiement',
-//                'libelle_pluriel'   => '%s étudiants peuvent faire l\'objet d\'une demande de mise en paiement',
-//                'route'             => 'intervenant/mise-en-paiement/demande',
-//                'irrecevables'      => false,
-//            ],
+            950 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant peut faire l\'objet d\'une demande de mise en paiement',
+                'libelle_pluriel'   => '%s étudiants peuvent faire l\'objet d\'une demande de mise en paiement',
+                'route'             => 'intervenant/mise-en-paiement/demande',
+                'irrecevables'      => false,
+            ],
 //            960 => [
 //                'enabled'           => true,
 //                'libelle_singulier' => '%s étudiant peut faire l\'objet d\'une mise en paiement',

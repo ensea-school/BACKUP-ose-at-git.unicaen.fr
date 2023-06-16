@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 94,
+            'position'    => 90,
             'commentaire' => NULL,
         ],
         'CLOTURE'                        => [
@@ -750,7 +750,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 95,
+            'position'    => 91,
             'commentaire' => NULL,
         ],
         'MODE_ENSEIGNEMENT_REALISE'      => [
@@ -762,7 +762,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 96,
+            'position'    => 92,
             'commentaire' => NULL,
         ],
         'MODIF_SERVICE_DU'               => [

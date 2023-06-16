@@ -118,7 +118,7 @@ SELECT m.intervenant_id                                                         
        'Modification/Ajout mission pour la composante ' || st.libelle_court || ' : ' || tm.libelle                   label,
        m.histo_creation                                                                histo_date,
        m.histo_createur_id                                                             histo_createur_id,
-       u.display_name																		histo_user,
+       u.display_name                                    histo_user,
        'glyphicon glyphicon-ok'                           icon,
        3                                                                                         ordre
 FROM mission m
@@ -135,8 +135,8 @@ SELECT m.intervenant_id                                                         
        '3 - Mission'                                                                     categorie,
        'Suppression mission pour la composante ' || st.libelle_court || ' : ' || tm.libelle                      label,
        m.histo_destruction                                                               histo_date,
-       m.histo_destructeur_id											 			     histo_createur_id,
-       u.display_name 													   			     histo_user,
+       m.histo_destructeur_id                                  histo_createur_id,
+       u.display_name                                         histo_user,
        'glyphicon glyphicon-ok'                                                          icon,
        3                                                                                 ordre
 FROM mission m
@@ -151,9 +151,9 @@ UNION ALL
 SELECT m.intervenant_id                                                                  intervenant_id,
        '3 - Mission'                                                                     categorie,
        'Validation mission pour la composante ' || st.libelle_court || ' : ' || tm.libelle                      label,
-       v.histo_modification 															 histo_date,
-       v.histo_modificateur_id 											 			     histo_createur_id,
-       u.display_name 													   			     histo_user,
+       v.histo_modification                                histo_date,
+       v.histo_modificateur_id                                   histo_createur_id,
+       u.display_name                                         histo_user,
        'glyphicon glyphicon-ok'                                                          icon,
        3                                                                                 ordre
 FROM mission m

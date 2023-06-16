@@ -311,7 +311,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
             $out .= '<div class="alert alert-danger" role="alert">Des heures à payer ont été positionnées sur ce service alors que c\'est normalement impossible.</div>';
         }
         $out .= '<table ' . $this->htmlAttribs($attrs) . '>';
-        $out .= '<thead ' . $this->htmlAttribs($hattrs) . '><tr><th colspan="3">' . $typeHeures->getLibelleLong() . '</th></tr><tr>';
+        $out .= '<thead ' . $this->htmlAttribs($hattrs) . '><tr><th colspan="'.($serviceAPayer->isDomaineFonctionnelModifiable() ? 4 : 3).'">' . $typeHeures->getLibelleLong() . '</th></tr><tr>';
         $out .= '<th style="width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
         $out .= '<th>Centre de coûts</th>';
         if ($serviceAPayer->isDomaineFonctionnelModifiable()) {

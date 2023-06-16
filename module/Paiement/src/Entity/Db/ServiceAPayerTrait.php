@@ -15,7 +15,7 @@ trait ServiceAPayerTrait
 
     private Collection $miseEnPaiement;
 
-    protected ?Collection $centreCout = null;
+    protected Collection $centreCout;
 
 
 
@@ -67,11 +67,6 @@ trait ServiceAPayerTrait
                 return true;
             }
         };
-
-        // Hack pour éviter un problème d'initialisation
-        if (null === $this->centreCout){
-            $this->centreCout = new ArrayCollection();
-        }
 
         return $this->centreCout->filter($filter);
     }

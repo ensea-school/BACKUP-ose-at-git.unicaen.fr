@@ -52,6 +52,17 @@
         <one-to-many field="volumesHoraires" target-entity="Mission\Entity\Db\VolumeHoraireMission" mapped-by="mission">
         </one-to-many>
 
+        <many-to-many field="centreCout" target-entity="Paiement\Entity\Db\CentreCout">
+            <join-table name="V_MISSION_CENTRE_COUT">
+                <join-columns>
+                    <join-column name="MISSION_ID" referenced-column-name="ID" unique="true"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
             <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>

@@ -1834,6 +1834,7 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
         'ETABLISSEMENT',
+        'MISSION',
     ],
     'TYPE_VALIDATION'                => [
         'ID',

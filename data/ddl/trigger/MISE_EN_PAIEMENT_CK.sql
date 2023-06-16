@@ -18,8 +18,8 @@ BEGIN
   END IF;
 
   /* Mise en place des contraintes */
-  IF :NEW.formule_res_service_id IS NULL AND :NEW.formule_res_service_ref_id IS NULL THEN
-    raise_application_error(-20101, 'La mise en paiement ne correspond à aucun service ou service référentiel.');
+  IF :NEW.formule_res_service_id IS NULL AND :NEW.formule_res_service_ref_id IS NULL AND :NEW.mission_id IS NULL THEN
+    raise_application_error(-20101, 'La mise en paiement ne correspond à aucun service.');
   END IF;
 
   IF 1 = has_validation AND :NEW.date_validation IS NULL THEN

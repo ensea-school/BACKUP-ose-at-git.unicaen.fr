@@ -477,17 +477,4 @@ class StatutSaisieForm extends AbstractForm
 
         return $this;
     }
-
-
-
-    public function getInputFilterSpecification()
-    {
-        $spec = [
-
-
-        ];
-
-        return $spec;
-    }
-
 }

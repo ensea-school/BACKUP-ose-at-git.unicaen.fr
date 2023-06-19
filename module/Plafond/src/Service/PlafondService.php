@@ -321,7 +321,7 @@ class PlafondService extends AbstractEntityService
             $libVal = 'entity.libelle';
             $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$pqr->entity->getId();
 
-        } elseif ($pqr->entity instanceof Service) {
+        } elseif ($pqr->entity instanceof Service && $pqr->entity->getElementPedagogique()) {
             return $this->makeQuery($pqr->sub($pqr->entity->getElementPedagogique()));
 
         } elseif ($pqr->entity instanceof VolumeHoraire) {

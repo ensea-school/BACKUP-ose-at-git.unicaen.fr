@@ -127,20 +127,21 @@ SELECT
 
                          FROM
                                      tbl_paiement mis
-                                JOIN mise_en_paiement        mep ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
-                                JOIN type_heures              th ON  th.id = mep.type_heures_id
-                                JOIN centre_cout              cc ON  cc.id = mep.centre_cout_id      -- pas d'historique pour les centres de coût, qui devront tout de même apparaitre mais en erreur
+                                JOIN mise_en_paiement        mep ON   mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
+                                JOIN type_heures              th ON   th.id = mep.type_heures_id
+                                JOIN centre_cout              cc ON   cc.id = mep.centre_cout_id      -- pas d'historique pour les centres de coût, qui devront tout de même apparaitre mais en erreur
                                 JOIN intervenant               i ON   i.id = mis.intervenant_id      AND i.histo_destruction IS NULL
                                 JOIN annee                     a ON   a.id = i.annee_id
-                                JOIN statut                   si ON  si.id = i.statut_id
-                                JOIN type_intervenant         ti ON  ti.id = si.type_intervenant_id
+                                JOIN statut                   si ON   si.id = i.statut_id
+                                JOIN type_intervenant         ti ON   ti.id = si.type_intervenant_id
                                 JOIN structure                 s ON   s.id = mis.structure_id
                            LEFT JOIN validation                v ON   v.id = mep.validation_id       AND v.histo_destruction IS NULL
-                           LEFT JOIN domaine_fonctionnel      df ON  df.id = mis.domaine_fonctionnel_id
+                           LEFT JOIN domaine_fonctionnel      df ON   df.id = mis.domaine_fonctionnel_id
                            LEFT JOIN periode                   p ON   p.id = mep.periode_paiement_id
                            LEFT JOIN service                  se ON   mis.service_id = se.id
                            LEFT JOIN element_pedagogique      ep ON   ep.id = se.element_pedagogique_id
-                           LEFT JOIN taux_remu                tr ON   tr.code = OSE_PAIEMENT.get_code_taux_remu_legal()
+                           JOIN parametre                     p  ON   p.nom = 'taux-remu'
+                           LEFT JOIN taux_remu                tr ON   tr.id = p.valeur
                      )
                      SELECT
                             periode_id,

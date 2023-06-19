@@ -477,11 +477,11 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
         UNION ALL
 
         SELECT
-          ''MISSION_VALIDATION''                               etape_code,
-          m.intervenant_id                                     intervenant_id,
-          m.structure_id                                       structure_id,
-          SUM(1)                                               objectif,
-          SUM(m.valide)                                        realisation
+          ''MISSION_VALIDATION''                                                                                        etape_code,
+          m.intervenant_id                                                                                              intervenant_id,
+          m.structure_id                                                                                                structure_id,
+          SUM(1)                                                                                                        objectif,
+          SUM(CASE WHEN m.valide = 1 AND m.heures_prevues_validees = m.heures_prevues_saisies THEN 1 ELSE 0 END)        realisation
         FROM
           tbl_mission m
         WHERE
@@ -492,11 +492,11 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
         UNION ALL
 
         SELECT
-          ''MISSION_SAISIE_REALISE''                           etape_code,
-          m.intervenant_id                                     intervenant_id,
-          m.structure_id                                       structure_id,
-          SUM(GREATEST(m.heures_prevues_validees,m.heures_realisees_saisies)) objectif,
-          SUM(m.heures_realisees_saisies)                      realisation
+          ''MISSION_SAISIE_REALISE''                                            etape_code,
+          m.intervenant_id                                                      intervenant_id,
+          m.structure_id                                                        structure_id,
+          SUM(GREATEST(m.heures_prevues_validees,m.heures_realisees_saisies))   objectif,
+          SUM(m.heures_realisees_saisies)                                       realisation
         FROM
           tbl_mission m
         WHERE

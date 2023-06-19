@@ -63,7 +63,7 @@ class MotifModificationServiceController extends AbstractController
             $this->getServiceMotifModificationServiceDu()->delete($motifModificationServiceDu);
             $this->flashMessenger()->addSuccessMessage("Motif de Modification de Service supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel();

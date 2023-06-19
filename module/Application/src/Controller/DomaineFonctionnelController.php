@@ -49,7 +49,6 @@ class DomaineFonctionnelController extends AbstractController
                 $this->getServiceDomaineFonctionnel()->save($fr);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
@@ -67,7 +66,7 @@ class DomaineFonctionnelController extends AbstractController
             $this->getServiceDomaineFonctionnel()->delete($domaineFonctionnel);
             $this->flashMessenger()->addSuccessMessage("Domaine Fonctionnel supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel(compact('domaineFonctionnel'));

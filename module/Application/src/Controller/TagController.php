@@ -4,7 +4,6 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Tag;
 use Application\Form\Tag\Traits\TagSaisieFormAwareTrait;
-use Application\Exception\DbException;
 use Application\Service\Traits\TagServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 

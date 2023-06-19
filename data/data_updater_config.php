@@ -226,7 +226,7 @@ return [
         ],],
     ],
     'JOUR_FERIE'                 => [
-        'actions' => ['install', 'update'],
+        'actions' => ['install'],
         'key'     => ['DATE_JOUR'],
         'options' => ['update' => false, 'delete' => false],
     ],

@@ -60,5 +60,6 @@ return [
     ],
 
     'forms' => [
+        Form\JourFerieForm::class => Form\JourFerieFormFactory::class,
     ],
 ];

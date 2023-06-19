@@ -1,0 +1,10 @@
+<?php
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form \Paiement\Form\JourFerieForm
+ * @var $title string
+ */
+
+echo '<h1 class="page-header">'.$title.'</h1>';
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->form($form);

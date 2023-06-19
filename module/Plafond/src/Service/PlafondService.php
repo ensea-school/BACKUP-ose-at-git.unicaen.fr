@@ -322,7 +322,9 @@ class PlafondService extends AbstractEntityService
             $filters['pd.ELEMENT_PEDAGOGIQUE_ID'] = (int)$pqr->entity->getId();
 
         } elseif ($pqr->entity instanceof Service) {
-            return $this->makeQuery($pqr->sub($pqr->entity->getElementPedagogique()));
+            if ($pqr->entity->getElementPedagogique()) {
+                return $this->makeQuery($pqr->sub($pqr->entity->getElementPedagogique()));
+            }
 
         } elseif ($pqr->entity instanceof VolumeHoraire) {
             $perimetre = PlafondPerimetre::VOLUME_HORAIRE;

@@ -81,12 +81,10 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
 
     public function __toString(): string
     {
-        $heures = Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
-
-        return sprintf("%s%s : %s (%sh)",
+        return sprintf("%s : %s",
             $this->getStructure() ? " - " . $this->getStructure() : null,
-            $this->getFonctionReferentiel(),
-            $heures);
+            $this->getFonctionReferentiel()
+        );
     }
 
 

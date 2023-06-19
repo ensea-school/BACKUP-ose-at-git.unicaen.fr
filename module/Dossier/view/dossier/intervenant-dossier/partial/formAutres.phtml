@@ -24,52 +24,59 @@ $dossierAutres = $form->get('DossierAutres');
 </style>
 
 <!-- Fiedlset Autres -->
-<?php if (count($champsAutres) > 0): ?>
+<?php
 
-    <div class="col-md-6">
-        <div class="card bg-default ">
+$autres = [];
+foreach ($champsAutres as $champsAutre) {
+    $canView = $this->isAllowed($intervenant, constant('Dossier\Assertion\IntervenantDossierAssertion::PRIV_VIEW_AUTRE' . $champsAutre->getId()));
+    $canEdit = $this->isAllowed($intervenant, constant('Dossier\Assertion\IntervenantDossierAssertion::PRIV_EDIT_AUTRE' . $champsAutre->getId()));
 
-            <div class="card-header">
-                AUTRES
-                <?php if (!empty($tblDossier)): ?>
-                    <?php if (!$intervenantDossier->getTblDossier()->getCompletudeAutres()): ?>
-                        <span class="badge bg-warning text-dark">A compléter</span>
-                    <?php else: ?>
-                        <span class="badge bg-success">Complet</span>
-                    <?php endif; ?>
+    if ($canView) {
+        $method = 'getAutre' . $champsAutre->getId();
+        $value = $intervenantDossier->$method();
+
+        $autres[] = [
+            'id'      => $champsAutre->getId(),
+            'canView' => $canView,
+            'canEdit' => $canEdit,
+            'value'   => $value,
+        ];
+    }
+}
+
+if (empty($autres)) return;
+
+?>
+<div class="col-md-6">
+    <div class="card bg-default ">
+        <div class="card-header">
+            AUTRES
+            <?php if (!empty($tblDossier)): ?>
+                <?php if (!$intervenantDossier->getTblDossier()->getCompletudeAutres()): ?>
+                    <span class="badge bg-warning text-dark">A compléter</span>
+                <?php else: ?>
+                    <span class="badge bg-success">Complet</span>
                 <?php endif; ?>
+            <?php endif; ?>
+        </div>
+        <div class="card-body">
+            <?php foreach ($autres as $champ): ?>
+                <div class="form-group">
+                 <?php if (!$champ['canEdit']): ?>
+                    <?= $this->formLabel($dossierAutres->get('champ-autre-' . $champ['id']),); ?>
+                    <div class="input-group cold-md-6 readonly">
+                        <?php
+                        if ($champ['value']) {
+                            echo ($champ['canView']) ? $champ['value'] : '***************';
+                        }
+                        ?>
+                    </div>
+                </div>
+                <?php else: ?>
+                <?= $this->formControlGroup($dossierAutres->get('champ-autre-' . $champ['id'])); ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
 
-            </div>
-            <div class="card-body">
-                <?php foreach ($champsAutres as $champ): ?>
-                    <?php if (!$this->isAllowed($intervenant, constant('Dossier\Assertion\IntervenantDossierAssertion::PRIV_EDIT_AUTRE' . $champ->getId()))): ?>
-                        <?php if ($this->isAllowed($intervenant, constant('Dossier\Assertion\IntervenantDossierAssertion::PRIV_VIEW_AUTRE' . $champ->getId()))): ?>
-
-                            <div class="form-group">
-                                <?php echo $this->formLabel($dossierAutres->get('champ-autre-' . $champ->getId()),); ?>
-                                <div class="input-group cold-md-6 readonly">
-                                    <?php
-                                    $method = 'getAutre' . $champ->getId();
-                                    $value  = $intervenantDossier->$method();
-                                    if (!empty($intervenantDossier->$method())) {
-                                        $viewAutre = $this->isAllowed($intervenant, constant('Dossier\Assertion\IntervenantDossierAssertion::PRIV_VIEW_AUTRE' . $champ->getId()));
-                                        echo ($viewAutre) ? $intervenantDossier->$method() : '***************';
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    <?php else: ?>
-                        <?php echo $this->formControlGroup($dossierAutres->get('champ-autre-' . $champ->getId())); ?>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-
-            </div>
         </div>
     </div>
-<?php endif; ?>
-
-
-
-
-
+</div>

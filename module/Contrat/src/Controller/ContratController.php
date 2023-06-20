@@ -472,6 +472,9 @@ class ContratController extends AbstractController
         /** @var Contrat $contrat */
         $contrat = $this->getEvent()->getParam('contrat');
 
+
+        $title = 'Envoi du contrat à l\'intervenant';
+
         if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
             throw new UnAuthorizedException("Interdiction d'envoyer le contrat par email");
         }
@@ -526,7 +529,7 @@ class ContratController extends AbstractController
             return $this->getResponse();
         }
 
-        return compact('form');
+        return compact('form', 'title');
     }
 
 

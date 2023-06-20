@@ -321,6 +321,36 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
             </div>
         </div>
 
+        <div class="card bg-default">
+            <div class="card-header">Paramètrage de l'extraction paie</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modeCalcul')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modeCalculPrime')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('codeIndemnite')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('codeIndemnitePrime')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('typePaie')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('typePaiePrime')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Plafonds -->
         <div class="card bg-default">

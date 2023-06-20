@@ -20,7 +20,7 @@ class StatutSaisieForm extends AbstractForm
     use ParametresServiceAwareTrait;
     use DossierAutreServiceAwareTrait;
 
-    public function init()
+    public function init ()
     {
         $labels = [
             'libelle'                       => 'Libellé',
@@ -65,6 +65,12 @@ class StatutSaisieForm extends AbstractForm
             'offreEmploiPostuler'           => 'Postuler à une offre d\'emploi',
             'modeEnseignementPrevisionnel'  => 'Mode de saisie pour les enseignements prévisionnels',
             'modeEnseignementRealise'       => 'Mode de saisie pour les enseignements réalisés',
+            'modeCalcul'                    => 'Mode de calcul de la paie (ex : A, B etc...)',
+            'codeIndemnite'                 => 'Code indémnité de la paie (ex : 0204, 2251 etc...)',
+            'typePaie'                      => 'Code du type ou carte de la paie (ex : 20, P etc...)',
+            'modeCalculPrime'               => 'Mode de calcul pour les primes (ex : A, B etc...)',
+            'codeIndemnitePrime'            => 'Code indémnité pour les primes (ex : 0204, 2251 etc...)',
+            'typePaiePrime'                 => 'Type ou carte pour les primes (ex : 20, P etc...)',
 
         ];
 
@@ -93,6 +99,7 @@ class StatutSaisieForm extends AbstractForm
             'offreEmploiPostuler',
             'modeEnseignementPrevisionnel',
             'modeEnseignementRealise',
+
         ];
 
         for ($i = 1; $i <= 5; $i++) {
@@ -238,7 +245,7 @@ class StatutSaisieForm extends AbstractForm
                 'visualisation' => 'Activé et visible par l\'intervenant',
                 'edition'       => 'Activé et modifiable par l\'intervenant',
             ];
-            if ($dveElement == 'paiement'){
+            if ($dveElement == 'paiement') {
                 unset($valueOptions['edition']);
             }
 
@@ -254,7 +261,7 @@ class StatutSaisieForm extends AbstractForm
 
                         $access = $statut->{$getter}();
                         $visu   = $statut->{$getter . 'Visualisation'}();
-                        $edit   = method_exists($statut, $getter . 'Edition') ?$statut->{$getter . 'Edition'}() : false;
+                        $edit   = method_exists($statut, $getter . 'Edition') ? $statut->{$getter . 'Edition'}() : false;
 
                         if ($edit && $visu && $access) {
                             return 'edition';
@@ -281,7 +288,7 @@ class StatutSaisieForm extends AbstractForm
                         $setter = 'set' . ucfirst($name);
                         $statut->{$setter}($access);
                         $statut->{$setter . 'Visualisation'}($visu);
-                        if (method_exists($statut,$setter . 'Edition')) {
+                        if (method_exists($statut, $setter . 'Edition')) {
                             $statut->{$setter . 'Edition'}($edit);
                         }
                     },

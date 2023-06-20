@@ -41,9 +41,14 @@ SELECT ct.annee_id,
        ct."numInsee",
        ct."statut",
        ct."totalHETD",
+       ct."tauxNom",
        ct."tauxHoraireValeur",
        ct."tauxHoraireDate",
        ct."tauxId",
+       ct."tauxMajoreNom",
+       ct."tauxMajoreHoraireValeur",
+       ct."tauxMajoreHoraireDate",
+       ct."tauxMajoreId",
        ct."dateSignature",
        ct."modifieComplete",
        CASE WHEN ct.est_contrat = 1 THEN 1 ELSE NULL END                                                                    "contrat1",
@@ -53,10 +58,10 @@ SELECT ct.annee_id,
        'Exemplaire à conserver'                                                                                             "exemplaire1",
        'Exemplaire à retourner' || ct."exemplaire2"                                                                         "exemplaire2",
        ct."serviceTotal",
+       ct."serviceTotal"/10                                                                                                 "total_divise_par_dix",
        ct."legendeAutresHeures",
        ct."enteteAutresHeures",
        ct."missionNom",
-       ct."tauxNom",
        ct."debutValidite",
        ct."finValidite",
        ct."pays_nationalite",
@@ -111,6 +116,10 @@ FROM (  SELECT c.*,
              COALESCE(to_char(OSE_PAIEMENT.get_taux_horaire_date(COALESCE(trm.id, trs.id,tr.id), a.date_debut), 'dd/mm/YYYY'), 'TAUX INTROUVABLE')         "tauxHoraireDate",
              COALESCE(trm.id, trs.id,tr.id)                                                                                                                "tauxId",
              COALESCE(trm.libelle, trs.libelle,tr.libelle)                                                                                                 "tauxNom",
+             REPLACE(ltrim(to_char(COALESCE(OSE_PAIEMENT.get_taux_horaire(COALESCE(tmm.id,trm.id, trs.id,tr.id), a.date_debut), 0), '999999.00')), '.', ',')"tauxMajoreHoraireValeur",
+             COALESCE(to_char(OSE_PAIEMENT.get_taux_horaire_date(COALESCE(tmm.id,trm.id, trs.id,tr.id), a.date_debut), 'dd/mm/YYYY'), 'TAUX INTROUVABLE')   "tauxMajoreHoraireDate",
+             COALESCE(tmm.id,trm.id, trs.id,tr.id)                                                                                                          "tauxMajoreId",
+             COALESCE(tmm.libelle,trm.libelle, trs.libelle,tr.libelle)                                                                                       "tauxMajoreNom",
              to_char(COALESCE(v.histo_creation, a.date_debut), 'dd/mm/YYYY')                                                                               "dateSignature",
              CASE
                  WHEN c.structure_id <> COALESCE(cp.structure_id, 0) THEN 'modifié'
@@ -165,6 +174,7 @@ FROM (  SELECT c.*,
             LEFT JOIN mission               m ON c.mission_id = m.id
             LEFT JOIN type_mission          tm ON m.type_mission_id = tm.id
             LEFT JOIN taux_remu             trm ON tm.taux_remu_id = trm.id
+            LEFT JOIN taux_remu             tmm ON tmm.id = m.taux_remu_majore_id
         WHERE
             c.histo_destruction IS NULL
 ) ct

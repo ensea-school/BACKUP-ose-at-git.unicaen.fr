@@ -35,20 +35,17 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
     {
         switch ($page['route']) {
             case 'offre-emploi':
+                $query = 'SELECT id FROM offre_emploi WHERE histo_destruction IS NULL';
+                $conn  = $this->getEntityManager()->getConnection();
+
+                if (false === $conn->executeQuery($query)->fetchOne()) {
+                    // Aucune offre => pas de lien
+                    return false;
+                }
+
                 $role = $this->getRole();
                 if (!$role) {
-                    $query = 'SELECT id FROM offre_emploi WHERE histo_destruction IS NULL';
-                    $conn  = $this->getEntityManager()->getConnection();
-
-                    if (false === $conn->executeQuery($query)->fetchOne()) {
-                        // Aucune offre => pas de lien public
-                        return false;
-                    } else {
-                        // Liste des offres d'emploi visible par tous
-                        return true;
-                    }
-
-
+                    // Visible si on n'est pas connecté
                     return true;
                 }
                 if (!$role->getIntervenant()) {

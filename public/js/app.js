@@ -100,13 +100,6 @@ $(function ()
         //     WidgetInitializer.includeJs(unicaenVue.url('js/chargens.js'));
     });
 
-    /* Droits */
-    WidgetInitializer.add('droits-tbl', 'droitsTbl', function () {
-        WidgetInitializer.includeJs(unicaenVue.url('js/droits.js'));
-    });
-    WidgetInitializer.add('affectation-form', 'affectationForm', function () {
-        WidgetInitializer.includeJs(unicaenVue.url('js/droits.js'));
-    });
 
     // installation de tooltip Bootstrap sur les icônes d'information (i)
     $(".info-icon").tooltip();

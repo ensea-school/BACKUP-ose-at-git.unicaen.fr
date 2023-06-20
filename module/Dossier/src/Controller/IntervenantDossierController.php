@@ -210,8 +210,8 @@ class IntervenantDossierController extends AbstractController
         }
         try {
             $this->getServiceValidation()->validerDossier($intervenantDossier);
-            $this->getProcessusImport()->execMaj('INTERVENANT', 'CODE', $intervenant->getCode());
             $this->updateTableauxBord($intervenant, true);
+            $this->getProcessusImport()->execMaj('INTERVENANT', 'CODE', $intervenant->getCode());
             $this->flashMessenger()->addSuccessMessage("Validation des données personnelles <strong>enregistrée</strong> avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));

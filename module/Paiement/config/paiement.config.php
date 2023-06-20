@@ -19,7 +19,9 @@ return [
                     'route'      => '/etat-demande-paiement',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'etatPaiement',
-                    'etat'       => \Paiement\Entity\Db\MiseEnPaiement::A_METTRE_EN_PAIEMENT,
+                    'defaults'   => [
+                        'etat' => Entity\Db\MiseEnPaiement::A_METTRE_EN_PAIEMENT,
+                    ],
                 ],
                 'mise-en-paiement'      => [
                     'route'       => '/mise-en-paiement/:structure/:intervenants',
@@ -33,7 +35,9 @@ return [
                     'route'      => '/etat-paiement',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'etatPaiement',
-                    'etat'       => \Paiement\Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
+                    'defaults'   => [
+                        'etat' => Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
+                    ],
                 ],
                 'mises-en-paiement-csv' => [
                     'route'      => '/mises-en-paiement-csv',
@@ -49,7 +53,9 @@ return [
                     'route'      => '/imputation-siham',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'imputationSiham',
-                    'etat'       => \Paiement\Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
+                    'defaults'   => [
+                        'etat' => Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
+                    ],
                 ],
             ],
         ],

@@ -57,7 +57,7 @@ class EnseignementAssertion extends AbstractAssertion
 
         $intervenant = null;
         if (isset($page['workflow-etape-code'])) {
-            $etape       = $page['workflow-etape-code'];
+            $etape = $page['workflow-etape-code'];
             $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
             if (
@@ -83,10 +83,10 @@ class EnseignementAssertion extends AbstractAssertion
                     return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_REALISE_VISUALISATION);
                 case 'intervenant/enseignement-prevu':
                     return $this->assertPageEnseignements($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
-                break;
+                    break;
                 case 'intervenant/enseignement-realise':
                     return $this->assertPageEnseignements($role, $intervenant, TypeVolumeHoraire::CODE_REALISE);
-                break;
+                    break;
             }
         }
 
@@ -97,7 +97,7 @@ class EnseignementAssertion extends AbstractAssertion
 
     /**
      * @param ResourceInterface $entity
-     * @param string            $privilege
+     * @param string $privilege
      *
      * @return boolean
      */
@@ -126,14 +126,14 @@ class EnseignementAssertion extends AbstractAssertion
                     case Privileges::ENSEIGNEMENT_REALISE_VALIDATION:
                         return $this->assertEnseignementValidation($role, $entity);
                 }
-            break;
+                break;
             case $entity instanceof VolumeHoraire:
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_PREVU_VALIDATION:
                     case Privileges::ENSEIGNEMENT_REALISE_VALIDATION:
                         return $this->assertVolumeHoraireValidation($role, $entity);
                 }
-            break;
+                break;
             case $entity instanceof Intervenant:
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_PREVU_VISUALISATION:
@@ -151,7 +151,7 @@ class EnseignementAssertion extends AbstractAssertion
                     case Privileges::ENSEIGNEMENT_EXTERIEUR:
                         return $this->assertIntervenantEnseignementExterieur($role, $entity);
                 }
-            break;
+                break;
             case $entity instanceof Validation:
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_PREVU_VALIDATION:
@@ -160,7 +160,7 @@ class EnseignementAssertion extends AbstractAssertion
                     case Privileges::ENSEIGNEMENT_DEVALIDATION:
                         return $this->assertValidationDevalidation($role, $entity);
                 }
-            break;
+                break;
         }
 
         return true;
@@ -177,7 +177,7 @@ class EnseignementAssertion extends AbstractAssertion
      */
     protected function assertController($controller, $action = null, $privilege = null)
     {
-        $role        = $this->getRole();
+        $role = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
@@ -189,19 +189,19 @@ class EnseignementAssertion extends AbstractAssertion
         switch ($controller . '.' . $action) {
             case EnseignementController::class . '.validation':
                 return $role->hasPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION) || $role->hasPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION);
-            break;
+                break;
             case EnseignementController::class . '.resume':
                 return $this->assertEnseignements($role);
-            break;
+                break;
             case EnseignementController::class . '.importAgenda':
                 return $this->assertImportAgenda($role);
-            break;
+                break;
             case EnseignementController::class . '.intervenant-saisie-prevu':
                 return $this->assertPageEnseignements($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
-            break;
+                break;
             case EnseignementController::class . '.intervenant-saisie-realise':
                 return $this->assertPageEnseignements($role, $intervenant, TypeVolumeHoraire::CODE_REALISE);
-            break;
+                break;
         }
 
         return true;
@@ -259,8 +259,8 @@ class EnseignementAssertion extends AbstractAssertion
     protected function assertEnseignementVisualisation(Role $role, Service $service)
     {
         $typeVolumeHoraire = $service->getTypeVolumeHoraire();
-        $intervenant       = $service->getIntervenant();
-        $statut            = $intervenant->getStatut();
+        $intervenant = $service->getIntervenant();
+        $statut = $intervenant->getStatut();
 
         $asserts = [
             $this->getAssertionService()->assertIntervenant($role, $intervenant),
@@ -285,7 +285,7 @@ class EnseignementAssertion extends AbstractAssertion
         $asserts = [];
 
         if ($structure) {
-            $structureAffectation  = $service->getIntervenant() ? $service->getIntervenant()->getStructure() : null;
+            $structureAffectation = $service->getIntervenant() ? $service->getIntervenant()->getStructure() : null;
             $structureEnseignement = $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null;
 
             if ($structureAffectation && $structureEnseignement) {
@@ -313,38 +313,27 @@ class EnseignementAssertion extends AbstractAssertion
 
     protected function assertHasEnseignements(Intervenant $intervenant, Structure $structure, string $etape, Role $role)
     {
-        $services        = $intervenant->getService();
         $typeIntervenant = $intervenant->getStatut()->getTypeIntervenant();
-
-        $nbServices = 0;
-        foreach ($services as $service) {
-
-            if ($service->getHistoDestruction()) continue;
-            if (!$service->getElementPedagogique()) continue;
-
-            $nbServices++;
+        switch ($etape) {
+            case WfEtape::CODE_SERVICE_VALIDATION:
+                $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+                break;
+            case WfEtape::CODE_SERVICE_VALIDATION_REALISE:
+                $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
+                break;
+            default:
+                throw new \Exception('Etape de workflow non gérée');
         }
 
         $reglesValidation = $this->getServiceRegleStructureValidation()->getList();
 
         foreach ($reglesValidation as $regle) {
 
-            if ($etape == WfEtape::CODE_SERVICE_VALIDATION && $regle->getTypeVolumeHoraire()->getCode() == 'PREVU') {
+            if ($regle->getTypeVolumeHoraire() == $typeVolumeHoraire) {
                 if ($regle->getTypeIntervenant()->getCode() == $typeIntervenant->getCode()) {
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
-                    if (($regle->getPriorite() == 'enseignement' && $nbServices > 0) ||
-                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure() == $role->getStructure())) {
-                        return true;
-                    }
-                }
-            }
-
-            if ($etape == WfEtape::CODE_SERVICE_VALIDATION_REALISE && $regle->getTypeVolumeHoraire()->getCode() == 'REALISE') {
-                if ($regle->getTypeIntervenant()->getCode() == $typeIntervenant->getCode()) {
-                    //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
-                    //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
-                    if (($regle->getPriorite() == 'enseignement' && $nbServices > 0) ||
+                    if (($regle->getPriorite() == 'enseignement' && $this->hasHeures($intervenant, $typeVolumeHoraire)) ||
                         ($regle->getPriorite() == 'affectation' && $intervenant->getStructure() == $role->getStructure())) {
                         return true;
                     }
@@ -353,6 +342,30 @@ class EnseignementAssertion extends AbstractAssertion
         }
 
         return false;
+    }
+
+
+
+    protected function hasHeures(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire): bool
+    {
+        $sql = "
+        SELECT
+          sum(vh.heures)
+        FROM
+          volume_horaire vh
+          JOIN service s ON s.id = vh.service_id
+        WHERE
+          s.histo_destruction IS NULL
+          AND vh.histo_destruction IS NULL
+          AND s.intervenant_id = :intervenant
+          AND vh.type_volume_horaire_id = :typeVolumeHoraire
+        ";
+
+        $conn = $this->getServiceContext()->getEntityManager()->getConnection();
+
+        $res = $conn->fetchOne($sql, ['intervenant' => $intervenant->getId(), 'typeVolumeHoraire' => $typeVolumeHoraire->getId()]);
+
+        return (float)$res > 0;
     }
 
 
@@ -425,10 +438,10 @@ class EnseignementAssertion extends AbstractAssertion
 
 
     protected function assertIntervenantEnseignement(
-        Role $role,
+        Role        $role,
         Intervenant $intervenant,
-        string $typeVolumeHoraireCode,
-        bool $edition = false
+        string      $typeVolumeHoraireCode,
+        bool        $edition = false
     )
     {
         if (!$this->getAssertionService()->assertIntervenant($role, $intervenant)) return false; // si on n'est pas le bon intervenant!!

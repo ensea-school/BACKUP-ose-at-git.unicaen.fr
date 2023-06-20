@@ -324,6 +324,8 @@ class PlafondService extends AbstractEntityService
         } elseif ($pqr->entity instanceof Service) {
             if ($pqr->entity->getElementPedagogique()) {
                 return $this->makeQuery($pqr->sub($pqr->entity->getElementPedagogique()));
+            }else{
+                return $this->makeQuery($pqr->sub($pqr->entity->getIntervenant()));
             }
 
         } elseif ($pqr->entity instanceof VolumeHoraire) {

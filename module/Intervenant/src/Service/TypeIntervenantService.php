@@ -48,6 +48,16 @@ class TypeIntervenantService extends AbstractEntityService
 
 
 
+    /**
+     * Retourne le type d'intervenant Extérieur
+     */
+    public function getEtudiant(): TypeIntervenant
+    {
+        return $this->getRepo()->findOneBy(['code' => TypeIntervenant::CODE_ETUDIANT]);
+    }
+
+
+
     public function getAlias(): string
     {
         return 'type_int';

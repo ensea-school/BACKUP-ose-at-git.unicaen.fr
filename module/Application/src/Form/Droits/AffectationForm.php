@@ -80,11 +80,15 @@ class AffectationForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'    => 'Select',
-            'name'    => 'structure',
-            'options' => [
+            'type'       => 'Select',
+            'name'       => 'structure',
+            'options'    => [
                 'label'         => 'Structure',
                 'value_options' => Util::collectionAsOptions($structures),
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => true,
             ],
         ]);
 
@@ -128,9 +132,6 @@ class AffectationForm extends AbstractForm
 }
 
 
-
-
-
 class AffectationFormHydrator implements HydratorInterface
 {
     use StructureServiceAwareTrait;
@@ -139,7 +140,7 @@ class AffectationFormHydrator implements HydratorInterface
 
 
     /**
-     * @param array                              $data
+     * @param array $data
      * @param \Application\Entity\Db\Affectation $object
      *
      * @return object
@@ -147,7 +148,7 @@ class AffectationFormHydrator implements HydratorInterface
     public function hydrate(array $data, $object)
     {
         $utilisateur = isset($data['utilisateur']['id']) ? $data['utilisateur']['id'] : null;
-        $structure   = isset($data['structure']) ? (int)$data['structure'] : null;
+        $structure = isset($data['structure']) ? (int)$data['structure'] : null;
 
         $object->setUtilisateur($this->getServiceUtilisateur()->getByUsername($utilisateur));
         $object->setRole($this->getServiceRole()->get($data['role']));

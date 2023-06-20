@@ -67,6 +67,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
                     ''                                                          => "Peu importe",
                     $this->getServiceTypeIntervenant()->getPermanent()->getId() => "Permanent",
                     $this->getServiceTypeIntervenant()->getExterieur()->getId() => "Vacataire",
+                    $this->getServiceTypeIntervenant()->getEtudiant()->getId()  => "Étudiant",
                 ],
             ],
             'attributes' => [

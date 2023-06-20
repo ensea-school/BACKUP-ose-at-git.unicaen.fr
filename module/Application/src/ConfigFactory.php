@@ -184,7 +184,7 @@ class ConfigFactory
             }
         }
 
-        /* On détecte le type s'il n'eiste pas déjà */
+        /* On détecte le type s'il n'existe pas déjà */
         if (!isset($config['type']) && isset($config['options']['route']) && !$isConsole) {
             if (false !== strpos($config['options']['route'], ':')) {
                 $config['type'] = 'Segment';

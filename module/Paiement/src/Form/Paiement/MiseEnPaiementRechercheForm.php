@@ -80,7 +80,8 @@ class MiseEnPaiementRechercheForm extends AbstractForm
                 'label' => "Composante",
             ],
             'attributes' => [
-                'class' => 'input-sm',
+                'class'            => 'input-sm selectpicker',
+                'data-live-search' => true,
             ],
             'type'       => 'Select',
         ]);
@@ -210,9 +211,6 @@ class MiseEnPaiementRechercheForm extends AbstractForm
 }
 
 
-
-
-
 /**
  *
  *
@@ -229,7 +227,7 @@ class MiseEnPaiementRechercheFormHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                                                $data
+     * @param array $data
      * @param \Paiement\Entity\MiseEnPaiementRecherche $object
      *
      * @return \Paiement\Entity\MiseEnPaiementRecherche

@@ -1,11 +1,12 @@
-CREATE OR REPLACE FORCE VIEW V_EXPORT_PAIEMENT_SIHAM AS
+--CREATE OR REPLACE FORCE VIEW V_EXPORT_PAIEMENT_SIHAM AS
 SELECT annee_id,
        type_intervenant_id,
        structure_id,
        periode_id,
-       'P'                                                               type,
+       CASE WHEN type_paie IS NOT NULL THEN type_paie ELSE 'P' END       type,
        code_rh                                                           matricule,
-       CASE WHEN type_intervenant_code = 'P' THEN '0204' ELSE '1578' END code_indemnite_retenu,
+       CASE WHEN code_indemnite IS NOT NULL THEN code_indemnite ELSE
+       		CASE WHEN type_intervenant_code = 'P' THEN '0204' ELSE '1578' END END code_indemnite_retenu,
        ose_paiement.get_format_mois_du()                                 du_mois,
        '20' || ose_paiement.get_annee_extraction_paie()                  annee_de_paye,
        ose_paiement.get_mois_extraction_paie()                           mois_de_paye,
@@ -19,7 +20,7 @@ SELECT annee_id,
        'DN ' || type_intervenant_code || ' '
            || substr(UPPER(structure_libelle), 0, 10)
            || ' ' || annee_libelle                                       libelle,
-       'B'                                                               mode_de_calcul,
+        CASE WHEN mode_calcul IS NOT NULL THEN mode_calcul ELSE 'B' END  mode_de_calcul,
        code_origine                                                      code_origine
 FROM (SELECT i.annee_id                                                                                        annee_id,
              a.libelle                                                                                         annee_libelle,
@@ -41,7 +42,13 @@ FROM (SELECT i.annee_id                                                         
              CASE WHEN ind <> ceil(t2.nbu / max_nbu) THEN max_nbu ELSE t2.nbu - max_nbu * (ind - 1) END        nbu,
              t2.nbu                                                                                            tnbu,
              (SELECT taux_hetd FROM annee ann WHERE ann.id = i.annee_id)                                       montant,
-             COALESCE(t2.unite_budgetaire, '') || ' ' || to_char(i.annee_id) || ' ' || to_char(i.annee_id + 1) libelle
+             COALESCE(t2.unite_budgetaire, '') || ' ' || to_char(i.annee_id) || ' ' || to_char(i.annee_id + 1) libelle,
+             si.code_indemnite																				   code_indemnite,
+             si.type_paie																					   type_paie,
+             si.mode_calcul																				       mode_calcul,
+             si.code_indemnite_prime																			   code_indemnite_prime,
+             si.type_paie_prime																				   type_paie_prime,
+             si.mode_calcul_prime																			   mode_calcul_prime
       FROM (SELECT structure_id,
                    periode_paiement_id,
                    intervenant_id,

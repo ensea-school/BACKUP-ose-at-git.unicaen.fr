@@ -57,8 +57,8 @@ SELECT ct.annee_id,
        to_char(sysdate, 'dd/mm/YYYY - hh24:mi:ss')                                                                          "horodatage",
        'Exemplaire à conserver'                                                                                             "exemplaire1",
        'Exemplaire à retourner' || ct."exemplaire2"                                                                         "exemplaire2",
+       ct."totalDiviseParDix",
        ct."serviceTotal",
-       ct."serviceTotal"/10                                                                                                 "total_divise_par_dix",
        ct."legendeAutresHeures",
        ct."enteteAutresHeures",
        ct."missionNom",
@@ -108,22 +108,22 @@ FROM (  SELECT c.*,
                              i.adresse_numero, i.adresse_numero_compl_id, i.adresse_voirie_id, i.adresse_voie,
                              i.adresse_code_postal, i.adresse_commune, i.adresse_pays_id
                          )
-                 )                                                                                                                                         "adresse",
-             COALESCE(d.numero_insee, i.numero_insee)                                                                                                      "numInsee",
-             si.libelle                                                                                                                                    "statut",
-             REPLACE(ltrim(to_char(COALESCE(c.total_hetd, fr.total, 0), '999999.00')), '.', ',')                                                           "totalHETD",
-             REPLACE(ltrim(to_char(COALESCE(OSE_PAIEMENT.get_taux_horaire(COALESCE(trm.id, trs.id,tr.id), a.date_debut), 0), '999999.00')), '.', ',')      "tauxHoraireValeur",
-             COALESCE(to_char(OSE_PAIEMENT.get_taux_horaire_date(COALESCE(trm.id, trs.id,tr.id), a.date_debut), 'dd/mm/YYYY'), 'TAUX INTROUVABLE')         "tauxHoraireDate",
-             COALESCE(trm.id, trs.id,tr.id)                                                                                                                "tauxId",
-             COALESCE(trm.libelle, trs.libelle,tr.libelle)                                                                                                 "tauxNom",
+                 )                                                                                                                                          "adresse",
+             COALESCE(d.numero_insee, i.numero_insee)                                                                                                       "numInsee",
+             si.libelle                                                                                                                                     "statut",
+             REPLACE(ltrim(to_char(COALESCE(c.total_hetd, fr.total, 0), '999999.00')), '.', ',')                                                            "totalHETD",
+             REPLACE(ltrim(to_char(COALESCE(OSE_PAIEMENT.get_taux_horaire(COALESCE(trm.id, trs.id,tr.id), a.date_debut), 0), '999999.00')), '.', ',')       "tauxHoraireValeur",
+             COALESCE(to_char(OSE_PAIEMENT.get_taux_horaire_date(COALESCE(trm.id, trs.id,tr.id), a.date_debut), 'dd/mm/YYYY'), 'TAUX INTROUVABLE')          "tauxHoraireDate",
+             COALESCE(trm.id, trs.id,tr.id)                                                                                                                 "tauxId",
+             COALESCE(trm.libelle, trs.libelle,tr.libelle)                                                                                                  "tauxNom",
              REPLACE(ltrim(to_char(COALESCE(OSE_PAIEMENT.get_taux_horaire(COALESCE(tmm.id,trm.id, trs.id,tr.id), a.date_debut), 0), '999999.00')), '.', ',')"tauxMajoreHoraireValeur",
              COALESCE(to_char(OSE_PAIEMENT.get_taux_horaire_date(COALESCE(tmm.id,trm.id, trs.id,tr.id), a.date_debut), 'dd/mm/YYYY'), 'TAUX INTROUVABLE')   "tauxMajoreHoraireDate",
              COALESCE(tmm.id,trm.id, trs.id,tr.id)                                                                                                          "tauxMajoreId",
              COALESCE(tmm.libelle,trm.libelle, trs.libelle,tr.libelle)                                                                                       "tauxMajoreNom",
-             to_char(COALESCE(v.histo_creation, a.date_debut), 'dd/mm/YYYY')                                                                               "dateSignature",
+             to_char(COALESCE(v.histo_creation, a.date_debut), 'dd/mm/YYYY')                                                                                "dateSignature",
              CASE
                  WHEN c.structure_id <> COALESCE(cp.structure_id, 0) THEN 'modifié'
-                 ELSE 'complété' END                                                                                                                       "modifieComplete",
+                 ELSE 'complété' END                                                                                                                        "modifieComplete",
              CASE
                  WHEN s.aff_adresse_contrat = 1 THEN
                          ' signé à l''adresse suivante :' || chr(13) || chr(10) ||
@@ -136,6 +136,7 @@ FROM (  SELECT c.*,
                                                                  ), chr(13), ' - ')
                  ELSE '' END                                                                                                                                "exemplaire2",
              REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal", 0), '999999.00')), '.', ',')                                                                 "serviceTotal",
+             REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"/10, 0), '999999.00')), '.', ',')                                                              "totalDiviseParDix",
              CASE
                  WHEN la.autre_libelles IS NOT NULL
                      THEN '*Dont type(s) intervention(s) : ' || la.autre_libelles END                                                                       "legendeAutresHeures",

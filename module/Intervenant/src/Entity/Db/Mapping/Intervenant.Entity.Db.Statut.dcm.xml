@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Intervenant\Entity\Db\Statut" table="STATUT">
         <id name="id" type="integer" column="ID">
@@ -113,6 +113,13 @@
 
         <field name="modeEnseignementPrevisionnel" type="string" column="MODE_ENSEIGNEMENT_PREVISIONNEL" length="1000" nullable="true"/>
         <field name="modeEnseignementRealise" type="string" column="MODE_ENSEIGNEMENT_REALISE" length="1000" nullable="true"/>
+
+        <field name="modeCalcul" type="string" column="MODE_CALCUL" length="1000" nullable="true"/>
+        <field name="codeIndemnite" type="string" column="CODE_INDEMNITE" length="1000" nullable="true"/>
+        <field name="typePaie" type="string" column="TYPE_PAIE" length="1000" nullable="true"/>
+        <field name="modeCalculPrime" type="string" column="MODE_CALCUL_PRIME" length="1000" nullable="true"/>
+        <field name="codeIndemnitePrime" type="string" column="CODE_INDEMNITE_PRIME" length="1000" nullable="true"/>
+        <field name="typePaiePrime" type="string" column="TYPE_PAIE_PRIME" length="1000" nullable="true"/>
 
 
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>

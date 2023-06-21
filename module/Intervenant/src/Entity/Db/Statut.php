@@ -198,6 +198,18 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private ?string     $modeEnseignementRealise            = null;
 
+    private ?string     $modeCalcul                         = null;
+
+    private ?string     $codeIndemnite                      = null;
+
+    private ?string     $typePaie                           = null;
+
+    private ?string     $modeCalculPrime                    = null;
+
+    private ?string     $codeIndemnitePrime                 = null;
+
+    private ?string     $typePaiePrime                      = null;
+
 
 
     public function __toString (): string
@@ -1328,14 +1340,14 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
-    public function getPaiement(): bool
+    public function getPaiement (): bool
     {
         return $this->paiement;
     }
 
 
 
-    public function setPaiement(bool $paiement): Statut
+    public function setPaiement (bool $paiement): Statut
     {
         $this->paiement = $paiement;
 
@@ -1535,6 +1547,138 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
     public function setTauxRemu (?TauxRemu $tauxRemu): Statut
     {
         $this->tauxRemu = $tauxRemu;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getModeCalcul (): ?string
+    {
+        return $this->modeCalcul;
+    }
+
+
+
+    /**
+     * @param string|null $modeCalcul
+     */
+    public function setModeCalcul (?string $modeCalcul): Statut
+    {
+        $this->modeCalcul = $modeCalcul;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodeIndemnite (): ?string
+    {
+        return $this->codeIndemnite;
+    }
+
+
+
+    /**
+     * @param string|null $codeIndemnite
+     */
+    public function setCodeIndemnite (?string $codeIndemnite): Statut
+    {
+        $this->codeIndemnite = $codeIndemnite;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getTypePaie (): ?string
+    {
+        return $this->typePaie;
+    }
+
+
+
+    /**
+     * @param string|null $typePaie
+     */
+    public function setTypePaie (?string $typePaie): Statut
+    {
+        $this->typePaie = $typePaie;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getModeCalculPrime (): ?string
+    {
+        return $this->modeCalculPrime;
+    }
+
+
+
+    /**
+     * @param string|null $modeCalculPrime
+     */
+    public function setModeCalculPrime (?string $modeCalculPrime): Statut
+    {
+        $this->modeCalculPrime = $modeCalculPrime;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getCodeIndemnitePrime (): ?string
+    {
+        return $this->codeIndemnitePrime;
+    }
+
+
+
+    /**
+     * @param string|null $codeIndemnitePrime
+     */
+    public function setCodeIndemnitePrime (?string $codeIndemnitePrime): Statut
+    {
+        $this->codeIndemnitePrime = $codeIndemnitePrime;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getTypePaiePrime (): ?string
+    {
+        return $this->typePaiePrime;
+    }
+
+
+
+    /**
+     * @param string|null $typePaiePrime
+     */
+    public function setTypePaiePrime (?string $typePaiePrime): Statut
+    {
+        $this->typePaiePrime = $typePaiePrime;
 
         return $this;
     }

@@ -10,6 +10,7 @@ class TypeIntervenant
 {
     const CODE_PERMANENT = 'P';
     const CODE_EXTERIEUR = 'E';
+    const CODE_ETUDIANT = 'S';
 
     protected int    $id;
 

@@ -328,12 +328,12 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('modeCalcul')); ?>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 mission-paie">
                         <?= $this->formControlGroup($form->get('modeCalculPrime')); ?>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6 mission-paie">
                         <?= $this->formControlGroup($form->get('codeIndemnite')); ?>
                     </div>
                     <div class="col-md-6">
@@ -344,7 +344,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('typePaie')); ?>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 mission-paie">
                         <?= $this->formControlGroup($form->get('typePaiePrime')); ?>
                     </div>
                 </div>
@@ -444,8 +444,8 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
             missionVisu: function () {
                 var visible = this.el('mission').val() != 'desactive';
-                console.log(visible);
                 this.element.find('.missionDetails').toggle(visible);
+                this.element.find('.mission-paie').toggle(visible);
             },
 
             _create: function () {

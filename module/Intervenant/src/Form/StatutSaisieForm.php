@@ -68,9 +68,9 @@ class StatutSaisieForm extends AbstractForm
             'modeCalcul'                    => 'Mode de calcul de la paie (ex : A, B etc...)',
             'codeIndemnite'                 => 'Code indémnité de la paie (ex : 0204, 2251 etc...)',
             'typePaie'                      => 'Code du type ou carte de la paie (ex : 20, P etc...)',
-            'modeCalculPrime'               => 'Mode de calcul pour les primes (ex : A, B etc...)',
-            'codeIndemnitePrime'            => 'Code indémnité pour les primes (ex : 0204, 2251 etc...)',
-            'typePaiePrime'                 => 'Type ou carte pour les primes (ex : 20, P etc...)',
+            'modeCalculPrime'               => 'Mode de calcul primes mission (ex : A, B etc...)',
+            'codeIndemnitePrime'            => 'Code indémnité primes mission (ex : 0204, 2251 etc...)',
+            'typePaiePrime'                 => 'Type ou carte primes mission (ex : 20, P etc...)',
 
         ];
 

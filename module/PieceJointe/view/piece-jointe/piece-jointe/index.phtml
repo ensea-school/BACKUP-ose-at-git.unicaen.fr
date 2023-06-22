@@ -42,7 +42,7 @@ $menuUrl = $this->url('piece-jointe/intervenant', ['intervenant' => $intervenant
                 //Check si piece obligatoire
                 $obligatoire = $pj->isObligatoire();
                 $tpj         = $pj->getTypePieceJointe();
-                if (isset($fournies[$tpj->getId()]) && $synthese[$tpj->getId()]->getFournie() == 1) { // qu'elles soient fournies ou non
+                if (isset($fournies[$tpj->getId()]) && (array_key_exists($tpj->getId(), $synthese) && $synthese[$tpj->getId()]->getFournie() == 1)) { // qu'elles soient fournies ou non
                     $pj = $fournies[$tpj->getId()];
                     unset($restantes[$tpj->getId()]);
                 } else {

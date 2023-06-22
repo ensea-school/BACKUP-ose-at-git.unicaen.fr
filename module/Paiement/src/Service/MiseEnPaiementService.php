@@ -200,6 +200,9 @@ class MiseEnPaiementService extends AbstractEntityService
                 'centre-cout-code'            => $d['CENTRE_COUT_CODE'],
                 'domaine-fonctionnel-libelle' => $d['DOMAINE_FONCTIONNEL_LIBELLE'],
 
+                'taux-remu'           => $d['TAUX_REMU'],
+                'taux-horaire'        => (float)$d['TAUX_HORAIRE'],
+
                 'hetd'                => (float)$d['HETD'],
                 'hetd-pourc'          => (float)$d['HETD_POURC'],
                 'hetd-montant'        => (float)$d['HETD_MONTANT'],

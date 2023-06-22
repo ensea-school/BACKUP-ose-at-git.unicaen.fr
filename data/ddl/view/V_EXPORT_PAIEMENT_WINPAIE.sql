@@ -33,7 +33,7 @@ FROM (SELECT i.annee_id                                                         
              t2.code_origine                                                                                   code_origine,
              CASE WHEN ind <> ceil(t2.nbu / max_nbu) THEN max_nbu ELSE t2.nbu - max_nbu * (ind - 1) END        nbu,
              t2.nbu                                                                                            tnbu,
-             (select taux_hetd from annee ann where ann.id = i.annee_id)                         montant,
+             t2.taux_horaire*t2.taux_conges_payes									                           montant,
              COALESCE(t2.unite_budgetaire, '') || ' ' || to_char(i.annee_id) || ' ' || to_char(i.annee_id + 1) libelle,
              si.code_indemnite																				   code_indemnite,
              si.type_paie																					   type_paie,
@@ -47,7 +47,9 @@ FROM (SELECT i.annee_id                                                         
                    code_origine,
                    round(SUM(nbu), 2) nbu,
                    unite_budgetaire,
-                   date_mise_en_paiement
+                   date_mise_en_paiement,
+                   taux_horaire,
+                   taux_conges_payes
             FROM (WITH mep AS (SELECT
                                    -- pour les filtres
                                    mep.id,
@@ -58,7 +60,9 @@ FROM (SELECT i.annee_id                                                         
                                    cc.unite_budgetaire,
                                    mep.date_mise_en_paiement,
                                    mis.heures_aa,
-                                   mis.heures_ac
+                                   mis.heures_ac,
+                                   mis.taux_horaire,
+                                   mis.taux_conges_payes
                                FROM tbl_paiement mis
                                         JOIN mise_en_paiement mep
                                              ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
@@ -74,7 +78,9 @@ FROM (SELECT i.annee_id                                                         
                          2             code_origine,
                          mep.heures_aa nbu,
                          mep.unite_budgetaire,
-                         mep.date_mise_en_paiement
+                         mep.date_mise_en_paiement,
+                         mep.taux_horaire,
+                         mep.taux_conges_payes
                   FROM mep
                   WHERE mep.heures_aa > 0
 
@@ -87,7 +93,9 @@ FROM (SELECT i.annee_id                                                         
                          1             code_origine,
                          mep.heures_ac nbu,
                          mep.unite_budgetaire,
-                         mep.date_mise_en_paiement
+                         mep.date_mise_en_paiement,
+                         mep.taux_horaire,
+                         mep.taux_conges_payes
                   FROM mep
                   WHERE mep.heures_ac > 0) t1
             GROUP BY structure_id,
@@ -95,7 +103,9 @@ FROM (SELECT i.annee_id                                                         
                      intervenant_id,
                      code_origine,
                      unite_budgetaire,
-                     date_mise_en_paiement) t2
+                     date_mise_en_paiement,
+                     taux_horaire,
+                     taux_conges_payes) t2
                JOIN (SELECT level ind, 99 max_nbu FROM dual CONNECT BY 1=1 AND LEVEL <= 11) tnbu
                     ON ceil(t2.nbu / max_nbu) >= ind
                JOIN intervenant i ON i.id = t2.intervenant_id

@@ -7,6 +7,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PARAMETRE" AS
   etablissement VARCHAR2(50);
   regle_paiement_annee_civile VARCHAR2(50);
   pourc_s1_pour_annee_civile FLOAT;
+  taux_conges_payes FLOAT;
 
 
 

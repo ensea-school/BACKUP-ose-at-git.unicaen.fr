@@ -82,13 +82,24 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PARAMETRE" AS
 
 
 
-  FUNCTION get_pourc_s1_annee_civ RETURN VARCHAR2 IS
+  FUNCTION get_pourc_s1_annee_civ RETURN FLOAT IS
   BEGIN
     IF pourc_s1_pour_annee_civile IS NULL THEN
       SELECT TO_NUMBER(valeur, '999999999D999999999', 'NLS_NUMERIC_CHARACTERS =.,') INTO pourc_s1_pour_annee_civile FROM parametre WHERE nom = 'pourc_s1_pour_annee_civile';
     END IF;
 
     RETURN pourc_s1_pour_annee_civile;
+  END;
+
+
+
+  FUNCTION get_taux_conges_payes RETURN FLOAT IS
+  BEGIN
+    IF taux_conges_payes IS NULL THEN
+      SELECT COALESCE(TO_NUMBER(valeur, '999999999D999999999', 'NLS_NUMERIC_CHARACTERS =.,'),1) INTO taux_conges_payes FROM parametre WHERE nom = 'taux_conges_payes';
+    END IF;
+
+    RETURN taux_conges_payes;
   END;
 
 

@@ -181,12 +181,11 @@ SELECT
   0.6                                         pourc_exercice_ac,
   COALESCE(mep.heures,0) * 0.4                heures_aa,
   COALESCE(mep.heures,0) * 0.6                heures_ac,
-  null taux_remu_id, null taux_horaire,COALESCE(to_number(p.valeur),1) taux_conges_payes
+  null taux_remu_id, 1 taux_horaire,ose_parametre.get_taux_conges_payes taux_conges_payes
   --COALESCE(si.taux_remu_id, to_number(p3.valeur))                  taux_remu_id,
   --OSE_PAIEMENT.GET_TAUX_HORAIRE(COALESCE(si.taux_remu_id, to_number(p3.valeur)),COALESCE(vhr.horaire_debut, a.date_debut)) taux_horaire
 FROM
   tbl_mission tm
-  JOIN parametre p ON p.nom = 'taux_conges_payes'
   LEFT JOIN mise_en_paiement                mep ON mep.mission_id = tm.mission_id
                                                AND mep.histo_destruction IS NULL
 WHERE

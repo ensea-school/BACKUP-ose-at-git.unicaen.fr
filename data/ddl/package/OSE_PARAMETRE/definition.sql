@@ -6,7 +6,8 @@ CREATE OR REPLACE PACKAGE "OSE_PARAMETRE" AS
   FUNCTION get_ose_user RETURN Numeric;
   FUNCTION get_formule RETURN formule%rowtype;
   FUNCTION get_regle_paiement_annee_civ RETURN VARCHAR2;
-  FUNCTION get_pourc_s1_annee_civ RETURN VARCHAR2;
+  FUNCTION get_pourc_s1_annee_civ RETURN FLOAT;
+  FUNCTION get_taux_conges_payes RETURN FLOAT;
 
   PROCEDURE CLEAR_CACHE;
 

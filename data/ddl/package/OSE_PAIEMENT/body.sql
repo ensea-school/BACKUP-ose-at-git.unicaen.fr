@@ -106,7 +106,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
 
     EXCEPTION
     WHEN OTHERS THEN
-       RETURN -1;
+       RETURN 1;
   END get_taux_horaire;
 
 

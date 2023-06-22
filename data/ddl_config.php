@@ -78,6 +78,7 @@ return [
 
             'V_SERVICE_VALIDE',
             'V_SERVICE_NON_VALIDE',
+            'V_EXP_HETD_CENTRE_COUT',
         ], 'excludes' => [
             'V_TBL_PLAFOND_%', // Les vues plafonds sont générées et non créées à partir de la DDL
         ],

@@ -4,6 +4,7 @@
 /* @var $hasFoot boolean */
 
 $majFc = $etatPaiement['total']['rem-fc-d714'] > 0;
+$hasCp = isset($etatPaiement['total']['conges-payes']) && $etatPaiement['total']['conges-payes'];
 
 ?>
 <table class="table table-sm table-bordered etat-paiement">
@@ -14,6 +15,7 @@ $majFc = $etatPaiement['total']['rem-fc-d714'] > 0;
         <th rowspan="2">Domaine fonctionnel</th>
         <th colspan="2" rowspan="2">HETD</th>
         <th colspan="2">Taux</th>
+        <?php if ($hasCp): ?><th rowspan="2" title="Taux de congés payés à prendre en compte, impactant la conversion des heures en euros">Congés payés *</th><?php endif; ?>
         <th rowspan="2">Montant</th>
         <?php if ($majFc): ?><th rowspan="2">Rém. FC D714.60</th><?php endif; ?>
         <th colspan="2">Exercice</th>
@@ -39,6 +41,7 @@ $majFc = $etatPaiement['total']['rem-fc-d714'] > 0;
         <td class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedPourcentage($ep['hetd-pourc']) : '' ?></td>
         <td><?= $ep['taux-remu'] ?></td>
         <td class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($ep['taux-horaire']) : '' ?>
+        <?php if ($hasCp): ?><td class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedPourcentage($ep['taux-conges-payes']) : '' ?></td><?php endif; ?>
         <td class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedEuros($ep['hetd-montant']) : '' ?></td>
         <?php if ($majFc): ?><td class="nombre"><?= $hetdRem == 'hetd' ? '' : \UnicaenApp\Util::formattedEuros($ep['rem-fc-d714']) ?></td><?php endif; ?>
         <td class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($ep['exercice-aa']) : '' ?></td>
@@ -53,8 +56,9 @@ $majFc = $etatPaiement['total']['rem-fc-d714'] > 0;
         <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedPourcentage($lep['total']['hetd-pourc']) : '' ?></th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
+        <?php if ($majFc): ?><th>&nbsp;</th><?php endif; ?>
         <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedEuros($lep['total']['hetd-montant']) : '' ?></th>
-        <?php if ($majFc): ?><th class="nombre"><?= $hetdRem == 'hetd' ? '' : \UnicaenApp\Util::formattedEuros($lep['total']['rem-fc-d714']) ?></th><?php endif; ?>
+        <?php if ($hasCp): ?><th class="nombre"><?= $hetdRem == 'hetd' ? '' : \UnicaenApp\Util::formattedEuros($lep['total']['rem-fc-d714']) ?></th><?php endif; ?>
         <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($lep['total']['exercice-aa']) : \UnicaenApp\Util::formattedEuros($lep['total']['exercice-aa-montant']) ?></th>
         <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($lep['total']['exercice-ac']) : \UnicaenApp\Util::formattedEuros($lep['total']['exercice-ac-montant']) ?></th>
     </tr>
@@ -70,8 +74,9 @@ $majFc = $etatPaiement['total']['rem-fc-d714'] > 0;
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
+        <?php if ($majFc): ?><th>&nbsp;</th><?php endif; ?>
         <td class="nombre"><?= \UnicaenApp\Util::formattedEuros($etatPaiement['total']['hetd-montant']) ?></td>
-        <?php if ($majFc): ?><td class="nombre"><?= \UnicaenApp\Util::formattedEuros($etatPaiement['total']['rem-fc-d714']) ?></td><?php endif; ?>
+        <?php if ($hasCp): ?><td class="nombre"><?= \UnicaenApp\Util::formattedEuros($etatPaiement['total']['rem-fc-d714']) ?></td><?php endif; ?>
         <td class="nombre"><?= \UnicaenApp\Util::formattedEuros($etatPaiement['total']['exercice-aa-montant']) ?></td>
         <td class="nombre"><?= \UnicaenApp\Util::formattedEuros($etatPaiement['total']['exercice-ac-montant']) ?></td>
     </tr>

@@ -88,28 +88,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
 
 
-  FUNCTION GET_TAUX_HORAIRE_HETD( DATE_OBS DATE DEFAULT NULL ) RETURN FLOAT IS
-  BEGIN
-    FOR t IN (
-      SELECT   valeur
-      FROM     taux_horaire_hetd t
-      WHERE    DATE_OBS BETWEEN t.histo_creation AND COALESCE(t.histo_destruction,GREATEST(SYSDATE,DATE_OBS))
-      ORDER BY histo_creation DESC
-    ) LOOP
-      RETURN t.valeur;
-    END LOOP;
-    RETURN NULL;
-  END;
-
-
-
-  PROCEDURE UPDATE_ANNEE_TAUX_HETD IS
-  BEGIN
-    UPDATE annee SET taux_hetd = GET_TAUX_HORAIRE_HETD(date_fin);
-  END;
-
-
-
   PROCEDURE LOAD_INTERVENANT_FROM_BDD IS
     TYPE t_formule_intervenant IS RECORD (
       intervenant_id                  NUMERIC,

@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => TRUE,
     'commentaire' => NULL,
-    'sequence'    => NULL,
+    'sequence'    => 'JOUR_FERIE_ID_SEQ',
     'columns'     => [
         'DATE_JOUR' => [
             'name'        => 'DATE_JOUR',

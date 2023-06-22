@@ -13,6 +13,7 @@ return [
             'TYPE_AGREMENT_STATUT',
             'PLAFOND_APPLICATION',
             'VERSION',
+            'TAUX_HORAIRE_HETD',
         ],
     ],
     'materialized-view' => [
@@ -110,6 +111,7 @@ return [
             'STATUT_INTERVENANT_ID_SEQ',
             'PLAFOND_APPLICATION_ID_SEQ',
             'MODELE_CONTRAT_ID_SEQ',
+            'TAUX_HORAIRE_HETD_ID_SEQ',
         ],
     ],
 ];

@@ -402,27 +402,6 @@ return [
         ],
     ],
 
-    'TAUX_HORAIRE_HETD' => [
-        [
-            'ID'                 => 1,
-            'VALEUR'             => 40.91,
-            'HISTO_CREATION'     => '2010-07-01 00:00:00',
-            'HISTO_MODIFICATION' => '2014-06-25 00:00:00',
-        ],
-        [
-            'ID'                 => 2,
-            'VALEUR'             => 41.41,
-            'HISTO_CREATION'     => '2017-02-01 00:00:00',
-            'HISTO_MODIFICATION' => '2017-02-01 00:00:00',
-        ],
-        [
-            'ID'                 => 3,
-            'VALEUR'             => 42.86,
-            'HISTO_CREATION'     => '2022-09-01 00:00:00',
-            'HISTO_MODIFICATION' => '2022-07-01 00:00:00',
-        ],
-    ],
-
     'TBL' => [
         [
             'TBL_NAME'           => 'candidature',

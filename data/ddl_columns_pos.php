@@ -106,7 +106,6 @@ return [
         'DATE_DEBUT',
         'DATE_FIN',
         'ACTIVE',
-        'TAUX_HETD',
     ],
     'CAMPAGNE_SAISIE'                => [
         'ID',
@@ -1509,6 +1508,9 @@ return [
         'POURC_EXERCICE_AC',
         'HEURES_AA',
         'HEURES_AC',
+        'TAUX_REMU_ID',
+        'TAUX_HORAIRE',
+        'TAUX_CONGES_PAYES',
     ],
     'TBL_PIECE_JOINTE'               => [
         'ID',

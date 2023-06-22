@@ -69,18 +69,6 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'TAUX_HETD'  => [
-            'name'        => 'TAUX_HETD',
-            'type'        => 'float',
-            'bdd-type'    => 'FLOAT',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => 126,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 6,
-            'commentaire' => NULL,
-        ],
     ],
 ];
 

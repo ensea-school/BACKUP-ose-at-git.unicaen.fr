@@ -36,7 +36,8 @@ SELECT
   exercice_ac,
   exercice_ac_montant,
   taux_remu,
-  taux_horaire
+  taux_horaire,
+  taux_conges_payes
 FROM
   (
   SELECT
@@ -67,16 +68,17 @@ FROM
       domaine_fonctionnel_libelle,
       hetd,
       ROUND( CASE WHEN hetd > 0 THEN hetd / SUM( hetd ) OVER( PARTITION BY periode_id, intervenant_id, etat, structure_id) ELSE 0 END, 3 ) hetd_pourc,
-      ROUND( hetd * taux_horaire, 2 ) hetd_montant,
-      ROUND( fc_majorees * taux_horaire, 2 ) rem_fc_d714,
+      ROUND( hetd * taux_horaire * taux_conges_payes, 2 ) hetd_montant,
+      ROUND( fc_majorees * taux_horaire * taux_conges_payes, 2 ) rem_fc_d714,
       exercice_aa,
-      ROUND( exercice_aa * taux_horaire, 2 ) exercice_aa_montant,
+      ROUND( exercice_aa * taux_horaire * taux_conges_payes, 2 ) exercice_aa_montant,
       exercice_ac,
-      ROUND( exercice_ac * taux_horaire, 2 ) exercice_ac_montant,
+      ROUND( exercice_ac * taux_horaire * taux_conges_payes, 2 ) exercice_ac_montant,
       (CASE WHEN hetd > 0 THEN hetd / SUM( hetd ) OVER( PARTITION BY periode_id, intervenant_id, etat, structure_id) ELSE 0 END)
       - ROUND( CASE WHEN hetd > 0 THEN hetd / SUM( hetd ) OVER( PARTITION BY periode_id, intervenant_id, etat, structure_id) ELSE 0 END, 3 ) pourc_diff,
         taux_remu,
-        taux_horaire
+        taux_horaire,
+        taux_conges_payes
     FROM (
       SELECT
         periode_id,
@@ -105,7 +107,8 @@ FROM
         SUM( exercice_aa ) exercice_aa,
         SUM( exercice_ac ) exercice_ac,
         taux_remu,
-        taux_horaire
+        taux_horaire,
+        taux_conges_payes
       FROM
         (
         SELECT
@@ -139,7 +142,8 @@ FROM
           mis.heures_aa                                                       exercice_aa,
           mis.heures_ac                                                       exercice_ac,
           tr.libelle taux_remu,
-          mis.taux_horaire
+          mis.taux_horaire,
+          mis.taux_conges_payes
         FROM
                     tbl_paiement mis
                JOIN mise_en_paiement        mep ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
@@ -181,6 +185,7 @@ FROM
         domaine_fonctionnel_libelle,
         taux_remu,
         taux_horaire,
+        taux_conges_payes,
         is_fc_majoree
       ) dep2
     ) dep3

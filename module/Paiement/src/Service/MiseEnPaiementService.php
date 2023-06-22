@@ -202,6 +202,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
                 'taux-remu'           => $d['TAUX_REMU'],
                 'taux-horaire'        => (float)$d['TAUX_HORAIRE'],
+                'taux-conges-payes'   => (float)$d['TAUX_CONGES_PAYES'],
 
                 'hetd'                => (float)$d['HETD'],
                 'hetd-pourc'          => (float)$d['HETD_POURC'],
@@ -212,6 +213,10 @@ class MiseEnPaiementService extends AbstractEntityService
                 'exercice-ac'         => (float)$d['EXERCICE_AC'],
                 'exercice-ac-montant' => (float)$d['EXERCICE_AC_MONTANT'],
             ];
+            if ($ds['taux-conges-payes'] != 1){
+                //on a des congés payés
+                $data['total']['conges-payes'] = true;
+            }
 
             $iid = $d['INTERVENANT_ID'];
 

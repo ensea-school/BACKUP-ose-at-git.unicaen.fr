@@ -107,7 +107,7 @@ FROM
           mis.heures_ac                                                       exercice_ac,
           mis.taux_horaire
         FROM
-                    v_tbl_paiement mis
+                    tbl_paiement mis
                JOIN mise_en_paiement        mep ON   mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
                JOIN type_heures              th ON   th.id = mep.type_heures_id
                JOIN centre_cout              cc ON   cc.id = mep.centre_cout_id      -- pas d'historique pour les centres de coût, qui devront tout de même apparaitre mais en erreur

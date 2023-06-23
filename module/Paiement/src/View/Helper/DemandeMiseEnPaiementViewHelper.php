@@ -313,7 +313,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
         }
         $out .= '<table ' . $this->htmlAttribs($attrs) . '>';
         $out .= '<thead ' . $this->htmlAttribs($hattrs) . '><tr><th colspan="' . ($serviceAPayer->isDomaineFonctionnelModifiable() ? 4 : 3) . '">' . $typeHeures->getLibelleLong() . '</th></tr><tr>';
-        $out .= '<th style="width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
+        $out .= '<th style="min-width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
         $out .= '<th>Centre de coûts</th>';
         if ($serviceAPayer->isDomaineFonctionnelModifiable()) {
             $out .= '<th>Domaine fonctionnel</th>';

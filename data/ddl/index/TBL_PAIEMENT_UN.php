@@ -12,6 +12,8 @@ return [
         'FORMULE_RES_SERVICE_ID',
         'FORMULE_RES_SERVICE_REF_ID',
         'MISSION_ID',
+        'TAUX_REMU_ID',
+        'TAUX_HORAIRE',
     ],
 ];
 

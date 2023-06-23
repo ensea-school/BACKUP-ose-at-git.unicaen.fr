@@ -20,7 +20,7 @@ function DemandeMiseEnPaiement(id)
         var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
             + '<i class="fas fa-exclamation"></i> '
             + errorStr
-            + '<button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">&times;</button>'
+            + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
             + '</div>';
         serviceElement.find(".breadcrumb").after(out);
     }
@@ -242,7 +242,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
         var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
             + '<i class="fas fa-exclamation"></i> '
             + errorStr
-            + '<button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">&times;</button>'
+            + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
             + '</div>';
         this.element.parents('.type-heures').prepend(out);
         this.validation = false;

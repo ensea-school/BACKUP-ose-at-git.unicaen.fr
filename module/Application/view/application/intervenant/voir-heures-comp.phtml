@@ -78,8 +78,7 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
 
     <?php if (vn($data, 'DEPASSEMENT_SERVICE_DU_SANS_HC', 'f')): ?>
         <div class="alert alert-info alert-dismissible" role="alert" style="margin-top:1em">
-            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             <strong>* </strong>
             Le statut de cet intervenant (<?= $intervenant->getStatut() ?>) ne lui permet pas de prétendre à des heures
             complémentaires.

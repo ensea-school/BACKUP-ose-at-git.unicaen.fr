@@ -8,6 +8,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PARAMETRE" AS
   regle_paiement_annee_civile VARCHAR2(50);
   pourc_s1_pour_annee_civile FLOAT;
   taux_conges_payes FLOAT;
+  horaire_nocturne VARCHAR2(5);
 
 
 
@@ -102,6 +103,18 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PARAMETRE" AS
 
     RETURN taux_conges_payes;
   END;
+
+
+
+  FUNCTION get_horaire_nocturne RETURN VARCHAR2 IS
+  BEGIN
+    IF horaire_nocturne IS NULL THEN
+      SELECT valeur INTO horaire_nocturne FROM parametre WHERE nom = 'horaire_nocturne';
+    END IF;
+
+    RETURN horaire_nocturne;
+  END;
+
 
 
   PROCEDURE CLEAR_CACHE IS

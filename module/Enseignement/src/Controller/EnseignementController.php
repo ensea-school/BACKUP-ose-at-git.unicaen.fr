@@ -20,6 +20,7 @@ use Enseignement\Processus\EnseignementProcessusAwareTrait;
 use Enseignement\Processus\ValidationEnseignementProcessusAwareTrait;
 use Enseignement\Service\ServiceServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
@@ -225,6 +226,13 @@ class EnseignementController extends AbstractController
         $details     = 1 == (int)$this->params()->fromQuery('details', (int)$this->params()->fromPost('details', 0));
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content', 0);
         $service     = $this->getEvent()->getParam('service');
+
+        if (!$service){
+            // dans le cas où l'ID de service a été existant dans une transaction
+            // annulée pour cause de plafond bloquant dépassé
+            return new JsonModel();
+        }
+
         $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->get($params['type-volume-horaire']));
 
         $vm = new ViewModel();

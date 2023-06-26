@@ -228,15 +228,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- AF=IF(ISERROR([.K20]);1;[.K20])
+      -- AF=IF(ISERROR([.J20]);1;[.J20])
       WHEN 'AF' THEN
-        RETURN vh.taux_service_compl;
+        RETURN vh.taux_service_du;
 
 
 
-      -- AG=IF(ISERROR([.L20]);1;[.L20])
+      -- AG=IF(ISERROR([.K20]);1;[.K20])
       WHEN 'AG' THEN
-        RETURN vh.ponderation_service_du;
+        RETURN vh.taux_service_compl;
 
 
 
@@ -306,7 +306,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
       -- AO=IF(AND([.$E20]="Oui";[.$B20]="Oui";[.$A20]=i_structure_code;[.$I20]<>"Référentiel";[.$O20]<>"Oui");[.$N20]*[.$F20]*[.$AF20];0)
       WHEN 'AO' THEN
-        IF vh.service_statutaire AND vh.structure_is_affectation AND vh.structure_is_affectation AND vh.volume_horaire_ref_id IS NULL AND COALESCE(vh.param_1,' ') <> 'Oui' THEN
+        IF vh.service_statutaire AND vh.structure_is_affectation AND vh.structure_is_affectation AND vh.volume_horaire_ref_id IS NULL AND vh.param_1 <> 'Oui' THEN
           RETURN vh.heures * vh.taux_fi * cell('AF',l);
         ELSE
           RETURN 0;

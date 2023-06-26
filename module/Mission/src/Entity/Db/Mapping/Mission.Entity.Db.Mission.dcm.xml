@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Mission\Entity\Db\Mission" table="MISSION">
         <id name="id" type="integer" column="ID">
@@ -24,8 +24,10 @@
         <field name="dateFin" type="datetime" column="DATE_FIN" nullable="false"/>
         <field name="heuresFormation" type="float" column="HEURES_FORMATION" precision="126" scale="0" nullable="true"/>
         <field name="description" type="string" column="DESCRIPTION" length="4000" nullable="true"/>
+        <field name="libelleMission" type="string" column="LIBELLE_MISSIOn" length="4000" nullable="true"/>
+
         <field name="etudiantsSuivis" type="string" column="ETUDIANTS_SUIVIS" length="4000" nullable="true"/>
-        <one-to-many field="miseEnPaiement" target-entity="Paiement\Entity\Db\MiseEnPaiement" mapped-by="mission" />
+        <one-to-many field="miseEnPaiement" target-entity="Paiement\Entity\Db\MiseEnPaiement" mapped-by="mission"/>
 
         <many-to-many field="etudiants" target-entity="Application\Entity\Db\Intervenant">
             <join-table name="MISSION_ETUDIANT">

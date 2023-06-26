@@ -82,6 +82,8 @@ class MissionService extends AbstractEntityService
 
         $properties = [
             'id',
+            'libelle',
+            'libelleMission',
             ['typeMission', ['libelle', 'accompagnementEtudiants', 'besoinFormation']],
             'dateDebut',
             'dateFin',
@@ -172,7 +174,7 @@ class MissionService extends AbstractEntityService
 
             $now = new \DateTime();
             $now->modify('+10 minutes'); // tolérance de 10 minutes
-            if ($vhm->getHoraireFin() > $now){
+            if ($vhm->getHoraireFin() > $now) {
                 throw new \Exception('Vous ne pouvez saisir de suivi avant qu\'il ne soit terminé');
             }
         }
@@ -198,6 +200,7 @@ class MissionService extends AbstractEntityService
         $mission->setDescription($candidature->getOffre()->getDescription());
         $mission->setStructure($candidature->getOffre()->getStructure());
         $mission->setHeures($candidature->getOffre()->getNombreHeures());
+        $mission->setLibelleMission($candidature->getOffre()->getTitre());
 
         $this->save($mission);
 

@@ -1,6 +1,6 @@
 <?php
 
-$this->headTitle()->append($title = 'Information importante');
+$this->headTitle()->append($title = 'Une erreur est survenue');
 $details = AppConfig::get('global', 'affichageErreurs') && isset($this->exception) && ($this->exception instanceof Error || $this->exception instanceof Exception);
 
 ?>

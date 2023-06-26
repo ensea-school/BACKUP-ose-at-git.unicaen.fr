@@ -14,14 +14,14 @@
   * Nouvelle interface de saisie des suivis de missions
   * Adaptation de la partie paiement pour gérer les heures nocturnes/dimanches/jours fériés
   * Plafonds applicables aux missions avec un nouveau périmètre par type de mission
-  
-  
+
+
 * Gestion renforcée des taux de paiement
   * Possibilité de gérer de nouveaux taux différents du taux légal de 42,86€
   * Nouvelle interface d'administration des taux de paiement
   * Les taux peuvent être indexés sur d'autres taux (le SMIC par exemple)
   * Les taux peuvent être appliqués globalement, par mission, par statut, par élément pédagogique, selon le contexte
- 
+
 * Pièces justificatives
   * Nouveau filtre permettant de ne demander des pièces que pour les étrangers 
 
@@ -40,6 +40,7 @@
 
 * Il est possible de rentrer une date de retour sur un contrat après avoir téléversé le contrat sans avoir besoin de recharger la page
 * Impossibilité de saisir des heures hors établissement (#51483)
+* Paris 1 : modification de la formule de calcul (#48148)
 
 
 

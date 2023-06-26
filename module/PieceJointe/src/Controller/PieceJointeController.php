@@ -139,14 +139,20 @@ class PieceJointeController extends \Application\Controller\AbstractController
         $workflowEtapePjValide = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_PJ_VALIDATION, $intervenant);
         $msgs                  = [];
 
-        if ($workflowEtapePjSaisie->getFranchie() != 1) {
-            $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
-        } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() == 1) {
-            $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
-        } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() != 1) {
-            $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
-            $msgs['warning'][] = "Mais certaines doivent encore être validées par un gestionnaire.";
+        if($workflowEtapePjSaisie != null){
+            if ($workflowEtapePjSaisie->getFranchie() != 1) {
+                $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
+            } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() == 1) {
+                $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
+            } elseif ($workflowEtapePjSaisie->getFranchie() == 1 && $workflowEtapePjValide->getFranchie() != 1) {
+                $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
+                $msgs['warning'][] = "Mais certaines doivent encore être validées par un gestionnaire.";
+            }
+        }else{
+            //Si aucune pièce n'est demandé mais que le workflow n'a pas été recalculé, on evite un message d'erreur
+            $msgs['success'] = "";
         }
+
 
         return $msgs;
     }

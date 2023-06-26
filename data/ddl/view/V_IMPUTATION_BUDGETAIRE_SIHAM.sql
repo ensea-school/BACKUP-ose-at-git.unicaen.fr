@@ -103,7 +103,7 @@ FROM (SELECT dep3.*,
                        i.numero_insee                                                             intervenant_numero_insee,
                        CASE
                            WHEN round(CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE 0 END *
-                                      a.taux_hetd, 2) > 0
+                                      mis.taux_horaire, 2) > 0
                                THEN '1542'
                            ELSE
                                CASE WHEN ti.code = 'P' THEN '="0204"' ELSE '="2251"' END
@@ -120,7 +120,7 @@ FROM (SELECT dep3.*,
                        CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE 0 END               fc_majorees,
                        mis.heures_aa                                                              exercice_aa,
                        mis.heures_ac                                                              exercice_ac,
-                       a.taux_hetd taux_horaire
+                       mis.taux_horaire taux_horaire
                 FROM tbl_paiement mis
                          JOIN mise_en_paiement mep
                               ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL

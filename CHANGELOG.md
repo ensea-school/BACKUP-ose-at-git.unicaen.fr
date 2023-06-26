@@ -39,7 +39,7 @@
 ## Corrections de bugs
 
 * Il est possible de rentrer une date de retour sur un contrat après avoir téléversé le contrat sans avoir besoin de recharger la page
-
+* Impossibilité de saisir des heures hors établissement (#51483)
 
 
 

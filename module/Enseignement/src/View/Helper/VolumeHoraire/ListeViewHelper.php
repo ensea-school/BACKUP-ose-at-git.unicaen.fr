@@ -57,34 +57,12 @@ class ListeViewHelper extends AbstractHtmlElement
     protected $hasForbiddenPeriodes = false;
 
 
-    /**
-     *
-     * @return boolean
-     */
-    public function getReadOnly()
-    {
-        return $this->readOnly || $this->forcedReadOnly;
-    }
 
-
-    /**
-     *
-     * @param boolean $readOnly
-     *
-     * @return self
-     */
-    public function setReadOnly($readOnly)
-    {
-        $this->readOnly = $readOnly;
-
-        return $this;
-    }
-
-
-    public function hasForbiddenPeriodes()
+    public function hasForbiddenPeriodes ()
     {
         return $this->hasForbiddenPeriodes;
     }
+
 
 
     /**
@@ -94,7 +72,7 @@ class ListeViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    final public function __invoke(VolumeHoraireListe $volumeHoraireListe)
+    final public function __invoke (VolumeHoraireListe $volumeHoraireListe)
     {
         /* Initialisation */
 
@@ -104,30 +82,17 @@ class ListeViewHelper extends AbstractHtmlElement
     }
 
 
+
     /**
      * Retourne le code HTML généré par cette aide de vue.
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->render();
     }
 
-
-    public function getRefreshUrl()
-    {
-        $url = $this->getView()->url(
-            'volume-horaire/liste',
-            [
-                'service' => $this->getVolumeHoraireListe()->getService()->getId(),
-            ], ['query' => [
-            'read-only'           => $this->getReadOnly() ? '1' : '0',
-            'type-volume-horaire' => $this->getVolumeHoraireListe()->getTypeVolumehoraire()->getId(),
-        ]]);
-
-        return $url;
-    }
 
 
     /**
@@ -135,13 +100,13 @@ class ListeViewHelper extends AbstractHtmlElement
      *
      * @return string
      */
-    public function render()
+    public function render ()
     {
         $this->hasForbiddenPeriodes = false;
-        $canViewMNP = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
-        $canEditMNP = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_EDITION);
-        $canViewTag = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::TAG_VISUALISATION);
-        $canEditTag = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::TAG_EDITION);
+        $canViewMNP                 = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
+        $canEditMNP                 = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_EDITION);
+        $canViewTag                 = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::TAG_VISUALISATION);
+        $canEditTag                 = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::TAG_EDITION);
 
 
         $out = '<table class="table table-sm table-bordered volume-horaire">';
@@ -156,7 +121,7 @@ class ListeViewHelper extends AbstractHtmlElement
         if ($canViewTag) {
             $out .= "<th style=\"width:25%\">Tag</th>\n";
         }
-        $out .= "</tr>\n";
+        $out      .= "</tr>\n";
         $periodes = $this->getPeriodes();
 
         foreach ($periodes as $periode) {
@@ -231,7 +196,6 @@ class ListeViewHelper extends AbstractHtmlElement
                     }
                     $out .= "</tr>\n";
                 }
-
             }
         }
         $out .= '</table>' . "\n";
@@ -240,7 +204,76 @@ class ListeViewHelper extends AbstractHtmlElement
     }
 
 
-    protected function renderPeriode($periode)
+
+    /**
+     *
+     * @return VolumeHoraireListe
+     */
+    public function getVolumeHoraireListe ()
+    {
+        return $this->volumeHoraireListe;
+    }
+
+
+
+    public function setVolumeHoraireListe (VolumeHoraireListe $volumeHoraireListe)
+    {
+        $typeVolumeHoraire        = $volumeHoraireListe->getTypeVolumeHoraire();
+        $this->volumeHoraireListe = $volumeHoraireListe;
+        $this->forcedReadOnly     = !$this->getView()->isAllowed($volumeHoraireListe->getService(), $typeVolumeHoraire->getPrivilegeEnseignementEdition());
+        $this->typesIntervention  = null;
+
+        return $this;
+    }
+
+
+
+    public function getTypesInterventions ()
+    {
+        if (!$this->typesIntervention) {
+            if ($this->getVolumeHoraireListe()->getService()->getElementPedagogique()) {
+                $tis = $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getTypeIntervention();
+            } else {
+                $qb = $this->getServiceTypeIntervention()->finderByContext();
+                $this->getServiceTypeIntervention()->finderByVisibleExterieur(true, $qb);
+                $this->getServiceTypeIntervention()->finderByHistorique($qb);
+                $tis = $this->getServiceTypeIntervention()->getList($qb);
+            }
+            $this->typesIntervention = [];
+            foreach ($tis as $ti) {
+                $this->typesIntervention[] = $ti;
+            }
+            uasort($this->typesIntervention, function ($a, $b) {
+                return $a->getordre() - $b->getOrdre();
+            });
+        }
+
+        return $this->typesIntervention;
+    }
+
+
+
+    public function getPeriodes ()
+    {
+        $vhl = $this->getVolumeHoraireListe()->createChild()
+            ->setTypeIntervention(false)
+            ->setPeriode(false);
+
+        $periodes   = $this->getServiceService()->getPeriodes($vhl->getService());
+        $vhPeriodes = $vhl->getPeriodes();
+        foreach ($vhPeriodes as $periode) {
+            if (!isset($periodes[$periode->getId()])) $periodes[$periode->getId()] = $periode;
+        }
+        uasort($periodes, function ($a, $b) {
+            return ($a ? $a->getOrdre() : '') > ($b ? $b->getOrdre() : '') ? 1 : 0;
+        });
+
+        return $periodes;
+    }
+
+
+
+    protected function renderPeriode ($periode)
     {
         if (!$periode) return "Indéterminée";
         $out = (string)$periode;
@@ -249,7 +282,8 @@ class ListeViewHelper extends AbstractHtmlElement
     }
 
 
-    public function renderHeures(VolumeHoraireListe $volumeHoraireListe, $readOnly = false)
+
+    public function renderHeures (VolumeHoraireListe $volumeHoraireListe, $readOnly = false)
     {
         $heures = $volumeHoraireListe->getHeures();
         $heures = \UnicaenApp\Util::formattedNumber($heures);
@@ -273,7 +307,34 @@ class ListeViewHelper extends AbstractHtmlElement
     }
 
 
-    protected function renderMotifNonPaiement($motifNonPaiement)
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getReadOnly ()
+    {
+        return $this->readOnly || $this->forcedReadOnly;
+    }
+
+
+
+    /**
+     *
+     * @param boolean $readOnly
+     *
+     * @return self
+     */
+    public function setReadOnly ($readOnly)
+    {
+        $this->readOnly = $readOnly;
+
+        return $this;
+    }
+
+
+
+    protected function renderMotifNonPaiement ($motifNonPaiement)
     {
         if (!empty($motifNonPaiement)) {
             $out = $motifNonPaiement->getLibelleLong();
@@ -284,7 +345,9 @@ class ListeViewHelper extends AbstractHtmlElement
         return $out;
     }
 
-    protected function renderTag($tag)
+
+
+    protected function renderTag ($tag)
     {
         /**
          * @var Tag $tag
@@ -300,66 +363,19 @@ class ListeViewHelper extends AbstractHtmlElement
     }
 
 
-    /**
-     *
-     * @return VolumeHoraireListe
-     */
-    public function getVolumeHoraireListe()
+
+    public function getRefreshUrl ()
     {
-        return $this->volumeHoraireListe;
-    }
+        $url = $this->getView()->url(
+            'volume-horaire/liste',
+            [
+                'service' => $this->getVolumeHoraireListe()->getService()->getId(),
+            ], ['query' => [
+            'read-only'           => $this->getReadOnly() ? '1' : '0',
+            'type-volume-horaire' => $this->getVolumeHoraireListe()->getTypeVolumehoraire()->getId(),
+        ]]);
 
-
-    public function setVolumeHoraireListe(VolumeHoraireListe $volumeHoraireListe)
-    {
-        $typeVolumeHoraire = $volumeHoraireListe->getTypeVolumeHoraire();
-        $this->volumeHoraireListe = $volumeHoraireListe;
-        $this->forcedReadOnly = !$this->getView()->isAllowed($volumeHoraireListe->getService(), $typeVolumeHoraire->getPrivilegeEnseignementEdition());
-        $this->typesIntervention = null;
-
-        return $this;
-    }
-
-
-    public function getTypesInterventions()
-    {
-        if (!$this->typesIntervention) {
-            if ($this->getVolumeHoraireListe()->getService()->getElementPedagogique()) {
-                $tis = $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getTypeIntervention();
-            } else {
-                $qb = $this->getServiceTypeIntervention()->finderByContext();
-                $this->getServiceTypeIntervention()->finderByHistorique($qb);
-                $tis = $this->getServiceTypeIntervention()->getList($qb);
-            }
-            $this->typesIntervention = [];
-            foreach ($tis as $ti) {
-                $this->typesIntervention[] = $ti;
-            }
-            uasort($this->typesIntervention, function ($a, $b) {
-                return $a->getordre() - $b->getOrdre();
-            });
-        }
-
-        return $this->typesIntervention;
-    }
-
-
-    public function getPeriodes()
-    {
-        $vhl = $this->getVolumeHoraireListe()->createChild()
-            ->setTypeIntervention(false)
-            ->setPeriode(false);
-
-        $periodes = $this->getServiceService()->getPeriodes($vhl->getService());
-        $vhPeriodes = $vhl->getPeriodes();
-        foreach ($vhPeriodes as $periode) {
-            if (!isset($periodes[$periode->getId()])) $periodes[$periode->getId()] = $periode;
-        }
-        uasort($periodes, function ($a, $b) {
-            return ($a ? $a->getOrdre() : '') > ($b ? $b->getOrdre() : '') ? 1 : 0;
-        });
-
-        return $periodes;
+        return $url;
     }
 
 }

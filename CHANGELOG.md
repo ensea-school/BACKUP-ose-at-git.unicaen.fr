@@ -41,6 +41,7 @@
 * Il est possible de rentrer une date de retour sur un contrat après avoir téléversé le contrat sans avoir besoin de recharger la page
 * Impossibilité de saisir des heures hors établissement (#51483)
 * Paris 1 : modification de la formule de calcul (#48148)
+* Filtrage des types d'intervention pour la saisie de service hors établissement (#51512)
 
 
 

@@ -34,7 +34,7 @@ SELECT
   COALESCE( ep.structure_id, i.structure_id ) structure_id,
   mep.id                                      mise_en_paiement_id,
   mep.periode_paiement_id                     periode_paiement_id,
-  COALESCE(mep.domaine_fonctionnel_id, e.domaine_fonctionnel_id, to_number(p.valeur)) domaine_fonctionnel_id,
+  COALESCE(mep.domaine_fonctionnel_id, e.domaine_fonctionnel_id, ose_parametre.get_domaine_fonc_ens_ext) domaine_fonctionnel_id,
   frs.heures_compl_fi + frs.heures_compl_fc + frs.heures_compl_fa + frs.heures_compl_fc_majorees heures_a_payer,
   COUNT(*) OVER(PARTITION BY frs.id)          heures_a_payer_pond,
   COALESCE(mep.heures,0)                      heures_demandees,
@@ -43,22 +43,19 @@ SELECT
   SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id)  total_heures,
   SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id) * pea.pourc_exercice_aa  total_heures_aa,
   SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id ORDER BY mep.id) cumul_heures,
-  CASE WHEN p2.valeur = 'prorata' THEN COALESCE(mep.heures,0) * pea.pourc_exercice_aa ELSE ose_divers.CALC_HEURES_AA(
+  CASE WHEN ose_parametre.get_regle_repart_annee_civ = 'prorata' THEN COALESCE(mep.heures,0) * pea.pourc_exercice_aa ELSE ose_divers.CALC_HEURES_AA(
     COALESCE(mep.heures,0), -- heures
     pea.pourc_exercice_aa, -- pourc_exercice_aa
     SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id), -- total_heures
     SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id ORDER BY mep.id) -- cumul_heures
   ) END heures_aa,
-  COALESCE(si.taux_remu_id, to_number(p3.valeur))                  taux_remu_id,
-  OSE_PAIEMENT.GET_TAUX_HORAIRE(COALESCE(si.taux_remu_id, to_number(p3.valeur)),COALESCE(pea.horaire_debut, a.date_debut)) taux_horaire,
+  COALESCE(ep.taux_remu_id, si.taux_remu_id, ose_parametre.get_taux_remu) taux_remu_id,
+  OSE_PAIEMENT.GET_TAUX_HORAIRE(COALESCE(ep.taux_remu_id, si.taux_remu_id, ose_parametre.get_taux_remu),COALESCE(pea.horaire_debut, a.date_debut)) taux_horaire,
   1 taux_conges_payes
 FROM
             formule_resultat_service        frs
        JOIN type_volume_horaire             tvh ON tvh.code = 'REALISE'
        JOIN etat_volume_horaire             evh ON evh.code = 'valide'
-       JOIN parametre                         p ON p.nom = 'domaine_fonctionnel_ens_ext'
-       JOIN parametre                        p2 ON p2.nom = 'regle_repartition_annee_civile'
-       JOIN parametre                        p3 ON p3.nom = 'taux-remu'
        JOIN formule_resultat                 fr ON fr.id = frs.formule_resultat_id
                                                AND fr.type_volume_horaire_id = tvh.id
                                                AND fr.etat_volume_horaire_id = evh.id
@@ -112,21 +109,19 @@ SELECT
   SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id)  total_heures,
   SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id) * pea.pourc_exercice_aa  total_heures_aa,
   SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id ORDER BY mep.id) cumul_heures,
-  CASE WHEN p2.valeur = 'prorata' THEN COALESCE(mep.heures,0) * pea.pourc_exercice_aa ELSE ose_divers.CALC_HEURES_AA(
+  CASE WHEN ose_parametre.get_regle_repart_annee_civ = 'prorata' THEN COALESCE(mep.heures,0) * pea.pourc_exercice_aa ELSE ose_divers.CALC_HEURES_AA(
     COALESCE(mep.heures,0), -- heures
     pea.pourc_exercice_aa, -- pourc_exercice_aa
     SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id), -- total_heures
     SUM(COALESCE(mep.heures,0)) OVER (partition BY frs.id ORDER BY mep.id) -- cumul_heures
   ) END heures_aa,
-  COALESCE(si.taux_remu_id, to_number(p3.valeur))                  taux_remu_id,
-  OSE_PAIEMENT.GET_TAUX_HORAIRE(COALESCE(si.taux_remu_id, to_number(p3.valeur)),COALESCE(pea.horaire_debut, a.date_debut)) taux_horaire,
+  COALESCE(si.taux_remu_id, ose_parametre.get_taux_remu) taux_remu_id,
+  OSE_PAIEMENT.GET_TAUX_HORAIRE(COALESCE(si.taux_remu_id, ose_parametre.get_taux_remu),COALESCE(pea.horaire_debut, a.date_debut)) taux_horaire,
   1 taux_conges_payes
 FROM
             formule_resultat_service_ref    frs
        JOIN type_volume_horaire             tvh ON tvh.code = 'REALISE'
        JOIN etat_volume_horaire             evh ON evh.code = 'valide'
-       JOIN parametre                        p2 ON p2.nom = 'regle_repartition_annee_civile'
-       JOIN parametre                        p3 ON p3.nom = 'taux-remu'
        JOIN formule_resultat                 fr ON fr.id = frs.formule_resultat_id
                                                AND fr.type_volume_horaire_id = tvh.id
                                                AND fr.etat_volume_horaire_id = evh.id

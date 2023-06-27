@@ -47,18 +47,17 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6">
-        <?= $this->formControlGroup($form->get('seuil-hetd')); ?>
-    </div>
-    <div class="col-md-6">
+    <div class="col-md-12">
         <?= $this->formControlGroup($form->get('type-heure-hetd')); ?>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('seuil-hetd')); ?>
+    </div>
+    <div class="col-md-6">
         <?= $this->formControlGroup($form->get('duree-vie')); ?>
     </div>
-
 </div>
 
 <?= $this->formSubmit($form->get('submit')); ?>

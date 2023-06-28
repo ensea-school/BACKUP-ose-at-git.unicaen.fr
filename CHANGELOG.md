@@ -30,6 +30,9 @@
   * Possibilité de contractualiser des heures de mission
   * Possibilité d'avoir des états de sortie distincts pour les contrats et pour les avenants, par statut
 
+* Tag
+  * Possiblité de mettre des dates de début et de fin d'utilisation pour les tags
+
 
 ## Améliorations
 

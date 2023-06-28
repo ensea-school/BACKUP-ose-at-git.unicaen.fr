@@ -215,6 +215,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
     protected function assertOffreEmploiSupprimer (Role $role, OffreEmploi $offre)
     {
         return $this->asserts([
+            !$offre->isValide(),
             $this->haveRole(),
             $this->assertOffreEmploi($role, $offre),
         ]);

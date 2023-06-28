@@ -53,6 +53,7 @@ return [
                         'bindRequiresDn'      => AppConfig::get('ldap', 'bindRequiresDn'),
                         'accountFilterFormat' => "(&(objectClass=" . AppConfig::get('ldap', 'loginObjectClass', 'posixAccount') . ")(" . AppConfig::get('ldap', 'loginAttribute') . "=%s))",
                         'port'                => AppConfig::get('ldap', 'port'),
+                        'useSsl'              => AppConfig::get('ldap', 'useSsl')
                     ],
                 ],
             ],

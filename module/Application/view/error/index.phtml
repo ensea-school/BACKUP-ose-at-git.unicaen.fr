@@ -1,11 +1,10 @@
 <?php
 
-$this->headTitle()->append($title = 'An error occurred');
+$this->headTitle()->append($title = 'Une erreur est survenue');
 $details = AppConfig::get('global', 'affichageErreurs') && isset($this->exception) && ($this->exception instanceof Error || $this->exception instanceof Exception);
 
 ?>
 <div class="alert alert-danger exception" role="alert">
-    <i class="fas fa-triangle-exclamation"></i>
     <h1><?= $this->translate($title) ?> :</h1>
     <?= $this->exception->getMessage() ?>
     <?php if ($details): ?>
@@ -21,7 +20,7 @@ $details = AppConfig::get('global', 'affichageErreurs') && isset($this->exceptio
             <dt><?= $this->translate('Stack trace') ?>:</dt>
             <dd>
                 <pre
-                    class="prettyprint linenums"><?= \UnicaenApp\Util::formatTraceString($this->exception->getTraceAsString()) ?></pre>
+                        class="prettyprint linenums"><?= \UnicaenApp\Util::formatTraceString($this->exception->getTraceAsString()) ?></pre>
             </dd>
         </dl>
         <?php
@@ -51,7 +50,7 @@ $details = AppConfig::get('global', 'affichageErreurs') && isset($this->exceptio
                             <dt><?= $this->translate('Stack trace') ?>:</dt>
                             <dd>
                                 <pre
-                                    class="prettyprint linenums"><?= \UnicaenApp\Util::formatTraceString($e->getTraceAsString()) ?></pre>
+                                        class="prettyprint linenums"><?= \UnicaenApp\Util::formatTraceString($e->getTraceAsString()) ?></pre>
                             </dd>
                         </dl>
                     </div>

@@ -2,6 +2,7 @@
 /**
  * @var $this              \Application\View\Renderer\PhpRenderer
  * @var $motifNonPaiements \Paiement\Entity\Db\MotifNonPaiement[]
+ * @var $fr                \Application\Entity\Db\Tag
  */
 
 use Application\Provider\Privilege\Privileges;
@@ -20,6 +21,8 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIE
     <th style="word-wrap: break-word ; ">Code</th>
     <th style="word-wrap: break-word ; ">Libelle Court</th>
     <th style="word-wrap: break-word ; ">Libelle Long</th>
+    <th style="word-wrap: break-word ; ">A partir de</th>
+    <th style="word-wrap: break-word ; ">Jusqu'à</th>
     <?php if ($canEdit) echo '<th>Actions</th>' ?>
     </thead>
     <tbody>
@@ -28,6 +31,8 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIE
             <td style="word-wrap: break-word ; "><?= $fr->getCode() ?></td>
             <td style="word-wrap: break-word ; "><?= $fr->getLibelleCourt() ?></td>
             <td style="word-wrap: break-word ; "><?= $fr->getLibelleLong() ?></td>
+            <td style="word-wrap: break-word ; "><?= ($fr->getDateDebut() instanceof DateTime) ? $fr->getDateDebut()->format('d-m-Y') : '' ?></td>
+            <td style="word-wrap: break-word ; "><?= ($fr->getDateFin() instanceof DateTime) ? $fr->getDateFin()->format('d-m-Y') : '' ?></td>
             <?php if ($canEdit) { ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">
                     <a class="mod-ajax" data-submit-reload="true"

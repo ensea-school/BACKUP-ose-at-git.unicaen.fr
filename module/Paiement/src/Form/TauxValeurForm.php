@@ -11,12 +11,15 @@ class TauxValeurForm extends AbstractForm
 {
     use SchemaServiceAwareTrait;
 
-    public function init()
+    public function init ()
     {
         $ignore = ['tauxRemu'];
         $this->spec(TauxRemuValeur::class, $ignore);
-        $this->build();
         $this->addSecurity();
+        $this->build();
+        $this->setLabels([
+            'dateEffet' => 'Date d\'effet',
+        ]);
         $this->addSubmit();
 
         return $this;
@@ -24,7 +27,7 @@ class TauxValeurForm extends AbstractForm
 
 
 
-    public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
+    public function bind ($object, $flags = FormInterface::VALUES_NORMALIZED)
     {
         /* @var $object TauxRemuValeur */
         parent::bind($object, $flags);

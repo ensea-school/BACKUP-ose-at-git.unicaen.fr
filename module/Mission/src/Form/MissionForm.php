@@ -22,15 +22,15 @@ class MissionForm extends AbstractForm
 
     use ContextServiceAwareTrait;
 
-    public function init()
+    public function init ()
     {
-        $tmDql = "SELECT tm FROM " . TypeMission::class . " tm WHERE tm.histoDestruction IS NULL AND tm.annee = :annee";
+        $tmDql       = "SELECT tm FROM " . TypeMission::class . " tm WHERE tm.histoDestruction IS NULL AND tm.annee = :annee";
         $tmDqlParams = ['annee' => $this->getServiceContext()->getAnnee()];
         /** @var TypeMission[] $typesMissions */
         $typesMissions = $this->getEntityManager()->createQuery($tmDql)->setParameters($tmDqlParams)->getResult();
 
         $tmAccEtu = [];
-        $tmData = [];
+        $tmData   = [];
         foreach ($typesMissions as $typeMission) {
             $tmData[$typeMission->getId()] = [
                 'accompagnementEtudiant' => $typeMission->isAccompagnementEtudiants(),
@@ -71,6 +71,7 @@ class MissionForm extends AbstractForm
             'dateDebut'       => 'Date de début',
             'dateFin'         => 'Date de fin',
             'description'     => 'Descriptif de la mission',
+            'libelleMission'  => 'Libelle mission',
             'etudiantsSuivis' => 'Noms des étudiants suivis',
             'heuresFormation' => 'Heures de formation prévues',
         ]);
@@ -80,7 +81,7 @@ class MissionForm extends AbstractForm
 
 
 
-    public function editValide(): self
+    public function editValide (): self
     {
         $this->valide = true;
 
@@ -98,7 +99,7 @@ class MissionForm extends AbstractForm
 
 
 
-    public function isValide(): bool
+    public function isValide (): bool
     {
         return $this->valide;
     }

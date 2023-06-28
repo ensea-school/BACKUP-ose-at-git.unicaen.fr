@@ -177,6 +177,18 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
+        'LIBELLE_MISSION'       => [
+            'name'        => 'LIBELLE_MISSION',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 4000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 19,
+            'commentaire' => NULL,
+        ],
         'STRUCTURE_ID'          => [
             'name'        => 'STRUCTURE_ID',
             'type'        => 'int',

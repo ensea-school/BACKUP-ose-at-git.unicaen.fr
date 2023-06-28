@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Application\Entity\Db\Tag" table="TAG">
         <indexes>
@@ -17,6 +17,9 @@
         <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
         <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="50" nullable="false"/>
         <field name="libelleLong" type="string" column="LIBELLE_LONG" length="200" nullable="false"/>
+        <field name="dateDebut" type="datetime" column="DATE_DEBUT" nullable="false"/>
+        <field name="dateFin" type="datetime" column="DATE_FIN" nullable="false"/>
+        
         <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
             <join-columns>
                 <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

@@ -2,6 +2,8 @@
 
 namespace Application;
 
+use Application\Form\Tag\TagSaisieForm;
+use Application\Form\Tag\TagSaisieFormFactory;
 use Application\Provider\Privilege\Privileges;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
@@ -100,9 +102,10 @@ return [
     ],
     'view_helpers'    => [
     ],
-    'form_elements'   => [
-        'invokables' => [
-            Form\Tag\TagSaisieForm::class => Form\Tag\TagSaisieForm::class,
-        ],
+
+
+    'forms' => [
+        TagSaisieForm::class => TagSaisieFormFactory::class,
     ],
+
 ];

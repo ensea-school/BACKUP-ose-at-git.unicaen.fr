@@ -2,6 +2,13 @@
 
 Organisation des Services d'Enseignement
 
+OSE permet :
+- d'organiser les services d'enseignements
+- de calculer le coût d'une offre de formation
+- de suivre les emplois étudiants
+
+Présentation rapide de l'application : http://ose.unicaen.fr/presentation
+
 ## Nouveautés
 
 La [`Liste des changements`](CHANGELOG.md) vous permettra de savoir :
@@ -16,7 +23,7 @@ Une [`procédure d'installation`](INSTALL.md) est à votre disposition pour mett
 
 La [`procédure de mise à jour`](UPDATE.md) vous indiquera comment mettre à niveau votre instance.
 
-## Documentation
+## Documentation technique
 
 [`Documentation`](doc/doc.md).
 

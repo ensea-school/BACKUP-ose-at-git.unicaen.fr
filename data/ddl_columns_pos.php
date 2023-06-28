@@ -1335,6 +1335,12 @@ return [
         'MODE_ENSEIGNEMENT_PREVISIONNEL',
         'MODE_ENSEIGNEMENT_REALISE',
         'PAIEMENT',
+        'MODE_CALCUL',
+        'MODE_CALCUL_PRIME',
+        'CODE_INDEMNITE',
+        'CODE_INDEMNITE_PRIME',
+        'TYPE_PAIE',
+        'TYPE_PAIE_PRIME',
     ],
     'STRUCTURE'                      => [
         'ID',
@@ -2209,6 +2215,7 @@ return [
         'ETUDIANTS_SUIVIS',
         'TAUX_REMU_MAJORE_ID',
         'HEURES_FORMATION',
+        'LIBELLE_MISSION',
     ],
     'MISSION_ETUDIANT'               => [
         'MISSION_ID',

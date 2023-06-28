@@ -4,6 +4,7 @@ namespace Application\Form\Tag;
 
 use Application\Entity\Db\Tag;
 use Application\Form\AbstractForm;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 
 /**
  * Description of TagSaisieForm
@@ -12,14 +13,22 @@ use Application\Form\AbstractForm;
  */
 class TagSaisieForm extends AbstractForm
 {
+    use AnneeServiceAwareTrait;
 
-    public function init()
+    public function init ()
     {
         $this->spec(Tag::class);
+
+
         $this->build();
 
-        $this->get('libelleCourt')->setLabel('Libellé court');
-        $this->get('libelleLong')->setLabel('Libellé long');
+        $this->setLabels([
+            'libelleCourt' => 'Libellé court',
+            'libelleLong'  => 'Libellé long',
+            'dateDebut'    => 'A partir de',
+            'dateFin'      => 'jusqu\'à',
+
+        ]);
 
         $this->addSecurity();
         $this->addSubmit();

@@ -3,7 +3,7 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\Tag;
-use Application\Form\Tag\Traits\TagSaisieFormAwareTrait;
+use Application\Form\Tag\TagSaisieFormAwareTrait;
 use Application\Service\Traits\TagServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
@@ -13,7 +13,7 @@ class TagController extends AbstractController
     use TagSaisieFormAwareTrait;
 
 
-    public function indexAction()
+    public function indexAction ()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Tag::class,
@@ -25,18 +25,20 @@ class TagController extends AbstractController
     }
 
 
-    public function saisirAction()
+
+    public function saisirAction ()
     {
         /* @var $tag Tag */
-        $tag = $this->getEvent()->getParam('tag');
+        $tag  = $this->getEvent()->getParam('tag');
+        $form = $this->getFormTag();
 
-        $form = $this->getFormTagSaisie();
         if (empty($tag)) {
             $title = 'Création d\'un nouveau tag';
-            $tag = $this->getServiceTag()->newEntity();
+            $tag   = $this->getServiceTag()->newEntity();
         } else {
             $title = 'Édition d\'un tag';
         }
+
 
         $form->bindRequestSave($tag, $this->getRequest(), function (Tag $tag) {
             try {
@@ -51,7 +53,8 @@ class TagController extends AbstractController
     }
 
 
-    public function supprimerAction()
+
+    public function supprimerAction ()
     {
         $tag = $this->getEvent()->getParam('tag');
 

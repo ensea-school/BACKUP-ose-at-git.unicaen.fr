@@ -150,7 +150,7 @@ class ServiceReferentielController extends AbstractController
                 }
                 $hFin = $entity->getVolumeHoraireReferentielListe()->getHeures();
                 $this->updateTableauxBord($intervenant);
-                if (!$this->getProcessusPlafond()->endTransaction($service, $typeVolumeHoraire, $hFin < $hDeb)) {
+                if (!$this->getProcessusPlafond()->endTransaction($entity, $typeVolumeHoraire, $hFin < $hDeb)) {
                     $this->updateTableauxBord($intervenant);
                 }
             } else {

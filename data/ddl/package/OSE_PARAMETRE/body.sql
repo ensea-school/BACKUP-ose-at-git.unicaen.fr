@@ -9,6 +9,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PARAMETRE" AS
   pourc_s1_pour_annee_civile FLOAT;
   taux_conges_payes FLOAT;
   horaire_nocturne VARCHAR2(5);
+  domaine_fonc_ens_ext NUMERIC;
+  regle_repart_annee_civ VARCHAR2(50);
+  taux_remu NUMERIC;
 
 
 
@@ -113,6 +116,47 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PARAMETRE" AS
     END IF;
 
     RETURN horaire_nocturne;
+  END;
+
+
+
+  FUNCTION get_domaine_fonc_ens_ext RETURN NUMERIC IS
+  BEGIN
+    IF domaine_fonc_ens_ext IS NULL THEN
+      SELECT to_number(valeur) INTO domaine_fonc_ens_ext FROM parametre WHERE nom = 'domaine_fonctionnel_ens_ext';
+    END IF;
+
+    IF domaine_fonc_ens_ext = 0 THEN
+      RETURN NULL;
+    ELSE
+      RETURN domaine_fonc_ens_ext;
+    END IF;
+  END;
+
+
+
+  FUNCTION get_regle_repart_annee_civ RETURN VARCHAR2 IS
+  BEGIN
+    IF regle_repart_annee_civ IS NULL THEN
+      SELECT valeur INTO regle_repart_annee_civ FROM parametre WHERE nom = 'regle_repartition_annee_civile';
+    END IF;
+
+    RETURN regle_repart_annee_civ;
+  END;
+
+
+
+  FUNCTION get_taux_remu RETURN NUMERIC IS
+  BEGIN
+    IF taux_remu IS NULL THEN
+      SELECT to_number(valeur) INTO taux_remu FROM parametre WHERE nom = 'taux-remu';
+    END IF;
+
+    IF taux_remu = 0 THEN
+      RETURN NULL;
+    ELSE
+      RETURN taux_remu;
+    END IF;
   END;
 
 

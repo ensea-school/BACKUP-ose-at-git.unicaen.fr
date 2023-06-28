@@ -186,12 +186,12 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_RENNES2 AS
 
 
 
-      -- AA=IF([.$I20]="Référentiel";0;([.$AM20]+[.$AS20]+[.$AY20]+[.$BE20])*[.H20])
+      -- AA=IF([.$I20]="Référentiel";0;([.$AN20]+[.$AT20]+[.$AZ20]+[.$BF20])*[.H20])
       WHEN 'AA' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AM',l) + cell('AS',l) + cell('AY',l) + cell('BE',l)) * vh.taux_fc;
+          RETURN (cell('AN',l) + cell('AT',l) + cell('AZ',l) + cell('BF',l)) * vh.taux_fc;
         END IF;
 
 
@@ -202,10 +202,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_RENNES2 AS
 
 
 
-      -- AC=IF([.$I20]="Référentiel";[.$AM20]+[.$AS20]+[.$AY20]+[.$BE20];0)
+      -- AC=IF([.$I20]="Référentiel";([.$AN20]+[.$AT20]+[.$AZ20]+[.$BF20]);0)
       WHEN 'AC' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('AM',l) + cell('AS',l) + cell('AY',l) + cell('BE',l);
+          RETURN (cell('AN',l) + cell('AT',l) + cell('AZ',l) + cell('BF',l));
         ELSE
           RETURN 0;
         END IF;
@@ -264,7 +264,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_RENNES2 AS
 
 
 
-      -- AI16=[.AI15]>=[.AH16]
+      -- AI16=IF([.AI15]>=[.AH16];1;0)
       WHEN 'AI16' THEN
         IF cell('AI15') >= cell('AH16') THEN
           RETURN 1;
@@ -274,7 +274,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_RENNES2 AS
 
 
 
-      -- AJ=IF(AND([.$E20]="Oui";[.$D20]<>"Oui";[.$A20]=i_structure_code;[.$O20]="Oui");IF(OR([.$AI$16];[.$I20]<>"Référentiel");[.$N20]*[.$AF20];0);0)
+      -- AJ=IF(AND([.$E20]="Oui";[.$D20]<>"Oui";[.$A20]=i_structure_code;[.$O20]="Oui");IF(OR([.$AI$16]=1;[.$I20]<>"Référentiel");[.$N20]*[.$AF20];0);0)
       WHEN 'AJ' THEN
         IF vh.service_statutaire AND NOT vh.structure_is_exterieur AND vh.structure_is_affectation AND vh.param_1 = 'Oui' THEN
           IF cell('AI16') = 1 OR vh.volume_horaire_ref_id IS NULL THEN
@@ -342,7 +342,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_RENNES2 AS
 
 
 
-      -- AP=IF(AND([.$E20]="Oui";[.$D20]<>"Oui";[.$A20]<>i_structure_code;[.$O20]="Oui");IF(OR([.$AI$16];[.$I20]<>"Référentiel");[.$N20]*[.$AF20];0);0)
+      -- AP=IF(AND([.$E20]="Oui";[.$D20]<>"Oui";[.$A20]<>i_structure_code;[.$O20]="Oui");IF(OR([.$AI$16]=1;[.$I20]<>"Référentiel");[.$N20]*[.$AF20];0);0)
       WHEN 'AP' THEN
         IF vh.service_statutaire AND NOT vh.structure_is_exterieur AND NOT vh.structure_is_affectation AND vh.param_1 = 'Oui' THEN
           IF cell('AI16') = 1 OR vh.volume_horaire_ref_id IS NULL THEN
@@ -410,7 +410,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_RENNES2 AS
 
 
 
-      -- AV=IF(AND([.$E20]="Oui";[.$D20]<>"Oui";[.$O20]<>"Oui");IF(OR([.$AI$16];[.$I20]<>"Référentiel");[.$N20]*[.$AF20];0);0)
+      -- AV=IF(AND([.$E20]="Oui";[.$D20]<>"Oui";[.$O20]<>"Oui");IF(OR([.$AI$16]=1;[.$I20]<>"Référentiel");[.$N20]*[.$AF20];0);0)
       WHEN 'AV' THEN
         IF vh.service_statutaire AND NOT vh.structure_is_exterieur AND vh.param_1 <> 'Oui' THEN
           IF cell('AI16') = 1 OR vh.volume_horaire_ref_id IS NULL THEN
@@ -478,7 +478,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_RENNES2 AS
 
 
 
-      -- BB=IF(AND([.$E20]="Oui";[.$D20]="Oui");IF(OR([.$AI$16];[.$I20]<>"Référentiel");[.$N20]*[.$AF20];0);0)
+      -- BB=IF(AND([.$E20]="Oui";[.$D20]="Oui");IF(OR([.$AI$16]=1;[.$I20]<>"Référentiel");[.$N20]*[.$AF20];0);0)
       WHEN 'BB' THEN
         IF vh.service_statutaire AND vh.structure_is_exterieur THEN
           IF cell('AI16') = 1 OR vh.volume_horaire_ref_id IS NULL THEN

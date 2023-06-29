@@ -117,19 +117,14 @@
                         <span v-if="!candidature.validation && candidature.motif === null" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
                     </td>
                     <td v-if="this.canValiderCandidature">
-                        <a v-if="!candidature.validation" :href="urlAccepterCandidature(candidature)"
-                           class="btn btn-success"
-                           data-content="Êtes vous sûr de vouloir accepter cette candidature ?"
-                           data-title="Accepter la candidature"
-                           title="Accepter la candidature"
-                           @click.prevent="validerCandidature">Accepter </a>&nbsp;
-                        <a v-if="!candidature.motif && candidature.validation"
-                           :href="urlRefuserCandidature(candidature)"
-                           class="btn btn-danger"
-                           data-content="Êtes vous sûr de vouloir refuser cette candidature ?"
-                           data-title="Refuser la candidature"
-                           title="Refuser la candidature"
-                           @click.prevent="refuserCandidature">Refuser </a>
+                        <a :href="urlVoirCandidature(candidature)"
+                           class="btn btn-primary"
+                           title="Consulter "
+                        >
+                            <u-icon name="eye"/>
+                            Voir
+                        </a>
+
                     </td>
                 </tr>
                 </tbody>
@@ -248,6 +243,9 @@ export default {
         },
         urlVoir: function (candidature) {
             return unicaenVue.url('intervenant/:code/voir', {code: 'code:'+candidature.intervenant.code})
+        },
+        urlVoirCandidature: function (candidature) {
+            return unicaenVue.url('intervenant/:code/candidature', {code: 'code:'+candidature.intervenant.code})
         },
         urlAccepterCandidature: function (candidature) {
             return unicaenVue.url('offre-emploi/accepter-candidature/:id', {id: candidature.id})

@@ -65,7 +65,7 @@ class  IntervenantController extends AbstractController
     use CandidatureServiceAwareTrait;
 
 
-    public function indexAction()
+    public function indexAction ()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -86,7 +86,7 @@ class  IntervenantController extends AbstractController
 
 
 
-    public function rechercherAction()
+    public function rechercherAction ()
     {
         $recents = $this->getIntervenantsRecents();
 
@@ -95,362 +95,11 @@ class  IntervenantController extends AbstractController
 
 
 
-    public function rechercheJsonAction()
-    {
-        $recherche         = $this->getProcessusIntervenant()->recherche();
-        $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
-        $recherche->setShowHisto($canShowHistorises);
-        $intervenants = [];
-        $term         = $this->axios()->fromPost('term');
-
-        if (!empty($term)) {
-            $intervenants = $recherche->rechercher($term, 40);
-        }
-
-        return new AxiosModel($intervenants);
-    }
-
-
-
-    public function voirAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        $tab         = $this->params()->fromQuery('tab');
-
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant introuvable');
-        }
-
-        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
-            $vh = new ViewModel();
-            $vh->setTemplate('application/intervenant/menu');
-
-            return $vh;
-        }
-        $date = new \DateTime();
-        $date->sub(new \DateInterval('P7D'));
-        $notificationNote = $this->getServiceNote()->countNote($intervenant, $date);
-        $this->addIntervenantRecent($intervenant);
-
-        return compact('intervenant', 'tab', 'notificationNote');
-    }
-
-
-
-    public function candidatureAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant introuvable');
-        }
-
-
-        return compact('intervenant');
-    }
-
-
-
-    public function getCandidaturesAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant introuvable');
-        }
-        /**
-         * @var Intervenant $intervenant
-         */
-        $candidatures = $this->getServiceCandidature()->data(['intervenant' => $intervenant]);
-
-
-        return $candidatures;
-    }
-
-
-
-    public function definirParDefautAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-        $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
-        $this->getServiceIntervenant()->definirParDefaut($intervenant, !$definiParDefaut);
-        $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
-
-        return compact('definiParDefaut');
-    }
-
-
-
-    public function ficheAction()
-    {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-
-        return compact('intervenant', 'role');
-    }
-
-
-
-    public function saisirAction()
-    {
-        $intervenant  = $this->getEvent()->getParam('intervenant');
-        $title        = "Saisie d'un intervenant";
-        $form         = $this->getFormIntervenantEdition();
-        $errors       = [];
-        $actionDetail = $this->params()->fromRoute('action-detail');
-        if ($intervenant) {
-            $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
-        } else {
-            $definiParDefaut = false;
-        }
-
-        $isNew = !$intervenant;
-        if (!$intervenant) {
-            $intervenant = $this->getServiceIntervenant()->newEntity();
-        }
-
-        if ($actionDetail == 'dupliquer') {
-            $intervenant = $intervenant->dupliquer();
-            $intervenant->setSource($this->getServiceSource()->getOse());
-            $intervenant->setStatut($this->getServiceStatut()->getAutres());
-        }
-
-        $canEdit = $this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION);
-        $form->setReadOnly(!$canEdit);
-        $form->bind($intervenant);
-        //Edition avancée pour éditer le code et la source de l'intervenant
-        $canEditAvancee = $this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION_AVANCEE);
-        if ($canEditAvancee) {
-            $form->activerEditionAvancee();
-        }
-
-        $ancienStatut = $intervenant->getStatut();
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $oriData  = $form->getHydrator()->extract($intervenant);
-            $postData = $request->getPost()->toArray();
-            $data     = array_merge($oriData, $postData);
-            $form->setData($data);
-            if ((!$form->isReadOnly()) && $form->isValid()) {
-                try {
-                    if ($form->get('intervenant-edition-login')->getValue() && $form->get('intervenant-edition-password')->getValue()) {
-                        $nom           = $intervenant->getNomUsuel();
-                        $prenom        = $intervenant->getPrenom();
-                        $dateNaissance = $intervenant->getDateNaissance();
-                        $login         = $form->get('intervenant-edition-login')->getValue();
-                        $password      = $form->get('intervenant-edition-password')->getValue();
-                        $utilisateur   = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
-                        $utilisateur->setCode($intervenant->getUtilisateurCode() ?: $intervenant->getCode());
-                        $this->getServiceUtilisateur()->save($utilisateur);
-                        if ($utilisateur->getCode() != $intervenant->getUtilisateurCode()) {
-                            $intervenant->setUtilisateurCode($utilisateur->getCode());
-                            $intervenant->setSyncUtilisateurCode(false);
-                        }
-                    }
-                    $this->getServiceIntervenant()->save($intervenant);
-                    if ($intervenant->getStatut() != $ancienStatut) {
-                        $dossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-                        if ($dossier->getId()) { // Il y a un dossier
-                            $dossier->setStatut($intervenant->getStatut());
-                            $this->getServiceDossier()->save($dossier); // On sauvegarde le dossier
-                        }
-                    }
-                    $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
-                    $form->get('id')->setValue($intervenant->getId()); // transmet le nouvel ID
-                    if ($isNew) {
-                        $etape = $this->getServiceWorkflow()->getEtapeCourante($intervenant);
-                        if ($etape) {
-                            return $this->redirect()->toUrl($etape->getUrl());
-                        }
-                    }
-
-                    return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'edition']]);
-                } catch (\Exception $e) {
-                    $errors[] = $this->translate($e);
-                }
-            }
-        }
-
-        $vm = new ViewModel();
-        $vm->setTemplate('application/intervenant/saisir');
-        $vm->setVariables(compact('intervenant', 'form', 'errors', 'title', 'definiParDefaut', 'actionDetail'));
-
-        return $vm;
-    }
-
-
-
-    public function synchronisationAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-        try {
-            $isImportable = $this->getServiceIntervenant()->isImportable($intervenant);
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translate($e));
-            $isImportable = false;
-        }
-        $data = [];
-
-        if ($isImportable) {
-            $query = new Query('INTERVENANT');
-            $query->setNotNull([]); // Aucune colonne ne doit être non nulle !!
-            $query->setLimit(101);
-            $query->setColValues(['ANNEE_ID' => $intervenant->getAnnee()->getId(), 'CODE' => $intervenant->getCode()]);
-            $data = $this->getServiceDifferentiel()->make($query, $query::SQL_FULL, false)->fetchAll();
-        }
-
-        return compact('intervenant', 'isImportable', 'data');
-    }
-
-
-
-    public function synchroniserAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        $this->getProcessusImport()->execMaj('INTERVENANT', 'CODE', $intervenant->getCode());
-        $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
-
-        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'synchronisation']]);
-    }
-
-
-
-    public function voirHeuresCompAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant \Application\Entity\Db\Intervenant */
-
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant non précisé ou inexistant');
-        }
-
-        $form = $this->getFormIntervenantHeuresComp();
-
-        $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
-        if (!$typeVolumeHoraire instanceof TypeVolumeHoraire) {
-            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraire);
-        }
-        /* @var $typeVolumeHoraire \Service\Entity\Db\TypeVolumeHoraire */
-        if (!isset($typeVolumeHoraire)) {
-            throw new LogicException('Type de volume horaire erroné');
-        }
-
-        $etatVolumeHoraire = $this->context()->etatVolumeHoraireFromQuery('etat-volume-horaire', $form->get('etat-volume-horaire')->getValue());
-        if (!$etatVolumeHoraire instanceof EtatVolumeHoraire) {
-            $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->get($etatVolumeHoraire);
-        }
-        /* @var $etatVolumeHoraire \Service\Entity\Db\EtatVolumeHoraire */
-        if (!isset($etatVolumeHoraire)) {
-            throw new LogicException('Etat de volume horaire erroné');
-        }
-
-        $form->setData([
-            'type-volume-horaire' => $typeVolumeHoraire->getId(),
-            'etat-volume-horaire' => $etatVolumeHoraire->getId(),
-        ]);
-
-        $data = $this->getServiceFormuleResultat()->getData(
-            $intervenant,
-            $typeVolumeHoraire,
-            $etatVolumeHoraire
-        );
-
-        return compact('form', 'intervenant', 'data');
-    }
-
-
-
-    public function formuleTotauxHetdAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-        $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
-        $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
-        $formuleResultat   = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
-
-        return compact('formuleResultat');
-    }
-
-
-
-    public function supprimerAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant \Application\Entity\Db\Intervenant */
-
-        if (!$intervenant) {
-            throw new \Exception('Intervenant introuvable');
-        }
-        $intervenantCode = $intervenant->getCode();
-
-        $intSuppr = $this->getProcessusIntervenant()->suppression($intervenant);
-
-        $ids = $intSuppr->idsFromPost($this->params()->fromPost('ids'));
-        if ($ids) {
-            try {
-                if (!empty($ids)) {
-                    $res = $intSuppr->delete($ids);
-                    $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
-                    if ($res) {
-                        $this->flashMessenger()->addSuccessMessage('Données de l\'intervenant supprimées');
-                    } else {
-                        $this->flashMessenger()->addErrorMessage('Une ou plusieurs erreurs ont été rencontrées');
-                    }
-                }
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
-            }
-        }
-        $tree = $intSuppr->getTree();
-        if (!$tree) {
-            $intervenant = $this->getServiceIntervenant()->getByCode($intervenantCode);
-            if ($intervenant && $intervenant->estHistorise()) $intervenant = null;
-        }
-
-        return compact('intervenant', 'tree');
-    }
-
-
-
-    public function historiserAction()
-    {
-        /* @var $intervenant \Application\Entity\Db\Intervenant */
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-        if (!$intervenant) {
-            throw new \Exception('Intervenant introuvable');
-        }
-        $this->getServiceIntervenant()->delete($intervenant);
-
-        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => 'code:' . $intervenant->getCode()]);
-    }
-
-
-
-    public function restaurerAction()
-    {
-        /* @var $intervenant \Application\Entity\Db\Intervenant */
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-        if (!$intervenant) {
-            throw new \Exception('Intervenant introuvable');
-        }
-        $intervenant->dehistoriser();
-        $this->getServiceIntervenant()->save($intervenant);
-        $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
-
-        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()]);
-    }
-
-
-
     /**
      *
      * @return array
      */
-    protected function getIntervenantsRecents()
+    protected function getIntervenantsRecents ()
     {
         $container = $this->getSessionContainer();
         //$container->recents = [];
@@ -476,13 +125,55 @@ class  IntervenantController extends AbstractController
 
 
 
+    public function rechercheJsonAction ()
+    {
+        $recherche         = $this->getProcessusIntervenant()->recherche();
+        $canShowHistorises = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_VISUALISATION_HISTORISES));
+        $recherche->setShowHisto($canShowHistorises);
+        $intervenants = [];
+        $term         = $this->axios()->fromPost('term');
+
+        if (!empty($term)) {
+            $intervenants = $recherche->rechercher($term, 40);
+        }
+
+        return new AxiosModel($intervenants);
+    }
+
+
+
+    public function voirAction ()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $tab         = $this->params()->fromQuery('tab');
+
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant introuvable');
+        }
+
+        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
+            $vh = new ViewModel();
+            $vh->setTemplate('application/intervenant/menu');
+
+            return $vh;
+        }
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('P7D'));
+        $notificationNote = $this->getServiceNote()->countNote($intervenant, $date);
+        $this->addIntervenantRecent($intervenant);
+
+        return compact('intervenant', 'tab', 'notificationNote');
+    }
+
+
+
     /**
      *
      * @param \Application\Entity\Db\Intervenant $intervenant
      *
      * @return \Application\Controller\IntervenantController
      */
-    protected function addIntervenantRecent(Intervenant $intervenant)
+    protected function addIntervenantRecent (Intervenant $intervenant)
     {
         $container = $this->getSessionContainer();
         if (!isset($container->recents)) {
@@ -533,5 +224,315 @@ class  IntervenantController extends AbstractController
         });
 
         return $this;
+    }
+
+
+
+    public function candidatureAction ()
+    {
+        $intervenant           = $this->getEvent()->getParam('intervenant');
+        $canValiderCandidature = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
+
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant introuvable');
+        }
+
+
+        return compact('intervenant', 'canValiderCandidature');
+    }
+
+
+
+    public function getCandidaturesAction ()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant introuvable');
+        }
+        /**
+         * @var Intervenant $intervenant
+         */
+        $candidatures = $this->getServiceCandidature()->data(['intervenant' => $intervenant]);
+
+
+        return $candidatures;
+    }
+
+
+
+    public function definirParDefautAction ()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
+        $this->getServiceIntervenant()->definirParDefaut($intervenant, !$definiParDefaut);
+        $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
+
+        return compact('definiParDefaut');
+    }
+
+
+
+    public function ficheAction ()
+    {
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ? : $this->getEvent()->getParam('intervenant');
+
+        return compact('intervenant', 'role');
+    }
+
+
+
+    public function saisirAction ()
+    {
+        $intervenant  = $this->getEvent()->getParam('intervenant');
+        $title        = "Saisie d'un intervenant";
+        $form         = $this->getFormIntervenantEdition();
+        $errors       = [];
+        $actionDetail = $this->params()->fromRoute('action-detail');
+        if ($intervenant) {
+            $definiParDefaut = $this->getServiceIntervenant()->estDefiniParDefaut($intervenant);
+        } else {
+            $definiParDefaut = false;
+        }
+
+        $isNew = !$intervenant;
+        if (!$intervenant) {
+            $intervenant = $this->getServiceIntervenant()->newEntity();
+        }
+
+        if ($actionDetail == 'dupliquer') {
+            $intervenant = $intervenant->dupliquer();
+            $intervenant->setSource($this->getServiceSource()->getOse());
+            $intervenant->setStatut($this->getServiceStatut()->getAutres());
+        }
+
+        $canEdit = $this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION);
+        $form->setReadOnly(!$canEdit);
+        $form->bind($intervenant);
+        //Edition avancée pour éditer le code et la source de l'intervenant
+        $canEditAvancee = $this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION_AVANCEE);
+        if ($canEditAvancee) {
+            $form->activerEditionAvancee();
+        }
+
+        $ancienStatut = $intervenant->getStatut();
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $oriData  = $form->getHydrator()->extract($intervenant);
+            $postData = $request->getPost()->toArray();
+            $data     = array_merge($oriData, $postData);
+            $form->setData($data);
+            if ((!$form->isReadOnly()) && $form->isValid()) {
+                try {
+                    if ($form->get('intervenant-edition-login')->getValue() && $form->get('intervenant-edition-password')->getValue()) {
+                        $nom           = $intervenant->getNomUsuel();
+                        $prenom        = $intervenant->getPrenom();
+                        $dateNaissance = $intervenant->getDateNaissance();
+                        $login         = $form->get('intervenant-edition-login')->getValue();
+                        $password      = $form->get('intervenant-edition-password')->getValue();
+                        $utilisateur   = $this->getServiceUtilisateur()->creerUtilisateur($nom, $prenom, $dateNaissance, $login, $password);
+                        $utilisateur->setCode($intervenant->getUtilisateurCode() ? : $intervenant->getCode());
+                        $this->getServiceUtilisateur()->save($utilisateur);
+                        if ($utilisateur->getCode() != $intervenant->getUtilisateurCode()) {
+                            $intervenant->setUtilisateurCode($utilisateur->getCode());
+                            $intervenant->setSyncUtilisateurCode(false);
+                        }
+                    }
+                    $this->getServiceIntervenant()->save($intervenant);
+                    if ($intervenant->getStatut() != $ancienStatut) {
+                        $dossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+                        if ($dossier->getId()) { // Il y a un dossier
+                            $dossier->setStatut($intervenant->getStatut());
+                            $this->getServiceDossier()->save($dossier); // On sauvegarde le dossier
+                        }
+                    }
+                    $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+                    $form->get('id')->setValue($intervenant->getId()); // transmet le nouvel ID
+                    if ($isNew) {
+                        $etape = $this->getServiceWorkflow()->getEtapeCourante($intervenant);
+                        if ($etape) {
+                            return $this->redirect()->toUrl($etape->getUrl());
+                        }
+                    }
+
+                    return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'edition']]);
+                } catch (\Exception $e) {
+                    $errors[] = $this->translate($e);
+                }
+            }
+        }
+
+        $vm = new ViewModel();
+        $vm->setTemplate('application/intervenant/saisir');
+        $vm->setVariables(compact('intervenant', 'form', 'errors', 'title', 'definiParDefaut', 'actionDetail'));
+
+        return $vm;
+    }
+
+
+
+    public function synchronisationAction ()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        try {
+            $isImportable = $this->getServiceIntervenant()->isImportable($intervenant);
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
+            $isImportable = false;
+        }
+        $data = [];
+
+        if ($isImportable) {
+            $query = new Query('INTERVENANT');
+            $query->setNotNull([]); // Aucune colonne ne doit être non nulle !!
+            $query->setLimit(101);
+            $query->setColValues(['ANNEE_ID' => $intervenant->getAnnee()->getId(), 'CODE' => $intervenant->getCode()]);
+            $data = $this->getServiceDifferentiel()->make($query, $query::SQL_FULL, false)->fetchAll();
+        }
+
+        return compact('intervenant', 'isImportable', 'data');
+    }
+
+
+
+    public function synchroniserAction ()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $this->getProcessusImport()->execMaj('INTERVENANT', 'CODE', $intervenant->getCode());
+        $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'synchronisation']]);
+    }
+
+
+
+    public function voirHeuresCompAction ()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant \Application\Entity\Db\Intervenant */
+
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+
+        $form = $this->getFormIntervenantHeuresComp();
+
+        $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
+        if (!$typeVolumeHoraire instanceof TypeVolumeHoraire) {
+            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraire);
+        }
+        /* @var $typeVolumeHoraire \Service\Entity\Db\TypeVolumeHoraire */
+        if (!isset($typeVolumeHoraire)) {
+            throw new LogicException('Type de volume horaire erroné');
+        }
+
+        $etatVolumeHoraire = $this->context()->etatVolumeHoraireFromQuery('etat-volume-horaire', $form->get('etat-volume-horaire')->getValue());
+        if (!$etatVolumeHoraire instanceof EtatVolumeHoraire) {
+            $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->get($etatVolumeHoraire);
+        }
+        /* @var $etatVolumeHoraire \Service\Entity\Db\EtatVolumeHoraire */
+        if (!isset($etatVolumeHoraire)) {
+            throw new LogicException('Etat de volume horaire erroné');
+        }
+
+        $form->setData([
+            'type-volume-horaire' => $typeVolumeHoraire->getId(),
+            'etat-volume-horaire' => $etatVolumeHoraire->getId(),
+        ]);
+
+        $data = $this->getServiceFormuleResultat()->getData(
+            $intervenant,
+            $typeVolumeHoraire,
+            $etatVolumeHoraire
+        );
+
+        return compact('form', 'intervenant', 'data');
+    }
+
+
+
+    public function formuleTotauxHetdAction ()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+        $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
+        $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
+        $formuleResultat   = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
+
+        return compact('formuleResultat');
+    }
+
+
+
+    public function supprimerAction ()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant \Application\Entity\Db\Intervenant */
+
+        if (!$intervenant) {
+            throw new \Exception('Intervenant introuvable');
+        }
+        $intervenantCode = $intervenant->getCode();
+
+        $intSuppr = $this->getProcessusIntervenant()->suppression($intervenant);
+
+        $ids = $intSuppr->idsFromPost($this->params()->fromPost('ids'));
+        if ($ids) {
+            try {
+                if (!empty($ids)) {
+                    $res = $intSuppr->delete($ids);
+                    $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+                    if ($res) {
+                        $this->flashMessenger()->addSuccessMessage('Données de l\'intervenant supprimées');
+                    } else {
+                        $this->flashMessenger()->addErrorMessage('Une ou plusieurs erreurs ont été rencontrées');
+                    }
+                }
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
+        }
+        $tree = $intSuppr->getTree();
+        if (!$tree) {
+            $intervenant = $this->getServiceIntervenant()->getByCode($intervenantCode);
+            if ($intervenant && $intervenant->estHistorise()) $intervenant = null;
+        }
+
+        return compact('intervenant', 'tree');
+    }
+
+
+
+    public function historiserAction ()
+    {
+        /* @var $intervenant \Application\Entity\Db\Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        if (!$intervenant) {
+            throw new \Exception('Intervenant introuvable');
+        }
+        $this->getServiceIntervenant()->delete($intervenant);
+
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => 'code:' . $intervenant->getCode()]);
+    }
+
+
+
+    public function restaurerAction ()
+    {
+        /* @var $intervenant \Application\Entity\Db\Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        if (!$intervenant) {
+            throw new \Exception('Intervenant introuvable');
+        }
+        $intervenant->dehistoriser();
+        $this->getServiceIntervenant()->save($intervenant);
+        $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+
+        return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()]);
     }
 }

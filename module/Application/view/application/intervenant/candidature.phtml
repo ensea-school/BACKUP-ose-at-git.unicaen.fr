@@ -3,7 +3,7 @@
 use Application\Provider\Privilege\Privileges;
 
 $this->intervenant($intervenant)->renderTitle('Candidature');
-$canValiderCandidature = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_CANDIDATURE_VALIDER));
+$canValiderCandidature = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
 
 
 echo $this->vue('mission/liste-candidatures', [

@@ -5,9 +5,13 @@ namespace Mission\Assertion;
 use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
+use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Mission\Entity\Db\Candidature;
+use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\OffreEmploi;
+use Mission\Entity\Db\VolumeHoraireMission;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
@@ -22,6 +26,7 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait;
+    use WorkflowServiceAwareTrait;
 
     /* ---- Routage général ---- */
     public function __invoke (array $page) // gestion des visibilités de menus
@@ -35,7 +40,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
     {
         switch ($page['route']) {
             case 'offre-emploi':
-                $query = 'SELECT id FROM offre_emploi WHERE histo_destruction IS NULL';
+                $query = 'SELECT id FROM offre_emploi WHERE histo_destruction IS NULL AND validation_id IS NOT NULL';
                 $conn  = $this->getEntityManager()->getConnection();
 
                 if (false === $conn->executeQuery($query)->fetchOne()) {
@@ -81,10 +86,14 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
                         return $this->assertOffreEmploiPostuler($role, $entity);
                     case Privileges::MISSION_CANDIDATURE_VISUALISATION:
                         return $this->assertCandidatureVisualisation($role, $entity);
-                    case Privileges::MISSION_CANDIDATURE_VALIDER:
-                        return $this->assertCandidatureValider($role, $entity);
                     case Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION:
                         return $this->assertOffreEmploiSupprimer($role, $entity);
+                }
+            break;
+            case $entity instanceof Intervenant:
+                switch ($privilege) {
+                    case Privileges::MISSION_CANDIDATURE_VALIDER:
+                        return $this->assertCandidatureValider($role, $entity);
                 }
             break;
         }
@@ -126,7 +135,6 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
         return $this->asserts([
             $this->haveRole(),
             $offre->canSaisie(),
-            //$offre->haveCandidats(),
             $this->assertOffreEmploi($role, $offre),
         ]);
     }
@@ -203,15 +211,6 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertCandidatureValider (Role $role, OffreEmploi $offre)
-    {
-        return $this->asserts([
-            $this->haveRole(),
-        ]);
-    }
-
-
-
     protected function assertOffreEmploiSupprimer (Role $role, OffreEmploi $offre)
     {
         return $this->asserts([
@@ -223,9 +222,15 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function haveCandidature ()
+    protected function assertCandidatureValider (Role $role, Intervenant $intervenant)
     {
+        $codeEtape = WfEtape::CANDIDATURE_VALIDATION;
+        $wfEtape   = $this->getServiceWorkflow()->getEtape($codeEtape, $intervenant);
 
+        return $this->asserts([
+            $wfEtape->isAtteignable(),
+            $this->haveRole(),
+        ]);
     }
 
 }

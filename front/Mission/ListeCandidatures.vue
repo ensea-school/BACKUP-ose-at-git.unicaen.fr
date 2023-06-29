@@ -29,14 +29,20 @@
                        class="btn btn-success"
                        data-content="Êtes vous sûr de vouloir accepter cette candidature ?"
                        data-title="Accepter la candidature"
+                       style="color:white;"
                        title="Accepter la candidature"
-                       @click.prevent="validerCandidature">Accepter </a>&nbsp;
+                       @click.prevent="validerCandidature">
+                        <i class="fa-solid fa-check"></i>
+                    </a>&nbsp;
                     <a :href="urlRefuserCandidature(candidature)"
                        class="btn btn-danger"
                        data-content="Êtes vous sûr de vouloir refuser cette candidature ?"
                        data-title="Refuser la candidature"
+                       style="color:white;"
                        title="Refuser la candidature"
-                       @click.prevent="refuserCandidature">Refuser </a>
+                       @click.prevent="refuserCandidature">
+                        <i class="fa-sharp fa-solid fa-xmark"></i>
+                    </a>
                 </td>
             </tr>
 

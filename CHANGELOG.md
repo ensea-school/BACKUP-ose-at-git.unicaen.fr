@@ -15,9 +15,9 @@
   * Adaptation de la partie paiement pour gérer les heures nocturnes/dimanches/jours fériés
   * Plafonds applicables aux missions avec un nouveau périmètre par type de mission
 
-
 * Gestion renforcée des taux de paiement
-  * Possibilité de gérer de nouveaux taux différents du taux légal de 42,86€
+  * Possibilité de gérer de nouveaux taux différents du taux HETD de 42,86€
+  * Prise en compte du nouveau taux HETD de 43,50€
   * Nouvelle interface d'administration des taux de paiement
   * Les taux peuvent être indexés sur d'autres taux (le SMIC par exemple)
   * Les taux peuvent être appliqués globalement, par mission, par statut, par élément pédagogique, selon le contexte
@@ -31,7 +31,7 @@
   * Possibilité d'avoir des états de sortie distincts pour les contrats et pour les avenants, par statut
 
 * Tag
-  * Possiblité de mettre des dates de début et de fin d'utilisation pour les tags
+  * Possibilité de mettre des dates de début et de fin d'utilisation pour les tags
 
 
 ## Améliorations

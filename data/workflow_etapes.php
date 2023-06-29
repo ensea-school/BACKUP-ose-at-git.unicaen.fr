@@ -8,13 +8,6 @@ return [
         "DESC_NON_FRANCHIE"   => "Aucune candidature n'a été faite",
         "OBLIGATOIRE"         => true,
     ],
-    "CANDIDATURE_VALIDATION"                 => [
-        "LIBELLE_INTERVENANT" => "Je visualise la validation de mes candidatures",
-        "LIBELLE_AUTRES"      => "J'accède à la validation des candidatures",
-        "ROUTE"               => "intervenant/candidature",
-        "DESC_NON_FRANCHIE"   => "Certaines candidatures attendent une réponse",
-        "OBLIGATOIRE"         => true,
-    ],
     "DONNEES_PERSO_SAISIE"           => [
         "LIBELLE_INTERVENANT" => "Je saisis mes données personnelles",
         "LIBELLE_AUTRES"      => "J'accède aux données personnelles",
@@ -48,6 +41,13 @@ return [
         "LIBELLE_AUTRES"      => "Je visualise la validation des données personnelles",
         "ROUTE"               => "intervenant/dossier",
         "DESC_NON_FRANCHIE"   => "Les données personnelles n'ont pas été validées",
+        "OBLIGATOIRE"         => true,
+    ],
+    "CANDIDATURE_VALIDATION"                 => [
+        "LIBELLE_INTERVENANT" => "Je visualise la validation de mes candidatures",
+        "LIBELLE_AUTRES"      => "J'accède à la validation des candidatures",
+        "ROUTE"               => "intervenant/candidature",
+        "DESC_NON_FRANCHIE"   => "Certaines candidatures attendent une réponse",
         "OBLIGATOIRE"         => true,
     ],
     "MISSION_SAISIE"                 => [

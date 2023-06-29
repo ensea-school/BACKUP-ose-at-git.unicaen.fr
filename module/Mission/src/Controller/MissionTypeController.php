@@ -41,6 +41,7 @@ class MissionTypeController extends AbstractController
     }
 
 
+
     public function visualiserAction()
     {
 
@@ -48,8 +49,9 @@ class MissionTypeController extends AbstractController
         $tab         = $this->params()->fromQuery('tab', 'fiche');
 
 
-        return compact( 'typeMission', 'tab');
+        return compact('typeMission', 'tab');
     }
+
 
 
     public function saisirAction()
@@ -93,13 +95,15 @@ class MissionTypeController extends AbstractController
         /**
          * @var TypeMission $entity
          */
-        $entity    = $this->getEvent()->getParam('typeMission');
-        $canEditCC = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_CENTRE_COUT_TYPE));
+        $entity = $this->getEvent()->getParam('typeMission');
+        //TODO décommenter pour mise en place centre couts par mission
+        $canEditCC = false;
+        //        $canEditCC = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_CENTRE_COUT_TYPE));
 
         if ($this->getRequest()->isPost()) {
             $centreCoutsId = $this->getRequest()->getPost()->get('centreCouts');
-            $cenCoutsIds = $entity->getCentreCoutsIds();
-            if(!in_array($centreCoutsId,$cenCoutsIds)){
+            $cenCoutsIds   = $entity->getCentreCoutsIds();
+            if (!in_array($centreCoutsId, $cenCoutsIds)) {
 
                 $centreCouts = $this->getServiceCentreCout()->get($centreCoutsId);
 
@@ -124,13 +128,15 @@ class MissionTypeController extends AbstractController
         return $vm;
     }
 
+
+
     public function CentreCoutsSupprimerAction(): \Laminas\Http\Response
     {
         /**
          * @var TypeMission $entity
          */
-        $entity    = $this->getEvent()->getParam('typeMission');
-        $centreCoutsLinker    = $this->getEvent()->getParam('centreCoutTypeMission');
+        $entity            = $this->getEvent()->getParam('typeMission');
+        $centreCoutsLinker = $this->getEvent()->getParam('centreCoutTypeMission');
 
         $this->getServiceMissionType()->removeCentreCoutLinker($centreCoutsLinker);
 

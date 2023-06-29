@@ -33,6 +33,11 @@
 * Tag
   * Possibilité de mettre des dates de début et de fin d'utilisation pour les tags
 
+* Extraction paie
+  * Nouveaux paramètrages par statut permettant de spécifier par statut le code indémnité attendu, le mode de calcul et le type de carte
+
+  **IMPORTANT** : Si aucun de ces paramètres n'est spécifié au niveau des status, ce sont les valeurs par défaut habituelles qui seront founries dans l'extraction winpaie et préliquidation SIHAM. N'hésitez pas à tester vos extractions de paie. 
+
 
 ## Améliorations
 

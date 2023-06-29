@@ -36,7 +36,7 @@ WITH t AS (
     /*@ANNEE_ID=i.annee_id*/
     AND NOT (si.contrat = 0 AND evh.code = 'valide')
 
-  UNION
+  UNION ALL
 
   SELECT
     m.annee_id        annee_id,
@@ -48,6 +48,7 @@ WITH t AS (
   FROM
     tbl_mission m
     LEFT JOIN volume_horaire_mission vhm ON vhm.mission_id = m.mission_id AND vhm.histo_destruction IS NULL
+    JOIN type_volume_horaire tvh ON tvh.id = vhm.type_volume_horaire_id AND tvh.code = 'PREVU'
     JOIN V_VOLUME_HORAIRE_MISSION_ETAT vvhme ON vvhme.volume_horaire_mission_id = vhm.id
     JOIN etat_volume_horaire       evh ON evh.id = vvhme.etat_volume_horaire_id
                                       AND evh.code IN ('valide', 'contrat-edite', 'contrat-signe')

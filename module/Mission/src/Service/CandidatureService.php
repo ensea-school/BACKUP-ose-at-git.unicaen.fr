@@ -109,7 +109,6 @@ class CandidatureService extends AbstractEntityService
         $query  = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
         $result = $query->getResult();
 
-        /*$triggers = $this->getOffreEmploiPrivileges();*/
         $triggers = [];
 
         $properties = [

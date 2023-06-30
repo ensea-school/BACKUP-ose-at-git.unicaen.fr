@@ -30,7 +30,34 @@ class WorkflowService extends AbstractService
 
 
 
-    protected function prepareEtapeParams($etape, Intervenant $intervenant = null, Structure $structure = null)
+    /**
+     * @param WfEtapeService|WorkflowEtape|TblWorkflow|string $etape
+     * @param Intervenant|null                                $intervenant
+     * @param Structure|null                                  $structure
+     *
+     * @return WorkflowEtape
+     */
+    public function getPreviousAccessibleEtape ($etape, Intervenant $intervenant = null, Structure $structure = null)
+    {
+        [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
+
+        $fdr       = $this->getFeuilleDeRoute($intervenant, $structure);
+        $isCurrent = false;
+        foreach ($fdr as $etape) {
+            if ($isCurrent && $etape->isAtteignable() && $etape->getUrl() && $this->isAllowed($etape)) {
+                return $etape;
+            }
+            if ($etape->getEtape()->getCode() == $etapeCode) {
+                $isCurrent = true;
+            }
+        }
+
+        return null;
+    }
+
+
+
+    protected function prepareEtapeParams ($etape, Intervenant $intervenant = null, Structure $structure = null)
     {
         switch (true) {
             case $etape === WfEtape::CURRENT || empty($etape):
@@ -75,134 +102,12 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @param WfEtapeService|WorkflowEtape|TblWorkflow|string $etape
-     * @param Intervenant|null                                $intervenant
-     * @param Structure|null                                  $structure
-     *
-     * @return WorkflowEtape
-     */
-    public function getEtape($etape, Intervenant $intervenant = null, Structure $structure = null)
-    {
-        [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
-
-        $fdr = $this->getFeuilleDeRoute($intervenant, $structure);
-        if ($fdr) {
-            foreach ($fdr as $etape) {
-                if ($etape->getEtape()->getCode() == $etapeCode) {
-                    return $etape;
-                }
-            }
-        }
-
-        return null;
-    }
-
-
-
-    /**
-     * @param WfEtapeService|WorkflowEtape|TblWorkflow|string $etape
-     * @param Intervenant|null                                $intervenant
-     * @param Structure|null                                  $structure
-     *
-     * @return WorkflowEtape
-     */
-    public function getNextEtape($etape, Intervenant $intervenant = null, Structure $structure = null)
-    {
-        [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
-
-        $fdr       = $this->getFeuilleDeRoute($intervenant, $structure);
-        $isCurrent = false;
-        foreach ($fdr as $etape) {
-            if ($isCurrent) {
-                return $etape;
-            }
-            if ($etape->getEtape()->getCode() == $etapeCode) {
-                $isCurrent = true;
-            }
-        }
-
-        return null;
-    }
-
-
-
-    /**
-     * @param WfEtapeService|WorkflowEtape|TblWorkflow|string $etape
-     * @param Intervenant|null                                $intervenant
-     * @param Structure|null                                  $structure
-     *
-     * @return WorkflowEtape
-     */
-    public function getPreviousAccessibleEtape($etape, Intervenant $intervenant = null, Structure $structure = null)
-    {
-        [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
-
-        $fdr       = $this->getFeuilleDeRoute($intervenant, $structure);
-        $isCurrent = false;
-        foreach ($fdr as $etape) {
-            if ($isCurrent && $etape->isAtteignable() && $etape->getUrl() && $this->isAllowed($etape)) {
-                return $etape;
-            }
-            if ($etape->getEtape()->getCode() == $etapeCode) {
-                $isCurrent = true;
-            }
-        }
-
-        return null;
-    }
-
-
-
-    /**
-     * @param WfEtapeService|WorkflowEtape|TblWorkflow|string $etape
-     * @param Intervenant|null                                $intervenant
-     * @param Structure|null                                  $structure
-     *
-     * @return WorkflowEtape
-     */
-    public function getNextAccessibleEtape($etape, Intervenant $intervenant = null, Structure $structure = null)
-    {
-        [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
-
-        $fdr       = $this->getFeuilleDeRoute($intervenant, $structure);
-        $isCurrent = false;
-        foreach ($fdr as $etape) {
-            if ($isCurrent && $etape->isAtteignable() && $etape->getUrl() && $this->isAllowed($etape)) {
-                return $etape;
-            }
-            if ($etape->getEtape()->getCode() == $etapeCode) {
-                $isCurrent = true;
-            }
-        }
-
-        return $this->getEtapeCourante($intervenant, $structure);
-    }
-
-
-
-    public function isAllowed($etape)
-    {
-        if ($etape instanceof WorkflowEtape) {
-            $etape = $etape->getEtape();
-        }
-        if (!$etape instanceof WfEtape) {
-            throw new \Exception('L\'étape fournie n\'est pas de classe WfEtape');
-        }
-
-        $resource = \Application\Util::routeToActionResource($etape->getRoute());
-
-        return $this->getServiceAuthorize()->isAllowed($resource);
-    }
-
-
-
-    /**
      * @param Intervenant|null $intervenant
      * @param Structure|null   $structure
      *
      * @return WorkflowEtape|null
      */
-    public function getEtapeCourante(Intervenant $intervenant = null, Structure $structure = null)
+    public function getEtapeCourante (Intervenant $intervenant = null, Structure $structure = null)
     {
         $fdr = $this->getFeuilleDeRoute($intervenant, $structure);
 
@@ -222,7 +127,7 @@ class WorkflowService extends AbstractService
      *
      * @return WorkflowEtape[]
      */
-    public function getFeuilleDeRoute(Intervenant $intervenant = null, Structure $structure = null)
+    public function getFeuilleDeRoute (Intervenant $intervenant = null, Structure $structure = null)
     {
         if (!$intervenant || !$structure) {
             /* Filtrage en fonction du contexte */
@@ -273,59 +178,51 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @return $this
-     * @throws \Doctrine\DBAL\DBALException
+     * @param Intervenant|null $intervenant
+     *
+     * @return TblWorkflow[]
      */
-    public function calculerTout()
+    protected function getEtapes (Intervenant $intervenant, ?Structure $structure = null, bool $calcIfEmpty = true)
     {
-        $this->getServiceTableauBord()->calculer('workflow');
 
-        return $this;
-    }
+        $dql = "
+        SELECT
+          we, tw, str, dblo, dep
+        FROM
+          Application\Entity\Db\TblWorkflow tw
+          JOIN tw.etape we
+          LEFT JOIN tw.structure str
+          LEFT JOIN tw.etapeDeps dblo
+          LEFT JOIN dblo.wfEtapeDep dep
+        WHERE
+          tw.intervenant = :intervenant
+          " . ($structure ? "AND (tw.structure IS NULL OR tw.structure = :structure)" : '') . "
+        ORDER BY
+          we.ordre, str.libelleCourt
+        ";
 
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameter('intervenant', $intervenant);
+        if ($structure) $query->setParameter('structure', $structure);
+        $etapes = $query->getResult();
 
+        if (empty($etapes) && $calcIfEmpty) {
+            $this->calculerTableauxBord([], $intervenant);
 
-    /**
-     * @return int
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function calculerTousTableauxBord($beforeTrigger = null, $afterTrigger = null)
-    {
-        $sql    = "SELECT tbl_name FROM tbl WHERE tbl_name <> 'formule' ORDER BY ordre";
-        $tbls   = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
-        $result = true;
-        foreach ($tbls as $tbl) {
-            $begin = microtime(true);
-            $tbl   = $tbl['TBL_NAME'];
-            $sql   = 'BEGIN UNICAEN_TBL.CALCULER(\'' . $tbl . '\'); END;';
-            if ($beforeTrigger instanceof \Closure) {
-                $beforeTrigger([
-                    'tableau-bord' => $tbl,
-                ]);
-            }
-            try {
-                $this->getEntityManager()->getConnection()->executeStatement($sql);
-                if ($afterTrigger instanceof \Closure) {
-                    $afterTrigger([
-                        'tableau-bord' => $tbl,
-                        'result'       => true,
-                        'duree'        => microtime(true) - $begin,
-                    ]);
+            return $this->getEtapes($intervenant, $structure, false);
+        }
+
+        /* @var $etapes TblWorkflow[] */
+        if ($this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
+            foreach ($etapes as $etape) {
+                $we = $etape->getEtape();
+                if ($we->getRouteIntervenant()) {
+                    $we->setRoute($we->getRouteIntervenant());
                 }
-            } catch (\Exception $e) {
-                if ($afterTrigger instanceof \Closure) {
-                    $afterTrigger([
-                        'tableau-bord' => $tbl,
-                        'result'       => false,
-                        'exception'    => $e,
-                        'duree'        => microtime(true) - $begin,
-                    ]);
-                }
-                $result = false;
             }
         }
 
-        return $result;
+        return $etapes;
     }
 
 
@@ -334,7 +231,7 @@ class WorkflowService extends AbstractService
      * @param array|string    $tableauxBords
      * @param Intervenant|int $intervenant
      */
-    public function calculerTableauxBord(array|string|null $tableauxBords, Intervenant|int $intervenant): array
+    public function calculerTableauxBord (array|string|null $tableauxBords, Intervenant|int $intervenant): array
     {
         $errors = [];
 
@@ -405,7 +302,7 @@ class WorkflowService extends AbstractService
 
 
 
-    private function addTbl($tblName, &$tbls, $deps)
+    private function addTbl ($tblName, &$tbls, $deps)
     {
         $tbls[$tblName] = 1;
         if (isset($deps[$tblName])) {
@@ -418,9 +315,56 @@ class WorkflowService extends AbstractService
 
 
     /**
+     * @param WfEtapeService|WorkflowEtape|TblWorkflow|string $etape
+     * @param Intervenant|null                                $intervenant
+     * @param Structure|null                                  $structure
+     *
+     * @return WorkflowEtape
+     */
+    public function getEtape ($etape, Intervenant $intervenant = null, Structure $structure = null)
+    {
+        [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
+
+        $fdr = $this->getFeuilleDeRoute($intervenant, $structure);
+        if ($fdr) {
+            foreach ($fdr as $etape) {
+                if ($etape->getEtape()->getCode() == $etapeCode) {
+                    return $etape;
+                }
+            }
+        }
+
+        return null;
+    }
+
+
+
+    /**
+     * Generates a url given the name of a route.
+     *
+     * @param string            $name               Name of the route
+     * @param array             $params             Parameters for the link
+     * @param array|Traversable $options            Options for the route
+     * @param bool              $reuseMatchedParams Whether to reuse matched parameters
+     *
+     * @return string Url                         For the link href attribute
+     * @see    \Laminas\Mvc\Router\RouteInterface::assemble()
+     *
+     */
+    protected function getUrl ($name = null, $params = [], $options = [], $reuseMatchedParams = false)
+    {
+        $url = \Application::$container->get('ViewHelperManager')->get('url');
+
+        /* @var $url \Laminas\View\Helper\Url */
+        return $url->__invoke($name, $params, $options, $reuseMatchedParams);
+    }
+
+
+
+    /**
      * @param $data WorkflowEtape[]
      */
-    protected function calculEtats($data)
+    protected function calculEtats ($data)
     {
         $couranteDefined = false;
 
@@ -455,72 +399,128 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @param Intervenant|null $intervenant
+     * @param WfEtapeService|WorkflowEtape|TblWorkflow|string $etape
+     * @param Intervenant|null                                $intervenant
+     * @param Structure|null                                  $structure
      *
-     * @return TblWorkflow[]
+     * @return WorkflowEtape
      */
-    protected function getEtapes(Intervenant $intervenant, ?Structure $structure = null, bool $calcIfEmpty = true)
+    public function getNextEtape ($etape, Intervenant $intervenant = null, Structure $structure = null)
     {
+        [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
-        $dql = "
-        SELECT
-          we, tw, str, dblo, dep
-        FROM
-          Application\Entity\Db\TblWorkflow tw
-          JOIN tw.etape we
-          LEFT JOIN tw.structure str
-          LEFT JOIN tw.etapeDeps dblo
-          LEFT JOIN dblo.wfEtapeDep dep
-        WHERE
-          tw.intervenant = :intervenant
-          " . ($structure ? "AND (tw.structure IS NULL OR tw.structure = :structure)" : '') . "
-        ORDER BY
-          we.ordre, str.libelleCourt
-        ";
-
-        $query = $this->getEntityManager()->createQuery($dql);
-        $query->setParameter('intervenant', $intervenant);
-        if ($structure) $query->setParameter('structure', $structure);
-        $etapes = $query->getResult();
-
-        if (empty($etapes) && $calcIfEmpty) {
-            $this->calculerTableauxBord([], $intervenant);
-
-            return $this->getEtapes($intervenant, $structure, false);
-        }
-
-        /* @var $etapes TblWorkflow[] */
-        if ($this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
-            foreach ($etapes as $etape) {
-                $we = $etape->getEtape();
-                if ($we->getRouteIntervenant()) {
-                    $we->setRoute($we->getRouteIntervenant());
-                }
+        $fdr       = $this->getFeuilleDeRoute($intervenant, $structure);
+        $isCurrent = false;
+        foreach ($fdr as $etape) {
+            if ($isCurrent) {
+                return $etape;
+            }
+            if ($etape->getEtape()->getCode() == $etapeCode) {
+                $isCurrent = true;
             }
         }
 
-        return $etapes;
+        return null;
+    }
+
+
+
+    public function isAllowed ($etape)
+    {
+        if ($etape instanceof WorkflowEtape) {
+            $etape = $etape->getEtape();
+        }
+        if (!$etape instanceof WfEtape) {
+            throw new \Exception('L\'étape fournie n\'est pas de classe WfEtape');
+        }
+
+        $resource = \Application\Util::routeToActionResource($etape->getRoute());
+
+        return $this->getServiceAuthorize()->isAllowed($resource);
     }
 
 
 
     /**
-     * Generates a url given the name of a route.
+     * @param WfEtapeService|WorkflowEtape|TblWorkflow|string $etape
+     * @param Intervenant|null                                $intervenant
+     * @param Structure|null                                  $structure
      *
-     * @param string            $name               Name of the route
-     * @param array             $params             Parameters for the link
-     * @param array|Traversable $options            Options for the route
-     * @param bool              $reuseMatchedParams Whether to reuse matched parameters
-     *
-     * @return string Url                         For the link href attribute
-     * @see    \Laminas\Mvc\Router\RouteInterface::assemble()
-     *
+     * @return WorkflowEtape
      */
-    protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false)
+    public function getNextAccessibleEtape ($etape, Intervenant $intervenant = null, Structure $structure = null)
     {
-        $url = \Application::$container->get('ViewHelperManager')->get('url');
+        [$etapeCode, $intervenant, $structure] = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
-        /* @var $url \Laminas\View\Helper\Url */
-        return $url->__invoke($name, $params, $options, $reuseMatchedParams);
+        $fdr       = $this->getFeuilleDeRoute($intervenant, $structure);
+        $isCurrent = false;
+        foreach ($fdr as $etape) {
+            if ($isCurrent && $etape->isAtteignable() && $etape->getFranchie() < 1 && $etape->getUrl() && $this->isAllowed($etape)) {
+                return $etape;
+            }
+            if ($etape->getEtape()->getCode() == $etapeCode) {
+                $isCurrent = true;
+            }
+        }
+
+        return $this->getEtapeCourante($intervenant, $structure);
+    }
+
+
+
+    /**
+     * @return $this
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function calculerTout ()
+    {
+        $this->getServiceTableauBord()->calculer('workflow');
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return int
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function calculerTousTableauxBord ($beforeTrigger = null, $afterTrigger = null)
+    {
+        $sql    = "SELECT tbl_name FROM tbl WHERE tbl_name <> 'formule' ORDER BY ordre";
+        $tbls   = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
+        $result = true;
+        foreach ($tbls as $tbl) {
+            $begin = microtime(true);
+            $tbl   = $tbl['TBL_NAME'];
+            $sql   = 'BEGIN UNICAEN_TBL.CALCULER(\'' . $tbl . '\'); END;';
+            if ($beforeTrigger instanceof \Closure) {
+                $beforeTrigger([
+                    'tableau-bord' => $tbl,
+                ]);
+            }
+            try {
+                $this->getEntityManager()->getConnection()->executeStatement($sql);
+                if ($afterTrigger instanceof \Closure) {
+                    $afterTrigger([
+                        'tableau-bord' => $tbl,
+                        'result'       => true,
+                        'duree'        => microtime(true) - $begin,
+                    ]);
+                }
+            } catch (\Exception $e) {
+                if ($afterTrigger instanceof \Closure) {
+                    $afterTrigger([
+                        'tableau-bord' => $tbl,
+                        'result'       => false,
+                        'exception'    => $e,
+                        'duree'        => microtime(true) - $begin,
+                    ]);
+                }
+                $result = false;
+            }
+        }
+
+        return $result;
     }
 }

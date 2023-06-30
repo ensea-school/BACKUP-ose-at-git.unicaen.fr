@@ -9,6 +9,7 @@ use Application\Provider\Privilege\Privileges;
 use Contrat\Controller\ContratController;
 use Dossier\Assertion\IntervenantDossierAssertion;
 use Dossier\Controller\IntervenantDossierController;
+use Mission\Assertion\OffreEmploiAssertion;
 use Paiement\Controller\PaiementController;
 use UnicaenPrivilege\Guard\PrivilegeController;
 use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
@@ -351,7 +352,7 @@ return [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['candidature', 'get-candidatures'],
                     'privileges' => [Privileges::MISSION_CANDIDATURE_VISUALISATION],
-                    'assertion'  => IntervenantAssertion::class,
+                    'assertion'  => OffreEmploiAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
@@ -406,6 +407,13 @@ return [
                         ],
                         'resources'  => ['Intervenant'],
                         'assertion'  => Assertion\IntervenantAssertion::class,
+                    ],
+                    [
+                        'privileges' => [
+                            Privileges::MISSION_CANDIDATURE_VALIDER,
+                        ],
+                        'resources'  => ['Intervenant'],
+                        'assertion'  => OffreEmploiAssertion::class,
                     ],
                 ],
             ],

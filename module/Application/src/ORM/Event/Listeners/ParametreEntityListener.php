@@ -328,7 +328,7 @@ class ParametreEntityListener implements EventSubscriber
                     $keyFields[] = $metadata->fieldNames[$consCol];
                 } else {
                     foreach ($metadata->associationMappings as $property => $associationMapping) {
-                        if ($consCol == $associationMapping['joinColumns'][0]['name']) {
+                        if (isset($associationMapping['joinColumns']) && $consCol == $associationMapping['joinColumns'][0]['name']) {
                             $keyFields[] = $property;
                         }
                     }

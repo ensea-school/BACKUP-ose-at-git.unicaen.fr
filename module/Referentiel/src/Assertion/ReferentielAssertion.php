@@ -247,7 +247,7 @@ class ReferentielAssertion extends AbstractAssertion
             // Si on n'a pas le privilège pour pouvoir du référentiel dans toutes les composantes sans restriction
             if ($structure = $role->getStructure()) {
                 $structureAffectation = $serviceReferentiel->getIntervenant() ? $serviceReferentiel->getIntervenant()->getStructure() : null;
-                $structureEnseignement = $serviceReferentiel->getStructure();
+                $structureEnseignement = $serviceReferentiel->getStructure() ?? $structure;
 
                 if ($structureAffectation && $structureEnseignement) {
                     // cas d'un intervenant d'une autre structure prenant un enseignement dans une autre structure

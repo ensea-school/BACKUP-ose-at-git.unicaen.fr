@@ -1038,7 +1038,7 @@ $.widget("ose.dmepBudget", {
         bar.attr('aria-valuenow', percent);
         bar.attr('style', 'width:' + percent + '%');
         if (restant >= 0) {
-            bar.html('<span class="restant">' + Formatter.floatToString(restant) + '</span><span class="label">HETD disponibles</span>');
+            bar.html('<span class="restant">' + Formatter.floatToString(restant) + '</span><span class="label">HETD dispo.</span>');
         } else {
             bar.html('<span class="restant deficit">' + Formatter.floatToString(restant * -1) + '</span><span class="label deficit">HETD de déficit</span>');
         }

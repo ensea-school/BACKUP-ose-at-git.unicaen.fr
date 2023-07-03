@@ -27,7 +27,7 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
 
     protected bool      $besoinFormation         = false;
 
-    protected           $centreCoutsLinkers      = null;
+    protected           $centreCoutsTypeMission      = null;
 
 
 
@@ -50,7 +50,7 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
      */
     public function __construct()
     {
-        $this->centreCoutsLinkers = new ArrayCollection();
+        $this->centreCoutsTypeMission = new ArrayCollection();
     }
 
 
@@ -58,9 +58,9 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
     /**
      * @return ArrayCollection
      */
-    public function getCentreCoutsLinkers()
+    public function getCentreCoutsTypeMission(): ArrayCollection
     {
-        return $this->centreCoutsLinkers->filter(function ($centreCoutLinker) {
+        return $this->centreCoutsTypeMission->filter(function ($centreCoutLinker) {
             return !$centreCoutLinker->estHistorise();
         });
     }
@@ -68,23 +68,28 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
 
 
     /**
-     * @param null $centreCoutsLinker
+     * @param null $centreCoutTypeMission
      *
      * @return TypeMission
      */
-    public function addCentreCoutsLinker($centreCoutsLinker): TypeMission
+    public function addCentreCoutTypeMission($centreCoutTypeMission): TypeMission
     {
-        $this->centreCoutsLinkers[] = $centreCoutsLinker;
+        $this->centreCoutsTypeMission[] = $centreCoutTypeMission;
 
         return $this;
     }
 
 
 
-    public function removeCentreCoutsLinker($centreCoutsLinker): TypeMission
+    /**
+     * @param $centreCoutTypeMission
+     *
+     * @return $this
+     */
+    public function removeCentreCoutTypeMission($centreCoutTypeMission): TypeMission
     {
 
-        $this->centreCoutsLinkers->removeElement($centreCoutsLinker);
+        $this->centreCoutsTypeMission->removeElement($centreCoutTypeMission);
         return $this;
     }
 
@@ -124,6 +129,9 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
 
 
 
+    /**
+     * @return TauxRemu|null
+     */
     public function getTauxRemu(): ?TauxRemu
     {
         return $this->tauxRemu;
@@ -131,6 +139,11 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
 
 
 
+    /**
+     * @param TauxRemu|null $tauxRemu
+     *
+     * @return $this
+     */
     public function setTauxRemu(?TauxRemu $tauxRemu): TypeMission
     {
         $this->tauxRemu = $tauxRemu;
@@ -140,6 +153,9 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
 
 
 
+    /**
+     * @return TauxRemu|null
+     */
     public function getTauxRemuMajore(): ?TauxRemu
     {
         return $this->tauxRemuMajore;
@@ -147,6 +163,11 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
 
 
 
+    /**
+     * @param TauxRemu|null $tauxRemuMajore
+     *
+     * @return $this
+     */
     public function setTauxRemuMajore(?TauxRemu $tauxRemuMajore): self
     {
         $this->tauxRemuMajore = $tauxRemuMajore;
@@ -201,10 +222,10 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
     {
         $centreCoutsIds = [];
         /**
-         * @var $centreCoutsLinker CentreCoutTypeMission
+         * @var CentreCoutTypeMission $centreCoutTypeMission
          */
-        foreach ($this->centreCoutsLinkers as $centreCoutsLinker) {
-            $centreCoutsIds[] = $centreCoutsLinker->getCentreCouts()->getId();
+        foreach ($this->centreCoutsTypeMission as $centreCoutTypeMission) {
+            $centreCoutsIds[] = $centreCoutTypeMission->getCentreCouts()->getId();
         }
 
         return $centreCoutsIds;

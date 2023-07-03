@@ -67,16 +67,16 @@ class MissionTypeService extends AbstractEntityService
 
 
 
-    public function removeCentreCoutLinker(CentreCoutTypeMission $centreCoutsLinker, $softDelete = true)
+    public function removeCentreCoutLinker(CentreCoutTypeMission $centreCoutTypeMission, $softDelete = true)
     {
         if($softDelete){
-            $centreCoutsLinker->historiser($this->getServiceContext()->getUtilisateur());
-            $this->getEntityManager()->persist($centreCoutsLinker);
+            $centreCoutTypeMission->historiser($this->getServiceContext()->getUtilisateur());
+            $this->getEntityManager()->persist($centreCoutTypeMission);
         }else{
-            $this->getEntityManager()->remove($centreCoutsLinker);
+            $this->getEntityManager()->remove($centreCoutTypeMission);
 
         }
-        $this->getEntityManager()->flush($centreCoutsLinker);
+        $this->getEntityManager()->flush($centreCoutTypeMission);
 
     }
 

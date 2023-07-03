@@ -116,6 +116,8 @@ trait FormuleResultatTypesHeuresTrait
                 return $this->getHeuresServiceFc();
             case TypeHeures::REFERENTIEL:
                 return $this->getHeuresServiceReferentiel();
+            case TypeHeures::MISSION:
+                return 0;
         }
         throw new \RuntimeException('Type d\'heures inconnu ou non pris en charge');
     }
@@ -135,6 +137,8 @@ trait FormuleResultatTypesHeuresTrait
                 return $this->getHeuresComplFcMajorees();
             case TypeHeures::REFERENTIEL:
                 return $this->getHeuresComplReferentiel();
+            case TypeHeures::MISSION:
+                return $this->getHeuresMission();
         }
         throw new \RuntimeException('Type d\'heures inconnu ou non pris en charge');
     }

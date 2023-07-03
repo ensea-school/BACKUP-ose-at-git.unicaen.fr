@@ -45,9 +45,11 @@ class ServiceAPayerService extends AbstractService
 
         $saps = [];
         foreach( $meps as $mep ){
-            $sap = $mep->getServiceAPayer();
-            $sapId = get_class($sap).'@'.$sap->getId();
-            $saps[$sapId] = $sap;
+            if ($mep->getHeuresAPayer() > 0 || $mep->getMiseEnPaiement()) {
+                $sap = $mep->getServiceAPayer();
+                $sapId = get_class($sap) . '@' . $sap->getId();
+                $saps[$sapId] = $sap;
+            }
         }
         return $saps;
 

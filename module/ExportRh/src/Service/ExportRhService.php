@@ -8,6 +8,7 @@ use Application\Service\AbstractService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use ExportRh\Entity\IntervenantRHExportParams;
 use phpDocumentor\Reflection\Types\Array_;
 use Laminas\Form\Fieldset;
@@ -23,28 +24,31 @@ class ExportRhService extends AbstractService
     use IntervenantServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use AnneeServiceAwareTrait;
+    use SourceServiceAwareTrait;
+
+    protected $connecteur;
+
+    protected $config;
 
     /**
      * @var IntervenantRHExportParams
      */
     private $intervenantEportParams;
 
-    protected $connecteur;
-
-    protected $config;
 
 
-    public function __construct($connecteur, $config)
+    public function __construct ($connecteur, $config)
     {
         $this->connecteur = $connecteur;
-        $this->config = $config;
+        $this->config     = $config;
     }
 
 
-    public function getListIntervenantRh($nomUsuel, $prenom, $insee)
+
+    public function getListIntervenantRh ($nomUsuel, $prenom, $insee)
     {
 
-        $listIntervenantRh = $this->connecteur->rechercherIntervenantRH($nomUsuel, $prenom, $insee);
+        $listIntervenantRh  = $this->connecteur->rechercherIntervenantRH($nomUsuel, $prenom, $insee);
         $intervenantService = $this->getServiceIntervenant();
         if (!empty($listIntervenantRh)) {
             foreach ($listIntervenantRh as $key => $intervenantRh) {
@@ -60,7 +64,8 @@ class ExportRhService extends AbstractService
     }
 
 
-    public function getIntervenantRh($intervenant)
+
+    public function getIntervenantRh ($intervenant)
     {
         $intervenantRh = $this->connecteur->recupererIntervenantRh($intervenant);
 
@@ -68,7 +73,8 @@ class ExportRhService extends AbstractService
     }
 
 
-    public function getDonneesAdministrativeIntervenantRh($intervenant)
+
+    public function getDonneesAdministrativeIntervenantRh ($intervenant)
     {
         $donneesAdministratives = $this->connecteur->recupererDonneesAdministrativesIntervenantRh($intervenant);
 
@@ -76,7 +82,8 @@ class ExportRhService extends AbstractService
     }
 
 
-    public function getAffectationEnCoursIntervenantRh($intervenant)
+
+    public function getAffectationEnCoursIntervenantRh ($intervenant)
     {
         $affectation = $this->connecteur->recupererAffectationEnCoursIntervenantRh($intervenant);
 
@@ -85,7 +92,8 @@ class ExportRhService extends AbstractService
     }
 
 
-    public function getContratEnCoursIntervenantRh($intervenant)
+
+    public function getContratEnCoursIntervenantRh ($intervenant)
     {
         $contrat = $this->connecteur->recupererContratEnCoursIntervenantRh($intervenant);
 
@@ -93,85 +101,99 @@ class ExportRhService extends AbstractService
     }
 
 
-    public function getListeUO()
+
+    public function getListeUO ()
     {
         return $this->connecteur->recupererListeUO();
     }
 
 
-    public function getListePositions()
+
+    public function getListePositions ()
     {
         return $this->connecteur->recupererListePositions();
     }
 
 
-    public function getListeEmplois()
+
+    public function getListeEmplois ()
     {
         return $this->connecteur->recupererListeEmplois();
     }
 
 
-    public function getListeStatuts()
+
+    public function getListeStatuts ()
     {
         return $this->connecteur->recupererListeStatuts();
     }
 
 
-    public function getListeModalites()
+
+    public function getListeModalites ()
     {
         return $this->connecteur->recupererListeModalites();
     }
 
 
-    public function getListContrats()
+
+    public function getListContrats ()
     {
         return $this->connecteur->recupererListeContrats();
     }
 
 
-    public function priseEnChargeIntrervenantRh(Intervenant $intervenant, $datas)
+
+    public function priseEnChargeIntrervenantRh (Intervenant $intervenant, $datas)
     {
         return $this->connecteur->prendreEnChargeIntervenantRh($intervenant, $datas);
     }
 
 
-    public function renouvellementIntervenantRh(Intervenant $intervenant, $datas)
+
+    public function renouvellementIntervenantRh (Intervenant $intervenant, $datas)
     {
         return $this->connecteur->renouvellerIntervenantRH($intervenant, $datas);
     }
 
 
-    public function synchroniserDonneesPersonnellesIntervenantRh(Intervenant $intervenant, $datas)
+
+    public function synchroniserDonneesPersonnellesIntervenantRh (Intervenant $intervenant, $datas)
     {
         return $this->connecteur->synchroniserDonneesPersonnellesIntervenantRh($intervenant, $datas);
     }
 
 
-    public function cloreDossier(Intervenant $intervenant)
+
+    public function cloreDossier (Intervenant $intervenant)
     {
         return $this->connecteur->cloreDossier($intervenant);
     }
 
 
-    public function getFieldsetConnecteur(): Fieldset
+
+    public function getFieldsetConnecteur (): Fieldset
     {
         return $this->connecteur->recupererFormulairePriseEnCharge();
     }
 
 
-    public function getConnecteurName(): string
+
+    public function getConnecteurName (): string
     {
         return $this->connecteur->getConnecteurName();
     }
 
 
-    public function getConnecteur()
+
+    public function getConnecteur ()
     {
         return $this->connecteur;
     }
 
 
-    public function getAnneeUniversitaireEnCours(): ?Annee
+
+    public function getAnneeUniversitaireEnCours (): ?Annee
     {
         $annee = $this->getServiceParametres()->get('annee');
 
@@ -179,9 +201,10 @@ class ExportRhService extends AbstractService
     }
 
 
-    public function getExcludeStatutOse(): array
+
+    public function getExcludeStatutOse (): array
     {
-        $config = $this->config;
+        $config             = $this->config;
         $configUnicaenSiham = $config['unicaen-siham'];
         if (array_key_exists('exclude-statut-ose', $configUnicaenSiham)) {
             return $configUnicaenSiham['exclude-statut-ose'];
@@ -190,7 +213,9 @@ class ExportRhService extends AbstractService
         return [];
     }
 
-    public function haveToSyncCode(): bool
+
+
+    public function haveToSyncCode (): bool
     {
         $config = $this->config;
         if ($config['export-rh']['sync-code'] === true) {
@@ -198,7 +223,23 @@ class ExportRhService extends AbstractService
         }
 
         return false;
+    }
 
+
+
+    public function haveToSyncSource (): bool
+    {
+
+        $config = $this->config;
+        if (!empty($config['export-rh']['sync-source'])) {
+            //On regarde si le code fourni correspond bien à une source valide
+            $source = $this->getServiceSource()->getByCode($config['export-rh']['sync-source']);
+            if (!empty($source)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

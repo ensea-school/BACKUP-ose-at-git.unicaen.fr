@@ -37,21 +37,21 @@ class ExportRhController extends AbstractController
 
 
 
-    public function __construct(ExportRhService $exportRhService)
+    public function __construct (ExportRhService $exportRhService)
     {
         $this->exportRhService = $exportRhService;
     }
 
 
 
-    public function indexAction()
+    public function indexAction ()
     {
         return [];
     }
 
 
 
-    public function chercherIntervenantRhAction(): array
+    public function chercherIntervenantRhAction (): array
     {
         $connecteurRh = $this->getServiceExportRh();
 
@@ -80,12 +80,50 @@ class ExportRhController extends AbstractController
 
 
 
-    public function exporterAction()
+    public function priseEnChargeAction ()
+    {
+        try {
+            if ($this->getRequest()->isPost()) {
+                $intervenant = $this->getEvent()->getParam('intervenant');
+
+                if (!$intervenant) {
+                    throw new \LogicException('Intervenant non précisé ou inexistant');
+                }
+
+                $posts  = $this->getRequest()->getPost();
+                $result = $this->exportRhService->priseEnChargeIntrervenantRh($intervenant, $posts);
+                if ($result !== false) {
+                    // $this->exportRhService->cloreDossier($intervenant);
+                    $this->flashMessenger()->addSuccessMessage('La prise en charge s\'est déroulée avec succés et le dossier a été cloturé');
+                    $this->getServiceIntervenant()->updateExportDate($intervenant);
+                    //On met à jour le code intervenant si l'option est activée
+                    if ($this->exportRhService->haveToSyncCode()) {
+                        $this->getServiceIntervenant()->updateCode($intervenant, $result);
+                    }
+                    //On met à jour le source code lors de la synchronisauot
+                    if ($this->exportRhService->haveToSyncSource()) {
+                        $this->getServiceIntervenant()->updateSource($intervenant);
+                    }
+                } else {
+                    $this->flashMessenger()->addErrorMessage('Probleme prise en charge');
+                }
+            }
+        } catch (\Exception $e) {
+
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+
+        return $this->exporterAction();
+    }
+
+
+
+    public function exporterAction ()
     {
 
         /* Initialisation */
         $role               = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant        = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $intervenant        = $role->getIntervenant() ? : $this->getEvent()->getParam('intervenant');
         $intervenantRh      = '';
         $form               = '';
         $nameConnecteur     = '';
@@ -184,42 +222,7 @@ class ExportRhController extends AbstractController
 
 
 
-    public function priseEnChargeAction()
-    {
-        try {
-            if ($this->getRequest()->isPost()) {
-                $intervenant = $this->getEvent()->getParam('intervenant');
-
-                if (!$intervenant) {
-                    throw new \LogicException('Intervenant non précisé ou inexistant');
-                }
-
-                $posts  = $this->getRequest()->getPost();
-                $result = $this->exportRhService->priseEnChargeIntrervenantRh($intervenant, $posts);
-
-                if ($result !== false) {
-                    $this->exportRhService->cloreDossier($intervenant);
-                    $this->flashMessenger()->addSuccessMessage('La prise en charge s\'est déroulée avec succés et le dossier a été cloturé');
-                    $this->getServiceIntervenant()->updateExportDate($intervenant);
-                    //On met à jour le code intervenant si l'option est activée
-                    if ($this->exportRhService->haveToSyncCode()) {
-                        $this->getServiceIntervenant()->updateCode($intervenant, $result);
-                    }
-                } else {
-                    $this->flashMessenger()->addErrorMessage('Probleme prise en charge');
-                }
-            }
-        } catch (\Exception $e) {
-
-            $this->flashMessenger()->addErrorMessage($e->getMessage());
-        }
-
-        return $this->exporterAction();
-    }
-
-
-
-    public function renouvellementAction()
+    public function renouvellementAction ()
     {
         try {
 
@@ -247,6 +250,9 @@ class ExportRhController extends AbstractController
                         if ($this->exportRhService->haveToSyncCode()) {
                             $this->getServiceIntervenant()->updateCode($intervenant, $result);
                         }
+                        if ($this->exportRhService->haveToSyncSource()) {
+                            $this->getServiceIntervenant()->updateSource($intervenant);
+                        }
                     } else {
                         $this->flashMessenger()->addErrorMessage('Un problème est survenu lors de la tentative de renouvellement de l\'intervenant');
                     }
@@ -261,7 +267,7 @@ class ExportRhController extends AbstractController
 
 
 
-    public function synchroniserAction()
+    public function synchroniserAction ()
     {
         try {
             if ($this->getRequest()->isPost()) {

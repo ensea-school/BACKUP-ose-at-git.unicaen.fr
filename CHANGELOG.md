@@ -43,6 +43,7 @@
 
 * Modification de libellé dans l'affichage de l'offre de formation (#49763)
 * Possibilité de modifier manuellement l'email expéditeur pour l'envoi d'email via les indicateurs (#50725)
+* Synchronisation du code source de l'intervenant avec l'export SIHAM lors d'une PEC ou REN (#50845)
 
 ## Corrections de bugs
 

@@ -23,6 +23,7 @@ suivantes :
         'actif'      => true,//False pour désactiver l'export RH
         'connecteur' => 'siham',//Le nom du connecteur dont vous avez besoin, pour le moment seul le connecteur SIHAM a été développé.
         'sync-code'  => false,//Permet de venir forcer le code de l'intervenant avec le matricule siham en retour d'un renouvellement ou d'une prise en charge
+        'sync-source'  => '',//Code de la source à remplacer après la synchronisation
     ],
 ```
 

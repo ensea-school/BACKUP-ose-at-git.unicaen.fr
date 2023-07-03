@@ -52,7 +52,7 @@
 * Rennes 2 : modification de la formule de calcul (#51135)
 * Filtrage des types d'intervention pour la saisie de service hors établissement (#51512)
 * L'enregistrement d'un statut ne possédant pas de contrat se fait correctement lorsqu'il n'y a pas d'état de sortie de saisie (#51400)
-
+* Le bouton de saisie du référentiel apparait maintenant même si la composante de l'intervenant diffère de celle du gestionnaire (#50799)
 
 # OSE 20.5 (07/06/2023)
 

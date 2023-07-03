@@ -10,9 +10,9 @@ use Application\Provider\Privilege\Privileges;
 echo '<br>' . $this->form($form);
 /**
  * @var $entity             \Mission\Entity\Db\TypeMission
- * @var $centreCoutsLinkers \Doctrine\ORM\PersistentCollection
+ * @var $centreCoutsTypeMission \Doctrine\ORM\PersistentCollection
  */
-if ($centreCoutsLinkers != null && !empty($centreCoutsLinkers)): ?>
+if ($centreCoutsTypeMission != null && !empty($centreCoutsTypeMission)): ?>
     <br>
     <table class="table table-bordered">
         <thead>
@@ -25,12 +25,12 @@ if ($centreCoutsLinkers != null && !empty($centreCoutsLinkers)): ?>
 
         <?php
         /**
-         * @var $centreCoutsLinker \Mission\Entity\Db\CentreCoutTypeMission
+         * @var $centreCoutTypeMission \Mission\Entity\Db\CentreCoutTypeMission
          */
-        foreach ($centreCoutsLinkers as $centreCoutsLinker): ?>
+        foreach ($centreCoutsTypeMission as $centreCoutTypeMission): ?>
             <tr>
                 <td>
-                    <?php echo $centreCoutsLinker->getCentreCouts()->getCode() . "-" . $centreCoutsLinker->getCentreCouts()->getLibelle(); ?>
+                    <?php echo $centreCoutTypeMission->getCentreCouts()->getCode() . "-" . $centreCoutTypeMission->getCentreCouts()->getLibelle(); ?>
                 </td>
                 <td>
                     <a class="pop-ajax"
@@ -40,7 +40,7 @@ if ($centreCoutsLinkers != null && !empty($centreCoutsLinkers)): ?>
                        data-cancel-button="Non"
                        data-submit-close="true"
                        data-submit-event="event-supprimer-cc"
-                       href="<?= $this->url('missions-type/centre-couts-supprimer', ['typeMission' => $entity->getId(), 'centreCoutTypeMission' => $centreCoutsLinker->getId()]) ?>"
+                       href="<?= $this->url('missions-type/centre-couts-supprimer', ['typeMission' => $entity->getId(), 'centreCoutTypeMission' => $centreCoutTypeMission->getId()]) ?>"
                        title="Supprimer le scénario"><i class="fas fa-trash-can"></i>
                     </a>
                 </td>

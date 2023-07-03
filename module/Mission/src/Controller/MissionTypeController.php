@@ -112,7 +112,7 @@ class MissionTypeController extends AbstractController
                 $centreCoutTypeLinker->setCentreCouts($centreCouts);
                 $this->getServiceMissionType()->saveCentreCoutTypeLinker($centreCoutTypeLinker);
 
-                $entity->addCentreCoutsLinker($centreCoutTypeLinker);
+                $entity->addCentreCoutTypeMission($centreCoutTypeLinker);
                 $this->getServiceMissionType()->save($entity);
             }
         }
@@ -120,10 +120,10 @@ class MissionTypeController extends AbstractController
 
         $form = $this->getFormMissionCentreCoutsType();
 
-        $centreCoutsLinkers = $entity->getCentreCoutsLinkers();
+        $centreCoutsTypeMission = $entity->getCentreCoutsTypeMission();
         $vm                 = new ViewModel();
 
-        $vm->setVariables(compact('form', 'title', 'canEditCC', 'entity', 'centreCoutsLinkers'));
+        $vm->setVariables(compact('form', 'title', 'canEditCC', 'entity', 'centreCoutsTypeMission'));
 
         return $vm;
     }
@@ -136,9 +136,9 @@ class MissionTypeController extends AbstractController
          * @var TypeMission $entity
          */
         $entity            = $this->getEvent()->getParam('typeMission');
-        $centreCoutsLinker = $this->getEvent()->getParam('centreCoutTypeMission');
+        $centreCoutTypeMission = $this->getEvent()->getParam('centreCoutTypeMission');
 
-        $this->getServiceMissionType()->removeCentreCoutLinker($centreCoutsLinker);
+        $this->getServiceMissionType()->removeCentreCoutLinker($centreCoutTypeMission);
 
 
         return $this->redirect()->toRoute('missions-type/centre-couts', ['typeMission' => $entity->getId()]);

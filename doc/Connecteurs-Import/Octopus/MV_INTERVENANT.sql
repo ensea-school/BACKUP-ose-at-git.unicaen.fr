@@ -120,7 +120,7 @@ WITH i AS (
                 MAX(source_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1 WHEN source_id = 'OCTOREFID' THEN 2 ELSE 999 END DESC,t_principale, date_debut) source_id
              FROM octo.individu_affectation@octoprod
              WHERE type_id = 4
-             AND date_fin + 1 >= (SYSDATE - (365 * 2))
+             AND COALESCE(date_fin, SYSDATE) + 1 >= (SYSDATE - (365 * 2))
              GROUP BY individu_id
          ),
      --CNU arrangé

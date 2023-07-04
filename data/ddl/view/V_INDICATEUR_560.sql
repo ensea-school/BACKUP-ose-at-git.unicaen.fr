@@ -9,13 +9,14 @@ FROM
   JOIN tbl_workflow wc ON wc.intervenant_id = w.intervenant_id
   JOIN intervenant i ON i.id = wc.intervenant_id
   JOIN structure s ON s.id = w.structure_id
+  JOIN statut s ON s.id = i.statut_id
   LEFT JOIN HISTO_INTERVENANT_SERVICE his ON his.INTERVENANT_ID = w.intervenant_id
 WHERE
   w.etape_code = 'REFERENTIEL_VALIDATION_REALISE'
   AND w.objectif > w.realisation
   AND w.atteignable = 1
 
-  AND wc.etape_code = 'CLOTURE_REALISE'
+  AND (wc.etape_code = 'CLOTURE_REALISE' AND s.cloture = 1)
   AND wc.objectif = wc.realisation
   AND w.structure_id = i.structure_id
 

@@ -272,4 +272,36 @@ class  OffreEmploiController extends AbstractController
         return compact('offreEmploi', 'utilisateur', 'canPostuler');
     }
 
+
+
+    public function candidatureAction ()
+    {
+        $intervenant           = $this->getEvent()->getParam('intervenant');
+        $canValiderCandidature = $this->isAllowed($intervenant, Privileges::MISSION_CANDIDATURE_VALIDER);
+
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant introuvable');
+        }
+
+
+        return compact('intervenant', 'canValiderCandidature');
+    }
+
+
+
+    public function getCandidaturesAction ()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant introuvable');
+        }
+        /**
+         * @var Intervenant $intervenant
+         */
+        $candidatures = $this->getServiceCandidature()->data(['intervenant' => $intervenant]);
+
+
+        return $candidatures;
+    }
+
 }

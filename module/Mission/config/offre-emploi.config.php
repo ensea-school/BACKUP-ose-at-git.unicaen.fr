@@ -4,6 +4,7 @@ namespace Mission;
 
 
 use Application\Provider\Privilege\Privileges;
+use Mission\Assertion\OffreEmploiAssertion;
 use Mission\Controller\OffreEmploiController;
 use Mission\Controller\OffreEmploiControllerFactory;
 use Mission\Service\CandidatureService;
@@ -16,11 +17,27 @@ use Mission\Service\OffreEmploiServiceFactory;
 
 return [
     'routes' => [
+        'intervenant' => [
+            'child_routes' => [
+                'candidature'      => [
+                    'route'      => '/:intervenant/candidature',
+                    'controller' => OffreEmploiController::class,
+                    'action'     => 'candidature',
+
+                ],
+                'get-candidatures' => [
+                    'route'      => '/:intervenant/get-candidatures',
+                    'controller' => OffreEmploiController::class,
+                    'action'     => 'get-candidatures',
+                ],
+            ],
+        ],
+
         'offre-emploi' => [
             'route'         => '/offre-emploi',
             'controller'    => OffreEmploiController::class,
             'action'        => 'index',
-            //   'privileges'    => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
+            //'privileges'    => Privileges::MISSION_OFFRE_EMPLOI_VISUALISATION,
             'may_terminate' => true,
             'child_routes'  => [
                 'saisir'               => [
@@ -92,6 +109,21 @@ return [
 
 
     'navigation' => [
+        'intervenant'   => [
+            'pages' => [
+                'candidature' => [
+                    'label'        => "Candidatures",
+                    'title'        => "Liste de vos candidatures en cours",
+                    'route'        => 'intervenant/candidature',
+                    'paramsInject' => [
+                        'intervenant',
+                    ],
+                    'withtarget'   => true,
+                    'resource'     => PrivilegeController::getResourceId(OffreEmploiController::class, 'candidature'),
+                    'order'        => 5,
+                ],
+            ],
+        ],
         'gestion'       => [
             'pages' => [
                 'offres-emploi' => [
@@ -142,6 +174,13 @@ return [
             'resources'  => 'OffreEmploi',
             'assertion'  => Assertion\OffreEmploiAssertion::class,
         ],
+        [
+            'privileges' => [
+                Privileges::MISSION_CANDIDATURE_VALIDER,
+            ],
+            'resources'  => ['Intervenant'],
+            'assertion'  => Assertion\OffreEmploiAssertion::class,
+        ],
 
     ],
 
@@ -188,6 +227,14 @@ return [
             'roles'      => ['guest'],
 
         ],
+        [
+            'controller' => OffreEmploiController::class,
+            'action'     => ['candidature', 'get-candidatures'],
+            'privileges' => [Privileges::MISSION_CANDIDATURE_VISUALISATION],
+            'assertion'  => Assertion\OffreEmploiAssertion::class,
+        ],
+
+
     ],
 
     'controllers' => [

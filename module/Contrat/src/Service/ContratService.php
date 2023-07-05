@@ -213,6 +213,9 @@ class ContratService extends AbstractEntityService
 
         if($contrat->estUnAvenant()){
             $modele = $contrat->getIntervenant()->getStatut()->getAvenantEtatSortie();
+            if(!$modele){
+                $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
+            }
         }else{
             $modele = $contrat->getIntervenant()->getStatut()->getContratEtatSortie();
         }

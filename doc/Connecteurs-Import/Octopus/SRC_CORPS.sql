@@ -7,4 +7,4 @@ SELECT c.lib_long  libelle_long,
 FROM corps@octoprod c
          JOIN source s
               ON s.code = 'Octopus'
-WHERE SYSDATE BETWEEN COALESCE(c.d_ouverture, SYSDATE) AND COALESCE(c.d_fermeture + 1, SYSDATE)
+WHERE SYSDATE BETWEEN COALESCE(c.d_ouverture, SYSDATE) AND COALESCE(c.d_fermeture + 1, SYSDATE) and c.d_fermeture IS NOT NULL and c.histo_destruction IS NULL

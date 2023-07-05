@@ -21,29 +21,31 @@ if ($structureElement) {
 
 <?php if ($structure): ?>
     <div class="engagement">
-        <!-- Abondements par types de ressources -->
-        <?php foreach ($dotations['typesRessources'] as $dtr):
-            $canEdit = $this->isAllowed($dtr['entity'], $dtr['entity']->getPrivilegeBudgetEdition());
-            ?>
-            <div class="col-md-<?= floor(12 / count($dotations['typesRessources'])) ?>">
-                <h2><?= $dtr['entity']->getLibelle() ?></h2>
-                <table class="table table-bordered table-hover">
-                    <?php foreach ($dtr['abondements'] as $libelle => $abondement): ?>
-                        <tr>
-                            <th><?= $abondement['libelle'] ?></th>
-                            <td class="dotation"><?php fdot($this, $dtr['entity'], $libelle, $abondement, $canEdit) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <tr>
-                        <th>Total</th>
-                        <td class="dotation"><?php fdot($this, $dtr['entity'], null, $dtr['total'], $canEdit) ?></td>
-                    </tr>
-                </table>
-            </div>
-        <?php endforeach; ?>
+        <div class="row">
 
+            <!-- Abondements par types de ressources -->
+            <?php foreach ($dotations['typesRessources'] as $dtr):
+                $canEdit = $this->isAllowed($dtr['entity'], $dtr['entity']->getPrivilegeBudgetEdition());
+                ?>
+                <div class="col-md-6">
+                    <h2><?= $dtr['entity']->getLibelle() ?></h2>
+                    <table class="table table-bordered table-hover">
+                        <?php foreach ($dtr['abondements'] as $libelle => $abondement): ?>
+                            <tr>
+                                <td><?= $abondement['libelle'] ?></td>
+                                <td class="dotation"><?php fdot($this, $dtr['entity'], $libelle, $abondement, $canEdit) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <tr>
+                            <th>Total</th>
+                            <td class="dotation"><?php fdot($this, $dtr['entity'], null, $dtr['total'], $canEdit) ?></td>
+                        </tr>
+                    </table>
+                </div>
+            <?php endforeach; ?>
+        </div>
         <!-- Liquidation -->
-        <div class="liquidation">
+        <div class="liquidation row">
             <h2>Liquidation</h2>
             <table class="table table-bordered">
                 <tr>
@@ -95,7 +97,7 @@ if ($structureElement) {
     <?php endif; ?>
 <?php endif; ?>
 
-<?php function fdot($view, $typeRessource, $libelle, array $data, $canEdit = true) /* Formatage d'une dotation */
+<?php function fdot ($view, $typeRessource, $libelle, array $data, $canEdit = true) /* Formatage d'une dotation */
 {
 
     $titleA1 = 'Année ' . $data['anneeCivile1']['annee'] . ' (chiffre en HETD)';
@@ -126,28 +128,32 @@ if ($structureElement) {
     }
 
     ?>
-
-    <div class="ha ha1 col-md-6" title="<?= $titleA1 ?>">
-        <?= Util::formattedNumber($data['anneeCivile1']['heures']) ?><span class="label">HETD</span>
-        <?php if ($canEdit): ?>
-            <a href="<?= $dotEditUrl1 ?>" class="mod-ajax" data-submit-reload="true"
-               title="<?= $libelle ? 'Modifier la dotation' : 'Nouvel abondement' ?>">
-                <i class="fas fa-<?= $libelle ? 'pen-to-square' : 'plus' ?>"></i>
-            </a>
-        <?php endif; ?>
-    </div>
-    <div class="ha ha2 col-md-6" title="<?= $titleA2 ?>">
-        <?= Util::formattedNumber($data['anneeCivile2']['heures']) ?><span class="label">HETD</span>
-        <?php if ($canEdit): ?>
-            <a href="<?= $dotEditUrl2 ?>" class="mod-ajax" data-submit-reload="true"
-               title="<?= $libelle ? 'Modifier la dotation' : 'Nouvel abondement' ?>">
-                <i class="fas fa-<?= $libelle ? 'pen-to-square' : 'plus' ?>"></i>
-            </a>
-        <?php endif; ?>
-    </div>
-
-    <div class="ha ha3 col-md-offset-3 col-md-6" title="<?= $titleA ?>">
-        <?= Util::formattedNumber($data['heures']) ?><span class="label">HETD</span>
+    <div class="container">
+        <div class="row">
+            <div class="ha ha1 col" title="<?= $titleA1 ?>">
+                <?= Util::formattedNumber($data['anneeCivile1']['heures']) ?><span class="label">HETD</span>
+                <?php if ($canEdit): ?>
+                    <a href="<?= $dotEditUrl1 ?>" class="mod-ajax" data-submit-reload="true"
+                       title="<?= $libelle ? 'Modifier la dotation' : 'Nouvel abondement' ?>">
+                        <i class="fas fa-<?= $libelle ? 'pen-to-square' : 'plus' ?>"></i>
+                    </a>
+                <?php endif; ?>
+            </div>
+            <div class="ha ha2 col" title="<?= $titleA2 ?>">
+                <?= Util::formattedNumber($data['anneeCivile2']['heures']) ?><span class="label">HETD</span>
+                <?php if ($canEdit): ?>
+                    <a href="<?= $dotEditUrl2 ?>" class="mod-ajax" data-submit-reload="true"
+                       title="<?= $libelle ? 'Modifier la dotation' : 'Nouvel abondement' ?>">
+                        <i class="fas fa-<?= $libelle ? 'pen-to-square' : 'plus' ?>"></i>
+                    </a>
+                <?php endif; ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="ha ha3 col" title="<?= $titleA ?>">
+                <?= Util::formattedNumber($data['heures']) ?><span class="label">HETD</span>
+            </div>
+        </div>
     </div>
 
 <?php }

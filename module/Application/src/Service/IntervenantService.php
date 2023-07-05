@@ -17,6 +17,7 @@ use Laminas\Hydrator\ClassMethodsHydrator;
 use Paiement\Service\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use RuntimeException;
+use UnicaenCode\Service\Traits\ConfigServiceAwareTrait;
 
 
 /**
@@ -43,7 +44,7 @@ class IntervenantService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass()
+    public function getEntityClass ()
     {
         return Intervenant::class;
     }
@@ -59,7 +60,7 @@ class IntervenantService extends AbstractEntityService
      *
      * @return Intervenant|null
      */
-    public function getByRouteParam(string $routeParam): ?Intervenant
+    public function getByRouteParam (string $routeParam): ?Intervenant
     {
         $code        = null;
         $anneeId     = $this->getServiceContext()->getAnnee()->getId();
@@ -90,84 +91,36 @@ class IntervenantService extends AbstractEntityService
 
 
     /**
-     * Retourne l'intervenant de l'année précédente
+     * Retourne les identifiants des données concernés
      *
-     * @param Intervenant $intervenant
-     * @param int         $anneeDiff
+     * @param string|string[]|null $sourceCode
+     * @param integer|null         $anneeId
      *
-     * @return Intervenant|null
+     * @return integer[]|null
      */
-    public function getPrecedent(Intervenant $intervenant, int $anneeDiff = -1): ?Intervenant
+    protected function getId ($column, $value, $anneeId = null)
     {
-        $code        = $intervenant->getCode();
-        $anneeId     = $this->getServiceContext()->getAnnee()->getId() + $anneeDiff;
-        $statutId    = $intervenant->getStatut() ? $intervenant->getStatut()->getId() : null;
-        $structureId = $intervenant->getStructure() ? $intervenant->getStructure()->getId() : null;
+        if (empty($sourceCode)) return null;
 
-        $bones = $this->getBones(['CODE' => $code, 'ANNEE_ID' => $anneeId]);
-
-        return $this->bestIntervenantByBones($bones, $code, $anneeId, $statutId, $structureId);
-    }
-
-
-
-    public function getByCode(string $code): ?Intervenant
-    {
-        $anneeId     = $this->getServiceContext()->getAnnee()->getId();
-        $statutId    = null;
-        $structureId = $this->getServiceContext()->getStructure();
-        if ($structureId) $structureId = $structureId->getId();
-
-        $bones = $this->getBones(['CODE' => $code, 'ANNEE_ID' => $anneeId]);
-
-        return $this->bestIntervenantByBones($bones, $code, $anneeId, $statutId, $structureId);
-    }
-
-
-
-    public function getByCodeRh(string $codeRh): ?Intervenant
-    {
-        $anneeId     = $this->getServiceContext()->getAnnee()->getId();
-        $statutId    = null;
-        $structureId = $this->getServiceContext()->getStructure();
-        if ($structureId) $structureId = $structureId->getId();
-
-        $bones = $this->getBones(['CODE_RH' => $codeRh, 'ANNEE_ID' => $anneeId]);
-
-        return $this->bestIntervenantByBones($bones, $codeRh, $anneeId, null, null);
-    }
-
-
-
-    /**
-     *
-     * @param string $sourceCode
-     * @param Annee  $annee
-     *
-     * @return Intervenant|null
-     */
-    public function getByUtilisateurCode(string $utilisateurCode): ?Intervenant
-    {
-        $anneeId     = $this->getServiceContext()->getAnnee()->getId();
-        $statutId    = null;
-        $structureId = $this->getServiceContext()->getStructure();
-        if ($structureId) $structureId = $structureId->getId();
-
-        $bones = $this->getBones(['UTILISATEUR_CODE' => $utilisateurCode, 'ANNEE_ID' => $anneeId]);
-        $code  = null;
-        foreach ($bones as $bone) {
-            if (!$code) $code = $bone['CODE'];
-            if ($code != $bone['CODE']) {
-                throw new \Exception('Intervenants différents retournés');
-            }
+        $sql = 'SELECT ID FROM INTERVENANT WHERE ' . $column . ' IN (:value)';
+        if ($anneeId) {
+            $sql .= ' AND ANNEE_ID = ' . (string)(int)$anneeId;
         }
-
-        return $this->bestIntervenantByBones($bones, $code, $anneeId, $statutId, $structureId);
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery(
+            $sql,
+            ['value' => (array)$value],
+            ['value' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
+        );
+        if ($r = $stmt->fetch()) {
+            return (int)$r['ID'];
+        } else {
+            return null;
+        }
     }
 
 
 
-    private function getBones(array $params): array
+    private function getBones (array $params): array
     {
         $psql = '';
         foreach ($params as $param => $val) {
@@ -193,7 +146,7 @@ class IntervenantService extends AbstractEntityService
 
 
 
-    private function bestIntervenantByBones(array $bones, ?string $code, ?int $anneeId, ?int $statutId, ?int $structureId): ?Intervenant
+    private function bestIntervenantByBones (array $bones, ?string $code, ?int $anneeId, ?int $statutId, ?int $structureId): ?Intervenant
     {
         $count = count($bones);
         if (0 == $count) {
@@ -231,23 +184,7 @@ class IntervenantService extends AbstractEntityService
 
 
 
-    public function isImportable(Intervenant $intervenant): bool
-    {
-        $connection = $this->getEntityManager()->getConnection();
-
-        $sqlEnabled = "SELECT sync_enabled FROM import_tables WHERE table_name = 'INTERVENANT'";
-        $res        = $connection->fetchAssociative($sqlEnabled);
-        if (false === $res || '0' == $res['SYNC_ENABLED']) return false;
-
-        $sql = "SELECT code FROM src_intervenant WHERE code = :code AND annee_id = :annee";
-        $res = $connection->fetchAssociative($sql, ['code' => $intervenant->getCode(), 'annee' => $intervenant->getAnnee()->getId()]);
-
-        return ($res !== false) && isset($res['CODE']) && ($intervenant->getCode() == $res['CODE']);
-    }
-
-
-
-    private function getIntervenantIdParDefaut(string $code, int $anneeId): ?int
+    private function getIntervenantIdParDefaut (string $code, int $anneeId): ?int
     {
         if (!$code || !$anneeId) return null;
 
@@ -263,6 +200,86 @@ class IntervenantService extends AbstractEntityService
 
 
     /**
+     * Retourne l'intervenant de l'année précédente
+     *
+     * @param Intervenant $intervenant
+     * @param int         $anneeDiff
+     *
+     * @return Intervenant|null
+     */
+    public function getPrecedent (Intervenant $intervenant, int $anneeDiff = -1): ?Intervenant
+    {
+        $code        = $intervenant->getCode();
+        $anneeId     = $this->getServiceContext()->getAnnee()->getId() + $anneeDiff;
+        $statutId    = $intervenant->getStatut() ? $intervenant->getStatut()->getId() : null;
+        $structureId = $intervenant->getStructure() ? $intervenant->getStructure()->getId() : null;
+
+        $bones = $this->getBones(['CODE' => $code, 'ANNEE_ID' => $anneeId]);
+
+        return $this->bestIntervenantByBones($bones, $code, $anneeId, $statutId, $structureId);
+    }
+
+
+
+    public function getByCodeRh (string $codeRh): ?Intervenant
+    {
+        $anneeId     = $this->getServiceContext()->getAnnee()->getId();
+        $statutId    = null;
+        $structureId = $this->getServiceContext()->getStructure();
+        if ($structureId) $structureId = $structureId->getId();
+
+        $bones = $this->getBones(['CODE_RH' => $codeRh, 'ANNEE_ID' => $anneeId]);
+
+        return $this->bestIntervenantByBones($bones, $codeRh, $anneeId, null, null);
+    }
+
+
+
+    /**
+     *
+     * @param string $sourceCode
+     * @param Annee  $annee
+     *
+     * @return Intervenant|null
+     */
+    public function getByUtilisateurCode (string $utilisateurCode): ?Intervenant
+    {
+        $anneeId     = $this->getServiceContext()->getAnnee()->getId();
+        $statutId    = null;
+        $structureId = $this->getServiceContext()->getStructure();
+        if ($structureId) $structureId = $structureId->getId();
+
+        $bones = $this->getBones(['UTILISATEUR_CODE' => $utilisateurCode, 'ANNEE_ID' => $anneeId]);
+        $code  = null;
+        foreach ($bones as $bone) {
+            if (!$code) $code = $bone['CODE'];
+            if ($code != $bone['CODE']) {
+                throw new \Exception('Intervenants différents retournés');
+            }
+        }
+
+        return $this->bestIntervenantByBones($bones, $code, $anneeId, $statutId, $structureId);
+    }
+
+
+
+    public function isImportable (Intervenant $intervenant): bool
+    {
+        $connection = $this->getEntityManager()->getConnection();
+
+        $sqlEnabled = "SELECT sync_enabled FROM import_tables WHERE table_name = 'INTERVENANT'";
+        $res        = $connection->fetchAssociative($sqlEnabled);
+        if (false === $res || '0' == $res['SYNC_ENABLED']) return false;
+
+        $sql = "SELECT code FROM src_intervenant WHERE code = :code AND annee_id = :annee";
+        $res = $connection->fetchAssociative($sql, ['code' => $intervenant->getCode(), 'annee' => $intervenant->getAnnee()->getId()]);
+
+        return ($res !== false) && isset($res['CODE']) && ($intervenant->getCode() == $res['CODE']);
+    }
+
+
+
+    /**
      * Permet de définit une fiche intervenant comme celle étant à consulter par défaut
      *
      * @param Intervenant $intervenant
@@ -270,7 +287,7 @@ class IntervenantService extends AbstractEntityService
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function definirParDefaut(Intervenant $intervenant, bool $definir = true)
+    public function definirParDefaut (Intervenant $intervenant, bool $definir = true)
     {
         if ($definir) {
             $idParDefaut = $this->getIntervenantIdParDefaut($intervenant->getCode(), $intervenant->getAnnee()->getId());
@@ -302,39 +319,9 @@ class IntervenantService extends AbstractEntityService
      *
      * @return bool
      */
-    public function estDefiniParDefaut(Intervenant $intervenant): bool
+    public function estDefiniParDefaut (Intervenant $intervenant): bool
     {
         return $this->getIntervenantIdParDefaut($intervenant->getCode(), $intervenant->getAnnee()->getId()) === $intervenant->getId();
-    }
-
-
-
-    /**
-     * Retourne les identifiants des données concernés
-     *
-     * @param string|string[]|null $sourceCode
-     * @param integer|null         $anneeId
-     *
-     * @return integer[]|null
-     */
-    protected function getId($column, $value, $anneeId = null)
-    {
-        if (empty($sourceCode)) return null;
-
-        $sql = 'SELECT ID FROM INTERVENANT WHERE ' . $column . ' IN (:value)';
-        if ($anneeId) {
-            $sql .= ' AND ANNEE_ID = ' . (string)(int)$anneeId;
-        }
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery(
-            $sql,
-            ['value' => (array)$value],
-            ['value' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
-        );
-        if ($r = $stmt->fetch()) {
-            return (int)$r['ID'];
-        } else {
-            return null;
-        }
     }
 
 
@@ -344,7 +331,7 @@ class IntervenantService extends AbstractEntityService
      *
      * @return Intervenant[]
      */
-    public function getIntervenants(Intervenant $intervenant): array
+    public function getIntervenants (Intervenant $intervenant): array
     {
         $findParams = ['code' => $intervenant->getCode(), 'annee' => $intervenant->getAnnee()];
         $repo       = $this->getRepo();
@@ -361,14 +348,14 @@ class IntervenantService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias()
+    public function getAlias ()
     {
         return 'int';
     }
 
 
 
-    public function finderByMiseEnPaiement(Structure $structure = null, Periode $periode = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByMiseEnPaiement (Structure $structure = null, Periode $periode = null, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
@@ -392,7 +379,7 @@ class IntervenantService extends AbstractEntityService
     /**
      * @return Intervenant
      */
-    public function newEntity(): Intervenant
+    public function newEntity (): Intervenant
     {
         $intervenant = parent::newEntity();
         $intervenant->setStructure($this->getServiceContext()->getStructure());
@@ -408,33 +395,11 @@ class IntervenantService extends AbstractEntityService
 
 
     /**
-     * Sauvegarde une entité
-     *
-     * @param Intervenant $entity
-     *
-     * @return Intervenant
-     * @throws \RuntimeException
-     */
-    public function save($entity)
-    {
-        if (!$entity->getSource()) {
-            $entity->setSource($this->getServiceSource()->getOse());
-        }
-        if (!$entity->getAnnee()) {
-            $entity->setAnnee($this->getServiceContext()->getAnnee());
-        }
-
-        return parent::save($entity);
-    }
-
-
-
-    /**
      *
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy (QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -454,7 +419,7 @@ class IntervenantService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByType(TypeIntervenant $typeIntervenant, QueryBuilder $qb = null, $alias = null)
+    public function finderByType (TypeIntervenant $typeIntervenant, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $sStatut = $this->getServiceStatut();
@@ -475,7 +440,7 @@ class IntervenantService extends AbstractEntityService
      *
      * @return self
      */
-    public function delete($entity, $softDelete = true)
+    public function delete ($entity, $softDelete = true)
     {
         if (!$softDelete) {
             $id   = (int)$entity->getId();
@@ -531,7 +496,7 @@ class IntervenantService extends AbstractEntityService
 
 
 
-    public function getSystemeInformationUrl(Intervenant $intervenant): ?string
+    public function getSystemeInformationUrl (Intervenant $intervenant): ?string
     {
         if (!$intervenant->getSource()->getImportable()) return null;
 
@@ -564,7 +529,7 @@ class IntervenantService extends AbstractEntityService
      *
      * @return Intervenant
      */
-    public function creerIntervenant(string $nom, string $prenom, \DateTime $dateNaissance, array $params = []): Intervenant
+    public function creerIntervenant (string $nom, string $prenom, \DateTime $dateNaissance, array $params = []): Intervenant
     {
         if (!isset($params['code']) || empty($params['code'])) {
             $params['code'] = uniqid('OSE');
@@ -603,7 +568,43 @@ class IntervenantService extends AbstractEntityService
 
 
 
-    public function updateExportDate(Intervenant $intervenant): Intervenant
+    public function getByCode (string $code): ?Intervenant
+    {
+        $anneeId     = $this->getServiceContext()->getAnnee()->getId();
+        $statutId    = null;
+        $structureId = $this->getServiceContext()->getStructure();
+        if ($structureId) $structureId = $structureId->getId();
+
+        $bones = $this->getBones(['CODE' => $code, 'ANNEE_ID' => $anneeId]);
+
+        return $this->bestIntervenantByBones($bones, $code, $anneeId, $statutId, $structureId);
+    }
+
+
+
+    /**
+     * Sauvegarde une entité
+     *
+     * @param Intervenant $entity
+     *
+     * @return Intervenant
+     * @throws \RuntimeException
+     */
+    public function save ($entity)
+    {
+        if (!$entity->getSource()) {
+            $entity->setSource($this->getServiceSource()->getOse());
+        }
+        if (!$entity->getAnnee()) {
+            $entity->setAnnee($this->getServiceContext()->getAnnee());
+        }
+
+        return parent::save($entity);
+    }
+
+
+
+    public function updateExportDate (Intervenant $intervenant): Intervenant
     {
         $date = new \DateTime();
         $intervenant->setExportDate($date);
@@ -615,7 +616,7 @@ class IntervenantService extends AbstractEntityService
 
 
 
-    public function updateCode(Intervenant $intervenant, $code): Intervenant
+    public function updateCode (Intervenant $intervenant, $code): Intervenant
     {
         if (!empty($code)) {
             $intervenant->setCode($code);
@@ -623,6 +624,26 @@ class IntervenantService extends AbstractEntityService
             $this->getEntityManager()->flush();
             //On recalcul les tablaeux de bords de l'intervenant
             $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+        }
+
+        return $intervenant;
+    }
+
+
+
+    public function updateSource (Intervenant $intervenant): Intervenant
+    {
+        $config = \AppConfig::get('export-rh');
+        if (!empty($config['sync-source'])) {
+            //On regarde si le code fourni correspond bien à une source valide
+            $source = $this->getServiceSource()->getByCode($config['sync-source']);
+            if (!empty($source)) {
+                $intervenant->setSource($source);
+                $this->getEntityManager()->persist($intervenant);
+                $this->getEntityManager()->flush();
+                //On recalcul les tablaeux de bords de l'intervenant
+                $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+            }
         }
 
         return $intervenant;

@@ -10,6 +10,7 @@ use Contrat\Controller\ContratController;
 use Dossier\Assertion\IntervenantDossierAssertion;
 use Dossier\Controller\IntervenantDossierController;
 use Mission\Assertion\OffreEmploiAssertion;
+use Mission\Controller\OffreEmploiController;
 use Paiement\Controller\PaiementController;
 use UnicaenPrivilege\Guard\PrivilegeController;
 use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
@@ -64,25 +65,8 @@ return [
                             ],
                         ],
                     ],
-                    'candidature'           => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/candidature',
-                            'defaults' => [
-                                'action' => 'candidature',
-                            ],
-                        ],
-                    ],
-                    'get-candidatures'      => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/get-candidatures',
-                            'defaults' => [
-                                'action' => 'get-candidatures',
-                            ],
-                        ],
-                    ],
-                    'voir'                  => [
+
+                    'voir'                => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/voir',
@@ -91,7 +75,7 @@ return [
                             ],
                         ],
                     ],
-                    'fiche'                 => [
+                    'fiche'               => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/fiche',
@@ -100,7 +84,7 @@ return [
                             ],
                         ],
                     ],
-                    'creer'                 => [
+                    'creer'               => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/creer',
@@ -110,7 +94,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisir'                => [
+                    'saisir'              => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/saisir',
@@ -120,7 +104,7 @@ return [
                             ],
                         ],
                     ],
-                    'dupliquer'             => [
+                    'dupliquer'           => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/dupliquer',
@@ -130,7 +114,7 @@ return [
                             ],
                         ],
                     ],
-                    'synchronisation'       => [
+                    'synchronisation'     => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/synchronisation',
@@ -139,7 +123,7 @@ return [
                             ],
                         ],
                     ],
-                    'synchroniser'          => [
+                    'synchroniser'        => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/synchroniser',
@@ -148,7 +132,7 @@ return [
                             ],
                         ],
                     ],
-                    'supprimer'             => [
+                    'supprimer'           => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/supprimer',
@@ -157,7 +141,7 @@ return [
                             ],
                         ],
                     ],
-                    'historiser'            => [
+                    'historiser'          => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/historiser',
@@ -166,7 +150,7 @@ return [
                             ],
                         ],
                     ],
-                    'restaurer'             => [
+                    'restaurer'           => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/restaurer',
@@ -175,7 +159,7 @@ return [
                             ],
                         ],
                     ],
-                    'definir-par-defaut'    => [
+                    'definir-par-defaut'  => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/definir-par-defaut',
@@ -184,7 +168,7 @@ return [
                             ],
                         ],
                     ],
-                    'voir-heures-comp'      => [
+                    'voir-heures-comp'    => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/voir-heures-comp/:intervenant',
@@ -193,7 +177,7 @@ return [
                             ],
                         ],
                     ],
-                    'formule-totaux-hetd'   => [
+                    'formule-totaux-hetd' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire',
@@ -206,7 +190,7 @@ return [
                             ],
                         ],
                     ],
-                    'feuille-de-route'      => [
+                    'feuille-de-route'    => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/feuille-de-route',
@@ -215,7 +199,7 @@ return [
                             ],
                         ],
                     ],
-                    'mise-en-paiement'      => [
+                    'mise-en-paiement'    => [
                         'type'          => 'Segment',
                         'may_terminate' => false,
                         'options'       => [
@@ -254,7 +238,7 @@ return [
                             ],
                         ],
                     ],
-                    'contrat'               => [
+                    'contrat'             => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/contrat',
@@ -279,17 +263,6 @@ return [
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'index'),
                         'order'    => 1,
                         'pages'    => [
-                            'candidature'      => [
-                                'label'        => "Candidatures",
-                                'title'        => "Liste de vos candidatures en cours",
-                                'route'        => 'intervenant/candidature',
-                                'paramsInject' => [
-                                    'intervenant',
-                                ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'candidature'),
-                                'order'        => 5,
-                            ],
                             'rechercher'       => [
                                 'label'        => " Rechercher",
                                 'title'        => "Rechercher un intervenant",
@@ -350,12 +323,6 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['candidature', 'get-candidatures'],
-                    'privileges' => [Privileges::MISSION_CANDIDATURE_VISUALISATION],
-                    'assertion'  => OffreEmploiAssertion::class,
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['saisir', 'definir-par-defaut', 'synchronisation', 'synchroniser'],
                     'privileges' => [
                         Privileges::INTERVENANT_EDITION,
@@ -393,6 +360,8 @@ return [
                         Privileges::REFERENTIEL_REALISE_VISUALISATION,
                     ],
                 ],
+
+
             ],
         ],
 
@@ -407,13 +376,6 @@ return [
                         ],
                         'resources'  => ['Intervenant'],
                         'assertion'  => Assertion\IntervenantAssertion::class,
-                    ],
-                    [
-                        'privileges' => [
-                            Privileges::MISSION_CANDIDATURE_VALIDER,
-                        ],
-                        'resources'  => ['Intervenant'],
-                        'assertion'  => OffreEmploiAssertion::class,
                     ],
                 ],
             ],

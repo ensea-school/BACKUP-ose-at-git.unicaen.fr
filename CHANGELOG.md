@@ -43,6 +43,9 @@
 
 * Modification de libellé dans l'affichage de l'offre de formation (#49763)
 * Possibilité de modifier manuellement l'email expéditeur pour l'envoi d'email via les indicateurs (#50725)
+* Synchronisation du code source de l'intervenant avec l'export SIHAM lors d'une PEC ou REN (#50845)
+* Les indicateurs 550, 560 et 570 sont maintenant utilisables même si la clôture n'est pas utilisée par les établissements (#50952)
+* Blocage de la saisie de motif de non paiement sur du service référentiel déjà validé (#51180)
 
 ## Corrections de bugs
 
@@ -53,6 +56,7 @@
 * Filtrage des types d'intervention pour la saisie de service hors établissement (#51512)
 * L'enregistrement d'un statut ne possédant pas de contrat se fait correctement lorsqu'il n'y a pas d'état de sortie de saisie (#51400)
 * Le bouton de saisie du référentiel apparait maintenant même si la composante de l'intervenant diffère de celle du gestionnaire (#50799)
+* Remise en forme de l'écran engagement et liquidation (#50738) 
 
 # OSE 20.5 (07/06/2023)
 

@@ -45,6 +45,7 @@
 * Possibilité de modifier manuellement l'email expéditeur pour l'envoi d'email via les indicateurs (#50725)
 * Synchronisation du code source de l'intervenant avec l'export SIHAM lors d'une PEC ou REN (#50845)
 * Les indicateurs 550, 560 et 570 sont maintenant utilisables même si la clôture n'est pas utilisée par les établissements (#50952)
+* Blocage de la saisie de motif de non paiement sur du service référentiel déjà validé (#51180)
 
 ## Corrections de bugs
 

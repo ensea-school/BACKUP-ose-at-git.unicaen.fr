@@ -100,6 +100,7 @@ return [
             'F_TYPE_INTERVENTION_S',
             'F_MODULATEUR',
             'F_MODULATEUR_S',
+            'T_CRG_TYPE_INTERVENTION',
         ],
     ],
     'sequence'          => [

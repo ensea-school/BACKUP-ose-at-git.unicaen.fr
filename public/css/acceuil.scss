@@ -5,7 +5,7 @@
     font-size: 60pt;
     float:left;
     padding-right: .5em;
-    padding-bottom: 2em;
+    padding-bottom: 3em;
 }
 
 .appname > .c1 {
@@ -37,4 +37,31 @@ div.div-connexion {
     width: 50%;
     margin: auto;
     min-width: 30em;
+}
+
+@media screen and (max-width: 500px) {
+    .page-accueil .titre {
+        font-size: 36pt;
+    }
+}
+
+
+@media screen and (max-width: 768px) {
+
+    .page-accueil.jumbotron {
+        padding: .5em !important;
+
+    }
+
+    .page-accueil .appname {
+        padding-bottom: 0px;
+    }
+
+}
+
+@media screen and (max-width: 991px) {
+
+    .page-accueil .appname {
+        float: none;
+    }
 }

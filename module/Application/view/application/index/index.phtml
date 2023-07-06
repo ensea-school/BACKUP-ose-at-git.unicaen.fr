@@ -14,16 +14,20 @@ echo $this->messenger()
 
 $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_ABONNEMENT));
 
-$intervenant     = $context->getIntervenant();
+$intervenant = $context->getIntervenant();
 $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()->getDbRole());
 
 ?>
-    <div class="container-fluid text-sm p-5 jumbotron">
-        <h1><span class="appname"><span class="c1">O</span><span class="c2">S</span><span class="c3">E</span></span>
+    <div class="container-fluid text-sm p-5 jumbotron page-accueil">
+        <h1 class="logo"><span class="appname"><span class="c1">O</span><span class="c2">S</span><span
+                        class="c3">E</span></span></h1>
+        <p class="texte">
+        <h1 class="titre">
             <small><?= AppConfig::get('etablissement', 'ose', 'Organisation des Services d\'Enseignement') ?></small>
         </h1>
-        <p class="lead"><?= $pageAccueil ?></p>
-        <p class="lead">Année <?= $annee ?>.</p>
+        <p class="text-accueil"><?= $pageAccueil ?></p>
+        <p class="annee">Année <?= $annee ?>.</p>
+        </p>
 
         <?php
         if ($context->getUtilisateur()) {
@@ -66,12 +70,10 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
     <!-------------------------- Indicateurs (AJAX) -------------------------->
 <?php if (isset($this->abonnementsUrl)): ?>
     <script>
-        $(function ()
-        {
+        $(function () {
             var url = '<?= $this->abonnementsUrl ?>';
             $(".abonnements").hide();
-            $("#abonnements").load(url, [], function ()
-            {
+            $("#abonnements").load(url, [], function () {
                 $(".abonnements").fadeIn();
                 $(this).hide().fadeIn();
             });

@@ -65,7 +65,7 @@ echo $this->form()->closeTag();
         return formElement().find('[name=typeMission]');
     }
 
-    function toggleViewElements()
+    function toggleViewElements(init)
     {
         var tmId = typeMissionSelect().val();
         var tmData = typeMissionSelect().data('tm');
@@ -82,13 +82,15 @@ echo $this->form()->closeTag();
             $('.heures-formation').hide();
         }
 
-        formElement().find('[name=tauxRemu]').val(tmData[tmId]['tauxRemu']);
-        formElement().find('[name=tauxRemuMajore]').val(tmData[tmId]['tauxRemuMajore']);
+        if (init !== true) {
+            formElement().find('[name=tauxRemu]').val(tmData[tmId]['tauxRemu']);
+            formElement().find('[name=tauxRemuMajore]').val(tmData[tmId]['tauxRemuMajore']);
+        }
     }
 
     $(function () {
         typeMissionSelect().on('change', toggleViewElements);
-        toggleViewElements();
+        toggleViewElements(true);
     });
 
 </script>

@@ -101,6 +101,8 @@ return [
             'F_MODULATEUR',
             'F_MODULATEUR_S',
             'T_CRG_TYPE_INTERVENTION',
+            'F_MODIF_SERVICE_DU',
+            'F_MODIF_SERVICE_DU_S',
         ],
     ],
     'sequence'          => [

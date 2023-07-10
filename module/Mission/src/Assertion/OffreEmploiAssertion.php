@@ -8,10 +8,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use Mission\Entity\Db\Candidature;
-use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\OffreEmploi;
-use Mission\Entity\Db\VolumeHoraireMission;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
@@ -98,6 +95,45 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
             break;
         }
 
+        return true;
+    }
+
+
+
+    protected function assertController($controller, $action = null, $privilege = null)
+    {
+        /* @var $role Role */
+        $role = $this->getRole();
+
+        // Si le rôle n'est pas renseigné alors on s'en va...
+        if (!$role instanceof Role) return false;
+        // pareil si le rôle ne possède pas le privilège adéquat
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+
+        // Si c'est bon alors on affine...
+        $entity = $role->getIntervenant();
+        if (!$entity) {
+            $entity = $this->getMvcEvent()->getParam('intervenant');
+        }
+        if (!$entity) {
+            $entity = $this->getMvcEvent()->getParam('mission');
+        }
+        if (!$entity) {
+            $entity = $this->getMvcEvent()->getParam('volumeHoraireMission');
+        }
+        if (!$entity) {
+            return false;
+        }
+
+        switch ($action) {
+            case 'candidature':
+                if ($entity instanceof Intervenant){
+                    // à revoir : réorganiser l'assertion
+                    // intégrer le workflow
+                    return $entity->getStatut()->getOffreEmploiPostuler();
+                }
+                break;
+        }
         return true;
     }
 
@@ -228,7 +264,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
         $wfEtape   = $this->getServiceWorkflow()->getEtape($codeEtape, $intervenant);
 
         return $this->asserts([
-            $wfEtape->isAtteignable(),
+            $wfEtape && $wfEtape->isAtteignable(),
             $this->haveRole(),
         ]);
     }

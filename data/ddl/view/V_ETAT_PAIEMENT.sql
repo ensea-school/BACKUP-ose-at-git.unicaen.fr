@@ -192,8 +192,8 @@ FROM
   ) dep4
 ORDER BY
   annee_id,
+  intervenant_nom,
   type_intervenant_id,
   statut_id,
   structure_id,
-  periode_id,
-  intervenant_nom
+  periode_id

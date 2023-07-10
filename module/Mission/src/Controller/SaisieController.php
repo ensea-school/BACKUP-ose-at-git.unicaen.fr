@@ -197,6 +197,11 @@ class SaisieController extends AbstractController
             $this->getProcessusPlafond()->beginTransaction();
             try {
                 $this->getServiceMission()->delete($mission);
+                //On historise les volumes horaires de la mission
+                $volumesHoraires = $mission->getVolumesHorairesPrevus();
+                foreach( $volumesHoraires as $volumesHoraire ){
+                    $this->getServiceMission()->deleteVolumeHoraire($volumesHoraire);
+                }
                 $this->updateTableauxBord($mission);
                 $this->flashMessenger()->addSuccessMessage("Mission supprimée avec succès.");
             } catch (\Exception $e) {

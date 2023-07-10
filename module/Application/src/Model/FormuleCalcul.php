@@ -1201,7 +1201,11 @@ END FORMULE_" . $this->getName() . ";";
             $plsql .= "END LOOP;\n";
         }
 
-        $plsql .= 'RETURN ' . $this->traductionExpr($term['valExpr']);
+        if (isset($term['valExpr'])) {
+            $plsql .= 'RETURN ' . $this->traductionExpr($term['valExpr']);
+        }else{
+            $plsql .= 'RETURN val;';
+        }
 
 //        echo '<pre>' . htmlentities($plsql) . '</pre>';
 

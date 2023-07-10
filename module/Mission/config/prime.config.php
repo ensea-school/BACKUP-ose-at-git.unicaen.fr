@@ -11,14 +11,27 @@ return [
     'routes' => [
         'intervenant' => [
             'child_routes' => [
-                'prime' => [
+                'prime'             => [
                     'route'      => '/:intervenant/prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'index',
                     //                    'privileges' => Privileges::MISSION_VISUALISATION_REALISE,
                     //                    'assertion'  => Assertion\SuiviAssertion::class,
                 ],
+                'get-contrat-prime' => [
+                    'route'      => '/:intervenant/get-contrat-prime',
+                    'controller' => Controller\PrimeController::class,
+                    'action'     => 'get-contrat-prime',
+
+                ],
+                'declaration-prime' => [
+                    'route'      => '/:intervenant/declaration-prime/:contrat',
+                    'controller' => Controller\PrimeController::class,
+                    'action'     => 'declaration-prime',
+
+                ],
             ],
+
         ],
 
     ],
@@ -36,7 +49,7 @@ return [
                     ],
                     'withtarget'   => true,
                     'resource'     => PrivilegeController::getResourceId(Controller\PrimeController::class, 'index'),
-                    'order'        => 13,
+                    'order'        => 14,
                 ],
             ],
         ],
@@ -58,7 +71,7 @@ return [
     'guards' => [
         [
             'controller' => PrimeController::class,
-            'action'     => ['index'],
+            'action'     => ['index', 'get-contrat-prime', 'declaration-prime'],
             'privileges' => [
                 Privileges::MISSION_PRIME_VISUALISATION,
             ],
@@ -72,9 +85,6 @@ return [
 
     /* 'forms' => [
          Form\MissionSuiviForm::class => Form\MissionSuiviFormFactory::class,
-     ],
-
-     'services' => [
-         Assertion\SuiviAssertion::class => AssertionFactory::class,
      ],*/
+
 ];

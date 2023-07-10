@@ -13,3 +13,11 @@ $nextEtape = WfEtape::CODE_MISSION_VALIDATION_REALISE;
 
 $this->intervenant($intervenant)->renderTitle($title);
 
+
+echo $this->vue('mission/liste-prime', [
+    'intervenant' => $intervenant->getId(),
+]);
+
+echo '<br />';
+
+

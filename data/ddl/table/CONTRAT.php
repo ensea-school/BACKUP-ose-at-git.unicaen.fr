@@ -177,6 +177,18 @@ return [
             'position'    => 17,
             'commentaire' => 'Utilisé pour la contrainte d\'unicité. Le service ne peut avoir qu\'un projet par structure mais les mission peuvent avoir deux projets de contrats dans la même structure si se sont des missions différentes',
         ],
+        'DECLARATION_PRIME_ID'            => [
+            'name'        => 'DECLARATION_PRIME_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 18,
+            'commentaire' => 'Permet de lier un fichier servant de déclaration de fin de mission, pour payer les primes de fin de contrats des missions',
+        ],
         'NUMERO_AVENANT'        => [
             'name'        => 'NUMERO_AVENANT',
             'type'        => 'int',

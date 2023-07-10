@@ -2,6 +2,7 @@
 
 namespace Mission\Service;
 
+use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
@@ -223,6 +224,59 @@ class MissionService extends AbstractEntityService
         parent::save($entity);
 
         return $entity;
+    }
+
+
+
+    public function getContratPrimeMission (array $parameters)
+    {
+
+
+        $sql = "
+        SELECT DISTINCT
+          c.id                       contrat_id,
+          c.debut_validite           date_debut_contrat,
+          c.fin_validite             date_fin_contrat,
+          m.libelle_mission			 libelle_mission,
+          tm.libelle                 type_mission,
+          c.intervenant_id           intervenant_id,
+          s.libelle_court            libelle_structure,
+          c.declaration_prime_id	 fichier_id,
+          f.nom						 fichier_nom,
+          f.validation_id            validation_id,
+          ROWNUM                     numero
+        FROM
+                    contrat         c
+               JOIN mission m ON m.id = c.mission_id     
+               JOIN type_mission tm ON tm.id = m.type_mission_id
+               JOIN structure s ON s.id = m.structure_id
+               JOIN validation      v ON v.id = c.validation_id 
+                                     AND v.histo_destruction IS NULL
+          LEFT JOIN fichier f ON f.id = c.declaration_prime_id
+          LEFT JOIN validation v ON f.validation_id = v.id                                       
+          LEFT JOIN contrat    c_suiv ON c_suiv.histo_destruction IS NULL 
+                                     AND c_suiv.fin_validite <> c.fin_validite 
+                                     AND c_suiv.intervenant_id = c.intervenant_id 
+                                     AND c.fin_validite BETWEEN c_suiv.debut_validite-1 AND c_suiv.fin_validite
+                                                 
+          LEFT JOIN validation v_suiv ON v_suiv.id = c_suiv.validation_id 
+                                     AND v_suiv.histo_destruction IS NULL
+        WHERE
+          c.histo_destruction IS NULL
+          -- on trouve un contrat validé qui suit => ce n'est pas un contrat qui donne droit à la prime
+          AND v_suiv.id IS NULL 
+          AND c.intervenant_id = :intervenant
+          --Uniquement si le contrat est déjà fini
+          AND c.fin_validite < SYSDATE
+          ORDER BY c.fin_validite ASC
+       ";
+
+        $data       = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['intervenant' => $parameters['intervenant']]);
+        $triggers   = [];
+        $properties = [];
+
+
+        return new AxiosModel($data, $properties, $triggers);
     }
 
 }

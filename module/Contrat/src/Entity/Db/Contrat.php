@@ -2,6 +2,7 @@
 
 namespace Contrat\Entity\Db;
 
+use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Mission\Entity\Db\Mission;
@@ -14,6 +15,11 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 class Contrat implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
+
+    /**
+     * @var \Contrat\Entity\Db\Contrat
+     */
+    protected $contrat;
 
     /**
      * @var integer
@@ -46,54 +52,9 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     private $numeroAvenant;
 
     /**
-     * @var \Contrat\Entity\Db\Contrat
-     */
-    protected $contrat;
-
-    /**
      * @var \DateTime
      */
     private $dateRetourSigne;
-
-
-
-    /**
-     * @return \DateTime
-     */
-    public function getDebutValidite(): \DateTime
-    {
-        return $this->debutValidite;
-    }
-
-
-
-    /**
-     * @param \DateTime $debutValidite
-     */
-    public function setDebutValidite(\DateTime $debutValidite): void
-    {
-        $this->debutValidite = $debutValidite;
-    }
-
-
-
-    /**
-     * @return \DateTime
-     */
-    public function getFinValidite(): \DateTime
-    {
-        return $this->finValidite;
-    }
-
-
-
-    /**
-     * @param \DateTime $finValidite
-     */
-    public function setFinValidite(\DateTime $finValidite): void
-    {
-        $this->finValidite = $finValidite;
-    }
 
     /**
      * @var \DateTime
@@ -116,9 +77,15 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     private $fichier;
 
     /**
+     * @var ?Fichier
+     */
+    private $declarationPrime = null;
+
+    /**
      * @var float
      */
     private $totalHetd;
+
     /**
      * @var Mission
      */
@@ -127,11 +94,51 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
+     * @return \DateTime
+     */
+    public function getDebutValidite (): \DateTime
+    {
+        return $this->debutValidite;
+    }
+
+
+
+    /**
+     * @param \DateTime $debutValidite
+     */
+    public function setDebutValidite (\DateTime $debutValidite): void
+    {
+        $this->debutValidite = $debutValidite;
+    }
+
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getFinValidite (): \DateTime
+    {
+        return $this->finValidite;
+    }
+
+
+
+    /**
+     * @param \DateTime $finValidite
+     */
+    public function setFinValidite (\DateTime $finValidite): void
+    {
+        $this->finValidite = $finValidite;
+    }
+
+
+
+    /**
      * Libellé de cet objet.
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->toString();
     }
@@ -146,7 +153,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return string
      */
-    public function toString($avecArticle = false, $deLe = false)
+    public function toString ($avecArticle = false, $deLe = false)
     {
         if ($this->estUnAvenant()) {
             if ($this->getValidation()) {
@@ -168,11 +175,79 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
+     * Indique s'il s'agit d'un avenant.
+     *
+     * @return bool
+     */
+    public function estUnAvenant (): bool
+    {
+        return $this->getTypeContrat() && $this->getTypeContrat()->estUnAvenant();
+    }
+
+
+
+    /**
+     * Get typeContrat
+     *
+     * @return \Contrat\Entity\Db\TypeContrat
+     */
+    public function getTypeContrat ()
+    {
+        return $this->typeContrat;
+    }
+
+
+
+    /**
+     * Set typeContrat
+     *
+     * @param \Contrat\Entity\Db\TypeContrat $typeContrat
+     *
+     * @return Contrat
+     */
+    public function setTypeContrat (\Contrat\Entity\Db\TypeContrat $typeContrat = null)
+    {
+        $this->typeContrat = $typeContrat;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get validation
+     *
+     * @return \Application\Entity\Db\Validation
+     */
+    public function getValidation ()
+    {
+        return $this->validation;
+    }
+
+
+
+    /**
+     * Set validation
+     *
+     * @param \Application\Entity\Db\Validation $validation
+     *
+     * @return Contrat
+     */
+    public function setValidation (\Application\Entity\Db\Validation $validation = null)
+    {
+        $this->validation = $validation;
+
+        return $this;
+    }
+
+
+
+    /**
      * Retourne la référence (numéro) du contrat ou de l'avenant.
      *
      * @return string
      */
-    public function getReference()
+    public function getReference ()
     {
         if ($this->estUnAvenant()) {
             if (!$this->getContrat()) {
@@ -188,177 +263,13 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
-     * Indique s'il s'agit d'un avenant.
+     * Get contrat
      *
-     * @return bool
+     * @return \Contrat\Entity\Db\Contrat
      */
-    public function estUnAvenant(): bool
+    public function getContrat ()
     {
-        return $this->getTypeContrat() && $this->getTypeContrat()->estUnAvenant();
-    }
-
-
-
-    /**
-     * Indique s'il s'agit d'un projet de contrat/avenant.
-     *
-     * @return bool
-     */
-    public function estUnProjet(): bool
-    {
-        return null === $this->getValidation();
-    }
-
-
-
-    /**
-     * Set numeroAvenant
-     *
-     * @param integer $numeroAvenant
-     *
-     * @return Contrat
-     */
-    public function setNumeroAvenant($numeroAvenant)
-    {
-        $this->numeroAvenant = $numeroAvenant;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get numeroAvenant
-     *
-     * @return integer
-     */
-    public function getNumeroAvenant()
-    {
-        return $this->numeroAvenant;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-
-    /**
-     * Set typeContrat
-     *
-     * @param \Contrat\Entity\Db\TypeContrat $typeContrat
-     *
-     * @return Contrat
-     */
-    public function setTypeContrat(\Contrat\Entity\Db\TypeContrat $typeContrat = null)
-    {
-        $this->typeContrat = $typeContrat;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get typeContrat
-     *
-     * @return \Contrat\Entity\Db\TypeContrat
-     */
-    public function getTypeContrat()
-    {
-        return $this->typeContrat;
-    }
-
-
-
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     *
-     * @return self
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\Intervenant
-     */
-    public function getIntervenant()
-    {
-        return $this->intervenant;
-    }
-
-
-
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     *
-     * @return Intervenant
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure
-     */
-    public function getStructure()
-    {
-        return $this->structure;
-    }
-
-
-
-    /**
-     * Set validation
-     *
-     * @param \Application\Entity\Db\Validation $validation
-     *
-     * @return Contrat
-     */
-    public function setValidation(\Application\Entity\Db\Validation $validation = null)
-    {
-        $this->validation = $validation;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get validation
-     *
-     * @return \Application\Entity\Db\Validation
-     */
-    public function getValidation()
-    {
-        return $this->validation;
+        return $this->contrat;
     }
 
 
@@ -370,7 +281,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return Contrat
      */
-    public function setContrat(\Contrat\Entity\Db\Contrat $contrat = null)
+    public function setContrat (\Contrat\Entity\Db\Contrat $contrat = null)
     {
         $this->contrat = $contrat;
 
@@ -380,27 +291,107 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
-     * Get contrat
+     * Get id
      *
-     * @return \Contrat\Entity\Db\Contrat
+     * @return integer
      */
-    public function getContrat()
+    public function getId ()
     {
-        return $this->contrat;
+        return $this->id;
     }
 
 
 
     /**
-     * Set dateRetourSigne
+     * Get numeroAvenant
      *
-     * @param \DateTime $dateRetourSigne
+     * @return integer
+     */
+    public function getNumeroAvenant ()
+    {
+        return $this->numeroAvenant;
+    }
+
+
+
+    /**
+     * Set numeroAvenant
+     *
+     * @param integer $numeroAvenant
      *
      * @return Contrat
      */
-    public function setDateRetourSigne($dateRetourSigne)
+    public function setNumeroAvenant ($numeroAvenant)
     {
-        $this->dateRetourSigne = $dateRetourSigne;
+        $this->numeroAvenant = $numeroAvenant;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Indique s'il s'agit d'un projet de contrat/avenant.
+     *
+     * @return bool
+     */
+    public function estUnProjet (): bool
+    {
+        return null === $this->getValidation();
+    }
+
+
+
+    /**
+     * Get intervenant
+     *
+     * @return \Application\Entity\Db\Intervenant
+     */
+    public function getIntervenant ()
+    {
+        return $this->intervenant;
+    }
+
+
+
+    /**
+     * Set intervenant
+     *
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     *
+     * @return self
+     */
+    public function setIntervenant (\Application\Entity\Db\Intervenant $intervenant = null)
+    {
+        $this->intervenant = $intervenant;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get structure
+     *
+     * @return \Application\Entity\Db\Structure
+     */
+    public function getStructure ()
+    {
+        return $this->structure;
+    }
+
+
+
+    /**
+     * Set structure
+     *
+     * @param \Application\Entity\Db\Structure $structure
+     *
+     * @return Intervenant
+     */
+    public function setStructure (\Application\Entity\Db\Structure $structure = null)
+    {
+        $this->structure = $structure;
 
         return $this;
     }
@@ -412,7 +403,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return \DateTime
      */
-    public function getDateRetourSigne()
+    public function getDateRetourSigne ()
     {
         return $this->dateRetourSigne;
     }
@@ -420,15 +411,15 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
-     * Set dateEnvoiEmail
+     * Set dateRetourSigne
      *
-     * @param \DateTime $dateEnvoiEmail
+     * @param \DateTime $dateRetourSigne
      *
      * @return Contrat
      */
-    public function setDateEnvoiEmail($dateEnvoiEmail)
+    public function setDateRetourSigne ($dateRetourSigne)
     {
-        $this->dateEnvoiEmail = $dateEnvoiEmail;
+        $this->dateRetourSigne = $dateRetourSigne;
 
         return $this;
     }
@@ -440,9 +431,25 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return \DateTime
      */
-    public function getDateEnvoiEmail()
+    public function getDateEnvoiEmail ()
     {
         return $this->dateEnvoiEmail;
+    }
+
+
+
+    /**
+     * Set dateEnvoiEmail
+     *
+     * @param \DateTime $dateEnvoiEmail
+     *
+     * @return Contrat
+     */
+    public function setDateEnvoiEmail ($dateEnvoiEmail)
+    {
+        $this->dateEnvoiEmail = $dateEnvoiEmail;
+
+        return $this;
     }
 
 
@@ -454,7 +461,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return self
      */
-    public function addFichier(\Application\Entity\Db\Fichier $fichier)
+    public function addFichier (\Application\Entity\Db\Fichier $fichier)
     {
         $this->fichier[] = $fichier;
 
@@ -468,7 +475,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @param \Application\Entity\Db\Fichier $fichier
      */
-    public function removeFichier(\Application\Entity\Db\Fichier $fichier)
+    public function removeFichier (\Application\Entity\Db\Fichier $fichier)
     {
         $this->fichier->removeElement($fichier);
     }
@@ -480,7 +487,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFichier()
+    public function getFichier ()
     {
         return $this->fichier;
     }
@@ -495,7 +502,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      * @return float|null
      * @since 1.5
      */
-    public function getTotalHetd()
+    public function getTotalHetd ()
     {
         return $this->totalHetd;
     }
@@ -510,7 +517,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      * @return self
      * @since 1.5
      */
-    public function setTotalHetd($totalHetd)
+    public function setTotalHetd ($totalHetd)
     {
         $this->totalHetd = $totalHetd;
 
@@ -525,16 +532,9 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      * @return string
      * @see ResourceInterface
      */
-    public function getResourceId()
+    public function getResourceId ()
     {
         return 'Contrat';
-    }
-
-
-
-    public function setMission(Mission $mission)
-    {
-        $this->mission = $mission;
     }
 
 
@@ -542,8 +542,32 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @return Mission|null
      */
-    public function getMission(): ?Mission
+    public function getMission (): ?Mission
     {
         return $this->mission;
     }
+
+
+
+    public function setMission (Mission $mission)
+    {
+        $this->mission = $mission;
+    }
+
+
+
+    public function getDeclarationPrime (): ?Fichier
+    {
+        return $this->declarationPrime;
+    }
+
+
+
+    public function setDeclarationPrime (?Fichier $fichier): Contrat
+    {
+        $this->declarationPrime = $fichier;
+
+        return $this;
+    }
+
 }

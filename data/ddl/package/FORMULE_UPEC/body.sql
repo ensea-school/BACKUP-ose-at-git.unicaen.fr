@@ -823,6 +823,11 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC AS
 
   PROCEDURE CALCUL_RESULTAT IS
   BEGIN
+    IF ose_formule.intervenant.annee_id < 2023 THEN
+      FORMULE_UPEC_2022.CALCUL_RESULTAT;
+      RETURN;
+    END IF;
+
     feuille.delete;
 
     IF ose_formule.intervenant.depassement_service_du_sans_hc THEN -- HC traitées comme du service

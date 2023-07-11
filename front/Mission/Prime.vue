@@ -17,7 +17,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <input name="prime" type="checkbox"/>
+                        <input :checked="contrat.FICHIER_ID" name="prime" type="checkbox" @change="enableForm"/>
                         En cochant cette case, je déclare sur l'honneur ne pas avoir d'autre contrat à suivre dans la fonction publique, et me rend éligible à
                         une
                         prime de fin de contrat.
@@ -50,10 +50,12 @@
                                 Dépôt de votre déclaration sur l'honneur
                             </div>
                             <div class="card-body">
-                                <p class="card-text">Déposez votre déclaration sur l'honneur signée ci-dessous. Vous trouverez un exemple de déclaration en <a
-                                    href=""> cliquant-ici</a></p>
-                                <input ref="file" name="files[]" type="file" @change="uploadFile">
-                                <input type="submit" value="Envoyer"/>
+                                <p class="card-text">En cochant <b>la case ci-contre</b> vous pourrez déposer votre déclaration sur l'honneur signée
+                                    ci-dessous.
+                                    Vous trouverez un exemple de déclaration en <a
+                                        href=""> cliquant-ici</a></p>
+                                <input ref="file" :disabled="disabledForm" name="files[]" type="file"/>
+                                <input :disabled="disabledForm" type="submit" value="Envoyer"/>
 
                             </div>
                         </div>
@@ -72,6 +74,7 @@
                             </div>
                             <div class="card-footer">
                                 <a v-if="contrat.FICHIER_ID && !contrat.VALIDATION_ID"
+                                   :href="supprimerUrl"
                                    class="btn btn-danger"
                                    title="Supprimer"
                                    @click.prevent="supprimer">
@@ -104,7 +107,12 @@ export default {
             declarationUrl: unicaenVue.url("intervenant/:intervenant/declaration-prime/:contrat", {
                 intervenant: this.intervenant,
                 contrat: this.contrat.CONTRAT_ID
-            })
+            }),
+            supprimerUrl: unicaenVue.url("intervenant/:intervenant/supprimer-declaration-prime/:contrat", {
+                intervenant: this.intervenant,
+                contrat: this.contrat.CONTRAT_ID,
+            }),
+            disabledForm: true,
 
         };
     },
@@ -113,9 +121,13 @@ export default {
         supprimer(event)
         {
             popConfirm(event.target, (response) => {
-                this.$emit('reload', this.offre);
+                this.$emit('reload');
             });
         },
+        enableForm(event)
+        {
+            this.disabledForm = !event.target.checked;
+        }
     }
 
 

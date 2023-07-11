@@ -61,6 +61,26 @@ class PrimeController extends AbstractController
 
 
 
+    public function supprimerDeclarationPrimeAction ()
+    {
+        $params  = $this->getEvent()->getParams();
+        $contrat = $this->getEvent()->getParam('contrat');
+        //On supprimer la déclaration sur l'honneur
+        $fichier = $contrat->getDeclaration();
+        if ($fichier) {
+            $contrat->setDeclaration(null);
+            $this->em()->remove($fichier);
+        }
+
+        $this->em()->flush();
+
+        $this->flashMessenger()->addSuccessMessage("Déclaration sur l'honneur supprimée");
+
+        return true;
+    }
+
+
+
     public function getContratPrimeAction ()
     {
         $intervenant   = $this->getEvent()->getParam('intervenant');

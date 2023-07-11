@@ -177,8 +177,8 @@ return [
             'position'    => 17,
             'commentaire' => 'Utilisé pour la contrainte d\'unicité. Le service ne peut avoir qu\'un projet par structure mais les mission peuvent avoir deux projets de contrats dans la même structure si se sont des missions différentes',
         ],
-        'DECLARATION_PRIME_ID'            => [
-            'name'        => 'DECLARATION_PRIME_ID',
+        'DECLARATION_ID'            => [
+            'name'        => 'DECLARATION_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

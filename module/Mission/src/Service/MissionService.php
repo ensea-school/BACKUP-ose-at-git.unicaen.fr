@@ -241,7 +241,7 @@ class MissionService extends AbstractEntityService
           tm.libelle                 type_mission,
           c.intervenant_id           intervenant_id,
           s.libelle_court            libelle_structure,
-          c.declaration_prime_id	 fichier_id,
+          c.declaration_id	 fichier_id,
           f.nom						 fichier_nom,
           f.validation_id            validation_id,
           ROWNUM                     numero
@@ -252,7 +252,7 @@ class MissionService extends AbstractEntityService
                JOIN structure s ON s.id = m.structure_id
                JOIN validation      v ON v.id = c.validation_id 
                                      AND v.histo_destruction IS NULL
-          LEFT JOIN fichier f ON f.id = c.declaration_prime_id
+          LEFT JOIN fichier f ON f.id = c.declaration_id
           LEFT JOIN validation v ON f.validation_id = v.id                                       
           LEFT JOIN contrat    c_suiv ON c_suiv.histo_destruction IS NULL 
                                      AND c_suiv.fin_validite <> c.fin_validite 

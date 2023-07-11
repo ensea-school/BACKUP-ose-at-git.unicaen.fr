@@ -76,9 +76,9 @@
                 <join-column name="MISSION_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="declarationPrime" target-entity="Application\Entity\Db\Fichier">
+        <many-to-one field="declaration" target-entity="Application\Entity\Db\Fichier">
             <join-columns>
-                <join-column name="DECLARATION_PRIME_ID" referenced-column-name="ID"/>
+                <join-column name="DECLARATION_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
     </entity>

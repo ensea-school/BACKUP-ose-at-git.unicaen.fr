@@ -79,7 +79,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @var ?Fichier
      */
-    private $declarationPrime = null;
+    private $declaration = null;
 
     /**
      * @var float
@@ -556,16 +556,16 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    public function getDeclarationPrime (): ?Fichier
+    public function getDeclaration (): ?Fichier
     {
-        return $this->declarationPrime;
+        return $this->declaration;
     }
 
 
 
-    public function setDeclarationPrime (?Fichier $fichier): Contrat
+    public function setDeclaration (?Fichier $fichier): Contrat
     {
-        $this->declarationPrime = $fichier;
+        $this->declaration = $fichier;
 
         return $this;
     }

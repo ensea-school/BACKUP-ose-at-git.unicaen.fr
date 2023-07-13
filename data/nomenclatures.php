@@ -899,6 +899,11 @@ return [
             "CODE"    => "CANDIDATURE",
             "LIBELLE" => "Validation d'une candidature par la DRH",
         ],
+        [
+            'ID'      => 12,
+            "CODE"    => "DECLARATION_PRIME",
+            "LIBELLE" => "Validation d'une déclaration prime",
+        ],
     ],
 
     'TYPE_VOLUME_HORAIRE' => [

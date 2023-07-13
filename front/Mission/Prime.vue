@@ -6,18 +6,26 @@
                 <span class="float-end">Du <u-date :value="contrat.DATE_DEBUT_CONTRAT"/> au <u-date
                     :value="contrat.DATE_FIN_CONTRAT"/></span>
             </h5>
+
+            <h5 v-if="!contrat.LIBELLE_MISSION">
+                Prime de fin de contrat N°{{ contrat.NUMERO }} - {{ contrat.LIBELLE_STRUCTURE }}
+                <span class="float-end">Du <u-date :value="contrat.DATE_DEBUT_CONTRAT"/> au <u-date
+                    :value="contrat.DATE_FIN_CONTRAT"/></span>
+            </h5>
             <h6 v-if="contrat.LIBELLE_MISSION">
                 {{ contrat.LIBELLE_MISSION }} ({{ contrat.TYPE_MISSION }})
             </h6>
-            <h5 v-if="!contrat.LIBELLE_MISSION">
+            <h6 v-else>
                 {{ contrat.TYPE_MISSION }}
-            </h5>
+            </h6>
+
         </div>
         <form :action="declarationUrl" enctype="multipart/form-data" method="post">
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <input :checked="contrat.FICHIER_ID" name="prime" type="checkbox" @change="enableForm"/>
+                        <input :checked="contrat.FICHIER_ID" :disabled="contrat.VALIDATION_ID" name="prime" type="checkbox"
+                               @change="enableForm"/>
                         En cochant cette case, je déclare sur l'honneur ne pas avoir d'autre contrat à suivre dans la fonction publique, et me rend éligible à
                         une
                         prime de fin de contrat.
@@ -26,19 +34,41 @@
                             <div>
                                 <label class=" form-label">Suivi de la déclaration : </label>
                             </div>
-                            <div>
-                                <u-icon :name="contrat.FICHIER_ID ? 'thumbs-up' : 'thumbs-down'"
-                                        :variant="contrat.FICHIER_ID ? 'success' : 'info'"/>
+                            <!--Etat du dépôt de la déclaration-->
+                            <div v-if="contrat.FICHIER_ID">
+                                <u-icon name="thumbs-up"
+                                        variant="success"/>
                                 Déclaration déposée le 26/05/1982 à 12:00 par Antony Le Courtes
                             </div>
-                            <div>
-                                <u-icon :name="contrat.VALIDATION_ID ? 'thumbs-up' : 'thumbs-down'"
-                                        :variant="contrat.VALIDATION_ID ? 'success' : 'info'"/>
-                                Déclaration validée le 26/05/1982 à 12:00 par Jean Dupont
+                            <div v-else>
+                                <u-icon name="thumbs-down"
+                                        variant="info"/>
+                                Aucune déclaration déposée
+
                             </div>
-                            <div v-if="!contrat.VALIDATION_ID">
-                                <u-icon name="euro-sign" variant="success"/>
-                                Intervenant éligible à une prime de fin de contrat
+                            <!--Etat de la validation de la déclaration-->
+                            <div v-if="contrat.VALIDATION_ID">
+                                <u-icon name="thumbs-up"
+                                        variant="success"/>
+                                Déclaration validée le 26/05/1982 à 12:00 par Antony Le Courtes
+                            </div>
+                            <div v-else>
+                                <u-icon name="thumbs-down"
+                                        variant="info"/>
+                                Aucune déclaration validée
+
+                            </div>
+                            <!--Eligibilité à la prime de fin de contrat-->
+                            <div v-if="contrat.VALIDATION_ID">
+                                <u-icon name="euro-sign"
+                                        variant="success"/>
+                                Intervenant éligible à la prime de fin de contrat
+                            </div>
+                            <div v-else>
+                                <u-icon name="euro-sign"
+                                        variant="info"/>
+                                Intervenant non éligible à la prime de fin de contrat
+
                             </div>
 
                         </div>
@@ -55,8 +85,11 @@
                                     Vous trouverez un exemple de déclaration en <a
                                         href=""> cliquant-ici</a></p>
                                 <input ref="file" :disabled="disabledForm" name="files[]" type="file"/>
-                                <input :disabled="disabledForm" type="submit" value="Envoyer"/>
 
+                            </div>
+                            <div class="card-footer d-grid gap-2">
+
+                                <input :disabled="disabledForm" class="btn btn-primary " type="submit" value="Envoyer">
                             </div>
                         </div>
                     </div>
@@ -68,17 +101,31 @@
                             </div>
                             <div class="card-body">
                                 <p class="card-text">Vous pouvez télécharger votre déclaration sur l'honneur ci-dessous : </p>
-                                {{ contrat.FICHIER_NOM }}
+                                <a :href="telechargerUrl">{{ contrat.FICHIER_NOM }}</a>
 
 
                             </div>
-                            <div class="card-footer">
+                            <div class="card-footer" style="text-align:right;">
                                 <a v-if="contrat.FICHIER_ID && !contrat.VALIDATION_ID"
                                    :href="supprimerUrl"
                                    class="btn btn-danger"
                                    title="Supprimer"
                                    @click.prevent="supprimer">
                                     Supprimer
+                                </a>&nbsp;
+                                <a v-if="contrat.FICHIER_ID && !contrat.VALIDATION_ID"
+                                   :href="validerUrl"
+                                   class="btn btn-success"
+                                   title="Valider"
+                                   @click.prevent="valider">
+                                    Valider
+                                </a>&nbsp;
+                                <a v-if="contrat.FICHIER_ID && contrat.VALIDATION_ID"
+                                   :href="devaliderUrl"
+                                   class="btn btn-danger d-grid gap-2"
+                                   title="Dévalider"
+                                   @click.prevent="devalider">
+                                    Dévalider
                                 </a>&nbsp;
                             </div>
                         </div>
@@ -112,6 +159,18 @@ export default {
                 intervenant: this.intervenant,
                 contrat: this.contrat.CONTRAT_ID,
             }),
+            validerUrl: unicaenVue.url("intervenant/:intervenant/valider-declaration-prime/:contrat", {
+                intervenant: this.intervenant,
+                contrat: this.contrat.CONTRAT_ID,
+            }),
+            devaliderUrl: unicaenVue.url("intervenant/:intervenant/devalider-declaration-prime/:contrat", {
+                intervenant: this.intervenant,
+                contrat: this.contrat.CONTRAT_ID,
+            }),
+            telechargerUrl: unicaenVue.url("intervenant/:intervenant/telecharger-declaration-prime/:contrat", {
+                intervenant: this.intervenant,
+                contrat: this.contrat.CONTRAT_ID,
+            }),
             disabledForm: true,
 
         };
@@ -119,6 +178,18 @@ export default {
     methods: {
 
         supprimer(event)
+        {
+            popConfirm(event.target, (response) => {
+                this.$emit('reload');
+            });
+        },
+        valider(event)
+        {
+            popConfirm(event.target, (response) => {
+                this.$emit('reload');
+            });
+        },
+        devalider(event)
         {
             popConfirm(event.target, (response) => {
                 this.$emit('reload');

@@ -3,9 +3,14 @@
 namespace Mission\Service;
 
 use Application\Acl\Role;
+use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
+use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Application\Service\Traits\TypeValidationServiceAwareTrait;
+use Application\Service\Traits\ValidationServiceAwareTrait;
+use Contrat\Entity\Db\Contrat;
 use Mission\Assertion\SaisieAssertion;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
@@ -27,6 +32,9 @@ class MissionService extends AbstractEntityService
 {
     use TypeVolumeHoraireServiceAwareTrait;
     use SourceServiceAwareTrait;
+    use ValidationServiceAwareTrait;
+    use TypeValidationServiceAwareTrait;
+    use FichierServiceAwareTrait;
 
     /**
      * Retourne la classe des entités
@@ -241,7 +249,7 @@ class MissionService extends AbstractEntityService
           tm.libelle                 type_mission,
           c.intervenant_id           intervenant_id,
           s.libelle_court            libelle_structure,
-          c.declaration_id	 fichier_id,
+          c.declaration_id	         fichier_id,
           f.nom						 fichier_nom,
           f.validation_id            validation_id,
           ROWNUM                     numero
@@ -277,6 +285,34 @@ class MissionService extends AbstractEntityService
 
 
         return new AxiosModel($data, $properties, $triggers);
+    }
+
+
+
+    public function validerDeclarationPrime (Contrat $contrat): Validation
+    {
+        $validation = $this->getServiceValidation()->newEntity($this->getServiceTypeValidation()->getDeclaration())
+            ->setIntervenant($contrat->getIntervenant())
+            ->setStructure($contrat->getStructure());
+
+        $fichier = $contrat->getDeclaration()->setValidation($validation);
+
+        $this->getServiceValidation()->save($validation);
+        $this->getServiceFichier()->save($fichier);
+
+        return $validation;
+    }
+
+
+
+    public function devaliderDeclarationPrime (Contrat $contrat): bool
+    {
+        $validation = $contrat->getDeclaration()->getValidation();
+        $fichier    = $contrat->getDeclaration()->setValidation(null);
+        $this->getServiceFichier()->save($fichier);
+        $this->getEntityManager()->remove($validation);
+        
+        return true;
     }
 
 }

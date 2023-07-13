@@ -3,8 +3,10 @@
 namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Contrat\Assertion\ContratAssertion;
@@ -25,6 +27,7 @@ class PrimeController extends AbstractController
     use MissionServiceAwareTrait;
     use SourceServiceAwareTrait;
     use ContratServiceAwareTrait;
+    use FichierServiceAwareTrait;
 
     public function indexAction ()
     {
@@ -63,7 +66,6 @@ class PrimeController extends AbstractController
 
     public function supprimerDeclarationPrimeAction ()
     {
-        $params  = $this->getEvent()->getParams();
         $contrat = $this->getEvent()->getParam('contrat');
         //On supprimer la déclaration sur l'honneur
         $fichier = $contrat->getDeclaration();
@@ -77,6 +79,50 @@ class PrimeController extends AbstractController
         $this->flashMessenger()->addSuccessMessage("Déclaration sur l'honneur supprimée");
 
         return true;
+    }
+
+
+
+    public function validerDeclarationPrimeAction ()
+    {
+
+        $contrat = $this->getEvent()->getParam('contrat');
+
+        //validation de la déclaration de prime
+        $this->getServiceMission()->validerDeclarationPrime($contrat);
+        $this->flashMessenger()->addSuccessMessage("Déclaration sur l'honneur validée");
+
+        return true;
+    }
+
+
+
+    public function devaliderDeclarationPrimeAction ()
+    {
+
+        $contrat = $this->getEvent()->getParam('contrat');
+
+        //validation de la déclaration de prime
+        $this->getServiceMission()->devaliderDeclarationPrime($contrat);
+        $this->flashMessenger()->addSuccessMessage("Déclaration sur l'honneur devalidée");
+
+        return true;
+    }
+
+
+
+    public function telechargerDeclarationPrimeAction ()
+    {
+        /** @var Fichier $fichier */
+
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /** @var Contrat $contrat */
+        $contrat = $this->getEvent()->getParam('contrat');
+
+        $fichier = $contrat->getDeclaration();
+
+        $this->uploader()->download($fichier);
     }
 
 

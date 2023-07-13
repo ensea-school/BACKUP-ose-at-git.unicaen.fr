@@ -10,8 +10,7 @@ $this->headTitle()->append("Gestion des types de missions");
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 $canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_TYPE));
 $canEditPlafond = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CONFIG_MISSION));
-//TODO décommenter pour mise en place centre couts par mission
-//$canEditCC = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_CENTRE_COUT_TYPE));
+$canEditCC = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_CENTRE_COUT_TYPE));
 $canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_SUPPRESSION_TYPE));
 ?>
 <h1 class="page-header">Gestion des types de missions</h1>
@@ -25,8 +24,7 @@ $canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_S
         <th>Besoin de formation</th>
         <th>Type de rémunération</th>
         <th>Type de rémunération majoré</th>
-        <?php //TODO décommenter pour mise en place centre couts par mission ?>
-        <?php if ($canSupprimer || $canEdit || /*$canEditCC ||*/ $canEditPlafond): ?>
+        <?php if ($canSupprimer || $canEdit || $canEditCC || $canEditPlafond): ?>
             <th>Action</th>
         <?php endif; ?>
     </tr>
@@ -45,11 +43,9 @@ $canSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_S
             <td><?php if ($missionType->getTauxRemuMajore()):
                     echo $missionType->getTauxRemuMajore()->getLibelle();
                 endif; ?></td>
-            <?php //TODO décommenter pour mise en place centre couts par mission ?>
-            <?php if ($canSupprimer || $canEdit ||/* $canEditCC ||*/ $canEditPlafond): ?>
+            <?php if ($canSupprimer || $canEdit || $canEditCC || $canEditPlafond): ?>
                 <td style="text-align: center">
-                    <?php //TODO décommenter pour mise en place centre couts par mission ?>
-                    <?php if ($canEdit ||/*$canEditCC ||*/ $canEditPlafond):
+                    <?php if ($canEdit || $canEditCC || $canEditPlafond):
                         if($canEdit): ?>
                             <a class="ajax-modal " data-event="type-edition"
                                href="<?= $this->url("missions-type/saisir", ['typeMission' => $missionType->getId()]) ?>"

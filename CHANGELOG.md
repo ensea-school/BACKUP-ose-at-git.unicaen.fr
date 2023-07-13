@@ -8,10 +8,10 @@
 
 * Correction de la formule de l'UPEC
 * Correction de la formule de Paris 1
-* Les structures peuvent de nouveau être ajoutées depuis l'IHM
+* Les structures peuvent de nouveau être ajoutées depuis l'IHM (#51692)
 * Plusieurs problèmes ont été corrigés au niveau des plafonds
 * Réparation du connecteur Actul => OSE (#51613)
-
+*
 
 # OSE 21 (07/07/2023)
 

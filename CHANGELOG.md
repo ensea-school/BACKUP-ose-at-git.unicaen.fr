@@ -1,6 +1,11 @@
 # Version stable
 
 [OSE 21.1](#ose-211-13072023)
+# OSE 22  (à venir)
+
+## Corrections de bugs
+
+* Correction de V_CONTRATS_SERVICES (#51795)
 
 # OSE 21.1 (13/07/2023)
 

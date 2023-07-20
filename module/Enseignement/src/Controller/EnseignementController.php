@@ -65,27 +65,7 @@ class EnseignementController extends AbstractController
     use EtatSortieServiceAwareTrait;
     use ElementPedagogiqueServiceAwareTrait;
 
-    /**
-     * Initialisation des filtres Doctrine pour les historique.
-     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
-     * éventuelles
-     * (services sur des enseignements fermés, etc.)
-     */
-    protected function initFilters()
-    {
-        $this->em()->getFilters()->enable('historique')->init([
-            \Enseignement\Entity\Db\Service::class,
-            \Enseignement\Entity\Db\VolumeHoraire::class,
-            \Application\Entity\Db\Validation::class,
-        ]);
-        $this->em()->getFilters()->enable('annee')->init([
-            ElementPedagogique::class,
-        ]);
-    }
-
-
-
-    public function prevuAction()
+    public function prevuAction ()
     {
         $prevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
 
@@ -94,16 +74,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function realiseAction()
-    {
-        $realise = $this->getServiceTypeVolumeHoraire()->getRealise();
-
-        return $this->indexAction($realise);
-    }
-
-
-
-    public function indexAction(?TypeVolumeHoraire $typeVolumeHoraire = null)
+    public function indexAction (?TypeVolumeHoraire $typeVolumeHoraire = null)
     {
         $this->initFilters();
         $this->em()->getFilters()->enable('historique')->init([
@@ -136,7 +107,36 @@ class EnseignementController extends AbstractController
 
 
 
-    public function saisieAction()
+    /**
+     * Initialisation des filtres Doctrine pour les historique.
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
+     * éventuelles
+     * (services sur des enseignements fermés, etc.)
+     */
+    protected function initFilters ()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            \Enseignement\Entity\Db\Service::class,
+            \Enseignement\Entity\Db\VolumeHoraire::class,
+            \Application\Entity\Db\Validation::class,
+        ]);
+        $this->em()->getFilters()->enable('annee')->init([
+            ElementPedagogique::class,
+        ]);
+    }
+
+
+
+    public function realiseAction ()
+    {
+        $realise = $this->getServiceTypeVolumeHoraire()->getRealise();
+
+        return $this->indexAction($realise);
+    }
+
+
+
+    public function saisieAction ()
     {
         $this->initFilters();
 
@@ -218,7 +218,23 @@ class EnseignementController extends AbstractController
 
 
 
-    public function rafraichirLigneAction()
+    private function updateTableauxBord (Intervenant $intervenant, $validation = false)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'formule',
+            'validation_enseignement',
+            'contrat',
+            'service',
+        ], $intervenant);
+
+        if (!$validation) {
+            $this->getServiceWorkflow()->calculerTableauxBord(['piece_jointe_demande', 'piece_jointe_fournie'], $intervenant);
+        }
+    }
+
+
+
+    public function rafraichirLigneAction ()
     {
         $this->initFilters();
 
@@ -227,7 +243,7 @@ class EnseignementController extends AbstractController
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content', 0);
         $service     = $this->getEvent()->getParam('service');
 
-        if (!$service){
+        if (!$service) {
             // dans le cas où l'ID de service a été existant dans une transaction
             // annulée pour cause de plafond bloquant dépassé
             return new JsonModel();
@@ -244,7 +260,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function saisieFormRefreshVhAction()
+    public function saisieFormRefreshVhAction ()
     {
         $this->initFilters();
 
@@ -258,8 +274,10 @@ class EnseignementController extends AbstractController
         $service = $this->getServiceService();
         $form    = $this->getFormServiceEnseignementSaisie();
         $form->setTypeVolumeHoraire($typeVolumeHoraire);
-        $element       = $this->context()->elementPedagogiqueFromPost('element');
-        $element       = $this->getServiceElementPedagogique()->get($element);
+        $element = $this->context()->elementPedagogiqueFromPost('element');
+        if (!$element instanceof \OffreFormation\Entity\Db\ElementPedagogique) {
+            $element = $this->getServiceElementPedagogique()->get($element);
+        }
         $etablissement = $this->context()->etablissementFromPost();
 
         if ($serviceId) {
@@ -291,7 +309,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function suppressionAction()
+    public function suppressionAction ()
     {
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
         if (empty($typeVolumeHoraire)) {
@@ -330,7 +348,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function initialisationAction()
+    public function initialisationAction ()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         $this->getProcessusPlafond()->beginTransaction();
@@ -348,7 +366,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function constatationAction()
+    public function constatationAction ()
     {
         $this->initFilters();
         $realise  = $this->getServiceTypeVolumeHoraire()->getRealise();
@@ -400,7 +418,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function importAgendaPrevisionnelAction()
+    public function importAgendaPrevisionnelAction ()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         $this->getServiceService()->setPrevusFromAgenda($intervenant);
@@ -411,7 +429,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function validationPrevuAction()
+    public function validationPrevuAction ()
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
 
@@ -420,16 +438,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function validationRealiseAction()
-    {
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
-
-        return $this->validationAction($typeVolumeHoraire);
-    }
-
-
-
-    private function validationAction(TypeVolumeHoraire $typeVolumeHoraire)
+    private function validationAction (TypeVolumeHoraire $typeVolumeHoraire)
     {
         $this->initFilters();
 
@@ -496,7 +505,16 @@ class EnseignementController extends AbstractController
 
 
 
-    public function validerAction()
+    public function validationRealiseAction ()
+    {
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
+
+        return $this->validationAction($typeVolumeHoraire);
+    }
+
+
+
+    public function validerAction ()
     {
         $this->initFilters();
 
@@ -538,7 +556,7 @@ class EnseignementController extends AbstractController
 
 
 
-    public function devaliderAction()
+    public function devaliderAction ()
     {
         $this->initFilters();
 
@@ -563,21 +581,5 @@ class EnseignementController extends AbstractController
 
 
         return new MessengerViewModel();
-    }
-
-
-
-    private function updateTableauxBord(Intervenant $intervenant, $validation = false)
-    {
-        $this->getServiceWorkflow()->calculerTableauxBord([
-            'formule',
-            'validation_enseignement',
-            'contrat',
-            'service',
-        ], $intervenant);
-
-        if (!$validation) {
-            $this->getServiceWorkflow()->calculerTableauxBord(['piece_jointe_demande', 'piece_jointe_fournie'], $intervenant);
-        }
     }
 }

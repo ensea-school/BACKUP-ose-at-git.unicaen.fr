@@ -4,6 +4,7 @@ namespace Dossier\Controller;
 
 
 use Application\Controller\AbstractController;
+use Application\Provider\Privilege\Privileges;
 use Dossier\Entity\Db\Employeur;
 use Dossier\Form\Traits\EmployeurSaisieFormAwareTrait;
 use Dossier\Service\Traits\EmployeurServiceAwareTrait;
@@ -21,18 +22,18 @@ class EmployeurController extends AbstractController
     use EmployeurServiceAwareTrait;
     use EmployeurSaisieFormAwareTrait;
 
-    public function indexAction()
+    public function indexAction ()
     {
         $critere    = $this->params()->fromPost('critere');
         $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere, 1000);
+        $canEdit    = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_EDITION));
 
-
-        return compact('employeurs');
+        return compact('employeurs', 'canEdit');
     }
 
 
 
-    public function saisieAction()
+    public function saisieAction ()
     {
         $employeur = $this->getEvent()->getParam('employeur');
 
@@ -66,7 +67,7 @@ class EmployeurController extends AbstractController
 
 
 
-    public function supprimerAction()
+    public function supprimerAction ()
     {
         $employeur = $this->getEvent()->getParam('employeur');
         $this->getServiceEmployeur()->delete($employeur, true);
@@ -76,7 +77,7 @@ class EmployeurController extends AbstractController
 
 
 
-    public function rechercheAction()
+    public function rechercheAction ()
     {
 
 
@@ -93,7 +94,7 @@ class EmployeurController extends AbstractController
 
 
 
-    public function rechercheJsonAction()
+    public function rechercheJsonAction ()
     {
         $critere = $this->params()->fromPost('critere');
 

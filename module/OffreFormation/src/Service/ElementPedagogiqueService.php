@@ -38,21 +38,9 @@ class ElementPedagogiqueService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass()
+    public function getEntityClass ()
     {
         return ElementPedagogique::class;
-    }
-
-
-
-    /**
-     * Retourne l'alias d'entité courante
-     *
-     * @return string
-     */
-    public function getAlias()
-    {
-        return 'ep';
     }
 
 
@@ -71,7 +59,7 @@ class ElementPedagogiqueService extends AbstractEntityService
      *
      * @return array
      */
-    public function getSearchResultByTerm(array $filters = [], $order = "gtf.ordre, e.niveau, ep.libelle")
+    public function getSearchResultByTerm (array $filters = [], $order = "gtf.ordre, e.niveau, ep.libelle")
     {
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -121,13 +109,14 @@ class ElementPedagogiqueService extends AbstractEntityService
         $whereContext = implode(PHP_EOL . 'AND ', array_filter($whereContext));
         $whereContext = $whereContext ? 'AND ' . $whereContext : null;
 
-        if (isset($filters['element']) && $filters['element'] instanceof ElementPedagogique) {
+        if (isset($filters['element']) && $filters['element'] instanceof \OffreFormation\Entity\Db\ElementPedagogique) {
             $orEp = " OR ep.id = " . ((int)$filters['element']->getId());
             $orCp = " OR cp.element_pedagogique_id = " . ((int)$filters['element']->getId());
         } else {
             $orEp = '';
             $orCp = '';
         }
+
 
         $sql = "
 select * from (
@@ -164,7 +153,6 @@ where rang = 1
 
         $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
 
-//        var_dump($sql, $params);die;
 
         return $result;
     }
@@ -178,7 +166,7 @@ where rang = 1
      *
      * @return ElementPedagogique
      */
-    public function getByCode($code, Annee $annee = null)
+    public function getByCode ($code, Annee $annee = null)
     {
         if (null == $code) return null;
 
@@ -197,7 +185,7 @@ where rang = 1
      *
      * @return int $n nombre d'élément pédagogique avec un centre de coût.
      */
-    public function countEpWithCc(Etape $etape)
+    public function countEpWithCc (Etape $etape)
     {
         $n                    = 0;
         $elementsPedagogiques = $etape->getElementPedagogique();
@@ -221,7 +209,7 @@ where rang = 1
      *
      * @return int $n nombre d'élément pédagogique avec un modulateur
      */
-    public function countEpWithModulateur(Etape $etape)
+    public function countEpWithModulateur (Etape $etape)
     {
         $n                    = 0;
         $elementsPedagogiques = $etape->getElementPedagogique();
@@ -247,50 +235,13 @@ where rang = 1
      *
      * @return QueryBuilder
      */
-    public function finderByContext(QueryBuilder $qb = null, $alias = null)
+    public function finderByContext (QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $this->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
 
         return $qb;
-    }
-
-
-
-    /**
-     *
-     * @param array   $result
-     * @param integer $length
-     *
-     * @return array
-     */
-    protected function truncateResult($result, $length = 15)
-    {
-        if ($length && ($remain = count($result) - $length) > 0) {
-            $result   = array_slice($result, 0, $length);
-            $result[] = ['id' => null, 'label' => "<em><small>$remain résultats restant, affinez vos critères, svp.</small></em>"];
-        }
-
-        return $result;
-    }
-
-
-
-    /**
-     * Retourne une nouvelle entité, initialisée avec les bons paramètres
-     *
-     * @return \OffreFormation\Entity\Db\ElementPedagogique
-     */
-    public function newEntity()
-    {
-        $entity = parent::newEntity();
-        // toutes les entités créées ont OSE pour source!!
-        $entity->setSource($this->getServiceSource()->getOse());
-        // on crée pour l'année courante
-        $entity->setAnnee($this->getServiceContext()->getAnnee());
-
-        return $entity;
     }
 
 
@@ -303,7 +254,7 @@ where rang = 1
      * @return ElementPedagogique
      * @throws \RuntimeException
      */
-    public function save($entity)
+    public function save ($entity)
     {
         if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ELEMENT_EDITION)) {
             throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cet enseignement.');
@@ -328,14 +279,32 @@ where rang = 1
 
 
     /**
+     * Retourne une nouvelle entité, initialisée avec les bons paramètres
+     *
+     * @return \OffreFormation\Entity\Db\ElementPedagogique
+     */
+    public function newEntity ()
+    {
+        $entity = parent::newEntity();
+        // toutes les entités créées ont OSE pour source!!
+        $entity->setSource($this->getServiceSource()->getOse());
+        // on crée pour l'année courante
+        $entity->setAnnee($this->getServiceContext()->getAnnee());
+
+        return $entity;
+    }
+
+
+
+    /**
      * Supprime (historise par défaut) le service spécifié.
      *
      * @param \OffreFormation\Entity\Db\ElementPedagogique $entity Entité à détruire
-     * @param bool                                             $softDelete
+     * @param bool                                         $softDelete
      *
      * @return self
      */
-    public function delete($entity, $softDelete = true)
+    public function delete ($entity, $softDelete = true)
     {
         if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ELEMENT_EDITION)) {
             throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à supprimer cet enseignement.');
@@ -361,17 +330,19 @@ where rang = 1
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function updateTauxRemu(ElementPedagogique $elementPedagogique, ?TauxRemu $tauxRemu){
+    public function updateTauxRemu (ElementPedagogique $elementPedagogique, ?TauxRemu $tauxRemu)
+    {
 
         /** @var ElementPedagogique $elp */
         $elp = $this->get($elementPedagogique->getId());
         $elp->setTauxRemuEp($tauxRemu);
         $this->getEntityManager()->persist($elp);
         $this->getEntityManager()->flush($elp);
-
     }
 
-    public function forcerTauxMixite(ElementPedagogique $elementPedagogique, $tauxFi, $tauxFc, $tauxFa)
+
+
+    public function forcerTauxMixite (ElementPedagogique $elementPedagogique, $tauxFi, $tauxFc, $tauxFa)
     {
         /** @var ElementTauxRegimes $etr */
         $etr = $this->getEntityManager()->getRepository(ElementTauxRegimes::class)->findOneBy([
@@ -444,7 +415,7 @@ where rang = 1
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function synchronisation($element)
+    public function synchronisation ($element)
     {
         if (is_string($element)) {
             $code  = $element;
@@ -487,11 +458,42 @@ where rang = 1
      *
      * @return QueryBuilder|null
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy (QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy($this->getAlias() . '.libelle');
 
         return $qb;
+    }
+
+
+
+    /**
+     * Retourne l'alias d'entité courante
+     *
+     * @return string
+     */
+    public function getAlias ()
+    {
+        return 'ep';
+    }
+
+
+
+    /**
+     *
+     * @param array   $result
+     * @param integer $length
+     *
+     * @return array
+     */
+    protected function truncateResult ($result, $length = 15)
+    {
+        if ($length && ($remain = count($result) - $length) > 0) {
+            $result   = array_slice($result, 0, $length);
+            $result[] = ['id' => null, 'label' => "<em><small>$remain résultats restant, affinez vos critères, svp.</small></em>"];
+        }
+
+        return $result;
     }
 }

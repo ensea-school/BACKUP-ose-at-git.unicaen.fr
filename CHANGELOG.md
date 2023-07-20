@@ -7,6 +7,13 @@
 
 * Correction de V_CONTRATS_SERVICES (#51795)
 
+# OSE 21.2 (à venir)
+
+## Corrections de bugs
+
+* Prise en compte du filtre formation lors de la recherche d'un enseignement en saisie de service (#51823)
+
+
 # OSE 21.1 (13/07/2023)
 
 ## Corrections de bugs

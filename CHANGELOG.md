@@ -1,7 +1,21 @@
 # Version stable
 
-[OSE 21.0](#ose-21-07072023)
+[OSE 21.1](#ose-211-13072023)
+# OSE 22  (à venir)
 
+## Corrections de bugs
+
+* Correction de V_CONTRATS_SERVICES (#51795)
+
+# OSE 21.1 (13/07/2023)
+
+## Corrections de bugs
+
+* Correction de la formule de l'UPEC
+* Correction de la formule de Paris 1
+* Les structures peuvent de nouveau être ajoutées depuis l'IHM (#51692)
+* Plusieurs problèmes ont été corrigés au niveau des plafonds
+* Réparation du connecteur Actul => OSE (#51613)
 
 # OSE 21 (07/07/2023)
 

@@ -27,18 +27,18 @@ return [
                     'action'     => 'saisir',
                     'privileges' => Privileges::MISSION_EDITION_TYPE,
                 ],
-//                'centre-couts'    => [
-//                    'route'      => '/centre-couts/:typeMission',
-//                    'controller' => Controller\MissionTypeController::class,
-//                    'action'     => 'centreCouts',
-//                    'privileges' => Privileges::MISSION_EDITION_CENTRE_COUT_TYPE,
-//                ],
-//                'centre-couts-supprimer'    => [
-//                    'route'      => '/centre-couts-supprimer/:typeMission/:centreCoutTypeMission',
-//                    'controller' => Controller\MissionTypeController::class,
-//                    'action'     => 'centreCoutsSupprimer',
-//                    'privileges' => Privileges::MISSION_EDITION_CENTRE_COUT_TYPE,
-//                ],
+                'centre-couts'    => [
+                    'route'      => '/centre-couts/:typeMission',
+                    'controller' => Controller\MissionTypeController::class,
+                    'action'     => 'centreCouts',
+                    'privileges' => Privileges::MISSION_EDITION_CENTRE_COUT_TYPE,
+                ],
+                'centre-couts-supprimer'    => [
+                    'route'      => '/centre-couts-supprimer/:typeMission/:centreCoutTypeMission',
+                    'controller' => Controller\MissionTypeController::class,
+                    'action'     => 'centreCoutsSupprimer',
+                    'privileges' => Privileges::MISSION_EDITION_CENTRE_COUT_TYPE,
+                ],
                 'supprimer' => [
                     'route'      => '/supprimer/:typeMission',
                     'controller' => Controller\MissionTypeController::class,

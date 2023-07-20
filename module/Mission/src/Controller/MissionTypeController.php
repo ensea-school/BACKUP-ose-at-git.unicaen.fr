@@ -96,9 +96,7 @@ class MissionTypeController extends AbstractController
          * @var TypeMission $entity
          */
         $entity = $this->getEvent()->getParam('typeMission');
-        //TODO décommenter pour mise en place centre couts par mission
-        $canEditCC = false;
-        //        $canEditCC = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_CENTRE_COUT_TYPE));
+                $canEditCC = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_CENTRE_COUT_TYPE));
 
         if ($this->getRequest()->isPost()) {
             $centreCoutsId = $this->getRequest()->getPost()->get('centreCouts');

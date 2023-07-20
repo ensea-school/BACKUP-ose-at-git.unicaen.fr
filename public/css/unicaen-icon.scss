@@ -17,6 +17,11 @@
     content: "\f06e";
 }
 
+.icon.icon-masquer:before,
+.icon.icon-hide:before {
+    content: "\f070";
+}
+
 .icon.icon-ajouter:before {
     content: "\f0fe";
 }
@@ -42,6 +47,12 @@
 .icon.icon-descendre:before {
     content: "\f063";
 }
+.icon.icon-precedent:before {
+    content: "\f053";
+}
+.icon.icon-suivant:before {
+    content: "\f054";
+}
 
 .icon.icon-user:before,
 .icon.icon-utilisateur:before {
@@ -56,6 +67,11 @@
 .icon.icon-user-delete:before,
 .icon.icon-utilisateur-supprimer:before {
     content: "\f503";
+}
+
+.icon.icon-user-checked:before,
+.icon.icon-utilisateur-ok:before {
+    content: "\f4fc";
 }
 
 .icon.icon-listing:before,
@@ -168,6 +184,16 @@
     content: "\f204";
 }
 
+.icon.icon-text:before,
+.icon.icon-texte:before {
+    content: "\f039";
+}
+
+.icon.icon-mail:before,
+.icon.icon-courrier:before{
+    content: "\f0e0";
+}
+
 .icon.icon-pdf:before {
     content: "\f1c1";
 }
@@ -240,8 +266,68 @@
     content: "\f1c6";
 }
 
-.icon.icon-attente,
-.icon.icon-wait,
-.icon.icon-hourglass {
+.icon.icon-play::before {
+    content: "\f04b";
+}
+.icon.icon-attente:before,
+.icon.icon-wait:before,
+.icon.icon-hourglass:before {
     content: "\f252";
+}
+
+.icon.icon-asterisque:before,
+.icon.icon-asterisk:before,
+.icon.icon-obligatoire:before,
+.icon.icon-mandatory:before
+{
+    content: "\f069";
+}
+
+.icon.icon-sauvegarder:before,
+.icon.icon-save:before
+{
+    content: "\f0c7";
+}
+
+.icon.icon-valider:before,
+.icon.icon-validate:before
+{
+    content: "\f14a";
+}
+
+.icon.icon-lier:before,
+.icon.icon-link:before {
+    content: "\f0c1";
+}
+
+
+.icon.icon-delier:before,
+.icon.icon-unlink:before {
+    content: "\f127";
+}
+
+.icon.icon-trier:before,
+.icon.icon-sort:before {
+    content:"\f160";
+}
+
+.icon.icon-trier-alpha:before,
+.icon.icon-sort-alpha:before {
+    content:"\f15d";
+}
+
+.icon.icon-reduire:before,
+.icon.icon-shrink:before {
+    content: "\f78c";
+}
+
+.icon.icon-agrandir:before,
+.icon.icon-enlarge:before {
+    content: "\f31e";
+}
+
+.icon.icon-effacer:before,
+.icon.icon-gommer:before,
+.icon.icon-erase:before {
+    content:"\f12d";
 }

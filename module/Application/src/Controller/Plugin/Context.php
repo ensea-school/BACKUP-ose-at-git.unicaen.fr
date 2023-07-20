@@ -35,7 +35,7 @@ class Context extends Params
      *
      * @throws LogicException
      */
-    public function __call($name, $arguments)
+    public function __call ($name, $arguments)
     {
         /* Récupération des paramètres */
         $argName     = isset($arguments[0]) ? $arguments[0] : null;
@@ -82,9 +82,16 @@ class Context extends Params
         if ('intervenant' === $target && $value) {
             $value = $this->getServiceIntervenant()->getByRouteParam($value);
         }
-
+        //Adaptation pour que contexte cherche les entités dans d'autres modules que Application
+        $modules = ['Application', 'OffreFormation'];
+        foreach ($modules as $module) {
+            $className = $module . '\\Entity\\Db\\' . ucfirst($target);
+            if (class_exists($className)) {
+                break;
+            }
+        }
         /* Conversion éventuelle en entité */
-        $className = 'Application\\Entity\\Db\\' . ucfirst($target);
+        //$className = 'Application\\Entity\\Db\\' . ucfirst($target);
         if (class_exists($className)) {
             if (!is_object($value) && !is_array($value)) {
                 $id = (int)$value;

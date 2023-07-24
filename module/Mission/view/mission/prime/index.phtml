@@ -7,6 +7,9 @@
  */
 
 use Application\Entity\Db\WfEtape;
+use Application\Provider\Privilege\Privileges;
+
+$canValider = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_PRIME_VALIDER));
 
 $title     = 'Prime de fin de mission';
 $nextEtape = WfEtape::CODE_MISSION_VALIDATION_REALISE;
@@ -16,6 +19,7 @@ $this->intervenant($intervenant)->renderTitle($title);
 
 echo $this->vue('mission/liste-prime', [
     'intervenant' => $intervenant->getId(),
+    'canValider'  => $canValider,
 ]);
 
 echo '<br />';

@@ -173,8 +173,6 @@ return [
             'candidature-visualisation'  => 'Visualiser les candidatures d\'une offre',
             'prime-visualisation'        => 'Visualiser les primes de fin de mission',
             'prime-valider'              => 'Valider les primes de fin de contrat',
-            //            'edition-centre-cout-type'   => 'Édition des centres de cout d\'un type de mission',
-
         ],
     ],
 

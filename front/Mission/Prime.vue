@@ -113,14 +113,14 @@
                                    @click.prevent="supprimer">
                                     Supprimer
                                 </a>&nbsp;
-                                <a v-if="contrat.FICHIER_ID && !contrat.VALIDATION_ID"
+                                <a v-if="contrat.FICHIER_ID && !contrat.VALIDATION_ID && this.canValider"
                                    :href="validerUrl"
                                    class="btn btn-success"
                                    title="Valider"
                                    @click.prevent="valider">
                                     Valider
                                 </a>&nbsp;
-                                <a v-if="contrat.FICHIER_ID && contrat.VALIDATION_ID"
+                                <a v-if="contrat.FICHIER_ID && contrat.VALIDATION_ID && this.canValider"
                                    :href="devaliderUrl"
                                    class="btn btn-danger d-grid gap-2"
                                    title="Dévalider"
@@ -145,7 +145,8 @@ export default {
     name: "Prime.vue",
     props: {
         contrat: {required: true},
-        intervenant: {required: true}
+        intervenant: {required: true},
+        canValider: {type: Boolean, required: false},
 
     },
     data()

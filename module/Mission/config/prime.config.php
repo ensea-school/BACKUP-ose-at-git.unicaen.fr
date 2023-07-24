@@ -15,8 +15,7 @@ return [
                     'route'      => '/:intervenant/prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'index',
-                    //                    'privileges' => Privileges::MISSION_VISUALISATION_REALISE,
-                    //                    'assertion'  => Assertion\SuiviAssertion::class,
+                    'privileges' => Privileges::MISSION_PRIME_VISUALISATION,
                 ],
                 'get-contrat-prime'             => [
                     'route'      => '/:intervenant/get-contrat-prime',
@@ -40,12 +39,16 @@ return [
                     'route'      => '/:intervenant/valider-declaration-prime/:contrat',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'valider-declaration-prime',
+                    'privileges' => Privileges::MISSION_PRIME_VALIDER,
+
 
                 ],
                 'devalider-declaration-prime'   => [
                     'route'      => '/:intervenant/devalider-declaration-prime/:contrat',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'devalider-declaration-prime',
+                    'privileges' => Privileges::MISSION_PRIME_VALIDER,
+
 
                 ],
                 'telecharger-declaration-prime' => [
@@ -79,19 +82,6 @@ return [
         ],
     ],
 
-
-    /* 'rules' => [
-         [
-             'privileges' => [
-                 Privileges::MISSION_EDITION_REALISE,
-                 Privileges::MISSION_VALIDATION_REALISE,
-                 Privileges::MISSION_DEVALIDATION_REALISE,
-             ],
-             'resources'  => 'VolumeHoraireMission',
-             'assertion'  => Assertion\SuiviAssertion::class,
-         ],
-     ],*/
-
     'guards' => [
         [
             'controller' => PrimeController::class,
@@ -100,6 +90,14 @@ return [
                 Privileges::MISSION_PRIME_VISUALISATION,
             ],
         ],
+        [
+            'controller' => PrimeController::class,
+            'action'     => ['valider-declaration-prime', 'devalider-declaration-prime'],
+            'privileges' => [
+                Privileges::MISSION_PRIME_VALIDER,
+            ],
+        ],
+
     ],
 
 

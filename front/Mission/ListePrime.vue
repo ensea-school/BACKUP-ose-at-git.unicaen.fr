@@ -1,5 +1,5 @@
 <template>
-    <prime v-for="contrat in contratsPrime" :key="contrat.CONTRAT_ID" :contrat="contrat" :intervenant="this.intervenant"
+    <prime v-for="contrat in contratsPrime" :key="contrat.CONTRAT_ID" :canValider="this.canValider" :contrat="contrat" :intervenant="this.intervenant"
            @reload="reload"></prime>
 </template>
 
@@ -13,6 +13,7 @@ export default {
     },
     props: {
         intervenant: {type: Number, required: true},
+        canValider: {type: Boolean, required: false},
     },
     data()
     {

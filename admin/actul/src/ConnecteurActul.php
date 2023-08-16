@@ -142,7 +142,7 @@ class ConnecteurActul
     public function majActTable(string $tableName): int
     {
         $sql  = $this->getActulQuery($tableName);
-        $data = $this->actul->select($sql, ['fetch' => Bdd::FETCH_ALL]);
+        $data = $this->actul->select($sql, [], ['fetch' => Bdd::FETCH_ALL]);
 
         $key = $this->getTableKey($tableName);
 

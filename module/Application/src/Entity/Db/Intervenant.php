@@ -15,6 +15,7 @@ use Contrat\Entity\Db\TypeContrat;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
+use Enseignement\Entity\Db\Service;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Hydrator\ClassMethodsHydrator;
@@ -23,6 +24,7 @@ use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\Traits\DisciplineAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiementIntervenantStructure;
 use Plafond\Interfaces\PlafondDataInterface;
+use Referentiel\Entity\Db\ServiceReferentiel;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\HistoIntervenantService;
 use Service\Entity\Db\ModificationServiceDu;
@@ -1560,7 +1562,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get service
      *
-     * @return Collection
+     * @return Collection|Service[]
      */
     public function getService()
     {
@@ -1572,7 +1574,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get service référentiel
      *
-     * @return Collection
+     * @return Collection|ServiceReferentiel[]
      */
     public function getServiceReferentiel()
     {
@@ -1606,7 +1608,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get missions
      *
-     * @return Collection|null
+     * @return Collection|null|Mission[]
      */
     public function getMissions(): ?Collection
     {

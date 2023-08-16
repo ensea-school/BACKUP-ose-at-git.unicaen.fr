@@ -1,9 +1,26 @@
 # Version stable
 
-[OSE 20.5](#ose-205-07062023)
+[OSE 21.1](#ose-211-13072023)
+
+# OSE 21.2 (à venir)
+
+## Corrections de bugs
+
+* Prise en compte du filtre formation lors de la recherche d'un enseignement en saisie de service (#51823)
+* Correction de V_CONTRATS_SERVICES (#51795)
 
 
-# OSE 21 (juin 2023)
+# OSE 21.1 (13/07/2023)
+
+## Corrections de bugs
+
+* Correction de la formule de l'UPEC
+* Correction de la formule de Paris 1
+* Les structures peuvent de nouveau être ajoutées depuis l'IHM (#51692)
+* Plusieurs problèmes ont été corrigés au niveau des plafonds
+* Réparation du connecteur Actul => OSE (#51613)
+
+# OSE 21 (07/07/2023)
 
 ## Nouveautés
 
@@ -17,7 +34,7 @@
 
 * Gestion renforcée des taux de paiement
   * Possibilité de gérer de nouveaux taux différents du taux HETD de 42,86€
-  * Prise en compte du nouveau taux HETD de 43,50€
+  * Prise en compte du nouveau taux HETD de 43,50€ pour 2023/2024
   * Nouvelle interface d'administration des taux de paiement
   * Les taux peuvent être indexés sur d'autres taux (le SMIC par exemple)
   * Les taux peuvent être appliqués globalement, par mission, par statut, par élément pédagogique, selon le contexte
@@ -34,9 +51,9 @@
   * Possibilité de mettre des dates de début et de fin d'utilisation pour les tags
 
 * Extraction paie
-  * Nouveaux paramètrages par statut permettant de spécifier par statut le code indémnité attendu, le mode de calcul et le type de carte
+  * Nouveaux paramétrages par statut permettant de spécifier par statut le code indémnité attendu, le mode de calcul et le type de carte
 
-  **IMPORTANT** : Si aucun de ces paramètres n'est spécifié au niveau des status, ce sont les valeurs par défaut habituelles qui seront fournies dans l'extraction winpaie et préliquidation SIHAM. N'hésitez pas à tester vos extractions de paie. 
+  **IMPORTANT** : Si aucun de ces paramètres n'est spécifié au niveau des statuts, ce sont les valeurs par défaut habituelles qui seront fournies dans l'extraction Winpaie et la préliquidation SIHAM. N'hésitez pas à tester vos extractions de paie. 
 
 
 ## Améliorations

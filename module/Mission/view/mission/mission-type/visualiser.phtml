@@ -33,8 +33,7 @@ $tabs = [
 
 $id             = $typeMission->getId();
 $canEditPlafond = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_CONFIG_MISSION));
-//TODO décommenter pour mise en place centre couts par mission
-//$canEditCC      = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_CENTRE_COUT_TYPE));
+$canEditCC      = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_CENTRE_COUT_TYPE));
 
 if ($id && $canEditPlafond) {
 
@@ -45,14 +44,13 @@ if ($id && $canEditPlafond) {
     ];
 }
 
-//TODO décommenter pour mise en place centre couts par mission
-//if ($id && $canEditCC) {
-//
-//    $tabs[] = [
-//        'id'    => 'centre-couts',
-//        'label' => '<i class="fas fa-eur"></i> Centre de coûts',
-//        'url'   => $this->url('missions-type/centre-couts', ['typeMission' => $id]),
-//    ];
-//}
+if ($id && $canEditCC) {
+
+    $tabs[] = [
+        'id'    => 'centre-couts',
+        'label' => '<i class="fas fa-eur"></i> Centre de coûts',
+        'url'   => $this->url('missions-type/centre-couts', ['typeMission' => $id]),
+    ];
+}
 
 echo $this->tabajax($tabs, $tab);

@@ -115,10 +115,14 @@ WITH services AS (
             LEFT JOIN validation_vol_horaire_miss vvhm ON vvhm.volume_horaire_mission_id = vhm.id
             JOIN validation v ON v.id = vvhm.validation_id AND v.histo_destruction IS NULL
             JOIN type_volume_horaire tvh ON tvh.id = vhm.type_volume_horaire_id
+            JOIN validation_mission vm ON vm.mission_id = m.id
+            JOIN validation v2 ON v2.id = vm.validation_id AND v2.histo_destruction IS NULL
         WHERE
             vhm.histo_destruction IS NULL
             AND tvh.code = 'PREVU'
             AND (v.id IS NOT NULL OR vhm.auto_validation = 1)
+            AND m.histo_destruction IS NULL
+            AND (v2.id IS NOT NULL OR vhm.auto_validation = 1)
         GROUP BY
             m.intervenant_id,
             c.id,

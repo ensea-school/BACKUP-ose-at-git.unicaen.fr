@@ -216,7 +216,8 @@ class PlafondService extends AbstractEntityService
         }
 
         if ($entity instanceof ServiceReferentiel) {
-            $this->controlePop($entity->getFonctionReferentiel(), $pqr);
+            /* Ca n'a pas de sens de limiter le nombre d'heures total par fonction uniquement */
+            //$this->controlePop($entity->getFonctionReferentiel(), $pqr);
             $this->controlePop($entity->getIntervenant(), $pqr);
             $this->controlePop($entity->getStructure(), $pqr);
         }
@@ -349,14 +350,37 @@ class PlafondService extends AbstractEntityService
                 $filters['pd.TYPE_INTERVENTION_ID'] = (int)$pqr->entity->getTypeIntervention()->getId();
                 break;
 
-            case FonctionReferentiel::class:
+            case ServiceReferentiel::class:
+                $intervenants = [];
+                $fonctions = [];
+                foreach( $entities as $entity){
+                    /* @var $entity ServiceReferentiel */
+                    if ($intervenant = $entity->getIntervenant()){
+                        $intervenants[$intervenant->getId()] = $intervenant;
+                    }
+                    if ($fonction = $entity->getFonctionReferentiel()){
+                        $fonctions[$fonction->getId()] = $fonction;
+                    }
+                }
+
+                $perimetre = PlafondPerimetre::REFERENTIEL;
+                $join = "JOIN FONCTION_REFERENTIEL entity ON entity.id = pd.FONCTION_REFERENTIEL_ID";
+                $libVal = 'entity.libelle_court';
+                $groupBy = 'entity.libelle_court';
+                $filters['pd.FONCTION_REFERENTIEL_ID'] = $fonctions;
+                $filters['pd.INTERVENANT_ID'] = $intervenants;
+                $filters['pd.ANNEE_ID'] = (int)$this->getServiceContext()->getAnnee()->getId();
+                break;
+
+            /* Ca n'a pas de sens de limiter le nombre d'heures total par fonction uniquement */
+            /*case FonctionReferentiel::class:
                 $perimetre = PlafondPerimetre::REFERENTIEL;
                 $join = "JOIN FONCTION_REFERENTIEL entity ON entity.id = pd.FONCTION_REFERENTIEL_ID";
                 $libVal = 'entity.libelle_court';
                 $groupBy = 'entity.libelle_court';
                 $filters['pd.FONCTION_REFERENTIEL_ID'] = $entities;
                 $filters['pd.ANNEE_ID'] = (int)$this->getServiceContext()->getAnnee()->getId();
-                break;
+                break;*/
 
             case TypeMission::class:
                 $perimetre = PlafondPerimetre::MISSION;

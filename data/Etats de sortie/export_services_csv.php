@@ -209,7 +209,7 @@ $head = [
 
 ];
 uasort($typesIntervention, function ($ti1, $ti2) {
-    return $ti1->getOrdre() - $ti2->getOrdre();
+    return ($ti1->getOrdre() - $ti2->getOrdre()) ? 1 : -1;
 });
 foreach ($typesIntervention as $typeIntervention) {
     /* @var \OffreFormation\Entity\Db\TypeIntervention $typeIntervention */

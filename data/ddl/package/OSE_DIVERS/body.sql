@@ -94,36 +94,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
 
 
 
-  PROCEDURE CALCULER_TABLEAUX_BORD IS
-  BEGIN
-    FOR d IN (
-      SELECT tbl_name
-      FROM tbl
-      WHERE tbl_name <> 'formule' -- TROP LONG !!
-      ORDER BY ordre
-    )LOOP
-      UNICAEN_TBL.CALCULER(d.tbl_name);
-      dbms_output.put_line('Calcul du tableau de bord "' || d.tbl_name || '" effectué');
-      COMMIT;
-    END LOOP;
-  END;
-
-
-
-  PROCEDURE CALCUL_FEUILLE_DE_ROUTE( INTERVENANT_ID NUMERIC ) IS
-  BEGIN
-    FOR d IN (
-      SELECT   tbl_name
-      FROM     tbl
-      WHERE    feuille_de_route = 1
-      ORDER BY ordre
-    ) LOOP
-      UNICAEN_TBL.CALCULER(d.tbl_name,'INTERVENANT_ID',intervenant_id);
-    END LOOP;
-  END;
-
-
-
   FUNCTION DATE_TO_PERIODE_CODE( date DATE, annee_id NUMERIC ) RETURN VARCHAR2 IS
     mois NUMERIC;
     annee NUMERIC;

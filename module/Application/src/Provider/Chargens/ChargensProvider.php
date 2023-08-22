@@ -489,7 +489,8 @@ class ChargensProvider
         $diffData = $this->diffDbData($oldData, $newData);
         $this->persist($diffData);
 
-        $this->getServiceTableauBord()->calculerDemandes();
+        $sql = "BEGIN UNICAEN_TBL.CALCULER_DEMANDES; END;";
+        $this->getEntityManager()->getConnection()->executeStatement($sql);
 
         if ($this->getScenario()) {
             $this->setScenario($this->getScenario());

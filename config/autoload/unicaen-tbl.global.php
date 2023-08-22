@@ -82,6 +82,31 @@ return [
                 ],
             ],
 
+            'candidature' => [
+                'order'              => 1,
+                'process'            => 'DbDiff',
+                'cols'               => [
+                    'ANNEE_ID',
+                    'INTERVENANT_ID',
+                    'STRUCTURE_ID',
+                    'OFFRE_EMPLOI_ID',
+                    'CANDIDATURE_ID',
+                    'VALIDATION_ID',
+                    'ACTIF',
+                    'REPONSE',
+                    'ACCEPTEE',
+                    'REFUSEE',
+                ],
+                'key'                => [
+                    'ANNEE_ID',
+                    'INTERVENANT_ID',
+                    'OFFRE_EMPLOI_ID',
+                ],
+                'key_values_if_null' => [
+                    'OFFRE_EMPLOI_ID' => 0,
+                ],
+            ],
+
             'piece_jointe_demande' => [
                 'order'   => 2,
                 'process' => 'DbDiff',
@@ -125,31 +150,6 @@ return [
                 'key_values_if_null' => [
                     'VALIDATION_ID' => 0,
                     'FICHIER_ID'    => 0,
-                ],
-            ],
-
-            'candidature' => [
-                'order'              => 1,
-                'process'            => 'DbDiff',
-                'cols'               => [
-                    'ANNEE_ID',
-                    'INTERVENANT_ID',
-                    'STRUCTURE_ID',
-                    'OFFRE_EMPLOI_ID',
-                    'CANDIDATURE_ID',
-                    'VALIDATION_ID',
-                    'ACTIF',
-                    'REPONSE',
-                    'ACCEPTEE',
-                    'REFUSEE',
-                ],
-                'key'                => [
-                    'ANNEE_ID',
-                    'INTERVENANT_ID',
-                    'OFFRE_EMPLOI_ID',
-                ],
-                'key_values_if_null' => [
-                    'OFFRE_EMPLOI_ID' => 0,
                 ],
             ],
 
@@ -381,6 +381,36 @@ return [
                 ],
             ],
 
+            'service' => [
+                'order'   => 14,
+                'process' => 'DbDiff',
+                'cols'    => [
+                    'ANNEE_ID',
+                    'INTERVENANT_ID',
+                    'ACTIF',
+                    'SERVICE_ID',
+                    'ELEMENT_PEDAGOGIQUE_ID',
+                    'TYPE_INTERVENANT_ID',
+                    'TYPE_INTERVENANT_CODE',
+                    'STRUCTURE_ID',
+                    'INTERVENANT_STRUCTURE_ID',
+                    'ELEMENT_PEDAGOGIQUE_PERIODE_ID',
+                    'ETAPE_ID',
+                    'TYPE_VOLUME_HORAIRE_ID',
+                    'TYPE_VOLUME_HORAIRE_CODE',
+                    'ELEMENT_PEDAGOGIQUE_HISTO',
+                    'ETAPE_HISTO',
+                    'HAS_HEURES_MAUVAISE_PERIODE',
+                    'NBVH',
+                    'HEURES',
+                    'VALIDE'
+                ],
+                'key'     => [
+                    'SERVICE_ID',
+                    'TYPE_VOLUME_HORAIRE_ID'
+                ],
+            ],
+
             'mission' => [
                 'order'              => 15,
                 'process'            => 'DbDiff',
@@ -581,36 +611,6 @@ return [
                 'key_values_if_null' => [
                     'PLAFOND_ID'             => 0,
                     'TYPE_VOLUME_HORAIRE_ID' => 0,
-                ],
-            ],
-
-            'service' => [
-                'order'   => 14,
-                'process' => 'DbDiff',
-                'cols'    => [
-                    'ANNEE_ID',
-                    'INTERVENANT_ID',
-                    'ACTIF',
-                    'SERVICE_ID',
-                    'ELEMENT_PEDAGOGIQUE_ID',
-                    'TYPE_INTERVENANT_ID',
-                    'TYPE_INTERVENANT_CODE',
-                    'STRUCTURE_ID',
-                    'INTERVENANT_STRUCTURE_ID',
-                    'ELEMENT_PEDAGOGIQUE_PERIODE_ID',
-                    'ETAPE_ID',
-                    'TYPE_VOLUME_HORAIRE_ID',
-                    'TYPE_VOLUME_HORAIRE_CODE',
-                    'ELEMENT_PEDAGOGIQUE_HISTO',
-                    'ETAPE_HISTO',
-                    'HAS_HEURES_MAUVAISE_PERIODE',
-                    'NBVH',
-                    'HEURES',
-                    'VALIDE'
-                ],
-                'key'     => [
-                    'SERVICE_ID',
-                    'TYPE_VOLUME_HORAIRE_ID'
                 ],
             ],
         ],

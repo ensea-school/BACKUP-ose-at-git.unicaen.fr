@@ -11,6 +11,7 @@ use Application\Service\Traits\WfEtapeDepServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Exception\LogicException;
 use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 
 
 /**
@@ -27,6 +28,7 @@ class WorkflowController extends AbstractController
     use DependanceFormAwareTrait;
     use WorkflowServiceAwareTrait;
     use WfEtapeServiceAwareTrait;
+    use TableauBordServiceAwareTrait;
 
 
     public function indexAction()
@@ -141,9 +143,7 @@ class WorkflowController extends AbstractController
 
     public function calculTableauxBordAction()
     {
-
-
-        $result = $this->getServiceWorkflow()->calculerTousTableauxBord(function (array $d) {
+        $result = $this->getServiceTableauBord()->calculerTout(['formule'],function (array $d) {
             $tblLine = 'Tableau de bord : ' . str_pad($d['tableau-bord'], 30);
             $c       = oseAdmin()->getConsole();
             $c->print($tblLine);

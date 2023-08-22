@@ -20,15 +20,15 @@ SELECT
   --t_effectif,t_dedoublement,
 
   CASE WHEN t_effectif < ouverture OR dedoublement = 0 OR t_effectif = 0 THEN 0 ELSE
-    (CEIL(t_effectif / dedoublement) * effectif) / t_effectif
+    ROUND((CEIL(t_effectif / dedoublement) * effectif) / t_effectif,10)
   END groupes,
 
   CASE WHEN t_effectif < ouverture OR dedoublement = 0 OR t_effectif = 0 THEN 0 ELSE
-    ((CEIL(t_effectif / dedoublement) * effectif) / t_effectif) * heures_ens
+    ROUND(((CEIL(t_effectif / dedoublement) * effectif) / t_effectif) * heures_ens,10)
   END heures,
 
   CASE WHEN t_effectif < ouverture OR dedoublement = 0 OR t_effectif = 0 THEN 0 ELSE
-    ((CEIL(t_effectif / dedoublement) * effectif) / t_effectif) * hetd
+    ROUND(((CEIL(t_effectif / dedoublement) * effectif) / t_effectif) * hetd,10)
   END  hetd
 
 FROM
@@ -112,4 +112,5 @@ FROM
   WHERE
     1=1
     /*@ETAPE_ENS_ID=sne.etape_id*/
+    /*@ETAPE_ID=etp.id*/
   ) t

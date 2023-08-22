@@ -10,7 +10,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
-use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
+use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 
 /**
  * Description of WorkflowService
@@ -280,7 +280,7 @@ class WorkflowService extends AbstractService
                 }
 
                 try {
-                    $this->getServiceTableauBord()->calculer($dep, 'INTERVENANT_ID', $value);
+                    $this->getServiceTableauBord()->calculer($dep, ['INTERVENANT_ID' => $value]);
                 } catch (\Exception $e) {
                     $errors[$dep] = $e;
                 }

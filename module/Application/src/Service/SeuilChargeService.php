@@ -14,7 +14,7 @@ use OffreFormation\Entity\Db\GroupeTypeFormation;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
-use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
+use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 
 
 /**

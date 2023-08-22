@@ -30,8 +30,7 @@ use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use RuntimeException;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use UnicaenTbl\Service\Traits\QueryGeneratorServiceAwareTrait;
-use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
+use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 
 /**
  * Description of PlafondService
@@ -46,7 +45,6 @@ use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 class PlafondService extends AbstractEntityService
 {
     use TableauBordServiceAwareTrait;
-    use QueryGeneratorServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
 
     /**
@@ -725,7 +723,7 @@ class PlafondService extends AbstractEntityService
     {
         if ($perimetre instanceof PlafondPerimetre) $perimetre = $perimetre->getCode();
         $tblName = 'plafond_' . $perimetre;
-        $this->getServiceTableauBord()->calculer($tblName, $param, $value);
+        $this->getServiceTableauBord()->calculer($tblName, [$param => $value]);
     }
 
 
@@ -735,7 +733,6 @@ class PlafondService extends AbstractEntityService
         $oseAdmin = oseAdmin();
         $oseAdmin->getBdd()->dataUpdater()->run('update', 'INDICATEUR');
         $this->construireVues();
-        $this->getServiceQueryGenerator()->updateProcedures();
     }
 
 

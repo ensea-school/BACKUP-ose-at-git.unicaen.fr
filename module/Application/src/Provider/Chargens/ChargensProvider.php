@@ -13,7 +13,7 @@ use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
+use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 
 class ChargensProvider
 {

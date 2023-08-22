@@ -4,7 +4,6 @@ namespace Plafond\Service;
 
 use Application\Constants;
 use Psr\Container\ContainerInterface;
-use UnicaenTbl\Service\QueryGeneratorService;
 use UnicaenTbl\Service\TableauBordService;
 
 
@@ -28,7 +27,6 @@ class PlafondServiceFactory
         $service = new PlafondService;
         $service->setEntityManager($container->get(Constants::BDD));
         $service->setServiceTableauBord($container->get(TableauBordService::class));
-        $service->setServiceQueryGenerator($container->get(QueryGeneratorService::class));
 
         return $service;
     }

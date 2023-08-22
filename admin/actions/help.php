@@ -38,7 +38,6 @@ $actionsDev = [
     "update-bdd-formules"   => "Mise à jour de la liste des formules de calcul",
     "test"                  => "Script de tests divers",
     "test-migration"        => "Script de test de migration. Paramètres : [before|after nom_du_script_de_migration]",
-    "build-tableaux-bord"   => "Reconstruction des tableaux de bord",
 ];
 
 if ($this->inDev()) {

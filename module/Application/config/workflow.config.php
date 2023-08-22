@@ -178,8 +178,8 @@ return [
         ],
     ],
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Workflow' => Controller\WorkflowController::class,
+        'factories' => [
+            'Application\Controller\Workflow' => Controller\Factory\WorkflowControllerFactory::class,
         ],
     ],
     'service_manager' => [

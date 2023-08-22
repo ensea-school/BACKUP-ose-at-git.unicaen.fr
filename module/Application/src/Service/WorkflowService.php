@@ -478,49 +478,4 @@ class WorkflowService extends AbstractService
 
         return $this;
     }
-
-
-
-    /**
-     * @return int
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function calculerTousTableauxBord ($beforeTrigger = null, $afterTrigger = null)
-    {
-        $sql    = "SELECT tbl_name FROM tbl WHERE tbl_name <> 'formule' ORDER BY ordre";
-        $tbls   = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
-        $result = true;
-        foreach ($tbls as $tbl) {
-            $begin = microtime(true);
-            $tbl   = $tbl['TBL_NAME'];
-            $sql   = 'BEGIN UNICAEN_TBL.CALCULER(\'' . $tbl . '\'); END;';
-            if ($beforeTrigger instanceof \Closure) {
-                $beforeTrigger([
-                    'tableau-bord' => $tbl,
-                ]);
-            }
-            try {
-                $this->getEntityManager()->getConnection()->executeStatement($sql);
-                if ($afterTrigger instanceof \Closure) {
-                    $afterTrigger([
-                        'tableau-bord' => $tbl,
-                        'result'       => true,
-                        'duree'        => microtime(true) - $begin,
-                    ]);
-                }
-            } catch (\Exception $e) {
-                if ($afterTrigger instanceof \Closure) {
-                    $afterTrigger([
-                        'tableau-bord' => $tbl,
-                        'result'       => false,
-                        'exception'    => $e,
-                        'duree'        => microtime(true) - $begin,
-                    ]);
-                }
-                $result = false;
-            }
-        }
-
-        return $result;
-    }
 }

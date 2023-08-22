@@ -42,7 +42,7 @@ $tbls = [
     'plafond_mission',
 ];
 
-$tbls = ['chargens'];
+$tbls = ['workflow'];
 
 $params = [
     //'ETAPE_ID' => 1367
@@ -81,7 +81,7 @@ foreach( $tbls as $tblName ){
 
     $countTable = $bdd->select('SELECT count(*) CC FROM tbl_'.$tblName)[0]['CC'];
     $countView = '';
-    $countView = $bdd->select('SELECT count(*) CC FROM v_tbl_'.$tblName)[0]['CC'];
+  //  $countView = $bdd->select('SELECT count(*) CC FROM v_tbl_'.$tblName)[0]['CC'];
 
     echo "  View : $countView lignes\n";
     echo "  Table après calcul : $countTable lignes\n";

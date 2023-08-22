@@ -72,6 +72,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
         $data = [];
 
         $q = "SELECT
+            sys_context( 'userenv', 'current_schema' ) \"schema\",
             t.table_name      \"name\",
             t.temporary       \"temporary\",
             t.logging         \"logging\",
@@ -120,6 +121,10 @@ class TableManager extends AbstractManager implements TableManagerInterface
 
             $default = $paq['default'] !== null ? $this->purger($paq['default']) : null;
             if ('NULL' === $default) $default = null;
+
+            if (str_starts_with($default, '"'.$paq['schema'].'"')){
+                $default = substr($default, strlen($paq['schema'])+3);
+            }
 
             $type      = $paq['type'];
             $precision = $paq['precision'] ? (int)$paq['precision'] : null;

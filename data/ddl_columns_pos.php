@@ -2277,6 +2277,8 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'DATE_DEBUT',
+        'DATE_FIN',
     ],
     'MODELE_CONTRAT'                 => [
         'ID',

@@ -161,7 +161,7 @@ return [
             'scale'       => '0',
             'precision'   => NULL,
             'nullable'    => FALSE,
-            'default'     => NULL,
+            'default'     => '"TBL_CHARGENS_ID_SEQ"."NEXTVAL"',
             'position'    => 1,
             'commentaire' => NULL,
         ],

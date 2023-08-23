@@ -65,7 +65,7 @@ return [
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,
-            'default'     => NULL,
+            'default'     => '"TBL_CANDIDATURE_ID_SEQ"."NEXTVAL"',
             'position'    => 1,
             'commentaire' => NULL,
         ],

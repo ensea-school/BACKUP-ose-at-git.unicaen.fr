@@ -113,7 +113,7 @@ return [
             'scale'       => NULL,
             'precision'   => NULL,
             'nullable'    => FALSE,
-            'default'     => NULL,
+            'default'     => '"TBL_MISSION_ID_SEQ"."NEXTVAL"',
             'position'    => 1,
             'commentaire' => NULL,
         ],

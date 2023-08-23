@@ -53,7 +53,7 @@ return [
             'scale'       => '0',
             'precision'   => NULL,
             'nullable'    => FALSE,
-            'default'     => NULL,
+            'default'     => '"TBL_CLOTURE_REALISE_ID_SEQ"."NEXTVAL"',
             'position'    => 1,
             'commentaire' => NULL,
         ],

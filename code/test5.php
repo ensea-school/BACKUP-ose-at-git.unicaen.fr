@@ -7,3 +7,9 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
+
+$diff = -0.01;
+
+$nbrs = [
+    'heures' =>
+];

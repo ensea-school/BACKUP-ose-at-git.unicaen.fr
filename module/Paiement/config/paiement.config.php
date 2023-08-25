@@ -4,6 +4,8 @@ namespace Paiement;
 
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
+use Paiement\Tbl\Process\PaiementProcess;
+use Paiement\Tbl\Process\PaiementProcessFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
@@ -221,6 +223,7 @@ return [
         Service\CentreCoutService::class                         => Service\CentreCoutServiceFactory::class,
         Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementServiceFactory::class,
         Assertion\PaiementAssertion::class                       => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        PaiementProcess::class                                   => PaiementProcessFactory::class,
     ],
 
     'view_helpers' => [

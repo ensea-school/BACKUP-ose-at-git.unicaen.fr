@@ -8,29 +8,28 @@
  * @var $viewFile   string
  */
 
-use Application\Entity\Db\Intervenant;
-use Mission\Entity\Db\Mission;
-use Service\Entity\Db\TypeVolumeHoraire;
+/** @var \UnicaenTbl\Service\TableauBordService $c */
+$c = $container->get(\UnicaenTbl\Service\TableauBordService::class);
 
-?>
-<script>
+$ptbl = $c->getTableauBord('paiement');
 
 
-    var data = {
-        0: {id: 15, heures: 15},
-        1: {id: 14, heures: 14},
-        2: {id: 120, heures: 120}
-    };
-
-    console.log(data[Util.json.indexById(data, 120)]);
+$params = [
+   //'INTERVENANT_ID' => 667613
+    'INTERVENANT_ID' => 656721
+];
 
 
-    var data2 = [
-        {id: 15, heures: 15},
-        {id: 14, heures: 14},
-        {id: 120, heures: 120}
-    ];
 
-    console.log(data2[Util.json.indexById(data2, 120)]);
 
-</script>
+$debut = microtime(true);
+
+
+$ptbl->calculer($params);
+
+$fin = microtime(true);
+$duree = $fin - $debut;
+
+echo "  Durée : ".round($duree, 4) . ' seconde(s)'."\n";
+
+

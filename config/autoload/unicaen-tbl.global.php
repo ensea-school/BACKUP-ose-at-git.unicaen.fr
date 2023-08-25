@@ -239,7 +239,8 @@ return [
 
             'paiement' => [
                 'order'              => 8,
-                'process'            => 'DbDiff',
+                //'process'            => 'DbDiff',
+                'process' => \Paiement\Tbl\Process\PaiementProcess::class,
                 'cols'               => [
                     'ANNEE_ID',
                     'SERVICE_ID',

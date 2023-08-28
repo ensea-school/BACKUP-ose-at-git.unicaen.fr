@@ -230,7 +230,7 @@ class Ddl implements \Iterator, \ArrayAccess
 
 
 
-    private function arrayExport($var, $indent = "")
+    public function arrayExport($var, string $indent = ""): string
     {
         switch (gettype($var)) {
             case "array":

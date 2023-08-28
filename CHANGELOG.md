@@ -1,11 +1,14 @@
 # Version stable
 
 [OSE 21.1](#ose-211-13072023)
-# OSE 22  (à venir)
+
+# OSE 21.2 (à venir)
 
 ## Corrections de bugs
 
+* Prise en compte du filtre formation lors de la recherche d'un enseignement en saisie de service (#51823)
 * Correction de V_CONTRATS_SERVICES (#51795)
+
 
 # OSE 21.1 (13/07/2023)
 
@@ -48,7 +51,7 @@
   * Possibilité de mettre des dates de début et de fin d'utilisation pour les tags
 
 * Extraction paie
-  * Nouveaux paramètrages par statut permettant de spécifier par statut le code indémnité attendu, le mode de calcul et le type de carte
+  * Nouveaux paramétrages par statut permettant de spécifier par statut le code indémnité attendu, le mode de calcul et le type de carte
 
   **IMPORTANT** : Si aucun de ces paramètres n'est spécifié au niveau des statuts, ce sont les valeurs par défaut habituelles qui seront fournies dans l'extraction Winpaie et la préliquidation SIHAM. N'hésitez pas à tester vos extractions de paie. 
 

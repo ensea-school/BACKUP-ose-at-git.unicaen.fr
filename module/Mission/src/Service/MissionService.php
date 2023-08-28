@@ -252,6 +252,7 @@ class MissionService extends AbstractEntityService
           c.declaration_id	         fichier_id,
           f.nom						 fichier_nom,
           f.validation_id            validation_id,
+          c.type_contrat_id          type_contrat_id,
           ROWNUM                     numero
         FROM
                     contrat         c
@@ -266,7 +267,7 @@ class MissionService extends AbstractEntityService
                                      AND c_suiv.fin_validite <> c.fin_validite 
                                      AND c_suiv.intervenant_id = c.intervenant_id 
                                      AND c.fin_validite BETWEEN c_suiv.debut_validite-1 AND c_suiv.fin_validite
-                                                 
+                                     AND c.type_contrat_id = (SELECT id FROM type_contrat WHERE code = 'CONTRAT')                                                
           LEFT JOIN validation v_suiv ON v_suiv.id = c_suiv.validation_id 
                                      AND v_suiv.histo_destruction IS NULL
         WHERE
@@ -276,6 +277,7 @@ class MissionService extends AbstractEntityService
           AND c.intervenant_id = :intervenant
           --Uniquement si le contrat est déjà fini
           AND c.fin_validite < SYSDATE
+          AND c.type_contrat_id = (SELECT id FROM type_contrat WHERE code = 'CONTRAT')
           ORDER BY c.fin_validite ASC
        ";
 
@@ -311,7 +313,7 @@ class MissionService extends AbstractEntityService
         $fichier    = $contrat->getDeclaration()->setValidation(null);
         $this->getServiceFichier()->save($fichier);
         $this->getEntityManager()->remove($validation);
-        
+
         return true;
     }
 

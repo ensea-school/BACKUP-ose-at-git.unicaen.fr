@@ -8,6 +8,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Entity\Db\Contrat;
@@ -28,6 +29,7 @@ class PrimeController extends AbstractController
     use SourceServiceAwareTrait;
     use ContratServiceAwareTrait;
     use FichierServiceAwareTrait;
+    use WorkflowServiceAwareTrait;
 
     public function indexAction ()
     {
@@ -53,13 +55,19 @@ class PrimeController extends AbstractController
         }
         if (is_array($result)) {
             $this->getServiceContrat()->creerDeclaration($result['files'], $contrat);
+            $this->updateTableauxBord($intervenant);
         }
 
-
-        //on récupére les posts
-
-
         return $this->redirect()->toRoute('intervenant/prime', ['intervenant' => $intervenant->getId()]);
+    }
+
+
+
+    private function updateTableauxBord (Intervenant $intervenant, $validation = false)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'prime',
+        ], $intervenant);
     }
 
 
@@ -75,7 +83,7 @@ class PrimeController extends AbstractController
         }
 
         $this->em()->flush();
-
+        $this->updateTableauxBord($contrat->getIntervenant());
         $this->flashMessenger()->addSuccessMessage("Déclaration sur l'honneur supprimée");
 
         return true;
@@ -90,6 +98,7 @@ class PrimeController extends AbstractController
 
         //validation de la déclaration de prime
         $this->getServiceMission()->validerDeclarationPrime($contrat);
+        $this->updateTableauxBord($contrat->getIntervenant());
         $this->flashMessenger()->addSuccessMessage("Déclaration sur l'honneur validée");
 
         return true;
@@ -100,10 +109,14 @@ class PrimeController extends AbstractController
     public function devaliderDeclarationPrimeAction ()
     {
 
+        /**
+         * @var $contrat Contrat
+         */
         $contrat = $this->getEvent()->getParam('contrat');
 
         //validation de la déclaration de prime
         $this->getServiceMission()->devaliderDeclarationPrime($contrat);
+        $this->updateTableauxBord($contrat->getIntervenant());
         $this->flashMessenger()->addSuccessMessage("Déclaration sur l'honneur devalidée");
 
         return true;

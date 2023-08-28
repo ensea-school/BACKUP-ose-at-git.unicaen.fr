@@ -414,6 +414,16 @@ return [
             'FEUILLE_DE_ROUTE'   => false,
         ],
         [
+            'TBL_NAME'           => 'prime',
+            'TABLE_NAME'         => 'TBL_PRIME',
+            'VIEW_NAME'          => 'V_TBL_PRIME',
+            'SEQUENCE_NAME'      => null,
+            'CONSTRAINT_NAME'    => 'TBL_PRIME_UN',
+            'CUSTOM_CALCUL_PROC' => null,
+            'ORDRE'              => 16,
+            'FEUILLE_DE_ROUTE'   => false,
+        ],
+        [
             'TBL_NAME'           => 'chargens_seuils_def',
             'TABLE_NAME'         => 'TBL_CHARGENS_SEUILS_DEF',
             'VIEW_NAME'          => 'V_TBL_CHARGENS_SEUILS_DEF',

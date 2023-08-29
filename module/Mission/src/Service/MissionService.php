@@ -253,6 +253,7 @@ class MissionService extends AbstractEntityService
           f.nom						 fichier_nom,
           f.validation_id            validation_id,
           c.type_contrat_id          type_contrat_id,
+          c.date_refus_prime         date_refus_prime,
           ROWNUM                     numero
         FROM
                     contrat         c

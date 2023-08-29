@@ -106,6 +106,31 @@ class PrimeController extends AbstractController
 
 
 
+    public function refuserPrimeAction ()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $contrat     = $this->getEvent()->getParam('contrat');
+        /**
+         * @var $contrat Contrat
+         */
+
+        if ($contrat->getDateRefusPrime()) {
+            $contrat->setDateRefusPrime(null);
+        } else {
+            $date = new \DateTime('now');
+            $contrat->setDateRefusPrime($date);
+        }
+        $this->em()->persist($contrat);
+        $this->em()->flush();
+
+        $this->updateTableauxBord($intervenant);
+
+
+        return $this->redirect()->toRoute('intervenant/prime', ['intervenant' => $intervenant->getId()]);
+    }
+
+
+
     public function devaliderDeclarationPrimeAction ()
     {
 

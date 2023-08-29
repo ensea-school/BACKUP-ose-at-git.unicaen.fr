@@ -59,6 +59,11 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @var \DateTime
      */
+    private $dateRefusPrime;
+
+    /**
+     * @var \DateTime
+     */
     private $debutValidite;
 
     /**
@@ -411,7 +416,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
-     * Set dateRetourSigne
+     * Set dateRefusPrime
      *
      * @param \DateTime $dateRetourSigne
      *
@@ -420,6 +425,34 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     public function setDateRetourSigne ($dateRetourSigne)
     {
         $this->dateRetourSigne = $dateRetourSigne;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get dateRefusPrime
+     *
+     * @return \DateTime
+     */
+    public function getDateRefusPrime ()
+    {
+        return $this->dateRefusPrime;
+    }
+
+
+
+    /**
+     * Set dateRefusPrime
+     *
+     * @param ?\DateTime $dateRefusPrime
+     *
+     * @return Contrat
+     */
+    public function setDateRefusPrime ($dateRefusPrime)
+    {
+        $this->dateRefusPrime = $dateRefusPrime;
 
         return $this;
     }

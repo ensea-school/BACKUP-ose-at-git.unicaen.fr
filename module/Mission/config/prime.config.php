@@ -51,6 +51,14 @@ return [
 
 
                 ],
+                'refuser-prime'                 => [
+                    'route'      => '/:intervenant/refuser-prime/:contrat',
+                    'controller' => Controller\PrimeController::class,
+                    'action'     => 'refuser-prime',
+                    'privileges' => Privileges::MISSION_PRIME_VALIDER,
+
+
+                ],
                 'telecharger-declaration-prime' => [
                     'route'      => '/:intervenant/telecharger-declaration-prime/:contrat',
                     'controller' => Controller\PrimeController::class,
@@ -85,7 +93,7 @@ return [
     'guards' => [
         [
             'controller' => PrimeController::class,
-            'action'     => ['index', 'get-contrat-prime', 'declaration-prime', 'supprimer-declaration-prime', 'valider-declaration-prime', 'devalider-declaration-prime', 'telecharger-declaration-prime'],
+            'action'     => ['index', 'get-contrat-prime', 'declaration-prime', 'supprimer-declaration-prime', 'valider-declaration-prime', 'devalider-declaration-prime', 'telecharger-declaration-prime', 'refuser-prime'],
             'privileges' => [
                 Privileges::MISSION_PRIME_VISUALISATION,
             ],
@@ -105,8 +113,5 @@ return [
         Controller\PrimeController::class => Controller\PrimeControllerFactory::class,
     ],
 
-    /* 'forms' => [
-         Form\MissionSuiviForm::class => Form\MissionSuiviFormFactory::class,
-     ],*/
 
 ];

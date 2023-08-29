@@ -23,60 +23,8 @@
         <form :action="declarationUrl" enctype="multipart/form-data" method="post">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
 
-                        Afin de bénéficier de la prime de fin de contrat, poursuivez vous une mission dans la fonction publique à partir du jour suivant la date
-                        de fin de ce contrat ?<br/><br/>
-                        <input :checked="contrat.FICHIER_ID" :disabled="contrat.VALIDATION_ID" name="prime" type="radio" value="oui"
-                               @click="enableForm"/>&nbsp;
-                        <label for="huey">Oui</label>&nbsp;
-                        <input :disabled="contrat.VALIDATION_ID" name="prime" type="radio" value="non"
-                               @click="enableForm"/>&nbsp;
-                        <label for="huey">Non</label>
-                        <br/><br/>
-                        <div>
-                            <div>
-                                <label class=" form-label">Suivi de la déclaration : </label>
-                            </div>
-                            <!--Etat du dépôt de la déclaration-->
-                            <div v-if="contrat.FICHIER_ID">
-                                <u-icon name="thumbs-up"
-                                        variant="success"/>
-                                Déclaration déposée le 26/05/1982 à 12:00 par Antony Le Courtes
-                            </div>
-                            <div v-else>
-                                <u-icon name="thumbs-down"
-                                        variant="info"/>
-                                Aucune déclaration déposée
 
-                            </div>
-                            <!--Etat de la validation de la déclaration-->
-                            <div v-if="contrat.VALIDATION_ID">
-                                <u-icon name="thumbs-up"
-                                        variant="success"/>
-                                Déclaration validée le 26/05/1982 à 12:00 par Antony Le Courtes
-                            </div>
-                            <div v-else>
-                                <u-icon name="thumbs-down"
-                                        variant="info"/>
-                                Aucune déclaration validée
-
-                            </div>
-                            <!--Eligibilité à la prime de fin de contrat-->
-                            <div v-if="contrat.VALIDATION_ID">
-                                <u-icon name="euro-sign"
-                                        variant="success"/>
-                                Intervenant éligible à la prime de fin de contrat
-                            </div>
-                            <div v-else>
-                                <u-icon name="euro-sign"
-                                        variant="info"/>
-                                Intervenant non éligible à la prime de fin de contrat
-
-                            </div>
-
-                        </div>
-                    </div>
                     <div v-if="!contrat.FICHIER_ID" class="col-md-6">
 
                         <div class="card text-dark bg-light">
@@ -84,10 +32,16 @@
                                 Dépôt de votre déclaration sur l'honneur
                             </div>
                             <div class="card-body">
-                                <p class="card-text">En cochant <b>la case ci-contre</b> vous pourrez déposer votre déclaration sur l'honneur signée
-                                    ci-dessous.
-                                    Vous trouverez un exemple de déclaration en <a
-                                        href=""> cliquant-ici</a></p>
+                                <p class="card-text">
+                                    Pour <b>bénéficier de votre prime de fin de contrat</b>, vous devez déposer une déclaration sur l'honneur (<a
+                                    href="">exemple</a>) signée précisant que vous
+                                    ne
+                                    débutez pas
+                                    d'autre contrat dans la fonction au publique à la date du
+                                    <u-date :value="dateLimite"/>
+                                    .
+                                </p>
+
                                 <input ref="file" :disabled="disabledForm" name="files[]" type="file"/>
 
                             </div>
@@ -134,6 +88,60 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+
+                        <input :checked="contrat.DATE_REFUS_PRIME" :disabled="contrat.VALIDATION_ID" name="prime" type="checkbox"
+                               @change="refuser"/>&nbsp;
+                        Ou en cochant cette case, <b>je déclare ne pas peut pouvoir bénéficier de la prime</b> de fin de mission en raison du démarrage d'un
+                        nouveau
+                        contrat au sein la
+                        fonction publique commençant au plus tard le
+                        <u-date :value="dateLimite"/>
+                        .
+                        <br/><br/>
+                        <div>
+                            <div>
+                                <label class=" form-label">Suivi de la déclaration : </label>
+                            </div>
+                            <!--Etat du dépôt de la déclaration-->
+                            <div v-if="contrat.FICHIER_ID">
+                                <u-icon name="thumbs-up"
+                                        variant="success"/>
+                                Déclaration déposée le 26/05/1982 à 12:00 par Antony Le Courtes
+                            </div>
+                            <div v-else>
+                                <u-icon name="thumbs-down"
+                                        variant="info"/>
+                                Aucune déclaration déposée
+
+                            </div>
+                            <!--Etat de la validation de la déclaration-->
+                            <div v-if="contrat.VALIDATION_ID">
+                                <u-icon name="thumbs-up"
+                                        variant="success"/>
+                                Déclaration validée le 26/05/1982 à 12:00 par Antony Le Courtes
+                            </div>
+                            <div v-else>
+                                <u-icon name="thumbs-down"
+                                        variant="info"/>
+                                Aucune déclaration validée
+
+                            </div>
+                            <!--Eligibilité à la prime de fin de contrat-->
+                            <div v-if="contrat.VALIDATION_ID">
+                                <u-icon name="euro-sign"
+                                        variant="success"/>
+                                Intervenant éligible à la prime de fin de contrat
+                            </div>
+                            <div v-else>
+                                <u-icon name="euro-sign"
+                                        variant="info"/>
+                                Intervenant non éligible à la prime de fin de contrat
+
+                            </div>
+
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -176,9 +184,21 @@ export default {
                 intervenant: this.intervenant,
                 contrat: this.contrat.CONTRAT_ID,
             }),
-            disabledForm: true,
+            refuserUrl: unicaenVue.url("intervenant/:intervenant/refuser-prime/:contrat", {
+                intervenant: this.intervenant,
+                contrat: this.contrat.CONTRAT_ID,
+            }),
+            disabledForm: false,
 
         };
+    },
+    computed: {
+        dateLimite: function () {
+            const d = new Date(this.contrat.DATE_FIN_CONTRAT);
+            d.setDate(d.getDate()+1);
+            console.log(d);
+            return d;
+        },
     },
     methods: {
 
@@ -200,11 +220,18 @@ export default {
                 this.$emit('reload');
             });
         },
-        enableForm(event)
+        refuser()
         {
-            console.log('disableforme');
-            this.disabledForm = !event.target.checked;
+            unicaenVue.axios.post(
+                this.refuserUrl
+            )
+                .then(response => {
+                    console.log('ok');
+                    this.disabledForm = this.disabledForm ? false : true
+                })
+
         }
+
     }
 
 

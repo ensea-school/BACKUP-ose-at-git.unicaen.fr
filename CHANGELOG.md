@@ -4,6 +4,10 @@
 
 # OSE 21.2 (à venir)
 
+## Nouveautés
+
+* Permettre d'activer le champs employeur des données personnelles et le rendre optionnel dans la complétude du dossier (#51889)
+
 ## Corrections de bugs
 
 * Prise en compte du filtre formation lors de la recherche d'un enseignement en saisie de service (#51823)

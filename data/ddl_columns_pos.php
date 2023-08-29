@@ -1342,6 +1342,7 @@ return [
         'CODE_INDEMNITE_PRIME',
         'TYPE_PAIE',
         'TYPE_PAIE_PRIME',
+        'DOSSIER_EMPLOYEUR_FACULTATIF',
     ],
     'STRUCTURE'                      => [
         'ID',
@@ -2499,7 +2500,7 @@ return [
         'INTERVENANT_ID',
         'STRUCTURE_ID',
         'ANNEE_ID',
-        'FICHIER_ID',
+        'DECLARATION',
         'VALIDATION_ID',
     ],
 ];

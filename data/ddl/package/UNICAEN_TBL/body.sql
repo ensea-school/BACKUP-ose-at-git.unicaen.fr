@@ -1228,7 +1228,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                CASE WHEN d.iban IS NOT NULL AND d.bic IS NOT NULL THEN 1 ELSE 0 END
              ) END completude_banque,
              /*Complétude employeur*/
-             CASE WHEN si.dossier_employeur = 0 THEN 1
+             CASE WHEN si.dossier_employeur = 0 OR si.dossier_employeur_facultatif = 1 THEN 1
              ELSE
              (
                CASE WHEN
@@ -2682,7 +2682,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           c.intervenant_id           intervenant_id,
           s.id                       structure_id,
           i.annee_id                 annee_id,
-          c.declaration_id	         fichier_id,
+          CASE WHEN c.declaration_id IS NOT NULL THEN 1 ELSE 0 END        declaration,
           f.validation_id            validation_id
         FROM
                     contrat         c
@@ -2715,7 +2715,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
       v.TYPE_MISSION_ID,
       v.INTERVENANT_ID,
       v.STRUCTURE_ID,
-      v.FICHIER_ID,
       v.VALIDATION_ID,
       v.ANNEE_ID,
       CASE WHEN
@@ -2724,10 +2723,11 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
         AND t.TYPE_MISSION_ID             = v.TYPE_MISSION_ID
         AND COALESCE(t.INTERVENANT_ID,0)  = COALESCE(v.INTERVENANT_ID,0)
         AND t.STRUCTURE_ID                = v.STRUCTURE_ID
-        AND COALESCE(t.FICHIER_ID,0)      = COALESCE(v.FICHIER_ID,0)
         AND COALESCE(t.VALIDATION_ID,0)   = COALESCE(v.VALIDATION_ID,0)
         AND t.ANNEE_ID                    = v.ANNEE_ID
-      THEN -1 ELSE t.ID END ID
+        AND COALESCE(t.DECLARATION,0)     = COALESCE(v.DECLARATION,0)
+      THEN -1 ELSE t.ID END ID,
+      v.DECLARATION
     FROM
       (' || QUERY_APPLY_PARAMS(viewQuery, useParams) || ') v
       FULL JOIN TBL_PRIME t ON

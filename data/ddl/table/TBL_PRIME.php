@@ -33,12 +33,12 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'DECLARATION'      => [
+        'DECLARATION'     => [
             'name'        => 'DECLARATION',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
-            'scale'       => NULL,
+            'scale'       => '0',
             'precision'   => 1,
             'nullable'    => TRUE,
             'default'     => NULL,

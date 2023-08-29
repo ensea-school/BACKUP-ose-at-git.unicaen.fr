@@ -33,13 +33,13 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'FICHIER_ID'      => [
-            'name'        => 'FICHIER_ID',
-            'type'        => 'int',
+        'DECLARATION'      => [
+            'name'        => 'DECLARATION',
+            'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,
             'scale'       => NULL,
-            'precision'   => NULL,
+            'precision'   => 1,
             'nullable'    => TRUE,
             'default'     => NULL,
             'position'    => 8,

@@ -6,7 +6,7 @@ SELECT
   c.intervenant_id           intervenant_id,
   s.id                       structure_id,
   i.annee_id                 annee_id,
-  c.declaration_id	         fichier_id,
+  CASE WHEN c.declaration_id IS NOT NULL THEN 1 ELSE 0 END        declaration,
   f.validation_id            validation_id
 FROM
             contrat         c

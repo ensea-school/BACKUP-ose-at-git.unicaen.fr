@@ -24,11 +24,15 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <input :checked="contrat.FICHIER_ID" :disabled="contrat.VALIDATION_ID" name="prime" type="checkbox"
-                               @change="enableForm"/>
-                        En cochant cette case, je déclare sur l'honneur ne pas avoir d'autre contrat à suivre dans la fonction publique, et me rend éligible à
-                        une
-                        prime de fin de contrat.
+
+                        Afin de bénéficier de la prime de fin de contrat, poursuivez vous une mission dans la fonction publique à partir du jour suivant la date
+                        de fin de ce contrat ?<br/><br/>
+                        <input :checked="contrat.FICHIER_ID" :disabled="contrat.VALIDATION_ID" name="prime" type="radio" value="oui"
+                               @click="enableForm"/>&nbsp;
+                        <label for="huey">Oui</label>&nbsp;
+                        <input :disabled="contrat.VALIDATION_ID" name="prime" type="radio" value="non"
+                               @click="enableForm"/>&nbsp;
+                        <label for="huey">Non</label>
                         <br/><br/>
                         <div>
                             <div>
@@ -198,6 +202,7 @@ export default {
         },
         enableForm(event)
         {
+            console.log('disableforme');
             this.disabledForm = !event.target.checked;
         }
     }

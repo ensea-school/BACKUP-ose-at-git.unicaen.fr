@@ -40,7 +40,7 @@ class TauxRemuController extends AbstractController
         ]);
 
 
-        $tauxListe = $this->getServiceTauxRemu()->getTauxRemusAnnee();
+        $tauxListe = $this->getServiceTauxRemu()->getTauxRemusAnneeWithValeur();
 
 
         $tauxRemuProp = ['id',

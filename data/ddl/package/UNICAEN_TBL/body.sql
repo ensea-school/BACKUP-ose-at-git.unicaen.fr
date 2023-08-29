@@ -968,7 +968,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
             /*@ANNEE_ID=i.annee_id*/
             AND NOT (si.contrat = 0 AND evh.code = ''valide'')
 
-          UNION
+          UNION ALL
 
           SELECT
             m.annee_id        annee_id,
@@ -980,6 +980,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
           FROM
             tbl_mission m
             LEFT JOIN volume_horaire_mission vhm ON vhm.mission_id = m.mission_id AND vhm.histo_destruction IS NULL
+            JOIN type_volume_horaire tvh ON tvh.id = vhm.type_volume_horaire_id AND tvh.code = ''PREVU''
             JOIN V_VOLUME_HORAIRE_MISSION_ETAT vvhme ON vvhme.volume_horaire_mission_id = vhm.id
             JOIN etat_volume_horaire       evh ON evh.id = vvhme.etat_volume_horaire_id
                                               AND evh.code IN (''valide'', ''contrat-edite'', ''contrat-signe'')
@@ -1226,7 +1227,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                CASE WHEN d.iban IS NOT NULL AND d.bic IS NOT NULL THEN 1 ELSE 0 END
              ) END completude_banque,
              /*Complétude employeur*/
-             CASE WHEN si.dossier_employeur = 0 THEN 1
+             CASE WHEN si.dossier_employeur = 0 OR si.dossier_employeur_facultatif = 1 THEN 1
              ELSE
              (
                CASE WHEN
@@ -1594,102 +1595,7 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                JOIN fonction_referentiel           fncr ON fncr.id = sr.fonction_id
           LEFT JOIN mise_en_paiement                mep ON mep.formule_res_service_ref_id = frs.id
                                                        AND mep.histo_destruction IS NULL
-        ) t
-
-        UNION ALL
-
-        SELECT
-          t.annee_id,
-          NULL                                        service_id,
-          NULL                                        service_referentiel_id,
-          NULL                                        formule_res_service_id,
-          NULL                                        formule_res_service_ref_id,
-          t.mission_id,
-          t.intervenant_id,
-          t.structure_id,
-          mep.id                                      mise_en_paiement_id,
-          mep.periode_paiement_id                     periode_paiement_id,
-          mep.domaine_fonctionnel_id                  domaine_fonctionnel_id,
-          t.heures_a_payer,
-          COUNT(*) OVER(PARTITION BY t.mission_id, t.taux_remu_id, t.taux_horaire) heures_a_payer_pond,
-          COALESCE(mep.heures,0)                      heures_demandees,
-          CASE WHEN mep.periode_paiement_id IS NULL THEN 0 ELSE mep.heures END heures_payees,
-          ROUND(t.heures_aa / t.heures_a_payer,2) pourc_exercice_aa,
-          1 - ROUND(t.heures_aa / t.heures_a_payer,2) pourc_exercice_ac,
-          t.heures_aa,
-          t.heures_ac,
-          t.taux_remu_id,
-          t.taux_horaire,
-          t.taux_conges_payes
-        FROM
-          (
-          SELECT
-            t.annee_id,
-            t.mission_id,
-            t.intervenant_id,
-            t.structure_id,
-            SUM(t.heures_a_payer) heures_a_payer,
-            --CASE WHEN t.aa = 1 THEN SUM(t.heures_a_payer) / SUM(t.heures_a_payer) ELSE 0 END pourc_exercice_aa,
-           -- SUM(t.heures_a_payer) / SUM(CASE WHEN t.aa = 0 THEN t.heures_a_payer ELSE 0 END) pourc_exercice_ac,
-            SUM(CASE WHEN t.aa = 1 THEN t.heures_a_payer ELSE 0 END) heures_aa,
-            SUM(CASE WHEN t.aa = 0 THEN t.heures_a_payer ELSE 0 END) heures_ac,
-            t.taux_remu_id,
-            t.taux_horaire,
-            t.taux_conges_payes
-          FROM
-            (
-            SELECT
-              tm.annee_id annee_id,
-              tm.mission_id                               mission_id,
-              tm.intervenant_id                           intervenant_id,
-              tm.structure_id                             structure_id,
-              vhm.heures                                  heures_a_payer,
-              CASE WHEN to_number(TO_CHAR( vhm.horaire_debut, ''YYYY'' )) = tm.annee_id THEN 1 ELSE 0 END aa,
-              CASE WHEN
-                TO_CHAR( vhm.horaire_debut, ''HH24:MI'' ) >= ose_parametre.get_horaire_nocturne -- horaire nocturne
-                OR jf.id IS NOT NULL                                                          -- jour ferie
-                OR TO_CHAR(vhm.horaire_debut, ''DAY'', ''NLS_DATE_LANGUAGE=FRENCH'') = ''DIMANCHE'' -- dimanche
-              THEN
-                COALESCE(m.taux_remu_majore_id, m.taux_remu_id)
-              ELSE
-                m.taux_remu_id
-              END                                         taux_remu_id,
-              ose_paiement.get_taux_horaire(CASE WHEN
-                TO_CHAR( vhm.horaire_debut, ''HH24:MI'' ) >= ose_parametre.get_horaire_nocturne -- horaire nocturne
-                OR jf.id IS NOT NULL                                                          -- jour ferie
-                OR TO_CHAR(vhm.horaire_debut, ''DAY'', ''NLS_DATE_LANGUAGE=FRENCH'') = ''DIMANCHE'' -- dimanche
-              THEN
-                COALESCE(m.taux_remu_majore_id, m.taux_remu_id)
-              ELSE
-                m.taux_remu_id
-              END, vhm.horaire_debut) taux_horaire,
-
-              ose_parametre.get_taux_conges_payes+1       taux_conges_payes
-            FROM
-              tbl_mission tm
-              JOIN mission m ON m.id = tm.mission_id
-              JOIN volume_horaire_mission vhm ON vhm.histo_destruction IS NULL AND vhm.mission_id = tm.mission_id
-              JOIN type_volume_horaire tvh ON tvh.id = vhm.type_volume_horaire_id AND tvh.code =''REALISE''
-              LEFT JOIN validation_vol_horaire_miss vvhm ON vvhm.volume_horaire_mission_id = vhm.id
-              LEFT JOIN validation v ON v.id = vvhm.validation_id AND v.histo_destruction IS NULL
-              LEFT JOIN jour_ferie jf ON TO_CHAR( jf.date_jour, ''dd/mm/YYYY'' ) = TO_CHAR( vhm.horaire_debut, ''dd/mm/YYYY'' )
-            WHERE
-              tm.valide = 1
-              /*@INTERVENANT_ID=tm.intervenant_id*/ /*@ANNEE_ID=tm.annee_id*/
-              AND (vhm.auto_validation = 1 OR v.id IS NOT NULL)
-            ORDER BY
-              vhm.horaire_debut
-            ) t
-          GROUP BY
-            t.annee_id,
-            t.mission_id,
-            t.intervenant_id,
-            t.structure_id,
-            t.taux_remu_id,
-            t.taux_horaire,
-            t.taux_conges_payes
-          ) t
-          LEFT JOIN mise_en_paiement mep ON mep.mission_id = t.mission_id AND mep.histo_destruction IS NULL';
+        ) t';
 
     OPEN c FOR '
     SELECT
@@ -2278,6 +2184,33 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
 
             UNION ALL
 
+          SELECT 9 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+            SELECT
+                i.annee_id                annee_id,
+                vh.type_volume_horaire_id type_volume_horaire_id,
+                i.id                      intervenant_id,
+                SUM(vh.heures)            heures
+              FROM
+                volume_horaire vh
+                JOIN service s ON s.id = vh.service_id
+                JOIN intervenant i ON i.id = s.intervenant_id
+                JOIN statut si ON si.id = i.statut_id
+              WHERE
+                vh.histo_destruction IS NULL
+                AND i.histo_destruction IS NULL
+                AND vh.motif_non_paiement_id IS NULL
+                AND si.code IN (''IMP'')
+              GROUP BY
+                i.annee_id,
+                vh.type_volume_horaire_id,
+                i.id,
+                i.statut_id
+              HAVING
+                SUM(vh.heures) >= 0
+            ) p
+
+            UNION ALL
+
           SELECT 4 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
             SELECT
                 i.annee_id                annee_id,
@@ -2314,33 +2247,6 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
                 JOIN etat_volume_horaire      evh ON evh.code = ''saisi''
                 JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
                 JOIN statut                    si ON si.id = i.statut_id
-            ) p
-
-            UNION ALL
-
-          SELECT 9 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
-            SELECT
-                i.annee_id                annee_id,
-                vh.type_volume_horaire_id type_volume_horaire_id,
-                i.id                      intervenant_id,
-                SUM(vh.heures)            heures
-              FROM
-                volume_horaire vh
-                JOIN service s ON s.id = vh.service_id
-                JOIN intervenant i ON i.id = s.intervenant_id
-                JOIN statut si ON si.id = i.statut_id
-              WHERE
-                vh.histo_destruction IS NULL
-                AND i.histo_destruction IS NULL
-                AND vh.motif_non_paiement_id IS NULL
-                AND si.code IN (''IMP'')
-              GROUP BY
-                i.annee_id,
-                vh.type_volume_horaire_id,
-                i.id,
-                i.statut_id
-              HAVING
-                SUM(vh.heures) >= 0
             ) p
           ) p
           JOIN intervenant i ON i.id = p.intervenant_id

@@ -32,6 +32,7 @@
         <field name="dossierContact" type="boolean" column="DOSSIER_CONTACT" nullable="false"/>
         <field name="dossierTelPerso" type="boolean" column="DOSSIER_TEL_PERSO" nullable="false"/>
         <field name="dossierEmailPerso" type="boolean" column="DOSSIER_EMAIL_PERSO" nullable="false"/>
+        <field name="dossierEmployeurFacultatif" type="boolean" column="DOSSIER_EMPLOYEUR_FACULTATIF" nullable="false"/>
         <field name="dossierAdresse" type="boolean" column="DOSSIER_ADRESSE" nullable="false"/>
         <field name="dossierBanque" type="boolean" column="DOSSIER_BANQUE" nullable="false"/>
         <field name="dossierInsee" type="boolean" column="DOSSIER_INSEE" nullable="false"/>

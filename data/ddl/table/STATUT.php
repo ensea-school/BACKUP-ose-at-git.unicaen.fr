@@ -537,6 +537,18 @@ return [
             'position'    => 22,
             'commentaire' => NULL,
         ],
+        'DOSSIER_EMPLOYEUR_FACULTATIF'   => [
+            'name'        => 'DOSSIER_EMPLOYEUR_FACULTATIF',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 100,
+            'commentaire' => NULL,
+        ],
         'DOSSIER_IDENTITE_COMP'          => [
             'name'        => 'DOSSIER_IDENTITE_COMP',
             'type'        => 'bool',

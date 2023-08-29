@@ -225,6 +225,7 @@ return [
         'MISSION_ID',
         'DEBUT_VALIDITE',
         'FIN_VALIDITE',
+        'DECLARATION_ID',
     ],
     'CONTRAT_FICHIER'                => [
         'CONTRAT_ID',
@@ -1341,7 +1342,6 @@ return [
         'CODE_INDEMNITE_PRIME',
         'TYPE_PAIE',
         'TYPE_PAIE_PRIME',
-        'DOSSIER_EMPLOYEUR_FACULTATIF',
     ],
     'STRUCTURE'                      => [
         'ID',
@@ -2491,9 +2491,16 @@ return [
         'DATE_JOUR',
         'LIBELLE',
     ],
-    'OFFRE_EMPLOI_ETUDIANT'          => [
+    'TBL_PRIME'                      => [
+        'ID',
+        'CONTRAT_ID',
+        'MISSION_ID',
+        'TYPE_MISSION_ID',
         'INTERVENANT_ID',
-        'OFFRE_EMPLOI_ID',
+        'STRUCTURE_ID',
+        'ANNEE_ID',
+        'FICHIER_ID',
+        'VALIDATION_ID',
     ],
 ];
 

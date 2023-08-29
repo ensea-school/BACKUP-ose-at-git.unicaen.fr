@@ -36,7 +36,7 @@ class SuiviController extends AbstractController
     use TypeVolumeHoraireServiceAwareTrait;
     use PlafondProcessusAwareTrait;
 
-    public function indexAction()
+    public function indexAction ()
     {
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -50,7 +50,7 @@ class SuiviController extends AbstractController
 
 
 
-    public function listeAction()
+    public function listeAction ()
     {
         /* @var $intervenant Intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -93,8 +93,8 @@ class SuiviController extends AbstractController
 
         $triggers = [
             '/' => function (VolumeHoraireMission $original, array $extracted) {
-                $extracted['canEdit'] = $this->isAllowed($original, Privileges::MISSION_EDITION_REALISE);
-                $extracted['canValider'] = $this->isAllowed($original, Privileges::MISSION_VALIDATION_REALISE);
+                $extracted['canEdit']      = $this->isAllowed($original, Privileges::MISSION_EDITION_REALISE);
+                $extracted['canValider']   = $this->isAllowed($original, Privileges::MISSION_VALIDATION_REALISE);
                 $extracted['canDevalider'] = $this->isAllowed($original, Privileges::MISSION_DEVALIDATION_REALISE);
                 $extracted['canSupprimer'] = $extracted['canSupprimer'] && $this->isAllowed($original, Privileges::MISSION_EDITION_REALISE);
 
@@ -112,7 +112,7 @@ class SuiviController extends AbstractController
      *
      * @return ViewModel
      */
-    public function ajoutAction(): ViewModel
+    public function ajoutAction (): ViewModel
     {
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -133,7 +133,7 @@ class SuiviController extends AbstractController
      *
      * @return ViewModel
      */
-    public function modifierAction(): ViewModel
+    public function modifierAction (): ViewModel
     {
         /** @var VolumeHoraireMission $volumeHoraireMission */
         $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
@@ -143,7 +143,7 @@ class SuiviController extends AbstractController
 
 
 
-    protected function saisieAction(Intervenant $intervenant, VolumeHoraireMission $volumeHoraireMission)
+    protected function saisieAction (Intervenant $intervenant, VolumeHoraireMission $volumeHoraireMission)
     {
         if ($volumeHoraireMission->getId()) {
             $title = 'Modification d\'un suivi de mission';
@@ -167,7 +167,7 @@ class SuiviController extends AbstractController
                 $this->updateTableauxBord($vhm->getMission());
                 if (!$this->getProcessusPlafond()->endTransaction($vhm, $typeVolumeHoraire, $hFin < $hDeb)) {
                     $this->updateTableauxBord($vhm->getMission());
-                }else{
+                } else {
                     $this->flashMessenger()->addSuccessMessage('Suivi bien enregistré');
                 }
             } catch (\Exception $e) {
@@ -187,7 +187,7 @@ class SuiviController extends AbstractController
 
 
 
-    public function supprimerAction()
+    public function supprimerAction ()
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
 
@@ -209,7 +209,7 @@ class SuiviController extends AbstractController
 
 
 
-    public function validerAction()
+    public function validerAction ()
     {
         /** @var VolumeHoraireMission $volumeHoraireMission */
         $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
@@ -228,7 +228,7 @@ class SuiviController extends AbstractController
 
 
 
-    public function devaliderAction()
+    public function devaliderAction ()
     {
         /** @var VolumeHoraireMission $volumeHoraireMission */
         $volumeHoraireMission = $this->getEvent()->getParam('volumeHoraireMission');
@@ -249,7 +249,7 @@ class SuiviController extends AbstractController
 
 
 
-    private function updateTableauxBord(Mission $mission)
+    private function updateTableauxBord (Mission $mission)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'mission',

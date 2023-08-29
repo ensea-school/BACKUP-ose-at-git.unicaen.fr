@@ -2,9 +2,15 @@
 
 namespace Mission\Service;
 
+use Application\Acl\Role;
+use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
+use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Application\Service\Traits\TypeValidationServiceAwareTrait;
+use Application\Service\Traits\ValidationServiceAwareTrait;
+use Contrat\Entity\Db\Contrat;
 use Mission\Assertion\SaisieAssertion;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
@@ -26,6 +32,9 @@ class MissionService extends AbstractEntityService
 {
     use TypeVolumeHoraireServiceAwareTrait;
     use SourceServiceAwareTrait;
+    use ValidationServiceAwareTrait;
+    use TypeValidationServiceAwareTrait;
+    use FichierServiceAwareTrait;
 
     /**
      * Retourne la classe des entités
@@ -223,6 +232,89 @@ class MissionService extends AbstractEntityService
         parent::save($entity);
 
         return $entity;
+    }
+
+
+
+    public function getContratPrimeMission (array $parameters)
+    {
+
+
+        $sql = "
+        SELECT DISTINCT
+          c.id                       contrat_id,
+          c.debut_validite           date_debut_contrat,
+          c.fin_validite             date_fin_contrat,
+          m.libelle_mission			 libelle_mission,
+          tm.libelle                 type_mission,
+          c.intervenant_id           intervenant_id,
+          s.libelle_court            libelle_structure,
+          c.declaration_id	         fichier_id,
+          f.nom						 fichier_nom,
+          f.validation_id            validation_id,
+          c.type_contrat_id          type_contrat_id,
+          ROWNUM                     numero
+        FROM
+                    contrat         c
+               JOIN mission m ON m.id = c.mission_id     
+               JOIN type_mission tm ON tm.id = m.type_mission_id
+               JOIN structure s ON s.id = m.structure_id
+               JOIN validation      v ON v.id = c.validation_id 
+                                     AND v.histo_destruction IS NULL
+          LEFT JOIN fichier f ON f.id = c.declaration_id
+          LEFT JOIN validation v ON f.validation_id = v.id                                       
+          LEFT JOIN contrat    c_suiv ON c_suiv.histo_destruction IS NULL 
+                                     AND c_suiv.fin_validite <> c.fin_validite 
+                                     AND c_suiv.intervenant_id = c.intervenant_id 
+                                     AND c.fin_validite BETWEEN c_suiv.debut_validite-1 AND c_suiv.fin_validite
+                                     AND c.type_contrat_id = (SELECT id FROM type_contrat WHERE code = 'CONTRAT')                                                
+          LEFT JOIN validation v_suiv ON v_suiv.id = c_suiv.validation_id 
+                                     AND v_suiv.histo_destruction IS NULL
+        WHERE
+          c.histo_destruction IS NULL
+          -- on trouve un contrat validé qui suit => ce n'est pas un contrat qui donne droit à la prime
+          AND v_suiv.id IS NULL 
+          AND c.intervenant_id = :intervenant
+          --Uniquement si le contrat est déjà fini
+          AND c.fin_validite < SYSDATE
+          AND c.type_contrat_id = (SELECT id FROM type_contrat WHERE code = 'CONTRAT')
+          ORDER BY c.fin_validite ASC
+       ";
+
+        $data       = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['intervenant' => $parameters['intervenant']]);
+        $triggers   = [];
+        $properties = [];
+
+
+        return new AxiosModel($data, $properties, $triggers);
+    }
+
+
+
+    public function validerDeclarationPrime (Contrat $contrat): Validation
+    {
+        $validation = $this->getServiceValidation()->newEntity($this->getServiceTypeValidation()->getDeclaration())
+            ->setIntervenant($contrat->getIntervenant())
+            ->setStructure($contrat->getStructure());
+
+        $fichier = $contrat->getDeclaration()->setValidation($validation);
+
+        $this->getServiceValidation()->save($validation);
+        $this->getServiceFichier()->save($fichier);
+
+        return $validation;
+    }
+
+
+
+    public function devaliderDeclarationPrime (Contrat $contrat): bool
+    {
+        $validation = $contrat->getDeclaration()->getValidation();
+        $fichier    = $contrat->getDeclaration()->setValidation(null);
+        $this->getServiceFichier()->save($fichier);
+        $this->getEntityManager()->remove($validation);
+
+        return true;
     }
 
 }

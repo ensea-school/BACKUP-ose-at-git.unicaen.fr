@@ -57,6 +57,18 @@ return [
             'position'    => 18,
             'commentaire' => NULL,
         ],
+        'DECLARATION_ID'        => [
+            'name'        => 'DECLARATION_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 20,
+            'commentaire' => 'Permet de lier un fichier servant de déclaration de fin de mission, pour payer les primes de fin de contrats des missions',
+        ],
         'FIN_VALIDITE'          => [
             'name'        => 'FIN_VALIDITE',
             'type'        => 'date',

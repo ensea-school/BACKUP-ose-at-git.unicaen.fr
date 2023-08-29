@@ -5,7 +5,7 @@ namespace Mission\Controller;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\RoleServiceAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\CentreCoutTypeMission;
@@ -13,7 +13,6 @@ use Mission\Entity\Db\TypeMission;
 use Mission\Form\MissionCentreCoutsTypeFormAwareTrait;
 use Mission\Form\MissionTypeFormAwareTrait;
 use Mission\Service\MissionTypeServiceAwareTrait;
-use Application\Service\Traits\ContextServiceAwareTrait;
 use Paiement\Service\CentreCoutServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
@@ -104,7 +103,7 @@ class MissionTypeController extends AbstractController
 
         if ($this->getRequest()->isPost()) {
             $centreCoutsId = $this->getRequest()->getPost()->get('centreCouts');
-            $structureId = $this->getRequest()->getPost()->get('structure');
+            $structureId   = $this->getRequest()->getPost()->get('structure');
             if ($centreCoutsId != null) {
 
                 $centreCouts = $this->getServiceCentreCout()->get($centreCoutsId);

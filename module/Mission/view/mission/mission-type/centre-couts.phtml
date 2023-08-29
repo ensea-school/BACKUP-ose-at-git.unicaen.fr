@@ -5,14 +5,12 @@
  * @var $tab   string
  */
 
-use Application\Provider\Privilege\Privileges;
-
 
 /**
- * @var $typeMission                 \Mission\Entity\Db\TypeMission
- * @var $structures                  Application\Entity\Db\Structure[]
+ * @var $typeMission                  \Mission\Entity\Db\TypeMission
+ * @var $structures                   Application\Entity\Db\Structure[]
  * @var $centreCoutsTypeMissionStruct Mission\Entity\Db\CentreCoutTypeMission[]
- * @var $forms \Mission\Form\MissionCentreCoutsTypeForm[]
+ * @var $forms                        \Mission\Form\MissionCentreCoutsTypeForm[]
  */
 ?>
 <br>
@@ -49,7 +47,7 @@ use Application\Provider\Privilege\Privileges;
                        data-cancel-button="Non"
                        data-submit-close="true"
                        data-submit-event="event-supprimer-cc"
-                       href="<?= $this->url('missions-type/centre-couts-supprimer', ['typeMission' => $typeMission->getId(), 'centreCoutTypeMission' => $centreCoutsTypeMissionStruct[$structure->getId()]->getId()])?>"
+                       href="<?= $this->url('missions-type/centre-couts-supprimer', ['typeMission' => $typeMission->getId(), 'centreCoutTypeMission' => $centreCoutsTypeMissionStruct[$structure->getId()]->getId()]) ?>"
                        title="Supprimer le scénario"><i class="fas fa-trash-can"></i>
                     </a>
                 </td>

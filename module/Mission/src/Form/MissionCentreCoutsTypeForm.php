@@ -24,18 +24,18 @@ class MissionCentreCoutsTypeForm extends AbstractForm
 
         $this->add([
 
-            'name'  => 'centreCouts',
-            'type'  => 'Select',
-            'input' => [
+            'name'    => 'centreCouts',
+            'type'    => 'Select',
+            'input'   => [
                 'required' => true,
             ],
             'options' => [
-                'empty_option' => 'Sélectionner un centre de cout'
+                'empty_option' => 'Sélectionner un centre de cout',
             ],
         ]);
         $this->add([
-            'name' => 'structure',
-            'type' => 'hidden',
+            'name'  => 'structure',
+            'type'  => 'hidden',
             'input' => [
                 'required' => true,
             ],

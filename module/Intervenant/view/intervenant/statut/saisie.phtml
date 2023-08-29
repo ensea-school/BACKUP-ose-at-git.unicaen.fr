@@ -133,7 +133,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                         </div>
                     </fieldset>
                     <fieldset class="donneesContactDetails">
-                        <legend>Règles spécifiques au module Contact :</legend>
+                        <legend>Règles spécifiques :</legend>
                         <div class="row">
                             <div class="col-md-12">
                                 <?= $this->formControlGroup($form->get('dossierTelPerso')); ?>
@@ -142,6 +142,11 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                         <div class="row">
                             <div class="col-md-12">
                                 <?= $this->formControlGroup($form->get('dossierEmailPerso')); ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?= $this->formControlGroup($form->get('dossierEmployeurFacultatif')); ?>
                             </div>
                         </div>
                     </fieldset>

@@ -1341,6 +1341,7 @@ return [
         'CODE_INDEMNITE_PRIME',
         'TYPE_PAIE',
         'TYPE_PAIE_PRIME',
+        'DOSSIER_EMPLOYEUR_FACULTATIF',
     ],
     'STRUCTURE'                      => [
         'ID',
@@ -2277,6 +2278,8 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'DATE_DEBUT',
+        'DATE_FIN',
     ],
     'MODELE_CONTRAT'                 => [
         'ID',
@@ -2487,6 +2490,10 @@ return [
         'ID',
         'DATE_JOUR',
         'LIBELLE',
+    ],
+    'OFFRE_EMPLOI_ETUDIANT'          => [
+        'INTERVENANT_ID',
+        'OFFRE_EMPLOI_ID',
     ],
 ];
 

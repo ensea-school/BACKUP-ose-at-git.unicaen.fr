@@ -39,6 +39,7 @@ class StatutSaisieForm extends AbstractForm
             'dossierContact'                => 'Contact',
             'dossierTelPerso'               => 'Téléphone personnel obligatoire même si le téléphone pro est renseigné',
             'dossierEmailPerso'             => 'Email personnel obligatoire même si l\'email établissement est renseigné',
+            'dossierEmployeurFacultatif'    => 'L\'employeur peut être facultatif',
             'dossierAdresse'                => 'Adresse',
             'dossierBanque'                 => 'Banque',
             'dossierInsee'                  => 'Numéro INSEE',

@@ -76,7 +76,7 @@ SELECT
        CASE WHEN d.iban IS NOT NULL AND d.bic IS NOT NULL THEN 1 ELSE 0 END
      ) END completude_banque,
      /*Complétude employeur*/
-     CASE WHEN si.dossier_employeur = 0 THEN 1
+     CASE WHEN si.dossier_employeur = 0 OR si.dossier_employeur_facultatif = 1 THEN 1
      ELSE
      (
        CASE WHEN

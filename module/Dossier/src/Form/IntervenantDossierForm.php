@@ -47,7 +47,7 @@ class IntervenantDossierForm extends AbstractForm
 
 
 
-    public function initForm()
+    public function initForm ()
     {
 
         $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($this->intervenant);
@@ -94,6 +94,10 @@ class IntervenantDossierForm extends AbstractForm
         $this->dossierEmployeurFieldset = new EmployeurFieldset('DossierEmployeur');
         $this->dossierEmployeurFieldset->init();
 
+        if ($statut->getDossierEmployeurFacultatif()) {
+            $this->dossierEmployeurFieldset->get('employeur')->setLabel('Employeurs :');
+        }
+
         $this->dossierAutresFiedlset = new DossierAutresFieldset('DossierAutres', ['listChampsAutres' => $dossierIntervenant->getStatut()->getChampsAutres()]);
         $this->dossierAutresFiedlset->init();
 
@@ -133,7 +137,7 @@ class IntervenantDossierForm extends AbstractForm
 
 
 
-    public function setIntervenant(Intervenant $intervenant): self
+    public function setIntervenant (Intervenant $intervenant): self
     {
         $this->intervenant = $intervenant;
 
@@ -148,7 +152,7 @@ class IntervenantDossierForm extends AbstractForm
      *
      * @return array
      */
-    public function getInputFilterSpecification(): array
+    public function getInputFilterSpecification (): array
     {
         return [];
     }

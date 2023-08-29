@@ -2424,6 +2424,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'STRUCTURE_ID',
     ],
     'SAVE_MODELE_CONTRAT'            => [
         'ID',

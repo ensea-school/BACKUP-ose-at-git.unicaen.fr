@@ -2,6 +2,7 @@
 
 namespace Mission\Entity\Db;
 
+use Application\Entity\Db\Structure;
 use Paiement\Entity\Db\CentreCout;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -10,11 +11,27 @@ class CentreCoutTypeMission implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
 
-    protected ?int $id = null;
+    protected ?int         $id          = null;
 
     protected ?TypeMission $typeMission = null;
 
     protected ?CentreCout  $centreCouts = null;
+
+    protected ?Structure   $structure   = null;
+
+
+
+    public function getStructure(): ?Structure
+    {
+        return $this->structure;
+    }
+
+
+
+    public function setStructure(?Structure $structure): void
+    {
+        $this->structure = $structure;
+    }
 
 
 
@@ -39,7 +56,6 @@ class CentreCoutTypeMission implements HistoriqueAwareInterface
     {
         return $this->centreCouts;
     }
-
 
 
 

@@ -27,11 +27,19 @@ class MissionCentreCoutsTypeForm extends AbstractForm
             'name'  => 'centreCouts',
             'type'  => 'Select',
             'input' => [
-                'required' => false,
+                'required' => true,
+            ],
+            'options' => [
+                'empty_option' => 'Sélectionner un centre de cout'
             ],
         ]);
-        $this->setValueOptions('centreCouts', $this->getServiceMissionType()->getCentreCouts());
-
+        $this->add([
+            'name' => 'structure',
+            'type' => 'hidden',
+            'input' => [
+                'required' => true,
+            ],
+        ]);
         $this->addSubmit("Ajouter");
     }
 }

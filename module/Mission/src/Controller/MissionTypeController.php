@@ -3,7 +3,10 @@
 namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\RoleServiceAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\CentreCoutTypeMission;
 use Mission\Entity\Db\TypeMission;
@@ -21,6 +24,7 @@ use UnicaenApp\View\Model\MessengerViewModel;
  */
 class MissionTypeController extends AbstractController
 {
+    use StructureServiceAwareTrait;
     use MissionTypeServiceAwareTrait;
     use CentreCoutServiceAwareTrait;
     use ContextServiceAwareTrait;
@@ -93,49 +97,69 @@ class MissionTypeController extends AbstractController
     {
         $title = 'Gestion des centres de coûts';
         /**
-         * @var TypeMission $entity
+         * @var TypeMission $typeMission
          */
-        $entity = $this->getEvent()->getParam('typeMission');
-                $canEditCC = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_CENTRE_COUT_TYPE));
+        $typeMission = $this->getEvent()->getParam('typeMission');
+        $canEditCC   = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_EDITION_CENTRE_COUT_TYPE));
 
         if ($this->getRequest()->isPost()) {
             $centreCoutsId = $this->getRequest()->getPost()->get('centreCouts');
-            $cenCoutsIds   = $entity->getCentreCoutsIds();
-            if (!in_array($centreCoutsId, $cenCoutsIds)) {
+            $structureId = $this->getRequest()->getPost()->get('structure');
+            if ($centreCoutsId != null) {
 
                 $centreCouts = $this->getServiceCentreCout()->get($centreCoutsId);
+                $structureCC = $this->getServiceStructure()->get($structureId);
 
                 $centreCoutTypeLinker = new CentreCoutTypeMission();
-                $centreCoutTypeLinker->setTypeMission($entity);
+                $centreCoutTypeLinker->setTypeMission($typeMission);
                 $centreCoutTypeLinker->setCentreCouts($centreCouts);
+                $centreCoutTypeLinker->setStructure($structureCC);
                 $this->getServiceMissionType()->saveCentreCoutTypeLinker($centreCoutTypeLinker);
 
-                $entity->addCentreCoutTypeMission($centreCoutTypeLinker);
-                $this->getServiceMissionType()->save($entity);
+                $typeMission->addCentreCoutTypeMission($centreCoutTypeLinker);
+                $this->getServiceMissionType()->save($typeMission);
             }
         }
 
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        if ($role->getStructure()) {
+            $structures[] = $role->getStructure();
+        } else {
+            $filter     = function (Structure $structure) {
+                return !$structure->estHistorise();
+            };
+            $structures = array_filter($this->getServiceStructure()->getList(), $filter);
+        }
+        $forms = [];
+        foreach ($structures as $structure) {
+            $form = $this->getFormMissionCentreCoutsType();
+            $form->setValueOptions('centreCouts', $structure->getCentreCout()->toArray());
+            $form->get('structure')->setValue($structure->getId());
+            $forms[$structure->getId()] = $form;
+        }
+        $centreCoutsTypeMission       = $typeMission->getCentreCoutsTypeMission();
+        $centreCoutsTypeMissionStruct = [];
+        foreach ($centreCoutsTypeMission as $ctm) {
+            /** @var CentreCoutTypeMission $ctm */
+            $centreCoutsTypeMissionStruct[$ctm->getStructure()->getId()] = $ctm;
+        }
+        $vm = new ViewModel();
 
-        $form = $this->getFormMissionCentreCoutsType();
-
-        $centreCoutsTypeMission = $entity->getCentreCoutsTypeMission();
-        $vm                 = new ViewModel();
-
-        $vm->setVariables(compact('form', 'title', 'canEditCC', 'entity', 'centreCoutsTypeMission'));
+        $vm->setVariables(compact('forms', 'structures', 'title', 'canEditCC', 'typeMission', 'centreCoutsTypeMissionStruct'));
 
         return $vm;
     }
 
 
 
-    public function CentreCoutsSupprimerAction(): \Laminas\Http\Response
+    public
+    function CentreCoutsSupprimerAction(): \Laminas\Http\Response
     {
         /**
          * @var TypeMission $entity
          */
-        $entity            = $this->getEvent()->getParam('typeMission');
+        $entity                = $this->getEvent()->getParam('typeMission');
         $centreCoutTypeMission = $this->getEvent()->getParam('centreCoutTypeMission');
-
         $this->getServiceMissionType()->removeCentreCoutLinker($centreCoutTypeMission);
 
 

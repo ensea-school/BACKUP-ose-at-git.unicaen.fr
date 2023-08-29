@@ -41,6 +41,85 @@ class TauxRemuService extends AbstractEntityService
 
 
 
+    public function tauxValeur(TauxRemu|int $tauxRemu, \DateTime $date): float
+    {
+        $session = $this->getSessionContainer();
+        if (!isset($session->tauxValeur)) {
+            $tauxValeur = [];
+
+            $sql = "
+            SELECT
+                tr.id, 
+                tr.taux_remu_id parent_id, to_char( trv.date_effet, 'YYYY-mm-dd' ) date_effet, trv.valeur
+            FROM
+                taux_remu tr
+                JOIN taux_remu_valeur trv ON trv.taux_remu_id = tr.id
+            ORDER BY
+                tr.id, trv.date_effet
+            ";
+
+            $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+            while ($tv = $stmt->fetchAssociative()) {
+                $id = (int)$tv['ID'];
+                $parent = (int)$tv['PARENT_ID'] ?: null;
+                $dateEffet = $tv['DATE_EFFET'];
+                $valeur = $tv['VALEUR'];
+
+                if (!isset($tauxValeur[$id])) {
+                    $tauxValeur[$id] = [
+                        'parent'  => $parent,
+                        'valeurs' => [],
+                    ];
+                }
+                $tauxValeur[$id]['valeurs'][$dateEffet] = $valeur;
+
+            }
+
+            $session->tauxValeur = $tauxValeur;
+        }
+
+        $tauxValeur = $session->tauxValeur;
+arrayDump($tauxValeur);
+        if ($tauxRemu instanceof TauxRemu) {
+            $tauxRemu = $tauxRemu->getId();
+        }
+
+        if (!isset($tauxValeur[$tauxRemu])){
+            throw new \Exception('Taux de rémunération invalide : ID '.$tauxRemu.' inconnu');
+        }
+
+
+        $dateStr = $date->format('Y-m-d');
+        $valeur = 1.0; // pas de taux => coëf 1
+
+        foreach($tauxValeur[$tauxRemu]['valeurs'] as $d => $v ){
+            if ($d <= $dateStr){
+                $valeur = $v;
+            }else{
+                break;
+            }
+        }
+
+        if (!empty($tauxValeur[$tauxRemu]['parent'])){
+            $tauxParent = $this->tauxValeur($tauxValeur[$tauxRemu]['parent'], $date);
+            return round( $valeur * $tauxParent, 2);
+        }else{
+            return $valeur;
+        }
+    }
+
+
+
+    public function clearCache(): self
+    {
+        $session = $this->getSessionContainer();
+        unset($session->tauxValeur);
+
+        return $this;
+    }
+
+
+
     /**
      * Retourne tous les taux de rémunération non historisé
      *

@@ -94,6 +94,7 @@ class TauxRemuController extends AbstractController
             foreach ($tauxRemuValeurs as $tauxRemuValeur) {
                 $this->em()->flush($tauxRemuValeur);
             }
+            $this->getServiceTauxRemu()->clearCache();
             $this->flashMessenger()->addSuccessMessage(
                 "Ajout réussi"
             );
@@ -127,6 +128,7 @@ class TauxRemuController extends AbstractController
         $form->bindRequestSave($tauxRemuValeur, $this->getRequest(), function () use ($tauxRemuValeur, $form) {
             $this->em()->persist($tauxRemuValeur);
             $this->em()->flush($tauxRemuValeur);
+            $this->getServiceTauxRemu()->clearCache();
             $this->flashMessenger()->addSuccessMessage(
                 "Ajout réussi"
             );
@@ -141,6 +143,7 @@ class TauxRemuController extends AbstractController
     {
         $tauxRemu = $this->getEvent()->getParam('tauxRemu');
         $this->getServiceTauxRemu()->delete($tauxRemu, true);
+        $this->getServiceTauxRemu()->clearCache();
 
         $this->flashMessenger()->addSuccessMessage("Taux supprimée avec succès.");
 
@@ -169,6 +172,7 @@ class TauxRemuController extends AbstractController
         $tauxRemuValeur   = $this->getServiceTauxRemu()->getTauxRemuValeur($tauxRemuValeurId);
         $this->em()->remove($tauxRemuValeur);
         $this->em()->flush();
+        $this->getServiceTauxRemu()->clearCache();
 
 
         return new MessengerViewModel();

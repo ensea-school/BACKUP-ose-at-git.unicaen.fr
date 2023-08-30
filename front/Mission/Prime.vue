@@ -42,12 +42,12 @@
                                     .
                                 </p>
 
-                                <input ref="file" :disabled="disabledForm" name="files[]" type="file"/>
+                                <input ref="file" :disabled="!contrat.DATE_REFUS_PRIME ? false : true" name="files[]" type="file"/>
 
                             </div>
                             <div class="card-footer d-grid gap-2">
 
-                                <input :disabled="disabledForm" class="btn btn-primary " type="submit" value="Envoyer">
+                                <input :disabled="!contrat.DATE_REFUS_PRIME ? false : true" class="btn btn-primary " type="submit" value="Envoyer">
                             </div>
                         </div>
                     </div>
@@ -103,37 +103,47 @@
                             <div>
                                 <label class=" form-label">Suivi de la déclaration : </label>
                             </div>
+                            <div v-if="contrat.DATE_REFUS_PRIME">
+                                <u-icon name="thumbs-down"
+                                        variant="danger"/>
+                                Prime refusée le
+                                <u-date :value="contrat.DATE_REFUS_PRIME"/>
+                            </div>
                             <!--Etat du dépôt de la déclaration-->
-                            <div v-if="contrat.FICHIER_ID">
+                            <div v-if="contrat.FICHIER_ID && !contrat.DATE_REFUS_PRIME">
                                 <u-icon name="thumbs-up"
                                         variant="success"/>
-                                Déclaration déposée le 26/05/1982 à 12:00 par Antony Le Courtes
+                                Déclaration déposée le
+                                <u-date :value="contrat.DATE_DEPOT"/>
+                                par {{ contrat.USER_DEPOT }}
                             </div>
-                            <div v-else>
+                            <div v-if="!contrat.FICHIER_ID && !contrat.DATE_REFUS_PRIME">
                                 <u-icon name="thumbs-down"
                                         variant="info"/>
                                 Aucune déclaration déposée
 
                             </div>
                             <!--Etat de la validation de la déclaration-->
-                            <div v-if="contrat.VALIDATION_ID">
+                            <div v-if="contrat.VALIDATION_ID && !contrat.DATE_REFUS_PRIME">
                                 <u-icon name="thumbs-up"
                                         variant="success"/>
-                                Déclaration validée le 26/05/1982 à 12:00 par Antony Le Courtes
+                                Déclaration validée le
+                                <u-date :value="contrat.DATE_VALIDATION"/>
+                                par {{ contrat.USER_VALIDATION }}
                             </div>
-                            <div v-else>
+                            <div v-if="!contrat.VALIDATION_ID && !contrat.DATE_REFUS_PRIME">
                                 <u-icon name="thumbs-down"
                                         variant="info"/>
                                 Aucune déclaration validée
 
                             </div>
                             <!--Eligibilité à la prime de fin de contrat-->
-                            <div v-if="contrat.VALIDATION_ID">
+                            <div v-if="contrat.VALIDATION_ID && !contrat.DATE_REFUS_PRIME">
                                 <u-icon name="euro-sign"
                                         variant="success"/>
                                 Intervenant éligible à la prime de fin de contrat
                             </div>
-                            <div v-else>
+                            <div v-if="contrat.DATE_REFUS_PRIME">
                                 <u-icon name="euro-sign"
                                         variant="info"/>
                                 Intervenant non éligible à la prime de fin de contrat
@@ -188,7 +198,6 @@ export default {
                 intervenant: this.intervenant,
                 contrat: this.contrat.CONTRAT_ID,
             }),
-            disabledForm: false,
 
         };
     },
@@ -226,8 +235,9 @@ export default {
                 this.refuserUrl
             )
                 .then(response => {
-                    console.log('ok');
-                    this.disabledForm = this.disabledForm ? false : true
+
+                    this.$emit('reload');
+
                 })
 
         }

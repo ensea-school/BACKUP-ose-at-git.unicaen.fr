@@ -254,6 +254,10 @@ class MissionService extends AbstractEntityService
           f.validation_id            validation_id,
           c.type_contrat_id          type_contrat_id,
           c.date_refus_prime         date_refus_prime,
+          f.histo_creation           date_depot,
+          u.display_name             user_depot,
+          v2.histo_modification       date_validation,
+          u2.display_name            user_validation,
           ROWNUM                     numero
         FROM
                     contrat         c
@@ -262,8 +266,10 @@ class MissionService extends AbstractEntityService
                JOIN structure s ON s.id = m.structure_id
                JOIN validation      v ON v.id = c.validation_id 
                                      AND v.histo_destruction IS NULL
-          LEFT JOIN fichier f ON f.id = c.declaration_id
-          LEFT JOIN validation v ON f.validation_id = v.id                                       
+          LEFT JOIN fichier f ON f.id = c.declaration_id 
+          LEFT JOIN utilisateur u ON f.histo_createur_id = u.id
+          LEFT JOIN validation v2 ON f.validation_id = v2.id AND v2.histo_destruction IS NULL                                  
+          LEFT JOIN utilisateur u2 ON v2.histo_modificateur_id = u2.id 
           LEFT JOIN contrat    c_suiv ON c_suiv.histo_destruction IS NULL 
                                      AND c_suiv.fin_validite <> c.fin_validite 
                                      AND c_suiv.intervenant_id = c.intervenant_id 

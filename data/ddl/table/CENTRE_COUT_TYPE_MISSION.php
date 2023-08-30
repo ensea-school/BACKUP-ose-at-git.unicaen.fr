@@ -112,7 +112,7 @@ return [
             'length'      => 0,
             'scale'       => NULL,
             'precision'   => NULL,
-            'nullable'    => TRUE,
+            'nullable'    => FALSE,
             'default'     => NULL,
             'position'    => 10,
             'commentaire' => NULL,

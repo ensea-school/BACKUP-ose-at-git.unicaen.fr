@@ -132,8 +132,14 @@ class MissionTypeController extends AbstractController
         $forms = [];
         foreach ($structures as $structure) {
             $form = $this->getFormMissionCentreCoutsType();
-            $form->setValueOptions('centreCouts', $structure->getCentreCout()->toArray());
             $form->get('structure')->setValue($structure->getId());
+
+            if(empty($structure->getCentreCout()->toArray())){
+                $form->get('centreCouts')->setEmptyOption( 'Aucun centre de couts disponible');
+                $form->remove('submit');
+            }else{
+                $form->setValueOptions('centreCouts', $structure->getCentreCout()->toArray());
+            }
             $forms[$structure->getId()] = $form;
         }
         $centreCoutsTypeMission       = $typeMission->getCentreCoutsTypeMission();

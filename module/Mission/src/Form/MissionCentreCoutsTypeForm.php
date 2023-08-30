@@ -30,7 +30,11 @@ class MissionCentreCoutsTypeForm extends AbstractForm
                 'required' => true,
             ],
             'options' => [
-                'empty_option' => 'Sélectionner un centre de cout',
+                'empty_option' => 'Sélectionner un centre de couts',
+            ],
+            'attributes' => [
+                'class'            => 'input-sm selectpicker',
+                'data-live-search' => 'true',
             ],
         ]);
         $this->add([

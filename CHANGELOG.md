@@ -8,6 +8,7 @@
 
 * Nouveau mode de calcul des heures à payer
 * Mises en paiement possibles pour les missions (emplois étudiants)
+* Gestion des primes de fin de mission (emplois étudiants)
 
 
 # OSE 21.2 (31/08/2023)

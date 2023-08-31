@@ -241,51 +241,60 @@ class MissionService extends AbstractEntityService
 
 
         $sql = "
-        SELECT DISTINCT
-          c.id                       contrat_id,
-          c.debut_validite           date_debut_contrat,
-          c.fin_validite             date_fin_contrat,
-          m.libelle_mission			 libelle_mission,
-          tm.libelle                 type_mission,
-          c.intervenant_id           intervenant_id,
-          s.libelle_court            libelle_structure,
-          c.declaration_id	         fichier_id,
-          f.nom						 fichier_nom,
-          f.validation_id            validation_id,
-          c.type_contrat_id          type_contrat_id,
-          c.date_refus_prime         date_refus_prime,
-          f.histo_creation           date_depot,
-          u.display_name             user_depot,
-          v2.histo_modification       date_validation,
-          u2.display_name            user_validation,
-          ROWNUM                     numero
-        FROM
-                    contrat         c
-               JOIN mission m ON m.id = c.mission_id     
-               JOIN type_mission tm ON tm.id = m.type_mission_id
-               JOIN structure s ON s.id = m.structure_id
-               JOIN validation      v ON v.id = c.validation_id 
-                                     AND v.histo_destruction IS NULL
-          LEFT JOIN fichier f ON f.id = c.declaration_id 
-          LEFT JOIN utilisateur u ON f.histo_createur_id = u.id
-          LEFT JOIN validation v2 ON f.validation_id = v2.id AND v2.histo_destruction IS NULL                                  
-          LEFT JOIN utilisateur u2 ON v2.histo_modificateur_id = u2.id 
-          LEFT JOIN contrat    c_suiv ON c_suiv.histo_destruction IS NULL 
-                                     AND c_suiv.fin_validite <> c.fin_validite 
-                                     AND c_suiv.intervenant_id = c.intervenant_id 
-                                     AND c.fin_validite BETWEEN c_suiv.debut_validite-1 AND c_suiv.fin_validite
-                                     AND c.type_contrat_id = (SELECT id FROM type_contrat WHERE code = 'CONTRAT')                                                
-          LEFT JOIN validation v_suiv ON v_suiv.id = c_suiv.validation_id 
-                                     AND v_suiv.histo_destruction IS NULL
-        WHERE
-          c.histo_destruction IS NULL
-          -- on trouve un contrat validé qui suit => ce n'est pas un contrat qui donne droit à la prime
-          AND v_suiv.id IS NULL 
-          AND c.intervenant_id = :intervenant
-          --Uniquement si le contrat est déjà fini
-          AND c.fin_validite < SYSDATE
-          AND c.type_contrat_id = (SELECT id FROM type_contrat WHERE code = 'CONTRAT')
-          ORDER BY c.fin_validite ASC
+        WITH contrat_mission AS (
+            SELECT 
+                    c.id                    contrat_id,
+                    m.date_debut 			date_debut_contrat,
+                    m.date_fin              date_fin_contrat,
+                    m.libelle_mission		libelle_mission,
+                    m.intervenant_id        intervenant_id,
+                    tm.libelle              type_mission,
+                    s.libelle_court         libelle_structure,
+                    c.declaration_id	    declaration_id,
+                    c.date_refus_prime      date_refus_prime,
+                    c.histo_destruction     histo_destruction
+            FROM mission m 
+            JOIN contrat c ON c.mission_id = m.id
+            JOIN type_mission tm ON tm.id = m.type_mission_id 
+            JOIN structure s ON s.id = m.structure_id 
+            JOIN validation v ON v.id = c.validation_id AND v.histo_destruction IS null 
+            WHERE 
+                c.type_contrat_id = (SELECT id FROM type_contrat WHERE code = 'CONTRAT')
+                AND c.histo_destruction IS NULL
+                AND c.date_retour_signe IS NOT NULL
+        )
+        SELECT DISTINCT 
+                cm.contrat_id            contrat_id,
+                cm.date_debut_contrat	 date_debut_contrat,
+                cm.date_fin_contrat		 date_fin_contrat,
+                cm.libelle_mission		 libelle_mission,
+                cm.intervenant_id        intervenant_id,
+                cm.type_mission          type_mission,
+                cm.libelle_structure     libelle_structure,
+                cm.declaration_id	     declaration_id,
+                cm.date_refus_prime      date_refus_prime,
+                cm.histo_destruction     histo_destruction,
+                f.nom					 fichier_nom,
+                f.validation_id          validation_id,
+                f.histo_creation         date_depot,
+                u.display_name           user_depot,
+                vf.histo_modification    date_validation,
+                u2.display_name          user_validation,
+                ROWNUM                   numero
+        FROM contrat_mission cm
+        LEFT JOIN fichier f ON f.id = cm.declaration_id
+        LEFT JOIN utilisateur u ON f.histo_createur_id = u.id 
+        LEFT JOIN validation vf ON vf.id = f.validation_id AND vf.histo_destruction IS null 
+        LEFT JOIN utilisateur u2 ON u2.id = vf.histo_createur_id 
+        LEFT JOIN contrat_mission cm_suiv ON cm_suiv.histo_destruction IS NULL 
+                                         AND cm_suiv.date_fin_contrat <> cm.date_fin_contrat
+                                         AND cm_suiv.intervenant_id = cm.intervenant_id 
+                                         AND cm.date_fin_contrat BETWEEN cm_suiv.date_debut_contrat-1 AND cm_suiv.date_fin_contrat
+        WHERE  
+            cm.intervenant_id = 12291	
+            AND cm.date_fin_contrat < SYSDATE
+            AND cm_suiv.contrat_id IS NULL       
+        ORDER BY cm.date_debut_contrat ASC
        ";
 
         $data       = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['intervenant' => $parameters['intervenant']]);

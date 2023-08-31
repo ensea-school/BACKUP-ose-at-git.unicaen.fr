@@ -1,5 +1,6 @@
 <template>
-    <div :class="{'bg-success':contrat.VALIDATION_ID,'bg-default':!contrat.VALIDATION_ID}" class="card">
+    <div :class="{'bg-success':contrat.VALIDATION_ID,'bg-default':!contrat.VALIDATION_ID&&!contrat.DATE_REFUS_PRIME,'bg-danger':contrat.DATE_REFUS_PRIME }"
+         class="card">
         <div class="card-header card-header-h3">
             <h5 v-if="contrat.LIBELLE_MISSION">
                 Prime de fin de contrat N°{{ contrat.NUMERO }} - {{ contrat.LIBELLE_STRUCTURE }}
@@ -25,7 +26,7 @@
                 <div class="row">
 
 
-                    <div v-if="!contrat.FICHIER_ID" class="col-md-6">
+                    <div v-if="!contrat.DECLARATION_ID" class="col-md-6">
 
                         <div class="card text-dark bg-light">
                             <div class="card-header">
@@ -51,7 +52,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="contrat.FICHIER_ID" class="col-md-6">
+                    <div v-if="contrat.DECLARATION_ID" class="col-md-6">
 
                         <div class="card text-dark bg-light">
                             <div class="card-header">
@@ -64,21 +65,21 @@
 
                             </div>
                             <div class="card-footer" style="text-align:right;">
-                                <a v-if="contrat.FICHIER_ID && !contrat.VALIDATION_ID"
+                                <a v-if="contrat.DECLARATION_ID && !contrat.VALIDATION_ID"
                                    :href="supprimerUrl"
                                    class="btn btn-danger"
                                    title="Supprimer"
                                    @click.prevent="supprimer">
                                     Supprimer
                                 </a>&nbsp;
-                                <a v-if="contrat.FICHIER_ID && !contrat.VALIDATION_ID && this.canValider"
+                                <a v-if="contrat.DECLARATION_ID && !contrat.VALIDATION_ID && this.canValider"
                                    :href="validerUrl"
                                    class="btn btn-success"
                                    title="Valider"
                                    @click.prevent="valider">
                                     Valider
                                 </a>&nbsp;
-                                <a v-if="contrat.FICHIER_ID && contrat.VALIDATION_ID && this.canValider"
+                                <a v-if="contrat.DECLARATION_ID && contrat.VALIDATION_ID && this.canValider"
                                    :href="devaliderUrl"
                                    class="btn btn-danger d-grid gap-2"
                                    title="Dévalider"
@@ -110,14 +111,14 @@
                                 <u-date :value="contrat.DATE_REFUS_PRIME"/>
                             </div>
                             <!--Etat du dépôt de la déclaration-->
-                            <div v-if="contrat.FICHIER_ID && !contrat.DATE_REFUS_PRIME">
+                            <div v-if="contrat.DECLARATION_ID && !contrat.DATE_REFUS_PRIME">
                                 <u-icon name="thumbs-up"
                                         variant="success"/>
                                 Déclaration déposée le
                                 <u-date :value="contrat.DATE_DEPOT"/>
                                 par {{ contrat.USER_DEPOT }}
                             </div>
-                            <div v-if="!contrat.FICHIER_ID && !contrat.DATE_REFUS_PRIME">
+                            <div v-if="!contrat.DECLARATION_ID && !contrat.DATE_REFUS_PRIME">
                                 <u-icon name="thumbs-down"
                                         variant="info"/>
                                 Aucune déclaration déposée

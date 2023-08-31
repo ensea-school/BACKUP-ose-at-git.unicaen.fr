@@ -1,18 +1,26 @@
 # Version stable
 
-[OSE 21.1](#ose-211-13072023)
+[OSE 21.1](#ose-212-31082023)
 
-# OSE 21.2 (à venir)
+# OSE 22 (à venir)
 
 ## Nouveautés
 
-* Permettre d'activer le champs employeur des données personnelles et le rendre optionnel dans la complétude du dossier (#51889)
+* Nouveau mode de calcul des heures à payer
+* Mises en paiement possibles pour les missions (emplois étudiants)
+
+
+# OSE 21.2 (31/08/2023)
+
+## Nouveautés
+
+* Permettre d'activer le champ employeur des données personnelles et le rendre optionnel dans la complétude du dossier (#51889)
 
 ## Corrections de bugs
 
 * Prise en compte du filtre formation lors de la recherche d'un enseignement en saisie de service (#51823)
 * Correction de V_CONTRATS_SERVICES (#51795)
-
+* Nouveaux problèmes corrigés au niveau du calcul des plafonds
 
 # OSE 21.1 (13/07/2023)
 

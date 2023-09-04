@@ -279,6 +279,13 @@ class OseAdmin
 
 
 
+    public function getController(string $name)
+    {
+        return $this->getContainer()->get('ControllerManager')->get($name);
+    }
+
+
+
     public function test(string $action)
     {
         $cible = $this->getOseDir() . 'test/'.$action.'.php';

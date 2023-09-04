@@ -1,19 +1,16 @@
 <?php
 
 
-
-
-
 class OseAdmin
 {
     const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE.git';
     const MIN_VERSION = 17; // version minimum installable
 
-    private static ?OseAdmin         $instance    = null;
+    private static ?OseAdmin $instance = null;
 
-    protected Console                $console;
+    protected Console $console;
 
-    protected ?\BddAdmin\Bdd         $bdd         = null;
+    protected ?\BddAdmin\Bdd $bdd = null;
 
     protected ?\BddAdmin\DataUpdater $dataUpdater = null;
 
@@ -46,6 +43,8 @@ class OseAdmin
      * @var string
      */
     public $version;
+
+    private ?\Psr\Container\ContainerInterface $container = null;
 
 
 
@@ -89,7 +88,7 @@ class OseAdmin
 
         $this->console = new Console();
 
-        $this->version    = $this->currentVersion();
+        $this->version = $this->currentVersion();
         $this->oldVersion = $this->version;
 
         if ($this->console->hasOption('oa-old-version')) {
@@ -239,7 +238,7 @@ class OseAdmin
             $filename = $cible . 'actions/' . $action . '.php';
         } elseif (is_dir($cible . $action)) {
             $sousAction = $this->getConsole()->getArg(2);
-            $filename   = $cible . $action . '/actions/' . $sousAction . '.php';
+            $filename = $cible . $action . '/actions/' . $sousAction . '.php';
         } else {
             $filename = null;
         }
@@ -253,7 +252,7 @@ class OseAdmin
                 );
             } else {
                 $oa = $this;
-                $c  = $this->console;
+                $c = $this->console;
                 require_once $filename;
             }
         } else {
@@ -261,6 +260,36 @@ class OseAdmin
             $c = $this->console;
             require_once $this->getOseDir() . 'admin/actions/help.php';
         }
+    }
+
+
+
+    public function getContainer(): \Psr\Container\ContainerInterface
+    {
+        if (empty($this->container)){
+            require_once $this->getOseDir().'config/application.config.php';
+
+            Application::init();
+            Application::start();
+            $this->container = Application::$container;
+        }
+
+        return $this->container;
+    }
+
+
+
+    public function test(string $action)
+    {
+        $cible = $this->getOseDir() . 'test/'.$action.'.php';
+
+        if (!file_exists($cible)){
+            $this->console->printDie("Le fichier $cible n'existe pas");
+        }
+
+        $oa = $this;
+        $c = $this->console;
+        require_once($cible);
     }
 
 
@@ -377,10 +406,10 @@ class OseAdmin
                 $this->bdd->setLogger($this->console);
             }
 
-            try{
+            try {
                 $this->bdd->setOption('source-id', $this->getSourceOseId());
                 $this->bdd->setOption('histo-user-id', $this->getOseAppliId());
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
 
             }
 
@@ -428,9 +457,9 @@ class OseAdmin
     {
         $bddConf = Config::getBdd();
 
-        $cs           = $bddConf['host'] . ':' . $bddConf['port'] . '/' . $bddConf['dbname'];
+        $cs = $bddConf['host'] . ':' . $bddConf['port'] . '/' . $bddConf['dbname'];
         $characterSet = 'AL32UTF8';
-        $conn         = @oci_pconnect($bddConf['username'], $bddConf['password'], $cs, $characterSet);
+        $conn = @oci_pconnect($bddConf['username'], $bddConf['password'], $cs, $characterSet);
         if (!$conn) {
             $msg = oci_error()['message'];
 

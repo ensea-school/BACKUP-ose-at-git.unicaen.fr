@@ -1,0 +1,10 @@
+#!/usr/bin/env php
+<?php
+
+require_once dirname(__DIR__) . '/admin/src/OseAdmin.php';
+
+$oa = OseAdmin::getInstance();
+
+$c = $oa->getConsole();
+
+$oa->test($c->getArg(1) ?: 'help');

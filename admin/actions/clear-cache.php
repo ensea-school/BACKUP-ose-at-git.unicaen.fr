@@ -9,7 +9,18 @@ try {
         "rm -Rf cache/*",
     ], false);
 
-    $oa->exec("generate-proxies");
+    /* Nettoyage des proxies */
+    /** @var \Doctrine\ORM\EntityManager $entityManager */
+    $entityManager = $oa->getContainer()->get('doctrine.entitymanager.orm_default');
+    $destPath = $entityManager->getConfiguration()->getProxyDir();
+
+    if (!is_dir($destPath)) {
+        mkdir($destPath, 0775, true);
+    }
+
+    $destPath = realpath($destPath);
+    $metadatas = $entityManager->getMetadataFactory()->getAllMetadata();
+    $entityManager->getProxyFactory()->generateProxyClasses($metadatas, $destPath);
 
     $c->exec([
         "cd $osedir",

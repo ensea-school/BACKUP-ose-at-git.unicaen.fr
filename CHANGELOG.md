@@ -11,6 +11,13 @@
 * Gestion des primes de fin de mission (emplois étudiants)
 
 
+# OSE 21.3 (à venir)
+
+## Corrections de bugs
+
+* Le filtre par élément pédagogique refonctionne normalement pour l'affichage du résumé des services (#51144)
+
+
 # OSE 21.2 (31/08/2023)
 
 ## Nouveautés

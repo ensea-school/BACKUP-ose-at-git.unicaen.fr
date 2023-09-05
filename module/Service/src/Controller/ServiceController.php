@@ -15,6 +15,7 @@ use Enseignement\Processus\EnseignementProcessusAwareTrait;
 use Laminas\Http\Request;
 use Laminas\View\Model\ViewModel;
 use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Recherche;
@@ -47,6 +48,7 @@ class ServiceController extends AbstractController
     use CampagneSaisieServiceAwareTrait;
     use ServiceReferentielProcessusAwareTrait;
     use ValidationServiceAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
 
 
     /**

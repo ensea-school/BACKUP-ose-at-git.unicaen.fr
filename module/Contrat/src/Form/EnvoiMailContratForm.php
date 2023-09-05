@@ -20,7 +20,7 @@ class EnvoiMailContratForm extends AbstractForm
 
 
 
-    public function init()
+    public function init ()
     {
         /*    $hydrator = new TypeInterventionStatutHydrator();
             $this->setHydrator($hydrator);*/
@@ -58,7 +58,7 @@ class EnvoiMailContratForm extends AbstractForm
 
         $this->add([
                 'options' => [
-                    'label' => 'Ajouter des destinataires en copie caché (séparés par des points virugles)',
+                    'label' => 'Ajouter des destinataires en copie caché (séparés par des points virgules)',
                 ],
                 'name'    => 'destinataire-cc-mail',
             ]
@@ -85,7 +85,7 @@ class EnvoiMailContratForm extends AbstractForm
      *
      * @return array
      */
-    public function getInputFilterSpecification()
+    public function getInputFilterSpecification ()
     {
         return [
             'expediteur-mail'      => [

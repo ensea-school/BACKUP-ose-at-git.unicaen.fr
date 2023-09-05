@@ -67,7 +67,7 @@ class StatutSaisieForm extends AbstractForm
             'modeEnseignementPrevisionnel'  => 'Mode de saisie pour les enseignements prévisionnels',
             'modeEnseignementRealise'       => 'Mode de saisie pour les enseignements réalisés',
             'modeCalcul'                    => 'Mode de calcul de la paie (ex : A, B etc...)',
-            'codeIndemnite'                 => 'Code indémnité de la paie (ex : 0204, 2251 etc...)',
+            'codeIndemnite'                 => 'Code indemnité de la paie (ex : 0204, 2251 etc...)',
             'typePaie'                      => 'Code du type ou carte de la paie (ex : 20, P etc...)',
             'modeCalculPrime'               => 'Mode de calcul primes mission (ex : A, B etc...)',
             'codeIndemnitePrime'            => 'Code indémnité primes mission (ex : 0204, 2251 etc...)',

@@ -70,10 +70,95 @@ class ServiceService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass()
+    public function getEntityClass ()
     {
         return Service::class;
     }
+
+
+
+    /**
+     * Retourne la liste des services selon l'étape donnée
+     *
+     * @param Etape             $etape
+     * @param QueryBuilder|null $queryBuilder
+     *
+     * @return QueryBuilder
+     */
+    public function finderByEtape (Etape $etape, QueryBuilder $qb = null, $alias = null)
+    {
+        $serviceElement = $this->getServiceElementPedagogique();
+
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        $this->leftJoin($serviceElement, $qb, 'elementPedagogique');
+        $serviceElement->finderByEtape($etape, $qb);
+
+        return $qb;
+    }
+
+
+
+    /**
+     * Retourne la liste des services selon l'étape donnée
+     *
+     * @param Etape             $etape
+     * @param QueryBuilder|null $queryBuilder
+     *
+     * @return QueryBuilder
+     */
+    public function finderByNiveauEtape (NiveauEtape $niveauEtape, QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        if ($niveauEtape && $niveauEtape->getId() !== '|') {
+            $serviceElement = $this->getServiceElementPedagogique();
+            $serviceEtape   = $this->getServiceEtape();
+
+            $this->leftJoin($serviceElement, $qb, 'elementPedagogique');
+            $serviceElement->join($serviceEtape, $qb, 'etape');
+            $serviceEtape->finderByNiveau($niveauEtape, $qb);
+        }
+
+        return $qb;
+    }
+
+
+
+    /**
+     * Retourne le query builder permettant de rechercher les services prévisionnels
+     * selon la composante spécifiée.
+     *
+     * Càd les services prévisionnels satisfaisant au moins l'un des critères suivants :
+     * - la structure d'enseignement (champ 'structure_ens') est la structure spécifiée;
+     * - la structure d'affectation (champ 'structure_aff')  est la structure spécifiée;
+     *
+     * @param Structure         $structure
+     * @param QueryBuilder|null $queryBuilder
+     *
+     * @return QueryBuilder
+     */
+    public function finderByComposante (Structure $structure, QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        $serviceStructure          = $this->getServiceStructure();
+        $serviceIntervenant        = $this->getServiceIntervenant();
+        $serviceElementPedagogique = $this->getServiceElementPedagogique();
+        $serviceStatut             = $this->getServiceStatut();
+        $iAlias                    = $serviceIntervenant->getAlias();
+        $sAlias                    = $serviceStatut->getAlias();
+
+        $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
+        $serviceIntervenant->join($serviceStatut, $qb, 'statut', false);
+        $this->leftJoin($serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias);
+        $serviceElementPedagogique->leftJoin($serviceStructure, $qb, 'structure', false, null, 's_ens');
+
+        $filter = "(($sAlias.typeIntervenant = :typeIntervenantPermanent AND $iAlias.structure = :composante) OR s_ens = :composante)";
+        $qb->andWhere($filter)->setParameter('composante', $structure);
+        $qb->setParameter('typeIntervenantPermanent', $this->getServiceTypeIntervenant()->getPermanent());
+
+        return $qb;
+    }
+
 
 
     /**
@@ -81,44 +166,410 @@ class ServiceService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias()
+    public function getAlias ()
     {
         return 's';
     }
 
 
+
     /**
-     * Retourne une nouvelle entité de la classe donnée
+     * Utile pour la recherche de services
      *
-     * @return Service
+     * @param Structure         $structure
+     * @param QueryBuilder|null $queryBuilder
+     *
+     * @return QueryBuilder
      */
-    public function newEntity()
+    public function finderByStructureAff (Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
-        /** @var Service $entity */
-        $entity = parent::newEntity();
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        $serviceIntervenant = $this->getServiceIntervenant();
+
+        $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
+        $serviceIntervenant->finderByStructure($structure, $qb);
+        $serviceIntervenant->finderByType($this->getServiceTypeIntervenant()->getPermanent(), $qb);
+
+        return $qb;
+    }
+
+
+
+    /**
+     * Utile pour la recherche de services
+     *
+     * @param Structure         $structure
+     * @param QueryBuilder|null $queryBuilder
+     *
+     * @return QueryBuilder
+     */
+    public function finderByStructureEns (Structure $structure, QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        $serviceElementPedagogique = $this->getServiceElementPedagogique();
+        $this->join($serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias);
+        $serviceElementPedagogique->finderByStructure($structure, $qb);
+
+        return $qb;
+    }
+
+
+
+    /**
+     * Filtre la liste des services selon lecontexte courant
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null       $alias
+     *
+     * @return QueryBuilder
+     */
+    public function finderByContext (QueryBuilder $qb = null, $alias = null)
+    {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        $this->join($this->getServiceIntervenant(), $qb, 'intervenant', false, $alias);
+        $this->getServiceIntervenant()->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
+
+        if ($intervenant = $role->getIntervenant()) { // Si c'est un intervenant
+            $this->finderByIntervenant($intervenant, $qb, $alias);
+        }
+
+        return $qb;
+    }
+
+
+
+    /**
+     * Retourne la liste des services selon l'étape donnée
+     *
+     * @param TypeIntervenant   $typeIntervenant
+     * @param QueryBuilder|null $queryBuilder
+     *
+     * @return QueryBuilder
+     */
+    public function finderByTypeIntervenant (TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        if ($typeIntervenant) {
+            $this->join($this->getServiceIntervenant(), $qb, 'intervenant', false, $alias);
+            $this->getServiceIntervenant()->finderByType($typeIntervenant, $qb);
+        }
+
+        return $qb;
+    }
+
+
+
+    /**
+     * Prend les services d'un intervenant, année n-1, et reporte ces services (et les volumes horaires associés)
+     * sur l'année n
+     *
+     * @param Intervenant $intervenant
+     *
+     */
+    public function setPrevusFromPrevus (Intervenant $intervenant)
+    {
+        $old               = $this->getPrevusFromPrevusData($intervenant);
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+
+        // Enregistrement des services trouvés dans la nouvelle année
+        foreach ($old as $o) {
+            $service = $o['service'];
+            if (!$service) {
+                $service = $this->newEntity();
+                $service->setIntervenant($intervenant);
+                $service->setElementPedagogique($o['element-pedagogique']);
+                $service->setEtablissement($o['etablissement']);
+            }
+            foreach ($o['heures'] as $heures) {
+                $volumeHoraire = $this->getServiceVolumeHoraire()->newEntity();
+                //@formatter:off
+                $volumeHoraire->setTypeVolumeHoraire($typeVolumeHoraire);
+                $volumeHoraire->setPeriode($heures['periode']);
+                $volumeHoraire->setTypeIntervention($heures['type-intervention']);
+                $volumeHoraire->setHeures($heures['heures']);
+                //@formatter:on
+                $volumeHoraire->setService($service);
+                $service->addVolumeHoraire($volumeHoraire);
+            }
+            $service->setHistoDestructeur(null); // restauration du service si besoin!!
+            $service->setHistoDestruction(null);
+            $service->setTypeVolumeHoraire($typeVolumeHoraire);
+            $service->setChanged(true);
+            try {
+                $this->save($service, false);
+            } catch (\Exception $e) {
+
+            }
+        }
+    }
+
+
+
+    public function getPrevusFromPrevusData (Intervenant $intervenant)
+    {
+        $tvhPrevu  = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $tvhSource = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'));
+        $evhValide = $this->getServiceEtatVolumeHoraire()->getValide();
+
+        $intervenantPrec = $this->getServiceIntervenant()->getPrecedent($intervenant);
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
-        if ($intervenant = $role->getIntervenant()) {
-            $entity->setIntervenant($intervenant);
-        }
-        $entity->setEtablissement($this->getServiceContext()->getEtablissement());
 
-        return $entity;
+        $sVolumeHoraire      = $this->getServiceVolumeHoraire();
+        $sElementPedagogique = $this->getServiceElementPedagogique();
+
+        $qb = $this->select(['id', 'elementPedagogique', 'etablissement']);
+        //@formatter:off
+        $this->join(EtablissementService::class, $qb, 'etablissement', true);//['id', 'sourceCode']);
+        $this->leftJoin(ElementPedagogiqueService::class, $qb, 'elementPedagogique', true);//['id', 'sourceCode']);
+        $this->leftJoin($sVolumeHoraire, $qb, 'volumeHoraire', true);//['id', 'periode', 'typeIntervention', 'heures']);
+        $sVolumeHoraire->leftJoin(PeriodeService::class, $qb, 'periode', true);//['id']);
+        $sVolumeHoraire->leftJoin(TypeInterventionService::class, $qb, 'typeIntervention', true);//['id']);
+        //@formatter:on
+
+        $this->finderByHistorique($qb);
+        $this->finderByIntervenant($intervenantPrec, $qb);
+        $sVolumeHoraire->finderByHistorique($qb);
+        $sVolumeHoraire->finderByTypeVolumeHoraire($tvhSource, $qb);
+        $sVolumeHoraire->finderByEtatVolumeHoraire($evhValide, $qb);
+
+        if ($structure = $role->getStructure()) {
+            $sElementPedagogique->finderByStructure($structure, $qb);
+        }
+
+        $s = $this->getList($qb);
+
+        $old = [];
+        foreach ($s as $service) {
+
+            /* @var $service Service */
+            $service->setTypeVolumeHoraire($tvhSource);
+            $oldElement = $service->getElementPedagogique();
+            $newElement = $oldElement ? $this->getServiceElementPedagogique()->getByCode(
+                $oldElement->getCode(),
+                $this->getServiceContext()->getAnnee()
+            ) : null;
+
+            if ($newElement && !$newElement->estNonHistorise()) {
+                $newElement = null; // s'il n'est pas actif alors on ne reporte pas
+            }
+
+            $newPeriode = $newElement ? $newElement->getPeriode() : null;
+
+            if (empty($oldElement) || !empty($newElement)) {
+                $o  = [
+                    'element-pedagogique' => $newElement,
+                    'etablissement'       => $service->getEtablissement(),
+                    'heures'              => [],
+                ];
+                $id = $newElement ? $newElement->getSourceCode() : '';
+                $id .= '-';
+                $id .= $service->getEtablissement()->getSourceCode();
+
+                $vhl = $service->getVolumeHoraireListe();
+
+                $periodes          = $vhl->getPeriodes();
+                $typesIntervention = $vhl->getTypesIntervention();
+                foreach ($periodes as $periode) {
+                    /* @var $periode \Application\Entity\Db\Periode */
+                    if (empty($newPeriode) || $periode === $newPeriode) { // pas de mauvaise période!!!
+                        foreach ($typesIntervention as $typeIntervention) {
+                            /* @var $typeIntervention TypeInterventionService */
+                            $heures = $vhl->setPeriode($periode)->setTypeIntervention($typeIntervention)->getHeures();
+                            if ($heures > 0) {
+                                $o['heures'][] = [
+                                    'periode'             => $periode,
+                                    'type-intervention'   => $typeIntervention,
+                                    'type-volume-horaire' => $tvhPrevu,
+                                    'heures'              => $heures,
+                                ];
+                            }
+                        }
+                    }
+                }
+
+                if (!empty($o['heures'])) {
+                    $newService = $this->getBy($intervenant, $newElement, $service->getEtablissement());
+                    if ($newService) {
+                        $newService->setTypeVolumeHoraire($tvhPrevu);
+                    }
+                    if ($newService && $newService->estNonHistorise()) {
+                        $newHeures = $newService->getVolumeHoraireListe()->getHeures();
+                    } else {
+                        $newHeures = 0;
+                    }
+                    if ($newHeures == 0) { // on n'insère pas le service si des heures ont déjà été saisies!!
+                        $o['service'] = $newService;
+                        $old[$id]     = $o;
+                    }
+                }
+            }
+        }
+
+        return $old;
     }
+
+
+
+    /**
+     *
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param QueryBuilder      $qb
+     * @param string            $alias
+     *
+     * @return QueryBuilder
+     */
+    public function finderByTypeVolumeHoraire (TypeVolumeHoraire $typeVolumeHoraire, QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        if ($typeVolumeHoraire) {
+            $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
+
+            $this->join($serviceVolumeHoraire, $qb, 'volumeHoraire');
+            $serviceVolumeHoraire->finderByTypeVolumeHoraire($typeVolumeHoraire, $qb);
+        }
+
+        return $qb;
+    }
+
+
+
+    /**
+     *
+     * @param EtatVolumeHoraire $etatVolumeHoraire
+     * @param QueryBuilder      $qb
+     * @param string            $alias
+     *
+     * @return QueryBuilder
+     */
+    public function finderByEtatVolumeHoraire (EtatVolumeHoraire $etatVolumeHoraire, QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        if ($etatVolumeHoraire) {
+            $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
+
+            $this->join($serviceVolumeHoraire, $qb, 'volumeHoraire');
+            $serviceVolumeHoraire->finderByEtatVolumeHoraire($etatVolumeHoraire, $qb);
+        }
+
+        return $qb;
+    }
+
+
+
+    /**
+     *
+     * @param Service[]         $services
+     * @param TypeVolumeHoraire $typeVolumehoraire
+     */
+    public function setTypeVolumehoraire ($services, TypeVolumeHoraire $typeVolumeHoraire)
+    {
+        foreach ($services as $service) {
+            $service->setTypeVolumeHoraire($typeVolumeHoraire);
+        }
+    }
+
+
+
+    /**
+     * Retourne la période courante d'un service
+     *
+     * @param Service $service
+     *
+     * @return Periode
+     */
+    public function getPeriode (Service $service)
+    {
+        if (!$this->isLocal($service)) return null;
+        if (!$service->getElementPedagogique()) return null;
+
+        return $service->getElementPedagogique()->getPeriode();
+    }
+
+
+
+    /**
+     * Détermine si un service est assuré localement (c'est-à-dire dans l'université) ou sur un autre établissement
+     *
+     * @param Service $service
+     *
+     * @return boolean
+     */
+    protected function isLocal (Service $service)
+    {
+        if (!$service->getEtablissement()) return true; // par défaut
+        if ($service->getEtablissement() === $this->getServiceContext()->getEtablissement()) return true;
+
+        return false;
+    }
+
+
+
+    /**
+     *
+     * @param Service $service
+     *
+     * @return Periode[]
+     */
+    public function getPeriodes (Service $service)
+    {
+        $p = $this->getPeriode($service);
+        if (null === $p) {
+            // Pas de période donc toutes les périodes sont autorisées
+            return $this->getServicePeriode()->getEnseignement();
+        } else {
+            return [$p->getId() => $p];
+        }
+    }
+
+
+
+    /**
+     *
+     * @param Service|Service[] $services
+     *
+     * @return TypeIntervention[]
+     */
+    public function getTypesIntervention ($services)
+    {
+        if ($services instanceof Service) $services = [$services];
+        $typesIntervention = [];
+        foreach ($services as $service) {
+            if (!$service instanceof Service) {
+                throw new \LogicException('Seules des entités Service doivent être passées en paramètre');
+            }
+            if ($ep = $service->getElementPedagogique()) {
+                foreach ($ep->getTypeIntervention() as $typeIntervention) {
+                    $typesIntervention[$typeIntervention->getId()] = $typeIntervention;
+                }
+            }
+        }
+        usort($typesIntervention, function ($ti1, $ti2) {
+            return $ti1->getOrdre() - $ti2->getOrdre();
+        });
+
+        return $typesIntervention;
+    }
+
 
 
     /**
      * Retourne un service unique selon ses critères précis
      *
-     * @param Intervenant $intervenant
+     * @param Intervenant        $intervenant
      * @param ElementPedagogique $elementPedagogique
-     * @param Etablissement $etablissement
+     * @param Etablissement      $etablissement
      *
      * @return null|Service
      */
-    public function getBy(
-        Intervenant   $intervenant,
-                      $elementPedagogique,
+    public function getBy (
+        Intervenant $intervenant,
+        $elementPedagogique,
         Etablissement $etablissement
     )
     {
@@ -143,6 +594,28 @@ class ServiceService extends AbstractEntityService
     }
 
 
+
+    /**
+     * Retourne une nouvelle entité de la classe donnée
+     *
+     * @return Service
+     */
+    public function newEntity ()
+    {
+        /** @var Service $entity */
+        $entity = parent::newEntity();
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        if ($intervenant = $role->getIntervenant()) {
+            $entity->setIntervenant($intervenant);
+        }
+        $entity->setEtablissement($this->getServiceContext()->getEtablissement());
+
+        return $entity;
+    }
+
+
+
     /**
      * Sauvegarde une entité
      *
@@ -151,7 +624,7 @@ class ServiceService extends AbstractEntityService
      * @return Service
      * @throws Exception
      */
-    public function save($entity)
+    public function save ($entity)
     {
         $this->getEntityManager()->beginTransaction();
         try {
@@ -230,19 +703,20 @@ class ServiceService extends AbstractEntityService
     }
 
 
+
     /**
      * Supprime (historise par défaut) le service spécifié.
      *
      * @param Service $entity Entité à détruire
-     * @param bool $softDelete
+     * @param bool    $softDelete
      *
      * @return self
      */
-    public function delete($entity, $softDelete = true)
+    public function delete ($entity, $softDelete = true)
     {
         if ($softDelete) {
             $vhListe = $entity->getVolumeHoraireListe();
-            $listes = $vhListe->getSousListes([$vhListe::FILTRE_PERIODE, $vhListe::FILTRE_TYPE_INTERVENTION, $vhListe::FILTRE_HORAIRE_DEBUT, $vhListe::FILTRE_HORAIRE_FIN]);
+            $listes  = $vhListe->getSousListes([$vhListe::FILTRE_PERIODE, $vhListe::FILTRE_TYPE_INTERVENTION, $vhListe::FILTRE_HORAIRE_DEBUT, $vhListe::FILTRE_HORAIRE_FIN]);
             foreach ($listes as $liste) {
                 $liste->setHeures(0);
             }
@@ -270,376 +744,18 @@ class ServiceService extends AbstractEntityService
     }
 
 
-    /**
-     * Retourne la liste des services selon l'étape donnée
-     *
-     * @param Etape $etape
-     * @param QueryBuilder|null $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByEtape(Etape $etape, QueryBuilder $qb = null, $alias = null)
+
+    public function setRealisesFromPrevus (Service $service)
     {
-        $serviceElement = $this->getServiceElementPedagogique();
-
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-        $this->leftJoin($serviceElement, $qb, 'elementPedagogique');
-        $serviceElement->finderByEtape($etape, $qb);
-
-        return $qb;
-    }
-
-
-    /**
-     * Retourne la liste des services selon l'étape donnée
-     *
-     * @param Etape $etape
-     * @param QueryBuilder|null $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByNiveauEtape(NiveauEtape $niveauEtape, QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-        if ($niveauEtape && $niveauEtape->getId() !== '|') {
-            $serviceElement = $this->getServiceElementPedagogique();
-            $serviceEtape = $this->getServiceEtape();
-
-            $this->leftJoin($serviceElement, $qb, 'elementPedagogique');
-            $serviceElement->join($serviceEtape, $qb, 'etape');
-            $serviceEtape->finderByNiveau($niveauEtape, $qb);
-        }
-
-        return $qb;
-    }
-
-
-    /**
-     *
-     * @param TypeVolumeHoraire $typeVolumeHoraire
-     * @param QueryBuilder $qb
-     * @param string $alias
-     *
-     * @return QueryBuilder
-     */
-    public function finderByTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-        if ($typeVolumeHoraire) {
-            $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
-
-            $this->join($serviceVolumeHoraire, $qb, 'volumeHoraire');
-            $serviceVolumeHoraire->finderByTypeVolumeHoraire($typeVolumeHoraire, $qb);
-        }
-
-        return $qb;
-    }
-
-
-    /**
-     *
-     * @param EtatVolumeHoraire $etatVolumeHoraire
-     * @param QueryBuilder $qb
-     * @param string $alias
-     *
-     * @return QueryBuilder
-     */
-    public function finderByEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire, QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-        if ($etatVolumeHoraire) {
-            $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
-
-            $this->join($serviceVolumeHoraire, $qb, 'volumeHoraire');
-            $serviceVolumeHoraire->finderByEtatVolumeHoraire($etatVolumeHoraire, $qb);
-        }
-
-        return $qb;
-    }
-
-
-    /**
-     * Retourne le query builder permettant de rechercher les services prévisionnels
-     * selon la composante spécifiée.
-     *
-     * Càd les services prévisionnels satisfaisant au moins l'un des critères suivants :
-     * - la structure d'enseignement (champ 'structure_ens') est la structure spécifiée;
-     * - la structure d'affectation (champ 'structure_aff')  est la structure spécifiée;
-     *
-     * @param Structure $structure
-     * @param QueryBuilder|null $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByComposante(Structure $structure, QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $serviceStructure = $this->getServiceStructure();
-        $serviceIntervenant = $this->getServiceIntervenant();
-        $serviceElementPedagogique = $this->getServiceElementPedagogique();
-        $serviceStatut = $this->getServiceStatut();
-        $iAlias = $serviceIntervenant->getAlias();
-        $sAlias = $serviceStatut->getAlias();
-
-        $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
-        $serviceIntervenant->join($serviceStatut, $qb, 'statut', false);
-        $this->leftJoin($serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias);
-        $serviceElementPedagogique->leftJoin($serviceStructure, $qb, 'structure', false, null, 's_ens');
-
-        $filter = "(($sAlias.typeIntervenant = :typeIntervenantPermanent AND $iAlias.structure = :composante) OR s_ens = :composante)";
-        $qb->andWhere($filter)->setParameter('composante', $structure);
-        $qb->setParameter('typeIntervenantPermanent', $this->getServiceTypeIntervenant()->getPermanent());
-
-        return $qb;
-    }
-
-
-    /**
-     * Utile pour la recherche de services
-     *
-     * @param Structure $structure
-     * @param QueryBuilder|null $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByStructureAff(Structure $structure, QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $serviceIntervenant = $this->getServiceIntervenant();
-
-        $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
-        $serviceIntervenant->finderByStructure($structure, $qb);
-        $serviceIntervenant->finderByType($this->getServiceTypeIntervenant()->getPermanent(), $qb);
-
-        return $qb;
-    }
-
-
-    /**
-     * Utile pour la recherche de services
-     *
-     * @param Structure $structure
-     * @param QueryBuilder|null $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByStructureEns(Structure $structure, QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $serviceElementPedagogique = $this->getServiceElementPedagogique();
-        $this->join($serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias);
-        $serviceElementPedagogique->finderByStructure($structure, $qb);
-
-        return $qb;
-    }
-
-
-    /**
-     * Filtre la liste des services selon lecontexte courant
-     *
-     * @param QueryBuilder|null $qb
-     * @param string|null $alias
-     *
-     * @return QueryBuilder
-     */
-    public function finderByContext(QueryBuilder $qb = null, $alias = null)
-    {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $this->join($this->getServiceIntervenant(), $qb, 'intervenant', false, $alias);
-        $this->getServiceIntervenant()->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
-
-        if ($intervenant = $role->getIntervenant()) { // Si c'est un intervenant
-            $this->finderByIntervenant($intervenant, $qb, $alias);
-        }
-
-        return $qb;
-    }
-
-
-    /**
-     * Retourne la liste des services selon l'étape donnée
-     *
-     * @param TypeIntervenant $typeIntervenant
-     * @param QueryBuilder|null $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByTypeIntervenant(TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-        if ($typeIntervenant) {
-            $this->join($this->getServiceIntervenant(), $qb, 'intervenant', false, $alias);
-            $this->getServiceIntervenant()->finderByType($typeIntervenant, $qb);
-        }
-
-        return $qb;
-    }
-
-
-    /**
-     * Prend les services d'un intervenant, année n-1, et reporte ces services (et les volumes horaires associés)
-     * sur l'année n
-     *
-     * @param Intervenant $intervenant
-     *
-     */
-    public function setPrevusFromPrevus(Intervenant $intervenant)
-    {
-        $old = $this->getPrevusFromPrevusData($intervenant);
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
-
-        // Enregistrement des services trouvés dans la nouvelle année
-        foreach ($old as $o) {
-            $service = $o['service'];
-            if (!$service) {
-                $service = $this->newEntity();
-                $service->setIntervenant($intervenant);
-                $service->setElementPedagogique($o['element-pedagogique']);
-                $service->setEtablissement($o['etablissement']);
-            }
-            foreach ($o['heures'] as $heures) {
-                $volumeHoraire = $this->getServiceVolumeHoraire()->newEntity();
-                //@formatter:off
-                $volumeHoraire->setTypeVolumeHoraire($typeVolumeHoraire);
-                $volumeHoraire->setPeriode($heures['periode']);
-                $volumeHoraire->setTypeIntervention($heures['type-intervention']);
-                $volumeHoraire->setHeures($heures['heures']);
-                //@formatter:on
-                $volumeHoraire->setService($service);
-                $service->addVolumeHoraire($volumeHoraire);
-            }
-            $service->setHistoDestructeur(null); // restauration du service si besoin!!
-            $service->setHistoDestruction(null);
-            $service->setTypeVolumeHoraire($typeVolumeHoraire);
-            $service->setChanged(true);
-            try {
-                $this->save($service, false);
-            } catch (\Exception $e) {
-
-            }
-        }
-    }
-
-
-    public function getPrevusFromPrevusData(Intervenant $intervenant)
-    {
-        $tvhPrevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
-        $tvhSource = $this->getServiceTypeVolumeHoraire()->getByCode($this->getServiceParametres()->get('report_service'));
-        $evhValide = $this->getServiceEtatVolumeHoraire()->getValide();
-
-        $intervenantPrec = $this->getServiceIntervenant()->getPrecedent($intervenant);
-
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $sVolumeHoraire = $this->getServiceVolumeHoraire();
-        $sElementPedagogique = $this->getServiceElementPedagogique();
-
-        $qb = $this->select(['id', 'elementPedagogique', 'etablissement']);
-        //@formatter:off
-        $this->join(EtablissementService::class, $qb, 'etablissement', true);//['id', 'sourceCode']);
-        $this->leftJoin(ElementPedagogiqueService::class, $qb, 'elementPedagogique', true);//['id', 'sourceCode']);
-        $this->leftJoin($sVolumeHoraire, $qb, 'volumeHoraire', true);//['id', 'periode', 'typeIntervention', 'heures']);
-        $sVolumeHoraire->leftJoin(PeriodeService::class, $qb, 'periode', true);//['id']);
-        $sVolumeHoraire->leftJoin(TypeInterventionService::class, $qb, 'typeIntervention', true);//['id']);
-        //@formatter:on
-
-        $this->finderByHistorique($qb);
-        $this->finderByIntervenant($intervenantPrec, $qb);
-        $sVolumeHoraire->finderByHistorique($qb);
-        $sVolumeHoraire->finderByTypeVolumeHoraire($tvhSource, $qb);
-        $sVolumeHoraire->finderByEtatVolumeHoraire($evhValide, $qb);
-
-        if ($structure = $role->getStructure()) {
-            $sElementPedagogique->finderByStructure($structure, $qb);
-        }
-
-        $s = $this->getList($qb);
-
-        $old = [];
-        foreach ($s as $service) {
-
-            /* @var $service Service */
-            $service->setTypeVolumeHoraire($tvhSource);
-            $oldElement = $service->getElementPedagogique();
-            $newElement = $oldElement ? $this->getServiceElementPedagogique()->getByCode(
-                $oldElement->getCode(),
-                $this->getServiceContext()->getAnnee()
-            ) : null;
-
-            if ($newElement && !$newElement->estNonHistorise()) {
-                $newElement = null; // s'il n'est pas actif alors on ne reporte pas
-            }
-
-            $newPeriode = $newElement ? $newElement->getPeriode() : null;
-
-            if (empty($oldElement) || !empty($newElement)) {
-                $o = [
-                    'element-pedagogique' => $newElement,
-                    'etablissement'       => $service->getEtablissement(),
-                    'heures'              => [],
-                ];
-                $id = $newElement ? $newElement->getSourceCode() : '';
-                $id .= '-';
-                $id .= $service->getEtablissement()->getSourceCode();
-
-                $vhl = $service->getVolumeHoraireListe();
-
-                $periodes = $vhl->getPeriodes();
-                $typesIntervention = $vhl->getTypesIntervention();
-                foreach ($periodes as $periode) {
-                    /* @var $periode \Application\Entity\Db\Periode */
-                    if (empty($newPeriode) || $periode === $newPeriode) { // pas de mauvaise période!!!
-                        foreach ($typesIntervention as $typeIntervention) {
-                            /* @var $typeIntervention TypeInterventionService */
-                            $heures = $vhl->setPeriode($periode)->setTypeIntervention($typeIntervention)->getHeures();
-                            if ($heures > 0) {
-                                $o['heures'][] = [
-                                    'periode'             => $periode,
-                                    'type-intervention'   => $typeIntervention,
-                                    'type-volume-horaire' => $tvhPrevu,
-                                    'heures'              => $heures,
-                                ];
-                            }
-                        }
-                    }
-                }
-
-                if (!empty($o['heures'])) {
-                    $newService = $this->getBy($intervenant, $newElement, $service->getEtablissement());
-                    if ($newService) {
-                        $newService->setTypeVolumeHoraire($tvhPrevu);
-                    }
-                    if ($newService && $newService->estNonHistorise()) {
-                        $newHeures = $newService->getVolumeHoraireListe()->getHeures();
-                    } else {
-                        $newHeures = 0;
-                    }
-                    if ($newHeures == 0) { // on n'insère pas le service si des heures ont déjà été saisies!!
-                        $o['service'] = $newService;
-                        $old[$id] = $o;
-                    }
-                }
-            }
-        }
-
-        return $old;
-    }
-
-
-    public function setRealisesFromPrevus(Service $service)
-    {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $rStructure = $role ? $role->getStructure() : null;
         $sStructure = $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null;
 
         if ($rStructure && $sStructure && $rStructure != $sStructure) {
-            return; // on ne reporte pas de service si l'utilisateur est d'une composante différente de celle du service
+            $intervenant = $service->getIntervenant();
+            if (!($intervenant->getStatut()->estPermanent() && $intervenant->getStructure() == $rStructure)) {
+                return; // on ne reporte pas de service si l'utilisateur est d'une composante différente de celle du service
+            }
         }
 
         $prevus = $service
@@ -661,7 +777,7 @@ class ServiceService extends AbstractEntityService
             VolumeHoraireListe::FILTRE_HORAIRE_FIN,
         ];
 
-        $listes = [];
+        $listes     = [];
         $prevListes = $prevus->getSousListes($filtres);
         foreach ($prevListes as $id => $prevListe) {
             $listes[$id]['prev'] = $prevListe;
@@ -689,83 +805,6 @@ class ServiceService extends AbstractEntityService
     }
 
 
-    /**
-     * Détermine si un service est assuré localement (c'est-à-dire dans l'université) ou sur un autre établissement
-     *
-     * @param Service $service
-     *
-     * @return boolean
-     */
-    protected function isLocal(Service $service)
-    {
-        if (!$service->getEtablissement()) return true; // par défaut
-        if ($service->getEtablissement() === $this->getServiceContext()->getEtablissement()) return true;
-
-        return false;
-    }
-
-
-    /**
-     * Retourne la période courante d'un service
-     *
-     * @param Service $service
-     *
-     * @return Periode
-     */
-    public function getPeriode(Service $service)
-    {
-        if (!$this->isLocal($service)) return null;
-        if (!$service->getElementPedagogique()) return null;
-
-        return $service->getElementPedagogique()->getPeriode();
-    }
-
-
-    /**
-     *
-     * @param Service $service
-     *
-     * @return Periode[]
-     */
-    public function getPeriodes(Service $service)
-    {
-        $p = $this->getPeriode($service);
-        if (null === $p) {
-            // Pas de période donc toutes les périodes sont autorisées
-            return $this->getServicePeriode()->getEnseignement();
-        } else {
-            return [$p->getId() => $p];
-        }
-    }
-
-
-    /**
-     *
-     * @param Service|Service[] $services
-     *
-     * @return TypeIntervention[]
-     */
-    public function getTypesIntervention($services)
-    {
-        if ($services instanceof Service) $services = [$services];
-        $typesIntervention = [];
-        foreach ($services as $service) {
-            if (!$service instanceof Service) {
-                throw new \LogicException('Seules des entités Service doivent être passées en paramètre');
-            }
-            if ($ep = $service->getElementPedagogique()) {
-                foreach ($ep->getTypeIntervention() as $typeIntervention) {
-                    $typesIntervention[$typeIntervention->getId()] = $typeIntervention;
-                }
-            }
-        }
-        usort($typesIntervention, function ($ti1, $ti2) {
-            return $ti1->getOrdre() - $ti2->getOrdre();
-        });
-
-        return $typesIntervention;
-    }
-
 
     /**
      * Retourne le total HETD des enseignements (réalisés et validés) d'un intervenant.
@@ -773,7 +812,7 @@ class ServiceService extends AbstractEntityService
      * @prama Intervenant $intervenant
      * @return float
      */
-    public function getTotalHetdIntervenant(Intervenant $intervenant)
+    public function getTotalHetdIntervenant (Intervenant $intervenant)
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
@@ -781,18 +820,5 @@ class ServiceService extends AbstractEntityService
         $fr = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return $fr->getServiceDu() + $fr->getSolde();
-    }
-
-
-    /**
-     *
-     * @param Service[] $services
-     * @param TypeVolumeHoraire $typeVolumehoraire
-     */
-    public function setTypeVolumehoraire($services, TypeVolumeHoraire $typeVolumeHoraire)
-    {
-        foreach ($services as $service) {
-            $service->setTypeVolumeHoraire($typeVolumeHoraire);
-        }
     }
 }

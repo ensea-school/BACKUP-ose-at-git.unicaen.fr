@@ -64,25 +64,6 @@ return [
         "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
 
-
-    /* Semestriel / calendaire
-    "modalite_services_prev_ens"                 => [
-        "VALEUR"      => "semestriel",
-        "DESCRIPTION" => "Modalité de gestion des services (prévisionnel, enseignements)",
-    ],
-    "modalite_services_prev_ref"                 => [
-        "VALEUR"      => "semestriel",
-        "DESCRIPTION" => "Modalité de gestion des services (prévisionnel, référentiel)",
-    ],
-    "modalite_services_real_ens"                 => [
-        "VALEUR"      => "semestriel",
-        "DESCRIPTION" => "Modalité de gestion des services (réalisé, enseignements)",
-    ],
-    "modalite_services_real_ref"                 => [
-        "VALEUR"      => "semestriel",
-        "DESCRIPTION" => "Modalité de gestion des services (réalisé, référentiel)",
-    ],*/
-
     /* Divers */
     "report_service"                             => [
         "VALEUR"      => "PREVU",

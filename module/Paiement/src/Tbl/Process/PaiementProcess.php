@@ -4,6 +4,14 @@ namespace Paiement\Tbl\Process;
 
 
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use Paiement\Service\TauxRemuServiceAwareTrait;
+use Paiement\Tbl\Process\Sub\Arrondisseur;
+use Paiement\Tbl\Process\Sub\Consolidateur;
+use Paiement\Tbl\Process\Sub\LigneAPayer;
+use Paiement\Tbl\Process\Sub\MiseEnPaiement;
+use Paiement\Tbl\Process\Sub\Rapprocheur;
+use Paiement\Tbl\Process\Sub\Repartiteur;
+use Paiement\Tbl\Process\Sub\ServiceAPayer;
 use UnicaenTbl\Process\ProcessInterface;
 use UnicaenTbl\Service\BddServiceAwareTrait;
 use UnicaenTbl\TableauBord;
@@ -17,18 +25,54 @@ class PaiementProcess implements ProcessInterface
 {
     use BddServiceAwareTrait;
     use ParametresServiceAwareTrait;
+    use TauxRemuServiceAwareTrait;
 
+    /** @var array|ServiceAPayer[] */
     protected array $services = [];
+    protected Repartiteur $repartiteur;
+    protected Rapprocheur $rapprocheur;
+    protected Consolidateur $consolidateur;
+    protected Arrondisseur $arrondisseur;
+
+
+
+    public function __construct()
+    {
+        $this->repartiteur = new repartiteur();
+        $this->rapprocheur = new Rapprocheur();
+        $this->consolidateur = new Consolidateur();
+        $this->arrondisseur = new Arrondisseur();
+    }
+
+
+
+    protected function init()
+    {
+        $regleRLM = $this->getServiceParametres()->get('regle_repartition_annee_civile');
+        $this->rapprocheur->setRegle($regleRLM);
+
+        $reglePaiementAnneeCiv = $this->getServiceParametres()->get('regle_paiement_annee_civile');
+        $this->repartiteur->setReglePaiementAnneeCiv($reglePaiementAnneeCiv);
+
+        $pourcS1PourAnneeCivile = (float)$this->getServiceParametres()->get('pourc_s1_pour_annee_civile');
+        $this->repartiteur->setPourcS1PourAnneeCivile($pourcS1PourAnneeCivile);
+
+        $this->services = [];
+    }
 
 
 
     public function run(TableauBord $tableauBord, array $params = [])
     {
-        $this->services = [];
+        $this->init();
 
         $this->loadAPayer($params);
 
-        //phpDump($this->services);
+        foreach ($this->services as $key => $serviceAPayer) {
+            $this->arrondisseur->arrondir($serviceAPayer);
+            $this->consolidateur->consolider($serviceAPayer);
+            $this->rapprocheur->rapprocher($serviceAPayer);
+        }
     }
 
 
@@ -42,72 +86,39 @@ class PaiementProcess implements ProcessInterface
             . ') t '
             . $this->getServiceBdd()->makeWhere($params);
 
-        $oriAp = $this->testData();
-        //$oriAp = [];
-        if (empty($oriAp)) {
-            $oriAp = $conn->fetchAllAssociative($sql);
-        }
-        foreach ($oriAp as $ap) {
-
-
-//        $aPayerStmt = $conn->executeQuery($sql);
-//        while ($ap = $aPayerStmt->fetchAssociative()) {
-
-
-            $key = $ap['KEY'];
-            if (!array_key_exists($key, $this->services)) {
-                $this->services[$key] = [
-                    'key'                     => $key,
-                    'annee'                   => (int)$ap['ANNEE_ID'],
-                    'service'                 => (int)$ap['SERVICE_ID'] ?: null,
-                    'referentiel'             => (int)$ap['SERVICE_REFERENTIEL_ID'] ?: null,
-                    'formule-res-service'     => (int)$ap['FORMULE_RES_SERVICE_ID'] ?: null,
-                    'formule-res-service-ref' => (int)$ap['FORMULE_RES_SERVICE_REF_ID'] ?: null,
-                    'mission'                 => (int)$ap['MISSION_ID'] ?: null,
-                    'intervenant'             => (int)$ap['INTERVENANT_ID'],
-                    'structure'               => (int)$ap['STRUCTURE_ID'],
-                    'type-heures'             => (int)$ap['TYPE_HEURES_ID'],
-                    'domaine-fonctionnel'     => (int)$ap['DOMAINE_FONCTIONNEL_ID'] ?: null,
-                    'centre-cout'             => (int)$ap['CENTRE_COUT_ID'] ?: null,
-                    'taux-conges-payes'       => (float)$ap['TAUX_CONGES_PAYES'],
-                    'service-heures'          => (float)$ap['SERVICE_HEURES'] ?: null,
-                    'vh-heures'               => 0,
-                    'ap'                      => [],
-                ];
-            }
-
-            $this->services[$key]['ap'][] = [
-                'heures'       => (float)$ap['HEURES'],
-                'taux-remu'    => (int)$ap['TAUX_REMU_ID'] ?: null,
-                'taux-valeur'  => null,
-                'annee-civile' => null,
-
-                'annee'         => (int)$ap['ANNEE_ID'],
-                'periode'       => (int)$ap['PERIODE_ID'] ?: null,
-                'horaire-debut' => $ap['HORAIRE_DEBUT'] ? \DateTime::createFromFormat('Y-m-d h:i:s', $ap['HORAIRE_DEBUT']) : null,
-                'horaire-fin'   => $ap['HORAIRE_FIN'] ? \DateTime::createFromFormat('Y-m-d h:i:s', $ap['HORAIRE_FIN']) : null,
-            ];
-            $this->services[$key]['vh-heures'] = round($this->services[$key]['vh-heures'] + (float)$ap['HEURES'], 2);
-        }
-
-        foreach( $this->services as $key => $serviceAPayer ){
-            if ($serviceAPayer['service-heures'] !== null && ($serviceAPayer['service-heures'] !== $serviceAPayer['vh-heures'])){
-                $this->traitementArrondis($key);
-            }
+        $aPayerStmt = $conn->executeQuery($sql);
+        while ($lap = $aPayerStmt->fetchAssociative()) {
+            $this->loadLigneAPayer($lap);
         }
     }
 
 
 
-    protected function traitementArrondis(string $key)
+    protected function loadLigneAPayer(array $data)
     {
-        $serviceAPayer = $this->services[$key];
+        $key = $data['KEY'];
+        $tauxRemu = (int)$data['TAUX_REMU_ID'];
+        $horaireDebut = (string)$data['HORAIRE_DEBUT'];
+        $miseEnPaiementId = (int)$data['MISE_EN_PAIEMENT_ID'];
 
-        $diff = round($serviceAPayer['service-heures'] - $serviceAPayer['vh-heures'],2);
+        if (!array_key_exists($key, $this->services)) {
+            $sap = new ServiceAPayer();
+            $sap->fromBdd($data);
+            $this->services[$sap->key] = $sap;
+        }
 
-        var_dump($diff);
+        $lap = new LigneAPayer();
+        $lap->tauxValeur = $this->getServiceTauxRemu()->tauxValeur($tauxRemu, $horaireDebut);
+        $lap->pourcAA = $this->repartiteur->fromBdd($data);
+        $lap->fromBdd($data);
 
-        arrayDump($serviceAPayer);
+        $this->services[$key]->lignesAPayer[$lap->id] = $lap;
+
+        if ($miseEnPaiementId > 0) {
+            $mep = new MiseEnPaiement();
+            $mep->fromBdd($data);
+            $this->services[$key]->misesEnPaiement[$mep->id] = $mep;
+        }
     }
 
 
@@ -115,638 +126,5 @@ class PaiementProcess implements ProcessInterface
     protected function heuresAPayerSql(): string
     {
         return file_get_contents(getcwd() . '/module/Paiement/sql/paiement_process_heures_a_payer.sql');
-    }
-
-
-
-    protected function testData(): array
-    {
-        return [
-            // Cas 1 : 1h de mission saisie
-            [
-                'KEY'                        => 'm-1-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '1',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '1',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '3',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '1',
-                'HORAIRE_DEBUT'              => '2023-06-07 10:00:00',
-                'HORAIRE_FIN'                => '2023-06-07 11:00:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-
-
-            // Cas 2 : un réalisé complet de mission avec plusieurs taux et plusieurs années
-            [
-                'KEY'                        => 'm-2-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '2',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '6',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '4',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '1',
-                'HORAIRE_DEBUT'              => '2023-05-01 13:00:00',
-                'HORAIRE_FIN'                => '2023-05-01 14:00:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-            [
-                'KEY'                        => 'm-2-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '2',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '6',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '3',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '1',
-                'HORAIRE_DEBUT'              => '2023-06-12 13:00:00',
-                'HORAIRE_FIN'                => '2023-06-12 14:00:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-            [
-                'KEY'                        => 'm-2-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '2',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '6',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '3',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '11',
-                'HORAIRE_DEBUT'              => '2022-11-02 09:00:00',
-                'HORAIRE_FIN'                => '2022-11-02 20:00:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-            [
-                'KEY'                        => 'm-2-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '2',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '6',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '4',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '3',
-                'HORAIRE_DEBUT'              => '2023-06-11 15:00:00',
-                'HORAIRE_FIN'                => '2023-06-11 18:00:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-            [
-                'KEY'                        => 'm-2-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '2',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '6',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '3',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '8',
-                'HORAIRE_DEBUT'              => '2023-06-07 10:00:00',
-                'HORAIRE_FIN'                => '2023-06-07 18:00:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-            [
-                'KEY'                        => 'm-2-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '2',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '6',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '3',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '1.95',
-                'HORAIRE_DEBUT'              => '2023-06-10 02:00:00',
-                'HORAIRE_FIN'                => '2023-06-10 03:57:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-            [
-                'KEY'                        => 'm-2-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '2',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '6',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '4',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '1.5',
-                'HORAIRE_DEBUT'              => '2022-11-06 12:00:00',
-                'HORAIRE_FIN'                => '2022-11-06 13:30:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-            [
-                'KEY'                        => 'm-2-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '2',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '6',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '3',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '13',
-                'HORAIRE_DEBUT'              => '2023-06-08 09:00:00',
-                'HORAIRE_FIN'                => '2023-06-08 22:00:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-            [
-                'KEY'                        => 'm-2-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '2',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '6',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '3',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '1.23',
-                'HORAIRE_DEBUT'              => '2023-01-02 09:01:00',
-                'HORAIRE_FIN'                => '2023-01-02 10:15:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-            [
-                'KEY'                        => 'm-2-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '2',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '6',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '3',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '6',
-                'HORAIRE_DEBUT'              => '2022-11-04 12:00:00',
-                'HORAIRE_FIN'                => '2022-11-04 18:00:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-            [
-                'KEY'                        => 'm-2-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '2',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '6',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '3',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '3',
-                'HORAIRE_DEBUT'              => '2023-06-06 12:00:00',
-                'HORAIRE_FIN'                => '2023-06-06 15:00:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-            [
-                'KEY'                        => 'm-2-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => NULL,
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => '2',
-                'FORMULE_RES_SERVICE_ID'     => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '30127',
-                'STRUCTURE_ID'               => '6',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => NULL,
-                'CENTRE_COUT_ID'             => NULL,
-                'TAUX_REMU_ID'               => '4',
-                'TAUX_CONGES_PAYES'          => '1.1',
-                'SERVICE_HEURES'             => NULL,
-                'HEURES'                     => '1',
-                'HORAIRE_DEBUT'              => '2023-06-13 22:00:00',
-                'HORAIRE_FIN'                => '2023-06-13 23:00:00',
-                'PERIODE_ID'                 => NULL,
-            ],
-
-
-            // Cas 3 : référentiel
-            [
-                'KEY' => 'r-3-10',
-                'ANNEE_ID' => '2022',
-                'SERVICE_ID' => NULL,
-                'SERVICE_REFERENTIEL_ID' => '3',
-                'MISSION_ID' => NULL,
-                'FORMULE_RES_SERVICE_ID' => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => '3',
-                'INTERVENANT_ID' => '656721',
-                'STRUCTURE_ID' => '54',
-                'TYPE_HEURES_ID' => '10',
-                'DOMAINE_FONCTIONNEL_ID' => '25',
-                'CENTRE_COUT_ID' => NULL,
-                'TAUX_REMU_ID' => '1',
-                'TAUX_CONGES_PAYES' => '1',
-                'SERVICE_HEURES' => NULL,
-                'HEURES' => '10',
-                'HORAIRE_DEBUT' => NULL,
-                'HORAIRE_FIN' => NULL,
-                'PERIODE_ID' => NULL,
-            ],
-            [
-                'KEY' => 'r-3-10',
-                'ANNEE_ID' => '2022',
-                'SERVICE_ID' => NULL,
-                'SERVICE_REFERENTIEL_ID' => '3',
-                'MISSION_ID' => NULL,
-                'FORMULE_RES_SERVICE_ID' => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => '3',
-                'INTERVENANT_ID' => '656721',
-                'STRUCTURE_ID' => '495',
-                'TYPE_HEURES_ID' => '10',
-                'DOMAINE_FONCTIONNEL_ID' => '26',
-                'CENTRE_COUT_ID' => NULL,
-                'TAUX_REMU_ID' => '1',
-                'TAUX_CONGES_PAYES' => '1',
-                'SERVICE_HEURES' => NULL,
-                'HEURES' => '10',
-                'HORAIRE_DEBUT' => NULL,
-                'HORAIRE_FIN' => NULL,
-                'PERIODE_ID' => NULL,
-            ],
-            [
-                'KEY' => 'r-3-10',
-                'ANNEE_ID' => '2022',
-                'SERVICE_ID' => NULL,
-                'SERVICE_REFERENTIEL_ID' => '3',
-                'MISSION_ID' => NULL,
-                'FORMULE_RES_SERVICE_ID' => NULL,
-                'FORMULE_RES_SERVICE_REF_ID' => '3',
-                'INTERVENANT_ID' => '656721',
-                'STRUCTURE_ID' => '495',
-                'TYPE_HEURES_ID' => '10',
-                'DOMAINE_FONCTIONNEL_ID' => '26',
-                'CENTRE_COUT_ID' => NULL,
-                'TAUX_REMU_ID' => '1',
-                'TAUX_CONGES_PAYES' => '1',
-                'SERVICE_HEURES' => NULL,
-                'HEURES' => '1.5',
-                'HORAIRE_DEBUT' => NULL,
-                'HORAIRE_FIN' => NULL,
-                'PERIODE_ID' => NULL,
-            ],
-
-
-            // cas 18 : Saisie de service en mode calendaire
-            [
-                'KEY'                        => 'e-18-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => '18',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '18',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '882253',
-                'STRUCTURE_ID'               => '378',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '208',
-                'TAUX_REMU_ID'               => '3',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '21',
-                'HEURES'                     => '7.5',
-                'HORAIRE_DEBUT'              => '2023-06-12 00:00:00',
-                'HORAIRE_FIN'                => '2023-06-13 00:00:00',
-                'PERIODE_ID'                 => '12',
-            ],
-            [
-                'KEY'                        => 'e-18-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => '18',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '18',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '882253',
-                'STRUCTURE_ID'               => '378',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '208',
-                'TAUX_REMU_ID'               => '3',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '21',
-                'HEURES'                     => '4.5',
-                'HORAIRE_DEBUT'              => '2023-06-21 00:00:00',
-                'HORAIRE_FIN'                => '2023-06-21 00:10:00',
-                'PERIODE_ID'                 => '12',
-            ],
-            [
-                'KEY'                        => 'e-18-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => '18',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '18',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '882253',
-                'STRUCTURE_ID'               => '378',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '208',
-                'TAUX_REMU_ID'               => '3',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '21',
-                'HEURES'                     => '9',
-                'HORAIRE_DEBUT'              => '2023-06-22 00:00:00',
-                'HORAIRE_FIN'                => '2023-06-22 03:00:00',
-                'PERIODE_ID'                 => '12',
-            ],
-
-
-            // Cas 19 : VH Multiples avec service <> somme et écart de 0.01 mode semestriel FI
-            [
-                'KEY'                        => 'e-19-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => '19',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '19',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '705810',
-                'STRUCTURE_ID'               => '594',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '2609',
-                'TAUX_REMU_ID'               => '1',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '36.36',
-                'HEURES'                     => '9.7',
-                'HORAIRE_DEBUT'              => NULL,
-                'HORAIRE_FIN'                => NULL,
-                'PERIODE_ID'                 => '12',
-            ],
-            [
-                'KEY'                        => 'e-19-6',
-                'ANNEE_ID'                   => '2022',
-                'SERVICE_ID'                 => '19',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '19',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '705810',
-                'STRUCTURE_ID'               => '594',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '2609',
-                'TAUX_REMU_ID'               => '1',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '36.36',
-                'HEURES'                     => '26.67',
-                'HORAIRE_DEBUT'              => NULL,
-                'HORAIRE_FIN'                => NULL,
-                'PERIODE_ID'                 => '12',
-            ],
-
-
-            // Cas 20 : VH Multiples et écart > 0.01 mode semestriel FI
-            [
-                'KEY'                        => 'e-20-6',
-                'ANNEE_ID'                   => '2017',
-                'SERVICE_ID'                 => '20',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '20',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '20970',
-                'STRUCTURE_ID'               => '229',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '2401',
-                'TAUX_REMU_ID'               => '1',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '.74',
-                'HEURES'                     => '.12',
-                'HORAIRE_DEBUT'              => NULL,
-                'HORAIRE_FIN'                => NULL,
-                'PERIODE_ID'                 => '13',
-            ],
-            [
-                'KEY'                        => 'e-20-6',
-                'ANNEE_ID'                   => '2017',
-                'SERVICE_ID'                 => '20',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '20',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '20970',
-                'STRUCTURE_ID'               => '229',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '2401',
-                'TAUX_REMU_ID'               => '1',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '.74',
-                'HEURES'                     => '.08',
-                'HORAIRE_DEBUT'              => NULL,
-                'HORAIRE_FIN'                => NULL,
-                'PERIODE_ID'                 => '13',
-            ],
-            [
-                'KEY'                        => 'e-20-6',
-                'ANNEE_ID'                   => '2017',
-                'SERVICE_ID'                 => '20',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '20',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '20970',
-                'STRUCTURE_ID'               => '229',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '2401',
-                'TAUX_REMU_ID'               => '1',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '.74',
-                'HEURES'                     => '.12',
-                'HORAIRE_DEBUT'              => NULL,
-                'HORAIRE_FIN'                => NULL,
-                'PERIODE_ID'                 => '13',
-            ],
-            [
-                'KEY'                        => 'e-20-6',
-                'ANNEE_ID'                   => '2017',
-                'SERVICE_ID'                 => '20',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '20',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '20970',
-                'STRUCTURE_ID'               => '229',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '2401',
-                'TAUX_REMU_ID'               => '1',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '.74',
-                'HEURES'                     => '.08',
-                'HORAIRE_DEBUT'              => NULL,
-                'HORAIRE_FIN'                => NULL,
-                'PERIODE_ID'                 => '13',
-            ],
-            [
-                'KEY'                        => 'e-20-6',
-                'ANNEE_ID'                   => '2017',
-                'SERVICE_ID'                 => '20',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '20',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '20970',
-                'STRUCTURE_ID'               => '229',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '2401',
-                'TAUX_REMU_ID'               => '1',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '.74',
-                'HEURES'                     => '.12',
-                'HORAIRE_DEBUT'              => NULL,
-                'HORAIRE_FIN'                => NULL,
-                'PERIODE_ID'                 => '13',
-            ],
-            [
-                'KEY'                        => 'e-20-6',
-                'ANNEE_ID'                   => '2017',
-                'SERVICE_ID'                 => '20',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '20',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '20970',
-                'STRUCTURE_ID'               => '229',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '2401',
-                'TAUX_REMU_ID'               => '1',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '.74',
-                'HEURES'                     => '.08',
-                'HORAIRE_DEBUT'              => NULL,
-                'HORAIRE_FIN'                => NULL,
-                'PERIODE_ID'                 => '13',
-            ],
-            [
-                'KEY'                        => 'e-20-6',
-                'ANNEE_ID'                   => '2017',
-                'SERVICE_ID'                 => '20',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '20',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '20970',
-                'STRUCTURE_ID'               => '229',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '2401',
-                'TAUX_REMU_ID'               => '1',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '.74',
-                'HEURES'                     => '.09',
-                'HORAIRE_DEBUT'              => NULL,
-                'HORAIRE_FIN'                => NULL,
-                'PERIODE_ID'                 => '13',
-            ],
-            [
-                'KEY'                        => 'e-20-6',
-                'ANNEE_ID'                   => '2017',
-                'SERVICE_ID'                 => '20',
-                'SERVICE_REFERENTIEL_ID'     => NULL,
-                'MISSION_ID'                 => NULL,
-                'FORMULE_RES_SERVICE_ID'     => '20',
-                'FORMULE_RES_SERVICE_REF_ID' => NULL,
-                'INTERVENANT_ID'             => '20970',
-                'STRUCTURE_ID'               => '229',
-                'TYPE_HEURES_ID'             => '6',
-                'DOMAINE_FONCTIONNEL_ID'     => '1',
-                'CENTRE_COUT_ID'             => '2401',
-                'TAUX_REMU_ID'               => '1',
-                'TAUX_CONGES_PAYES'          => '1',
-                'SERVICE_HEURES'             => '.74',
-                'HEURES'                     => '.08',
-                'HORAIRE_DEBUT'              => NULL,
-                'HORAIRE_FIN'                => NULL,
-                'PERIODE_ID'                 => '13',
-            ],
-        ];
     }
 }

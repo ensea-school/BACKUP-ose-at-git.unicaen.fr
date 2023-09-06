@@ -35,6 +35,7 @@ class MissionCentreCoutsTypeForm extends AbstractForm
             'attributes' => [
                 'class'            => 'input-sm selectpicker',
                 'data-live-search' => 'true',
+                'onchange' => 'this.form.submit();',
             ],
         ]);
         $this->add([
@@ -44,7 +45,6 @@ class MissionCentreCoutsTypeForm extends AbstractForm
                 'required' => true,
             ],
         ]);
-        $this->addSubmit("Ajouter");
     }
 }
 

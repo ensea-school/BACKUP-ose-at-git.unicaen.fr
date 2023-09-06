@@ -32,39 +32,194 @@ class Rapprocheur
 
     public function rapprocher(ServiceAPayer $sap)
     {
-        if ('prorata' === $this->getRegle()) {
-            // Chaque mise en paiement est répartie selon le prorata AA/AC
+        if (empty($sap->misesEnPaiement)) {
+            return; // rien à rapprocher
+        }
 
-            foreach ($sap->lignesAPayer as $lapId => $lap) {
-                $lap->misesEnPaiement = [];
-                $aaNp = $lap->heuresAA;
-                $acNp = $lap->heuresAC;
-                foreach ($sap->misesEnPaiement as $mepId => $mep) {
-                    $nmep = null;
-                    $heures = min($mep->heures, $aaNp);
+        foreach ($sap->lignesAPayer as $lap) {
+            $lap->misesEnPaiement = [];
+
+            $npAA = $lap->heuresAA;
+            $npAC = $lap->heuresAC;
+
+            foreach ($sap->misesEnPaiement as $mid => $mep) {
+                if ($npAA + $npAC == 0) {
+                    // plus rien à rapprocher
+                    break;
+                }
+
+                $nmep = new MiseEnPaiement();
+                $nmep->id = $mep->id;
+                $nmep->domaineFonctionnel = $mep->domaineFonctionnel;
+                $nmep->centreCout = $mep->centreCout;
+                $nmep->periodePaiement = $mep->periodePaiement;
+                $nmep->date = $mep->date;
+                $nmep->heuresAA = 0;
+                $nmep->heuresAC = 0;
+
+                if (Rapprocheur::REGLE_ORDRE_SAISIE == $this->regle) {
+
+                    $heures = min($mep->heures, $npAA);
                     if ($heures > 0) {
-                        $nmep = new MiseEnPaiement();
-                        $nmep->heures = $heures;
-                        $nmep->heuresAA = $heures;
-                        $nmep->id = $mep->id;
-                        $nmep->domaineFonctionnel = $mep->domaineFonctionnel;
-                        $nmep->centreCout = $mep->centreCout;
-                        $nmep->periodePaiement = $mep->periodePaiement;
-                        $nmep->date = $mep->date;
-
-                        // on retire les heures des NP et des MEP
-                        $aaNp = $aaNp - $heures;
-                        $mep->heures = $mep->heures - $heures;
+                        $nmep->heuresAA += $heures;
+                        $mep->heures -= $heures;
+                        $npAA -= $heures;
                     }
 
-                    if ($nmep){
-                        //$lap->misesEnPaiement[$nmep->id] = $
+                    $heures = min($mep->heures, $npAC);
+                    if ($heures > 0) {
+                        $nmep->heuresAC += $heures;
+                        $mep->heures -= $heures;
+                        $npAC -= $heures;
+                    }
+
+                } else {
+                    $heures = min($mep->heures, $npAA + $npAC);
+
+                    $aaHeures = min((int)round($heures * $npAA / ($npAA + $npAC)), $npAA);
+                    if ($aaHeures > 0) {
+                        $nmep->heuresAA += $aaHeures;
+                        $mep->heures -= $aaHeures;
+                        $npAA -= $aaHeures;
+                    }
+
+                    $acHeures = $heures - $aaHeures;
+                    if ($acHeures > 0) {
+                        $nmep->heuresAC += $acHeures;
+                        $mep->heures -= $acHeures;
+                        $npAC -= $acHeures;
+                    }
+
+                }
+
+                if ($nmep->heuresAA + $nmep->heuresAC > 0) {
+                    $lap->misesEnPaiement[$nmep->id] = $nmep;
+                    if ($mep->heures == 0) {
+                        unset($sap->misesEnPaiement[$mid]);
                     }
                 }
             }
         }
-        if ('ordre-saisie' === $this->getRegle()) {
-            // Les premières mises en paiement sont considérées en AA, puis ce qui dépasse est en AC
+    }
+
+
+
+    protected function rapprochementProrata(ServiceAPayer $sap)
+    {
+        foreach ($sap->lignesAPayer as $lap) {
+            $lap->misesEnPaiement = [];
+
+            $npAA = $lap->heuresAA;
+            $npAC = $lap->heuresAC;
+
+            foreach ($sap->misesEnPaiement as $mid => $mep) {
+                if ($npAA + $npAC == 0) {
+                    // plus rien à rapprocher
+                    break;
+                }
+
+                $nmep = new MiseEnPaiement();
+                $nmep->id = $mep->id;
+                $nmep->domaineFonctionnel = $mep->domaineFonctionnel;
+                $nmep->centreCout = $mep->centreCout;
+                $nmep->periodePaiement = $mep->periodePaiement;
+                $nmep->date = $mep->date;
+                $nmep->heuresAA = 0;
+                $nmep->heuresAC = 0;
+
+                $heures = min($mep->heures, $npAA + $npAC);
+
+                $aaHeures = min((int)round($heures * $npAA / ($npAA + $npAC)), $npAA);
+                if ($aaHeures > 0) {
+                    $nmep->heuresAA += $aaHeures;
+                    $mep->heures -= $aaHeures;
+                    $npAA -= $aaHeures;
+                }
+
+                $acHeures = $heures - $aaHeures;
+                if ($acHeures > 0) {
+                    $nmep->heuresAC += $acHeures;
+                    $mep->heures -= $acHeures;
+                    $npAC -= $acHeures;
+                }
+
+                if ($nmep->heuresAA + $nmep->heuresAC > 0) {
+                    $lap->misesEnPaiement[$nmep->id] = $nmep;
+                    if ($mep->heures == 0) {
+                        unset($sap->misesEnPaiement[$mid]);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    protected function rapprochementOrdre(ServiceAPayer $sap)
+    {
+        foreach ($sap->lignesAPayer as $lap) {
+            $lap->misesEnPaiement = [];
+
+            $npAA = $lap->heuresAA;
+            $npAC = $lap->heuresAC;
+
+            foreach ($sap->misesEnPaiement as $mid => $mep) {
+                if ($npAA + $npAC == 0) {
+                    // plus rien à rapprocher
+                    break;
+                }
+
+                $nmep = new MiseEnPaiement();
+                $nmep->id = $mep->id;
+                $nmep->domaineFonctionnel = $mep->domaineFonctionnel;
+                $nmep->centreCout = $mep->centreCout;
+                $nmep->periodePaiement = $mep->periodePaiement;
+                $nmep->date = $mep->date;
+                $nmep->heuresAA = 0;
+                $nmep->heuresAC = 0;
+
+                if (Rapprocheur::REGLE_ORDRE_SAISIE == $this->regle) {
+
+                    $heures = min($mep->heures, $npAA);
+                    if ($heures > 0) {
+                        $nmep->heuresAA += $heures;
+                        $mep->heures -= $heures;
+                        $npAA -= $heures;
+                    }
+
+                    $heures = min($mep->heures, $npAC);
+                    if ($heures > 0) {
+                        $nmep->heuresAC += $heures;
+                        $mep->heures -= $heures;
+                        $npAC -= $heures;
+                    }
+
+                } else {
+                    $heures = min($mep->heures, $npAA + $npAC);
+
+                    $aaHeures = min((int)round($heures * $npAA / ($npAA + $npAC)), $npAA);
+                    if ($aaHeures > 0) {
+                        $nmep->heuresAA += $aaHeures;
+                        $mep->heures -= $aaHeures;
+                        $npAA -= $aaHeures;
+                    }
+
+                    $acHeures = $heures - $aaHeures;
+                    if ($acHeures > 0) {
+                        $nmep->heuresAC += $acHeures;
+                        $mep->heures -= $acHeures;
+                        $npAC -= $acHeures;
+                    }
+
+                }
+
+                if ($nmep->heuresAA + $nmep->heuresAC > 0) {
+                    $lap->misesEnPaiement[$nmep->id] = $nmep;
+                    if ($mep->heures == 0) {
+                        unset($sap->misesEnPaiement[$mid]);
+                    }
+                }
+            }
         }
     }
 }

@@ -7,25 +7,29 @@ class Consolidateur
 
     public function consolider(ServiceAPayer $sap)
     {
-        $oldLap = $sap->lignesAPayer;
-        $sap->lignesAPayer = [];
+        if (empty($sap->lignesAPayer)){
+            return;
+        }
 
-        foreach ($oldLap as $l) {
-            $key = $l->key;
-            if (!isset($sap->lignesAPayer[$key])) {
+        $laps = [];
+        foreach ($sap->lignesAPayer as $l) {
+            $key = $l->tauxRemu . '-' . $l->tauxValeur;
+            if (!isset($laps[$key])) {
                 $lap = new LigneAPayer();
-                $sap->lignesAPayer[$key] = $lap;
                 $lap->tauxRemu = $l->tauxRemu;
                 $lap->tauxValeur = $l->tauxValeur;
                 $lap->heures = 0;
                 $lap->heuresAA = 0;
                 $lap->heuresAC = 0;
+                $laps[$key] = $lap;
             }
-            $heuresAA = $l->heures * $l->pourcAA;
-            $sap->lignesAPayer[$key]->heures = $sap->lignesAPayer[$key]->heures + $l->heures;
-            $sap->lignesAPayer[$key]->heuresAA = $sap->lignesAPayer[$key]->heuresAA + $heuresAA;
-            $sap->lignesAPayer[$key]->heuresAC = $sap->lignesAPayer[$key]->heuresAC + $l->heures - $heuresAA;
+            $heuresAA = round($l->heures * $l->pourcAA);
+            $laps[$key]->heures = $laps[$key]->heures + $l->heures;
+            $laps[$key]->heuresAA = $laps[$key]->heuresAA + $heuresAA;
+            $laps[$key]->heuresAC = $laps[$key]->heuresAC + $l->heures - $heuresAA;
         }
+
+        $sap->lignesAPayer = array_values($laps);
     }
 
 }

@@ -7,10 +7,3 @@
  * @var $viewName   string
  * @var $viewFile   string
  */
-
-/** @var \Paiement\Service\TauxRemuService $trs */
-$trs = $container->get(\Paiement\Service\TauxRemuService::class);
-
-$val = $trs->tauxValeur(4, new \DateTime());
-
-var_dump($val);

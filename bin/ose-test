@@ -7,12 +7,15 @@ $oa = OseAdmin::getInstance();
 
 $c = $oa->getConsole();
 
-$action = $c->getArg(1) ?: 'phpunit';
+$filter = $c->getArg(1) ?: null;
 
-if ('phpunit' == $action){
-    $c->exec(dirname(__DIR__).'/vendor/bin/phpunit tests --color=always');
-}else{
-    // lancement du script demandé
-    $oa->testsInit();
-    $oa->test($action);
+if ($filter == 'help'){
+    $c->println("Précisez un nom de répertoire du dossier tests pour filtrer, ou bien rien du tout pour lancer tous les tests");
+
+    return;
 }
+
+if ($filter){
+    $filter = '--filter '.$filter;
+}
+$c->exec(dirname(__DIR__)."/vendor/bin/phpunit tests $filter --color=always");

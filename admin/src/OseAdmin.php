@@ -286,9 +286,26 @@ class OseAdmin
 
 
 
+    public function testsInit()
+    {
+        // permet de charger l'application
+        $this->getContainer();
+
+        // autoload pour les tests
+        spl_autoload_register(function(string $class){
+            if (str_starts_with($class, 'tests\\')){
+                $filename = dirname(dirname(__DIR__)).'/'.str_replace('\\', '/', $class).'.php';
+                require_once $filename;
+            }
+        });
+
+    }
+
+
+
     public function test(string $action)
     {
-        $cible = $this->getOseDir() . 'test/'.$action.'.php';
+        $cible = $this->getOseDir() . 'tests/'.$action.'.php';
 
         if (!file_exists($cible)){
             $this->console->printDie("Le fichier $cible n'existe pas");

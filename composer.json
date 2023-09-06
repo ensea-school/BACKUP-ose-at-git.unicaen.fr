@@ -28,7 +28,8 @@
         "squizlabs/php_codesniffer"         : "*",
         "phpcompatibility/php-compatibility": "*",
         "phan/phan"                         : "^5.3",
-        "phpmd/phpmd"                       : "*"
+        "phpmd/phpmd"                       : "*",
+        "phpunit/phpunit"                   : "^9"
     },
     "prefer-stable"    : true,
     "config"           : {

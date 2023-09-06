@@ -7,4 +7,12 @@ $oa = OseAdmin::getInstance();
 
 $c = $oa->getConsole();
 
-$oa->test($c->getArg(1) ?: 'help');
+$action = $c->getArg(1) ?: 'phpunit';
+
+if ('phpunit' == $action){
+    $c->exec(dirname(__DIR__).'/vendor/bin/phpunit tests --color=always');
+}else{
+    // lancement du script demandé
+    $oa->testsInit();
+    $oa->test($action);
+}

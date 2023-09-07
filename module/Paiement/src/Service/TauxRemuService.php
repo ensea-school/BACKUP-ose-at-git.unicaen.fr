@@ -129,7 +129,7 @@ class TauxRemuService extends AbstractEntityService
      */
     public function getTauxRemus(): array
     {
-        $dql = "SELECT tr, trv, trp, str
+        $dql   = "SELECT tr, trv, trp, str
                  FROM " . TauxRemu::class . " tr
                  LEFT JOIN tr.tauxRemu trp
                  LEFT JOIN tr.tauxRemuValeurs trv
@@ -150,7 +150,7 @@ class TauxRemuService extends AbstractEntityService
      */
     public function getTauxRemusIndexable(): array
     {
-        $dql = "SELECT mtr, mtrv
+        $dql   = "SELECT mtr, mtrv
                  FROM " . TauxRemu::class . " mtr
                  LEFT JOIN mtr.tauxRemuValeurs mtrv
                  WHERE mtr.histoDestruction IS NULL
@@ -170,11 +170,11 @@ class TauxRemuService extends AbstractEntityService
      */
     public function getTauxRemuValeur(int $tauxRemuValeurId): ?TauxRemuValeur
     {
-        $dql = "SELECT mtr
+        $dql    = "SELECT mtr
                  FROM " . TauxRemuValeur::class . " mtr
                  WHERE mtr.id =" . $tauxRemuValeurId
             . " ORDER BY mtr.id";
-        $query = $this->getEntityManager()->createQuery($dql);
+        $query  = $this->getEntityManager()->createQuery($dql);
         $result = $query->getResult();
         if (!empty($result)) {
             return $result[0];
@@ -182,42 +182,6 @@ class TauxRemuService extends AbstractEntityService
 
         return null;
     }
-
-
-
-    /**
-     * Renvoie tous les tauxRemu non historisé et les valeurs concernant l'année en cours
-     *
-     * @return array|null
-     */
-    public function getTauxRemusAnnee(): ?array
-    {
-        $dql = "SELECT tr, trv, trp
-                 FROM " . TauxRemu::class . " tr
-                 LEFT JOIN tr.tauxRemu trp
-                 LEFT JOIN tr.tauxRemuValeurs trv
-                 WHERE tr.histoDestruction IS NULL
-                 ORDER BY tr.id";
-        $query = $this->getEntityManager()->createQuery($dql);
-
-        $tauxRemus = $query->getResult();
-        $annee = $this->getServiceContext()->getAnnee();
-
-
-        $result = [];
-        /** @var TauxRemu $tauxRemu */
-        foreach ($tauxRemus as $tauxRemu) {
-            /** @var TauxRemuValeur $valeur */
-            /** @var TauxRemuValeur $temp */
-            $valeurs = $tauxRemu->getValeurAnnee($annee);
-            $tauxRemu->setValeurs($valeurs);
-            $result[$tauxRemu->getId()] = $tauxRemu;
-        }
-
-        return $result;
-    }
-
-
 
     /**
      * Retourne les taux Remu qui possèdent une valeurs sur l'année
@@ -227,7 +191,7 @@ class TauxRemuService extends AbstractEntityService
     public function getTauxRemusAnneeWithValeur(): ?array
     {
 
-        $dql = "SELECT tr, trv, trp
+        $dql   = "SELECT tr, trv, trp
                  FROM " . TauxRemu::class . " tr
                  LEFT JOIN tr.tauxRemu trp
                  LEFT JOIN tr.tauxRemuValeurs trv
@@ -236,7 +200,7 @@ class TauxRemuService extends AbstractEntityService
         $query = $this->getEntityManager()->createQuery($dql);
 
         $tauxRemus = $query->getResult();
-        $annee = $this->getServiceContext()->getAnnee();
+        $annee     = $this->getServiceContext()->getAnnee();
 
 
         $result = [];
@@ -285,6 +249,3 @@ class TauxRemuService extends AbstractEntityService
         return new tauxRemuValeur();
     }
 }
-
-
-?>

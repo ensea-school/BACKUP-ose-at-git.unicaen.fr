@@ -116,6 +116,7 @@ return [
             'PLAFOND_APPLICATION_ID_SEQ',
             'MODELE_CONTRAT_ID_SEQ',
             'TAUX_HORAIRE_HETD_ID_SEQ',
+            'UNICAEN_MAIL_ID_SEQ',
         ],
     ],
 ];

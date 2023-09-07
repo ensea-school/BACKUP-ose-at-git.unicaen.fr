@@ -171,8 +171,8 @@ return [
             'offre-emploi-postuler'      => 'Postuler à une offre d\'emploi',
             'candidature-valider'        => 'Valider une candidature',
             'candidature-visualisation'  => 'Visualiser les candidatures d\'une offre',
-//            'edition-centre-cout-type'   => 'Édition des centres de cout d\'un type de mission',
-
+            'prime-visualisation'        => 'Visualiser les primes de fin de mission',
+            'prime-valider'              => 'Valider les primes de fin de contrat',
         ],
     ],
 

@@ -27,7 +27,7 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
 
     protected bool      $besoinFormation         = false;
 
-    protected           $centreCoutsTypeMission      = null;
+    protected           $centreCoutsTypeMission  = null;
 
 
 
@@ -90,6 +90,7 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
     {
 
         $this->centreCoutsTypeMission->removeElement($centreCoutTypeMission);
+
         return $this;
     }
 
@@ -109,15 +110,20 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
         return $this->libelle;
     }
 
+
+
     public function getAccompagnementEtudiants(): ?string
     {
         return $this->accompagnementEtudiants;
     }
 
+
+
     public function getBesoinFormation(): ?string
     {
         return $this->besoinFormation;
     }
+
 
 
     public function setLibelle(?string $libelle): TypeMission
@@ -203,6 +209,7 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
     public function setBesoinFormation(bool $besoinFormation): TypeMission
     {
         $this->besoinFormation = $besoinFormation;
+
         return $this;
     }
 

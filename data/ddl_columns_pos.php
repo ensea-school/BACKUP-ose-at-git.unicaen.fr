@@ -225,6 +225,7 @@ return [
         'MISSION_ID',
         'DEBUT_VALIDITE',
         'FIN_VALIDITE',
+        'DECLARATION_ID',
     ],
     'CONTRAT_FICHIER'                => [
         'CONTRAT_ID',
@@ -1341,6 +1342,7 @@ return [
         'CODE_INDEMNITE_PRIME',
         'TYPE_PAIE',
         'TYPE_PAIE_PRIME',
+        'DOSSIER_EMPLOYEUR_FACULTATIF',
     ],
     'STRUCTURE'                      => [
         'ID',
@@ -2422,6 +2424,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'STRUCTURE_ID',
     ],
     'SAVE_MODELE_CONTRAT'            => [
         'ID',
@@ -2489,6 +2492,17 @@ return [
         'ID',
         'DATE_JOUR',
         'LIBELLE',
+    ],
+    'TBL_PRIME'                      => [
+        'ID',
+        'CONTRAT_ID',
+        'MISSION_ID',
+        'TYPE_MISSION_ID',
+        'INTERVENANT_ID',
+        'STRUCTURE_ID',
+        'ANNEE_ID',
+        'DECLARATION',
+        'VALIDATION_ID',
     ],
 ];
 

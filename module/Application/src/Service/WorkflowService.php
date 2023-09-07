@@ -240,6 +240,7 @@ class WorkflowService extends AbstractService
             'piece_jointe_demande'    => ['piece_jointe'],
             'piece_jointe_fournie'    => ['piece_jointe'],
             'candidature'             => ['workflow'],
+            'prime'                   => ['workflow'],
             'agrement'                => ['workflow'],
             'cloture_realise'         => ['workflow'],
             'contrat'                 => ['workflow'],
@@ -257,6 +258,7 @@ class WorkflowService extends AbstractService
             'plafond_referentiel'     => [],
             'plafond_element'         => [],
             'plafond_volume_horaire'  => [],
+
         ];
 
         if ($tableauxBords) {

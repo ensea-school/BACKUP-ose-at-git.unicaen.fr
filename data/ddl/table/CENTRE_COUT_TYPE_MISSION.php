@@ -105,6 +105,18 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
+        'STRUCTURE_ID'          => [
+            'name'        => 'STRUCTURE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 10,
+            'commentaire' => NULL,
+        ],
         'TYPE_MISSION_ID'       => [
             'name'        => 'TYPE_MISSION_ID',
             'type'        => 'int',

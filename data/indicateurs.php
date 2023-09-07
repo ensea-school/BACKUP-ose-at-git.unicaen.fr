@@ -19,6 +19,13 @@ return [
                 'route'             => 'intervenant/candidature',
                 'irrecevables'      => false,
             ],
+            290 => [
+                'enabled'           => true,
+                'libelle_singulier' => '%s étudiant est en attente de validation d\'une prime de fin de contrat',
+                'libelle_pluriel'   => '%s étudiants sont en attente de validation d\'une prime de fin de contrat',
+                'route'             => 'intervenant/prime',
+                'irrecevables'      => false,
+            ],
             350 => [
                 'enabled'           => true,
                 'libelle_singulier' => '%s étudiant est en attente de validation d\'une mission',

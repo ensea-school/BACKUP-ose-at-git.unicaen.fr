@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Application\Entity\Db\Intervenant" table="INTERVENANT">
         <id name="id" type="integer" column="ID">
@@ -136,6 +136,10 @@
         <one-to-many field="validation" target-entity="Application\Entity\Db\Validation" mapped-by="intervenant"/>
         <one-to-many field="indicModifDossier" target-entity="Indicateur\Entity\Db\IndicModifDossier"
                      mapped-by="intervenant"/>
-        <one-to-many field="missions" target-entity="Mission\Entity\Db\Mission" mapped-by="intervenant"/>
+        <one-to-many field="missions" target-entity="Mission\Entity\Db\Mission" mapped-by="intervenant">
+            <order-by>
+                <order-by-field name="dateDebut" direction="ASC"/>
+            </order-by>
+        </one-to-many>
     </entity>
 </doctrine-mapping>

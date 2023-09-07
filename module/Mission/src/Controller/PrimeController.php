@@ -14,6 +14,9 @@ use Contrat\Assertion\ContratAssertion;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Mission\Entity\Db\VolumeHoraireMission;
+use Mission\Form\PrimeFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
 use Mission\Service\PrimeServiceAwareTrait;
 
@@ -30,6 +33,8 @@ class PrimeController extends AbstractController
     use ContratServiceAwareTrait;
     use FichierServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use PrimeServiceAwareTrait;
+    use PrimeFormAwareTrait;
 
     public function indexAction ()
     {
@@ -171,6 +176,64 @@ class PrimeController extends AbstractController
         $contratsPrime = $this->getServiceMission()->getContratPrimeMission(['intervenant' => $intervenant->getId()]);
 
         return $contratsPrime;
+    }
+
+
+
+    /**
+     * Retourne la liste des primes
+     *
+     * @return JsonModel
+     */
+    public function listeAction ()
+    {
+        /* @var $intervenant Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $model = $this->getServicePrime()->data(['intervenant' => $intervenant]);
+
+
+        return $model;
+    }
+
+
+
+    protected function saisieAction ()
+    {
+        $prime       = $this->getEvent()->getParam('prime');
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $missions    = $intervenant->getMissions();
+
+
+        if ($prime) {
+            $title = 'Modification d\'une prime de mission';
+        } else {
+            $title = 'Création d\'une prime de mission';
+        }
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            if (empty($prime)) {
+                $prime = $this->getServicePrime()->newEntity();
+                $prime->setIntervenant($intervenant);
+                $prime = $this->getServicePrime()->save($prime);
+                $this->flashMessenger()->addSuccessMessage('Prime créée');
+            }
+            //On rattache la prime au contrat
+            $datas = $this->getRequest()->getPost('missions');
+            foreach ($datas as $id => $mission) {
+                $missionEntity = $this->getServiceMission()->get($id);
+                $missionEntity->setPrime($prime);
+                $this->getServiceMission()->save($missionEntity);
+            }
+            $this->flashMessenger()->addSuccessMessage('Prime créée');
+        }
+
+        $vm = new ViewModel();
+        $vm->setTemplate('mission/prime/saisie');
+        $vm->setVariables(compact('title', 'missions', 'prime', 'intervenant'));
+
+        return $vm;
     }
 
 }

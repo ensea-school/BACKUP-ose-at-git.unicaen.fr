@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @var $this                     \Application\View\Renderer\PhpRenderer
+ * @var $title                    string
+ * @var $prime                    \Mission\Entity\Db\Prime
+ * @var $mission                  \Mission\Entity\Db\Mission
+ * @var $intervenant              \Application\Entity\Db\Intervenant
+ */
+
+?>
+<form action="<?= $this->url('prime/saisie', ['intervenant' => $intervenant->getId(), 'prime' => ($prime) ? $prime->getId() : '']) ?>" method="post">
+
+    <?php foreach ($missions as $mission): ?>
+
+        <?php if (empty($mission->getPrime())): ?>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"
+                       name="missions[<?= $mission->getId() ?>]">
+                <strong><?= $mission->getTypeMission()->getLibelle() . ' - ' . $mission->getStructure()->getLibelle() ?></strong><br/>
+                <i> Du <?= $mission->getDateDebut()->format('d/m/Y') ?> au <?= $mission->getDateFin()->format('d/m/Y'); ?></i>
+
+            </div>
+        <?php endif; ?>
+
+    <?php endforeach; ?>
+
+    <input type="submit" name="submit" class="btn btn-primary btn-save" value="Enregistrer">

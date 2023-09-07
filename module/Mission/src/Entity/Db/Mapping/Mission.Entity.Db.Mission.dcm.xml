@@ -79,5 +79,10 @@
                 <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
+        <many-to-one field="prime" target-entity="Mission\Entity\Db\Prime" inversed-by="mission">
+            <join-columns>
+                <join-column name="PRIME_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
     </entity>
 </doctrine-mapping>

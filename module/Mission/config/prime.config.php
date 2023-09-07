@@ -9,12 +9,14 @@ use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [
-        'intervenant' => [
-            'child_routes' => [
-                'prime'                         => [
-                    'route'      => '/:intervenant/prime',
+        'prime' => [
+            'route'         => '/prime',
+            'may_terminate' => false,
+            'child_routes'  => [
+                'liste'                         => [
+                    'route'      => '/:intervenant/liste',
                     'controller' => Controller\PrimeController::class,
-                    'action'     => 'index',
+                    'action'     => 'liste',
                     'privileges' => Privileges::MISSION_PRIME_VISUALISATION,
                 ],
                 'get-contrat-prime'             => [
@@ -65,6 +67,23 @@ return [
                     'action'     => 'telecharger-declaration-prime',
 
                 ],
+                'saisie'                        => [
+                    'route'      => '/:intervenant/saisie/[:prime]',
+                    'controller' => Controller\PrimeController::class,
+                    'action'     => 'saisie',
+
+                ],
+            ],
+        ],
+
+        'intervenant' => [
+            'child_routes' => [
+                'prime-mission' => [
+                    'route'      => '/:intervenant/prime',
+                    'controller' => Controller\PrimeController::class,
+                    'action'     => 'index',
+                    'privileges' => Privileges::MISSION_PRIME_VISUALISATION,
+                ],
             ],
 
         ],
@@ -93,7 +112,7 @@ return [
     'guards' => [
         [
             'controller' => PrimeController::class,
-            'action'     => ['index', 'get-contrat-prime', 'declaration-prime', 'supprimer-declaration-prime', 'valider-declaration-prime', 'devalider-declaration-prime', 'telecharger-declaration-prime', 'refuser-prime'],
+            'action'     => ['saisie', 'index', 'get-contrat-prime', 'declaration-prime', 'supprimer-declaration-prime', 'valider-declaration-prime', 'devalider-declaration-prime', 'telecharger-declaration-prime', 'refuser-prime', 'liste'],
             'privileges' => [
                 Privileges::MISSION_PRIME_VISUALISATION,
             ],
@@ -113,5 +132,8 @@ return [
         Controller\PrimeController::class => Controller\PrimeControllerFactory::class,
     ],
 
+    'services' => [
+        Service\PrimeService::class => Service\PrimeServiceFactory::class,
+    ],
 
 ];

@@ -11,6 +11,11 @@
 * Gestion des primes de fin de mission (emplois étudiants)
 
 
+## Notes de mise à jour
+
+* Attention : Oracle est requis en version 19 au minimum. Ose ne pourra plus fonctionner avec Oracle 11.
+
+
 # OSE 21.3 (à venir)
 
 ## Corrections de bugs

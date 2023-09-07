@@ -20,7 +20,7 @@ Les spécifications sont les suivantes :
 * tablespace de 9 Go (pour 3 années d'utilisation)
 * un tablespace UNDO de 1 Go minimum ou supprimer la rétention
 * un tablespace temporaire de 2 Go minimum
-* encodage en UTF-8, Oracle Enterprise Edition 11.2.0.3 (ou +), version 19.x recommandée à partir de la version 15 de OSE
+* encodage en UTF-8, Oracle 19 minimum, XE ou entreprise
 
 ### Paramétrage
 Pour information, notre base de données est configurée avec les paramètres suivants :

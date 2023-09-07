@@ -56,94 +56,30 @@ final class RapprocheurTest extends OseTestCase
         $this->rapprocheur->setRegle($regle);
         $this->rapprocheur->rapprocher($sapObject);
         $calc = $sapObject->toArray();
-        $this->assertArrayEquals($calc, $await);
+//        var_dump($regle);
+//        arrayDump($calc);
+        $res = $this->assertArrayEquals($calc, $await);
     }
 
-
-
-    /*
-     * $data = [
-        2 => [ // mep < lap
-            'lap' => [
-                ['aa' => 5, 'ac' => 4],
-            ],
-            'mep' => [
-                ['h' => 6],
-            ],
-        ],
-        3 => [ // 3 mep
-            'lap' => [
-                ['aa' => 5, 'ac' => 4],
-            ],
-            'mep' => [
-                ['h' => 2],
-                ['h' => 3],
-                ['h' => 1],
-            ],
-        ],
-        4 => [ // n mep, = lap
-            'lap' => [
-                ['aa' => 5, 'ac' => 4],
-                ['aa' => 3, 'ac' => 21],
-            ],
-            'mep' => [
-                ['h' => 33],
-            ],
-        ],
-        5 => [ // n mep, =  2 lap
-            'lap' => [
-                ['aa' => 5, 'ac' => 4],
-                ['aa' => 3, 'ac' => 21],
-            ],
-            'mep' => [
-                ['h' => 18],
-                ['h' => 15],
-            ],
-        ],
-        6 => [ // n mep, <  2 lap
-            'lap' => [
-                ['aa' => 5, 'ac' => 4],
-                ['aa' => 3, 'ac' => 21],
-            ],
-            'mep' => [
-                ['h' => 3],
-                ['h' => 10],
-                ['h' => 31],
-            ],
-        ],
-    ];
-     *
-     */
 
 
     public function testMepEqLap()
     {
         $data = [
             'lignesAPayer'    => [
-                [
-                    'heuresAA' => 5,
-                    'heuresAC' => 4,
-                ],
+                ['heuresAA' => 5, 'heuresAC' => 4],
             ],
             'misesEnPaiement' => [
-                [
-                    'id'     => 1,
-                    'heures' => 9,
-                ]
+                ['id' => 1, 'heures' => 9]
             ],
         ];
 
         $await = [
             'lignesAPayer' => [
                 [
-                    'heuresAA'        => 5,
-                    'heuresAC'        => 4,
+                    'heuresAA'        => 5, 'heuresAC' => 4,
                     'misesEnPaiement' => [
-                        1 => [
-                            'id' => 1,
-                            'heuresAA' => 5,
-                            'heuresAC' => 4,
-                        ]
+                        1 => ['id' => 1, 'heuresAA' => 5, 'heuresAC' => 4]
                     ],
                 ],
             ],
@@ -153,4 +89,242 @@ final class RapprocheurTest extends OseTestCase
         $this->process(Rapprocheur::REGLE_ORDRE_SAISIE, $data, $await);
     }
 
+
+
+    public function testMepInfLap()
+    {
+        $data = [
+            'lignesAPayer'    => [
+                ['heuresAA' => 5, 'heuresAC' => 4],
+            ],
+            'misesEnPaiement' => [
+                ['id' => 1, 'heures' => 6]
+            ],
+        ];
+
+        $awaitProrata = [
+            'lignesAPayer' => [
+                [
+                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'misesEnPaiement' => [
+                        1 => ['id' => 1, 'heuresAA' => 3, 'heuresAC' => 3]
+                    ],
+                ],
+            ],
+        ];
+
+        $awaitOrdre = [
+            'lignesAPayer' => [
+                [
+                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'misesEnPaiement' => [
+                        1 => [
+                            'id' => 1, 'heuresAA' => 5, 'heuresAC' => 1]
+                    ],
+                ],
+            ],
+        ];
+
+        $this->process(Rapprocheur::REGLE_PRORATA, $data, $awaitProrata);
+        $this->process(Rapprocheur::REGLE_ORDRE_SAISIE, $data, $awaitOrdre);
+    }
+
+
+
+    public function testMepInfLapMultiMep()
+    {
+        $data = [
+            'lignesAPayer'    => [
+                ['heuresAA' => 5, 'heuresAC' => 4],
+            ],
+            'misesEnPaiement' => [
+                ['id' => 1, 'heures' => 2],
+                ['id' => 2, 'heures' => 3],
+                ['id' => 3, 'heures' => 1]
+            ],
+        ];
+
+        $awaitProrata = [
+            'lignesAPayer' => [
+                [
+                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'misesEnPaiement' => [
+                        1 => ['id' => 1, 'heuresAA' => 1, 'heuresAC' => 1],
+                        2 => ['id' => 2, 'heuresAA' => 2, 'heuresAC' => 1],
+                        3 => ['id' => 3, 'heuresAA' => 1, 'heuresAC' => 0],
+                    ],
+                ],
+            ],
+        ];
+
+        $awaitOrdre = [
+            'lignesAPayer' => [
+                [
+                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'misesEnPaiement' => [
+                        1 => ['id' => 1, 'heuresAA' => 2, 'heuresAC' => 0],
+                        2 => ['id' => 2, 'heuresAA' => 3, 'heuresAC' => 0],
+                        3 => ['id' => 3, 'heuresAA' => 0, 'heuresAC' => 1],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->process(Rapprocheur::REGLE_PRORATA, $data, $awaitProrata);
+        $this->process(Rapprocheur::REGLE_ORDRE_SAISIE, $data, $awaitOrdre);
+    }
+
+
+
+    public function testMultiLap()
+    {
+        $data = [
+            'lignesAPayer'    => [
+                ['heuresAA' => 5, 'heuresAC' => 4],
+                ['heuresAA' => 3, 'heuresAC' => 21],
+            ],
+            'misesEnPaiement' => [
+                ['id' => 1, 'heures' => 33]
+            ],
+        ];
+
+        $await = [
+            'lignesAPayer' => [
+                [
+                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'misesEnPaiement' => [
+                        1 => ['id' => 1, 'heuresAA' => 5, 'heuresAC' => 4]
+                    ],
+                ],
+                [
+                    'heuresAA'        => 3, 'heuresAC' => 21,
+                    'misesEnPaiement' => [
+                        1 => ['id' => 1, 'heuresAA' => 3, 'heuresAC' => 21]
+                    ],
+                ],
+            ],
+        ];
+
+        $this->process(Rapprocheur::REGLE_PRORATA, $data, $await);
+        $this->process(Rapprocheur::REGLE_ORDRE_SAISIE, $data, $await);
+    }
+
+
+
+    public function testMultiLapMep()
+    {
+        $data = [
+            'lignesAPayer'    => [
+                ['heuresAA' => 5, 'heuresAC' => 4],
+                ['heuresAA' => 3, 'heuresAC' => 21],
+            ],
+            'misesEnPaiement' => [
+                ['id' => 1, 'heures' => 18],
+                ['id' => 2, 'heures' => 15],
+            ],
+        ];
+
+        $awaitProrata = [
+            'lignesAPayer' => [
+                [
+                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'misesEnPaiement' => [
+                        1 => ['id' => 1, 'heuresAA' => 5, 'heuresAC' => 4],
+                    ],
+                ],
+                [
+                    'heuresAA'        => 3, 'heuresAC' => 21,
+                    'misesEnPaiement' => [
+                        1 => ['id' => 1, 'heuresAA' => 1, 'heuresAC' => 8],
+                        2 => ['id' => 2, 'heuresAA' => 2, 'heuresAC' => 13],
+                    ],
+                ],
+            ],
+        ];
+
+        $awaitOrdre = [
+            'lignesAPayer' => [
+                [
+                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'misesEnPaiement' => [
+                        1 => ['id' => 1, 'heuresAA' => 5, 'heuresAC' => 4],
+                    ],
+                ],
+                [
+                    'heuresAA'        => 3, 'heuresAC' => 21,
+                    'misesEnPaiement' => [
+                        1 => ['id' => 1, 'heuresAA' => 3, 'heuresAC' => 6],
+                        2 => ['id' => 2, 'heuresAA' => 0, 'heuresAC' => 15],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->process(Rapprocheur::REGLE_PRORATA, $data, $awaitProrata);
+        $this->process(Rapprocheur::REGLE_ORDRE_SAISIE, $data, $awaitOrdre);
+    }
+
+
+
+    public function testMultiLapSupMep()
+    {
+        $data = [
+            'lignesAPayer'    => [
+                ['heuresAA' => 5, 'heuresAC' => 4],
+                ['heuresAA' => 3, 'heuresAC' => 21],
+            ],
+            'misesEnPaiement' => [
+                1 => ['id' => 1, 'heures' => 6],
+                2 => ['id' => 2, 'heures' => 10],
+                3 => ['id' => 3, 'heures' => 31],
+            ],
+        ];
+
+        $awaitProrata = [
+            'lignesAPayer' => [
+                [
+                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'misesEnPaiement' => [
+                        1 => ['id' => 1, 'heuresAA' => 3, 'heuresAC' => 3],
+                        2 => ['id' => 2, 'heuresAA' => 2, 'heuresAC' => 1],
+                    ],
+                ],
+                [
+                    'heuresAA'        => 3, 'heuresAC' => 21,
+                    'misesEnPaiement' => [
+                        2 => ['id' => 2, 'heuresAA' => 1, 'heuresAC' => 6],
+                        3 => ['id' => 3, 'heuresAA' => 2, 'heuresAC' => 15],
+                    ],
+                ],
+            ],
+            'misesEnPaiement' => [
+                3 => ['id' => 3, 'heures' => 14],
+            ],
+        ];
+
+        $awaitOrdre = [
+            'lignesAPayer' => [
+                [
+                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'misesEnPaiement' => [
+                        1 => ['id' => 1, 'heuresAA' => 5, 'heuresAC' => 1],
+                        2 => ['id' => 2, 'heuresAA' => 0, 'heuresAC' => 3],
+                    ],
+                ],
+                [
+                    'heuresAA'        => 3, 'heuresAC' => 21,
+                    'misesEnPaiement' => [
+                        2 => ['id' => 2, 'heuresAA' => 3, 'heuresAC' => 4],
+                        3 => ['id' => 3, 'heuresAA' => 0, 'heuresAC' => 17],
+                    ],
+                ],
+            ],
+            'misesEnPaiement' => [
+                3 => ['id' => 3, 'heures' => 14],
+            ],
+        ];
+
+        $this->process(Rapprocheur::REGLE_PRORATA, $data, $awaitProrata);
+        $this->process(Rapprocheur::REGLE_ORDRE_SAISIE, $data, $awaitOrdre);
+    }
 }

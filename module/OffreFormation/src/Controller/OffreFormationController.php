@@ -315,7 +315,7 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
                 }
                 $result = $this->getProcessusReconduction()->reconduireModulateurFormation($etapesReconduitesCc);
 
-                $this->flashMessenger()->addSuccessMessage("$result modulateur(s) ont été reconduit pour l'année prochaine. ");
+                $this->flashMessenger()->addSuccessMessage("$result modulateur(s) ont été reconduits pour l'année prochaine. ");
 
                 $etapesReconduites = $this->getServiceEtape()->getEtapeModulateurReconductible($structure);
             } catch (\Exception $e) {

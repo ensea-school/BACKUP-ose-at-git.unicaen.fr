@@ -6,7 +6,13 @@ use Application\Entity\Db\Periode;
 
 class Repartiteur
 {
-    protected string $reglePaiementAnneeCiv = '4-6sur10';
+    // Répartition 4/10 des heures pour l'année antérieure, 6/10 pour l'année en cours
+    const PAIEMENT_ANNEE_CIV_4_10_6_10 = '4-6sur10';
+    // En fonction du semestre des heures ou de la date des cours
+    const PAIEMENT_ANNEE_CIV_SEMESTRE_DATE = 'semestre-date';
+
+
+    protected string $reglePaiementAnneeCiv = self::PAIEMENT_ANNEE_CIV_4_10_6_10;
 
     protected float $pourcS1PourAnneeCivile = 2 / 3;
 
@@ -21,6 +27,11 @@ class Repartiteur
 
     public function setReglePaiementAnneeCiv(string $reglePaiementAnneeCiv): Repartiteur
     {
+        $regles = [self::PAIEMENT_ANNEE_CIV_4_10_6_10, self::PAIEMENT_ANNEE_CIV_SEMESTRE_DATE];
+        if (!in_array($reglePaiementAnneeCiv, $regles)) {
+            throw new \Exception('Règle inconnue');
+        }
+
         $this->reglePaiementAnneeCiv = $reglePaiementAnneeCiv;
 
         return $this;
@@ -57,6 +68,16 @@ class Repartiteur
 
 
 
+    /**
+     * Retourne un taux AA/AC
+     *
+     * @param bool $semestriel Si on est en mode semestriel ou non
+     * @param string|null $periodeCode Code de la période, pour détecter si on est en S1 ou S2
+     * @param int $anneeId ID de l'année universitaire
+     * @param string $horaireDebut Horaire de début au format Y-m-d
+     * @param string $horaireFin Horaire de fin au format Y-m-d
+     * @return float
+     */
     public function calculPourcAA(
         bool    $semestriel,
         ?string $periodeCode = null,
@@ -68,7 +89,7 @@ class Repartiteur
         // On est en mode de calcul semestriel
         if ($semestriel) {
             // si on est sur la règle 4/10 / 6/10
-            if ($this->reglePaiementAnneeCiv == '4-6sur10') {
+            if ($this->reglePaiementAnneeCiv == self::PAIEMENT_ANNEE_CIV_4_10_6_10) {
                 return 4 / 10;
             }
 
@@ -78,88 +99,35 @@ class Repartiteur
                     return $this->pourcS1PourAnneeCivile;
                 case Periode::SEMESTRE_2:
                     return 0; // le S2 n'est jamais effectué l'année antérieure
-                default: // si on ne trouve pas la période
+                default: // si on ne trouve pas la période => référentiel
                     return 4 / 10;
             }
         }
 
-        // Mode calendaire : en fonction des dates
-
         $debut = \DateTime::createFromFormat('Y-m-d', substr($horaireDebut, 0, 10));
         $fin = \DateTime::createFromFormat('Y-m-d', substr($horaireFin, 0, 10));
 
+        // ça se termine avant ou bien en AA
+        if ((int)$fin->format('Y') <= $anneeId){
+            return 1;
+        }
 
-        //   FUNCTION CALC_POURC_AA( periode_id NUMERIC, horaire_debut DATE, horaire_fin DATE, annee_id NUMERIC ) RETURN FLOAT IS
-        //    regle_paiement_annee_civ VARCHAR2(50);
-        //    nbjaa NUMERIC;
-        //    nbjac NUMERIC;
-        //  BEGIN
-        //    regle_paiement_annee_civ := ose_parametre.get_regle_paiement_annee_civ;
-        //
-        //    IF regle_paiement_annee_civ = '4-6sur10' THEN
-        //      RETURN 4/10;
-        //    END IF;
-        //
-        //    -- Sinon on calcule en fonction du nombre du semestre
-        //    IF horaire_debut IS NULL AND horaire_fin IS NULL AND periode_id IS NOT NULL THEN
-        //      IF CPA_S1_ID IS NULL THEN
-        //        SELECT id INTO CPA_S1_ID FROM periode WHERE code = 'S1';
-        //      END IF;
-        //
-        //      IF periode_id = CPA_S1_ID THEN
-        //        RETURN ose_parametre.get_pourc_s1_annee_civ;
-        //      ELSE
-        //        RETURN 0;
-        //      END IF;
-        //    END IF;
-        //
-        //    -- S'il y a des dates, alors on s'appuie dessus
-        //    IF horaire_debut IS NOT NULL AND horaire_fin IS NULL THEN
-        //      IF to_number(to_char(horaire_debut,'YYYY')) = annee_id THEN
-        //        RETURN 1;
-        //      ELSE
-        //        RETURN 0;
-        //      END IF;
-        //    END IF;
-        //
-        //    IF horaire_fin IS NOT NULL AND horaire_debut IS NULL THEN
-        //      IF to_number(to_char(horaire_fin,'YYYY')) = annee_id THEN
-        //        RETURN 1;
-        //      ELSE
-        //        RETURN 0;
-        //      END IF;
-        //    END IF;
-        //
-        //    IF horaire_fin IS NOT NULL AND horaire_debut IS NOT NULL THEN
-        //      IF to_number(to_char(horaire_debut,'YYYY')) = to_number(to_char(horaire_fin,'YYYY')) THEN -- si c'est la même année
-        //        IF to_number(to_char(horaire_debut,'YYYY')) = annee_id THEN
-        //          RETURN 1;
-        //        ELSE
-        //          RETURN 0;
-        //        END IF;
-        //      ELSE
-        //        nbjaa := to_date('01/01/' || (annee_id+1), 'dd/mm/YYYY') - horaire_debut;
-        //        IF nbjaa < 1 THEN
-        //          RETURN 0;
-        //        END IF;
-        //
-        //        nbjac := horaire_fin - to_date('31/12/' || annee_id, 'dd/mm/YYYY');
-        //        IF nbjac < 1 THEN
-        //          RETURN 1;
-        //        END IF;
-        //
-        //        RETURN nbjaa / (nbjaa + nbjac);
-        //      END IF;
-        //    END IF;
-        //
-        //    IF periode_id IS NULL THEN
-        //      -- on se trouve dans du référentiel ou dans un enseignement annuel, on utilise le ratio configuré
-        //      RETURN ose_parametre.get_pourc_s1_annee_civ;
-        //    ELSE
-        //      -- Sinon on retourne comme avant, CAD 4/10
-        //      RETURN 4/10;
-        //    END IF;
-        //  END;
+        // ça commence après ou en AC
+        if ((int)$debut->format('Y') > $anneeId){
+            return 0;
+        }
+
+        $endOfYear = \DateTime::createFromFormat('Y-m-d H:i:s', ($anneeId+1).'-01-01 00:00:00');
+
+        $intervalAA = $endOfYear->diff($debut);
+        $joursAA = $intervalAA->days+1;
+
+        $intervalAC = $endOfYear->diff($fin);
+        $joursAC = $intervalAC->days+1;
+
+        $pourcAA = round($joursAA / ($joursAA + $joursAC), 2);
+
+        return $pourcAA;
     }
 
 

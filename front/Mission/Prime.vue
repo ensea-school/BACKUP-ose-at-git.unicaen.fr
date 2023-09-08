@@ -146,6 +146,25 @@
                     </div>
 
                 </div>
+                <!--Gestion de la prime-->
+                <div class="row">
+                    <!-- Boutons d'actions -->
+                    <div class="col-md-12 ">
+                      <span class="float-end">
+                          <a
+                              :href="modifierPrimeUrl"
+                              class="btn btn-primary"
+                              @click.prevent="modifierPrime"
+                          >Modifier</a>
+                          &nbsp;
+                          <a
+                              :href="supprimerPrimeUrl"
+                              class="btn btn-danger"
+                              @click.prevent="supprimerPrime"
+                          >Supprimer</a>
+                          </span>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -169,28 +188,37 @@ export default {
         return {
             declarationUrl: unicaenVue.url("intervenant/:intervenant/declaration-prime/:contrat", {
                 intervenant: this.intervenant,
-                prime: this.id
+                prime: this.prime.id
             }),
             supprimerUrl: unicaenVue.url("intervenant/:intervenant/supprimer-declaration-prime/:contrat", {
                 intervenant: this.intervenant,
-                prime: this.id
+                prime: this.prime.id
             }),
             validerUrl: unicaenVue.url("intervenant/:intervenant/valider-declaration-prime/:contrat", {
                 intervenant: this.intervenant,
-                prime: this.id
+                prime: this.prime.id
             }),
             devaliderUrl: unicaenVue.url("intervenant/:intervenant/devalider-declaration-prime/:contrat", {
                 intervenant: this.intervenant,
-                prime: this.id
+                prime: this.prime.id
             }),
             telechargerUrl: unicaenVue.url("intervenant/:intervenant/telecharger-declaration-prime/:contrat", {
                 intervenant: this.intervenant,
-                prime: this.id
+                prime: this.prime.id
             }),
             refuserUrl: unicaenVue.url("intervenant/:intervenant/refuser-prime/:contrat", {
                 intervenant: this.intervenant,
-                prime: this.id
+                prime: this.prime.id
             }),
+            modifierPrimeUrl: unicaenVue.url('prime/:intervenant/saisie/:prime', {
+                intervenant: this.intervenant,
+                prime: this.prime.id
+            }),
+            supprimerPrimeUrl: unicaenVue.url('prime/:intervenant/supprimer-prime/:prime', {
+                intervenant: this.intervenant,
+                prime: this.prime.id
+            })
+
 
         };
     },
@@ -225,6 +253,19 @@ export default {
                     this.$emit('reload');
 
                 })
+
+        },
+        modifierPrime(event)
+        {
+            modAjax(event.currentTarget, (widget) => {
+                this.$emit('reload');
+            });
+        },
+        supprimerPrime(event)
+        {
+            popConfirm(event.target, (response) => {
+                this.$emit('reload');
+            });
 
         }
 

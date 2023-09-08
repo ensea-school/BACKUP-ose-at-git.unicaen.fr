@@ -15,6 +15,7 @@ use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use Mission\Entity\Db\Prime;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Mission\Form\PrimeFormAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
@@ -40,10 +41,16 @@ class PrimeController extends AbstractController
     {
         /* @var $intervenant Intervenant */
 
-        $intervenant = $this->getEvent()->getParam('intervenant');
+        $intervenant          = $this->getEvent()->getParam('intervenant');
+        $missions             = $intervenant->getMissions();
+        $missionsWithoutPrime = 0;
+        foreach ($missions as $mission) {
+            if (!$mission->getPrime()) {
+                $missionsWithoutPrime += 1;
+            }
+        }
 
-
-        return compact('intervenant');
+        return compact('intervenant', 'missionsWithoutPrime');
     }
 
 
@@ -198,8 +205,33 @@ class PrimeController extends AbstractController
 
 
 
+    public function supprimerPrimeAction ()
+    {
+        /**
+         * @var Prime       $prime
+         * @var Intervenant $intervenant
+         */
+
+        $prime       = $this->getEvent()->getParam('prime');
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        if ($prime->getIntervenant()->getId() == $intervenant->getId()) {
+            $this->getServicePrime()->supprimerPrime($prime);
+            $this->flashMessenger()->addSuccessMessage("La prime a été supprimée");
+        } else {
+            $this->flashMessenger()->addErrorMessage("La prime n'appartien pas au bon intervenant");
+        }
+
+        return true;
+    }
+
+
+
     protected function saisieAction ()
     {
+        /**
+         * @var Intervenant $intervenant
+         */
         $prime       = $this->getEvent()->getParam('prime');
         $intervenant = $this->getEvent()->getParam('intervenant');
         $missions    = $intervenant->getMissions();

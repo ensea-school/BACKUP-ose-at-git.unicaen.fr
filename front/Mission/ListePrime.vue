@@ -3,7 +3,7 @@
            :prime="prime"
            @reload="reload"></prime>
     <div v-if="primes.length == 0"> aucune prime<br/><br/></div>
-    <div>
+    <div v-if="this.missionsWithoutPrime > 0">
         <a :href="ajoutUrl" class=" btn btn-primary" @click.prevent="ajout">Créer une nouvelle prime</a>
     </div>
 </template>
@@ -19,6 +19,7 @@ export default {
     props: {
         intervenant: {type: Number, required: true},
         numero: {type: Number, required: false},
+        missionsWithoutPrime: {type: Number, required: false},
         canValider: {type: Boolean, required: false},
 
     },

@@ -73,7 +73,7 @@ class PrimeService extends AbstractEntityService
           JOIN m.typeMission tm
           JOIN m.structure str
         WHERE 
-          m.histoDestruction IS NULL 
+          p.histoDestruction IS NULL 
           " . dqlAndWhere([
                 'intervenant' => 'p.intervenant',
                 'prime'       => 'p',
@@ -117,6 +117,27 @@ class PrimeService extends AbstractEntityService
         ];*/
 
         return new AxiosModel($query, $properties, $triggers);
+    }
+
+
+
+    public function supprimerPrime (Prime $prime): bool
+    {
+
+        //On déférence la prime de toutes les missions
+        /**
+         * @var Mission $mission
+         */
+        $missions = $prime->getMissions();
+        foreach ($missions as $mission) {
+            $mission->setPrime(null);
+            $this->entityManager->persist($mission);
+        }
+        $this->entityManager->flush();
+
+        $this->delete($prime);
+
+        return true;
     }
 
 

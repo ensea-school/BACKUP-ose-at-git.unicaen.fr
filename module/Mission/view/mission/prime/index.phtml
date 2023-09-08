@@ -1,9 +1,10 @@
 <?php
 /**
- * @var $this              \Application\View\Renderer\PhpRenderer
- * @var $intervenant       \Application\Entity\Db\Intervenant
- * @var $canAddMission     bool
- * @var $typeVolumeHoraire \Service\Entity\Db\TypeVolumeHoraire
+ * @var $this                       \Application\View\Renderer\PhpRenderer
+ * @var $intervenant                \Application\Entity\Db\Intervenant
+ * @var $missionsWithoutPrime       int
+ * @var $canAddMission              bool
+ * @var $typeVolumeHoraire          \Service\Entity\Db\TypeVolumeHoraire
  */
 
 use Application\Entity\Db\WfEtape;
@@ -18,7 +19,8 @@ $this->intervenant($intervenant)->renderTitle($title);
 
 
 echo $this->vue('mission/liste-prime', [
-    'intervenant' => $intervenant->getId(),
+    'intervenant'          => $intervenant->getId(),
+    'missionsWithoutPrime' => $missionsWithoutPrime,
     //'canValider'  => $canValider,
 ]);
 

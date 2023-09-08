@@ -12,11 +12,15 @@
 <form action="<?= $this->url('prime/saisie', ['intervenant' => $intervenant->getId(), 'prime' => ($prime) ? $prime->getId() : '']) ?>" method="post">
 
     <?php foreach ($missions as $mission): ?>
+        <?php
 
-        <?php if (empty($mission->getPrime())): ?>
+        $missionPrimeId = $mission->getPrime() ? $mission->getPrime()->getId() : '';
+        $primeId        = $prime ? $prime->getId() : '';
+        ?>
+        <?php if (empty($mission->getPrime()) || $missionPrimeId == $primeId): ?>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox"
-                       name="missions[<?= $mission->getId() ?>]">
+                <input <?= ($missionPrimeId == $primeId && !empty($missionPrimeId)) ? 'checked' : '' ?> class="form-check-input" type="checkbox"
+                                                                                                        name="missions[<?= $mission->getId() ?>]">
                 <strong><?= $mission->getTypeMission()->getLibelle() . ' - ' . $mission->getStructure()->getLibelle() ?></strong><br/>
                 <i> Du <?= $mission->getDateDebut()->format('d/m/Y') ?> au <?= $mission->getDateFin()->format('d/m/Y'); ?></i>
 
@@ -26,3 +30,4 @@
     <?php endforeach; ?>
 
     <input type="submit" name="submit" class="btn btn-primary btn-save" value="Enregistrer">
+</form>

@@ -73,6 +73,12 @@ return [
                     'action'     => 'saisie',
 
                 ],
+                'supprimer-prime'               => [
+                    'route'      => '/:intervenant/supprimer-prime/[:prime]',
+                    'controller' => Controller\PrimeController::class,
+                    'action'     => 'supprimer-prime',
+
+                ],
             ],
         ],
 
@@ -112,7 +118,7 @@ return [
     'guards' => [
         [
             'controller' => PrimeController::class,
-            'action'     => ['saisie', 'index', 'get-contrat-prime', 'declaration-prime', 'supprimer-declaration-prime', 'valider-declaration-prime', 'devalider-declaration-prime', 'telecharger-declaration-prime', 'refuser-prime', 'liste'],
+            'action'     => ['supprimer-prime', 'saisie', 'index', 'get-contrat-prime', 'declaration-prime', 'supprimer-declaration-prime', 'valider-declaration-prime', 'devalider-declaration-prime', 'telecharger-declaration-prime', 'refuser-prime', 'liste'],
             'privileges' => [
                 Privileges::MISSION_PRIME_VISUALISATION,
             ],

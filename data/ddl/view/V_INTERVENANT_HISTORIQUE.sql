@@ -45,6 +45,23 @@ FROM validation v
          JOIN intervenant_dossier d ON d.histo_destruction IS NULL AND d.intervenant_id = v.intervenant_id
 
 UNION ALL
+
+--Dévalidation des données personnelles
+SELECT d.intervenant_id                          intervenant_id,
+       '1 - Données personnelles'                categorie,
+       'Dévalidation des données personnelles'   label,
+       v.histo_destruction                       histo_date,
+       v.histo_destructeur_id                    histo_destructeur_id,
+       u.display_name                            histo_user,
+       'glyphicon glyphicon-ok'                  icon,
+       1                                         ordre
+FROM validation v
+         JOIN utilisateur u ON u.id = v.histo_destructeur_id
+         JOIN type_validation tv ON tv.id = v.type_validation_id AND tv.code = 'DONNEES_PERSO_PAR_COMP'
+         JOIN intervenant_dossier d ON d.histo_destruction IS NULL AND d.intervenant_id = v.intervenant_id
+WHERE v.histo_destruction IS NOT NULL
+
+UNION ALL
 --Dépôt des pièces justificatives
 SELECT pj.intervenant_id                             intervenant_id,
        '2 - Pièces justificatives'                   categorie,

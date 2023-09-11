@@ -64,6 +64,13 @@ return [
         "DESC_NON_FRANCHIE"   => "Certaines missions n'ont pas été validées",
         "OBLIGATOIRE"         => true,
     ],
+    "MISSION_PRIME"                  => [
+        "LIBELLE_INTERVENANT" => "Je visualise mes primes de fin de missions",
+        "LIBELLE_AUTRES"      => "Je visualise mes primes de fin de missions",
+        "ROUTE"               => "intervenant/prime-mission",
+        "DESC_NON_FRANCHIE"   => "Aucune prime en cours",
+        "OBLIGATOIRE"         => true,
+    ],
     "SERVICE_VALIDATION"             => [
         "LIBELLE_INTERVENANT" => "Je visualise la validation de mes services prévisionnels",
         "LIBELLE_AUTRES"      => "Je visualise la validation des enseignements prévisionnels",

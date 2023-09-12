@@ -14,7 +14,6 @@
         </id>
         <field name="numeroAvenant" type="integer" column="NUMERO_AVENANT" nullable="false"/>
         <field name="dateRetourSigne" type="datetime" column="DATE_RETOUR_SIGNE" nullable="true"/>
-        <field name="dateRefusPrime" type="datetime" column="DATE_REFUS_PRIME" nullable="true"/>
         <field name="debutValidite" type="datetime" column="DEBUT_VALIDITE" nullable="true"/>
         <field name="finValidite" type="datetime" column="FIN_VALIDITE" nullable="true"/>
         <field name="dateEnvoiEmail" type="datetime" column="DATE_ENVOI_EMAIL" nullable="true"/>
@@ -75,11 +74,6 @@
         <many-to-one field="mission" target-entity="Mission\Entity\Db\Mission">
             <join-columns>
                 <join-column name="MISSION_ID" referenced-column-name="ID"/>
-            </join-columns>
-        </many-to-one>
-        <many-to-one field="declaration" target-entity="Application\Entity\Db\Fichier">
-            <join-columns>
-                <join-column name="DECLARATION_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
     </entity>

@@ -3,10 +3,9 @@ SELECT
     tp.intervenant_id,
     tp.structure_id
 FROM
-    tbl_prime tp
+    tbl_mission_prime tp
 WHERE
-  tp.declaration IS NOT NULL
-  AND tp.validation_id IS NULL
+  tp.declaration > tp.validation+tp.refus
 GROUP BY
   tp.intervenant_id,
   tp.annee_id,

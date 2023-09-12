@@ -1,5 +1,6 @@
 <template>
-    <prime v-for="(prime, index) in primes" :intervenant="this.intervenant" :numero="index"
+    <prime v-for="(prime, index) in primes" :canValider="canValider" :intervenant="this.intervenant"
+           :numero="index"
            :prime="prime"
            @reload="reload"></prime>
     <div v-if="primes.length == 0"> aucune prime<br/><br/></div>

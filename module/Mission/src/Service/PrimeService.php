@@ -3,6 +3,7 @@
 namespace Mission\Service;
 
 use Application\Acl\Role;
+use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
@@ -72,6 +73,8 @@ class PrimeService extends AbstractEntityService
           JOIN p.missions m
           JOIN m.typeMission tm
           JOIN m.structure str
+          LEFT JOIN p.declaration d
+          LEFT JOIN p.validation v
         WHERE 
           p.histoDestruction IS NULL 
           " . dqlAndWhere([
@@ -86,9 +89,9 @@ class PrimeService extends AbstractEntityService
 
         $properties = [
             'id',
-            'declaration',
-            'validation',
-            'date_refus',
+            ['declaration', ['nom', 'id', 'histoCreation', 'histoCreateur']],
+            ['validation', ['id', 'histoCreation', 'histoCreateur']],
+            'dateRefus',
             ['missions', [['structure', ['libelleCourt']], 'libelleMission', 'dateDebut', 'dateFin', ['typeMission', ['libelle']]]],
             'histoCreation',
             'histoCreateur',
@@ -121,6 +124,44 @@ class PrimeService extends AbstractEntityService
 
 
 
+    public function creerDeclaration ($files, Prime $prime, $deleteFiles = true)
+    {
+
+        if (!$files) {
+            throw new \LogicException("Aucune donnée sur les fichiers spécifiée.");
+        }
+        $instances = [];
+
+        foreach ($files as $file) {
+            $path          = $file['tmp_name'];
+            $nomFichier    = str_replace([',', ';', ':'], '', $file['name']);
+            $typeFichier   = $file['type'];
+            $tailleFichier = $file['size'];
+
+            $fichier = (new Fichier())
+                ->setTypeMime($typeFichier)
+                ->setNom($nomFichier)
+                ->setTaille($tailleFichier)
+                ->setContenu(file_get_contents($path))
+                ->setValidation(null);
+
+            $prime->setDeclaration($fichier);
+
+            $this->getServiceFichier()->save($fichier);
+            $instances[] = $fichier;
+
+            if ($deleteFiles) {
+                unlink($path);
+            }
+        }
+
+        $this->getEntityManager()->flush();
+
+        return $instances;
+    }
+
+
+
     public function supprimerPrime (Prime $prime): bool
     {
 
@@ -142,28 +183,29 @@ class PrimeService extends AbstractEntityService
 
 
 
-    public function validerDeclarationPrime (Contrat $contrat): Validation
+    public function validerDeclarationPrime (Prime $prime): bool
     {
         $validation = $this->getServiceValidation()->newEntity($this->getServiceTypeValidation()->getDeclaration())
-            ->setIntervenant($contrat->getIntervenant())
-            ->setStructure($contrat->getStructure());
-
-        $fichier = $contrat->getDeclaration()->setValidation($validation);
+            ->setIntervenant($prime->getIntervenant())
+            ->setStructure($prime->getIntervenant()->getStructure());
 
         $this->getServiceValidation()->save($validation);
-        $this->getServiceFichier()->save($fichier);
+        $prime->setValidation($validation);
+        $this->save($prime);
 
-        return $validation;
+        return true;
     }
 
 
 
-    public function devaliderDeclarationPrime (Contrat $contrat): bool
+    public function devaliderDeclarationPrime (Prime $prime): bool
     {
-        $validation = $contrat->getDeclaration()->getValidation();
-        $fichier    = $contrat->getDeclaration()->setValidation(null);
-        $this->getServiceFichier()->save($fichier);
-        $this->getEntityManager()->remove($validation);
+        $validation = $prime->getValidation();
+        $validation->historiser();
+        $this->getEntityManager()->persist($validation);
+        $this->getEntityManager()->flush();
+        $prime->setValidation(null);
+        $this->save($prime);
 
         return true;
     }

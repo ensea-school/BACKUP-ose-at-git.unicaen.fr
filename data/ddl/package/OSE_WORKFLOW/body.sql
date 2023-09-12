@@ -527,8 +527,9 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
         SELECT
           ''MISSION_PRIME''                                   etape_code,
           mp.intervenant_id                                   intervenant_id,
+          mp.structure_id                                     structure_id,
           mp.prime                                            objectif,
-          mp.validation+mp.refus						  realisation
+          mp.validation+mp.refus						      realisation
         FROM
           tbl_mission_prime mp
         WHERE

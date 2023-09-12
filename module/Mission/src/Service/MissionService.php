@@ -305,32 +305,4 @@ class MissionService extends AbstractEntityService
         return new AxiosModel($data, $properties, $triggers);
     }
 
-
-
-    public function validerDeclarationPrime (Contrat $contrat): Validation
-    {
-        $validation = $this->getServiceValidation()->newEntity($this->getServiceTypeValidation()->getDeclaration())
-            ->setIntervenant($contrat->getIntervenant())
-            ->setStructure($contrat->getStructure());
-
-        $fichier = $contrat->getDeclaration()->setValidation($validation);
-
-        $this->getServiceValidation()->save($validation);
-        $this->getServiceFichier()->save($fichier);
-
-        return $validation;
-    }
-
-
-
-    public function devaliderDeclarationPrime (Contrat $contrat): bool
-    {
-        $validation = $contrat->getDeclaration()->getValidation();
-        $fichier    = $contrat->getDeclaration()->setValidation(null);
-        $this->getServiceFichier()->save($fichier);
-        $this->getEntityManager()->remove($validation);
-
-        return true;
-    }
-
 }

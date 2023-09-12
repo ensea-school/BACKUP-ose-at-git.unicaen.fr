@@ -444,6 +444,7 @@ return [
                 'cols'    => [
                     'ANNEE_ID',
                     'INTERVENANT_ID',
+                    'STRUCTURE_ID',
                     'ACTIF',
                     'PRIME',
                     'DECLARATION',

@@ -21,7 +21,7 @@ $this->intervenant($intervenant)->renderTitle($title);
 echo $this->vue('mission/liste-prime', [
     'intervenant'          => $intervenant->getId(),
     'missionsWithoutPrime' => $missionsWithoutPrime,
-    //'canValider'  => $canValider,
+    'canValider'           => $canValider,
 ]);
 
 echo '<br />';

@@ -3,7 +3,9 @@
            :numero="index"
            :prime="prime"
            @reload="reload"></prime>
-    <div v-if="primes.length == 0"> aucune prime<br/><br/></div>
+    <div v-if="!load" class="text-secondary text-center fs-6   " style="text-align:center;"> Chargement en cours...<br/><br/></div>
+    <div v-if="primes.length == 0 && load" class="text-secondary text-center fs-6   " style="text-align:center;"> Aucune prime de fin de mission
+        actuellement...<br/><br/></div>
     <div v-if="this.missionsWithoutPrime > 0">
         <a :href="ajoutUrl" class=" btn btn-primary" @click.prevent="ajout">Créer une nouvelle prime</a>
     </div>
@@ -26,7 +28,9 @@ export default {
     },
     data()
     {
+
         return {
+            load: false,
             primes: [],
             ajoutUrl: unicaenVue.url('prime/:intervenant/saisie/', {intervenant: this.intervenant})
         };
@@ -48,10 +52,13 @@ export default {
 
         reload()
         {
+            this.load = false;
+            this.primes = [];
             unicaenVue.axios.get(
                 unicaenVue.url("prime/:intervenant/liste", {intervenant: this.intervenant})
             ).then(response => {
                 this.primes = response.data;
+                this.load = true;
             });
         },
 

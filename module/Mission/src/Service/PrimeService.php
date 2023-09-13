@@ -82,7 +82,7 @@ class PrimeService extends AbstractEntityService
                 'prime'       => 'p',
             ], $parameters) . "
         ORDER BY
-          m.dateDebut
+          p.id
         ";
 
         $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);

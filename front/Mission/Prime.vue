@@ -86,10 +86,10 @@
 
                         <input :checked="prime.dateRefus" :disabled="prime.validation" name="prime" type="checkbox"
                                @change="refuser"/>&nbsp;
-                        Ou en cochant cette case, <b>je déclare ne pas peut pouvoir bénéficier de la prime</b> de fin de mission en raison du démarrage d'un
+                        Ou en cochant cette case, <b>je déclare ne pas pouvoir bénéficier de la prime</b> de fin de mission en raison du démarrage d'un
                         nouveau
-                        contrat au sein la
-                        fonction publique à la suite de ces missions
+                        contrat au sein de la
+                        fonction publique à la suite de ces missions.
 
                         <br/><br/>
                         <div>
@@ -153,14 +153,14 @@
                     <div class="col-md-12 ">
                       <span class="float-end">
                           <a
-                              v-if="!prime.validation"
+                              v-if="!prime.validation && !prime.dateRefus"
                               :href="modifierPrimeUrl"
                               class="btn btn-primary"
                               @click.prevent="modifierPrime"
                           >Modifier</a>
                           &nbsp;
                           <a
-                              v-if="!prime.validation"
+                              v-if="!prime.validation && !prime.dateRefus"
                               :href="supprimerPrimeUrl"
                               class="btn btn-danger"
                               @click.prevent="supprimerPrime"

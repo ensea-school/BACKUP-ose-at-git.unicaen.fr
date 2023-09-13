@@ -14,6 +14,7 @@ use Contrat\Entity\Db\Contrat;
 use Mission\Assertion\SaisieAssertion;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\Prime;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
@@ -196,6 +197,37 @@ class MissionService extends AbstractEntityService
 
 
 
+    public function deletePrimeMissions (Prime $prime)
+    {
+        $missions = $prime->getMissions();
+        foreach ($missions as $mission) {
+            $mission->setPrime(null);
+            $this->save($mission);
+        }
+
+        return true;
+    }
+
+
+
+    /**
+     * @param Mission $entity
+     *
+     * @return Mission
+     */
+    public function save ($entity): Mission
+    {
+        foreach ($entity->getVolumesHorairesPrevus() as $vh) {
+            $this->saveVolumeHoraire($vh);
+        }
+
+        parent::save($entity);
+
+        return $entity;
+    }
+
+
+
     public function createMissionFromCandidature (Candidature $candidature): ?Mission
     {
         $mission = $this->newEntity();
@@ -214,24 +246,6 @@ class MissionService extends AbstractEntityService
         $this->save($mission);
 
         return $mission;
-    }
-
-
-
-    /**
-     * @param Mission $entity
-     *
-     * @return Mission
-     */
-    public function save ($entity)
-    {
-        foreach ($entity->getVolumesHorairesPrevus() as $vh) {
-            $this->saveVolumeHoraire($vh);
-        }
-
-        parent::save($entity);
-
-        return $entity;
     }
 
 }

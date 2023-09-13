@@ -6,9 +6,13 @@
  * @var $prime                    \Mission\Entity\Db\Prime
  * @var $mission                  \Mission\Entity\Db\Mission
  * @var $intervenant              \Application\Entity\Db\Intervenant
+ * @var $missions                 \Application\Entity\Collection
  */
 
 ?>
+
+<?= $this->tag('h1', ['class' => 'page-header'])->html($title); ?>
+
 <form action="<?= $this->url('prime/saisie', ['intervenant' => $intervenant->getId(), 'prime' => ($prime) ? $prime->getId() : '']) ?>" method="post">
 
     <?php foreach ($missions as $mission): ?>

@@ -247,15 +247,20 @@ class PrimeController extends AbstractController
                 $prime->setIntervenant($intervenant);
                 $prime = $this->getServicePrime()->save($prime);
                 $this->flashMessenger()->addSuccessMessage('Prime créée');
+            } else {
+                //On supprimer la prime de toutes les missions
+                //On est en mise à jour
+                $this->flashMessenger()->addSuccessMessage('Prime mise à jour');
+                $this->getServiceMission()->deletePrimeMissions($prime);
             }
-            //On rattache la prime au contrat
+            //On rattache la prime aux missions concernées
             $datas = $this->getRequest()->getPost('missions');
+
             foreach ($datas as $id => $mission) {
                 $missionEntity = $this->getServiceMission()->get($id);
                 $missionEntity->setPrime($prime);
                 $this->getServiceMission()->save($missionEntity);
             }
-            $this->flashMessenger()->addSuccessMessage('Prime créée');
         }
 
         $vm = new ViewModel();

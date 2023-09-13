@@ -465,11 +465,19 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ULHN AS
         PONDERATION_SERVICE_DU,
         PONDERATION_SERVICE_COMPL,
         SERVICE_STATUTAIRE,
-          CASE WHEN 0 > MIN(heures) OVER (PARTITION BY service_id, type_intervention_id, periode_id, horaire_debut, horaire_fin) THEN
-            CASE WHEN volume_horaire_id = MIN(volume_horaire_id) OVER (PARTITION BY service_id, type_intervention_id, periode_id, horaire_debut, horaire_fin) THEN
-              SUM(heures) OVER (PARTITION BY service_id, type_intervention_id, periode_id, horaire_debut, horaire_fin)
+        CASE WHEN volume_horaire_id IS NOT NULL THEN
+            CASE WHEN 0 > MIN(heures) OVER (PARTITION BY service_id, type_intervention_id, periode_id, horaire_debut, horaire_fin) THEN
+                CASE WHEN volume_horaire_id = MIN(volume_horaire_id) OVER (PARTITION BY service_id, type_intervention_id, periode_id, horaire_debut, horaire_fin) THEN
+                    SUM(heures) OVER (PARTITION BY service_id, type_intervention_id, periode_id, horaire_debut, horaire_fin)
+                ELSE 0 END
+            ELSE heures END
+        ELSE
+        CASE WHEN 0 > MIN(heures) OVER (PARTITION BY service_referentiel_id, type_intervention_id, horaire_debut, horaire_fin) THEN
+            CASE WHEN volume_horaire_ref_id = MIN(volume_horaire_ref_id) OVER (PARTITION BY service_referentiel_id, horaire_debut, horaire_fin) THEN
+                SUM(heures) OVER (PARTITION BY service_referentiel_id, type_intervention_id, horaire_debut, horaire_fin)
             ELSE 0 END
-          ELSE heures END HEURES,
+            ELSE heures END
+        END HEURES,
         PERIODE_ID,
         HORAIRE_DEBUT,
         HORAIRE_FIN,

@@ -28537,14 +28537,6 @@ table {
   border-top: none;
 }
 
-.engagement td.dotation {
-    padding: 0.2em;
-}
-
-.engagement td.dotation {
-    padding: 0.2em;
-}
-
 .engagement td.hetd {
   text-align: right;
 }
@@ -28561,7 +28553,6 @@ table {
 .engagement .liquidation h2, .engagement .liquidation .h2 {
   text-align: center;
 }
-
 
 table.budget-tbl {
   width: auto;
@@ -28590,8 +28581,6 @@ table.budget-tbl .label {
 }
 
 table.dmep-budget {
-  width: auto;
-  margin: auto;
   margin-bottom: 1em;
 }
 

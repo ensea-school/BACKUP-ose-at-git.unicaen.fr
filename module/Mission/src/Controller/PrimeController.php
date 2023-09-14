@@ -165,21 +165,11 @@ class PrimeController extends AbstractController
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
         /** @var Contrat $contrat */
-        $contrat = $this->getEvent()->getParam('contrat');
+        $prime = $this->getEvent()->getParam('prime');
 
-        $fichier = $contrat->getDeclaration();
+        $fichier = $prime->getDeclaration();
 
         $this->uploader()->download($fichier);
-    }
-
-
-
-    public function getContratPrimeAction ()
-    {
-        $intervenant   = $this->getEvent()->getParam('intervenant');
-        $contratsPrime = $this->getServiceMission()->getContratPrimeMission(['intervenant' => $intervenant->getId()]);
-
-        return $contratsPrime;
     }
 
 

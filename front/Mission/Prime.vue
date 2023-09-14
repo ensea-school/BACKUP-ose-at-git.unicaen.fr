@@ -1,7 +1,7 @@
 <template>
-    <div :class="{'bg-success':prime.validation,'bg-default':!prime.validation&&!prime.dateRefus,'bg-danger':prime.dateRefus }"
+    <div :class="{'bg-success':prime.validation,'bg-default':!prime.validation&&!prime.dateRefus,'bg-danger':prime.dateRefus}"
          class="card">
-        <div class="card-header card-header-h3">
+        <div :class="{'text-white':prime.dateRefus}" class="card-header card-header-h3">
             <h5 v-if="prime.id">
                 Prime de fin de mission N°{{ numero+1 }}<br/>
             </h5>

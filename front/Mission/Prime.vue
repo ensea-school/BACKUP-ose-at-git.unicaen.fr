@@ -58,21 +58,21 @@
 
                             </div>
                             <div class="card-footer" style="text-align:right;">
-                                <a v-if="prime.declaration && !prime.validation"
+                                <a v-if="prime.declaration && !prime.validation && !prime.dateRefus"
                                    :href="supprimerUrl"
                                    class="btn btn-danger"
                                    title="Supprimer"
                                    @click.prevent="supprimer">
                                     Supprimer
                                 </a>&nbsp;
-                                <a v-if="prime.declaration && !prime.validation && this.canValider"
+                                <a v-if="prime.declaration && !prime.validation && this.canValider  && !prime.dateRefus"
                                    :href="validerUrl"
                                    class="btn btn-success"
                                    title="Valider"
                                    @click.prevent="valider">
                                     Valider
                                 </a>&nbsp;
-                                <a v-if="prime.declaration && prime.validation && this.canValider"
+                                <a v-if="prime.declaration && prime.validation && this.canValider  && !prime.dateRefus"
                                    :href="devaliderUrl"
                                    class="btn btn-danger d-grid gap-2"
                                    title="Dévalider"

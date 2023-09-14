@@ -10,7 +10,7 @@
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 
-$canValider = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_PRIME_VALIDER));
+$canValider = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_PRIME_GESTION));
 
 $title     = 'Prime de fin de mission';
 $nextEtape = WfEtape::CODE_MISSION_VALIDATION_REALISE;

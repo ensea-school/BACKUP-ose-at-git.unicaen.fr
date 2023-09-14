@@ -91,6 +91,34 @@ final class RapprocheurTest extends OseTestCase
 
 
 
+    public function testLapZero()
+    {
+        $data = [
+            'lignesAPayer'    => [
+                ['heuresAA' => 5, 'heuresAC' => 4],
+            ],
+            'misesEnPaiement' => [
+                ['id' => 1, 'heures' => 0]
+            ],
+        ];
+
+        $await = [
+            'lignesAPayer' => [
+                [
+                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'misesEnPaiement' => [
+                        1 => ['id' => 1, 'heuresAA' => 0, 'heuresAC' => 0]
+                    ],
+                ],
+            ],
+        ];
+
+        $this->process(Rapprocheur::REGLE_PRORATA, $data, $await);
+        $this->process(Rapprocheur::REGLE_ORDRE_SAISIE, $data, $await);
+    }
+
+
+
     public function testMepInfLap()
     {
         $data = [

@@ -92,7 +92,7 @@ class Rapprocheur
 
                 }
 
-                if ($nmep->heuresAA + $nmep->heuresAC > 0) {
+                if ($nmep->heuresAA + $nmep->heuresAC > 0 || $mep->heures == 0) {
                     $lap->misesEnPaiement[$nmep->id] = $nmep;
                     if ($mep->heures == 0) {
                         unset($sap->misesEnPaiement[$mid]);

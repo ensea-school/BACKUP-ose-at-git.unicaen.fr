@@ -16,8 +16,9 @@ $ptbl = $c->getTableauBord('paiement');
 
 $params = [
    //'INTERVENANT_ID' => 667613
-   // 'INTERVENANT_ID' => 20970
-    'FORMULE_RES_SERVICE_ID' => 113957505
+    //'INTERVENANT_ID' => 20970
+   // 'FORMULE_RES_SERVICE_ID' => 113957505
+    'SERVICE_ID' => 131918,
 ];
 
 
@@ -25,7 +26,7 @@ $params = [
 
 $debut = microtime(true);
 
-$ptbl->getProcess()->test();
+arrayDump($ptbl->getProcess()->getData($params));
 //$ptbl->calculer($params);
 
 $fin = microtime(true);

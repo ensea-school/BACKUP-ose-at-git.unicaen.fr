@@ -24,8 +24,10 @@ class OseTestCase extends TestCase
 
         foreach( $k1 as $k ){
             $p = $path.'/'.$k;
-            if (getType($a1[$k]) !== getType($a2[$k])){
-                $this->assertNotTrue(true, 'Des valeurs ne sont pas du même type ('.$p.')');
+            $a1Type = getType($a1[$k]);
+            $a2Type = getType($a2[$k]);
+            if ($a1Type != $a2Type){
+                $this->assertNotTrue(true, 'Des valeurs ne sont pas du même type ('.$p.') : '.$a2Type.' pour '.$a1Type);
                 return false;
             }
             if (is_array($a1[$k])){
@@ -35,7 +37,7 @@ class OseTestCase extends TestCase
                 }
             }else{
                 if ($a1[$k] !== $a2[$k]){
-                    $this->assertNotTrue(true, 'Des valeurs sont différentes ('.$p.')');
+                    $this->assertNotTrue(true, 'Des valeurs sont différentes ('.$p.') : '.$a2[$k].' pour '.$a1[$k]);
                     return false;
                 }
             }

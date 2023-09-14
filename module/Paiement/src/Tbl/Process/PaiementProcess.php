@@ -7,6 +7,7 @@ use Application\Service\Traits\ParametresServiceAwareTrait;
 use Paiement\Service\TauxRemuServiceAwareTrait;
 use Paiement\Tbl\Process\Sub\Arrondisseur;
 use Paiement\Tbl\Process\Sub\Consolidateur;
+use Paiement\Tbl\Process\Sub\Exporteur;
 use Paiement\Tbl\Process\Sub\LigneAPayer;
 use Paiement\Tbl\Process\Sub\MiseEnPaiement;
 use Paiement\Tbl\Process\Sub\Rapprocheur;
@@ -29,10 +30,13 @@ class PaiementProcess implements ProcessInterface
 
     /** @var array|ServiceAPayer[] */
     protected array $services = [];
+    protected array $tblData = [];
+
     protected Repartiteur $repartiteur;
     protected Rapprocheur $rapprocheur;
     protected Consolidateur $consolidateur;
     protected Arrondisseur $arrondisseur;
+    protected Exporteur $exporteur;
 
 
 
@@ -42,6 +46,7 @@ class PaiementProcess implements ProcessInterface
         $this->rapprocheur = new Rapprocheur();
         $this->consolidateur = new Consolidateur();
         $this->arrondisseur = new Arrondisseur();
+        $this->exporteur = new Exporteur();
     }
 
 
@@ -58,6 +63,7 @@ class PaiementProcess implements ProcessInterface
         $this->repartiteur->setPourcS1PourAnneeCivile($pourcS1PourAnneeCivile);
 
         $this->services = [];
+        $this->tblData = [];
     }
 
 
@@ -68,10 +74,54 @@ class PaiementProcess implements ProcessInterface
 
         $this->loadAPayer($params);
 
-        foreach ($this->services as $key => $serviceAPayer) {
+        $this->traitement();
+    }
+
+
+
+    public function getData(array $params = [])
+    {
+        $conn = $this->getServiceBdd()->getEntityManager()->getConnection();
+
+        $sql = 'SELECT * FROM ('
+            . $this->getServiceBdd()->injectKey($this->heuresAPayerSql(), $params)
+            . ') t '
+            . $this->getServiceBdd()->makeWhere($params);
+
+        $aPayerStmt = $conn->executeQuery($sql);
+        $res = [];
+        while ($lap = $aPayerStmt->fetchAssociative()) {
+            $res[] = $lap;
+
+        }
+
+        return $res;
+    }
+
+
+
+    public function calcData(array $lapData): array
+    {
+        $this->init();
+
+        foreach ($lapData as $lap) {
+            $this->loadLigneAPayer($lap);
+        }
+
+        $this->traitement();
+
+        return $this->tblData;
+    }
+
+
+
+    protected function traitement()
+    {
+        foreach ($this->services as $serviceAPayer) {
             $this->arrondisseur->arrondir($serviceAPayer);
             $this->consolidateur->consolider($serviceAPayer);
             $this->rapprocheur->rapprocher($serviceAPayer);
+            $this->exporteur->exporter($serviceAPayer, $this->tblData);
         }
     }
 
@@ -125,6 +175,8 @@ class PaiementProcess implements ProcessInterface
 
     protected function heuresAPayerSql(): string
     {
-        return file_get_contents(getcwd() . '/module/Paiement/sql/paiement_process_heures_a_payer.sql');
+        return $this->getServiceBdd()->getViewDefinition('V_TBL_PAIEMENT');
+
+//        return file_get_contents(getcwd() . '/module/Paiement/sql/paiement_process_heures_a_payer.sql');
     }
 }

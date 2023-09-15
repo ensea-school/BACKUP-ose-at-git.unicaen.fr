@@ -1,24 +1,31 @@
 # Version stable
 
-[OSE 21.1](#ose-212-31082023)
+[OSE 21.1](#ose-213-15092023)
 
 # OSE 22 (à venir)
 
 ## Nouveautés
 
 * Nouveau mode de calcul des heures à payer
-* Mises en paiement possibles pour les missions (emplois étudiants)
+  * Paiements : Gestion fine des changements de valeurs de taux horaires en cours d'année
+  * Paiements : Répartition des heures AA/AC tenant compte du semestre des heures réalisées
+  * Mises en paiement possibles pour les missions (emplois étudiants)
 * Gestion des primes de fin de mission (emplois étudiants)
 
 ## Améliorations
 
 * Ajout des dates de dévalidation des données personnelles dans les notes/historique par intervenant
 
-# OSE 21.3 (à venir)
+
+
+
+
+
+# OSE 21.3 (15/09/2023)
 
 ## Améliorations
 
-* Au niveau des données personnelles, le champs employeur peut être activé et mis en facultatif (#51889)
+* Au niveau des données personnelles, le champ employeur peut être activé et mis en facultatif (#51889)
 
 
 ## Corrections de bugs
@@ -26,6 +33,11 @@
 * Le filtre par élément pédagogique refonctionne normalement pour l'affichage du résumé des services (#51144)
 * Possibilité d'éditer ou ajouter un employeur via l'administration (#52301 et #52261)
 * Filtre formation refonctionne normalement au niveau de l'offre de formation
+* Les calculs n'ignirent plus certains plafonds dont le montant est fixé par requête (#51991)
+* Les libellés des enveloppes budgétaires s'affichent mieux sur la page des demandes de mises en paiement (#51066)
+* Système de gestion des heures négatives de la formule de calcul du Havre corrigé (#48972)
+
+
 
 # OSE 21.2 (31/08/2023)
 
@@ -38,6 +50,8 @@
 * Prise en compte du filtre formation lors de la recherche d'un enseignement en saisie de service (#51823)
 * Correction de V_CONTRATS_SERVICES (#51795)
 * Nouveaux problèmes corrigés au niveau du calcul des plafonds
+
+
 
 # OSE 21.1 (13/07/2023)
 

@@ -529,7 +529,7 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
           mp.intervenant_id                                   intervenant_id,
           mp.structure_id                                     structure_id,
           mp.prime                                            objectif,
-          mp.validation+mp.refus						      realisation
+          mp.validation+mp.refus                              realisation
         FROM
           tbl_mission_prime mp
         WHERE
@@ -843,7 +843,7 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
       LEFT JOIN ( ' || candidature || '
         UNION ALL ' || dossier || '
         UNION ALL ' || mission || '
-		UNION ALL ' || mission_prime || '
+    UNION ALL ' || mission_prime || '
         UNION ALL ' || service_saisie || '
         UNION ALL ' || service_saisie_realise || '
         UNION ALL ' || validation_enseignement || '

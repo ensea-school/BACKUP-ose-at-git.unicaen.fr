@@ -100,7 +100,7 @@ class PaiementProcess implements ProcessInterface
 
 
 
-    public function calcData(array $lapData): array
+    public function testData(array $lapData): array
     {
         $this->init();
 

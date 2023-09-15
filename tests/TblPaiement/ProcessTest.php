@@ -56,23 +56,9 @@ final class ProcessTest extends OseTestCase
 
     protected function process(array $data, array $await)
     {
-        $calc = $this->pp->calcData($data);
+        $calc = $this->pp->testData($data);
 
         $this->assertArrayEquals($calc, $await);
-    }
-
-
-
-    public function estMock()
-    {
-        $this->useParametres([
-            ['regle_repartition_annee_civile', Rapprocheur::REGLE_PRORATA],
-            ['regle_paiement_annee_civile', Repartiteur::PAIEMENT_ANNEE_CIV_4_10_6_10],
-            ['pourc_s1_pour_annee_civile', '0.67'],
-        ]);
-
-        $p = $this->pp->getServiceParametres()->get('pourc_s1_pour_annee_civile');
-        var_dump($p);
     }
 
 
@@ -382,4 +368,126 @@ final class ProcessTest extends OseTestCase
         $this->process($data, $await);
     }
 
+
+
+    public function testMultiMep()
+    {
+        $this->useParametres([
+            ['regle_repartition_annee_civile', Rapprocheur::REGLE_PRORATA],
+            ['regle_paiement_annee_civile', Repartiteur::PAIEMENT_ANNEE_CIV_4_10_6_10],
+            ['pourc_s1_pour_annee_civile', '0.67'],
+        ]);
+
+        $data = [
+            [
+                'KEY'                        => 'e-120624024-8',
+                'CALCUL_SEMESTRIEL'          => '1',
+                'A_PAYER_ID'                 => '322879',
+                'ANNEE_ID'                   => '2018',
+                'SERVICE_ID'                 => '131918',
+                'SERVICE_REFERENTIEL_ID'     => NULL,
+                'MISSION_ID'                 => NULL,
+                'FORMULE_RES_SERVICE_ID'     => '120624024',
+                'FORMULE_RES_SERVICE_REF_ID' => NULL,
+                'INTERVENANT_ID'             => '58961',
+                'STRUCTURE_ID'               => '287',
+                'TYPE_HEURES_ID'             => '9',
+                'DEF_DOMAINE_FONCTIONNEL_ID' => '14',
+                'DEF_CENTRE_COUT_ID'         => NULL,
+                'TAUX_REMU_ID'               => '1',
+                'TAUX_CONGES_PAYES'          => '1',
+                'HEURES'                     => '15',
+                'LAP_HEURES'                 => '15',
+                'PERIODE_ENS_CODE'           => 'S1',
+                'HORAIRE_DEBUT'              => self::HORAIRE_DEBUT_AA,
+                'HORAIRE_FIN'                => self::HORAIRE_DEBUT_AA,
+                'MISE_EN_PAIEMENT_ID'        => '109871',
+                'DATE_MISE_EN_PAIEMENT'      => '2019-07-31 10:45:52',
+                'PERIODE_PAIEMENT_ID'        => '10',
+                'MEP_CENTRE_COUT_ID'         => '2491',
+                'MEP_HEURES'                 => '4',
+                'MEP_DOMAINE_FONCTIONNEL_ID' => '14',
+            ],
+            [
+                'KEY'                        => 'e-120624024-8',
+                'CALCUL_SEMESTRIEL'          => '1',
+                'A_PAYER_ID'                 => '322879',
+                'ANNEE_ID'                   => '2018',
+                'SERVICE_ID'                 => '131918',
+                'SERVICE_REFERENTIEL_ID'     => NULL,
+                'MISSION_ID'                 => NULL,
+                'FORMULE_RES_SERVICE_ID'     => '120624024',
+                'FORMULE_RES_SERVICE_REF_ID' => NULL,
+                'INTERVENANT_ID'             => '58961',
+                'STRUCTURE_ID'               => '287',
+                'TYPE_HEURES_ID'             => '9',
+                'DEF_DOMAINE_FONCTIONNEL_ID' => '14',
+                'DEF_CENTRE_COUT_ID'         => NULL,
+                'TAUX_REMU_ID'               => '1',
+                'TAUX_CONGES_PAYES'          => '1',
+                'HEURES'                     => '15',
+                'LAP_HEURES'                 => '15',
+                'PERIODE_ENS_CODE'           => 'S1',
+                'HORAIRE_DEBUT'              => self::HORAIRE_DEBUT_AA,
+                'HORAIRE_FIN'                => self::HORAIRE_DEBUT_AA,
+                'MISE_EN_PAIEMENT_ID'        => '109871',
+                'DATE_MISE_EN_PAIEMENT'      => '2019-07-31 10:45:52',
+                'PERIODE_PAIEMENT_ID'        => '10',
+                'MEP_CENTRE_COUT_ID'         => '2491',
+                'MEP_HEURES'                 => '5',
+                'MEP_DOMAINE_FONCTIONNEL_ID' => '14',
+            ],
+        ];
+
+        $await = [
+            [
+                'ANNEE_ID'                   => 2018,
+                'SERVICE_ID'                 => 131918,
+                'SERVICE_REFERENTIEL_ID'     => NULL,
+                'MISSION_ID'                 => NULL,
+                'FORMULE_RES_SERVICE_ID'     => 120624024,
+                'FORMULE_RES_SERVICE_REF_ID' => NULL,
+                'INTERVENANT_ID'             => 58961,
+                'STRUCTURE_ID'               => 287,
+                'MISE_EN_PAIEMENT_ID'        => 109871,
+                'PERIODE_PAIEMENT_ID'        => 10,
+                'CENTRE_COUT_ID'             => 2491,
+                'DOMAINE_FONCTIONNEL_ID'     => 14,
+                'TAUX_REMU_ID'               => 1,
+                'TAUX_HORAIRE'               => 41.41,
+                'TAUX_CONGES_PAYES'          => 1.0,
+                'HEURES_A_PAYER_AA'          => 0.0,
+                'HEURES_A_PAYER_AC'          => 0.0,
+                'HEURES_DEMANDEES_AA'        => 0.0,
+                'HEURES_DEMANDEES_AC'        => 0.0,
+                'HEURES_PAYEES_AA'           => 0.0,
+                'HEURES_PAYEES_AC'           => 0.0,
+            ],
+            [
+                'ANNEE_ID'                   => 2018,
+                'SERVICE_ID'                 => 131918,
+                'SERVICE_REFERENTIEL_ID'     => NULL,
+                'MISSION_ID'                 => NULL,
+                'FORMULE_RES_SERVICE_ID'     => 120624024,
+                'FORMULE_RES_SERVICE_REF_ID' => NULL,
+                'INTERVENANT_ID'             => 58961,
+                'STRUCTURE_ID'               => 287,
+                'MISE_EN_PAIEMENT_ID'        => NULL,
+                'PERIODE_PAIEMENT_ID'        => NULL,
+                'CENTRE_COUT_ID'             => NULL,
+                'DOMAINE_FONCTIONNEL_ID'     => 14,
+                'TAUX_REMU_ID'               => 1,
+                'TAUX_HORAIRE'               => 41.41,
+                'TAUX_CONGES_PAYES'          => 1.0,
+                'HEURES_A_PAYER_AA'          => 15.36,
+                'HEURES_A_PAYER_AC'          => 23.04,
+                'HEURES_DEMANDEES_AA'        => 0.0,
+                'HEURES_DEMANDEES_AC'        => 0.0,
+                'HEURES_PAYEES_AA'           => 0.0,
+                'HEURES_PAYEES_AC'           => 0.0,
+            ],
+        ];
+
+        $this->process($data, $await);
+    }
 }

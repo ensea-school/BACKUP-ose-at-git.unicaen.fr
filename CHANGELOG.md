@@ -16,6 +16,11 @@
 
 # OSE 21.3 (à venir)
 
+## Améliorations
+
+* Au niveau des données personnelles, le champs employeur peut être activé et mis en facultatif (#51889)
+
+
 ## Corrections de bugs
 
 * Le filtre par élément pédagogique refonctionne normalement pour l'affichage du résumé des services (#51144)

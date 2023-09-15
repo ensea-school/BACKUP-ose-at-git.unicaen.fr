@@ -20,6 +20,7 @@
 
 * Le filtre par élément pédagogique refonctionne normalement pour l'affichage du résumé des services (#51144)
 * Possibilité d'éditer ou ajouter un employeur via l'administration (#52301 et #52261)
+* Filtre formation refonctionne normalement au niveau de l'offre de formation
 
 # OSE 21.2 (31/08/2023)
 

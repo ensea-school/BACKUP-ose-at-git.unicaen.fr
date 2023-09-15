@@ -33,7 +33,7 @@
 * Le filtre par élément pédagogique refonctionne normalement pour l'affichage du résumé des services (#51144)
 * Possibilité d'éditer ou ajouter un employeur via l'administration (#52301 et #52261)
 * Filtre formation refonctionne normalement au niveau de l'offre de formation
-* Les calculs n'ignirent plus certains plafonds dont le montant est fixé par requête (#51991)
+* Les calculs n'ignorent plus certains plafonds dont le montant est fixé par requête (#51991)
 * Les libellés des enveloppes budgétaires s'affichent mieux sur la page des demandes de mises en paiement (#51066)
 * Système de gestion des heures négatives de la formule de calcul du Havre corrigé (#48972)
 

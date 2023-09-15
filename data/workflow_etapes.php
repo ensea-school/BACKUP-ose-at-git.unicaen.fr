@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "CANDIDATURE_SAISIE"           => [
+    "CANDIDATURE_SAISIE"             => [
         "LIBELLE_INTERVENANT" => "Je postule à une ou plusieurs offres d'emploi",
         "LIBELLE_AUTRES"      => "J'accède aux candidatures",
         "ROUTE"               => "intervenant/candidature",
@@ -43,7 +43,7 @@ return [
         "DESC_NON_FRANCHIE"   => "Les données personnelles n'ont pas été validées",
         "OBLIGATOIRE"         => true,
     ],
-    "CANDIDATURE_VALIDATION"                 => [
+    "CANDIDATURE_VALIDATION"         => [
         "LIBELLE_INTERVENANT" => "Je visualise la validation de mes candidatures",
         "LIBELLE_AUTRES"      => "J'accède à la validation des candidatures",
         "ROUTE"               => "intervenant/candidature",
@@ -111,6 +111,13 @@ return [
         "LIBELLE_AUTRES"      => "J'accède au suivi de mission",
         "ROUTE"               => "intervenant/missions-suivi",
         "DESC_NON_FRANCHIE"   => "Aucune heure de mission réalisée n'a été renseignée",
+        "OBLIGATOIRE"         => true,
+    ],
+    "MISSION_PRIME"                  => [
+        "LIBELLE_INTERVENANT" => "Je visualise mes primes de fin de missions",
+        "LIBELLE_AUTRES"      => "Je visualise mes primes de fin de missions",
+        "ROUTE"               => "intervenant/prime-mission",
+        "DESC_NON_FRANCHIE"   => "Aucune prime à gérer",
         "OBLIGATOIRE"         => true,
     ],
     "CLOTURE_REALISE"                => [

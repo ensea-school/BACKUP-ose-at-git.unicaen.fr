@@ -24,9 +24,10 @@ class EmployeurController extends AbstractController
 
     public function indexAction ()
     {
+        $canEdit    = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_EDITION));
         $critere    = $this->params()->fromPost('critere');
         $employeurs = $this->getServiceEmployeur()->rechercheEmployeur($critere, 1000);
-        $canEdit    = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_EDITION));
+
 
         return compact('employeurs', 'canEdit');
     }

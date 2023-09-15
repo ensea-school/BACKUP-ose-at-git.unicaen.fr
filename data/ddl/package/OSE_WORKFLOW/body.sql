@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
+CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
   TYPE t_dep_bloquante IS RECORD (
     id NUMERIC,
     to_delete BOOLEAN DEFAULT TRUE
@@ -352,6 +352,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
     intervenant CLOB;
     candidature CLOB;
     mission CLOB;
+    mission_prime CLOB;
     dossier CLOB;
     service_saisie CLOB;
     service_saisie_realise CLOB;
@@ -522,7 +523,18 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
           m.structure_id
     ';
 
-
+   mission_prime := '
+        SELECT
+          ''MISSION_PRIME''                                   etape_code,
+          mp.intervenant_id                                   intervenant_id,
+          mp.structure_id                                     structure_id,
+          mp.prime                                            objectif,
+          mp.validation+mp.refus						      realisation
+        FROM
+          tbl_mission_prime mp
+        WHERE
+          mp.actif = 1
+    ';
 
     dossier := '
         SELECT
@@ -831,6 +843,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
       LEFT JOIN ( ' || candidature || '
         UNION ALL ' || dossier || '
         UNION ALL ' || mission || '
+		UNION ALL ' || mission_prime || '
         UNION ALL ' || service_saisie || '
         UNION ALL ' || service_saisie_realise || '
         UNION ALL ' || validation_enseignement || '

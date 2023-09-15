@@ -19,7 +19,7 @@ return [
                     'TYPE_INTERVENTION_ID',
                     'STRUCTURE_ID',
                     'GROUPE_TYPE_FORMATION_ID',
-                    'ANNEE_ID'
+                    'ANNEE_ID',
                 ],
             ],
 
@@ -404,15 +404,15 @@ return [
                     'HAS_HEURES_MAUVAISE_PERIODE',
                     'NBVH',
                     'HEURES',
-                    'VALIDE'
+                    'VALIDE',
                 ],
                 'key'     => [
                     'SERVICE_ID',
-                    'TYPE_VOLUME_HORAIRE_ID'
+                    'TYPE_VOLUME_HORAIRE_ID',
                 ],
             ],
 
-            'mission' => [
+            'mission'       => [
                 'order'              => 15,
                 'process'            => 'DbDiff',
                 'cols'               => [
@@ -438,6 +438,24 @@ return [
                 'key_values_if_null' => [
                     'MISSION_ID' => 0,
                 ],
+            ],
+            'mission_prime' => [
+                'order'   => 15,
+                'process' => 'DbDiff',
+                'cols'    => [
+                    'ANNEE_ID',
+                    'INTERVENANT_ID',
+                    'STRUCTURE_ID',
+                    'ACTIF',
+                    'PRIME',
+                    'DECLARATION',
+                    'VALIDATION',
+                    'REFUS',
+                ],
+                'key'     => [
+                    'INTERVENANT_ID',
+                ],
+
             ],
 
             'workflow' => [

@@ -10,6 +10,9 @@
 * Mises en paiement possibles pour les missions (emplois étudiants)
 * Gestion des primes de fin de mission (emplois étudiants)
 
+## Améliorations
+
+* Ajout des dates de dévalidation des données personnelles dans les notes/historique par intervenant
 
 ## Notes de mise à jour
 
@@ -21,7 +24,7 @@
 ## Corrections de bugs
 
 * Le filtre par élément pédagogique refonctionne normalement pour l'affichage du résumé des services (#51144)
-
+* Possibilité d'éditer ou ajouter un employeur via l'administration (#52301 et #52261)
 
 # OSE 21.2 (31/08/2023)
 
@@ -50,36 +53,36 @@
 ## Nouveautés
 
 * Nouvelle notion de mission, permettant de [gérer les contrats étudiants](https://redmine.unicaen.fr/Etablissement/dmsf/files/71233/view)
-  * Référentiel de missions avec par défaut 8 types de mission proposés et personnalisables via une interface d'administration
-  * Gestion des offres d'emploi & des candidatures
-  * Nouvelle interface de gestion des missions
-  * Nouvelle interface de saisie des suivis de missions
-  * Adaptation de la partie paiement pour gérer les heures nocturnes/dimanches/jours fériés
-  * Plafonds applicables aux missions avec un nouveau périmètre par type de mission
+    * Référentiel de missions avec par défaut 8 types de mission proposés et personnalisables via une interface d'administration
+    * Gestion des offres d'emploi & des candidatures
+    * Nouvelle interface de gestion des missions
+    * Nouvelle interface de saisie des suivis de missions
+    * Adaptation de la partie paiement pour gérer les heures nocturnes/dimanches/jours fériés
+    * Plafonds applicables aux missions avec un nouveau périmètre par type de mission
 
 * Gestion renforcée des taux de paiement
-  * Possibilité de gérer de nouveaux taux différents du taux HETD de 42,86€
-  * Prise en compte du nouveau taux HETD de 43,50€ pour 2023/2024
-  * Nouvelle interface d'administration des taux de paiement
-  * Les taux peuvent être indexés sur d'autres taux (le SMIC par exemple)
-  * Les taux peuvent être appliqués globalement, par mission, par statut, par élément pédagogique, selon le contexte
+    * Possibilité de gérer de nouveaux taux différents du taux HETD de 42,86€
+    * Prise en compte du nouveau taux HETD de 43,50€ pour 2023/2024
+    * Nouvelle interface d'administration des taux de paiement
+    * Les taux peuvent être indexés sur d'autres taux (le SMIC par exemple)
+    * Les taux peuvent être appliqués globalement, par mission, par statut, par élément pédagogique, selon le contexte
 
 * Pièces justificatives
-  * Nouveau filtre permettant de ne demander des pièces que pour les étrangers 
+    * Nouveau filtre permettant de ne demander des pièces que pour les étrangers
 
 * Contrats de travail
-  * Possibilité de contractualiser des heures de référentiel
-  * Possibilité de contractualiser des heures de mission
-  * Possibilité d'avoir des états de sortie distincts pour les contrats et pour les avenants, par statut
+    * Possibilité de contractualiser des heures de référentiel
+    * Possibilité de contractualiser des heures de mission
+    * Possibilité d'avoir des états de sortie distincts pour les contrats et pour les avenants, par statut
 
 * Tag
-  * Possibilité de mettre des dates de début et de fin d'utilisation pour les tags
+    * Possibilité de mettre des dates de début et de fin d'utilisation pour les tags
 
 * Extraction paie
-  * Nouveaux paramétrages par statut permettant de spécifier par statut le code indémnité attendu, le mode de calcul et le type de carte
+    * Nouveaux paramétrages par statut permettant de spécifier par statut le code indémnité attendu, le mode de calcul et le type de carte
 
-  **IMPORTANT** : Si aucun de ces paramètres n'est spécifié au niveau des statuts, ce sont les valeurs par défaut habituelles qui seront fournies dans l'extraction Winpaie et la préliquidation SIHAM. N'hésitez pas à tester vos extractions de paie. 
-
+  **IMPORTANT** : Si aucun de ces paramètres n'est spécifié au niveau des statuts, ce sont les valeurs par défaut habituelles qui seront fournies dans
+  l'extraction Winpaie et la préliquidation SIHAM. N'hésitez pas à tester vos extractions de paie.
 
 ## Améliorations
 
@@ -98,16 +101,13 @@
 * Filtrage des types d'intervention pour la saisie de service hors établissement (#51512)
 * L'enregistrement d'un statut ne possédant pas de contrat se fait correctement lorsqu'il n'y a pas d'état de sortie de saisie (#51400)
 * Le bouton de saisie du référentiel apparait maintenant même si la composante de l'intervenant diffère de celle du gestionnaire (#50799)
-* Remise en forme de l'écran engagement et liquidation (#50738) 
+* Remise en forme de l'écran engagement et liquidation (#50738)
 
 # OSE 20.5 (07/06/2023)
 
 ## Correction de bug
 
 * Correction d'une régression introduite en 20.4 empêchant de saisir ou modifier du référentiel
-
-
-
 
 # OSE 20.4 (05/06/2023)
 
@@ -119,8 +119,6 @@
 * Correction de la formule de Picardie
 * Correction de la formule de calcul de Lyon 2
 * Correction de la formule de Paris 1
-
-
 
 # OSE 20.3 (23/05/2023)
 
@@ -144,12 +142,11 @@
 
 ## Notes de migration
 
-Si vous créez des intervenants locaux sans leur remplir de données personnelles, de services ou de PJ, OSE les historise. Afin d'éviter cela, il vous faut modifier le filtre de synchronisation des intervenants.
+Si vous créez des intervenants locaux sans leur remplir de données personnelles, de services ou de PJ, OSE les historise. Afin d'éviter cela, il vous faut
+modifier le filtre de synchronisation des intervenants.
 
 Vous trouverez plus d'indications ainsi que le filtre en question ici :
 https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Connecteurs-Import/Connecteurs-IMPORT.md#utilisation-pour-contr%C3%B4ler-la-synchronisation-des-intervenants
-
-
 
 # OSE 20.2 (28/04/2023)
 
@@ -159,7 +156,7 @@ https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Connecteurs-Import/Conn
 
 ## Améliorations
 
-* Possibilité d'entrer des dérogations aux plafonds avant d'avoir des heures à plafonner (#46387) 
+* Possibilité d'entrer des dérogations aux plafonds avant d'avoir des heures à plafonner (#46387)
 
 ## Corrections de bugs
 
@@ -170,13 +167,11 @@ https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Connecteurs-Import/Conn
 * Formule de Picardie : prise en compte des heures négatives (#50471)
 * L'interface d'administration des types de formation est de nouveau opérationnelle (#50360)
 
-
-
 # OSE 20.1 (04/04/2023)
 
 ## Nouveautés
 
-* Ajout de la date de clôture dans la page historique de l'intervenant 
+* Ajout de la date de clôture dans la page historique de l'intervenant
 * Possibilité de saisir une modification de service dû avec 0 heure (#49764)
 
 ## Améliorations
@@ -194,15 +189,15 @@ https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Connecteurs-Import/Conn
 
 ## Notes de mise à jour
 
-Si vous rencontrez les deux messages d'erreurs suivants, merci de ne pas en tenir compte, ces erreurs n'occasionneront pas de dysfonctionnezmenet de l'application.
+Si vous rencontrez les deux messages d'erreurs suivants, merci de ne pas en tenir compte, ces erreurs n'occasionneront pas de dysfonctionnezmenet de l'
+application.
 
 1. Suppression de l'index TYPE_INTERVENTION_CODE_UN
-ORA-02429: cannot drop index used for enforcement of unique/primary key (offset 11
-DROP INDEX TYPE_INTERVENTION_CODE_UN
+   ORA-02429: cannot drop index used for enforcement of unique/primary key (offset 11
+   DROP INDEX TYPE_INTERVENTION_CODE_UN
 
 2. Transformation des modèles de contrats en états de sortie ... Convertion des contrats de travail en états de sortie
-Erreur : ORA-00001: unique constraint (OSE.ETAT_SORTIE_CODE_UN) violated
-
+   Erreur : ORA-00001: unique constraint (OSE.ETAT_SORTIE_CODE_UN) violated
 
 # OSE 20 (28/02/2023)
 
@@ -234,7 +229,8 @@ Erreur : ORA-00001: unique constraint (OSE.ETAT_SORTIE_CODE_UN) violated
 * Lors de la saisie d'enseignement, les elements pedagogique sur lesquels il est impossible de saisir des heures seront surlignés en rouge
 * Il est de nouveau possible de saisir des taux de charge TTC et des taux de charge patronale a virgule
 * Modification du filtre des status séléctionnables dans les données personnelles (#48151)
-* Lors de la demande de mise en paiement, pouvoir choisir un EOTP même si son centre de coût parent n'est pas de l'activité attendue (pilotage / enseignement) (#48286)
+* Lors de la demande de mise en paiement, pouvoir choisir un EOTP même si son centre de coût parent n'est pas de l'activité attendue (pilotage / enseignement) (
+  #48286)
 * Utilisation prioritaire de l'email personnel des données personnelles pour l'envoi d'email via les indicateurs (#48393)
 * Meilleure gestion de la casse lors de la recherche d'un employeur (#48543)
 * Ajout d'une contrainte d'unicité sur la colonne code de la table type_intervention (#48727)
@@ -243,33 +239,34 @@ Erreur : ORA-00001: unique constraint (OSE.ETAT_SORTIE_CODE_UN) violated
 
 ## Notes de mise à jour
 
-* Supprimer la ligne faisant référence à TBL_NOEUD dans Administration/Synchronisation/Tables, table NOEUD, champ "Traitements postérieurs : à exécuter après la synchro".
+* Supprimer la ligne faisant référence à TBL_NOEUD dans Administration/Synchronisation/Tables, table NOEUD, champ "Traitements postérieurs : à exécuter après la
+  synchro".
 * La génération des contrats de travail ayant été remaniée, veuillez vérifier que vous pouvez générer correctement de nouveaux contrats de travail
 
+Avec l'ajout de la notion de tag sur les services d'enseignement et référentiel, les champs 'TAG' et 'TAG_ID' ont été ajouté dans la V_EXPORT_SERVICE, si vous
+avez créé votre propre V_EXPORT_SERVICE, il vous faudra la modifier vous même en vous appuyant sur la V_EXPORT_SERVICE par défaut de
+OSE (https://git.unicaen.fr/open-source/OSE/-/blob/master/data/ddl/view/V_EXPORT_SERVICE.sql)
 
-Avec l'ajout de la notion de tag sur les services d'enseignement et référentiel, les champs 'TAG' et 'TAG_ID' ont été ajouté dans la V_EXPORT_SERVICE, si vous avez créé votre propre V_EXPORT_SERVICE, il vous faudra la modifier vous même en vous appuyant sur la V_EXPORT_SERVICE par défaut de OSE (https://git.unicaen.fr/open-source/OSE/-/blob/master/data/ddl/view/V_EXPORT_SERVICE.sql)
+Ensuite si vous souhaitez faire apparaître les tags dans l'export des services, il vous faudra modifier vous même l'état de sortie 'Export des services', dans
+l'onglet 'Export CSV' :
 
-Ensuite si vous souhaitez faire apparaître les tags dans l'export des services, il vous faudra modifier vous même l'état de sortie 'Export des services', dans l'onglet 'Export CSV' : 
-
-A la **ligne 56** ajouter TAG_ID à la variable $sid : 
+A la **ligne 56** ajouter TAG_ID à la variable $sid :
 
     $sid .= '_' . $d['TAG_ID'];
 
-A la **ligne 102** ajouter la colonne TAG dans le tableau $ds: 
+A la **ligne 102** ajouter la colonne TAG dans le tableau $ds:
 
     tag' => $d['TAG'],
 
-A la **ligne 206** Ajouter le titre de colonne TAG dans le tableau $head : 
-  
+A la **ligne 206** Ajouter le titre de colonne TAG dans le tableau $head :
+
     'tag' => 'Tags',
 
-Le système de mise à jour peut - dans certaines circonstances - vous afficher quelques erreurs qui sont sans impact 
+Le système de mise à jour peut - dans certaines circonstances - vous afficher quelques erreurs qui sont sans impact
 sur le bon fonctionnement de l'application.
 Je vais modifier les scripts de mise à jour pour éviter qu'elles ne se produisent.
 Mais en attendant, si vous y êtes confrontés, vous en trouverez les explications sur le ticket suivant :
 https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_position=1&next_issue_id=48972
-
-
 
 # OSE 19.7 (16/12/2022)
 
@@ -277,8 +274,6 @@ https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_posit
 
 * Correction régression 19.5 : le workflow fonctionne à nouveau (#47982)
 * Correction formule de calcul du Havre (#48024)
-
-
 
 # OSE 19.6 (14/12/2022)
 
@@ -291,7 +286,6 @@ https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_posit
 * Correction régression 19.5 : la page d'administration des statuts fonctionne de nouveau (#47976)
 * Correction sur l'état de sortie préliquidation SIHAM (#47678)
 * Prise dans compte des modulateurs pour la formule de Rennes 2 (#47753)
-
 
 # OSE 19.5 (12/12/2022)
 
@@ -329,23 +323,17 @@ https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_posit
 * Modification de la formule de calcul de Lyon 2
 * Modification de la formule de calcul de Nice Cote d'Azur
 
-
-
 # OSE 19.3 (08/09/2022)
 
 ## Corrections de bugs
 
-* Pb lié à la 19.2 : la vue V_ETAT_PAIEMENT n'était pas mise à jour correctement. 
-
-
+* Pb lié à la 19.2 : la vue V_ETAT_PAIEMENT n'était pas mise à jour correctement.
 
 # OSE 19.2 (06/09/2022)
 
 ## Nouveautés
 
 * Prise en compte du nouveau point d'indice valable à partir du 1er juillet 2022
-
-
 
 # OSE 19.1 (21/07/2022)
 
@@ -360,8 +348,6 @@ https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_posit
 ## Corrections de bugs
 
 * La synchronisation via la ligne de commande ne fonctionnait plus. C'est rétabli
-
-
 
 # OSE 19.0 (12/07/2022)
 
@@ -391,19 +377,20 @@ https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_posit
 * Bouton Prévu->réalisé Apparait correctement pour le service réalisé.
 * Correction sur la reconduction des centres de coût et modulateurs (#45746)
 
-
 ## Notes de mise à jour
 
 * Si vous êtes en version 17.x, se référer à toutes les notes de migration de la version [18.0](#ose-18-23052022)
-Une fois la migration réalisée et quelques tests effectués, vous devrez supprimer manuellement les tables de sauvegarde listées ci-dessous.
-Si vous ne le faites pas, le risque est que les scripts de migration de la version 17 à la version 18 soient rejoués sans qu'il n'en soit nécessaire, avec en sus un *risque de perte de données* pour des intervenants ayant changé de statut entre temps.
+  Une fois la migration réalisée et quelques tests effectués, vous devrez supprimer manuellement les tables de sauvegarde listées ci-dessous.
+  Si vous ne le faites pas, le risque est que les scripts de migration de la version 17 à la version 18 soient rejoués sans qu'il n'en soit nécessaire, avec en
+  sus un *risque de perte de données* pour des intervenants ayant changé de statut entre temps.
 
 
 * Si vous êtes déjà en version 18.x et si ce n'est déjà fait, il vous faudra supprimer les tables de sauvegardes liées à la migration 17 --> 18 et
-la table STATUT_INTERVENANT
-**avant** de migrer en 19.0.
+  la table STATUT_INTERVENANT
+  **avant** de migrer en 19.0.
 
 #### Liste des tables de sauvegardes de migration 17=>18 concernées :
+
 ```sql
 DROP TABLE save_v18_dossier_autre_statut;
 DROP TABLE save_v18_plafond;
@@ -422,10 +409,6 @@ DROP TABLE save_v18_role_privilege;
 DROP TABLE statut_intervenant;
 
 ```
-
-
-
-
 
 # OSE 18.2 (15/06/2022)
 
@@ -747,7 +730,6 @@ Objectif : Connecteur Export OSE => Logiciel RH
   documentation :
     * [côté utilisateur](doc/Export-Rh/fonctionnalite.md)
     * [pour la configuration du connecteur](doc/Export-Rh/configuration.md)
-
 
 # Anciennes versions de OSE
 

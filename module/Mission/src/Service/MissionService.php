@@ -14,6 +14,7 @@ use Contrat\Entity\Db\Contrat;
 use Mission\Assertion\SaisieAssertion;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
+use Mission\Entity\Db\Prime;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
@@ -196,6 +197,37 @@ class MissionService extends AbstractEntityService
 
 
 
+    public function deletePrimeMissions (Prime $prime)
+    {
+        $missions = $prime->getMissions();
+        foreach ($missions as $mission) {
+            $mission->setPrime(null);
+            $this->save($mission);
+        }
+
+        return true;
+    }
+
+
+
+    /**
+     * @param Mission $entity
+     *
+     * @return Mission
+     */
+    public function save ($entity): Mission
+    {
+        foreach ($entity->getVolumesHorairesPrevus() as $vh) {
+            $this->saveVolumeHoraire($vh);
+        }
+
+        parent::save($entity);
+
+        return $entity;
+    }
+
+
+
     public function createMissionFromCandidature (Candidature $candidature): ?Mission
     {
         $mission = $this->newEntity();
@@ -214,123 +246,6 @@ class MissionService extends AbstractEntityService
         $this->save($mission);
 
         return $mission;
-    }
-
-
-
-    /**
-     * @param Mission $entity
-     *
-     * @return Mission
-     */
-    public function save ($entity)
-    {
-        foreach ($entity->getVolumesHorairesPrevus() as $vh) {
-            $this->saveVolumeHoraire($vh);
-        }
-
-        parent::save($entity);
-
-        return $entity;
-    }
-
-
-
-    public function getContratPrimeMission (array $parameters)
-    {
-
-
-        $sql = "
-        WITH contrat_mission AS (
-            SELECT 
-                    c.id                    contrat_id,
-                    m.date_debut 			date_debut_contrat,
-                    m.date_fin              date_fin_contrat,
-                    m.libelle_mission		libelle_mission,
-                    m.intervenant_id        intervenant_id,
-                    tm.libelle              type_mission,
-                    s.libelle_court         libelle_structure,
-                    c.declaration_id	    declaration_id,
-                    c.date_refus_prime      date_refus_prime,
-                    c.histo_destruction     histo_destruction
-            FROM mission m 
-            JOIN contrat c ON c.mission_id = m.id
-            JOIN type_mission tm ON tm.id = m.type_mission_id 
-            JOIN structure s ON s.id = m.structure_id 
-            JOIN validation v ON v.id = c.validation_id AND v.histo_destruction IS null 
-            WHERE 
-                c.type_contrat_id = (SELECT id FROM type_contrat WHERE code = 'CONTRAT')
-                AND c.histo_destruction IS NULL
-                AND c.date_retour_signe IS NOT NULL
-        )
-        SELECT DISTINCT 
-                cm.contrat_id            contrat_id,
-                cm.date_debut_contrat	 date_debut_contrat,
-                cm.date_fin_contrat		 date_fin_contrat,
-                cm.libelle_mission		 libelle_mission,
-                cm.intervenant_id        intervenant_id,
-                cm.type_mission          type_mission,
-                cm.libelle_structure     libelle_structure,
-                cm.declaration_id	     declaration_id,
-                cm.date_refus_prime      date_refus_prime,
-                cm.histo_destruction     histo_destruction,
-                f.nom					 fichier_nom,
-                f.validation_id          validation_id,
-                f.histo_creation         date_depot,
-                u.display_name           user_depot,
-                vf.histo_modification    date_validation,
-                u2.display_name          user_validation,
-                ROWNUM                   numero
-        FROM contrat_mission cm
-        LEFT JOIN fichier f ON f.id = cm.declaration_id
-        LEFT JOIN utilisateur u ON f.histo_createur_id = u.id 
-        LEFT JOIN validation vf ON vf.id = f.validation_id AND vf.histo_destruction IS null 
-        LEFT JOIN utilisateur u2 ON u2.id = vf.histo_createur_id 
-        LEFT JOIN contrat_mission cm_suiv ON cm_suiv.histo_destruction IS NULL 
-                                         AND cm_suiv.date_fin_contrat <> cm.date_fin_contrat
-                                         AND cm_suiv.intervenant_id = cm.intervenant_id 
-                                         AND cm.date_fin_contrat BETWEEN cm_suiv.date_debut_contrat-1 AND cm_suiv.date_fin_contrat
-        WHERE  
-            cm.intervenant_id = 12291	
-            AND cm.date_fin_contrat < SYSDATE
-            AND cm_suiv.contrat_id IS NULL       
-        ORDER BY cm.date_debut_contrat ASC
-       ";
-
-        $data       = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['intervenant' => $parameters['intervenant']]);
-        $triggers   = [];
-        $properties = [];
-
-
-        return new AxiosModel($data, $properties, $triggers);
-    }
-
-
-
-    public function validerDeclarationPrime (Contrat $contrat): Validation
-    {
-        $validation = $this->getServiceValidation()->newEntity($this->getServiceTypeValidation()->getDeclaration())
-            ->setIntervenant($contrat->getIntervenant())
-            ->setStructure($contrat->getStructure());
-
-        $fichier = $contrat->getDeclaration()->setValidation($validation);
-
-        $this->getServiceValidation()->save($validation);
-        $this->getServiceFichier()->save($fichier);
-
-        return $validation;
-    }
-
-
-
-    public function devaliderDeclarationPrime (Contrat $contrat): bool
-    {
-        $validation = $contrat->getDeclaration()->getValidation();
-        $fichier    = $contrat->getDeclaration()->setValidation(null);
-        $this->getServiceFichier()->save($fichier);
-        $this->getEntityManager()->remove($validation);
-
-        return true;
     }
 
 }

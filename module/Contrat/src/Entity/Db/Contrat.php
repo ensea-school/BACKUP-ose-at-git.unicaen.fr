@@ -59,11 +59,6 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @var \DateTime
      */
-    private $dateRefusPrime;
-
-    /**
-     * @var \DateTime
-     */
     private $debutValidite;
 
     /**
@@ -80,11 +75,6 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      * @var \Doctrine\Common\Collections\Collection
      */
     private $fichier;
-
-    /**
-     * @var ?Fichier
-     */
-    private $declaration = null;
 
     /**
      * @var float
@@ -432,34 +422,6 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
-     * Get dateRefusPrime
-     *
-     * @return \DateTime
-     */
-    public function getDateRefusPrime ()
-    {
-        return $this->dateRefusPrime;
-    }
-
-
-
-    /**
-     * Set dateRefusPrime
-     *
-     * @param ?\DateTime $dateRefusPrime
-     *
-     * @return Contrat
-     */
-    public function setDateRefusPrime ($dateRefusPrime)
-    {
-        $this->dateRefusPrime = $dateRefusPrime;
-
-        return $this;
-    }
-
-
-
-    /**
      * Get dateEnvoiEmail
      *
      * @return \DateTime
@@ -585,22 +547,6 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     public function setMission (Mission $mission)
     {
         $this->mission = $mission;
-    }
-
-
-
-    public function getDeclaration (): ?Fichier
-    {
-        return $this->declaration;
-    }
-
-
-
-    public function setDeclaration (?Fichier $fichier): Contrat
-    {
-        $this->declaration = $fichier;
-
-        return $this;
     }
 
 }

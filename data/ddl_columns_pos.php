@@ -225,7 +225,6 @@ return [
         'MISSION_ID',
         'DEBUT_VALIDITE',
         'FIN_VALIDITE',
-        'DECLARATION_ID',
     ],
     'CONTRAT_FICHIER'                => [
         'CONTRAT_ID',
@@ -2218,6 +2217,8 @@ return [
         'TAUX_REMU_MAJORE_ID',
         'HEURES_FORMATION',
         'LIBELLE_MISSION',
+        'PRIME_ID',
+        'PRIME_ACTIVE',
     ],
     'MISSION_ETUDIANT'               => [
         'MISSION_ID',
@@ -2503,6 +2504,30 @@ return [
         'ANNEE_ID',
         'DECLARATION',
         'VALIDATION_ID',
+    ],
+    'TBL_MISSION_PRIME'              => [
+        'ID',
+        'ANNEE_ID',
+        'INTERVENANT_ID',
+        'STRUCTURE_ID',
+        'ACTIF',
+        'PRIME',
+        'DECLARATION',
+        'VALIDATION',
+        'REFUS',
+    ],
+    'MISSION_PRIME'                  => [
+        'ID',
+        'DATE_REFUS',
+        'INTERVENANT_ID',
+        'DECLARATION_ID',
+        'VALIDATION_ID',
+        'HISTO_CREATEUR_ID',
+        'HISTO_CREATION',
+        'HISTO_DESTRUCTEUR_ID',
+        'HISTO_DESTRUCTION',
+        'HISTO_MODIFICATEUR_ID',
+        'HISTO_MODIFICATION',
     ],
 ];
 

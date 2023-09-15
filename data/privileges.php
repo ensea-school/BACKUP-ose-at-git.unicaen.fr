@@ -172,7 +172,7 @@ return [
             'candidature-valider'        => 'Valider une candidature',
             'candidature-visualisation'  => 'Visualiser les candidatures d\'une offre',
             'prime-visualisation'        => 'Visualiser les primes de fin de mission',
-            'prime-valider'              => 'Valider les primes de fin de contrat',
+            'prime-gestion'              => 'Gérer les primes de fin de mission',
         ],
     ],
 

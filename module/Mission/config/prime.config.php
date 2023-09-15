@@ -9,13 +9,14 @@ use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [
-        'intervenant' => [
-            'child_routes' => [
-                'prime'                         => [
-                    'route'      => '/:intervenant/prime',
+        'prime' => [
+            'route'         => '/prime',
+            'may_terminate' => false,
+            'child_routes'  => [
+                'liste'                         => [
+                    'route'      => '/:intervenant/liste',
                     'controller' => Controller\PrimeController::class,
-                    'action'     => 'index',
-                    'privileges' => Privileges::MISSION_PRIME_VISUALISATION,
+                    'action'     => 'liste',
                 ],
                 'get-contrat-prime'             => [
                     'route'      => '/:intervenant/get-contrat-prime',
@@ -24,46 +25,71 @@ return [
 
                 ],
                 'declaration-prime'             => [
-                    'route'      => '/:intervenant/declaration-prime/:contrat',
+                    'route'      => '/:intervenant/declaration-prime/:prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'declaration-prime',
-
                 ],
                 'supprimer-declaration-prime'   => [
-                    'route'      => '/:intervenant/supprimer-declaration-prime/:contrat',
+                    'route'      => '/:intervenant/supprimer-declaration-prime/:prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'supprimer-declaration-prime',
+                    'privileges' => Privileges::MISSION_PRIME_GESTION,
+
 
                 ],
                 'valider-declaration-prime'     => [
-                    'route'      => '/:intervenant/valider-declaration-prime/:contrat',
+                    'route'      => '/:intervenant/valider-declaration-prime/:prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'valider-declaration-prime',
-                    'privileges' => Privileges::MISSION_PRIME_VALIDER,
+                    'privileges' => Privileges::MISSION_PRIME_GESTION,
 
 
                 ],
                 'devalider-declaration-prime'   => [
-                    'route'      => '/:intervenant/devalider-declaration-prime/:contrat',
+                    'route'      => '/:intervenant/devalider-declaration-prime/:prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'devalider-declaration-prime',
-                    'privileges' => Privileges::MISSION_PRIME_VALIDER,
+                    'privileges' => Privileges::MISSION_PRIME_GESTION,
 
 
                 ],
                 'refuser-prime'                 => [
-                    'route'      => '/:intervenant/refuser-prime/:contrat',
+                    'route'      => '/:intervenant/refuser-prime/:prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'refuser-prime',
-                    'privileges' => Privileges::MISSION_PRIME_VALIDER,
-
-
                 ],
                 'telecharger-declaration-prime' => [
-                    'route'      => '/:intervenant/telecharger-declaration-prime/:contrat',
+                    'route'      => '/:intervenant/telecharger-declaration-prime/:prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'telecharger-declaration-prime',
 
+
+                ],
+                'saisie'                        => [
+                    'route'      => '/:intervenant/saisie/[:prime]',
+                    'controller' => Controller\PrimeController::class,
+                    'action'     => 'saisie',
+                    'privileges' => Privileges::MISSION_PRIME_GESTION,
+
+
+                ],
+                'supprimer-prime'               => [
+                    'route'      => '/:intervenant/supprimer-prime/[:prime]',
+                    'controller' => Controller\PrimeController::class,
+                    'action'     => 'supprimer-prime',
+                    'privileges' => Privileges::MISSION_PRIME_GESTION,
+
+
+                ],
+            ],
+        ],
+
+        'intervenant' => [
+            'child_routes' => [
+                'prime-mission' => [
+                    'route'      => '/:intervenant/prime',
+                    'controller' => Controller\PrimeController::class,
+                    'action'     => 'index',
                 ],
             ],
 
@@ -78,7 +104,7 @@ return [
                 'prime' => [
                     'label'        => "Prime de fin de missions",
                     'title'        => "Prime de fin de missions",
-                    'route'        => 'intervenant/prime',
+                    'route'        => 'intervenant/prime-mission',
                     'paramsInject' => [
                         'intervenant',
                     ],
@@ -93,18 +119,12 @@ return [
     'guards' => [
         [
             'controller' => PrimeController::class,
-            'action'     => ['index', 'get-contrat-prime', 'declaration-prime', 'supprimer-declaration-prime', 'valider-declaration-prime', 'devalider-declaration-prime', 'telecharger-declaration-prime', 'refuser-prime'],
+            'action'     => ['supprimer-prime', 'saisie', 'index', 'get-contrat-prime', 'declaration-prime', 'supprimer-declaration-prime', 'telecharger-declaration-prime', 'refuser-prime', 'liste', 'valider-declaration-prime', 'devalider-declaration-prime'],
             'privileges' => [
-                Privileges::MISSION_PRIME_VISUALISATION,
+                'privileges' => Privileges::MISSION_PRIME_GESTION,
             ],
         ],
-        [
-            'controller' => PrimeController::class,
-            'action'     => ['valider-declaration-prime', 'devalider-declaration-prime'],
-            'privileges' => [
-                Privileges::MISSION_PRIME_VALIDER,
-            ],
-        ],
+       
 
     ],
 
@@ -113,5 +133,8 @@ return [
         Controller\PrimeController::class => Controller\PrimeControllerFactory::class,
     ],
 
+    'services' => [
+        Service\PrimeService::class => Service\PrimeServiceFactory::class,
+    ],
 
 ];

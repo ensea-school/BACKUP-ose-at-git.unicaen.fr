@@ -1,6 +1,14 @@
 <template>
-    <prime v-for="contrat in contratsPrime" :key="contrat.CONTRAT_ID" :canValider="this.canValider" :contrat="contrat" :intervenant="this.intervenant"
+    <prime v-for="(prime, index) in primes" :canValider="canValider" :intervenant="this.intervenant"
+           :numero="index"
+           :prime="prime"
            @reload="reload"></prime>
+    <div v-if="!load" class="text-secondary text-center fs-6   " style="text-align:center;"> Chargement en cours...<br/><br/></div>
+    <div v-if="primes.length == 0 && load" class="text-secondary text-center fs-6   " style="text-align:center;"> Aucune prime de fin de mission
+        actuellement...<br/><br/></div>
+    <div v-if="this.missionsWithoutPrime > 0">
+        <a :href="ajoutUrl" class=" btn btn-primary" @click.prevent="ajout">Créer une nouvelle prime</a>
+    </div>
 </template>
 
 <script>
@@ -13,26 +21,44 @@ export default {
     },
     props: {
         intervenant: {type: Number, required: true},
+        numero: {type: Number, required: false},
+        missionsWithoutPrime: {type: Number, required: false},
         canValider: {type: Boolean, required: false},
+
     },
     data()
     {
+
         return {
-            contratsPrime: [],
+            load: false,
+            primes: [],
+            ajoutUrl: unicaenVue.url('prime/:intervenant/saisie/', {intervenant: this.intervenant})
         };
     },
     mounted()
     {
+
         this.reload();
+        console.log(this.primes.length)
     },
+
     methods: {
+        ajout(event)
+        {
+            modAjax(event.currentTarget, (widget) => {
+                this.reload();
+            });
+        },
 
         reload()
         {
+            this.load = false;
+            this.primes = [];
             unicaenVue.axios.get(
-                unicaenVue.url("intervenant/:intervenant/get-contrat-prime", {intervenant: this.intervenant})
+                unicaenVue.url("prime/:intervenant/liste", {intervenant: this.intervenant})
             ).then(response => {
-                this.contratsPrime = response.data;
+                this.primes = response.data;
+                this.load = true;
             });
         },
 

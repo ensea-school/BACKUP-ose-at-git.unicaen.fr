@@ -5,15 +5,14 @@ namespace Mission\Controller;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Intervenant;
-use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use BjyAuthorize\Exception\UnAuthorizedException;
-use Contrat\Assertion\ContratAssertion;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Mission\Entity\Db\Prime;
 use Mission\Service\MissionServiceAwareTrait;
 use Mission\Service\PrimeServiceAwareTrait;
 
@@ -30,15 +29,22 @@ class PrimeController extends AbstractController
     use ContratServiceAwareTrait;
     use FichierServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use PrimeServiceAwareTrait;
 
     public function indexAction ()
     {
         /* @var $intervenant Intervenant */
 
-        $intervenant = $this->getEvent()->getParam('intervenant');
+        $intervenant          = $this->getEvent()->getParam('intervenant');
+        $missions             = $intervenant->getMissions();
+        $missionsWithoutPrime = 0;
+        foreach ($missions as $mission) {
+            if (!$mission->getPrime()) {
+                $missionsWithoutPrime += 1;
+            }
+        }
 
-
-        return compact('intervenant');
+        return compact('intervenant', 'missionsWithoutPrime');
     }
 
 
@@ -46,7 +52,7 @@ class PrimeController extends AbstractController
     public function declarationPrimeAction ()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $contrat     = $this->getEvent()->getParam('contrat');
+        $prime       = $this->getEvent()->getParam('prime');
 
         $result = $this->uploader()->upload();
 
@@ -54,11 +60,11 @@ class PrimeController extends AbstractController
             return $result;
         }
         if (is_array($result)) {
-            $this->getServiceContrat()->creerDeclaration($result['files'], $contrat);
+            $this->getServicePrime()->creerDeclaration($result['files'], $prime);
             $this->updateTableauxBord($intervenant);
         }
 
-        return $this->redirect()->toRoute('intervenant/prime', ['intervenant' => $intervenant->getId()]);
+        return $this->redirect()->toRoute('intervenant/prime-mission', ['intervenant' => $intervenant->getId()]);
     }
 
 
@@ -66,7 +72,7 @@ class PrimeController extends AbstractController
     private function updateTableauxBord (Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'prime',
+            'mission_prime',
         ], $intervenant);
     }
 
@@ -74,16 +80,19 @@ class PrimeController extends AbstractController
 
     public function supprimerDeclarationPrimeAction ()
     {
-        $contrat = $this->getEvent()->getParam('contrat');
+        /**
+         * @var Prime $prime
+         */
+        $prime = $this->getEvent()->getParam('prime');
         //On supprimer la déclaration sur l'honneur
-        $fichier = $contrat->getDeclaration();
+        $fichier = $prime->getDeclaration();
         if ($fichier) {
-            $contrat->setDeclaration(null);
+            $prime->setDeclaration(null);
             $this->em()->remove($fichier);
         }
 
         $this->em()->flush();
-        $this->updateTableauxBord($contrat->getIntervenant());
+        $this->updateTableauxBord($prime->getIntervenant());
         $this->flashMessenger()->addSuccessMessage("Déclaration sur l'honneur supprimée");
 
         return true;
@@ -94,11 +103,11 @@ class PrimeController extends AbstractController
     public function validerDeclarationPrimeAction ()
     {
 
-        $contrat = $this->getEvent()->getParam('contrat');
+        $prime = $this->getEvent()->getParam('prime');
 
         //validation de la déclaration de prime
-        $this->getServiceMission()->validerDeclarationPrime($contrat);
-        $this->updateTableauxBord($contrat->getIntervenant());
+        $this->getServicePrime()->validerDeclarationPrime($prime);
+        $this->updateTableauxBord($prime->getIntervenant());
         $this->flashMessenger()->addSuccessMessage("Déclaration sur l'honneur validée");
 
         return true;
@@ -109,24 +118,24 @@ class PrimeController extends AbstractController
     public function refuserPrimeAction ()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $contrat     = $this->getEvent()->getParam('contrat');
+        $prime       = $this->getEvent()->getParam('prime');
         /**
-         * @var $contrat Contrat
+         * @var $prime Prime
          */
 
-        if ($contrat->getDateRefusPrime()) {
-            $contrat->setDateRefusPrime(null);
+        if ($prime->getDateRefus()) {
+            $prime->setDateRefus(null);
         } else {
             $date = new \DateTime('now');
-            $contrat->setDateRefusPrime($date);
+            $prime->setDateRefus($date);
         }
-        $this->em()->persist($contrat);
+        $this->em()->persist($prime);
         $this->em()->flush();
 
         $this->updateTableauxBord($intervenant);
 
 
-        return $this->redirect()->toRoute('intervenant/prime', ['intervenant' => $intervenant->getId()]);
+        return $this->redirect()->toRoute('intervenant/prime-mission', ['intervenant' => $intervenant->getId()]);
     }
 
 
@@ -135,13 +144,13 @@ class PrimeController extends AbstractController
     {
 
         /**
-         * @var $contrat Contrat
+         * @var $prime Prime
          */
-        $contrat = $this->getEvent()->getParam('contrat');
+        $prime = $this->getEvent()->getParam('prime');
 
         //validation de la déclaration de prime
-        $this->getServiceMission()->devaliderDeclarationPrime($contrat);
-        $this->updateTableauxBord($contrat->getIntervenant());
+        $this->getServicePrime()->devaliderDeclarationPrime($prime);
+        $this->updateTableauxBord($prime->getIntervenant());
         $this->flashMessenger()->addSuccessMessage("Déclaration sur l'honneur devalidée");
 
         return true;
@@ -156,21 +165,99 @@ class PrimeController extends AbstractController
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
         /** @var Contrat $contrat */
-        $contrat = $this->getEvent()->getParam('contrat');
+        $prime = $this->getEvent()->getParam('prime');
 
-        $fichier = $contrat->getDeclaration();
+        $fichier = $prime->getDeclaration();
 
         $this->uploader()->download($fichier);
     }
 
 
 
-    public function getContratPrimeAction ()
+    /**
+     * Retourne la liste des primes
+     *
+     * @return JsonModel
+     */
+    public function listeAction ()
     {
-        $intervenant   = $this->getEvent()->getParam('intervenant');
-        $contratsPrime = $this->getServiceMission()->getContratPrimeMission(['intervenant' => $intervenant->getId()]);
+        /* @var $intervenant Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
 
-        return $contratsPrime;
+        $model = $this->getServicePrime()->data(['intervenant' => $intervenant]);
+
+
+        return $model;
+    }
+
+
+
+    public function supprimerPrimeAction ()
+    {
+        /**
+         * @var Prime       $prime
+         * @var Intervenant $intervenant
+         */
+
+        $prime       = $this->getEvent()->getParam('prime');
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        if ($prime->getIntervenant()->getId() == $intervenant->getId()) {
+            $this->getServicePrime()->supprimerPrime($prime);
+            $this->flashMessenger()->addSuccessMessage("La prime a été supprimée");
+        } else {
+            $this->flashMessenger()->addErrorMessage("La prime n'appartien pas au bon intervenant");
+        }
+
+        return true;
+    }
+
+
+
+    protected function saisieAction ()
+    {
+        /**
+         * @var Intervenant $intervenant
+         */
+        $prime       = $this->getEvent()->getParam('prime');
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $missions    = $intervenant->getMissions();
+
+
+        if ($prime) {
+            $title = 'Modification d\'une prime de mission';
+        } else {
+            $title = 'Création d\'une prime de mission';
+        }
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            if (empty($prime)) {
+                $prime = $this->getServicePrime()->newEntity();
+                $prime->setIntervenant($intervenant);
+                $prime = $this->getServicePrime()->save($prime);
+                $this->flashMessenger()->addSuccessMessage('Prime créée');
+            } else {
+                //On supprimer la prime de toutes les missions
+                //On est en mise à jour
+                $this->flashMessenger()->addSuccessMessage('Prime mise à jour');
+                $this->getServiceMission()->deletePrimeMissions($prime);
+            }
+            //On rattache la prime aux missions concernées
+            $datas = $this->getRequest()->getPost('missions');
+
+            foreach ($datas as $id => $mission) {
+                $missionEntity = $this->getServiceMission()->get($id);
+                $missionEntity->setPrime($prime);
+                $this->getServiceMission()->save($missionEntity);
+            }
+        }
+
+        $vm = new ViewModel();
+        $vm->setTemplate('mission/prime/saisie');
+        $vm->setVariables(compact('title', 'missions', 'prime', 'intervenant'));
+
+        return $vm;
     }
 
 }

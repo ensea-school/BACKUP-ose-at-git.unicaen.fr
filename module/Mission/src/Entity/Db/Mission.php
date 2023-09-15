@@ -58,6 +58,10 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
     private Collection     $volumesHoraires;
 
+    private ?Prime         $prime           = null;
+
+    private bool           $primeActive     = true;
+
 
 
     public function __construct ()
@@ -629,6 +633,38 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
     public function isPayable (): bool
     {
         return $this->isValide();
+    }
+
+
+
+    public function getPrime (): ?Prime
+    {
+        return $this->prime;
+    }
+
+
+
+    public function setPrime (?Prime $prime): self
+    {
+        $this->prime = $prime;
+
+        return $this;
+    }
+
+
+
+    public function isPrimeActive (): bool
+    {
+        return $this->primeActive;
+    }
+
+
+
+    public function setPrimeActive (bool $primeActive): self
+    {
+        $this->primeActive = $primeActive;
+
+        return $this;
     }
 
 }

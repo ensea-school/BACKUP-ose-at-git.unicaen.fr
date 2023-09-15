@@ -528,18 +528,33 @@ class PlafondService extends AbstractEntityService
             $hasQuery = false;
             foreach ($plafonds as $plafond) {
                 $testRes = $this->testRequete($plafond);
+
                 if ($testRes['success']) {
 
                     $hasQuery = true;
                     if (!$first) $view .= "\n\n    UNION ALL\n";
-                    $view .= "\n  SELECT " . $plafond->getId() . " PLAFOND_ID,";
-                    if (!$testRes['plafondCol']) {
-                        $view .= " NULL PLAFOND,";
+                    $view .= "\n  SELECT";
+
+                    foreach( $cols as $col ){
+                        $colVal = "NULL $col";
+                        switch($col){
+                            case 'PLAFOND_ID':
+                                $colVal = (string)$plafond->getId()." $col";
+                                break;
+                            case 'DEROGATION':
+                                $colVal = null;
+                                break;
+                            default:
+                                if (in_array($col, $testRes['columns'])){
+                                    $colVal = 'p.'.$col;
+                                }
+                        }
+                        if ($colVal !== null){
+                            $view .= " $colVal,";
+                        }
                     }
-                    if (!$testRes['etatCol']) {
-                        $view .= " NULL PLAFOND_ETAT_ID,";
-                    }
-                    $view .= " p.* FROM (\n    ";
+                    $view = substr($view, 0, -1); // on retire la dernière virgule
+                    $view .= " FROM (\n    ";
                     $view .= str_replace("\n", "\n      ", $plafond->getRequete());
                     $view .= "\n    ) p";
                     $first = false;
@@ -597,8 +612,7 @@ class PlafondService extends AbstractEntityService
             }
 
             $res = $res[0];
-            $return['plafondCol'] = isset($res['PLAFOND']);
-            $return['etatCol'] = isset($res['PLAFOND_ETAT_ID']);
+            $return['columns'] = array_keys($res);
 
             foreach ($cols as $col) {
                 if (!isset($res[$col])) {

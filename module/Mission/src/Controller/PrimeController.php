@@ -205,6 +205,7 @@ class PrimeController extends AbstractController
         if ($prime->getIntervenant()->getId() == $intervenant->getId()) {
             $this->getServicePrime()->supprimerPrime($prime);
             $this->flashMessenger()->addSuccessMessage("La prime a été supprimée");
+            $this->updateTableauxBord($prime->getIntervenant());
         } else {
             $this->flashMessenger()->addErrorMessage("La prime n'appartien pas au bon intervenant");
         }
@@ -251,6 +252,7 @@ class PrimeController extends AbstractController
                 $missionEntity->setPrime($prime);
                 $this->getServiceMission()->save($missionEntity);
             }
+            $this->updateTableauxBord($prime->getIntervenant());
         }
 
         $vm = new ViewModel();

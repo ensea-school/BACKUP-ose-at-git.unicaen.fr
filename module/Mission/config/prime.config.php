@@ -4,6 +4,7 @@ namespace Mission;
 
 use Application\Provider\Privilege\Privileges;
 use Mission\Controller\PrimeController;
+use UnicaenPrivilege\Assertion\AssertionFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 
@@ -13,28 +14,24 @@ return [
             'route'         => '/prime',
             'may_terminate' => false,
             'child_routes'  => [
-                'liste'                         => [
+                'liste' => [
                     'route'      => '/:intervenant/liste',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'liste',
+                    'privileges' => Privileges::MISSION_PRIME_VISUALISATION,
                 ],
-                'get-contrat-prime'             => [
-                    'route'      => '/:intervenant/get-contrat-prime',
-                    'controller' => Controller\PrimeController::class,
-                    'action'     => 'get-contrat-prime',
 
-                ],
                 'declaration-prime'             => [
                     'route'      => '/:intervenant/declaration-prime/:prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'declaration-prime',
+                    'privileges' => Privileges::MISSION_PRIME_VISUALISATION,
                 ],
                 'supprimer-declaration-prime'   => [
                     'route'      => '/:intervenant/supprimer-declaration-prime/:prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'supprimer-declaration-prime',
-                    'privileges' => Privileges::MISSION_PRIME_GESTION,
-
+                    'privileges' => Privileges::MISSION_PRIME_VISUALISATION,
 
                 ],
                 'valider-declaration-prime'     => [
@@ -57,11 +54,13 @@ return [
                     'route'      => '/:intervenant/refuser-prime/:prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'refuser-prime',
+                    'privileges' => Privileges::MISSION_PRIME_VISUALISATION,
                 ],
                 'telecharger-declaration-prime' => [
                     'route'      => '/:intervenant/telecharger-declaration-prime/:prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'telecharger-declaration-prime',
+                    'privileges' => Privileges::MISSION_PRIME_VISUALISATION,
 
 
                 ],
@@ -90,6 +89,9 @@ return [
                     'route'      => '/:intervenant/prime',
                     'controller' => Controller\PrimeController::class,
                     'action'     => 'index',
+                    'privileges' => Privileges::MISSION_PRIME_VISUALISATION,
+                    'assertion'  => Assertion\PrimeAssertion::class,
+
                 ],
             ],
 
@@ -119,12 +121,22 @@ return [
     'guards' => [
         [
             'controller' => PrimeController::class,
-            'action'     => ['supprimer-prime', 'saisie', 'index', 'get-contrat-prime', 'declaration-prime', 'supprimer-declaration-prime', 'telecharger-declaration-prime', 'refuser-prime', 'liste', 'valider-declaration-prime', 'devalider-declaration-prime'],
+            'action'     => ['supprimer-prime', 'saisie', 'valider-declaration-prime', 'devalider-declaration-prime'],
             'privileges' => [
                 'privileges' => Privileges::MISSION_PRIME_GESTION,
             ],
+            'assertion'  => Assertion\PrimeAssertion::class,
+
         ],
-       
+        [
+            'controller' => PrimeController::class,
+            'action'     => ['index', 'declaration-prime', 'supprimer-declaration-prime', 'telecharger-declaration-prime', 'refuser-prime', 'liste'],
+            'privileges' => [
+                'privileges' => Privileges::MISSION_PRIME_VISUALISATION,
+            ],
+            'assertion'  => Assertion\PrimeAssertion::class,
+
+        ],
 
     ],
 
@@ -134,7 +146,9 @@ return [
     ],
 
     'services' => [
-        Service\PrimeService::class => Service\PrimeServiceFactory::class,
+        Service\PrimeService::class     => Service\PrimeServiceFactory::class,
+        Assertion\PrimeAssertion::class => AssertionFactory::class,
+
     ],
 
 ];

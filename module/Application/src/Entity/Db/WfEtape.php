@@ -11,26 +11,48 @@ class WfEtape
 {
     const CANDIDATURE_SAISIE                  = 'CANDIDATURE_SAISIE';
     const CANDIDATURE_VALIDATION              = 'CANDIDATURE_VALIDATION';
-    const CODE_DONNEES_PERSO_SAISIE           = 'DONNEES_PERSO_SAISIE';
-    const CODE_SERVICE_SAISIE                 = 'SERVICE_SAISIE';
-    const CODE_PJ_SAISIE                      = 'PJ_SAISIE';
-    const CODE_PJ_VALIDATION                  = 'PJ_VALIDATION';
-    const CODE_DONNEES_PERSO_VALIDATION       = 'DONNEES_PERSO_VALIDATION';
-    const CODE_SERVICE_VALIDATION             = 'SERVICE_VALIDATION';
-    const CODE_REFERENTIEL_VALIDATION         = 'REFERENTIEL_VALIDATION';
-    const CODE_MISSION_SAISIE                 = 'MISSION_SAISIE';
-    const CODE_MISSION_VALIDATION             = 'MISSION_VALIDATION';
-    const CODE_MISSION_SAISIE_REALISE         = 'MISSION_SAISIE_REALISE';
-    const CODE_MISSION_VALIDATION_REALISE     = 'MISSION_VALIDATION_REALISE';
-    const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT;  // NB: c'est texto le code du type d'agrément
-    const CODE_CONSEIL_ACADEMIQUE             = TypeAgrement::CODE_CONSEIL_ACADEMIQUE; // NB: c'est texto le code du type d'agrément
-    const CODE_CONTRAT                        = 'CONTRAT';
-    const CODE_SERVICE_SAISIE_REALISE         = 'SERVICE_SAISIE_REALISE';
+
     const CODE_CLOTURE_REALISE                = 'CLOTURE_REALISE';
-    const CODE_SERVICE_VALIDATION_REALISE     = 'SERVICE_VALIDATION_REALISE';
-    const CODE_REFERENTIEL_VALIDATION_REALISE = 'REFERENTIEL_VALIDATION_REALISE';
+
+const CODE_CONSEIL_ACADEMIQUE             = TypeAgrement::CODE_CONSEIL_ACADEMIQUE;
+
+const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT;
+
+    const CODE_CONTRAT                        = 'CONTRAT';
+
     const CODE_DEMANDE_MEP                    = 'DEMANDE_MEP';
+
+    const CODE_DONNEES_PERSO_SAISIE           = 'DONNEES_PERSO_SAISIE';
+
+    const CODE_DONNEES_PERSO_VALIDATION       = 'DONNEES_PERSO_VALIDATION';
+
+    const CODE_MISSION_PRIME                  = 'MISSION_PRIME';
+
+    const CODE_MISSION_SAISIE                 = 'MISSION_SAISIE';
+
+    const CODE_MISSION_SAISIE_REALISE         = 'MISSION_SAISIE_REALISE';
+
+    const CODE_MISSION_VALIDATION             = 'MISSION_VALIDATION';
+
+    const CODE_MISSION_VALIDATION_REALISE     = 'MISSION_VALIDATION_REALISE';
+
+    const CODE_PJ_SAISIE                      = 'PJ_SAISIE';  // NB: c'est texto le code du type d'agrément
+
+    const CODE_PJ_VALIDATION                  = 'PJ_VALIDATION'; // NB: c'est texto le code du type d'agrément
+
+    const CODE_REFERENTIEL_VALIDATION         = 'REFERENTIEL_VALIDATION';
+
+    const CODE_REFERENTIEL_VALIDATION_REALISE = 'REFERENTIEL_VALIDATION_REALISE';
+
     const CODE_SAISIE_MEP                     = 'SAISIE_MEP';
+
+    const CODE_SERVICE_SAISIE                 = 'SERVICE_SAISIE';
+
+    const CODE_SERVICE_SAISIE_REALISE         = 'SERVICE_SAISIE_REALISE';
+
+    const CODE_SERVICE_VALIDATION             = 'SERVICE_VALIDATION';
+
+    const CODE_SERVICE_VALIDATION_REALISE     = 'SERVICE_VALIDATION_REALISE';
 
     const CURRENT = 'current-etape';
     const NEXT    = 'next-etape';
@@ -92,7 +114,7 @@ class WfEtape
      *
      * @return integer
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
@@ -104,9 +126,25 @@ class WfEtape
      *
      * @return string
      */
-    public function getCode()
+    public function getCode ()
     {
         return $this->code;
+    }
+
+
+
+    /**
+     * @param \Application\Acl\Role $role
+     *
+     * @return string
+     */
+    public function getLibelle (\Application\Acl\Role $role)
+    {
+        if ($role->getIntervenant()) {
+            return $this->getLibelleIntervenant();
+        } else {
+            return $this->getLibelleAutres();
+        }
     }
 
 
@@ -116,7 +154,7 @@ class WfEtape
      *
      * @return string
      */
-    public function getLibelleIntervenant()
+    public function getLibelleIntervenant ()
     {
         return $this->libelleIntervenant;
     }
@@ -128,37 +166,21 @@ class WfEtape
      *
      * @return string
      */
-    public function getLibelleAutres()
+    public function getLibelleAutres ()
     {
         return $this->libelleAutres;
     }
 
 
 
-    /**
-     * @param \Application\Acl\Role $role
-     *
-     * @return string
-     */
-    public function getLibelle(\Application\Acl\Role $role)
-    {
-        if ($role->getIntervenant()) {
-            return $this->getLibelleIntervenant();
-        } else {
-            return $this->getLibelleAutres();
-        }
-    }
-
-
-
-    public function getOrdre()
+    public function getOrdre ()
     {
         return $this->ordre;
     }
 
 
 
-    public function getRoute()
+    public function getRoute ()
     {
         return $this->route;
     }
@@ -168,7 +190,7 @@ class WfEtape
     /**
      * @param string $route
      */
-    public function setRoute($route)
+    public function setRoute ($route)
     {
         $this->route = $route;
     }
@@ -178,7 +200,7 @@ class WfEtape
     /**
      * @param string $routeIntervenant
      */
-    public function getRouteIntervenant()
+    public function getRouteIntervenant ()
     {
         return $this->routeIntervenant;
     }
@@ -188,7 +210,7 @@ class WfEtape
     /**
      * @return boolean
      */
-    public function getObligatoire()
+    public function getObligatoire ()
     {
         return $this->obligatoire;
     }
@@ -200,7 +222,7 @@ class WfEtape
      *
      * @return WfEtape
      */
-    public function setObligatoire($obligatoire)
+    public function setObligatoire ($obligatoire)
     {
         $this->obligatoire = $obligatoire;
 
@@ -212,7 +234,7 @@ class WfEtape
     /**
      * @return string
      */
-    public function getDescNonFranchie()
+    public function getDescNonFranchie ()
     {
         return $this->descNonFranchie;
     }
@@ -224,7 +246,7 @@ class WfEtape
      *
      * @return WfEtape
      */
-    public function setDescNonFranchie($descNonFranchie)
+    public function setDescNonFranchie ($descNonFranchie)
     {
         $this->descNonFranchie = $descNonFranchie;
 
@@ -236,7 +258,7 @@ class WfEtape
     /**
      * @return mixed
      */
-    public function getDescSansObjectif()
+    public function getDescSansObjectif ()
     {
         return $this->descSansObjectif;
     }
@@ -248,7 +270,7 @@ class WfEtape
      *
      * @return WfEtape
      */
-    public function setDescSansObjectif($descSansObjectif)
+    public function setDescSansObjectif ($descSansObjectif)
     {
         $this->descSansObjectif = $descSansObjectif;
 
@@ -257,7 +279,7 @@ class WfEtape
 
 
 
-    public function __toString()
+    public function __toString ()
     {
         return $this->getLibelleAutres();
     }

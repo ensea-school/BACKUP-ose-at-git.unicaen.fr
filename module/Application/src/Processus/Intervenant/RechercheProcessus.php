@@ -42,7 +42,7 @@ class RechercheProcessus
 
         $anneeId = (int)$this->getServiceContext()->getAnnee()->getId();
 
-        //$critere  = Util::reduce($critere);
+        $critere  = Util::reduce($critere);
         $criteres = explode('_', $critere);
 
         $sqlSource = '';
@@ -63,7 +63,6 @@ class RechercheProcessus
         foreach ($criteres as $c) {
             $cc = (int)$c;
             if (0 === $cc) {
-                $c = str_replace("'", "''", $c);
                 if ($sqlCri != '') $sqlCri .= ' AND ';
                 $sqlCri .= 'instr(\' \' || critere ,\' ' . $c . '\') > 0';
             } else {

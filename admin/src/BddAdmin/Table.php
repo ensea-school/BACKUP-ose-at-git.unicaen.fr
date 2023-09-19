@@ -63,6 +63,13 @@ class Table
 
 
 
+    public function setDdl(array $ddl)
+    {
+        $this->ddl = $ddl;
+    }
+
+
+
     public function hasHistorique(): bool
     {
         $ddl      = $this->getDdl();
@@ -95,7 +102,7 @@ class Table
 
         $types = [];
         foreach ($ddl['columns'] as $column => $d) {
-            $types[$column] = $d['type'];
+            $types[$column] = $d['type'] ?? null;
         }
 
         return $types;
@@ -127,9 +134,9 @@ class Table
 
         /* Construction et exécution de la requête */
         $cols = '';
-        foreach ($ddl['columns'] as $colDdl) {
+        foreach ($ddl['columns'] as $cname => $colDdl) {
             if ($cols != '') $cols .= ', ';
-            $cols .= $colDdl['name'];
+            $cols .= $colDdl['name'] ?? $cname;
         }
         $sql    = "SELECT $cols FROM \"$this->name\"";
         $params = [];
@@ -430,28 +437,15 @@ class Table
             $options['where'] = 'HISTO_DESTRUCTION IS NULL';
         }
 
-        $diff = [];
-
-        /* Chargement des données actuelles, à mettre à jour */
-        $oldData = $this->select($options['where'], $options);
-        foreach ($oldData as $k => $d) {
-            if (!isset($diff[$k])) {
-                $diff[$k] = ['old' => [], 'new' => []];
-            }
-            if (!($hasHistorique && $d['HISTO_DESTRUCTION'])){
-                $diff[$k]['old'] = $d;
-            }
-        }
-
-
         /* Mise en forme des nouvelles données */
+        $new = [];
         foreach ($data as $d) {
             foreach ($d as $c => $v) {
                 if (isset($ddl['columns'][$c])) {
                     if (isset($options['columns'][$c]['transformer'])) {
                         $d[$c] = $this->transform($v, $options['columns'][$c]['transformer'], $ddl['columns'][$c]);
                     }
-                    if ($ddl['columns'][$c]['type'] == Bdd::TYPE_DATE && !empty($val) && is_string($val)) {
+                    if (isset($ddl['columns'][$c]['type']) && $ddl['columns'][$c]['type'] == Bdd::TYPE_DATE && !empty($val) && is_string($val)) {
                         $d[$c] = \DateTime::createFromFormat('Y-m-d H:i:s', $v);
                     }
                 } else {
@@ -459,44 +453,46 @@ class Table
                 }
             }
             $k = $this->makeKey($d, $key);
-
-            if (!isset($diff[$k])) {
-                $diff[$k] = ['old' => [], 'new' => []];
-            }
-            $diff[$k]['new'] = $d;
+            $new[$k] = $d;
         }
 
-        /* Traitement */
-        $bdd->beginTransaction();
-        foreach ($diff as $dr) {
-            $old = $dr['old'];
-            $new = $dr['new'];
 
-            if (empty($old)) { // INSERT
-                if ($options['insert']) {
-                    $this->insert($new);
-                    $result['insert']++;
-                }
-            } elseif (empty($new) && $options['soft-delete'] && $hasHistorique && $histoUserId) { // SOFT DELETE
+        /* Chargement des données actuelles et traitement */
+        $bdd->beginTransaction();
+
+        $selOptions = $options;
+        $selOptions['fetch'] = Bdd::FETCH_EACH;
+        $stmt = $this->select($options['where'], $selOptions);
+        while ($o = $stmt->next()) {
+            // récupération de k et n
+            $k = $this->makeKey($o, $key);
+            if (array_key_exists($k, $new)){
+                $n = $new[$k];
+                unset($new[$k]);
+            }else{
+                $n = null;
+            }
+
+            if (empty($n) && $options['soft-delete'] && $hasHistorique && $histoUserId) { // SOFT DELETE
                 //On ne delete pas mais on historise
-                $new                         = $old;
-                $new['HISTO_DESTRUCTEUR_ID'] = $histoUserId;
-                $new['HISTO_DESTRUCTION']    = new \DateTime();
-                $this->update($new, $this->makeKeyArray($old, $key));
+                $n                         = $o;
+                $n['HISTO_DESTRUCTEUR_ID'] = $histoUserId;
+                $n['HISTO_DESTRUCTION']    = new \DateTime();
+                $this->update($n, $this->makeKeyArray($o, $k));
                 $result['soft-delete']++;
-            } elseif (empty($new) && !$options['soft-delete']) { // DELETE
+            } elseif (empty($n) && !$options['soft-delete']) { // DELETE
                 if ($options['delete']) {
-                    $this->delete($this->makeKeyArray($old, $key));
+                    $this->delete($this->makeKeyArray($o, $key));
                     $result['delete']++;
                 }
             } elseif ($options['update']) { // UPDATE si différent!!
                 $toUpdate = [];
-                foreach ($old as $c => $ov) {
-                    $newc = $new[$c] ?? null;
-                    $oldc = $old[$c] ?? null;
+                foreach ($o as $c => $ov) {
+                    $newc = $n[$c] ?? null;
+                    $oldc = $o[$c] ?? null;
                     if ($newc instanceof \DateTime) $newc = $newc->format('Y-m-d H:i:s');
                     if ($oldc instanceof \DateTime) $oldc = $oldc->format('Y-m-d H:i:s');
-                    if ($newc != $oldc && array_key_exists($c, $new) && $c != 'ID') {
+                    if ($newc != $oldc && array_key_exists($c, $n) && $c != 'ID') {
                         $ok = empty($options['update-cols']); // OK par défaut si une liste n'a pas été établie manuellement
 
                         if (in_array($c, $options['update-cols'])) $ok = true;
@@ -504,16 +500,25 @@ class Table
                         if (in_array($c, $options['update-only-null']) && $oldc !== null) $ok = false;
 
                         if ($ok) {
-                            $toUpdate[$c] = $new[$c];
+                            $toUpdate[$c] = $n[$c];
                         }
                     }
                 }
                 if (!empty($toUpdate)) {
-                    $this->update($toUpdate, $this->makeKeyArray($old, $key));
+                    $this->update($toUpdate, $this->makeKeyArray($o, $key), ['ddl' => $ddl]);
                     $result['update']++;
                 }
             }
         }
+
+        /* Pour finir, insertion de tous les nouveaux éléments */
+        foreach( $new as $k => $n ){
+            if ($options['insert']) {
+                $this->insert($n);
+                $result['insert']++;
+            }
+        }
+
         $bdd->commitTransaction();
 
         return $result;

@@ -5,17 +5,15 @@
       <unique-constraint name="tbl_paiement__un" columns="SERVICE_A_PAYER_ID,INTERVENANT_ID,MISE_EN_PAIEMENT_ID,MISSION_ID"/>
     </unique-constraints>
     <id name="id" type="integer" column="ID">
-      <generator strategy="SEQUENCE"/>
-      <sequence-generator sequence-name="TBL_PAIEMENT_ID_seq" allocation-size="1" initial-value="1"/>
     </id>
-    <field name="heuresAPayer" type="float" column="HEURES_A_PAYER" precision="126" scale="0" nullable="false" />
-    <field name="heuresAPayerPond" type="float" column="HEURES_A_PAYER_POND" precision="126" scale="0" nullable="false" />
-    <field name="heuresDemandees" type="float" column="HEURES_DEMANDEES" precision="126" scale="0" nullable="false" />
-    <field name="heuresPayees" type="float" column="HEURES_PAYEES" precision="126" scale="0" nullable="false" />
+    <field name="heuresAPayerAA" type="float" column="HEURES_A_PAYER_AA" precision="126" scale="0" nullable="false" />
+    <field name="heuresAPayerAC" type="float" column="HEURES_A_PAYER_AC" precision="126" scale="0" nullable="false" />
+    <field name="heuresDemandeesAA" type="float" column="HEURES_DEMANDEES_AA" precision="126" scale="0" nullable="false" />
+    <field name="heuresDemandeesAC" type="float" column="HEURES_DEMANDEES_AC" precision="126" scale="0" nullable="false" />
+    <field name="heuresPayeesAA" type="float" column="HEURES_PAYEES_AA" precision="126" scale="0" nullable="false" />
+    <field name="heuresPayeesAC" type="float" column="HEURES_PAYEES_AC" precision="126" scale="0" nullable="false" />
     <many-to-one field="formuleResultatService" target-entity="Application\Entity\Db\FormuleResultatService">
-      <join-columns>
         <join-column name="FORMULE_RES_SERVICE_ID" referenced-column-name="ID"/>
-      </join-columns>
     </many-to-one>
     <many-to-one field="formuleResultatServiceReferentiel" target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel">
         <join-column name="FORMULE_RES_SERVICE_REF_ID" referenced-column-name="ID"/>

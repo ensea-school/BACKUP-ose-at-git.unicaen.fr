@@ -31,13 +31,17 @@ class TblPaiement
 
     private ?MiseEnPaiement $miseEnPaiement = null;
 
-    private float $heuresAPayer = 0;
+    private float $heuresAPayerAA = 0.0;
 
-    private float $heuresAPayerPond = 0;
+    private float $heuresAPayerAC = 0.0;
 
-    private float $heuresDemandees = 0;
+    private float $heuresDemandeesAA = 0.0;
 
-    private float $heuresPayees = 0;
+    private float $heuresDemandeesAC = 0.0;
+
+    private float $heuresPayeesAA = 0.0;
+
+    private float $heuresPayeesAC = 0.0;
 
 
 
@@ -115,30 +119,64 @@ class TblPaiement
 
 
 
-    public function getHeuresAPayer(): float
+    public function getHeuresAPayerAA(): float
     {
-        return $this->heuresAPayer;
+        return $this->heuresAPayerAA;
     }
 
 
 
-    public function getHeuresAPayerPond(): float
+    public function getHeuresAPayerAC(): float
     {
-        return $this->heuresAPayerPond;
+        return $this->heuresAPayerAC;
+    }
+
+
+
+    public function getHeuresAPayer(): float
+    {
+        return round($this->heuresAPayerAA + $this->getHeuresAPayerAC(), 2);
+    }
+
+
+
+    public function getHeuresDemandeesAA(): float
+    {
+        return $this->heuresDemandeesAA;
+    }
+
+
+
+    public function getHeuresDemandeesAC(): float
+    {
+        return $this->heuresDemandeesAC;
     }
 
 
 
     public function getHeuresDemandees(): float
     {
-        return $this->heuresDemandees;
+        return round($this->heuresDemandeesAA + $this->heuresDemandeesAC, 2);
+    }
+
+
+
+    public function getHeuresPayeesAA(): float
+    {
+        return $this->heuresPayeesAA;
+    }
+
+
+
+    public function getHeuresPayeesAC(): float
+    {
+        return $this->heuresPayeesAC;
     }
 
 
 
     public function getHeuresPayees(): float
     {
-        return $this->heuresPayees;
+        return round($this->heuresPayeesAA + $this->heuresPayeesAC, 2);
     }
-
 }

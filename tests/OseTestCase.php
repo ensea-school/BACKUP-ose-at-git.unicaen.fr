@@ -34,7 +34,7 @@ class OseTestCase extends TestCase
             $a1Type = getType($a1[$k]);
             $a2Type = getType($a2[$k]);
             if ($a1Type != $a2Type){
-                return $this->error('Des valeurs ne sont pas du même type ('.$p.') : '.$a2Type.' pour '.$a1Type);
+                return $this->error('Des valeurs ne sont pas du même type ('.$p.') : '.$a2Type.' attendu pour '.$a1Type.' calculé');
             }
             if (is_array($a1[$k])){
                 if (!$this->assertArrayEquals($a1[$k], $a2[$k], $strict, $p)){
@@ -42,7 +42,7 @@ class OseTestCase extends TestCase
                 }
             }else{
                 if ($a1[$k] !== $a2[$k]){
-                    return $this->error('Des valeurs sont différentes ('.$p.') : '.$a2[$k].' pour '.$a1[$k]);
+                    return $this->error('Des valeurs sont différentes ('.$p.') : '.$a2[$k].' attendu pour '.$a1[$k].' calculé');
                 }
             }
         }

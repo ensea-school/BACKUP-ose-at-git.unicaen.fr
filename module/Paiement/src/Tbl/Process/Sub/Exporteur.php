@@ -19,8 +19,13 @@ class Exporteur
         }
 
         foreach($sap->misesEnPaiement as $smep){
-            $heuresAA = (int)round($smep->heures * $lastPourcAA);
-            $heuresAc = $smep->heures - $heuresAA;
+            if (isset($smep->heuresAA) && isset($smep->heuresAC)) {
+                $heuresAA = $smep->heuresAA;//(int)round($smep->heures * $lastPourcAA);
+                $heuresAc = $smep->heuresAC;// - $heuresAA;
+            }else{
+                $heuresAA = (int)round($smep->heures * $lastPourcAA);
+                $heuresAc = $smep->heures - $heuresAA;
+            }
             $ldata = [
                 'ANNEE_ID'                   => $sap->annee,
                 'SERVICE_ID'                 => $sap->service,
@@ -76,8 +81,8 @@ class Exporteur
                 'TAUX_REMU_ID'               => $lap->tauxRemu,
                 'TAUX_HORAIRE'               => $lap->tauxValeur,
                 'TAUX_CONGES_PAYES'          => $sap->tauxCongesPayes,
-                'HEURES_A_PAYER_AA'          => round($rapAA / 100, 2),
-                'HEURES_A_PAYER_AC'          => round($rapAC / 100, 2),
+                'HEURES_A_PAYER_AA'          => round($mep->heuresAA / 100, 2),
+                'HEURES_A_PAYER_AC'          => round($mep->heuresAC / 100, 2),
                 'HEURES_DEMANDEES_AA'        => round($mep->heuresAA / 100, 2),
                 'HEURES_DEMANDEES_AC'        => round($mep->heuresAC / 100, 2),
                 'HEURES_PAYEES_AA'           => $mep->periodePaiement ? round($mep->heuresAA / 100, 2) : 0.0,

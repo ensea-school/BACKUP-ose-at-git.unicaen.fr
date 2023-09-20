@@ -71,7 +71,7 @@ WHERE
     WHEN 'fa' THEN frvh.heures_compl_fa
     WHEN 'fc' THEN frvh.heures_compl_fc
     WHEN 'fc_majorees' THEN frvh.heures_compl_fc_majorees
-  END > 0
+  END <> 0
   /*@INTERVENANT_ID=fr.intervenant_id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@SERVICE_ID=frs.service_id*/
@@ -127,7 +127,7 @@ FROM
                                                AND mep.formule_res_service_ref_id = frsr.id
                                                AND mep.type_heures_id = th.id
 WHERE
-   frsr.heures_compl_referentiel > 0
+   frsr.heures_compl_referentiel <> 0
    /*@INTERVENANT_ID=i.id*/
    /*@ANNEE_ID=i.annee_id*/
    /*@SERVICE_REFERENTIEL_ID=frsr.service_referentiel_id*/

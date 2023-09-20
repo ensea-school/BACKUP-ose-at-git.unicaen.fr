@@ -398,7 +398,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
             $heures = $demande ? 'heures_demandees' : 'heures_payees';
 
             $sql = "SELECT COUNT(*) res FROM tbl_paiement p "
-                . "WHERE p.intervenant_id = $id AND p.$heures > 0 AND rownum = 1";
+                . "WHERE p.intervenant_id = $id AND p.$heures"."_AA + p.$heures"."_AC > 0 AND rownum = 1";
 
             $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 

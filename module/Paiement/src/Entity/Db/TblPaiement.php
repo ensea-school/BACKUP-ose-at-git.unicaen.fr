@@ -73,7 +73,7 @@ class TblPaiement
 
 
 
-    public function getServiceAPayer(): ServiceAPayerInterface
+    public function getServiceAPayer(): ?ServiceAPayerInterface
     {
         if ($this->formuleResultatService) return $this->formuleResultatService;
         if ($this->formuleResultatServiceReferentiel) return $this->formuleResultatServiceReferentiel;

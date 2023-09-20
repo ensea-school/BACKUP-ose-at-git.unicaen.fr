@@ -15,10 +15,11 @@ $ptbl = $c->getTableauBord('paiement');
 
 
 $params = [
-   //'INTERVENANT_ID' => 667613
-    //'INTERVENANT_ID' => 20970
+   'INTERVENANT_ID' => 882254
+    //'INTERVENANT_ID' => 20970,
    // 'FORMULE_RES_SERVICE_ID' => 113957505
-    'SERVICE_ID' => 258201,
+  //  'SERVICE_ID' => 258201,
+   //'ANNEE_ID' => 2014,
 ];
 
 
@@ -26,8 +27,17 @@ $params = [
 
 $debut = microtime(true);
 
-arrayDump($ptbl->getProcess()->getData($params));
-//$ptbl->calculer($params);
+$data = $ptbl->getProcess()->getData($params);
+echo '<h2>Data en entrée</h2>';
+echo phpDump($data);
+
+
+$ptbl->calculer($params);
+
+
+$res = phpDump(oseAdmin()->getBdd()->getTable('TBL_PAIEMENT')->select($params));
+echo '<h2>Résultat</h2>';
+echo phpDump($res);
 
 $fin = microtime(true);
 $duree = $fin - $debut;

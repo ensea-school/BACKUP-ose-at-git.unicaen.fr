@@ -71,15 +71,14 @@ class PaiementProcess implements ProcessInterface
     public function run(TableauBord $tableauBord, array $params = [])
     {
         $this->init();
-
         $this->loadAPayer($params);
-
         $this->traitement();
+        $this->enregistrement($tableauBord);
     }
 
 
 
-    public function getData(array $params = [])
+    public function getData(array $params = []): array
     {
         $conn = $this->getServiceBdd()->getEntityManager()->getConnection();
 
@@ -117,12 +116,30 @@ class PaiementProcess implements ProcessInterface
 
     protected function traitement()
     {
-        foreach ($this->services as $serviceAPayer) {
+        foreach ($this->services as $sid => $serviceAPayer) {
             $this->arrondisseur->arrondir($serviceAPayer);
             $this->consolidateur->consolider($serviceAPayer);
             $this->rapprocheur->rapprocher($serviceAPayer);
             $this->exporteur->exporter($serviceAPayer, $this->tblData);
+            unset($this->services[$sid]);// libération de mémoire
         }
+    }
+
+
+
+    protected function enregistrement(TableauBord $tableauBord)
+    {
+        // Enregistrement en BDD
+        $key = $tableauBord->getOption('key');
+
+        $table = oseAdmin()->getBdd()->getTable('TBL_PAIEMENT');
+
+        // on force la DDL pour éviter de faire des requêtes en plus
+        $table->setDdl(['columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
+        // on merge dans la table
+        $table->merge($this->tblData, $key);
+        // on vide pour limiter la conso de RAM
+        $this->tblData = [];
     }
 
 

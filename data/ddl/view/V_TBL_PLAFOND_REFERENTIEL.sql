@@ -16,7 +16,7 @@ SELECT
   CASE WHEN p.heures > COALESCE(p.PLAFOND,ps.heures,0) + COALESCE(pd.heures, 0) + 0.05 THEN 1 ELSE 0 END depassement
 FROM
   (
-  SELECT 7 PLAFOND_ID, NULL PLAFOND, NULL PLAFOND_ETAT_ID, p.* FROM (
+  SELECT 7 PLAFOND_ID, p.ANNEE_ID, p.TYPE_VOLUME_HORAIRE_ID, p.INTERVENANT_ID, p.FONCTION_REFERENTIEL_ID, p.HEURES, NULL PLAFOND, NULL PLAFOND_ETAT_ID FROM (
     SELECT
         i.annee_id                        annee_id,
         vhr.type_volume_horaire_id        type_volume_horaire_id,

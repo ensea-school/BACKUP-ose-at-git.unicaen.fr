@@ -760,9 +760,9 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
             SELECT
               intervenant_id,
               structure_id,
-              SUM(heures_a_payer / heures_a_payer_pond) sap,
-              SUM(heures_demandees) dmep,
-              SUM(heures_payees) mep
+              SUM(heures_a_payer_aa + heures_a_payer_ac) sap,
+              SUM(heures_demandees_aa + heures_demandees_ac) dmep,
+              SUM(heures_payees_aa + heures_payees_ac) mep
             FROM
               tbl_paiement
             WHERE

@@ -105,6 +105,10 @@ return [
         "VALEUR"      => 0.1,
         "DESCRIPTION" => "Taux de majoration des heures pour prise en compte des congés payés",
     ],
+    "distinction_fi_fa_fc" => [
+        "VALEUR"      => 1,
+        "DESCRIPTION" => "Distinction FI/FA/FC des heures à payer",
+    ],
 
     /* Documentations */
     "doc-intervenant-vacataires"                 => [

@@ -240,6 +240,21 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'type'       => 'Select',
+            'name'       => 'distinction_fi_fa_fc',
+            'options'    => [
+                'label'  => 'Distinction FI/FA/FC des heures à payer',
+                'value_options' => [
+                    '1' => 'Oui, distinguer la FI, la FA et la FC pour les heures à payer',
+                    '0' => 'Non, toutes les heures d\'enseignement seront traitées sous l label "Enseignement"',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
+            ],
+        ]);
+
+        $this->add([
             'name'    => 'doc-intervenant-vacataires',
             'type'    => 'Text',
             'options' => [

@@ -195,7 +195,9 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
   BEGIN
     IF NOT UNICAEN_TBL.ACTIV_CALCULS THEN RETURN; END IF;
 
-    SELECT custom_calcul_proc INTO calcul_proc FROM tbl WHERE tbl_name = CALCULER.TBL_NAME;
+    calcul_proc := CASE TBL_NAME
+    WHEN 'formule' THEN 'OSE_FORMULE.CALCULER_TBL'
+    ELSE NULL END;
 
     params.p1 := param;
     params.v1 := VALUE;
@@ -218,7 +220,9 @@ CREATE OR REPLACE PACKAGE BODY "UNICAEN_TBL" AS
   BEGIN
     IF NOT UNICAEN_TBL.ACTIV_CALCULS THEN RETURN; END IF;
 
-    SELECT custom_calcul_proc INTO calcul_proc FROM tbl WHERE tbl_name = CALCULER.TBL_NAME;
+    calcul_proc := CASE TBL_NAME
+    WHEN 'formule' THEN 'OSE_FORMULE.CALCULER_TBL'
+    ELSE NULL END;
 
     unicaen_tbl.calcul_proc_params := params;
 

@@ -1385,17 +1385,6 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
     ],
-    'TBL'                            => [
-        'TBL_NAME',
-        'TABLE_NAME',
-        'VIEW_NAME',
-        'SEQUENCE_NAME',
-        'CONSTRAINT_NAME',
-        'CUSTOM_CALCUL_PROC',
-        'ORDRE',
-        'FEUILLE_DE_ROUTE',
-        'PARAMETRES',
-    ],
     'TBL_AGREMENT'                   => [
         'ID',
         'ANNEE_ID',

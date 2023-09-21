@@ -52,10 +52,6 @@ return [
         'actions' => ['install', 'update'],
         'key'     => 'CODE',
     ],
-    'TBL'                        => [
-        'actions' => ['install', 'update'],
-        'key'     => 'TBL_NAME',
-    ],
     'WF_ETAPE'                   => [
         'actions' => ['install', 'update'],
         'key'     => 'CODE',

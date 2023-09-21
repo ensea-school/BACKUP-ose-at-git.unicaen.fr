@@ -14,6 +14,7 @@ return [
             'PLAFOND_APPLICATION',
             'VERSION',
             'TAUX_HORAIRE_HETD',
+            'TBL',
         ],
     ],
     'materialized-view' => [

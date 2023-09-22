@@ -3,9 +3,9 @@
 //@formatter:off
 
 return [
-    'name'    => 'CENTRE_COUT_TYPE_MISSION_STFK',
+    'name'    => 'TBL_MISSION_PRIME_STRUCTURE_FK',
     'unique'  => FALSE,
-    'table'   => 'CENTRE_COUT_TYPE_MISSION',
+    'table'   => 'TBL_MISSION_PRIME',
     'columns' => [
         'STRUCTURE_ID',
     ],

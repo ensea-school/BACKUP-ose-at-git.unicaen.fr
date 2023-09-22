@@ -54,7 +54,7 @@ class IndicateurService extends AbstractService
             'annee' => $annee->getId(),
         ];
         if ($onlyCount) {
-            $select  = "COUNT(DISTINCT i.id) NB";
+            $select  = "COUNT(DISTINCT indic.intervenant_id) NB";
             $orderBy = "";
         } else {
             $select  = "
@@ -72,7 +72,20 @@ class IndicateurService extends AbstractService
             $orderBy = " ORDER BY si.prioritaire_indicateurs DESC, s.libelle_court, i.nom_usuel, i.prenom";
         }
 
-        $sql = "SELECT
+        if ($indicateur->isSpecial()){
+            $sql = "SELECT
+          $select
+        FROM
+          ($viewDef) indic
+          LEFT JOIN intervenant    i ON 1 = 0
+          LEFT JOIN statut        si ON 1 = 0
+          LEFT JOIN intervenant_dossier d ON 1 = 0
+          LEFT JOIN structure s ON s.id = indic.structure_id
+        WHERE
+          1=1
+        ";
+        }else{
+            $sql = "SELECT
           $select
         FROM
           ($viewDef) indic
@@ -83,7 +96,9 @@ class IndicateurService extends AbstractService
         WHERE
           i.annee_id = :annee
         ";
-        if (!$indicateur->isIrrecevables()) {
+        }
+
+        if (!$indicateur->isSpecial() && !$indicateur->isIrrecevables()) {
             $sql .= ' AND i.irrecevable = 0';
         }
         if ($structure) {

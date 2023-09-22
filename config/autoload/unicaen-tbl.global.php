@@ -248,6 +248,7 @@ return [
                     'FORMULE_RES_SERVICE_ID',
                     'FORMULE_RES_SERVICE_REF_ID',
                     'MISSION_ID',
+                    'TYPE_HEURES_ID',
                     'INTERVENANT_ID',
                     'STRUCTURE_ID',
                     'MISE_EN_PAIEMENT_ID',
@@ -268,6 +269,7 @@ return [
                     'FORMULE_RES_SERVICE_ID',
                     'FORMULE_RES_SERVICE_REF_ID',
                     'MISSION_ID',
+                    'TYPE_HEURES_ID',
                     'INTERVENANT_ID',
                     'MISE_EN_PAIEMENT_ID',
                     'TAUX_REMU_ID',
@@ -278,7 +280,6 @@ return [
                     'FORMULE_RES_SERVICE_REF_ID' => 0,
                     'MISSION_ID'                 => 0,
                     'MISE_EN_PAIEMENT_ID'        => 0,
-                    'TAUX_REMU_ID'               => 0,
                 ],
             ],
 

@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'CENTRE_COUT_ID'             => [
@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 24,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'DOMAINE_FONCTIONNEL_ID'     => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 20,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'FORMULE_RES_SERVICE_ID'     => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 9,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'FORMULE_RES_SERVICE_REF_ID' => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'HEURES_A_PAYER_AA'          => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 21,
+            'position'    => 17,
             'commentaire' => 'HETD à payer en
  AA',
         ],
@@ -91,7 +91,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 1,
+            'position'    => 18,
             'commentaire' => 'HETD à payer en AC',
         ],
         'HEURES_DEMANDEES_AA'        => [
@@ -103,7 +103,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 22,
+            'position'    => 19,
             'commentaire' => 'HETD demandées en AA',
         ],
         'HEURES_DEMANDEES_AC'        => [
@@ -115,7 +115,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 25,
+            'position'    => 20,
             'commentaire' => 'HETD demandées en AC
 ',
         ],
@@ -128,7 +128,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 23,
+            'position'    => 21,
             'commentaire' => 'HETD payées en AA',
         ],
         'HEURES_PAYEES_AC'           => [
@@ -140,7 +140,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 26,
+            'position'    => 22,
             'commentaire' => 'HETD payées en AC',
         ],
         'ID'                         => [
@@ -152,7 +152,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '"TBL_PAIEMENT_ID_SEQ"."NEXTVAL"',
-            'position'    => 19,
+            'position'    => 1,
             'commentaire' => NULL,
         ],
         'INTERVENANT_ID'             => [
@@ -164,7 +164,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 11,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'MISE_EN_PAIEMENT_ID'        => [
@@ -176,7 +176,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 17,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'MISSION_ID'                 => [
@@ -188,7 +188,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 8,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'PERIODE_PAIEMENT_ID'        => [
@@ -200,7 +200,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 18,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'SERVICE_ID'                 => [
@@ -212,7 +212,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'SERVICE_REFERENTIEL_ID'     => [
@@ -224,7 +224,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 7,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'STRUCTURE_ID'               => [
@@ -236,7 +236,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 12,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'TAUX_CONGES_PAYES'          => [
@@ -248,7 +248,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 14,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'TAUX_HORAIRE'               => [
@@ -260,7 +260,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 16,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'TAUX_REMU_ID'               => [
@@ -272,7 +272,19 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 10,
+            'commentaire' => NULL,
+        ],
+        'TYPE_HEURES_ID'             => [
+            'name'        => 'TYPE_HEURES_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
     ],

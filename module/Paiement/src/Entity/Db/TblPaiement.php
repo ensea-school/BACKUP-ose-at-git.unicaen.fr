@@ -8,6 +8,7 @@ use Application\Entity\Db\FormuleResultatServiceReferentiel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Structure;
+use OffreFormation\Entity\Db\TypeHeures;
 use Mission\Entity\Db\Mission;
 
 
@@ -26,6 +27,8 @@ class TblPaiement
     private ?FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null;
 
     private ?Mission $mission = null;
+
+    private ?TypeHeures $typeHeures;
 
     private ?Periode $periodePaiement = null;
 
@@ -87,6 +90,13 @@ class TblPaiement
     public function getStructure(): Structure
     {
         return $this->structure;
+    }
+
+
+
+    public function getTypeHeures(): ?TypeHeures
+    {
+        return $this->typeHeures;
     }
 
 

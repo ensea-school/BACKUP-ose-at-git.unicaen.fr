@@ -30,24 +30,6 @@ if (file_exists($colPosFile)) {
     $positions = [];
 }
 
-$sql = "SELECT 
-  tbl.table_name,
-  tc.column_name,
-  COALESCE(vc.column_id,0) + 1 position  
-FROM 
-  tbl
-  JOIN user_tab_columns tc ON tc.table_name = tbl.table_name
-  LEFT JOIN user_tab_columns vc ON vc.table_name = tbl.view_name AND tc.column_name = vc.column_name
-WHERE 
-  tbl.table_name IS NOT NULL AND tbl.view_name IS NOT NULL
-ORDER BY
-  tbl.view_name,
-  position";
-$dd  = $oa->getBdd()->select($sql);
-foreach ($dd as $d) {
-    $positions[$d['TABLE_NAME']][$d['POSITION'] - 1] = $d['COLUMN_NAME'];
-}
-
 $positions = $ddl->applyColumnPositions($positions);
 $ddl->writeArray($colPosFile, $positions);
 $c->end('Positionnement de colonnes à jour');

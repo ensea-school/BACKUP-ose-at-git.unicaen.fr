@@ -322,6 +322,8 @@ class CcActivite implements HistoriqueAwareInterface
                 return $this->getFc();
             case TypeHeures::FC_MAJOREES:
                 return $this->getFcMajorees();
+            case TypeHeures::ENSEIGNEMENT:
+                return $this->getFi() || $this->getFa() || $this->getFc() || $this->getFcMajorees();
             case TypeHeures::REFERENTIEL:
                 return $this->getReferentiel();
             case TypeHeures::MISSION:

@@ -114,6 +114,8 @@ trait FormuleResultatTypesHeuresTrait
                 return $this->getHeuresServiceFa();
             case TypeHeures::FC:
                 return $this->getHeuresServiceFc();
+            case TypeHeures::ENSEIGNEMENT:
+                return $this->getHeuresServiceFi() + $this->getHeuresServiceFa() + $this->getHeuresServiceFc();
             case TypeHeures::REFERENTIEL:
                 return $this->getHeuresServiceReferentiel();
             case TypeHeures::MISSION:
@@ -135,6 +137,8 @@ trait FormuleResultatTypesHeuresTrait
                 return $this->getHeuresComplFc();
             case TypeHeures::FC_MAJOREES:
                 return $this->getHeuresComplFcMajorees();
+            case TypeHeures::ENSEIGNEMENT:
+                return $this->getHeuresComplFi() + $this->getHeuresComplFa() + $this->getHeuresComplFc() + $this->getHeuresComplFcMajorees();
             case TypeHeures::REFERENTIEL:
                 return $this->getHeuresComplReferentiel();
             case TypeHeures::MISSION:

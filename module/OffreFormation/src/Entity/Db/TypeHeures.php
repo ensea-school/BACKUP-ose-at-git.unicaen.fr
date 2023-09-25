@@ -1,6 +1,7 @@
 <?php
 
 namespace OffreFormation\Entity\Db;
+
 use Application\Entity\Db\type;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -12,12 +13,13 @@ class TypeHeures implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
 
-    const FI          = 'fi';
-    const FA          = 'fa';
-    const FC          = 'fc';
-    const FC_MAJOREES = 'fc_majorees';
-    const REFERENTIEL = 'referentiel';
-    const MISSION     = 'mission';
+    const FI           = 'fi';
+    const FA           = 'fa';
+    const FC           = 'fc';
+    const FC_MAJOREES  = 'fc_majorees';
+    const REFERENTIEL  = 'referentiel';
+    const MISSION      = 'mission';
+    const ENSEIGNEMENT = 'enseignement';
 
     /**
      * @var string

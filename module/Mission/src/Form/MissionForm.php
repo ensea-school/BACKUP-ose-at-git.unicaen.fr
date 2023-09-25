@@ -74,7 +74,7 @@ class MissionForm extends AbstractForm
             'libelleMission'  => 'Libelle mission',
             'etudiantsSuivis' => 'Noms des étudiants suivis',
             'heuresFormation' => 'Heures de formation prévues',
-            'heures'          => 'Heures (formation incluse)',
+            'heures'          => 'Heures',
         ]);
 
         $this->addSubmit();

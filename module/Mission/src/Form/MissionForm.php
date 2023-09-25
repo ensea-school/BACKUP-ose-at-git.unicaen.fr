@@ -22,7 +22,7 @@ class MissionForm extends AbstractForm
 
     use ContextServiceAwareTrait;
 
-    public function init ()
+    public function init()
     {
         $tmDql       = "SELECT tm FROM " . TypeMission::class . " tm WHERE tm.histoDestruction IS NULL AND tm.annee = :annee";
         $tmDqlParams = ['annee' => $this->getServiceContext()->getAnnee()];
@@ -74,6 +74,7 @@ class MissionForm extends AbstractForm
             'libelleMission'  => 'Libelle mission',
             'etudiantsSuivis' => 'Noms des étudiants suivis',
             'heuresFormation' => 'Heures de formation prévues',
+            'heures'          => 'Heures',
         ]);
 
         $this->addSubmit();
@@ -81,7 +82,7 @@ class MissionForm extends AbstractForm
 
 
 
-    public function editValide (): self
+    public function editValide(): self
     {
         $this->valide = true;
 
@@ -99,7 +100,7 @@ class MissionForm extends AbstractForm
 
 
 
-    public function isValide (): bool
+    public function isValide(): bool
     {
         return $this->valide;
     }

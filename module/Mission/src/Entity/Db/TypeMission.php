@@ -237,4 +237,11 @@ class TypeMission implements ParametreEntityInterface, PlafondPerimetreInterface
 
         return $centreCoutsIds;
     }
+
+
+
+    public function setCentreCoutsTypeMission(?ArrayCollection $centreCoutsTypeMission): void
+    {
+        $this->centreCoutsTypeMission = $centreCoutsTypeMission;
+    }
 }

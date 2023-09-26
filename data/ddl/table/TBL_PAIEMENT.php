@@ -191,6 +191,18 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
+        'PERIODE_ENS_ID'             => [
+            'name'        => 'PERIODE_ENS_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 24,
+            'commentaire' => 'Période d\'enseignement',
+        ],
         'PERIODE_PAIEMENT_ID'        => [
             'name'        => 'PERIODE_PAIEMENT_ID',
             'type'        => 'int',

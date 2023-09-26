@@ -1493,9 +1493,11 @@ return [
         'FORMULE_RES_SERVICE_REF_ID',
         'INTERVENANT_ID',
         'STRUCTURE_ID',
+        'TYPE_HEURES_ID',
         'TAUX_REMU_ID',
         'TAUX_CONGES_PAYES',
         'TAUX_HORAIRE',
+        'PERIODE_ENS_ID',
         'MISE_EN_PAIEMENT_ID',
         'PERIODE_PAIEMENT_ID',
         'CENTRE_COUT_ID',
@@ -1506,7 +1508,7 @@ return [
         'HEURES_DEMANDEES_AC',
         'HEURES_PAYEES_AA',
         'HEURES_PAYEES_AC',
-        'TYPE_HEURES_ID',
+
     ],
     'TBL_PIECE_JOINTE'               => [
         'ID',

@@ -286,7 +286,8 @@ return [
         'actif'      => true,
         'connecteur' => 'siham',
         'sync-code' => false,
-        'sync-source' => false,
+        //Le code de la source à forcer lors de la synchronisation
+        'sync-source' => 'Siham',
     ],
 
 

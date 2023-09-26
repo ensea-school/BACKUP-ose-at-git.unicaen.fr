@@ -13,9 +13,10 @@ class Consolidateur
 
         $laps = [];
         foreach ($sap->lignesAPayer as $l) {
-            $key = $l->tauxRemu . '-' . $l->tauxValeur;
+            $key = $l->tauxRemu . '-' . $l->tauxValeur . '-' . ($l->periode ?? 0);
             if (!isset($laps[$key])) {
                 $lap = new LigneAPayer();
+                $lap->periode = $l->periode;
                 $lap->tauxRemu = $l->tauxRemu;
                 $lap->tauxValeur = $l->tauxValeur;
                 $lap->heures = 0;
@@ -23,10 +24,10 @@ class Consolidateur
                 $lap->heuresAC = 0;
                 $laps[$key] = $lap;
             }
-            $heuresAA = round($l->heures * $l->pourcAA);
-            $laps[$key]->heures = $laps[$key]->heures + $l->heures;
-            $laps[$key]->heuresAA = $laps[$key]->heuresAA + $heuresAA;
-            $laps[$key]->heuresAC = $laps[$key]->heuresAC + $l->heures - $heuresAA;
+            $heuresAA = (int)round($l->heures * $l->pourcAA);
+            $laps[$key]->heures += $l->heures;
+            $laps[$key]->heuresAA += $heuresAA;
+            $laps[$key]->heuresAC += $l->heures - $heuresAA;
         }
 
         $sap->lignesAPayer = array_values($laps);

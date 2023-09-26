@@ -56,6 +56,7 @@ final class ExporteurTest extends OseTestCase
                     'heures'          => 814,
                     'heuresAA'        => 325,
                     'heuresAC'        => 489,
+                    'periode'         => 12,
                     'misesEnPaiement' => [],
                 ],
             ],
@@ -72,6 +73,7 @@ final class ExporteurTest extends OseTestCase
                 'FORMULE_RES_SERVICE_REF_ID' => null,
                 'INTERVENANT_ID'             => 20970,
                 'STRUCTURE_ID'               => 229,
+                'PERIODE_ENS_ID'             => 12,
                 'MISE_EN_PAIEMENT_ID'        => NULL,
                 'PERIODE_PAIEMENT_ID'        => NULL,
                 'CENTRE_COUT_ID'             => 360,
@@ -287,7 +289,7 @@ final class ExporteurTest extends OseTestCase
                     ],
                 ],
             ],
-            'misesEnPaiement' => [
+            'misesEnPaiement'       => [
                 76198 => [
                     'id'                 => 76198,
                     'heuresAA'           => 2,

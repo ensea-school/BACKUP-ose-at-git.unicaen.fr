@@ -7,7 +7,7 @@ use Paiement\Service\TauxRemuServiceAwareTrait;
 class LigneAPayer
 {
     public int $id;
- //   public string $key;
+    public ?int $periode = null;
     public int $tauxRemu;
     public float $tauxValeur;
     public float $pourcAA;
@@ -24,6 +24,7 @@ class LigneAPayer
     {
         $this->id = (int)$data['A_PAYER_ID'];
         $this->tauxRemu = (int)$data['TAUX_REMU_ID'];
+        $this->periode = $data['PERIODE_ENS_ID'] ? (int)$data['PERIODE_ENS_ID'] : null;
         $this->heures = (int)round((float)$data['LAP_HEURES'] * 100);
     }
 

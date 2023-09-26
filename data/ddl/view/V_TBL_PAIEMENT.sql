@@ -30,6 +30,7 @@ SELECT
     WHEN 'fc_majorees' THEN frvh.heures_compl_fc_majorees
     WHEN 'enseignement' THEN frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_compl_fc_majorees
   END                                         lap_heures,
+  p.id                                        periode_ens_id,
   p.code                                      periode_ens_code,
   COALESCE(vh.horaire_debut, add_months(a.date_debut, p.ecart_mois)) horaire_debut,
   COALESCE(vh.horaire_fin, add_months(a.date_debut, p.ecart_mois + 5)) horaire_fin,
@@ -103,6 +104,7 @@ SELECT
   1                                           taux_conges_payes,
   NULL                                        heures,
   frsr.heures_compl_referentiel               lap_heures,
+  NULL                                        periode_ens_id,
   NULL                                        periode_ens_code,
   a.date_debut                                horaire_debut,
   a.date_fin                                  horaire_fin,
@@ -167,6 +169,7 @@ SELECT
   ose_parametre.get_taux_conges_payes+1       taux_conges_payes,
   NULL                                        heures,
   vhm.heures                                  lap_heures,
+  NULL                                        periode_ens_id,
   NULL                                        periode_ens_code,
   COALESCE(vhm.horaire_debut,m.date_debut)    horaire_debut,
   COALESCE(vhm.horaire_fin,m.date_fin)        horaire_fin,

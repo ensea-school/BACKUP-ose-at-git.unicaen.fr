@@ -2,7 +2,6 @@
 
 namespace Mission\Entity\Db;
 
-
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Validation;
@@ -35,12 +34,10 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     protected ?string     $motif      = null;
 
 
-
     public function getResourceId ()
     {
         return 'Candidature';
     }
-
 
 
     /**
@@ -54,12 +51,10 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     }
 
 
-
     public function getId (): ?int
     {
         return $this->id;
     }
-
 
 
     /**
@@ -69,7 +64,6 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     {
         return $this->intervenant;
     }
-
 
 
     /**
@@ -83,7 +77,6 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     }
 
 
-
     /**
      * @return OffreEmploi
      */
@@ -91,7 +84,6 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     {
         return $this->offre;
     }
-
 
 
     /**
@@ -105,17 +97,15 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     }
 
 
-
     public function isValide (): bool
     {
-
-        if ($validation = $this->getValidation()) {
+        $validation = $this->getValidation();
+        if ($validation) {
             if ($validation->estNonHistorise()) return true;
         }
 
         return false;
     }
-
 
 
     /**
@@ -125,7 +115,6 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     {
         return $this->validation;
     }
-
 
 
     /**
@@ -139,7 +128,6 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     }
 
 
-
     /**
      * @return string|null
      */
@@ -147,7 +135,6 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     {
         return $this->motif;
     }
-
 
 
     /**

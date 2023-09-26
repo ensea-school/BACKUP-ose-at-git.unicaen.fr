@@ -6,7 +6,7 @@ return [
         'actif'       => AppConfig::get('export-rh', 'actif') ? AppConfig::get('export-rh', 'actif') : false,
         'connecteur'  => AppConfig::get('export-rh', 'connecteur') ? AppConfig::get('export-rh', 'connecteur') : '',
         'sync-code'   => AppConfig::get('export-rh', 'sync-code') ? AppConfig::get('export-rh', 'sync-code') : false,
-        'sync-source' => AppConfig::get('export-rh', 'sync-source') ? AppConfig::get('export-rh', 'sync-source') : '',
+        'sync-source' => AppConfig::get('export-rh', 'sync-source') ? AppConfig::get('export-rh', 'sync-source') : false,
     ],
 
 ];

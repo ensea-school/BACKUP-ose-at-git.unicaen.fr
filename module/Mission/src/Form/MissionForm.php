@@ -42,7 +42,7 @@ class MissionForm extends AbstractForm
 
         $this->setAttribute('id', uniqid('fm'));
 
-        $this->spec(Mission::class, ['intervenant', 'autoValidation']);
+        $this->spec(Mission::class, ['intervenant', 'autoValidation', 'prime', 'primeActive']);
         $this->spec([
             'description'     => ['type' => 'Textarea'],
             'etudiantsSuivis' => ['type' => 'Textarea'],

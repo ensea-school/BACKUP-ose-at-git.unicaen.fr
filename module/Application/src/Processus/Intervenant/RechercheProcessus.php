@@ -25,7 +25,7 @@ class RechercheProcessus
      *
      * @return array
      */
-    public function rechercher($critere, $limit = 50, string $key = ':CODE')
+    public function rechercher ($critere, $limit = 50, string $key = ':CODE')
     {
         try {
             return $this->rechercheGenerique($critere, $limit, $key, false);
@@ -36,122 +36,7 @@ class RechercheProcessus
 
 
 
-    /**
-     * @return bool
-     */
-    public function isShowHisto(): bool
-    {
-        return $this->showHisto;
-    }
-
-
-
-    /**
-     * @param bool $showHisto
-     *
-     * @return RechercheProcessus
-     */
-    public function setShowHisto(bool $showHisto): RechercheProcessus
-    {
-        $this->showHisto = $showHisto;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @param string  $critere
-     * @param integer $limit
-     *
-     * @return array
-     */
-    public function rechercherLocalement($critere, $limit = 50, string $key = ':CODE')
-    {
-        return $this->rechercheGenerique($critere, $limit, $key, true);
-    }
-
-
-
-    private function sqlLocale(): string
-    {
-        $sql = "
-        SELECT
-          i.id,
-          i.code,
-          i.code_rh,
-          i.statut_id,
-          ti.code type_intervenant_code,
-          ti.libelle type_intervenant_libelle,        
-          i.nom_usuel,
-          i.nom_patronymique,
-          i.prenom,
-          i.date_naissance,
-          s.libelle_court structure,
-          c.libelle_long civilite,
-          si.libelle statut,
-          i.critere_recherche critere,
-          i.annee_id,
-          i.histo_destruction
-        FROM
-          intervenant i
-          LEFT JOIN structure s ON s.id = i.structure_id
-          LEFT JOIN civilite c ON c.id = i.civilite_id
-          LEFT JOIN statut si ON si.id = i.statut_id
-          LEFT JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
-        ";
-        if (!$this->showHisto) {
-            $sql .= "WHERE i.histo_destruction IS NULL";
-        }
-
-        return $sql;
-    }
-
-
-
-    private function sqlSource(): string
-    {
-        return "
-        SELECT
-          NULL id,
-          i.code,
-          i.statut_id,
-          ti.code type_intervenant_code,
-          ti.libelle type_intervenant_libelle,
-          i.nom_usuel,
-          i.nom_patronymique,
-          i.prenom,
-          i.date_naissance,
-          s.libelle_court structure,
-          c.libelle_long civilite,
-          si.libelle statut,
-          i.critere_recherche critere,
-          i.annee_id,
-          NULL histo_destruction
-        FROM
-          src_intervenant i
-          LEFT JOIN structure s ON s.id = i.structure_id
-          LEFT JOIN civilite c ON c.id = i.civilite_id
-          LEFT JOIN statut si ON si.id = i.statut_id
-          LEFT JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
-        ";
-    }
-
-
-
-    protected function makeKey(array $data, string $key): string
-    {
-        $resKey = $key;
-        foreach ($data as $k => $v) {
-            $resKey = str_replace(':' . $k, $v, $resKey);
-        }
-
-        return $resKey;
-    }
-
-
-
-    private function rechercheGenerique($critere, $limit = 50, string $key = ':CODE', $onlyLocale = false)
+    private function rechercheGenerique ($critere, $limit = 50, string $key = ':CODE', $onlyLocale = false)
     {
         if (strlen($critere) < 2) return [];
 
@@ -232,6 +117,121 @@ class RechercheProcessus
         }
 
         return $intervenants;
+    }
+
+
+
+    private function sqlSource (): string
+    {
+        return "
+        SELECT
+          NULL id,
+          i.code,
+          i.statut_id,
+          ti.code type_intervenant_code,
+          ti.libelle type_intervenant_libelle,
+          i.nom_usuel,
+          i.nom_patronymique,
+          i.prenom,
+          i.date_naissance,
+          s.libelle_court structure,
+          c.libelle_long civilite,
+          si.libelle statut,
+          i.critere_recherche critere,
+          i.annee_id,
+          NULL histo_destruction
+        FROM
+          src_intervenant i
+          LEFT JOIN structure s ON s.id = i.structure_id
+          LEFT JOIN civilite c ON c.id = i.civilite_id
+          LEFT JOIN statut si ON si.id = i.statut_id
+          LEFT JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
+        ";
+    }
+
+
+
+    private function sqlLocale (): string
+    {
+        $sql = "
+        SELECT
+          i.id,
+          i.code,
+          i.code_rh,
+          i.statut_id,
+          ti.code type_intervenant_code,
+          ti.libelle type_intervenant_libelle,        
+          i.nom_usuel,
+          i.nom_patronymique,
+          i.prenom,
+          i.date_naissance,
+          s.libelle_court structure,
+          c.libelle_long civilite,
+          si.libelle statut,
+          i.critere_recherche critere,
+          i.annee_id,
+          i.histo_destruction
+        FROM
+          intervenant i
+          LEFT JOIN structure s ON s.id = i.structure_id
+          LEFT JOIN civilite c ON c.id = i.civilite_id
+          LEFT JOIN statut si ON si.id = i.statut_id
+          LEFT JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
+        ";
+        if (!$this->showHisto) {
+            $sql .= "WHERE i.histo_destruction IS NULL";
+        }
+
+        return $sql;
+    }
+
+
+
+    protected function makeKey (array $data, string $key): string
+    {
+        $resKey = $key;
+        foreach ($data as $k => $v) {
+            $resKey = str_replace(':' . $k, $v, $resKey);
+        }
+
+        return $resKey;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isShowHisto (): bool
+    {
+        return $this->showHisto;
+    }
+
+
+
+    /**
+     * @param bool $showHisto
+     *
+     * @return RechercheProcessus
+     */
+    public function setShowHisto (bool $showHisto): RechercheProcessus
+    {
+        $this->showHisto = $showHisto;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param string  $critere
+     * @param integer $limit
+     *
+     * @return array
+     */
+    public function rechercherLocalement ($critere, $limit = 50, string $key = ':CODE')
+    {
+        return $this->rechercheGenerique($critere, $limit, $key, true);
     }
 
 }

@@ -65,14 +65,14 @@
                                    @click.prevent="supprimer">
                                     Supprimer
                                 </a>&nbsp;
-                                <a v-if="prime.declaration && !prime.validation && this.canValider  && !prime.dateRefus"
+                                <a v-if="prime.declaration && !prime.validation && this.canGerer  && !prime.dateRefus"
                                    :href="validerUrl"
                                    class="btn btn-success"
                                    title="Valider"
                                    @click.prevent="valider">
                                     Valider
                                 </a>&nbsp;
-                                <a v-if="prime.declaration && prime.validation && this.canValider  && !prime.dateRefus"
+                                <a v-if="prime.declaration && prime.validation && this.canGerer  && !prime.dateRefus"
                                    :href="devaliderUrl"
                                    class="btn btn-danger d-grid gap-2"
                                    title="Dévalider"
@@ -83,15 +83,16 @@
                         </div>
                     </div>
                     <div class="col-md-6">
+                        <div v-if="!prime.validation">
+                            <input :checked="prime.dateRefus" :disabled="prime.validation" name="prime" type="checkbox"
+                                   @change="refuser"/>&nbsp;
+                            Ou en cochant cette case, <b>je déclare ne pas pouvoir bénéficier de la prime</b> de fin de mission en raison du démarrage d'un
+                            nouveau
+                            contrat au sein de la
+                            fonction publique à la suite de ces missions.
+                            <br/><br/>
 
-                        <input :checked="prime.dateRefus" :disabled="prime.validation" name="prime" type="checkbox"
-                               @change="refuser"/>&nbsp;
-                        Ou en cochant cette case, <b>je déclare ne pas pouvoir bénéficier de la prime</b> de fin de mission en raison du démarrage d'un
-                        nouveau
-                        contrat au sein de la
-                        fonction publique à la suite de ces missions.
-
-                        <br/><br/>
+                        </div>
                         <div>
                             <div>
                                 <label class=" form-label">Suivi de la déclaration : </label>
@@ -153,14 +154,14 @@
                     <div class="col-md-12 ">
                       <span class="float-end">
                           <a
-                              v-if="!prime.validation && !prime.dateRefus"
+                              v-if="!prime.validation && !prime.dateRefus  && this.canGerer"
                               :href="modifierPrimeUrl"
                               class="btn btn-primary"
                               @click.prevent="modifierPrime"
                           >Modifier</a>
                           &nbsp;
                           <a
-                              v-if="!prime.validation && !prime.dateRefus"
+                              v-if="!prime.validation && !prime.dateRefus && this.canGerer"
                               :href="supprimerPrimeUrl"
                               class="btn btn-danger"
                               @click.prevent="supprimerPrime"
@@ -183,7 +184,7 @@ export default {
         prime: {required: true},
         numero: {required: false},
         intervenant: {required: true},
-        canValider: {type: Boolean, required: false},
+        canGerer: {type: Boolean, required: false},
 
     },
     data()

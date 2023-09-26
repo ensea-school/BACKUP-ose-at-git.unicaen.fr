@@ -1002,7 +1002,7 @@ class VolumeHoraireListe
 
         foreach ($vhs as $vh) {
             if (!empty($reportFilters)) {
-                if ($this->isVolumeHoraireModifiable($vh)) {
+                if ($this->isVolumeHoraireModifiable($vh) || $vh->isAutoValidation()) {
                     if ($typeIntervention !== false) {
                         $vh->setTypeIntervention($typeIntervention);
                     }

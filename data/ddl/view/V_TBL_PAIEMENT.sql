@@ -30,10 +30,10 @@ SELECT
     WHEN 'fc_majorees' THEN frvh.heures_compl_fc_majorees
     WHEN 'enseignement' THEN frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_compl_fc_majorees
   END                                         lap_heures,
-  p.id                                        periode_ens_id,
-  p.code                                      periode_ens_code,
-  COALESCE(vh.horaire_debut, add_months(a.date_debut, p.ecart_mois)) horaire_debut,
-  COALESCE(vh.horaire_fin, add_months(a.date_debut, p.ecart_mois + 5)) horaire_fin,
+  prd.id                                      periode_ens_id,
+  prd.code                                    periode_ens_code,
+  COALESCE(vh.horaire_debut, add_months(a.date_debut, prd.ecart_mois)) horaire_debut,
+  COALESCE(vh.horaire_fin, add_months(a.date_debut, prd.ecart_mois + 5)) horaire_fin,
 
   mep.id                                      mise_en_paiement_id,
   mep.date_mise_en_paiement                   date_mise_en_paiement,
@@ -50,12 +50,12 @@ FROM
 
        JOIN type_volume_horaire             tvh ON tvh.code = 'REALISE'
        JOIN etat_volume_horaire             evh ON evh.code = 'valide'
-       JOIN type_heures                      th ON th.code IN ('fi', 'fa', 'fc', 'fc_majorees')
+       JOIN type_heures                      th ON (p.valeur = '1' AND th.code IN ('fi', 'fa', 'fc', 'fc_majorees')) OR (p.valeur = '0' AND th.code = 'enseignement')
        JOIN formule_resultat                 fr ON fr.id = frs.formule_resultat_id
                                                AND fr.type_volume_horaire_id = tvh.id
                                                AND fr.etat_volume_horaire_id = evh.id
 
-       JOIN periode                           p ON p.id = vh.periode_id
+       JOIN periode                         prd ON prd.id = vh.periode_id
        JOIN intervenant                       i ON i.id = fr.intervenant_id
        JOIN annee                             a ON a.id = i.annee_id
        JOIN statut                           si ON si.id = i.statut_id

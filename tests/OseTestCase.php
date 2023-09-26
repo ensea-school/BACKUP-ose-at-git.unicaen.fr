@@ -17,7 +17,14 @@ class OseTestCase extends TestCase
         $k1 = array_keys($a1);
         $k2 = array_keys($a2);
 
-        if ($strict && !empty(array_diff($k1, $k2))){
+        $diff = array_diff($k1, $k2);
+        $hasInt = false;
+        foreach( $diff as $d){
+            if (is_int($d)){
+                $hasInt = true;
+            }
+        }
+        if (($strict || $hasInt) && !empty($diff)){
             $kl = implode( ',', $k1);
             return $this->error('Les tableaux n\'ont pas les mêmes clés ('.$path.') : '.$kl.' en trop');
         }

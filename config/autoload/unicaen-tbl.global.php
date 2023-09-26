@@ -240,7 +240,7 @@ return [
             'paiement' => [
                 'order'              => 8,
                 //'process'            => 'DbDiff',
-                'process' => \Paiement\Tbl\Process\PaiementProcess::class,
+                'process'            => \Paiement\Tbl\Process\PaiementProcess::class,
                 'cols'               => [
                     'ANNEE_ID',
                     'SERVICE_ID',
@@ -255,6 +255,7 @@ return [
                     'PERIODE_PAIEMENT_ID',
                     'CENTRE_COUT_ID',
                     'DOMAINE_FONCTIONNEL_ID',
+                    'PERIODE_ENS_ID',
                     'HEURES_A_PAYER_AA',
                     'HEURES_A_PAYER_AC',
                     'HEURES_DEMANDEES_AA',
@@ -271,6 +272,7 @@ return [
                     'MISSION_ID',
                     'TYPE_HEURES_ID',
                     'INTERVENANT_ID',
+                    'PERIODE_ENS_ID',
                     'MISE_EN_PAIEMENT_ID',
                     'TAUX_REMU_ID',
                     'TAUX_HORAIRE',
@@ -280,6 +282,7 @@ return [
                     'FORMULE_RES_SERVICE_REF_ID' => 0,
                     'MISSION_ID'                 => 0,
                     'MISE_EN_PAIEMENT_ID'        => 0,
+                    'PERIODE_ENS_ID'             => 0,
                 ],
             ],
 

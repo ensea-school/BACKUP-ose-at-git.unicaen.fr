@@ -1,6 +1,6 @@
 CREATE OR REPLACE FORCE VIEW V_TBL_PAIEMENT AS
 SELECT
-  'e' || '-' || frs.id || '-' || COALESCE(thens.id,th.id) key,
+  'e' || '-' || frs.id || '-' || COALESCE(thens.id,th.id) || '-' || prd.id key,
   CASE WHEN si.mode_enseignement_realise = 'semestriel' THEN 1 ELSE 0 END calcul_semestriel,
   vh.id                                       a_payer_id,
   i.annee_id                                  annee_id,
@@ -21,7 +21,7 @@ SELECT
     WHEN 'fa' THEN frs.heures_compl_fa
     WHEN 'fc' THEN frs.heures_compl_fc
     WHEN 'fc_majorees' THEN frs.heures_compl_fc_majorees
-    WHEN 'enseignement' THEN frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_compl_fc_majorees
+    WHEN 'enseignement' THEN frs.heures_compl_fi + frs.heures_compl_fa + frs.heures_compl_fc + frs.heures_compl_fc_majorees
   END                                         heures,
   CASE th.code
     WHEN 'fi' THEN frvh.heures_compl_fi
@@ -78,6 +78,63 @@ WHERE
     WHEN 'fc_majorees' THEN frvh.heures_compl_fc_majorees
     WHEN 'enseignement' THEN frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_compl_fc_majorees
   END <> 0
+  /*@INTERVENANT_ID=fr.intervenant_id*/
+  /*@ANNEE_ID=i.annee_id*/
+  /*@SERVICE_ID=frs.service_id*/
+  /*@FORMULE_RES_SERVICE_ID=frs.id*/
+
+UNION ALL
+
+SELECT
+  'e' || '-' || frs.id || '-' || mep.type_heures_id || '-0' key,
+  CASE WHEN si.mode_enseignement_realise = 'semestriel' THEN 1 ELSE 0 END calcul_semestriel,
+  mep.id                                      a_payer_id,
+  i.annee_id                                  annee_id,
+  frs.service_id                              service_id,
+  NULL                                        service_referentiel_id,
+  NULL                                        mission_id,
+  frs.id                                      formule_res_service_id,
+  NULL                                        formule_res_service_ref_id,
+  i.id                                        intervenant_id,
+  COALESCE( ep.structure_id, i.structure_id ) structure_id,
+  mep.type_heures_id                          type_heures_id,
+  NULL def_domaine_fonctionnel_id,
+  NULL                                        def_centre_cout_id,
+  COALESCE(ep.taux_remu_id, si.taux_remu_id, ose_parametre.get_taux_remu) taux_remu_id,
+  1                                           taux_conges_payes,
+  0                                           heures,
+  0                                           lap_heures,
+  NULL                                        periode_ens_id,
+  NULL                                        periode_ens_code,
+  a.date_debut                                horaire_debut,
+  a.date_fin                                  horaire_fin,
+  mep.id                                      mise_en_paiement_id,
+  mep.date_mise_en_paiement                   date_mise_en_paiement,
+  mep.periode_paiement_id                     periode_paiement_id,
+  mep.centre_cout_id                          mep_centre_cout_id,
+  mep.heures                                  mep_heures,
+  mep.domaine_fonctionnel_id                  mep_domaine_fonctionnel_id
+FROM
+            mise_en_paiement                mep
+       JOIN type_heures                      th ON th.id = mep.type_heures_id
+       JOIN formule_resultat_service        frs ON frs.id = mep.formule_res_service_id
+       JOIN formule_resultat                 fr ON fr.id = frs.formule_resultat_id
+       JOIN intervenant                       i ON i.id = fr.intervenant_id
+       JOIN annee                             a ON a.id = i.annee_id
+       JOIN statut                           si ON si.id = i.statut_id
+       JOIN service                           s ON s.id = frs.service_id
+       JOIN parametre                         p ON p.nom = 'distinction_fi_fa_fc'
+  LEFT JOIN element_pedagogique              ep ON ep.id = s.element_pedagogique_id
+WHERE
+  mep.histo_destruction IS NULL
+  AND CASE
+    WHEN th.code = 'fi' THEN frs.heures_compl_fi
+    WHEN th.code = 'fa' THEN frs.heures_compl_fa
+    WHEN th.code = 'fc' THEN frs.heures_compl_fc
+    WHEN th.code = 'fc_majorees' THEN frs.heures_compl_fc_majorees
+    WHEN p.valeur = '1' AND th.code = 'enseignement' THEN 0
+    WHEN p.valeur = '0' AND th.code = 'enseignement' THEN frs.heures_compl_fi + frs.heures_compl_fa + frs.heures_compl_fc + frs.heures_compl_fc_majorees
+  END = 0
   /*@INTERVENANT_ID=fr.intervenant_id*/
   /*@ANNEE_ID=i.annee_id*/
   /*@SERVICE_ID=frs.service_id*/

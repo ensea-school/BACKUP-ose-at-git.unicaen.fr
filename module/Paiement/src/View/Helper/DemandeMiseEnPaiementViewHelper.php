@@ -396,7 +396,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
             'default-domaine-fonctionnel' => $defaultDomaineFonctionnel ? $defaultDomaineFonctionnel->getId() : null,
             'mises-en-paiement'           => [],
             'demandes-mep'                => [],
-            'heures-total'                => $serviceAPayer->isPayable() ? $serviceAPayer->getHeuresCompl($typeHeures) : 0,
+            'heures-total'                => $serviceAPayer->isPayable() ? round($serviceAPayer->getHeuresCompl($typeHeures),2) : 0.0,
             'heures-mep'                  => 0.0,
             'heures-dmep'                 => 0.0,
             'heures-non-dmep'             => 0.0,
@@ -444,18 +444,18 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
                 if (!isset($mepBuffer[$pp->getId()])) {
                     $mepBuffer[$pp->getId()] = [
                         'periode' => $pp,
-                        'heures'  => 0,
+                        'heures'  => 0.0,
                     ];
                 }
                 $mepBuffer[$pp->getId()]['heures'] += $miseEnPaiement->getHeures(); // mise en buffer pour tri...
-                $params['heures-mep'] += $miseEnPaiement->getHeures();
+                $params['heures-mep'] = round($params['heures-mep'] + $miseEnPaiement->getHeures(),2);
             } else {
                 $domaineFonctionnel = $miseEnPaiement->getDomaineFonctionnel();
 
                 $dmepParams = [
                     'centre-cout-id'         => $miseEnPaiement->getCentreCout()->getId(),
                     'domaine-fonctionnel-id' => $domaineFonctionnel ? $domaineFonctionnel->getId() : null,
-                    'heures'                 => $miseEnPaiement->getHeures(),
+                    'heures'                 => round($miseEnPaiement->getHeures(),2),
                     'read-only'              => $this->getReadOnly() || !$this->getView()->isAllowed($miseEnPaiement, Privileges::MISE_EN_PAIEMENT_DEMANDE),
                 ];
                 if ($validation = $miseEnPaiement->getValidation()) {
@@ -465,10 +465,10 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
                     ];
                 }
                 $params['demandes-mep'][$miseEnPaiement->getId()] = $dmepParams;
-                $params['heures-dmep'] += $miseEnPaiement->getHeures();
+                $params['heures-dmep'] = round($params['heures-dmep'] + $miseEnPaiement->getHeures(),2);
             }
         }
-        $params['heures-non-dmep'] = (float)$params['heures-total'] - (float)$params['heures-mep'] - (float)$params['heures-dmep'];
+        $params['heures-non-dmep'] = round((float)$params['heures-total'] - (float)$params['heures-mep'] - (float)$params['heures-dmep'], 2);
         if (abs($params['heures-non-dmep']) < 0.009) $params['heures-non-dmep'] = 0.0;
 
         // tri du buffer et mise en paramètres

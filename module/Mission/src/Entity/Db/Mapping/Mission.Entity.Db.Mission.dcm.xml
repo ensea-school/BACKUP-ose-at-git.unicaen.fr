@@ -84,5 +84,7 @@
                 <join-column name="PRIME_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
+        <field name="primeActive" type="boolean" column="PRIME_ACTIVE" nullable="false"/>
+
     </entity>
 </doctrine-mapping>

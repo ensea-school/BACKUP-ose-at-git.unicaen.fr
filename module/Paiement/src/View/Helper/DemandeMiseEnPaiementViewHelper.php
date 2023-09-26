@@ -239,11 +239,9 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
         $out = '<div class="service-a-payer" id="' . $this->getServiceAPayerId($serviceAPayer) . '">';
         $out .= $this->renderHead($serviceAPayer);
         $typesHeures = $this->getServiceTypeHeures()->getList($this->getServiceTypeHeures()->finderByServiceaPayer($serviceAPayer));
-        $colSpan = 12 / count($typesHeures);
-        if ($colSpan > 6) $colSpan = 6;
         $out .= '<div class="row">';
         foreach ($typesHeures as $typeHeures) {
-            $out .= $this->renderMiseEnPaiementListe($serviceAPayer, $typeHeures, $colSpan);
+            $out .= $this->renderMiseEnPaiementListe($serviceAPayer, $typeHeures);
         }
         $out .= '</div>';
         $out .= '</div>';
@@ -279,7 +277,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
 
 
 
-    public function renderMiseEnPaiementListe(ServiceAPayerInterface $serviceAPayer, TypeHeures $typeHeures, $colSpan = 12)
+    public function renderMiseEnPaiementListe(ServiceAPayerInterface $serviceAPayer, TypeHeures $typeHeures)
     {
         $params = $this->getServiceAPayerParams($serviceAPayer, $typeHeures);
 
@@ -290,7 +288,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
         $saisieTerminee = ($params['heures-dmep'] + $params['heures-non-dmep']) == 0; // s'il reste des heures à positionner ou déjà positionnées
 
         $attrs = [
-            'class' => ['type-heures', 'col-md-' . $colSpan],
+            'class' => ['type-heures', 'col-md-6'],
             'id'    => (string)$typeHeures->getId(),
             'style' => ['margin-bottom:.5em'],
         ];

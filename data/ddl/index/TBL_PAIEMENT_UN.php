@@ -14,6 +14,8 @@ return [
         'MISSION_ID',
         'TAUX_REMU_ID',
         'TAUX_HORAIRE',
+        'PERIODE_ENS_ID',
+        'TYPE_HEURES_ID',
     ],
 ];
 

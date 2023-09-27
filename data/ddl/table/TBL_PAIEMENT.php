@@ -30,7 +30,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 15,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'DOMAINE_FONCTIONNEL_ID'     => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 16,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'FORMULE_RES_SERVICE_ID'     => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 17,
+            'position'    => 19,
             'commentaire' => 'HETD à payer en
  AA',
         ],
@@ -91,7 +91,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 18,
+            'position'    => 20,
             'commentaire' => 'HETD à payer en AC',
         ],
         'HEURES_DEMANDEES_AA'        => [
@@ -103,7 +103,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 19,
+            'position'    => 21,
             'commentaire' => 'HETD demandées en AA',
         ],
         'HEURES_DEMANDEES_AC'        => [
@@ -115,7 +115,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 20,
+            'position'    => 22,
             'commentaire' => 'HETD demandées en AC
 ',
         ],
@@ -128,7 +128,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 21,
+            'position'    => 23,
             'commentaire' => 'HETD payées en AA',
         ],
         'HEURES_PAYEES_AC'           => [
@@ -140,7 +140,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 22,
+            'position'    => 24,
             'commentaire' => 'HETD payées en AC',
         ],
         'ID'                         => [
@@ -176,7 +176,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 13,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'MISSION_ID'                 => [
@@ -200,7 +200,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 24,
+            'position'    => 14,
             'commentaire' => 'Période d\'enseignement',
         ],
         'PERIODE_PAIEMENT_ID'        => [
@@ -212,7 +212,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 14,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'SERVICE_ID'                 => [
@@ -260,7 +260,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 11,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'TAUX_HORAIRE'               => [
@@ -272,7 +272,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 12,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'TAUX_REMU_ID'               => [
@@ -284,7 +284,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'TYPE_HEURES_ID'             => [
@@ -296,7 +296,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 23,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
     ],

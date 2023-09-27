@@ -1508,7 +1508,6 @@ return [
         'HEURES_DEMANDEES_AC',
         'HEURES_PAYEES_AA',
         'HEURES_PAYEES_AC',
-
     ],
     'TBL_PIECE_JOINTE'               => [
         'ID',

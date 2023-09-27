@@ -75,7 +75,14 @@ class VolumeHoraireController extends AbstractController
 
     public function saisieCalendaireAction()
     {
-        return $this->saisieMixte($this->getFormVolumeHoraireSaisieCalendaire());
+        /**
+         * @var Service $service
+         */
+        $service = $this->getEvent()->getParam('service');
+        $form    = $this->getFormVolumeHoraireSaisieCalendaire();
+        $form->setElementPedagogique($service->getElementPedagogique());
+
+        return $this->saisieMixte($form);
     }
 
 
@@ -114,7 +121,6 @@ class VolumeHoraireController extends AbstractController
         /**
          * @var VolumeHoraireSaisieForm $form
          */
-
         $form->setViewMNP($canViewMNP);
         $form->setEditMNP($canEditMNP);
         $form->setViewTag($canViewTag);

@@ -13,6 +13,7 @@ use Enseignement\Hydrator\ListeFilterHydrator;
 use Laminas\Form\Element\DateTimeLocal;
 use Laminas\Form\Element\Hidden;
 use Laminas\Hydrator\HydratorInterface;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use Paiement\Entity\Db\MotifNonPaiement;
@@ -27,6 +28,11 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
     use TagServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;
     use PeriodeServiceAwareTrait;
+
+    /**
+     * @var ElementPedagogique
+     */
+    protected $elementPedagogique = null;
 
     /**
      * @var boolean
@@ -83,7 +89,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
             'type'       => 'Select',
             'options'    => [
                 'label'         => 'Période',
-                'value_options' => Util::collectionAsOptions($this->getPeriodes()),
+                'value_options' => $this->getValuesOptionsPeriodes(),
             ],
             'attributes' => [
                 'value' => '',
@@ -196,14 +202,14 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
 
 
     /**
-     * @return Periode[]
+     * @return array
      */
-    protected function getPeriodes ()
+    protected function getValuesOptionsPeriodes (): array
     {
-        $qb = $this->getServicePeriode()->finderByHistorique();
-        $this->getServicePeriode()->finderByEnseignement($qb);
+        $periodes = $this->getServicePeriode()->findPeriodeByElementPedagogique($this->elementPedagogique);
 
-        return $this->getServicePeriode()->getList($qb);
+        return $periodes;
+
     }
 
 
@@ -211,12 +217,11 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
     /**
      * @return TypeIntervention[]
      */
-    protected function getTypesIntervention ()
+    protected function getTypesIntervention (): array
     {
-        $qb = $this->getServiceTypeIntervention()->finderByContext();
-        $this->getServiceTypeIntervention()->finderByHistorique($qb);
+        $typeInterventions = $this->getServiceTypeIntervention()->findTypeInterventionByElementPedagogique($this->elementPedagogique);
 
-        return $this->getServiceTypeIntervention()->getList($qb);
+        return $typeInterventions;
     }
 
 
@@ -327,7 +332,17 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
         return $this;
     }
 
+    /**
+     * @param ElementPedagogique $elementPedagogique
+     *
+     * @return VolumeHoraireSaisieCalendaireForm
+     */
+    public function setElementPedagogique (ElementPedagogique $elementPedagogique): self
+    {
+        $this->elementPedagogique = $elementPedagogique;
 
+        return $this;
+    }
 
     /**
      * Should return an array specification compatible with

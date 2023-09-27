@@ -8,6 +8,7 @@ use Application\Entity\Db\FormuleResultatServiceReferentiel;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\TypeHeures;
@@ -30,6 +31,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
     use DomaineFonctionnelServiceAwareTrait;
     use TypeHeuresServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use ParametresServiceAwareTrait;
 
     private $servicesAPayer = [];
 
@@ -385,6 +387,10 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
         $defaultCentreCout = $serviceAPayer->getDefaultCentreCout($typeHeures);
         $defaultDomaineFonctionnel = $serviceAPayer->getDefaultDomaineFonctionnel($this->getServiceDomaineFonctionnel());
 
+        $heuresTotal = $serviceAPayer->getHeuresCompl($typeHeures);
+        if ($typeHeures->getCode() === TypeHeures::ENSEIGNEMENT && $this->getServiceParametres()->get('distinction_fi_fa_fc') == 1){
+            $heuresTotal = 0.0;
+        }
 
         $params = [
             'centres-cout'                => [],
@@ -394,7 +400,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
             'default-domaine-fonctionnel' => $defaultDomaineFonctionnel ? $defaultDomaineFonctionnel->getId() : null,
             'mises-en-paiement'           => [],
             'demandes-mep'                => [],
-            'heures-total'                => $serviceAPayer->isPayable() ? round($serviceAPayer->getHeuresCompl($typeHeures),2) : 0.0,
+            'heures-total'                => $serviceAPayer->isPayable() ? round($heuresTotal,2) : 0.0,
             'heures-mep'                  => 0.0,
             'heures-dmep'                 => 0.0,
             'heures-non-dmep'             => 0.0,

@@ -118,8 +118,8 @@ FROM (SELECT dep3.*,
                        df.libelle                                                                 domaine_fonctionnel_libelle,
                        CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE mep.heures END      hetd,
                        CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE 0 END               fc_majorees,
-                       mis.heures_aa                                                              exercice_aa,
-                       mis.heures_ac                                                              exercice_ac,
+                       mis.HEURES_PAYEES_AA                                                       exercice_aa,
+                       mis.HEURES_PAYEES_AC                                                       exercice_ac,
                        mis.taux_horaire taux_horaire
                 FROM tbl_paiement mis
                          JOIN mise_en_paiement mep

@@ -286,6 +286,7 @@ class VolumeHoraireListe
             }
         }
         //Uniquement en mode semestriel car en mode calendaire on ne doit pas être sur des mêmes horaires de début et de fin
+        // @todo test isModeEnseignementSemestriel à retirer : il pose problème : aucun lien avec le motif de non paiement ou les horaires
         if (false !== $this->motifNonPaiement && $intervenant->getStatut()->isModeEnseignementSemestriel($volumeHoraire->getTypeVolumeHoraire())) {
             $motifNonPaiement = $volumeHoraire->getMotifNonPaiement();
             if (true === $this->motifNonPaiement) {
@@ -295,6 +296,7 @@ class VolumeHoraireListe
             }
         }
         //Uniquement en mode semestriel car en mode calendaire on ne doit pas être sur des mêmes horaires de début et de fin
+        // @todo test isModeEnseignementSemestriel à retirer : il pose problème : aucun lien avec le motif de non paiement ou les horaires
         if (false !== $this->tag && $intervenant->getStatut()->isModeEnseignementSemestriel($volumeHoraire->getTypeVolumeHoraire())) {
             $tag = $volumeHoraire->getTag();
             if (true === $this->tag) {
@@ -1002,6 +1004,7 @@ class VolumeHoraireListe
 
         foreach ($vhs as $vh) {
             if (!empty($reportFilters)) {
+                // @todo Attention : || $vh->isAutoValidation() rajouté pour résoudre un bug : une solution définitive devra être apportée pour retirer le test
                 if ($this->isVolumeHoraireModifiable($vh) || $vh->isAutoValidation()) {
                     if ($typeIntervention !== false) {
                         $vh->setTypeIntervention($typeIntervention);

@@ -129,38 +129,6 @@ class StructureService extends AbstractEntityService
 
 
     /**
-     * Recherche par nom
-     *
-     * @param string            $term
-     * @param QueryBuilder|null $qb
-     *
-     * @return QueryBuilder
-     */
-    public function finderByNom($term, QueryBuilder $qb = null, $alias = null)
-    {
-        $term = str_replace(' ', '', $term);
-
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $libelleLong  = new Func('CONVERT', ["$alias.libelleLong", '?3']);
-        $libelleCourt = new Func('CONVERT', ["$alias.libelleCourt", '?3']);
-
-        $qb
-            ->where("$alias.sourceCode = ?1")
-            ->orWhere($qb->expr()->like($qb->expr()->upper($libelleLong), $qb->expr()->upper('CONVERT(?2, ?3)')))
-            ->orWhere($qb->expr()->like($qb->expr()->upper($libelleCourt), $qb->expr()->upper('CONVERT(?2, ?3)')))
-            ->orderBy("$alias.libelleCourt");
-
-        $qb->setParameters([1 => $term, 2 => "%$term%", 3 => 'US7ASCII']);
-
-        //print_r($qb->getQuery()->getSQL()); var_dump($qb->getQuery()->getParameters());die;
-
-        return $qb;
-    }
-
-
-
-    /**
      * Ne recherche que les structures où il y a des enseignements
      *
      * @todo à corriger pour palier au cas où une structure destinée à assurer des enseignements n'ai encore aucun

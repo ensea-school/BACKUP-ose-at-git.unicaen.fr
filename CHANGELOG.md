@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 21.1](#ose-213-15092023)
+[OSE 21.3](#ose-213-15092023)
 
 # OSE 22 (à venir)
 
@@ -18,6 +18,7 @@
 ## Améliorations
 
 * Ajout des dates de dévalidation des données personnelles dans les notes/historique par intervenant
+* En mode de saisie de service calendaire, la période ainsi que les types d'intervention sont maintenant filtrés par rapport à l'élement pédagogique
 
 ## Corrections de bugs
 

@@ -19,6 +19,7 @@
 ## Corrections de bugs
 
 * Prise en compte de la bonne fin d'année universitaire pour la clôture du dossier d'un vacataire (PEC) dans l'export Ose vers SIHAM (#52484)
+* Suppression des notes d'un intervenant avant sa suppression définitive de OSE (#52719)
 
 
 

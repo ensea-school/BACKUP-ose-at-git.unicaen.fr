@@ -243,10 +243,15 @@
                         <?= $this->formControlGroup($form->get('regle_repartition_annee_civile')); ?>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row regle_paiement_annee_civile_details">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('pourc_s1_pour_annee_civile')); ?>
                     </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('pourc_aa_referentiel')); ?>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-6">
                         <?= $this->formControlGroup($form->get('distinction_fi_fa_fc')); ?>
                     </div>
@@ -338,9 +343,32 @@
                 </div>
             </div>
         </div>
-
-
     </div>
+    <script>
+
+        $(function () {
+
+            var reglePaiementAnneeCivile = $('select[name="regle_paiement_annee_civile"]');
+
+            reglePaiementAnneeCivile.on("change", function (e, item) {
+                changementReglePaiementAnneeCivile(reglePaiementAnneeCivile);
+            });
+
+            changementReglePaiementAnneeCivile(reglePaiementAnneeCivile);
+        });
+
+        function changementReglePaiementAnneeCivile(reglePaiementAnneeCivile)
+        {
+            var val = reglePaiementAnneeCivile.val();
+
+            if ('semestre-date' == val) {
+                $('.regle_paiement_annee_civile_details').show();
+            } else {
+                $('.regle_paiement_annee_civile_details').hide();
+            }
+        }
+
+    </script>
 <?php
 if ($canEdit) echo $this->formsubmit($form->get('submit'));
 echo $this->form()->closeTag();

@@ -74,7 +74,7 @@ return [
         "DESCRIPTION" => "Constatation du service fait",
     ],
 
-    /* Paiepment */
+    /* Paiement */
     "centres_couts_paye"                         => [
         "VALEUR"      => "enseignement",
         "DESCRIPTION" => "Centres de coûts utilisés pour la paye",
@@ -86,6 +86,10 @@ return [
     "regle_repartition_annee_civile"             => [
         "VALEUR"      => "prorata",
         "DESCRIPTION" => "Ventilation des heures AA/AC",
+    ],
+    "pourc_aa_referentiel" => [
+        "VALEUR"      => '0.4',
+        "DESCRIPTION" => "Pourcentage AA pour les heures de référentiel",
     ],
     "pourc_s1_pour_annee_civile"                 => [
         "VALEUR"      => "0.67",

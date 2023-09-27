@@ -69,6 +69,7 @@ final class ProcessTest extends OseTestCase
             ['regle_repartition_annee_civile', Rapprocheur::REGLE_PRORATA],
             ['regle_paiement_annee_civile', Repartiteur::PAIEMENT_ANNEE_CIV_4_10_6_10],
             ['pourc_s1_pour_annee_civile', '0.67'],
+            ['pourc_aa_referentiel', '0.4'],
         ]);
 
         $data = [
@@ -225,6 +226,7 @@ final class ProcessTest extends OseTestCase
             ['regle_repartition_annee_civile', Rapprocheur::REGLE_PRORATA],
             ['regle_paiement_annee_civile', Repartiteur::PAIEMENT_ANNEE_CIV_4_10_6_10],
             ['pourc_s1_pour_annee_civile', '0.67'],
+            ['pourc_aa_referentiel', '0.4'],
         ]);
 
         $data = [
@@ -412,6 +414,7 @@ final class ProcessTest extends OseTestCase
             ['regle_repartition_annee_civile', Rapprocheur::REGLE_PRORATA],
             ['regle_paiement_annee_civile', Repartiteur::PAIEMENT_ANNEE_CIV_4_10_6_10],
             ['pourc_s1_pour_annee_civile', '0.67'],
+            ['pourc_aa_referentiel', '0.4'],
         ]);
 
         $data = [
@@ -485,6 +488,7 @@ final class ProcessTest extends OseTestCase
             ['regle_repartition_annee_civile', Rapprocheur::REGLE_PRORATA],
             ['regle_paiement_annee_civile', Repartiteur::PAIEMENT_ANNEE_CIV_4_10_6_10],
             ['pourc_s1_pour_annee_civile', '0.67'],
+            ['pourc_aa_referentiel', '0.4'],
         ]);
 
         $data = [
@@ -558,6 +562,7 @@ final class ProcessTest extends OseTestCase
             ['regle_repartition_annee_civile', Rapprocheur::REGLE_PRORATA],
             ['regle_paiement_annee_civile', Repartiteur::PAIEMENT_ANNEE_CIV_4_10_6_10],
             ['pourc_s1_pour_annee_civile', '0.67'],
+            ['pourc_aa_referentiel', '0.4'],
         ]);
 
         $data = [
@@ -631,6 +636,7 @@ final class ProcessTest extends OseTestCase
             ['regle_repartition_annee_civile', Rapprocheur::REGLE_PRORATA],
             ['regle_paiement_annee_civile', Repartiteur::PAIEMENT_ANNEE_CIV_4_10_6_10],
             ['pourc_s1_pour_annee_civile', '0.67'],
+            ['pourc_aa_referentiel', '0.4'],
         ]);
 
         $data = [
@@ -728,6 +734,7 @@ final class ProcessTest extends OseTestCase
             ['regle_repartition_annee_civile', Rapprocheur::REGLE_PRORATA],
             ['regle_paiement_annee_civile', Repartiteur::PAIEMENT_ANNEE_CIV_4_10_6_10],
             ['pourc_s1_pour_annee_civile', '0.67'],
+            ['pourc_aa_referentiel', '0.4'],
         ]);
 
         $data = [
@@ -816,6 +823,7 @@ final class ProcessTest extends OseTestCase
             ['regle_repartition_annee_civile', Rapprocheur::REGLE_PRORATA],
             ['regle_paiement_annee_civile', Repartiteur::PAIEMENT_ANNEE_CIV_4_10_6_10],
             ['pourc_s1_pour_annee_civile', '0.67'],
+            ['pourc_aa_referentiel', '0.4'],
         ]);
 
         $data = [
@@ -1063,6 +1071,7 @@ final class ProcessTest extends OseTestCase
             ['regle_repartition_annee_civile', Rapprocheur::REGLE_PRORATA],
             ['regle_paiement_annee_civile', Repartiteur::PAIEMENT_ANNEE_CIV_SEMESTRE_DATE],
             ['pourc_s1_pour_annee_civile', '0.67'],
+            ['pourc_aa_referentiel', '0.4'],
         ]);
 
         $data = [

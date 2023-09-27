@@ -240,6 +240,21 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'       => 'pourc_aa_referentiel',
+            'options'    => [
+                'label'  => 'Pour les heures de référentiel, % d\'heures sur l\'année antérieure',
+                'suffix' => '%',
+            ],
+            'attributes' => [
+                'class' => 'input-sm',
+                'step'  => 'any',
+                'min'   => 0,
+                'max'   => 1,
+            ],
+            'type'       => 'Text',
+        ]);
+
+        $this->add([
             'type'       => 'Select',
             'name'       => 'distinction_fi_fa_fc',
             'options'    => [

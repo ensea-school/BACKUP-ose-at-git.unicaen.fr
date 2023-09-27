@@ -16,6 +16,7 @@ class Repartiteur
 
     protected float $pourcS1PourAnneeCivile = 2 / 3;
 
+    protected float $pourAAReferentiel = 0.4;
 
 
     public function getReglePaiementAnneeCiv(): string
@@ -49,6 +50,22 @@ class Repartiteur
     public function setPourcS1PourAnneeCivile(float $pourcS1PourAnneeCivile): Repartiteur
     {
         $this->pourcS1PourAnneeCivile = $pourcS1PourAnneeCivile;
+
+        return $this;
+    }
+
+
+
+    public function getPourAAReferentiel(): float
+    {
+        return $this->pourAAReferentiel;
+    }
+
+
+
+    public function setPourAAReferentiel(float $pourAAReferentiel): Repartiteur
+    {
+        $this->pourAAReferentiel = $pourAAReferentiel;
 
         return $this;
     }
@@ -100,7 +117,7 @@ class Repartiteur
                 case Periode::SEMESTRE_2:
                     return 0; // le S2 n'est jamais effectué l'année antérieure
                 default: // si on ne trouve pas la période => référentiel
-                    return 4 / 10;
+                    return $this->pourAAReferentiel;
             }
         }
 

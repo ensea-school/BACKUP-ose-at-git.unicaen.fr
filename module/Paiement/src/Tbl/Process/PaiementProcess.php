@@ -53,14 +53,19 @@ class PaiementProcess implements ProcessInterface
 
     protected function init()
     {
-        $regleRLM = $this->getServiceParametres()->get('regle_repartition_annee_civile');
+        $parametres = $this->getServiceParametres();
+
+        $regleRLM = $parametres->get('regle_repartition_annee_civile');
         $this->rapprocheur->setRegle($regleRLM);
 
-        $reglePaiementAnneeCiv = $this->getServiceParametres()->get('regle_paiement_annee_civile');
+        $reglePaiementAnneeCiv = $parametres->get('regle_paiement_annee_civile');
         $this->repartiteur->setReglePaiementAnneeCiv($reglePaiementAnneeCiv);
 
-        $pourcS1PourAnneeCivile = (float)$this->getServiceParametres()->get('pourc_s1_pour_annee_civile');
+        $pourcS1PourAnneeCivile = (float)$parametres->get('pourc_s1_pour_annee_civile');
         $this->repartiteur->setPourcS1PourAnneeCivile($pourcS1PourAnneeCivile);
+
+        $pourcAAReferentiel = (float)$parametres->get('pourc_aa_referentiel');
+        $this->repartiteur->setPourAAReferentiel($pourcAAReferentiel);
 
         $this->services = [];
         $this->tblData = [];

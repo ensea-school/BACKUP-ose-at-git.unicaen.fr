@@ -5,93 +5,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
   CPA_S1_ID NUMERIC;
 
 
-  FUNCTION CALC_POURC_AA( periode_id NUMERIC, horaire_debut DATE, horaire_fin DATE, annee_id NUMERIC ) RETURN FLOAT IS
-    regle_paiement_annee_civ VARCHAR2(50);
-    nbjaa NUMERIC;
-    nbjac NUMERIC;
-  BEGIN
-    regle_paiement_annee_civ := ose_parametre.get_regle_paiement_annee_civ;
-
-    IF regle_paiement_annee_civ = '4-6sur10' THEN
-      RETURN 4/10;
-    END IF;
-
-    -- Sinon on calcule en fonction du nombre du semestre
-    IF horaire_debut IS NULL AND horaire_fin IS NULL AND periode_id IS NOT NULL THEN
-      IF CPA_S1_ID IS NULL THEN
-        SELECT id INTO CPA_S1_ID FROM periode WHERE code = 'S1';
-      END IF;
-
-      IF periode_id = CPA_S1_ID THEN
-        RETURN ose_parametre.get_pourc_s1_annee_civ;
-      ELSE
-        RETURN 0;
-      END IF;
-    END IF;
-
-    -- S'il y a des dates, alors on s'appuie dessus
-    IF horaire_debut IS NOT NULL AND horaire_fin IS NULL THEN
-      IF to_number(to_char(horaire_debut,'YYYY')) = annee_id THEN
-        RETURN 1;
-      ELSE
-        RETURN 0;
-      END IF;
-    END IF;
-
-    IF horaire_fin IS NOT NULL AND horaire_debut IS NULL THEN
-      IF to_number(to_char(horaire_fin,'YYYY')) = annee_id THEN
-        RETURN 1;
-      ELSE
-        RETURN 0;
-      END IF;
-    END IF;
-
-    IF horaire_fin IS NOT NULL AND horaire_debut IS NOT NULL THEN
-      IF to_number(to_char(horaire_debut,'YYYY')) = to_number(to_char(horaire_fin,'YYYY')) THEN -- si c'est la même année
-        IF to_number(to_char(horaire_debut,'YYYY')) = annee_id THEN
-          RETURN 1;
-        ELSE
-          RETURN 0;
-        END IF;
-      ELSE
-        nbjaa := to_date('01/01/' || (annee_id+1), 'dd/mm/YYYY') - horaire_debut;
-        IF nbjaa < 1 THEN
-          RETURN 0;
-        END IF;
-
-        nbjac := horaire_fin - to_date('31/12/' || annee_id, 'dd/mm/YYYY');
-        IF nbjac < 1 THEN
-          RETURN 1;
-        END IF;
-
-        RETURN nbjaa / (nbjaa + nbjac);
-      END IF;
-    END IF;
-
-    IF periode_id IS NULL THEN
-      -- on se trouve dans du référentiel ou dans un enseignement annuel, on utilise le ratio configuré
-      RETURN ose_parametre.get_pourc_s1_annee_civ;
-    ELSE
-      -- Sinon on retourne comme avant, CAD 4/10
-      RETURN 4/10;
-    END IF;
-  END;
-
-
-
-  FUNCTION CALC_HEURES_AA(heures FLOAT, pourc_exercice_aa FLOAT, total_heures FLOAT, cumul_heures FLOAT) RETURN FLOAT IS
-  BEGIN
-    IF cumul_heures <= total_heures * pourc_exercice_aa THEN
-      RETURN heures;
-    END IF;
-
-    IF total_heures * pourc_exercice_aa - cumul_heures + heures > 0 THEN
-      RETURN total_heures * pourc_exercice_aa - cumul_heures + heures;
-    END IF;
-
-    RETURN 0;
-  END;
-
 
 
   FUNCTION DATE_TO_PERIODE_CODE( date DATE, annee_id NUMERIC ) RETURN VARCHAR2 IS
@@ -194,12 +107,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
     RETURN RTRIM(utl_raw.cast_to_varchar2((nlssort(str, 'nls_sort=binary_ai'))),CHR(0));
   END;
 
-  FUNCTION STR_FIND( haystack VARCHAR2, needle VARCHAR2 ) RETURN NUMERIC IS
-  BEGIN
-    IF STR_REDUCE( haystack ) LIKE STR_REDUCE( '%' || needle || '%' ) THEN RETURN 1; END IF;
-    RETURN 0;
-  END;
-
   FUNCTION GET_VIEW_QUERY( view_name VARCHAR2 ) RETURN CLOB IS
     vlong long;
   BEGIN
@@ -208,16 +115,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
     WHERE  view_name = GET_VIEW_QUERY.view_name;
 
     RETURN to_clob(vlong);
-  END;
-
-  FUNCTION LIKED( haystack VARCHAR2, needle VARCHAR2 ) RETURN NUMERIC IS
-  BEGIN
-    RETURN CASE WHEN STR_REDUCE(haystack) LIKE STR_REDUCE(needle) THEN 1 ELSE 0 END;
-  END;
-
-  PROCEDURE DO_NOTHING IS
-  BEGIN
-    RETURN;
   END;
 
   PROCEDURE CALCUL_TAUX( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, r_fi OUT FLOAT, r_fc OUT FLOAT, r_fa OUT FLOAT, arrondi NUMERIC DEFAULT 4 ) IS

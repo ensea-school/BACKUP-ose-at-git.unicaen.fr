@@ -68,8 +68,8 @@ FROM (SELECT i.annee_id                                                         
                                    mep.heures,
                                    cc.unite_budgetaire,
                                    mep.date_mise_en_paiement,
-                                   mis.heures_aa,
-                                   mis.heures_ac,
+                                   mis.heures_payees_aa heures_aa,
+                                   mis.heures_payees_ac heures_ac,
                                    mis.taux_horaire,
                                    mis.taux_conges_payes
                                FROM tbl_paiement mis

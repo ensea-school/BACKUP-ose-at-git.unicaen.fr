@@ -139,8 +139,8 @@ FROM
           df.libelle                                                          domaine_fonctionnel_libelle,
           CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END        hetd,
           CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE 0 END        fc_majorees,
-          mis.heures_aa                                                       exercice_aa,
-          mis.heures_ac                                                       exercice_ac,
+          mis.heures_payees_aa                                                exercice_aa,
+          mis.heures_payees_ac                                                exercice_ac,
           tr.libelle taux_remu,
           mis.taux_horaire,
           mis.taux_conges_payes

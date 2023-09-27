@@ -523,6 +523,7 @@ WHERE
         '.MODIFICATION_SERVICE_DU'     => [],
         '.INTERVENANT_DOSSIER'         => [],
         '.INTERVENANT'                 => ['queries' => [
+            'DELETE FROM note WHERE intervenant_id = :ID',//Suppression des notes de l'intervenant
             'DELETE FROM validation WHERE intervenant_id = :ID',// Suppression de toutes les validations orphelines restantes
             'DELETE FROM formule_resultat WHERE intervenant_id = :ID', // Suppression de tous les restes de formules de calcul
         ]],

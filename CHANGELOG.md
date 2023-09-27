@@ -9,6 +9,7 @@
 * Nouveau mode de calcul des heures à payer
   * Paiements : Gestion fine des changements de valeurs de taux horaires en cours d'année
   * Paiements : Répartition des heures AA/AC tenant compte du semestre des heures réalisées
+  * Possibilité de personnaliser le ratio AA/AC pour le référentiel
   * Mises en paiement possibles pour les missions (emplois étudiants)
 * Gestion des primes de fin de mission (emplois étudiants)
 

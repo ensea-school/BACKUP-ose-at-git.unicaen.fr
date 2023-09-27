@@ -13,6 +13,8 @@
   * Mises en paiement possibles pour les missions (emplois étudiants)
 * Gestion des primes de fin de mission (emplois étudiants)
 
+* Nouveau mode de calcul des tableaux de bord de calcul intermédiaires. commande ose build-tableaux-bord supprimée et non remplacée
+
 ## Améliorations
 
 * Ajout des dates de dévalidation des données personnelles dans les notes/historique par intervenant

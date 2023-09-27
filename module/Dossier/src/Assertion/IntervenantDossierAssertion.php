@@ -8,6 +8,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 
 // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
+use Dossier\Controller\IntervenantDossierController;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
@@ -465,7 +466,7 @@ class IntervenantDossierAssertion extends AbstractAssertion
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
         switch ($controller) {
-            case "Application\Controller\IntervenantDossier":
+            case IntervenantDossierController::class:
                 switch ($action) {
                     case 'index':
                         if (!$this->assertPriv(Privileges::DOSSIER_VISUALISATION)) return false;

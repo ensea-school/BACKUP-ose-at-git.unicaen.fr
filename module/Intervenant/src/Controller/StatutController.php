@@ -81,7 +81,10 @@ class StatutController extends AbstractController
             });
         } else {
             $form->bind($statut);
-            $form->readOnly();
+            $elements = $form->getElements();
+            $elements = array_keys($elements);
+            $form->readOnly(true, $elements);
+
         }
 
         $vm = new ViewModel();

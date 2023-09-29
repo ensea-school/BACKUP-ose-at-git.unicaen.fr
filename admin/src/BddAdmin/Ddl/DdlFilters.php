@@ -124,97 +124,63 @@ class DdlFilters implements \Iterator, \ArrayAccess
 
 
 
-    public function __construct()
-    {
-        $this->position = 0;
-    }
-
-
-
-    /**
-     * @inheritDoc
-     */
-    public function current()
+    public function current(): mixed
     {
         return current($this->objects);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function next()
+    public function next(): void
     {
-        return next($this->objects);
+        next($this->objects);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function key()
+    public function key(): mixed
     {
         return key($this->objects);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function valid()
+    public function valid(): bool
     {
         return key($this->objects) !== null;
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->objects);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->has($offset);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->get($offset);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->set($offset, $value);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->objects[$offset]);
     }

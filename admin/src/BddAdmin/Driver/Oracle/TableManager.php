@@ -10,12 +10,7 @@ use BddAdmin\Exception\BddException;
 
 class TableManager extends AbstractManager implements TableManagerInterface
 {
-    /**
-     * @param string|null $commentaire
-     *
-     * @return array
-     */
-    private function interpreterCommentaire($commentaire): array
+    private function interpreterCommentaire(?string $commentaire): array
     {
         $data = [];
         if ($commentaire) {
@@ -255,7 +250,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
 
 
 
-    protected function makeCreateComm(array $data, $forceUpdateNull = false)
+    protected function makeCreateComm(array $data, bool $forceUpdateNull = false): string
     {
         if ($data['commentaire']) {
             $comm = "'" . str_replace("'", "''", $data['commentaire']) . "'";
@@ -314,7 +309,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
 
 
 
-    public function create(array $data)
+    public function create(array $data): void
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
@@ -334,7 +329,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
 
 
 
-    public function drop($name)
+    public function drop($name): void
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
@@ -345,7 +340,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
 
 
 
-    public function majSequence(array $data)
+    public function majSequence(array $data): void
     {
         if (!isset($data['sequence'])) return;
         if (!isset($data['columns']['ID'])) return;
@@ -388,7 +383,7 @@ END;';
 
 
 
-    private function isColDiff(array $col1, array $col2)
+    private function isColDiff(array $col1, array $col2): bool
     {
         return $this->isColDiffType($col1, $col2)
             || $this->isColDiffDefault($col1, $col2)
@@ -398,7 +393,7 @@ END;';
 
 
 
-    private function isColDiffType(array $col1, array $col2)
+    private function isColDiffType(array $col1, array $col2): bool
     {
         return $col1['type'] !== $col2['type']
             || $col1['length'] !== $col2['length']
@@ -408,28 +403,28 @@ END;';
 
 
 
-    private function isColDiffNullable(array $col1, array $col2)
+    private function isColDiffNullable(array $col1, array $col2): bool
     {
         return $col1['nullable'] !== $col2['nullable'];
     }
 
 
 
-    private function isColDiffDefault(array $col1, array $col2)
+    private function isColDiffDefault(array $col1, array $col2): bool
     {
         return $col1['default'] !== $col2['default'];
     }
 
 
 
-    private function isColDiffComment(array $col1, array $col2)
+    private function isColDiffComment(array $col1, array $col2): bool
     {
         return $col1['commentaire'] !== $col2['commentaire'];
     }
 
 
 
-    public function alter(array $old, array $new)
+    public function alter(array $old, array $new): void
     {
         if ($this->isDiff($old, $new)) {
             $name = $new['name'];
@@ -479,7 +474,7 @@ END;';
 
 
 
-    private function addColumn(string $table, array $column, $noNotNull = false)
+    private function addColumn(string $table, array $column, $noNotNull = false): void
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
@@ -505,7 +500,7 @@ END;';
 
 
 
-    private function dropColumn(string $table, array $column)
+    private function dropColumn(string $table, array $column): void
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
@@ -518,7 +513,7 @@ END;';
 
 
 
-    private function alterColumnType(string $table, array $old, array $new)
+    private function alterColumnType(string $table, array $old, array $new): void
     {
         if ($this->sendEvent()->getReturn('no-exec')) return;
 
@@ -531,7 +526,7 @@ END;';
 
 
 
-    private function alterColumnNullable(string $table, array $old, array $new)
+    private function alterColumnNullable(string $table, array $old, array $new): void
     {
         $column = $new['name'];
         if ($this->isColDiffNullable($old, $new)) {
@@ -544,7 +539,7 @@ END;';
 
 
 
-    private function alterColumnDefault(string $table, array $old, array $new)
+    private function alterColumnDefault(string $table, array $old, array $new): void
     {
         $column = $new['name'];
         if ($this->isColDiffDefault($old, $new)) {
@@ -559,7 +554,7 @@ END;';
 
 
 
-    private function alterColumnComment(string $table, array $old, array $new)
+    private function alterColumnComment(string $table, array $old, array $new): void
     {
         $column = $new['name'];
         if ($this->isColDiffComment($old, $new)) {
@@ -579,7 +574,7 @@ END;';
 
 
 
-    public function rename(string $oldName, array $new)
+    public function rename(string $oldName, array $new): void
     {
         $newName = $new['name'];
 

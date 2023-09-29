@@ -6,30 +6,15 @@ use BddAdmin\Ddl\DdlFilters;
 
 class MigrationManager
 {
-    /**
-     * @var OseAdmin
-     */
-    protected $oseAdmin;
+    protected OseAdmin $oseAdmin;
 
-    /**
-     * @var Ddl
-     */
-    protected $ref;
+    protected Ddl ref;
 
-    /**
-     * @var Ddl
-     */
-    protected $old;
+    protected Ddl $old;
 
-    /**
-     * @var DdlFilters
-     */
-    protected $filters;
+    protected DdlFilters $filters;
 
-    /**
-     * @var array
-     */
-    private $actions = [];
+    private array $actions = [];
 
 
 
@@ -37,7 +22,7 @@ class MigrationManager
     {
         $this->oseAdmin = $oseAdmin;
         $this->ref      = $ref;
-        $this->filtres  = DdlFilters::normalize($filters);
+        $this->filters  = DdlFilters::normalize($filters);
     }
 
 
@@ -61,8 +46,6 @@ class MigrationManager
 
     /**
      * Retourne la nouvelle DDL de la base de données
-     *
-     * @return Ddl
      */
     public function getRef(): Ddl
     {
@@ -73,8 +56,6 @@ class MigrationManager
 
     /**
      * Retourne ll'ancienne DDL de la base de données
-     *
-     * @return Ddl
      */
     public function getOld(): Ddl
     {
@@ -85,11 +66,6 @@ class MigrationManager
 
     /**
      * Détermine si un objet existe dans la base de données avant migration
-     *
-     * @param string $type
-     * @param string $name
-     *
-     * @return bool
      */
     public function has(string $type, string $name): bool
     {
@@ -98,12 +74,6 @@ class MigrationManager
 
 
 
-    /**
-     * @param string $type
-     * @param string $Name
-     *
-     * @return bool
-     */
     public function hasNew(string $type, string $Name): bool
     {
         return !isset($this->old->get($type)[$Name]) && isset($this->ref->get($type)[$Name]);
@@ -111,12 +81,6 @@ class MigrationManager
 
 
 
-    /**
-     * @param string $type
-     * @param string $Name
-     *
-     * @return bool
-     */
     public function hasOld(string $type, string $Name): bool
     {
         if (Ddl::TABLE == $type) {
@@ -130,10 +94,6 @@ class MigrationManager
 
     /**
      * Détermine si une table existe dans la base de données avant migration
-     *
-     * @param string $tableName
-     *
-     * @return bool
      */
     public function hasTable(string $tableName): bool
     {
@@ -144,11 +104,6 @@ class MigrationManager
 
     /**
      * Détermine si une colonne existe dans la base de données avant migration
-     *
-     * @param string $tableName
-     * @param string $columnName
-     *
-     * @return bool
      */
     public function hasColumn(string $tableName, string $columnName): bool
     {
@@ -159,11 +114,6 @@ class MigrationManager
 
     /**
      * Détermine si une colonne doit être ajoutée
-     *
-     * @param string $tableName
-     * @param string $columnName
-     *
-     * @return bool
      */
     public function hasNewColumn(string $tableName, string $columnName): bool
     {
@@ -177,11 +127,6 @@ class MigrationManager
 
     /**
      * Détermine si une colonne doit être supprimée
-     *
-     * @param string $tableName
-     * @param string $columnName
-     *
-     * @return bool
      */
     public function hasOldColumn(string $tableName, string $columnName): bool
     {
@@ -203,7 +148,7 @@ class MigrationManager
 
 
 
-    public function sauvegarderTable(string $tableName, string $name)
+    public function sauvegarderTable(string $tableName, string $name): void
     {
         if ($this->tableRealExists($tableName) && !$this->tableRealExists($name)) {
             $this->getBdd()->exec("CREATE TABLE $name AS SELECT * FROM $tableName");
@@ -212,7 +157,7 @@ class MigrationManager
 
 
 
-    public function supprimerSauvegarde(string $name)
+    public function supprimerSauvegarde(string $name): void
     {
         if ($this->tableRealExists($name)) {
             $this->getBdd()->exec("DROP TABLE $name");
@@ -221,7 +166,7 @@ class MigrationManager
 
 
 
-    protected function getMigrationDir()
+    protected function getMigrationDir(): string
     {
         return $this->oseAdmin->getOseDir() . 'admin/migration/';
     }
@@ -250,7 +195,7 @@ class MigrationManager
 
 
 
-    protected function runMigrationAction(string $contexte, string $action)
+    protected function runMigrationAction(string $contexte, string $action): void
     {
         $console = $this->oseAdmin->getConsole();
 
@@ -286,7 +231,7 @@ class MigrationManager
 
 
 
-    public function migration(string $context = 'pre', string $action = null)
+    public function migration(string $context = 'pre', string $action = null): void
     {
         if (!$this->old) {
             $this->old = $this->oseAdmin->getBdd()->getDdl($this->filters);

@@ -252,10 +252,10 @@ class Console implements \BddAdmin\Logger\LoggerInterface
 
 
 
-    public function end(?string $msg = null)
+    public function end(?string $msg = null): void
     {
         if ($this->lastMessage && $this->lastRewrite) {
-            $msg .= str_pad('', strlen($this->lastMessage) - strlen($msg) + 2);
+            $msg .= str_pad('', strlen($this->lastMessage) - strlen($msg ?? '') + 2);
         }
         if ($msg) {
             $this->println($msg);
@@ -267,7 +267,7 @@ class Console implements \BddAdmin\Logger\LoggerInterface
 
 
 
-    public function gestExitCode($code, bool $sendException = false)
+    public function gestExitCode($code, bool $sendException = false): void
     {
         if (0 == $code) return;
 
@@ -280,7 +280,7 @@ class Console implements \BddAdmin\Logger\LoggerInterface
 
 
 
-    public function printDie($text)
+    public function printDie($text): void
     {
         $this->println($text, self::COLOR_LIGHT_RED);
         $this->println(' -- FIN Prématurée de l\'exécution du script -- ', null, self::BG_RED);
@@ -289,7 +289,7 @@ class Console implements \BddAdmin\Logger\LoggerInterface
 
 
 
-    public function getArg($index = null)
+    public function getArg(int $index = null): string
     {
         $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : [];
 
@@ -304,9 +304,6 @@ class Console implements \BddAdmin\Logger\LoggerInterface
 
 
 
-    /**
-     * @return array
-     */
     public function getOptions(): array
     {
         if (null === $this->options) {

@@ -8,7 +8,7 @@ class MigrationManager
 {
     protected OseAdmin $oseAdmin;
 
-    protected Ddl ref;
+    protected Ddl $ref;
 
     protected Ddl $old;
 
@@ -69,7 +69,7 @@ class MigrationManager
      */
     public function has(string $type, string $name): bool
     {
-        return isset($this->old->get($type)[$name]);
+        return isset($this->old) && isset($this->old->get($type)[$name]);
     }
 
 
@@ -233,7 +233,7 @@ class MigrationManager
 
     public function migration(string $context = 'pre', string $action = null): void
     {
-        if (!$this->old) {
+        if (empty($this->old)) {
             $this->old = $this->oseAdmin->getBdd()->getDdl($this->filters);
         }
 

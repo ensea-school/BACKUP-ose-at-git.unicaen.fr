@@ -117,7 +117,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
             $default = $paq['default'] !== null ? $this->purger($paq['default']) : null;
             if ('NULL' === $default) $default = null;
 
-            if (str_starts_with($default, '"'.$paq['schema'].'"')){
+            if (!empty($default) && str_starts_with($default, '"'.$paq['schema'].'"')){
                 $default = substr($default, strlen($paq['schema'])+3);
             }
 

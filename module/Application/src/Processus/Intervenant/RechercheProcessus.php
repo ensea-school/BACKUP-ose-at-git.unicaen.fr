@@ -191,7 +191,9 @@ class RechercheProcessus
     {
         $resKey = $key;
         foreach ($data as $k => $v) {
-            $resKey = str_replace(':' . $k, $v, $resKey);
+            if (!empty($v)) {
+                $resKey = str_replace(':' . $k, $v, $resKey);
+            }
         }
 
         return $resKey;

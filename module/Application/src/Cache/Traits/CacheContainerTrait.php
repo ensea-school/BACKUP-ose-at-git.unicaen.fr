@@ -11,6 +11,7 @@ use Application\Cache\CacheService;
  */
 trait CacheContainerTrait
 {
+    private $__cacheContainer;
 
     /**
      *

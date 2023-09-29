@@ -51,8 +51,6 @@ class Driver implements DriverInterface
         $password     = isset($config['password']) ? $config['password'] : null;
         $characterset = isset($config['characterset']) ? $config['characterset'] : 'AL32UTF8';
 
-        $this->config['characterset'] = 'AL32UTF8';
-
         if (!$host) throw new BddException('host non fourni');
         if (!$port) throw new BddException('port non fourni');
         if (!$dbname) throw new BddException('dbname non fourni');

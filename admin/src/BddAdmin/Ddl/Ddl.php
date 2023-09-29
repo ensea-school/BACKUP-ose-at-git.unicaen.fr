@@ -70,11 +70,6 @@ class Ddl implements \Iterator, \ArrayAccess
 
 
 
-    /**
-     * @param $data
-     *
-     * @return DdlFilters
-     */
     public static function normalize($data): self
     {
         if ($data instanceof self) {
@@ -91,90 +86,63 @@ class Ddl implements \Iterator, \ArrayAccess
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function current()
+    public function current(): mixed
     {
         return current($this->data);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function next()
+    public function next(): void
     {
-        return next($this->data);
+        next($this->data);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function key()
+    public function key(): mixed
     {
         return key($this->data);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function valid()
+    public function valid(): bool
     {
         return key($this->data) !== null;
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->data);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->has($offset);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->get($offset);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->set($offset, $value);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->data[$offset]);
     }

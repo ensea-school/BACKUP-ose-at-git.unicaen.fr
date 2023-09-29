@@ -55,22 +55,14 @@ class DdlFilter implements \ArrayAccess
 
 
 
-    /**
-     * @return array|string|null
-     */
-    public function getExcludes()
+    public function getExcludes(): array|string|null
     {
         return $this->excludes;
     }
 
 
 
-    /**
-     * @param array|string|null $excludes
-     *
-     * @return DdlFilter
-     */
-    public function setExcludes($excludes)
+    public function setExcludes(array|string|null $excludes): DdlFilter
     {
         $this->excludes = $excludes;
 
@@ -131,7 +123,7 @@ class DdlFilter implements \ArrayAccess
 
 
 
-    static public function normalize2($includes = [], $excludes = [])
+    static public function normalize2($includes = [], $excludes = []): DdlFilter
     {
         if ($includes instanceof DdlFilter) return $includes;
 
@@ -140,11 +132,6 @@ class DdlFilter implements \ArrayAccess
 
 
 
-    /**
-     * @param string $colName
-     *
-     * @return array
-     */
     public function toSql(string $colName): array
     {
         $includes = $this->includes;
@@ -186,11 +173,6 @@ class DdlFilter implements \ArrayAccess
 
 
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public function match(string $name): bool
     {
         if ($this->excludes) {
@@ -225,40 +207,28 @@ class DdlFilter implements \ArrayAccess
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset);
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->$offset;
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->$offset = $value;
     }
 
 
 
-    /**
-     * @inheritDoc
-     */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
     }
 }

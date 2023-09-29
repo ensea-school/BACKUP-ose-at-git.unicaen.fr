@@ -7,7 +7,7 @@ use Application\Filter\DateTimeFromString;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\TagServiceAwareTrait;
+use Service\Service\TagServiceAwareTrait;
 use Enseignement\Entity\VolumeHoraireListe;
 use Enseignement\Hydrator\ListeFilterHydrator;
 use Laminas\Form\Element\DateTimeLocal;

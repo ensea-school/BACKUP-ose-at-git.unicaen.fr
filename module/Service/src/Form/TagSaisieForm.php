@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\Form\Tag;
+namespace Service\Form;
 
-use Application\Entity\Db\Tag;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\AnneeServiceAwareTrait;
+use Service\Entity\Db\Tag;
 
 /**
  * Description of TagSaisieForm

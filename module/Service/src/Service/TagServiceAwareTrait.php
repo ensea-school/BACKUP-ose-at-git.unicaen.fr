@@ -1,8 +1,7 @@
 <?php
 
-namespace Application\Service\Traits;
+namespace Service\Service;
 
-use Application\Service\TagService;
 
 /**
  * Description of TagServiceAwareTrait

@@ -285,6 +285,19 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
+        'STRUCTURE_ID'            => [
+            'name'        => 'STRUCTURE_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 24,
+            'commentaire' => 'structure par
+ente',
+        ],
     ],
 ];
 

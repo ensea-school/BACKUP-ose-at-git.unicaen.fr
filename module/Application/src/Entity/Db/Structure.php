@@ -40,6 +40,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
     protected            $affAdresseContrat = true;
 
+    protected ?Structure $structure = null;
 
 
     function __construct ()

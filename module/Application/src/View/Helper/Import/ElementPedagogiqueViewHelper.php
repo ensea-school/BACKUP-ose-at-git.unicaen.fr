@@ -16,7 +16,7 @@ class ElementPedagogiqueViewHelper extends DifferentielLigne
         if ('insert' == $this->ligne->getAction() || 'undelete' == $this->ligne->getAction()){
             return sprintf( $format, $this->ligne->get('LIBELLE'), $this->ligne->getSourceCode(), $this->ligne->get('ANNEE_ID').'-'.($this->ligne->get('ANNEE_ID')+1) );
         }else{
-            $entity = $this->ligne->getEntity();
+            $entity = $this->ligne->getEntityManager()->getRepository(ElementPedagogique::class)->find($this->ligne->getId());
             /* @var $entity ElementPedagogique */
             return sprintf( $format, $entity->getLibelle(), $this->ligne->getSourceCode(), (string)$entity->getAnnee() );
         }

@@ -250,7 +250,7 @@ class TableManager extends AbstractManager implements TableManagerInterface
 
 
 
-    protected function makeCreateComm(array $data, bool $forceUpdateNull = false): string
+    protected function makeCreateComm(array $data, bool $forceUpdateNull = false): ?string
     {
         if ($data['commentaire']) {
             $comm = "'" . str_replace("'", "''", $data['commentaire']) . "'";

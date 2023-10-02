@@ -93,11 +93,10 @@ class Repartiteur
      * @param int $anneeId ID de l'année universitaire
      * @param string $horaireDebut Horaire de début au format Y-m-d
      * @param string $horaireFin Horaire de fin au format Y-m-d
-     * @return float
      */
     public function calculPourcAA(
         bool    $semestriel,
-        ?string $periodeCode = null,
+        ?string $periodeCode,
         int     $anneeId,
         string  $horaireDebut,
         string  $horaireFin
@@ -111,14 +110,11 @@ class Repartiteur
             }
 
             // Sinon, on calcule en fonction du semestre
-            switch ($periodeCode) {
-                case Periode::SEMESTRE_1:
-                    return $this->pourcS1PourAnneeCivile;
-                case Periode::SEMESTRE_2:
-                    return 0; // le S2 n'est jamais effectué l'année antérieure
-                default: // si on ne trouve pas la période => référentiel
-                    return $this->pourAAReferentiel;
-            }
+            return match ($periodeCode) {
+                Periode::SEMESTRE_1 => $this->pourcS1PourAnneeCivile,
+                Periode::SEMESTRE_2 => 0,
+                default => $this->pourAAReferentiel,
+            };
         }
 
         $debut = \DateTime::createFromFormat('Y-m-d', substr($horaireDebut, 0, 10));

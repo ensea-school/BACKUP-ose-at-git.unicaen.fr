@@ -4,10 +4,10 @@
            :prime="prime"
            @reload="reload"></prime>
     <div v-if="!load" class="text-secondary text-center fs-6   " style="text-align:center;"> Chargement en cours...<br/><br/></div>
-    <div v-if="primes.length == 0 && load" class="text-secondary text-center fs-6   " style="text-align:center;"> Aucune prime de fin de mission
+    <div v-if="primes.length == 0 && load" class="text-secondary text-center fs-6   " style="text-align:center;"> Aucune indemnité de fin de contrat
         actuellement...<br/><br/></div>
     <div v-if="this.missionsWithoutPrime > 0 && this.canGerer">
-        <a :href="ajoutUrl" class=" btn btn-primary" @click.prevent="ajout">Créer une nouvelle prime</a>
+        <a :href="ajoutUrl" class=" btn btn-primary" @click.prevent="ajout">Créer une nouvelle indemnité</a>
     </div>
 </template>
 

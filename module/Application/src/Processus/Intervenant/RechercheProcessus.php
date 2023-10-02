@@ -41,19 +41,13 @@ class RechercheProcessus
         if (strlen($critere) < 2) return [];
 
         $anneeId = (int)$this->getServiceContext()->getAnnee()->getId();
+        $critere = self::reduce($critere);
 
-        $critere  = Util::reduce($critere);
         $criteres = explode('_', $critere);
-
-        $sqlSource = '';
-        if (!$onlyLocale) {
-            $sqlSource = ' UNION ALL ' . $this->sqlSource();
-        }
 
         $sql     = '
         WITH vrec AS (
-            ' . $this->sqlLocale() . '
-            ' . $sqlSource . '  
+            ' . $this->sqlLocale() . '  
         )
         SELECT * FROM vrec WHERE 
           rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
@@ -233,5 +227,24 @@ class RechercheProcessus
     {
         return $this->rechercheGenerique($critere, $limit, $key, true);
     }
+
+    /**
+     * @param string $str      Chaine à nettoyer
+     * @param string $encoding Encodage en sortie
+     *
+     * @return string
+     */
+
+    private static function reduce (string $str, string $encoding = 'UTF-8'): string
+    {
+        $from = 'ÀÁÂÃÄÅÇÐÈÉÊËÌÍÎÏÒÓÔÕÖØÙÚÛÜŸÑàáâãäåçðèéêëìíîïòóôõöøùúûüÿñ€@()…,<> /?€%!":';
+        $to   = 'aaaaaacdeeeeiiiioooooouuuuynaaaaaacdeeeeiiiioooooouuuuynea________________';
+
+        $str = strtolower(Util::strtr($str, $from, $to, false, $encoding));
+
+        //On escape les quotes simples pour la requête sql
+        return str_replace("'", "''", $str);
+    }
+
 
 }

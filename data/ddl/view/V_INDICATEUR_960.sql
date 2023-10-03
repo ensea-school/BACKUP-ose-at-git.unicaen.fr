@@ -2,13 +2,11 @@ CREATE OR REPLACE FORCE VIEW V_INDICATEUR_960 AS
 SELECT
   w.intervenant_id,
   w.structure_id,
-  MAX(histo_modification) AS "Date de modification"
+  MAX(mep.histo_modification) AS "Date de modification"
 FROM
-  mise_en_paiement mep
-  LEFT JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id
-  LEFT JOIN formule_resultat_service_ref frsr ON frsr.id = mep.formule_res_service_ref_id
-  JOIN formule_resultat fr ON fr.id = COALESCE(frs.formule_resultat_id,frsr.formule_resultat_id)
-  JOIN tbl_workflow w ON w.intervenant_id = fr.intervenant_id
+    tbl_workflow w
+    LEFT JOIN mission m ON m.intervenant_id = w.intervenant_id
+    LEFT JOIN mise_en_paiement mep ON mep.mission_id = m.id
 WHERE
   mep.histo_destruction IS NULL
   AND mep.periode_paiement_id IS NULL
@@ -17,7 +15,6 @@ WHERE
   AND w.atteignable = 1
   AND w.objectif > w.realisation
 GROUP BY
-  fr.intervenant_id,
   w.annee_id,
   w.intervenant_id,
   w.structure_id

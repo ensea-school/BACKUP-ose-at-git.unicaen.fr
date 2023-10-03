@@ -8,9 +8,9 @@
 
 $this->intervenant($intervenant)->renderTitle("Mises en paiement");
 
-$data     = [];
+$data = [];
 $periodes = [];
-$total    = [
+$total = [
     'heures-a-payer'   => 0,
     'heures-demandees' => 0,
     'heures-payees'    => ['total' => 0],
@@ -19,53 +19,74 @@ $total    = [
 foreach ($paiements as $paiement) {
     $sap = $paiement->getServiceAPayer();
 
+
     if ($sap instanceof \Application\Entity\Db\FormuleResultatService) {
-        $sid = 'service-' . $sap->getService()->getId();
-    } else {
-        /* @var $sap \Application\Entity\Db\FormuleResultatServiceReferentiel */
-        $sid = 'referentiel-' . $sap->getServiceReferentiel()->getId();
+        $sapType = 'service';
+        $sid = $sapType . '-' . $sap->getService()->getId();
+    } elseif ($sap instanceof \Application\Entity\Db\FormuleResultatServiceReferentiel) {
+        $sapType = 'referentiel';
+        $sid = $sapType . '-' . $sap->getServiceReferentiel()->getId();
+    } elseif ($sap instanceof \Mission\Entity\Db\Mission) {
+        $sapType = 'mission';
+        $sid = $sapType . '-' . $sap->getId();
     }
 
 
     if (!isset($data[$sid])) {
-        if ($sap instanceof \Application\Entity\Db\FormuleResultatService) {
+        if ('service' == $sapType) {
 
             $d = [];
 
             $service = $sap->getService();
             if ($service->getElementPedagogique()) {
                 $d['structure'] = (string)$this->structure($service->getElementPedagogique()->getStructure())->renderLink();
-                $d['etape']     = (string)$this->etape($service->getElementPedagogique()->getEtape())->renderLink();
-                $d['element']   = (string)$this->elementPedagogique($service->getElementPedagogique())->renderLink();
+                $d['service'] = [
+                    'Formation'    => (string)$this->etape($service->getElementPedagogique()->getEtape())->renderLink(),
+                    'Enseignement' => (string)$this->elementPedagogique($service->getElementPedagogique())->renderLink(),
+                ];
             } else {
-                $d['structure']     = (string)$this->structure($service->getIntervenant()->getStructure())->renderLink();
-                $d['etablissement'] = $this->etablissement($service->getEtablissement())->renderLink();
-                $d['description']   = $service->getDescription();
+                $d['structure'] = (string)$this->structure($service->getIntervenant()->getStructure())->renderLink();
+                $d['service'] = [
+                    'Établissement' => $this->etablissement($service->getEtablissement())->renderLink(),
+                    'Description'   => $service->getDescription(),
+                ];
             }
-        } else {
+        } elseif ('referentiel' == $sapType) {
             $d = [];
 
             /* @var $sap \Application\Entity\Db\FormuleResultatServiceReferentiel */
             $serviceReferentiel = $sap->getServiceReferentiel();
-            $d['structure']     = (string)$this->structure($serviceReferentiel->getStructure())->renderLink();
-            $d['fonction']      = (string)$this->fonctionReferentiel($serviceReferentiel->getFonctionReferentiel())->renderLink();
-            $d['description']   = $serviceReferentiel->getCommentaires();
+            $d['structure'] = (string)$this->structure($serviceReferentiel->getStructure())->renderLink();
+            $d['service'] = [
+                'Fonction' => (string)$this->fonctionReferentiel($serviceReferentiel->getFonctionReferentiel())->renderLink(),
+                ''         => $serviceReferentiel->getCommentaires(),
+            ];
+        } elseif ('mission' == $sapType) {
+            $d = [];
+
+            /* @var $mission \Mission\Entity\Db\Mission */
+            $mission = $sap;
+            $d['structure'] = (string)$this->structure($mission->getStructure())->renderLink();
+            $d['service'] = [
+                'Type de mission' => (string)$mission->getTypeMission()->getLibelle(),
+                ''                => $mission->getLibelle(),
+            ];
         }
-        $d['heures-a-payer']     = $paiement->getHeuresAPayer();
+        $d['heures-a-payer'] = $paiement->getHeuresAPayer();
         $total['heures-a-payer'] += $paiement->getHeuresAPayer();
-        $d['heures-demandees']   = 0;
-        $d['heures-payees']      = ['total' => 0];
-        $data[$sid]              = $d;
+        $d['heures-demandees'] = 0;
+        $d['heures-payees'] = ['total' => 0];
+        $data[$sid] = $d;
     }
 
     // addition des heures demandées
     $data[$sid]['heures-demandees'] += $paiement->getHeuresDemandees();
-    $total['heures-demandees']      += $paiement->getHeuresDemandees();
+    $total['heures-demandees'] += $paiement->getHeuresDemandees();
 
     // addition des heures payées
     if ($hp = $paiement->getHeuresPayees()) {
         $data[$sid]['heures-payees']['total'] += $paiement->getHeuresPayees();
-        $total['heures-payees']['total']      += $paiement->getHeuresPayees();
+        $total['heures-payees']['total'] += $paiement->getHeuresPayees();
 
         $ppId = $paiement->getPeriodePaiement()->getId();
         if (!isset($periodes[$ppId])) {
@@ -96,8 +117,7 @@ foreach ($periodes as $id => $periode) {
 <table class="table table-bordered table-sm">
     <tr>
         <th style="width:10%">Composante</th>
-        <th style="width:25%">Formation</th>
-        <th style="width:25%">Enseignement</th>
+        <th style="width:50%">Service</th>
         <th style="width:10%">À payer <abbr title="Heures équivalent TD">(HETD)</abbr></th>
         <th style="width:10%"><abbr title="Demandes émanant de la composante">Demandes de paiement</abbr> <abbr
                     title="Heures équivalent TD">(HETD)</abbr></th>
@@ -109,22 +129,15 @@ foreach ($periodes as $id => $periode) {
             $d['heures-restantes'] = $d['heures-a-payer'] - $d['heures-payees']['total'];
 
             echo '<tr>';
-            if (isset($d['element'])) {
-                // enseignement normal
-                echo '<td>' . $d['structure'] . '</td>';
-                echo '<td>' . $d['etape'] . '</td>';
-                echo '<td>' . $d['element'] . '</td>';
-            } elseif (isset($d['etablissement'])) {
-                // enseignement extérieur
-                echo '<td colspan="2">' . $d['etablissement'] . '</td>';
-                echo '<td>' . $d['description'] . '</td>';
-            } elseif (isset($d['fonction'])) {
-                // référentiel
-                echo '<td>' . $d['structure'] . '</td>';
-                echo '<td>' . $d['fonction'] . ' <small>(Référentiel)</small></td>';
-                echo '<td>' . $d['description'] . '</td>';
+            echo '<td>' . $d['structure'] . '</td>';
+            echo '<td>';
+            foreach ($d['service'] as $k => $v) {
+                if ($k) {
+                    echo "<b>$k</b> : ";
+                }
+                echo "$v<br />";
             }
-
+            echo '</td>';
             echo '<td>' . \UnicaenApp\Util::formattedNumber($d['heures-a-payer']) . '</td>';
             echo '<td>' . \UnicaenApp\Util::formattedNumber($d['heures-demandees']) . '</td>';
             echo '<td><table class="table table-bordered table-xs" style="margin-bottom: 0px">';
@@ -153,12 +166,15 @@ foreach ($periodes as $id => $periode) {
         <td colspan="2" style="text-align:right"><?= \UnicaenApp\Util::formattedNumber($total['heures-a-payer']) ?></td>
     </tr>
     <tr>
-        <th><abbr title="Demandes émanant de la composante">Demandes de paiement</abbr> <abbr title="Heures équivalent TD">(HETD)</abbr>
+        <th><abbr title="Demandes émanant de la composante">Demandes de paiement</abbr> <abbr
+                    title="Heures équivalent TD">(HETD)</abbr>
         </th>
-        <td colspan="2" style="text-align:right"><?= \UnicaenApp\Util::formattedNumber($total['heures-demandees']) ?></td>
+        <td colspan="2"
+            style="text-align:right"><?= \UnicaenApp\Util::formattedNumber($total['heures-demandees']) ?></td>
     </tr>
     <tr>
-        <th rowspan="<?= count($total['heures-payees']) ?>">Mises en paiement <abbr title="Heures équivalent TD">(HETD)</abbr>
+        <th rowspan="<?= count($total['heures-payees']) ?>">Mises en paiement <abbr
+                    title="Heures équivalent TD">(HETD)</abbr>
         </th>
     </tr>
     <?php foreach ($periodes as $pid => $periode): if (isset($total['heures-payees'][$pid])): ?>

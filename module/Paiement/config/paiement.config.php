@@ -51,6 +51,11 @@ return [
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'extractionPaie',
                 ],
+                'extraction-paie-prime' => [
+                    'route'      => '/extraction-paie-prime[/:type][/:periode]',
+                    'controller' => Controller\PaiementController::class,
+                    'action'     => 'extractionPaiePrime',
+                ],
                 'imputation-siham'      => [
                     'route'      => '/imputation-siham',
                     'controller' => Controller\PaiementController::class,
@@ -141,6 +146,12 @@ return [
                             'route'    => 'paiement/extraction-paie',
                             'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                         ],
+                        'extraction-paie-prime' => [
+                            'label'    => "Extraction des primes étudiantes",
+                            'title'    => "Export des données pour payer les primes étudiantes",
+                            'route'    => 'paiement/extraction-paie-prime',
+                            'resource' => Privileges::getResourceId(Privileges::MISSION_PRIME_GESTION),
+                        ],
 
                         'imputation-siham' => [
                             'label'    => "Imputation budgétaire SIHAM",
@@ -205,6 +216,11 @@ return [
             'controller' => Controller\PaiementController::class,
             'action'     => ['extractionPaie', 'imputationSiham'],
             'privileges' => [Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE],
+        ],
+        [
+            'controller' => Controller\PaiementController::class,
+            'action'     => ['extractionPaiePrime'],
+            'privileges' => [Privileges::MISSION_PRIME_GESTION],
         ],
     ],
 

@@ -30,13 +30,11 @@ class PaiementAssertion extends AbstractAssertion
     use TypeVolumeHoraireServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 
-
     /* ---- Routage général ---- */
-    public function __invoke(array $page) // gestion des visibilités de menus
+    public function __invoke (array $page) // gestion des visibilités de menus
     {
         return $this->assertPage($page);
     }
-
 
 
     /**
@@ -45,7 +43,7 @@ class PaiementAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity (ResourceInterface $entity, $privilege = null)
     {
         $role = $this->getRole();
 
@@ -74,7 +72,6 @@ class PaiementAssertion extends AbstractAssertion
     }
 
 
-
     /**
      * @param string $controller
      * @param string $action
@@ -82,7 +79,7 @@ class PaiementAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController ($controller, $action = null, $privilege = null)
     {
         $role = $this->getRole();
 
@@ -108,6 +105,9 @@ class PaiementAssertion extends AbstractAssertion
             case 'etatpaiement':
                 if ($role->getIntervenant()) return false; // pas pour les intervenants
             break;
+            case 'extractionpaieprime':
+                return $this->assertEtapeAtteignable(WfEtape::CODE_MISSION_PRIME, $intervenant);
+            break;
             case  'miseenpaiement':
 
             break;
@@ -117,8 +117,7 @@ class PaiementAssertion extends AbstractAssertion
     }
 
 
-
-    protected function assertPage(array $page)
+    protected function assertPage (array $page)
     {
         if (isset($page['workflow-etape-code'])) {
             $etape       = $page['workflow-etape-code'];
@@ -133,8 +132,7 @@ class PaiementAssertion extends AbstractAssertion
     }
 
 
-
-    protected function assertMiseEnPaiementDemande(Role $role, MiseEnPaiement $miseEnPaiement)
+    protected function assertMiseEnPaiementDemande (Role $role, MiseEnPaiement $miseEnPaiement)
     {
         if (!$this->asserts([
             !$miseEnPaiement->getValidation(),
@@ -150,8 +148,7 @@ class PaiementAssertion extends AbstractAssertion
     }
 
 
-
-    protected function assertServiceAPayerDemande(Role $role, ServiceAPayerInterface $serviceAPayer)
+    protected function assertServiceAPayerDemande (Role $role, ServiceAPayerInterface $serviceAPayer)
     {
         $oriStructure  = $role->getStructure();
         $destStructure = $serviceAPayer->getStructure();
@@ -163,8 +160,7 @@ class PaiementAssertion extends AbstractAssertion
     }
 
 
-
-    protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null, Structure $structure = null)
+    protected function assertEtapeAtteignable ($etape, Intervenant $intervenant = null, Structure $structure = null)
     {
         if ($intervenant) {
             $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant, $structure);

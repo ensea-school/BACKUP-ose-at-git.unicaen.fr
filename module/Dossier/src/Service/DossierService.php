@@ -152,7 +152,7 @@ class DossierService extends AbstractEntityService
 
             $iPrec = $this->getServiceIntervenant()->getPrecedent($intervenant, -$i);
 
-            if ($iPrec && $iPrec->getStatut()->estVacataire() && $iPrec->getStatut()->getServiceStatutaire()) {
+            if ($iPrec && $iPrec->getStatut()->estVacataire() && $iPrec->getStatut()->getServiceRealise()) {
                 return $iPrec;
             }
         }

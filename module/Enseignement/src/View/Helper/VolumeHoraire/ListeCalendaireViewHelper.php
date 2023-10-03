@@ -3,7 +3,7 @@
 namespace Enseignement\View\Helper\VolumeHoraire;
 
 use Application\Constants;
-use Application\Entity\Db\Tag;
+use Service\Entity\Db\Tag;
 use Application\Provider\Privilege\Privileges;
 use Enseignement\Entity\VolumeHoraireListe;
 use Enseignement\Hydrator\ListeFilterHydrator;

@@ -1,9 +1,8 @@
 <?php
 
-namespace Application\Form\Tag;
+namespace Service\Form;
 
 use Psr\Container\ContainerInterface;
-
 
 /**
  * Description of TagSaisieFormFactory

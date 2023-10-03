@@ -5,7 +5,7 @@ namespace Referentiel\Entity\Db;
 use Application\Entity\Db\FormuleResultatServiceReferentiel;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
-use Application\Entity\Db\Traits\TagAwareTrait;
+use Service\Entity\Db\Traits\TagAwareTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;

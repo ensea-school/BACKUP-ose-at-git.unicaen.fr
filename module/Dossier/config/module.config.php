@@ -147,8 +147,8 @@ return [
                 'intervenants'  => [
                     'pages' => [
                         'gestion-champs-autres-dossier-intervenant' => [
-                            'label'      => "Champs personnalisés du dossier",
-                            'title'      => "Editer et modifier les 5 champs personnalisables pour les dossiers des intervenant",
+                            'label'      => "Champs personnalisés des données personnelles",
+                            'title'      => "Éditer et modifier les 5 champs personnalisables pour les données personnelles des intervenants",
                             'route'      => 'autres-infos',
                             'withtarget' => true,
                             'order'      => 10,

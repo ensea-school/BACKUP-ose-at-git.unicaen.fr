@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 21.1](#ose-213-15092023)
+[OSE 21.3](#ose-213-15092023)
 
 # OSE 22 (à venir)
 
@@ -18,11 +18,13 @@
 ## Améliorations
 
 * Ajout des dates de dévalidation des données personnelles dans les notes/historique par intervenant
+* En mode de saisie de service calendaire, la période ainsi que les types d'intervention sont maintenant filtrés par rapport à l'élement pédagogique
 
 ## Corrections de bugs
 
 * Prise en compte de la bonne fin d'année universitaire pour la clôture du dossier d'un vacataire (PEC) dans l'export Ose vers SIHAM (#52484)
 * Suppression des notes d'un intervenant avant sa suppression définitive de OSE (#52719)
+* Masquer 'Données personnelles' sur le menu de gauche lorsque celles-ci sont désactivées pour l'intervenant (#52479)
 
 
 
@@ -388,11 +390,11 @@ https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_posit
 * Changement du bouton de cloture de service pour un libellé plus parlant et un style de bouton plus prononcé
 * Formules nouvelles ou mises à jour : Rennes 2, Paris Saclay, Guyane, Côte d'Azur, La Réunion, Poitiers, Brest, Rouen
 * Possibilité de créer un nouveau test de formule en téléversant une feuille de calcul au format tableur
-* Ajout d'un champs cci pour l'envoi de mail aux intervenants et le refus de pièces jointes (#45083)
+* Ajout d'un champ cci pour l'envoi de mail aux intervenants et le refus de pièces jointes (#45083)
 
 ## Corrections de bugs
 
-* Données personnelles : pouvoir pré-remplir le champs statut avec un statut non sélectionnable dans la liste. (#45216)
+* Données personnelles : pouvoir pré-remplir le champ statut avec un statut non sélectionnable dans la liste. (#45216)
 * Budget/Liquidation : afficher le nombre de HETD uniquement des HCO et non les HETD des HCO + Heures de service
 * Notes : Afficher le bon utilisateur pour la validation de service (#45413).
 * Forcer l'activiation de l'étape pièces justificatives même si il n'y a pas de service prévisionnel de renseigné.

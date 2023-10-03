@@ -6,7 +6,6 @@ use Application\Entity\Db\Periode;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\TagServiceAwareTrait;
 use Enseignement\Entity\VolumeHoraireListe;
 use Enseignement\Hydrator\ListeFilterHydrator;
 use Laminas\Form\Element\Hidden;
@@ -15,6 +14,7 @@ use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use Paiement\Entity\Db\MotifNonPaiement;
 use Paiement\Service\MotifNonPaiementServiceAwareTrait;
+use Service\Service\TagServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
 

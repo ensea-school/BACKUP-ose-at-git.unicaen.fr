@@ -35,7 +35,7 @@
         <many-to-one field="motifNonPaiement" target-entity="Paiement\Entity\Db\MotifNonPaiement">
             <join-column name="MOTIF_NON_PAIEMENT_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="tag" target-entity="Application\Entity\Db\Tag">
+        <many-to-one field="tag" target-entity="Service\Entity\Db\Tag">
             <join-column name="TAG_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="periode" target-entity="Application\Entity\Db\Periode">

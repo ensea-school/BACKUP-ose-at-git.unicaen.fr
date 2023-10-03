@@ -33,6 +33,8 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
 
     protected ?string     $motif      = null;
 
+    protected ?\DateTime $dateCommission = null;
+
 
     public function getResourceId ()
     {
@@ -143,6 +145,18 @@ class Candidature implements HistoriqueAwareInterface, ResourceInterface
     public function setMotif (?string $motif): self
     {
         $this->motif = $motif;
+
+        return $this;
+    }
+
+    public function getDateCommission (): ?\DateTime
+    {
+        return $this->dateCommission;
+    }
+
+    public function setDateCommission (?\DateTime $dateCommission): self
+    {
+        $this->dateCommission = $dateCommission;
 
         return $this;
     }

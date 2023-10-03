@@ -4,7 +4,7 @@ namespace Enseignement\Entity\Db;
 
 use Application\Entity\Db\FormuleResultatVolumeHoraire;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
-use Application\Entity\Db\Traits\TagAwareTrait;
+use Service\Entity\Db\Traits\TagAwareTrait;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Contrat\Entity\Db\Contrat;

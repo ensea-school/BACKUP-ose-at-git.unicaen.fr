@@ -42,7 +42,7 @@ class AutresForm extends AbstractForm
         $this->add([
             'name'    => 'description',
             'options' => [
-                'label' => "Description du champs",
+                'label' => "Description du champ",
             ],
             'type'    => 'Textarea',
         ]);
@@ -52,12 +52,12 @@ class AutresForm extends AbstractForm
             'type' => 'Select',
         ]);
         $this->get('type')
-            ->setValueOptions(['' => '(Sélectionnez un type de champs...)'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceDossierAutreType()->getList()));
+            ->setValueOptions(['' => '(Sélectionnez un type de champ...)'] + \UnicaenApp\Util::collectionAsOptions($this->getServiceDossierAutreType()->getList()));
 
         $this->add([
             'name'    => 'obligatoire',
             'options' => [
-                'label' => 'Champs obligatoire',
+                'label' => 'Champ obligatoire',
             ],
             'type'    => 'Checkbox',
         ]);

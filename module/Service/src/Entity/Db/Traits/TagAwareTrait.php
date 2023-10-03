@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
+namespace Service\Entity\Db\Traits;
 
-use Application\Entity\Db\Tag;
+use Service\Entity\Db\Tag;
 
 /**
  * Description of TagAwareTrait

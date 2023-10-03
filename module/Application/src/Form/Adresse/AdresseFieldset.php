@@ -85,7 +85,7 @@ class AdresseFieldset extends AbstractFieldset
                 'class'       => 'dossierElement',
                 'placeholder' => 'N°',
                 'pattern'     => '[0-9]*',
-                'title'       => 'Le champs doit contenir uniquement des numéros',
+                'title'       => 'Le champ doit contenir uniquement des numéros',
                 'maxlength'   => 4,
             ],
             'type'       => 'Text',

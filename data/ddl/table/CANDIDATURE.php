@@ -141,6 +141,18 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
+        'DATE_COMMISSION'              => [
+            'name'        => 'DATE_COMMISSION',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => null,
+            'precision'   => null,
+            'nullable'    => true,
+            'default'     => null,
+            'position'    => 4,
+            'commentaire' => null,
+        ],
     ],
 ];
 

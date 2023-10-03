@@ -6,17 +6,19 @@
                 <th>Offre d'emploi</th>
                 <th>Composante</th>
                 <th>Etat</th>
+                <th>Date commission</th>
                 <th v-if="canValiderCandidature">Action</th>
             </tr>
             </thead>
             <tbody>
             <tr v-if="candidatures.length == 0">
-                <td v-if="canValiderCandidature" colspan="4" style="text-align:center;">Aucune candidature</td>
-                <td v-if="!canValiderCandidature" colspan="3" style="text-align:center;">Aucune candidature</td>
+                <td v-if="canValiderCandidature" colspan="5" style="text-align:center;">Aucune candidature</td>
+
             </tr>
+
             <tr v-for="candidature in candidatures" :key="candidature.id">
                 <td style="text-align:center;"><a :href="urlOffre(candidature)">{{ candidature.offre.titre }}</a></td>
-                <td style="text-align:center;">{{ candidature.offre.structure.libelleLong }}</td>
+                <td style="text-align:center;">{{ candidature.offre.structure.libelleCourt }}</td>
                 <td style="text-align:center;">
                     <span v-if="candidature.validation" class="badge rounded-pill bg-success">Acceptée par {{
                             candidature.validation.histoCreateur.displayName
@@ -24,6 +26,10 @@
                     <span v-if="!candidature.validation && candidature.motif !== null" class="badge rounded-pill bg-danger">{{ candidature.motif }}</span>
                     <span v-if="!candidature.validation && candidature.motif === null" class="badge rounded-pill bg-warning">En attente d'acceptation</span>
                 </td>
+                <td>
+                    <u-date v-if="candidature.dateCommission" :value="candidature.dateCommission"/>
+                </td>
+
                 <td v-if="this.canValiderCandidature" style="text-align:center;">
                     <a v-if="!candidature.validation" :href="urlAccepterCandidature(candidature)"
                        class="btn btn-success"
@@ -97,7 +103,7 @@ export default {
         },
         validerCandidature(event)
         {
-            popConfirm(event.target, (response) => {
+            modAjax(event.currentTarget, (widget) => {
                 this.reload();
             });
         },

@@ -88,6 +88,7 @@ trait FormFieldsetTrait
 
         /** @var $element \Laminas\Form\Element */
         foreach ($elements as $elementName) {
+            
             if ($element = $this->get($elementName)) {
                 switch (get_class($element)) {
                     case Select::class:

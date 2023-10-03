@@ -114,10 +114,10 @@ return [
         "OBLIGATOIRE"         => true,
     ],
     "MISSION_PRIME"                  => [
-        "LIBELLE_INTERVENANT" => "Je visualise mes primes de fin de missions",
-        "LIBELLE_AUTRES"      => "Je visualise mes primes de fin de missions",
+        "LIBELLE_INTERVENANT" => "Je visualise mes indemnités de fin de contrat",
+        "LIBELLE_AUTRES"      => "Je visualise mes indemnités de fin de contrat",
         "ROUTE"               => "intervenant/prime-mission",
-        "DESC_NON_FRANCHIE"   => "Aucune prime à gérer",
+        "DESC_NON_FRANCHIE"   => "Aucune indemnité de fin de contrat à gérer",
         "OBLIGATOIRE"         => true,
     ],
     "CLOTURE_REALISE"                => [

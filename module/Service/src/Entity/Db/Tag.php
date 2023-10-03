@@ -1,8 +1,7 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Service\Entity\Db;
 
-use Laminas\Validator\Date;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 

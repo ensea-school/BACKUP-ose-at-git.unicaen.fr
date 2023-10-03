@@ -143,7 +143,7 @@ Les données en sortie sont préparées pour être exploitées par la vue source
 [SRC_INTERVENANT](../Générique/SRC_INTERVENANT.sql)
 
 La vue SRC_INTERVENANT remplit plusieurs rôles :
-* Elle récupère les valeurs identifiantes pour les champs faisant références à d'autres tables à l'aide des valeurs (champs z_*) transmises à cet effet par la vue matérialisée
+* Elle récupère les valeurs identifiantes pour les champs faisant références à d'autres tables à l'aide des valeurs (champ z_*) transmises à cet effet par la vue matérialisée
 * Elle se charge de ne synchroniser les colonnes STATUT_ID et STRUCTURE_ID que si ces dernières sont synchronisables (les colonnes SYNC_* l'indiquant).
 * Si les données personnelles sont saisies, alors le statut de l'intervenant sera celui renseigné par l'intervenant dans son dossier.
 * La vue source synchronise les données des deux dernières années. 

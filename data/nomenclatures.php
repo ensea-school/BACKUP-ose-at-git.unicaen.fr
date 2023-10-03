@@ -102,11 +102,11 @@ return [
     ],
 
     'DOSSIER_CHAMP_AUTRE' => [
-        ['ID' => 1, 'LIBELLE' => 'Dossier champs autre 1', 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
-        ['ID' => 2, 'LIBELLE' => 'Dossier champs autre 2', 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
-        ['ID' => 3, 'LIBELLE' => 'Dossier champs autre 3', 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
-        ['ID' => 4, 'LIBELLE' => 'Dossier champs autre 4', 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
-        ['ID' => 5, 'LIBELLE' => 'Dossier champs autre 5', 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 1, 'LIBELLE' => 'Dossier champ autre 1', 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 2, 'LIBELLE' => 'Dossier champ autre 2', 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 3, 'LIBELLE' => 'Dossier champ autre 3', 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 4, 'LIBELLE' => 'Dossier champ autre 4', 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
+        ['ID' => 5, 'LIBELLE' => 'Dossier champ autre 5', 'DOSSIER_CHAMP_AUTRE_TYPE_ID' => 1, 'OBLIGATOIRE' => true],
     ],
 
 

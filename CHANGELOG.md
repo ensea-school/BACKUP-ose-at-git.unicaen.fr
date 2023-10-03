@@ -390,11 +390,11 @@ https://redmine.unicaen.fr/Etablissement/issues/49445?issue_count=42&issue_posit
 * Changement du bouton de cloture de service pour un libellé plus parlant et un style de bouton plus prononcé
 * Formules nouvelles ou mises à jour : Rennes 2, Paris Saclay, Guyane, Côte d'Azur, La Réunion, Poitiers, Brest, Rouen
 * Possibilité de créer un nouveau test de formule en téléversant une feuille de calcul au format tableur
-* Ajout d'un champs cci pour l'envoi de mail aux intervenants et le refus de pièces jointes (#45083)
+* Ajout d'un champ cci pour l'envoi de mail aux intervenants et le refus de pièces jointes (#45083)
 
 ## Corrections de bugs
 
-* Données personnelles : pouvoir pré-remplir le champs statut avec un statut non sélectionnable dans la liste. (#45216)
+* Données personnelles : pouvoir pré-remplir le champ statut avec un statut non sélectionnable dans la liste. (#45216)
 * Budget/Liquidation : afficher le nombre de HETD uniquement des HCO et non les HETD des HCO + Heures de service
 * Notes : Afficher le bon utilisateur pour la validation de service (#45413).
 * Forcer l'activiation de l'étape pièces justificatives même si il n'y a pas de service prévisionnel de renseigné.

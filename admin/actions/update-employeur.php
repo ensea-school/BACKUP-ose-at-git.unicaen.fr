@@ -83,9 +83,9 @@ foreach ($listFiles as $file) {
         * $data[2] = Nom unité légale (cas entreprise en nom propre)
         * $data[3] = Nom usage unité légale
         * $data[4] = Raison sociale pour les personnes morales
-        * $data[5] = Nom sous lequel est connu l'entreprise du grand public (champs N°1 à 70 carac)
-        * $data[6] = Nom sous lequel est connu l'entreprise du grand public (champs N°2 à 70 carac)
-        * $data[7] = Nom sous lequel est connu l'entreprise du grand public (champs N°3 à 70 carac)
+        * $data[5] = Nom sous lequel est connu l'entreprise du grand public (champ N°1 à 70 carac)
+        * $data[6] = Nom sous lequel est connu l'entreprise du grand public (champ N°2 à 70 carac)
+        * $data[7] = Nom sous lequel est connu l'entreprise du grand public (champ N°3 à 70 carac)
         * $data[8] = Date de dernier traitement de l'unité légale
         * $data[9] = Unité pouvant employer des personnes
         * $data[10] = Identifiant association

@@ -368,7 +368,7 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
         WHEN e.code = ''CANDIDATURE_SAISIE'' OR e.code = ''CANDIDATURE_VALIDATION'' THEN
           si.offre_emploi_postuler
 
-        WHEN e.code = ''MISSION_SAISIE'' OR e.code = ''MISSION_VALIDATION'' OR e.code = ''MISSION_SAISIE_REALISE'' OR e.code = ''MISSION_VALIDATION_REALISE'' THEN
+        WHEN e.code = ''MISSION_SAISIE'' OR e.code = ''MISSION_VALIDATION'' OR e.code = ''MISSION_SAISIE_REALISE'' OR e.code = ''MISSION_VALIDATION_REALISE'' OR e.code = ''MISSION_PRIME'' THEN
           si.mission
 
         WHEN e.code = ''DONNEES_PERSO_SAISIE'' OR e.code = ''DONNEES_PERSO_VALIDATION'' THEN

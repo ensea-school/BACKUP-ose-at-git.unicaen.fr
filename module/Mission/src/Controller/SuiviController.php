@@ -253,6 +253,7 @@ class SuiviController extends AbstractController
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'mission',
+            'paiement'
         ], $mission->getIntervenant());
     }
 

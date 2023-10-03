@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @var $this                     \Application\View\Renderer\PhpRenderer
+ * @var $title                    string
+ * @var $prime                    \Mission\Entity\Db\Prime
+ * @var $mission                  \Mission\Entity\Db\Mission
+ * @var $intervenant              \Application\Entity\Db\Intervenant
+ * @var $missions                 \Application\Entity\Collection
+ */
+
+?>
+
+<?= $this->tag('h1', ['class' => 'page-header'])->html($title); ?>
+
+<form action="<?= $this->url('offre-emploi/accepter-candidature', ['candidature' => $candidature->getId()]) ?>" method="post">
+    <p>
+        Pour accepter cette candidature, vous devez renseigner la date de commission de recrutement concernant la validation de la candidature de <b><?= $candidature->getIntervenant()->getNomUsuel() . ' ' . $candidature->getIntervenant()->getPrenom() ?> </b>pour l'offre <b>
+        <?= $candidature->getOffre()->getTitre() . '</b> (' . $candidature->getOffre()->getTypeMission()->getLibelle() . ')' ?>
+    </p>
+    <label>Date de commission : </label>
+    <input type="date" name="date-commission" class="form-control" value="">
+
+    <input type="submit" name="submit" class="btn btn-primary btn-save" value="Accepter la candidature">
+</form>

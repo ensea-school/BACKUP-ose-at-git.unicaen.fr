@@ -28,6 +28,8 @@
             <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
         </many-to-one>
         <field name="motif" type="string" column="MOTIF" length="4000" nullable="true"/>
+        <field name="dateCommission" type="datetime" column="DATE_COMMISSION" nullable="true"/>
+
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
             <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>

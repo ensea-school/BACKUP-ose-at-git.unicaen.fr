@@ -9,6 +9,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Doctrine\ORM\Query;
+use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\OffreEmploi;
@@ -177,20 +178,37 @@ class  OffreEmploiController extends AbstractController
         /** @var Candidature $candidature */
         $candidature = $this->getEvent()->getParam('candidature');
 
-        if ($candidature->isValide()) {
-            $this->flashMessenger()->addInfoMessage('La candidature est déjà acceptée');
-        } else {
-            $this->getServiceValidation()->validerCandidature($candidature);
-            $this->getServiceCandidature()->save($candidature);
-            //Envoyer mail de confirmation d'acceptation de candidature
-            $this->getServiceCandidature()->envoyerMail($candidature, Candidature::MODELE_MAIL_ACCEPTATION, Candidature::OBJET_MAIL_ACCEPTATION);
-            $this->flashMessenger()->addSuccessMessage("La candidature est bien acceptée");
-            $mission = $this->getServiceMission()->createMissionFromCandidature($candidature);
-            $this->getServiceWorkflow()->calculerTableauxBord([], $candidature->getIntervenant());
+        $title = "Accepter candidature";
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+
+            $dateCommission = $this->getRequest()->getPost('date-commission');
+
+            if (!empty($dateCommission)) {
+
+                $dateCommission = new \DateTime($dateCommission);
+                $candidature->setDateCommission($dateCommission);
+                $this->getServiceValidation()->validerCandidature($candidature);
+                $this->getServiceCandidature()->save($candidature);
+                //Envoyer mail de confirmation d'acceptation de candidature
+                $this->getServiceCandidature()->envoyerMail($candidature, Candidature::MODELE_MAIL_ACCEPTATION, Candidature::OBJET_MAIL_ACCEPTATION);
+                $this->flashMessenger()->addSuccessMessage("La candidature est bien acceptée");
+                $mission = $this->getServiceMission()->createMissionFromCandidature($candidature);
+                $this->getServiceWorkflow()->calculerTableauxBord([], $candidature->getIntervenant());
+            } else {
+                $this->flashMessenger()->addErrorMessage("Vous n'avez pas renseigné la date de commission de recurtement");
+            }
+            //On valide la candidature
+
         }
 
+        $vm = new ViewModel();
+        $vm->setTemplate('mission/offre-emploi/accepter-candidature');
+        $vm->setVariables(compact('title', 'candidature'));
 
-        return $this->getAction($candidature->getOffre());
+        return $vm;
+
     }
 
 
@@ -211,6 +229,7 @@ class  OffreEmploiController extends AbstractController
             if ($candidature->isValide()) {
                 $validation = $candidature->getValidation();
                 $candidature->setValidation(null);
+                $candidature->setDateCommission(null);
                 $this->getServiceValidation()->delete($validation);
             }
 

@@ -115,7 +115,8 @@ class CandidatureService extends AbstractEntityService
             'id',
             'motif',
             'validation',
-            ['offre', ['id', 'typeMission', 'titre', ['structure', ['libelleLong']]]],
+            'dateCommission',
+            ['offre', ['id', 'typeMission', 'titre', ['structure', ['libelleCourt']]]],
             ['intervenant', ['id', 'nomUsuel', 'prenom', 'emailPro', 'code', ['structure', ['libelleLong', 'libelleCourt', 'code', 'id']], ['statut', ['libelle', 'code']]]],
         ];
 

@@ -12,7 +12,7 @@ use Application\Provider\Privilege\Privileges;
 
 $canGerer = $this->isAllowed(Privileges::getResourceId(Privileges::MISSION_PRIME_GESTION));
 
-$title = 'Indemnité de fin de contrat';
+$title = 'Indemnités de fin de contrat';
 $nextEtape = WfEtape::CODE_MISSION_VALIDATION_REALISE;
 
 $this->intervenant($intervenant)->renderTitle($title);

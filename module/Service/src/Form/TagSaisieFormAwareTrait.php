@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Form\Tag;
+namespace Service\Form;
 
 
 /**

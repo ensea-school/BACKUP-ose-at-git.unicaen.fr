@@ -125,7 +125,7 @@ class IntervenantDossierController extends AbstractController
             'fieldset-iban'                    => $intervenantDossier->getStatut()->getDossierBanque(),
             'fieldset-insee'                   => $intervenantDossier->getStatut()->getDossierInsee(),
             'fieldset-employeur'               => $intervenantDossier->getStatut()->getDossierEmployeur(),
-            'fieldset-autres'                  => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champs autre
+            'fieldset-autres'                  => (!empty($champsAutres)) ? 1 : 0,//Si le statut intervenant a au moins 1 champ autre
         ];
 
         $iPrec    = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);

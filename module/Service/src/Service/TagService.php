@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\Service;
+namespace Service\Service;
 
-use Application\Entity\Db\Tag;
+use Application\Service\AbstractEntityService;
+use Service\Entity\Db\Tag;
 use Doctrine\ORM\QueryBuilder;
-use Laminas\Validator\Date;
 
 /**
  * Description of TagService

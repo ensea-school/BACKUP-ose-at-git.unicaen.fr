@@ -1,10 +1,11 @@
 <?php
 
-namespace Application\Controller;
+namespace Service\Controller;
 
-use Application\Entity\Db\Tag;
-use Application\Form\Tag\TagSaisieFormAwareTrait;
-use Application\Service\Traits\TagServiceAwareTrait;
+use Application\Controller\AbstractController;
+use Service\Service\TagServiceAwareTrait;
+use Service\Entity\Db\Tag;
+use Service\Form\TagSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 class TagController extends AbstractController

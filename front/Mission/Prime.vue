@@ -3,7 +3,7 @@
          class="card">
         <div :class="{'text-white':prime.dateRefus}" class="card-header card-header-h3">
             <h5 v-if="prime.id">
-                Prime de fin de mission N°{{ numero+1 }}<br/>
+                Indemnité de fin de contrat N°{{ numero+1 }}<br/>
             </h5>
             <div>
                 <u>Mission(s) concernée(s)</u> :
@@ -29,7 +29,7 @@
                             </div>
                             <div class="card-body">
                                 <p class="card-text">
-                                    Pour <b>bénéficier de votre prime de fin de contrat</b>, vous devez déposer une déclaration sur l'honneur (<a
+                                    Pour <b>bénéficier de votre indemnité de fin de contrat</b>, vous devez déposer une déclaration sur l'honneur (<a
                                     href="">exemple</a>) signée précisant que vous
                                     ne
                                     débutez pas
@@ -86,7 +86,7 @@
                         <div v-if="!prime.validation">
                             <input :checked="prime.dateRefus" :disabled="prime.validation" name="prime" type="checkbox"
                                    @change="refuser"/>&nbsp;
-                            Ou en cochant cette case, <b>je déclare ne pas pouvoir bénéficier de la prime</b> de fin de mission en raison du démarrage d'un
+                            Ou en cochant cette case, <b>je déclare ne pas pouvoir bénéficier d'une indemnité</b> de fin de contrat en raison du démarrage d'un
                             nouveau
                             contrat au sein de la
                             fonction publique à la suite de ces missions.
@@ -100,7 +100,7 @@
                             <div v-if="prime.dateRefus">
                                 <u-icon name="thumbs-down"
                                         variant="danger"/>
-                                Prime refusée le
+                                Indemnité refusée le
                                 <u-date :value="prime.dateRefus"/>
                             </div>
                             <!--Etat du dépôt de la déclaration-->
@@ -135,12 +135,12 @@
                             <div v-if="prime.validation && !prime.dateRefus">
                                 <u-icon name="euro-sign"
                                         variant="success"/>
-                                Intervenant éligible à la prime de fin de contrat
+                                Intervenant éligible à une indemnité de fin de contrat
                             </div>
                             <div v-if="prime.dateRefus">
                                 <u-icon name="euro-sign"
                                         variant="info"/>
-                                Intervenant non éligible à la prime de fin de contrat
+                                Intervenant non éligible à une indemnité de fin de contrat
 
                             </div>
 

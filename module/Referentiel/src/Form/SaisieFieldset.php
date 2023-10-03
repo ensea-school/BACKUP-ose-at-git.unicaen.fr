@@ -3,7 +3,7 @@
 namespace Referentiel\Form;
 
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\Tag;
+use Service\Entity\Db\Tag;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Application\Form\AbstractFieldset;
@@ -11,7 +11,6 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TagServiceAwareTrait;
 use Laminas\Filter\PregReplace;
 use Laminas\Form\Element\Hidden;
 use Laminas\Hydrator\HydratorInterface;
@@ -22,6 +21,7 @@ use Paiement\Service\MotifNonPaiementServiceAwareTrait;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Service\FonctionReferentielServiceAwareTrait;
+use Service\Service\TagServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
 use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;

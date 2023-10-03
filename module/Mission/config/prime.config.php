@@ -104,8 +104,8 @@ return [
         'intervenant' => [
             'pages' => [
                 'prime' => [
-                    'label'        => "Prime de fin de missions",
-                    'title'        => "Prime de fin de missions",
+                    'label' => "Indemnités de fin de contrat",
+                    'title' => "Indemnités de fin de contrat",
                     'route'        => 'intervenant/prime-mission',
                     'paramsInject' => [
                         'intervenant',

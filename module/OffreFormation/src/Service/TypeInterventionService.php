@@ -5,6 +5,7 @@ namespace OffreFormation\Service;
 use Application\Service\AbstractEntityService;
 use Application\Service\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\TypeIntervention;
 
 /**
@@ -100,4 +101,21 @@ class TypeInterventionService extends AbstractEntityService
             return null;
         }
     }
+
+    public function findTypeInterventionByElementPedagogique (ElementPedagogique $elementPedagogique): array
+    {
+        $sql = "
+              SELECT ti.id, ti.code  
+              FROM element_pedagogique ep 
+              JOIN type_intervention_ep tie ON ep.id = tie.element_pedagogique_id AND tie.histo_destruction IS NULL
+			  JOIN type_intervention ti	ON ti.id = tie.type_intervention_id              
+			  WHERE ep.id = :elementPedagogique
+        ";
+
+        $res = $this->getEntityManager()->getConnection()->fetchAllKeyValue($sql, ['elementPedagogique' => $elementPedagogique->getId()]);
+
+        return $res;
+    }
+
+
 }

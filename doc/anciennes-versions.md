@@ -83,7 +83,7 @@ Objectif : Connecteur import Actul+ & système différentiel pour comparer des c
 
 ## Corrections de bugs
 
-* Vérification que le champs 'numéro de rue' contient uniquement des chiffres lors de l'enregistrement des données
+* Vérification que le champ 'numéro de rue' contient uniquement des chiffres lors de l'enregistrement des données
   personnelles (#37492)
 * Il n'est désormais plus possible de saisir un horaire de fin antérieur à celui de début en mode de saisie de service
   calendaire (#36319)

@@ -3,7 +3,7 @@
 namespace Enseignement\Entity;
 
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Tag;
+use Service\Entity\Db\Tag;
 use Application\Entity\Db\Validation;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;

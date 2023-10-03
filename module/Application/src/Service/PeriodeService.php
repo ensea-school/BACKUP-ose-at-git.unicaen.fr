@@ -6,6 +6,7 @@ use Application\Entity\Db\Periode;
 use Application\Entity\Db\Structure;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use Paiement\Service\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 
@@ -113,6 +114,23 @@ class PeriodeService extends AbstractEntityService
         $qb->andWhere("$alias.enseignement = 1");
 
         return $qb;
+    }
+
+    public function findPeriodeByElementPedagogique (ElementPedagogique $elementPedagogique): array
+    {
+        $sql = "
+            SELECT 
+                p.id, p.libelle_long              
+            FROM 
+              element_pedagogique ep 
+              JOIN periode p ON p.id = ep.periode_id
+            WHERE 
+              ep.id = :elementPedagogique
+        ";
+
+        $res = $this->getEntityManager()->getConnection()->fetchAllKeyValue($sql, ['elementPedagogique' => $elementPedagogique->getId()]);
+
+        return $res;
     }
 
 

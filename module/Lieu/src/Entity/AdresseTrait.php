@@ -2,7 +2,6 @@
 
 namespace Lieu\Entity;
 
-use Application\Interfaces\AdresseInterface;
 use Lieu\Entity\Db\AdresseNumeroCompl;
 use Lieu\Entity\Db\Pays;
 use Lieu\Entity\Db\Voirie;

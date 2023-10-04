@@ -4,10 +4,10 @@ namespace Dossier\Entity\Db;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\CiviliteAwareTrait;
-use Application\Interfaces\AdresseInterface;
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\AdresseInterface;
 use Lieu\Entity\AdresseTrait;
 use Lieu\Entity\Db\Departement;
 use Lieu\Entity\Db\Pays;

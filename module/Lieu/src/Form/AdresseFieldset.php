@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Form\Adresse;
+namespace Lieu\Form;
 
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;

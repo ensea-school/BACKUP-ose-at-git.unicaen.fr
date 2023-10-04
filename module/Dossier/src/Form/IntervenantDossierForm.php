@@ -5,13 +5,13 @@ namespace Dossier\Form;
 use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractFieldset;
 use Application\Form\AbstractForm;
-use Application\Form\Adresse\AdresseFieldset;
-use Dossier\Hydrator\IntervenantDossierHydrator;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Dossier\Hydrator\IntervenantDossierHydrator;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Enseignement\Service\ServiceServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
+use Lieu\Form\AdresseFieldset;
 
 /**
  * Formulaire de modification du dossier d'un intervenant extérieur.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Interfaces;
+namespace Lieu\Entity;
 
 
 interface AdresseInterface

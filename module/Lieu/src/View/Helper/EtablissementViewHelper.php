@@ -4,6 +4,7 @@ namespace Lieu\View\Helper;
 
 use Laminas\View\Helper\AbstractHelper;
 use Lieu\Entity\Db\Etablissement;
+use Lieu\Entity\Db\EtablissementAwareTrait;
 
 /**
  * Description of EtablissementViewHelper

@@ -20,7 +20,7 @@
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+    <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure">
       <join-columns>
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
       </join-columns>

@@ -3,18 +3,18 @@
 namespace Agrement\Assertion;
 
 use Agrement\Entity\Db\Agrement;
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
 use Agrement\Entity\Db\TblAgrement;
 use Agrement\Entity\Db\TypeAgrement;
+use Agrement\Service\Traits\TblAgrementServiceAwareTrait;
+use Agrement\Service\Traits\TypeAgrementServiceAwareTrait;
+use Application\Acl\Role;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Resource\WorkflowResource;
-use Agrement\Service\Traits\TblAgrementServiceAwareTrait;
-use Agrement\Service\Traits\TypeAgrementServiceAwareTrait;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
-use Application\Acl\Role;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\Structure;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 
 
 /**

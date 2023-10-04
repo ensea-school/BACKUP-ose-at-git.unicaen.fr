@@ -3,22 +3,22 @@
 namespace Service\Form;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
 use Application\Entity\NiveauEtape;
 use Application\Form\AbstractForm;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Select;
 use Laminas\Form\ElementInterface;
 use Laminas\Hydrator\HydratorInterface;
-use OffreFormation\Form\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
-use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
+use Lieu\Entity\Db\Structure;
+use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Form\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
+use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Recherche;

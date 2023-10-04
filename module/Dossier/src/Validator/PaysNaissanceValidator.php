@@ -2,11 +2,11 @@
 
 namespace Dossier\Validator;
 
-use Application\Entity\Db\Pays as PaysEntity;
 use Application\Filter\DateTimeFromString;
-use LogicException;
 use DateTime;
 use Laminas\Validator\AbstractValidator;
+use Lieu\Entity\Db\Pays as PaysEntity;
+use LogicException;
 
 class PaysNaissanceValidator extends AbstractValidator
 {

@@ -3,15 +3,15 @@
 namespace Enseignement\Processus;
 
 use Application\Entity\Db\Intervenant;
-use Application\Processus\AbstractProcessus;
-use Enseignement\Entity\Db\Service;
-use Application\Entity\Db\Structure;
-use Enseignement\Entity\Db\TblValidationEnseignement;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
+use Application\Processus\AbstractProcessus;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
+use Enseignement\Entity\Db\Service;
+use Enseignement\Entity\Db\TblValidationEnseignement;
+use Lieu\Entity\Db\Structure;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 
 /**

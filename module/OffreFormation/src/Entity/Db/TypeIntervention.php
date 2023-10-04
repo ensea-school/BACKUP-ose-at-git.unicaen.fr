@@ -3,8 +3,8 @@
 namespace OffreFormation\Entity\Db;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Structure;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\Structure;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 

@@ -3,7 +3,7 @@
 namespace Mission\Controller;
 
 use Application\Service\ContextService;
-use Application\Service\StructureService;
+use Lieu\Service\StructureService;
 use Mission\Service\MissionTypeService;
 use Paiement\Service\CentreCoutService;
 use Psr\Container\ContainerInterface;

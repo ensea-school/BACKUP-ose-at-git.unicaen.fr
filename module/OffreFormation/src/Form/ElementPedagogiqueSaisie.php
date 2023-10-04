@@ -7,8 +7,8 @@ use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Service\Traits\DisciplineServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 

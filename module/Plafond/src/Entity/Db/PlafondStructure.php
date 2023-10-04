@@ -2,10 +2,10 @@
 
 namespace Plafond\Entity\Db;
 
-use Application\Entity\Db\Structure;
-use Application\Entity\Db\Traits\StructureAwareTrait;
+use Lieu\Entity\Db\Structure;
 use Plafond\Interfaces\PlafondConfigInterface;
 use Plafond\Traits\PlafondConfigTrait;
+use Lieu\Entity\Db\StructureAwareTrait;
 
 /**
  * PlafondStructure

@@ -6,9 +6,9 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Entity\MiseEnPaiementRecherche;
 
 /**

@@ -4,23 +4,23 @@ namespace Referentiel\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Intervenant;
+use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
+use Plafond\Processus\PlafondProcessusAwareTrait;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Referentiel\Form\SaisieAwareTrait;
-use Plafond\Processus\PlafondProcessusAwareTrait;
 use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
 use Referentiel\Processus\ValidationReferentielProcessusAwareTrait;
-use Application\Provider\Privilege\Privileges;
-use Service\Service\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Referentiel\Service\ServiceReferentielServiceAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Entity\Recherche;
+use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\RechercheServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
-use Service\Entity\Recherche;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 /**
@@ -98,7 +98,7 @@ class ServiceReferentielController extends AbstractController
     {
         $this->initFilters();
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\Structure::class,
+            \Lieu\Entity\Db\Structure::class,
         ]);
         $id = (int)$this->params()->fromRoute('id');
 

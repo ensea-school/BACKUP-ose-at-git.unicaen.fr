@@ -3,17 +3,17 @@
 namespace ExportRh\Connecteur\Siham;
 
 use Application\Entity\Db\Intervenant;
-use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
-use Application\Service\Traits\VoirieServiceAwareTrait;
 use ExportRh\Connecteur\ConnecteurRhInterface;
 use ExportRh\Entity\IntervenantRh;
 use ExportRh\Form\Fieldset\SihamFieldset;
 use ExportRh\Service\ExportRhServiceAwareTrait;
+use Laminas\Form\Fieldset;
+use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
+use Lieu\Service\VoirieServiceAwareTrait;
 use UnicaenApp\Util;
 use UnicaenSiham\Exception\SihamException;
 use UnicaenSiham\Service\Siham;
-use Laminas\Form\Fieldset;
 
 class SihamConnecteur implements ConnecteurRhInterface
 {

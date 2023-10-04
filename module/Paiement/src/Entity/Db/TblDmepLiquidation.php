@@ -23,7 +23,7 @@ class TblDmepLiquidation
     private $typeRessource;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Lieu\Entity\Db\Structure
      */
     private $structure;
 
@@ -73,7 +73,7 @@ class TblDmepLiquidation
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure
+     * @return \Lieu\Entity\Db\Structure
      */
     public function getStructure()
     {

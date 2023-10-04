@@ -5,6 +5,7 @@ namespace Application\Entity\Db;
 use Doctrine\Common\Collections\ArrayCollection;
 use Enseignement\Entity\Db\Service;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\CentreCoutEp;
 use OffreFormation\Entity\Db\TypeHeures;
 use OffreFormation\Service\DomaineFonctionnelService;

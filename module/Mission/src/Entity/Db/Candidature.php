@@ -3,12 +3,11 @@
 namespace Mission\Entity\Db;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Validation;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use UnicaenVue\Axios\AxiosExtractorInterface;
 
 class Candidature implements HistoriqueAwareInterface, ResourceInterface
 {

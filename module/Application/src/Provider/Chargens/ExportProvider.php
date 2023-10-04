@@ -3,10 +3,10 @@
 namespace Application\Provider\Chargens;
 
 
-use Application\Model\Chargens\Export;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Scenario;
-use Application\Entity\Db\Structure;
+use Application\Model\Chargens\Export;
+use Lieu\Entity\Db\Structure;
 use UnicaenApp\View\Model\CsvModel;
 
 class ExportProvider

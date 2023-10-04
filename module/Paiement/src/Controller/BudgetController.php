@@ -3,13 +3,13 @@
 namespace Paiement\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Structure;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\Form\Element\Select;
+use Lieu\Entity\Db\Structure;
+use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Entity\Db\Dotation;
 use Paiement\Entity\Db\TypeRessource;
 use Paiement\Form\Budget\DotationSaisieFormAwareTrait;

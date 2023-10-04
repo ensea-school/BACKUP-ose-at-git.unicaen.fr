@@ -51,7 +51,7 @@
             </join-columns>
         </many-to-one>
         <!-- NB: inversed-by ajouté à la main -->
-        <many-to-one field="structure" target-entity="Application\Entity\Db\Structure" inversed-by="elementPedagogique">
+        <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure" inversed-by="elementPedagogique">
             <join-columns>
                 <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
             </join-columns>

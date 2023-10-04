@@ -23,7 +23,7 @@ class MiseEnPaiementIntervenantStructure
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Lieu\Entity\Db\Structure
      */
     private $structure;
 
@@ -105,10 +105,10 @@ class MiseEnPaiementIntervenantStructure
     /**
      * Set structure
      *
-     * @param \Application\Entity\Db\Structure $structure
+     * @param \Lieu\Entity\Db\Structure $structure
      * @return MiseEnPaiementIntervenantStructure
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 
@@ -118,7 +118,7 @@ class MiseEnPaiementIntervenantStructure
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Lieu\Entity\Db\Structure
      */
     public function getStructure()
     {

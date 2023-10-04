@@ -163,6 +163,23 @@ class ConfigFactory
             $routeGuards[] = $routeGuard;
         }
 
+        if (isset($config['controller']) && isset($config['action']) && isset($config['roles'])) {
+            $routeGuard = [
+                'controller' => $config['controller'],
+                'action'     => $config['action'],
+                'roles'      => $config['roles'],
+            ];
+            unset($config['roles']);
+
+            if (isset($config['assertion'])) {
+                $routeGuard['assertion'] = $config['assertion'];
+
+                unset($config['assertion']);
+            }
+
+            $routeGuards[] = $routeGuard;
+        }
+
         /* On remonte ces params dans le sous-menu options */
         $optionsParams = ['route', 'defaults', 'constraints'];
         foreach ($optionsParams as $param) {

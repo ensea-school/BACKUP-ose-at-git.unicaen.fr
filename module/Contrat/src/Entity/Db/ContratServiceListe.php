@@ -4,7 +4,7 @@ namespace Contrat\Entity\Db;
 
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
+use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\TypeMission;
 use OffreFormation\Entity\Db\ElementPedagogique;

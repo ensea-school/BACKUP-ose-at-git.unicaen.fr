@@ -2,10 +2,10 @@
 
 namespace Application\View\Helper;
 
+use Lieu\Service\StructureServiceAwareTrait as StructureServiceAwareTrait;
+use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenUtilisateur\View\Helper\UserProfileSelectRadioItem as UnicaenAuthViewHelper;
-use Application\Service\Traits\StructureServiceAwareTrait as StructureServiceAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 
 /**
  * Aide de vue dessinant un item de sélection d'un profil utilisateur.

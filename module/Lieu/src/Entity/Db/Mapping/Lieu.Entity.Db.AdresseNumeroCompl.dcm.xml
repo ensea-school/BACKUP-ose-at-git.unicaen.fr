@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Lieu\Entity\Db\AdresseNumeroCompl" table="ADRESSE_NUMERO_COMPL">
+        <id name="id" type="integer" column="ID"/>
+        <field name="code" type="string" column="CODE" length="5" nullable="false"/>
+        <field name="codeRh" type="string" column="CODE_RH" length="10" nullable="true"/>
+        <field name="libelle" type="string" column="LIBELLE" length="60" nullable="false"/>
+    </entity>
+</doctrine-mapping>

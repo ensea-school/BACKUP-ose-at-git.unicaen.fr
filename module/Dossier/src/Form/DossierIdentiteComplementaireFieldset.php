@@ -2,16 +2,16 @@
 
 namespace Dossier\Form;
 
+use Application\Constants;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DepartementServiceAwareTrait;
-use Application\Service\Traits\PaysServiceAwareTrait;
-use Intervenant\Service\StatutServiceAwareTrait;
 use Dossier\Validator\DepartementNaissanceValidator;
 use Dossier\Validator\PaysNaissanceValidator;
-use Application\Constants;
+use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Validator\Date as DateValidator;
+use Lieu\Service\DepartementServiceAwareTrait;
+use Lieu\Service\PaysServiceAwareTrait;
 
 /**
  * Description of DossierIdentiteComplementaireFieldset

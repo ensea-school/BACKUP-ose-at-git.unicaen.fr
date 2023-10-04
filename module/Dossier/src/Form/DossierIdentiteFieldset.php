@@ -5,9 +5,9 @@ namespace Dossier\Form;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DepartementServiceAwareTrait;
-use Application\Service\Traits\PaysServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
+use Lieu\Service\DepartementServiceAwareTrait;
+use Lieu\Service\PaysServiceAwareTrait;
 
 /**
  * Description of DossierFieldset

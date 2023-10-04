@@ -3,10 +3,10 @@
 namespace Application\Controller;
 
 use Application\Acl\Role;
-use Application\Service\Traits\UtilisateurServiceAwareTrait;
-use UnicaenAuthentification\Controller\UtilisateurController as BaseController;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Lieu\Service\StructureServiceAwareTrait;
+use UnicaenAuthentification\Controller\UtilisateurController as BaseController;
 use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
 
 

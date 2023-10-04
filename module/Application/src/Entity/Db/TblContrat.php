@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Lieu\Entity\Db\Structure;
+
 class TblContrat
 {
     private int         $id;

@@ -2,22 +2,22 @@
 
 namespace Enseignement\Form;
 
-use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Form\AbstractFieldset;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtablissementServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Entity\Db\Etablissement;
+use Lieu\Service\EtablissementServiceAwareTrait;
+use Lieu\Service\StructureServiceAwareTrait;
+use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Form\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
-use OffreFormation\Entity\Db\ElementPedagogique;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
 

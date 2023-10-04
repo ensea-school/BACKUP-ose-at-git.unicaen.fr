@@ -2,10 +2,10 @@
 
 namespace Application\View\Helper;
 
+use Application\Service\Traits\ContextServiceAwareTrait;
+use Lieu\Service\StructureServiceAwareTrait;
 use Psr\Container\ContainerInterface;
 use UnicaenApp\View\Helper\UserProfileSelectFactory;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenAuthentification\Service\UserContext;
 
 /**

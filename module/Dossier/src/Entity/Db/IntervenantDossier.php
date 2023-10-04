@@ -2,19 +2,19 @@
 
 namespace Dossier\Entity\Db;
 
-use Application\Entity\Db\Departement;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Pays;
 use Application\Entity\Db\Traits\CiviliteAwareTrait;
-use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
-use Application\Entity\Traits\AdresseTrait;
 use Application\Interfaces\AdresseInterface;
+use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Intervenant\Entity\Db\Statut;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\AdresseTrait;
+use Lieu\Entity\Db\Departement;
+use Lieu\Entity\Db\Pays;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface, EntityManagerAwareInterface, AdresseInterface
 {

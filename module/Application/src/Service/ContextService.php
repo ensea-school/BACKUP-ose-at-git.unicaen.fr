@@ -5,15 +5,13 @@ namespace Application\Service;
 use Application\Acl\Role;
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Entity\Db\Affectation;
-use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Parametre;
-use Application\Entity\Db\Structure;
-use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Lieu\Entity\Db\Etablissement;
+use Lieu\Entity\Db\Structure;
 use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
 
@@ -24,10 +22,10 @@ use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
  */
 class ContextService extends AbstractService
 {
-    use Traits\EtablissementServiceAwareTrait;
+    use \Lieu\Service\EtablissementServiceAwareTrait;
     use Traits\AnneeServiceAwareTrait;
     use Traits\ParametresServiceAwareTrait;
-    use Traits\StructureServiceAwareTrait;
+    use \Lieu\Service\StructureServiceAwareTrait;
     use SessionContainerTrait;
     use UserContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;

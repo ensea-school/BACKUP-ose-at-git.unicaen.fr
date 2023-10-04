@@ -2,10 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Application\Entity\Db\Traits\StructureAwareTrait;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 class Scenario implements HistoriqueAwareInterface, ResourceInterface
 {

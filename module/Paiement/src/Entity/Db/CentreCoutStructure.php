@@ -2,7 +2,7 @@
 
 namespace Paiement\Entity\Db;
 
-use Application\Entity\Db\Structure;
+use Lieu\Entity\Db\Structure;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -27,7 +27,7 @@ class CentreCoutStructure implements HistoriqueAwareInterface, ImportAwareInterf
     private $centreCout;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Lieu\Entity\Db\Structure
      */
     private $structure;
 

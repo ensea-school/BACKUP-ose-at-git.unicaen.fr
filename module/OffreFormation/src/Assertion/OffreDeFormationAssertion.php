@@ -4,19 +4,19 @@ namespace OffreFormation\Assertion;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\CentreCoutEp;
 use OffreFormation\Entity\Db\ElementModulateur;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Entity\Db\VolumeHoraireEns;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
 use UnicaenImport\Entity\Db\Source;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 
 
 /**

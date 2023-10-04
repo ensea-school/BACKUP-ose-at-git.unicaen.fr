@@ -23,7 +23,7 @@
         <many-to-one field="domaineFonctionnel" target-entity="Application\Entity\Db\DomaineFonctionnel">
             <join-column name="DOMAINE_FONCTIONNEL_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+        <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure">
             <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">

@@ -2,14 +2,14 @@
 
 namespace Plafond\View\Helper;
 
-use Mission\Entity\Db\TypeMission;
-use Referentiel\Entity\Db\FonctionReferentiel;
 use Intervenant\Entity\Db\Statut;
-use Application\Entity\Db\Structure;
 use Laminas\View\Helper\AbstractHtmlElement;
+use Lieu\Entity\Db\Structure;
+use Mission\Entity\Db\TypeMission;
 use Plafond\Form\PlafondConfigFormAwareTrait;
 use Plafond\Interfaces\PlafondConfigInterface;
 use Plafond\Service\PlafondServiceAwareTrait;
+use Referentiel\Entity\Db\FonctionReferentiel;
 
 
 /**

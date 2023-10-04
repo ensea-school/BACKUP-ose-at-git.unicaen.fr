@@ -3,12 +3,12 @@
 namespace Service\Hydrator;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Laminas\Hydrator\HydratorInterface;
-use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Recherche;

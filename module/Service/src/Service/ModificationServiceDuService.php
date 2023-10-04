@@ -2,11 +2,11 @@
 
 namespace Service\Service;
 
+use Application\Entity\Db\Annee;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Annee;
-use Application\Entity\Db\Structure;
+use Lieu\Entity\Db\Structure;
 
 
 /**

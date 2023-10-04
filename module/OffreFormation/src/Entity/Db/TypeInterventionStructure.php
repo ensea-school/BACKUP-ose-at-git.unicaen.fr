@@ -3,8 +3,8 @@
 namespace OffreFormation\Entity\Db;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use OffreFormation\Entity\Db\Traits\TypeInterventionAwareTrait;
+use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 

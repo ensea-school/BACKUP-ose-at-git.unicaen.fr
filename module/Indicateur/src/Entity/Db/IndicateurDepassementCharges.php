@@ -5,10 +5,10 @@ namespace Indicateur\Entity\Db;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use OffreFormation\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
 use OffreFormation\Entity\Db\Traits\TypeInterventionAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
+use Lieu\Entity\Db\StructureAwareTrait;
 
 
 /**

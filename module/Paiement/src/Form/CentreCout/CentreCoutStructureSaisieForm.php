@@ -4,14 +4,14 @@ namespace Paiement\Form\CentreCout;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Service\CentreCoutServiceAwareTrait;
 use Paiement\Service\CentreCoutStructureServiceAwareTrait;
 
 /**
- * Description of CentreCoutStructureStructureSaisieForm
+ * Description of CentreCoutStructureSaisieForm
  *
  * @author ZVENIGOROSKY Alexandre <alexandre.zvenigorosky@unicaen.fr>
  */

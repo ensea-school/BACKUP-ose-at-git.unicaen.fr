@@ -2,11 +2,11 @@
 
 namespace Agrement\Service;
 
-use Application\Service\AbstractEntityService;
-use Doctrine\ORM\QueryBuilder;
 use Agrement\Entity\Db\Agrement;
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Structure;
+use Application\Service\AbstractEntityService;
+use Doctrine\ORM\QueryBuilder;
+use Lieu\Entity\Db\Structure;
 
 
 /**

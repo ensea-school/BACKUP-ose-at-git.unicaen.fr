@@ -4,11 +4,11 @@ namespace Paiement\Entity\Db;
 
 use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\Intervenant;
-use Doctrine\Common\Collections\Collection;
-use Paiement\Entity\MiseEnPaiementListe;
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Structure;
+use Doctrine\Common\Collections\Collection;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\TypeHeures;
+use Paiement\Entity\MiseEnPaiementListe;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>

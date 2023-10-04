@@ -2,19 +2,16 @@
 
 namespace Application\Provider\Role;
 
+use Application\Acl\Role;
 use Application\Entity\Db\Affectation;
-use Application\Entity\Db\Structure;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PrivilegeServiceAwareTrait;
 use BjyAuthorize\Provider\Role\ProviderInterface;
-use Intervenant\Entity\Db\Statut;
+use Intervenant\Service\StatutServiceAwareTrait;
+use Laminas\Permissions\Acl\Role\RoleInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use UnicaenPrivilege\Provider\Privilege\PrivilegeProviderAwareTrait;
-use Laminas\Permissions\Acl\Role\RoleInterface;
-use Application\Acl\Role;
-use Intervenant\Service\StatutServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 
 /**
  * Fournisseur des rôles utilisateurs de l'application :

@@ -2,15 +2,15 @@
 
 namespace ExportRh\Entity;
 
-use Application\Entity\Db\AdresseNumeroCompl;
 use Application\Entity\Db\Civilite;
-use Application\Entity\Db\Departement;
 use Application\Entity\Db\Grade;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Pays;
-use Application\Entity\Db\Structure;
-use Application\Entity\Db\Voirie;
 use Intervenant\Entity\Db\Statut;
+use Lieu\Entity\Db\AdresseNumeroCompl;
+use Lieu\Entity\Db\Departement;
+use Lieu\Entity\Db\Pays;
+use Lieu\Entity\Db\Structure;
+use Lieu\Entity\Db\Voirie;
 use OffreFormation\Entity\Db\Discipline;
 
 class IntervenantRh

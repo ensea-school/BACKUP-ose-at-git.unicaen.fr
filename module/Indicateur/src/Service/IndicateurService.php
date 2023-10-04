@@ -4,11 +4,11 @@ namespace Indicateur\Service;
 
 use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Structure;
 use Application\Service\AbstractService;
 use DateTime;
 use Indicateur\Entity\Db\Indicateur;
 use Indicateur\Entity\Db\NotificationIndicateur;
+use Lieu\Entity\Db\Structure;
 use Plafond\Service\IndicateurServiceAwareTrait as PlafondIndicateurServiceAwareTrait;
 
 

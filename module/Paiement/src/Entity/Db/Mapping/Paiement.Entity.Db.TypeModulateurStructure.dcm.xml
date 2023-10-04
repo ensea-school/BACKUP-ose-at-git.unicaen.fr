@@ -37,7 +37,7 @@
         <join-column name="TYPE_MODULATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+    <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure">
       <join-columns>
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
       </join-columns>

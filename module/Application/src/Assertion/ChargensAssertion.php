@@ -4,12 +4,14 @@ namespace Application\Assertion;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Scenario;
-use Application\Entity\Db\Structure;
-use Application\Provider\Privilege\Privileges; // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\Structure;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
+
+// sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 
 
 /**

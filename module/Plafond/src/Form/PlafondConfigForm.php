@@ -2,16 +2,16 @@
 
 namespace Plafond\Form;
 
-use Referentiel\Entity\Db\FonctionReferentiel;
-use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Form\Element;
 use Laminas\Http\Request;
+use Lieu\Entity\Db\Structure;
 use Plafond\Entity\Db\Plafond;
 use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Interfaces\PlafondConfigInterface;
 use Plafond\Service\PlafondServiceAwareTrait;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use UnicaenApp\Util;
 
 

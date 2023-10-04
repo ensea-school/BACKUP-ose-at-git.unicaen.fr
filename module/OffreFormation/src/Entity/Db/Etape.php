@@ -84,7 +84,7 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
     protected $cheminPedagogique;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Lieu\Entity\Db\Structure
      */
     protected $structure;
 
@@ -319,11 +319,11 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
     /**
      * Set structure
      *
-     * @param \Application\Entity\Db\Structure $structure
+     * @param \Lieu\Entity\Db\Structure $structure
      *
      * @return Etape
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 
@@ -335,7 +335,7 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure
+     * @return \Lieu\Entity\Db\Structure
      */
     public function getStructure()
     {

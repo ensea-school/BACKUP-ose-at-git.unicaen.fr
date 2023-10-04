@@ -2,20 +2,16 @@
 
 namespace Enseignement\Service;
 
-use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Structure;
 use Application\Entity\NiveauEtape;
 use Application\Service\AbstractEntityService;
-use Application\Service\EtablissementService;
 use Application\Service\PeriodeService;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Enseignement\Entity\Db\Service;
@@ -23,6 +19,10 @@ use Enseignement\Entity\VolumeHoraireListe;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
+use Lieu\Entity\Db\Etablissement;
+use Lieu\Entity\Db\Structure;
+use Lieu\Service\EtablissementService;
+use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Entity\Db\TypeIntervention;

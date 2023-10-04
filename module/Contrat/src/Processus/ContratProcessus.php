@@ -3,7 +3,6 @@
 namespace Contrat\Processus;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
 use Application\Entity\Db\Validation;
 use Application\ORM\Event\Listeners\HistoriqueListenerAwareTrait;
 use Application\Processus\AbstractProcessus;
@@ -24,13 +23,12 @@ use Laminas\Mail\Message as MailMessage;
 use Laminas\Mime\Message;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part;
+use Lieu\Entity\Db\Structure;
 use LogicException;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
-use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
-use Service\Entity\Db\TypeService;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;

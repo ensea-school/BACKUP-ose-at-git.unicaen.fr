@@ -3,8 +3,8 @@
 namespace Application\Entity\Chargens;
 
 use Application\Entity\Db\Scenario;
-use Application\Entity\Db\Structure;
 use Application\Provider\Chargens\ChargensProvider;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Entity\Db\TypeIntervention;

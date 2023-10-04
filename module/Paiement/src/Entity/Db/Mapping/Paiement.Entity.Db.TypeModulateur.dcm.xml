@@ -36,7 +36,7 @@
             </inverse-join-columns>
         </join-table>
     </many-to-many>
-    <many-to-many field="structure" target-entity="Application\Entity\Db\Structure">
+    <many-to-many field="structure" target-entity="Lieu\Entity\Db\Structure">
         <join-table name="V_STRUCTURE_TYPE_MODULATEUR">
             <join-columns>
                 <join-column name="TYPE_MODULATEUR_ID" referenced-column-name="ID"/>

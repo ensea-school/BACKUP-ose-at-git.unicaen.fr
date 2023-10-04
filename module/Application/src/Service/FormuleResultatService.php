@@ -2,12 +2,12 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Enseignement\Service\ServiceServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use Lieu\Entity\Db\Etablissement;
+use Lieu\Entity\Db\Structure;
+use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use Referentiel\Service\ServiceReferentielServiceAwareTrait;

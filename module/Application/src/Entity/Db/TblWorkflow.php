@@ -28,7 +28,7 @@ class TblWorkflow
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Lieu\Entity\Db\Structure
      */
     private $structure;
 
@@ -107,7 +107,7 @@ class TblWorkflow
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure
+     * @return \Lieu\Entity\Db\Structure
      */
     public function getStructure()
     {

@@ -4,9 +4,9 @@ namespace Enseignement\Entity\Db;
 
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use Application\Entity\Db\Traits\ValidationAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
+use Lieu\Entity\Db\StructureAwareTrait;
 
 class TblValidationEnseignement
 {

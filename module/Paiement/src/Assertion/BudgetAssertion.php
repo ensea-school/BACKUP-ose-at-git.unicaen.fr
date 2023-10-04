@@ -3,8 +3,8 @@
 namespace Paiement\Assertion;
 
 use Application\Acl\Role;
-use Application\Entity\Db\Structure;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\Structure;
 use Paiement\Controller\BudgetController;
 use Paiement\Entity\Db\Dotation;
 use Paiement\Entity\Db\TypeRessource;

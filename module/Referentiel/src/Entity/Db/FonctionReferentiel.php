@@ -3,12 +3,12 @@
 namespace Referentiel\Entity\Db;
 
 use Application\Entity\Db\Traits\DomaineFonctionnelAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityNotFoundException;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
+use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 

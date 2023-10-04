@@ -3,8 +3,8 @@
 namespace OffreFormation\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Structure;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Entity\Db\TypeInterventionStatut;
 use OffreFormation\Entity\Db\TypeInterventionStructure;

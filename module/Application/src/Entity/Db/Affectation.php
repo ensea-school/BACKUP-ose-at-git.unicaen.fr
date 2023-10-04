@@ -3,8 +3,8 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\Db\Traits\RoleAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\UtilisateurAwareTrait;
+use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;

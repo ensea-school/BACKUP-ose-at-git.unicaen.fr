@@ -5,8 +5,8 @@ namespace OffreFormation\Form;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeFormationServiceAwareTrait;
 

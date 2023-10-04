@@ -4,7 +4,6 @@ namespace OffreFormation\Entity\Db;
 
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\Traits\DisciplineAwareTrait;
@@ -12,6 +11,7 @@ use OffreFormation\Entity\Db\Traits\EtapeAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
+use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;

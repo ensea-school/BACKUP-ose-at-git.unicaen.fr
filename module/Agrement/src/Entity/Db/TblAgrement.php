@@ -3,13 +3,13 @@
 namespace Agrement\Entity\Db;
 
 use Agrement\Entity\Db\Traits\AgrementAwareTrait;
+use Agrement\Entity\Db\Traits\TypeAgrementAwareTrait;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
-use Agrement\Entity\Db\Traits\TypeAgrementAwareTrait;
 use Application\Resource\WorkflowResource;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\StructureAwareTrait;
 
 
 class TblAgrement implements ResourceInterface

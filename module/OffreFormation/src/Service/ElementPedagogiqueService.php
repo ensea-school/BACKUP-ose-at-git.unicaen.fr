@@ -11,11 +11,11 @@ use BjyAuthorize\Exception\UnAuthorizedException;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
-use OffreFormation\Service\Traits\CheminPedagogiqueServiceAwareTrait;
-use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\ElementTauxRegimes;
 use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Service\Traits\CheminPedagogiqueServiceAwareTrait;
+use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
 use RuntimeException;
 use function count;
@@ -90,7 +90,7 @@ class ElementPedagogiqueService extends AbstractEntityService
         }
 
         $whereContext = [];
-        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
+        if (isset($filters['structure']) && $filters['structure'] instanceof \Lieu\Entity\Db\Structure) {
             $whereContext[]      = 's.id = :structure';
             $params['structure'] = $filters['structure']->getId();
         }

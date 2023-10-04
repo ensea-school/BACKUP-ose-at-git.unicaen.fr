@@ -4,25 +4,23 @@ namespace Referentiel\Assertion;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
-use Enseignement\Entity\Db\Service;
-use Referentiel\Controller\ServiceReferentielController;
-use Referentiel\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\Structure;
-use Service\Assertion\ServiceAssertionAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Enseignement\Entity\Db\VolumeHoraire;
-use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-use Service\Service\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Service\Service\RegleStructureValidationServiceAwareTrait;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\Structure;
+use Referentiel\Controller\ServiceReferentielController;
+use Referentiel\Entity\Db\ServiceReferentiel;
+use Referentiel\Entity\Db\VolumeHoraireReferentiel;
+use Service\Assertion\ServiceAssertionAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraire;
+use Service\Service\CampagneSaisieServiceAwareTrait;
+use Service\Service\RegleStructureValidationServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 
 
 /**

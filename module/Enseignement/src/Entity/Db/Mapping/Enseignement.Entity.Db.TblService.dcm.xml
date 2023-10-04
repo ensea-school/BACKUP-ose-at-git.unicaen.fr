@@ -12,7 +12,7 @@
     <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service" fetch="LAZY">
       <join-column name="SERVICE_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure" fetch="LAZY">
+    <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure" fetch="LAZY">
       <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
     </many-to-one>
     <many-to-one field="typeVolumeHoraire" target-entity="Service\Entity\Db\TypeVolumeHoraire" fetch="LAZY">

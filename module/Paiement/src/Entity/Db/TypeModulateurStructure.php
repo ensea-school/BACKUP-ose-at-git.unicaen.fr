@@ -24,7 +24,7 @@ class TypeModulateurStructure implements HistoriqueAwareInterface
     protected $typeModulateur;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Lieu\Entity\Db\Structure
      */
     protected $structure;
 
@@ -82,11 +82,11 @@ class TypeModulateurStructure implements HistoriqueAwareInterface
     /**
      * Set structure
      *
-     * @param \Application\Entity\Db\Structure $structure
+     * @param \Lieu\Entity\Db\Structure $structure
      *
      * @return TypeModulateurStructure
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 
@@ -98,7 +98,7 @@ class TypeModulateurStructure implements HistoriqueAwareInterface
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure
+     * @return \Lieu\Entity\Db\Structure
      */
     public function getStructure()
     {

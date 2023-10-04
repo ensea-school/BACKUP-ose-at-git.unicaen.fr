@@ -4,6 +4,7 @@ namespace Application\Entity\Db;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\TypeHeures;
 use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\ServiceAPayerInterface;

@@ -6,9 +6,9 @@ use Application\Entity\Collection;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiement;
+use Lieu\Entity\Db\StructureAwareTrait;
 
 
 /**

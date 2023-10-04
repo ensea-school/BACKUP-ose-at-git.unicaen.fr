@@ -4,14 +4,14 @@ namespace Application\Provider\Chargens;
 
 use Application\Entity\Chargens\Noeud;
 use Application\Entity\Db\Scenario;
-use Application\Entity\Db\Structure;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use BjyAuthorize\Service\Authorize;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
+use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 

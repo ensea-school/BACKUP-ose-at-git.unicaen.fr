@@ -2,9 +2,9 @@
 
 namespace OffreFormation\Form;
 
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Lieu\Entity\Db\StructureAwareTrait;
 
 /**
  * Description of ElementPedagogiqueSynchronisationForm

@@ -2,11 +2,11 @@
 
 namespace Paiement\Service;
 
-use Application\Entity\Db\Structure;
 use Application\Service\AbstractEntityService;
 use Application\Service\RuntimeException;
 use Application\Service\type;
 use Doctrine\ORM\QueryBuilder;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use Paiement\Entity\Db\TypeModulateur;
 

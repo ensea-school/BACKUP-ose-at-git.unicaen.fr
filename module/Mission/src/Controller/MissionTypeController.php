@@ -3,11 +3,11 @@
 namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
+use Lieu\Entity\Db\Structure;
+use Lieu\Service\StructureServiceAwareTrait;
 use Mission\Entity\Db\CentreCoutTypeMission;
 use Mission\Entity\Db\TypeMission;
 use Mission\Form\MissionCentreCoutsTypeFormAwareTrait;

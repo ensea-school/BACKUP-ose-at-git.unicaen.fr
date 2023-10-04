@@ -9,7 +9,7 @@ use UnicaenImport\View\Helper\DifferentielLigne\DifferentielLigne;
  */
 class EtapeViewHelper extends DifferentielLigne
 {
-    use \Application\Service\Traits\StructureServiceAwareTrait;
+    use \Lieu\Service\StructureServiceAwareTrait;
 
     public function getColumnDetails($column, $value)
     {

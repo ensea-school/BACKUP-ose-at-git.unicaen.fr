@@ -3,9 +3,9 @@
 namespace Agrement\Entity\Db;
 
 use Application\Resource\WorkflowResource;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * AgrementService
@@ -173,11 +173,11 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set structure
      *
-     * @param \Application\Entity\Db\Structure $structure
+     * @param \Lieu\Entity\Db\Structure $structure
      *
      * @return Intervenant
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 
@@ -189,7 +189,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure
+     * @return \Lieu\Entity\Db\Structure
      */
     public function getStructure()
     {

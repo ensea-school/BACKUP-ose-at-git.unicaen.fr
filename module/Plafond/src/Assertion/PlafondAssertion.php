@@ -3,10 +3,10 @@
 namespace Plafond\Assertion;
 
 use Application\Acl\Role;
-use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\Structure;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 
 
 /**

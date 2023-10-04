@@ -7,8 +7,6 @@ use Agrement\Entity\Db\TypeAgrement;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\CiviliteAwareTrait;
 use Application\Entity\Db\Traits\GradeAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
-use Application\Entity\Traits\AdresseTrait;
 use Application\Interfaces\AdresseInterface;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\TypeContrat;
@@ -20,6 +18,11 @@ use Indicateur\Entity\Db\IndicModifDossier;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\AdresseTrait;
+use Lieu\Entity\Db\Departement;
+use Lieu\Entity\Db\Pays;
+use Lieu\Entity\Db\Structure;
+use Lieu\Entity\Db\StructureAwareTrait;
 use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\Traits\DisciplineAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiementIntervenantStructure;
@@ -1359,7 +1362,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      * Get contrat
      *
      * @param \Contrat\Entity\Db\TypeContrat   $typeContrat
-     * @param \Application\Entity\Db\Structure $structure
+     * @param \Lieu\Entity\Db\Structure $structure
      *
      * @return Collection
      */

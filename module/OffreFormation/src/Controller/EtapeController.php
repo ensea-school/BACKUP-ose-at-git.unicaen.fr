@@ -4,18 +4,18 @@ namespace OffreFormation\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\DomaineFonctionnel;
-use Application\Entity\Db\Structure;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Lieu\Entity\Db\Structure;
+use OffreFormation\Entity\Db\CheminPedagogique;
+use OffreFormation\Entity\Db\ElementPedagogique;
+use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\Db\TypeFormation;
 use OffreFormation\Form\TauxMixite\Traits\TauxMixiteFormAwareTrait;
 use OffreFormation\Form\Traits\EtapeSaisieAwareTrait;
 use OffreFormation\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use OffreFormation\Service\Traits\NiveauEtapeServiceAwareTrait;
-use OffreFormation\Entity\Db\CheminPedagogique;
-use OffreFormation\Entity\Db\ElementPedagogique;
-use OffreFormation\Entity\Db\Etape;
-use OffreFormation\Entity\Db\TypeFormation;
 
 /**
  * Description of EtapeController

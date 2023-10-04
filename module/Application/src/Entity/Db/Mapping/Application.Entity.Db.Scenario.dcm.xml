@@ -10,7 +10,7 @@
         <field name="libelle" type="string" column="LIBELLE" length="255" nullable="false"/>
         <field name="type" type="integer" column="TYPE" nullable="false"/>
 
-        <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+        <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure">
             <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
         </many-to-one>
 

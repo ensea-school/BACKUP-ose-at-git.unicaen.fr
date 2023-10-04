@@ -5,11 +5,11 @@ namespace OffreFormation\Form\TypeIntervention;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
-use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
+use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\Traits\TypeInterventionStructureAwareTrait;
+use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
 

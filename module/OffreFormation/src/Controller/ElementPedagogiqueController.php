@@ -7,7 +7,7 @@ use Application\Filter\FloatFromString;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
+use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Form\Traits\ElementModulateurCentreCoutTauxRemuFormAwareTrait;
 use OffreFormation\Form\Traits\ElementPedagogiqueSaisieAwareTrait;

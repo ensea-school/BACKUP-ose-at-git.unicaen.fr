@@ -6,11 +6,11 @@ use Application\Entity\Db\Role;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Laminas\Hydrator\HydratorInterface;
+use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
-use Laminas\Hydrator\HydratorInterface;
 
 /**
  * Description of AffectationForm

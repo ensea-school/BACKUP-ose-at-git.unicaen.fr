@@ -2,13 +2,12 @@
 
 namespace Application\Assertion;
 
-use Application\Entity\Db\Structure;
 use Application\Entity\WorkflowEtape;
-use Application\Provider\Privilege\Privileges;
 use Application\Resource\WorkflowResource;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\Structure;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 
 
 /**

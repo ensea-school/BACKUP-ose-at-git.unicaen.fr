@@ -123,7 +123,6 @@ class AppConfig
             'DoctrineORMModule',
             'ZfcUser',
             'UnicaenApp',
-            //'UnicaenAuth',
             'UnicaenAuthentification',
             'UnicaenMail',
             'UnicaenUtilisateur',
@@ -147,6 +146,7 @@ class AppConfig
             'ExportRh',
             'Dossier',
             'Contrat',
+            'Lieu',
         ];
 
         if (!self::inConsole()) {

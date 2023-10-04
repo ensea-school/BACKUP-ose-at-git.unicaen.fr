@@ -18,7 +18,7 @@
         <join-column name="TYPE_RESSOURCE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure" fetch="LAZY">
+    <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure" fetch="LAZY">
       <join-columns>
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
       </join-columns>

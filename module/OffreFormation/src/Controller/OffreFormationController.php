@@ -5,7 +5,7 @@ namespace OffreFormation\Controller;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
+use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\CheminPedagogique;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\Etape;

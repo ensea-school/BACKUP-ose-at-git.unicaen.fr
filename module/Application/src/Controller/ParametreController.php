@@ -7,9 +7,9 @@ use Application\Filter\StringFromFloat;
 use Application\Form\Traits\ParametresFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Application\Service\Traits\EtablissementServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
+use Lieu\Service\EtablissementServiceAwareTrait;
 
 
 /**

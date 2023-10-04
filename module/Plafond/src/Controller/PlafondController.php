@@ -3,19 +3,18 @@
 namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
-use Mission\Entity\Db\TypeMission;
-use Referentiel\Entity\Db\FonctionReferentiel;
-use Service\Entity\Db\TypeVolumeHoraire;
-use Intervenant\Entity\Db\Statut;
-use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
+use Intervenant\Entity\Db\Statut;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use Lieu\Entity\Db\Structure;
+use Mission\Entity\Db\TypeMission;
 use Plafond\Entity\Db\Plafond;
-use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Form\PlafondConfigFormAwareTrait;
 use Plafond\Form\PlafondFormAwareTrait;
 use Plafond\Service\PlafondServiceAwareTrait;
+use Referentiel\Entity\Db\FonctionReferentiel;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 

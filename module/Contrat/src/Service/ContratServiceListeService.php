@@ -4,7 +4,6 @@ namespace Contrat\Service;
 
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
 use Application\Service\AbstractService;
 use Contrat\Entity\Db\ContratServiceListe;
 use UnicaenApp\Service\EntityManagerAwareTrait;

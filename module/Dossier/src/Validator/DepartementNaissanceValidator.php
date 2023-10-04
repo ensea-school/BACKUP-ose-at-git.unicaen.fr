@@ -2,9 +2,9 @@
 
 namespace Dossier\Validator;
 
-use Application\Entity\Db\Pays;
-use Application\Service\Traits\PaysServiceAwareTrait;
 use Laminas\Validator\AbstractValidator;
+use Lieu\Entity\Db\Pays;
+use Lieu\Service\PaysServiceAwareTrait;
 
 class DepartementNaissanceValidator extends AbstractValidator
 {

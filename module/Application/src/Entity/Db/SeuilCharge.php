@@ -4,9 +4,9 @@ namespace Application\Entity\Db;
 
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\ScenarioAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use OffreFormation\Entity\Db\Traits\GroupeTypeFormationAwareTrait;
 use OffreFormation\Entity\Db\Traits\TypeInterventionAwareTrait;
+use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 

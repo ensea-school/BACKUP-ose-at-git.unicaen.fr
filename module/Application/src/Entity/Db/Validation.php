@@ -2,9 +2,9 @@
 
 namespace Application\Entity\Db;
 
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenVue\Axios\AxiosExtractorInterface;
 
 /**
@@ -29,7 +29,7 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Lieu\Entity\Db\Structure
      */
     private $structure;
 
@@ -119,11 +119,11 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
     /**
      * Set structure
      *
-     * @param \Application\Entity\Db\Structure $structure
+     * @param \Lieu\Entity\Db\Structure $structure
      *
      * @return Validation
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setStructure(\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 
@@ -135,7 +135,7 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure
+     * @return \Lieu\Entity\Db\Structure
      */
     public function getStructure()
     {

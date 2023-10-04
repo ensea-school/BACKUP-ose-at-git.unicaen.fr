@@ -1,0 +1,37 @@
+<?php
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form  \Lieu\Form\StructureSaisieForm
+ */
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->form()->openTag($form);
+
+?>
+<div class="row">
+    <div class="col-md-3">
+        <?= $this->formControlGroup($form->get('code')) ?>
+    </div>
+    <div class="col-md-9">
+        <?= $this->formControlGroup($form->get('libelleCourt')) ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('libelleLong')) ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('enseignement')) ?>
+    </div>
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('affAdresseContrat')) ?>
+    </div>
+</div>
+
+<?php
+echo $this->formSubmit($form->get('submit'));
+echo $this->formControlGroup($form->get('security'));
+echo $this->form()->closeTag();
+?>

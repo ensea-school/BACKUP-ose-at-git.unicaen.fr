@@ -4,12 +4,12 @@ namespace Application\Service;
 
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\SeuilCharge;
-use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use Lieu\Entity\Db\Structure;
+use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\GroupeTypeFormation;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Service\Traits\GroupeTypeFormationServiceAwareTrait;

@@ -5,9 +5,9 @@ namespace Application\Form\Chargens;
 use Application\Entity\Db\Scenario;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
-use UnicaenApp\Util;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Service\StructureServiceAwareTrait;
+use UnicaenApp\Util;
 
 
 /**

@@ -2,12 +2,12 @@
 
 namespace Mission\Form;
 
-use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
-use Paiement\Entity\Db\TauxRemu;
 use Mission\Entity\Db\TypeMission;
+use Paiement\Entity\Db\TauxRemu;
 use UnicaenApp\Util;
 
 

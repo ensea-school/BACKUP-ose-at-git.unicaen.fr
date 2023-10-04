@@ -2,7 +2,7 @@
 
 namespace Mission\Entity\Db;
 
-use Application\Entity\Db\Structure;
+use Lieu\Entity\Db\Structure;
 use Paiement\Entity\Db\CentreCout;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;

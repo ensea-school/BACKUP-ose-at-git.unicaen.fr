@@ -2,15 +2,10 @@
 
 namespace Mission\Form;
 
-use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
-use Laminas\Form\FormInterface;
-use Mission\Entity\Db\Mission;
+use Lieu\Service\StructureServiceAwareTrait;
 use Mission\Entity\Db\OffreEmploi;
-use OffreFormation\Entity\Db\ElementPedagogique;
-use Paiement\Entity\Db\TauxRemu;
 use Mission\Entity\Db\TypeMission;
 
 

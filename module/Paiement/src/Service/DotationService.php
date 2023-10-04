@@ -2,11 +2,11 @@
 
 namespace Paiement\Service;
 
-use Application\Entity\Db\Structure;
 use Application\Service\AbstractEntityService;
 use Application\Service\RuntimeException;
 use Application\Util;
 use Doctrine\ORM\QueryBuilder;
+use Lieu\Entity\Db\Structure;
 use Paiement\Entity\Db\Dotation;
 use Paiement\Entity\Db\TypeRessource;
 

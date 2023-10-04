@@ -4,18 +4,18 @@ namespace Application\Form;
 
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\Parametre;
-use Paiement\Entity\Db\TauxRemu;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\FormuleServiceAwareTrait;
-use Application\Service\Traits\PaysServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\WfEtapeServiceAwareTrait;
 use Laminas\Form\Element;
+use Lieu\Service\PaysServiceAwareTrait;
+use Lieu\Service\StructureServiceAwareTrait;
+use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use Paiement\Entity\Db\TauxRemu;
+use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
 

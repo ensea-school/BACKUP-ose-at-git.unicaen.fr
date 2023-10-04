@@ -3,11 +3,11 @@
 namespace Application\Form\Adresse;
 
 use Application\Form\AbstractFieldset;
-use Application\Service\Traits\AdresseNumeroComplServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\PaysServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
-use Application\Service\Traits\VoirieServiceAwareTrait;
+use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
+use Lieu\Service\PaysServiceAwareTrait;
+use Lieu\Service\VoirieServiceAwareTrait;
 
 /**
  * Description of AdresseFieldset

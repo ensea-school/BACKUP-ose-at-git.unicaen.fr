@@ -2,13 +2,13 @@
 
 namespace OffreFormation\View\Helper;
 
-use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Application\Util;
 use Laminas\View\Helper\AbstractHtmlElement;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\Etape as Entity;
-use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 use OffreFormation\Entity\Db\Traits\EtapeAwareTrait;
+use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
 
 /**
  * Description of ElementPedagogique

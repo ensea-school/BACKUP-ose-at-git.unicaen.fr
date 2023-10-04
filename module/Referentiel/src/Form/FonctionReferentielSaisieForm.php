@@ -2,15 +2,15 @@
 
 namespace Referentiel\Form;
 
-use Referentiel\Entity\Db\FonctionReferentiel;
 use Application\Form\AbstractForm;
-use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
-use Referentiel\Service\FonctionReferentielServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
-use UnicaenApp\Util;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
-use Application\Service\Traits\ContextServiceAwareTrait;
+use Lieu\Service\StructureServiceAwareTrait;
+use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use Referentiel\Entity\Db\FonctionReferentiel;
+use Referentiel\Service\FonctionReferentielServiceAwareTrait;
+use UnicaenApp\Util;
 
 /**
  * Description of FonctionReferentielSaisieForm

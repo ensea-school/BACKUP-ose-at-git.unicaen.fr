@@ -3,7 +3,6 @@
 namespace Paiement\Service;
 
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Structure;
 use Application\Service\AbstractEntityService;
 use Application\Service\Recherche;
 use Application\Service\Traits;
@@ -12,6 +11,7 @@ use Application\Service\Traits\FormuleResultatServiceServiceAwareTrait;
 use Application\Util;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Entity\Db\TypeIntervenant;
+use Lieu\Entity\Db\Structure;
 use Mission\Service\MissionServiceAwareTrait;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;

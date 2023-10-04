@@ -3,11 +3,11 @@
 namespace Dossier\Validator;
 
 use Application\Entity\Db\Civilite;
-use Application\Entity\Db\Departement;
-use Application\Entity\Db\Pays;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
-use Application\Service\Traits\DepartementServiceAwareTrait;
-use Application\Service\Traits\PaysServiceAwareTrait;
+use Lieu\Entity\Db\Departement;
+use Lieu\Entity\Db\Pays;
+use Lieu\Service\DepartementServiceAwareTrait;
+use Lieu\Service\PaysServiceAwareTrait;
 use UnicaenApp\Form\Element\Date;
 use UnicaenApp\Validator\NumeroINSEE;
 

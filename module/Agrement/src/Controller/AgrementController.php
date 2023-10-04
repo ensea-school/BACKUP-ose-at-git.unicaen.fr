@@ -2,24 +2,24 @@
 
 namespace Agrement\Controller;
 
-use Application\Controller\AbstractController;
 use Agrement\Entity\Db\Agrement;
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\TblWorkflow;
 use Agrement\Entity\Db\TypeAgrement;
 use Agrement\Form\Traits\SaisieAwareTrait;
-use Application\Provider\Privilege\Privileges;
 use Agrement\Service\AgrementService;
 use Agrement\Service\Traits\AgrementServiceAwareTrait;
+use Agrement\Service\Traits\TblAgrementServiceAwareTrait;
+use Application\Controller\AbstractController;
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\TblWorkflow;
+use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Enseignement\Service\ServiceServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
-use Agrement\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Laminas\Form\Element\Checkbox;
 use Laminas\View\Model\ViewModel;
-use Application\Service\Traits\ContextServiceAwareTrait;
+use Lieu\Service\StructureServiceAwareTrait;
 
 /**
  * Opérations sur les agréments.

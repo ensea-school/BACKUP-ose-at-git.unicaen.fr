@@ -3,14 +3,14 @@
 namespace Referentiel\Processus;
 
 use Application\Entity\Db\Intervenant;
-use Application\Processus\AbstractProcessus;
-use Referentiel\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\Structure;
-use Referentiel\Entity\Db\TblValidationReferentiel;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
+use Application\Processus\AbstractProcessus;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
+use Lieu\Entity\Db\Structure;
+use Referentiel\Entity\Db\ServiceReferentiel;
+use Referentiel\Entity\Db\TblValidationReferentiel;
+use Service\Entity\Db\TypeVolumeHoraire;
 
 
 /**

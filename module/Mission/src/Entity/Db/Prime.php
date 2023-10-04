@@ -3,18 +3,12 @@
 namespace Mission\Entity\Db;
 
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Validation;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use UnicaenVue\Axios\AxiosExtractor;
-use UnicaenVue\Axios\AxiosExtractorInterface;
 
 class Prime implements HistoriqueAwareInterface, ResourceInterface
 {

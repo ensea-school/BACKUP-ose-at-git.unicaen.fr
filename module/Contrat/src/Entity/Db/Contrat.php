@@ -2,7 +2,6 @@
 
 namespace Contrat\Entity\Db;
 
-use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Mission\Entity\Db\Mission;
@@ -37,7 +36,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Lieu\Entity\Db\Structure
      */
     private $structure;
 
@@ -368,7 +367,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure
+     * @return \Lieu\Entity\Db\Structure
      */
     public function getStructure ()
     {
@@ -380,11 +379,11 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set structure
      *
-     * @param \Application\Entity\Db\Structure $structure
+     * @param \Lieu\Entity\Db\Structure $structure
      *
      * @return Intervenant
      */
-    public function setStructure (\Application\Entity\Db\Structure $structure = null)
+    public function setStructure (\Lieu\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 

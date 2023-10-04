@@ -47,7 +47,7 @@ class EnseignementSaisieFormViewHelper extends AbstractHtmlElement
 
 
     /**
-     * @return \Application\Entity\Db\Etablissement|null
+     * @return \Lieu\Entity\Db\Etablissement|null
      */
     protected function getEtablissement()
     {

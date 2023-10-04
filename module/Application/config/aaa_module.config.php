@@ -147,17 +147,12 @@ $config = [
     ],
     'service_manager'    => [
         'invokables' => [
-            Service\AdresseNumeroComplService::class               => Service\AdresseNumeroComplService::class,
             Service\AnneeService::class                            => Service\AnneeService::class,
             Service\LocalContextService::class                     => Service\LocalContextService::class,
             Service\ParametresService::class                       => Service\ParametresService::class,
-            \OffreFormation\Service\TypeInterventionService::class => \OffreFormation\Service\TypeInterventionService::class,
             Service\SourceService::class                           => Service\SourceService::class,
             Service\AffectationService::class                      => Service\AffectationService::class,
             Service\RoleService::class                             => Service\RoleService::class,
-            Service\PaysService::class                             => Service\PaysService::class,
-            Service\DepartementService::class                      => Service\DepartementService::class,
-            Service\VoirieService::class                           => Service\VoirieService::class,
             Service\FichierService::class                          => Service\FichierService::class,
             Service\TypeValidationService::class                   => Service\TypeValidationService::class,
             Service\ValidationService::class                       => Service\ValidationService::class,

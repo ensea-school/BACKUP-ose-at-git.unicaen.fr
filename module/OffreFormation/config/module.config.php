@@ -626,6 +626,7 @@ return [
         Assertion\OffreDeFormationAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         Service\VolumeHoraireEnsService::class          => Service\Factory\VolumeHoraireEnsServiceFactory::class,
         Processus\ReconductionProcessus::class          => Processus\Factory\ReconductionProcessusFactory::class,
+        Service\TypeInterventionService::class          => Service\Factory\TypeInterventionServiceFactory::class,
         Service\TypeInterventionStructureService::class => Service\Factory\TypeInterventionStructureServiceFactory::class,
         Service\TypeInterventionStatutService::class    => Service\Factory\TypeInterventionStatutServiceFactory::class,
         Service\TypeHeuresService::class                => Service\TypeHeuresServiceFactory::class,

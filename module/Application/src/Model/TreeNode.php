@@ -7,69 +7,40 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
     const ABSOLUTE_ID_SEPARATOR = '/';
 
-    /**
-     * @var mixed
-     */
-    private $id;
+    private mixed $id;
 
-    /**
-     * @var ?string
-     */
-    private $label;
+    private ?string $label = null;
 
-    /**
-     * @var ?int
-     */
-    private $ordre;
+    private ?int $ordre = null;
 
-    /**
-     * @var ?string
-     */
-    private $icon;
+    private ?string $icon = null;
 
-    /**
-     * @var ?string
-     */
-    private $title;
+    private ?string $title = null;
 
-    /**
-     * @var TreeNode
-     */
-    private $parent;
+    private ?TreeNode $parent = null;
 
     /**
      * @var TreeNode[]
      */
-    private $children = [];
+    private array $children = [];
 
 
 
-    /**
-     * TreeNode constructor.
-     *
-     * @param $id
-     */
-    public function __construct($id)
+    public function __construct(mixed $id)
     {
         $this->id = $id;
     }
 
 
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+    public function getId(): mixed
     {
         return $this->id;
     }
 
 
 
-    /**
-     * @return string
-     */
-    public function getAbsoluteId()
+    public function getAbsoluteId(): string
     {
         $ai = $this->getParent() ? $this->getParent()->getAbsoluteId(self::ABSOLUTE_ID_SEPARATOR) : '';
         if ($ai != '' && $this->getId()) {
@@ -84,12 +55,7 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @param mixed $id
-     *
-     * @return TreeNode
-     */
-    public function setId($id)
+    public function setId(mixed $id): self
     {
         $this->id = $id;
 
@@ -98,9 +64,6 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @return string|null
-     */
     public function getLabel(): ?string
     {
         return $this->label;
@@ -108,11 +71,6 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @param string|null $label
-     *
-     * @return TreeNode
-     */
     public function setLabel(?string $label): TreeNode
     {
         $this->label = $label;
@@ -122,9 +80,6 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @return int|null
-     */
     public function getOrdre(): ?int
     {
         return $this->ordre;
@@ -132,11 +87,6 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @param int|null $ordre
-     *
-     * @return TreeNode
-     */
     public function setOrdre(?int $ordre): TreeNode
     {
         $this->ordre = $ordre;
@@ -146,9 +96,6 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @return string|null
-     */
     public function getIcon(): ?string
     {
         return $this->icon;
@@ -156,11 +103,6 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @param string|null $icon
-     *
-     * @return TreeNode
-     */
     public function setIcon(?string $icon): TreeNode
     {
         $this->icon = $icon;
@@ -170,9 +112,6 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @return string|null
-     */
     public function getTitle(): ?string
     {
         return $this->title;
@@ -180,11 +119,6 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @param string|null $title
-     *
-     * @return TreeNode
-     */
     public function setTitle(?string $title): TreeNode
     {
         $this->title = $title;
@@ -194,34 +128,21 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @param $id
-     *
-     * @return bool
-     */
-    public function has($id)
+    public function has(mixed $id): bool
     {
         return array_key_exists($id, $this->children);
     }
 
 
 
-    /**
-     * @return bool
-     */
-    public function hasChildren()
+    public function hasChildren(): bool
     {
         return !empty($this->children);
     }
 
 
 
-    /**
-     * @param $id
-     *
-     * @return TreeNode|null
-     */
-    public function get($id)
+    public function get(mixed $id): ?TreeNode
     {
         if ($this->has($id)) {
             return $this->children[$id];
@@ -232,23 +153,17 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @param TreeNode $isd
-     */
-    public function add(TreeNode $isd)
+    public function add(TreeNode $isd): self
     {
         $isd->__setParent($this);
         $this->children[$isd->getId()] = $isd;
+
+        return self;
     }
 
 
 
-    /**
-     * @param $id
-     *
-     * @return $this
-     */
-    public function remove($id = null)
+    public function remove(mixed $id = null): self
     {
         if (null == $id && $this->getParent()) {
             return $this->getParent()->remove($this->getId());
@@ -268,22 +183,14 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @return TreeNode
-     */
-    public function getParent()
+    public function getParent(): ?TreeNode
     {
         return $this->parent;
     }
 
 
 
-    /**
-     * @param TreeNode $parent
-     *
-     * @return TreeNode
-     */
-    public function __setParent(TreeNode $parent = null)
+    public function __setParent(?TreeNode $parent = null): self
     {
         $this->parent = $parent;
 
@@ -293,11 +200,11 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
     /**
-     * @param array $children
+     * @param TreeNode[] $children
      *
      * @return $this
      */
-    public function setChildren(array $children)
+    public function setChildren(array $children): self
     {
         $this->children = [];
         foreach ($children as $child) {
@@ -315,17 +222,14 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
     /**
      * @return TreeNode[]
      */
-    public function getChildren()
+    public function getChildren(): array
     {
         return $this->children;
     }
 
 
 
-    /**
-     * @return $this
-     */
-    public function order()
+    public function order(): self
     {
         uasort($this->children, function ($a, $b) {
             if ($a->getOrdre() && $b->getOrdre()) {
@@ -340,116 +244,49 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @return \ArrayIterator
-     */
-    public function getIterator()
+    public function getIterator() : \Traversable
     {
         return new \ArrayIterator($this->children);
     }
 
 
 
-    /**
-     * Whether a offset exists
-     *
-     * @link  http://php.net/manual/en/arrayaccess.offsetexists.php
-     *
-     * @param mixed $offset <p>
-     *                      An offset to check for.
-     *                      </p>
-     *
-     * @return boolean true on success or false on failure.
-     * </p>
-     * <p>
-     * The return value will be casted to boolean if non-boolean was returned.
-     * @since 5.0.0
-     */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->has($offset);
     }
 
 
 
-    /**
-     * Offset to retrieve
-     *
-     * @link  http://php.net/manual/en/arrayaccess.offsetget.php
-     *
-     * @param mixed $offset <p>
-     *                      The offset to retrieve.
-     *                      </p>
-     *
-     * @return mixed Can return all value types.
-     * @since 5.0.0
-     */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): ?TreeNode
     {
         return $this->get($offset);
     }
 
 
 
-    /**
-     * Offset to set
-     *
-     * @link  http://php.net/manual/en/arrayaccess.offsetset.php
-     *
-     * @param mixed $offset <p>
-     *                      The offset to assign the value to.
-     *                      </p>
-     * @param mixed $value  <p>
-     *                      The value to set.
-     *                      </p>
-     *
-     * @return void
-     * @since 5.0.0
-     */
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->add($value);
     }
 
 
 
-    /**
-     * Offset to unset
-     *
-     * @link  http://php.net/manual/en/arrayaccess.offsetunset.php
-     *
-     * @param mixed $offset <p>
-     *                      The offset to unset.
-     *                      </p>
-     *
-     * @return void
-     * @since 5.0.0
-     */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         $this->remove($offset);
     }
 
 
 
-    /**
-     * @param $absoluteId
-     *
-     * @return TreeNode|null
-     */
-    public function findOneByAbsoluteId($absoluteId)
+    public function findOneByAbsoluteId(string $absoluteId): ?TreeNode
     {
         return $this->findOneBy(['absoluteId' => $absoluteId]);
     }
 
 
 
-    /**
-     * @param array $criteria
-     *
-     * @return TreeNode|null
-     */
-    public function findOneBy(array $criteria)
+    public function findOneBy(array $criteria): ?TreeNode
     {
         if ($this->match($criteria)) return $this;
 
@@ -467,7 +304,7 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
      *
      * @return TreeNode[]
      */
-    public function findBy(array $criteria)
+    public function findBy(array $criteria): array
     {
         $result = [];
 
@@ -485,12 +322,7 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @param array $criteria
-     *
-     * @return bool
-     */
-    protected function match(array $criteria)
+    protected function match(array $criteria): bool
     {
         foreach ($criteria as $criterium => $value) {
             if (!$this->matchCriterium($criterium, $value)) return false;
@@ -501,13 +333,7 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
 
 
 
-    /**
-     * @param $criterium
-     * @param $value
-     *
-     * @return bool
-     */
-    protected function matchCriterium($criterium, $value)
+    protected function matchCriterium(string $criterium, string $value): bool
     {
         $method = 'get' . ucfirst($criterium);
 

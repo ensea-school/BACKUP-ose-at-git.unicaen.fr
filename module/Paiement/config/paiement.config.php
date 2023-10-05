@@ -52,7 +52,7 @@ return [
                     'action'     => 'extractionPaie',
                 ],
                 'extraction-paie-prime' => [
-                    'route'      => '/extraction-paie-prime[/:type][/:periode]',
+                    'route' => '/extraction-paie-prime[/:periode]',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'extractionPaiePrime',
                 ],
@@ -147,8 +147,8 @@ return [
                             'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                         ],
                         'extraction-paie-prime' => [
-                            'label'    => "Extraction des primes étudiantes",
-                            'title'    => "Export des données pour payer les primes étudiantes",
+                            'label' => "Extraction des indemnités de fin de contrat",
+                            'title' => "Export des données pour payer les indemnités de fin de contrat des étudiantes",
                             'route'    => 'paiement/extraction-paie-prime',
                             'resource' => Privileges::getResourceId(Privileges::MISSION_PRIME_GESTION),
                         ],

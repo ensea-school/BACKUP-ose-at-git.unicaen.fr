@@ -439,12 +439,19 @@ class PaiementController extends AbstractController
         $this->initFilters();
         $periode = $this->params()->fromRoute('periode');
         $periode = $this->getServicePeriode()->getRepo()->findOneBy(['code' => $periode]);
+        $type = $this->params()->fromRoute('type');
+        $type = $this->getServiceTypeIntervenant()->getRepo()->findOneBy(['code' => $type]);
 
         $annee = $this->getServiceContext()->getAnnee();
         $role  = $this->getServiceContext()->getSelectedIdentityRole();
 
-        if (empty($periode)) {
-            $qb       = $this->getServicePeriode()->getPeriodePaiement();
+        if (empty($type)) {
+            $types = $this->getServiceTypeIntervenant()->getList();
+
+            return compact('types');
+        } elseif (empty($periode)) {
+            $qb = $this->getServicePeriode()->finderByMiseEnPaiement();
+            $this->getServiceMiseEnPaiement()->finderByEtat(MiseEnPaiement::MIS_EN_PAIEMENT, $qb);
             $periodes = $this->getServicePeriode()->getList($qb);
 
             return compact('type', 'periodes', 'annee');
@@ -470,8 +477,22 @@ class PaiementController extends AbstractController
         $this->initFilters();
         $periode = $this->params()->fromRoute('periode');
         $annee   = $this->getServiceContext()->getAnnee();
+        if (empty($periode)) {
+            $periodes = $this->getServicePeriode()->getPaiement();
+        } else {
+            $periode   = $this->getServicePeriode()->getByCode($periode);
+            $recherche = new MiseEnPaiementRecherche;
+            $recherche->setAnnee($annee);
+            $recherche->setPeriode($periode);
+            $filters = $recherche->getFilters();
 
-        $periodes = $this->getServicePeriode()->getPaiement();
+            $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'winpaie-indemnites']);
+            $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
+            $csvModel->setFilename(str_replace(' ', '_', 'ose-export-indemnite-' . strtolower($periode->getLibelleAnnuel($annee)) . '.csv'));
+
+            return $csvModel;
+        }
+
 
         return compact('periodes', 'annee');
     }

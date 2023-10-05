@@ -191,6 +191,68 @@ return [
 }',
     ],
     [
+        'CODE'           => 'winpaie-indemnites',
+        'LIBELLE'        => 'Extraction Winpaie indemnité de fin de contrat',
+        'PDF_TRAITEMENT' => null,
+        'AUTO_BREAK'     => false,
+        'REQUETE'        => 'SELECT * FROM v_export_paiement_indemnites',
+        'CSV_PARAMS'     => '{
+    "ANNEE_ID": {
+        "visible": false
+    },
+    "PRIME_ID": {
+        "visible": false
+    },
+    "TYPE_INTERVENANT": {
+        "visible": false
+    },
+    "STRUCTURE_ID": {
+        "visible": false
+    },
+    "PERIODE_ID": {
+        "visible": false
+    },
+    "PERIODE_CODE": {
+        "visible": false
+    },
+    "INTERVENANT_ID": {
+        "visible": false
+    },
+    "INSEE": {
+        "libelle": "Insee"
+    },
+    "NOM": {
+        "libelle": "Nom"
+    },
+    "CARTE": {
+        "libelle": "Carte"
+    },
+    "CODE_ORIGINE": {
+        "libelle": "Code origine"
+    },
+    "RETENUE": {
+        "libelle": "Retenue"
+    },
+    "SENS": {
+        "libelle": "Sens"
+    },
+    "MC": {
+        "libelle": "MC"
+    },
+    "NBU": {
+        "libelle": "NBU",
+        "type": "float"
+    },
+    "MONTANT": {
+        "libelle": "Montant",
+        "type": "float"
+    },
+    "LIBELLE": {
+        "libelle": "Libellé"
+    }
+}',
+    ],
+    [
         'CODE'           => 'export-agrement',
         'LIBELLE'        => 'Export Agrément',
         'PDF_TRAITEMENT' => null,

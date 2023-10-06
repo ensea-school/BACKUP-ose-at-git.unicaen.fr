@@ -79,7 +79,7 @@ export default {
     data()
     {
         return {
-            saisieUrl: unicaenVue.url('structure/saisie/:structure', {structure: this.structure.id}),
+            saisieUrl: unicaenVue.url('structure/voir/:structure', {structure: this.structure.id})+'?tab=edition',
             deleteUrl: unicaenVue.url('structure/delete/:structure', {structure: this.structure.id}),
             liste: this.$parent.liste,
         };

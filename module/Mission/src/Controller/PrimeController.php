@@ -222,7 +222,7 @@ class PrimeController extends AbstractController
          */
         $prime       = $this->getEvent()->getParam('prime');
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $missions    = $intervenant->getMissions();
+        $missions = $this->getServicePrime()->getMissionsByIntervenant(['intervenant' => $intervenant]);
 
 
         if ($prime) {

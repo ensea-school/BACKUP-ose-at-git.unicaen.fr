@@ -140,7 +140,9 @@ class CandidatureService extends AbstractEntityService
             $vIntervenant = $intervenant->getNomUsuel();
         }
         $vUtilisateur = $this->getServiceContext()->getUtilisateur()->getDisplayName();
-        $html         = str_replace([':intervenant', ':utilisateur'], [$vIntervenant, $vUtilisateur], $html);
+        $offre    = $candidature->getOffre();
+        $vMission = $offre->getTitre() . ' (' . $offre->getTypeMission()->getLibelle() . ') prévue du ' . $offre->getDateDebut()->format('d-m-Y') . ' au ' . $offre->getDateFin()->format('d-m-Y');
+        $html     = str_replace([':intervenant', ':utilisateur', ':mission'], [$vIntervenant, $vUtilisateur, $vMission], $html);
         $subject      = $this->getServiceParametres()->get($sujet);
         $subject      = str_replace(':intervenant', $vIntervenant, $subject);
         $to           = (!empty($intervenant->getEmailPerso())) ? $intervenant->getEmailPerso() : $intervenant->getEmailPro();

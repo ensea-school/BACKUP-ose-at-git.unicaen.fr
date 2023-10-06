@@ -10,7 +10,6 @@ use OffreFormation\Entity\Db\ElementPedagogique;
 use Paiement\Service\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 
-
 /**
  * Description of Periode
  *
@@ -35,18 +34,16 @@ class PeriodeService extends AbstractEntityService
     private $cache;
 
 
-
     /**
      * retourne la classe des entités
      *
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass()
+    public function getEntityClass ()
     {
         return Periode::class;
     }
-
 
 
     /**
@@ -54,11 +51,10 @@ class PeriodeService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias()
+    public function getAlias ()
     {
         return 'per';
     }
-
 
 
     /**
@@ -67,7 +63,7 @@ class PeriodeService extends AbstractEntityService
      *
      * @return Periode
      */
-    public function getByCode($code)
+    public function getByCode ($code)
     {
         if (!isset($this->cache[$code])) {
             $this->cache[$code] = $this->getRepo()->findOneBy(['code' => $code]);
@@ -77,14 +73,13 @@ class PeriodeService extends AbstractEntityService
     }
 
 
-
     /**
      *
      * @param \DateTime $date
      *
      * @return Periode
      */
-    public function getPeriodePaiement(\DateTime $date = null)
+    public function getPeriodePaiement (\DateTime $date = null)
     {
         $anneeDateDebut = $this->getServiceContext()->getAnnee()->getDateDebut();
         $aY             = (int)$anneeDateDebut->format('Y');
@@ -100,7 +95,6 @@ class PeriodeService extends AbstractEntityService
     }
 
 
-
     /**
      * Retourne la liste des périodes d'enseignement
      *
@@ -108,7 +102,7 @@ class PeriodeService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByEnseignement(QueryBuilder $qb = null, $alias = null)
+    public function finderByEnseignement (QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.enseignement = 1");
@@ -134,8 +128,7 @@ class PeriodeService extends AbstractEntityService
     }
 
 
-
-    public function finderByMiseEnPaiement(Structure $structure = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByMiseEnPaiement (Structure $structure = null, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
@@ -155,13 +148,12 @@ class PeriodeService extends AbstractEntityService
     }
 
 
-
     /**
      *
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy (QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -171,13 +163,12 @@ class PeriodeService extends AbstractEntityService
     }
 
 
-
     /**
      * Retourne la liste des périodes d'enseignement
      *
      * @return Periode[]
      */
-    public function getEnseignement()
+    public function getEnseignement ()
     {
         if (!$this->enseignement) {
             $this->enseignement = $this->getList($this->finderByEnseignement());
@@ -187,17 +178,31 @@ class PeriodeService extends AbstractEntityService
     }
 
 
+    /**
+     * Retourne la liste des périodes de paiement
+     *
+     * @return Periode[]
+     */
+    public function getPaiement ()
+    {
+
+        [$qb, $alias] = $this->initQuery();
+        $qb->andWhere("$alias.paiement = 1");
+        $qb->andWhere("$alias.ordre < 13");
+
+        return $this->getList($qb);
+    }
+
 
     /**
      * Retourne le semestre 1
      *
      * @return Periode
      */
-    public function getSemestre1()
+    public function getSemestre1 ()
     {
         return $this->getRepo()->findOneBy(['code' => Periode::SEMESTRE_1]);
     }
-
 
 
     /**
@@ -205,11 +210,10 @@ class PeriodeService extends AbstractEntityService
      *
      * @return Periode
      */
-    public function getSemestre2()
+    public function getSemestre2 ()
     {
         return $this->getRepo()->findOneBy(['code' => Periode::SEMESTRE_2]);
     }
-
 
 
     /**
@@ -217,11 +221,10 @@ class PeriodeService extends AbstractEntityService
      *
      * @return Periode|null
      */
-    public function getPaiementTardif(): ?Periode
+    public function getPaiementTardif (): ?Periode
     {
         return $this->getRepo()->findOneBy(['code' => Periode::PAIEMENT_TARDIF]);
     }
-
 
 
     /**
@@ -229,7 +232,7 @@ class PeriodeService extends AbstractEntityService
      *
      * @param Periode $entity
      */
-    public function save($entity)
+    public function save ($entity)
     {
         if (empty($entity->getOrdre())) {
             $ordre = (int)$this->getEntityManager()->getConnection()->fetchOne("SELECT MAX(ORDRE) M FROM PERIODE P");

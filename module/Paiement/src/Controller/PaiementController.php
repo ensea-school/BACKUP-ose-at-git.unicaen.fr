@@ -51,14 +51,13 @@ class PaiementController extends AbstractController
     use WorkflowServiceAwareTrait;
     use EtatSortieServiceAwareTrait;
 
-
     /**
      * Initialisation des filtres Doctrine pour les historique.
      * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
      * éventuelles
      * (services sur des enseignements fermés, etc.)
      */
-    protected function initFilters()
+    protected function initFilters ()
     {
         $this->em()->getFilters()->enable('historique')->init([
             MiseEnPaiement::class,
@@ -71,18 +70,16 @@ class PaiementController extends AbstractController
     }
 
 
-
-    public function indexAction()
+    public function indexAction ()
     {
         return [];
     }
 
 
-
     /**
      * @return int
      */
-    protected function getChangeIndex()
+    protected function getChangeIndex ()
     {
         $session = $this->getSessionContainer();
         if (!isset($session->cgtIndex)) $session->cgtIndex = 0;
@@ -93,8 +90,7 @@ class PaiementController extends AbstractController
     }
 
 
-
-    protected function isChangeIndexSaved($changeIndex)
+    protected function isChangeIndexSaved ($changeIndex)
     {
         $session = $this->getSessionContainer();
         if (!isset($session->cht)) $session->cht = [];
@@ -103,8 +99,7 @@ class PaiementController extends AbstractController
     }
 
 
-
-    protected function setChangeIndexSaved($changeIndex)
+    protected function setChangeIndexSaved ($changeIndex)
     {
         $session = $this->getSessionContainer();
         if (!isset($session->cht)) $session->cht = [];
@@ -114,8 +109,7 @@ class PaiementController extends AbstractController
     }
 
 
-
-    public function demandeMiseEnPaiementAction()
+    public function demandeMiseEnPaiementAction ()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
@@ -166,7 +160,6 @@ class PaiementController extends AbstractController
             }
         }
 
-
         $dateDerniereModif   = null;
         $dernierModificateur = null;
 
@@ -211,8 +204,7 @@ class PaiementController extends AbstractController
     }
 
 
-
-    public function visualisationMiseEnPaiementAction()
+    public function visualisationMiseEnPaiementAction ()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
@@ -235,8 +227,7 @@ class PaiementController extends AbstractController
     }
 
 
-
-    public function editionMiseEnPaiementAction()
+    public function editionMiseEnPaiementAction ()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
@@ -290,7 +281,6 @@ class PaiementController extends AbstractController
         $res       = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
         $paiements = array_merge($paiements, $res->getResult());
 
-
         foreach ($paiements as $index => $paiement) {
             if (isset($mep[$paiement->getId()]) && $mep[$paiement->getId()] == "1") {
                 if ($paiement->getPeriodePaiement()) {
@@ -310,8 +300,7 @@ class PaiementController extends AbstractController
     }
 
 
-
-    public function etatPaiementAction()
+    public function etatPaiementAction ()
     {
         $this->initFilters();
 
@@ -409,8 +398,7 @@ class PaiementController extends AbstractController
     }
 
 
-
-    private function makeFilenameFromRecherche(MiseEnPaiementRecherche $recherche)
+    private function makeFilenameFromRecherche (MiseEnPaiementRecherche $recherche)
     {
         if ($recherche->getEtat() == MiseEnPaiement::A_METTRE_EN_PAIEMENT) {
             $filename = 'demande_mise_en_paiement';
@@ -426,8 +414,7 @@ class PaiementController extends AbstractController
     }
 
 
-
-    public function misesEnPaiementCsvAction()
+    public function misesEnPaiementCsvAction ()
     {
         $this->initFilters();
         $role = $this->getServiceContext()->getSelectedIdentityRole();
@@ -447,13 +434,11 @@ class PaiementController extends AbstractController
     }
 
 
-
-    public function extractionPaieAction()
+    public function extractionPaieAction ()
     {
         $this->initFilters();
         $periode = $this->params()->fromRoute('periode');
         $periode = $this->getServicePeriode()->getRepo()->findOneBy(['code' => $periode]);
-
         $type = $this->params()->fromRoute('type');
         $type = $this->getServiceTypeIntervenant()->getRepo()->findOneBy(['code' => $type]);
 
@@ -487,8 +472,33 @@ class PaiementController extends AbstractController
     }
 
 
+    public function extractionPaiePrimeAction ()
+    {
+        $this->initFilters();
+        $periode = $this->params()->fromRoute('periode');
+        $annee   = $this->getServiceContext()->getAnnee();
+        if (empty($periode)) {
+            $periodes = $this->getServicePeriode()->getPaiement();
+        } else {
+            $periode   = $this->getServicePeriode()->getByCode($periode);
+            $recherche = new MiseEnPaiementRecherche;
+            $recherche->setAnnee($annee);
+            $recherche->setPeriode($periode);
+            $filters = $recherche->getFilters();
 
-    public function imputationSihamAction()
+            $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'winpaie-indemnites']);
+            $csvModel   = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, ['periode' => $periode, 'annee' => $annee]);
+            $csvModel->setFilename(str_replace(' ', '_', 'ose-export-indemnite-' . strtolower($periode->getLibelleAnnuel($annee)) . '.csv'));
+
+            return $csvModel;
+        }
+
+
+        return compact('periodes', 'annee');
+    }
+
+
+    public function imputationSihamAction ()
     {
         $title = 'Export des données pour le chargement en masse des imputations budgétaires dans SIHAM';
         $this->initFilters();
@@ -505,7 +515,6 @@ class PaiementController extends AbstractController
 
         $rechercheForm = $this->getFormPaiementMiseEnPaiementRecherche();
         $rechercheForm->bind($recherche);
-
 
         $qb = $this->getServicePeriode()->finderByMiseEnPaiement();
         $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($recherche->getTypeIntervenant(), $qb);
@@ -529,7 +538,6 @@ class PaiementController extends AbstractController
         $rechercheForm->populateIntervenants($intervenants);
         $noData = count($intervenants) == 0;
 
-
         $request = $this->getRequest();
         if ($request->isPost()) {
             $rechercheForm->setData($request->getPost());
@@ -537,7 +545,6 @@ class PaiementController extends AbstractController
         }
 
         $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'imputation-budgetaire']);
-
 
         if ($this->params()->fromPost('exporter-csv-imputation') !== null && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV))) {
             $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $recherche->getFilters());
@@ -557,8 +564,7 @@ class PaiementController extends AbstractController
     }
 
 
-
-    public function miseEnPaiementAction()
+    public function miseEnPaiementAction ()
     {
         $this->initFilters();
         $title        = 'Mise en paiement';
@@ -598,11 +604,10 @@ class PaiementController extends AbstractController
     }
 
 
-
     /**
      * @param Intervenant $intervenant
      */
-    private function updateTableauxBord($intervenant)
+    private function updateTableauxBord ($intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'paiement',

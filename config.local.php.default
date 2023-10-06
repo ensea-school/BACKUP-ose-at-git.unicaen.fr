@@ -235,6 +235,7 @@ return [
     /* CAS */
     'cas'    => [
         /* Détermine si OSE est cassifiée ou pas */
+        /* Attention : le CAS ne peut être activé que si OSE est en HTTPS */
         'actif'   => false,
 
         /* Si true, alors on ne peut se connecter QUE via le CAS, les autres options ne seront pas proposées */

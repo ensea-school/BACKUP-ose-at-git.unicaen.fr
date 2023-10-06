@@ -210,4 +210,36 @@ class PrimeService extends AbstractEntityService
         return true;
     }
 
+    public function getMissionsByIntervenant (array $parameters): ?array
+    {
+
+        $dql = "
+        SELECT 
+          c,m,t
+        FROM 
+          " . Contrat::class . " c
+          JOIN c.mission m
+          JOIN m.typeMission t
+        WHERE 
+          c.dateRetourSigne IS NOT NULL
+          " . dqlAndWhere([
+                'intervenant' => 'c.intervenant',
+            ], $parameters) . "
+        ORDER BY
+          m.dateDebut
+        ";
+
+        $query = $this->getEntityManager()->createQuery($dql)->setParameters($parameters);
+
+        $contrats = $query->getResult();
+        $missions = [];
+
+        foreach ($contrats as $contrat) {
+            $missions[] = $contrat->getMission();
+        }
+
+        return $missions;
+    }
+
+
 }

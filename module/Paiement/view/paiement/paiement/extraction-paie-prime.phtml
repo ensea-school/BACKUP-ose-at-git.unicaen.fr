@@ -13,7 +13,7 @@
     <ul>
         <?php
         foreach ($periodes as $periode) {
-            $url   = '';//$this->url('paiement/extraction-paie', ['type' => $type->getCode(), 'periode' => $periode->getCode()]);
+            $url = $this->url('paiement/extraction-paie-prime', ['periode' => $periode->getCode()]);
             $title = $periode->getLibelleAnnuel($annee);
             echo '<li><a href="' . $url . '">' . $title . '</a></li>';
         }

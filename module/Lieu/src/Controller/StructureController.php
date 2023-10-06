@@ -3,11 +3,13 @@
 namespace Lieu\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Provider\Privilege\Privileges;
 use Lieu\Entity\Db\Structure;
 use Lieu\Form\StructureSaisieFormAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
 use RuntimeException;
-use UnicaenApp\View\Model\MessengerViewModel;
+use UnicaenVue\View\Model\AxiosModel;
+use UnicaenVue\View\Model\VueModel;
 
 
 /**
@@ -20,16 +22,31 @@ class StructureController extends AbstractController
     use StructureServiceAwareTrait;
     use StructureSaisieFormAwareTrait;
 
+    protected array $structures = [];
+
 
     public function indexAction()
+    {
+        $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::STRUCTURES_ADMINISTRATION_EDITION));
+
+        $vm = new VueModel;
+        $vm->setTemplate('lieu/structures-admin');
+        $vm->setVariable('canAdd', $canAdd);
+
+        return $vm;
+    }
+
+
+
+    public function listeAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Structure::class,
         ]);
 
-        $structures = $this->getServiceStructure()->getList();
+        $treeArray = $this->getServiceStructure()->getTreeArray();
 
-        return compact('structures');
+        return new AxiosModel($treeArray);
     }
 
 
@@ -37,12 +54,11 @@ class StructureController extends AbstractController
     public function saisieAction()
     {
         /* @var $structure Structure */
-
         $structure = $this->getEvent()->getParam('structure');
 
         $form = $this->getFormStructureSaisie();
         if (empty($structure)) {
-            $title     = 'Création d\'une nouvelle Structure';
+            $title = 'Création d\'une nouvelle Structure';
             $structure = $this->getServiceStructure()->newEntity();
         } else {
             $title = 'Édition d\'une Structure';
@@ -81,7 +97,7 @@ class StructureController extends AbstractController
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
-        return new MessengerViewModel(compact('structure'));
+        return new AxiosModel();
     }
 
 
@@ -89,7 +105,7 @@ class StructureController extends AbstractController
     public function voirAction()
     {
         $structure = $this->getEvent()->getParam('structure');
-        $tab       = $this->params()->fromQuery('tab', 'fiche');
+        $tab = $this->params()->fromQuery('tab', 'fiche');
 
         if (!$structure) {
             throw new RuntimeException("Structure non spécifiée ou introuvable.");

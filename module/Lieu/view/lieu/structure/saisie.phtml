@@ -8,30 +8,72 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 echo $this->form()->openTag($form);
 
 ?>
-<div class="row">
-    <div class="col-md-3">
-        <?= $this->formControlGroup($form->get('code')) ?>
+    <h1 class="title">Édition d'une structure</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <?= $this->formControlGroup($form->get('structure')) ?>
+        </div>
     </div>
-    <div class="col-md-9">
-        <?= $this->formControlGroup($form->get('libelleCourt')) ?>
+
+    <div class="row">
+        <div class="col-md-3">
+            <?= $this->formControlGroup($form->get('code')) ?>
+        </div>
+        <div class="col-md-9">
+            <?= $this->formControlGroup($form->get('libelleCourt')) ?>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <?= $this->formControlGroup($form->get('libelleLong')) ?>
+    <div class="row">
+        <div class="col-md-12">
+            <?= $this->formControlGroup($form->get('libelleLong')) ?>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        <?= $this->formControlGroup($form->get('enseignement')) ?>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $this->formControlGroup($form->get('enseignement')) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $this->formControlGroup($form->get('affAdresseContrat')) ?>
+        </div>
     </div>
-    <div class="col-md-6">
-        <?= $this->formControlGroup($form->get('affAdresseContrat')) ?>
+
+
+    <div class="card bg-default">
+        <div class="card-header">Adresse</div>
+        <div class="card-body">
+            <?= $this->formControlGroup($form->get('adresseLieuDit')); ?>
+            <div class="row">
+                <div class="col-md-2">
+                    <?= $this->formControlGroup($form->get('adresseNumero')); ?>
+                </div>
+                <div class="col-md-2">
+                    <?= $this->formControlGroup($form->get('adresseNumeroCompl')); ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $this->formControlGroup($form->get('adresseVoirie')); ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $this->formControlGroup($form->get('adresseVoie')); ?>
+                </div>
+            </div>
+            <?= $this->formControlGroup($form->get('adressePrecisions')); ?>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <?= $this->formControlGroup($form->get('adresseCodePostal')); ?>
+                </div>
+                <div class="col-md-8">
+                    <?= $this->formControlGroup($form->get('adresseCommune')); ?>
+                </div>
+            </div>
+            <?= $this->formControlGroup($form->get('adressePays')); ?>
+
+
+        </div>
     </div>
-</div>
+
 
 <?php
 echo $this->formSubmit($form->get('submit'));
 echo $this->formControlGroup($form->get('security'));
 echo $this->form()->closeTag();
-?>

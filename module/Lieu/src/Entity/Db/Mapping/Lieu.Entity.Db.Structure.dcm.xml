@@ -44,9 +44,11 @@
     <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
       <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure">
+    <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure" nullable="true">
       <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
     </many-to-one>
+    <one-to-many field="structures" target-entity="Lieu\Entity\Db\Structure" mapped-by="structure" />
+
     <many-to-many field="centreCout" target-entity="Paiement\Entity\Db\CentreCout" mapped-by="structure" />
     <one-to-many field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique" mapped-by="structure" />
     <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Paiement\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="structure" />

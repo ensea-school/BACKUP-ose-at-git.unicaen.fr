@@ -44,6 +44,7 @@ class StructureViewHelper extends AbstractHtmlElement
             "Libellé long"                            => $entity->getLibelleLong(),
             "Libellé court"                           => $entity->getLibelleCourt(),
             "N° {$entity->getSource()->getLibelle()}" => $entity->getCode(),
+            "Adresse" => '<pre>'.$entity->getAdresse(false).'</pre>',
         ];
 
         $html = "<dl class=\"structure dl-horizontal\">\n";

@@ -20,16 +20,22 @@ return [
                     'constraints' => [
                         'structure' => '[0-9]*',
                     ],
-                    'controller'    => Controller\StructureController::class,
+                    'controller'  => Controller\StructureController::class,
                     'action'      => 'voir',
                     'roles'       => ['user'],
                 ],
+                'liste'   => [
+                    'route'      => '/liste',
+                    'controller' => Controller\StructureController::class,
+                    'action'     => 'liste',
+                    'privileges' => Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION,
+                ],
                 'saisie' => [
-                    'route'       => '/saisie/[:structure]',
+                    'route'       => '/saisie[/:structure]',
                     'constraints' => [
                         'structure' => '[0-9]*',
                     ],
-                    'controller'    => Controller\StructureController::class,
+                    'controller'  => Controller\StructureController::class,
                     'action'      => 'saisie',
                     'privileges'  => Privileges::STRUCTURES_ADMINISTRATION_EDITION,
                     'assertion'   => Assertion\StructureAssertion::class,
@@ -39,7 +45,7 @@ return [
                     'constraints' => [
                         'structure' => '[0-9]*',
                     ],
-                    'controller'    => Controller\StructureController::class,
+                    'controller'  => Controller\StructureController::class,
                     'action'      => 'delete',
                     'privileges'  => Privileges::STRUCTURES_ADMINISTRATION_EDITION,
                     'assertion'   => Assertion\StructureAssertion::class,

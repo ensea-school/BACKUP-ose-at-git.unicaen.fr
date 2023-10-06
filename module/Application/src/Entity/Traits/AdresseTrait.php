@@ -78,10 +78,10 @@ trait AdresseTrait
         if ($this->getAdresseLieuDit()) $adresse[] = $this->getAdresseLieuDit();
 
         $cpcp = [];
-        if (!empty(trim($this->getAdresseCodePostal()))) $cpcp[] = $this->getAdresseCodePostal();
-        if (!empty(trim($this->getAdresseCommune()))) $cpcp[] = $this->getAdresseCommune();
-        if (!empty(trim($this->getAdressePays()))) $cpcp[] = $this->getAdressePays();
-        if (!empty($cpcp)) {
+        if ($this->getAdresseCodePostal() && !empty(trim($this->getAdresseCodePostal()))) $cpcp[] = $this->getAdresseCodePostal();
+        if ($this->getAdresseCommune() && !empty(trim($this->getAdresseCommune()))) $cpcp[] = $this->getAdresseCommune();
+        if ($this->getAdressePays() && !empty(trim($this->getAdressePays()))) $cpcp[] = $this->getAdressePays();
+        if ($cpcp && !empty($cpcp)) {
             $adresse[] = implode(' ', $cpcp);
         }
 

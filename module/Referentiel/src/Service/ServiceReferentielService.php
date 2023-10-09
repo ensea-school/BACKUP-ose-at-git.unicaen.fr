@@ -364,6 +364,9 @@ class ServiceReferentielService extends AbstractEntityService
             $volumeHoraire = $this->getServiceVolumeHoraireReferentiel()->newEntity();
             //@formatter:off
             $volumeHoraire->setTypeVolumeHoraire($o['type-volume-horaire']);
+            if(!$service->getTypeVolumeHoraire()){
+                $service->setTypeVolumeHoraire($o['type-volume-horaire']);
+            }
             $volumeHoraire->setHeures($o['heures']);
             //@formatter:on
             $volumeHoraire->setServiceReferentiel($service);

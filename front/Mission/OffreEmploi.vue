@@ -88,7 +88,14 @@
             <br/>
 
         </p>
-        <p v-html="descriptionHtml"></p>
+        <p>
+            {{ this.offre.description.replace(/(?:\r\n|\r|\n)/g, '<br/>')}}
+        </p>
+        <p v-if="this.decretText" class="alert alert-info">
+            <input id="decret" v-model="decret" name="decret" type="checkbox">&nbsp;
+            <span v-html="this.decretText"></span>
+
+        </p>
         <br/>
         <div v-if="this.canValiderCandidature">
             <h5><strong>Liste des candidats :</strong></h5>
@@ -108,7 +115,7 @@
                 </tr>
                 <tr v-for="candidature in offre.candidatures">
                     <td><a :href="urlVoir(candidature)">
-                        {{ candidature.intervenant.prenom+' '+candidature.intervenant.nomUsuel }}</a></td>
+                        {{ candidature.intervenant.prenom + ' ' + candidature.intervenant.nomUsuel }}</a></td>
                     <td> <span v-if="candidature.validation" class="badge rounded-pill bg-success">Acceptée le <u-date
                         :value="candidature.validation.histoCreation"/> par {{
                             candidature.validation.histoCreateur.displayName
@@ -136,6 +143,7 @@
         <div class="mt-5">
             <a :href="offreEmploiUrl" class="btn btn-secondary">Retour aux offres</a>&nbsp;
             <a v-if="this.canPostuler" :href="postulerUrl" class="btn btn-primary"
+               :class="!decret?'disabled':''"
                data-bs-original-title="Vous devez être connecté pour postuler"
                data-bs-placement="top"
                data-bs-toggle="tooltip">Postuler</a>&nbsp;
@@ -195,9 +203,11 @@ export default {
         canSupprimer: {type: Boolean, required: false},
         canVoirCandidature: {type: Boolean, required: false},
         canValiderCandidature: {type: Boolean, required: false},
+        decretText: {type: String, required: false},
     },
     data()
     {
+
 
         return {
             saisirUrl: unicaenVue.url('offre-emploi/saisir/:offre', {offre: this.offre.id}),
@@ -206,7 +216,8 @@ export default {
             devaliderUrl: unicaenVue.url('offre-emploi/devalider/:offre', {offre: this.offre.id}),
             consulterUrl: unicaenVue.url('offre-emploi/detail/:offre', {offre: this.offre.id}),
             offreEmploiUrl: unicaenVue.url('offre-emploi'),
-            postulerUrl: unicaenVue.url('offre-emploi/postuler/:id', {id: this.offre.id})
+            postulerUrl: unicaenVue.url('offre-emploi/postuler/:id', {id: this.offre.id}),
+            decret: false,
 
 
         };
@@ -226,12 +237,18 @@ export default {
             return this.offre.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
         },
         connectionLink: function () {
-            let url = 'auth/connexion?redirect='+window.location.href;
+            let url = 'auth/connexion?redirect=' + window.location.href;
             return unicaenVue.url(url);
 
         },
 
 
+    },
+    mounted()
+    {
+        if (!this.decretText) {
+            this.decret = true;
+        }
     },
 
     methods: {
@@ -242,10 +259,10 @@ export default {
             });
         },
         urlVoir: function (candidature) {
-            return unicaenVue.url('intervenant/:code/voir', {code: 'code:'+candidature.intervenant.code})
+            return unicaenVue.url('intervenant/:code/voir', {code: 'code:' + candidature.intervenant.code})
         },
         urlVoirCandidature: function (candidature) {
-            return unicaenVue.url('intervenant/:code/candidature', {code: 'code:'+candidature.intervenant.code})
+            return unicaenVue.url('intervenant/:code/candidature', {code: 'code:' + candidature.intervenant.code})
         },
         urlAccepterCandidature: function (candidature) {
             return unicaenVue.url('offre-emploi/accepter-candidature/:id', {id: candidature.id})
@@ -296,7 +313,7 @@ export default {
             popConfirm(event.currentTarget, (response) => {
                 this.$emit('refresh', response.data);
             });
-        }
+        },
 
     },
 

@@ -777,6 +777,18 @@ return [
             'position'    => 88,
             'commentaire' => NULL,
         ],
+		'MISSION_DECRET'          => [
+			'name'        => 'MISSION_DECRET',
+			'type'        => 'string',
+			'bdd-type'    => 'VARCHAR2',
+			'length'      => 1000,
+			'scale'       => '0',
+			'precision'   => 1,
+			'nullable'    => TRUE,
+			'default'     => NULL,
+			'position'    => 100,
+			'commentaire' => NULL,
+		],
         'MODE_CALCUL'                    => [
             'name'        => 'MODE_CALCUL',
             'type'        => 'string',

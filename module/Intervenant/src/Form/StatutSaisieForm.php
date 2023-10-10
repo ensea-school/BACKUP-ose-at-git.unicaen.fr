@@ -72,6 +72,7 @@ class StatutSaisieForm extends AbstractForm
             'modeCalculPrime'               => 'Mode de calcul primes mission (ex : A, B etc...)',
             'codeIndemnitePrime'            => 'Code indémnité primes mission (ex : 0204, 2251 etc...)',
             'typePaiePrime'                 => 'Type ou carte primes mission (ex : 20, P etc...)',
+            'missionDecret'                 => 'Decret nécessaire pour postuler',
 
         ];
 
@@ -238,6 +239,18 @@ class StatutSaisieForm extends AbstractForm
             ],
         ]]);
 
+        $this->spec(['missionDecret' => [
+            'name'       => 'missionDecret',
+            'options'    => [
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],
+            ],
+            'attributes' => [
+                'rows' => 2,
+            ],
+            'type'       => 'Textarea',
+        ]]);
 
         foreach ($dveElements as $dveElement) {
             $valueOptions = [

@@ -44,6 +44,8 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
     protected ?Structure $structure = null;
 
+    protected ?string $ids = null;
+
     protected Collection $structures;
 
 
@@ -68,6 +70,29 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+
+
+    public function getIds(): ?string
+    {
+        return $this->ids;
+    }
+
+
+
+    /**
+     * Permet de savoir si l'objet est une sous-structure de $structure
+     */
+    public function inStructure(Structure $structure): bool
+    {
+        $id = $structure->getId();
+
+        if (empty($this->ids)){
+            return false;
+        }
+
+        return str_contains($this->ids, '-'.$id.'-');
     }
 
 

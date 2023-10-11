@@ -70,6 +70,26 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
 
 
 
+  PROCEDURE update_structure_ids IS
+  BEGIN
+    FOR str IN (
+        SELECT
+          id, COALESCE(ids,'-') oids,
+          SYS_CONNECT_BY_PATH(id, '-') || '-' nids
+        FROM
+          structure
+        CONNECT BY
+          structure_id = PRIOR id
+        START WITH structure_id IS NULL
+      ) LOOP
+        IF str.oids <> str.nids THEN
+          UPDATE structure SET ids = str.nids WHERE id = str.id;
+        END IF;
+      END LOOP;
+  END;
+
+
+
   PROCEDURE intervenant_horodatage_service( INTERVENANT_ID NUMERIC, TYPE_VOLUME_HORAIRE_ID NUMERIC, REFERENTIEL NUMERIC, HISTO_MODIFICATEUR_ID NUMERIC, HISTO_MODIFICATION DATE ) AS
   BEGIN
       MERGE INTO histo_intervenant_service his USING dual ON (

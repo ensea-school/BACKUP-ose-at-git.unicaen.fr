@@ -1368,6 +1368,7 @@ return [
         'ADRESSE_VOIE',
         'ADRESSE_VOIRIE_ID',
         'STRUCTURE_ID',
+        'IDS',
     ],
     'SYNC_LOG'                       => [
         'ID',

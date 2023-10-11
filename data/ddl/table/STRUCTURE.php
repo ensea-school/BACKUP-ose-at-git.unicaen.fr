@@ -237,6 +237,18 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
+        'IDS'                     => [
+            'name'        => 'IDS',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 1000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 25,
+            'commentaire' => NULL,
+        ],
         'LIBELLE_COURT'           => [
             'name'        => 'LIBELLE_COURT',
             'type'        => 'string',

@@ -29,10 +29,6 @@ class StructureService extends AbstractEntityService
     use MiseEnPaiementServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
 
-    /** @var Structure[] */
-    private array $treeStructures;
-
-
 
     public function getEntityClass()
     {
@@ -62,36 +58,89 @@ class StructureService extends AbstractEntityService
 
     public function getTreeArray(): array
     {
-        $dql = "
-        SELECT 
-            s, src, sp
-        FROM 
-            " . Structure::class . " s 
-            JOIN s.source src
-            LEFT JOIN s.structure sp WITH sp.histoDestruction IS NULL
-        WHERE s.histoDestruction IS NULL 
-        ORDER BY s.libelleCourt
-        ";
-
-        $this->treeStructures = [];
-        $query = $this->getEntityManager()->createQuery($dql);
-
-        /** @var Structure[] $r */
-        $r = $query->getResult();
-        $this->treeStructures = [];
-        foreach ($r as $str) {
-            $this->treeStructures[$str->getId()] = $str;
-        }
-        unset($r);
+        $tree = $this->getTree();
 
         $ta = [];
-        foreach ($this->treeStructures as $structure) {
-            if (null === $structure->getStructure()) {
-                $ta[$structure->getId()] = $this->getStructureArray($structure);
-            }
+        foreach ($tree as $structure) {
+            $ta[$structure->getId()] = $this->getStructureArray($structure);
         }
 
         return $ta;
+    }
+
+
+
+    /**
+     * @return array|Structure[]
+     */
+    public function getTree(?Structure $root = null, bool $onlyEnseignement = false): array
+    {
+        $cStructure = $this->getServiceContext()->getStructure();
+
+        if ($root && $cStructure) {
+            if ($cStructure->inStructure($root)) {
+                // le ROOT est une sous-structure des structures autorisées
+                $root = $cStructure;
+            }
+            if (!$root->inStructure($cStructure)) {
+                // le root n'est pas une sous-structure autorisée => liste vide
+                return [];
+            }
+        } elseif (!$root && $cStructure) {
+            // pas de root définie => on se base sur la structure du contexte
+            $root = $cStructure;
+        }
+
+        if ($root) {
+            $id = $root->getId();
+
+            $pFilter = "AND p.ids LIKE '%-$id-%'";
+            $strFilter = "AND str.ids LIKE '%-$id-%'";
+            $subFilter = "AND sub.ids LIKE '%-$id-%'";
+        } else {
+            $pFilter = "";
+            $strFilter = "";
+            $subFilter = "";
+        }
+
+        if ($onlyEnseignement){
+            $pFilter .= ' AND p.enseignement = true';
+            $strFilter .= ' AND str.enseignement = true';
+            $subFilter .= ' AND sub.enseignement = true';
+        }
+
+        $dql = "
+        SELECT 
+            str, p, sub
+        FROM
+            " . Structure::class . " str
+            LEFT JOIN str.structure p WITH p.histoDestruction IS NULL $pFilter
+            LEFT JOIN str.structures sub WITH sub.histoDestruction IS NULL $subFilter
+        WHERE
+            str.histoDestruction IS NULL
+            $strFilter 
+        ORDER BY
+            str.libelleCourt
+        ";
+
+        /** @var Structure[] $strs */
+        $strs = $this->getEntityManager()->createQuery($dql)->getResult();
+        $result = [];
+        foreach ($strs as $str) {
+            $found = false;
+            foreach( $strs as $sstr){
+                foreach($sstr->getStructures() as $ssstr){
+                    if ($str == $ssstr){
+                        $found = true; // trouvé comme sous-structure
+                    }
+                }
+            }
+            if (!$found) {
+                $result[$str->getId()] = $str;
+            }
+        }
+
+        return $result;
     }
 
 
@@ -110,9 +159,9 @@ class StructureService extends AbstractEntityService
             'enseignement'      => $structure->isEnseignement(),
             'affAdresseContrat' => $structure->isAffAdresseContrat(),
             'adresse'           => $structure->getAdresse(false),
-        'structures'   => [],
-            'canEdit'      => $canEdit,
-            'canDelete'    => $canDelete,
+            'structures'        => [],
+            'canEdit'           => $canEdit,
+            'canDelete'         => $canDelete,
         ];
 
         foreach ($structure->getStructures() as $subStr) {
@@ -169,26 +218,6 @@ class StructureService extends AbstractEntityService
 
 
     /**
-     *
-     * @param QueryBuilder $qb
-     * @param string $alias
-     *
-     * @return QueryBuilder
-     */
-    public function finderByContext(QueryBuilder $qb = null, $alias = null)
-    {
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        if ($cStructure = $this->getServiceContext()->getStructure()) {
-            $this->finderById($cStructure->getId(), $qb, $alias);
-        }
-
-        return $qb;
-    }
-
-
-
-    /**
      * Ne recherche que les structures où il y a des enseignements
      *
      * @todo à corriger pour palier au cas où une structure destinée à assurer des enseignements n'ai encore aucun
@@ -226,6 +255,17 @@ class StructureService extends AbstractEntityService
         $serviceIntervenant->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
 
         return $qb;
+    }
+
+
+
+    public function save($entity)
+    {
+        parent::save($entity); // TODO: Change the autogenerated stub
+
+        $this->getEntityManager()->getConnection()->executeStatement('BEGIN OSE_DIVERS.UPDATE_STRUCTURES(); END;');
+
+        return $entity;
     }
 
 

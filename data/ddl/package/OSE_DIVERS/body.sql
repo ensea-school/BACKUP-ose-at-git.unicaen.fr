@@ -70,22 +70,38 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
 
 
 
-  PROCEDURE update_structure_ids IS
+  PROCEDURE update_structures IS
   BEGIN
+    -- mise à jour des listes d'IDs
     FOR str IN (
-        SELECT
-          id, COALESCE(ids,'-') oids,
-          SYS_CONNECT_BY_PATH(id, '-') || '-' nids
-        FROM
-          structure
-        CONNECT BY
-          structure_id = PRIOR id
-        START WITH structure_id IS NULL
-      ) LOOP
-        IF str.oids <> str.nids THEN
-          UPDATE structure SET ids = str.nids WHERE id = str.id;
-        END IF;
-      END LOOP;
+      SELECT
+        id, COALESCE(ids,'-') oids,
+        SYS_CONNECT_BY_PATH(id, '-') || '-' nids
+      FROM
+        structure
+      CONNECT BY
+        structure_id = PRIOR id
+      START WITH structure_id IS NULL
+    ) LOOP
+      IF str.oids <> str.nids THEN
+        UPDATE structure SET ids = str.nids WHERE id = str.id;
+      END IF;
+    END LOOP;
+
+    -- mise à 1 du témoin enseignement si deséléments sont dans la structure
+    FOR str IN (
+      SELECT DISTINCT
+        ep.structure_id id
+      FROM
+        element_pedagogique ep
+        JOIN structure str ON str.id = ep.structure_id
+      WHERE
+        ep.histo_destruction IS NULL
+        AND str.enseignement = 0
+    ) LOOP
+        UPDATE structure SET enseignement = 1 WHERE id = str.id;
+    END LOOP;
+
   END;
 
 

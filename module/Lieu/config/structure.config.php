@@ -24,7 +24,7 @@ return [
                     'action'      => 'voir',
                     'roles'       => ['user'],
                 ],
-                'liste'   => [
+                'liste'  => [
                     'route'      => '/liste',
                     'controller' => Controller\StructureController::class,
                     'action'     => 'liste',
@@ -95,5 +95,6 @@ return [
 
     'forms' => [
         Form\StructureSaisieForm::class => Form\StructureSaisieFormFactory::class,
+        Form\Element\Structure::class   => Form\Element\StructureFactory::class,
     ],
 ];

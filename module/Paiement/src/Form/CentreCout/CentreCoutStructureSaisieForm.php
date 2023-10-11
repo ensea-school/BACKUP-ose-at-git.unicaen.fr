@@ -6,6 +6,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Service\CentreCoutServiceAwareTrait;
 use Paiement\Service\CentreCoutStructureServiceAwareTrait;
@@ -36,17 +37,8 @@ class CentreCoutStructureSaisieForm extends AbstractForm
 
         $this->add([
             'name'       => 'structure',
-            'options'    => [
-                'label' => 'Structure',
-            ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
-            ],
-            'type'       => 'Select',
+            'type'       => Structure::class,
         ]);
-        $this->get('structure')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getStructures()));
 
         $this->add(new Csrf('security'));
         $this->add([
@@ -59,17 +51,6 @@ class CentreCoutStructureSaisieForm extends AbstractForm
         ]);
 
         return $this;
-    }
-
-
-
-    public function getStructures()
-    {
-        $serviceStructure = $this->getServiceStructure();
-        $qb               = $serviceStructure->finderByHistorique();
-        $structures       = $serviceStructure->getList($qb);
-
-        return $structures;
     }
 
 

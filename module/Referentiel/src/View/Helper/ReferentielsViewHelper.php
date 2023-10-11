@@ -37,6 +37,8 @@ class ReferentielsViewHelper extends AbstractHtmlElement
 
     private bool $horodatage = false;
 
+    private array $services = [];
+
     private array $columns = [
         'intervenant'        => [
             'visibility' => false,

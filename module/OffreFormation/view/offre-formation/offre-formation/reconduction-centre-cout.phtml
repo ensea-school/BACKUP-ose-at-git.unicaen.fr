@@ -9,12 +9,11 @@ $this->headScript()->offsetSetFile(130, $this->basePath('/js/reconduction-centre
             <div class="card-header">Veuillez sélectionner une composante :</div>
             <div class="card-body">
                 <?php
-                $selectStructure = new \Laminas\Form\Element\Select('structure');
+                $selectStructure = new \Lieu\Form\Element\Structure('structure');
+                $selectStructure->init();
                 $selectStructure
-                    ->setValueOptions(['' => "(Sélectionnez une composante)"] + \UnicaenApp\Util::collectionAsOptions($structures))
-                    ->setValue($structure ? $structure->getId() : null)
-                    ->setAttributes(['class' => 'structure form-select',
-                                     'style' => 'width:250px;']);
+                    ->setValue($structure?->getId())
+                    ->setAttribute('class', 'structure selectpicker');
                 echo $this->formSelect($selectStructure);
                 ?>
            

@@ -6,6 +6,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Referentiel\Entity\Db\FonctionReferentiel;
@@ -84,14 +85,10 @@ class FonctionReferentielSaisieForm extends AbstractForm
         ]);
         $this->add([
             'name'       => 'structure',
+            'type'       => Structure::class,
             'options'    => [
                 'label' => 'Structure',
             ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
-            ],
-            'type'       => 'Select',
         ]);
 
         $this->add([
@@ -122,10 +119,6 @@ class FonctionReferentielSaisieForm extends AbstractForm
         // peuplement liste des domaines fonctionnels
         $this->get('domaine-fonctionnel')
             ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceDomaineFonctionnel()->getList()));
-
-        $this->get('structure')
-            ->setEmptyOption("(Aucun)")
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getStructures()));
 
         return $this;
     }

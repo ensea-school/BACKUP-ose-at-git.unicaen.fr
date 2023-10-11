@@ -8,6 +8,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
@@ -54,12 +55,6 @@ class AffectationForm extends AbstractForm
         $this->setAttribute('data-roles-must-have-structure', json_encode($rolesMustHaveStructure));
         $this->setAttribute('class', 'affectation-form');
 
-        $qb = $this->getServiceStructure()->finderByHistorique();
-        if ($structure) {
-            $this->getServiceStructure()->finderById($structure->getId(), $qb);
-        }
-        $structures = $this->getServiceStructure()->getList($qb);
-
         $utilisateur = new SearchAndSelect('utilisateur');
         $utilisateur->setRequired(true)
             ->setSelectionRequired(true)
@@ -80,16 +75,8 @@ class AffectationForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'Select',
+            'type'       => Structure::class,
             'name'       => 'structure',
-            'options'    => [
-                'label'         => 'Structure',
-                'value_options' => Util::collectionAsOptions($structures),
-            ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => true,
-            ],
         ]);
 
         $this->add([

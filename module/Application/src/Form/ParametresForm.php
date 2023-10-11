@@ -11,6 +11,7 @@ use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\WfEtapeServiceAwareTrait;
 use Laminas\Form\Element;
+use Lieu\Form\Element\Structure;
 use Lieu\Service\PaysServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
@@ -82,17 +83,10 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'Select',
+            'type'       => Structure::class,
             'name'       => 'structure_univ',
             'options'    => [
-                'value_options' => Util::collectionAsOptions($this->getServiceStructure()->getList(
-                    $this->getServiceStructure()->finderByHistorique()
-                )),
                 'label'         => 'Composante représentant l\'université',
-            ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
             ],
         ]);
 

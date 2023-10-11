@@ -144,15 +144,9 @@ class EditionForm extends AbstractForm
 
         $this->add([
             'name'       => 'structure',
-            'type'       => 'Select',
+            'type'       => \Lieu\Form\Element\Structure::class,
             'options'    => [
                 'label'         => 'Structure',
-                'empty_option'  => '- Non renseignée -',
-                'value_options' => Util::collectionAsOptions($this->getStructures()),
-            ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
             ],
         ]);
 
@@ -361,16 +355,6 @@ class EditionForm extends AbstractForm
                 'class' => 'btn btn-primary',
             ],
         ]);
-    }
-
-
-
-    public function getStructures(): array
-    {
-        $serviceStructure = $this->getServiceStructure();
-        $qb = $serviceStructure->finderByHistorique();
-
-        return $serviceStructure->getList($qb);
     }
 
 

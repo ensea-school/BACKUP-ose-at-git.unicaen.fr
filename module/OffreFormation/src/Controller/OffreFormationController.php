@@ -190,11 +190,6 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
         //Get role of user
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        $qb = $this->getServiceStructure()->finderByHistorique();
-        $this->getServiceStructure()->finderByEnseignement($qb);
-        $this->getServiceStructure()->finderByRole($role, $qb);
-        $structures = $this->getServiceStructure()->getList($qb);
-
         $anneeEnCours = $this->getServiceContext()->getAnnee();
         [$offresComplementaires, $mappingEtape, $reconductionTotale] = $this->getServiceOffreFormation()->getOffreComplementaire($structure, $niveau, $etape);
 
@@ -231,7 +226,6 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
             'offresComplementaires' => $offresComplementaires,
             'reconductionTotale'    => $reconductionTotale,
             'structure'             => $structure,
-            'structures'            => $structures,
             'anneeEnCours'          => $anneeEnCours,
             'reconductionStep'      => $reconductionStep,
             'messageStep'           => $messageStep,
@@ -248,11 +242,6 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
 
         //Get role of user
         $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $qb = $this->getServiceStructure()->finderByHistorique();
-        $this->getServiceStructure()->finderByEnseignement($qb);
-        $this->getServiceStructure()->finderByRole($role, $qb);
-        $structures = $this->getServiceStructure()->getList($qb);
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -284,7 +273,6 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
 
 
         return [
-            'structures'        => $structures,
             'structure'         => $structure,
             'etapesReconduites' => $etapesReconduites,
         ];
@@ -299,12 +287,6 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
         [$structure, $niveau, $etape] = $this->getParams();
         $etapesReconduites = [];
         $role              = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $qb = $this->getServiceStructure()->finderByHistorique();
-        $this->getServiceStructure()->finderByEnseignement($qb);
-        $this->getServiceStructure()->finderByRole($role, $qb);
-        $structures = $this->getServiceStructure()->getList($qb);
-
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -337,7 +319,6 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
 
 
         return [
-            'structures'        => $structures,
             'etapesReconduites' => $etapesReconduites,
             'structure'         => $structure,
         ];
@@ -393,6 +374,7 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
         $etape     = $this->context()->etapeFromQuery();
         if ($etape) $etape = $this->getServiceEtape()->get($etape->getId()); // entité Niveau
         if ($niveau) $niveau = $this->getServiceNiveauEtape()->get($niveau); // entité Niveau
+        if ($structure) $structure = $this->getServiceStructure()->get($structure);
 
         return [$structure, $niveau, $etape];
     }

@@ -7,6 +7,7 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\Traits\TypeInterventionStructureAwareTrait;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;
@@ -40,14 +41,7 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
         );
         $this->add([
             'name'       => 'structure',
-            'options'    => [
-                'label' => 'Structure',
-            ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
-            ],
-            'type'       => 'Select',
+            'type'       => Structure::class,
         ]);
         $this->add([
             'name'    => 'visible',
@@ -91,14 +85,6 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
                 'class' => 'btn btn-primary',
             ],
         ]);
-        $role             = $this->getServiceContext()->getSelectedIdentityRole();
-        $serviceStructure = $this->getServiceStructure();
-        $qb               = $serviceStructure->finderByEnseignement();
-        if ($role && $role->getStructure()) {
-            $serviceStructure->finderById($role->getStructure()->getId(), $qb); // Filtre
-        }
-        $this->get('structure')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($serviceStructure->getList($qb)));
 
         return $this;
     }

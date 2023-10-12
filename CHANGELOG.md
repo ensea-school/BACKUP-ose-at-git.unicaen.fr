@@ -22,6 +22,7 @@
 * Ajout des dates de dévalidation des données personnelles dans les notes/historique par intervenant
 * Ajout du suivi du référentiel dans les notes de l'intervenant (#52478)
 * En mode de saisie de service calendaire, la période ainsi que les types d'intervention sont maintenant filtrés par rapport à l'élement pédagogique (#51141)
+* Possibilité d'utiliser les indicateurs 550, 560 et 570 même sans la clôture d'activée pour les permanents (#50952)
 
 ## Corrections de bugs
 
@@ -32,6 +33,7 @@
 * Le report du service réalisé validé fonctionne de nouveau pour le référentiel (#53144 et #53144 et #53159)
 * L'export ne remonte plus de taux à 1 (#53198)
 * Recherche des intervenants avec apostrophe améliorée (#50815)
+* Problème de privilèges sur la saisie de l'employeur sur le dossier de l'intervenant (#53126)
 
 
 

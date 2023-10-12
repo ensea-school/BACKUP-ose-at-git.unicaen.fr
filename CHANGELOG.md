@@ -28,7 +28,7 @@
 * Masquer 'Données personnelles' sur le menu de gauche lorsque celles-ci sont désactivées pour l'intervenant (#52479)
 * Le bandeau d'heures réalisé sur l'année précédente est bien affiché dans le menu données personelles (#48022)
 * Le report du service réalisé validé fonctionne de nouveau pour le référentiel (#53144 et #53144 et #53159)
-
+* L'export ne remonte plus de taux à 1 (#53198)
 
 
 

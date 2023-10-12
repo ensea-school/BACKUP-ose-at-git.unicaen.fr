@@ -14,7 +14,7 @@
 * Gestion des indemnités de fin de contrat pour les missions étudiantes (#47519)
 * Extraction du fichier de paie des indemnités de fin de contrat pour les missions étudiantes
 * Nouveau mode de calcul des tableaux de bord de calcul intermédiaires. commande ose build-tableaux-bord supprimée et non remplacée (#51555)
-* Saisie de date de commission de recrutement pour les candidatures aux missions
+* Saisie de date de commission de recrutement pour accepter les candidatures des missions
 * Case à cocher par les étudiants avec un texte règlementaire personnalisable préalablement à la candidature à une offre d'emploi
 
 ## Améliorations

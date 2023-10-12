@@ -27,15 +27,23 @@ $this->intervenant($intervenant)->renderTitle('Annulation de mises en paiement')
         <?php foreach ($paiements as $paiement):
             if ($paiement->getFormuleResultatService()) {
                 $service = $paiement->getFormuleResultatService()->getService();
+                $serviceReferentiel = null;
+                $mission = null;
                 if ($service->getElementPedagogique()) {
                     $composante = $service->getElementPedagogique()->getStructure();
                 } else {
                     $composante = $intervenant->getStructure();
                 }
-            } else {
-                $service            = null;
+            } elseif ($paiement->getFormuleResultatServiceReferentiel()) {
+                $service = null;
                 $serviceReferentiel = $paiement->getFormuleResultatServiceReferentiel()->getServiceReferentiel();
-                $composante         = $serviceReferentiel->getStructure();
+                $mission = null;
+                $composante = $serviceReferentiel->getStructure();
+            } elseif ($paiement->getMission()) {
+                $service = null;
+                $serviceReferentiel = null;
+                $mission = $paiement->getMission();
+                $composante = $mission->getStructure();
             }
             ?>
             <tr>
@@ -52,8 +60,10 @@ $this->intervenant($intervenant)->renderTitle('Annulation de mises en paiement')
                                 echo $this->etablissement($service->getEtablissement())->renderLink();
                             }
                         }
-                    } else {
+                    } elseif ($serviceReferentiel) {
                         echo $this->fonctionReferentiel($serviceReferentiel->getFonctionReferentiel())->renderLink();
+                    } elseif ($mission) {
+                        echo $mission->getLibelle().' ('.$mission->getTypeMission()->getLibelle().')';
                     }
                     ?></td>
                 <td><?= $paiement->getCentreCout() ?></td>
@@ -66,10 +76,12 @@ $this->intervenant($intervenant)->renderTitle('Annulation de mises en paiement')
         </tbody>
     </table>
     <div>
-        <button class="btn btn-secondary btn-sm" type="button" onclick="$('.table-sort :checkbox').prop('checked', true);">Tout
+        <button class="btn btn-secondary btn-sm" type="button"
+                onclick="$('.table-sort :checkbox').prop('checked', true);">Tout
             sélectionner
         </button>
-        <button class="btn btn-secondary btn-sm" type="button" onclick="$('.table-sort :checkbox').prop('checked', false);">Ne
+        <button class="btn btn-secondary btn-sm" type="button"
+                onclick="$('.table-sort :checkbox').prop('checked', false);">Ne
             rien sélectionner
         </button>
     </div>

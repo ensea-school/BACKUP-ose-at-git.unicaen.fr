@@ -25,6 +25,3 @@ GROUP BY
   w.annee_id,
   w.intervenant_id,
   i.structure_id
-
-
-

@@ -35,6 +35,9 @@
 * Recherche des intervenants avec apostrophe améliorée (#50815)
 * Problème de privilèges sur la saisie de l'employeur sur le dossier de l'intervenant (#53126)
 
+## Notes de mise à jour
+
+* Oracle est maintenant requis en version 19 au MINIMUM
 
 
 

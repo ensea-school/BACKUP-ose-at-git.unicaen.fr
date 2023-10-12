@@ -1342,6 +1342,7 @@ return [
         'TYPE_PAIE',
         'TYPE_PAIE_PRIME',
         'DOSSIER_EMPLOYEUR_FACULTATIF',
+        'MISSION_DECRET',
     ],
     'STRUCTURE'                      => [
         'ID',
@@ -2366,6 +2367,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'DATE_COMMISSION',
     ],
     'OFFRE_EMPLOI'                   => [
         'ID',

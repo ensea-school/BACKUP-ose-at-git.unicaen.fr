@@ -22,7 +22,7 @@
 * Ajout des dates de dévalidation des données personnelles dans les notes/historique par intervenant
 * Ajout du suivi du référentiel dans les notes de l'intervenant (#52478)
 * En mode de saisie de service calendaire, la période ainsi que les types d'intervention sont maintenant filtrés par rapport à l'élement pédagogique (#51141)
-* Possibilité d'utiliser les indicateurs 550, 560 et 570 même sans la clôture d'activée pour les permanents (#50952)
+* Possibilité d'utiliser les indicateurs 550, 560 et 570 même sans activation de la clôture pour les permanents (#50952)
 
 ## Corrections de bugs
 

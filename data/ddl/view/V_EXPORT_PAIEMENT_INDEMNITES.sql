@@ -56,7 +56,8 @@ FROM (
 	JOIN heures_paie_mission hpm ON hpm.mission_id = m.id
 	JOIN annee a ON a.id = i.annee_id
 	--On regarde la date de fin la plus éloignée des missions composants la prime, pour en déduire la période de paie au mois suivant cette date
-	JOIN periode p ON p.ecart_mois = ROUND(MONTHS_BETWEEN(m.date_fin,a.date_debut))
+	-- on ajoute 0.5 pour être sûre d'arrondir à l'entier supérieur et on filtre sur les périodes de paiement uniquement
+	JOIN periode p ON p.ecart_mois = ROUND(MONTHS_BETWEEN(m.date_fin,a.date_debut)+0.5) and p.enseignement = 0
 	WHERE
 	--Il faut impérativement une prime validée
 	mp.declaration_id IS NOT NULL

@@ -126,7 +126,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- T=IF([.$H20]="Référentiel";0;IF([.$E20]+[.$F20]=0;0;([.$AI20]+[.$AU20])/([.$E20]+[.$F20]))*[.E20])
+      -- T=IF([.$H20]="Référentiel";0;IF([.$E20]+[.$F20]=0;0;([.$AI20]+[.$AO20])/([.$E20]+[.$F20]))*[.E20])
       WHEN 'T' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
@@ -134,13 +134,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
           IF vh.taux_fi + vh.taux_fa = 0 THEN
             RETURN 0;
           ELSE
-            RETURN ((cell('AI',l) + cell('AU',l)) / (vh.taux_fi + vh.taux_fa)) * vh.taux_fi;
+            RETURN ((cell('AI',l) + cell('AO',l)) / (vh.taux_fi + vh.taux_fa)) * vh.taux_fi;
           END IF;
         END IF;
 
 
 
-      -- U=IF([.$H20]="Référentiel";0;IF([.$E20]+[.$F20]=0;0;([.$AI20]+[.$AU20])/([.$E20]+[.$F20]))*[.F20])
+      -- U=IF([.$H20]="Référentiel";0;IF([.$E20]+[.$F20]=0;0;([.$AI20]+[.$AO20])/([.$E20]+[.$F20]))*[.F20])
       WHEN 'U' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
@@ -148,7 +148,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
           IF vh.taux_fi + vh.taux_fa = 0 THEN
             RETURN 0;
           ELSE
-            RETURN ((cell('AI',l) + cell('AU',l)) / (vh.taux_fi + vh.taux_fa)) * vh.taux_fa;
+            RETURN ((cell('AI',l) + cell('AO',l)) / (vh.taux_fi + vh.taux_fa)) * vh.taux_fa;
           END IF;
         END IF;
 
@@ -164,17 +164,17 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- W=IF([.$H20]="Référentiel";[.$AO20]+[.$BA20];0)
+      -- W=IF([.$H20]="Référentiel";[.$AU20]+[.$BA20];0)
       WHEN 'W' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('AO',l) + cell('BA',l);
+          RETURN cell('AU',l) + cell('BA',l);
         ELSE
           RETURN 0;
         END IF;
 
 
 
-      -- X=IF([.$H20]="Référentiel";0;IF([.$E20]+[.$F20]=0;0;([.$AK20]+[.$AW20])/([.$E20]+[.$F20]))*[.E20])
+      -- X=IF([.$H20]="Référentiel";0;IF([.$E20]+[.$F20]=0;0;([.$AK20]+[.$AQ20])/([.$E20]+[.$F20]))*[.E20])
       WHEN 'X' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
@@ -182,13 +182,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
           IF vh.taux_fi + vh.taux_fa = 0 THEN
             RETURN 0;
           ELSE
-            RETURN ((cell('AK',l) + cell('AW',l)) / (vh.taux_fi + vh.taux_fa)) * vh.taux_fi;
+            RETURN ((cell('AK',l) + cell('AQ',l)) / (vh.taux_fi + vh.taux_fa)) * vh.taux_fi;
           END IF;
         END IF;
 
 
 
-      -- Y=IF([.$H20]="Référentiel";0;IF([.$E20]+[.$F20]=0;0;([.$AK20]+[.$AW20])/([.$E20]+[.$F20]))*[.F20])
+      -- Y=IF([.$H20]="Référentiel";0;IF([.$E20]+[.$F20]=0;0;([.$AK20]+[.$AQ20])/([.$E20]+[.$F20]))*[.F20])
       WHEN 'Y' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
@@ -196,7 +196,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
           IF vh.taux_fi + vh.taux_fa = 0 THEN
             RETURN 0;
           ELSE
-            RETURN ((cell('AK',l) + cell('AW',l)) / (vh.taux_fi + vh.taux_fa)) * vh.taux_fa;
+            RETURN ((cell('AK',l) + cell('AQ',l)) / (vh.taux_fi + vh.taux_fa)) * vh.taux_fa;
           END IF;
         END IF;
 
@@ -228,15 +228,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AD=IF(ISERROR([.I20]);1;[.I20]*[.K20])
+      -- AD=IF(ISERROR([.I20]);1;[.I20])
       WHEN 'AD' THEN
-        RETURN (vh.taux_service_du * vh.ponderation_service_du);
+        RETURN vh.taux_service_du;
 
 
 
-      -- AE=IF(ISERROR([.J20]);1;[.J20]*[.L20])
+      -- AE=IF(ISERROR([.J20]);1;[.J20])
       WHEN 'AE' THEN
-        RETURN (vh.taux_service_compl * vh.ponderation_service_compl);
+        RETURN vh.taux_service_compl;
 
 
 
@@ -284,9 +284,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AJ=IF(ABS([.AI20])<ABS([.AG20]);([.AG20]-[.AI20])/[.$AD20];0)
+      -- AJ=IF([.AI20]<[.AG20];([.AG20]-[.AI20])/[.$AD20];0)
       WHEN 'AJ' THEN
-        IF ABS(cell('AI',l)) < ABS(cell('AG',l)) THEN
+        IF cell('AI',l) < cell('AG',l) THEN
           RETURN (cell('AG',l) - cell('AI',l)) / cell('AD',l);
         ELSE
           RETURN 0;
@@ -304,25 +304,19 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AM=IF(AND([.$D20]="Oui";[.$H20]="Référentiel";[.$A20]=i_structure_code);[.$M20]*[.$AD20];0)
+      -- AM=IF(AND([.$D20]="Oui";[.$H20]<>"Référentiel";[.$A20]<>i_structure_code);[.$M20]*([.$E20]+[.$F20])*[.$AD20];0)
       WHEN 'AM' THEN
-        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation THEN
-          RETURN vh.heures * cell('AD',l);
+        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
+          RETURN vh.heures * (vh.taux_fi + vh.taux_fa) * cell('AD',l);
         ELSE
           RETURN 0;
         END IF;
 
 
 
-      -- AN14=SUM([.AM$1:.AM$1048576])
-      WHEN 'AN14' THEN
-        RETURN calcFnc('somme','AM');
-
-
-
-      -- AN15=MIN([.AN14];i_service_du/3)
+      -- AN15=SUM([.AM$1:.AM$1048576])
       WHEN 'AN15' THEN
-        RETURN LEAST(cell('AN14'), i.service_du / 3);
+        RETURN calcFnc('somme','AM');
 
 
 
@@ -338,10 +332,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AN=IF([.AN$14]>0;[.AM20]/[.AN$14];0)
+      -- AN=IF([.AN$15]>0;[.AM20]/[.AN$15];0)
       WHEN 'AN' THEN
-        IF cell('AN14') > 0 THEN
-          RETURN cell('AM',l) / cell('AN14');
+        IF cell('AN15') > 0 THEN
+          RETURN cell('AM',l) / cell('AN15');
         ELSE
           RETURN 0;
         END IF;
@@ -354,9 +348,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AP=IF(ABS([.AO20])<ABS([.AM20]);([.AM20]-[.AO20])/[.$AD20];0)
+      -- AP=IF([.AO20]<[.AM20];([.AM20]-[.AO20])/[.$AD20];0)
       WHEN 'AP' THEN
-        IF ABS(cell('AO',l)) < ABS(cell('AM',l)) THEN
+        IF cell('AO',l) < cell('AM',l) THEN
           RETURN (cell('AM',l) - cell('AO',l)) / cell('AD',l);
         ELSE
           RETURN 0;
@@ -374,19 +368,25 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AS=IF(AND([.$D20]="Oui";[.$H20]<>"Référentiel";[.$A20]<>i_structure_code);[.$M20]*([.$E20]+[.$F20])*[.$AD20];0)
+      -- AS=IF(AND([.$D20]="Oui";[.$H20]="Référentiel";[.$A20]=i_structure_code);[.$M20]*[.$AD20];0)
       WHEN 'AS' THEN
-        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
-          RETURN vh.heures * (vh.taux_fi + vh.taux_fa) * cell('AD',l);
+        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation THEN
+          RETURN vh.heures * cell('AD',l);
         ELSE
           RETURN 0;
         END IF;
 
 
 
-      -- AT15=SUM([.AS$1:.AS$1048576])
-      WHEN 'AT15' THEN
+      -- AT14=SUM([.AS$1:.AS$1048576])
+      WHEN 'AT14' THEN
         RETURN calcFnc('somme','AS');
+
+
+
+      -- AT15=MIN([.AT14];i_service_du/3)
+      WHEN 'AT15' THEN
+        RETURN LEAST(cell('AT14'), i.service_du / 3);
 
 
 
@@ -402,10 +402,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AT=IF([.AT$15]>0;[.AS20]/[.AT$15];0)
+      -- AT=IF([.AT$14]>0;[.AS20]/[.AT$14];0)
       WHEN 'AT' THEN
-        IF cell('AT15') > 0 THEN
-          RETURN cell('AS',l) / cell('AT15');
+        IF cell('AT14') > 0 THEN
+          RETURN cell('AS',l) / cell('AT14');
         ELSE
           RETURN 0;
         END IF;
@@ -418,9 +418,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AV=IF(ABS([.AU20])<ABS([.AS20]);([.AS20]-[.AU20])/[.$AD20];0)
+      -- AV=IF([.AU20]<[.AS20];([.AS20]-[.AU20])/[.$AD20];0)
       WHEN 'AV' THEN
-        IF ABS(cell('AU',l)) < ABS(cell('AS',l)) THEN
+        IF cell('AU',l) < cell('AS',l) THEN
           RETURN (cell('AS',l) - cell('AU',l)) / cell('AD',l);
         ELSE
           RETURN 0;
@@ -454,9 +454,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- AZ15=MIN([.AZ14];(i_service_du/3)-[.AN16])
+      -- AZ15=MIN([.AZ14];(i_service_du/3)-[.AT16])
       WHEN 'AZ15' THEN
-        RETURN LEAST(cell('AZ14'), (i.service_du / 3) - cell('AN16'));
+        RETURN LEAST(cell('AZ14'), (i.service_du / 3) - cell('AT16'));
 
 
 
@@ -488,9 +488,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- BB=IF(ABS([.BA20])<ABS([.AY20]);([.AY20]-[.BA20])/[.$AD20];0)
+      -- BB=IF([.BA20]<[.AY20];([.AY20]-[.BA20])/[.$AD20];0)
       WHEN 'BB' THEN
-        IF ABS(cell('BA',l)) < ABS(cell('AY',l)) THEN
+        IF cell('BA',l) < cell('AY',l) THEN
           RETURN (cell('AY',l) - cell('BA',l)) / cell('AD',l);
         ELSE
           RETURN 0;
@@ -552,9 +552,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- BH=IF(ABS([.BG20])<ABS([.BE20]);([.BE20]-[.BG20])/[.$AD20];0)
+      -- BH=IF([.BG20]<[.BE20];([.BE20]-[.BG20])/[.$AD20];0)
       WHEN 'BH' THEN
-        IF ABS(cell('BG',l)) < ABS(cell('BE',l)) THEN
+        IF cell('BG',l) < cell('BE',l) THEN
           RETURN (cell('BE',l) - cell('BG',l)) / cell('AD',l);
         ELSE
           RETURN 0;
@@ -616,9 +616,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- BN=IF(ABS([.BM20])<ABS([.BK20]);([.BK20]-[.BM20])/[.$AD20];0)
+      -- BN=IF([.BM20]<[.BK20];([.BK20]-[.BM20])/[.$AD20];0)
       WHEN 'BN' THEN
-        IF ABS(cell('BM',l)) < ABS(cell('BK',l)) THEN
+        IF cell('BM',l) < cell('BK',l) THEN
           RETURN (cell('BK',l) - cell('BM',l)) / cell('AD',l);
         ELSE
           RETURN 0;
@@ -646,10 +646,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- BS=IF(AND([.$D20]="Oui";[.$BL$17]=0;[.$H20]="Référentiel");([.AQ20]+[.BC20])*[.$AE20];0)
+      -- BS=IF(AND([.$D20]="Oui";[.$BL$17]=0;[.$H20]="Référentiel");([.AW20]+[.BC20])*[.$AE20];0)
       WHEN 'BS' THEN
         IF vh.service_statutaire AND cell('BL17') = 0 AND vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN (cell('AQ',l) + cell('BC',l)) * cell('AE',l);
+          RETURN (cell('AW',l) + cell('BC',l)) * cell('AE',l);
         ELSE
           RETURN 0;
         END IF;

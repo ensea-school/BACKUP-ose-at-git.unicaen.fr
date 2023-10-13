@@ -13,24 +13,20 @@ class Structure extends Select
 
     private bool $enseignement = false;
 
-    private array $optionsBuilding = [];
-
     public function init()
     {
         parent::init();
-
         $this->setLabel('Structure');
         $this->setAttribute('class', 'selectpicker');
         $this->setAttribute('data-live-search', 'true');
         $this->setEmptyOption('- Aucune -');
-        $this->populateOptions();
     }
 
 
 
     public function isEnseignement(): bool
     {
-        return $this->enseignement;
+        return $this->enseignement || $this->getOption('enseignement');
     }
 
 
@@ -45,13 +41,24 @@ class Structure extends Select
 
     protected function populateOptions()
     {
-        $this->optionsBuilding = [];
+        $this->valueOptions = [];
 
         $tree = $this->getServiceStructure()->getTree(null, $this->isEnseignement());
         $this->subPopulate($tree, 1);
+    }
 
-        $this->setValueOptions($this->optionsBuilding);
-        $this->optionsBuilding = [];
+
+
+    /**
+     * @return array
+     */
+    public function getValueOptions(): array
+    {
+        if (empty($this->valueOptions)){
+            $this->populateOptions();
+        }
+
+        return $this->valueOptions;
     }
 
 
@@ -64,7 +71,7 @@ class Structure extends Select
     protected function subPopulate(array|Collection $structures, int $level)
     {
         foreach($structures as $structure){
-            $this->optionsBuilding[$structure->getId()] = [
+            $this->valueOptions[$structure->getId()] = [
                 'value' => $structure->getId(),
                 'label' => $structure->getLibelleCourt(),
                 'attributes' => [

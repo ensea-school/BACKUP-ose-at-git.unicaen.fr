@@ -45,6 +45,9 @@ class TypeModulateurStructureSaisieForm extends AbstractForm
         $this->add([
             'name'       => 'structure',
             'type'       => Structure::class,
+            'options' => [
+                'enseignement' => true,
+            ],
         ]);
 
         $this->add([

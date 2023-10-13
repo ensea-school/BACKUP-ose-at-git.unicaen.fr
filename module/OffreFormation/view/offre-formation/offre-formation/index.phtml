@@ -5,7 +5,6 @@
  * @var $structure  \Lieu\Entity\Db\Structure
  * @var $niveau     \Application\Entity\NiveauEtape
  * @var $etape      \OffreFormation\Entity\Db\Etape
- * @var $structures \Lieu\Entity\Db\Structure[]
  * @var $niveaux    \Application\Entity\NiveauEtape[]
  * @var $etapes     \OffreFormation\Entity\Db\Etape[]
  * @var $elements   \OffreFormation\Entity\Db\ElementPedagogique[]
@@ -102,6 +101,10 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
     div.card-body input.form-control {
         width: 75%
     }
+
+    .bootstrap-select.struct {
+        max-width: 200px;
+    }
 </style>
 
 <?php ?>
@@ -116,11 +119,12 @@ $canSyncElement = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELE
             <div class="card-header">Structure</div>
             <div class="card-body">
                 <?php
-                $selectStructure = new \Laminas\Form\Element\Select('structure');
+                $selectStructure = new \Lieu\Form\Element\Structure('structure');
+                $selectStructure->setEnseignement(true);
+                $selectStructure->init();
                 $selectStructure
-                    ->setValueOptions(['' => "(Sélectionnez...)"] + \UnicaenApp\Util::collectionAsOptions($structures))
                     ->setValue($structure ? $structure->getId() : null)
-                    ->setAttributes(['class' => 'struct form-select']);
+                    ->setAttributes(['class' => 'struct selectpicker']);
                 echo $this->formSelect($selectStructure);
                 ?>
                 <script>

@@ -11,6 +11,8 @@ class Structure extends Select
 {
     use StructureServiceAwareTrait;
 
+    private bool $enseignement = false;
+
     private array $optionsBuilding = [];
 
     public function init()
@@ -26,11 +28,26 @@ class Structure extends Select
 
 
 
+    public function isEnseignement(): bool
+    {
+        return $this->enseignement;
+    }
+
+
+
+    public function setEnseignement(bool $enseignement): Structure
+    {
+        $this->enseignement = $enseignement;
+        return $this;
+    }
+
+
+
     protected function populateOptions()
     {
         $this->optionsBuilding = [];
 
-        $tree = $this->getServiceStructure()->getTree();
+        $tree = $this->getServiceStructure()->getTree(null, $this->isEnseignement());
         $this->subPopulate($tree, 1);
 
         $this->setValueOptions($this->optionsBuilding);

@@ -5,6 +5,7 @@ namespace OffreFormation\Controller;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\CheminPedagogique;
 use OffreFormation\Entity\Db\ElementPedagogique;
@@ -40,8 +41,18 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
     use OffreFormationServiceAwareTrait;
     use SchemaServiceAwareTrait;
 
+    private Structure $structureElement;
 
-    public function indexAction ()
+
+
+    public function __construct(Structure $structureElement)
+    {
+        $this->structureElement = $structureElement;
+    }
+
+
+
+    public function indexAction()
     {
         $this->initFilters();
 
@@ -54,7 +65,6 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
             ->setNiveau($niveau)
             ->setEtape($etape);
 
-        $structures = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByEnseignement());
         [$niveaux, $etapes, $elements] = $this->getServiceOffreFormation()->getNeep($structure, $niveau, $etape);
 
         $params = [];
@@ -69,22 +79,22 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
         }
 
         return [
-            'structures'     => $structures,
-            'niveaux'        => $niveaux,
-            'etapes'         => $etapes,
-            'elements'       => $elements,
-            'structure'      => $structure,
-            'niveau'         => $niveau,
-            'etape'          => $etape,
-            'serviceEtape'   => $this->getServiceEtape(), // pour déterminer les droits
-            'serviceElement' => $this->getServiceElementPedagogique(), // pour déterminer les droits
-            'serviceSchema'  => $this->getServiceSchema(),
+            'structureElement' => $this->structureElement,
+            'niveaux'          => $niveaux,
+            'etapes'           => $etapes,
+            'elements'         => $elements,
+            'structure'        => $structure,
+            'niveau'           => $niveau,
+            'etape'            => $etape,
+            'serviceEtape'     => $this->getServiceEtape(), // pour déterminer les droits
+            'serviceElement'   => $this->getServiceElementPedagogique(), // pour déterminer les droits
+            'serviceSchema'    => $this->getServiceSchema(),
         ];
     }
 
 
 
-    public function exportAction ()
+    public function exportAction()
     {
         $this->initFilters();
 
@@ -120,30 +130,30 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
 
 
         foreach ($elements as $element) {
-            $cm       = '0';
-            $td       = '0';
-            $tp       = '0';
+            $cm = '0';
+            $td = '0';
+            $tp = '0';
             $cmGroupe = '0';
             $tdGroupe = '0';
             $tpGroupe = '0';
 
             foreach ($element->getVolumeHoraireEns() as $vhe) {
                 if ($vhe->getTypeIntervention()->getCode() == 'CM') {
-                    $cm       = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
+                    $cm = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
                     $cmGroupe = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
                 }
                 if ($vhe->getTypeIntervention()->getCode() == 'TD') {
-                    $td       = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
+                    $td = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
                     $tdGroupe = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
                 }
                 if ($vhe->getTypeIntervention()->getCode() == 'TP') {
-                    $tp       = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
+                    $tp = (!empty($vhe->getHeures())) ? $vhe->getHeures() : '0';
                     $tpGroupe = (!empty($vhe->getGroupes())) ? $vhe->getGroupes() : '0';
                 }
             }
 
-            $etape      = $element->getEtape();
-            $effectifs  = $element->getEffectifs();
+            $etape = $element->getEtape();
+            $effectifs = $element->getEffectifs();
             $discipline = $element->getDiscipline();
             $csvModel->addLine([
                 $etape->getCode(),
@@ -176,14 +186,14 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
 
 
 
-    public function administrationOffreAction ()
+    public function administrationOffreAction()
     {
         return [];
     }
 
 
 
-    public function reconductionAction ()
+    public function reconductionAction()
     {
         $this->initFilterHistorique();
         [$structure, $niveau, $etape] = $this->getParams();
@@ -194,13 +204,13 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
         [$offresComplementaires, $mappingEtape, $reconductionTotale] = $this->getServiceOffreFormation()->getOffreComplementaire($structure, $niveau, $etape);
 
         $reconductionStep = '';
-        $messageStep      = '';
-        $fromPost         = false;
+        $messageStep = '';
+        $fromPost = false;
 
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $datas    = $request->getPost();
+            $datas = $request->getPost();
             $fromPost = true;
             //Ajout du mapping des EtapesN et EtapesN1 pour pouvoir reconduire un element pédagogique sur une etape déjà reconduite.
             $datas['mappingEtape'] = $mappingEtape;
@@ -215,7 +225,7 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
                 }
             } catch (\Exception $e) {
                 $reconductionStep = false;
-                $messageStep      = $e->getMessage();
+                $messageStep = $e->getMessage();
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
         }
@@ -234,7 +244,7 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
 
 
 
-    public function reconductionCentreCoutAction ()
+    public function reconductionCentreCoutAction()
     {
         $this->initFilterHistorique();
         $etapesReconduites = [];
@@ -249,7 +259,7 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
             $datas = $request->getPost();
             //Reconduire les centres de coût des EP de l'étape.
             try {
-                $etapesReconduites   = $this->getServiceEtape()->getEtapeCentreCoutReconductible($structure);
+                $etapesReconduites = $this->getServiceEtape()->getEtapeCentreCoutReconductible($structure);
                 $etapesReconduitesCc = [];
                 if (isset($datas['etapes'])) {
                     foreach ($datas['etapes'] as $code) {
@@ -258,7 +268,7 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
                         }
                     }
                 }
-                $result            = $this->getProcessusReconduction()->reconduireCCFormation($etapesReconduitesCc);
+                $result = $this->getProcessusReconduction()->reconduireCCFormation($etapesReconduitesCc);
                 $etapesReconduites = $this->getServiceEtape()->getEtapeCentreCoutReconductible($structure);
 
                 $this->flashMessenger()->addSuccessMessage("$result centre(s) de coût(s) ont été reconduit pour l'année prochaine. ");
@@ -280,17 +290,17 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
 
 
 
-    public function reconductionModulateurAction ()
+    public function reconductionModulateurAction()
     {
         $this->initFilterHistorique();
 
         [$structure, $niveau, $etape] = $this->getParams();
         $etapesReconduites = [];
-        $role              = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $datas             = $request->getPost();
+            $datas = $request->getPost();
             $etapesReconduites = $this->getServiceEtape()->getEtapeModulateurReconductible($structure);
             try {
                 $etapesReconduitesCc = [];
@@ -326,7 +336,7 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
 
 
 
-    protected function initFilters ()
+    protected function initFilters()
     {
         $this->initFilterAnnee();
         $this->initFilterHistorique();
@@ -334,7 +344,7 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
 
 
 
-    protected function initFilterAnnee ()
+    protected function initFilterAnnee()
     {
         $this->em()->getFilters()->enable('annee')->init([
             ElementPedagogique::class,
@@ -345,7 +355,7 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
 
 
 
-    protected function initFilterHistorique ()
+    protected function initFilterHistorique()
     {
         /* Mise en place des filtres */
         $this->em()->getFilters()->enable('historique')->init([
@@ -360,18 +370,18 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
 
 
 
-    protected function disableFilters ($name)
+    protected function disableFilters($name)
     {
         $this->em()->getFilters()->disable($name);
     }
 
 
 
-    protected function getParams ()
+    protected function getParams()
     {
-        $structure = $this->context()->structureFromQuery() ? : $this->getServiceContext()->getStructure();
-        $niveau    = $this->context()->niveauFromQuery();
-        $etape     = $this->context()->etapeFromQuery();
+        $structure = $this->context()->structureFromQuery() ?: $this->getServiceContext()->getStructure();
+        $niveau = $this->context()->niveauFromQuery();
+        $etape = $this->context()->etapeFromQuery();
         if ($etape) $etape = $this->getServiceEtape()->get($etape->getId()); // entité Niveau
         if ($niveau) $niveau = $this->getServiceNiveauEtape()->get($niveau); // entité Niveau
         if ($structure) $structure = $this->getServiceStructure()->get($structure);

@@ -4,6 +4,7 @@
 */
 namespace OffreFormation\Controller\Factory;
 
+use Lieu\Form\Element\Structure;
 use OffreFormation\Controller\OffreFormationController;
 use Psr\Container\ContainerInterface;
 use UnicaenImport\Service\SchemaService;
@@ -19,8 +20,9 @@ class OffreFormationControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $renderer   = $container->get('ViewRenderer');
-        $controller = new OffreFormationController($renderer);
+        $structureElement = $container->get('FormElementManager')->get(Structure::class);
+
+        $controller = new OffreFormationController($structureElement);
         $controller->setServiceSchema($container->get(SchemaService::class));
 
         return $controller;

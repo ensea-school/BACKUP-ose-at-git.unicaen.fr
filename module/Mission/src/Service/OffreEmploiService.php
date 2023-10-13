@@ -120,11 +120,13 @@ class OffreEmploiService extends AbstractEntityService
             return [
                 '/' => function (OffreEmploi $offre, array $extracted) {
 
+
                     $extracted['canModifier']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_MODIFIER);
                     $extracted['canValider']    = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_VALIDER);
                     $extracted['canPostuler']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
                     $extracted['canVisualiser'] = true;
                     $extracted['canSupprimer']  = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION);
+                    $extracted['decretText'] = ($this->getServiceContext()->getIntervenant()) ? $this->getServiceContext()->getIntervenant()->getStatut()->getMissionDecret() : '';
 
                     return $extracted;
                 },
@@ -141,6 +143,7 @@ class OffreEmploiService extends AbstractEntityService
                 $extracted['canPostuler']   = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
                 $extracted['canVisualiser'] = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_POSTULER);
                 $extracted['canSupprimer']  = $this->getAuthorize()->isAllowed($offre, Privileges::MISSION_OFFRE_EMPLOI_SUPPRESSION);
+                $extracted['decretText'] = ($this->getServiceContext()->getIntervenant()) ? $this->getServiceContext()->getIntervenant()->getStatut()->getMissionDecret() : '';
 
                 return $extracted;
             },

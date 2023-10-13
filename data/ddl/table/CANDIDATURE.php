@@ -9,6 +9,18 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'CANDIDATURE_ID_SEQ',
     'columns'     => [
+        'DATE_COMMISSION'       => [
+            'name'        => 'DATE_COMMISSION',
+            'type'        => 'date',
+            'bdd-type'    => 'DATE',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 12,
+            'commentaire' => NULL,
+        ],
         'HISTO_CREATEUR_ID'     => [
             'name'        => 'HISTO_CREATEUR_ID',
             'type'        => 'int',
@@ -140,18 +152,6 @@ return [
             'default'     => NULL,
             'position'    => 4,
             'commentaire' => NULL,
-        ],
-        'DATE_COMMISSION'              => [
-            'name'        => 'DATE_COMMISSION',
-            'type'        => 'date',
-            'bdd-type'    => 'DATE',
-            'length'      => 0,
-            'scale'       => null,
-            'precision'   => null,
-            'nullable'    => true,
-            'default'     => null,
-            'position'    => 4,
-            'commentaire' => null,
         ],
     ],
 ];

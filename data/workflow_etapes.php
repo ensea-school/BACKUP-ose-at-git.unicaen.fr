@@ -113,13 +113,6 @@ return [
         "DESC_NON_FRANCHIE"   => "Aucune heure de mission réalisée n'a été renseignée",
         "OBLIGATOIRE"         => true,
     ],
-    "MISSION_PRIME"                  => [
-        "LIBELLE_INTERVENANT" => "Je visualise mes indemnités de fin de contrat",
-        "LIBELLE_AUTRES"      => "Je visualise mes indemnités de fin de contrat",
-        "ROUTE"               => "intervenant/prime-mission",
-        "DESC_NON_FRANCHIE"   => "Aucune indemnité de fin de contrat à gérer",
-        "OBLIGATOIRE"         => true,
-    ],
     "CLOTURE_REALISE"                => [
         "LIBELLE_INTERVENANT" => "Je visualise la clôture de la saisie de mes services réalisés",
         "LIBELLE_AUTRES"      => "Je visualise la clôture de la saisie des services réalisés",
@@ -139,6 +132,13 @@ return [
         "LIBELLE_AUTRES"      => "J'accède à la validation du suivi de mission",
         "ROUTE"               => "intervenant/missions-suivi",
         "DESC_NON_FRANCHIE"   => "Des heures de mission réalisées n'ont pas été validées",
+        "OBLIGATOIRE"         => true,
+    ],
+    "MISSION_PRIME"                  => [
+        "LIBELLE_INTERVENANT" => "Je visualise mes indemnités de fin de contrat",
+        "LIBELLE_AUTRES"      => "Je visualise mes indemnités de fin de contrat",
+        "ROUTE"               => "intervenant/prime-mission",
+        "DESC_NON_FRANCHIE"   => "Aucune indemnité de fin de contrat à gérer",
         "OBLIGATOIRE"         => true,
     ],
     "REFERENTIEL_VALIDATION_REALISE" => [

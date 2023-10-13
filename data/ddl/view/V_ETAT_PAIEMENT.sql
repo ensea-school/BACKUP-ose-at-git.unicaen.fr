@@ -137,10 +137,22 @@ FROM
           cc.libelle                                                          centre_cout_libelle,
           df.source_code                                                      domaine_fonctionnel_code,
           df.libelle                                                          domaine_fonctionnel_libelle,
-          CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE mep.heures END        hetd,
-          CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE 0 END        fc_majorees,
-          mis.heures_payees_aa                                                exercice_aa,
-          mis.heures_payees_ac                                                exercice_ac,
+          CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE CASE
+            WHEN mep.date_mise_en_paiement IS NULL THEN mis.heures_demandees_aa + mis.heures_demandees_ac
+            ELSE mis.heures_payees_aa + mis.heures_payees_ac
+          END END                                                             hetd,
+          CASE WHEN th.code = 'fc_majorees' THEN CASE
+            WHEN mep.date_mise_en_paiement IS NULL THEN mis.heures_demandees_aa + mis.heures_demandees_ac
+            ELSE mis.heures_payees_aa + mis.heures_payees_ac
+          END ELSE 0 END                                                      fc_majorees,
+          CASE
+            WHEN mep.date_mise_en_paiement IS NULL THEN mis.heures_demandees_aa
+            ELSE mis.heures_payees_aa
+          END                                                                 exercice_aa,
+          CASE
+            WHEN mep.date_mise_en_paiement IS NULL THEN mis.heures_demandees_ac
+            ELSE mis.heures_payees_ac
+          END                                                                 exercice_ac,
           tr.libelle taux_remu,
           mis.taux_horaire,
           mis.taux_conges_payes

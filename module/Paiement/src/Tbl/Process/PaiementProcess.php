@@ -78,7 +78,7 @@ class PaiementProcess implements ProcessInterface
         $this->init();
         $this->loadAPayer($params);
         $this->traitement();
-        $this->enregistrement($tableauBord);
+        $this->enregistrement($tableauBord, $params);
     }
 
 
@@ -132,7 +132,7 @@ class PaiementProcess implements ProcessInterface
 
 
 
-    protected function enregistrement(TableauBord $tableauBord)
+    protected function enregistrement(TableauBord $tableauBord, array $params)
     {
         // Enregistrement en BDD
         $key = $tableauBord->getOption('key');
@@ -142,7 +142,7 @@ class PaiementProcess implements ProcessInterface
         // on force la DDL pour éviter de faire des requêtes en plus
         $table->setDdl(['columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);
         // on merge dans la table
-        $table->merge($this->tblData, $key);
+        $table->merge($this->tblData, $key, ['where' => $params]);
         // on vide pour limiter la conso de RAM
         $this->tblData = [];
     }

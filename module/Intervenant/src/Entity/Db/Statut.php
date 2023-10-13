@@ -192,6 +192,8 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
     private bool        $missionRealiseEdition              = false;
 
+    private ?string     $missionDecret                      = null;
+
     private bool        $offreEmploiPostuler                = false;
 
     private ?TauxRemu   $tauxRemu                           = null;
@@ -1534,6 +1536,22 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
 
 
+    public function getMissionDecret (): ?string
+    {
+        return $this->missionDecret;
+    }
+
+
+
+    public function setMissionDecret (?string $missionDecret): Statut
+    {
+        $this->missionDecret = $missionDecret;
+
+        return $this;
+    }
+
+
+
     public function getOffreEmploiPostuler (): bool
     {
         return $this->offreEmploiPostuler;
@@ -1865,4 +1883,5 @@ class Statut implements ParametreEntityInterface, RoleInterface, ResourceInterfa
 
         return $champsAutres;
     }
+
 }

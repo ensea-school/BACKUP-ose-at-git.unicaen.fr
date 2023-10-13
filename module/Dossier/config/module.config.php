@@ -223,8 +223,16 @@ return [
         ],
         [
             'controller' => EmployeurController::class,
-            'action'     => ['index', 'recherche-json', 'recherche', 'saisie', 'supprimer', 'employeur'],
+            'action'     => ['index', 'saisie', 'supprimer', 'employeur'],
             'privileges' => [Privileges::REFERENTIEL_COMMUN_EMPLOYEUR_VISUALISATION],
+            'assertion'  => IntervenantDossierAssertion::class,
+
+        ],
+        [
+            'controller' => EmployeurController::class,
+            'action'     => ['recherche-json', 'recherche',],
+            'roles'      => ['guest'],
+
         ],
     ],
     'rules'        => [

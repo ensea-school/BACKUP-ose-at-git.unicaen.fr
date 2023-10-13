@@ -233,7 +233,10 @@ class ServiceReferentielController extends AbstractController
         $this->updateTableauxBord($intervenant);
         $errors = [];
 
-        return compact('errors');
+        $vm = new ViewModel();
+        $vm->setTemplate('referentiel/initialisation');
+        $vm->setVariables(compact('errors'));
+        return $vm;
     }
 
 

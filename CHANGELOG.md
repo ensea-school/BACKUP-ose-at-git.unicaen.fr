@@ -1,25 +1,28 @@
 # Version stable
 
-[OSE 21.3](#ose-213-15092023)
+[OSE 22.0](#ose-22-12102023)
 
-# OSE 22 (à venir)
+# OSE 22 (12/10/2023)
 
 ## Nouveautés
 
 * Nouveau mode de calcul des heures à payer
   * Paiements : Gestion fine des changements de valeurs de taux horaires en cours d'année
-  * Paiements : Répartition des heures AA/AC tenant compte du semestre des heures réalisées
-  * Possibilité de personnaliser le ratio AA/AC pour le référentiel
-  * Mises en paiement possibles pour les missions (emplois étudiants)
-* Gestion des indemnités de fin de contrat pour les missions étudiantes
+  * Paiements : Répartition des heures AA/AC tenant compte du semestre des heures réalisées (#45564)
+  * Possibilité de personnaliser le ratio AA/AC pour le référentiel (#47972)
+  * Mises en paiement possibles pour les missions (emplois étudiants) (#51156)
+* Gestion des indemnités de fin de contrat pour les missions étudiantes (#47519)
 * Extraction du fichier de paie des indemnités de fin de contrat pour les missions étudiantes
-
-* Nouveau mode de calcul des tableaux de bord de calcul intermédiaires. commande ose build-tableaux-bord supprimée et non remplacée
+* Nouveau mode de calcul des tableaux de bord de calcul intermédiaires. commande ose build-tableaux-bord supprimée et non remplacée (#51555)
+* Saisie de date de commission de recrutement pour les candidatures aux missions
+* Case à cocher par les étudiants avec un texte règlementaire personnalisable préalablement à la candidature à une offre d'emploi
 
 ## Améliorations
 
 * Ajout des dates de dévalidation des données personnelles dans les notes/historique par intervenant
-* En mode de saisie de service calendaire, la période ainsi que les types d'intervention sont maintenant filtrés par rapport à l'élement pédagogique
+* Ajout du suivi du référentiel dans les notes de l'intervenant (#52478)
+* En mode de saisie de service calendaire, la période ainsi que les types d'intervention sont maintenant filtrés par rapport à l'élement pédagogique (#51141)
+* Possibilité d'utiliser les indicateurs 550, 560 et 570 même sans la clôture d'activée pour les permanents (#50952)
 
 ## Corrections de bugs
 
@@ -27,7 +30,10 @@
 * Suppression des notes d'un intervenant avant sa suppression définitive de OSE (#52719)
 * Masquer 'Données personnelles' sur le menu de gauche lorsque celles-ci sont désactivées pour l'intervenant (#52479)
 * Le bandeau d'heures réalisé sur l'année précédente est bien affiché dans le menu données personelles (#48022)
-
+* Le report du service réalisé validé fonctionne de nouveau pour le référentiel (#53144 et #53144 et #53159)
+* L'export ne remonte plus de taux à 1 (#53198)
+* Recherche des intervenants avec apostrophe améliorée (#50815)
+* Problème de privilèges sur la saisie de l'employeur sur le dossier de l'intervenant (#53126)
 
 
 
@@ -129,6 +135,8 @@
 * Le bouton de saisie du référentiel apparait maintenant même si la composante de l'intervenant diffère de celle du gestionnaire (#50799)
 * Remise en forme de l'écran engagement et liquidation (#50738)
 
+
+
 # OSE 20.5 (07/06/2023)
 
 ## Correction de bug
@@ -173,6 +181,8 @@ modifier le filtre de synchronisation des intervenants.
 
 Vous trouverez plus d'indications ainsi que le filtre en question ici :
 https://git.unicaen.fr/open-source/OSE/-/blob/master/doc/Connecteurs-Import/Connecteurs-IMPORT.md#utilisation-pour-contr%C3%B4ler-la-synchronisation-des-intervenants
+
+
 
 # OSE 20.2 (28/04/2023)
 

@@ -8,7 +8,7 @@ FROM
 WHERE
   tc.candidature_id IS NOT NULL
   AND tc.validation_id IS NULL
-  AND w.etape_code = 'CANDIDATURE_VALIDATION'
+  AND w.etape_code = 'CANDIDATURE_SAISIE'
   AND w.atteignable = 1
 GROUP BY
   tc.intervenant_id,

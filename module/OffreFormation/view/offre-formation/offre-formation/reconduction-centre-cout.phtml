@@ -10,6 +10,7 @@ $this->headScript()->offsetSetFile(130, $this->basePath('/js/reconduction-centre
             <div class="card-body">
                 <?php
                 $selectStructure = new \Lieu\Form\Element\Structure('structure');
+                $selectStructure->setEnseignement(true);
                 $selectStructure->init();
                 $selectStructure
                     ->setValue($structure?->getId())

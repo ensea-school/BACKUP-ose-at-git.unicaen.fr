@@ -77,7 +77,7 @@ class StructureAssertion extends AbstractAssertion
     {
         if (!$role->getStructure()) return true;
 
-        return $role->getStructure() == $structure;
+        return $structure->inStructure($role->getStructure());
     }
 
 }

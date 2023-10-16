@@ -366,7 +366,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
         $dql = "
         SELECT
-          tpjs, tpj, si
+          tpjs, tpj
         FROM
           " . TypePieceJointeStatut::class . " tpjs
           JOIN tpjs.typePieceJointe tpj

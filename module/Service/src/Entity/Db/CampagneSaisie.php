@@ -122,7 +122,7 @@ class CampagneSaisie
         $dateDebut = $this->dateDebut ? $this->dateDebut->format(Constants::DATE_FORMAT) : '[Pas de date définie]';
         $dateFin   = $this->dateFin ? $this->dateFin->format(Constants::DATE_FORMAT) : '[Pas de date définie]';
 
-        return str_replace([':dateDebut', ':dateFin'], [$dateDebut, $dateFin], $message);
+        return str_replace([':dateDebut', ':dateFin'], [$dateDebut, $dateFin], $message ?? '');
     }
 
 

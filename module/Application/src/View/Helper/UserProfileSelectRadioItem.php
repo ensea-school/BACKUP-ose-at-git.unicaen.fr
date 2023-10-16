@@ -35,8 +35,10 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
         if ($this->role->getPeutChangerStructure() && $perimetre && $perimetre->isEtablissement()) {
             $selectClass = 'user-profile-select-input-structure';
 
-            $select = new Structure('structure-' . $this->role->getRoleId());
+            $select = new \Laminas\Form\Element\Select('structure-' . $this->role->getRoleId());
             $select
+                ->setEmptyOption("(Aucune)")
+                ->setValueOptions($this->getStructures())
                 ->setValue($this->getStructure() ? $this->getStructure()->getId() : null)
                 ->setAttribute('class', $selectClass)
                 ->setAttribute('onchange', 'Util.userProfileStructureChange(this)')

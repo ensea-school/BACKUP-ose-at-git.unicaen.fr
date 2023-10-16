@@ -6,6 +6,7 @@ use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Form\Element\Structure;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -61,15 +62,15 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
                 'label_attributes'          => [
                     'title' => "Structure gestionnaire de l'enseignement",
                 ],
+                'enseignement' => true,
             ],
             'attributes' => [
                 'id'               => 'structure',
                 'title'            => "Structure gestionnaire de l'enseignement",
                 'class'            => 'element-pedagogique element-pedagogique-structure input-sm selectpicker',
                 'data-width'       => "100%",
-                'data-live-search' => "true",
             ],
-            'type'       => 'Select',
+            'type'       => Structure::class,
         ]);
 
         $this->add([
@@ -155,7 +156,6 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     {
         $data = $this->getData();
         $this->relations = $data['relations'];
-        $this->get('structure')->setValueOptions($data['structures']);
         $this->get('niveau')->setValueOptions($data['niveaux']);
         $this->get('etape')->setValueOptions($data['etapes']);
     }
@@ -191,22 +191,17 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
         );
 
         $result = [
-            'structures' => [],
             'niveaux'    => [],
             'etapes'     => [],
             'relations'  => ['ALL' => ['ALL' => []]],
         ];
         foreach ($res as $e) {
             $structureId = $e['STRUCTURE_ID'];
-            $structure = $e['STRUCTURE_LIBELLE'];
             $niveauId = $e['NIVEAU_ID'];
             $niveau = $e['NIVEAU_LIBELLE'];
             $etapeId = $e['ETAPE_ID'];
             $etape = $e['ETAPE_LIBELLE'];
 
-            if (!isset($result['structures'][$structureId])) {
-                $result['structures'][$structureId] = $structure;
-            }
             if (!isset($result['niveaux'][$niveauId])) {
                 $result['niveaux'][$niveauId] = $niveau;
             }
@@ -228,7 +223,6 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
             $result['relations']['ALL'][$niveauId][] = $etapeId;
             $result['relations'][$structureId][$niveauId][] = $etapeId;
         }
-        asort($result['structures']);
         asort($result['etapes']);
 
         return $result;

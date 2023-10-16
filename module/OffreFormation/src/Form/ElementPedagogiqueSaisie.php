@@ -8,6 +8,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Service\Traits\DisciplineServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;
@@ -147,15 +148,9 @@ class ElementPedagogiqueSaisie extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'structure',
-            'options'    => [
-                'label' => 'Structure',
-            ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
-            ],
-            'type'       => 'Select',
+            'name'    => 'structure',
+            'type'    => Structure::class,
+            'options' => ['enseignement' => true],
         ]);
 
         $this->add([
@@ -194,10 +189,6 @@ class ElementPedagogiqueSaisie extends AbstractForm
             ->setEmptyOption("")
             ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServicePeriode()->getEnseignement()));
 
-        // peuplement liste des structures
-        $serviceStructure = $this->getServiceStructure();
-        $qb               = $serviceStructure->finderByEnseignement();
-        $this->get('structure')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($serviceStructure->getList($qb)));
         if ($structure = $localContext->getStructure()) {
             $this->get('structure')->setValue($structure->getId());
         }
@@ -258,9 +249,6 @@ class ElementPedagogiqueSaisie extends AbstractForm
 }
 
 
-
-
-
 /**
  *
  *
@@ -277,7 +265,7 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                                            $data
+     * @param array $data
      * @param \OffreFormation\Entity\Db\ElementPedagogique $object
      *
      * @return object

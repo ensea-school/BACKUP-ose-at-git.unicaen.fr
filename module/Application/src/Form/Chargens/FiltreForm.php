@@ -67,6 +67,7 @@ class FiltreForm extends AbstractForm
 
         $this->add([
             'name'       => 'structure',
+            'type'       => \Lieu\Form\Element\Structure::class,
             'options'    => [
                 'label'                     => "Composante :",
                 'empty_option'              => "(Toutes)",
@@ -74,7 +75,7 @@ class FiltreForm extends AbstractForm
                 'label_attributes'          => [
                     'title' => "Structure gestionnaire de la formation",
                 ],
-                'value_options'             => Util::collectionAsOptions($this->structures),
+                'enseignement' => true,
             ],
             'attributes' => [
                 'id'               => 'structure',
@@ -85,7 +86,6 @@ class FiltreForm extends AbstractForm
                 'data-etapes'      => json_encode($this->structuresEtapes),
                 'data-scenarios'   => json_encode($this->structuresScenarios),
             ],
-            'type'       => 'Select',
         ]);
 
         $this->add([

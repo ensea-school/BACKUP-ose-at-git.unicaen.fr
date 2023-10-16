@@ -46,6 +46,7 @@ class MissionForm extends AbstractForm
         $this->spec([
             'description'     => ['type' => 'Textarea'],
             'etudiantsSuivis' => ['type' => 'Textarea'],
+            'structure' => ['type' => \Lieu\Form\Element\Structure::class],
             'tauxRemuMajore'  => ['input' => ['required' => false]],
             'heuresFormation' => ['input' => ['required' => false]],
         ]);
@@ -58,10 +59,6 @@ class MissionForm extends AbstractForm
         $this->setValueOptions('tauxRemu', $trDql);
         $this->setValueOptions('tauxRemuMajore', $trDql);
         $this->get('tauxRemuMajore')->setEmptyOption('- Aucune majoration -');
-
-        $sDql = "SELECT s FROM " . Structure::class . " s WHERE s.histoDestruction IS NULL";
-        $this->setValueOptions('structure', $sDql);
-        $this->get('structure')->setAttributes(['class' => 'selectpicker', 'data-live-search' => true]);
 
         $this->setLabels([
             'structure'       => 'Composante en charge du suivi de mission',

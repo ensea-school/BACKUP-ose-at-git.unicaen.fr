@@ -330,17 +330,18 @@ class PaiementController extends AbstractController
         $rechercheForm = $this->getFormPaiementMiseEnPaiementRecherche();
         $rechercheForm->bind($recherche);
 
-        if ($role->getStructure()) {
-            $structures = [$role->getStructure()->getId() => $role->getStructure()];
-        } else {
-            $qb = $this->getServiceStructure()->finderByMiseEnPaiement();
-            $this->getServiceStructure()->finderByRole($role, $qb);
-            $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($recherche->getTypeIntervenant(), $qb);
-            $this->getServiceMiseEnPaiement()->finderByEtat($recherche->getEtat(), $qb);
-            $structures = $this->getServiceStructure()->getList($qb);
-        }
-
-        $rechercheForm->populateStructures($structures);
+        //@todo à revoir...
+//        if ($role->getStructure()) {
+//            $structures = [$role->getStructure()->getId() => $role->getStructure()];
+//        } else {
+//            $qb = $this->getServiceStructure()->finderByMiseEnPaiement();
+//            $this->getServiceStructure()->finderByRole($role, $qb);
+//            $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($recherche->getTypeIntervenant(), $qb);
+//            $this->getServiceMiseEnPaiement()->finderByEtat($recherche->getEtat(), $qb);
+//            $structures = $this->getServiceStructure()->getList($qb);
+//        }
+//
+//        $rechercheForm->populateStructures($structures);
 
         if (!$recherche->getStructure()) {
             if (count($structures) == 1) {

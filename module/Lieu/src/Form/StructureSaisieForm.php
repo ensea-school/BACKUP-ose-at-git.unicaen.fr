@@ -23,7 +23,7 @@ class StructureSaisieForm extends AbstractForm
     public function init()
     {
         $this->spec(Structure::class);
-        $this->spec(['structure' => ['input' => ['required' => false]]]);
+        $this->spec(['structure' => ['type' => \Lieu\Form\Element\Structure::class, 'input' => ['required' => false]]]);
         $this->spec(['adressePrecisions' => ['input' => ['required' => false]]]);
         $this->spec(['adresseNumero' => ['input' => ['required' => false]]]);
         $this->spec(['adresseNumeroCompl' => ['input' => ['required' => false]]]);
@@ -53,7 +53,6 @@ class StructureSaisieForm extends AbstractForm
             'adressePays'        => 'Pays',
         ]);
 
-        $this->setValueOptions('structure', 'SELECT str FROM ' . Structure::class . ' str WHERE str.histoDestruction IS NULL ORDER BY str.libelleCourt');
         $this->get('structure')->setEmptyOption('- Structure racine -');
 
         $this->setValueOptions('adresseNumeroCompl', 'SELECT anc FROM ' . AdresseNumeroCompl::class . ' anc ORDER BY anc.id');

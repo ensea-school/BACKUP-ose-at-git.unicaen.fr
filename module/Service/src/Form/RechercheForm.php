@@ -145,11 +145,9 @@ class RechercheForm extends AbstractForm
             ->setLabel("Statut :");
         $this->add($typeIntervenant);
 
-        $structures = $this->getServiceStructure()->getList(
-            $this->getServiceStructure()->finderByEnseignement()
-        );
         $this->add([
             'name'       => 'structure-aff',
+            'type'       => \Lieu\Form\Element\Structure::class,
             'options'    => [
                 'label'                     => "Structure d'affectation:",
                 'empty_option'              => "(Toutes)",
@@ -160,11 +158,9 @@ class RechercheForm extends AbstractForm
             ],
             'attributes' => [
                 'title' => "Structure gestionnaire de l'enseignement",
-                'class' => 'input-sm',
+                'class' => 'input-sm selectpicker',
             ],
-            'type'       => 'Select',
         ]);
-        $this->get('structure-aff')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($structures));
 
         $intervenant = new SearchAndSelect('intervenant');
         $intervenant

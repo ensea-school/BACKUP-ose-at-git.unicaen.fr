@@ -6,6 +6,7 @@ use Application\Entity\Db\Scenario;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Util;
 
@@ -20,17 +21,10 @@ class ScenarioForm extends AbstractForm
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
 
-    /**
-     * @var Structure[]
-     */
-    private $structures;
-
 
 
     public function init()
     {
-        $this->loadData();
-
         $hydrator = new ScenarioFormHydrator;
         $hydrator->setServiceStructure($this->getServiceStructure());
         $this->setHydrator($hydrator);
@@ -52,21 +46,18 @@ class ScenarioForm extends AbstractForm
 
         $this->add([
             'name'       => 'structure',
-            'type'       => 'Select',
+            'type'       => Structure::class,
             'options'    => [
                 'label'                     => "Composante :",
-                'empty_option'              => "- Aucune -",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
                     'title' => "Structure gestionnaire de l'enseignement",
                 ],
-                'value_options'             => Util::collectionAsOptions($this->structures),
+                'enseignement' => true,
             ],
             'attributes' => [
                 'title'            => "Composante ...",
-                'class'            => 'selectpicker',
                 'data-width'       => "100%",
-                'data-live-search' => "true",
             ],
         ]);
 
@@ -78,23 +69,6 @@ class ScenarioForm extends AbstractForm
                 'class' => 'btn btn-primary',
             ],
         ]);
-    }
-
-
-
-    private function loadData()
-    {
-        $cStructure = $this->getServiceContext()->getStructure();
-
-        if ($cStructure) {
-            $this->structures = [$cStructure];
-        } else {
-            $qb = $this->getServiceStructure()->finderByHistorique();
-            $this->getServiceStructure()->finderByEnseignement($qb);
-            $this->structures = $this->getServiceStructure()->getList($qb);
-        }
-
-        return $this;
     }
 
 

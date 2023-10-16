@@ -6,6 +6,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeFormationServiceAwareTrait;
@@ -88,15 +89,11 @@ class EtapeSaisie extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'structure',
-            'options'    => [
-                'label' => 'Structure',
+            'name'    => 'structure',
+            'type'    => Structure::class,
+            'options' => [
+                'enseignement' => true,
             ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
-            ],
-            'type'       => 'Select',
         ]);
 
         $this->add([
@@ -126,14 +123,6 @@ class EtapeSaisie extends AbstractForm
         ]);
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $serviceStructure = $this->getServiceStructure();
-        $qb               = $serviceStructure->finderByEnseignement();
-        if ($structure = ($role ? $role->getStructure() : null)) {
-            $serviceStructure->finderById($role->getStructure()->getId(), $qb); // Filtre
-        }
-        $this->get('structure')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($serviceStructure->getList($qb)));
 
         // peuplement liste des types de formation
         $valueOptions = \UnicaenApp\Util::collectionAsOptions($this->getTypesFormation());
@@ -204,9 +193,9 @@ class EtapeSaisie extends AbstractForm
      */
     private function getRequiredNiveau()
     {
-        $typeFormation     = $this->get('type-formation')->getValue();
+        $typeFormation = $this->get('type-formation')->getValue();
         $pertinencesNiveau = $this->getPertinencesNiveau();
-        $pertinent         = isset($pertinencesNiveau[$typeFormation]) && (bool)$pertinencesNiveau[$typeFormation];
+        $pertinent = isset($pertinencesNiveau[$typeFormation]) && (bool)$pertinencesNiveau[$typeFormation];
 
         return $pertinent;
     }
@@ -248,9 +237,6 @@ class EtapeSaisie extends AbstractForm
 }
 
 
-
-
-
 /**
  *
  *
@@ -266,7 +252,7 @@ class EtapeSaisieHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param array                               $data
+     * @param array $data
      * @param \OffreFormation\Entity\Db\Etape $object
      *
      * @return object

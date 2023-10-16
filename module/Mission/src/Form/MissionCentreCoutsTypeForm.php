@@ -3,7 +3,6 @@
 namespace Mission\Form;
 
 use Application\Form\AbstractForm;
-use Mission\Entity\Db\CentreCoutTypeMission;
 use Mission\Service\MissionTypeServiceAwareTrait;
 
 

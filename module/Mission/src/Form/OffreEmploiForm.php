@@ -4,6 +4,7 @@ namespace Mission\Form;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Mission\Entity\Db\OffreEmploi;
 use Mission\Entity\Db\TypeMission;
@@ -23,7 +24,10 @@ class OffreEmploiForm extends AbstractForm
     {
         $this->spec(OffreEmploi::class, ['intervenant', 'autoValidation', 'validation']);
 
-        $this->spec(['description' => ['type' => 'Textarea']]);
+        $this->spec([
+            'description' => ['type' => 'Textarea'],
+            'structure' => ['type' => Structure::class],
+        ]);
 
         $this->build();
 
@@ -32,14 +36,6 @@ class OffreEmploiForm extends AbstractForm
 
         $this->setValueOptions('typeMission', $tmDql, $tmDqlParams);
 
-        $sDql = $this->getServiceStructure()->finderByHistorique();
-        if ($this->getServiceContext()->getSelectedIdentityRole()->getStructure()) {
-            $this->getServiceStructure()->finderByRole($this->getServiceContext()->getSelectedIdentityRole(), $sDql);
-        }
-        $structure = $this->getServiceStructure()->getList($sDql);
-
-
-        $this->setValueOptions('structure', $structure);
         $this->get('structure')->setAttributes(['class' => 'selectpicker', 'data-live-search' => true]);
 
         $this->setLabels([

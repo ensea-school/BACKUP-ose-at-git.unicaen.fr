@@ -86,15 +86,14 @@ class SaisieFieldset extends AbstractFieldset
 
         $this->add([
             'name'       => 'structure',
+            'type'       => \Lieu\Form\Element\Structure::class,
             'options'    => [
                 'label' => "Composante ou Service :",
             ],
             'attributes' => [
                 'title'            => "Structure / Service concernée",
                 'class'            => 'fonction-referentiel fonction-referentiel-structure input-sm selectpicker',
-                'data-live-search' => 'true',
             ],
-            'type'       => 'Select',
         ]);
 
         $this->add([
@@ -187,24 +186,9 @@ class SaisieFieldset extends AbstractFieldset
             'type'       => 'Textarea',
         ]);
 
-        $this->get('structure')->setValueOptions(Util::collectionAsOptions($this->getStructures()));//->setEmptyOption("(Sélectionnez une structure...)");
         $this->get('fonction')->setValueOptions($this->getFonctions());//->setEmptyOption("(Sélectionnez une fonction...)");
     }
 
-
-    protected function getStructures()
-    {
-        if (!$this->structures) {
-            $qb = $this->getServiceStructure()->finderByEnseignement();
-            if ($univ = $this->getServiceStructure()->getRacine()) {
-                $this->structures = [$univ->getId() => $univ] + $this->getServiceStructure()->getList($qb);
-            } else {
-                $this->structures = $this->getServiceStructure()->getList($qb);
-            }
-        }
-
-        return $this->structures;
-    }
 
 
     public function getFonctions()

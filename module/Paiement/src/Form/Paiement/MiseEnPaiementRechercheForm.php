@@ -8,6 +8,7 @@ use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
+use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Entity\MiseEnPaiementRecherche;
 
@@ -77,14 +78,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
 
         $this->add([
             'name'       => 'structure',
-            'options'    => [
-                'label' => "Composante",
-            ],
-            'attributes' => [
-                'class'            => 'input-sm selectpicker',
-                'data-live-search' => true,
-            ],
-            'type'       => 'Select',
+            'type'       => Structure::class,
         ]);
 
         $this->add([
@@ -146,17 +140,6 @@ class MiseEnPaiementRechercheForm extends AbstractForm
                 'class' => 'btn btn-secondary',
             ],
         ]);
-    }
-
-
-
-    /**
-     *
-     * @param array $structures
-     */
-    public function populateStructures($structures)
-    {
-        $this->get('structure')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($structures));
     }
 
 

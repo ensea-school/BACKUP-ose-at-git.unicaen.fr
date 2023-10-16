@@ -82,7 +82,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "Email"           => $entity->getEmailPro() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Téléphone perso" => $entity->getTelPerso() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Téléphone pro"   => $entity->getTelPro() ?: '<span class="inconnu">(Inconnu)</span>',
-                "Adresse"         => nl2br($entity->getAdresse(false)),
+                "Adresse"         => nl2br($entity->getAdresse(false) ?? ''),
             ],
             'metier'       => [
                 "Type d'intervenant"       => $entity->getStatut()->getTypeIntervenant(),

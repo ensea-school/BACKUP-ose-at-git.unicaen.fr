@@ -38,6 +38,7 @@
 ## Notes de mise à jour
 
 * Oracle est maintenant requis en version 19 au MINIMUM
+* Attention : la table TBL_PAIEMENT a évolué, si vous avez des vues ou des extractions basées sur cette table, vous devrez donc les faire évoluer en conséquence. Doc disponible [ici](doc/export-pilotage.md) : 
 
 
 

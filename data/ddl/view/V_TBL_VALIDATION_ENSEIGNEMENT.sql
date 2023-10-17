@@ -17,7 +17,7 @@ FROM
   JOIN volume_horaire vh ON vh.service_id = s.id AND vh.histo_destruction IS NULL
   JOIN intervenant i ON i.id = s.intervenant_id AND i.histo_destruction IS NULL
   JOIN statut si ON si.id = i.statut_id
-  JOIN regle_structure_validation rsv ON rsv.type_intervenant_id = si.type_intervenant_id AND rsv.type_volume_horaire_id = vh.type_volume_horaire_id
+  LEFT JOIN regle_structure_validation rsv ON rsv.type_intervenant_id = si.type_intervenant_id AND rsv.type_volume_horaire_id = vh.type_volume_horaire_id
   LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
   LEFT JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
   LEFT JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL

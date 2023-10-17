@@ -200,7 +200,6 @@ class PieceJointeService extends AbstractEntityService
         $result = [];
         foreach ($lpjf as $pjf) {
             $pj        = $pjf->getPieceJointe();
-            $pj->annee = $pjf->getAnnee();
             //Gérer les cas où plusieurs PJ sont éligible mais sans date d'archive, on prend la première uniquement.
             if (!array_key_exists($pj->getType()->getId(), $result)) {
                 $result[$pj->getType()->getId()] = $pj;

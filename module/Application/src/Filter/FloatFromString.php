@@ -12,7 +12,7 @@ class FloatFromString extends AbstractFilter
 
     public function filter($value)
     {
-        if ($value === '') return null;
+        if ($value === '' || $value === null) return null;
 
         if (false !== strpos($value, '/')) {
             [$f1, $f2] = explode('/', $value);

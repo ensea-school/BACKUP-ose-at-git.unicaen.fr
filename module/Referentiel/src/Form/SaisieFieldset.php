@@ -49,10 +49,12 @@ class SaisieFieldset extends AbstractFieldset
     protected $structures;
 
 
+
     public function __construct($name = null, $options = [])
     {
         parent::__construct('service', $options);
     }
+
 
 
     public function init()
@@ -91,8 +93,8 @@ class SaisieFieldset extends AbstractFieldset
                 'label' => "Composante ou Service :",
             ],
             'attributes' => [
-                'title'            => "Structure / Service concernée",
-                'class'            => 'fonction-referentiel fonction-referentiel-structure input-sm selectpicker',
+                'title' => "Structure / Service concernée",
+                'class' => 'fonction-referentiel fonction-referentiel-structure input-sm selectpicker',
             ],
         ]);
 
@@ -191,6 +193,22 @@ class SaisieFieldset extends AbstractFieldset
 
 
 
+    protected function getStructures()
+    {
+        if (!$this->structures) {
+            $qb = $this->getServiceStructure()->finderByEnseignement();
+            if ($univ = $this->getServiceStructure()->getRacine()) {
+                $this->structures = [$univ->getId() => $univ] + $this->getServiceStructure()->getList($qb);
+            } else {
+                $this->structures = $this->getServiceStructure()->getList($qb);
+            }
+        }
+
+        return $this->structures;
+    }
+
+
+
     public function getFonctions()
     {
         $fncs = $this->getServiceFonctionReferentiel()->getList($this->getServiceFonctionReferentiel()->finderByHistorique());
@@ -213,6 +231,7 @@ class SaisieFieldset extends AbstractFieldset
     }
 
 
+
     public function initFromContext()
     {
         /* Peuple le formulaire avec les valeurs issues du contexte local */
@@ -222,6 +241,7 @@ class SaisieFieldset extends AbstractFieldset
             $this->get('structure')->setValue($structure->getId());
         }
     }
+
 
 
     public function saveToContext()
@@ -235,6 +255,8 @@ class SaisieFieldset extends AbstractFieldset
         }
     }
 
+
+
     /**
      * @return MotifNonPaiement[]
      */
@@ -244,6 +266,7 @@ class SaisieFieldset extends AbstractFieldset
 
         return $this->getServiceMotifNonPaiement()->getList($qb);
     }
+
 
 
     /**
@@ -289,6 +312,7 @@ class SaisieFieldset extends AbstractFieldset
 
         return $v;
     }
+
 
 
     /**
@@ -411,6 +435,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
 
         return $object;
     }
+
 
 
     /**

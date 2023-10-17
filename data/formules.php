@@ -118,4 +118,10 @@ return [
         'VH_PARAM_1_LIBELLE' => 'Heures DU',
         'VH_PARAM_2_LIBELLE' => 'Code référentiel',
     ],
+    28 => [
+        'LIBELLE'            => 'Université d\'Avignon',
+        'PACKAGE_NAME'       => 'FORMULE_AVIGNON',
+        'VH_PARAM_1_LIBELLE' => 'LIC PRO',
+        'VH_PARAM_2_LIBELLE' => 'S1 ou S2',
+    ],
 ];

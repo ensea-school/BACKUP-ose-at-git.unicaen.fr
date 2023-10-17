@@ -344,22 +344,22 @@ class PaiementController extends AbstractController
 //        $rechercheForm->populateStructures($structures);
 
         if (!$recherche->getStructure()) {
-            if (count($structures) == 1) {
-                $structure = current($structures);
-                $recherche->setStructure($structure);
-                $rechercheForm->get('structure')->setValue($structure->getId());
-                $noData = false;
-            } elseif (count($structures) == 0) {
+//            if (count($structures) == 1) {
+//                $structure = current($structures);
+//                $recherche->setStructure($structure);
+//                $rechercheForm->get('structure')->setValue($structure->getId());
+//                $noData = false;
+//            } elseif (count($structures) == 0) {
+//                $structure = $this->getServiceStructure()->get((int)$this->params()->fromPost('structure'));
+//
+//                $noData = true;
+//                $recherche->setStructure($structure);
+//            } else {
                 $structure = $this->getServiceStructure()->get((int)$this->params()->fromPost('structure'));
 
-                $noData = true;
-                $recherche->setStructure($structure);
-            } else {
-                $structure = $this->getServiceStructure()->get((int)$this->params()->fromPost('structure'));
-
                 $noData = false;
                 $recherche->setStructure($structure);
-            }
+//            }
         }
 
         if ($recherche->getStructure()) {

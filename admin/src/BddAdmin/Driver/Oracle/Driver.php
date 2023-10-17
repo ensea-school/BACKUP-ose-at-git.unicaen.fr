@@ -108,8 +108,11 @@ class Driver implements DriverInterface
             $type = isset($types[$key]) ? $types[$key] : null;
             switch ($type) {
                 case Bdd::TYPE_CLOB:
-                    ${$key} = oci_new_descriptor($this->connexion, OCI_D_LOB);
-                    ${$key}->writeTemporary($params[$key], OCI_TEMP_CLOB);
+                    $dkey = oci_new_descriptor($this->connexion, OCI_D_LOB);
+                    $dkey->writeTemporary($params[$key], OCI_TEMP_CLOB);
+                    //${$key} = oci_new_descriptor($this->connexion, OCI_D_LOB);
+                    //${$key}->writeTemporary($params[$key], OCI_TEMP_CLOB);
+                    ${$key} = $dkey;
                     oci_bind_by_name($statement, ':' . $key, ${$key}, -1, OCI_B_CLOB);
                 break;
                 case Bdd::TYPE_BLOB:

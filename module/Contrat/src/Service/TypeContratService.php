@@ -14,6 +14,8 @@ use Contrat\Entity\Db\TypeContrat;
 class TypeContratService extends AbstractEntityService
 {
 
+    private array $cache = [];
+
     /**
      * retourne la classe des entités
      *

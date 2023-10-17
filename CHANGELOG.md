@@ -14,7 +14,7 @@
 * Gestion des indemnités de fin de contrat pour les missions étudiantes (#47519)
 * Extraction du fichier de paie des indemnités de fin de contrat pour les missions étudiantes
 * Nouveau mode de calcul des tableaux de bord de calcul intermédiaires. commande ose build-tableaux-bord supprimée et non remplacée (#51555)
-* Saisie de date de commission de recrutement pour les candidatures aux missions
+* Saisie de date de commission de recrutement pour accepter les candidatures des missions
 * Case à cocher par les étudiants avec un texte règlementaire personnalisable préalablement à la candidature à une offre d'emploi
 
 ## Améliorations
@@ -22,7 +22,7 @@
 * Ajout des dates de dévalidation des données personnelles dans les notes/historique par intervenant
 * Ajout du suivi du référentiel dans les notes de l'intervenant (#52478)
 * En mode de saisie de service calendaire, la période ainsi que les types d'intervention sont maintenant filtrés par rapport à l'élement pédagogique (#51141)
-* Possibilité d'utiliser les indicateurs 550, 560 et 570 même sans la clôture d'activée pour les permanents (#50952)
+* Possibilité d'utiliser les indicateurs 550, 560 et 570 même sans activation de la clôture pour les permanents (#50952)
 
 ## Corrections de bugs
 
@@ -35,6 +35,10 @@
 * Recherche des intervenants avec apostrophe améliorée (#50815)
 * Problème de privilèges sur la saisie de l'employeur sur le dossier de l'intervenant (#53126)
 
+## Notes de mise à jour
+
+* Oracle est maintenant requis en version 19 au MINIMUM
+* Attention : la table TBL_PAIEMENT a évolué, si vous avez des vues ou des extractions basées sur cette table, vous devrez donc les faire évoluer en conséquence. Doc disponible [ici](doc/export-pilotage.md) : 
 
 
 

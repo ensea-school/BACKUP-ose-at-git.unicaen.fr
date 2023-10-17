@@ -48,7 +48,7 @@ class StringFromFloat extends AbstractFilter
 
         $res = Util::formattedFloat($value);
         if (!$show0Digits) {
-            $res = str_replace(',00', '', $res);
+            $res = str_replace(',00', '', $res ?? '');
         }
 
         return $res;

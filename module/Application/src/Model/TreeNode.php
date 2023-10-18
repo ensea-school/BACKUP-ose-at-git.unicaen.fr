@@ -158,7 +158,7 @@ class TreeNode implements \IteratorAggregate, \ArrayAccess
         $isd->__setParent($this);
         $this->children[$isd->getId()] = $isd;
 
-        return self;
+        return $this;
     }
 
 

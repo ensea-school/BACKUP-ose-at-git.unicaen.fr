@@ -16,10 +16,7 @@ class ContratControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-
-        $renderer = $container->get('ViewRenderer');
-
-        $controller = new ContratController($renderer);
+        $controller = new ContratController();
         $controller->setServiceContratServiceListe($container->get(ContratServiceListeService::class));
 
         return $controller;

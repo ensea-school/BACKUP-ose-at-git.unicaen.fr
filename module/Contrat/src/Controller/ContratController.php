@@ -27,7 +27,6 @@ use Enseignement\Service\ServiceServiceAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Laminas\Http\Response;
 use Laminas\View\Model\JsonModel;
-use Laminas\View\Renderer\PhpRenderer;
 use Lieu\Entity\Db\Structure;
 use LogicException;
 use Service\Entity\Db\TypeService;
@@ -57,17 +56,6 @@ class ContratController extends AbstractController
     use EnvoiMailContratFormAwareTrait;
     use NoteServiceAwareTrait;
     use ContratServiceListeServiceAwareTrait;
-
-    private $renderer;
-
-
-
-    public function __construct(PhpRenderer $renderer)
-    {
-
-        $this->renderer = $renderer;
-    }
-
 
 
     /**

@@ -196,7 +196,7 @@ class WorkflowService extends AbstractService
           LEFT JOIN dblo.wfEtapeDep dep
         WHERE
           tw.intervenant = :intervenant
-          " . ($structure ? "AND (tw.structure IS NULL OR tw.structure = :structure)" : '') . "
+          " . ($structure ? "AND (tw.structure IS NULL OR str.ids LIKE CONCAT('%-',:structure,'-%'))" : '') . "
         ORDER BY
           we.ordre, str.libelleCourt
         ";

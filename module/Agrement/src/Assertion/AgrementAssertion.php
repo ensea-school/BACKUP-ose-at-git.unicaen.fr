@@ -207,7 +207,7 @@ class AgrementAssertion extends AbstractAssertion
     protected function assertStructureSaisie(Role $role, Structure $entity)
     {
         if ($roleStructure = $role->getStructure()) {
-            if ($roleStructure != $entity) return false; // pas d'édition pour les copains
+            if (!$entity->inStructure($roleStructure)) return false; // pas d'édition pour les copains
         }
 
         return true;

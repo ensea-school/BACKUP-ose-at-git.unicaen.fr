@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
+CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
   TYPE t_dep_bloquante IS RECORD (
     id NUMERIC,
     to_delete BOOLEAN DEFAULT TRUE
@@ -439,7 +439,8 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
         FROM
           tbl_candidature c
         WHERE
-          c.actif = 1
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'c') || '
+          AND c.actif = 1
         GROUP BY
           c.intervenant_id, c.structure_id
 
@@ -454,7 +455,8 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
         FROM
           tbl_candidature c
         WHERE
-          c.actif = 1
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'c') || '
+          AND c.actif = 1
         GROUP BY
           c.intervenant_id, c.structure_id
 
@@ -471,7 +473,8 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
         FROM
           tbl_mission m
         WHERE
-          m.actif = 1
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'm') || '
+          AND m.actif = 1
         GROUP BY
           m.intervenant_id, m.structure_id, m.intervenant_structure_id
 
@@ -486,7 +489,8 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
         FROM
           tbl_mission m
         WHERE
-          m.actif = 1
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'm') || '
+          AND m.actif = 1
         GROUP BY
           m.intervenant_id, m.structure_id
 
@@ -501,7 +505,8 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
         FROM
           tbl_mission m
         WHERE
-          m.actif = 1
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'm') || '
+          AND m.actif = 1
         GROUP BY
           m.intervenant_id,
           m.structure_id
@@ -517,7 +522,8 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
         FROM
           tbl_mission m
         WHERE
-          m.actif = 1
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'm') || '
+          AND m.actif = 1
         GROUP BY
           m.intervenant_id,
           m.structure_id
@@ -533,7 +539,8 @@ CREATE OR REPLACE PACKAGE BODY     OSE_WORKFLOW AS
         FROM
           tbl_mission_prime mp
         WHERE
-          mp.actif = 1
+          ' || unicaen_tbl.MAKE_WHERE(param, VALUE, 'mp') || '
+          AND mp.actif = 1
     ';
 
     dossier := '

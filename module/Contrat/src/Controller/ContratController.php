@@ -120,6 +120,7 @@ class ContratController extends AbstractController
         $sContrat = $this->getServiceContrat();
         $qb       = $sContrat->finderByIntervenant($intervenant);
         if ($structure && $avenant_param >= 0) {
+            $qb->andWhere();
             $sContrat->finderByStructure($structure, $qb);
         }
 

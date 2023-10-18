@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Laminas\Hydrator\HydratorInterface;
 use Laminas\Hydrator\ObjectPropertyHydrator;
 use Doctrine\ORM\QueryBuilder;
+use Lieu\Entity\Db\Structure;
 use UnicaenApp\Exception\RuntimeException;
 use Doctrine\ORM\Query\Expr;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -496,6 +497,28 @@ abstract class AbstractEntityService extends AbstractService
         $hasHistorique = is_subclass_of($this->getEntityClass(), 'UnicaenApp\Entity\HistoriqueAwareInterface');
         if ($hasHistorique) {
             $qb->andWhere($alias . '.histoDestruction IS NULL');
+        }
+
+        return $qb;
+    }
+
+
+
+    /**
+     * Hack pour gérer le finder de structure différent des autres compte tenu de la hiérarchisation des structures
+     */
+    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
+    {
+        /** @var $qb QueryBuilder */
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+
+        $e = $qb->expr();
+
+        if (!$structure){
+            $qb->andWhere("$alias.structure IS NULL");
+        }else{
+            $qb->leftJoin("$alias.structure", 'strids');
+            $qb->andWhere($e->like("strids.ids", $e->literal('%-'.$structure->getId().'-%')));
         }
 
         return $qb;

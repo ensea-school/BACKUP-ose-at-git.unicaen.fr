@@ -62,7 +62,7 @@ class TypeModulateurService extends AbstractEntityService
      * @param type $alias
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderByStructure(Structure $structure, QueryBuilder $qb=null, $alias=null)
+    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
     {
         [$qb,$alias] = $this->initQuery($qb, $alias);
 

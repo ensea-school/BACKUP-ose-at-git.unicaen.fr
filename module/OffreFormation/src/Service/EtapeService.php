@@ -9,6 +9,7 @@ use Application\Service\Traits;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Doctrine\ORM\QueryBuilder;
+use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\Etape;
 use OffreFormation\Service\Traits\CheminPedagogiqueServiceAwareTrait;
@@ -179,7 +180,7 @@ class EtapeService extends AbstractEntityService
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderByStructure(\Lieu\Entity\Db\Structure $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

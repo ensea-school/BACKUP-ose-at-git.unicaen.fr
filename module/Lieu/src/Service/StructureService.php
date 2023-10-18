@@ -204,7 +204,7 @@ class StructureService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByStructure(Structure $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

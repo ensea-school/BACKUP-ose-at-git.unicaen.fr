@@ -100,7 +100,7 @@ class MiseEnPaiementService extends AbstractEntityService
     }
 
 
-    public function finderByStructure(Structure $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 

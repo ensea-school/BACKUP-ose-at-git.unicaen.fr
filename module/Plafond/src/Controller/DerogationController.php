@@ -26,8 +26,9 @@ class DerogationController extends AbstractController
         $intervenant          = $this->getEvent()->getParam('intervenant');
         $typesVolumesHoraires = $this->getServiceTypeVolumeHoraire()->getList();
 
+        $canEdit = $this->isAllowed($intervenant, Privileges::PLAFONDS_DEROGATIONS_EDITION);
 
-        if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_DEROGATIONS_EDITION)) && $this->params()->fromPost('action') == 'save') {
+        if ($canEdit && $this->params()->fromPost('action') == 'save') {
             $this->saveDerogations($intervenant);
         }
 
@@ -57,7 +58,7 @@ class DerogationController extends AbstractController
             }
         }
 
-        return compact('intervenant', 'data', 'typesVolumesHoraires');
+        return compact('intervenant', 'data', 'typesVolumesHoraires', 'canEdit');
     }
 
 

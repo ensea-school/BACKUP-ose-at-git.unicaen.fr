@@ -270,7 +270,7 @@ class ServiceAssertion extends AbstractAssertion
     {
         if ($structure) {
             if ($ri = $role->getStructure()) {
-                if ($ri != $structure) { // une structure ne peut pas éditer les services d'une autre
+                if (!$structure->inStructure($ri)) { // une structure ne peut pas éditer les services d'une autre
                     return false;
                 }
             }

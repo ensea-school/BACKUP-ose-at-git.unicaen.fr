@@ -3,6 +3,7 @@
  * @var $this                 \Application\View\Renderer\PhpRenderer
  * @var $typesVolumesHoraires \Service\Entity\Db\TypeVolumeHoraire[]
  * @var $intervenant          \Application\Entity\Db\Intervenant
+ * @var $canEdit              bool
  * @var $data                 array
  *
  */
@@ -11,12 +12,10 @@ use Application\Provider\Privilege\Privileges;
 
 echo '<h1>Dérogations accordées</h1>';
 
-$canDerog = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_DEROGATIONS_EDITION));
-
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 ?>
-<?php if ($canDerog): ?>
+<?php if ($canEdit): ?>
 
     <form method="post" action="<?= $this->url('derogations', ['intervenant' => $intervenant->getId()]) ?>">
 
@@ -49,8 +48,9 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 <?php endforeach; ?>
 
                 <td>
-                    <?php if ($canDerog): ?>
-                        <input class="form-control" type="text" name="plafond-<?= $id ?>" value="<?= $plafond['derogation'] ?>"/>
+                    <?php if ($canEdit): ?>
+                        <input class="form-control" type="text" name="plafond-<?= $id ?>"
+                               value="<?= $plafond['derogation'] ?>"/>
                     <?php else: ?>
                         <?= floatToString($plafond['derogation']) ?>
                     <?php endif; ?>
@@ -59,7 +59,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         <?php endforeach; ?>
         </tbody>
     </table>
-<?php if ($canDerog): ?>
+<?php if ($canEdit && !empty($data)): ?>
 
     <input type="hidden" name="action" value="save"/>
     <button class="btn btn-primary" type="submit">Enregistrer les modifications</button>

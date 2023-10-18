@@ -341,6 +341,7 @@ return [
                     'privileges' => [
                         Privileges::INTERVENANT_SUPPRESSION,
                     ],
+                    'assertion'  => Assertion\IntervenantAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
@@ -371,6 +372,7 @@ return [
                     [
                         'privileges' => [
                             Privileges::INTERVENANT_EDITION,
+                            Privileges::INTERVENANT_SUPPRESSION,
                             Privileges::INTERVENANT_EDITION_AVANCEE,
                             Privileges::MISSION_OFFRE_EMPLOI_POSTULER,
                         ],

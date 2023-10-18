@@ -135,11 +135,11 @@ return [
                 'rh' => [
                     'pages' => [
                         'plafonds' => [
-                            'label'        => "Plafonds",
-                            'route'        => 'plafond',
-                            'resource'     => PrivilegeController::getResourceId('Plafond\Controller\Plafond', 'index'),
-                            'color' => '#9B9B9B',
-                            'order'        => 60,
+                            'label'    => "Plafonds",
+                            'route'    => 'plafond',
+                            'resource' => PrivilegeController::getResourceId('Plafond\Controller\Plafond', 'index'),
+                            'color'    => '#9B9B9B',
+                            'order'    => 60,
                         ],
                     ],
                 ],
@@ -220,15 +220,15 @@ return [
         ],
     ],
 
-    /*    'rules' => [
-            [
-                'privileges' => [
-
-                ],
-                'resources'  => 'Structure',
-                'assertion'  => Assertion\PlafondAssertion::class,
+    'rules' => [
+        [
+            'privileges' => [
+                Privileges::PLAFONDS_DEROGATIONS_EDITION,
             ],
-        ],*/
+            'resources'  => 'Intervenant',
+            'assertion'  => Assertion\PlafondAssertion::class,
+        ],
+    ],
 
     'controllers' => [
         'Plafond\Controller\Plafond'    => Controller\PlafondControllerFactory::class,

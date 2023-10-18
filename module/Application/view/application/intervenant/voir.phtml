@@ -19,7 +19,7 @@ $tabs = [
         'force-refresh' => true,
     ],
 ];
-if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))) {
+if ($this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION)) {
 
     $tabs[] = [
         'id'    => 'edition',
@@ -28,7 +28,7 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))
     ];
 }
 
-if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))) {
+if ($this->isAllowed($intervenant, Privileges::INTERVENANT_EDITION)) {
     $tabs[] = [
         'id'            => 'synchronisation',
         'label'         => '<i class="fas fa-download"></i> Synchronisation',
@@ -46,8 +46,7 @@ if ($this->isAllowed($intervenant, \ExportRh\Assertion\ExportRhAssertion::PRIV_C
     ];
 }
 
-
-if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSION))) {
+if ($this->isAllowed($intervenant, Privileges::INTERVENANT_SUPPRESSION)) {
     $tabs[] = [
         'id'            => 'suppression',
         'label'         => '<i class="fas fa-trash-can"></i> Suppression',
@@ -55,7 +54,6 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSI
         'force-refresh' => true,
     ];
 }
-
 
 if ($this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_DEROGATIONS_VISUALISATION))) {
     $tabs[] = [

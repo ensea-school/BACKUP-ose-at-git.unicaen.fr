@@ -4,8 +4,6 @@ namespace Application\Assertion;
 
 use Application\Entity\Db\Intervenant;
 use Application\Acl\Role;
-use Application\Entity\Db\Validation;
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
@@ -50,6 +48,7 @@ class IntervenantAssertion extends AbstractAssertion
                 switch ($privilege) {
                     case Privileges::INTERVENANT_EDITION:
                     case Privileges::INTERVENANT_EDITION_AVANCEE:
+                    case Privileges::INTERVENANT_SUPPRESSION:
                         return $this->assertEdition($entity);
                 }
             break;
@@ -91,6 +90,10 @@ class IntervenantAssertion extends AbstractAssertion
             case 'voir-heures-comp':
                 return $this->assertVisuHC($intervenant);
             break;
+            case 'supprimer':
+            case 'historiser':
+                return $this->assertEdition($intervenant);
+            break;
         }
 
         return true;
@@ -102,7 +105,7 @@ class IntervenantAssertion extends AbstractAssertion
     {
         $role = $this->getRole();
         if ($role instanceof Role && $role->getStructure() && $intervenant->getStructure()) {
-            return $role->getStructure() == $intervenant->getStructure();
+            return $intervenant->getStructure()->inStructure($role->getStructure());
         }
 
         return true;

@@ -3,6 +3,7 @@
 namespace Plafond\Assertion;
 
 use Application\Acl\Role;
+use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
@@ -41,7 +42,7 @@ class PlafondAssertion extends AbstractAssertion
             case 'index':
             case 'editer':
                 return $this->assertStructure($role, $structure);
-            break;
+                break;
         }
 
         return true;
@@ -59,12 +60,29 @@ class PlafondAssertion extends AbstractAssertion
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         switch (true) {
+            case $entity instanceof Intervenant:
+                switch ($privilege) {
+                    case Privileges::PLAFONDS_DEROGATIONS_EDITION:
+                        return $this->assertIntervenant($role, $entity);
+                }
+                break;
             case $entity instanceof Structure:
                 switch ($privilege) {
                     case Privileges::PLAFONDS_CONFIG_STRUCTURE:
                         return $this->assertStructure($role, $entity);
                 }
-            break;
+                break;
+        }
+
+        return true;
+    }
+
+
+
+    protected function assertIntervenant($role, Intervenant $intervenant)
+    {
+        if ($intervenant->getStructure()) {
+            return $this->assertStructure($role, $intervenant->getStructure());
         }
 
         return true;
@@ -76,7 +94,7 @@ class PlafondAssertion extends AbstractAssertion
     {
         if (!$role->getStructure()) return true;
 
-        return $role->getStructure() == $structure;
+        return $structure->inStructure($role->getStructure());
     }
 
 }

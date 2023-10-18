@@ -249,13 +249,13 @@ class ReferentielAssertion extends AbstractAssertion
 
                 if ($structureAffectation && $structureEnseignement) {
                     // cas d'un intervenant d'une autre structure prenant un enseignement dans une autre structure
-                    $asserts[] = $structure == $structureAffectation || $structure == $structureEnseignement; // le service doit avoir un lien avec la structure
+                    $asserts[] = $structureAffectation->inStructure($structure) || $structureEnseignement->inStructure($structure); // le service doit avoir un lien avec la structure
                 } elseif ($structureAffectation && !$structureEnseignement) {
                     // cas d'un intervenant prenant des enseignements à l'extérieur
-                    $asserts[] = $structure == $structureAffectation;
+                    $asserts[] = $structureAffectation->inStructure($structure);
                 } elseif (!$structureAffectation && $structureEnseignement) {
                     // cas d'un intervenant extérieur prenant des enseignements de la composante
-                    $asserts[] = $structure == $structureEnseignement;
+                    $asserts[] = $structureEnseignement->inStructure($structure);
                 }
             }
         }
@@ -290,7 +290,7 @@ class ReferentielAssertion extends AbstractAssertion
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
                     if (($regle->getPriorite() == 'enseignement' && $nbServices > 0) ||
-                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure() == $role->getStructure())) {
+                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure()?->inStructure($role->getStructure()))) {
                         return true;
                     }
                 }
@@ -301,7 +301,7 @@ class ReferentielAssertion extends AbstractAssertion
                     //Cas 1 : Si la priorité est sur l'enseignement et qu'il y a du service sur la composante du gestionnaire alors on peut valider ces services
                     //Cas 2 : Si la priorité est sur l'affectation et que la composante d'affectation de l'intervenant égale à la composante du gestionnaire alors on peut valider tout le service
                     if (($regle->getPriorite() == 'enseignement' && $nbServices > 0) ||
-                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure() == $role->getStructure())) {
+                        ($regle->getPriorite() == 'affectation' && $intervenant->getStructure()?->inStructure($role->getStructure()))) {
                         return true;
                     }
                 }

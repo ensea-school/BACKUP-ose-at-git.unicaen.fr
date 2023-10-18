@@ -55,6 +55,16 @@ class IndexController extends AbstractController
 
 
 
+    public function planAction()
+    {
+        $configPages = \Application::$container->get('config')['navigation']['default']['home']['pages'];
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        return compact('configPages', 'role');
+    }
+    
+
+
     public function changementAnneeAction()
     {
         /* Prise en compte du changement d'année!! */

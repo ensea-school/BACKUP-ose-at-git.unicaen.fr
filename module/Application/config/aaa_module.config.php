@@ -83,6 +83,17 @@ $config = [
                     ],
                 ],
             ],
+            'plan'      => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/plan',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Index',
+                        'action'     => 'plan',
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
             'application'      => [
                 'type'          => 'Literal',
                 'options'       => [
@@ -122,7 +133,7 @@ $config = [
             \BjyAuthorize\Guard\Controller::class => [
                 [
                     'controller' => 'Application\Controller\Index',
-                    'action'     => ['changement-annee'],
+                    'action'     => ['changement-annee', 'plan'],
                     'roles'      => ['guest'],
                 ],
             ],

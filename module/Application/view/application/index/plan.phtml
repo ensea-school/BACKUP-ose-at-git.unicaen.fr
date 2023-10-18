@@ -13,13 +13,6 @@ $intervenantId = 999999999999999999;
 
 ?>
     <h1>Plan de l'application</h1>
-    <form method="get">
-        <div class="mb-2">
-            <label class="form-label">ID d'intervenant</label>
-            <input class="form-inline" name="intervenant" type="text" value="" onchange="jsd.exec(this)"/>
-        </div>
-    </form>
-
     <script>
 
         var jsd = {
@@ -29,11 +22,12 @@ $intervenantId = 999999999999999999;
                 $('a.osepage').each(function () {
                     var a = $(this);
 
-                    a.attr('target', '_blank');
+                    //a.attr('target', '_blank');
 
                     if (a.attr("href").includes('<?= $intervenantId ?>')) {
                         jsd.liens[a.attr("href")] = a;
                     }
+                    a.attr('href', '');
                 });
             },
 
@@ -93,6 +87,9 @@ foreach ($configPages['chargens']['pages'] as $p) {
     $pages['Charges'][$p['label']] = $this->url($p['route']);
 }
 
+uasort($configPages['gestion']['pages'], function ($a, $b) {
+    return $a['order'] - $b['order'];
+});
 foreach ($configPages['gestion']['pages'] as $p) {
     $pages['Gestion'][$p['label']] = [];
     foreach ($p['pages'] as $pp) {
@@ -100,15 +97,27 @@ foreach ($configPages['gestion']['pages'] as $p) {
     }
 }
 
+uasort($configPages['administration']['pages'], function ($a, $b) {
+    return $a['order'] - $b['order'];
+});
 foreach ($configPages['administration']['pages'] as $p) {
     $pages['Administration'][$p['label']] = [];
     foreach ($p['pages'] as $pp) {
+
         $pages['Administration'][$p['label']][$pp['label']] = $this->url($pp['route']);
     }
 }
 
 foreach ($pages as $rubrique => $rpages) {
     echo "<h2>$rubrique</h2>\n";
+    if ('Intervenant' == $rubrique){
+        ?>
+        <div class="mb-2">
+            <label class="form-label">ID d'intervenant :</label>
+            <input class="form-inline" name="intervenant" type="text" value="" onchange="jsd.exec(this)"/>
+        </div>
+        <?php
+    }
     echo "<ul>\n";
     foreach ($rpages as $label => $url) {
         if (is_array($url)) {

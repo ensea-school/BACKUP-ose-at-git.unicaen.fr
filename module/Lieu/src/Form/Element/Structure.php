@@ -13,6 +13,10 @@ class Structure extends Select
 
     private bool $enseignement = false;
 
+    private bool $contextFilter = true;
+
+
+
     public function init()
     {
         parent::init();
@@ -20,6 +24,22 @@ class Structure extends Select
         $this->setAttribute('class', 'selectpicker');
         $this->setAttribute('data-live-search', 'true');
         $this->setEmptyOption('- Aucune -');
+    }
+
+
+
+    public function isContextFilter(): bool
+    {
+        return $this->contextFilter && false !== $this->getOption('context_filter');
+    }
+
+
+
+    public function setContextFilter(bool $contextFilter): Structure
+    {
+        $this->contextFilter = $contextFilter;
+
+        return $this;
     }
 
 
@@ -34,6 +54,7 @@ class Structure extends Select
     public function setEnseignement(bool $enseignement): Structure
     {
         $this->enseignement = $enseignement;
+
         return $this;
     }
 
@@ -43,7 +64,7 @@ class Structure extends Select
     {
         $this->valueOptions = [];
 
-        $tree = $this->getServiceStructure()->getTree(null, $this->isEnseignement());
+        $tree = $this->getServiceStructure()->getTree(null, $this->isEnseignement(), $this->isContextFilter());
         $this->subPopulate($tree, 1);
     }
 

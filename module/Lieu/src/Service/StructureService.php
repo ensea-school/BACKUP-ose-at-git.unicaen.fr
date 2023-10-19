@@ -73,9 +73,13 @@ class StructureService extends AbstractEntityService
     /**
      * @return array|Structure[]
      */
-    public function getTree(?Structure $root = null, bool $onlyEnseignement = false): array
+    public function getTree(?Structure $root = null, bool $onlyEnseignement = false, bool $contextFilter=true): array
     {
-        $cStructure = $this->getServiceContext()->getStructure();
+        if ($contextFilter) {
+            $cStructure = $this->getServiceContext()->getStructure();
+        }else{
+            $cStructure = null;
+        }
 
         if ($root && $cStructure) {
             if ($cStructure->inStructure($root)) {

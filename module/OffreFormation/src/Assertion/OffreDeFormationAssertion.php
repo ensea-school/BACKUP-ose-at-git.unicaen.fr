@@ -251,7 +251,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
     protected function assertStructureSaisie(Role $role, Structure $structure)
     {
         if ($rs = $role->getStructure()) {
-            return $rs === $structure;
+            return $structure->inStructure($rs);
         }
 
         return true;

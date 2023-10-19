@@ -448,11 +448,11 @@ class MiseEnPaiementService extends AbstractEntityService
           JOIN structure str ON str.id = tdl.structure_id
         WHERE
           tdl.annee_id = :annee
-          AND str.ids LIKE '%-' || :structure || '-%'";
+          AND str.ids LIKE :structure";
 
         $params = [
             'annee'     => $annee->getId(),
-            'structure' => $structure->getId(),
+            'structure' => $structure->idsFilter(),
         ];
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
         while ($d = $stmt->fetch()) {

@@ -246,7 +246,7 @@ class PaiementController extends AbstractController
         ];
 
         if ($structure){
-            $parameters['structure'] = '%-'.$structure->getId().'-%';
+            $parameters['structure'] = $structure->idsFilter();
         }
 
         $dql = "

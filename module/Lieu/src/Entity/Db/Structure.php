@@ -97,6 +97,13 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
+    public function idsFilter(): string
+    {
+        return '%-'.$this->getId().'-%';
+    }
+
+
+
     public function getCode(): ?string
     {
         return $this->code;

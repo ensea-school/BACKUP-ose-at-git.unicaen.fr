@@ -92,11 +92,11 @@ class StructureService extends AbstractEntityService
         }
 
         if ($root) {
-            $id = $root->getId();
+            $id = $root->idsFilter();
 
-            $pFilter = "AND p.ids LIKE '%-$id-%'";
-            $strFilter = "AND str.ids LIKE '%-$id-%'";
-            $subFilter = "AND sub.ids LIKE '%-$id-%'";
+            $pFilter = "AND p.ids LIKE '$id'";
+            $strFilter = "AND str.ids LIKE '$id'";
+            $subFilter = "AND sub.ids LIKE '$id'";
         } else {
             $pFilter = "";
             $strFilter = "";

@@ -196,14 +196,14 @@ class WorkflowService extends AbstractService
           LEFT JOIN dblo.wfEtapeDep dep
         WHERE
           tw.intervenant = :intervenant
-          " . ($structure ? "AND (tw.structure IS NULL OR str.ids LIKE CONCAT('%-',:structure,'-%'))" : '') . "
+          " . ($structure ? "AND (tw.structure IS NULL OR str.ids LIKE :structure)" : '') . "
         ORDER BY
           we.ordre, str.libelleCourt
         ";
 
         $query = $this->getEntityManager()->createQuery($dql);
         $query->setParameter('intervenant', $intervenant);
-        if ($structure) $query->setParameter('structure', $structure);
+        if ($structure) $query->setParameter('structure', $structure->idsFilter());
         $etapes = $query->getResult();
 
         if (empty($etapes) && $calcIfEmpty) {

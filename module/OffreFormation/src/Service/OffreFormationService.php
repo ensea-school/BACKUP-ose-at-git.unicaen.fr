@@ -9,6 +9,7 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\CheminPedagogique;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\Etape;
@@ -38,7 +39,7 @@ class OffreFormationService extends AbstractEntityService
 
 
 
-    public function getNeep($structure, $niveau, $etape, $annee = null, $source = null)
+    public function getNeep(Structure $structure, $niveau, $etape, $annee = null, $source = null)
     {
         if ($etape) {
             /* workaroud pour parser les chemins pédagogiques si on fournit une étape spécifique */
@@ -67,9 +68,10 @@ class OffreFormationService extends AbstractEntityService
               JOIN e.typeFormation tf
               JOIN tf.groupe gtf
               LEFT JOIN e.elementPedagogique ep
+              LEFT JOIN ep.structure epstr
               LEFT JOIN ep.volumeHoraireEns vme
             WHERE
-              (s = :structure OR ep.structure = :structure) AND e.annee = :annee ';
+              (s.ids LIKE :structure OR epstr.ids LIKE :structure) AND e.annee = :annee ';
 
         if (!empty($source)) {
             $dql .= 'AND e.source = :source ';
@@ -80,7 +82,7 @@ class OffreFormationService extends AbstractEntityService
 
         $query = $this->getEntityManager()->createQuery($dql);
 
-        $query->setParameter('structure', $structure);
+        $query->setParameter('structure', $structure->idsFilter());
         $query->setParameter('annee', $annee);
 
         if (!empty($source)) {

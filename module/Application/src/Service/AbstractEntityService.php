@@ -518,7 +518,7 @@ abstract class AbstractEntityService extends AbstractService
             $qb->andWhere("$alias.structure IS NULL");
         }else{
             $qb->leftJoin("$alias.structure", 'strids');
-            $qb->andWhere($e->like("strids.ids", $e->literal('%-'.$structure->getId().'-%')));
+            $qb->andWhere($e->like("strids.ids", $e->literal($structure->idsFilter())));
         }
 
         return $qb;

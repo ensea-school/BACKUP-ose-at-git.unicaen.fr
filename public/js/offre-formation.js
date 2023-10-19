@@ -1,5 +1,5 @@
 /**
- * etapeCentreCout
+ * elementPedagogiqueRecherche
  */
 $.widget("ose.elementPedagogiqueRecherche", {
 
@@ -14,6 +14,7 @@ $.widget("ose.elementPedagogiqueRecherche", {
         for (nId in this.relations[structureId ? structureId : 'ALL']) {
             niveauxValues.push(nId);
         }
+
         var etapesValues = this.relations[structureId ? structureId : 'ALL'][niveauId ? niveauId : 'ALL'];
         if ($.inArray(etapeId, etapesValues) == -1) {
             etapeId = "";
@@ -110,6 +111,7 @@ $.widget("ose.elementPedagogiqueRecherche", {
         var that = this;
 
         this.relations = this.element.data('relations');
+        console.log(this.relations);
         this.getElementAutocompleteElement().autocomplete();
         this.getElementElement().hide();
 

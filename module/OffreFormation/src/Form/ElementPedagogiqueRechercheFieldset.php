@@ -45,6 +45,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     protected $queryBuilder;
 
 
+
     public function init()
     {
         $hydrator = new ElementPedagogiqueRechercheHydrator;
@@ -62,13 +63,14 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
                 'label_attributes'          => [
                     'title' => "Structure gestionnaire de l'enseignement",
                 ],
-                'enseignement' => true,
+                'enseignement'              => true,
+                'context_filter'            => false,
             ],
             'attributes' => [
-                'id'               => 'structure',
-                'title'            => "Structure gestionnaire de l'enseignement",
-                'class'            => 'element-pedagogique element-pedagogique-structure input-sm selectpicker',
-                'data-width'       => "100%",
+                'id'         => 'structure',
+                'title'      => "Structure gestionnaire de l'enseignement",
+                'class'      => 'element-pedagogique element-pedagogique-structure input-sm selectpicker',
+                'data-width' => "100%",
             ],
             'type'       => Structure::class,
         ]);
@@ -152,6 +154,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     public function populateOptions()
     {
         $data = $this->getData();
@@ -159,6 +162,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
         $this->get('niveau')->setValueOptions($data['niveaux']);
         $this->get('etape')->setValueOptions($data['etapes']);
     }
+
 
 
     protected function getData()
@@ -191,17 +195,22 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
         );
 
         $result = [
+            'structures' => [],
             'niveaux'    => [],
             'etapes'     => [],
             'relations'  => ['ALL' => ['ALL' => []]],
         ];
         foreach ($res as $e) {
             $structureId = $e['STRUCTURE_ID'];
+            $structure = $e['STRUCTURE_LIBELLE'];
             $niveauId = $e['NIVEAU_ID'];
             $niveau = $e['NIVEAU_LIBELLE'];
             $etapeId = $e['ETAPE_ID'];
             $etape = $e['ETAPE_LIBELLE'];
 
+            if (!isset($result['structures'][$structureId])) {
+                $result['structures'][$structureId] = $structure;
+            }
             if (!isset($result['niveaux'][$niveauId])) {
                 $result['niveaux'][$niveauId] = $niveau;
             }
@@ -223,10 +232,12 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
             $result['relations']['ALL'][$niveauId][] = $etapeId;
             $result['relations'][$structureId][$niveauId][] = $etapeId;
         }
+        asort($result['structures']);
         asort($result['etapes']);
 
         return $result;
     }
+
 
 
     public function getRelations()
@@ -235,10 +246,12 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     public function getStructureName()
     {
         return $this->structureName;
     }
+
 
 
     public function getNiveauName()
@@ -247,10 +260,12 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     public function getEtapeName()
     {
         return $this->etapeName;
     }
+
 
 
     public function getStructureEnabled()
@@ -259,16 +274,19 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     public function getNiveauEnabled()
     {
         return $this->niveauEnabled;
     }
 
 
+
     public function getEtapeEnabled()
     {
         return $this->etapeEnabled;
     }
+
 
 
     public function setStructureEnabled($structureEnabled = true)
@@ -279,12 +297,14 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     public function setNiveauEnabled($niveauEnabled = true)
     {
         $this->niveauEnabled = $niveauEnabled;
 
         return $this;
     }
+
 
 
     public function setEtapeEnabled($etapeEnabled = true)
@@ -295,6 +315,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     }
 
 
+
     /**
      * @return string
      */
@@ -302,6 +323,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     {
         return $this->elementId;
     }
+
 
 
     /**
@@ -316,6 +338,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
 
         return $this;
     }
+
 
 
     /**
@@ -375,6 +398,7 @@ class ElementPedagogiqueRechercheHydrator implements HydratorInterface
 
         return null;
     }
+
 
 
     /**

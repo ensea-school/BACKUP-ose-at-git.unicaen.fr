@@ -219,7 +219,9 @@ SELECT
   t.etat_volume_horaire_id          etat_volume_horaire_id,
   etab.id                           etablissement_id,
   saff.id                           structure_aff_id,
+  saff.ids                          structure_aff_ids,
   sens.id                           structure_ens_id,
+  sens.ids                          structure_ens_ids,
   gtf.id                            groupe_type_formation_id,
   tf.id                             type_formation_id,
   CASE

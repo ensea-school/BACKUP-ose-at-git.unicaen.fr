@@ -71,8 +71,8 @@ class Recherche
         if ($c4 = $this->getIntervenant()) $filters['INTERVENANT_ID'] = $c4->getId();
         if ($c6 = $this->getEtape()) $filters['ETAPE_ID'] = $c6->getId();
         if ($c7 = $this->getElementPedagogique()) $filters['ELEMENT_PEDAGOGIQUE_ID'] = $c7->getId();
-        if ($c8 = $this->getStructureAff()) $filters['STRUCTURE_AFF_ID'] = $c8->getId();
-        if ($c9 = $this->getStructureEns()) $filters['STRUCTURE_ENS_ID'] = $c9->getId();
+        if ($c8 = $this->getStructureAff()) $filters['STRUCTURE_AFF_IDS'] = $c8->idsFilter();
+        if ($c9 = $this->getStructureEns()) $filters['STRUCTURE_ENS_IDS'] = $c9->idsFilter();
 
         return $filters;
     }

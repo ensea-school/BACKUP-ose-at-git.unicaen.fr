@@ -312,10 +312,14 @@ class EtatSortieService extends AbstractEntityService
                 $index = 0;
                 $query .= " AND (";
                 foreach ($values as $val) {
+                    $op = '=';
+                    if (str_contains($val, '%')){
+                        $op = 'LIKE';
+                    }
                     if ($index > 0) {
                         $query .= ' OR ';
                     }
-                    $query .= "q.\"$filtre\" = :$filtre$index";
+                    $query .= "q.\"$filtre\" $op :$filtre$index";
                     $queryFilters[$filtre . $index] = $val;
                     $index++;
                 }
@@ -323,17 +327,26 @@ class EtatSortieService extends AbstractEntityService
             } else {
                 if (false !== strpos($filtre, ' OR ')) {
                     $newFiltre = str_replace(' ', '_', $filtre);
+                    $op = '=';
+                    if (str_contains($values, '%')){
+                        $op = 'LIKE';
+                    }
                     $queryFilters[$newFiltre] = $queryFilters[$filtre];
                     unset($queryFilters[$filtre]);
                     $orFiltres = explode(" OR ", $filtre);
                     $orQuery = '';
                     foreach ($orFiltres as $orFiltre) {
                         if ($orQuery) $orQuery .= ' OR ';
-                        $orQuery .= "q.\"$orFiltre\" = :$newFiltre";
+                        $orQuery .= "q.\"$orFiltre\" $op :$newFiltre";
                     }
                     $query .= " AND ($orQuery)";
                 } else {
-                    $query .= " AND q.\"$filtre\" = :$filtre";
+                    $op = '=';
+                    if (str_contains($values, '%')){
+                        $op = 'LIKE';
+                    }
+
+                    $query .= " AND q.\"$filtre\" $op :$filtre";
                 }
             }
         }

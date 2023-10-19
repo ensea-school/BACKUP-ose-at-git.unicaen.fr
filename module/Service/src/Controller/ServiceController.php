@@ -341,7 +341,7 @@ class ServiceController extends AbstractController
         $filters             = $recherche->getFilters();
         $filters['ANNEE_ID'] = $annee->getId();
         if ($structure) {
-            $filters['STRUCTURE_AFF_ID OR STRUCTURE_ENS_ID'] = $structure->getId();
+            $filters['STRUCTURE_AFF_IDS OR STRUCTURE_ENS_IDS'] = $structure->idsFilter();
         }
 
         $options = [

@@ -149,11 +149,12 @@ class ServiceService extends AbstractEntityService
 
         $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
         $serviceIntervenant->join($serviceStatut, $qb, 'statut', false);
+        $serviceIntervenant->leftJoin($serviceStructure, $qb, 'structure', false, null, 'i_ens');
         $this->leftJoin($serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias);
         $serviceElementPedagogique->leftJoin($serviceStructure, $qb, 'structure', false, null, 's_ens');
 
-        $filter = "(($sAlias.typeIntervenant = :typeIntervenantPermanent AND $iAlias.structure = :composante) OR s_ens = :composante)";
-        $qb->andWhere($filter)->setParameter('composante', $structure);
+        $filter = "(($sAlias.typeIntervenant = :typeIntervenantPermanent AND i_ens.ids LIKE :composante) OR s_ens.ids LIKE = :composante)";
+        $qb->andWhere($filter)->setParameter('composante', $structure->idsFilter());
         $qb->setParameter('typeIntervenantPermanent', $this->getServiceTypeIntervenant()->getPermanent());
 
         return $qb;

@@ -85,8 +85,8 @@ class ResumeService extends AbstractService
         //if ($c5 = $recherche->getNiveauFormation()    ) $conditions['niveau_formation_id']    = '(niveau_formation_id = -1 OR niveau_formation_id = '    . $c5->getId().')';
         if ($c6 = $recherche->getEtape()) $conditions['etape_id'] = '(etape_id = -1 OR etape_id = ' . $c6->getId() . ')';
         if ($c7 = $recherche->getElementPedagogique()) $conditions['element_pedagogique_id'] = '(element_pedagogique_id = -1 OR element_pedagogique_id = ' . $c7->getId() . ')';
-        if ($c8 = $recherche->getStructureAff()) $conditions['structure_aff_id'] = '(structure_aff_id IS NULL OR structure_aff_id = -1 OR structure_aff_id = ' . $c8->getId() . ')';
-        if ($c9 = $recherche->getStructureEns()) $conditions['structure_ens_id'] = '(structure_ens_id = -1 OR structure_ens_id = ' . $c9->getId() . ')';
+        if ($c8 = $recherche->getStructureAff()) $conditions['structure_aff_id'] = '(structure_aff_id IS NULL OR structure_aff_id = -1 OR structure_aff_ids LIKE \'' . $c8->idsFilter() . '\')';
+        if ($c9 = $recherche->getStructureEns()) $conditions['structure_ens_id'] = '(structure_ens_id = -1 OR structure_ens_ids LIKE \'' . $c9->idsFilter() . '\')';
 
         if ($options['composante'] instanceof Structure) {
             $id                       = (int)$options['composante']->getId();

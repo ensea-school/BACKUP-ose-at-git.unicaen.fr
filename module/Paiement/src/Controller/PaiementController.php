@@ -145,7 +145,7 @@ class PaiementController extends AbstractController
         $etapes         = $workflowEtape->getEtapes();
         $whyNotEditable = [];
         foreach ($etapes as $we) {
-            if (!$role->getStructure() || !$we->getStructure() || $role->getStructure() == $we->getStructure()) {
+            if (!$role->getStructure() || !$we->getStructure() || $we->getStructure()->inStructure($role->getStructure())) {
                 $sid  = $we->getStructure() ? $we->getStructure()->getId() : 0;
                 $deps = $we->getEtapeDeps();
                 foreach ($deps as $dep) {
@@ -167,7 +167,7 @@ class PaiementController extends AbstractController
         $structures      = [];
 
         foreach ($servicesAPayer as $sap) {
-            if (null == $role->getStructure() || $sap->getStructure() == $role->getStructure()) {
+            if (null == $role->getStructure() || $sap->getStructure()->inStructure($role->getStructure())) {
                 $structures[$sap->getStructure()->getId()] = $sap->getStructure();
             }
             $mepListe = $sap->getMiseEnPaiement();

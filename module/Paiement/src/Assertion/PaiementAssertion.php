@@ -155,7 +155,7 @@ class PaiementAssertion extends AbstractAssertion
 
         return $this->asserts([
             $this->assertEtapeAtteignable(WfEtape::CODE_DEMANDE_MEP, $serviceAPayer->getIntervenant(), $destStructure),
-            empty($oriStructure) || empty($destStructure) || $oriStructure === $destStructure,
+            empty($oriStructure) || empty($destStructure) || $destStructure->inStructure($oriStructure),
         ]);
     }
 

@@ -441,13 +441,14 @@ class MiseEnPaiementService extends AbstractEntityService
 
         $sql = "
         SELECT
-          type_ressource_id,
-          heures
+          tdl.type_ressource_id,
+          tdl.heures
         FROM
-          v_tbl_dmep_liquidation
+          v_tbl_dmep_liquidation tdl
+          JOIN structure str ON str.id = tdl.structure_id
         WHERE
-          annee_id = :annee
-          AND structure_id = :structure";
+          tdl.annee_id = :annee
+          AND str.ids LIKE '%-' || :structure || '-%'";
 
         $params = [
             'annee'     => $annee->getId(),

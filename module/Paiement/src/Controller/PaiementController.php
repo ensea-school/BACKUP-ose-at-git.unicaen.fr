@@ -239,6 +239,16 @@ class PaiementController extends AbstractController
         $paiements = [];
         /* @var $paiements MiseEnPaiement[] */
 
+        $structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure();
+
+        $parameters = [
+            'intervenant' => $intervenant,
+        ];
+
+        if ($structure){
+            $parameters['structure'] = '%-'.$structure->getId().'-%';
+        }
+
         $dql = "
             SELECT
               mep, frs, fr, pp, s, cc, df, ep, str
@@ -248,6 +258,8 @@ class PaiementController extends AbstractController
               JOIN frs.formuleResultat fr
               LEFT JOIN mep.periodePaiement pp
               JOIN frs.service s
+              JOIN s.intervenant i
+              LEFT JOIN i.structure istr
               LEFT JOIN mep.centreCout cc
               LEFT JOIN mep.domaineFonctionnel df
               LEFT JOIN s.elementPedagogique ep
@@ -255,9 +267,10 @@ class PaiementController extends AbstractController
             WHERE
               fr.intervenant = :intervenant
               AND mep.histoDestruction IS NULL
+              ".($structure ? 'AND COALESCE(str.ids,istr.ids) LIKE :structure' : '')."
         ";
 
-        $res       = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
+        $res       = $this->em()->createQuery($dql)->setParameters($parameters);
         $paiements = array_merge($paiements, $res->getResult());
 
         $dql = "
@@ -269,16 +282,17 @@ class PaiementController extends AbstractController
               JOIN frsr.formuleResultat fr
               LEFT JOIN mep.periodePaiement pp
               JOIN frsr.serviceReferentiel sr
+              JOIN sr.structure str
               LEFT JOIN mep.centreCout cc
               LEFT JOIN mep.domaineFonctionnel df
               LEFT JOIN sr.fonctionReferentiel f
-              LEFT JOIN sr.structure str
             WHERE
               fr.intervenant = :intervenant
               AND mep.histoDestruction IS NULL
+              ".($structure ? 'AND str.ids LIKE :structure' : '')."
         ";
 
-        $res       = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
+        $res       = $this->em()->createQuery($dql)->setParameters($parameters);
         $paiements = array_merge($paiements, $res->getResult());
 
         $dql = "
@@ -287,12 +301,14 @@ class PaiementController extends AbstractController
             FROM
               Paiement\Entity\Db\MiseEnPaiement mep
               JOIN mep.mission m
+              JOIN m.structure str
             WHERE
               m.intervenant = :intervenant
               AND mep.histoDestruction IS NULL
+              ".($structure ? 'AND str.ids LIKE :structure' : '')."
         ";
 
-        $res       = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
+        $res       = $this->em()->createQuery($dql)->setParameters($parameters);
         $paiements = array_merge($paiements, $res->getResult());
 
         foreach ($paiements as $index => $paiement) {

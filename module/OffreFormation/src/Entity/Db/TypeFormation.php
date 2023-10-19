@@ -38,10 +38,9 @@ class TypeFormation extends AbstractEntityService implements HistoriqueAwareInte
      */
     protected ?GroupeTypeFormation $groupe = null;
 
-    /**
-     * @var bool
-     */
     protected bool $serviceStatutaire = true;
+
+    protected bool $diplomeNational = false;
 
 
     /**
@@ -164,6 +163,22 @@ class TypeFormation extends AbstractEntityService implements HistoriqueAwareInte
     public function setServiceStatutaire(bool $serviceStatutaire): void
     {
         $this->serviceStatutaire = $serviceStatutaire;
+    }
+
+
+
+    public function isDiplomeNational(): bool
+    {
+        return $this->diplomeNational;
+    }
+
+
+
+    public function setDiplomeNational(bool $diplomeNational): TypeFormation
+    {
+        $this->diplomeNational = $diplomeNational;
+
+        return $this;
     }
 
 

@@ -21,6 +21,7 @@
     <field name="libelleLong" type="string" column="LIBELLE_LONG" length="80" nullable="false"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
     <field name="serviceStatutaire" type="boolean" column="SERVICE_STATUTAIRE" nullable="false"/>
+    <field name="diplomeNational" type="boolean" column="DIPLOME_NATIONAL" nullable="false"/>
     <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
       <join-columns>
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>

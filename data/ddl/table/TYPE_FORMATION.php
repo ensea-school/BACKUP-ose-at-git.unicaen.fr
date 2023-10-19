@@ -9,6 +9,18 @@ return [
     'commentaire' => NULL,
     'sequence'    => 'TYPE_FORMATION_ID_SEQ',
     'columns'     => [
+        'DIPLOME_NATIONAL'      => [
+            'name'        => 'DIPLOME_NATIONAL',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 14,
+            'commentaire' => NULL,
+        ],
         'GROUPE_ID'             => [
             'name'        => 'GROUPE_ID',
             'type'        => 'int',

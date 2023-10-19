@@ -1664,6 +1664,7 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
         'SERVICE_STATUTAIRE',
+        'DIPLOME_NATIONAL',
     ],
     'TYPE_HEURES'                    => [
         'ID',

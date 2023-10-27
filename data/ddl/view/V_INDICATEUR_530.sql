@@ -1,3 +1,4 @@
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_530 AS
 SELECT DISTINCT
   w.intervenant_id,
   i.structure_id

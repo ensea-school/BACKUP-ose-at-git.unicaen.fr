@@ -27,7 +27,8 @@ PHP 8.2 est maintenant requis
 ## Améliorations
 
 * Modification de la formule de calcul de Picardie
-* Modification de la formule de calcul de Paris 8 (48203)
+* Modification de la formule de calcul de Paris 8 (#48203)
+* Ajout des tags dans l'export CSV de services (#51614)
 
 ## Corrections de bugs
 
@@ -35,7 +36,7 @@ PHP 8.2 est maintenant requis
 * En mode calendaire, si pas de période d'enseignement définie sur l'élément pédagogique alors le choix du semestre est libre pour la saisie d'heures (#53422)
 * La visualisation des heures mises en paiement est de nouveau opérationnelle (#53386)
 * Correction de l'indicateur 530 renvoie maintenant correctement vers les fiches des intervenants
-
+  
 
 
 # OSE 22 (12/10/2023)

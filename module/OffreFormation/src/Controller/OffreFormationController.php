@@ -2,6 +2,7 @@
 
 namespace OffreFormation\Controller;
 
+use Application\Controller\AbstractController;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
@@ -27,7 +28,7 @@ use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
  *
  *
  */
-class OffreFormationController extends \Application\Controller\AbstractController
+class OffreFormationController extends AbstractController
 {
     use ContextServiceAwareTrait;
     use LocalContextServiceAwareTrait;
@@ -95,6 +96,7 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
 
         $csvModel = new CsvModel();
         $csvModel->setHeader([
+            'Structure',
             'Code formation',
             'Libellé formation',
             'Niveau',
@@ -146,6 +148,7 @@ class OffreFormationController extends \Application\Controller\AbstractControlle
             $effectifs  = $element->getEffectifs();
             $discipline = $element->getDiscipline();
             $csvModel->addLine([
+                $etape->getStructure()->getLibelleCourt(),
                 $etape->getCode(),
                 $etape->getLibelle(),
                 $etape->getNiveauToString(),

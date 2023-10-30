@@ -212,6 +212,9 @@ class SihamConnecteur implements ConnecteurRhInterface
             /*CONTRAT*/
             $config = $this->siham->getConfig();
             if (array_key_exists('contrat', $this->siham->getConfig())) {
+                //On récupere le gradeTG pour le contrat
+                $codeStatut = $datas['connecteurForm']['statut'];
+                $gradeTG    = $this->recupererGradeTG($codeStatut);
                 if ($this->siham->getConfig()['contrat']['active']) {
                     $contrat[] =
                         ['dateDebutContrat'  => $dateEffet,
@@ -221,6 +224,9 @@ class SihamConnecteur implements ConnecteurRhInterface
                          'typeLienJuridique' => $this->siham->getConfig()['contrat']['parameters']['typeLienJuridique'],
                          'modeRemuneration'  => $this->siham->getConfig()['contrat']['parameters']['modeRemuneration'],
                          'modeDeGestion'     => $this->siham->getConfig()['contrat']['parameters']['modeDeGestion'],
+                         'gradeTG'           => $gradeTG,
+                         'tauxHoraires'      => '',
+                         'nbHeuresContrat'   => '',
                          'temoinValidite'    => $this->siham->getConfig()['contrat']['parameters']['temoinValidite'],
                         ];
                 }
@@ -389,6 +395,19 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
+    public function recupererGradeTG (string $codeStatut): ?string
+    {
+        $gradeTG = '';
+
+        if (array_key_exists('gradeTG', $this->siham->getConfig()['contrat']['parameters'])) {
+            $gradeTG = (array_key_exists($codeStatut, $this->siham->getConfig()['contrat']['parameters']['gradeTG'])) ? $this->siham->getConfig()['contrat']['parameters']['gradeTG'][$codeStatut] : '';
+        }
+
+        return $gradeTG;
+    }
+
+
+
     public static function cleanDatas ($str, $strict = false, $encoding = 'UTF-8')
     {
         $from = 'ÀÁÂÃÄÅÇÐÈÉÊËÌÍÎÏÒÓÔÕÖØÙÚÛÜŸÑàáâãäåçðèéêëìíîïòóôõöøùúûüÿñ()…,<> /?€%!":’\'+.';
@@ -453,7 +472,12 @@ class SihamConnecteur implements ConnecteurRhInterface
             /*CONTRAT*/
             $config  = $this->siham->getConfig();
             $contrat = [];
+
             if (array_key_exists('contrat', $this->siham->getConfig())) {
+                //On récupere le gradeTG pour le contrat
+
+                $codeStatut = $datas['connecteurForm']['statut'];
+                $gradeTG    = $this->recupererGradeTG($codeStatut);
 
                 if ($this->siham->getConfig()['contrat']['active']) {
                     $contrat[] =
@@ -464,6 +488,9 @@ class SihamConnecteur implements ConnecteurRhInterface
                          'typeLienJuridique' => $this->siham->getConfig()['contrat']['parameters']['typeLienJuridique'],
                          'modeRemuneration'  => $this->siham->getConfig()['contrat']['parameters']['modeRemuneration'],
                          'modeDeGestion'     => $this->siham->getConfig()['contrat']['parameters']['modeDeGestion'],
+                         'gradeTG'           => $gradeTG,
+                         'tauxHoraires'      => '43.5',
+                         'nbHeuresContrat'   => '20',
                          'temoinValidite'    => $this->siham->getConfig()['contrat']['parameters']['temoinValidite'],
 
                         ];

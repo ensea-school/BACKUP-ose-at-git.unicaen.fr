@@ -19,7 +19,6 @@ $total = [
 foreach ($paiements as $paiement) {
     $sap = $paiement->getServiceAPayer();
 
-
     if ($sap instanceof \Application\Entity\Db\FormuleResultatService) {
         $sapType = 'service';
         $sid = $sapType . '-' . $sap->getService()->getId();
@@ -33,10 +32,13 @@ foreach ($paiements as $paiement) {
 
 
     if (!isset($data[$sid])) {
+        $d = [
+            'heures-a-payer'   => 0,
+            'heures-demandees' => 0,
+            'heures-payees'    => ['total' => 0],
+        ];
+
         if ('service' == $sapType) {
-
-            $d = [];
-
             $service = $sap->getService();
             if ($service->getElementPedagogique()) {
                 $d['structure'] = (string)$this->structure($service->getElementPedagogique()->getStructure())->renderLink();
@@ -52,8 +54,6 @@ foreach ($paiements as $paiement) {
                 ];
             }
         } elseif ('referentiel' == $sapType) {
-            $d = [];
-
             /* @var $sap \Application\Entity\Db\FormuleResultatServiceReferentiel */
             $serviceReferentiel = $sap->getServiceReferentiel();
             $d['structure'] = (string)$this->structure($serviceReferentiel->getStructure())->renderLink();
@@ -62,8 +62,6 @@ foreach ($paiements as $paiement) {
                 ''         => $serviceReferentiel->getCommentaires(),
             ];
         } elseif ('mission' == $sapType) {
-            $d = [];
-
             /* @var $mission \Mission\Entity\Db\Mission */
             $mission = $sap;
             $d['structure'] = (string)$this->structure($mission->getStructure())->renderLink();
@@ -72,15 +70,13 @@ foreach ($paiements as $paiement) {
                 ''                => $mission->getLibelle(),
             ];
         }
-        $d['heures-a-payer'] = $paiement->getHeuresAPayer();
-        $total['heures-a-payer'] += $paiement->getHeuresAPayer();
-        $d['heures-demandees'] = 0;
-        $d['heures-payees'] = ['total' => 0];
         $data[$sid] = $d;
     }
 
-    // addition des heures demandées
+    $data[$sid]['heures-a-payer'] += $paiement->getHeuresAPayer();
     $data[$sid]['heures-demandees'] += $paiement->getHeuresDemandees();
+
+    $total['heures-a-payer'] += $paiement->getHeuresAPayer();
     $total['heures-demandees'] += $paiement->getHeuresDemandees();
 
     // addition des heures payées

@@ -2,6 +2,12 @@
 
 [OSE 22.0](#ose-22-12102023)
 
+# OSE 22.1 (à venir)
+
+## Corrections
+
+* Erreur sur la page d'amdministration des pièces jointes par statut (#53289)
+
 # OSE 22 (12/10/2023)
 
 ## Nouveautés

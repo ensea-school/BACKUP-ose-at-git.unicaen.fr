@@ -7,6 +7,7 @@
 ## Corrections
 
 * Erreur sur la page d'amdministration des pièces jointes par statut (#53289)
+* En mode calendaire, si pas de période d'enseignemnt définie sur l'élément pédagogique alors le choix du semestre est libre pour la saisie d'heures (#53422)
 
 # OSE 22 (12/10/2023)
 

@@ -267,6 +267,12 @@ class Bdd
 
 
 
+    public function selectEach(string $sql, array $params = []): SelectParser
+    {
+        return $this->select($sql, $params, ['fetch' => self::FETCH_EACH]);
+    }
+
+
     /**
      * @param string $name
      *

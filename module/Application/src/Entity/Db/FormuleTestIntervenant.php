@@ -1052,7 +1052,7 @@ class FormuleTestIntervenant
         $data = ['lines' => [], 'cols' => [], 'cells' => [], 'inds' => []];
         $calcs = [];
 
-        $a = explode('[', $this->debugInfo);
+        $a = explode('[', $this->debugInfo ?? '');
         foreach ($a as $d) {
             $d = explode('|', $d);
             switch ($d[0]) {

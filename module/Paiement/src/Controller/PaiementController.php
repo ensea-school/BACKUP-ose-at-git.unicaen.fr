@@ -281,6 +281,20 @@ class PaiementController extends AbstractController
         $res       = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
         $paiements = array_merge($paiements, $res->getResult());
 
+        $dql = "
+            SELECT
+              mep, m
+            FROM
+              Paiement\Entity\Db\MiseEnPaiement mep
+              JOIN mep.mission m
+            WHERE
+              m.intervenant = :intervenant
+              AND mep.histoDestruction IS NULL
+        ";
+
+        $res       = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
+        $paiements = array_merge($paiements, $res->getResult());
+
         foreach ($paiements as $index => $paiement) {
             if (isset($mep[$paiement->getId()]) && $mep[$paiement->getId()] == "1") {
                 if ($paiement->getPeriodePaiement()) {
@@ -289,9 +303,8 @@ class PaiementController extends AbstractController
                     $this->getServiceMiseEnPaiement()->save($paiement);
                 } else {
                     $this->getServiceMiseEnPaiement()->delete($paiement);
+                    unset($paiements[$index]);
                 }
-
-                unset($paiements[$index]);
             }
         }
         $this->updateTableauxBord($intervenant);

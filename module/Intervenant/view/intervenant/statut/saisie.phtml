@@ -248,6 +248,12 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
                         <?= $this->formControlGroup($form->get('missionRealise')); ?>
                     </div>
                 </div>
+                <div class="row missionDecret">
+                    <div class="col-md-12">
+                        <?= $this->formControlGroup($form->get('missionDecret')); ?>
+                    </div>
+                    
+                </div>
 
             </div>
         </div>
@@ -492,7 +498,7 @@ $canAdd = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STA
 
 
             el: function (name) {
-                return this.element.find('[name='+name+']');
+                return this.element.find('[name=' + name + ']');
             }
         });
     });

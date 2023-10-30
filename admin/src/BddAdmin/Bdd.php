@@ -874,9 +874,11 @@ class Bdd
                 $excludes[] = $table;
             }
         }
+        $sDdl = $source->sequence()->get(null, $excludes);
         $tDdl = $source->table()->get(null, $excludes);
 
         $this->drop();
+        $this->create([Ddl::SEQUENCE => $sDdl]);
         $this->create([Ddl::TABLE => $tDdl]);
         $this->inCopy = true;
 

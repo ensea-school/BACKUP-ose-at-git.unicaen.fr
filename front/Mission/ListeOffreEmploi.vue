@@ -4,6 +4,7 @@
         <offreEmploi v-for="offre in offres" :key="offre.id" :canModifier="this.canModifier" :canSupprimer="this.canSupprimer" :canValider="this.canValider"
                      :canVoirCandidature="this.canVoirCandidature"
                      :offre="offre"
+                     :decretText="offre.decretText"
                      @refresh="refresh"
                      @supprimer="supprimer"></offreEmploi>
     </div>
@@ -17,6 +18,7 @@
                      :canValider="this.canValider"
                      :canValiderCandidature="this.canValiderCandidature"
                      :canVoirCandidature="this.canVoirCandidature"
+                     :decretText="offre.decretText"
                      :extended="extended"
                      :offre="offre"
                      :utilisateur="this.utilisateur"
@@ -46,11 +48,11 @@ export default {
         canSupprimer: {type: Boolean, required: false},
 
 
+
     },
 
     data()
     {
-
 
         return {
             offres: [],

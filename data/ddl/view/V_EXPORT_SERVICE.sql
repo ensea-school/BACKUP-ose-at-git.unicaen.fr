@@ -14,14 +14,14 @@ WITH t AS ( SELECT
   vh.type_intervention_id           type_intervention_id,
   NULL                              fonction_referentiel_id,
   NULL                              motif_non_paiement_id,
-  NULL                              tag_id,
+  t.id                              tag_id,
   s.description                     service_description,
 
   vh.heures                         heures,
   0                                 heures_ref,
   0                                 heures_non_payees,
   NULL                              motif_non_paiement,
-  NULL                              tag,
+  t.libelle_court                   tag,
   frvh.service_fi                   service_fi,
   frvh.service_fa                   service_fa,
   frvh.service_fc                   service_fc,
@@ -59,14 +59,14 @@ SELECT
   vh.type_intervention_id           type_intervention_id,
   NULL                              fonction_referentiel_id,
   mnp.id                            motif_non_paiement_id,
-  NULL                              tag_id,
+  t.id								tag_id,
   s.description                     service_description,
 
   vh.heures                         heures,
   0                                 heures_ref,
   1                                 heures_non_payees,
   mnp.libelle_court                 motif_non_paiement,
-  NULL                              tag,
+  t.libelle_court                   tag,
   0                                 service_fi,
   0                                 service_fa,
   0                                 service_fc,
@@ -86,6 +86,7 @@ FROM
   JOIN v_vol_horaire_etat_multi  vhe ON vhe.volume_horaire_id = vh.id
   JOIN motif_non_paiement        mnp ON mnp.id = vh.motif_non_paiement_id
   LEFT JOIN formule_resultat      fr ON fr.intervenant_id = s.intervenant_id AND fr.type_volume_horaire_id = vh.type_volume_horaire_id AND fr.etat_volume_horaire_id = vhe.etat_volume_horaire_id
+  JOIN tag t ON t.id = vh.tag_id
 WHERE
   vh.histo_destruction IS NULL
   AND s.histo_destruction IS NULL
@@ -315,3 +316,5 @@ FROM
   LEFT JOIN fonction_referentiel         fr ON fr.id    = t.fonction_referentiel_id
   LEFT JOIN type_validation              tv ON tvh.code = 'REALISE' AND tv.code = 'CLOTURE_REALISE'
   LEFT JOIN validation                    v ON v.intervenant_id = i.id AND v.type_validation_id = tv.id AND v.histo_destruction IS NULL
+
+

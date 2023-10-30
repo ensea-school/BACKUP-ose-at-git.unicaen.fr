@@ -65,17 +65,20 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
     valeur_parent FLOAT;
   BEGIN
 
-    SELECT valeur INTO valeur FROM
-    (
-        SELECT trv.valeur
-        FROM taux_remu tr
-        JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
-        WHERE tr.id = id_in
-        AND tr.histo_destruction IS NULL
-        AND trv.date_effet <= date_val
-        ORDER BY trv.date_effet DESC
-    )
-    WHERE rownum = 1;
+    SELECT(
+        SELECT valeur FROM
+        (
+            SELECT trv.valeur
+            FROM taux_remu tr
+            JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
+            WHERE tr.id = id_in
+            AND tr.histo_destruction IS NULL
+            AND trv.date_effet <= date_val
+            ORDER BY trv.date_effet DESC
+        )
+        WHERE rownum = 1
+    ) INTO valeur
+    from dual;
 
     SELECT(
         SELECT valeur FROM
@@ -115,17 +118,20 @@ CREATE OR REPLACE PACKAGE BODY "OSE_PAIEMENT" AS
     date_valeur DATE;
     date_parent DATE;
   BEGIN
-    SELECT date_effet INTO date_valeur FROM
-    (
-        SELECT trv.date_effet
-        FROM taux_remu tr
-        JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
-        WHERE tr.id = id_in
-        AND tr.histo_destruction IS NULL
-        AND trv.date_effet <= date_val
-        ORDER BY trv.date_effet DESC
-    )
-    WHERE rownum = 1;
+    SELECT(
+        SELECT date_effet FROM
+        (
+            SELECT trv.date_effet
+            FROM taux_remu tr
+            JOIN taux_remu_valeur trv ON tr.id = trv.taux_remu_id
+            WHERE tr.id = id_in
+            AND tr.histo_destruction IS NULL
+            AND trv.date_effet <= date_val
+            ORDER BY trv.date_effet DESC
+        )
+        WHERE rownum = 1
+    ) INTO date_valeur
+    FROM dual;
 
     SELECT(
         SELECT date_effet FROM

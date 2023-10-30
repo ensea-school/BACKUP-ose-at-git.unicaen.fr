@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 22.0](#ose-22-12102023)
+[OSE 22.0](#ose-221-30102023)
 
 # OSE 23 (à venir)
 
@@ -18,7 +18,7 @@ PHP 8.2 est maintenant requis
 
 
 
-# OSE 22.1 (à venir)
+# OSE 22.1 (30/10/2023)
 
 ## Nouveautés
 
@@ -32,7 +32,7 @@ PHP 8.2 est maintenant requis
 ## Corrections de bugs
 
 * Erreur sur la page d'administration des pièces jointes par statut (#53289)
-* En mode calendaire, si pas de période d'enseignemnt définie sur l'élément pédagogique alors le choix du semestre est libre pour la saisie d'heures (#53422)
+* En mode calendaire, si pas de période d'enseignement définie sur l'élément pédagogique alors le choix du semestre est libre pour la saisie d'heures (#53422)
 * La visualisation des heures mises en paiement est de nouveau opérationnelle (#53386)
 * Correction de l'indicateur 530 renvoie maintenant correctement vers les fiches des intervenants
 

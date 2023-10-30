@@ -61,7 +61,8 @@ class OffreFormationService extends AbstractEntityService
                 partial tf.{id},
                 partial gtf.{id, libelleCourt, ordre, pertinenceNiveau},
                 partial ep.{id,code,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa},
-                partial vme.{id,heures, groupes}
+                partial vme.{id,heures, groupes},
+                partial s.{id,libelleCourt}
             FROM
               OffreFormation\Entity\Db\Etape e
               JOIN e.structure s

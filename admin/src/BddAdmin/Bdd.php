@@ -252,6 +252,27 @@ class Bdd
 
 
 
+    public function selectOne(string $sql, array $params = [], string $column = null): mixed
+    {
+        $res = $this->select($sql, $params, ['fetch' => self::FETCH_ONE]);
+
+        if (empty($res)) return null;
+
+        if (is_array($res) && !empty($column)){
+            return $res[$column];
+        }
+
+        return $res;
+    }
+
+
+
+    public function selectEach(string $sql, array $params = []): SelectParser
+    {
+        return $this->select($sql, $params, ['fetch' => self::FETCH_EACH]);
+    }
+
+
     /**
      * @param string $name
      *

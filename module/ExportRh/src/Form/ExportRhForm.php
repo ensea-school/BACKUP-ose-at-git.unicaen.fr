@@ -2,6 +2,7 @@
 
 namespace ExportRh\Form;
 
+use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
 use ExportRh\Form\Fieldset\GeneriqueFieldset;
 use ExportRh\Hydrator\ExportRhHydrator;
@@ -12,17 +13,20 @@ class ExportRhForm extends AbstractForm
 
     protected $fieldsetConnecteur;
 
+    protected $config;
 
 
-    public function __construct(?Fieldset $fieldsetConnecteur)
+
+    public function __construct (?Fieldset $fieldsetConnecteur)
     {
         $this->fieldsetConnecteur = $fieldsetConnecteur;
+
         parent::__construct('ExportRhForm', []);
     }
 
 
 
-    public function init()
+    public function init ()
     {
         $this->setAttribute('action', $this->getCurrentUrl());
         //Partie générique du formulaire
@@ -30,7 +34,7 @@ class ExportRhForm extends AbstractForm
         $this->add($generiqueFieldset->init());
         //Partie sépcifique au connecteur SI RH
         $this->add($this->fieldsetConnecteur->init());
-        
+
         $hydrator = new ExportRhHydrator();
         $this->setHydrator($hydrator);
 
@@ -47,13 +51,34 @@ class ExportRhForm extends AbstractForm
 
 
 
+    public function setAffectationDefault (Intervenant $intervenant): self
+    {
+
+        $intervenantAffectation = $intervenant->getStructure()->getLibelleCourt();
+        //On récupére les libellés de composante dispo dans le form
+        $elementAffectation = $this->get('connecteurForm')->get('affectation');
+        $listeComposantes   = $this->get('connecteurForm')->get('affectation')->getValueOptions();
+        foreach ($listeComposantes as $code => $composante) {
+            //On prend que le libelle court ed SIHAM pour le comparer au libelle court de OSE
+            $libelleAffectation = explode(' ', $composante, 2);
+            $libelleCourt       = $libelleAffectation[1];
+            if (strtolower($intervenantAffectation) == strtolower($libelleCourt)) {
+                $elementAffectation->setValue($code);
+            }
+        }
+
+        return $this;
+    }
+
+
+
     /**
      * Should return an array specification compatible with
      * {@link Laminas\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
      */
-    public function getInputFilterSpecification()
+    public function getInputFilterSpecification ()
     {
         return [];
     }

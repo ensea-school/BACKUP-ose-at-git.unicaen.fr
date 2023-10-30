@@ -208,8 +208,14 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
     {
         $periodes = $this->getServicePeriode()->findPeriodeByElementPedagogique($this->elementPedagogique);
 
-        return $periodes;
+        if (empty($periodes)) {
+            $qb = $this->getServicePeriode()->finderByHistorique();
+            $this->getServicePeriode()->finderByEnseignement($qb);
 
+            $periodes = Util::collectionAsOptions($this->getServicePeriode()->getList($qb));
+        }
+
+        return $periodes;
     }
 
 
@@ -332,6 +338,8 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
         return $this;
     }
 
+
+
     /**
      * @param ElementPedagogique $elementPedagogique
      *
@@ -343,6 +351,8 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
 
         return $this;
     }
+
+
 
     /**
      * Should return an array specification compatible with

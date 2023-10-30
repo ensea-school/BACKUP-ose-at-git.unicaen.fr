@@ -6,11 +6,11 @@ namespace ExportRh\Controller;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\WfEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\WfEtapeServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Dossier\Service\Traits\DossierServiceAwareTrait;
 use ExportRh\Form\Traits\ExportRhFormAwareTrait;
 use ExportRh\Service\ExportRhService;
 use ExportRh\Service\ExportRhServiceAwareTrait;
@@ -93,7 +93,7 @@ class ExportRhController extends AbstractController
                 $posts  = $this->getRequest()->getPost();
                 $result = $this->exportRhService->priseEnChargeIntrervenantRh($intervenant, $posts);
                 if ($result !== false) {
-                    // $this->exportRhService->cloreDossier($intervenant);
+                    $this->exportRhService->cloreDossier($intervenant);
                     $this->flashMessenger()->addSuccessMessage('La prise en charge s\'est déroulée avec succés et le dossier a été cloturé');
                     $this->getServiceIntervenant()->updateExportDate($intervenant);
                     //On met à jour le code intervenant si l'option est activée
@@ -123,7 +123,7 @@ class ExportRhController extends AbstractController
 
         /* Initialisation */
         $role               = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant        = $role->getIntervenant() ? : $this->getEvent()->getParam('intervenant');
+        $intervenant        = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $intervenantRh      = '';
         $form               = '';
         $nameConnecteur     = '';
@@ -195,6 +195,8 @@ class ExportRhController extends AbstractController
             $nameConnecteur = $this->exportRhService->getConnecteurName();
             $form           = $this->getFormExportRh($intervenant);
             $form->bind($intervenantDossier);
+            //On essaie de mettre l'affectation par défaut en comparant les libellés cours des structures (OSE/SIHAM)
+            $form->setAffectationDefault($intervenant);
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
@@ -290,4 +292,5 @@ class ExportRhController extends AbstractController
 
         return $this->exporterAction();
     }
+
 }

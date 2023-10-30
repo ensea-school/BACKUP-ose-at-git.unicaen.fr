@@ -39,7 +39,7 @@ class OffreFormationService extends AbstractEntityService
 
 
 
-    public function getNeep(Structure $structure, $niveau, $etape, $annee = null, $source = null)
+    public function getNeep(?Structure $structure, $niveau, $etape, $annee = null, $source = null)
     {
         if ($etape) {
             /* workaroud pour parser les chemins pédagogiques si on fournit une étape spécifique */

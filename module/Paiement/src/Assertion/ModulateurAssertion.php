@@ -58,7 +58,7 @@ class ModulateurAssertion extends AbstractAssertion
     protected function assertStructure( Structure $structure )
     {
         $rs = $this->getRole()->getStructure();
-        return (! $rs || $rs == $structure);
+        return (! $rs || $structure->inStructure($rs));
     }
 
     protected function assertTypeModulateur( Role $role, TypeModulateur $typeModulateur )

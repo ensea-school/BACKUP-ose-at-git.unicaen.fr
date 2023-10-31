@@ -21,6 +21,12 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <?= $this->form()->openTag($form->prepare()); ?>
     <div class="row">
         <div class="col-md-12">
+            <?= $this->formControlGroup($form->get('structure')); ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
             <?= $this->formControlGroup($form->get('libelle')); ?>
         </div>
     </div>

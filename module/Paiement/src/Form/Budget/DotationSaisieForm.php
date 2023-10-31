@@ -3,6 +3,7 @@
 namespace Paiement\Form\Budget;
 
 use Application\Form\AbstractForm;
+use Lieu\Form\Element\Structure;
 
 
 /**
@@ -16,6 +17,11 @@ class DotationSaisieForm extends AbstractForm
     public function init()
     {
         $this->setAttribute('action', $this->getCurrentUrl());
+
+        $this->add([
+            'type' => Structure::class,
+            'name' => 'structure',
+        ]);
 
         $this->add([
             'type'    => 'Text',

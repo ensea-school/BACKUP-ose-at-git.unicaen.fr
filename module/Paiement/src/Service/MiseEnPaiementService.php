@@ -337,7 +337,7 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return array
      */
-    public function getTableauBord(Structure $structure = null)
+    public function getTableauBord(Structure $structure)
     {
         $annee = $this->getServiceContext()->getAnnee();
         $data = [];
@@ -348,8 +348,8 @@ class MiseEnPaiementService extends AbstractEntityService
         $sql = 'SELECT * FROM v_export_dmep WHERE annee_id = :annee';
 
         if ($structure) {
-            $params['structure'] = $structure->getId();
-            $sql .= ' AND structure_id = :structure';
+            $params['structure'] = $structure->idsFilter();
+            $sql .= ' AND structure_ids LIKE :structure';
         }
 
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
@@ -467,6 +467,12 @@ class MiseEnPaiementService extends AbstractEntityService
     }
 
 
+
+    /**
+     * @param array|Structure[] $structures
+     * @return array|int[]
+     * @throws \Doctrine\DBAL\Exception
+     */
     private function getTblLiquidationMS(array $structures = [])
     {
         $annee = $this->getServiceContext()->getAnnee();
@@ -482,13 +488,22 @@ class MiseEnPaiementService extends AbstractEntityService
           V_TBL_DMEP_LIQUIDATION
         WHERE
           annee_id = :annee
-          " . Util::sqlAndIn('structure_id', $structures);
+        ";
+
+        $strFilters = [];
+        foreach( $structures as $structure ){
+            $strFilters[] = 'structure_ids LIKE \''.$structure->idsFilter()."'";
+        }
+        if (!empty($strFilters)){
+            $sql .= 'AND ('.implode(' OR ', $strFilters).')';
+        }
 
         $params = [
             'annee' => $annee->getId(),
         ];
+
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
-        while ($d = $stmt->fetch()) {
+        while ($d = $stmt->fetchAssociative()) {
             $structureId = (int)$d['STRUCTURE_ID'];
             $typeRessourceId = (int)$d['TYPE_RESSOURCE_ID'];
             $heures = (float)$d['HEURES'];

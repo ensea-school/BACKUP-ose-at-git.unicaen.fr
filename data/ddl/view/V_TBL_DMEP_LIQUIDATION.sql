@@ -1,9 +1,10 @@
 CREATE OR REPLACE FORCE VIEW V_TBL_DMEP_LIQUIDATION AS
 SELECT
-  annee_id,
-  type_ressource_id,
-  structure_id,
-  SUM(heures) heures
+  t1.annee_id,
+  t1.type_ressource_id,
+  t1.structure_id,
+  str.ids structure_ids,
+  SUM(t1.heures) heures
 FROM
 (
   SELECT
@@ -43,5 +44,6 @@ FROM
     /*@ANNEE_ID=i.annee_id*/
 
 ) t1
+JOIN structure str ON str.id = t1.structure_id
 GROUP BY
-  annee_id, type_ressource_id, structure_id
+  t1.annee_id, t1.type_ressource_id, t1.structure_id, str.ids

@@ -69,7 +69,7 @@ class DotationService extends AbstractEntityService
         $res = ['total' => 0];
         $params = ['annee' => $this->getServiceContext()->getAnnee()->getId()];
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
-        while( $d = $stmt->fetch()){
+        while( $d = $stmt->fetchAssociative()){
             $structureId = (int)$d['STRUCTURE_ID'];
             $typeRessourceId = (int)$d['TYPE_RESSOURCE_ID'];
             $heures = (float)$d['HEURES'];

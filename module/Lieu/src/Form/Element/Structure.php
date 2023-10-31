@@ -11,9 +11,9 @@ class Structure extends Select
 {
     use StructureServiceAwareTrait;
 
-    private bool $enseignement = false;
-
     private bool $contextFilter = true;
+
+    private ?\Lieu\Entity\Db\Structure $root = null;
 
 
 
@@ -23,6 +23,9 @@ class Structure extends Select
         $this->setLabel('Structure');
         $this->setAttribute('class', 'selectpicker');
         $this->setAttribute('data-live-search', 'true');
+        $this->setContextFilter(true);
+        $this->setEnseignement(true);
+        $this->setRoot(null);
         $this->setEmptyOption('- Aucune -');
     }
 
@@ -30,14 +33,14 @@ class Structure extends Select
 
     public function isContextFilter(): bool
     {
-        return $this->contextFilter && false !== $this->getOption('context_filter');
+        return $this->getOption('context_filter');
     }
 
 
 
     public function setContextFilter(bool $contextFilter): Structure
     {
-        $this->contextFilter = $contextFilter;
+        $this->setOption('context_filter', $contextFilter);
 
         return $this;
     }
@@ -46,14 +49,30 @@ class Structure extends Select
 
     public function isEnseignement(): bool
     {
-        return $this->enseignement || $this->getOption('enseignement');
+        return $this->getOption('enseignement');
     }
 
 
 
     public function setEnseignement(bool $enseignement): Structure
     {
-        $this->enseignement = $enseignement;
+        $this->setOption('enseignement', $enseignement);
+
+        return $this;
+    }
+
+
+
+    public function getRoot(): ?StructureEntity
+    {
+        return $this->getOption('root');
+    }
+
+
+
+    public function setRoot(?StructureEntity $root): Structure
+    {
+        $this->setOption('root', $root);
 
         return $this;
     }
@@ -64,7 +83,7 @@ class Structure extends Select
     {
         $this->valueOptions = [];
 
-        $tree = $this->getServiceStructure()->getTree(null, $this->isEnseignement(), $this->isContextFilter());
+        $tree = $this->getServiceStructure()->getTree($this->getRoot(), $this->isEnseignement(), $this->isContextFilter());
         $this->subPopulate($tree, 1);
     }
 

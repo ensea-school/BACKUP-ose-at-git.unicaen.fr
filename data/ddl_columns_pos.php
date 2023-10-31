@@ -1451,6 +1451,7 @@ return [
         'ANNEE_ID',
         'TYPE_RESSOURCE_ID',
         'STRUCTURE_ID',
+        'STRUCTURE_IDS',
         'HEURES',
     ],
     'TBL_DOSSIER'                    => [

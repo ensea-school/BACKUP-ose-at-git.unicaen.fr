@@ -57,6 +57,18 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
+        'STRUCTURE_IDS'     => [
+            'name'        => 'STRUCTURE_IDS',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 1000,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => '\'-\'',
+            'position'    => 6,
+            'commentaire' => NULL,
+        ],
         'TYPE_RESSOURCE_ID' => [
             'name'        => 'TYPE_RESSOURCE_ID',
             'type'        => 'int',

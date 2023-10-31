@@ -102,8 +102,8 @@ class IndicateurService extends AbstractService
             $sql .= ' AND i.irrecevable = 0';
         }
         if ($structure) {
-            $params['structure'] = $structure->getId();
-            $sql                 .= ' AND (indic.structure_id = :structure OR indic.structure_id IS NULL)';
+            $params['structure'] = $structure->idsFilter();
+            $sql                 .= ' AND (s.ids LIKE :structure OR s.ids IS NULL)';
         }
         $sql .= $orderBy;
 
@@ -209,7 +209,7 @@ class IndicateurService extends AbstractService
             foreach ($d as $dateTest) {
                 $count++;
                 if (!is_array($dateTest)) {
-                    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $dateTest);
+                    $dt = $dateTest ? DateTime::createFromFormat('Y-m-d H:i:s', $dateTest) : null;
                     if ($dt && $dt->format('Y-m-d H:i:s') === $dateTest) {
                         $keys            = array_keys($d);
                         $datePresentes[] = $keys[$count];

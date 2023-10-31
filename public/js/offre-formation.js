@@ -11,6 +11,9 @@ $.widget("ose.elementPedagogiqueRecherche", {
         var elementId = this.getElementId();
 
         var niveauxValues = [];
+        if (!this.relations[structureId ? structureId : 'ALL']){
+            structureId = 'ALL';
+        }
         for (nId in this.relations[structureId ? structureId : 'ALL']) {
             niveauxValues.push(nId);
         }
@@ -111,7 +114,7 @@ $.widget("ose.elementPedagogiqueRecherche", {
         var that = this;
 
         this.relations = this.element.data('relations');
-        console.log(this.relations);
+
         this.getElementAutocompleteElement().autocomplete();
         this.getElementElement().hide();
 

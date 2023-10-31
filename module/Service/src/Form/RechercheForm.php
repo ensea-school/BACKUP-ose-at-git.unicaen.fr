@@ -151,6 +151,7 @@ class RechercheForm extends AbstractForm
             'options'    => [
                 'label'                     => "Structure d'affectation:",
                 'empty_option'              => "(Toutes)",
+                'context_filter' => false,
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
                     'title' => "Structure gestionnaire de l'enseignement",

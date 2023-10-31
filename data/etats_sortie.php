@@ -263,6 +263,7 @@ return [
     "INTERVENANT_ID"            : { "visible": false },
     "INTERVENANT_STRUCTURE_ID"            : { "visible": false },
     "STRUCTURE_ID"            : { "visible": false },
+    "STRUCTURE_IDS"         : { "visible": false },
     "AGREE"            : { "visible": false },
     "ANNEE": { "libelle": "Année"},
     "INTERVENANT_CODE": { "libelle": "Code intervenant"},

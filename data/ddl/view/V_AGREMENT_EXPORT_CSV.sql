@@ -32,6 +32,7 @@ SELECT a.libelle                                                 annee,
        s2.id                                                     intervenant_structure_id,
        s2.libelle_court                                          intervenant_structure_libelle,
        s.id                                                      structure_id,
+       s.ids                                                     structure_ids,
 
        s.libelle_court                                           structure_libelle,
        i.code                                                    intervenant_code,

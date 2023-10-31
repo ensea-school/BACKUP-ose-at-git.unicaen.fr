@@ -215,12 +215,13 @@ class AgrementController extends AbstractController
           JOIN wie.intervenant i
           JOIN wie.etape we
           LEFT JOIN wie.structure s
+          LEFT JOIN i.structure istr
         WHERE
           i.annee = :annee
           AND we.code = :typeAgrement
           AND wie.atteignable = true
           AND wie.realisation = 0
-          " . ($role->getStructure() ? 'AND (wie.structure = :structure OR (wie.structure IS NULL AND i.structure = :structure))' : '') . "
+          " . ($role->getStructure() ? 'AND (s.ids LIKE :structure OR (wie.structure IS NULL AND istr.ids LIKE :structure))' : '') . "
         ORDER BY
           s.libelleCourt, i.nomUsuel, i.prenom
         ";
@@ -229,7 +230,7 @@ class AgrementController extends AbstractController
         $query->setParameter('annee', $this->getServiceContext()->getAnnee());
         $query->setParameter('typeAgrement', $typeAgrement->getCode());
         if ($role->getStructure()) {
-            $query->setParameter('structure', $role->getStructure());
+            $query->setParameter('structure', $role->getStructure()->idsFilter());
         }
 
         $res = $query->getResult();
@@ -291,7 +292,7 @@ class AgrementController extends AbstractController
 
         $filters['ANNEE_ID'] = $annee->getId();
         if ($structure) {
-            $filters['STRUCTURE_ID'] = $structure->getId();
+            $filters['STRUCTURE_IDS'] = $structure->idsFilter();
         }
         //On récupére l'état de sortie pour l'export des agréments
         $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'export-agrement']);

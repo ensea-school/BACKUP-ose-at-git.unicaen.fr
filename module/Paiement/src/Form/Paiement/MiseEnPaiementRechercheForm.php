@@ -146,6 +146,17 @@ class MiseEnPaiementRechercheForm extends AbstractForm
 
     /**
      *
+     * @param array $structures
+     */
+    public function populateStructures($structures)
+    {
+        $this->get('structure')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($structures));
+    }
+
+
+
+    /**
+     *
      * @param array $periodes
      */
     public function populatePeriodes($periodes)

@@ -191,7 +191,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
 
-            $anneeUniversitaire = $intervenant->getAnnee();//$this->getServiceExportRh()->getAnneeUniversitaireEnCours();
+            $anneeUniversitaire = $intervenant->getAnnee();
             $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
             $dateFin            = $anneeUniversitaire->getDateFin()->format('Y-m-d');
 
@@ -465,7 +465,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
-            $anneeUniversitaire = $intervenant->getAnnee();//$this->getServiceExportRh()->getAnneeUniversitaireEnCours();
+            $anneeUniversitaire = $intervenant->getAnnee();
 
             $dateEffet = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
             $dateFin   = $anneeUniversitaire->getDateFin()->format('Y-m-d');
@@ -667,7 +667,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             }
 
             if ($datas['generiqueFieldset']['iban']) {
-                $anneeUniversitaire = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
+                $anneeUniversitaire = $intervenant->getAnnee();
                 $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
                 $coordonnees        = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
 

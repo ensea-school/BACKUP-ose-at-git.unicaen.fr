@@ -8,6 +8,7 @@ use ExportRh\Connecteur\ConnecteurRhInterface;
 use ExportRh\Entity\IntervenantRh;
 use ExportRh\Form\Fieldset\SihamFieldset;
 use ExportRh\Service\ExportRhServiceAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use Laminas\Form\Fieldset;
 use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
 use Lieu\Service\VoirieServiceAwareTrait;
@@ -17,6 +18,7 @@ use UnicaenSiham\Service\Siham;
 
 class SihamConnecteur implements ConnecteurRhInterface
 {
+    use EntityManagerAwareTrait;
     use DossierServiceAwareTrait;
     use ExportRhServiceAwareTrait;
     use AdresseNumeroComplServiceAwareTrait;
@@ -189,7 +191,7 @@ class SihamConnecteur implements ConnecteurRhInterface
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
 
-            $anneeUniversitaire = $intervenant->getAnnee();//$this->getServiceExportRh()->getAnneeUniversitaireEnCours();
+            $anneeUniversitaire = $intervenant->getAnnee();
             $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
             $dateFin            = $anneeUniversitaire->getDateFin()->format('Y-m-d');
 
@@ -210,6 +212,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                 ];
 
             /*CONTRAT*/
+            //On récupére le nombre d'heures du contrat et le taux horaire appliqué
+            $infos  = $this->getInfosContrat($intervenant);
             $config = $this->siham->getConfig();
             if (array_key_exists('contrat', $this->siham->getConfig())) {
                 //On récupere le gradeTG pour le contrat
@@ -225,8 +229,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                          'modeRemuneration'  => $this->siham->getConfig()['contrat']['parameters']['modeRemuneration'],
                          'modeDeGestion'     => $this->siham->getConfig()['contrat']['parameters']['modeDeGestion'],
                          'gradeTG'           => $gradeTG,
-                         'tauxHoraires'      => '',
-                         'nbHeuresContrat'   => '',
+                         'tauxHoraires'      => $infos['taux'],
+                         'nbHeuresContrat'   => $infos['totalHeure'],
                          'temoinValidite'    => $this->siham->getConfig()['contrat']['parameters']['temoinValidite'],
                         ];
                 }
@@ -395,6 +399,26 @@ class SihamConnecteur implements ConnecteurRhInterface
 
 
 
+    public function getInfosContrat (Intervenant $intervenant): array
+    {
+        $infos = [
+            'totalHeure' => '',
+            'taux'       => '',
+        ];
+
+        $sql = 'SELECT "totalHETD","tauxHoraireValeur" FROM V_CONTRAT_MAIN WHERE intervenant_id = :intervenant';
+        $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['intervenant' => $intervenant->getId()]);
+
+        if (!empty($res)) {
+            $infos['totalHeure'] = str_replace(',', '.', $res[0]['totalHETD']);
+            $infos['taux']       = str_replace(',', '.', $res[0]['tauxHoraireValeur']);
+        }
+
+        return $infos;
+    }
+
+
+
     public function recupererGradeTG (string $codeStatut): ?string
     {
         $gradeTG = '';
@@ -441,7 +465,7 @@ class SihamConnecteur implements ConnecteurRhInterface
 
             /* Récupération du dossier de l'intervenant */
             $dossierIntervenant = $this->getServiceDossier()->getByIntervenant($intervenant);
-            $anneeUniversitaire = $intervenant->getAnnee();//$this->getServiceExportRh()->getAnneeUniversitaireEnCours();
+            $anneeUniversitaire = $intervenant->getAnnee();
 
             $dateEffet = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
             $dateFin   = $anneeUniversitaire->getDateFin()->format('Y-m-d');
@@ -470,6 +494,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                 ];
 
             /*CONTRAT*/
+            //On récupére le nombre d'heures du contrat et le taux horaire appliqué
+            $infos   = $this->getInfosContrat($intervenant);
             $config  = $this->siham->getConfig();
             $contrat = [];
 
@@ -489,8 +515,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                          'modeRemuneration'  => $this->siham->getConfig()['contrat']['parameters']['modeRemuneration'],
                          'modeDeGestion'     => $this->siham->getConfig()['contrat']['parameters']['modeDeGestion'],
                          'gradeTG'           => $gradeTG,
-                         'tauxHoraires'      => '43.5',
-                         'nbHeuresContrat'   => '20',
+                         'tauxHoraires'      => $infos['taux'],
+                         'nbHeuresContrat'   => $infos['totalHeure'],
                          'temoinValidite'    => $this->siham->getConfig()['contrat']['parameters']['temoinValidite'],
 
                         ];
@@ -640,9 +666,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                 $this->siham->modifierAdressePrincipaleAgent($params);
             }
 
-            //Fait planter les WS SIHAM....
-            /*if ($datas['generiqueFieldset']['iban']) {
-                $anneeUniversitaire = $this->getServiceExportRh()->getAnneeUniversitaireEnCours();
+            if ($datas['generiqueFieldset']['iban']) {
+                $anneeUniversitaire = $intervenant->getAnnee();
                 $dateEffet          = $anneeUniversitaire->getDateDebut()->format('Y-m-d');
                 $coordonnees        = $this->siham->formatCoordoonneesBancairesForSiham($dossierIntervenant->getIBAN(), $dossierIntervenant->getBIC());
 
@@ -660,8 +685,8 @@ class SihamConnecteur implements ConnecteurRhInterface
                     'temoinValidite' => '1',
                 ];
 
-                $this->siham->modifierCoordonnéesBancairesAgent($params);
-            }*/
+                $this->siham->modifierCoordonneesBancairesAgent($params);
+            }
 
             return true;
         } catch

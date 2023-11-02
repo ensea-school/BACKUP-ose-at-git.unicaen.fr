@@ -20,18 +20,18 @@ class OffreEmploiForm extends AbstractForm
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
 
-    public function init ()
+    public function init()
     {
         $this->spec(OffreEmploi::class, ['intervenant', 'autoValidation', 'validation']);
 
         $this->spec([
-            'description' => ['type' => 'Textarea'],
-            'structure' => ['type' => Structure::class],
+            'description' => ['type' => 'Textarea', 'input' => ['required' => true,],],
+            'structure'   => ['type' => Structure::class],
         ]);
 
         $this->build();
 
-        $tmDql       = "SELECT tm FROM " . TypeMission::class . " tm WHERE tm.histoDestruction IS NULL AND tm.annee = :annee";
+        $tmDql = "SELECT tm FROM " . TypeMission::class . " tm WHERE tm.histoDestruction IS NULL AND tm.annee = :annee";
         $tmDqlParams = ['annee' => $this->getServiceContext()->getAnnee()];
 
         $this->setValueOptions('typeMission', $tmDql, $tmDqlParams);

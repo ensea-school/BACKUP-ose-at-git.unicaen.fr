@@ -169,7 +169,7 @@ class SuiviAssertion extends AbstractAssertion
         }
 
         // OK si =
-        return $role->getStructure() === $structure;
+        return $structure->inStructure($role->getStructure());
     }
 
 }

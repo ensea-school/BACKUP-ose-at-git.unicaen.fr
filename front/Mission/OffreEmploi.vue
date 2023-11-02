@@ -89,7 +89,7 @@
 
         </p>
         <p>
-            {{ this.offre.description.replace(/(?:\r\n|\r|\n)/g, '<br/>')}}
+            {{ this.descriptionHtml }}
         </p>
         <p v-if="this.decretText" class="alert alert-info">
             <input id="decret" v-model="decret" name="decret" type="checkbox">&nbsp;
@@ -227,6 +227,9 @@ export default {
             return false;
         },
         shortDesc: function () {
+            if (!this.offre.description){
+                return '';
+            }
             let shorDesc = this.offre.description.substr(0, 200);
             if (this.offre.description.length > 200) {
                 shorDesc += '...';
@@ -234,6 +237,9 @@ export default {
             return shorDesc;
         },
         descriptionHtml: function () {
+            if (!this.offre.description){
+                return '';
+            }
             return this.offre.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
         },
         connectionLink: function () {

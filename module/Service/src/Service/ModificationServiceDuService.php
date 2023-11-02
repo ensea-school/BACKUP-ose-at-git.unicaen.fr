@@ -94,8 +94,8 @@ class ModificationServiceDuService extends AbstractEntityService
 
         $sql = "SELECT * FROM V_MODIF_SERVICE_DU_EXPORT_CSV WHERE annee_id = :annee";
         if ($structure) {
-            $sql                 .= " AND structure_id = :structure";
-            $params['structure'] = $structure->getId();
+            $sql                 .= " AND structure_ids LIKE :structure";
+            $params['structure'] = $structure->idsFilter();
         }
 
         $data = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);

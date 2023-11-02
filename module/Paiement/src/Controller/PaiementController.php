@@ -634,6 +634,34 @@ class PaiementController extends AbstractController
     }
 
 
+    public function pilotageAction()
+    {
+        return [];
+    }
+
+
+
+    public function ecartsEtatsACtion()
+    {
+
+        //Contexte année et structure
+        $annee = $this->getServiceContext()->getAnnee();
+        $structure = $this->getServiceContext()->getStructure();
+
+        $filters['ANNEE_ID'] = $annee->getId();
+        if ($structure) {
+            $filters['STRUCTURE_IDS'] = $structure->idsFilter();
+        }
+        //On récupére l'état de sortie pour l'export des agréments
+        $etatSortie = $this->getServiceEtatSortie()->getRepo()->findOneBy(['code' => 'ecarts-heures-complementaire']);
+        $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters);
+        $csvModel->setFilename('ecarts-heures-complementaires-' . $annee->getId() . '.csv');
+
+        return $csvModel;
+    }
+
+
+
     /**
      * @param Intervenant $intervenant
      */

@@ -4,6 +4,7 @@ namespace Paiement;
 
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
+use Paiement\Controller\PaiementController;
 use Paiement\Tbl\Process\PaiementProcess;
 use Paiement\Tbl\Process\PaiementProcessFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
@@ -52,7 +53,7 @@ return [
                     'action'     => 'extractionPaie',
                 ],
                 'extraction-paie-prime' => [
-                    'route' => '/extraction-paie-prime[/:periode]',
+                    'route'      => '/extraction-paie-prime[/:periode]',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'extractionPaiePrime',
                 ],
@@ -63,6 +64,18 @@ return [
                     'defaults'   => [
                         'etat' => Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
                     ],
+                ],
+                'pilotage'              => [
+                    'route'      => '/pilotage',
+                    'controller' => Controller\PaiementController::class,
+                    'action'     => 'pilotage',
+                    'privileges' => Privileges::PILOTAGE_VISUALISATION,
+                ],
+                'ecarts-etats'          => [
+                    'route'      => '/ecarts-etats',
+                    'action'     => 'ecartsEtats',
+                    'controller' => Controller\PaiementController::class,
+                    'privileges' => Privileges::PILOTAGE_ECARTS_ETATS,
                 ],
             ],
         ],
@@ -147,8 +160,8 @@ return [
                             'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                         ],
                         'extraction-paie-prime' => [
-                            'label' => "Extraction des indemnités de fin de contrat",
-                            'title' => "Export des données pour payer les indemnités de fin de contrat des étudiantes",
+                            'label'    => "Extraction des indemnités de fin de contrat",
+                            'title'    => "Export des données pour payer les indemnités de fin de contrat des étudiantes",
                             'route'    => 'paiement/extraction-paie-prime',
                             'resource' => Privileges::getResourceId(Privileges::MISSION_PRIME_GESTION),
                         ],
@@ -160,6 +173,24 @@ return [
                             'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                         ],
                     ],
+                ],
+                'pilotage' => [
+                    'label' => 'Pilotage',
+                    'title' => 'Pilotage',
+                    'icon'  => 'fas fa-chart-line',
+                    'route'    => 'paiement/pilotage',
+                    'resource' => PrivilegeController::getResourceId(PaiementController::class, 'pilotage'),
+                    'pages' => [
+                        'ecarts-etats' => [
+                            'label'       => 'Ecarts d\'heures complémentaires (CSV)',
+                            'title'       => 'Ecarts d\'heures complémentaires (CSV)',
+                            'description' => 'Export CSV des HETD (ne porte que sur les heures complémentaires et non sur le service dû)',
+                            'route'       => 'paiement/ecarts-etats',
+                            'resource'    => PrivilegeController::getResourceId(PaiementController::class, 'ecartsEtats'),
+                        ],
+                    ],
+                    'order' => 20,
+                    'color' => '#00A020',
                 ],
             ],
         ],

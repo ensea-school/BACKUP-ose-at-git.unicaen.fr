@@ -57,8 +57,7 @@ return [
     ],
 
     'navigation' => [
-      
-        'administration' => [
+       'administration' => [
             'pages' => [
                 'rh' => [
                     'pages' => [
@@ -68,6 +67,20 @@ return [
                             'resource' => PrivilegeController::getResourceId(MotifModificationServiceController::class, 'index'),
                             'order'    => 40,
                             'color'    => '#BBCF55',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'gestion' => [
+            'pages' => [
+                'pilotage' => [
+                    'pages'    => [
+                        'modification-service-du-export-csv' => [
+                            'label'    => "Modifications de service dû (CSV)",
+                            'title'    => "Modifications de service dû (CSV)",
+                            'route'    => 'modification-service-du/export-csv',
+                            'resource' => PrivilegeController::getResourceId(ModificationServiceDuController::class, 'export-csv'),
                         ],
                     ],
                 ],
@@ -88,7 +101,6 @@ return [
                 ],
             ],
         ],
-
     ],
 
     'rules' => [

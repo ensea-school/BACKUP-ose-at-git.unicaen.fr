@@ -2,7 +2,8 @@ CREATE OR REPLACE FORCE VIEW V_MODIF_SERVICE_DU_EXPORT_CSV AS
 SELECT
   i.annee_id                      annee_id,
   i.id                            intervenant_id,
-  i.structure_id                  structure_id,
+  s.id                            structure_id,
+  s.ids                           structure_ids,
 
   a.libelle                       annee,
   s.libelle_court                 structure_libelle,

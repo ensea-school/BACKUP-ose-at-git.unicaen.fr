@@ -156,7 +156,7 @@ class EtatSortieService extends AbstractEntityService
         $role = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
 
 
-        if (trim($etatSortie->getCsvTraitement())) {
+        if (trim($etatSortie->getCsvTraitement() ?? '')) {
             $__PHP__CODE__TRAITEMENT__ = $etatSortie->getCsvTraitement();
             // Isolation de traitement pour éviter tout débordement...
             $traitement = function () use ($csv, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {

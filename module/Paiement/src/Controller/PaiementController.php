@@ -513,12 +513,14 @@ class PaiementController extends AbstractController
         $this->initFilters();
         $periode = $this->params()->fromRoute('periode');
         $annee = $this->getServiceContext()->getAnnee();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         if (empty($periode)) {
             $periodes = $this->getServicePeriode()->getPaiement();
         } else {
             $periode = $this->getServicePeriode()->getByCode($periode);
             $recherche = new MiseEnPaiementRecherche;
             $recherche->setAnnee($annee);
+            $recherche->setStructure($role->getStructure());
             $recherche->setPeriode($periode);
             $filters = $recherche->getFilters();
 
@@ -548,6 +550,7 @@ class PaiementController extends AbstractController
         $recherche = new MiseEnPaiementRecherche;
         $recherche->setEtat(MiseEnPaiement::MIS_EN_PAIEMENT); // données à mettre en paiement uniquement
         $recherche->setAnnee($this->getServiceContext()->getAnnee());
+        $recherche->setStructure($role->getStructure());
         $recherche->setTypeIntervenant($typeIntervenant);
 
         $rechercheForm = $this->getFormPaiementMiseEnPaiementRecherche();

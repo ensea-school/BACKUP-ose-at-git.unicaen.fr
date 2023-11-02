@@ -1,7 +1,8 @@
-CREATE OR REPLACE FORCE VIEW V_EXPORT_PAIEMENT_WINPAIE AS
+CREATE OR REPLACE VIEW V_EXPORT_PAIEMENT_WINPAIE AS
 SELECT annee_id,
        type_intervenant_id,
        structure_id,
+       structure_ids,
        periode_id,
        intervenant_id,
        insee,
@@ -22,6 +23,7 @@ FROM (SELECT i.annee_id                                                         
              ti.id                                                                                             type_intervenant_id,
              ti.code                                                                                           type_intervenant_code,
              t2.structure_id                                                                                   structure_id,
+             t2.structure_ids                                                                                  structure_ids,
              t2.periode_paiement_id                                                                            periode_id,
              i.id                                                                                              intervenant_id,
              CASE
@@ -42,6 +44,7 @@ FROM (SELECT i.annee_id                                                         
              si.type_paie_prime																				   type_paie_prime,
              si.mode_calcul_prime																			   mode_calcul_prime
       FROM (SELECT structure_id,
+                   structure_ids,
                    periode_paiement_id,
                    intervenant_id,
                    code_origine,
@@ -53,7 +56,8 @@ FROM (SELECT i.annee_id                                                         
             FROM (WITH mep AS (SELECT
                                    -- pour les filtres
                                    mep.id,
-                                   mis.structure_id,
+                                   str.id structure_id,
+                                   str.ids structure_ids,
                                    mep.periode_paiement_id,
                                    mis.intervenant_id,
                                    mep.heures,
@@ -68,11 +72,13 @@ FROM (SELECT i.annee_id                                                         
                                              ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
                                         JOIN centre_cout cc ON cc.id = mep.centre_cout_id
                                         JOIN type_heures th ON th.id = mep.type_heures_id
+                                        JOIN structure str ON str.id = mis.structure_id
                                WHERE mep.date_mise_en_paiement IS NOT NULL
                                  AND mep.periode_paiement_id IS NOT NULL
                                  AND th.eligible_extraction_paie = 1)
                   SELECT mep.id,
                          mep.structure_id,
+                         mep.structure_ids,
                          mep.periode_paiement_id,
                          mep.intervenant_id,
                          2             code_origine,
@@ -87,7 +93,8 @@ FROM (SELECT i.annee_id                                                         
                   UNION ALL
 
                   SELECT mep.id,
-                         mep.structure_id,
+                         str.id structure_id,
+                         str.ids structure_ids,
                          mep.periode_paiement_id,
                          mep.intervenant_id,
                          1             code_origine,
@@ -97,8 +104,10 @@ FROM (SELECT i.annee_id                                                         
                          mep.taux_horaire,
                          mep.taux_conges_payes
                   FROM mep
+                    JOIN structure str ON str.id = mep.structure_id
                   WHERE mep.heures_ac > 0) t1
             GROUP BY structure_id,
+                     structure_ids,
                      periode_paiement_id,
                      intervenant_id,
                      code_origine,

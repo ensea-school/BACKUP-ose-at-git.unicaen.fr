@@ -28,6 +28,9 @@ return [
     "STRUCTURE_ID": {
         "visible": false
     },
+    "STRUCTURE_IDS": {
+        "visible": false
+    },
     "PERIODE_ID": {
         "visible": false
     },
@@ -150,6 +153,9 @@ return [
     "STRUCTURE_ID": {
         "visible": false
     },
+    "STRUCTURE_IDS": {
+        "visible": false
+    },
     "PERIODE_ID": {
         "visible": false
     },
@@ -207,6 +213,9 @@ return [
         "visible": false
     },
     "STRUCTURE_ID": {
+        "visible": false
+    },
+    "STRUCTURE_IDS": {
         "visible": false
     },
     "PERIODE_ID": {

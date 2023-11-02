@@ -13,12 +13,13 @@ WITH heures_paie_mission AS(
 		tp.mission_id
 )
 SELECT
-	t.annee_id           				annee_id,
-	ti.id				 				type_intervenant,
-	i.structure_id		 				structure_id,
-	t.periode_id         				periode_id,
-	t.periode_code						periode_code,
-	i.id				 				intervenant_id,
+	t.annee_id           			annee_id,
+	ti.id				 		    type_intervenant,
+	str.id	   	 				    structure_id,
+    str.ids	   	 	                structure_ids,
+	t.periode_id         			periode_id,
+	t.periode_code		   			periode_code,
+	i.id         			        intervenant_id,
 	CASE
      WHEN i.numero_insee IS NULL
      THEN '''' || TRIM(d.numero_insee)
@@ -71,3 +72,4 @@ JOIN intervenant i ON t.intervenant_id = i.id
 LEFT JOIN intervenant_dossier d ON d.intervenant_id = i.id AND d.histo_destruction IS NULL
 JOIN statut s ON s.id = i.statut_id
 JOIN type_intervenant ti ON ti.id = s.type_intervenant_id
+LEFT JOIN structure str ON str.id = i.structure_id

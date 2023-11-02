@@ -2,6 +2,7 @@ CREATE OR REPLACE FORCE VIEW V_EXPORT_PAIEMENT_SIHAM AS
 SELECT annee_id,
        type_intervenant_id,
        structure_id,
+       structure_ids,
        periode_id,
        CASE WHEN type_paie IS NOT NULL THEN type_paie ELSE 'P' END       type,
        code_rh                                                           matricule,
@@ -28,6 +29,7 @@ FROM (SELECT i.annee_id                                                         
              ti.code                                                                                           type_intervenant_code,
              i.code_rh                                                                                         code_rh,
              t2.structure_id                                                                                   structure_id,
+             t2.structure_ids                                                                                  structure_ids,
              s.libelle_court                                                                                   structure_libelle,
              s.source_code                                                                                     structure_code,
              t2.periode_paiement_id                                                                            periode_id,
@@ -51,6 +53,7 @@ FROM (SELECT i.annee_id                                                         
              si.type_paie_prime																				   type_paie_prime,
              si.mode_calcul_prime																			   mode_calcul_prime
       FROM (SELECT structure_id,
+                   structure_ids,
                    periode_paiement_id,
                    intervenant_id,
                    code_origine,
@@ -62,7 +65,8 @@ FROM (SELECT i.annee_id                                                         
             FROM (WITH mep AS (SELECT
                                    -- pour les filtres
                                    mep.id,
-                                   mis.structure_id,
+                                   str.id structure_id,
+                                   str.ids structure_ids,
                                    mep.periode_paiement_id,
                                    mis.intervenant_id,
                                    mep.heures,
@@ -77,11 +81,13 @@ FROM (SELECT i.annee_id                                                         
                                              ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
                                         JOIN centre_cout cc ON cc.id = mep.centre_cout_id
                                         JOIN type_heures th ON th.id = mep.type_heures_id
+                                        JOIN structure str ON str.id = mis.structure_id
                                WHERE mep.date_mise_en_paiement IS NOT NULL
                                  AND mep.periode_paiement_id IS NOT NULL
                                  AND th.eligible_extraction_paie = 1)
                   SELECT mep.id,
-                         mep.structure_id,
+                         str.id structure_id,
+                         str.ids structure_ids,
                          mep.periode_paiement_id,
                          mep.intervenant_id,
                          2             code_origine,
@@ -90,13 +96,14 @@ FROM (SELECT i.annee_id                                                         
                          mep.date_mise_en_paiement,
                          mep.taux_horaire,
 						 mep.taux_conges_payes
-                  FROM mep
+                  FROM mep JOIN structure str ON str.id = mep.structure_id
                   WHERE mep.heures_aa > 0
 
                   UNION ALL
 
                   SELECT mep.id,
-                         mep.structure_id,
+                         str.id structure_id,
+                         str.ids structure_ids,
                          mep.periode_paiement_id,
                          mep.intervenant_id,
                          1             code_origine,
@@ -105,9 +112,10 @@ FROM (SELECT i.annee_id                                                         
                          mep.date_mise_en_paiement,
 						 mep.taux_horaire,
                          mep.taux_conges_payes
-                  FROM mep
+                  FROM mep JOIN structure str ON str.id = mep.structure_id
                   WHERE mep.heures_ac > 0) t1
             GROUP BY structure_id,
+                     structure_ids,
                      periode_paiement_id,
                      intervenant_id,
                      code_origine,

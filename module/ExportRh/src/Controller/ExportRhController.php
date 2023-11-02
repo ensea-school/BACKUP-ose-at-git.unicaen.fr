@@ -195,7 +195,7 @@ class ExportRhController extends AbstractController
             $nameConnecteur = $this->exportRhService->getConnecteurName();
             $form           = $this->getFormExportRh($intervenant);
             $form->bind($intervenantDossier);
-            //On essaie de mettre l'affectation par défaut en comparant les libellés cours des structures (OSE/SIHAM)
+            //On essaie de mettre l'affectation par défaut en comparant les libellés courts des structures (OSE/SIHAM)
             $form->setAffectationDefault($intervenant);
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());

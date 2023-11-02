@@ -70,30 +70,36 @@ class EtapeService extends AbstractEntityService
      * @return string
      */
 
-    public function getEtapeCentreCoutReconductible($structure)
+    public function getEtapeCentreCoutReconductible(Structure $structure)
     {
         $annee = $this->getServiceContext()->getAnnee()->getId();
 
 
         $sql = '
         SELECT 
-            count(*) as nb_centre_cout,
-            etape_id,
-            etape_code,
-            etape_libelle
+          count(*) as nb_centre_cout,
+          etape_id,
+          etape_code,
+          etape_libelle
         FROM 
-            V_RECONDUCTION_CENTRE_COUT 
+          V_RECONDUCTION_CENTRE_COUT 
         WHERE
-            annee_id = :annee
-            AND structure_id = ' . $structure->getId();
+          annee_id = :annee
+          AND structure_ids LIKE :structure
+        GROUP BY
+          etape_id,
+          etape_code,
+          etape_libelle
+        ORDER BY 
+          etape_id ASC
+        ';
 
-        $sql .= 'GROUP BY
-                   etape_id,
-                   etape_code,
-                   etape_libelle
-                ORDER BY etape_id ASC';
+        $params = [
+            'annee' => $annee,
+            'structure' => $structure->idsFilter(),
+        ];
 
-        $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['annee' => $annee]);
+        $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
         $etapes = [];
         foreach ($result as $etape) {
             $etapes[$etape['ETAPE_CODE']] = $etape;
@@ -118,23 +124,29 @@ class EtapeService extends AbstractEntityService
 
         $sql = '
         SELECT 
-            count(*) as nb_modulateur,
-            etape_id,
-            etape_code,
-            etape_libelle
+          count(*) as nb_modulateur,
+          etape_id,
+          etape_code,
+          etape_libelle
         FROM 
-            V_RECONDUCTION_MODULATEUR 
+          V_RECONDUCTION_MODULATEUR 
         WHERE
-            annee_id = :annee
-            AND structure_id = ' . $structure->getId();
+          annee_id = :annee
+          AND structure_ids LIKE :structure
+        GROUP BY
+          etape_id,
+          etape_code,
+          etape_libelle
+        ORDER BY 
+          etape_id ASC
+        ';
 
-        $sql .= 'GROUP BY
-                   etape_id,
-                   etape_code,
-                   etape_libelle
-                ORDER BY etape_id ASC';
+        $params = [
+            'annee' => $annee,
+            'structure' => $structure->idsFilter(),
+        ];
 
-        $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, ['annee' => $annee]);
+        $result = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
         $etapes = [];
         foreach ($result as $etape) {
             $etapes[$etape['ETAPE_CODE']] = $etape;

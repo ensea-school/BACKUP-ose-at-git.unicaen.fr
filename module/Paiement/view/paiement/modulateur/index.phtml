@@ -70,7 +70,7 @@ foreach ($typeModulateurs as $tm) {
                                             } else $infoBulle = ''; ?>
                                             <?php echo ($infoBulle ? '<abbr title="' . $infoBulle . '">' : '') . $tms->getStructure()->getLibelleCourt();
                                             echo($infoBulle ? '</abbr>' : '');
-                                            if ($canEdit) { ?>
+                                            if ($this->isAllowed($tms, Privileges::MODULATEUR_EDITION)){ ?>
                                                 <a style="position:relative; left:10px;" class="ajax-modal"
                                                    data-event="modulateur-saisie"
                                                    href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId(), 'typeModulateurStructure' => $tms->getId()]) ?>"

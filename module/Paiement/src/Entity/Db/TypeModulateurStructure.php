@@ -2,6 +2,7 @@
 
 namespace Paiement\Entity\Db;
 use Application\Entity\Db\Annee;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\TypeInterventionStructure;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -9,7 +10,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 /**
  * TypeModulateurStructure
  */
-class TypeModulateurStructure implements HistoriqueAwareInterface
+class TypeModulateurStructure implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
 
@@ -47,6 +48,13 @@ class TypeModulateurStructure implements HistoriqueAwareInterface
     public function getId()
     {
         return $this->id;
+    }
+
+
+
+    public function getResourceId(): string
+    {
+        return 'TypeModulateurStructure';
     }
 
 

@@ -15,9 +15,7 @@ $head = [
     'source'      => '<abbr title="Source de données">Src</abbr>/Actions',
 ];
 
-if ($structure) unset($head['structure']);
-
-$canEdit  = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_AFFECTATION_EDITION));
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_AFFECTATION_EDITION));
 $ajoutUrl = $this->url('droits/affectations/edition');
 
 ?>
@@ -39,16 +37,13 @@ $ajoutUrl = $this->url('droits/affectations/edition');
         $suppressionUrl = $this->url('droits/affectations/suppression', ['affectation' => $affectation->getId()]);
         ?>
         <tr>
-            <?php if (!$structure): ?>
-
-                <td><?php
-                    $str = (string)$affectation->getStructure();
-                    if ('' == $str) {
-                        $str = '<span class="bg-info">&Eacute;tablissement</span>';
-                    }
-                    echo $str;
-                    ?></td>
-            <?php endif; ?>
+            <td><?php
+                $str = (string)$affectation->getStructure();
+                if ('' == $str) {
+                    $str = '<span class="bg-info">&Eacute;tablissement</span>';
+                }
+                echo $str;
+                ?></td>
             <td><?= $affectation->getRole() ?></td>
             <td><?= $affectation->getUtilisateur() ?></td>
             <td style="text-align: center;width:1%;white-space: nowrap"><?php

@@ -104,6 +104,11 @@ return [
             'resources'  => ['TypeModulateur', 'Structure'],
             'assertion'  => Assertion\ModulateurAssertion::class,
         ],
+        [
+            'privileges' => Privileges::MODULATEUR_EDITION,
+            'resources'  => ['TypeModulateurStructure'],
+            'assertion'  => Assertion\ModulateurAssertion::class,
+        ],
     ],
 
     'services' => [

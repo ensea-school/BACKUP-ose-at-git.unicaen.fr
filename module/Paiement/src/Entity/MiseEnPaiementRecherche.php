@@ -89,7 +89,7 @@ class MiseEnPaiementRecherche
             $filters['ANNEE_ID'] = $a->getId();
         }
         if ($s = $this->getStructure()) {
-            $filters['STRUCTURE_ID'] = $s->getId();
+            $filters['STRUCTURE_IDS'] = $s->idsFilter();
         }
         if ($p = $this->getPeriode()) {
             $filters['PERIODE_ID'] = $p->getId();

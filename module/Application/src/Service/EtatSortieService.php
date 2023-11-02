@@ -233,7 +233,7 @@ class EtatSortieService extends AbstractEntityService
                         $line[$k] = (float)$v;
                         break;
                     case 'date':
-                        $date = \DateTime::createFromFormat('Y-m-d H:i:s', $v);
+                        $date = $v ? \DateTime::createFromFormat('Y-m-d H:i:s', $v) : null;
                         if ($date instanceof \DateTime) {
                             $format = isset($params[$k]['format']) ? $params[$k]['format'] : Constants::DATE_FORMAT;
                             $line[$k] = $date->format($format);

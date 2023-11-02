@@ -294,7 +294,9 @@ return [
         'CSV_PARAMS'     => '{
     "ANNEE_ID"                  : { "visible": false },
     "TYPE_INTERVENANT_ID"       : { "visible": false },
+    "STATUT_ID"                 : { "visible": false },
     "STRUCTURE_ID"              : { "visible": false },
+    "STRUCTURE_IDS"             : { "visible": false },
     "PERIODE_ID"                : { "visible": false },
     "INTERVENANT_ID"            : { "visible": false },
     "CENTRE_COUT_ID"            : { "visible": false },

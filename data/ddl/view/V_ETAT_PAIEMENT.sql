@@ -4,6 +4,7 @@ SELECT
   type_intervenant_id,
   statut_id,
   structure_id,
+  structure_ids,
   periode_id,
   intervenant_id,
   centre_cout_id,
@@ -47,6 +48,7 @@ FROM
     SELECT
       periode_id,
       structure_id,
+      structure_ids,
       type_intervenant_id,
       statut_id,
       intervenant_id,
@@ -83,6 +85,7 @@ FROM
       SELECT
         periode_id,
         structure_id,
+        structure_ids,
         type_intervenant_id,
         statut_id,
         intervenant_id,
@@ -115,6 +118,7 @@ FROM
           CASE WHEN th.code = 'fc_majorees' THEN 1 ELSE 0 END                 is_fc_majoree,
           p.id                                                                periode_id,
           s.id                                                                structure_id,
+          s.ids                                                               structure_ids,
           i.id                                                                intervenant_id,
           si.id                                                               statut_id,
           i.annee_id                                                          annee_id,
@@ -176,6 +180,7 @@ FROM
       GROUP BY
         periode_id,
         structure_id,
+        structure_ids,
         type_intervenant_id,
         statut_id,
         intervenant_id,

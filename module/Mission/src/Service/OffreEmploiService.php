@@ -75,7 +75,7 @@ class OffreEmploiService extends AbstractEntityService
         $dql .= dqlAndWhere([
             'offreEmploi' => 'oe',
             'annee'       => 'tm.annee',
-            'structure'   => 'str',
+            'structure'   => 'str.ids',
 
         ], $parameters);
 

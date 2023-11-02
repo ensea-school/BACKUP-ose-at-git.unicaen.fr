@@ -123,7 +123,8 @@ function dqlAndWhere(array $filters, array $parameters): string
             } elseif ($value == 'IS NOT NULL') {
                 $dqlFilters .= "\nAND " . $filters[$name] . ' IS NOT NULL';
             } else {
-                $dqlFilters .= "\nAND " . $filters[$name] . ' = :' . $name;
+                $op = str_contains($value, '%') ? 'LIKE' : '=';
+                $dqlFilters .= "\nAND " . $filters[$name] . ' '.$op.' :' . $name;
             }
         }
     }

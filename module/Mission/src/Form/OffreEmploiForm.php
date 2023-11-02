@@ -36,7 +36,7 @@ class OffreEmploiForm extends AbstractForm
 
         $this->setValueOptions('typeMission', $tmDql, $tmDqlParams);
 
-        $this->get('structure')->setAttributes(['class' => 'selectpicker', 'data-live-search' => true]);
+        $this->get('structure')->setOption('enseignement', false);
 
         $this->setLabels([
             'structure'    => 'Composante proposant l\'offre',
@@ -49,47 +49,6 @@ class OffreEmploiForm extends AbstractForm
             'description'  => 'Descriptif de l\'offre',
             'titre'        => 'Titre de l\'offre',
         ]);
-
-        $this->spec([
-            'dateLimite'   => [
-                'input' => [
-                    'required' => true,
-                ],
-            ],
-            'dateDebut'    => [
-                'input' => [
-                    'required' => true,
-                ],
-            ],
-            'dateFin'      => [
-                'input' => [
-                    'required' => true,
-                ],
-            ],
-            'nombreHeures' => [
-                'input' => [
-                    'required' => true,
-                ],
-            ],
-            'typeMission'  => [
-                'input' => [
-                    'required' => true,
-                ],
-            ],
-            'titre'        => [
-                'input' => [
-                    'required' => true,
-                ],
-            ],
-            'description'  => [
-                'input' => [
-                    'required' => true,
-                ],
-            ],
-
-
-        ]);
-
 
         $this->addSubmit();
     }

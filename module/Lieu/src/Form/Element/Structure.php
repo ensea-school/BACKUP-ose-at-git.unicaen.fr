@@ -33,7 +33,7 @@ class Structure extends Select
 
     public function isContextFilter(): bool
     {
-        return $this->getOption('context_filter');
+        return $this->getOption('context_filter') ?? true;
     }
 
 
@@ -49,7 +49,7 @@ class Structure extends Select
 
     public function isEnseignement(): bool
     {
-        return $this->getOption('enseignement');
+        return $this->getOption('enseignement') ?? true;
     }
 
 

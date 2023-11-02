@@ -100,7 +100,7 @@ class  OffreEmploiController extends AbstractController
 
         if ($canEdit) {
             if ($role->getStructure()) {
-                $params['structure'] = $role->getStructure();
+                $params['structure'] = $role->getStructure()->idsFilter();
             }
 
             return $this->getServiceOffreEmploi()->data($params, $role);

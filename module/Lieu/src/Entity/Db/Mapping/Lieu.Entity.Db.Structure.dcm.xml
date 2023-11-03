@@ -11,6 +11,7 @@
     <field name="enseignement" type="boolean" column="ENSEIGNEMENT" nullable="false"/>
     <field name="affAdresseContrat" type="boolean" column="AFF_ADRESSE_CONTRAT" nullable="false"/>
     <field name="ids" type="string" column="IDS" length="1000" nullable="true"/>
+    <field name="libellesCourts" type="string" column="LIBELLES_COURTS" length="4000" nullable="true"/>
 
     <field name="adressePrecisions" type="string" column="ADRESSE_PRECISIONS" length="240" nullable="true"/>
     <field name="adresseNumero" type="string" column="ADRESSE_NUMERO" length="4" nullable="true"/>

@@ -76,7 +76,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
     FOR str IN (
       SELECT
         id, COALESCE(ids,'-') oids,
-        SYS_CONNECT_BY_PATH(id, '-') || '-' nids
+        SYS_CONNECT_BY_PATH(id, '-') || '-' nids,
+        COALESCE(libelles_courts, '||') olibelles_courts,
+        SYS_CONNECT_BY_PATH(libelle_court, '||') || '||' nlibelles_courts
       FROM
         structure
       CONNECT BY
@@ -86,9 +88,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
       IF str.oids <> str.nids THEN
         UPDATE structure SET ids = str.nids WHERE id = str.id;
       END IF;
+      IF str.olibelles_courts <> str.nlibelles_courts THEN
+        UPDATE structure SET libelles_courts = str.nlibelles_courts WHERE id = str.id;
+      END IF;
     END LOOP;
 
-    -- mise à 1 du témoin enseignement si deséléments sont dans la structure
+    -- mise à 1 du témoin enseignement si des éléments sont dans la structure
     FOR str IN (
       SELECT DISTINCT
         ep.structure_id id

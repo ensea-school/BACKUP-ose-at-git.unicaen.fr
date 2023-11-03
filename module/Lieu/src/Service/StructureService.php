@@ -294,7 +294,7 @@ class StructureService extends AbstractEntityService
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
-        $qb->addOrderBy("$alias.libelleCourt");
+        $qb->addOrderBy("$alias.libellesCourts");
 
         return $qb;
     }

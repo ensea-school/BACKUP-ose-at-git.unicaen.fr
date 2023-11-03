@@ -1370,6 +1370,7 @@ return [
         'ADRESSE_VOIRIE_ID',
         'STRUCTURE_ID',
         'IDS',
+        'LIBELLES_COURTS',
     ],
     'SYNC_LOG'                       => [
         'ID',

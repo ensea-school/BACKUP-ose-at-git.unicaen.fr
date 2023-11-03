@@ -46,6 +46,8 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
     protected ?string $ids = null;
 
+    protected ?string $libellesCourts = null;
+
     protected Collection $structures;
 
 
@@ -78,6 +80,21 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     {
         return $this->ids;
     }
+
+
+
+    public function getLevel(): int
+    {
+        return substr_count($this->ids, '-') - 2;
+    }
+
+
+
+    public function getLibellesCourts(): ?string
+    {
+        return $this->libellesCourts;
+    }
+
 
 
 

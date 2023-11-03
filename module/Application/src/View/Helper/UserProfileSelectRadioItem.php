@@ -6,6 +6,7 @@ use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait as StructureServiceAwareTrait;
 use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
+use UnicaenApp\View\Helper\TagViewHelper;
 use UnicaenUtilisateur\View\Helper\UserProfileSelectRadioItem as UnicaenAuthViewHelper;
 
 /**
@@ -33,18 +34,37 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
         $perimetre = $this->role ? $this->role->getPerimetre() : null;
 
         if ($this->role->getPeutChangerStructure() && $perimetre && $perimetre->isEtablissement()) {
-            $selectClass = 'user-profile-select-input-structure';
+            $value = $this->getStructure() ? $this->getStructure()->getId() : null;
 
-            $select = new \Laminas\Form\Element\Select('structure-' . $this->role->getRoleId());
-            $select
-                ->setEmptyOption("(Aucune)")
-                ->setValueOptions($this->getStructures())
-                ->setValue($this->getStructure() ? $this->getStructure()->getId() : null)
-                ->setAttribute('class', $selectClass)
-                ->setAttribute('onchange', 'Util.userProfileStructureChange(this)')
-                ->setAttribute('title', "Cliquez pour sélectionner la structure associée au profil $this->role");
+            /** @var TagViewHelper $tag */
+            $tag = $this->getView()->tag();
 
-            $html .= ' ' . $this->getView()->formSelect($select);
+            $html .= $tag('select', [
+                'name' => 'structure-'.$this->role->getRoleId(),
+                'class' => 'user-profile-select-input-structure',
+                'onchange' => 'Util.userProfileStructureChange(this)',
+                'title' => 'Cliquez pour sélectionner la structure associée au profil '.$this->role,
+            ])->open();
+
+            $attrs = [
+                'value' => ''
+            ];
+            if (empty($value)){
+                $attrs['selected'] = 'selected';
+            }
+            $html .= $tag('option', $attrs)->html('- toutes structures -');
+
+            $structures = $this->getStructures();
+            foreach( $structures as $id => $label){
+                $attrs = [
+                    'value' => $id
+                ];
+                if ($value == $id){
+                    $attrs['selected'] = 'selected';
+                }
+                $html .= $tag('option', $attrs)->html($label);
+            }
+            $html .= '</select>'."\n";
         }
 
         return $html;
@@ -87,7 +107,7 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
             $s                   = $this->getServiceStructure()->getList($qb);
             $session->structures = [];
             foreach ($s as $structure) {
-                $session->structures[$structure->getId()] = (string)$structure;
+                $session->structures[$structure->getId()] = str_repeat('&nbsp;', $structure->getLevel()*4).(string)$structure;
             }
         }
 

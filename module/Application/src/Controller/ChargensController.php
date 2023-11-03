@@ -252,7 +252,7 @@ class ChargensController extends AbstractController
 
         if ($scenario) {
             if (($ss = $scenario->getStructure()) && ($cs = $this->getServiceContext()->getStructure())) {
-                if ($ss != $cs) {
+                if (!$ss->inStructure($cs)) {
                     throw new UnAuthorizedException('Les données appartiennent à une autre composante. Vous ne pouvez pas y accéder');
                 }
             }

@@ -224,13 +224,12 @@ class SeuilChargeService extends AbstractEntityService
                 $cStructure = $scenario->getStructure();
             }
 
-            if ($cStructure) {
-                $structures = [$cStructure->getId() => $cStructure];
-            } else {
-                $qb = $this->getServiceStructure()->finderByHistorique();
-                $this->getServiceStructure()->finderByEnseignement($qb);
-                $structures = $this->getServiceStructure()->getList($qb);
+            $qb = $this->getServiceStructure()->finderByHistorique();
+            $this->getServiceStructure()->finderByEnseignement($qb);
+            if ($cStructure){
+                $this->getServiceStructure()->finderByStructure($cStructure, $qb);
             }
+            $structures = $this->getServiceStructure()->getList($qb);
 
             foreach ($structures as $structure) {
                 $res[$structure->getId()] = $structure->getLibelleCourt();

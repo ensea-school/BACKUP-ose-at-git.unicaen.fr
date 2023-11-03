@@ -13,6 +13,7 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Referentiel\Controller\ServiceReferentielController;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Service\Assertion\ServiceAssertionAwareTrait;
@@ -151,6 +152,12 @@ class ReferentielAssertion extends AbstractAssertion
                         return $this->assertValidationValidation($role, $entity);
                     case Privileges::REFERENTIEL_DEVALIDATION:
                         return $this->assertValidationDevalidation($role, $entity);
+                }
+                break;
+            case $entity instanceof FonctionReferentiel:
+                switch ($privilege) {
+                    case Privileges::REFERENTIEL_ADMIN_EDITION:
+                        return $this->assertFonctionReferentielEdition($role, $entity);
                 }
                 break;
         }
@@ -370,6 +377,20 @@ class ReferentielAssertion extends AbstractAssertion
         }
         if (TypeVolumeHoraire::CODE_REALISE == $typeVolumeHoraireCode) {
             if (!$statut->getReferentielRealise()) return false;
+        }
+
+        return true;
+    }
+
+
+
+    protected function assertFonctionReferentielEdition(Role $role, FonctionReferentiel $fonctionReferentiel): bool
+    {
+        if ($role->getStructure()){
+            if (!$fonctionReferentiel->getStructure()){
+                return false;
+            }
+            return $fonctionReferentiel->getStructure()->inStructure($role->getStructure());
         }
 
         return true;

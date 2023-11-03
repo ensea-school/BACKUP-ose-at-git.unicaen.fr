@@ -55,7 +55,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                             <tr>
                                 <td><?= ($tis->isVisible() ? $tis->getStructure() : '<s>' . $tis->getStructure() . '</s>') ?></td>
                                 <td><?= validiteIntervalle($tis->getAnneeDebut(), $tis->getAnneeFin()); ?></td>
-                                <?php if ($canEdit): ?>
+                                <?php if ($this->isAllowed($tis, Privileges::TYPE_INTERVENTION_EDITION)): ?>
 
                                     <td style="width: 50px;">
                                         <a class="pop-ajax"

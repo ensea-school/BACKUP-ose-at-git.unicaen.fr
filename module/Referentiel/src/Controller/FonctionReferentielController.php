@@ -3,6 +3,7 @@
 namespace Referentiel\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Provider\Privilege\Privileges;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Referentiel\Service\FonctionReferentielServiceAwareTrait;
 use Referentiel\Form\FonctionReferentielSaisieFormAwareTrait;
@@ -39,11 +40,15 @@ class FonctionReferentielController extends AbstractController
         }
 
         $form->bindRequestSave($fonctionReferentiel, $this->getRequest(), function (FonctionReferentiel $fr) {
-            try {
-                $this->getServiceFonctionReferentiel()->save($fr);
-                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            if ($this->isAllowed($fr, Privileges::REFERENTIEL_ADMIN_EDITION)) {
+                try {
+                    $this->getServiceFonctionReferentiel()->save($fr);
+                    $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
+                }
+            }else{
+                $this->flashMessenger()->addErrorMessage('Vous ne disposez pas des droits nécessaires pour ajouter ou modifier cette fonction référentielle');
             }
         });
 

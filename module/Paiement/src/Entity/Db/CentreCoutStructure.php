@@ -2,6 +2,7 @@
 
 namespace Paiement\Entity\Db;
 
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -11,7 +12,7 @@ use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 /**
  * CentreCoutStructure
  */
-class CentreCoutStructure implements HistoriqueAwareInterface, ImportAwareInterface
+class CentreCoutStructure implements HistoriqueAwareInterface, ImportAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
@@ -45,6 +46,14 @@ class CentreCoutStructure implements HistoriqueAwareInterface, ImportAwareInterf
     {
         return $this->structure;
     }
+
+
+
+    public function getResourceId()
+    {
+        return 'CentreCoutStructure';
+    }
+
 
 
     /**

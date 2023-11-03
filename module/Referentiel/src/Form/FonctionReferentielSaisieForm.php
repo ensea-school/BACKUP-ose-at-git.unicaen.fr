@@ -34,8 +34,9 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
         $this->setAttribute('action', $this->getCurrentUrl());
 
-        
+
         $this->add([
+            'type'       => 'Select',
             'name'       => 'parent',
             'options'    => [
                 'label'         => 'Type de fonction',
@@ -46,7 +47,6 @@ class FonctionReferentielSaisieForm extends AbstractForm
                 'class'            => 'selectpicker',
                 'data-live-search' => 'true',
             ],
-            'type'       => 'Select',
         ]);
         $this->add([
             'name'       => 'code',
@@ -73,6 +73,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
             'type'    => 'Text',
         ]);
         $this->add([
+            'type'       => 'Select',
             'name'       => 'domaine-fonctionnel',
             'options'    => [
                 'label' => 'Domaine fonctionnel',
@@ -81,12 +82,11 @@ class FonctionReferentielSaisieForm extends AbstractForm
                 'class'            => 'selectpicker',
                 'data-live-search' => 'true',
             ],
-            'type'       => 'Select',
         ]);
         $this->add([
-            'name'       => 'structure',
-            'type'       => Structure::class,
-            'options'    => [
+            'type'    => Structure::class,
+            'name'    => 'structure',
+            'options' => [
                 'label' => 'Structure',
             ],
         ]);
@@ -120,8 +120,13 @@ class FonctionReferentielSaisieForm extends AbstractForm
         $this->get('domaine-fonctionnel')
             ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceDomaineFonctionnel()->getList()));
 
+        if ($this->getServiceContext()->getStructure()) {
+            $this->get('structure')->setEmptyOption(null);
+        }
+
         return $this;
     }
+
 
 
     /**
@@ -138,6 +143,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
     }
 
 
+
     public function getStructures()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
@@ -151,6 +157,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
         return $structures;
     }
+
 
 
     /**
@@ -219,6 +226,7 @@ class FonctionReferentielHydrator implements HydratorInterface
 
         return $object;
     }
+
 
 
     /**

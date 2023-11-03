@@ -13,7 +13,6 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @method FonctionReferentiel get($id)
  * @method FonctionReferentiel[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
- * @method FonctionReferentiel newEntity()
  */
 class FonctionReferentielService extends AbstractEntityService
 {
@@ -26,6 +25,17 @@ class FonctionReferentielService extends AbstractEntityService
     public function getEntityClass()
     {
         return FonctionReferentiel::class;
+    }
+
+
+
+    public function newEntity()
+    {
+        /** @var FonctionReferentiel $entity */
+        $entity = parent::newEntity();
+        $entity->setStructure($this->getServiceContext()->getStructure());
+
+        return $entity;
     }
 
 

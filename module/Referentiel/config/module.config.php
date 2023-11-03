@@ -218,6 +218,11 @@ return [
             'resources'  => 'Validation',
             'assertion'  => Assertion\ReferentielAssertion::class,
         ],
+        [
+            'privileges' => Privileges::REFERENTIEL_ADMIN_EDITION,
+            'resources'  => 'FonctionReferentiel',
+            'assertion'  => Assertion\ReferentielAssertion::class,
+        ],
     ],
 
     'guards' => [

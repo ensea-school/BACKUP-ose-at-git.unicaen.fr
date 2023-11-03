@@ -113,11 +113,20 @@ return [
         ],
     ],
 
+    'rules' => [
+        [
+            'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION,
+            'resources'  => 'CentreCoutStructure',
+            'assertion'  => Assertion\CentreCoutAssertion::class,
+        ],
+    ],
+
     'controllers' => [
         Controller\CentreCoutController::class => Controller\CentreCoutControllerFactory::class,
     ],
 
     'services' => [
+        Assertion\CentreCoutAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         Service\CentreCoutService::class          => Service\CentreCoutServiceFactory::class,
         Service\CentreCoutStructureService::class => Service\CentreCoutStructureServiceFactory::class,
         Service\CcActiviteService::class          => Service\CcActiviteServiceFactory::class,

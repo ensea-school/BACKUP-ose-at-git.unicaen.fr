@@ -6,13 +6,14 @@ use Application\Entity\Db\Traits\DomaineFonctionnelAwareTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityNotFoundException;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
 use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-class FonctionReferentiel implements HistoriqueAwareInterface, PlafondPerimetreInterface, PlafondDataInterface
+class FonctionReferentiel implements HistoriqueAwareInterface, PlafondPerimetreInterface, PlafondDataInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
     use StructureAwareTrait;
@@ -42,6 +43,13 @@ class FonctionReferentiel implements HistoriqueAwareInterface, PlafondPerimetreI
     public function __construct()
     {
         $this->fille = new ArrayCollection();
+    }
+
+
+
+    public function getResourceId(): string
+    {
+        return 'FonctionReferentiel';
     }
 
 

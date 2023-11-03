@@ -267,7 +267,6 @@ return [
         Service\ServiceAPayerService::class                      => Service\ServiceAPayerServiceFactory::class,
         Service\MiseEnPaiementService::class                     => Service\MiseEnPaiementServiceFactory::class,
         Service\MiseEnPaiementIntervenantStructureService::class => Service\MiseEnPaiementIntervenantStructureServiceFactory::class,
-        Service\CentreCoutService::class                         => Service\CentreCoutServiceFactory::class,
         Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementServiceFactory::class,
         Assertion\PaiementAssertion::class                       => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         PaiementProcess::class                                   => PaiementProcessFactory::class,

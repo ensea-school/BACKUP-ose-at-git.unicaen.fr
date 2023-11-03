@@ -598,6 +598,12 @@ return [
             'resources'  => ['ElementPedagogique'],
             'assertion'  => Assertion\OffreDeFormationAssertion::class,
         ],
+        [
+            'privileges' => Privileges::TYPE_INTERVENTION_EDITION,
+            'resources'  => ['TypeInterventionStructure'],
+            'assertion'  => Assertion\TypeInterventionAssertion::class,
+        ],
+
 
     ],
     'controllers'  => [
@@ -624,6 +630,7 @@ return [
         Service\DomaineFonctionnelService::class        => Service\Factory\DomaineFonctionnelServiceFactory::class,
         Service\OffreFormationService::class            => Service\Factory\OffreFormationServiceFactory::class,
         Assertion\OffreDeFormationAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Assertion\TypeInterventionAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         Service\VolumeHoraireEnsService::class          => Service\Factory\VolumeHoraireEnsServiceFactory::class,
         Processus\ReconductionProcessus::class          => Processus\Factory\ReconductionProcessusFactory::class,
         Service\TypeInterventionService::class          => Service\Factory\TypeInterventionServiceFactory::class,

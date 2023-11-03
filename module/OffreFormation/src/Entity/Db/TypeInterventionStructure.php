@@ -3,6 +3,7 @@
 namespace OffreFormation\Entity\Db;
 
 use Application\Entity\Db\Annee;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\Traits\TypeInterventionAwareTrait;
 use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -11,7 +12,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 /**
  * TypeInterventionStructure
  */
-class TypeInterventionStructure implements HistoriqueAwareInterface
+class TypeInterventionStructure implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
     use TypeInterventionAwareTrait;
@@ -47,6 +48,13 @@ class TypeInterventionStructure implements HistoriqueAwareInterface
     public function getId()
     {
         return $this->id;
+    }
+
+
+
+    public function getResourceId(): string
+    {
+        return 'TypeInterventionStructure';
     }
 
 

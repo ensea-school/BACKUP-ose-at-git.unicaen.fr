@@ -193,7 +193,7 @@ return [
         Assertion\NoteAssertion::class        => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         Service\MailService::class            => Service\MailServiceFactory::class,
 
-        Assertion\StatutAssertion::class => Assertion\StatutAssertionFactory::class,
+        Assertion\StatutAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
     ],
 
 

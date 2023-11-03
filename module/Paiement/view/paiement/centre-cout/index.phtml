@@ -87,7 +87,7 @@ while ($i < $nTblListe) {
                 <?php foreach ($centreCoutStructures as $ccs) {
                     if ($ccs->getCentreCout()->getId() == $fr->getId()) { ?>
                         <?= $ccs->getStructure() ?>
-                        <?php if ((!$ccs->getSource()->getImportable()) && $canEdit) { ?>
+                        <?php if ((!$ccs->getSource()->getImportable()) && $this->isAllowed($ccs, Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION)) { ?>
                             <a class="pop-ajax"
                                href="<?= $this->url('centre-cout/delete-structure', ['centreCoutStructure' => $ccs->getId()]) ?>"
                                title="Supprimer la structure du Centre de Coûts"

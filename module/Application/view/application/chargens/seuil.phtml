@@ -96,7 +96,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
             url: "<?= $scenario ? $this->url('chargens/seuil/modifier', ['scenario' => $scenario->getId()]) : null ?>",
             data: params,
             success: function () {
-                unicaenVue.flashMessenger.toast("Le nouveau seuil a bien été pris en compte", 'success';
+                unicaenVue.flashMessenger.toast("Le nouveau seuil a bien été pris en compte", 'success');
                 seuilCalcHeures();
             },
         });

@@ -174,9 +174,16 @@ class SeuilChargeService extends AbstractEntityService
             'structures' => [],
             'seuils'     => [],
         ];
-        foreach ($strs as $sid => $libelle) {
+        $mainLevel = 999;
+        foreach ($strs as $structure) {
+            if ($structure instanceof Structure) {
+                if ($structure->getLevel() < $mainLevel) $mainLevel = $structure->getLevel();
+            }
+        }
+        foreach ($strs as $sid => $structure) {
             $r = [
-                'libelle'                 => $libelle,
+                'libelle'                 => (string)$structure,
+                'level'                   => $structure instanceof Structure ? $structure->getLevel()-$mainLevel : 0,
                 'types-interventions'     => [],
                 'groupes-type-formations' => [0 => 'Par défaut'],
                 'seuils'                  => [],
@@ -208,14 +215,18 @@ class SeuilChargeService extends AbstractEntityService
 
 
 
-    private function getSeuilsStructures(Scenario $scenario)
+    /**
+     * @param Scenario $scenario
+     * @return array|string[]|Structure[]
+     */
+    private function getSeuilsStructures(Scenario $scenario): array
     {
         $canViewEtablissement = $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SEUIL_ETABLISSEMENT_VISUALISATION));
         $canViewComposantes   = $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SEUIL_COMPOSANTE_VISUALISATION));
 
         $res = [];
         if ($canViewEtablissement) {
-            $res[0] = 'Établissement';
+            $res[0] = '<i>Par défaut</i>';
         }
 
         if ($canViewComposantes) {
@@ -232,7 +243,7 @@ class SeuilChargeService extends AbstractEntityService
             $structures = $this->getServiceStructure()->getList($qb);
 
             foreach ($structures as $structure) {
-                $res[$structure->getId()] = $structure->getLibelleCourt();
+                $res[$structure->getId()] = $structure;
             }
         }
 

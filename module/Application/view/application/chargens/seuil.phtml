@@ -27,7 +27,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
 
 <?php if ($scenario) {
     foreach ($seuils['structures'] as $sid => $structure): ?>
-        <div class="card bg-default">
+        <div class="card bg-default" style="margin-left:<?= $structure['level']*2 ?>em">
             <div class="card-header card-header-h3">
                 <h3>
                     <?= $structure['libelle'] ?>

@@ -202,7 +202,7 @@ FROM
  UNION ALL
 --Suppression service référentiel uniquement pour les permanents
 SELECT  s.intervenant_id                                                                     intervenant_id,
-       '3 - Service prévisionnel et/ou service référentiel'                                 categorie,
+       '3 - Service prévisionnel (enseignement et/ou référentiel)'                                 categorie,
         'Suppression service référentiel : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
        s.histo_destruction                                                                histo_date,
        s.histo_destructeur_id                                                             histo_createur_id,
@@ -268,7 +268,7 @@ WHERE
  --Modification de service dû
   SELECT
      msd.intervenant_id                                                                     intervenant_id,
-       '3 - Service prévisionnel et/ou service référentiel'                                 categorie,
+       '3 - Service prévisionnel (enseignement et/ou référentiel)'                                 categorie,
         'Modification de service dû : ' || mss.libelle                              label,
        msd.histo_modification                                                                histo_date,
        msd.histo_modificateur_id                                                             histo_createur_id,

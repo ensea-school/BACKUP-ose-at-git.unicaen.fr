@@ -88,11 +88,11 @@ class ScenarioNoeudProvider
             $scenarioNoeud = $scenarioNoeuds[$scenarioNoeudId];
             $typeHeures    = $this->chargens->getEntities()->get(TypeHeures::class, $typeHeuresId);
             $etape         = $this->chargens->getEntities()->get(Etape::class, $etapeId);
-
-            $scenarioNoeudEffectif = new ScenarioNoeudEffectif($scenarioNoeud, $typeHeures, $etape);
-            $sneHydrator->hydrate($d, $scenarioNoeudEffectif);
-
-            $scenarioNoeud->addEffectif($scenarioNoeudEffectif);
+            if ($etape) {
+                $scenarioNoeudEffectif = new ScenarioNoeudEffectif($scenarioNoeud, $typeHeures, $etape);
+                $sneHydrator->hydrate($d, $scenarioNoeudEffectif);
+                $scenarioNoeud->addEffectif($scenarioNoeudEffectif);
+            }
         }
 
         $sns         = $this->getScenarioNoeudSeuilsData($noeudIds);

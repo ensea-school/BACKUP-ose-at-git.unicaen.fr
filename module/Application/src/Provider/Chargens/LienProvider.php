@@ -276,9 +276,9 @@ class LienProvider
         $cStructure = $this->chargens->getServiceContext()->getStructure();
         $canEdit    = false;
         if ($cStructure) {
-            $structureId = $lien->getStructure(false);
+            $lStructure = $lien->getStructure(true);
 
-            if (!$structureId || $structureId == $cStructure->getId()) {
+            if (!$lStructure || $lStructure->inStructure($cStructure)) {
                 $canEdit = true;
             }
         } else {

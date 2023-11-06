@@ -111,11 +111,21 @@ class ChargensAssertion extends AbstractAssertion
 
     private function assertScenarioStructureEdition(Structure $structure = null)
     {
+        /** @var Role $role */
+        $role = $this->getRole();
+
+        $asserts = [];
+
         if ($structure) {
-            return $this->getAcl()->isAllowed($this->getRole(), Privileges::getResourceId(Privileges::CHARGENS_SCENARIO_COMPOSANTE_EDITION));
+            $asserts[] = $this->getAcl()->isAllowed($this->getRole(), Privileges::getResourceId(Privileges::CHARGENS_SCENARIO_COMPOSANTE_EDITION));
+            if ($role->getStructure()){
+                $asserts[] = $structure->inStructure($role->getStructure());
+            }
         } else {
-            return $this->getAcl()->isAllowed($this->getRole(), Privileges::getResourceId(Privileges::CHARGENS_SCENARIO_ETABLISSEMENT_EDITION));
+            $asserts[] = $this->getAcl()->isAllowed($this->getRole(), Privileges::getResourceId(Privileges::CHARGENS_SCENARIO_ETABLISSEMENT_EDITION));
         }
+
+        return $this->asserts($asserts);
     }
 
 }

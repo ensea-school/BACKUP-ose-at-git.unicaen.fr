@@ -83,6 +83,28 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
+    public function getIdsArray(): array
+    {
+        $res = [];
+
+        if (empty($this->ids)){
+            return $res;
+        }
+
+
+        $ids = explode('-', substr($this->ids, 1, -1));
+        foreach ($ids as $id){
+            $id = (int)$id;
+            if ($id > 0){
+                $res[] = $id;
+            }
+        }
+
+        return $res;
+    }
+
+
+
     public function getLevel(): int
     {
         return substr_count($this->ids, '-') - 2;

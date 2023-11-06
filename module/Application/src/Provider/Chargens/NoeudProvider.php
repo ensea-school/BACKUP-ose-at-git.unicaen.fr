@@ -440,9 +440,9 @@ class NoeudProvider
         $cStructure = $this->chargens->getServiceContext()->getStructure();
         $canEdit    = false;
         if ($cStructure) {
-            $structureId = $noeud->getStructure(false);
+            $nStructure = $noeud->getStructure(true);
 
-            if (!$structureId || $structureId == $cStructure->getId()) {
+            if (!$nStructure || $nStructure->inStructure($cStructure)) {
                 $canEdit = true;
             }
         } else {

@@ -43,11 +43,13 @@ class ScenarioService extends AbstractEntityService
      */
     public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
+        /** @var $qb QueryBuilder */
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
         if ($structure = $this->getServiceContext()->getStructure()) {
-            $qb->andWhere($alias . '.structure = :structure OR ' . $alias . '.structure IS NULL')->setParameter(
-                'structure', $structure
+            $qb->leftJoin($alias . '.structure', 'fbcStr');
+            $qb->andWhere('fbcStr.ids like :structure OR ' . $alias . '.structure IS NULL')->setParameter(
+                'structure', $structure->idsFilter()
             );
         }
 

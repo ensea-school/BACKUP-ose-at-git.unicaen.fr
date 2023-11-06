@@ -75,7 +75,7 @@ class FiltreForm extends AbstractForm
                 'label_attributes'          => [
                     'title' => "Structure gestionnaire de la formation",
                 ],
-                'enseignement' => true,
+                'enseignement'              => true,
             ],
             'attributes' => [
                 'id'               => 'structure',
@@ -166,59 +166,55 @@ class FiltreForm extends AbstractForm
     {
         $cStructure = $this->getServiceContext()->getStructure();
 
-        if ($cStructure) {
-            $this->structures = [$cStructure];
-        } else {
-            $qb = $this->getServiceStructure()->finderByHistorique();
-            $this->getServiceStructure()->finderByEnseignement($qb);
-            $this->structures = $this->getServiceStructure()->getList($qb);
-        }
+        $qb = $this->getServiceStructure()->finderByHistorique();
+        $this->getServiceStructure()->finderByEnseignement($qb);
+        $this->structures = $this->getServiceStructure()->getList($qb);
 
-        $etapesSql    = '
+        $etapesSql = '
         SELECT DISTINCT
             e.id,
             e.code,
             e.libelle,
-            e.structure_id
+            str.ids structure_ids
         FROM
           etape e
           JOIN noeud n ON n.etape_id = e.id
           JOIN lien l ON l.noeud_sup_id = n.id
+          JOIN structure str ON str.id = e.structure_id
         WHERE
           e.histo_destruction IS NULL
           AND n.histo_destruction IS NULL
           AND l.histo_destruction IS NULL
           AND e.annee_id = ' . $this->getServiceContext()->getAnnee()->getId() . '
-          ' . (($s = $this->getServiceContext()->getStructure()) ? 'AND e.structure_id = ' . $s->getId() : '') . ' 
+          ' . (($s = $this->getServiceContext()->getStructure()) ? 'AND str.ids LIKE \'' . $s->idsFilter() . "'" : '') . ' 
         ORDER BY
             e.libelle, e.code
         ';
         $this->etapes = [];
-        $dEtapes      = $this->getServiceEtape()->getEntityManager()->getConnection()->fetchAllAssociative($etapesSql);
-
-        /*$qb = $this->getServiceEtape()->finderByHistorique();
-        $this->getServiceEtape()->finderByContext($qb);
-        $this->etapes = $this->getServiceEtape()->getList($qb);*/
+        $dEtapes = $this->getServiceEtape()->getEntityManager()->getConnection()->fetchAllAssociative($etapesSql);
 
         $qb = $this->getServiceScenario()->finderByHistorique();
         $this->getServiceScenario()->finderByContext($qb);
         $this->scenarios = $this->getServiceScenario()->getList($qb);
 
-        $sEtapes     = [];
+        $sEtapes = [];
         $eStructures = [];
-        $sScenarios  = [];
+        $sScenarios = [];
         foreach ($dEtapes as $e) {
-            $id    = (int)$e['ID'];
+            $id = (int)$e['ID'];
             $label = $e['LIBELLE'] . ' (' . $e['CODE'] . ')';
-            $sid   = (int)$e['STRUCTURE_ID'];
+            $sids = explode('-', substr($e['STRUCTURE_IDS'], 1, -1));
 
             $this->etapes[$id] = $label;
 
-            if (!isset($sEtapes[$sid])) {
-                $sEtapes[$sid] = [];
+            foreach ($sids as $sid) {
+                $sid = (int)$sid;
+                if (!isset($sEtapes[$sid])) {
+                    $sEtapes[$sid] = [];
+                }
+                $sEtapes[$sid][] = $id;
+                $eStructures[$id] = $sid;
             }
-            $sEtapes[$sid][]  = $id;
-            $eStructures[$id] = $sid;
         }
 
         foreach ($this->scenarios as $scenario) {
@@ -231,16 +227,20 @@ class FiltreForm extends AbstractForm
             }
 
             foreach ($structures as $structure) {
-                if (!isset($sScenarios[$structure->getId()])) {
-                    $sScenarios[$structure->getId()] = [];
+                $ids = $structure->getIdsArray();
+                foreach ($ids as $sid) {
+                    if (!isset($sScenarios[$sid])) {
+                        $sScenarios[$sid] = [];
+                    }
+                    $sScenarios[$sid][] = $scenario->getId();
                 }
-                $sScenarios[$structure->getId()][] = $scenario->getId();
+
             }
         }
 
-        $this->structuresEtapes    = $sEtapes;
+        $this->structuresEtapes = $sEtapes;
         $this->structuresScenarios = $sScenarios;
-        $this->etapesStructure     = $eStructures;
+        $this->etapesStructure = $eStructures;
 
         return $this;
     }

@@ -48,6 +48,7 @@ WITH c AS (
 SELECT
   s.annee_id                                  annee_id,
   sens.id                                     structure_id,
+  sens.ids                                    structure_ids,
   tiv.id                                      type_intervention_id,
 
   a.libelle                                   annee,

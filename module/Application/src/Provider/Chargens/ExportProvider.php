@@ -43,8 +43,8 @@ class ExportProvider
             'annee'    => $annee->getId(),
         ];
         if ($structure) {
-            $sql                 .= ' AND (structure_porteuse_id = :structure OR structure_ins_id = :structure)';
-            $params['structure'] = $structure->getId();
+            $sql                 .= ' AND (structure_porteuse_ids LIKE :structure OR structure_ins_ids LIKE :structure)';
+            $params['structure'] = $structure->idsFilter();
         }
 
         $data = $this->chargens->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);

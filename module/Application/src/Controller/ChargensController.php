@@ -436,8 +436,8 @@ class ChargensController extends AbstractController
             'annee' => $annee->getId(),
         ];
         if ($structure) {
-            $sql                 .= ' AND structure_id = :structure';
-            $params['structure'] = $structure->getId();
+            $sql                 .= ' AND structure_ids LIKE :structure';
+            $params['structure'] = $structure->idsFilter();
         }
         $data = $this->em()->getConnection()->fetchAllAssociative($sql, $params);
 

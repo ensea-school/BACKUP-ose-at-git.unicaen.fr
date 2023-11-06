@@ -95,19 +95,20 @@ class DifferentielForm extends AbstractForm
 
         $structure = $this->getServiceContext()->getStructure();
         if ($structure) {
-            $where  = 'WHERE s.structure_id IS NULL OR s.structure_id = :structure';
-            $params = ['structure' => $structure->getId()];
+            $where  = 'WHERE s.structure_id IS NULL OR str.ids LIKE :structure';
+            $params = ['structure' => $structure->idsFilter()];
         } else {
             $where  = '';
             $params = [];
         }
         $sql = "
         SELECT 
-          DISTINCT c.annee_id, a.LIBELLE annee, s.id scenario_id, s.libelle scenario, s.type, s.structure_id
+          DISTINCT c.annee_id, a.LIBELLE annee, s.id scenario_id, s.libelle scenario, s.type, s.structure_id 
         FROM 
           tbl_chargens c
           JOIN scenario s ON s.id = c.scenario_id
           JOIN annee a ON a.id = c.annee_id
+          LEFT JOIN structure str ON str.id = s.structure_id 
         $where
         ORDER BY 
           annee_id, type DESC, scenario

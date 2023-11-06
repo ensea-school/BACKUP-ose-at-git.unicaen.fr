@@ -3,7 +3,9 @@ SELECT
   a.id              annee_id,
   cph.scenario_id   scenario_id,
   sp.id             structure_porteuse_id,
+  sp.ids            structure_porteuse_ids,
   si.id             structure_ins_id,
+  si.ids            structure_ins_ids,
 
   a.libelle         annee,
 

@@ -109,7 +109,7 @@ FROM validation v
 UNION ALL
 --Dernière modification du service prévisionnel par composante
 SELECT s.intervenant_id                                                                          intervenant_id,
-       '3 - Service prévisionnel et/ou service référentiel'                                                              categorie,
+       '3 - Service prévisionnel (enseignement et/ou référentiel)'                                 categorie,
        'Modification/Ajout du service prévisionnel pour la composante ' || MAX(st.libelle_court) label,
        MAX(s.histo_creation)                                                                histo_date,
        MAX(s.histo_createur_id)                                                             KEEP (dense_rank FIRST ORDER BY s.histo_modification DESC)   histo_createur_id,
@@ -184,8 +184,8 @@ WHERE v.histo_destruction IS NULL
 UNION ALL
 --Service référentiel uniquement pour les permanents
 SELECT  s.intervenant_id                                                                     intervenant_id,
-       '3 - Service prévisionnel et/ou service référentiel'                                 categorie,
-        'Ajout service référentiel : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
+       '3 - Service prévisionnel (enseignement et/ou référentiel)'                                 categorie,
+        'Ajout service référentiel prévisionnel : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
        s.histo_modification                                                                histo_date,
        s.histo_modificateur_id                                                             histo_createur_id,
        u.display_name                                                        histo_user,
@@ -193,9 +193,11 @@ SELECT  s.intervenant_id                                                        
        3                                ordre
 FROM
   service_referentiel s
+  JOIN volume_horaire_ref vhr ON vhr.service_referentiel_id = s.id AND vhr.histo_destruction IS NULL
   JOIN fonction_referentiel fr ON fr.id = s.fonction_id
   JOIN utilisateur u ON u.id = s.histo_modificateur_id
   LEFT JOIN STRUCTURE str ON str.id = s.structure_id
+  WHERE vhr.type_volume_horaire_id = (SELECT id FROM type_volume_horaire tvh WHERE code = 'PREVU')
 
  UNION ALL
 --Suppression service référentiel uniquement pour les permanents
@@ -209,16 +211,19 @@ SELECT  s.intervenant_id                                                        
        3                                ordre
 FROM
   service_referentiel s
+  JOIN volume_horaire_ref vhr ON vhr.service_referentiel_id = s.id AND vhr.histo_destruction IS NULL
   JOIN fonction_referentiel fr ON fr.id = s.fonction_id
   JOIN utilisateur u ON u.id = s.histo_destructeur_id
   LEFT JOIN STRUCTURE str ON str.id = s.structure_id
-WHERE
- s.histo_destruction IS NOT NULL
+  WHERE
+   vhr.type_volume_horaire_id = (SELECT id FROM type_volume_horaire tvh WHERE code = 'PREVU')
+  AND
+   s.histo_destruction IS NOT NULL
 
  UNION ALL
 --Validation du service prévisionnel
 SELECT s.intervenant_id                                                                          intervenant_id,
-       '3 - Service prévisionnel et/ou service référentiel'                                                              categorie,
+       '3 - Service prévisionnel (enseignement et/ou référentiel)'                                 categorie,
        'Validation du service prévisionnel pour la composante ' || MAX(st.libelle_court) label,
        MAX(v.histo_modification)                                                                histo_date,
        MAX(v.histo_modificateur_id)                                                             KEEP (dense_rank FIRST ORDER BY v.histo_modification DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY v.histo_modification DESC)    histo_user,
@@ -239,7 +244,7 @@ FROM volume_horaire vh
          UNION ALL
          --validation du service référentiel
 SELECT  s.intervenant_id                                                                     intervenant_id,
-       '3 - Service prévisionnel et/ou service référentiel'                                 categorie,
+       '3 - Service prévisionnel (enseignement et/ou référentiel)'                                 categorie,
         'Validation du service référentiel : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
        v.histo_modification                                                                histo_date,
        v.histo_modificateur_id                                                             histo_createur_id,
@@ -248,12 +253,15 @@ SELECT  s.intervenant_id                                                        
        3                                ordre
 FROM
   service_referentiel s
-  JOIN validation_vol_horaire_ref vvhr ON s.id = vvhr.volume_horaire_ref_id
+  JOIN volume_horaire_ref vhr ON vhr.service_referentiel_id = s.id
+  JOIN validation_vol_horaire_ref vvhr ON vhr.id = vvhr.volume_horaire_ref_id
   JOIN validation v ON v.id = vvhr.validation_id
   JOIN fonction_referentiel fr ON fr.id = s.fonction_id
   JOIN utilisateur u ON u.id = v.histo_modificateur_id
   LEFT JOIN STRUCTURE str ON str.id = s.structure_id
 WHERE
+	vhr.type_volume_horaire_id = (SELECT id FROM type_volume_horaire tvh WHERE code = 'PREVU')
+  AND
  s.histo_destruction IS NULL
 
  UNION ALL
@@ -376,7 +384,7 @@ UNION ALL
 
 --Dernière modification du service réalisé par composante
 SELECT s.intervenant_id                                                                     intervenant_id,
-       '6 - Services réalisés'                                                              categorie,
+       '6 - Services réalisés (enseignement et/ou référentiel)'                                                              categorie,
        'Modification/Ajout du service réalisé pour la composante ' || MAX(st.libelle_court) label,
        MAX(vh.histo_modification)                                                           histo_date,
        MAX(vh.histo_modificateur_id)                                                        KEEP (dense_rank FIRST ORDER BY vh.histo_modification DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY vh.histo_modification DESC)    histo_user, 'glyphicon glyphicon-calendar' icon,
@@ -394,9 +402,28 @@ GROUP BY s.intervenant_id, ep.structure_id
 
 UNION ALL
 
+--Service référentiel réalisé
+SELECT  s.intervenant_id                                                                     intervenant_id,
+       '6 - Services réalisés (enseignement et/ou référentiel)'                                 categorie,
+        'Ajout service référentiel realisé : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
+       s.histo_modification                                                                histo_date,
+       s.histo_modificateur_id                                                             histo_createur_id,
+       u.display_name                                                        histo_user,
+       'glyphicon glyphicon-ok'                                              icon,
+       5                                ordre
+FROM
+  service_referentiel s
+  JOIN volume_horaire_ref vhr ON vhr.service_referentiel_id = s.id AND vhr.histo_destruction IS NULL
+  JOIN fonction_referentiel fr ON fr.id = s.fonction_id
+  JOIN utilisateur u ON u.id = s.histo_modificateur_id
+  LEFT JOIN STRUCTURE str ON str.id = s.structure_id
+  WHERE vhr.type_volume_horaire_id = (SELECT id FROM type_volume_horaire tvh WHERE code = 'REALISE')
+
+UNION ALL
+
 --Validation du service réalisé
 SELECT s.intervenant_id                                                                     intervenant_id,
-       '6 - Services réalisés'                                                              categorie,
+       '6 - Services réalisés (enseignement et/ou référentiel)'                                                              categorie,
        'Validation du service réalisé pour la composante ' || MAX(st.libelle_court) label,
        MAX(v.histo_modification)                                                           histo_date,
        MAX(v.histo_modificateur_id)                                                        KEEP (dense_rank FIRST ORDER BY v.histo_modification DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY v.histo_modification DESC)    histo_user, 'glyphicon glyphicon-calendar' icon,
@@ -416,9 +443,32 @@ GROUP BY s.intervenant_id, ep.structure_id
 
 UNION ALL
 
+SELECT  s.intervenant_id                                                                     intervenant_id,
+       '6 - Services réalisés (enseignement et/ou référentiel)'                                 categorie,
+        'Validation du service référentiel réalisé : ' || fr.libelle_court || ' pour la composante ' || str.libelle_court                      label,
+       v.histo_modification                                                                histo_date,
+       v.histo_modificateur_id                                                             histo_createur_id,
+       u.display_name                                                        histo_user,
+       'glyphicon glyphicon-ok'                                              icon,
+       5                                ordre
+FROM
+  service_referentiel s
+  JOIN volume_horaire_ref vhr ON vhr.service_referentiel_id = s.id
+  JOIN validation_vol_horaire_ref vvhr ON vhr.id = vvhr.volume_horaire_ref_id
+  JOIN validation v ON v.id = vvhr.validation_id
+  JOIN fonction_referentiel fr ON fr.id = s.fonction_id
+  JOIN utilisateur u ON u.id = v.histo_modificateur_id
+  LEFT JOIN STRUCTURE str ON str.id = s.structure_id
+WHERE
+	vhr.type_volume_horaire_id = (SELECT id FROM type_volume_horaire tvh WHERE code = 'PREVU')
+  AND
+ s.histo_destruction IS NULL
+
+ UNION ALL
+
 --Cloture de service
 SELECT i.id                                                                                 intervenant_id,
-       '6 - Services réalisés'                                                              categorie,
+       '6 - Services réalisés (enseignement et/ou référentiel)'                                                              categorie,
        'Clôture de service réalisé '                              label,
        MAX(v.histo_modification)                                                            histo_date,
        MAX(v.histo_modificateur_id)                                                         KEEP (dense_rank FIRST ORDER BY v.histo_creation  DESC)   histo_createur_id, MAX(u.display_name) KEEP (dense_rank FIRST ORDER BY v.histo_creation  DESC)    histo_user, 'glyphicon glyphicon-calendar' icon,
@@ -487,3 +537,5 @@ SELECT rownum id,
        icon
 FROM historique
 ORDER BY intervenant_id, ordre ASC, histo_date ASC
+
+

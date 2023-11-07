@@ -63,7 +63,7 @@ class DdlDiff implements \Iterator, \ArrayAccess
     /**
      * @inheritDoc
      */
-    public function current()
+    public function current(): mixed
     {
         return current($this->data);
     }
@@ -73,9 +73,9 @@ class DdlDiff implements \Iterator, \ArrayAccess
     /**
      * @inheritDoc
      */
-    public function next()
+    public function next(): void
     {
-        return next($this->data);
+        next($this->data);
     }
 
 
@@ -83,7 +83,7 @@ class DdlDiff implements \Iterator, \ArrayAccess
     /**
      * @inheritDoc
      */
-    public function key()
+    public function key(): mixed
     {
         return key($this->data);
     }
@@ -93,7 +93,7 @@ class DdlDiff implements \Iterator, \ArrayAccess
     /**
      * @inheritDoc
      */
-    public function valid()
+    public function valid(): bool
     {
         return key($this->data) !== null;
     }
@@ -103,7 +103,7 @@ class DdlDiff implements \Iterator, \ArrayAccess
     /**
      * @inheritDoc
      */
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->data);
     }
@@ -113,7 +113,7 @@ class DdlDiff implements \Iterator, \ArrayAccess
     /**
      * @inheritDoc
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->has($offset);
     }
@@ -123,7 +123,7 @@ class DdlDiff implements \Iterator, \ArrayAccess
     /**
      * @inheritDoc
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->get($offset);
     }
@@ -133,7 +133,7 @@ class DdlDiff implements \Iterator, \ArrayAccess
     /**
      * @inheritDoc
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->set($offset, $value);
     }
@@ -143,7 +143,7 @@ class DdlDiff implements \Iterator, \ArrayAccess
     /**
      * @inheritDoc
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->data[$offset]);
     }

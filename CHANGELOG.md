@@ -16,7 +16,12 @@
 
 PHP 8.2 est maintenant requis
 
+# OSE 22.2 (A venir)
 
+## Améliorations
+
+* Meilleur affiche du service référentiel dans les notes de l'intervenant (#53479)
+ 
 
 # OSE 22.1 (30/10/2023)
 

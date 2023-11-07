@@ -30,7 +30,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 5,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'ID'                => [
@@ -66,7 +66,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '\'-\'',
-            'position'    => 6,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'TYPE_RESSOURCE_ID' => [

@@ -85,8 +85,8 @@ FROM
   JOIN service                     s ON s.id = vh.service_id
   JOIN v_vol_horaire_etat_multi  vhe ON vhe.volume_horaire_id = vh.id
   JOIN motif_non_paiement        mnp ON mnp.id = vh.motif_non_paiement_id
+  JOIN tag                         t ON t.id = vh.tag_id
   LEFT JOIN formule_resultat      fr ON fr.intervenant_id = s.intervenant_id AND fr.type_volume_horaire_id = vh.type_volume_horaire_id AND fr.etat_volume_horaire_id = vhe.etat_volume_horaire_id
-  JOIN tag t ON t.id = vh.tag_id
 WHERE
   vh.histo_destruction IS NULL
   AND s.histo_destruction IS NULL
@@ -318,5 +318,3 @@ FROM
   LEFT JOIN fonction_referentiel         fr ON fr.id    = t.fonction_referentiel_id
   LEFT JOIN type_validation              tv ON tvh.code = 'REALISE' AND tv.code = 'CLOTURE_REALISE'
   LEFT JOIN validation                    v ON v.intervenant_id = i.id AND v.type_validation_id = tv.id AND v.histo_destruction IS NULL
-
-

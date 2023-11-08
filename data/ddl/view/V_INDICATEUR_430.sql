@@ -9,6 +9,7 @@ SELECT
 FROM
   intervenant i
   JOIN tbl_workflow w ON w.intervenant_id = i.id
+  JOIN statut si ON si.id = i.intervenant_id
   JOIN (
     SELECT DISTINCT
       c.intervenant_id,
@@ -21,7 +22,7 @@ FROM
   ) hc ON hc.intervenant_id = i.id
 WHERE
   w.atteignable = 1
-  AND w.type_intervenant_code = 'E'
+  AND si.contrat = 1
   AND w.etape_code = 'CONTRAT'
   AND w.objectif > 0
   AND w.realisation < w.objectif

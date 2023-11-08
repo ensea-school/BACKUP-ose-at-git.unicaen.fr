@@ -23,6 +23,7 @@ PHP 8.2 est maintenant requis
 ## Corrections de bugs
 
 * La saisie des valeurs de plafonds par composante et par fonction référentielle est de nouveau opérationnelle
+* Résolution d'un problème de calcul des mises en paiement pour des services étalés sur plusieurs semestres
 
 ## Améliorations
 

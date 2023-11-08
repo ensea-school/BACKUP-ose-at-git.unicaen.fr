@@ -12,7 +12,6 @@ SELECT DISTINCT
   LEFT JOIN contrat c ON c.intervenant_id = w.intervenant_id AND c.histo_destruction IS NULL
 WHERE
   w.atteignable = 1
-  AND w.type_intervenant_code = 'E'
   AND w.etape_code = 'CONTRAT'
   AND w.objectif > 0
   AND w.realisation = 0

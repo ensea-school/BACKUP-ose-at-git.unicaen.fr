@@ -21,6 +21,7 @@ PHP 8.2 est maintenant requis
 ## Améliorations
 
 * Meilleur affiche du service référentiel dans les notes de l'intervenant (#53479)
+* Les indicateurs 420 et 430 (contrat) remontent maintenant l'ensemble des intervenants (vacataires ou permanents)
  
 
 # OSE 22.1 (30/10/2023)

@@ -481,17 +481,21 @@ class OseAdmin
     {
         $bddConf = Config::getBdd();
 
-        $cs = $bddConf['host'] . ':' . $bddConf['port'] . '/' . $bddConf['dbname'];
-        $characterSet = 'AL32UTF8';
-        $conn = @oci_pconnect($bddConf['username'], $bddConf['password'], $cs, $characterSet);
-        if (!$conn) {
-            $msg = oci_error()['message'];
+        $driver = $bddConf['driver'] ?? 'Oracle';
+        if ('Oracle' == $driver) {
+            $cs = $bddConf['host'] . ':' . $bddConf['port'] . '/' . $bddConf['dbname'];
+            $characterSet = 'AL32UTF8';
+            $conn = @oci_pconnect($bddConf['username'], $bddConf['password'], $cs, $characterSet);
+            if (!$conn) {
+                $msg = oci_error()['message'];
 
-            return false;
-        } else {
-            oci_close($conn);
+                return false;
+            } else {
+                oci_close($conn);
 
-            return true;
+                return true;
+            }
         }
+        return true;
     }
 }

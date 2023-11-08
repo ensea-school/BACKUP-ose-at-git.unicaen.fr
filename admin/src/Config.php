@@ -49,6 +49,7 @@ class Config
     public static function getBdd(): array
     {
         return [
+            'driver'   => self::get('bdd', 'driver') ?? 'Oracle',
             'host'     => self::get('bdd', 'host'),
             'port'     => self::get('bdd', 'port'),
             'dbname'   => self::get('bdd', 'dbname'),

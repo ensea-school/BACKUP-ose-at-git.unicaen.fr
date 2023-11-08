@@ -23,7 +23,6 @@ use BddAdmin\Manager\TriggerManagerInterface;
 use BddAdmin\Manager\UniqueConstraintManagerInterface;
 use BddAdmin\Manager\ViewManagerInterface;
 use \Exception;
-use Unicaen\OpenDocument\Data;
 
 class Bdd
 {

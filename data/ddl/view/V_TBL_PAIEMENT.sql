@@ -1,6 +1,6 @@
 CREATE OR REPLACE FORCE VIEW V_TBL_PAIEMENT AS
 SELECT
-  'e' || '-' || frs.id || '-' || COALESCE(thens.id,th.id) || '-' || prd.id key,
+  'e' || '-' || frs.id || '-' || COALESCE(thens.id,th.id) key,
   CASE WHEN si.mode_enseignement_realise = 'semestriel' THEN 1 ELSE 0 END calcul_semestriel,
   vh.id                                       a_payer_id,
   i.annee_id                                  annee_id,
@@ -86,7 +86,7 @@ WHERE
 UNION ALL
 
 SELECT
-  'e' || '-' || frs.id || '-' || mep.type_heures_id || '-0' key,
+  'e' || '-' || frs.id || '-' || mep.type_heures_id key,
   CASE WHEN si.mode_enseignement_realise = 'semestriel' THEN 1 ELSE 0 END calcul_semestriel,
   mep.id                                      a_payer_id,
   i.annee_id                                  annee_id,

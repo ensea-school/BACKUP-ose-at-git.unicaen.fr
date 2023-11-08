@@ -16,13 +16,20 @@
 
 PHP 8.2 est maintenant requis
 
+
+
 # OSE 22.2 (A venir)
+
+## Corrections de bugs
+
+* La saisie des valeurs de plafonds par composante et par fonction référentielle est de nouveau opérationnelle
 
 ## Améliorations
 
 * Meilleur affiche du service référentiel dans les notes de l'intervenant (#53479)
 * Les indicateurs 420 et 430 (contrat) remontent maintenant l'ensemble des intervenants (vacataires ou permanents)
- 
+
+
 
 # OSE 22.1 (30/10/2023)
 

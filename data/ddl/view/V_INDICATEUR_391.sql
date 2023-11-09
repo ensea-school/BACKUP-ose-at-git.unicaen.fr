@@ -1,12 +1,13 @@
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_391 AS
 SELECT
-    tp.intervenant_id,
-    tp.structure_id
+i.id                intervenant_id,
+i.structure_id      structure_id
 FROM
-    tbl_mission_prime tp
-WHERE
-  tp.declaration > tp.validation+tp.refus
+mission m
+JOIN contrat c ON c.mission_id = m.id AND c.histo_destruction IS NULL
+JOIN intervenant i ON i.id = m.intervenant_id
+WHERE c.date_retour_signe IS NOT NULL
 GROUP BY
-  tp.intervenant_id,
-  tp.annee_id,
-  tp.structure_id
+i.id,
+i.structure_id
+HAVING SUM(m.prime_id) IS NULL

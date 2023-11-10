@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 22.0](#ose-221-30102023)
+[OSE 22.0](#ose-222-10112023)
 
 # OSE 23 (à venir)
 
@@ -18,7 +18,7 @@ PHP 8.2 est maintenant requis
 
 
 
-# OSE 22.2 (A venir)
+# OSE 22.2 (10/11/2023)
 
 ## Corrections de bugs
 
@@ -27,7 +27,7 @@ PHP 8.2 est maintenant requis
 
 ## Améliorations
 
-* Meilleur affiche du service référentiel dans les notes de l'intervenant (#53479)
+* Meilleur affichage du service référentiel dans les notes de l'intervenant (#53479)
 * Les indicateurs 420 et 430 (contrat) remontent maintenant l'ensemble des intervenants (vacataires ou permanents)
 
 

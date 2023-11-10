@@ -21,6 +21,7 @@
         "unicaen/siham"                               : "6.1.2",
         "unicaen/mail"                                : "dev-php82",
         "unicaen/vue"                                 : "6.0.0",
+        "unicaen/bddadmin"                            : "dev-main",
         "laminas/laminas-cache-storage-adapter-memory": "2.2.0",
         "laminas/laminas-text"                        : "2.10"
     },

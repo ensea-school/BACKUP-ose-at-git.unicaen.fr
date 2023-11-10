@@ -1,11 +1,13 @@
 <?php
 
+use Unicaen\BddAdmin\Ddl\Ddl;
+
 /* Initialisation */
 $bdd = $oa->getBdd();
 $bdd->setLogger($c);
 
 /* Mise en place du schéma de la BDD */
-$ref = new BddAdmin\Ddl\Ddl();
+$ref = new Ddl();
 $ref->loadFromDir($oa->getOseDir() . 'data/ddl');
 $bdd->create($ref);
 

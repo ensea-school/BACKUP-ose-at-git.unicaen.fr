@@ -1,7 +1,7 @@
 <?php
 
-use BddAdmin\Bdd;
-use BddAdmin\Ddl\Ddl;
+use Unicaen\BddAdmin\Bdd;
+use Unicaen\BddAdmin\Ddl\Ddl;
 
 
 class ConnecteurActul

@@ -1,6 +1,6 @@
 <?php
 
-use BddAdmin\Ddl\Ddl;
+use Unicaen\BddAdmin\Ddl\Ddl;
 
 $prepost = $c->getArg()[2];
 $action  = $c->getArg()[3];

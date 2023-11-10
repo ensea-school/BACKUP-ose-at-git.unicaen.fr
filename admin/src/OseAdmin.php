@@ -1,5 +1,8 @@
 <?php
 
+use Unicaen\BddAdmin\Bdd;
+use Unicaen\BddAdmin\DataUpdater;
+use Psr\Container\ContainerInterface;
 
 class OseAdmin
 {
@@ -10,9 +13,9 @@ class OseAdmin
 
     protected Console $console;
 
-    protected ?\BddAdmin\Bdd $bdd = null;
+    protected ?Bdd $bdd = null;
 
-    protected ?\BddAdmin\DataUpdater $dataUpdater = null;
+    protected ?DataUpdater $dataUpdater = null;
 
     /**
      * @var array
@@ -44,7 +47,7 @@ class OseAdmin
      */
     public $version;
 
-    private ?\Psr\Container\ContainerInterface $container = null;
+    private ?ContainerInterface $container = null;
 
 
 
@@ -85,6 +88,11 @@ class OseAdmin
                 }
             }
         });
+
+        require_once $this->getOseDir().'config/application.config.php';
+
+        Application::init();
+        Application::start();
 
         $this->console = new Console();
 
@@ -264,13 +272,9 @@ class OseAdmin
 
 
 
-    public function getContainer(): \Psr\Container\ContainerInterface
+    public function getContainer(): ContainerInterface
     {
         if (empty($this->container)){
-            require_once $this->getOseDir().'config/application.config.php';
-
-            Application::init();
-            Application::start();
             $this->container = Application::$container;
         }
 
@@ -416,16 +420,16 @@ class OseAdmin
 
 
     /**
-     * @return \BddAdmin\Bdd
+     * @return Bdd
      */
-    public function getBdd(): \BddAdmin\Bdd
+    public function getBdd(): Bdd
     {
         if (!$this->bdd) {
             if (!$this->bddIsOk($msg)) {
                 $this->console->printDie("Impossible d'accéder à la base de données : $msg!"
                     . "\nVeuillez contrôler vos paramètres de configuration s'il vous plaît, avant de refaire une tentative de MAJ de la base de données (./bin/ose update-bdd).");
             }
-            $this->bdd = new \BddAdmin\Bdd(Config::getBdd());
+            $this->bdd = new Bdd(Config::getBdd());
             if (PHP_SAPI == 'cli') {
                 $this->bdd->setLogger($this->console);
             }
@@ -451,11 +455,11 @@ class OseAdmin
 
 
     /**
-     * @param \BddAdmin\Bdd $bdd
+     * @param Bdd $bdd
      *
      * @return $this
      */
-    public function setBdd(\BddAdmin\Bdd $bdd)
+    public function setBdd(Bdd $bdd)
     {
         $this->bdd = $bdd;
 

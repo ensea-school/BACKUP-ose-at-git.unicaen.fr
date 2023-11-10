@@ -1,8 +1,8 @@
 <?php
 
-use BddAdmin\Bdd;
-use BddAdmin\Ddl\Ddl;
-use BddAdmin\Ddl\DdlFilters;
+use Unicaen\BddAdmin\Bdd;
+use Unicaen\BddAdmin\Ddl\Ddl;
+use Unicaen\BddAdmin\Ddl\DdlFilters;
 
 class MigrationManager
 {

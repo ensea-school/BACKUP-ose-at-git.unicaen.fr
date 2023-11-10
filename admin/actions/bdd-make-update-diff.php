@@ -9,7 +9,7 @@ $c->begin("Construction d'un script de mise à jour de la base de données");
 $c->msg("Attention : par rapport à update-bdd, seules les définitions des objets sont concernées. Les requêtes de mise à jour des données ne sont pas générées.");
 
 /* Récupération du schéma de référence */
-$ref = new BddAdmin\Ddl\Ddl;
+$ref = new Unicaen\BddAdmin\Ddl\Ddl;
 $ref->loadFromDir($oa->getOseDir() . 'data/ddl');
 
 

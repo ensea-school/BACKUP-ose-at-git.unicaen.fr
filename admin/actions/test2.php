@@ -1,6 +1,5 @@
 <?php
 
-use Unicaen\BddAdmin\Ddl\Ddl;
 
 // Initialisation
 $bdd = $oa->getBdd();
@@ -10,6 +9,9 @@ $bdd->setLogger($c);
 //$ref->loadFromDir($oa->getOseDir() . 'data/ddl-pg');
 
 
-$d = $bdd->table()->exists("toto");
+
+//$d = $bdd->schema()->create(['name' => 'lololo8']);
+//$d = $bdd->schema()->rename('lololo8', 'lo9');
+$d = $bdd->schema()->drop('lo9');
 
 var_dump($d);

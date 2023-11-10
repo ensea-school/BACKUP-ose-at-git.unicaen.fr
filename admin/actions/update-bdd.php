@@ -1,6 +1,6 @@
 <?php
 
-use BddAdmin\Ddl\Ddl;
+use Unicaen\BddAdmin\Ddl\Ddl;
 
 // Initialisation
 $bdd = $oa->getBdd();

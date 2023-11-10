@@ -9,7 +9,7 @@ SELECT
 FROM
   intervenant i
   JOIN tbl_workflow w ON w.intervenant_id = i.id
-  JOIN statut si ON si.id = i.intervenant_id
+  JOIN statut si ON si.id = i.statut_id
   JOIN (
     SELECT DISTINCT
       c.intervenant_id,

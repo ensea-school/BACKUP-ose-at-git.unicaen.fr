@@ -228,7 +228,8 @@ SELECT DISTINCT
     telpro.numero                                                                      tel_pro,
     COALESCE(ind.tel_perso_ow, ind.tel_perso)                                          tel_perso,
     compte.email                                                                       email_pro,
-    COALESCE(ind.email_perso_ow, ind.email_perso)                                      email_perso,
+    CAST(NULL AS varchar2(255))                                                        email_perso,
+    --COALESCE(ind.email_perso_ow, ind.email_perso)                                      email_perso,
     /* Adresse */
     TRIM(adr.adresse1 ||
          CASE

@@ -128,7 +128,7 @@ class PlafondConfigElementViewHelper extends AbstractHtmlElement
                                 plafond: el.data('plafond-id'),
                                 name: el.data('name'),
                                 value: el.val(),
-                                entityId: <?= $entityId ?: 'null' ?>
+                                entityId: el.data('entity-id')
                             },
                             success: function () {
                                 unicaenVue.flashMessenger.toast('Votre modification a bien été prise en compte', 'success');

@@ -316,5 +316,3 @@ FROM
   LEFT JOIN fonction_referentiel         fr ON fr.id    = t.fonction_referentiel_id
   LEFT JOIN type_validation              tv ON tvh.code = 'REALISE' AND tv.code = 'CLOTURE_REALISE'
   LEFT JOIN validation                    v ON v.intervenant_id = i.id AND v.type_validation_id = tv.id AND v.histo_destruction IS NULL
-
-

@@ -537,5 +537,3 @@ SELECT rownum id,
        icon
 FROM historique
 ORDER BY intervenant_id, ordre ASC, histo_date ASC
-
-

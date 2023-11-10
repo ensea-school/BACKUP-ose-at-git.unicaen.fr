@@ -96,6 +96,8 @@
         <field name="syncStructure" type="boolean" column="SYNC_STRUCTURE" nullable="false"/>
         <field name="syncUtilisateurCode" type="boolean" column="SYNC_UTILISATEUR_CODE" nullable="false"/>
         <field name="irrecevable" type="boolean" column="IRRECEVABLE" nullable="true"/>
+        <field name="numeroPec" type="string" column="NUMERO_PEC" length="255" nullable="true"/>
+
 
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">

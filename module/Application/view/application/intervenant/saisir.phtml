@@ -28,12 +28,10 @@ if ($errors) {
                 <div class="card-header">Données essentielles</div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <?= $this->formControlGroup($form->get('nomUsuel')); ?>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <?= $this->formControlGroup($form->get('prenom')); ?>
                         </div>
                     </div>
@@ -49,6 +47,17 @@ if ($errors) {
                         <div class="col-md-6">
                             <?= $this->formControlGroup($form->get('codeRh')); ?>
                         </div>
+                    </div>
+                    <!--INSEE ET NUMERO DE PRISE EN CHARGE-->
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <?= $this->formControlGroup($form->get('numeroInsee')); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?= $this->formControlGroup($form->get('numeroPec')); ?>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -124,8 +133,9 @@ if ($errors) {
                         <div class="col-md-6"><?= $this->formControlGroup($form->get('sourceCode')); ?></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6"><?= $this->formControlGroup($form->get('syncStatut')); ?></div>
-                        <div class="col-md-6"><?= $this->formControlGroup($form->get('syncStructure')); ?></div>
+                        <div class="col-md-4"><?= $this->formControlGroup($form->get('syncStatut')); ?></div>
+                        <div class="col-md-4"><?= $this->formControlGroup($form->get('syncStructure')); ?></div>
+                        <div class="col-md-4"><?= $this->formControlGroup($form->get('syncPec')); ?></div>
                     </div>
                 </div>
             </div>

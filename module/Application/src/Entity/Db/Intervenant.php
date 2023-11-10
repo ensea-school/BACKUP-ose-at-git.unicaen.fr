@@ -310,6 +310,12 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
     protected bool $irrecevable = false;
 
+    /**
+     * @var string|null
+     */
+    protected $numeroPec;
+
+
 
 
     /**
@@ -1649,6 +1655,23 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
         return $this;
     }
+
+
+
+    public function getNumeroPec (): ?string
+    {
+        return $this->numeroPec;
+    }
+
+
+
+    public function setNumeroPec (?string $numeroPec): self
+    {
+        $this->numeroPec = $numeroPec;
+
+        return $this;
+    }
+
 
 
 

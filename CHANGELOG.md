@@ -29,6 +29,7 @@ PHP 8.2 est maintenant requis
 
 * Meilleur affichage du service référentiel dans les notes de l'intervenant (#53479)
 * Les indicateurs 420 et 430 (contrat) remontent maintenant l'ensemble des intervenants (vacataires ou permanents)
+* Ajout de l'indicateur 392 pour suivre les indémnités de fin de contrat non validées par les étudiants
 
 
 

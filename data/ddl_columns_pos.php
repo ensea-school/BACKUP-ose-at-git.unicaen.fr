@@ -839,6 +839,7 @@ return [
         'HISTO_DESTRUCTEUR_ID',
         'EXPORT_DATE',
         'IRRECEVABLE',
+        'NUMERO_PEC',
     ],
     'INTERVENANT_DOSSIER'            => [
         'ID',

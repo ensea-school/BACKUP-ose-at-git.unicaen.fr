@@ -537,6 +537,18 @@ return [
             'position'    => 33,
             'commentaire' => NULL,
         ],
+        'NUMERO_PEC'               => [
+            'name'        => 'NUMERO_PEC',
+            'type'        => 'string',
+            'bdd-type'    => 'VARCHAR2',
+            'length'      => 100,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 61,
+            'commentaire' => NULL,
+        ],
         'PAYS_NAISSANCE_ID'        => [
             'name'        => 'PAYS_NAISSANCE_ID',
             'type'        => 'int',

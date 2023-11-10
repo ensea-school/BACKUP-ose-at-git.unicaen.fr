@@ -4544,38 +4544,38 @@
         },
         {
             "name": "laminas/laminas-session",
-            "version": "2.16.0",
+            "version": "2.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-session.git",
-                "reference": "9c845a0361625d5775cad6f043716196201ad41f"
+                "reference": "2f255f1b4349a9f330ba1a26dcf4e2773a6a8226"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-session/zipball/9c845a0361625d5775cad6f043716196201ad41f",
-                "reference": "9c845a0361625d5775cad6f043716196201ad41f",
+                "url": "https://api.github.com/repos/laminas/laminas-session/zipball/2f255f1b4349a9f330ba1a26dcf4e2773a6a8226",
+                "reference": "2f255f1b4349a9f330ba1a26dcf4e2773a6a8226",
                 "shasum": ""
             },
             "require": {
-                "laminas/laminas-eventmanager": "^3.5",
-                "laminas/laminas-servicemanager": "^3.15.1",
-                "laminas/laminas-stdlib": "^3.10.1",
-                "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
+                "laminas/laminas-eventmanager": "^3.12",
+                "laminas/laminas-servicemanager": "^3.22",
+                "laminas/laminas-stdlib": "^3.18",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
             },
             "conflict": {
                 "zendframework/zend-session": "*"
             },
             "require-dev": {
-                "laminas/laminas-cache": "^3.8",
-                "laminas/laminas-cache-storage-adapter-memory": "^2.2",
-                "laminas/laminas-coding-standard": "~2.4.0",
-                "laminas/laminas-db": "^2.15",
-                "laminas/laminas-http": "^2.17.1",
-                "laminas/laminas-validator": "^2.28",
-                "mongodb/mongodb": "~1.13.0",
-                "phpunit/phpunit": "^9.5.26",
-                "psalm/plugin-phpunit": "^0.18.0",
-                "vimeo/psalm": "^5.0"
+                "laminas/laminas-cache": "^3.10.1",
+                "laminas/laminas-cache-storage-adapter-memory": "^2.3",
+                "laminas/laminas-coding-standard": "~2.5.0",
+                "laminas/laminas-db": "^2.18.0",
+                "laminas/laminas-http": "^2.18",
+                "laminas/laminas-validator": "^2.30.1",
+                "mongodb/mongodb": "~1.16.0",
+                "phpunit/phpunit": "^9.6.13",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "vimeo/psalm": "^5.15"
             },
             "suggest": {
                 "laminas/laminas-cache": "Laminas\\Cache component",
@@ -4621,7 +4621,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-12-04T11:15:36+00:00"
+            "time": "2023-11-10T12:20:40+00:00"
         },
         {
             "name": "laminas/laminas-stdlib",
@@ -5795,16 +5795,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v6.3.4",
+            "version": "v6.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "eca495f2ee845130855ddf1cf18460c38966c8b6"
+                "reference": "0d14a9f6d04d4ac38a8cea1171f4554e325dae92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/eca495f2ee845130855ddf1cf18460c38966c8b6",
-                "reference": "eca495f2ee845130855ddf1cf18460c38966c8b6",
+                "url": "https://api.github.com/repos/symfony/console/zipball/0d14a9f6d04d4ac38a8cea1171f4554e325dae92",
+                "reference": "0d14a9f6d04d4ac38a8cea1171f4554e325dae92",
                 "shasum": ""
             },
             "require": {
@@ -5865,7 +5865,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v6.3.4"
+                "source": "https://github.com/symfony/console/tree/v6.3.8"
             },
             "funding": [
                 {
@@ -5881,7 +5881,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-16T10:10:12+00:00"
+            "time": "2023-10-31T08:09:35+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -6674,16 +6674,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v6.3.5",
+            "version": "v6.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "13d76d0fb049051ed12a04bef4f9de8715bea339"
+                "reference": "13880a87790c76ef994c91e87efb96134522577a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/13d76d0fb049051ed12a04bef4f9de8715bea339",
-                "reference": "13d76d0fb049051ed12a04bef4f9de8715bea339",
+                "url": "https://api.github.com/repos/symfony/string/zipball/13880a87790c76ef994c91e87efb96134522577a",
+                "reference": "13880a87790c76ef994c91e87efb96134522577a",
                 "shasum": ""
             },
             "require": {
@@ -6740,7 +6740,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v6.3.5"
+                "source": "https://github.com/symfony/string/tree/v6.3.8"
             },
             "funding": [
                 {
@@ -6756,20 +6756,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-18T10:38:32+00:00"
+            "time": "2023-11-09T08:28:21+00:00"
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v6.3.6",
+            "version": "v6.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "999ede244507c32b8e43aebaa10e9fce20de7c97"
+                "reference": "81acabba9046550e89634876ca64bfcd3c06aa0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/999ede244507c32b8e43aebaa10e9fce20de7c97",
-                "reference": "999ede244507c32b8e43aebaa10e9fce20de7c97",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/81acabba9046550e89634876ca64bfcd3c06aa0a",
+                "reference": "81acabba9046550e89634876ca64bfcd3c06aa0a",
                 "shasum": ""
             },
             "require": {
@@ -6824,7 +6824,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v6.3.6"
+                "source": "https://github.com/symfony/var-dumper/tree/v6.3.8"
             },
             "funding": [
                 {
@@ -6840,7 +6840,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-12T18:45:56+00:00"
+            "time": "2023-11-08T10:42:36+00:00"
         },
         {
             "name": "unicaen/app",
@@ -6848,7 +6848,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "a22e005fe9a26692a57514b5fbd8b2ff346e38cb"
+                "reference": "73b8fb3ac196cc51477e3ee90cef15e1cb4cbb55"
             },
             "require": {
                 "beberlei/assert": "^3.3",
@@ -6883,7 +6883,7 @@
                 "laminas/laminas-view": "^2.27",
                 "mpdf/mpdf": "^8.0",
                 "php": "^8.2",
-                "unicaen/console": "^6.0"
+                "unicaen/console": "dev-php82"
             },
             "require-dev": {
                 "laminas/laminas-test": "^4.7"
@@ -6903,7 +6903,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2023-09-29T12:10:09+00:00"
+            "time": "2023-11-10T11:22:17+00:00"
         },
         {
             "name": "unicaen/authentification",
@@ -6941,7 +6941,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bddadmin.git",
-                "reference": "b560581bb90afd38d242d2a00fe15ec3dfcebe72"
+                "reference": "6d322737e167f1d9bb22b17c4ece70183f3c1e47"
             },
             "type": "library",
             "autoload": {
@@ -6953,7 +6953,7 @@
                 ]
             },
             "description": "Module administrer des bases de données Postgresql et Oracle",
-            "time": "2023-11-10T11:02:22+00:00"
+            "time": "2023-11-10T13:54:40+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",
@@ -7046,11 +7046,11 @@
         },
         {
             "name": "unicaen/console",
-            "version": "6.0.0",
+            "version": "dev-php82",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/console.git",
-                "reference": "4d52eee8c0b2ae238aec8fa692685de455eaf7ca"
+                "reference": "4170e6dd937e4946e467eb27f93adeaeb25740fa"
             },
             "require": {
                 "laminas/laminas-stdlib": "^3.2",
@@ -7090,7 +7090,7 @@
                 ]
             },
             "description": "Build console applications using getopt syntax or routing, complete with prompts",
-            "time": "2022-11-28T12:26:08+00:00"
+            "time": "2023-10-02T14:33:23+00:00"
         },
         {
             "name": "unicaen/import",
@@ -9951,16 +9951,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v6.3.2",
+            "version": "v6.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "b47ca238b03e7b0d7880ffd1cf06e8d637ca1467"
+                "reference": "b7a63887960359e5b59b15826fa9f9be10acbe88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/b47ca238b03e7b0d7880ffd1cf06e8d637ca1467",
-                "reference": "b47ca238b03e7b0d7880ffd1cf06e8d637ca1467",
+                "url": "https://api.github.com/repos/symfony/config/zipball/b7a63887960359e5b59b15826fa9f9be10acbe88",
+                "reference": "b7a63887960359e5b59b15826fa9f9be10acbe88",
                 "shasum": ""
             },
             "require": {
@@ -10006,7 +10006,7 @@
             "description": "Helps you find, load, combine, autofill and validate configuration values of any kind",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/config/tree/v6.3.2"
+                "source": "https://github.com/symfony/config/tree/v6.3.8"
             },
             "funding": [
                 {
@@ -10022,20 +10022,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-19T20:22:16+00:00"
+            "time": "2023-11-09T08:28:21+00:00"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v6.3.5",
+            "version": "v6.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "2ed62b3bf98346e1f45529a7b6be2196739bb993"
+                "reference": "1f30f545c4151f611148fc19e28d54d39e0a00bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/2ed62b3bf98346e1f45529a7b6be2196739bb993",
-                "reference": "2ed62b3bf98346e1f45529a7b6be2196739bb993",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/1f30f545c4151f611148fc19e28d54d39e0a00bc",
+                "reference": "1f30f545c4151f611148fc19e28d54d39e0a00bc",
                 "shasum": ""
             },
             "require": {
@@ -10087,7 +10087,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/dependency-injection/tree/v6.3.5"
+                "source": "https://github.com/symfony/dependency-injection/tree/v6.3.8"
             },
             "funding": [
                 {
@@ -10103,7 +10103,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-25T16:46:40+00:00"
+            "time": "2023-10-31T08:07:48+00:00"
         },
         {
             "name": "symfony/var-exporter",

@@ -14,7 +14,7 @@
 
 ## Notes de mise à jour
 
-PHP 8.2 est maintenant requis
+A partir la V23 uniquement, PHP 8.2 est maintenant obligatoire.
 
 
 

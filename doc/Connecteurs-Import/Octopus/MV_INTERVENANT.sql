@@ -225,12 +225,11 @@ SELECT DISTINCT
     COALESCE(ind.c_pays_naissance_ow, ind.c_pays_naissance)                            z_pays_naissance_id,
     COALESCE(ind.c_dept_naissance_ow, ind.c_dept_naissance)                            z_departement_naissance_id,
     COALESCE(ind.c_pays_nationalite_ow, ind.c_pays_nationalite)                        z_pays_nationalite_id,
-    telpro.numero                                                                      tel_pro,
+    CAST(telpro.numero AS varchar2(255))                                               tel_pro,
     COALESCE(ind.tel_perso_ow, ind.tel_perso)                                          tel_perso,
-    compte.email                                                                       email_pro,
+    CAST(compte.email AS varchar2(255))                                                email_pro,
     CAST(NULL AS varchar2(255))                                                        email_perso,
-    --COALESCE(ind.email_perso_ow, ind.email_perso)                                      email_perso,
-    /* Adresse */
+    --COALESCE(ind.email_perso_ow, ind.email_perso)                                      email_perso,    /* Adresse */
     TRIM(adr.adresse1 ||
          CASE
              WHEN adr.adresse1 IS NOT NULL
@@ -269,19 +268,19 @@ SELECT DISTINCT
     CAST(NULL AS varchar2(255))                                                        autre_5,
     /* Employeur */
     CAST(NULL AS varchar2(255))                                                        z_employeur_id,
-    CASE
+    CAST(CASE
         WHEN i.validite_debut = to_date('01/01/1900', 'dd/mm/YYYY')
             THEN NULL
         ELSE i.validite_debut
-        END                                                                            validite_debut,
-    CASE
+        END AS DATE)                                                                           validite_debut,
+    CAST(CASE
         WHEN i.validite_fin = to_date('01/01/9999', 'dd/mm/YYYY')
             THEN NULL
         WHEN (i.z_type = 'vacataire' AND i.validite_fin < compte.date_fin AND i.validite_fin IS NOT NULL)
             THEN compte.date_fin
         ELSE i.validite_fin
-        END                                                                            validite_fin,
-    i.fin_affectation_siham                                                            affectation_fin
+        END AS DATE)                                                                         validite_fin,
+    CAST(i.fin_affectation_siham AS DATE)                                                           affectation_fin
 
 FROM i
          JOIN induni

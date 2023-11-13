@@ -657,6 +657,18 @@ return [
             'position'    => 50,
             'commentaire' => NULL,
         ],
+        'SYNC_PEC'              => [
+            'name'        => 'SYNC_PEC',
+            'type'        => 'bool',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 1,
+            'nullable'    => FALSE,
+            'default'     => '1',
+            'position'    => 62,
+            'commentaire' => NULL,
+        ],
         'SYNC_STRUCTURE'           => [
             'name'        => 'SYNC_STRUCTURE',
             'type'        => 'bool',

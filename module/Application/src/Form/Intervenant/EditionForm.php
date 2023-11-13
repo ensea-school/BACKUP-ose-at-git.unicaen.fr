@@ -463,7 +463,7 @@ class EditionForm extends AbstractForm
 
     public function activerEditionAvancee ()
     {
-        $elements = ['source', 'code'];
+        $elements = ['source', 'code', 'numeroPec', 'numeroInsee'];
         foreach ($this->getElements() as $element) {
             if (in_array($element->getName(), $elements)) {
 
@@ -487,7 +487,7 @@ class EditionForm extends AbstractForm
                 $element->setAttribute('disabled', true);
             }
         } else {
-            $noImport = ['syncStatut', 'syncStructure', 'statut', 'structure', 'intervenant-edition-login', 'intervenant-edition-password', 'numeroInsee', 'numeroPec'];
+            $noImport = ['syncStatut', 'syncStructure', 'syncPec', 'statut', 'structure', 'intervenant-edition-login', 'intervenant-edition-password'];
             if ($object->getAnnee()->getId() < $this->getServiceContext()->getAnneeImport()->getId()) {
                 $noImport[] = 'grade';
             }

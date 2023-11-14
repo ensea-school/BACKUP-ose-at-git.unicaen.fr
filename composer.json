@@ -9,7 +9,7 @@
     ],
     "require"          : {
         "php"                                         : ">=8.2",
-        "unicaen/app"                                 : "dev-php82 as 6.0.6",
+        "unicaen/app"                                 : "6.1.1",
         "unicaen/authentification"                    : "dev-php82 as 6.0.1",
         "unicaen/privilege"                           : "6.0.1",
         "unicaen/utilisateur"                         : "dev-php82",
@@ -22,7 +22,8 @@
         "unicaen/mail"                                : "dev-php82",
         "unicaen/vue"                                 : "dev-php82",
         "laminas/laminas-cache-storage-adapter-memory": "2.2.0",
-        "laminas/laminas-text"                        : "2.10"
+        "laminas/laminas-text"                        : "2.10",
+        "unicaen/console"                             : "dev-php82"
     },
     "require-dev"      : {
         "squizlabs/php_codesniffer"         : "*",

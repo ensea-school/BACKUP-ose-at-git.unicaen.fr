@@ -289,7 +289,7 @@ class Console implements \BddAdmin\Logger\LoggerInterface
 
 
 
-    public function getArg(int $index = null): string
+    public function getArg(int $index = null): ?string
     {
         $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : [];
 

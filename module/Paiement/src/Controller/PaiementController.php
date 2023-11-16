@@ -24,6 +24,7 @@ use Paiement\Form\Paiement\MiseEnPaiementFormAwareTrait;
 use Paiement\Form\Paiement\MiseEnPaiementRechercheFormAwareTrait;
 use Paiement\Service\DotationServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
+use Paiement\Service\NumeroPriseEnChargeServiceAwareTrait;
 use Paiement\Service\ServiceAPayerServiceAwareTrait;
 use Paiement\Service\TypeRessourceServiceAwareTrait;
 use Referentiel\Entity\Db\ServiceReferentiel;
@@ -50,6 +51,7 @@ class PaiementController extends AbstractController
     use DotationServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use EtatSortieServiceAwareTrait;
+    use NumeroPriseEnChargeServiceAwareTrait;
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -679,7 +681,16 @@ class PaiementController extends AbstractController
         $this->initFilters();
         $title = 'Import des numéros de prise en charge';
 
-        return true;
+        if ($this->getRequest()->isPost()) {
+            $files                      = $this->getRequest()->getFiles()->toArray();
+            $datas                      = $this->getRequest()->getPost();
+            $importFile                 = $files['importFile'];
+            $serviceNumeroPriseEnCharge = $this->getServiceNumeroPriseEnCharge();
+
+            return $serviceNumeroPriseEnCharge->treatImportFile($importFile, $datas['modeleImport']);
+        }
+
+        return compact('title');
     }
 
 

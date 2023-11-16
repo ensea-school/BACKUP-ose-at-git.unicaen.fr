@@ -69,6 +69,7 @@ return [
                     'route'      => '/import-numero-pec',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'importNumeroPec',
+                    'privileges' => Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE,
                 ],
                 'pilotage'              => [
                     'route'      => '/pilotage',
@@ -256,7 +257,7 @@ return [
         ],
         [
             'controller' => Controller\PaiementController::class,
-            'action'     => ['extractionPaie', 'imputationSiham'],
+            'action'     => ['extractionPaie', 'imputationSiham', 'importNumeroPec'],
             'privileges' => [Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE],
         ],
         [
@@ -279,6 +280,7 @@ return [
         Service\MiseEnPaiementService::class                     => Service\MiseEnPaiementServiceFactory::class,
         Service\MiseEnPaiementIntervenantStructureService::class => Service\MiseEnPaiementIntervenantStructureServiceFactory::class,
         Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementServiceFactory::class,
+        Service\NumeroPriseEnChargeService::class                => Service\NumeroPriseEnChargeServiceFactory::class,
         Assertion\PaiementAssertion::class                       => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         PaiementProcess::class                                   => PaiementProcessFactory::class,
     ],

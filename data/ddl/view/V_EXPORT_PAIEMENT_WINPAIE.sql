@@ -27,9 +27,9 @@ FROM (SELECT i.annee_id                                                         
              t2.periode_paiement_id                                                                            periode_id,
              i.id                                                                                              intervenant_id,
              CASE
-                 WHEN i.numero_insee IS NULL THEN '''' || TRIM(d.numero_insee)
+                 WHEN i.numero_insee IS NULL THEN '''' || TRIM(d.numero_insee) || TRIM(numero_pec)
                  ELSE
-                     '''' || TRIM(i.numero_insee)
+                     '''' || TRIM(i.numero_insee) || TRIM(numero_pec)
                  END                                                                                           insee,
              i.nom_usuel || ',' || i.prenom                                                                    nom,
              t2.code_origine                                                                                   code_origine,

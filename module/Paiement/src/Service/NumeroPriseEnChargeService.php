@@ -23,8 +23,11 @@ class NumeroPriseEnChargeService extends AbstractService
      */
     public function treatImportFile (array $file, string $model = 'winpaie'): AxiosModel
     {
-        $errors   = [];
-        $nameFile = $file['tmp_name'];
+        $errors                = [];
+        $nameFile              = $file['tmp_name'];
+        $errors['intervenant'] = [];
+        $errors['message']     = '';
+        $errors['file']        = [];
 
         $document = new Document();
         $document->loadFromFile($nameFile);
@@ -38,8 +41,8 @@ class NumeroPriseEnChargeService extends AbstractService
                 $datas = $this->genericTreatment($sheet);
             break;
         }
-        $errors['file'] = $datas['errors'];
-
+        $errors['file']    = $datas['errors'];
+        $errors['message'] = (isset($datas['message'])) ? $datas['message'] : [];
         //On met à jour les numéros de prise en charge des intervenants
         $em = $this->getEntityManager();
         $em->beginTransaction();
@@ -78,32 +81,48 @@ class NumeroPriseEnChargeService extends AbstractService
         ];
 
         $maxRow = $sheet->getMaxRow();
+        $maxCol = $sheet->getMaxCol();
+        if ($maxCol <= 3) {
+            $datas['result']  = $lines;
+            $datas['errors']  = $errors;
+            $datas['message'] = 'Le format de fichier fourni n\'est pas celui de winpaie';
+
+            return $datas;
+        }
 
         for ($rowNum = 2; $rowNum <= $maxRow; $rowNum++) {
 
             $cell     = $sheet->getCellByCoords($colonneNames['insee'], $rowNum);
             $colValue = $cell->getContent();
+            //On supprime la quote et les espaces
+            $colValue = str_replace(["'"], [''], $colValue);
             // Expression régulière pour capturer les caractères après le 16ème caractère
-            $regexInsee           = '/^(.{16})(.*)$/';
-            $regexInseeProvisoire = '/^(.{15})(.*)$/';
-            // Utilisation de preg_match pour appliquer l'expression régulière
-            if (preg_match($regexInsee, $colValue, $matches)) {
-                $insee = str_replace("'", "", $matches[1]);
-                $pec   = $matches[2];
-                //Si je n'ai pas réussi à récupérer le numéro PEC s'est que le numéro insee doit etre provisoire sur 15 carctères
-                if ($pec == '') {
-                    if (preg_match($regexInseeProvisoire, $colValue, $matches)) {
-                        $insee = str_replace(["'", " "], ["", ""], $matches[1]);
-                        $pec   = $matches[2];
-                    } else {
-                        $inseeFile = $sheet->getCellByCoords($colonneNames['insee'], $rowNum)->getContent();
-                        $nomFile   = $sheet->getCellByCoords($colonneNames['nom'], $rowNum)->getContent();
-                        $errors[]  = $nomFile . " - " . $inseeFile;
-                    }
+            /*
+             * 1- si numero comporte une lettre alors c'est un insee etrangé
+             * 2- si il fait moins de 15 caractères c'est un numéro provisoire
+             * 3- sinon c'est un insee normale
+             */
+            $regexInseeEtranger = '/[a-zA-Z]/';
+            $regexInsee         = '/^(.{15})(.*)$/';
+
+            //On regarde d'abord si c'est un insee etranger (qui contient une lettre)
+            if (preg_match($regexInseeEtranger, $colValue)) {
+                if (preg_match('/^(.{13})(.*)$/', $colValue, $matches)) {
+                    $insee   = trim($matches[1]);
+                    $pec     = trim($matches[2]);
+                    $lines[] = [
+                        'insee' => $insee,
+                        'pec'   => $pec,
+                        'nom'   => $sheet->getCellByCoords($colonneNames['nom'], $rowNum)->getContent(),
+                    ];
                 }
+                continue;
+            } elseif (preg_match($regexInsee, $colValue, $matches)) {
+                $insee   = $matches[1];
+                $pec     = $matches[2];
                 $lines[] = [
-                    'insee' => $insee,
-                    'pec'   => $pec,
+                    'insee' => trim($insee),
+                    'pec'   => trim($pec),
                     'nom'   => $sheet->getCellByCoords($colonneNames['nom'], $rowNum)->getContent(),
                 ];
             } else {
@@ -113,9 +132,10 @@ class NumeroPriseEnChargeService extends AbstractService
                 $errors[]  = $nomFile . " - " . $inseeFile;
             }
         }
+        $datas['result']  = $lines;
+        $datas['errors']  = $errors;
+        $datas['message'] = '';
 
-        $datas['result'] = $lines;
-        $datas['errors'] = $errors;
 
         return $datas;
     }
@@ -134,6 +154,14 @@ class NumeroPriseEnChargeService extends AbstractService
         ];
 
         $maxRow = $sheet->getMaxRow();
+        $maxCol = $sheet->getMaxCol();
+        if ($maxCol != 3) {
+            $datas['result']  = $lines;
+            $datas['errors']  = $errors;
+            $datas['message'] = 'Le format de fichier fourni n\'est pas le modèle numérique';
+
+            return $datas;
+        }
 
         for ($rowNum = 2; $rowNum <= $maxRow; $rowNum++) {
 
@@ -148,8 +176,9 @@ class NumeroPriseEnChargeService extends AbstractService
             ];
         }
 
-        $datas['result'] = $lines;
-        $datas['errors'] = $errors;
+        $datas['result']  = $lines;
+        $datas['errors']  = $errors;
+        $datas['message'] = '';
 
         return $datas;
     }

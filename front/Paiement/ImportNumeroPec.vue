@@ -132,10 +132,8 @@ export default {
                     let datas = response.data;
                     this.fileErrors = datas.file;
                     this.intervenantMissing = datas.intervenant;
-                    console.log(this.messageErrors);
                     if (datas.message.length != 0) {
                         this.messageErrors = datas.message
-                        console.log(this.messageErrors);
                     } else {
                         this.messageConfirm = "Importation des numéros de prise en charge réalisée avec succés !";
                     }

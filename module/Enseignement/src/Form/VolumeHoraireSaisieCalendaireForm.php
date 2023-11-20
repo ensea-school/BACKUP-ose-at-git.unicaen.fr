@@ -6,6 +6,7 @@ use Application\Entity\Db\Periode;
 use Application\Filter\DateTimeFromString;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Service\Service\TagServiceAwareTrait;
 use Enseignement\Entity\VolumeHoraireListe;
@@ -28,6 +29,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
     use TagServiceAwareTrait;
     use TypeInterventionServiceAwareTrait;
     use PeriodeServiceAwareTrait;
+    use ContextServiceAwareTrait;
 
     /**
      * @var ElementPedagogique
@@ -364,7 +366,27 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
     {
         return [
             'horaire-debut'             => [
-                'required' => true,
+                'required'   => true,
+                'validators' => [[
+                                     'name'    => 'Callback',
+                                     'options' => [
+                                         'messages' => [
+                                             \Laminas\Validator\Callback::INVALID_VALUE => 'La date de début saisie n\'ai pas comprise dans la période de l\'année universitaire',
+                                         ],
+                                         'callback' => function ($value, $context = []) {
+                                             $anneeContext = $this->getServiceContext()->getAnnee();
+                                             $debAnnee     = $anneeContext->getDateDebut()->getTimestamp();
+                                             $finAnnee     = $anneeContext->getDateFin()->getTimestamp();
+                                             $horaireDebut = DateTimeFromString::run($context['horaire-debut']);
+                                             $deb          = $horaireDebut->getTimestamp();
+                                             if ($finAnnee > $deb && $debAnnee < $deb) {
+                                                 return true;
+                                             }
+
+                                             return false;
+                                         },
+                                     ],
+                                 ]],
             ],
             'horaire-fin'               => [
                 'required'   => true,
@@ -384,6 +406,26 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
                                              $diff         = $fin - $deb;
 
                                              return $diff >= 0;
+                                         },
+                                     ],
+                                 ],
+                                 [
+                                     'name'    => 'Callback',
+                                     'options' => [
+                                         'messages' => [
+                                             \Laminas\Validator\Callback::INVALID_VALUE => 'La date de fin saisie n\'ai pas comprise dans la période de l\'année universitaire',
+                                         ],
+                                         'callback' => function ($value, $context = []) {
+                                             $anneeContext = $this->getServiceContext()->getAnnee();
+                                             $debAnnee     = $anneeContext->getDateDebut()->getTimestamp();
+                                             $finAnnee     = $anneeContext->getDateFin()->getTimestamp();
+                                             $horaireFin   = DateTimeFromString::run($context['horaire-fin']);
+                                             $fin          = $horaireFin->getTimestamp();
+                                             if ($finAnnee > $fin && $debAnnee < $fin) {
+                                                 return true;
+                                             }
+
+                                             return false;
                                          },
                                      ],
                                  ]],
@@ -426,6 +468,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
             ],
         ];
     }
+
 }
 
 

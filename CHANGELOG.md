@@ -12,6 +12,10 @@
 
 * Une colonne "Structure" a été ajoutée à l'export de l'offre de formation
 
+## Corrections
+
+* Ajout d'un contrôle de date sur l'année universitaire sur la saisie en mode calendaire (#53364)
+
 ## Notes de mise à jour
 
 A partir la V23 uniquement, PHP 8.2 est maintenant obligatoire.

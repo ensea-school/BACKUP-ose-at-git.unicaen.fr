@@ -7,6 +7,7 @@
 ## Nouveautés
 
 * Gestion arbosrescente des structures dans toute l'application (#3268)
+* Possibilité d'importer et/ou gérer les numéros de prise en charge des intervenants pour la paie (#15131)
 
 ## Améliorations
 
@@ -15,10 +16,14 @@
 ## Corrections
 
 * Ajout d'un contrôle de date sur l'année universitaire sur la saisie en mode calendaire (#53364)
+* Ajout d'un contrôle au niveau des données personnelles,  pour empêcher de mettre un statut d'une année différente de l'intervenant (#53668)
 
 ## Notes de mise à jour
 
 A partir la V23 uniquement, PHP 8.2 est maintenant obligatoire.
+
+Pour les établissements qui utilisent le module Export SIHAM : la configuration spécifique du module d'export Siham anciennement mise dans config/autoload/unicaen-siham.local.php doit maintenant être mise directement à la racine de OSE dans le fichier de configuration globale config.local.php. (Voir un exemple dans [unicaen-siham.local.php](config.local.php.default)).
+
 
 
 

@@ -4,6 +4,7 @@ namespace Dossier\Controller;
 
 use Application\Constants;
 use Application\Controller\AbstractController;
+use DoctrineORMModule\Proxy\__CG__\Intervenant\Entity\Db\Statut;
 use Dossier\Form\Traits\IntervenantDossierFormAwareTrait;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
@@ -41,7 +42,7 @@ class IntervenantDossierController extends AbstractController
     use ImportProcessusAwareTrait;
 
 
-    protected function initFilters()
+    protected function initFilters ()
     {
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\Intervenant::class,
@@ -52,7 +53,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public function indexAction()
+    public function indexAction ()
     {
         $this->initFilters();
 
@@ -159,8 +160,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function changeStatutDossierAction()
+    public function changeStatutDossierAction ()
     {
         if ($this->getRequest()->isPost()) {
             $data        = $this->getRequest()->getPost();
@@ -171,22 +171,30 @@ class IntervenantDossierController extends AbstractController
             }
 
             $intervenantDossier = $this->getServiceDossier()->getByIntervenant($intervenant);
-            $statut             = $this->getServiceStatut()->get($data['DossierStatut']['statut']);
-            if ($statut) {
-                $intervenantDossier->setStatut($statut);
-                $this->getServiceDossier()->save($intervenantDossier);
-                $intervenant->setStatut($statut);
-                $intervenant->setSyncStatut(false);
-                $this->getServiceIntervenant()->save($intervenant);
-                $this->updateTableauxBord($intervenant);
+            /**
+             * @var Statut $statut
+             */
+            $statut = $this->getServiceStatut()->get($data['DossierStatut']['statut']);
 
-                // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
-                // au statut choisi dans le dossier.
-                if ($role->getIntervenant()) {
-                    $this->serviceUserContext->clearIdentityRoles();
-                    \Application::$container->get(\Application\Provider\Identity\IdentityProvider::class)->clearIdentityRoles();
-                    \Application::$container->get(\Application\Provider\Role\RoleProvider::class)->clearRoles();
-                    $this->serviceUserContext->setSelectedIdentityRole($statut->getRoleId());
+            if ($statut) {
+                //On vérifie que l'année du statut est bien la même année que celle de l'intervenant que l'on veut modifier
+                if ($statut->getAnnee()->getId() != $intervenant->getAnnee()->getId()) {
+                    $this->flashMessenger()->addErrorMessage("L'année du statut ( " . $statut->getAnnee()->getLibelle() . ") et celle de l'intervenant ( " . $intervenant->getAnnee()->getLibelle() . ") sont différentes. Impossible de mettre à jour le statut.");
+                } else {
+                    $intervenantDossier->setStatut($statut);
+                    $this->getServiceDossier()->save($intervenantDossier);
+                    $intervenant->setStatut($statut);
+                    $intervenant->setSyncStatut(false);
+                    $this->getServiceIntervenant()->save($intervenant);
+                    $this->updateTableauxBord($intervenant);
+                    // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
+                    // au statut choisi dans le dossier.
+                    if ($role->getIntervenant()) {
+                        $this->serviceUserContext->clearIdentityRoles();
+                        \Application::$container->get(\Application\Provider\Identity\IdentityProvider::class)->clearIdentityRoles();
+                        \Application::$container->get(\Application\Provider\Role\RoleProvider::class)->clearRoles();
+                        $this->serviceUserContext->setSelectedIdentityRole($statut->getRoleId());
+                    }
                 }
             }
         }
@@ -197,7 +205,7 @@ class IntervenantDossierController extends AbstractController
 
 
     public
-    function validerAction()
+    function validerAction ()
     {
         $this->initFilters();
 
@@ -223,7 +231,7 @@ class IntervenantDossierController extends AbstractController
 
 
     public
-    function devaliderAction()
+    function devaliderAction ()
     {
         $this->initFilters();
 
@@ -244,7 +252,7 @@ class IntervenantDossierController extends AbstractController
 
 
     public
-    function supprimerAction()
+    function supprimerAction ()
     {
         $this->initFilters();
 
@@ -266,7 +274,7 @@ class IntervenantDossierController extends AbstractController
 
 
     public
-    function differencesAction()
+    function differencesAction ()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
 
@@ -295,7 +303,7 @@ class IntervenantDossierController extends AbstractController
 
 
     public
-    function purgerDifferencesAction()
+    function purgerDifferencesAction ()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
 
@@ -322,7 +330,7 @@ class IntervenantDossierController extends AbstractController
 
 
     private
-    function updateTableauxBord(Intervenant $intervenant, $validation = false)
+    function updateTableauxBord (Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'dossier',

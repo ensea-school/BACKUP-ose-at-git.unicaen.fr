@@ -42,8 +42,8 @@
         }
     },
     "scripts"          : {
-        "sniffer:php8": "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0",
-        "phpcs"       : "./vendor/bin/phpcs -p ./module --standard=PSR12"
+        "sniffer:php8": "./vendor/bin/phpcs -p ./module --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.2",
+        "phpcs"       : "./vendor/bin/phpcs --standard=phpcs.xml"
     },
     "minimum-stability": "dev"
 }

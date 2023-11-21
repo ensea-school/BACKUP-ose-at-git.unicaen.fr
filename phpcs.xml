@@ -12,11 +12,15 @@
     <!-- Show progress -->
     <arg value="p"/>
 
+    <config name="testVersion" value="8.2-"/>
+
     <!-- Paths to check -->
     <file>admin</file>
-    <file>src</file>
+    <file>module</file>
+    <!--<file>vendor</file>-->
     <!--<file>test</file>-->
 
     <!-- Include all rules from Laminas Coding Standard -->
-    <rule ref="LaminasCodingStandard"/>
+    <!--<rule ref="LaminasCodingStandard"/>-->
+    <rule ref="vendor/phpcompatibility/php-compatibility/PHPCompatibility"/>
 </ruleset>

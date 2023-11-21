@@ -5,8 +5,9 @@ SELECT
   code,
   code_rh,
   CASE WHEN sync_utilisateur_code = 1 THEN COALESCE(s_utilisateur_code,i_utilisateur_code) ELSE i_utilisateur_code END     utilisateur_code,
-  CASE WHEN annee_id < current_annee_id AND intervenant_id IS NOT NULL THEN intervenant_structure_id ELSE structure_id END structure_id,
-  CASE
+ CASE WHEN mission_structure_id IS NOT NULL THEN mission_structure_id
+	  WHEN annee_id < current_annee_id THEN intervenant_structure_id ELSE structure_id END structure_id,
+CASE
     WHEN action = 'insert' OR intervenant_histo = 1 THEN statut_source_id
     WHEN (action = 'update-no-statut' OR sync_statut = 0 OR annee_id < current_annee_id) AND statut_intervenant_id IS NOT NULL THEN statut_intervenant_id
     ELSE statut_source_id
@@ -306,6 +307,17 @@ FROM (
       LEFT JOIN voirie                  v ON v.source_code      = s.z_adresse_voirie_id
       LEFT JOIN pays                 padr ON padr.source_code   = s.z_adresse_pays_id
       LEFT JOIN employeur            empl ON empl.source_code   = s.z_employeur_id
+      LEFT JOIN (
+            SELECT
+                m.intervenant_id    intervenant_id,
+                m.structure_id      structure_id
+            FROM mission m
+            JOIN validation_mission vm ON vm.mission_id = m.id
+            JOIN validation v2 ON v2.id = vm.validation_id AND v2.histo_destruction IS NULL
+            WHERE m.histo_destruction IS NULL
+            GROUP BY m.intervenant_id, m.structure_id
+            HAVING COUNT(DISTINCT m.structure_id) = 1
+          ) mi ON mi.intervenant_id = i.id
       LEFT JOIN (
         SELECT DISTINCT intervenant_id
         FROM (      select intervenant_id from AGREMENT where histo_destruction is null

@@ -210,7 +210,7 @@ SELECT DISTINCT
     CAST(telpro.numero AS varchar2(255))                                               tel_pro,
     COALESCE(ind.tel_perso_ow, ind.tel_perso)                                          tel_perso,
     CAST(compte.email AS varchar2(255))                                                email_pro,
-    -CAST(NULL AS varchar2(255))                                                        email_perso,
+    CAST(NULL AS varchar2(255))                                                        email_perso,
     --COALESCE(ind.email_perso_ow, ind.email_perso)                                      email_perso,    /* Adresse */
     TRIM(adr.adresse1 ||
          CASE

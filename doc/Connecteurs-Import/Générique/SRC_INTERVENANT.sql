@@ -4,7 +4,7 @@ SELECT
   annee_id,
   code,
   code_rh,
-  CASE WHEN sync_utilisateur_code = 1 THEN COALESCE(s_utilisateur_code,i_utilisateur_code) ELSE i_utilisateur_code END     utilisateur_code,
+ CASE WHEN sync_utilisateur_code = 1 THEN COALESCE(s_utilisateur_code,i_utilisateur_code) ELSE i_utilisateur_code END     utilisateur_code,
  CASE WHEN mission_structure_id IS NOT NULL THEN mission_structure_id
 	  WHEN annee_id < current_annee_id THEN intervenant_structure_id ELSE structure_id END structure_id,
 CASE
@@ -140,10 +140,10 @@ FROM (
 
       -- Cas 9 : Quand il y a plusieurs sources et aucun intervenant
       WHEN nb_sources > 1 AND nb_intervenants = 0 THEN CASE
-        
+
         -- Si un des statuts est NON AUTORISE
         WHEN statut_source_nautorise = 1 THEN 'drop'
-        
+
         -- Si on est sur un statut "Autres" et qu'il y a un autre statut du même type
         WHEN types_identiques = 1 AND statut_source_autre = 1 THEN 'drop'
 
@@ -217,6 +217,7 @@ FROM (
       s.utilisateur_code                                                                     s_utilisateur_code,
       CASE WHEN i.sync_structure = 0 THEN i.structure_id ELSE str.id END                     structure_id,
       i.structure_id                                                                         intervenant_structure_id,
+      mi.structure_id																		 mission_structure_id,
       ssi.id                                                                                 statut_source_id,
       i.statut_id                                                                            statut_intervenant_id,
       g.id                                                                                   grade_id,

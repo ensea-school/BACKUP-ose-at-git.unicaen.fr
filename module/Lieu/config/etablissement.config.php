@@ -3,6 +3,7 @@
 namespace Lieu;
 
 use Application\Provider\Privilege\Privileges;
+use Lieu\Controller\EtablissementController;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
@@ -46,9 +47,9 @@ return [
 
     'guards' => [
         [
-            'controller' => 'Application\Controller\Etablissement',
+            'controller' => EtablissementController::class,
             'action'     => ['recherche'],
-            'roles'      => ['user']
+            'roles'      => ['user'],
         ],
     ],
 

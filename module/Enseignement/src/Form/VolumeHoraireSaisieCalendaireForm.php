@@ -206,7 +206,11 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
      */
     protected function getValuesOptionsPeriodes (): array
     {
-        $periodes = $this->getServicePeriode()->findPeriodeByElementPedagogique($this->elementPedagogique);
+        $periodes = [];
+
+        if ($this->elementPedagogique instanceof ElementPedagogique) {
+            $periodes = $this->getServicePeriode()->findPeriodeByElementPedagogique($this->elementPedagogique);
+        }
 
         if (empty($periodes)) {
             $qb = $this->getServicePeriode()->finderByHistorique();
@@ -225,7 +229,17 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
      */
     protected function getTypesIntervention (): array
     {
-        $typeInterventions = $this->getServiceTypeIntervention()->findTypeInterventionByElementPedagogique($this->elementPedagogique);
+        $typeInterventions = [];
+
+        if ($this->elementPedagogique instanceof ElementPedagogique) {
+            $typeInterventions = $this->getServiceTypeIntervention()->findTypeInterventionByElementPedagogique($this->elementPedagogique);
+        }
+
+        if (empty($typeInterventions)) {
+            $qb = $this->getServiceTypeIntervention()->finderByHistorique();
+            $this->getServiceTypeIntervention()->finderByContext();
+            $typeInterventions = Util::collectionAsOptions($this->getServiceTypeIntervention()->getList($qb));
+        }
 
         return $typeInterventions;
     }
@@ -345,7 +359,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
      *
      * @return VolumeHoraireSaisieCalendaireForm
      */
-    public function setElementPedagogique (ElementPedagogique $elementPedagogique): self
+    public function setElementPedagogique(?ElementPedagogique $elementPedagogique): self
     {
         $this->elementPedagogique = $elementPedagogique;
 

@@ -15,7 +15,6 @@
 
 ## Corrections
 
-* Ajout d'un contrôle de date sur l'année universitaire sur la saisie en mode calendaire (#53364)
 * Ajout d'un contrôle au niveau des données personnelles,  pour empêcher de mettre un statut d'une année différente de l'intervenant (#53668)
 
 ## Notes de mise à jour
@@ -25,6 +24,15 @@ A partir la V23 uniquement, PHP 8.2 est maintenant obligatoire.
 Pour les établissements qui utilisent le module Export SIHAM : la configuration spécifique du module d'export Siham anciennement mise dans config/autoload/unicaen-siham.local.php doit maintenant être mise directement à la racine de OSE dans le fichier de configuration globale config.local.php. (Voir un exemple dans [config.local.php.default](config.local.php.default)).
 
 
+# OSE 22.3 (à venir)
+
+## Corrections de bugs
+
+* Impossible de saisir du service hors établissement suite à une régression (#53694)
+
+## Améliorations
+
+* Ajout d'un contrôle de date sur l'année universitaire sur la saisie en mode calendaire (#53364)
 
 
 # OSE 22.2 (10/11/2023)

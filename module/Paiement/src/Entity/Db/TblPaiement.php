@@ -34,6 +34,8 @@ class TblPaiement
 
     private ?MiseEnPaiement $miseEnPaiement = null;
 
+    private ?CentreCout $centreCout = null;
+
     private float $heuresAPayerAA = 0.0;
 
     private float $heuresAPayerAC = 0.0;
@@ -111,6 +113,13 @@ class TblPaiement
     public function getMiseEnPaiement(): ?MiseEnPaiement
     {
         return $this->miseEnPaiement;
+    }
+
+
+
+    public function getCentreCout (): ?CentreCout
+    {
+        return $this->centreCout;
     }
 
 

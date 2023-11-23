@@ -16,10 +16,12 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\Json\Json;
+use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\TypeRessource;
 use Paiement\Entity\MiseEnPaiementRecherche;
+use Paiement\Form\Paiement\DemandeMiseEnPaiementRechercheFormAwareTrait;
 use Paiement\Form\Paiement\MiseEnPaiementFormAwareTrait;
 use Paiement\Form\Paiement\MiseEnPaiementRechercheFormAwareTrait;
 use Paiement\Service\DotationServiceAwareTrait;
@@ -30,6 +32,7 @@ use Paiement\Service\TypeRessourceServiceAwareTrait;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use UnicaenApp\Traits\SessionContainerTrait;
+use UnicaenVue\View\Model\AxiosModel;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
@@ -208,6 +211,38 @@ class PaiementController extends AbstractController
         }
 
         return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur', 'budget', 'whyNotEditable');
+    }
+
+
+
+    function demandeMiseEnPaiementLotAction ()
+    {
+        $title        = 'Mise en paiement';
+        $intervenants = [];
+        $structures   = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement()->getData();
+        if ($this->getRequest()->isPost()) {
+            //On récupere les données post notamment la structure recherchée
+            $idStructure  = $this->getRequest()->getPost('structure');
+            $structure    = $this->em()->find(Structure::class, $idStructure);
+            $intervenants = $this->getServiceServiceAPayer()->getListByStructure($structure);
+
+
+            return new AxiosModel($intervenants);
+        }
+
+        /**
+         * $rechercheForm = $this->getFormPaiementMiseEnPaiementRecherche();
+         * $rechercheForm->bind($recherche);
+         *
+         * $qb = $this->getServiceStructure()->finderByMiseEnPaiement();
+         * $this->getServiceStructure()->finderByRole($role, $qb);
+         * $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($recherche->getTypeIntervenant(), $qb);
+         * $this->getServiceMiseEnPaiement()->finderByEtat($recherche->getEtat(), $qb);
+         * $structures = $this->getServiceStructure()->getList($qb);
+         * $rechercheForm->populateStructures($structures);
+         */
+
+        return compact('title', 'structures', 'intervenants');
     }
 
 

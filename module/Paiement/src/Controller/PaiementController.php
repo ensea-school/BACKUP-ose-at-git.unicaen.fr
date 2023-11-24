@@ -32,6 +32,7 @@ use Paiement\Service\TypeRessourceServiceAwareTrait;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use UnicaenApp\Traits\SessionContainerTrait;
+use UnicaenApp\Util;
 use UnicaenVue\View\Model\AxiosModel;
 
 /**
@@ -219,28 +220,16 @@ class PaiementController extends AbstractController
     {
         $title        = 'Mise en paiement';
         $intervenants = [];
-        $structures   = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement()->getData();
+        $structures = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement();
+
         if ($this->getRequest()->isPost()) {
             //On récupere les données post notamment la structure recherchée
             $idStructure  = $this->getRequest()->getPost('structure');
             $structure    = $this->em()->find(Structure::class, $idStructure);
             $intervenants = $this->getServiceServiceAPayer()->getListByStructure($structure);
 
-
             return new AxiosModel($intervenants);
         }
-
-        /**
-         * $rechercheForm = $this->getFormPaiementMiseEnPaiementRecherche();
-         * $rechercheForm->bind($recherche);
-         *
-         * $qb = $this->getServiceStructure()->finderByMiseEnPaiement();
-         * $this->getServiceStructure()->finderByRole($role, $qb);
-         * $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($recherche->getTypeIntervenant(), $qb);
-         * $this->getServiceMiseEnPaiement()->finderByEtat($recherche->getEtat(), $qb);
-         * $structures = $this->getServiceStructure()->getList($qb);
-         * $rechercheForm->populateStructures($structures);
-         */
 
         return compact('title', 'structures', 'intervenants');
     }

@@ -61,6 +61,7 @@ export default {
     },
     data()
     {
+        console.log(this.structures);
         return {
             selectedStructure: null,
             urlDemandeMiseEnPaiement: unicaenVue.url('paiement/demande-mise-en-paiement-lot'),

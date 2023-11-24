@@ -293,6 +293,7 @@ return [
         Service\ServiceAPayerService::class                      => Service\ServiceAPayerServiceFactory::class,
         Service\MiseEnPaiementService::class                     => Service\MiseEnPaiementServiceFactory::class,
         Service\MiseEnPaiementIntervenantStructureService::class => Service\MiseEnPaiementIntervenantStructureServiceFactory::class,
+        Service\TblPaiementService::class => Service\TblPaiementServiceFactory::class,
         Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementServiceFactory::class,
         Service\NumeroPriseEnChargeService::class                => Service\NumeroPriseEnChargeServiceFactory::class,
         Assertion\PaiementAssertion::class                       => \UnicaenPrivilege\Assertion\AssertionFactory::class,

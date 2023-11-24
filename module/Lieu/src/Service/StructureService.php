@@ -8,11 +8,13 @@ use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Util;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Lieu\Entity\Db\Structure;
 use Paiement\Service\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
+use Paiement\Service\TblPaiementServiceAwareTrait;
 use UnicaenVue\View\Model\AxiosModel;
 
 
@@ -31,6 +33,7 @@ class StructureService extends AbstractEntityService
     use IntervenantServiceAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
+    use TblPaiementServiceAwareTrait;
 
 
     public function getEntityClass ()
@@ -266,6 +269,24 @@ class StructureService extends AbstractEntityService
 
 
 
+    public function finderByDemandeMiseEnPaiement (QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        $serviceTblPaiement = $this->getServiceTblPaiement();
+        $this->join($serviceTblPaiement, $qb, 'tblPaiement', false, $alias);
+
+
+        //Uniquement les entités tbl_paiement pour lesquelles il y a encore des heures a payer
+        $serviceTblPaiement->finderByHeuresAPayer($qb);
+        //Uniquement les entités tbl_paiement sur l'année contextuelle
+        $serviceTblPaiement->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
+
+        return $qb;
+    }
+
+
+
+
     /**
      * Méthode qui renvoient la liste des structures pour lesquelles il reste des demandes de mise en paiement
      * d'heures à faire
@@ -273,46 +294,23 @@ class StructureService extends AbstractEntityService
      * @return array
      */
 
-    public function getStructuresDemandeMiseEnPaiement (?TypeIntervenant $typeIntervenant = null): AxiosModel
+    public function getStructuresDemandeMiseEnPaiement (): array
     {
         $structures = [];
-        $sql        = "
-            SELECT
-                str.id    			        structure_id,
-                MAX(str.code)  			    structure_code,
-                MAX(str.libelle_court)  	structure_libelle
-            from tbl_paiement tp 
-            JOIN structure str ON str.id = tp.structure_id 
-            JOIN intervenant i ON i.id = tp.intervenant_id 
-            JOIN statut s ON s.id = i.statut_id 
-            JOIN type_intervenant ti ON ti.id = s.type_intervenant_id 
-            WHERE (tp.heures_a_payer_aa > tp.heures_demandees_aa  OR tp.heures_a_payer_ac > tp.heures_a_payer_ac) 
-            AND tp.annee_id = :annee ";
-        //On ajoute le filtre par type d'intervenant
-        if ($typeIntervenant instanceof TypeIntervenant) {
-            $sql .= "AND ti.code = :typeIntervenant";
-        }
-        $sql .= "
-            GROUP BY str.id
-            ORDER BY MAX(str.libelle_court) ASC
-        ";
-
-
-        $params = ['annee' => $this->getServiceContext()->getAnnee()->getId()];
-        $stmt   = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
-
-        while ($r = $stmt->fetchAssociative()) {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $qb   = $this->finderByDemandeMiseEnPaiement();
+        $this->finderByRole($role, $qb);
+        $listeStructures = $this->getList($qb);
+        foreach ($listeStructures as $structure) {
             $structures[] =
                 [
-                    'id'      => $r['STRUCTURE_ID'],
-                    'libelle' => $r['STRUCTURE_LIBELLE'],
-                    'code'    => $r['STRUCTURE_CODE'],
+                    'id'      => $structure->getId(),
+                    'libelle' => $structure->getLibelleCourt(),
+                    'code'    => $structure->getCode(),
                 ];
         }
 
-        $data = new AxiosModel($structures);
-
-        return $data;
+        return $structures;
     }
 
 

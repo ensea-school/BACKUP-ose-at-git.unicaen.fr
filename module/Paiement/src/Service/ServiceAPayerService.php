@@ -35,7 +35,7 @@ class ServiceAPayerService extends AbstractService
         FROM
             ".TblPaiement::class." tp
         WHERE
-            tp. intervenant = :intervenant
+            tp.intervenant = :intervenant
         ";
         /** @var TblPaiement[] $meps */
         $meps = $this->getEntityManager()->createQuery($dql)->setParameters(['intervenant' => $intervenant])->getResult();

@@ -29,6 +29,8 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 ## Corrections de bugs
 
 * Impossible de saisir du service hors établissement suite à une régression (#53694)
+* Report de service dans l'IHM de tests de formules de calcul rétabli (#53684)
+* Correction sur le rafraîchissement de l'intervenant lors d'un changement de statut au niveau des données personnelles (#53778)
 
 ## Améliorations
 

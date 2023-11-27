@@ -10,6 +10,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Intervenant\Entity\Db\Statut;
 use Lieu\Entity\Db\Etablissement;
 use Lieu\Entity\Db\Structure;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -65,6 +66,16 @@ class ContextService extends AbstractService
         }
 
         return $this->selectedIdentityRole;
+    }
+
+
+
+    public function refreshRoleStatut (Statut $statut): void
+    {
+        $this->serviceUserContext->clearIdentityRoles();
+        \Application::$container->get(\Application\Provider\Identity\IdentityProvider::class)->clearIdentityRoles();
+        \Application::$container->get(\Application\Provider\Role\RoleProvider::class)->clearRoles();
+        $this->serviceUserContext->setSelectedIdentityRole($statut->getRoleId());
     }
 
 

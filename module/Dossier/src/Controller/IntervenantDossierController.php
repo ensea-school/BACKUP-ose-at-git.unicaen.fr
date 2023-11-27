@@ -190,10 +190,7 @@ class IntervenantDossierController extends AbstractController
                     // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
                     // au statut choisi dans le dossier.
                     if ($role->getIntervenant()) {
-                        $this->serviceUserContext->clearIdentityRoles();
-                        \Application::$container->get(\Application\Provider\Identity\IdentityProvider::class)->clearIdentityRoles();
-                        \Application::$container->get(\Application\Provider\Role\RoleProvider::class)->clearRoles();
-                        $this->serviceUserContext->setSelectedIdentityRole($statut->getRoleId());
+                        $this->getServiceContext()->refreshRoleStatut($statut);
                     }
                 }
             }

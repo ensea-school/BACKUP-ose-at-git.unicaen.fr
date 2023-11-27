@@ -159,8 +159,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function changeStatutDossierAction()
+    public function changeStatutDossierAction()
     {
         if ($this->getRequest()->isPost()) {
             $data        = $this->getRequest()->getPost();
@@ -182,11 +181,10 @@ class IntervenantDossierController extends AbstractController
 
                 // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
                 // au statut choisi dans le dossier.
+                // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
+                // au statut choisi dans le dossier.
                 if ($role->getIntervenant()) {
-                    $this->serviceUserContext->clearIdentityRoles();
-                    \Application::$container->get(\Application\Provider\Identity\IdentityProvider::class)->clearIdentityRoles();
-                    \Application::$container->get(\Application\Provider\Role\RoleProvider::class)->clearRoles();
-                    $this->serviceUserContext->setSelectedIdentityRole($statut->getRoleId());
+                    $this->getServiceContext()->refreshRoleStatut($statut);
                 }
             }
         }
@@ -196,8 +194,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function validerAction()
+    public function validerAction()
     {
         $this->initFilters();
 
@@ -222,8 +219,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function devaliderAction()
+    public function devaliderAction()
     {
         $this->initFilters();
 
@@ -243,8 +239,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function supprimerAction()
+    public function supprimerAction()
     {
         $this->initFilters();
 
@@ -265,8 +260,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function differencesAction()
+    public function differencesAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
 
@@ -294,8 +288,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    public
-    function purgerDifferencesAction()
+    public function purgerDifferencesAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
 
@@ -321,8 +314,7 @@ class IntervenantDossierController extends AbstractController
 
 
 
-    private
-    function updateTableauxBord(Intervenant $intervenant, $validation = false)
+    private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'dossier',

@@ -3,11 +3,12 @@
 //@formatter:off
 
 return [
-    'name'    => 'FONCTION_REFERENTIEL_CODE_UN',
+    'name'    => 'FONCTION_REFERENTIEL_UN',
+    'unique'  => TRUE,
     'table'   => 'FONCTION_REFERENTIEL',
-    'index'   => 'FONCTION_REFERENTIEL_CODE_UN',
     'columns' => [
         'CODE',
+        'ANNEE_ID',
         'HISTO_DESTRUCTION',
     ],
 ];

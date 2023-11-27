@@ -531,6 +531,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'ANNEE_ID',
     ],
     'FORMULE'                        => [
         'ID',
@@ -2526,6 +2527,18 @@ return [
         'HISTO_DESTRUCTION',
         'HISTO_MODIFICATEUR_ID',
         'HISTO_MODIFICATION',
+    ],
+    'SAVE_PARAMETRE'                 => [
+        'ID',
+        'NOM',
+        'HISTO_CREATION',
+        'HISTO_CREATEUR_ID',
+        'HISTO_MODIFICATION',
+        'HISTO_MODIFICATEUR_ID',
+        'HISTO_DESTRUCTION',
+        'HISTO_DESTRUCTEUR_ID',
+        'VALEUR',
+        'DESCRIPTION',
     ],
 ];
 

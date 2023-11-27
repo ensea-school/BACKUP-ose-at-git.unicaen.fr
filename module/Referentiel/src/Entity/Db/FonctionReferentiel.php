@@ -3,6 +3,8 @@
 namespace Referentiel\Entity\Db;
 
 use Application\Entity\Db\Traits\DomaineFonctionnelAwareTrait;
+use Application\Interfaces\ParametreEntityInterface;
+use Application\Traits\ParametreEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityNotFoundException;
@@ -13,8 +15,9 @@ use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-class FonctionReferentiel implements HistoriqueAwareInterface, PlafondPerimetreInterface, PlafondDataInterface, ResourceInterface
+class FonctionReferentiel implements HistoriqueAwareInterface, ParametreEntityInterface, PlafondPerimetreInterface, PlafondDataInterface, ResourceInterface
 {
+    use ParametreEntityTrait;
     use HistoriqueAwareTrait;
     use StructureAwareTrait;
     use DomaineFonctionnelAwareTrait;

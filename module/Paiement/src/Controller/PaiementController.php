@@ -218,7 +218,7 @@ class PaiementController extends AbstractController
 
     function demandeMiseEnPaiementLotAction ()
     {
-        $title        = 'Mise en paiement';
+        $title = 'Demande de mise en paiement par lot';
         $intervenants = [];
         $structures = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement();
 

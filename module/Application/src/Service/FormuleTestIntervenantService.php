@@ -134,7 +134,7 @@ class FormuleTestIntervenantService extends AbstractEntityService
         $nbAutres = 0;
         foreach ($vhdata as $vhd) {
             if ($vhd['TYPE_INTERVENTION_CODE']) {
-                if (!array_key_exists($vhd['TYPE_INTERVENTION_CODE'], $typesIntervention) && count($typesIntervention == 8)){
+                if (!array_key_exists($vhd['TYPE_INTERVENTION_CODE'], $typesIntervention) && count($typesIntervention) == 8){
                     throw new \Exception('Il est impossible de transférer cette fiche : il y a plus de 5 types d\'intervention spécifiques, différents de CM/TD/TP');
                 }
 

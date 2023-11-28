@@ -116,7 +116,7 @@ class PlafondService extends AbstractEntityService
 
             foreach ($entity->getServiceReferentiel() as $referentiel) {
                 $sPqr->add($referentiel->getStructure());
-                $sPqr->add($referentiel->getFonctionReferentiel());
+                $sPqr->add($referentiel);
             }
 
             foreach ($entity->getMissions() as $mission) {

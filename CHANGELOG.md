@@ -3,7 +3,9 @@
 [OSE 22.2](#ose-222-10112023)
 
 # OSE 23 (à venir)
+<details><summary>OSE 23 (à venir)</summary>
 
+</details>
 ## Nouveautés
 
 * Gestion arbosrescente des structures dans toute l'application (#3268)

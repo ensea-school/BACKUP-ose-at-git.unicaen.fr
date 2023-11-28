@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 22.0](#ose-222-10112023)
+[OSE 22.2](#ose-222-10112023)
 
 # OSE 23 (à venir)
 

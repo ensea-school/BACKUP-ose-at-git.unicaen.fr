@@ -164,7 +164,7 @@ class PlafondsViewHelper extends AbstractHtmlElement
                 'class' => 'progress',
             ])->html(
                 $t('div', [
-                    'class' => 'progress-bar progress-bar-striped progress-bar-' . $color,
+                    'class' => 'progress-bar progress-bar-striped bg-' . $color,
                     'role' => 'progressbar',
                     'aria-valuenow' => $progression,
                     'aria-valuemin' => 0,

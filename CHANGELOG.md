@@ -4,8 +4,6 @@
 
 # OSE 23 (à venir)
 <details><summary>OSE 23 (à venir)</summary>
-
-</details>
 ## Nouveautés
 
 * Gestion arbosrescente des structures dans toute l'application (#3268)
@@ -24,6 +22,7 @@
 A partir la V23 uniquement, PHP 8.2 est maintenant obligatoire.
 
 Pour les établissements qui utilisent le module Export SIHAM : la configuration spécifique du module d'export Siham anciennement mise dans config/autoload/unicaen-siham.local.php doit maintenant être mise directement à la racine de OSE dans le fichier de configuration globale config.local.php. (Voir un exemple dans [config.local.php.default](config.local.php.default)).
+</details>
 
 
 # OSE 22.3 (à venir)

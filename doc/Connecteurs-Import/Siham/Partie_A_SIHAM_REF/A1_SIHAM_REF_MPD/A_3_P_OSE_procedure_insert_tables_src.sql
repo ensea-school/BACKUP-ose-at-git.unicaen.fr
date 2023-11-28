@@ -237,7 +237,7 @@ END;
 
 CREATE OR REPLACE PROCEDURE OSE.UM_SYNCHRO_VOIRIE(p_source_id number) IS
 /* ===================================================================================================
-    PROCEDURE UM_SYNCHRO_VOIRIE -- v2.2 03/12/2020
+    PROCEDURE UM_SYNCHRO_VOIRIE -- v2.3 28/11/2023
 ====================================================================================================*/                           
 
 -- VARIABLES DE TRAITEMENT ----------------------------
@@ -256,23 +256,8 @@ cursor cur_voirie is
 			, upper(trim(l_reg.liblon)) as ll_voie
 		 from zd00@SIHAM.WORLD reg	-- reglementation
 			, zd01@SIHAM.WORLD l_reg  -- libelle reglementation
-		where cdstco = 'VNT'	-- adresse VNT ou WAM
+		where cdstco = 'WAM'	-- adresse WAM
 		and reg.nudoss = l_reg.nudoss
-	UNION
-		select distinct trim(reg.cdcode) as code_voie
-			, upper(trim(l_reg.liblon)) as ll_voie
-		 from zd00@SIHAM.WORLD reg
-			, zd01@SIHAM.WORLD l_reg
-		where cdstco = 'WAM'
-		-- code de WAM qui n existent pas en VNT car libelles pas identiques pour meme code !
-		and trim(reg.cdcode) in (select distinct trim(reg.cdcode)
-						   from zd00@SIHAM.WORLD reg
-							where cdstco = 'WAM'
-						   minus
-							 select distinct trim(reg.cdcode)
-						   from zd00@SIHAM.WORLD reg
-							where cdstco = 'VNT'
-							)
 		and reg.nudoss = l_reg.nudoss
 	order by code_voie
 ;
@@ -326,7 +311,6 @@ BEGIN
     select count(*) INTO v_nb_total from OSE.UM_VOIRIE;
     dbms_output.put_line(rpad(' synchro UM_VOIRIE  ',35,' ')||'-  nb_insert :'||v_nb_insert||' - nb update :'||v_nb_update||' - nb enreg total :'||v_nb_total);
 END;
-/
 
 CREATE OR REPLACE PROCEDURE OSE.UM_ALIM_ADRESSE_NUMERO_COMPL IS
 /* ===================================================================================================

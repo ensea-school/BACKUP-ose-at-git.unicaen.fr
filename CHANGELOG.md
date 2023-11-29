@@ -40,6 +40,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 * Administration : Le différentiel au niveau de l'import des données s'affiche de nouveau sans erreur si un filtre est présent  (#53300)
 * Correction de problème d'arrondi au niveau des jauges des plafonds
 * L'état de sortie listant les privilèges de chaque rôle renvoie les bonnes valeurs pour les administrateurs (#53549)
+* Problème de valeurs NULL retourné par la formule de calcul de Rennes 2 résolu (#51135)
 
 ## Améliorations
 

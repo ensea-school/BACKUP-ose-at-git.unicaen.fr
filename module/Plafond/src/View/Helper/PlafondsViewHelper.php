@@ -146,7 +146,7 @@ class PlafondsViewHelper extends AbstractHtmlElement
 
         if (!$text) {
             $text = floatToString($plafond->getHeures()) . 'h, '
-                . floatToString($max - $plafond->getHeures()) . ' dispo.';
+                . floatToString(round($max - $plafond->getHeures(),2)) . ' dispo.';
         }
 
         $html = '';

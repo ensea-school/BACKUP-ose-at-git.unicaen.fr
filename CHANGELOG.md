@@ -36,6 +36,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 * En sélectionnant "Non" au paramètre général "Distinction FI/FA/FC des heures à payer", les demandes de mise en paiement pouvaient disparaitre de l'écran des demandes (#53752)
 * Les jauges de plafond référentiel s'affichent de nouveau correctement (#53371)
 * Les couleurs distinctes sont de nouveau présentes sur les jauges des plafonds (#53371)
+* La formule de calcul D'Avignon prend maintenant en compte correctement les heures de référentiel (#36193)
 
 ## Améliorations
 

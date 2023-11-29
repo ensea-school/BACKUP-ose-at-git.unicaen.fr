@@ -15,7 +15,7 @@
         "unicaen/utilisateur"                         : "dev-php82",
         "laminas/laminas-file"                        : "^2.8",
         "unicaen/code"                                : "dev-php82",
-        "unicaen/import"                              : "6.0.1",
+        "unicaen/import"                              : "6.0.2",
         "unicaen/tbl"                                 : "dev-php82",
         "unicaen/open-document"                       : "6.0.2",
         "unicaen/siham"                               : "6.1.2",

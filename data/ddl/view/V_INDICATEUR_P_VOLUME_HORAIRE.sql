@@ -4,7 +4,7 @@ SELECT
   tp.intervenant_id,
   ep.structure_id structure_id,
   pe.libelle etat,
-  ep.libelle element,
+  ep.libelle || ' (' || ep.code || ')' element,
   ti.code type_intervention,
   tp.heures,
   tp.plafond,

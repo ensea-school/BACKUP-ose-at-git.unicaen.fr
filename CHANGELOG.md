@@ -52,6 +52,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 * Nouvelle commande ./bin/ose calcul-feuille-de-route <in intervenant>
 * Indicateurs relatifs aux plafonds liés aux charges : ajout du code des enseignements (#47340)
 * Modification de la formule de calcul de Rennes 2 (#47753)
+* Plus de lien "Mot de passe oublié" affiché sur la fenêtre de connexion non CAS (#51885)
 
 # OSE 22.2 (10/11/2023)
 

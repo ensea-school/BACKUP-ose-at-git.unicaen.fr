@@ -212,6 +212,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
                             'data-type-ressource' => $trid,
                             'data-dotation'       => $this->budget[$sid][$trid]['dotation'],
                             'data-usage'          => $this->budget[$sid][$trid]['usage'],
+                            'style' => 'width: 100%',
                         ])->html(
                             $t('div', [
                                 'class'         => 'progress-bar progress-bar-striped',

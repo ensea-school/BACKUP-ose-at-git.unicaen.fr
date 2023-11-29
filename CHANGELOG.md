@@ -46,7 +46,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 
 * Ajout d'un contrôle de date sur l'année universitaire sur la saisie en mode calendaire (#53364)
 * Nouvelle commande ./bin/ose calcul-feuille-de-route <in intervenant>
-
+* Indicateurs relatifs aux plafonds liés aux charges : ajout du code des enseignements (#47340)
 
 
 # OSE 22.2 (10/11/2023)

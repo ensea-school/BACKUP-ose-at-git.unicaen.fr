@@ -41,6 +41,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 * Correction de problème d'arrondi au niveau des jauges des plafonds
 * L'état de sortie listant les privilèges de chaque rôle renvoie les bonnes valeurs pour les administrateurs (#53549)
 * Problème de valeurs NULL retourné par la formule de calcul de Rennes 2 résolu (#51135)
+* Les messages d'alerte des plafonds à la saisie tiennent maintenant compte des dérogations saisies (#51729)
 
 ## Améliorations
 

@@ -43,6 +43,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 * Problème de valeurs NULL retourné par la formule de calcul de Rennes 2 résolu (#51135)
 * Les messages d'alerte des plafonds à la saisie tiennent maintenant compte des dérogations saisies (#51729)
 * Le formulaire de saisie d'enseignement fonctionne à nouveau depuis le menu "Services" (#51903)
+* Formule de calcul de l'UBO de nouveau opérationnelle (#53533)
 
 ## Améliorations
 

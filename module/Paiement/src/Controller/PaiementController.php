@@ -218,10 +218,9 @@ class PaiementController extends AbstractController
 
     function demandeMiseEnPaiementLotAction ()
     {
-        $title = 'Demande de mise en paiement par lot';
+        $title        = 'Demande de mise en paiement par lot';
         $intervenants = [];
-        $structures = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement();
-
+        $structures   = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement();
         if ($this->getRequest()->isPost()) {
             //On récupere les données post notamment la structure recherchée
             $idStructure  = $this->getRequest()->getPost('structure');
@@ -232,6 +231,18 @@ class PaiementController extends AbstractController
         }
 
         return compact('title', 'structures', 'intervenants');
+    }
+
+
+
+    function processDemandeMiseEnPaiementLotAction ()
+    {
+        $var = '';
+        if ($this->getRequest()->isPost()) {
+            dump($this->getRequest()->getPost('intervenant'));
+        }
+
+        return false;
     }
 
 

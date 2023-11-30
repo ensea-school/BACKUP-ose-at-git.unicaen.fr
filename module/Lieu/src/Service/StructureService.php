@@ -298,10 +298,12 @@ class StructureService extends AbstractEntityService
     {
         $structures = [];
         $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $qb   = $this->finderByDemandeMiseEnPaiement();
+        $qb = $this->finderByDemandeMiseEnPaiement();
         $this->finderByRole($role, $qb);
+
         $listeStructures = $this->getList($qb);
         foreach ($listeStructures as $structure) {
+            //$tree = $this->getTree($structure, 1, true);
             $structures[] =
                 [
                     'id'      => $structure->getId(),

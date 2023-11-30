@@ -18,7 +18,7 @@ return [
             'privileges'    => Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION,
             'may_terminate' => true,
             'child_routes'  => [
-                'etat-demande-paiement'        => [
+                'etat-demande-paiement'                => [
                     'route'      => '/etat-demande-paiement',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'etatPaiement',
@@ -26,7 +26,7 @@ return [
                         'etat' => Entity\Db\MiseEnPaiement::A_METTRE_EN_PAIEMENT,
                     ],
                 ],
-                'mise-en-paiement'             => [
+                'mise-en-paiement'                     => [
                     'route'       => '/mise-en-paiement/:structure/:intervenants',
                     'controller'  => Controller\PaiementController::class,
                     'action'      => 'MiseEnPaiement',
@@ -34,7 +34,7 @@ return [
                         'structure' => '[0-9]*',
                     ],
                 ],
-                'etat-paiement'                => [
+                'etat-paiement'                        => [
                     'route'      => '/etat-paiement',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'etatPaiement',
@@ -42,22 +42,22 @@ return [
                         'etat' => Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
                     ],
                 ],
-                'mises-en-paiement-csv'        => [
+                'mises-en-paiement-csv'                => [
                     'route'      => '/mises-en-paiement-csv',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'misesEnPaiementCsv',
                 ],
-                'extraction-paie'              => [
+                'extraction-paie'                      => [
                     'route'      => '/extraction-paie[/:type][/:periode]',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'extractionPaie',
                 ],
-                'extraction-paie-prime'        => [
+                'extraction-paie-prime'                => [
                     'route'      => '/extraction-paie-prime[/:periode]',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'extractionPaiePrime',
                 ],
-                'imputation-siham'             => [
+                'imputation-siham'                     => [
                     'route'      => '/imputation-siham',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'imputationSiham',
@@ -65,13 +65,13 @@ return [
                         'etat' => Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
                     ],
                 ],
-                'import-numero-pec'            => [
+                'import-numero-pec'                    => [
                     'route'      => '/import-numero-pec',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'importNumeroPec',
                     'privileges' => Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE,
                 ],
-                'demande-mise-en-paiement-lot' => [
+                'demande-mise-en-paiement-lot'         => [
                     'route'       => '/demande-mise-en-paiement-lot[/:structure]',
                     'controller'  => Controller\PaiementController::class,
                     'action'      => 'demandeMiseEnPaiementLot',
@@ -79,13 +79,18 @@ return [
                         'structure' => '[0-9]*',
                     ],
                 ],
-                'pilotage'                     => [
+                'process-demande-mise-en-paiement-lot' => [
+                    'route'      => '/process-demande-mise-en-paiement-lot',
+                    'controller' => Controller\PaiementController::class,
+                    'action'     => 'processDemandeMiseEnPaiementLot',
+                ],
+                'pilotage'                             => [
                     'route'      => '/pilotage',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'pilotage',
                     'privileges' => Privileges::PILOTAGE_VISUALISATION,
                 ],
-                'ecarts-etats'                 => [
+                'ecarts-etats'                         => [
                     'route'      => '/ecarts-etats',
                     'action'     => 'ecartsEtats',
                     'controller' => Controller\PaiementController::class,
@@ -225,7 +230,7 @@ return [
     'guards' => [
         [
             'controller' => Controller\PaiementController::class,
-            'action' => ['demandeMiseEnPaiement', 'demandeMiseEnPaiementLot'],
+            'action'     => ['demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
             'privileges' => [
                 Privileges::MISE_EN_PAIEMENT_DEMANDE,
             ],
@@ -293,7 +298,7 @@ return [
         Service\ServiceAPayerService::class                      => Service\ServiceAPayerServiceFactory::class,
         Service\MiseEnPaiementService::class                     => Service\MiseEnPaiementServiceFactory::class,
         Service\MiseEnPaiementIntervenantStructureService::class => Service\MiseEnPaiementIntervenantStructureServiceFactory::class,
-        Service\TblPaiementService::class => Service\TblPaiementServiceFactory::class,
+        Service\TblPaiementService::class                        => Service\TblPaiementServiceFactory::class,
         Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementServiceFactory::class,
         Service\NumeroPriseEnChargeService::class                => Service\NumeroPriseEnChargeServiceFactory::class,
         Assertion\PaiementAssertion::class                       => \UnicaenPrivilege\Assertion\AssertionFactory::class,

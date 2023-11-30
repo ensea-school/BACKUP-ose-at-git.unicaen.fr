@@ -5,6 +5,7 @@ namespace Paiement\Service;
 use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractService;
 use Lieu\Entity\Db\Structure;
+use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\TblPaiement;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
@@ -44,8 +45,8 @@ class ServiceAPayerService extends AbstractService
         $saps = [];
         foreach ($meps as $mep) {
             if ($mep->getHeuresAPayer() > 0 || $mep->getMiseEnPaiement()) {
-                $sap = $mep->getServiceAPayer();
-                $sapId = get_class($sap) . '@' . $sap->getId();
+                $sap          = $mep->getServiceAPayer();
+                $sapId        = get_class($sap) . '@' . $sap->getId();
                 $saps[$sapId] = $sap;
             }
         }
@@ -81,15 +82,19 @@ class ServiceAPayerService extends AbstractService
                 if (!array_key_exists($intervenant->getId(), $dmep)) {
 
                     $dmep[$intervenant->getId()]['datasIntervenant'] = [
-                        'nom_usuel' => $intervenant->getNomUsuel(),
-                        'prenom'    => $intervenant->getPrenom(),
-                        'structure' => $intervenant->getStructure()->getLibelleCourt(),
-                        'statut'    => $intervenant->getStatut()->getLibelle(),
+                        'id'              => $intervenant->getId(),
+                        'nom_usuel'       => $intervenant->getNomUsuel(),
+                        'prenom'          => $intervenant->getPrenom(),
+                        'structure'       => $intervenant->getStructure()->getLibelleCourt(),
+                        'statut'          => $intervenant->getStatut()->getLibelle(),
+                        'typeIntervenant' => $intervenant->getStatut()->getTypeIntervenant()->getLibelle(),
                     ];
                 }
                 $dmep[$intervenant->getId()]['heures'][] = [
                     'heuresAPayer' => $value->getHeuresAPayerAC() + $value->getHeuresAPayerAA(),
-                    'centreCout'   => '',
+                    'centreCout'   => ['libelle' => ($value->getCentreCout()) ? $value->getCentreCout()->getLibelle() : '',
+                                       'code'    => ($value->getCentreCout()) ? $value->getCentreCout()->getCode() : '',
+                    ],
                 ];
             }
         }

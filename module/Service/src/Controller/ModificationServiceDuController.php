@@ -60,7 +60,7 @@ class ModificationServiceDuController extends AbstractController
         $variables = [
             'form'        => $form,
             'intervenant' => $intervenant,
-            'title'       => "Modifications de service dû <small>$intervenant</small>",
+            'title'       => "Modifications de service dû",
             'canEdit'     => $canEdit,
         ];
 

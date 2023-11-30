@@ -45,6 +45,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 * Le formulaire de saisie d'enseignement fonctionne à nouveau depuis le menu "Services" (#51903)
 * Formule de calcul de l'UBO de nouveau opérationnelle (#53533)
 * Les jauges budgétaires des demandes de mise en paiement s'affichent ànouveau correctement (#51066)
+* Résolution des soucis de sous-service dans la formule de Paris 8 (#51659)
 
 ## Améliorations
 

@@ -32,6 +32,12 @@ Pas de paramètre pour cette commande.
 Pas de paramètre pour cette commande.
 Attention : le temps de traitement peut être long!
 
+### ```calcul-feuille-de-route <id>``` : Recalcule la feuille de route de l'intervenant dont l'ID est <id>
+
+<id> doit être un nombre entier correspondant à l'ID d'un intervenant.
+Le calcul prend environ deux secondes.
+
+
 ### ```formule-calcul``` : Calcul de toutes les heures complémentaires à l'aide de la formule
 
 Pas de paramètre pour cette commande.

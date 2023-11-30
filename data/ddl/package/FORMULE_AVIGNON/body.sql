@@ -880,8 +880,8 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_AVIGNON AS
       NULL param_5
     FROM
       V_FORMULE_VOLUME_HORAIRE fvh
-      JOIN volume_horaire vh ON vh.id = fvh.volume_horaire_id
-      JOIN periode p ON p.id = vh.periode_id
+      LEFT JOIN volume_horaire vh ON vh.id = fvh.volume_horaire_id
+      LEFT JOIN periode p ON p.id = vh.periode_id
       LEFT JOIN service s ON s.id = fvh.service_id
       LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
       LEFT JOIN etape e ON e.id = ep.etape_id

@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 22.0](#ose-222-10112023)
+[OSE 22.2](#ose-222-10112023)
 
 # OSE 23 (à venir)
 
@@ -24,6 +24,7 @@ A partir la V23 uniquement, PHP 8.2 est maintenant obligatoire.
 Pour les établissements qui utilisent le module Export SIHAM : la configuration spécifique du module d'export Siham anciennement mise dans config/autoload/unicaen-siham.local.php doit maintenant être mise directement à la racine de OSE dans le fichier de configuration globale config.local.php. (Voir un exemple dans [config.local.php.default](config.local.php.default)).
 
 
+
 # OSE 22.3 (à venir)
 
 ## Corrections de bugs
@@ -32,11 +33,26 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 * Report de service dans l'IHM de tests de formules de calcul rétabli (#53684)
 * Correction sur le rafraîchissement de l'intervenant lors d'un changement de statut au niveau des données personnelles (#53778)
 * Les intervenants ayant un avenant créé sans date de retour signé ne remontent plus dans l'indicateur 430
+* En sélectionnant "Non" au paramètre général "Distinction FI/FA/FC des heures à payer", les demandes de mise en paiement pouvaient disparaitre de l'écran des demandes (#53752)
+* Les jauges de plafond référentiel s'affichent de nouveau correctement (#53371)
+* Les couleurs distinctes sont de nouveau présentes sur les jauges des plafonds (#53371)
+* La formule de calcul D'Avignon prend maintenant en compte correctement les heures de référentiel (#36193)
+* Administration : Le différentiel au niveau de l'import des données s'affiche de nouveau sans erreur si un filtre est présent  (#53300)
+* Correction de problème d'arrondi au niveau des jauges des plafonds
+* L'état de sortie listant les privilèges de chaque rôle renvoie les bonnes valeurs pour les administrateurs (#53549)
+* Problème de valeurs NULL retourné par la formule de calcul de Rennes 2 résolu (#51135)
+* Les messages d'alerte des plafonds à la saisie tiennent maintenant compte des dérogations saisies (#51729)
+* Le formulaire de saisie d'enseignement fonctionne à nouveau depuis le menu "Services" (#51903)
+* Formule de calcul de l'UBO de nouveau opérationnelle (#53533)
+* Les jauges budgétaires des demandes de mise en paiement s'affichent ànouveau correctement (#51066)
 
 ## Améliorations
 
 * Ajout d'un contrôle de date sur l'année universitaire sur la saisie en mode calendaire (#53364)
-
+* Nouvelle commande ./bin/ose calcul-feuille-de-route <in intervenant>
+* Indicateurs relatifs aux plafonds liés aux charges : ajout du code des enseignements (#47340)
+* Modification de la formule de calcul de Rennes 2 (#47753)
+* Plus de lien "Mot de passe oublié" affiché sur la fenêtre de connexion non CAS (#51885)
 
 # OSE 22.2 (10/11/2023)
 

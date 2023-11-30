@@ -13,6 +13,7 @@ use RuntimeException;
 use Service\Entity\Db\MotifModificationServiceDu;
 use Service\Form\ModificationServiceDuFormAwareTrait;
 use Service\Service\ModificationServiceDuServiceAwareTrait;
+use Service\Service\MotifModificationServiceDuServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 
 class ModificationServiceDuController extends AbstractController
@@ -20,6 +21,7 @@ class ModificationServiceDuController extends AbstractController
     use ContextServiceAwareTrait;
     use ModificationServiceDuFormAwareTrait;
     use ModificationServiceDuServiceAwareTrait;
+    use MotifModificationServiceDuServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 
 
@@ -53,15 +55,23 @@ class ModificationServiceDuController extends AbstractController
         }
 
         $form = $this->getFormIntervenantModificationServiceDu();
-        $fs   = $form->getFieldsets()['fs'];
+        $fs = $form->getFieldsets()['fs'];
         $form->setAttribute('action', $this->getRequest()->getRequestUri());
         $form->bind($intervenant);
 
+        /** @var MotifModificationServiceDu[] $mds */
+        $mds = $this->getServiceMotifModificationServiceDu()->getList();
+        $multiplicateurs = [];
+        foreach( $mds as $md ){
+            $multiplicateurs[$md->getId()] = $md->getMultiplicateur();
+        }
+
         $variables = [
-            'form'        => $form,
-            'intervenant' => $intervenant,
-            'title'       => "Modifications de service dû",
-            'canEdit'     => $canEdit,
+            'form'            => $form,
+            'intervenant'     => $intervenant,
+            'title'           => "Modifications de service dû",
+            'multiplicateurs' => $multiplicateurs,
+            'canEdit'         => $canEdit,
         ];
 
         $request = $this->getRequest();
@@ -82,7 +92,7 @@ class ModificationServiceDuController extends AbstractController
                     $this->flashMessenger()->addSuccessMessage(sprintf("Modifications de service dû de $intervenant enregistrées avec succès."));
                     $this->redirect()->toRoute(null, [], [], true);
                 } catch (Exception $exc) {
-                    $exception              = new RuntimeException("Impossible d'enregistrer les modifications de service dû.", null, $exc->getPrevious());
+                    $exception = new RuntimeException("Impossible d'enregistrer les modifications de service dû.", null, $exc->getPrevious());
                     $variables['exception'] = $exception;
                 }
             }
@@ -96,7 +106,7 @@ class ModificationServiceDuController extends AbstractController
     public function exportCsvAction()
     {
         $annee = $this->getServiceContext()->getAnnee();
-        $role  = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $this->em()->getFilters()->enable('historique')->init([
             ModificationServiceDu::class,

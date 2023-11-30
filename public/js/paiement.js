@@ -1023,24 +1023,33 @@ $.widget("ose.dmepBudget", {
         var dotation = progress.data('dotation');
         var usage = progress.data('usage') + value;
         var restant = dotation - usage;
-        var percent = 100 - Math.round(usage * 10000 / dotation) / 100;
-        if (restant <= 0) {
+        var percent = Math.round(usage / dotation * 100);
+
+        if (percent > 100) {
+            percent = 100;
+        }
+        if (percent < 0){
             percent = 0;
         }
-        if (percent < 0) percent = 0;
 
-        bar.removeClass('progress-bar-success progress-bar-info progress-bar-warning progress-bar-danger active');
-        if (percent < 10) {
-            bar.addClass('progress-bar-warning active');
-        } else {
-            bar.addClass('progress-bar-success');
+        bar.removeClass('bg-success bg-info bg-warning bg-danger');
+        if (percent > 95){
+            if (restant >= 0){
+                bar.addClass('bg-warning');
+            }else{
+                bar.addClass('bg-danger');
+            }
+        }else if (percent > 90){
+            bar.addClass('bg-info');
+        }else{
+            bar.addClass('bg-success');
         }
         bar.attr('aria-valuenow', percent);
         bar.attr('style', 'width:' + percent + '%');
         if (restant >= 0) {
-            bar.html('<span class="restant">' + Formatter.floatToString(restant) + '</span><span class="label">HETD dispo.</span>');
+            bar.html('<span class="restant label">' + Formatter.floatToString(restant) + ' HETD dispo.</span>');
         } else {
-            bar.html('<span class="restant deficit">' + Formatter.floatToString(restant * -1) + '</span><span class="label deficit">HETD de déficit</span>');
+            bar.html('<span class="restant label deficit">' + Formatter.floatToString(restant * -1) + ' HETD de déficit</span>');
         }
         if (restant < 0) this.depassement = true;
 

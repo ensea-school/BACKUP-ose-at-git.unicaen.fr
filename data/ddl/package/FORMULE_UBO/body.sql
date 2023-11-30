@@ -928,4 +928,41 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
     END LOOP;
   END;
 
+
+
+  FUNCTION INTERVENANT_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN '
+    SELECT
+      fi.*,
+      CASE WHEN si.code IN (''ENS_CH'',''ASS_MI_TPS'',''ENS_CH_LRU'',''DOCTOR'') THEN ''oui'' ELSE ''non'' END param_1,
+     CASE WHEN si.code IN (''LECTEUR'',''ATER'') THEN ''oui'' ELSE ''non'' END param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      V_FORMULE_INTERVENANT fi
+      JOIN intervenant i ON i.id = fi.intervenant_id
+      JOIN statut si ON si.id = i.statut_id
+    ';
+  END;
+
+
+
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN '
+    SELECT
+      fvh.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      V_FORMULE_VOLUME_HORAIRE fvh
+    ORDER BY
+      ordre';
+  END;
+
 END FORMULE_UBO;

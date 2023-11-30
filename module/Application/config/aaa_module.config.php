@@ -3,8 +3,10 @@
 namespace Application;
 
 use Application\Mouchard\MouchardCompleterContextFactory;
+use Application\View\Helper\LocalConnectViewHelperFactory;
 use Application\View\Helper\UserProfileSelectRadioItem;
 use Application\View\Helper\UserProfileSelectRadioItemFactory;
+use UnicaenAuthentification\View\Helper\LocalConnectViewHelper;
 use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 $config = [
@@ -194,6 +196,7 @@ $config = [
         'factories'  => [
             UserProfileSelectRadioItem::class      => UserProfileSelectRadioItemFactory::class,
             \UnicaenApp\View\Helper\AppLink::class => View\Helper\AppLinkFactory::class,
+            LocalConnectViewHelper::class => LocalConnectViewHelperFactory::class,
             'tab'                                  => View\Helper\TabViewHelperFactory::class,
         ],
         'invokables' => [

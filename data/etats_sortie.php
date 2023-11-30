@@ -386,17 +386,7 @@ ORDER BY
         'LIBELLE'        => 'Synthèse des privilèges par rôle',
         'PDF_TRAITEMENT' => null,
         'AUTO_BREAK'     => false,
-        'REQUETE'        => 'SELECT 
-  r.libelle role,
-  cp.libelle categorie_privilege,
-  p.libelle privilege,
-  CASE WHEN rp.privilege_id IS NULL THEN \'Non\' ELSE \'Oui\' END acces
-FROM
-  role r
-  JOIN privilege p ON 1=1
-  JOIN categorie_privilege cp ON cp.id = p.categorie_id
-  LEFT JOIN role_privilege rp ON rp.privilege_id = p.id AND rp.role_id = r.id
-  ORDER BY r.libelle, cp.libelle, p.libelle',
+        'REQUETE'        => 'SELECT * FROM v_synthese_privilege',
         'CSV_PARAMS'     => '',
     ],
 ];

@@ -166,32 +166,32 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- X=IF([.$H20]="Référentiel";0;([.$AK20]+[.$AW20]+[.$BI20]+[.$BQ20])*[.E20])
+      -- X=IF([.$H20]="Référentiel";0;([.$AK20]+[.$AW20]+[.$BI20]+[.$BR20])*[.E20])
       WHEN 'X' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AK',l) + cell('AW',l) + cell('BI',l) + cell('BQ',l)) * vh.taux_fi;
+          RETURN (cell('AK',l) + cell('AW',l) + cell('BI',l) + cell('BR',l)) * vh.taux_fi;
         END IF;
 
 
 
-      -- Y=IF([.$H20]="Référentiel";0;([.$AK20]+[.$AW20]+[.$BI20]+[.$BQ20])*[.F20])
+      -- Y=IF([.$H20]="Référentiel";0;([.$AK20]+[.$AW20]+[.$BI20]+[.$BR20])*[.F20])
       WHEN 'Y' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AK',l) + cell('AW',l) + cell('BI',l) + cell('BQ',l)) * vh.taux_fa;
+          RETURN (cell('AK',l) + cell('AW',l) + cell('BI',l) + cell('BR',l)) * vh.taux_fa;
         END IF;
 
 
 
-      -- Z=IF([.$H20]="Référentiel";0;([.$AK20]+[.$AW20]+[.$BI20]+[.$BQ20])*[.G20])
+      -- Z=IF([.$H20]="Référentiel";0;([.$AK20]+[.$AW20]+[.$BI20]+[.$BR20])*[.G20])
       WHEN 'Z' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AK',l) + cell('AW',l) + cell('BI',l) + cell('BQ',l)) * vh.taux_fc;
+          RETURN (cell('AK',l) + cell('AW',l) + cell('BI',l) + cell('BR',l)) * vh.taux_fc;
         END IF;
 
 
@@ -202,10 +202,10 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- AB=IF([.$H20]="Référentiel";[.$AQ20]+[.$BC20]+[.$BO20]+[.$BQ20];0)
+      -- AB=IF([.$H20]="Référentiel";[.$AQ20]+[.$BC20]+[.$BO20]+[.$BR20];0)
       WHEN 'AB' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('AQ',l) + cell('BC',l) + cell('BO',l) + cell('BQ',l);
+          RETURN cell('AQ',l) + cell('BC',l) + cell('BO',l) + cell('BR',l);
         ELSE
           RETURN 0;
         END IF;
@@ -612,12 +612,32 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS8 AS
 
 
 
-      -- BQ=IF(OR(MID([.$A20];1;25)="20595";MID([.$A20];1;25)="40");[.$M20]*[.$AE20];0)
+      -- BQ=IF(AND([.$D20]="Oui";[.$H20]<>"Référentiel");[.$M20]*[.$AE20];0)
       WHEN 'BQ' THEN
-        IF COALESCE(SUBSTR(vh.structure_code, 1, 25),' ') = '20595' OR COALESCE(SUBSTR(vh.structure_code, 1, 25),' ') = '40' THEN
+        IF vh.service_statutaire AND vh.volume_horaire_ref_id IS NULL THEN
           RETURN vh.heures * cell('AE',l);
         ELSE
           RETURN 0;
+        END IF;
+
+
+
+      -- BR15=SUM([.BQ20:.BQ500])
+      WHEN 'BR15' THEN
+        RETURN calcFnc('somme','BQ');
+
+
+
+      -- BR=IF([.$BR$15]<i_service_du;0;IF(OR(MID([.$A20];1;25)="20595";MID([.$A20];1;25)="40");[.$M20]*[.$AE20];0))
+      WHEN 'BR' THEN
+        IF cell('BR15') < i.service_du THEN
+          RETURN 0;
+        ELSE
+          IF COALESCE(SUBSTR(vh.structure_code, 1, 25),' ') = '20595' OR COALESCE(SUBSTR(vh.structure_code, 1, 25),' ') = '40' THEN
+            RETURN vh.heures * cell('AE',l);
+          ELSE
+            RETURN 0;
+          END IF;
         END IF;
 
 

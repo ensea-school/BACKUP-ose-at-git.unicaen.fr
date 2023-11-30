@@ -24,7 +24,11 @@ class v23FonctionReferentiel extends AbstractMigration
     {
         $bdd = $this->manager->getBdd();
         $c   = $this->manager->getOseAdmin()->getConsole();
-        $c->msg('Mise en etat de la base de données pour pouvoir migrer');
+
+        //Faire en sorte que les traitements ne soit pas fait sur l'utilisateur oseappli n'existe pas
+        $oa = OseAdmin::getInstance();
+        $oa->getOseAppliId();
+
         $this->traitementContrainteTriggerIndex($bdd, $c);
 
         $this->traitementFonctionReferentielInsertion($c, $bdd);
@@ -36,7 +40,6 @@ class v23FonctionReferentiel extends AbstractMigration
 
         //supprimer les anciennes fonction qui n'ont pas d'année
         $c->msg('Suppression des anciennes fonctions');
-
         $bdd->exec('DELETE FROM TBL_REFERENTIEL');
         $bdd->exec('DELETE FROM TBL_PLAFOND_REFERENTIEL');
         $bdd->exec('DELETE FROM FONCTION_REFERENTIEL WHERE annee_id IS NULL');
@@ -53,7 +56,7 @@ class v23FonctionReferentiel extends AbstractMigration
      */
     public function traitementContrainteTriggerIndex(Bdd $bdd, Console $c): void
     {
-
+        $c->msg('Mise en état de la base de données pour pouvoir migrer');
         //Mise en etat de la base de données pour pouvoir migrer
         try {
             $bdd->exec("ALTER TABLE FONCTION_REFERENTIEL ADD(ANNEE_ID NUMBER)");
@@ -134,7 +137,7 @@ class v23FonctionReferentiel extends AbstractMigration
                 $bdd->getTable('FONCTION_REFERENTIEL')->insert($fonction);
             }
             if ($nombreFonctionFaite % 10 == 0) {
-                $c->msg('Fonction annualisé : ' . $nombreFonctionFaite . ' sur ' . $countFonction);
+                $c->msg('Fonctions annualisées : ' . $nombreFonctionFaite . ' sur ' . $countFonction);
             }
             $nombreFonctionFaite++;
         }
@@ -154,7 +157,7 @@ class v23FonctionReferentiel extends AbstractMigration
      */
     public function traitementParentIdFonctionReferentiel(Console $c, Bdd $bdd): void
     {
-        $c->begin('Traitement des fonctions réferentiels inseré');
+        $c->begin('Traitements des fonctions référentiels insérés');
         $lignefonctionTraite = 0;
 
         $sql = 'select fr2.code, fr2.histo_destruction, fr.annee_id, fr.id
@@ -174,7 +177,7 @@ class v23FonctionReferentiel extends AbstractMigration
                 $c->msg($lignefonctionTraite . ' fonctions traités');
             }
         }
-        $c->end('Toutes les fonction referentiel ont été migré');
+        $c->end('Toutes les fonctions référentielles ont été migré');
     }
 
 
@@ -209,7 +212,7 @@ class v23FonctionReferentiel extends AbstractMigration
      */
     public function traitementServiceReferentiel(Console $c, Bdd $bdd): void
     {
-        $c->msg('Migration des données du service referentiel vers les nouvelles fonctions');
+        $c->msg('MMigration des données du service référentiel vers les nouvelles fonctions');
         $ligneServiceTraite = 0;
 
         $sql = 'select fr.code, fr.histo_destruction, i.annee_id, sr.id

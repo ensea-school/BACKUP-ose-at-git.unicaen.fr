@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 22.2](#ose-222-10112023)
+[OSE 22.3](#ose-223-30112023)
 
 # OSE 23 (à venir)
 
@@ -25,7 +25,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 
 
 
-# OSE 22.3 (à venir)
+# OSE 22.3 (30/11/2023)
 
 ## Corrections de bugs
 

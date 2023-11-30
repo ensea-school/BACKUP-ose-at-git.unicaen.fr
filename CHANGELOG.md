@@ -32,7 +32,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 * Impossible de saisir du service hors établissement suite à une régression (#53694)
 * Report de service dans l'IHM de tests de formules de calcul rétabli (#53684)
 * Correction sur le rafraîchissement de l'intervenant lors d'un changement de statut au niveau des données personnelles (#53778)
-* Les intervenants ayant un avenant créé sans date de retour signé ne remontent plus dans l'indicateur 430
+* Les intervenants ayant un avenant créé sans date de retour signé ne remontent plus dans l'indicateur 430 (#53709)
 * En sélectionnant "Non" au paramètre général "Distinction FI/FA/FC des heures à payer", les demandes de mise en paiement pouvaient disparaitre de l'écran des demandes (#53752)
 * Les jauges de plafond référentiel s'affichent de nouveau correctement (#53371)
 * Les couleurs distinctes sont de nouveau présentes sur les jauges des plafonds (#53371)
@@ -45,6 +45,8 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 * Le formulaire de saisie d'enseignement fonctionne à nouveau depuis le menu "Services" (#51903)
 * Formule de calcul de l'UBO de nouveau opérationnelle (#53533)
 * Les jauges budgétaires des demandes de mise en paiement s'affichent ànouveau correctement (#51066)
+* Résolution des soucis de sous-service dans la formule de Paris 8 (#51659)
+* Charges d'enseignement : l'affichage de la page des seuils s'affiche de nouveau en ckiquant sur "afficher" (#53580)
 
 ## Améliorations
 
@@ -53,6 +55,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 * Indicateurs relatifs aux plafonds liés aux charges : ajout du code des enseignements (#47340)
 * Modification de la formule de calcul de Rennes 2 (#47753)
 * Plus de lien "Mot de passe oublié" affiché sur la fenêtre de connexion non CAS (#51885)
+* Mise à jour de la formule de Paris 1 (#48148)
 
 # OSE 22.2 (10/11/2023)
 

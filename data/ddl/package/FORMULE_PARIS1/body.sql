@@ -136,22 +136,22 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- V=IF([.$I20]="Référentiel";0;([.$AK20]+[.$BC20]+[.$BI20]+[.$BU20]+[.$BO20]))
+      -- V=IF([.$I20]="Référentiel";0;([.$BC20]+[.$BI20]+[.$BU20]+[.$BO20]))
       WHEN 'V' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AK',l) + cell('BC',l) + cell('BI',l) + cell('BU',l) + cell('BO',l));
+          RETURN (cell('BC',l) + cell('BI',l) + cell('BU',l) + cell('BO',l));
         END IF;
 
 
 
-      -- W=IF([.$I20]="Référentiel";0;([.$AK20]+[.$CA20]+[.$CG20]+[.$BO20]+[.$BU20]))
+      -- W=IF([.$I20]="Référentiel";0;([.$CA20]+[.$CG20]+[.$BO20]+[.$BU20]))
       WHEN 'W' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AK',l) + cell('CA',l) + cell('CG',l) + cell('BO',l) + cell('BU',l));
+          RETURN (cell('CA',l) + cell('CG',l) + cell('BO',l) + cell('BU',l));
         END IF;
 
 
@@ -176,22 +176,22 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PARIS1 AS
 
 
 
-      -- Z=IF([.$I20]="Référentiel";0;([.$AM20]+[.$BE20]+[.$BK20]+[.$BQ20]+[.$BW20]))
+      -- Z=IF([.$I20]="Référentiel";0;([.$BE20]+[.$BK20]))
       WHEN 'Z' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AM',l) + cell('BE',l) + cell('BK',l) + cell('BQ',l) + cell('BW',l));
+          RETURN (cell('BE',l) + cell('BK',l));
         END IF;
 
 
 
-      -- AA=IF([.$I20]="Référentiel";0;([.$AM20]+[.$BQ20]+[.$BW20]+[.$CC20]+[.$CI20]))
+      -- AA=IF([.$I20]="Référentiel";0;([.$CC20]+[.$CI20]))
       WHEN 'AA' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AM',l) + cell('BQ',l) + cell('BW',l) + cell('CC',l) + cell('CI',l));
+          RETURN (cell('CC',l) + cell('CI',l));
         END IF;
 
 

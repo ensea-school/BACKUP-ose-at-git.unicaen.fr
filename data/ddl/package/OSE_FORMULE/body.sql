@@ -654,6 +654,20 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
           t_res(code).id := fr.id;
           INSERT INTO formule_resultat VALUES fr;
         ELSE
+          IF fr.SERVICE_DU               IS NULL THEN fr.SERVICE_DU               := 0;  END IF;
+          IF fr.HEURES_COMPL_FI          IS NULL THEN fr.HEURES_COMPL_FI          := 0;  END IF;
+          IF fr.HEURES_COMPL_FA          IS NULL THEN fr.HEURES_COMPL_FA          := 0;  END IF;
+          IF fr.HEURES_COMPL_FC          IS NULL THEN fr.HEURES_COMPL_FC          := 0;  END IF;
+          IF fr.HEURES_COMPL_REFERENTIEL IS NULL THEN fr.HEURES_COMPL_REFERENTIEL := 0;  END IF;
+          IF fr.SOUS_SERVICE             IS NULL THEN fr.SOUS_SERVICE             := 0;  END IF;
+          IF fr.HEURES_COMPL_FC_MAJOREES IS NULL THEN fr.HEURES_COMPL_FC_MAJOREES := 0;  END IF;
+          IF fr.HEURES_COMPL             IS NULL THEN fr.HEURES_COMPL             := 0;  END IF;
+          IF fr.SERVICE_FI               IS NULL THEN fr.SERVICE_FI               := 0;  END IF;
+          IF fr.SERVICE_FC               IS NULL THEN fr.SERVICE_FC               := 0;  END IF;
+          IF fr.SERVICE_FA               IS NULL THEN fr.SERVICE_FA               := 0;  END IF;
+          IF fr.SERVICE_REFERENTIEL      IS NULL THEN fr.SERVICE_REFERENTIEL      := 0;  END IF;
+          IF fr.TOTAL                    IS NULL THEN fr.TOTAL                    := 0;  END IF;
+          IF fr.SOLDE                    IS NULL THEN fr.SOLDE                    := 0;  END IF;
           UPDATE formule_resultat SET ROW = fr WHERE id = fr.id;
         END IF;
       END IF;
@@ -687,6 +701,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
             frs.id := formule_resultat_servic_id_seq.nextval;
             INSERT INTO formule_resultat_service VALUES frs;
           ELSE
+            IF frs.SERVICE_FI               IS NULL THEN frs.SERVICE_FI               := 0;  END IF;
+            IF frs.SERVICE_FC               IS NULL THEN frs.SERVICE_FC               := 0;  END IF;
+            IF frs.SERVICE_FA               IS NULL THEN frs.SERVICE_FA               := 0;  END IF;
+            IF frs.HEURES_COMPL_FI          IS NULL THEN frs.HEURES_COMPL_FI          := 0;  END IF;
+            IF frs.HEURES_COMPL_FA          IS NULL THEN frs.HEURES_COMPL_FA          := 0;  END IF;
+            IF frs.HEURES_COMPL_FC          IS NULL THEN frs.HEURES_COMPL_FC          := 0;  END IF;
+            IF frs.HEURES_COMPL_FC_MAJOREES IS NULL THEN frs.HEURES_COMPL_FC_MAJOREES := 0;  END IF;
+            IF frs.TOTAL                    IS NULL THEN frs.TOTAL                    := 0;  END IF;
             UPDATE formule_resultat_service SET ROW = frs WHERE id = frs.id;
           END IF;
         WHEN code LIKE '%-sr-%' THEN -- formule_resultat_service_ref
@@ -722,6 +744,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
             frvh.id := formule_resultat_vh_id_seq.nextval;
             INSERT INTO formule_resultat_vh VALUES frvh;
           ELSE
+            IF frvh.SERVICE_FI               IS NULL THEN frvh.SERVICE_FI               := 0;  END IF;
+            IF frvh.SERVICE_FC               IS NULL THEN frvh.SERVICE_FC               := 0;  END IF;
+            IF frvh.SERVICE_FA               IS NULL THEN frvh.SERVICE_FA               := 0;  END IF;
+            IF frvh.HEURES_COMPL_FI          IS NULL THEN frvh.HEURES_COMPL_FI          := 0;  END IF;
+            IF frvh.HEURES_COMPL_FA          IS NULL THEN frvh.HEURES_COMPL_FA          := 0;  END IF;
+            IF frvh.HEURES_COMPL_FC          IS NULL THEN frvh.HEURES_COMPL_FC          := 0;  END IF;
+            IF frvh.HEURES_COMPL_FC_MAJOREES IS NULL THEN frvh.HEURES_COMPL_FC_MAJOREES := 0;  END IF;
+            IF frvh.TOTAL                    IS NULL THEN frvh.TOTAL                    := 0;  END IF;
             UPDATE formule_resultat_vh SET ROW = frvh WHERE id = frvh.id;
           END IF;
         WHEN code LIKE '%-vhr-%' THEN -- formule_resultat_vh_ref

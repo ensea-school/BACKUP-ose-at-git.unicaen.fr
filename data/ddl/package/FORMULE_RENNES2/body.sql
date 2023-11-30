@@ -220,7 +220,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_RENNES2 AS
             WHEN vh.param_2 <= 80 THEN vh.taux_service_du * 2
             WHEN vh.param_2 <= 120 THEN vh.taux_service_du * 3
             WHEN vh.param_2 <= 160 THEN vh.taux_service_du * 4
-            WHEN vh.param_2 > 160 THEN vh.taux_service_du * 5
+            WHEN vh.param_2 <= 200 THEN vh.taux_service_du * 5
+            WHEN vh.param_2 <= 240 THEN vh.taux_service_du * 6
+            WHEN vh.param_2 <= 280 THEN vh.taux_service_du * 7
           END;
         ELSE
           RETURN 1;

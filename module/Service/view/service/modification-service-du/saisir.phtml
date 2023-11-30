@@ -1,6 +1,4 @@
-<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Modification de service dû") ?>
-
-<h1 class="page-header"><?= $title ?></h1>
+<?= $this->intervenant($intervenant)->renderTitle($title); ?>
 
 <?= $this->messenger()->addMessagesFromFlashMessenger() ?>
 

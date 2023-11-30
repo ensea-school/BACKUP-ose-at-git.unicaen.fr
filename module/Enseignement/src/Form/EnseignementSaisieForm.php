@@ -102,7 +102,15 @@ class EnseignementSaisieForm extends AbstractForm
     public function initPeriodes()
     {
         // Product Fieldset
-        if ($this->getIntervenant()->getStatut()->isModeEnseignementSemestriel($this->getTypeVolumeHoraire())) {
+        if ($this->getIntervenant()) {
+            if ($this->getIntervenant()->getStatut()->isModeEnseignementSemestriel($this->getTypeVolumeHoraire())) {
+                foreach ($this->getPeriodes() as $periode) {
+                    $pf = $this->getFieldsetVolumeHoraireSaisieMultiple();
+                    $pf->setName($periode->getCode());
+                    $this->add($pf);
+                }
+            }
+        }else{
             foreach ($this->getPeriodes() as $periode) {
                 $pf = $this->getFieldsetVolumeHoraireSaisieMultiple();
                 $pf->setName($periode->getCode());

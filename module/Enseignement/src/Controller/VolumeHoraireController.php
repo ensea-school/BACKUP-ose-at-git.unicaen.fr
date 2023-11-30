@@ -105,6 +105,7 @@ class VolumeHoraireController extends AbstractController
 
         $volumeHoraireListe = new VolumeHoraireListe($service);
 
+
         $vhlph = new ListeFilterHydrator();
         $vhlph->setEntityManager($this->em());
 
@@ -125,7 +126,17 @@ class VolumeHoraireController extends AbstractController
         $form->setEditMNP($canEditMNP);
         $form->setViewTag($canViewTag);
         $form->setEditTag($canEditTag);
+
         $form->build();
+        //Si le volume horaire est validé on bloque la modification de motif de non paiement
+        $vhs = $volumeHoraireListe->getVolumeHoraires();
+        foreach ($vhs as $vh) {
+            if ($vh->isValide()) {
+                $form->disableMotifNonPaiement();
+                break;
+            }
+        }
+
         $bind = $form->bindRequestSave($volumeHoraireListe, $this->getRequest(), function (VolumeHoraireListe $vhl) use ($hDeb, $volumeHoraireListe) {
             try {
                 $service = $vhl->getService();

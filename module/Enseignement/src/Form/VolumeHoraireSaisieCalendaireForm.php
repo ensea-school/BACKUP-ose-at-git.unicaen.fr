@@ -370,6 +370,15 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
 
 
 
+    public function disableMotifNonPaiement(): self
+    {
+        $this->get('motif-non-paiement')->setAttributes(['disabled' => true,
+                                                         'title'    => 'Vous ne pouvez pas changer de motif de non paiement sur un service déjà validé']);
+
+        return $this;
+    }
+
+
     /**
      * Should return an array specification compatible with
      * {@link Laminas\InputFilter\Factory::createInputFilter()}.

@@ -47,6 +47,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 * Les jauges budgétaires des demandes de mise en paiement s'affichent ànouveau correctement (#51066)
 * Résolution des soucis de sous-service dans la formule de Paris 8 (#51659)
 * Charges d'enseignement : l'affichage de la page des seuils s'affiche de nouveau en ckiquant sur "afficher" (#53580)
+* Modifications de service dû : le total tient compte du coefficient multiplicateur (#50570)
 
 ## Améliorations
 

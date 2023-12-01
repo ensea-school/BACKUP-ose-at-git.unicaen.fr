@@ -32,6 +32,10 @@
         </div>
     </div>
 
+    <div class="alert alert-info" role="alert">
+        Seules les HETD avec des centres de coûts pré-paramètrés peuvent bénéficier d'une demande de mise en paiement automatisées. Pour les autres, il faudra
+        passer sur chaque fiches intervenant pour faire les demandes.
+    </div>
 
     <div id="dmep" class="accordion">
         <form id="formProcessDemandeMiseEnPaiement" action="" method="post">
@@ -41,7 +45,7 @@
                     <button aria-controls="dmep-permanents-collapse" aria-expanded="true" class="accordion-button" data-bs-target="#dmep-permanents-collapse"
                             data-bs-toggle="collapse"
                             type="button">
-                        Vacataire
+                        Permanent(s)
                     </button>
                 </h2>
                 <div id="dmep-permanents-collapse" aria-labelledby="dmep-permanents-heading" class="accordion-collapse collapse show">
@@ -105,7 +109,7 @@
                     <button aria-controls="dmep-etudiants-collapse" aria-expanded="true" class="accordion-button" data-bs-target="#dmep-etudiants-collapse"
                             data-bs-toggle="collapse"
                             type="button">
-                        Vacataire
+                        Etudiants
                     </button>
                 </h2>
                 <div id="dmep-etudiants-collapse" aria-labelledby="dmep-etudiants-heading" class="accordion-collapse collapse show">
@@ -130,13 +134,13 @@
                     </div>
                 </div>
             </div>
-            <!--Etudiant-->
+            <!--Autres-->
             <div v-if="this.autres.length > 0" class="accordion-item">
                 <h2 id="dmep-autres-heading" class="accordion-header">
                     <button aria-controls="dmep-autres-collapse" aria-expanded="true" class="accordion-button" data-bs-target="#dmep-autres-collapse"
                             data-bs-toggle="collapse"
                             type="button">
-                        Vacataire
+                        Autres
                     </button>
                 </h2>
                 <div id="dmep-autres-collapse" aria-labelledby="dmep-autres-heading" class="accordion-collapse collapse show">
@@ -293,27 +297,25 @@ export default {
 
             datas.forEach((intervenant, index) => {
                 switch (intervenant.datasIntervenant.typeIntervenant) {
-
                     case 'Vacataire':
                         this.vacataires.push(intervenant);
-                        this.permanents.push(intervenant);
                         break;
-                    case 'Permanent':
+                    case 'Intervenant permanent':
                         this.permanents.push(intervenant);
                         break;
                     case 'Étudiant':
                         this.etudiants.push(intervenant);
                         break;
                     default:
+                        console.log(intervenant);
+                        console.log('here');
                         this.autres.push(intervenant);
                 }
 
 
 
             });
-            console.log(this.vacataires);
-            console.log(this.permanents);
-            console.log(this.etudiants);
+
 
         }
 

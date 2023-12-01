@@ -237,12 +237,19 @@ class PaiementController extends AbstractController
 
     function processDemandeMiseEnPaiementLotAction ()
     {
-        $var = '';
-        if ($this->getRequest()->isPost()) {
-            dump($this->getRequest()->getPost('intervenant'));
-        }
 
-        return false;
+        if ($this->getRequest()->isPost()) {
+            $datasIntervenant = $this->getRequest()->getPost('intervenant');
+            $intervenantIds   = array_keys($datasIntervenant);
+            foreach ($intervenantIds as $id) {
+                $intervenant = $this->getServiceIntervenant()->get($id);
+                if ($intervenant) {
+                    $this->getServiceMiseEnPaiement()->demandesMisesEnPaiementIntervenant($intervenant);
+                }
+            }
+
+            return $this->redirect()->toRoute('paiement/demande-mise-en-paiement-lot');
+        }
     }
 
 

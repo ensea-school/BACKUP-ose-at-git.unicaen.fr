@@ -25,6 +25,15 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 
 
 
+
+
+# OSE 22.4 (01/01/2023)
+
+## Corrections de bugs
+
+* Depuis la 22.3, les demandes de mise en paiement pouvaient être faites plusieurs fois pour les mêmes heures si on ne distinguait pas FI/FA/FC (#53913)
+
+
 # OSE 22.3 (30/11/2023)
 
 ## Corrections de bugs

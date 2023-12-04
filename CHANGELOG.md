@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 22.2](#ose-222-10112023)
+[OSE 22.4](#ose-224-01122023)
 
 # OSE 23 (à venir)
 
@@ -25,7 +25,16 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 
 
 
-# OSE 22.3 (à venir)
+
+
+# OSE 22.4 (01/12/2023)
+
+## Corrections de bugs
+
+* Depuis la 22.3, les demandes de mise en paiement pouvaient être faites plusieurs fois pour les mêmes heures si on ne distinguait pas FI/FA/FC (#53913)
+
+
+# OSE 22.3 (30/11/2023)
 
 ## Corrections de bugs
 
@@ -47,6 +56,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 * Les jauges budgétaires des demandes de mise en paiement s'affichent ànouveau correctement (#51066)
 * Résolution des soucis de sous-service dans la formule de Paris 8 (#51659)
 * Charges d'enseignement : l'affichage de la page des seuils s'affiche de nouveau en ckiquant sur "afficher" (#53580)
+* Modifications de service dû : le total tient compte du coefficient multiplicateur (#50570)
 
 ## Améliorations
 

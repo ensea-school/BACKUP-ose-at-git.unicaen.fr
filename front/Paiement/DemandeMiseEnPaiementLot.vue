@@ -1,9 +1,10 @@
 <template>
+    <h1>Demande de mise en paiement par lots</h1>
 
 
     <div class=" card text-dark bg-light">
         <div class="card-header text-uppercase fw-bold">
-            Demande de mise en paiement par lot
+            Recherchez des heures restantes à payer :
         </div>
 
         <div class="card-body">
@@ -36,7 +37,9 @@
         Seules les HETD avec des centres de coûts pré-paramètrés peuvent bénéficier d'une demande de mise en paiement automatisées. Pour les autres, il faudra
         passer sur chaque fiches intervenant pour faire les demandes.
     </div>
-
+    <div v-if="this.intervenants.length = 0 && this.selectedStructure" class="alert alert-light text-center" role="alert">
+        Aucune heure en attente de mise en paiement pour cette structure
+    </div>
     <div id="dmep" class="accordion">
         <form id="formProcessDemandeMiseEnPaiement" action="" method="post">
             <!--Permanents-->
@@ -52,7 +55,8 @@
                     <div class="accordion-body">
                         <table class="table">
                             <thead>
-                            <th scope="col"><input id="allPermanents" checked="checked" name="allPermanents" type="checkbox"></th>
+                            <th scope="col"><input id="allPermanents" checked="checked" class="checkbox-permanent" name="allPermanents" type="checkbox"
+                                                   @click="toggleCheckbox"></th>
                             <th scope="col">Intervenant</th>
                             <th scope="col">HETD avec centre coût</th>
                             <th scope="col">HETD sans centre coût</th>
@@ -60,7 +64,10 @@
                             <tbody>
 
                             <tr v-for="intervenant in this.permanents">
-                                <td><input id="" :name="'intervenant[' + intervenant.datasIntervenant.id +']'" checked="checked" type="checkbox"></td>
+                                <td><input :id="'permanent-' + intervenant.datasIntervenant.id"
+                                           :disabled="totalPayable(intervenant.heures) == 0 "
+                                           :name="'intervenant[' + intervenant.datasIntervenant.id +']'"
+                                           checked="checked" class="checkbox-permanent" type="checkbox"></td>
                                 <td>{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</td>
                                 <td>{{ totalPayable(intervenant.heures) }} h</td>
                                 <td>{{ totalNonPayable(intervenant.heures) }} h</td>
@@ -77,14 +84,15 @@
                     <button aria-controls="dmep-vacataires-collapse" aria-expanded="true" class="accordion-button" data-bs-target="#dmep-vacataires-collapse"
                             data-bs-toggle="collapse"
                             type="button">
-                        Vacataire
+                        Vacataire(s)
                     </button>
                 </h2>
                 <div id="dmep-vacataires-collapse" aria-labelledby="dmep-vacataires-heading" class="accordion-collapse collapse show">
                     <div class="accordion-body">
                         <table class="table">
                             <thead>
-                            <th><input id="allVacataire" checked="checked" name="allVacataire" type="checkbox"></th>
+                            <th><input id="allVacataire" checked="checked" class="checkbox-vacataire" name="allVacataire" type="checkbox"
+                                       @click="toggleCheckbox"></th>
                             <th>Intervenant</th>
                             <th>HETD avec centre coût</th>
                             <th>HETD sans centre coût</th>
@@ -92,8 +100,15 @@
                             <tbody>
 
                             <tr v-for="intervenant in this.vacataires">
-                                <td><input id="" :name="'intervenant[' + intervenant.datasIntervenant.id +']'" checked="checked" type="checkbox"></td>
-                                <td>{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</td>
+                                <td><input :id="'vacataire-' + intervenant.datasIntervenant.id"
+                                           :disabled="totalPayable(intervenant.heures) == 0 "
+                                           :name="'intervenant[' + intervenant.datasIntervenant.id +']'"
+                                           :title="totalPayable(intervenant.heures) == 0?'Aucune heure pré-paramétrée avec un centre de coût ne peut bénéficier d\'une demande de mise en paiement':''"
+                                           checked="checked" class="checkbox-vacataire"
+                                           type="checkbox">
+                                </td>
+                                <td><a :href="urlIntervenant(intervenant)"
+                                       target="_blank">{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</a></td>
                                 <td>{{ totalPayable(intervenant.heures) }} h</td>
                                 <td>{{ totalNonPayable(intervenant.heures) }} h</td>
 
@@ -109,14 +124,15 @@
                     <button aria-controls="dmep-etudiants-collapse" aria-expanded="true" class="accordion-button" data-bs-target="#dmep-etudiants-collapse"
                             data-bs-toggle="collapse"
                             type="button">
-                        Etudiants
+                        Etudiant(s)
                     </button>
                 </h2>
                 <div id="dmep-etudiants-collapse" aria-labelledby="dmep-etudiants-heading" class="accordion-collapse collapse show">
                     <div class="accordion-body">
                         <table class="table">
                             <thead>
-                            <th><input id="allEtudiants" checked="checked" name="allEtudiants" type="checkbox"></th>
+                            <th><input id="allEtudiants" checked="checked" class="checkbox-etudiant" name="allEtudiants" type="checkbox"
+                                       @click="toggleCheckbox"></th>
                             <th>Intervenant</th>
                             <th>HETD avec centre coût</th>
                             <th>HETD sans centre coût</th>
@@ -124,7 +140,10 @@
                             <tbody>
 
                             <tr v-for="intervenant in this.etudiants">
-                                <td><input id="" :name="'intervenant[' + intervenant.datasIntervenant.id +']'" checked="checked" type="checkbox"></td>
+                                <td><input :id="'etudiant-' + intervenant.datasIntervenant.id"
+                                           :disabled="totalPayable(intervenant.heures) == 0 "
+                                           :name="'intervenant[' + intervenant.datasIntervenant.id +']'"
+                                           checked="checked" class="checkbox-etudiant" type="checkbox"></td>
                                 <td>{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</td>
                                 <td>{{ totalPayable(intervenant.heures) }} h</td>
                                 <td>{{ totalNonPayable(intervenant.heures) }} h</td>
@@ -140,14 +159,14 @@
                     <button aria-controls="dmep-autres-collapse" aria-expanded="true" class="accordion-button" data-bs-target="#dmep-autres-collapse"
                             data-bs-toggle="collapse"
                             type="button">
-                        Autres
+                        Autre(s)
                     </button>
                 </h2>
                 <div id="dmep-autres-collapse" aria-labelledby="dmep-autres-heading" class="accordion-collapse collapse show">
                     <div class="accordion-body">
                         <table class="table">
                             <thead>
-                            <th><input id="allAutres" checked="checked" name="allAutres" type="checkbox"></th>
+                            <th><input id="allAutres" checked="checked" class="checkbox-autre" name="allAutres" type="checkbox" @click="toggleCheckbox"></th>
                             <th>Intervenant</th>
                             <th>HETD avec centre coût</th>
                             <th>HETD sans centre coût</th>
@@ -155,7 +174,11 @@
                             <tbody>
 
                             <tr v-for="intervenant in this.etudiants">
-                                <td><input id="" :name="'intervenant[' + intervenant.datasIntervenant.id +']'" checked="checked" type="checkbox"></td>
+                                <td><input :id="'autre-' + intervenant.datasIntervenant.id"
+                                           :disabled="totalPayable(intervenant.heures) == 0 "
+                                           :name="'intervenant[' + intervenant.datasIntervenant.id +']'" checked="checked" class="checkbox-autre"
+
+                                           type="checkbox"></td>
                                 <td>{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</td>
                                 <td>{{ totalPayable(intervenant.heures) }} h</td>
                                 <td>{{ totalNonPayable(intervenant.heures) }} h</td>
@@ -203,6 +226,7 @@ export default {
             vacataires: [],
             etudiants: [],
             autres: [],
+            intervenants: [],
         }
     },
     mounted()
@@ -215,6 +239,7 @@ export default {
             let form = document.getElementById('formRechercheDemandeMiseEnPaiement');
             let formData = new FormData(form);
             //On desactive le bouton de soumission
+
             let btnRdmep = document.getElementById('btn-rdmep')
             let btnRdmepInProgress = document.getElementById('btn-rdmep-inprogress')
             btnRdmepInProgress.classList.remove('d-none');
@@ -222,9 +247,9 @@ export default {
             btnRdmep.disabled = true;
 
 
+
             unicaenVue.axios.post(this.urlRechercheDemandeMiseEnPaiement, formData, {})
                 .then(response => {
-
                     this.dispatchDatas(response.data)
                     btnRdmep.disabled = false;
                     btnRdmepInProgress.classList.add('d-none');
@@ -239,7 +264,6 @@ export default {
         {
             let form = document.getElementById('formProcessDemandeMiseEnPaiement');
             let formData = new FormData(form);
-            console.log(formData);
             //On desactive le bouton de soumission
             let btnPdmep = document.getElementById('btn-pdmep')
             let btnPdmepInProgress = document.getElementById('btn-pdmep-inprogress')
@@ -250,12 +274,15 @@ export default {
 
             unicaenVue.axios.post(this.urlProcessDemandeMiseEnPaiement, formData, {})
                 .then(response => {
-
+                    this.findDemandeMiseEnPaiement()
+                    btnPdmep.disabled = false;
+                    btnPdmepInProgress.classList.add('d-none');
+                    btnPdmep.classList.remove('d-none');
 
 
                 })
                 .catch(error => {
-                    console.error('Error dmep');
+                    console.error('Error process dmep');
                 })
         },
         totalPayable(heures)
@@ -266,11 +293,8 @@ export default {
                     total += item.heuresAPayer;
                 }
             })
-            if (total % 1 !== 0) {
-                return total.toFixed(2);
-            }
+            return total.toLocaleString('fr-FR', {maximumFractionDigits: 2});
 
-            return total;
         },
         totalNonPayable(heures)
         {
@@ -281,11 +305,9 @@ export default {
                 }
             })
 
-            if (total % 1 !== 0) {
-                return total.toFixed(2);
-            }
 
-            return total;
+            return total.toLocaleString('fr-FR', {maximumFractionDigits: 2});
+
 
         },
         dispatchDatas(datas)
@@ -299,23 +321,63 @@ export default {
                 switch (intervenant.datasIntervenant.typeIntervenant) {
                     case 'Vacataire':
                         this.vacataires.push(intervenant);
+                        this.intervenants.push(intervenant);
                         break;
                     case 'Intervenant permanent':
                         this.permanents.push(intervenant);
+                        this.intervenants.push(intervenant);
                         break;
                     case 'Étudiant':
                         this.etudiants.push(intervenant);
+                        this.intervenants.push(intervenant);
                         break;
                     default:
-                        console.log(intervenant);
-                        console.log('here');
                         this.autres.push(intervenant);
+                        this.intervenants.push(intervenant);
                 }
 
 
 
             });
 
+
+        },
+
+        toggleCheckbox(event)
+        {
+
+            console.log(event.target);
+            //on récupere toutes les checkbox que l'on doit traiter
+            let checkbox = Array.from(document.getElementsByClassName(event.target.className));
+            console.log(checkbox)
+            if (event.target.checked) {
+                checkbox.forEach(function (element, index)
+                {
+                    console.log('check');
+
+                    console.log(element);
+                    element.checked = true;
+                });
+            } else {
+                checkbox.forEach(function (element, index)
+                {
+                    console.log('uncheck')
+                    console.log(element);
+
+                    element.checked = false;
+                });
+            }
+            console.log(checkbox);
+
+
+
+        },
+
+        urlIntervenant(intervenant)
+        {
+            return unicaenVue.url('intervenant/code::intervenantCode/mise-en-paiement/demande', {
+                intervenantCode: intervenant.datasIntervenant.code,
+            })
 
         }
 

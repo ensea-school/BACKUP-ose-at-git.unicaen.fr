@@ -240,13 +240,17 @@ class PaiementController extends AbstractController
 
         if ($this->getRequest()->isPost()) {
             $datasIntervenant = $this->getRequest()->getPost('intervenant');
-            $intervenantIds   = array_keys($datasIntervenant);
+            if (empty($datasIntervenant)) {
+                return false;
+            }
+            $intervenantIds = array_keys($datasIntervenant);
             foreach ($intervenantIds as $id) {
                 $intervenant = $this->getServiceIntervenant()->get($id);
                 if ($intervenant) {
                     $this->getServiceMiseEnPaiement()->demandesMisesEnPaiementIntervenant($intervenant);
                 }
             }
+            $this->flashMessenger()->addSuccessMessage("Les demandes de mise en paiement ont bien été effectuée");
 
             return $this->redirect()->toRoute('paiement/demande-mise-en-paiement-lot');
         }

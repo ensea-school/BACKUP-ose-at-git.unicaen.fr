@@ -67,8 +67,10 @@ class ServiceAPayerService extends AbstractService
             tp. structure = :structure
         AND tp.annee = :annee
         ";
+
         /** @var TblPaiement[] $meps */
         $annee = $this->getServiceContext()->getAnnee();
+
         $dmeps = $this->getEntityManager()->createQuery($dql)->setParameters(['structure' => $structure, 'annee' => $annee])->getResult();
 
         $dmep = [];
@@ -83,6 +85,7 @@ class ServiceAPayerService extends AbstractService
 
                     $dmep[$intervenant->getId()]['datasIntervenant'] = [
                         'id'              => $intervenant->getId(),
+                        'code'            => $intervenant->getCode(),
                         'nom_usuel'       => $intervenant->getNomUsuel(),
                         'prenom'          => $intervenant->getPrenom(),
                         'structure'       => $intervenant->getStructure()->getLibelleCourt(),

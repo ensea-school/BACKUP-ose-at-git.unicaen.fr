@@ -27,7 +27,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 
 
 
-# OSE 22.4 (01/01/2023)
+# OSE 22.4 (01/12/2023)
 
 ## Corrections de bugs
 

@@ -38,6 +38,8 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
     protected Collection $miseEnPaiementIntervenantStructure;
 
+    protected Collection $tblPaiement;
+
     protected bool $enseignement = false;
 
     protected $affAdresseContrat = true;
@@ -264,6 +266,19 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     {
         return $this->miseEnPaiementIntervenantStructure;
     }
+
+
+
+    /**
+     * Get tblPaiement
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTblPaiement ()
+    {
+        return $this->tblPaiement;
+    }
+
 
 
 

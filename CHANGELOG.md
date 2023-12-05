@@ -1,27 +1,86 @@
 # Version stable
 
-[OSE 22.0](#ose-221-30102023)
+[OSE 22.4](#ose-224-01122023)
 
 # OSE 23 (à venir)
 
 ## Nouveautés
 
 * Gestion arbosrescente des structures dans toute l'application (#3268)
+* Possibilité d'importer et/ou gérer les numéros de prise en charge des intervenants pour la paie (#15131)
 
 ## Améliorations
 
 * Une colonne "Structure" a été ajoutée à l'export de l'offre de formation
 
+## Corrections
+
+* Ajout d'un contrôle au niveau des données personnelles,  pour empêcher de mettre un statut d'une année différente de l'intervenant (#53668)
+
 ## Notes de mise à jour
 
-PHP 8.2 est maintenant requis
+A partir la V23 uniquement, PHP 8.2 est maintenant obligatoire.
 
-# OSE 22.2 (A venir)
+Pour les établissements qui utilisent le module Export SIHAM : la configuration spécifique du module d'export Siham anciennement mise dans config/autoload/unicaen-siham.local.php doit maintenant être mise directement à la racine de OSE dans le fichier de configuration globale config.local.php. (Voir un exemple dans [config.local.php.default](config.local.php.default)).
+
+
+
+
+
+# OSE 22.4 (01/12/2023)
+
+## Corrections de bugs
+
+* Depuis la 22.3, les demandes de mise en paiement pouvaient être faites plusieurs fois pour les mêmes heures si on ne distinguait pas FI/FA/FC (#53913)
+
+
+# OSE 22.3 (30/11/2023)
+
+## Corrections de bugs
+
+* Impossible de saisir du service hors établissement suite à une régression (#53694)
+* Report de service dans l'IHM de tests de formules de calcul rétabli (#53684)
+* Correction sur le rafraîchissement de l'intervenant lors d'un changement de statut au niveau des données personnelles (#53778)
+* Les intervenants ayant un avenant créé sans date de retour signé ne remontent plus dans l'indicateur 430 (#53709)
+* En sélectionnant "Non" au paramètre général "Distinction FI/FA/FC des heures à payer", les demandes de mise en paiement pouvaient disparaitre de l'écran des demandes (#53752)
+* Les jauges de plafond référentiel s'affichent de nouveau correctement (#53371)
+* Les couleurs distinctes sont de nouveau présentes sur les jauges des plafonds (#53371)
+* La formule de calcul D'Avignon prend maintenant en compte correctement les heures de référentiel (#36193)
+* Administration : Le différentiel au niveau de l'import des données s'affiche de nouveau sans erreur si un filtre est présent  (#53300)
+* Correction de problème d'arrondi au niveau des jauges des plafonds
+* L'état de sortie listant les privilèges de chaque rôle renvoie les bonnes valeurs pour les administrateurs (#53549)
+* Problème de valeurs NULL retourné par la formule de calcul de Rennes 2 résolu (#51135)
+* Les messages d'alerte des plafonds à la saisie tiennent maintenant compte des dérogations saisies (#51729)
+* Le formulaire de saisie d'enseignement fonctionne à nouveau depuis le menu "Services" (#51903)
+* Formule de calcul de l'UBO de nouveau opérationnelle (#53533)
+* Les jauges budgétaires des demandes de mise en paiement s'affichent ànouveau correctement (#51066)
+* Résolution des soucis de sous-service dans la formule de Paris 8 (#51659)
+* Charges d'enseignement : l'affichage de la page des seuils s'affiche de nouveau en ckiquant sur "afficher" (#53580)
+* Modifications de service dû : le total tient compte du coefficient multiplicateur (#50570)
 
 ## Améliorations
 
-* Meilleur affiche du service référentiel dans les notes de l'intervenant (#53479)
- 
+* Ajout d'un contrôle de date sur l'année universitaire sur la saisie en mode calendaire (#53364)
+* Nouvelle commande ./bin/ose calcul-feuille-de-route <in intervenant>
+* Indicateurs relatifs aux plafonds liés aux charges : ajout du code des enseignements (#47340)
+* Modification de la formule de calcul de Rennes 2 (#47753)
+* Plus de lien "Mot de passe oublié" affiché sur la fenêtre de connexion non CAS (#51885)
+* Mise à jour de la formule de Paris 1 (#48148)
+
+# OSE 22.2 (10/11/2023)
+
+## Corrections de bugs
+
+* La saisie des valeurs de plafonds par composante et par fonction référentielle est de nouveau opérationnelle
+* Résolution d'un problème de calcul des mises en paiement pour des services étalés sur plusieurs semestres
+
+## Améliorations
+
+* Meilleur affichage du service référentiel dans les notes de l'intervenant (#53479)
+* Les indicateurs 420 et 430 (contrat) remontent maintenant l'ensemble des intervenants (vacataires ou permanents)
+* Ajout de l'indicateur 392 pour suivre les indémnités de fin de contrat non validées par les étudiants
+
+
 
 # OSE 22.1 (30/10/2023)
 

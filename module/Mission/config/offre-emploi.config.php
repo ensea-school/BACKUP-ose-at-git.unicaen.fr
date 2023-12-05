@@ -131,7 +131,7 @@ return [
                     'icon'     => 'fas fa-duotone fa-pen-to-square',
                     'title'    => "Offre",
                     'route'    => 'offre-emploi',
-                    'resource' => PrivilegeController::getResourceId(OffreEmploiController::class, 'index'),
+                    'resource' => Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_AJOUTER),
                     'order'    => 60,
                     'color'    => '#217DD8',
                     'pages'    => [
@@ -139,7 +139,7 @@ return [
                             'label'    => "Consulter la liste des offres",
                             'title'    => "Consulter la liste des emplois étudiants",
                             'route'    => 'offre-emploi',
-                            'resource' => PrivilegeController::getResourceId(OffreEmploiController::class, 'index'),
+                            'resource' => Privileges::getResourceId(Privileges::MISSION_OFFRE_EMPLOI_AJOUTER),
                             'order'    => 10,
                             'color'    => '#217DD8',
                         ],

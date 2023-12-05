@@ -1,9 +1,13 @@
-<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Modification de service dû") ?>
+<?php
+/**
+ * @var $this                      \Application\View\Renderer\PhpRenderer
+ * @var $multiplicateurs array
+ */
 
-<h1 class="page-header"><?= $title ?></h1>
+echo $this->intervenant($intervenant)->renderTitle($title);
+echo $this->messenger()->addMessagesFromFlashMessenger();
 
-<?= $this->messenger()->addMessagesFromFlashMessenger() ?>
-
+?>
 <style>
     form.modification-service-du .form-group {
         float: left;
@@ -80,21 +84,18 @@ echo $this->form()->closeTag();
     var formId = "<?= $form->getAttribute('id') ?>";
     var form = $("#" + formId);
 
-    $("body").on('click', "#" + formId + " button.modification-service-du-ajouter", function ()
-    {
+    $("body").on('click', "#" + formId + " button.modification-service-du-ajouter", function () {
         addLigne();
         return false;
     });
-    $("body").on('click', "#" + formId + " button.modification-service-du-supprimer", function ()
-    {
+    $("body").on('click', "#" + formId + " button.modification-service-du-supprimer", function () {
         if (getLigneCurrentCount() > 0) {
             removeLigne($(this));
         }
         return false;
     });
 
-    $(function ()
-    {
+    $(function () {
         <?php if (!$canEdit): ?>
         form.find('input').attr('readonly', "readonly");
         form.find('select').attr('disabled', "disabled");
@@ -103,18 +104,15 @@ echo $this->form()->closeTag();
 
         updateLigneCounter();
         $(":input").tooltip();
-        $('body')
-            .on('change', "#" + formId + " select.modification-service-du-motif", function ()
-            {
-                var select = $(this); // select de référence, dont la valeur a changé
-                if (select.val() === '') {
-                    return;
-                }
-            })
-            .on('change', "#" + formId + " input.modification-service-du-heures", function ()
-            {
-                updateLigneCounter();
-            });
+        $('body').on('change', "#" + formId + " select.modification-service-du-motif", function () {
+            var select = $(this); // select de référence, dont la valeur a changé
+            if (select.val() === '') {
+                return;
+            }
+            updateLigneCounter();
+        }).on('change', "#" + formId + " input.modification-service-du-heures", function () {
+            updateLigneCounter();
+        });
     });
 
     function addLigne()
@@ -147,7 +145,14 @@ echo $this->form()->closeTag();
     function getLigneCurrentTotal()
     {
         var total = 0;
-        $.each(getLignes(), function (index, ligne) { total = total + Formatter.stringToFloat($(".modification-service-du-heures", ligne).val()); });
+        $.each(getLignes(), function (index, ligne) {
+            var multiplicateurs = <?= json_encode($multiplicateurs) ?>;
+
+            var heures = Formatter.stringToFloat($(".modification-service-du-heures", ligne).val());
+            var motifId = $(".modification-service-du-motif", ligne).val();
+
+            total += (heures * multiplicateurs[motifId]);
+        });
         return total;
     }
 
@@ -156,8 +161,18 @@ echo $this->form()->closeTag();
         var msg = "Aucune modification de service dû.";
         var currentCount = getLigneCurrentCount();
         if (currentCount) {
-            var total = getLigneCurrentTotal();
-            msg = currentCount + " modification(s) de service dû (total = " + Formatter.floatToString(total) + ").";
+            var sstat = <?= (int)$intervenant->getStatut()->getServiceStatutaire() ?>;
+            var modifs = getLigneCurrentTotal();
+            var s = currentCount > 1 ? 's' : '';
+
+            msg = currentCount + " modification" + s + ", soient " + sstat;
+            if (modifs >= 0) {
+                msg += " + " + modifs;
+            } else {
+                msg += " - " + (modifs * -1);
+            }
+
+            msg += ' = ' + (sstat + modifs) + " heures de service dû";
         }
         $("#modification-service-du-comptage").html(msg);
     }

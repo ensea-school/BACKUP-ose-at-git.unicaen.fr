@@ -50,6 +50,8 @@ class EditionForm extends AbstractForm
         'nomUsuel'           => ['type' => 'string'],
         'nomPatronymique'    => ['type' => 'string'],
         'prenom'             => ['type' => 'string'],
+        'numeroInsee'        => ['type' => 'string'],
+        'numeroPec'          => ['type' => 'string'],
         'dateNaissance'      => ['type' => \DateTime::class],
         'statut'             => ['type' => Statut::class],
         'structure'          => ['type' => Structure::class],
@@ -62,6 +64,7 @@ class EditionForm extends AbstractForm
         'sourceCode'         => ['type' => 'string'],
         'syncStatut'         => ['type' => 'bool'],
         'syncStructure'      => ['type' => 'bool'],
+        'syncPec'            => ['type' => 'bool'],
         'irrecevable'        => ['type' => 'bool'],
         'montantIndemniteFc' => ['type' => 'float'],
         'validiteDebut'      => ['type' => \DateTime::class],
@@ -72,7 +75,7 @@ class EditionForm extends AbstractForm
 
 
 
-    public function init()
+    public function init ()
     {
         $hydrator = new EditionFormHydrator($this->getServiceSource()->getEntityManager(), $this->hydratorElements);
         $this->setHydrator($hydrator);
@@ -143,10 +146,10 @@ class EditionForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'structure',
-            'type'       => \Lieu\Form\Element\Structure::class,
-            'options'    => [
-                'label'         => 'Structure',
+            'name'    => 'structure',
+            'type'    => \Lieu\Form\Element\Structure::class,
+            'options' => [
+                'label' => 'Structure',
             ],
         ]);
 
@@ -206,6 +209,26 @@ class EditionForm extends AbstractForm
             'options' => [
                 'label' => 'Code RH éventuel',
             ],
+        ]);
+
+        $this->add([
+            'name'    => 'numeroInsee',
+            'type'    => 'Text',
+            'options' => [
+                'label'         => 'Numéro INSEE',
+                'label_options' => ['disable_html_escape' => true],
+            ],
+
+        ]);
+
+        $this->add([
+            'name'    => 'numeroPec',
+            'type'    => 'Text',
+            'options' => [
+                'label'         => 'Numéro de prise en charge',
+                'label_options' => ['disable_html_escape' => true],
+            ],
+
         ]);
 
         $utilisateur = new SearchAndSelect('utilisateur');
@@ -323,6 +346,17 @@ class EditionForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'       => 'syncPec',
+            'options'    => [
+                'label' => 'Synchronisation du numéro PEC',
+            ],
+            'attributes' => [
+                'title' => 'Si pas coché, alors le numéro de prise en charge ne sera plus définie par le connecteur, ni par le chargement en masse des numéros de prise en charge',
+            ],
+            'type'       => 'Checkbox',
+        ]);
+
+        $this->add([
             'name'    => 'irrecevable',
             'options' => [
                 'label' => 'Fiche considérée comme irrecevable (sortie des indicateurs)',
@@ -359,21 +393,21 @@ class EditionForm extends AbstractForm
 
 
 
-    public function getDisciplines(): array
+    public function getDisciplines (): array
     {
         return $this->getServiceDiscipline()->getList($this->getServiceDiscipline()->finderByHistorique());
     }
 
 
 
-    public function getGrades(): array
+    public function getGrades (): array
     {
         return $this->getServiceGrade()->getList($this->getServiceGrade()->finderByHistorique());
     }
 
 
 
-    public function getStatuts(): array
+    public function getStatuts (): array
     {
         $statuts = $this->getServiceStatut()->getStatuts();
         $res     = [];
@@ -393,7 +427,7 @@ class EditionForm extends AbstractForm
 
 
 
-    public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
+    public function bind ($object, $flags = FormInterface::VALUES_NORMALIZED)
     {
         /* @var $object Intervenant */
         parent::bind($object, $flags);
@@ -408,7 +442,7 @@ class EditionForm extends AbstractForm
     /**
      * @return boolean
      */
-    public function isReadOnly()
+    public function isReadOnly ()
     {
         return $this->readOnly;
     }
@@ -420,16 +454,16 @@ class EditionForm extends AbstractForm
      *
      * @return Dossier
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly ($readOnly)
     {
         $this->readOnly = $readOnly;
     }
 
 
 
-    public function activerEditionAvancee()
+    public function activerEditionAvancee ()
     {
-        $elements = ['source', 'code'];
+        $elements = ['source', 'code', 'numeroPec', 'numeroInsee'];
         foreach ($this->getElements() as $element) {
             if (in_array($element->getName(), $elements)) {
 
@@ -443,7 +477,7 @@ class EditionForm extends AbstractForm
 
 
 
-    public function protection($object)
+    public function protection ($object)
     {
         if ($this->isReadOnly()) {
 
@@ -453,7 +487,7 @@ class EditionForm extends AbstractForm
                 $element->setAttribute('disabled', true);
             }
         } else {
-            $noImport = ['syncStatut', 'syncStructure', 'statut', 'structure', 'intervenant-edition-login', 'intervenant-edition-password'];
+            $noImport = ['syncStatut', 'syncStructure', 'syncPec', 'statut', 'structure', 'intervenant-edition-login', 'intervenant-edition-password'];
             if ($object->getAnnee()->getId() < $this->getServiceContext()->getAnneeImport()->getId()) {
                 $noImport[] = 'grade';
             }
@@ -499,7 +533,7 @@ class EditionForm extends AbstractForm
      *
      * @return array
      */
-    public function getInputFilterSpecification()
+    public function getInputFilterSpecification ()
     {
         return [
             'montantIndemniteFc'           => [
@@ -519,6 +553,8 @@ class EditionForm extends AbstractForm
             'grade'                        => ['required' => false],
             'code'                         => ['required' => true],
             'codeRh'                       => ['required' => false],
+            'numeroInsee'                  => ['required' => false],
+            'numeroPec'                    => ['required' => false],
             'utilisateur'                  => ['required' => false],
             'intervenant-edition-login'    => ['required' => false],
             'validiteDebut'                => ['required' => false],
@@ -560,7 +596,7 @@ class EditionFormHydrator extends GenericHydrator
      *
      * @return object
      */
-    public function hydrate(array $data, $object)
+    public function hydrate (array $data, $object)
     {
         parent::hydrate($data, $object);
 
@@ -584,7 +620,7 @@ class EditionFormHydrator extends GenericHydrator
      *
      * @return array
      */
-    public function extract($object): array
+    public function extract ($object): array
     {
         $res = parent::extract($object);
 

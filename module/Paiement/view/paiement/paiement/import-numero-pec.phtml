@@ -1,0 +1,11 @@
+<?php
+
+$this->headTitle()->append($title);
+?>
+
+    <h1 class="page-header">Import des numéros de prise en charge</h1>
+<?php
+
+echo $this->vue('paiement/import-numero-pec', [
+    'canImport' => true,
+]);

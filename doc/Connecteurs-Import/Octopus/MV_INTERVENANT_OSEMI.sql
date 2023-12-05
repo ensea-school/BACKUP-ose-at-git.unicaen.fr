@@ -12,64 +12,7 @@ WITH i AS (
                     MAX(fin_affectation_siham) OVER (PARTITION BY code, z_statut_id)     fin_affectation_siham
 
     FROM (
-	    	 --Step 1 : On prend tous les individus qui ont ou ont eu un contrat à l'université
-             SELECT icto.individu_id                                            code,
-                    CASE
-                        WHEN icto.code_ose = 'ENS_2ND_DEGRE' THEN 'ENS_2ND_DEG'
-                        WHEN icto.code_ose IS NOT NULL THEN icto.code_ose
-                        ELSE 'AUTRES' END                                       z_statut_id,
-                    CASE
-                    	WHEN icto.code_ose IS NOT NULL AND icto.code_ose NOT IN ('NON_AUTORISE') THEN 'permanent'
-                    	ELSE 'vacataire' END                                        z_type,
-                    icto.id_orig                                                source_code,
-                    COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) validite_debut,
-                     CASE
-	                    --Si date de fin est réglée au 1er sept, on la repasse au 31/08 de la même année (Bug Octopus)
-                    	WHEN to_char(icto.d_fin, 'dd/mm') = '01/09' THEN icto.d_fin-1
-                    	ELSE COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) END   validite_fin,
-                    NULL	   													fin_affectation_siham
-             FROM octo.v_individu_contrat_type_ose@octoprod icto
-                      JOIN octo.individu_unique@octoprod uni ON icto.individu_id = uni.c_individu_chaine
-                      JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
-
-             WHERE (COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) - 184 <= SYSDATE OR COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) >= SYSDATE)  AND icto.code_ose IS NOT NULL
-
-
-             UNION ALL
-             -- Step 2 : on prend tout le reste potentiel vacataire, notamment les hébergés
-             SELECT uni.c_individu_chaine                                           code,
-                    'AUTRES'                                                        z_statut_id,
-					CASE
-                    	WHEN (inds.t_titulaire='O' OR inds.t_cdi='O' OR inds.t_cdd='O') THEN 'permanent'
-                    	ELSE 'vacataire' END                                        z_type,
-                    uni.c_individu_chaine || '-autre'                               source_code,
-                    COALESCE(inds.d_debut, to_date('01/01/1900', 'dd/mm/YYYY'))     validite_debut,
-                    CASE
-                    	WHEN inds.d_fin = to_date('01/09/2021', 'dd/mm/YYYY') THEN to_date('31/08/2021', 'dd/mm/YYYY')
-                    	ELSE COALESCE(inds.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) END   validite_fin,
-                    CASE
-                        WHEN inds.c_source = 'SIHAM' THEN 	inds.d_fin
-                        ELSE NULL END		                                        fin_affectation_siham
-
-             FROM octo.individu_unique@octoprod uni
-                      JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
-   					  LEFT JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
-					  LEFT JOIN octo.v_individu_contrat_type_ose@octoprod icto ON uni.c_individu_chaine = icto.individu_id AND  COALESCE(icto.d_debut, to_date('01/01/1900', 'dd/mm/YYYY')) - 184 <= SYSDATE AND COALESCE(icto.d_fin, to_date('01/01/9999', 'dd/mm/YYYY'))  >= SYSDATE AND icto.code_ose IS NOT NULL AND icto.code_ose NOT IN('NON_AUTORISE')
-             WHERE inds.d_debut - 184 <= SYSDATE
-               --On ne remonte pas de statut autre pour ceux qui ont déjà un certain type de contrat
-	           --AND icto.individu_id IS NULL
-               --Combinaison des témoins octopus pour récupérer les bonnes populations
-               AND ((inds.t_enseignant = 'O' AND inds.t_vacataire = 'O')
-                 OR (inds.t_enseignant = 'O' AND inds.t_heberge = 'O')
-                 OR (inds.t_vacataire = 'O')
-                 OR (inds.t_heberge = 'O'))
-               AND icto.individu_id IS NULL
-               --AND (vinds.t_doctorant='N' OR vinds.individu_id IS NULL)
-               AND inds.c_source IN ('HARP', 'OCTO', 'SIHAM')
-
-             UNION ALL
-
-             SELECT uni.c_individu_chaine                                           code,
+	         SELECT uni.c_individu_chaine                                           code,
                     'ETUDIANT'                                                      z_statut_id,
 					'etudiant'                                                      z_type,
                     uni.c_individu_chaine || '-etudiant'                            source_code,
@@ -121,8 +64,9 @@ WITH i AS (
                 MAX(structure_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1  WHEN source_id = 'OCTOREFID' THEN 2  WHEN source_id = 'APO' THEN 3 ELSE 999 END DESC , t_principale, date_debut)   structure_id,
                 MAX(source_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1 WHEN source_id = 'OCTOREFID' THEN 2 WHEN source_id = 'APO' THEN 3 ELSE 999 END DESC,t_principale, date_debut) source_id
              FROM octo.individu_affectation@octoprod
-             --WHERE type_id = 5 //Filtre pour les affectations étudiants
-             WHERE type_id = 4
+             --//Filtre pour les affectations étudiants
+             WHERE type_id = 5
+             --WHERE type_id = 4
              AND COALESCE(date_fin, SYSDATE) + 1 >= (SYSDATE - (365 * 2))
              GROUP BY individu_id
          ),
@@ -207,7 +151,7 @@ SELECT DISTINCT
     /*Code RH si l'utilisateur est dans SIHAM*/
     ind.c_rh                                                                           code_rh,
     compte.ldap_uid                                                                    utilisateur_code,
-    str2.code                                                                          z_structure_id,
+    CAST(NULL AS varchar2(255))                                                        z_structure_id,
     i.z_statut_id                                                                      z_statut_id,
     grade.c_grade                                                                      z_grade_id,
     CASE WHEN COALESCE(cnua.code_cnu_arrange, '00') = '12'
@@ -229,8 +173,9 @@ SELECT DISTINCT
     CAST(telpro.numero AS varchar2(255))                                               tel_pro,
     COALESCE(ind.tel_perso_ow, ind.tel_perso)                                          tel_perso,
     CAST(compte.email AS varchar2(255))                                                email_pro,
-    CAST(NULL AS varchar2(255))                                                        email_perso,
-    --COALESCE(ind.email_perso_ow, ind.email_perso)                                      email_perso,    /* Adresse */
+    --CAST(NULL AS varchar2(255))                                                        email_perso,
+    COALESCE(ind.email_perso_ow, ind.email_perso)                                      email_perso,
+    /* Adresse */
     TRIM(adr.adresse1 ||
          CASE
              WHEN adr.adresse1 IS NOT NULL
@@ -257,10 +202,11 @@ SELECT DISTINCT
             AND vindinsee.no_insee_provisoire IS NOT NULL
             THEN 1
         ELSE 0 END                                                                     numero_insee_provisoire,
+    CAST(NULL AS varchar2(255))                                                        numero_pec,
     /* Banque */
     COALESCE(TRIM(vindiban.iban), ibandossier.iban)                                    iban,
     COALESCE(TRIM(vindiban.bic), ibandossier.bic)                                      bic,
-    CAST(NULL AS varchar2(255))                                                        numero_pec,
+
     0                                                                                  rib_hors_sepa,
     /* Données complémentaires */
     CAST(NULL AS varchar2(255))                                                        autre_1,

@@ -137,7 +137,11 @@ FROM (  SELECT c.*,
                                                                  ), chr(13), ' - ')
                  ELSE '' END                                                                                                                                "exemplaire2",
              REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal", 0), '999999.00')), '.', ',')                                                                 "serviceTotal",
-             REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"/10, 0), '999999.00')), '.', ',')                                                              "totalDiviseParDix",
+            CASE
+                WHEN COALESCE(hs."serviceTotal"/10, 0) < 1
+                THEN CONCAT('0', REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"/10, 0), '999999.00')), '.', ','))
+                ELSE REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"/10, 0), '999999.00')), '.', ',')
+                END                                                                                                                                         "totalDiviseParDix",
              REPLACE(ltrim(to_char(COALESCE(hs."serviceTotal"+(hs."serviceTotal"/10), 0), '999999.00')), '.', ',')                                          "serviceTotalPaye",
              CASE
                  WHEN la.autre_libelles IS NOT NULL

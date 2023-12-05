@@ -212,6 +212,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
                             'data-type-ressource' => $trid,
                             'data-dotation'       => $this->budget[$sid][$trid]['dotation'],
                             'data-usage'          => $this->budget[$sid][$trid]['usage'],
+                            'style' => 'width: 100%',
                         ])->html(
                             $t('div', [
                                 'class'         => 'progress-bar progress-bar-striped',
@@ -431,7 +432,12 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
         }
 
         $misesEnPaiement = $serviceAPayer->getMiseEnPaiement()->filter(function (MiseEnPaiement $miseEnPaiement) use ($typeHeures) {
-            return $miseEnPaiement->getTypeHeures() === $typeHeures;
+            $mepth = $miseEnPaiement->getTypeHeures();
+            if ($typeHeures->getCode() === TypeHeures::ENSEIGNEMENT){
+                return in_array($mepth->getCode(),[TypeHeures::FI,TypeHeures::FA,TypeHeures::FC,TypeHeures::FC_MAJOREES,TypeHeures::ENSEIGNEMENT]);
+            }else{
+                return $mepth->getCode() === $typeHeures->getCode();
+            }
         });
         /* @var $misesEnPaiement MiseEnPaiement[] */
         foreach ($misesEnPaiement as $miseEnPaiement) {

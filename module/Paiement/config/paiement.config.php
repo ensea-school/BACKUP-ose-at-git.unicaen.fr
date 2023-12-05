@@ -65,6 +65,12 @@ return [
                         'etat' => Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
                     ],
                 ],
+                'import-numero-pec'     => [
+                    'route'      => '/import-numero-pec',
+                    'controller' => Controller\PaiementController::class,
+                    'action'     => 'importNumeroPec',
+                    'privileges' => Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE,
+                ],
                 'pilotage'              => [
                     'route'      => '/pilotage',
                     'controller' => Controller\PaiementController::class,
@@ -166,21 +172,27 @@ return [
                             'resource' => Privileges::getResourceId(Privileges::MISSION_PRIME_GESTION),
                         ],
 
-                        'imputation-siham' => [
+                        'imputation-siham'  => [
                             'label'    => "Imputation budgétaire SIHAM",
                             'title'    => "Export des données pour chargement en masse des imputations budgétaires dans SIHAM",
                             'route'    => 'paiement/imputation-siham',
                             'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                         ],
+                        'import-numero-pec' => [
+                            'label'    => "Import des numéros de prise en charge",
+                            'title'    => "Importer les numéros de prise en charge pour automatiser le fichier de paie",
+                            'route'    => 'paiement/import-numero-pec',
+                            'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
+                        ],
                     ],
                 ],
                 'pilotage' => [
-                    'label' => 'Pilotage',
-                    'title' => 'Pilotage',
-                    'icon'  => 'fas fa-chart-line',
+                    'label'    => 'Pilotage',
+                    'title'    => 'Pilotage',
+                    'icon'     => 'fas fa-chart-line',
                     'route'    => 'paiement/pilotage',
                     'resource' => PrivilegeController::getResourceId(PaiementController::class, 'pilotage'),
-                    'pages' => [
+                    'pages'    => [
                         'ecarts-etats' => [
                             'label'       => 'Ecarts d\'heures complémentaires (CSV)',
                             'title'       => 'Ecarts d\'heures complémentaires (CSV)',
@@ -189,8 +201,8 @@ return [
                             'resource'    => PrivilegeController::getResourceId(PaiementController::class, 'ecartsEtats'),
                         ],
                     ],
-                    'order' => 20,
-                    'color' => '#00A020',
+                    'order'    => 20,
+                    'color'    => '#00A020',
                 ],
             ],
         ],
@@ -245,7 +257,7 @@ return [
         ],
         [
             'controller' => Controller\PaiementController::class,
-            'action'     => ['extractionPaie', 'imputationSiham'],
+            'action'     => ['extractionPaie', 'imputationSiham', 'importNumeroPec'],
             'privileges' => [Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE],
         ],
         [
@@ -268,6 +280,7 @@ return [
         Service\MiseEnPaiementService::class                     => Service\MiseEnPaiementServiceFactory::class,
         Service\MiseEnPaiementIntervenantStructureService::class => Service\MiseEnPaiementIntervenantStructureServiceFactory::class,
         Service\MotifNonPaiementService::class                   => Service\MotifNonPaiementServiceFactory::class,
+        Service\NumeroPriseEnChargeService::class                => Service\NumeroPriseEnChargeServiceFactory::class,
         Assertion\PaiementAssertion::class                       => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         PaiementProcess::class                                   => PaiementProcessFactory::class,
     ],

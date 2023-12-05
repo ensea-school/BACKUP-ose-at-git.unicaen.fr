@@ -302,7 +302,7 @@ class PlafondControle
         return sprintf(
             $errStr,
             $this->getMessage(),
-            floatToString($this->getPlafond()),
+            floatToString(round($this->getPlafond()+$this->getDerogation(),2)),
             floatToString($this->getHeures())
         );
     }

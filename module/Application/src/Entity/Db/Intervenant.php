@@ -214,6 +214,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @var bool
      */
+    protected $syncPec = true;
+
+    /**
+     * @var bool
+     */
     protected $syncUtilisateurCode = true;
 
     /**
@@ -310,22 +315,17 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
     protected bool $irrecevable = false;
 
-
-
     /**
-     * @return int|null
+     * @var string|null
      */
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    protected $numeroPec;
 
 
 
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct ()
     {
         $this->affectation                        = new ArrayCollection();
         $this->agrement                           = new ArrayCollection();
@@ -344,18 +344,28 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
     /**
+     * @return int|null
+     */
+    public function getId (): ?int
+    {
+        return $this->id;
+    }
+
+
+
+    /**
      * Retourne la représentation littérale de cet objet.
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return strtoupper($this->getNomUsuel()) . ' ' . ucfirst($this->getPrenom());
     }
 
 
 
-    function __sleep()
+    function __sleep ()
     {
         return [];
     }
@@ -368,14 +378,14 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      * @return string
      * @see ResourceInterface
      */
-    public function getResourceId()
+    public function getResourceId ()
     {
         return 'Intervenant';
     }
 
 
 
-    public function getAdresseIdentite(): ?string
+    public function getAdresseIdentite (): ?string
     {
         $identite = [];
         if ($this->getCivilite()) $identite[] = (string)$this->getCivilite();
@@ -394,14 +404,14 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @param bool $demande
      */
-    public function hasMiseEnPaiement($demande = true)
+    public function hasMiseEnPaiement ($demande = true)
     {
         if ($this->hasMiseEnPaiement === null) {
             $id     = (int)$this->getId();
             $heures = $demande ? 'heures_demandees' : 'heures_payees';
 
             $sql = "SELECT COUNT(*) res FROM tbl_paiement p "
-                . "WHERE p.intervenant_id = $id AND p.$heures"."_AA + p.$heures"."_AC > 0 AND rownum = 1";
+                . "WHERE p.intervenant_id = $id AND p.$heures" . "_AA + p.$heures" . "_AC > 0 AND rownum = 1";
 
             $res = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql);
 
@@ -416,7 +426,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getCode(): ?string
+    public function getCode (): ?string
     {
         return $this->code;
     }
@@ -428,7 +438,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setCode(?string $code): Intervenant
+    public function setCode (?string $code): Intervenant
     {
         $this->code = $code;
 
@@ -440,7 +450,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getCodeRh(): ?string
+    public function getCodeRh (): ?string
     {
         return $this->codeRh;
     }
@@ -452,7 +462,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setCodeRh(?string $codeRh): Intervenant
+    public function setCodeRh (?string $codeRh): Intervenant
     {
         $this->codeRh = $codeRh;
 
@@ -464,7 +474,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getUtilisateurCode(): ?string
+    public function getUtilisateurCode (): ?string
     {
         return $this->utilisateurCode;
     }
@@ -476,7 +486,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setUtilisateurCode(?string $utilisateurCode): Intervenant
+    public function setUtilisateurCode (?string $utilisateurCode): Intervenant
     {
         $this->utilisateurCode = $utilisateurCode;
 
@@ -490,7 +500,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Statut
      */
-    public function getStatut()
+    public function getStatut ()
     {
         return $this->statut;
     }
@@ -504,7 +514,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setStatut(Statut $statut = null)
+    public function setStatut (Statut $statut = null)
     {
         $this->statut = $statut;
 
@@ -516,7 +526,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getNomUsuel(): ?string
+    public function getNomUsuel (): ?string
     {
         return $this->nomUsuel;
     }
@@ -528,7 +538,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setNomUsuel(?string $nomUsuel): Intervenant
+    public function setNomUsuel (?string $nomUsuel): Intervenant
     {
         $this->nomUsuel = $nomUsuel;
 
@@ -540,7 +550,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getPrenom(): ?string
+    public function getPrenom (): ?string
     {
         return $this->prenom;
     }
@@ -552,7 +562,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setPrenom(?string $prenom): Intervenant
+    public function setPrenom (?string $prenom): Intervenant
     {
         $this->prenom = $prenom;
 
@@ -564,7 +574,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return \DateTime|null
      */
-    public function getDateNaissance(): ?\DateTime
+    public function getDateNaissance (): ?\DateTime
     {
         return $this->dateNaissance;
     }
@@ -576,7 +586,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setDateNaissance(?\DateTime $dateNaissance): Intervenant
+    public function setDateNaissance (?\DateTime $dateNaissance): Intervenant
     {
         $this->dateNaissance = $dateNaissance;
 
@@ -588,7 +598,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getNomPatronymique(): ?string
+    public function getNomPatronymique (): ?string
     {
         return $this->nomPatronymique;
     }
@@ -600,7 +610,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setNomPatronymique(?string $nomPatronymique): Intervenant
+    public function setNomPatronymique (?string $nomPatronymique): Intervenant
     {
         $this->nomPatronymique = $nomPatronymique;
 
@@ -612,7 +622,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getCommuneNaissance(): ?string
+    public function getCommuneNaissance (): ?string
     {
         return $this->communeNaissance;
     }
@@ -624,7 +634,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setCommuneNaissance(?string $communeNaissance): Intervenant
+    public function setCommuneNaissance (?string $communeNaissance): Intervenant
     {
         $this->communeNaissance = $communeNaissance;
 
@@ -636,7 +646,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return Pays|null
      */
-    public function getPaysNaissance(): ?Pays
+    public function getPaysNaissance (): ?Pays
     {
         return $this->paysNaissance;
     }
@@ -648,7 +658,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setPaysNaissance(?Pays $paysNaissance): Intervenant
+    public function setPaysNaissance (?Pays $paysNaissance): Intervenant
     {
         $this->paysNaissance = $paysNaissance;
 
@@ -660,7 +670,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return Departement|null
      */
-    public function getDepartementNaissance(): ?Departement
+    public function getDepartementNaissance (): ?Departement
     {
         return $this->departementNaissance;
     }
@@ -672,7 +682,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setDepartementNaissance(?Departement $departementNaissance): Intervenant
+    public function setDepartementNaissance (?Departement $departementNaissance): Intervenant
     {
         $this->departementNaissance = $departementNaissance;
 
@@ -684,7 +694,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return Pays|null
      */
-    public function getPaysNationalite(): ?Pays
+    public function getPaysNationalite (): ?Pays
     {
         return $this->paysNationalite;
     }
@@ -696,7 +706,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setPaysNationalite(?Pays $paysNationalite): Intervenant
+    public function setPaysNationalite (?Pays $paysNationalite): Intervenant
     {
         $this->paysNationalite = $paysNationalite;
 
@@ -708,7 +718,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getTelPro(): ?string
+    public function getTelPro (): ?string
     {
         return $this->telPro;
     }
@@ -720,7 +730,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setTelPro(?string $telPro): Intervenant
+    public function setTelPro (?string $telPro): Intervenant
     {
         $this->telPro = $telPro;
 
@@ -732,7 +742,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getTelPerso(): ?string
+    public function getTelPerso (): ?string
     {
         return $this->telPerso;
     }
@@ -744,7 +754,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setTelPerso(?string $telPerso): Intervenant
+    public function setTelPerso (?string $telPerso): Intervenant
     {
         $this->telPerso = $telPerso;
 
@@ -756,7 +766,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getEmailPro(): ?string
+    public function getEmailPro (): ?string
     {
         return $this->emailPro;
     }
@@ -768,7 +778,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setEmailPro(?string $emailPro): Intervenant
+    public function setEmailPro (?string $emailPro): Intervenant
     {
         $this->emailPro = $emailPro;
 
@@ -780,7 +790,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getEmailPerso(): ?string
+    public function getEmailPerso (): ?string
     {
         return $this->emailPerso;
     }
@@ -792,7 +802,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setEmailPerso(?string $emailPerso): Intervenant
+    public function setEmailPerso (?string $emailPerso): Intervenant
     {
         $this->emailPerso = $emailPerso;
 
@@ -804,7 +814,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getNumeroInsee(): ?string
+    public function getNumeroInsee (): ?string
     {
         return $this->numeroInsee;
     }
@@ -816,7 +826,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setNumeroInsee(?string $numeroInsee): Intervenant
+    public function setNumeroInsee (?string $numeroInsee): Intervenant
     {
         $this->numeroInsee = $numeroInsee;
 
@@ -828,7 +838,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return bool|null
      */
-    public function getNumeroInseeProvisoire(): ?bool
+    public function getNumeroInseeProvisoire (): ?bool
     {
         return $this->numeroInseeProvisoire;
     }
@@ -840,7 +850,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setNumeroInseeProvisoire(?bool $numeroInseeProvisoire): Intervenant
+    public function setNumeroInseeProvisoire (?bool $numeroInseeProvisoire): Intervenant
     {
         $this->numeroInseeProvisoire = $numeroInseeProvisoire;
 
@@ -852,7 +862,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getIBAN(): ?string
+    public function getIBAN (): ?string
     {
         return $this->IBAN;
     }
@@ -864,7 +874,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setIBAN(?string $IBAN): Intervenant
+    public function setIBAN (?string $IBAN): Intervenant
     {
         $this->IBAN = $IBAN;
 
@@ -876,7 +886,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getBIC(): ?string
+    public function getBIC (): ?string
     {
         return $this->BIC;
     }
@@ -888,7 +898,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setBIC(?string $BIC): Intervenant
+    public function setBIC (?string $BIC): Intervenant
     {
         $this->BIC = $BIC;
 
@@ -902,7 +912,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return string|null
      */
-    public function getRib(): ?string
+    public function getRib (): ?string
     {
         $rib = '';
 
@@ -918,7 +928,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return bool
      */
-    public function isRibHorsSepa(): bool
+    public function isRibHorsSepa (): bool
     {
         return $this->ribHorsSepa;
     }
@@ -928,7 +938,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return bool
      */
-    public function getRibHorsSepa(): bool
+    public function getRibHorsSepa (): bool
     {
         return $this->ribHorsSepa;
     }
@@ -940,7 +950,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setRibHorsSepa(bool $ribHorsSepa): Intervenant
+    public function setRibHorsSepa (bool $ribHorsSepa): Intervenant
     {
         $this->ribHorsSepa = $ribHorsSepa;
 
@@ -952,7 +962,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getAutre1(): ?string
+    public function getAutre1 (): ?string
     {
         return $this->autre1;
     }
@@ -964,7 +974,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setAutre1(?string $autre1): Intervenant
+    public function setAutre1 (?string $autre1): Intervenant
     {
         $this->autre1 = $autre1;
 
@@ -976,7 +986,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getAutre2(): ?string
+    public function getAutre2 (): ?string
     {
         return $this->autre2;
     }
@@ -988,7 +998,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setAutre2(?string $autre2): Intervenant
+    public function setAutre2 (?string $autre2): Intervenant
     {
         $this->autre2 = $autre2;
 
@@ -1000,7 +1010,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getAutre3(): ?string
+    public function getAutre3 (): ?string
     {
         return $this->autre3;
     }
@@ -1012,7 +1022,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setAutre3(?string $autre3): Intervenant
+    public function setAutre3 (?string $autre3): Intervenant
     {
         $this->autre3 = $autre3;
 
@@ -1024,7 +1034,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getAutre4(): ?string
+    public function getAutre4 (): ?string
     {
         return $this->autre4;
     }
@@ -1036,7 +1046,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setAutre4(?string $autre4): Intervenant
+    public function setAutre4 (?string $autre4): Intervenant
     {
         $this->autre4 = $autre4;
 
@@ -1048,7 +1058,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return string|null
      */
-    public function getAutre5(): ?string
+    public function getAutre5 (): ?string
     {
         return $this->autre5;
     }
@@ -1060,7 +1070,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setAutre5(?string $autre5): Intervenant
+    public function setAutre5 (?string $autre5): Intervenant
     {
         $this->autre5 = $autre5;
 
@@ -1072,7 +1082,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return float|null
      */
-    public function getMontantIndemniteFc(): ?float
+    public function getMontantIndemniteFc (): ?float
     {
         return $this->montantIndemniteFc;
     }
@@ -1084,7 +1094,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setMontantIndemniteFc(?float $montantIndemniteFc): Intervenant
+    public function setMontantIndemniteFc (?float $montantIndemniteFc): Intervenant
     {
         $this->montantIndemniteFc = $montantIndemniteFc;
 
@@ -1096,7 +1106,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return bool|null
      */
-    public function getPremierRecrutement(): ?bool
+    public function getPremierRecrutement (): ?bool
     {
         return $this->premierRecrutement;
     }
@@ -1108,7 +1118,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setPremierRecrutement(?bool $premierRecrutement): Intervenant
+    public function setPremierRecrutement (?bool $premierRecrutement): Intervenant
     {
         $this->premierRecrutement = $premierRecrutement;
 
@@ -1120,7 +1130,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return bool
      */
-    public function isSyncStatut(): bool
+    public function isSyncStatut (): bool
     {
         return $this->syncStatut;
     }
@@ -1132,7 +1142,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setSyncStatut(bool $syncStatut): Intervenant
+    public function setSyncStatut (bool $syncStatut): Intervenant
     {
         $this->syncStatut = $syncStatut;
 
@@ -1144,7 +1154,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return bool
      */
-    public function isSyncStructure(): bool
+    public function isSyncStructure (): bool
     {
         return $this->syncStructure;
     }
@@ -1156,9 +1166,25 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setSyncStructure(bool $syncStructure): Intervenant
+    public function setSyncStructure (bool $syncStructure): Intervenant
     {
         $this->syncStructure = $syncStructure;
+
+        return $this;
+    }
+
+
+
+    public function isSyncPec (): bool
+    {
+        return $this->syncPec;
+    }
+
+
+
+    public function setSyncPec (bool $syncPec): self
+    {
+        $this->syncPec = $syncPec;
 
         return $this;
     }
@@ -1168,7 +1194,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return bool
      */
-    public function isSyncUtilisateurCode(): bool
+    public function isSyncUtilisateurCode (): bool
     {
         return $this->syncUtilisateurCode;
     }
@@ -1180,7 +1206,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setSyncUtilisateurCode(bool $syncUtilisateurCode): Intervenant
+    public function setSyncUtilisateurCode (bool $syncUtilisateurCode): Intervenant
     {
         $this->syncUtilisateurCode = $syncUtilisateurCode;
 
@@ -1192,7 +1218,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return \DateTime
      */
-    public function getValiditeDebut(): ?\DateTime
+    public function getValiditeDebut (): ?\DateTime
     {
         return $this->validiteDebut;
     }
@@ -1204,7 +1230,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setValiditeDebut(?\DateTime $validiteDebut): Intervenant
+    public function setValiditeDebut (?\DateTime $validiteDebut): Intervenant
     {
         $this->validiteDebut = $validiteDebut;
 
@@ -1216,7 +1242,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return \DateTime
      */
-    public function getValiditeFin(): ?\DateTime
+    public function getValiditeFin (): ?\DateTime
     {
         return $this->validiteFin;
     }
@@ -1228,7 +1254,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setValiditeFin(?\DateTime $validiteFin): Intervenant
+    public function setValiditeFin (?\DateTime $validiteFin): Intervenant
     {
         $this->validiteFin = $validiteFin;
 
@@ -1240,7 +1266,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return \DateTime
      */
-    public function getExportDate(): ?\DateTime
+    public function getExportDate (): ?\DateTime
     {
         return $this->exportDate;
     }
@@ -1252,7 +1278,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setExportDate(?\DateTime $exportDate): Intervenant
+    public function setExportDate (?\DateTime $exportDate): Intervenant
     {
         $this->exportDate = $exportDate;
 
@@ -1261,7 +1287,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
 
-    public function getValidite(): string
+    public function getValidite (): string
     {
         if (!$this->validiteDebut && !$this->validiteFin) {
             return '';
@@ -1283,7 +1309,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection
      */
-    public function getAffectation()
+    public function getAffectation ()
     {
         return $this->affectation;
     }
@@ -1295,7 +1321,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection
      */
-    public function getCandidatures()
+    public function getCandidatures ()
     {
         return $this->candidatures;
     }
@@ -1307,7 +1333,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection
      */
-    public function getAgrement(TypeAgrement $typeAgrement = null)
+    public function getAgrement (TypeAgrement $typeAgrement = null)
     {
         if (null === $this->agrement) {
             return null;
@@ -1337,7 +1363,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function addContrat(\Contrat\Entity\Db\Contrat $contrat)
+    public function addContrat (\Contrat\Entity\Db\Contrat $contrat)
     {
         $this->contrat[] = $contrat;
 
@@ -1351,7 +1377,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @param \Contrat\Entity\Db\Contrat $contrat
      */
-    public function removeContrat(\Contrat\Entity\Db\Contrat $contrat)
+    public function removeContrat (\Contrat\Entity\Db\Contrat $contrat)
     {
         $this->contrat->removeElement($contrat);
     }
@@ -1361,12 +1387,12 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * Get contrat
      *
-     * @param \Contrat\Entity\Db\TypeContrat   $typeContrat
-     * @param \Lieu\Entity\Db\Structure $structure
+     * @param \Contrat\Entity\Db\TypeContrat $typeContrat
+     * @param \Lieu\Entity\Db\Structure      $structure
      *
      * @return Collection
      */
-    public function getContrat(TypeContrat $typeContrat = null, Structure $structure = null)
+    public function getContrat (TypeContrat $typeContrat = null, Structure $structure = null)
     {
         if (null === $this->contrat) {
             return null;
@@ -1394,7 +1420,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Contrat|null
      */
-    public function getContratInitial(): ?Contrat
+    public function getContratInitial (): ?Contrat
     {
         if (!count($this->getContrat())) {
             return null;
@@ -1423,7 +1449,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection
      */
-    public function getFormuleResultat(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumehoraire = null)
+    public function getFormuleResultat (TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumehoraire = null)
     {
         $filter = function (FormuleResultat $formuleResultat) use ($typeVolumeHoraire, $etatVolumehoraire) {
             if ($typeVolumeHoraire && $typeVolumeHoraire !== $formuleResultat->getTypeVolumeHoraire()) {
@@ -1449,7 +1475,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return FormuleResultat
      */
-    public function getUniqueFormuleResultat(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire)
+    public function getUniqueFormuleResultat (TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire)
     {
         $formuleResultat = $this->getFormuleResultat($typeVolumeHoraire, $etatVolumehoraire)->first();
         if (false === $formuleResultat) {
@@ -1470,7 +1496,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return HistoIntervenantService
      */
-    public function getHistoService($typeVolumeHoraire, $referentiel = false)
+    public function getHistoService ($typeVolumeHoraire, $referentiel = false)
     {
         $result = $this->histoService->filter(function (HistoIntervenantService $histoService) use ($typeVolumeHoraire, $referentiel) {
             return
@@ -1498,7 +1524,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection
      */
-    public function getMiseEnPaiementIntervenantStructure()
+    public function getMiseEnPaiementIntervenantStructure ()
     {
         return $this->miseEnPaiementIntervenantStructure;
     }
@@ -1512,7 +1538,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function addModificationServiceDu(ModificationServiceDu $modificationServiceDu)
+    public function addModificationServiceDu (ModificationServiceDu $modificationServiceDu)
     {
         $this->modificationServiceDu[] = $modificationServiceDu;
 
@@ -1527,7 +1553,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      * @param ModificationServiceDu $modificationServiceDu
      * @param bool                  $softDelete
      */
-    public function removeModificationServiceDu(ModificationServiceDu $modificationServiceDu, $softDelete = true)
+    public function removeModificationServiceDu (ModificationServiceDu $modificationServiceDu, $softDelete = true)
     {
         if ($softDelete && $modificationServiceDu instanceof HistoriqueAwareInterface) {
             $modificationServiceDu->setHistoDestruction(new \DateTime());
@@ -1543,7 +1569,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection
      */
-    public function getModificationServiceDu()
+    public function getModificationServiceDu ()
     {
         return $this->modificationServiceDu;
     }
@@ -1555,7 +1581,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection
      */
-    public function getPieceJointe()
+    public function getPieceJointe ()
     {
         return $this->pieceJointe;
     }
@@ -1567,7 +1593,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection|Service[]
      */
-    public function getService()
+    public function getService ()
     {
         return $this->service;
     }
@@ -1579,7 +1605,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection|ServiceReferentiel[]
      */
-    public function getServiceReferentiel()
+    public function getServiceReferentiel ()
     {
         return $this->serviceReferentiel;
     }
@@ -1591,7 +1617,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection
      */
-    public function getIndicModifDossier()
+    public function getIndicModifDossier ()
     {
         if (null === $this->indicModifDossier) {
             return null;
@@ -1613,7 +1639,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection|null|Mission[]
      */
-    public function getMissions(): ?Collection
+    public function getMissions (): ?Collection
     {
         if (null === $this->missions) {
             return null;
@@ -1631,7 +1657,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     /**
      * @return bool
      */
-    public function isIrrecevable(): bool
+    public function isIrrecevable (): bool
     {
         return $this->irrecevable;
     }
@@ -1643,9 +1669,25 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Intervenant
      */
-    public function setIrrecevable(bool $irrecevable): Intervenant
+    public function setIrrecevable (bool $irrecevable): Intervenant
     {
         $this->irrecevable = $irrecevable;
+
+        return $this;
+    }
+
+
+
+    public function getNumeroPec (): ?string
+    {
+        return $this->numeroPec;
+    }
+
+
+
+    public function setNumeroPec (?string $numeroPec): self
+    {
+        $this->numeroPec = $numeroPec;
 
         return $this;
     }
@@ -1659,7 +1701,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      *
      * @return Collection
      */
-    public function getValidation(TypeValidation $type = null)
+    public function getValidation (TypeValidation $type = null)
     {
         if (null === $type) {
             return $this->validation;
@@ -1678,7 +1720,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
 
-    public function dupliquer()
+    public function dupliquer ()
     {
         $intervenant = new Intervenant();
 

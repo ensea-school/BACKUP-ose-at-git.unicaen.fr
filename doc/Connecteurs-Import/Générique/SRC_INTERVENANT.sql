@@ -4,9 +4,10 @@ SELECT
   annee_id,
   code,
   code_rh,
-  CASE WHEN sync_utilisateur_code = 1 THEN COALESCE(s_utilisateur_code,i_utilisateur_code) ELSE i_utilisateur_code END     utilisateur_code,
-  CASE WHEN annee_id < current_annee_id AND intervenant_id IS NOT NULL THEN intervenant_structure_id ELSE structure_id END structure_id,
-  CASE
+ CASE WHEN sync_utilisateur_code = 1 THEN COALESCE(s_utilisateur_code,i_utilisateur_code) ELSE i_utilisateur_code END     utilisateur_code,
+ CASE WHEN mission_structure_id IS NOT NULL THEN mission_structure_id
+	  WHEN annee_id < current_annee_id THEN intervenant_structure_id ELSE structure_id END structure_id,
+CASE
     WHEN action = 'insert' OR intervenant_histo = 1 THEN statut_source_id
     WHEN (action = 'update-no-statut' OR sync_statut = 0 OR annee_id < current_annee_id) AND statut_intervenant_id IS NOT NULL THEN statut_intervenant_id
     ELSE statut_source_id
@@ -37,6 +38,7 @@ SELECT
   adresse_pays_id,
   numero_insee,
   numero_insee_provisoire,
+  numero_pec,
   -- Pour synchroniser les coord. bancaires uniquement sur l'année n, il faut décommenter les 3 lignes ci-dessous et commenter les trois lignes d'après
   --CASE WHEN annee_id < current_annee_id AND intervenant_id IS NOT NULL THEN i_iban          ELSE s_iban          END iban,
   --CASE WHEN annee_id < current_annee_id AND intervenant_id IS NOT NULL THEN i_bic           ELSE s_bic           END bic,
@@ -138,10 +140,10 @@ FROM (
 
       -- Cas 9 : Quand il y a plusieurs sources et aucun intervenant
       WHEN nb_sources > 1 AND nb_intervenants = 0 THEN CASE
-        
+
         -- Si un des statuts est NON AUTORISE
         WHEN statut_source_nautorise = 1 THEN 'drop'
-        
+
         -- Si on est sur un statut "Autres" et qu'il y a un autre statut du même type
         WHEN types_identiques = 1 AND statut_source_autre = 1 THEN 'drop'
 
@@ -215,6 +217,7 @@ FROM (
       s.utilisateur_code                                                                     s_utilisateur_code,
       CASE WHEN i.sync_structure = 0 THEN i.structure_id ELSE str.id END                     structure_id,
       i.structure_id                                                                         intervenant_structure_id,
+      mi.structure_id																		 mission_structure_id,
       ssi.id                                                                                 statut_source_id,
       i.statut_id                                                                            statut_intervenant_id,
       g.id                                                                                   grade_id,
@@ -244,6 +247,7 @@ FROM (
       padr.id                                                                                adresse_pays_id,
       s.numero_insee                                                                         numero_insee,
       COALESCE(s.numero_insee_provisoire,i.numero_insee_provisoire,0)                        numero_insee_provisoire,
+      CASE WHEN i.sync_pec = 0 THEN i.numero_pec ELSE s.numero_pec END                       nunmero_pec,
       s.iban                                                                                 s_iban,
       s.bic                                                                                  s_bic,
       s.rib_hors_sepa                                                                        s_rib_hors_sepa,
@@ -274,6 +278,7 @@ FROM (
       CASE WHEN ssi.type_intervenant_id = isi.type_intervenant_id THEN 1 ELSE 0 END          types_identiques,
       COALESCE(i.sync_statut,1)                                                              sync_statut,
       COALESCE(i.sync_utilisateur_code,1)                                                    sync_utilisateur_code,
+      COALESCE(i.sync_pec,1)                                                                 sync_pec,
       CASE WHEN COALESCE(isrc.importable,1) = 1 THEN 0 ELSE 1 END                            intervenant_local,
       CASE WHEN idata.intervenant_id IS NULL THEN 0 ELSE 1 END                               intervenant_donnees,
       CASE WHEN i.histo_destruction IS NULL THEN 0 ELSE 1 END                                intervenant_histo,
@@ -303,6 +308,17 @@ FROM (
       LEFT JOIN voirie                  v ON v.source_code      = s.z_adresse_voirie_id
       LEFT JOIN pays                 padr ON padr.source_code   = s.z_adresse_pays_id
       LEFT JOIN employeur            empl ON empl.source_code   = s.z_employeur_id
+      LEFT JOIN (
+            SELECT
+                m.intervenant_id    intervenant_id,
+                m.structure_id      structure_id
+            FROM mission m
+            JOIN validation_mission vm ON vm.mission_id = m.id
+            JOIN validation v2 ON v2.id = vm.validation_id AND v2.histo_destruction IS NULL
+            WHERE m.histo_destruction IS NULL
+            GROUP BY m.intervenant_id, m.structure_id
+            HAVING COUNT(DISTINCT m.structure_id) = 1
+          ) mi ON mi.intervenant_id = i.id
       LEFT JOIN (
         SELECT DISTINCT intervenant_id
         FROM (      select intervenant_id from AGREMENT where histo_destruction is null

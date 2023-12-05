@@ -21,6 +21,8 @@ use Enseignement\Service\ServiceServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use Lieu\Entity\Db\Etablissement;
+use Lieu\Service\EtablissementServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
@@ -64,6 +66,7 @@ class EnseignementController extends AbstractController
     use PlafondProcessusAwareTrait;
     use EtatSortieServiceAwareTrait;
     use ElementPedagogiqueServiceAwareTrait;
+    use EtablissementServiceAwareTrait;
 
     public function prevuAction ()
     {
@@ -279,6 +282,9 @@ class EnseignementController extends AbstractController
             $element = $this->getServiceElementPedagogique()->get($element);
         }
         $etablissement = $this->context()->etablissementFromPost();
+        if (!$etablissement instanceof Etablissement) {
+            $etablissement = $this->getServiceEtablissement()->get($etablissement);
+        }
 
         if ($serviceId) {
             /* @var $entity Service */

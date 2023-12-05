@@ -67,25 +67,7 @@ WITH i AS (
                --AND (vinds.t_doctorant='N' OR vinds.individu_id IS NULL)
                AND inds.c_source IN ('HARP', 'OCTO', 'SIHAM')
 
-             UNION ALL
 
-             SELECT uni.c_individu_chaine                                           code,
-                    'ETUDIANT'                                                      z_statut_id,
-					'etudiant'                                                      z_type,
-                    uni.c_individu_chaine || '-etudiant'                            source_code,
-                    COALESCE(inds.d_debut, to_date('01/01/1900', 'dd/mm/YYYY'))     validite_debut,
-                    CASE
-                    	WHEN inds.d_fin = to_date('01/09/2021', 'dd/mm/YYYY') THEN to_date('31/08/2021', 'dd/mm/YYYY')
-                    	ELSE COALESCE(inds.d_fin, to_date('01/01/9999', 'dd/mm/YYYY')) END   validite_fin,
-                    NULL 															fin_affectation_siham
-             FROM octo.individu_unique@octoprod uni
-                      JOIN octo.individu_statut@octoprod inds ON inds.individu_id = uni.c_individu_chaine
-   					  LEFT JOIN octo.v_individu_statut@octoprod vinds ON vinds.individu_id = uni.c_individu_chaine
-             WHERE inds.d_debut - 184 <= SYSDATE
-               AND inds.t_etudiant = 'O'
-              -- On remonte maitnenant les doctorants
-              -- AND inds.t_doctorant ='N'
-               AND inds.c_source IN ('APO', 'OCTO')
          ) t
 
 
@@ -121,7 +103,6 @@ WITH i AS (
                 MAX(structure_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1  WHEN source_id = 'OCTOREFID' THEN 2  WHEN source_id = 'APO' THEN 3 ELSE 999 END DESC , t_principale, date_debut)   structure_id,
                 MAX(source_id) KEEP (DENSE_RANK  LAST ORDER BY CASE WHEN source_id = 'SIHAM' THEN 1 WHEN source_id = 'OCTOREFID' THEN 2 WHEN source_id = 'APO' THEN 3 ELSE 999 END DESC,t_principale, date_debut) source_id
              FROM octo.individu_affectation@octoprod
-             --WHERE type_id = 5 //Filtre pour les affectations étudiants
              WHERE type_id = 4
              AND COALESCE(date_fin, SYSDATE) + 1 >= (SYSDATE - (365 * 2))
              GROUP BY individu_id
@@ -257,10 +238,10 @@ SELECT DISTINCT
             AND vindinsee.no_insee_provisoire IS NOT NULL
             THEN 1
         ELSE 0 END                                                                     numero_insee_provisoire,
+    CAST(NULL AS varchar2(255))                                                        numero_pec,
     /* Banque */
     COALESCE(TRIM(vindiban.iban), ibandossier.iban)                                    iban,
     COALESCE(TRIM(vindiban.bic), ibandossier.bic)                                      bic,
-    CAST(NULL AS varchar2(255))                                                        numero_pec,
     0                                                                                  rib_hors_sepa,
     /* Données complémentaires */
     CAST(NULL AS varchar2(255))                                                        autre_1,

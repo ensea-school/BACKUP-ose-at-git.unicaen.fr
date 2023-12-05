@@ -370,6 +370,15 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
 
 
 
+    public function disableMotifNonPaiement(): self
+    {
+        $this->get('motif-non-paiement')->setAttributes(['disabled' => true,
+                                                         'title'    => 'Vous ne pouvez pas changer de motif de non paiement sur un service déjà validé']);
+
+        return $this;
+    }
+
+
     /**
      * Should return an array specification compatible with
      * {@link Laminas\InputFilter\Factory::createInputFilter()}.
@@ -393,7 +402,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
                                              $finAnnee     = $anneeContext->getDateFin()->getTimestamp();
                                              $horaireDebut = DateTimeFromString::run($context['horaire-debut']);
                                              $deb          = $horaireDebut->getTimestamp();
-                                             if ($finAnnee > $deb && $debAnnee < $deb) {
+                                             if ($finAnnee >= $deb && $debAnnee <= $deb) {
                                                  return true;
                                              }
 
@@ -435,7 +444,7 @@ class VolumeHoraireSaisieCalendaireForm extends AbstractForm
                                              $finAnnee     = $anneeContext->getDateFin()->getTimestamp();
                                              $horaireFin   = DateTimeFromString::run($context['horaire-fin']);
                                              $fin          = $horaireFin->getTimestamp();
-                                             if ($finAnnee > $fin && $debAnnee < $fin) {
+                                             if ($finAnnee >= $fin && $debAnnee <= $fin) {
                                                  return true;
                                              }
 

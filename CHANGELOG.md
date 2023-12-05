@@ -8,6 +8,7 @@
 
 * Gestion arbosrescente des structures dans toute l'application (#3268)
 * Possibilité d'importer et/ou gérer les numéros de prise en charge des intervenants pour la paie (#15131)
+* Possibilité de faire des demandes de mise en paiement par lot (#12584)
 
 ## Améliorations
 
@@ -16,6 +17,7 @@
 ## Corrections
 
 * Ajout d'un contrôle au niveau des données personnelles,  pour empêcher de mettre un statut d'une année différente de l'intervenant (#53668)
+* Prise en compte des dates bornées d'une année universitaire dans le contrôle de saisie de service en mode calendaire (#53947)
 
 ## Notes de mise à jour
 

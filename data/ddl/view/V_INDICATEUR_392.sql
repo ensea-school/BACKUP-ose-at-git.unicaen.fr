@@ -5,7 +5,7 @@ SELECT
 FROM
     tbl_mission_prime tp
 WHERE
-        tp.prime > tp.declaration
+        tp.prime > tp.declaration+tp.refus
 GROUP BY
     tp.intervenant_id,
     tp.annee_id,

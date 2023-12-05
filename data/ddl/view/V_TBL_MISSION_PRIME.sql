@@ -4,19 +4,21 @@ SELECT DISTINCT
     i.id 			    intervenant_id,
     i.structure_id      structure_id,
     '1' 				actif,
-    CASE WHEN count(mp.id) = 0 THEN 0 ELSE count(mp.id) END		    prime,
+    count(mp.id)        prime,
     SUM(CASE WHEN mp.declaration_id IS NOT NULL THEN 1 ELSE 0 END)   declaration,
     SUM(CASE WHEN mp.validation_id IS NOT NULL THEN 1 ELSE 0 END)   validation,
     SUM(CASE WHEN mp.date_refus IS NOT NULL THEN 1 ELSE 0 END)   refus
 FROM
     intervenant i
-        LEFT JOIN mission_prime mp ON i.id = mp.intervenant_id AND mp.histo_destruction IS null
-WHERE mp.histo_destruction IS NULL
-  AND i.histo_destruction IS NULL
+    JOIN mission m ON m.intervenant_id = i.id
+    JOIN contrat c ON c.mission_id = m.id AND c.histo_destruction IS NULL
+    LEFT JOIN mission_prime mp ON m.prime_id = mp.id AND mp.histo_destruction IS null
+WHERE i.histo_destruction IS NULL
+  AND c.date_retour_signe IS NOT NULL
 /*@INTERVENANT_ID=i.id*/
 /*@ANNEE_ID=i.annee_id*/
 GROUP BY
     i.id,
     i.annee_id,
     i.structure_id
-HAVING CASE WHEN count(mp.id) = 0 THEN 0 ELSE count(mp.id) END > 0
+

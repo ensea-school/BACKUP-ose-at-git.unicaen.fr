@@ -35,10 +35,34 @@
 
     <div class="alert alert-info" role="alert">
         Seules les HETD avec des centres de coûts pré-paramètrés peuvent bénéficier d'une demande de mise en paiement automatisées. Pour les autres, il faudra
-        passer sur chaque fiches intervenant pour faire les demandes.
+        passer sur chaque fiches intervenant pour faire les demandes en sélectionnant le centre de coût manuellement.
     </div>
     <div v-if="this.intervenants.length = 0 && this.selectedStructure" class="alert alert-light text-center" role="alert">
         Aucune heure en attente de mise en paiement pour cette structure
+    </div>
+    <!--BUDGET-->
+    <div>
+        <table class="table">
+            <thead>
+            <th></th>
+            <th>Paie etat</th>
+            <th>Ressource propre</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Budget prévisionnel</td>
+                <td> {{ this.dotation }} HETD</td>
+                <td> {{ this.dotation }} HETD</td>
+            </tr>
+            <tr>
+                <td>Budget réalisé</td>
+                <td> {{ this.liquidation }} HETD</td>
+                <td> {{ this.liquidation }} HETD</td>
+            </tr>
+
+            </tbody>
+        </table>
+
     </div>
     <div id="dmep" class="accordion">
         <form id="formProcessDemandeMiseEnPaiement" action="" method="post">
@@ -65,9 +89,11 @@
 
                             <tr v-for="intervenant in this.permanents">
                                 <td><input :id="'permanent-' + intervenant.datasIntervenant.id"
+                                           :data-ressource-etat="totalRessourcePaieEtat(intervenant.heures)"
+                                           :data-ressource-propre="totalRessourcePropre(intervenant.heures)"
                                            :disabled="totalPayable(intervenant.heures) == 0 "
-                                           :name="'intervenant[' + intervenant.datasIntervenant.id +']'"
-                                           checked="checked" class="checkbox-permanent" type="checkbox"></td>
+                                           :name="'intervenant[' + intervenant.datasIntervenant.id +']'" checked="checked" class="checkbox-permanent"
+                                           type="checkbox"></td>
                                 <td>{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</td>
                                 <td>{{ totalPayable(intervenant.heures) }} h</td>
                                 <td>{{ totalNonPayable(intervenant.heures) }} h</td>
@@ -101,15 +127,21 @@
 
                             <tr v-for="intervenant in this.vacataires">
                                 <td><input :id="'vacataire-' + intervenant.datasIntervenant.id"
+                                           :data-ressource-etat="totalRessourcePaieEtat(intervenant.heures)"
+                                           :data-ressource-propre="totalRessourcePropre(intervenant.heures)"
                                            :disabled="totalPayable(intervenant.heures) == 0 "
                                            :name="'intervenant[' + intervenant.datasIntervenant.id +']'"
                                            :title="totalPayable(intervenant.heures) == 0?'Aucune heure pré-paramétrée avec un centre de coût ne peut bénéficier d\'une demande de mise en paiement':''"
-                                           checked="checked" class="checkbox-vacataire"
+                                           checked="checked"
+                                           class="checkbox-vacataire"
                                            type="checkbox">
                                 </td>
                                 <td><a :href="urlIntervenant(intervenant)"
                                        target="_blank">{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</a></td>
-                                <td>{{ totalPayable(intervenant.heures) }} h</td>
+                                <td><span
+                                    :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' ">{{
+                                        totalPayable(intervenant.heures)
+                                    }} h</span></td>
                                 <td>{{ totalNonPayable(intervenant.heures) }} h</td>
 
                             </tr>
@@ -141,6 +173,8 @@
 
                             <tr v-for="intervenant in this.etudiants">
                                 <td><input :id="'etudiant-' + intervenant.datasIntervenant.id"
+                                           :data-ressource-etat="totalRessourcePaieEtat(intervenant.heures)"
+                                           :data-ressource-propre="totalRessourcePropre(intervenant.heures)"
                                            :disabled="totalPayable(intervenant.heures) == 0 "
                                            :name="'intervenant[' + intervenant.datasIntervenant.id +']'"
                                            checked="checked" class="checkbox-etudiant" type="checkbox"></td>
@@ -175,9 +209,11 @@
 
                             <tr v-for="intervenant in this.etudiants">
                                 <td><input :id="'autre-' + intervenant.datasIntervenant.id"
-                                           :disabled="totalPayable(intervenant.heures) == 0 "
-                                           :name="'intervenant[' + intervenant.datasIntervenant.id +']'" checked="checked" class="checkbox-autre"
-
+                                           :data-ressource-etat="totalRessourcePaieEtat(intervenant.heures)"
+                                           :data-ressource-propre="totalRessourcePropre(intervenant.heures)"
+                                           :disabled="totalPayable(intervenant.heures) == 0 " :name="'intervenant[' + intervenant.datasIntervenant.id +']'"
+                                           checked="checked"
+                                           class="checkbox-autre"
                                            type="checkbox"></td>
                                 <td>{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</td>
                                 <td>{{ totalPayable(intervenant.heures) }} h</td>
@@ -217,7 +253,6 @@ export default {
     },
     data()
     {
-        console.log(this.structures);
         return {
             selectedStructure: null,
             urlRechercheDemandeMiseEnPaiement: unicaenVue.url('paiement/demande-mise-en-paiement-lot'),
@@ -227,6 +262,9 @@ export default {
             etudiants: [],
             autres: [],
             intervenants: [],
+            dotation: null,
+            liquidation: null,
+            previsionnel: null,
         }
     },
     mounted()
@@ -245,6 +283,17 @@ export default {
             btnRdmepInProgress.classList.remove('d-none');
             btnRdmep.classList.add('d-none');
             btnRdmep.disabled = true;
+
+            //On récupére le budget de la structure
+            console.log(this.selectedStructure);
+
+
+            unicaenVue.axios.get(unicaenVue.url('budget/get-budget-structure/:structure', {structure: this.selectedStructure}))
+                .then(response => {
+                    let datas = response.data;
+                    this.dotation = datas.dotation;
+                    this.liquidation = datas.liquidation;
+                })
 
 
 
@@ -310,6 +359,30 @@ export default {
 
 
         },
+        totalRessourcePaieEtat(heures)
+        {
+            let total = 0;
+            heures.forEach((item, index) => {
+                if (item.centreCout.typeRessourceCode == 'paie-etat') {
+                    total += item.heuresAPayer;
+                }
+            })
+
+            return total.toLocaleString('fr-FR', {maximumFractionDigits: 2});
+
+        },
+        totalRessourcePropre(heures)
+        {
+            let total = 0;
+            heures.forEach((item, index) => {
+                if (item.centreCout.typeRessourceCode == 'ressources-propres') {
+                    total += item.heuresAPayer;
+                }
+            })
+
+            return total.toLocaleString('fr-FR', {maximumFractionDigits: 2});
+
+        },
         dispatchDatas(datas)
         {
             this.vacataires = [];
@@ -345,31 +418,19 @@ export default {
 
         toggleCheckbox(event)
         {
-
-            console.log(event.target);
             //on récupere toutes les checkbox que l'on doit traiter
             let checkbox = Array.from(document.getElementsByClassName(event.target.className));
-            console.log(checkbox)
             if (event.target.checked) {
                 checkbox.forEach(function (element, index)
                 {
-                    console.log('check');
-
-                    console.log(element);
                     element.checked = true;
                 });
             } else {
                 checkbox.forEach(function (element, index)
                 {
-                    console.log('uncheck')
-                    console.log(element);
-
                     element.checked = false;
                 });
             }
-            console.log(checkbox);
-
-
 
         },
 

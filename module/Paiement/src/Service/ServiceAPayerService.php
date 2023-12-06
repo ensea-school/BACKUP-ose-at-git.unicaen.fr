@@ -95,8 +95,10 @@ class ServiceAPayerService extends AbstractService
                 }
                 $dmep[$intervenant->getId()]['heures'][] = [
                     'heuresAPayer' => $value->getHeuresAPayerAC() + $value->getHeuresAPayerAA(),
-                    'centreCout'   => ['libelle' => ($value->getCentreCout()) ? $value->getCentreCout()->getLibelle() : '',
-                                       'code'    => ($value->getCentreCout()) ? $value->getCentreCout()->getCode() : '',
+                    'centreCout'   => ['libelle'              => ($value->getCentreCout()) ? $value->getCentreCout()->getLibelle() : '',
+                                       'code'                 => ($value->getCentreCout()) ? $value->getCentreCout()->getCode() : '',
+                                       'typeRessourceCode'    => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getCode() : '',
+                                       'typeRessourceLibelle' => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getLibelle() : '',
                     ],
                 ];
             }

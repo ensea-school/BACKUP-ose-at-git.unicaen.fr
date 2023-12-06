@@ -92,7 +92,9 @@ class OseAdmin
         require_once $this->getOseDir().'config/application.config.php';
 
         Application::init();
-        Application::start();
+        if (AppConfig::hasLocalConfig()) {
+            Application::start();
+        }
 
         $this->console = new Console();
 

@@ -135,14 +135,40 @@ class BudgetController extends AbstractController
 
     function getBudgetStructureAction ()
     {
-        $role                 = $this->getServiceContext()->getSelectedIdentityRole();
-        $structure            = $role->getStructure() ?: $this->getEvent()->getParam('structure');
-        $dotation             = $this->getServiceDotation()->getTableauBord([$structure->getId()]);
-        $liquidation          = $this->getServiceMiseEnPaiement()->getTblLiquidation($structure);
-        $datas['dotation']    = $dotation['total'];
-        $datas['liquidation'] = $liquidation['total'];
+        $budget    = [
+            'dotation'    => [
+                'paieEtat'        => 0,
+                'ressourcePropre' => 0,
+                'total'           => 0,
+            ],
+            'liquidation' => [
+                'paieEtat'        => 0,
+                'ressourcePropre' => 0,
+                'total'           => 0,
+            ],
 
-        return new AxiosModel($datas);
+        ];
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
+        $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
+        if ($structure instanceof Structure) {
+            $dotation    = $this->getServiceDotation()->getTableauBord([$structure->getId()]);
+            $liquidation = $this->getServiceMiseEnPaiement()->getTblLiquidation($structure);
+            foreach ($dotation as $key => $value) {
+                if ($key == $structure->getId()) {
+                    $budget['dotation']['paieEtat']        = (key_exists(1, $value)) ? $value['1'] : 0;
+                    $budget['dotation']['ressourcePropre'] = (key_exists(2, $value)) ? $value['2'] : 0;
+                    $budget['dotation']['total']           = $value['total'];
+                    break;
+                }
+            }
+            //liquidation
+            $budget['liquidation']['paieEtat']        = (key_exists('1', $liquidation)) ? $liquidation['1'] : 0;
+            $budget['liquidation']['ressourcePropre'] = (key_exists('2', $liquidation)) ? $liquidation['2'] : 0;
+            $budget['liquidation']['total']           = $liquidation['total'];
+        }
+
+
+        return new AxiosModel($budget);
     }
 
 

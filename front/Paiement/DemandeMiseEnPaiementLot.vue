@@ -4,7 +4,7 @@
 
     <div class=" card text-dark bg-light">
         <div class="card-header text-uppercase fw-bold">
-            Recherchez des heures restantes à payer :
+            Recherchez des heures en attente de demande de mise en paiement :
         </div>
 
         <div class="card-body">
@@ -24,7 +24,7 @@
                         &nbsp;Veuillez patienter...
                     </button>
                     <button id="btn-rdmep" :disabled="(!selectedStructure)?true:false" class="btn btn-primary" type="button" @click="findDemandeMiseEnPaiement">
-                        Rechercher les heures pouvants bénéficier d'une demande de mise en paiement
+                        Lancer la recherche
                     </button>
 
                 </div>

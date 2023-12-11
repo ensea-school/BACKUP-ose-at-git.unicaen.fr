@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5cf562455eab832335c12f3a6ad17e5",
+    "content-hash": "e89e8004eda1b82acbc22fe8a31e49ba",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -7003,11 +7003,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "dev-php82",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "a2cae68ffc5756fab5cfef5feaa83ca761ad282b"
+                "reference": "eef7a24e18a66762c8e0140872a3d09dd8ec2700"
             },
             "require": {
                 "easybook/geshi": ">=1.0",
@@ -7024,7 +7024,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2023-10-04T16:03:31+00:00"
+            "time": "2023-12-11T15:25:37+00:00"
         },
         {
             "name": "unicaen/console",
@@ -7261,11 +7261,11 @@
         },
         {
             "name": "unicaen/vue",
-            "version": "dev-php82",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/vue.git",
-                "reference": "c9b85dcc73f55718811e77c90580adc425a14ff9"
+                "reference": "7b4743de372c29bbc79f9f951b9d383a5135d521"
             },
             "type": "library",
             "autoload": {
@@ -7277,7 +7277,7 @@
                 ]
             },
             "description": "Module pour utiliser Vue.js",
-            "time": "2023-10-05T07:59:56+00:00"
+            "time": "2023-12-11T15:30:38+00:00"
         },
         {
             "name": "unicaen/zfc-user",
@@ -10299,9 +10299,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "unicaen/utilisateur": 20,
-        "unicaen/code": 20,
-        "unicaen/vue": 20
+        "unicaen/utilisateur": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

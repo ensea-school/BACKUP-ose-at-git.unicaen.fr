@@ -9,8 +9,7 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
-{
+class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
 
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                  = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION              = 'agrement-conseil-academique-suppression';
@@ -24,10 +23,10 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const BUDGET_EDITION_ENGAGEMENT_COMPOSANTE                 = 'budget-edition-engagement-composante';
     const BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT              = 'budget-edition-engagement-etablissement';
     const BUDGET_EXPORT                                        = 'budget-export';
-    const BUDGET_TYPES_RESSOURCES_EDITION                      = 'budget-types-ressources-edition';
-    const BUDGET_TYPES_RESSOURCES_VISUALISATION                = 'budget-types-ressources-visualisation';
     const BUDGET_TYPE_DOTATION_EDITION                         = 'budget-type-dotation-edition';
     const BUDGET_TYPE_DOTATION_VISUALISATION                   = 'budget-type-dotation-visualisation';
+    const BUDGET_TYPES_RESSOURCES_EDITION                      = 'budget-types-ressources-edition';
+    const BUDGET_TYPES_RESSOURCES_VISUALISATION                = 'budget-types-ressources-visualisation';
     const BUDGET_VISUALISATION                                 = 'budget-visualisation';
     const CENTRES_COUTS_ADMINISTRATION_EDITION                 = 'centres-couts-administration-edition';
     const CENTRES_COUTS_ADMINISTRATION_RECONDUCTION            = 'centres-couts-administration-reconduction';
@@ -162,6 +161,7 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const MAIL_MAIL_SUPPRIMER                                  = 'mail-mail_supprimer';
     const MAIL_MAIL_TEST                                       = 'mail-mail_test';
     const MISE_EN_PAIEMENT_DEMANDE                             = 'mise-en-paiement-demande';
+    const MISE_EN_PAIEMENT_DETAILS                             = 'mise-en-paiement-details';
     const MISE_EN_PAIEMENT_EDITION                             = 'mise-en-paiement-edition';
     const MISE_EN_PAIEMENT_EXPORT_CSV                          = 'mise-en-paiement-export-csv';
     const MISE_EN_PAIEMENT_EXPORT_PAIE                         = 'mise-en-paiement-export-paie';
@@ -202,12 +202,12 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const MODIF_SERVICE_DU_VISUALISATION                       = 'modif-service-du-visualisation';
     const MODULATEUR_EDITION                                   = 'modulateur-edition';
     const MODULATEUR_VISUALISATION                             = 'modulateur-visualisation';
-    const MOTIFS_MODIFICATION_SERVICE_DU_EDITION               = 'motifs-modification-service-du-edition';
-    const MOTIFS_MODIFICATION_SERVICE_DU_VISUALISATION         = 'motifs-modification-service-du-visualisation';
     const MOTIF_NON_PAIEMENT_ADMINISTRATION_EDITION            = 'motif-non-paiement-administration-edition';
     const MOTIF_NON_PAIEMENT_ADMINISTRATION_VISUALISATION      = 'motif-non-paiement-administration-visualisation';
     const MOTIF_NON_PAIEMENT_EDITION                           = 'motif-non-paiement-edition';
     const MOTIF_NON_PAIEMENT_VISUALISATION                     = 'motif-non-paiement-visualisation';
+    const MOTIFS_MODIFICATION_SERVICE_DU_EDITION               = 'motifs-modification-service-du-edition';
+    const MOTIFS_MODIFICATION_SERVICE_DU_VISUALISATION         = 'motifs-modification-service-du-visualisation';
     const NOMENCLATURE_RH_CORPS_EDITION                        = 'nomenclature-rh-corps-edition';
     const NOMENCLATURE_RH_CORPS_VISUALISATION                  = 'nomenclature-rh-corps-visualisation';
     const NOMENCLATURE_RH_GRADES_EDITION                       = 'nomenclature-rh-grades-edition';
@@ -228,23 +228,23 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges
     const ODF_RECONDUCTION_MODULATEUR                          = 'odf-reconduction-modulateur';
     const ODF_RECONDUCTION_OFFRE                               = 'odf-reconduction-offre';
     const ODF_TAUX_MIXITE_EDITION                              = 'odf-taux-mixite-edition';
-    const ODF_TYPES_DIPLOME_EDITION                            = 'odf-types-diplome-edition';
-    const ODF_TYPES_DIPLOME_VISUALISATION                      = 'odf-types-diplome-visualisation';
     const ODF_TYPE_FORMATION_EDITION                           = 'odf-type-formation-edition';
     const ODF_TYPE_FORMATION_VISUALISATION                     = 'odf-type-formation-visualisation';
+    const ODF_TYPES_DIPLOME_EDITION                            = 'odf-types-diplome-edition';
+    const ODF_TYPES_DIPLOME_VISUALISATION                      = 'odf-types-diplome-visualisation';
     const ODF_VISUALISATION                                    = 'odf-visualisation';
+    const PARAMETRES_DEPARTEMENT_EDITION                       = 'parametres-Departement-edition';
+    const PARAMETRES_DEPARTEMENT_VISUALISATION                 = 'parametres-Departement-visualisation';
+    const PARAMETRES_PAYS_EDITION                              = 'parametres-Pays-edition';
+    const PARAMETRES_PAYS_VISUALISATION                        = 'parametres-Pays-visualisation';
     const PARAMETRES_ANNEES_EDITION                            = 'parametres-annees-edition';
     const PARAMETRES_ANNEES_VISUALISATION                      = 'parametres-annees-visualisation';
     const PARAMETRES_CAMPAGNES_SAISIE_EDITION                  = 'parametres-campagnes-saisie-edition';
     const PARAMETRES_CAMPAGNES_SAISIE_VISUALISATION            = 'parametres-campagnes-saisie-visualisation';
-    const PARAMETRES_DEPARTEMENT_EDITION                       = 'parametres-Departement-edition';
-    const PARAMETRES_DEPARTEMENT_VISUALISATION                 = 'parametres-Departement-visualisation';
     const PARAMETRES_ETABLISSEMENT_EDITION                     = 'parametres-etablissement-edition';
     const PARAMETRES_ETABLISSEMENT_VISUALISATION               = 'parametres-etablissement-visualisation';
     const PARAMETRES_GENERAL_EDITION                           = 'parametres-general-edition';
     const PARAMETRES_GENERAL_VISUALISATION                     = 'parametres-general-visualisation';
-    const PARAMETRES_PAYS_EDITION                              = 'parametres-Pays-edition';
-    const PARAMETRES_PAYS_VISUALISATION                        = 'parametres-Pays-visualisation';
     const PARAMETRES_PERIODES_EDITION                          = 'parametres-periodes-edition';
     const PARAMETRES_PERIODES_VISUALISATION                    = 'parametres-periodes-visualisation';
     const PARAMETRES_REGLES_STRUCTURE_VALIDATION_EDITION       = 'parametres-regles-structure-validation-edition';

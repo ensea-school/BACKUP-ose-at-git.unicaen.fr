@@ -119,6 +119,21 @@ class PaiementProcess implements ProcessInterface
 
 
 
+    public function debug(array $params = []): array
+    {
+        $this->init();
+        $this->loadAPayer($params);
+        foreach ($this->services as $sid => $serviceAPayer) {
+            $this->arrondisseur->arrondir($serviceAPayer);
+            $this->consolidateur->consolider($serviceAPayer, false);
+            $this->rapprocheur->rapprocher($serviceAPayer);
+        }
+
+        return $this->services;
+    }
+
+
+
     protected function traitement()
     {
         foreach ($this->services as $sid => $serviceAPayer) {

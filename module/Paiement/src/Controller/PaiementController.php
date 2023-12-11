@@ -16,6 +16,7 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\Json\Json;
+use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\TypeRessource;
@@ -27,9 +28,13 @@ use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\NumeroPriseEnChargeServiceAwareTrait;
 use Paiement\Service\ServiceAPayerServiceAwareTrait;
 use Paiement\Service\TypeRessourceServiceAwareTrait;
+use Paiement\Tbl\Process\PaiementDebugger;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use UnicaenApp\Traits\SessionContainerTrait;
+use UnicaenApp\Util;
+use UnicaenVue\View\Model\AxiosModel;
+use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
@@ -51,6 +56,7 @@ class PaiementController extends AbstractController
     use DotationServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use EtatSortieServiceAwareTrait;
+    use TableauBordServiceAwareTrait;
     use NumeroPriseEnChargeServiceAwareTrait;
 
     /**
@@ -208,6 +214,48 @@ class PaiementController extends AbstractController
         }
 
         return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur', 'budget', 'whyNotEditable');
+    }
+
+
+
+    function demandeMiseEnPaiementLotAction ()
+    {
+        $title        = 'Demande de mise en paiement par lot';
+        $intervenants = [];
+        $structures   = $this->getServiceStructure()->getStructuresDemandeMiseEnPaiement();
+        if ($this->getRequest()->isPost()) {
+            //On récupere les données post notamment la structure recherchée
+            $idStructure  = $this->getRequest()->getPost('structure');
+            $structure    = $this->em()->find(Structure::class, $idStructure);
+            $intervenants = $this->getServiceServiceAPayer()->getListByStructure($structure);
+
+            return new AxiosModel($intervenants);
+        }
+
+        return compact('title', 'structures', 'intervenants');
+    }
+
+
+
+    function processDemandeMiseEnPaiementLotAction ()
+    {
+
+        if ($this->getRequest()->isPost()) {
+            $datasIntervenant = $this->getRequest()->getPost('intervenant');
+            if (empty($datasIntervenant)) {
+                return false;
+            }
+            $intervenantIds = array_keys($datasIntervenant);
+            foreach ($intervenantIds as $id) {
+                $intervenant = $this->getServiceIntervenant()->get($id);
+                if ($intervenant) {
+                    $this->getServiceMiseEnPaiement()->demandesMisesEnPaiementIntervenant($intervenant);
+                }
+            }
+            $this->flashMessenger()->addSuccessMessage("Les demandes de mise en paiement ont bien été effectuée");
+
+            return $this->redirect()->toRoute('paiement/demande-mise-en-paiement-lot');
+        }
     }
 
 
@@ -691,6 +739,24 @@ class PaiementController extends AbstractController
         }
 
         return compact('title');
+    }
+
+
+
+
+    public function detailsCalculsAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+
+        $tblPaiement = $this->getServiceTableauBord()->getTableauBord('paiement');
+        $debugger = new PaiementDebugger($tblPaiement->getProcess());
+        $debugger->run($intervenant);
+
+        return compact('intervenant', 'debugger');
     }
 
 

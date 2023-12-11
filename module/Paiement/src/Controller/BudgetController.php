@@ -18,6 +18,7 @@ use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\TypeRessourceServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use Lieu\Form\Element\Structure as StructureElement;
+use UnicaenVue\View\Model\AxiosModel;
 
 
 /**
@@ -36,14 +37,14 @@ class BudgetController extends AbstractController
     use SourceServiceAwareTrait;
 
 
-    public function indexAction()
+    public function indexAction ()
     {
         return [];
     }
 
 
 
-    public function tableauDeBordAction()
+    public function tableauDeBordAction ()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Structure::class,
@@ -51,7 +52,7 @@ class BudgetController extends AbstractController
             Dotation::class,
         ]);
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
         $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
 
         $annee = $this->getServiceContext()->getAnnee();
@@ -89,7 +90,7 @@ class BudgetController extends AbstractController
 
 
 
-    public function getJsonAction()
+    public function getJsonAction ()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Structure::class,
@@ -97,7 +98,7 @@ class BudgetController extends AbstractController
             Dotation::class,
         ]);
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
         $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
 
         $tbl = $this->getServiceDotation()->getTableauBord();
@@ -132,7 +133,47 @@ class BudgetController extends AbstractController
 
 
 
-    public function engagementsLiquidationAction()
+    function getBudgetStructureAction ()
+    {
+        $budget    = [
+            'dotation'    => [
+                'paieEtat'        => 0,
+                'ressourcePropre' => 0,
+                'total'           => 0,
+            ],
+            'liquidation' => [
+                'paieEtat'        => 0,
+                'ressourcePropre' => 0,
+                'total'           => 0,
+            ],
+
+        ];
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
+        $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
+        if ($structure instanceof Structure) {
+            $dotation    = $this->getServiceDotation()->getTableauBord([$structure->getId()]);
+            $liquidation = $this->getServiceMiseEnPaiement()->getTblLiquidation($structure);
+            foreach ($dotation as $key => $value) {
+                if ($key == $structure->getId()) {
+                    $budget['dotation']['paieEtat']        = (key_exists(1, $value)) ? $value['1'] : 0;
+                    $budget['dotation']['ressourcePropre'] = (key_exists(2, $value)) ? $value['2'] : 0;
+                    $budget['dotation']['total']           = $value['total'];
+                    break;
+                }
+            }
+            //liquidation
+            $budget['liquidation']['paieEtat']        = (key_exists('1', $liquidation)) ? $liquidation['1'] : 0;
+            $budget['liquidation']['ressourcePropre'] = (key_exists('2', $liquidation)) ? $liquidation['2'] : 0;
+            $budget['liquidation']['total']           = $liquidation['total'];
+        }
+
+
+        return new AxiosModel($budget);
+    }
+
+
+
+    public function engagementsLiquidationAction ()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Structure::class,
@@ -140,10 +181,10 @@ class BudgetController extends AbstractController
             Dotation::class,
         ]);
 
-        $annee = $this->getServiceContext()->getAnnee();
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $annee     = $this->getServiceContext()->getAnnee();
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
         $structure = $this->getEvent()->getParam('structure');
-        if (!$structure){
+        if (!$structure) {
             $structure = $role->getStructure();
         }
         /* @var $structure Structure */
@@ -151,21 +192,21 @@ class BudgetController extends AbstractController
 
         $liquidation = [];
         if ($structure) {
-            $dotations = $this->getServiceDotation()->getDotations($structure);
+            $dotations          = $this->getServiceDotation()->getDotations($structure);
             $previsionnelValide = $this->getServiceFormuleResultat()->getTotalPrevisionnelValide($structure);
-            $ld = $this->getServiceMiseEnPaiement()->getTblLiquidation($structure);
+            $ld                 = $this->getServiceMiseEnPaiement()->getTblLiquidation($structure);
             foreach ($dotations['typesRessources'] as $dtrId => $dtr) {
                 $typeRessource = $dtr['entity'];
                 /* @var $typeRessource TypeRessource */
 
-                $dmep = isset($ld[$dtrId]) ? $ld[$dtrId] : 0;
+                $dmep                = isset($ld[$dtrId]) ? $ld[$dtrId] : 0;
                 $liquidation[$dtrId] = [
                     'dmep'  => $dmep,
                     'solde' => $dotations['typesRessources'][$dtrId]['total']['heures'] - $dmep,
                 ];
             }
         } else {
-            $dotations = [];
+            $dotations          = [];
             $previsionnelValide = 0;
         }
 
@@ -176,12 +217,12 @@ class BudgetController extends AbstractController
 
 
 
-    public function saisieDotationAction()
+    public function saisieDotationAction ()
     {
-        $annee = $this->getEvent()->getParam('annee');
+        $annee     = $this->getEvent()->getParam('annee');
         $anneePrec = $this->getServiceAnnee()->getPrecedente($annee);
         $structure = $this->getEvent()->getParam('structure');
-        $libelle = $this->params()->fromQuery('libelle');
+        $libelle   = $this->params()->fromQuery('libelle');
         /* @var $structure Structure */
         $typeRessource = $this->getEvent()->getParam('typeRessource');
         /* @var $typeRessource TypeRessource */
@@ -222,7 +263,7 @@ class BudgetController extends AbstractController
 
             $form->requestSave($this->getRequest(), function ($data) use ($dotation1, $dotation2) {
                 $structure = $this->getServiceStructure()->get($data['structure']);
-                $h1 = (float)str_replace([',', ' '], ['.', ''], $data['annee1']);
+                $h1        = (float)str_replace([',', ' '], ['.', ''], $data['annee1']);
                 if ($dotation1->getId() && 0 == $h1) {
                     $this->getServiceDotation()->delete($dotation1);
                 } else {
@@ -249,12 +290,12 @@ class BudgetController extends AbstractController
 
 
 
-    public function exportAction()
+    public function exportAction ()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $structure = $this->getEvent()->getParam('structure');
-        if (!$structure){
+        if (!$structure) {
             $structure = $role->getStructure();
         }
 
@@ -316,7 +357,7 @@ class BudgetController extends AbstractController
 
 
 
-    protected function getStructureElement(?Structure $structure): StructureElement
+    protected function getStructureElement (?Structure $structure): StructureElement
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 

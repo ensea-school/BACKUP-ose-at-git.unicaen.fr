@@ -59,6 +59,18 @@ return [
                         Privileges::MISE_EN_PAIEMENT_DEMANDE,
                     ],
                 ],
+                'get-budget-structure'    => [
+                    'route'       => '/get-budget-structure[/:structure]',
+                    'controller'  => Controller\BudgetController::class,
+                    'action'      => 'get-budget-structure',
+                    'constraints' => [
+                        'structure' => '[0-9]*',
+                    ],
+                    'privileges'  => [
+                        Privileges::BUDGET_VISUALISATION,
+                        Privileges::MISE_EN_PAIEMENT_DEMANDE,
+                    ],
+                ],
                 'saisie-dotation'         => [
                     'route'       => '/saisie-dotation/:annee/:structure/:typeRessource/[:dotation1]/[:dotation2]',
                     'controller'  => Controller\BudgetController::class,

@@ -4,7 +4,7 @@
     <div class="intervenant-recherche">
         <div class="critere">
             <div>
-                <input id="term" class="form-control input" placeholder="votre recherche..." type="text"
+                <input id="term" autofocus class="form-control input" placeholder="votre recherche..." type="text"
                        v-on:keyup="rechercher"/><br/>
             </div>
             <div>
@@ -105,7 +105,7 @@ export default {
 
         urlFiche(code)
         {
-            return unicaenVue.url('intervenant/code:'+code+'/voir');
+            return unicaenVue.url('intervenant/code:' + code + '/voir');
         },
 
         reload()

@@ -7,10 +7,15 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Application\Util;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Lieu\Entity\Db\Structure;
 use Paiement\Service\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
+use Paiement\Service\TblPaiementServiceAwareTrait;
+use UnicaenVue\View\Model\AxiosModel;
 
 
 /**
@@ -28,16 +33,17 @@ class StructureService extends AbstractEntityService
     use IntervenantServiceAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
+    use TblPaiementServiceAwareTrait;
 
 
-    public function getEntityClass()
+    public function getEntityClass ()
     {
         return Structure::class;
     }
 
 
 
-    public function getAlias()
+    public function getAlias ()
     {
         return 'str';
     }
@@ -49,14 +55,14 @@ class StructureService extends AbstractEntityService
      *
      * @return Structure
      */
-    public function getRacine()
+    public function getRacine ()
     {
         return $this->getRepo()->findOneBySourceCode('UNIV');
     }
 
 
 
-    public function getTreeArray(): array
+    public function getTreeArray (): array
     {
         $tree = $this->getTree();
 
@@ -73,11 +79,11 @@ class StructureService extends AbstractEntityService
     /**
      * @return array|Structure[]
      */
-    public function getTree(?Structure $root = null, bool $onlyEnseignement = false, bool $contextFilter=true): array
+    public function getTree (?Structure $root = null, bool $onlyEnseignement = false, bool $contextFilter = true): array
     {
         if ($contextFilter) {
             $cStructure = $this->getServiceContext()->getStructure();
-        }else{
+        } else {
             $cStructure = null;
         }
 
@@ -98,17 +104,17 @@ class StructureService extends AbstractEntityService
         if ($root) {
             $id = $root->idsFilter();
 
-            $pFilter = "AND p.ids LIKE '$id'";
+            $pFilter   = "AND p.ids LIKE '$id'";
             $strFilter = "AND str.ids LIKE '$id'";
             $subFilter = "AND sub.ids LIKE '$id'";
         } else {
-            $pFilter = "";
+            $pFilter   = "";
             $strFilter = "";
             $subFilter = "";
         }
 
-        if ($onlyEnseignement){
-            $pFilter .= ' AND p.enseignement = true';
+        if ($onlyEnseignement) {
+            $pFilter   .= ' AND p.enseignement = true';
             $strFilter .= ' AND str.enseignement = true';
             $subFilter .= ' AND sub.enseignement = true';
         }
@@ -128,13 +134,13 @@ class StructureService extends AbstractEntityService
         ";
 
         /** @var Structure[] $strs */
-        $strs = $this->getEntityManager()->createQuery($dql)->getResult();
+        $strs   = $this->getEntityManager()->createQuery($dql)->getResult();
         $result = [];
         foreach ($strs as $str) {
             $found = false;
-            foreach( $strs as $sstr){
-                foreach($sstr->getStructures() as $ssstr){
-                    if ($str == $ssstr){
+            foreach ($strs as $sstr) {
+                foreach ($sstr->getStructures() as $ssstr) {
+                    if ($str == $ssstr) {
                         $found = true; // trouvé comme sous-structure
                     }
                 }
@@ -149,9 +155,9 @@ class StructureService extends AbstractEntityService
 
 
 
-    protected function getStructureArray(Structure $structure): array
+    protected function getStructureArray (Structure $structure): array
     {
-        $canEdit = $this->getAuthorize()->isAllowed($structure, Privileges::STRUCTURES_ADMINISTRATION_EDITION);
+        $canEdit   = $this->getAuthorize()->isAllowed($structure, Privileges::STRUCTURES_ADMINISTRATION_EDITION);
         $canDelete = $canEdit && !$structure->getSource()->getImportable() && $structure->getStructures()->count() == 0;
 
         $a = [
@@ -183,7 +189,7 @@ class StructureService extends AbstractEntityService
      *
      * @param Role|true $role
      */
-    public function finderByRole($role, QueryBuilder $qb = null, $alias = null)
+    public function finderByRole ($role, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -202,13 +208,13 @@ class StructureService extends AbstractEntityService
      * Filtre par la structure et ses filles
      *
      *
-     * @param Structure $structure
+     * @param Structure    $structure
      * @param QueryBuilder $qb
-     * @param string $alias
+     * @param string       $alias
      *
      * @return QueryBuilder
      */
-    public function finderByStructure(?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
+    public function finderByStructure (?Structure $structure, ?QueryBuilder $qb = null, $alias = null): QueryBuilder
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -229,11 +235,11 @@ class StructureService extends AbstractEntityService
      * @todo prendre en compte l'année courante (tester utilisation d'un filtre Doctrine)
      *
      * @param QueryBuilder|null $qb
-     * @param string|null $alias
+     * @param string|null       $alias
      *
      * @return QueryBuilder
      */
-    public function finderByEnseignement(QueryBuilder $qb = null, $alias = null)
+    public function finderByEnseignement (QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->andWhere('(' . $alias . '.enseignement = 1 OR EXISTS (SELECT ep FROM OffreFormation\Entity\Db\ElementPedagogique ep WHERE ep.structure = ' . $alias . '))');
@@ -243,12 +249,12 @@ class StructureService extends AbstractEntityService
 
 
 
-    public function finderByMiseEnPaiement(QueryBuilder $qb = null, $alias = null)
+    public function finderByMiseEnPaiement (QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
         $serviceMiseEnPaiement = $this->getServiceMiseEnPaiement();
-        $serviceIntervenant = $this->getServiceIntervenant();
+        $serviceIntervenant    = $this->getServiceIntervenant();
 
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -263,19 +269,68 @@ class StructureService extends AbstractEntityService
 
 
 
+    public function finderByDemandeMiseEnPaiement (QueryBuilder $qb = null, $alias = null)
+    {
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        $serviceTblPaiement = $this->getServiceTblPaiement();
+        $this->join($serviceTblPaiement, $qb, 'tblPaiement', false, $alias);
+
+
+        //Uniquement les entités tbl_paiement pour lesquelles il y a encore des heures a payer
+        $serviceTblPaiement->finderByHeuresAPayer($qb);
+        //Uniquement les entités tbl_paiement sur l'année contextuelle
+        $serviceTblPaiement->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
+
+        return $qb;
+    }
+
+
+
+
+    /**
+     * Méthode qui renvoient la liste des structures pour lesquelles il reste des demandes de mise en paiement
+     * d'heures à faire
+     *
+     * @return array
+     */
+
+    public function getStructuresDemandeMiseEnPaiement (): array
+    {
+        $structures = [];
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $qb = $this->finderByDemandeMiseEnPaiement();
+        $this->finderByRole($role, $qb);
+
+        $listeStructures = $this->getList($qb);
+        foreach ($listeStructures as $structure) {
+            //$tree = $this->getTree($structure, 1, true);
+            $structures[] =
+                [
+                    'id'      => $structure->getId(),
+                    'libelle' => $structure->getLibelleCourt(),
+                    'code'    => $structure->getCode(),
+                ];
+        }
+
+        return $structures;
+    }
+
+
+
     /**
      * @param Structure $entity
+     *
      * @return mixed
      * @throws \Doctrine\DBAL\Exception
      */
-    public function save($entity)
+    public function save ($entity)
     {
         parent::save($entity); // TODO: Change the autogenerated stub
 
         $cStructure = $this->getServiceContext()->getStructure();
-        if ($cStructure){
-            if (!$entity->getStructure() || !$entity->getStructure()->inStructure($cStructure)){
-                throw new \Exception('La nouvelle structure doit hériter de '.$cStructure);
+        if ($cStructure) {
+            if (!$entity->getStructure() || !$entity->getStructure()->inStructure($cStructure)) {
+                throw new \Exception('La nouvelle structure doit hériter de ' . $cStructure);
             }
         }
 
@@ -289,9 +344,9 @@ class StructureService extends AbstractEntityService
     /**
      *
      * @param QueryBuilder|null $qb
-     * @param string|null $alias
+     * @param string|null       $alias
      */
-    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    public function orderBy (QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libellesCourts");

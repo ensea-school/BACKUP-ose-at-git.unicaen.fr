@@ -10,20 +10,20 @@
     "require"          : {
         "php"                                         : ">=8.2",
         "unicaen/app"                                 : "6.1.1",
-        "unicaen/authentification"                    : "dev-php82 as 6.0.1",
+        "unicaen/authentification"                    : "^6.1.0",
         "unicaen/privilege"                           : "6.0.1",
         "unicaen/utilisateur"                         : "dev-php82",
         "laminas/laminas-file"                        : "^2.8",
         "unicaen/code"                                : "dev-php82",
         "unicaen/import"                              : "6.0.1",
-        "unicaen/tbl"                                 : "dev-php82",
+        "unicaen/tbl"                                 : "^6.2.0",
         "unicaen/open-document"                       : "6.0.2",
         "unicaen/siham"                               : "6.1.2",
-        "unicaen/mail"                                : "dev-php82",
+        "unicaen/mail"                                : "^6.1.0",
         "unicaen/vue"                                 : "dev-php82",
         "laminas/laminas-cache-storage-adapter-memory": "2.2.0",
         "laminas/laminas-text"                        : "2.10",
-        "unicaen/console"                             : "dev-php82"
+        "unicaen/console"                             : "^6.1.0"
     },
     "require-dev"      : {
         "squizlabs/php_codesniffer"         : "*",

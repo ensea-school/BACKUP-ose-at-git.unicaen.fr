@@ -114,15 +114,19 @@ class v23FonctionReferentiel extends AbstractMigration
 
         $oa = OseAdmin::getInstance();
 
-        //Annualiser toute les fonctions existantes
+        //Annualiser toutes les fonctions existantes
         $countFonction       = count($resFonctions);
-        $nombreFonctionFaite = 1;
+        $nombreFonctionFaite = 0;
         $c->msg('Annualisation des ' . $countFonction . ' fonctions référentiels');
+        $table = $bdd->getTable('FONCTION_REFERENTIEL');
+
         $bdd->beginTransaction();
         foreach ($resFonctions as $fonction) {
+
             $fonction['HISTO_CREATION']        = new DateTime();
             $fonction['HISTO_CREATEUR_ID']     = $oa->getOseAppliId();
             $fonction['HISTO_MODIFICATEUR_ID'] = null;
+
 
             for ($a = 2010; $a < 2100; $a++) {
 
@@ -134,12 +138,12 @@ class v23FonctionReferentiel extends AbstractMigration
 
                 $fonction['ID']       = null;
                 $fonction['ANNEE_ID'] = $a;
-                $bdd->getTable('FONCTION_REFERENTIEL')->insert($fonction);
+                $table->insert($fonction);
             }
+            $nombreFonctionFaite++;
             if ($nombreFonctionFaite % 10 == 0) {
                 $c->msg('Fonctions annualisées : ' . $nombreFonctionFaite . ' sur ' . $countFonction);
             }
-            $nombreFonctionFaite++;
         }
         $bdd->commitTransaction();
     }
@@ -212,7 +216,7 @@ class v23FonctionReferentiel extends AbstractMigration
      */
     public function traitementServiceReferentiel(Console $c, Bdd $bdd): void
     {
-        $c->msg('MMigration des données du service référentiel vers les nouvelles fonctions');
+        $c->msg('Migration des données du service référentiel vers les nouvelles fonctions');
         $ligneServiceTraite = 0;
 
         $sql = 'select fr.code, fr.histo_destruction, i.annee_id, sr.id

@@ -14,7 +14,7 @@ SELECT
   COALESCE( ep.structure_id, i.structure_id ) structure_id,
   COALESCE(thens.id,th.id)                    type_heures_id,
   COALESCE(e.domaine_fonctionnel_id, ose_parametre.get_domaine_fonc_ens_ext) def_domaine_fonctionnel_id,
-  ccep.centre_cout_id                         def_centre_cout_id,
+  COALESCE(ccep.centre_cout_id,str.centre_cout_id) def_centre_cout_id,
   COALESCE(ep.taux_remu_id, si.taux_remu_id, ose_parametre.get_taux_remu) taux_remu_id,
   1                                           taux_conges_payes,
   CASE th.code
@@ -45,6 +45,7 @@ SELECT
 FROM
             formule_resultat_service        frs
        JOIN parametre                         p ON p.nom = 'distinction_fi_fa_fc'
+       JOIN parametre                       ccp ON ccp.nom = 'centres_couts_paye'
        JOIN formule_resultat_vh            frvh ON frvh.formule_resultat_id = frs.formule_resultat_id
        JOIN volume_horaire                   vh ON vh.id = frvh.volume_horaire_id
                                                AND vh.service_id = frs.service_id
@@ -71,6 +72,8 @@ FROM
   LEFT JOIN mise_en_paiement                mep ON mep.histo_destruction IS NULL
                                                AND mep.formule_res_service_id = frs.id
                                                AND COALESCE(thens.id,mep.type_heures_id) = COALESCE(thens.id,th.id)
+
+  LEFT JOIN structure                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN COALESCE( ep.structure_id, i.structure_id ) ELSE i.structure_id END
 WHERE
    CASE th.code
     WHEN 'fi' THEN frvh.heures_compl_fi
@@ -100,8 +103,8 @@ SELECT
   i.id                                        intervenant_id,
   COALESCE( ep.structure_id, i.structure_id ) structure_id,
   mep.type_heures_id                          type_heures_id,
-  NULL def_domaine_fonctionnel_id,
-  NULL                                        def_centre_cout_id,
+  NULL                                        def_domaine_fonctionnel_id,
+  str.centre_cout_id                          def_centre_cout_id,
   COALESCE(ep.taux_remu_id, si.taux_remu_id, ose_parametre.get_taux_remu) taux_remu_id,
   1                                           taux_conges_payes,
   0                                           heures,
@@ -126,7 +129,9 @@ FROM
        JOIN statut                           si ON si.id = i.statut_id
        JOIN service                           s ON s.id = frs.service_id
        JOIN parametre                         p ON p.nom = 'distinction_fi_fa_fc'
+       JOIN parametre                       ccp ON ccp.nom = 'centres_couts_paye'
   LEFT JOIN element_pedagogique              ep ON ep.id = s.element_pedagogique_id
+  LEFT JOIN structure                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN COALESCE( ep.structure_id, i.structure_id ) ELSE i.structure_id END
 WHERE
   mep.histo_destruction IS NULL
   AND CASE
@@ -159,7 +164,7 @@ SELECT
   sr.structure_id                             structure_id,
   th.id                                       type_heures_id,
   fr.domaine_fonctionnel_id                   def_domaine_fonctionnel_id,
-  NULL                                        def_centre_cout_id,
+  str.centre_cout_id                          def_centre_cout_id,
   COALESCE(si.taux_remu_id, ose_parametre.get_taux_remu) taux_remu_id,
   1                                           taux_conges_payes,
   NULL                                        heures,
@@ -184,6 +189,7 @@ FROM
                                                AND fr.type_volume_horaire_id = tvh.id
                                                AND fr.etat_volume_horaire_id = evh.id
 
+       JOIN parametre                       ccp ON ccp.nom = 'centres_couts_paye'
        JOIN intervenant                       i ON i.id = fr.intervenant_id
        JOIN annee                             a ON a.id = i.annee_id
        JOIN statut                           si ON si.id = i.statut_id
@@ -193,6 +199,8 @@ FROM
   LEFT JOIN mise_en_paiement                mep ON mep.histo_destruction IS NULL
                                                AND mep.formule_res_service_ref_id = frsr.id
                                                AND mep.type_heures_id = th.id
+
+  LEFT JOIN structure                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN sr.structure_id ELSE i.structure_id END
 WHERE
    frsr.heures_compl_referentiel <> 0
    /*@INTERVENANT_ID=i.id*/
@@ -217,7 +225,7 @@ SELECT
   m.structure_id                              structure_id,
   th.id                                       type_heures_id,
   NULL                                        def_domaine_fonctionnel_id,
-  NULL                                        def_centre_cout_id,
+  str.centre_cout_id                          def_centre_cout_id,
   CASE WHEN
     TO_CHAR( vhm.horaire_debut, 'HH24:MI' ) >= ose_parametre.get_horaire_nocturne -- horaire nocturne
     OR jf.id IS NOT NULL                                                          -- jour ferie
@@ -244,9 +252,11 @@ SELECT
 FROM
             tbl_mission                   tm
        JOIN mission                        m ON m.id = tm.mission_id
+       JOIN intervenant                    i ON i.id = m.intervenant_id
        JOIN volume_horaire_mission       vhm ON vhm.histo_destruction IS NULL AND vhm.mission_id = tm.mission_id
        JOIN type_volume_horaire          tvh ON tvh.id = vhm.type_volume_horaire_id AND tvh.code ='REALISE'
        JOIN type_heures                   th ON th.code = 'mission'
+       JOIN parametre                    ccp ON ccp.nom = 'centres_couts_paye'
   LEFT JOIN validation_vol_horaire_miss vvhm ON vvhm.volume_horaire_mission_id = vhm.id
   LEFT JOIN validation                     v ON v.id = vvhm.validation_id AND v.histo_destruction IS NULL
   LEFT JOIN jour_ferie jf                    ON TO_CHAR( jf.date_jour, 'dd/mm/YYYY' ) = TO_CHAR( vhm.horaire_debut, 'dd/mm/YYYY' )
@@ -254,6 +264,8 @@ FROM
   LEFT JOIN mise_en_paiement                mep ON mep.histo_destruction IS NULL
                                                AND mep.mission_id = m.id
                                                AND mep.type_heures_id = th.id
+
+  LEFT JOIN structure                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN m.structure_id ELSE i.structure_id END
 WHERE
   tm.valide = 1
   /*@ANNEE_ID=tm.annee_id*/

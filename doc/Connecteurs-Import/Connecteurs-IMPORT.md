@@ -682,6 +682,20 @@ WHERE (import_action <> 'delete' OR (
 ))
 ```
 
+### Filtres de synchronisation pour les structures
+
+Certaines données relatives aux structures doivent être mises à jour automatiquement.
+
+Deux tables nécessitent des post-traitements après leur mise à jour :
+STRUCTURE et CENTRE_COUT_STRUCTURE.
+
+Le filtre suivant est donc à insérer en tant que post traitement pour ces deux tables :
+
+```plsql
+OSE_DIVERS.UPDATE_STRUCTURE_IDS();
+```
+
+
 ### Utilisation pour contrôler la synchronisation de l'offre de formation
 
 Prenons l'exemple d'une offre de formation importée à la fois d'Apogée et de FCA Manager. Dans OSE ainsi que dans FCA Manager,

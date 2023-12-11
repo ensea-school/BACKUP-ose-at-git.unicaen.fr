@@ -129,6 +129,18 @@ return [
             'position'    => 12,
             'commentaire' => NULL,
         ],
+        'CENTRE_COUT_ID'          => [
+            'name'        => 'CENTRE_COUT_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 27,
+            'commentaire' => NULL,
+        ],
         'CODE'                    => [
             'name'        => 'CODE',
             'type'        => 'string',

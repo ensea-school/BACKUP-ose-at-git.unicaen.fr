@@ -841,6 +841,7 @@ return [
         'EXPORT_DATE',
         'IRRECEVABLE',
         'NUMERO_PEC',
+        'SYNC_PEC',
     ],
     'INTERVENANT_DOSSIER'            => [
         'ID',
@@ -1373,6 +1374,7 @@ return [
         'STRUCTURE_ID',
         'IDS',
         'LIBELLES_COURTS',
+        'CENTRE_COUT_ID',
     ],
     'SYNC_LOG'                       => [
         'ID',

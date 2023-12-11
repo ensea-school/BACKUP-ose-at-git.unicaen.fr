@@ -173,6 +173,7 @@ return [
             'candidature-visualisation'  => 'Visualiser les candidatures d\'une offre',
             'prime-visualisation'        => 'Visualiser les primes de fin de mission',
             'prime-gestion'              => 'Gérer les primes de fin de mission',
+            'edition-centre-cout-type'   => 'Édition des centres de cout d\'un type de mission',
         ],
     ],
 
@@ -253,6 +254,7 @@ return [
             'mise-en-paiement'          => 'Mise en paiement',
             'export-paie'               => 'Export vers le logiciel de paie',
             'edition'                   => 'Annulation de mises en paiement',
+            'details'                   => 'Détail des calculs de mises en paiement',
             'visualisation-intervenant' => 'Visualisation (Intervenant)',
         ],
     ],

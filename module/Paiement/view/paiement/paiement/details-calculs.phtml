@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @var $this        Application\View\Renderer\PhpRenderer
+ * @var $intervenant Application\Entity\Db\Intervenant
+ * @var $debugger    Paiement\Tbl\Process\PaiementDebugger
+ */
+
+$this->intervenant($intervenant)->renderTitle('Détails de calcul des paiements');
+
+$data = [
+    'parametres' => $debugger->parametres(),
+    'servicesAPayer' => $debugger->servicesAPayer(),
+];
+
+echo $this->vue('paiement/details-calculs', $data);

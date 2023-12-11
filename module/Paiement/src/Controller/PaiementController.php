@@ -21,7 +21,6 @@ use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\TypeRessource;
 use Paiement\Entity\MiseEnPaiementRecherche;
-use Paiement\Form\Paiement\DemandeMiseEnPaiementRechercheFormAwareTrait;
 use Paiement\Form\Paiement\MiseEnPaiementFormAwareTrait;
 use Paiement\Form\Paiement\MiseEnPaiementRechercheFormAwareTrait;
 use Paiement\Service\DotationServiceAwareTrait;
@@ -29,11 +28,13 @@ use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\NumeroPriseEnChargeServiceAwareTrait;
 use Paiement\Service\ServiceAPayerServiceAwareTrait;
 use Paiement\Service\TypeRessourceServiceAwareTrait;
+use Paiement\Tbl\Process\PaiementDebugger;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenApp\Util;
 use UnicaenVue\View\Model\AxiosModel;
+use UnicaenTbl\Service\TableauBordServiceAwareTrait;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
@@ -55,6 +56,7 @@ class PaiementController extends AbstractController
     use DotationServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use EtatSortieServiceAwareTrait;
+    use TableauBordServiceAwareTrait;
     use NumeroPriseEnChargeServiceAwareTrait;
 
     /**
@@ -737,6 +739,24 @@ class PaiementController extends AbstractController
         }
 
         return compact('title');
+    }
+
+
+
+
+    public function detailsCalculsAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+        if (!$intervenant) {
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+
+        $tblPaiement = $this->getServiceTableauBord()->getTableauBord('paiement');
+        $debugger = new PaiementDebugger($tblPaiement->getProcess());
+        $debugger->run($intervenant);
+
+        return compact('intervenant', 'debugger');
     }
 
 

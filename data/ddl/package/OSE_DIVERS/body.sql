@@ -104,7 +104,24 @@ CREATE OR REPLACE PACKAGE BODY "OSE_DIVERS" AS
         ep.histo_destruction IS NULL
         AND str.enseignement = 0
     ) LOOP
-        UPDATE structure SET enseignement = 1 WHERE id = str.id;
+      UPDATE structure SET enseignement = 1 WHERE id = str.id;
+    END LOOP;
+
+    -- mise à jour du centre de couts par défaut si la structure n'a qu'un seul CC possible
+    FOR ccstr IN (
+      SELECT
+        ccs.structure_id                              structure_id,
+        cc.id                                         centre_cout_id,
+        COUNT(*) OVER (partition by ccs.structure_id) nbr
+      FROM
+        centre_cout_structure ccs
+        JOIN centre_cout cc ON cc.id = ccs.centre_cout_id AND cc.histo_destruction IS NULL
+      WHERE
+        ccs.histo_destruction IS NULL
+    ) LOOP
+      IF ccstr.nbr = 1 THEN
+        UPDATE structure SET centre_cout_id = ccstr.centre_cout_id WHERE id = ccstr.structure_id AND centre_cout_id IS NULL;
+      END IF;
     END LOOP;
 
   END;

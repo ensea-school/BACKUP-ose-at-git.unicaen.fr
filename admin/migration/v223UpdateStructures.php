@@ -5,7 +5,7 @@ class v223UpdateStructures extends AbstractMigration
 
     public function description(): string
     {
-        return "Ajout du script d'après-déclenchement de MAH de la table STRUCTURE";
+        return "Ajout du script d'après-déclenchement de MAJ de la table STRUCTURE";
     }
 
 

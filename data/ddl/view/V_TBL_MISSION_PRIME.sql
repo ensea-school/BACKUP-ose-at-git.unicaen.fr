@@ -21,4 +21,3 @@ GROUP BY
     i.id,
     i.annee_id,
     i.structure_id
-

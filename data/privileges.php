@@ -254,6 +254,7 @@ return [
             'mise-en-paiement'          => 'Mise en paiement',
             'export-paie'               => 'Export vers le logiciel de paie',
             'edition'                   => 'Annulation de mises en paiement',
+            'details'                   => 'Détail des calculs de mises en paiement',
             'visualisation-intervenant' => 'Visualisation (Intervenant)',
         ],
     ],

@@ -3,7 +3,7 @@
 namespace Paiement\Controller;
 
 use Psr\Container\ContainerInterface;
-
+use UnicaenTbl\Service\TableauBordService;
 
 
 /**
@@ -25,7 +25,7 @@ class PaiementControllerFactory
     {
         $controller = new PaiementController;
 
-        /* Injectez vos dépendances ICI */
+        $controller->setServiceTableauBord( $container->get(TableauBordService::class));
 
         return $controller;
     }

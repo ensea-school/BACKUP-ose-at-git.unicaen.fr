@@ -34,6 +34,12 @@ return [
                         'structure' => '[0-9]*',
                     ],
                 ],
+                'details-calculs'      => [
+                    'route'       => '/details-calculs/:intervenant/',
+                    'controller'  => Controller\PaiementController::class,
+                    'action'      => 'DetailsCalculs',
+                    'privileges'  => Privileges::MISE_EN_PAIEMENT_DETAILS,
+                ],
                 'etat-paiement'                        => [
                     'route'      => '/etat-paiement',
                     'controller' => Controller\PaiementController::class,
@@ -113,7 +119,7 @@ return [
                     'withtarget'          => true,
                     'workflow-etape-code' => WfEtape::CODE_DEMANDE_MEP,
                     'resource'            => PrivilegeController::getResourceId(Controller\PaiementController::class, 'demandeMiseEnPaiement'),
-                    'visible'             => \Paiement\Assertion\PaiementAssertion::class,
+                    'visible'             => Assertion\PaiementAssertion::class,
                     'order'               => 16,
                 ],
                 'visualisation-mise-en-paiement' => [
@@ -126,7 +132,7 @@ return [
                     'withtarget'          => true,
                     'workflow-etape-code' => WfEtape::CODE_SAISIE_MEP,
                     'resource'            => PrivilegeController::getResourceId(Controller\PaiementController::class, 'visualisationMiseEnPaiement'),
-                    'visible'             => \Paiement\Assertion\PaiementAssertion::class,
+                    'visible'             => Assertion\PaiementAssertion::class,
                     'order'               => 17,
                 ],
                 'edition-mise-en-paiement'       => [
@@ -138,8 +144,20 @@ return [
                     ],
                     'withtarget'   => true,
                     'resource'     => PrivilegeController::getResourceId(Controller\PaiementController::class, 'editionMiseEnPaiement'),
-                    'visible'      => \Paiement\Assertion\PaiementAssertion::class,
+                    'visible'      => Assertion\PaiementAssertion::class,
                     'order'        => 18,
+                ],
+                'detail-calculs-paiements' => [
+                    'label'        => "Détails de calculs des paiements",
+                    'title'        => "Détails de calculs des paiements",
+                    'route'        => 'paiement/details-calculs',
+                    'paramsInject' => [
+                        'intervenant',
+                    ],
+                    'withtarget'   => true,
+                    'resource'     => PrivilegeController::getResourceId(Controller\PaiementController::class, 'detailsCalculs'),
+                    'visible'      => Assertion\PaiementAssertion::class,
+                    'order'        => 19,
                 ],
             ],
         ],

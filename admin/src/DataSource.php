@@ -240,7 +240,7 @@ class DataSource
 
         foreach ($data['plafonds'] as $numero => $p) {
             $psql = 'SELECT id FROM plafond_perimetre WHERE code = :code';
-            $perimetreId = $this->oseAdmin->getBdd()->select($psql, ['code' => $p['perimetre']], ['fetch' => \BddAdmin\Bdd::FETCH_ONE])['ID'];
+            $perimetreId = $this->oseAdmin->getBdd()->selectOne($psql, ['code' => $p['perimetre']], 'ID');
             $plafond = [
                 'NUMERO'               => $numero,
                 'LIBELLE'              => $p['libelle'],
@@ -447,7 +447,7 @@ class DataSource
                 $query = $params['QUERY'];
 
                 $val = isset($data[$nom]['VALEUR']) ? $data[$nom]['VALEUR'] : null;
-                $res = $bdd->select($query, ['valeur' => $val], ['fetch' => $bdd::FETCH_ONE]);
+                $res = $bdd->selectOne($query, ['valeur' => $val]);
                 if (isset($res['VALEUR'])) {
                     $data[$nom]['VALEUR'] = (string)$res['VALEUR'];
                 }

@@ -1,60 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Lieu\Entity\Db\Structure" table="STRUCTURE">
-    <id name="id" type="integer" column="ID">
-      <generator strategy="SEQUENCE"/>
-    </id>
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Lieu\Entity\Db\Structure" table="STRUCTURE">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
 
-    <field name="code" type="string" column="CODE" length="100" nullable="true"/>
-    <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="25" nullable="false"/>
-    <field name="libelleLong" type="string" column="LIBELLE_LONG" length="200" nullable="false"/>
-    <field name="enseignement" type="boolean" column="ENSEIGNEMENT" nullable="false"/>
-    <field name="affAdresseContrat" type="boolean" column="AFF_ADRESSE_CONTRAT" nullable="false"/>
-    <field name="ids" type="string" column="IDS" length="1000" nullable="true"/>
-    <field name="libellesCourts" type="string" column="LIBELLES_COURTS" length="4000" nullable="true"/>
+        <field name="code" type="string" column="CODE" length="100" nullable="true"/>
+        <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="25" nullable="false"/>
+        <field name="libelleLong" type="string" column="LIBELLE_LONG" length="200" nullable="false"/>
+        <field name="enseignement" type="boolean" column="ENSEIGNEMENT" nullable="false"/>
+        <field name="affAdresseContrat" type="boolean" column="AFF_ADRESSE_CONTRAT" nullable="false"/>
+        <field name="ids" type="string" column="IDS" length="1000" nullable="true"/>
+        <field name="libellesCourts" type="string" column="LIBELLES_COURTS" length="4000" nullable="true"/>
 
-    <field name="adressePrecisions" type="string" column="ADRESSE_PRECISIONS" length="240" nullable="true"/>
-    <field name="adresseNumero" type="string" column="ADRESSE_NUMERO" length="4" nullable="true"/>
-    <many-to-one field="adresseNumeroCompl" target-entity="Lieu\Entity\Db\AdresseNumeroCompl">
-      <join-column name="ADRESSE_NUMERO_COMPL_ID" referenced-column-name="ID"/>
-    </many-to-one>
-    <many-to-one field="adresseVoirie" target-entity="Lieu\Entity\Db\Voirie">
-      <join-column name="ADRESSE_VOIRIE_ID" referenced-column-name="ID"/>
-    </many-to-one>
-    <field name="adresseVoie" type="string" column="ADRESSE_VOIE" length="60" nullable="true"/>
-    <field name="adresseLieuDit" type="string" column="ADRESSE_LIEU_DIT" length="60" nullable="true"/>
-    <field name="adresseCodePostal" type="string" column="ADRESSE_CODE_POSTAL" length="15" nullable="true"/>
-    <field name="adresseCommune" type="string" column="ADRESSE_COMMUNE" length="50" nullable="true"/>
-    <many-to-one field="adressePays" target-entity="Lieu\Entity\Db\Pays">
-      <join-column name="ADRESSE_PAYS_ID" referenced-column-name="ID"/>
-    </many-to-one>
+        <field name="adressePrecisions" type="string" column="ADRESSE_PRECISIONS" length="240" nullable="true"/>
+        <field name="adresseNumero" type="string" column="ADRESSE_NUMERO" length="4" nullable="true"/>
+        <many-to-one field="adresseNumeroCompl" target-entity="Lieu\Entity\Db\AdresseNumeroCompl">
+            <join-column name="ADRESSE_NUMERO_COMPL_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="adresseVoirie" target-entity="Lieu\Entity\Db\Voirie">
+            <join-column name="ADRESSE_VOIRIE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="adresseVoie" type="string" column="ADRESSE_VOIE" length="60" nullable="true"/>
+        <field name="adresseLieuDit" type="string" column="ADRESSE_LIEU_DIT" length="60" nullable="true"/>
+        <field name="adresseCodePostal" type="string" column="ADRESSE_CODE_POSTAL" length="15" nullable="true"/>
+        <field name="adresseCommune" type="string" column="ADRESSE_COMMUNE" length="50" nullable="true"/>
+        <many-to-one field="adressePays" target-entity="Lieu\Entity\Db\Pays">
+            <join-column name="ADRESSE_PAYS_ID" referenced-column-name="ID"/>
+        </many-to-one>
 
-    <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
-    <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
-      <join-column name="SOURCE_ID" referenced-column-name="ID"/>
-    </many-to-one>
+        <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
+        <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
+            <join-column name="SOURCE_ID" referenced-column-name="ID"/>
+        </many-to-one>
 
-    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
-    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
-        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
-    </many-to-one>
-    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
-      <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
-    </many-to-one>
-    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
-    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
-      <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
-    </many-to-one>
-    <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure" nullable="true">
-      <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-    </many-to-one>
-    <one-to-many field="structures" target-entity="Lieu\Entity\Db\Structure" mapped-by="structure" />
+        <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure" nullable="true">
+            <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <one-to-many field="structures" target-entity="Lieu\Entity\Db\Structure" mapped-by="structure"/>
 
-    <many-to-many field="centreCout" target-entity="Paiement\Entity\Db\CentreCout" mapped-by="structure" />
-    <one-to-many field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique" mapped-by="structure" />
-    <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Paiement\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="structure" />
-    <one-to-many field="tblPaiement" target-entity="Paiement\Entity\Db\TblPaiement" mapped-by="structure"/>
+        <many-to-many field="centreCout" target-entity="Paiement\Entity\Db\CentreCout" mapped-by="structure"/>
+        <many-to-one field="centreCoutDefault" target-entity="Paiement\Entity\Db\CentreCout" nullable="true">
+            <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <one-to-many field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique" mapped-by="structure"/>
+        <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Paiement\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="structure"/>
+        <one-to-many field="tblPaiement" target-entity="Paiement\Entity\Db\TblPaiement" mapped-by="structure"/>
 
-  </entity>
+    </entity>
 </doctrine-mapping>

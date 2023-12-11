@@ -4,6 +4,7 @@ namespace Paiement;
 
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
+use Paiement\Assertion\PaiementAssertion;
 use Paiement\Controller\PaiementController;
 use Paiement\Tbl\Process\PaiementProcess;
 use Paiement\Tbl\Process\PaiementProcessFactory;
@@ -84,11 +85,15 @@ return [
                     'constraints' => [
                         'structure' => '[0-9]*',
                     ],
+                    'privileges'  => Privileges::MISE_EN_PAIEMENT_DEMANDE,
+
                 ],
                 'process-demande-mise-en-paiement-lot' => [
                     'route'      => '/process-demande-mise-en-paiement-lot',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'processDemandeMiseEnPaiementLot',
+                    'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
+                    'assertion'  => PaiementAssertion::class,
                 ],
                 'pilotage'                             => [
                     'route'      => '/pilotage',

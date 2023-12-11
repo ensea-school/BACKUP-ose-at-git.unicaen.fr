@@ -3,7 +3,10 @@
 namespace Paiement\Service;
 
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\WfEtape;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractService;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\ServiceAPayerInterface;
@@ -21,6 +24,7 @@ class ServiceAPayerService extends AbstractService
 {
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
     /**
@@ -80,7 +84,14 @@ class ServiceAPayerService extends AbstractService
              * @var TblPaiement $value
              */
             if (empty($value->getMiseEnPaiement())) {
-                $intervenant = $value->getIntervenant();
+                $intervenant   = $value->getIntervenant();
+                $serviceAPayer = $value->getServiceAPayer();
+                $structure     = $intervenant->getStructure();
+                $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant, $value->getStructure());
+                //Si l'étape de demande de mise en paiement n'est pas atteignable alors on ne le propose pas
+                if (!$workflowEtape || !$workflowEtape->isAtteignable()) {
+                    continue;
+                }
                 if (!array_key_exists($intervenant->getId(), $dmep)) {
 
                     $dmep[$intervenant->getId()]['datasIntervenant'] = [
@@ -93,6 +104,7 @@ class ServiceAPayerService extends AbstractService
                         'typeIntervenant' => $intervenant->getStatut()->getTypeIntervenant()->getLibelle(),
                     ];
                 }
+
                 $dmep[$intervenant->getId()]['heures'][] = [
                     'heuresAPayer' => $value->getHeuresAPayerAC() + $value->getHeuresAPayerAA(),
                     'centreCout'   => ['libelle'              => ($value->getCentreCout()) ? $value->getCentreCout()->getLibelle() : '',

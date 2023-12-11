@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\AdresseInterface;
 use Lieu\Entity\AdresseTrait;
+use Paiement\Entity\Db\CentreCout;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -24,80 +25,82 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     use ImportAwareTrait;
     use HistoriqueAwareTrait;
 
-    protected ?int $id = null;
+    protected ?int        $id                = null;
 
-    protected ?string $code = null;
+    protected ?string     $code              = null;
 
-    protected ?string $libelleCourt = null;
+    protected ?string     $libelleCourt      = null;
 
-    protected ?string $libelleLong = null;
+    protected ?string     $libelleLong       = null;
 
-    protected Collection $elementPedagogique;
+    protected Collection  $elementPedagogique;
 
-    protected Collection $centreCout;
+    protected Collection  $centreCout;
 
-    protected Collection $miseEnPaiementIntervenantStructure;
+    protected ?CentreCout $centreCoutDefault = null;
 
-    protected Collection $tblPaiement;
+    protected Collection  $miseEnPaiementIntervenantStructure;
 
-    protected bool $enseignement = false;
+    protected Collection  $tblPaiement;
 
-    protected $affAdresseContrat = true;
+    protected bool        $enseignement      = false;
 
-    protected ?Structure $structure = null;
+    protected             $affAdresseContrat = true;
 
-    protected ?string $ids = null;
+    protected ?Structure  $structure         = null;
 
-    protected ?string $libellesCourts = null;
+    protected ?string     $ids               = null;
 
-    protected Collection $structures;
+    protected ?string     $libellesCourts    = null;
+
+    protected Collection  $structures;
 
 
 
-    function __construct()
+    function __construct ()
     {
-        $this->elementPedagogique = new ArrayCollection;
-        $this->centreCout = new ArrayCollection;
+        $this->elementPedagogique                 = new ArrayCollection;
+        $this->centreCout                         = new ArrayCollection;
         $this->miseEnPaiementIntervenantStructure = new ArrayCollection;
-        $this->structures = new ArrayCollection;
+        $this->structures                         = new ArrayCollection;
     }
 
 
 
-    public function axiosDefinition(): array
+    public function axiosDefinition (): array
     {
         return ['libelleLong', 'libelleCourt', 'code', 'id'];
     }
 
 
 
-    public function getId(): ?int
+    public function getId (): ?int
     {
         return $this->id;
     }
 
 
 
-    public function getIds(): ?string
+    public function getIds (): ?string
     {
         return $this->ids;
     }
 
 
 
-    public function getIdsArray(): array
+    public function getIdsArray (): array
     {
         $res = [];
 
-        if (empty($this->ids)){
+        if (empty($this->ids)) {
             return $res;
         }
 
 
         $ids = explode('-', substr($this->ids, 1, -1));
-        foreach ($ids as $id){
+        foreach ($ids as $id) {
             $id = (int)$id;
-            if ($id > 0){
+            if ($id > 0) {
                 $res[] = $id;
             }
         }
@@ -107,52 +110,51 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
-    public function getLevel(): int
+    public function getLevel (): int
     {
         return substr_count($this->ids, '-') - 2;
     }
 
 
 
-    public function getLibellesCourts(): ?string
+    public function getLibellesCourts (): ?string
     {
         return $this->libellesCourts;
     }
 
 
 
-
     /**
      * Permet de savoir si l'objet est une sous-structure de $structure
      */
-    public function inStructure(Structure $structure): bool
+    public function inStructure (Structure $structure): bool
     {
         $id = $structure->getId();
 
-        if (empty($this->ids)){
+        if (empty($this->ids)) {
             return false;
         }
 
-        return str_contains($this->ids, '-'.$id.'-');
+        return str_contains($this->ids, '-' . $id . '-');
     }
 
 
 
-    public function idsFilter(): string
+    public function idsFilter (): string
     {
-        return '%-'.$this->getId().'-%';
+        return '%-' . $this->getId() . '-%';
     }
 
 
 
-    public function getCode(): ?string
+    public function getCode (): ?string
     {
         return $this->code;
     }
 
 
 
-    public function setCode(?string $code): Structure
+    public function setCode (?string $code): Structure
     {
         $this->code = $code;
 
@@ -161,14 +163,14 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
-    public function getLibelleLong(): ?string
+    public function getLibelleLong (): ?string
     {
         return $this->libelleLong;
     }
 
 
 
-    public function setLibelleLong(?string $libelleLong): Structure
+    public function setLibelleLong (?string $libelleLong): Structure
     {
         $this->libelleLong = $libelleLong;
 
@@ -184,7 +186,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      *
      * @return Intervenant
      */
-    public function addElementPedagogique(\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique)
+    public function addElementPedagogique (\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique)
     {
         $this->elementPedagogique[] = $elementPedagogique;
 
@@ -198,7 +200,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      *
      * @param \OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique
      */
-    public function removeElementPedagogique(\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique)
+    public function removeElementPedagogique (\OffreFormation\Entity\Db\ElementPedagogique $elementPedagogique)
     {
         $this->elementPedagogique->removeElement($elementPedagogique);
     }
@@ -210,7 +212,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getElementPedagogique()
+    public function getElementPedagogique ()
     {
         return $this->elementPedagogique;
     }
@@ -224,7 +226,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      *
      * @return Intervenant
      */
-    public function addCentreCout(\Paiement\Entity\Db\CentreCout $centreCout)
+    public function addCentreCout (\Paiement\Entity\Db\CentreCout $centreCout)
     {
         $this->centreCout[] = $centreCout;
 
@@ -238,7 +240,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      *
      * @param \Paiement\Entity\Db\CentreCout $centreCout
      */
-    public function removeCentreCout(\Paiement\Entity\Db\CentreCout $centreCout)
+    public function removeCentreCout (\Paiement\Entity\Db\CentreCout $centreCout)
     {
         $this->service->removeElement($centreCout);
     }
@@ -250,9 +252,35 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCentreCout()
+    public function getCentreCout ()
     {
         return $this->centreCout;
+    }
+
+
+
+    /**
+     * Get centreCoutDefault
+     *
+     * @return ?CentreCout
+     */
+    public function getCentreCoutDefault (): ?CentreCout
+    {
+        return $this->centreCoutDefault;
+    }
+
+
+
+    /**
+     * Set centreCoutDefault
+     *
+     * @return Structure
+     */
+    public function setCentreCoutDefault (?CentreCout $centreCoutDefault): self
+    {
+        $this->centreCoutDefault = $centreCoutDefault;
+
+        return $this;
     }
 
 
@@ -262,7 +290,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getMiseEnPaiementIntervenantStructure()
+    public function getMiseEnPaiementIntervenantStructure ()
     {
         return $this->miseEnPaiementIntervenantStructure;
     }
@@ -281,15 +309,14 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
-
-    public function isEnseignement(): bool
+    public function isEnseignement (): bool
     {
         return $this->enseignement;
     }
 
 
 
-    public function setEnseignement(bool $enseignement): Structure
+    public function setEnseignement (bool $enseignement): Structure
     {
         $this->enseignement = $enseignement;
 
@@ -298,14 +325,14 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
-    public function isAffAdresseContrat(): bool
+    public function isAffAdresseContrat (): bool
     {
         return $this->affAdresseContrat;
     }
 
 
 
-    public function setAffAdresseContrat(bool $affAdresseContrat): Structure
+    public function setAffAdresseContrat (bool $affAdresseContrat): Structure
     {
         $this->affAdresseContrat = $affAdresseContrat;
 
@@ -319,28 +346,28 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      *
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getLibelleCourt();
     }
 
 
 
-    public function getAdresseIdentite(): ?string
+    public function getAdresseIdentite (): ?string
     {
         return $this->getLibelleLong();
     }
 
 
 
-    public function getStructure(): ?Structure
+    public function getStructure (): ?Structure
     {
         return $this->structure;
     }
 
 
 
-    public function setStructure(?Structure $structure): Structure
+    public function setStructure (?Structure $structure): Structure
     {
         $this->structure = $structure;
 
@@ -352,21 +379,21 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     /**
      * @return Collection|Structure[]
      */
-    public function getStructures(): Collection
+    public function getStructures (): Collection
     {
         return $this->structures;
     }
 
 
 
-    public function getLibelleCourt(): ?string
+    public function getLibelleCourt (): ?string
     {
         return $this->libelleCourt;
     }
 
 
 
-    public function setLibelleCourt(?string $libelleCourt): Structure
+    public function setLibelleCourt (?string $libelleCourt): Structure
     {
         $this->libelleCourt = $libelleCourt;
 
@@ -375,7 +402,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
 
-    public function getLibelle(): string
+    public function getLibelle (): string
     {
         return $this->getLibelleCourt();
     }
@@ -387,14 +414,14 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      *
      * @return string
      */
-    public function getResourceId()
+    public function getResourceId ()
     {
         return 'Structure';
     }
 
 
 
-    function __sleep()
+    function __sleep ()
     {
         return [];
     }

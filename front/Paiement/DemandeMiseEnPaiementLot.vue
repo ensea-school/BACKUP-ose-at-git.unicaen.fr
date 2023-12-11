@@ -41,7 +41,7 @@
     <!--BUDGET-->
     <div v-if="haveDotation">
         <div v-if="alertDotation" class="alert alert-danger" role="alert">
-            Attention vous dépassez vos dotations, vous ne pourrez pas enclencher les demandes de mise en paiement par lot. Veuillez ajuster votre sélection
+            Attention vous dépassez vos dotations, vous ne pourrez pas lancer les demandes de mise en paiement par lot. Veuillez ajuster votre sélection
             d'intervenants pour faire les demandes de mise en paiement.
         </div>
         <table class="table table-bordered caption-top">
@@ -108,12 +108,14 @@
                                            class="checkbox-permanent"
                                            type="checkbox"
                                            @change="refreshTotalConsommation()"></td>
-                                <td>{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</td>
+                                <td><a :href="urlIntervenant(intervenant)"
+                                       target="_blank">{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</a></td>
                                 <td><span
-                                    :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' ">
+                                    :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' "
+                                    style="text-decoration:underline dotted;cursor: help;">
                                     {{ totalPayable(intervenant.heures) }} h</span></td>
-                                <td>{{ totalNonPayable(intervenant.heures) }} h</td>
-
+                                <td><span style="text-decoration:underline dotted;cursor: help;"
+                                          title="Aucun centre de coût">{{ totalNonPayable(intervenant.heures) }} h</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -158,10 +160,12 @@
                                 <td><a :href="urlIntervenant(intervenant)"
                                        target="_blank">{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</a></td>
                                 <td><span
-                                    :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' ">{{
+                                    :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' "
+                                    style="text-decoration:underline dotted;cursor: help;">{{
                                         totalPayable(intervenant.heures)
                                     }} h</span></td>
-                                <td>{{ totalNonPayable(intervenant.heures) }} h</td>
+                                <td><span style="text-decoration:underline dotted;cursor: help;"
+                                          title="Aucun centre de coût">{{ totalNonPayable(intervenant.heures) }} h</span></td>
 
                             </tr>
                             </tbody>
@@ -201,11 +205,14 @@
                                            :title="totalPayable(intervenant.heures) == 0?'Aucune heure pré-paramétrée avec un centre de coût ne peut bénéficier d\'une demande de mise en paiement':''"
                                            checked="checked" class="checkbox-etudiant" type="checkbox"
                                            @change="refreshTotalConsommation()"></td>
-                                <td>{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</td>
+                                <td><a :href="urlIntervenant(intervenant)"
+                                       target="_blank">{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</a></td>
                                 <td><span
-                                    :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' ">
+                                    :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' "
+                                    style="text-decoration:underline dotted;cursor: help;">
                                     {{ totalPayable(intervenant.heures) }} h</span></td>
-                                <td>{{ totalNonPayable(intervenant.heures) }} h</td>
+                                <td><span style="text-decoration:underline dotted;cursor: help;"
+                                          title="Aucun centre de coût">{{ totalNonPayable(intervenant.heures) }} h</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -246,12 +253,14 @@
                                            class="checkbox-autre"
                                            type="checkbox"
                                            @change="refreshTotalConsommation()"></td>
-                                <td>{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</td>
+                                <td><a :href="urlIntervenant(intervenant)"
+                                       target="_blank">{{ intervenant.datasIntervenant.prenom + ' ' + intervenant.datasIntervenant.nom_usuel }}</a></td>
                                 <td><span
-                                    :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' ">
+                                    :title="totalRessourcePaieEtat(intervenant.heures) + ' HETD en paie état / ' + totalRessourcePropre(intervenant.heures) + ' HETD en ressource propre' "
+                                    style="text-decoration:underline dotted;cursor: help;">
                                     {{ totalPayable(intervenant.heures) }} h</span></td>
-                                <td>{{ totalNonPayable(intervenant.heures) }} h</td>
-
+                                <td><span style="text-decoration:underline dotted;cursor: help;"
+                                          title="Aucun centre de coût">{{ totalNonPayable(intervenant.heures) }} h</span></td>
                             </tr>
                             </tbody>
                         </table>

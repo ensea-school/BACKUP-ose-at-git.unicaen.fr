@@ -32,7 +32,9 @@ class Application
     {
         $appDir = dirname(dirname(__DIR__));
 
-        define('REQUEST_MICROTIME', microtime(true));
+        if (!defined('REQUEST_MICROTIME')) {
+            define('REQUEST_MICROTIME', microtime(true));
+        }
         chdir($appDir);
 
         /* Définition de la config globale, éventuellement à partir du fichier de config général */

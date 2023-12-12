@@ -40,21 +40,21 @@ class EnseignementAssertion extends AbstractAssertion
 
 
     /* ---- Routage général ---- */
-    public function __invoke(array $page) // gestion des visibilités de menus
+    public function __invoke (array $page) // gestion des visibilités de menus
     {
         return $this->assertPage($page);
     }
 
 
 
-    protected function assertPage(array $page)
+    protected function assertPage (array $page)
     {
         $role = $this->getRole();
         /* @var $role Role */
 
         $intervenant = null;
         if (isset($page['workflow-etape-code'])) {
-            $etape = $page['workflow-etape-code'];
+            $etape       = $page['workflow-etape-code'];
             $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
             if (
@@ -80,10 +80,10 @@ class EnseignementAssertion extends AbstractAssertion
                     return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_REALISE_VISUALISATION);
                 case 'intervenant/enseignement-prevu':
                     return $this->assertPageEnseignements($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
-                    break;
+                break;
                 case 'intervenant/enseignement-realise':
                     return $this->assertPageEnseignements($role, $intervenant, TypeVolumeHoraire::CODE_REALISE);
-                    break;
+                break;
             }
         }
 
@@ -94,11 +94,11 @@ class EnseignementAssertion extends AbstractAssertion
 
     /**
      * @param ResourceInterface $entity
-     * @param string $privilege
+     * @param string            $privilege
      *
      * @return boolean
      */
-    protected function assertEntity(ResourceInterface $entity, $privilege = null)
+    protected function assertEntity (ResourceInterface $entity, $privilege = null)
     {
         $role = $this->getRole();
 
@@ -123,14 +123,14 @@ class EnseignementAssertion extends AbstractAssertion
                     case Privileges::ENSEIGNEMENT_REALISE_VALIDATION:
                         return $this->assertEnseignementValidation($role, $entity);
                 }
-                break;
+            break;
             case $entity instanceof VolumeHoraire:
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_PREVU_VALIDATION:
                     case Privileges::ENSEIGNEMENT_REALISE_VALIDATION:
                         return $this->assertVolumeHoraireValidation($role, $entity);
                 }
-                break;
+            break;
             case $entity instanceof Intervenant:
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_PREVU_VISUALISATION:
@@ -148,7 +148,7 @@ class EnseignementAssertion extends AbstractAssertion
                     case Privileges::ENSEIGNEMENT_EXTERIEUR:
                         return $this->assertIntervenantEnseignementExterieur($role, $entity);
                 }
-                break;
+            break;
             case $entity instanceof Validation:
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_PREVU_VALIDATION:
@@ -157,7 +157,7 @@ class EnseignementAssertion extends AbstractAssertion
                     case Privileges::ENSEIGNEMENT_DEVALIDATION:
                         return $this->assertValidationDevalidation($role, $entity);
                 }
-                break;
+            break;
         }
 
         return true;
@@ -172,9 +172,9 @@ class EnseignementAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController ($controller, $action = null, $privilege = null)
     {
-        $role = $this->getRole();
+        $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
@@ -186,19 +186,19 @@ class EnseignementAssertion extends AbstractAssertion
         switch ($controller . '.' . $action) {
             case EnseignementController::class . '.validation':
                 return $role->hasPrivilege(Privileges::ENSEIGNEMENT_PREVU_VISUALISATION) || $role->hasPrivilege(Privileges::ENSEIGNEMENT_REALISE_VISUALISATION);
-                break;
+            break;
             case EnseignementController::class . '.resume':
                 return $this->assertEnseignements($role);
-                break;
+            break;
             case EnseignementController::class . '.importAgenda':
                 return $this->assertImportAgenda($role);
-                break;
+            break;
             case EnseignementController::class . '.intervenant-saisie-prevu':
                 return $this->assertPageEnseignements($role, $intervenant, TypeVolumeHoraire::CODE_PREVU);
-                break;
+            break;
             case EnseignementController::class . '.intervenant-saisie-realise':
                 return $this->assertPageEnseignements($role, $intervenant, TypeVolumeHoraire::CODE_REALISE);
-                break;
+            break;
         }
 
         return true;
@@ -206,7 +206,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertPageEnseignements(Role $role, Intervenant $intervenant = null, string $typeVolumeHoraireCode)
+    protected function assertPageEnseignements (Role $role, Intervenant $intervenant = null, string $typeVolumeHoraireCode)
     {
         if (!$intervenant) return true;
 
@@ -230,7 +230,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignements(Role $role)
+    protected function assertEnseignements (Role $role)
     {
         return $this->asserts([
             (
@@ -245,7 +245,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertImportAgenda(Role $role)
+    protected function assertImportAgenda (Role $role)
     {
         return true;
         //return $this->getAssertionService()->assertEtapeAtteignable(WfEtape::CODE_SERVICE_SAISIE);
@@ -253,11 +253,11 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignementVisualisation(Role $role, Service $service)
+    protected function assertEnseignementVisualisation (Role $role, Service $service)
     {
         $typeVolumeHoraire = $service->getTypeVolumeHoraire();
-        $intervenant = $service->getIntervenant();
-        $statut = $intervenant->getStatut();
+        $intervenant       = $service->getIntervenant();
+        $statut            = $intervenant->getStatut();
 
         $asserts = [
             $this->getAssertionService()->assertIntervenant($role, $intervenant),
@@ -275,14 +275,14 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignementEdition(Role $role, Service $service)
+    protected function assertEnseignementEdition (Role $role, Service $service)
     {
         $structure = $role->getStructure();
 
         $asserts = [];
 
         if ($structure) {
-            $structureAffectation = $service->getIntervenant() ? $service->getIntervenant()->getStructure() : null;
+            $structureAffectation  = $service->getIntervenant() ? $service->getIntervenant()->getStructure() : null;
             $structureEnseignement = $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null;
 
             if ($structureAffectation && $structureEnseignement) {
@@ -308,16 +308,16 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertHasEnseignements(Intervenant $intervenant, Structure $structure, string $etape, Role $role)
+    protected function assertHasEnseignements (Intervenant $intervenant, Structure $structure, string $etape, Role $role)
     {
         $typeIntervenant = $intervenant->getStatut()->getTypeIntervenant();
         switch ($etape) {
             case WfEtape::CODE_SERVICE_VALIDATION:
                 $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
-                break;
+            break;
             case WfEtape::CODE_SERVICE_VALIDATION_REALISE:
                 $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
-                break;
+            break;
             default:
                 throw new \Exception('Etape de workflow non gérée');
         }
@@ -343,7 +343,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function hasHeures(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire): bool
+    protected function hasHeures (Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire): bool
     {
         $sql = "
         SELECT
@@ -367,7 +367,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertVolumeHoraireValidation(Role $role, VolumeHoraire $volumeHoraire)
+    protected function assertVolumeHoraireValidation (Role $role, VolumeHoraire $volumeHoraire)
     {
         $service = $volumeHoraire->getService();
 
@@ -376,14 +376,14 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignementValidation(Role $role, Service $service)
+    protected function assertEnseignementValidation (Role $role, Service $service)
     {
         return $this->assertValidation($role, $service->getIntervenant(), $service->getStructure());
     }
 
 
 
-    protected function assertValidationValidation(Role $role, Validation $validation)
+    protected function assertValidationValidation (Role $role, Validation $validation)
     {
         return $this->asserts([
             !$validation->getId(),
@@ -393,7 +393,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertValidation(Role $role, Intervenant $intervenant, ?Structure $structure)
+    protected function assertValidation (Role $role, Intervenant $intervenant, ?Structure $structure)
     {
         return $this->asserts([
             $this->getAssertionService()->assertIntervenant($role, $intervenant),
@@ -403,7 +403,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertValidationDevalidation(Role $role, Validation $validation)
+    protected function assertValidationDevalidation (Role $role, Validation $validation)
     {
         return $this->asserts([
             $validation->getId(),
@@ -415,7 +415,7 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertEnseignementExterieur(Role $role, Service $service)
+    protected function assertEnseignementExterieur (Role $role, Service $service)
     {
         return $this->asserts([
             $this->assertIntervenantEnseignementExterieur($role, $service->getIntervenant()),
@@ -424,21 +424,22 @@ class EnseignementAssertion extends AbstractAssertion
 
 
 
-    protected function assertIntervenantEnseignementExterieur(Role $role, Intervenant $intervenant)
+    protected function assertIntervenantEnseignementExterieur (Role $role, Intervenant $intervenant)
     {
+
         return $this->asserts([
-            $intervenant->getStatut()->estPermanent(),
+            $intervenant->getStatut()->getServiceExterieur(),
             $role->hasPrivilege(Privileges::ENSEIGNEMENT_EXTERIEUR),
         ]);
     }
 
 
 
-    protected function assertIntervenantEnseignement(
-        Role        $role,
+    protected function assertIntervenantEnseignement (
+        Role $role,
         Intervenant $intervenant,
-        string      $typeVolumeHoraireCode,
-        bool        $edition = false
+        string $typeVolumeHoraireCode,
+        bool $edition = false
     )
     {
         if (!$this->getAssertionService()->assertIntervenant($role, $intervenant)) return false; // si on n'est pas le bon intervenant!!

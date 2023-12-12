@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e89e8004eda1b82acbc22fe8a31e49ba",
+    "content-hash": "24450508c8c0f553521e9b2d7e49a3cb",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -6938,6 +6938,30 @@
             "time": "2023-11-15T15:52:42+00:00"
         },
         {
+            "name": "unicaen/bddadmin",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/bddadmin.git",
+                "reference": "9759a6a5cac894a27187a08f50c6ffeaa00300e9"
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Unicaen\\BddAdmin\\": "src/",
+                    "Unicaen\\BddAdmin\\Tests": "tests/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "description": "Module pour administrer des bases de données Postgresql et Oracle",
+            "time": "2023-12-12T10:05:11+00:00"
+        },
+        {
             "name": "unicaen/bjy-authorize",
             "version": "6.1.0",
             "source": {
@@ -10299,7 +10323,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "unicaen/utilisateur": 20
+        "unicaen/utilisateur": 20,
+        "unicaen/bddadmin": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

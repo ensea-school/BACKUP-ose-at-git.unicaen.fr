@@ -21,6 +21,10 @@
                 <join-column name="PARENT_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+            <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
         <one-to-many field="fille" target-entity="Referentiel\Entity\Db\FonctionReferentiel" mapped-by="parent"/>
 
         <many-to-one field="domaineFonctionnel" target-entity="Application\Entity\Db\DomaineFonctionnel">

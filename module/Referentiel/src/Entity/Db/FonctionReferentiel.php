@@ -9,9 +9,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityNotFoundException;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\StructureAwareTrait;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
-use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -83,22 +83,6 @@ class FonctionReferentiel implements HistoriqueAwareInterface, ParametreEntityIn
     public function setCode(?string $code): FonctionReferentiel
     {
         $this->code = $code;
-
-        return $this;
-    }
-
-
-
-    public function getLibelleCourt(): ?string
-    {
-        return $this->libelleCourt;
-    }
-
-
-
-    public function setLibelleCourt(?string $libelleCourt): FonctionReferentiel
-    {
-        $this->libelleCourt = $libelleCourt;
 
         return $this;
     }
@@ -210,5 +194,21 @@ class FonctionReferentiel implements HistoriqueAwareInterface, ParametreEntityIn
         }
 
         return $str;
+    }
+
+
+
+    public function getLibelleCourt(): ?string
+    {
+        return $this->libelleCourt;
+    }
+
+
+
+    public function setLibelleCourt(?string $libelleCourt): FonctionReferentiel
+    {
+        $this->libelleCourt = $libelleCourt;
+
+        return $this;
     }
 }

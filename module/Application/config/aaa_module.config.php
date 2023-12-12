@@ -10,7 +10,7 @@ use UnicaenAuthentification\View\Helper\LocalConnectViewHelper;
 use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 
 $config = [
-    'doctrine'           => [
+    'doctrine'   => [
         'connection'    => [
             'orm_default' => [
                 'driverClass' => \Doctrine\DBAL\Driver\OCI8\Driver::class,
@@ -60,10 +60,10 @@ $config = [
             ],
         ],
     ],
-    'zfcuser'            => [
+    'zfcuser'    => [
         'user_entity_class' => Entity\Db\Utilisateur::class,
     ],
-    'translator'         => [
+    'translator' => [
         'locale'                    => \AppConfig::get('global', 'locale'),
         'translation_file_patterns' => [
             [
@@ -73,7 +73,7 @@ $config = [
             ],
         ],
     ],
-    'router'             => [
+    'router'     => [
         'routes' => [
             'home'             => [
                 'type'    => 'Literal',
@@ -85,7 +85,7 @@ $config = [
                     ],
                 ],
             ],
-            'plan'      => [
+            'plan'             => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/plan',
@@ -160,15 +160,15 @@ $config = [
     ],
     'service_manager'    => [
         'invokables' => [
-            Service\AnneeService::class                            => Service\AnneeService::class,
-            Service\LocalContextService::class                     => Service\LocalContextService::class,
-            Service\ParametresService::class                       => Service\ParametresService::class,
-            Service\SourceService::class                           => Service\SourceService::class,
-            Service\AffectationService::class                      => Service\AffectationService::class,
-            Service\RoleService::class                             => Service\RoleService::class,
-            Service\FichierService::class                          => Service\FichierService::class,
-            Service\TypeValidationService::class                   => Service\TypeValidationService::class,
-            Service\ValidationService::class                       => Service\ValidationService::class,
+            Service\AnneeService::class          => Service\AnneeService::class,
+            Service\LocalContextService::class   => Service\LocalContextService::class,
+            Service\ParametresService::class     => Service\ParametresService::class,
+            Service\SourceService::class         => Service\SourceService::class,
+            Service\AffectationService::class    => Service\AffectationService::class,
+            Service\RoleService::class           => Service\RoleService::class,
+            Service\FichierService::class        => Service\FichierService::class,
+            Service\TypeValidationService::class => Service\TypeValidationService::class,
+            Service\ValidationService::class     => Service\ValidationService::class,
         ],
         'factories'  => [
             \Laminas\Navigation\Navigation::class                       => Navigation\NavigationFactory::class,
@@ -202,7 +202,7 @@ $config = [
         'factories'  => [
             UserProfileSelectRadioItem::class      => UserProfileSelectRadioItemFactory::class,
             \UnicaenApp\View\Helper\AppLink::class => View\Helper\AppLinkFactory::class,
-            LocalConnectViewHelper::class => LocalConnectViewHelperFactory::class,
+            LocalConnectViewHelper::class          => LocalConnectViewHelperFactory::class,
             'tab'                                  => View\Helper\TabViewHelperFactory::class,
         ],
         'invokables' => [

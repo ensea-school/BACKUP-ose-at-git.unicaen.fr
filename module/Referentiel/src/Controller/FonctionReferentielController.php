@@ -17,6 +17,9 @@ class FonctionReferentielController extends AbstractController
 
     public function indexAction()
     {
+        $this->em()->getFilters()->enable('annee')->init([
+            FonctionReferentiel::class,
+        ]);
         $fonctionsReferentiels = $this->getServiceFonctionReferentiel()->getList();
 
         return compact('fonctionsReferentiels');
@@ -27,6 +30,10 @@ class FonctionReferentielController extends AbstractController
     public function saisieAction()
     {
         /* @var $fonctionReferentiel FonctionReferentiel */
+
+        $this->em()->getFilters()->enable('annee')->init([
+            FonctionReferentiel::class,
+        ]);
 
         $fonctionReferentiel = $this->getEvent()->getParam('fonctionReferentiel');
         $tab                 = $this->params()->fromQuery('tab', 'fiche');

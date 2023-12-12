@@ -13,6 +13,7 @@
 ## Améliorations
 
 * Une colonne "Structure" a été ajoutée à l'export de l'offre de formation
+* Activation de la saisie de service hors établissement, en fonction de l'option de statut "L'intervenant pourra assurer des services dans d'autres établissements" et non par rapport au type d'intervenant (#54004)
 
 ## Corrections
 

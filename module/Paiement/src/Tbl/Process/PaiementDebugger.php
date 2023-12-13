@@ -7,7 +7,7 @@ use Application\Constants;
 use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Structure;
+use Lieu\Entity\Db\Structure;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
@@ -31,12 +31,12 @@ class PaiementDebugger
 {
     protected PaiementProcess $process;
 
-    public ?Intervenant $intervenant = null;
+    public ?Intervenant       $intervenant = null;
 
     /** @var ServiceAPayer[] */
     protected array $services = [];
 
-    protected array $pg = [
+    protected array $pg       = [
         'mode'                           => [
             'libelle' => 'Mode de saisie pour les enseignements réalisés',
         ],
@@ -92,26 +92,26 @@ class PaiementDebugger
 
 
 
-    public function __construct(PaiementProcess $process)
+    public function __construct (PaiementProcess $process)
     {
         $this->process = $process;
     }
 
 
 
-    public function run(Intervenant $intervenant)
+    public function run (Intervenant $intervenant)
     {
         $this->intervenant = $intervenant;
-        $this->services = $this->process->debug(['INTERVENANT_ID' => $intervenant->getId()]);
+        $this->services    = $this->process->debug(['INTERVENANT_ID' => $intervenant->getId()]);
     }
 
 
 
-    public function parametres(): array
+    public function parametres (): array
     {
         $statut = $this->intervenant->getStatut();
 
-        $this->pg['mode']['value'] = $statut->getModeEnseignementRealise();
+        $this->pg['mode']['value']  = $statut->getModeEnseignementRealise();
         $this->pg['mode']['libval'] = ucfirst($this->pg['mode']['value']);
 
         if ($statut->getTauxRemu()) {
@@ -168,7 +168,7 @@ class PaiementDebugger
 
 
 
-    public function servicesAPayer(): array
+    public function servicesAPayer (): array
     {
         $saps = [];
 
@@ -190,15 +190,15 @@ class PaiementDebugger
                 }
             }
             if ($service->referentiel) {
-                $s['type'] = 'Référentiel';
+                $s['type']    = 'Référentiel';
                 $s['libelle'] = (string)$this->getEntity(ServiceReferentiel::class, $service->referentiel);
             }
             if ($service->mission) {
-                $s['type'] = 'Mission';
+                $s['type']    = 'Mission';
                 $s['libelle'] = (string)$this->getEntity(Mission::class, $service->mission);
             }
 
-            $s['parametres']['Structure'] = (string)$this->getEntity(Structure::class, $service->structure);
+            $s['parametres']['Structure']      = (string)$this->getEntity(Structure::class, $service->structure);
             $s['parametres']['Type d\'heures'] = (string)$this->getEntity(TypeHeures::class, $service->typeHeures);
 
             if ($service->defCentreCout) {
@@ -216,7 +216,7 @@ class PaiementDebugger
             $s['laps'] = [];
 
             foreach ($service->lignesAPayer as $lap) {
-                $l = $lap->toArray();
+                $l                  = $lap->toArray();
                 $l['volumeHoraire'] = [];
                 if ($l['volumeHoraireId']) {
                     if ($service->service) {
@@ -235,19 +235,19 @@ class PaiementDebugger
                         );
                     }
                 }
-                $l['tauxRemu'] = (string)$this->getEntity(TauxRemu::class, $l['tauxRemu']);
+                $l['tauxRemu']   = (string)$this->getEntity(TauxRemu::class, $l['tauxRemu']);
                 $l['tauxValeur'] = $this->fts($l['tauxValeur']);
-                $l['heures'] = $this->fts($l['heures'] / 100);
-                $l['heuresAA'] = $this->fts($l['heuresAA'] / 100);
-                $l['heuresAC'] = $this->fts($l['heuresAC'] / 100);
+                $l['heures']     = $this->fts($l['heures'] / 100);
+                $l['heuresAA']   = $this->fts($l['heuresAA'] / 100);
+                $l['heuresAC']   = $this->fts($l['heuresAC'] / 100);
                 foreach ($l['misesEnPaiement'] as $i => $m) {
-                    $m['heures'] = $this->fts(($m['heuresAA'] + $m['heuresAC']) / 100);
-                    $m['heuresAA'] = $this->fts($m['heuresAA'] / 100);
-                    $m['heuresAC'] = $this->fts($m['heuresAC'] / 100);
-                    $m['date'] = \DateTime::createFromFormat('Y-m-d', $m['date'])->format('d/m/Y');
-                    $m['periodePaiement'] = (string)$this->getEntity(Periode::class, $m['periodePaiement']);
-                    $m['centreCout'] = (string)$this->getEntity(CentreCout::class, $m['centreCout']);
-                    $m['domaineFonctionnel'] = (string)$this->getEntity(DomaineFonctionnel::class, $m['domaineFonctionnel']);
+                    $m['heures']              = $this->fts(($m['heuresAA'] + $m['heuresAC']) / 100);
+                    $m['heuresAA']            = $this->fts($m['heuresAA'] / 100);
+                    $m['heuresAC']            = $this->fts($m['heuresAC'] / 100);
+                    $m['date']                = \DateTime::createFromFormat('Y-m-d', $m['date'])->format('d/m/Y');
+                    $m['periodePaiement']     = (string)$this->getEntity(Periode::class, $m['periodePaiement']);
+                    $m['centreCout']          = (string)$this->getEntity(CentreCout::class, $m['centreCout']);
+                    $m['domaineFonctionnel']  = (string)$this->getEntity(DomaineFonctionnel::class, $m['domaineFonctionnel']);
                     $l['misesEnPaiement'][$i] = $m;
                 }
 
@@ -257,15 +257,15 @@ class PaiementDebugger
             $s['misesEnPaiement'] = [];
 
             foreach ($service->misesEnPaiement as $mep) {
-                $m = $mep->toArray();
-                $m['heures'] = $this->fts(($m['heuresAA'] + $m['heuresAC']) / 100);
-                $m['heuresAA'] = $this->fts($m['heuresAA'] / 100);
-                $m['heuresAC'] = $this->fts($m['heuresAC'] / 100);
-                $m['date'] = \DateTime::createFromFormat('Y-m-d', $m['date'])->format('d/m/Y');
-                $m['periodePaiement'] = (string)$this->getEntity(Periode::class, $m['periodePaiement']);
-                $m['centreCout'] = (string)$this->getEntity(CentreCout::class, $m['centreCout']);
+                $m                       = $mep->toArray();
+                $m['heures']             = $this->fts(($m['heuresAA'] + $m['heuresAC']) / 100);
+                $m['heuresAA']           = $this->fts($m['heuresAA'] / 100);
+                $m['heuresAC']           = $this->fts($m['heuresAC'] / 100);
+                $m['date']               = \DateTime::createFromFormat('Y-m-d', $m['date'])->format('d/m/Y');
+                $m['periodePaiement']    = (string)$this->getEntity(Periode::class, $m['periodePaiement']);
+                $m['centreCout']         = (string)$this->getEntity(CentreCout::class, $m['centreCout']);
                 $m['domaineFonctionnel'] = (string)$this->getEntity(DomaineFonctionnel::class, $m['domaineFonctionnel']);
-                $s['misesEnPaiement'][] = $m;
+                $s['misesEnPaiement'][]  = $m;
             }
 
             $saps[] = $s;
@@ -276,7 +276,7 @@ class PaiementDebugger
 
 
 
-    protected function getEntity(string $class, mixed $id): mixed
+    protected function getEntity (string $class, mixed $id): mixed
     {
         if (!$id) {
             return null;
@@ -287,15 +287,15 @@ class PaiementDebugger
 
 
 
-    protected function vhLibelle(VolumeHoraire|VolumeHoraireReferentiel|VolumeHoraireMission $volumeHoraire): string
+    protected function vhLibelle (VolumeHoraire|VolumeHoraireReferentiel|VolumeHoraireMission $volumeHoraire): string
     {
         $props = [];
 
         if ($volumeHoraire instanceof VolumeHoraire) {
-            return $volumeHoraire->getHeures().' heures '.$volumeHoraire->getTypeIntervention();
+            return $volumeHoraire->getHeures() . ' heures ' . $volumeHoraire->getTypeIntervention();
         }
         if ($volumeHoraire instanceof VolumeHoraireReferentiel) {
-            return $volumeHoraire->getHeures().' heures';
+            return $volumeHoraire->getHeures() . ' heures';
         }
         if ($volumeHoraire instanceof VolumeHoraireMission) {
             return 'Le ' . $volumeHoraire->getHoraireDebut()->format(Constants::DATE_FORMAT)
@@ -308,7 +308,7 @@ class PaiementDebugger
 
 
 
-    protected function fts(float $value): string
+    protected function fts (float $value): string
     {
         return number_format($value, 2, ',', ' ');
     }

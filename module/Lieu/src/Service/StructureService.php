@@ -286,7 +286,6 @@ class StructureService extends AbstractEntityService
 
 
 
-
     /**
      * Méthode qui renvoient la liste des structures pour lesquelles il reste des demandes de mise en paiement
      * d'heures à faire
@@ -297,8 +296,8 @@ class StructureService extends AbstractEntityService
     public function getStructuresDemandeMiseEnPaiement (): array
     {
         $structures = [];
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $qb = $this->finderByDemandeMiseEnPaiement();
+        $role       = $this->getServiceContext()->getSelectedIdentityRole();
+        $qb         = $this->finderByDemandeMiseEnPaiement();
         $this->finderByRole($role, $qb);
 
         $listeStructures = $this->getList($qb);

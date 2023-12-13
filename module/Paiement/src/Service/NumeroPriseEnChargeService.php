@@ -60,7 +60,7 @@ class NumeroPriseEnChargeService extends AbstractService
             $em->commit();
         } catch (\Exception $e) {
 
-            $errors['message'] = "Fichier invalide, impossible de le lire. Merci de mettre le fichier au format xlsx ou ods";
+            $errors['message'] = "Fichier invalide, impossible de le lire. Merci de mettre le fichier au format xlsx ou ods (" . $e->getMessage() . ")";
         }
 
 

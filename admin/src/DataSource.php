@@ -59,7 +59,7 @@ class DataSource
     {
         $departements = [];
 
-        $r = fopen($this->oseAdmin->getOseDir() . 'data/departement.csv', 'r');
+        $r = fopen(getcwd() . '/data/departement.csv', 'r');
         $i = 0;
         while ($d = fgetcsv($r, 0, ',', '"')) {
             $i++;
@@ -85,7 +85,7 @@ class DataSource
 
     public function IMPORT_TABLES()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/import_tables.php';
+        $data = require getcwd() . '/data/import_tables.php';
 
         $ordre = 0;
         $d = [];
@@ -103,7 +103,7 @@ class DataSource
 
     public function JOUR_FERIE()
     {
-        $joursFeries = require $this->oseAdmin->getOseDir() . 'data/jours_feries.php';
+        $joursFeries = require getcwd() . '/data/jours_feries.php';
 
         $jfs = [];
         for ($a = 1950; $a < 2100; $a++) {
@@ -132,14 +132,14 @@ class DataSource
 
     public function ETAT_SORTIE()
     {
-        return require $this->oseAdmin->getOseDir() . 'data/etats_sortie.php';
+        return require getcwd() . '/data/etats_sortie.php';
     }
 
 
 
     public function CATEGORIE_PRIVILEGE()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
+        $data = require getcwd() . '/data/privileges.php';
         $categories = [];
         foreach ($data as $code => $record) {
             $categories[] = [
@@ -156,7 +156,7 @@ class DataSource
 
     public function PRIVILEGE()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/privileges.php';
+        $data = require getcwd() . '/data/privileges.php';
         $privileges = [];
         foreach ($data as $code => $record) {
             $io = 0;
@@ -178,7 +178,7 @@ class DataSource
 
     public function FORMULE()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/formules.php';;
+        $data = require getcwd() . '/data/formules.php';;
         $formules = [];
         foreach ($data as $id => $formule) {
             $formule['ID'] = $id;
@@ -197,7 +197,7 @@ class DataSource
 
     public function STATUT()
     {
-        $donneesParDefaut = require $this->oseAdmin->getOseDir() . '/data/donnees_par_defaut.php';
+        $donneesParDefaut = require getcwd() . '/data/donnees_par_defaut.php';
         $data = $donneesParDefaut['STATUT'];
 
         $statuts = [];
@@ -216,7 +216,7 @@ class DataSource
 
     public function TYPE_PIECE_JOINTE_STATUT()
     {
-        $donneesParDefaut = require $this->oseAdmin->getOseDir() . '/data/donnees_par_defaut.php';
+        $donneesParDefaut = require getcwd() . '/data/donnees_par_defaut.php';
         $data = $donneesParDefaut['TYPE_PIECE_JOINTE_STATUT'];
 
         $statuts = [];
@@ -235,7 +235,7 @@ class DataSource
 
     public function PLAFOND()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data = require getcwd() . '/data/plafonds.php';
         $plafonds = [];
 
         foreach ($data['plafonds'] as $numero => $p) {
@@ -258,7 +258,7 @@ class DataSource
 
     public function PLAFOND_ETAT()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data = require getcwd() . '/data/plafonds.php';
         $plafonds = [];
         $id = 1;
         foreach ($data['etats'] as $code => $pe) {
@@ -279,7 +279,7 @@ class DataSource
 
     public function PLAFOND_PERIMETRE()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data = require getcwd() . '/data/plafonds.php';
         $plafonds = [];
         $id = 0;
         foreach ($data['perimetres'] as $code => $libelle) {
@@ -299,7 +299,7 @@ class DataSource
 
     public function TAUX_REMU(string $action)
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/taux_remu.php';
+        $data = require getcwd() . '/data/taux_remu.php';
 
         $tauxRemu = [];
 
@@ -323,7 +323,7 @@ class DataSource
 
     public function TAUX_REMU_VALEUR(string $action)
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/taux_remu.php';
+        $data = require getcwd() . '/data/taux_remu.php';
 
         $tauxValeurs = [];
 
@@ -349,7 +349,7 @@ class DataSource
 
     public function TYPE_MISSION()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/type_mission.php';
+        $data = require getcwd() . '/data/type_mission.php';
 
         $tms = [];
 
@@ -374,7 +374,7 @@ class DataSource
 
     public function TYPE_INDICATEUR()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
+        $data = require getcwd() . '/data/indicateurs.php';
         $indicateurs = [];
         $ordre = 0;
         foreach ($data as $libelle => $indicateur) {
@@ -393,7 +393,7 @@ class DataSource
 
     public function INDICATEUR()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/indicateurs.php';
+        $data = require getcwd() . '/data/indicateurs.php';
         $indicateurs = [];
         $ordre = 0;
         foreach ($data as $typeIndicateur) {
@@ -422,7 +422,7 @@ class DataSource
 
     public function WF_ETAPE()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/workflow_etapes.php';
+        $data = require getcwd() . '/data/workflow_etapes.php';
         $etapes = [];
         $ordre = 1;
         foreach ($data as $code => $etape) {
@@ -440,7 +440,7 @@ class DataSource
     {
         $bdd = $this->oseAdmin->getBdd();
 
-        $data = require $this->oseAdmin->getOseDir() . 'data/parametres.php';
+        $data = require getcwd() . '/data/parametres.php';
 
         foreach ($data as $nom => $params) {
             if (isset($params['QUERY'])) {

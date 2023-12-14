@@ -25,7 +25,7 @@ class v18Statuts extends AbstractMigration
     public function before()
     {
         $bdd = $this->manager->getBdd();
-        $c = $this->manager->getOseAdmin()->getConsole();
+        $c = $this->manager->getOseAdmin()->console();
 
         try {
             $this->preMigrationStatuts();
@@ -105,7 +105,7 @@ class v18Statuts extends AbstractMigration
     public function after()
     {
         $bdd = $this->manager->getBdd();
-        $c = $this->manager->getOseAdmin()->getConsole();
+        $c = $this->manager->getOseAdmin()->console();
 
         $c->begin('Mise à jour des libellés des champs complémentaires pour les statuts');
 
@@ -120,7 +120,7 @@ class v18Statuts extends AbstractMigration
     public function preMigrationStatuts()
     {
         $bdd = $this->manager->getBdd();
-        $c = $this->manager->getOseAdmin()->getConsole();
+        $c = $this->manager->getOseAdmin()->console();
 
         $c->begin('Mise à jour de la liste des statuts');
 
@@ -432,7 +432,7 @@ class v18Statuts extends AbstractMigration
     protected function preMigrationIntervenants()
     {
         $bdd = $this->manager->getBdd();
-        $c = $this->manager->getOseAdmin()->getConsole();
+        $c = $this->manager->getOseAdmin()->console();
 
         $c->begin('Application des nouveaux statuts aux intervenants');
 
@@ -481,7 +481,7 @@ class v18Statuts extends AbstractMigration
     protected function preMigrationDossiers()
     {
         $bdd = $this->manager->getBdd();
-        $c = $this->manager->getOseAdmin()->getConsole();
+        $c = $this->manager->getOseAdmin()->console();
 
         $c->begin('Application des nouveaux statuts aux données personnelles');
 
@@ -525,7 +525,7 @@ class v18Statuts extends AbstractMigration
     protected function preMigrationTypePieceJointeStatuts()
     {
         $bdd = $this->manager->getBdd();
-        $c = $this->manager->getOseAdmin()->getConsole();
+        $c = $this->manager->getOseAdmin()->console();
 
         $c->begin('Application des nouveaux statuts aux paramétrages de PJ');
 
@@ -613,7 +613,7 @@ class v18Statuts extends AbstractMigration
     protected function preMigrationTypeInterventionStatuts()
     {
         $bdd = $this->manager->getBdd();
-        $c = $this->manager->getOseAdmin()->getConsole();
+        $c = $this->manager->getOseAdmin()->console();
 
         $c->begin('Application des nouveaux statuts aux paramétrages des types d\'intervention');
 

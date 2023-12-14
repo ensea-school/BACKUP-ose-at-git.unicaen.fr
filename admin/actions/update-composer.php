@@ -3,7 +3,7 @@
 // A supprimer pour après la version 20!!!
 
 // Initialisation
-$osedir = $oa->getOseDir();
+$osedir = getcwd();
 
 // Récupération des dépendances
 $c->println("\nMise à jour des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);

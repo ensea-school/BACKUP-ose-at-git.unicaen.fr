@@ -6943,7 +6943,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bddadmin.git",
-                "reference": "9759a6a5cac894a27187a08f50c6ffeaa00300e9"
+                "reference": "a7d389595f1fd9850c8b78b8b02927638d33e668"
             },
             "require": {
                 "php": ">=8.2"
@@ -6952,14 +6952,14 @@
             "autoload": {
                 "psr-4": {
                     "Unicaen\\BddAdmin\\": "src/",
-                    "Unicaen\\BddAdmin\\Tests": "tests/"
+                    "Unicaen\\BddAdmin\\Tests\\": "tests/"
                 },
                 "classmap": [
                     "./Module.php"
                 ]
             },
             "description": "Module pour administrer des bases de données Postgresql et Oracle",
-            "time": "2023-12-12T10:05:11+00:00"
+            "time": "2023-12-13T08:14:43+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",

@@ -24,7 +24,7 @@ class v18Indicateurs extends AbstractMigration
     public function before()
     {
         $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
 
         $c->begin('Préparation à la mise à jour des indicateurs');
 
@@ -35,7 +35,7 @@ class v18Indicateurs extends AbstractMigration
               ORDRE NUMBER DEFAULT 1 NOT NULL ENABLE
             )');
 
-        $indicateurs = require $this->manager->getOseAdmin()->getOseDir() . '/data/indicateurs.php';
+        $indicateurs = require getcwd() . '/data/indicateurs.php';
         foreach ($indicateurs as $libelle => $type) {
             $data = ['ID' => $type['id'], 'LIBELLE' => $libelle];
             $bdd->getTable('TYPE_INDICATEUR')->insert($data);

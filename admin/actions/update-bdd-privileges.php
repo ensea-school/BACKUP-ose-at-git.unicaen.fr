@@ -1,7 +1,9 @@
 <?php
 
 $oa->getBdd()->dataUpdater()->run('privileges');
-$oa->exec('UnicaenCode GeneratePrivileges write=true');
+
+$args = 'UnicaenCode GeneratePrivileges write=true';
+$c->passthru("php " . getcwd() . "/public/index.php " . $args);
 
 // Néttoyage des caches
 $oa->run('clear-cache');

@@ -32,7 +32,7 @@ trait EtapeServiceAwareTrait
     public function getServiceEtape(): ?EtapeService
     {
         if (empty($this->serviceEtape)) {
-            $this->serviceEtape = \Application::$container->get(EtapeService::class);
+            $this->serviceEtape = \OseAdmin::instance()->container()->get(EtapeService::class);
         }
 
         return $this->serviceEtape;

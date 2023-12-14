@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-$c = new Console();
+$c = new OseConsole();
 $c->setInputOptions([
     'version:',
     'config-file:',
@@ -186,7 +186,7 @@ class OseDeploy
     const MIN_VERSION = 9; // version minimum installable
 
     /**
-     * @var Console
+     * @var OseConsole
      */
     protected $console;
 
@@ -205,9 +205,9 @@ class OseDeploy
     /**
      * OseDeploy constructor.
      *
-     * @param Console $console
+     * @param OseConsole $console
      */
-    public function __construct(Console $console)
+    public function __construct(OseConsole $console)
     {
         $this->console = $console;
     }

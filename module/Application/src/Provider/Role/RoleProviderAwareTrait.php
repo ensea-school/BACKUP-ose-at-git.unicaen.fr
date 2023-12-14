@@ -31,7 +31,7 @@ trait RoleProviderAwareTrait
     public function getProviderRoleRole(): ?RoleProvider
     {
         if (empty($this->providerRoleRole)) {
-            $this->providerRoleRole = \Application::$container->get(RoleProvider::class);
+            $this->providerRoleRole = \OseAdmin::instance()->container()->get(RoleProvider::class);
         }
 
         return $this->providerRoleRole;

@@ -8,7 +8,7 @@ $bdd->setLogger($c);
 
 /* Mise en place du schéma de la BDD */
 $ref = new Ddl();
-$ref->loadFromDir($oa->getOseDir() . 'data/ddl');
+$ref->loadFromDir(getcwd() . '/data/ddl');
 $bdd->create($ref);
 
 /* Insertion des données */
@@ -23,7 +23,9 @@ $bdd->setOption('histo-user-id', $oa->getOseAppliId());
 $bdd->dataUpdater()->run('install');
 
 /* On construit les plafonds et les tableaux de bord */
-$oa->exec('plafonds construire');
+$args = 'plafonds construire';
+$c->passthru("php " . getcwd() . "/public/index.php " . $args);
+
 
 /* Définition d'un mdp pour oseappli */
 if ($c->hasOption('oseappli-pwd')) {
@@ -42,7 +44,8 @@ if ($c->hasOption('oseappli-pwd')) {
 }
 
 $c->println('Application du mot de passe de oseappli...');
-$oa->exec("changement-mot-de-passe --utilisateur=oseappli --mot-de-passe=$pwd1");
+$args = "changement-mot-de-passe --utilisateur=oseappli --mot-de-passe=$pwd1";
+$c->passthru("php " . getcwd() . "/public/index.php " . $args);
 
 $c->println('Mot de passe changé', $c::COLOR_LIGHT_GREEN);
 

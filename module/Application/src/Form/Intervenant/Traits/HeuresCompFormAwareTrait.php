@@ -35,6 +35,6 @@ trait HeuresCompFormAwareTrait
             return $this->formIntervenantHeuresComp;
         }
 
-        return \Application::$container->get('FormElementManager')->get(HeuresCompForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(HeuresCompForm::class);
     }
 }

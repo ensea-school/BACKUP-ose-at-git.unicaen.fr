@@ -32,7 +32,7 @@ trait PrivilegeServiceAwareTrait
     public function getServicePrivilege(): ?PrivilegeService
     {
         if (empty($this->servicePrivilege)) {
-            $this->servicePrivilege = \Application::$container->get(PrivilegeService::class);
+            $this->servicePrivilege = \OseAdmin::instance()->container()->get(PrivilegeService::class);
         }
 
         return $this->servicePrivilege;

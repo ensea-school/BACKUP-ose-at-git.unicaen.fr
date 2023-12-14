@@ -30,7 +30,7 @@ trait ServiceReferentielProcessusAwareTrait
     public function getProcessusServiceReferentiel(): ?ServiceReferentielProcessus
     {
         if (empty($this->processusServiceReferentiel)) {
-            $this->processusServiceReferentiel = \Application::$container->get(ServiceReferentielProcessus::class);
+            $this->processusServiceReferentiel = \OseAdmin::instance()->container()->get(ServiceReferentielProcessus::class);
         }
 
         return $this->processusServiceReferentiel;

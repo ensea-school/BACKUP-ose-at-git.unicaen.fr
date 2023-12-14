@@ -143,11 +143,3 @@ function vhlDump(\Enseignement\Entity\VolumeHoraireListe $volumeHoraireListe): \
 
     return $dumper;
 }
-
-
-function oseAdmin(): OseAdmin
-{
-    require_once getcwd() . '/admin/src/OseAdmin.php';
-
-    return OseAdmin::getInstance();
-}

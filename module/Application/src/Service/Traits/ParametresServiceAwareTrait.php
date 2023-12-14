@@ -32,7 +32,7 @@ trait ParametresServiceAwareTrait
     public function getServiceParametres(): ?ParametresService
     {
         if (empty($this->serviceParametres)) {
-            $this->serviceParametres = \Application::$container->get(ParametresService::class);
+            $this->serviceParametres = \OseAdmin::instance()->container()->get(ParametresService::class);
         }
 
         return $this->serviceParametres;

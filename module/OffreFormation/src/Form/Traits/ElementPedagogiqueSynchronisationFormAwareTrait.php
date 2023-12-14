@@ -35,6 +35,6 @@ trait ElementPedagogiqueSynchronisationFormAwareTrait
             return $this->formOffreFormationElementPedagogiqueSynchronisation;
         }
 
-        return \Application::$container->get('FormElementManager')->get(ElementPedagogiqueSynchronisationForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ElementPedagogiqueSynchronisationForm::class);
     }
 }

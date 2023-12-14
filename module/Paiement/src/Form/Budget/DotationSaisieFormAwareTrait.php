@@ -34,6 +34,6 @@ trait DotationSaisieFormAwareTrait
             return $this->formBudgetDotationSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(DotationSaisieForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(DotationSaisieForm::class);
     }
 }

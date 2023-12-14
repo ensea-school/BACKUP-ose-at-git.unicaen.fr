@@ -32,7 +32,7 @@ trait SeuilChargeServiceAwareTrait
     public function getServiceSeuilCharge(): ?SeuilChargeService
     {
         if (empty($this->serviceSeuilCharge)) {
-            $this->serviceSeuilCharge = \Application::$container->get(SeuilChargeService::class);
+            $this->serviceSeuilCharge = \OseAdmin::instance()->container()->get(SeuilChargeService::class);
         }
 
         return $this->serviceSeuilCharge;

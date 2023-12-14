@@ -23,7 +23,7 @@ class v21Nomenclatures extends AbstractMigration
 
     public function after()
     {
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
         $bdd = $this->manager->getBdd();
 
         $du = $bdd->dataUpdater();

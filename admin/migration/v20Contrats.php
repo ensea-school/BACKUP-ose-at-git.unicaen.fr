@@ -23,7 +23,7 @@ class v20Contrats extends AbstractMigration
 
     public function after()
     {
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
         $bdd = $this->manager->getBdd();
 
         $c->begin("Convertion des contrats de travail en états de sortie");

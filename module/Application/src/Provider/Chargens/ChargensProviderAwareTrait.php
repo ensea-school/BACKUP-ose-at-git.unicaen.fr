@@ -31,7 +31,7 @@ trait ChargensProviderAwareTrait
     public function getProviderChargensChargens(): ?ChargensProvider
     {
         if (empty($this->providerChargensChargens)) {
-            $this->providerChargensChargens = \Application::$container->get(ChargensProvider::class);
+            $this->providerChargensChargens = \OseAdmin::instance()->container()->get(ChargensProvider::class);
         }
 
         return $this->providerChargensChargens;

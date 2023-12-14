@@ -1,17 +1,19 @@
 <?php
 
+$config = \OseAdmin::instance()->config();
+
 return [
     'doctrine'     => [
         'connection'    => [
             'orm_default' => [
                 'params' => [
-                    'host'          => AppConfig::get('bdd', 'host'),
-                    'port'          => AppConfig::get('bdd', 'port'),
-                    'dbname'        => AppConfig::get('bdd', 'dbname'),
-                    'user'          => AppConfig::get('bdd', 'username'),
-                    'password'      => AppConfig::get('bdd', 'password'),
+                    'host'          => $config->get('bdd', 'host'),
+                    'port'          => $config->get('bdd', 'port'),
+                    'dbname'        => $config->get('bdd', 'dbname'),
+                    'user'          => $config->get('bdd', 'username'),
+                    'password'      => $config->get('bdd', 'password'),
                     'charset'       => 'AL32UTF8',
-                    'connectstring' => AppConfig::get('bdd', 'connectstring'),
+                    'connectstring' => $config->get('bdd', 'connectstring'),
                     //'persistent' => true,
                 ],
             ],
@@ -22,17 +24,17 @@ return [
                 //                'query_cache'      => 'filesystem',
                 'result_cache'     => 'filesystem',
                 'hydration_cache'  => 'array',
-                'generate_proxies' => AppConfig::get('bdd', 'generateProxies'),
+                'generate_proxies' => $config->get('bdd', 'generateProxies'),
                 'proxy_dir'        => 'cache/DoctrineProxy',
             ],
         ],
     ],
     'view_manager' => [
-        'display_not_found_reason' => AppConfig::get('global', 'affichageErreurs'),
+        'display_not_found_reason' => $config->get('global', 'affichageErreurs'),
     ],
     'cli_config'   => [
-        'scheme' => AppConfig::get('global', 'scheme'),
-        'domain' => AppConfig::get('global', 'domain'),
+        'scheme' => $config->get('global', 'scheme'),
+        'domain' => $config->get('global', 'domain'),
     ],
 
     'session_config' => [
@@ -61,8 +63,8 @@ return [
     ],
     'application'     => [
         'etats-sortie' => [
-            'host'    => AppConfig::get('etats-sortie', 'host', '127.0.0.1'),
-            'tmp-dir' => AppConfig::get('etats-sortie', 'tmp-dir', getcwd() . '/cache/'),
+            'host'    => $config->get('etats-sortie', 'host', '127.0.0.1'),
+            'tmp-dir' => $config->get('etats-sortie', 'tmp-dir', getcwd() . '/cache/'),
         ],
     ],
 ];

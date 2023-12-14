@@ -152,7 +152,7 @@ class PaiementProcess implements ProcessInterface
         // Enregistrement en BDD
         $key = $tableauBord->getOption('key');
 
-        $table = oseAdmin()->getBdd()->getTable('TBL_PAIEMENT');
+        $table = \OseAdmin::instance()->getBdd()->getTable('TBL_PAIEMENT');
 
         // on force la DDL pour éviter de faire des requêtes en plus
         $table->setDdl(['columns' => array_fill_keys($tableauBord->getOption('cols'), [])]);

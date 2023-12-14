@@ -35,6 +35,6 @@ trait SaisieFieldsetAwareTrait
             return $this->fieldsetServiceReferentielSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(SaisieFieldset::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(SaisieFieldset::class);
     }
 }

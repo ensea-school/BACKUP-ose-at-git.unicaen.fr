@@ -34,7 +34,7 @@ trait MissionCentreCoutsTypeFormAwareTrait
             return $this->formMissionCentreCoutsType;
         }
 
-        return \Application::$container->get('FormElementManager')->get(MissionCentreCoutsTypeForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(MissionCentreCoutsTypeForm::class);
     }
 }
 

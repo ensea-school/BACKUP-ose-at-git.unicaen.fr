@@ -32,7 +32,7 @@ trait GradeServiceAwareTrait
     public function getServiceGrade(): ?GradeService
     {
         if (empty($this->serviceGrade)) {
-            $this->serviceGrade = \Application::$container->get(GradeService::class);
+            $this->serviceGrade = \OseAdmin::instance()->container()->get(GradeService::class);
         }
 
         return $this->serviceGrade;

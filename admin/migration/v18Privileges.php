@@ -24,7 +24,7 @@ class v18Privileges extends AbstractMigration
 
     public function after()
     {
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
         $bdd = $this->manager->getBdd();
 
         $sql = "

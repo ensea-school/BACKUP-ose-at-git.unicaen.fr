@@ -35,6 +35,6 @@ trait ElementPedagogiqueRechercheFieldsetAwareTrait
             return $this->fieldsetOffreFormationElementPedagogiqueRecherche;
         }
 
-        return \Application::$container->get('FormElementManager')->get(ElementPedagogiqueRechercheFieldset::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ElementPedagogiqueRechercheFieldset::class);
     }
 }

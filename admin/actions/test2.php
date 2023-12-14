@@ -6,7 +6,7 @@ $bdd = $oa->getBdd();
 $bdd->setLogger($c);
 
 //$ref = new Ddl();
-//$ref->loadFromDir($oa->getOseDir() . 'data/ddl-pg');
+//$ref->loadFromDir(getcwd() . '/data/ddl-pg');
 
 
 

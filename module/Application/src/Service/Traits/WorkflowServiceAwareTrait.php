@@ -32,7 +32,7 @@ trait WorkflowServiceAwareTrait
     public function getServiceWorkflow(): ?WorkflowService
     {
         if (empty($this->serviceWorkflow)) {
-            $this->serviceWorkflow = \Application::$container->get(WorkflowService::class);
+            $this->serviceWorkflow = \OseAdmin::instance()->container()->get(WorkflowService::class);
         }
 
         return $this->serviceWorkflow;

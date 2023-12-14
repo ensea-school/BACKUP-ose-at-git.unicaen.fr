@@ -1,7 +1,7 @@
 <?php
 
 // Initialisation
-$osedir = $oa->getOseDir();
+$osedir = getcwd();
 
 
 // Choix de la version

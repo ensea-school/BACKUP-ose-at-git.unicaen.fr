@@ -32,7 +32,7 @@ trait RoleServiceAwareTrait
     public function getServiceRole(): ?RoleService
     {
         if (empty($this->serviceRole)) {
-            $this->serviceRole = \Application::$container->get(RoleService::class);
+            $this->serviceRole = \OseAdmin::instance()->container()->get(RoleService::class);
         }
 
         return $this->serviceRole;

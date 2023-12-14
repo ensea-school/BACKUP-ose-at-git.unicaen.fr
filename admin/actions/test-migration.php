@@ -7,11 +7,11 @@ $action  = $c->getArg()[3];
 
 // Récupération du schéma de référence
 $ref = new Ddl();
-$ref->loadFromDir($oa->getOseDir() . 'data/ddl');
+$ref->loadFromDir(getcwd() . '/data/ddl');
 
 
 // Construction de la config de DDL pour filtrer
-$filters = require $oa->getOseDir() . 'data/ddl_config.php';
+$filters = require getcwd() . '/data/ddl_config.php';
 foreach ($ref as $ddlClass => $objects) {
     foreach ($objects as $object => $objectDdl) {
         $filters[$ddlClass]['includes'][] = $object;

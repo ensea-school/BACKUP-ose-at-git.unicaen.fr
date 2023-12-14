@@ -29,7 +29,7 @@ trait FormFieldsetTrait
     protected function getEntityManager(): EntityManager
     {
         if (!$this->entityManager) {
-            $this->entityManager = \Application::$container->get(Constants::BDD);
+            $this->entityManager = \OseAdmin::instance()->container()->get(Constants::BDD);
         }
 
         return $this->entityManager;
@@ -40,7 +40,7 @@ trait FormFieldsetTrait
     private function getControllerPluginFlashMessenger(): FlashMessenger
     {
         if (!$this->controllerPluginFlashMessenger) {
-            $this->controllerPluginFlashMessenger = \Application::$container->get('ControllerPluginManager')->get('flashMessenger');
+            $this->controllerPluginFlashMessenger = \OseAdmin::instance()->container()->get('ControllerPluginManager')->get('flashMessenger');
         }
 
         return $this->controllerPluginFlashMessenger;
@@ -62,7 +62,7 @@ trait FormFieldsetTrait
      */
     protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false): string
     {
-        $url = \Application::$container->get('ViewHelperManager')->get('url');
+        $url = \OseAdmin::instance()->container()->get('ViewHelperManager')->get('url');
 
         /* @var $url \Laminas\View\Helper\Url */
         return $url->__invoke($name, $params, $options, $reuseMatchedParams);

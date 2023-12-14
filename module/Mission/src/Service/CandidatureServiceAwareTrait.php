@@ -33,7 +33,7 @@ trait CandidatureServiceAwareTrait
     public function getServiceCandidature(): ?CandidatureService
     {
         if (empty($this->serviceCandidature)) {
-            $this->serviceCandidature = \Application::$container->get(CandidatureService::class);
+            $this->serviceCandidature = \OseAdmin::instance()->container()->get(CandidatureService::class);
         }
 
         return $this->serviceCandidature;

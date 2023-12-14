@@ -1,10 +1,6 @@
 <?php
 
-/* Chargement de la config globale */
+/** @var OseAdmin $oa */
+$oa = require_once dirname(__DIR__).'/admin/src/start.php';
 
-ini_set('session.cookie_samesite', 'Strict');
-
-require_once dirname(__DIR__).'/config/application.config.php';
-
-Application::init();
-Application::run();
+$oa->runWebApp();

@@ -35,6 +35,6 @@ trait ElementPedagogiqueSaisieAwareTrait
             return $this->formOffreFormationElementPedagogiqueSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(ElementPedagogiqueSaisie::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ElementPedagogiqueSaisie::class);
     }
 }

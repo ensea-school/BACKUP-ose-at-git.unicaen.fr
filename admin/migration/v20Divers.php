@@ -23,7 +23,7 @@ class v20Divers extends AbstractMigration
 
     public function before()
     {
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
         $bdd = $this->manager->getBdd();
 
         $c->begin("Préparation de la migration vers la version 20");

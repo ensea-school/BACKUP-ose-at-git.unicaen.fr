@@ -32,7 +32,7 @@ trait DossierServiceAwareTrait
     public function getServiceDossier(): ?DossierService
     {
         if (empty($this->serviceDossier)) {
-            $this->serviceDossier = \Application::$container->get(DossierService::class);
+            $this->serviceDossier = \OseAdmin::instance()->container()->get(DossierService::class);
         }
 
         return $this->serviceDossier;

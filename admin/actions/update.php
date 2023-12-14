@@ -1,9 +1,5 @@
 <?php
 
-// Initialisation
-$osedir = $oa->getOseDir();
-
-
 // Alerte pour l'activation du mode maintenance
 $c->println("Mise à jour de OSE");
 if ($c->getOption('maintenance') != 'no') {

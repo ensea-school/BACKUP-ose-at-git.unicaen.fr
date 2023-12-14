@@ -24,7 +24,7 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
     {
         if (!$id) return null;
 
-        $em = \Application::$container->get(Constants::BDD);
+        $em = \OseAdmin::instance()->container()->get(Constants::BDD);
 
         return $em->getRepository($class)->find($id);
     }

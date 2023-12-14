@@ -14,6 +14,8 @@ if ($pwd1 <> $pwd2) {
 }
 
 $c->println('Application du changement de mot de pase ...');
-$oa->exec("changement-mot-de-passe --utilisateur=$login --mot-de-passe=$pwd1");
+
+$args = "changement-mot-de-passe --utilisateur=$login --mot-de-passe=$pwd1";
+$c->passthru("php " . getcwd() . "/public/index.php " . $args);
 
 $c->println('Mot de passe changé', $c::COLOR_LIGHT_GREEN);

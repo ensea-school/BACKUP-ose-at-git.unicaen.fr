@@ -33,6 +33,6 @@ trait VolumeHoraireSaisieMultipleFieldsetAwareTrait
             return $this->fieldsetVolumeHoraireSaisieMultiple;
         }
 
-        return \Application::$container->get('FormElementManager')->get(VolumeHoraireSaisieMultipleFieldset::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(VolumeHoraireSaisieMultipleFieldset::class);
     }
 }

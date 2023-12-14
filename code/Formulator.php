@@ -35,7 +35,7 @@ $action  = $_POST['action'] ?? 'gen';
 $fichier = $_FILES['fichier'] ?? null;
 
 
-$bdd = oseAdmin()->getBdd();
+$bdd = OseAdmin::instance()->getBdd();
 
 
 if (!$fichier) {
@@ -107,7 +107,7 @@ switch ($action) {
 
 function affCreateData(\Application\Model\FormuleCalcul $fc)
 {
-    $bdd         = oseAdmin()->getBdd();
+    $bdd         = OseAdmin::instance()->getBdd();
     $packageName = 'FORMULE_' . $fc->getName();
     $pe          = $bdd->select('SELECT id FROM formule WHERE package_name = :pn', ['pn' => $packageName]);
     if (empty($pe)) {

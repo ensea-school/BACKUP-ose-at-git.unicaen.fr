@@ -34,6 +34,6 @@ trait MailerIntervenantFormAwareTrait
             return $this->formMailerIntervenant;
         }
 
-        return \Application::$container->get('FormElementManager')->get(MailerIntervenantForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(MailerIntervenantForm::class);
     }
 }

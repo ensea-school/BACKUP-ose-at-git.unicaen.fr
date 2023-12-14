@@ -32,7 +32,7 @@ trait FormuleResultatServiceAwareTrait
     public function getServiceFormuleResultat(): ?FormuleResultatService
     {
         if (empty($this->serviceFormuleResultat)) {
-            $this->serviceFormuleResultat = \Application::$container->get(FormuleResultatService::class);
+            $this->serviceFormuleResultat = \OseAdmin::instance()->container()->get(FormuleResultatService::class);
         }
 
         return $this->serviceFormuleResultat;

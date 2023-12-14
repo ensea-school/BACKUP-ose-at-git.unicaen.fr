@@ -60,22 +60,23 @@ class ConnecteurActul
 
     public function __construct()
     {
-        $this->oa = OseAdmin::getInstance();
+        $this->oa = OseAdmin::instance();
     }
 
 
 
     public function getDdlDir()
     {
-        return $this->oa->getOseDir() . 'admin/actul/ddl';
+        return getcwd() . '/admin/actul/ddl';
     }
 
 
 
     public function init()
     {
-        $this->actul = new Bdd(Config::get('actul'));
-        $this->actul->setLogger($this->oa->getConsole());
+        $bddConf = OseAdmin::instance()->config()->get('actul');
+        $this->actul = new Bdd($bddConf);
+        $this->actul->setLogger($this->oa->console());
 
         $this->ose = $this->oa->getBdd();
 
@@ -134,7 +135,7 @@ class ConnecteurActul
 
     protected function getActulQuery($name): string
     {
-        return file_get_contents($this->oa->getOseDir() . 'admin/actul/query/' . $name . '.sql');
+        return file_get_contents(getcwd() . '/admin/actul/query/' . $name . '.sql');
     }
 
 

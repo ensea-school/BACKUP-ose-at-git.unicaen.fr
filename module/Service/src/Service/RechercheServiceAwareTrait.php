@@ -30,7 +30,7 @@ trait RechercheServiceAwareTrait
     public function getServiceRecherche(): ?RechercheService
     {
         if (empty($this->serviceRecherche)) {
-            $this->serviceRecherche = \Application::$container->get(RechercheService::class);
+            $this->serviceRecherche = \OseAdmin::instance()->container()->get(RechercheService::class);
         }
 
         return $this->serviceRecherche;

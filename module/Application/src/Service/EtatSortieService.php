@@ -105,7 +105,7 @@ class EtatSortieService extends AbstractEntityService
             $traitement = function () use ($document, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {
                 $dir = getcwd();
 
-                if (\AppConfig::inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')){
+                if (\OseAdmin::instance()->env()->inDev() && str_starts_with($__PHP__CODE__TRAITEMENT__, 'UnicaenCode:')){
                     $filename = getcwd().'/code/'.substr($__PHP__CODE__TRAITEMENT__,strlen('UnicaenCode:')).'.php';
                     if (file_exists($filename)){
                         require $filename;

@@ -32,7 +32,7 @@ trait DomaineFonctionnelServiceAwareTrait
     public function getServiceDomaineFonctionnel(): ?DomaineFonctionnelService
     {
         if (empty($this->serviceDomaineFonctionnel)) {
-            $this->serviceDomaineFonctionnel = \Application::$container->get(DomaineFonctionnelService::class);
+            $this->serviceDomaineFonctionnel = \OseAdmin::instance()->container()->get(DomaineFonctionnelService::class);
         }
 
         return $this->serviceDomaineFonctionnel;

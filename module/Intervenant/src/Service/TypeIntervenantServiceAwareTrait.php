@@ -31,7 +31,7 @@ trait TypeIntervenantServiceAwareTrait
     public function getServiceTypeIntervenant(): ?TypeIntervenantService
     {
         if (empty($this->serviceTypeIntervenant)) {
-            $this->serviceTypeIntervenant = \Application::$container->get(TypeIntervenantService::class);
+            $this->serviceTypeIntervenant = \OseAdmin::instance()->container()->get(TypeIntervenantService::class);
         }
 
         return $this->serviceTypeIntervenant;

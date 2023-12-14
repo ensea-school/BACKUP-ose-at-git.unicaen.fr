@@ -3,18 +3,18 @@
 $bdd = $oa->getBdd();
 $bdd->setLogger($c);
 
-$fichier = $oa->getOseDir() . 'cache/bdd-update-diff.sql';
+$fichier = getcwd() . '/cache/bdd-update-diff.sql';
 
 $c->begin("Construction d'un script de mise à jour de la base de données");
 $c->msg("Attention : par rapport à update-bdd, seules les définitions des objets sont concernées. Les requêtes de mise à jour des données ne sont pas générées.");
 
 /* Récupération du schéma de référence */
 $ref = new Unicaen\BddAdmin\Ddl\Ddl;
-$ref->loadFromDir($oa->getOseDir() . 'data/ddl');
+$ref->loadFromDir(getcwd() . '/data/ddl');
 
 
 /* Construction de la config de DDL pour filtrer */
-$filters = require $oa->getOseDir() . 'data/ddl_config.php';
+$filters = require getcwd() . '/data/ddl_config.php';
 foreach ($ref as $ddlClass => $objects) {
     foreach ($objects as $object => $objectDdl) {
         $filters[$ddlClass]['includes'][] = $object;

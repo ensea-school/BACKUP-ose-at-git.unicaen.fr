@@ -33,6 +33,6 @@ trait DepartementSaisieFormAwareTrait
             return $this->formDepartementSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(DepartementSaisieForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(DepartementSaisieForm::class);
     }
 }

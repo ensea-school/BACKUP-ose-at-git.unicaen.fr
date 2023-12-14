@@ -1,7 +1,7 @@
 <?php
 
 /** @var \Application\Service\WorkflowService $ws */
-$ws = $oa->getContainer()->get(\Application\Service\WorkflowService::class);
+$ws = $oa->container()->get(\Application\Service\WorkflowService::class);
 
 $id = (int)$c->getArg(2);
 

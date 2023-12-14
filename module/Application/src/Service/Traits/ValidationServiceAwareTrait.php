@@ -32,7 +32,7 @@ trait ValidationServiceAwareTrait
     public function getServiceValidation(): ?ValidationService
     {
         if (empty($this->serviceValidation)) {
-            $this->serviceValidation = \Application::$container->get(ValidationService::class);
+            $this->serviceValidation = \OseAdmin::instance()->container()->get(ValidationService::class);
         }
 
         return $this->serviceValidation;

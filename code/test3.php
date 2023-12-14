@@ -35,7 +35,7 @@ echo phpDump($data);
 $ptbl->calculer($params);
 
 
-$res = phpDump(oseAdmin()->getBdd()->getTable('TBL_PAIEMENT')->select($params));
+$res = phpDump(OseAdmin::instance()->getBdd()->getTable('TBL_PAIEMENT')->select($params));
 echo '<h2>Résultat</h2>';
 echo phpDump($res);
 

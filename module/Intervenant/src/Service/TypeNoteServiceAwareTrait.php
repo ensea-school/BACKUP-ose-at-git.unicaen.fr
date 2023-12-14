@@ -31,7 +31,7 @@ trait TypeNoteServiceAwareTrait
     public function getServiceTypeNote(): ?TypeNoteService
     {
         if (empty($this->serviceTypeNote)) {
-            $this->serviceTypeNote = \Application::$container->get(TypeNoteService::class);
+            $this->serviceTypeNote = \OseAdmin::instance()->container()->get(TypeNoteService::class);
         }
 
         return $this->serviceTypeNote;

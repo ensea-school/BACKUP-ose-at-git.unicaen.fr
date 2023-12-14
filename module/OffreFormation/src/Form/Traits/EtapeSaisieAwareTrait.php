@@ -35,6 +35,6 @@ trait EtapeSaisieAwareTrait
             return $this->formOffreFormationEtapeSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(EtapeSaisie::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(EtapeSaisie::class);
     }
 }

@@ -32,7 +32,7 @@ trait DisciplineServiceAwareTrait
     public function getServiceDiscipline(): ?DisciplineService
     {
         if (empty($this->serviceDiscipline)) {
-            $this->serviceDiscipline = \Application::$container->get(DisciplineService::class);
+            $this->serviceDiscipline = \OseAdmin::instance()->container()->get(DisciplineService::class);
         }
 
         return $this->serviceDiscipline;

@@ -35,6 +35,6 @@ trait ModifierTypePieceJointeStatutFormAwareTrait
             return $this->formPieceJointeModifierTypePieceJointeStatut;
         }
 
-        return \Application::$container->get('FormElementManager')->get(ModifierTypePieceJointeStatutForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ModifierTypePieceJointeStatutForm::class);
     }
 }

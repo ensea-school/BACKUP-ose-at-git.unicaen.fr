@@ -2,7 +2,7 @@
 <?php
 
 /** @var OseAdmin $oa */
-$oa = require_once dirname(__DIR__) . '/admin/src/start.php';
+$oa = require dirname(__DIR__) . '/admin/src/start.php';
 
 $c = $oa->console();
 

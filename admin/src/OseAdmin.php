@@ -173,7 +173,7 @@ class OseAdmin
 
 
 
-    private function start(): void
+    public function start(): void
     {
         if (!$this->container) {
             $configuration = $this->config()->getApplicationConfig();

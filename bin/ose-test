@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-$oa = require_once dirname(__DIR__) . '/admin/src/start.php';
+$oa = require dirname(__DIR__) . '/admin/src/start.php';
 
 $c = $oa->console();
 

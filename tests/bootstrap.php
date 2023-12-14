@@ -1,6 +1,8 @@
 <?php
 
-require_once dirname(__DIR__) . '/admin/src/OseAdmin.php';
+require dirname(__DIR__) . '/admin/src/start.php';
+
+OseAdmin::instance()->start();
 
 spl_autoload_register(function (string $class) {
     if (str_starts_with($class, 'tests\\')) {

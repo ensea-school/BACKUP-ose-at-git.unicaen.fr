@@ -64,7 +64,7 @@ $config = [
         'user_entity_class' => Entity\Db\Utilisateur::class,
     ],
     'translator' => [
-        'locale'                    => \AppConfig::get('global', 'locale'),
+        'locale'                    => \OseAdmin::instance()->config()->get('global', 'locale'),
         'translation_file_patterns' => [
             [
                 'type'     => 'gettext',

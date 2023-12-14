@@ -35,11 +35,11 @@ return [
                         'structure' => '[0-9]*',
                     ],
                 ],
-                'details-calculs'      => [
-                    'route'       => '/details-calculs/:intervenant/',
-                    'controller'  => Controller\PaiementController::class,
-                    'action'      => 'DetailsCalculs',
-                    'privileges'  => Privileges::MISE_EN_PAIEMENT_DETAILS,
+                'details-calculs'                      => [
+                    'route'      => '/details-calculs/:intervenant/',
+                    'controller' => Controller\PaiementController::class,
+                    'action'     => 'DetailsCalculs',
+                    'privileges' => Privileges::MISE_EN_PAIEMENT_DETAILS,
                 ],
                 'etat-paiement'                        => [
                     'route'      => '/etat-paiement',
@@ -127,6 +127,19 @@ return [
                     'visible'             => Assertion\PaiementAssertion::class,
                     'order'               => 16,
                 ],
+                'demandenew-mise-en-paiement'    => [
+                    'label'               => "Demande de mise en paiement",
+                    'title'               => "Demande de mise en paiement",
+                    'route'               => 'intervenant/mise-en-paiement/demandenew',
+                    'paramsInject'        => [
+                        'intervenant',
+                    ],
+                    'withtarget'          => true,
+                    'workflow-etape-code' => WfEtape::CODE_DEMANDE_MEP,
+                    'resource'            => PrivilegeController::getResourceId(Controller\PaiementController::class, 'demandeMiseEnPaiement'),
+                    'visible'             => Assertion\PaiementAssertion::class,
+                    'order'               => 16,
+                ],
                 'visualisation-mise-en-paiement' => [
                     'label'               => "Visualisation des mises en paiement",
                     'title'               => "Visualisation des mises en paiement",
@@ -152,7 +165,7 @@ return [
                     'visible'      => Assertion\PaiementAssertion::class,
                     'order'        => 18,
                 ],
-                'detail-calculs-paiements' => [
+                'detail-calculs-paiements'       => [
                     'label'        => "Détails de calculs des paiements",
                     'title'        => "Détails de calculs des paiements",
                     'route'        => 'paiement/details-calculs',
@@ -253,7 +266,7 @@ return [
     'guards' => [
         [
             'controller' => Controller\PaiementController::class,
-            'action'     => ['demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
+            'action'     => ['listeServiceAPayer', 'demandenewMiseEnPaiement', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
             'privileges' => [
                 Privileges::MISE_EN_PAIEMENT_DEMANDE,
             ],

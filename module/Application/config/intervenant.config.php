@@ -209,7 +209,7 @@ return [
                             ],
                         ],
                         'child_routes'  => [
-                            'visualisation' => [
+                            'visualisation'         => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/visualisation',
@@ -218,7 +218,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'demande'       => [
+                            'demande'               => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/demande',
@@ -227,7 +227,25 @@ return [
                                     ],
                                 ],
                             ],
-                            'edition'       => [
+                            'demandenew'            => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/demandenew',
+                                    'defaults' => [
+                                        'action' => 'demandenewMiseEnPaiement',
+                                    ],
+                                ],
+                            ],
+                            'liste-service-a-payer' => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/liste-service-a-payer',
+                                    'defaults' => [
+                                        'action' => 'listeServiceAPayer',
+                                    ],
+                                ],
+                            ],
+                            'edition'               => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/edition',

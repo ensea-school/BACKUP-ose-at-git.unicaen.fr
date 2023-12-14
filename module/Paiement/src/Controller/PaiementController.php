@@ -122,6 +122,45 @@ class PaiementController extends AbstractController
 
 
 
+    public function demandenewMiseEnPaiementAction ()
+    {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $this->initFilters();
+        $intervenant = $this->getEvent()->getParam('intervenant');
+     
+
+        //Un intervenant n'a pas le droit de voir cette page de demande de mise en paiement
+        if ($role->getIntervenant()) {
+            //On redirige vers la visualisation des mises en paiement
+            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
+        }
+        $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenantNew($intervenant);
+
+
+        return compact('intervenant');
+    }
+
+
+
+    public function listeServiceAPayerAction ()
+    {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $this->initFilters();
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        //Un intervenant n'a pas le droit de voir cette page de demande de mise en paiement
+        if ($role->getIntervenant()) {
+            //On redirige vers la visualisation des mises en paiement
+            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
+        }
+        $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenantNew($intervenant);
+
+
+        return new AxiosModel($servicesAPayer);
+    }
+
+
+
     public function demandeMiseEnPaiementAction ()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
@@ -743,8 +782,7 @@ class PaiementController extends AbstractController
 
 
 
-
-    public function detailsCalculsAction()
+    public function detailsCalculsAction ()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
@@ -753,7 +791,7 @@ class PaiementController extends AbstractController
         }
 
         $tblPaiement = $this->getServiceTableauBord()->getTableauBord('paiement');
-        $debugger = new PaiementDebugger($tblPaiement->getProcess());
+        $debugger    = new PaiementDebugger($tblPaiement->getProcess());
         $debugger->run($intervenant);
 
         return compact('intervenant', 'debugger');

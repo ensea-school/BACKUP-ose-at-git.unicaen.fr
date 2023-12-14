@@ -212,7 +212,22 @@ class DataSource
         return $statuts;
     }
 
+    public function FONCTION_REFERENTIEL()
+    {
+        $donneesParDefaut = require $this->oseAdmin->getOseDir() . '/data/donnees_par_defaut.php';
+        $data = $donneesParDefaut['FONCTION_REFERENTIEL'];
 
+        $fonctions = [];
+        for ($a = 2010; $a <= 2099; $a++) {
+            foreach ($data as $d) {
+                $d['ANNEE_ID'] = $a;
+                $d['HISTO_MODIFICATEUR_ID'] = null;
+                $fonctions[] = $d;
+            }
+        }
+
+        return $fonctions;
+    }
 
     public function TYPE_PIECE_JOINTE_STATUT()
     {

@@ -15,7 +15,9 @@
             </div>
             <form id="formImport" action="" enctype="multipart/form-data" method="post">
                 <p class="fs-9 text">
-                    Vous pouvez utiliser le modèle directement extrait de winpaie ou télécharger le modèle d'import générique en <a
+                    Vous pouvez utiliser le modèle directement extrait de winpaie <strong>(format .xlsx ou .ods)</strong> ou télécharger le modèle d'import
+                    générique
+                    en <a
                     href="/modeles/import-numero-pec.xlsx">cliquant
                     ici.</a>
                 </p>

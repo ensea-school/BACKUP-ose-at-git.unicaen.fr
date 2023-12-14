@@ -531,6 +531,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_DESTRUCTION',
         'HISTO_DESTRUCTEUR_ID',
+        'ANNEE_ID',
     ],
     'FORMULE'                        => [
         'ID',

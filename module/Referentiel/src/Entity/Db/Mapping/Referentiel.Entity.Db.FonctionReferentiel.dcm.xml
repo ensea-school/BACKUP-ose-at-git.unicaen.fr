@@ -5,6 +5,9 @@
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
+        <unique-constraints>
+            <unique-constraint name="FONCTION_REFERENTIEL_UN" columns="CODE,ANNEE_ID,HISTO_DESTRUCTION"/>
+        </unique-constraints>
         <field name="code" type="string" column="CODE" length="10" nullable="false"/>
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
@@ -18,6 +21,10 @@
                 <join-column name="PARENT_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+            <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
         <one-to-many field="fille" target-entity="Referentiel\Entity\Db\FonctionReferentiel" mapped-by="parent"/>
 
         <many-to-one field="domaineFonctionnel" target-entity="Application\Entity\Db\DomaineFonctionnel">

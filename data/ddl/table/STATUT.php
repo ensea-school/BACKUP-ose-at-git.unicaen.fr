@@ -16,7 +16,7 @@ return [
             'length'      => 0,
             'scale'       => '0',
             'precision'   => NULL,
-            'nullable'    => TRUE,
+            'nullable'    => FALSE,
             'default'     => NULL,
             'position'    => 5,
             'commentaire' => NULL,

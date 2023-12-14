@@ -28,36 +28,41 @@ class NumeroPriseEnChargeService extends AbstractService
         $errors['intervenant'] = [];
         $errors['message']     = '';
         $errors['file']        = [];
+        try {
+            $document = new Document();
+            $document->loadFromFile($nameFile);
+            $sheet = $document->getCalc()->getSheet(0);
 
-        $document = new Document();
-        $document->loadFromFile($nameFile);
-        $sheet = $document->getCalc()->getSheet(0);
-
-        switch ($model) {
-            case 'winpaie':
-                $datas = $this->winpaieTreatment($sheet);
-            break;
-            default:
-                $datas = $this->genericTreatment($sheet);
-            break;
-        }
-        $errors['file']    = $datas['errors'];
-        $errors['message'] = (isset($datas['message'])) ? $datas['message'] : [];
-        //On met à jour les numéros de prise en charge des intervenants
-        $em = $this->getEntityManager();
-        $em->beginTransaction();
-        foreach ($datas['result'] as $key => $value) {
-            $intervenant = $em->getRepository(Intervenant::class)->findOneBy(['numeroInsee' => $value['insee'], 'annee' => $this->getServiceContext()->getAnnee()]);
-            if ($intervenant) {
-                $intervenant->setNumeroPec($value['pec']);
-                $intervenant->setSyncPec(0);
-                $em->persist($intervenant);
-            } else {
-                $errors['intervenant'][] = $value['nom'] . " - " . $value['insee'];
+            switch ($model) {
+                case 'winpaie':
+                    $datas = $this->winpaieTreatment($sheet);
+                break;
+                default:
+                    $datas = $this->genericTreatment($sheet);
+                break;
             }
+            $errors['file']    = $datas['errors'];
+            $errors['message'] = (isset($datas['message'])) ? $datas['message'] : [];
+            //On met à jour les numéros de prise en charge des intervenants
+            $em = $this->getEntityManager();
+            $em->beginTransaction();
+            foreach ($datas['result'] as $key => $value) {
+                $intervenant = $em->getRepository(Intervenant::class)->findOneBy(['numeroInsee' => $value['insee'], 'annee' => $this->getServiceContext()->getAnnee()]);
+                if ($intervenant) {
+                    $intervenant->setNumeroPec($value['pec']);
+                    $intervenant->setSyncPec(0);
+                    $em->persist($intervenant);
+                } else {
+                    $errors['intervenant'][] = $value['nom'] . " - " . $value['insee'];
+                }
+            }
+            $em->flush();
+            $em->commit();
+        } catch (\Exception $e) {
+
+            $errors['message'] = "Fichier invalide, impossible de le lire. Merci de mettre le fichier au format xlsx ou ods (" . $e->getMessage() . ")";
         }
-        $em->flush();
-        $em->commit();
+
 
         return new AxiosModel($errors);
     }

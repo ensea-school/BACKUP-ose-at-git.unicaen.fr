@@ -289,7 +289,7 @@ class OseConsole implements LoggerInterface
 
 
 
-    public function getArg(int $index = null): ?string
+    public function getArg(int $index = null): mixed
     {
         $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : [];
 

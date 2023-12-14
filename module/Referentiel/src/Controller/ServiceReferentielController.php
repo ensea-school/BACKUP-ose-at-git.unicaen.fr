@@ -10,6 +10,7 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 use Plafond\Processus\PlafondProcessusAwareTrait;
+use Referentiel\Entity\Db\FonctionReferentiel;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use Referentiel\Form\SaisieAwareTrait;
@@ -97,6 +98,9 @@ class ServiceReferentielController extends AbstractController
     public function saisieAction ()
     {
         $this->initFilters();
+        $this->em()->getFilters()->enable('annee')->init([
+            FonctionReferentiel::class,
+        ]);
         $this->em()->getFilters()->enable('historique')->init([
             \Lieu\Entity\Db\Structure::class,
         ]);

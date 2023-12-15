@@ -26,7 +26,7 @@ class v23FonctionReferentiel extends AbstractMigration
         $c   = $this->manager->getOseAdmin()->getConsole();
 
         //Faire en sorte que les traitements ne soit pas fait sur l'utilisateur oseappli n'existe pas
-        $oa = OseAdmin::getInstance();
+        $oa = OseAdmin::instance();
         $oa->getOseAppliId();
 
         $this->traitementContrainteTriggerIndex($bdd, $c);
@@ -112,7 +112,7 @@ class v23FonctionReferentiel extends AbstractMigration
         $resFonctions = $bdd->select("SELECT *
             FROM FONCTION_REFERENTIEL fr");
 
-        $oa = OseAdmin::getInstance();
+        $oa = OseAdmin::instance();
 
         //Annualiser toutes les fonctions existantes
         $countFonction       = count($resFonctions);

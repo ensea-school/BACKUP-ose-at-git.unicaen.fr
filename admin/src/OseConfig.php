@@ -26,6 +26,9 @@ class OseConfig
             }
         }
 
+        if (empty($this->config)){
+            return $default;
+        }
 
 
         if ($this->config && $section && $key) {

@@ -8,7 +8,7 @@ if ($c->getOption('maintenance') != 'no') {
 }
 
 // Mise à jour du code source
-$oa->run('update-code', true);
+$oa->run('update-code', false);
 
 // Mise à jour de la base de données à partir d'un nouveau processus
 $oa->run('update-bdd', true);

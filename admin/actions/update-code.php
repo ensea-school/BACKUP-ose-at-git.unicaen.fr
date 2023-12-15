@@ -14,7 +14,7 @@ if (!$c->hasOption('version')) {
     $c->println("Sélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
     $c->println("La version actuellement installée est la " . $oa->oldVersion);
     $c->println("Voici la liste des versions de OSE disponibles:");
-    $tags = $oa->getTags();
+    $tags = $oa->repo()->getTags();
     foreach ($tags as $tag) {
         $c->println($tag);
     }

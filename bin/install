@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-$c = new OseConsole();
+$c = new Console();
 $c->setInputOptions([
     'version:',
     'config-file:',
@@ -109,7 +109,14 @@ if ($intVersion > 0 && $intVersion < 18) {
     $c->passthru("cd $osedir;wget https://getcomposer.org/download/1.10.21/composer.phar");
 } else {
     // à partir de la v18, et toutes les branches
-    $c->passthru("cd $osedir;wget https://getcomposer.org/composer.phar");
+    $osedir = realpath($osedir);
+    $composerSetupFile = $osedir.'/composer-setup.php';
+    copy('https://getcomposer.org/installer', $composerSetupFile);
+    if (!hash_file('sha384', $composerSetupFile) === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') {
+        die('Installateur de composer corrompu');
+        unlink($composerSetupFile);
+    }
+    $c->passthru("cd $osedir;php $composerSetupFile --2.2");
 }
 
 // Récupération des dépendances
@@ -183,10 +190,10 @@ $c->println('');
 class OseDeploy
 {
     const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE.git';
-    const MIN_VERSION = 9; // version minimum installable
+    const MIN_VERSION = 17; // version minimum installable
 
     /**
-     * @var OseConsole
+     * @var Console
      */
     protected $console;
 
@@ -205,9 +212,9 @@ class OseDeploy
     /**
      * OseDeploy constructor.
      *
-     * @param OseConsole $console
+     * @param Console $console
      */
-    public function __construct(OseConsole $console)
+    public function __construct(Console $console)
     {
         $this->console = $console;
     }
@@ -314,7 +321,7 @@ class OseDeploy
                     $vb = (int)$b;
                 }
 
-                if ($va == $vb) return $a > $b;
+                if ($va == $vb) return $a > $b ? 1 : -1;
 
                 return $va - $vb;
             });
@@ -496,7 +503,7 @@ class Console
         $pstr = str_repeat(' ', $spaces);
         $t    = $pstr . $title . $pstr;
 
-        $len = mb_strlen($t);
+        $len = strlen($t);
 
         echo '╔' . str_repeat('═', $len) . "╗\n";
         echo '║' . str_repeat(' ', $len) . "║\n";
@@ -688,6 +695,6 @@ class Console
 
     public function strPad($input, $padLength = null, $padString = ' ')
     {
-        return utf8_encode(str_pad(utf8_decode($input), $padLength, $padString));
+        return str_pad($input, $padLength, $padString);
     }
 }

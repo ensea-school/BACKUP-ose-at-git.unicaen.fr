@@ -30,7 +30,7 @@ trait ClotureAssertionAwareTrait
     public function getAssertionCloture(): ?ClotureAssertion
     {
         if (empty($this->assertionCloture)) {
-            $this->assertionCloture = \Application::$container->get(ClotureAssertion::class);
+            $this->assertionCloture = \OseAdmin::instance()->container()->get(ClotureAssertion::class);
         }
 
         return $this->assertionCloture;

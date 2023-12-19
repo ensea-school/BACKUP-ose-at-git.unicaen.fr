@@ -23,7 +23,7 @@ class CacheServiceFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $appConfig = \AppConfig::getGlobal();
+        $appConfig = \OseAdmin::instance()->config()->getApplicationConfig();
         $cacheDir  = getcwd() . '/' . $appConfig['module_listener_options']['cache_dir'];
 
         if (!is_dir($cacheDir)) {

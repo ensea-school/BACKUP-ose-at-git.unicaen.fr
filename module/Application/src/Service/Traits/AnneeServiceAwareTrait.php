@@ -32,7 +32,7 @@ trait AnneeServiceAwareTrait
     public function getServiceAnnee(): ?AnneeService
     {
         if (empty($this->serviceAnnee)) {
-            $this->serviceAnnee = \Application::$container->get(AnneeService::class);
+            $this->serviceAnnee = \OseAdmin::instance()->container()->get(AnneeService::class);
         }
 
         return $this->serviceAnnee;

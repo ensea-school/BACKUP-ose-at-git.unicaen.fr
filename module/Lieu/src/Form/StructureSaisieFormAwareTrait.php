@@ -33,6 +33,6 @@ trait StructureSaisieFormAwareTrait
             return $this->formStructureSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(StructureSaisieForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(StructureSaisieForm::class);
     }
 }

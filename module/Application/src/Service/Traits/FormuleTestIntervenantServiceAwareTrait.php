@@ -32,7 +32,7 @@ trait FormuleTestIntervenantServiceAwareTrait
     public function getServiceFormuleTestIntervenant(): ?FormuleTestIntervenantService
     {
         if (empty($this->serviceFormuleTestIntervenant)) {
-            $this->serviceFormuleTestIntervenant = \Application::$container->get(FormuleTestIntervenantService::class);
+            $this->serviceFormuleTestIntervenant = \OseAdmin::instance()->container()->get(FormuleTestIntervenantService::class);
         }
 
         return $this->serviceFormuleTestIntervenant;

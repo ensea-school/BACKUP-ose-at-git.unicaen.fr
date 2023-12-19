@@ -35,6 +35,6 @@ trait EtatSortieFormAwareTrait
             return $this->formEtatSortie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(EtatSortieForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(EtatSortieForm::class);
     }
 }

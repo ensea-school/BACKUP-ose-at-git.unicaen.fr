@@ -35,6 +35,6 @@ trait DifferentielFormAwareTrait
             return $this->formChargensDifferentiel;
         }
 
-        return \Application::$container->get('FormElementManager')->get(DifferentielForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(DifferentielForm::class);
     }
 }

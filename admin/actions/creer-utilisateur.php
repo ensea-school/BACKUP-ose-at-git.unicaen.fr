@@ -44,4 +44,6 @@ if ($params['params']['creer-intervenant']) {
 }
 
 $params = base64_encode(json_encode($params));
-$oa->exec("creer-utilisateur --data=$params");
+
+$args = "creer-utilisateur --data=$params";
+$c->passthru("php " . getcwd() . "/public/index.php " . $args);

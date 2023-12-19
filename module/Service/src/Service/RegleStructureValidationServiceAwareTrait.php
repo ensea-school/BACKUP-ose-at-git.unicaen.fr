@@ -30,7 +30,7 @@ trait RegleStructureValidationServiceAwareTrait
     public function getServiceRegleStructureValidation(): ?RegleStructureValidationService
     {
         if (empty($this->serviceRegleStructureValidation)) {
-            $this->serviceRegleStructureValidation = \Application::$container->get(RegleStructureValidationService::class);
+            $this->serviceRegleStructureValidation = \OseAdmin::instance()->container()->get(RegleStructureValidationService::class);
         }
 
         return $this->serviceRegleStructureValidation;

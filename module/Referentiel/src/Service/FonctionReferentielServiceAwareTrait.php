@@ -30,7 +30,7 @@ trait FonctionReferentielServiceAwareTrait
     public function getServiceFonctionReferentiel(): ?FonctionReferentielService
     {
         if (empty($this->serviceFonctionReferentiel)) {
-            $this->serviceFonctionReferentiel = \Application::$container->get(FonctionReferentielService::class);
+            $this->serviceFonctionReferentiel = \OseAdmin::instance()->container()->get(FonctionReferentielService::class);
         }
 
         return $this->serviceFonctionReferentiel;

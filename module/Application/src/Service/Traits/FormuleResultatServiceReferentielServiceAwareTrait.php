@@ -32,7 +32,7 @@ trait FormuleResultatServiceReferentielServiceAwareTrait
     public function getServiceFormuleResultatServiceReferentiel(): ?FormuleResultatServiceReferentielService
     {
         if (empty($this->serviceFormuleResultatServiceReferentiel)) {
-            $this->serviceFormuleResultatServiceReferentiel = \Application::$container->get(FormuleResultatServiceReferentielService::class);
+            $this->serviceFormuleResultatServiceReferentiel = \OseAdmin::instance()->container()->get(FormuleResultatServiceReferentielService::class);
         }
 
         return $this->serviceFormuleResultatServiceReferentiel;

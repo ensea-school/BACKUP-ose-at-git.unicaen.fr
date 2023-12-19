@@ -32,7 +32,7 @@ trait FichierServiceAwareTrait
     public function getServiceFichier(): ?FichierService
     {
         if (empty($this->serviceFichier)) {
-            $this->serviceFichier = \Application::$container->get(FichierService::class);
+            $this->serviceFichier = \OseAdmin::instance()->container()->get(FichierService::class);
         }
 
         return $this->serviceFichier;

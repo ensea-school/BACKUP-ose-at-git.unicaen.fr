@@ -1,7 +1,7 @@
 <?php
 
-$dirname    = $oa->getOseDir() . 'data/ddl';
-$colPosFile = $oa->getOseDir() . 'data/ddl_columns_pos.php';
+$dirname    = getcwd() . '/data/ddl';
+$colPosFile = getcwd() . '/data/ddl_columns_pos.php';
 
 $filters = [
     'table'              => ['excludes' => ['UNICAEN_ELEMENT_DISCIPLINE', 'UNICAEN_CORRESP_STRUCTURE_CC', 'SYS_EXPORT_SCHEMA_%', 'ACT_%']],

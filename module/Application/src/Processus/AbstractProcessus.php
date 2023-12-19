@@ -21,7 +21,7 @@ class AbstractProcessus implements EntityManagerAwareInterface
      */
     public function getAuthorize()
     {
-        return \Application::$container->get('BjyAuthorize\Service\Authorize');
+        return \OseAdmin::instance()->container()->get('BjyAuthorize\Service\Authorize');
     }
 
 }

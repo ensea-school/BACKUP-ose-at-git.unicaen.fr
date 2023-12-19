@@ -1,7 +1,5 @@
 <?php
 
-use BddAdmin\Ddl\Ddl;
-
 // Initialisation
 $bdd = $oa->getBdd();
 $bdd->setLogger($c);

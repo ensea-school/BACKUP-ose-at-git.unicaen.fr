@@ -32,7 +32,7 @@ trait ReconductionProcessusAwareTrait
     public function getProcessusReconduction(): ?ReconductionProcessus
     {
         if (empty($this->processusReconduction)) {
-            $this->processusReconduction = \Application::$container->get(ReconductionProcessus::class);
+            $this->processusReconduction = \OseAdmin::instance()->container()->get(ReconductionProcessus::class);
         }
 
         return $this->processusReconduction;

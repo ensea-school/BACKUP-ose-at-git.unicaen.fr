@@ -31,7 +31,7 @@ trait ModulateurServiceAwareTrait
     public function getServiceModulateur(): ?ModulateurService
     {
         if (empty($this->serviceModulateur)) {
-            $this->serviceModulateur = \Application::$container->get(ModulateurService::class);
+            $this->serviceModulateur = \OseAdmin::instance()->container()->get(ModulateurService::class);
         }
 
         return $this->serviceModulateur;

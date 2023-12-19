@@ -34,6 +34,6 @@ trait MissionSuiviFormAwareTrait
             return $this->formMissionSuivi;
         }
 
-        return \Application::$container->get('FormElementManager')->get(MissionSuiviForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(MissionSuiviForm::class);
     }
 }

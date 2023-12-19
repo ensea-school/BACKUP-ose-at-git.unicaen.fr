@@ -31,7 +31,7 @@ trait StatutServiceAwareTrait
     public function getServiceStatut(): ?StatutService
     {
         if (empty($this->serviceStatut)) {
-            $this->serviceStatut = \Application::$container->get(StatutService::class);
+            $this->serviceStatut = \OseAdmin::instance()->container()->get(StatutService::class);
         }
 
         return $this->serviceStatut;

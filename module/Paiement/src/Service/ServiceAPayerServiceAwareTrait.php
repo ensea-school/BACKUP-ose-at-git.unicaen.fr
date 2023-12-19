@@ -31,7 +31,7 @@ trait ServiceAPayerServiceAwareTrait
     public function getServiceServiceAPayer(): ?ServiceAPayerService
     {
         if (empty($this->serviceServiceAPayer)) {
-            $this->serviceServiceAPayer = \Application::$container->get(ServiceAPayerService::class);
+            $this->serviceServiceAPayer = \OseAdmin::instance()->container()->get(ServiceAPayerService::class);
         }
 
         return $this->serviceServiceAPayer;

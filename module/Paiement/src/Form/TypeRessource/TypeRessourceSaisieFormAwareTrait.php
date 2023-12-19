@@ -34,6 +34,6 @@ trait TypeRessourceSaisieFormAwareTrait
             return $this->formTypeRessourceTypeRessourceSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(TypeRessourceSaisieForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(TypeRessourceSaisieForm::class);
     }
 }

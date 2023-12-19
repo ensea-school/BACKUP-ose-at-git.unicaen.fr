@@ -24,11 +24,11 @@ class v18Divers extends AbstractMigration
     public function before()
     {
         $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
 
         // test pour savoir si on est bien en V17 minimum
         if (!$this->manager->hasColumn('INTERVENANT', 'EXPORT_DATE')) {
-            $c->printDie('Attention : vous devez d\'abord mettre à jour en version 17.3 AVANT de mettre à jour en version 18');
+            $c->error('Attention : vous devez d\'abord mettre à jour en version 17.3 AVANT de mettre à jour en version 18');
         }
 
         try {
@@ -50,7 +50,7 @@ class v18Divers extends AbstractMigration
 
 
         if (!$this->checkDoublons()) {
-            $c->printDie('Attention : des doublons ont été trouvés dans vos intervenants. Merci de purger d\'abord votre base de données, puis de relancer ensuite la procédure de mise à jour.');
+            $c->error('Attention : des doublons ont été trouvés dans vos intervenants. Merci de purger d\'abord votre base de données, puis de relancer ensuite la procédure de mise à jour.');
         }
 
         try {
@@ -82,7 +82,7 @@ class v18Divers extends AbstractMigration
     protected function sauvegardes()
     {
         $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
 
         $tables = [
             'INTERVENANT'                    => 'SAVE_V18_INTERVENANT',
@@ -120,7 +120,7 @@ class v18Divers extends AbstractMigration
     public function checkDoublons(): bool
     {
         $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
 
         $uc = \BddAdmin\Ddl\Ddl::UNIQUE_CONSTRAINT;
 
@@ -195,7 +195,7 @@ class v18Divers extends AbstractMigration
     private function checkDoublonsCode(): array
     {
         $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
 
         $statutTable = $this->manager->hasTable('STATUT') ? 'STATUT' : 'STATUT_INTERVENANT';
 
@@ -260,7 +260,7 @@ class v18Divers extends AbstractMigration
     private function checkDoublonsSourceCode(): array
     {
         $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
 
 //        $statutTable = $this->manager->hasTable('STATUT') ? 'STATUT' : 'STATUT_INTERVENANT';
         $statutTable = 'STATUT_INTERVENANT';

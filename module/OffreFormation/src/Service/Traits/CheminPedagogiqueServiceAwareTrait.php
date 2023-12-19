@@ -32,7 +32,7 @@ trait CheminPedagogiqueServiceAwareTrait
     public function getServiceCheminPedagogique(): ?CheminPedagogiqueService
     {
         if (empty($this->serviceCheminPedagogique)) {
-            $this->serviceCheminPedagogique = \Application::$container->get(CheminPedagogiqueService::class);
+            $this->serviceCheminPedagogique = \OseAdmin::instance()->container()->get(CheminPedagogiqueService::class);
         }
 
         return $this->serviceCheminPedagogique;

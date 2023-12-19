@@ -2,14 +2,14 @@
 
 $fromMaster = true;
 
-$osedir = $oa->getOseDir();
+$osedir = getcwd();
 $bdd = $oa->getBdd();
 $oseSource = $oa->getSourceOseId();
 $oseId = $oa->getOseAppliId();
 $c->println("Mise à jour de la table employeur");
 
 ini_set('memory_limit', '-1');
-$importDirectory = $osedir . 'cache/employeurs/';
+$importDirectory = $osedir . '/cache/employeurs/';
 $importArchive = 'employeurs.tar.gz';
 $importFilePath = $importDirectory . $importArchive;
 if (!file_exists($importDirectory)) {

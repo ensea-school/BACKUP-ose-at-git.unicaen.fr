@@ -92,7 +92,7 @@ class IndicateurProcessus extends AbstractProcessus
         // init
         $message = new MailMessage();
         $message->setEncoding('UTF-8')
-            ->setFrom(\AppConfig::get('mail', 'from'), "Application OSE")
+            ->setFrom(\OseAdmin::instance()->config()->get('mail', 'from'), "Application OSE")
             ->setSubject(sprintf(
                 "[OSE %s, n°%s: Notif %s] %s",
                 $this->getServiceContext()->getAnnee(),

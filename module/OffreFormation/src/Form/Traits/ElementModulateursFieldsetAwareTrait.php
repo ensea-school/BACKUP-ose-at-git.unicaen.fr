@@ -35,6 +35,6 @@ trait ElementModulateursFieldsetAwareTrait
             return $this->fieldsetOffreFormationElementModulateurs;
         }
 
-        return \Application::$container->get('FormElementManager')->get(ElementModulateursFieldset::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ElementModulateursFieldset::class);
     }
 }

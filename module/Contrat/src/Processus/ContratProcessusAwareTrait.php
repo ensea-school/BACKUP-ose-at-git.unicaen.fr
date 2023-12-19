@@ -30,7 +30,7 @@ trait ContratProcessusAwareTrait
     public function getProcessusContrat(): ?ContratProcessus
     {
         if (empty($this->processusContrat)) {
-            $this->processusContrat = \Application::$container->get(ContratProcessus::class);
+            $this->processusContrat = \OseAdmin::instance()->container()->get(ContratProcessus::class);
         }
 
         return $this->processusContrat;

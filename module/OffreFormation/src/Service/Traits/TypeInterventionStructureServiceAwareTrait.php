@@ -32,7 +32,7 @@ trait TypeInterventionStructureServiceAwareTrait
     public function getServiceTypeInterventionStructure(): ?TypeInterventionStructureService
     {
         if (empty($this->serviceTypeInterventionStructure)) {
-            $this->serviceTypeInterventionStructure = \Application::$container->get(TypeInterventionStructureService::class);
+            $this->serviceTypeInterventionStructure = \OseAdmin::instance()->container()->get(TypeInterventionStructureService::class);
         }
 
         return $this->serviceTypeInterventionStructure;

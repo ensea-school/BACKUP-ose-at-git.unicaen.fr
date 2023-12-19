@@ -32,7 +32,7 @@ trait IntervenantServiceAwareTrait
     public function getServiceIntervenant(): ?IntervenantService
     {
         if (empty($this->serviceIntervenant)) {
-            $this->serviceIntervenant = \Application::$container->get(IntervenantService::class);
+            $this->serviceIntervenant = \OseAdmin::instance()->container()->get(IntervenantService::class);
         }
 
         return $this->serviceIntervenant;

@@ -33,6 +33,6 @@ trait ModificationServiceDuFieldsetAwareTrait
             return $this->fieldsetIntervenantModificationServiceDu;
         }
 
-        return \Application::$container->get('FormElementManager')->get(ModificationServiceDuFieldset::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ModificationServiceDuFieldset::class);
     }
 }

@@ -35,6 +35,6 @@ trait GroupeTypeFormationSaisieFormAwareTrait
             return $this->formGroupeTypeFormationGroupeTypeFormationSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(GroupeTypeFormationSaisieForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(GroupeTypeFormationSaisieForm::class);
     }
 }

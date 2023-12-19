@@ -2,7 +2,7 @@
 
 $fromMaster = true;
 
-$osedir = $oa->getOseDir();
+$osedir = getcwd();
 
 $c->println("Installation de OSE");
 
@@ -74,7 +74,7 @@ if ($composerExists) {
     $c->passthru("cd $osedir;php composer.phar install");
 }
 
-if (!file_exists($osedir . 'config.local.php')) {
+if (!file_exists($osedir . '/config.local.php')) {
     $c->exec([
         "cd $osedir",
         "cp config.local.php.default config.local.php",

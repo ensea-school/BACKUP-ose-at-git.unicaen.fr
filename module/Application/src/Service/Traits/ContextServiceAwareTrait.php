@@ -32,7 +32,7 @@ trait ContextServiceAwareTrait
     public function getServiceContext(): ?ContextService
     {
         if (empty($this->serviceContext)) {
-            $this->serviceContext = \Application::$container->get(ContextService::class);
+            $this->serviceContext = \OseAdmin::instance()->container()->get(ContextService::class);
         }
 
         return $this->serviceContext;

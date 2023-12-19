@@ -31,7 +31,7 @@ trait MissionServiceAwareTrait
     public function getServiceMission(): ?MissionService
     {
         if (empty($this->serviceMission)) {
-            $this->serviceMission = \Application::$container->get(MissionService::class);
+            $this->serviceMission = \OseAdmin::instance()->container()->get(MissionService::class);
         }
 
         return $this->serviceMission;

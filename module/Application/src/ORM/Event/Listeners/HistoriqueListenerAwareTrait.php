@@ -31,7 +31,7 @@ trait HistoriqueListenerAwareTrait
     public function getORMEventListenersHistoriqueListener(): ?HistoriqueListener
     {
         if (empty($this->oRMEventListenersHistoriqueListener)) {
-            $this->oRMEventListenersHistoriqueListener = \Application::$container->get(HistoriqueListener::class);
+            $this->oRMEventListenersHistoriqueListener = \OseAdmin::instance()->container()->get(HistoriqueListener::class);
         }
 
         return $this->oRMEventListenersHistoriqueListener;

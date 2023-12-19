@@ -34,6 +34,6 @@ trait NoteSaisieFormAwareTrait
             return $this->formNoteSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(NoteSaisieForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(NoteSaisieForm::class);
     }
 }

@@ -42,6 +42,6 @@ trait ElementModulateurCentreCoutTauxRemuFormAwareTrait
             return $this->formElementModulateurCentreCoutTauxRemu;
         }
 
-        return \Application::$container->get('FormElementManager')->get(ElementModulateurCentreCoutTauxRemuForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ElementModulateurCentreCoutTauxRemuForm::class);
     }
 }

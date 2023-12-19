@@ -30,7 +30,7 @@ trait MailServiceAwareTrait
     public function getServiceMail(): ?MailService
     {
         if (empty($this->serviceMail)) {
-            $this->serviceMail = \Application::$container->get(MailService::class);
+            $this->serviceMail = \OseAdmin::instance()->container()->get(MailService::class);
         }
 
         return $this->serviceMail;

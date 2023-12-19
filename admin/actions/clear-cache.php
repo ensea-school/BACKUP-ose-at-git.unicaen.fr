@@ -1,17 +1,17 @@
 <?php
 
-$osedir = $oa->getOseDir();
+use Doctrine\ORM\EntityManager;
 
 $c->println("\nNettoyage des caches et mise à jour des proxies", $c::COLOR_LIGHT_CYAN);
 try {
     $c->exec([
-        "cd $osedir",
+        "cd ".getcwd(),
         "rm -Rf cache/*",
     ], false);
 
     /* Nettoyage des proxies */
-    /** @var \Doctrine\ORM\EntityManager $entityManager */
-    $entityManager = $oa->getContainer()->get('doctrine.entitymanager.orm_default');
+    /** @var EntityManager $entityManager */
+    $entityManager = $oa->container()->get('doctrine.entitymanager.orm_default');
     $destPath = $entityManager->getConfiguration()->getProxyDir();
 
     if (!is_dir($destPath)) {
@@ -23,7 +23,7 @@ try {
     $entityManager->getProxyFactory()->generateProxyClasses($metadatas, $destPath);
 
     $c->exec([
-        "cd $osedir",
+        "cd ".getcwd(),
         "chmod -R 777 cache",
     ], false);
 

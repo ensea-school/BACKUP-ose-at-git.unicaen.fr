@@ -30,7 +30,7 @@ trait VolumeHoraireReferentielServiceAwareTrait
     public function getServiceVolumeHoraireReferentiel(): ?VolumeHoraireReferentielService
     {
         if (empty($this->serviceVolumeHoraireReferentiel)) {
-            $this->serviceVolumeHoraireReferentiel = \Application::$container->get(VolumeHoraireReferentielService::class);
+            $this->serviceVolumeHoraireReferentiel = \OseAdmin::instance()->container()->get(VolumeHoraireReferentielService::class);
         }
 
         return $this->serviceVolumeHoraireReferentiel;

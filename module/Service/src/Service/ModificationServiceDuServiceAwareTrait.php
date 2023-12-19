@@ -30,7 +30,7 @@ trait ModificationServiceDuServiceAwareTrait
     public function getServiceModificationServiceDu(): ?ModificationServiceDuService
     {
         if (empty($this->serviceModificationServiceDu)) {
-            $this->serviceModificationServiceDu = \Application::$container->get(ModificationServiceDuService::class);
+            $this->serviceModificationServiceDu = \OseAdmin::instance()->container()->get(ModificationServiceDuService::class);
         }
 
         return $this->serviceModificationServiceDu;

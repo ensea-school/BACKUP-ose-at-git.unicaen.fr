@@ -101,7 +101,7 @@ class LdapConnecteur extends AbstractService
 
     public function isActif(): bool
     {
-        return \AppConfig::get('ldap', 'actif', true);
+        return \OseAdmin::instance()->config()->get('ldap', 'actif', true);
     }
 
 

@@ -1,7 +1,9 @@
 <?php
 
-/** @var \Application\Controller\WorkflowController $wf */
-$wf = $oa->getController(\Application\Controller\WorkflowController::class);
+use Application\Controller\WorkflowController;
+
+/** @var WorkflowController $wf */
+$wf = $oa->getController(WorkflowController::class);
 
 // les plafonds seront aussi calculés!
 $wf->calculTableauxBordAction();

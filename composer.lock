@@ -6889,7 +6889,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bddadmin.git",
-                "reference": "5a709afb211f5b0c32fd8fb9e226eb0843947c03"
+                "reference": "e6abd880ad579eb1998692e388da51e98a028b39"
             },
             "require": {
                 "php": ">=8.2"
@@ -6905,7 +6905,7 @@
                 ]
             },
             "description": "Module pour administrer des bases de données Postgresql et Oracle",
-            "time": "2023-12-15T16:00:21+00:00"
+            "time": "2023-12-19T09:38:34+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",

@@ -89,8 +89,8 @@ class ResumeService extends AbstractService
         if ($c9 = $recherche->getStructureEns()) $conditions['structure_ens_id'] = '(structure_ens_id = -1 OR structure_ens_ids LIKE \'' . $c9->idsFilter() . '\')';
 
         if ($options['composante'] instanceof Structure) {
-            $id                       = (int)$options['composante']->getId();
-            $conditions['composante'] = "(structure_aff_id IS NULL OR structure_aff_id = -1 OR structure_aff_id = $id OR structure_ens_id = -1 OR structure_ens_id = $id)";
+            $ids                      = $options['composante']->idsFilter();
+            $conditions['composante'] = "(structure_aff_id IS NULL OR structure_aff_id = -1 OR structure_aff_ids LIKE '$ids' OR structure_ens_id = -1 OR structure_ens_ids LIKE '$ids')";
         }
 
         switch ($options['tri']) {
@@ -105,7 +105,8 @@ class ResumeService extends AbstractService
             break;
         }
 
-        $sql  = 'SELECT * FROM V_EXPORT_SERVICE WHERE ' . implode(' AND ', $conditions) . ' '
+        $sql  = 'SELECT * FROM V_EXPORT_SERVICE 
+                WHERE ' . implode(' AND ', $conditions) . ' '
             . 'ORDER BY ' . $orderBy;
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
 

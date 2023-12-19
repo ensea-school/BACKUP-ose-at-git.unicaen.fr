@@ -116,7 +116,7 @@ if ($intVersion > 0 && $intVersion < 18) {
         die('Installateur de composer corrompu');
         unlink($composerSetupFile);
     }
-    $c->passthru("cd $osedir;php $composerSetupFile --2.2");
+    $c->passthru("cd $osedir;php $composerSetupFile");
 }
 
 // Récupération des dépendances

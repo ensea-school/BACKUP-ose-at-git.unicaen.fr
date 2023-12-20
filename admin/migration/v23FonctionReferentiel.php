@@ -1,7 +1,7 @@
 <?php
 
 
-use BddAdmin\Bdd;
+use Unicaen\BddAdmin\Bdd;
 
 class v23FonctionReferentiel extends AbstractMigration
 {
@@ -50,11 +50,11 @@ class v23FonctionReferentiel extends AbstractMigration
 
     /**
      * @param Bdd     $bdd
-     * @param Console $c
+     * @param OseConsole $c
      *
      * @return void
      */
-    public function traitementContrainteTriggerIndex (Bdd $bdd, Console $c): void
+    public function traitementContrainteTriggerIndex (Bdd $bdd, OseConsole $c): void
     {
         $c->msg('Mise en état de la base de données pour pouvoir migrer');
         //Mise en etat de la base de données pour pouvoir migrer
@@ -98,15 +98,15 @@ class v23FonctionReferentiel extends AbstractMigration
 
 
     /**
-     * @param Console $c
-     * @param Bdd     $bdd
+     * @param OseConsole $c
+     * @param Bdd        $bdd
      *
-     * @return mixed
-     * @throws \BddAdmin\Exception\BddCompileException
-     * @throws \BddAdmin\Exception\BddException
-     * @throws \BddAdmin\Exception\BddIndexExistsException
+     * @return void
+     * @throws \Unicaen\BddAdmin\Exception\BddCompileException
+     * @throws \Unicaen\BddAdmin\Exception\BddException
+     * @throws \Unicaen\BddAdmin\Exception\BddIndexExistsException
      */
-    public function traitementFonctionReferentielInsertion (Console $c, Bdd $bdd): void
+    public function traitementFonctionReferentielInsertion (OseConsole $c, Bdd $bdd): void
     {
         $c->msg('Récuperations des fonctions référentiels');
         $resFonctions = $bdd->select("SELECT *
@@ -155,11 +155,11 @@ class v23FonctionReferentiel extends AbstractMigration
      * @param Bdd     $bdd
      *
      * @return void
-     * @throws \BddAdmin\Exception\BddCompileException
-     * @throws \BddAdmin\Exception\BddException
-     * @throws \BddAdmin\Exception\BddIndexExistsException
+     * @throws \Unicaen\BddAdmin\Exception\BddCompileException
+     * @throws \Unicaen\BddAdmin\Exception\BddException
+     * @throws \Unicaen\BddAdmin\Exception\BddIndexExistsException
      */
-    public function traitementParentIdFonctionReferentiel (Console $c, Bdd $bdd): void
+    public function traitementParentIdFonctionReferentiel (OseConsole $c, Bdd $bdd): void
     {
         $c->begin('Traitements des fonctions référentiels insérés');
         $lignefonctionTraite = 0;
@@ -186,6 +186,15 @@ class v23FonctionReferentiel extends AbstractMigration
 
 
 
+    /**
+     * @param Bdd   $bdd
+     * @param array $itemRef
+     *
+     * @return mixed
+     * @throws \Unicaen\BddAdmin\Exception\BddCompileException
+     * @throws \Unicaen\BddAdmin\Exception\BddException
+     * @throws \Unicaen\BddAdmin\Exception\BddIndexExistsException
+     */
     private function calculNouvelleFonctionId (Bdd $bdd, array $itemRef): mixed
     {
         $sql = 'SELECT fr.id 
@@ -206,15 +215,15 @@ class v23FonctionReferentiel extends AbstractMigration
 
 
     /**
-     * @param Console $c
-     * @param Bdd     $bdd
+     * @param OseConsole $c
+     * @param Bdd        $bdd
      *
      * @return void
-     * @throws \BddAdmin\Exception\BddCompileException
-     * @throws \BddAdmin\Exception\BddException
-     * @throws \BddAdmin\Exception\BddIndexExistsException
+     * @throws \Unicaen\BddAdmin\Exception\BddCompileException
+     * @throws \Unicaen\BddAdmin\Exception\BddException
+     * @throws \Unicaen\BddAdmin\Exception\BddIndexExistsException
      */
-    public function traitementServiceReferentiel (Console $c, Bdd $bdd): void
+    public function traitementServiceReferentiel (OseConsole $c, Bdd $bdd): void
     {
         $c->msg('Migration des données du service référentiel vers les nouvelles fonctions');
         $ligneServiceTraite = 0;
@@ -243,15 +252,15 @@ class v23FonctionReferentiel extends AbstractMigration
 
 
     /**
-     * @param Console $c
-     * @param Bdd     $bdd
+     * @param OseConsole $c
+     * @param Bdd        $bdd
      *
      * @return void
-     * @throws \BddAdmin\Exception\BddCompileException
-     * @throws \BddAdmin\Exception\BddException
-     * @throws \BddAdmin\Exception\BddIndexExistsException
+     * @throws \Unicaen\BddAdmin\Exception\BddCompileException
+     * @throws \Unicaen\BddAdmin\Exception\BddException
+     * @throws \Unicaen\BddAdmin\Exception\BddIndexExistsException
      */
-    public function traitementPlafondReferentiel (Console $c, Bdd $bdd): void
+    public function traitementPlafondReferentiel (OseConsole $c, Bdd $bdd): void
     {
         $c->msg('Migration des données de plafond referentiel vers les nouvelles fonctions');
         $ligneplafondTraite = 0;

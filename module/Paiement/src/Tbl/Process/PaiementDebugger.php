@@ -8,19 +8,18 @@ use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
 use Lieu\Entity\Db\Structure;
-use Application\Service\Traits\ParametresServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use OffreFormation\Entity\Db\TypeHeures;
 use Paiement\Entity\Db\CentreCout;
+use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\TauxRemu;
-use Paiement\Service\TauxRemuServiceAwareTrait;
 use Paiement\Tbl\Process\Sub\ServiceAPayer;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
-use UnicaenTbl\Service\BddServiceAwareTrait;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
 
 /**
  * Description of PaiementDebugger
@@ -31,12 +30,12 @@ class PaiementDebugger
 {
     protected PaiementProcess $process;
 
-    public ?Intervenant       $intervenant = null;
+    public ?Intervenant $intervenant = null;
 
     /** @var ServiceAPayer[] */
     protected array $services = [];
 
-    protected array $pg       = [
+    protected array $pg = [
         'mode'                           => [
             'libelle' => 'Mode de saisie pour les enseignements réalisés',
         ],
@@ -92,26 +91,26 @@ class PaiementDebugger
 
 
 
-    public function __construct (PaiementProcess $process)
+    public function __construct(PaiementProcess $process)
     {
         $this->process = $process;
     }
 
 
 
-    public function run (Intervenant $intervenant)
+    public function run(Intervenant $intervenant)
     {
         $this->intervenant = $intervenant;
-        $this->services    = $this->process->debug(['INTERVENANT_ID' => $intervenant->getId()]);
+        $this->services = $this->process->debug(['INTERVENANT_ID' => $intervenant->getId()]);
     }
 
 
 
-    public function parametres (): array
+    public function parametres(): array
     {
         $statut = $this->intervenant->getStatut();
 
-        $this->pg['mode']['value']  = $statut->getModeEnseignementRealise();
+        $this->pg['mode']['value'] = $statut->getModeEnseignementRealise();
         $this->pg['mode']['libval'] = ucfirst($this->pg['mode']['value']);
 
         if ($statut->getTauxRemu()) {
@@ -168,7 +167,7 @@ class PaiementDebugger
 
 
 
-    public function servicesAPayer (): array
+    public function servicesAPayer(): array
     {
         $saps = [];
 
@@ -190,15 +189,15 @@ class PaiementDebugger
                 }
             }
             if ($service->referentiel) {
-                $s['type']    = 'Référentiel';
-                $s['libelle'] = (string)$this->getEntity(ServiceReferentiel::class, $service->referentiel);
+                $s['type'] = 'Référentiel';
+                $s['libelle'] = (string)$this->getEntity(ServiceReferentiel::class, $service->referentiel)->getFonctionReferentiel();
             }
             if ($service->mission) {
-                $s['type']    = 'Mission';
+                $s['type'] = 'Mission';
                 $s['libelle'] = (string)$this->getEntity(Mission::class, $service->mission);
             }
 
-            $s['parametres']['Structure']      = (string)$this->getEntity(Structure::class, $service->structure);
+            $s['parametres']['Structure'] = (string)$this->getEntity(Structure::class, $service->structure);
             $s['parametres']['Type d\'heures'] = (string)$this->getEntity(TypeHeures::class, $service->typeHeures);
 
             if ($service->defCentreCout) {
@@ -216,56 +215,73 @@ class PaiementDebugger
             $s['laps'] = [];
 
             foreach ($service->lignesAPayer as $lap) {
-                $l                  = $lap->toArray();
-                $l['volumeHoraire'] = [];
+                $l = $lap->toArray();
+                if (!isset($l['misesEnPaiement'])) {
+                    $l['misesEnPaiement'] = [];
+                }
+                $l['volumeHoraire'] = '';
+                $l['volumeHoraireHisto'] = '';
                 if ($l['volumeHoraireId']) {
                     if ($service->service) {
-                        $l['volumeHoraire'] = $this->vhLibelle(
-                            $this->getEntity(VolumeHoraire::class, $l['volumeHoraireId'])
-                        );
-                    }
-                    if ($service->referentiel) {
-                        $l['volumeHoraire'] = $this->vhLibelle(
-                            $this->getEntity(VolumeHoraireReferentiel::class, $l['volumeHoraireId'])
-                        );
+                        $entity = $this->getEntity(VolumeHoraire::class, $l['volumeHoraireId']);
+                        $l['volumeHoraire'] = $this->vhLibelle($entity);
                     }
                     if ($service->mission) {
-                        $l['volumeHoraire'] = $this->vhLibelle(
-                            $this->getEntity(VolumeHoraireMission::class, $l['volumeHoraireId'])
-                        );
+                        $entity = $this->getEntity(VolumeHoraireMission::class, $l['volumeHoraireId']);
+                        $l['volumeHoraire'] = $this->vhLibelle($entity);
                     }
+                    if ($entity){
+                        /** @var $entity HistoriqueAwareInterface */
+                        $l['volumeHoraireHisto'] = 'Dernière modification par '.$entity->getHistoModificateur().' le '.$entity->getHistoModification()->format('d/m/Y');
+                    }
+                }elseif($service->referentiel){
+                    $l['volumeHoraireId'] = $this->getReferentielVhs($service->formuleResServiceRef);
+
+
                 }
-                $l['tauxRemu']   = (string)$this->getEntity(TauxRemu::class, $l['tauxRemu']);
+                $l['tauxRemu'] = (string)$this->getEntity(TauxRemu::class, $l['tauxRemu']);
                 $l['tauxValeur'] = $this->fts($l['tauxValeur']);
-                $l['heures']     = $this->fts($l['heures'] / 100);
-                $l['heuresAA']   = $this->fts($l['heuresAA'] / 100);
-                $l['heuresAC']   = $this->fts($l['heuresAC'] / 100);
+                $l['heuresRestantes'] = $l['heures'];
+                $l['heures'] = $this->fts($l['heures'] / 100);
+                $l['heuresAA'] = $this->fts($l['heuresAA'] / 100);
+                $l['heuresAC'] = $this->fts($l['heuresAC'] / 100);
                 foreach ($l['misesEnPaiement'] as $i => $m) {
-                    $m['heures']              = $this->fts(($m['heuresAA'] + $m['heuresAC']) / 100);
-                    $m['heuresAA']            = $this->fts($m['heuresAA'] / 100);
-                    $m['heuresAC']            = $this->fts($m['heuresAC'] / 100);
-                    $m['date']                = \DateTime::createFromFormat('Y-m-d', $m['date'])->format('d/m/Y');
-                    $m['periodePaiement']     = (string)$this->getEntity(Periode::class, $m['periodePaiement']);
-                    $m['centreCout']          = (string)$this->getEntity(CentreCout::class, $m['centreCout']);
-                    $m['domaineFonctionnel']  = (string)$this->getEntity(DomaineFonctionnel::class, $m['domaineFonctionnel']);
+                    /** @var CentreCout $centreCouts */
+                    $centreCouts = $this->getEntity(CentreCout::class, $m['centreCout']);
+
+                    $mepEntity = $this->getEntity(MiseEnPaiement::class,$m['id']);
+                    $m['heures'] = $this->fts(($m['heuresAA'] + $m['heuresAC']) / 100);
+                    $l['heuresRestantes'] = $l['heuresRestantes'] - $m['heuresAA'] - $m['heuresAC'];
+                    $m['heuresAA'] = $this->fts($m['heuresAA'] / 100);
+                    $m['heuresAC'] = $this->fts($m['heuresAC'] / 100);
+                    $m['date'] = $m['date'] ? \DateTime::createFromFormat('Y-m-d', $m['date'])->format('d/m/Y') : null;
+                    $m['periodePaiement'] = (string)$this->getEntity(Periode::class, $m['periodePaiement']);
+                    $m['centreCoutCode'] = $centreCouts?->getCode();
+                    $m['centreCoutLibelle'] = $centreCouts?->getLibelle();
+                    $m['domaineFonctionnel'] = (string)$this->getEntity(DomaineFonctionnel::class, $m['domaineFonctionnel']);
+                    $m['heuresTotal'] = $mepEntity->getHeures();
+                    $m['historique'] = 'Dernière modification par '.$mepEntity->getHistoModificateur().' le '.$mepEntity->getHistoModification()->format('d/m/Y');
                     $l['misesEnPaiement'][$i] = $m;
                 }
-
+                $l['heuresRestantes'] = $this->fts($l['heuresRestantes'] / 100);
                 $s['laps'][] = $l;
             }
 
             $s['misesEnPaiement'] = [];
 
             foreach ($service->misesEnPaiement as $mep) {
-                $m                       = $mep->toArray();
-                $m['heures']             = $this->fts(($m['heuresAA'] + $m['heuresAC']) / 100);
-                $m['heuresAA']           = $this->fts($m['heuresAA'] / 100);
-                $m['heuresAC']           = $this->fts($m['heuresAC'] / 100);
-                $m['date']               = \DateTime::createFromFormat('Y-m-d', $m['date'])->format('d/m/Y');
-                $m['periodePaiement']    = (string)$this->getEntity(Periode::class, $m['periodePaiement']);
-                $m['centreCout']         = (string)$this->getEntity(CentreCout::class, $m['centreCout']);
+                /** @var CentreCout $centreCouts */
+                $centreCouts = $this->getEntity(CentreCout::class, $m['centreCout']);
+                $mepEntity = $this->getEntity(MiseEnPaiement::class,$m['id']);
+                $m = $mep->toArray();
+                $m['heures'] = $this->fts($m['heures'] / 100);
+                $m['date'] = $m['date'] ? \DateTime::createFromFormat('Y-m-d', $m['date'])->format('d/m/Y') : null;
+                $m['periodePaiement'] = (string)$this->getEntity(Periode::class, $m['periodePaiement']);
+                $m['centreCoutCode'] = $centreCouts?->getCode();
+                $m['centreCoutLibelle'] = $centreCouts?->getLibelle();
                 $m['domaineFonctionnel'] = (string)$this->getEntity(DomaineFonctionnel::class, $m['domaineFonctionnel']);
-                $s['misesEnPaiement'][]  = $m;
+                $m['historique'] = 'Dernière modification par '.$mepEntity->getHistoModificateur().' le '.$mepEntity->getHistoModification()->format('d/m/Y');
+                $s['misesEnPaiement'][] = $m;
             }
 
             $saps[] = $s;
@@ -276,7 +292,7 @@ class PaiementDebugger
 
 
 
-    protected function getEntity (string $class, mixed $id): mixed
+    protected function getEntity(string $class, mixed $id): mixed
     {
         if (!$id) {
             return null;
@@ -287,12 +303,34 @@ class PaiementDebugger
 
 
 
-    protected function vhLibelle (VolumeHoraire|VolumeHoraireReferentiel|VolumeHoraireMission $volumeHoraire): string
+    protected function vhLibelle(VolumeHoraire|VolumeHoraireReferentiel|VolumeHoraireMission $volumeHoraire): string
     {
         $props = [];
 
         if ($volumeHoraire instanceof VolumeHoraire) {
-            return $volumeHoraire->getHeures() . ' heures ' . $volumeHoraire->getTypeIntervention();
+            $lib = $volumeHoraire->getHeures() . ' heures ' . $volumeHoraire->getTypeIntervention() . ' au ' . $volumeHoraire->getPeriode()->getLibelleCourt();
+            if ($volumeHoraire->getHoraireDebut() && !$volumeHoraire->getHoraireFin()){
+                $lib .= ' à partir du ' . $volumeHoraire->getHoraireDebut()->format('d/m/Y à H:i');
+            }
+            if (!$volumeHoraire->getHoraireDebut() && $volumeHoraire->getHoraireFin()){
+                $lib .= ' jusqu\'au ' . $volumeHoraire->getHoraireFin()->format('d/m/Y à H:i');
+            }
+
+            if ($volumeHoraire->getHoraireDebut() && $volumeHoraire->getHoraireFin()) {
+                $dateDebut = $volumeHoraire->getHoraireDebut()->format('d/m/Y');
+                $heureDebut = $volumeHoraire->getHoraireDebut()->format('H:i');
+                $dateFin = $volumeHoraire->getHoraireFin()->format('d/m/Y');
+                $heureFin = $volumeHoraire->getHoraireFin()->format('H:i');
+
+                if ($dateDebut == $dateFin){
+                    $lib .= " le $dateDebut de $heureDebut à $heureFin";
+                }else{
+                    $lib.= " du $dateDebut à $heureDebut au $dateFin à $heureFin";
+                }
+            }
+
+            return $lib;
+
         }
         if ($volumeHoraire instanceof VolumeHoraireReferentiel) {
             return $volumeHoraire->getHeures() . ' heures';
@@ -308,7 +346,32 @@ class PaiementDebugger
 
 
 
-    protected function fts (float $value): string
+    protected function getReferentielVhs(int $formuleResultatServiceRefId)
+    {
+        $conn = $this->process->getServiceBdd()->getEntityManager()->getConnection();
+
+        $sql = "
+        SELECT
+          vhr.id,
+          vhr.heures,
+          'Dernière modification par ' || u.display_name || ' le ' || to_char(vhr.histo_modification,'dd/mm/YYYY') histo
+        FROM
+          formule_resultat_service_ref frsr 
+          JOIN formule_resultat_vh_ref frvhr ON frvhr.formule_resultat_id = frsr.formule_resultat_id
+          JOIN volume_horaire_ref vhr ON vhr.id = frvhr.volume_horaire_ref_id
+          JOIN utilisateur u ON u.id = vhr.histo_modificateur_id
+        WHERE
+          frsr.id = :frsr
+        ORDER BY
+          frvhr.id
+        ";
+
+        return $conn->fetchAllAssociative($sql, ['frsr' => $formuleResultatServiceRefId]);
+    }
+
+
+
+    protected function fts(float $value): string
     {
         return number_format($value, 2, ',', ' ');
     }

@@ -1,5 +1,7 @@
 <?php
 
+$config = OseAdmin::instance()->config();
+
 $settings = [
     /**
      * Flag indiquant si l'utilisateur authenitifié avec succès via l'annuaire LDAP doit
@@ -29,12 +31,12 @@ $settings = [
     /**
      * Attribut LDAP utilisé pour le username des utilisateurs
      */
-    'ldap_username'                => strtolower(AppConfig::get('ldap', 'loginAttribute')),
+    'ldap_username'                => strtolower($config->get('ldap', 'loginAttribute')),
 
     /**
      * Gestion des autorisations d'usurpation
      */
-    'usurpation_allowed_usernames' => AppConfig::get('ldap', 'autorisationsUrsurpation', []),
+    'usurpation_allowed_usernames' => $config->get('ldap', 'autorisationsUrsurpation', []),
 
     /**
      * Configuration de l'authentification locale.
@@ -46,22 +48,22 @@ $settings = [
          * Possibilité ou non de s'authentifier à l'aide d'un compte local.
          * Toujours OK si pas de CAS
          */
-        'enabled' => (AppConfig::get('ldap', 'actif', true) || AppConfig::get('ldap', 'local', true)) && !(AppConfig::get('cas', 'actif', false) && AppConfig::get('cas', 'exclusif', false)),
+        'enabled' => ($config->get('ldap', 'actif', true) || $config->get('ldap', 'local', true)) && !($config->get('cas', 'actif', false) && $config->get('cas', 'exclusif', false)),
 
-        'description' => "Utilisez ce formulaire si vous possédez un compte LDAP établissement " . (AppConfig::get('ldap', 'local', true) ? "ou un compte local " : '') . "dédié à l'application.",
+        'description' => "Utilisez ce formulaire si vous possédez un compte LDAP établissement " . ($config->get('ldap', 'local', true) ? "ou un compte local " : '') . "dédié à l'application.",
 
         /**
          * Mode d'authentification à l'aide d'un compte dans la BDD de l'application.
          */
         'db'          => [
-            'enabled' => AppConfig::get('ldap', 'local', true),
+            'enabled' => $config->get('ldap', 'local', true),
         ],
 
         'ldap' => [
             /**
              * Possibilité ou non de s'authentifier via l'annuaire LDAP ET en local!!.
              */
-            'enabled' => AppConfig::get('ldap', 'actif', true) && !(AppConfig::get('cas', 'actif', false) && AppConfig::get('cas', 'exclusif', false)),
+            'enabled' => $config->get('ldap', 'actif', true) && !($config->get('cas', 'actif', false) && $config->get('cas', 'exclusif', false)),
         ],
     ],
 
@@ -74,7 +76,7 @@ $settings = [
         /**
          * Activation ou non de ce mode d'authentification.
          */
-        'enabled'     => AppConfig::get('cas', 'actif', false),
+        'enabled'     => $config->get('cas', 'actif', false),
 
         /**
          * Permet de sauter le formulaire d'authentification "/auth/connexion" si CAS est la seule source d'authentification
@@ -109,13 +111,13 @@ $settings = [
     ],
 ];
 
-if (AppConfig::get('cas', 'actif')) {
+if ($config->get('cas', 'actif')) {
     $settings['cas']['connection']['default']['params'] = [
-        'hostname' => AppConfig::get('cas', 'host'),
-        'port'     => AppConfig::get('cas', 'port'),
-        'version'  => AppConfig::get('cas', 'version'),
-        'uri'      => AppConfig::get('cas', 'uri'),
-        'debug'    => AppConfig::get('cas', 'debug'),
+        'hostname' => $config->get('cas', 'host'),
+        'port'     => $config->get('cas', 'port'),
+        'version'  => $config->get('cas', 'version'),
+        'uri'      => $config->get('cas', 'uri'),
+        'debug'    => $config->get('cas', 'debug'),
     ];
 }
 

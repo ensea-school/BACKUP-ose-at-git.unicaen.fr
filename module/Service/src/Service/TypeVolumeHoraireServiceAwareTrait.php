@@ -30,7 +30,7 @@ trait TypeVolumeHoraireServiceAwareTrait
     public function getServiceTypeVolumeHoraire(): ?TypeVolumeHoraireService
     {
         if (empty($this->serviceTypeVolumeHoraire)) {
-            $this->serviceTypeVolumeHoraire = \Application::$container->get(TypeVolumeHoraireService::class);
+            $this->serviceTypeVolumeHoraire = \OseAdmin::instance()->container()->get(TypeVolumeHoraireService::class);
         }
 
         return $this->serviceTypeVolumeHoraire;

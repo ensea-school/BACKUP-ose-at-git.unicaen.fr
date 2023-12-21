@@ -35,6 +35,6 @@ trait CorpsSaisieFormAwareTrait
             return $this->formCorpsCorpsSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(CorpsSaisieForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(CorpsSaisieForm::class);
     }
 }

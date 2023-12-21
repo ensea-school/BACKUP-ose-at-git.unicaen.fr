@@ -2,10 +2,7 @@
 
 $bdd = $oa->getBdd();
 
-$conf = Config::get();
-if (isset($conf['fichiers'])) {
-    $conf = $conf['fichiers'];
-}
+$conf = $oa->config()->get('fichiers');
 
 if (!$conf['stockage'] == 'file') {
     $c->printDie('Votre instance ne stocke pas les fichiers dans le système de fichiers');

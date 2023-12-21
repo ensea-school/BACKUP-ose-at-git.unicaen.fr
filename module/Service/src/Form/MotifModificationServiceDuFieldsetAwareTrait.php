@@ -33,6 +33,6 @@ trait MotifModificationServiceDuFieldsetAwareTrait
             return $this->fieldsetIntervenantMotifModificationServiceDu;
         }
 
-        return \Application::$container->get('FormElementManager')->get(MotifModificationServiceDuFieldset::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(MotifModificationServiceDuFieldset::class);
     }
 }

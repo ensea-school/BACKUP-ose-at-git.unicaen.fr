@@ -30,7 +30,7 @@ trait EtablissementServiceAwareTrait
     public function getServiceEtablissement(): ?EtablissementService
     {
         if (empty($this->serviceEtablissement)) {
-            $this->serviceEtablissement = \Application::$container->get(EtablissementService::class);
+            $this->serviceEtablissement = \OseAdmin::instance()->container()->get(EtablissementService::class);
         }
 
         return $this->serviceEtablissement;

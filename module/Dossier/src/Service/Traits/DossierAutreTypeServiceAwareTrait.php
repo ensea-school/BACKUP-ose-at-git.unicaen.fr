@@ -32,7 +32,7 @@ trait DossierAutreTypeServiceAwareTrait
     public function getServiceDossierAutreType(): ?DossierAutreTypeService
     {
         if (empty($this->serviceDossierAutreType)) {
-            $this->serviceDossierAutreType = \Application::$container->get(DossierAutreTypeService::class);
+            $this->serviceDossierAutreType = \OseAdmin::instance()->container()->get(DossierAutreTypeService::class);
         }
 
         return $this->serviceDossierAutreType;

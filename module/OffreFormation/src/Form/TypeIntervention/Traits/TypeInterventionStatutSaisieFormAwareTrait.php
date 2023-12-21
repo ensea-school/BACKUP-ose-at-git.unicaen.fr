@@ -35,6 +35,6 @@ trait TypeInterventionStatutSaisieFormAwareTrait
             return $this->formTypeInterventionTypeInterventionStatutSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(TypeInterventionStatutSaisieForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(TypeInterventionStatutSaisieForm::class);
     }
 }

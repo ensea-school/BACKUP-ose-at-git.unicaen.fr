@@ -35,6 +35,6 @@ trait ExportRhFormAwareTrait
             return $this->formExportRh;
         }
 
-        return \Application::$container->get('FormElementManager')->get(ExportRhForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ExportRhForm::class);
     }
 }

@@ -25,7 +25,7 @@ $forwarded = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDE
         <h1>OSE
             <small>Organisation des Services d'Enseignement</small>
         </h1>
-        <p class="lead"><?= \Application::$maintenanceText ?></p>
+        <p class="lead"><?= \OseAdmin::instance()->maintenanceText() ?></p>
 
 </div>
 <style>

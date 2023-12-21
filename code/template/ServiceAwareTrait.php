@@ -33,7 +33,7 @@ trait <classname>
     public function get<method>(): ?<targetClassname>
     {
         if (empty($this-><variable>)) {
-            $this-><variable> = \Application::$container->get(<targetClassname>::class);
+            $this-><variable> = \OseAdmin::instance()->container()->get(<targetClassname>::class);
         }
         
         return $this-><variable>;

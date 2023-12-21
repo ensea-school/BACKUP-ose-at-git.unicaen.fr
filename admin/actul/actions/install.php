@@ -1,7 +1,5 @@
 <?php
 
-use BddAdmin\Ddl\Ddl;
-
 $c->begin("\nInstallation ou mise à jour du connecteur ACTUL+");
 
 $c->println('Création de la source de données Actul+ si besoin');

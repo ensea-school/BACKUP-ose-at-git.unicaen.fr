@@ -1,3 +1,4 @@
 <?php
 
-$oa->exec('notifier indicateurs');
+$args = 'notifier indicateurs';
+$c->passthru("php " . getcwd() . "/public/index.php " . $args);

@@ -32,7 +32,7 @@ trait FormuleResultatVolumeHoraireServiceAwareTrait
     public function getServiceFormuleResultatVolumeHoraire(): ?FormuleResultatVolumeHoraireService
     {
         if (empty($this->serviceFormuleResultatVolumeHoraire)) {
-            $this->serviceFormuleResultatVolumeHoraire = \Application::$container->get(FormuleResultatVolumeHoraireService::class);
+            $this->serviceFormuleResultatVolumeHoraire = \OseAdmin::instance()->container()->get(FormuleResultatVolumeHoraireService::class);
         }
 
         return $this->serviceFormuleResultatVolumeHoraire;

@@ -624,7 +624,7 @@ class EditionFormHydrator extends GenericHydrator
     {
         $res = parent::extract($object);
 
-        $res['creerUtilisateur'] = !$object->getId() && !\AppConfig::get('cas', 'actif');
+        $res['creerUtilisateur'] = !$object->getId() && !\OseAdmin::instance()->config()->get('cas', 'actif');
 
         if ($code = $object->getUtilisateurCode()) {
             $utilisateur = $this->getConnecteurLdap()->getUtilisateurFromCode($code, false);

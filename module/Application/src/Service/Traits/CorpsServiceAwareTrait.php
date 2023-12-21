@@ -32,7 +32,7 @@ trait CorpsServiceAwareTrait
     public function getServiceCorps(): ?CorpsService
     {
         if (empty($this->serviceCorps)) {
-            $this->serviceCorps = \Application::$container->get(CorpsService::class);
+            $this->serviceCorps = \OseAdmin::instance()->container()->get(CorpsService::class);
         }
 
         return $this->serviceCorps;

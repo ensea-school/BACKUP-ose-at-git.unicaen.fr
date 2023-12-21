@@ -34,6 +34,6 @@ trait ContratRetourFormAwareTrait
             return $this->formIntervenantContratRetourForm;
         }
 
-        return \Application::$container->get('FormElementManager')->get(ContratRetourForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(ContratRetourForm::class);
     }
 }

@@ -31,7 +31,7 @@ trait DotationServiceAwareTrait
     public function getServiceDotation(): ?DotationService
     {
         if (empty($this->serviceDotation)) {
-            $this->serviceDotation = \Application::$container->get(DotationService::class);
+            $this->serviceDotation = \OseAdmin::instance()->container()->get(DotationService::class);
         }
 
         return $this->serviceDotation;

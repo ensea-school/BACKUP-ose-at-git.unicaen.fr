@@ -30,7 +30,7 @@ trait StructureServiceAwareTrait
     public function getServiceStructure(): ?StructureService
     {
         if (empty($this->serviceStructure)) {
-            $this->serviceStructure = \Application::$container->get(StructureService::class);
+            $this->serviceStructure = \OseAdmin::instance()->container()->get(StructureService::class);
         }
 
         return $this->serviceStructure;

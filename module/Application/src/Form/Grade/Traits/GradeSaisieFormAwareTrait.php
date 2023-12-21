@@ -35,6 +35,6 @@ trait GradeSaisieFormAwareTrait
             return $this->formGradeGradeSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(GradeSaisieForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(GradeSaisieForm::class);
     }
 }

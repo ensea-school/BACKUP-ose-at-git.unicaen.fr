@@ -31,7 +31,7 @@ trait TauxRemuServiceAwareTrait
     public function getServiceTauxRemu(): ?TauxRemuService
     {
         if (empty($this->serviceTaux)) {
-            $this->serviceTaux = \Application::$container->get(TauxRemuService::class);
+            $this->serviceTaux = \OseAdmin::instance()->container()->get(TauxRemuService::class);
         }
 
         return $this->serviceTaux;

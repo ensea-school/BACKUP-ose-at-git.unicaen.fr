@@ -201,7 +201,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
             'relations'  => ['ALL' => ['ALL' => []]],
         ];
         foreach ($res as $e) {
-            $ids = explode('-', substr($e['STRUCTURE_IDS'],1,-1));
+            $ids = explode('-', substr($e['STRUCTURE_IDS']?$e['STRUCTURE_IDS']:'',1,-1));
             foreach( $ids as $structureId) {
                 $structure = $e['STRUCTURE_LIBELLE'];
                 $niveauId = $e['NIVEAU_ID'];

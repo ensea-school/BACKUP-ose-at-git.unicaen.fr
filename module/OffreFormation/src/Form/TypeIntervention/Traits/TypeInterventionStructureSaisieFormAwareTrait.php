@@ -35,6 +35,6 @@ trait TypeInterventionStructureSaisieFormAwareTrait
             return $this->formTypeInterventionTypeInterventionStructureSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get(TypeInterventionStructureSaisieForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(TypeInterventionStructureSaisieForm::class);
     }
 }

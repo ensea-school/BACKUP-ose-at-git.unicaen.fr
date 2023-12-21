@@ -1,8 +1,8 @@
 <?php
 
-use BddAdmin\Bdd;
-use BddAdmin\Ddl\Ddl;
-use BddAdmin\Ddl\DdlFilters;
+use Unicaen\BddAdmin\Bdd;
+use Unicaen\BddAdmin\Ddl\Ddl;
+use Unicaen\BddAdmin\Ddl\DdlFilters;
 
 class MigrationManager
 {
@@ -168,7 +168,7 @@ class MigrationManager
 
     protected function getMigrationDir(): string
     {
-        return $this->oseAdmin->getOseDir() . 'admin/migration/';
+        return getcwd() . '/admin/migration/';
     }
 
 
@@ -197,7 +197,7 @@ class MigrationManager
 
     protected function runMigrationAction(string $contexte, string $action): void
     {
-        $console = $this->oseAdmin->getConsole();
+        $logger = $this->getBdd()->getLogger();
 
         $migration = $this->getMigrationObject($action);
         if (
@@ -210,12 +210,12 @@ class MigrationManager
                 'after'  => 'APRES',
             ];
             $contexteLib = $traducs[$contexte] ?? $contexte;
-            $console->print("[$contexteLib MIGRATION] " . $migration->description() . ' ... ');
+            $logger->msg("[$contexteLib MIGRATION] " . $migration->description() . ' ... ');
             try {
                 $migration->$contexte();
-                $console->println('OK', $console::COLOR_GREEN);
+                $logger->msg("OK\n");
             } catch (\Throwable $e) {
-                $console->println('Erreur : ' . $e->getMessage(), $console::COLOR_RED);
+                $logger->error($e);
             }
         }
     }
@@ -234,7 +234,7 @@ class MigrationManager
     public function migration(string $context = 'pre', string $action = null): void
     {
         if (empty($this->old)) {
-            $this->old = $this->oseAdmin->getBdd()->getDdl($this->filters);
+            $this->old = $this->getBdd()->getDdl($this->filters);
         }
 
         if (!is_dir($this->getMigrationDir())) return;

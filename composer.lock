@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e89e8004eda1b82acbc22fe8a31e49ba",
+    "content-hash": "a72fee6aa567cbeadfd6cae18d213607",
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -1851,21 +1851,21 @@
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-memory",
-            "version": "2.2.0",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache-storage-adapter-memory.git",
-                "reference": "e002c7d3fa0d4723589b550d7ab4586befa72366"
+                "reference": "d2c357a8b839ceb0e0781d5e9aebe46642dbf0b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-memory/zipball/e002c7d3fa0d4723589b550d7ab4586befa72366",
-                "reference": "e002c7d3fa0d4723589b550d7ab4586befa72366",
+                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-memory/zipball/d2c357a8b839ceb0e0781d5e9aebe46642dbf0b2",
+                "reference": "d2c357a8b839ceb0e0781d5e9aebe46642dbf0b2",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-cache": "^3.0",
-                "php": "~8.0.0 || ~8.1.0  || ~8.2.0"
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0"
             },
             "conflict": {
                 "laminas/laminas-servicemanager": "<3.11"
@@ -1874,11 +1874,11 @@
                 "laminas/laminas-cache-storage-implementation": "1.0"
             },
             "require-dev": {
-                "laminas/laminas-cache-storage-adapter-benchmark": "^1.0",
-                "laminas/laminas-cache-storage-adapter-test": "^2.0",
-                "laminas/laminas-coding-standard": "~2.4.0",
-                "psalm/plugin-phpunit": "^0.17.0",
-                "vimeo/psalm": "^4.9"
+                "laminas/laminas-cache-storage-adapter-benchmark": "^1.1.0",
+                "laminas/laminas-cache-storage-adapter-test": "^2.3.0",
+                "laminas/laminas-coding-standard": "~2.5.0",
+                "psalm/plugin-phpunit": "^0.18.0",
+                "vimeo/psalm": "^4.29.0"
             },
             "type": "library",
             "extra": {
@@ -1914,7 +1914,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-10-22T14:38:52+00:00"
+            "time": "2023-10-18T09:43:33+00:00"
         },
         {
             "name": "laminas/laminas-cache-storage-deprecated-factory",
@@ -2240,59 +2240,6 @@
                 }
             ],
             "time": "2023-05-05T16:22:28+00:00"
-        },
-        {
-            "name": "laminas/laminas-dependency-plugin",
-            "version": "2.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-dependency-plugin.git",
-                "reference": "8f2d10199381cdc7d0843bfadad55f8485df9e38"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-dependency-plugin/zipball/8f2d10199381cdc7d0843bfadad55f8485df9e38",
-                "reference": "8f2d10199381cdc7d0843bfadad55f8485df9e38",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": ">=1.1.0 <2.3.0",
-                "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
-            },
-            "require-dev": {
-                "composer/composer": ">=1.9.0 <2.3.0",
-                "laminas/laminas-coding-standard": "~2.4.0",
-                "mikey179/vfsstream": "^1.6.11",
-                "phpunit/phpunit": "^9.5.5",
-                "psalm/plugin-phpunit": "^0.17.0",
-                "roave/security-advisories": "dev-master",
-                "vimeo/psalm": "^4.5"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "Laminas\\DependencyPlugin\\DependencyRewriterPluginDelegator"
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\DependencyPlugin\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Replace zendframework and zfcampus packages with their Laminas Project equivalents.",
-            "support": {
-                "issues": "https://github.com/laminas/laminas-dependency-plugin/issues",
-                "source": "https://github.com/laminas/laminas-dependency-plugin/tree/2.5.0"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "time": "2022-10-16T14:45:47+00:00"
         },
         {
             "name": "laminas/laminas-developer-tools",
@@ -4684,28 +4631,28 @@
         },
         {
             "name": "laminas/laminas-text",
-            "version": "2.10.0",
+            "version": "2.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-text.git",
-                "reference": "40f7acdb284d41553d32db811e704d6e15e415b4"
+                "reference": "d799f3ccb3547e9e6ab313447138bae7009c7cc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-text/zipball/40f7acdb284d41553d32db811e704d6e15e415b4",
-                "reference": "40f7acdb284d41553d32db811e704d6e15e415b4",
+                "url": "https://api.github.com/repos/laminas/laminas-text/zipball/d799f3ccb3547e9e6ab313447138bae7009c7cc7",
+                "reference": "d799f3ccb3547e9e6ab313447138bae7009c7cc7",
                 "shasum": ""
             },
             "require": {
-                "laminas/laminas-servicemanager": "^3.19.0",
+                "laminas/laminas-servicemanager": "^3.22.0",
                 "laminas/laminas-stdlib": "^3.7.1",
-                "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
             },
             "conflict": {
                 "zendframework/zend-text": "*"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~2.4.0",
+                "laminas/laminas-coding-standard": "~2.5.0",
                 "phpunit/phpunit": "^9.5",
                 "psalm/plugin-phpunit": "^0.18.4",
                 "vimeo/psalm": "^5.1"
@@ -4740,7 +4687,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-12-11T15:36:27+00:00"
+            "time": "2023-11-07T16:45:45+00:00"
         },
         {
             "name": "laminas/laminas-uri",
@@ -4802,16 +4749,16 @@
         },
         {
             "name": "laminas/laminas-validator",
-            "version": "2.44.1",
+            "version": "2.45.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-validator.git",
-                "reference": "e9228cdf37434dc376cd7b820e8c80ed7b5d78e9"
+                "reference": "2a60d288ffa1acb84321c85a066dcbf96da34a50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/e9228cdf37434dc376cd7b820e8c80ed7b5d78e9",
-                "reference": "e9228cdf37434dc376cd7b820e8c80ed7b5d78e9",
+                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/2a60d288ffa1acb84321c85a066dcbf96da34a50",
+                "reference": "2a60d288ffa1acb84321c85a066dcbf96da34a50",
                 "shasum": ""
             },
             "require": {
@@ -4830,11 +4777,11 @@
                 "laminas/laminas-i18n": "^2.24.1",
                 "laminas/laminas-session": "^2.17",
                 "laminas/laminas-uri": "^2.11.0",
-                "phpunit/phpunit": "^10.4.2",
+                "phpunit/phpunit": "^10.5.2",
                 "psalm/plugin-phpunit": "^0.18.4",
                 "psr/http-client": "^1.0.3",
                 "psr/http-factory": "^1.0.2",
-                "vimeo/psalm": "^5.16"
+                "vimeo/psalm": "^5.17"
             },
             "suggest": {
                 "laminas/laminas-db": "Laminas\\Db component, required by the (No)RecordExists validator",
@@ -4882,7 +4829,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-12-06T11:43:53+00:00"
+            "time": "2023-12-18T01:12:24+00:00"
         },
         {
             "name": "laminas/laminas-view",
@@ -6849,11 +6796,11 @@
         },
         {
             "name": "unicaen/app",
-            "version": "6.1.1",
+            "version": "6.1.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "a1d8c4be8a7119b43ecb942121f3cc01423601e2"
+                "reference": "14307a4a39345fbb3af578c22e6829b7c86d768c"
             },
             "require": {
                 "beberlei/assert": "^3.3",
@@ -6864,7 +6811,6 @@
                 "ext-ldap": "*",
                 "friendsofphp/proxy-manager-lts": "^1.0",
                 "laminas/laminas-config": "^3.9",
-                "laminas/laminas-dependency-plugin": "^2.2",
                 "laminas/laminas-eventmanager": "^3.10",
                 "laminas/laminas-form": "^3.9",
                 "laminas/laminas-http": "^2.18",
@@ -6906,7 +6852,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2023-11-20T15:05:42+00:00"
+            "time": "2023-12-19T08:30:55+00:00"
         },
         {
             "name": "unicaen/authentification",
@@ -6938,19 +6884,42 @@
             "time": "2023-11-15T15:52:42+00:00"
         },
         {
+            "name": "unicaen/bddadmin",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/bddadmin.git",
+                "reference": "e6abd880ad579eb1998692e388da51e98a028b39"
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Unicaen\\BddAdmin\\": "src/",
+                    "Unicaen\\BddAdmin\\Tests\\": "tests/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "description": "Module pour administrer des bases de données Postgresql et Oracle",
+            "time": "2023-12-19T09:38:34+00:00"
+        },
+        {
             "name": "unicaen/bjy-authorize",
-            "version": "6.1.0",
+            "version": "6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bjy-authorize.git",
-                "reference": "85cf9c2a2fc1ed3f522bdc9ea869d7c7cebb3740"
+                "reference": "cf85f0fad582ea4d297afc984bda923ffa0ef057"
             },
             "require": {
                 "doctrine/common": "^3.2",
                 "laminas/laminas-cache": "^3.1",
                 "laminas/laminas-cache-storage-adapter-memory": "^2.0",
                 "laminas/laminas-cache-storage-deprecated-factory": "^1.0",
-                "laminas/laminas-dependency-plugin": "^2.4",
                 "laminas/laminas-eventmanager": "^3.4",
                 "laminas/laminas-http": "^2.15",
                 "laminas/laminas-mvc": "^3.3",
@@ -6999,7 +6968,7 @@
                 "zf2",
                 "zfc-user"
             ],
-            "time": "2023-12-11T15:53:04+00:00"
+            "time": "2023-12-18T16:19:13+00:00"
         },
         {
             "name": "unicaen/code",
@@ -7103,15 +7072,14 @@
         },
         {
             "name": "unicaen/mail",
-            "version": "6.1.0",
+            "version": "6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/mail.git",
-                "reference": "8e83ed22ae0a5e0f07b1527c5c6462e19f43035d"
+                "reference": "f00dd8dbacf36919bc7a3aeb0a5b5f528e659471"
             },
             "require": {
-                "laminas/laminas-dependency-plugin": "^2.5",
-                "php": "^8.2",
+                "php": "^8.0",
                 "unicaen/privilege": "^6.0"
             },
             "type": "library",
@@ -7122,7 +7090,7 @@
                 ]
             },
             "description": "Module d'envoi de mail",
-            "time": "2023-09-29T09:32:48+00:00"
+            "time": "2023-12-18T16:35:38+00:00"
         },
         {
             "name": "unicaen/open-document",
@@ -7146,14 +7114,13 @@
         },
         {
             "name": "unicaen/privilege",
-            "version": "6.0.1",
+            "version": "6.0.5",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/privilege.git",
-                "reference": "574471c1763acc4b2ec441fd6dbc0fe6a599a877"
+                "reference": "26a3010e7576b4496c5027005a8fec80e0262b97"
             },
             "require": {
-                "laminas/laminas-dependency-plugin": "^2.1",
                 "unicaen/app": ">=5.0"
             },
             "require-dev": {
@@ -7169,7 +7136,7 @@
                 ]
             },
             "description": "Module reprenant la gestion des privileges  - Version laminas",
-            "time": "2023-03-21T09:16:07+00:00"
+            "time": "2023-12-19T08:22:01+00:00"
         },
         {
             "name": "unicaen/siham",
@@ -7229,16 +7196,15 @@
         },
         {
             "name": "unicaen/utilisateur",
-            "version": "dev-php82",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/utilisateur.git",
-                "reference": "4464b89b1850b3016af76f316316623d308dc1e6"
+                "reference": "8230c6a278dd97696caa71b30938c79268cf3c8c"
             },
             "require": {
-                "laminas/laminas-dependency-plugin": "^2.5",
-                "unicaen/app": "6.1.1",
-                "unicaen/mail": "6.1.0"
+                "unicaen/app": "^6.1",
+                "unicaen/mail": "^6.1"
             },
             "require-dev": {
                 "phpunit/phpunit": ">=3.7"
@@ -7257,7 +7223,7 @@
                 ]
             },
             "description": "Module reprenant la gestion des utilisateurs, privileges et roles - Version laminas",
-            "time": "2023-12-11T15:36:10+00:00"
+            "time": "2023-12-18T15:55:33+00:00"
         },
         {
             "name": "unicaen/vue",
@@ -7281,17 +7247,16 @@
         },
         {
             "name": "unicaen/zfc-user",
-            "version": "6.0",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/zfc-user.git",
-                "reference": "0a079b0ee2e260d72ab597fe4312a7a0549cfc55"
+                "reference": "fa0b8b14dd5ac677f0b2aab550de1d4decb61948"
             },
             "require": {
                 "laminas/laminas-authentication": "^2.9",
                 "laminas/laminas-crypt": "^3.6",
                 "laminas/laminas-db": "^2.13",
-                "laminas/laminas-dependency-plugin": "^2.2",
                 "laminas/laminas-form": "^3.1",
                 "laminas/laminas-http": "^2.15",
                 "laminas/laminas-hydrator": "^4.3",
@@ -7328,7 +7293,7 @@
                 ]
             },
             "description": "A generic user registration and authentication module for ZF2. Supports Laminas\\Db and Doctrine2.",
-            "time": "2023-11-07T14:52:39+00:00"
+            "time": "2023-12-18T16:14:37+00:00"
         },
         {
             "name": "webimpress/safe-writer",
@@ -7810,16 +7775,16 @@
         },
         {
             "name": "pdepend/pdepend",
-            "version": "2.16.1",
+            "version": "2.16.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pdepend/pdepend.git",
-                "reference": "66ceb05eaa8bf358574143c974b04463911bc700"
+                "reference": "f942b208dc2a0868454d01b29f0c75bbcfc6ed58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/66ceb05eaa8bf358574143c974b04463911bc700",
-                "reference": "66ceb05eaa8bf358574143c974b04463911bc700",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/f942b208dc2a0868454d01b29f0c75bbcfc6ed58",
+                "reference": "f942b208dc2a0868454d01b29f0c75bbcfc6ed58",
                 "shasum": ""
             },
             "require": {
@@ -7861,7 +7826,7 @@
             ],
             "support": {
                 "issues": "https://github.com/pdepend/pdepend/issues",
-                "source": "https://github.com/pdepend/pdepend/tree/2.16.1"
+                "source": "https://github.com/pdepend/pdepend/tree/2.16.2"
             },
             "funding": [
                 {
@@ -7869,7 +7834,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-10T18:38:19+00:00"
+            "time": "2023-12-17T18:09:59+00:00"
         },
         {
             "name": "phan/phan",
@@ -8376,16 +8341,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.24.4",
+            "version": "1.24.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "6bd0c26f3786cd9b7c359675cb789e35a8e07496"
+                "reference": "fedf211ff14ec8381c9bf5714e33a7a552dd1acc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/6bd0c26f3786cd9b7c359675cb789e35a8e07496",
-                "reference": "6bd0c26f3786cd9b7c359675cb789e35a8e07496",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/fedf211ff14ec8381c9bf5714e33a7a552dd1acc",
+                "reference": "fedf211ff14ec8381c9bf5714e33a7a552dd1acc",
                 "shasum": ""
             },
             "require": {
@@ -8417,9 +8382,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.24.4"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.24.5"
             },
-            "time": "2023-11-26T18:29:22+00:00"
+            "time": "2023-12-16T09:33:33+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -10299,7 +10264,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "unicaen/utilisateur": 20
+        "unicaen/bddadmin": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
@@ -10307,5 +10272,5 @@
         "php": ">=8.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.6.0"
 }

@@ -31,7 +31,7 @@ trait PlafondServiceAwareTrait
     public function getServicePlafond(): ?PlafondService
     {
         if (empty($this->servicePlafond)) {
-            $this->servicePlafond = \Application::$container->get(PlafondService::class);
+            $this->servicePlafond = \OseAdmin::instance()->container()->get(PlafondService::class);
         }
 
         return $this->servicePlafond;

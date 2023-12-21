@@ -83,7 +83,7 @@ class Util
      */
     static public function routeToControllerAction($route)
     {
-        $container = \Application::$container;
+        $container = \OseAdmin::instance()->container();
         if (!$container) throw new \LogicException('Le container n\'est pas accessible!!!');
 
         if (!array_key_exists($route, self::$rcaCache)) {

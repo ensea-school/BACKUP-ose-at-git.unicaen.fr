@@ -11,7 +11,7 @@
 /** @var \UnicaenTbl\Service\TableauBordService $c */
 $c = $container->get(\UnicaenTbl\Service\TableauBordService::class);
 
-$bdd = oseAdmin()->getBdd();
+$bdd = OseAdmin::instance()->getBdd();
 
 
 $tbls = [

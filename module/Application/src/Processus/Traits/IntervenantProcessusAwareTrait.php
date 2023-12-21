@@ -32,7 +32,7 @@ trait IntervenantProcessusAwareTrait
     public function getProcessusIntervenant(): ?IntervenantProcessus
     {
         if (empty($this->processusIntervenant)) {
-            $this->processusIntervenant = \Application::$container->get(IntervenantProcessus::class);
+            $this->processusIntervenant = \OseAdmin::instance()->container()->get(IntervenantProcessus::class);
         }
 
         return $this->processusIntervenant;

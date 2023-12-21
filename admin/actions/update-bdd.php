@@ -1,6 +1,6 @@
 <?php
 
-use BddAdmin\Ddl\Ddl;
+use Unicaen\BddAdmin\Ddl\Ddl;
 
 // Initialisation
 $bdd = $oa->getBdd();
@@ -12,11 +12,11 @@ $c->println("\n" . 'Mise à jour des définitions de la base de données. Merci 
 
 // Récupération du schéma de référence
 $ref = new Ddl();
-$ref->loadFromDir($oa->getOseDir() . 'data/ddl');
+$ref->loadFromDir(getcwd() . '/data/ddl');
 
 
 // Construction de la config de DDL pour filtrer
-$filters = require $oa->getOseDir() . 'data/ddl_config.php';
+$filters = require getcwd() . '/data/ddl_config.php';
 foreach ($ref as $ddlClass => $objects) {
     foreach ($objects as $object => $objectDdl) {
         $filters[$ddlClass]['includes'][] = $object;
@@ -63,7 +63,10 @@ $bdd->dataUpdater()->run('update');
 
 // Reconstruction des TBL
 $c->begin("Reconstruction de tous les plafonds & tableaux de bord");
-$oa->exec('plafonds construire');
+
+$args = 'plafonds construire';
+$c->passthru("php " . getcwd() . "/public/index.php " . $args);
+
 $c->end();
 
 

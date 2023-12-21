@@ -35,6 +35,6 @@ trait VolumeHoraireEnsFormAwareTrait
             return $this->formOffreFormationVolumeHoraireEns;
         }
 
-        return \Application::$container->get('FormElementManager')->get(VolumeHoraireEnsForm::class);
+        return \OseAdmin::instance()->container()->get('FormElementManager')->get(VolumeHoraireEnsForm::class);
     }
 }

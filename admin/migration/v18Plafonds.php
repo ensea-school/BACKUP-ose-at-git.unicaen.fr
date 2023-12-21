@@ -29,7 +29,7 @@ class v18Plafonds extends AbstractMigration
     public function before()
     {
         $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
 
         if (!empty($bdd->table()->get('PLAFOND'))) {
             $bdd->exec('DROP TABLE PLAFOND CASCADE CONSTRAINTS');
@@ -41,7 +41,7 @@ class v18Plafonds extends AbstractMigration
 
     public function after()
     {
-        $c = $this->manager->getOseAdmin()->getConsole();
+        $c = $this->manager->getOseAdmin()->console();
         try {
             $this->migrationParamsStructure();
         } catch (\Exception $e) {
@@ -66,7 +66,7 @@ class v18Plafonds extends AbstractMigration
     public function migrationParamsStructure()
     {
         $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
 
         $sql = "
         SELECT
@@ -172,7 +172,7 @@ class v18Plafonds extends AbstractMigration
     public function migrationParamsReferentiel()
     {
         $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
 
         $sql  = "
         SELECT
@@ -278,7 +278,7 @@ class v18Plafonds extends AbstractMigration
     public function migrationParamsStatut()
     {
         $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
 
         $sql  = "
         SELECT

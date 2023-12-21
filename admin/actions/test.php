@@ -1,6 +1,5 @@
 <?php
 
-// Mise à jour
-$oa->getBdd()->dataUpdater()->run('install', 'TAUX_REMU');
-$oa->getBdd()->dataUpdater()->run('install', 'TAUX_REMU_VALEUR');
-$oa->getBdd()->dataUpdater()->run('install', 'TYPE_MISSION');
+use Unicaen\BddAdmin\Ddl\Ddl;
+
+$r = $oa->getController(\Paiement\Controller\BudgetController::class);

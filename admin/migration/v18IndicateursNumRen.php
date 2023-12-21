@@ -81,7 +81,7 @@ class v18IndicateursNumRen extends AbstractMigration
 
 
         $bdd = $this->manager->getBdd();
-        $c   = $this->manager->getOseAdmin()->getConsole();
+        $c   = $this->manager->getOseAdmin()->console();
 
 
         $ids = [];

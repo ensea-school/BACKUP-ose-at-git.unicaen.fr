@@ -30,7 +30,7 @@ trait ResumeServiceAwareTrait
     public function getServiceResume(): ?ResumeService
     {
         if (empty($this->serviceResume)) {
-            $this->serviceResume = \Application::$container->get(ResumeService::class);
+            $this->serviceResume = \OseAdmin::instance()->container()->get(ResumeService::class);
         }
 
         return $this->serviceResume;

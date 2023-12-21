@@ -31,7 +31,7 @@ trait SihamConnecteurAwareTrait
     public function getConnecteurSihamSiham(): ?SihamConnecteur
     {
         if (empty($this->connecteurSihamSiham)) {
-            $this->connecteurSihamSiham = \Application::$container->get(SihamConnecteur::class);
+            $this->connecteurSihamSiham = \OseAdmin::instance()->container()->get(SihamConnecteur::class);
         }
 
         return $this->connecteurSihamSiham;

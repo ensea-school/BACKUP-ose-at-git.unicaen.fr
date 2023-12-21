@@ -4,6 +4,8 @@ use UnicaenMail\Controller\MailController;
 use UnicaenMail\Entity\Db\Mail;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
+$config = OseAdmin::instance()->config();
+
 return [
     'unicaen-mail' => [
         /**
@@ -15,17 +17,17 @@ return [
          * Options concernant l'envoi de mail par l'application
          */
         'transport_options' => [
-            'host' => AppConfig::get('mail', 'smtpHost'),
-            'port' => AppConfig::get('mail', 'smtpPort'),
+            'host' => $config->get('mail', 'smtpHost'),
+            'port' => $config->get('mail', 'smtpPort'),
         ],
 
-        'redirect_to' => AppConfig::get('mail', 'redirection'),
-        'do_not_send' => AppConfig::get('mail', 'envoiDesactive'),
-        'redirect'    => !empty(AppConfig::get('mail', 'redirection')),
+        'redirect_to' => $config->get('mail', 'redirection'),
+        'do_not_send' => $config->get('mail', 'envoiDesactive'),
+        'redirect'    => !empty($config->get('mail', 'redirection')),
 
         'subject_prefix' => 'OSE',
         'from_name'      => 'Application',
-        'from_email'     => AppConfig::get('mail', 'from'),
+        'from_email'     => $config->get('mail', 'from'),
 
         /**
          * Adresses des redirections si do_not_send est à true
@@ -33,19 +35,19 @@ return [
 
         'module' => [
             'default' => [
-                'redirect_to'    => AppConfig::get('mail', 'redirection'),
-                'do_not_send'    => AppConfig::get('mail', 'envoiDesactive'),
-                'redirect'       => !empty(AppConfig::get('mail', 'redirection')),
+                'redirect_to'    => $config->get('mail', 'redirection'),
+                'do_not_send'    => $config->get('mail', 'envoiDesactive'),
+                'redirect'       => !empty($config->get('mail', 'redirection')),
                 'subject_prefix' => 'OSE',
                 'from_name'      => 'OSE | Application',
-                'from_email'     => AppConfig::get('mail', 'from'),
+                'from_email'     => $config->get('mail', 'from'),
 
             ],
 
         ],
     ],
 
-    'server_url' => AppConfig::get('global', 'scheme') . '://' . AppConfig::get('global', 'domain'),
+    'server_url' => $config->get('global', 'scheme') . '://' . $config->get('global', 'domain'),
 
     /*'navigation' => [
         'default' => [

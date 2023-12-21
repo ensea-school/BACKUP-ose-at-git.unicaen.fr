@@ -1,60 +1,36 @@
 <?php
 
+use Unicaen\BddAdmin\Bdd;
+use Unicaen\BddAdmin\DataUpdater;
+use Psr\Container\ContainerInterface;
 
 class OseAdmin
 {
-    const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE.git';
-    const MIN_VERSION = 17; // version minimum installable
-
     private static ?OseAdmin $instance = null;
 
-    protected Console $console;
+    protected ?OseConsole $console = null;
 
-    protected ?\BddAdmin\Bdd $bdd = null;
+    protected ?OseConfig $config = null;
 
-    protected ?\BddAdmin\DataUpdater $dataUpdater = null;
+    protected ?OseEnv $env = null;
 
-    /**
-     * @var array
-     */
-    private $tags = false;
+    protected ?OseRepo $repo = null;
 
-    /**
-     * @var array
-     */
-    private $branches = false;
+    private ?ContainerInterface $container = null;
 
-    /**
-     * @var int
-     */
-    private $oseAppliId;
+    protected ?Bdd $bdd = null;
 
-    /**
-     * @var int
-     */
-    private $sourceOseId;
+    protected ?DataUpdater $dataUpdater = null;
 
-    /**
-     * @var string
-     */
-    public $oldVersion;
+    private ?int $oseAppliId = null;
 
-    /**
-     * @var string
-     */
-    public $version;
+    private ?int $sourceOseId = null;
 
-    private ?\Psr\Container\ContainerInterface $container = null;
+    private string $maintenanceText = "OSE est actuellement en maintenance. Veuillez nous excuser pour ce déagrément.";
 
 
 
-    private function __construct()
-    {
-    }
-
-
-
-    public static function getInstance(): self
+    public static function instance(): self
     {
         if (!self::$instance) {
             self::$instance = new self();
@@ -66,212 +42,168 @@ class OseAdmin
 
 
 
-    public function init()
+    public function console(): OseConsole
     {
-        spl_autoload_register(function ($class) {
-            $root = self::getInstance()->getOseDir();
-
-            $dirs = [
-                $root . '/admin/src/',
-                $root . '/admin/actul/src/',
-            ];
-
-            foreach ($dirs as $dir) {
-                $filename = $dir . str_replace('\\', '/', $class) . '.php';
-
-                if (file_exists($filename)) {
-                    require_once $filename;
-                    break;
-                }
-            }
-        });
-
-        $this->console = new Console();
-
-        $this->version = $this->currentVersion();
-        $this->oldVersion = $this->version;
-
-        if ($this->console->hasOption('oa-old-version')) {
-            $this->oldVersion = $this->console->getOption('oa-old-version');
+        if (!$this->console) {
+            $this->console = new OseConsole();
         }
-        if ($this->console->hasOption('oa-version')) {
-            $this->version = $this->console->getOption('oa-version');
-        }
+
+        return $this->console;
     }
 
 
 
-    public function gitlabIsReachable(): bool
+    public function config(): OseConfig
     {
-        return $this->brancheIsValid('master');
+        if (!$this->config) {
+            $this->config = new OseConfig();
+        }
+
+        return $this->config;
     }
 
 
 
-    public function getTags($minVersion = self::MIN_VERSION): array
+    public function env(): OseEnv
     {
-        if (false === $this->tags) {
-            $this->tags = [];
+        if (!$this->env) {
+            $this->env = new OseEnv($this);
+        }
 
-            $ts = $this->console->exec("git ls-remote --tags --refs " . self::OSE_ORIGIN, false);
-            foreach ($ts as $tag) {
-                $this->tags[] = substr($tag, strpos($tag, 'refs/tags/') + 10);
-            }
+        return $this->env;
+    }
 
-            usort($this->tags, function ($a, $b) {
-                if ((string)(int)$a !== $a) {
-                    $va = (int)substr($a, 0, strpos($a, '.'));
-                } else {
-                    $va = (int)$a;
-                }
-                if ((string)(int)$b !== $b) {
-                    $vb = (int)substr($b, 0, strpos($b, '.'));
-                } else {
-                    $vb = (int)$b;
-                }
 
-                if ($va == $vb) return 1;
 
-                return $va - $vb;
+    public function repo(): OseRepo
+    {
+        if (!$this->repo) {
+            $this->repo = new OseRepo($this);
+        }
+
+        return $this->repo;
+    }
+
+
+
+    private function init()
+    {
+        if (!defined('REQUEST_MICROTIME')) {
+            define('REQUEST_MICROTIME', microtime(true));
+        }
+
+        /* Définition de la config globale, éventuellement à partir du fichier de config général */
+        if ($this->config()->get('global', 'affichageErreurs')) {
+            error_reporting(E_ALL);
+        } else {
+            error_reporting(E_ERROR);
+            set_exception_handler(function ($e) { // on affiche quand même les erreurs fatales pour expliquer!
+                $this->webAppError($e);
             });
         }
 
-        $tags = $this->tags;
-        foreach ($tags as $i => $tag) {
-            if ((string)(int)$tag !== $tag) {
-                $version = (int)substr($tag, 0, strpos($tag, '.'));
-            } else {
-                $version = (int)$tag;
-            }
-            if ($version < $minVersion) unset($tags[$i]);
+        \Locale::setDefault($this->config()->get('global', 'locale'));
+
+        if (!class_exists('Laminas\Loader\AutoloaderFactory')) {
+            throw new RuntimeException('Impossible de démarrer Laminas. Exécutez `php composer.phar install`');
         }
-
-        return $tags;
     }
 
 
 
-    public function getBranches(): array
+    public function run(string $action, $newProcess = false): void
     {
-        if (false === $this->branches) {
-            $this->branches = [];
+        $cible = getcwd() . '/admin';
 
-            $bs = $this->console->exec("git ls-remote --heads --refs " . self::OSE_ORIGIN, false);
-            foreach ($bs as $branche) {
-                $this->branches[] = substr($branche, strpos($branche, 'refs/heads/') + 11);
-            }
-
-            sort($this->branches);
-        }
-
-        return $this->branches;
-    }
-
-
-
-    public function getCurrentBranche(): ?string
-    {
-        $ts = $this->console->exec("git branch", false);
-        foreach ($ts as $t) {
-            if (0 === strpos($t, '*')) {
-                return trim(substr($t, 1));
-            }
-        }
-
-        return null;
-    }
-
-
-
-    /**
-     * @param string $tag
-     *
-     * @return bool
-     */
-    public function tagIsValid(string $tag): bool
-    {
-        return in_array($tag, $this->getTags());
-    }
-
-
-
-    /**
-     * @param string $tag
-     *
-     * @return bool
-     */
-    public function brancheIsValid(string $branche): bool
-    {
-        return in_array($branche, $this->getBranches());
-    }
-
-
-
-    public function currentVersion(): string
-    {
-        $vf = $this->getOseDir() . 'VERSION';
-        if (!file_exists($vf)) {
-            return 'inconnue';
-        }
-
-        return trim(file_get_contents($vf));
-    }
-
-
-
-    public function writeVersion(string $version)
-    {
-        $this->version = $version;
-        file_put_contents($this->getOseDir() . 'VERSION', $version);
-    }
-
-
-
-    /**
-     * @param string $action
-     */
-    public function run(string $action, $newProcess = false)
-    {
-        $cible = $this->getOseDir() . 'admin/';
-
-        if (file_exists($cible . 'actions/' . $action . '.php')) {
-            $filename = $cible . 'actions/' . $action . '.php';
-        } elseif (is_dir($cible . $action)) {
-            $sousAction = $this->getConsole()->getArg(2);
-            $filename = $cible . $action . '/actions/' . $sousAction . '.php';
+        if (file_exists($cible . '/actions/' . $action . '.php')) {
+            $filename = $cible . '/actions/' . $action . '.php';
+        } elseif (is_dir($cible . '/' . $action)) {
+            $sousAction = $this->console()->getArg(2);
+            $filename = $cible . '/' . $action . '/actions/' . $sousAction . '.php';
         } else {
             $filename = null;
         }
 
         if ($filename) {
             if ($newProcess) {
-                $this->console->passthru(
-                    "php " . $this->getOseDir() . "/bin/ose " . $action
-                    . ' --oa-old-version=' . $this->oldVersion
-                    . ' --oa-version=' . $this->version
+                $this->console()->passthru(
+                    "php " . getcwd() . "/bin/ose " . $action
                 );
             } else {
                 $oa = $this;
-                $c = $this->console;
+                $c = $this->console();
                 require_once $filename;
             }
         } else {
-            $this->console->println('Action "' . $action . '" inconnue.', $this->console::COLOR_RED);
-            $c = $this->console;
-            require_once $this->getOseDir() . 'admin/actions/help.php';
+            $this->console()->println('Action "' . $action . '" inconnue.', $this->console()::COLOR_RED);
+            $c = $this->console();
+            require_once getcwd() . '/admin/actions/help.php';
         }
     }
 
 
 
-    public function getContainer(): \Psr\Container\ContainerInterface
+    public function runWebApp(): void
     {
-        if (empty($this->container)){
-            require_once $this->getOseDir().'config/application.config.php';
+        if (php_sapi_name() !== 'cli' && $this->inMaintenance()) {
+            $this->maintenanceText = $this->config()->get('maintenance', 'messageInfo');
+            require 'public/maintenance.php';
+        } else {
+            ini_set('session.cookie_samesite', 'Strict');
 
-            Application::init();
-            Application::start();
-            $this->container = Application::$container;
+            $this->container()->get('Application')->run();
+        }
+    }
+
+
+
+    private function webAppError($exception)
+    {
+        header("HTTP/1.0 500 Internal Server Error");
+        $this->maintenanceText = '<h2>Une erreur est survenue !</h2>'
+            . '<p>' . $exception->getMessage() . '</p>'
+            . '<p style="color:darkred">' . $exception->getFile() . ' ligne ' . $exception->getLine() . '</p>';
+        if (!$this->env()->inConsole()) {
+            require 'public/maintenance.php';
+        } else {
+            echo $this->maintenanceText . "\n";
+        }
+        die();
+    }
+
+
+
+    public function start(): void
+    {
+        if (!$this->container) {
+            $configuration = $this->config()->getApplicationConfig();
+
+            //Laminas\Mvc\Application::init(AppConfig::getGlobal())->run();
+
+            // Prepare the service manager
+            $smConfig = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
+            $smConfig = new \Laminas\Mvc\Service\ServiceManagerConfig($smConfig);
+
+            $serviceManager = new Laminas\ServiceManager\ServiceManager();
+            $this->container = $serviceManager;
+            $smConfig->configureServiceManager($serviceManager);
+            $serviceManager->setService('ApplicationConfig', $configuration);
+
+            // Load modules
+            /** @var $moduleManager \Laminas\ModuleManager\ModuleManager */
+            $moduleManager = $serviceManager->get('ModuleManager');
+            $moduleManager->loadModules();
+
+            $serviceManager->get('Application')->bootstrap([]);
+        }
+    }
+
+
+
+    public function container(): ContainerInterface
+    {
+        if (!$this->container) {
+            $this->start();
         }
 
         return $this->container;
@@ -279,69 +211,24 @@ class OseAdmin
 
 
 
-    public function getController(string $name)
+    public function getController(string $name): object
     {
-        return $this->getContainer()->get('ControllerManager')->get($name);
+        return $this->container()->get('ControllerManager')->get($name);
     }
 
 
 
-    public function testsInit()
+    public function test(string $action): void
     {
-        // permet de charger l'application
-        $this->getContainer();
+        $cible = getcwd() . '/tests/' . $action . '.php';
 
-        // autoload pour les tests
-        spl_autoload_register(function(string $class){
-            if (str_starts_with($class, 'tests\\')){
-                $filename = dirname(dirname(__DIR__)).'/'.str_replace('\\', '/', $class).'.php';
-                require_once $filename;
-            }
-        });
-
-    }
-
-
-
-    public function test(string $action)
-    {
-        $cible = $this->getOseDir() . 'tests/'.$action.'.php';
-
-        if (!file_exists($cible)){
-            $this->console->printDie("Le fichier $cible n'existe pas");
+        if (!file_exists($cible)) {
+            $this->console()->printDie("Le fichier $cible n'existe pas");
         }
 
         $oa = $this;
-        $c = $this->console;
+        $c = $this->console();
         require_once($cible);
-    }
-
-
-
-    public function getEnv(): string
-    {
-        return getenv('APPLICATION_ENV') ?: 'dev';
-    }
-
-
-
-    public function inDev(): bool
-    {
-        return 'dev' == $this->getEnv();
-    }
-
-
-
-    public function exec($args)
-    {
-        $this->console->passthru("php " . $this->getOseDir() . "/public/index.php " . $args);
-    }
-
-
-
-    public function getOseDir(): string
-    {
-        return dirname(dirname(__DIR__)) . '/';
     }
 
 
@@ -378,56 +265,47 @@ class OseAdmin
 
 
 
-    public function getConfig(string $section = null, string $key = null, $default = null)
-    {
-        $configFilename = $this->getOseDir() . '/config.local.php';
-        if (file_exists($configFilename)) {
-            $config = require $configFilename;
-        } else {
-            $config = [];
-        }
-
-        if ($config && $section && $key) {
-            if (isset($config[$section][$key])) {
-                return $config[$section][$key];
-            } else {
-                return $default;
-            }
-        }
-
-        if ($config && $section) {
-            if (isset($config[$section])) {
-                return $config[$section];
-            }
-        }
-
-        return $config;
-    }
-
-
-
     public function inMaintenance(): bool
     {
-        $config = $this->getConfig();
+        if ($this->env()->inConsole()) {
+            // pas de mode de maintenance en mode console
+            return false;
+        }
 
-        return $config['maintenance']['modeMaintenance'] ?? true;
+        $inMaintenance = $this->config()->get('maintenance', 'modeMaintenance', false);
+        if (!$inMaintenance) {
+            return false;
+        }
+
+        $whiteList = $this->config()->get('maintenance', 'whiteList', []);
+
+        $passed = false;
+        foreach ($whiteList as $ip) {
+            $passed = $ip[0] === (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null);
+            if ($passed && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $passed = isset($ip[1]) && $ip[1] === $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+            if ($passed) break;
+        }
+
+        return !$passed;
     }
 
 
 
-    /**
-     * @return \BddAdmin\Bdd
-     */
-    public function getBdd(): \BddAdmin\Bdd
+    public function maintenanceText(): string
+    {
+        return $this->maintenanceText;
+    }
+
+
+
+    public function getBdd(): Bdd
     {
         if (!$this->bdd) {
-            if (!$this->bddIsOk($msg)) {
-                $this->console->printDie("Impossible d'accéder à la base de données : $msg!"
-                    . "\nVeuillez contrôler vos paramètres de configuration s'il vous plaît, avant de refaire une tentative de MAJ de la base de données (./bin/ose update-bdd).");
-            }
-            $this->bdd = new \BddAdmin\Bdd(Config::getBdd());
+            $this->bdd = new Bdd($this->config()->get('bdd'));
             if (PHP_SAPI == 'cli') {
-                $this->bdd->setLogger($this->console);
+                $this->bdd->setLogger($this->console());
             }
 
             try {
@@ -438,60 +316,14 @@ class OseAdmin
             }
 
             $du = $this->bdd->dataUpdater();
-            $du->setConfig(require $this->getOseDir() . '/data/data_updater_config.php');
+            $du->setConfig(require getcwd() . '/data/data_updater_config.php');
             $du->addSource(new \DataSource($this));
-            $du->addSource($this->getOseDir() . '/data/nomenclatures.php');
-            $du->addSource($this->getOseDir() . '/data/donnees_par_defaut.php');
+            $du->addSource(getcwd() . '/data/nomenclatures.php');
+            $du->addSource(getcwd() . '/data/donnees_par_defaut.php');
             $du->addAction('privileges', 'Mise à jour des privilèges dans la base de données');
         }
 
         return $this->bdd;
     }
 
-
-
-    /**
-     * @param \BddAdmin\Bdd $bdd
-     *
-     * @return $this
-     */
-    public function setBdd(\BddAdmin\Bdd $bdd)
-    {
-        $this->bdd = $bdd;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return Console
-     */
-    public function getConsole(): Console
-    {
-        return $this->console;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function bddIsOk(&$msg): bool
-    {
-        $bddConf = Config::getBdd();
-
-        $cs = $bddConf['host'] . ':' . $bddConf['port'] . '/' . $bddConf['dbname'];
-        $characterSet = 'AL32UTF8';
-        $conn = @oci_pconnect($bddConf['username'], $bddConf['password'], $cs, $characterSet);
-        if (!$conn) {
-            $msg = oci_error()['message'];
-
-            return false;
-        } else {
-            oci_close($conn);
-
-            return true;
-        }
-    }
 }

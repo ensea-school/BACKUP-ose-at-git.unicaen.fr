@@ -33,7 +33,7 @@ trait OffreEmploiServiceAwareTrait
     public function getServiceOffreEmploi(): ?OffreEmploiService
     {
         if (empty($this->serviceOffreEmploi)) {
-            $this->serviceOffreEmploi = \Application::$container->get(OffreEmploiService::class);
+            $this->serviceOffreEmploi = \OseAdmin::instance()->container()->get(OffreEmploiService::class);
         }
 
         return $this->serviceOffreEmploi;

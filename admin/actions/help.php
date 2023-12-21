@@ -40,7 +40,7 @@ $actionsDev = [
     "test-migration"        => "Script de test de migration. Paramètres : [before|after nom_du_script_de_migration]",
 ];
 
-if ($this->inDev()) {
+if (OseAdmin::instance()->env()->inDev()) {
     $actions = array_merge($actions, $actionsDev);
 }
 

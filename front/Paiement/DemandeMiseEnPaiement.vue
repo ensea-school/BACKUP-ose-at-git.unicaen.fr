@@ -15,9 +15,11 @@
             <div id="dmep-vacataires-collapse" aria-labelledby="dmep-vacataires-heading" class="accordion-collapse collapse show">
                 <div class="accordion-body">
                     <div v-for="(etape, code) in structure.etapes">
-                        <h4>{{ code + ' - ' + etape.libelle }}</h4>
                         <div v-for="(enseignement,code) in etape.enseignements">
-                            <h5>{{ code + ' - ' + enseignement.libelle }}</h5>
+                            <div class="cartridge gray bordered" style="padding-bottom: 5px">
+                                <span>{{ etape.libelle }}</span>
+                                <span>{{ enseignement.libelle }}</span>
+                            </div>
                             <table class="table">
                                 <thead>
                                 <tr>
@@ -29,17 +31,19 @@
                                 </thead>
                                 <tbody>
                                 <template v-for="(typeHeure, code) in enseignement.typeHeure">
-                                    <tr v-for="heure in typeHeure.heures">
+                                    <tr v-for="(value,id) in typeHeure.heures">
                                         <td>{{ typeHeure.libelle }}</td>
-                                        <td>{{ heure.heuresAPayer }}</td>
-                                        <td>{{ heure.centreCout.libelle }}</td>
-                                        <td>{{ heuresStatut(heure) }}</td>
+                                        <td v-if="value.heuresDemandees != 0 ">{{ value.heuresAPayer }}</td>
+                                        <td v-if="value.heuresDemandees == 0 "><input :max="value.heuresAPayer" :value="value.heuresAPayer" min="0" step="0.5"
+                                                                                      type="number"/></td>
+                                        <td>{{ value.centreCout.libelle }}</td>
+                                        <td>{{ heuresStatut(value) }}</td>
                                     </tr>
                                 </template>
 
                                 </tbody>
                             </table>
-                           
+
                         </div>
 
                     </div>
@@ -83,16 +87,16 @@ export default {
                     console.error(error);
                 })
         },
-        heuresStatut(heures)
+        heuresStatut(value)
         {
-            if (heures.heuresAPayer == heures.heuresPayer) {
+            if (value.heuresAPayer == value.heuresPayees) {
                 return 'Heures payées';
             }
-            if (heures.heuresAPayer == heures.heuresDemander) {
+            if (value.heuresAPayer == value.heuresDemandees) {
                 return 'Paiement demandé';
             }
-            if (heures.heuresDemander == 0) {
-                return 'Heures à demander';
+            if (value.heuresDemandees == 0) {
+                return 'Paiement à demander';
             }
             return 'indetermine';
         }

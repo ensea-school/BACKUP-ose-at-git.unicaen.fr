@@ -127,7 +127,7 @@ class PaiementController extends AbstractController
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
-     
+
 
         //Un intervenant n'a pas le droit de voir cette page de demande de mise en paiement
         if ($role->getIntervenant()) {
@@ -153,7 +153,8 @@ class PaiementController extends AbstractController
             //On redirige vers la visualisation des mises en paiement
             $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
         }
-        $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenantNew($intervenant);
+        $this->updateTableauxBord($intervenant);
+        $servicesAPayer = $this->getServiceServiceAPayer()->getDemandeMiseEnPaiementResume($intervenant);
 
 
         return new AxiosModel($servicesAPayer);

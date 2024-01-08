@@ -2,8 +2,6 @@
 
 namespace Paiement\Tbl\Process\Sub;
 
-use Paiement\Service\TauxRemuServiceAwareTrait;
-
 class LigneAPayer
 {
     public int $id;
@@ -12,9 +10,9 @@ class LigneAPayer
     public int $tauxRemu;
     public float $tauxValeur;
     public float $pourcAA;
-    public int $heures;
-    public int $heuresAA;
-    public int $heuresAC;
+    public int $heures = 0;
+    public int $heuresAA = 0;
+    public int $heuresAC = 0;
 
     /** @var array|MiseEnPaiement[] */
     public array $misesEnPaiement = [];

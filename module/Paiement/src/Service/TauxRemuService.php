@@ -41,7 +41,7 @@ class TauxRemuService extends AbstractEntityService
 
 
 
-    public function tauxValeur(TauxRemu|int $tauxRemu, \DateTime|string $date): float
+    public function getTauxMap(): array
     {
         $session = $this->getSessionContainer();
         if (!isset($session->tauxValeur)) {
@@ -78,7 +78,14 @@ class TauxRemuService extends AbstractEntityService
             $session->tauxValeur = $tauxValeur;
         }
 
-        $tauxValeur = $session->tauxValeur;
+        return $session->tauxValeur;
+    }
+
+
+
+    public function tauxValeur(TauxRemu|int $tauxRemu, \DateTime|string $date): float
+    {
+        $tauxValeur = $this->getTauxMap();
 
         if ($tauxRemu instanceof TauxRemu) {
             $tauxRemu = $tauxRemu->getId();

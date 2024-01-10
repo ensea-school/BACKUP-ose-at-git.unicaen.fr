@@ -22,7 +22,8 @@ SELECT 'P'                                                                      
            END)) * 100                                                                    pourcentage,
        --pourc_ecart,
        --pourc_diff,
-       (lpad(FLOOR(hetd), 2, '0')) || ':' || lpad(FLOOR((hetd - FLOOR(hetd)) * 60), 2, 0) nombres_heures,
+       CASE WHEN hetd >= 100 THEN FLOOR(hetd) || ':' || lpad(FLOOR((hetd - FLOOR(hetd)) * 60), 2, 0)
+       ELSE (lpad(FLOOR(hetd), 2, '0')) || ':' || lpad(FLOOR((hetd - FLOOR(hetd)) * 60), 2, 0) END         nombres_heures,
        NULL                                                                               flmodi,
        NULL                                                                               numord,
        NULL                                                                               numgrp,

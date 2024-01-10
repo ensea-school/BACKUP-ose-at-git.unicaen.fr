@@ -107,7 +107,11 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
             $s                   = $this->getServiceStructure()->getList($qb);
             $session->structures = [];
             foreach ($s as $structure) {
-                $session->structures[$structure->getId()] = str_repeat('&nbsp;', ($structure->getLevel() ?? 0)*4).(string)$structure;
+                if ($structure->getLevel() > 0) {
+                    $session->structures[$structure->getId()] = str_repeat('&nbsp;', $structure->getLevel() * 4) . (string)$structure;
+                }else{
+                    $session->structures[$structure->getId()] = (string)$structure;
+                }
             }
         }
 

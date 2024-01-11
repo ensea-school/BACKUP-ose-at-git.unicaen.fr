@@ -37,16 +37,15 @@ final class ArrondisseurTest extends OseTestCase
         $data = [
             'heures'       => 8,
             'lignesAPayer' => [
-                ['heures' => 5,],
-                ['heures' => 3,],
+                ['heuresAA' => 5],
+                ['heuresAA' => 3],
             ],
         ];
 
         $await = [
-            'heures'       => 8,
             'lignesAPayer' => [
-                ['heures' => 5,],
-                ['heures' => 3,],
+                ['heuresAA' => 5],
+                ['heuresAA' => 3],
             ],
         ];
 
@@ -60,16 +59,15 @@ final class ArrondisseurTest extends OseTestCase
         $data = [
             'heures'       => 5,
             'lignesAPayer' => [
-                ['heures' => 5,],
-                ['heures' => 3,],
+                ['heuresAA' => 5],
+                ['heuresAA' => 3],
             ],
         ];
 
         $await = [
-            'heures'       => 5,
             'lignesAPayer' => [
-                ['heures' => 4,],
-                ['heures' => 1,],
+                ['heuresAA' => 4],
+                ['heuresAA' => 1],
             ],
         ];
 
@@ -83,16 +81,15 @@ final class ArrondisseurTest extends OseTestCase
         $data = [
             'heures'       => 10,
             'lignesAPayer' => [
-                ['heures' => 5,],
-                ['heures' => 3,],
+                ['heuresAA' => 5],
+                ['heuresAA' => 3],
             ],
         ];
 
         $await = [
-            'heures'       => 10,
             'lignesAPayer' => [
-                ['heures' => 6,],
-                ['heures' => 4,],
+                ['heuresAA' => 6],
+                ['heuresAA' => 4],
             ],
         ];
 

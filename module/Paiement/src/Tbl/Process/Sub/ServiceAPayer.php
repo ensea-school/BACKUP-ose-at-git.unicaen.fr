@@ -4,20 +4,20 @@ namespace Paiement\Tbl\Process\Sub;
 
 class ServiceAPayer
 {
-    public string $key;
-    public int $annee;
-    public int $intervenant;
-    public int $structure;
-    public ?int $service;
-    public ?int $referentiel;
-    public ?int $mission;
-    public ?int $formuleResService;
-    public ?int $formuleResServiceRef;
-    public int $typeHeures;
-    public ?int $defDomaineFonctionnel;
-    public ?int $defCentreCout;
-    public float $tauxCongesPayes;
-    public ?int $heures;
+    public ?string $key = null;
+    public ?int $annee = null;
+    public ?int $intervenant = null;
+    public ?int $structure = null;
+    public ?int $service = null;
+    public ?int $referentiel = null;
+    public ?int $mission = null;
+    public ?int $formuleResService = null;
+    public ?int $formuleResServiceRef = null;
+    public ?int $typeHeures = null;
+    public ?int $defDomaineFonctionnel = null;
+    public ?int $defCentreCout = null;
+    public ?float $tauxCongesPayes = null;
+    public ?int $heures = 0;
 
     /** @var array|LigneAPayer[] */
     public array $lignesAPayer = [];
@@ -42,7 +42,7 @@ class ServiceAPayer
         $this->defDomaineFonctionnel = (int)$data['DEF_DOMAINE_FONCTIONNEL_ID'] ?: null;
         $this->defCentreCout = (int)$data['DEF_CENTRE_COUT_ID'] ?: null;
         $this->tauxCongesPayes = (float)$data['TAUX_CONGES_PAYES'];
-        $this->heures = (int)round((float)$data['HEURES']*100) ?: null;
+        $this->heures = (int)round((float)$data['HEURES'] * 100) ?: null;
         $this->lignesAPayer = [];
         $this->misesEnPaiement = [];
     }
@@ -58,6 +58,9 @@ class ServiceAPayer
         }
         if (isset($data['lignesAPayer'])) {
             foreach ($data['lignesAPayer'] as $did => $dlap) {
+                if (!isset($dmep['id'])){
+                    $dlap['id'] = $did;
+                }
                 $lap = new LigneAPayer();
                 $lap->fromArray($dlap);
                 $this->lignesAPayer[$did] = $lap;
@@ -65,6 +68,9 @@ class ServiceAPayer
         }
         if (isset($data['misesEnPaiement'])) {
             foreach ($data['misesEnPaiement'] as $mid => $dmep) {
+                if (!isset($dmep['id'])){
+                    $dmep['id'] = $mid;
+                }
                 $mep = new MiseEnPaiement();
                 $mep->fromArray($dmep);
                 $this->misesEnPaiement[$mid] = $mep;
@@ -85,7 +91,7 @@ class ServiceAPayer
             $vars['misesEnPaiement'][$id] = $mep->toArray();
         }
 
-        if (empty($vars['misesEnPaiement'])){
+        if (empty($vars['misesEnPaiement'])) {
             unset($vars['misesEnPaiement']);
         }
 

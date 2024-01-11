@@ -123,25 +123,26 @@ class PaiementProcess implements ProcessInterface
     {
         $this->init();
         $this->loadAPayer($params);
-        foreach ($this->services as $sid => $serviceAPayer) {
-            $this->arrondisseur->arrondir($serviceAPayer);
-            $this->consolidateur->consolider($serviceAPayer, false);
-            $this->rapprocheur->rapprocher($serviceAPayer);
-        }
+        $this->traitement(false, false);
 
         return $this->services;
     }
 
 
 
-    protected function traitement()
+    protected function traitement(bool $export=true, bool $consolidation=true)
     {
         foreach ($this->services as $sid => $serviceAPayer) {
             $this->arrondisseur->arrondir($serviceAPayer);
-            $this->consolidateur->consolider($serviceAPayer);
+            $this->repartiteur->repartir($serviceAPayer);
             $this->rapprocheur->rapprocher($serviceAPayer);
-            $this->exporteur->exporter($serviceAPayer, $this->tblData);
-            unset($this->services[$sid]);// libération de mémoire
+            if ($consolidation) {
+                $this->consolidateur->consolider($serviceAPayer);
+            }
+            if ($export) {
+                $this->exporteur->exporter($serviceAPayer, $this->tblData);
+                unset($this->services[$sid]);// libération de mémoire
+            }
         }
     }
 
@@ -184,27 +185,29 @@ class PaiementProcess implements ProcessInterface
     protected function loadLigneAPayer(array $data)
     {
         $key = $data['KEY'];
-        $tauxRemu = (int)$data['TAUX_REMU_ID'];
-        $horaireDebut = (string)$data['HORAIRE_DEBUT'];
-        $miseEnPaiementId = (int)$data['MISE_EN_PAIEMENT_ID'];
+        $lapKey = (int)$data['A_PAYER_ID'];
+        $mepKey = (int)$data['MISE_EN_PAIEMENT_ID'];
 
         if (!array_key_exists($key, $this->services)) {
             $sap = new ServiceAPayer();
             $sap->fromBdd($data);
-            $this->services[$sap->key] = $sap;
+            $this->services[$key] = $sap;
         }
 
-        $lap = new LigneAPayer();
-        $lap->tauxValeur = $this->getServiceTauxRemu()->tauxValeur($tauxRemu, $horaireDebut);
-        $lap->pourcAA = $this->repartiteur->fromBdd($data);
-        $lap->fromBdd($data);
+        if (!array_key_exists($lapKey, $this->services[$key]->lignesAPayer)) {
+            $lap = new LigneAPayer();
+            $tauxRemu = (int)$data['TAUX_REMU_ID'];
+            $horaireDebut = (string)$data['HORAIRE_DEBUT'];
+            $lap->tauxValeur = $this->getServiceTauxRemu()->tauxValeur($tauxRemu, $horaireDebut);
+            $lap->pourcAA = $this->repartiteur->fromBdd($data);
+            $lap->fromBdd($data);
+            $this->services[$key]->lignesAPayer[$lapKey] = $lap;
+        }
 
-        $this->services[$key]->lignesAPayer[$lap->id] = $lap;
-
-        if ($miseEnPaiementId > 0) {
+        if ($mepKey > 0 && !array_key_exists($mepKey,$this->services[$key]->misesEnPaiement )) {
             $mep = new MiseEnPaiement();
             $mep->fromBdd($data);
-            $this->services[$key]->misesEnPaiement[$mep->id] = $mep;
+            $this->services[$key]->misesEnPaiement[$mepKey] = $mep;
         }
     }
 
@@ -213,7 +216,5 @@ class PaiementProcess implements ProcessInterface
     protected function heuresAPayerSql(): string
     {
         return $this->getServiceBdd()->getViewDefinition('V_TBL_PAIEMENT');
-
-//        return file_get_contents(getcwd() . '/module/Paiement/sql/paiement_process_heures_a_payer.sql');
     }
 }

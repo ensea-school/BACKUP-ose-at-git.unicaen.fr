@@ -5,7 +5,7 @@ namespace Paiement\Tbl\Process\Sub;
 class Consolidateur
 {
 
-    public function consolider(ServiceAPayer $sap, $full = true)
+    public function consolider(ServiceAPayer $sap)
     {
         if (empty($sap->lignesAPayer)) {
             return;
@@ -13,34 +13,62 @@ class Consolidateur
 
         $laps = [];
         foreach ($sap->lignesAPayer as $i => $l) {
-            if ($full) {
-                $key = $l->tauxRemu . '-' . $l->tauxValeur . '-' . ($l->periode ?? 0);
-            } else {
-                $key = $i;
-            }
+            $key = $l->tauxRemu . '-' . $l->tauxValeur . '-' . ($l->periode ?? 0);
             if (!isset($laps[$key])) {
-                $lap = new LigneAPayer();
-                $lap->periode = $l->periode;
-                if (empty($l->volumeHoraireId)) {
-                    $lap->volumeHoraireId = null;
-                } elseif (empty($lap->volumeHoraireId)) {
-                    $lap->volumeHoraireId = $l->volumeHoraireId;
+                $laps[$key] = $l;
+            } else {
+                $laps[$key]->heuresAA += $l->heuresAA;
+                $laps[$key]->heuresAC += $l->heuresAC;
+                foreach ($l->misesEnPaiement as $mepId => $mep) {
+                    if (!array_key_exists($mepId, $laps[$key]->misesEnPaiement)) {
+                        $laps[$key]->misesEnPaiement[$mepId] = $mep;
+                    } else {
+                        $laps[$key]->misesEnPaiement[$mepId]->heuresAA += $mep->heuresAA;
+                        $laps[$key]->misesEnPaiement[$mepId]->heuresAC += $mep->heuresAC;
+                        unset($l->misesEnPaiement[$mepId]);
+                    }
                 }
-
-                $lap->tauxRemu = $l->tauxRemu;
-                $lap->tauxValeur = $l->tauxValeur;
-                $lap->heures = 0;
-                $lap->heuresAA = 0;
-                $lap->heuresAC = 0;
-                $laps[$key] = $lap;
+                unset($sap->lignesAPayer[$i]);
             }
-            $heuresAA = (int)round($l->heures * $l->pourcAA);
-            $laps[$key]->heures += $l->heures;
-            $laps[$key]->heuresAA += $heuresAA;
-            $laps[$key]->heuresAC += $l->heures - $heuresAA;
         }
 
-        $sap->lignesAPayer = array_values($laps);
+        /* Deuxième passe de calcul */
+        /* Traitement des heures payées en trop à isoler */
+        foreach ($sap->lignesAPayer as $i => $l) {
+            $heuresAARestantes = $l->heuresAA;
+            $heuresACRestantes = $l->heuresAC;
+            foreach ($l->misesEnPaiement as $mepId => $mep) {
+                $heuresEnMoins= false;
+                if ($mep->heuresAA > $heuresAARestantes) {
+                    $sapMep = $this->getSapMep($sap, $mep);
+                    $sapMep->heuresAA += $mep->heuresAA - $heuresAARestantes;
+                    $mep->heuresAA -= $mep->heuresAA - $heuresAARestantes;
+                    $heuresEnMoins= true;
+                }
+                if ($mep->heuresAC > $heuresACRestantes) {
+                    $sapMep = $this->getSapMep($sap, $mep);
+                    $sapMep->heuresAC += $mep->heuresAC - $heuresACRestantes;
+                    $mep->heuresAC -= $mep->heuresAC - $heuresACRestantes;
+                    $heuresEnMoins= true;
+                }
+                if ($heuresEnMoins && $mep->heuresAA == 0 && $mep->heuresAC == 0){
+                    unset($l->misesEnPaiement[$mepId]);
+                }
+            }
+        }
+
+        $sap->lignesAPayer = array_values($sap->lignesAPayer);
     }
 
+
+
+    protected function getSapMep(ServiceAPayer $sap, MiseEnPaiement $reference): MiseEnPaiement
+    {
+        if (!array_key_exists($reference->id, $sap->misesEnPaiement)) {
+            $nmep = $reference->newFrom();
+            $sap->misesEnPaiement[$nmep->id] = $nmep;
+        }
+
+        return $sap->misesEnPaiement[$reference->id];
+    }
 }

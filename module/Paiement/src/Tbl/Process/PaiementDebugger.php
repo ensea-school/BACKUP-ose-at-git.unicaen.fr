@@ -241,8 +241,8 @@ class PaiementDebugger
                 }
                 $l['tauxRemu'] = (string)$this->getEntity(TauxRemu::class, $l['tauxRemu']);
                 $l['tauxValeur'] = $this->fts($l['tauxValeur']);
-                $l['heuresRestantes'] = $l['heures'];
-                $l['heures'] = $this->fts($l['heures'] / 100);
+                $l['heuresRestantes'] = $l['heuresAA'] + $l['heuresAC'];
+                $l['heures'] = $this->fts(($l['heuresAA'] + $l['heuresAC']) / 100);
                 $l['heuresAA'] = $this->fts($l['heuresAA'] / 100);
                 $l['heuresAC'] = $this->fts($l['heuresAC'] / 100);
                 foreach ($l['misesEnPaiement'] as $i => $m) {
@@ -274,7 +274,7 @@ class PaiementDebugger
                 $centreCouts = $this->getEntity(CentreCout::class, $m['centreCout']);
                 $mepEntity = $this->getEntity(MiseEnPaiement::class,$m['id']);
                 $m = $mep->toArray();
-                $m['heures'] = $this->fts($m['heures'] / 100);
+                $m['heures'] = $this->fts(($m['heuresAA']+$m['heuresAC']) / 100);
                 $m['date'] = $m['date'] ? \DateTime::createFromFormat('Y-m-d', $m['date'])->format('d/m/Y') : null;
                 $m['periodePaiement'] = (string)$this->getEntity(Periode::class, $m['periodePaiement']);
                 $m['centreCoutCode'] = $centreCouts?->getCode();

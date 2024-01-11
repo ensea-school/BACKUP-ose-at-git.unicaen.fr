@@ -142,6 +142,34 @@ class PaiementController extends AbstractController
 
 
 
+    public function supprimerMiseEnPaiementAction ()
+    {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $this->initFilters();
+        $idDmep      = $this->params()->fromRoute('mise-en-paiement');
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+
+        //Un intervenant ne peut pas supprimer des demandes de mise en paiement
+        if ($role->getIntervenant()) {
+            //On redirige vers la visualisation des mises en paiement
+            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
+        }
+        //on supprimer la demande de mise en paiement
+        if ($this->getServiceMiseEnPaiement()->supprimerDemandeMiseEnPaiement($idDmep)) {
+            $this->flashMessenger()->addSuccessMessage("Demande de mise en paiement supprimer.");
+        } else {
+            $this->flashMessenger()->addErrorMessage("Impossible de supprimer la demande de mise en paiement, les heures ont déjà été payé.");
+        }
+
+        //Mise à jour tableau de bord de paiement
+        $this->updateTableauxBord($intervenant);
+
+        return false;
+    }
+
+
+
     public function listeServiceAPayerAction ()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
@@ -252,6 +280,7 @@ class PaiementController extends AbstractController
                 $budget[$sid][$trid] = compact('dotation', 'usage');
             }
         }
+
 
         return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur', 'budget', 'whyNotEditable');
     }

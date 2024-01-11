@@ -12,6 +12,7 @@ use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [
+
         'paiement' => [
             'route'         => '/paiement',
             'controller'    => Controller\PaiementController::class,
@@ -88,6 +89,25 @@ return [
                     'privileges'  => Privileges::MISE_EN_PAIEMENT_DEMANDE,
 
                 ],
+                'ajouter-demande-mise-en-paiement'     => [
+                    'type'    => 'Literal',
+                    'options' => [
+                        'route'    => '/:intervenant/ajouter-demande',
+                        'defaults' => [
+                            'action' => 'demandenewMiseEnPaiement',
+                        ],
+                    ],
+                ],
+                'supprimer-demande-mise-en-paiement'   => [
+                    'type'    => 'Segment',
+                    'options' => [
+                        'route'    => '/:intervenant/supprimer-demande/:mise-en-paiement',
+                        'defaults' => [
+                            'action' => 'supprimerMiseEnPaiement',
+                        ],
+
+                    ],
+                ],
                 'process-demande-mise-en-paiement-lot' => [
                     'route'      => '/process-demande-mise-en-paiement-lot',
                     'controller' => Controller\PaiementController::class,
@@ -95,13 +115,14 @@ return [
                     'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
                     'assertion'  => PaiementAssertion::class,
                 ],
-                'pilotage'                             => [
+
+                'pilotage'     => [
                     'route'      => '/pilotage',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'pilotage',
                     'privileges' => Privileges::PILOTAGE_VISUALISATION,
                 ],
-                'ecarts-etats'                         => [
+                'ecarts-etats' => [
                     'route'      => '/ecarts-etats',
                     'action'     => 'ecartsEtats',
                     'controller' => Controller\PaiementController::class,
@@ -266,7 +287,7 @@ return [
     'guards' => [
         [
             'controller' => Controller\PaiementController::class,
-            'action'     => ['listeServiceAPayer', 'demandenewMiseEnPaiement', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
+            'action'     => ['supprimerMiseEnPaiement', 'listeServiceAPayer', 'demandenewMiseEnPaiement', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
             'privileges' => [
                 Privileges::MISE_EN_PAIEMENT_DEMANDE,
             ],

@@ -575,6 +575,26 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
+    public function supprimerDemandeMiseEnPaiement ($idMep)
+    {
+        /**
+         * @var MiseEnPaiement $mep
+         */
+
+        $mep = $this->getEntityManager()->getRepository(MiseEnPaiement::class)->find($idMep);
+        //Si on a pas de période de paiement, on est bien sur une demande de mise en paiement
+        if (!$mep->getPeriodePaiement()) {
+
+            $this->delete($mep);
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+
     /**
      * Sauvegarde tous les changements intervenus dans un ensemble de mises en paiement
      *

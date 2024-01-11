@@ -11,6 +11,7 @@ use Dossier\Assertion\IntervenantDossierAssertion;
 use Dossier\Controller\IntervenantDossierController;
 use Mission\Assertion\OffreEmploiAssertion;
 use Mission\Controller\OffreEmploiController;
+use Paiement\Assertion\PaiementAssertion;
 use Paiement\Controller\PaiementController;
 use UnicaenPrivilege\Guard\PrivilegeController;
 use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
@@ -245,7 +246,8 @@ return [
                                     ],
                                 ],
                             ],
-                            'edition'               => [
+
+                            'edition' => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/edition',

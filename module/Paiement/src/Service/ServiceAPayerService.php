@@ -59,7 +59,7 @@ class ServiceAPayerService extends AbstractService
             MAX(th.id) 				  		type_heure_id,	 
             th.code               			type_heure_code,
             MAX(th.libelle_long)  			type_heure_libelle,
-            tp.mise_en_paiement_id   		mep_id,
+            COALESCE(tp.mise_en_paiement_id,0)  		mep_id,
             MAX(cc.id)     					centre_cout_id,
             MAX(cc.code)   					centre_cout_code,
             MAX(cc.libelle)   				centre_cout_libelle,
@@ -73,7 +73,7 @@ class ServiceAPayerService extends AbstractService
             tp.heures_payees_ac) 		    heures_payees
         FROM
             tbl_paiement tp
-        LEFT JOIN STRUCTURE s ON s.id = tp.structure_id 
+        LEFT JOIN structure s ON s.id = tp.structure_id 
         LEFT JOIN service s ON	s.id = tp.service_id
         LEFT JOIN service_referentiel sr ON	sr.id = tp.service_referentiel_id
         LEFT JOIN element_pedagogique ep ON	ep.id = s.element_pedagogique_id
@@ -108,7 +108,6 @@ class ServiceAPayerService extends AbstractService
 
 
         foreach ($dmeps as $value) {
-
             //On traite ici les heures d'enseignement
             if ($value['TYPAGE'] == "enseignement") {
                 $dmep[$value['STRUCTURE_CODE']]['libelle']                                                                                                                  = $value['STRUCTURE_LIBELLE'];
@@ -121,7 +120,8 @@ class ServiceAPayerService extends AbstractService
                 }
                 //Heure déjà mise en paiement
                 if (!empty($value['MEP_ID'])) {
-                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures'][$value['MEP_ID']] = [
+                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['mep_id_' . $value['MEP_ID']] = [
+                        'id_mep'          => $value['MEP_ID'],
                         'heuresAPayer'    => $value['HEURES_A_PAYER'],
                         'heuresDemandees' => $value['HEURES_DEMANDEES'],
                         'heuresPayees'    => $value['HEURES_PAYEES'],
@@ -133,7 +133,7 @@ class ServiceAPayerService extends AbstractService
                         ],
                     ];
                 } else {
-                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures'][0] = [
+                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['a_demander'] = [
                         'heuresAPayer'    => $value['HEURES_A_PAYER'],
                         'heuresDemandees' => $value['HEURES_DEMANDEES'],
                         'heuresPayees'    => $value['HEURES_PAYEES'],

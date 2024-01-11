@@ -20,39 +20,77 @@
                                 <span>{{ etape.libelle }}</span>
                                 <span>{{ enseignement.libelle }}</span>
                             </div>
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>Type d'heures</th>
-                                    <th>Heures</th>
-                                    <th>Centre de cout</th>
-                                    <th>Statut</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <template v-for="(typeHeure, code) in enseignement.typeHeure">
-                                    <tr v-for="(value,id) in typeHeure.heures">
-                                        <td>{{ typeHeure.libelle }}</td>
-                                        <td v-if="value.heuresDemandees != 0 ">{{ value.heuresAPayer }}</td>
-                                        <td v-if="value.heuresDemandees == 0 "><input :max="value.heuresAPayer" :value="value.heuresAPayer" min="0" step="0.5"
-                                                                                      type="number"/></td>
-                                        <td>{{ value.centreCout.libelle }}</td>
-                                        <td>{{ heuresStatut(value) }}</td>
-                                    </tr>
-                                </template>
+                            <div class="container">
+                                <div class="row">
+                                    <template v-for="(typeHeure, code) in enseignement.typeHeure">
+                                        <div class="col-12">
+                                            <table class="table mt-3 table-bordered">
+                                                <thead class="table-light">
+                                                <tr>
+                                                    <th colspan="2">{{ typeHeure.libelle }}</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <table class="table table-sm ">
+                                                            <thead>
+                                                            <th scope="col" style="font-size:12px;">Heures</th>
+                                                            <th scope="col" style="font-size:12px;">Centre cout</th>
+                                                            <th scope="col" style="font-size:12px;">Statut</th>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr v-for="(value,id) in typeHeure.heures">
+                                                                <td v-if="value.heuresDemandees != 0 ">{{ value.heuresAPayer }} hetd</td>
+                                                                <td v-if="value.heuresDemandees == 0 ">
+                                                                    <div class="input-group col-1">
+                                                                        <input
+                                                                            :max="value.heuresAPayer"
+                                                                            :value="value.heuresAPayer"
+                                                                            class="form-control form-control-sm"
+                                                                            min="0"
+                                                                            style="width: 40px;"
+                                                                            type="number"/>
+                                                                        <span class="input-group-text" style="font-size:12px;">hetd(s) restantes</span>
+                                                                    </div>
+                                                                </td>
+                                                                <!--<td>{{ value.centreCout.libelle }}</td>-->
+                                                                <td> PDE58569</td>
+                                                                <td style="font-size:12px;">
+                                                                    {{ heuresStatut(value) }}
+                                                                    <span
+                                                                        v-if="value.heuresAPayer != value.heuresPayees &&  value.heuresAPayer == value.heuresDemandees">
+                                                                        <button class="btn btn-danger"
+                                                                                type="button" @click="this.supprimerDemandeMiseEnPaiement(value.id_mep)">Supprimer</button>
+                                                                    </span>
+                                                                    <span
+                                                                        v-if="value.heuresDemandees == 0">
+                                                                        <button class="btn btn-success" type="button">Demander</button>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
 
-                                </tbody>
-                            </table>
-
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                <tr class="table-light">
+                                                    <th scope="row">Total</th>
+                                                    <td>21 HETD</td>
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </div>
-
-
     </div>
 </template>
 
@@ -68,7 +106,6 @@ export default {
     },
     data()
     {
-        console.log(this.intervenant);
         return {
             datasServiceAPayer: null,
             urlListeServiceAPayer: unicaenVue.url('intervenant/:intervenant/mise-en-paiement/liste-service-a-payer', {intervenant: this.intervenant}),
@@ -99,6 +136,20 @@ export default {
                 return 'Paiement à demander';
             }
             return 'indetermine';
+        },
+        supprimerDemandeMiseEnPaiement(id)
+        {
+            unicaenVue.axios.get(unicaenVue.url('paiement/:intervenant/supprimer-demande/:dmep', {intervenant: this.intervenant, dmep: id}))
+                .then(response => {
+                    this.findServiceAPayer();
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+        },
+        ajouterDemandeMiseEnPaiement()
+        {
+
         }
     },
     mounted()

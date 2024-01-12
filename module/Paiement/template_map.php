@@ -27,7 +27,9 @@ return [
     'paiement/type-ressource/saisie'                       => __DIR__ . '/view/paiement/type-ressource/saisie.phtml',
     'paiement/type-ressource/index'                        => __DIR__ . '/view/paiement/type-ressource/index.phtml',
     'paiement/paiement/etat-paiement-tableau'              => __DIR__ . '/view/paiement/paiement/etat-paiement-tableau.phtml',
+    'paiement/paiement/import-numero-pec'                  => __DIR__ . '/view/paiement/paiement/import-numero-pec.phtml',
     'paiement/paiement/extraction-paie'                    => __DIR__ . '/view/paiement/paiement/extraction-paie.phtml',
+    'paiement/paiement/details-calculs'                    => __DIR__ . '/view/paiement/paiement/details-calculs.phtml',
     'paiement/paiement/edition-mise-en-paiement'           => __DIR__ . '/view/paiement/paiement/edition-mise-en-paiement.phtml',
     'paiement/paiement/etat-paiement-pdf'                  => __DIR__ . '/view/paiement/paiement/etat-paiement-pdf.phtml',
     'paiement/paiement/visualisation-mise-en-paiement'     => __DIR__ . '/view/paiement/paiement/visualisation-mise-en-paiement.phtml',
@@ -36,5 +38,7 @@ return [
     'paiement/paiement/demande-mise-en-paiement'           => __DIR__ . '/view/paiement/paiement/demande-mise-en-paiement.phtml',
     'paiement/paiement/extraction-paie-prime'              => __DIR__ . '/view/paiement/paiement/extraction-paie-prime.phtml',
     'paiement/paiement/index'                              => __DIR__ . '/view/paiement/paiement/index.phtml',
+    'paiement/paiement/pilotage'                           => __DIR__ . '/view/paiement/paiement/pilotage.phtml',
     'paiement/paiement/etat-paiement'                      => __DIR__ . '/view/paiement/paiement/etat-paiement.phtml',
+    'paiement/paiement/demande-mise-en-paiement-lot'       => __DIR__ . '/view/paiement/paiement/demande-mise-en-paiement-lot.phtml',
 ];

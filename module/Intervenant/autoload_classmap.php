@@ -6,7 +6,6 @@
 return [
     'Intervenant\Assertion\NoteAssertion'               => __DIR__ . '/src/Assertion/NoteAssertion.php',
     'Intervenant\Assertion\StatutAssertion'             => __DIR__ . '/src/Assertion/StatutAssertion.php',
-    'Intervenant\Assertion\StatutAssertionFactory'      => __DIR__ . '/src/Assertion/StatutAssertionFactory.php',
     'Intervenant\Controller\NoteController'             => __DIR__ . '/src/Controller/NoteController.php',
     'Intervenant\Controller\NoteControllerFactory'      => __DIR__ . '/src/Controller/NoteControllerFactory.php',
     'Intervenant\Controller\StatutController'           => __DIR__ . '/src/Controller/StatutController.php',

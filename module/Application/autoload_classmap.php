@@ -4,7 +4,6 @@
  * Commande : php public/index.php UnicaenCode  module='Application'
  */
 return [
-    'Application'                                                        => __DIR__ . '/Application.php',
     'Application\Acl\Role'                                               => __DIR__ . '/src/Acl/Role.php',
     'Application\Assertion\ChargensAssertion'                            => __DIR__ . '/src/Assertion/ChargensAssertion.php',
     'Application\Assertion\GestionAssertion'                             => __DIR__ . '/src/Assertion/GestionAssertion.php',
@@ -225,6 +224,7 @@ return [
     'Application\View\Helper\Intervenant\FeuilleDeRouteViewHelper'       => __DIR__ . '/src/View/Helper/Intervenant/FeuilleDeRouteViewHelper.php',
     'Application\View\Helper\Intervenant\IntervenantViewHelper'          => __DIR__ . '/src/View/Helper/Intervenant/IntervenantViewHelper.php',
     'Application\View\Helper\Intervenant\TotauxHetdViewHelper'           => __DIR__ . '/src/View/Helper/Intervenant/TotauxHetdViewHelper.php',
+    'Application\View\Helper\LocalConnectViewHelperFactory'              => __DIR__ . '/src/View/Helper/LocalConnectViewHelperFactory.php',
     'Application\View\Helper\TabViewHelper'                              => __DIR__ . '/src/View/Helper/TabViewHelper.php',
     'Application\View\Helper\TabViewHelperFactory'                       => __DIR__ . '/src/View/Helper/TabViewHelperFactory.php',
     'Application\View\Helper\TreeViewHelper'                             => __DIR__ . '/src/View/Helper/TreeViewHelper.php',

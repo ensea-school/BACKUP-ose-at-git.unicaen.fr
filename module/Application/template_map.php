@@ -6,7 +6,6 @@
 return [
     'error/exception'                                => __DIR__ . '/view/error/exception.phtml',
     'error/index'                                    => __DIR__ . '/view/error/index.phtml',
-    'application/pilotage/index'                     => __DIR__ . '/view/application/pilotage/index.phtml',
     'application/formule/test'                       => __DIR__ . '/view/application/formule/test.phtml',
     'application/formule/test-saisir'                => __DIR__ . '/view/application/formule/test-saisir.phtml',
     'application/workflow/suppression-dep'           => __DIR__ . '/view/application/workflow/suppression-dep.phtml',
@@ -65,6 +64,7 @@ return [
     'application/intervenant/index'                  => __DIR__ . '/view/application/intervenant/index.phtml',
     'application/intervenant/apercevoir'             => __DIR__ . '/view/application/intervenant/apercevoir.phtml',
     'application/intervenant/definir-par-defaut'     => __DIR__ . '/view/application/intervenant/definir-par-defaut.phtml',
+    'application/index/plan'                         => __DIR__ . '/view/application/index/plan.phtml',
     'application/index/index'                        => __DIR__ . '/view/application/index/index.phtml',
     'application/index/changement-annee'             => __DIR__ . '/view/application/index/changement-annee.phtml',
     'layout/ajax'                                    => __DIR__ . '/view/layout/ajax.phtml',

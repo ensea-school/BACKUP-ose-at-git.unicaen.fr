@@ -14,5 +14,4 @@ return [
     'lieu/pays/index'           => __DIR__ . '/view/lieu/pays/index.phtml',
     'lieu/structure/voir'       => __DIR__ . '/view/lieu/structure/voir.phtml',
     'lieu/structure/saisie'     => __DIR__ . '/view/lieu/structure/saisie.phtml',
-    'lieu/structure/index'      => __DIR__ . '/view/lieu/structure/index.phtml',
 ];

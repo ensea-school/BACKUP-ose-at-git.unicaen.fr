@@ -5,6 +5,7 @@
  */
 return [
     'OffreFormation\Assertion\OffreDeFormationAssertion'                                      => __DIR__ . '/src/Assertion/OffreDeFormationAssertion.php',
+    'OffreFormation\Assertion\TypeInterventionAssertion'                                      => __DIR__ . '/src/Assertion/TypeInterventionAssertion.php',
     'OffreFormation\Controller\DisciplineController'                                          => __DIR__ . '/src/Controller/DisciplineController.php',
     'OffreFormation\Controller\ElementPedagogiqueController'                                  => __DIR__ . '/src/Controller/ElementPedagogiqueController.php',
     'OffreFormation\Controller\EtapeCentreCoutController'                                     => __DIR__ . '/src/Controller/EtapeCentreCoutController.php',

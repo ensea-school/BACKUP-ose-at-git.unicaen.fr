@@ -36,13 +36,15 @@ class Arrondisseur
 
     public function arrondir(ServiceAPayer $sap)
     {
+        /* l'arrondisseur ne traite que les heures AA, puisque la répartition AA/AC n'a pas encore eu lieu */
+
         if ($sap->heures === null) {
             return;
         }
 
         $vhHeures = 0;
         foreach ($sap->lignesAPayer as $id => $lap) {
-            $vhHeures = $vhHeures + $lap->heures;
+            $vhHeures = $vhHeures + $lap->heuresAA;
         }
 
         $diff = $sap->heures - $vhHeures;
@@ -59,7 +61,7 @@ class Arrondisseur
             $selected = null;
             $maxScore = -1;
             foreach ($sap->lignesAPayer as $k => $lap) {
-                $nbr = '00'.(string)$lap->heures;
+                $nbr = '00'.(string)$lap->heuresAA;
                 $cent = (int)substr($nbr, -1);
                 $dec = (int)substr($nbr, -2, 1);
                 $score = 100000 * $this->possibilites[$sens][$cent] + 10000 * $this->possibilites[$sens][$dec];
@@ -71,8 +73,11 @@ class Arrondisseur
                     $selected = $k;
                 }
             }
-            $sap->lignesAPayer[$selected]->heures = (int)round($sap->lignesAPayer[$selected]->heures + $sens);
+            $sap->lignesAPayer[$selected]->heuresAA = (int)round($sap->lignesAPayer[$selected]->heuresAA + $sens);
             $allreadyChanged[] = $selected;
         }
+
+        // plus besoin des heures du service : l'arrondi a déjà été fait
+        $sap->heures = null;
     }
 }

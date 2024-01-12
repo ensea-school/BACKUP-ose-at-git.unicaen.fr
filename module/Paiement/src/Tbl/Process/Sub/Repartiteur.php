@@ -144,4 +144,21 @@ class Repartiteur
     }
 
 
+
+    public function repartir(ServiceAPayer $sap)
+    {
+        foreach( $sap->lignesAPayer as $lap ){
+            $this->repartirLap($lap);
+        }
+    }
+
+
+
+    public function repartirLap(LigneAPayer $lap)
+    {
+        $heures = $lap->heuresAA + $lap->heuresAC;
+
+        $lap->heuresAA = (int)round($heures * $lap->pourcAA);
+        $lap->heuresAC = $heures - $lap->heuresAA;
+    }
 }

@@ -1,0 +1,86 @@
+<?php
+/**
+ * @var $this                  \Application\View\Renderer\PhpRenderer
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+$this->headTitle()->append("Gestion des grades");
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::NOMENCLATURE_RH_GRADES_EDITION));
+
+
+?>
+<h1 class="page-header">Gestion des grades</h1>
+
+<table class="table table-bordered table-sort">
+    <thead>
+    <th>Code</th>
+    <th>Libelle</th>
+    <th>Source</th>
+    <th>Corps</th>
+    <?php if ($canEdit) echo '<th>Actions</th>' ?>
+    </thead>
+    <tbody>
+    <?php
+    /**
+     * @var \Intervenant\Entity\Db\Grade $grade
+     */
+    ?>
+    <?php foreach ($grades as $grade): ?>
+        <tr>
+            <td><?= $grade->getSourceCode() ?></td>
+
+            <td data-order="<?= $grade->getLibelleLong() ?>">
+                <?= $grade->getLibelleLong() ?>
+            </td>
+            <td><?= $grade->getSource()->getLibelle() ?></td>
+            <?php if ($grade->getCorps()): ?>
+                <td><?= $grade->getCorps()->getLibelleCourt() ?></td>
+            <?php else: ?>
+                <td></td>
+            <?php endif; ?>
+
+            <?php if ($canEdit): ?>
+                <td style="text-align:center;width:1px;white-space: nowrap">
+                    <?php if (!$grade->getSource()->getImportable()): ?>
+                        <a class="disabled ajax-modal" data-event="grade-saisie"
+                           href="<?= $this->url('grades/saisie', ['grade' => $grade->getId()]) ?>"
+                           title="Modifier le grade">
+                            <i class="fas fa-pen-to-square"></i>
+                        </a>
+                        <a class="pop-ajax"
+                           href="<?= $this->url('grades/delete', ['grade' => $grade->getId()]) ?>"
+                           title="Supprimer le grade"
+                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                           data-confirm="true"
+                           data-confirm-button="Oui"
+                           data-cancel-button="Non"
+                           data-submit-reload="true"
+                        >
+                            <i class="fas fa-trash-can"></i>
+                        </a>
+                    <?php else: ?>
+                        Non modifiable
+                    <?php endif; ?>
+                </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary ajax-modal" data-event="grade-saisie"
+       href="<?= $this->url('grades/saisie') ?>"
+       title="Ajouter un grade">
+        <i class="fas fa-pen-to-square"></i>
+        Ajouter un grade</a>
+
+    <script type="text/javascript">
+        $(function () {
+            $("body").on("grade-saisie", function (event, data) {
+                window.location.reload();
+            });
+        });
+    </script>
+<?php endif ?>

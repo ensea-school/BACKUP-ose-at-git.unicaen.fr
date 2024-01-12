@@ -15,17 +15,12 @@ class Exporteur
             $this->exporterLAP($sap, $lap, $destination);
             $lastTauxRemu = $lap->tauxRemu;
             $lastTauxValeur = $lap->tauxValeur;
-            $lastPourcAA = 1;//$lap->pourcAA;
         }
 
         foreach($sap->misesEnPaiement as $smep){
-            if (isset($smep->heuresAA) && isset($smep->heuresAC)) {
-                $heuresAA = $smep->heuresAA;//(int)round($smep->heures * $lastPourcAA);
-                $heuresAc = $smep->heuresAC;// - $heuresAA;
-            }else{
-                $heuresAA = (int)round($smep->heures * $lastPourcAA);
-                $heuresAc = $smep->heures - $heuresAA;
-            }
+            $heuresAA = $smep->heuresAA;//(int)round($smep->heures * $lastPourcAA);
+            $heuresAc = $smep->heuresAC;// - $heuresAA;
+
             $ldata = [
                 'ANNEE_ID'                   => $sap->annee,
                 'SERVICE_ID'                 => $sap->service,

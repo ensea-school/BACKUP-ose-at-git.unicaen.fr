@@ -40,13 +40,13 @@ final class ConsolidateurTest extends OseTestCase
                     'tauxRemu'   => 1,
                     'tauxValeur' => 40.91,
                     'pourcAA'    => 4 / 10,
-                    'heures'     => 5,
+                    'heuresAA'   => 5,
                 ],
                 2 => [
                     'tauxRemu'   => 1,
                     'tauxValeur' => 40.91,
                     'pourcAA'    => 4 / 10,
-                    'heures'     => 3,
+                    'heuresAA'   => 3,
                 ],
             ],
         ];
@@ -57,16 +57,13 @@ final class ConsolidateurTest extends OseTestCase
                 0 => [
                     'tauxRemu'   => 1,
                     'tauxValeur' => 40.91,
-                    'heures'     => 8,
-                    'heuresAA'   => 3,
-                    'heuresAC'   => 5,
+                    'heuresAA'   => 8,
                 ],
             ],
         ];
 
         $this->process($data, $await);
     }
-
 
 
 
@@ -79,13 +76,13 @@ final class ConsolidateurTest extends OseTestCase
                     'tauxRemu'   => 1,
                     'tauxValeur' => 40.91,
                     'pourcAA'    => 4 / 10,
-                    'heures'     => 5,
+                    'heuresAA'   => 5,
                 ],
                 2 => [
                     'tauxRemu'   => 1,
                     'tauxValeur' => 41.41,
                     'pourcAA'    => 4 / 10,
-                    'heures'     => 3,
+                    'heuresAA'   => 3,
                 ],
             ],
         ];
@@ -96,16 +93,12 @@ final class ConsolidateurTest extends OseTestCase
                 0 => [
                     'tauxRemu'   => 1,
                     'tauxValeur' => 40.91,
-                    'heures'     => 5,
-                    'heuresAA'   => 2,
-                    'heuresAC'   => 3,
+                    'heuresAA'   => 5,
                 ],
                 1 => [
                     'tauxRemu'   => 1,
                     'tauxValeur' => 41.41,
-                    'heures'     => 3,
-                    'heuresAA'   => 1,
-                    'heuresAC'   => 2,
+                    'heuresAA'   => 3,
                 ],
             ],
         ];
@@ -113,4 +106,58 @@ final class ConsolidateurTest extends OseTestCase
         $this->process($data, $await);
     }
 
+
+
+    public function testTropDmepHeuresNegatives()
+    {
+        $data = [
+            'lignesAPayer' => [
+                [
+                    'periode'         => 12,
+                    'heuresAA'        => 15,
+                    'misesEnPaiement' => [
+                        1 => ['heuresAA' => 10],
+                        2 => ['heuresAA' => 5],
+                    ],
+                ],
+                [
+                    'periode'         => 13,
+                    'heuresAC'        => 21,
+                    'misesEnPaiement' => [
+                        2 => ['heuresAC' => 19],
+                    ],
+                ],
+                [
+                    'periode'  => 13,
+                    'heuresAC' => -15,
+                ],
+            ],
+        ];
+
+        $await = [
+            'heures'          => 0,
+            'lignesAPayer'    => [
+                [
+                    'periode'         => 12,
+                    'heuresAA'        => 15,
+                    'misesEnPaiement' => [
+                        1 => ['heuresAA' => 10],
+                        2 => ['heuresAA' => 5],
+                    ],
+                ],
+                [
+                    'periode'         => 13,
+                    'heuresAC'        => 6,
+                    'misesEnPaiement' => [
+                        2 => ['heuresAC' => 6],
+                    ],
+                ],
+            ],
+            'misesEnPaiement' => [
+                2 => ['heuresAC' => 13],
+            ],
+        ];
+
+        $this->process($data, $await);
+    }
 }

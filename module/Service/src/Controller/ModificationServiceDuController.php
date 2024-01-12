@@ -51,6 +51,7 @@ class ModificationServiceDuController extends AbstractController
                     $this->em()->flush();
                 }
                 $this->em()->refresh($intervenant);
+                $this->updateTableauxBord($intervenant);
             }
         }
 
@@ -129,6 +130,8 @@ class ModificationServiceDuController extends AbstractController
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'formule',
+            'plafond_intervenant',
+            'plafond_volume_horaire',
         ], $intervenant);
     }
 }

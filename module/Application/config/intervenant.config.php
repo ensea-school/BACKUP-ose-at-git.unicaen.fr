@@ -2,16 +2,8 @@
 
 namespace Application;
 
-use Application\Assertion\IntervenantAssertion;
-use Application\Controller\IntervenantController;
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Contrat\Controller\ContratController;
-use Dossier\Assertion\IntervenantDossierAssertion;
-use Dossier\Controller\IntervenantDossierController;
-use Mission\Assertion\OffreEmploiAssertion;
-use Mission\Controller\OffreEmploiController;
-use Paiement\Assertion\PaiementAssertion;
 use Paiement\Controller\PaiementController;
 use UnicaenPrivilege\Guard\PrivilegeController;
 use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
@@ -210,7 +202,7 @@ return [
                             ],
                         ],
                         'child_routes'  => [
-                            'visualisation'         => [
+                            'visualisation' => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/visualisation',
@@ -219,7 +211,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'demande'               => [
+                            'demande'       => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/demande',
@@ -413,11 +405,6 @@ return [
             Service\IntervenantService::class     => Service\Factory\IntervenantServiceFactory::class,
             Processus\IntervenantProcessus::class => Processus\Factory\IntervenantProcessusFactory::class,
             Assertion\IntervenantAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
-        ],
-        'invokables' => [
-            Service\CiviliteService::class => Service\CiviliteService::class,
-            Service\GradeService::class    => Service\GradeService::class,
-            Service\CorpsService::class    => Service\CorpsService::class,
         ],
     ],
     'view_helpers'    => [

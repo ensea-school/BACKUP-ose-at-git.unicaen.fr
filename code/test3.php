@@ -15,9 +15,9 @@ $ptbl = $c->getTableauBord('paiement');
 
 
 $params = [
-   'INTERVENANT_ID' => 883384,
+   'INTERVENANT_ID' => 32779,
     //'INTERVENANT_ID' => 20970,
-    'SERVICE_REFERENTIEL_ID' => 19194
+    //'SERVICE_REFERENTIEL_ID' => 19194
     //'SERVICE_ID' => 258206,
    //'ANNEE_ID' => 2014,
 ];

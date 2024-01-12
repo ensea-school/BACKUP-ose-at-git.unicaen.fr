@@ -24,6 +24,8 @@ return [
     'Lieu\Form\AdresseFieldset'                       => __DIR__ . '/src/Form/AdresseFieldset.php',
     'Lieu\Form\DepartementSaisieForm'                 => __DIR__ . '/src/Form/DepartementSaisieForm.php',
     'Lieu\Form\DepartementSaisieFormFactory'          => __DIR__ . '/src/Form/DepartementSaisieFormFactory.php',
+    'Lieu\Form\Element\Structure'                     => __DIR__ . '/src/Form/Element/Structure.php',
+    'Lieu\Form\Element\StructureFactory'              => __DIR__ . '/src/Form/Element/StructureFactory.php',
     'Lieu\Form\EtablissementSaisieForm'               => __DIR__ . '/src/Form/EtablissementSaisieForm.php',
     'Lieu\Form\EtablissementSaisieFormFactory'        => __DIR__ . '/src/Form/EtablissementSaisieFormFactory.php',
     'Lieu\Form\PaysSaisieForm'                        => __DIR__ . '/src/Form/PaysSaisieForm.php',

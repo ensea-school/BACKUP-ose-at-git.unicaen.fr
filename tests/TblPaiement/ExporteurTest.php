@@ -53,7 +53,6 @@ final class ExporteurTest extends OseTestCase
                 [
                     'tauxRemu'        => 1,
                     'tauxValeur'      => 41.41,
-                    'heures'          => 814,
                     'heuresAA'        => 325,
                     'heuresAC'        => 489,
                     'periode'         => 12,
@@ -116,7 +115,6 @@ final class ExporteurTest extends OseTestCase
                 [
                     'tauxRemu'        => 1,
                     'tauxValeur'      => 41.41,
-                    'heures'          => 74,
                     'heuresAA'        => 28,
                     'heuresAC'        => 46,
                     'misesEnPaiement' => [
@@ -273,7 +271,6 @@ final class ExporteurTest extends OseTestCase
                 [
                     'tauxRemu'        => 1,
                     'tauxValeur'      => 41.41,
-                    'heures'          => 74,
                     'heuresAA'        => 28,
                     'heuresAC'        => 46,
                     'misesEnPaiement' => [

@@ -36,70 +36,70 @@ class Rapprocheur
             return; // rien à rapprocher
         }
 
-        foreach ($sap->lignesAPayer as $lap) {
-            $lap->misesEnPaiement = [];
+        foreach ($sap->misesEnPaiement as $mid => $mep) {
+            foreach ($sap->lignesAPayer as $lap) {
+                // heures non payées, AA & AC
+                $npAA = $lap->nonPayeAA();
+                $npAC = $lap->nonPayeAC();
 
-            $npAA = $lap->heuresAA;
-            $npAC = $lap->heuresAC;
-
-            foreach ($sap->misesEnPaiement as $mid => $mep) {
-                if ($npAA + $npAC == 0) {
+                if (($npAA + $npAC == 0) || empty($mep)) {
                     // plus rien à rapprocher
-                    break;
+                    continue;
                 }
 
-                $nmep = new MiseEnPaiement();
-                $nmep->id = $mep->id;
-                $nmep->domaineFonctionnel = $mep->domaineFonctionnel;
-                $nmep->centreCout = $mep->centreCout;
-                $nmep->periodePaiement = $mep->periodePaiement;
-                $nmep->date = $mep->date;
-                $nmep->heuresAA = 0;
-                $nmep->heuresAC = 0;
+                // heures payées. Les mises en paiement non rapprochées ont toutes leurs heures en AA
+                $mepHeures = $mep->heuresAA;
+                // heures payées nouvellement rapprochées
+                $nmepAA = 0;
+                $nmepAC = 0;
 
                 if (Rapprocheur::REGLE_ORDRE_SAISIE == $this->regle) {
 
-                    $heures = min($mep->heures, $npAA);
+                    $heures = min($mepHeures, $npAA);
                     if ($heures > 0) {
-                        $nmep->heuresAA += $heures;
-                        $mep->heures -= $heures;
+                        $nmepAA += $heures;
+                        $mepHeures -= $heures;
                         $npAA -= $heures;
                     }
 
-                    $heures = min($mep->heures, $npAC);
+                    $heures = min($mepHeures, $npAC);
                     if ($heures > 0) {
-                        $nmep->heuresAC += $heures;
-                        $mep->heures -= $heures;
+                        $nmepAC += $heures;
+                        $mepHeures -= $heures;
                         $npAC -= $heures;
                     }
 
                 } else {
-                    $heures = min($mep->heures, $npAA + $npAC);
+                    $heures = min($mepHeures, $npAA + $npAC);
 
                     $aaHeures = min((int)round($heures * $npAA / ($npAA + $npAC)), $npAA);
                     if ($aaHeures > 0) {
-                        $nmep->heuresAA += $aaHeures;
-                        $mep->heures -= $aaHeures;
+                        $nmepAA += $aaHeures;
+                        $mepHeures -= $aaHeures;
                         $npAA -= $aaHeures;
                     }
 
                     $acHeures = $heures - $aaHeures;
                     if ($acHeures > 0) {
-                        $nmep->heuresAC += $acHeures;
-                        $mep->heures -= $acHeures;
+                        $nmepAC += $acHeures;
+                        $mepHeures -= $acHeures;
                         $npAC -= $acHeures;
                     }
 
                 }
 
-                if ($nmep->heuresAA + $nmep->heuresAC > 0 || $mep->heures == 0) {
+                if ($nmepAA > 0 || $nmepAC > 0 || $mepHeures == 0) {
+                    $nmep = $mep->newFrom();
+                    $nmep->heuresAA = $nmepAA;
+                    $nmep->heuresAC = $nmepAC;
                     $lap->misesEnPaiement[$nmep->id] = $nmep;
-                    if ($mep->heures == 0) {
-                        unset($sap->misesEnPaiement[$mid]);
-                    }
+                    $mep->heuresAA = $mepHeures;
+                }
+                if ($mep->heuresAA + $mep->heuresAC == 0) {
+                    unset($sap->misesEnPaiement[$mid]);
+                    $mep = null;
                 }
             }
         }
     }
-
 }

@@ -19,37 +19,8 @@ final class RapprocheurTest extends OseTestCase
 
 
 
-    protected function initMepData(array &$mep)
-    {
-        $mep['domaineFonctionnel'] = 1;
-        $mep['centreCout'] = 1;
-        $mep['periodePaiement'] = 1;
-        $mep['date'] = '1980-09-27';
-    }
-
-
-
     protected function process(string $regle, array $data, array $await)
     {
-        // données initialisées automatiquement
-        if (isset($data['misesEnPaiement'])) {
-            foreach ($data['misesEnPaiement'] as $mid => $mep) {
-                $this->initMepData($data['misesEnPaiement'][$mid]);
-            }
-        }
-        if (isset($await['misesEnPaiement'])) {
-            foreach ($await['misesEnPaiement'] as $mid => $mep) {
-                $this->initMepData($await['misesEnPaiement'][$mid]);
-            }
-        }
-        foreach ($await['lignesAPayer'] as $lapId => $lap) {
-            if (isset($lap['misesEnPaiement'])) {
-                foreach ($await['lignesAPayer'][$lapId]['misesEnPaiement'] as $mid => $mep) {
-                    $this->initMepData($await['lignesAPayer'][$lapId]['misesEnPaiement'][$mid]);
-                }
-            }
-        }
-
         $sapObject = new ServiceAPayer();
         $sapObject->fromArray($data);
 
@@ -70,7 +41,7 @@ final class RapprocheurTest extends OseTestCase
                 ['heuresAA' => 5, 'heuresAC' => 4],
             ],
             'misesEnPaiement' => [
-                ['id' => 1, 'heures' => 9]
+                1 => ['heuresAA' => 9]
             ],
         ];
 
@@ -79,7 +50,7 @@ final class RapprocheurTest extends OseTestCase
                 [
                     'heuresAA'        => 5, 'heuresAC' => 4,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 5, 'heuresAC' => 4]
+                        1 => ['heuresAA' => 5, 'heuresAC' => 4]
                     ],
                 ],
             ],
@@ -98,7 +69,7 @@ final class RapprocheurTest extends OseTestCase
                 ['heuresAA' => 5, 'heuresAC' => 4],
             ],
             'misesEnPaiement' => [
-                ['id' => 1, 'heures' => 0]
+                1 => ['heuresAA' => 0]
             ],
         ];
 
@@ -107,7 +78,7 @@ final class RapprocheurTest extends OseTestCase
                 [
                     'heuresAA'        => 5, 'heuresAC' => 4,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 0, 'heuresAC' => 0]
+                        1 => ['heuresAA' => 0, 'heuresAC' => 0]
                     ],
                 ],
             ],
@@ -126,7 +97,7 @@ final class RapprocheurTest extends OseTestCase
                 ['heuresAA' => 5, 'heuresAC' => 4],
             ],
             'misesEnPaiement' => [
-                ['id' => 1, 'heures' => 6]
+                1 => ['heuresAA' => 6]
             ],
         ];
 
@@ -135,7 +106,7 @@ final class RapprocheurTest extends OseTestCase
                 [
                     'heuresAA'        => 5, 'heuresAC' => 4,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 3, 'heuresAC' => 3]
+                        1 => ['heuresAA' => 3, 'heuresAC' => 3]
                     ],
                 ],
             ],
@@ -146,8 +117,7 @@ final class RapprocheurTest extends OseTestCase
                 [
                     'heuresAA'        => 5, 'heuresAC' => 4,
                     'misesEnPaiement' => [
-                        1 => [
-                            'id' => 1, 'heuresAA' => 5, 'heuresAC' => 1]
+                        1 => ['heuresAA' => 5, 'heuresAC' => 1]
                     ],
                 ],
             ],
@@ -166,9 +136,9 @@ final class RapprocheurTest extends OseTestCase
                 ['heuresAA' => 5, 'heuresAC' => 4],
             ],
             'misesEnPaiement' => [
-                ['id' => 1, 'heures' => 2],
-                ['id' => 2, 'heures' => 3],
-                ['id' => 3, 'heures' => 1]
+                1 => ['heuresAA' => 2],
+                2 => ['heuresAA' => 3],
+                3 => ['heuresAA' => 1]
             ],
         ];
 
@@ -177,9 +147,9 @@ final class RapprocheurTest extends OseTestCase
                 [
                     'heuresAA'        => 5, 'heuresAC' => 4,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 1, 'heuresAC' => 1],
-                        2 => ['id' => 2, 'heuresAA' => 2, 'heuresAC' => 1],
-                        3 => ['id' => 3, 'heuresAA' => 1, 'heuresAC' => 0],
+                        1 => ['heuresAA' => 1, 'heuresAC' => 1],
+                        2 => ['heuresAA' => 2, 'heuresAC' => 1],
+                        3 => ['heuresAA' => 1, 'heuresAC' => 0],
                     ],
                 ],
             ],
@@ -190,9 +160,9 @@ final class RapprocheurTest extends OseTestCase
                 [
                     'heuresAA'        => 5, 'heuresAC' => 4,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 2, 'heuresAC' => 0],
-                        2 => ['id' => 2, 'heuresAA' => 3, 'heuresAC' => 0],
-                        3 => ['id' => 3, 'heuresAA' => 0, 'heuresAC' => 1],
+                        1 => ['heuresAA' => 2, 'heuresAC' => 0],
+                        2 => ['heuresAA' => 3, 'heuresAC' => 0],
+                        3 => ['heuresAA' => 0, 'heuresAC' => 1],
                     ],
                 ],
             ],
@@ -212,7 +182,7 @@ final class RapprocheurTest extends OseTestCase
                 ['heuresAA' => 3, 'heuresAC' => 21],
             ],
             'misesEnPaiement' => [
-                ['id' => 1, 'heures' => 33]
+                1 => ['heuresAA' => 33]
             ],
         ];
 
@@ -221,13 +191,13 @@ final class RapprocheurTest extends OseTestCase
                 [
                     'heuresAA'        => 5, 'heuresAC' => 4,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 5, 'heuresAC' => 4]
+                        1 => ['heuresAA' => 5, 'heuresAC' => 4]
                     ],
                 ],
                 [
                     'heuresAA'        => 3, 'heuresAC' => 21,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 3, 'heuresAC' => 21]
+                        1 => ['heuresAA' => 3, 'heuresAC' => 21]
                     ],
                 ],
             ],
@@ -247,24 +217,26 @@ final class RapprocheurTest extends OseTestCase
                 ['heuresAA' => 3, 'heuresAC' => 21],
             ],
             'misesEnPaiement' => [
-                ['id' => 1, 'heures' => 18],
-                ['id' => 2, 'heures' => 15],
+                1 => ['heuresAA' => 18],
+                2 => ['heuresAA' => 15],
             ],
         ];
 
         $awaitProrata = [
             'lignesAPayer' => [
                 [
-                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'heuresAA'        => 5,
+                    'heuresAC'        => 4,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 5, 'heuresAC' => 4],
+                        1 => ['heuresAA' => 5, 'heuresAC' => 4],
                     ],
                 ],
                 [
-                    'heuresAA'        => 3, 'heuresAC' => 21,
+                    'heuresAA'        => 3,
+                    'heuresAC'        => 21,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 1, 'heuresAC' => 8],
-                        2 => ['id' => 2, 'heuresAA' => 2, 'heuresAC' => 13],
+                        1 => ['heuresAA' => 1, 'heuresAC' => 8],
+                        2 => ['heuresAA' => 2, 'heuresAC' => 13],
                     ],
                 ],
             ],
@@ -273,16 +245,18 @@ final class RapprocheurTest extends OseTestCase
         $awaitOrdre = [
             'lignesAPayer' => [
                 [
-                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'heuresAA'        => 5,
+                    'heuresAC'        => 4,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 5, 'heuresAC' => 4],
+                        1 => ['heuresAA' => 5, 'heuresAC' => 4],
                     ],
                 ],
                 [
-                    'heuresAA'        => 3, 'heuresAC' => 21,
+                    'heuresAA'        => 3,
+                    'heuresAC'        => 21,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 3, 'heuresAC' => 6],
-                        2 => ['id' => 2, 'heuresAA' => 0, 'heuresAC' => 15],
+                        1 => ['heuresAA' => 3, 'heuresAC' => 6],
+                        2 => ['heuresAA' => 0, 'heuresAC' => 15],
                     ],
                 ],
             ],
@@ -302,57 +276,99 @@ final class RapprocheurTest extends OseTestCase
                 ['heuresAA' => 3, 'heuresAC' => 21],
             ],
             'misesEnPaiement' => [
-                1 => ['id' => 1, 'heures' => 6],
-                2 => ['id' => 2, 'heures' => 10],
-                3 => ['id' => 3, 'heures' => 31],
+                1 => ['heuresAA' => 6],
+                2 => ['heuresAA' => 10],
+                3 => ['heuresAA' => 31],
             ],
         ];
 
         $awaitProrata = [
-            'lignesAPayer' => [
+            'lignesAPayer'    => [
                 [
                     'heuresAA'        => 5, 'heuresAC' => 4,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 3, 'heuresAC' => 3],
-                        2 => ['id' => 2, 'heuresAA' => 2, 'heuresAC' => 1],
+                        1 => ['heuresAA' => 3, 'heuresAC' => 3],
+                        2 => ['heuresAA' => 2, 'heuresAC' => 1],
                     ],
                 ],
                 [
                     'heuresAA'        => 3, 'heuresAC' => 21,
                     'misesEnPaiement' => [
-                        2 => ['id' => 2, 'heuresAA' => 1, 'heuresAC' => 6],
-                        3 => ['id' => 3, 'heuresAA' => 2, 'heuresAC' => 15],
+                        2 => ['heuresAA' => 1, 'heuresAC' => 6],
+                        3 => ['heuresAA' => 2, 'heuresAC' => 15],
                     ],
                 ],
             ],
             'misesEnPaiement' => [
-                3 => ['id' => 3, 'heures' => 14],
+                3 => ['id' => 3, 'heuresAA' => 14],
             ],
         ];
 
         $awaitOrdre = [
-            'lignesAPayer' => [
+            'lignesAPayer'    => [
                 [
-                    'heuresAA'        => 5, 'heuresAC' => 4,
+                    'heuresAA'        => 5,
+                    'heuresAC'        => 4,
                     'misesEnPaiement' => [
-                        1 => ['id' => 1, 'heuresAA' => 5, 'heuresAC' => 1],
-                        2 => ['id' => 2, 'heuresAA' => 0, 'heuresAC' => 3],
+                        1 => ['heuresAA' => 5, 'heuresAC' => 1],
+                        2 => ['heuresAA' => 0, 'heuresAC' => 3],
                     ],
                 ],
                 [
-                    'heuresAA'        => 3, 'heuresAC' => 21,
+                    'heuresAA'        => 3,
+                    'heuresAC'        => 21,
                     'misesEnPaiement' => [
-                        2 => ['id' => 2, 'heuresAA' => 3, 'heuresAC' => 4],
-                        3 => ['id' => 3, 'heuresAA' => 0, 'heuresAC' => 17],
+                        2 => ['heuresAA' => 3, 'heuresAC' => 4],
+                        3 => ['heuresAA' => 0, 'heuresAC' => 17],
                     ],
                 ],
             ],
             'misesEnPaiement' => [
-                3 => ['id' => 3, 'heures' => 14],
+                3 => ['heuresAA' => 14],
             ],
         ];
 
         $this->process(Rapprocheur::REGLE_PRORATA, $data, $awaitProrata);
         $this->process(Rapprocheur::REGLE_ORDRE_SAISIE, $data, $awaitOrdre);
     }
+
+
+
+    public function testTropDmepHeuresNegatives()
+    {
+        $data = [
+            'lignesAPayer'    => [
+                ['periode' => 12, 'heuresAA' => 15],
+                ['periode' => 13, 'heuresAC' => 21],
+                ['periode' => 13, 'heuresAC' => -15],
+            ],
+            'misesEnPaiement' => [
+                1 => ['heuresAA' => 10],
+                2 => ['heuresAA' => 24],
+            ],
+        ];
+
+        $await = [
+            'lignesAPayer' => [
+                [
+                    'periode'         => 12, 'heuresAA' => 15,
+                    'misesEnPaiement' => [
+                        1 => ['heuresAA' => 10],
+                        2 => ['heuresAA' => 5],
+                    ],
+                ],
+                [
+                    'periode'         => 13, 'heuresAC' => 21,
+                    'misesEnPaiement' => [
+                        2 => ['heuresAC' => 19],
+                    ],
+                ],
+                ['periode' => 13, 'heuresAC' => -15],
+            ],
+        ];
+
+        $this->process(Rapprocheur::REGLE_PRORATA, $data, $await);
+        $this->process(Rapprocheur::REGLE_ORDRE_SAISIE, $data, $await);
+    }
+
 }

@@ -4,8 +4,6 @@ namespace Intervenant;
 
 use Application\Provider\Privilege\Privileges;
 use Intervenant\Assertion\NoteAssertion;
-use Intervenant\Entity\Db\Note;
-use Intervenant\Entity\Db\Statut;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 
@@ -110,11 +108,11 @@ return [
                 'intervenants' => [
                     'pages' => [
                         'statut' => [
-                            'label'        => 'Statuts',
-                            'route'        => 'statut',
-                            'resource'     => PrivilegeController::getResourceId('Intervenant\Controller\Statut', 'index'),
-                            'order'        => 40,
-                            'color' => '#BBCF55',
+                            'label'    => 'Statuts',
+                            'route'    => 'statut',
+                            'resource' => PrivilegeController::getResourceId('Intervenant\Controller\Statut', 'index'),
+                            'order'    => 40,
+                            'color'    => '#BBCF55',
                         ],
                     ],
                 ],
@@ -192,8 +190,8 @@ return [
         Service\TypeNoteService::class        => Service\TypeNoteServiceFactory::class,
         Assertion\NoteAssertion::class        => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         Service\MailService::class            => Service\MailServiceFactory::class,
-
-        Assertion\StatutAssertion::class => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Service\CiviliteService::class        => Service\CiviliteServiceFactory::class,
+        Assertion\StatutAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,
     ],
 
 

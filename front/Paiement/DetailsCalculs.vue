@@ -26,7 +26,7 @@
                 </ul>
 
 
-                <div v-for="lap in sap.laps" class="row">
+                <div v-for="lap in sap.laps" class="row lap">
                     <div class="col-md-6">
                         <!-- Heures à payer -->
                         <h6>Heures à payer</h6>
@@ -163,5 +163,18 @@ export default {
 }
 </script>
 <style scoped>
+
+.table {
+    margin-bottom:1px;
+}
+
+.lap {
+    padding-top: .5em;
+    padding-bottom: .5em;
+}
+
+.lap:hover {
+    background-color:#fff9de;
+}
 
 </style>

@@ -2,8 +2,8 @@
 
 namespace Dossier\Validator;
 
-use Application\Entity\Db\Civilite;
-use Application\Service\Traits\CiviliteServiceAwareTrait;
+use Intervenant\Entity\Db\Civilite;
+use Intervenant\Service\CiviliteServiceAwareTrait;
 use Lieu\Entity\Db\Departement;
 use Lieu\Entity\Db\Pays;
 use Lieu\Service\DepartementServiceAwareTrait;

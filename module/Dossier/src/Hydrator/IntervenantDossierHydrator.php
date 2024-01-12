@@ -2,10 +2,10 @@
 
 namespace Dossier\Hydrator;
 
-use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Dossier\Entity\Db\IntervenantDossier;
 use Dossier\Service\Traits\EmployeurServiceAwareTrait;
 use Intervenant\Entity\Db\Statut;
+use Intervenant\Service\CiviliteServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 use Lieu\Service\AdresseNumeroComplServiceAwareTrait;

@@ -3,8 +3,8 @@
 namespace Dossier\Entity\Db;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Traits\CiviliteAwareTrait;
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
+use Intervenant\Entity\Db\CiviliteAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\AdresseInterface;

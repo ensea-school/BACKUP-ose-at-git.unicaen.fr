@@ -112,7 +112,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
     public function getLevel (): int
     {
-        return substr_count($this->ids, '-') - 2;
+        return substr_count($this->ids ?? '', '-') - 2;
     }
 
 

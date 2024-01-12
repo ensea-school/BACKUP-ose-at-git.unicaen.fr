@@ -3,8 +3,8 @@
 namespace Dossier\Form;
 
 use Application\Form\AbstractFieldset;
-use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Intervenant\Service\CiviliteServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Lieu\Service\DepartementServiceAwareTrait;
 use Lieu\Service\PaysServiceAwareTrait;

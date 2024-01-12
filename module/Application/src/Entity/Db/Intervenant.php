@@ -5,8 +5,6 @@ namespace Application\Entity\Db;
 use Agrement\Entity\Db\Agrement;
 use Agrement\Entity\Db\TypeAgrement;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
-use Application\Entity\Db\Traits\CiviliteAwareTrait;
-use Application\Entity\Db\Traits\GradeAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Entity\Db\TypeContrat;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,6 +12,8 @@ use Doctrine\Common\Collections\Collection;
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Indicateur\Entity\Db\IndicModifDossier;
+use Intervenant\Entity\Db\CiviliteAwareTrait;
+use Intervenant\Entity\Db\GradeAwareTrait;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
@@ -77,7 +77,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
     protected $utilisateurCode;
 
     /**
-     * @var \Intervenant\Entity\Db\Statut
+     * @var Statut
      */
     protected $statut;
 

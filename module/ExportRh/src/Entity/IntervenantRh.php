@@ -2,9 +2,9 @@
 
 namespace ExportRh\Entity;
 
-use Application\Entity\Db\Civilite;
-use Application\Entity\Db\Grade;
 use Application\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\Civilite;
+use Intervenant\Entity\Db\Grade;
 use Intervenant\Entity\Db\Statut;
 use Lieu\Entity\Db\AdresseNumeroCompl;
 use Lieu\Entity\Db\Departement;

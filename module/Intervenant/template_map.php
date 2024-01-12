@@ -6,6 +6,10 @@
 return [
     'intervenant/statut/saisie'      => __DIR__ . '/view/intervenant/statut/saisie.phtml',
     'intervenant/statut/index'       => __DIR__ . '/view/intervenant/statut/index.phtml',
+    'intervenant/corps/saisie'       => __DIR__ . '/view/intervenant/corps/saisie.phtml',
+    'intervenant/corps/index'        => __DIR__ . '/view/intervenant/corps/index.phtml',
+    'intervenant/grade/saisie'       => __DIR__ . '/view/intervenant/grade/saisie.phtml',
+    'intervenant/grade/index'        => __DIR__ . '/view/intervenant/grade/index.phtml',
     'intervenant/note/voir'          => __DIR__ . '/view/intervenant/note/voir.phtml',
     'intervenant/note/saisir'        => __DIR__ . '/view/intervenant/note/saisir.phtml',
     'intervenant/note/envoyer-email' => __DIR__ . '/view/intervenant/note/envoyer-email.phtml',

@@ -3,18 +3,18 @@
 namespace Application\Form\Intervenant;
 
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
-use Application\Entity\Db\Civilite;
-use Application\Entity\Db\Grade;
 use Application\Entity\Db\Intervenant;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractForm;
 use Application\Hydrator\GenericHydrator;
-use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\GradeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Intervenant\Entity\Db\Civilite;
+use Intervenant\Entity\Db\Grade;
 use Intervenant\Entity\Db\Statut;
+use Intervenant\Service\CiviliteServiceAwareTrait;
+use Intervenant\Service\GradeServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Form\Element;
 use Laminas\Form\FormInterface;

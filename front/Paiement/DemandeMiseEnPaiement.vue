@@ -14,15 +14,15 @@
 
             <div id="dmep-vacataires-collapse" aria-labelledby="dmep-vacataires-heading" class="accordion-collapse collapse show">
                 <div class="accordion-body">
-                    <div v-for="(etape, code) in structure.etapes">
-                        <div v-for="(enseignement,code) in etape.enseignements">
+                    <div v-for="(etape, codeEtape) in structure.etapes">
+                        <div v-for="(enseignement,codeEnseignement) in etape.enseignements">
                             <div class="cartridge gray bordered" style="padding-bottom: 5px">
                                 <span>{{ etape.libelle }}</span>
                                 <span>{{ enseignement.libelle }}</span>
                             </div>
                             <div class="container">
                                 <div class="row">
-                                    <template v-for="(typeHeure, code) in enseignement.typeHeure">
+                                    <template v-for="(typeHeure, codeTypeHeure) in enseignement.typeHeure">
                                         <div class="col-12">
                                             <table class="table mt-3 table-bordered">
                                                 <thead class="table-light">
@@ -45,12 +45,16 @@
                                                                 <td v-if="value.heuresDemandees == 0 ">
                                                                     <div class="input-group col-1">
                                                                         <input
+                                                                            :id="codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
+                                                                            :data-formule-res-service-id="value.formuleResServiceId"
+                                                                            :data-type-heures-id="value.typeHeureId"
                                                                             :max="value.heuresAPayer"
                                                                             :value="value.heuresAPayer"
                                                                             class="form-control form-control-sm"
                                                                             min="0"
                                                                             style="width: 40px;"
-                                                                            type="number"/>
+                                                                            type="number"
+                                                                        />
                                                                         <span class="input-group-text" style="font-size:12px;">hetd(s) restantes</span>
                                                                     </div>
                                                                 </td>
@@ -65,7 +69,8 @@
                                                                     </span>
                                                                     <span
                                                                         v-if="value.heuresDemandees == 0">
-                                                                        <button class="btn btn-success" type="button">Demander</button>
+                                                                        <button class="btn btn-success" type="button"
+                                                                                @click="this.ajouterDemandeMiseEnPaiement(codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure)">Demander</button>
                                                                     </span>
                                                                 </td>
                                                             </tr>
@@ -147,9 +152,19 @@ export default {
                     console.error(error);
                 })
         },
-        ajouterDemandeMiseEnPaiement()
+        ajouterDemandeMiseEnPaiement(id)
         {
+            console.log(id);
+            let input = document.getElementById(id);
+            let heureADemander = input.value;
+            let typeHeure = input.getAttribute('data-type-heures-id');
+            let formuleResServiceId = input.getAttribute('data-formule-res-service-id');
+            console.log(input);
+            console.log(input.value);
+            /*unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demande'), {
+                heures: heureADemander,
 
+            })*/
         }
     },
     mounted()

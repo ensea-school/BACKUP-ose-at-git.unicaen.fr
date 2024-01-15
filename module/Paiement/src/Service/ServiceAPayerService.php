@@ -38,39 +38,43 @@ class ServiceAPayerService extends AbstractService
         $sql = "
         
         SELECT
-            tp.intervenant_id 				intervenant_id,
-            tp.structure_id                 structure_id,
-            MAX(s.code)                     structure_code,
-            MAX(s.libelle_long)   			structure_libelle,
+            tp.intervenant_id 				    intervenant_id,
+            tp.structure_id                     structure_id,
+            MAX(s.code)                         structure_code,
+            MAX(s.libelle_long)   			    structure_libelle,
             CASE
                 WHEN MAX(tp.service_id) IS NOT NULL THEN 'enseignement'
                 WHEN MAX(tp.service_referentiel_id) IS NOT NULL THEN 'referentiel'
                 ELSE 'mission'
-            END 							typage,
-            MAX(e.id)   					etape_id,
-            e.code 							etape_code,
-            MAX(e.libelle) 					etape_libelle,
-            MAX(ep.id)   					element_id,
-            ep.code 						element_code,
-            MAX(ep.libelle) 				element_libelle,
-            MAX(fr.id)      				fonction_id,
-            fr.code    						fonction_code,
-            MAX(fr.libelle_long)  			fonction_libelle,
-            MAX(th.id) 				  		type_heure_id,	 
-            th.code               			type_heure_code,
-            MAX(th.libelle_long)  			type_heure_libelle,
-            COALESCE(tp.mise_en_paiement_id,0)  		mep_id,
-            MAX(cc.id)     					centre_cout_id,
-            MAX(cc.code)   					centre_cout_code,
-            MAX(cc.libelle)   				centre_cout_libelle,
-            MAX(p.code)						periode_code,
-            MAX(p.libelle_long)				periode_libelle,
+            END 							    typage,
+            MAX(e.id)   					    etape_id,
+            e.code 							    etape_code,
+            MAX(e.libelle) 					    etape_libelle,
+            MAX(ep.id)   					    element_id,
+            ep.code 						    element_code,
+            MAX(ep.libelle) 				    element_libelle,
+            MAX(fr.id)      				    fonction_id,
+            fr.code    						    fonction_code,
+            MAX(fr.libelle_long)  			    fonction_libelle,
+            MAX(th.id) 				  		    type_heure_id,	 
+            th.code               			    type_heure_code,
+            MAX(th.libelle_long)  			    type_heure_libelle,
+            COALESCE(tp.mise_en_paiement_id,0)  mep_id,
+            MAX(cc.id)     					    centre_cout_id,
+            MAX(cc.code)   					    centre_cout_code,
+            MAX(cc.libelle)   				    centre_cout_libelle,
+            MAX(p.code)						    periode_code,
+            MAX(p.libelle_long)				    periode_libelle,
             SUM(tp.heures_a_payer_aa + 
-            tp.heures_a_payer_ac)   		heures_a_payer,
+            tp.heures_a_payer_ac)   		    heures_a_payer,
             SUM(tp.heures_demandees_aa + 
-            tp.heures_demandees_ac) 		heures_demandees,
+            tp.heures_demandees_ac) 		    heures_demandees,
             SUM(tp.heures_payees_aa + 
-            tp.heures_payees_ac) 		    heures_payees
+            tp.heures_payees_ac) 		        heures_payees,
+            MAX(tp.domaine_fonctionnel_id)      domaine_fonctionel_id,
+            MAX(tp.formule_res_service_id)      formule_res_service_id,
+            MAX(tp.formule_res_service_ref_id)  formule_res_service_ref_id,
+            MAX(tp.type_heures_id )             type_heure_id 
         FROM
             tbl_paiement tp
         LEFT JOIN structure s ON s.id = tp.structure_id 
@@ -121,11 +125,13 @@ class ServiceAPayerService extends AbstractService
                 //Heure déjà mise en paiement
                 if (!empty($value['MEP_ID'])) {
                     $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['mep_id_' . $value['MEP_ID']] = [
-                        'id_mep'          => $value['MEP_ID'],
-                        'heuresAPayer'    => $value['HEURES_A_PAYER'],
-                        'heuresDemandees' => $value['HEURES_DEMANDEES'],
-                        'heuresPayees'    => $value['HEURES_PAYEES'],
-                        'centreCout'      => [
+                        'mepId'               => $value['MEP_ID'],
+                        'typeHeureId'         => $value['TYPE_HEURE_ID'],
+                        'formuleResServiceId' => $value['FORMULE_RES_SERVICE_ID'],
+                        'heuresAPayer'        => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'     => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'        => $value['HEURES_PAYEES'],
+                        'centreCout'          => [
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
                             'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
                             'typeRessourceCode'    => $value['CENTRE_COUT_LIBELLE'] ?: '',
@@ -134,10 +140,13 @@ class ServiceAPayerService extends AbstractService
                     ];
                 } else {
                     $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['a_demander'] = [
-                        'heuresAPayer'    => $value['HEURES_A_PAYER'],
-                        'heuresDemandees' => $value['HEURES_DEMANDEES'],
-                        'heuresPayees'    => $value['HEURES_PAYEES'],
-                        'centreCout'      => [
+                        'mepId'               => '',
+                        'typeHeureId'         => $value['TYPE_HEURE_ID'],
+                        'formuleResServiceId' => $value['FORMULE_RES_SERVICE_ID'],
+                        'heuresAPayer'        => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'     => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'        => $value['HEURES_PAYEES'],
+                        'centreCout'          => [
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
                             'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
                             'typeRessourceCode'    => $value['CENTRE_COUT_LIBELLE'] ?: '',

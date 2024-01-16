@@ -6,6 +6,7 @@ class ServiceAPayer
 {
     public ?string $key = null;
     public ?int $annee = null;
+    public ?int $typeIntervenant = null;
     public ?int $intervenant = null;
     public ?int $structure = null;
     public ?int $service = null;
@@ -30,18 +31,19 @@ class ServiceAPayer
     public function fromBdd(array $data)
     {
         $this->key = $data['KEY'];
-        $this->annee = (int)$data['ANNEE_ID'];
-        $this->intervenant = (int)$data['INTERVENANT_ID'];
-        $this->structure = (int)$data['STRUCTURE_ID'];
-        $this->service = (int)$data['SERVICE_ID'] ?: null;
-        $this->referentiel = (int)$data['SERVICE_REFERENTIEL_ID'] ?: null;
-        $this->mission = (int)$data['MISSION_ID'] ?: null;
-        $this->formuleResService = (int)$data['FORMULE_RES_SERVICE_ID'] ?: null;
-        $this->formuleResServiceRef = (int)$data['FORMULE_RES_SERVICE_REF_ID'] ?: null;
-        $this->typeHeures = (int)$data['TYPE_HEURES_ID'];
-        $this->defDomaineFonctionnel = (int)$data['DEF_DOMAINE_FONCTIONNEL_ID'] ?: null;
-        $this->defCentreCout = (int)$data['DEF_CENTRE_COUT_ID'] ?: null;
-        $this->tauxCongesPayes = (float)$data['TAUX_CONGES_PAYES'];
+        $this->annee = (int)$data['ANNEE_ID'] ?: null;
+        $this->typeIntervenant = (int)@$data['TYPE_INTERVENANT_ID'] ?: null;
+        $this->intervenant = (int)@$data['INTERVENANT_ID'] ?: null;
+        $this->structure = (int)@$data['STRUCTURE_ID'] ?: null;
+        $this->service = (int)@$data['SERVICE_ID'] ?: null;
+        $this->referentiel = (int)@$data['SERVICE_REFERENTIEL_ID'] ?: null;
+        $this->mission = (int)@$data['MISSION_ID'] ?: null;
+        $this->formuleResService = (int)@$data['FORMULE_RES_SERVICE_ID'] ?: null;
+        $this->formuleResServiceRef = (int)@$data['FORMULE_RES_SERVICE_REF_ID'] ?: null;
+        $this->typeHeures = (int)@$data['TYPE_HEURES_ID'] ?: null;
+        $this->defDomaineFonctionnel = (int)@$data['DEF_DOMAINE_FONCTIONNEL_ID'] ?: null;
+        $this->defCentreCout = (int)@$data['DEF_CENTRE_COUT_ID'] ?: null;
+        $this->tauxCongesPayes = (float)$data['TAUX_CONGES_PAYES'] ?: null;
         $this->heures = (int)round((float)$data['HEURES'] * 100) ?: null;
         $this->lignesAPayer = [];
         $this->misesEnPaiement = [];

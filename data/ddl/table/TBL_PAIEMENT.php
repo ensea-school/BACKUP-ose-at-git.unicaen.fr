@@ -299,6 +299,18 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
+        'TYPE_INTERVENANT_ID'        => [
+            'name'        => 'TYPE_INTERVENANT_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => NULL,
+            'nullable'    => FALSE,
+            'default'     => NULL,
+            'position'    => 25,
+            'commentaire' => NULL,
+        ],
     ],
 ];
 

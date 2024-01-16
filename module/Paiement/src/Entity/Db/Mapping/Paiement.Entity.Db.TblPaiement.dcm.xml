@@ -36,6 +36,9 @@
     <many-to-one field="centreCout" target-entity="Paiement\Entity\Db\CentreCout" fetch="LAZY">
       <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
     </many-to-one>
+    <many-to-one field="typeIntervenant" target-entity="Intervenant\Entity\Db\TypeIntervenant" fetch="LAZY">
+      <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
+    </many-to-one>
     <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" fetch="LAZY">
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
     </many-to-one>

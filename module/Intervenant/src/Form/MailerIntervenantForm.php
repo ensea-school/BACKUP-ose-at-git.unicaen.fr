@@ -34,7 +34,7 @@ class MailerIntervenantForm extends AbstractForm
 
 
 
-    public function initForm()
+    public function initForm ()
     {
         $labels = [
             'from'    => 'Expéditeur',
@@ -97,7 +97,7 @@ class MailerIntervenantForm extends AbstractForm
         //On set l'email expéditeur par rapport au contexte utilisateur
         $context     = $this->getServiceContext();
         $parametre   = $this->getServiceParametres();
-        $fromDefault = trim($parametre->get('indicateur_email_expediteur'));
+        $fromDefault = !empty($parametre->get('indicateur_email_expediteur')) ? trim($parametre->get('indicateur_email_expediteur')) : '';
         if (!empty($fromDefault)) {
             $from = $fromDefault;
         } else {
@@ -121,7 +121,7 @@ class MailerIntervenantForm extends AbstractForm
 
 
 
-    public function setIntervenant(Intervenant $intervenant)
+    public function setIntervenant (Intervenant $intervenant)
     {
         $this->intervenant = $intervenant;
 
@@ -130,7 +130,7 @@ class MailerIntervenantForm extends AbstractForm
 
 
 
-    public function getIntervenant(): Intervenant
+    public function getIntervenant (): Intervenant
     {
         return $this->intervenant;
     }

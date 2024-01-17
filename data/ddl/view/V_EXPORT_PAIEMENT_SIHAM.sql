@@ -59,68 +59,55 @@ FROM (SELECT i.annee_id                                                         
                    code_origine,
                    round(SUM(nbu), 2) nbu,
                    unite_budgetaire,
-                   date_mise_en_paiement,
                    taux_horaire,
                    taux_conges_payes
-            FROM (WITH mep AS (SELECT
-                                   -- pour les filtres
-                                   mep.id,
-                                   str.id structure_id,
-                                   str.ids structure_ids,
-                                   mep.periode_paiement_id,
-                                   mis.intervenant_id,
-                                   mep.heures,
-                                   cc.unite_budgetaire,
-                                   mep.date_mise_en_paiement,
-                                   mis.heures_payees_aa heures_aa,
-                                   mis.heures_payees_ac heures_ac,
-                                   mis.taux_horaire,
-                                   mis.taux_conges_payes
-                               FROM tbl_paiement mis
-                                        JOIN mise_en_paiement mep
-                                             ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
-                                        JOIN centre_cout cc ON cc.id = mep.centre_cout_id
-                                        JOIN type_heures th ON th.id = mep.type_heures_id
-                                        JOIN structure str ON str.id = mis.structure_id
-                               WHERE mep.date_mise_en_paiement IS NOT NULL
-                                 AND mep.periode_paiement_id IS NOT NULL
-                                 AND th.eligible_extraction_paie = 1)
-                  SELECT mep.id,
-                         str.id structure_id,
-                         str.ids structure_ids,
-                         mep.periode_paiement_id,
-                         mep.intervenant_id,
-                         2             code_origine,
-                         mep.heures_aa nbu,
-                         mep.unite_budgetaire,
-                         mep.date_mise_en_paiement,
-                         mep.taux_horaire,
-						 mep.taux_conges_payes
-                  FROM mep JOIN structure str ON str.id = mep.structure_id
-                  WHERE mep.heures_aa > 0
+            FROM (
+
+                --Pour les heures payées pour les heures AA
+                SELECT tp.mise_en_paiement_id    id,
+                         tp.structure_id           structure_id,
+                         s.ids                     structure_ids,
+                         tp.periode_paiement_id,
+                         tp.intervenant_id,
+                         2             			   code_origine,
+                         tp.heures_payees_aa       nbu,
+                         cc.unite_budgetaire,
+                         tp.taux_horaire,
+                         tp.taux_conges_payes,
+                         'heures_payees'           type_paiement
+                         
+                  FROM tbl_paiement tp
+                  JOIN structure s ON tp.structure_id = s.id 
+                  JOIN centre_cout cc ON cc.id = tp.centre_cout_id
+                  WHERE tp.heures_payees_aa > 0
+                  AND tp.periode_paiement_id IS NOT NULL
 
                   UNION ALL
 
-                  SELECT mep.id,
-                         str.id structure_id,
-                         str.ids structure_ids,
-                         mep.periode_paiement_id,
-                         mep.intervenant_id,
-                         1             code_origine,
-                         mep.heures_ac nbu,
-                         mep.unite_budgetaire,
-                         mep.date_mise_en_paiement,
-						 mep.taux_horaire,
-                         mep.taux_conges_payes
-                  FROM mep JOIN structure str ON str.id = mep.structure_id
-                  WHERE mep.heures_ac > 0) t1
+                  --Pour les heures payées pour les heures AC
+                  SELECT tp.mise_en_paiement_id   id,
+                         tp.structure_id          structure_id,
+                         s.ids                    structure_ids,
+                         tp.periode_paiement_id,
+                         tp.intervenant_id,
+                         2             			  code_origine,
+                         tp.heures_payees_ac      nbu,
+                         cc.unite_budgetaire,
+                         tp.taux_horaire,
+                         tp.taux_conges_payes,
+                         'heures_payees'          type_paiement
+                  FROM tbl_paiement tp
+                  JOIN structure s ON tp.structure_id = s.id 
+                  JOIN centre_cout cc ON cc.id = tp.centre_cout_id
+                  WHERE tp.heures_payees_ac > 0
+                  AND tp.periode_paiement_id IS NOT NULL
+                  ) t1
             GROUP BY structure_id,
                      structure_ids,
                      periode_paiement_id,
                      intervenant_id,
                      code_origine,
                      unite_budgetaire,
-                     date_mise_en_paiement,
                      taux_horaire,
                      taux_conges_payes) t2
                JOIN (SELECT level ind, 99 max_nbu FROM dual CONNECT BY 1=1 AND LEVEL <= 11) tnbu
@@ -130,5 +117,8 @@ FROM (SELECT i.annee_id                                                         
                LEFT JOIN intervenant_dossier d ON i.id = d.intervenant_id AND d.histo_destruction IS NULL
                JOIN statut si ON si.id = i.statut_id
                JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
-               JOIN structure s ON s.id = i.structure_id) t3
+               JOIN structure s ON s.id = i.structure_id) t3 WHERE code_rh = 'UCN000201041'
 ORDER BY annee_id, type_intervenant_id, structure_id, periode_id, nom, code_origine, nbu DESC
+
+
+

@@ -90,7 +90,7 @@ FROM (SELECT i.annee_id                                                         
                          s.ids                    structure_ids,
                          tp.periode_paiement_id,
                          tp.intervenant_id,
-                         2             			  code_origine,
+                         1             			  code_origine,
                          tp.heures_payees_ac      nbu,
                          cc.unite_budgetaire,
                          tp.taux_horaire,

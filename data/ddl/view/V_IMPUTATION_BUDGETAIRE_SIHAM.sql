@@ -125,9 +125,9 @@ FROM (SELECT dep3.*,
                 FROM tbl_paiement mis
                          JOIN mise_en_paiement mep
                               ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL
-                         JOIN type_heures th ON th.id = mep.type_heures_id
+                         JOIN type_heures th ON th.id = mis.type_heures_id
                          JOIN centre_cout cc
-                              ON cc.id = mep.centre_cout_id -- pas d'historique pour les centres de coût, qui devront tout de même apparaitre mais en erreur
+                              ON cc.id = mis.centre_cout_id -- pas d'historique pour les centres de coût, qui devront tout de même apparaitre mais en erreur
                          LEFT JOIN centre_cout cc2 ON cc.parent_id = cc2.id
                          JOIN intervenant i ON i.id = mis.intervenant_id AND i.histo_destruction IS NULL
                          JOIN annee a ON a.id = i.annee_id
@@ -135,8 +135,8 @@ FROM (SELECT dep3.*,
                          JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
                          LEFT JOIN validation v ON v.id = mep.validation_id AND v.histo_destruction IS NULL
                          LEFT JOIN domaine_fonctionnel df ON df.id = mis.domaine_fonctionnel_id
-                         LEFT JOIN periode p ON p.id = mep.periode_paiement_id
-                WHERE mep.date_mise_en_paiement IS NOT NULL)
+                         LEFT JOIN periode p ON p.id = mis.periode_paiement_id
+                WHERE mis.periode_paiement_id IS NOT NULL)
                   SELECT periode_id,
                          type_intervenant_id,
                          MAX(type_intervenant_code) type_intervenant_code,
@@ -190,8 +190,6 @@ FROM (SELECT dep3.*,
                            taux_horaire,
                            is_fc_majoree,
                            code_indemnite) dep2) dep3) dep4
-    /* where
-     intervenant_matricule = 'UCN000001157' AND annee_id ='2021'*/
 ORDER BY annee_id,
          type_intervenant_id,
          periode_id,

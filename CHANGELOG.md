@@ -19,13 +19,17 @@
 
 * Ajout d'un contrôle au niveau des données personnelles,  pour empêcher de mettre un statut d'une année différente de l'intervenant (#53668)
 * Prise en compte des dates bornées d'une année universitaire dans le contrôle de saisie de service en mode calendaire (#53947)
+* Modification de la formule de calcul de Paris 8
+* Modification de la formule de calcul de Picardie
 
 ## Notes de mise à jour
 
 A partir la V23 uniquement, PHP 8.2 est maintenant obligatoire.
 
-Pour les établissements qui utilisent le module Export SIHAM : la configuration spécifique du module d'export Siham anciennement mise dans config/autoload/unicaen-siham.local.php doit maintenant être mise directement à la racine de OSE dans le fichier de configuration globale config.local.php. (Voir un exemple dans [config.local.php.default](config.local.php.default)).
+Pour les établissements qui utilisent le module Export SIHAM : la configuration spécifique du module d'export Siham anciennement mise dans `config/autoload/unicaen-siham.local.php` doit maintenant être mise directement à la racine de OSE dans le fichier de configuration globale config.local.php. (Voir un exemple dans [config.local.php.default](config.local.php.default)).
 
+Veillez bien à retester tous vos états de sortie si vous les avez personnalisé au niveau des requêtes SQL.
+Ceux qui sont filtrables par structure, comme les états de paiements, nécessitent une nouvelle colonne STRUCTURE_IDS qui remonte l'information présente dans la colonne `STRUCTURE.IDS`.
 
 
 

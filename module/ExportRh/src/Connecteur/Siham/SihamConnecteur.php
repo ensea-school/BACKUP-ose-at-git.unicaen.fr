@@ -774,6 +774,7 @@ class SihamConnecteur implements ConnecteurRhInterface
                 'dateSortie'         => $dateSortie,
                 'matricule'          => $matricule,
                 'motifSituation'     => 'MC141',
+                'temoinValidite'     => 1,
 
             ];
 

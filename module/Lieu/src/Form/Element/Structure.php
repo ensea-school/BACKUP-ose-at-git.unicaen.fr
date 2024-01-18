@@ -49,7 +49,7 @@ class Structure extends Select
 
     public function isEnseignement(): bool
     {
-        return $this->getOption('enseignement') ?? true;
+        return $this->getOption('enseignement') ?? false;
     }
 
 

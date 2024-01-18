@@ -1,5 +1,5 @@
 CREATE OR REPLACE FORCE VIEW V_TBL_MISSION_PRIME AS
-SELECT DISTINCT
+SELECT
     i.annee_id 			annee_id,
     i.id 			    intervenant_id,
     i.structure_id      structure_id,

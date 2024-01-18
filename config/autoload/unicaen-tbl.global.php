@@ -250,6 +250,7 @@ return [
                     'FORMULE_RES_SERVICE_REF_ID',
                     'MISSION_ID',
                     'TYPE_HEURES_ID',
+                    'TYPE_INTERVENANT_ID',
                     'INTERVENANT_ID',
                     'STRUCTURE_ID',
                     'MISE_EN_PAIEMENT_ID',

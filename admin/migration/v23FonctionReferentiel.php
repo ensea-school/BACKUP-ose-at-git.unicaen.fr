@@ -43,7 +43,7 @@ class v23FonctionReferentiel extends AbstractMigration
         $bdd->exec('DELETE FROM TBL_REFERENTIEL');
         $bdd->exec('DELETE FROM TBL_PLAFOND_REFERENTIEL');
         $bdd->exec('DELETE FROM FONCTION_REFERENTIEL WHERE annee_id IS NULL');
-        $c->msg('Fin de la migration des fonctions referentiel');
+        $c->msg('Fin de la migration des fonctions referentielles');
     }
 
 
@@ -108,7 +108,7 @@ class v23FonctionReferentiel extends AbstractMigration
      */
     public function traitementFonctionReferentielInsertion (OseConsole $c, Bdd $bdd): void
     {
-        $c->msg('Récuperations des fonctions référentiels');
+        $c->msg('Récuperation des fonctions référentielles');
         $resFonctions = $bdd->select("SELECT *
             FROM FONCTION_REFERENTIEL fr");
 
@@ -161,7 +161,7 @@ class v23FonctionReferentiel extends AbstractMigration
      */
     public function traitementParentIdFonctionReferentiel (OseConsole $c, Bdd $bdd): void
     {
-        $c->begin('Traitements des fonctions référentiels insérés');
+        $c->begin('Traitements des fonctions référentielles insérées');
         $lignefonctionTraite = 0;
 
         $sql = 'select fr2.code, fr2.histo_destruction, fr.annee_id, fr.id
@@ -181,7 +181,7 @@ class v23FonctionReferentiel extends AbstractMigration
                 $c->msg($lignefonctionTraite . ' fonctions traités');
             }
         }
-        $c->end('Toutes les fonctions référentielles ont été migré');
+        $c->end('Toutes les fonctions référentielles ont été migrées');
     }
 
 
@@ -243,10 +243,10 @@ class v23FonctionReferentiel extends AbstractMigration
                             WHERE sr.id =' . $serviceRef['ID']);
             $ligneServiceTraite++;
             if ($ligneServiceTraite % 1000 == 0) {
-                $c->msg($ligneServiceTraite . ' lignes de service traité');
+                $c->msg($ligneServiceTraite . ' lignes de service traitées');
             }
         }
-        $c->msg('Toutes les lignes de service referentiel ont été migré');
+        $c->msg('Toutes les lignes de service référentiel ont été migrées');
     }
 
 

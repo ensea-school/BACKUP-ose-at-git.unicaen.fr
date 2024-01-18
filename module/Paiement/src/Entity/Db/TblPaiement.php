@@ -8,6 +8,7 @@ use Application\Entity\Db\FormuleResultatService;
 use Application\Entity\Db\FormuleResultatServiceReferentiel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
+use Intervenant\Entity\Db\TypeIntervenant;
 use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\TypeHeures;
@@ -18,6 +19,8 @@ class TblPaiement
     private int                                $id;
 
     private Annee                              $annee;
+
+    private TypeIntervenant                    $typeIntervenant;
 
     private Intervenant                        $intervenant;
 
@@ -134,6 +137,12 @@ class TblPaiement
         return $this->domaineFonctionnel;
     }
 
+
+
+    public function getTypeIntervenant(): TypeIntervenant
+    {
+        return $this->typeIntervenant;
+    }
 
 
     public function getIntervenant (): Intervenant

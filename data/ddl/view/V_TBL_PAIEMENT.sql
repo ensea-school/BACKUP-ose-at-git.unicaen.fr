@@ -10,6 +10,7 @@ SELECT
   vh.id                                       volume_horaire_id,
   frs.id                                      formule_res_service_id,
   NULL                                        formule_res_service_ref_id,
+  si.type_intervenant_id                      type_intervenant_id,
   i.id                                        intervenant_id,
   COALESCE( ep.structure_id, i.structure_id ) structure_id,
   COALESCE(thens.id,th.id)                    type_heures_id,
@@ -100,6 +101,7 @@ SELECT
   NULL                                        volume_horaire_id,
   frs.id                                      formule_res_service_id,
   NULL                                        formule_res_service_ref_id,
+  si.type_intervenant_id                      type_intervenant_id,
   i.id                                        intervenant_id,
   COALESCE( ep.structure_id, i.structure_id ) structure_id,
   mep.type_heures_id                          type_heures_id,
@@ -160,6 +162,7 @@ SELECT
   NULL                                        volume_horaire_id,
   NULL                                        formule_res_service_id,
   frsr.id                                     formule_res_service_ref_id,
+  si.type_intervenant_id                      type_intervenant_id,
   i.id                                        intervenant_id,
   sr.structure_id                             structure_id,
   th.id                                       type_heures_id,
@@ -221,6 +224,7 @@ SELECT
   vhm.id                                      volume_horaire_id,
   NULL                                        formule_res_service_id,
   NULL                                        formule_res_service_ref_id,
+  si.type_intervenant_id                      type_intervenant_id,
   tm.intervenant_id                           intervenant_id,
   m.structure_id                              structure_id,
   th.id                                       type_heures_id,
@@ -253,6 +257,7 @@ FROM
             tbl_mission                   tm
        JOIN mission                        m ON m.id = tm.mission_id
        JOIN intervenant                    i ON i.id = m.intervenant_id
+       JOIN statut                        si ON si.id = i.statut_id
        JOIN volume_horaire_mission       vhm ON vhm.histo_destruction IS NULL AND vhm.mission_id = tm.mission_id
        JOIN type_volume_horaire          tvh ON tvh.id = vhm.type_volume_horaire_id AND tvh.code ='REALISE'
        JOIN type_heures                   th ON th.code = 'mission'

@@ -368,6 +368,8 @@ function modAjax(element, onSubmit)
         }
         widget.show();
     }
+    widget.element = element;
+    widget.options.url = element.dataset.url;
 
     return widget;
 }

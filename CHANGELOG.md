@@ -19,6 +19,7 @@
 
 * Ajout d'un contrôle au niveau des données personnelles,  pour empêcher de mettre un statut d'une année différente de l'intervenant (#53668)
 * Prise en compte des dates bornées d'une année universitaire dans le contrôle de saisie de service en mode calendaire (#53947)
+* Correction des dates de saisies d'heures lors d'un changement de mois #54005
 
 ## Notes de mise à jour
 

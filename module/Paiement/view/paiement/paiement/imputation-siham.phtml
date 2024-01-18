@@ -2,13 +2,12 @@
 
 use Application\Provider\Privilege\Privileges;
 use Paiement\Entity\MiseEnPaiementRecherche;
+use Paiement\Form\Paiement\MiseEnPaiementRechercheForm;
 
 /* @var $recherche MiseEnPaiementRecherche */
-/* @var $rechercheForm \Application\Form\Paiement\MiseEnPaiementRechercheForm */
-/* @var $etatPaiement array */
-/* @var $miseEnPaiementForm \Paiement\Form\Paiement\MiseEnPaiementForm */
+/* @var $rechercheForm MiseEnPaiementRechercheForm */
 
-$title = 'Paiement';
+$title = 'Export des imputations budgétaires dans SIHAM';
 $rechercheForm->get('exporter-csv-imputation')->setValue('Exporter les imputations budgétaires');
 
 $this->headTitle()->append($title);
@@ -19,19 +18,34 @@ $this->headTitle()->append($title);
 
         <div class="card-header">Filtres</div>
         <div class="card-body">
-            <?= $this->form()->openTag($rechercheForm->prepare()); ?>
             <?php
+            echo $this->form()->openTag($rechercheForm->prepare());
 
-            echo $this->formControlGroup($rechercheForm->get('type-intervenant'));
+            if ($rechercheForm->hasTypesIntervenants()) {
+                echo $this->formControlGroup($rechercheForm->get('typeIntervenant'));
+            } else {
+                echo '<div class="alert alert-info">Aucune donnée trouvée</div>';
+            }
 
-            echo $this->formControlGroup($rechercheForm->get('periode'));
+            if ($rechercheForm->hasStructures()) {
+                echo $this->formControlGroup($rechercheForm->get('structure'));
+            }
 
-            echo $this->formRow($rechercheForm->get('afficher')) . ' ';
+            if ($rechercheForm->hasPeriodes()) {
+                echo $this->formControlGroup($rechercheForm->get('periode'));
+            }
+
+            if ($rechercheForm->hasIntervenants()) {
+                echo $this->formControlGroup($rechercheForm->get('intervenants'), $this->formAdvancedMultiCheckbox()->setHeight('20em'));
+            }
+
+            if ($rechercheForm->hasTypesIntervenants()) {
+                echo $this->formRow($rechercheForm->get('suite')) . ' ';
+            }
 
             if ($this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV))) {
                 echo $this->formRow($rechercheForm->get('exporter-csv-imputation')) . ' ';
             }
-
 
             echo $this->form()->closeTag();
             echo $this->formErrors($rechercheForm);

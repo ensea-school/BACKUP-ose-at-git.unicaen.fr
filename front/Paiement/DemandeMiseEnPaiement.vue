@@ -65,7 +65,7 @@
                                                                     <span
                                                                         v-if="value.heuresAPayer != value.heuresPayees &&  value.heuresAPayer == value.heuresDemandees">
                                                                         <button class="btn btn-danger"
-                                                                                type="button" @click="this.supprimerDemandeMiseEnPaiement(value.id_mep)">Supprimer</button>
+                                                                                type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">Supprimer</button>
                                                                     </span>
                                                                     <span
                                                                         v-if="value.heuresDemandees == 0">

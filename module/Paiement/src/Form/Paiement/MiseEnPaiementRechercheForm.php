@@ -2,14 +2,17 @@
 
 namespace Paiement\Form\Paiement;
 
+use Application\Entity\Db\Periode;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
+use Laminas\Form\Element\Select;
 use Laminas\Hydrator\HydratorInterface;
 use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
+use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\MiseEnPaiementRecherche;
 
 /**
@@ -22,11 +25,13 @@ class MiseEnPaiementRechercheForm extends AbstractForm
     use TypeIntervenantServiceAwareTrait;
     use ContextServiceAwareTrait;
 
-    /**
-     *
-     * @var string
-     */
-    private $id;
+    private string $id = '';
+
+    private array $typesIntervenants = [];
+
+    private bool $periodeFilter = true;
+
+    private bool $structureFilter = true;
 
 
 
@@ -38,7 +43,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
      */
     public function getId()
     {
-        if (null === $this->id) $this->id = uniqid();
+        if ('' === $this->id) $this->id = uniqid();
 
         return $this->id;
     }
@@ -61,15 +66,9 @@ class MiseEnPaiementRechercheForm extends AbstractForm
 
         $this->add([
             'type'       => 'Laminas\Form\Element\Radio',
-            'name'       => 'type-intervenant',
+            'name'       => 'typeIntervenant',
             'options'    => [
-                'label'         => 'Statut des intervenants',
-                'value_options' => [
-                    ''                                                          => "Peu importe",
-                    $this->getServiceTypeIntervenant()->getPermanent()->getId() => "Permanent",
-                    $this->getServiceTypeIntervenant()->getExterieur()->getId() => "Vacataire",
-                    $this->getServiceTypeIntervenant()->getEtudiant()->getId()  => "Étudiant",
-                ],
+                'label' => 'Statut des intervenants',
             ],
             'attributes' => [
                 'class' => 'input-sm',
@@ -77,8 +76,8 @@ class MiseEnPaiementRechercheForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'structure',
-            'type'       => Structure::class,
+            'name' => 'structure',
+            'type' => Structure::class,
         ]);
 
         $this->add([
@@ -144,38 +143,227 @@ class MiseEnPaiementRechercheForm extends AbstractForm
 
 
 
-    /**
-     *
-     * @param array $structures
-     */
-    public function populateStructures($structures)
+    public function populateAll(): void
     {
-        $this->get('structure')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($structures));
+        /** @var MiseEnPaiementRecherche $recherche */
+        $recherche = $this->getObject();
+
+        $params = [
+            'annee' => $recherche->getAnnee()->getId(),
+        ];
+
+        $filters = [
+            'tp.annee_id = :annee'
+        ];
+
+        // Filtre des paiements
+        if ($recherche->getEtat() == MiseEnPaiement::A_METTRE_EN_PAIEMENT) {
+            $filters[] = 'AND tp.mise_en_paiement_id IS NOT NULL';
+            $filters[] = 'AND tp.periode_paiement_id IS NULL';
+        }
+        if ($recherche->getEtat() == MiseEnPaiement::MIS_EN_PAIEMENT) {
+            $filters[] = 'AND tp.mise_en_paiement_id IS NOT NULL';
+            $filters[] = 'AND tp.periode_paiement_id IS NOT NULL';
+        }
+
+        $this->populateTypeIntervenants($params, $filters);
+        $this->checkAndAutoSelect('typeIntervenant');
+        if (!$this->get('typeIntervenant')->getValue()) {
+            return;
+        } else {
+            $params['typeIntervenant'] = $this->get('typeIntervenant')->getValue();
+            $filters[] = 'AND tp.type_intervenant_id = :typeIntervenant';
+        }
+
+        if ($this->hasStructureFilter()) {
+            $this->populateStructures($params, $filters);
+            $this->checkAndAutoSelect('structure');
+            if (!$this->get('structure')->getValue()) {
+                return;
+            } else {
+                $params['structure'] = $this->get('structure')->getValue();
+                $filters[] = 'AND tp.structure_id = :structure';
+            }
+        }
+
+        if ($this->hasPeriodeFilter()) {
+            $this->populatePeriodes($params, $filters);
+            $this->checkAndAutoSelect('periode');
+
+            if (!$this->get('periode')->getValue()) {
+                return;
+            } else {
+                $params['periode'] = $this->get('periode')->getValue();
+                $filters[] = 'AND tp.periode_paiement_id = :periode';
+            }
+        }
+
+        $this->populateIntervenants($params, $filters);
     }
 
 
 
-    /**
-     *
-     * @param array $periodes
-     */
-    public function populatePeriodes($periodes)
+    protected function checkAndAutoSelect(string $elementName): void
     {
-        $annee = $this->getServiceContext()->getAnnee();
-        $this->get('periode')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($periodes, false, function ($p) use ($annee) {
-            return $p->getLibelleAnnuel($annee);
-        }));
+        /** @var Select $element */
+        $element = $this->get($elementName);
+
+        $values = $element->getValueOptions();
+        $value = $element->getValue();
+
+        if (count($values) == 1 && !$value) {
+            $value = key($values);
+            $element->setValue($value);
+        } elseif (!array_key_exists($value, $values)) {
+            $element->setValue(null);
+        }
     }
 
 
 
-    /**
-     *
-     * @param array $intervenants
-     */
-    public function populateIntervenants($intervenants)
+    protected function populateTypeIntervenants(array $params, array $filters)
     {
-        $this->get('intervenants')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($intervenants));
+        $sql = "
+          SELECT DISTINCT
+            ti.id, 
+            ti.libelle 
+          FROM 
+            tbl_paiement tp
+            JOIN type_intervenant ti ON ti.id = tp.type_intervenant_id
+          WHERE
+            " . implode("\n", $filters) . "
+          ORDER BY
+            ti.id
+        ";
+        $this->setValueOptionsSql('typeIntervenant', $sql, $params);
+    }
+
+
+
+    public function hasTypesIntervenants(): bool
+    {
+        return count($this->get('typeIntervenant')->getValueOptions()) > 0;
+    }
+
+
+
+    protected function populateStructures(array $params, array $filters)
+    {
+        // Filtre des rôles
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        if ($role->getStructure()) {
+            $filters[] = 'AND s.ids LIKE \'' . $role->getStructure()->idsFilter() . "'";
+        }
+
+        $sql = "
+          SELECT DISTINCT
+            s.id, 
+            s.libelle_court 
+          FROM 
+            tbl_paiement tp
+            JOIN structure s ON s.id = tp.structure_id 
+          WHERE
+            " . implode("\n", $filters) . "
+          ORDER BY
+            s.libelle_court
+        ";
+        $this->setValueOptionsSql('structure', $sql, $params);
+    }
+
+
+
+    public function hasStructures(): bool
+    {
+        return count($this->get('structure')->getValueOptions()) > 0;
+    }
+
+
+
+    public function hasStructureFilter(): bool
+    {
+        return $this->structureFilter;
+    }
+
+
+
+    public function setStructureFilter(bool $structureFilter): MiseEnPaiementRechercheForm
+    {
+        $this->structureFilter = $structureFilter;
+
+        return $this;
+    }
+
+
+
+    protected function populatePeriodes(array $params, array $filters)
+    {
+        $sql = "
+          SELECT DISTINCT
+            p.id, p.ordre 
+          FROM 
+            tbl_paiement tp
+            JOIN periode p ON p.id = tp.periode_paiement_id 
+          WHERE
+            " . implode("\n", $filters) . "
+          ORDER BY
+            p.ordre
+        ";
+        $periodes = [];
+        $periodesBdd = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
+        foreach($periodesBdd as $i => $p){
+            $periode = $this->getEntityManager()->find(Periode::class, $p['ID']);
+            $periodes[$periode->getId()] = $periode->getLibelleAnnuel($this->getObject()->getAnnee());
+        }
+
+        $this->setValueOptions('periode', $periodes);
+    }
+
+
+
+    public function hasPeriodes(): bool
+    {
+        return count($this->get('periode')->getValueOptions()) > 0;
+    }
+
+
+
+    public function hasPeriodeFilter(): bool
+    {
+        return $this->periodeFilter;
+    }
+
+
+
+    public function setPeriodeFilter(bool $periodeFilter): MiseEnPaiementRechercheForm
+    {
+        $this->periodeFilter = $periodeFilter;
+        return $this;
+    }
+
+
+
+    protected function populateIntervenants(array $params, array $filters)
+    {
+        $sql = "
+          SELECT DISTINCT
+            i.id, 
+            i.nom_usuel || ' ' || i.prenom label 
+          FROM 
+            tbl_paiement tp
+            JOIN intervenant i ON i.id = tp.intervenant_id 
+          WHERE
+            " . implode("\n", $filters) . "
+          ORDER BY
+            label
+        ";
+        $this->setValueOptionsSql('intervenants', $sql, $params);
+    }
+
+
+
+    public function hasIntervenants(): bool
+    {
+        return count($this->get('intervenants')->getValueOptions()) > 0;
     }
 
 
@@ -189,16 +377,16 @@ class MiseEnPaiementRechercheForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'type-intervenant' => [
+            'typeIntervenant' => [
                 'required' => false,
             ],
-            'structure'        => [
+            'structure'       => [
                 'required' => false,
             ],
-            'periode'          => [
+            'periode'         => [
                 'required' => false,
             ],
-            'intervenants'     => [
+            'intervenants'    => [
                 'required' => false,
             ],
         ];
@@ -229,7 +417,7 @@ class MiseEnPaiementRechercheFormHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $id = isset($data['type-intervenant']) ? (int)$data['type-intervenant'] : null;
+        $id = isset($data['typeIntervenant']) ? (int)$data['typeIntervenant'] : null;
         $object->setTypeIntervenant($this->getServiceTypeIntervenant()->get($id));
 
         $id = isset($data['structure']) ? (int)$data['structure'] : null;
@@ -259,10 +447,10 @@ class MiseEnPaiementRechercheFormHydrator implements HydratorInterface
     public function extract($object): array
     {
         $data = [
-            'type-intervenant' => $object->getTypeIntervenant() ? $object->getTypeIntervenant()->getId() : null,
-            'structure'        => $object->getStructure() ? $object->getStructure()->getId() : null,
-            'periode'          => $object->getPeriode() ? $object->getPeriode()->getId() : null,
-            'intervenants'     => [],
+            'typeIntervenant' => $object->getTypeIntervenant() ? $object->getTypeIntervenant()->getId() : null,
+            'structure'       => $object->getStructure() ? $object->getStructure()->getId() : null,
+            'periode'         => $object->getPeriode() ? $object->getPeriode()->getId() : null,
+            'intervenants'    => [],
         ];
         foreach ($object->getIntervenants() as $intervenant) {
             $data['intervenants'][] = $intervenant->getId();

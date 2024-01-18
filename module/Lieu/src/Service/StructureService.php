@@ -249,26 +249,6 @@ class StructureService extends AbstractEntityService
 
 
 
-    public function finderByMiseEnPaiement (QueryBuilder $qb = null, $alias = null)
-    {
-        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
-
-        $serviceMiseEnPaiement = $this->getServiceMiseEnPaiement();
-        $serviceIntervenant    = $this->getServiceIntervenant();
-
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
-        $serviceMIS->join($serviceMiseEnPaiement, $qb, 'miseEnPaiement');
-        $serviceMIS->join($serviceIntervenant, $qb, 'intervenant', false);
-
-        $serviceIntervenant->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
-
-        return $qb;
-    }
-
-
-
     public function finderByDemandeMiseEnPaiement (QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);

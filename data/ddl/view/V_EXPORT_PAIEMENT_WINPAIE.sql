@@ -15,7 +15,7 @@ SELECT annee_id,
        CASE WHEN mode_calcul IS NOT NULL THEN mode_calcul ELSE 'B' END                 mc,
        nbu,
        montant,
-       CASE WHEN type_paiement = 'conges_payes' THEN libelle ELSE libelle || ' ' || lpad(to_char(floor(nbu)), 2, '00') || ' H' ||
+       CASE WHEN type_paiement = 'conges_payes' THEN libelle || ' CONGES PAYES' ELSE libelle || ' ' || lpad(to_char(floor(nbu)), 2, '00') || ' H' ||
 		       CASE to_char(round(nbu - floor(nbu), 2) * 100, '00')
 		           WHEN ' 00' THEN ''
 		           ELSE ' ' || lpad(round(nbu - floor(nbu), 2) * 100, 2, '00') END
@@ -90,7 +90,7 @@ FROM (SELECT i.annee_id                                                         
                          s.ids                    structure_ids,
                          tp.periode_paiement_id,
                          tp.intervenant_id,
-                         2             			  code_origine,
+                         1             			  code_origine,
                          tp.heures_payees_ac      nbu,
                          cc.unite_budgetaire,
                          tp.taux_horaire,
@@ -110,7 +110,7 @@ FROM (SELECT i.annee_id                                                         
                          s.ids                     structure_ids,
                          tp.periode_paiement_id,
                          tp.intervenant_id,
-                         2             			   code_origine,
+                         2            			   code_origine,
                          tp.heures_payees_aa       nbu,
                          cc.unite_budgetaire,
                          tp.taux_horaire,
@@ -131,7 +131,7 @@ FROM (SELECT i.annee_id                                                         
                          s.ids                    structure_ids,
                          tp.periode_paiement_id,
                          tp.intervenant_id,
-                         2             			  code_origine,
+                         1             			  code_origine,
                          tp.heures_payees_ac      nbu,
                          cc.unite_budgetaire,
                          tp.taux_horaire,

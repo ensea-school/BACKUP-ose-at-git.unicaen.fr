@@ -1,7 +1,11 @@
 <?php
 
 // Mise à jour
-$oa->getBdd()->dataUpdater()->run('update');
+$bdd = $oa->getBdd();
+
+$bdd->logBegin('Contrôle et mise à jour des données');
+$bdd->dataUpdater()->run('update');
+$bdd->logEnd('Données à jour');
 
 // Néttoyage des caches
 $oa->run('clear-cache');

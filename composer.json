@@ -21,7 +21,7 @@
         "unicaen/siham"                               : "6.1.3",
         "unicaen/mail"                                : "6.1.1",
         "unicaen/vue"                                 : "6.1.0",
-        "unicaen/bddadmin"                            : "dev-main",
+        "unicaen/bddadmin"                            : "0.9.0",
         "laminas/laminas-cache-storage-adapter-memory": "2.3.0",
         "laminas/laminas-text"                        : "2.11",
         "unicaen/console"                             : "6.1.0"

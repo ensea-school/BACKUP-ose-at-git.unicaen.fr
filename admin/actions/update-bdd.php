@@ -1,6 +1,8 @@
 <?php
 
 use Unicaen\BddAdmin\Ddl\Ddl;
+use Application\Controller\WorkflowController;
+use Plafond\Service\PlafondService;
 
 // Initialisation
 $bdd = $oa->getBdd();
@@ -58,7 +60,9 @@ $bdd->majSequences($ref);
 
 
 // Mise à jour des données
+$bdd->logBegin('Contrôle et mise à jour des données');
 $bdd->dataUpdater()->run('update');
+$bdd->logEnd('Données à jour');
 
 
 // Reconstruction des TBL
@@ -66,6 +70,14 @@ $c->begin("Reconstruction de tous les plafonds & tableaux de bord");
 
 $args = 'plafonds construire';
 $c->passthru("php " . getcwd() . "/public/index.php " . $args);
+
+/** @var PlafondService $servicePlafond */
+$servicePlafond = $oa->container()->get(PlafondService::class);
+$servicePlafond->construire();
+
+/** @var WorkflowController $wf */
+$wf = $oa->getController(WorkflowController::class);
+$wf->calculTableauxBordAction();
 
 $c->end();
 

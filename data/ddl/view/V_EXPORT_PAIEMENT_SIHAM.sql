@@ -75,9 +75,9 @@ FROM (SELECT i.annee_id                                                         
                          tp.taux_horaire,
                          tp.taux_conges_payes,
                          'heures_payees'           type_paiement
-                         
+
                   FROM tbl_paiement tp
-                  JOIN structure s ON tp.structure_id = s.id 
+                  JOIN structure s ON tp.structure_id = s.id
                   JOIN centre_cout cc ON cc.id = tp.centre_cout_id
                   WHERE tp.heures_payees_aa > 0
                   AND tp.periode_paiement_id IS NOT NULL
@@ -97,7 +97,7 @@ FROM (SELECT i.annee_id                                                         
                          tp.taux_conges_payes,
                          'heures_payees'          type_paiement
                   FROM tbl_paiement tp
-                  JOIN structure s ON tp.structure_id = s.id 
+                  JOIN structure s ON tp.structure_id = s.id
                   JOIN centre_cout cc ON cc.id = tp.centre_cout_id
                   WHERE tp.heures_payees_ac > 0
                   AND tp.periode_paiement_id IS NOT NULL
@@ -119,6 +119,3 @@ FROM (SELECT i.annee_id                                                         
                JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
                JOIN structure s ON s.id = i.structure_id) t3 WHERE code_rh = 'UCN000201041'
 ORDER BY annee_id, type_intervenant_id, structure_id, periode_id, nom, code_origine, nbu DESC
-
-
-

@@ -34,15 +34,15 @@ FROM (SELECT i.annee_id                                                         
                  END                                                                                           insee,
              i.nom_usuel || ',' || i.prenom                                                                    nom,
              t2.code_origine                                                                                   code_origine,
-             CASE WHEN t2.type_paiement = 'heures_payees' THEN							
+             CASE WHEN t2.type_paiement = 'heures_payees' THEN
 	             	CASE WHEN ind <> ceil(t2.nbu / max_nbu) THEN max_nbu ELSE t2.nbu - max_nbu * (ind - 1) END
 	             ELSE 0 END																					   nbu,
 			 --Si le type de paiement est conges payés on met systématiquement 0
 	         CASE WHEN t2.type_paiement = 'heures_payees' THEN t2.nbu ELSE 0 END                               tnbu,
-			 --Selon le type de paiement (conges ou heures) on affiche le montant en euros ou le taux horaire	
-             CASE 
-	             WHEN t2.type_paiement = 'heures_payees' 
-	             THEN t2.taux_horaire ELSE ROUND((CASE WHEN ind <> ceil(t2.nbu / max_nbu) THEN max_nbu ELSE t2.nbu - max_nbu * (ind - 1) END*t2.taux_horaire*(t2.taux_conges_payes-1)),3) END	   montant,	
+			 --Selon le type de paiement (conges ou heures) on affiche le montant en euros ou le taux horaire
+             CASE
+	             WHEN t2.type_paiement = 'heures_payees'
+	             THEN t2.taux_horaire ELSE ROUND((CASE WHEN ind <> ceil(t2.nbu / max_nbu) THEN max_nbu ELSE t2.nbu - max_nbu * (ind - 1) END*t2.taux_horaire*(t2.taux_conges_payes-1)),3) END	   montant,
              COALESCE(t2.unite_budgetaire, '') || ' ' || to_char(i.annee_id) || ' ' || to_char(i.annee_id + 1) libelle,
              CASE WHEN t2.type_paiement = 'heures_payees' THEN si.code_indemnite ELSE '290' END				   code_indemnite,
              si.type_paie																					   type_paie,
@@ -75,9 +75,9 @@ FROM (SELECT i.annee_id                                                         
                          tp.taux_horaire,
                          tp.taux_conges_payes,
                          'heures_payees'           type_paiement
-                         
+
                   FROM tbl_paiement tp
-                  JOIN structure s ON tp.structure_id = s.id 
+                  JOIN structure s ON tp.structure_id = s.id
                   JOIN centre_cout cc ON cc.id = tp.centre_cout_id
                   WHERE tp.heures_payees_aa > 0
                   AND tp.periode_paiement_id IS NOT NULL
@@ -97,13 +97,13 @@ FROM (SELECT i.annee_id                                                         
                          tp.taux_conges_payes,
                          'heures_payees'          type_paiement
                   FROM tbl_paiement tp
-                  JOIN structure s ON tp.structure_id = s.id 
+                  JOIN structure s ON tp.structure_id = s.id
                   JOIN centre_cout cc ON cc.id = tp.centre_cout_id
                   WHERE tp.heures_payees_ac > 0
                   AND tp.periode_paiement_id IS NOT NULL
-                  
+
                   UNION ALL
- 
+
                   --Pour les congés payées pour les heures AA
                   SELECT tp.mise_en_paiement_id    id,
                          tp.structure_id           structure_id,
@@ -117,12 +117,12 @@ FROM (SELECT i.annee_id                                                         
                          tp.taux_conges_payes,
                          'conges_payes'            type_paiement
                   FROM tbl_paiement tp
-                  JOIN structure s ON tp.structure_id = s.id 
+                  JOIN structure s ON tp.structure_id = s.id
                   JOIN centre_cout cc ON cc.id = tp.centre_cout_id
                   WHERE tp.heures_payees_aa > 0
                   AND tp.periode_paiement_id IS NOT NULL
                   AND tp.taux_conges_payes > 1
-                  
+
                   UNION ALL
 
 				  --Pour les congés payées pour les heures AC
@@ -138,7 +138,7 @@ FROM (SELECT i.annee_id                                                         
                          tp.taux_conges_payes,
                          'conges_payes'           type_paiement
                   FROM tbl_paiement tp
-                  JOIN structure s ON tp.structure_id = s.id 
+                  JOIN structure s ON tp.structure_id = s.id
                   JOIN centre_cout cc ON cc.id = tp.centre_cout_id
                   WHERE tp.heures_payees_ac > 0
                   AND tp.periode_paiement_id IS NOT NULL
@@ -161,5 +161,3 @@ FROM (SELECT i.annee_id                                                         
                JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
                JOIN structure s ON s.id = t2.structure_id) t3
 ORDER BY annee_id, type_intervenant_id, structure_id, periode_id, nom, code_origine, nbu DESC
-
-

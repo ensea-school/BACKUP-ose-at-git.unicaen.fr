@@ -575,6 +575,33 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
+    public function ajouterDemandeMiseEnPaiement (Intervenant $intervenant, array $datas): ?MiseEnPaiement
+    {
+
+        $data['heures']                          = (array_key_exists('heures', $datas)) ? $datas['heures'] : '';
+        $data['type-heures-id']                  = (array_key_exists('typeHeuresId', $datas)) ? $datas['typeHeuresId'] : '';
+        $data['centre-cout-id']                  = (array_key_exists('centreCoutId', $datas)) ? $datas['centreCoutId'] : '';
+        $data['formule-resultat-service-id']     = (array_key_exists('formuleResServiceId', $datas)) ? $datas['formuleResServiceId'] : '';
+        $data['formule-resultat-service-ref-id'] = (array_key_exists('formuleResServiceId', $datas)) ? $datas['formuleResServiceRefId'] : '';
+        $data['domaine-fonctionnel-id']          = (array_key_exists('domaineFonctionnelId', $datas)) ? $datas['domaineFonctionnelId'] : '';
+        $data['mission-id']                      = (array_key_exists('missionId', $datas)) ? $datas['missionId'] : '';
+
+        /* @var $miseEnPaiement MiseEnPaiement */
+        //On enregistre la demande de mise en paiement
+        $miseEnPaiement = $this->newEntity();
+        $this->hydrateFromChangements($miseEnPaiement, $data);
+        $this->save($miseEnPaiement);
+
+        //On recalcule le tableau de bord paiement de l'intervenant conserné
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'paiement',
+        ], $intervenant);
+
+        return $miseEnPaiement;
+    }
+
+
+
     public function supprimerDemandeMiseEnPaiement ($idMep)
     {
         /**

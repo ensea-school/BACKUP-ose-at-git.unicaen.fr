@@ -71,9 +71,10 @@ class ServiceAPayerService extends AbstractService
             tp.heures_demandees_ac) 		    heures_demandees,
             SUM(tp.heures_payees_aa + 
             tp.heures_payees_ac) 		        heures_payees,
-            MAX(tp.domaine_fonctionnel_id)      domaine_fonctionel_id,
+            MAX(tp.domaine_fonctionnel_id)      domaine_fonctionnel_id,
             MAX(tp.formule_res_service_id)      formule_res_service_id,
             MAX(tp.formule_res_service_ref_id)  formule_res_service_ref_id,
+            MAX(tp.mission_id)                  mission_id,
             MAX(tp.type_heures_id )             type_heure_id 
         FROM
             tbl_paiement tp
@@ -125,13 +126,17 @@ class ServiceAPayerService extends AbstractService
                 //Heure déjà mise en paiement
                 if (!empty($value['MEP_ID'])) {
                     $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['mep_id_' . $value['MEP_ID']] = [
-                        'mepId'               => $value['MEP_ID'],
-                        'typeHeureId'         => $value['TYPE_HEURE_ID'],
-                        'formuleResServiceId' => $value['FORMULE_RES_SERVICE_ID'],
-                        'heuresAPayer'        => $value['HEURES_A_PAYER'],
-                        'heuresDemandees'     => $value['HEURES_DEMANDEES'],
-                        'heuresPayees'        => $value['HEURES_PAYEES'],
-                        'centreCout'          => [
+                        'mepId'                  => $value['MEP_ID'],
+                        'typeHeureId'            => $value['TYPE_HEURE_ID'],
+                        'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
+                        'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
+                        'domaineFonctionelId'    => $value['DOMAINE_FONCTIONNEL_ID'],
+                        'missionId'              => $value['MISSION_ID'],
+                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'        => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'           => $value['HEURES_PAYEES'],
+                        'centreCout'             => [
+                            'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
                             'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
                             'typeRessourceCode'    => $value['CENTRE_COUT_LIBELLE'] ?: '',
@@ -140,13 +145,17 @@ class ServiceAPayerService extends AbstractService
                     ];
                 } else {
                     $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['a_demander'] = [
-                        'mepId'               => '',
-                        'typeHeureId'         => $value['TYPE_HEURE_ID'],
-                        'formuleResServiceId' => $value['FORMULE_RES_SERVICE_ID'],
-                        'heuresAPayer'        => $value['HEURES_A_PAYER'],
-                        'heuresDemandees'     => $value['HEURES_DEMANDEES'],
-                        'heuresPayees'        => $value['HEURES_PAYEES'],
-                        'centreCout'          => [
+                        'mepId'                  => '',
+                        'typeHeureId'            => $value['TYPE_HEURE_ID'],
+                        'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
+                        'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
+                        'domaineFonctionelId'    => $value['DOMAINE_FONCTIONNEL_ID'],
+                        'missionId'              => $value['MISSION_ID'],
+                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'        => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'           => $value['HEURES_PAYEES'],
+                        'centreCout'             => [
+                            'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
                             'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
                             'typeRessourceCode'    => $value['CENTRE_COUT_LIBELLE'] ?: '',
@@ -194,7 +203,7 @@ class ServiceAPayerService extends AbstractService
 
         //->groupBy('tp.periodeEnseignement');
 
-
+        $dmep  = [];
         $dmeps = $qb->getQuery()->getResult();
 
 
@@ -246,10 +255,6 @@ class ServiceAPayerService extends AbstractService
                         ],
                     ];
                 }
-            }
-            //On traite les heures de référentiels
-            if ($fonctionReferentiel) {
-
             }
         }
 

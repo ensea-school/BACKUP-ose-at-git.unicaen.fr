@@ -134,7 +134,6 @@ class PaiementController extends AbstractController
             //On redirige vers la visualisation des mises en paiement
             $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
         }
-        $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenantNew($intervenant);
 
 
         return compact('intervenant');
@@ -164,6 +163,31 @@ class PaiementController extends AbstractController
 
         //Mise à jour tableau de bord de paiement
         $this->updateTableauxBord($intervenant);
+
+        return false;
+    }
+
+
+
+    public function ajouterMiseEnPaiementAction ()
+    {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $this->initFilters();
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        //Un intervenant ne peut pas supprimer des demandes de mise en paiement
+        if ($role->getIntervenant()) {
+            //On redirige vers la visualisation des mises en paiement
+            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
+        }
+        if ($this->getRequest()->isPost()) {
+
+            $datas = $this->getRequest()->getPost()->toArray();
+         
+
+            return $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $datas);
+        }
+
+        //$this->updateTableauxBord($intervenant);
 
         return false;
     }

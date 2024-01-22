@@ -18,5 +18,5 @@ foreach ($ref as $ddlClass => $objects) {
     }
 }
 
-$mm = new MigrationManager($oa, $ref, $filters);
+$mm = new MigrationManager($oa, $ref);
 $mm->migration($prepost, $action);

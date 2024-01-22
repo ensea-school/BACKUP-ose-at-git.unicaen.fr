@@ -90,11 +90,11 @@ return [
 
                 ],
                 'ajouter-demande-mise-en-paiement'     => [
-                    'type'    => 'Literal',
+                    'type'    => 'Segment',
                     'options' => [
                         'route'    => '/:intervenant/ajouter-demande',
                         'defaults' => [
-                            'action' => 'demandenewMiseEnPaiement',
+                            'action' => 'ajouterMiseEnPaiement',
                         ],
                     ],
                 ],
@@ -287,7 +287,7 @@ return [
     'guards' => [
         [
             'controller' => Controller\PaiementController::class,
-            'action'     => ['supprimerMiseEnPaiement', 'listeServiceAPayer', 'demandenewMiseEnPaiement', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
+            'action'     => ['ajouterMiseEnPaiement', 'supprimerMiseEnPaiement', 'listeServiceAPayer', 'demandenewMiseEnPaiement', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
             'privileges' => [
                 Privileges::MISE_EN_PAIEMENT_DEMANDE,
             ],

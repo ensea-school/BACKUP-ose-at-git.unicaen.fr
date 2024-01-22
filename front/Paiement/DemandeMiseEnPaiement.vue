@@ -45,8 +45,11 @@
                                                                 <td v-if="value.heuresDemandees == 0 ">
                                                                     <div class="input-group col-1">
                                                                         <input
-                                                                            :id="codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
+                                                                            :id="'heures-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
+                                                                            :data-domaine-fonctionnel-id="value.domaineFonctionnelId"
                                                                             :data-formule-res-service-id="value.formuleResServiceId"
+                                                                            :data-formule-res-service-ref-id="value.formuleResServiceRefId"
+                                                                            :data-mission-id="value.missionId"
                                                                             :data-type-heures-id="value.typeHeureId"
                                                                             :max="value.heuresAPayer"
                                                                             :value="value.heuresAPayer"
@@ -59,7 +62,15 @@
                                                                     </div>
                                                                 </td>
                                                                 <!--<td>{{ value.centreCout.libelle }}</td>-->
-                                                                <td> PDE58569</td>
+                                                                <td v-if="value.heuresDemandees == 0 ">
+                                                                    <select :id="'centreCout-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
+                                                                            name="">
+                                                                        <option value="2907">PAYE M1 MAE EVREUX</option>
+                                                                    </select>
+                                                                </td>
+                                                                <td v-if="value.heuresDemandees != 0 ">
+                                                                    {{ value.centreCout.libelle }}
+                                                                </td>
                                                                 <td style="font-size:12px;">
                                                                     {{ heuresStatut(value) }}
                                                                     <span
@@ -154,17 +165,32 @@ export default {
         },
         ajouterDemandeMiseEnPaiement(id)
         {
-            console.log(id);
-            let input = document.getElementById(id);
-            let heureADemander = input.value;
-            let typeHeure = input.getAttribute('data-type-heures-id');
-            let formuleResServiceId = input.getAttribute('data-formule-res-service-id');
-            console.log(input);
-            console.log(input.value);
-            /*unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demande'), {
-                heures: heureADemander,
+            let inputHeure = document.getElementById('heures-' + id);
+            let inputCentreCout = document.getElementById('centreCout-' + id);
+            let heureADemander = inputHeure.value;
+            let centreCoutId = inputCentreCout.value;
 
-            })*/
+            let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
+            let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
+            let formuleResServiceRefId = (inputHeure.hasAttribute('data-formule-res-service-ref-id') ? inputHeure.getAttribute('data-formule-res-service-ref-id') : '');
+            let missionId = (inputHeure.hasAttribute('data-mission-id') ? inputHeure.getAttribute('data-mission-id') : '');
+
+            var datas = new FormData();
+            datas.append('heures', heureADemander);
+            datas.append('typeHeuresId', typeHeureId);
+            datas.append('formuleResServiceId', formuleResServiceId);
+            datas.append('formuleResServiceRefId', formuleResServiceRefId);
+            datas.append('centreCoutId', centreCoutId);
+            datas.append('missionId', missionId);
+            console.log(datas);
+
+            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demande', {intervenant: this.intervenant}), datas)
+                .then(response => {
+                    this.findServiceAPayer();
+                })
+                .catch(error => {
+                    console.error(error);
+                })
         }
     },
     mounted()

@@ -2,7 +2,7 @@
 
 [OSE 22.4](#ose-224-01122023)
 
-# OSE 23 (à venir)
+# OSE 23 (26/01/2024)
 
 ## Nouveautés
 
@@ -10,8 +10,8 @@
 * Possibilité d'importer et/ou gérer les numéros de prise en charge des intervenants pour la paie (#15131)
 * Possibilité de faire des demandes de mise en paiement par lot (#12584)
 * Possibilité de paramétrer l'export OSE/SIHAM pour créer le contrat directement dans SIHAM
-* Annualisation des fonctions référentielles 
-* 
+* Annualisation des fonctions référentielles
+
 ## Améliorations
 
 * Une colonne "Structure" a été ajoutée à l'export de l'offre de formation
@@ -26,6 +26,7 @@
 * Prise en compte des dates bornées d'une année universitaire dans le contrôle de saisie de service en mode calendaire (#53947)
 * Modification de la formule de calcul de Paris 8
 * Modification de la formule de calcul de Picardie
+* Correction de la formule de calcul de Rouen
 * Correction sur les incohérences du nombre d'heures sur l'export des imputations budgétaires SIHAM (#53098)
 * Affichage inversé FI FA dans l'administration des types d'activité des centres de coûts (#54059)
 * Correction des dates de saisies d'heures lors d'un changement de mois #54005

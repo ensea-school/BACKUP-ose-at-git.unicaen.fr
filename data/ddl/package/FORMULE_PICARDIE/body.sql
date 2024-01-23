@@ -636,9 +636,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- BQ=IF(AND([.$D20]<>"Oui";[.$BL$17]=0;[.$H20]="Référentiel");[.$M20]*[.$AE20];0)
+      -- BQ=IF(AND([.$D20]<>"Oui";[.$BL$17]=0;[.$H20]="Référentiel";i_depassement_service_du_sans_hc="Non");[.$M20]*[.$AE20];0)
       WHEN 'BQ' THEN
-        IF NOT vh.service_statutaire AND cell('BL17') = 0 AND vh.volume_horaire_ref_id IS NOT NULL THEN
+        IF NOT vh.service_statutaire AND cell('BL17') = 0 AND vh.volume_horaire_ref_id IS NOT NULL AND NOT i.depassement_service_du_sans_hc THEN
           RETURN vh.heures * cell('AE',l);
         ELSE
           RETURN 0;
@@ -646,9 +646,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_PICARDIE AS
 
 
 
-      -- BS=IF(AND([.$D20]="Oui";[.$BL$17]=0;[.$H20]="Référentiel");([.AW20]+[.BC20])*[.$AE20];0)
+      -- BS=IF(AND([.$D20]="Oui";[.$BL$17]=0;[.$H20]="Référentiel";i_depassement_service_du_sans_hc="Non");([.AW20]+[.BC20])*[.$AE20];0)
       WHEN 'BS' THEN
-        IF vh.service_statutaire AND cell('BL17') = 0 AND vh.volume_horaire_ref_id IS NOT NULL THEN
+        IF vh.service_statutaire AND cell('BL17') = 0 AND vh.volume_horaire_ref_id IS NOT NULL AND NOT i.depassement_service_du_sans_hc THEN
           RETURN (cell('AW',l) + cell('BC',l)) * cell('AE',l);
         ELSE
           RETURN 0;

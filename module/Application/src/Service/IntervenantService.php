@@ -354,27 +354,6 @@ class IntervenantService extends AbstractEntityService
 
 
 
-    public function finderByMiseEnPaiement (Structure $structure = null, Periode $periode = null, QueryBuilder $qb = null, $alias = null)
-    {
-        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
-
-        [$qb, $alias] = $this->initQuery($qb, $alias);
-
-        $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
-        $serviceMIS->join($this->getServiceMiseEnPaiement(), $qb, 'miseEnPaiement');
-
-        if ($structure) {
-            $serviceMIS->finderByStructure($structure, $qb);
-        }
-        if ($periode) {
-            $serviceMIS->finderByPeriode($periode, $qb);
-        }
-
-        return $qb;
-    }
-
-
-
     /**
      * @return Intervenant
      */

@@ -349,7 +349,7 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return array
      */
-    public function getTableauBord (Structure $structure)
+    public function getTableauBord (?Structure $structure)
     {
         $annee = $this->getServiceContext()->getAnnee();
         $data  = [];

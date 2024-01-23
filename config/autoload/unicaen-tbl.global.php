@@ -193,8 +193,36 @@ return [
                 ],
             ],
 
-            'contrat' => [
+            'mission'       => [
                 'order'              => 6,
+                'process'            => 'DbDiff',
+                'cols'               => [
+                    'ANNEE_ID',
+                    'INTERVENANT_ID',
+                    'ACTIF',
+                    'MISSION_ID',
+                    'STRUCTURE_ID',
+                    'INTERVENANT_STRUCTURE_ID',
+                    'VALIDE',
+                    'VALIDATION_ID',
+                    'CONTRACTUALISE',
+                    'CONTRAT_ID',
+                    'HEURES_PREVUES_SAISIES',
+                    'HEURES_PREVUES_VALIDEES',
+                    'HEURES_REALISEES_SAISIES',
+                    'HEURES_REALISEES_VALIDEES',
+                ],
+                'key'                => [
+                    'INTERVENANT_ID',
+                    'MISSION_ID',
+                ],
+                'key_values_if_null' => [
+                    'MISSION_ID' => 0,
+                ],
+            ],
+
+            'contrat' => [
+                'order'              => 7,
                 'process'            => 'DbDiff',
                 'cols'               => [
                     'ANNEE_ID',
@@ -215,7 +243,7 @@ return [
             ],
 
             'dossier' => [
-                'order'   => 7,
+                'order'   => 8,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -239,8 +267,7 @@ return [
             ],
 
             'paiement' => [
-                'order'              => 8,
-                //'process'            => 'DbDiff',
+                'order'              => 9,
                 'process'            => \Paiement\Tbl\Process\PaiementProcess::class,
                 'cols'               => [
                     'ANNEE_ID',
@@ -289,7 +316,7 @@ return [
             ],
 
             'piece_jointe' => [
-                'order'   => 9,
+                'order'   => 10,
                 'process' => 'DbDiff',
                 'cols'    => [
                     'ANNEE_ID',
@@ -417,33 +444,6 @@ return [
                 ],
             ],
 
-            'mission'       => [
-                'order'              => 15,
-                'process'            => 'DbDiff',
-                'cols'               => [
-                    'ANNEE_ID',
-                    'INTERVENANT_ID',
-                    'ACTIF',
-                    'MISSION_ID',
-                    'STRUCTURE_ID',
-                    'INTERVENANT_STRUCTURE_ID',
-                    'VALIDE',
-                    'VALIDATION_ID',
-                    'CONTRACTUALISE',
-                    'CONTRAT_ID',
-                    'HEURES_PREVUES_SAISIES',
-                    'HEURES_PREVUES_VALIDEES',
-                    'HEURES_REALISEES_SAISIES',
-                    'HEURES_REALISEES_VALIDEES',
-                ],
-                'key'                => [
-                    'INTERVENANT_ID',
-                    'MISSION_ID',
-                ],
-                'key_values_if_null' => [
-                    'MISSION_ID' => 0,
-                ],
-            ],
             'mission_prime' => [
                 'order'   => 15,
                 'process' => 'DbDiff',

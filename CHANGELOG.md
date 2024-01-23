@@ -2,30 +2,43 @@
 
 [OSE 22.4](#ose-224-01122023)
 
-# OSE 23 (à venir)
+# OSE 23 (26/01/2024)
 
 ## Nouveautés
 
 * Gestion arbosrescente des structures dans toute l'application (#3268)
 * Possibilité d'importer et/ou gérer les numéros de prise en charge des intervenants pour la paie (#15131)
 * Possibilité de faire des demandes de mise en paiement par lot (#12584)
+* Possibilité de paramétrer l'export OSE/SIHAM pour créer le contrat directement dans SIHAM
+* Annualisation des fonctions référentielles
 
 ## Améliorations
 
 * Une colonne "Structure" a été ajoutée à l'export de l'offre de formation
 * Activation de la saisie de service hors établissement, en fonction de l'option de statut "L'intervenant pourra assurer des services dans d'autres établissements" et non par rapport au type d'intervenant (#54004)
+* Adaptation des exports de paie (winpaie et siham) pour gérer le paiement des congés payés dans le cadre des missions étudiantes
+* Export Ose/Siham : Auto validation de la clôture d'un dossier d'un agent
+* Possibilité d'ajouter un centre de coût par défaut au niveau de la structure
 
 ## Corrections
 
 * Ajout d'un contrôle au niveau des données personnelles,  pour empêcher de mettre un statut d'une année différente de l'intervenant (#53668)
 * Prise en compte des dates bornées d'une année universitaire dans le contrôle de saisie de service en mode calendaire (#53947)
+* Modification de la formule de calcul de Paris 8
+* Modification de la formule de calcul de Picardie
+* Correction de la formule de calcul de Rouen
+* Correction sur les incohérences du nombre d'heures sur l'export des imputations budgétaires SIHAM (#53098)
+* Affichage inversé FI FA dans l'administration des types d'activité des centres de coûts (#54059)
+* Correction des dates de saisies d'heures lors d'un changement de mois #54005
 
 ## Notes de mise à jour
 
-A partir la V23 uniquement, PHP 8.2 est maintenant obligatoire.
+À partir la V23 uniquement, PHP 8.2 est maintenant obligatoire.
 
-Pour les établissements qui utilisent le module Export SIHAM : la configuration spécifique du module d'export Siham anciennement mise dans config/autoload/unicaen-siham.local.php doit maintenant être mise directement à la racine de OSE dans le fichier de configuration globale config.local.php. (Voir un exemple dans [config.local.php.default](config.local.php.default)).
+Pour les établissements qui utilisent le module Export SIHAM : la configuration spécifique du module d'export Siham anciennement mise dans `config/autoload/unicaen-siham.local.php` doit maintenant être mise directement à la racine de OSE dans le fichier de configuration globale config.local.php. (Voir un exemple dans [config.local.php.default](config.local.php.default)). A noter, qu'il est maintenant possible de paramétrer la création du contrat automatiquement dans SIHAM.
 
+Veillez bien à retester tous vos états de sortie si vous les avez personnalisés au niveau des requêtes SQL.
+Ceux qui sont filtrables par structure, comme les états de paiements, nécessitent une nouvelle colonne STRUCTURE_IDS qui remonte l'information présente dans la colonne `STRUCTURE.IDS`.
 
 
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Contrat\Entity\Db;
 
+use Application\Entity\Db\Annee;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 

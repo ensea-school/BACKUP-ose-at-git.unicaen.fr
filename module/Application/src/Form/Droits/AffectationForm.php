@@ -59,7 +59,7 @@ class AffectationForm extends AbstractForm
         $utilisateur->setRequired(true)
             ->setSelectionRequired(true)
             ->setAutocompleteSource(
-                $this->getUrl('recherche', ['action' => 'utilisateurFind'])
+                $this->getUrl('utilisateur-recherche')
             )
             ->setLabel("Utilisateur")
             ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);

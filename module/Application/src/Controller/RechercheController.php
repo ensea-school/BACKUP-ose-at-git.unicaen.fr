@@ -54,17 +54,4 @@ class RechercheController extends AbstractController
         return new JsonModel($result);
     }
 
-
-
-    public function utilisateurFindAction()
-    {
-
-        if (!($term = $this->params()->fromQuery('term'))) {
-            return new JsonModel([]);
-        }
-
-        $result = $this->getServiceUtilisateur()->rechercheUtilisateurs($term);
-
-        return new JsonModel($result);
-    }
 }

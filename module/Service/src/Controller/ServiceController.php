@@ -12,6 +12,7 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
+use Formule\Controller\AffichageController;
 use Laminas\Http\Request;
 use Laminas\View\Model\ViewModel;
 use OffreFormation\Entity\Db\ElementPedagogique;
@@ -257,7 +258,7 @@ class ServiceController extends AbstractController
         $this->getEvent()->setParam('typeVolumeHoraire', $typeVolumeHoraire);
         $this->getEvent()->setParam('etatVolumeHoraire', $etatVolumeHoraire);
         $params['action'] = 'formuleTotauxHetd';
-        $widget           = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
+        $widget           = $this->forward()->dispatch(AffichageController::class, $params);
         if ($widget) $vm->addChild($widget, 'formuleTotauxHetd');
 
         /* Clôture de saisie (si nécessaire) */

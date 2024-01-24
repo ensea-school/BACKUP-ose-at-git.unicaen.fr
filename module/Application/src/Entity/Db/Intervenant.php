@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Enseignement\Entity\Db\Service;
+use Formule\Entity\Db\FormuleResultat;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Intervenant\Entity\Db\CiviliteAwareTrait;
 use Intervenant\Entity\Db\GradeAwareTrait;

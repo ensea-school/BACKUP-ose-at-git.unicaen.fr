@@ -16,7 +16,7 @@ namespace Application\View\Renderer;
  * @method \Application\View\Helper\FormSupprimerViewHelper formSupprimer($form)
  * @method \Application\View\Helper\Intervenant\FeuilleDeRouteViewHelper feuilleDeRoute(?\Application\Entity\Db\Intervenant $intervenant = null)
  * @method \Application\View\Helper\Intervenant\IntervenantViewHelper intervenant(?\Application\Entity\Db\Intervenant $intervenant = null)
- * @method \Application\View\Helper\Intervenant\TotauxHetdViewHelper formuleTotauxHetd(\Application\Entity\Db\FormuleResultat $formuleResultat)
+ * @method \Formule\View\Helper\TotauxHetdViewHelper formuleTotauxHetd(\Formule\Entity\Db\FormuleResultat $formuleResultat)
  * @method \Application\View\Helper\TabViewHelper tab()
  * @method \Application\View\Helper\TreeViewHelper tree(\Application\Model\TreeNode $tree, array $attributes = [])
  * @method string utilisateur(\Application\Entity\Db\Utilisateur $utilisateur, $title = null, $subject = null, $body = null)

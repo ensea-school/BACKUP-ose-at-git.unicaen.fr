@@ -87,9 +87,6 @@ class IntervenantAssertion extends AbstractAssertion
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         switch ($action) {
-            case 'voir-heures-comp':
-                return $this->assertVisuHC($intervenant);
-            break;
             case 'supprimer':
             case 'historiser':
                 return $this->assertEdition($intervenant);
@@ -123,16 +120,5 @@ class IntervenantAssertion extends AbstractAssertion
         }
 
         return true;
-    }
-
-
-
-    protected function assertVisuHC(?Intervenant $intervenant)
-    {
-        if (!$intervenant) return true;
-
-        $statut = $intervenant->getStatut();
-
-        return $statut->getServicePrevu() || $statut->getServiceRealise() || $statut->getReferentielPrevu() || $statut->getReferentielRealise();
     }
 }

@@ -4,11 +4,9 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Intervenant;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
-use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\FormuleResultatServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
@@ -16,15 +14,13 @@ use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
+use Formule\Form\HeuresCompFormAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
-use LogicException;
-use Mission\Entity\Db\Candidature;
 use Mission\Service\CandidatureServiceAwareTrait;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Referentiel\Processus\ServiceReferentielProcessusAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\CampagneSaisieServiceAwareTrait;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
@@ -54,7 +50,6 @@ class  IntervenantController extends AbstractController
     use CampagneSaisieServiceAwareTrait;
     use ValidationServiceAwareTrait;
     use PlafondProcessusAwareTrait;
-    use FormuleResultatServiceAwareTrait;
     use StatutServiceAwareTrait;
     use SourceServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
@@ -373,64 +368,6 @@ class  IntervenantController extends AbstractController
         $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
 
         return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getId()], ['query' => ['tab' => 'synchronisation']]);
-    }
-
-
-
-    public function voirHeuresCompAction ()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant \Application\Entity\Db\Intervenant */
-
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant non précisé ou inexistant');
-        }
-
-        $form = $this->getFormIntervenantHeuresComp();
-
-        $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
-        if (!$typeVolumeHoraire instanceof TypeVolumeHoraire) {
-            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get($typeVolumeHoraire);
-        }
-        /* @var $typeVolumeHoraire \Service\Entity\Db\TypeVolumeHoraire */
-        if (!isset($typeVolumeHoraire)) {
-            throw new LogicException('Type de volume horaire erroné');
-        }
-
-        $etatVolumeHoraire = $this->context()->etatVolumeHoraireFromQuery('etat-volume-horaire', $form->get('etat-volume-horaire')->getValue());
-        if (!$etatVolumeHoraire instanceof EtatVolumeHoraire) {
-            $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->get($etatVolumeHoraire);
-        }
-        /* @var $etatVolumeHoraire \Service\Entity\Db\EtatVolumeHoraire */
-        if (!isset($etatVolumeHoraire)) {
-            throw new LogicException('Etat de volume horaire erroné');
-        }
-
-        $form->setData([
-            'type-volume-horaire' => $typeVolumeHoraire->getId(),
-            'etat-volume-horaire' => $etatVolumeHoraire->getId(),
-        ]);
-
-        $data = $this->getServiceFormuleResultat()->getData(
-            $intervenant,
-            $typeVolumeHoraire,
-            $etatVolumeHoraire
-        );
-
-        return compact('form', 'intervenant', 'data');
-    }
-
-
-
-    public function formuleTotauxHetdAction ()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-        $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
-        $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
-        $formuleResultat   = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
-
-        return compact('formuleResultat');
     }
 
 

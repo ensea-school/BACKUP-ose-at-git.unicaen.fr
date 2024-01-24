@@ -44,7 +44,7 @@
             </cascade>
         </one-to-many>
         <one-to-many field="formuleResultatServiceReferentiel"
-                     target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel"
+                     target-entity="Formule\Entity\Db\FormuleResultatServiceReferentiel"
                      mapped-by="serviceReferentiel"/>
 
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">

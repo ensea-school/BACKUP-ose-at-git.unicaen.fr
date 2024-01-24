@@ -4,7 +4,6 @@ namespace Application\Service;
 
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Periode;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -13,7 +12,6 @@ use Intervenant\Entity\Db\Statut;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Hydrator\ClassMethodsHydrator;
-use Lieu\Entity\Db\Structure;
 use Paiement\Service\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use RuntimeException;

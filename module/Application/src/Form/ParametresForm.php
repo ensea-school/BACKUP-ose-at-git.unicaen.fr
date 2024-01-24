@@ -2,14 +2,14 @@
 
 namespace Application\Form;
 
-use Application\Entity\Db\Formule;
 use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
-use Application\Service\Traits\FormuleServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\WfEtapeServiceAwareTrait;
+use Formule\Entity\Db\Formule;
+use Formule\Service\FormuleServiceAwareTrait;
 use Laminas\Form\Element;
 use Lieu\Form\Element\Structure;
 use Lieu\Service\PaysServiceAwareTrait;

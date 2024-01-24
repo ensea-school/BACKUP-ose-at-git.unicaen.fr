@@ -50,7 +50,7 @@ if (!file_exists($fichier['tmp_name'])) {
     return;
 }
 
-$fc                         = new \Application\Model\FormuleCalcul($fichier['tmp_name'], $name);
+$fc                         = new \Formule\Model\FormuleCalcul($fichier['tmp_name'], $name);
 
 switch ($action) {
     case 'feuille':
@@ -105,7 +105,7 @@ switch ($action) {
 }
 
 
-function affCreateData(\Application\Model\FormuleCalcul $fc)
+function affCreateData(\Formule\Model\FormuleCalcul $fc)
 {
     $bdd         = OseAdmin::instance()->getBdd();
     $packageName = 'FORMULE_' . $fc->getName();

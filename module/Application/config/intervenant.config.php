@@ -161,28 +161,6 @@ return [
                             ],
                         ],
                     ],
-                    'voir-heures-comp'    => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/voir-heures-comp/:intervenant',
-                            'defaults' => [
-                                'action' => 'voir-heures-comp',
-                            ],
-                        ],
-                    ],
-                    'formule-totaux-hetd' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire',
-                            'constraints' => [
-                                'typeVolumeHoraire' => '[0-9]*',
-                                'etatVolumeHoraire' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'formule-totaux-hetd',
-                            ],
-                        ],
-                    ],
                     'feuille-de-route'    => [
                         'type'    => 'Segment',
                         'options' => [
@@ -279,18 +257,6 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'voir'),
                                 'order'        => 2,
                             ],
-                            'voir-heures-comp' => [
-                                'label'        => "Calcul HETD",
-                                'title'        => "Calcul des heures équivalent TD {id}",
-                                'route'        => 'intervenant/voir-heures-comp',
-                                'paramsInject' => [
-                                    'intervenant',
-                                ],
-                                'action'       => 'voir-heures-comp',
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'voir-heures-comp'),
-                                'order'        => 3,
-                            ],
                         ],
                     ],
                 ],
@@ -336,26 +302,6 @@ return [
                     ],
                     'assertion'  => Assertion\IntervenantAssertion::class,
                 ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['voir-heures-comp'],
-                    'privileges' => [
-                        Privileges::INTERVENANT_CALCUL_HETD,
-                    ],
-                    'assertion'  => Assertion\IntervenantAssertion::class,
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['formule-totaux-hetd'],
-                    'privileges' => [
-                        Privileges::ENSEIGNEMENT_PREVU_VISUALISATION,
-                        Privileges::ENSEIGNEMENT_REALISE_VISUALISATION,
-                        Privileges::REFERENTIEL_PREVU_VISUALISATION,
-                        Privileges::REFERENTIEL_REALISE_VISUALISATION,
-                    ],
-                ],
-
-
             ],
         ],
 
@@ -390,16 +336,12 @@ return [
     ],
     'view_helpers'    => [
         'invokables' => [
-            'formuleTotauxHetd' => View\Helper\Intervenant\TotauxHetdViewHelper::class,
             'intervenant'       => View\Helper\Intervenant\IntervenantViewHelper::class,
         ],
     ],
     'form_elements'   => [
         'factories'  => [
             Form\Intervenant\EditionForm::class => Form\Intervenant\Factory\EditionFormFactory::class,
-        ],
-        'invokables' => [
-            Form\Intervenant\HeuresCompForm::class => Form\Intervenant\HeuresCompForm::class,
         ],
     ],
 ];

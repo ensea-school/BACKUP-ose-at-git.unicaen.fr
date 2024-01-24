@@ -3,11 +3,11 @@
 namespace Paiement\Entity\Db;
 
 use Application\Entity\Db\DomaineFonctionnel;
-use Application\Entity\Db\FormuleResultatService;
-use Application\Entity\Db\FormuleResultatServiceReferentiel;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\Collection;
+use Formule\Entity\Db\FormuleResultatService;
+use Formule\Entity\Db\FormuleResultatServiceReferentiel;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\TypeHeures;

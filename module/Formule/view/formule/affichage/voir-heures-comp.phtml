@@ -1,0 +1,275 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/* @var $intervenant \Application\Entity\Db\Intervenant */
+/* @var $form \Formule\Form\HeuresCompForm */
+/* @var $data array */
+
+$totalService =
+    (float)vn($data, 'SERVICE_FI')
+    + (float)vn($data, 'SERVICE_FA')
+    + (float)vn($data, 'SERVICE_FC')
+    + (float)vn($data, 'SERVICE_REFERENTIEL');
+
+
+$canPutInTest = $this->isAllowed(Privileges::getResourceId(Privileges::FORMULE_TESTS));
+
+
+function vn(array $array, $key, $type = 's')
+{
+    if (isset($array[$key])) {
+        $val = (float)$array[$key];
+        if (0 == $val) return null;
+
+        switch ($type) {
+            case 's':
+                return \UnicaenApp\Util::formattedNumber($val);
+            break;
+            case 'p':
+                return \UnicaenApp\Util::formattedPourcentage($val);
+            break;
+            case 'f':
+                return $val;
+            break;
+        }
+    }
+
+    return null;
+}
+
+$this->intervenant($intervenant)->renderTitle('Calcul HETD');
+
+?>
+
+    <style>
+        th {
+            background-color: #eee
+        }
+    </style>
+<?= $this->form()->openTag($form->prepare()); ?>
+    <div class="row">
+        <div class="col-sm-4"><?= $this->formControlGroup($form->get('type-volume-horaire')); ?></div>
+        <div class="col-sm-4"><?= $this->formControlGroup($form->get('etat-volume-horaire')); ?></div>
+        <div class="col-sm-2"><label>&nbsp;</label><br/><?= $this->formRow($form->get('submit')); ?></div>
+    </div>
+<?= $this->form()->closeTag(); ?>
+
+<?php if ($intervenant->getStatut()->getServiceStatutaire() > 0): ?>
+    <h2>Service Dû</h2>
+    <div class="row">
+        <div class="col-sm-4">Composante d'affectation</div>
+        <div class="col-sm-2 nombre"><?= $this->structure($data['STRUCTURE'])->renderLink() ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">Service statutaire</div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_SERVICE_STATUTAIRE') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">- Modifications de service</div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_SERVICE_MODIFIE') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">= Service dû<?= vn($data, 'DEPASSEMENT_SERVICE_DU_SANS_HC') ? '*' : '' ?></div>
+        <div class="col-sm-2 nombre"><span class="label label-info"
+                                           style="font-size:12pt"><?= vn($data, 'SERVICE_DU') ?></span>
+        </div>
+    </div>
+
+    <?php if (vn($data, 'DEPASSEMENT_SERVICE_DU_SANS_HC', 'f')): ?>
+        <div class="alert alert-info alert-dismissible" role="alert" style="margin-top:1em">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <strong>* </strong>
+            Le statut de cet intervenant (<?= $intervenant->getStatut() ?>) ne lui permet pas de prétendre à des heures
+            complémentaires.
+            Par conséquent, en cas de dépassement de service statutaire, l'ensemble de son service assuré est considéré comme
+            étant du service dû.
+        </div>
+    <?php endif; ?>
+
+<?php endif; ?>
+
+
+    <h2>Heures effectives d'enseignement</h2>
+<?php if (count($data['s']) > 0): ?>
+    <table class="table table-bordered table-xs">
+        <tr>
+            <th rowspan="4">Elément ou établissement</th>
+            <th colspan="3">Taux</th>
+            <th rowspan="4"><abbr
+                        title="Détermine si les heures peuvent être comptées dans le service statutaire de l'intervenant ou non">Peut
+                    dans serv.</abbr></th>
+            <th colspan="2">Majoration</th>
+            <th rowspan="4">Composante d'intervention</th>
+            <?php if (count($data['types-intervention']) > 0): ?>
+                <th style="white-space:nowrap" colspan="<?= count($data['types-intervention']); ?>">Types d'intervention</th>
+            <?php endif; ?>
+            <th colspan="7">HETD</th>
+        </tr>
+        <tr>
+            <th rowspan="3">FI</th>
+            <th rowspan="3">FA</th>
+            <th rowspan="3">FC</th>
+            <th rowspan="3">Service</th>
+            <th rowspan="3">HC</th>
+            <?php foreach ($data['types-intervention'] as $ti): ?>
+                <th><abbr title="<?= $ti->getLibelle() ?>"><?= $ti->getCode() ?></abbr></th>
+            <?php endforeach; ?>
+            <th colspan="3">Dans le service</th>
+            <th colspan="4">Au-delà du service</th>
+        </tr>
+        <tr>
+            <?php foreach ($data['types-intervention'] as $ti): ?>
+                <td class="nombre"><abbr
+                            title="Pondération des heures de services"><?= \UnicaenApp\Util::formattedNumber($ti->getTauxHetdService()) ?></abbr>
+                </td>
+            <?php endforeach; ?>
+            <th rowspan="2">FI</th>
+            <th rowspan="2">FA</th>
+            <th rowspan="2">FC</th>
+            <th rowspan="2">FI</th>
+            <th rowspan="2">FA</th>
+            <th rowspan="2">FC</th>
+            <th rowspan="2">FC D714.60</th>
+        </tr>
+        <tr>
+            <?php foreach ($data['types-intervention'] as $ti): ?>
+                <td class="nombre"><abbr
+                            title="Pondération des heures au-delà du service"><?= \UnicaenApp\Util::formattedNumber($ti->getTauxHetdComplementaire()) ?></abbr>
+                </td>
+            <?php endforeach; ?>
+        </tr>
+        <?php foreach ($data['s'] as $ls): ?>
+            <tr>
+                <td><?php
+                    if ($ls['element-etablissement'] instanceof \OffreFormation\Entity\Db\ElementPedagogique) {
+                        echo $this->elementPedagogique($ls['element-etablissement'])->renderLink();
+                    } else {
+                        echo $this->etablissement($ls['element-etablissement'])->renderLink();
+                    }
+                    ?></td>
+                <td class="nombre"><?= vn($ls, 'TAUX_FI', 'p') ?></td>
+                <td class="nombre"><?= vn($ls, 'TAUX_FA', 'p') ?></td>
+                <td class="nombre"><?= vn($ls, 'TAUX_FC', 'p') ?></td>
+                <td><?= $ls['SERVICE_STATUTAIRE'] ? 'Oui' : 'Non' ?></td>
+                <td class="nombre"><?= vn($ls, 'PONDERATION_SERVICE_DU') ?></td>
+                <td class="nombre"><?= vn($ls, 'PONDERATION_SERVICE_COMPL') ?></td>
+                <td><?= $this->structure($ls['structure'])->renderLink() ?></td>
+                <?php foreach ($data['types-intervention'] as $ti): ?>
+                    <td class="nombre">
+                        <?= vn($ls['heures'], $ti->getId()) ?>
+                    </td>
+                <?php endforeach; ?>
+                <td class="nombre"><?= vn($ls['hetd'], 'SERVICE_FI') ?></td>
+                <td class="nombre"><?= vn($ls['hetd'], 'SERVICE_FA') ?></td>
+                <td class="nombre"><?= vn($ls['hetd'], 'SERVICE_FC') ?></td>
+                <td class="nombre"><?= vn($ls['hetd'], 'HEURES_COMPL_FI') ?></td>
+                <td class="nombre"><?= vn($ls['hetd'], 'HEURES_COMPL_FA') ?></td>
+                <td class="nombre"><?= vn($ls['hetd'], 'HEURES_COMPL_FC') ?></td>
+                <td class="nombre"><?= vn($ls['hetd'], 'HEURES_COMPL_FC_MAJOREES') ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php else: ?>
+    Aucun service.
+<?php endif; ?>
+
+<?php if (!empty($data['r'])): ?>
+    <h2>Heures de référentiel</h2>
+    <table class="table table-bordered table-xs" style="width:auto">
+        <tr>
+            <th>Structure</th>
+            <th>Heures réelles</th>
+            <th><abbr title="Heures Equivalent TD dans le service">HETD service</abbr></th>
+            <th><abbr title="Heures Equivalent TD au-delà du service">HETD compl.</abbr></th>
+            <th>
+                <abbr title="Détermine si les heures peuvent être comptées dans le service statutaire de l'intervenant ou non">Peut
+                    dans serv.</abbr></th>
+        </tr>
+        <?php foreach ($data['r'] as $ref): ?>
+            <tr>
+                <td><?= $this->structure($ref['structure'])->renderLink() ?></td>
+                <td class="nombre"><?= vn($ref, 'heures') ?></td>
+                <td class="nombre"><?= vn($ref['hetd'], 'SERVICE_REFERENTIEL') ?></td>
+                <td class="nombre"><?= vn($ref['hetd'], 'HEURES_COMPL_REFERENTIEL') ?></td>
+                <td><?= $ref['SERVICE_STATUTAIRE'] ? 'Oui' : 'Non' ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php endif; ?>
+
+    <h2>Totaux HETD</h2>
+    <div class="row">
+        <div class="col-sm-4">Service FI</div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_FI') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">+ Service FA</div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_FA') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">+ Service FC</div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_FC') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">+ référentiel</div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_REFERENTIEL') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">= Service assuré</div>
+        <div class="col-sm-2 nombre"><span class="label label-info"
+                                           style="font-size:12pt"><?= vn($data, 'SERVICE_TOTAL') ?></span>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-sm-4"><abbr title="Heures complémentaires (formation initiale)">HC FI</abbr></div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FI') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4"><abbr title="Heures complémentaires (formation en apprentissage)">+ HC FA</abbr></div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FA') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4"><abbr title="Heures complémentaires (formation continue)">+ HC FC</abbr></div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FC') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4"><abbr title="Rémunération FC au titre de l'article D714-60 du code de l’Éducation">+
+                Rémunération FC
+                D714-60</abbr></div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FC_MAJOREES') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4"><abbr title="Heures complémentaires (référentiel)">+ HC Référentiel</abbr></div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_REFERENTIEL') ?></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">= Heures complémentaires</div>
+        <div class="col-sm-2 nombre"><span class="label label-info"
+                                           style="font-size:12pt"><?= vn($data, 'HEURES_COMPL_TOTAL') ?></span>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-4">Solde</div>
+        <div class="col-sm-2 nombre"><span class="label label-<?php $hs = (float)vn($data, 'SOLDE', 'f');
+            if ($hs == 0) {
+                echo 'info';
+            } elseif ($hs < 0) echo 'danger';
+            else echo 'warning'; ?>"
+                                           style="font-size:12pt"><?= vn($data, 'SOLDE') ?></span>
+        </div>
+    </div>
+<?php
+
+if ($canPutInTest) {
+    echo $this->tag('a', [
+        'class' => 'btn btn-secondary',
+        'href'  => $this->url('formule-test/creer-from-reel', [
+            'intervenant'       => $intervenant->getId(),
+            'typeVolumeHoraire' => $form->get('type-volume-horaire')->getValue(),
+            'etatVolumeHoraire' => $form->get('etat-volume-horaire')->getValue(),
+        ]),
+    ])->text('Reporter les données de cet intervenant dans l\'interface de test de formule');
+}

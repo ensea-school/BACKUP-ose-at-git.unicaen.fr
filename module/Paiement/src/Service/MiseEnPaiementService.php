@@ -5,12 +5,10 @@ namespace Paiement\Service;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
 use Application\Service\AbstractEntityService;
-use Application\Service\Recherche;
 use Application\Service\Traits;
-use Application\Service\Traits\FormuleResultatServiceReferentielServiceAwareTrait;
-use Application\Service\Traits\FormuleResultatServiceServiceAwareTrait;
-use Application\Util;
 use Doctrine\ORM\QueryBuilder;
+use Formule\Entity\Db\FormuleResultatService;
+use Formule\Entity\Db\FormuleResultatServiceReferentiel;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Lieu\Entity\Db\Structure;
 use Mission\Service\MissionServiceAwareTrait;
@@ -34,8 +32,6 @@ class MiseEnPaiementService extends AbstractEntityService
     use CentreCoutServiceAwareTrait;
     use DomaineFonctionnelServiceAwareTrait;
     use TypeHeuresServiceAwareTrait;
-    use FormuleResultatServiceServiceAwareTrait;
-    use FormuleResultatServiceReferentielServiceAwareTrait;
     use MissionServiceAwareTrait;
     use ServiceAPayerServiceAwareTrait;
     use TblPaiementServiceAwareTrait;
@@ -659,11 +655,13 @@ class MiseEnPaiementService extends AbstractEntityService
         }
 
         if (isset($data['formule-resultat-service-id'])) {
-            $object->setFormuleResultatService($this->getServiceFormuleResultatService()->get((int)$data['formule-resultat-service-id']));
+            $entity = $this->getEntityManager()->find(FormuleResultatService::class, (int)$data['formule-resultat-service-id']);
+            $object->setFormuleResultatService($entity);
         }
 
         if (isset($data['formule-resultat-service-referentiel-id'])) {
-            $object->setFormuleResultatServiceReferentiel($this->getServiceFormuleResultatServiceReferentiel()->get((int)$data['formule-resultat-service-referentiel-id']));
+            $entity = $this->getEntityManager()->find(FormuleResultatServiceReferentiel::class, (int)$data['formule-resultat-service-referentiel-id']);
+            $object->setFormuleResultatServiceReferentiel($entity);
         }
 
         if (isset($data['mission-id'])) {

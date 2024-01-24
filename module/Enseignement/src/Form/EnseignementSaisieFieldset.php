@@ -66,7 +66,7 @@ class EnseignementSaisieFieldset extends AbstractFieldset
         $intervenant->setRequired(true)
             ->setSelectionRequired(true)
             ->setAutocompleteSource(
-                $this->getUrl('recherche', ['action' => 'intervenantFind'])
+                $this->getUrl('intervenant/recherche')
             )
             ->setLabel("Intervenant :")
             ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);

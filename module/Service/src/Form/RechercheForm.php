@@ -166,8 +166,8 @@ class RechercheForm extends AbstractForm
         $intervenant = new SearchAndSelect('intervenant');
         $intervenant
             ->setAutocompleteSource($this->getUrl(
-                'recherche',
-                ['action' => 'intervenantFind'],
+                'intervenant/recherche',
+                [],
                 ['query' => ['having-services' => 1]]
             ))
             ->setLabel('Intervenant :');

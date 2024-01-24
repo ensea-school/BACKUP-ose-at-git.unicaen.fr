@@ -3,9 +3,9 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $structure  \Lieu\Entity\Db\Structure
- * @var $niveau     \Application\Entity\NiveauEtape
+ * @var $niveau     \OffreFormation\Entity\NiveauEtape
  * @var $etape      \OffreFormation\Entity\Db\Etape
- * @var $niveaux    \Application\Entity\NiveauEtape[]
+ * @var $niveaux    \OffreFormation\Entity\NiveauEtape[]
  * @var $etapes     \OffreFormation\Entity\Db\Etape[]
  * @var $elements   \OffreFormation\Entity\Db\ElementPedagogique[]
  */
@@ -15,7 +15,7 @@ use Application\Provider\Privilege\Privileges;
 
 /**
  * @param \Lieu\Entity\Db\Structure    $structure
- * @param \Application\Entity\NiveauEtape     $niveau
+ * @param \OffreFormation\Entity\NiveauEtape     $niveau
  * @param \OffreFormation\Entity\Db\Etape $etape
  */
 function makeQuery($structure = null, $niveau = null, $etape = null)

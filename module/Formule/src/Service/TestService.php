@@ -2,13 +2,13 @@
 
 namespace Formule\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Application\Service\RuntimeException;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Entity\Db\FormuleTestVolumeHoraire;
 use Formule\Model\FormuleCalcul;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;

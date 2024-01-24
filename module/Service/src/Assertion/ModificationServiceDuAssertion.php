@@ -2,12 +2,12 @@
 
 namespace Service\Assertion;
 
-use Application\Entity\Db\Intervenant;
-use Application\Provider\Privilege\Privileges;
 use Application\Acl\Role;
+use Application\Provider\Privilege\Privileges;
+use Intervenant\Entity\Db\Intervenant;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Service\Controller\ModificationServiceDuController;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**

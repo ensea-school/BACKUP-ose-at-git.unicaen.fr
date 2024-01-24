@@ -3,8 +3,8 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Periode;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use Paiement\Service\MiseEnPaiementIntervenantStructureServiceAwareTrait;

@@ -2,13 +2,13 @@
 
 namespace Formule\Entity\Db;
 
-use Paiement\Entity\Db\DomaineFonctionnel;
-use Application\Entity\Db\Intervenant;
 use Doctrine\Common\Collections\ArrayCollection;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\TypeHeures;
 use Paiement\Entity\Db\CentreCout;
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\ServiceAPayerTrait;
 use Referentiel\Entity\Db\ServiceReferentiel;

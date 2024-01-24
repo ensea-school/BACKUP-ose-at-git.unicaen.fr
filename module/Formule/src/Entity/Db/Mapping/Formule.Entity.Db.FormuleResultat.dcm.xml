@@ -5,7 +5,7 @@
       <unique-constraint name="formule_resultat__un" columns="INTERVENANT_ID,TYPE_VOLUME_HORAIRE_ID,ETAT_VOLUME_HORAIRE_ID"/>
     </unique-constraints>
     <id name="id" type="integer" column="ID" />
-    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+    <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant">
       <join-columns>
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>

@@ -3,9 +3,9 @@
 namespace Contrat\Service;
 
 
-use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractService;
 use Contrat\Entity\Db\ContratServiceListe;
+use Intervenant\Entity\Db\Intervenant;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
 /**

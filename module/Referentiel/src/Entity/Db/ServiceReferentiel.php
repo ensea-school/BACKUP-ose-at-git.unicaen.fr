@@ -2,10 +2,10 @@
 
 namespace Referentiel\Entity\Db;
 
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Formule\Entity\Db\FormuleResultatServiceReferentiel;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\StructureAwareTrait;
 use Paiement\Entity\Db\MotifNonPaiementAwareTrait;

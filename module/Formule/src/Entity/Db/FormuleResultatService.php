@@ -2,9 +2,9 @@
 
 namespace Formule\Entity\Db;
 
-use Application\Entity\Db\Intervenant;
 use Doctrine\Common\Collections\ArrayCollection;
 use Enseignement\Entity\Db\Service;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\CentreCoutEp;

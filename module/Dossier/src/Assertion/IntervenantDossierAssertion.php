@@ -3,16 +3,16 @@
 namespace Dossier\Assertion;
 
 use Application\Acl\Role;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
-
-// sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Dossier\Controller\IntervenantDossierController;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
+
+// sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 
 
 /**

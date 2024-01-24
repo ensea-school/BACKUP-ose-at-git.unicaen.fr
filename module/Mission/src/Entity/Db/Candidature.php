@@ -2,8 +2,8 @@
 
 namespace Mission\Entity\Db;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Validation;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;

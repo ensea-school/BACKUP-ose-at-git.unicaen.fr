@@ -3,11 +3,11 @@
 namespace Formule\Controller;
 
 use Application\Controller\AbstractController;
-use Service\Entity\Db\EtatVolumeHoraire;
-use Application\Entity\Db\Intervenant;
 use Formule\Form\HeuresCompFormAwareTrait;
 use Formule\Service\FormuleResultatServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use LogicException;
+use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;

@@ -2,7 +2,7 @@
 
 namespace Contrat\Entity\Db;
 
-use Application\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Mission\Entity\Db\Mission;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -31,7 +31,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     private $typeContrat;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
+     * @var \Intervenant\Entity\Db\Intervenant
      */
     private $intervenant;
 
@@ -339,7 +339,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get intervenant
      *
-     * @return \Application\Entity\Db\Intervenant
+     * @return \Intervenant\Entity\Db\Intervenant
      */
     public function getIntervenant ()
     {
@@ -351,11 +351,11 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set intervenant
      *
-     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @param \Intervenant\Entity\Db\Intervenant $intervenant
      *
      * @return self
      */
-    public function setIntervenant (\Application\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant (\Intervenant\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 

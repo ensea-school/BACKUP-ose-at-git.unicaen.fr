@@ -2,9 +2,9 @@
 
 namespace Mission\Form;
 
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Form\AbstractForm;
 use Doctrine\Common\Collections\ArrayCollection;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;

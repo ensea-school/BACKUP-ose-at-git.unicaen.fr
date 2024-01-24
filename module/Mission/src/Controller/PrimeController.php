@@ -4,12 +4,12 @@ namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Prime;

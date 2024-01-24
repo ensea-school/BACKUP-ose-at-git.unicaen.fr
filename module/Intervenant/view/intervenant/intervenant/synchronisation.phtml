@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @var $this            \Application\View\Renderer\PhpRenderer
+ * @var $intervenant     \Intervenant\Entity\Db\Intervenant
+ * @var $isImportable    bool
+ * @var $data            array
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+if (!$isImportable) {
+    echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+    echo $this->tag('div', ['class' => 'alert alert-warning'])->html('Cet intervenant n\'est pas synchronisable');
+
+    return;
+}
+
+$canRestaure = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_AJOUT_STATUT));
+$canDelete   = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSION));
+echo '<h4>Différentiel</h4>';
+echo $this->differentielListe($data);
+if ($isImportable && !empty($data)) {
+    echo $this->tag('a', [
+        'href'  => $this->url('intervenant/synchroniser', ['intervenant' => $intervenant->getId()]),
+        'title' => 'Synchroniser (import vers OSE)',
+        'class' => 'btn btn-secondary no-intranavigation',
+    ])->html('Synchroniser (import vers OSE)');
+}

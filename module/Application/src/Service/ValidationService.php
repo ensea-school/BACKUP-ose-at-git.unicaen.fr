@@ -2,7 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
@@ -10,6 +9,7 @@ use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Dossier\Entity\Db\IntervenantDossier;
+use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;

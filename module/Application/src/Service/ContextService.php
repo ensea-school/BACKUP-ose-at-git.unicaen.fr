@@ -6,13 +6,15 @@ use Application\Acl\Role;
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Utilisateur;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Etablissement;
 use Lieu\Entity\Db\Structure;
+use Lieu\Service\EtablissementServiceAwareTrait;
+use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
 
@@ -23,10 +25,10 @@ use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
  */
 class ContextService extends AbstractService
 {
-    use \Lieu\Service\EtablissementServiceAwareTrait;
+    use EtablissementServiceAwareTrait;
     use Traits\AnneeServiceAwareTrait;
     use Traits\ParametresServiceAwareTrait;
-    use \Lieu\Service\StructureServiceAwareTrait;
+    use StructureServiceAwareTrait;
     use SessionContainerTrait;
     use UserContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;

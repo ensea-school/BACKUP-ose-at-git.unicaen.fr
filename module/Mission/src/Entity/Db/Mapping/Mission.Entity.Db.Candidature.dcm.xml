@@ -14,7 +14,7 @@
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
-        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" fetch="EAGER">
+        <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant" fetch="EAGER">
             <join-columns>
                 <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
             </join-columns>

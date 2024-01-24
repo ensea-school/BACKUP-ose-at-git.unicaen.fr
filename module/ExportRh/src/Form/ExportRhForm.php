@@ -2,10 +2,10 @@
 
 namespace ExportRh\Form;
 
-use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
 use ExportRh\Form\Fieldset\GeneriqueFieldset;
 use ExportRh\Hydrator\ExportRhHydrator;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Form\Fieldset;
 
 class ExportRhForm extends AbstractForm

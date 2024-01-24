@@ -3,9 +3,9 @@
 namespace Mission\Entity\Db;
 
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\Collection;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;

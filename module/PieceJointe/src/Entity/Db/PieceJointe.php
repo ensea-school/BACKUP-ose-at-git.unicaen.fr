@@ -2,10 +2,10 @@
 
 namespace PieceJointe\Entity\Db;
 
-use Application\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\Intervenant;
+use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
-use Laminas\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * PieceJointe
@@ -27,7 +27,7 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
     private $type;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
+     * @var \Intervenant\Entity\Db\Intervenant
      */
     private $intervenant;
 

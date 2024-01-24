@@ -3,12 +3,12 @@
 namespace Service\Assertion;
 
 use Application\Acl\Role;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Service\Controller\ServiceController;
 use Service\Entity\Db\TypeVolumeHoraire;

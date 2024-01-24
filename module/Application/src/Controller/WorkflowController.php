@@ -2,13 +2,13 @@
 
 namespace Application\Controller;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtapeDep;
 use Application\Form\Workflow\Traits\DependanceFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\WfEtapeServiceAwareTrait;
 use Application\Service\Traits\WfEtapeDepServiceAwareTrait;
+use Application\Service\Traits\WfEtapeServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use UnicaenApp\Exception\LogicException;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;

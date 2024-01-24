@@ -14,7 +14,7 @@
                 <join-column name="TYPE_AGREMENT_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+        <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant">
             <join-columns>
                 <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
             </join-columns>

@@ -159,13 +159,13 @@ class EtapeService extends AbstractEntityService
 
     /**
      *
-     * @param \Application\Entity\NiveauEtape $niveau
+     * @param \OffreFormation\Entity\NiveauEtape $niveau
      * @param \Doctrine\ORM\QueryBuilder      $qb
      * @param string                          $alias
      *
      * @return QueryBuilder
      */
-    public function finderByNiveau(\Application\Entity\NiveauEtape $niveau, QueryBuilder $qb = null, $alias = null)
+    public function finderByNiveau(\OffreFormation\Entity\NiveauEtape $niveau, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 

@@ -3,7 +3,6 @@
 namespace Service\Assertion;
 
 use Application\Acl\Role;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
@@ -12,6 +11,7 @@ use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Referentiel\Entity\Db\ServiceReferentiel;

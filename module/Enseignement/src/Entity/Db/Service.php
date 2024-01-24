@@ -2,13 +2,13 @@
 
 namespace Enseignement\Entity\Db;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Enseignement\Entity\VolumeHoraireListe;
 use Formule\Entity\Db\FormuleResultatService;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Etablissement;
 use Lieu\Entity\Db\Structure;

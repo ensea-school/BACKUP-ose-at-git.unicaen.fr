@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 
 class TblContrat

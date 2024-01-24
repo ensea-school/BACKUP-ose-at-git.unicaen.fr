@@ -2,8 +2,8 @@
 
 namespace Service\View\Helper;
 
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;

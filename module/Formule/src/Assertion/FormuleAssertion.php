@@ -2,8 +2,8 @@
 
 namespace Formule\Assertion;
 
-use Application\Entity\Db\Intervenant;
 use Application\Acl\Role;
+use Intervenant\Entity\Db\Intervenant;
 use UnicaenPrivilege\Assertion\AbstractAssertion;
 
 

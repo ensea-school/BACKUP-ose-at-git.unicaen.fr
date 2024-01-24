@@ -2,14 +2,14 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Intervenant;
-use Application\Entity\NiveauEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\NiveauEtape;
 use OffreFormation\Service\NiveauEtapeService;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;

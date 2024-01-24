@@ -2,7 +2,7 @@
 
 namespace Formule\Entity\Db;
 
-use Application\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\Intervenant;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 
@@ -56,7 +56,7 @@ class FormuleResultat
     private $formuleResultatVolumeHoraireReferentiel;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
+     * @var \Intervenant\Entity\Db\Intervenant
      */
     private $intervenant;
 
@@ -205,7 +205,7 @@ class FormuleResultat
     /**
      * Get intervenant
      *
-     * @return \Application\Entity\Db\Intervenant
+     * @return \Intervenant\Entity\Db\Intervenant
      */
     public function getIntervenant()
     {

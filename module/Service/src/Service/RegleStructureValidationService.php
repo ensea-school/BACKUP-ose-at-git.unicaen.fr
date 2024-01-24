@@ -3,9 +3,9 @@
 namespace Service\Service;
 
 use Application\Service\AbstractEntityService;
+use Intervenant\Entity\Db\Intervenant;
 use Service\Entity\Db\RegleStructureValidation;
 use Service\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\Db\Intervenant;
 
 /**
  * Description of RegleStructureValidationService

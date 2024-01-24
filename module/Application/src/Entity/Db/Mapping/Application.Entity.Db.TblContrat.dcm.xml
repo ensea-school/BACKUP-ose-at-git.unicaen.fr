@@ -5,7 +5,7 @@
     <many-to-one field="annee" target-entity="Application\Entity\Db\Annee" fetch="LAZY">
       <join-column name="ANNEE_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" fetch="LAZY">
+    <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant" fetch="LAZY">
       <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
     </many-to-one>
     <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure" fetch="LAZY">

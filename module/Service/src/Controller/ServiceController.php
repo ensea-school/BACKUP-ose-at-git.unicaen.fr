@@ -3,7 +3,6 @@
 namespace Service\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -13,6 +12,7 @@ use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
 use Formule\Controller\AffichageController;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Http\Request;
 use Laminas\View\Model\ViewModel;
 use OffreFormation\Entity\Db\ElementPedagogique;
@@ -207,7 +207,7 @@ class ServiceController extends AbstractController
 
         if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
             $vh = new ViewModel();
-            $vh->setTemplate('application/intervenant/menu');
+            $vh->setTemplate('intervenant/intervenant/menu');
 
             return $vh;
         }
@@ -221,7 +221,7 @@ class ServiceController extends AbstractController
 
         //        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
         //            $vh = new ViewModel();
-        //            $vh->setTemplate('application/intervenant/menu');
+        //            $vh->setTemplate('intervenant/intervenant/menu');
         //
         //            return $vh;
         //        }

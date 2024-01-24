@@ -3,12 +3,12 @@
 namespace Paiement\Entity;
 
 use Application\Entity\Collection;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
-use Paiement\Entity\Db\MiseEnPaiement;
 use Lieu\Entity\Db\StructureAwareTrait;
+use Paiement\Entity\Db\MiseEnPaiement;
 
 
 /**

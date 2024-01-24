@@ -3,12 +3,11 @@
 namespace Mission\Service;
 
 use Application\Acl\Role;
-use Application\Entity\Db\Intervenant;
-use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
 use UnicaenMail\Service\Mail\MailServiceAwareTrait;

@@ -3,7 +3,6 @@
 namespace Contrat\Assertion;
 
 use Application\Acl\Role;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Parametre;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
@@ -11,6 +10,7 @@ use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Contrat\Service\ContratServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use UnicaenPrivilege\Assertion\AbstractAssertion;

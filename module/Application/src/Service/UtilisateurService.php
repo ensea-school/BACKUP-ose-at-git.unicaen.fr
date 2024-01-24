@@ -4,12 +4,11 @@ namespace Application\Service;
 
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Entity\Db\Utilisateur;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use Laminas\Crypt\Password\Bcrypt;
-use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use UnicaenApp\Util;
+use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
 
 /**
  * Description of Utilisateur

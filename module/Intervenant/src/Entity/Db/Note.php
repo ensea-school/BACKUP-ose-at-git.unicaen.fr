@@ -3,7 +3,6 @@
 namespace Intervenant\Entity\Db;
 
 
-use Application\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;

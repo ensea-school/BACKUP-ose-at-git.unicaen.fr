@@ -3,7 +3,6 @@
 namespace OffreFormation\Service;
 
 
-use Application\Entity\NiveauEtape;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -13,6 +12,7 @@ use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\CheminPedagogique;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\NiveauEtape;
 
 /**
  * Description of OffreFormationService

@@ -4,8 +4,8 @@ namespace Dossier\Entity\Db;
 
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Validation;
+use Intervenant\Entity\Db\Intervenant;
 
 class TblDossier
 {

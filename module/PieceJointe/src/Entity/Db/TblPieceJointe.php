@@ -33,7 +33,7 @@ class TblPieceJointe
     private $typePieceJointe;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
+     * @var \Intervenant\Entity\Db\Intervenant
      */
     private $intervenant;
 
@@ -117,7 +117,7 @@ class TblPieceJointe
     /**
      * Get intervenant
      *
-     * @return \Application\Entity\Db\Intervenant
+     * @return \Intervenant\Entity\Db\Intervenant
      */
     public function getIntervenant()
     {

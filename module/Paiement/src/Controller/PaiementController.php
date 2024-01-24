@@ -3,17 +3,17 @@
 namespace Paiement\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Enseignement\Entity\Db\VolumeHoraire;
+use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
 use Laminas\Json\Json;
 use Lieu\Entity\Db\Structure;
@@ -32,9 +32,8 @@ use Paiement\Tbl\Process\PaiementDebugger;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
 use UnicaenApp\Traits\SessionContainerTrait;
-use UnicaenApp\Util;
-use UnicaenVue\View\Model\AxiosModel;
 use UnicaenTbl\Service\TableauBordServiceAwareTrait;
+use UnicaenVue\View\Model\AxiosModel;
 
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
@@ -137,7 +136,7 @@ class PaiementController extends AbstractController
         $postChangeIndex = (int)$this->params()->fromPost('change-index');
         $changeIndex = $this->getChangeIndex();
 
-        /* @var $intervenant \Application\Entity\Db\Intervenant */
+        /* @var $intervenant \Intervenant\Entity\Db\Intervenant */
         if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }

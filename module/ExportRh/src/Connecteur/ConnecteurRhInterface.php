@@ -13,27 +13,27 @@ interface ConnecteurRhInterface
 
 
 
-    public function recupererIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?IntervenantRh;
+    public function recupererIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant): ?IntervenantRh;
 
 
 
-    public function recupererDonneesAdministrativesIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?array;
+    public function recupererDonneesAdministrativesIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant): ?array;
 
 
 
-    public function recupererAffectationEnCoursIntervenantRh(\Application\Entity\Db\Intervenant $intervenant): ?array;
+    public function recupererAffectationEnCoursIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant): ?array;
 
 
 
-    public function prendreEnChargeIntervenantRh(\Application\Entity\Db\Intervenant $intervenant, array $postData): ?string;
+    public function prendreEnChargeIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant, array $postData): ?string;
 
 
 
-    public function renouvellerIntervenantRh(\Application\Entity\Db\Intervenant $intervenant, array $postData): ?string;
+    public function renouvellerIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant, array $postData): ?string;
 
 
 
-    public function synchroniserDonneesPersonnellesIntervenantRh(\Application\Entity\Db\Intervenant $intervenant, $datas): bool;
+    public function synchroniserDonneesPersonnellesIntervenantRh(\Intervenant\Entity\Db\Intervenant $intervenant, $datas): bool;
 
 
 

@@ -9,7 +9,7 @@ if (0 === $id){
     $c->printDie('L\'ID valide d\'un intervenant doit être transmis en argument');
 }
 
-$intervenant = $ws->getEntityManager()->find(\Application\Entity\Db\Intervenant::class, $id);
+$intervenant = $ws->getEntityManager()->find(\Intervenant\Entity\Db\Intervenant::class, $id);
 
 if (!$intervenant){
     $c->printDie('L\'intervenant dont l\'ID est '.$id.' n\'existe pas');

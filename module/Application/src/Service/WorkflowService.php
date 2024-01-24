@@ -2,11 +2,11 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TblWorkflow;
 use Application\Entity\Db\WfEtape;
 use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenAuthentification\Service\Traits\AuthorizeServiceAwareTrait;
@@ -273,7 +273,7 @@ class WorkflowService extends AbstractService
 
         foreach ($deps as $dep => $null) {
             if (isset($tbls[$dep])) {
-                if ($intervenant instanceof \Application\Entity\Db\Intervenant) {
+                if ($intervenant instanceof \Intervenant\Entity\Db\Intervenant) {
                     $value = $intervenant->getId();
                 } else {
                     $value = $intervenant;

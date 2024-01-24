@@ -6,10 +6,10 @@ use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
+use UnicaenAuthentification\Service\Traits\UserContextServiceAwareTrait;
 
 /**
  *

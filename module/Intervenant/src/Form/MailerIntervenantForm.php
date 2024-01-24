@@ -2,20 +2,11 @@
 
 namespace Intervenant\Form;
 
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Traits\ParametreAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Intervenant\Entity\Db\Note;
-use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
-use Intervenant\Entity\Db\Statut;
-use Laminas\Form\Element\Checkbox;
-use Laminas\Form\Element\Hidden;
-use Laminas\Form\Element\Text;
-use Laminas\Form\Element\Textarea;
-use Laminas\Form\Form;
+use Dossier\Service\Traits\DossierServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 
 /**
  * Description of Statut

@@ -3,7 +3,6 @@
 namespace Contrat\Service;
 
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\FichierServiceAwareTrait;
@@ -12,6 +11,7 @@ use Application\Service\Traits\ValidationServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Doctrine\ORM\QueryBuilder;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Mission\Entity\Db\Mission;
 use RuntimeException;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;

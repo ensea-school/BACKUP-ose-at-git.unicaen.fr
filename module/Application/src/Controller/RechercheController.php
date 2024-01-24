@@ -3,8 +3,8 @@
 namespace Application\Controller;
 
 use Application\Constants;
-use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Intervenant\Processus\IntervenantProcessusAwareTrait;
 use Laminas\View\Model\JsonModel;
 
 /**

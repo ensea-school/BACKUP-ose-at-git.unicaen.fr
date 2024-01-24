@@ -4,16 +4,16 @@ namespace Paiement\Tbl\Process;
 
 
 use Application\Constants;
-use Paiement\Entity\Db\DomaineFonctionnel;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
-use Lieu\Entity\Db\Structure;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
+use Intervenant\Entity\Db\Intervenant;
+use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\VolumeHoraireMission;
 use OffreFormation\Entity\Db\TypeHeures;
 use Paiement\Entity\Db\CentreCout;
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\TauxRemu;
 use Paiement\Tbl\Process\Sub\ServiceAPayer;

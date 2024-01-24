@@ -3,28 +3,28 @@
 namespace PieceJointe\Controller;
 
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\Intervenant;
-use PieceJointe\Entity\Db\PieceJointe;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\WfEtape;
-use PieceJointe\Form\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
-use PieceJointe\Form\Traits\TypePieceJointeSaisieFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
-use PieceJointe\Service\Traits\PieceJointeServiceAwareTrait;
-use PieceJointe\Service\Traits\TypePieceJointeServiceAwareTrait;
-use PieceJointe\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Intervenant\Form\MailerIntervenantFormAwareTrait;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Intervenant\Service\MailServiceAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use PieceJointe\Entity\Db\PieceJointe;
 use PieceJointe\Entity\Db\TypePieceJointe;
 use PieceJointe\Entity\Db\TypePieceJointeStatut;
+use PieceJointe\Form\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
+use PieceJointe\Form\Traits\TypePieceJointeSaisieFormAwareTrait;
+use PieceJointe\Service\Traits\PieceJointeServiceAwareTrait;
+use PieceJointe\Service\Traits\TypePieceJointeServiceAwareTrait;
+use PieceJointe\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 
@@ -82,7 +82,7 @@ class PieceJointeController extends \Application\Controller\AbstractController
 
         if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
             $menu = new ViewModel();
-            $menu->setTemplate('application/intervenant/menu');
+            $menu->setTemplate('intervenant/intervenant/menu');
 
             return $menu;
         }

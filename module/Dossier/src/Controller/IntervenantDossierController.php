@@ -4,21 +4,21 @@ namespace Dossier\Controller;
 
 use Application\Constants;
 use Application\Controller\AbstractController;
-use DoctrineORMModule\Proxy\__CG__\Intervenant\Entity\Db\Statut;
-use Dossier\Form\Traits\IntervenantDossierFormAwareTrait;
-use Indicateur\Entity\Db\IndicModifDossier;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
-use Dossier\Form\Traits\AutresFormAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Dossier\Service\Traits\DossierAutreServiceAwareTrait;
-use Dossier\Service\Traits\DossierServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Enseignement\Service\ServiceServiceAwareTrait;
-use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use DoctrineORMModule\Proxy\__CG__\Intervenant\Entity\Db\Statut;
+use Dossier\Form\Traits\AutresFormAwareTrait;
+use Dossier\Form\Traits\IntervenantDossierFormAwareTrait;
+use Dossier\Service\Traits\DossierAutreServiceAwareTrait;
+use Dossier\Service\Traits\DossierServiceAwareTrait;
+use Enseignement\Service\ServiceServiceAwareTrait;
+use Indicateur\Entity\Db\IndicModifDossier;
+use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Service\IntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
@@ -45,7 +45,7 @@ class IntervenantDossierController extends AbstractController
     protected function initFilters ()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\Intervenant::class,
+            \Intervenant\Entity\Db\Intervenant::class,
             \Application\Entity\Db\Validation::class,
             \Dossier\Entity\Db\IntervenantDossier::class,
         ]);

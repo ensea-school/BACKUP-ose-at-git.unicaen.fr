@@ -2,9 +2,9 @@
 
 namespace Lieu\Entity\Db;
 
-use Application\Entity\Db\Intervenant;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\AdresseInterface;
 use Lieu\Entity\AdresseTrait;

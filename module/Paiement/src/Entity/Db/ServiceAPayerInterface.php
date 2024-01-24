@@ -2,9 +2,9 @@
 
 namespace Paiement\Entity\Db;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
 use Doctrine\Common\Collections\Collection;
+use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\TypeHeures;
 use Paiement\Entity\MiseEnPaiementListe;

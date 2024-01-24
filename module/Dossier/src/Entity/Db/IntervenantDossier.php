@@ -2,9 +2,9 @@
 
 namespace Dossier\Entity\Db;
 
-use Application\Entity\Db\Intervenant;
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Intervenant\Entity\Db\CiviliteAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\AdresseInterface;
@@ -822,7 +822,7 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
 
     /**
      *
-     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @param \Intervenant\Entity\Db\Intervenant $intervenant
      *
      * @return \Dossier\Entity\Db\IntervenantDossier
      */

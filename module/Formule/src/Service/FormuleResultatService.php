@@ -2,11 +2,11 @@
 
 namespace Formule\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Application\Service\RuntimeException;
 use Enseignement\Service\ServiceServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Etablissement;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;

@@ -145,11 +145,11 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set intervenant
      *
-     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @param \Intervenant\Entity\Db\Intervenant $intervenant
      *
      * @return Agrement
      */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant(\Intervenant\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 
@@ -161,7 +161,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get intervenant
      *
-     * @return \Application\Entity\Db\Intervenant
+     * @return \Intervenant\Entity\Db\Intervenant
      */
     public function getIntervenant()
     {

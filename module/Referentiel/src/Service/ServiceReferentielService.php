@@ -2,12 +2,12 @@
 
 namespace Referentiel\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureService;
 use Lieu\Service\StructureServiceAwareTrait;

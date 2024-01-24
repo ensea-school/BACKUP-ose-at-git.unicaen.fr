@@ -2,7 +2,6 @@
 
 namespace Contrat\Processus;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Validation;
 use Application\ORM\Event\Listeners\HistoriqueListenerAwareTrait;
 use Application\Processus\AbstractProcessus;
@@ -19,6 +18,7 @@ use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
 use Exception;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Mail\Message as MailMessage;
 use Laminas\Mime\Message;
 use Laminas\Mime\Mime;

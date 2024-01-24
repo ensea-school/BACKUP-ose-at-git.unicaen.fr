@@ -2,13 +2,13 @@
 
 namespace Paiement\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits;
 use Doctrine\ORM\QueryBuilder;
 use Formule\Entity\Db\FormuleResultatService;
 use Formule\Entity\Db\FormuleResultatServiceReferentiel;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Lieu\Entity\Db\Structure;
 use Mission\Service\MissionServiceAwareTrait;
@@ -26,7 +26,7 @@ use RuntimeException;
  */
 class MiseEnPaiementService extends AbstractEntityService
 {
-    use Traits\IntervenantServiceAwareTrait;
+    use \Intervenant\Service\IntervenantServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
     use CentreCoutServiceAwareTrait;
     use DomaineFonctionnelServiceAwareTrait;
@@ -600,7 +600,7 @@ class MiseEnPaiementService extends AbstractEntityService
     /**
      *
      * @param Structure                            $structure
-     * @param \Application\Entity\Db\Intervenant[] $intervenants
+     * @param \Intervenant\Entity\Db\Intervenant[] $intervenants
      * @param Periode                              $periodePaiement
      * @param \DateTime                            $dateMiseEnPaiement
      */

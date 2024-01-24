@@ -2,11 +2,11 @@
 
 namespace Service\Form;
 
-use Service\Entity\Db\ModificationServiceDu;
 use Application\Form\AbstractFieldset;
-use Application\Entity\Db\Intervenant;
-use Laminas\Stdlib\ArrayUtils;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Hydrator\HydratorInterface;
+use Laminas\Stdlib\ArrayUtils;
+use Service\Entity\Db\ModificationServiceDu;
 
 class ModificationServiceDuFieldset extends AbstractFieldset
 {

@@ -9,14 +9,14 @@
  */
 
 use Application\Entity\Db\Fichier;
-use PieceJointe\Entity\Db\PieceJointe;
 use Application\Entity\Db\Validation;
 use Application\Service\FichierService;
-use Application\Service\IntervenantService;
-use PieceJointe\Service\PieceJointeService;
-use PieceJointe\Service\TypePieceJointeService;
 use Application\Service\TypeValidationService;
 use Application\Service\ValidationService;
+use Intervenant\Service\IntervenantService;
+use PieceJointe\Entity\Db\PieceJointe;
+use PieceJointe\Service\PieceJointeService;
+use PieceJointe\Service\TypePieceJointeService;
 
 $repertoire = '/app/cache/2020/';
 $typeMime   = 'application/msword';

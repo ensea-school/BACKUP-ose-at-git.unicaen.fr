@@ -10,7 +10,7 @@
         <field name="referentiel" type="boolean" column="REFERENTIEL" nullable="false"/>
         <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
 
-        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+        <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant">
             <join-columns>
                 <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
             </join-columns>

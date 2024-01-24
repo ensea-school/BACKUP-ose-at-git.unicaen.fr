@@ -2,7 +2,7 @@
 
 namespace Service\Entity\Db;
 
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Util;

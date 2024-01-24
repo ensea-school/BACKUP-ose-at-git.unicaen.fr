@@ -2,15 +2,15 @@
 
 namespace Enseignement\View\Helper;
 
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Processus\EnseignementProcessusAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
+use Intervenant\Processus\IntervenantProcessusAwareTrait;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Helper\AbstractHtmlElement;
 use OffreFormation\Entity\Db\TypeIntervention;
 use OffreFormation\Service\Traits\TypeInterventionServiceAwareTrait;

@@ -5,7 +5,7 @@
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
-        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+        <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant">
             <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="structure" target-entity="Lieu\Entity\Db\Structure">
@@ -29,7 +29,7 @@
         <field name="etudiantsSuivis" type="string" column="ETUDIANTS_SUIVIS" length="4000" nullable="true"/>
         <one-to-many field="miseEnPaiement" target-entity="Paiement\Entity\Db\MiseEnPaiement" mapped-by="mission"/>
 
-        <many-to-many field="etudiants" target-entity="Application\Entity\Db\Intervenant">
+        <many-to-many field="etudiants" target-entity="Intervenant\Entity\Db\Intervenant">
             <join-table name="MISSION_ETUDIANT">
                 <join-columns>
                     <join-column name="MISSION_ID" referenced-column-name="ID"/>

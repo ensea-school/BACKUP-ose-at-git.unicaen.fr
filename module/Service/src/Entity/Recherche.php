@@ -2,12 +2,12 @@
 
 namespace Service\Entity;
 
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Application\Traits\NiveauEtapeAwareTrait;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Intervenant\Entity\Db\TypeIntervenantAwareTrait;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
 use OffreFormation\Entity\Db\Traits\EtapeAwareTrait;
+use OffreFormation\Entity\NiveauEtapeAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\EtatVolumeHoraireAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;

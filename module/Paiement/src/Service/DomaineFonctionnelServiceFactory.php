@@ -1,9 +1,8 @@
 <?php
 
-namespace OffreFormation\Service\Factory;
+namespace Paiement\Service;
 
 use Psr\Container\ContainerInterface;
-use OffreFormation\Service\DomaineFonctionnelService;
 
 
 /**

@@ -2,7 +2,7 @@
 
 namespace Formule\Entity\Db;
 
-use Application\Entity\Db\DomaineFonctionnel;
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\Intervenant;
 use Doctrine\Common\Collections\ArrayCollection;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;

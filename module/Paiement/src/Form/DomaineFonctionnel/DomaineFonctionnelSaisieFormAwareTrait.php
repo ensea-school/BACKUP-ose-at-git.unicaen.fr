@@ -1,8 +1,7 @@
 <?php
 
-namespace Application\Form\DomaineFonctionnel\Traits;
+namespace Paiement\Form\DomaineFonctionnel;
 
-use Application\Form\DomaineFonctionnel\DomaineFonctionnelSaisieForm;
 
 /**
  * Description of DomaineFonctionnelSaisieFormAwareTrait

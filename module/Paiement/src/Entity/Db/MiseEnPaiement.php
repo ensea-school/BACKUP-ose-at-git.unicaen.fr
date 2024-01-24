@@ -2,7 +2,6 @@
 
 namespace Paiement\Entity\Db;
 
-use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\Collection;

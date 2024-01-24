@@ -3,7 +3,7 @@
 namespace Mission\Entity\Db;
 
 use Application\Constants;
-use Application\Entity\Db\DomaineFonctionnel;
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Validation;

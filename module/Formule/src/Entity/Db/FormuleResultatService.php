@@ -2,7 +2,6 @@
 
 namespace Formule\Entity\Db;
 
-use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\Intervenant;
 use Doctrine\Common\Collections\ArrayCollection;
 use Enseignement\Entity\Db\Service;
@@ -10,12 +9,14 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\CentreCoutEp;
 use OffreFormation\Entity\Db\TypeHeures;
-use OffreFormation\Service\DomaineFonctionnelService;
 use Paiement\Entity\Db\CentreCout;
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\ServiceAPayerTrait;
+use Paiement\Service\DomaineFonctionnelService;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
+
 /**
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */

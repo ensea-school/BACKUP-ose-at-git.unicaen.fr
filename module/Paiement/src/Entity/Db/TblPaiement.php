@@ -3,7 +3,6 @@
 namespace Paiement\Entity\Db;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
 use Formule\Entity\Db\FormuleResultatService;

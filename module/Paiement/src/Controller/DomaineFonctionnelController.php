@@ -1,12 +1,13 @@
 <?php
 
-namespace Application\Controller;
+namespace Paiement\Controller;
 
-use Application\Entity\Db\DomaineFonctionnel;
-use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
-use Application\Form\DomaineFonctionnel\Traits\DomaineFonctionnelSaisieFormAwareTrait;
-use UnicaenApp\View\Model\MessengerViewModel;
+use Application\Controller\AbstractController;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Paiement\Entity\Db\DomaineFonctionnel;
+use Paiement\Form\DomaineFonctionnel\DomaineFonctionnelSaisieFormAwareTrait;
+use Paiement\Service\DomaineFonctionnelServiceAwareTrait;
+use UnicaenApp\View\Model\MessengerViewModel;
 
 class DomaineFonctionnelController extends AbstractController
 {

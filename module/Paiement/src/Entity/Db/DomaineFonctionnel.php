@@ -1,16 +1,12 @@
 <?php
 
-namespace Application\Entity\Db;
+namespace Paiement\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
-/**
- * DomaineFonctionnel
- */
 class DomaineFonctionnel implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;

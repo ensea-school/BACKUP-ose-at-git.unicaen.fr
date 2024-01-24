@@ -1,12 +1,12 @@
 <?php
 
-namespace OffreFormation\Service;
+namespace Paiement\Service;
 
 use Application\Service\AbstractEntityService;
-use RuntimeException;
 use Application\Service\Traits;
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\DomaineFonctionnel;
+use Paiement\Entity\Db\DomaineFonctionnel;
+use RuntimeException;
 
 /**
  *
@@ -54,7 +54,7 @@ class DomaineFonctionnelService extends AbstractEntityService
      *
      * @param QueryBuilder|null $qb
      * @param string|null $alias
-     * @return \Application\Entity\Db\DomaineFonctionnel[]
+     * @return \Paiement\Entity\Db\DomaineFonctionnel[]
      */
     public function getList(QueryBuilder $qb = null, $alias = null)
     {

@@ -4,7 +4,6 @@ namespace Application;
 
 use Application\Provider\Privilege\Privileges;
 use Contrat\Controller\ContratController;
-use Paiement\Controller\PaiementController;
 use UnicaenPrivilege\Guard\PrivilegeController;
 use UnicaenPrivilege\Provider\Rule\PrivilegeRuleProvider;
 

@@ -1,8 +1,6 @@
 <?php
 
-namespace OffreFormation\Service\Traits;
-
-use OffreFormation\Service\DomaineFonctionnelService;
+namespace Paiement\Service;
 
 /**
  * Description of DomaineFonctionnelServiceAwareTrait

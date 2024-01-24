@@ -19,7 +19,7 @@
     <many-to-one field="centreCout" target-entity="Paiement\Entity\Db\CentreCout">
         <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="domaineFonctionnel" target-entity="Application\Entity\Db\DomaineFonctionnel">
+    <many-to-one field="domaineFonctionnel" target-entity="Paiement\Entity\Db\DomaineFonctionnel">
         <join-column name="DOMAINE_FONCTIONNEL_ID" referenced-column-name="ID"/>
     </many-to-one>
     <many-to-one field="mission" target-entity="Mission\Entity\Db\Mission">

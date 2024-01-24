@@ -3,7 +3,7 @@
 namespace OffreFormation\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\DomaineFonctionnel;
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\CheminPedagogique;

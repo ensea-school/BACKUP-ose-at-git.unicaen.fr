@@ -1,11 +1,11 @@
 <?php
 
-namespace Application\Form\DomaineFonctionnel;
+namespace Paiement\Form\DomaineFonctionnel;
 
 use Application\Form\AbstractForm;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
-use Application\Service\Traits\SourceServiceAwareTrait;
 
 /**
  * Description of DomaineFonctionnelSaisieForm
@@ -95,7 +95,7 @@ class DomaineFonctionnelHydrator implements HydratorInterface
      * Hydrate $object with the provided $data.
      *
      * @param array                                     $data
-     * @param \Application\Entity\Db\DomaineFonctionnel $object
+     * @param \Paiement\Entity\Db\DomaineFonctionnel $object
      *
      * @return object
      */
@@ -115,7 +115,7 @@ class DomaineFonctionnelHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param \Application\Entity\Db\DomaineFonctionnel $object
+     * @param \Paiement\Entity\Db\DomaineFonctionnel $object
      *
      * @return array
      */

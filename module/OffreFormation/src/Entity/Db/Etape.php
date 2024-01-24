@@ -94,7 +94,7 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
     protected $typeFormation;
 
     /**
-     * @var \Application\Entity\Db\DomaineFonctionnel
+     * @var \Paiement\Entity\Db\DomaineFonctionnel
      */
     private $domaineFonctionnel;
 
@@ -375,11 +375,11 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
     /**
      * Set domaineFonctionnel
      *
-     * @param \Application\Entity\Db\DomaineFonctionnel $domaineFonctionnel
+     * @param \Paiement\Entity\Db\DomaineFonctionnel $domaineFonctionnel
      *
      * @return Etape
      */
-    public function setDomaineFonctionnel(\Application\Entity\Db\DomaineFonctionnel $domaineFonctionnel = null)
+    public function setDomaineFonctionnel(\Paiement\Entity\Db\DomaineFonctionnel $domaineFonctionnel = null)
     {
         $this->domaineFonctionnel = $domaineFonctionnel;
 
@@ -391,7 +391,7 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
     /**
      * Get domaineFonctionnel
      *
-     * @return \Application\Entity\Db\DomaineFonctionnel
+     * @return \Paiement\Entity\Db\DomaineFonctionnel
      */
     public function getDomaineFonctionnel()
     {

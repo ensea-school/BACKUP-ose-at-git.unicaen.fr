@@ -4,7 +4,7 @@ namespace Paiement\Tbl\Process;
 
 
 use Application\Constants;
-use Application\Entity\Db\DomaineFonctionnel;
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
 use Lieu\Entity\Db\Structure;

@@ -627,7 +627,6 @@ return [
         Service\NiveauEtapeService::class               => Service\Factory\NiveauEtapeServiceFactory::class,
         Service\NiveauFormationService::class           => Service\Factory\NiveauFormationServiceFactory::class,
         Service\ElementModulateurService::class         => Service\Factory\ElementModulateurServiceFactory::class,
-        Service\DomaineFonctionnelService::class        => Service\Factory\DomaineFonctionnelServiceFactory::class,
         Service\OffreFormationService::class            => Service\Factory\OffreFormationServiceFactory::class,
         Assertion\OffreDeFormationAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,
         Assertion\TypeInterventionAssertion::class      => \UnicaenPrivilege\Assertion\AssertionFactory::class,

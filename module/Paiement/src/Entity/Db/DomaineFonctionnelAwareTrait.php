@@ -1,8 +1,6 @@
 <?php
 
-namespace Application\Entity\Db\Traits;
-
-use Application\Entity\Db\DomaineFonctionnel;
+namespace Paiement\Entity\Db;
 
 /**
  * Description of DomaineFonctionnelAwareTrait

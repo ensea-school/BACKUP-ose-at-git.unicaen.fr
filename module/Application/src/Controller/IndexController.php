@@ -32,8 +32,9 @@ class IndexController extends AbstractController
         $role = $this->serviceUserContext->getSelectedIdentityRole();
 
         $documentation = [
-            'vacataires' => $this->getServiceParametres()->get('doc-intervenant-vacataires'),
-            'permanents' => $this->getServiceParametres()->get('doc-intervenant-permanents'),
+            'E' => $this->getServiceParametres()->get('doc-intervenant-vacataires'),
+            'P' => $this->getServiceParametres()->get('doc-intervenant-permanents'),
+            'S' => $this->getServiceParametres()->get('doc-intervenant-etudiants'),
         ];
 
         $view = new ViewModel([

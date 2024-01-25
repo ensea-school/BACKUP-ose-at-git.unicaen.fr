@@ -3,11 +3,11 @@
 namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Mission;
@@ -45,7 +45,7 @@ class SaisieController extends AbstractController
     {
         if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
             $menu = new ViewModel();
-            $menu->setTemplate('application/intervenant/menu');
+            $menu->setTemplate('intervenant/intervenant/menu');
 
             return $menu;
         }

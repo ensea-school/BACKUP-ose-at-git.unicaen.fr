@@ -3,11 +3,11 @@
 namespace Referentiel\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\ViewModel;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use Referentiel\Entity\Db\FonctionReferentiel;

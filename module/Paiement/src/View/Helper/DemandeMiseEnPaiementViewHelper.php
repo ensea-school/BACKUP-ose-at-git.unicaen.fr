@@ -2,22 +2,22 @@
 
 namespace Paiement\View\Helper;
 
-use Application\Entity\Db\DomaineFonctionnel;
-use Application\Entity\Db\FormuleResultatService;
-use Application\Entity\Db\FormuleResultatServiceReferentiel;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use Formule\Entity\Db\FormuleResultatService;
+use Formule\Entity\Db\FormuleResultatServiceReferentiel;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use OffreFormation\Entity\Db\TypeHeures;
-use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use Paiement\Controller\BudgetController;
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\TypeRessource;
+use Paiement\Service\DomaineFonctionnelServiceAwareTrait;
 use UnicaenApp\View\Helper\TagViewHelper;
 use UnicaenPrivilege\Guard\PrivilegeController;
 

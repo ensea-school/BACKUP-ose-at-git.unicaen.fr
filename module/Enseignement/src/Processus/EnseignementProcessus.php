@@ -2,16 +2,16 @@
 
 namespace Enseignement\Processus;
 
-use Application\Entity\Db\Intervenant;
 use Application\Processus\AbstractProcessus;
-use Application\Service\IntervenantService;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Service\ServiceServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Service\IntervenantService;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\EtapeServiceAwareTrait;

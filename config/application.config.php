@@ -48,6 +48,7 @@ $modules = [
     'Dossier',
     'Contrat',
     'Lieu',
+    'Formule',
 ];
 
 if (!$oa->env()->inConsole()) {

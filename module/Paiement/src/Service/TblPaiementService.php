@@ -3,13 +3,11 @@
 namespace Paiement\Service;
 
 
-use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Application\Service\RuntimeException;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Paiement\Entity\Db\CentreCout;
+use Intervenant\Entity\Db\Intervenant;
 
 
 /**

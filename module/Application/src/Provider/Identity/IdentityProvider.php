@@ -5,13 +5,13 @@ namespace Application\Provider\Identity;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
+use BjyAuthorize\Provider\Identity\ProviderInterface as IdentityProviderInterface;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use UnicaenApp\HostLocalization\HostLocalizationAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenAuthentification\Provider\Identity\ChainableProvider;
 use UnicaenAuthentification\Provider\Identity\ChainEvent;
-use BjyAuthorize\Provider\Identity\ProviderInterface as IdentityProviderInterface;
-use UnicaenApp\Traits\SessionContainerTrait;
 
 /**
  * Classe chargée de fournir les rôles que possède l'identité authentifiée.

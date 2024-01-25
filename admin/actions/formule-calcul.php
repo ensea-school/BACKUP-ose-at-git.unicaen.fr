@@ -1,4 +1,3 @@
 <?php
 
-$args = 'formule-calcul';
-$c->passthru("php " . getcwd() . "/public/index.php " . $args);
+$bdd = $oa->getBdd()->exec('BEGIN OSE_FORMULE.CALCULER_TOUT; END;');

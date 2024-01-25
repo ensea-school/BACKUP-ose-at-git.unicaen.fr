@@ -2,8 +2,8 @@
 
 namespace Paiement\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractService;
+use Intervenant\Entity\Db\Intervenant;
 use Unicaen\OpenDocument\Calc\Sheet;
 use Unicaen\OpenDocument\Document;
 use UnicaenVue\View\Model\AxiosModel;

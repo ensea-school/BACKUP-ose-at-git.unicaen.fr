@@ -6,7 +6,6 @@ namespace ExportRh\Controller;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\WfEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\WfEtapeServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -14,6 +13,7 @@ use Dossier\Service\Traits\DossierServiceAwareTrait;
 use ExportRh\Form\Traits\ExportRhFormAwareTrait;
 use ExportRh\Service\ExportRhService;
 use ExportRh\Service\ExportRhServiceAwareTrait;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Model\ViewModel;
 use UnicaenSiham\Exception\SihamException;
 

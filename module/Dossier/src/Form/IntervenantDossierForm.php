@@ -2,13 +2,13 @@
 
 namespace Dossier\Form;
 
-use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractFieldset;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Dossier\Hydrator\IntervenantDossierHydrator;
 use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Enseignement\Service\ServiceServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\StatutServiceAwareTrait;
 use Laminas\Form\Element\Csrf;
 use Lieu\Form\AdresseFieldset;

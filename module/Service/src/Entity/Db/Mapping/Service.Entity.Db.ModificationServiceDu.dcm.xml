@@ -22,7 +22,7 @@
         <many-to-one field="motif" target-entity="Service\Entity\Db\MotifModificationServiceDu">
             <join-column name="MOTIF_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+        <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant">
             <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
     </entity>

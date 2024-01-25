@@ -3,22 +3,22 @@
 namespace Mission\Entity\Db;
 
 use Application\Constants;
-use Application\Entity\Db\DomaineFonctionnel;
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Lieu\Entity\Db\StructureAwareTrait;
 use OffreFormation\Entity\Db\TypeHeures;
 use Paiement\Entity\Db\CentreCout;
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Paiement\Entity\Db\MiseEnPaiementListe;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\ServiceAPayerTrait;
 use Paiement\Entity\Db\TauxRemu;
 use Plafond\Interfaces\PlafondDataInterface;
 use Service\Entity\Db\TypeVolumeHoraire;
-use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;

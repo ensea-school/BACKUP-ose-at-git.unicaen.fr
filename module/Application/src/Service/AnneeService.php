@@ -123,7 +123,7 @@ class AnneeService extends AbstractEntityService
             if (!$session->choixAnnees) {
                 $session->choixAnnees = [];
             }
-            $session->choixAnnees[$rid] = [];
+            $session->choixAnnees = [$rid => []];
             foreach ($result as $annee) {
                 extract(array_change_key_case($annee, CASE_LOWER));
                 $session->choixAnnees[$rid][$id] = $libelle;

@@ -4,13 +4,12 @@ namespace ExportRh\Assertion;
 
 
 use Application\Acl\Role;
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use ExportRh\Service\ExportRhServiceAwareTrait;
-use UnicaenPrivilege\Assertion\AbstractAssertion;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use UnicaenPrivilege\Assertion\AbstractAssertion;
 
 /**
  * Description of ExportRhAssertion

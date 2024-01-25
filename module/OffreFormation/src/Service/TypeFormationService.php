@@ -34,7 +34,7 @@ class TypeFormationService extends AbstractEntityService
         return 'typefor';
     }
     
-    public function finderByNiveau(\Application\Entity\NiveauEtape $niveau, QueryBuilder $qb = null, $alias = null)
+    public function finderByNiveau(\OffreFormation\Entity\NiveauEtape $niveau, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         

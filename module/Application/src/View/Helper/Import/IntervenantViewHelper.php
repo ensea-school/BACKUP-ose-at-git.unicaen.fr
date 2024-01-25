@@ -2,7 +2,7 @@
 
 namespace Application\View\Helper\Import;
 
-use Application\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Lieu\Entity\Db\Structure;

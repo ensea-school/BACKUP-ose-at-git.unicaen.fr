@@ -11,9 +11,8 @@ use Intervenant\Form\MailerIntervenantFormAwareTrait;
 use Intervenant\Form\NoteSaisieFormAwareTrait;
 use Intervenant\Service\MailServiceAwareTrait;
 use Intervenant\Service\NoteServiceAwareTrait;
-
-
 use UnicaenApp\View\Model\MessengerViewModel;
+
 
 class NoteController extends AbstractController
 {
@@ -29,7 +28,7 @@ class NoteController extends AbstractController
         ]);
 
         $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant \Application\Entity\Db\Intervenant */
+        /* @var $intervenant \Intervenant\Entity\Db\Intervenant */
 
         if (!$intervenant) {
             throw new \Exception();

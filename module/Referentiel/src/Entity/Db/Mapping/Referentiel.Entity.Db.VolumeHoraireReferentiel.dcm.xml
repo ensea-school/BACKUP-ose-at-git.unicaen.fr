@@ -46,7 +46,7 @@
             </join-table>
         </many-to-many>
         <one-to-many field="formuleResultatVolumeHoraireReferentiel"
-                     target-entity="Application\Entity\Db\FormuleResultatVolumeHoraireReferentiel"
+                     target-entity="Formule\Entity\Db\FormuleResultatVolumeHoraireReferentiel"
                      mapped-by="volumeHoraireReferentiel"/>
 
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">

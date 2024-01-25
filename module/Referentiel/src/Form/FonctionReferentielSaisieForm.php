@@ -8,7 +8,7 @@ use Laminas\Form\Element\Csrf;
 use Laminas\Hydrator\HydratorInterface;
 use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
-use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use Paiement\Service\DomaineFonctionnelServiceAwareTrait;
 use Referentiel\Entity\Db\FonctionReferentiel;
 use Referentiel\Service\FonctionReferentielServiceAwareTrait;
 use UnicaenApp\Util;

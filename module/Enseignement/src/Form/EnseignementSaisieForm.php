@@ -3,15 +3,15 @@
 namespace Enseignement\Form;
 
 use Application\Entity\Db\Periode;
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\FormInterface;
 use Laminas\Hydrator\HydratorInterface;
-use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 
 

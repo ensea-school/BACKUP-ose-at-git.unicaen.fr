@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Application\Acl\Role;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Laminas\View\Model\JsonModel;
 use Lieu\Service\StructureServiceAwareTrait;
 use UnicaenAuthentification\Controller\UtilisateurController as BaseController;
 use UnicaenUtilisateur\Service\User\UserServiceAwareTrait;
@@ -84,5 +85,19 @@ class UtilisateurController extends BaseController
             $data->{'mot-de-passe'},
             (array)$data->params
         );
+    }
+
+
+
+    public function rechercheAction()
+    {
+
+        if (!($term = $this->params()->fromQuery('term'))) {
+            return new JsonModel([]);
+        }
+
+        $result = $this->getServiceUtilisateur()->rechercheUtilisateurs($term);
+
+        return new JsonModel($result);
     }
 }

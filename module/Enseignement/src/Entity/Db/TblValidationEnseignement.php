@@ -3,10 +3,10 @@
 namespace Enseignement\Entity\Db;
 
 use Application\Entity\Db\Traits\AnneeAwareTrait;
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\ValidationAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Lieu\Entity\Db\StructureAwareTrait;
+use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 
 class TblValidationEnseignement
 {

@@ -9,7 +9,7 @@ use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [
-        'contrat' => [
+        'contrat'     => [
             'route'         => '/contrat',
             'controller'    => ContratController::class,
             'action'        => 'index',
@@ -23,7 +23,7 @@ return [
                     'action'      => 'creer',
                     'controller'  => ContratController::class,
                 ],
-                'creer-mission'               => [
+                'creer-mission'       => [
                     'route'       => '/:intervenant/creer-mission/:mission',
                     'constraints' => [
                         'mission' => '[0-9]*',
@@ -115,13 +115,22 @@ return [
                 ],
             ],
         ],
+        'intervenant' => [
+            'child_routes' => [
+                'contrat' => [
+                    'route'      => '/:intervenant/contrat',
+                    'controller' => ContratController::class,
+                    'action'     => 'index',
+                ],
+            ],
+        ],
     ],
     'guards' => [
         [
             'controller' => ContratController::class,
             'action'     => ['index'],
             'privileges' => Privileges::CONTRAT_VISUALISATION,
-            'assertion'  => \Contrat\Assertion\ContratAssertion::class,
+            'assertion'  => Assertion\ContratAssertion::class,
         ],
         [
             'controller' => ContratController::class,
@@ -132,7 +141,7 @@ return [
             'controller' => ContratController::class,
             'action'     => ['exporter'],
             'privileges' => [Privileges::CONTRAT_CONTRAT_GENERATION, Privileges::CONTRAT_PROJET_GENERATION],
-            'assertion'  => \Contrat\Assertion\ContratAssertion::class,
+            'assertion'  => Assertion\ContratAssertion::class,
         ],
         [
             'controller' => ContratController::class,
@@ -143,43 +152,43 @@ return [
             'controller' => ContratController::class,
             'action'     => ['creer'],
             'privileges' => Privileges::CONTRAT_CREATION,
-            'assertion'  => \Contrat\Assertion\ContratAssertion::class,
+            'assertion'  => Assertion\ContratAssertion::class,
         ],
         [
             'controller' => ContratController::class,
             'action'     => ['creer-mission'],
             'privileges' => Privileges::CONTRAT_CREATION,
-            'assertion'  => \Contrat\Assertion\ContratAssertion::class,
+            'assertion'  => Assertion\ContratAssertion::class,
         ],
         [
             'controller' => ContratController::class,
             'action'     => ['supprimer'],
             'privileges' => Privileges::CONTRAT_SUPPRESSION,
-            'assertion'  => \Contrat\Assertion\ContratAssertion::class,
+            'assertion'  => Assertion\ContratAssertion::class,
         ],
         [
             'controller' => ContratController::class,
             'action'     => ['valider'],
             'privileges' => Privileges::CONTRAT_VALIDATION,
-            'assertion'  => \Contrat\Assertion\ContratAssertion::class,
+            'assertion'  => Assertion\ContratAssertion::class,
         ],
         [
             'controller' => ContratController::class,
             'action'     => ['devalider'],
             'privileges' => Privileges::CONTRAT_DEVALIDATION,
-            'assertion'  => \Contrat\Assertion\ContratAssertion::class,
+            'assertion'  => Assertion\ContratAssertion::class,
         ],
         [
             'controller' => ContratController::class,
             'action'     => ['deposer-fichier', 'supprimer-fichier'],
             'privileges' => Privileges::CONTRAT_DEPOT_RETOUR_SIGNE,
-            'assertion'  => \Contrat\Assertion\ContratAssertion::class,
+            'assertion'  => Assertion\ContratAssertion::class,
         ],
         [
             'controller' => ContratController::class,
             'action'     => ['saisir-retour'],
             'privileges' => Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE,
-            'assertion'  => \Contrat\Assertion\ContratAssertion::class,
+            'assertion'  => Assertion\ContratAssertion::class,
         ],
 
     ],
@@ -189,15 +198,15 @@ return [
         'intervenant' => [
             'pages' => [
                 'contrat' => [
-                    'label' => "Contrat / avenant",
-                    'title' => "Contrat et avenants de l'intervenant",
-                    'route' => 'intervenant/contrat',
+                    'label'        => "Contrat / avenant",
+                    'title'        => "Contrat et avenants de l'intervenant",
+                    'route'        => 'intervenant/contrat',
                     'paramsInject' => [
                         'intervenant',
                     ],
-                    'withtarget' => true,
-                    'resource' => PrivilegeController::getResourceId(ContratController::class, 'index'),
-                    'order' => 12,
+                    'withtarget'   => true,
+                    'resource'     => PrivilegeController::getResourceId(ContratController::class, 'index'),
+                    'order'        => 12,
                 ],
             ],
         ],
@@ -223,24 +232,24 @@ return [
                 ContratAssertion::PRIV_EXPORT,
             ],
             'resources'  => 'Contrat',
-            'assertion'  => \Contrat\Assertion\ContratAssertion::class,
+            'assertion'  => Assertion\ContratAssertion::class,
         ],
     ],
 
     'controllers'  => [
-        ContratController::class => \Contrat\Controller\ContratControllerFactory::class,
+        ContratController::class => Controller\ContratControllerFactory::class,
     ],
     'services'     => [
-        \Contrat\Assertion\ContratAssertion::class         => \UnicaenPrivilege\Assertion\AssertionFactory::class,
-        \Contrat\Service\ContratService::class             => \Contrat\Service\ContratServiceFactory::class,
-        \Contrat\Service\TypeContratService::class         => \Contrat\Service\TypeContratServiceFactory::class,
-        \Contrat\Processus\ContratProcessus::class         => \Contrat\Processus\ContratProcessusFactory::class,
-        \Contrat\Service\ContratServiceListeService::class => \Contrat\Service\ContratServiceListeServiceFactory::class,
+        Assertion\ContratAssertion::class         => \UnicaenPrivilege\Assertion\AssertionFactory::class,
+        Service\ContratService::class             => Service\ContratServiceFactory::class,
+        Service\TypeContratService::class         => Service\TypeContratServiceFactory::class,
+        Processus\ContratProcessus::class         => Processus\ContratProcessusFactory::class,
+        Service\ContratServiceListeService::class => Service\ContratServiceListeServiceFactory::class,
     ],
     'view_helpers' => [
     ],
     'forms'        => [
-        \Contrat\Form\ContratValidationForm::class => \Contrat\Form\ContratValidationFormFactory::class, /** @todo à supprimer ? */
-        \Contrat\Form\ContratRetourForm::class     => \Contrat\Form\ContratRetourFormFactory::class,
+        Form\ContratValidationForm::class => Form\ContratValidationFormFactory::class, /** @todo à supprimer ? */
+        Form\ContratRetourForm::class     => Form\ContratRetourFormFactory::class,
     ],
 ];

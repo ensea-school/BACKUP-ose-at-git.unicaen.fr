@@ -3,12 +3,11 @@
 namespace Mission\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use Doctrine\ORM\Query;
+use Intervenant\Entity\Db\Intervenant;
 use Laminas\View\Model\ViewModel;
 use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
@@ -17,7 +16,6 @@ use Mission\Form\OffreEmploiFormAwareTrait;
 use Mission\Service\CandidatureServiceAwareTrait;
 use Mission\Service\MissionServiceAwareTrait;
 use Mission\Service\OffreEmploiServiceAwareTrait;
-use UnicaenVue\Axios\AxiosExtractor;
 use UnicaenVue\View\Model\AxiosModel;
 
 

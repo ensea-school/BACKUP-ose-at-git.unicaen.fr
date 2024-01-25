@@ -3,12 +3,12 @@
 namespace Plafond\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
-use Service\Service\TypeVolumeHoraireServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Plafond\Entity\Db\PlafondDerogation;
 use Plafond\Entity\Db\PlafondEtat;
 use Plafond\Service\PlafondServiceAwareTrait;
+use Service\Service\TypeVolumeHoraireServiceAwareTrait;
 
 
 /**

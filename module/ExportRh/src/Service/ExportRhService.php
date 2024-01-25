@@ -3,14 +3,13 @@
 namespace ExportRh\Service;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use ExportRh\Entity\IntervenantRHExportParams;
-use phpDocumentor\Reflection\Types\Array_;
+use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\Form\Fieldset;
 
 /**

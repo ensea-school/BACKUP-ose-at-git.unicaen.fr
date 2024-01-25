@@ -2,7 +2,7 @@
 
 namespace Service\Hydrator;
 
-use Application\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Laminas\Hydrator\HydratorInterface;
 use Lieu\Entity\Db\Structure;

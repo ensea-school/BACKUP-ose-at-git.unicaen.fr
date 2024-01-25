@@ -3,7 +3,6 @@
 namespace Enseignement\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Intervenant;
 use Application\Form\AbstractForm;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -17,6 +16,7 @@ use Enseignement\Form\VolumeHoraireSaisieFormAwareTrait;
 use Enseignement\Hydrator\ListeFilterHydrator;
 use Enseignement\Service\ServiceServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Paiement\Entity\Db\MotifNonPaiement;
 use Plafond\Processus\PlafondProcessusAwareTrait;
 use RuntimeException;

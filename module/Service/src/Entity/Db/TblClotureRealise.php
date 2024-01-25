@@ -3,7 +3,7 @@
 namespace Service\Entity\Db;
 
 use Application\Entity\Db\Traits\AnneeAwareTrait;
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
 
 class TblClotureRealise
 {

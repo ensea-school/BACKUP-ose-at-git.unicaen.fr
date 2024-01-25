@@ -19,7 +19,7 @@
     <many-to-one field="centreCout" target-entity="Paiement\Entity\Db\CentreCout">
         <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="domaineFonctionnel" target-entity="Application\Entity\Db\DomaineFonctionnel">
+    <many-to-one field="domaineFonctionnel" target-entity="Paiement\Entity\Db\DomaineFonctionnel">
         <join-column name="DOMAINE_FONCTIONNEL_ID" referenced-column-name="ID"/>
     </many-to-one>
     <many-to-one field="mission" target-entity="Mission\Entity\Db\Mission">
@@ -34,13 +34,13 @@
     <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
         <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="formuleResultatService" target-entity="Application\Entity\Db\FormuleResultatService">
+    <many-to-one field="formuleResultatService" target-entity="Formule\Entity\Db\FormuleResultatService">
         <join-column name="FORMULE_RES_SERVICE_ID" referenced-column-name="ID"/>
     </many-to-one>
     <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="formuleResultatServiceReferentiel" target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel">
+    <many-to-one field="formuleResultatServiceReferentiel" target-entity="Formule\Entity\Db\FormuleResultatServiceReferentiel">
         <join-column name="FORMULE_RES_SERVICE_REF_ID" referenced-column-name="ID"/>
     </many-to-one>
     <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Paiement\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="miseEnPaiement" />

@@ -2,20 +2,20 @@
 
 namespace Enseignement\Entity\Db;
 
-use Application\Entity\Db\FormuleResultatVolumeHoraire;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
-use Service\Entity\Db\Traits\TagAwareTrait;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Contrat\Entity\Db\Contrat;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Formule\Entity\Db\FormuleResultatVolumeHoraire;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\Traits\TypeInterventionAwareTrait;
 use Paiement\Entity\Db\MotifNonPaiementAwareTrait;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
 use Service\Entity\Db\EtatVolumeHoraire;
+use Service\Entity\Db\Traits\TagAwareTrait;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;

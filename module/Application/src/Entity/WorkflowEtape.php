@@ -3,9 +3,9 @@
 namespace Application\Entity;
 
 use Application\Entity\Db\TblWorkflow;
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\WfEtape;
 use Application\Resource\WorkflowResource;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Structure;
 use Lieu\Entity\Db\StructureAwareTrait;

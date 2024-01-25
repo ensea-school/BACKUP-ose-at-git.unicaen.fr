@@ -12,7 +12,6 @@ use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [
-
         'paiement' => [
             'route'         => '/paiement',
             'controller'    => Controller\PaiementController::class,
@@ -36,11 +35,11 @@ return [
                         'structure' => '[0-9]*',
                     ],
                 ],
-                'details-calculs'                      => [
-                    'route'      => '/details-calculs/:intervenant/',
-                    'controller' => Controller\PaiementController::class,
-                    'action'     => 'DetailsCalculs',
-                    'privileges' => Privileges::MISE_EN_PAIEMENT_DETAILS,
+                'details-calculs'      => [
+                    'route'       => '/details-calculs/:intervenant/',
+                    'controller'  => Controller\PaiementController::class,
+                    'action'      => 'DetailsCalculs',
+                    'privileges'  => Privileges::MISE_EN_PAIEMENT_DETAILS,
                 ],
                 'etat-paiement'                        => [
                     'route'      => '/etat-paiement',
@@ -115,18 +114,43 @@ return [
                     'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
                     'assertion'  => PaiementAssertion::class,
                 ],
-
-                'pilotage'     => [
+                'pilotage'                             => [
                     'route'      => '/pilotage',
                     'controller' => Controller\PaiementController::class,
                     'action'     => 'pilotage',
                     'privileges' => Privileges::PILOTAGE_VISUALISATION,
                 ],
-                'ecarts-etats' => [
+                'ecarts-etats'                         => [
                     'route'      => '/ecarts-etats',
                     'action'     => 'ecartsEtats',
                     'controller' => Controller\PaiementController::class,
                     'privileges' => Privileges::PILOTAGE_ECARTS_ETATS,
+                ],
+            ],
+        ],
+        'intervenant' => [
+            'child_routes' => [
+                'mise-en-paiement' => [
+                    'may_terminate' => false,
+                    'route'         => '/:intervenant/mise-en-paiement',
+                    'controller'    => Controller\PaiementController::class,
+                    'child_routes'  => [
+                        'visualisation' => [
+                            'route'      => '/visualisation',
+                            'controller' => Controller\PaiementController::class,
+                            'action'     => 'visualisationMiseEnPaiement',
+                        ],
+                        'demande'       => [
+                            'route'      => '/demande',
+                            'controller' => Controller\PaiementController::class,
+                            'action'     => 'demandeMiseEnPaiement',
+                        ],
+                        'edition'       => [
+                            'route'      => '/edition',
+                            'controller' => Controller\PaiementController::class,
+                            'action'     => 'editionMiseEnPaiement',
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -186,7 +210,7 @@ return [
                     'visible'      => Assertion\PaiementAssertion::class,
                     'order'        => 18,
                 ],
-                'detail-calculs-paiements'       => [
+                'detail-calculs-paiements' => [
                     'label'        => "Détails de calculs des paiements",
                     'title'        => "Détails de calculs des paiements",
                     'route'        => 'paiement/details-calculs',

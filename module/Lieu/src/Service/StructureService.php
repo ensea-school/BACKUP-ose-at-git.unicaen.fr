@@ -6,16 +6,12 @@ use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Util;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Intervenant\Entity\Db\TypeIntervenant;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use Paiement\Service\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\TblPaiementServiceAwareTrait;
-use UnicaenVue\View\Model\AxiosModel;
 
 
 /**

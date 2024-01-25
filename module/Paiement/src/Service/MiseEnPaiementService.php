@@ -2,19 +2,16 @@
 
 namespace Paiement\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Periode;
 use Application\Service\AbstractEntityService;
-use Application\Service\Recherche;
 use Application\Service\Traits;
-use Application\Service\Traits\FormuleResultatServiceReferentielServiceAwareTrait;
-use Application\Service\Traits\FormuleResultatServiceServiceAwareTrait;
-use Application\Util;
 use Doctrine\ORM\QueryBuilder;
+use Formule\Entity\Db\FormuleResultatService;
+use Formule\Entity\Db\FormuleResultatServiceReferentiel;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\TypeIntervenant;
 use Lieu\Entity\Db\Structure;
 use Mission\Service\MissionServiceAwareTrait;
-use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\ServiceAPayerInterface;
@@ -29,13 +26,11 @@ use RuntimeException;
  */
 class MiseEnPaiementService extends AbstractEntityService
 {
-    use Traits\IntervenantServiceAwareTrait;
+    use \Intervenant\Service\IntervenantServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
     use CentreCoutServiceAwareTrait;
     use DomaineFonctionnelServiceAwareTrait;
     use TypeHeuresServiceAwareTrait;
-    use FormuleResultatServiceServiceAwareTrait;
-    use FormuleResultatServiceReferentielServiceAwareTrait;
     use MissionServiceAwareTrait;
     use ServiceAPayerServiceAwareTrait;
     use TblPaiementServiceAwareTrait;
@@ -652,7 +647,7 @@ class MiseEnPaiementService extends AbstractEntityService
     /**
      *
      * @param Structure                            $structure
-     * @param \Application\Entity\Db\Intervenant[] $intervenants
+     * @param \Intervenant\Entity\Db\Intervenant[] $intervenants
      * @param Periode                              $periodePaiement
      * @param \DateTime                            $dateMiseEnPaiement
      */
@@ -706,11 +701,13 @@ class MiseEnPaiementService extends AbstractEntityService
         }
 
         if (isset($data['formule-resultat-service-id'])) {
-            $object->setFormuleResultatService($this->getServiceFormuleResultatService()->get((int)$data['formule-resultat-service-id']));
+            $entity = $this->getEntityManager()->find(FormuleResultatService::class, (int)$data['formule-resultat-service-id']);
+            $object->setFormuleResultatService($entity);
         }
 
         if (isset($data['formule-resultat-service-referentiel-id'])) {
-            $object->setFormuleResultatServiceReferentiel($this->getServiceFormuleResultatServiceReferentiel()->get((int)$data['formule-resultat-service-referentiel-id']));
+            $entity = $this->getEntityManager()->find(FormuleResultatServiceReferentiel::class, (int)$data['formule-resultat-service-referentiel-id']);
+            $object->setFormuleResultatServiceReferentiel($entity);
         }
 
         if (isset($data['mission-id'])) {

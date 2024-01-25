@@ -3,8 +3,8 @@
 namespace Application\Acl;
 
 use Application\Entity\Db\Privilege;
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\PerimetreAwareTrait;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Lieu\Entity\Db\StructureAwareTrait;
 use UnicaenUtilisateur\Acl\NamedRole;
 

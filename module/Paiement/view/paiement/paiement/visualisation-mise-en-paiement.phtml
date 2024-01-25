@@ -2,7 +2,7 @@
 
 /**
  * @var $this        \Application\View\Renderer\PhpRenderer
- * @var $intervenant \Application\Entity\Db\Intervenant
+ * @var $intervenant \Intervenant\Entity\Db\Intervenant
  * @var $paiements   \Paiement\Entity\Db\TblPaiement[]
  */
 
@@ -19,10 +19,10 @@ $total = [
 foreach ($paiements as $paiement) {
     $sap = $paiement->getServiceAPayer();
 
-    if ($sap instanceof \Application\Entity\Db\FormuleResultatService) {
+    if ($sap instanceof \Formule\Entity\Db\FormuleResultatService) {
         $sapType = 'service';
         $sid = $sapType . '-' . $sap->getService()->getId();
-    } elseif ($sap instanceof \Application\Entity\Db\FormuleResultatServiceReferentiel) {
+    } elseif ($sap instanceof \Formule\Entity\Db\FormuleResultatServiceReferentiel) {
         $sapType = 'referentiel';
         $sid = $sapType . '-' . $sap->getServiceReferentiel()->getId();
     } elseif ($sap instanceof \Mission\Entity\Db\Mission) {
@@ -54,7 +54,7 @@ foreach ($paiements as $paiement) {
                 ];
             }
         } elseif ('referentiel' == $sapType) {
-            /* @var $sap \Application\Entity\Db\FormuleResultatServiceReferentiel */
+            /* @var $sap \Formule\Entity\Db\FormuleResultatServiceReferentiel */
             $serviceReferentiel = $sap->getServiceReferentiel();
             $d['structure'] = (string)$this->structure($serviceReferentiel->getStructure())->renderLink();
             $d['service'] = [

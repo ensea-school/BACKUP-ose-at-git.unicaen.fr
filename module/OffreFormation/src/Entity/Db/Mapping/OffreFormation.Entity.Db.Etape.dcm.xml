@@ -73,7 +73,7 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
-        <many-to-one field="domaineFonctionnel" target-entity="Application\Entity\Db\DomaineFonctionnel">
+        <many-to-one field="domaineFonctionnel" target-entity="Paiement\Entity\Db\DomaineFonctionnel">
             <join-columns>
                 <join-column name="DOMAINE_FONCTIONNEL_ID" referenced-column-name="ID"/>
             </join-columns>

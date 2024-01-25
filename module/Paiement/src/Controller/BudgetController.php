@@ -5,10 +5,11 @@ namespace Paiement\Controller;
 use Application\Controller\AbstractController;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\FormuleResultatServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Formule\Service\FormuleResultatServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Lieu\Entity\Db\Structure;
+use Lieu\Form\Element\Structure as StructureElement;
 use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Entity\Db\Dotation;
 use Paiement\Entity\Db\TypeRessource;
@@ -17,7 +18,6 @@ use Paiement\Service\DotationServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\TypeRessourceServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
-use Lieu\Form\Element\Structure as StructureElement;
 use UnicaenVue\View\Model\AxiosModel;
 
 

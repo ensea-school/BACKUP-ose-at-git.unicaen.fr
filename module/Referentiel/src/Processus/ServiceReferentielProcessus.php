@@ -3,13 +3,13 @@
 namespace Referentiel\Processus;
 
 use Application\Processus\AbstractProcessus;
-use Referentiel\Entity\Db\ServiceReferentiel;
-use Service\Entity\Recherche;
-use Service\Service\EtatVolumeHoraireService;
-use Application\Service\IntervenantService;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Intervenant\Service\IntervenantService;
+use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Service\ServiceReferentielServiceAwareTrait;
 use Referentiel\Service\VolumeHoraireReferentielServiceAwareTrait;
+use Service\Entity\Recherche;
+use Service\Service\EtatVolumeHoraireService;
 
 /**
  * Description of ServiceReferentielProcessus

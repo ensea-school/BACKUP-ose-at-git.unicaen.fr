@@ -2,12 +2,12 @@
 
 namespace Enseignement\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Contrat\Entity\Db\Contrat;
 use Doctrine\ORM\QueryBuilder;
 use Enseignement\Entity\Db\VolumeHoraire;
+use Intervenant\Entity\Db\Intervenant;
 use OffreFormation\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;

@@ -18,7 +18,7 @@ class MiseEnPaiementIntervenantStructure
     private $miseEnPaiement;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
+     * @var \Intervenant\Entity\Db\Intervenant
      */
     private $intervenant;
 
@@ -82,10 +82,10 @@ class MiseEnPaiementIntervenantStructure
     /**
      * Set intervenant
      *
-     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @param \Intervenant\Entity\Db\Intervenant $intervenant
      * @return MiseEnPaiementIntervenantStructure
      */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant(\Intervenant\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 
@@ -95,7 +95,7 @@ class MiseEnPaiementIntervenantStructure
     /**
      * Get intervenant
      *
-     * @return \Application\Entity\Db\Intervenant 
+     * @return \Intervenant\Entity\Db\Intervenant
      */
     public function getIntervenant()
     {

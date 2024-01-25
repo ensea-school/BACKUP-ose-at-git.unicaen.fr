@@ -27,11 +27,11 @@ $this->headTitle()->append($title);
                 echo '<div class="alert alert-info">Aucune donnée trouvée</div>';
             }
 
-            if ($rechercheForm->hasStructures()) {
+            if ($rechercheForm->hasStructureFilter() && $rechercheForm->hasStructures()) {
                 echo $this->formControlGroup($rechercheForm->get('structure'));
             }
 
-            if ($rechercheForm->hasPeriodes()) {
+            if ($rechercheForm->hasPeriodeFilter() && $rechercheForm->hasPeriodes()) {
                 echo $this->formControlGroup($rechercheForm->get('periode'));
             }
 

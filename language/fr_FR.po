@@ -145,15 +145,15 @@ msgstr ""
 msgid "Corps du mail"
 msgstr ""
 
-#: module/Application/view/application/intervenant/cloturer-saisie.phtml:2
+#: module/Intervenant/view/intervenant/intervenant/cloturer-saisie.phtml:2
 msgid "J'ai terminé la saisie de la totalité de mon service réalisé."
 msgstr ""
 
-#: module/Application/view/application/intervenant/partial/cloture.phtml:43
+#: module/Intervenant/view/intervenant/intervenant/partial/cloture.phtml:43
 msgid "J'ai terminé la saisie de la totalité de mon service réalisé"
 msgstr ""
 
-#: module/Application/view/application/intervenant/partial/cloture.phtml:60
+#: module/Intervenant/view/intervenant/intervenant/partial/cloture.phtml:60
 msgid "L'intervenant a terminé la saisie de la totalité de son service réalisé"
 msgstr ""
 

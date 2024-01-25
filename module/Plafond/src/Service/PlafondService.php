@@ -2,10 +2,10 @@
 
 namespace Plafond\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Statut;
 use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;

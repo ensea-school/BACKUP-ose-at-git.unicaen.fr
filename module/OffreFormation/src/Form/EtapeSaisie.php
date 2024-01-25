@@ -8,8 +8,8 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
-use OffreFormation\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeFormationServiceAwareTrait;
+use Paiement\Service\DomaineFonctionnelServiceAwareTrait;
 
 /**
  * Description of EtapeSaisie

@@ -3,15 +3,15 @@
 namespace Application\Connecteur;
 
 use Application\Entity\Db\Composante;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\AbstractService;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use UnicaenApp\Entity\Ldap\AbstractEntity;
 use UnicaenApp\Entity\Ldap\People;
-use UnicaenAuthentification\Service\UserContext;
-use UnicaenApp\Mapper\Ldap\Structure as MapperStructure;
 use UnicaenApp\Mapper\Ldap\People as MapperPeople;
+use UnicaenApp\Mapper\Ldap\Structure as MapperStructure;
+use UnicaenAuthentification\Service\UserContext;
 use UnicaenAuthentification\Service\UserMapper as MapperUser;
 
 

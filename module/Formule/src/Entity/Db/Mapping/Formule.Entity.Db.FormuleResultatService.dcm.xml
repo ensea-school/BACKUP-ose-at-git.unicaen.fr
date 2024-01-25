@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Formule\Entity\Db\FormuleResultatService" table="FORMULE_RESULTAT_SERVICE" read-only="true">
+    <id name="id" type="integer" column="ID" />
+    <many-to-one field="formuleResultat" target-entity="Formule\Entity\Db\FormuleResultat">
+      <join-columns>
+        <join-column name="FORMULE_RESULTAT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service">
+      <join-columns>
+        <join-column name="SERVICE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-many field="miseEnPaiement" target-entity="Paiement\Entity\Db\MiseEnPaiement" mapped-by="formuleResultatService" />
+
+    <field name="heuresServiceFi" type="float" column="SERVICE_FI" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceFa" type="float" column="SERVICE_FA" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceFc" type="float" column="SERVICE_FC" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplFi" type="float" column="HEURES_COMPL_FI" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplFa" type="float" column="HEURES_COMPL_FA" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplFc" type="float" column="HEURES_COMPL_FC" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplFcMajorees" type="float" column="HEURES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="false"/>
+    <field name="total" type="float" column="TOTAL" precision="126" scale="0" nullable="false"/>
+
+    <many-to-many field="centreCout" target-entity="Paiement\Entity\Db\CentreCout">
+        <join-table name="V_FR_SERVICE_CENTRE_COUT">
+            <join-columns>
+                <join-column name="FORMULE_RESULTAT_SERVICE_ID" referenced-column-name="ID" unique="true"/>
+            </join-columns>
+            <inverse-join-columns>
+                <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
+            </inverse-join-columns>
+        </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

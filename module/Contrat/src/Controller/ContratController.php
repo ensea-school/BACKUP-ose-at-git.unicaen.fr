@@ -3,7 +3,6 @@
 namespace Contrat\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Parametre;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
@@ -24,6 +23,7 @@ use Dossier\Service\Traits\DossierServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
 use Enseignement\Service\ServiceServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\NoteServiceAwareTrait;
 use Laminas\Http\Response;
 use Laminas\View\Model\JsonModel;

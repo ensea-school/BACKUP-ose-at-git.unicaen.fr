@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Formule\Entity\Db\FormuleResultatVolumeHoraire" table="FORMULE_RESULTAT_VH" read-only="true">
+    <id name="id" type="integer" column="ID" />
+    <many-to-one field="formuleResultat" target-entity="Formule\Entity\Db\FormuleResultat">
+      <join-columns>
+        <join-column name="FORMULE_RESULTAT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="volumeHoraire" target-entity="Enseignement\Entity\Db\VolumeHoraire">
+      <join-columns>
+        <join-column name="VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <field name="heuresServiceFi" type="float" column="SERVICE_FI" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceFa" type="float" column="SERVICE_FA" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceFc" type="float" column="SERVICE_FC" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplFi" type="float" column="HEURES_COMPL_FI" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplFa" type="float" column="HEURES_COMPL_FA" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplFc" type="float" column="HEURES_COMPL_FC" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplFcMajorees" type="float" column="HEURES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="false"/>
+    <field name="total" type="float" column="TOTAL" precision="126" scale="0" nullable="false"/>
+  </entity>
+</doctrine-mapping>

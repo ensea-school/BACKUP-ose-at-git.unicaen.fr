@@ -3,7 +3,6 @@
 namespace OffreFormation\Service;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\NiveauEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
@@ -14,6 +13,7 @@ use Doctrine\ORM\QueryBuilder;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\ElementTauxRegimes;
 use OffreFormation\Entity\Db\Etape;
+use OffreFormation\Entity\NiveauEtape;
 use OffreFormation\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use OffreFormation\Service\Traits\ElementModulateurServiceAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
@@ -95,7 +95,7 @@ class ElementPedagogiqueService extends AbstractEntityService
             $params['structure'] = $filters['structure']->getId();
         }
         if (isset($filters['niveau']) && $filters['niveau']) {
-            if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
+            if ($filters['niveau'] instanceof \OffreFormation\Entity\NiveauEtape) {
                 $filters['niveau'] = $filters['niveau']->getId();
             }
             $niveau           = str_replace(NiveauEtape::SEPARATOR, '', $filters['niveau']);

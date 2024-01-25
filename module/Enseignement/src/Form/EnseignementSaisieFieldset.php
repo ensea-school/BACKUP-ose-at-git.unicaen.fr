@@ -2,13 +2,13 @@
 
 namespace Enseignement\Form;
 
-use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Form\AbstractFieldset;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Enseignement\Entity\Db\Service;
+use Intervenant\Entity\Db\IntervenantAwareTrait;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\Hydrator\HydratorInterface;
 use Lieu\Entity\Db\Etablissement;
 use Lieu\Service\EtablissementServiceAwareTrait;
@@ -66,7 +66,7 @@ class EnseignementSaisieFieldset extends AbstractFieldset
         $intervenant->setRequired(true)
             ->setSelectionRequired(true)
             ->setAutocompleteSource(
-                $this->getUrl('recherche', ['action' => 'intervenantFind'])
+                $this->getUrl('intervenant/recherche')
             )
             ->setLabel("Intervenant :")
             ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);

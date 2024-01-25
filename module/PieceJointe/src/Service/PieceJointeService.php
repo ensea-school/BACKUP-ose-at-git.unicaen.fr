@@ -2,19 +2,19 @@
 
 namespace PieceJointe\Service;
 
+use Application\Entity\Db\Fichier;
+use Application\Entity\Db\TypeValidation;
 use Application\Service\AbstractEntityService;
-use PieceJointe\Entity\Db\TblPieceJointe;
-use PieceJointe\Entity\Db\TblPieceJointeDemande;
-use PieceJointe\Entity\Db\TblPieceJointeFournie;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
-use PieceJointe\Entity\Db\TypePieceJointe;
-use PieceJointe\Entity\Db\PieceJointe;
-use Application\Entity\Db\Fichier;
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\TypeValidation;
 use BjyAuthorize\Exception\UnAuthorizedException;
+use Intervenant\Entity\Db\Intervenant;
+use PieceJointe\Entity\Db\PieceJointe;
+use PieceJointe\Entity\Db\TblPieceJointe;
+use PieceJointe\Entity\Db\TblPieceJointeDemande;
+use PieceJointe\Entity\Db\TblPieceJointeFournie;
+use PieceJointe\Entity\Db\TypePieceJointe;
 
 
 /**

@@ -24,7 +24,7 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
+     * @var \Intervenant\Entity\Db\Intervenant
      */
     private $intervenant;
 
@@ -91,11 +91,11 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
     /**
      * Set intervenant
      *
-     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @param \Intervenant\Entity\Db\Intervenant $intervenant
      *
      * @return Validation
      */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
+    public function setIntervenant(\Intervenant\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 
@@ -107,7 +107,7 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
     /**
      * Get intervenant
      *
-     * @return \Application\Entity\Db\Intervenant
+     * @return \Intervenant\Entity\Db\Intervenant
      */
     public function getIntervenant()
     {

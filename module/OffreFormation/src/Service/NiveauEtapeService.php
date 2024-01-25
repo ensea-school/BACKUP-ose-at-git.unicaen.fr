@@ -2,8 +2,8 @@
 
 namespace OffreFormation\Service;
 
-use Application\Entity\NiveauEtape;
 use Application\Service\AbstractService;
+use OffreFormation\Entity\NiveauEtape;
 
 /**
  * Description of NiveauEtape
@@ -16,7 +16,7 @@ class NiveauEtapeService extends AbstractService
      *
      * @param string $id
      *
-     * @return \Application\Entity\NiveauEtape
+     * @return \OffreFormation\Entity\NiveauEtape
      */
     public function get($id)
     {

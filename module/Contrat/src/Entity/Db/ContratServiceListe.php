@@ -3,7 +3,7 @@
 namespace Contrat\Entity\Db;
 
 
-use Application\Entity\Db\Intervenant;
+use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\TypeMission;

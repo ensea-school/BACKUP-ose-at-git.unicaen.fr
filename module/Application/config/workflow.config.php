@@ -185,7 +185,7 @@ return [
     ],
     'view_helpers'    => [
         'invokables' => [
-            'feuilleDeRoute' => View\Helper\Intervenant\FeuilleDeRouteViewHelper::class,
+            'feuilleDeRoute' => \Intervenant\View\Helper\FeuilleDeRouteViewHelper::class,
         ],
     ],
 ];

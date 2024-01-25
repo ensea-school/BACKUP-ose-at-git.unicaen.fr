@@ -3,12 +3,10 @@
 namespace Enseignement\Controller;
 
 use Application\Controller\AbstractController;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
@@ -19,6 +17,8 @@ use Enseignement\Processus\EnseignementProcessusAwareTrait;
 use Enseignement\Processus\ValidationEnseignementProcessusAwareTrait;
 use Enseignement\Service\ServiceServiceAwareTrait;
 use Enseignement\Service\VolumeHoraireServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Lieu\Entity\Db\Etablissement;

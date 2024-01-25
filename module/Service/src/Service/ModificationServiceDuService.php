@@ -4,8 +4,8 @@ namespace Service\Service;
 
 use Application\Entity\Db\Annee;
 use Application\Service\AbstractEntityService;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 
 

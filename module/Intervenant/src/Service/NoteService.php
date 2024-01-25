@@ -2,11 +2,10 @@
 
 namespace Intervenant\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Entity\Db\Note;
-use Laminas\Validator\Date;
 
 /**
  * Description of NoteService

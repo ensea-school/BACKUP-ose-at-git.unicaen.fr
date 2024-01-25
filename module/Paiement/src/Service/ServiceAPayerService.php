@@ -2,13 +2,11 @@
 
 namespace Paiement\Service;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
-use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractService;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
-use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\TblPaiement;
 use Service\Service\EtatVolumeHoraireServiceAwareTrait;

@@ -2,18 +2,18 @@
 
 namespace Dossier\Service;
 
-use Application\Service\AbstractEntityService;
-use Indicateur\Entity\Db\IndicModifDossier;
-use Application\Entity\Db\Intervenant;
-use Dossier\Entity\Db\IntervenantDossier;
-use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\TypeValidation;
+use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\Validation;
+use Application\Service\AbstractEntityService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Intervenant\Service\StatutServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
+use Dossier\Entity\Db\IntervenantDossier;
+use Indicateur\Entity\Db\IndicModifDossier;
+use Intervenant\Entity\Db\Intervenant;
+use Intervenant\Service\IntervenantServiceAwareTrait;
+use Intervenant\Service\StatutServiceAwareTrait;
 
 /**
  * Description of Intervenant Dossier

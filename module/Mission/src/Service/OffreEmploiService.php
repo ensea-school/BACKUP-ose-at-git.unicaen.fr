@@ -3,11 +3,9 @@
 namespace Mission\Service;
 
 use Application\Acl\Role;
-use Application\Entity\Db\Intervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\OffreEmploi;
 use UnicaenVue\View\Model\AxiosModel;
 

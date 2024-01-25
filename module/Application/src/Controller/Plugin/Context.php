@@ -2,11 +2,11 @@
 
 namespace Application\Controller\Plugin;
 
-use Application\Service\Traits\IntervenantServiceAwareTrait;
-use UnicaenApp\Service\EntityManagerAwareTrait;
+use Intervenant\Service\IntervenantServiceAwareTrait;
 use Laminas\Mvc\Controller\Plugin\Params;
 use LogicException;
 use RuntimeException;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 
 /**
  * Plugin facilitant l'accès au gestionnaire d'entités Doctrine.

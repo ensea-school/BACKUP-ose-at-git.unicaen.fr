@@ -2,8 +2,10 @@
 
 namespace Paiement\Service;
 
+use Application\Entity\Db\Intervenant;
 use Application\Service\AbstractEntityService;
 use Doctrine\ORM\QueryBuilder;
+use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\TypeHeures;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
 use Paiement\Entity\Db\CentreCout;
@@ -19,13 +21,12 @@ class CentreCoutService extends AbstractEntityService
     use TypeHeuresServiceAwareTrait;
 
 
-
     /**
      * retourne la classe des entités
      *
      * @return string
      */
-    public function getEntityClass()
+    public function getEntityClass ()
     {
         return CentreCout::class;
     }
@@ -37,7 +38,7 @@ class CentreCoutService extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias()
+    public function getAlias ()
     {
         return 'cc';
     }
@@ -52,7 +53,7 @@ class CentreCoutService extends AbstractEntityService
      *
      * @return QueryBuilder
      */
-    public function finderByTypeHeures(TypeHeures $typeHeures, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeHeures (TypeHeures $typeHeures, QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
 
@@ -74,7 +75,7 @@ class CentreCoutService extends AbstractEntityService
      *
      * @param CentreCout[] $centresCouts
      */
-    public function formatCentresCouts($centresCouts)
+    public function formatCentresCouts ($centresCouts)
     {
         $result = [];
 
@@ -106,12 +107,47 @@ class CentreCoutService extends AbstractEntityService
 
 
 
+    public function getCentresCoutsMiseEnPaiement (Structure $structure): array
+    {
+        $sql = "
+        SELECT 
+            cc.id 		 				 centre_cout_id,
+            cc.libelle	  				 libelle,
+            cc.code      				 code,
+            CASE WHEN tr.fi = 1 AND cca.fi = 1 THEN 1 ELSE 0 END fi,
+            CASE WHEN tr.fa = 1 AND cca.fa = 1 THEN 1 ELSE 0 END fa,
+            CASE WHEN tr.fc = 1 AND cca.fc = 1 THEN 1 ELSE 0 END fc,
+            CASE WHEN tr.referentiel = 1 AND cca.referentiel = 1 THEN 1 ELSE 0 END referentiel,
+            CASE WHEN tr.fc_majorees = 1 AND cca.fc_majorees = 1 THEN 1 ELSE 0 END fc_majorees,
+            cc.parent_id  				 centre_cout_parent_id,
+            ccp.libelle   				 libelle_parent,
+            ccp.code      				 code_parent
+        FROM centre_cout cc 
+        LEFT JOIN centre_cout ccp ON ccp.id = cc.parent_id
+        JOIN centre_cout_structure ccs ON cc.id = ccs.centre_cout_id 
+        JOIN structure s ON s.id = ccs.structure_id
+        JOIN cc_activite cca ON cca.id = cc.activite_id
+        JOIN type_ressource tr ON tr.id = cc.type_ressource_id
+        WHERE s.code = :structure
+        AND cc.histo_destruction IS NULL
+        ORDER BY ccp.code ASC, cc.code ASC
+        ";
+
+        $cc = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, [
+            'structure' => $structure->getCode(),
+        ]);
+
+        return $cc;
+    }
+
+
+
     /**
      * Retourne la liste des centres de coûts sans parent
      *
      * @return CentreCout[]
      */
-    public function getListeParent(QueryBuilder $qb = null, $alias = null)
+    public function getListeParent (QueryBuilder $qb = null, $alias = null)
     {
         [$qb, $alias] = $this->initQuery($qb, $alias);
         $qb->where("$alias.parent is Null");

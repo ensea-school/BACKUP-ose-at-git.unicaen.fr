@@ -38,6 +38,7 @@
                                                             <th scope="col" style="font-size:12px;">Heures</th>
                                                             <th scope="col" style="font-size:12px;">Centre cout</th>
                                                             <th scope="col" style="font-size:12px;">Statut</th>
+                                                            <th>Action</th>
                                                             </thead>
                                                             <tbody>
                                                             <tr v-for="(value,id) in typeHeure.heures">
@@ -63,25 +64,45 @@
                                                                 </td>
                                                                 <!--<td>{{ value.centreCout.libelle }}</td>-->
                                                                 <td v-if="value.heuresDemandees == 0 ">
-                                                                    <select :id="'centreCout-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
-                                                                            name="">
+                                                                    <select
+                                                                        id="teste"
+                                                                        class="selectpicker"
+                                                                        data-live-search="true"
+                                                                        name="centreCout">
                                                                         <option value="2907">PAYE M1 MAE EVREUX</option>
+                                                                        <option value="2907">PAYE M1 MAE qsxsq</option>
+                                                                        <option value="2907">PAYE M1 MAE ecezec</option>
+
                                                                     </select>
                                                                 </td>
                                                                 <td v-if="value.heuresDemandees != 0 ">
-                                                                    {{ value.centreCout.libelle }}
+                                                                    <select :id="'centreCout-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
+                                                                            class="selectpicker"
+                                                                            disabled
+
+                                                                            name="">
+                                                                        <option value="2907">PAYE M1 MAE EVREUX</option>
+                                                                    </select></td>
+                                                                <td>
+                                                                    {{ heuresStatut(value) }}
                                                                 </td>
                                                                 <td style="font-size:12px;">
-                                                                    {{ heuresStatut(value) }}
+
                                                                     <span
                                                                         v-if="value.heuresAPayer != value.heuresPayees &&  value.heuresAPayer == value.heuresDemandees">
                                                                         <button class="btn btn-danger"
-                                                                                type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">Supprimer</button>
+                                                                                type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
+                                                                            <i class="fa-solid fa-trash" style="color:white;"></i>
+                                                                        </button>
                                                                     </span>
                                                                     <span
                                                                         v-if="value.heuresDemandees == 0">
-                                                                        <button class="btn btn-success" type="button"
-                                                                                @click="this.ajouterDemandeMiseEnPaiement(codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure)">Demander</button>
+                                                                        <button class="btn btn-primary" type="button"
+                                                                                @click="this.ajouterDemandeMiseEnPaiement(codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure)">
+                                                                                <!--<span style="color:white">OK</span>-->
+                                                                            <i class="fa-solid fa-plus" style="color:white;"></i>
+
+                                                                        </button>
                                                                     </span>
                                                                 </td>
                                                             </tr>
@@ -113,8 +134,6 @@
 <script>
 
 
-import UnicaenVue from "unicaen-vue/js/Client/unicaenVue";
-
 export default {
     name: "DemandeMiseEnPaiement.vue",
     props: {
@@ -135,10 +154,12 @@ export default {
             unicaenVue.axios.get(this.urlListeServiceAPayer)
                 .then(response => {
                     this.datasServiceAPayer = response.data;
+
                 })
                 .catch(error => {
                     console.error(error);
                 })
+
         },
         heuresStatut(value)
         {
@@ -196,6 +217,13 @@ export default {
     mounted()
     {
         this.findServiceAPayer();
+
+
+    },
+    updated()
+    {
+        $('.selectpicker').selectpicker('render');
     }
+
 }
 </script>

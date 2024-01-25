@@ -4,6 +4,7 @@ namespace Paiement\Service;
 
 use Application\Entity\Db\WfEtape;
 use Application\Service\AbstractService;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Intervenant\Entity\Db\Intervenant;
 use Lieu\Entity\Db\Structure;
@@ -23,6 +24,8 @@ class ServiceAPayerService extends AbstractService
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use CentreCoutServiceAwareTrait;
+    use ParametresServiceAwareTrait;
 
 
     /**
@@ -109,10 +112,20 @@ class ServiceAPayerService extends AbstractService
             'intervenant' => $intervenant->getId(),
         ]);
 
+        //On regarde le paramétrage des centres de cout pour les paiement
+        $parametreCentreCout = $this->getServiceParametres()->get('centres_couts_paye');
+        //Si le paramétrage est affectation, on va chercher une fois pour toutes les centres de couts de paiement de la structure d'affectation de l'intervenant
+        if ($parametreCentreCout == 'affectation') {
+            $structure                       = $this->getEntityManager()->getRepository(Structure::class)->find($intervenant->getStructure()->getId());
+            $centresCoutsPaiementAffectation = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
+        }
+
 
         foreach ($dmeps as $value) {
+            //On va chercher les centre de cout nécessaire aux mises en paiement
             //On traite ici les heures d'enseignement
             if ($value['TYPAGE'] == "enseignement") {
+
                 $dmep[$value['STRUCTURE_CODE']]['libelle']                                                                                                                  = $value['STRUCTURE_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['libelle']                                                                                  = $value['ETAPE_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['libelle']                                         = $value['ELEMENT_LIBELLE'];
@@ -161,6 +174,19 @@ class ServiceAPayerService extends AbstractService
                         ],
                     ];
                 }
+            }
+            //On va récuperer les centres de couts de la structure d'enseignement
+            //1- On regarde le paramètrage des centres de coût pour la paye (affectation ou enseignement)
+            $structureId = $value['STRUCTURE_CODE'];
+            if ($parametreCentreCout == 'enseignement') {
+                $structure                        = $this->getEntityManager()->getRepository(Structure::class)->find($value['STRUCTURE_ID']);
+                $centresCoutsPaiementEnseignement = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
+            } else {
+                //$centresCouts =
+            }
+            $centresCouts = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
+            if (!array_key_exists('centreCoutPaiement', $dmep[$value['STRUCTURE_CODE']])) {
+                $dmep[$value['STRUCTURE_CODE']]['centreCoutPaiement'] = $centresCouts;
             }
         }
 

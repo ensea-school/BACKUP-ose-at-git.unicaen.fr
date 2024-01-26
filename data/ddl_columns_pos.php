@@ -559,7 +559,6 @@ return [
         'HEURES_COMPL_FA',
         'HEURES_COMPL_FC',
         'HEURES_COMPL_REFERENTIEL',
-        'SOUS_SERVICE',
         'HEURES_COMPL_FC_MAJOREES',
         'HEURES_COMPL',
         'SERVICE_FA',
@@ -929,6 +928,8 @@ return [
         'TYPE_HEURES_ID',
         'DOMAINE_FONCTIONNEL_ID',
         'MISSION_ID',
+        'SERVICE_ID',
+        'SERVICE_REFERENTIEL_ID',
     ],
     'MODIFICATION_SERVICE_DU'        => [
         'ID',

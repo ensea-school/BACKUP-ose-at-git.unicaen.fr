@@ -32,7 +32,6 @@
     <field name="heuresComplReferentiel" type="float" column="HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="false"/>
     <field name="total" type="float" column="TOTAL" precision="126" scale="0" nullable="false"/>
     <field name="solde" type="float" column="SOLDE" precision="126" scale="0" nullable="false"/>
-    <field name="sousService" type="float" column="SOUS_SERVICE" precision="126" scale="0" nullable="false"/>
     <field name="heuresCompl" type="float" column="HEURES_COMPL" precision="126" scale="0" nullable="false"/>
     <one-to-many field="formuleResultatService" target-entity="Formule\Entity\Db\FormuleResultatService" mapped-by="formuleResultat" />
     <one-to-many field="formuleResultatServiceReferentiel" target-entity="Formule\Entity\Db\FormuleResultatServiceReferentiel" mapped-by="formuleResultat" />

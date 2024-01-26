@@ -189,18 +189,6 @@ return [
             'position'    => 17,
             'commentaire' => NULL,
         ],
-        'SOUS_SERVICE'             => [
-            'name'        => 'SOUS_SERVICE',
-            'type'        => 'float',
-            'bdd-type'    => 'FLOAT',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => 126,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 10,
-            'commentaire' => NULL,
-        ],
         'TOTAL'                    => [
             'name'        => 'TOTAL',
             'type'        => 'float',

@@ -641,10 +641,8 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
         fr.solde                    := COALESCE(intervenant.solde,fr.total - fr.service_du);
         IF fr.solde >= 0 THEN
-          fr.sous_service           := 0;
           fr.heures_compl           := fr.solde;
         ELSE
-          fr.sous_service           := fr.solde * -1;
           fr.heures_compl           := 0;
         END IF;
         fr.type_intervenant_code    := intervenant.type_intervenant_code;
@@ -659,7 +657,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
           IF fr.HEURES_COMPL_FA          IS NULL THEN fr.HEURES_COMPL_FA          := 0;  END IF;
           IF fr.HEURES_COMPL_FC          IS NULL THEN fr.HEURES_COMPL_FC          := 0;  END IF;
           IF fr.HEURES_COMPL_REFERENTIEL IS NULL THEN fr.HEURES_COMPL_REFERENTIEL := 0;  END IF;
-          IF fr.SOUS_SERVICE             IS NULL THEN fr.SOUS_SERVICE             := 0;  END IF;
           IF fr.HEURES_COMPL_FC_MAJOREES IS NULL THEN fr.HEURES_COMPL_FC_MAJOREES := 0;  END IF;
           IF fr.HEURES_COMPL             IS NULL THEN fr.HEURES_COMPL             := 0;  END IF;
           IF fr.SERVICE_FI               IS NULL THEN fr.SERVICE_FI               := 0;  END IF;

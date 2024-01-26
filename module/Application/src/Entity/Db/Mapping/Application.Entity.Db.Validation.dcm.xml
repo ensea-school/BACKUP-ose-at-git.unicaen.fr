@@ -66,15 +66,5 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
-        <many-to-many field="miseEnPaiement" target-entity="Paiement\Entity\Db\MiseEnPaiement">
-            <join-table name="V_VALIDATION_MISE_EN_PAIEMENT">
-                <join-columns>
-                    <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="MISE_EN_PAIEMENT_ID" referenced-column-name="ID"/>
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
     </entity>
 </doctrine-mapping>

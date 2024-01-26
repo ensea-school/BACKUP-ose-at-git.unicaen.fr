@@ -470,7 +470,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement
                 ];
                 if ($validation = $miseEnPaiement->getValidation()) {
                     $dmepParams['validation'] = [
-                        'date'        => $miseEnPaiement->getDateValidation()->format('d/m/Y'),
+                        'date'        => $miseEnPaiement->getDateMiseEnPaiement()->format('d/m/Y'),
                         'utilisateur' => (string)$validation->getHistoCreateur(),
                     ];
                 }

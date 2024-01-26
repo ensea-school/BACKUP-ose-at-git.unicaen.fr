@@ -5,7 +5,6 @@ namespace Paiement\Entity;
 use Application\Entity\Db\Periode;
 use Application\Entity\LogicException;
 use Application\Entity\RuntimeException;
-use Application\Entity\Validation;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Interfaces\ServiceAPayerAwareInterface;
 use Paiement\Traits\ServiceAPayerAwareTrait;
@@ -29,11 +28,6 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
      * @var Periode
      */
     protected $periodePaiement = false;
-
-    /**
-     * @var Validation|boolean
-     */
-    protected $validation = false;
 
     /**
      * Centre de coûts
@@ -116,35 +110,6 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
             throw new RuntimeException('Valeur non autorisée');
         }
         $this->periodePaiement = $periodePaiement;
-
-        return $this;
-    }
-
-
-
-    /**
-     *
-     * @return Validation|boolean
-     */
-    public function getValidation()
-    {
-        return $this->validation;
-    }
-
-
-
-    /**
-     *
-     * @param Validation|boolean $validation
-     *
-     * @return self
-     */
-    public function setValidation($validation)
-    {
-        if (!(is_bool($validation) || null === $validation || $validation instanceof Validation)) {
-            throw new RuntimeException('Valeur non autorisée');
-        }
-        $this->validation = $validation;
 
         return $this;
     }
@@ -375,9 +340,6 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
             $saisieHeures   = $newHeures;
             $miseEnPaiement = new \Paiement\Entity\Db\MiseEnPaiement();
             $miseEnPaiement->setServiceAPayer($mpl->getServiceAPayer());
-            if ($this->dateMiseEnPaiement instanceof \DateTime) {
-                $miseEnPaiement->setDateValidation($this->dateMiseEnPaiement);
-            }
 
             if ($this->periodePaiement instanceof Periode) {
                 $miseEnPaiement->setPeriodePaiement($this->periodePaiement);
@@ -463,9 +425,6 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
         }
         if ($this->getDateMiseEnPaiement() instanceof \DateTime) {
             $result['date-mise-paiement'] = $this->getDateMiseEnPaiement()->format('Y-m-d');
-        }
-        if ($this->getValidation() instanceof Validation) {
-            $result['validation'] = $this->getValidation()->getId();
         }
         if ($this->getCentreCout() instanceof \Paiement\Entity\Db\CentreCout) {
             $result['centre-cout'] = $this->getCentreCout()->getId();

@@ -36,8 +36,6 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
     private ?DomaineFonctionnel $domaineFonctionnel = null;
 
-    private ?Validation $validation = null;
-
     private ?FormuleResultatService $formuleResultatService = null;
 
     private ?FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null;
@@ -67,22 +65,6 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
     public function getDateMiseEnPaiement(): ?\DateTime
     {
         return $this->dateMiseEnPaiement;
-    }
-
-
-
-    public function setDateValidation(?\DateTime $dateValidation): self
-    {
-        $this->dateValidation = $dateValidation;
-
-        return $this;
-    }
-
-
-
-    public function getDateValidation(): ?\DateTime
-    {
-        return $this->dateValidation;
     }
 
 
@@ -170,22 +152,6 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
         $this->domaineFonctionnel = $domaineFonctionnel;
 
         return $this;
-    }
-
-
-
-    public function setValidation(?Validation $validation = null): self
-    {
-        $this->validation = $validation;
-
-        return $this;
-    }
-
-
-
-    public function getValidation(): ?Validation
-    {
-        return $this->validation;
     }
 
 

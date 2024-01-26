@@ -15,8 +15,6 @@ use Mission\Entity\Db\Candidature;
 use Mission\Entity\Db\Mission;
 use Mission\Entity\Db\OffreEmploi;
 use Mission\Entity\Db\VolumeHoraireMission;
-use Paiement\Entity\Db\MiseEnPaiement;
-use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use RuntimeException;
 use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Service\TypeVolumeHoraireServiceAwareTrait;
@@ -29,7 +27,6 @@ class ValidationService extends AbstractEntityService
 {
     use TypeValidationServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
-    use MiseEnPaiementServiceAwareTrait;
     use ContratServiceAwareTrait;
 
     /**
@@ -170,13 +167,6 @@ class ValidationService extends AbstractEntityService
     public function delete ($entity, $softDelete = true)
     {
         /* On détruit d'abord les dépendances possibles ... */
-        foreach ($entity->getMiseEnPaiement() as $mep) {
-            /** @var MiseEnPaiement $mep */
-            if (!$mep->estNonHistorise()) { // seulement pour les historisés!!
-                $this->getServiceMiseEnPaiement()->delete($mep, false);
-            }
-        }
-
         foreach ($entity->getVolumeHoraire() as $vh) {
             $entity->removeVolumeHoraire($vh);
         }

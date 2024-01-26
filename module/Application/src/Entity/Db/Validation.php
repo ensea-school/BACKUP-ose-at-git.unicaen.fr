@@ -48,11 +48,6 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
      */
     private $volumeHoraireReferentiel;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $miseEnPaiement;
-
 
 
     /**
@@ -248,18 +243,6 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface, AxiosEx
     public function getVolumeHoraireReferentiel()
     {
         return $this->volumeHoraireReferentiel;
-    }
-
-
-
-    /**
-     * Get miseEnPaiement
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMiseEnPaiement()
-    {
-        return $this->miseEnPaiement;
     }
 
 

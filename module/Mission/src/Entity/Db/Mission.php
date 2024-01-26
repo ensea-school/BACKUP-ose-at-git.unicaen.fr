@@ -13,7 +13,6 @@ use Lieu\Entity\Db\StructureAwareTrait;
 use OffreFormation\Entity\Db\TypeHeures;
 use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\DomaineFonctionnel;
-use Paiement\Entity\Db\MiseEnPaiementListe;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\ServiceAPayerTrait;
 use Paiement\Entity\Db\TauxRemu;

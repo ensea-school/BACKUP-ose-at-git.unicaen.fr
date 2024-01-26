@@ -25,9 +25,6 @@
     <many-to-one field="mission" target-entity="Mission\Entity\Db\Mission">
       <join-column name="MISSION_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="validation" target-entity="Application\Entity\Db\Validation">
-        <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
-    </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
     </many-to-one>

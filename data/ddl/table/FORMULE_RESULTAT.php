@@ -126,7 +126,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 21,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'NON_PAYABLE_FC'           => [
@@ -138,7 +138,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 22,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'NON_PAYABLE_FI'           => [
@@ -150,7 +150,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 20,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'NON_PAYABLE_REFERENTIEL'  => [
@@ -162,7 +162,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 23,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'SERVICE_DU'               => [
@@ -246,7 +246,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 19,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'TOTAL'                    => [

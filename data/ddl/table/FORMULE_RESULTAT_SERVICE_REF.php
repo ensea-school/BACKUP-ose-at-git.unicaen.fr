@@ -45,6 +45,18 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
+        'NON_PAYABLE_REFERENTIEL'  => [
+            'name'        => 'NON_PAYABLE_REFERENTIEL',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 7,
+            'commentaire' => NULL,
+        ],
         'SERVICE_REFERENTIEL'      => [
             'name'        => 'SERVICE_REFERENTIEL',
             'type'        => 'float',

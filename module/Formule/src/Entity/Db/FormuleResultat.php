@@ -28,11 +28,6 @@ class FormuleResultat
     /**
      * @var float
      */
-    private $sousService;
-
-    /**
-     * @var float
-     */
     private $heuresCompl;
 
     /**
@@ -137,7 +132,12 @@ class FormuleResultat
      */
     public function getSousService()
     {
-        return $this->sousService;
+        $solde = $this->getSolde();
+        if ($solde >= 0.0) {
+            return 0.0;
+        } else {
+            return $solde * -1;
+        }
     }
 
 

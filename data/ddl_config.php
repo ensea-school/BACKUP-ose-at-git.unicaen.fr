@@ -76,10 +76,18 @@ return [
             'V_TBL_VOLUME_HORAIRE',
             'V_PRIVILEGES_ROLES',
             'V_CTL_SERVICES_ODF_HISTO',
-
             'V_SERVICE_VALIDE',
             'V_SERVICE_NON_VALIDE',
             'V_EXP_HETD_CENTRE_COUT',
+            'V_INDIC_ATT_VALID_ENS_AUTRE',
+            'V_INDIC_ATT_VALID_REF_AUTRE',
+            'V_INDIC_ATT_VALID_SERVICE',
+            'V_INDIC_ATT_VALID_SERVICE_REF',
+            'V_INDIC_ATTENTE_DEMANDE_MEP',
+            'V_INDIC_ATTENTE_MEP',
+            'V_INDIC_TOUS_SERVICES_VALIDES',
+            'V_TOTAL_DEMANDE_MEP_STRUCTURE',
+            'V_VALIDATION_MISE_EN_PAIEMENT',
         ], 'excludes' => [
             'V_TBL_PLAFOND_%', // Les vues plafonds sont générées et non créées à partir de la DDL
         ],

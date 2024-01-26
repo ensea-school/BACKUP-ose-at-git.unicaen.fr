@@ -568,6 +568,10 @@ return [
         'SOLDE',
         'TOTAL',
         'TYPE_INTERVENANT_CODE',
+        'NON_PAYABLE_FI',
+        'NON_PAYABLE_FA',
+        'NON_PAYABLE_FC',
+        'NON_PAYABLE_REFERENTIEL',
     ],
     'FORMULE_RESULTAT_SERVICE'       => [
         'ID',
@@ -581,6 +585,9 @@ return [
         'SERVICE_FC',
         'SERVICE_FI',
         'TOTAL',
+        'NON_PAYABLE_FI',
+        'NON_PAYABLE_FA',
+        'NON_PAYABLE_FC',
     ],
     'FORMULE_RESULTAT_SERVICE_REF'   => [
         'ID',
@@ -589,6 +596,7 @@ return [
         'HEURES_COMPL_REFERENTIEL',
         'SERVICE_REFERENTIEL',
         'TOTAL',
+        'NON_PAYABLE_REFERENTIEL',
     ],
     'FORMULE_RESULTAT_VH'            => [
         'ID',
@@ -602,6 +610,9 @@ return [
         'SERVICE_FC',
         'SERVICE_FI',
         'TOTAL',
+        'NON_PAYABLE_FI',
+        'NON_PAYABLE_FA',
+        'NON_PAYABLE_FC',
     ],
     'FORMULE_RESULTAT_VH_REF'        => [
         'ID',
@@ -610,6 +621,7 @@ return [
         'HEURES_COMPL_REFERENTIEL',
         'SERVICE_REFERENTIEL',
         'TOTAL',
+        'NON_PAYABLE_REFERENTIEL',
     ],
     'FORMULE_TEST_INTERVENANT'       => [
         'ID',
@@ -688,6 +700,14 @@ return [
         'C_HEURES_COMPL_REFERENTIEL',
         'DEBUG_INFO',
         'STRUCTURE_CODE',
+        'A_NON_PAYABLE_FI',
+        'A_NON_PAYABLE_FA',
+        'A_NON_PAYABLE_FC',
+        'A_NON_PAYABLE_REFERENTIEL',
+        'C_NON_PAYABLE_FI',
+        'C_NON_PAYABLE_FA',
+        'C_NON_PAYABLE_FC',
+        'C_NON_PAYABLE_REFERENTIEL',
     ],
     'GRADE'                          => [
         'ID',

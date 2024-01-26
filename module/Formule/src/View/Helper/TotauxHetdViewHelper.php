@@ -3,7 +3,6 @@
 namespace Formule\View\Helper;
 
 use Formule\Entity\Db\FormuleResultat;
-use Formule\Entity\Db\FormuleResultatAwareTrait;
 use Laminas\View\Helper\AbstractHtmlElement;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -15,7 +14,30 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
 class TotauxHetdViewHelper extends AbstractHtmlElement
 {
     use EntityManagerAwareTrait;
-    use FormuleResultatAwareTrait;
+
+    protected ?FormuleResultat $formuleResultat = null;
+
+
+
+    /**
+     * @param FormuleResultat $formuleResultat
+     *
+     * @return self
+     */
+    public function setFormuleResultat(?FormuleResultat $formuleResultat)
+    {
+        $this->formuleResultat = $formuleResultat;
+
+        return $this;
+    }
+
+
+
+    public function getFormuleResultat(): ?FormuleResultat
+    {
+        return $this->formuleResultat;
+    }
+
 
 
     /**

@@ -127,6 +127,7 @@ class FormuleResultat
 
     /**
      * Get sousService
+     * @deprecated
      *
      * @return float
      */

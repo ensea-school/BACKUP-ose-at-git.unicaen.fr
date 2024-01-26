@@ -28,7 +28,6 @@ use UnicaenApp\Util;
 class TestService extends AbstractEntityService
 {
     use FormuleServiceAwareTrait;
-    use FormuleServiceAwareTrait;
 
 
     /**

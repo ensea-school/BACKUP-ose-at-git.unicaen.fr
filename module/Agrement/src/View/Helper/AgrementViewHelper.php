@@ -37,7 +37,7 @@ class AgrementViewHelper extends AbstractHtmlElement
      *
      * @return self
      */
-    public function __invoke(Agrement $agrement = null, TblAgrement $tblAgrement = null)
+    public function __invoke (Agrement $agrement = null, TblAgrement $tblAgrement = null)
     {
         if ($agrement) $this->setAgrement($agrement);
         if ($tblAgrement) $this->setTblAgrement($tblAgrement);
@@ -52,14 +52,14 @@ class AgrementViewHelper extends AbstractHtmlElement
      *
      * @return string Code HTML
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->render();
     }
 
 
 
-    public function short()
+    public function short ()
     {
         $this->short = true;
 
@@ -68,7 +68,7 @@ class AgrementViewHelper extends AbstractHtmlElement
 
 
 
-    public function box()
+    public function box ()
     {
         $this->box = true;
 
@@ -82,7 +82,7 @@ class AgrementViewHelper extends AbstractHtmlElement
      *
      * @return string Code HTML
      */
-    public function render()
+    public function render ()
     {
         $entity      = $this->getAgrement();
         $tblAgrement = $this->getTblAgrement();
@@ -95,7 +95,7 @@ class AgrementViewHelper extends AbstractHtmlElement
             "Type d'agrément"       => (string)$entity->getType(),
             "Date de la décision"   => $entity->getDateDecision()->format(Constants::DATE_FORMAT),
             "Année d'agrémentation" => (string)$tblAgrement->getAnneeAgrement()->getLibelle(),
-            "Valable jusqu'en"      => (integer)$tblAgrement->getAnneeAgrement()->getId() + (integer)$tblAgrement->getDureeVie(),
+            "Valable jusqu'au"      => '31 août ' . (integer)$tblAgrement->getAnneeAgrement()->getId() + (integer)$tblAgrement->getDureeVie(),
         ];
 
         if (!$this->short) {
@@ -127,7 +127,7 @@ class AgrementViewHelper extends AbstractHtmlElement
 
 
 
-    public function renderLabel()
+    public function renderLabel ()
     {
         $entity = $this->getAgrement();
 

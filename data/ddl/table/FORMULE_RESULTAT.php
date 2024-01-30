@@ -21,6 +21,18 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
+        'HEURES_COMPL'             => [
+            'name'        => 'HEURES_COMPL',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 11,
+            'commentaire' => NULL,
+        ],
         'HEURES_COMPL_FA'          => [
             'name'        => 'HEURES_COMPL_FA',
             'type'        => 'float',

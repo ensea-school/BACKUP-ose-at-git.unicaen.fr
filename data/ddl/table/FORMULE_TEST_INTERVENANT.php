@@ -21,42 +21,6 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'A_SERVICE_DU'                   => [
-            'name'        => 'A_SERVICE_DU',
-            'type'        => 'float',
-            'bdd-type'    => 'FLOAT',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => 126,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 16,
-            'commentaire' => NULL,
-        ],
-        'C_SERVICE_DU'                   => [
-            'name'        => 'C_SERVICE_DU',
-            'type'        => 'float',
-            'bdd-type'    => 'FLOAT',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => 126,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 17,
-            'commentaire' => NULL,
-        ],
-        'DEBUG_INFO'                     => [
-            'name'        => 'DEBUG_INFO',
-            'type'        => 'clob',
-            'bdd-type'    => 'CLOB',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => TRUE,
-            'default'     => NULL,
-            'position'    => 18,
-            'commentaire' => NULL,
-        ],
         'DEPASSEMENT_SERVICE_DU_SANS_HC' => [
             'name'        => 'DEPASSEMENT_SERVICE_DU_SANS_HC',
             'type'        => 'bool',
@@ -201,6 +165,18 @@ return [
             'position'    => 15,
             'commentaire' => NULL,
         ],
+        'SERVICE_DU'                     => [
+            'name'        => 'SERVICE_DU',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 36,
+            'commentaire' => NULL,
+        ],
         'STRUCTURE_CODE'                 => [
             'name'        => 'STRUCTURE_CODE',
             'type'        => 'string',
@@ -210,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 23,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_1_CODE'              => [
@@ -222,7 +198,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 26,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_1_SERVICE_COMPL'     => [
@@ -234,7 +210,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 25,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_1_SERVICE_DU'        => [
@@ -246,7 +222,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 24,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_2_CODE'              => [
@@ -258,7 +234,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 29,
+            'position'    => 26,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_2_SERVICE_COMPL'     => [
@@ -270,7 +246,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 28,
+            'position'    => 25,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_2_SERVICE_DU'        => [
@@ -282,7 +258,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 27,
+            'position'    => 24,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_3_CODE'              => [
@@ -294,7 +270,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 32,
+            'position'    => 29,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_3_SERVICE_COMPL'     => [
@@ -306,7 +282,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 31,
+            'position'    => 28,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_3_SERVICE_DU'        => [
@@ -318,7 +294,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 30,
+            'position'    => 27,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_4_CODE'              => [
@@ -330,7 +306,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 35,
+            'position'    => 32,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_4_SERVICE_COMPL'     => [
@@ -342,7 +318,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 34,
+            'position'    => 31,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_4_SERVICE_DU'        => [
@@ -354,7 +330,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 33,
+            'position'    => 30,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_5_CODE'              => [
@@ -366,7 +342,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 38,
+            'position'    => 35,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_5_SERVICE_COMPL'     => [
@@ -378,7 +354,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 37,
+            'position'    => 34,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_5_SERVICE_DU'        => [
@@ -390,7 +366,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 36,
+            'position'    => 33,
             'commentaire' => NULL,
         ],
         'TAUX_CM_SERVICE_COMPL'          => [
@@ -402,7 +378,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1.5',
-            'position'    => 21,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'TAUX_CM_SERVICE_DU'             => [
@@ -414,7 +390,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1.5',
-            'position'    => 20,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'TAUX_TP_SERVICE_COMPL'          => [
@@ -426,7 +402,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '2/3',
-            'position'    => 22,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'TAUX_TP_SERVICE_DU'             => [
@@ -438,7 +414,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 19,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_ID'            => [

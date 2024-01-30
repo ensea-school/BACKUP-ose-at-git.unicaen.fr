@@ -64,6 +64,7 @@
                                                                 </td>
                                                                 <!--<td>{{ value.centreCout.libelle }}</td>-->
                                                                 <td v-if="value.heuresDemandees == 0 ">
+                                                                    {{ centreCoutSelect(structure.centreCoutPaiement) }}
                                                                     <select
                                                                         id="teste"
                                                                         class="selectpicker"
@@ -212,7 +213,15 @@ export default {
                 .catch(error => {
                     console.error(error);
                 })
+        },
+        centreCoutSelect(datas)
+        {
+            console.log(datas);
+            let centresCouts = [];
+            
         }
+
+
     },
     mounted()
     {

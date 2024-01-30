@@ -178,15 +178,47 @@ class ServiceAPayerService extends AbstractService
             //On va récuperer les centres de couts de la structure d'enseignement
             //1- On regarde le paramètrage des centres de coût pour la paye (affectation ou enseignement)
             $structureId = $value['STRUCTURE_CODE'];
-            if ($parametreCentreCout == 'enseignement') {
-                $structure                        = $this->getEntityManager()->getRepository(Structure::class)->find($value['STRUCTURE_ID']);
-                $centresCoutsPaiementEnseignement = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
-            } else {
-                //$centresCouts =
-            }
+
+
             $centresCouts = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
+            //Je n'ai pas encore fourni la liste des centres de couts utilisable pour les demandes de mise en paiement
             if (!array_key_exists('centreCoutPaiement', $dmep[$value['STRUCTURE_CODE']])) {
-                $dmep[$value['STRUCTURE_CODE']]['centreCoutPaiement'] = $centresCouts;
+                $dmep[$value['STRUCTURE_CODE']]['centreCoutPaiement'] = [];
+                if ($parametreCentreCout == 'enseignement') {
+                    $structure    = $this->getEntityManager()->getRepository(Structure::class)->find($value['STRUCTURE_ID']);
+                    $centresCouts = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
+                } else {
+                    $centresCouts = $centresCoutsPaiementAffectation;
+                }
+                $listeCentresCouts = [];
+                foreach ($centresCouts as $centreCout) {
+                    if (!empty($centreCout['CODE_PARENT'])) {
+                        if (!array_key_exists($centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT'], $listeCentresCouts)) {
+                            $listeCentresCouts[$centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT']] = [];
+                        }
+                        $listeCentresCouts[$centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT']][] = [
+                            'centreCoutId'      => $centreCout['CENTRE_COUT_ID'],
+                            'centreCoutLibelle' => $centreCout['LIBELLE'],
+                            'centreCoutCode'    => $centreCout['CODE'],
+                            'fi'                => $centreCout['FI'],
+                            'fa'                => $centreCout['FA'],
+                            'fc'                => $centreCout['FC'],
+                            'referentiel'       => $centreCout['REFERENTIEL'],
+                            'fcMajorees'        => $centreCout['FC_MAJOREES'],
+                        ];
+                    } else {
+                        $listeCentresCouts['AUTRES'][] = [
+                            'centreCoutId'      => $centreCout['CENTRE_COUT_ID'],
+                            'centreCoutLibelle' => $centreCout['LIBELLE'],
+                            'centreCoutCode'    => $centreCout['CODE'],
+                            'fi'                => $centreCout['FI'],
+                            'fa'                => $centreCout['FA'],
+                            'fc'                => $centreCout['FC'],
+                        ];
+                    }
+
+                    $dmep[$value['STRUCTURE_CODE']]['centreCoutPaiement'] = $listeCentresCouts;
+                }
             }
         }
 

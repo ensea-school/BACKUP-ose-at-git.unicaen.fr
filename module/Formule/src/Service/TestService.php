@@ -3,7 +3,7 @@
 namespace Formule\Service;
 
 use Application\Service\AbstractEntityService;
-use Application\Service\RuntimeException;
+use RuntimeException;
 use Formule\Entity\Db\Formule;
 use Formule\Entity\Db\FormuleTestIntervenant;
 use Formule\Entity\Db\FormuleTestVolumeHoraire;

@@ -7,16 +7,8 @@
             <generator strategy="SEQUENCE"/>
             <sequence-generator sequence-name="FTEST_INTERVENANT_ID_SEQ" allocation-size="1" initial-value="1"/>
         </id>
-        <field name="libelle" type="string" column="LIBELLE" length="150"/>
-
-        <many-to-one field="formule" target-entity="Formule\Entity\Db\Formule">
-            <join-column name="FORMULE_ID" referenced-column-name="ID"/>
-        </many-to-one>
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
             <join-column name="ANNEE_ID" referenced-column-name="ID"/>
-        </many-to-one>
-        <many-to-one field="typeIntervenant" target-entity="Intervenant\Entity\Db\TypeIntervenant">
-            <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
         <many-to-one field="typeVolumeHoraire" target-entity="Service\Entity\Db\TypeVolumeHoraire">
             <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
@@ -25,10 +17,26 @@
             <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
         </many-to-one>
 
-        <field name="structureCode" type="string" column="STRUCTURE_CODE" length="100" nullable="true"/>
+        <field name="libelle" type="string" column="LIBELLE" length="150"/>
+        <many-to-one field="formule" target-entity="Formule\Entity\Db\Formule">
+            <join-column name="FORMULE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
         <field name="heuresServiceStatutaire" type="float" column="HEURES_SERVICE_STATUTAIRE" precision="126" scale="0"/>
         <field name="heuresServiceModifie" type="float" column="HEURES_SERVICE_MODIFIE" precision="126" scale="0"/>
         <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC"/>
+        <field name="structureCode" type="string" column="STRUCTURE_CODE" length="100" nullable="true"/>
+        <many-to-one field="typeIntervenant" target-entity="Intervenant\Entity\Db\TypeIntervenant">
+            <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <field name="param1" type="string" column="PARAM_1" length="100" nullable="true"/>
+        <field name="param2" type="string" column="PARAM_2" length="100" nullable="true"/>
+        <field name="param3" type="string" column="PARAM_3" length="100" nullable="true"/>
+        <field name="param4" type="string" column="PARAM_4" length="100" nullable="true"/>
+        <field name="param5" type="string" column="PARAM_5" length="100" nullable="true"/>
+
+        <field name="serviceDu" type="float" column="SERVICE_DU" precision="126" scale="0" nullable="true"/>
 
         <field name="tauxCmServiceDu" type="float" column="TAUX_CM_SERVICE_DU" precision="126" scale="0"/>
         <field name="tauxCmServiceCompl" type="float" column="TAUX_CM_SERVICE_COMPL" precision="126" scale="0"/>
@@ -49,16 +57,6 @@
         <field name="tauxAutre5ServiceDu" type="float" column="TAUX_AUTRE_5_SERVICE_DU" precision="126" scale="0"/>
         <field name="tauxAutre5ServiceCompl" type="float" column="TAUX_AUTRE_5_SERVICE_COMPL" precision="126" scale="0"/>
         <field name="tauxAutre5Code" type="string" column="TAUX_AUTRE_5_CODE" length="30" nullable="true"/>
-        <field name="param1" type="string" column="PARAM_1" length="100" nullable="true"/>
-        <field name="param2" type="string" column="PARAM_2" length="100" nullable="true"/>
-        <field name="param3" type="string" column="PARAM_3" length="100" nullable="true"/>
-        <field name="param4" type="string" column="PARAM_4" length="100" nullable="true"/>
-        <field name="param5" type="string" column="PARAM_5" length="100" nullable="true"/>
-
-        <field name="aServiceDu" type="float" column="A_SERVICE_DU" precision="126" scale="0" nullable="true"/>
-        <field name="cServiceDu" type="float" column="C_SERVICE_DU" precision="126" scale="0" nullable="true"/>
-
-        <field name="debugInfo" type="string" column="DEBUG_INFO" nullable="true"/>
 
         <one-to-many field="volumeHoraireTest" target-entity="Formule\Entity\Db\FormuleTestVolumeHoraire"
                      mapped-by="intervenantTest" orphan-removal="true">

@@ -2,6 +2,17 @@
 
 [OSE 23.0](#ose-23-26012024)
 
+# OSE 23.1 (A venir)
+
+## Corrections de bugs
+
+* Correction sur la bonne prise en compte de la durée de validité d'un agrément par rapport à l'année d'obtention de l'agrément (#54499)
+
+## Améliorations
+
+* Modification d'affichage de la date de fin de validité d'un agrément (#54400)
+* Ajout de la date d'expiration d'un agrément dans l'export CSV des agréments (#54400)
+
 # OSE 23 (26/01/2024)
 
 ## Nouveautés

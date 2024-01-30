@@ -290,6 +290,7 @@ return [
     "TYPE_AGREMENT": {"libelle": "Type d\'agrément"},
     "AGREE_TXT": {"libelle": "Agréé"},
     "DATE_DECISION": {"libelle": "Date de décision"},
+    "DATE_EXPIRATION": {"libelle": "Date d\'expiration"},
     "MODIFICATEUR": {"libelle": "Modificateur"},
     "DATE_MODIFICATION": {"libelle": "Date de modification"}
 }',

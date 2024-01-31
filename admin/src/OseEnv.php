@@ -22,7 +22,7 @@ class OseEnv
 
     public function getEnv()
     {
-        $forcedEnv = $this->oa->config()->get('dev', 'forcd-env', false);
+        $forcedEnv = $this->oa->config()->get('dev', 'forced-env', 'test');
 
         if (false !== $forcedEnv) return $forcedEnv;
 

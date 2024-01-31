@@ -69,7 +69,6 @@ namespace Application\View\Renderer;
  * @method \Laminas\Form\View\Helper\FormTel formTel(?Laminas\Form\ElementInterface $element = null)
  * @method \Laminas\Form\View\Helper\FormText formText(?Laminas\Form\ElementInterface $element = null)
  * @method \Laminas\Form\View\Helper\FormTextarea formTextarea(?Laminas\Form\ElementInterface $element = null)
- * @method \Laminas\Form\View\Helper\FormTextarea formTextArea(?Laminas\Form\ElementInterface $element = null)
  * @method \Laminas\Form\View\Helper\FormTime formTime(?Laminas\Form\ElementInterface $element = null)
  * @method \Laminas\Form\View\Helper\FormUrl formUrl(?Laminas\Form\ElementInterface $element = null)
  * @method \Laminas\Form\View\Helper\FormWeek formWeek(?Laminas\Form\ElementInterface $element = null)
@@ -228,8 +227,7 @@ namespace Application\View\Renderer;
  *
  * @author UnicaenCode
  */
-class PhpRenderer extends \Laminas\View\Renderer\PhpRenderer {
-
-
+class PhpRenderer extends \Laminas\View\Renderer\PhpRenderer
+{
 
 }

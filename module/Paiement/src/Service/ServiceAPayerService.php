@@ -76,7 +76,8 @@ class ServiceAPayerService extends AbstractService
             MAX(tp.formule_res_service_id)      formule_res_service_id,
             MAX(tp.formule_res_service_ref_id)  formule_res_service_ref_id,
             MAX(tp.mission_id)                  mission_id,
-            MAX(tp.type_heures_id )             type_heure_id 
+            MAX(tp.type_heures_id )             type_heure_id,
+            MAX(th.code)                        type_heure_code
         FROM
             tbl_paiement tp
         LEFT JOIN structure s ON s.id = tp.structure_id 
@@ -139,6 +140,7 @@ class ServiceAPayerService extends AbstractService
                     $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['mep_id_' . $value['MEP_ID']] = [
                         'mepId'                  => $value['MEP_ID'],
                         'typeHeureId'            => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
                         'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
                         'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
                         'domaineFonctionelId'    => $value['DOMAINE_FONCTIONNEL_ID'],
@@ -158,6 +160,7 @@ class ServiceAPayerService extends AbstractService
                     $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['a_demander'] = [
                         'mepId'                  => '',
                         'typeHeureId'            => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
                         'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
                         'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
                         'domaineFonctionelId'    => $value['DOMAINE_FONCTIONNEL_ID'],
@@ -174,6 +177,9 @@ class ServiceAPayerService extends AbstractService
                         ],
                     ];
                 }
+            } else {
+                //on fera le referentiel plus tard
+                continue;
             }
             //On va récuperer les centres de couts de la structure d'enseignement
             //1- On regarde le paramètrage des centres de coût pour la paye (affectation ou enseignement)

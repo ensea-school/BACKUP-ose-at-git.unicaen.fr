@@ -63,18 +63,32 @@
                                                                     </div>
                                                                 </td>
                                                                 <!--<td>{{ value.centreCout.libelle }}</td>-->
-                                                                <td v-if="value.heuresDemandees == 0 ">
-                                                                    {{ centreCoutSelect(structure.centreCoutPaiement) }}
-                                                                    <select
-                                                                        id="teste"
-                                                                        class="selectpicker"
-                                                                        data-live-search="true"
-                                                                        name="centreCout">
-                                                                        <option value="2907">PAYE M1 MAE EVREUX</option>
-                                                                        <option value="2907">PAYE M1 MAE qsxsq</option>
-                                                                        <option value="2907">PAYE M1 MAE ecezec</option>
+                                                                <td v-if="value.heuresDemandees == 0 " id="test">
+                                                                    <select :id="'centreCout-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
+                                                                            v-model="selected"
+                                                                            class="selectpicker"
+                                                                            data-live-search="true"
+                                                                            name="centreCout">
+                                                                        <optgroup
+                                                                            v-for="(group, groupName) in prepareCentresCouts(structure.centreCoutPaiement,value)"
+                                                                            :key="groupName"
+                                                                            :label="groupName">
+                                                                            <option v-for="item in group" :key="item.value" :value="item.centreCoutId">
+                                                                                {{ item.centreCoutLibelle + ' - ' + item.centreCoutCode }}
+                                                                            </option>
 
+                                                                        </optgroup>
                                                                     </select>
+                                                                    <!--                                                                    <select
+                                                                                                                                            id="teste"
+                                                                                                                                            class="selectpicker"
+                                                                                                                                            data-live-search="true"
+                                                                                                                                            name="centreCout">
+                                                                                                                                            <option value="2907">PAYE M1 MAE EVREUX</option>
+                                                                                                                                            <option value="2907">PAYE M1 MAE qsxsq</option>
+                                                                                                                                            <option value="2907">PAYE M1 MAE ecezec</option>
+
+                                                                                                                                        </select>-->
                                                                 </td>
                                                                 <td v-if="value.heuresDemandees != 0 ">
                                                                     <select :id="'centreCout-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
@@ -216,9 +230,35 @@ export default {
         },
         centreCoutSelect(datas)
         {
-            console.log(datas);
-            let centresCouts = [];
-            
+            let selectElement = document.createElement('select');
+            let container = document.getElementById('test');
+            for (var eotp in datas) {
+                let optgroup = document.createElement('optgroup');
+                optgroup.label = eotp;
+
+
+                
+                selectElement.appendChild(optgroup);
+
+            }
+            return eval(selectElement);
+        },
+        prepareCentresCouts(centresCouts, typeHeures)
+        {
+
+            let centresCoutesFiltered = [];
+            for (var eotp in centresCouts) {
+                let group = eotp;
+                let child = [];
+                centresCouts[eotp].forEach(function (centreCout, index) {
+                    child.push(centreCout);
+                })
+                centresCoutesFiltered.push({[group]: child});
+            }
+
+            console.log(centresCoutesFiltered);
+
+            return centresCoutesFiltered;
         }
 
 

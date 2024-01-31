@@ -124,4 +124,13 @@ return [
         'VH_PARAM_1_LIBELLE' => 'LIC PRO',
         'VH_PARAM_2_LIBELLE' => 'S1 ou S2',
     ],
+    29 => [
+        'LIBELLE'            => 'Université Paris Panthéon-Assas',
+        'PACKAGE_NAME'       => 'FORMULE_ASSAS',
+        'VH_PARAM_1_LIBELLE' => 'Diplomes nationaux',
+        'VH_PARAM_2_LIBELLE' => '0',
+        'VH_PARAM_3_LIBELLE' => '0',
+        'VH_PARAM_4_LIBELLE' => '0',
+        'VH_PARAM_5_LIBELLE' => '0',
+    ],
 ];

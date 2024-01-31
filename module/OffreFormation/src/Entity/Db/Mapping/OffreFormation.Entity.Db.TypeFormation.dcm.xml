@@ -22,6 +22,11 @@
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
     <field name="serviceStatutaire" type="boolean" column="SERVICE_STATUTAIRE" nullable="false"/>
     <field name="diplomeNational" type="boolean" column="DIPLOME_NATIONAL" nullable="false"/>
+    <field name="autre1" type="string" column="AUTRE_1" length="1000" nullable="true"/>
+    <field name="autre2" type="string" column="AUTRE_2" length="1000" nullable="true"/>
+    <field name="autre3" type="string" column="AUTRE_3" length="1000" nullable="true"/>
+    <field name="autre4" type="string" column="AUTRE_4" length="1000" nullable="true"/>
+    <field name="autre5" type="string" column="AUTRE_5" length="1000" nullable="true"/>
     <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
       <join-columns>
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>

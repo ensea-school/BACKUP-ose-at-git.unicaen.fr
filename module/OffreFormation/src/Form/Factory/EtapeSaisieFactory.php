@@ -4,6 +4,7 @@ namespace OffreFormation\Form\Factory;
 
 use Psr\Container\ContainerInterface;
 use OffreFormation\Form\EtapeSaisie;
+use UnicaenImport\Service\SchemaService;
 
 
 /**
@@ -25,7 +26,7 @@ class EtapeSaisieFactory
     {
         $form = new EtapeSaisie;
 
-        /* Injectez vos dépendances ICI */
+        $form->setServiceSchema($container->get(SchemaService::class));
 
         return $form;
     }

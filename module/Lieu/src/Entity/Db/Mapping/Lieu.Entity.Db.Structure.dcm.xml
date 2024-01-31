@@ -26,6 +26,11 @@
         <field name="adresseLieuDit" type="string" column="ADRESSE_LIEU_DIT" length="60" nullable="true"/>
         <field name="adresseCodePostal" type="string" column="ADRESSE_CODE_POSTAL" length="15" nullable="true"/>
         <field name="adresseCommune" type="string" column="ADRESSE_COMMUNE" length="50" nullable="true"/>
+        <field name="autre1" type="string" column="AUTRE_1" length="1000" nullable="true"/>
+        <field name="autre2" type="string" column="AUTRE_2" length="1000" nullable="true"/>
+        <field name="autre3" type="string" column="AUTRE_3" length="1000" nullable="true"/>
+        <field name="autre4" type="string" column="AUTRE_4" length="1000" nullable="true"/>
+        <field name="autre5" type="string" column="AUTRE_5" length="1000" nullable="true"/>
         <many-to-one field="adressePays" target-entity="Lieu\Entity\Db\Pays">
             <join-column name="ADRESSE_PAYS_ID" referenced-column-name="ID"/>
         </many-to-one>

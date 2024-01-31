@@ -692,7 +692,7 @@ STRUCTURE et CENTRE_COUT_STRUCTURE.
 Le filtre suivant est donc à insérer en tant que post traitement pour ces deux tables :
 
 ```plsql
-OSE_DIVERS.UPDATE_STRUCTURE_IDS();
+OSE_DIVERS.UPDATE_STRUCTURES();
 ```
 
 

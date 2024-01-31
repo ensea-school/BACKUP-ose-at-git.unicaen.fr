@@ -16,7 +16,7 @@ if (!$c->hasOption('version')) {
     $c->println("Voici la liste des versions de OSE disponibles:");
     $tags = $oa->repo()->getTags();
     foreach ($tags as $tag) {
-        $c->println($tag);
+        $c->println($tag['tag']);
     }
 
     // Choix de la version

@@ -61,7 +61,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 Veillez bien à retester tous vos états de sortie si vous les avez personnalisés au niveau des requêtes SQL.
 Ceux qui sont filtrables par structure, comme les états de paiements, nécessitent une nouvelle colonne STRUCTURE_IDS qui remonte l'information présente dans la colonne `STRUCTURE.IDS`.
 
-Attention : la version 23.0 ontroduit deux régrsssions corrigées en 23.1. Il est donc déconseillé d'installer cette version et de privilégier la 23.1 (ou ultérieure) pour votre montée en version.
+Attention : la version 23.0 ontroduit deux régressions corrigées en 23.1. Il est donc déconseillé d'installer cette version et de privilégier la 23.1 (ou ultérieure) pour votre montée en version.
 
 
 

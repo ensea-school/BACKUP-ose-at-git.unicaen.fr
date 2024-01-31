@@ -4,6 +4,8 @@ namespace OffreFormation\Entity\Db;
 
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
+use Parametre\Interface\ChampsAutresInterface;
+use Parametre\Trait\ChampsAutresTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -12,11 +14,12 @@ use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 /**
  * Etape
  */
-class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
+class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, ChampsAutresInterface
 {
     use HistoriqueAwareTrait;
     use AnneeAwareTrait;
     use ImportAwareTrait;
+    use ChampsAutresTrait;
 
 
     /**

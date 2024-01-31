@@ -11,18 +11,21 @@ use Lieu\Entity\AdresseInterface;
 use Lieu\Entity\AdresseTrait;
 use Lieu\Entity\Db\Departement;
 use Lieu\Entity\Db\Pays;
+use Parametre\Interface\ChampsAutresInterface;
+use Parametre\Trait\ChampsAutresTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
-class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface, EntityManagerAwareInterface, AdresseInterface
+class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface, EntityManagerAwareInterface, AdresseInterface, ChampsAutresInterface
 {
     use CiviliteAwareTrait;
     use AdresseTrait;
     use EmployeurAwareTrait;
     use HistoriqueAwareTrait;
     use EntityManagerAwareTrait;
+    use ChampsAutresTrait;
 
     /**
      * @var int|null
@@ -118,31 +121,6 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
      * @var bool
      */
     protected $ribHorsSepa = false;
-
-    /**
-     * @var string|null
-     */
-    protected $autre1;
-
-    /**
-     * @var string|null
-     */
-    protected $autre2;
-
-    /**
-     * @var string|null
-     */
-    protected $autre3;
-
-    /**
-     * @var string|null
-     */
-    protected $autre4;
-
-    /**
-     * @var string|null
-     */
-    protected $autre5;
 
     /**
      * @var Intervenant|null
@@ -663,126 +641,6 @@ class IntervenantDossier implements HistoriqueAwareInterface, ResourceInterface,
     public function setRibHorsSepa(bool $ribHorsSepa): IntervenantDossier
     {
         $this->ribHorsSepa = $ribHorsSepa;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string|null
-     */
-    public function getAutre1(): ?string
-    {
-        return $this->autre1;
-    }
-
-
-
-    /**
-     * @param string|null $autre1
-     *
-     * @return IntervenantDossier
-     */
-    public function setAutre1(?string $autre1): IntervenantDossier
-    {
-        $this->autre1 = $autre1;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string|null
-     */
-    public function getAutre2(): ?string
-    {
-        return $this->autre2;
-    }
-
-
-
-    /**
-     * @param string|null $autre2
-     *
-     * @return IntervenantDossier
-     */
-    public function setAutre2(?string $autre2): IntervenantDossier
-    {
-        $this->autre2 = $autre2;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string|null
-     */
-    public function getAutre3(): ?string
-    {
-        return $this->autre3;
-    }
-
-
-
-    /**
-     * @param string|null $autre3
-     *
-     * @return IntervenantDossier
-     */
-    public function setAutre3(?string $autre3): IntervenantDossier
-    {
-        $this->autre3 = $autre3;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string|null
-     */
-    public function getAutre4(): ?string
-    {
-        return $this->autre4;
-    }
-
-
-
-    /**
-     * @param string|null $autre4
-     *
-     * @return IntervenantDossier
-     */
-    public function setAutre4(?string $autre4): IntervenantDossier
-    {
-        $this->autre4 = $autre4;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return string|null
-     */
-    public function getAutre5(): ?string
-    {
-        return $this->autre5;
-    }
-
-
-
-    /**
-     * @param string|null $autre5
-     *
-     * @return IntervenantDossier
-     */
-    public function setAutre5(?string $autre5): IntervenantDossier
-    {
-        $this->autre5 = $autre5;
 
         return $this;
     }

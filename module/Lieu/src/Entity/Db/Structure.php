@@ -9,6 +9,8 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\AdresseInterface;
 use Lieu\Entity\AdresseTrait;
 use Paiement\Entity\Db\CentreCout;
+use Parametre\Interface\ChampsAutresInterface;
+use Parametre\Trait\ChampsAutresTrait;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -19,11 +21,12 @@ use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 /**
  * Structure
  */
-class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, PlafondPerimetreInterface, PlafondDataInterface, AdresseInterface
+class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, PlafondPerimetreInterface, PlafondDataInterface, AdresseInterface, ChampsAutresInterface
 {
     use AdresseTrait;
     use ImportAwareTrait;
     use HistoriqueAwareTrait;
+    use ChampsAutresTrait;
 
     protected ?int        $id                = null;
 

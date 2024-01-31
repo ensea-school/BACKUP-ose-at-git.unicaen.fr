@@ -21,7 +21,7 @@ class v223UpdateStructuresCCS extends AbstractMigration
 
     public function after()
     {
-        $sql = "UPDATE IMPORT_TABLES SET SYNC_HOOK_AFTER = 'OSE_DIVERS.UPDATE_STRUCTURE_IDS();' WHERE TABLE_NAME = 'CENTRE_COUT_STRUCTURE'";
+        $sql = "UPDATE IMPORT_TABLES SET SYNC_HOOK_AFTER = 'OSE_DIVERS.UPDATE_STRUCTURES();' WHERE TABLE_NAME = 'CENTRE_COUT_STRUCTURE'";
         $this->manager->getBdd()->exec($sql);
     }
 }

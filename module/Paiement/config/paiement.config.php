@@ -89,23 +89,23 @@ return [
 
                 ],
                 'ajouter-demande-mise-en-paiement'     => [
-                    'type'    => 'Segment',
-                    'options' => [
-                        'route'    => '/:intervenant/ajouter-demande',
-                        'defaults' => [
-                            'action' => 'ajouterMiseEnPaiement',
-                        ],
-                    ],
+                    'route'      => '/:intervenant/ajouter-demande',
+                    'controller' => Controller\PaiementController::class,
+                    'action'     => 'ajouterMiseEnPaiement',
+                    'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
+
                 ],
                 'supprimer-demande-mise-en-paiement'   => [
-                    'type'    => 'Segment',
-                    'options' => [
-                        'route'    => '/:intervenant/supprimer-demande/:mise-en-paiement',
-                        'defaults' => [
-                            'action' => 'supprimerMiseEnPaiement',
-                        ],
-
-                    ],
+                    'route'      => '/:intervenant/supprimer-demande/:mise-en-paiement',
+                    'controller' => Controller\PaiementController::class,
+                    'action'     => 'supprimerMiseEnPaiement',
+                    'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
+                ],
+                'demande-mise-en-paiement-all'         => [
+                    'route'      => '/:intervenant/all-demande',
+                    'controller' => Controller\PaiementController::class,
+                    'action'     => 'demandeMiseEnPaiementAll',
+                    'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
                 ],
                 'process-demande-mise-en-paiement-lot' => [
                     'route'      => '/process-demande-mise-en-paiement-lot',

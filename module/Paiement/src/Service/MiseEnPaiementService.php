@@ -36,6 +36,7 @@ class MiseEnPaiementService extends AbstractEntityService
     use ServiceAPayerServiceAwareTrait;
     use TblPaiementServiceAwareTrait;
     use Traits\WorkflowServiceAwareTrait;
+    use Traits\ParametresServiceAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -571,7 +572,7 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function ajouterDemandeMiseEnPaiement (Intervenant $intervenant, array $datas): ?MiseEnPaiement
+    public function ajouterDemandeMiseEnPaiement (Intervenant $intervenant, array $datas): bool|MiseEnPaiement
     {
 
         $data['heures']                          = (array_key_exists('heures', $datas)) ? $datas['heures'] : '';
@@ -582,16 +583,17 @@ class MiseEnPaiementService extends AbstractEntityService
         $data['domaine-fonctionnel-id']          = (array_key_exists('domaineFonctionnelId', $datas)) ? $datas['domaineFonctionnelId'] : '';
         $data['mission-id']                      = (array_key_exists('missionId', $datas)) ? $datas['missionId'] : '';
 
+        if (empty($data['centre-cout-id'])) {
+            //on a pas de centre de cout de renseigné donc on ne faire rien
+            return false;
+        }
+
         /* @var $miseEnPaiement MiseEnPaiement */
         //On enregistre la demande de mise en paiement
         $miseEnPaiement = $this->newEntity();
         $this->hydrateFromChangements($miseEnPaiement, $data);
         $this->save($miseEnPaiement);
 
-        //On recalcule le tableau de bord paiement de l'intervenant conserné
-        $this->getServiceWorkflow()->calculerTableauxBord([
-            'paiement',
-        ], $intervenant);
 
         return $miseEnPaiement;
     }
@@ -614,6 +616,212 @@ class MiseEnPaiementService extends AbstractEntityService
         }
 
         return false;
+    }
+
+
+
+    /**
+     *
+     * @param Intervenant $intervenant
+     *
+     * @return ServiceAPayerInterface[]
+     */
+    public function getDemandeMiseEnPaiementResume (Intervenant $intervenant)
+    {
+        //Centres de cout de la composante d'affectation de l'intervenant
+        $centresCoutsPaiementAffectation = [];
+        //Récupération du paramétrage des centres de cout pour les paiement
+        $parametreCentreCout = $this->getServiceParametres()->get('centres_couts_paye');
+
+        $sql = "
+        
+        SELECT
+            tp.intervenant_id 				    intervenant_id,
+            tp.structure_id                     structure_id,
+            MAX(s.code)                         structure_code,
+            MAX(s.libelle_long)   			    structure_libelle,
+            CASE
+                WHEN MAX(tp.service_id) IS NOT NULL THEN 'enseignement'
+                WHEN MAX(tp.service_referentiel_id) IS NOT NULL THEN 'referentiel'
+                ELSE 'mission'
+            END 							    typage,
+            MAX(e.id)   					    etape_id,
+            e.code 							    etape_code,
+            MAX(e.libelle) 					    etape_libelle,
+            MAX(ep.id)   					    element_id,
+            ep.code 						    element_code,
+            MAX(ep.libelle) 				    element_libelle,
+            MAX(fr.id)      				    fonction_id,
+            fr.code    						    fonction_code,
+            MAX(fr.libelle_long)  			    fonction_libelle,
+            MAX(th.id) 				  		    type_heure_id,	 
+            th.code               			    type_heure_code,
+            MAX(th.libelle_long)  			    type_heure_libelle,
+            COALESCE(tp.mise_en_paiement_id,0)  mep_id,
+            MAX(cc.id)     					    centre_cout_id,
+            MAX(cc.code)   					    centre_cout_code,
+            MAX(cc.libelle)   				    centre_cout_libelle,
+            MAX(p.code)						    periode_code,
+            MAX(p.libelle_long)				    periode_libelle,
+            SUM(tp.heures_a_payer_aa + 
+            tp.heures_a_payer_ac)   		    heures_a_payer,
+            SUM(tp.heures_demandees_aa + 
+            tp.heures_demandees_ac) 		    heures_demandees,
+            SUM(tp.heures_payees_aa + 
+            tp.heures_payees_ac) 		        heures_payees,
+            MAX(tp.domaine_fonctionnel_id)      domaine_fonctionnel_id,
+            MAX(tp.formule_res_service_id)      formule_res_service_id,
+            MAX(tp.formule_res_service_ref_id)  formule_res_service_ref_id,
+            MAX(tp.mission_id)                  mission_id,
+            MAX(tp.type_heures_id )             type_heure_id,
+            MAX(th.code)                        type_heure_code
+        FROM
+            tbl_paiement tp
+        LEFT JOIN structure s ON s.id = tp.structure_id 
+        LEFT JOIN service s ON	s.id = tp.service_id
+        LEFT JOIN service_referentiel sr ON	sr.id = tp.service_referentiel_id
+        LEFT JOIN element_pedagogique ep ON	ep.id = s.element_pedagogique_id
+        LEFT JOIN etape e ON e.id = ep.etape_id
+        LEFT JOIN fonction_referentiel fr ON fr.id = sr.fonction_id 
+        LEFT JOIN type_heures th ON th.id = tp.type_heures_id 
+        LEFT JOIN mise_en_paiement mep ON mep.id = tp.mise_en_paiement_id AND mep.histo_destruction IS NULL
+        LEFT JOIN centre_cout cc ON cc.id = tp.centre_cout_id 
+        LEFT JOIN periode p ON p.id = tp.periode_paiement_id
+        WHERE
+            tp.intervenant_id = :intervenant
+        GROUP BY
+            tp.intervenant_id ,
+            tp.structure_id,
+            e.code,
+            ep.code,
+            fr.code,
+            th.code,
+            tp.mise_en_paiement_id 
+        ORDER BY 
+            tp.structure_id,
+            MAX(e.libelle) ASC,
+            MAX(ep.libelle) ASC,
+            MAX(th.code) ASC,
+            MAX(fr.libelle_long) ASC,
+            tp.mise_en_paiement_id ASC
+
+        ";
+
+        $dmeps = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, [
+            'intervenant' => $intervenant->getId(),
+        ]);
+
+
+        foreach ($dmeps as $value) {
+            //On va chercher les centre de cout nécessaire aux mises en paiement
+            //On traite ici les heures d'enseignement
+            if ($value['TYPAGE'] == "enseignement") {
+                $dmep[$value['STRUCTURE_CODE']]['code']                                                                                                                     = $value['STRUCTURE_CODE'];
+                $dmep[$value['STRUCTURE_CODE']]['libelle']                                                                                                                  = $value['STRUCTURE_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['libelle']                                                                                  = $value['ETAPE_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['libelle']                                         = $value['ELEMENT_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['libelle'] = $value['TYPE_HEURE_LIBELLE'];
+                if (!array_key_exists('heures', $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']])) {
+                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures'] = [];
+                }
+                //Heure déjà mise en paiement
+                if (!empty($value['MEP_ID'])) {
+                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['mep_id_' . $value['MEP_ID']] = [
+                        'mepId'                  => $value['MEP_ID'],
+                        'typeHeureId'            => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
+                        'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
+                        'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
+                        'domaineFonctionelId'    => $value['DOMAINE_FONCTIONNEL_ID'],
+                        'missionId'              => $value['MISSION_ID'],
+                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'        => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'           => $value['HEURES_PAYEES'],
+                        'centreCout'             => [
+                            'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
+                            'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
+                            'typeRessourceCode'    => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'typeRessourceLibelle' => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                        ],
+                    ];
+                } else {
+                    $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['a_demander'] = [
+                        'mepId'                  => '',
+                        'typeHeureId'            => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
+                        'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
+                        'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
+                        'domaineFonctionelId'    => $value['DOMAINE_FONCTIONNEL_ID'],
+                        'missionId'              => $value['MISSION_ID'],
+                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'        => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'           => $value['HEURES_PAYEES'],
+                        'centreCout'             => [
+                            'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
+                            'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
+                            'typeRessourceCode'    => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'typeRessourceLibelle' => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                        ],
+                    ];
+                }
+            } else {
+                //on fera le referentiel plus tard
+                continue;
+            }
+
+
+            //On alimente les centres couts disponibles pour ces demandes de mise en paiement
+            //Si le paramétrage est affectation, on va chercher une fois pour toutes les centres de couts de paiement de la structure d'affectation de l'intervenant
+            if ($parametreCentreCout == 'affectation' && empty($centresCoutsPaiementAffectation)) {
+                $structure                       = $this->getEntityManager()->getRepository(Structure::class)->find($intervenant->getStructure()->getId());
+                $centresCoutsPaiementAffectation = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
+            }
+
+            //Je n'ai pas encore fourni la liste des centres de couts utilisable pour les demandes de mise en paiement
+            if (!array_key_exists('centreCoutPaiement', $dmep[$value['STRUCTURE_CODE']])) {
+                $dmep[$value['STRUCTURE_CODE']]['centreCoutPaiement'] = [];
+                if ($parametreCentreCout == 'enseignement') {
+                    $structure    = $this->getEntityManager()->getRepository(Structure::class)->find($value['STRUCTURE_ID']);
+                    $centresCouts = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
+                } else {
+                    $centresCouts = $centresCoutsPaiementAffectation;
+                }
+                $listeCentresCouts = [];
+                foreach ($centresCouts as $centreCout) {
+                    if (!empty($centreCout['CODE_PARENT'])) {
+                        if (!array_key_exists($centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT'], $listeCentresCouts)) {
+                            $listeCentresCouts[$centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT']] = [];
+                        }
+                        $listeCentresCouts[$centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT']][] = [
+                            'centreCoutId'      => $centreCout['CENTRE_COUT_ID'],
+                            'centreCoutLibelle' => $centreCout['LIBELLE'],
+                            'centreCoutCode'    => $centreCout['CODE'],
+                            'fi'                => $centreCout['FI'],
+                            'fa'                => $centreCout['FA'],
+                            'fc'                => $centreCout['FC'],
+                            'referentiel'       => $centreCout['REFERENTIEL'],
+                            'fcMajorees'        => $centreCout['FC_MAJOREES'],
+                        ];
+                    } else {
+                        $listeCentresCouts['AUTRES'][] = [
+                            'centreCoutId'      => $centreCout['CENTRE_COUT_ID'],
+                            'centreCoutLibelle' => $centreCout['LIBELLE'],
+                            'centreCoutCode'    => $centreCout['CODE'],
+                            'fi'                => $centreCout['FI'],
+                            'fa'                => $centreCout['FA'],
+                            'fc'                => $centreCout['FC'],
+                        ];
+                    }
+
+                    $dmep[$value['STRUCTURE_CODE']]['centreCoutPaiement'] = $listeCentresCouts;
+                }
+            }
+        }
+
+
+        return $dmep;
     }
 
 

@@ -181,9 +181,38 @@ class PaiementController extends AbstractController
         if ($this->getRequest()->isPost()) {
 
             $datas = $this->getRequest()->getPost()->toArray();
+            $this->updateTableauxBord($intervenant);
+            $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $datas);
+
+            //On recalcule le tableau de bord paiement de l'intervenant conserné
+            return true;
+        }
+
+        return false;
+    }
 
 
-            return $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $datas);
+
+    public function demandeMiseEnPaiementAllAction ()
+    {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $this->initFilters();
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        //Un intervenant ne peut pas supprimer des demandes de mise en paiement
+        if ($role->getIntervenant()) {
+            //On redirige vers la visualisation des mises en paiement
+            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
+        }
+        if ($this->getRequest()->isPost()) {
+            $post = file_get_contents('php://input') ?? $_POST;
+
+            $demandes = json_decode($post, true);
+            foreach ($demandes as $demande) {
+                $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $demande);
+            }
+            $this->updateTableauxBord($intervenant);
+
+            return true;
         }
 
         return false;
@@ -203,7 +232,7 @@ class PaiementController extends AbstractController
             $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
         }
         $this->updateTableauxBord($intervenant);
-        $servicesAPayer = $this->getServiceServiceAPayer()->getDemandeMiseEnPaiementResume($intervenant);
+        $servicesAPayer = $this->getServiceMiseEnPaiement()->getDemandeMiseEnPaiementResume($intervenant);
 
 
         return new AxiosModel($servicesAPayer);

@@ -24,7 +24,7 @@ class Structure extends Select
         $this->setAttribute('class', 'selectpicker');
         $this->setAttribute('data-live-search', 'true');
         $this->setContextFilter(true);
-        $this->setEnseignement(true);
+        $this->setEnseignement(false);
         $this->setRoot(null);
         $this->setEmptyOption('- Aucune -');
     }

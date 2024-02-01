@@ -2,12 +2,15 @@
 
 namespace Service\Entity\Db;
 
+use Parametre\Interface\ChampsAutresInterface;
+use Parametre\Trait\ChampsAutresTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-class MotifModificationServiceDu implements HistoriqueAwareInterface
+class MotifModificationServiceDu implements HistoriqueAwareInterface, ChampsAutresInterface
 {
     use HistoriqueAwareTrait;
+    use ChampsAutresTrait;
 
     protected ?int $id = null;
 

@@ -48,6 +48,7 @@ $modules = [
     'Dossier',
     'Contrat',
     'Lieu',
+    'Parametre',
     'Formule',
 ];
 

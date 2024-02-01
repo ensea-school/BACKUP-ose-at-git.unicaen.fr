@@ -126,7 +126,13 @@ class OseRepo
      */
     public function tagIsValid(string $tag): bool
     {
-        return in_array($tag, $this->getTags());
+        $tags = $this->getTags();
+        foreach( $tags as $t ){
+            if ($t['tag'] == $tag){
+                return true;
+            }
+        }
+        return false;
     }
 
 

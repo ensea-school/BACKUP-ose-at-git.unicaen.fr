@@ -1,6 +1,30 @@
 # Version stable
 
-[OSE 22.4](#ose-224-01122023)
+[OSE 23.0](#ose-23-26012024)
+
+# OSE 23.1 (02/02/2024)
+
+## Nouveautés
+
+* Formule de calcul de Panthéon ASSAS (#51544)
+
+## Corrections de bugs
+
+* Correction sur la bonne prise en compte de la durée de validité d'un agrément par rapport à l'année d'obtention de l'agrément (#54499)
+* La version 23.0 introduisait un problème au niveau de la gestion des tags du dépôt GIT qui bloquait toute mise à jour
+* Correction d'un script de migration érroné introduit en version 23.0
+* Les heures mises en paiement puis dévalidées ou supprimées peuvent à nouveau être visualisées correctement (#54340)
+* Arrondi des calculs d'heures de modifications de service dû (#50570)
+* Formule de Rouen : résolution de problème de division par zéro (#53987)
+
+## Améliorations
+
+* Modification d'affichage de la date de fin de validité d'un agrément (#54400)
+* Ajout de la date d'expiration d'un agrément dans l'export CSV des agréments (#54400)
+
+
+
+
 
 # OSE 23 (26/01/2024)
 
@@ -40,6 +64,7 @@ Pour les établissements qui utilisent le module Export SIHAM : la configuration
 Veillez bien à retester tous vos états de sortie si vous les avez personnalisés au niveau des requêtes SQL.
 Ceux qui sont filtrables par structure, comme les états de paiements, nécessitent une nouvelle colonne STRUCTURE_IDS qui remonte l'information présente dans la colonne `STRUCTURE.IDS`.
 
+Attention : la version 23.0 ontroduit deux régressions corrigées en 23.1. Il est donc déconseillé d'installer cette version et de privilégier la 23.1 (ou ultérieure) pour votre montée en version.
 
 
 

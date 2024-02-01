@@ -121,6 +121,9 @@ return [
     "doc-intervenant-permanents"                 => [
         "DESCRIPTION" => "URL de la documentation OSE pour les permanents",
     ],
+    "doc-intervenant-etudiants"                 => [
+        "DESCRIPTION" => "URL de la documentation OSE pour les étudiants",
+    ],
 
 
     /* Disciplines */

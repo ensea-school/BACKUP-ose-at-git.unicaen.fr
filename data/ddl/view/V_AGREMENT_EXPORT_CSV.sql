@@ -60,6 +60,9 @@ SELECT a.libelle                                                 annee,
        CASE WHEN agr.id IS NULL THEN 0 ELSE 1 END                agree,
        CASE WHEN agr.id IS NULL THEN 'En attente' ELSE 'Oui' END agree_txt,
        agr.date_decision                                         date_decision,
+       CASE WHEN ta.annee_agrement IS NOT NULL
+       	    THEN '31/08/' || to_char(ta.annee_agrement+ta.duree_vie)
+       	    ELSE NULL END	 									 date_expiration,
        u.display_name                                            modificateur,
        agr.histo_modification                                    date_modification
 FROM tbl_agrement ta

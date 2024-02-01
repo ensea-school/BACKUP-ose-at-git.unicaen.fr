@@ -25,6 +25,11 @@
         <field name="niveau" type="integer" column="NIVEAU" nullable="true"/>
         <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
         <field name="specifiqueEchanges" type="boolean" column="SPECIFIQUE_ECHANGES" nullable="false"/>
+        <field name="autre1" type="string" column="AUTRE_1" length="1000" nullable="true"/>
+        <field name="autre2" type="string" column="AUTRE_2" length="1000" nullable="true"/>
+        <field name="autre3" type="string" column="AUTRE_3" length="1000" nullable="true"/>
+        <field name="autre4" type="string" column="AUTRE_4" length="1000" nullable="true"/>
+        <field name="autre5" type="string" column="AUTRE_5" length="1000" nullable="true"/>
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
             <join-columns>
                 <join-column name="ANNEE_ID" referenced-column-name="ID"/>

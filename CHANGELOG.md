@@ -15,6 +15,7 @@
 * Correction d'un script de migration érroné introduit en version 23.0
 * Les heures mises en paiement puis dévalidées ou supprimées peuvent à nouveau être visualisées correctement (#54340)
 * Arrondi des calculs d'heures de modifications de service dû (#50570)
+* Formule de Rouen : résolution de problème de division par zéro (#53987)
 
 ## Améliorations
 

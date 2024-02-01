@@ -14,6 +14,7 @@
 * La version 23.0 introduisait un problème au niveau de la gestion des tags du dépôt GIT qui bloquait toute mise à jour
 * Correction d'un script de migration érroné introduit en version 23.0
 * Les heures mises en paiement puis dévalidées ou supprimées peuvent à nouveau être visualisées correctement (#54340)
+* Arrondi des calculs d'heures de modifications de service dû (#50570)
 
 ## Améliorations
 

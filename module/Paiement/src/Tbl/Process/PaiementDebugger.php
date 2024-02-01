@@ -270,10 +270,11 @@ class PaiementDebugger
             $s['misesEnPaiement'] = [];
 
             foreach ($service->misesEnPaiement as $mep) {
+                $m = $mep->toArray();
+
                 /** @var CentreCout $centreCouts */
                 $centreCouts = $this->getEntity(CentreCout::class, $m['centreCout']);
                 $mepEntity = $this->getEntity(MiseEnPaiement::class,$m['id']);
-                $m = $mep->toArray();
                 $m['heures'] = $this->fts(($m['heuresAA']+$m['heuresAC']) / 100);
                 $m['date'] = $m['date'] ? \DateTime::createFromFormat('Y-m-d', $m['date'])->format('d/m/Y') : null;
                 $m['periodePaiement'] = (string)$this->getEntity(Periode::class, $m['periodePaiement']);

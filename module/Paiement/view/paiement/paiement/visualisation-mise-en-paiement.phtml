@@ -121,7 +121,7 @@ foreach ($periodes as $id => $periode) {
     </tr>
     <?php
     foreach ($data as $d) {
-        if ($d['heures-a-payer'] > 0) {
+        if ($d['heures-a-payer'] + $d['heures-demandees'] > 0) {
             $d['heures-restantes'] = $d['heures-a-payer'] - $d['heures-payees']['total'];
 
             echo '<tr>';

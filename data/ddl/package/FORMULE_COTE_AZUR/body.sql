@@ -126,202 +126,206 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_COTE_AZUR AS
 
 
 
-      -- T=IF([.$H20]="Référentiel";0;[.$AG20]*[.E20])
-      WHEN 'T' THEN
-        IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN 0;
-        ELSE
-          RETURN cell('AG',l) * vh.taux_fi;
-        END IF;
-
-
-
-      -- U=IF([.$H20]="Référentiel";0;[.$AG20]*[.F20])
+      -- U=IF([.$I20]="Référentiel";0;[.$AH20]*[.F20])
       WHEN 'U' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN cell('AG',l) * vh.taux_fa;
+          RETURN cell('AH',l) * vh.taux_fi;
         END IF;
 
 
 
-      -- V=IF([.$H20]="Référentiel";0;[.$AG20]*[.G20])
+      -- V=IF([.$I20]="Référentiel";0;[.$AH20]*[.G20])
       WHEN 'V' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN cell('AG',l) * vh.taux_fc;
+          RETURN cell('AH',l) * vh.taux_fa;
         END IF;
 
 
 
-      -- W=IF([.$H20]="Référentiel";[.$AG20];0)
+      -- W=IF([.$I20]="Référentiel";0;[.$AH20]*[.H20])
       WHEN 'W' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('AG',l);
-        ELSE
           RETURN 0;
+        ELSE
+          RETURN cell('AH',l) * vh.taux_fc;
         END IF;
 
 
 
-      -- X=IF([.$H20]="Référentiel";0;([.$AK20]+[.$AN20])*[.E20])
+      -- X=IF([.$I20]="Référentiel";[.$AH20];0)
       WHEN 'X' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN 0;
+          RETURN cell('AH',l);
         ELSE
-          RETURN (cell('AK',l) + cell('AN',l)) * vh.taux_fi;
+          RETURN 0;
         END IF;
 
 
 
-      -- Y=IF([.$H20]="Référentiel";0;([.$AK20]+[.$AN20])*[.F20])
+      -- Y=IF([.$I20]="Référentiel";0;([.$AL20]+[.$AO20])*[.F20])
       WHEN 'Y' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AK',l) + cell('AN',l)) * vh.taux_fa;
+          RETURN (cell('AL',l) + cell('AO',l)) * vh.taux_fi;
         END IF;
 
 
 
-      -- Z=IF([.$H20]="Référentiel";0;([.$AK20]+[.$AN20])*[.G20])
+      -- Z=IF([.$I20]="Référentiel";0;([.$AL20]+[.$AO20])*[.G20])
       WHEN 'Z' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN (cell('AK',l) + cell('AN',l)) * vh.taux_fc;
+          RETURN (cell('AL',l) + cell('AO',l)) * vh.taux_fa;
         END IF;
 
 
 
-      -- AA=0
+      -- AA=IF([.$I20]="Référentiel";0;([.$AL20]+[.$AO20])*[.H20])
       WHEN 'AA' THEN
+        IF vh.volume_horaire_ref_id IS NOT NULL THEN
+          RETURN 0;
+        ELSE
+          RETURN (cell('AL',l) + cell('AO',l)) * vh.taux_fc;
+        END IF;
+
+
+
+      -- AB=0
+      WHEN 'AB' THEN
         RETURN 0;
 
 
 
-      -- AB=IF([.$H20]="Référentiel";[.$AK20]+[.$AN20];0)
-      WHEN 'AB' THEN
+      -- AC=IF([.$I20]="Référentiel";[.$AL20]+[.$AO20];0)
+      WHEN 'AC' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('AK',l) + cell('AN',l);
+          RETURN cell('AL',l) + cell('AO',l);
         ELSE
           RETURN 0;
         END IF;
 
 
 
-      -- AD=IF(ISERROR([.I20]);1;[.I20])
-      WHEN 'AD' THEN
+      -- AE=IF(ISERROR([.J20]);1;[.J20])
+      WHEN 'AE' THEN
         RETURN vh.taux_service_du;
 
 
 
-      -- AE=IF([.$D20]="Oui";[.$M20]*[.$AD20];0)
-      WHEN 'AE' THEN
+      -- AF=IF([.$E20]="Oui";[.$N20]*[.$AE20];0)
+      WHEN 'AF' THEN
         IF vh.service_statutaire THEN
-          RETURN vh.heures * cell('AD',l);
+          RETURN vh.heures * cell('AE',l);
         ELSE
           RETURN 0;
         END IF;
 
 
 
-      -- AF=IF([.AF19]+[.AE20]>i_service_du;i_service_du;[.AF19]+[.AE20])
-      WHEN 'AF' THEN
-        IF cell('AF',l-1) + cell('AE',l) > i.service_du THEN
+      -- AG=IF([.AG19]+[.AF20]>i_service_du;i_service_du;[.AG19]+[.AF20])
+      WHEN 'AG' THEN
+        IF cell('AG',l-1) + cell('AF',l) > i.service_du THEN
           RETURN i.service_du;
         ELSE
-          RETURN cell('AF',l-1) + cell('AE',l);
+          RETURN cell('AG',l-1) + cell('AF',l);
         END IF;
 
 
 
-      -- AG=[.AF20]-[.AF19]
-      WHEN 'AG' THEN
-        RETURN cell('AF',l) - cell('AF',l-1);
+      -- AH=[.AG20]-[.AG19]
+      WHEN 'AH' THEN
+        RETURN cell('AG',l) - cell('AG',l-1);
 
 
 
-      -- AH19=SUM([.AG$1:.AG$1048576])
-      WHEN 'AH19' THEN
-        RETURN calcFnc('somme','AG');
+      -- AI19=SUM([.AH$1:.AH$1048576])
+      WHEN 'AI19' THEN
+        RETURN calcFnc('somme','AH');
 
 
 
-      -- AI=IF([.AF19]+[.AE20]<i_service_du;0;(([.AF19]+[.AE20])-i_service_du)/[.AD20])
-      WHEN 'AI' THEN
-        IF cell('AF',l-1) + cell('AE',l) < i.service_du THEN
+      -- AJ=IF([.AG19]+[.AF20]<i_service_du;0;IF([.$AE20]=0;0;(([.AG19]+[.AF20])-i_service_du)/[.AE20]))
+      WHEN 'AJ' THEN
+        IF cell('AG',l-1) + cell('AF',l) < i.service_du THEN
           RETURN 0;
         ELSE
-          RETURN ((cell('AF',l-1) + cell('AE',l)) - i.service_du) / cell('AD',l);
+          IF cell('AE',l) = 0 THEN
+            RETURN 0;
+          ELSE
+            RETURN ((cell('AG',l-1) + cell('AF',l)) - i.service_du) / cell('AE',l);
+          END IF;
         END IF;
 
 
 
-      -- AJ=IF(ISERROR([.J20]);1;[.J20])
-      WHEN 'AJ' THEN
+      -- AK=IF(ISERROR([.K20]);1;[.K20])
+      WHEN 'AK' THEN
         RETURN vh.taux_service_compl;
 
 
 
-      -- AK=IF(OR([.$AH$19]<i_service_du;i_depassement_service_du_sans_hc="Oui");0;[.AI20]*[.AJ20])
-      WHEN 'AK' THEN
-        IF cell('AH19') < i.service_du OR i.depassement_service_du_sans_hc THEN
-          RETURN 0;
-        ELSE
-          RETURN cell('AI',l) * cell('AJ',l);
-        END IF;
-
-
-
-      -- AL17=[.AH19]/5
+      -- AL17=[.AI19]/5
       WHEN 'AL17' THEN
-        RETURN cell('AH19') / 5;
+        RETURN cell('AI19') / 5;
 
 
 
-      -- AL=IF(OR([.$AH$19]<i_service_du;i_depassement_service_du_sans_hc="Oui";[.$D20]="Oui");0;[.M20]*[.AJ20])
+      -- AL=IF(OR([.$AI$19]<i_service_du;i_depassement_service_du_sans_hc="Oui");0;[.AJ20]*[.AK20])
       WHEN 'AL' THEN
-        IF cell('AH19') < i.service_du OR i.depassement_service_du_sans_hc OR vh.service_statutaire THEN
+        IF cell('AI19') < i.service_du OR i.depassement_service_du_sans_hc THEN
           RETURN 0;
         ELSE
-          RETURN vh.heures * cell('AJ',l);
+          RETURN cell('AJ',l) * cell('AK',l);
         END IF;
 
 
 
-      -- AM17=[.AH19]/5
+      -- AM17=[.AI19]/5
       WHEN 'AM17' THEN
-        RETURN cell('AH19') / 5;
+        RETURN cell('AI19') / 5;
 
 
 
-      -- AM=IF(AND([.AM19]+[.AL20]>[.$AL$17];i_type_intervenant_code="P");[.$AL$17];[.AM19]+[.AL20])
+      -- AM=IF(OR([.$AI$19]<i_service_du;i_depassement_service_du_sans_hc="Oui";[.$E20]="Oui");0;[.N20]*[.AK20])
       WHEN 'AM' THEN
-        IF cell('AM',l-1) + cell('AL',l) > cell('AL17') AND i.type_intervenant_code = 'P' THEN
+        IF cell('AI19') < i.service_du OR i.depassement_service_du_sans_hc OR vh.service_statutaire THEN
+          RETURN 0;
+        ELSE
+          RETURN vh.heures * cell('AK',l);
+        END IF;
+
+
+
+      -- AN=IF(AND([.AN19]+[.AM20]>[.$AL$17];i_type_intervenant_code="P");[.$AL$17];[.AN19]+[.AM20])
+      WHEN 'AN' THEN
+        IF cell('AN',l-1) + cell('AM',l) > cell('AL17') AND i.type_intervenant_code = 'P' THEN
           RETURN cell('AL17');
         ELSE
-          RETURN cell('AM',l-1) + cell('AL',l);
+          RETURN cell('AN',l-1) + cell('AM',l);
         END IF;
 
 
 
-      -- AN=[.AM20]-[.AM19]
-      WHEN 'AN' THEN
-        RETURN cell('AM',l) - cell('AM',l-1);
+      -- AO=[.AN20]-[.AN19]
+      WHEN 'AO' THEN
+        RETURN cell('AN',l) - cell('AN',l-1);
 
 
 
-      -- AF19
-      WHEN 'AF19' THEN
+      -- AG19
+      WHEN 'AG19' THEN
         RETURN 0;
 
 
 
-      -- AM19
-      WHEN 'AM19' THEN
+      -- AN19
+      WHEN 'AN19' THEN
         RETURN 0;
 
 
@@ -347,15 +351,15 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_COTE_AZUR AS
 
     -- transmission des résultats aux volumes horaires et volumes horaires référentiel
     FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
-      ose_formule.volumes_horaires.items(l).service_fi               := mainCell('Service FI', 'T',l);
-      ose_formule.volumes_horaires.items(l).service_fa               := mainCell('Service FA', 'U',l);
-      ose_formule.volumes_horaires.items(l).service_fc               := mainCell('Service FC', 'V',l);
-      ose_formule.volumes_horaires.items(l).service_referentiel      := mainCell('Service référentiel', 'W',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'X',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'Y',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'Z',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'AA',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'AB',l);
+      ose_formule.volumes_horaires.items(l).service_fi               := mainCell('Service FI', 'U',l);
+      ose_formule.volumes_horaires.items(l).service_fa               := mainCell('Service FA', 'V',l);
+      ose_formule.volumes_horaires.items(l).service_fc               := mainCell('Service FC', 'W',l);
+      ose_formule.volumes_horaires.items(l).service_referentiel      := mainCell('Service référentiel', 'X',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'Y',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'Z',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'AA',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'AB',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'AC',l);
     END LOOP;
   END;
 

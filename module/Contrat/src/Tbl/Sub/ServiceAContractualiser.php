@@ -43,29 +43,29 @@ class ServiceAContractualiser
     public ?float  $tauxCongesPayes  = null;
 
 
+
     public function fromBdd(array $data)
     {
-        $this->key             = $data['KEY'];
+        $this->key = $data['KEY'];
 
-        $this->heures          = (int)round((float)$data['HEURES'] * 100) ?: null;
+        $this->heures = (int)round((float)$data['HEURES'] * 100) ?: null;
 
-        $this->contrat          = (int)round((float)$data['CONTRAT_ID']) ?: null;
+        $this->contrat = (int)round((float)$data['CONTRAT_ID']) ?: null;
 
-        $this->annee           = (int)$data['ANNEE_ID'] ?: null;
+        $this->annee = (int)$data['ANNEE_ID'] ?: null;
 
-        $this->intervenant     = (int)@$data['INTERVENANT_ID'] ?: null;
+        $this->intervenant = (int)@$data['INTERVENANT_ID'] ?: null;
 
-        $this->structure       = (int)@$data['STRUCTURE_ID'] ?: null;
+        $this->structure = (int)@$data['STRUCTURE_ID'] ?: null;
 
         $this->service         = (int)@$data['SERVICE_ID'] ?: null;
         $this->referentiel     = (int)@$data['SERVICE_REFERENTIEL_ID'] ?: null;
         $this->mission         = (int)@$data['MISSION_ID'] ?: null;
-        $this->cm         = (int)@$data['CM'] ?: null;
-        $this->td         = (int)@$data['TD'] ?: null;
-        $this->tp         = (int)@$data['TP'] ?: null;
-        $this->autre         = (int)@$data['AUTRE'] ?: null;
+        $this->cm              = (int)@$data['CM'] ?: null;
+        $this->td              = (int)@$data['TD'] ?: null;
+        $this->tp              = (int)@$data['TP'] ?: null;
+        $this->autre           = (int)@$data['AUTRE'] ?: null;
         $this->tauxCongesPayes = (float)$data['TAUX_CONGES_PAYES'] ?: null;
-
     }
 
 
@@ -81,4 +81,4 @@ class ServiceAContractualiser
     {
         return [];
     }
-    }
+}

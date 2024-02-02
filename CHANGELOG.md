@@ -1,6 +1,6 @@
 # Version stable
 
-[OSE 23.0](#ose-23-26012024)
+[OSE 23.1](#ose-231-02022024)
 
 # OSE 23.1 (02/02/2024)
 
@@ -21,7 +21,7 @@
 
 * Modification d'affichage de la date de fin de validité d'un agrément (#54400)
 * Ajout de la date d'expiration d'un agrément dans l'export CSV des agréments (#54400)
-
+* La formule de Côte d'Azur gère le service dû avec un taux à 0 pour les types d'intervention (#54508)
 
 
 

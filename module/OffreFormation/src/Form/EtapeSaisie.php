@@ -5,11 +5,14 @@ namespace OffreFormation\Form;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
+use Laminas\Form\FormInterface;
 use Laminas\Hydrator\HydratorInterface;
 use Lieu\Form\Element\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeFormationServiceAwareTrait;
 use Paiement\Service\DomaineFonctionnelServiceAwareTrait;
+use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 /**
  * Description of EtapeSaisie
@@ -23,6 +26,8 @@ class EtapeSaisie extends AbstractForm
     use StructureServiceAwareTrait;
     use DomaineFonctionnelServiceAwareTrait;
     use TypeFormationServiceAwareTrait;
+    use ParametresServiceAwareTrait;
+    use SchemaServiceAwareTrait;
 
     private $typesFormation;
 
@@ -61,7 +66,7 @@ class EtapeSaisie extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'type-formation',
+            'name'       => 'typeFormation',
             'options'    => [
                 'label' => 'Type de formation',
             ],
@@ -81,9 +86,12 @@ class EtapeSaisie extends AbstractForm
         ]);
 
         $this->add([
-            'name'    => 'specifique-echanges',
+            'name'    => 'specifiqueEchanges',
             'options' => [
                 'label' => 'Spécifique aux échanges',
+                'use_hidden_element' => true,
+                'checked_value'      => '1',
+                'unchecked_value'    => '0',
             ],
             'type'    => 'Checkbox',
         ]);
@@ -97,7 +105,7 @@ class EtapeSaisie extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'domaine-fonctionnel',
+            'name'       => 'domaineFonctionnel',
             'options'    => [
                 'label' => 'Domaine fonctionnel',
             ],
@@ -107,6 +115,27 @@ class EtapeSaisie extends AbstractForm
             ],
             'type'       => 'Select',
         ]);
+
+        /** Hack pour formule ASSAS : @todo à remplacer par une vraie gestion des champs autres */
+        $formuleId = (int)$this->getServiceParametres()->get('formule');
+        if (29 == $formuleId){ // formule d'ASSAS
+            $this->add([
+                'type'       => 'Select',
+                'name'       => 'autre1',
+                'options'    => [
+                    'label' => 'Diplôme national',
+                    'value_options' => ['Oui' => 'Oui', 'Non' => 'Non'],
+                    'empty_option'  => 'Veuillez préciser...',
+                ],
+
+            ]);
+        }else{
+            $this->add([
+                'name' => 'autre1',
+                'type' => 'Hidden',
+            ]);
+        }
+
 
         $this->add([
             'name' => 'id',
@@ -126,12 +155,12 @@ class EtapeSaisie extends AbstractForm
 
         // peuplement liste des types de formation
         $valueOptions = \UnicaenApp\Util::collectionAsOptions($this->getTypesFormation());
-        $this->get('type-formation')
+        $this->get('typeFormation')
             ->setEmptyOption(count($valueOptions) > 1 ? "(Sélectionnez un type...)" : null)
             ->setValueOptions($valueOptions);
 
         // peuplement liste des domaines fonctionnels
-        $this->get('domaine-fonctionnel')
+        $this->get('domaineFonctionnel')
             ->setEmptyOption("(Aucun)")
             ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceDomaineFonctionnel()->getList()));
 
@@ -148,6 +177,27 @@ class EtapeSaisie extends AbstractForm
             $this->get('niveau')->setValue($localContext->getNiveau()->getNiv());
         }
     }
+
+
+
+
+    public function bind ($object, $flags = FormInterface::VALUES_NORMALIZED)
+    {
+        /* @var $object \Lieu\Entity\Db\Structure */
+        parent::bind($object, $flags);
+
+        if ($object->getSource() && $object->getSource()->getImportable()) {
+            foreach ($this->getElements() as $element) {
+                if ($this->getServiceSchema()->isImportedProperty($object, $element->getName())) {
+                    $element->setAttribute('readonly', true);
+                    $element->setAttribute('disabled', true);
+                }
+            }
+        }
+
+        return $this;
+    }
+
 
 
 
@@ -193,7 +243,7 @@ class EtapeSaisie extends AbstractForm
      */
     private function getRequiredNiveau()
     {
-        $typeFormation = $this->get('type-formation')->getValue();
+        $typeFormation = $this->get('typeFormation')->getValue();
         $pertinencesNiveau = $this->getPertinencesNiveau();
         $pertinent = isset($pertinencesNiveau[$typeFormation]) && (bool)$pertinencesNiveau[$typeFormation];
 
@@ -217,7 +267,7 @@ class EtapeSaisie extends AbstractForm
             'libelle'             => [
                 'required' => true,
             ],
-            'type-formation'      => [
+            'typeFormation'      => [
                 'required' => true,
             ],
             'niveau'              => [
@@ -229,7 +279,10 @@ class EtapeSaisie extends AbstractForm
             'structure'           => [
                 'required' => false,
             ],
-            'domaine-fonctionnel' => [
+            'domaineFonctionnel' => [
+                'required' => false,
+            ],
+            'specifiqueEchanges' => [
                 'required' => false,
             ],
         ];
@@ -262,17 +315,18 @@ class EtapeSaisieHydrator implements HydratorInterface
         $object->setCode($data['code']);
         $object->setSourceCode($data['code']);
         $object->setLibelle($data['libelle']);
-        $object->setTypeFormation($this->getServiceTypeFormation()->get($data['type-formation']));
+        $object->setTypeFormation($this->getServiceTypeFormation()->get($data['typeFormation']));
         if (array_key_exists('niveau', $data)) {
             $object->setNiveau($data['niveau']);
         }
-        $object->setSpecifiqueEchanges($data['specifique-echanges']);
+        $object->setSpecifiqueEchanges($data['specifiqueEchanges'] ?? false);
         if (array_key_exists('structure', $data)) {
             $object->setStructure($this->getServiceStructure()->get($data['structure']));
         }
-        if (array_key_exists('domaine-fonctionnel', $data)) {
-            $object->setDomaineFonctionnel($this->getServiceDomaineFonctionnel()->get($data['domaine-fonctionnel']));
+        if (array_key_exists('domaineFonctionnel', $data)) {
+            $object->setDomaineFonctionnel($this->getServiceDomaineFonctionnel()->get($data['domaineFonctionnel']));
         }
+        $object->setAutre1($data['autre1']);
 
         return $object;
     }
@@ -292,11 +346,12 @@ class EtapeSaisieHydrator implements HydratorInterface
             'code'                => $object->getCode(),
             'libelle'             => $object->getLibelle(),
             'id'                  => $object->getId(),
-            'type-formation'      => ($tf = $object->getTypeFormation()) ? $tf->getId() : null,
+            'typeFormation'      => ($tf = $object->getTypeFormation()) ? $tf->getId() : null,
             'niveau'              => $object->getNiveau(),
-            'specifique-echanges' => $object->getSpecifiqueEchanges(),
+            'specifiqueEchanges' => $object->getSpecifiqueEchanges() ? '1' : '0',
             'structure'           => ($s = $object->getStructure()) ? $s->getId() : null,
-            'domaine-fonctionnel' => ($s = $object->getDomaineFonctionnel()) ? $s->getId() : null,
+            'domaineFonctionnel' => ($s = $object->getDomaineFonctionnel()) ? $s->getId() : null,
+            'autre1' => $object->getAutre1(),
         ];
 
         return $data;

@@ -134,8 +134,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
     protected function assertEtapeSaisie(Role $role, Etape $etape)
     {
-        return $this->assertStructureSaisie($role, $etape->getStructure())
-            && $this->assertSourceSaisie($etape->getSource(), $etape->getAnnee());
+        return $this->assertStructureSaisie($role, $etape->getStructure());
     }
 
 

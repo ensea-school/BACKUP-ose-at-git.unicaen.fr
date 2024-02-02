@@ -32,7 +32,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 <div class="row">
     <div class="col-sm-5">
         <?php
-        echo $this->formControlGroup($form->get('type-formation'));
+        echo $this->formControlGroup($form->get('typeFormation'));
         ?>
     </div>
     <div class="col-sm-3">
@@ -42,15 +42,16 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     </div>
     <div class="col-sm-4">
         <?php
-        echo $this->formControlGroup($form->get('specifique-echanges'));
+        echo $this->formControlGroup($form->get('specifiqueEchanges'));
         ?>
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-7">
-        <?php
-        echo $this->formControlGroup($form->get('domaine-fonctionnel'));
-        ?>
+    <div class="col-sm-6">
+        <?= $this->formControlGroup($form->get('domaineFonctionnel')) ?>
+    </div>
+    <div class="col-sm-6">
+        <?= $this->formControlGroup($form->get('autre1')) ?>
     </div>
 </div>
 

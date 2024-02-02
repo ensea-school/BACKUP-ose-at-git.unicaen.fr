@@ -254,13 +254,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ROUEN AS
 
 
 
-      -- AH=IF(ISERROR([.J20]);1;IF([.I20]="TP";IF(AND([.$AG$15]<i_heures_decharge;[.$AG16]<>0);[.J20];([.$AG$16]-(([.$AG$15]-i_heures_decharge)*[.$AG$17])+(([.$AG$15]-i_heures_decharge)*[.$AG$17]*[.K20]))/[.$AG$16]);[.J20]))
+      -- AH=IF(ISERROR([.J20]);1;IF([.I20]="TP";IF(AND([.$AG$15]<i_heures_decharge;[.$AG16]<>0);([.$AG$16]-(([.$AG$15]-i_heures_decharge)*[.$AG$17])+(([.$AG$15]-i_heures_decharge)*[.$AG$17]*[.K20]))/[.$AG$16];[.$J20]);[.$J20]))
       WHEN 'AH' THEN
         IF vh.type_intervention_code = 'TP' THEN
           IF cell('AG15') < i.heures_service_statutaire AND cell('AG16') <> 0 THEN
-            RETURN vh.taux_service_du;
-          ELSE
             RETURN (cell('AG16') - ((cell('AG15') - i.heures_service_statutaire) * cell('AG17')) + ((cell('AG15') - i.heures_service_statutaire) * cell('AG17') * vh.taux_service_compl)) / cell('AG16');
+          ELSE
+            RETURN vh.taux_service_du;
           END IF;
         ELSE
           RETURN vh.taux_service_du;
@@ -268,13 +268,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ROUEN AS
 
 
 
-      -- AI=IF(ISERROR([.K20]);1;IF([.I20]="TP";IF(AND([.$AG$15]<i_heures_decharge;[.$AG16]<>0);[.J20];([.$AG$16]-(([.$AG$15]-i_heures_decharge)*[.$AG$17])+(([.$AG$15]-i_heures_decharge)*[.$AG$17]*[.K20]))/[.$AG$16]);[.K20]))
+      -- AI=IF(ISERROR([.$K20]);1;IF([.$I20]="TP";IF(AND([.$AG$15]<i_heures_decharge;[.$AG16]<>0);([.$AG$16]-(([.$AG$15]-i_heures_decharge)*[.$AG$17])+(([.$AG$15]-i_heures_decharge)*[.$AG$17]*[.$K20]))/[.$AG$16];[.$K20]);[.$K20]))
       WHEN 'AI' THEN
         IF vh.type_intervention_code = 'TP' THEN
           IF cell('AG15') < i.heures_service_statutaire AND cell('AG16') <> 0 THEN
-            RETURN vh.taux_service_du;
-          ELSE
             RETURN (cell('AG16') - ((cell('AG15') - i.heures_service_statutaire) * cell('AG17')) + ((cell('AG15') - i.heures_service_statutaire) * cell('AG17') * vh.taux_service_compl)) / cell('AG16');
+          ELSE
+            RETURN vh.taux_service_compl;
           END IF;
         ELSE
           RETURN vh.taux_service_compl;

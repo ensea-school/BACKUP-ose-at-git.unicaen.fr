@@ -10,17 +10,20 @@ use Doctrine\ORM\EntityNotFoundException;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\StructureAwareTrait;
 use Paiement\Entity\Db\DomaineFonctionnelAwareTrait;
+use Parametre\Interface\ChampsAutresInterface;
+use Parametre\Trait\ChampsAutresTrait;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-class FonctionReferentiel implements HistoriqueAwareInterface, ParametreEntityInterface, PlafondPerimetreInterface, PlafondDataInterface, ResourceInterface
+class FonctionReferentiel implements HistoriqueAwareInterface, ParametreEntityInterface, PlafondPerimetreInterface, PlafondDataInterface, ResourceInterface, ChampsAutresInterface
 {
     use ParametreEntityTrait;
     use HistoriqueAwareTrait;
     use StructureAwareTrait;
     use DomaineFonctionnelAwareTrait;
+    use ChampsAutresTrait;
 
     protected ?FonctionReferentiel $parent            = null;
 

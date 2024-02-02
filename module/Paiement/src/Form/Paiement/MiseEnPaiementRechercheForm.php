@@ -274,7 +274,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
 
     public function hasStructures(): bool
     {
-        return count($this->get('structure')->getValueOptions()) > 0;
+        return $this->get('typeIntervenant')->getValue() && count($this->get('structure')->getValueOptions()) > 0;
     }
 
 

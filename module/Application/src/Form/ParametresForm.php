@@ -280,6 +280,14 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'    => 'doc-intervenant-etudiants',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Étudiants',
+            ],
+        ]);
+
+        $this->add([
             'type'       => 'Select',
             'name'       => 'oseuser',
             'options'    => [

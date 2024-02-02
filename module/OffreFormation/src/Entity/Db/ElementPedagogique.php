@@ -9,6 +9,8 @@ use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use OffreFormation\Entity\Db\Traits\DisciplineAwareTrait;
 use OffreFormation\Entity\Db\Traits\EtapeAwareTrait;
 use Paiement\Entity\Db\TauxRemu;
+use Parametre\Interface\ChampsAutresInterface;
+use Parametre\Trait\ChampsAutresTrait;
 use Plafond\Interfaces\PlafondDataInterface;
 use Plafond\Interfaces\PlafondPerimetreInterface;
 use Lieu\Entity\Db\StructureAwareTrait;
@@ -24,7 +26,7 @@ use function count;
 /**
  * ElementPedagogique
  */
-class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, EntityManagerAwareInterface, PlafondPerimetreInterface, PlafondDataInterface
+class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, EntityManagerAwareInterface, PlafondPerimetreInterface, PlafondDataInterface, ChampsAutresInterface
 {
     use HistoriqueAwareTrait;
     use DisciplineAwareTrait;
@@ -34,6 +36,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ResourceInterface,
     use EtapeAwareTrait;
     use ImportAwareTrait;
     use EntityManagerAwareTrait;
+    use ChampsAutresTrait;
 
     /**
      * @var string

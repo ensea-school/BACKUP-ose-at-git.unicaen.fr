@@ -39,6 +39,7 @@ class StringFromFloat extends AbstractFilter
 
     public function filter($value, $show0Digits = true)
     {
+        if ($value === null) return '';
         $valfrac = round($value, 6);
         foreach ($this->fractions as $fs) {
             if ($fs['f'] === $valfrac) {

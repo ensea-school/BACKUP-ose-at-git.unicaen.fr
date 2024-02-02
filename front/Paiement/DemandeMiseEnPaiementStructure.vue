@@ -31,28 +31,25 @@
                                                 <td colspan="2">
                                                     <table class="table table-sm ">
                                                         <thead>
-                                                        <th scope="col" style="font-size:12px;">Heures</th>
-                                                        <th scope="col" style="font-size:12px;">Centre cout</th>
-                                                        <th scope="col" style="font-size:12px;">Statut</th>
-                                                        <th>Action</th>
+                                                        <th scope="col" style="width:20%;font-size:12px;">Heures</th>
+                                                        <th scope="col" style="width:40%;font-size:12px;">Centre cout</th>
+                                                        <th scope="col" style="width:25%;font-size:12px;">Statut</th>
+                                                        <th style="width:15%;font-size:12px;">Action</th>
                                                         </thead>
                                                         <tbody>
                                                         <tr v-for="(value,id) in typeHeure.heures" class="detailHeure">
-                                                            <td v-if="value.heuresDemandees != 0 ">{{ value.heuresAPayer }} hetd</td>
-                                                            <td v-if="value.heuresDemandees == 0 ">
+                                                            <td v-if="value.heuresDemandees != 0 " style="width:20%;">{{ value.heuresAPayer }} hetd</td>
+                                                            <td v-if="value.heuresDemandees == 0 " style="width:20%;">
                                                                 <div class="input-group col-1">
                                                                     <input
                                                                         :id="'heures-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
                                                                         :data-domaine-fonctionnel-id="value.domaineFonctionnelId"
                                                                         :data-formule-res-service-id="value.formuleResServiceId"
-                                                                        :data-formule-res-service-ref-id="value.formuleResServiceRefId"
-                                                                        :data-mission-id="value.missionId"
                                                                         :data-type-heures-id="value.typeHeureId"
                                                                         :max="value.heuresAPayer"
                                                                         :value="value.heuresAPayer"
                                                                         class="form-control form-control-sm"
                                                                         min="0"
-                                                                        style="width: 40px;"
                                                                         type="number"
                                                                     />
                                                                     <span class="input-group-text" style="font-size:12px;">hetd(s)</span>
@@ -79,8 +76,8 @@
                                                             <td v-if="value.heuresDemandees != 0 ">
                                                                 {{ value.centreCout.code + ' - ' + value.centreCout.libelle }}
                                                             </td>
-                                                            <td>
-                                                                {{ heuresStatutToString(value) }}
+                                                            <td v-html="heuresStatutToString(value)">
+
                                                             </td>
                                                             <td style="font-size:12px;">
                                                                 <span
@@ -122,6 +119,116 @@
                         </div>
                     </div>
                 </div>
+                <!--FONCTION REFERENTIEL-->
+                <div class="cartridge gray bordered" style="padding-bottom: 5px">
+                    <span>Référentiel</span>
+                    <!--                        <span>{{ fonction.libelle }}</span>-->
+                </div>
+                <div v-for="(fonction, codeFonction) in datas.fonctionsReferentiels">
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table mt-3 table-bordered">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th colspan="2">{{ fonction.libelle }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td colspan="2">
+                                            <table class="table table-sm ">
+                                                <thead>
+                                                <th scope="col" style="width:20%;font-size:12px;">Heures</th>
+                                                <th scope="col" style="width:40%;font-size:12px;">Centre cout</th>
+                                                <th scope="col" style="width:25%;font-size:12px;">Statut</th>
+                                                <th style="width:15%;font-size:12px;">Action</th>
+                                                </thead>
+                                                <tbody>
+                                                <tr v-for="(value,id) in fonction.heures" class="detailHeure">
+                                                    <td v-if="value.heuresDemandees != 0 " style="width:20%;">{{ value.heuresAPayer }} hetd</td>
+                                                    <td v-if="value.heuresDemandees == 0 " style="width:20%;">
+                                                        <div class="input-group col-1">
+                                                            <input
+                                                                :id="'heures-' + codeFonction"
+                                                                :data-domaine-fonctionnel-id="value.domaineFonctionnelId"
+                                                                :data-formule-res-service-ref-id="value.formuleResServiceRefId"
+                                                                :data-type-heures-id="value.typeHeureId"
+                                                                :max="value.heuresAPayer"
+                                                                :value="value.heuresAPayer"
+                                                                class="form-control form-control-sm"
+                                                                min="0"
+                                                                style="width: 40px;"
+                                                                type="number"
+                                                            />
+                                                            <span class="input-group-text" style="font-size:12px;">hetd(s)</span>
+                                                        </div>
+                                                    </td>
+                                                    <!--<td>{{ value.centreCout.libelle }}</td>-->
+                                                    <td v-if="value.heuresDemandees == 0 ">
+                                                        <select :id="'centreCout-' + codeFonction"
+                                                                class="selectpicker"
+                                                                data-live-search="true"
+                                                                name="centreCout">
+                                                            <option value="">Aucun centre de cout</option>
+                                                            <optgroup
+                                                                v-for="group in filtrerCentresCouts(datas.centreCoutPaiement,'referentiel')"
+                                                                :key="group.group"
+                                                                :label="group.group">
+                                                                <option v-for="item in group.child" :key="item.value" :value="item.centreCoutId">
+                                                                    {{ item.centreCoutCode + ' - ' + item.centreCoutLibelle }}
+                                                                </option>
+
+                                                            </optgroup>
+                                                        </select>
+                                                    </td>
+                                                    <td v-if="value.heuresDemandees != 0 ">
+                                                        {{ value.centreCout.code + ' - ' + value.centreCout.libelle }}
+                                                    </td>
+                                                    <td v-html="heuresStatutToString(value)">
+
+                                                    </td>
+                                                    <td style="font-size:12px;">
+                                                                <span
+                                                                    v-if="value.heuresAPayer != value.heuresPayees &&  value.heuresAPayer == value.heuresDemandees">
+                                                                    <button :id="'remove-' + value.mepId"
+                                                                            class="btn btn-danger"
+                                                                            type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
+                                                                        <i class="fa-solid fa-trash" style="color:white;"></i>
+                                                                    </button>
+                                                                </span>
+                                                        <span
+                                                            v-if="value.heuresDemandees == 0">
+                                                                    <button :id="'add-' + codeFonction"
+                                                                            class="btn btn-primary"
+                                                                            type="button"
+                                                                            @click="this.ajouterDemandeMiseEnPaiement(codeFonction)">
+                                                                            <u-icon name="plus"/>
+                                                                    </button>
+                                                                </span>
+
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+
+
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr class="table-light">
+                                        <th scope="row">Total</th>
+                                        <td>{{ totalHeure(fonction.heures) }} hetd</td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
             <div style="text-align:center;margin-bottom:20px;">
                 <button :id="'add-all-' + datas.code"
@@ -157,13 +264,13 @@ export default {
         heuresStatutToString(value)
         {
             if (value.heuresAPayer == value.heuresPayees) {
-                return 'Heures payées';
+                return '<span style="font-size:12px;line-height:20px;" class="badge bg-success">Paiement effectué</span>';
             }
             if (value.heuresAPayer == value.heuresDemandees) {
-                return 'Paiement demandé';
+                return '<span style="font-size:12px;line-height:20px;" class="badge bg-secondary text-dark">Paiement en cours</span>';
             }
             if (value.heuresDemandees == 0) {
-                return 'Paiement à demander';
+                return '<span style="font-size:12px;line-height:20px;" class="badge bg-light text-dark">A payer</span>';
             }
             return 'indetermine';
         },
@@ -279,6 +386,8 @@ export default {
             * Méthode permettant de filtrer les centres coûts disponibles par rapport
             * aux types d'heures à payer (fi, fa, fc etc...)
             * */
+            console.log(typeHeures);
+
 
             let centresCoutesFiltered = [];
             for (var eotp in centresCouts) {
@@ -286,6 +395,7 @@ export default {
                 let child = [];
                 centresCouts[eotp].forEach(function (centreCout, index) {
                     if (centreCout[typeHeures] == 1) {
+                        console.log(centreCout);
                         child.push(centreCout);
                     }
                 })

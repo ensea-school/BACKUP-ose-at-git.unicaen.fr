@@ -575,13 +575,13 @@ class MiseEnPaiementService extends AbstractEntityService
     public function ajouterDemandeMiseEnPaiement (Intervenant $intervenant, array $datas): bool|MiseEnPaiement
     {
 
-        $data['heures']                          = (array_key_exists('heures', $datas)) ? $datas['heures'] : '';
-        $data['type-heures-id']                  = (array_key_exists('typeHeuresId', $datas)) ? $datas['typeHeuresId'] : '';
-        $data['centre-cout-id']                  = (array_key_exists('centreCoutId', $datas)) ? $datas['centreCoutId'] : '';
-        $data['formule-resultat-service-id']     = (array_key_exists('formuleResServiceId', $datas)) ? $datas['formuleResServiceId'] : '';
-        $data['formule-resultat-service-ref-id'] = (array_key_exists('formuleResServiceId', $datas)) ? $datas['formuleResServiceRefId'] : '';
-        $data['domaine-fonctionnel-id']          = (array_key_exists('domaineFonctionnelId', $datas)) ? $datas['domaineFonctionnelId'] : '';
-        $data['mission-id']                      = (array_key_exists('missionId', $datas)) ? $datas['missionId'] : '';
+        $data['heures']                                  = (array_key_exists('heures', $datas)) ? $datas['heures'] : '';
+        $data['type-heures-id']                          = (array_key_exists('typeHeuresId', $datas)) ? $datas['typeHeuresId'] : '';
+        $data['centre-cout-id']                          = (array_key_exists('centreCoutId', $datas)) ? $datas['centreCoutId'] : '';
+        $data['formule-resultat-service-id']             = (array_key_exists('formuleResServiceId', $datas)) ? $datas['formuleResServiceId'] : '';
+        $data['formule-resultat-service-referentiel-id'] = (array_key_exists('formuleResServiceId', $datas)) ? $datas['formuleResServiceRefId'] : '';
+        $data['domaine-fonctionnel-id']                  = (array_key_exists('domaineFonctionnelId', $datas)) ? $datas['domaineFonctionnelId'] : '';
+        $data['mission-id']                              = (array_key_exists('missionId', $datas)) ? $datas['missionId'] : '';
 
         if (empty($data['centre-cout-id'])) {
             //on a pas de centre de cout de renseigné donc on ne faire rien
@@ -655,7 +655,9 @@ class MiseEnPaiementService extends AbstractEntityService
             fr.code    						    fonction_code,
             MAX(fr.libelle_long)  			    fonction_libelle,
             MAX(th.id) 				  		    type_heure_id,	 
-            th.code               			    type_heure_code,
+            CASE WHEN th.code = 'fc_majorees' 
+                THEN 'fcMajorees' 
+                ELSE th.code END   			    type_heure_code,
             MAX(th.libelle_long)  			    type_heure_libelle,
             COALESCE(tp.mise_en_paiement_id,0)  mep_id,
             MAX(cc.id)     					    centre_cout_id,
@@ -672,9 +674,8 @@ class MiseEnPaiementService extends AbstractEntityService
             MAX(tp.domaine_fonctionnel_id)      domaine_fonctionnel_id,
             MAX(tp.formule_res_service_id)      formule_res_service_id,
             MAX(tp.formule_res_service_ref_id)  formule_res_service_ref_id,
-            MAX(tp.mission_id)                  mission_id,
-            MAX(tp.type_heures_id )             type_heure_id,
-            MAX(th.code)                        type_heure_code
+            MAX(tp.mission_id)                  mission_id
+            
         FROM
             tbl_paiement tp
         LEFT JOIN structure s ON s.id = tp.structure_id 
@@ -696,7 +697,7 @@ class MiseEnPaiementService extends AbstractEntityService
             ep.code,
             fr.code,
             th.code,
-            tp.mise_en_paiement_id 
+            tp.mise_en_paiement_id  
         ORDER BY 
             tp.structure_id,
             MAX(e.libelle) ASC,
@@ -727,17 +728,15 @@ class MiseEnPaiementService extends AbstractEntityService
                 //Heure déjà mise en paiement
                 if (!empty($value['MEP_ID'])) {
                     $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['heures']['mep_id_' . $value['MEP_ID']] = [
-                        'mepId'                  => $value['MEP_ID'],
-                        'typeHeureId'            => $value['TYPE_HEURE_ID'],
-                        'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
-                        'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
-                        'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
-                        'domaineFonctionelId'    => $value['DOMAINE_FONCTIONNEL_ID'],
-                        'missionId'              => $value['MISSION_ID'],
-                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
-                        'heuresDemandees'        => $value['HEURES_DEMANDEES'],
-                        'heuresPayees'           => $value['HEURES_PAYEES'],
-                        'centreCout'             => [
+                        'mepId'               => $value['MEP_ID'],
+                        'typeHeureId'         => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'       => $value['TYPE_HEURE_CODE'],
+                        'formuleResServiceId' => $value['FORMULE_RES_SERVICE_ID'],
+                        'domaineFonctionelId' => $value['DOMAINE_FONCTIONNEL_ID'],
+                        'heuresAPayer'        => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'     => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'        => $value['HEURES_PAYEES'],
+                        'centreCout'          => [
                             'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
                             'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
@@ -766,9 +765,50 @@ class MiseEnPaiementService extends AbstractEntityService
                         ],
                     ];
                 }
-            } else {
-                //on fera le referentiel plus tard
-                continue;
+            } elseif ($value['TYPAGE'] == "referentiel") {
+                $dmep[$value['STRUCTURE_CODE']]['code']                                                      = $value['STRUCTURE_CODE'];
+                $dmep[$value['STRUCTURE_CODE']]['libelle']                                                   = $value['STRUCTURE_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['fonctionsReferentiels'][$value['FONCTION_CODE']]['libelle'] = $value['FONCTION_LIBELLE'];
+                if (!array_key_exists('heures', $dmep[$value['STRUCTURE_CODE']]['fonctionsReferentiels'][$value['FONCTION_CODE']])) {
+                    $dmep[$value['STRUCTURE_CODE']]['fonctionsReferentiels'][$value['FONCTION_CODE']]['heures'] = [];
+                }
+                if (!empty($value['MEP_ID'])) {
+                    $dmep[$value['STRUCTURE_CODE']]['fonctionsReferentiels'][$value['FONCTION_CODE']]['heures']['mep_id_' . $value['MEP_ID']] = [
+                        'mepId'                  => $value['MEP_ID'],
+                        'typeHeureId'            => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
+                        'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
+                        'domaineFonctionelId'    => $value['DOMAINE_FONCTIONNEL_ID'],
+                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'        => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'           => $value['HEURES_PAYEES'],
+                        'centreCout'             => [
+                            'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
+                            'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
+                            'typeRessourceCode'    => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'typeRessourceLibelle' => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                        ],
+                    ];
+                } else {
+                    $dmep[$value['STRUCTURE_CODE']]['fonctionsReferentiels'][$value['FONCTION_CODE']]['heures']['a_demander'] = [
+                        'mepId'                  => '',
+                        'typeHeureId'            => $value['TYPE_HEURE_ID'],
+                        'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
+                        'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
+                        'domaineFonctionelId'    => $value['DOMAINE_FONCTIONNEL_ID'],
+                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
+                        'heuresDemandees'        => $value['HEURES_DEMANDEES'],
+                        'heuresPayees'           => $value['HEURES_PAYEES'],
+                        'centreCout'             => [
+                            'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
+                            'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'code'                 => $value['CENTRE_COUT_CODE'] ?: '',
+                            'typeRessourceCode'    => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                            'typeRessourceLibelle' => $value['CENTRE_COUT_LIBELLE'] ?: '',
+                        ],
+                    ];
+                }
             }
 
 
@@ -803,6 +843,7 @@ class MiseEnPaiementService extends AbstractEntityService
                             'fc'                => $centreCout['FC'],
                             'referentiel'       => $centreCout['REFERENTIEL'],
                             'fcMajorees'        => $centreCout['FC_MAJOREES'],
+                            'mission'           => $centreCout['MISSION'],
                         ];
                     } else {
                         $listeCentresCouts['AUTRES'][] = [
@@ -812,6 +853,9 @@ class MiseEnPaiementService extends AbstractEntityService
                             'fi'                => $centreCout['FI'],
                             'fa'                => $centreCout['FA'],
                             'fc'                => $centreCout['FC'],
+                            'referentiel'       => $centreCout['REFERENTIEL'],
+                            'fcMajorees'        => $centreCout['FC_MAJOREES'],
+                            'mission'           => $centreCout['MISSION'],
                         ];
                     }
 

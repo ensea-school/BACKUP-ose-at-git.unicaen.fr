@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 22,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'DEPASSEMENT_SERVICE_DU_SANS_HC' => [
@@ -30,7 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 27,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'ETAT_VOLUME_HORAIRE_ID'         => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 4,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_FA'                => [
@@ -54,7 +54,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 7,
+            'position'    => 26,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_FC'                => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 8,
+            'position'    => 27,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_FC_MAJOREES'       => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 10,
+            'position'    => 28,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_FI'                => [
@@ -90,7 +90,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 6,
+            'position'    => 25,
             'commentaire' => NULL,
         ],
         'HEURES_COMPL_REFERENTIEL'       => [
@@ -102,7 +102,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 9,
+            'position'    => 29,
             'commentaire' => NULL,
         ],
         'HEURES_NON_PAYABLE_FA'          => [
@@ -114,7 +114,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 18,
+            'position'    => 22,
             'commentaire' => NULL,
         ],
         'HEURES_NON_PAYABLE_FC'          => [
@@ -126,7 +126,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 19,
+            'position'    => 23,
             'commentaire' => NULL,
         ],
         'HEURES_NON_PAYABLE_FI'          => [
@@ -138,7 +138,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 17,
+            'position'    => 21,
             'commentaire' => NULL,
         ],
         'HEURES_NON_PAYABLE_REFERENTIEL' => [
@@ -150,7 +150,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 20,
+            'position'    => 24,
             'commentaire' => NULL,
         ],
         'HEURES_SERVICE_FA'              => [
@@ -162,7 +162,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 13,
+            'position'    => 18,
             'commentaire' => NULL,
         ],
         'HEURES_SERVICE_FC'              => [
@@ -174,7 +174,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 14,
+            'position'    => 19,
             'commentaire' => NULL,
         ],
         'HEURES_SERVICE_FI'              => [
@@ -186,7 +186,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 15,
+            'position'    => 17,
             'commentaire' => NULL,
         ],
         'HEURES_SERVICE_MODIFIE'         => [
@@ -198,7 +198,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 26,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'HEURES_SERVICE_REFERENTIEL'     => [
@@ -210,7 +210,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 16,
+            'position'    => 20,
             'commentaire' => NULL,
         ],
         'HEURES_SERVICE_STATUTAIRE'      => [
@@ -222,7 +222,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 25,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'ID'                             => [
@@ -258,7 +258,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 28,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'PARAM_2'                        => [
@@ -270,7 +270,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 29,
+            'position'    => 12,
             'commentaire' => NULL,
         ],
         'PARAM_3'                        => [
@@ -282,7 +282,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 30,
+            'position'    => 13,
             'commentaire' => NULL,
         ],
         'PARAM_4'                        => [
@@ -294,7 +294,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 31,
+            'position'    => 14,
             'commentaire' => NULL,
         ],
         'PARAM_5'                        => [
@@ -306,7 +306,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 32,
+            'position'    => 15,
             'commentaire' => NULL,
         ],
         'SERVICE_DU'                     => [
@@ -318,7 +318,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 5,
+            'position'    => 16,
             'commentaire' => NULL,
         ],
         'SOLDE'                          => [
@@ -330,7 +330,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 11,
+            'position'    => 30,
             'commentaire' => NULL,
         ],
         'SOUS_SERVICE'                   => [
@@ -342,7 +342,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 21,
+            'position'    => 31,
             'commentaire' => NULL,
         ],
         'STRUCTURE_CODE'                 => [
@@ -354,19 +354,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 24,
-            'commentaire' => NULL,
-        ],
-        'TYPE_INTERVENANT_CODE'          => [
-            'name'        => 'TYPE_INTERVENANT_CODE',
-            'type'        => 'string',
-            'bdd-type'    => 'VARCHAR2',
-            'length'      => 5,
-            'scale'       => NULL,
-            'precision'   => NULL,
-            'nullable'    => FALSE,
-            'default'     => NULL,
-            'position'    => 12,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_ID'            => [
@@ -378,7 +366,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 23,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'TYPE_VOLUME_HORAIRE_ID'         => [
@@ -390,7 +378,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 3,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
     ],

@@ -18,7 +18,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 2,
+            'position'    => 4,
             'commentaire' => NULL,
         ],
         'DEPASSEMENT_SERVICE_DU_SANS_HC' => [
@@ -30,7 +30,7 @@ return [
             'precision'   => 1,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 9,
+            'position'    => 11,
             'commentaire' => NULL,
         ],
         'ETAT_VOLUME_HORAIRE_ID'         => [
@@ -42,7 +42,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 4,
+            'position'    => 6,
             'commentaire' => NULL,
         ],
         'FORMULE_ID'                     => [
@@ -54,7 +54,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 6,
+            'position'    => 3,
             'commentaire' => NULL,
         ],
         'HEURES_SERVICE_MODIFIE'         => [
@@ -66,7 +66,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 8,
+            'position'    => 10,
             'commentaire' => NULL,
         ],
         'HEURES_SERVICE_STATUTAIRE'      => [
@@ -78,7 +78,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 7,
+            'position'    => 9,
             'commentaire' => NULL,
         ],
         'ID'                             => [
@@ -102,7 +102,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => NULL,
-            'position'    => 5,
+            'position'    => 2,
             'commentaire' => NULL,
         ],
         'PARAM_1'                        => [
@@ -186,7 +186,7 @@ return [
             'precision'   => NULL,
             'nullable'    => TRUE,
             'default'     => NULL,
-            'position'    => 10,
+            'position'    => 8,
             'commentaire' => NULL,
         ],
         'TAUX_AUTRE_1_CODE'              => [
@@ -426,7 +426,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 11,
+            'position'    => 7,
             'commentaire' => NULL,
         ],
         'TYPE_VOLUME_HORAIRE_ID'         => [
@@ -438,7 +438,7 @@ return [
             'precision'   => NULL,
             'nullable'    => FALSE,
             'default'     => '1',
-            'position'    => 3,
+            'position'    => 5,
             'commentaire' => NULL,
         ],
     ],

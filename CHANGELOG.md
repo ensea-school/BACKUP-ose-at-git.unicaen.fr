@@ -2,6 +2,21 @@
 
 [OSE 23.1](#ose-231-02022024)
 
+
+
+# OSE 24 (à venir)
+
+
+# OSE 23.2 (à venir)
+
+## Nouveautés
+
+* Formule de calcul de Paris Deauphine (#50652)
+
+
+
+
+
 # OSE 23.1 (02/02/2024)
 
 ## Nouveautés

@@ -20,21 +20,21 @@ class FormuleTestIntervenant extends FormuleIntervenant
     protected float $tauxCmServiceCompl = 1.5;
     protected float $tauxTpServiceDu = 1.0;
     protected float $tauxTpServiceCompl = 2 / 3;
+    protected ?string $tauxAutre1Code = null;
     protected float $tauxAutre1ServiceDu = 1.0;
     protected float $tauxAutre1ServiceCompl = 1.0;
-    protected ?string $tauxAutre1Code = null;
+    protected ?string $tauxAutre2Code = null;
     protected float $tauxAutre2ServiceDu = 1.0;
     protected float $tauxAutre2ServiceCompl = 1.0;
-    protected ?string $tauxAutre2Code = null;
+    protected ?string $tauxAutre3Code = null;
     protected float $tauxAutre3ServiceDu = 1.0;
     protected float $tauxAutre3ServiceCompl = 1.0;
-    protected ?string $tauxAutre3Code = null;
+    protected ?string $tauxAutre4Code = null;
     protected float $tauxAutre4ServiceDu = 1.0;
     protected float $tauxAutre4ServiceCompl = 1.0;
-    protected ?string $tauxAutre4Code = null;
+    protected ?string $tauxAutre5Code = null;
     protected float $tauxAutre5ServiceDu = 1.0;
     protected float $tauxAutre5ServiceCompl = 1.0;
-    protected ?string $tauxAutre5Code = null;
 
 
 
@@ -288,6 +288,21 @@ class FormuleTestIntervenant extends FormuleIntervenant
 
 
 
+    public function getTauxAutre1Code(): ?string
+    {
+        return $this->tauxAutre1Code;
+    }
+
+
+
+    public function setTauxAutre1Code(?string $tauxAutre1Code): FormuleTestIntervenant
+    {
+        $this->tauxAutre1Code = $tauxAutre1Code;
+        return $this;
+    }
+
+
+
     public function getTauxAutre1ServiceDu(): float
     {
         return $this->tauxAutre1ServiceDu;
@@ -318,16 +333,16 @@ class FormuleTestIntervenant extends FormuleIntervenant
 
 
 
-    public function getTauxAutre1Code(): ?string
+    public function getTauxAutre2Code(): ?string
     {
-        return $this->tauxAutre1Code;
+        return $this->tauxAutre2Code;
     }
 
 
 
-    public function setTauxAutre1Code(?string $tauxAutre1Code): FormuleTestIntervenant
+    public function setTauxAutre2Code(?string $tauxAutre2Code): FormuleTestIntervenant
     {
-        $this->tauxAutre1Code = $tauxAutre1Code;
+        $this->tauxAutre2Code = $tauxAutre2Code;
         return $this;
     }
 
@@ -363,16 +378,16 @@ class FormuleTestIntervenant extends FormuleIntervenant
 
 
 
-    public function getTauxAutre2Code(): ?string
+    public function getTauxAutre3Code(): ?string
     {
-        return $this->tauxAutre2Code;
+        return $this->tauxAutre3Code;
     }
 
 
 
-    public function setTauxAutre2Code(?string $tauxAutre2Code): FormuleTestIntervenant
+    public function setTauxAutre3Code(?string $tauxAutre3Code): FormuleTestIntervenant
     {
-        $this->tauxAutre2Code = $tauxAutre2Code;
+        $this->tauxAutre3Code = $tauxAutre3Code;
         return $this;
     }
 
@@ -408,16 +423,16 @@ class FormuleTestIntervenant extends FormuleIntervenant
 
 
 
-    public function getTauxAutre3Code(): ?string
+    public function getTauxAutre4Code(): ?string
     {
-        return $this->tauxAutre3Code;
+        return $this->tauxAutre4Code;
     }
 
 
 
-    public function setTauxAutre3Code(?string $tauxAutre3Code): FormuleTestIntervenant
+    public function setTauxAutre4Code(?string $tauxAutre4Code): FormuleTestIntervenant
     {
-        $this->tauxAutre3Code = $tauxAutre3Code;
+        $this->tauxAutre4Code = $tauxAutre4Code;
         return $this;
     }
 
@@ -453,16 +468,16 @@ class FormuleTestIntervenant extends FormuleIntervenant
 
 
 
-    public function getTauxAutre4Code(): ?string
+    public function getTauxAutre5Code(): ?string
     {
-        return $this->tauxAutre4Code;
+        return $this->tauxAutre5Code;
     }
 
 
 
-    public function setTauxAutre4Code(?string $tauxAutre4Code): FormuleTestIntervenant
+    public function setTauxAutre5Code(?string $tauxAutre5Code): FormuleTestIntervenant
     {
-        $this->tauxAutre4Code = $tauxAutre4Code;
+        $this->tauxAutre5Code = $tauxAutre5Code;
         return $this;
     }
 
@@ -495,21 +510,4 @@ class FormuleTestIntervenant extends FormuleIntervenant
         $this->tauxAutre5ServiceCompl = $tauxAutre5ServiceCompl;
         return $this;
     }
-
-
-
-    public function getTauxAutre5Code(): ?string
-    {
-        return $this->tauxAutre5Code;
-    }
-
-
-
-    public function setTauxAutre5Code(?string $tauxAutre5Code): FormuleTestIntervenant
-    {
-        $this->tauxAutre5Code = $tauxAutre5Code;
-        return $this;
-    }
-
-
 }

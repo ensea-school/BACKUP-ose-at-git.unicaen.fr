@@ -9,7 +9,7 @@ return [
     'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [
-        'INTERVENANT_TEST_ID' => 'ID',
+        'FORMULE_INTERVENANT_TEST_ID' => 'ID',
     ],
 ];
 

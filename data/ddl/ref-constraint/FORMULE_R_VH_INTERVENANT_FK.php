@@ -3,13 +3,13 @@
 //@formatter:off
 
 return [
-    'name'        => 'FRR_FORMULE_RESULTAT_FK',
-    'table'       => 'FORMULE_RESULTAT_SERVICE_REF',
+    'name'        => 'FORMULE_R_VH_INTERVENANT_FK',
+    'table'       => 'FORMULE_RESULTAT_VOLUME_HORAIRE',
     'rtable'      => 'FORMULE_RESULTAT_INTERVENANT',
     'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [
-        'FORMULE_RESULTAT_ID' => 'ID',
+        'FORMULE_RESULTAT_INTERVENANT_ID' => 'ID',
     ],
 ];
 

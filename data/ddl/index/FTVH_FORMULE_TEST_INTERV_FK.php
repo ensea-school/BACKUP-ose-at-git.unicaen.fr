@@ -7,7 +7,7 @@ return [
     'unique'  => FALSE,
     'table'   => 'FORMULE_TEST_VOLUME_HORAIRE',
     'columns' => [
-        'INTERVENANT_TEST_ID',
+        'FORMULE_INTERVENANT_TEST_ID',
     ],
 ];
 

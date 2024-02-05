@@ -19,16 +19,16 @@ class FormuleVolumeHoraire implements FormuleHeuresInterface
 
     // Paramètres globaux
     protected ?string $structureCode = null;
+    protected ?string $typeInterventionCode = null;
     protected bool $structureUniv = false;
     protected bool $structureExterieur = false;
     protected bool $serviceStatutaire = true;
     protected bool $nonPayable = false;
+
+    // Pondérations et heures
     protected float $tauxFi = 1.0;
     protected float $tauxFa = 0.0;
     protected float $tauxFc = 0.0;
-
-    // Pondérations et heures
-    protected ?string $typeInterventionCode = null;
     protected float $tauxServiceDu = 1.0; // en fonction des types d'intervention
     protected float $tauxServiceCompl = 1.0; // en fonction des types d'intervention
     protected float $ponderationServiceDu = 1.0;// relatif aux modulateurs
@@ -65,6 +65,8 @@ class FormuleVolumeHoraire implements FormuleHeuresInterface
     {
         return $this->formuleIntervenant->getStructureCode() === $this->getStructureCode();
     }
+
+
 
     /***********************************/
     /* Accésseurs générés par PhpStorm */
@@ -176,6 +178,21 @@ class FormuleVolumeHoraire implements FormuleHeuresInterface
 
 
 
+    public function getTypeInterventionCode(): ?string
+    {
+        return $this->typeInterventionCode;
+    }
+
+
+
+    public function setTypeInterventionCode(?string $typeInterventionCode): FormuleVolumeHoraire
+    {
+        $this->typeInterventionCode = $typeInterventionCode;
+        return $this;
+    }
+
+
+
     public function isStructureUniv(): bool
     {
         return $this->structureUniv;
@@ -276,21 +293,6 @@ class FormuleVolumeHoraire implements FormuleHeuresInterface
     public function setTauxFc(float $tauxFc): FormuleVolumeHoraire
     {
         $this->tauxFc = $tauxFc;
-        return $this;
-    }
-
-
-
-    public function getTypeInterventionCode(): ?string
-    {
-        return $this->typeInterventionCode;
-    }
-
-
-
-    public function setTypeInterventionCode(?string $typeInterventionCode): FormuleVolumeHoraire
-    {
-        $this->typeInterventionCode = $typeInterventionCode;
         return $this;
     }
 

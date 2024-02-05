@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Formule\Entity\Db\FormuleResultat" table="FORMULE_RESULTAT" read-only="true">
-    <unique-constraints>
-      <unique-constraint name="formule_resultat__un" columns="INTERVENANT_ID,TYPE_VOLUME_HORAIRE_ID,ETAT_VOLUME_HORAIRE_ID"/>
-    </unique-constraints>
+  <entity name="Formule\Entity\Db\FormuleResultatIntervenant" table="FORMULE_RESULTAT_INTERVENANT" read-only="true">
     <id name="id" type="integer" column="ID" />
     <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant">
       <join-columns>
@@ -30,12 +27,9 @@
     <field name="heuresComplFc" type="float" column="HEURES_COMPL_FC" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFcMajorees" type="float" column="HEURES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplReferentiel" type="float" column="HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="false"/>
-    <field name="total" type="float" column="TOTAL" precision="126" scale="0" nullable="false"/>
     <field name="solde" type="float" column="SOLDE" precision="126" scale="0" nullable="false"/>
-    <field name="heuresCompl" type="float" column="HEURES_COMPL" precision="126" scale="0" nullable="false"/>
-    <one-to-many field="formuleResultatService" target-entity="Formule\Entity\Db\FormuleResultatService" mapped-by="formuleResultat" />
-    <one-to-many field="formuleResultatServiceReferentiel" target-entity="Formule\Entity\Db\FormuleResultatServiceReferentiel" mapped-by="formuleResultat" />
+
+
     <one-to-many field="formuleResultatVolumeHoraire" target-entity="Formule\Entity\Db\FormuleResultatVolumeHoraire" mapped-by="formuleResultat" />
-    <one-to-many field="formuleResultatVolumeHoraireReferentiel" target-entity="Formule\Entity\Db\FormuleResultatVolumeHoraireReferentiel" mapped-by="formuleResultat" />
   </entity>
 </doctrine-mapping>

@@ -18,11 +18,11 @@ class FormuleIntervenant implements FormuleHeuresInterface
     protected ?EtatVolumeHoraire $etatVolumeHoraire = null;
 
     // Paramètres globaux
+    protected ?TypeIntervenant $typeIntervenant;
+    protected ?string $structureCode = null;
     protected float $heuresServiceStatutaire = 0.0;
     protected float $heuresServiceModifie = 0.0;
     protected bool $depassementServiceDuSansHC = false;
-    protected ?string $structureCode = null;
-    protected ?TypeIntervenant $typeIntervenant;
 
     // Paramètres spécifiques
     protected ?string $param1 = null;
@@ -349,6 +349,36 @@ class FormuleIntervenant implements FormuleHeuresInterface
 
 
 
+    public function getTypeIntervenant(): ?TypeIntervenant
+    {
+        return $this->typeIntervenant;
+    }
+
+
+
+    public function setTypeIntervenant(?TypeIntervenant $typeIntervenant): FormuleIntervenant
+    {
+        $this->typeIntervenant = $typeIntervenant;
+        return $this;
+    }
+
+
+
+    public function getStructureCode(): ?string
+    {
+        return $this->structureCode;
+    }
+
+
+
+    public function setStructureCode(?string $structureCode): FormuleIntervenant
+    {
+        $this->structureCode = $structureCode;
+        return $this;
+    }
+
+
+
     public function getHeuresServiceStatutaire(): float
     {
         return $this->heuresServiceStatutaire;
@@ -389,36 +419,6 @@ class FormuleIntervenant implements FormuleHeuresInterface
     public function setDepassementServiceDuSansHC(bool $depassementServiceDuSansHC): FormuleIntervenant
     {
         $this->depassementServiceDuSansHC = $depassementServiceDuSansHC;
-        return $this;
-    }
-
-
-
-    public function getStructureCode(): ?string
-    {
-        return $this->structureCode;
-    }
-
-
-
-    public function setStructureCode(?string $structureCode): FormuleIntervenant
-    {
-        $this->structureCode = $structureCode;
-        return $this;
-    }
-
-
-
-    public function getTypeIntervenant(): ?TypeIntervenant
-    {
-        return $this->typeIntervenant;
-    }
-
-
-
-    public function setTypeIntervenant(?TypeIntervenant $typeIntervenant): FormuleIntervenant
-    {
-        $this->typeIntervenant = $typeIntervenant;
         return $this;
     }
 

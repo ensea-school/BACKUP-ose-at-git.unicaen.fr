@@ -5,12 +5,13 @@ namespace Formule\Entity\Db;
 use Formule\Entity\FormuleIntervenant;
 use Intervenant\Entity\Db\Intervenant;
 
-class FormuleResultat extends FormuleIntervenant
+class FormuleResultatIntervenant extends FormuleIntervenant
 {
     protected float $solde = 0.0;
 
-    protected Intervenant $intervenant;
+    protected float $sousService = 0.0;
 
+    protected Intervenant $intervenant;
 
 
 
@@ -21,11 +22,10 @@ class FormuleResultat extends FormuleIntervenant
 
 
 
-    public function getHeuresCompl(): float
+    public function getSousService(): float
     {
-        return $this->getHeuresComplFi() + $this->getHeuresComplFa() + $this->getHeuresComplFc() + $this->getHeuresComplFcMajorees() + $this->getHeuresComplReferentiel();
+        return $this->sousService;
     }
-
 
 
     public function getIntervenant(): Intervenant

@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Dossier\Entity\Db\Traits\EmployeurAwareTrait;
 use Enseignement\Entity\Db\Service;
-use Formule\Entity\Db\FormuleResultat;
+use Formule\Entity\Db\FormuleResultatIntervenant;
 use Indicateur\Entity\Db\IndicModifDossier;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
@@ -1451,7 +1451,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      */
     public function getFormuleResultat (TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumehoraire = null)
     {
-        $filter = function (FormuleResultat $formuleResultat) use ($typeVolumeHoraire, $etatVolumehoraire) {
+        $filter = function (FormuleResultatIntervenant $formuleResultat) use ($typeVolumeHoraire, $etatVolumehoraire) {
             if ($typeVolumeHoraire && $typeVolumeHoraire !== $formuleResultat->getTypeVolumeHoraire()) {
                 return false;
             }
@@ -1473,13 +1473,13 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
      * @param TypeVolumeHoraire $typeVolumeHoraire
      * @param EtatVolumeHoraire $etatVolumehoraire
      *
-     * @return FormuleResultat
+     * @return FormuleResultatIntervenant
      */
     public function getUniqueFormuleResultat (TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire)
     {
         $formuleResultat = $this->getFormuleResultat($typeVolumeHoraire, $etatVolumehoraire)->first();
         if (false === $formuleResultat) {
-            $formuleResultat = new FormuleResultat;
+            $formuleResultat = new FormuleResultatIntervenant;
             $formuleResultat->init($this, $typeVolumeHoraire, $etatVolumehoraire);
         }
 

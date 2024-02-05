@@ -2,7 +2,7 @@
 
 namespace Formule\View\Helper;
 
-use Formule\Entity\Db\FormuleResultat;
+use Formule\Entity\Db\FormuleResultatIntervenant;
 use Laminas\View\Helper\AbstractHtmlElement;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -15,16 +15,16 @@ class TotauxHetdViewHelper extends AbstractHtmlElement
 {
     use EntityManagerAwareTrait;
 
-    protected ?FormuleResultat $formuleResultat = null;
+    protected ?FormuleResultatIntervenant $formuleResultat = null;
 
 
 
     /**
-     * @param FormuleResultat $formuleResultat
+     * @param FormuleResultatIntervenant $formuleResultat
      *
      * @return self
      */
-    public function setFormuleResultat(?FormuleResultat $formuleResultat)
+    public function setFormuleResultat(?FormuleResultatIntervenant $formuleResultat)
     {
         $this->formuleResultat = $formuleResultat;
 
@@ -33,7 +33,7 @@ class TotauxHetdViewHelper extends AbstractHtmlElement
 
 
 
-    public function getFormuleResultat(): ?FormuleResultat
+    public function getFormuleResultat(): ?FormuleResultatIntervenant
     {
         return $this->formuleResultat;
     }
@@ -43,11 +43,11 @@ class TotauxHetdViewHelper extends AbstractHtmlElement
     /**
      * Helper entry point.
      *
-     * @param FormuleResultat $formuleResultat
+     * @param FormuleResultatIntervenant $formuleResultat
      *
      * @return self
      */
-    final public function __invoke(FormuleResultat $formuleResultat)
+    final public function __invoke(FormuleResultatIntervenant $formuleResultat)
     {
         $this->setFormuleResultat($formuleResultat);
 

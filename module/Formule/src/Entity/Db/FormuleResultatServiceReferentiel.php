@@ -23,7 +23,7 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, Resou
     use FormuleResultatTypesHeuresTrait;
     use ServiceAPayerTrait;
 
-    private FormuleResultat $formuleResultat;
+    private FormuleResultatIntervenant $formuleResultat;
 
     private ServiceReferentiel $serviceReferentiel;
 
@@ -79,7 +79,7 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, Resou
 
 
 
-    public function getFormuleResultat(): FormuleResultat
+    public function getFormuleResultat(): FormuleResultatIntervenant
     {
         return $this->formuleResultat;
     }

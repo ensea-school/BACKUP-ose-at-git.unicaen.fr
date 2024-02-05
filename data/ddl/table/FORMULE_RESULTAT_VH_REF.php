@@ -7,7 +7,7 @@ return [
     'temporary'   => FALSE,
     'logging'     => FALSE,
     'commentaire' => NULL,
-    'sequence'    => 'FORMULE_RESULTAT_VH_REF_ID_SEQ',
+    'sequence'    => NULL,
     'columns'     => [
         'FORMULE_RESULTAT_ID'      => [
             'name'        => 'FORMULE_RESULTAT_ID',

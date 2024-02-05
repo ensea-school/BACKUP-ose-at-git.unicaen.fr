@@ -25,7 +25,7 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
     use FormuleResultatTypesHeuresTrait;
     use ServiceAPayerTrait;
 
-    private FormuleResultat $formuleResultat;
+    private FormuleResultatIntervenant $formuleResultat;
 
     private Service $service;
 
@@ -104,7 +104,7 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
 
 
 
-    public function getFormuleResultat(): FormuleResultat
+    public function getFormuleResultat(): FormuleResultatIntervenant
     {
         return $this->formuleResultat;
     }

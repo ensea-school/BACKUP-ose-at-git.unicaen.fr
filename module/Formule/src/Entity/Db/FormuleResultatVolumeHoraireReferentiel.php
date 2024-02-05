@@ -15,7 +15,7 @@ class FormuleResultatVolumeHoraireReferentiel
     private $id;
 
     /**
-     * @var \Formule\Entity\Db\FormuleResultat
+     * @var \Formule\Entity\Db\FormuleResultatIntervenant
      */
     private $formuleResultat;
 
@@ -38,7 +38,7 @@ class FormuleResultatVolumeHoraireReferentiel
     /**
      * Get formuleResultat
      *
-     * @return \Formule\Entity\Db\FormuleResultat
+     * @return \Formule\Entity\Db\FormuleResultatIntervenant
      */
     public function getFormuleResultat()
     {

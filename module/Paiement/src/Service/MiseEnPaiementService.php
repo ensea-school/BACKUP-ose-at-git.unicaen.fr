@@ -14,6 +14,7 @@ use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use Mission\Service\MissionServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\TblPaiement;
@@ -672,6 +673,8 @@ class MiseEnPaiementService extends AbstractEntityService
             SUM(tp.heures_payees_aa + 
             tp.heures_payees_ac) 		        heures_payees,
             MAX(tp.domaine_fonctionnel_id)      domaine_fonctionnel_id,
+            MAX(df.libelle)                     domaine_fonctionnel_libelle,
+            MAX(df.source_code)                  domaine_fonctionnel_code,
             MAX(tp.formule_res_service_id)      formule_res_service_id,
             MAX(tp.formule_res_service_ref_id)  formule_res_service_ref_id,
             MAX(tp.mission_id)                  mission_id
@@ -687,6 +690,7 @@ class MiseEnPaiementService extends AbstractEntityService
         LEFT JOIN type_heures th ON th.id = tp.type_heures_id 
         LEFT JOIN mise_en_paiement mep ON mep.id = tp.mise_en_paiement_id AND mep.histo_destruction IS NULL
         LEFT JOIN centre_cout cc ON cc.id = tp.centre_cout_id 
+        LEFT JOIN domaine_fonctionnel df ON df.id = tp.domaine_fonctionnel_id
         LEFT JOIN periode p ON p.id = tp.periode_paiement_id
         WHERE
             tp.intervenant_id = :intervenant
@@ -808,6 +812,15 @@ class MiseEnPaiementService extends AbstractEntityService
                             'typeRessourceLibelle' => $value['CENTRE_COUT_LIBELLE'] ?: '',
                         ],
                     ];
+                }
+
+                //On récupere la liste des domaines fonctionnels
+                $domainesFonctionels = $this->getServiceDomaineFonctionnel()->getList();
+                /**
+                 * @var DomaineFonctionnel $d
+                 */
+                foreach ($domainesFonctionels as $d) {
+
                 }
             }
 

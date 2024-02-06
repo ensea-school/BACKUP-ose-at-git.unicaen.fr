@@ -1,14 +1,15 @@
 <template>
     <div :id="'demande-mise-en-paiement-' + datas.code" class="accordion-item">
-        <h2 id="dmep-vacataires-heading" class="accordion-header">
-            <button aria-controls="dmep-vacataires-collapse" aria-expanded="true" class="accordion-button" data-bs-target="#dmep-vacataires-collapse"
+        <h2 :id="'dmep-heading-' + datas.code" class="accordion-header ">
+            <button :aria-controls="'dmep-collapse-' + datas.code" :data-bs-target="'#dmep-collapse-' + datas.code" aria-expanded="true"
+                    class="accordion-button bg-light"
                     data-bs-toggle="collapse"
                     type="button">
                 {{ datas.code + ' - ' + datas.libelle }}
             </button>
 
         </h2>
-        <div id="dmep-vacataires-collapse" aria-labelledby="dmep-vacataires-heading" class="accordion-collapse collapse show">
+        <div :id="'dmep-collapse-' + datas.code" :aria-labelledby="'dmep-heading-' + datas.code" class="accordion-collapse collapse show">
             <div class="accordion-body">
                 <div v-for="(etape, codeEtape) in datas.etapes">
                     <div v-for="(enseignement,codeEnseignement) in etape.enseignements">
@@ -38,7 +39,9 @@
                                                         </thead>
                                                         <tbody>
                                                         <tr v-for="(value,id) in typeHeure.heures" class="detailHeure">
-                                                            <td v-if="value.heuresDemandees != 0 " style="width:20%;">{{ value.heuresAPayer }} hetd</td>
+                                                            <td v-if="value.heuresDemandees != 0 " style="width:20%;">{{ Number(value.heuresAPayer) }}
+                                                                hetd
+                                                            </td>
                                                             <td v-if="value.heuresDemandees == 0 " style="width:20%;">
                                                                 <div class="input-group col-1">
                                                                     <input
@@ -66,15 +69,18 @@
                                                                         v-for="group in filtrerCentresCouts(datas.centreCoutPaiement,value.typeHeureCode)"
                                                                         :key="group.group"
                                                                         :label="group.group">
-                                                                        <option v-for="item in group.child" :key="item.value" :value="item.centreCoutId">
+                                                                        <option
+                                                                            v-for="item in group.child"
+                                                                            :key="item.value"
+                                                                            :selected="item.centreCoutId==value.centreCout.centreCoutId"
+                                                                            :value="item.centreCoutId">
                                                                             {{ item.centreCoutCode + ' - ' + item.centreCoutLibelle }}
                                                                         </option>
 
                                                                     </optgroup>
                                                                 </select>
                                                             </td>
-                                                            <td v-if="value.heuresDemandees != 0 ">
-                                                                {{ value.centreCout.code + ' - ' + value.centreCout.libelle }}
+                                                            <td v-if="value.heuresDemandees != 0 " v-html="shortenCentreCout(value.centreCout, 30)">
                                                             </td>
                                                             <td v-html="heuresStatutToString(value)">
 
@@ -176,15 +182,17 @@
                                                                 v-for="group in filtrerCentresCouts(datas.centreCoutPaiement,'referentiel')"
                                                                 :key="group.group"
                                                                 :label="group.group">
-                                                                <option v-for="item in group.child" :key="item.value" :value="item.centreCoutId">
+                                                                <option v-for="item in group.child"
+                                                                        :key="item.value"
+                                                                        :selected="item.centreCoutId == value.centreCout.centreCoutId"
+                                                                        :value="item.centreCoutId">
                                                                     {{ item.centreCoutCode + ' - ' + item.centreCoutLibelle }}
                                                                 </option>
 
                                                             </optgroup>
                                                         </select>
                                                     </td>
-                                                    <td v-if="value.heuresDemandees != 0 ">
-                                                        {{ value.centreCout.code + ' - ' + value.centreCout.libelle }}
+                                                    <td v-if="value.heuresDemandees != 0 " v-html="shortenCentreCout(value.centreCout, 30)">
                                                     </td>
                                                     <td v-html="heuresStatutToString(value)">
 
@@ -230,16 +238,18 @@
                     </div>
                 </div>
             </div>
-            <div style="text-align:center;margin-bottom:20px;">
+            <div style="background-color:#fbfbfb;padding:10px;padding-right:40px;text-align:right;">
                 <button :id="'add-all-' + datas.code"
                         class="btn btn-primary"
                         type="button"
                         @click="demanderToutesLesHeuresEnPaiement(datas.code)">
-                    TOUT METTRE EN PAIEMENT POUR CETTE COMPOSANTE
+                    <u-icon name="square-plus"/>
+                    DEMANDER TOUS LES PAIEMENTS POUR {{ datas.libelle }}
                 </button>
             </div>
         </div>
     </div>
+
 
 </template>
 
@@ -267,7 +277,7 @@ export default {
                 return '<span style="font-size:12px;line-height:20px;" class="badge bg-success">Paiement effectué</span>';
             }
             if (value.heuresAPayer == value.heuresDemandees) {
-                return '<span style="font-size:12px;line-height:20px;" class="badge bg-secondary text-dark">Paiement en cours</span>';
+                return '<span style="font-size:12px;line-height:20px;" class="badge bg-secondary text-dark">Paiement demandé</span>';
             }
             if (value.heuresDemandees == 0) {
                 return '<span style="font-size:12px;line-height:20px;" class="badge bg-light text-dark">A payer</span>';
@@ -414,6 +424,20 @@ export default {
                 total += Number(heures[heure].heuresAPayer);
             }
             return total;
+        },
+        shortenCentreCout(centreCout, length = 20)
+        {
+            var chaine = centreCout.code + ' - ' + centreCout.libelle;
+            if (chaine.length > length) {
+
+                var centreCout = '<span title="' + centreCout.code + ' - ' + centreCout.libelle + '"';
+                centreCout += 'data-bs-placement="top" data-bs-toggle="tooltip">';
+                centreCout += chaine.substring(0, length) + "...";
+                centreCout += '</span>'
+                return centreCout;
+            } else {
+                return chaine;
+            }
         }
 
 

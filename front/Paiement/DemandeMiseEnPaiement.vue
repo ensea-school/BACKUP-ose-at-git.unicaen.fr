@@ -1,8 +1,11 @@
 <template>
-    <demande-mise-en-paiement-structure v-for="(structure, code) in datasServiceAPayer"
-                                        :datas="structure"
-                                        :intervenant="intervenant"
-                                        @refresh="findServiceAPayer"/>
+    <div id="accordionPanelsStayOpenExample" class="accordion">
+
+        <demande-mise-en-paiement-structure v-for="(structure, code) in datasServiceAPayer"
+                                            :datas="structure"
+                                            :intervenant="intervenant"
+                                            @refresh="findServiceAPayer"/>
+    </div>
 </template>
 
 <script>
@@ -47,6 +50,11 @@ export default {
     updated()
     {
         $('.selectpicker').selectpicker('render');
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
     }
 
 

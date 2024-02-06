@@ -13,6 +13,9 @@
 
 * Formule de calcul de Paris Deauphine (#50652)
 
+## Corrections de bugs
+
+* Modification de la formule de calcul de l'UPEC (#54445)
 
 
 

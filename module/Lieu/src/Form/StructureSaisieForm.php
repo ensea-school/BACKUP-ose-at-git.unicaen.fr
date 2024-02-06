@@ -24,7 +24,8 @@ class StructureSaisieForm extends AbstractForm
 
     public function init ()
     {
-        $this->spec(Structure::class);
+        $ignore = ["autre"];
+        $this->spec(Structure::class, $ignore);
         $this->spec(['structure' => ['type' => \Lieu\Form\Element\Structure::class, 'input' => ['required' => false]]]);
         $this->spec(['adressePrecisions' => ['input' => ['required' => false]]]);
         $this->spec(['adresseNumero' => ['input' => ['required' => false]]]);

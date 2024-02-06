@@ -126,25 +126,33 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC AS
 
 
 
-      -- T=IF([.$I20]="Référentiel";0;[.$AJ20]+[.$AP20]+[.$BB20]+[.$BZ20])
+      -- T=IF([.$I20]="Référentiel";0;([.$AJ20]+[.$AP20]+[.$BB20]+[.$BH20])*[.$F20]+[.$BZ20])
       WHEN 'T' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN cell('AJ',l) + cell('AP',l) + cell('BB',l) + cell('BZ',l);
+          RETURN (cell('AJ',l) + cell('AP',l) + cell('BB',l) + cell('BH',l)) * vh.taux_fi + cell('BZ',l);
         END IF;
 
 
 
-      -- U=0
+      -- U=IF([.$I20]="Référentiel";0;([.$AJ20]+[.$AP20]+[.$BB20]+[.$BH20])*[.$G20])
       WHEN 'U' THEN
-        RETURN 0;
+        IF vh.volume_horaire_ref_id IS NOT NULL THEN
+          RETURN 0;
+        ELSE
+          RETURN (cell('AJ',l) + cell('AP',l) + cell('BB',l) + cell('BH',l)) * vh.taux_fa;
+        END IF;
 
 
 
-      -- V=0
+      -- V=IF([.$I20]="Référentiel";0;([.$AJ20]+[.$AP20]+[.$BB20]+[.$BH20])*[.$H20])
       WHEN 'V' THEN
-        RETURN 0;
+        IF vh.volume_horaire_ref_id IS NOT NULL THEN
+          RETURN 0;
+        ELSE
+          RETURN (cell('AJ',l) + cell('AP',l) + cell('BB',l) + cell('BH',l)) * vh.taux_fc;
+        END IF;
 
 
 
@@ -158,25 +166,33 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC AS
 
 
 
-      -- X=IF([.$I20]="Référentiel";0;[.$AL20]+[.$AR20]+[.$BD20]+[.$BJ20]+[.$CB20])
+      -- X=IF([.$I20]="Référentiel";0;([.$AL20]+[.$AR20]+[.$BD20]+[.$BJ20])*[.$F20]+[.$CB20])
       WHEN 'X' THEN
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           RETURN 0;
         ELSE
-          RETURN cell('AL',l) + cell('AR',l) + cell('BD',l) + cell('BJ',l) + cell('CB',l);
+          RETURN (cell('AL',l) + cell('AR',l) + cell('BD',l) + cell('BJ',l)) * vh.taux_fi + cell('CB',l);
         END IF;
 
 
 
-      -- Y=0
+      -- Y=IF([.$I20]="Référentiel";0;([.$AL20]+[.$AR20]+[.$BD20]+[.$BJ20])*[.$G20])
       WHEN 'Y' THEN
-        RETURN 0;
+        IF vh.volume_horaire_ref_id IS NOT NULL THEN
+          RETURN 0;
+        ELSE
+          RETURN (cell('AL',l) + cell('AR',l) + cell('BD',l) + cell('BJ',l)) * vh.taux_fa;
+        END IF;
 
 
 
-      -- Z=0
+      -- Z=IF([.$I20]="Référentiel";0;([.$AL20]+[.$AR20]+[.$BD20]+[.$BJ20])*[.$H20])
       WHEN 'Z' THEN
-        RETURN 0;
+        IF vh.volume_horaire_ref_id IS NOT NULL THEN
+          RETURN 0;
+        ELSE
+          RETURN (cell('AL',l) + cell('AR',l) + cell('BD',l) + cell('BJ',l)) * vh.taux_fc;
+        END IF;
 
 
 
@@ -232,9 +248,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC AS
 
 
 
-      -- AE15=2/3
+      -- AE15=i_param_1
       WHEN 'AE15' THEN
-        RETURN 2 / 3;
+        RETURN i.param_1;
 
 
 
@@ -855,7 +871,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC AS
     RETURN '
     SELECT
       fi.*,
-      NULL param_1,
+      2/3  param_1,
       NULL param_2,
       NULL param_3,
       NULL param_4,

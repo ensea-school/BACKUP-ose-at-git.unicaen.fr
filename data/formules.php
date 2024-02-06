@@ -133,4 +133,9 @@ return [
         'VH_PARAM_4_LIBELLE' => '0',
         'VH_PARAM_5_LIBELLE' => '0',
     ],
+    30 => [
+        'LIBELLE'            => 'Université Paris Dauphine-PSL',
+        'PACKAGE_NAME'       => 'FORMULE_DAUPHINE',
+        'VH_PARAM_1_LIBELLE' => 'Code enseignement',
+    ],
 ];

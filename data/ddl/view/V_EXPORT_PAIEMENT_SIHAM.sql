@@ -79,8 +79,10 @@ FROM (SELECT i.annee_id                                                         
                   FROM tbl_paiement tp
                   JOIN structure s ON tp.structure_id = s.id
                   JOIN centre_cout cc ON cc.id = tp.centre_cout_id
+                  JOIN type_heures th ON th.id = tp.type_heures_id
                   WHERE tp.heures_payees_aa > 0
                   AND tp.periode_paiement_id IS NOT NULL
+                  AND th.eligible_extraction_paie  = 1
 
                   UNION ALL
 
@@ -99,8 +101,10 @@ FROM (SELECT i.annee_id                                                         
                   FROM tbl_paiement tp
                   JOIN structure s ON tp.structure_id = s.id
                   JOIN centre_cout cc ON cc.id = tp.centre_cout_id
+                  JOIN type_heures th ON th.id = tp.type_heures_id
                   WHERE tp.heures_payees_ac > 0
                   AND tp.periode_paiement_id IS NOT NULL
+                  AND th.eligible_extraction_paie = 1
                   ) t1
             GROUP BY structure_id,
                      structure_ids,
@@ -117,5 +121,5 @@ FROM (SELECT i.annee_id                                                         
                LEFT JOIN intervenant_dossier d ON i.id = d.intervenant_id AND d.histo_destruction IS NULL
                JOIN statut si ON si.id = i.statut_id
                JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
-               JOIN structure s ON s.id = i.structure_id) t3 WHERE code_rh = 'UCN000201041'
+               JOIN structure s ON s.id = i.structure_id) t3
 ORDER BY annee_id, type_intervenant_id, structure_id, periode_id, nom, code_origine, nbu DESC

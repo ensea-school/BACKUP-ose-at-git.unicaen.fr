@@ -22,9 +22,10 @@ class TypeFormationSaisieForm extends AbstractForm
     use SchemaServiceAwareTrait;
 
 
-    public function init()
+    public function init ()
     {
-        $this->spec(TypeFormation::class);
+        $ignore = ['autre', 'autre1', 'autre2', 'autre3', 'autre4', 'autre5'];
+        $this->spec(TypeFormation::class, $ignore);
         $this->build();
 
         $this->get('libelleCourt')->setLabel('Libellé court');
@@ -39,7 +40,7 @@ class TypeFormationSaisieForm extends AbstractForm
 
 
 
-    public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
+    public function bind ($object, $flags = FormInterface::VALUES_NORMALIZED)
     {
         /* @var $object TypeFormation */
         parent::bind($object, $flags);

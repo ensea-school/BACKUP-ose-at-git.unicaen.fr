@@ -14,6 +14,7 @@
                 <div v-for="(etape, codeEtape) in datas.etapes">
                     <div v-for="(enseignement,codeEnseignement) in etape.enseignements">
                         <div class="cartridge gray bordered" style="padding-bottom: 5px">
+                            <span>Enseignement</span>
                             <span>{{ etape.libelle }}</span>
                             <span>{{ enseignement.libelle }}</span>
                         </div>
@@ -126,34 +127,31 @@
                     </div>
                 </div>
                 <!--FONCTION REFERENTIEL-->
-                <div class="cartridge gray bordered" style="padding-bottom: 5px">
-                    <span>Référentiel</span>
-                    <!--                        <span>{{ fonction.libelle }}</span>-->
-                </div>
-                <div v-for="(fonction, codeFonction) in datas.fonctionsReferentiels">
 
+                <div v-for="(fonction, codeFonction) in datas.fonctionsReferentiels">
+                    <div class="cartridge gray bordered" style="padding-bottom: 5px">
+                        <span>Référentiel</span>
+                        <span>{{ fonction.libelle }}</span>
+                    </div>
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
                                 <table class="table mt-3 table-bordered">
-                                    <thead class="table-light">
-                                    <tr>
-                                        <th colspan="2">{{ fonction.libelle }}</th>
-                                    </tr>
-                                    </thead>
+
                                     <tbody>
                                     <tr>
                                         <td colspan="2">
                                             <table class="table table-sm ">
                                                 <thead>
-                                                <th scope="col" style="width:20%;font-size:12px;">Heures</th>
-                                                <th scope="col" style="width:40%;font-size:12px;">Centre cout</th>
-                                                <th scope="col" style="width:25%;font-size:12px;">Statut</th>
+                                                <th scope="col" style="width:10%;font-size:12px;">Heures</th>
+                                                <th scope="col" style="width:25%;font-size:12px;">Centre cout</th>
+                                                <th scope="col" style="width:25%;font-size:12px;">Domaine fonctionnel</th>
+                                                <th scope="col" style="width:20%;font-size:12px;">Statut</th>
                                                 <th style="width:15%;font-size:12px;">Action</th>
                                                 </thead>
                                                 <tbody>
                                                 <tr v-for="(value,id) in fonction.heures" class="detailHeure">
-                                                    <td v-if="value.heuresDemandees != 0 " style="width:20%;">{{ value.heuresAPayer }} hetd</td>
+                                                    <td v-if="value.heuresDemandees != 0 " style="width:10%;">{{ value.heuresAPayer }} hetd</td>
                                                     <td v-if="value.heuresDemandees == 0 " style="width:20%;">
                                                         <div class="input-group col-1">
                                                             <input
@@ -171,7 +169,6 @@
                                                             <span class="input-group-text" style="font-size:12px;">hetd(s)</span>
                                                         </div>
                                                     </td>
-                                                    <!--<td>{{ value.centreCout.libelle }}</td>-->
                                                     <td v-if="value.heuresDemandees == 0 ">
                                                         <select :id="'centreCout-' + codeFonction"
                                                                 class="selectpicker"
@@ -192,10 +189,27 @@
                                                             </optgroup>
                                                         </select>
                                                     </td>
-                                                    <td v-if="value.heuresDemandees != 0 " v-html="shortenCentreCout(value.centreCout, 30)">
+                                                    <td v-if="value.heuresDemandees != 0 " v-html="shortenCentreCout(value.centreCout, 20)">
+                                                    </td>
+                                                    <td v-if="value.heuresDemandees == 0 ">
+                                                        <select :id="'domaineFonctionnel-' + codeFonction"
+                                                                class="selectpicker"
+                                                                data-live-search="true"
+                                                                name="centreCout">
+                                                            <option value="">Aucun domaine fonctionnel</option>
+                                                            <option v-for="item in datas.domaineFonctionnelPaiement"
+                                                                    :selected="item.domaineFonctionnelId == value.domaineFonctionnel.domaineFonctionnelId"
+                                                                    :value="item.domaineFonctionnelId">
+                                                                {{ item.domaineFonctionnelLibelle }}
+                                                            </option>
+
+
+                                                        </select>
+                                                    </td>
+                                                    <td v-if="value.heuresDemandees != 0 ">
+                                                        {{ value.domaineFonctionnel.libelle }}
                                                     </td>
                                                     <td v-html="heuresStatutToString(value)">
-
                                                     </td>
                                                     <td style="font-size:12px;">
                                                                 <span
@@ -396,7 +410,6 @@ export default {
             * Méthode permettant de filtrer les centres coûts disponibles par rapport
             * aux types d'heures à payer (fi, fa, fc etc...)
             * */
-            console.log(typeHeures);
 
 
             let centresCoutesFiltered = [];
@@ -405,7 +418,6 @@ export default {
                 let child = [];
                 centresCouts[eotp].forEach(function (centreCout, index) {
                     if (centreCout[typeHeures] == 1) {
-                        console.log(centreCout);
                         child.push(centreCout);
                     }
                 })

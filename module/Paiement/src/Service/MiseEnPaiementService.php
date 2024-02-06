@@ -674,7 +674,7 @@ class MiseEnPaiementService extends AbstractEntityService
             tp.heures_payees_ac) 		        heures_payees,
             MAX(tp.domaine_fonctionnel_id)      domaine_fonctionnel_id,
             MAX(df.libelle)                     domaine_fonctionnel_libelle,
-            MAX(df.source_code)                  domaine_fonctionnel_code,
+            MAX(df.source_code)                 domaine_fonctionnel_code,
             MAX(tp.formule_res_service_id)      formule_res_service_id,
             MAX(tp.formule_res_service_ref_id)  formule_res_service_ref_id,
             MAX(tp.mission_id)                  mission_id
@@ -716,6 +716,17 @@ class MiseEnPaiementService extends AbstractEntityService
             'intervenant' => $intervenant->getId(),
         ]);
 
+        //On récupere la liste des domaines fonctionnels
+        $listeDomainesFonctionnels = [];
+        $domainesFonctionels       = $this->getServiceDomaineFonctionnel()->getList();
+        foreach ($domainesFonctionels as $d) {
+            $listeDomainesFonctionnels[] = [
+                'domaineFonctionnelId'      => $d->getId(),
+                'domaineFonctionnelLibelle' => $d->getLibelle(),
+                'domaineFonctionnelCode'    => $d->getSourceCode(),
+            ];
+        }
+
 
         foreach ($dmeps as $value) {
             //On va chercher les centre de cout nécessaire aux mises en paiement
@@ -736,10 +747,14 @@ class MiseEnPaiementService extends AbstractEntityService
                         'typeHeureId'         => $value['TYPE_HEURE_ID'],
                         'typeHeureCode'       => $value['TYPE_HEURE_CODE'],
                         'formuleResServiceId' => $value['FORMULE_RES_SERVICE_ID'],
-                        'domaineFonctionelId' => $value['DOMAINE_FONCTIONNEL_ID'],
                         'heuresAPayer'        => $value['HEURES_A_PAYER'],
                         'heuresDemandees'     => $value['HEURES_DEMANDEES'],
                         'heuresPayees'        => $value['HEURES_PAYEES'],
+                        'domaineFonctionnel'  => [
+                            'domaineFonctionelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
+                            'libelle'             => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
+                            'code'                => $value['DOMAINE_FONCTIONNEL_CODE'] ?: '',
+                        ],
                         'centreCout'          => [
                             'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
@@ -755,11 +770,15 @@ class MiseEnPaiementService extends AbstractEntityService
                         'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
                         'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
                         'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
-                        'domaineFonctionelId'    => $value['DOMAINE_FONCTIONNEL_ID'],
                         'missionId'              => $value['MISSION_ID'],
                         'heuresAPayer'           => $value['HEURES_A_PAYER'],
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
                         'heuresPayees'           => $value['HEURES_PAYEES'],
+                        'domaineFonctionnel'     => [
+                            'domaineFonctionelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
+                            'libelle'             => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
+                            'code'                => $value['DOMAINE_FONCTIONNEL_CODE'] ?: '',
+                        ],
                         'centreCout'             => [
                             'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
@@ -782,10 +801,14 @@ class MiseEnPaiementService extends AbstractEntityService
                         'typeHeureId'            => $value['TYPE_HEURE_ID'],
                         'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
                         'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
-                        'domaineFonctionelId'    => $value['DOMAINE_FONCTIONNEL_ID'],
-                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
                         'heuresPayees'           => $value['HEURES_PAYEES'],
+                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
+                        'domaineFonctionnel'     => [
+                            'domaineFonctionelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
+                            'libelle'             => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
+                            'code'                => $value['DOMAINE_FONCTIONNEL_CODE'] ?: '',
+                        ],
                         'centreCout'             => [
                             'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
@@ -800,10 +823,14 @@ class MiseEnPaiementService extends AbstractEntityService
                         'typeHeureId'            => $value['TYPE_HEURE_ID'],
                         'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
                         'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
-                        'domaineFonctionelId'    => $value['DOMAINE_FONCTIONNEL_ID'],
-                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
                         'heuresPayees'           => $value['HEURES_PAYEES'],
+                        'heuresAPayer'           => $value['HEURES_A_PAYER'],
+                        'domaineFonctionnel'     => [
+                            'domaineFonctionelId' => $value['DOMAINE_FONCTIONNEL_ID'] ?: '',
+                            'libelle'             => $value['DOMAINE_FONCTIONNEL_LIBELLE'] ?: '',
+                            'code'                => $value['DOMAINE_FONCTIONNEL_CODE'] ?: '',
+                        ],
                         'centreCout'             => [
                             'centreCoutId'         => $value['CENTRE_COUT_ID'] ?: '',
                             'libelle'              => $value['CENTRE_COUT_LIBELLE'] ?: '',
@@ -812,15 +839,6 @@ class MiseEnPaiementService extends AbstractEntityService
                             'typeRessourceLibelle' => $value['CENTRE_COUT_LIBELLE'] ?: '',
                         ],
                     ];
-                }
-
-                //On récupere la liste des domaines fonctionnels
-                $domainesFonctionels = $this->getServiceDomaineFonctionnel()->getList();
-                /**
-                 * @var DomaineFonctionnel $d
-                 */
-                foreach ($domainesFonctionels as $d) {
-
                 }
             }
 
@@ -875,8 +893,11 @@ class MiseEnPaiementService extends AbstractEntityService
                     $dmep[$value['STRUCTURE_CODE']]['centreCoutPaiement'] = $listeCentresCouts;
                 }
             }
-        }
 
+            if (!array_key_exists('domaineFonctionnelPaiement', $dmep[$value['STRUCTURE_CODE']])) {
+                $dmep[$value['STRUCTURE_CODE']]['domaineFonctionnelPaiement'] = $listeDomainesFonctionnels;
+            }
+        }
 
         return $dmep;
     }

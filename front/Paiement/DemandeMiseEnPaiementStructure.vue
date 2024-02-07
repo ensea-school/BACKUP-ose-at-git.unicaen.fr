@@ -9,13 +9,45 @@
             </button>
 
         </h2>
+
         <div :id="'dmep-collapse-' + datas.code" :aria-labelledby="'dmep-heading-' + datas.code" class="accordion-collapse collapse show">
             <div class="accordion-body">
+                <!--Budget-->
+                <div class="cartridge gray bordered" style="padding-bottom: 5px;margin-bottom:20px;">
+                    <span>Budget composante</span>
+                </div>
+                <div class="container">
+
+                    <table class="table table-bordered caption-top">
+                        <thead class="table-light">
+                        <tr>
+                            <th class="fw-bold" scope="col">Budget</th>
+                            <th class="fw-bold" scope="col">Paie etat</th>
+                            <th class="fw-bold" scope="col">Ressource propre</th>
+                            <th class="fw-bold" scope="col">Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Dotation</td>
+                            <td>1900,00 HETD</td>
+                            <td>300,00 HETD</td>
+                            <td class="fw-bold">2200,00 HETD</td>
+                        </tr>
+                        <tr>
+                            <td>Consommation</td>
+                            <td><span class="">699,11 HETD</span></td>
+                            <td><span class="">10,00 HETD</span></td>
+                            <td class="fw-bold">709,11 HETD</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div v-for="(etape, codeEtape) in datas.etapes">
                     <div v-for="(enseignement,codeEnseignement) in etape.enseignements">
                         <div class="cartridge gray bordered" style="padding-bottom: 5px">
                             <span>Enseignement</span>
-                            <span>{{ etape.libelle }}</span>
+                            <span v-html="shorten(etape.libelle, 50)"></span>
                             <span>{{ enseignement.libelle }}</span>
                         </div>
                         <div class="container">
@@ -65,7 +97,10 @@
                                                                         class="selectpicker"
                                                                         data-live-search="true"
                                                                         name="centreCout">
-                                                                    <option value="">Aucun centre de cout</option>
+                                                                    <option value="">{{
+                                                                            notValueCentreCoutValue(datas.centreCoutPaiement, value.typeHeureCode)
+                                                                        }}
+                                                                    </option>
                                                                     <optgroup
                                                                         v-for="group in filtrerCentresCouts(datas.centreCoutPaiement,value.typeHeureCode)"
                                                                         :key="group.group"
@@ -80,8 +115,10 @@
 
                                                                     </optgroup>
                                                                 </select>
+
                                                             </td>
-                                                            <td v-if="value.heuresDemandees != 0 " v-html="shortenCentreCout(value.centreCout, 30)">
+                                                            <td v-if="value.heuresDemandees != 0 "
+                                                                v-html="shorten(value.centreCout.code + ' - ' + value.centreCout.libelle, 30)">
                                                             </td>
                                                             <td v-html="heuresStatutToString(value)">
 
@@ -189,7 +226,8 @@
                                                             </optgroup>
                                                         </select>
                                                     </td>
-                                                    <td v-if="value.heuresDemandees != 0 " v-html="shortenCentreCout(value.centreCout, 20)">
+                                                    <td v-if="value.heuresDemandees != 0 "
+                                                        v-html="shorten(value.centreCout.code + ' - ' + value.centreCout.libelle, 20)">
                                                     </td>
                                                     <td v-if="value.heuresDemandees == 0 ">
                                                         <select :id="'domaineFonctionnel-' + codeFonction"
@@ -273,7 +311,7 @@ export default {
 
     name: "DemandeMiseEnPaiementStructure",
     props: {
-        datas: {type: Array, required: true},
+        datas: {required: true},
         intervenant: {required: true},
     },
     data()
@@ -324,14 +362,15 @@ export default {
             btnAdd.disabled = true;
             let inputHeure = document.getElementById('heures-' + id);
             let inputCentreCout = document.getElementById('centreCout-' + id);
-            let heureADemander = inputHeure.value;
+            let heureADemander = Number(inputHeure.value);
+            let heureADemanderMax = Number(inputHeure.getAttribute('max'));
+
             let centreCoutId = inputCentreCout.value;
 
             let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
             let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
             let formuleResServiceRefId = (inputHeure.hasAttribute('data-formule-res-service-ref-id') ? inputHeure.getAttribute('data-formule-res-service-ref-id') : '');
             let missionId = (inputHeure.hasAttribute('data-mission-id') ? inputHeure.getAttribute('data-mission-id') : '');
-
             var datas = new FormData();
             datas.append('heures', heureADemander);
             datas.append('typeHeuresId', typeHeureId);
@@ -340,16 +379,27 @@ export default {
             datas.append('centreCoutId', centreCoutId);
             datas.append('missionId', missionId);
 
-            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demande', {intervenant: this.intervenant}), datas)
-                .then(response => {
-                    this.$emit('refresh');
-                    setTimeout(() => {
-                        btnAdd.disabled = false;
-                    }, 1500);
-                })
-                .catch(error => {
-                    console.error(error);
-                })
+            //Si volontairement on passe 0 heure à demander ou si on demande plus d'heures que le maximum possible pour cette ligne
+            if (heureADemander > 0 && heureADemander <= heureADemanderMax) {
+                unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demande', {intervenant: this.intervenant}), datas)
+                    .then(response => {
+                        this.$emit('refresh');
+                        setTimeout(() => {
+                            btnAdd.disabled = false;
+                        }, 1500);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    })
+            } else {
+                this.$emit('refresh');
+                setTimeout(() => {
+                    btnAdd.disabled = false;
+                }, 1500);
+                console.warn("Le nombre d'heures demandées en paiement n'est pas situé entre le max et min possible.");
+            }
+
+
 
         },
         demanderToutesLesHeuresEnPaiement(codeStructure)
@@ -370,22 +420,31 @@ export default {
                     if (demandesMiseEnPaiement[i].getElementsByTagName('select')[0].value != '') {
 
                         let selectCentreCout = demandesMiseEnPaiement[i].getElementsByTagName('select')[0];
-                        let heureADemander = inputHeure.value;
-                        let centreCoutId = selectCentreCout.value;
-                        let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
-                        let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
-                        let formuleResServiceRefId = (inputHeure.hasAttribute('data-formule-res-service-ref-id') ? inputHeure.getAttribute('data-formule-res-service-ref-id') : '');
-                        let missionId = (inputHeure.hasAttribute('data-mission-id') ? inputHeure.getAttribute('data-mission-id') : '');
 
-                        let demande = {
-                            heures: heureADemander,
-                            centreCoutId: centreCoutId,
-                            typeHeuresId: typeHeureId,
-                            formuleResServiceId: formuleResServiceId,
-                            formuleResServiceRefId: formuleResServiceRefId,
-                            missionId: missionId,
+                        let heureADemander = Number(inputHeure.value);
+                        let heureADemanderMax = Number(inputHeure.getAttribute('max'));
+                        //Si volontairement on passe 0 heure à demander ou si on demande plus d'heures que le maximum possible pour cette ligne
+                        if (heureADemander <= 0 || heureADemander > heureADemanderMax) {
+                            console.warn("Le nombre d'heures demandées en paiement n'est pas situé entre le max et min possible.");
+                        } else {
+                            let centreCoutId = selectCentreCout.value;
+                            let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
+                            let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
+                            let formuleResServiceRefId = (inputHeure.hasAttribute('data-formule-res-service-ref-id') ? inputHeure.getAttribute('data-formule-res-service-ref-id') : '');
+                            let missionId = (inputHeure.hasAttribute('data-mission-id') ? inputHeure.getAttribute('data-mission-id') : '');
+
+                            let demande = {
+                                heures: heureADemander,
+                                centreCoutId: centreCoutId,
+                                typeHeuresId: typeHeureId,
+                                formuleResServiceId: formuleResServiceId,
+                                formuleResServiceRefId: formuleResServiceRefId,
+                                missionId: missionId,
+                            }
+                            datas.push(demande);
                         }
-                        datas.push(demande);
+
+
                     }
 
                 }
@@ -429,6 +488,16 @@ export default {
 
             return centresCoutesFiltered;
         },
+        notValueCentreCoutValue(centresCouts, typeHeures)
+        {
+            let values = this.filtrerCentresCouts(centresCouts, typeHeures)
+            if (values.length != 0) {
+                return "Choisir un centre de coût";
+            } else {
+                return "Aucun centre de coût disponible demande de paiement impossible";
+            }
+
+        },
         totalHeure(heures)
         {
             let total = 0;
@@ -437,12 +506,11 @@ export default {
             }
             return total;
         },
-        shortenCentreCout(centreCout, length = 20)
+        shorten(chaine, length = 20)
         {
-            var chaine = centreCout.code + ' - ' + centreCout.libelle;
             if (chaine.length > length) {
 
-                var centreCout = '<span title="' + centreCout.code + ' - ' + centreCout.libelle + '"';
+                var centreCout = '<span title="' + chaine + '"';
                 centreCout += 'data-bs-placement="top" data-bs-toggle="tooltip">';
                 centreCout += chaine.substring(0, length) + "...";
                 centreCout += '</span>'

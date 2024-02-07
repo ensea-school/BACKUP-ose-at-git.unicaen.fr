@@ -32,6 +32,7 @@ class MiseEnPaiementService extends AbstractEntityService
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
     use CentreCoutServiceAwareTrait;
     use DomaineFonctionnelServiceAwareTrait;
+    use DotationServiceAwareTrait;
     use TypeHeuresServiceAwareTrait;
     use MissionServiceAwareTrait;
     use ServiceAPayerServiceAwareTrait;
@@ -531,6 +532,43 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
+    public function getBudgetPaiement (Structure $structure): array
+    {
+        $budget = [
+            'dotation'    => [
+                'paieEtat'        => 0,
+                'ressourcePropre' => 0,
+                'total'           => 0,
+            ],
+            'liquidation' => [
+                'paieEtat'        => 0,
+                'ressourcePropre' => 0,
+                'total'           => 0,
+            ],
+
+        ];
+        if ($structure instanceof Structure) {
+            $dotation    = $this->getServiceDotation()->getTableauBord([$structure->getId()]);
+            $liquidation = $this->getTblLiquidation($structure);
+            foreach ($dotation as $key => $value) {
+                if ($key == $structure->getId()) {
+                    $budget['dotation']['paieEtat']        = (key_exists(1, $value)) ? $value['1'] : 0;
+                    $budget['dotation']['ressourcePropre'] = (key_exists(2, $value)) ? $value['2'] : 0;
+                    $budget['dotation']['total']           = $value['total'];
+                    break;
+                }
+            }
+            //liquidation
+            $budget['liquidation']['paieEtat']        = (key_exists('1', $liquidation)) ? $liquidation['1'] : 0;
+            $budget['liquidation']['ressourcePropre'] = (key_exists('2', $liquidation)) ? $liquidation['2'] : 0;
+            $budget['liquidation']['total']           = $liquidation['total'];
+        }
+
+        return $budget;
+    }
+
+
+
     /**
      * Méthode permettant de faire l'ensemble des demandes de mise en paiement pour un intervenant (uniquement les heures avec des centres de cout pré-paramétrées)
      *
@@ -897,6 +935,9 @@ class MiseEnPaiementService extends AbstractEntityService
             if (!array_key_exists('domaineFonctionnelPaiement', $dmep[$value['STRUCTURE_CODE']])) {
                 $dmep[$value['STRUCTURE_CODE']]['domaineFonctionnelPaiement'] = $listeDomainesFonctionnels;
             }
+            //On va chercher le budget de la composante (dotation et liquidation)
+            $structure = $this->getEntityManager()->getRepository(Structure::class)->find($value['STRUCTURE_ID']);
+            $budget    = $this->getBudgetPaiement($structure);
         }
 
         return $dmep;

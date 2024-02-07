@@ -64,10 +64,13 @@ SELECT ct.annee_id,
        ct."enteteAutresHeures",
        ct."missionNom",
        ct."debutValidite",
+       ct."finValiditeParent",
        ct."finValidite",
        ct."pays_nationalite",
        ct."date_creation",
        ct."date_contrat_lie",
+       ct."libelleMission",
+       ct."heuresFormation",
        CASE ct.est_contrat
            WHEN 1 THEN -- contrat
                'Contrat de travail'
@@ -157,7 +160,10 @@ FROM (  SELECT c.*,
              to_char(c.fin_validite, 'dd/mm/YYYY')                                                                                                          "finValidite",
              p.libelle                                                                                                                                      "pays_nationalite",
              COALESCE(v.histo_creation,c.histo_creation)                                                                                                    "date_creation",
-             cp.date_retour_signe                                                                                                                           "date_contrat_lie"
+             cp.date_retour_signe                                                                                                                           "date_contrat_lie",
+             m.libelle_mission                                                                                                                              "libelleMission",
+             m.heures_formation                                                                                                                             "heuresFormation",
+             to_char(cp.fin_validite, 'dd/mm/YYYY')                                                                                                         "finValiditeParent"
         FROM
             contrat                         c
             JOIN type_contrat               tc ON tc.id = c.type_contrat_id

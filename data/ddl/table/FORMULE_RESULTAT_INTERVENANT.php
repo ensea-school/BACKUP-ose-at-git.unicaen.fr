@@ -357,6 +357,18 @@ return [
             'position'    => 7,
             'commentaire' => NULL,
         ],
+        'TOTAL'                          => [
+            'name'        => 'TOTAL',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 32,
+            'commentaire' => NULL,
+        ],
         'TYPE_INTERVENANT_ID'            => [
             'name'        => 'TYPE_INTERVENANT_ID',
             'type'        => 'int',

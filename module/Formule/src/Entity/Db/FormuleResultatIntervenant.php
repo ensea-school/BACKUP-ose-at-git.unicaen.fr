@@ -7,11 +7,27 @@ use Intervenant\Entity\Db\Intervenant;
 
 class FormuleResultatIntervenant extends FormuleIntervenant
 {
+    protected Intervenant $intervenant;
+
+    protected float $total = 0.0;
+
     protected float $solde = 0.0;
 
     protected float $sousService = 0.0;
 
-    protected Intervenant $intervenant;
+
+
+    public function getIntervenant(): Intervenant
+    {
+        return $this->intervenant;
+    }
+
+
+
+    public function getTotal(): float
+    {
+        return $this->total;
+    }
 
 
 
@@ -26,11 +42,4 @@ class FormuleResultatIntervenant extends FormuleIntervenant
     {
         return $this->sousService;
     }
-
-
-    public function getIntervenant(): Intervenant
-    {
-        return $this->intervenant;
-    }
-
 }

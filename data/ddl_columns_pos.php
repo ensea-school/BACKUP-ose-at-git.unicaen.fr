@@ -2610,6 +2610,7 @@ return [
         'HEURES_COMPL_FC',
         'HEURES_COMPL_FC_MAJOREES',
         'HEURES_COMPL_REFERENTIEL',
+        'TOTAL',
         'SOLDE',
         'SOUS_SERVICE',
     ],

@@ -1,6 +1,6 @@
 <?php
 
-namespace ContratProcess\Tbl\Process;
+namespace Contrat\Tbl\Process;
 
 use Contrat\Tbl\Process\ContratProcess;
 use Psr\Container\ContainerInterface;
@@ -23,7 +23,7 @@ class ContratProcessFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null): ContratProcess
     {
-        $service = new ContratProcess;
+        $service = new ContratProcess();
 
         $service->setServiceBdd($container->get(BddService::class));
 

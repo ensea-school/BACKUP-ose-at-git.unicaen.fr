@@ -1,9 +1,8 @@
 <?php
 
-namespace ContratProcess\Tbl\Process;
+namespace Contrat\Tbl\Process;
 
 
-use Contrat\Tbl\Process\ContratProcess;
 
 trait ContratProcessAwareTrait
 {

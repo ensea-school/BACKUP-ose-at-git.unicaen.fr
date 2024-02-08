@@ -6,7 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use Contrat\Assertion\ContratAssertion;
 use Contrat\Controller\ContratController;
 use Contrat\Tbl\Process\ContratProcess;
-use ContratProcess\Tbl\Process\ContratProcessFactory;
+use Contrat\Tbl\Process\ContratProcessFactory;
 use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [

@@ -7,6 +7,10 @@
             <generator strategy="SEQUENCE"/>
             <sequence-generator sequence-name="FTEST_INTERVENANT_ID_SEQ" allocation-size="1" initial-value="1"/>
         </id>
+        <field name="libelle" type="string" column="LIBELLE" length="150"/>
+        <many-to-one field="formule" target-entity="Formule\Entity\Db\Formule">
+            <join-column name="FORMULE_ID" referenced-column-name="ID"/>
+        </many-to-one>
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
             <join-column name="ANNEE_ID" referenced-column-name="ID"/>
         </many-to-one>
@@ -17,18 +21,14 @@
             <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
         </many-to-one>
 
-        <field name="libelle" type="string" column="LIBELLE" length="150"/>
-        <many-to-one field="formule" target-entity="Formule\Entity\Db\Formule">
-            <join-column name="FORMULE_ID" referenced-column-name="ID"/>
-        </many-to-one>
-
-        <field name="heuresServiceStatutaire" type="float" column="HEURES_SERVICE_STATUTAIRE" precision="126" scale="0"/>
-        <field name="heuresServiceModifie" type="float" column="HEURES_SERVICE_MODIFIE" precision="126" scale="0"/>
-        <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC"/>
-        <field name="structureCode" type="string" column="STRUCTURE_CODE" length="100" nullable="true"/>
         <many-to-one field="typeIntervenant" target-entity="Intervenant\Entity\Db\TypeIntervenant">
             <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
+        <field name="structureCode" type="string" column="STRUCTURE_CODE" length="100" nullable="true"/>
+        <field name="heuresServiceStatutaire" type="float" column="HEURES_SERVICE_STATUTAIRE" precision="126"
+               scale="0"/>
+        <field name="heuresServiceModifie" type="float" column="HEURES_SERVICE_MODIFIE" precision="126" scale="0"/>
+        <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC"/>
 
         <field name="param1" type="string" column="PARAM_1" length="100" nullable="true"/>
         <field name="param2" type="string" column="PARAM_2" length="100" nullable="true"/>
@@ -42,29 +42,34 @@
         <field name="tauxCmServiceCompl" type="float" column="TAUX_CM_SERVICE_COMPL" precision="126" scale="0"/>
         <field name="tauxTpServiceDu" type="float" column="TAUX_TP_SERVICE_DU" precision="126" scale="0"/>
         <field name="tauxTpServiceCompl" type="float" column="TAUX_TP_SERVICE_COMPL" precision="126" scale="0"/>
-        <field name="tauxAutre1ServiceDu" type="float" column="TAUX_AUTRE_1_SERVICE_DU" precision="126" scale="0"/>
-        <field name="tauxAutre1ServiceCompl" type="float" column="TAUX_AUTRE_1_SERVICE_COMPL" precision="126" scale="0"/>
         <field name="tauxAutre1Code" type="string" column="TAUX_AUTRE_1_CODE" length="30" nullable="true"/>
-        <field name="tauxAutre2ServiceDu" type="float" column="TAUX_AUTRE_2_SERVICE_DU" precision="126" scale="0"/>
-        <field name="tauxAutre2ServiceCompl" type="float" column="TAUX_AUTRE_2_SERVICE_COMPL" precision="126" scale="0"/>
+        <field name="tauxAutre1ServiceDu" type="float" column="TAUX_AUTRE_1_SERVICE_DU" precision="126" scale="0"/>
+        <field name="tauxAutre1ServiceCompl" type="float" column="TAUX_AUTRE_1_SERVICE_COMPL" precision="126"
+               scale="0"/>
         <field name="tauxAutre2Code" type="string" column="TAUX_AUTRE_2_CODE" length="30" nullable="true"/>
-        <field name="tauxAutre3ServiceDu" type="float" column="TAUX_AUTRE_3_SERVICE_DU" precision="126" scale="0"/>
-        <field name="tauxAutre3ServiceCompl" type="float" column="TAUX_AUTRE_3_SERVICE_COMPL" precision="126" scale="0"/>
+        <field name="tauxAutre2ServiceDu" type="float" column="TAUX_AUTRE_2_SERVICE_DU" precision="126" scale="0"/>
+        <field name="tauxAutre2ServiceCompl" type="float" column="TAUX_AUTRE_2_SERVICE_COMPL" precision="126"
+               scale="0"/>
         <field name="tauxAutre3Code" type="string" column="TAUX_AUTRE_3_CODE" length="30" nullable="true"/>
-        <field name="tauxAutre4ServiceDu" type="float" column="TAUX_AUTRE_4_SERVICE_DU" precision="126" scale="0"/>
-        <field name="tauxAutre4ServiceCompl" type="float" column="TAUX_AUTRE_4_SERVICE_COMPL" precision="126" scale="0"/>
+        <field name="tauxAutre3ServiceDu" type="float" column="TAUX_AUTRE_3_SERVICE_DU" precision="126" scale="0"/>
+        <field name="tauxAutre3ServiceCompl" type="float" column="TAUX_AUTRE_3_SERVICE_COMPL" precision="126"
+               scale="0"/>
         <field name="tauxAutre4Code" type="string" column="TAUX_AUTRE_4_CODE" length="30" nullable="true"/>
-        <field name="tauxAutre5ServiceDu" type="float" column="TAUX_AUTRE_5_SERVICE_DU" precision="126" scale="0"/>
-        <field name="tauxAutre5ServiceCompl" type="float" column="TAUX_AUTRE_5_SERVICE_COMPL" precision="126" scale="0"/>
+        <field name="tauxAutre4ServiceDu" type="float" column="TAUX_AUTRE_4_SERVICE_DU" precision="126" scale="0"/>
+        <field name="tauxAutre4ServiceCompl" type="float" column="TAUX_AUTRE_4_SERVICE_COMPL" precision="126"
+               scale="0"/>
         <field name="tauxAutre5Code" type="string" column="TAUX_AUTRE_5_CODE" length="30" nullable="true"/>
+        <field name="tauxAutre5ServiceDu" type="float" column="TAUX_AUTRE_5_SERVICE_DU" precision="126" scale="0"/>
+        <field name="tauxAutre5ServiceCompl" type="float" column="TAUX_AUTRE_5_SERVICE_COMPL" precision="126"
+               scale="0"/>
 
-        <one-to-many field="volumeHoraireTest" target-entity="Formule\Entity\Db\FormuleTestVolumeHoraire"
+        <one-to-many field="formuleVolumeHoraire" target-entity="Formule\Entity\Db\FormuleTestVolumeHoraire"
                      mapped-by="intervenantTest" orphan-removal="true">
             <cascade>
                 <cascade-all/>
             </cascade>
             <order-by>
-                <order-by-field name="id" direction="ASC" />
+                <order-by-field name="id" direction="ASC"/>
             </order-by>
         </one-to-many>
     </entity>

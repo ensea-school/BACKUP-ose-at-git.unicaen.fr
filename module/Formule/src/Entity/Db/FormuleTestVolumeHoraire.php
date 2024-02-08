@@ -4,6 +4,7 @@ namespace Formule\Entity\Db;
 
 use Enseignement\Entity\Db\Service;
 use Enseignement\Entity\Db\VolumeHoraire;
+use Formule\Entity\FormuleIntervenant;
 use Formule\Entity\FormuleVolumeHoraire;
 use Referentiel\Entity\Db\ServiceReferentiel;
 use Referentiel\Entity\Db\VolumeHoraireReferentiel;
@@ -31,23 +32,19 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function setReferentiel(bool $referentiel): FormuleTestVolumeHoraire
+    public function getFormuleIntervenant(): ?FormuleTestIntervenant
     {
-        if ($referentiel) {
-            $this->typeInterventionCode = null;
-        }
-        $this->referentiel = $referentiel;
-        return $this;
+        return $this->formuleIntervenant;
     }
 
 
 
-    public function setTypeInterventionCode(?string $typeInterventionCode): FormuleTestVolumeHoraire
+    public function setFormuleIntervenant(?FormuleIntervenant $formuleIntervenant): FormuleVolumeHoraire
     {
-        if (!empty($typeInterventionCode)) {
-            $this->referentiel = false;
+        if (!$formuleIntervenant instanceof FormuleTestIntervenant) {
+            throw new \Exception('Classe incompatible : un FormuleTestIntervenant doit être fourni obligatoirement');
         }
-        parent::setTypeInterventionCode($typeInterventionCode);
+        $this->formuleIntervenant = $formuleIntervenant;
         return $this;
     }
 
@@ -108,6 +105,28 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
     public function setServiceReferentiel(int|ServiceReferentiel|null $serviceReferentiel): FormuleVolumeHoraire
     {
         $this->referentiel = !(bool)$serviceReferentiel;
+        return $this;
+    }
+
+
+
+    public function setReferentiel(bool $referentiel): FormuleTestVolumeHoraire
+    {
+        if ($referentiel) {
+            $this->typeInterventionCode = null;
+        }
+        $this->referentiel = $referentiel;
+        return $this;
+    }
+
+
+
+    public function setTypeInterventionCode(?string $typeInterventionCode): FormuleTestVolumeHoraire
+    {
+        if (!empty($typeInterventionCode)) {
+            $this->referentiel = false;
+        }
+        parent::setTypeInterventionCode($typeInterventionCode);
         return $this;
     }
 

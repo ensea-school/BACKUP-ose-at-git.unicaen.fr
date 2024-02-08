@@ -330,7 +330,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 30,
+            'position'    => 31,
             'commentaire' => NULL,
         ],
         'SOUS_SERVICE'                   => [
@@ -342,7 +342,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 31,
+            'position'    => 32,
             'commentaire' => NULL,
         ],
         'STRUCTURE_CODE'                 => [
@@ -366,7 +366,7 @@ return [
             'precision'   => 126,
             'nullable'    => FALSE,
             'default'     => '0',
-            'position'    => 32,
+            'position'    => 30,
             'commentaire' => NULL,
         ],
         'TYPE_INTERVENANT_ID'            => [

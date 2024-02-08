@@ -3,33 +3,52 @@
   <entity name="Formule\Entity\Db\FormuleResultatIntervenant" table="FORMULE_RESULTAT_INTERVENANT" read-only="true">
     <id name="id" type="integer" column="ID" />
     <many-to-one field="intervenant" target-entity="Intervenant\Entity\Db\Intervenant">
-      <join-columns>
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
-      </join-columns>
+    </many-to-one>
+    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+      <join-column name="ANNEE_ID" referenced-column-name="ID"/>
     </many-to-one>
     <many-to-one field="typeVolumeHoraire" target-entity="Service\Entity\Db\TypeVolumeHoraire">
-      <join-columns>
         <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
-      </join-columns>
     </many-to-one>
     <many-to-one field="etatVolumeHoraire" target-entity="Service\Entity\Db\EtatVolumeHoraire">
-      <join-columns>
         <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
-      </join-columns>
     </many-to-one>
+
+    <many-to-one field="typeIntervenant" target-entity="Intervenant\Entity\Db\TypeIntervenant">
+      <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
+    </many-to-one>
+    <field name="structureCode" type="string" column="STRUCTURE_CODE" length="100" nullable="true"/>
+    <field name="heuresServiceStatutaire" type="float" column="HEURES_SERVICE_STATUTAIRE" precision="126" scale="0"/>
+    <field name="heuresServiceModifie" type="float" column="HEURES_SERVICE_MODIFIE" precision="126" scale="0"/>
+    <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC"/>
+
+    <field name="param1" type="string" column="PARAM_1" length="100" nullable="true"/>
+    <field name="param2" type="string" column="PARAM_2" length="100" nullable="true"/>
+    <field name="param3" type="string" column="PARAM_3" length="100" nullable="true"/>
+    <field name="param4" type="string" column="PARAM_4" length="100" nullable="true"/>
+    <field name="param5" type="string" column="PARAM_5" length="100" nullable="true"/>
+
     <field name="serviceDu" type="float" column="SERVICE_DU" precision="126" scale="0" nullable="false"/>
-    <field name="heuresServiceFi" type="float" column="SERVICE_FI" precision="126" scale="0" nullable="false"/>
-    <field name="heuresServiceFa" type="float" column="SERVICE_FA" precision="126" scale="0" nullable="false"/>
-    <field name="heuresServiceFc" type="float" column="SERVICE_FC" precision="126" scale="0" nullable="false"/>
-    <field name="heuresServiceReferentiel" type="float" column="SERVICE_REFERENTIEL" precision="126" scale="0" nullable="false"/>
+
+    <field name="heuresServiceFi" type="float" column="HEURES_SERVICE_FI" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceFa" type="float" column="HEURES_SERVICE_FA" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceFc" type="float" column="HEURES_SERVICE_FC" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceReferentiel" type="float" column="HEURES_SERVICE_REFERENTIEL" precision="126" scale="0" nullable="false"/>
+    <field name="heuresNonPayableFi" type="float" column="HEURES_NON_PAYABLE_FI" precision="126" scale="0" nullable="false"/>
+    <field name="heuresNonPayableFa" type="float" column="HEURES_NON_PAYABLE_FA" precision="126" scale="0" nullable="false"/>
+    <field name="heuresNonPayableFc" type="float" column="HEURES_NON_PAYABLE_FC" precision="126" scale="0" nullable="false"/>
+    <field name="heuresNonPayableReferentiel" type="float" column="HEURES_NON_PAYABLE_REFERENTIEL" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFi" type="float" column="HEURES_COMPL_FI" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFa" type="float" column="HEURES_COMPL_FA" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFc" type="float" column="HEURES_COMPL_FC" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFcMajorees" type="float" column="HEURES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplReferentiel" type="float" column="HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="false"/>
+
+    <field name="total" type="float" column="TOTAL" precision="126" scale="0" nullable="false"/>
     <field name="solde" type="float" column="SOLDE" precision="126" scale="0" nullable="false"/>
+    <field name="sousService" type="float" column="SOUS_SERVICE" precision="126" scale="0" nullable="false"/>
 
-
-    <one-to-many field="formuleResultatVolumeHoraire" target-entity="Formule\Entity\Db\FormuleResultatVolumeHoraire" mapped-by="formuleResultat" />
+    <one-to-many field="formuleVolumeHoraire" target-entity="Formule\Entity\Db\FormuleResultatVolumeHoraire" mapped-by="formuleResultatIntervenant" />
   </entity>
 </doctrine-mapping>

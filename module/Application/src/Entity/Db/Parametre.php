@@ -10,19 +10,27 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
  */
 class Parametre implements HistoriqueAwareInterface
 {
-    const CONTRAT_FRANCHI_VALIDATION  = 'validation';
-    const CONTRAT_FRANCHI_DATE_RETOUR = 'date-retour';
-
     const AVENANT_AUTORISE  = 'avenant_autorise';
-    const AVENANT_STRUCT    = 'avenant_struct';
     const AVENANT_DESACTIVE = 'avenant_desactive';
 
-    const CONTRAT_DIRECT = 'contrat_direct';
     const CONTRAT_DATE   = 'contrat_date';
+    const CONTRAT_DIRECT = 'contrat_direct';
 
+    const CONTRAT_ENS_COMPOSANTE = 'contrat_ens_composante';
+    const CONTRAT_ENS_GLOBALE    = 'contrat_ens_globale';
 
-    const SERVICES_MODALITE_SEMESTRIEL = 'semestriel';
+    const CONTRAT_FRANCHI_DATE_RETOUR = 'date-retour';
+
+    const CONTRAT_FRANCHI_VALIDATION = 'validation';
+
+    const CONTRAT_MIS_COMPOSANTE = 'contrat_mis_composante';
+
+    const CONTRAT_MIS_GLOBALE = 'contrat_mis_globale';
+
+    const CONTRAT_MIS_MISSION = 'contrat_mis_mission';
+
     const SERVICES_MODALITE_CALENDAIRE = 'calendaire';
+    const SERVICES_MODALITE_SEMESTRIEL = 'semestriel';
 
     use HistoriqueAwareTrait;
 
@@ -49,6 +57,18 @@ class Parametre implements HistoriqueAwareInterface
 
 
     /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+
+
+    /**
      * Set description
      *
      * @param string $description
@@ -65,13 +85,13 @@ class Parametre implements HistoriqueAwareInterface
 
 
     /**
-     * Get description
+     * Get nom
      *
      * @return string
      */
-    public function getDescription()
+    public function getNom()
     {
-        return $this->description;
+        return $this->nom;
     }
 
 
@@ -93,13 +113,13 @@ class Parametre implements HistoriqueAwareInterface
 
 
     /**
-     * Get nom
+     * Get valeur
      *
      * @return string
      */
-    public function getNom()
+    public function getValeur()
     {
-        return $this->nom;
+        return $this->valeur;
     }
 
 
@@ -116,18 +136,6 @@ class Parametre implements HistoriqueAwareInterface
         $this->valeur = $valeur;
 
         return $this;
-    }
-
-
-
-    /**
-     * Get valeur
-     *
-     * @return string
-     */
-    public function getValeur()
-    {
-        return $this->valeur;
     }
 
 

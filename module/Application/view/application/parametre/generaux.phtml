@@ -121,6 +121,8 @@
                             <li><strong>:annee :</strong> année universitaire du contrat (ex : 2019/2020)</li>
                         </ul>
                         </p>
+                        <?= $this->formControlGroup($form->get('contrat_ens')); ?>
+                        <?= $this->formControlGroup($form->get('contrat_mis')); ?>
                         <?= $this->formControlGroup($form->get('avenant')); ?>
                         <?= $this->formControlGroup($form->get('contrat_direct')); ?>
                         <?= $this->formControlGroup($form->get('contrat_date')); ?>

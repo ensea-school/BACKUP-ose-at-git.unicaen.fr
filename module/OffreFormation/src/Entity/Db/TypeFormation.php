@@ -4,6 +4,8 @@ namespace OffreFormation\Entity\Db;
 
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Parametre\Interface\ChampsAutresInterface;
+use Parametre\Trait\ChampsAutresTrait;
 use RuntimeException;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -13,11 +15,13 @@ use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 /**
  * TypeFormation
  */
-class TypeFormation extends AbstractEntityService implements HistoriqueAwareInterface, ImportAwareInterface
+class TypeFormation extends AbstractEntityService implements HistoriqueAwareInterface, ImportAwareInterface, ChampsAutresInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
     use SourceServiceAwareTrait;
+    use ChampsAutresTrait;
+
     /**
      * @var string
      */

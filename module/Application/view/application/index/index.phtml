@@ -42,7 +42,7 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
 
 
                     /* Guide à télécharger... */
-                    $guideType = $intervenant->getStatut()->estVacataire() ? 'vacataires' : 'permanents';
+                    $guideType = $intervenant->getStatut()->getTypeIntervenant()->getCode();
                     if (!empty($documentation[$guideType])) {
                         echo $this->tag('div', ['class' => 'alert alert-info', 'style' => 'margin-top:1em', 'role' => 'alert'])->html(
                             'Un guide d\'utilisation de OSE vous est proposé. Vous pouvez le télécharger en suivant le lien ci-contre : '

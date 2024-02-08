@@ -120,6 +120,24 @@ Attention : il doit y avoir unicité de la clé [ANNEE_ID, FONCTION_REFERENTIEL_
 (*) La colonne PLAFOND est facultative et ne doit être fournie que si ce plafond dépend d'un calcul (% du service dû, etc.). A défaut la valeur retenue est
 celle saisie dans l'IHM d'administration de la fonction référentielle pour le plafond donné.
 
+### Types de missions
+
+| Colonne                | Type (ou référence)       | Description                               |
+|------------------------|---------------------------|-------------------------------------------|
+| ANNEE_ID               | => ANNEE.ID               | Année universitaire                       | 
+| TYPE_MISSION_ID        | => TYPE_MISSION.ID        | Identifiant du type de mission visé       | 
+| TYPE_VOLUME_HORAIRE_ID | => TYPE_VOLUME_HORAIRE.ID | Prévisionnel ou réalisé                   |
+| PLAFOND*               | FLOAT NOT NULL            | Valeur du plafond en heures               |
+| HEURES                 | FLOAT NOT NULL            | Heures calculées pour l'intervenant donné |
+
+Attention : il doit y avoir unicité de la clé [ANNEE_ID, TYPE_MISSION_ID, TYPE_VOLUME_HORAIRE_ID]
+
+* Si la colonne PLAFOND n'est pas fournie par la requête, alors la valeur du plafond sera celle saisie dans OSE pour le type de mission donné
+
+(*) La colonne PLAFOND est facultative et ne doit être fournie que si ce plafond dépend d'un calcul (% du service dû, etc.). A défaut la valeur retenue est
+celle saisie dans l'IHM d'administration du type de mission pour le plafond donné.
+
+
 ### Elément
 
 | Colonne                | Type (ou référence)       | Description                                                    |

@@ -17,6 +17,7 @@
 
 * Modification de la formule de calcul de l'UPEC (#54445)
 * La prise en compte du caractère éligible selon le type d'heures est rétablie sur les extractions de paye
+* Modification workflow pour permettre la saisie de mission par plusieurs composantes sur un même étudiant (#54487)
 
 
 

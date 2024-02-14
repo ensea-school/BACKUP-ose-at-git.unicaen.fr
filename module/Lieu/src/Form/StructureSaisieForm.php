@@ -46,21 +46,22 @@ class StructureSaisieForm extends AbstractForm
         $this->build();
 
         $this->setLabels([
-            'structure'          => 'Structure parente',
-            'libelleCourt'       => 'Libellé court',
-            'libelleLong'        => 'Libellé long',
-            'enseignement'       => 'Peut porter des enseignements',
-            'affAdresseContrat'  => 'Affichage de l\'adresse sur le contrat de travail',
-            'adressePrecisions'  => 'Précisions',
-            'adresseNumero'      => 'N°',
-            'adresseNumeroCompl' => 'Compl.',
-            'adresseVoirie'      => 'Voirie',
-            'adresseVoie'        => 'Voie',
-            'adresseLieuDit'     => 'Lieu dit',
-            'adresseCodePostal'  => 'Code postal',
-            'adresseCommune'     => 'Commune',
-            'adressePays'        => 'Pays',
-            'centreCoutDefault'  => 'Centre de coût par défaut',
+            'structure'                 => 'Structure parente',
+            'libelleCourt'              => 'Libellé court',
+            'libelleLong'               => 'Libellé long',
+            'enseignement'              => 'Peut porter des enseignements',
+            'affAdresseContrat'         => 'Affichage de l\'adresse sur le contrat de travail',
+            'adressePrecisions'         => 'Précisions',
+            'adresseNumero'             => 'N°',
+            'adresseNumeroCompl'        => 'Compl.',
+            'adresseVoirie'             => 'Voirie',
+            'adresseVoie'               => 'Voie',
+            'adresseLieuDit'            => 'Lieu dit',
+            'adresseCodePostal'         => 'Code postal',
+            'adresseCommune'            => 'Commune',
+            'adressePays'               => 'Pays',
+            'centreCoutDefault'         => 'Centre de coût par défaut',
+            'domaineFonctionnelDefault' => 'Domaine fonctionnel par défaut',
         ]);
 
         $this->get('structure')->setEmptyOption('- Structure racine -');

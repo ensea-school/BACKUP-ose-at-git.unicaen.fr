@@ -12,6 +12,7 @@
 ## Nouveautés
 
 * Formule de calcul de Paris Deauphine (#50652)
+* Possibilité de paramétrer un domaine fonctionnel par défaut pour une strucutre (#54962)
 
 ## Corrections de bugs
 

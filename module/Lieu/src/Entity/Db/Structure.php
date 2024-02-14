@@ -2,6 +2,7 @@
 
 namespace Lieu\Entity\Db;
 
+use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\Intervenant;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -28,35 +29,37 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     use HistoriqueAwareTrait;
     use ChampsAutresTrait;
 
-    protected ?int        $id                = null;
+    protected ?int                $id                        = null;
 
-    protected ?string     $code              = null;
+    protected ?string             $code                      = null;
 
-    protected ?string     $libelleCourt      = null;
+    protected ?string             $libelleCourt              = null;
 
-    protected ?string     $libelleLong       = null;
+    protected ?string             $libelleLong               = null;
 
-    protected Collection  $elementPedagogique;
+    protected Collection          $elementPedagogique;
 
-    protected Collection  $centreCout;
+    protected Collection          $centreCout;
 
-    protected ?CentreCout $centreCoutDefault = null;
+    protected ?CentreCout         $centreCoutDefault         = null;
 
-    protected Collection  $miseEnPaiementIntervenantStructure;
+    protected ?DomaineFonctionnel $domaineFonctionnelDefault = null;
 
-    protected Collection  $tblPaiement;
+    protected Collection          $miseEnPaiementIntervenantStructure;
 
-    protected bool        $enseignement      = false;
+    protected Collection          $tblPaiement;
 
-    protected             $affAdresseContrat = true;
+    protected bool                $enseignement              = false;
 
-    protected ?Structure  $structure         = null;
+    protected                     $affAdresseContrat         = true;
 
-    protected ?string     $ids               = null;
+    protected ?Structure          $structure                 = null;
 
-    protected ?string     $libellesCourts    = null;
+    protected ?string             $ids                       = null;
 
-    protected Collection  $structures;
+    protected ?string             $libellesCourts            = null;
+
+    protected Collection          $structures;
 
 
 
@@ -282,6 +285,32 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     public function setCentreCoutDefault (?CentreCout $centreCoutDefault): self
     {
         $this->centreCoutDefault = $centreCoutDefault;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get domaineFonctionnelDefault
+     *
+     * @return ?DomaineFonctionnel
+     */
+    public function getDomaineFonctionnelDefault (): ?DomaineFonctionnel
+    {
+        return $this->domaineFonctionnelDefault;
+    }
+
+
+
+    /**
+     * Set domaineFonctionnelDefault
+     *
+     * @return Structure
+     */
+    public function setDomaineFonctionnelDefault (?DomaineFonctionnel $domaineFonctionnelDefault): self
+    {
+        $this->domaineFonctionnelDefault = $domaineFonctionnelDefault;
 
         return $this;
     }

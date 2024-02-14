@@ -213,6 +213,18 @@ return [
             'position'    => 14,
             'commentaire' => NULL,
         ],
+        'DOMAINE_FONCTIONNEL_ID'  => [
+            'name'        => 'DOMAINE_FONCTIONNEL_ID',
+            'type'        => 'int',
+            'bdd-type'    => 'NUMBER',
+            'length'      => 0,
+            'scale'       => '0',
+            'precision'   => 38,
+            'nullable'    => TRUE,
+            'default'     => NULL,
+            'position'    => 33,
+            'commentaire' => NULL,
+        ],
         'ENSEIGNEMENT'            => [
             'name'        => 'ENSEIGNEMENT',
             'type'        => 'bool',

@@ -2,6 +2,7 @@
 
 namespace Lieu\Form;
 
+use Paiement\Entity\Db\DomaineFonctionnel;
 use Application\Form\AbstractForm;
 use Laminas\Form\FormInterface;
 use Lieu\Entity\Db\AdresseNumeroCompl;
@@ -10,6 +11,7 @@ use Lieu\Entity\Db\Structure;
 use Lieu\Entity\Db\Voirie;
 use Lieu\Service\AdresseNumeroComplServiceAwareTrait;
 use Paiement\Service\CentreCoutServiceAwareTrait;
+use Paiement\Service\DomaineFonctionnelServiceAwareTrait;
 use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 
 /**
@@ -21,6 +23,7 @@ class StructureSaisieForm extends AbstractForm
 {
     use SchemaServiceAwareTrait;
     use CentreCoutServiceAwareTrait;
+    use DomaineFonctionnelServiceAwareTrait;
 
     public function init ()
     {
@@ -38,6 +41,7 @@ class StructureSaisieForm extends AbstractForm
         $this->spec(['adresseCommune' => ['input' => ['required' => false]]]);
         $this->spec(['adressePays' => ['input' => ['required' => false]]]);
         $this->spec(['centreCoutDefault' => ['type' => 'Select', 'input' => ['required' => false,],]]);
+        $this->spec(['domaineFonctionnelDefault' => ['type' => 'Select', 'input' => ['required' => false,],]]);
 
         $this->build();
 
@@ -67,6 +71,8 @@ class StructureSaisieForm extends AbstractForm
 
         $this->get('centreCoutDefault')->setValueOptions(['' => '(Sélectionnez un centre de coût)'] + $centresCoutsOrdered);
 
+        $this->setValueOptions('domaineFonctionnelDefault', 'SELECT df FROM ' . DomaineFonctionnel::class . ' df WHERE df.histoDestruction IS NULL ORDER BY df.libelle');
+        $this->get('domaineFonctionnelDefault')->setEmptyOption('(Sélectionnez un domaine fonctionnel)');
 
         $this->setValueOptions('adresseNumeroCompl', 'SELECT anc FROM ' . AdresseNumeroCompl::class . ' anc ORDER BY anc.id');
         $this->get('adresseNumeroCompl')->setEmptyOption('');

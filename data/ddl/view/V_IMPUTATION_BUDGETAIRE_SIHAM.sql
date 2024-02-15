@@ -15,13 +15,13 @@ SELECT
  	to_char((CASE
                 WHEN pourc_ecart >= 0 THEN
                     CASE
-                        WHEN rank() OVER (PARTITION BY periode_id, intervenant_id, code_indemnite   ORDER BY operation,centre_cout, pourcentage) = 1
-                        THEN pourcentage - pourc_ecart
+                        WHEN rank() OVER (PARTITION BY periode_id, intervenant_id   ORDER BY operation,centre_cout, pourcentage) = 1
+                        THEN pourcentage + pourc_ecart
                         ELSE pourcentage END
                 ELSE
                     CASE
-                        WHEN rank() OVER (PARTITION BY periode_id, intervenant_id, code_indemnite   ORDER BY operation, centre_cout, pourcentage) = 1
-                        THEN pourcentage + pourc_ecart
+                        WHEN rank() OVER (PARTITION BY periode_id, intervenant_id   ORDER BY operation, centre_cout, pourcentage) = 1
+                        THEN pourcentage - pourc_ecart
                         ELSE pourcentage END
        END))	pourcentage,
      nombres_heures,
@@ -31,8 +31,9 @@ SELECT
 FROM(
 SELECT
 	imputation2.*,
+	SUM(pourcentage) OVER ( PARTITION BY periode_id, intervenant_id)   somme,
 	--On regarde si la somme des pourcentages est égale à 100% sinon on calcule l'écart qu'il faudra redistribuer ou retirer
-	100 - SUM(pourcentage) OVER ( PARTITION BY periode_id, intervenant_id, code_indemnite)  pourc_ecart
+	100 - SUM(pourcentage) OVER ( PARTITION BY periode_id, intervenant_id)  pourc_ecart
 FROM (
 	SELECT 'P'                                                                                										type,
 		   NULL																				  										uo,
@@ -46,8 +47,8 @@ FROM (
 	       NULL                                                                               										fonds,
 	       NULL                                                                               										poste_reservation_credit,
 	       CASE WHEN montant_hetd > 0
-	       	    THEN ROUND(montant_hetd / SUM(montant_hetd) OVER( PARTITION BY periode_id,intervenant_id,code_indemnite),2)*100
-	       	    ELSE 0  END																												pourcentage,
+	       	    THEN ROUND(montant_hetd / SUM(montant_hetd) OVER( PARTITION BY periode_id,intervenant_id),2)*100
+	       	    ELSE 0  END																											pourcentage,
 	       CASE WHEN hetd >= 100 THEN FLOOR(hetd) || ':' || lpad(FLOOR((hetd - FLOOR(hetd)) * 60), 2, 0)
 	       ELSE (lpad(FLOOR(hetd), 2, '0')) || ':' || lpad(FLOOR((hetd - FLOOR(hetd)) * 60), 2, 0) END         						nombres_heures,
 	       NULL                                                                               										flmodi,

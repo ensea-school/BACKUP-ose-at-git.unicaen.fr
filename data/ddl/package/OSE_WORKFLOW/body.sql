@@ -467,7 +467,7 @@ CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
         SELECT
           ''MISSION_SAISIE''                                   etape_code,
           m.intervenant_id                                     intervenant_id,
-          COALESCE(m.structure_id,m.intervenant_structure_id)  structure_id,
+          NULL                                                 structure_id,
           SUM(1)                                               objectif,
           SUM(CASE WHEN m.mission_id IS NULL THEN 0 ELSE 1 END) realisation
         FROM

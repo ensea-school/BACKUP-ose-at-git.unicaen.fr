@@ -14,7 +14,7 @@ SELECT
   i.id                                        intervenant_id,
   COALESCE( ep.structure_id, i.structure_id ) structure_id,
   COALESCE(thens.id,th.id)                    type_heures_id,
-  COALESCE(e.domaine_fonctionnel_id, ose_parametre.get_domaine_fonc_ens_ext) def_domaine_fonctionnel_id,
+  COALESCE(e.domaine_fonctionnel_id, str.domaine_fonctionnel_id, ose_parametre.get_domaine_fonc_ens_ext) def_domaine_fonctionnel_id,
   COALESCE(ccep.centre_cout_id,str.centre_cout_id) def_centre_cout_id,
   COALESCE(ep.taux_remu_id, si.taux_remu_id, ose_parametre.get_taux_remu) taux_remu_id,
   1                                           taux_conges_payes,
@@ -228,7 +228,7 @@ SELECT
   tm.intervenant_id                           intervenant_id,
   m.structure_id                              structure_id,
   th.id                                       type_heures_id,
-  NULL                                        def_domaine_fonctionnel_id,
+  str.domaine_fonctionnel_id                  def_domaine_fonctionnel_id,
   str.centre_cout_id                          def_centre_cout_id,
   CASE WHEN
     TO_CHAR( vhm.horaire_debut, 'HH24:MI' ) >= ose_parametre.get_horaire_nocturne -- horaire nocturne

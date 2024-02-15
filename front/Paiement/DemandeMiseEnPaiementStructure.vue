@@ -66,7 +66,7 @@
                                                     <table class="table table-sm ">
                                                         <thead>
                                                         <th scope="col" style="width:20%;font-size:12px;">Heures</th>
-                                                        <th scope="col" style="width:40%;font-size:12px;">Centre cout</th>
+                                                        <th scope="col" style="width:40%;font-size:12px;">Centre de cout</th>
                                                         <th scope="col" style="width:25%;font-size:12px;">Statut</th>
                                                         <th style="width:15%;font-size:12px;">Action</th>
                                                         </thead>
@@ -81,6 +81,8 @@
                                                                         :id="'heures-' + codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure"
                                                                         :data-domaine-fonctionnel-id="value.domaineFonctionnelId"
                                                                         :data-formule-res-service-id="value.formuleResServiceId"
+                                                                        :data-formule-res-service-ref-id="value.formuleResServiceRefId"
+                                                                        :data-mission-id="value.missionId"
                                                                         :data-type-heures-id="value.typeHeureId"
                                                                         :max="value.heuresAPayer"
                                                                         :value="value.heuresAPayer"
@@ -164,7 +166,6 @@
                     </div>
                 </div>
                 <!--FONCTION REFERENTIEL-->
-
                 <div v-for="(fonction, codeFonction) in datas.fonctionsReferentiels">
                     <div class="cartridge gray bordered" style="padding-bottom: 5px">
                         <span>Référentiel</span>
@@ -181,7 +182,7 @@
                                             <table class="table table-sm ">
                                                 <thead>
                                                 <th scope="col" style="width:10%;font-size:12px;">Heures</th>
-                                                <th scope="col" style="width:25%;font-size:12px;">Centre cout</th>
+                                                <th scope="col" style="width:25%;font-size:12px;">Centre de cout</th>
                                                 <th scope="col" style="width:25%;font-size:12px;">Domaine fonctionnel</th>
                                                 <th scope="col" style="width:20%;font-size:12px;">Statut</th>
                                                 <th style="width:15%;font-size:12px;">Action</th>
@@ -194,7 +195,9 @@
                                                             <input
                                                                 :id="'heures-' + codeFonction"
                                                                 :data-domaine-fonctionnel-id="value.domaineFonctionnelId"
+                                                                :data-formule-res-service-id="value.formuleResServiceId"
                                                                 :data-formule-res-service-ref-id="value.formuleResServiceRefId"
+                                                                :data-mission-id="value.missionId"
                                                                 :data-type-heures-id="value.typeHeureId"
                                                                 :max="value.heuresAPayer"
                                                                 :value="value.heuresAPayer"
@@ -289,12 +292,144 @@
                         </div>
                     </div>
                 </div>
+                <!--MISSIONS-->
+                <div v-for="mission in datas.missions">
+                    <div class="cartridge gray bordered" style="padding-bottom: 5px">
+                        <span>Mission</span>
+                        <span>{{ mission.libelle }}</span>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+
+                                <table class="table mt-3 table-bordered">
+
+                                    <tbody>
+                                    <tr>
+                                        <td colspan="2">
+                                            <table class="table table-sm ">
+                                                <thead>
+                                                <th scope="col" style="width:10%;font-size:12px;">Heures</th>
+                                                <th scope="col" style="width:25%;font-size:12px;">Centre de cout</th>
+                                                <th scope="col" style="width:25%;font-size:12px;">Domaine fonctionnel</th>
+                                                <th scope="col" style="width:20%;font-size:12px;">Statut</th>
+                                                <th style="width:15%;font-size:12px;">Action</th>
+                                                </thead>
+                                                <tbody>
+
+                                                <tr v-for="(value,id) in mission.heures" class="detailHeure">
+                                                    <td v-if="value.heuresDemandees != 0 " style="width:10%;">{{ value.heuresAPayer }} hetd</td>
+                                                    <td v-if="value.heuresDemandees == 0 " style="width:20%;">
+                                                        <div class="input-group col-1">
+                                                            <input
+                                                                :id="'heures-' + mission.missionId"
+                                                                :data-domaine-fonctionnel-id="value.domaineFonctionnelId"
+                                                                :data-formule-res-service-ref-id="value.formuleResServiceRefId"
+                                                                :data-mission-id="value.missionId"
+                                                                :data-type-heures-id="value.typeHeureId"
+                                                                :max="value.heuresAPayer"
+                                                                :value="value.heuresAPayer"
+                                                                class="form-control form-control-sm"
+                                                                min="0"
+                                                                style="width: 40px;"
+                                                                type="number"
+                                                            />
+                                                            <span class="input-group-text" style="font-size:12px;">hetd(s)</span>
+                                                        </div>
+                                                    </td>
+                                                    <td v-if="value.heuresDemandees == 0 ">
+                                                        <select :id="'centreCout-' + mission.missionId" class="selectpicker"
+                                                                data-live-search="true"
+                                                                name="centreCout"
+                                                                @change="enabledPaiement(mission.missionId,'mission')">
+                                                            <option value="">Aucun centre de cout</option>
+                                                            <optgroup
+                                                                v-for="group in filtrerCentresCouts(datas.centreCoutPaiement,'mission')"
+                                                                :key="group.group"
+                                                                :label="group.group">
+                                                                <option v-for="item in group.child"
+                                                                        :key="item.value"
+                                                                        :selected="item.centreCoutId == value.centreCout.centreCoutId"
+                                                                        :value="item.centreCoutId"
+                                                                >
+                                                                    {{ item.centreCoutCode + ' - ' + item.centreCoutLibelle }}
+                                                                </option>
+
+                                                            </optgroup>
+                                                        </select>
+                                                    </td>
+                                                    <td v-if="value.heuresDemandees != 0 "
+                                                        v-html="shorten(value.centreCout.code + ' - ' + value.centreCout.libelle, 20)">
+                                                    </td>
+                                                    <td v-if="value.heuresDemandees == 0 ">
+                                                        <select :id="'domaineFonctionnel-' + mission.missionId"
+                                                                class="selectpicker"
+                                                                data-live-search="true"
+                                                                name="centreCout"
+                                                                @change="enabledPaiement(mission.missionId,'mission')">
+                                                            <option value="">Aucun domaine fonctionnel</option>
+                                                            <option v-for="item in datas.domaineFonctionnelPaiement"
+                                                                    :selected="item.domaineFonctionnelId == value.domaineFonctionnel.domaineFonctionnelId"
+                                                                    :value="item.domaineFonctionnelId">
+                                                                {{ item.domaineFonctionnelLibelle }}
+                                                            </option>
+
+
+                                                        </select>
+                                                    </td>
+                                                    <td v-if="value.heuresDemandees != 0 ">
+                                                        {{ value.domaineFonctionnel.libelle }}
+                                                    </td>
+                                                    <td v-html="heuresStatutToString(value)">
+                                                    </td>
+                                                    <td style="font-size:12px;">
+                                                                <span
+                                                                    v-if="value.heuresAPayer != value.heuresPayees &&  value.heuresAPayer == value.heuresDemandees">
+                                                                    <button :id="'remove-' + value.mepId"
+                                                                            class="btn btn-danger"
+                                                                            type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
+                                                                        <i class="fa-solid fa-trash" style="color:white;"></i>
+                                                                    </button>
+                                                                </span>
+                                                        <span
+                                                            v-if="value.heuresDemandees == 0">
+                                                                    <button :id="'add-' + mission.missionId"
+                                                                            class="btn btn-primary"
+                                                                            type="button"
+                                                                            @click="this.ajouterDemandeMiseEnPaiement(mission.missionId)">
+                                                                            <u-icon name="plus"/>
+                                                                    </button>
+                                                                </span>
+
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+
+
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr class="table-light">
+                                        <th scope="row">Total</th>
+                                        <td>{{ totalHeure(mission.heures) }} hetd</td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
             <div style="background-color:#fbfbfb;padding:10px;padding-right:40px;text-align:right;">
                 <button :id="'add-all-' + datas.code"
                         class="btn btn-primary"
                         type="button"
-                        @click="demanderToutesLesHeuresEnPaiement(datas.code)">
+                        @click="demanderToutesLesHeuresEnPaiement(datas.code, datas.libelle)">
                     <u-icon name="square-plus"/>
                     DEMANDER TOUS LES PAIEMENTS POUR {{ datas.libelle }}
                 </button>
@@ -320,8 +455,7 @@ export default {
             urlListeServiceAPayer: unicaenVue.url('intervenant/:intervenant/mise-en-paiement/liste-service-a-payer', {intervenant: this.intervenant}),
         }
     },
-    computed:
-        {},
+    computed: {},
     methods: {
         heuresStatutToString(value)
         {
@@ -353,6 +487,36 @@ export default {
                     console.error(error);
                 })
         },
+        disabledPaiement(value)
+        {
+            if (value.missionId != '' || value.formuleResServiceRefId != '') {
+                if (value.centreCoutId && value.domaineFonctionnel) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            return false;
+        },
+        enabledPaiement(id, type)
+        {
+            if (type == 'mission') {
+                let btnAdd = document.getElementById('add-' + id);
+                let centreCoutId = document.getElementById('centreCout-' + id).value;
+                let domaineFonctionnelId = document.getElementById('domaineFonctionnel-' + id).value;
+                if (centreCoutId != '' && domaineFonctionnelId != '') {
+                    console.log('false');
+                    btnAdd.disabled = false;
+                } else {
+                    btnAdd.disabled = true;
+                    console.log('true');
+                }
+
+            }
+
+        },
+
+
         ajouterDemandeMiseEnPaiement(id)
         {
 
@@ -362,10 +526,12 @@ export default {
             btnAdd.disabled = true;
             let inputHeure = document.getElementById('heures-' + id);
             let inputCentreCout = document.getElementById('centreCout-' + id);
+            let inputDomaineFonctionnel = document.getElementById('domaineFonctionnel-' + id);
             let heureADemander = Number(inputHeure.value);
             let heureADemanderMax = Number(inputHeure.getAttribute('max'));
 
             let centreCoutId = inputCentreCout.value;
+            let domaineFonctionnelId = (inputDomaineFonctionnel) ? inputDomaineFonctionnel.value : '';
 
             let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
             let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
@@ -377,6 +543,7 @@ export default {
             datas.append('formuleResServiceId', formuleResServiceId);
             datas.append('formuleResServiceRefId', formuleResServiceRefId);
             datas.append('centreCoutId', centreCoutId);
+            datas.append('domaineFonctionnelId', domaineFonctionnelId);
             datas.append('missionId', missionId);
 
             //Si volontairement on passe 0 heure à demander ou si on demande plus d'heures que le maximum possible pour cette ligne
@@ -402,7 +569,7 @@ export default {
 
 
         },
-        demanderToutesLesHeuresEnPaiement(codeStructure)
+        demanderToutesLesHeuresEnPaiement(codeStructure, libelleStructure)
         {
             //On récupere le bouton d'ajout
             let btnAddAll = document.getElementById('add-all-' + codeStructure);
@@ -420,6 +587,9 @@ export default {
                     if (demandesMiseEnPaiement[i].getElementsByTagName('select')[0].value != '') {
 
                         let selectCentreCout = demandesMiseEnPaiement[i].getElementsByTagName('select')[0];
+                        console.log(demandesMiseEnPaiement[i].getElementsByTagName('select'));
+                        console.log(demandesMiseEnPaiement[i]);
+
 
                         let heureADemander = Number(inputHeure.value);
                         let heureADemanderMax = Number(inputHeure.getAttribute('max'));
@@ -455,7 +625,7 @@ export default {
                     this.$emit('refresh');
                     setTimeout(() => {
                         btnAddAll.disabled = false;
-                        btnAddAll.innerText = "TOUT METTRE EN PAIEMENT POUR CETTE COMPOSANTE"
+                        btnAddAll.innerHTML = "<i class=\"square-plus\"></i>TOUT METTRE EN PAIEMENT POUR " + libelleStructure;
                     }, 1500);
 
                 })

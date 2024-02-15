@@ -154,16 +154,17 @@ class PaiementController extends AbstractController
             $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
         }
         //on supprimer la demande de mise en paiement
-        if ($this->getServiceMiseEnPaiement()->supprimerDemandeMiseEnPaiement($idDmep)) {
+        try {
+            $this->getServiceMiseEnPaiement()->supprimerDemandeMiseEnPaiement($idDmep);
             $this->flashMessenger()->addSuccessMessage("Demande de mise en paiement supprimer.");
-        } else {
-            $this->flashMessenger()->addErrorMessage("Impossible de supprimer la demande de mise en paiement, les heures ont déjà été payé.");
+            $this->updateTableauxBord($intervenant);
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+
+            return false;
         }
 
-        //Mise à jour tableau de bord de paiement
-        $this->updateTableauxBord($intervenant);
-
-        return false;
+        return true;
     }
 
 
@@ -181,8 +182,15 @@ class PaiementController extends AbstractController
         if ($this->getRequest()->isPost()) {
 
             $datas = $this->getRequest()->getPost()->toArray();
-            $this->updateTableauxBord($intervenant);
-            $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $datas);
+            
+            try {
+                $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $datas);
+                $this->updateTableauxBord($intervenant);
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+
+                return false;
+            }
 
             //On recalcule le tableau de bord paiement de l'intervenant conserné
             return true;
@@ -208,7 +216,11 @@ class PaiementController extends AbstractController
 
             $demandes = json_decode($post, true);
             foreach ($demandes as $demande) {
-                $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $demande);
+                try {
+                    $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $demande);
+                } catch (\Exception $e) {
+                    continue;
+                }
             }
             $this->updateTableauxBord($intervenant);
 

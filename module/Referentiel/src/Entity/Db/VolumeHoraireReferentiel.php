@@ -6,11 +6,9 @@ use Application\Entity\Db\Validation;
 use Contrat\Entity\Db\Contrat;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Formule\Entity\Db\FormuleResultatVolumeHoraireReferentiel;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Plafond\Interfaces\PlafondDataInterface;
 use Service\Entity\Db\EtatVolumeHoraire;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -41,8 +39,6 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
 
     private Collection $etatVolumeHoraireReferentiel;
 
-    private Collection $formuleResultatVolumeHoraireReferentiel;
-
     private bool       $remove         = false;
 
     private ?Contrat   $contrat        = null;
@@ -53,7 +49,6 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
     {
         $this->validation                              = new ArrayCollection();
         $this->etatVolumeHoraireReferentiel            = new ArrayCollection();
-        $this->formuleResultatVolumeHoraireReferentiel = new ArrayCollection();
     }
 
 
@@ -193,31 +188,6 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
     public function getEtatVolumeHoraireReferentiel(): EtatVolumeHoraire
     {
         return $this->etatVolumeHoraireReferentiel->first();
-    }
-
-
-
-    public function getFormuleResultatVolumeHoraireReferentiel(?TypeVolumeHoraire $typeVolumeHoraire = null, ?EtatVolumeHoraire $etatVolumeHoraire = null): Collection
-    {
-        $filter = function (FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel) use ($typeVolumeHoraire, $etatVolumeHoraire) {
-            if (isset($typeVolumeHoraire) && $typeVolumeHoraire !== $formuleResultatVolumeHoraireReferentiel->getFormuleResultat()->getTypeVolumeHoraire()) {
-                return false;
-            }
-            if (isset($etatVolumeHoraire) && $etatVolumeHoraire !== $formuleResultatVolumeHoraireReferentiel->getFormuleResultat()->getEtatVolumeHoraire()) {
-                return false;
-            }
-
-            return true;
-        };
-
-        return $this->formuleResultatVolumeHoraireReferentiel->filter($filter);
-    }
-
-
-
-    public function getUniqueFormuleResultatVolumeHoraireReferentiel(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): ?FormuleResultatVolumeHoraireReferentiel
-    {
-        return $this->getFormuleResultatVolumeHoraireReferentiel($typeVolumeHoraire, $etatVolumeHoraire)->first() ?: null;
     }
 
 

@@ -8,13 +8,13 @@
     <many-to-one field="volumeHoraire" target-entity="Enseignement\Entity\Db\VolumeHoraire">
       <join-column name="VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="volumeHoraireReferenfiel" target-entity="Referentiel\Entity\Db\VolumeHoraireReferentiel">
+    <many-to-one field="volumeHoraireReferentiel" target-entity="Referentiel\Entity\Db\VolumeHoraireReferentiel">
       <join-column name="VOLUME_HORAIRE_REF_ID" referenced-column-name="ID"/>
     </many-to-one>
     <many-to-one field="service" target-entity="Enseignement\Entity\Db\Service">
       <join-column name="SERVICE_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="serviceReferenfiel" target-entity="Referentiel\Entity\Db\ServiceReferentiel">
+    <many-to-one field="serviceReferentiel" target-entity="Referentiel\Entity\Db\ServiceReferentiel">
       <join-column name="SERVICE_REFERENTIEL_ID" referenced-column-name="ID"/>
     </many-to-one>
 

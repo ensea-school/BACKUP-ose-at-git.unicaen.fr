@@ -63,7 +63,7 @@
         <field name="tauxAutre5ServiceCompl" type="float" column="TAUX_AUTRE_5_SERVICE_COMPL" precision="126"
                scale="0"/>
 
-        <one-to-many field="formuleVolumeHoraire" target-entity="Formule\Entity\Db\FormuleTestVolumeHoraire"
+        <one-to-many field="volumesHoraires" target-entity="Formule\Entity\Db\FormuleTestVolumeHoraire"
                      mapped-by="intervenantTest" orphan-removal="true">
             <cascade>
                 <cascade-all/>

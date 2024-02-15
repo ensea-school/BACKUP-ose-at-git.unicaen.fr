@@ -18,6 +18,24 @@ class FormuleResultatIntervenant extends FormuleIntervenant
     protected float $sousService = 0.0;
 
 
+    // Résultats
+    protected float $heuresServiceFi = 0.0;
+    protected float $heuresServiceFa = 0.0;
+    protected float $heuresServiceFc = 0.0;
+    protected float $heuresServiceReferentiel = 0.0;
+
+    protected float $heuresNonPayableFi = 0.0;
+    protected float $heuresNonPayableFa = 0.0;
+    protected float $heuresNonPayableFc = 0.0;
+    protected float $heuresNonPayableReferentiel = 0.0;
+
+    protected float $heuresComplFi = 0.0;
+    protected float $heuresComplFa = 0.0;
+    protected float $heuresComplFc = 0.0;
+    protected float $heuresComplFcMajorees = 0.0;
+    protected float $heuresComplReferentiel = 0.0;
+
+
 
     public function init(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): self
     {
@@ -28,7 +46,10 @@ class FormuleResultatIntervenant extends FormuleIntervenant
         return $this;
     }
 
-
+    /***********************************/
+    /* Accésseurs générés par PhpStorm */
+    /* Attention : getters uniquement  */
+    /***********************************/
 
     public function getIntervenant(): Intervenant
     {
@@ -54,5 +75,96 @@ class FormuleResultatIntervenant extends FormuleIntervenant
     public function getSousService(): float
     {
         return $this->sousService;
+    }
+
+
+
+    public function getHeuresServiceFi(): float
+    {
+        return $this->heuresServiceFi;
+    }
+
+
+
+    public function getHeuresServiceFa(): float
+    {
+        return $this->heuresServiceFa;
+    }
+
+
+
+    public function getHeuresServiceFc(): float
+    {
+        return $this->heuresServiceFc;
+    }
+
+
+
+    public function getHeuresServiceReferentiel(): float
+    {
+        return $this->heuresServiceReferentiel;
+    }
+
+
+
+    public function getHeuresNonPayableFi(): float
+    {
+        return $this->heuresNonPayableFi;
+    }
+
+
+
+    public function getHeuresNonPayableFa(): float
+    {
+        return $this->heuresNonPayableFa;
+    }
+
+
+
+    public function getHeuresNonPayableFc(): float
+    {
+        return $this->heuresNonPayableFc;
+    }
+
+
+
+    public function getHeuresNonPayableReferentiel(): float
+    {
+        return $this->heuresNonPayableReferentiel;
+    }
+
+
+
+    public function getHeuresComplFi(): float
+    {
+        return $this->heuresComplFi;
+    }
+
+
+
+    public function getHeuresComplFa(): float
+    {
+        return $this->heuresComplFa;
+    }
+
+
+
+    public function getHeuresComplFc(): float
+    {
+        return $this->heuresComplFc;
+    }
+
+
+
+    public function getHeuresComplFcMajorees(): float
+    {
+        return $this->heuresComplFcMajorees;
+    }
+
+
+
+    public function getHeuresComplReferentiel(): float
+    {
+        return $this->heuresComplReferentiel;
     }
 }

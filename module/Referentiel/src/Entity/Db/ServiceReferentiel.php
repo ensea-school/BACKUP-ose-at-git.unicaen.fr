@@ -4,16 +4,13 @@ namespace Referentiel\Entity\Db;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Formule\Entity\Db\FormuleResultatServiceReferentiel;
 use Intervenant\Entity\Db\IntervenantAwareTrait;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\StructureAwareTrait;
 use Paiement\Entity\Db\MotifNonPaiementAwareTrait;
 use Plafond\Interfaces\PlafondDataInterface;
 use Referentiel\Entity\VolumeHoraireReferentielListe;
-use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\Traits\TagAwareTrait;
-use Service\Entity\Db\TypeVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraireAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -42,7 +39,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
 
     private Collection $volumeHoraireReferentiel;
 
-    private Collection $formuleResultatServiceReferentiel;
 
 
     public function getId(): ?int
@@ -90,7 +86,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
     public function __construct()
     {
         $this->volumeHoraireReferentiel = new ArrayCollection();
-        $this->formuleResultatServiceReferentiel = new ArrayCollection();
     }
 
 
@@ -151,28 +146,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
         return $volumeHoraireListe;
     }
 
-
-    public function getFormuleResultatServiceReferentiel(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumeHoraire = null): Collection
-    {
-        $filter = function (FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel) use ($typeVolumeHoraire, $etatVolumeHoraire) {
-            if (isset($typeVolumeHoraire) && $typeVolumeHoraire !== $formuleResultatServiceReferentiel->getFormuleResultat()->getTypeVolumeHoraire()) {
-                return false;
-            }
-            if (isset($etatVolumeHoraire) && $etatVolumeHoraire !== $formuleResultatServiceReferentiel->getFormuleResultat()->getEtatVolumeHoraire()) {
-                return false;
-            }
-
-            return true;
-        };
-
-        return $this->formuleResultatServiceReferentiel->filter($filter);
-    }
-
-
-    public function getUniqueFormuleResultatServiceReferentiel(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): FormuleResultatServiceReferentiel
-    {
-        return $this->getFormuleResultatServiceReferentiel($typeVolumeHoraire, $etatVolumeHoraire)->first();
-    }
 
 
     public function getResourceId(): string

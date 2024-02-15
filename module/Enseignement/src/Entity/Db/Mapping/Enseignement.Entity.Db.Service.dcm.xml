@@ -39,8 +39,6 @@
                 <cascade-all/>
             </cascade>
         </one-to-many>
-        <one-to-many field="formuleResultatService" target-entity="Formule\Entity\Db\FormuleResultatService"
-                     mapped-by="service" fetch="EXTRA_LAZY"/>
 
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
             <join-columns>

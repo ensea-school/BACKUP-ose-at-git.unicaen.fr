@@ -7,7 +7,6 @@ use Application\Entity\Db\Validation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Enseignement\Entity\VolumeHoraireListe;
-use Formule\Entity\Db\FormuleResultatService;
 use Intervenant\Entity\Db\Intervenant;
 use Laminas\Permissions\Acl\Resource\ResourceInterface;
 use Lieu\Entity\Db\Etablissement;
@@ -15,7 +14,6 @@ use Lieu\Entity\Db\Structure;
 use OffreFormation\Entity\Db\ElementPedagogique;
 use OffreFormation\Entity\Db\TypeIntervention;
 use Plafond\Interfaces\PlafondDataInterface;
-use Service\Entity\Db\EtatVolumeHoraire;
 use Service\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -43,8 +41,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
 
     protected Collection          $volumeHoraire;
 
-    protected Collection          $formuleResultatService;
-
 
 
     /**
@@ -53,7 +49,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
     public function __construct()
     {
         $this->volumeHoraire          = new ArrayCollection();
-        $this->formuleResultatService = new ArrayCollection();
     }
 
 
@@ -275,36 +270,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
         $this->typeVolumeHoraire = $typeVolumeHoraire;
 
         return $this;
-    }
-
-
-
-    /**
-     * Get formuleResultatService
-     *
-     * @return Collection|FormuleResultatService[]
-     */
-    public function getFormuleResultatService(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumeHoraire = null): Collection
-    {
-        $filter = function (FormuleResultatService $formuleResultatService) use ($typeVolumeHoraire, $etatVolumeHoraire) {
-            if (isset($typeVolumeHoraire) && $typeVolumeHoraire !== $formuleResultatService->getFormuleResultat()->getTypeVolumeHoraire()) {
-                return false;
-            }
-            if (isset($etatVolumeHoraire) && $etatVolumeHoraire !== $formuleResultatService->getFormuleResultat()->getEtatVolumeHoraire()) {
-                return false;
-            }
-
-            return true;
-        };
-
-        return $this->formuleResultatService->filter($filter);
-    }
-
-
-
-    public function getUniqueFormuleResultatService(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire): ?FormuleResultatService
-    {
-        return $this->getFormuleResultatService($typeVolumeHoraire, $etatVolumeHoraire)->first();
     }
 
 

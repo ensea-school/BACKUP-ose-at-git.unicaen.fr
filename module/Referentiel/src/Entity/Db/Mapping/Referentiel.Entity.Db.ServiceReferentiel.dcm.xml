@@ -43,9 +43,6 @@
                 <cascade-all/>
             </cascade>
         </one-to-many>
-        <one-to-many field="formuleResultatServiceReferentiel"
-                     target-entity="Formule\Entity\Db\FormuleResultatServiceReferentiel"
-                     mapped-by="serviceReferentiel"/>
 
         <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
             <join-column name="SOURCE_ID" referenced-column-name="ID"/>

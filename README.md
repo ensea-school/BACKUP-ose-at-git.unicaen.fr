@@ -23,11 +23,9 @@ Une [`procédure d'installation`](INSTALL.md) est à votre disposition pour mett
 
 La [`procédure de mise à jour`](UPDATE.md) vous indiquera comment mettre à niveau votre instance.
 
-## Vidéos de présentation
+## Ressources vidéos
 
-<iframe src="https://mediatheque-pedagogique.unicaen.fr/video/2703-ose-missions-demonstration-de-gestion-dun-dossier-de-mission-emploi-etudiant/?is_iframe=true" width="640" height="360" style="padding: 0; margin: 0; border:0" allowfullscreen ></iframe>
-
-
+https://mediatheque-pedagogique.unicaen.fr/dsi/ose/
 
 ## Documentation technique
 

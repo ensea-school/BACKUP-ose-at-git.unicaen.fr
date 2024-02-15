@@ -71,7 +71,7 @@ class  AffichageController extends AbstractController
         /* @var $intervenant Intervenant */
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
         $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
-        $formuleResultat = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
+        $formuleResultat = $intervenant->getFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return compact('formuleResultat');
     }

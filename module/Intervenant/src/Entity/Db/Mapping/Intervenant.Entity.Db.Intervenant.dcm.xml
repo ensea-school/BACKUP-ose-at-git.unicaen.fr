@@ -116,7 +116,7 @@
         <one-to-many field="affectation" target-entity="Intervenant\Entity\Db\AffectationRecherche" mapped-by="intervenant"/>
         <one-to-many field="agrement" target-entity="Agrement\Entity\Db\Agrement" mapped-by="intervenant"/>
         <one-to-many field="contrat" target-entity="Contrat\Entity\Db\Contrat" mapped-by="intervenant"/>
-        <one-to-many field="formuleResultat" target-entity="Formule\Entity\Db\FormuleResultat" mapped-by="intervenant"/>
+        <one-to-many field="formuleResultat" target-entity="Formule\Entity\Db\FormuleResultatIntervenant" mapped-by="intervenant"/>
         <one-to-many field="histoService" target-entity="Service\Entity\Db\HistoIntervenantService"
                      mapped-by="intervenant"/>
         <one-to-many field="miseEnPaiementIntervenantStructure"

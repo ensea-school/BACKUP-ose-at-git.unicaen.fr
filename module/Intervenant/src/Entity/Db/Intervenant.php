@@ -1441,15 +1441,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
 
 
 
-    /**
-     * Get formuleResultat
-     *
-     * @param TypeVolumeHoraire $typeVolumeHoraire
-     * @param EtatVolumeHoraire $etatVolumehoraire
-     *
-     * @return Collection
-     */
-    public function getFormuleResultat (TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumehoraire = null)
+    public function getFormuleResultat (TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire): FormuleResultatIntervenant
     {
         $filter = function (FormuleResultatIntervenant $formuleResultat) use ($typeVolumeHoraire, $etatVolumehoraire) {
             if ($typeVolumeHoraire && $typeVolumeHoraire !== $formuleResultat->getTypeVolumeHoraire()) {
@@ -1462,22 +1454,8 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
             return true;
         };
 
-        return $this->formuleResultat->filter($filter);
-    }
+        $formuleResultat = $this->formuleResultat->filter($filter);
 
-
-
-    /**
-     * Get unique formuleResultat
-     *
-     * @param TypeVolumeHoraire $typeVolumeHoraire
-     * @param EtatVolumeHoraire $etatVolumehoraire
-     *
-     * @return FormuleResultatIntervenant
-     */
-    public function getUniqueFormuleResultat (TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire)
-    {
-        $formuleResultat = $this->getFormuleResultat($typeVolumeHoraire, $etatVolumehoraire)->first();
         if (false === $formuleResultat) {
             $formuleResultat = new FormuleResultatIntervenant;
             $formuleResultat->init($this, $typeVolumeHoraire, $etatVolumehoraire);

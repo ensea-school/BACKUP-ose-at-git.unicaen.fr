@@ -231,7 +231,9 @@ class ContratProcessus extends AbstractProcessus
 
         $contrat->setIntervenant($intervenant);
         $contrat->setStructure($structure);
-        $contrat->setTotalHetd($this->getIntervenantTotalHetd($intervenant));
+
+        /** @todo à fusionner avec refactoring TBL_CONTRAT : getIntervenantTotalHetd supprimé */
+        $contrat->setTotalHetd(0);
         if($mission != null){
             $contrat->setMission($mission);
             $contrat->setDebutValidite($mission->getDateDebut());
@@ -513,23 +515,6 @@ class ContratProcessus extends AbstractProcessus
         $contrat->setNumeroAvenant(0);
 
         return $this;
-    }
-
-
-
-    /**
-     * @param Intervenant $intervenant
-     *
-     * @return float
-     */
-    public function getIntervenantTotalHetd(Intervenant $intervenant): float
-    {
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
-        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
-
-        $fr = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
-
-        return $fr->getServiceDu() + $fr->getSolde();
     }
 
 

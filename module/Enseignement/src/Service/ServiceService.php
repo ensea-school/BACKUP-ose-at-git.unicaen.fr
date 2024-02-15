@@ -809,17 +809,14 @@ class ServiceService extends AbstractEntityService
 
     /**
      * Retourne le total HETD des enseignements (réalisés et validés) d'un intervenant.
-     *
-     * @prama Intervenant $intervenant
-     * @return float
      */
     public function getTotalHetdIntervenant (Intervenant $intervenant)
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
 
-        $fr = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
+        $fr = $intervenant->getFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
-        return $fr->getServiceDu() + $fr->getSolde();
+        return $fr->getTotal();
     }
 }

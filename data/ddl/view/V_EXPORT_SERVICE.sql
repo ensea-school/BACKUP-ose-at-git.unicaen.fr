@@ -22,9 +22,9 @@ WITH t AS ( SELECT
   0                                 heures_non_payees,
   NULL                              motif_non_paiement,
   t.libelle_court                   tag,
-  frvh.service_fi                   service_fi,
-  frvh.service_fa                   service_fa,
-  frvh.service_fc                   service_fc,
+  frvh.heures_service_fi            service_fi,
+  frvh.heures_service_fa            service_fa,
+  frvh.heures_service_fc            service_fc,
   0                                 service_referentiel,
   frvh.heures_compl_fi              heures_compl_fi,
   frvh.heures_compl_fa              heures_compl_fa,
@@ -36,8 +36,8 @@ WITH t AS ( SELECT
   NULL                              service_ref_formation,
   NULL                              commentaires
 FROM
-  formule_resultat_vh                frvh
-  JOIN formule_resultat                fr ON fr.id = frvh.formule_resultat_id
+  formule_resultat_volume_horaire    frvh
+  JOIN formule_resultat_intervenant    fr ON fr.id = frvh.formule_resultat_intervenant_id
   JOIN volume_horaire                  vh ON vh.id = frvh.volume_horaire_id AND vh.motif_non_paiement_id IS NULL AND vh.histo_destruction IS NULL
   JOIN service                         s  ON s.id = vh.service_id AND s.intervenant_id = fr.intervenant_id AND s.histo_destruction IS NULL
   LEFT JOIN tag t ON t.id = vh.tag_id
@@ -86,7 +86,7 @@ FROM
   JOIN v_vol_horaire_etat_multi  vhe ON vhe.volume_horaire_id = vh.id
   JOIN motif_non_paiement        mnp ON mnp.id = vh.motif_non_paiement_id
   LEFT JOIN tag                         t ON t.id = vh.tag_id
-  LEFT JOIN formule_resultat      fr ON fr.intervenant_id = s.intervenant_id AND fr.type_volume_horaire_id = vh.type_volume_horaire_id AND fr.etat_volume_horaire_id = vhe.etat_volume_horaire_id
+  LEFT JOIN formule_resultat_intervenant fr ON fr.intervenant_id = s.intervenant_id AND fr.type_volume_horaire_id = vh.type_volume_horaire_id AND fr.etat_volume_horaire_id = vhe.etat_volume_horaire_id
 WHERE
   vh.histo_destruction IS NULL
   AND s.histo_destruction IS NULL
@@ -121,7 +121,7 @@ SELECT
   0                                 service_fi,
   0                                 service_fa,
   0                                 service_fc,
-  frvr.service_referentiel          service_referentiel,
+  frvr.heures_service_referentiel   service_referentiel,
   0                                 heures_compl_fi,
   0                                 heures_compl_fa,
   0                                 heures_compl_fc,
@@ -132,12 +132,12 @@ SELECT
   sr.formation                      service_ref_formation,
   sr.commentaires                   commentaires
 FROM
-  formule_resultat_vh_ref       frvr
-  JOIN formule_resultat           fr ON fr.id = frvr.formule_resultat_id
-  JOIN volume_horaire_ref        vhr ON vhr.id =  frvr.volume_horaire_ref_id AND vhr.histo_destruction IS NULL
-  JOIN service_referentiel        sr ON sr.id = vhr.service_referentiel_id AND sr.intervenant_id = fr.intervenant_id AND sr.histo_destruction IS NULL
-  LEFT JOIN motif_non_paiement mnp ON mnp.id = sr.motif_non_paiement_id
-  LEFT JOIN tag t ON t.id = sr.tag_id
+  formule_resultat_volume_horaire frvr
+  JOIN formule_resultat_intervenant fr ON fr.id = frvr.formule_resultat_intervenant_id
+  JOIN volume_horaire_ref          vhr ON vhr.id =  frvr.volume_horaire_ref_id AND vhr.histo_destruction IS NULL
+  JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id AND sr.intervenant_id = fr.intervenant_id AND sr.histo_destruction IS NULL
+  LEFT JOIN motif_non_paiement     mnp ON mnp.id = sr.motif_non_paiement_id
+  LEFT JOIN tag                      t ON t.id = sr.tag_id
 
 UNION ALL
 
@@ -184,7 +184,7 @@ FROM
   JOIN type_volume_horaire tvh ON tvh.code IN ('PREVU','REALISE')
   JOIN modification_service_du msd ON msd.intervenant_id = i.id AND msd.histo_destruction IS NULL
   JOIN motif_modification_service mms ON mms.id = msd.motif_id
-  LEFT JOIN formule_resultat fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
+  LEFT JOIN formule_resultat_intervenant fr ON fr.intervenant_id = i.id AND fr.type_volume_horaire_id = tvh.id AND fr.etat_volume_horaire_id = evh.id
 WHERE
   i.histo_destruction IS NULL
   AND COALESCE(fr.total,0) = 0

@@ -68,6 +68,21 @@ class FormuleVolumeHoraire implements FormuleHeuresInterface
 
 
 
+    public function getTotal(): float
+    {
+        return $this->getHeuresServiceFi()
+            + $this->getHeuresServiceFa()
+            + $this->getHeuresServiceFc()
+            + $this->getHeuresServiceReferentiel()
+            + $this->getHeuresComplFi()
+            + $this->getHeuresComplFa()
+            + $this->getHeuresComplFc()
+            + $this->getHeuresComplFcMajorees()
+            + $this->getHeuresComplReferentiel();
+    }
+
+
+
     /***********************************/
     /* Accésseurs générés par PhpStorm */
     /***********************************/

@@ -38,20 +38,22 @@
     <field name="param4" type="string" column="PARAM_4" length="100" nullable="true"/>
     <field name="param5" type="string" column="PARAM_5" length="100" nullable="true"/>
 
-    <field name="heuresServiceFi" type="float" column="HEURES_SERVICE_FI" precision="126" scale="0" nullable="true"/>
-    <field name="heuresServiceFa" type="float" column="HEURES_SERVICE_FA" precision="126" scale="0" nullable="true"/>
-    <field name="heuresServiceFc" type="float" column="HEURES_SERVICE_FC" precision="126" scale="0" nullable="true"/>
-    <field name="heuresServiceReferentiel" type="float" column="HEURES_SERVICE_REFERENTIEL" precision="126" scale="0" nullable="true"/>
+    <field name="heuresServiceFi" type="float" column="HEURES_SERVICE_FI" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceFa" type="float" column="HEURES_SERVICE_FA" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceFc" type="float" column="HEURES_SERVICE_FC" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceReferentiel" type="float" column="HEURES_SERVICE_REFERENTIEL" precision="126" scale="0" nullable="false"/>
 
-    <field name="heuresNonPayableFi" type="float" column="HEURES_NON_PAYABLE_FI" precision="126" scale="0" nullable="true"/>
-    <field name="heuresNonPayableFa" type="float" column="HEURES_NON_PAYABLE_FA" precision="126" scale="0" nullable="true"/>
-    <field name="heuresNonPayableFc" type="float" column="HEURES_NON_PAYABLE_FC" precision="126" scale="0" nullable="true"/>
-    <field name="heuresNonPayableReferentiel" type="float" column="HEURES_NON_PAYABLE_REFERENTIEL" precision="126" scale="0" nullable="true"/>
+    <field name="heuresNonPayableFi" type="float" column="HEURES_NON_PAYABLE_FI" precision="126" scale="0" nullable="false"/>
+    <field name="heuresNonPayableFa" type="float" column="HEURES_NON_PAYABLE_FA" precision="126" scale="0" nullable="false"/>
+    <field name="heuresNonPayableFc" type="float" column="HEURES_NON_PAYABLE_FC" precision="126" scale="0" nullable="false"/>
+    <field name="heuresNonPayableReferentiel" type="float" column="HEURES_NON_PAYABLE_REFERENTIEL" precision="126" scale="0" nullable="false"/>
 
-    <field name="heuresComplFi" type="float" column="HEURES_COMPL_FI" precision="126" scale="0" nullable="true"/>
-    <field name="heuresComplFa" type="float" column="HEURES_COMPL_FA" precision="126" scale="0" nullable="true"/>
-    <field name="heuresComplFc" type="float" column="HEURES_COMPL_FC" precision="126" scale="0" nullable="true"/>
-    <field name="heuresComplFcMajorees" type="float" column="HEURES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="true"/>
-    <field name="heuresComplReferentiel" type="float" column="HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="true"/>
+    <field name="heuresComplFi" type="float" column="HEURES_COMPL_FI" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplFa" type="float" column="HEURES_COMPL_FA" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplFc" type="float" column="HEURES_COMPL_FC" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplFcMajorees" type="float" column="HEURES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplReferentiel" type="float" column="HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="false"/>
+
+    <field name="total" type="float" column="TOTAL" precision="126" scale="0" nullable="false"/>
   </entity>
 </doctrine-mapping>

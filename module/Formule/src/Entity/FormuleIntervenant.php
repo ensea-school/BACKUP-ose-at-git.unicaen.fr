@@ -248,16 +248,7 @@ class FormuleIntervenant implements FormuleHeuresInterface
     {
         $total = 0.0;
         foreach ($this->volumesHoraires as $volumesHoraire) {
-            $total = $total
-                + $volumesHoraire->getHeuresServiceFi()
-                + $volumesHoraire->getHeuresServiceFa()
-                + $volumesHoraire->getHeuresServiceFc()
-                + $volumesHoraire->getHeuresServiceReferentiel()
-                + $volumesHoraire->getHeuresComplFi()
-                + $volumesHoraire->getHeuresComplFa()
-                + $volumesHoraire->getHeuresComplFc()
-                + $volumesHoraire->getHeuresComplFcMajorees()
-                + $volumesHoraire->getHeuresComplReferentiel();
+            $total += $volumesHoraire->getTotal();
         }
 
         return $total;

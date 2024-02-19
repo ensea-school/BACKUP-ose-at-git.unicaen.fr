@@ -1419,6 +1419,7 @@ return [
         'AUTRE_3',
         'AUTRE_4',
         'AUTRE_5',
+        'DOMAINE_FONCTIONNEL_ID',
     ],
     'SYNC_LOG'                        => [
         'ID',
@@ -2652,6 +2653,7 @@ return [
         'HEURES_COMPL_FC',
         'HEURES_COMPL_FC_MAJOREES',
         'HEURES_COMPL_REFERENTIEL',
+        'TOTAL',
     ],
 ];
 

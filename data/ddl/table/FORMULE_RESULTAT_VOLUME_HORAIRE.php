@@ -417,6 +417,18 @@ return [
             'position'    => 15,
             'commentaire' => NULL,
         ],
+        'TOTAL'                           => [
+            'name'        => 'TOTAL',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 38,
+            'commentaire' => NULL,
+        ],
         'TYPE_INTERVENTION_CODE'          => [
             'name'        => 'TYPE_INTERVENTION_CODE',
             'type'        => 'string',

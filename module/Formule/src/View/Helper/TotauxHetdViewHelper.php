@@ -104,10 +104,10 @@ class TotauxHetdViewHelper extends AbstractHtmlElement
                     </tr>
                 <?php endif; ?>
 
-                <?php if ($fr->getHeuresService() > 0): ?>
+                <?php if (($fr->getHeuresServiceFi() + $fr->getHeuresServiceFa() + $fr->getHeuresServiceFc() + $fr->getHeuresServiceReferentiel()) > 0): ?>
                     <tr>
                         <th>Service assuré</th>
-                        <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getHeuresService()) ?></td>
+                        <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getHeuresServiceFi() + $fr->getHeuresServiceFa() + $fr->getHeuresServiceFc() + $fr->getHeuresServiceReferentiel()) ?></td>
                     </tr>
 
                     <?php if ($fr->getHeuresServiceFa() + $fr->getHeuresServiceFc() + $fr->getHeuresServiceFi() > 0): ?>
@@ -126,11 +126,11 @@ class TotauxHetdViewHelper extends AbstractHtmlElement
 
                 <?php endif; ?>
 
-                <?php if ($fr->getHeuresCompl() > 0) : ?>
+                <?php if (($fr->getHeuresComplFi() + $fr->getHeuresComplFa() + $fr->getHeuresComplFc() + $fr->getHeuresComplFcMajorees() + $fr->getHeuresComplReferentiel()) > 0) : ?>
 
                     <tr>
                         <th><?= ($fr->getServiceDu() > 0) ? 'Heures complémentaires' : 'Service assuré' ?></th>
-                        <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getHeuresCompl()) ?></td>
+                        <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getHeuresComplFi() + $fr->getHeuresComplFa() + $fr->getHeuresComplFc() + $fr->getHeuresComplFcMajorees() + $fr->getHeuresComplReferentiel()) ?></td>
                     </tr>
 
                     <?php if ($fr->getHeuresComplFi() > 0): ?>

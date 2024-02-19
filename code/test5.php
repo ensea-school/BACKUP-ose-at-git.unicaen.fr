@@ -8,9 +8,22 @@
  * @var $viewFile   string
  */
 
-/** @var \Paiement\Service\TauxRemuService $trs */
-$trs = $container->get(\Paiement\Service\TauxRemuService::class);
 
-$val = $trs->tauxValeur(4, new \DateTime());
+/** @var \Formule\Service\FormuleService $fs */
+$fs = $container->get(\Formule\Service\FormuleService::class);
 
-var_dump($val);
+$em = $fs->getEntityManager();
+
+$intervenant = $em->find(\Intervenant\Entity\Db\Intervenant::class, 778887);
+$typeVolumeHoraire = $container->get(\Service\Service\TypeVolumeHoraireService::class)->getPrevu();
+$etatVolumeHoraire = $container->get(\Service\Service\EtatVolumeHoraireService::class)->getSaisi();
+
+$intervenantTest = $em->find(\Formule\Entity\Db\FormuleTestIntervenant::class, 10030);
+
+//$res = $fs->getResultat($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
+
+
+$res = $fs->getTest($intervenantTest);
+
+
+var_dump($res);

@@ -64,7 +64,7 @@
                scale="0"/>
 
         <one-to-many field="volumesHoraires" target-entity="Formule\Entity\Db\FormuleTestVolumeHoraire"
-                     mapped-by="intervenantTest" orphan-removal="true">
+                     mapped-by="formuleIntervenant" orphan-removal="true">
             <cascade>
                 <cascade-all/>
             </cascade>

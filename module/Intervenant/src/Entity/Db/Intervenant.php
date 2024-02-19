@@ -1454,7 +1454,7 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, Import
             return true;
         };
 
-        $formuleResultat = $this->formuleResultat->filter($filter);
+        $formuleResultat = $this->formuleResultat->filter($filter)->first();
 
         if (false === $formuleResultat) {
             $formuleResultat = new FormuleResultatIntervenant;

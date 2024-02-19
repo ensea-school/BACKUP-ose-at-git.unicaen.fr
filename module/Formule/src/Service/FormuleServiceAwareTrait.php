@@ -2,6 +2,7 @@
 
 namespace Formule\Service;
 
+
 /**
  * Description of FormuleServiceAwareTrait
  *

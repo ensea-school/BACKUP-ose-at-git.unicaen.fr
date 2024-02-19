@@ -14,21 +14,21 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 {
     protected bool $referentiel = false;
 
-    protected float $heuresAttenduesServiceFi = 0.0;
-    protected float $heuresAttenduesServiceFa = 0.0;
-    protected float $heuresAttenduesServiceFc = 0.0;
-    protected float $heuresAttenduesServiceReferentiel = 0.0;
+    protected ?float $heuresAttenduesServiceFi = null;
+    protected ?float $heuresAttenduesServiceFa = null;
+    protected ?float $heuresAttenduesServiceFc = null;
+    protected ?float $heuresAttenduesServiceReferentiel = null;
 
-    protected float $heuresAttenduesNonPayableFi = 0.0;
-    protected float $heuresAttenduesNonPayableFa = 0.0;
-    protected float $heuresAttenduesNonPayableFc = 0.0;
-    protected float $heuresAttenduesNonPayableReferentiel = 0.0;
+    protected ?float $heuresAttenduesNonPayableFi = null;
+    protected ?float $heuresAttenduesNonPayableFa = null;
+    protected ?float $heuresAttenduesNonPayableFc = null;
+    protected ?float $heuresAttenduesNonPayableReferentiel = null;
 
-    protected float $heuresAttenduesComplFi = 0.0;
-    protected float $heuresAttenduesComplFa = 0.0;
-    protected float $heuresAttenduesComplFc = 0.0;
-    protected float $heuresAttenduesComplFcMajorees = 0.0;
-    protected float $heuresAttenduesComplReferentiel = 0.0;
+    protected ?float $heuresAttenduesComplFi = null;
+    protected ?float $heuresAttenduesComplFa = null;
+    protected ?float $heuresAttenduesComplFc = null;
+    protected ?float $heuresAttenduesComplFcMajorees = null;
+    protected ?float $heuresAttenduesComplReferentiel = null;
 
 
 
@@ -106,6 +106,13 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
     {
         $this->referentiel = !(bool)$serviceReferentiel;
         return $this;
+    }
+
+
+
+    public function isReferentiel(): bool
+    {
+        return $this->referentiel;
     }
 
 
@@ -201,21 +208,14 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
     /***********************************/
 
 
-    public function isReferentiel(): bool
-    {
-        return $this->referentiel;
-    }
-
-
-
-    public function getHeuresAttenduesServiceFi(): float
+    public function getHeuresAttenduesServiceFi(): ?float
     {
         return $this->heuresAttenduesServiceFi;
     }
 
 
 
-    public function setHeuresAttenduesServiceFi(float $heuresAttenduesServiceFi): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesServiceFi(?float $heuresAttenduesServiceFi): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesServiceFi = $heuresAttenduesServiceFi;
         return $this;
@@ -223,14 +223,14 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesServiceFa(): float
+    public function getHeuresAttenduesServiceFa(): ?float
     {
         return $this->heuresAttenduesServiceFa;
     }
 
 
 
-    public function setHeuresAttenduesServiceFa(float $heuresAttenduesServiceFa): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesServiceFa(?float $heuresAttenduesServiceFa): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesServiceFa = $heuresAttenduesServiceFa;
         return $this;
@@ -238,14 +238,14 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesServiceFc(): float
+    public function getHeuresAttenduesServiceFc(): ?float
     {
         return $this->heuresAttenduesServiceFc;
     }
 
 
 
-    public function setHeuresAttenduesServiceFc(float $heuresAttenduesServiceFc): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesServiceFc(?float $heuresAttenduesServiceFc): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesServiceFc = $heuresAttenduesServiceFc;
         return $this;
@@ -253,14 +253,14 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesServiceReferentiel(): float
+    public function getHeuresAttenduesServiceReferentiel(): ?float
     {
         return $this->heuresAttenduesServiceReferentiel;
     }
 
 
 
-    public function setHeuresAttenduesServiceReferentiel(float $heuresAttenduesServiceReferentiel): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesServiceReferentiel(?float $heuresAttenduesServiceReferentiel): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesServiceReferentiel = $heuresAttenduesServiceReferentiel;
         return $this;
@@ -268,14 +268,14 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesNonPayableFi(): float
+    public function getHeuresAttenduesNonPayableFi(): ?float
     {
         return $this->heuresAttenduesNonPayableFi;
     }
 
 
 
-    public function setHeuresAttenduesNonPayableFi(float $heuresAttenduesNonPayableFi): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesNonPayableFi(?float $heuresAttenduesNonPayableFi): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesNonPayableFi = $heuresAttenduesNonPayableFi;
         return $this;
@@ -283,14 +283,14 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesNonPayableFa(): float
+    public function getHeuresAttenduesNonPayableFa(): ?float
     {
         return $this->heuresAttenduesNonPayableFa;
     }
 
 
 
-    public function setHeuresAttenduesNonPayableFa(float $heuresAttenduesNonPayableFa): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesNonPayableFa(?float $heuresAttenduesNonPayableFa): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesNonPayableFa = $heuresAttenduesNonPayableFa;
         return $this;
@@ -298,14 +298,14 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesNonPayableFc(): float
+    public function getHeuresAttenduesNonPayableFc(): ?float
     {
         return $this->heuresAttenduesNonPayableFc;
     }
 
 
 
-    public function setHeuresAttenduesNonPayableFc(float $heuresAttenduesNonPayableFc): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesNonPayableFc(?float $heuresAttenduesNonPayableFc): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesNonPayableFc = $heuresAttenduesNonPayableFc;
         return $this;
@@ -313,14 +313,14 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesNonPayableReferentiel(): float
+    public function getHeuresAttenduesNonPayableReferentiel(): ?float
     {
         return $this->heuresAttenduesNonPayableReferentiel;
     }
 
 
 
-    public function setHeuresAttenduesNonPayableReferentiel(float $heuresAttenduesNonPayableReferentiel): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesNonPayableReferentiel(?float $heuresAttenduesNonPayableReferentiel): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesNonPayableReferentiel = $heuresAttenduesNonPayableReferentiel;
         return $this;
@@ -328,14 +328,14 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesComplFi(): float
+    public function getHeuresAttenduesComplFi(): ?float
     {
         return $this->heuresAttenduesComplFi;
     }
 
 
 
-    public function setHeuresAttenduesComplFi(float $heuresAttenduesComplFi): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesComplFi(?float $heuresAttenduesComplFi): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesComplFi = $heuresAttenduesComplFi;
         return $this;
@@ -343,14 +343,14 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesComplFa(): float
+    public function getHeuresAttenduesComplFa(): ?float
     {
         return $this->heuresAttenduesComplFa;
     }
 
 
 
-    public function setHeuresAttenduesComplFa(float $heuresAttenduesComplFa): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesComplFa(?float $heuresAttenduesComplFa): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesComplFa = $heuresAttenduesComplFa;
         return $this;
@@ -358,14 +358,14 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesComplFc(): float
+    public function getHeuresAttenduesComplFc(): ?float
     {
         return $this->heuresAttenduesComplFc;
     }
 
 
 
-    public function setHeuresAttenduesComplFc(float $heuresAttenduesComplFc): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesComplFc(?float $heuresAttenduesComplFc): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesComplFc = $heuresAttenduesComplFc;
         return $this;
@@ -373,14 +373,14 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesComplFcMajorees(): float
+    public function getHeuresAttenduesComplFcMajorees(): ?float
     {
         return $this->heuresAttenduesComplFcMajorees;
     }
 
 
 
-    public function setHeuresAttenduesComplFcMajorees(float $heuresAttenduesComplFcMajorees): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesComplFcMajorees(?float $heuresAttenduesComplFcMajorees): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesComplFcMajorees = $heuresAttenduesComplFcMajorees;
         return $this;
@@ -388,18 +388,17 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesComplReferentiel(): float
+    public function getHeuresAttenduesComplReferentiel(): ?float
     {
         return $this->heuresAttenduesComplReferentiel;
     }
 
 
 
-    public function setHeuresAttenduesComplReferentiel(float $heuresAttenduesComplReferentiel): FormuleTestVolumeHoraire
+    public function setHeuresAttenduesComplReferentiel(?float $heuresAttenduesComplReferentiel): FormuleTestVolumeHoraire
     {
         $this->heuresAttenduesComplReferentiel = $heuresAttenduesComplReferentiel;
         return $this;
     }
-
 
 }

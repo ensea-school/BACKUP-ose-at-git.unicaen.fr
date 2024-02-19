@@ -2,14 +2,14 @@
 
 namespace Formule\Service;
 
-use Application\Constants;
 use Psr\Container\ContainerInterface;
+
 
 
 /**
  * Description of FormuleServiceFactory
  *
- * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
+ * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
 class FormuleServiceFactory
 {
@@ -21,10 +21,11 @@ class FormuleServiceFactory
      *
      * @return FormuleService
      */
-    public function __invoke(ContainerInterface $container, $requestedName, $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null): FormuleService
     {
         $service = new FormuleService;
-        $service->setEntityManager($container->get(Constants::BDD));
+
+        /* Injectez vos dépendances ICI */
 
         return $service;
     }

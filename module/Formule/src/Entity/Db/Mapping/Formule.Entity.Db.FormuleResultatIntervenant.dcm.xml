@@ -49,6 +49,6 @@
     <field name="solde" type="float" column="SOLDE" precision="126" scale="0" nullable="false"/>
     <field name="sousService" type="float" column="SOUS_SERVICE" precision="126" scale="0" nullable="false"/>
 
-    <one-to-many field="volumesHoraires" target-entity="Formule\Entity\Db\FormuleResultatVolumeHoraire" mapped-by="formuleResultatIntervenant" />
+    <one-to-many field="volumesHoraires" target-entity="Formule\Entity\Db\FormuleResultatVolumeHoraire" mapped-by="formuleIntervenant" />
   </entity>
 </doctrine-mapping>

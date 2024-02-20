@@ -173,7 +173,7 @@ class PaiementController extends AbstractController
             //On vérifie ici qu'on peut bien mettre en demande le nombre d'heure demandé
 
             try {
-                $this->getServiceMiseEnPaiement()->verifierValiditerDemandeMiseEnPaiement($intervenant, $datas);
+                $this->getServiceMiseEnPaiement()->verifierDemandeMiseEnPaiement($intervenant, $datas);
                 $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $datas);
                 $this->updateTableauxBord($intervenant);
             } catch (\Exception $e) {
@@ -205,14 +205,40 @@ class PaiementController extends AbstractController
             $post = file_get_contents('php://input') ?? $_POST;
 
             $demandes = json_decode($post, true);
+            $error    = 0;
+            $success  = 0;
             foreach ($demandes as $demande) {
                 try {
+                    $this->getServiceMiseEnPaiement()->verifierDemandeMiseEnPaiement($intervenant, $demande);
                     $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $demande);
                 } catch (\Exception $e) {
+                    if ($e->getCode() == 3) {
+                        $this->flashMessenger()->addErrorMessage($e->getMessage());
+                    }
+                    $error++;
                     continue;
                 }
+                $success++;
             }
             $this->updateTableauxBord($intervenant);
+            //Traitement des messages de succes ou d'erreur (Toast)
+            if ($success == 0 && $error == 0) {
+                $this->flashMessenger()->addInfoMessage('Aucun demande de mise en paiement a effectué pour cette composante');
+            }
+            if ($success > 0) {
+                if ($success > 1) {
+                    $this->flashMessenger()->addSuccessMessage($success . " demandes de mise en paiement ont été effectué pour cette composante.");
+                } else {
+                    $this->flashMessenger()->addSuccessMessage($success . " demande de mise en paiement a été effectué pour cette composante.");
+                }
+            }
+            if ($error > 0) {
+                if ($error > 1) {
+                    $this->flashMessenger()->addErrorMessage("Attention, $error demandes de mise en paiement n'ont pas pu être traité pour cette composante car vous n'avez pas sélectionné un centre de coût et/ou un domaine fonctionnel.");
+                } else {
+                    $this->flashMessenger()->addErrorMessage("Attention, $error demande de mise en paiement n'a pas pu être traité pour cette composante car vous n'avez pas sélectionné un centre de coût et/ou un domaine fonctionnel.");
+                }
+            }
 
             return true;
         }

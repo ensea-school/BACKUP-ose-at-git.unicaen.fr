@@ -40,6 +40,12 @@ class MiseEnPaiementService extends AbstractEntityService
     use Traits\WorkflowServiceAwareTrait;
     use Traits\ParametresServiceAwareTrait;
 
+    const EXCEPTION_DMEP_CENTRE_COUT         = 1;
+    const EXCEPTION_DMEP_DOMAINE_FONCTIONNEL = 2;
+    const EXCEPTION_DMEP_INVALIDE            = 3;
+
+
+
     /**
      * retourne la classe des entités
      *
@@ -616,11 +622,11 @@ class MiseEnPaiementService extends AbstractEntityService
         $data['mission-id']                              = (array_key_exists('missionId', $datas)) ? $datas['missionId'] : '';
 
         if (empty($data['centre-cout-id'])) {
-            throw new \Exception('Vous devez renseigner un centre de cout pour demander ce paiement');
+            throw new \Exception('Vous devez renseigner un centre de cout pour demander ce paiement', self::EXCEPTION_DMEP_CENTRE_COUT);
         }
         if (!empty($data['mission-id']) || !empty($data['formule-resultat-service-referentiel-id'])) {
             if (empty($data['domaine-fonctionnel-id'])) {
-                throw new \Exception('Vous devez renseigner un domaine fonctionnel pour demander ce paiement');
+                throw new \Exception('Vous devez renseigner un domaine fonctionnel pour demander ce paiement', self::EXCEPTION_DMEP_DOMAINE_FONCTIONNEL);
             }
         }
 
@@ -969,15 +975,17 @@ class MiseEnPaiementService extends AbstractEntityService
                             $listeCentresCouts[$centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT']] = [];
                         }
                         $listeCentresCouts[$centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT']][] = [
-                            'centreCoutId'      => $centreCout['CENTRE_COUT_ID'],
-                            'centreCoutLibelle' => $centreCout['LIBELLE'],
-                            'centreCoutCode'    => $centreCout['CODE'],
-                            'fi'                => $centreCout['FI'],
-                            'fa'                => $centreCout['FA'],
-                            'fc'                => $centreCout['FC'],
-                            'referentiel'       => $centreCout['REFERENTIEL'],
-                            'fcMajorees'        => $centreCout['FC_MAJOREES'],
-                            'mission'           => $centreCout['MISSION'],
+                            'centreCoutId'         => $centreCout['CENTRE_COUT_ID'],
+                            'centreCoutLibelle'    => $centreCout['LIBELLE'],
+                            'centreCoutCode'       => $centreCout['CODE'],
+                            'fi'                   => $centreCout['FI'],
+                            'fa'                   => $centreCout['FA'],
+                            'fc'                   => $centreCout['FC'],
+                            'referentiel'          => $centreCout['REFERENTIEL'],
+                            'fcMajorees'           => $centreCout['FC_MAJOREES'],
+                            'mission'              => $centreCout['MISSION'],
+                            'typeRessourceCode'    => $centreCout['TYPE_RESSOURCE_CODE'],
+                            'typeRessourceLibelle' => $centreCout['TYPE_RESSOURCE_LIBELLE'],
                         ];
                     } else {
                         $listeCentresCouts['AUTRES'][] = [
@@ -1001,8 +1009,9 @@ class MiseEnPaiementService extends AbstractEntityService
                 $dmep[$value['STRUCTURE_CODE']]['domaineFonctionnelPaiement'] = $listeDomainesFonctionnels;
             }
             //On va chercher le budget de la composante (dotation et liquidation)
-            $structure = $this->getEntityManager()->getRepository(Structure::class)->find($value['STRUCTURE_ID']);
-            $budget    = $this->getBudgetPaiement($structure);
+            $structure                                = $this->getEntityManager()->getRepository(Structure::class)->find($value['STRUCTURE_ID']);
+            $budget                                   = $this->getBudgetPaiement($structure);
+            $dmep[$value['STRUCTURE_CODE']]['budget'] = $budget;
         }
 
         return $dmep;
@@ -1010,10 +1019,10 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function verifierValiditerDemandeMiseEnPaiement (Intervenant $intervenant, $datas)
+    public function verifierDemandeMiseEnPaiement (Intervenant $intervenant, $datas)
     {
-        var_dump($datas);
-        $sql = "
+        $type = "";
+        $sql  = "
         
         SELECT
            	SUM(tp.heures_a_payer_aa + tp.heures_a_payer_ac) - SUM(tp.heures_payees_aa + tp.heures_payees_ac) solde
@@ -1025,13 +1034,16 @@ class MiseEnPaiementService extends AbstractEntityService
         ";
 
         if (!empty($datas['formuleResServiceId'])) {
-            $sql .= " AND tp.formule_res_service_id =  " . $datas['formuleResServiceId'];
+            $type = "le service d'enseignements avec id#" . $datas['formuleResServiceId'];
+            $sql  .= " AND tp.formule_res_service_id =  " . $datas['formuleResServiceId'];
         }
-        if (!empty($datas['formule_res_service_ref_id'])) {
-            $sql .= " AND tp.formuleResServiceRefId =  " . $datas['formuleResServiceRefId'];
+        if (!empty($datas['formuleResServiceRefId'])) {
+            $type = "le service referentiel avec id#" . $datas['formuleResServiceRefId'];
+            $sql  .= " AND tp.formule_res_service_ref_id =  " . $datas['formuleResServiceRefId'];
         }
         if (!empty($datas['missionId'])) {
-            $sql .= " AND tp.mission_id =  " . $datas['missionId'];
+            $type = "la mission avec id#" . $datas['missionId'];
+            $sql  .= " AND tp.mission_id =  " . $datas['missionId'];
         }
 
         $sql .= "
@@ -1046,14 +1058,12 @@ class MiseEnPaiementService extends AbstractEntityService
         $soldeHeures     = 0;
         $heuresDemandees = $datas['heures'];
         foreach ($dmeps as $dmep) {
-            $heuresDemandees += $dmep['SOLDE'];
+            $soldeHeures += $dmep['SOLDE'];
         }
-        var_dump($soldeHeures);
-        var_dump($heuresDemandees);
-        die;
+
         //On vérifie que l'on peut mettre en demande de mise en paiement les heures demandées
         if ($heuresDemandees > $soldeHeures) {
-            throw new \Exception("Le solde des heures à payer n'est pas assez élevé");
+            throw new \Exception('Demande de mise en paiement refusée pour ' . $type . '. ' . $heuresDemandees . ' hetd demandés pour un restant à payer de ' . $soldeHeures . ' hetd', self::EXCEPTION_DMEP_INVALIDE);
         }
 
         return true;

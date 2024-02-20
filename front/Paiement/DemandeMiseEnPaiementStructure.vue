@@ -12,36 +12,56 @@
 
         <div :id="'dmep-collapse-' + datas.code" :aria-labelledby="'dmep-heading-' + datas.code" class="accordion-collapse collapse show">
             <div class="accordion-body">
-                <!--Budget-->
-                <div class="cartridge gray bordered" style="padding-bottom: 5px;margin-bottom:20px;">
-                    <span>Budget composante</span>
-                </div>
-                <div class="container">
+                <div v-if="this.dotationPaieEtat + dotationRessourcesPropres > 0">
+                    <!--Budget-->
+                    <div class="cartridge gray bordered" style="padding-bottom: 5px;margin-bottom:20px;">
+                        <span>Budget</span>
+                    </div>
+                    <div class="container">
+                        <table class="table table-bordered caption-top">
+                            <thead class="table-light">
+                            <tr>
+                                <th class="fw-bold" scope="col">Paie etat</th>
+                                <th class="fw-bold" scope="col">Ressource propre</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
 
-                    <table class="table table-bordered caption-top">
-                        <thead class="table-light">
-                        <tr>
-                            <th class="fw-bold" scope="col">Budget</th>
-                            <th class="fw-bold" scope="col">Paie etat</th>
-                            <th class="fw-bold" scope="col">Ressource propre</th>
-                            <th class="fw-bold" scope="col">Total</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Dotation</td>
-                            <td>1900,00 HETD</td>
-                            <td>300,00 HETD</td>
-                            <td class="fw-bold">2200,00 HETD</td>
-                        </tr>
-                        <tr>
-                            <td>Consommation</td>
-                            <td><span class="">699,11 HETD</span></td>
-                            <td><span class="">10,00 HETD</span></td>
-                            <td class="fw-bold">709,11 HETD</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                <td>
+                                    <div class="progress position-relative bg-secondary" style="height: 30px;">
+                                        <span class="position-absolute top-50 start-50 translate-middle" style="color:white;">{{
+                                                this.consommationPaieEtat + ' sur ' + this.dotationPaieEtat
+                                            }} HETD</span>
+                                        <div :aria-valuemax="this.dotationPaieEtat"
+                                             :aria-valuenow="this.consommationPaieEtat"
+                                             :style="'width:' + this.pourcentagePaieEtat + '%;'"
+                                             :title="Math.round(this.pourcentagePaieEtat) + '%'"
+                                             aria-valuemin="0"
+                                             class="progress-bar progress-bar-striped bg-success"
+                                             role="progressbar">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="progress position-relative bg-secondary" style="height: 30px;">
+                                        <span class="position-absolute top-50 start-50 translate-middle" style="color:white;">{{
+                                                this.consommationRessourcesPropres + ' sur ' + this.dotationRessourcesPropres
+                                            }} HETD</span>
+                                        <div :aria-valuemax="this.dotationRessourcesPropres"
+                                             :aria-valuenow="this.consommationRessourcesPropres"
+                                             :style="'width:' + this.pourcentageRessourcePropre + '%;'"
+                                             :title="Math.round(this.pourcentageRessourcePropre) + '%'"
+                                             aria-valuemin="0"
+                                             class="progress-bar progress-bar-striped bg-success"
+                                             role="progressbar">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div v-for="(etape, codeEtape) in datas.etapes">
                     <div v-for="(enseignement,codeEnseignement) in etape.enseignements">
@@ -449,7 +469,29 @@ export default {
         datas: {required: true},
         intervenant: {required: true},
     },
-    computed: {},
+    data()
+    {
+        return {
+            dotationPaieEtat: this.datas.budget.dotation.paieEtat,
+            dotationRessourcesPropres: this.datas.budget.dotation.ressourcePropre,
+            consommationPaieEtat: this.datas.budget.liquidation.paieEtat,
+            consommationRessourcesPropres: this.datas.budget.liquidation.ressourcePropre,
+            pourcentagePaieEtat: (this.consommationPaieEtat / this.dotationPaieEtat) * 100,
+            pourcentageRessourcePropre: (this.consommationRessourcesPropres / this.dotationRessourcesPropres) * 100,
+
+        }
+    },
+    watch: {
+        datas: function () {
+            this.dotationPaieEtat = this.datas.budget.dotation.paieEtat;
+            this.dotationRessourcesPropres = this.datas.budget.dotation.ressourcePropre;
+            this.consommationPaieEtat = this.datas.budget.liquidation.paieEtat;
+            this.consommationRessourcesPropres = this.datas.budget.liquidation.ressourcePropre;
+            this.pourcentagePaieEtat = (this.consommationPaieEtat / this.dotationPaieEtat) * 100;
+            this.pourcentageRessourcePropre = (this.consommationRessourcesPropres / this.dotationRessourcesPropres) * 100;
+        },
+
+    },
     methods: {
         heuresStatutToString(value)
         {
@@ -584,38 +626,34 @@ export default {
                 if (demandesMiseEnPaiement[i].getElementsByTagName('input').length > 0 && demandesMiseEnPaiement[i].classList.contains('detailHeure')) {
                     let inputHeure = demandesMiseEnPaiement[i].getElementsByTagName('input')[0];
                     //Si le select de centre de cout à une valeur alors je peux faire la demande de mise en paiement
-                    if (demandesMiseEnPaiement[i].getElementsByTagName('select')[0].value != '') {
-
-                        let selectCentreCout = demandesMiseEnPaiement[i].getElementsByTagName('select')[0];
-                        console.log(demandesMiseEnPaiement[i].getElementsByTagName('select'));
-                        console.log(demandesMiseEnPaiement[i]);
-
-
-                        let heureADemander = Number(inputHeure.value);
-                        let heureADemanderMax = Number(inputHeure.getAttribute('max'));
-                        //Si volontairement on passe 0 heure à demander ou si on demande plus d'heures que le maximum possible pour cette ligne
-                        if (heureADemander <= 0 || heureADemander > heureADemanderMax) {
-                            console.warn("Le nombre d'heures demandées en paiement n'est pas situé entre le max et min possible.");
-                        } else {
-                            let centreCoutId = selectCentreCout.value;
-                            let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
-                            let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
-                            let formuleResServiceRefId = (inputHeure.hasAttribute('data-formule-res-service-ref-id') ? inputHeure.getAttribute('data-formule-res-service-ref-id') : '');
-                            let missionId = (inputHeure.hasAttribute('data-mission-id') ? inputHeure.getAttribute('data-mission-id') : '');
-
-                            let demande = {
-                                heures: heureADemander,
-                                centreCoutId: centreCoutId,
-                                typeHeuresId: typeHeureId,
-                                formuleResServiceId: formuleResServiceId,
-                                formuleResServiceRefId: formuleResServiceRefId,
-                                missionId: missionId,
-                            }
-                            datas.push(demande);
+                    let selectCentreCout = demandesMiseEnPaiement[i].getElementsByTagName('select')[0];
+                    let inputDomaineFonctionnel = demandesMiseEnPaiement[i].getElementsByTagName('select')[1];
+                    let heureADemander = Number(inputHeure.value);
+                    let heureADemanderMax = Number(inputHeure.getAttribute('max'));
+                    //Si volontairement on passe 0 heure à demander ou si on demande plus d'heures que le maximum possible pour cette ligne
+                    if (heureADemander <= 0 || heureADemander > heureADemanderMax) {
+                        console.warn("Le nombre d'heures demandées en paiement n'est pas situé entre le max et min possible.");
+                    } else {
+                        let centreCoutId = selectCentreCout.value;
+                        let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
+                        let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
+                        let formuleResServiceRefId = (inputHeure.hasAttribute('data-formule-res-service-ref-id') ? inputHeure.getAttribute('data-formule-res-service-ref-id') : '');
+                        let missionId = (inputHeure.hasAttribute('data-mission-id') ? inputHeure.getAttribute('data-mission-id') : '');
+                        let domaineFonctionnelId = (inputDomaineFonctionnel) ? inputDomaineFonctionnel.value : '';
+                        let demande = {
+                            heures: heureADemander,
+                            centreCoutId: centreCoutId,
+                            typeHeuresId: typeHeureId,
+                            formuleResServiceId: formuleResServiceId,
+                            formuleResServiceRefId: formuleResServiceRefId,
+                            domaineFonctionnelId: domaineFonctionnelId,
+                            missionId: missionId,
                         }
-
-
+                        datas.push(demande);
                     }
+
+
+
 
                 }
 
@@ -696,6 +734,7 @@ export default {
 
 
     },
+  
 
 
 }

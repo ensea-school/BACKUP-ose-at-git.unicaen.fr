@@ -70,7 +70,7 @@ return [
                 'LOGIN_OR_NAME_FILTER'         => '(|(' . $config->get('ldap', 'loginAttribute') . '=%s)(cn=%s*))',
                 'FILTER_STRUCTURE_DN'          => '(%s)',
                 'FILTER_STRUCTURE_CODE_ENTITE' => '(' . $config->get('ldap', 'structureCode') . '=%s)',
-                'NO_INDIVIDU_FILTER'           => '(' . $config->get('ldap', 'utilisateurCode') . '=%08s)',
+                'NO_INDIVIDU_FILTER'           => '(' . $config->get('ldap', 'utilisateurCode') . '=%s)',
             ],
             'utilisateur' => [
                 'LOGIN'      => $config->get('ldap', 'loginAttribute'),

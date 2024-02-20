@@ -1,52 +1,12 @@
 <?php
 
-/**
- * @var $this                \Application\View\Renderer\PhpRenderer
- * @var $intervenant         \Intervenant\Entity\Db\Intervenant
- * @var $serviceaAPayer      Enseignement\Entity\Db\ServiceAPayerInterface[]
- * @var $saved               boolean
- * @var $dateDerniereModif   DateTime
- * @var $dernierModificateur \Application\Entity\Db\Utilisateur
- * @var $changeIndex         integer
- * @var $budget              array
- * @var $whyNotEditable      array
- */
-
 $title = 'Demande de mise en paiement';
-if ($intervenant) {
-    $this->intervenant($intervenant)->renderTitle($title);
-} else {
-    $this->headTitle()->append($title);
-    echo $this->tag('h1', ['class' => 'page-header'])->html($title);
-}
 
-if ($whyNotEditable) {
-    echo '<div class="alert alert-warning alert-dismissible" role="alert">'
-        . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
-        . '<strong>Attention</strong> : certaines demandes de mise en paiement ne peuvent pas être faites :'
-        . '<ul>';
-    foreach ($whyNotEditable as $ws) {
-        echo '<li>' . ($ws['structure'] ? $ws['structure'] : 'Toutes composantes');
-        echo '<ul>';
-        foreach ($ws['raisons'] as $raison) {
-            echo "<li>$raison</li>";
-        }
-        echo '</ul></li>';
-    }
-    echo '</ul></div>';
-}
+$this->headTitle()->append($title);
+echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
 
-echo $this->demandeMiseEnPaiement($servicesAPayer, $changeIndex)->setBudget($budget)->render();
+echo $this->vue('paiement/demande-mise-en-paiement', [
+    'intervenant' => $intervenant->getId(),
+]);
 
-echo $this->historique()->setHistoModification($dateDerniereModif)->setHistoModificateur($dernierModificateur);
-
-if ($saved) {
-    ?>
-    <script type="text/javascript">
-        $(function () {
-            unicaenVue.flashMessenger.toast('La demande de paiement a bien été prise en compte.', 'success');
-        });
-    </script>
-    <?php
-}

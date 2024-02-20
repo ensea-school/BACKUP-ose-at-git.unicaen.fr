@@ -150,11 +150,6 @@ return [
                             'controller' => Controller\PaiementController::class,
                             'action'     => 'demandeMiseEnPaiement',
                         ],
-                        'demandenew'            => [
-                            'route'      => '/demandenew',
-                            'controller' => Controller\PaiementController::class,
-                            'action'     => 'demandenewMiseEnPaiement',
-                        ],
                         'edition'               => [
                             'route'      => '/edition',
                             'controller' => Controller\PaiementController::class,
@@ -176,23 +171,10 @@ return [
     'navigation' => [
         'intervenant' => [
             'pages' => [
-                'demande-mise-en-paiement'    => [
+                'demande-mise-en-paiement' => [
                     'label'               => "Demande de mise en paiement",
                     'title'               => "Demande de mise en paiement",
                     'route'               => 'intervenant/mise-en-paiement/demande',
-                    'paramsInject'        => [
-                        'intervenant',
-                    ],
-                    'withtarget'          => true,
-                    'workflow-etape-code' => WfEtape::CODE_DEMANDE_MEP,
-                    'resource'            => PrivilegeController::getResourceId(Controller\PaiementController::class, 'demandeMiseEnPaiement'),
-                    'visible'             => Assertion\PaiementAssertion::class,
-                    'order'               => 16,
-                ],
-                'demandenew-mise-en-paiement' => [
-                    'label'               => "Demande de mise en paiement",
-                    'title'               => "Demande de mise en paiement",
-                    'route'               => 'intervenant/mise-en-paiement/demandenew',
                     'paramsInject'        => [
                         'intervenant',
                     ],
@@ -330,7 +312,7 @@ return [
     'guards' => [
         [
             'controller' => Controller\PaiementController::class,
-            'action'     => ['ajouterMiseEnPaiement', 'supprimerMiseEnPaiement', 'listeServiceAPayer', 'demandenewMiseEnPaiement', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
+            'action'     => ['ajouterMiseEnPaiement', 'supprimerMiseEnPaiement', 'listeServiceAPayer', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
             'privileges' => [
                 Privileges::MISE_EN_PAIEMENT_DEMANDE,
             ],
@@ -391,7 +373,6 @@ return [
     ],
 
     'services' => [
-        Service\ServiceAPayerService::class                      => Service\ServiceAPayerServiceFactory::class,
         Service\MiseEnPaiementService::class                     => Service\MiseEnPaiementServiceFactory::class,
         Service\MiseEnPaiementIntervenantStructureService::class => Service\MiseEnPaiementIntervenantStructureServiceFactory::class,
         Service\TblPaiementService::class                        => Service\TblPaiementServiceFactory::class,

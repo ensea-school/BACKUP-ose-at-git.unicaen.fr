@@ -26,7 +26,6 @@ use Paiement\Form\Paiement\MiseEnPaiementRechercheFormAwareTrait;
 use Paiement\Service\DotationServiceAwareTrait;
 use Paiement\Service\MiseEnPaiementServiceAwareTrait;
 use Paiement\Service\NumeroPriseEnChargeServiceAwareTrait;
-use Paiement\Service\ServiceAPayerServiceAwareTrait;
 use Paiement\Service\TypeRessourceServiceAwareTrait;
 use Paiement\Tbl\Process\PaiementDebugger;
 use Referentiel\Entity\Db\ServiceReferentiel;
@@ -46,7 +45,6 @@ class PaiementController extends AbstractController
     use UtilisateurServiceAwareTrait;
     use PeriodeServiceAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
-    use ServiceAPayerServiceAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use MiseEnPaiementFormAwareTrait;
     use MiseEnPaiementRechercheFormAwareTrait;
@@ -110,18 +108,7 @@ class PaiementController extends AbstractController
 
 
 
-    protected function setChangeIndexSaved ($changeIndex)
-    {
-        $session = $this->getSessionContainer();
-        if (!isset($session->cht)) $session->cht = [];
-        $session->cht[$changeIndex] = true;
-
-        return $this;
-    }
-
-
-
-    public function demandenewMiseEnPaiementAction ()
+    public function demandeMiseEnPaiementAction ()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
@@ -181,9 +168,12 @@ class PaiementController extends AbstractController
         }
         if ($this->getRequest()->isPost()) {
 
+
             $datas = $this->getRequest()->getPost()->toArray();
-            
+            //On vérifie ici qu'on peut bien mettre en demande le nombre d'heure demandé
+
             try {
+                $this->getServiceMiseEnPaiement()->verifierValiditerDemandeMiseEnPaiement($intervenant, $datas);
                 $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $datas);
                 $this->updateTableauxBord($intervenant);
             } catch (\Exception $e) {
@@ -192,7 +182,7 @@ class PaiementController extends AbstractController
                 return false;
             }
 
-            //On recalcule le tableau de bord paiement de l'intervenant conserné
+            //On recalcule le tableau de bord paiement de l'intervenant concerné
             return true;
         }
 
@@ -248,102 +238,6 @@ class PaiementController extends AbstractController
 
 
         return new AxiosModel($servicesAPayer);
-    }
-
-
-
-    public function demandeMiseEnPaiementAction ()
-    {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $this->initFilters();
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-        //Un intervenant n'a pas le droit de voir cette page de demande de mise en paiement
-        if ($role->getIntervenant()) {
-            //On redirige vers la visualisation des mises en paiement
-            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
-        }
-        // pour empêcher le ré-enregistrement avec un rafraichissement (F5)
-        $postChangeIndex = (int)$this->params()->fromPost('change-index');
-        $changeIndex     = $this->getChangeIndex();
-
-        /* @var $intervenant \Intervenant\Entity\Db\Intervenant */
-        if (!$intervenant) {
-            throw new \LogicException('Intervenant non précisé ou inexistant');
-        }
-
-        $saved = false;
-        if ($this->getRequest()->isPost() && !$this->isChangeIndexSaved($postChangeIndex)) {
-            $changements = $this->params()->fromPost('changements', '{}');
-            $changements = Json::decode($changements, Json::TYPE_ARRAY);
-            $this->getServiceMiseEnPaiement()->saveChangements($changements);
-            $this->updateTableauxBord($intervenant);
-            $this->setChangeIndexSaved($postChangeIndex);
-            $saved = true;
-        }
-        $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant);
-        /* On récupère du workflow les raisons de non édition éventuelles (selon sa structure le cas échéant) */
-        $workflowEtape  = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
-        $etapes         = $workflowEtape->getEtapes();
-        $whyNotEditable = [];
-        foreach ($etapes as $we) {
-            if (!$role->getStructure() || !$we->getStructure() || $we->getStructure()->inStructure($role->getStructure())) {
-                $sid  = $we->getStructure() ? $we->getStructure()->getId() : 0;
-                $deps = $we->getEtapeDeps();
-                foreach ($deps as $dep) {
-                    if (!isset($whyNotEditable[$sid])) {
-                        $whyNotEditable[$sid] = [
-                            'structure' => (string)$we->getStructure(),
-                            'raisons'   => [],
-                        ];
-                    }
-                    $whyNotEditable[$sid]['raisons'][] = $dep->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie();
-                }
-            }
-        }
-
-        $dateDerniereModif   = null;
-        $dernierModificateur = null;
-
-        $typesRessources = $this->getServiceTypeRessource()->getList();
-        $structures      = [];
-
-        foreach ($servicesAPayer as $sap) {
-            if (null == $role->getStructure() || $sap->getStructure()->inStructure($role->getStructure())) {
-                $structures[$sap->getStructure()->getId()] = $sap->getStructure();
-            }
-            $mepListe = $sap->getMiseEnPaiement();
-            foreach ($mepListe as $mep) {
-                /* @var $mep MiseEnPaiement */
-                $dateModification = $mep->getHistoModification();
-
-                if ($dateDerniereModif == null || $dateDerniereModif < $dateModification) {
-                    $dateDerniereModif   = $dateModification;
-                    $dernierModificateur = $mep->getHistoModificateur();
-                }
-            }
-        }
-
-        $budget = [
-            'structures'      => $structures,
-            'typesRessources' => $typesRessources,
-        ];
-        $dot    = $this->getServiceDotation()->getTableauBord($structures);
-        $liq    = $this->getServiceMiseEnPaiement()->getTblLiquidation($structures);
-        foreach ($structures as $structure) {
-            $sid = $structure->getId();
-            foreach ($typesRessources as $typeRessource) {
-                $trid = $typeRessource->getId();
-
-                $dotation = isset($dot[$sid][$trid]) ? $dot[$sid][$trid] : 0;
-                $usage    = isset($liq[$sid][$trid]) ? $liq[$sid][$trid] : 0;
-
-                $budget[$sid][$trid] = compact('dotation', 'usage');
-            }
-        }
-
-
-        return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur', 'budget', 'whyNotEditable');
     }
 
 

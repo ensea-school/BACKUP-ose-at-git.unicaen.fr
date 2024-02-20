@@ -449,16 +449,11 @@ export default {
         datas: {required: true},
         intervenant: {required: true},
     },
-    data()
-    {
-        return {
-            urlListeServiceAPayer: unicaenVue.url('intervenant/:intervenant/mise-en-paiement/liste-service-a-payer', {intervenant: this.intervenant}),
-        }
-    },
     computed: {},
     methods: {
         heuresStatutToString(value)
         {
+
             if (value.heuresAPayer == value.heuresPayees) {
                 return '<span style="font-size:12px;line-height:20px;" class="badge bg-success">Paiement effectué</span>';
             }
@@ -467,6 +462,10 @@ export default {
             }
             if (value.heuresDemandees == 0) {
                 return '<span style="font-size:12px;line-height:20px;" class="badge bg-light text-dark">A payer</span>';
+            }
+            if (value.heuresPayees > value.heuresAPayer) {
+                let diff = value.heuresPayees - value.heuresAPayer;
+                return '<span style="font-size:12px;line-height:20px;" class="badge bg-danger">Paiement effectué - ' + diff + ' hetd de trop payé </span>';
             }
             return 'indetermine';
         },
@@ -481,10 +480,13 @@ export default {
                     this.$emit('refresh');
                     setTimeout(() => {
                         btnRemove.disabled = false;
-                    }, 1500);
+                    }, 2500);
                 })
                 .catch(error => {
-                    console.error(error);
+                    this.$emit('refresh');
+                    setTimeout(() => {
+                        btnRemove.disabled = false;
+                    }, 2500);
                 })
         },
         disabledPaiement(value)
@@ -505,11 +507,9 @@ export default {
                 let centreCoutId = document.getElementById('centreCout-' + id).value;
                 let domaineFonctionnelId = document.getElementById('domaineFonctionnel-' + id).value;
                 if (centreCoutId != '' && domaineFonctionnelId != '') {
-                    console.log('false');
                     btnAdd.disabled = false;
                 } else {
                     btnAdd.disabled = true;
-                    console.log('true');
                 }
 
             }
@@ -553,7 +553,7 @@ export default {
                         this.$emit('refresh');
                         setTimeout(() => {
                             btnAdd.disabled = false;
-                        }, 1500);
+                        }, 2500);
                     })
                     .catch(error => {
                         console.error(error);
@@ -562,7 +562,7 @@ export default {
                 this.$emit('refresh');
                 setTimeout(() => {
                     btnAdd.disabled = false;
-                }, 1500);
+                }, 2500);
                 console.warn("Le nombre d'heures demandées en paiement n'est pas situé entre le max et min possible.");
             }
 
@@ -626,11 +626,15 @@ export default {
                     setTimeout(() => {
                         btnAddAll.disabled = false;
                         btnAddAll.innerHTML = "<i class=\"square-plus\"></i>TOUT METTRE EN PAIEMENT POUR " + libelleStructure;
-                    }, 1500);
+                    }, 2500);
 
                 })
                 .catch(error => {
-                    console.log(error)
+                    this.$emit('refresh');
+                    setTimeout(() => {
+                        btnAddAll.disabled = false;
+                        btnAddAll.innerHTML = "<i class=\"square-plus\"></i>TOUT METTRE EN PAIEMENT POUR " + libelleStructure;
+                    }, 2500);
                 })
         },
         filtrerCentresCouts(centresCouts, typeHeures)

@@ -3,6 +3,7 @@
 namespace Paiement\Service;
 
 use Application\Entity\Db\Periode;
+use Application\Entity\Db\WfEtape;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits;
 use Doctrine\ORM\QueryBuilder;
@@ -35,7 +36,6 @@ class MiseEnPaiementService extends AbstractEntityService
     use DotationServiceAwareTrait;
     use TypeHeuresServiceAwareTrait;
     use MissionServiceAwareTrait;
-    use ServiceAPayerServiceAwareTrait;
     use TblPaiementServiceAwareTrait;
     use Traits\WorkflowServiceAwareTrait;
     use Traits\ParametresServiceAwareTrait;
@@ -611,7 +611,7 @@ class MiseEnPaiementService extends AbstractEntityService
         $data['type-heures-id']                          = (array_key_exists('typeHeuresId', $datas)) ? $datas['typeHeuresId'] : '';
         $data['centre-cout-id']                          = (array_key_exists('centreCoutId', $datas)) ? $datas['centreCoutId'] : '';
         $data['formule-resultat-service-id']             = (array_key_exists('formuleResServiceId', $datas)) ? $datas['formuleResServiceId'] : '';
-        $data['formule-resultat-service-referentiel-id'] = (array_key_exists('formuleResServiceId', $datas)) ? $datas['formuleResServiceRefId'] : '';
+        $data['formule-resultat-service-referentiel-id'] = (array_key_exists('formuleResServiceRefId', $datas)) ? $datas['formuleResServiceRefId'] : '';
         $data['domaine-fonctionnel-id']                  = (array_key_exists('domaineFonctionnelId', $datas)) ? $datas['domaineFonctionnelId'] : '';
         $data['mission-id']                              = (array_key_exists('missionId', $datas)) ? $datas['missionId'] : '';
 
@@ -1010,29 +1010,114 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    /**
-     * Sauvegarde tous les changements intervenus dans un ensemble de mises en paiement
-     *
-     * @param array $changements
-     */
-    public function saveChangements ($changements)
+    public function verifierValiditerDemandeMiseEnPaiement (Intervenant $intervenant, $datas)
     {
-        foreach ($changements as $miseEnPaiementId => $data) {
-            if (0 === strpos($miseEnPaiementId, 'new')) { // insert
-                $miseEnPaiement = $this->newEntity();
-                /* @var $miseEnPaiement MiseEnPaiement */
-                $this->hydrateFromChangements($miseEnPaiement, $data);
-                $this->save($miseEnPaiement);
-            } else {
-                $miseEnPaiement = $this->get($miseEnPaiementId);
-                if (null == $data || 'removed' == $data) { // delete
-                    $this->delete($miseEnPaiement);
-                } else { // update
-                    $this->hydrateFromChangements($miseEnPaiement, $data);
-                    $this->save($miseEnPaiement);
+        var_dump($datas);
+        $sql = "
+        
+        SELECT
+           	SUM(tp.heures_a_payer_aa + tp.heures_a_payer_ac) - SUM(tp.heures_payees_aa + tp.heures_payees_ac) solde
+        FROM
+            tbl_paiement tp
+        WHERE
+            tp.intervenant_id = :intervenant
+        AND tp.mise_en_paiement_id IS NULL
+        ";
+
+        if (!empty($datas['formuleResServiceId'])) {
+            $sql .= " AND tp.formule_res_service_id =  " . $datas['formuleResServiceId'];
+        }
+        if (!empty($datas['formule_res_service_ref_id'])) {
+            $sql .= " AND tp.formuleResServiceRefId =  " . $datas['formuleResServiceRefId'];
+        }
+        if (!empty($datas['missionId'])) {
+            $sql .= " AND tp.mission_id =  " . $datas['missionId'];
+        }
+
+        $sql .= "
+        GROUP BY
+            tp.intervenant_id ,
+            tp.structure_id  
+        ";
+
+        $dmeps           = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, [
+            'intervenant' => $intervenant->getId(),
+        ]);
+        $soldeHeures     = 0;
+        $heuresDemandees = $datas['heures'];
+        foreach ($dmeps as $dmep) {
+            $heuresDemandees += $dmep['SOLDE'];
+        }
+        var_dump($soldeHeures);
+        var_dump($heuresDemandees);
+        die;
+        //On vérifie que l'on peut mettre en demande de mise en paiement les heures demandées
+        if ($heuresDemandees > $soldeHeures) {
+            throw new \Exception("Le solde des heures à payer n'est pas assez élevé");
+        }
+
+        return true;
+    }
+
+
+
+    public function getListByStructure (Structure $structure)
+    {
+        $dql = "
+        SELECT
+            tp
+        FROM
+            " . TblPaiement::class . " tp
+        WHERE
+            tp. structure = :structure
+        AND tp.annee = :annee
+        ";
+
+        /** @var TblPaiement[] $meps */
+        $annee = $this->getServiceContext()->getAnnee();
+
+        $dmeps = $this->getEntityManager()->createQuery($dql)->setParameters(['structure' => $structure, 'annee' => $annee])->getResult();
+
+        $dmep = [];
+
+        foreach ($dmeps as $value) {
+            /**
+             * @var TblPaiement $value
+             */
+            if (empty($value->getMiseEnPaiement())) {
+                $intervenant   = $value->getIntervenant();
+                $serviceAPayer = $value->getServiceAPayer();
+                $structure     = $intervenant->getStructure();
+                $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant, $value->getStructure());
+                //Si l'étape de demande de mise en paiement n'est pas atteignable alors on ne le propose pas
+                if (!$workflowEtape || !$workflowEtape->isAtteignable()) {
+                    continue;
                 }
+                if (!array_key_exists($intervenant->getId(), $dmep)) {
+
+                    $dmep[$intervenant->getId()]['datasIntervenant'] = [
+                        'id'              => $intervenant->getId(),
+                        'code'            => $intervenant->getCode(),
+                        'nom_usuel'       => $intervenant->getNomUsuel(),
+                        'prenom'          => $intervenant->getPrenom(),
+                        'structure'       => $intervenant->getStructure()->getLibelleCourt(),
+                        'statut'          => $intervenant->getStatut()->getLibelle(),
+                        'typeIntervenant' => $intervenant->getStatut()->getTypeIntervenant()->getLibelle(),
+                    ];
+                }
+
+                $dmep[$intervenant->getId()]['heures'][] = [
+                    'heuresAPayer' => $value->getHeuresAPayerAC() + $value->getHeuresAPayerAA(),
+                    'centreCout'   => ['libelle'              => ($value->getCentreCout()) ? $value->getCentreCout()->getLibelle() : '',
+                                       'code'                 => ($value->getCentreCout()) ? $value->getCentreCout()->getCode() : '',
+                                       'typeRessourceCode'    => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getCode() : '',
+                                       'typeRessourceLibelle' => ($value->getCentreCout()) ? $value->getCentreCout()->getTypeRessource()->getLibelle() : '',
+                    ],
+                ];
             }
         }
+
+        return $dmep;
     }
 
 

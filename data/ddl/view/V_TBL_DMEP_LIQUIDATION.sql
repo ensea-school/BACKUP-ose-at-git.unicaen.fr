@@ -15,8 +15,7 @@ FROM
   FROM
               mise_en_paiement         mep
          JOIN centre_cout               cc ON cc.id = mep.centre_cout_id
-         JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id
-         JOIN service                    s ON s.id = frs.service_id
+         JOIN service                    s ON s.id = mep.service_id
          JOIN intervenant                i ON i.id = s.intervenant_id
     LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
   WHERE
@@ -34,8 +33,7 @@ FROM
   FROM
               mise_en_paiement              mep
          JOIN centre_cout                    cc ON cc.id = mep.centre_cout_id
-         JOIN formule_resultat_service_ref frsr ON frsr.id = mep.formule_res_service_ref_id
-         JOIN service_referentiel            sr ON sr.id = frsr.service_referentiel_id
+         JOIN service_referentiel            sr ON sr.id = mep.service_referentiel_id
          JOIN intervenant                     i ON i.id = sr.intervenant_id
 
   WHERE

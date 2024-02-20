@@ -1,12 +1,12 @@
 CREATE OR REPLACE FORCE VIEW V_EXPORT_DMEP AS
 WITH mep AS (
   SELECT
-    frs.service_id,
-    frsr.service_referentiel_id,
+    tp.service_id,
+    tp.service_referentiel_id,
     mep.date_mise_en_paiement,
-    mep.periode_paiement_id,
-    mep.centre_cout_id,
-    mep.domaine_fonctionnel_id,
+    tp.periode_paiement_id,
+    tp.centre_cout_id,
+    tp.domaine_fonctionnel_id,
 
     SUM(CASE WHEN th.code = 'fi' THEN mep.heures ELSE 0 END) heures_fi,
     SUM(CASE WHEN th.code = 'fa' THEN mep.heures ELSE 0 END) heures_fa,
@@ -14,19 +14,18 @@ WITH mep AS (
     SUM(CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE 0 END) heures_fc_majorees,
     SUM(CASE WHEN th.code = 'referentiel' THEN mep.heures ELSE 0 END) heures_referentiel
   FROM
-              mise_en_paiement              mep
-         JOIN type_heures                    th ON th.id   = mep.type_heures_id
-    LEFT JOIN formule_resultat_service      frs ON frs.id  = mep.formule_res_service_id
-    LEFT JOIN formule_resultat_service_ref frsr ON frsr.id = mep.formule_res_service_ref_id
+              tbl_paiement                   tp
+         JOIN mise_en_paiement              mep ON mep.id = tp.mise_en_paiement_id
+         JOIN type_heures                    th ON th.id   = tp.type_heures_id
   WHERE
     mep.histo_destruction IS NULL
   GROUP BY
-    frs.service_id,
-    frsr.service_referentiel_id,
+    tp.service_id,
+    tp.service_referentiel_id,
     mep.date_mise_en_paiement,
-    mep.periode_paiement_id,
-    mep.centre_cout_id,
-    mep.domaine_fonctionnel_id
+    tp.periode_paiement_id,
+    tp.centre_cout_id,
+    tp.domaine_fonctionnel_id
 )
 SELECT i.id                                                       intervenant_id,
        i.code_rh                                                  code_rh,

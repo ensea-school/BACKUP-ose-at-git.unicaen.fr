@@ -493,8 +493,7 @@ SELECT
        7                                ordre
 FROM
   mise_en_paiement mep
-  JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id
-  JOIN service s ON s.id = frs.service_id
+  JOIN service s ON s.id = mep.service_id
   JOIN type_heures th ON th.id = mep.type_heures_id
   JOIN utilisateur u ON u.id = mep.histo_modificateur_id
   LEFT JOIN periode p ON p.id = mep.periode_paiement_id
@@ -515,8 +514,7 @@ SELECT
        8                                ordre
 FROM
   mise_en_paiement mep
-  JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id
-  JOIN service s ON s.id = frs.service_id
+  JOIN service s ON s.id = mep.service_id
   JOIN type_heures th ON th.id = mep.type_heures_id
   JOIN utilisateur u ON u.id = mep.histo_modificateur_id
   LEFT JOIN periode p ON p.id = mep.periode_paiement_id

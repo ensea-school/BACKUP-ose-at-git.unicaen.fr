@@ -3,24 +3,24 @@ WITH heures_s AS (
   SELECT
     i.id                                      intervenant_id,
     COALESCE(ep.structure_id,i.structure_id)  structure_id,
-    SUM(frs.service_fi)                       service_fi,
-    SUM(frs.service_fa)                       service_fa,
-    SUM(frs.service_fc)                       service_fc,
-    SUM(frs.heures_compl_fi)                  heures_compl_fi,
-    SUM(frs.heures_compl_fa)                  heures_compl_fa,
-    SUM(frs.heures_compl_fc)                  heures_compl_fc,
-    SUM(frs.heures_compl_fc_majorees)         heures_compl_fc_majorees,
-    SUM(frs.total)                            total
+    SUM(frvh.heures_service_fi)               service_fi,
+    SUM(frvh.heures_service_fa)                service_fa,
+    SUM(frvh.heures_service_fc)                service_fc,
+    SUM(frvh.heures_compl_fi)                  heures_compl_fi,
+    SUM(frvh.heures_compl_fa)                  heures_compl_fa,
+    SUM(frvh.heures_compl_fc)                  heures_compl_fc,
+    SUM(frvh.heures_compl_fc_majorees)         heures_compl_fc_majorees,
+    SUM(frvh.total)                            total
   FROM
-              formule_resultat_service frs
-         JOIN type_volume_horaire      tvh ON tvh.code = 'PREVU'
-         JOIN etat_volume_horaire      evh ON evh.code = 'valide'
-         JOIN formule_resultat          fr ON fr.id = frs.formule_resultat_id
-                                          AND fr.type_volume_horaire_id = tvh.id
-                                          AND fr.etat_volume_horaire_id = evh.id
-         JOIN intervenant                i ON i.id = fr.intervenant_id
-         JOIN service                    s ON s.id = frs.service_id
-    LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
+              formule_resultat_volume_horaire frvh
+         JOIN type_volume_horaire              tvh ON tvh.code = 'PREVU'
+         JOIN etat_volume_horaire              evh ON evh.code = 'valide'
+         JOIN formule_resultat_intervenant      fr ON fr.id = frvh.formule_resultat_intervenant_id
+                                                  AND fr.type_volume_horaire_id = tvh.id
+                                                  AND fr.etat_volume_horaire_id = evh.id
+         JOIN intervenant                        i ON i.id = fr.intervenant_id
+         JOIN service                            s ON s.id = frvh.service_id
+    LEFT JOIN element_pedagogique               ep ON ep.id = s.element_pedagogique_id
   GROUP BY
     i.id,
     ep.structure_id,
@@ -43,13 +43,13 @@ SELECT a.libelle                                                 annee,
        si.libelle                                                intervenant_statut_libelle,
        d.libelle_court                                           discipline,
 
-       COALESCE(heures_s.service_fi, fr.service_fi)
+       COALESCE(heures_s.service_fi, fr.heures_service_fi)
            + COALESCE(heures_s.heures_compl_fi, fr.heures_compl_fi)
                                                                  hetd_fi,
-       COALESCE(heures_s.service_fa, fr.service_fa)
+       COALESCE(heures_s.service_fa, fr.heures_service_fa)
            + COALESCE(heures_s.heures_compl_fa, fr.heures_compl_fa)
                                                                  hetd_fa,
-       COALESCE(heures_s.service_fc, fr.service_fc)
+       COALESCE(heures_s.service_fc, fr.heures_service_fc)
            + COALESCE(heures_s.heures_compl_fc, fr.heures_compl_fc)
            + COALESCE(heures_s.heures_compl_fc_majorees, fr.heures_compl_fc_majorees)
                                                                  hetd_fc,
@@ -80,7 +80,7 @@ FROM tbl_agrement ta
          LEFT JOIN utilisateur u ON u.id = agr.histo_modificateur_id
          LEFT JOIN discipline d ON d.id = i.discipline_id
 
-         LEFT JOIN formule_resultat fr ON fr.intervenant_id = i.id
+         LEFT JOIN formule_resultat_intervenant fr ON fr.intervenant_id = i.id
     AND fr.type_volume_horaire_id = tvh.id
     AND fr.etat_volume_horaire_id = evh.id
 

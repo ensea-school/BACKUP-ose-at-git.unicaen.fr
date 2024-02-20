@@ -35,10 +35,10 @@ FROM (SELECT annee_id,
                          th.code                                   type_heures,
                          COALESCE(ep.structure_id, i.structure_id) structure_id,
                          fr.intervenant_id,
-                         SUM(frs.heures_compl_fi)                  hetd
-                  FROM formule_resultat_service frs
-                           JOIN formule_resultat fr ON fr.id = frs.formule_resultat_id
-                           JOIN service s ON s.id = frs.service_id
+                         SUM(frvh.heures_compl_fi)                  hetd
+                  FROM formule_resultat_volume_horaire frvh
+                           JOIN formule_resultat_intervenant fr ON fr.id = frvh.formule_resultat_intervenant_id
+                           JOIN service s ON s.id = frvh.service_id
                            JOIN intervenant i ON i.id = fr.intervenant_id
                            JOIN type_heures th ON th.code = 'fi'
                            LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
@@ -59,10 +59,10 @@ FROM (SELECT annee_id,
                          th.code                                   type_heures,
                          COALESCE(ep.structure_id, i.structure_id) structure_id,
                          fr.intervenant_id,
-                         SUM(frs.heures_compl_fa)                  hetd
-                  FROM formule_resultat_service frs
-                           JOIN formule_resultat fr ON fr.id = frs.formule_resultat_id
-                           JOIN service s ON s.id = frs.service_id
+                         SUM(frvh.heures_compl_fa)                  hetd
+                  FROM formule_resultat_volume_horaire frvh
+                           JOIN formule_resultat_intervenant fr ON fr.id = frvh.formule_resultat_intervenant_id
+                           JOIN service s ON s.id = frvh.service_id
                            JOIN intervenant i ON i.id = fr.intervenant_id
                            JOIN type_heures th ON th.code = 'fa'
                            LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
@@ -83,10 +83,10 @@ FROM (SELECT annee_id,
                          th.code                                   type_heures,
                          COALESCE(ep.structure_id, i.structure_id) structure_id,
                          fr.intervenant_id,
-                         SUM(frs.heures_compl_fc)                  hetd
-                  FROM formule_resultat_service frs
-                           JOIN formule_resultat fr ON fr.id = frs.formule_resultat_id
-                           JOIN service s ON s.id = frs.service_id
+                         SUM(frvh.heures_compl_fc)                  hetd
+                  FROM formule_resultat_volume_horaire frvh
+                           JOIN formule_resultat_intervenant fr ON fr.id = frvh.formule_resultat_intervenant_id
+                           JOIN service s ON s.id = frvh.service_id
                            JOIN intervenant i ON i.id = fr.intervenant_id
                            JOIN type_heures th ON th.code = 'fc'
                            LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
@@ -107,10 +107,10 @@ FROM (SELECT annee_id,
                          th.code                            type_heures,
                          sr.structure_id,
                          fr.intervenant_id,
-                         SUM(frsr.heures_compl_referentiel) hetd
-                  FROM formule_resultat_service_ref frsr
-                           JOIN formule_resultat fr ON fr.id = frsr.formule_resultat_id
-                           JOIN service_referentiel sr ON sr.id = frsr.service_referentiel_id
+                         SUM(frvh.heures_compl_referentiel) hetd
+                  FROM formule_resultat_volume_horaire frvh
+                           JOIN formule_resultat_intervenant fr ON fr.id = frvh.formule_resultat_intervenant_id
+                           JOIN service_referentiel sr ON sr.id = frvh.service_referentiel_id
                            JOIN intervenant i ON i.id = fr.intervenant_id
                            JOIN type_heures th ON th.code = 'referentiel'
                   GROUP BY i.annee_id,
@@ -134,52 +134,38 @@ FROM (SELECT annee_id,
                    structure_id,
                    intervenant_id,
                    SUM(hetd) hetd
-            FROM (SELECT i.annee_id,
+            FROM (SELECT mep.annee_id,
                          'demande-mise-en-paiement'                                 etat,
                          90                                                         ordre,
                          th.id                                                      type_heures_id,
                          th.code                                                    type_heures,
-                         COALESCE(sr.structure_id, ep.structure_id, i.structure_id) structure_id,
-                         i.id                                                       intervenant_id,
-                         mep.heures                                                 hetd
-                  FROM mise_en_paiement mep
+                         mep.structure_id                                           structure_id,
+                         mep.intervenant_id                                         intervenant_id,
+                         sum(mep.heures_demandees_aa + mep.heures_demandees_ac)     hetd
+                  FROM tbl_paiement mep
                            JOIN type_heures th ON th.id = mep.type_heures_id
                            JOIN centre_cout cc ON cc.id = mep.centre_cout_id
-                           LEFT JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id
-                           LEFT JOIN formule_resultat_service_ref frsr ON frsr.id = mep.formule_res_service_ref_id
-                           LEFT JOIN formule_resultat fr
-                                     ON fr.id = COALESCE(frs.formule_resultat_id, frsr.formule_resultat_id)
-                           LEFT JOIN service s ON s.id = frs.service_id
-                           LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
-                           LEFT JOIN service_referentiel sr ON sr.id = frsr.service_referentiel_id
-                           LEFT JOIN intervenant i ON i.id = fr.intervenant_id
-                  WHERE mep.histo_destruction IS NULL
-                    AND th.eligible_extraction_paie = 1
+                  WHERE
+                    th.eligible_extraction_paie = 1
+                  GROUP BY
+                    mep.annee_id, th.id, th.code, mep.structure_id, mep.intervenant_id
 
                   UNION ALL
 
-                  SELECT i.annee_id,
-                         'mise-en-paiement'                                         etat,
-                         91                                                         ordre,
-                         th.id                                                      type_heures_id,
-                         th.code                                                    type_heures,
-                         COALESCE(sr.structure_id, ep.structure_id, i.structure_id) structure_id,
-                         i.id                                                       intervenant_id,
-                         mep.heures                                                 hetd
-                  FROM mise_en_paiement mep
+                  SELECT mep.annee_id,
+                         'mise-en-paiement'                               etat,
+                         91                                               ordre,
+                         th.id                                            type_heures_id,
+                         th.code                                          type_heures,
+                         mep.structure_id                                 structure_id,
+                         mep.intervenant_id                               intervenant_id,
+                         sum(mep.heures_payees_aa + mep.heures_payees_ac) hetd
+                  FROM tbl_paiement mep
                            JOIN type_heures th ON th.id = mep.type_heures_id
-                           JOIN centre_cout cc ON cc.id = mep.centre_cout_id
-                           LEFT JOIN formule_resultat_service frs ON frs.id = mep.formule_res_service_id
-                           LEFT JOIN formule_resultat_service_ref frsr ON frsr.id = mep.formule_res_service_ref_id
-                           LEFT JOIN formule_resultat fr
-                                     ON fr.id = COALESCE(frs.formule_resultat_id, frsr.formule_resultat_id)
-                           LEFT JOIN service s ON s.id = frs.service_id
-                           LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
-                           LEFT JOIN service_referentiel sr ON sr.id = frsr.service_referentiel_id
-                           LEFT JOIN intervenant i ON i.id = fr.intervenant_id
-                  WHERE mep.histo_destruction IS NULL
-                    AND th.eligible_extraction_paie = 1
-                    AND mep.periode_paiement_id IS NOT NULL) t1
+                  WHERE th.eligible_extraction_paie = 1
+                    AND mep.periode_paiement_id IS NOT NULL
+                  GROUP BY
+                    mep.annee_id, th.id, th.code, mep.structure_id, mep.intervenant_id) t1
             GROUP BY annee_id, etat, ordre, type_heures_id, type_heures, structure_id, intervenant_id) t2
       GROUP BY annee_id, etat, ordre
              , type_heures_id, type_heures

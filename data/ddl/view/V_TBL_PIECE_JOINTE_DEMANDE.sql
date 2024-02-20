@@ -24,7 +24,7 @@ hetd AS (
     intervenant_id,
     SUM(total) AS total_hetd
   FROM
-    formule_resultat   fr
+    formule_resultat_intervenant   fr
   JOIN type_volume_horaire tvh ON tvh.id = fr.type_volume_horaire_id
   JOIN etat_volume_horaire evh ON evh.id = fr.etat_volume_horaire_id
     WHERE

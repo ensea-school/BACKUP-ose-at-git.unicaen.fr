@@ -1,19 +1,21 @@
 CREATE OR REPLACE FORCE VIEW V_TBL_AGREMENT AS
 WITH i_s AS (
   SELECT
-    fr.intervenant_id,
-    ep.structure_id structure_id
+    s.intervenant_id intervenant_id,
+    ep.structure_id  structure_id,
+    sum(vh.heures)   heures
   FROM
-    formule_resultat fr
-    JOIN type_volume_horaire  tvh ON tvh.code = 'PREVU' AND tvh.id = fr.type_volume_horaire_id
-    JOIN etat_volume_horaire  evh ON evh.code = 'valide' AND evh.id = fr.etat_volume_horaire_id
-
-    JOIN formule_resultat_service frs ON frs.formule_resultat_id = fr.id
-    JOIN service s ON s.id = frs.service_id
-    JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
+    volume_horaire vh
+    JOIN service s ON s.id = vh.service_id
+    JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id -- pas de service extérieur, que du local
+    JOIN type_volume_horaire tvh ON tvh.code = 'PREVU' AND tvh.id = vh.type_volume_horaire_id
   WHERE
-    frs.total > 0
-    /*@INTERVENANT_ID=fr.intervenant_id*/
+    vh.histo_destruction IS NULL
+    /*@INTERVENANT_ID=s.intervenant_id*/
+  GROUP BY
+    s.intervenant_id, ep.structure_id
+  HAVING
+    sum(vh.heures) > 0
 ),
 avi AS (
  SELECT

@@ -17,5 +17,12 @@ FROM
   LEFT JOIN motif_modification_service mms ON mms.id = msd.motif_id
        JOIN statut                      si ON si.id = i.statut_id
        JOIN type_intervenant            ti ON ti.id = si.type_intervenant_id
+WHERE
+  1=1
+  /*@INTERVENANT_ID=i.id*/
+  /*@STATUT_ID=si.id*/
+  /*@TYPE_INTERVENANT_ID=ti.id*/
+  /*@ANNEE_ID=i.annee_id*/
+  /*@MOTIF_MODIFICATION_SERVICE_ID=mms.id*/
 GROUP BY
   i.id, i.annee_id, i.structure_id, ti.id, ti.code, s.code, si.service_statutaire, si.depassement_service_du_sans_hc

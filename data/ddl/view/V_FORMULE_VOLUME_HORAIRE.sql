@@ -48,10 +48,10 @@ FROM
       MAX(COALESCE( m.ponderation_service_du, 1))                          ponderation_service_du,
       MAX(COALESCE( m.ponderation_service_compl, 1))                       ponderation_service_compl
     FROM
-      element_pedagogique ep
-      LEFT JOIN element_modulateur        em ON em.element_id = ep.id
-                                            AND em.histo_destruction IS NULL
-      LEFT JOIN modulateur                 m ON m.id = em.modulateur_id
+                element_pedagogique   ep
+      LEFT JOIN element_modulateur    em ON em.element_id = ep.id
+                                        AND em.histo_destruction IS NULL
+      LEFT JOIN modulateur             m ON m.id = em.modulateur_id
     GROUP BY
       ep.id,
       ep.structure_id,
@@ -69,6 +69,9 @@ WHERE
   AND s.histo_destruction IS NULL
   AND vh.heures <> 0
   AND vh.motif_non_paiement_id IS NULL
+  /*@INTERVENANT_ID=i.id*/
+  /*@STATUT_ID=i.statut_id*/
+  /*@ANNEE_ID=i.annee_id*/
 
 UNION ALL
 
@@ -116,6 +119,8 @@ WHERE
   AND sr.histo_destruction IS NULL
   AND vhr.heures <> 0
   AND sr.motif_non_paiement_id IS NULL
-
+  /*@INTERVENANT_ID=i.id*/
+  /*@STATUT_ID=i.statut_id*/
+  /*@ANNEE_ID=i.annee_id*/
 ORDER BY
   horaire_fin, horaire_debut, volume_horaire_id, volume_horaire_ref_id

@@ -4,7 +4,6 @@ namespace Paiement\Controller;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Validation;
-use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
@@ -15,7 +14,6 @@ use Enseignement\Entity\Db\VolumeHoraire;
 use Intervenant\Entity\Db\Intervenant;
 use Intervenant\Service\IntervenantServiceAwareTrait;
 use Intervenant\Service\TypeIntervenantServiceAwareTrait;
-use Laminas\Json\Json;
 use Lieu\Entity\Db\Structure;
 use Lieu\Service\StructureServiceAwareTrait;
 use Paiement\Entity\Db\MiseEnPaiement;
@@ -83,38 +81,11 @@ class PaiementController extends AbstractController
 
 
 
-    /**
-     * @return int
-     */
-    protected function getChangeIndex ()
-    {
-        $session = $this->getSessionContainer();
-        if (!isset($session->cgtIndex)) $session->cgtIndex = 0;
-        $result = $session->cgtIndex;
-        $session->cgtIndex++;
-
-        return $result;
-    }
-
-
-
-    protected function isChangeIndexSaved ($changeIndex)
-    {
-        $session = $this->getSessionContainer();
-        if (!isset($session->cht)) $session->cht = [];
-
-        return isset($session->cht[$changeIndex]) && $session->cht[$changeIndex];
-    }
-
-
-
     public function demandeMiseEnPaiementAction ()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
-
-
         //Un intervenant n'a pas le droit de voir cette page de demande de mise en paiement
         if ($role->getIntervenant()) {
             //On redirige vers la visualisation des mises en paiement
@@ -127,81 +98,12 @@ class PaiementController extends AbstractController
 
 
 
-    public function supprimerMiseEnPaiementAction ()
-    {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $this->initFilters();
-        $idDmep      = $this->params()->fromRoute('mise-en-paiement');
-        $intervenant = $this->getEvent()->getParam('intervenant');
-
-
-        //Un intervenant ne peut pas supprimer des demandes de mise en paiement
-        if ($role->getIntervenant()) {
-            //On redirige vers la visualisation des mises en paiement
-            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
-        }
-        //on supprimer la demande de mise en paiement
-        try {
-            $this->getServiceMiseEnPaiement()->supprimerDemandeMiseEnPaiement($idDmep);
-            $this->flashMessenger()->addSuccessMessage("Demande de mise en paiement supprimer.");
-            $this->updateTableauxBord($intervenant);
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($e->getMessage());
-
-            return false;
-        }
-
-        return true;
-    }
-
-
-
-    public function ajouterMiseEnPaiementAction ()
-    {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $this->initFilters();
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        //Un intervenant ne peut pas supprimer des demandes de mise en paiement
-        if ($role->getIntervenant()) {
-            //On redirige vers la visualisation des mises en paiement
-            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
-        }
-        if ($this->getRequest()->isPost()) {
-
-
-            $datas = $this->getRequest()->getPost()->toArray();
-            //On vérifie ici qu'on peut bien mettre en demande le nombre d'heure demandé
-
-            try {
-                $this->getServiceMiseEnPaiement()->verifierDemandeMiseEnPaiement($intervenant, $datas);
-                $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $datas);
-                $this->updateTableauxBord($intervenant);
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($e->getMessage());
-
-                return false;
-            }
-
-            //On recalcule le tableau de bord paiement de l'intervenant concerné
-            return true;
-        }
-
-        return false;
-    }
-
-
-
     public function demandeMiseEnPaiementAllAction ()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
-        //Un intervenant ne peut pas supprimer des demandes de mise en paiement
-        if ($role->getIntervenant()) {
-            //On redirige vers la visualisation des mises en paiement
-            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
-        }
-        if ($this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost() && !$role->getIntervenant()) {
             $post = file_get_contents('php://input') ?? $_POST;
 
             $demandes = json_decode($post, true);
@@ -248,16 +150,71 @@ class PaiementController extends AbstractController
 
 
 
+    public function supprimerMiseEnPaiementAction ()
+    {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $this->initFilters();
+        $idDmep      = $this->params()->fromRoute('mise-en-paiement');
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        //Un intervenant ne peut pas supprimer des demandes de mise en paiement
+        if ($role->getIntervenant()) {
+            //On redirige vers la visualisation des mises en paiement
+            return false;
+        }
+        //on supprimer la demande de mise en paiement
+        try {
+            $this->getServiceMiseEnPaiement()->supprimerDemandeMiseEnPaiement($idDmep);
+            $this->flashMessenger()->addSuccessMessage("Demande de mise en paiement supprimer.");
+            $this->updateTableauxBord($intervenant);
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    public function ajouterMiseEnPaiementAction ()
+    {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $this->initFilters();
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        if ($this->getRequest()->isPost() && !$role->getIntervenant()) {
+            $post = file_get_contents('php://input') ?? $_POST;
+
+            $datas = current(json_decode($post, true));
+
+            try {
+                $this->getServiceMiseEnPaiement()->verifierDemandeMiseEnPaiement($intervenant, $datas);
+                $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $datas);
+                $this->updateTableauxBord($intervenant);
+                $this->flashMessenger()->addSuccessMessage("Demande de mise en paiement effecutée");
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+
+                return false;
+            }
+
+            //On recalcule le tableau de bord paiement de l'intervenant concerné
+            return true;
+        }
+
+        return false;
+    }
+
+
+
     public function listeServiceAPayerAction ()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
-
-        //Un intervenant n'a pas le droit de voir cette page de demande de mise en paiement
+        //Un intervenant ne peut pas récuperer les datas de demande de mise en paiement
         if ($role->getIntervenant()) {
-            //On redirige vers la visualisation des mises en paiement
-            $this->redirect()->toRoute('intervenant/mise-en-paiement/visualisation', ['intervenant' => $intervenant->getId()]);
+            return new AxiosModel([]);
         }
         $this->updateTableauxBord($intervenant);
         $servicesAPayer = $this->getServiceMiseEnPaiement()->getDemandeMiseEnPaiementResume($intervenant);
@@ -277,7 +234,7 @@ class PaiementController extends AbstractController
             //On récupere les données post notamment la structure recherchée
             $idStructure  = $this->getRequest()->getPost('structure');
             $structure    = $this->em()->find(Structure::class, $idStructure);
-            $intervenants = $this->getServiceServiceAPayer()->getListByStructure($structure);
+            $intervenants = $this->getServiceMiseEnPaiement()->getListByStructure($structure);
 
             return new AxiosModel($intervenants);
         }

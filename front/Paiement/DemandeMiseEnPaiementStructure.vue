@@ -22,7 +22,7 @@
                             <thead class="table-light">
                             <tr>
                                 <th class="fw-bold" scope="col">Paie etat</th>
-                                <th class="fw-bold" scope="col">Ressource propre</th>
+                                <th class="fw-bold" scope="col">Ressources propres</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -36,7 +36,7 @@
                                         <div :aria-valuemax="this.dotationPaieEtat"
                                              :aria-valuenow="this.consommationPaieEtat"
                                              :style="'width:' + this.pourcentagePaieEtat + '%;'"
-                                             :title="Math.round(this.pourcentagePaieEtat) + '%'"
+                                             :title="this.pourcentagePaieEtat + '%'"
                                              aria-valuemin="0"
                                              class="progress-bar progress-bar-striped bg-success"
                                              role="progressbar">
@@ -51,7 +51,7 @@
                                         <div :aria-valuemax="this.dotationRessourcesPropres"
                                              :aria-valuenow="this.consommationRessourcesPropres"
                                              :style="'width:' + this.pourcentageRessourcePropre + '%;'"
-                                             :title="Math.round(this.pourcentageRessourcePropre) + '%'"
+                                             :title="this.pourcentageRessourcePropre + '%'"
                                              aria-valuemin="0"
                                              class="progress-bar progress-bar-striped bg-success"
                                              role="progressbar">
@@ -87,8 +87,8 @@
                                                         <thead>
                                                         <th scope="col" style="width:20%;font-size:12px;">Heures</th>
                                                         <th scope="col" style="width:40%;font-size:12px;">Centre de cout</th>
-                                                        <th scope="col" style="width:25%;font-size:12px;">Statut</th>
-                                                        <th style="width:15%;font-size:12px;">Action</th>
+                                                        <th scope="col" style="width:25%;font-size:12px;">Etat</th>
+                                                        <th style="width:15%;font-size:12px;"></th>
                                                         </thead>
                                                         <tbody>
                                                         <tr v-for="(value,id) in typeHeure.heures" class="detailHeure">
@@ -130,6 +130,8 @@
                                                                         <option
                                                                             v-for="item in group.child"
                                                                             :key="item.value"
+                                                                            :data-paie-etat="item.paieEtat"
+                                                                            :data-ressources-propres="item.ressourcesPropres"
                                                                             :selected="item.centreCoutId==value.centreCout.centreCoutId"
                                                                             :value="item.centreCoutId">
                                                                             {{ item.centreCoutCode + ' - ' + item.centreCoutLibelle }}
@@ -151,7 +153,8 @@
                                                                     <button :id="'remove-' + value.mepId"
                                                                             class="btn btn-danger"
                                                                             type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
-                                                                        <i class="fa-solid fa-trash" style="color:white;"></i>
+                                                                        <u-icon id="action" name="trash" style="color:white;"/>
+                                                                        <u-icon id="waiting" name="spin" rotate="right" style="color:white;display:none;"/>
                                                                     </button>
                                                                 </span>
                                                                 <span
@@ -160,7 +163,9 @@
                                                                             class="btn btn-primary"
                                                                             type="button"
                                                                             @click="this.ajouterDemandeMiseEnPaiement(codeEtape + '-' + codeEnseignement + '-' + codeTypeHeure)">
-                                                                            <u-icon name="plus"/>
+                                                                            <u-icon id="action" name="plus"/>
+                                                                            <u-icon id="waiting" name="spin" rotate="right" style="display:none;"/>
+
                                                                     </button>
                                                                 </span>
 
@@ -204,8 +209,8 @@
                                                 <th scope="col" style="width:10%;font-size:12px;">Heures</th>
                                                 <th scope="col" style="width:25%;font-size:12px;">Centre de cout</th>
                                                 <th scope="col" style="width:25%;font-size:12px;">Domaine fonctionnel</th>
-                                                <th scope="col" style="width:20%;font-size:12px;">Statut</th>
-                                                <th style="width:15%;font-size:12px;">Action</th>
+                                                <th scope="col" style="width:20%;font-size:12px;">Etat</th>
+                                                <th style="width:15%;font-size:12px;"></th>
                                                 </thead>
                                                 <tbody>
                                                 <tr v-for="(value,id) in fonction.heures" class="detailHeure">
@@ -241,6 +246,8 @@
                                                                 :label="group.group">
                                                                 <option v-for="item in group.child"
                                                                         :key="item.value"
+                                                                        :data-paie-etat="item.paieEtat"
+                                                                        :data-ressources-propres="item.ressourcesPropres"
                                                                         :selected="item.centreCoutId == value.centreCout.centreCoutId"
                                                                         :value="item.centreCoutId">
                                                                     {{ item.centreCoutCode + ' - ' + item.centreCoutLibelle }}
@@ -278,7 +285,8 @@
                                                                     <button :id="'remove-' + value.mepId"
                                                                             class="btn btn-danger"
                                                                             type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
-                                                                        <i class="fa-solid fa-trash" style="color:white;"></i>
+                                                                        <u-icon id="action" name="trash" style="color:white;"/>
+                                                                        <u-icon id="waiting" name="spin" rotate="right" style="color:white;display:none;"/>
                                                                     </button>
                                                                 </span>
                                                         <span
@@ -287,9 +295,11 @@
                                                                             class="btn btn-primary"
                                                                             type="button"
                                                                             @click="this.ajouterDemandeMiseEnPaiement(codeFonction)">
-                                                                            <u-icon name="plus"/>
+                                                                            <u-icon id="action" name="plus"/>
+                                                                            <u-icon id="waiting" name="spin" rotate="right" style="display:none;"/>
+
                                                                     </button>
-                                                                </span>
+                                                        </span>
 
                                                     </td>
                                                 </tr>
@@ -332,8 +342,8 @@
                                                 <th scope="col" style="width:10%;font-size:12px;">Heures</th>
                                                 <th scope="col" style="width:25%;font-size:12px;">Centre de cout</th>
                                                 <th scope="col" style="width:25%;font-size:12px;">Domaine fonctionnel</th>
-                                                <th scope="col" style="width:20%;font-size:12px;">Statut</th>
-                                                <th style="width:15%;font-size:12px;">Action</th>
+                                                <th scope="col" style="width:20%;font-size:12px;">Etat</th>
+                                                <th style="width:15%;font-size:12px;"></th>
                                                 </thead>
                                                 <tbody>
 
@@ -369,6 +379,8 @@
                                                                 :label="group.group">
                                                                 <option v-for="item in group.child"
                                                                         :key="item.value"
+                                                                        :data-paie-etat="item.paieEtat"
+                                                                        :data-ressources-propres="item.ressourcesPropres"
                                                                         :selected="item.centreCoutId == value.centreCout.centreCoutId"
                                                                         :value="item.centreCoutId"
                                                                 >
@@ -408,7 +420,8 @@
                                                                     <button :id="'remove-' + value.mepId"
                                                                             class="btn btn-danger"
                                                                             type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
-                                                                        <i class="fa-solid fa-trash" style="color:white;"></i>
+                                                                        <u-icon id="action" name="trash" style="color:white;"/>
+                                                                        <u-icon id="waiting" name="spin" rotate="right" style="color:white;display:none;"/>
                                                                     </button>
                                                                 </span>
                                                         <span
@@ -417,7 +430,8 @@
                                                                             class="btn btn-primary"
                                                                             type="button"
                                                                             @click="this.ajouterDemandeMiseEnPaiement(mission.missionId)">
-                                                                            <u-icon name="plus"/>
+                                                                            <u-icon id="action" name="plus"/>
+                                                                            <u-icon id="waiting" name="spin" rotate="right" style="display:none;"/>
                                                                     </button>
                                                                 </span>
 
@@ -450,7 +464,8 @@
                         class="btn btn-primary"
                         type="button"
                         @click="demanderToutesLesHeuresEnPaiement(datas.code, datas.libelle)">
-                    <u-icon name="square-plus"/>
+                    <u-icon id="action" name="square-plus" style="color:white;"/>
+                    <u-icon id="waiting" name="spin" rotate="right" style="display:none;"/>
                     DEMANDER TOUS LES PAIEMENTS POUR {{ datas.libelle }}
                 </button>
             </div>
@@ -476,8 +491,7 @@ export default {
             dotationRessourcesPropres: this.datas.budget.dotation.ressourcePropre,
             consommationPaieEtat: this.datas.budget.liquidation.paieEtat,
             consommationRessourcesPropres: this.datas.budget.liquidation.ressourcePropre,
-            pourcentagePaieEtat: (this.consommationPaieEtat / this.dotationPaieEtat) * 100,
-            pourcentageRessourcePropre: (this.consommationRessourcesPropres / this.dotationRessourcesPropres) * 100,
+
 
         }
     },
@@ -487,11 +501,20 @@ export default {
             this.dotationRessourcesPropres = this.datas.budget.dotation.ressourcePropre;
             this.consommationPaieEtat = this.datas.budget.liquidation.paieEtat;
             this.consommationRessourcesPropres = this.datas.budget.liquidation.ressourcePropre;
-            this.pourcentagePaieEtat = (this.consommationPaieEtat / this.dotationPaieEtat) * 100;
-            this.pourcentageRessourcePropre = (this.consommationRessourcesPropres / this.dotationRessourcesPropres) * 100;
         },
 
     },
+    computed:
+        {
+            pourcentagePaieEtat()
+            {
+                return Math.round((this.consommationPaieEtat / this.dotationPaieEtat) * 100);
+            },
+            pourcentageRessourcePropre()
+            {
+                return Math.round((this.consommationRessourcesPropres / this.dotationRessourcesPropres) * 100);
+            }
+        },
     methods: {
         heuresStatutToString(value)
         {
@@ -514,20 +537,18 @@ export default {
         supprimerDemandeMiseEnPaiement(id)
         {
             //On récupere le bouton d'ajout
-            let btnRemove = document.getElementById('remove-' + id);
-            //On desactive le bouton pour éviter le multi click
-            btnRemove.disabled = true;
+            this.btnToggle('remove-' + id);
             unicaenVue.axios.get(unicaenVue.url('paiement/:intervenant/supprimer-demande/:dmep', {intervenant: this.intervenant, dmep: id}))
                 .then(response => {
                     this.$emit('refresh');
                     setTimeout(() => {
-                        btnRemove.disabled = false;
+                        this.btnToggle('remove-' + id);
                     }, 2500);
                 })
                 .catch(error => {
                     this.$emit('refresh');
                     setTimeout(() => {
-                        btnRemove.disabled = false;
+                        this.btnToggle('remove-' + id);
                     }, 2500);
                 })
         },
@@ -563,22 +584,58 @@ export default {
         {
 
             //On récupere le bouton d'ajout
-            let btnAdd = document.getElementById('add-' + id);
-            //On desactive le bouton pour éviter le multi click
-            btnAdd.disabled = true;
+            this.btnToggle('add-' + id);
+            let options = {animation: true, delay: 15000, autohide: true};
             let inputHeure = document.getElementById('heures-' + id);
             let inputCentreCout = document.getElementById('centreCout-' + id);
             let inputDomaineFonctionnel = document.getElementById('domaineFonctionnel-' + id);
             let heureADemander = Number(inputHeure.value);
             let heureADemanderMax = Number(inputHeure.getAttribute('max'));
-
-            let centreCoutId = inputCentreCout.value;
             let domaineFonctionnelId = (inputDomaineFonctionnel) ? inputDomaineFonctionnel.value : '';
-
             let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
             let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
             let formuleResServiceRefId = (inputHeure.hasAttribute('data-formule-res-service-ref-id') ? inputHeure.getAttribute('data-formule-res-service-ref-id') : '');
             let missionId = (inputHeure.hasAttribute('data-mission-id') ? inputHeure.getAttribute('data-mission-id') : '');
+
+            let centreCoutId = inputCentreCout.value;
+            let ressourcesPropres = inputCentreCout.options[inputCentreCout.selectedIndex].getAttribute('data-ressources-propres');
+            let paieEtat = inputCentreCout.options[inputCentreCout.selectedIndex].getAttribute('data-paie-etat');
+            console.log("Ressource Propres => " + ressourcesPropres);
+            console.log("Paie etat => " + paieEtat);
+            //Si centre de cout non sélectionné
+            if (centreCoutId == '') {
+                unicaenVue.flashMessenger.toast("Vous devez sélectionner un centre de coût pour demander la mise en paiement de ces heures", 'error', options)
+                this.btnToggle('add-' + id);
+                return false;
+
+            }
+            //Si le nombre d'heure demandées est supérieur au nombre d'heures maximum pour cette ligne
+            if (heureADemander > 0 && heureADemander > heureADemanderMax) {
+                unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible, vous demandez " + heureADemander + " hetd alors que vous pouvez demander maximum " + heureADemanderMax + " hetd", 'error', options);
+                this.btnToggle('add-' + id);
+                return false;
+            }
+            //Si je suis sur une demande de mise en paiement avec des fonds paie etat
+            if (paieEtat == 1 && this.dotationPaieEtat > 0) {
+
+                let solde = this.dotationPaieEtat - (this.consommationPaieEtat + heureADemander);
+                if (solde <= 0) {
+                    unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible manque de dotation 'paie etat' pour ces heures", 'error', options)
+                    this.btnToggle('add-' + id);
+                    return false;
+                }
+            }
+            //Si je suis sur une demande de mise en paiement avec des fonds ressources propres
+            if (ressourcesPropres == 1 && this.dotationRessourcesPropres > 0) {
+                let solde = this.dotationRessourcesPropres - (this.consommationRessourcesPropres + heureADemander);
+                if (solde <= 0) {
+                    unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible manque de dotation 'ressources propres' pour ces heures", 'error', options)
+                    this.btnToggle('add-' + id);
+                    return false;
+                }
+            }
+
+
             var datas = new FormData();
             datas.append('heures', heureADemander);
             datas.append('typeHeuresId', typeHeureId);
@@ -588,25 +645,36 @@ export default {
             datas.append('domaineFonctionnelId', domaineFonctionnelId);
             datas.append('missionId', missionId);
 
-            //Si volontairement on passe 0 heure à demander ou si on demande plus d'heures que le maximum possible pour cette ligne
-            if (heureADemander > 0 && heureADemander <= heureADemanderMax) {
-                unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demande', {intervenant: this.intervenant}), datas)
-                    .then(response => {
-                        this.$emit('refresh');
-                        setTimeout(() => {
-                            btnAdd.disabled = false;
-                        }, 2500);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    })
-            } else {
-                this.$emit('refresh');
-                setTimeout(() => {
-                    btnAdd.disabled = false;
-                }, 2500);
-                console.warn("Le nombre d'heures demandées en paiement n'est pas situé entre le max et min possible.");
+            var datas = [];
+            let demande = {
+                heures: heureADemander,
+                centreCoutId: centreCoutId,
+                typeHeuresId: typeHeureId,
+                formuleResServiceId: formuleResServiceId,
+                formuleResServiceRefId: formuleResServiceRefId,
+                domaineFonctionnelId: domaineFonctionnelId,
+                missionId: missionId,
             }
+            datas.push(demande);
+
+            console.log(JSON.stringify(datas));
+            //Si volontairement on passe 0 heure à demander ou si on demande plus d'heures que le maximum possible pour cette ligne
+
+            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demande', {intervenant: this.intervenant}), datas, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    this.$emit('refresh');
+                    setTimeout(() => {
+                        this.btnToggle('add-' + id);
+                    }, 2500);
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+
 
 
 
@@ -614,10 +682,7 @@ export default {
         demanderToutesLesHeuresEnPaiement(codeStructure, libelleStructure)
         {
             //On récupere le bouton d'ajout
-            let btnAddAll = document.getElementById('add-all-' + codeStructure);
-            //On desactive le bouton pour éviter le multi click
-            btnAddAll.disabled = true;
-            btnAddAll.innerText = "VEUILLEZ PATIENTER..."
+            this.btnToggle('add-all-' + codeStructure);
             let datas = [];
             let parent = document.getElementById("demande-mise-en-paiement-" + codeStructure);
             let demandesMiseEnPaiement = parent.getElementsByTagName("tr");
@@ -652,26 +717,22 @@ export default {
                         datas.push(demande);
                     }
 
-
-
-
                 }
 
             }
+
             unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/all-demande', {intervenant: this.intervenant}), datas)
                 .then(response => {
                     this.$emit('refresh');
                     setTimeout(() => {
-                        btnAddAll.disabled = false;
-                        btnAddAll.innerHTML = "<i class=\"square-plus\"></i>TOUT METTRE EN PAIEMENT POUR " + libelleStructure;
+                        this.btnToggle('add-all-' + codeStructure);
                     }, 2500);
 
                 })
                 .catch(error => {
                     this.$emit('refresh');
                     setTimeout(() => {
-                        btnAddAll.disabled = false;
-                        btnAddAll.innerHTML = "<i class=\"square-plus\"></i>TOUT METTRE EN PAIEMENT POUR " + libelleStructure;
+                        this.btnToggle('add-all-' + codeStructure);
                     }, 2500);
                 })
         },
@@ -730,11 +791,26 @@ export default {
             } else {
                 return chaine;
             }
+        },
+        btnToggle(id)
+        {
+            let btn = document.getElementById(id);
+            if (btn.disabled) {
+                btn.disabled = false;
+                btn.querySelector('#waiting').style.display = 'none';
+                btn.querySelector('#action').style.display = 'inline-block';
+            } else {
+                btn.disabled = true;
+                btn.querySelector('#waiting').style.display = 'inline-block';
+                btn.querySelector('#action').style.display = 'none';
+            }
+
+            return btn;
         }
 
 
     },
-  
+
 
 
 }

@@ -120,8 +120,8 @@ class CentreCoutService extends AbstractEntityService
             CASE WHEN tr.referentiel = 1 AND cca.referentiel = 1 THEN 1 ELSE 0 END referentiel,
             CASE WHEN tr.fc_majorees = 1 AND cca.fc_majorees = 1 THEN 1 ELSE 0 END fc_majorees,
             CASE WHEN tr.mission = 1 AND cca.mission = 1 THEN 1 ELSE 0 END mission,
-            tr.code                      type_ressource_code,
-            tr.libelle                   type_ressource_libelle,
+            CASE WHEN tr.code = 'ressources-propres' THEN 1 ELSE 0 END  ressources_propres,
+            CASE WHEN tr.code = 'paie-etat' THEN 1 ELSE 0 END  paie_etat,
             cc.parent_id  				 centre_cout_parent_id,
             ccp.libelle   				 libelle_parent,
             ccp.code      				 code_parent

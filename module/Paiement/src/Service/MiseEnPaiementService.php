@@ -649,14 +649,17 @@ class MiseEnPaiementService extends AbstractEntityService
          */
 
         $mep = $this->getEntityManager()->getRepository(MiseEnPaiement::class)->find($idMep);
-        //Si on a pas de période de paiement, on est bien sur une demande de mise en paiement
-        if (!$mep->getPeriodePaiement()) {
-            $this->delete($mep);
-        } else {
-            throw new \Exception("Vous ne pouvez pas supprimer cette demande de mise en paiement, les heures on déjà été payé");
-        }
+        if (!empty($mep)) {
+            if (!$mep->getPeriodePaiement()) {
+                $this->delete($mep);
+            } else {
+                throw new \Exception("Vous ne pouvez pas supprimer cette demande de mise en paiement, les heures on déjà été payé");
+            }
 
-        return true;
+            return true;
+        } else {
+            throw new \Exception("Demande de mise en paiement non trouvée");
+        }
     }
 
 
@@ -975,17 +978,18 @@ class MiseEnPaiementService extends AbstractEntityService
                             $listeCentresCouts[$centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT']] = [];
                         }
                         $listeCentresCouts[$centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT']][] = [
-                            'centreCoutId'         => $centreCout['CENTRE_COUT_ID'],
-                            'centreCoutLibelle'    => $centreCout['LIBELLE'],
-                            'centreCoutCode'       => $centreCout['CODE'],
-                            'fi'                   => $centreCout['FI'],
-                            'fa'                   => $centreCout['FA'],
-                            'fc'                   => $centreCout['FC'],
-                            'referentiel'          => $centreCout['REFERENTIEL'],
-                            'fcMajorees'           => $centreCout['FC_MAJOREES'],
-                            'mission'              => $centreCout['MISSION'],
-                            'typeRessourceCode'    => $centreCout['TYPE_RESSOURCE_CODE'],
-                            'typeRessourceLibelle' => $centreCout['TYPE_RESSOURCE_LIBELLE'],
+                            'centreCoutId'      => $centreCout['CENTRE_COUT_ID'],
+                            'centreCoutLibelle' => $centreCout['LIBELLE'],
+                            'centreCoutCode'    => $centreCout['CODE'],
+                            'fi'                => $centreCout['FI'],
+                            'fa'                => $centreCout['FA'],
+                            'fc'                => $centreCout['FC'],
+                            'referentiel'       => $centreCout['REFERENTIEL'],
+                            'fcMajorees'        => $centreCout['FC_MAJOREES'],
+                            'mission'           => $centreCout['MISSION'],
+                            'paieEtat'          => $centreCout['PAIE_ETAT'],
+                            'ressourcesPropres' => $centreCout['RESSOURCES_PROPRES'],
+
                         ];
                     } else {
                         $listeCentresCouts['AUTRES'][] = [
@@ -998,6 +1002,8 @@ class MiseEnPaiementService extends AbstractEntityService
                             'referentiel'       => $centreCout['REFERENTIEL'],
                             'fcMajorees'        => $centreCout['FC_MAJOREES'],
                             'mission'           => $centreCout['MISSION'],
+                            'paieEtat'          => $centreCout['PAIE_ETAT'],
+                            'ressourcesPropres' => $centreCout['RESSOURCES_PROPRES'],
                         ];
                     }
 

@@ -7,7 +7,7 @@
 # OSE 24 (à venir)
 
 
-# OSE 23.2 (à venir)
+# OSE 23.2 (23/02/2024)
 
 ## Nouveautés
 
@@ -20,7 +20,7 @@
 * La prise en compte du caractère éligible selon le type d'heures est rétablie sur les extractions de paye
 * Modification workflow pour permettre la saisie de mission par plusieurs composantes sur un même étudiant (#54487)
 * Dysfonctionnement recherche LDAP quand le code utilisateur de l'intervenant fait moins de 8 caractères (#54717)
-
+* La modification de formule de ROUEN demandée pour la 23.1 s'applique désormais uniquement à partir de 2023/2024 (#55241) 
 
 
 

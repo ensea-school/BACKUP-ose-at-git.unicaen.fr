@@ -316,8 +316,6 @@ FROM (
         WHERE
           m.valide = 1
           AND m.validation_id IS NOT NULL
-        ORDER BY
-          m.mission_id
         ) mi ON mi.intervenant_id = i.id AND mi.prems = 1
       LEFT JOIN (
         SELECT DISTINCT intervenant_id

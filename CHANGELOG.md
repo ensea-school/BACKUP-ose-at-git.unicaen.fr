@@ -6,6 +6,11 @@
 
 # OSE 24 (à venir)
 
+# OSE 23.3 (23/02/2024)
+
+## Corrections de bugs
+
+* Correction sur l'export des imputations budgétaires siham
 
 # OSE 23.2 (23/02/2024)
 

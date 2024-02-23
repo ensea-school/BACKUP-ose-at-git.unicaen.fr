@@ -63,9 +63,12 @@ return [
 
 
     'services' => [
-        Assertion\FormuleAssertion::class                       => AssertionFactory::class,
-        Service\FormuleService::class                           => Service\FormuleServiceFactory::class,
-        Service\FormuleResultatService::class                   => Service\FormuleResultatServiceFactory::class,
+        Assertion\FormuleAssertion::class         => AssertionFactory::class,
+        Service\FormuleService::class             => Service\FormuleServiceFactory::class,
+        Service\FormuleResultatService::class     => Service\FormuleResultatServiceFactory::class,
+        Tbl\Process\FormuleProcess::class         => Tbl\Process\FormuleProcessFactory::class,
+        Tbl\Process\Sub\ServiceDataManager::class => Tbl\Process\Sub\ServiceDataManagerFactory::class,
+        Service\CalculateurService::class         => Service\CalculateurServiceFactory::class,
     ],
 
 

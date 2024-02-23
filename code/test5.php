@@ -8,22 +8,15 @@
  * @var $viewFile   string
  */
 
+$intervenantId = 778603;
 
-/** @var \Formule\Service\FormuleService $fs */
-$fs = $container->get(\Formule\Service\FormuleService::class);
-
-$em = $fs->getEntityManager();
-
-$intervenant = $em->find(\Intervenant\Entity\Db\Intervenant::class, 778887);
-$typeVolumeHoraire = $container->get(\Service\Service\TypeVolumeHoraireService::class)->getPrevu();
-$etatVolumeHoraire = $container->get(\Service\Service\EtatVolumeHoraireService::class)->getSaisi();
-
-$intervenantTest = $em->find(\Formule\Entity\Db\FormuleTestIntervenant::class, 10030);
-
-//$res = $fs->getResultat($intervenant, $typeVolumeHoraire, $etatVolumeHoraire);
+/** @var  $st \UnicaenTbl\Service\TableauBordService */
+$st = $container->get(\UnicaenTbl\Service\TableauBordService::class);
 
 
-$res = $fs->getTest($intervenantTest);
+$params = [
+    'INTERVENANT_ID' => $intervenantId,
+    'TYPE_VOLUME_HORAIRE_ID' => 1,
+];
 
-
-var_dump($res);
+$st->calculer('formule', $params);

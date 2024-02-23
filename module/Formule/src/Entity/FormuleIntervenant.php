@@ -63,6 +63,9 @@ class FormuleIntervenant implements FormuleHeuresInterface
     public function addVolumeHoraire(FormuleVolumeHoraire $volumeHoraire): FormuleIntervenant
     {
         $this->volumesHoraires->add($volumeHoraire);
+        if (empty($volumeHoraire->getFormuleIntervenant())) {
+            $volumeHoraire->setFormuleIntervenant($this);
+        }
         return $this;
     }
 
@@ -72,17 +75,10 @@ class FormuleIntervenant implements FormuleHeuresInterface
     {
         if ($volumeHoraire instanceof FormuleVolumeHoraire) {
             $this->volumesHoraires->removeElement($volumeHoraire);
+            $volumeHoraire->setFormuleIntervenant(null);
         } else {
             $this->volumesHoraires->remove($volumeHoraire);
         }
-        return $this;
-    }
-
-
-
-    public function clearVolumeHoraires(): FormuleIntervenant
-    {
-        $this->volumesHoraires->clear();
         return $this;
     }
 

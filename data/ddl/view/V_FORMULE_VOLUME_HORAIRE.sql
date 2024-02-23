@@ -1,6 +1,5 @@
 CREATE OR REPLACE FORCE VIEW V_FORMULE_VOLUME_HORAIRE AS
 SELECT
-  to_number( 1 || vh.id )                                              id,
   s.intervenant_id                                                     intervenant_id,
   vh.type_volume_horaire_id                                            type_volume_horaire_id,
   vhe.etat_volume_horaire_id                                           etat_volume_horaire_id,
@@ -72,11 +71,12 @@ WHERE
   /*@INTERVENANT_ID=i.id*/
   /*@STATUT_ID=i.statut_id*/
   /*@ANNEE_ID=i.annee_id*/
+  /*@TYPE_VOLUME_HORAIRE_ID=vh.type_volume_horaire_id*/
+  /*@ETAT_VOLUME_HORAIRE_ID<=vhe.etat_volume_horaire_id*/
 
 UNION ALL
 
 SELECT
-  to_number( 2 || vhr.id )                                             id,
   sr.intervenant_id                                                    intervenant_id,
   vhr.type_volume_horaire_id                                           type_volume_horaire_id,
   evh.id                                                               etat_volume_horaire_id,
@@ -122,5 +122,8 @@ WHERE
   /*@INTERVENANT_ID=i.id*/
   /*@STATUT_ID=i.statut_id*/
   /*@ANNEE_ID=i.annee_id*/
+  /*@TYPE_VOLUME_HORAIRE_ID=vhr.type_volume_horaire_id*/
+  /*@ETAT_VOLUME_HORAIRE_ID<=evh.etat_volume_horaire_id*/
+
 ORDER BY
   horaire_fin, horaire_debut, volume_horaire_id, volume_horaire_ref_id

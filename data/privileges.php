@@ -474,7 +474,8 @@ return [
     'formule' => [
         'libelle'    => 'Formule de calcul',
         'privileges' => [
-            'tests' => 'Tests',
+            'createur' => 'Créateur',
+            'tests'    => 'Tests',
         ],
     ],
 

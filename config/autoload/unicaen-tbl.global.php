@@ -62,8 +62,7 @@ return [
 
             'formule' => [
                 'order'   => 1,
-                'process' => 'Plsql',
-                'command' => 'OSE_FORMULE.CALCULER_TBL',
+                'process' => \Formule\Tbl\Process\FormuleProcess::class,
             ],
 
             'dmep_liquidation' => [
@@ -193,7 +192,7 @@ return [
                 ],
             ],
 
-            'mission'       => [
+            'mission' => [
                 'order'              => 6,
                 'process'            => 'DbDiff',
                 'cols'               => [

@@ -15,6 +15,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 class ParametreEntityListener implements EventSubscriber
 {
@@ -346,7 +347,10 @@ class ParametreEntityListener implements EventSubscriber
         }
 
         foreach ($metadata->associationMappings as $field => $associationMapping) {
-            if (!in_array($field, $keyFields) && !in_array($field, ['annee'])) {
+           if (!in_array($field, $keyFields)
+               && !in_array($field, ['annee'])
+               && $associationMapping['type'] == ClassMetadataInfo::MANY_TO_ONE
+           ) {
                 $dataFields[] = $field;
             }
         }

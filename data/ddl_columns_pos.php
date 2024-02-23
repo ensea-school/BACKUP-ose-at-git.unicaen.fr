@@ -1400,6 +1400,7 @@ return [
         'AUTRE_3',
         'AUTRE_4',
         'AUTRE_5',
+        'DOMAINE_FONCTIONNEL_ID',
     ],
     'SYNC_LOG'                       => [
         'ID',
@@ -2561,6 +2562,7 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_MODIFICATION',
     ],
+
 ];
 
 //@formatter:on

@@ -65,8 +65,7 @@ FROM (
            annee_id,
            'mis-en-paiement'																								        etat
 FROM(
-
-	FROM ( SELECT
+    SELECT
 		       p.id                                                                                          periode_id,
 		       i.id                                                                                          intervenant_id,
 		       MAX(i.annee_id)                                                                               annee_id,

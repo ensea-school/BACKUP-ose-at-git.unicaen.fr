@@ -61,7 +61,7 @@
         <many-to-one field="centreCoutDefault" target-entity="Paiement\Entity\Db\CentreCout" nullable="true">
             <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="domaineFonctionnelDefault" target-entity="Application\Entity\Db\DomaineFonctionnel" nullable="true">
+        <many-to-one field="domaineFonctionnelDefault" target-entity="Paiement\Entity\Db\DomaineFonctionnel" nullable="true">
             <join-column name="DOMAINE_FONCTIONNEL_ID" referenced-column-name="ID"/>
         </many-to-one>
         <one-to-many field="elementPedagogique" target-entity="OffreFormation\Entity\Db\ElementPedagogique" mapped-by="structure"/>

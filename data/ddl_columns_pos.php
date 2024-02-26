@@ -1468,14 +1468,27 @@ return [
         'CLOTURE',
     ],
     'TBL_CONTRAT'                    => [
-        'ID',
         'ANNEE_ID',
         'INTERVENANT_ID',
         'ACTIF',
-        'STRUCTURE_ID',
-        'NBVH',
         'EDITE',
         'SIGNE',
+        'CONTRAT_ID',
+        'MISSION_ID',
+        'SERVICE_ID',
+        'SERVICE_REFERENTIEL_ID',
+        'HEURES',
+        'HETD',
+        'CM',
+        'TD',
+        'TP',
+        'AUTRE',
+        'AUTRE_LIBELLE',
+        'TAUX_REMU_ID',
+        'TAUX_REMU_VALEUR',
+        'TAUX_CONGES_PAYES',
+        'NBVH',
+        'STRUCTURE_ID',
     ],
     'TBL_DMEP_LIQUIDATION'           => [
         'ID',
@@ -2562,7 +2575,6 @@ return [
         'HISTO_MODIFICATEUR_ID',
         'HISTO_MODIFICATION',
     ],
-
 ];
 
 //@formatter:on

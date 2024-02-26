@@ -3,13 +3,13 @@
 //@formatter:off
 
 return [
-    'name'        => 'TBL_CONTRAT_INTERVENANT_FK',
+    'name'        => 'TBL_CONTRAT_REFERENTIEL_FK',
     'table'       => 'TBL_CONTRAT',
-    'rtable'      => 'INTERVENANT',
+    'rtable'      => 'SERVICE_REFERENTIEL',
     'delete_rule' => NULL,
     'index'       => NULL,
     'columns'     => [
-        'INTERVENANT_ID' => 'ID',
+        'SERVICE_REFERENTIEL_ID' => 'ID',
     ],
 ];
 

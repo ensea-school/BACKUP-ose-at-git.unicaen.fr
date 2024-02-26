@@ -3,12 +3,11 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_CONTRAT_UN',
-    'unique'  => TRUE,
+    'name'    => 'TBL_CONTRAT_REFERENTIEL_FK',
+    'unique'  => FALSE,
     'table'   => 'TBL_CONTRAT',
     'columns' => [
-        'INTERVENANT_ID',
-        'STRUCTURE_ID',
+        'SERVICE_REFERENTIEL_ID',
     ],
 ];
 

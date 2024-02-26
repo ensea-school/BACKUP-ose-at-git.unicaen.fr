@@ -227,7 +227,7 @@ return [
                 'cols'               => [
                     'ANNEE_ID',
                     'INTERVENANT_ID',
-                    'STRCTURUE_ID',
+                    'STRUCTURE_ID',
                     'CONTRAT_ID',
                     'MISSION_ID',
                     'SERVICE_ID',

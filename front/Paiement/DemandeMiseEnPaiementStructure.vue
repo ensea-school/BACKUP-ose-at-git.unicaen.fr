@@ -636,15 +636,6 @@ export default {
             }
 
 
-            var datas = new FormData();
-            datas.append('heures', heureADemander);
-            datas.append('typeHeuresId', typeHeureId);
-            datas.append('formuleResServiceId', formuleResServiceId);
-            datas.append('formuleResServiceRefId', formuleResServiceRefId);
-            datas.append('centreCoutId', centreCoutId);
-            datas.append('domaineFonctionnelId', domaineFonctionnelId);
-            datas.append('missionId', missionId);
-
             var datas = [];
             let demande = {
                 heures: heureADemander,
@@ -654,17 +645,13 @@ export default {
                 formuleResServiceRefId: formuleResServiceRefId,
                 domaineFonctionnelId: domaineFonctionnelId,
                 missionId: missionId,
+                structureId: this.datas.id,
             }
             datas.push(demande);
 
-            console.log(JSON.stringify(datas));
             //Si volontairement on passe 0 heure à demander ou si on demande plus d'heures que le maximum possible pour cette ligne
 
-            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demande', {intervenant: this.intervenant}), datas, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
+            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demande', {intervenant: this.intervenant}), datas)
                 .then(response => {
                     this.$emit('refresh');
                     setTimeout(() => {
@@ -713,6 +700,7 @@ export default {
                             formuleResServiceRefId: formuleResServiceRefId,
                             domaineFonctionnelId: domaineFonctionnelId,
                             missionId: missionId,
+                            structureId: this.datas.id,
                         }
                         datas.push(demande);
                     }

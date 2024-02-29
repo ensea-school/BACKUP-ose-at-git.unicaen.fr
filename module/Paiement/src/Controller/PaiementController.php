@@ -109,23 +109,28 @@ class PaiementController extends AbstractController
 
             $demandes = json_decode($post, true);
             $error    = 0;
+            $budget   = 0;
             $success  = 0;
             foreach ($demandes as $demande) {
                 try {
+                    $this->getServiceMiseEnPaiement()->verifierBudgetDemandeMiseEnPaiement($demande);
                     $this->getServiceMiseEnPaiement()->verifierDemandeMiseEnPaiement($intervenant, $demande);
                     $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $demande);
+                    $this->updateTableauxBord($intervenant);
                 } catch (\Exception $e) {
                     if ($e->getCode() == 3) {
                         $this->flashMessenger()->addErrorMessage($e->getMessage());
                     }
-                    $error++;
+                    if ($e->getCode() == 4) {
+                        $budget++;
+                    }
                     continue;
                 }
                 $success++;
             }
             $this->updateTableauxBord($intervenant);
             //Traitement des messages de succes ou d'erreur (Toast)
-            if ($success == 0 && $error == 0) {
+            if ($success == 0) {
                 $this->flashMessenger()->addInfoMessage('Aucun demande de mise en paiement a effectué pour cette composante');
             }
             if ($success > 0) {
@@ -140,6 +145,14 @@ class PaiementController extends AbstractController
                     $this->flashMessenger()->addErrorMessage("Attention, $error demandes de mise en paiement n'ont pas pu être traité pour cette composante car vous n'avez pas sélectionné un centre de coût et/ou un domaine fonctionnel.");
                 } else {
                     $this->flashMessenger()->addErrorMessage("Attention, $error demande de mise en paiement n'a pas pu être traité pour cette composante car vous n'avez pas sélectionné un centre de coût et/ou un domaine fonctionnel.");
+                }
+            }
+
+            if ($budget > 0) {
+                if ($budget > 1) {
+                    $this->flashMessenger()->addErrorMessage("Attention, $budget demandes de mise en paiement n'ont pas pu être traité pour cette composante car votre budget ne permet plus d'en faire la demande.");
+                } else {
+                    $this->flashMessenger()->addErrorMessage("Attention, $budget demande de mise en paiement n'a pas pu être traité pour cette composante car car votre budget ne permet plus d'en faire la demande.");
                 }
             }
 
@@ -183,12 +196,18 @@ class PaiementController extends AbstractController
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
+        if ($role instanceof Role && $role->getIntervenant()) {
+            //On redirige vers la visualisation des mises en paiement
+            return false;
+        }
         if ($this->getRequest()->isPost() && !$role->getIntervenant()) {
             $post = file_get_contents('php://input') ?? $_POST;
 
             $datas = current(json_decode($post, true));
 
             try {
+
+                $this->getServiceMiseEnPaiement()->verifierBudgetDemandeMiseEnPaiement($datas);
                 $this->getServiceMiseEnPaiement()->verifierDemandeMiseEnPaiement($intervenant, $datas);
                 $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $datas);
                 $this->updateTableauxBord($intervenant);
@@ -215,7 +234,7 @@ class PaiementController extends AbstractController
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
         //Un intervenant ne peut pas récuperer les datas de demande de mise en paiement
-        if ($role->getIntervenant()) {
+        if ($role->getIntervenant() && $role instanceof \Application\Acl\Role) {
             return new AxiosModel([]);
         }
         //$this->updateTableauxBord($intervenant);

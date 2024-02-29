@@ -7,6 +7,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Service\AbstractEntityService;
 use Application\Service\Traits;
 use Doctrine\ORM\QueryBuilder;
+use Enseignement\Service\ServiceServiceAwareTrait;
 use Formule\Entity\Db\FormuleResultatService;
 use Formule\Entity\Db\FormuleResultatServiceReferentiel;
 use Intervenant\Entity\Db\Intervenant;
@@ -15,11 +16,13 @@ use Intervenant\Service\IntervenantServiceAwareTrait;
 use Lieu\Entity\Db\Structure;
 use Mission\Service\MissionServiceAwareTrait;
 use OffreFormation\Service\Traits\TypeHeuresServiceAwareTrait;
+use Paiement\Entity\Db\CentreCout;
 use Paiement\Entity\Db\DomaineFonctionnel;
 use Paiement\Entity\Db\MiseEnPaiement;
 use Paiement\Entity\Db\ServiceAPayerInterface;
 use Paiement\Entity\Db\TblPaiement;
 use Paiement\Entity\MiseEnPaiementRecherche;
+use Referentiel\Service\ServiceReferentielServiceAwareTrait;
 use RuntimeException;
 
 /**
@@ -36,6 +39,9 @@ class MiseEnPaiementService extends AbstractEntityService
     use DotationServiceAwareTrait;
     use TypeHeuresServiceAwareTrait;
     use MissionServiceAwareTrait;
+    use ServiceReferentielServiceAwareTrait;
+    use MissionServiceAwareTrait;
+    use ServiceServiceAwareTrait;
     use TblPaiementServiceAwareTrait;
     use Traits\WorkflowServiceAwareTrait;
     use Traits\ParametresServiceAwareTrait;
@@ -43,6 +49,7 @@ class MiseEnPaiementService extends AbstractEntityService
     const EXCEPTION_DMEP_CENTRE_COUT         = 1;
     const EXCEPTION_DMEP_DOMAINE_FONCTIONNEL = 2;
     const EXCEPTION_DMEP_INVALIDE            = 3;
+    const EXCEPTION_DMEP_BUDGET              = 4;
 
 
 
@@ -794,6 +801,7 @@ class MiseEnPaiementService extends AbstractEntityService
             //On traite ici les heures d'enseignement
             if ($value['TYPAGE'] == "enseignement") {
                 $dmep[$value['STRUCTURE_CODE']]['code']                                                                                                                     = $value['STRUCTURE_CODE'];
+                $dmep[$value['STRUCTURE_CODE']]['id']                                                                                                                       = $value['STRUCTURE_ID'];
                 $dmep[$value['STRUCTURE_CODE']]['libelle']                                                                                                                  = $value['STRUCTURE_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['libelle']                                                                                  = $value['ETAPE_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['libelle']                                         = $value['ELEMENT_LIBELLE'];
@@ -853,6 +861,7 @@ class MiseEnPaiementService extends AbstractEntityService
                 }
             } elseif ($value['TYPAGE'] == "referentiel") {
                 $dmep[$value['STRUCTURE_CODE']]['code']                                                      = $value['STRUCTURE_CODE'];
+                $dmep[$value['STRUCTURE_CODE']]['id']                                                        = $value['STRUCTURE_ID'];
                 $dmep[$value['STRUCTURE_CODE']]['libelle']                                                   = $value['STRUCTURE_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['fonctionsReferentiels'][$value['FONCTION_CODE']]['libelle'] = $value['FONCTION_LIBELLE'];
                 if (!array_key_exists('heures', $dmep[$value['STRUCTURE_CODE']]['fonctionsReferentiels'][$value['FONCTION_CODE']])) {
@@ -909,6 +918,7 @@ class MiseEnPaiementService extends AbstractEntityService
                 }
             } elseif ($value['TYPAGE'] == "mission") {
                 $dmep[$value['STRUCTURE_CODE']]['code']                                        = $value['STRUCTURE_CODE'];
+                $dmep[$value['STRUCTURE_CODE']]['id']                                          = $value['STRUCTURE_ID'];
                 $dmep[$value['STRUCTURE_CODE']]['libelle']                                     = $value['STRUCTURE_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['missions'][$value['MISSION_ID']]['libelle']   = $value['MISSION_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['missions'][$value['MISSION_ID']]['missionId'] = $value['MISSION_ID'];
@@ -1033,6 +1043,48 @@ class MiseEnPaiementService extends AbstractEntityService
         }
 
         return $dmep;
+    }
+
+
+
+    public function verifierBudgetDemandeMiseEnPaiement ($datas)
+    {
+        $heuresDemandees = $datas['heures'];
+        //1 - On récupére le budget de la structure pour laquelle on a des heures à demander
+        $structure = $this->getEntityManager()->getRepository(Structure::class)->find($datas['structureId']);
+        if ($structure instanceof Structure) {
+            $budget = $this->getBudgetPaiement($structure);
+            //2 - On récupére le centre de cout que nous souhaitons utiliser pour la demande de mise en paiement
+            $centreCout = $this->getEntityManager()->getRepository(CentreCout::class)->find($datas['centreCoutId']);
+            if ($centreCout instanceof CentreCout) {
+                //3 - on vérifier si il y a du budget dans le type de ressource auquel est rattaché ce centre de cout
+                if ($centreCout->getTypeRessource()->getCode() == 'ressources-propres') {
+                    if ($budget['dotation']['ressourcePropre'] > 0) {
+                        //4 - on regarde si il y a encore assez de budget pour demander les heures en paiement
+                        $total = $budget['liquidation']['ressourcePropre'] + $datas['heures'];
+                        if (($budget['liquidation']['ressourcePropre'] + $datas['heures']) > $budget['dotation']['ressourcePropre']) {
+                            $solde = $budget['dotation']['ressourcePropre'] - $budget['liquidation']['ressourcePropre'];
+                            throw new \Exception('Vous dépassez la dotation budgétaire en ressources propres. ' . $heuresDemandees . ' hetd demandés pour une dotation ressources propres restante de ' . $solde . ' hetd', self::EXCEPTION_DMEP_BUDGET);
+                        }
+                    }
+                }
+                if ($centreCout->getTypeRessource()->getCode() == 'paie-etat') {
+                    //Si la dotation est supérieur à 0, alors on vérifie si il reste du budget disponible
+                    if ($budget['dotation']['paieEtat'] > 0) {
+                        //4bis - on regarde si il y a encore assez de budget pour demander les heures en paiement
+                        $total = $budget['liquidation']['paieEtat'] + $datas['heures'];
+                        if (($budget['liquidation']['paieEtat'] + $datas['heures']) > $budget['dotation']['paieEtat']) {
+                            $solde = $budget['dotation']['paieEtat'] - $budget['liquidation']['paieEtat'];
+                            throw new \Exception('Vous dépassez la dotation budgétaire en paie état. ' . $heuresDemandees . ' hetd demandés pour une dotation paie état restante de ' . $solde . ' hetd', self::EXCEPTION_DMEP_BUDGET);
+                        }
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
 

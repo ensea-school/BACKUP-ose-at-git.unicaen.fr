@@ -15,11 +15,9 @@
             </div>
             <form id="formImport" action="" enctype="multipart/form-data" method="post">
                 <p class="fs-9 text">
-                    Vous pouvez utiliser le modèle directement extrait de winpaie <strong>(format .xlsx ou .ods)</strong> ou télécharger le modèle d'import
-                    générique
-                    en <a
-                    href="/modeles/import-numero-pec.xlsx">cliquant
-                    ici.</a>
+                    Vous pouvez utiliser le modèle directement extrait de winpaie <strong>(format .xlsx ou .ods)</strong> ou créer votre modèle générique de
+                    classeur <strong>(format .xlsx ou .ods)</strong> incluant
+                    3 colonnes : insee,numero pec, nom.
                 </p>
                 <div class="mb-3">
                     <label class="form-label" for="importFile">Choisissez le fichier à importer :</label>&nbsp;

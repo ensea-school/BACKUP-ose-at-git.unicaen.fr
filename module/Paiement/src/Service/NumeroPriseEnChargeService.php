@@ -132,9 +132,11 @@ class NumeroPriseEnChargeService extends AbstractService
                 ];
             } else {
                 //On stocke les erreurs dans datas pour afficher les lignes qui n'ont pas pu être traitées.
-                $inseeFile = $sheet->getCellByCoords($colonneNames['insee'], $rowNum)->getContent();
-                $nomFile   = $sheet->getCellByCoords($colonneNames['nom'], $rowNum)->getContent();
-                $errors[]  = $nomFile . " - " . $inseeFile;
+                if (!empty($colValue)) {
+                    $inseeFile = $sheet->getCellByCoords($colonneNames['insee'], $rowNum)->getContent();
+                    $nomFile   = $sheet->getCellByCoords($colonneNames['nom'], $rowNum)->getContent();
+                    $errors[]  = $nomFile . " - " . $inseeFile;
+                }
             }
         }
         $datas['result']  = $lines;

@@ -670,7 +670,7 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return ServiceAPayerInterface[]
      */
-    public function getDemandeMiseEnPaiementResume (Intervenant $intervenant)
+    public function getDemandeMiseEnPaiementResume (Intervenant $intervenant, ?Structure $structure = null)
     {
         //Centres de cout de la composante d'affectation de l'intervenant
         $centresCoutsPaiementAffectation = [];
@@ -742,7 +742,14 @@ class MiseEnPaiementService extends AbstractEntityService
         LEFT JOIN mission m ON m.id = tp.mission_id
         LEFT JOIN type_mission tm ON tm.id = m.type_mission_id
         WHERE
-            tp.intervenant_id = :intervenant
+            tp.intervenant_id = :intervenant ";
+
+        //Si on ne veut que les heures à payer d'une structure donnée.
+        if (!empty($structure)) {
+            $sql .= " AND tp.structure_id = :structure";
+        }
+
+        $sql .= "
         GROUP BY
             tp.intervenant_id ,
             tp.structure_id,
@@ -761,9 +768,14 @@ class MiseEnPaiementService extends AbstractEntityService
 
         ";
 
-        $dmeps = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, [
-            'intervenant' => $intervenant->getId(),
-        ]);
+        $params['intervenant'] = $intervenant->getId();
+
+        if (!empty($structure)) {
+            $params['structure'] = $structure->getId();
+        }
+
+        $dmeps = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params);
+
 
         //On récupere la liste des domaines fonctionnels
         $listeDomainesFonctionnels = [];

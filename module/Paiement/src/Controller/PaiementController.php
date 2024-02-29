@@ -3,6 +3,7 @@
 namespace Paiement\Controller;
 
 use Application\Controller\AbstractController;
+use Application\Entity\Db\Role;
 use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -209,15 +210,19 @@ class PaiementController extends AbstractController
 
     public function listeServiceAPayerAction ()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $structure = null;
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
         //Un intervenant ne peut pas récuperer les datas de demande de mise en paiement
         if ($role->getIntervenant()) {
             return new AxiosModel([]);
         }
-        $this->updateTableauxBord($intervenant);
-        $servicesAPayer = $this->getServiceMiseEnPaiement()->getDemandeMiseEnPaiementResume($intervenant);
+        //$this->updateTableauxBord($intervenant);
+        if ($role->getPerimetre()->isComposante()) {
+            $structure = $role->getStructure();
+        }
+        $servicesAPayer = $this->getServiceMiseEnPaiement()->getDemandeMiseEnPaiementResume($intervenant, $structure);
 
 
         return new AxiosModel($servicesAPayer);

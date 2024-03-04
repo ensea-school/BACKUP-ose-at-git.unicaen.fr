@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY FORMULE_ROUEN AS
+CREATE OR REPLACE PACKAGE BODY FORMULE_ROUEN_2022 AS
   decalageLigne NUMERIC DEFAULT 19;
 
   /* Stockage des valeurs intermédiaires */
@@ -254,13 +254,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ROUEN AS
 
 
 
-      -- AH=IF(ISERROR([.J20]);1;IF([.I20]="TP";IF(AND([.$AG$15]<i_heures_decharge;[.$AG16]<>0);([.$AG$16]-(([.$AG$15]-i_heures_decharge)*[.$AG$17])+(([.$AG$15]-i_heures_decharge)*[.$AG$17]*[.K20]))/[.$AG$16];[.$J20]);[.$J20]))
+      -- AH=IF(ISERROR([.J20]);1;IF([.I20]="TP";IF(AND([.$AG$15]<i_heures_decharge;[.$AG16]<>0);[.J20];([.$AG$16]-(([.$AG$15]-i_heures_decharge)*[.$AG$17])+(([.$AG$15]-i_heures_decharge)*[.$AG$17]*[.K20]))/[.$AG$16]);[.J20]))
       WHEN 'AH' THEN
         IF vh.type_intervention_code = 'TP' THEN
           IF cell('AG15') < i.heures_service_statutaire AND cell('AG16') <> 0 THEN
-            RETURN (cell('AG16') - ((cell('AG15') - i.heures_service_statutaire) * cell('AG17')) + ((cell('AG15') - i.heures_service_statutaire) * cell('AG17') * vh.taux_service_compl)) / cell('AG16');
-          ELSE
             RETURN vh.taux_service_du;
+          ELSE
+            RETURN (cell('AG16') - ((cell('AG15') - i.heures_service_statutaire) * cell('AG17')) + ((cell('AG15') - i.heures_service_statutaire) * cell('AG17') * vh.taux_service_compl)) / cell('AG16');
           END IF;
         ELSE
           RETURN vh.taux_service_du;
@@ -268,13 +268,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ROUEN AS
 
 
 
-      -- AI=IF(ISERROR([.$K20]);1;IF([.$I20]="TP";IF(AND([.$AG$15]<i_heures_decharge;[.$AG16]<>0);([.$AG$16]-(([.$AG$15]-i_heures_decharge)*[.$AG$17])+(([.$AG$15]-i_heures_decharge)*[.$AG$17]*[.$K20]))/[.$AG$16];[.$K20]);[.$K20]))
+      -- AI=IF(ISERROR([.K20]);1;IF([.I20]="TP";IF(AND([.$AG$15]<i_heures_decharge;[.$AG16]<>0);[.J20];([.$AG$16]-(([.$AG$15]-i_heures_decharge)*[.$AG$17])+(([.$AG$15]-i_heures_decharge)*[.$AG$17]*[.K20]))/[.$AG$16]);[.K20]))
       WHEN 'AI' THEN
         IF vh.type_intervention_code = 'TP' THEN
           IF cell('AG15') < i.heures_service_statutaire AND cell('AG16') <> 0 THEN
-            RETURN (cell('AG16') - ((cell('AG15') - i.heures_service_statutaire) * cell('AG17')) + ((cell('AG15') - i.heures_service_statutaire) * cell('AG17') * vh.taux_service_compl)) / cell('AG16');
+            RETURN vh.taux_service_du;
           ELSE
-            RETURN vh.taux_service_compl;
+            RETURN (cell('AG16') - ((cell('AG15') - i.heures_service_statutaire) * cell('AG17')) + ((cell('AG15') - i.heures_service_statutaire) * cell('AG17') * vh.taux_service_compl)) / cell('AG16');
           END IF;
         ELSE
           RETURN vh.taux_service_compl;
@@ -681,11 +681,6 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ROUEN AS
   BEGIN
     feuille.delete;
 
-    IF ose_formule.intervenant.annee_id < 2023 THEN
-      FORMULE_ROUEN_2022.CALCUL_RESULTAT;
-      RETURN;
-    END IF;
-
     IF ose_formule.intervenant.depassement_service_du_sans_hc THEN -- HC traitées comme du service
       ose_formule.intervenant.service_du := ose_formule.intervenant.heures_service_statutaire + ose_formule.intervenant.heures_service_modifie;
     END IF;
@@ -743,4 +738,4 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_ROUEN AS
     ';
   END;
 
-END FORMULE_ROUEN;
+END FORMULE_ROUEN_2022;

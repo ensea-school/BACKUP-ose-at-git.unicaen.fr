@@ -679,6 +679,7 @@ WHERE (import_action <> 'delete' OR (
   AND (NOT exists(SELECT intervenant_id FROM intervenant_dossier WHERE histo_destruction IS NULL AND intervenant_id = v_diff_intervenant.id))
   AND (NOT exists(SELECT intervenant_id FROM piece_jointe WHERE histo_destruction IS NULL AND intervenant_id = v_diff_intervenant.id))
   AND (NOT exists(SELECT intervenant_id FROM service WHERE histo_destruction IS NULL AND intervenant_id = v_diff_intervenant.id))
+  AND (NOT exists(SELECT intervenant_id FROM mission WHERE histo_destruction IS NULL AND intervenant_id = v_diff_intervenant.id))
 ))
 ```
 

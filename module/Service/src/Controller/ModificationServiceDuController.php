@@ -80,6 +80,12 @@ class ModificationServiceDuController extends AbstractController
             $data = $request->getPost()->toArray();
             if (empty($data['fs']['modificationServiceDu'])) {
                 $data['fs']['modificationServiceDu'] = [];
+            }else{
+                foreach( $data['fs']['modificationServiceDu'] as $i => $msdData ){
+                    if ('' == $msdData['commentaires']){
+                        $data['fs']['modificationServiceDu'][$i]['commentaires'] = null;
+                    }
+                }
             }
 
             $form->setData($data);

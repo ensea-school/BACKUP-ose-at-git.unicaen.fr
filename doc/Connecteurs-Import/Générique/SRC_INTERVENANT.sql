@@ -309,16 +309,16 @@ FROM (
       LEFT JOIN pays                 padr ON padr.source_code   = s.z_adresse_pays_id
       LEFT JOIN employeur            empl ON empl.source_code   = s.z_employeur_id
       LEFT JOIN (
-            SELECT
-                m.intervenant_id    intervenant_id,
-                m.structure_id      structure_id
-            FROM mission m
-            JOIN validation_mission vm ON vm.mission_id = m.id
-            JOIN validation v2 ON v2.id = vm.validation_id AND v2.histo_destruction IS NULL
-            WHERE m.histo_destruction IS NULL
-            GROUP BY m.intervenant_id, m.structure_id
-            HAVING COUNT(DISTINCT m.structure_id) = 1
-          ) mi ON mi.intervenant_id = i.id
+        SELECT
+          m.intervenant_id, m.structure_id, rank() over (partition by m.intervenant_id order by m.mission_id) prems
+        FROM
+          tbl_mission m
+        WHERE
+          m.valide = 1
+          AND m.validation_id IS NOT NULL
+        ORDER BY
+          m.mission_id
+        ) mi ON mi.intervenant_id = i.id AND mi.prems = 1
       LEFT JOIN (
         SELECT DISTINCT intervenant_id
         FROM (      select intervenant_id from AGREMENT where histo_destruction is null

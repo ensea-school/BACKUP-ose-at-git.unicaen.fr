@@ -9,7 +9,8 @@
             </div>
             <div>
                 <span class="fw-bold">Types d'intervenant : </span>
-                <input v-model="checkedTypes" checked="checked" name="type[]" type="checkbox" value="permanent" v-on:change="reload()"> Permanent
+                <input v-model="checkedTypes" checked="checked" name="type[]" type="checkbox" value="permanent" v-on:change="reload()">
+                Permanent
                 <input v-model="checkedTypes" checked="checked" name="type[]" type="checkbox" value="vacataire" v-on:change="reload()"> Vacataire
                 <input v-model="checkedTypes" checked="checked" name="type[]" type="checkbox" value="etudiant" v-on:change="reload()"> Etudiant
 
@@ -110,6 +111,8 @@ export default {
 
         reload()
         {
+            var inputRecherche = document.getElementById('term');
+            inputRecherche.focus();
 
             if (this.timer) {
                 clearTimeout(this.timer);

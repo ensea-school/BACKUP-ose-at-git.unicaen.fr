@@ -1,10 +1,19 @@
 # Version stable
 
-[OSE 23.1](#ose-231-02022024)
+[OSE 23.3](#ose-233-23022024)
 
 
 
 # OSE 24 (à venir)
+
+# OSE 23.4 (à venir)
+
+## Corrections de bugs
+
+* Les modifications de servic dû ne sont enregistrées que s'il y a un changement effectif de donnée (#55446)
+
+
+
 
 # OSE 23.3 (23/02/2024)
 

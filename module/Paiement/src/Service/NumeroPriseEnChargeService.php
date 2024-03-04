@@ -41,6 +41,7 @@ class NumeroPriseEnChargeService extends AbstractService
                     $datas = $this->genericTreatment($sheet);
                 break;
             }
+          
             $errors['file']    = $datas['errors'];
             $errors['message'] = (isset($datas['message'])) ? $datas['message'] : [];
             //On met à jour les numéros de prise en charge des intervenants
@@ -132,9 +133,11 @@ class NumeroPriseEnChargeService extends AbstractService
                 ];
             } else {
                 //On stocke les erreurs dans datas pour afficher les lignes qui n'ont pas pu être traitées.
-                $inseeFile = $sheet->getCellByCoords($colonneNames['insee'], $rowNum)->getContent();
-                $nomFile   = $sheet->getCellByCoords($colonneNames['nom'], $rowNum)->getContent();
-                $errors[]  = $nomFile . " - " . $inseeFile;
+                if (!empty($colValue)) {
+                    $inseeFile = ($sheet->getCellByCoords($colonneNames['insee'], $rowNum)) ? $sheet->getCellByCoords($colonneNames['insee'], $rowNum)->getContent() : '';
+                    $nomFile   = ($sheet->getCellByCoords($colonneNames['nom'], $rowNum)) ? $sheet->getCellByCoords($colonneNames['nom'], $rowNum)->getContent() : '';
+                    $errors[]  = "Ligne " . $rowNum . " : " . $nomFile . " - " . $inseeFile;
+                }
             }
         }
         $datas['result']  = $lines;

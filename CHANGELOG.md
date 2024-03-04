@@ -10,7 +10,8 @@
 
 ## Corrections de bugs
 
-* Les modifications de servic dû ne sont enregistrées que s'il y a un changement effectif de donnée (#55446)
+* Les modifications de service dû ne sont enregistrées que s'il y a un changement effectif de donnée (#55446)
+* Correction sur le privilege d'administration des tags (#55439)
 
 
 

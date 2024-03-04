@@ -107,22 +107,26 @@ class PaiementController extends AbstractController
         if ($this->getRequest()->isPost() && !$role->getIntervenant()) {
             $post = file_get_contents('php://input') ?? $_POST;
 
-            $demandes = json_decode($post, true);
-            $error    = 0;
-            $budget   = 0;
-            $success  = 0;
-            foreach ($demandes as $demande) {
+            $demandes           = json_decode($post, true);
+            $demandesApprouvees = $this->getServiceMiseEnPaiement()->verifierBudgetDemandeMiseEnPaiement($demandes);
+            var_dump(count($demandes));
+            var_dump(count($demandesApprouvees));
+
+            $error   = 0;
+            $budget  = count($demandes) - count($demandesApprouvees);
+            $success = 0;
+            foreach ($demandesApprouvees as $demande) {
                 try {
-                    $this->getServiceMiseEnPaiement()->verifierBudgetDemandeMiseEnPaiement($demande);
                     $this->getServiceMiseEnPaiement()->verifierDemandeMiseEnPaiement($intervenant, $demande);
                     $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $demande);
-                    $this->updateTableauxBord($intervenant);
+                    //$this->updateTableauxBord($intervenant);
                 } catch (\Exception $e) {
                     if ($e->getCode() == 3) {
                         $this->flashMessenger()->addErrorMessage($e->getMessage());
-                    }
-                    if ($e->getCode() == 4) {
+                    } elseif ($e->getCode() == 4) {
                         $budget++;
+                    } else {
+                        $error++;
                     }
                     continue;
                 }

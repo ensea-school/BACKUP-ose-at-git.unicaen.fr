@@ -1047,44 +1047,51 @@ class MiseEnPaiementService extends AbstractEntityService
 
 
 
-    public function verifierBudgetDemandeMiseEnPaiement ($datas)
+    public function verifierBudgetDemandeMiseEnPaiement (array $demandes): array
     {
-        $heuresDemandees = $datas['heures'];
-        //1 - On récupére le budget de la structure pour laquelle on a des heures à demander
-        $structure = $this->getEntityManager()->getRepository(Structure::class)->find($datas['structureId']);
-        if ($structure instanceof Structure) {
-            $budget = $this->getBudgetPaiement($structure);
-            //2 - On récupére le centre de cout que nous souhaitons utiliser pour la demande de mise en paiement
-            $centreCout = $this->getEntityManager()->getRepository(CentreCout::class)->find($datas['centreCoutId']);
-            if ($centreCout instanceof CentreCout) {
-                //3 - on vérifier si il y a du budget dans le type de ressource auquel est rattaché ce centre de cout
-                if ($centreCout->getTypeRessource()->getCode() == 'ressources-propres') {
-                    if ($budget['dotation']['ressourcePropre'] > 0) {
-                        //4 - on regarde si il y a encore assez de budget pour demander les heures en paiement
-                        $total = $budget['liquidation']['ressourcePropre'] + $datas['heures'];
-                        if (($budget['liquidation']['ressourcePropre'] + $datas['heures']) > $budget['dotation']['ressourcePropre']) {
-                            $solde = $budget['dotation']['ressourcePropre'] - $budget['liquidation']['ressourcePropre'];
-                            throw new \Exception('Vous dépassez la dotation budgétaire en ressources propres. ' . $heuresDemandees . ' hetd demandés pour une dotation ressources propres restante de ' . $solde . ' hetd', self::EXCEPTION_DMEP_BUDGET);
-                        }
-                    }
-                }
-                if ($centreCout->getTypeRessource()->getCode() == 'paie-etat') {
-                    //Si la dotation est supérieur à 0, alors on vérifie si il reste du budget disponible
-                    if ($budget['dotation']['paieEtat'] > 0) {
-                        //4bis - on regarde si il y a encore assez de budget pour demander les heures en paiement
-                        $total = $budget['liquidation']['paieEtat'] + $datas['heures'];
-                        if (($budget['liquidation']['paieEtat'] + $datas['heures']) > $budget['dotation']['paieEtat']) {
-                            $solde = $budget['dotation']['paieEtat'] - $budget['liquidation']['paieEtat'];
-                            throw new \Exception('Vous dépassez la dotation budgétaire en paie état. ' . $heuresDemandees . ' hetd demandés pour une dotation paie état restante de ' . $solde . ' hetd', self::EXCEPTION_DMEP_BUDGET);
-                        }
-                    }
-                }
 
-                return true;
+        $totalHeuresDemandees['ressourcePropre'] = 0;
+        $totalHeuresDemandees['paieEtat']        = 0;
+
+        //1 - On récupére le budget de la structure pour laquelle on a des heures à demander
+        foreach ($demandes as $demande) {
+            $structure = $this->getEntityManager()->getRepository(Structure::class)->find($demande['structureId']);
+            if ($structure instanceof Structure) {
+
+                $budget = $this->getBudgetPaiement($structure);
+                //2 - On récupére le centre de cout que nous souhaitons utiliser pour la demande de mise en paiement
+
+                $centreCout = $this->getEntityManager()->getRepository(CentreCout::class)->find($demande['centreCoutId']);
+                if ($centreCout instanceof CentreCout) {
+                    //3 - on vérifier si il y a du budget dans le type de ressource auquel est rattaché ce centre de cout
+                    if ($centreCout->getTypeRessource()->getCode() == 'ressources-propres') {
+                        if ($budget['dotation']['ressourcePropre'] > 0) {
+
+                            //4 - on regarde si il y a encore assez de budget pour demander les heures en paiement
+                            $total = $budget['liquidation']['ressourcePropre'] + $demande['heures'] + $totalHeuresDemandees['ressourcePropre'];
+                            if ($total <= $budget['dotation']['ressourcePropre']) {
+                                $totalHeuresDemandees['ressourcePropre'] += $demande['heures'];
+                                $demandesApprouvees[]                    = $demande;
+                            }
+                        }
+                    }
+                    if ($centreCout->getTypeRessource()->getCode() == 'paie-etat') {
+                        //Si la dotation est supérieur à 0, alors on vérifie si il reste du budget disponible
+                        if ($budget['dotation']['paieEtat'] > 0) {
+                            //4bis - on regarde si il y a encore assez de budget pour demander les heures en paiement
+                            $total = $budget['liquidation']['paieEtat'] + $demande['heures'] + $totalHeuresDemandees['paieEtat'];
+                            if ($total <= $budget['dotation']['paieEtat']) {
+                                $totalHeuresDemandees['paieEtat'] += $demande['heures'];
+                                $demandesApprouvees[]             = $demande;
+                                //throw new \Exception('Vous dépassez la dotation budgétaire en paie état. ' . $demande['heures'] . ' hetd demandés pour une dotation paie état restante de ' . $solde . ' hetd', self::EXCEPTION_DMEP_BUDGET);
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        return false;
+        return $demandesApprouvees;
     }
 
 

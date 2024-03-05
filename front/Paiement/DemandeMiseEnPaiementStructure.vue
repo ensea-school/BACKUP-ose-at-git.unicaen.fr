@@ -734,7 +734,9 @@ export default {
             unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas)
                 .then(response => {
                     this.$emit('refresh');
-                
+                    setTimeout(() => {
+                        this.btnToggle('add-all-' + codeStructure);
+                    }, 5000);
 
                 })
                 .catch(error => {

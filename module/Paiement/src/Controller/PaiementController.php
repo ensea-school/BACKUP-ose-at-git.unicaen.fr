@@ -99,76 +99,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function demandeMiseEnPaiementAllAction ()
-    {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $this->initFilters();
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        if ($this->getRequest()->isPost() && !$role->getIntervenant()) {
-            $post = file_get_contents('php://input') ?? $_POST;
-
-            $demandes           = json_decode($post, true);
-            $demandesApprouvees = $this->getServiceMiseEnPaiement()->verifierBudgetDemandeMiseEnPaiement($demandes);
-            var_dump(count($demandes));
-            var_dump(count($demandesApprouvees));
-
-            $error   = 0;
-            $budget  = count($demandes) - count($demandesApprouvees);
-            $success = 0;
-            foreach ($demandesApprouvees as $demande) {
-                try {
-                    $this->getServiceMiseEnPaiement()->verifierDemandeMiseEnPaiement($intervenant, $demande);
-                    $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $demande);
-                    //$this->updateTableauxBord($intervenant);
-                } catch (\Exception $e) {
-                    if ($e->getCode() == 3) {
-                        $this->flashMessenger()->addErrorMessage($e->getMessage());
-                    } elseif ($e->getCode() == 4) {
-                        $budget++;
-                    } else {
-                        $error++;
-                    }
-                    continue;
-                }
-                $success++;
-            }
-            $this->updateTableauxBord($intervenant);
-            //Traitement des messages de succes ou d'erreur (Toast)
-            if ($success == 0) {
-                $this->flashMessenger()->addInfoMessage('Aucun demande de mise en paiement a effectué pour cette composante');
-            }
-            if ($success > 0) {
-                if ($success > 1) {
-                    $this->flashMessenger()->addSuccessMessage($success . " demandes de mise en paiement ont été effectué pour cette composante.");
-                } else {
-                    $this->flashMessenger()->addSuccessMessage($success . " demande de mise en paiement a été effectué pour cette composante.");
-                }
-            }
-            if ($error > 0) {
-                if ($error > 1) {
-                    $this->flashMessenger()->addErrorMessage("Attention, $error demandes de mise en paiement n'ont pas pu être traité pour cette composante car vous n'avez pas sélectionné un centre de coût et/ou un domaine fonctionnel.");
-                } else {
-                    $this->flashMessenger()->addErrorMessage("Attention, $error demande de mise en paiement n'a pas pu être traité pour cette composante car vous n'avez pas sélectionné un centre de coût et/ou un domaine fonctionnel.");
-                }
-            }
-
-            if ($budget > 0) {
-                if ($budget > 1) {
-                    $this->flashMessenger()->addErrorMessage("Attention, $budget demandes de mise en paiement n'ont pas pu être traité pour cette composante car votre budget ne permet plus d'en faire la demande.");
-                } else {
-                    $this->flashMessenger()->addErrorMessage("Attention, $budget demande de mise en paiement n'a pas pu être traité pour cette composante car car votre budget ne permet plus d'en faire la demande.");
-                }
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-
-
-    public function supprimerMiseEnPaiementAction ()
+    public function supprimerDemandeMiseEnPaiementAction ()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
@@ -195,7 +126,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function ajouterMiseEnPaiementAction ()
+    public function ajouterDemandesMiseEnPaiementAction ()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->initFilters();
@@ -207,22 +138,56 @@ class PaiementController extends AbstractController
         if ($this->getRequest()->isPost() && !$role->getIntervenant()) {
             $post = file_get_contents('php://input') ?? $_POST;
 
-            $datas = current(json_decode($post, true));
-
-            try {
-
-                $this->getServiceMiseEnPaiement()->verifierBudgetDemandeMiseEnPaiement($datas);
-                $this->getServiceMiseEnPaiement()->verifierDemandeMiseEnPaiement($intervenant, $datas);
-                $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $datas);
-                $this->updateTableauxBord($intervenant);
-                $this->flashMessenger()->addSuccessMessage("Demande de mise en paiement effecutée");
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($e->getMessage());
-
-                return false;
+            $demandes                         = json_decode($post, true);
+            $demandesApprouveesBudgetairement = $this->getServiceMiseEnPaiement()->verifierBudgetDemandeMiseEnPaiement($demandes);
+            $error                            = 0;
+            $errorBudget                      = count($demandes) - count($demandesApprouveesBudgetairement);
+            $success                          = 0;
+            foreach ($demandesApprouveesBudgetairement as $demande) {
+                try {
+                    $this->getServiceMiseEnPaiement()->verifierValiditeDemandeMiseEnPaiement($intervenant, $demande);
+                    $this->getServiceMiseEnPaiement()->ajouterDemandeMiseEnPaiement($intervenant, $demande);
+                } catch (\Exception $e) {
+                    if ($e->getCode() == 3) {
+                        $this->flashMessenger()->addErrorMessage($e->getMessage());
+                    } else {
+                        $error++;
+                    }
+                    continue;
+                }
+                $success++;
+            }
+            //Mise à jour des tableaux de bord nécessaires
+            $this->updateTableauxBord($intervenant);
+            //Traitement des messages de succes ou d'erreur (Toast)
+            if ($success == 0) {
+                $this->flashMessenger()->addInfoMessage('Aucun demande de mise en paiement a effectué pour cette composante');
+            }
+            //Demandes de mise en paiement effectuées
+            if ($success > 0) {
+                if ($success > 1) {
+                    $this->flashMessenger()->addSuccessMessage($success . " demandes de mise en paiement ont été effectué pour cette composante.");
+                } else {
+                    $this->flashMessenger()->addSuccessMessage($success . " demande de mise en paiement a été effectué pour cette composante.");
+                }
+            }
+            //Erreur de demande de mise en paiement pour mauvais paramètrage de centre de cout ou de domaine fonctionnel
+            if ($error > 0) {
+                if ($error > 1) {
+                    $this->flashMessenger()->addErrorMessage("Attention, $error demandes de mise en paiement n'ont pas pu être traité pour cette composante car vous n'avez pas sélectionné un centre de coût et/ou un domaine fonctionnel.");
+                } else {
+                    $this->flashMessenger()->addErrorMessage("Attention, $error demande de mise en paiement n'a pas pu être traité pour cette composante car vous n'avez pas sélectionné un centre de coût et/ou un domaine fonctionnel.");
+                }
+            }
+            //Erreur de mise en paiement pour raison de dépassement de budget
+            if ($errorBudget > 0) {
+                if ($errorBudget > 1) {
+                    $this->flashMessenger()->addErrorMessage("Attention, $errorBudget demandes de mise en paiement n'ont pas pu être traité pour cette composante car votre budget ne permet plus d'en faire la demande.");
+                } else {
+                    $this->flashMessenger()->addErrorMessage("Attention, $errorBudget demande de mise en paiement n'a pas pu être traité pour cette composante car car votre budget ne permet plus d'en faire la demande.");
+                }
             }
 
-            //On recalcule le tableau de bord paiement de l'intervenant concerné
             return true;
         }
 

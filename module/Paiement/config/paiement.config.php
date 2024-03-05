@@ -89,22 +89,16 @@ return [
 
                 ],
                 'ajouter-demande-mise-en-paiement'     => [
-                    'route'      => '/:intervenant/ajouter-demande',
+                    'route'      => '/:intervenant/ajouter-demandes',
                     'controller' => Controller\PaiementController::class,
-                    'action'     => 'ajouterMiseEnPaiement',
+                    'action'     => 'ajouterDemandesMiseEnPaiement',
                     'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
 
                 ],
                 'supprimer-demande-mise-en-paiement'   => [
                     'route'      => '/:intervenant/supprimer-demande/:mise-en-paiement',
                     'controller' => Controller\PaiementController::class,
-                    'action'     => 'supprimerMiseEnPaiement',
-                    'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-                ],
-                'demande-mise-en-paiement-all'         => [
-                    'route'      => '/:intervenant/all-demande',
-                    'controller' => Controller\PaiementController::class,
-                    'action'     => 'demandeMiseEnPaiementAll',
+                    'action'     => 'supprimerDemandeMiseEnPaiement',
                     'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
                 ],
                 'process-demande-mise-en-paiement-lot' => [
@@ -312,7 +306,7 @@ return [
     'guards' => [
         [
             'controller' => Controller\PaiementController::class,
-            'action'     => ['ajouterMiseEnPaiement', 'supprimerMiseEnPaiement', 'listeServiceAPayer', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
+            'action'     => ['ajouterDemandeMiseEnPaiement', 'supprimerDemandeMiseEnPaiement', 'listeServiceAPayer', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
             'privileges' => [
                 Privileges::MISE_EN_PAIEMENT_DEMANDE,
             ],

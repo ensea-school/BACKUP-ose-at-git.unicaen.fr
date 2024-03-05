@@ -93,7 +93,7 @@
                                                         <tbody>
                                                         <tr v-for="(value,id) in typeHeure.heures" class="detailHeure">
                                                             <td v-if="value.heuresDemandees != 0 " style="width:20%;">{{ Number(value.heuresAPayer) }}
-                                                                hetd
+                                                                hetd(s)
                                                             </td>
                                                             <td v-if="value.heuresDemandees == 0 " style="width:20%;">
                                                                 <div class="input-group col-1">
@@ -180,7 +180,7 @@
                                             <tfoot>
                                             <tr class="table-light">
                                                 <th scope="row">Total</th>
-                                                <td>{{ totalHeure(typeHeure.heures) }} hetd</td>
+                                                <td>{{ totalHeure(typeHeure.heures) }} hetd(s)</td>
                                             </tr>
                                             </tfoot>
                                         </table>
@@ -214,7 +214,7 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr v-for="(value,id) in fonction.heures" class="detailHeure">
-                                                    <td v-if="value.heuresDemandees != 0 " style="width:10%;">{{ value.heuresAPayer }} hetd</td>
+                                                    <td v-if="value.heuresDemandees != 0 " style="width:10%;">{{ value.heuresAPayer }} hetd(s)</td>
                                                     <td v-if="value.heuresDemandees == 0 " style="width:20%;">
                                                         <div class="input-group col-1">
                                                             <input
@@ -313,7 +313,7 @@
                                     <tfoot>
                                     <tr class="table-light">
                                         <th scope="row">Total</th>
-                                        <td>{{ totalHeure(fonction.heures) }} hetd</td>
+                                        <td>{{ totalHeure(fonction.heures) }} hetd(s)</td>
                                     </tr>
                                     </tfoot>
                                 </table>
@@ -348,7 +348,7 @@
                                                 <tbody>
 
                                                 <tr v-for="(value,id) in mission.heures" class="detailHeure">
-                                                    <td v-if="value.heuresDemandees != 0 " style="width:10%;">{{ value.heuresAPayer }} hetd</td>
+                                                    <td v-if="value.heuresDemandees != 0 " style="width:10%;">{{ value.heuresAPayer }} hetd(s)</td>
                                                     <td v-if="value.heuresDemandees == 0 " style="width:20%;">
                                                         <div class="input-group col-1">
                                                             <input
@@ -447,7 +447,7 @@
                                     <tfoot>
                                     <tr class="table-light">
                                         <th scope="row">Total</th>
-                                        <td>{{ totalHeure(mission.heures) }} hetd</td>
+                                        <td>{{ totalHeure(mission.heures) }} hetd(s)</td>
                                     </tr>
                                     </tfoot>
                                 </table>
@@ -486,6 +486,7 @@ export default {
     },
     data()
     {
+        console.log(this.datas);
         return {
             dotationPaieEtat: this.datas.budget.dotation.paieEtat,
             dotationRessourcesPropres: this.datas.budget.dotation.ressourcePropre,
@@ -530,7 +531,7 @@ export default {
             }
             if (value.heuresPayees > value.heuresAPayer) {
                 let diff = value.heuresPayees - value.heuresAPayer;
-                return '<span style="font-size:12px;line-height:20px;" class="badge bg-danger">Paiement effectué - ' + diff + ' hetd de trop payé </span>';
+                return '<span style="font-size:12px;line-height:20px;" class="badge bg-danger">Paiement effectué - ' + diff + ' hetd(s) de trop payé </span>';
             }
             return 'indetermine';
         },
@@ -600,24 +601,20 @@ export default {
             let centreCoutId = inputCentreCout.value;
             let ressourcesPropres = inputCentreCout.options[inputCentreCout.selectedIndex].getAttribute('data-ressources-propres');
             let paieEtat = inputCentreCout.options[inputCentreCout.selectedIndex].getAttribute('data-paie-etat');
-            console.log("Ressource Propres => " + ressourcesPropres);
-            console.log("Paie etat => " + paieEtat);
             //Si centre de cout non sélectionné
             if (centreCoutId == '') {
                 unicaenVue.flashMessenger.toast("Vous devez sélectionner un centre de coût pour demander la mise en paiement de ces heures", 'error', options)
                 this.btnToggle('add-' + id);
                 return false;
-
             }
             //Si le nombre d'heure demandées est supérieur au nombre d'heures maximum pour cette ligne
             if (heureADemander > 0 && heureADemander > heureADemanderMax) {
-                unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible, vous demandez " + heureADemander + " hetd alors que vous pouvez demander maximum " + heureADemanderMax + " hetd", 'error', options);
+                unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible, vous demandez " + heureADemander + " hetd(s) alors que vous pouvez demander maximum " + heureADemanderMax + " hetd(s)", 'error', options);
                 this.btnToggle('add-' + id);
                 return false;
             }
             //Si je suis sur une demande de mise en paiement avec des fonds paie etat
             if (paieEtat == 1 && this.dotationPaieEtat > 0) {
-
                 let solde = this.dotationPaieEtat - (this.consommationPaieEtat + heureADemander);
                 if (solde <= 0) {
                     unicaenVue.flashMessenger.toast("Demande de mise en paiement impossible manque de dotation 'paie etat' pour ces heures", 'error', options)
@@ -651,7 +648,7 @@ export default {
 
             //Si volontairement on passe 0 heure à demander ou si on demande plus d'heures que le maximum possible pour cette ligne
 
-            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demande', {intervenant: this.intervenant}), datas)
+            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas)
                 .then(response => {
                     this.$emit('refresh');
                     setTimeout(() => {
@@ -709,7 +706,7 @@ export default {
 
             }
 
-            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/all-demande', {intervenant: this.intervenant}), datas)
+            unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas)
                 .then(response => {
                     this.$emit('refresh');
                     setTimeout(() => {

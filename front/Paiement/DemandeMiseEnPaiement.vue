@@ -1,4 +1,10 @@
 <template>
+    <div v-if="!this.datasServiceAPayer" class="text-center">
+        <div class="mt-5 spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Chargement des demandes de mise en paiement en cours...</span>
+        </div>
+        Chargement des demandes de mise en paiement en cours...
+    </div>
     <div id="accordionPanelsStayOpenExample" class="accordion">
 
         <demande-mise-en-paiement-structure v-for="(structure, code) in datasServiceAPayer"

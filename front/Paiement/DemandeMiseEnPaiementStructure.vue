@@ -560,9 +560,7 @@ export default {
             unicaenVue.axios.get(unicaenVue.url('paiement/:intervenant/supprimer-demande/:dmep', {intervenant: this.intervenant, dmep: id}))
                 .then(response => {
                     this.$emit('refresh');
-                    setTimeout(() => {
-                        this.btnToggle('remove-' + id);
-                    }, 2500);
+
                 })
                 .catch(error => {
                     this.$emit('refresh');
@@ -673,12 +671,13 @@ export default {
             unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas)
                 .then(response => {
                     this.$emit('refresh');
-                    setTimeout(() => {
-                        this.btnToggle('add-' + id);
-                    }, 2500);
+
                 })
                 .catch(error => {
                     console.error(error);
+                    setTimeout(() => {
+                        this.btnToggle('add-' + id);
+                    }, 2500);
                 })
 
 
@@ -735,9 +734,7 @@ export default {
             unicaenVue.axios.post(unicaenVue.url('paiement/:intervenant/ajouter-demandes', {intervenant: this.intervenant}), datas)
                 .then(response => {
                     this.$emit('refresh');
-                    setTimeout(() => {
-                        this.btnToggle('add-all-' + codeStructure);
-                    }, 2500);
+                
 
                 })
                 .catch(error => {

@@ -666,8 +666,8 @@ class MiseEnPaiementService extends AbstractEntityService
     /**
      *
      * @param Intervenant $intervenant
+     * @param ?Structure  $structure
      *
-     * @return ServiceAPayerInterface[]
      */
     public function getDemandeMiseEnPaiementResume (Intervenant $intervenant, ?Structure $structure = null)
     {
@@ -721,6 +721,8 @@ class MiseEnPaiementService extends AbstractEntityService
             MAX(df.source_code)                 domaine_fonctionnel_code,
             MAX(tp.formule_res_service_id)      formule_res_service_id,
             MAX(tp.formule_res_service_ref_id)  formule_res_service_ref_id,
+            MAX(tp.service_id)                  service_id,
+            MAX(tp.service_referentiel_id)      service_referentiel_id,
             MAX(tp.mission_id)                  mission_id,
             MAX(tm.libelle) || 
             ' / ' || 
@@ -812,6 +814,8 @@ class MiseEnPaiementService extends AbstractEntityService
                         'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
                         'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
                         'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
+                        'serviceId'              => $value['SERVICE_ID'],
+                        'serviceReferentielId'   => $value['SERVICE_REFERENTIEL_ID'],
                         'missionId'              => $value['MISSION_ID'],
                         'heuresAPayer'           => $value['HEURES_A_PAYER'],
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
@@ -836,6 +840,8 @@ class MiseEnPaiementService extends AbstractEntityService
                         'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
                         'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
                         'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
+                        'serviceId'              => $value['SERVICE_ID'],
+                        'serviceReferentielId'   => $value['SERVICE_REFERENTIEL_ID'],
                         'missionId'              => $value['MISSION_ID'],
                         'heuresAPayer'           => $value['HEURES_A_PAYER'],
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
@@ -870,6 +876,8 @@ class MiseEnPaiementService extends AbstractEntityService
                         'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
                         'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
                         'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
+                        'serviceId'              => $value['SERVICE_ID'],
+                        'serviceReferentielId'   => $value['SERVICE_REFERENTIEL_ID'],
                         'missionId'              => $value['MISSION_ID'],
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
                         'heuresPayees'           => $value['HEURES_PAYEES'],
@@ -894,6 +902,8 @@ class MiseEnPaiementService extends AbstractEntityService
                         'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
                         'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
                         'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
+                        'serviceId'              => $value['SERVICE_ID'],
+                        'serviceReferentielId'   => $value['SERVICE_REFERENTIEL_ID'],
                         'missionId'              => $value['MISSION_ID'],
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
                         'heuresPayees'           => $value['HEURES_PAYEES'],
@@ -929,6 +939,8 @@ class MiseEnPaiementService extends AbstractEntityService
                         'typeHeureCode'          => $value['TYPE_HEURE_CODE'],
                         'formuleResServiceId'    => $value['FORMULE_RES_SERVICE_ID'],
                         'formuleResServiceRefId' => $value['FORMULE_RES_SERVICE_REF_ID'],
+                        'serviceId'              => $value['SERVICE_ID'],
+                        'serviceReferentielId'   => $value['SERVICE_REFERENTIEL_ID'],
                         'missionId'              => $value['MISSION_ID'],
                         'heuresDemandees'        => $value['HEURES_DEMANDEES'],
                         'heuresPayees'           => $value['HEURES_PAYEES'],
@@ -1086,6 +1098,8 @@ class MiseEnPaiementService extends AbstractEntityService
                         }
                         $demandesApprouvees[] = $demande;
                     }
+                } else {
+                    $demandesApprouvees[] = $demande;
                 }
             }
         }
@@ -1101,21 +1115,20 @@ class MiseEnPaiementService extends AbstractEntityService
         $sql  = "
         
         SELECT
-           	SUM(tp.heures_a_payer_aa + tp.heures_a_payer_ac) - SUM(tp.heures_payees_aa + tp.heures_payees_ac) solde
+           	SUM(tp.heures_a_payer_aa + tp.heures_a_payer_ac) - SUM(tp.heures_demandees_aa + tp.heures_demandees_ac) solde
         FROM
             tbl_paiement tp
         WHERE
             tp.intervenant_id = :intervenant
-        AND tp.mise_en_paiement_id IS NULL
         ";
 
-        if (!empty($data['formuleResServiceId'])) {
-            $type = "le service d'enseignements avec id#" . $data['formuleResServiceId'];
-            $sql  .= " AND tp.formule_res_service_id =  " . $data['formuleResServiceId'];
+        if (!empty($data['serviceId'])) {
+            $type = "le service d'enseignements avec id#" . $data['serviceId'];
+            $sql  .= " AND tp.service_id =  " . $data['serviceId'];
         }
-        if (!empty($data['formuleResServiceRefId'])) {
-            $type = "le service referentiel avec id#" . $data['formuleResServiceRefId'];
-            $sql  .= " AND tp.formule_res_service_ref_id =  " . $data['formuleResServiceRefId'];
+        if (!empty($data['serviceReferentielId'])) {
+            $type = "le service referentiel avec id#" . $data['serviceReferentielId'];
+            $sql  .= " AND tp.service_referentiel_id =  " . $data['serviceReferentielId'];
         }
         if (!empty($data['missionId'])) {
             $type = "la mission avec id#" . $data['missionId'];

@@ -29,7 +29,7 @@
                             <tr>
 
                                 <td>
-                                    <div class="progress position-relative bg-secondary" style="height: 30px;">
+                                    <div v-if="this.dotationRessourcesPropres > 0" class="progress position-relative bg-secondary" style="height: 30px;">
                                         <span class="position-absolute top-50 start-50 translate-middle" style="color:white;">{{
                                                 this.consommationPaieEtat + ' sur ' + this.dotationPaieEtat
                                             }} HETD</span>
@@ -42,9 +42,12 @@
                                              role="progressbar">
                                         </div>
                                     </div>
+                                    <div class="text-center">
+                                        Aucune dotation paie état
+                                    </div>
                                 </td>
                                 <td>
-                                    <div class="progress position-relative bg-secondary" style="height: 30px;">
+                                    <div v-if="this.dotationRessourcesPropres > 0" class="progress position-relative bg-secondary" style="height: 30px;">
                                         <span class="position-absolute top-50 start-50 translate-middle" style="color:white;">{{
                                                 this.consommationRessourcesPropres + ' sur ' + this.dotationRessourcesPropres
                                             }} HETD</span>
@@ -56,6 +59,9 @@
                                              class="progress-bar progress-bar-striped bg-success"
                                              role="progressbar">
                                         </div>
+                                    </div>
+                                    <div class="text-center">
+                                        Aucune dotation ressources propres
                                     </div>
                                 </td>
                             </tr>
@@ -103,6 +109,8 @@
                                                                         :data-formule-res-service-id="value.formuleResServiceId"
                                                                         :data-formule-res-service-ref-id="value.formuleResServiceRefId"
                                                                         :data-mission-id="value.missionId"
+                                                                        :data-service-id="value.serviceId"
+                                                                        :data-service-referentiel-id="value.serviceReferentielId"
                                                                         :data-type-heures-id="value.typeHeureId"
                                                                         :max="value.heuresAPayer"
                                                                         :value="value.heuresAPayer"
@@ -149,7 +157,7 @@
                                                             </td>
                                                             <td style="font-size:12px;">
                                                                 <span
-                                                                    v-if="value.heuresAPayer != value.heuresPayees &&  value.heuresAPayer == value.heuresDemandees">
+                                                                    v-if="value.heuresPayees == 0 && value.heuresDemandees > 0">
                                                                     <button :id="'remove-' + value.mepId"
                                                                             class="btn btn-danger"
                                                                             type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
@@ -223,6 +231,8 @@
                                                                 :data-formule-res-service-id="value.formuleResServiceId"
                                                                 :data-formule-res-service-ref-id="value.formuleResServiceRefId"
                                                                 :data-mission-id="value.missionId"
+                                                                :data-service-id="value.serviceId"
+                                                                :data-service-referentiel-id="value.serviceReferentielId"
                                                                 :data-type-heures-id="value.typeHeureId"
                                                                 :max="value.heuresAPayer"
                                                                 :value="value.heuresAPayer"
@@ -281,7 +291,7 @@
                                                     </td>
                                                     <td style="font-size:12px;">
                                                                 <span
-                                                                    v-if="value.heuresAPayer != value.heuresPayees &&  value.heuresAPayer == value.heuresDemandees">
+                                                                    v-if="value.heuresPayees == 0 && value.heuresDemandees > 0">
                                                                     <button :id="'remove-' + value.mepId"
                                                                             class="btn btn-danger"
                                                                             type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
@@ -354,8 +364,11 @@
                                                             <input
                                                                 :id="'heures-' + mission.missionId"
                                                                 :data-domaine-fonctionnel-id="value.domaineFonctionnelId"
+                                                                :data-formule-res-service-id="value.formuleResServiceId"
                                                                 :data-formule-res-service-ref-id="value.formuleResServiceRefId"
                                                                 :data-mission-id="value.missionId"
+                                                                :data-service-id="value.serviceId"
+                                                                :data-service-referentiel-id="value.serviceReferentielId"
                                                                 :data-type-heures-id="value.typeHeureId"
                                                                 :max="value.heuresAPayer"
                                                                 :value="value.heuresAPayer"
@@ -416,7 +429,7 @@
                                                     </td>
                                                     <td style="font-size:12px;">
                                                                 <span
-                                                                    v-if="value.heuresAPayer != value.heuresPayees &&  value.heuresAPayer == value.heuresDemandees">
+                                                                    v-if="value.heuresPayees == 0 && value.heuresDemandees > 0">
                                                                     <button :id="'remove-' + value.mepId"
                                                                             class="btn btn-danger"
                                                                             type="button" @click="this.supprimerDemandeMiseEnPaiement(value.mepId)">
@@ -529,9 +542,14 @@ export default {
             if (value.heuresDemandees == 0) {
                 return '<span style="font-size:12px;line-height:20px;" class="badge bg-light text-dark">A payer</span>';
             }
-            if (value.heuresPayees > value.heuresAPayer) {
+            if (Number(value.heuresPayees) > Number(value.heuresAPayer)) {
                 let diff = value.heuresPayees - value.heuresAPayer;
-                return '<span style="font-size:12px;line-height:20px;" class="badge bg-danger">Paiement effectué - ' + diff + ' hetd(s) de trop payé </span>';
+                return '<span style="font-size:12px;line-height:20px;" class="badge bg-danger"><i class="fa-solid fa-triangle-exclamation"></i> Paiement effectué - ' + parseFloat(diff.toFixed(2)) + ' hetd(s) payées en trop. </span>';
+            }
+            //Trop d'heure demandé
+            if (Number(value.heuresDemandees) > Number(value.heuresAPayer)) {
+                let diff = value.heuresDemandees - value.heuresAPayer;
+                return '<span style="font-size:12px;line-height:20px;" class="badge bg-danger"><i class="fa-solid fa-triangle-exclamation"></i> Paiement demandé - ' + parseFloat(diff.toFixed(2)) + ' hetd(s) demandées en trop. </span></span>';
             }
             return 'indetermine';
         },
@@ -596,6 +614,8 @@ export default {
             let typeHeureId = (inputHeure.hasAttribute('data-type-heures-id') ? inputHeure.getAttribute('data-type-heures-id') : '');
             let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
             let formuleResServiceRefId = (inputHeure.hasAttribute('data-formule-res-service-ref-id') ? inputHeure.getAttribute('data-formule-res-service-ref-id') : '');
+            let serviceId = (inputHeure.hasAttribute('data-service-id') ? inputHeure.getAttribute('data-service-id') : '');
+            let serviceReferentielId = (inputHeure.hasAttribute('data-service-referentiel-id') ? inputHeure.getAttribute('data-service-referentiel-id') : '');
             let missionId = (inputHeure.hasAttribute('data-mission-id') ? inputHeure.getAttribute('data-mission-id') : '');
 
             let centreCoutId = inputCentreCout.value;
@@ -640,6 +660,8 @@ export default {
                 typeHeuresId: typeHeureId,
                 formuleResServiceId: formuleResServiceId,
                 formuleResServiceRefId: formuleResServiceRefId,
+                serviceId: serviceId,
+                serviceReferentielId: serviceReferentielId,
                 domaineFonctionnelId: domaineFonctionnelId,
                 missionId: missionId,
                 structureId: this.datas.id,
@@ -688,6 +710,8 @@ export default {
                         let formuleResServiceId = (inputHeure.hasAttribute('data-formule-res-service-id') ? inputHeure.getAttribute('data-formule-res-service-id') : '');
                         let formuleResServiceRefId = (inputHeure.hasAttribute('data-formule-res-service-ref-id') ? inputHeure.getAttribute('data-formule-res-service-ref-id') : '');
                         let missionId = (inputHeure.hasAttribute('data-mission-id') ? inputHeure.getAttribute('data-mission-id') : '');
+                        let serviceId = (inputHeure.hasAttribute('data-service-id') ? inputHeure.getAttribute('data-service-id') : '');
+                        let serviceReferentielId = (inputHeure.hasAttribute('data-service-referentiel-id') ? inputHeure.getAttribute('data-service-referentiel-id') : '');
                         let domaineFonctionnelId = (inputDomaineFonctionnel) ? inputDomaineFonctionnel.value : '';
                         let demande = {
                             heures: heureADemander,
@@ -695,6 +719,8 @@ export default {
                             typeHeuresId: typeHeureId,
                             formuleResServiceId: formuleResServiceId,
                             formuleResServiceRefId: formuleResServiceRefId,
+                            serviceId: serviceId,
+                            serviceReferentielId: serviceReferentielId,
                             domaineFonctionnelId: domaineFonctionnelId,
                             missionId: missionId,
                             structureId: this.datas.id,
@@ -762,7 +788,7 @@ export default {
             for (var heure in heures) {
                 total += Number(heures[heure].heuresAPayer);
             }
-            return total;
+            return parseFloat(total.toFixed(2));
         },
         shorten(chaine, length = 20)
         {

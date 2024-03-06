@@ -11,7 +11,7 @@
 ## Corrections de bugs
 
 * Les modifications de servic dû ne sont enregistrées que s'il y a un changement effectif de donnée (#55446)
-
+* Le calcul des paiements s'effectue correctement sur les cas complexes avec des heures négatives
 
 
 

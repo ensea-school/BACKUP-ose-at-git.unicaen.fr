@@ -69,7 +69,7 @@ CREATE OR REPLACE PACKAGE "OSE_FORMULE" AS
     heures_compl_fi            FLOAT DEFAULT 0,
     heures_compl_fa            FLOAT DEFAULT 0,
     heures_compl_fc            FLOAT DEFAULT 0,
-    heures_compl_fc_majorees   FLOAT DEFAULT 0,
+    heures_primes              FLOAT DEFAULT 0,
     heures_compl_referentiel   FLOAT DEFAULT 0,
 
     debug_info                 CLOB

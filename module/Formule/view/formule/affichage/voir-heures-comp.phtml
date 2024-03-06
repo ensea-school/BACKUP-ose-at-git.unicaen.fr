@@ -166,7 +166,7 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
                 <td class="nombre"><?= vn($ls['hetd'], 'HEURES_COMPL_FI') ?></td>
                 <td class="nombre"><?= vn($ls['hetd'], 'HEURES_COMPL_FA') ?></td>
                 <td class="nombre"><?= vn($ls['hetd'], 'HEURES_COMPL_FC') ?></td>
-                <td class="nombre"><?= vn($ls['hetd'], 'HEURES_COMPL_FC_MAJOREES') ?></td>
+                <td class="nombre"><?= vn($ls['hetd'], 'HEURES_PRIMES') ?></td>
             </tr>
         <?php endforeach; ?>
     </table>
@@ -238,7 +238,7 @@ $this->intervenant($intervenant)->renderTitle('Calcul HETD');
         <div class="col-sm-4"><abbr title="Rémunération FC au titre de l'article D714-60 du code de l’Éducation">+
                 Rémunération FC
                 D714-60</abbr></div>
-        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FC_MAJOREES') ?></div>
+        <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_PRIMES') ?></div>
     </div>
     <div class="row">
         <div class="col-sm-4"><abbr title="Heures complémentaires (référentiel)">+ HC Référentiel</abbr></div>

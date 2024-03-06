@@ -48,8 +48,8 @@ class ResumeService extends AbstractService
             'heures-compl-fi',
             'heures-compl-fa',
             'heures-compl-fc',
-            'heures-compl-fc-majorees',
             'heures-compl-referentiel',
+            'heures-primes',
             'total',
             'solde',
         ];
@@ -69,8 +69,8 @@ class ResumeService extends AbstractService
             'heures-compl-fi',
             'heures-compl-fa',
             'heures-compl-fc',
-            'heures-compl-fc-majorees',
             'heures-compl-referentiel',
+            'heures-primes',
             'total',
         ];
 
@@ -176,9 +176,9 @@ class ResumeService extends AbstractService
                 'heures-compl-fi'              => (float)$d['HEURES_COMPL_FI'],
                 'heures-compl-fa'              => (float)$d['HEURES_COMPL_FA'],
                 'heures-compl-fc'              => (float)$d['HEURES_COMPL_FC'],
-                'heures-compl-fc-majorees'     => (float)$d['HEURES_COMPL_FC_MAJOREES'],
                 'heures-compl-referentiel'     => (float)$d['HEURES_COMPL_REFERENTIEL'],
-                'total'                        => (float)$d['HEURES_COMPL_FI'] + (float)$d['HEURES_COMPL_FA'] + (float)$d['HEURES_COMPL_FC'] + (float)$d['HEURES_COMPL_FC_MAJOREES'] + (float)$d['HEURES_COMPL_REFERENTIEL'],
+                'heures-primes'                => (float)$d['HEURES_PRIMES'],
+                'total'                        => (float)$d['HEURES_COMPL_FI'] + (float)$d['HEURES_COMPL_FA'] + (float)$d['HEURES_COMPL_FC'] + (float)$d['HEURES_PRIMES'] + (float)$d['HEURES_COMPL_REFERENTIEL'],
                 'solde'                        => (float)$d['SOLDE'],
                 'date-cloture-service-realise' => $d['DATE_CLOTURE_REALISE'],
             ];
@@ -287,8 +287,8 @@ class ResumeService extends AbstractService
         $head['heures-compl-fi']              = 'HETD Compl. FI';
         $head['heures-compl-fa']              = 'HETD Compl. FA';
         $head['heures-compl-fc']              = 'HETD Compl. FC';
-        $head['heures-compl-fc-majorees']     = 'HETD Compl. FC D714-60';
         $head['heures-compl-referentiel']     = 'HETD Compl. référentiel';
+        $head['heures-primes']                = 'HETD Prime FC D714-60';
         $head['total']                        = 'Total HETD';
         $head['solde']                        = 'Solde HETD';
         $head['date-cloture-service-realise'] = 'Clôture du service réalisé';

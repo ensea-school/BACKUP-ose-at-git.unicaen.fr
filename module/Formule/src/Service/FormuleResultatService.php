@@ -222,8 +222,8 @@ class FormuleResultatService extends AbstractEntityService
             $data['HEURES_COMPL_TOTAL'] = $data['HEURES_COMPL_FI']
                 + $data['HEURES_COMPL_FA']
                 + $data['HEURES_COMPL_FC']
-                + $data['HEURES_COMPL_FC_MAJOREES']
-                + $data['HEURES_COMPL_REFERENTIEL'];
+                + $data['HEURES_COMPL_REFERENTIEL']
+                + $data['HEURES_PRIMES'];
             $sql                        = "SELECT * FROM FORMULE_RESULTAT_SERVICE WHERE FORMULE_RESULTAT_ID = :frId";
             $frss                       = $conn->fetchAllAssociative($sql, compact('frId'));
             foreach ($frss as $frs) {

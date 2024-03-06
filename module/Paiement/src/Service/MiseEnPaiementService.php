@@ -407,8 +407,8 @@ class MiseEnPaiementService extends AbstractEntityService
                 'heures-fi'                   => (float)$d['HEURES_FI'],
                 'heures-fa'                   => (float)$d['HEURES_FA'],
                 'heures-fc'                   => (float)$d['HEURES_FC'],
-                'heures-fc-majorees'          => (float)$d['HEURES_FC_MAJOREES'],
                 'heures-referentiel'          => (float)$d['HEURES_REFERENTIEL'],
+                'heures-primes'               => (float)$d['HEURES_PRIMES'],
             ];
 
             $data[] = $ds;

@@ -23,7 +23,7 @@ class TypeRessourceHydrator implements HydratorInterface
         $object->setFi($data['fi']);
         $object->setFa($data['fa']);
         $object->setFc($data['fc']);
-        $object->setFcMajorees($data['fc_majore']);
+        $object->setPrimes($data['primes']);
         $object->setReferentiel($data['referentiel']);
         $object->setMission($data['mission']);
         $object->setEtablissement($data['etablissement']);
@@ -49,7 +49,7 @@ class TypeRessourceHydrator implements HydratorInterface
             'fi'            => $object->getFi(),
             'fa'            => $object->getFa(),
             'fc'            => $object->getFc(),
-            'fc_majore'     => $object->getFcMajorees(),
+            'primes'        => $object->getPrimes(),
             'referentiel'   => $object->getReferentiel(),
             'mission'       => $object->getMission(),
             'etablissement' => $object->getEtablissement(),

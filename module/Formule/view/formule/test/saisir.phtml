@@ -273,7 +273,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 </tr>
                 <tr>
                     <th>FC majorées</th>
-                    <?= $lf->output('cHeuresComplFcMajorees') ?>
+                    <?= $lf->output('cHeuresPrimes') ?>
                 </tr>
                 <tr>
                     <th>Référentiel</th>
@@ -397,7 +397,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 <td class="attendu"><?= $lf->input('aHeuresComplFi', ['data-type' => 'float']) ?></td>
                 <td class="attendu"><?= $lf->input('aHeuresComplFa', ['data-type' => 'float']) ?></td>
                 <td class="attendu"><?= $lf->input('aHeuresComplFc', ['data-type' => 'float']) ?></td>
-                <td class="attendu"><?= $lf->input('aHeuresComplFcMajorees', ['data-type' => 'float']) ?></td>
+                <td class="attendu"><?= $lf->input('aHeuresPrimes', ['data-type' => 'float']) ?></td>
                 <td class="attendu"><?= $lf->input('aHeuresComplReferentiel', ['data-type' => 'float']) ?></td>
                 <?= $lf->output('cServiceFi', ['class' => 'resultats', 'data-assert' => 'aServiceFi']) ?>
                 <?= $lf->output('cServiceFa', ['class' => 'resultats', 'data-assert' => 'aServiceFa']) ?>
@@ -406,8 +406,8 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 <?= $lf->output('cHeuresComplFi', ['class' => 'resultats', 'data-assert' => 'aHeuresComplFi']) ?>
                 <?= $lf->output('cHeuresComplFa', ['class' => 'resultats', 'data-assert' => 'aHeuresComplFa']) ?>
                 <?= $lf->output('cHeuresComplFc', ['class' => 'resultats', 'data-assert' => 'aHeuresComplFc']) ?>
-                <?= $lf->output('cHeuresComplFcMajorees', ['class' => 'resultats', 'data-assert' => 'aHeuresComplFcMajorees']) ?>
                 <?= $lf->output('cHeuresComplReferentiel', ['class' => 'resultats', 'data-assert' => 'aHeuresComplReferentiel']) ?>
+                <?= $lf->output('cHeuresPrimes', ['class' => 'resultats', 'data-assert' => 'aHeuresPrimes']) ?>
                 <?= $lf->output('debugInfo', ['class' => 'debug', 'data-type' => 'string']) ?>
             </tr>
         <?php endfor; ?>

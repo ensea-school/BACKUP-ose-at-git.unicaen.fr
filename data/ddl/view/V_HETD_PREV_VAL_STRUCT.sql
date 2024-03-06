@@ -7,8 +7,8 @@ SELECT
 FROM (
     SELECT
       i.annee_id,
-      coalesce(ep.structure_id, i.structure_id)                                                          structure_id,
-      frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_compl_fc_majorees heures
+      coalesce(ep.structure_id, i.structure_id)                                                structure_id,
+      frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_primes  heures
     FROM
       formule_resultat_volume_horaire frvh
       JOIN formule_resultat_intervenant fr ON fr.id = frvh.formule_resultat_intervenant_id

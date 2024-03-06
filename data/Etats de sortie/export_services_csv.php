@@ -31,8 +31,8 @@ $numericColunms    = [
     'heures-compl-fi',
     'heures-compl-fa',
     'heures-compl-fc',
-    'heures-compl-fc-majorees',
     'heures-compl-referentiel',
+    'heures-primes',
     'total',
     'solde',
 ];
@@ -51,8 +51,8 @@ $addableColumns = [
     'heures-compl-fi',
     'heures-compl-fa',
     'heures-compl-fc',
-    'heures-compl-fc-majorees',
     'heures-compl-referentiel',
+    'heures-primes',
     'total',
 ];
 
@@ -114,8 +114,8 @@ foreach ($data as $d) {
         'heures-compl-fi'              => (float)$d['HEURES_COMPL_FI'],
         'heures-compl-fa'              => (float)$d['HEURES_COMPL_FA'],
         'heures-compl-fc'              => (float)$d['HEURES_COMPL_FC'],
-        'heures-compl-fc-majorees'     => (float)$d['HEURES_COMPL_FC_MAJOREES'],
         'heures-compl-referentiel'     => (float)$d['HEURES_COMPL_REFERENTIEL'],
+        'heures-primes'                => (float)$d['HEURES_PRIMES'],
         'total'                        => (float)$d['TOTAL'],
         'solde'                        => (float)$d['SOLDE'],
         'date-cloture-service-realise' => $d['DATE_CLOTURE_REALISE'],
@@ -223,8 +223,8 @@ $head['service-referentiel'] = 'HETD Service Référentiel';
 $head['heures-compl-fi'] = 'HETD Compl. FI';
 $head['heures-compl-fa'] = 'HETD Compl. FA';
 $head['heures-compl-fc'] = 'HETD Compl. FC';
-$head['heures-compl-fc-majorees'] = 'HETD Compl. FC D714-60';
 $head['heures-compl-referentiel'] = 'HETD Compl. référentiel';
+$head['heures-primes'] = 'Prime FC D714-60';
 $head['total'] = 'Total HETD';
 $head['solde'] = 'Solde HETD';
 $head['date-cloture-service-realise'] = 'Clôture du service réalisé';

@@ -75,7 +75,7 @@ FROM(
 		       MAX(TRIM(to_char(add_months(a.date_debut, p.ecart_mois), 'dd/mm/yyyy')))                      date_debut,
 		       MAX(TRIM(to_char(last_day(add_months(a.date_debut, p.ecart_mois)),'dd/mm/yyyy')))             date_fin,
 		       CASE
-		          WHEN MAX(th.code) = 'fc_majorees'  THEN '1542'
+		          WHEN MAX(th.code) = 'primes'  THEN '1542'
 		          WHEN MAX(mis.mission_id) IS NOT NULL THEN '0125'
 		          ELSE
 		             CASE WHEN MAX(ti.code) = 'P' THEN '="0204"' ELSE '="2251"' END
@@ -86,17 +86,17 @@ FROM(
 		       CASE WHEN cc.parent_id IS NOT NULL THEN cc.id ELSE NULL END                                   eotp_id,
 		       MAX(df.source_code)   																	     domaine_fonctionnel_code,
 		       SUM(mis.heures_payees_aa + mis.heures_payees_ac)                                              hetd,
-		       SUM(CASE WHEN th.code = 'fc_majorees'
+		       SUM(CASE WHEN th.code = 'primes'
 		       		THEN mis.heures_payees_aa + mis.heures_payees_ac
-		       		ELSE 0 END)               											                     fc_majorees,
+		       		ELSE 0 END)               											                     primes,
 		       CASE WHEN MAX(mis.mission_id) IS NULL
 		       		--Si on n'est pas dans le cas d'une mission on multiplie juste par le taux horaire
 		       	    THEN SUM(ROUND(mis.taux_horaire * (mis.heures_payees_aa + mis.heures_payees_ac),2))
 		       	    --Si on est dans le cas d'une mission alors on rajoute 10% pour les congés payés systématiquement
 		       	    ELSE SUM(ROUND(0.1*mis.taux_horaire * (mis.heures_payees_aa + mis.heures_payees_ac),2)) END  montant_hetd,
-		       SUM(CASE WHEN th.code = 'fc_majorees'
+		       SUM(CASE WHEN th.code = 'primes'
 		       		THEN ROUND(mis.taux_horaire * (mis.heures_payees_aa + mis.heures_payees_ac),2)
-		       		ELSE 0 END)   	   				                        		                         montant_fc_majorees,
+		       		ELSE 0 END)   	   				                        		                         montant_primes,
 		       MAX(mis.taux_horaire)																	     taux_horaire
 			FROM tbl_paiement mis
 			JOIN mise_en_paiement mep ON mep.id = mis.mise_en_paiement_id AND mep.histo_destruction IS NULL

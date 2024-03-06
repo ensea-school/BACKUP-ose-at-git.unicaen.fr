@@ -32,8 +32,8 @@ class FormuleResultatIntervenant extends FormuleIntervenant
     protected float $heuresComplFi = 0.0;
     protected float $heuresComplFa = 0.0;
     protected float $heuresComplFc = 0.0;
-    protected float $heuresComplFcMajorees = 0.0;
     protected float $heuresComplReferentiel = 0.0;
+    protected float $heuresPrimes = 0.0;
 
 
 
@@ -156,15 +156,16 @@ class FormuleResultatIntervenant extends FormuleIntervenant
 
 
 
-    public function getHeuresComplFcMajorees(): float
-    {
-        return $this->heuresComplFcMajorees;
-    }
-
-
-
     public function getHeuresComplReferentiel(): float
     {
         return $this->heuresComplReferentiel;
     }
+
+
+
+    public function getHeuresPrimes(): float
+    {
+        return $this->heuresPrimes;
+    }
+
 }

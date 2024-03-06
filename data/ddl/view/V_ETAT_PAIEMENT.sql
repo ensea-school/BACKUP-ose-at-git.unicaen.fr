@@ -71,7 +71,7 @@ FROM
       hetd,
       ROUND( CASE WHEN hetd > 0 THEN hetd / SUM( hetd ) OVER( PARTITION BY periode_id, intervenant_id, etat, structure_id) ELSE 0 END, 3 ) hetd_pourc,
       ROUND( hetd * taux_horaire * taux_conges_payes, 2 ) hetd_montant,
-      ROUND( fc_majorees * taux_horaire * taux_conges_payes, 2 ) rem_fc_d714,
+      ROUND( primes * taux_horaire * taux_conges_payes, 2 ) rem_fc_d714,
       exercice_aa,
       ROUND( exercice_aa * taux_horaire * taux_conges_payes, 2 ) exercice_aa_montant,
       exercice_ac,
@@ -106,7 +106,7 @@ FROM
         domaine_fonctionnel_code,
         domaine_fonctionnel_libelle,
         SUM( hetd ) hetd,
-        SUM( fc_majorees ) fc_majorees,
+        SUM( primes ) primes,
         SUM( exercice_aa ) exercice_aa,
         SUM( exercice_ac ) exercice_ac,
         taux_remu,
@@ -115,7 +115,7 @@ FROM
       FROM
         (
         SELECT
-          CASE WHEN th.code = 'fc_majorees' THEN 1 ELSE 0 END                 is_fc_majoree,
+          CASE WHEN th.code = 'primes' THEN 1 ELSE 0 END                      is_primes,
           p.id                                                                periode_id,
           s.id                                                                structure_id,
           s.ids                                                               structure_ids,
@@ -141,14 +141,14 @@ FROM
           cc.libelle                                                          centre_cout_libelle,
           df.source_code                                                      domaine_fonctionnel_code,
           df.libelle                                                          domaine_fonctionnel_libelle,
-          CASE WHEN th.code = 'fc_majorees' THEN 0 ELSE CASE
+          CASE WHEN th.code = 'primes' THEN 0 ELSE CASE
             WHEN mis.periode_paiement_id IS NULL THEN mis.heures_demandees_aa + mis.heures_demandees_ac
             ELSE mis.heures_payees_aa + mis.heures_payees_ac
           END END                                                             hetd,
-          CASE WHEN th.code = 'fc_majorees' THEN CASE
+          CASE WHEN th.code = 'primes' THEN CASE
             WHEN mis.periode_paiement_id IS NULL THEN mis.heures_demandees_aa + mis.heures_demandees_ac
             ELSE mis.heures_payees_aa + mis.heures_payees_ac
-          END ELSE 0 END                                                      fc_majorees,
+          END ELSE 0 END                                                      primes,
           CASE
             WHEN mis.periode_paiement_id IS NULL THEN mis.heures_demandees_aa
             ELSE mis.heures_payees_aa

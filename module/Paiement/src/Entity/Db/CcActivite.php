@@ -31,7 +31,7 @@ class CcActivite implements HistoriqueAwareInterface
     /**
      * @var boolean
      */
-    private $fcMajorees;
+    private $primes;
 
     /**
      * @var boolean
@@ -155,15 +155,15 @@ class CcActivite implements HistoriqueAwareInterface
 
 
     /**
-     * Set fcMajorees
+     * Set primes
      *
-     * @param boolean $fcMajorees
+     * @param boolean $primes
      *
      * @return CcActivite
      */
-    public function setFcMajorees($fcMajorees)
+    public function setPrimes($primes)
     {
-        $this->fcMajorees = $fcMajorees;
+        $this->primes = $primes;
 
         return $this;
     }
@@ -171,13 +171,13 @@ class CcActivite implements HistoriqueAwareInterface
 
 
     /**
-     * Get fcMajorees
+     * Get primes
      *
      * @return boolean
      */
-    public function getFcMajorees()
+    public function getPrimes()
     {
-        return $this->fcMajorees;
+        return $this->primes;
     }
 
 
@@ -320,12 +320,12 @@ class CcActivite implements HistoriqueAwareInterface
                 return $this->getFa();
             case TypeHeures::FC         :
                 return $this->getFc();
-            case TypeHeures::FC_MAJOREES:
-                return $this->getFcMajorees();
             case TypeHeures::ENSEIGNEMENT:
-                return $this->getFi() || $this->getFa() || $this->getFc() || $this->getFcMajorees();
+                return $this->getFi() || $this->getFa() || $this->getFc() || $this->getPrimes();
             case TypeHeures::REFERENTIEL:
                 return $this->getReferentiel();
+            case TypeHeures::PRIMES:
+                return $this->getPrimes();
             case TypeHeures::MISSION:
                 return $this->getMission();
         }

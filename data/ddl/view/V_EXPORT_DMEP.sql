@@ -11,7 +11,7 @@ WITH mep AS (
     SUM(CASE WHEN th.code = 'fi' THEN mep.heures ELSE 0 END) heures_fi,
     SUM(CASE WHEN th.code = 'fa' THEN mep.heures ELSE 0 END) heures_fa,
     SUM(CASE WHEN th.code = 'fc' THEN mep.heures ELSE 0 END) heures_fc,
-    SUM(CASE WHEN th.code = 'fc_majorees' THEN mep.heures ELSE 0 END) heures_fc_majorees,
+    SUM(CASE WHEN th.code = 'primes' THEN mep.heures ELSE 0 END) heures_primes,
     SUM(CASE WHEN th.code = 'referentiel' THEN mep.heures ELSE 0 END) heures_referentiel
   FROM
               tbl_paiement                   tp
@@ -89,7 +89,7 @@ SELECT i.id                                                       intervenant_id
        mep.heures_fi                                              heures_fi,
        mep.heures_fa                                              heures_fa,
        mep.heures_fc                                              heures_fc,
-       mep.heures_fc_majorees                                     heures_fc_majorees,
+       mep.heures_primes                                          heures_primes,
        mep.heures_referentiel                                     heures_referentiel
 FROM mep
          JOIN centre_cout cc ON cc.id = mep.centre_cout_id

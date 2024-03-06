@@ -21,7 +21,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     heures_compl_fi            FLOAT DEFAULT 0,
     heures_compl_fa            FLOAT DEFAULT 0,
     heures_compl_fc            FLOAT DEFAULT 0,
-    heures_compl_fc_majorees   FLOAT DEFAULT 0,
+    heures_primes              FLOAT DEFAULT 0,
     heures_compl_referentiel   FLOAT DEFAULT 0,
 
     changed                    BOOLEAN DEFAULT FALSE,
@@ -392,7 +392,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       t_res(code).heures_compl_fi          := 0;
       t_res(code).heures_compl_fa          := 0;
       t_res(code).heures_compl_fc          := 0;
-      t_res(code).heures_compl_fc_majorees := 0;
+      t_res(code).heures_primes            := 0;
       t_res(code).heures_compl_referentiel := 0;
     END IF;
 
@@ -403,7 +403,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     t_res(code).heures_compl_fi          := t_res(code).heures_compl_fi          + vh.heures_compl_fi;
     t_res(code).heures_compl_fa          := t_res(code).heures_compl_fa          + vh.heures_compl_fa;
     t_res(code).heures_compl_fc          := t_res(code).heures_compl_fc          + vh.heures_compl_fc;
-    t_res(code).heures_compl_fc_majorees := t_res(code).heures_compl_fc_majorees + vh.heures_compl_fc_majorees;
+    t_res(code).heures_primes            := t_res(code).heures_primes            + vh.heures_primes;
     t_res(code).heures_compl_referentiel := t_res(code).heures_compl_referentiel + vh.heures_compl_referentiel;
 
     t_res(code).type_volume_horaire_id := tvh;
@@ -445,8 +445,8 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       ose_test.echo('  heures_compl_fi          = ' || t_res(code).heures_compl_fi);
       ose_test.echo('  heures_compl_fa          = ' || t_res(code).heures_compl_fa);
       ose_test.echo('  heures_compl_fc          = ' || t_res(code).heures_compl_fc);
-      ose_test.echo('  heures_compl_fc_majorees = ' || t_res(code).heures_compl_fc_majorees);
       ose_test.echo('  heures_compl_referentiel = ' || t_res(code).heures_compl_referentiel);
+      ose_test.echo('  heures_primes            = ' || t_res(code).heures_primes);
 
       code := t_res.NEXT(code);
     END LOOP;
@@ -623,13 +623,13 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         fr.heures_compl_fi          := ROUND(t_res(code).heures_compl_fi,2);
         fr.heures_compl_fa          := ROUND(t_res(code).heures_compl_fa,2);
         fr.heures_compl_fc          := ROUND(t_res(code).heures_compl_fc,2);
-        fr.heures_compl_fc_majorees := ROUND(t_res(code).heures_compl_fc_majorees,2);
+        fr.heures_primes            := ROUND(t_res(code).heures_primes,2);
         fr.heures_compl_referentiel := ROUND(t_res(code).heures_compl_referentiel,2);
         fr.total := COALESCE(intervenant.total,
               ROUND(
                 t_res(code).service_fi + t_res(code).service_fa + t_res(code).service_fc + t_res(code).service_referentiel
                 + t_res(code).heures_compl_fi + t_res(code).heures_compl_fa + t_res(code).heures_compl_fc
-                + t_res(code).heures_compl_fc_majorees + t_res(code).heures_compl_referentiel
+                + t_res(code).heures_primes + t_res(code).heures_primes
               ,2)
         );
 
@@ -657,7 +657,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
           IF fr.HEURES_COMPL_FA          IS NULL THEN fr.HEURES_COMPL_FA          := 0;  END IF;
           IF fr.HEURES_COMPL_FC          IS NULL THEN fr.HEURES_COMPL_FC          := 0;  END IF;
           IF fr.HEURES_COMPL_REFERENTIEL IS NULL THEN fr.HEURES_COMPL_REFERENTIEL := 0;  END IF;
-          IF fr.HEURES_COMPL_FC_MAJOREES IS NULL THEN fr.HEURES_COMPL_FC_MAJOREES := 0;  END IF;
+          IF fr.HEURES_PRIMES            IS NULL THEN fr.HEURES_PRIMES            := 0;  END IF;
           IF fr.HEURES_COMPL             IS NULL THEN fr.HEURES_COMPL             := 0;  END IF;
           IF fr.SERVICE_FI               IS NULL THEN fr.SERVICE_FI               := 0;  END IF;
           IF fr.SERVICE_FC               IS NULL THEN fr.SERVICE_FC               := 0;  END IF;
@@ -688,11 +688,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
           frs.heures_compl_fi            := ROUND(t_res(code).heures_compl_fi, 2);
           frs.heures_compl_fa            := ROUND(t_res(code).heures_compl_fa, 2);
           frs.heures_compl_fc            := ROUND(t_res(code).heures_compl_fc, 2);
-          frs.heures_compl_fc_majorees   := ROUND(t_res(code).heures_compl_fc_majorees, 2);
+          frs.heures_primes              := ROUND(t_res(code).heures_primes, 2);
           frs.total                      := ROUND(
                 t_res(code).service_fi + t_res(code).service_fa + t_res(code).service_fc
                 + t_res(code).heures_compl_fi + t_res(code).heures_compl_fa + t_res(code).heures_compl_fc
-                + t_res(code).heures_compl_fc_majorees
+                + t_res(code).heures_primes
               ,2);
           IF frs.id IS NULL THEN
             frs.id := formule_resultat_servic_id_seq.nextval;
@@ -704,7 +704,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
             IF frs.HEURES_COMPL_FI          IS NULL THEN frs.HEURES_COMPL_FI          := 0;  END IF;
             IF frs.HEURES_COMPL_FA          IS NULL THEN frs.HEURES_COMPL_FA          := 0;  END IF;
             IF frs.HEURES_COMPL_FC          IS NULL THEN frs.HEURES_COMPL_FC          := 0;  END IF;
-            IF frs.HEURES_COMPL_FC_MAJOREES IS NULL THEN frs.HEURES_COMPL_FC_MAJOREES := 0;  END IF;
+            IF frs.HEURES_PRIMES            IS NULL THEN frs.HEURES_PRIMES            := 0;  END IF;
             IF frs.TOTAL                    IS NULL THEN frs.TOTAL                    := 0;  END IF;
             UPDATE formule_resultat_service SET ROW = frs WHERE id = frs.id;
           END IF;
@@ -731,11 +731,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
           frvh.heures_compl_fi           := ROUND(t_res(code).heures_compl_fi, 2);
           frvh.heures_compl_fa           := ROUND(t_res(code).heures_compl_fa, 2);
           frvh.heures_compl_fc           := ROUND(t_res(code).heures_compl_fc, 2);
-          frvh.heures_compl_fc_majorees  := ROUND(t_res(code).heures_compl_fc_majorees, 2);
+          frvh.heures_primes             := ROUND(t_res(code).heures_primes, 2);
           frvh.total                     := ROUND(
                 t_res(code).service_fi + t_res(code).service_fa + t_res(code).service_fc
                 + t_res(code).heures_compl_fi + t_res(code).heures_compl_fa + t_res(code).heures_compl_fc
-                + t_res(code).heures_compl_fc_majorees
+                + t_res(code).heures_primes
               ,2);
           IF frvh.id IS NULL THEN
             frvh.id := formule_resultat_vh_id_seq.nextval;
@@ -747,7 +747,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
             IF frvh.HEURES_COMPL_FI          IS NULL THEN frvh.HEURES_COMPL_FI          := 0;  END IF;
             IF frvh.HEURES_COMPL_FA          IS NULL THEN frvh.HEURES_COMPL_FA          := 0;  END IF;
             IF frvh.HEURES_COMPL_FC          IS NULL THEN frvh.HEURES_COMPL_FC          := 0;  END IF;
-            IF frvh.HEURES_COMPL_FC_MAJOREES IS NULL THEN frvh.HEURES_COMPL_FC_MAJOREES := 0;  END IF;
+            IF frvh.HEURES_PRIMES            IS NULL THEN frvh.HEURES_PRIMES            := 0;  END IF;
             IF frvh.TOTAL                    IS NULL THEN frvh.TOTAL                    := 0;  END IF;
             UPDATE formule_resultat_vh SET ROW = frvh WHERE id = frvh.id;
           END IF;
@@ -790,7 +790,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         c_heures_compl_fi          = CASE WHEN passed = 1 THEN vh.heures_compl_fi ELSE NULL END,
         c_heures_compl_fa          = CASE WHEN passed = 1 THEN vh.heures_compl_fa ELSE NULL END,
         c_heures_compl_fc          = CASE WHEN passed = 1 THEN vh.heures_compl_fc ELSE NULL END,
-        c_heures_compl_fc_majorees = CASE WHEN passed = 1 THEN vh.heures_compl_fc_majorees ELSE NULL END,
+        c_heures_primes            = CASE WHEN passed = 1 THEN vh.heures_primes ELSE NULL END,
         c_heures_compl_referentiel = CASE WHEN passed = 1 THEN vh.heures_compl_referentiel ELSE NULL END,
         debug_info                 = vh.debug_info
       WHERE
@@ -968,8 +968,8 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
             ose_test.echo('heures_compl_fi           = ' || vh.heures_compl_fi);
             ose_test.echo('heures_compl_fa           = ' || vh.heures_compl_fa);
             ose_test.echo('heures_compl_fc           = ' || vh.heures_compl_fc);
-            ose_test.echo('heures_compl_fc_majorees  = ' || vh.heures_compl_fc_majorees);
             ose_test.echo('heures_compl_referentiel  = ' || vh.heures_compl_referentiel);
+            ose_test.echo('heures_primes             = ' || vh.heures_primes);
             ose_test.echo('');
           END IF;
         END LOOP;

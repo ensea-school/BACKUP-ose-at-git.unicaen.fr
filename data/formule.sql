@@ -151,7 +151,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_<--NAME--> AS
       ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', <--vh.heures_compl_fi-->,l);
       ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', <--vh.heures_compl_fa-->,l);
       ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', <--vh.heures_compl_fc-->,l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', <--vh.heures_compl_fc_majorees-->,l);
+      ose_formule.volumes_horaires.items(l).heures_primes            := mainCell('Heures primes', <--vh.heures_primes-->,l);
       ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', <--vh.heures_compl_referentiel-->,l);
     END LOOP;
   END;

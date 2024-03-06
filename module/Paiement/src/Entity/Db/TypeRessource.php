@@ -33,7 +33,7 @@ class TypeRessource implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @var boolean
      */
-    private $fcMajorees;
+    private $primes;
 
     /**
      * @var boolean
@@ -152,15 +152,15 @@ class TypeRessource implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
-     * Set fcMajorees
+     * Set primes
      *
-     * @param boolean $fcMajorees
+     * @param boolean $primes
      *
      * @return TypeRessource
      */
-    public function setFcMajorees($fcMajorees)
+    public function setPrimes($primes)
     {
-        $this->fcMajorees = $fcMajorees;
+        $this->primes = $primes;
 
         return $this;
     }
@@ -168,13 +168,13 @@ class TypeRessource implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
-     * Get fcMajorees
+     * Get primes
      *
      * @return boolean
      */
-    public function getFcMajorees()
+    public function getPrimes()
     {
-        return $this->fcMajorees;
+        return $this->primes;
     }
 
 
@@ -343,10 +343,10 @@ class TypeRessource implements HistoriqueAwareInterface, ResourceInterface
                 return $this->getFa();
             case TypeHeures::FC         :
                 return $this->getFc();
-            case TypeHeures::FC_MAJOREES:
-                return $this->getFcMajorees();
+            case TypeHeures::PRIMES:
+                return $this->getPrimes();
             case TypeHeures::ENSEIGNEMENT:
-                return $this->getFi() + $this->getFa() + $this->getFc() + $this->getFcMajorees();
+                return $this->getFi() + $this->getFa() + $this->getFc() + $this->getPrimes();
             case TypeHeures::REFERENTIEL:
                 return $this->getReferentiel();
             case TypeHeures::MISSION:

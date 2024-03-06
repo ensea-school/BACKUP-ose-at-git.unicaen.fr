@@ -42,7 +42,7 @@ interface ServiceAPayerInterface
 
 
 
-    public function getHeuresComplFcMajorees(): float;
+    public function getHeuresPrimes(): float;
 
 
 

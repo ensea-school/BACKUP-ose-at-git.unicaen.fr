@@ -50,4 +50,4 @@ from
   centre_cout cc
   join type_ressource  tr on tr.id = cc.type_ressource_id
   join cc_activite    cca on cca.id = cc.activite_id
-  join type_heures     th on th.code = decode(tr.fc_majorees + cca.fc_majorees, 2, 'fc_majorees', null)
+  join type_heures     th on th.code = decode(tr.primes + cca.primes, 2, 'primes', null)

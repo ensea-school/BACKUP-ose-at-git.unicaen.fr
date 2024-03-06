@@ -20,9 +20,9 @@ trait FormuleResultatTypesHeuresTrait
 
     private float $heuresComplFc = 0.0;
 
-    private float $heuresComplFcMajorees = 0.0;
-
     private float $heuresComplReferentiel = 0.0;
+
+    private float $heuresPrimes = 0.0;
 
     private float $total = 0.0;
 
@@ -77,16 +77,16 @@ trait FormuleResultatTypesHeuresTrait
 
 
 
-    public function getHeuresComplFcMajorees(): float
+    public function getHeuresComplReferentiel(): float
     {
-        return $this->heuresComplFcMajorees;
+        return $this->heuresComplReferentiel;
     }
 
 
 
-    public function getHeuresComplReferentiel(): float
+    public function getHeuresPrimes(): float
     {
-        return $this->heuresComplReferentiel;
+        return $this->heuresPrimes;
     }
 
 
@@ -135,10 +135,10 @@ trait FormuleResultatTypesHeuresTrait
                 return $this->getHeuresComplFa();
             case TypeHeures::FC:
                 return $this->getHeuresComplFc();
-            case TypeHeures::FC_MAJOREES:
-                return $this->getHeuresComplFcMajorees();
+            case TypeHeures::PRIMES:
+                return $this->getHeuresPrimes();
             case TypeHeures::ENSEIGNEMENT:
-                return $this->getHeuresComplFi() + $this->getHeuresComplFa() + $this->getHeuresComplFc() + $this->getHeuresComplFcMajorees();
+                return $this->getHeuresComplFi() + $this->getHeuresComplFa() + $this->getHeuresComplFc() + $this->getHeuresPrimes();
             case TypeHeures::REFERENTIEL:
                 return $this->getHeuresComplReferentiel();
             case TypeHeures::MISSION:

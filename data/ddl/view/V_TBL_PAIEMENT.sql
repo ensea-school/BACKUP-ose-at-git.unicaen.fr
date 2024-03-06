@@ -22,15 +22,15 @@ SELECT
     WHEN 'fi' THEN frs.heures_compl_fi
     WHEN 'fa' THEN frs.heures_compl_fa
     WHEN 'fc' THEN frs.heures_compl_fc
-    WHEN 'fc_majorees' THEN frs.heures_compl_fc_majorees
-    WHEN 'enseignement' THEN frs.heures_compl_fi + frs.heures_compl_fa + frs.heures_compl_fc + frs.heures_compl_fc_majorees
+    WHEN 'primes' THEN frs.heures_primes
+    WHEN 'enseignement' THEN frs.heures_compl_fi + frs.heures_compl_fa + frs.heures_compl_fc + frs.heures_primes
   END                                         heures,
   CASE th.code
     WHEN 'fi' THEN frvh.heures_compl_fi
     WHEN 'fa' THEN frvh.heures_compl_fa
     WHEN 'fc' THEN frvh.heures_compl_fc
-    WHEN 'fc_majorees' THEN frvh.heures_compl_fc_majorees
-    WHEN 'enseignement' THEN frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_compl_fc_majorees
+    WHEN 'primes' THEN frvh.heures_primes
+    WHEN 'enseignement' THEN frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_primes
   END                                         lap_heures,
   prd.id                                      periode_ens_id,
   prd.code                                    periode_ens_code,
@@ -53,7 +53,7 @@ FROM
 
        JOIN type_volume_horaire             tvh ON tvh.code = 'REALISE'
        JOIN etat_volume_horaire             evh ON evh.code = 'valide'
-       JOIN type_heures                      th ON (p.valeur = '1' AND th.code IN ('fi', 'fa', 'fc', 'fc_majorees')) OR (p.valeur = '0' AND th.code = 'enseignement')
+       JOIN type_heures                      th ON (p.valeur = '1' AND th.code IN ('fi', 'fa', 'fc', 'primes')) OR (p.valeur = '0' AND th.code = 'enseignement')
        JOIN formule_resultat                 fr ON fr.id = frs.formule_resultat_id
                                                AND fr.type_volume_horaire_id = tvh.id
                                                AND fr.etat_volume_horaire_id = evh.id
@@ -80,8 +80,8 @@ WHERE
     WHEN 'fi' THEN frvh.heures_compl_fi
     WHEN 'fa' THEN frvh.heures_compl_fa
     WHEN 'fc' THEN frvh.heures_compl_fc
-    WHEN 'fc_majorees' THEN frvh.heures_compl_fc_majorees
-    WHEN 'enseignement' THEN frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_compl_fc_majorees
+    WHEN 'primes' THEN frvh.heures_primes
+    WHEN 'enseignement' THEN frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_primes
   END <> 0
   /*@INTERVENANT_ID=fr.intervenant_id*/
   /*@ANNEE_ID=i.annee_id*/
@@ -140,9 +140,9 @@ WHERE
     WHEN th.code = 'fi' THEN frs.heures_compl_fi
     WHEN th.code = 'fa' THEN frs.heures_compl_fa
     WHEN th.code = 'fc' THEN frs.heures_compl_fc
-    WHEN th.code = 'fc_majorees' THEN frs.heures_compl_fc_majorees
+    WHEN th.code = 'primes' THEN frs.heures_primes
     WHEN p.valeur = '1' AND th.code = 'enseignement' THEN 0
-    WHEN p.valeur = '0' AND th.code = 'enseignement' THEN frs.heures_compl_fi + frs.heures_compl_fa + frs.heures_compl_fc + frs.heures_compl_fc_majorees
+    WHEN p.valeur = '0' AND th.code = 'enseignement' THEN frs.heures_compl_fi + frs.heures_compl_fa + frs.heures_compl_fc + frs.heures_primes
   END = 0
   /*@INTERVENANT_ID=fr.intervenant_id*/
   /*@ANNEE_ID=i.annee_id*/

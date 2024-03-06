@@ -75,12 +75,12 @@ class TypeHeuresService extends AbstractEntityService
             if ($serviceAPayer->getHeuresComplFi() != 0) $codes[TypeHeures::FI] = TypeHeures::FI;
             if ($serviceAPayer->getHeuresComplFa() != 0) $codes[TypeHeures::FA] = TypeHeures::FA;
             if ($serviceAPayer->getHeuresComplFc() != 0) $codes[TypeHeures::FC] = TypeHeures::FC;
-            if ($serviceAPayer->getHeuresComplFcMajorees() != 0) $codes[TypeHeures::FC_MAJOREES] = TypeHeures::FC_MAJOREES;
+            if ($serviceAPayer->getHeuresPrimes() != 0) $codes[TypeHeures::PRIMES] = TypeHeures::PRIMES;
         }else{
             $hc = $serviceAPayer->getHeuresComplFi()
                 + $serviceAPayer->getHeuresComplFa()
                 + $serviceAPayer->getHeuresComplFc()
-                + $serviceAPayer->getHeuresComplFcMajorees();
+                + $serviceAPayer->getHeuresPrimes();
             if ($hc != 0) $codes[TypeHeures::FI] = TypeHeures::ENSEIGNEMENT;
         }
         if ($serviceAPayer->getHeuresComplReferentiel() != 0) $codes[TypeHeures::REFERENTIEL] = TypeHeures::REFERENTIEL;

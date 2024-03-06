@@ -48,9 +48,10 @@ interface FormuleHeuresInterface
 
 
 
-    public function getHeuresComplFcMajorees(): float;
-
-
-
     public function getHeuresComplReferentiel(): float;
+
+
+
+    public function getHeuresPrimes(): float;
+
 }

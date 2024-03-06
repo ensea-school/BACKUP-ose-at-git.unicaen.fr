@@ -126,11 +126,11 @@ class TotauxHetdViewHelper extends AbstractHtmlElement
 
                 <?php endif; ?>
 
-                <?php if (($fr->getHeuresComplFi() + $fr->getHeuresComplFa() + $fr->getHeuresComplFc() + $fr->getHeuresComplFcMajorees() + $fr->getHeuresComplReferentiel()) > 0) : ?>
+                <?php if (($fr->getHeuresComplFi() + $fr->getHeuresComplFa() + $fr->getHeuresComplFc() + $fr->getHeuresPrimes() + $fr->getHeuresComplReferentiel()) > 0) : ?>
 
                     <tr>
                         <th><?= ($fr->getServiceDu() > 0) ? 'Heures complémentaires' : 'Service assuré' ?></th>
-                        <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getHeuresComplFi() + $fr->getHeuresComplFa() + $fr->getHeuresComplFc() + $fr->getHeuresComplFcMajorees() + $fr->getHeuresComplReferentiel()) ?></td>
+                        <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getHeuresComplFi() + $fr->getHeuresComplFa() + $fr->getHeuresComplFc() + $fr->getHeuresPrimes() + $fr->getHeuresComplReferentiel()) ?></td>
                     </tr>
 
                     <?php if ($fr->getHeuresComplFi() > 0): ?>
@@ -154,12 +154,12 @@ class TotauxHetdViewHelper extends AbstractHtmlElement
                         </tr>
                     <?php endif; ?>
 
-                    <?php if ($fr->getHeuresComplFcMajorees() > 0): ?>
+                    <?php if ($fr->getHeuresPrimes() > 0): ?>
                         <tr>
                             <th style="padding-left:5em">Dont <abbr
                                         title="Rémunération FC au titre de l'article D714-60 du code de l’Éducation">rémunération
                                     FC D714-60</abbr></th>
-                            <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getHeuresComplFcMajorees()) ?></td>
+                            <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getHeuresPrimes()) ?></td>
                         </tr>
                     <?php endif; ?>
 

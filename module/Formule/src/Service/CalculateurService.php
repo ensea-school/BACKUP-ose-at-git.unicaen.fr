@@ -107,8 +107,8 @@ class CalculateurService
             'heuresComplFi'          => 'Heures complémentaires en formation initiale (FI) (flottant)',
             'heuresComplFa'          => 'Heures complémentaires en formation en apprentissage (FA) (flottant)',
             'heuresComplFc'          => 'Heures complémentaires en formation continue (FC) (flottant)',
-            'heuresComplFcMajorees'  => 'Heures complémentaires en formation continue majorées (flottant)',
             'heuresComplReferentiel' => 'Heures complémentaires en référentiel (flottant)',
+            'heuresprimes'           => 'Heures relatives aux primes FC D714-60 ou autres (flottant)',
         ];
 
         $resultVariables = [];

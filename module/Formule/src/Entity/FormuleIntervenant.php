@@ -216,14 +216,14 @@ class FormuleIntervenant implements FormuleHeuresInterface
 
 
 
-    public function getHeuresComplFcMajorees(): float
+    public function getHeuresPrimes(): float
     {
-        $heuresComplFcMajorees = 0.0;
+        $heuresPrimes = 0.0;
         foreach ($this->volumesHoraires as $volumesHoraire) {
-            $heuresComplFcMajorees += $volumesHoraire->getHeuresComplFcMajorees();
+            $heuresPrimes += $volumesHoraire->getHeuresPrimes();
         }
 
-        return $heuresComplFcMajorees;
+        return $heuresPrimes;
     }
 
 

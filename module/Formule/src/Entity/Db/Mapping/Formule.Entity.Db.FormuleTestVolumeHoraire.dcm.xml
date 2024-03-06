@@ -44,8 +44,8 @@
         <field name="heuresComplFi" type="float" column="HEURES_COMPL_FI" precision="126" scale="0" nullable="true"/>
         <field name="heuresComplFa" type="float" column="HEURES_COMPL_FA" precision="126" scale="0" nullable="true"/>
         <field name="heuresComplFc" type="float" column="HEURES_COMPL_FC" precision="126" scale="0" nullable="true"/>
-        <field name="heuresComplFcMajorees" type="float" column="HEURES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="true"/>
         <field name="heuresComplReferentiel" type="float" column="HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="true"/>
+        <field name="heuresPrimes" type="float" column="HEURES_PRIMES" precision="126" scale="0" nullable="true"/>
 
         <field name="heuresAttenduesServiceFi" type="float" column="HEURES_ATTENDUES_SERVICE_FI" precision="126" scale="0" nullable="true"/>
         <field name="heuresAttenduesServiceFa" type="float" column="HEURES_ATTENDUES_SERVICE_FA" precision="126" scale="0" nullable="true"/>
@@ -60,7 +60,7 @@
         <field name="heuresAttenduesComplFi" type="float" column="HEURES_ATTENDUES_COMPL_FI" precision="126" scale="0" nullable="true"/>
         <field name="heuresAttenduesComplFa" type="float" column="HEURES_ATTENDUES_COMPL_FA" precision="126" scale="0" nullable="true"/>
         <field name="heuresAttenduesComplFc" type="float" column="HEURES_ATTENDUES_COMPL_FC" precision="126" scale="0" nullable="true"/>
-        <field name="heuresAttenduesComplFcMajorees" type="float" column="HEURES_ATTENDUES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="true"/>
         <field name="heuresAttenduesComplReferentiel" type="float" column="HEURES_ATTENDUES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="true"/>
+        <field name="heuresAttenduesPrimes" type="float" column="HEURES_ATTENDUES_PRIMES" precision="126" scale="0" nullable="true"/>
     </entity>
 </doctrine-mapping>

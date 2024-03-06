@@ -69,8 +69,8 @@ return [
             'position'    => 42,
             'commentaire' => NULL,
         ],
-        'HEURES_ATTENDUES_COMPL_FC_MAJOREES'       => [
-            'name'        => 'HEURES_ATTENDUES_COMPL_FC_MAJOREES',
+        'HEURES_ATTENDUES_PRIMES'       => [
+            'name'        => 'HEURES_ATTENDUES_PRIMES',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
             'length'      => 0,
@@ -225,8 +225,8 @@ return [
             'position'    => 29,
             'commentaire' => NULL,
         ],
-        'HEURES_COMPL_FC_MAJOREES'                 => [
-            'name'        => 'HEURES_COMPL_FC_MAJOREES',
+        'HEURES_PRIMES'                 => [
+            'name'        => 'HEURES_PRIMES',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
             'length'      => 0,

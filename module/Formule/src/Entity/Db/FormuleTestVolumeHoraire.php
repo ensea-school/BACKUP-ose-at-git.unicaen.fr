@@ -27,8 +27,8 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
     protected ?float $heuresAttenduesComplFi = null;
     protected ?float $heuresAttenduesComplFa = null;
     protected ?float $heuresAttenduesComplFc = null;
-    protected ?float $heuresAttenduesComplFcMajorees = null;
     protected ?float $heuresAttenduesComplReferentiel = null;
+    protected ?float $heuresAttenduesPrimes = null;
 
 
 
@@ -373,21 +373,6 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
 
 
 
-    public function getHeuresAttenduesComplFcMajorees(): ?float
-    {
-        return $this->heuresAttenduesComplFcMajorees;
-    }
-
-
-
-    public function setHeuresAttenduesComplFcMajorees(?float $heuresAttenduesComplFcMajorees): FormuleTestVolumeHoraire
-    {
-        $this->heuresAttenduesComplFcMajorees = $heuresAttenduesComplFcMajorees;
-        return $this;
-    }
-
-
-
     public function getHeuresAttenduesComplReferentiel(): ?float
     {
         return $this->heuresAttenduesComplReferentiel;
@@ -401,4 +386,18 @@ class FormuleTestVolumeHoraire extends FormuleVolumeHoraire
         return $this;
     }
 
+
+
+    public function getHeuresAttenduesPrimes(): ?float
+    {
+        return $this->heuresAttenduesPrimes;
+    }
+
+
+
+    public function setHeuresAttenduesPrimes(?float $heuresAttenduesPrimes): FormuleTestVolumeHoraire
+    {
+        $this->heuresAttenduesPrimes = $heuresAttenduesPrimes;
+        return $this;
+    }
 }

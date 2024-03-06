@@ -18,81 +18,81 @@ END;
 
 Voici les colonnes qui la composent :
 
-| Colonne                        | Description                                                                                |
-|--------------------------------|--------------------------------------------------------------------------------------------|
-| ID                             | Identifiant unique de ligne                                                                |
-| SERVICE_ID                     | ==> SERVICE.ID                                                                             |
-| INTERVENANT_ID                 | ==> INTERVENANT.ID                                                                         |
-| STATUT_ID                      | ==> STATUT.ID                                                                              |
-| TYPE_INTERVENANT_ID            | ==> TYPE_INTERVENANT.ID                                                                    |
-| ANNEE_ID                       | ==> ANNEE.ID                                                                               |
-| TYPE_VOLUME_HORAIRE_ID         | ==> TYPE_VOLUME_HORAIRE.ID                                                                 |
-| ETAT_VOLUME_HORAIRE_ID         | ==> ETAT_VOLUME_HORAIRE.ID                                                                 |
-| ETABLISSEMENT_ID               | ==> ETABLISSEMENT.ID                                                                       |
-| STRUCTURE_AFF_ID               | ==> STRUCTURE.ID Composante d'affectation                                                  |
-| STRUCTURE_ENS_ID               | ==> STRUCTURE.ID Composante d'enseignement                                                 |
-| GROUPE_TYPE_FORMATION_ID       | ==> GROUPE_TYPE_FORMATION.ID Grand type de formation (License, etc.)                       |
-| TYPE_FORMATION_ID              | ==> TYPE_FORMATION.ID Type de formation (License pro, etc.)                                |
-| NIVEAU_FORMATION_ID            | Identifiant du niveau de formation (lié à aucune table)                                    |
-| ETAPE_ID                       | ==> ETAPE.ID                                                                               |
-| ELEMENT_PEDAGOGIQUE_ID         | ==> ELEMENT_PEDAGOGIQUE.ID                                                                 |
-| PERIODE_ID                     | ==> PERIODE.ID                                                                             |
-| TYPE_INTERVENTION_ID           | ==> TYPE_INTERVENTION.ID                                                                   |
-| FONCTION_REFERENTIEL_ID        | ==> FONCTION_REFERENTIEL.ID Uniquement s'il s'agit de référentiel                          |
-| INTERVENANT_DISCIPLINE_ID      | ==> DISCIPLINE.ID Discipline de l'intervenant                                              |
-| ELEMENT_DISCIPLINE_ID          | ==> DISCIPLINE.ID Discipline de l'enseignement                                             |
-| MOTIF_NON_PAIEMENT_ID          | ==> MOTIF_NON_PAIEMENT.ID Si heure non payable                                             |
-| TYPE_ETAT                      | Prévu/réalisé, saisi/validé                                                                |
-| SERVICE_DATE_MODIFICATION      | Dernière date dfe modification du service                                                  |
-| INTERVENANT_CODE               | Code de l'intervenant                                                                      |
-| INTERVENANT_NOM                | Nom de l'intervenant                                                                       |
-| INTERVENANT_DATE_NAISSANCE     | Date de naissance                                                                          |
-| INTERVENANT_STATUT_LIBELLE     | Libellé de son statut                                                                      |
-| INTERVENANT_TYPE_CODE          | P=permanent, E=extérieur(vacataire)                                                        |
-| INTERVENANT_TYPE_LIBELLE       | Libellé du type d'intervenant                                                              |
-| INTERVENANT_GRADE_CODE         | Code du grade (si renseigné)                                                               |
-| INTERVENANT_GRADE_LIBELLE      | Libellé du grade (si renseigné)                                                            |
-| INTERVENANT_DISCIPLINE_CODE    | Code de la discipline de l'intervenant                                                     |
-| INTERVENANT_DISCIPLINE_LIBELLE | Libellé de la discipline de l'intervenant                                                  |
-| SERVICE_STRUCTURE_AFF_LIBELLE  | Libellé de la composante éventuelle de l'intervenant                                       |
-| SERVICE_STRUCTURE_ENS_LIBELLE  | Libellé de la composante éventuelle d'enseignement                                         |
-| ETABLISSEMENT_LIBELLE          | Libellé de l'établissement (utile si enseignement pris dans d'autres établissements        |
-| GROUPE_TYPE_FORMATION_LIBELLE  | Libellé du grand type de formation                                                         |
-| TYPE_FORMATION_LIBELLE         | Libellé du type de formation                                                               |
-| ETAPE_NIVEAU                   | Niveau éventuel de la formation (1,2,3, etc.)                                              |
-| ETAPE_CODE                     | Code de l'étape (formation)                                                                |
-| ETAPE_LIBELLE                  | Libellé de l'étape (formation)                                                             |
-| ELEMENT_CODE                   | Code de l'élément (enseignement)                                                           |
-| ELEMENT_LIBELLE                | Libellé de l'élément (enseignement)                                                        |
-| ELEMENT_DISCIPLINE_CODE        | Code de la discipline de l'enseignement                                                    |
-| ELEMENT_DISCIPLINE_LIBELLE     | Libellé de la discipline de l'enseignement                                                 |
-| FONCTION_REFERENTIEL_LIBELLE   | Libellé de la fonction référentielle éventuelle                                            |
-| ELEMENT_TAUX_FI                | % FI de l'enseignement (entre 0 et 1)                                                      |
-| ELEMENT_TAUX_FC                | % FC de l'enseignement (entre 0 et 1)                                                      |
-| ELEMENT_TAUX_FA                | % FA de l'enseignement (entre 0 et 1)                                                      |
-| SERVICE_REF_FORMATION          | Libellé précisant ce à quoi se rattache la fonction référentielle                          |
-| COMMENTAIRES                   | Commentaires éventuel si référentiel                                                       |
-| PERIODE_LIBELLE                | Libellé de période si enseignement                                                         |
-| ELEMENT_PONDERATION_COMPL      | Majoration des heures complémentaires (modulation heures complémentaires)                  |
-| ELEMENT_SOURCE_LIBELLE         | Libellé de la source de données de l'enseignement                                          |
-| HEURES                         | Heures                                                                                     |
-| HEURES_REF                     | Heures de référentiel                                                                      |
-| HEURES_NON_PAYEES              | Heures non payables                                                                        |
-| MOTIF_NON_PAIEMENT             | Motif de non paiement éventuel                                                             |
-| SERVICE_STATUTAIRE             | Heures de service statutaire de l'intervenant                                              |
-| SERVICE_DU_MODIFIE             | Heures de service dû modifié de l'intervenant                                              |
-| SERVICE_FI                     | HETD de service en FI                                                                      |
-| SERVICE_FA                     | HETD de service en FA                                                                      |
-| SERVICE_FC                     | HETD de service en FC                                                                      |
-| SERVICE_REFERENTIEL            | HETD de service en référentiel                                                             |
-| HEURES_COMPL_FI                | HETD Complémentaires en FI                                                                 |
-| HEURES_COMPL_FA                | HETD Complémentaires en FA                                                                 |
-| HEURES_COMPL_FC                | HETD Complémentaires en FC                                                                 |
-| HEURES_COMPL_FC_MAJOREES       | HETD Complémentaires en FC majorées au titre de la prime FC D714.60 du code de l'éducation |
-| HEURES_COMPL_REFERENTIEL       | HETD Complémentaires en référentiel                                                        |
-| TOTAL                          | HETD total                                                                                 |
-| SOLDE                          | Solde en HETD de l'intervenant                                                             |
-| DATE_CLOTURE_REALISE           | Date éventuelle de clôture des services par l'intervenant                                  |
+| Colonne                        | Description                                                                                                             |
+|--------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| ID                             | Identifiant unique de ligne                                                                                             |
+| SERVICE_ID                     | ==> SERVICE.ID                                                                                                          |
+| INTERVENANT_ID                 | ==> INTERVENANT.ID                                                                                                      |
+| STATUT_ID                      | ==> STATUT.ID                                                                                                           |
+| TYPE_INTERVENANT_ID            | ==> TYPE_INTERVENANT.ID                                                                                                 |
+| ANNEE_ID                       | ==> ANNEE.ID                                                                                                            |
+| TYPE_VOLUME_HORAIRE_ID         | ==> TYPE_VOLUME_HORAIRE.ID                                                                                              |
+| ETAT_VOLUME_HORAIRE_ID         | ==> ETAT_VOLUME_HORAIRE.ID                                                                                              |
+| ETABLISSEMENT_ID               | ==> ETABLISSEMENT.ID                                                                                                    |
+| STRUCTURE_AFF_ID               | ==> STRUCTURE.ID Composante d'affectation                                                                               |
+| STRUCTURE_ENS_ID               | ==> STRUCTURE.ID Composante d'enseignement                                                                              |
+| GROUPE_TYPE_FORMATION_ID       | ==> GROUPE_TYPE_FORMATION.ID Grand type de formation (License, etc.)                                                    |
+| TYPE_FORMATION_ID              | ==> TYPE_FORMATION.ID Type de formation (License pro, etc.)                                                             |
+| NIVEAU_FORMATION_ID            | Identifiant du niveau de formation (lié à aucune table)                                                                 |
+| ETAPE_ID                       | ==> ETAPE.ID                                                                                                            |
+| ELEMENT_PEDAGOGIQUE_ID         | ==> ELEMENT_PEDAGOGIQUE.ID                                                                                              |
+| PERIODE_ID                     | ==> PERIODE.ID                                                                                                          |
+| TYPE_INTERVENTION_ID           | ==> TYPE_INTERVENTION.ID                                                                                                |
+| FONCTION_REFERENTIEL_ID        | ==> FONCTION_REFERENTIEL.ID Uniquement s'il s'agit de référentiel                                                       |
+| INTERVENANT_DISCIPLINE_ID      | ==> DISCIPLINE.ID Discipline de l'intervenant                                                                           |
+| ELEMENT_DISCIPLINE_ID          | ==> DISCIPLINE.ID Discipline de l'enseignement                                                                          |
+| MOTIF_NON_PAIEMENT_ID          | ==> MOTIF_NON_PAIEMENT.ID Si heure non payable                                                                          |
+| TYPE_ETAT                      | Prévu/réalisé, saisi/validé                                                                                             |
+| SERVICE_DATE_MODIFICATION      | Dernière date dfe modification du service                                                                               |
+| INTERVENANT_CODE               | Code de l'intervenant                                                                                                   |
+| INTERVENANT_NOM                | Nom de l'intervenant                                                                                                    |
+| INTERVENANT_DATE_NAISSANCE     | Date de naissance                                                                                                       |
+| INTERVENANT_STATUT_LIBELLE     | Libellé de son statut                                                                                                   |
+| INTERVENANT_TYPE_CODE          | P=permanent, E=extérieur(vacataire)                                                                                     |
+| INTERVENANT_TYPE_LIBELLE       | Libellé du type d'intervenant                                                                                           |
+| INTERVENANT_GRADE_CODE         | Code du grade (si renseigné)                                                                                            |
+| INTERVENANT_GRADE_LIBELLE      | Libellé du grade (si renseigné)                                                                                         |
+| INTERVENANT_DISCIPLINE_CODE    | Code de la discipline de l'intervenant                                                                                  |
+| INTERVENANT_DISCIPLINE_LIBELLE | Libellé de la discipline de l'intervenant                                                                               |
+| SERVICE_STRUCTURE_AFF_LIBELLE  | Libellé de la composante éventuelle de l'intervenant                                                                    |
+| SERVICE_STRUCTURE_ENS_LIBELLE  | Libellé de la composante éventuelle d'enseignement                                                                      |
+| ETABLISSEMENT_LIBELLE          | Libellé de l'établissement (utile si enseignement pris dans d'autres établissements                                     |
+| GROUPE_TYPE_FORMATION_LIBELLE  | Libellé du grand type de formation                                                                                      |
+| TYPE_FORMATION_LIBELLE         | Libellé du type de formation                                                                                            |
+| ETAPE_NIVEAU                   | Niveau éventuel de la formation (1,2,3, etc.)                                                                           |
+| ETAPE_CODE                     | Code de l'étape (formation)                                                                                             |
+| ETAPE_LIBELLE                  | Libellé de l'étape (formation)                                                                                          |
+| ELEMENT_CODE                   | Code de l'élément (enseignement)                                                                                        |
+| ELEMENT_LIBELLE                | Libellé de l'élément (enseignement)                                                                                     |
+| ELEMENT_DISCIPLINE_CODE        | Code de la discipline de l'enseignement                                                                                 |
+| ELEMENT_DISCIPLINE_LIBELLE     | Libellé de la discipline de l'enseignement                                                                              |
+| FONCTION_REFERENTIEL_LIBELLE   | Libellé de la fonction référentielle éventuelle                                                                         |
+| ELEMENT_TAUX_FI                | % FI de l'enseignement (entre 0 et 1)                                                                                   |
+| ELEMENT_TAUX_FC                | % FC de l'enseignement (entre 0 et 1)                                                                                   |
+| ELEMENT_TAUX_FA                | % FA de l'enseignement (entre 0 et 1)                                                                                   |
+| SERVICE_REF_FORMATION          | Libellé précisant ce à quoi se rattache la fonction référentielle                                                       |
+| COMMENTAIRES                   | Commentaires éventuel si référentiel                                                                                    |
+| PERIODE_LIBELLE                | Libellé de période si enseignement                                                                                      |
+| ELEMENT_PONDERATION_COMPL      | Majoration des heures complémentaires (modulation heures complémentaires)                                               |
+| ELEMENT_SOURCE_LIBELLE         | Libellé de la source de données de l'enseignement                                                                       |
+| HEURES                         | Heures                                                                                                                  |
+| HEURES_REF                     | Heures de référentiel                                                                                                   |
+| HEURES_NON_PAYEES              | Heures non payables                                                                                                     |
+| MOTIF_NON_PAIEMENT             | Motif de non paiement éventuel                                                                                          |
+| SERVICE_STATUTAIRE             | Heures de service statutaire de l'intervenant                                                                           |
+| SERVICE_DU_MODIFIE             | Heures de service dû modifié de l'intervenant                                                                           |
+| SERVICE_FI                     | HETD de service en FI                                                                                                   |
+| SERVICE_FA                     | HETD de service en FA                                                                                                   |
+| SERVICE_FC                     | HETD de service en FC                                                                                                   |
+| SERVICE_REFERENTIEL            | HETD de service en référentiel                                                                                          |
+| HEURES_COMPL_FI                | HETD Complémentaires en FI                                                                                              |
+| HEURES_COMPL_FA                | HETD Complémentaires en FA                                                                                              |
+| HEURES_COMPL_FC                | HETD Complémentaires en FC                                                                                              |
+| HEURES_COMPL_REFERENTIEL       | HETD Complémentaires en référentiel                                                                                     |
+| HEURES_PRIMES                  | HETD destinées au calcul de primes de formation continue FC D714.60 du code de l'éducation, RIPEC référentiel ou autres |
+| TOTAL                          | HETD total                                                                                                              |
+| SOLDE                          | Solde en HETD de l'intervenant                                                                                          |
+| DATE_CLOTURE_REALISE           | Date éventuelle de clôture des services par l'intervenant                                                               |
 
 ## Liens entre les services et les paiements
 

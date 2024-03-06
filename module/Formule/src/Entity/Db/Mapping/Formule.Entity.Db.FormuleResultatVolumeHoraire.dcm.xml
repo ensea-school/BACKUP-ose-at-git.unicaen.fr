@@ -51,8 +51,8 @@
     <field name="heuresComplFi" type="float" column="HEURES_COMPL_FI" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFa" type="float" column="HEURES_COMPL_FA" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFc" type="float" column="HEURES_COMPL_FC" precision="126" scale="0" nullable="false"/>
-    <field name="heuresComplFcMajorees" type="float" column="HEURES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplReferentiel" type="float" column="HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="false"/>
+    <field name="heuresPrimes" type="float" column="HEURES_PRIMES" precision="126" scale="0" nullable="false"/>
 
     <field name="total" type="float" column="TOTAL" precision="126" scale="0" nullable="false"/>
   </entity>

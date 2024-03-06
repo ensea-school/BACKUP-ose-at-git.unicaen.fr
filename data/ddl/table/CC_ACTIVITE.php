@@ -45,8 +45,8 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'FC_MAJOREES'           => [
-            'name'        => 'FC_MAJOREES',
+        'PRIMES'           => [
+            'name'        => 'PRIMES',
             'type'        => 'bool',
             'bdd-type'    => 'NUMBER',
             'length'      => 0,

@@ -60,7 +60,7 @@ foreach ($data as $d) {
 
     $fi    = (float)$d['SERVICE_FI'] + (float)$d['HEURES_COMPL_FI'];
     $fa    = (float)$d['SERVICE_FA'] + (float)$d['HEURES_COMPL_FA'];
-    $fc    = (float)$d['SERVICE_FC'] + (float)$d['HEURES_COMPL_FC'] + (float)$d['HEURES_COMPL_FC_MAJOREES'];
+    $fc    = (float)$d['SERVICE_FC'] + (float)$d['HEURES_COMPL_FC'] + (float)$d['HEURES_PRIMES'];
     $ref   = (float)$d['SERVICE_REFERENTIEL'] + (float)$d['HEURES_COMPL_REFERENTIEL'];
     $total = $fi + $fa + $fc + $ref;
 

@@ -573,7 +573,7 @@ class Mission implements HistoriqueAwareInterface, ResourceInterface, EntityMana
 
 
 
-    public function getHeuresComplFcMajorees (): float
+    public function getHeuresPrimes (): float
     {
         return 0;
     }

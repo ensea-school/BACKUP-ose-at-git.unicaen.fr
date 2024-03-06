@@ -69,8 +69,8 @@ return [
             'position'    => 27,
             'commentaire' => NULL,
         ],
-        'HEURES_COMPL_FC_MAJOREES'       => [
-            'name'        => 'HEURES_COMPL_FC_MAJOREES',
+        'HEURES_PRIMES'       => [
+            'name'        => 'HEURES_PRIMES',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
             'length'      => 0,

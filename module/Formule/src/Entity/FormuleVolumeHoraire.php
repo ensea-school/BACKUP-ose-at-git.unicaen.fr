@@ -56,8 +56,8 @@ class FormuleVolumeHoraire implements FormuleHeuresInterface
     protected float $heuresComplFi = 0.0;
     protected float $heuresComplFa = 0.0;
     protected float $heuresComplFc = 0.0;
-    protected float $heuresComplFcMajorees = 0.0;
     protected float $heuresComplReferentiel = 0.0;
+    protected float $heuresPrimes = 0.0;
 
 
 
@@ -77,8 +77,8 @@ class FormuleVolumeHoraire implements FormuleHeuresInterface
             + $this->getHeuresComplFi()
             + $this->getHeuresComplFa()
             + $this->getHeuresComplFc()
-            + $this->getHeuresComplFcMajorees()
-            + $this->getHeuresComplReferentiel();
+            + $this->getHeuresComplReferentiel()
+            + $this->getHeuresPrimes();
     }
 
 
@@ -628,16 +628,16 @@ class FormuleVolumeHoraire implements FormuleHeuresInterface
 
 
 
-    public function getHeuresComplFcMajorees(): float
+    public function getHeuresPrimes(): float
     {
-        return $this->heuresComplFcMajorees;
+        return $this->heuresPrimes;
     }
 
 
 
-    public function setHeuresComplFcMajorees(float $heuresComplFcMajorees): FormuleVolumeHoraire
+    public function setHeuresPrimes(float $heuresPrimes): FormuleVolumeHoraire
     {
-        $this->heuresComplFcMajorees = $heuresComplFcMajorees;
+        $this->heuresPrimes = $heuresPrimes;
         return $this;
     }
 

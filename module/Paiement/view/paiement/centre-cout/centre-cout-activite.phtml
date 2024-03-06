@@ -39,7 +39,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::BUDGET_CC_ACTI
             <td><?= ($activite->getFi()) ? 'OUI' : 'NON'; ?></td>
             <td><?= ($activite->getFa()) ? 'OUI' : 'NON'; ?></td>
             <td><?= ($activite->getFc()) ? 'OUI' : 'NON'; ?></td>
-            <td><?= ($activite->getFcMajorees()) ? 'OUI' : 'NON'; ?></td>
+            <td><?= ($activite->getPrimes()) ? 'OUI' : 'NON'; ?></td>
             <td><?= ($activite->getReferentiel()) ? 'OUI' : 'NON'; ?></td>
             <td><?= ($activite->getMission()) ? 'OUI' : 'NON'; ?></td>
             <?php if ($canEdit): ?>

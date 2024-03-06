@@ -102,8 +102,8 @@ class FormuleCalcul
             'heures_compl_fi'           => 'vh.heures_compl_fi',
             'heures_compl_fa'           => 'vh.heures_compl_fa',
             'heures_compl_fc'           => 'vh.heures_compl_fc',
-            'heures_compl_fc_majorees'  => 'vh.heures_compl_fc_majorees',
             'heures_compl_referentiel'  => 'vh.heures_compl_referentiel',
+            'heures_primes'             => 'vh.heures_primes',
         ];
 
         $maxCol = Calc::letterToNumber('AC');
@@ -199,8 +199,8 @@ class FormuleCalcul
             'vh.heures_compl_fi'               => 'float',
             'vh.heures_compl_fa'               => 'float',
             'vh.heures_compl_fc'               => 'float',
-            'vh.heures_compl_fc_majorees'      => 'float',
             'vh.heures_compl_referentiel'      => 'float',
+            'vh.heures_primes'                 => 'float',
             'i.type_intervenant_code'          => 'string',
             'i.structure_code'                 => 'string',
             'i.heures_service_statutaire'      => 'float',

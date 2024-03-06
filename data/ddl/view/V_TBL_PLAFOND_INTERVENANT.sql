@@ -32,10 +32,10 @@ FROM
 
   SELECT 2 PLAFOND_ID, p.ANNEE_ID, p.TYPE_VOLUME_HORAIRE_ID, p.INTERVENANT_ID, p.HEURES, NULL PLAFOND, NULL PLAFOND_ETAT_ID FROM (
     SELECT
-        i.annee_id                             annee_id,
-        fr.type_volume_horaire_id              type_volume_horaire_id,
-        i.id                                   intervenant_id,
-        fr.total - fr.heures_compl_fc_majorees heures
+        i.annee_id                  annee_id,
+        fr.type_volume_horaire_id   type_volume_horaire_id,
+        i.id                        intervenant_id,
+        fr.total - fr.heures_primes heures
       FROM
         intervenant                     i
         JOIN etat_volume_horaire      evh ON evh.code = 'saisi'

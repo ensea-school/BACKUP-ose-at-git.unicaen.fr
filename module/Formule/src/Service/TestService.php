@@ -364,7 +364,7 @@ class TestService extends AbstractEntityService
             $ftvh->setAHeuresComplFi($vh['vh.heures_compl_fi'] ?? null);
             $ftvh->setAHeuresComplFa($vh['vh.heures_compl_fa'] ?? null);
             $ftvh->setAHeuresComplFc($vh['vh.heures_compl_fc'] ?? null);
-            $ftvh->setAHeuresComplFcMajorees($vh['vh.heures_compl_fc_majorees'] ?? null);
+            $ftvh->setAHeuresPrimes($vh['vh.heures_primes'] ?? null);
             $ftvh->setAHeuresComplReferentiel($vh['vh.heures_compl_referentiel'] ?? null);
 
             $fti->addVolumeHoraireTest($ftvh);

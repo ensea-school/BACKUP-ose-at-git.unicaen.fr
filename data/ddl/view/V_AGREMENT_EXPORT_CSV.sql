@@ -9,7 +9,7 @@ WITH heures_s AS (
     SUM(frvh.heures_compl_fi)                  heures_compl_fi,
     SUM(frvh.heures_compl_fa)                  heures_compl_fa,
     SUM(frvh.heures_compl_fc)                  heures_compl_fc,
-    SUM(frvh.heures_compl_fc_majorees)         heures_compl_fc_majorees,
+    SUM(frvh.heures_primes)                    heures_primes,
     SUM(frvh.total)                            total
   FROM
               formule_resultat_volume_horaire frvh
@@ -51,7 +51,7 @@ SELECT a.libelle                                                 annee,
                                                                  hetd_fa,
        COALESCE(heures_s.service_fc, fr.heures_service_fc)
            + COALESCE(heures_s.heures_compl_fc, fr.heures_compl_fc)
-           + COALESCE(heures_s.heures_compl_fc_majorees, fr.heures_compl_fc_majorees)
+           + COALESCE(heures_s.heuresprimes, fr.heures_primes)
                                                                  hetd_fc,
        COALESCE(heures_s.total, fr.total)                        hetd_total,
 

@@ -349,7 +349,7 @@ final class RapprocheurTest extends OseTestCase
         ];
 
         $await = [
-            'lignesAPayer' => [
+            'lignesAPayer'    => [
                 [
                     'periode'         => 12, 'heuresAA' => 15,
                     'misesEnPaiement' => [
@@ -360,10 +360,13 @@ final class RapprocheurTest extends OseTestCase
                 [
                     'periode'         => 13, 'heuresAC' => 21,
                     'misesEnPaiement' => [
-                        2 => ['heuresAC' => 19],
+                        2 => ['heuresAC' => 6],
                     ],
                 ],
                 ['periode' => 13, 'heuresAC' => -15],
+            ],
+            'misesEnPaiement' => [
+                2 => ['heuresAA' => 13, 'heuresAC' => 0],
             ],
         ];
 
@@ -371,4 +374,122 @@ final class RapprocheurTest extends OseTestCase
         $this->process(Rapprocheur::REGLE_ORDRE_SAISIE, $data, $await);
     }
 
+
+
+    public function testHeuresNegativesPbSemestre()
+    {
+        $data = [
+            'lignesAPayer'    => [
+                ['periode' => 12, 'heuresAA' => 3360],
+                ['periode' => 12, 'heuresAA' => 3360],
+                ['periode' => 12, 'heuresAA' => 3360],
+                ['periode' => 12, 'heuresAA' => -3360],
+                ['periode' => 12, 'heuresAA' => 5040],
+                ['periode' => 13, 'heuresAA' => 1680],
+            ],
+            'misesEnPaiement' => [
+                1 => ['heuresAA' => 13440],
+            ],
+        ];
+
+        $await = [
+            'heures'       => 0,
+            'lignesAPayer' => [
+                [
+                    'periode'         => 12,
+                    'heuresAA'        => 3360,
+                    'misesEnPaiement' => [1 => ['heuresAA' => 3360]],
+                ],
+                [
+                    'periode'         => 12,
+                    'heuresAA'        => 3360,
+                    'misesEnPaiement' => [1 => ['heuresAA' => 3360]],
+                ],
+                [
+                    'periode'  => 12,
+                    'heuresAA' => 3360,
+                ],
+                [
+                    'periode'  => 12,
+                    'heuresAA' => -3360,
+                ],
+                [
+                    'periode'         => 12,
+                    'heuresAA'        => 5040,
+                    'misesEnPaiement' => [1 => ['heuresAA' => 5040]],
+                ],
+                [
+                    'periode'         => 13,
+                    'heuresAA'        => 1680,
+                    'misesEnPaiement' => [1 => ['heuresAA' => 1680]],
+                ],
+            ],
+        ];
+
+        $this->process(Rapprocheur::REGLE_PRORATA, $data, $await);
+        $this->process(Rapprocheur::REGLE_ORDRE_SAISIE, $data, $await);
+    }
+
+
+
+    public function testHeuresNegativesPbSemestre2()
+    {
+        $data = [
+            'lignesAPayer'    => [
+                ['periode' => 12, 'heuresAA' => -3360],
+                ['periode' => 12, 'heuresAA' => 1360],
+                ['periode' => 12, 'heuresAA' => 2000],
+                ['periode' => 12, 'heuresAA' => 3360],
+                ['periode' => 12, 'heuresAA' => 3360],
+                ['periode' => 12, 'heuresAA' => 5040],
+                ['periode' => 13, 'heuresAA' => 1680],
+            ],
+            'misesEnPaiement' => [
+                1 => ['heuresAA' => 13440],
+            ],
+        ];
+
+        $await = [
+            'heures'       => 0,
+            'lignesAPayer' => [
+                [
+                    'periode'  => 12,
+                    'heuresAA' => -3360,
+                ],
+                [
+                    'periode'  => 12,
+                    'heuresAA' => 1360,
+
+                ],
+                [
+                    'periode'  => 12,
+                    'heuresAA' => 2000,
+
+                ],
+                [
+                    'periode'         => 12,
+                    'heuresAA'        => 3360,
+                    'misesEnPaiement' => [1 => ['heuresAA' => 3360]],
+                ],
+                [
+                    'periode'         => 12,
+                    'heuresAA'        => 3360,
+                    'misesEnPaiement' => [1 => ['heuresAA' => 3360]],
+                ],
+                [
+                    'periode'         => 12,
+                    'heuresAA'        => 5040,
+                    'misesEnPaiement' => [1 => ['heuresAA' => 5040]],
+                ],
+                [
+                    'periode'         => 13,
+                    'heuresAA'        => 1680,
+                    'misesEnPaiement' => [1 => ['heuresAA' => 1680]],
+                ],
+            ],
+        ];
+
+        $this->process(Rapprocheur::REGLE_PRORATA, $data, $await);
+        $this->process(Rapprocheur::REGLE_ORDRE_SAISIE, $data, $await);
+    }
 }

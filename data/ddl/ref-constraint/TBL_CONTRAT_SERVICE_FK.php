@@ -6,7 +6,7 @@ return [
     'name'        => 'TBL_CONTRAT_SERVICE_FK',
     'table'       => 'TBL_CONTRAT',
     'rtable'      => 'SERVICE',
-    'delete_rule' => NULL,
+    'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [
         'SERVICE_ID' => 'ID',

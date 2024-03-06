@@ -3,16 +3,15 @@
 //@formatter:off
 
 return [
-    'name'    => 'TBL_CONTRAT_PK',
+    'name'    => 'TBL_CONTRAT_UK1',
     'table'   => 'TBL_CONTRAT',
-    'index'   => 'TBL_CONTRAT_PK',
+    'index'   => 'TBL_CONTRAT_UK1',
     'columns' => [
-        'INTERVENANT_ID',
-        'STRUCTURE_ID',
         'CONTRAT_ID',
         'MISSION_ID',
         'SERVICE_ID',
         'SERVICE_REFERENTIEL_ID',
+        'DATE_FIN',
     ],
 ];
 

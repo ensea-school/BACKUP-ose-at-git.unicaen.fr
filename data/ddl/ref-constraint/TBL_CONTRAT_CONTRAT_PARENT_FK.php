@@ -3,13 +3,13 @@
 //@formatter:off
 
 return [
-    'name'        => 'TBL_CONTRAT_ANNEE_FK',
+    'name'        => 'TBL_CONTRAT_CONTRAT_PARENT_FK',
     'table'       => 'TBL_CONTRAT',
-    'rtable'      => 'ANNEE',
+    'rtable'      => 'CONTRAT',
     'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [
-        'ANNEE_ID' => 'ID',
+        'CONTRAT_PARENT_ID' => 'ID',
     ],
 ];
 

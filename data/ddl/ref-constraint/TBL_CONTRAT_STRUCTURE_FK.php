@@ -6,7 +6,7 @@ return [
     'name'        => 'TBL_CONTRAT_STRUCTURE_FK',
     'table'       => 'TBL_CONTRAT',
     'rtable'      => 'STRUCTURE',
-    'delete_rule' => NULL,
+    'delete_rule' => 'CASCADE',
     'index'       => NULL,
     'columns'     => [
         'STRUCTURE_ID' => 'ID',

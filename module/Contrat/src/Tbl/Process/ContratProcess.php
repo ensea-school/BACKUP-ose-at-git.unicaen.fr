@@ -30,7 +30,9 @@ class ContratProcess implements ProcessInterface
     {
         $parametres = $this->getServiceParametres();
 
-        $regleRLM = $parametres->get('regle_repartition_annee_civile');
+        $regleCE = $parametres->get('contrat_ens');
+        $regleCM = $parametres->get('contrat_mis');
+        $regleA = $parametres->get('avenant');
 //        $this->process->setRegle($regleRLM);
 //        ou
 //        $this->variable = $regleRLM

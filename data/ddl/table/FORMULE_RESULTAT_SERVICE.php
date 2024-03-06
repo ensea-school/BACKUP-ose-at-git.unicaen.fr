@@ -9,7 +9,7 @@ return [
     'commentaire' => NULL,
     'sequence'    => NULL,
     'columns'     => [
-        'FORMULE_RESULTAT_ID'      => [
+        'FORMULE_RESULTAT_ID' => [
             'name'        => 'FORMULE_RESULTAT_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -21,7 +21,7 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'HEURES_COMPL_FA'          => [
+        'HEURES_COMPL_FA'     => [
             'name'        => 'HEURES_COMPL_FA',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -33,7 +33,7 @@ return [
             'position'    => 5,
             'commentaire' => NULL,
         ],
-        'HEURES_COMPL_FC'          => [
+        'HEURES_COMPL_FC'     => [
             'name'        => 'HEURES_COMPL_FC',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -45,19 +45,7 @@ return [
             'position'    => 6,
             'commentaire' => NULL,
         ],
-        'HEURES_PRIMES' => [
-            'name'        => 'HEURES_PRIMES',
-            'type'        => 'float',
-            'bdd-type'    => 'FLOAT',
-            'length'      => 0,
-            'scale'       => NULL,
-            'precision'   => 126,
-            'nullable'    => FALSE,
-            'default'     => '0',
-            'position'    => 7,
-            'commentaire' => NULL,
-        ],
-        'HEURES_COMPL_FI'          => [
+        'HEURES_COMPL_FI'     => [
             'name'        => 'HEURES_COMPL_FI',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -69,7 +57,19 @@ return [
             'position'    => 4,
             'commentaire' => NULL,
         ],
-        'ID'                       => [
+        'HEURES_PRIMES'       => [
+            'name'        => 'HEURES_PRIMES',
+            'type'        => 'float',
+            'bdd-type'    => 'FLOAT',
+            'length'      => 0,
+            'scale'       => NULL,
+            'precision'   => 126,
+            'nullable'    => FALSE,
+            'default'     => '0',
+            'position'    => 7,
+            'commentaire' => NULL,
+        ],
+        'ID'                  => [
             'name'        => 'ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -81,7 +81,7 @@ return [
             'position'    => 1,
             'commentaire' => NULL,
         ],
-        'NON_PAYABLE_FA'           => [
+        'NON_PAYABLE_FA'      => [
             'name'        => 'NON_PAYABLE_FA',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -93,7 +93,7 @@ return [
             'position'    => 13,
             'commentaire' => NULL,
         ],
-        'NON_PAYABLE_FC'           => [
+        'NON_PAYABLE_FC'      => [
             'name'        => 'NON_PAYABLE_FC',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -105,7 +105,7 @@ return [
             'position'    => 14,
             'commentaire' => NULL,
         ],
-        'NON_PAYABLE_FI'           => [
+        'NON_PAYABLE_FI'      => [
             'name'        => 'NON_PAYABLE_FI',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -117,7 +117,7 @@ return [
             'position'    => 12,
             'commentaire' => NULL,
         ],
-        'SERVICE_FA'               => [
+        'SERVICE_FA'          => [
             'name'        => 'SERVICE_FA',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -129,7 +129,7 @@ return [
             'position'    => 8,
             'commentaire' => NULL,
         ],
-        'SERVICE_FC'               => [
+        'SERVICE_FC'          => [
             'name'        => 'SERVICE_FC',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -141,7 +141,7 @@ return [
             'position'    => 9,
             'commentaire' => NULL,
         ],
-        'SERVICE_FI'               => [
+        'SERVICE_FI'          => [
             'name'        => 'SERVICE_FI',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',
@@ -153,7 +153,7 @@ return [
             'position'    => 10,
             'commentaire' => NULL,
         ],
-        'SERVICE_ID'               => [
+        'SERVICE_ID'          => [
             'name'        => 'SERVICE_ID',
             'type'        => 'int',
             'bdd-type'    => 'NUMBER',
@@ -165,7 +165,7 @@ return [
             'position'    => 3,
             'commentaire' => NULL,
         ],
-        'TOTAL'                    => [
+        'TOTAL'               => [
             'name'        => 'TOTAL',
             'type'        => 'float',
             'bdd-type'    => 'FLOAT',

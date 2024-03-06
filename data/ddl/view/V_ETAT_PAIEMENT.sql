@@ -169,7 +169,7 @@ FROM
                JOIN annee                     a ON a.id = i.annee_id
                JOIN statut                   si ON si.id = i.statut_id
                JOIN type_intervenant         ti ON ti.id = si.type_intervenant_id
-               JOIN structure                 s ON s.id = mis.structure_id
+               JOIN STRUCTURE                 s ON s.id = mis.structure_id
           LEFT JOIN domaine_fonctionnel      df ON df.id = mis.domaine_fonctionnel_id
           LEFT JOIN periode                   p ON p.id = mis.periode_paiement_id
           LEFT JOIN service                  se ON mis.service_id = se.id

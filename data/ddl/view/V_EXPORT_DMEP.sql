@@ -96,7 +96,7 @@ FROM mep
          JOIN type_ressource tr ON tr.id = cc.type_ressource_id
          LEFT JOIN service s ON s.id = mep.service_id
          LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
-         LEFT JOIN source src ON src.id = ep.source_id OR (ep.source_id IS NULL AND src.code = 'OSE')
+         LEFT JOIN SOURCE src ON src.id = ep.source_id OR (ep.source_id IS NULL AND src.code = 'OSE')
          LEFT JOIN discipline de ON de.id = ep.discipline_id
          LEFT JOIN etape etp ON etp.id = ep.etape_id
          LEFT JOIN type_formation tf ON tf.id = etp.type_formation_id
@@ -108,8 +108,8 @@ FROM mep
          JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
          LEFT JOIN grade g ON g.id = i.grade_id
          LEFT JOIN discipline di ON di.id = i.discipline_id
-         LEFT JOIN structure saff ON saff.id = i.structure_id-- AND ti.code = 'P'
-         LEFT JOIN structure sens ON sens.id = nvl(ep.structure_id, sr.structure_id)
+         LEFT JOIN STRUCTURE saff ON saff.id = i.structure_id-- AND ti.code = 'P'
+         LEFT JOIN STRUCTURE sens ON sens.id = nvl(ep.structure_id, sr.structure_id)
          JOIN etablissement etab ON etab.id = nvl(s.etablissement_id, ose_parametre.get_etablissement())
          LEFT JOIN periode p ON p.id = mep.periode_paiement_id
          LEFT JOIN domaine_fonctionnel df ON df.id = mep.domaine_fonctionnel_id

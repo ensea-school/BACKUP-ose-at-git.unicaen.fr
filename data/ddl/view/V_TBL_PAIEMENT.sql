@@ -1,6 +1,6 @@
 CREATE OR REPLACE FORCE VIEW V_TBL_PAIEMENT AS
 SELECT
-  'e' || '-' || frs.id || '-' || COALESCE(thens.id,th.id) key,
+  'e' || '-' || frs.id || '-' || COALESCE(thens.id,th.id) KEY,
   CASE WHEN si.mode_enseignement_realise = 'semestriel' THEN 1 ELSE 0 END calcul_semestriel,
   vh.id                                       a_payer_id,
   i.annee_id                                  annee_id,
@@ -74,7 +74,7 @@ FROM
                                                AND mep.formule_res_service_id = frs.id
                                                AND COALESCE(thens.id,mep.type_heures_id) = COALESCE(thens.id,th.id)
 
-  LEFT JOIN structure                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN COALESCE( ep.structure_id, i.structure_id ) ELSE i.structure_id END
+  LEFT JOIN STRUCTURE                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN COALESCE( ep.structure_id, i.structure_id ) ELSE i.structure_id END
 WHERE
    CASE th.code
     WHEN 'fi' THEN frvh.heures_compl_fi
@@ -91,7 +91,7 @@ WHERE
 UNION ALL
 
 SELECT
-  'e' || '-' || frs.id || '-' || mep.type_heures_id key,
+  'e' || '-' || frs.id || '-' || mep.type_heures_id KEY,
   CASE WHEN si.mode_enseignement_realise = 'semestriel' THEN 1 ELSE 0 END calcul_semestriel,
   mep.id                                      a_payer_id,
   i.annee_id                                  annee_id,
@@ -133,7 +133,7 @@ FROM
        JOIN parametre                         p ON p.nom = 'distinction_fi_fa_fc'
        JOIN parametre                       ccp ON ccp.nom = 'centres_couts_paye'
   LEFT JOIN element_pedagogique              ep ON ep.id = s.element_pedagogique_id
-  LEFT JOIN structure                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN COALESCE( ep.structure_id, i.structure_id ) ELSE i.structure_id END
+  LEFT JOIN STRUCTURE                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN COALESCE( ep.structure_id, i.structure_id ) ELSE i.structure_id END
 WHERE
   mep.histo_destruction IS NULL
   AND CASE
@@ -152,7 +152,7 @@ WHERE
 UNION ALL
 
 SELECT
-  'r' || '-' || frsr.id || '-' || th.id       key,
+  'r' || '-' || frsr.id || '-' || th.id       KEY,
   1                                           calcul_semestriel,
   sr.id                                       a_payer_id,
   i.annee_id                                  annee_id,
@@ -203,7 +203,7 @@ FROM
                                                AND mep.formule_res_service_ref_id = frsr.id
                                                AND mep.type_heures_id = th.id
 
-  LEFT JOIN structure                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN sr.structure_id ELSE i.structure_id END
+  LEFT JOIN STRUCTURE                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN sr.structure_id ELSE i.structure_id END
 WHERE
    frsr.heures_compl_referentiel <> 0
    /*@INTERVENANT_ID=i.id*/
@@ -214,7 +214,7 @@ WHERE
 UNION ALL
 
 SELECT
-  'm' || '-' || m.id || '-' || th.id          key,
+  'm' || '-' || m.id || '-' || th.id          KEY,
   0                                           calcul_semestriel,
   vhm.id                                      a_payer_id,
   tm.annee_id                                 annee_id,
@@ -270,7 +270,7 @@ FROM
                                                AND mep.mission_id = m.id
                                                AND mep.type_heures_id = th.id
 
-  LEFT JOIN structure                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN m.structure_id ELSE i.structure_id END
+  LEFT JOIN STRUCTURE                       str ON str.id = CASE WHEN ccp.valeur = 'enseignement' THEN m.structure_id ELSE i.structure_id END
 WHERE
   tm.valide = 1
   /*@ANNEE_ID=tm.annee_id*/

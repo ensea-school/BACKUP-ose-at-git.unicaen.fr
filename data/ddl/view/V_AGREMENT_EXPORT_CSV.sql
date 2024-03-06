@@ -61,8 +61,8 @@ SELECT a.libelle                                                 annee,
        CASE WHEN agr.id IS NULL THEN 'En attente' ELSE 'Oui' END agree_txt,
        agr.date_decision                                         date_decision,
        CASE WHEN ta.annee_agrement IS NOT NULL
-       	    THEN '31/08/' || to_char(ta.annee_agrement+ta.duree_vie)
-       	    ELSE NULL END	 									 date_expiration,
+             THEN '31/08/' || to_char(ta.annee_agrement+ta.duree_vie)
+             ELSE NULL END                      date_expiration,
        u.display_name                                            modificateur,
        agr.histo_modification                                    date_modification
 FROM tbl_agrement ta
@@ -74,8 +74,8 @@ FROM tbl_agrement ta
          JOIN etat_volume_horaire evh ON evh.code = 'valide'
 
 
-         LEFT JOIN structure s ON s.id = ta.structure_id
-         LEFT JOIN structure s2 ON s2.id = i.structure_id
+         LEFT JOIN STRUCTURE s ON s.id = ta.structure_id
+         LEFT JOIN STRUCTURE s2 ON s2.id = i.structure_id
          LEFT JOIN agrement agr ON agr.id = ta.agrement_id
          LEFT JOIN utilisateur u ON u.id = agr.histo_modificateur_id
          LEFT JOIN discipline d ON d.id = i.discipline_id

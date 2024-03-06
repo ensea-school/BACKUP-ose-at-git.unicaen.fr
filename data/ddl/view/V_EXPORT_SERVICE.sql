@@ -59,7 +59,7 @@ SELECT
   vh.type_intervention_id           type_intervention_id,
   NULL                              fonction_referentiel_id,
   mnp.id                            motif_non_paiement_id,
-  t.id								tag_id,
+  t.id                tag_id,
   s.description                     service_description,
 
   vh.heures                         heures,

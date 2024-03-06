@@ -62,13 +62,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
       END IF;
     END IF;
 
-    feuille(c).cells(l).enCalcul := true;
+    feuille(c).cells(l).enCalcul := TRUE;
     val := calcCell( c, l );
     IF ose_formule.debug_actif THEN
       dbgCell( c, l, val );
     END IF;
     feuille(c).cells(l).valeur := val;
-    feuille(c).cells(l).enCalcul := false;
+    feuille(c).cells(l).enCalcul := FALSE;
 
     RETURN val;
   END;
@@ -1094,7 +1094,7 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UNICAEN AS
 
 
     ELSE
-      return 111;--raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
+      RETURN 111;--raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
   END CASE; END;
 
 

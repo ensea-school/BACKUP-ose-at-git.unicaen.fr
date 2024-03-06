@@ -27,8 +27,8 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UNICAEN_2016" AS
     tcRes.tableau := tableau;
     tcRes.version := version;
     CASE
-      WHEN options like '%t%' THEN tcRes.setTotal := TRUE;
-      WHEN options like '%r%' THEN tcRes.referentiel := TRUE;
+      WHEN options LIKE '%t%' THEN tcRes.setTotal := TRUE;
+      WHEN options LIKE '%r%' THEN tcRes.referentiel := TRUE;
       ELSE RETURN tcRes;
       END CASE;
 

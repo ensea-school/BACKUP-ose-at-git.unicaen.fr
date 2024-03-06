@@ -62,13 +62,13 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
       END IF;
     END IF;
 
-    feuille(c).cells(l).enCalcul := true;
+    feuille(c).cells(l).enCalcul := TRUE;
     val := calcCell( c, l );
     IF ose_formule.debug_actif THEN
       dbgCell( c, l, val );
     END IF;
     feuille(c).cells(l).valeur := val;
-    feuille(c).cells(l).enCalcul := false;
+    feuille(c).cells(l).enCalcul := FALSE;
 
     RETURN val;
   END;
@@ -169,7 +169,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
     -- l = SI(OU(L20+K21>service_du;L20=service_du);service_du;L20+K21)
-	-- UM l =SI(K21 < 0;L20+K21;SI(OU(L20+K21>service_du;L20=service_du);service_du;L20+K21))
+  -- UM l =SI(K21 < 0;L20+K21;SI(OU(L20+K21>service_du;L20=service_du);service_du;L20+K21))
 /*
     WHEN c = 'l' AND v >= 1 THEN
       IF l < 1 THEN
@@ -188,15 +188,15 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
       IF l < 1 THEN
         RETURN 0;
       END IF;
-	  IF cell('k',l) < 0 THEN
-		RETURN cell('l', l-1) + cell('k',l);
-	  ELSE
-		IF (cell('l', l-1) + cell('k',l) > i.service_du) OR (cell('l', l-1) = i.service_du) THEN
-			RETURN ose_formule.intervenant.service_du;
-		ELSE
-			RETURN cell('l', l-1) + cell('k',l);
-		END IF;
-	  END IF;
+    IF cell('k',l) < 0 THEN
+    RETURN cell('l', l-1) + cell('k',l);
+    ELSE
+    IF (cell('l', l-1) + cell('k',l) > i.service_du) OR (cell('l', l-1) = i.service_du) THEN
+      RETURN ose_formule.intervenant.service_du;
+    ELSE
+      RETURN cell('l', l-1) + cell('k',l);
+    END IF;
+    END IF;
 
     -- m = SI(OU(ESTVIDE(composante_affectation);L20=service_du);SI(H21<>"Oui";0;I21);SI(J21>0;SI(L20+K21<service_du;0;((L20+K21)-service_du)/J21);0))
     -- composante_affectation vide si vacataire
@@ -226,9 +226,9 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 -- m  =SI(OU(ESTVIDE(composante_affectation);OU(L20=service_du;I21<0));SI(OU(H21<>"Oui";L21<service_du);0;I21);SI(J21>0;SI(L20+K21<service_du;0;((L20+K21)-service_du)/J21);0))
     WHEN c = 'm' AND v >= 1 THEN
       --SI(OU(ESTVIDE(composante_affectation);OU(L20=service_du;I21<0))
-      IF i.type_intervenant_code = 'E' OR cell('l',l-1) = i.service_du OR ( cell('l',l-1) = i.service_du and cell('k',l)<0) THEN
+      IF i.type_intervenant_code = 'E' OR cell('l',l-1) = i.service_du OR ( cell('l',l-1) = i.service_du AND cell('k',l)<0) THEN
         -- SI(OU(H21<>"Oui";L21<service_du);0;I21);
-        IF NOT vh.service_statutaire OR (cell('l',l) < i.service_du and cell('k',l)<0) THEN
+        IF NOT vh.service_statutaire OR (cell('l',l) < i.service_du AND cell('k',l)<0) THEN
           RETURN 0;
         ELSE
           RETURN vh.heures;
@@ -444,7 +444,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
     -- v =SI(ESTVIDE(composante_affectation);0;SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$E21;SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21))))
-	    --UM  v =SI(ESTVIDE(composante_affectation);0;SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$E21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$E21;$K21*$E21))))
+      --UM  v =SI(ESTVIDE(composante_affectation);0;SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$E21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$E21;$K21*$E21))))
     -- HC = calcFnc('total','o')
     -- H21="Non" = NOT vh.service_statutaire
     -- P21 = O21!!
@@ -475,7 +475,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
     -- w =SI(ESTVIDE(composante_affectation);0;SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$F21;SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21))))
-	--UM  w =SI(ESTVIDE(composante_affectation);0;SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$F21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$F21;$K21*$F21))))
+  --UM  w =SI(ESTVIDE(composante_affectation);0;SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$F21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$F21;$K21*$F21))))
     WHEN c = 'w' AND v >= 1 THEN
       IF i.type_intervenant_code = 'E' THEN
         RETURN 0;

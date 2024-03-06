@@ -52,13 +52,13 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_POITIERS AS
       END IF;
     END IF;
 
-    feuille(c).cells(l).enCalcul := true;
+    feuille(c).cells(l).enCalcul := TRUE;
     val := calcCell( c, l );
     IF ose_formule.debug_actif THEN
       dbgCell( c, l, val );
     END IF;
     feuille(c).cells(l).valeur := val;
-    feuille(c).cells(l).enCalcul := false;
+    feuille(c).cells(l).enCalcul := FALSE;
 
     RETURN val;
   END;

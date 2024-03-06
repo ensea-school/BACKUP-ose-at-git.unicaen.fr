@@ -34,9 +34,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   arrondi NUMERIC DEFAULT 2;
   t_res t_resultats;
   formule_definition formule%rowtype;
-  in_calculer_tout BOOLEAN DEFAULT false;
-  view_intervenant clob;
-  view_volume_horaire clob;
+  in_calculer_tout BOOLEAN DEFAULT FALSE;
+  view_intervenant CLOB;
+  view_volume_horaire CLOB;
 
 
 
@@ -141,8 +141,8 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
     EXCEPTION WHEN NO_DATA_FOUND THEN
       intervenant.id                             := NULL;
-      intervenant.annee_id                       := null;
-      intervenant.structure_code                 := null;
+      intervenant.annee_id                       := NULL;
+      intervenant.structure_code                 := NULL;
       intervenant.heures_service_statutaire      := 0;
       intervenant.depassement_service_du_sans_hc := FALSE;
       intervenant.heures_service_modifie         := 0;
@@ -210,18 +210,18 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
     EXCEPTION WHEN NO_DATA_FOUND THEN
       intervenant.id                             := NULL;
-      intervenant.annee_id                       := null;
-      intervenant.structure_code                 := null;
+      intervenant.annee_id                       := NULL;
+      intervenant.structure_code                 := NULL;
       intervenant.heures_service_statutaire      := 0;
       intervenant.depassement_service_du_sans_hc := FALSE;
       intervenant.heures_service_modifie         := 0;
       intervenant.type_intervenant_code          := 'E';
       intervenant.service_du                     := 0;
-      intervenant.param_1                        := null;
-      intervenant.param_2                        := null;
-      intervenant.param_3                        := null;
-      intervenant.param_4                        := null;
-      intervenant.param_5                        := null;
+      intervenant.param_1                        := NULL;
+      intervenant.param_2                        := NULL;
+      intervenant.param_3                        := NULL;
+      intervenant.param_4                        := NULL;
+      intervenant.param_5                        := NULL;
   END;
 
 
@@ -242,7 +242,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     vh_structure_is_exterieur NUMERIC;
     vh t_volume_horaire;
     etat_volume_horaire_id NUMERIC DEFAULT 1;
-    length NUMERIC;
+    LENGTH NUMERIC;
   BEGIN
     all_volumes_horaires.delete;
 
@@ -265,7 +265,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         vh.taux_fi,
         vh.taux_fa,
         vh.taux_fc,
-        length, -- on ignore ensuite
+        LENGTH, -- on ignore ensuite
         vh.structure_code,
         vh_structure_is_affectation,
         vh_structure_is_univ,
@@ -274,7 +274,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         vh.ponderation_service_compl,
         vh.service_statutaire,
         vh.heures,
-        length, -- on ignore ensuite
+        LENGTH, -- on ignore ensuite
         vh_horaire_debut,
         vh_horaire_fin,
         vh.type_intervention_code,
@@ -294,13 +294,13 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
       FOR etat_volume_horaire_id IN 1 .. vh_etat_volume_horaire_id LOOP
         BEGIN
-          length := all_volumes_horaires(vh_intervenant_id)(vh_type_volume_horaire_id)(etat_volume_horaire_id).length;
+          LENGTH := all_volumes_horaires(vh_intervenant_id)(vh_type_volume_horaire_id)(etat_volume_horaire_id).length;
         EXCEPTION WHEN NO_DATA_FOUND THEN
-          length := 0;
+          LENGTH := 0;
         END;
-        length := length + 1;
-        all_volumes_horaires(vh_intervenant_id)(vh_type_volume_horaire_id)(etat_volume_horaire_id).length := length;
-        all_volumes_horaires(vh_intervenant_id)(vh_type_volume_horaire_id)(etat_volume_horaire_id).items(length) := vh;
+        LENGTH := LENGTH + 1;
+        all_volumes_horaires(vh_intervenant_id)(vh_type_volume_horaire_id)(etat_volume_horaire_id).length := LENGTH;
+        all_volumes_horaires(vh_intervenant_id)(vh_type_volume_horaire_id)(etat_volume_horaire_id).items(LENGTH) := vh;
       END LOOP;
     END LOOP;
     CLOSE cur;
@@ -311,10 +311,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   PROCEDURE LOAD_VH_FROM_TEST IS
     vh t_volume_horaire;
     etat_volume_horaire_id NUMERIC DEFAULT 1;
-    length NUMERIC;
+    LENGTH NUMERIC;
   BEGIN
     volumes_horaires.items.delete;
-    length := 0;
+    LENGTH := 0;
 
     FOR d IN (
       SELECT
@@ -347,36 +347,36 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       WHERE  ftvh.intervenant_test_id = intervenant.id
       ORDER BY ftvh.id
     ) LOOP
-      length := length + 1;
-      volumes_horaires.length := length;
+      LENGTH := LENGTH + 1;
+      volumes_horaires.length := LENGTH;
 
       IF d.referentiel = 0 THEN
-        volumes_horaires.items(length).volume_horaire_id       := d.id;
-        volumes_horaires.items(length).service_id              := d.id;
+        volumes_horaires.items(LENGTH).volume_horaire_id       := d.id;
+        volumes_horaires.items(LENGTH).service_id              := d.id;
       ELSE
-        volumes_horaires.items(length).volume_horaire_ref_id   := d.id;
-        volumes_horaires.items(length).service_referentiel_id  := d.id;
+        volumes_horaires.items(LENGTH).volume_horaire_ref_id   := d.id;
+        volumes_horaires.items(LENGTH).service_referentiel_id  := d.id;
       END IF;
-      volumes_horaires.items(length).taux_fi                   := d.taux_fi;
-      volumes_horaires.items(length).taux_fa                   := d.taux_fa;
-      volumes_horaires.items(length).taux_fc                   := d.taux_fc;
-      volumes_horaires.items(length).ponderation_service_du    := d.ponderation_service_du;
-      volumes_horaires.items(length).ponderation_service_compl := d.ponderation_service_compl;
-      volumes_horaires.items(length).structure_is_affectation  := COALESCE(d.structure_code,' ') = COALESCE(intervenant.structure_code,' ');
-      volumes_horaires.items(length).structure_is_univ         := d.structure_code = '__UNIV__';
-      volumes_horaires.items(length).structure_is_exterieur    := d.structure_code = '__EXTERIEUR__';
-      volumes_horaires.items(length).service_statutaire        := d.service_statutaire = 1;
-      volumes_horaires.items(length).heures                    := d.heures;
-      volumes_horaires.items(length).type_volume_horaire_code  := d.type_volume_horaire_code;
-      volumes_horaires.items(length).type_intervention_code    := CASE WHEN d.referentiel = 1 THEN NULL ELSE d.type_intervention_code END;
-      volumes_horaires.items(length).structure_code            := CASE WHEN d.structure_code IN ('__EXTERIEUR__', '__UNIV__') THEN NULL ELSE d.structure_code END;
-      volumes_horaires.items(length).taux_service_du           := d.taux_service_du;
-      volumes_horaires.items(length).taux_service_compl        := d.taux_service_compl;
-      volumes_horaires.items(length).param_1                   := d.param_1;
-      volumes_horaires.items(length).param_2                   := d.param_2;
-      volumes_horaires.items(length).param_3                   := d.param_3;
-      volumes_horaires.items(length).param_4                   := d.param_4;
-      volumes_horaires.items(length).param_5                   := d.param_5;
+      volumes_horaires.items(LENGTH).taux_fi                   := d.taux_fi;
+      volumes_horaires.items(LENGTH).taux_fa                   := d.taux_fa;
+      volumes_horaires.items(LENGTH).taux_fc                   := d.taux_fc;
+      volumes_horaires.items(LENGTH).ponderation_service_du    := d.ponderation_service_du;
+      volumes_horaires.items(LENGTH).ponderation_service_compl := d.ponderation_service_compl;
+      volumes_horaires.items(LENGTH).structure_is_affectation  := COALESCE(d.structure_code,' ') = COALESCE(intervenant.structure_code,' ');
+      volumes_horaires.items(LENGTH).structure_is_univ         := d.structure_code = '__UNIV__';
+      volumes_horaires.items(LENGTH).structure_is_exterieur    := d.structure_code = '__EXTERIEUR__';
+      volumes_horaires.items(LENGTH).service_statutaire        := d.service_statutaire = 1;
+      volumes_horaires.items(LENGTH).heures                    := d.heures;
+      volumes_horaires.items(LENGTH).type_volume_horaire_code  := d.type_volume_horaire_code;
+      volumes_horaires.items(LENGTH).type_intervention_code    := CASE WHEN d.referentiel = 1 THEN NULL ELSE d.type_intervention_code END;
+      volumes_horaires.items(LENGTH).structure_code            := CASE WHEN d.structure_code IN ('__EXTERIEUR__', '__UNIV__') THEN NULL ELSE d.structure_code END;
+      volumes_horaires.items(LENGTH).taux_service_du           := d.taux_service_du;
+      volumes_horaires.items(LENGTH).taux_service_compl        := d.taux_service_compl;
+      volumes_horaires.items(LENGTH).param_1                   := d.param_1;
+      volumes_horaires.items(LENGTH).param_2                   := d.param_2;
+      volumes_horaires.items(LENGTH).param_3                   := d.param_3;
+      volumes_horaires.items(LENGTH).param_4                   := d.param_4;
+      volumes_horaires.items(LENGTH).param_5                   := d.param_5;
     END LOOP;
   END;
 
@@ -412,7 +412,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
   PROCEDURE DEBUG_TRES IS
     code varchar2(15);
-    table_name varchar2(30);
+    TABLE_NAME varchar2(30);
     fr formule_resultat%rowtype;
     frs formule_resultat_service%rowtype;
     frsr formule_resultat_service_ref%rowtype;
@@ -421,7 +421,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   BEGIN
     code := t_res.FIRST;
     LOOP EXIT WHEN code IS NULL;
-      table_name := CASE
+      TABLE_NAME := CASE
         WHEN code LIKE '%-s-%' THEN 'FORMULE_RESULTAT_SERVICE'
         WHEN code LIKE '%-sr-%' THEN 'FORMULE_RESULTAT_SERVICE_REF'
         WHEN code LIKE '%-vh-%' THEN 'FORMULE_RESULTAT_VH'
@@ -429,7 +429,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         ELSE 'FORMULE_RESULTAT'
       END;
 
-      ose_test.echo('T_RES( ' || code || ' - Table ' || table_name || ' ) ');
+      ose_test.echo('T_RES( ' || code || ' - Table ' || TABLE_NAME || ' ) ');
       ose_test.echo('  id = ' || t_res(code).id);
       ose_test.echo('  formule_resultat_id      = ' || t_res(code).formule_resultat_id);
       ose_test.echo('  type_volume_horaire_id   = ' || t_res(code).type_volume_horaire_id);
@@ -474,10 +474,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         fr.id                       formule_resultat_id,
         fr.type_volume_horaire_id   type_volume_horaire_id,
         fr.etat_volume_horaire_id   etat_volume_horaire_id,
-        null                        service_id,
-        null                        service_referentiel_id,
-        null                        volume_horaire_id,
-        null                        volume_horaire_ref_id
+        NULL                        service_id,
+        NULL                        service_referentiel_id,
+        NULL                        volume_horaire_id,
+        NULL                        volume_horaire_ref_id
 
       FROM
         formule_resultat fr
@@ -491,9 +491,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         fr.type_volume_horaire_id   type_volume_horaire_id,
         fr.etat_volume_horaire_id   etat_volume_horaire_id,
         frs.service_id              service_id,
-        null                        service_referentiel_id,
-        null                        volume_horaire_id,
-        null                        volume_horaire_ref_id
+        NULL                        service_referentiel_id,
+        NULL                        volume_horaire_id,
+        NULL                        volume_horaire_ref_id
       FROM
         formule_resultat_service frs
         JOIN formule_resultat fr ON fr.id = frs.formule_resultat_id
@@ -506,10 +506,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         fr.id                       formule_resultat_id,
         fr.type_volume_horaire_id   type_volume_horaire_id,
         fr.etat_volume_horaire_id   etat_volume_horaire_id,
-        null                        service_id,
+        NULL                        service_id,
         frsr.service_referentiel_id service_referentiel_id,
-        null                        volume_horaire_id,
-        null                        volume_horaire_ref_id
+        NULL                        volume_horaire_id,
+        NULL                        volume_horaire_ref_id
       FROM
         formule_resultat_service_ref frsr
         JOIN formule_resultat fr ON fr.id = frsr.formule_resultat_id
@@ -522,10 +522,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         fr.id                       formule_resultat_id,
         fr.type_volume_horaire_id   type_volume_horaire_id,
         fr.etat_volume_horaire_id   etat_volume_horaire_id,
-        null                        service_id,
-        null                        service_referentiel_id,
+        NULL                        service_id,
+        NULL                        service_referentiel_id,
         frvh.volume_horaire_id      volume_horaire_id,
-        null                        volume_horaire_ref_id
+        NULL                        volume_horaire_ref_id
       FROM
         formule_resultat_vh frvh
         JOIN formule_resultat fr ON fr.id = frvh.formule_resultat_id
@@ -538,9 +538,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         fr.id                       formule_resultat_id,
         fr.type_volume_horaire_id   type_volume_horaire_id,
         fr.etat_volume_horaire_id   etat_volume_horaire_id,
-        null                        service_id,
-        null                        service_referentiel_id,
-        null                        volume_horaire_id,
+        NULL                        service_id,
+        NULL                        service_referentiel_id,
+        NULL                        volume_horaire_id,
         frvhr.volume_horaire_ref_id volume_horaire_ref_id
       FROM
         formule_resultat_vh_ref frvhr
@@ -844,17 +844,17 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     i_id NUMERIC;
   BEGIN
     formule_definition := ose_parametre.get_formule;
-    intervenant.id := null;
+    intervenant.id := NULL;
     LOAD_VH_FROM_BDD;
 
-    in_calculer_tout := true;
+    in_calculer_tout := TRUE;
     i_id := all_volumes_horaires.FIRST;
     LOOP EXIT WHEN i_id IS NULL;
       CALCULER( i_id );
       COMMIT;
       i_id := all_volumes_horaires.NEXT(i_id);
     END LOOP;
-    in_calculer_tout := false;
+    in_calculer_tout := FALSE;
   END;
 
 
@@ -880,7 +880,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       SAVE_TO_TEST(1);
     EXCEPTION WHEN OTHERS THEN
       SAVE_TO_TEST(0);
-      RAISE_APPLICATION_ERROR(-20001, dbms_utility.format_error_backtrace,true);
+      RAISE_APPLICATION_ERROR(-20001, dbms_utility.format_error_backtrace,TRUE);
     END;
   END;
 
@@ -896,13 +896,13 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
 
 
-  PROCEDURE CALCULER_TBL(param VARCHAR2 DEFAULT NULL, value VARCHAR2 DEFAULT NULL) IS
+  PROCEDURE CALCULER_TBL(param VARCHAR2 DEFAULT NULL, VALUE VARCHAR2 DEFAULT NULL) IS
     intervenant_id NUMERIC;
     TYPE r_cursor IS REF CURSOR;
     diff_cur r_cursor;
   BEGIN
     OPEN diff_cur FOR 'SELECT id FROM intervenant WHERE '
-      || unicaen_tbl.MAKE_WHERE( CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, value );
+      || unicaen_tbl.MAKE_WHERE( CASE param WHEN 'INTERVENANT_ID' THEN 'ID' ELSE param END, VALUE );
     LOOP
       FETCH diff_cur INTO intervenant_id; EXIT WHEN diff_cur%NOTFOUND;
       BEGIN

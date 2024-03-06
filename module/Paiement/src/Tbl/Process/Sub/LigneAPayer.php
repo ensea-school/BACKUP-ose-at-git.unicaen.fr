@@ -5,6 +5,7 @@ namespace Paiement\Tbl\Process\Sub;
 class LigneAPayer
 {
     public int $id;
+    private ?string $key = null;
     public ?int $volumeHoraireId = null;
     public ?int $periode = null;
     public ?int $tauxRemu = null;
@@ -12,6 +13,9 @@ class LigneAPayer
     public ?float $pourcAA = null;
     public int $heuresAA = 0;
     public int $heuresAC = 0;
+    public ?int $intBuffer1 = null;
+    public ?int $intBuffer2 = null;
+
 
     /** @var array|MiseEnPaiement[] */
     public array $misesEnPaiement = [];
@@ -70,6 +74,17 @@ class LigneAPayer
         }
 
         return $res;
+    }
+
+
+
+    public function key(): string
+    {
+        if (empty($this->key)){
+            $this->key = $this->tauxRemu . '-' . $this->tauxValeur . '-' . ($this->periode ?? 0);
+        }
+
+        return $this->key;
     }
 
 

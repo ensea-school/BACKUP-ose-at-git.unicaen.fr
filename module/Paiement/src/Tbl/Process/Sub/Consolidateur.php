@@ -13,7 +13,7 @@ class Consolidateur
 
         $laps = [];
         foreach ($sap->lignesAPayer as $i => $l) {
-            $key = $l->tauxRemu . '-' . $l->tauxValeur . '-' . ($l->periode ?? 0);
+            $key = $l->key();
             if (!isset($laps[$key])) {
                 $laps[$key] = $l;
             } else {

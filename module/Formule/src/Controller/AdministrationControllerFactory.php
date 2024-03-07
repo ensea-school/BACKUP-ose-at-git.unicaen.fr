@@ -6,11 +6,11 @@ use Psr\Container\ContainerInterface;
 
 
 /**
- * Description of CreateurControllerFactory
+ * Description of AdministrationControllerFactory
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class CreateurControllerFactory
+class AdministrationControllerFactory
 {
 
     /**
@@ -18,11 +18,11 @@ class CreateurControllerFactory
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return CreateurController
+     * @return AdministrationController
      */
-    public function __invoke(ContainerInterface $container, $requestedName, $options = null): CreateurController
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null): AdministrationController
     {
-        $controller = new CreateurController;
+        $controller = new AdministrationController;
 
         /* Injectez vos dépendances ICI */
 

@@ -8,6 +8,10 @@ use UnicaenPrivilege\Guard\PrivilegeController;
 
 return [
     'routes' => [
+        'formule' => [
+            'route' => '/formule',
+        ],
+
         'intervenant' => [
             'child_routes' => [
                 'voir-heures-comp'    => [

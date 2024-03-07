@@ -61,11 +61,11 @@ switch ($action) {
         $intervenantQuery = null;
         $volumeHoraireQuery = null;
         try {
-            $packageName = 'FORMULE_' . $fc->getName();
-            $pe          = $bdd->select('SELECT id FROM formule WHERE package_name = :pn', ['pn' => $packageName]);
+            $code = 'FORMULE_' . $fc->getName();
+            $pe          = $bdd->select('SELECT id FROM formule WHERE code = :code', ['code' => $code]);
             if (!empty($pe)) {
-                $intervenantQuery   = trim(@$bdd->select("SELECT $packageName.INTERVENANT_QUERY Q FROM dual")[0]['Q']);
-                $volumeHoraireQuery = trim(@$bdd->select("SELECT $packageName.VOLUME_HORAIRE_QUERY Q FROM dual")[0]['Q']);
+                $intervenantQuery   = trim(@$bdd->select("SELECT $code.INTERVENANT_QUERY Q FROM dual")[0]['Q']);
+                $volumeHoraireQuery = trim(@$bdd->select("SELECT $code.VOLUME_HORAIRE_QUERY Q FROM dual")[0]['Q']);
 
                 $intervenantQuery   = str_replace("'", "''", $intervenantQuery);
                 $volumeHoraireQuery = str_replace("'", "''", $volumeHoraireQuery);
@@ -108,8 +108,8 @@ switch ($action) {
 function affCreateData(\Formule\Model\FormuleCalcul $fc)
 {
     $bdd         = OseAdmin::instance()->getBdd();
-    $packageName = 'FORMULE_' . $fc->getName();
-    $pe          = $bdd->select('SELECT id FROM formule WHERE package_name = :pn', ['pn' => $packageName]);
+    $code = 'FORMULE_' . $fc->getName();
+    $pe          = $bdd->select('SELECT id FROM formule WHERE code = :code', ['code' => $code]);
     if (empty($pe)) {
         $newFormuleId = $bdd->select('SELECT max(id) + 1 nid FROM formule')[0]['NID'];
     } else {
@@ -117,8 +117,8 @@ function affCreateData(\Formule\Model\FormuleCalcul $fc)
     }
 
     $array  = [
+        'CODE' => $code,
         'LIBELLE'      => '...',
-        'PACKAGE_NAME' => $packageName,
     ];
     $params = $fc->getParams();
     $plibs  = [

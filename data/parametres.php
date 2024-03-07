@@ -28,7 +28,7 @@ return [
     "formule"                                    => [
         "VALEUR"      => "FORMULE_UNICAEN",
         "DESCRIPTION" => "Formule de calcul",
-        "QUERY"       => 'SELECT id valeur FROM formule WHERE package_name = :valeur',
+        "QUERY"       => 'SELECT id valeur FROM formule WHERE code = :valeur',
     ],
     "domaine_fonctionnel_ens_ext"                => [
         "VALEUR"      => "D102",

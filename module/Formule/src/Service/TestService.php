@@ -95,8 +95,8 @@ class TestService extends AbstractEntityService
         $conn = $this->getEntityManager()->getConnection();
 
         $formule = $this->getServiceFormule()->getCurrent();
-        $intervenantQuery = trim($conn->executeQuery('SELECT ' . $formule->getPackageName() . '.INTERVENANT_QUERY Q FROM DUAL')->fetchOne());
-        $volumeHoraireQuery = trim($conn->executeQuery('SELECT ' . $formule->getPackageName() . '.VOLUME_HORAIRE_QUERY Q FROM DUAL')->fetchOne());
+        $intervenantQuery = trim($conn->executeQuery('SELECT ' . $formule->getCode() . '.INTERVENANT_QUERY Q FROM DUAL')->fetchOne());
+        $volumeHoraireQuery = trim($conn->executeQuery('SELECT ' . $formule->getCode() . '.VOLUME_HORAIRE_QUERY Q FROM DUAL')->fetchOne());
 
         $sql = "BEGIN ose_formule.intervenant.id := " . $intervenant->getId() . "; END;";
         $conn->executeStatement($sql);

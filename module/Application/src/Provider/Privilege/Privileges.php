@@ -120,7 +120,8 @@ class Privileges extends \UnicaenPrivilege\Provider\Privilege\Privileges {
     const ENSEIGNEMENT_REALISE_VISUALISATION                   = 'enseignement-realise-visualisation';
     const ETAT_SORTIE_ADMINISTRATION_EDITION                   = 'etat-sortie-administration-edition';
     const ETAT_SORTIE_ADMINISTRATION_VISUALISATION             = 'etat-sortie-administration-visualisation';
-    const FORMULE_CREATEUR                                     = 'formule-createur';
+    const FORMULE_ADMINISTRATION_EDITION                       = 'formule-administration-edition';
+    const FORMULE_ADMINISTRATION_VISUALISATION                 = 'formule-administration-visualisation';
     const FORMULE_TESTS                                        = 'formule-tests';
     const IMPORT_ECARTS                                        = 'import-ecarts';
     const IMPORT_MAJ                                           = 'import-maj';

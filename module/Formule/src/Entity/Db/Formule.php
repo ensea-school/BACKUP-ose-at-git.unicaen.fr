@@ -9,7 +9,7 @@ class Formule
 
     protected string  $libelle;
 
-    protected string  $packageName;
+    protected string  $code;
 
     protected bool    $active          = true;
 
@@ -49,9 +49,9 @@ class Formule
 
 
 
-    public function getPackageName(): string
+    public function getCode(): string
     {
-        return $this->packageName;
+        return $this->code;
     }
 
 

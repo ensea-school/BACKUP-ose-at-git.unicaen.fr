@@ -474,8 +474,9 @@ return [
     'formule' => [
         'libelle'    => 'Formule de calcul',
         'privileges' => [
-            'createur' => 'Créateur',
-            'tests'    => 'Tests',
+            'administration-visualisation' => 'Visualisation administration',
+            'administration-edition'       => 'Édition administration',
+            'tests'                        => 'Tests',
         ],
     ],
 

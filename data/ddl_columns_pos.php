@@ -550,8 +550,8 @@ return [
     ],
     'FORMULE'                         => [
         'ID',
+        'CODE',
         'LIBELLE',
-        'PACKAGE_NAME',
         'ACTIVE',
         'I_PARAM_1_LIBELLE',
         'I_PARAM_2_LIBELLE',

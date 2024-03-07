@@ -105,8 +105,8 @@ return [
             'position'    => 2,
             'commentaire' => NULL,
         ],
-        'PACKAGE_NAME'       => [
-            'name'        => 'PACKAGE_NAME',
+        'CODE'       => [
+            'name'        => 'CODE',
             'type'        => 'string',
             'bdd-type'    => 'VARCHAR2',
             'length'      => 30,

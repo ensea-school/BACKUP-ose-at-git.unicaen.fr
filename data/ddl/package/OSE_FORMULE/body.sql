@@ -63,7 +63,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   FUNCTION MAKE_INTERVENANT_QUERY RETURN CLOB IS
     query CLOB;
   BEGIN
-    EXECUTE IMMEDIATE 'SELECT ' || formule_definition.package_name || '.intervenant_query FROM DUAL' INTO query;
+    EXECUTE IMMEDIATE 'SELECT ' || formule_definition.code || '.intervenant_query FROM DUAL' INTO query;
     --query := REPLACE( query, 'V_FORMULE_INTERVENANT', '(' || GET_VIEW_INTERVENANT || ')');
 
     RETURN query;
@@ -73,7 +73,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   FUNCTION MAKE_VOLUME_HORAIRE_QUERY RETURN CLOB IS
     query CLOB;
   BEGIN
-    EXECUTE IMMEDIATE 'SELECT ' || formule_definition.package_name || '.volume_horaire_query FROM DUAL' INTO query;
+    EXECUTE IMMEDIATE 'SELECT ' || formule_definition.code || '.volume_horaire_query FROM DUAL' INTO query;
     --query := REPLACE( query, 'V_FORMULE_VOLUME_HORAIRE', '(' || GET_VIEW_VOLUME_HORAIRE || ')');
 
     RETURN query;
@@ -827,7 +827,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         LOOP EXIT WHEN etat_volume_horaire_id IS NULL;
           intervenant.etat_volume_horaire_id := etat_volume_horaire_id;
           volumes_horaires := all_volumes_horaires(intervenant.id)(type_volume_horaire_id)(etat_volume_horaire_id);
-          EXECUTE IMMEDIATE 'BEGIN ' || formule_definition.package_name || '.CALCUL_RESULTAT; END;';
+          EXECUTE IMMEDIATE 'BEGIN ' || formule_definition.code || '.CALCUL_RESULTAT; END;';
           all_volumes_horaires(intervenant.id)(type_volume_horaire_id)(etat_volume_horaire_id) := volumes_horaires;
           etat_volume_horaire_id := all_volumes_horaires(intervenant.id)(type_volume_horaire_id).NEXT(etat_volume_horaire_id);
         END LOOP;
@@ -860,12 +860,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
 
   PROCEDURE TEST( INTERVENANT_TEST_ID NUMERIC ) IS
-    package_name VARCHAR2(30);
+    code VARCHAR2(30);
   BEGIN
     intervenant.id := INTERVENANT_TEST_ID;
 
     SELECT
-      package_name INTO package_name
+      code INTO code
     FROM
       formule f JOIN formule_test_intervenant fti ON fti.formule_id = f.id
     WHERE
@@ -876,7 +876,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     debug_actif := TRUE;
 
     BEGIN
-      EXECUTE IMMEDIATE 'BEGIN ' || package_name || '.CALCUL_RESULTAT; END;';
+      EXECUTE IMMEDIATE 'BEGIN ' || code || '.CALCUL_RESULTAT; END;';
       SAVE_TO_TEST(1);
     EXCEPTION WHEN OTHERS THEN
       SAVE_TO_TEST(0);

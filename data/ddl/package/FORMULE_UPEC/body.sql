@@ -248,9 +248,9 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC AS
 
 
 
-      -- AE15=i_param_1
+      -- AE15=2/3
       WHEN 'AE15' THEN
-        RETURN i.param_1;
+        RETURN 2 / 3;
 
 
 
@@ -871,8 +871,8 @@ CREATE OR REPLACE PACKAGE BODY FORMULE_UPEC AS
     RETURN '
     SELECT
       fi.*,
-      2/3  param_1,
-      NULL param_2,
+      CASE WHEN si.code IN (''ENS_CH'',''ASS_MI_TPS'',''ENS_CH_LRU'',''DOCTOR'') THEN ''oui'' ELSE ''non'' END param_1,
+      CASE WHEN si.code IN (''LECTEUR'',''ATER'') THEN ''oui'' ELSE ''non'' END param_2,
       NULL param_3,
       NULL param_4,
       NULL param_5

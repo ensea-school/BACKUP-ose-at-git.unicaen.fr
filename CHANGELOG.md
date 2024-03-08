@@ -12,6 +12,8 @@
 
 * Les modifications de service dû ne sont enregistrées que s'il y a un changement effectif de donnée (#55446)
 * Correction sur le privilege d'administration des tags (#55439)
+* Empêcher de postuler à une offre d'emploi tant qu'elle n'est pas validée
+* Le calcul des paiements s'effectue correctement sur les cas complexes avec des heures négatives
 
 
 

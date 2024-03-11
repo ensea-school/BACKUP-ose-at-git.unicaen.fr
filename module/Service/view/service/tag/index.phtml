@@ -11,7 +11,7 @@ $title = "Tag";
 
 $this->headTitle()->append($title);
 //TODO gestion du privilege spécifique pour les tags
-$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIF_NON_PAIEMENT_EDITION));
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TAG_ADMINISTRATION_EDITION));
 
 ?>
 <h1 class="page-header"><?= $title ?></h1>

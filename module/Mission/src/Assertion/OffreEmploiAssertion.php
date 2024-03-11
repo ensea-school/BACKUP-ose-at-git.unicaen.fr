@@ -100,7 +100,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
 
 
 
-    protected function assertController($controller, $action = null, $privilege = null)
+    protected function assertController ($controller, $action = null, $privilege = null)
     {
         /* @var $role Role */
         $role = $this->getRole();
@@ -214,7 +214,7 @@ class OffreEmploiAssertion extends AbstractAssertion implements EntityManagerAwa
     {
 
         //On vérifier que l'on a bien un contexte avec un intervenant
-        if (!$this->haveIntervenant()) {
+        if (!$this->haveIntervenant() || !$offre->isValide()) {
             return false;
         }
 

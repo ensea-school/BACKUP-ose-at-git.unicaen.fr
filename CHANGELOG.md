@@ -1,10 +1,22 @@
 # Version stable
 
-[OSE 23.1](#ose-231-02022024)
+[OSE 23.3](#ose-233-23022024)
 
 
 
 # OSE 24 (à venir)
+
+# OSE 23.4 (à venir)
+
+## Corrections de bugs
+
+* Les modifications de service dû ne sont enregistrées que s'il y a un changement effectif de donnée (#55446)
+* Correction sur le privilege d'administration des tags (#55439)
+* Empêcher de postuler à une offre d'emploi tant qu'elle n'est pas validée
+* Le calcul des paiements s'effectue correctement sur les cas complexes avec des heures négatives
+
+
+
 
 # OSE 23.3 (23/02/2024)
 

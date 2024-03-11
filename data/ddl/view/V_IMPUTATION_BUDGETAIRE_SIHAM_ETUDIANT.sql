@@ -97,7 +97,7 @@ FROM (
 			   MAX(CASE WHEN cc.parent_id IS NULL THEN cc.id ELSE cc2.id END)                                centre_cout_id,
 		       MAX(CASE WHEN cc.parent_id IS NOT NULL THEN cc.source_code ELSE NULL END)                     eotp_code,
 		       CASE WHEN cc.parent_id IS NOT NULL THEN cc.id ELSE NULL END                                   eotp_id,
-		       NULL																						     domaine_fonctionnel_code,
+		       MAX(df.source_code)																		     domaine_fonctionnel_code,
 		       SUM(mis.heures_payees_aa + mis.heures_payees_ac)                                              hetd,
 		       SUM(CASE WHEN th.code = 'fc_majorees'
 		       		THEN mis.heures_payees_aa + mis.heures_payees_ac

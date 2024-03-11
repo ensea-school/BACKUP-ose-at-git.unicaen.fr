@@ -97,7 +97,7 @@ class ServiceAPayerService extends AbstractService
                         'code'            => $intervenant->getCode(),
                         'nom_usuel'       => $intervenant->getNomUsuel(),
                         'prenom'          => $intervenant->getPrenom(),
-                        'structure'       => $intervenant->getStructure()->getLibelleCourt(),
+                        'structure'       => ($intervenant->getStructure()) ? $intervenant->getStructure()->getLibelleCourt() : '',
                         'statut'          => $intervenant->getStatut()->getLibelle(),
                         'typeIntervenant' => $intervenant->getStatut()->getTypeIntervenant()->getLibelle(),
                     ];

@@ -200,7 +200,7 @@ class PaiementController extends AbstractController
 
 
 
-    public function listeServiceAPayerAction ()
+    public function getDemandesMiseEnPaiementAction ()
     {
         $structure = null;
         $role      = $this->getServiceContext()->getSelectedIdentityRole();
@@ -214,69 +214,11 @@ class PaiementController extends AbstractController
         if ($role->getPerimetre()->isComposante()) {
             $structure = $role->getStructure();
         }
+
         $servicesAPayer = $this->getServiceMiseEnPaiement()->getDemandeMiseEnPaiementResume($intervenant, $structure);
 
 
         return new AxiosModel($servicesAPayer);
-    }
-
-
-
-    public function centreCoutPaiementAction ()
-    {
-        $centresCoutsPaiement        = [];
-        $datas                       = [];
-        $parametreCentreCoutPaiement = $this->getServiceParametres()->get('centres_couts_paye');
-        $intervenant                 = $this->getEvent()->getParam('intervenant');
-        $structure                   = $this->getEvent()->getParam('structure');
-
-
-        //On alimente les centres couts disponibles pour ces demandes de mise en paiement
-        //Si le paramétrage est affectation, on va chercher une fois pour toutes les centres de couts de paiement de la structure d'affectation de l'intervenant
-        if ($parametreCentreCoutPaiement == 'affectation') {
-            $structure            = $this->getEntityManager()->getRepository(Structure::class)->find($intervenant->getStructure()->getId());
-            $centresCoutsPaiement = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
-        } else {
-            $centresCoutsPaiement = $this->getServiceCentreCout()->getCentresCoutsMiseEnPaiement($structure);
-        }
-        foreach ($centresCoutsPaiement as $centreCout) {
-            if (!empty($centreCout['CODE_PARENT'])) {
-                if (!array_key_exists($centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT'], $datas)) {
-                    $datas[$centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT']] = [];
-                }
-                $datas[$centreCout['CODE_PARENT'] . ' - ' . $centreCout['LIBELLE_PARENT']][] = [
-                    'centreCoutId'      => $centreCout['CENTRE_COUT_ID'],
-                    'centreCoutLibelle' => $centreCout['LIBELLE'],
-                    'centreCoutCode'    => $centreCout['CODE'],
-                    'fi'                => $centreCout['FI'],
-                    'fa'                => $centreCout['FA'],
-                    'fc'                => $centreCout['FC'],
-                    'referentiel'       => $centreCout['REFERENTIEL'],
-                    'fcMajorees'        => $centreCout['FC_MAJOREES'],
-                    'mission'           => $centreCout['MISSION'],
-                    'paieEtat'          => $centreCout['PAIE_ETAT'],
-                    'ressourcesPropres' => $centreCout['RESSOURCES_PROPRES'],
-
-                ];
-            } else {
-                $datas['AUTRES'][] = [
-                    'centreCoutId'      => $centreCout['CENTRE_COUT_ID'],
-                    'centreCoutLibelle' => $centreCout['LIBELLE'],
-                    'centreCoutCode'    => $centreCout['CODE'],
-                    'fi'                => $centreCout['FI'],
-                    'fa'                => $centreCout['FA'],
-                    'fc'                => $centreCout['FC'],
-                    'referentiel'       => $centreCout['REFERENTIEL'],
-                    'fcMajorees'        => $centreCout['FC_MAJOREES'],
-                    'mission'           => $centreCout['MISSION'],
-                    'paieEtat'          => $centreCout['PAIE_ETAT'],
-                    'ressourcesPropres' => $centreCout['RESSOURCES_PROPRES'],
-                ];
-            }
-        }
-
-
-        return new AxiosModel($datas);
     }
 
 

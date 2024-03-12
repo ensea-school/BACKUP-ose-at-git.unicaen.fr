@@ -517,7 +517,7 @@
                         @click="demanderToutesLesHeuresEnPaiement(datas.code, datas.libelle)">
                     <u-icon id="action" name="square-plus" style="color:white;"/>
                     <u-icon id="waiting" name="spin" rotate="right" style="display:none;"/>
-                    DEMANDER TOUS LES PAIEMENTS POUR {{ datas.libelle }}
+                    DEMANDER TOUS LES PAIEMENTS POUR {{ datas.libelleCourt }}
                 </button>
             </div>
         </div>
@@ -567,19 +567,6 @@ export default {
             }
         },
     methods: {
-        getCentresCoutsPaiement()
-        {
-            unicaenVue.axios.get(unicaenVue.url('intervenant/:intervenant/mise-en-paiement/centre-cout-paiement/:structure', {
-                intervenant: this.intervenant,
-                structure: this.datas.id
-            }))
-                .then(response => {
-                    this.centresCoutsPaiement = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        },
         heuresStatutToString(value)
         {
 

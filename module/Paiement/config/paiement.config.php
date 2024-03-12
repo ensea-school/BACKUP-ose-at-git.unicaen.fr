@@ -129,7 +129,7 @@ return [
                     'route'         => '/:intervenant/mise-en-paiement',
                     'controller'    => Controller\PaiementController::class,
                     'child_routes'  => [
-                        'visualisation'         => [
+                        'visualisation'                 => [
                             'route'      => '/visualisation',
                             'controller' => Controller\PaiementController::class,
                             'action'     => 'visualisationMiseEnPaiement',
@@ -139,32 +139,24 @@ return [
                             ],
                             'assertion'  => \Paiement\Assertion\PaiementAssertion::class,
                         ],
-                        'demande'               => [
+                        'demande'                       => [
                             'route'      => '/demande',
                             'controller' => Controller\PaiementController::class,
                             'action'     => 'demandeMiseEnPaiement',
                         ],
-                        'edition'               => [
+                        'edition'                       => [
                             'route'      => '/edition',
                             'controller' => Controller\PaiementController::class,
                             'action'     => 'editionMiseEnPaiement',
                         ],
-                        'liste-service-a-payer' => [
-                            'route'      => '/liste-service-a-payer',
+                        'get-demandes-mise-en-paiement' => [
+                            'route'      => '/get-demandes-mise-en-paiement[/:structure]',
                             'controller' => Controller\PaiementController::class,
-                            'action'     => 'listeServiceAPayer',
+                            'action'     => 'getDemandesMiseEnpaiement',
                             'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
 
                         ],
-                        'centre-cout-paiement'  => [
-                            'route'       => '/centre-cout-paiement/:structure',
-                            'controller'  => Controller\PaiementController::class,
-                            'action'      => 'centreCoutPaiement',
-                            'privileges'  => Privileges::MISE_EN_PAIEMENT_DEMANDE,
-                            'constraints' => [
-                                'structure' => '[0-9]*',
-                            ],
-                        ],
+
 
                     ],
                 ],
@@ -316,7 +308,7 @@ return [
     'guards' => [
         [
             'controller' => Controller\PaiementController::class,
-            'action'     => ['ajouterDemandeMiseEnPaiement', 'supprimerDemandeMiseEnPaiement', 'listeServiceAPayer', 'centreCoutPaiement', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
+            'action'     => ['ajouterDemandeMiseEnPaiement', 'supprimerDemandeMiseEnPaiement', 'get-demandes-mise-en-paiement', 'demandeMiseEnPaiement', 'demandeMiseEnPaiementLot', 'processDemandeMiseEnPaiementLot'],
             'privileges' => [
                 Privileges::MISE_EN_PAIEMENT_DEMANDE,
             ],

@@ -684,7 +684,8 @@ class MiseEnPaiementService extends AbstractEntityService
             tp.intervenant_id 				    intervenant_id,
             tp.structure_id                     structure_id,
             MAX(s.code)                         structure_code,
-            MAX(s.libelle_court)   			    structure_libelle,
+            MAX(s.libelle_long)   			    structure_libelle,
+            MAX(s.libelle_court)   			    structure_libelle_court,
             CASE
                 WHEN MAX(tp.service_id) IS NOT NULL THEN 'enseignement'
                 WHEN MAX(tp.service_referentiel_id) IS NOT NULL THEN 'referentiel'
@@ -802,6 +803,7 @@ class MiseEnPaiementService extends AbstractEntityService
                 $dmep[$value['STRUCTURE_CODE']]['code']                                                                                                                     = $value['STRUCTURE_CODE'];
                 $dmep[$value['STRUCTURE_CODE']]['id']                                                                                                                       = $value['STRUCTURE_ID'];
                 $dmep[$value['STRUCTURE_CODE']]['libelle']                                                                                                                  = $value['STRUCTURE_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['libelleCourt']                                                                                                             = $value['STRUCTURE_LIBELLE_COURT'];
                 $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['libelle']                                                                                  = $value['ETAPE_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['libelle']                                         = $value['ELEMENT_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['etapes'][$value['ETAPE_CODE']]['enseignements'][$value['ELEMENT_CODE']]['typeHeure'][$value['TYPE_HEURE_CODE']]['libelle'] = $value['TYPE_HEURE_LIBELLE'];
@@ -875,6 +877,7 @@ class MiseEnPaiementService extends AbstractEntityService
                 $dmep[$value['STRUCTURE_CODE']]['code']                                                      = $value['STRUCTURE_CODE'];
                 $dmep[$value['STRUCTURE_CODE']]['id']                                                        = $value['STRUCTURE_ID'];
                 $dmep[$value['STRUCTURE_CODE']]['libelle']                                                   = $value['STRUCTURE_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['libelleCourt']                                              = $value['STRUCTURE_LIBELLE_COURT'];
                 $dmep[$value['STRUCTURE_CODE']]['fonctionsReferentiels'][$value['FONCTION_CODE']]['libelle'] = $value['FONCTION_LIBELLE'];
                 if (!array_key_exists('heures', $dmep[$value['STRUCTURE_CODE']]['fonctionsReferentiels'][$value['FONCTION_CODE']])) {
                     $dmep[$value['STRUCTURE_CODE']]['fonctionsReferentiels'][$value['FONCTION_CODE']]['heures'] = [];
@@ -945,6 +948,7 @@ class MiseEnPaiementService extends AbstractEntityService
                 $dmep[$value['STRUCTURE_CODE']]['code']                                        = $value['STRUCTURE_CODE'];
                 $dmep[$value['STRUCTURE_CODE']]['id']                                          = $value['STRUCTURE_ID'];
                 $dmep[$value['STRUCTURE_CODE']]['libelle']                                     = $value['STRUCTURE_LIBELLE'];
+                $dmep[$value['STRUCTURE_CODE']]['libelleCourt']                                = $value['STRUCTURE_LIBELLE_COURT'];
                 $dmep[$value['STRUCTURE_CODE']]['missions'][$value['MISSION_ID']]['libelle']   = $value['MISSION_LIBELLE'];
                 $dmep[$value['STRUCTURE_CODE']]['missions'][$value['MISSION_ID']]['missionId'] = $value['MISSION_ID'];
                 if (!array_key_exists('heures', $dmep[$value['STRUCTURE_CODE']]['missions'][$value['MISSION_ID']])) {

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!this.datasServiceAPayer" class="text-center">
+    <div v-if="!this.datasDemandesMiseEnPaiement" class="text-center">
         <div class="mt-5 spinner-border spinner-border-sm" role="status">
             <span class="visually-hidden">Chargement des demandes de mise en paiement en cours...</span>
         </div>
@@ -7,10 +7,10 @@
     </div>
     <div id="accordionPanelsStayOpenExample" class="accordion">
 
-        <demande-mise-en-paiement-structure v-for="(structure, code) in datasServiceAPayer"
+        <demande-mise-en-paiement-structure v-for="(structure, code) in datasDemandesMiseEnPaiement"
                                             :datas="structure"
                                             :intervenant="intervenant"
-                                            @refresh="findServiceAPayer"/>
+                                            @refresh="getDemandesMiseEnPaiement"/>
     </div>
 </template>
 
@@ -29,18 +29,18 @@ export default {
     data()
     {
         return {
-            datasServiceAPayer: null,
-            urlListeServiceAPayer: unicaenVue.url('intervenant/:intervenant/mise-en-paiement/liste-service-a-payer', {intervenant: this.intervenant}),
+            datasDemandesMiseEnPaiement: null,
+            urlGetDemandesMiseEnPaiement: unicaenVue.url('intervenant/:intervenant/mise-en-paiement/get-demandes-mise-en-paiement', {intervenant: this.intervenant}),
         }
     },
 
     methods: {
-        findServiceAPayer()
+        getDemandesMiseEnPaiement()
         {
 
-            unicaenVue.axios.get(this.urlListeServiceAPayer)
+            unicaenVue.axios.get(this.urlGetDemandesMiseEnPaiement)
                 .then(response => {
-                    this.datasServiceAPayer = response.data;
+                    this.datasDemandesMiseEnPaiement = response.data;
                 })
                 .catch(error => {
                     console.error(error);
@@ -51,7 +51,7 @@ export default {
     },
     mounted()
     {
-        this.findServiceAPayer();
+        this.getDemandesMiseEnPaiement();
     },
     updated()
     {
